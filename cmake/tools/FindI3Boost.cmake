@@ -67,5 +67,6 @@ else()
     NO_DEFAULT_PATH)
   find_library(BOOST_DATE_TIME boost_date_time${BOOST_LIB_SUFFIX} ${I3_PORTS}/lib/boost-1.36.0
     NO_DEFAULT_PATH)
+  set(BOOST_LIBRARIES "${BOOST_LIBRARIES};${BOOST_SYSTEM}" CACHE PATH "Libraries for tool 'boost'" FORCE)
 endif()
 
