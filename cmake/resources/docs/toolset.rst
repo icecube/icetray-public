@@ -62,10 +62,12 @@ SYSTEM_PACKAGES
 Most tools are detected are expected to be found in ``I3_PORTS``, and
 system-installed versions are ignored.  If you define
 ``SYSTEM_PACKAGES``, the cmake flag ``NO_DEFAULT_PATH`` is omitted and
-system-installed versions may be found.  This is an experimental
-feature and will probably not work... but some who are capable of
-diagnosing their own build problems find it useful, as one can avoid
-e.g. building the *Qt* in ``I3_PORTS`` by using the system version.
+system-installed packages may be used if versions installed from 
+``I3_PORTS`` cannot be found.  This is an experimental
+feature and may cause problems in the event of version conflicts, but 
+this option can speed up builds by avoiding the need for an ``I3_PORTS``
+Qt or allow operation of Icetray on systems not supported by the ports
+tools.
 
 Troubleshooting
 ---------------
