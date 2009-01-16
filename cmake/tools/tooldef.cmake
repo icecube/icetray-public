@@ -48,7 +48,7 @@ macro(tooldef tool_ incdir incfile libdir bindir)
   message(STATUS "${tool_}")
 
   # Set the config error to false by default		
-  set(${TOOL}_CONFIG_ERROR)
+  set(${TOOL}_CONFIG_ERROR FALSE)
 
   if(NOT "${incdir}" STREQUAL "NONE")
     find_path(${TOOL}_INCLUDE_DIR ${incfile} ${I3_PORTS}/${incdir} ${incdir})
@@ -72,7 +72,7 @@ macro(tooldef tool_ incdir incfile libdir bindir)
     find_library(foundlib${lib} 
       ${lib} 
       ${I3_PORTS}/${libdir} ${libdir}
-      NO_DEFAULT_PATH)
+      ${TOOL_SYSTEM_PATH})
     if(${foundlib${lib}} MATCHES ".*NOTFOUND$" AND NOT ${libdir} STREQUAL "NONE")
       found_not_ok("${lib}")
       set(${TOOL}_CONFIG_ERROR TRUE)
