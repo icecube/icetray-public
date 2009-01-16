@@ -14,17 +14,16 @@ tray.AddModule("Dump","dump1")
 tray.AddModule("Dump","dump2")
 tray.AddModule("Trash","trash")
 
-tray.ConnectBoxes("bottomless","OutBox","dump1")
-tray.ConnectBoxes("dump1","OutBox","dump2")
-tray.ConnectBoxes("dump1","OutBox","trash")
-
-
 try:
-    tray.Execute(5)
-    sys.exit(1)
+    tray.ConnectBoxes("bottomless","OutBox","dump1")
+    tray.ConnectBoxes("dump1","OutBox","dump2")
+    tray.ConnectBoxes("dump1","OutBox","trash")
 except:
-    print "Good.  It threw."
-    sys.exit(0) # indicate success.
+    print "OK: THROW EXPECTED"
+    sys.exit(0)
+else:
+    print "ERROR: no throw as expected"
+    sys.exit(1)
 
 
 
