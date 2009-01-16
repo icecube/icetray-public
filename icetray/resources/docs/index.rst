@@ -24,6 +24,7 @@ Table of Contents:
    logging
    framestreamstop
    inspect
+   standard_modules
    newfeaturesv3
    changes
 
