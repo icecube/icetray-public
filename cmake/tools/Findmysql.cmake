@@ -17,20 +17,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
-if(DEBIAN)
-  tooldef (mysql
-    /usr/include
-    mysql/mysql.h
-    /usr/lib
-    NONE
-    mysqlclient
-    )
-else(DEBIAN)
-  TOOLDEF (mysql
+TOOLDEF (mysql
     include/mysql-4.1.20
     mysql/mysql.h
     lib/mysql-4.1.20/mysql
     NONE
     mysqlclient
     )
-endif(DEBIAN)

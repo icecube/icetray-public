@@ -17,20 +17,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
-if(DEBIAN)
-  tooldef (cdk
-    /usr/include/cdk
-    cdk.h 
-    /usr/lib
-    NONE
-    cdk
-    )
-else(DEBIAN)
-  tooldef (cdk
-    include
-    cdk/cdk.h 
-    lib/cdk
-    NONE
-    cdk
-    )
-endif(DEBIAN)
+tooldef (cdk
+	include
+	cdk/cdk.h 
+	lib/cdk
+	NONE
+	cdk
+	)

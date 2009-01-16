@@ -17,21 +17,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
-if(DEBIAN)
-  TOOLDEF (rdmc
-    /usr/include
-    rdmc/rdmc.h
-    /usr/lib/rdmc
-    NONE  # bin is n/a, placeholder
-    rdmc
-    )
-else(DEBIAN)
-  TOOLDEF (rdmc
+TOOLDEF (rdmc
     include/rdmc-2.9.5
     rdmc/rdmc.h
     lib/rdmc-2.9.5
     NONE  # bin is n/a, placeholder
     rdmc
     )
-endif(DEBIAN)
 

@@ -32,22 +32,12 @@ if(PRINTF_LOGGING)
     NONE
     )
 else(PRINTF_LOGGING)  # just use log4cplus
-  if(DEBIAN)
-    tooldef (log4cplus
-      /usr/include/log4cplus
-      logger.h
-      /usr/lib
-      NONE
-      log4cplus
-      )
-  else(DEBIAN)
-    tooldef (log4cplus 
+  tooldef (log4cplus 
     include/log4cplus-1.0.2 
     log4cplus/logger.h
     lib/log4cplus-1.0.2
     NONE
     log4cplus
     )
-  endif(DEBIAN)
 endif(PRINTF_LOGGING)
 

@@ -17,21 +17,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
-if(DEBIAN)
-  tooldef(gsl
-    /usr/include
-    gsl/gsl_rng.h
-    /usr/lib
-    NONE
-    gsl gslcblas
-    )
-else(DEBIAN)
-  tooldef(gsl 
+tooldef(gsl 
     include/gsl-1.8 
     gsl/gsl_rng.h
     lib/gsl-1.8
     NONE
     gsl gslcblas
     )
-endif(DEBIAN)
-
