@@ -19,7 +19,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
-#include <dataio/FrameIO.h>
+#include <icetray/open.h>
 
 using namespace std;
 

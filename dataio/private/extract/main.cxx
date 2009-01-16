@@ -44,7 +44,7 @@ using namespace std;
 #include <signal.h>
 #include <dlfcn.h>
 
-#include <dataio/FrameIO.h>
+#include <icetray/open.h>
 
 #include <icetray/serialization.h>
 #include <icetray/Utility.h>

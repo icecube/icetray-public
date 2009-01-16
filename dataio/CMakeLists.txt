@@ -18,7 +18,9 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
-i3_project(dataio)
+i3_project(dataio
+  DOCS_DIR resources/docs
+  )
 
 i3_add_library (dataio 
   private/dataio-modules/*.cxx private/dataio/*.cxx
