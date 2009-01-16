@@ -27,6 +27,7 @@ using namespace std;
 #include <fstream>
 #include <icetray/I3Frame.h>
 #include <boost/iostreams/filtering_stream.hpp>
+#include <boost/python/errors.hpp>
 
 class I3LootFile
 {
@@ -45,6 +46,30 @@ class I3LootFile
   I3FramePtr pop_frame();
   I3FramePtr pop_frame(I3Frame::Stream s);
   I3FramePtr pop_physics();
+
+  struct iterator 
+  {
+    boost::shared_ptr<I3LootFile> file;
+    I3FramePtr next()
+    {
+      if (not file->more())
+	{
+	  PyErr_SetObject(PyExc_StopIteration, Py_None);
+	  boost::python::throw_error_already_set();
+	}
+      return file->pop_frame();
+    }
+  };
+
+  static iterator make_iterator(boost::shared_ptr<I3LootFile> f)
+  {
+    if (f->mode_ != Reading)
+      throw std::runtime_error("Can only iterate over I3Files opened for reading"); 
+
+    iterator iter;
+    iter.file = f;
+    return iter;
+  }
 
  private:
 
@@ -178,6 +203,11 @@ void register_I3LootFile()
     .def("pop_physics", &I3LootFile::pop_physics,
 	 "Return the next physics frame from the file, skipping frames on "
 	 "other streams.")
+    .def("__iter__", &I3LootFile::make_iterator)
+    ;
+
+  class_<I3LootFile::iterator>("iterator")
+    .def("next", &I3LootFile::iterator::next)
     ;
 
   enum_<I3LootFile::Mode>("Mode")
