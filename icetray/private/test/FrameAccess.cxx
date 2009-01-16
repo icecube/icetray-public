@@ -50,12 +50,12 @@ TEST(test)
 
   ENSURE(frame.Get<GrandpaConstPtr>("grandpa"));
   const Grandpa& grandpa = frame.Get<Grandpa>("grandpa");
-  assert(&grandpa);
+  ENSURE(&grandpa);
 
   ENSURE(frame.Get<PaConstPtr>("pa"));
   try {
     const Pa& pa = frame.Get<Pa>("grandpa");
-    assert(&pa);
+    std::cout << "got pa @ " << &pa;
     FAIL("that should have thrown");
   } catch (const std::exception& e) {
     // ok
@@ -70,7 +70,7 @@ TEST(test)
   ENSURE(frame.Get<GrandpaConstPtr>("son"));
 
   const Grandpa& gp = frame.Get<Daughter>("daughter");
-  assert(&gp);
+  ENSURE(&gp);
 
   try {
     frame.Get<Daughter>("son");
