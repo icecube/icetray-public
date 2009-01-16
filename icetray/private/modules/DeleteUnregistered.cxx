@@ -1,7 +1,7 @@
 /**
  *  $Id$
  *  
- *  Copyright (C) 2007
+ *  Copyright (C) 2007, 2008, 2009
  *  Troy Straszheim <troy@icecube.umd.edu>
  *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
  *  
@@ -11,7 +11,7 @@
  *  (at your option) any later version.
  *  
  *  This program is distributed in the hope that it will be useful,
-n *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  
@@ -25,6 +25,7 @@ n *  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #include <icetray/I3Frame.h>
 #include <icetray/I3Logging.h>
 #include <icetray/I3Module.h>
+#include <boost/archive/archive_exception.hpp>
 
 using namespace std;
 
@@ -73,8 +74,15 @@ void DeleteUnregistered::Process()
     {
       try {
 	I3FrameObjectConstPtr fop = frame->Get<I3FrameObjectConstPtr>(iter->first, true);
-      } catch (const std::exception& e) {
-	deleteme.push_back(iter->first);
+      } catch (const boost::archive::archive_exception& e) {
+	switch (e.code) {
+	case boost::archive::archive_exception::unregistered_class:
+	case boost::archive::archive_exception::unsupported_version:
+	  deleteme.push_back(iter->first);
+	  break;
+	default:
+	  throw;
+	}
       }
     }
   for (unsigned i=0; i<deleteme.size(); i++)
