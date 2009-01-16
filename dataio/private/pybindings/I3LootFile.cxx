@@ -42,7 +42,8 @@ class I3LootFile
 
   bool more();
   void push(I3FramePtr f);
-  I3FramePtr pop_frame(I3Frame::Stream s = I3Frame::None);
+  I3FramePtr pop_frame();
+  I3FramePtr pop_frame(I3Frame::Stream s);
   I3FramePtr pop_physics();
 
  private:
@@ -84,6 +85,12 @@ I3LootFile::open_file(const std::string& filename, Mode mode)
     I3::dataio::open(ofs_, filename);
     
   return 0;
+}
+
+I3FramePtr
+I3LootFile::pop_frame()
+{
+  return this->pop_frame(I3Frame::None);
 }
 
 I3FramePtr
