@@ -387,8 +387,8 @@ g                Go to frame\n\
 t                Toggle display of TrayInfo frames\n\
 \n\
 The 'tape' display at the bottom shows activity on each of IceTrays's data\n\
-'streams'.
-
+'streams'.\n\
+\n\
 If you don't like these keybindings you can customize them in $HOME/shovelrc.\n\
 This message does/will not reflect any customizations.\n\
 ";
