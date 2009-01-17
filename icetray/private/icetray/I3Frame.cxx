@@ -1,5 +1,5 @@
 /**
- *  $Id: I3Frame.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
+ *  $Id: I3Frame.h 41943 2008-02-07 15:14:07Z tschmidt $
  *  
  *  Copyright (C) 2007-8
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -270,7 +270,7 @@ void I3Frame::Delete(const string& name)
 string I3Frame::as_xml(const string& key) const
 {
   try {
-    I3FrameObjectConstPtr focp = Get<I3FrameObjectConstPtr>(key);
+    I3FrameObjectConstPtr focp = Get<I3FrameObjectConstPtr>(key, true);
     const I3FrameObject *tobj_p(focp.get());
 
     ostringstream oss;
