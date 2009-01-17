@@ -139,6 +139,7 @@ int main (int argc, char *argv[])
     ('a',"about")
     ('g',"goto_frame")
     ('p',"pretty_print")
+    ('s',"save_xml")
     ('t',"toggle_infoframes")
     ('w',"write_frame")
     ('x',"xml")
@@ -231,6 +232,7 @@ int main (int argc, char *argv[])
     actions["pretty_print"] = bind(&Model::pretty_print, ref(model));
     actions["toggle_infoframes"] = bind(&Model::toggle_infoframes, ref(model));
     actions["write_frame"] = bind(&Model::write_frame, ref(model));
+    actions["save_xml"] = bind(&Model::save_xml, ref(model));
     actions["goto_frame"] = bind(&Model::do_goto_frame, ref(model));
     actions["xml"] = bind(&Model::show_xml, ref(model));
     actions["quit"] = bind(exit, 0);

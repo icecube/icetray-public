@@ -55,10 +55,12 @@ Model::Model(View& view) : view_(view)
   y_index_=0;
 }
 
-void 
-fboo(double d)
-{
-  View::Instance().scan_progress(d);
+namespace {
+  void 
+  fboo(double d)
+  {
+    View::Instance().scan_progress(d);
+  }
 }
 
 int
@@ -72,7 +74,7 @@ Model::open_file(const std::string& filename,
   log_trace("%s", __PRETTY_FUNCTION__);
   // tried doing this with the bind but it's a no-go
   //i3file_.open_file(filename, boost::bind(&View::scan_progress, View::Instance(), _1));
-  if (i3file_.open_file(filename, fboo, skipstreams, nframes))
+  if (i3file_.open_file(filename, fboo, skipstreams, nframes, false))
     log_fatal("error opening file %s", filename.c_str());
   
   View::Instance().end_scan_progress();
@@ -131,18 +133,31 @@ Model::do_goto_frame()
 }
 
 void
+Model::save_xml()
+{
+  optional<string> result = view_.get_file("Save xml to file: ");
+  if (!result)
+    return;
+
+  std::ofstream ofs(result->c_str());
+
+  unsigned fileindex = frame_infos_[x_index_].second;
+  I3FramePtr frame = i3file_.get_raw_frame(fileindex);
+
+  string xml = frame->as_xml(y_keystring_);
+
+  ofs <<  prettify_xml(xml);
+  ofs.close();
+}
+
+void
 Model::write_frame()
 {
-  optional<string> result = view_.get_file("  Write frame to file: ");
+  optional<string> result = view_.get_file("Write frame to file: ");
   if (!result)
     return;
 
   std::ofstream ofs(result->c_str(), ios::binary | ios::app);
-
-  // grr.  boost::iostreams::file_sink doesn't want to do append.
-  //  boost::iostreams::filtering_ostream os;
-  //  if(result)
-  //    I3::dataio::open(os, *result, ios::binary | ios_base::app | ios::out);
 
   unsigned fileindex = frame_infos_[x_index_].second;
   I3FramePtr fp = i3file_.get_raw_frame(fileindex);
@@ -178,6 +193,9 @@ void
 Model::show_xml()
 {
   I3FramePtr frame = get_frame(x_index_);
+  if (frame->size() == 0)
+    return;
+
   string xml = frame->as_xml(y_keystring_);
   string pretty = y_keystring_ + " [type: " + frame->type_name(y_keystring_)
     + "]\n\n" + prettify_xml(xml);
@@ -188,6 +206,9 @@ void
 Model::pretty_print()
 {
   I3FramePtr frame = get_frame(x_index_);
+  if (frame->size() == 0)
+    return;
+
   I3TrayInfoConstPtr ticp = frame->Get<I3TrayInfoConstPtr>(y_keystring_);
   
   ostringstream oss;
@@ -203,7 +224,6 @@ void
 Model::notify()
 {
   I3FramePtr frame = get_frame(x_index_);
-
   y_max_ = frame->size();
 
   if (y_index_ >= y_max_)
@@ -213,7 +233,9 @@ Model::notify()
 
   // you have to get the sorted keys out here
   vector<string> keys = frame->keys();
-  y_keystring_ = keys[y_index_];
+
+  y_keystring_ = frame->size() > 0 ? keys[y_index_] : std::string();
+
   view_.display_frame(frame, x_index_, y_index_);
 }
 

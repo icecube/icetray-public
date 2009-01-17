@@ -73,6 +73,7 @@ public:
   void do_goto_frame();
   void goto_frame(unsigned frameno);
   void write_frame();
+  void save_xml();
 
   void notify();
 

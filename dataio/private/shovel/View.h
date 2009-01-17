@@ -23,6 +23,7 @@
 #define DATAIO_SHOVEL_VIEW_H_INCLUDED
 
 #include <ncurses.h>
+#include "color.h"
 #include <boost/optional.hpp>
 #include <icetray/I3Frame.h>
 
@@ -48,6 +49,8 @@ class View
 private:
 
   View();
+
+  std::vector<color_pair> colors_;
 
 public:
   
