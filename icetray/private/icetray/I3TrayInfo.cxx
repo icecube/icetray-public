@@ -39,10 +39,8 @@ void
 I3TrayInfo::serialize(Archive & ar, unsigned version)
 {
   if (version <= 1)
-    {
-      log_error("Backwards-incompatible:  cannot read old version of I3TrayInfo object.  Use an older version of icetray");
-      throw boost::archive::archive_exception(boost::archive::archive_exception::unsupported_version);
-    }
+    throw boost::archive::archive_exception(boost::archive::archive_exception::unsupported_version);
+
   ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
   ar & make_nvp("host_info", host_info);
   ar & make_nvp("svn_url", svn_url);

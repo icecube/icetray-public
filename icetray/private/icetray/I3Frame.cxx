@@ -270,7 +270,7 @@ void I3Frame::Delete(const string& name)
 string I3Frame::as_xml(const string& key) const
 {
   try {
-    I3FrameObjectConstPtr focp = Get<I3FrameObjectConstPtr>(key);
+    I3FrameObjectConstPtr focp = Get<I3FrameObjectConstPtr>(key, true);
     const I3FrameObject *tobj_p(focp.get());
 
     ostringstream oss;
