@@ -113,9 +113,12 @@ namespace {
 I3Frame::I3Frame(Stream stop)
   : stop_(stop),
     drop_blobs_(true)
-{ 
-}
+{ }
 
+I3Frame::I3Frame(char stop)
+  : stop_(I3Frame::Stream(stop)),
+    drop_blobs_(true)
+{ }
 
 I3Frame::I3Frame(const I3Frame& rhs)
 {
@@ -161,41 +164,45 @@ I3Frame::size_type I3Frame::size(const string& key) const
 
 
 void
-I3Frame::copy(const I3Frame& rhs)
+I3Frame::assign(const I3Frame& rhs)
 {
   *this = rhs;
 }
 
+void I3Frame::purge(const Stream& what)
+{
+  std::vector<std::string> keys;
+  for (map_t::const_iterator it = map_.begin();
+       it != map_.end();
+       it++)
+    if (it->second->stream == what)
+      keys.push_back(it->first);
+  for (unsigned i=0; i< keys.size(); i++)
+    Delete(keys[i]);
+}
+
+void I3Frame::purge()
+{
+  std::vector<std::string> keys;
+  for (map_t::const_iterator it = map_.begin();
+       it != map_.end();
+       it++)
+    if (it->second->stream != stop_)
+      keys.push_back(it->first);
+  for (unsigned i=0; i< keys.size(); i++)
+    Delete(keys[i]);
+}
+
+
 void I3Frame::merge(const I3Frame& rhs)
 {
-  map_t cleanmap;
-
+  purge(rhs.GetStop());
   for(map_t::const_iterator it = rhs.map_.begin();
       it != rhs.map_.end();
       it++)
     {
-      // take only those that aren't on *our* stream
-      if (it->second->stream != stop_)
-	{
-	  cleanmap[it->first] = it->second;
-	  log_trace("merging %s from rhs", it->first.c_str());
-	}
+      map_[it->first] = it->second;
     }
-
-  for(map_t::const_iterator it = map_.begin();
-      it != map_.end();
-      it++)
-    {
-      // keep only those that are on our stream
-      if (it->second->stream == stop_)
-	{
-	  cleanmap[it->first] = it->second;
-	  log_trace("keeping %s from lhs", it->first.c_str());
-	}
-    }
-
-  // now we're merged.  yay.
-  map_ = cleanmap;
 }
 
 
@@ -203,7 +210,6 @@ void I3Frame::swap(I3Frame& rhs)
 {
   map_.swap(rhs.map_);
 }
-
 
 void I3Frame::take(const I3Frame& rhs, const string& what, const string& as)
 {

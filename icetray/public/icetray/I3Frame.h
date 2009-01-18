@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3Frame.h 51748 2009-01-08 14:55:14Z troy $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -210,6 +210,7 @@ class I3Frame
 
 
   explicit I3Frame(Stream stop = I3Frame::None);
+  explicit I3Frame(char stop);
   ~I3Frame() { }
   I3Frame(const I3Frame& rhs);
   I3Frame& operator=(const I3Frame& rhs);
@@ -227,7 +228,7 @@ class I3Frame
   void clear() { map_.clear(); }
 
   // just calls operator=
-  void copy(const I3Frame& rhs);
+  void assign(const I3Frame& rhs);
 
   const_iterator begin() const { return const_iterator(map_.begin(), this); } 
   const_iterator end() const { return const_iterator(map_.end(), this); } 
@@ -253,6 +254,13 @@ class I3Frame
   bool Has(const std::string& key) const { return map_.count(key); }
 
   void merge(const I3Frame& rhs);
+
+  // delete any frame objects we're carrying that are on stream 'what'
+  void purge(const Stream& what);
+
+  // delete all frame objects we're carrying that aren't on our stream 
+  void purge();
+
   void swap(I3Frame& rhs);
 
   //
