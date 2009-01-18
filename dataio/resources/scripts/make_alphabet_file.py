@@ -17,12 +17,15 @@ streams = [chr(x) for x in
            range(ord('a'), ord('z')+1)
            + range(ord('A'), ord('Z')+1) + range(ord('0'), ord('9')+1)]
 
+index = 0;
+
 for st in streams:
     print "=====", st, "====="
     theframe = icetray.I3Frame(icetray.I3Frame.Stream(st))
     theframe[st] = icetray.I3Int(ord(st))
-
+    theframe['index'] = icetray.I3Int(index)
     i3f.push(theframe)
+    index += 1
 
 i3f.close()
 

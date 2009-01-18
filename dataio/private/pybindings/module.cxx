@@ -23,13 +23,13 @@
 #include <icetray/load_project.h>
 
 void register_I3File();
-void register_I3LootFile();
+void register_I3SequentialFile();
 
 BOOST_PYTHON_MODULE(dataio)
 {
   load_project("libdataio", false);
 
   register_I3File();
-  register_I3LootFile();
+  register_I3SequentialFile();
 }
 

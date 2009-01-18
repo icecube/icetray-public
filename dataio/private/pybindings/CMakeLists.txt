@@ -20,7 +20,7 @@
 if(BUILD_PYBINDINGS)
   i3_add_pybindings(dataio
     I3File.cxx
-    I3LootFile.cxx
+    I3SequentialFile.cxx
     module.cxx
     USE_TOOLS boost python log4cplus
     USE_PROJECTS dataio

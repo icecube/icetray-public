@@ -197,6 +197,7 @@ I3ReaderService::PopEvent(I3Frame& frame)
 	frame.take(*next_event_, iter->first);
     }
   log_trace("Popping event with %zu items", frame.size());
+  std::cout << *next_event_ << "\n";
   I3Time thetime = next_event_->Get<I3Time>("DrivingTime");
   // this has to be cleared out so PopMeta will move us to the next event.
   next_event_.reset();

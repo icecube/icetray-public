@@ -28,10 +28,6 @@ using boost::optional;
 #include <icetray/serialization.h>
 #include <icetray/Utility.h>
 
-#include <dataclasses/geometry/I3Geometry.h>
-#include <dataclasses/calibration/I3Calibration.h>
-#include <dataclasses/status/I3DetectorStatus.h>
-
 #include <vector>
 #include <errno.h>
 #include <sys/types.h>
@@ -56,12 +52,7 @@ class I3FileImpl
 
   vector<string> skipkeys_;
 
-  I3GeometryConstPtr geo_;
-  unsigned geo_frame_;
-  I3CalibrationConstPtr cal_;
-  unsigned cal_frame_;
-  I3DetectorStatusConstPtr ds_;
-  unsigned ds_frame_;
+  map<unsigned, I3FramePtr> frame_cache_;
 
   static void noop(double) { }
 
@@ -72,7 +63,8 @@ public:
   int open_file(const std::string& filename,
 		boost::function<void(double)> cb = noop,
 		boost::optional<vector<I3Frame::Stream> > skipstreams = boost::optional<vector<I3Frame::Stream> >(),
-		boost::optional<unsigned> nframes = boost::optional<unsigned>());
+		boost::optional<unsigned> nframes = boost::optional<unsigned>(),
+		bool verbose = true);
 
   void close();
 
@@ -98,13 +90,7 @@ public:
 I3FileImpl::I3FileImpl() : 
   x_index_(0), 
   y_index_(0),
-  y_max_(0),
-  /// potential bug: if you have (2^32)-1 frames in a file and the
-  /// user chooses that frame first, then the geo/cal/status returned
-  /// will be wrong.
-  geo_frame_(std::numeric_limits<unsigned>::max()),
-  cal_frame_(std::numeric_limits<unsigned>::max()),
-  ds_frame_(std::numeric_limits<unsigned>::max())
+  y_max_(0)
 { }
 
 void
@@ -119,18 +105,13 @@ I3FileImpl::close()
   ifs_.close();
   frame_infos_.clear();
   skipkeys_.clear();
-  geo_.reset();
-  geo_frame_ = 0;
-  cal_.reset();
-  cal_frame_ = 0;
-  ds_.reset();
-  ds_frame_ = 0;
 }
 
 int
 I3FileImpl::open_file(const std::string& filename, boost::function<void(double)> cb,
-		  boost::optional<vector<I3Frame::Stream> >skipstreams,
-		  boost::optional<unsigned> nframes_opt)
+		      boost::optional<vector<I3Frame::Stream> >skipstreams,
+		      boost::optional<unsigned> nframes_opt,
+		      bool verbose)
 {
   log_trace("I3FileImpl::open_file(%s)", filename.c_str());
   if (filename.find(".gz") == filename.length() - 3)
@@ -148,15 +129,22 @@ I3FileImpl::open_file(const std::string& filename, boost::function<void(double)>
   ifs_.seekg (0, ios::end);
   uint64_t length = ifs_.tellg();
   ifs_.seekg (0, ios::beg);
-  cout << "Scanning " << filename << " (" << length << " bytes)\n";
-  cout.flush();
-
-  unsigned geo_f = 0, cal_f = 0, ds_f = 0;
+  if (verbose)
+    {
+      cout << "Scanning " << filename << " (" << length << " bytes)\n";
+      cout.flush();
+    }
 
   unsigned counter = 0, pct = 0;
 
   unsigned nframes = nframes_opt ? *nframes_opt : std::numeric_limits<unsigned>::max();
+
   cb(pct);
+
+  std::map<I3Frame::Stream, unsigned> stream_cache;
+
+  bool first = true;
+
   while (ifs_.peek() != EOF && counter < nframes)
     {
       FrameInfo frame_info;
@@ -173,9 +161,9 @@ I3FileImpl::open_file(const std::string& filename, boost::function<void(double)>
       if (ifs_.peek() == EOF)
 	break;
 
-      I3Frame frame;
+      I3FramePtr frame(new I3Frame);
       try {
-	frame.load(ifs_, vector<string>());
+	frame->load(ifs_, vector<string>());
       } catch (const std::exception& e) {
 	log_info("caught exception %s at frame %zu", 
 		 e.what(), frame_infos_.size());
@@ -187,25 +175,18 @@ I3FileImpl::open_file(const std::string& filename, boost::function<void(double)>
 	  bool skipit = false;
 	  BOOST_FOREACH(const I3Frame::Stream& s, *skipstreams)
 	    {
-	      if (frame.GetStop() == s)
+	      if (frame->GetStop() == s)
 		skipit = true;
 	    }
 	  if (skipit) 
 	    continue;
 	}
 
-      if (frame.GetStop() == I3Frame::Geometry)
-	geo_f = counter;
-      if (frame.GetStop() == I3Frame::Calibration)
-	cal_f = counter;
-      if (frame.GetStop() == I3Frame::DetectorStatus)
-	ds_f = counter;
+      stream_cache[frame->GetStop()] = counter;
+      log_trace("Frame %c at %u (%u total)", frame->GetStop().id(), counter, stream_cache.size());
 
-      frame_info.geo_frame = geo_f;
-      frame_info.cal_frame = cal_f;
-      frame_info.ds_frame = ds_f;
-      
-      frame_info.stream = frame.GetStop();
+      frame_info.stream = frame->GetStop();
+      frame_info.other_streams = stream_cache;
       frame_infos_.push_back(frame_info);
       counter++;
     }
@@ -275,95 +256,27 @@ I3FileImpl::get_raw_frame(unsigned index)
   return frame;
 }
 
-// return frame with geo/cal/status adjusted.  Check and update cached
-// objects while we're at it.
 I3FramePtr
 I3FileImpl::get_frame(unsigned index)
 {
   I3FramePtr frame = get_raw_frame(index);
-
+  I3Frame cache;
+  
   const FrameInfo& fi = frame_infos_[index];
 
-  if (frame->GetStop() == I3Frame::Geometry)
+  log_trace("other streams size = %u", fi.other_streams.size());
+  for (FrameInfo::stream_map_t::const_iterator iter = fi.other_streams.begin();
+       iter != fi.other_streams.end();
+       iter++)
     {
-      if (index == geo_frame_)
+      log_trace("prev frame %u on stream %c", iter->second, iter->first.id());
+      if (iter->first == frame->GetStop())
 	{
-	  I3FramePtr frame(new I3Frame(I3Frame::Geometry));
-	  frame->Put(geo_);
-	  return frame;
+	  assert(iter->second == index); 
+	  continue;
 	}
-      geo_ = frame->Get<I3GeometryConstPtr>();
-      assert(geo_);
-      geo_frame_ = index;
-      return frame;
-    }
-
-  if (frame->GetStop() == I3Frame::Calibration)
-    {
-      if (geo_frame_ != fi.geo_frame)
-	{
-	  I3FramePtr f = get_raw_frame(fi.geo_frame);
-	  geo_ = f->Get<I3GeometryConstPtr>();
-	  assert(geo_);
-	  geo_frame_ = fi.geo_frame;
-	}
-      assert(geo_);
-      frame->Put(geo_);
-      return frame;
-    }
-  
-  if (frame->GetStop() == I3Frame::DetectorStatus)
-    {
-      if (geo_frame_ != fi.geo_frame)
-	{
-	  I3FramePtr f = get_raw_frame(fi.geo_frame);
-	  geo_ = f->Get<I3GeometryConstPtr>();
-	  geo_frame_ = fi.geo_frame;
-	}
-      frame->Put(geo_);
-      if (cal_frame_ != fi.cal_frame)
-	{
-	  I3FramePtr f = get_raw_frame(fi.cal_frame);
-	  cal_ = f->Get<I3CalibrationConstPtr>();
-	  cal_frame_ = fi.cal_frame;
-	}
-      frame->Put(cal_);
-      return frame;
-    }
-
-  if (frame->GetStop() == I3Frame::Physics)
-    {
-      log_debug("physics frame %u has g=%u c=%u s=%u", 
-		index,
-		fi.geo_frame,
-		fi.cal_frame,
-		fi.ds_frame);
-
-      if (geo_frame_ > 13)
-	log_debug("egh");
-
-      if (geo_frame_ != fi.geo_frame)
-	{
-	  log_debug("getting geo from frame %u", fi.geo_frame);
-	  I3FramePtr f = get_raw_frame(fi.geo_frame);
-	  geo_ = f->Get<I3GeometryConstPtr>();
-	  geo_frame_ = fi.geo_frame;
-	}
-      frame->Put(geo_);
-      if (cal_frame_ != fi.cal_frame)
-	{
-	  I3FramePtr f = get_raw_frame(fi.cal_frame);
-	  cal_ = f->Get<I3CalibrationConstPtr>();
-	  cal_frame_ = fi.cal_frame;
-	}
-      frame->Put(cal_);
-      if (ds_frame_ != fi.ds_frame)
-	{
-	  I3FramePtr f = get_raw_frame(fi.ds_frame);
-	  ds_ = f->Get<I3DetectorStatusConstPtr>();
-	  ds_frame_ = fi.ds_frame;
-	}
-      frame->Put(ds_);
+      I3FramePtr otherframe = get_raw_frame(iter->second);
+      frame->merge(*otherframe);
     }
 
   return frame;
@@ -423,9 +336,10 @@ int
 I3File::open_file(const std::string& filename,
 		  boost::function<void(double)> cb,
 		  boost::optional<vector<I3Frame::Stream> > skipstreams,
-		    boost::optional<unsigned> nframes)
+		  boost::optional<unsigned> nframes,
+		  bool verbose)
 {
-  return impl_->open_file(filename, cb, skipstreams, nframes);
+  return impl_->open_file(filename, cb, skipstreams, nframes, verbose);
 }
 
 void 
