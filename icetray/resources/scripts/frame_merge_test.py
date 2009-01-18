@@ -1,107 +1,93 @@
 #!/usr/bin/env python
 
 """
-Test of how merges are done in the I3Reader, etc.
+Test the I3Frame's merging/purging stuff
 """
 
 from icecube.icetray import *
 
-def docopy(frame):
-    newframe = I3Frame(I3Frame.Stream('X'))
-    newframe.copy(frame)
-    newframe.merge(docopy.oldframe)
-    docopy.oldframe.copy(newframe)
-    return newframe
+def makeframe(stream, key = None):
+    if not key:
+        key = stream
+    frame = I3Frame(stream)
+    frame[key] = I3Int(ord(stream))
+    return frame
 
-docopy.oldframe = I3Frame(I3Frame.Stream('X'))
+a = makeframe('a')
 
-aframe = I3Frame(I3Frame.Stream('A'))
-aframe['a'] = I3Int(ord('a'))
-print "aframe=", aframe
+assert 'a' in a
+assert 'a2' not in a
 
-newfr = docopy(aframe)
-print "docopy", newfr
-assert 'a' in newfr
+a2 = makeframe('a', 'a2')
 
-bframe = I3Frame(I3Frame.Stream('B'))
-bframe['b'] = I3Int(ord('b'))
-print "bframe=", bframe
-newfr = docopy(bframe)
-print "docopy", newfr
-assert 'a' in newfr
-assert 'b' in newfr
+assert 'a2' in a2
+assert 'a' not in a2
 
-aframe = I3Frame(I3Frame.Stream('A'))
-aframe['a2'] = I3Int(ord('a'))
+a.merge(a2)
 
-newfr = docopy(aframe)
-print newfr
+assert 'a2' in a
+assert 'a' not in a
 
-assert 'a' not in newfr
-assert 'a2' in newfr
-assert 'b' in newfr
+################################################################################
 
-cframe = I3Frame(I3Frame.Stream('C'))
-cframe['c'] = I3Int(7)
-
-newfr = docopy(cframe)
-print newfr
-assert 'a2' in newfr
-assert 'b' in newfr
-assert 'c' in newfr
-
-cframe.clear()
-
-newfr = docopy(cframe)
-print newfr
-assert 'a2' in newfr
-assert 'b' in newfr
-assert not 'c' in newfr
-
-#
-#  Various other unity tests
-#
-
-a = I3Frame(I3Frame.Stream('A'))
-b = I3Frame(I3Frame.Stream('B'))
+a = makeframe('a')
+b = makeframe('b')
+c = makeframe('c')
 
 a.merge(b)
 
-assert a.GetStop() == I3Frame.Stream('A')
-assert b.GetStop() == I3Frame.Stream('B')
-assert len(a) == 0
-assert len(b) == 0
+assert 'a' in a
+assert 'b' in a
 
-a['a'] = None
+assert 'a' not in b
+assert 'b' in b
+
+a.merge(c)
+
+assert 'a' in a
+assert 'b' in a
+assert 'c' in a
 
 print a
 
-b.merge(a)
+a.purge(I3Frame.Stream('b'))
 
-assert 'a' in b
 assert 'a' in a
+assert 'b' not in a
+assert 'c' in a
+
+a.purge(I3Frame.Stream('c'))
+
+assert 'a' in a 
+assert 'b' not in a 
+assert 'c' not in a 
+
+################################################################################
+
+a = makeframe('a')
+b = makeframe('b')
+c = makeframe('c')
 
 a.merge(b)
+a.merge(c)
 
-assert 'a' in b
 assert 'a' in a
+assert 'b' in a
+assert 'c' in a
 
-#
-#  Let's put same thing on two streams and merge
-#
+a.purge()
 
-b['X'] = I3Int(ord('b'))
-a['X'] = I3Int(ord('a'))
+assert 'a' in a
+assert 'b' not in a
+assert 'c' not in a
 
-a.merge(b)
+################################################################################
 
-# 'our' stream's version overwrites
-assert a['X'].value == ord('a')
-
-b.merge(a)
-
-# 'our' stream's version overwrites
-assert b['X'].value == ord('b')
-
-
+a = makeframe('a')
+a2 = makeframe('a')
+a['a'].value = 666
+a2['a'].value = 777
+ 
+a.merge(a2)
+assert a['a'].value == 777
 

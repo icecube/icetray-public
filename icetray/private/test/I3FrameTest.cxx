@@ -475,9 +475,9 @@ TEST(type_id)
 
 TEST(merge_doesnt_mutate_stream)
 {
-  I3Frame f(I3Frame::Geometry), g(I3Frame::Calibration);
+  I3Frame f('a'), g('b');
   f.merge(g);
-  ENSURE_EQUAL(f.GetStop(), I3Frame::Geometry);
+  ENSURE_EQUAL(f.GetStop().id(), 'a');
 }
 
 TEST(assign_mutates_stream)
@@ -497,10 +497,10 @@ TEST(merge)
   ENSURE(!f.Has("j"));
   ENSURE(!g.Has("i"));
   ENSURE(g.Has("j"));
-  // things will 'bounce off' of g since they're on the same stream
+  // g's stuff gets overwritten
   g.merge(f);
-  ENSURE(!g.Has("i"));
-  ENSURE(g.Has("j"));
+  ENSURE(g.Has("i"));
+  ENSURE(!g.Has("j"));
 }
 
 
