@@ -1,10 +1,10 @@
-:mod:`dataio` -- python bindings to Data I/O utilities
+:mod:`icecube.dataio` -- python bindings to Data I/O utilities
 ======================================================
 
-.. module:: dataio
+.. module:: icecube.dataio
    :synopsis: python bindings to Data I/O utilities
 
-.. class:: icecube.dataio.I3File
+.. class:: I3File
 
    Simple sequential reader/writer of ``.i3`` files.
 
@@ -21,24 +21,24 @@
       Create an I3File object w/o an actual associated file::
 
         # not very useful
-        f = dataio.I3File()      	     
+        f = I3File()      	     
 
-   .. method:: open_file(path, mode = dataio.I3File.Reading)
+   .. method:: open_file(path, mode = I3File.Reading)
 
       Open file at *path*.  Default mode is for reading::
 
         # open for reading
-        i3file = dataio.I3File()
+        i3file = I3File()
         i3file.open_file("mydata.i3")
 
         # open for writing
-        i3file2 = dataio.I3File()
-        i3file2.open_file("mydata.i3", dataio.I3File.Writing)
+        i3file2 = I3File()
+        i3file2.open_file("mydata.i3", I3File.Writing)
 
       *path* may end in ``.i3`` or ``.i3.gz`` for uncompressed or
        gzip-compresed files (applies for both **Reading** and **Writing**)
 
-   .. method:: I3File(path, mode = dataio.I3File.Reading)
+   .. method:: I3File(path, mode = I3File.Reading)
 
       Create an I3File, then call::
 
@@ -69,19 +69,23 @@
       Push frame onto file (file must be open for writing)::
 
         frame = icetray.I3Frame(icetray.I3Frame.Physics)
-	i3file = dataio.I3File("generated.i3.gz", dataio.I3File.Writing)
+	i3file = I3File("generated.i3.gz", I3File.Writing)
 	i3file.push(frame)
 
    .. method:: close()
 
       Close the file.
       
+   .. method:: rewind()
+
+      Close and reopen the file to the beginning.   
+      
    .. method:: more()
 
       Returns true if there are more frames available.  This prints
       all the event ids in a file::
 
-        i3f = dataio.I3File("mydata.i3")
+        i3f = I3File("mydata.i3")
         while i3f.more():
           phys = i3f.pop_frame()
           print phys['I3EventHeader'].EventID
@@ -89,35 +93,37 @@
       You can also use the iterator interface rather than writing an
       explicit loop.
 
+   .. method:: next()
+
+      Returns the next frame, if available, else throws StopIteration.
+      This is part of the python 'iterator protocol'; this function
+      combined with ``__iter__()``, gets you iteration in loops and
+      list comprehensions (see __iter__() below):
+
    .. method:: __iter__()
 
-      Return an iterator to the I3File.  The I3File class supports
-      standard python iteration.  This means you can use the I3File
-      in looping contexts::
+      Return an iterator to the I3File (just a freshly-opened copy of
+      the I3File object itself, since I3File implements the iterator
+      protocol).  The I3File class supports standard python iteration.
+      This means you can use the I3File in looping contexts::
 
-         i3f = dataio.I3File("mydata.i3")
+         i3f = I3File("mydata.i3")
          for frame in i3f:
              print frame
 
       or minus the intermediate variable ``i3f``::
 
-         for frame in dataio.I3File('mydata.i3'):
+         for frame in I3File('mydata.i3'):
              print frame  	       
 
       and list comprehensions.  For instance this gets the EventID of
       all physics frames in the file ``mydata.i3``::
 
          eventids = [frame['I3EventHeader'].EventId 
-	             for frame in dataio.I3File('mydata.i3')
+	             for frame in I3File('mydata.i3')
 	             if frame.GetStop() == icetray.I3Frame.Physics]
  
-      .. warning::
-
-          I3File iterators clobber each other.  The I3File has only
-          (internal) current position: you can't, for instance, loop
-          twice over the same file (for this, just reopen the file) or
-          use two iterators into the same file concurrently.
-
+	  
 
 
       
