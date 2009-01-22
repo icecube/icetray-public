@@ -497,10 +497,9 @@ TEST(merge)
   ENSURE(!f.Has("j"));
   ENSURE(!g.Has("i"));
   ENSURE(g.Has("j"));
-  // g's stuff gets overwritten
   g.merge(f);
   ENSURE(g.Has("i"));
-  ENSURE(!g.Has("j"));
+  ENSURE(g.Has("j"));
 }
 
 
