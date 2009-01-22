@@ -152,6 +152,7 @@ I3Reader::Process()
     {
       log_trace("Doing a merge");
       // sync the two up.
+      cache_->purge(frame->GetStop());
 
       frame->merge(*cache_);
       *cache_ = *frame;
