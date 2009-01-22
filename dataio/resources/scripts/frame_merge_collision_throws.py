@@ -30,4 +30,3 @@ else:
     print "*** FAIL should have thrown"
     sys.exit(1)
 
-sys.exit(1)
