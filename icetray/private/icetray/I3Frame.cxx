@@ -193,15 +193,16 @@ void I3Frame::purge()
     Delete(keys[i]);
 }
 
-
 void I3Frame::merge(const I3Frame& rhs)
 {
-  purge(rhs.GetStop());
   for(map_t::const_iterator it = rhs.map_.begin();
       it != rhs.map_.end();
       it++)
     {
-      map_[it->first] = it->second;
+      if (map_.find(it->first) == map_.end())
+	map_[it->first] = it->second;
+      else
+	log_fatal("Frame merge collision on frame object %s", it->first.c_str());
     }
 }
 
