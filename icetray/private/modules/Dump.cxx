@@ -1,7 +1,7 @@
 /**
  *  $Id$
  *  
- *  Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007,8,9   Troy D. Straszheim  <troy@icecube.umd.edu>
  *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
  *  
  *  This file is free software; you can redistribute it and/or modify
@@ -18,72 +18,44 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
-#include <icetray/modules/Dump.h>
-
-I3_MODULE(Dump);
 
 #include <iostream>
 #include <icetray/I3Context.h>
+#include <icetray/I3Frame.h>
+#include <icetray/I3ConditionalModule.h>
 
 using namespace std;
 
-Dump::Dump(const I3Context& context)
-  : I3ConditionalModule(context),
-    physicsPrescale_(1u),
-    frameCount_(0u)
+class Dump : public I3ConditionalModule
 {
-  AddParameter("Prescale",
-               "Reduce the output for physics frames by this prescale factor",
-               physicsPrescale_);
-
-  AddOutBox("OutBox");
-}
-
-Dump::~Dump()
-{
-}
-
-void Dump::Configure()
-{
-  GetParameter("Prescale", physicsPrescale_);
-  if(!physicsPrescale_) physicsPrescale_ = 1u;
-}
-
-void Dump::Physics(I3FramePtr frame)
-{
-  frameCount_++;
-  if(!(frameCount_ % physicsPrescale_))
+ public:
+  Dump(const I3Context& context)  : I3ConditionalModule(context),
+				    frameCount_(0u)
   {
-    cout<<"Physics.....["<<frameCount_<<"]"<<endl;
-    cout<<*frame;
-    cout<<"---------------------------------"<<endl;
+    AddOutBox("OutBox");
   }
-  PushFrame(frame,"OutBox");
-}
 
-void Dump::DetectorStatus(I3FramePtr frame)
-{
-  frameCount_++;
-  cout<<"DetectorStatus.....["<<frameCount_<<"]"<<endl;
-  cout<<*frame;
-  cout<<"---------------------------------"<<endl;
-  PushFrame(frame,"OutBox");
-}
+  virtual ~Dump() { }
 
-void Dump::Geometry(I3FramePtr frame)
-{
-  frameCount_++;
-  cout<<"Geometry.....["<<frameCount_<<"]"<<endl;
-  cout<<*frame;
-  cout<<"---------------------------------"<<endl;
-  PushFrame(frame,"OutBox");
-}
+  void Configure(){ }
 
-void Dump::Calibration(I3FramePtr frame)
-{
-  frameCount_++;
-  cout<<"Calibration.....["<<frameCount_<<"]"<<endl;
-  cout<<*frame;
-  cout<<"---------------------------------"<<endl;
-  PushFrame(frame,"OutBox");
-}
+  void Process(){
+    I3FramePtr frame = PopFrame();
+    if (!frame)
+      return;
+
+    frameCount_++;
+    cout << "------------------------- Frame #" << frameCount_ << " -------------------------\n" << *frame;
+    PushFrame(frame,"OutBox");
+  }
+
+ private:
+
+  uint64_t frameCount_;
+  
+  Dump(const Dump&);
+  Dump& operator=(const Dump&);
+};
+
+I3_MODULE(Dump);
+
