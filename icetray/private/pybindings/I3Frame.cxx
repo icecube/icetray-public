@@ -109,6 +109,14 @@ static void frame_put(I3Frame& f, const std::string& s, I3FrameObjectConstPtr fo
   f.Put(s, fop);
 }
 
+static void frame_put_on_stream(I3Frame& f, 
+				const std::string& s, 
+				I3FrameObjectConstPtr fop,
+				const I3Frame::Stream& stream)
+{
+  f.Put(s, fop, stream);
+}
+
 // used for I3Frame::Stream::__repr__
 std::string format_stream(const I3Frame::Stream& s)
 {
@@ -124,15 +132,15 @@ void register_I3Frame()
     class_<I3Frame, boost::shared_ptr<I3Frame> >("I3Frame")
     .def(init<I3Frame::Stream>())
     .def(init<char>())
-    .def("Dump", &I3Frame::Dump)
     .def("Has", &I3Frame::Has)
     .def("Delete", &I3Frame::Delete)
+    .def("__delitem__", &I3Frame::Delete)
     .def("Rename", &I3Frame::Rename)
     .def(self_ns::str(self))
     .def("Put", frame_put)
+    .def("Put", frame_put_on_stream)
     .def("Get", &frame_get<I3FrameObject>)
     // more pythonic interface
-    .def("has_key", &I3Frame::Has)
     .def("__contains__", &I3Frame::Has)
     .def("__getitem__", &frame_get<I3FrameObject>)
     .def("__setitem__", put_fn_p)
