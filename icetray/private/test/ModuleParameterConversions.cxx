@@ -94,7 +94,7 @@ struct ParamConversionCheckModule : I3Module
 
   virtual void Process() 
   { 
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     I3FramePtr frame(new I3Frame(I3Frame::Physics));
     PushFrame(frame, "OutBox");
   }
