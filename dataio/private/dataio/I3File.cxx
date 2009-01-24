@@ -183,7 +183,7 @@ I3FileImpl::open_file(const std::string& filename, boost::function<void(double)>
 	}
 
       stream_cache[frame->GetStop()] = counter;
-      log_trace("Frame %c at %u (%u total)", frame->GetStop().id(), counter, stream_cache.size());
+      log_trace("Frame %c at %u (%zu total)", frame->GetStop().id(), counter, stream_cache.size());
 
       frame_info.stream = frame->GetStop();
       frame_info.other_streams = stream_cache;
@@ -264,7 +264,7 @@ I3FileImpl::get_frame(unsigned index)
   
   const FrameInfo& fi = frame_infos_[index];
 
-  log_trace("other streams size = %u", fi.other_streams.size());
+  log_trace("other streams size = %zu", fi.other_streams.size());
   for (FrameInfo::stream_map_t::const_iterator iter = fi.other_streams.begin();
        iter != fi.other_streams.end();
        iter++)
