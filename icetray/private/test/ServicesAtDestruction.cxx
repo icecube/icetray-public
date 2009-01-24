@@ -24,12 +24,12 @@ struct ServiceAtDestructionService
   vector<bool*> watched_;
   ServiceAtDestructionService()
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
   }  
   
   ~ServiceAtDestructionService()
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     for(unsigned int i = 0 ; i < watched_.size() ; i++)
       {
 	log_trace("falsifying the bool at %p which is already set to %d",
@@ -93,7 +93,7 @@ public:
     
   ~ServicesAtDestructionModule()
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     log_trace("service status at destruction: address: %p value: %d",
 	      &serviceExists_, serviceExists_);
     ENSURE(serviceExists_);
@@ -101,7 +101,7 @@ public:
     
   void Configure()
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     ENSURE(context_.Has<ServiceAtDestructionService>("Foo"));
     ServiceAtDestructionService& sads = context_.Get<ServiceAtDestructionService>("Foo");
     sads.AddMonitoredBool(&serviceExists_);
