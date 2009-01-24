@@ -42,7 +42,7 @@ class TestServiceFactory : public I3ServiceFactory
 
   void Configure()
     {
-      log_trace(__PRETTY_FUNCTION__);
+      log_trace("%s",__PRETTY_FUNCTION__);
       log_trace("configured=%d", configured);
       ENSURE(!configured);
       GetParameter("intParam",intParam);

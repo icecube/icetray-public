@@ -1,10 +1,10 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: ServicesAtDestruction.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
+ * $Id: ServicesAtDestruction.cxx 15801 2006-02-15 18:01:22Z troy $
  *
- * @version $Revision: 165886 $
- * @date $Date: 2018-10-01 07:37:58 -0700 (Mon, 01 Oct 2018) $
+ * @version $Revision: 1.3 $
+ * @date $Date: 2006-02-15 19:01:22 +0100 (Wed, 15 Feb 2006) $
  * @author <a href="http://icecube.umd.edu/pretz">John Pretz</a>
  *
  * This is a test which tests that the services are available to modules during
@@ -24,12 +24,12 @@ struct ServiceAtDestructionService
   vector<bool*> watched_;
   ServiceAtDestructionService()
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
   }  
   
   ~ServiceAtDestructionService()
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     for(unsigned int i = 0 ; i < watched_.size() ; i++)
       {
 	log_trace("falsifying the bool at %p which is already set to %d",
@@ -93,7 +93,7 @@ public:
     
   ~ServicesAtDestructionModule()
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     log_trace("service status at destruction: address: %p value: %d",
 	      &serviceExists_, serviceExists_);
     ENSURE(serviceExists_);
@@ -101,7 +101,7 @@ public:
     
   void Configure()
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     ENSURE(context_.Has<ServiceAtDestructionService>("Foo"));
     ServiceAtDestructionService& sads = context_.Get<ServiceAtDestructionService>("Foo");
     sads.AddMonitoredBool(&serviceExists_);

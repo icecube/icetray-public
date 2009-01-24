@@ -16,7 +16,7 @@ public:
 
   void Physics(I3FramePtr frame)
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     const I3Int& data = frame->Get<I3Int>("myint");
     ENSURE(data.value % 2 != 0);
   }
@@ -35,7 +35,7 @@ public:
 
   void Physics(I3FramePtr frame)
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     const I3Int& data = frame->Get<I3Int>("myint");
     ENSURE(data.value % 2 == 0);
   }
@@ -49,14 +49,14 @@ class IntSorter : public I3Module
 public:
   IntSorter(const I3Context& context) : I3Module(context)
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     AddOutBox("Evens");
     AddOutBox("Odds");
   }
 
   void Physics(I3FramePtr frame)
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     const I3Int& data = frame->Get<I3Int>("myint");
     if(data.value % 2 == 0)
       PushFrame(frame,"Evens");
@@ -88,7 +88,7 @@ class AddsNullsToFramesWithOddInts : public I3Module
 public:
   AddsNullsToFramesWithOddInts(const I3Context& context) : I3Module(context)
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     AddOutBox("OutBox");
   }
 
@@ -102,7 +102,7 @@ public:
   // myint.value
   void Physics(I3FramePtr frame)
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     frame->Put("oddone", I3FrameObjectPtr());
     PushFrame(frame);
   }

@@ -34,7 +34,7 @@ class TestModule : public I3Module
 
   void Configure()
     {
-      log_debug(__PRETTY_FUNCTION__);
+      log_debug("%s",__PRETTY_FUNCTION__);
       GetParameter("boolParam",boolParam);
       GetParameter("intParam",intParam);
       GetParameter("doubleParam",doubleParam);
@@ -44,7 +44,7 @@ class TestModule : public I3Module
 
   void Process()
     {
-      log_debug(__PRETTY_FUNCTION__);
+      log_debug("%s",__PRETTY_FUNCTION__);
     }
 
   virtual ~TestModule()

@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3Tray.h 47987 2008-08-08 14:09:48Z troy $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -103,7 +103,7 @@ public:
     template <typename T>
     param_setter& operator()(const std::string& param, T value)
     {
-      log_trace(__PRETTY_FUNCTION__);
+      log_trace("%s", __PRETTY_FUNCTION__);
       tray_.SetParameter(module_name_.c_str(), param.c_str(), value);
       return *this;
     }

@@ -42,7 +42,7 @@ struct IntegerServiceFactory : I3ServiceFactory
 
   virtual bool InstallService(I3Context& services)
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     shared_ptr<int> the_service(new int(service_number));
     log_debug("putting service with %d", *the_service);
     ENSURE(services.Put(the_service, "int"));
@@ -86,7 +86,7 @@ public:
   }
 
   void CheckContext() {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     int i = context_.Get<int>("int");
     const I3Context &context = I3Tray::GetActiveContext();
     ENSURE(&context_ == &context);
@@ -121,7 +121,7 @@ struct GetsAnIntModule : I3Module
   }
 
   void CheckContext() {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     int i = GetContext().Get<int>("int");
     const I3Context &context = I3Tray::GetActiveContext();
     ENSURE(&(GetContext()) == &context);
@@ -136,7 +136,7 @@ struct GetsAnIntModule : I3Module
 
   virtual void Process() 
   { 
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     I3FramePtr frame = PopFrame();
     int i = GetContext().Get<int>("int");
     const I3Context &context = I3Tray::GetActiveContext();
