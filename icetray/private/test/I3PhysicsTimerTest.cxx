@@ -2,7 +2,6 @@
 #include <icetray/I3Units.h>
 #include <icetray/serialization.h>
 #include <icetray/modules/FrameCheck.h>
-#include <icetray/modules/Dump.h>
 
 #include <icetray/I3PhysicsTimer.h>
 #include <icetray/I3TrayHeaders.h>

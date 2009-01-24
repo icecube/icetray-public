@@ -1,10 +1,10 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: ModuleParameterConversions.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
+ * $Id: ServicesAtDestruction.cxx 5468 2005-03-30 14:48:26Z pretz $
  *
- * @version $Revision: 165886 $
- * @date $Date: 2018-10-01 07:37:58 -0700 (Mon, 01 Oct 2018) $
+ * @version $Revision: 1.3 $
+ * @date $Date: 2005-03-30 16:48:26 +0200 (Wed, 30 Mar 2005) $
  * @author troy d. straszheim
  *
  * This tests that the global GetService<> works; that the underlying
@@ -94,7 +94,7 @@ struct ParamConversionCheckModule : I3Module
 
   virtual void Process() 
   { 
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     I3FramePtr frame(new I3Frame(I3Frame::Physics));
     PushFrame(frame, "OutBox");
   }
