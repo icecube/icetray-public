@@ -54,7 +54,10 @@ void do_vector (std::string classname)
     ENSURE_EQUAL(v[i], T(i));
 
   log_debug("reading past versions");
-  string src = getenv("I3_SRC");
+  const char* i3_src = getenv("I3_SRC");
+  if (!i3_src)
+    log_fatal("I3_SRC not set... we need to know this to find the data files.  run your env-shell.sh");
+  string src = i3_src;
   vector<string> i3files;
   string globstr = src + "/dataio/resources/data/serialization/*/" + fname;
   log_debug("globbing '%s'", globstr.c_str());
@@ -80,10 +83,10 @@ TEST(int16_t) { do_vector<int16_t>("int16_t"); }
 TEST(uint32_t) { do_vector<uint32_t>("uint32_t"); }
 TEST(int32_t) { do_vector<int32_t>("int32_t"); }
 TEST(int64_t) {
-  do_vector<long long>("int64_t");
+  do_vector<int64_t>("int64_t");
 }
 TEST(uint64_t) {
-  do_vector<unsigned long long>("uint64_t");
+  do_vector<uint64_t>("uint64_t");
 }
 TEST(double) { do_vector<double>("double"); }
 TEST(float) { do_vector<float>("float"); }

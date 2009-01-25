@@ -111,13 +111,9 @@ namespace dataio
       unsigned line_no = 1;
       while (getline(ifs, str))
 	{
-#if BOOST_VERSION < 013600
 	  if (!parse(str.c_str(), g, space_p).full)
 	    log_fatal("Failure parsing %s at line %u", 
 		      filename.c_str(), line_no);
-#else
-#warning fixme
-#endif
 	  line_no++;
 	}
       return true;
