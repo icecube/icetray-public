@@ -51,7 +51,7 @@ macro(tooldef tool_ incdir incfile libdir bindir)
   set(${TOOL}_CONFIG_ERROR FALSE)
 
   if(NOT "${incdir}" STREQUAL "NONE")
-    find_path(${TOOL}_INCLUDE_DIR ${incfile} ${I3_PORTS}/${incdir} ${incdir})
+    find_path(${TOOL}_INCLUDE_DIR NAMES ${incfile} PATHS ${I3_PORTS}/${incdir} ${incdir} ${TOOL_SYSTEM_PATH})
     if(${${TOOL}_INCLUDE_DIR} MATCHES ".*NOTFOUND$")
       found_not_ok("${incfile} not found in ${incdir}")
       set(${TOOL}_CONFIG_ERROR TRUE)
