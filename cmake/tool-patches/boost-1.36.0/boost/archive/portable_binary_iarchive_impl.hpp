@@ -64,6 +64,14 @@ namespace boost {
 	this->load_binary(&(s[0]), l);
       }
 
+
+      void load_override(bool& b, BOOST_PFTO int)
+      {
+	uint8_t l;
+	this->load(l);
+	b = l;
+      }
+
       void load_override(class_name_type& t, BOOST_PFTO int)
       {
 	std::string cn;

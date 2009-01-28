@@ -75,6 +75,12 @@ namespace boost {
         this->basic_binary_oarchive<Archive>::save_override(t, 0L);
       }
 
+      void save_override(const bool& b, BOOST_PFTO int)
+      {
+	uint8_t l = b;
+	this->save(l);
+      }
+
       void save_override(const std::string & s, BOOST_PFTO int)
       {
 	uint32_t l = static_cast<uint32_t>(s.size());
