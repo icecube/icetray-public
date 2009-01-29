@@ -3,8 +3,21 @@
 #  Build slave script.
 #
 
-import pysvn, os, time
+import pysvn, os, time, sys, subprocess, logging, logging.handlers, glob, regex
 from optparse import OptionParser
+
+binary_dir = r'@CMAKE_BINARY_DIR@'
+source_dir = r'@CMAKE_SOURCE_DIR@'
+
+logdir = binary_dir
+
+daemon_pid = logdir + os.sep + "run_continuous_slave.pid"
+daemon_log = logdir + os.sep + "run_continuous_slave.log"
+# This gets the revision number and ".log" appended to it
+build_log = logdir + os.sep + "build_rev_"
+
+make_targets = 'slave-start test slave-finish'
+
 
 parser = OptionParser()
 
@@ -20,58 +33,169 @@ parser.add_option("-C", "--clean-every-time",
                   action="store_true", dest="clean_every_time", default=False,
                   help="Clean before every build")
 
+parser.add_option("-d", "--daemon",
+                  action="store_true", dest="daemon", default=False,
+                  help="Run as daemon in backgroud")
+
 parser.add_option("-k", "--keep-rebuilding",
                   action="store_true", dest="keep_rebuilding", default=False,
                   help="Rebuild even if there are no updates to svn")
 
+parser.add_option("-v", "--verbose",
+                  action="store_true", dest="verbose", default=False,
+                  help="Be verbose when running in foreground")
+
 (options, args) = parser.parse_args()
 
 
-client = pysvn.Client()
+logger =  logging.getLogger("build_slave")
+logger.setLevel(logging.DEBUG)
 
-wc_path = r'@CMAKE_SOURCE_DIR@'
+formatter = logging.Formatter('%(asctime)s %(message)s', '%b %d %H:%M:%S')
 
-def do_build(clean_):
+if options.daemon:
+    log_file = logging.handlers.TimedRotatingFileHandler(filename=daemon_log,
+                                                         when="midnight",
+                                                         backupCount="30")
+    log_file.setFormatter(formatter)
+    log_file.setLevel(logging.DEBUG)
+    logger.addHandler(log_file)
+else:
+    log_console = logging.StreamHandler()
+    log_console.setFormatter(formatter)
+    if options.verbose:
+        console_level = logging.DEBUG
+    else:
+        console_level = logging.INFO
+    log_console.setLevel(console_level)
+
+    logger.addHandler(log_console)
+
+
+def do_build(clean_, revision, logger):
     if clean_:
         clean = 'clean'
     else:
         clean = ''
     if os.name == 'nt':
-        cmd = 'nmake /I ' + clean + ' slave-start test slave-finish'
+        cmd = 'nmake /I ' + clean + ' ' + make_targets
     else:
-        cmd = 'make -i ' + clean + ' slave-start test slave-finish'
-    print "Starting build:\n>>> ", cmd
-    os.system(cmd)
-    
+        cmd = 'make -i ' + clean + ' ' + make_targets
 
-if options.build_first:
-    do_build(options.clean_first)
+    log_build = logging.FileHandler(build_log + str(revision) + ".log")
+    log_build.setFormatter(formatter)
+    log_build.setLevel(logging.DEBUG)
 
-while True:
+    logger.addHandler(log_build)
+    logger.info("Starting build for revision %d", revision)
+    if options.daemon:
+        logger.removeHandler(log_file)
+
+    logger.debug("Starting build with command:")
+    logger.debug(">>> " + cmd)
+
+    process = subprocess.Popen(cmd, 
+                               shell=True, 
+                               stderr=subprocess.STDOUT, 
+                               stdout=subprocess.PIPE)
+    while True:
+        line = process.stdout.readline()
+        if not line: break
+        logger.debug(line.rstrip())
+
+    if options.daemon:
+        logger.addHandler(log_file)
+    logger.info("Build for revision %d completed", revision)
+    logger.removeHandler(log_build)
+    log_build.close()
+
+
+def main():
+    client = pysvn.Client()
+
     try:
-        svn_entry = client.info(wc_path)
-
-        print "Wc has url %s rev %d.\nChecking for updates." \
-            % (svn_entry.url, svn_entry.revision.number)
-
-        client.update(wc_path)
-
-        newsvnentry = client.info(wc_path)
-        if newsvnentry.revision.number > svn_entry.revision.number:
-            print "Updated to r%d" % newsvnentry.revision.number
-        else:
-            print "No updates, still at r%d" % svn_entry.revision.number
-
-        if newsvnentry.revision.number > svn_entry.revision.number or options.keep_rebuilding:
-            do_build(options.clean_every_time)
-
-
+        svn_entry = client.info(source_dir)
     except Exception, e:
-        print e
-        print "Error.  Will retry."
-    
-    print "Sleeping %d seconds" % @BUILD_SLAVE_SLEEP_DURATION@
-    time.sleep(@BUILD_SLAVE_SLEEP_DURATION@)
+        logger.error(e)
+        logger.error("Error encountered getting Subversion info.")
+        logger.error("Trying to continue.")
 
-        
+    if options.build_first:
+        logger.debug("Initial build requested.")
+        do_build(options.clean_first, svn_entry.revision.number, logger)
 
+    # Don't advertise the submission credentials
+    svn_url_re = re.compile(r":\/\/.*:.*\@")
+    svn_url_printable = svn_url_re.sub('://', svn_entry.url)
+
+    while True:
+        try:
+            logger.info("Wc has url %s rev %d."
+                        % (svn_url_printable, svn_entry.revision.number))
+            logger.info("Checking for updates.")
+
+            client.update(source_dir)
+
+            newsvnentry = client.info(source_dir)
+            if newsvnentry.revision.number > svn_entry.revision.number:
+                logger.info("Updated to r%d" % newsvnentry.revision.number)
+            else:
+                logger.info("No updates, still at r%d" 
+                            % svn_entry.revision.number)
+
+            if newsvnentry.revision.number > svn_entry.revision.number or options.keep_rebuilding:
+                do_build(options.clean_every_time,
+                         newsvnentry.revision.number, logger)
+
+        except Exception, e:
+            logger.error(e)
+            logger.error("Error.  Will retry.")
+
+        build_log_list = sorted(glob.glob(logdir), reverse=True)
+        build_log_list_rm = build_log_list[30:]
+        if build_log_list_rm:
+            logger.debug("Older build logs found.")
+            for file in build_log_list_rm:
+                try:
+                    os.remove(file)
+                    logger.debug("Build log removed: %s" % file)
+                except Exception, e:
+                    logger.error("Error removing older build log %s:" % file)
+                    logger.error(e)
+
+        sleep_interval = 60
+        logger.info("Sleeping %d seconds" % sleep_interval)
+        time.sleep(sleep_interval)
+
+
+if options.daemon:
+    # Fork #1
+    try:
+        pid = os.fork()
+        if pid > 0:
+            sys.exit(0)
+    except OSError, e:
+        logger.error("First fork failed: %d (%s)" % (e.errno, e.strerror))
+        sys.exit(1)
+
+    # Drop the parent env
+    os.chdir(binary_dir)
+    os.setsid()
+    os.umask(0)
+
+    # Fork #2
+    try:
+        pid = os.fork()
+        if pid > 0:
+            # Write to both the console and logger
+            print "Daemon running with PID %d" % pid
+            logger.info("Daemon running with PID %d" % pid)
+            pidfile = open(daemon_pid, 'w')
+            pidfile.write(str(pid))
+            pidfile.close()
+            sys.exit(0)
+    except OSError, e:
+        logger.error("Second fork failed: %d (%s)" % (e.errno, e.strerror))
+        sys.exit(1)
+
+main()
