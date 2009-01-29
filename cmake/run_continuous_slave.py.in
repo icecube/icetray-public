@@ -6,6 +6,7 @@
 import pysvn, os, time, sys, subprocess, logging, logging.handlers, glob, regex
 from optparse import OptionParser
 
+
 binary_dir = r'@CMAKE_BINARY_DIR@'
 source_dir = r'@CMAKE_SOURCE_DIR@'
 
