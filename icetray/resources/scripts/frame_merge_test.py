@@ -5,6 +5,7 @@ Test the I3Frame's merging/purging stuff
 """
 
 from icecube.icetray import *
+import sys
 
 def makeframe(stream, key = None):
     if not key:
@@ -26,7 +27,7 @@ assert 'a' not in a2
 a.merge(a2)
 
 assert 'a2' in a
-assert 'a' not in a
+assert 'a'  in a
 
 ################################################################################
 
@@ -88,6 +89,13 @@ a2 = makeframe('a')
 a['a'].value = 666
 a2['a'].value = 777
  
-a.merge(a2)
-assert a['a'].value == 777
+try:
+    a.merge(a2)
+except:
+    print "ok,  that threw"
+    sys.exit(0)
+else:
+    print "that should have thrown"
+    sys.exit(1)
+
 
