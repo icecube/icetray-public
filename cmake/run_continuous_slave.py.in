@@ -3,7 +3,7 @@
 #  Build slave script.
 #
 
-import pysvn, os, time, sys, subprocess, logging, logging.handlers, glob, regex
+import pysvn, os, time, sys, subprocess, logging, logging.handlers, glob, re
 from optparse import OptionParser
 
 
