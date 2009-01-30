@@ -18,7 +18,12 @@ repo_path = "@CMAKE_SOURCE_DIR@"
 client = pysvn.Client()
 svn_entry = client.info(repo_path)
 _configured_hostname = "@BUILD_SLAVE_HOSTNAME@"
-fqdn = _configured_hostname if len(_configured_hostname) > 0 else socket.getfqdn()
+
+if len(_configured_hostname) > 0:
+    fqdn = _configured_hostname 
+else:
+    fqdn = socket.getfqdn()
+
 uname = platform.uname()
 toolset = "@TOOLSET@"
 
