@@ -55,9 +55,15 @@ logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s %(message)s', '%b %d %H:%M:%S')
 
 if options.daemon:
-    log_file = logging.handlers.TimedRotatingFileHandler(filename=daemon_log,
-                                                         when="midnight",
-                                                         backupCount="30")
+    try:
+        log_file = \
+            logging.handlers.TimedRotatingFileHandler(filename=daemon_log,
+                                                      when="midnight",
+                                                      backupCount="30")
+    except AttributeError, e:
+        print "Daemon logging enabled but no automatic log rotation available"
+        log_file = logging.FileHandler(filename=daemon_log)
+
     log_file.setFormatter(formatter)
     log_file.setLevel(logging.DEBUG)
     logger.addHandler(log_file)
