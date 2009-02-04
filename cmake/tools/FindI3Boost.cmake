@@ -40,6 +40,7 @@ if (BOOST_VERSION)
     boost/version.hpp
     lib/boost-${BOOST_VERSION}
     NONE
+    boost_system${BOOST_LIB_SUFFIX} 
     boost_filesystem${BOOST_LIB_SUFFIX} 
     boost_serialization${BOOST_LIB_SUFFIX} 
     boost_program_options${BOOST_LIB_SUFFIX} 
