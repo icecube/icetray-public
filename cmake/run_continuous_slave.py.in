@@ -153,12 +153,17 @@ def main():
             if newsvnentry.revision.number > svn_entry.revision.number or options.keep_rebuilding:
                 do_build(options.clean_every_time,
                          newsvnentry.revision.number, logger)
+                svn_entry = client.info(source_dir)
 
         except Exception, e:
             logger.error(e)
             logger.error("Error.  Will retry.")
 
-        build_log_list = sorted(glob.glob(logdir), reverse=True)
+        #build_log_list = sorted(glob.glob(logdir), reverse=True)
+        build_log_list = glob.glob(logdir)
+        build_log_list.sort()
+        build_log_list.reverse()
+
         build_log_list_rm = build_log_list[30:]
         if build_log_list_rm:
             logger.debug("Older build logs found.")
