@@ -18,6 +18,14 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
 
+# The following prevent these variables from being cached and force 
+#   them to be rechecked across changes from Release/Debug builds.
+SET(BOOST_PYTHON "BOOST_PYTHON-NOTFOUND" CACHE FILEPATH "Cleared with rebuild_cache." FORCE)
+SET(BOOST_SYSTEM "BOOST_SYSTEM-NOTFOUND" CACHE FILEPATH "Cleared with rebuild_cache." FORCE)
+SET(BOOST_SIGNALS "BOOST_SIGNALS-NOTFOUND" CACHE FILEPATH "Cleared with rebuild_cache." FORCE)
+SET(BOOST_THREAD "BOOST_THREAD-NOTFOUND" CACHE FILEPATH "Cleared with rebuild_cache." FORCE)
+SET(BOOST_DATE_TIME "BOOST_DATE_TIME-NOTFOUND" CACHE FILEPATH "Cleared with rebuild_cache." FORCE)
+
 if(CMAKE_BUILD_TYPE MATCHES "Rel")
   set(BOOST_LIB_SUFFIX "")
 else()
@@ -70,3 +78,8 @@ else()
   set(BOOST_LIBRARIES "${BOOST_LIBRARIES};${BOOST_SYSTEM}" CACHE PATH "Libraries for tool 'boost'" FORCE)
 endif()
 
+message(STATUS "...BOOST_PYTHON: ${BOOST_PYTHON}")
+message(STATUS "...BOOST_SYSTEM: ${BOOST_SYSTEM}")
+message(STATUS "...BOOST_SIGNALS: ${BOOST_SIGNALS}")
+message(STATUS "...BOOST_THREAD: ${BOOST_THREAD}")
+message(STATUS "...BOOST_DATE_TIME: ${BOOST_DATE_TIME}")
