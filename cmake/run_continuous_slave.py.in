@@ -159,8 +159,8 @@ def main():
             logger.error(e)
             logger.error("Error.  Will retry.")
 
-        #build_log_list = sorted(glob.glob(logdir), reverse=True)
-        build_log_list = glob.glob(logdir)
+        #build_log_list = sorted(glob.glob(build_log + '*'), reverse=True)
+        build_log_list = glob.glob(build_log + '*')
         build_log_list.sort()
         build_log_list.reverse()
 
