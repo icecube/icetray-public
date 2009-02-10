@@ -38,7 +38,13 @@
 //  Preprocessor def is set if we're building python bindings.  
 //
 #ifdef I3_PYBINDINGS_MODULE
+
+// this has to match the type of libs you link to.  This should
+// probably be configured by the boost tool and put on the command
+// line instead of done here.
+#if BOOST_VERSION < 103800
 #define BOOST_DISABLE_THREADS
+#endif
 
 #define BOOST_PYTHON_DYNAMIC_LIB
 
