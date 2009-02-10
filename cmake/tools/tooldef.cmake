@@ -69,10 +69,17 @@ macro(tooldef tool_ incdir incfile libdir bindir)
   endif(NOT "${bindir}" STREQUAL "NONE")
 
   foreach(lib ${ARGN})
-    find_library(foundlib${lib} 
-      ${lib} 
-      ${I3_PORTS}/${libdir} ${libdir}
-      ${TOOL_SYSTEM_PATH})
+    set(foundlib${lib} "NOTFOUND" CACHE INTERNAL "tmp" FORCE)
+    if (NOT ${lib})
+      # if it is nothing, go find it
+      find_library(foundlib${lib} 
+	${lib} 
+	${I3_PORTS}/${libdir} ${libdir}
+	${TOOL_SYSTEM_PATH})
+    else (NOT ${lib})
+      #else go try to find it
+      set(foundlib${lib} ${lib})
+    endif(NOT ${lib})
     if(${foundlib${lib}} MATCHES ".*NOTFOUND$" AND NOT ${libdir} STREQUAL "NONE")
       found_not_ok("${lib}")
       set(${TOOL}_CONFIG_ERROR TRUE)
