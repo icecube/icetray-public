@@ -49,7 +49,7 @@ A version of sphinx > 0.4.3 is required.  This means that as of this
 writing, the trunk is required.     The easiest way to install this 
 version is::
 
-   easy_install http://svn.python.org/projects/doctools/trunk
+   easy_install -U Sphinx
 
 Then see :ref:`workspace-targets` for information on building them.
 
