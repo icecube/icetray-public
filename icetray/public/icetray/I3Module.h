@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3Module.h 49585 2008-10-06 17:23:28Z blaufuss $
  *  
  *  Copyright (C) 2007, 2008
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -49,7 +49,7 @@ using namespace std;
  * This class defines the interface which should be implementaed by all 
  * modules in IceTray.
  *
- * @version $Id$
+ * @version $Id: I3Module.h 49585 2008-10-06 17:23:28Z blaufuss $
  */
 class I3Module;
 I3_POINTER_TYPEDEFS(I3Module);
@@ -377,7 +377,7 @@ protected:
 
 };
 
-typedef shared_ptr<I3Module> I3ModulePtr;
+typedef boost::shared_ptr<I3Module> I3ModulePtr;
 
 #include "icetray/I3Factory.h"
 #endif // I3MODULE_H

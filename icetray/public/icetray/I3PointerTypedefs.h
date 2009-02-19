@@ -25,8 +25,8 @@
 // for generating pointer typedefs in dataclass structures.
 // pointer to const object and pointer to object
 #define I3_POINTER_TYPEDEFS(C)			\
-  typedef shared_ptr<C> C##Ptr;			\
-  typedef shared_ptr<const C> C##ConstPtr;
+  typedef boost::shared_ptr<C> C##Ptr;			\
+  typedef boost::shared_ptr<const C> C##ConstPtr;
 
 #define I3_FORWARD_DECLARATION(C)  class C;	I3_POINTER_TYPEDEFS(C)
 

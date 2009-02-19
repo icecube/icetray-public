@@ -33,25 +33,25 @@ struct is_shared_ptr
 };
 
 template <typename T>
-struct is_shared_ptr<shared_ptr<T> >
+struct is_shared_ptr<boost::shared_ptr<T> >
 {
   const static bool value = true;
 };
 
 template <typename T>
-struct is_shared_ptr<shared_ptr<const T> >
+struct is_shared_ptr<boost::shared_ptr<const T> >
 {
   const static bool value = true;
 };
 
 template <typename T>
-struct is_shared_ptr<const shared_ptr<T> >
+struct is_shared_ptr<const boost::shared_ptr<T> >
 {
   const static bool value = true;
 };
 
 template <typename T>
-struct is_shared_ptr<const shared_ptr<const T> >
+struct is_shared_ptr<const boost::shared_ptr<const T> >
 {
   const static bool value = true;
 };
