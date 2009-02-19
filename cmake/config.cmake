@@ -241,7 +241,12 @@ add_definitions(-D_REEENTRANT -fPIC)
 #
 # libraries everybody links to
 #
-link_libraries(m dl stdc++)
+if (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
+	# FreeBSD keeps libdl stuff in libc
+	link_libraries(m stdc++)
+else (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
+	link_libraries(m dl stdc++)
+endif (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
 
 set(TESTING_LD_LIBRARY_PATH $ENV{LD_LIBRARY_PATH}:${CMAKE_BINARY_DIR}/lib:${I3_PORTS}/lib:${I3_PORTS}/lib/boost-1.33.1)
 set(TESTING_PATH ${I3_PORTS}/bin:${CMAKE_BINARY_DIR}/bin:$ENV{PATH})
