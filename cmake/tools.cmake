@@ -31,7 +31,7 @@ set(ALL_TOOLS pthread root I3Boost python
     rdmc expat gsl sprng sla
     mysql bdb log4cplus photonics ptd
     ZThread omniORB fox jni ncurses
-    cdk I3Qt4
+    cdk I3Qt4 cfitsio
     )
   
 foreach(tool ${ALL_TOOLS})
