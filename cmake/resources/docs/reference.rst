@@ -49,6 +49,12 @@ us).
       python packages work, these directories will need a file
       ``__init__.py`` in order to be importable.
 
+      NB: If you use both pybindings and python code, you should code like
+      this in your __init__.py::
+	
+	from icecube.load_pybindings import load_pybindings
+	load_pybindings(__name__, __path__)
+
       See also :ref:`USE_SETUPTOOLS <USE_SETUPTOOLS>`
 
    .. _PYTHON_DEST:	   
