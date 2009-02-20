@@ -23,6 +23,10 @@ i3_project(icetray
   DOCS_DIR resources/docs
   PYTHON_DIR python)
 
+if (USE_ROOT)
+  set(ROOT_TOOL root)
+endif (USE_ROOT)
+
 set(ICETRAY_PYTHON_SRC
   private/pybindings/module.cxx
   private/pybindings/OMKey.cxx
@@ -37,6 +41,11 @@ set(ICETRAY_PYTHON_SRC
   private/pybindings/I3FrameObject.cxx
   private/pybindings/I3TrayInfo.cxx
   private/pybindings/std_cont_pod.cxx)
+
+if (NOT ${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
+  # On FreeBSD, the backtrace facility is in a separate library.
+  set(I3_BACKTRACE_CXX private/icetray/Backtrace.cxx)
+endif (NOT ${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
 
 i3_add_library(icetray
   private/icetray/I3Frame.cxx 
@@ -65,7 +74,7 @@ i3_add_library(icetray
   private/icetray/I3TrayInfo.cxx	       
   private/icetray/I3TrayInfoService.cxx  
   private/icetray/I3IcePick.cxx	       
-  private/icetray/Backtrace.cxx	       
+  ${I3_BACKTRACE_CXX}
   private/icetray/PythonInterpreter.cxx	       
   private/icetray/PythonFunction.cxx	       
   private/icetray/PythonModule.cxx	       
@@ -94,7 +103,7 @@ i3_add_library(icetray
 
   ${ICETRAY_PYTHON_SRC}
 
-  USE_TOOLS boost python log4cplus root 
+  USE_TOOLS boost python log4cplus ${ROOT_TOOL}
   LINK_LIBRARIES ${BOOST_PYTHON}
   ROOTCINT public/icetray/I3FrameObject.h)
 
@@ -115,7 +124,7 @@ set_source_files_properties(${ICETRAY_PYTHON_SRC}
 i3_executable(inspect 
   private/inspect/*.cxx
   USE_PROJECTS icetray
-  USE_TOOLS log4cplus boost root)
+  USE_TOOLS log4cplus boost ${ROOT_TOOL})
 
 i3_test_executable(test 
   private/test/CleanConstructorTest.cxx  
@@ -151,7 +160,8 @@ i3_test_executable(test
   private/test/typesizes.cxx
   private/test/OMKey.cxx
   private/test/I3ConditionalModuleTest.cxx
-  USE_TOOLS root
+
+  USE_TOOLS ${ROOT_TOOL}
   USE_PROJECTS icetray)
 
 i3_test_compile(main private/test/main.cxx)
