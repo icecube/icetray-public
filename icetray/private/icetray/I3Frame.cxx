@@ -18,8 +18,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-#include <icetray/I3Frame.h>
-#include <icetray/I3Tray.h>
 
 #include <algorithm>
 #include <fstream>
@@ -37,6 +35,8 @@
 
 #include <icetray/serialization.h>
 #include <icetray/Utility.h>
+#include <icetray/I3Frame.h>
+#include <icetray/I3Tray.h>
 
 
 using namespace std;
