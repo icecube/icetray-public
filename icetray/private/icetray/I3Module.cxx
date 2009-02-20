@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3Module.cxx 51710 2009-01-06 19:23:39Z troy $
  *  
  *  Copyright (C) 2004 - 2008
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -20,10 +20,10 @@
  *  
  */
 
+#include <boost/python.hpp>
 #include <sys/time.h>
 #include <sys/resource.h>
 
-#include <boost/python.hpp>
 #include <boost/bind.hpp>
 #include <boost/preprocessor.hpp>
 
