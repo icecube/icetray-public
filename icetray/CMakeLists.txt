@@ -23,10 +23,6 @@ i3_project(icetray
   DOCS_DIR resources/docs
   PYTHON_DIR python)
 
-if (USE_ROOT)
-  set(ROOT_TOOL root)
-endif (USE_ROOT)
-
 set(ICETRAY_PYTHON_SRC
   private/pybindings/module.cxx
   private/pybindings/OMKey.cxx
@@ -103,7 +99,7 @@ i3_add_library(icetray
 
   ${ICETRAY_PYTHON_SRC}
 
-  USE_TOOLS boost python log4cplus ${ROOT_TOOL}
+  USE_TOOLS boost python log4cplus root
   LINK_LIBRARIES ${BOOST_PYTHON}
   ROOTCINT public/icetray/I3FrameObject.h)
 
@@ -124,7 +120,7 @@ set_source_files_properties(${ICETRAY_PYTHON_SRC}
 i3_executable(inspect 
   private/inspect/*.cxx
   USE_PROJECTS icetray
-  USE_TOOLS log4cplus boost ${ROOT_TOOL})
+  USE_TOOLS log4cplus boost root)
 
 i3_test_executable(test 
   private/test/CleanConstructorTest.cxx  
@@ -161,7 +157,7 @@ i3_test_executable(test
   private/test/OMKey.cxx
   private/test/I3ConditionalModuleTest.cxx
 
-  USE_TOOLS ${ROOT_TOOL}
+  USE_TOOLS root
   USE_PROJECTS icetray)
 
 i3_test_compile(main private/test/main.cxx)
