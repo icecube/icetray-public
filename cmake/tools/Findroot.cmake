@@ -29,6 +29,11 @@ if(NOT USE_ROOT)
   set(ROOT_LIB_DIR "/USE_ROOT/IS/OFF" CACHE STRING "USE_ROOT is OFF" FORCE)
   set(ROOT_LIBRARIES "" CACHE STRING "USE_ROOT is OFF" FORCE)
   set(ROOTSYS "/USE_ROOT/IS/OFF" CACHE STRING "USE_ROOT is OFF" FORCE)
+
+  # ROOT is nothing if USE_ROOT is off, so set ROOT_FOUND to fake out
+  # modules that uncoditionally add USE_TOOLS root
+
+  set(ROOT_FOUND TRUE)
 else(NOT USE_ROOT)
 
   if(NOT ROOT_VERSION)
