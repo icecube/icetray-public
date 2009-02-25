@@ -197,9 +197,14 @@ Model::show_xml()
     return;
 
   string xml = frame->as_xml(y_keystring_);
-  string pretty = y_keystring_ + " [type: " + frame->type_name(y_keystring_)
-    + "]\n\n" + prettify_xml(xml);
-  view_.page(pretty);
+  try {
+    string pretty = y_keystring_ + " [type: " + frame->type_name(y_keystring_)
+      + "]\n\n" + prettify_xml(xml);
+    view_.page(pretty);
+  } catch (const std::bad_alloc& e) {
+    log_trace("Pretty xml output not possible, going to plain xml");
+    view_.page(xml);
+  }
 }
 
 void
