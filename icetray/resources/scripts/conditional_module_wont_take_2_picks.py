@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 from icecube import icetray, dataclasses, dataio, util
 from I3Tray import *

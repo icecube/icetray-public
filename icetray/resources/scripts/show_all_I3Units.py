@@ -66,6 +66,12 @@ print "second ==", I3Units.second
 print "nanosecond ==", I3Units.nanosecond
 print "millisecond ==", I3Units.millisecond
 print "microsecond ==", I3Units.microsecond
+print "picosecond ==", I3Units.picosecond
+print "minute ==", I3Units.minute
+print "hour ==", I3Units.hour
+print "day ==", I3Units.day
+print "gregorianyear ==", I3Units.gregorianyear
+print "julianyear ==", I3Units.julianyear
 print "hertz ==", I3Units.hertz
 print "kilohertz ==", I3Units.kilohertz
 print "megahertz ==", I3Units.megahertz
@@ -90,6 +96,7 @@ print "coulomb ==", I3Units.coulomb
 print "C ==", I3Units.C
 print "picocoulomb ==", I3Units.picocoulomb
 print "pC ==", I3Units.pC
+print "joule ==", I3Units.joule
 print "ampere ==", I3Units.ampere
 print "A ==", I3Units.A
 print "milliampere ==", I3Units.milliampere

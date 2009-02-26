@@ -90,6 +90,7 @@ BOOST_PP_SEQ_FOR_EACH(I3_SETPARAM_OVERLOAD, ~, ITHON_I3_PARAM_TYPES);
     (kilometer3)							\
     (parsec)								\
     (micrometer)							\
+    (nanometer)								\
     (angstrom)								\
     (fermi)								\
     (barn)								\
@@ -121,6 +122,7 @@ BOOST_PP_SEQ_FOR_EACH(I3_SETPARAM_OVERLOAD, ~, ITHON_I3_PARAM_TYPES);
     (sr)								\
     (deg)								\
     (second)								\
+    (picosecond)							\
     (nanosecond)							\
     (millisecond)							\
     (microsecond)							\
@@ -133,7 +135,7 @@ BOOST_PP_SEQ_FOR_EACH(I3_SETPARAM_OVERLOAD, ~, ITHON_I3_PARAM_TYPES);
     (minute)								\
     (hour)								\
     (day)								\
-    (gregoianyear)							\
+    (gregorianyear)							\
     (julianyear)							\
     (electronvolt)							\
     (kiloelectronvolt)							\
@@ -153,6 +155,7 @@ BOOST_PP_SEQ_FOR_EACH(I3_SETPARAM_OVERLOAD, ~, ITHON_I3_PARAM_TYPES);
     (C)									\
     (picocoulomb)							\
     (pC)								\
+    (joule)								\
     (ampere)								\
     (A)									\
     (milliampere)							\
