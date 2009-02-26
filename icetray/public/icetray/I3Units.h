@@ -9,9 +9,9 @@
  Joules
 
  Modified 2-17-04 by John Pretz from a Geant4 header
- @version $Id: I3Units.h 165886 2018-10-01 14:37:58Z nwhitehorn $
+ @version $Id: I3Units.h 14493 2006-01-18 16:52:24Z bchristy $
  @file I3Units.h  
- @date $Date: 2018-10-01 07:37:58 -0700 (Mon, 01 Oct 2018) $
+ @date $Date: 2006-01-18 17:52:24 +0100 (Wed, 18 Jan 2006) $
  
  Also removed everything but Time, Energy, Length, Angle, Areas and Volumes.
  Pressure, Power, stuff like that is not done, since the redefinition of
@@ -78,7 +78,7 @@
  *      readvoltage = myContainerPtr->GetVoltage()/I3Units::V;
  * 
  * @version $Version:$
- * @date $Date: 2018-10-01 07:37:58 -0700 (Mon, 01 Oct 2018) $
+ * @date $Date: 2006-01-18 17:52:24 +0100 (Wed, 18 Jan 2006) $
  * @author Geant4 Team (original) M.Maire, S.Giani
  * @author pretz (IceCube modifications)
  * @todo Should we have a 'speed' here too?
@@ -363,7 +363,7 @@ namespace I3Units
   /**
    * Gregorian Year
    */ 
-  static const double gregoianyear = 365.2425*day;
+  static const double gregorianyear = 365.2425*day;
 
   /**
    * Julian Year
@@ -404,11 +404,6 @@ namespace I3Units
   //
   // Energy [E]
   //
-  /**
-   * joule
-   */
-  //  static const double joule = kg*m*m/(s*s);
-  
   /**
    * eV
    */
@@ -469,7 +464,7 @@ namespace I3Units
    * PeV
    */
   static const double PeV = petaelectronvolt;
-   
+
   //
   // Charge
   //
@@ -490,6 +485,15 @@ namespace I3Units
    */
    static const double picocoulomb = 1.e-12*coulomb;
    static const double pC = picocoulomb;
+
+   
+  //
+  // Energy in joule
+  //
+  /**
+   * joule
+   */
+  static const double joule = electronvolt/eSI;  // joule = 6.24150 e+12 * MeV;
   
   //
   // Current
@@ -555,6 +559,26 @@ namespace I3Units
      */ 
     static const double kelvin = 1.0;
     
+    //
+    // Mass [E][T^2][L^-2]
+    //
+    /** 
+     * Kilogram
+     */ 
+    static const double kilogram = joule*second*second/(meter*meter);
+    static const double kg = kilogram;
+
+    /** 
+     * Gram
+     */ 
+    static const double gram = 1.e-3*kilogram;
+    static const double g = gram;
+
+    /** 
+     * Milligram
+     */ 
+    static const double milligram = 1.e-3*gram;
+    static const double mg = milligram;    
 
   //
   // Miscellaneous

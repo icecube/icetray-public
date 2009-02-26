@@ -1,5 +1,5 @@
 /**
- *  $Id: I3Tray.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
+ *  $Id: ithon.cxx 43705 2008-03-26 20:54:18Z kjmeagher $
  *  
  *  Copyright (C) 2004, 2005, 2006, 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -90,6 +90,7 @@ BOOST_PP_SEQ_FOR_EACH(I3_SETPARAM_OVERLOAD, ~, ITHON_I3_PARAM_TYPES);
     (kilometer3)							\
     (parsec)								\
     (micrometer)							\
+    (nanometer)								\
     (angstrom)								\
     (fermi)								\
     (barn)								\
@@ -121,6 +122,7 @@ BOOST_PP_SEQ_FOR_EACH(I3_SETPARAM_OVERLOAD, ~, ITHON_I3_PARAM_TYPES);
     (sr)								\
     (deg)								\
     (second)								\
+    (picosecond)							\
     (nanosecond)							\
     (millisecond)							\
     (microsecond)							\
@@ -133,7 +135,7 @@ BOOST_PP_SEQ_FOR_EACH(I3_SETPARAM_OVERLOAD, ~, ITHON_I3_PARAM_TYPES);
     (minute)								\
     (hour)								\
     (day)								\
-    (gregoianyear)							\
+    (gregorianyear)							\
     (julianyear)							\
     (electronvolt)							\
     (kiloelectronvolt)							\
@@ -153,6 +155,7 @@ BOOST_PP_SEQ_FOR_EACH(I3_SETPARAM_OVERLOAD, ~, ITHON_I3_PARAM_TYPES);
     (C)									\
     (picocoulomb)							\
     (pC)								\
+    (joule)								\
     (ampere)								\
     (A)									\
     (milliampere)							\
