@@ -24,6 +24,7 @@ using boost::optional;
 
 #include <boost/foreach.hpp>
 
+#include <map>
 #include <dataio/I3File.h>
 #include <icetray/serialization.h>
 #include <icetray/Utility.h>
