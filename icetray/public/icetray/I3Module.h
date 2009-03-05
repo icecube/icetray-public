@@ -27,6 +27,7 @@
 #include <icetray/Version.h>
 #include <icetray/I3Logging.h>
 #include <icetray/I3Context.h>
+#include <icetray/I3PointerTypedefs.h>
 #include <icetray/I3Frame.h>
 #include <icetray/I3Configuration.h>
 #include <icetray/I3PhysicsUsage.h>
@@ -40,8 +41,6 @@
 class I3Configuration;
 class I3Context;
 class I3Frame;
-
-typedef boost::shared_ptr<I3Frame> I3FramePtr;
 
 using namespace std;
 
@@ -377,7 +376,33 @@ protected:
 
 };
 
-typedef boost::shared_ptr<I3Module> I3ModulePtr;
+
+const I3Context& GetActiveContext();
+
+// Use argument
+template <class T>
+T& 
+GetService(const std::string &where = I3DefaultName<T>::value(), 
+	   typename boost::disable_if<is_shared_ptr<T>, bool>::type* enabler = 0)
+{
+  const I3Context& context = GetActiveContext();
+
+  //Fix to get around the 3.2 compiler
+  return context.template Get<T>(where);
+}
+
+template <class T>
+T 
+GetService(const std::string &where = I3DefaultName<typename T::value_type>::value(),
+	   typename boost::enable_if<is_shared_ptr<T>, bool>::type* enabler = 0)
+{
+  const I3Context& context = GetActiveContext();
+
+  //Fix to get around the 3.2 compiler
+  return context.template Get<T>(where);
+}
+
+
 
 #include "icetray/I3Factory.h"
 #endif // I3MODULE_H
