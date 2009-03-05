@@ -293,27 +293,9 @@ I3Tray::AddService(const std::string& instancename)
   return this->AddService(I3::name_of<Type>(), instancename);
 }
 
-// Use argument
-template <class T>
-T& 
-GetService(const std::string &where = I3DefaultName<T>::value(), 
-	   typename boost::disable_if<is_shared_ptr<T>, bool>::type* enabler = 0)
-{
-  const I3Context& context = I3Tray::GetActiveContext();
-
-  //Fix to get around the 3.2 compiler
-  return context.template Get<T>(where);
-}
-
-template <class T>
-T 
-GetService(const std::string &where = I3DefaultName<typename T::value_type>::value(),
-	   typename boost::enable_if<is_shared_ptr<T>, bool>::type* enabler = 0)
-{
-  const I3Context& context = I3Tray::GetActiveContext();
-
-  //Fix to get around the 3.2 compiler
-  return context.template Get<T>(where);
-}
+//
+//  ugly... at the top level.  But necessary for the obnoxious 'GetService'.
+//
+const I3Context& GetActiveContext();
 
 #endif

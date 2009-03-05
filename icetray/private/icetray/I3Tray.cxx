@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3Tray.cxx 51710 2009-01-06 19:23:39Z troy $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -487,6 +487,11 @@ void
 I3Tray::SetActiveContext(const I3Context* newactive)
 {
   active_context_ = newactive;
+}
+
+const I3Context& GetActiveContext() 
+{
+  return I3Tray::GetActiveContext();
 }
 
 // test commit.
