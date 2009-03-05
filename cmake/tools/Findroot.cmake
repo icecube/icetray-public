@@ -59,7 +59,7 @@ else(NOT USE_ROOT)
   set(ROOT_5.16.00_LIBS Core Cint RIO Net Hist Graf Graf3d Gpad Tree Rint Postscript Matrix Physics Minuit)
   set(ROOT_5.17.06_LIBS Core Cint RIO Net Hist Graf Graf3d Gpad Tree Rint Postscript Matrix Physics Minuit)
   set(ROOT_5.18.00_LIBS Core Cint RIO Net Hist Graf Graf3d Gpad Tree Rint Postscript Matrix Physics Minuit)
-  set(ROOT_5.20.00_LIBS Core Cint RIO Net Hist Graf Graf3d Gpad Tree Rint Postscript Matrix Physics MathCore Thread Minuit Minuit2 Gui)
+  set(ROOT_5.20.00_LIBS Core Cint RIO Net Hist Graf Graf3d Gpad Tree Rint Postscript Matrix Physics MathCore Thread Minuit Gui)
 
   add_definitions(-DI3_USE_ROOT -fno-strict-aliasing)
   if(NOT ROOTSYS)
