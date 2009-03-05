@@ -71,7 +71,7 @@ I3MultiWriter::Configure_()
 
   GetParameter("SizeLimit", size_limit_);
   if (size_limit_ == 0)
-    log_fatal("SizeLimit (%llu) must be > 0", size_limit_);
+    log_fatal("SizeLimit (%llu) must be > 0", (unsigned long long)size_limit_);
 
   log_trace("path_=%s", path_.c_str());
   log_debug("Starting new file '%s'", current_path().c_str());
@@ -100,7 +100,7 @@ I3MultiWriter::Flush()
   if (!ctr) log_fatal("couldnt get counter from stream");
   bytes_written = ctr->characters();
 
-  log_trace("%llu bytes: %s", bytes_written, current_path().c_str());
+  log_trace("%llu bytes: %s", (unsigned long long)bytes_written, current_path().c_str());
 
   if (bytes_written > size_limit_)
     NewFile();
@@ -118,7 +118,7 @@ I3MultiWriter::Finish_()
 
   filterstream_.reset();
 
-  log_trace("lastfile bytes=%llu", lastfile_bytes);
+  log_trace("lastfile bytes=%llu", (unsigned long long)lastfile_bytes);
 
   if (lastfile_bytes == 0)
     {
