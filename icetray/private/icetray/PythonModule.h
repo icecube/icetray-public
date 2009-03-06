@@ -1,7 +1,9 @@
+#ifndef ICETRAY_PYTHONOMODULE_H_INCLUDED
+#define ICETRAY_PYTHONOMODULE_H_INCLUDED
 //
 //   Copyright (c) 2004, 2005, 2006, 2007   Troy D. Straszheim  
 //   
-//   $Id: PythonModule.h 165886 2018-10-01 14:37:58Z nwhitehorn $
+//   $Id: ithon.cxx 25598 2006-11-25 02:52:57Z troy $
 //
 //   This file is part of IceTray.
 //
@@ -28,7 +30,8 @@
 #include <boost/python.hpp>
 
 
-struct PythonModule : I3Module, boost::python::wrapper<I3Module>
+template <typename Base>
+struct PythonModule : Base, boost::python::wrapper<Base>
 {
   PythonModule(const I3Context& ctx); 
 
@@ -64,3 +67,4 @@ struct PythonModule : I3Module, boost::python::wrapper<I3Module>
 };
 
 
+#endif

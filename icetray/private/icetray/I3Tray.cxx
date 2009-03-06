@@ -96,19 +96,31 @@ I3Tray::AddModule(boost::python::object obj, const std::string& instancename)
     {
       config->ClassName(boost::python::extract<std::string>(obj));
     } 
-  else if (PyFunction_Check(obj.ptr())) 
+  else if (PyFunction_Check(obj.ptr()))
     // it is a python function... put the object in the context and 
     // call it a PythonFunction
     {
-      config->ClassName("PythonFunction");
+      config->ClassName("PythonFunction"); // Used to look up Create function in factory
+      // only in this case... we need the python object whose constructor will get called
+      // by the Create function
       context->Put(boost::shared_ptr<boost::python::object>(new boost::python::object(obj)), 
 		   "object");
     } 
-  else {
-    config->ClassName("PythonModule");
-    context->Put(boost::shared_ptr<boost::python::object>(new boost::python::object(obj)), 
-		 "class");
-  }
+  else if (PyType_Check(obj.ptr()))
+    {
+      config->ClassName("PythonModule"); // Used to look up Create function in factory
+      // only in this case... we need the python object whose constructor will get called
+      // by the Create function
+      context->Put(boost::shared_ptr<boost::python::object>(new boost::python::object(obj)),
+		   "class");
+    }
+  else
+    {
+      log_fatal("'%s%s' passed to AddModule with instance name %s.  Must be a string, a python function, or a python I3Module.", 
+		PyEval_GetFuncName(obj.ptr()),
+		PyEval_GetFuncDesc(obj.ptr()),
+		instancename.c_str());
+    }
 
   log_trace("%s : %s", __PRETTY_FUNCTION__, instancename.c_str());
 
