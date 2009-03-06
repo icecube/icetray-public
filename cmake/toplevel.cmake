@@ -34,15 +34,25 @@ if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 
+execute_process(COMMAND ${CMAKE_SOURCE_DIR}/cmake/readlink.py ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE I3_SRC
+  )
+message(STATUS "After resolving links I3_SRC=${I3_SRC}")
+
+execute_process(COMMAND ${CMAKE_SOURCE_DIR}/cmake/readlink.py ${CMAKE_BINARY_DIR}
+  OUTPUT_VARIABLE I3_BUILD
+  )
+message(STATUS "After resolving links I3_BUILD=${I3_BUILD}")
+
 #
 #  Check build sanity
 #
 if(DEFINED ENV{I3_BUILD})
-  if(NOT "$ENV{I3_BUILD}" STREQUAL "${CMAKE_BINARY_DIR}")
+  if(NOT "$ENV{I3_BUILD}" STREQUAL "${I3_BUILD}")
     message("***")
     message("*** You appear to be trying to configure cmake from within an environment with a different workspace")
     message("*** I3_BUILD = $ENV{I3_BUILD}")
-    message("*** CMAKE_BINARY_DIR = ${CMAKE_BINARY_DIR}")
+    message("*** CMAKE_BINARY_DIR = ${I3_BUILD}")
     message("***")
     message("*** Retry from a clean environment (exit your env-shell.sh)")
     message("***")
@@ -55,11 +65,11 @@ else()
 endif()
 
 if(DEFINED ENV{I3_SRC})
-  if(NOT "$ENV{I3_SRC}" STREQUAL "${CMAKE_SOURCE_DIR}")
+  if(NOT "$ENV{I3_SRC}" STREQUAL "${I3_SRC}")
     message("***")
     message("*** You appear to be trying to configure cmake from within an environment with a different workspace")
     message("*** I3_SRC = $ENV{I3_SRC}")
-    message("*** CMAKE_SOURCE_DIR = ${CMAKE_SOURCE_DIR}")
+    message("*** CMAKE_SOURCE_DIR = ${I3_SRC}")
     message("***")
     message("*** Retry from a clean environment (exit your env-shell.sh)")
     message("***")
