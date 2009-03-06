@@ -22,6 +22,7 @@
 #include <vector>
 
 #include <icetray/I3Module.h>
+#include <icetray/I3ConditionalModule.h>
 #include <icetray/I3Logging.h>
 #include <icetray/I3TrayHeaders.h>
 #include <icetray/OMKey.h>
@@ -29,14 +30,15 @@
 #include <boost/python/import.hpp>
 
 namespace bp = boost::python;
-
-PythonModule::PythonModule(const I3Context& ctx) : I3Module(ctx)
+template <typename Base>
+PythonModule<Base>::PythonModule(const I3Context& ctx) : Base(ctx)
 { 
   log_trace("%s", __PRETTY_FUNCTION__);
 }
 
+template <typename Base>
 void 
-PythonModule::Configure()
+PythonModule<Base>::Configure()
 {
   log_trace("%s", __PRETTY_FUNCTION__);
   if (bp::override conf = this->get_override("Configure"))
@@ -45,118 +47,137 @@ PythonModule::Configure()
     log_fatal("Python module doesn't implement 'Configure'");
 }
 
+template <typename Base>
 void 
-PythonModule::Process()
+PythonModule<Base>::Process()
 {
   log_trace("%s", __PRETTY_FUNCTION__);
   if (bp::override process = this->get_override("Process"))
     process();
   else
-    I3Module::Process();
+    Base::Process();
 }
 
+template <typename Base>
 void 
-PythonModule::Finish()
+PythonModule<Base>::Finish()
 {
   log_trace("%s", __PRETTY_FUNCTION__);
   if (bp::override fin = this->get_override("Finish"))
     fin();
   else
-    I3Module::Finish();
+    Base::Finish();
 }
 
+template <typename Base>
 void
-PythonModule::AddParameter(const std::string& name, 
+PythonModule<Base>::AddParameter(const std::string& name, 
 			   const std::string& description, 
 			   const bp::object& value)
 {
-  I3Module::AddParameter(name, description, value);
+  Base::AddParameter(name, description, value);
 }
 
+template <typename Base>
 void
-PythonModule::AddParameter(const std::string& name, 
+PythonModule<Base>::AddParameter(const std::string& name, 
 			   const std::string& description) 
 {
-  I3Module::AddParameter(name, description);
+  Base::AddParameter(name, description);
 }
 
+template <typename Base>
 void
-PythonModule::Register(const I3Frame::Stream& s, const boost::python::object& method)
+PythonModule<Base>::Register(const I3Frame::Stream& s, const boost::python::object& method)
 {
-  I3Module::Register(s, method);
+  Base::Register(s, method);
 }
 
+template <typename Base>
 bp::object
-PythonModule::GetParameter(const std::string& name)
+PythonModule<Base>::GetParameter(const std::string& name)
 {
   bp::object obj;
-  I3Module::GetParameter(name, obj);
+  Base::GetParameter(name, obj);
   return obj;
 }
   
+template <typename Base>
 void 
-PythonModule::Geometry(I3FramePtr frame)
+PythonModule<Base>::Geometry(I3FramePtr frame)
 {
   log_trace("%s", __PRETTY_FUNCTION__);
   if (bp::override g = this->get_override("Geometry"))
     g(frame);
   else
-    I3Module::Geometry(frame);
+    Base::Geometry(frame);
 }
 
+template <typename Base>
 void 
-PythonModule::Calibration(I3FramePtr frame)
+PythonModule<Base>::Calibration(I3FramePtr frame)
 {
   log_trace("%s", __PRETTY_FUNCTION__);
   if (bp::override cal = this->get_override("Calibration"))
     cal(frame);
   else
-    I3Module::Calibration(frame);
+    Base::Calibration(frame);
 }
 
+template <typename Base>
 void 
-PythonModule::DetectorStatus(I3FramePtr frame)
+PythonModule<Base>::DetectorStatus(I3FramePtr frame)
 {
   log_trace("%s", __PRETTY_FUNCTION__);
   if (bp::override ds = this->get_override("DetectorStatus"))
     ds(frame);
   else
-    I3Module::DetectorStatus(frame);
+    Base::DetectorStatus(frame);
 }
 
+template <typename Base>
 void 
-PythonModule::Physics(I3FramePtr frame)
+PythonModule<Base>::Physics(I3FramePtr frame)
 {
   log_trace("%s", __PRETTY_FUNCTION__);
   if (bp::override phys = this->get_override("Physics"))
     phys(frame);
   else
-    I3Module::Physics(frame);
+    Base::Physics(frame);
 }
 
+template <typename Base>
 I3FramePtr
-PythonModule::PopFrame()
+PythonModule<Base>::PopFrame()
 {
-  return I3Module::PopFrame();
+  return Base::PopFrame();
 }
 
+template <typename Base>
 void
-PythonModule::PushFrame(I3FramePtr f)
+PythonModule<Base>::PushFrame(I3FramePtr f)
 {
-  return I3Module::PushFrame(f);
+  return Base::PushFrame(f);
 }
 
+template <typename Base>
 void
-PythonModule::PushFrame(I3FramePtr f, const std::string& where)
+PythonModule<Base>::PushFrame(I3FramePtr f, const std::string& where)
 {
-  return I3Module::PushFrame(f, where);
+  return Base::PushFrame(f, where);
 }
 
+template <typename Base>
 void
-PythonModule::AddOutBox(const std::string& name)
+PythonModule<Base>::AddOutBox(const std::string& name)
 {
-  I3Module::AddOutBox(name);
+  Base::AddOutBox(name);
 }
+
+template class PythonModule<I3Module>;
+template class PythonModule<I3ConditionalModule>;
+
+
 
 //
 //  Custom module creator policy for python modules.  Python class
@@ -169,17 +190,19 @@ struct PythonCreate
   shared_ptr<FactoryProductType> 
   Create (const I3Context& c)
   {
-    try {
+    //    try {
       bp::object cls = c.Get<bp::object>("class");
       log_trace("about to cls(c)");
       // use 'ptr' to avoid pass-by-value of context
       bp::object instance = cls(bp::ptr(&c));
       return bp::extract<boost::shared_ptr<FactoryProductType> >(instance);
-    } catch (...) {
-      log_warn("Unable to get a boost::python::object named 'class' out of the context... this will be a braindead pythonmodule");
-      return boost::shared_ptr<FactoryProductType>(new PythonModule(c));
-    }
+      //    } catch (...) {
+      //      log_fatal("Internal error. Unable to get a boost::python::object named 'class' out of the context.");}
   }
 };
 
-I3_REGISTER(I3Module, PythonModule, PythonCreate);
+namespace {
+  typedef void PythonModule;
+  I3_REGISTER(I3Module, PythonModule, PythonCreate);
+}
+//I3_REGISTER(I3Module, PythonModule<I3ConditionalModule>, PythonCreate);
