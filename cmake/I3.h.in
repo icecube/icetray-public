@@ -42,7 +42,10 @@
 // this has to match the type of libs you link to.  This should
 // probably be configured by the boost tool and put on the command
 // line instead of done here.
-#if BOOST_VERSION < 103800
+#include <boost/version.hpp>
+
+// We used to disable threads throughout everything.
+#if BOOST_VERSION < 103600
 #define BOOST_DISABLE_THREADS
 #endif
 
@@ -97,8 +100,6 @@ using scitbx::boost_python::container_conversions::variable_capacity_policy;
 #include <math.h>
 using std::isnan;
 
-// Threading causes wierd lockups in various places as ROOT fights
-// with Java and whatever else.
 #define BOOST_NO_WREGEX
 
 #ifdef I3_OPTIMIZE
