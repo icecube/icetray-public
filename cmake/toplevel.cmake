@@ -351,7 +351,10 @@ execute_process(COMMAND mkdir -p ${CMAKE_BINARY_DIR}/docs/inspect
 #
 find_program(XSLTPROC_BIN xsltproc)
 
-
-
-
-
+#
+# subprocess.py needed by older Python
+#
+if(INSTALL_PYTHON_SUBPROCESS)
+  install(FILES ${CMAKE_SOURCE_DIR}/cmake/subprocess.py
+    DESTINATION ${LIBRARY_OUTPUT_PATH})
+endif(INSTALL_PYTHON_SUBPROCESS)

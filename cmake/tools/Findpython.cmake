@@ -44,6 +44,11 @@ endif(NOT PYTHON_EXECUTABLE)
 execute_process(COMMAND ${PYTHON_EXECUTABLE} -V
   ERROR_VARIABLE PYTHON_VERSION
   ERROR_STRIP_TRAILING_WHITESPACE)
+#
+# Provide version in numeric form for comparison
+#
+execute_process(COMMAND ${CMAKE_SOURCE_DIR}/cmake/pythonversion.pl ${PYTHON_VERSION}
+  OUTPUT_VARIABLE PYTHON_NUMERIC_VERSION)
 
 message(STATUS "+  version: ${PYTHON_VERSION}") 
 set(PYTHON_INCLUDE_DIR ${PYTHON_INCLUDE_PATH})
@@ -58,3 +63,12 @@ message(STATUS "+   binary: ${PYTHON_EXECUTABLE}")
 message(STATUS "+ includes: ${PYTHON_INCLUDE_DIR}")	
 message(STATUS "+     libs: ${PYTHON_LIBRARIES}")	
 
+# Python <2.4 does not include subprocess.py which is used by
+# runtests.py and run_continuous_slave.py. Mark it for installation if
+# needed.
+#
+set(INSTALL_PYTHON_SUBPROCESS FALSE)
+if(PYTHON_NUMERIC_VERSION LESS 20400)
+  message(STATUS "+ including subprocess module")
+  set(INSTALL_PYTHON_SUBPROCESS TRUE)
+endif(PYTHON_NUMERIC_VERSION LESS 20400)
