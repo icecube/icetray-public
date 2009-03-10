@@ -1,4 +1,3 @@
-#
 #  $Id$
 #  
 #  Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -117,7 +116,7 @@ include(tools)
 include(project)
 
 add_custom_target(test
-  COMMAND ${EXECUTABLE_OUTPUT_PATH}/runtests.py
+  COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${EXECUTABLE_OUTPUT_PATH}/runtests.py
   COMMENT ">>>
 >>>  Running tests via the utility 'runtests.py' in your $I3_BUILD/bin/ directory.\n
 >>>  Run without arguments to see help/options.
