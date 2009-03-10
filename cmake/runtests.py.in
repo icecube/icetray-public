@@ -79,7 +79,11 @@ def run_tests(stack, f, d, verbose=False):
         return True
     else:
         rslt = False
-        for k in sorted(d.keys()):
+        # no sorted() in <2.4
+        # for k in sorted(d.keys()):
+        keys = d.keys()
+        keys.sort()
+        for k in keys:
             if len(stack) == 0:
                 marshalfile = i3_build + "/" + k + "/Log.marshal"
                 try:
