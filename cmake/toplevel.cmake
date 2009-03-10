@@ -355,6 +355,7 @@ find_program(XSLTPROC_BIN xsltproc)
 # subprocess.py needed by older Python
 #
 if(INSTALL_PYTHON_SUBPROCESS)
-  install(FILES ${CMAKE_SOURCE_DIR}/cmake/subprocess.py
-    DESTINATION ${LIBRARY_OUTPUT_PATH})
+  configure_file(${CMAKE_SOURCE_DIR}/cmake/subprocess.py
+    ${LIBRARY_OUTPUT_PATH}/subprocess.py
+    COPYONLY)
 endif(INSTALL_PYTHON_SUBPROCESS)
