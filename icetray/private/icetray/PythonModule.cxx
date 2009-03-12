@@ -169,6 +169,13 @@ PythonModule<Base>::PushFrame(I3FramePtr f, const std::string& where)
 
 template <typename Base>
 void
+PythonModule<Base>::RequestSuspension()
+{
+  return Base::RequestSuspension();
+}
+
+template <typename Base>
+void
 PythonModule<Base>::AddOutBox(const std::string& name)
 {
   Base::AddOutBox(name);

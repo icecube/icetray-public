@@ -32,6 +32,7 @@ namespace {
       .def("PushFrame", (void (module_t::*)(I3FramePtr, const std::string&)) &module_t::PushFrame)
       .def("PopFrame", &module_t::PopFrame)
       .def("Process", &module_t::Process)
+      .def("RequestSuspension",&module_t::RequestSuspension)
       ;
 
     implicitly_convertible<boost::shared_ptr<module_t>, boost::shared_ptr<I3Module> >();

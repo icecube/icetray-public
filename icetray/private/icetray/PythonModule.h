@@ -61,6 +61,8 @@ struct PythonModule : Base, boost::python::wrapper<Base>
   void PushFrame(I3FramePtr frame);
   void PushFrame(I3FramePtr frame, const std::string& where);
 
+  void RequestSuspension();
+
   void AddOutBox(const std::string& name);
   I3FramePtr PopFrame();
 
