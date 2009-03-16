@@ -96,7 +96,7 @@ ELSE(NOT IS_DIRECTORY $ENV{JAVA_HOME})
 ENDIF(NOT IS_DIRECTORY $ENV{JAVA_HOME})
 
 SET(JNI_INCLUDE_DIR ${jni_h_include_dir} ${jni_md_h_include_dir}
-  CACHE STRING "Include dirs for jni")
+  CACHE STRING "Include dirs for jni" FORCE)
 SET(JNI_LIBRARIES ${jni_jvm_lib} ${jni_verify_lib} ${jni_zip_lib}
-  CACHE STRING "Libraries for tool jni")
-SET(JNI_FOUND TRUE CACHE BOOL "Jni found flag")
+  CACHE STRING "Libraries for tool jni" FORCE)
+SET(JNI_FOUND TRUE CACHE BOOL "Jni found flag" FORCE)
