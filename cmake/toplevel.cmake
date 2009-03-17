@@ -33,15 +33,22 @@ if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 
-execute_process(COMMAND ${CMAKE_SOURCE_DIR}/cmake/readlink.py ${CMAKE_SOURCE_DIR}
-  OUTPUT_VARIABLE I3_SRC
-  )
-message(STATUS "After resolving links I3_SRC=${I3_SRC}")
+#
+#  this was a failed attempt to fix ticket #181.
+#  
+#
+# execute_process(COMMAND ${CMAKE_SOURCE_DIR}/cmake/readlink.py ${CMAKE_SOURCE_DIR}
+#   OUTPUT_VARIABLE I3_SRC
+#   )
+# message(STATUS "After resolving links I3_SRC=${I3_SRC}")
+# 
+# execute_process(COMMAND ${CMAKE_SOURCE_DIR}/cmake/readlink.py ${CMAKE_BINARY_DIR}
+#   OUTPUT_VARIABLE I3_BUILD
+#   )
+# message(STATUS "After resolving links I3_BUILD=${I3_BUILD}")
 
-execute_process(COMMAND ${CMAKE_SOURCE_DIR}/cmake/readlink.py ${CMAKE_BINARY_DIR}
-  OUTPUT_VARIABLE I3_BUILD
-  )
-message(STATUS "After resolving links I3_BUILD=${I3_BUILD}")
+set(I3_SRC ${CMAKE_SOURCE_DIR})
+set(I3_BUILD ${CMAKE_BINARY_DIR})
 
 #
 #  Check build sanity
