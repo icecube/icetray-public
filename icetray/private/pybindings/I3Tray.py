@@ -4,9 +4,20 @@
 # $Id$
 #
 
+import os, sys, inspect
+
+if os.uname()[0] == 'FreeBSD':
+	# C++ modules are extremely fragile when loaded with RTLD_LOCAL,
+	# which is what Python uses on FreeBSD by default, and maybe other 
+	# systems. Convince it to use RTLD_GLOBAL, which prevents conflicts
+	# between our loader and Python's.
+
+	# See thread by Abrahams et al:
+	# http://mail.python.org/pipermail/python-dev/2002-May/024074.html
+	sys.setdlopenflags(0x102)
+
 import icecube.icetray as icetray
 import I3Units
-import sys, inspect
 
 # manually create a global symbol 'NaN'
 NaN = float('NaN')
