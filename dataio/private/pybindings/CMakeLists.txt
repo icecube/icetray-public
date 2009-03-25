@@ -22,7 +22,7 @@ if(BUILD_PYBINDINGS)
     I3File.cxx
     I3SequentialFile.cxx
     module.cxx
+    USE_PROJECTS icetray dataio
     USE_TOOLS boost python log4cplus
-    USE_PROJECTS dataio
     )
 endif(BUILD_PYBINDINGS)
