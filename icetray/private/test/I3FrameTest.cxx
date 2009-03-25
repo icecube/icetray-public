@@ -526,3 +526,23 @@ TEST(assign)
   ENSURE_EQUAL(g.size(), 1u); 
 }
 
+TEST(putemptystringframeobjname)
+{ 
+  I3Frame f;
+  I3IntPtr i(new I3Int(661));
+  try {
+    f.Put("", i);
+    FAIL("Should have failed to add a empty string named item");
+  } catch (const std::exception& e) { }
+}
+
+TEST(putspacefilledstringframeobjname)
+{
+  I3Frame f;
+  I3IntPtr i(new I3Int(661));
+  try {
+    f.Put("  ", i);
+    FAIL("Should have failed to add a space only string named item");
+  } catch (const std::exception& e) { }
+}
+

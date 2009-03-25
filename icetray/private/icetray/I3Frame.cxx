@@ -236,6 +236,8 @@ void I3Frame::Put(const string& name, I3FrameObjectConstPtr element, const I3Fra
     }
 
   // this should be more exhausive than just space tab newline.
+  if (name.size() == 0)
+    log_fatal("attempt to Put an element into frame with an empty string used as the key");
   if (name.find_first_of(" \t\n") != string::npos)
     log_fatal("attempt to Put an element into frame at name \"%s\", "
               "which contains an illegal whitespace character",
