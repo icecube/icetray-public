@@ -29,6 +29,20 @@ hash_omkey (const OMKey& key)
   return OMKey::hash()(key); 
 }
 
+typedef OMKey value_type;
+// make OMKey iterable: string,om = OMKey
+static object pair_getitem(value_type const& x, int i) {
+    if (i==0 || i==-2) return object(x.GetString());
+    else if (i==1 || i==-1) return object(x.GetOM()); 
+    else {
+        PyErr_SetString(PyExc_IndexError,"Index out of range.");
+        throw_error_already_set();
+        return object(); // None
+    }
+}
+// __len__ std::pair = 2
+static int pair_len(value_type const& x) { return 2; }
+
 void
 register_OMKey()
 {
@@ -42,6 +56,8 @@ register_OMKey()
     .def("__str__", &OMKey::str)
     .def("__repr__", &OMKey::str)
     .def("__hash__", hash_omkey)
+    .def("__getitem__", pair_getitem)
+    .def("__len__", pair_len)
     .def(self == self)
     .def(self < self)
     ;

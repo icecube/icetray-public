@@ -74,7 +74,7 @@ class i3_map_extras : public def_visitor<i3_map_extras<Map> >
   template <typename Class>
   void visit(Class& cl) const
   {
-    std::cout << __PRETTY_FUNCTION__ << "\n";
+    // std::cout << __PRETTY_FUNCTION__ << "\n";
     cl
       .def("keys", &keys)
       ;
