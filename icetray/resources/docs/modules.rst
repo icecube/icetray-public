@@ -36,7 +36,7 @@ passed::
 one puts all of this into a file :file:`PyDump.py`, and uses it as
 follows::
 
-   #!/usr/bin/python
+   #!/usr/bin/env python
 
    from PyDump import PyDump
    from I3Tray import *
