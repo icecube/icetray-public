@@ -19,17 +19,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
-#include <icetray/open.h>
 
-using namespace std;
-
-
-#include <fstream>
 #include <icetray/I3Frame.h>
+#include <icetray/open.h>
+#include <fstream>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/python/errors.hpp>
 
-namespace {
+// This calls out for an anonymous namespace. But doing that breaks GCC between
+// versions 4.0 and 4.3.
+namespace I3 { namespace dataio { namespace python {
 
   class I3SequentialFile
   {
@@ -175,14 +174,15 @@ namespace {
   {
     return ifs_.peek() != EOF;
   }
+}}}
 
-}
 //
 //
 //   boost::python registration
 //
 //
 using namespace boost::python;
+using namespace I3::dataio::python;
 namespace bp = boost::python;
 
 void register_I3SequentialFile()
