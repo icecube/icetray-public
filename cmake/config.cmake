@@ -23,10 +23,10 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(DOXYGEN_OUTPUT_PATH ${CMAKE_BINARY_DIR}/docs/doxygen)
 
-if(NOT ENV{I3_PORTS})
+if("$ENV{I3_PORTS}" STREQUAL "")
   message(STATUS "I3_PORTS not set, maybe not a problem.  Trying default of /opt/i3/ports.")
   set(ENV{I3_PORTS} "/opt/i3/ports")
-endif(NOT ENV{I3_PORTS})
+endif("$ENV{I3_PORTS}" STREQUAL "")
 
 set(I3_PORTS $ENV{I3_PORTS} CACHE STRING "Path to your icecube ports installation" FORCE)
 
