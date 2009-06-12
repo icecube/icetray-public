@@ -163,6 +163,11 @@ View::page(const std::string &text)
   ofstream of(tmpfile_name);
   assert(of.good());
   of << text;
+  if(!of.good()){
+    unlink(tmpfile_name);
+    log_fatal("Error writing to /tmp/shovel-XXXX file.  (Maybe xml version of too large?)");
+  }
+  assert(of.good());
   of.close();
   
   def_prog_mode();
