@@ -36,7 +36,7 @@ else(PRINTF_LOGGING)  # just use log4cplus
   #
   # try the ubuntu packages first
   #
-  find_package(log4cplus)
+  find_package(log4cplus QUIET)
   if(NOT LOG4CPLUS_FOUND)
     tooldef (log4cplus 
       include/log4cplus-1.0.2 
