@@ -1,7 +1,7 @@
 #
 #  $Id$
 #  
-#  Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
+#  Copyright (C) 2007-9  Troy D. Straszheim  <troy@icecube.umd.edu>
 #  and the IceCube Collaboration <http://www.icecube.wisc.edu>
 #  
 #  This file is free software; you can redistribute it and/or modify
@@ -35,7 +35,10 @@ set(ALL_TOOLS pthread root I3Boost python
     )
   
 foreach(tool ${ALL_TOOLS})
-  find_package(${tool})
+  set(toolfile ${CMAKE_SOURCE_DIR}/cmake/tools/${tool}.cmake)
+  if(EXISTS ${toolfile})
+    include(${toolfile})
+  endif()
 endforeach(tool ${ALL_TOOLS})
 
 macro(use_tool TARGET TOOL_)

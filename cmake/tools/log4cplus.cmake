@@ -1,7 +1,7 @@
 #
 #  $Id$
 #  
-#  Copyright (C) 2007
+#  Copyright (C) 2007-9
 #  Troy D. Straszheim  <troy@icecube.umd.edu>
 #  and the IceCube Collaboration <http://www.icecube.wisc.edu>
 #  
@@ -32,12 +32,19 @@ if(PRINTF_LOGGING)
     NONE
     )
 else(PRINTF_LOGGING)  # just use log4cplus
-  tooldef (log4cplus 
-    include/log4cplus-1.0.2 
-    log4cplus/logger.h
-    lib/log4cplus-1.0.2
-    NONE
-    log4cplus
-    )
+
+  #
+  # try the ubuntu packages first
+  #
+  find_package(log4cplus)
+  if(NOT LOG4CPLUS_FOUND)
+    tooldef (log4cplus 
+      include/log4cplus-1.0.2 
+      log4cplus/logger.h
+      lib/log4cplus-1.0.2
+      NONE
+      log4cplus
+      )
+  endif()
 endif(PRINTF_LOGGING)
 
