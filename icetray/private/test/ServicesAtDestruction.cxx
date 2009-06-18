@@ -16,36 +16,36 @@
 #include "icetray/I3Tray.h"
 #include "icetray/I3ServiceFactory.h"
 
+#include <set>
+
+
 TEST_GROUP(ServicesAtDestruction);
 
 // The service we're looking for at destruction
+struct ServiceAtDestructionService;
+
+typedef std::set<ServiceAtDestructionService*> set_t;
+set_t existing_services;
+
 struct ServiceAtDestructionService
 {
-  vector<bool*> watched_;
   ServiceAtDestructionService()
   {
-    log_trace("%s",__PRETTY_FUNCTION__);
+    existing_services.insert(this);
   }  
   
   ~ServiceAtDestructionService()
   {
-    log_trace("%s",__PRETTY_FUNCTION__);
-    for(unsigned int i = 0 ; i < watched_.size() ; i++)
-      {
-	log_trace("falsifying the bool at %p which is already set to %d",
-		  watched_[i], *watched_[i]);
-	(*watched_[i]) = false;
-	log_trace("And now is set to %d", *watched_[i]);
-      }
+    existing_services.erase(this);
   }
     
-  void AddMonitoredBool(bool* b)
+  ServiceAtDestructionService* that()
   {
-    watched_.push_back(b);
-    *b = true;
+    return this;
   }
 };
   
+
 // something that installs this service one instance into each
 // context that comes by.
 struct ServiceAtDestructionPluralFactory : public I3ServiceFactory
@@ -84,7 +84,9 @@ I3_SERVICE_FACTORY(ServiceAtDestructionServiceSingletonFactory);
 // a module to check for whether or not the service exists
 struct ServicesAtDestructionModule : public I3Module
 {
-  bool serviceExists_;
+
+  ServiceAtDestructionService* that;
+
 public:
   ServicesAtDestructionModule(const I3Context& context) : I3Module(context)
   {
@@ -93,10 +95,7 @@ public:
     
   ~ServicesAtDestructionModule()
   {
-    log_trace("%s",__PRETTY_FUNCTION__);
-    log_trace("service status at destruction: address: %p value: %d",
-	      &serviceExists_, serviceExists_);
-    ENSURE(serviceExists_);
+    ENSURE(existing_services.find(that) != existing_services.end());
   }
     
   void Configure()
@@ -104,12 +103,13 @@ public:
     log_trace("%s",__PRETTY_FUNCTION__);
     ENSURE(context_.Has<ServiceAtDestructionService>("Foo"));
     ServiceAtDestructionService& sads = context_.Get<ServiceAtDestructionService>("Foo");
-    sads.AddMonitoredBool(&serviceExists_);
+    that = sads.that();
+    ENSURE(existing_services.find(that) != existing_services.end());
   }
 
   void Process()
   {
-    ENSURE(serviceExists_);
+    ENSURE(existing_services.find(that) != existing_services.end());
     RequestSuspension();
   }
 };

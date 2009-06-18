@@ -219,3 +219,27 @@ T_EST(no_such_box)
   }
 }
 #endif
+
+
+TEST(multiple_tray_create_destroy)
+{
+  {
+    I3Tray tray;
+    tray.AddModule("BottomlessSource", "source");
+    tray.AddModule("TrashCan", "trash");
+    tray.Execute(1);
+  }
+
+  {
+    I3Tray tray2;
+    tray2.AddModule("BottomlessSource", "source");
+    tray2.AddModule("TrashCan", "trash");
+    tray2.Execute(1);
+  }
+
+}
+
+TEST(simultaneous_trays)
+{
+  I3Tray tray1, tray2;
+}
