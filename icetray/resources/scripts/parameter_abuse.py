@@ -31,4 +31,4 @@ try:
 except TypeError, t:
 
     print "OK, threw as expected"
-    exit(0)
+    sys.exit(0)
