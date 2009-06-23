@@ -73,6 +73,7 @@ namespace boost { namespace python {
         
 
         // __getitem__ for std::pair
+// FIXME: horrible (20x) performance regression vs. (pair.key(),pair.data())
         static object pair_getitem(value_type const& x, int i) {
             if (i==0 || i==-2) return object(x.first);
             else if (i==1 || i==-1) return object(x.second); 
@@ -82,6 +83,16 @@ namespace boost { namespace python {
                 return object(); // None
             }
         }
+
+// __iter__ for std::pair
+// here we cheat by making a tuple and returning its iterator
+// FIXME: replace this with a pure C++ iterator
+// how to handle the different return types of first and second?
+static PyObject* pair_iter(value_type const& x) {
+object tuple = bp::make_tuple(x.first,x.second);
+return incref(tuple.attr("__iter__")().ptr());
+}
+
         // __len__ std::pair = 2
         static int pair_len(value_type const& x) { return 2; }
 
@@ -404,6 +415,7 @@ namespace boost { namespace python {
                 .def("key", &DerivedPolicies::get_key,
                    "K.key() -> the key associated with this pair.\n")
                 .def("__getitem__",&pair_getitem)
+                .def("__iter__",&pair_iter)
                 .def("__len__",&pair_len)
                 .def("first",&DerivedPolicies::get_key,
                    "K.first() -> the first item in this pair.\n")
