@@ -240,7 +240,7 @@ macro(i3_add_library THIS_LIB_NAME)
 
     endif(NOT ${THIS_LIB_NAME}_ARGS_NO_DOXYGEN)
 
-    if(NOT ${THIS_LIB_NAME}_ARGS_NOT_INSPECTABLE)
+    if(NOT ${THIS_LIB_NAME}_ARGS_NOT_INSPECTABLE AND XSLTPROC_BIN)
 
       set(XML_TMP ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${THIS_LIB_NAME}-inspection.xml)
       set(HTML_OUTPUT ${CMAKE_BINARY_DIR}/docs/inspect/${THIS_LIB_NAME}.html)
@@ -255,7 +255,7 @@ macro(i3_add_library THIS_LIB_NAME)
 	${PROJECT_NAME}-${THIS_LIB_NAME}-inspect
 	)
 
-    endif(NOT ${THIS_LIB_NAME}_ARGS_NOT_INSPECTABLE)
+    endif()
 
 
 

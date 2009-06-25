@@ -18,7 +18,7 @@ Components of this metaproject
    :glob:
    :maxdepth: 2
 
-   projects/**/index
+   projects/*/index
 
 Of general interest
 ===================

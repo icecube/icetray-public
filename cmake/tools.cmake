@@ -27,18 +27,40 @@ include(tooldef)
 #
 #  These guys are in subdirectory 'tools'
 #
-set(ALL_TOOLS pthread root I3Boost python
+set(ALL_TOOLS pthread root boost python
     rdmc expat gsl sprng sla
     mysql bdb log4cplus photonics ptd
     ZThread omniORB fox jni ncurses
-    cdk I3Qt4 cfitsio hdf5 
+    cdk qt4 cfitsio hdf5 
     )
-  
+
+#
+#   By default, use /usr/share/fizzicks/cmake as I3_SITE_CMAKE_DIR 
+# 
+if (NOT IS_DIRECTORY $ENV{I3_SITE_CMAKE_DIR})
+  set (SITE_CMAKE "/usr/share/fizzicks/cmake" 
+    CACHE PATH "Path to site-specific cmake files")
+  message(STATUS "Using default site cmake dir of ${SITE_CMAKE}")
+else()
+  set (SITE_CMAKE $ENV{I3_SITE_CMAKE_DIR}
+    CACHE PATH "Path to site-specific cmake files")
+  message(STATUS "Using user-configured I3_SITE_CMAKE_DIR=${SITE_CMAKE}")
+endif()
+
 foreach(tool ${ALL_TOOLS})
-  set(toolfile ${CMAKE_SOURCE_DIR}/cmake/tools/${tool}.cmake)
-  if(EXISTS ${toolfile})
-    include(${toolfile})
+
+  if(IS_DIRECTORY ${SITE_CMAKE})
+    set(toolfile ${SITE_CMAKE}/${tool}.cmake)
   endif()
+
+  if(NOT EXISTS ${toolfile})
+    set(toolfile ${CMAKE_SOURCE_DIR}/cmake/tools/${tool}.cmake)
+  else()
+    message(STATUS "Using site-configured ${tool}")
+  endif()
+
+  include(${toolfile})
+
 endforeach(tool ${ALL_TOOLS})
 
 macro(use_tool TARGET TOOL_)

@@ -45,6 +45,11 @@ several cmake variables.  For a tool *ZZZ*,
   Not often used but available if the tool provides executables for
   some reason.
 
+**ZZZ_FOUND**:
+
+  A flag needed by the rest of the build system to know that detection
+  of **ZZZ** succeeded.
+
 tooldef
 -------
 
@@ -68,6 +73,30 @@ feature and may cause problems in the event of version conflicts, but
 this option can speed up builds by avoiding the need for an ``I3_PORTS``
 Qt or allow operation of Icetray on systems not supported by the ports
 tools.
+
+Site-specific tool configuration
+--------------------------------
+
+.. _I3_SITE_CMAKE_DIR:
+.. index:: I3_SITE_CMAKE_DIR
+.. index:: /usr/share/fizzicks/cmake
+
+Site specific handling of tools is supported as follows:
+
+For each tool ``T``, the directory :file:`/usr/share/fizzicks/cmake` is
+searched for ``T.cmake`` and if this file is found, it is read in lieu
+of the standard tool definition file.  This directory can be
+overridden by setting ``I3_SITE_CMAKE_DIR`` in your environment.
+
+For instance, an override for tool *python* (filename
+``python.cmake``) might look like::
+
+  set(PYTHON_LIBRARIES "/usr/local/strangepython/lib/libpython2.6.so")
+  set(PYTHON_INCLUDE_DIR "/usr/local/strangepython/include/python2.6")
+  set(PYTHON_VERSION "2.6")
+  set(PYTHON_FOUND TRUE)
+
+
 
 Troubleshooting
 ---------------

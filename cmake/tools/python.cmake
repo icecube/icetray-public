@@ -32,43 +32,63 @@ if(EXISTS ${I3_PORTS}/bin/python)
 endif(EXISTS ${I3_PORTS}/bin/python)
 
 find_package(PythonInterp)
-find_package(PythonLibs)
 
 if(NOT PYTHON_EXECUTABLE)
+
   set(PYTHON_FOUND FALSE)
+
+else(IF APPLE)
+
+find_package(PythonLibs)
+
+else()
+
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; print sys.version[:3]"
+    OUTPUT_VARIABLE PYTHON_VERSION
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c 
+    "import sys; print '%s/include/python%s' % (sys.prefix, sys.version[:3])"
+    OUTPUT_VARIABLE include_dir
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  if (EXISTS ${include_dir}/Python.h)
+    set(PYTHON_INCLUDE_DIR ${include_dir} CACHE PATH "Python include directory")
+  else()
+    message(STATUS "Error configuring python:  ${PYTHON_INCLUDE_DIR}/Python.h does not exist.\n")
+    set(PYTHON_FOUND FALSE)
+    set(PYTHON_CONFIG_ERROR TRUE)
+  endif()
+
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c 
+    "import sys; print '%s/lib/libpython%s.so' % (sys.prefix, sys.version[:3])"
+    OUTPUT_VARIABLE python_lib
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  if (EXISTS ${python_lib})
+    set(PYTHON_LIBRARIES ${python_lib} CACHE FILEPATH "Python library")
+  else()
+    message(STATUS "Error configuring python:  ${python_lib} does not exist.\n")
+    set(PYTHON_FOUND FALSE)
+    set(PYTHON_CONFIG_ERROR TRUE)
+  endif()
+
+  message(STATUS "+  version: ${PYTHON_VERSION}") 
+  message(STATUS "+   binary: ${PYTHON_EXECUTABLE}")	
+  message(STATUS "+ includes: ${PYTHON_INCLUDE_DIR}")	
+  message(STATUS "+     libs: ${PYTHON_LIBRARIES}")	
+
+
 endif(NOT PYTHON_EXECUTABLE)
-
-# 
-# determine version of the system python.
-#
-execute_process(COMMAND ${PYTHON_EXECUTABLE} -V
-  ERROR_VARIABLE PYTHON_VERSION
-  ERROR_STRIP_TRAILING_WHITESPACE)
-#
-# Provide version in numeric form for comparison
-#
-execute_process(COMMAND ${CMAKE_SOURCE_DIR}/cmake/pythonversion.pl ${PYTHON_VERSION}
-  OUTPUT_VARIABLE PYTHON_NUMERIC_VERSION)
-
-message(STATUS "+  version: ${PYTHON_VERSION}") 
-set(PYTHON_INCLUDE_DIR ${PYTHON_INCLUDE_PATH})
-
-if(NOT EXISTS "${PYTHON_INCLUDE_DIR}/Python.h")
-  message(STATUS "Error configuring python:  ${PYTHON_INCLUDE_DIR}/Python.h does not exist.\n")
-  set(PYTHON_FOUND FALSE)
-  set(PYTHON_CONFIG_ERROR TRUE)
-endif(NOT  EXISTS "${PYTHON_INCLUDE_DIR}/Python.h")
-
-message(STATUS "+   binary: ${PYTHON_EXECUTABLE}")	
-message(STATUS "+ includes: ${PYTHON_INCLUDE_DIR}")	
-message(STATUS "+     libs: ${PYTHON_LIBRARIES}")	
 
 # Python <2.4 does not include subprocess.py which is used by
 # runtests.py and run_continuous_slave.py. Mark it for installation if
 # needed.
 #
-set(INSTALL_PYTHON_SUBPROCESS FALSE)
-if(PYTHON_NUMERIC_VERSION LESS 20400)
+if(PYTHON_VERSION LESS 20400)
   message(STATUS "+ including subprocess module")
   set(INSTALL_PYTHON_SUBPROCESS TRUE)
-endif(PYTHON_NUMERIC_VERSION LESS 20400)
+else()
+  set(INSTALL_PYTHON_SUBPROCESS FALSE)
+endif()
+
