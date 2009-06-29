@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
-message(STATUS "python")
+message(STATUS "python ...")
 
 set(PYTHON_FOUND TRUE)
 if(EXISTS ${I3_PORTS}/bin/python)
@@ -37,15 +37,19 @@ if(NOT PYTHON_EXECUTABLE)
 
   set(PYTHON_FOUND FALSE)
 
-else(IF APPLE)
+elseif(APPLE)
 
 find_package(PythonLibs)
 
 else()
 
+  message(STATUS "+   binary: ${PYTHON_EXECUTABLE}")	
+
   execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; print sys.version[:3]"
     OUTPUT_VARIABLE PYTHON_VERSION
     OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  message(STATUS "+  version: ${PYTHON_VERSION}") 
 
   execute_process(COMMAND ${PYTHON_EXECUTABLE} -c 
     "import sys; print '%s/include/python%s' % (sys.prefix, sys.version[:3])"
@@ -54,6 +58,7 @@ else()
 
   if (EXISTS ${include_dir}/Python.h)
     set(PYTHON_INCLUDE_DIR ${include_dir} CACHE PATH "Python include directory")
+    message(STATUS "+ includes: ${PYTHON_INCLUDE_DIR}")	
   else()
     message(STATUS "Error configuring python:  ${PYTHON_INCLUDE_DIR}/Python.h does not exist.\n")
     set(PYTHON_FOUND FALSE)
@@ -73,9 +78,6 @@ else()
     set(PYTHON_CONFIG_ERROR TRUE)
   endif()
 
-  message(STATUS "+  version: ${PYTHON_VERSION}") 
-  message(STATUS "+   binary: ${PYTHON_EXECUTABLE}")	
-  message(STATUS "+ includes: ${PYTHON_INCLUDE_DIR}")	
   message(STATUS "+     libs: ${PYTHON_LIBRARIES}")	
 
 
@@ -85,7 +87,7 @@ endif(NOT PYTHON_EXECUTABLE)
 # runtests.py and run_continuous_slave.py. Mark it for installation if
 # needed.
 #
-if(PYTHON_VERSION LESS 20400)
+if(PYTHON_VERSION STREQUAL "2.3")
   message(STATUS "+ including subprocess module")
   set(INSTALL_PYTHON_SUBPROCESS TRUE)
 else()
