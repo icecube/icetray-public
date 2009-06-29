@@ -49,9 +49,9 @@ endif()
 
 foreach(tool ${ALL_TOOLS})
 
-  if(EXISTS ${I3_SITE_CMAKE_DIR}/${toolfile})
+  if(EXISTS "${I3_SITE_CMAKE_DIR}/${tool}.cmake")
     message(STATUS "Using site-configured ${tool}")
-    include(${I3_SITE_CMAKE_DIR}/${toolfile})
+    include("${I3_SITE_CMAKE_DIR}/${tool}.cmake")
   else()
     include(${CMAKE_SOURCE_DIR}/cmake/tools/${tool}.cmake)
   endif()
