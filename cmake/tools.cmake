@@ -38,28 +38,23 @@ set(ALL_TOOLS pthread root boost python
 #   By default, use /usr/share/fizzicks/cmake as I3_SITE_CMAKE_DIR 
 # 
 if (NOT IS_DIRECTORY $ENV{I3_SITE_CMAKE_DIR})
-  set (SITE_CMAKE "/usr/share/fizzicks/cmake" 
+  set (I3_SITE_CMAKE_DIR "/usr/share/fizzicks/cmake" 
     CACHE PATH "Path to site-specific cmake files")
-  message(STATUS "Using default site cmake dir of ${SITE_CMAKE}")
+  message(STATUS "Using default site cmake dir of ${I3_SITE_CMAKE_DIR}")
 else()
-  set (SITE_CMAKE $ENV{I3_SITE_CMAKE_DIR}
+  set (I3_SITE_CMAKE_DIR $ENV{I3_SITE_CMAKE_DIR}
     CACHE PATH "Path to site-specific cmake files")
-  message(STATUS "Using user-configured I3_SITE_CMAKE_DIR=${SITE_CMAKE}")
+  message(STATUS "Using user-configured I3_SITE_CMAKE_DIR=${I3_SITE_CMAKE_DIR}")
 endif()
 
 foreach(tool ${ALL_TOOLS})
 
-  if(IS_DIRECTORY ${SITE_CMAKE})
-    set(toolfile ${SITE_CMAKE}/${tool}.cmake)
-  endif()
-
-  if(NOT EXISTS ${toolfile})
-    set(toolfile ${CMAKE_SOURCE_DIR}/cmake/tools/${tool}.cmake)
-  else()
+  if(EXISTS ${I3_SITE_CMAKE_DIR}/${toolfile})
     message(STATUS "Using site-configured ${tool}")
+    include(${I3_SITE_CMAKE_DIR}/${toolfile})
+  else()
+    include(${CMAKE_SOURCE_DIR}/cmake/tools/${tool}.cmake)
   endif()
-
-  include(${toolfile})
 
 endforeach(tool ${ALL_TOOLS})
 

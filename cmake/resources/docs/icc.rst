@@ -26,10 +26,10 @@ Specify the path to ``icc`` and ``icpc`` on the command line at cmake-time:
   -- Detecting CXX compiler ABI info - done
 
 Gotchas
-^^^^^^^
+-------
 
 __sync_fetch_and_add
-""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^
 
 See this thread:
 
@@ -40,7 +40,7 @@ which is found in gcc 4.2 stl headers.  The patch is in
 ``cmake/tool-patches/common/I3/intel_compatibility.h``.
 
 libimf.so
-"""""""""
+^^^^^^^^^
 
 If you see::
 
