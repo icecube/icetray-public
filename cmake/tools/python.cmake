@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
-message(STATUS "python ...")
+message(STATUS "python")
 
 set(PYTHON_FOUND TRUE)
 if(EXISTS ${I3_PORTS}/bin/python)
@@ -32,83 +32,43 @@ if(EXISTS ${I3_PORTS}/bin/python)
 endif(EXISTS ${I3_PORTS}/bin/python)
 
 find_package(PythonInterp)
+find_package(PythonLibs)
 
 if(NOT PYTHON_EXECUTABLE)
-
   set(PYTHON_FOUND FALSE)
-
-elseif(APPLE)
-
-  find_package(PythonLibs)
-
-else()
-
-  message(STATUS "+   binary: ${PYTHON_EXECUTABLE}")	
-
-  execute_process(COMMAND 
-    ${PYTHON_EXECUTABLE} -c "import sys; print sys.version[:3]"
-    OUTPUT_VARIABLE PYTHON_VERSION
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-  message(STATUS "+  version: ${PYTHON_VERSION}") 
-
-  execute_process(COMMAND 
-    ${PYTHON_EXECUTABLE} -c 
-    "import sys; print '%s/include/python%s' % (sys.prefix, sys.version[:3])"
-    OUTPUT_VARIABLE include_dir
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-  if (EXISTS ${include_dir}/Python.h)
-    set(PYTHON_INCLUDE_DIR ${include_dir} 
-      CACHE PATH 
-      "Python include directory")
-    message(STATUS "+ includes: ${PYTHON_INCLUDE_DIR}")	
-  else()
-    message(STATUS "Error configuring python:  ${PYTHON_INCLUDE_DIR}/Python.h does not exist.\n")
-    set(PYTHON_FOUND FALSE)
-    set(PYTHON_CONFIG_ERROR TRUE)
-  endif()
-
-  #
-  # YAAAY HACK
-  #
-  # Shout to my people keeping it real with python 2.3
-  #
-  if (PYTHON_VERSION STREQUAL "2.3")
-    set(lib_finder
-      "import sys, distutils.sysconfig; print '%s/lib/libpython%s.so' % (distutils.sysconfig.get_python_lib(0,1), sys.version[:3])"
-      )
-  else()
-    set(lib_finder
-      "import sys; print '%s/lib/libpython%s.so' % (sys.prefix, sys.version[:3])"
-      )
-  endif()  
-
-  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "${lib_finder}"
-    OUTPUT_VARIABLE python_lib
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-  if (EXISTS ${python_lib})
-    set(PYTHON_LIBRARIES ${python_lib} CACHE FILEPATH "Python library")
-  else()
-    message(STATUS "Error configuring python:  ${python_lib} does not exist.\n")
-    set(PYTHON_FOUND FALSE)
-    set(PYTHON_CONFIG_ERROR TRUE)
-  endif()
-
-  message(STATUS "+     libs: ${PYTHON_LIBRARIES}")	
-
-
 endif(NOT PYTHON_EXECUTABLE)
+
+# 
+# determine version of the system python.
+#
+execute_process(COMMAND ${PYTHON_EXECUTABLE} -V
+  ERROR_VARIABLE PYTHON_VERSION
+  ERROR_STRIP_TRAILING_WHITESPACE)
+#
+# Provide version in numeric form for comparison
+#
+execute_process(COMMAND ${CMAKE_SOURCE_DIR}/cmake/pythonversion.pl ${PYTHON_VERSION}
+  OUTPUT_VARIABLE PYTHON_NUMERIC_VERSION)
+
+message(STATUS "+  version: ${PYTHON_VERSION}") 
+set(PYTHON_INCLUDE_DIR ${PYTHON_INCLUDE_PATH})
+
+if(NOT EXISTS "${PYTHON_INCLUDE_DIR}/Python.h")
+  message(STATUS "Error configuring python:  ${PYTHON_INCLUDE_DIR}/Python.h does not exist.\n")
+  set(PYTHON_FOUND FALSE)
+  set(PYTHON_CONFIG_ERROR TRUE)
+endif(NOT  EXISTS "${PYTHON_INCLUDE_DIR}/Python.h")
+
+message(STATUS "+   binary: ${PYTHON_EXECUTABLE}")	
+message(STATUS "+ includes: ${PYTHON_INCLUDE_DIR}")	
+message(STATUS "+     libs: ${PYTHON_LIBRARIES}")	
 
 # Python <2.4 does not include subprocess.py which is used by
 # runtests.py and run_continuous_slave.py. Mark it for installation if
 # needed.
 #
-if(PYTHON_VERSION STREQUAL "2.3")
+set(INSTALL_PYTHON_SUBPROCESS FALSE)
+if(PYTHON_NUMERIC_VERSION LESS 20400)
   message(STATUS "+ including subprocess module")
   set(INSTALL_PYTHON_SUBPROCESS TRUE)
-else()
-  set(INSTALL_PYTHON_SUBPROCESS FALSE)
-endif()
-
+endif(PYTHON_NUMERIC_VERSION LESS 20400)
