@@ -39,25 +39,29 @@ if(NOT PYTHON_EXECUTABLE)
 
 elseif(APPLE)
 
-find_package(PythonLibs)
+  find_package(PythonLibs)
 
 else()
 
   message(STATUS "+   binary: ${PYTHON_EXECUTABLE}")	
 
-  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; print sys.version[:3]"
+  execute_process(COMMAND 
+    ${PYTHON_EXECUTABLE} -c "import sys; print sys.version[:3]"
     OUTPUT_VARIABLE PYTHON_VERSION
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
   message(STATUS "+  version: ${PYTHON_VERSION}") 
 
-  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c 
+  execute_process(COMMAND 
+    ${PYTHON_EXECUTABLE} -c 
     "import sys; print '%s/include/python%s' % (sys.prefix, sys.version[:3])"
     OUTPUT_VARIABLE include_dir
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
   if (EXISTS ${include_dir}/Python.h)
-    set(PYTHON_INCLUDE_DIR ${include_dir} CACHE PATH "Python include directory")
+    set(PYTHON_INCLUDE_DIR ${include_dir} 
+      CACHE PATH 
+      "Python include directory")
     message(STATUS "+ includes: ${PYTHON_INCLUDE_DIR}")	
   else()
     message(STATUS "Error configuring python:  ${PYTHON_INCLUDE_DIR}/Python.h does not exist.\n")
@@ -65,8 +69,22 @@ else()
     set(PYTHON_CONFIG_ERROR TRUE)
   endif()
 
-  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c 
-    "import sys; print '%s/lib/libpython%s.so' % (sys.prefix, sys.version[:3])"
+  #
+  # YAAAY HACK
+  #
+  # Shout to my people keeping it real with python 2.3
+  #
+  if (PYTHON_VERSION STREQUAL "2.3")
+    set(lib_finder
+      "import sys, distutils.sysconfig; print '%s/lib/libpython%s.so' % (distutils.sysconfig.get_python_lib(0,1), sys.version[:3])"
+      )
+  else()
+    set(lib_finder
+      "import sys; print '%s/lib/libpython%s.so' % (sys.prefix, sys.version[:3])"
+      )
+  endif()  
+
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "${lib_finder}"
     OUTPUT_VARIABLE python_lib
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
