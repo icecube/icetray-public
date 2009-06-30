@@ -195,7 +195,7 @@ set(QT4_INSTALLED_VERSION_TOO_OLD FALSE)
 macro(QT_QUERY_QMAKE outvar invar)
   file(WRITE ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmpQmake/tmp.pro
     "message(CMAKE_message<$$${invar}>)")
-  execute_process(COMMAND ${QT_QMAKE_EXECUTABLE}
+  execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} tmp.pro
     WORKING_DIRECTORY  
     ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmpQmake
     OUTPUT_VARIABLE _qmake_query_output
