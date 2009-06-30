@@ -72,8 +72,7 @@ Model::open_file(const std::string& filename,
   View::Instance().start_scan_progress(filename);
 
   log_trace("%s", __PRETTY_FUNCTION__);
-  // tried doing this with the bind but it's a no-go
-  //i3file_.open_file(filename, boost::bind(&View::scan_progress, View::Instance(), _1));
+
   if (i3file_.open_file(filename, fboo, skipstreams, nframes, false))
     log_fatal("error opening file %s", filename.c_str());
   
