@@ -24,12 +24,12 @@
 #include <icetray/I3Logging.h>
 
 #include <boost/function.hpp>
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/phoenix/primitives.hpp>
-#include <boost/spirit/phoenix/operators.hpp>
-#include <boost/spirit/phoenix/functions.hpp>
-#include <boost/spirit/attribute.hpp>
-#include <boost/spirit/actor.hpp>
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/phoenix1_primitives.hpp>
+#include <boost/spirit/include/phoenix1_operators.hpp>
+#include <boost/spirit/include/phoenix1_functions.hpp>
+#include <boost/spirit/include/classic_attribute.hpp>
+#include <boost/spirit/include/classic_actor.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -37,7 +37,7 @@
 #include <map>
 
 using namespace std;
-using namespace boost::spirit;
+using namespace boost::spirit::classic;
 using namespace phoenix;
 
 namespace dataio
