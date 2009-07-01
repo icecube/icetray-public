@@ -1,5 +1,5 @@
 :mod:`icecube.dataio` -- python bindings to Data I/O utilities
-======================================================
+===============================================================
 
 .. module:: icecube.dataio
    :synopsis: python bindings to Data I/O utilities
