@@ -25,9 +25,10 @@ Table of Contents:
    framestreamstop
    inspect
    standard_modules
+   scripting
+   i3units
    newfeaturesv3
    changes
-   i3units
 
 To Document
 -----------
