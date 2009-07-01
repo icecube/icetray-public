@@ -5,6 +5,7 @@ Mostly taken from the manpages
 
 .. toctree::
 
+   installing_ports
    port_faq
 
    man_port
