@@ -44,8 +44,7 @@
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/map.hpp>
 #ifdef I3_USE_FAST_OMKEY_MAP
-#define __GLIBCPP__ 1
-#define BOOST_HAS_HASH 1
+//#define __GLIBCPP__ 1
 #include <boost/serialization/hash_map.hpp>
 // have to undef this.  gcc prior to 3.4 defined this and regex uses it to turn on
 // BOOST_REGEX_BUGGY_CTYPE_FACET
