@@ -521,7 +521,7 @@ bool I3Frame::load(IStreamT& is, const vector<string>& skip)
 
 //
 //
-//  load_old.
+//  load version 5 (latest)
 //
 //
 template <typename IStreamT>
@@ -810,6 +810,9 @@ ostream& operator<<(ostream& os, const I3Frame& frame)
 
       if (frame.size(*iter) > 0)
 	os << " (" << frame.size(*iter) << ")";
+      else
+	os << " (unk)";
+	
       os << "\n";
     }
   os << "]\n";
