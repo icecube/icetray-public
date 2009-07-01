@@ -365,3 +365,9 @@ if(INSTALL_PYTHON_SUBPROCESS)
     ${LIBRARY_OUTPUT_PATH}/subprocess.py
     COPYONLY)
 endif(INSTALL_PYTHON_SUBPROCESS)
+
+add_custom_target(deploy-docs
+  COMMAND rsync -va --delete ${CMAKE_BINARY_DIR}/docs/ umdgrb.umd.edu:public_html/${META_PROJECT}/
+  COMMENT Deploying docs to ${META_PROJECT}
+  )
+

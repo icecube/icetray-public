@@ -20,6 +20,7 @@ CMake: icetray's build system
    i3test
    reference
    ports
+   platforms
    svn_intro
    env-shell.sh
    icc
