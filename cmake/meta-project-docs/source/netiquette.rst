@@ -112,15 +112,19 @@ Use an illustrative subject line.
 Don't put in a subject line like "HELP ME!" or "icetray question."
 Instead, say something like "StreamError writing TWRMCHitSeriesMap".
  
-Don't use meaningless words in the Subject:
+Don't use meaningless words in the *Subject*
 
-emergency     unless shutting down means losing data it probably isn't.
-Help          everybody with a question is looking for help
-Macro         just means you haven't found the programming newsgroup yet
-My Job        is on the line,    how did it come down to that, don't want to know
-Please        meaningless in a subject description
-Question      almost all threads begin with a question so the word adds nothing
-urgent        everybody with a question is looking for help
+**emergency**
+  unless shutting down means losing data it probably isn't.
+
+**Help** 
+  everybody with a question is looking for help
+
+**Question**
+  almost all threads begin with a question so the word adds nothing
+
+**urgent**
+  everybody with a question is looking for help
 
 Use the subject line to properly identify the problem.  Single words
 are not adequate.  Misleading subject lines make it difficult to
