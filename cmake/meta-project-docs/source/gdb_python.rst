@@ -373,4 +373,4 @@ When one optimizes code, one makes a decision that the loss of clarity introduce
 Furthermore, do not ever optimize code that is not thoroughly, I mean thoroughly tested:
  '''It is much, much easier to make correct code fast than it is to make fast code correct.'''
 
-Use the utilities valgrind (specifically the callgrind tool) and kcachegrind (nice graphical tool for viewing results).  Google them, you'll find stuff.
+Use the utilities **valgrind** (specifically the callgrind tool) and **kcachegrind** (nice graphical tool for viewing results).  Google them, you'll find stuff.
