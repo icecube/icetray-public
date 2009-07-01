@@ -27,6 +27,7 @@ Table of Contents:
    standard_modules
    newfeaturesv3
    changes
+   i3units
 
 To Document
 -----------
