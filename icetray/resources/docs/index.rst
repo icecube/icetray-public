@@ -39,3 +39,6 @@ To Document
   RuntimeError: extension class wrapper for base class I3FrameObject has not been created yet
 
 
+* The "lazy frame"
+* Frame objects tagged with which stream they are on
+* frame printout
