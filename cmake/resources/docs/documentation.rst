@@ -1,14 +1,49 @@
+.. _Documentation:
+
 Documentation
 =============
+
+These docs were generated with Sphinx: http://sphinx.pocoo.org/
+
+Requirements
+------------
+
+A version of sphinx >= 0.6.2 is required.  The easiest way to install
+this version is::
+
+   easy_install -U Sphinx
 
 We use automatically-generated "doxyen" for c++-code level
 documentation and ReStructuredText (rst, the standard for python
 documentation) for high-level and python documentation.  You can click
-the link "Show Source", on this page, to see what restructuredtext
-looks like.
-
+the link "Show Source", on this page's side panel, to see what
+restructuredtext looks like.
 
 .. index:: Doxygen
+
+.. _rst :
+.. index:: reStructuredText
+
+reStructuredText (rst)
+----------------------
+
+reStructuredText is the tool of choice for writing overview
+documentation (and a good way to generate quick web pages).  See
+:ref:`Links` below for source documentation.  Sphinx is a
+documentation toolkit built on top of restructured text, used for
+python's standard documentation.
+
+.. index:: DOCS_DIR 
+
+Projects that contain a :ref:`DOCS_DIR <DOCS_DIR>` in their
+CMakeList.txt's :ref:`i3_project <i3_project>` invocation will have
+documentation generated from the .rst source in that directory when
+``make html`` or ``make docs`` is run.  For an example see the
+documentation for project :ref:`dataio`. See also
+:ref:`project-organization` and :ref:`workspace-targets`.
+
+For project ``P``, the built html documentation will be found in
+:ref:`$I3_BUILD <I3_BUILD>`:file:`/docs/projects/` ``P``.
 
 Doxygen
 -------
@@ -39,26 +74,6 @@ specific class does but typically do not do a good job of explaining
 how the classes fit together or how the project as a whole is to be
 used. For this use restructuredText.
 
-.. _rst :
-.. index:: reStructuredText
-
-reStructuredText (rst)
-----------------------
-
-reStructuredText is the tool of choice for writing overview
-documentation (and a good way to generate quick web pages).  See
-:ref:`Links` below for source documentation.
-
-.. index:: DOCS_DIR 
-
-Projects that contain a :ref:`DOCS_DIR <DOCS_DIR>` in their
-CMakeList.txt's :ref:`i3_project <i3_project>` invocation will have
-documentation generated from the .rst source in that directory when
-``make html`` or ``make docs`` is run, see also :ref:`workspace-targets`.
-
-For project ``P``, the built html documentation will be found in
-:ref:`$I3_BUILD <I3_BUILD>`:file:`/docs/projects/` ``P``.
-
 Linking to doxygen docs from reStructuredText
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -77,9 +92,12 @@ Simply execute ``make docs`` in your project or the workspace.  See
 also :ref:`workspace-targets`.
 
 
+.. _Links:
+
 Links
 -----
 
 * `Doxygen <http://www.doxygen.org>`_
 * `Sphinx  <http://sphinx.pocoo.org>`_
 * `reStructuredText <http://docutils.sourceforge.net/rst.html>`_
+* `reStructuredText Directives reference <http://docutils.sourceforge.net/docs/ref/rst/directives.html>`_

@@ -43,17 +43,7 @@ Automatically Generated Documentation
 About this documentation
 ========================
 
-These docs were generated with Sphinx: http://sphinx.pocoo.org/
-
-A version of sphinx >= 0.6.2 is required.  The easiest way to install
-this version is::
-
-   easy_install -U Sphinx
-
-Then see :ref:`workspace-targets` for information on building them.
-
-Each project whose :ref:`i3_project() <i3_project>` macro invocation specifies a
-:ref:`DOCS_DIR <DOCS_DIR>` will be linked to above.
+See :ref:`Documentation`
 
 
 ..  FAQ

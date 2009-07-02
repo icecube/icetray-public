@@ -15,6 +15,8 @@ for simulation; other metaprojects perform specific reconstructions;
 and there is a "stripped down" reconstruction metaproject containing
 first-guess methods for filtering of data at the Pole itself.
 
+.. _project-organization:
+
 Project Directory Structure
 ---------------------------
 IceCube projects have the following general directory structure:
