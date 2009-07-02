@@ -10,8 +10,6 @@ CMake: icetray's build system
 
    tutorial
    organization
-   branches_releases_trunk
-   gfilt
    documentation
    targets
    tarball
@@ -24,6 +22,7 @@ CMake: icetray's build system
    env-shell.sh
    commitmails
    icc
+   gfilt
 
 Information on particular tools
 -------------------------------
