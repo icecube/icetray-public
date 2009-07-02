@@ -10,10 +10,9 @@ CMake: icetray's build system
 
    tutorial
    organization
-   commitmails
    branches_releases_trunk
    gfilt
-   doxygen
+   documentation
    targets
    tarball
    toolset
@@ -23,6 +22,7 @@ CMake: icetray's build system
    platforms
    svn_intro
    env-shell.sh
+   commitmails
    icc
 
 Information on particular tools

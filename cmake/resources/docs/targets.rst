@@ -1,8 +1,11 @@
 .. _targets:
 .. _workspace-targets:
 
-Workspace level targets
-=======================
+Targets
+=======
+
+Workspace level
+---------------
 
 As the name suggests, workspace-level targets are available from the
 workspace directory. These are a superset of the targets available in
@@ -51,8 +54,8 @@ directory.
    * - edit_cache 
      - See documentation for cmake and :ref:`rebuild_cache`
 
-Project level targets
-=====================
+Project level
+-------------
 
 Project level targets include several standard targets like *clean*
 and *all*, as well as whatever targets are created by calling 

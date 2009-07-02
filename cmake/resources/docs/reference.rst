@@ -1,10 +1,13 @@
 .. _macroreference:
 
-CMake macro reference
----------------------
+Icetray-specific cmake macro reference
+======================================
 
 See the cmake documentation for macros not listed here (not written by
 us).
+
+i3_project
+----------
 
 .. _i3_project:
 .. index:: i3_project 
@@ -119,6 +122,9 @@ us).
 
       will be used to install the python into the tarball.
 
+i3_add_library
+--------------
+
 .. _i3_add_library:
 
 .. index:: i3_add_library 
@@ -189,6 +195,9 @@ us).
 
       See cmake documentation of ``add_library``
 
+
+i3_executable
+-------------
 
 .. index:: i3_executable 
    single: CMake macros ; i3_executable
@@ -277,6 +286,9 @@ us).
    also :ref:`testdriver`
 
 
+i3_add_pybindings
+-----------------
+
 .. index:: i3_add_pybindings 
    single: CMake macros ; i3_add_pybindings
 
@@ -318,6 +330,9 @@ us).
 
    **Options**:  Same as ``i3_add_library()``
        
+
+i3_test_scripts
+---------------
 
 .. _i3_test_scripts():
 

@@ -74,8 +74,8 @@ this option can speed up builds by avoiding the need for an ``I3_PORTS``
 Qt or allow operation of Icetray on systems not supported by the ports
 tools.
 
-Site-specific tool configuration
---------------------------------
+I3_SITE_CMAKE_DIR
+-----------------
 
 .. _I3_SITE_CMAKE_DIR:
 .. index:: I3_SITE_CMAKE_DIR

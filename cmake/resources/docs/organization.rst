@@ -1,8 +1,5 @@
-Organization
-============
-
-Projects and Metaprojects
--------------------------
+Organization/Structure of Projects and Metaprojects
+===================================================
 
 IceCube software is divided up into projects, logical groupings of one
 or more classes and modules that have similar or related
