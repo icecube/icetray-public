@@ -25,6 +25,7 @@ if(SPHINX_BUILD)
     -D latex_paper_size=${SPHINX_PAPER_SIZE} 
     source
     ${CMAKE_BINARY_DIR}/docs
+    DEPENDS icetray-pybindings
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "Generating docs to ${CMAKE_BINARY_DIR}/docs")
 
