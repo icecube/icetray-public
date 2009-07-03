@@ -135,6 +135,8 @@ set(INSPECT_ALL_HTML ${CMAKE_BINARY_DIR}/doxygen/inspect/index.html)
 
 add_custom_target(doxygen)
 add_custom_target(inspect)
+add_dependencies(inspect icetray-inspect)
+
 add_custom_target(pybindings)
 add_dependencies(doxygen inspect)
 
@@ -371,3 +373,9 @@ add_custom_target(deploy-docs
   COMMENT Deploying docs to ${META_PROJECT}
   )
 
+file(DOWNLOAD 
+  http://www.icecube.umd.edu/~troy/${META_PROJECT}/projects/cmake/workspace_configured.html
+  ${CMAKE_BINARY_DIR}/.tag
+  TIMEOUT 0.5
+  )
+file(REMOVE ${CMAKE_BINARY_DIR}/.tag)
