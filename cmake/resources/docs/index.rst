@@ -28,12 +28,10 @@ Information on particular tools
 -------------------------------
 
 .. toctree::
+   :glob:
+   :maxdepth: 1
 
-   tools/python
-   tools/boost
-   tools/java
-   tools/root
-
+   tools/*
 
 Write me
 ^^^^^^^^
