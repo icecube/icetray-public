@@ -24,12 +24,6 @@ CMake: icetray's build system
    icc
    gfilt
 
-.. toctree::
-   :hidden:
-
-   workspace_configured
-
-
 Information on particular tools
 -------------------------------
 
