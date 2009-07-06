@@ -30,6 +30,8 @@ Table of Contents:
    newfeaturesv3
    changes
 
+Also see the `doxygen <../../doxygen/icetray/index.html>`_ docs.
+
 To Document
 -----------
 
