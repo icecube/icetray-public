@@ -1,7 +1,8 @@
 #
 #  $Id$
 #
-i3_project(interfaces)
+i3_project(interfaces
+  DOCS_DIR resources/docs)
 
 i3_add_library(interfaces
   private/interfaces/*.cxx
@@ -17,3 +18,4 @@ i3_test_executable(test
 i3_test_scripts(resources/scripts/*.py)
 
 add_subdirectory(private/pybindings)
+
