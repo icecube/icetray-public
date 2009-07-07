@@ -9,14 +9,8 @@
 Boost
 =====
 
-Boost is available in the toolset in versions 1.33.1 and 1.36.0.
-
-The most recent (highest version number) will be used by default.  If
-you e.g. have both installed and want to force the use of boost
-1.33.1, set ``BOOST_VERSION`` on the cmake line::
-
-  % cd build
-  % cmake -DBOOST_VERSION=1.33.1 ../src
+Boost is provided by the I3_PORTS toolset.  Our current versions 1.38.0
+This version will be used by default.  
 
 .. warning::
 
@@ -27,10 +21,12 @@ you e.g. have both installed and want to force the use of boost
 boost python bindings library
 -----------------------------
 
-There is a history of missteps regarding this library and the toolset.
-We appear to have converged on a good solution.
+Currently, boost_python libraries are automatically built 
+against the system python.  No special instructions are needed.
 
-In chronological order:
+There is a history of missteps regarding this library and the toolset.
+We appear to have converged on a good solution.  That history is, 
+in chronological order:
 
 1.  Python (2.3.5) was in the toolset, and the boost_python library was
     built by the boost port against this python.  I don't recall at this
@@ -65,6 +61,6 @@ In chronological order:
     build of boost_python back into the toolset but we don't have
     anybody to do the necessary hand-holding.
     
-3.  As of boost-1.36.0, boost_python is built by the toolset against
-    the system python.  
+3.  As of boost-1.38.0, boost_python is built by the toolset against
+    the system python and the projet 'boost' is no longer needed or supplied. 
 
