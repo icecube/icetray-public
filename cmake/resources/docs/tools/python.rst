@@ -45,7 +45,10 @@ environment to provide analysis-level tools like IPython
 (http://matplotlib.sourceforge.net/), Numpy (http://numpy.scipy.org/)
 and PyTables (http://www.pytables.org/). These instructions will
 help you get these additional tools setup and guide you through a few
-examples.
+examples.  
+
+**Note**: At a minimum, you're going to need at Python 2.4 or better, and 
+it is highly recommended you use Python 2.5 or better.
 
 Ubuntu or Debian Linux
 ^^^^^^^^^^^^^^^^^^^^^^^
