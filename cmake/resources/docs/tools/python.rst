@@ -140,7 +140,7 @@ http://code.icecube.wisc.edu/tools/distfiles/i3python/Mac/
 
    And now get ``tables-2.1.1.tar.gz`` and::
 
-      > sh -c "export HDF5_DIR=/Users/blaufuss/icework/i3tools; ~/python/bin/easy_install ./tables-2.1.1.tar.gz"
+      > sh -c "export HDF5_DIR=$I3_PORTS; ~/python/bin/easy_install ./tables-2.1.1.tar.gz"
 
 Redhat/Scientific Linux 5
 ^^^^^^^^^^^^^^^^^^^^^^^^^
