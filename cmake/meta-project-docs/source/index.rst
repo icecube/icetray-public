@@ -33,6 +33,7 @@ Of general interest
    :maxdepth: 2
 
    metaproject_metainfo
+   code_standards
    netiquette
    gdb_python
 
