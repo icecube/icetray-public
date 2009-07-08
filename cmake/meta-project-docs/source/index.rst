@@ -3,6 +3,7 @@ Metaproject documentation
 =========================
 
 .. toctree::
+   :maxdepth: 2
 
    metaproject/index
 
