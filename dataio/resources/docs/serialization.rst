@@ -183,7 +183,7 @@ You do this by simply adding the boost macro BOOST_CLASS_VERSION
 to your class.  By default the version of all classes is 0, so
 the first modifcation will be version 1.
 
-For example, you added "double new_var_" to your class I3MyClass.
+For example, you added "double new_var\_" to your class I3MyClass.
 You would add the following lines to your class::
 
  static const unsigned i3myclass_version_ = 1;
