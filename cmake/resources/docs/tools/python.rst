@@ -176,7 +176,7 @@ http://code.icecube.wisc.edu/tools/distfiles/i3python/Linux
 
      export PATH=~/python/bin:$PATH
      export PYTHONPATH=~/python/lib
-     export LD_LIBRARY_PATH=/opt/i3/ports/lib
+     export LD_LIBRARY_PATH=$I3_PORTS/lib
 
    These settings need to be set in your environment before you continue.
 
