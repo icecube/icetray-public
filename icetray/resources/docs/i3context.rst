@@ -36,9 +36,13 @@ The icetray passes a const I3Context to I3ServiceFactories and I3Modules in thei
  
  };
 
-and it is through this context that an I3Module accesses whatever services have been installed by the framework. The framework installs all requested services before it creates the first module::
+and it is through this context that an I3Module accesses whatever
+services have been installed by the framework. The framework installs
+all requested services before it creates the first module.
 
-I3Modules store this context in the protected member context_, which (because it is protected and not private) is visible to derived module classes::
+I3Modules store this context in the protected member ``context_``, which
+(because it is protected and not private) is visible to derived module
+classes::
 
  class I3Module 
  {
@@ -54,9 +58,10 @@ Interface
 ---------------- 
 
 I3Context::Has()
-^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
 
-These following examples all assume an I3Context named context_ is in scope:
+These following examples all assume an I3Context named
+``context_`` is in scope:
 
 Find out if the context contains something named "something" regardless of what type that "something" might be::
 

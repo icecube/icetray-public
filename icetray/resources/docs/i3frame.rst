@@ -169,44 +169,62 @@ Where the last line is the most important: can't convert from pointer-to-string 
  frame.Put(mystuff_p, "snaaaake");              // put in frame
 
 Put with default names
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^
 
-There are actually two forms of I3Frame::Put(). One variation is for objects without associated default names (that's almost all of them), as used above in MyModule::Physics(),
- void Put(const string& name, shared_ptr<I3FrameObject> element);
-and the other omits the name parameter::
+There are actually two forms of ``I3Frame::Put()``. One variation is
+for objects without associated default names (that's almost all of
+them), as used above in ``MyModule::Physics()``, ``void Put(const
+string& name, shared_ptr<I3FrameObject> element)``; and the other
+omits the name parameter::
 
  template <typename T>
  void 
  Put(shared_ptr<T> element);
 
-If the object has a default name (though putting default-named objects into the frame is a job that only authors of specific, specialized modules will do), Put will work like this::
+If the object has a default name (though putting default-named objects
+into the frame is a job that only authors of specific, specialized
+modules will do), Put will work like this::
 
  I3GeometryPtr geo(new I3Geometry);
  frame.Put(geo);
 
 I3Frame::Get<T>()
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
 
 This function:
- * Verifies that some object exists at the location requested
- * Verifies that the object there is actually of the type requested
- * Returns a const reference or const shared_ptr to the object, depending on the arguments passed.
 
-Get takes two forms. One returns a const reference to an object, the other returns a shared_ptr to a const object.
+ * Verifies that some object exists at the location requested
+
+ * Verifies that the object there is actually of the type requested
+
+ * Returns a const reference or const shared_ptr to the object,
+   depending on the arguments passed.
+
+Get takes two forms. One returns a const reference to an object, the
+other returns a shared_ptr to a const object.
 
 Getting a reference
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
 
 ::
  template <typename T>
  const T& 
  I3Frame::Get(const std::string& key);
 
-This version returns a const reference to the item at location key in the frame, if something exists at that name and a dynamic_cast of that item to type T succeeds. It follows that one can retrieve object O as type T from the frame if and only if O is of type T or a type derived from T.
+This version returns a const reference to the item at location key in
+the frame, if something exists at that name and a dynamic_cast of that
+item to type T succeeds. It follows that one can retrieve object O as
+type T from the frame if and only if O is of type T or a type derived
+from T.
 
-If either of these two preconditions fail, the I3Frame will throw an exception of type std::runtime_error.
+If either of these two preconditions fail, the I3Frame will throw an
+exception of type std::runtime_error.
 
-Object in the frame may have default names: see I3_DEFAULT_NAME . Objects who have some default name defined (like I3Geometry) do not require a string key argument. Less 'stable' classes like I3Particle or I3Hit do not have default locations, in these cases one must pass I3Frame::Get a key name.
+Object in the frame may have default names: see I3_DEFAULT_NAME
+. Objects who have some default name defined (like I3Geometry) do not
+require a string key argument. Less 'stable' classes like I3Particle
+or I3Hit do not have default locations, in these cases one must pass
+I3Frame::Get a key name.
 
 Get a const reference to the geometry::
 
@@ -214,16 +232,19 @@ Get a const reference to the geometry::
 
 (Notice that I3Geometry doesn't require a "key" argument.
 
-Get a const reference to an I3Particle placed there by some module earlier in the module chain::
+Get a const reference to an I3Particle placed there by some module
+earlier in the module chain::
 
  const I3Particle& seed = frame->Get<I3Particle>("linefit_result");
 
 This one does require a specific key name. ("linefit_result", above.)
 
 Getting a SomethingConstPtr
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-There are certain situations where retrieving a reference to an object is insufficient, for example if one wants to hold a shared_ptr to a frame object to ensure that it is not deleted.
+There are certain situations where retrieving a reference to an object
+is insufficient, for example if one wants to hold a shared_ptr to a
+frame object to ensure that it is not deleted.
 
 The second form of Get retrieves a shared_ptr to a frame object::
 
@@ -231,22 +252,32 @@ The second form of Get retrieves a shared_ptr to a frame object::
  T
  Get(const std::string& key);
 
-As in the other form, the frame will first attempt to locate an object at key, and an object does exist there, the frame will then attempt to dynamic_pointer_cast this object to the template argument T. If either of these steps fails, the frame returns a null TPtr (or shared_ptr<const > if you like).
+As in the other form, the frame will first attempt to locate an object
+at key, and an object does exist there, the frame will then attempt to
+dynamic_pointer_cast this object to the template argument T. If either
+of these steps fails, the frame returns a null TPtr (or
+shared_ptr<const > if you like).
 
-Note that this function will only compile if the type T is const. That is::
+Note that this function will only compile if the type T is const. That
+is::
 
  I3ParticlePtr particle = frame.Get<I3ParticlePtr>("linefit_result");
 
 
-will not compile. The reason for this is that what you're requesting, above, is not a const pointer: the module executing the code above would be able to change a frame item that it had not put there. Your collaborators agree almost unanimously that to allow this is a Bad Idea. The code above is easy enough to fix, though::
+will not compile. The reason for this is that what you're requesting,
+above, is not a const pointer: the module executing the code above
+would be able to change a frame item that it had not put there. Your
+collaborators agree almost unanimously that to allow this is a Bad
+Idea. The code above is easy enough to fix, though::
 
  I3ParticleConstPtr particle = frame.Get<I3ParticleConstPtr>("linefit_result");
            
 
-This works fine. Note that I3ParticleConstPtr is a typedef of shared_ptr<const I3Particle>. See I3_POINTER_TYPEDEFS .
+This works fine. Note that I3ParticleConstPtr is a typedef of
+shared_ptr<const I3Particle>. See :ref:`I3_POINTER_TYPEDEFS`.
 
 Examples
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^
 
 Some more examples. Get a shared_ptr to the geometry::
 
@@ -306,21 +337,29 @@ Frame names may not contain whitespace
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The name associated with the data in the frame has one restriction: it may not contain whitespace. The dataio modules and various utilities available for splicing and filtering data streams use whitespace to separate lists of frame names that they should keep or ignore. If you attempt such a thing, for instance 
+::
+
  frame.Put("bogus name",something) 
+
 you will see something like::
 
  public/icetray/I3Frame.h:115: Attempt to Put() element into frame at name
  "bogus name", which contains whitespace.
 
-I3_POINTER_TYPEDEFS
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. index:: I3_POINTER_TYPEDEFS
+.. _I3_POINTER_TYPEDEFS:
 
-The macro invocation I3_POINTER_TYPEDEFS(T)  expands to::
+I3_POINTER_TYPEDEFS
+^^^^^^^^^^^^^^^^^^^
+
+The macro invocation ``I3_POINTER_TYPEDEFS(T)``  expands to::
 
  typedef shared_ptr<T> TPtr;
  typedef shared_ptr<const T> TConstPtr;
 
-Notice the second typedef. This is useful when getting things out of the frame. It is not sufficient to prepend the first typedef (TPtr, above) with const, like this::
+Notice the second typedef. This is useful when getting things out of
+the frame. It is not sufficient to prepend the first typedef (TPtr,
+above) with const, like this::
 
  const I3ParticlePtr particle = frame.Get<I3ParticlePtr>("seed");
 
@@ -329,16 +368,23 @@ which is equivalent to::
  const shared_ptr<I3Particle> particle = 
    frame.Get<shared_ptr<I3Particle> >("seed");
 
-as this const I3ParticlePtr is a const pointer to a nonconst particle; the pointer isn't changable, and the particle is. This is of course the opposite of the desired effect, and by design, the line above won't compile. The second typedef, TConstPtr, is the correct one::
+as this const I3ParticlePtr is a const pointer to a nonconst particle;
+the pointer isn't changable, and the particle is. This is of course
+the opposite of the desired effect, and by design, the line above
+won't compile. The second typedef, TConstPtr, is the correct one::
 
  I3ParticleConstPtr particle = frame.Get<I3ParticleConstPtr>("seed");
 
-Wherein the pointer to the particle is mutable, but the particle itself is not. If you look at the code with the typdefs lifted, you can see that the const is associated with the particle, not the pointer::
+Wherein the pointer to the particle is mutable, but the particle
+itself is not. If you look at the code with the typdefs lifted, you
+can see that the const is associated with the particle, not the
+pointer::
 
  shared_ptr<const I3Particle> particle = 
    frame.Get<shared_ptr<const I3Particle> >("seed");
 
-If you attempt to Get<> something non-const, you will see an error something like::
+If you attempt to Get<> something non-const, you will see an error
+something like::
 
  /Users/troy/Icecube/meta-projects/offline-software/work-dc2/offline-mk/too
  l-patches/boost/shared_ptr.hpp: In constructor 'boost::shared_ptr<T>::shar
@@ -364,8 +410,11 @@ wherein the last line is the most important::
 
  cannot dynamic_cast, conversion casts away constness. 
 
+.. index:: I3_DEFAULT_NAME
+.. _I3_DEFAULT_NAME:
+
 I3_DEFAULT_NAME
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 Classes that exist as "singletons" in the frame, like I3Geometry, I3DetectorStatus, I3EventHeader and I3Calibration, or service base classes like I3RandomService (but not SomePar ticularKindOfRandomService) are located in standard slots. The 'canonical' I3Geometry, for instance, will always be at slot "I3Geometry" and never elsewhere. It is possible to put I3Geometries or I3EventHeaders at locations other than their default names, but geometries or eventheaders at these locations are not the geometries and/or event headers, and will be ignored unless following modules know where to look for them.
 
@@ -740,27 +789,6 @@ See the documentation on :ref:`I3_SERIALIZABLE`,
 :ref:`I3_POINTER_TYPEDEFS`, and the documentation for
 boost::serialization for more details.  
 
-
-
-.. index:: I3_POINTER_TYPEDEFS
-.. _I3_POINTER_TYPEDEFS:
-
-I3_POINTER_TYPEDEFS
--------------------
-
-A call::
-
-  I3_POINTER_TYPEDEFS(X);
-
-Will expand to the following two typedefs::
-
-  typedef boost::shared_ptr<X>        XPtr;
-  typedef boost::shared_ptr<const X>  XConstPtr;
-
-The invocation belongs in a header file after the definition of the
-class ``X``.  By convention, all classes that are handled via
-``shared_ptr`` should have one of these, and the typedefs should
-be used in lieu of the expanded type.
 
 
 .. index:: I3_SERIALIZABLE
