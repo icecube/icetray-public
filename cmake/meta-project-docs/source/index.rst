@@ -1,5 +1,10 @@
 
-.. include:: metaproject/index.rst
+Metaproject documentation
+=========================
+
+.. toctree::
+
+   metaproject/index
 
 .. this is here to provoke an early load of this module
 .. apparently the rest of our projects should have a wrapper that loads

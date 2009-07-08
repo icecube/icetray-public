@@ -213,13 +213,13 @@ shared disk, one for each OS/Architecture you are working with:
 Troubleshooting
 ----------------------------------------------------------
 
-* If your :file:``i3-install.sh`` build gets interrupted for some
-  reason (other than an error), there is no need to remove all your
-  previous work and start from scratch.  You can take a look at the
-  contents of the i3-install.sh file.  As long as you are past the
-  "make install" step (first couple of minutes), you can simply repeat
-  any of the subsequent commands ($1 in this script is your :env:`$I3_PORTS`
-  directory) This is essentially switching to the manual instructions.
+If your :file:``i3-install.sh`` build gets interrupted for some reason
+(other than an error), there is no need to remove all your previous
+work and start from scratch.  You can take a look at the contents of
+the i3-install.sh file.  As long as you are past the "make install"
+step (first couple of minutes), you can simply repeat any of the
+subsequent commands ($1 in this script is your :envvar:`$I3_PORTS`
+directory) This is essentially switching to the manual instructions.
 
 
 See also :ref:`platforms`.

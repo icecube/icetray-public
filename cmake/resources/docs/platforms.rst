@@ -12,12 +12,15 @@ Apple Mac OS X
 * If you use MacPorts to manage your "extra" system tools, like
   subversion, then take caution.  After you have "source env.sh", your
   $PATH variable is updated so that $I3_PORTS/bin is first. So:
+
   * Always explicitly run $I3_PORTS/bin/port (never let it come from
     your path).
+
   * Never "su" or "sudo" from an xterm where you have "source env.sh",
     as this altered path might be kept and cause conflicts when you
     think you are running a "system" port command.  Start a new xterm
     instead.
+
   * A system Macports install for things like subversion is not needed
     in 10.5/Leopard, since subversion is now supplied by the OS.
 
