@@ -1,3 +1,6 @@
+.. index:: svnintro
+.. _svnintro:
+
 Introduction to Subversion for use with IceTray
 ===============================================
 

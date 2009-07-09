@@ -1,3 +1,6 @@
+.. index:: MetaProjectTop
+.. _MetaProjectTop:
+
 
 Metaproject documentation
 =========================

@@ -4,6 +4,10 @@
 
 .. highlight:: sh
 
+.. index:: PythonTool
+.. _PythonTool:
+
+
 Python
 ======
 
