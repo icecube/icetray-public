@@ -1,3 +1,6 @@
+.. index:: I3Muxer
+.. _I3Muxer:
+
 Using the I3Muxer
 ===================
 

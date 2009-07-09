@@ -18,7 +18,7 @@ that are available in the data warehouse.
 **Note:** Just make sure you order the files sent to the I3Reader so
   that the proper GCD frames are supplied prior to P frames.
 
-When do I need to use the Muxer (**TODO** link to Muxer) and
+When do I need to use the Muxer (see :ref:`I3Muxer`) and
 appropriate source services?
 
 * Using the database as a source of Geometry, Calibration, DetectorStatus
