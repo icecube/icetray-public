@@ -99,6 +99,13 @@ http://code.icecube.wisc.edu/tools/distfiles/i3python/Mac/
 
    These settings need to be set in your environment before you continue.
 
+   **Note**:  There is nothing special about these values set 
+   in this ``~/.pydistutils``.  This file is used by the Python Setuptools
+   to see where to install libraries for your use.  The ``.pydistutils.cfg``
+   file has to be in your ``$HOME`` directory.  The values set in there can be
+   any directory you can write to, as long as they match the values you set
+   in ``PATH`` and ``PYTHONPATH``.
+
 3. Install setup tools.  Get ``setuptools-0.6c9-py2.5.egg`` and::
 
      > sh setuptools-0.6c9-py2.5.egg
@@ -179,6 +186,13 @@ http://code.icecube.wisc.edu/tools/distfiles/i3python/Linux
      export LD_LIBRARY_PATH=$I3_PORTS/lib
 
    These settings need to be set in your environment before you continue.
+
+   **Note**:  There is nothing special about these values set 
+   in this ``~/.pydistutils``.  This file is used by the Python Setuptools
+   to see where to install libraries for your use.  The ``.pydistutils.cfg``
+   file has to be in your ``$HOME`` directory.  The values set in there can be
+   any directory you can write to, as long as they match the values you set
+   in ``PATH`` and ``PYTHONPATH``.
 
 3. Install setup tools.  Get ``setuptools-0.6c9-py2.4.egg`` and::
 
