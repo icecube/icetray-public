@@ -57,13 +57,16 @@ Accounts/policy on code repository
 -----------------------------------
 
 Our svn server is configured to use htaccess-style web accounts. 
-You can create your own, just follow the link on the 
-`IceCube SVN webpage. <http://code.icecube.wisc.edu>`_
+To request your own account, send a request to svn_admin@icecube.umd.edu
+from your email address at an IceCube institution.
 
 With this account, you'll be able to checkout code anywhere, and 
 commit to any project's "trunk" (aka "head") area. Released ("tagged") 
 versions of projects are only writable by a small group of people, to prevent 
-them from being changed after release. The "icecube" account 
+them from being changed after release. 
+
+If you only intend to check out code, you don't your own account,
+as the "icecube" account 
 (standard web password) is also available for checkouts only.
 
 Organization of the repository
@@ -79,7 +82,7 @@ further broken down into sub-areas:
    * projects/<foo>/trunk - Containing the latest (HEAD) versions of all projects.
    * projects/<foo>/releases - Containing tagged (numbered Vxx-yy-zz) releases of projects, organized by project.
    * projects/<foo>/branches - Contains other "named" branches, typically used for code testing and prototyping. 
-* meta-projects - Contains the "collections of projects" workspaces used by svn to replace the bfd meta-projects.
+* meta-projects - Contains the "collections of projects" workspaces used by svn to build a workspace.
 * sandbox - A development area for code exchange and early prototyping work of new projects. 
 
 Projects are specified by their URL now, for example, to reference 
@@ -309,7 +312,7 @@ line in this file specifies a project. Here you see three example lines with:
   directwalk http://code.icecube.wisc.edu/svn/projects/directwalk/trunk
   rime -r 22652 http://code.icecube.wisc.edu/svn/projects/rime/trunk (!)
 
-*caution* should be used when using a specific revision number.  
+**CAUTION** should be used when using a specific revision number.  
 'svn update' will take you literally and enforce this, sometimes at the 
 expense of local mods.  You are better off making
 a release from this specific revision (or a branch), and including that.
