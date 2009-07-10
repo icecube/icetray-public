@@ -20,6 +20,7 @@ CMake: icetray's build system
    toolset
    i3test
    reference
+   pybindings
    ports
    platforms
    svn_intro
