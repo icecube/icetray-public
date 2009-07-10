@@ -146,9 +146,11 @@ I3FileImpl::open_file(const std::string& filename, boost::function<void(double)>
 
   bool first = true;
 
-  vector<string> skip;
-  skip.push_back(".*");
-
+  vector<string> tmpskip;
+  // revisit:  how to scan file w/o loading every frame object?
+  //
+  //  tmpskip.push_back(".*");
+  //
   while (ifs_.peek() != EOF && counter < nframes)
     {
       FrameInfo frame_info;
@@ -168,7 +170,7 @@ I3FileImpl::open_file(const std::string& filename, boost::function<void(double)>
       I3FramePtr frame(new I3Frame);
 
       try {
-	frame->load(ifs_, skip);
+	frame->load(ifs_, tmpskip);
       } catch (const std::exception& e) {
 	log_info("caught exception %s at frame %zu", 
 		 e.what(), frame_infos_.size());
