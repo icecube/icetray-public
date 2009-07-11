@@ -74,6 +74,30 @@ This macro can be used to expose your interface to Python exactly as it is in C+
 	#define METHODS_TO_WRAP (GetTime)(GetX)(GetY)(GetZ)
 	BOOST_PP_SEQ_FOR_EACH(WRAP_DEF, I3Particle, METHODS_TO_WRAP)
 
+Since the Get/Set pattern is fairly common, there are iterable macros specifically for Get/Set. With these, one sequence can be used to define C++ style Get/Set methods and Python-style properties (see :cfunc:`WRAP_PROP`).
+
+.. cfunction:: WRAP_GET(R, Class, Name)
+
+	Define GetName(). Suitable for use with BOOST_PP_SEQ_FOR_EACH.
+
+	:param Class: The parent C++ class.
+	:param Name: The base name of the Get method.
+
+.. cfunction:: WRAP_GETSET(R, Class, Name)
+
+	Define GetName() and SetName(). Suitable for use with BOOST_PP_SEQ_FOR_EACH.
+
+	:param Class: The parent C++ class.
+	:param Name: The base name of the Get/Set methods.
+
+::
+
+	#define NAMES_TO_WRAP (Time)(X)(Y)(Z)
+	BOOST_PP_SEQ_FOR_EACH(WRAP_GETSET, I3Particle, NAMES_TO_WRAP)
+	BOOST_PP_SEQ_FOR_EACH(WRAP_PROP, I3Particle, NAMES_TO_WRAP)
+
+There are also versions of these macros (:cfunc:`WRAP_GET_INTERNAL_REFERENCE` and :cfunc:`WRAP_GETSET_INTERNAL_REFERENCE`) that return a reference rather than a copy.
+
 Exposing private member data via Get/Set
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -89,23 +113,30 @@ If you want to be nice to your users, you can wrap your Get/Set methods in Pytho
 
 .. cfunction:: WRAP_PROP(R, Class, Fn)
 
-	Add Class.Fn as a property with getter/setter functions GetFn()/SetFn(). Suitable for use with BOOST_PP_SEQ_FOR_EACH.
+	Add Class.fn as a property with getter/setter functions GetFn()/SetFn(). Suitable for use with BOOST_PP_SEQ_FOR_EACH.
 
 	:param Class: Parent C++ class
 	:param Fn: The name of the Python property and base name of the Get/Set functions
+
+.. cfunction:: WRAP_PROP_RO(R, Class, Fn)
+
+	Add Class.fn as a property with getter function GetFn(). Suitable for use with BOOST_PP_SEQ_FOR_EACH.
+
+	:param Class: Parent C++ class
+	:param Fn: The name of the Python property and base name of the Get function
 
 ::
 
 	#define DATA_TO_WRAP (Time)(X)(Y)(Z)
 	BOOST_PP_SEQ_FOR_EACH(WRAP_PROP, I3Particle, DATA_TO_WRAP)
 
-Now in Python, I3Particle.X with call and return I3Particle::GetX() and I3Particle.X = 0 will call I3Particle::SetX(0).
+Now in Python, I3Particle.x (yes, lowercase) will call and return I3Particle::GetX() and I3Particle.x = 0 will call I3Particle::SetX(0).
 
 For finer-grained control of the Python property name, use the trinary form:
 
 ::
 
-	PROPERTY(I3Particle, time, Time)	
+	PROPERTY(I3Particle, partyTime, Time)	
 
 
 Exposing public member data with access restrictions
@@ -156,6 +187,22 @@ For a name X, this will define Objtype::GetX() to return a GotType by value. Thi
 	:param Name: The base name of the Get/Set methods. 
 
 This will define Objtype::GetX() to return a reference to GotType, where GotType is still owned by the parent object. This is appropriate for compound objects like vectors and maps.
+
+There are also trinary versions of these macros for use with BOOST_PP_SEQ_FOR_EACH:
+
+.. cfunction:: WRAP_GET_INTERNAL_REFERENCE(R, Class, Name)
+
+	Define GetName() to return an internal reference. Suitable for use with BOOST_PP_SEQ_FOR_EACH.
+
+	:param Class: The parent C++ class.
+	:param Name: The base name of the Get method.
+
+.. cfunction:: WRAP_GETSET_INTERNAL_REFERENCE(R, Class, Name)
+
+	Define GetName() and SetName(). GetName() will return an internal reference. Suitable for use with BOOST_PP_SEQ_FOR_EACH.
+
+	:param Class: The parent C++ class.
+	:param Name: The base name of the Get/Set methods.
 
 Todo: finer points of return-by-value vs. reference
 ___________________________________________________ 
