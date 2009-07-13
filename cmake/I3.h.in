@@ -168,6 +168,17 @@ identity_(T t) { return t; }
   .def("Set" BOOST_PP_STRINGIZE(Name),					\
        &ObjType::Set##Name)
 
+// A version suitable for use with sequences
+#define GETSET_IMPL_NOTYPE(ObjType, Name, CallPolicies)			\
+  GET_IMPL_NOTYPE(ObjType, Name, CallPolicies)				\
+  .def("Set" BOOST_PP_STRINGIZE(Name),					\
+       &ObjType::Set##Name)
+
+#define GET_IMPL_NOTYPE(ObjType, Name, CallPolicies)			\
+  .def("Get" BOOST_PP_STRINGIZE(Name),					\
+       &ObjType:: Get##Name,						\
+       CallPolicies)							\
+
 // This is for member functions that return a Whatever&,
 // where the actual Whatever is owned by the class.
 #define GETSET_INTERNAL_REFERENCE(ObjType, GotType, Name)		\
@@ -178,6 +189,59 @@ identity_(T t) { return t; }
   GETSET_IMPL(Objtype, GotType, Name, default_call_policies())
 
 #define PROPERTY(Class, Prop, Fn) .add_property(BOOST_PP_STRINGIZE(Prop), &Class::Get##Fn, &Class::Set##Fn)
+
+#include <ctype.h>
+#include <string.h>
+// convert from upper to lower CamelCase:
+// ParticleType => particleType
+// ATWDBinSize => atwdBinSize
+char * lowerCamelCase(const char * str);
+#define DECLARE_CAMELCASE_WRAPPER						\
+	char * lowerCamelCase(const char * str) {				\
+		int len,i;							\
+		char* out;							\
+		len = strlen(str);						\
+		out = (char*)malloc(len+1);					\
+		strcpy(out,str);						\
+		out[0] = tolower(out[0]);					\
+		for (i=1;i<len-1;i++) {						\
+			if (!(isupper(out[i]) && isupper(out[i+1]))) break;	\
+			out[i] = tolower(out[i]);				\
+		}								\
+		return out;							\
+	}
+
+// add other housekeeping bits here
+#define I3_PYTHON_MODULE(modname)						\
+	DECLARE_CAMELCASE_WRAPPER						\
+	BOOST_PYTHON_MODULE(modname)
+
+#include <boost/preprocessor/seq.hpp>
+
+// Trinary macros suitable for use with BOOST_PP_SEQ_FOR_EACH
+#define WRAP_PROP(R, Class, Fn) .add_property(lowerCamelCase(BOOST_PP_STRINGIZE(Fn)), BOOST_PP_CAT(&Class::Get,Fn), BOOST_PP_CAT(&Class::Set,Fn))
+#define WRAP_PROP_INTERNAL_REFERENCE(R, Class, Fn) 						\
+   .add_property(lowerCamelCase(BOOST_PP_STRINGIZE(Fn)),					\
+                 boost::python::make_function(BOOST_PP_CAT(&Class::Get,Fn), 			\
+                                              boost::python::return_internal_reference<1>()), 	\
+                 BOOST_PP_CAT(&Class::Set,Fn))
+#define WRAP_PROP_RO(R, Class, Fn) .add_property(lowerCamelCase(BOOST_PP_STRINGIZE(Fn)), BOOST_PP_CAT(&Class::Get,Fn))
+#define WRAP_PROP_RO_INTERNAL_REFERENCE(R, Class, Fn) 						\
+   .add_property(lowerCamelCase(BOOST_PP_STRINGIZE(Fn)),					\
+                 boost::python::make_function(BOOST_PP_CAT(&Class::Get,Fn), 			\
+                                              boost::python::return_internal_reference<1>())) 
+#define WRAP_RW(R, Class, Member) .def_readwrite(BOOST_PP_STRINGIZE(Member), &Class::Member)
+#define WRAP_RO(R, Class, Member) .def_readonly(BOOST_PP_STRINGIZE(Member), &Class::Member)
+#define WRAP_DEF(R, Class, Fn) .def(BOOST_PP_STRINGIZE(Fn), &Class::Fn)
+#define WRAP_GET(R, Class, Name) GET_IMPL_NOTYPE(Class, Name, default_call_policies())
+#define WRAP_GETSET(R, Class, Name) GETSET_IMPL_NOTYPE(Class, Name, default_call_policies())
+#define WRAP_GET_INTERNAL_REFERENCE(R, Class, Name) GET_IMPL_NOTYPE(Class, Name, return_internal_reference<1>())
+#define WRAP_GETSET_INTERNAL_REFERENCE(R, Class, Name) GETSET_IMPL_NOTYPE(Class, Name, return_internal_reference<1>())
+#define WRAP_ENUM_VALUE(R, Class, Name) .value(BOOST_PP_STRINGIZE(Name),Class::Name)
+
+// Class registration stuff
+#define I3_REGISTRATION_FN_DECL(r, data, t) void BOOST_PP_CAT(register_,t)();
+#define I3_REGISTER(r, data, t) BOOST_PP_CAT(register_,t)();
 
 #endif
 
