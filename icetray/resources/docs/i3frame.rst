@@ -541,12 +541,20 @@ In Python
 	item in question, this may trigger the deserialization of the
 	item::
 
-           >>> obj = frame.Get('foo')
-	   >>> print obj
-	   <icecube.icetray.I3Int object at 0xb7d587d4>
 	   >>> obj = frame['foo']
 	   >>> obj
 	   <icecube.icetray.I3Int object at 0xb7d587d4>
+           >>> obj = frame.Get('foo')
+	   >>> obj
+	   <icecube.icetray.I3Int object at 0xb7d587d4>
+
+	This method will throw :exc:`KeyError` if the key isn't found in the
+	frame::
+
+           >>> frame['nope']
+           Traceback (most recent call last):
+             File "<stdin>", line 1, in <module>
+           KeyError: 'nope'
 
    .. method:: keys()
 

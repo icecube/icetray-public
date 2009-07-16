@@ -185,4 +185,41 @@ gets cleaned up after each run::
             sys.exit(0)
 
 
+.. _NaN:
+.. index:: NaN
+
+.. _Inf:
+.. index:: Inf
+
+NaN and Inf
+===========
+
+:file:`I3Tray.py` creates namespace-scope variables ``Inf`` and
+``Nan``, for the special floating-point values infinity and
+not-a-number.  These are for the occasions when one needs to pass NaN
+or Inf to a module parameter, or to initialize e.g. an :ref:`I3Double` to
+NaN.
+
+``NaN`` compared to anything (includng itself) is always false.  To
+tell if a variable is nan, or not, use the functions ``isnan`` and
+``isinf``.  In python 2.6 and later, these are in module :mod:`math`,
+in earlier versions they are in module :mod:`scipy`::
+
+  Python 2.6.2 (release26-maint, Apr 19 2009, 01:58:18) 
+  [GCC 4.3.3] on linux2
+  Type "help", "copyright", "credits" or "license" for more information.
+  >>> from I3Tray import NaN, Inf
+  >>> NaN
+  nan
+  >>> Inf
+  inf
+  >>> NaN == NaN       # You probably do *not* want this
+  False
+  >>> import math
+  >>> math.isnan(NaN)  # You want this
+  True
+  >>> math.isinf(Inf)
+  True
+  
+
 
