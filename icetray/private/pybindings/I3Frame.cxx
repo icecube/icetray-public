@@ -28,6 +28,13 @@ template <typename T>
 inline static 
 boost::shared_ptr<T> frame_get(const I3Frame* f, const std::string& where)
 {
+  if (!f->Has(where))
+    {
+      PyErr_SetString(PyExc_KeyError, where.c_str());
+      throw_error_already_set();
+      return boost::shared_ptr<T>();
+    }
+
   try {
     boost::shared_ptr<const T> thing = f->Get<boost::shared_ptr<const T> >(where);
     return boost::const_pointer_cast<T>(thing);
