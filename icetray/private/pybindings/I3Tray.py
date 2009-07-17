@@ -1,3 +1,6 @@
+"""
+FILE LEVEL DOCSTRING YAY
+"""
 #
 # Copyright (C) 2004-9   Troy D. Straszheim
 #
@@ -10,6 +13,22 @@ NaN = float('NaN')
 Inf = float('inf')
 
 def load(filename):
+    """
+    load the library (via dlopen) into the running tray.  This is
+    primarily used for libraries that don't have python bindings
+    (eventually all libraries should have at least stub python
+    bindings, making them loadable via the standard python *import*,
+    and this sould be obsolete.
+
+    :param filename: -- should be the name of the file to load
+    including the leading ``lib``, but *not* including the trailing
+    ``.so`` or ``.dylib``, eg::
+
+      load("libdataio")
+      load("libexamples")
+
+    
+    """
     try:
         icetray.load(filename)
     except:
@@ -36,10 +55,24 @@ class I3Tray:
         """
         Add a module to the tray's processing stream.
 
-        The first argument, *type*, can be either a string (search for
-        a registered c++ module in the module factory) or a python
-        class (create a module of this type), or a python function
-        (create a python module to wrap this function).
+        :param type: either a string (search for a registered c++
+        module in the module factory) or a python class (create a
+        module of this type), or a python function (create a python
+        module to wrap this function).
+
+        :param name: instance name for this module, needed when
+        connecting in/outboxes in unusual ways, otherwise just make
+        this string unique among the set of *name* parameters passed
+        to AddModule and AddService.
+
+        :param kwargs: parameter values forwarded to the added module
+
+        Example::
+
+           tray.AddModule("I3Reader", "reader",
+                          Filename = "/path/to/foo.i3",
+                          SkipKeys = ['I3DST', 'RecoPulses'])
+        
         """
         if inspect.isclass(type) and not icetray.I3Module in inspect.getmro(type):
             raise RuntimeError, "Module %s of type %s doesn't inherit from icecube.icetray.I3Module" % (name, type)
