@@ -197,8 +197,8 @@ NaN and Inf
 :file:`I3Tray.py` creates namespace-scope variables ``Inf`` and
 ``Nan``, for the special floating-point values infinity and
 not-a-number.  These are for the occasions when one needs to pass NaN
-or Inf to a module parameter, or to initialize e.g. an :ref:`I3Double` to
-NaN.
+or Inf to a module parameter, or to initialize e.g. an :ref:`I3Double`
+to NaN.
 
 ``NaN`` compared to anything (includng itself) is always false.  To
 tell if a variable is nan, or not, use the functions ``isnan`` and
