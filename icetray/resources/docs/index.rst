@@ -1,3 +1,9 @@
+..  $Date$
+..  $Revision$
+..  $Author$
+..  $HeadURL$
+..  $Id$
+
 Icetray
 =======
 
