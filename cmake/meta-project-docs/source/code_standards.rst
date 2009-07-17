@@ -278,7 +278,7 @@ evel:
   "processed 1000 events" type statements,
 * log_debug: One or two lines output for each process call (per 
   event, config, etc) per module
-*log_trace: line by line debugging is possible.
+* log_trace: line by line debugging is possible.
 
 Documentation
 ^^^^^^^^^^^^^
@@ -454,10 +454,9 @@ STL: Containers
 Use vector and string instead of arrays.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Don't use C-style const char *'s, arrays, ``strcmp``, ``strcpy``, or 
-``strncmp``.  C-style arrays (``float[3]``) can be used if their size is
-known at compile time.
-Use STL strings instead::
+Don't use C-style const char \*'s, arrays, ``strcmp``, ``strcpy``, or
+``strncmp``.  C-style arrays (``float[3]``) can be used if their size
+is known at compile time.  Use STL strings instead::
 
  string s1, s2;
 
