@@ -1,9 +1,6 @@
 #
-# Copyright (C) 2004, 2005, 2006, 2007   Troy D. Straszheim
+# Copyright (C) 2004-9   Troy D. Straszheim
 #
-# $Id$
-#
-
 import os, sys, inspect
 import icecube.icetray as icetray
 import I3Units
@@ -23,11 +20,27 @@ def OMKey(string,omnum):
     return icetray.OMKey(string,omnum)
 
 class I3Tray:
+    """
+    A convenience wrapper around the wrapped c++ class icetray.I3Tray.
+    This class provides keyword-arguments to the AddModule and so forth.
+    """
+
     def __init__(self):
+        """
+        Creates an I3Tray.
+        """
         self.last_added = None
         self.the_tray = icetray.I3Tray()
 
     def AddModule(self, type, name, **kwargs):
+        """
+        Add a module to the tray's processing stream.
+
+        The first argument, *type*, can be either a string (search for
+        a registered c++ module in the module factory) or a python
+        class (create a module of this type), or a python function
+        (create a python module to wrap this function).
+        """
         if inspect.isclass(type) and not icetray.I3Module in inspect.getmro(type):
             raise RuntimeError, "Module %s of type %s doesn't inherit from icecube.icetray.I3Module" % (name, type)
         try:

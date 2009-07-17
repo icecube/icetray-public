@@ -35,6 +35,7 @@ Table of Contents:
    i3units
    newfeaturesv3
    changes
+   I3Tray
 
 Also see the `doxygen <../../doxygen/icetray/index.html>`_ docs.
 
@@ -52,3 +53,5 @@ To Document
 * The "lazy frame"
 * Frame objects tagged with which stream they are on
 * frame printout
+
+
