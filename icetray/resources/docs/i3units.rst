@@ -18,9 +18,9 @@ Alternatively, if you prefer mV::
  readvoltage = myContainerPtr->GetVoltage()/I3Units::mV;
 
 Note, however, that there is no real need to divide out the unit when
-you fetch the data. Doing so means you have made a choice of units 
-(for readvoltage in this case) which other people reading your code need to be 
-aware of. If instead you just do::
+you fetch the data. Doing so means you have made a choice of units
+(for readvoltage in this case) which other people reading your code
+need to be aware of. If instead you just do::
 
  readvoltage = myContainerPtr->GetVoltage();
 
@@ -38,9 +38,9 @@ readvoltage higher up in the code.
 The IceCube unit system
 ------------------------
 
-In the IceTray software a set of "units" have been defined in the file 
-I3Units.h. These units live in namespace I3Units, for example I3Units::GeV.
-We have, for example::
+In the IceTray software a set of "units" have been defined in the file
+I3Units.h. These units live in namespace I3Units, for example
+I3Units::GeV.  We have, for example::
 
  static const double eplus = 1.;		   // positron charge
 
@@ -72,15 +72,22 @@ choose the unit. We can write, for example::
 
  time = 40*I3Unit::ns;
 
-The quantities so constructed are '''not''' tied to any particular units. We can divide distance by I3Units::m to get the value in metres, or with I3Units::yd to get it in yards. So we can pass these quantities around between modules without caring about units, and in some other module we can set::
+The quantities so constructed are '''not''' tied to any particular
+units. We can divide distance by I3Units::m to get the value in
+metres, or with I3Units::yd to get it in yards. So we can pass these
+quantities around between modules without caring about units, and in
+some other module we can set::
 
  speed = distance/time;
 
-which will give us the speed, again without specific unit. It is only when we want  to communicate with some external code which expects quantities expressed in (i.e. divided by) some specific unit  that we must divide by the appropriate unit, like::
+which will give us the speed, again without specific unit. It is only
+when we want to communicate with some external code which expects
+quantities expressed in (i.e. divided by) some specific unit that we
+must divide by the appropriate unit, like::
 
  speed_in_metres_per_second = speed/(I3Units::m/I3Units::s);
 
-Of course, if we want to print the speed in metres per second we must 
+Of course, if we want to print the speed in metres per second we must
 also do the above.
 
 Need for a convention!
@@ -94,16 +101,22 @@ is therefore **essential** that a convention is adopted. All modules
 should assume that parameters with dimension include the unit, and all 
 users should be aware of this.
 
-To exploit the benefits of the I3Units we should also avoid converting to specific units inside the code, and in particular when passing parameters to functions and services. If we don't do this the I3Unit approach only serves to complicate things!
+To exploit the benefits of the I3Units we should also avoid converting
+to specific units inside the code, and in particular when passing
+parameters to functions and services. If we don't do this the I3Unit
+approach only serves to complicate things!
 
 Using in Python Scripts
 ------------------------
 
-Using I3Units in python scripts to specify parameters is simple.  As long as you have this line::
+Using I3Units in python scripts to specify parameters is simple.  As
+long as you have this line::
 
  from I3Tray import *
 
 then you can use I3Units like this::
 
- ("AzimuthRange",[-azimuth * I3Units.degree, azimuth * I3Units.degree])
+  AzimuthRange = [-azimuth * I3Units.degree, azimuth * I3Units.degree]
+
+
 
