@@ -3,20 +3,17 @@
 #  use the standard messy monolith reader to get some data going.
 #
 from I3Tray import *
-
 from os.path import expandvars
 
 import os
 import sys
 
-load("libdataclasses")
-load("libphys-services")
-load("libdataio")
+from icecube import icetray, dataclasses, phys_services, dataio
 
 tray = I3Tray()
 
-tray.AddService("I3ReaderServiceFactory","readerfactory")(
-    ("Filename", expandvars("$I3_PORTS/test-data/string-21/Linux-i386.i3.gz"))
+tray.AddService("I3ReaderServiceFactory","readerfactory",
+                Filename = expandvars("$I3_PORTS/test-data/string-21/Linux-i386.i3.gz")
     )
 
 tray.AddModule("I3Muxer","muxme")

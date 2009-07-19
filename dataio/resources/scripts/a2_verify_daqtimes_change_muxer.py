@@ -7,8 +7,7 @@ from os.path import expandvars
 tray = I3Tray()
 
 
-tools = expandvars("$I3_PORTS")
-runfile = tools + "/test-data/2006data/Run00089508.i3.gz"
+runfile = expandvars("$I3_PORTS/test-data/2006data/Run00089508.i3.gz")
 
 tray.AddService("I3ReaderServiceFactory", "readers",
 		Filename = runfile)

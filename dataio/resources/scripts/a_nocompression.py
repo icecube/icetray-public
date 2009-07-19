@@ -31,10 +31,9 @@ tray = I3Tray()
 # Default configuration of the I3Muxer and the I3ReaderServices.  This
 # is cut-and-pasteable if you're just reading from a .i3 file.
 #
-tray.AddService("I3ReaderServiceFactory","i3reader")(
-    ("Filename", runfile),
-    ("SkipKeys",["I3PfFilterMask"])
-    )
+tray.AddService("I3ReaderServiceFactory","i3reader",
+                Filename = runfile,
+                SkipKeys = ["I3PfFilterMask"])
 
 #
 # The muxer talks to the services above and puts together frames
@@ -57,11 +56,10 @@ tray.AddModule("DumbFeatureExtractor","dumbfe")
 # This would probably be better named I3ConstantSeed.  You can imagine
 # what it does.
 #
-tray.AddModule("PutParticle","put")(
-    ("Zenith",1.28),
-    ("Azimuth",3.14),
-    ("Where", "somewhere")
-    )
+tray.AddModule("PutParticle","put",
+               Zenith = 1.28,
+               Azimuth = 3.14,
+               Where =  "somewhere")
 
 #
 # This is the very convenient "Dump" module which spits out the frames
@@ -73,9 +71,9 @@ tray.AddModule("Dump","dump")
 #
 # And this is the magic writer.  We will make it work harder later.
 #
-tray.AddModule("I3Writer","writer")(
-    ("filename", "pass1.i3")
-    )
+tray.AddModule("I3Writer","writer",
+               filename =  "pass1.i3"
+               )
 
 #
 # The TrashCan is another standard module.  Every module's outboxes
