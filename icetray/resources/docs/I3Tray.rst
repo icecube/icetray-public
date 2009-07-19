@@ -7,8 +7,24 @@
 .. autofunction:: load
 
 .. autoclass:: I3Tray
-   :members:
-   :undoc-members:
 
    .. automethod:: __init__
+
+   .. automethod:: AddModule
+
+      .. seealso:: 
+
+      :ref:`pyfunction_as_module`
+
+   .. automethod:: AddService
+
+   .. automethod:: ConnectBoxes
+
+   .. automethod:: Execute
+
+   .. automethod:: Finish
+
+   .. automethod:: SetParameter
+
+   .. automethod:: Usage
 

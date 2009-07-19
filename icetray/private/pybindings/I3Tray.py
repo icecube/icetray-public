@@ -6,7 +6,8 @@ FILE LEVEL DOCSTRING YAY
 #
 import os, sys, inspect
 import icecube.icetray as icetray
-import I3Units
+
+I3Units = icetray.I3Units
 
 # manually create a global symbol 'NaN'
 NaN = float('NaN')

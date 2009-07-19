@@ -1,3 +1,5 @@
+.. _pyfunction_as_module:
+
 Passing python functions to :meth:`I3Tray.AddModule`
 ====================================================
 
