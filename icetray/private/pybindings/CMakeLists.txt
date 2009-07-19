@@ -26,20 +26,21 @@ i3_add_pybindings(icetray
   )
 
 # 
-# These are special, they go in the toplevel 'lib' directory, for backwards-compatibility
+# This is special, goes in the toplevel 'lib' directory for
+# backwards compatibility
 #
-foreach(pyfile I3Tray.py I3Units.py)
-  install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${pyfile} 
-    DESTINATION lib)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/I3Tray.py 
+  DESTINATION lib)
 
-  add_custom_command(OUTPUT ${TMP_LIBRARY_OUTPUT_PATH}/${pyfile}
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${pyfile}
-    COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/${pyfile} ${TMP_LIBRARY_OUTPUT_PATH}
-    )
-  add_custom_target(${pyfile}
-    DEPENDS ${TMP_LIBRARY_OUTPUT_PATH}/${pyfile}
-    )
-  add_dependencies(icetray-pybindings ${pyfile})
-endforeach(pyfile I3Tray.py I3Units.py)
+add_custom_command(OUTPUT ${TMP_LIBRARY_OUTPUT_PATH}/I3Tray.py
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/I3Tray.py
+  COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/I3Tray.py ${TMP_LIBRARY_OUTPUT_PATH}
+  )
+
+add_custom_target(I3Tray.py
+  DEPENDS ${TMP_LIBRARY_OUTPUT_PATH}/I3Tray.py
+  )
+
+add_dependencies(icetray-pybindings I3Tray.py)
 
 

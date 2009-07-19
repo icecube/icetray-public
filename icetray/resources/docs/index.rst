@@ -36,6 +36,7 @@ Table of Contents:
    newfeaturesv3
    changes
    I3Tray
+   icecube.icetray
 
 Also see the `doxygen <../../doxygen/icetray/index.html>`_ docs.
 

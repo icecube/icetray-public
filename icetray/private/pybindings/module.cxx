@@ -31,6 +31,7 @@ void register_I3PhysicsUsage();
 void register_I3RUsage();
 void register_I3TrayInfo();
 void register_I3Tray();
+void register_I3Units();
 void register_I3Frame();
 void register_I3FrameObject();
 void register_I3Module();
@@ -72,6 +73,7 @@ BOOST_PYTHON_MODULE(icetray)
   register_OMKey();
   register_I3PhysicsUsage();
   register_I3Tray();
+  register_I3Units();
   register_I3Frame();
   register_I3FrameObject();
   register_I3Module();

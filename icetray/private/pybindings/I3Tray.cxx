@@ -31,7 +31,6 @@
 
 #include <icetray/I3Logging.h>
 #include <icetray/I3Tray.h>
-#include <icetray/I3Units.h>
 #include <icetray/OMKey.h>
 
 
@@ -72,114 +71,6 @@ BOOST_PP_SEQ_FOR_EACH(I3_SETPARAM_OVERLOAD, ~, ITHON_I3_PARAM_TYPES);
 // to python
 #define I3_SETPARAM_OVERLOAD_DEF(r,data,t) .def("SetParameter", BOOST_PP_CAT(sp_,t)) 
 
-//
-// these correspond to I3UNITS in dataclasses/I3Units.h.
-// only those I3Units listed here will be visible from within ithon
-//
-#define I3_UNITS (meter)						\
-    (meter2)								\
-    (meter3)								\
-    (millimeter)							\
-    (millimeter2)							\
-    (millimeter3)							\
-    (centimeter)							\
-    (centimeter2)							\
-    (centimeter3)							\
-    (kilometer)								\
-    (kilometer2)							\
-    (kilometer3)							\
-    (parsec)								\
-    (micrometer)							\
-    (nanometer)								\
-    (angstrom)								\
-    (fermi)								\
-    (barn)								\
-    (millibarn)								\
-    (microbarn)								\
-    (nanobarn)								\
-    (picobarn)								\
-    (feet)								\
-    (mm)								\
-    (mm2)								\
-    (mm3)								\
-    (cm)								\
-    (cm2)								\
-    (cm3)								\
-    (m)									\
-    (m2)								\
-    (m3)								\
-    (km)								\
-    (km2)								\
-    (km3)								\
-    (pc)								\
-    (ft)								\
-    (radian)								\
-    (milliradian)							\
-    (degree)								\
-    (steradian)								\
-    (rad)								\
-    (mrad)								\
-    (sr)								\
-    (deg)								\
-    (second)								\
-    (picosecond)							\
-    (nanosecond)							\
-    (millisecond)							\
-    (microsecond)							\
-    (hertz)								\
-    (kilohertz)								\
-    (megahertz)								\
-    (ns)								\
-    (s)									\
-    (ms)								\
-    (minute)								\
-    (hour)								\
-    (day)								\
-    (gregorianyear)							\
-    (julianyear)							\
-    (electronvolt)							\
-    (kiloelectronvolt)							\
-    (megaelectronvolt)							\
-    (gigaelectronvolt)							\
-    (teraelectronvolt)							\
-    (petaelectronvolt)							\
-    (MeV)								\
-    (eV)								\
-    (keV)								\
-    (GeV)								\
-    (TeV)								\
-    (PeV)								\
-    (eplus)								\
-    (eSI)								\
-    (coulomb)								\
-    (C)									\
-    (picocoulomb)							\
-    (pC)								\
-    (joule)								\
-    (ampere)								\
-    (A)									\
-    (milliampere)							\
-    (mA)								\
-    (nanoampere)							\
-    (nA)								\
-    (millivolt)								\
-    (mV)								\
-    (volt)								\
-    (V)									\
-    (kilovolt)								\
-    (kV)								\
-    (microvolt)								\
-    (ohm)								\
-    (perCent)								\
-    (perThousand)							\
-    (perMillion)
-
-#define I3_UNITS_INTERFACE(r,data,t) \
-  double t(double d) { return I3Units::t * d; }
-
-#define I3_UNITS_DEF(r,data,t) def(BOOST_PP_STRINGIZE(t),&t);
-
-BOOST_PP_SEQ_FOR_EACH(I3_UNITS_INTERFACE,~,I3_UNITS)
 
 //
 // Main python interface definition.  The name "ithon" must match
@@ -227,9 +118,6 @@ void register_I3Tray()
     // BOOST_PP_SEQ_FOR_EACH(I3_SETPARAM_OVERLOAD_DEF, ~, ITHON_I3_PARAM_TYPES)
     ;
   
-  // inserts a toplevel "def" command for each unit in I3_UNITS, above.
-  // glue to these functions is provided in I3Units.py
-  BOOST_PP_SEQ_FOR_EACH(I3_UNITS_DEF,~,I3_UNITS)
 }
 
 

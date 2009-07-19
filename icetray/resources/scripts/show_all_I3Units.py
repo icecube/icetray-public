@@ -16,7 +16,7 @@
 
 from os.path import expandvars 
 
-import I3Units
+from icecube.icetray import I3Units
 
 print "meter ==", I3Units.meter
 print "meter2 ==", I3Units.meter2
