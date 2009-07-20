@@ -195,7 +195,18 @@ Model::show_xml()
   if (frame->size() == 0)
     return;
 
-  string xml = frame->as_xml(y_keystring_);
+  string xml;
+  try {
+    xml = frame->as_xml(y_keystring_);
+  } catch (const std::exception& e) {
+    xml = std::string("***\n*** ") + e.what() + " caught while deserializing\n***\n"
+      + "*** Object is unreadable in an unanticipated way, \n"
+      + "*** please retain the .i3 file and report this error\n"
+      + "***\n"
+      ;
+    view_.page(xml);
+    return;
+  }
   try {
     string pretty = y_keystring_ + " [type: " + frame->type_name(y_keystring_)
       + "]\n\n" + prettify_xml(xml);
@@ -237,6 +248,11 @@ Model::notify()
 
   // you have to get the sorted keys out here
   vector<string> keys = frame->keys();
+  log_trace("Got frame with %zu keys", keys.size());
+  for (unsigned i=0; i < keys.size(); i++)
+    {
+      log_debug("key: %s", keys[i].c_str());
+    }
 
   y_keystring_ = frame->size() > 0 ? keys[y_index_] : std::string();
 
