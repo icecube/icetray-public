@@ -70,7 +70,8 @@ public:
     return classname; 
   }
 
-  void ClassName(const std::string& s) { 
+  void ClassName(const std::string& s) 
+  { 
     log_trace("classname: <<<%s>>>", s.c_str());
     if (s.empty())
       log_fatal("classname is empty?");
@@ -102,12 +103,11 @@ private:
   friend class boost::serialization::access;
   friend class I3Configuration;
 
-  template <typename Archive>
-  void
-  serialize(Archive&, unsigned);
+  template <typename Archive> void serialize(Archive&, unsigned);
 
   // case-insensitive string compare
-  struct case_insensitive_lt {
+  struct case_insensitive_lt 
+  {
     static int lowercase(int c) { return std::tolower(c); }
     bool operator()(const std::string& lhs, const std::string& rhs) const
     {
@@ -143,6 +143,6 @@ private:
 std::ostream& operator<<(std::ostream&, const I3ConfigurationImpl&);
 
 I3_POINTER_TYPEDEFS(I3ConfigurationImpl);
-BOOST_CLASS_VERSION(I3ConfigurationImpl, 1);
+BOOST_CLASS_VERSION(I3ConfigurationImpl, 2);
 
 #endif

@@ -36,6 +36,8 @@
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/python/object.hpp>
 #include <boost/foreach.hpp>
+#include <boost/serialization/split_free.hpp>
+
 
 using namespace std;
 
@@ -131,14 +133,57 @@ I3ConfigurationImpl::Connect(const std::string& boxname, const std::string& modu
   outboxes[boxname] = modulename;
 }
 
+namespace boost {
+  namespace serialization {
+    //
+    //  Careful: multi_index has nonportable serialization (doesn't
+    //  obey serialization's container_size_type).  Do it manually
+    //  here.
+    //
+
+    template <class Archive>
+    void save(Archive& ar, const I3ConfigurationImpl::parameters_t& params, unsigned)
+    {
+      uint16_t count = params.size();
+      ar & make_nvp("nparams", count);
+      for(I3ConfigurationImpl::parameters_t::const_iterator ci = params.begin();
+	  ci != params.end();
+	  ci++)
+	ar & make_nvp("param", *ci);
+    }
+
+    template <class Archive>
+    void load(Archive& ar, I3ConfigurationImpl::parameters_t& params, unsigned)
+    {
+      uint16_t count;
+      ar & make_nvp("nparams", count);
+      for (unsigned i = 0; i< count; i++)
+	{
+	  I3Parameter p;
+	  ar & make_nvp("param", p);
+	  params.insert(p);
+	}
+    }
+  }
+}
+
+BOOST_SERIALIZATION_SPLIT_FREE(I3ConfigurationImpl::parameters_t);
+
 template <typename Archive>
 void
 I3ConfigurationImpl::serialize(Archive &ar, unsigned version)
 {
-  if (version > 1)
+  if (version > 2)
     log_fatal("Attempt to read I3ConfigurationImpl version %u, this software knows only versions <= 1",
 	      version);
-  ar & make_nvp("parameters", parameters);
+
+  // unfortunately, version 1 was nonportable.  Wasn't ever officially
+  // in the wild, though.
+  if (version < 2)
+    throw boost::archive::archive_exception(boost::archive::archive_exception::unsupported_version);
+
+  // for parameters_t, use the portable save/load above
+  ar & make_nvp("parameters", parameters); 
   ar & make_nvp("outboxes", outboxes);
   ar & make_nvp("classname", classname);
   ar & make_nvp("instancname", instancename);
