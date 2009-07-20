@@ -112,7 +112,7 @@ Using in Python Scripts
 Using I3Units in python scripts to specify parameters is simple.  As
 long as you have this line::
 
- from I3Tray import *
+  from icecube.icetray import I3Units
 
 then you can use I3Units like this::
 
