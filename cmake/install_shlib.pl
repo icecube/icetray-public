@@ -28,6 +28,10 @@
 #  instead of liba.so...  and liba.so and liba.so.2 might both be
 #  symlinks to liba.so.2.0.0
 
+print "***\n*** DEPRECATED, use install_shlib.py instead\n***\n"
+exit(1)
+
+
 use File::Copy;
 use File::Basename;
 

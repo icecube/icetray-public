@@ -90,7 +90,7 @@ macro(tooldef tool_ incdir incfile libdir bindir)
 	add_custom_command(TARGET install_tool_libs
 	  PRE_BUILD
 	  COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/lib/tools
-	  COMMAND ${CMAKE_SOURCE_DIR}/cmake/install_shlib.pl ${foundlib${lib}} ${CMAKE_INSTALL_PREFIX}/lib/tools
+	  COMMAND ${CMAKE_SOURCE_DIR}/cmake/install_shlib.py ${foundlib${lib}} ${CMAKE_INSTALL_PREFIX}/lib/tools
 	  ) 
 	add_dependencies(install_tool_libs install_${TOOL}_libs)
       endif(NOT ${libdir} STREQUAL "NONE")
