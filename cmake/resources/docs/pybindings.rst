@@ -191,6 +191,15 @@ If you want to be nice to your users, you can wrap your Get/Set methods in Pytho
 	:param Prop: The name of the Python property
 	:param Fn: The base name of the C++ Get/Set functions
 
+.. cfunction:: PROPERTY_TYPE(Class, Prop, GotType, Fn)
+
+	Add Class.Prop as a property with getter/setter functions GetFn()/SetFn(), specifying that GetFn() returns GotType. This is useful when wrapping overloaded getter functions.
+
+	:param Class: Parent C++ class
+	:param Prop: The name of the Python property
+	:param GotType: The type returned by GetFn() 
+	:param Fn: The base name of the C++ Get/Set functions
+
 .. cfunction:: WRAP_PROP(R, Class, Fn)
 
 	Add Class.fn as a property with getter/setter functions GetFn()/SetFn(). Suitable for use with :cfunc:`BOOST_PP_SEQ_FOR_EACH`.
@@ -349,7 +358,25 @@ Constructing a Python module
 Gotchas
 _______
 
-Some common pitfalls should be listed here.
+<unresolved overloaded function type> errors
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You may be mystified by errors like these::
+	
+	error: No match for 'boost::python::class_<
+	    I3MCPMTResponse, boost::shared_ptr<I3MCPMTResponse>,
+	    boost::python::detail::not_specified,
+	    boost::python::detail::not_specified
+	>::def(const char [11], <unresolved overloaded function type>)'
+	
+This can happen when the wrapped class exposes two different versions of the function, for example returning a const or non-const type. In this case, you have to specify the return type by hand. The :cfunc:`BOOST_PP_SEQ_FOR_EACH` tricks will not work; you'll need to use :cfunc:`GETSET` or :cfunc:`PROPERTY_TYPE` to wrap each name individually instead.
+
+Naming conventions
+__________________
+
+Python properties are preferred over C++-style Get/Set methods. The exposed Python module should conform to the `Style Guide for Python Code`_ as closely as possible.
+
+.. _Style Guide for Python Code: http://www.python.org/dev/peps/pep-0008/
 
 
 Resources

@@ -163,20 +163,20 @@ identity_(T t) { return t; }
 // Used by the two macros below
 #define GETSET_IMPL(ObjType, GotType, Name, CallPolicies)		\
   .def("Get" BOOST_PP_STRINGIZE(Name),					\
-       (GotType (ObjType::*) ()) &ObjType:: Get##Name,			\
+       (GotType (ObjType::*) ()) &ObjType:: BOOST_PP_CAT(Get,Name),	\
        CallPolicies)							\
   .def("Set" BOOST_PP_STRINGIZE(Name),					\
-       &ObjType::Set##Name)
+       &ObjType:: BOOST_PP_CAT(Set,Name))
 
 // A version suitable for use with sequences
 #define GETSET_IMPL_NOTYPE(ObjType, Name, CallPolicies)			\
   GET_IMPL_NOTYPE(ObjType, Name, CallPolicies)				\
   .def("Set" BOOST_PP_STRINGIZE(Name),					\
-       &ObjType::Set##Name)
+       &ObjType:: BOOST_PP_CAT(Set,Name))
 
 #define GET_IMPL_NOTYPE(ObjType, Name, CallPolicies)			\
   .def("Get" BOOST_PP_STRINGIZE(Name),					\
-       &ObjType:: Get##Name,						\
+       &ObjType:: BOOST_PP_CAT(Get,Name),				\
        CallPolicies)							\
 
 // This is for member functions that return a Whatever&,
@@ -189,6 +189,7 @@ identity_(T t) { return t; }
   GETSET_IMPL(Objtype, GotType, Name, default_call_policies())
 
 #define PROPERTY(Class, Prop, Fn) .add_property(BOOST_PP_STRINGIZE(Prop), &Class::Get##Fn, &Class::Set##Fn)
+#define PROPERTY_TYPE(Class, Prop, GotType, Fn) .add_property(BOOST_PP_STRINGIZE(Prop), (GotType (Class::*) ()) &Class::Get##Fn, &Class::Set##Fn)
 
 #include <ctype.h>
 #include <string.h>
@@ -211,28 +212,56 @@ char * lowerCamelCase(const char * str);
 		return out;							\
 	}
 
+// convert from upper CamelCase to snake_case
+// ATWDBinSize => atwd_bin_size
+// NBinsATWD0 => n_bins_atwd_0
+char * snake_case(const char * str);
+#define DECLARE_SNAKE_CASE_WRAPPER							\
+	char * snake_case(const char * str) {						\
+	        int i,j,len;								\
+	        char* out;								\
+	        j=0;									\
+	        len = strlen(str);							\
+	        out = (char*)malloc(2*len+1);						\
+	        for (i=0;i<len;i++) {							\
+	                out[i+j] = tolower(str[i]);					\
+	                if ( (!isupper(str[i]) && isupper(str[i+1])) ||			\
+	                     ((i<len-1) && isupper(str[i+1]) && islower(str[i+2])) ||	\
+	                     (!isalpha(str[i+1]) && (str[i+1] != '\0')) ) {		\
+	                        j++;							\
+	                        out[i+j] = '_'; 					\
+	                }								\
+	        }									\
+		out[len+j] = '\0';							\
+	       	out = (char*)realloc(out,len+j+1);					\
+	        return out;								\
+	}
+
+
 // add other housekeeping bits here
 #define I3_PYTHON_MODULE(modname)						\
 	DECLARE_CAMELCASE_WRAPPER						\
+	DECLARE_SNAKE_CASE_WRAPPER						\
 	BOOST_PYTHON_MODULE(modname)
 
 #include <boost/preprocessor/seq.hpp>
 
 // Trinary macros suitable for use with BOOST_PP_SEQ_FOR_EACH
-#define WRAP_PROP(R, Class, Fn) .add_property(lowerCamelCase(BOOST_PP_STRINGIZE(Fn)), BOOST_PP_CAT(&Class::Get,Fn), BOOST_PP_CAT(&Class::Set,Fn))
+#define WRAP_PROP(R, Class, Fn) .add_property(snake_case(BOOST_PP_STRINGIZE(Fn)), BOOST_PP_CAT(&Class::Get,Fn), BOOST_PP_CAT(&Class::Set,Fn))
 #define WRAP_PROP_INTERNAL_REFERENCE(R, Class, Fn) 						\
-   .add_property(lowerCamelCase(BOOST_PP_STRINGIZE(Fn)),					\
+   .add_property(snake_case(BOOST_PP_STRINGIZE(Fn)),					\
                  boost::python::make_function(BOOST_PP_CAT(&Class::Get,Fn), 			\
                                               boost::python::return_internal_reference<1>()), 	\
                  BOOST_PP_CAT(&Class::Set,Fn))
-#define WRAP_PROP_RO(R, Class, Fn) .add_property(lowerCamelCase(BOOST_PP_STRINGIZE(Fn)), BOOST_PP_CAT(&Class::Get,Fn))
+#define WRAP_PROP_RO(R, Class, Fn) .add_property(snake_case(BOOST_PP_STRINGIZE(Fn)), BOOST_PP_CAT(&Class::Get,Fn))
 #define WRAP_PROP_RO_INTERNAL_REFERENCE(R, Class, Fn) 						\
-   .add_property(lowerCamelCase(BOOST_PP_STRINGIZE(Fn)),					\
+   .add_property(snake_case(BOOST_PP_STRINGIZE(Fn)),					\
                  boost::python::make_function(BOOST_PP_CAT(&Class::Get,Fn), 			\
                                               boost::python::return_internal_reference<1>())) 
 #define WRAP_RW(R, Class, Member) .def_readwrite(BOOST_PP_STRINGIZE(Member), &Class::Member)
 #define WRAP_RO(R, Class, Member) .def_readonly(BOOST_PP_STRINGIZE(Member), &Class::Member)
 #define WRAP_DEF(R, Class, Fn) .def(BOOST_PP_STRINGIZE(Fn), &Class::Fn)
+#define WRAP_DEF_RECASE(R, Class, Fn) .def(snake_case(BOOST_PP_STRINGIZE(Fn)), &Class::Fn)
 #define WRAP_GET(R, Class, Name) GET_IMPL_NOTYPE(Class, Name, default_call_policies())
 #define WRAP_GETSET(R, Class, Name) GETSET_IMPL_NOTYPE(Class, Name, default_call_policies())
 #define WRAP_GET_INTERNAL_REFERENCE(R, Class, Name) GET_IMPL_NOTYPE(Class, Name, return_internal_reference<1>())
