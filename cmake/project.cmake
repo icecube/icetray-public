@@ -291,11 +291,12 @@ macro(i3_project PROJECT_NAME)
     "Build project I3.${PROJECT_NAME} (prefer using make targets, not this, for building individual libs)"
     ON)
 
-  add_custom_target(${PROJECT_NAME}-doxygen)
-
-  i3_add_testing_targets()
-
   if(BUILD_${I3_PROJECT})
+
+    add_custom_target(${PROJECT_NAME}-doxygen)
+    
+    i3_add_testing_targets()
+
     if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/resources)
       install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/resources/
 	DESTINATION ${PROJECT_NAME}/resources/
@@ -436,85 +437,87 @@ macro(i3_executable THIS_EXECUTABLE_NAME)
 endmacro(i3_executable THIS_EXECUTABLE_NAME)
 
 macro(i3_test_executable THIS_EXECUTABLE_NAME)
+  if (BUILD_${I3_PROJECT})
+    
+    parse_arguments(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}
+      "USE_TOOLS;USE_PROJECTS;LINK_LIBRARIES"
+      ""
+      ${ARGN}
+      )
+    no_dotfile_glob(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES
+      ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_DEFAULT_ARGS}
+      )
 
-  parse_arguments(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}
-    "USE_TOOLS;USE_PROJECTS;LINK_LIBRARIES"
-    ""
-    ${ARGN}
-    )
-  no_dotfile_glob(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES
-    ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_DEFAULT_ARGS}
-    )
+    add_executable(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} 
+      EXCLUDE_FROM_ALL
+      ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES}
+      )
 
-  add_executable(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} 
-    EXCLUDE_FROM_ALL
-    ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES}
-    )
+    add_dependencies(test-bins ${PROJECT_NAME}-${THIS_EXECUTABLE_NAME})
 
-  add_dependencies(test-bins ${PROJECT_NAME}-${THIS_EXECUTABLE_NAME})
-
-  set_target_properties(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
-    PROPERTIES
-    DEFINE_SYMBOL PROJECT=${PROJECT_NAME}
-    )
-  if(APPLE)
     set_target_properties(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
       PROPERTIES
-      LINK_FLAGS "-bind_at_load -multiply_defined suppress"
+      DEFINE_SYMBOL PROJECT=${PROJECT_NAME}
       )
-  endif(APPLE)
+    if(APPLE)
+      set_target_properties(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
+	PROPERTIES
+	LINK_FLAGS "-bind_at_load -multiply_defined suppress"
+	)
+    endif(APPLE)
 
-  boost_post_results(${PROJECT_NAME} ${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} test ${CMAKE_CURRENT_BINARY_DIR})
+    boost_post_results(${PROJECT_NAME} ${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} test ${CMAKE_CURRENT_BINARY_DIR})
 
-  use_projects(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
-    PROJECTS ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_USE_PROJECTS})
+    use_projects(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
+      PROJECTS ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_USE_PROJECTS})
 
-  use_tools(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
-    TOOLS "${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_USE_TOOLS};python")
+    use_tools(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
+      TOOLS "${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_USE_TOOLS};python")
 
-  set_source_files_properties(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES}
-    PROPERTIES
-    COMPILE_FLAGS "-include ${I3_UBER_HEADER} ${WARNING_FLAGS}"
-    )
-
-  file( TO_NATIVE_PATH "${TEST_DRIVER}" NATIVE_TEST_DRIVER )
-  if(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_LINK_LIBRARIES)
-    target_link_libraries(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
-      ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_LINK_LIBRARIES})
-  endif(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_LINK_LIBRARIES)
-
-  set(THIS_TEST_UNIT_LIST ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}.units.txt)
-  file(REMOVE ${THIS_TEST_UNIT_LIST})
-  file(APPEND ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tests.list "${THIS_EXECUTABLE_NAME} ${THIS_TEST_UNIT_LIST}\n")
-
-  list(SORT ${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES)
-  foreach(file ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES})
-    execute_process(COMMAND grep -l TEST_GROUP ${file} OUTPUT_VARIABLE testable_file)
-    string(REGEX REPLACE "[ \n]+" "" testable_file "${testable_file}")
-    get_filename_component(testable_file "/${testable_file}" NAME)
-    execute_process(COMMAND perl -ne "m{TEST\\s*\\((\\w+)\\)}s && print \"$1\;\"" ${file}
-      OUTPUT_VARIABLE UNITTESTS)
-
-    if(NOT "${testable_file}" STREQUAL "")
-      get_filename_component(GROUPNAME ${testable_file} NAME_WE)
-      foreach(unittest ${UNITTESTS})
-	set(TESTNAME ${PROJECT_NAME}-test-${GROUPNAME}-${unittest}-run)
-	set(THIS_TEST_PREFIX_ARGS
-	  ${PYTHON_EXECUTABLE} ${NATIVE_TEST_DRIVER} ${CMAKE_CURRENT_BINARY_DIR} run ${TESTNAME} 
-	  )
-
-	file(APPEND ${THIS_TEST_UNIT_LIST} "${testable_file}/${unittest} ${THIS_TEST_PREFIX_ARGS} ${CMAKE_BINARY_DIR}/env-shell.sh ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} -s ${testable_file}/${unittest}\n")
-
-      endforeach(unittest ${UNITTESTS})
-    endif(NOT "${testable_file}" STREQUAL "")
-  endforeach(file ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_files})
-
-  if(DPKG_INSTALL_PREFIX)
-    set_target_properties(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
+    set_source_files_properties(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES}
       PROPERTIES
-      INSTALL_RPATH_USE_LINK_PATH TRUE
+      COMPILE_FLAGS "-include ${I3_UBER_HEADER} ${WARNING_FLAGS}"
       )
-  endif(DPKG_INSTALL_PREFIX)
+
+    file( TO_NATIVE_PATH "${TEST_DRIVER}" NATIVE_TEST_DRIVER )
+    if(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_LINK_LIBRARIES)
+      target_link_libraries(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
+	${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_LINK_LIBRARIES})
+    endif(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_LINK_LIBRARIES)
+
+    set(THIS_TEST_UNIT_LIST ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}.units.txt)
+    file(REMOVE ${THIS_TEST_UNIT_LIST})
+    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tests.list "${THIS_EXECUTABLE_NAME} ${THIS_TEST_UNIT_LIST}\n")
+
+    list(SORT ${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES)
+    foreach(file ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES})
+      execute_process(COMMAND grep -l TEST_GROUP ${file} OUTPUT_VARIABLE testable_file)
+      string(REGEX REPLACE "[ \n]+" "" testable_file "${testable_file}")
+      get_filename_component(testable_file "/${testable_file}" NAME)
+      execute_process(COMMAND perl -ne "m{TEST\\s*\\((\\w+)\\)}s && print \"$1\;\"" ${file}
+	OUTPUT_VARIABLE UNITTESTS)
+
+      if(NOT "${testable_file}" STREQUAL "")
+	get_filename_component(GROUPNAME ${testable_file} NAME_WE)
+	foreach(unittest ${UNITTESTS})
+	  set(TESTNAME ${PROJECT_NAME}-test-${GROUPNAME}-${unittest}-run)
+	  set(THIS_TEST_PREFIX_ARGS
+	    ${PYTHON_EXECUTABLE} ${NATIVE_TEST_DRIVER} ${CMAKE_CURRENT_BINARY_DIR} run ${TESTNAME} 
+	    )
+
+	  file(APPEND ${THIS_TEST_UNIT_LIST} "${testable_file}/${unittest} ${THIS_TEST_PREFIX_ARGS} ${CMAKE_BINARY_DIR}/env-shell.sh ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} -s ${testable_file}/${unittest}\n")
+
+	endforeach(unittest ${UNITTESTS})
+      endif(NOT "${testable_file}" STREQUAL "")
+    endforeach(file ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_files})
+
+    if(DPKG_INSTALL_PREFIX)
+      set_target_properties(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
+	PROPERTIES
+	INSTALL_RPATH_USE_LINK_PATH TRUE
+	)
+    endif(DPKG_INSTALL_PREFIX)
+  endif ()
 endmacro(i3_test_executable THIS_EXECUTABLE_NAME)
 
 #
@@ -538,43 +541,45 @@ install(FILES ${LIBRARY_OUTPUT_PATH}/icecube/__init__.py
 
 
 macro(i3_add_pybindings MODULENAME)
-  #
-  # In many places these if() guards are *outside* the call to i3_add_pybindings.
-  # this is so you can use these projects with older i3-cmakes that do not yet
-  # have this macro
-  #
-  i3_add_library(${MODULENAME}-pybindings ${ARGN}
-    LINK_LIBRARIES ${BOOST_PYTHON}
-    INSTALL_DESTINATION lib/icecube
-    NOT_INSPECTABLE
-    MODULE
-    )
-  
-  add_custom_command(TARGET ${MODULENAME}-pybindings
-    PRE_LINK
-    COMMAND mkdir -p ${CMAKE_BINARY_DIR}/lib/icecube
-    )
-
-  set_target_properties(${MODULENAME}-pybindings
-    PROPERTIES
-    PREFIX ""
-    OUTPUT_NAME ${MODULENAME}
-    DEFINE_SYMBOL I3_PYBINDINGS_MODULE
-    COMPILE_FLAGS "-include ${I3_UBER_HEADER} ${WARNING_FLAGS} -I${CMAKE_SOURCE_DIR}/boost/public"
-    LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}/icecube
-    )
-
-  add_dependencies(pybindings ${MODULENAME}-pybindings)
-
-  message(STATUS "  + ${MODULENAME}-pybindings")
-
-  if(APPLE)
-    set_target_properties(${MODULENAME}-pybindings
-      PROPERTIES 
-      LINK_FLAGS "-bundle -flat_namespace -undefined dynamic_lookup" 
-      #used to be here: -multiply_defined suppress 
+  if (BUILD_${I3_PROJECT})
+    #
+    # In many places these if() guards are *outside* the call to i3_add_pybindings.
+    # this is so you can use these projects with older i3-cmakes that do not yet
+    # have this macro
+    #
+    i3_add_library(${MODULENAME}-pybindings ${ARGN}
+      LINK_LIBRARIES ${BOOST_PYTHON}
+      INSTALL_DESTINATION lib/icecube
+      NOT_INSPECTABLE
+      MODULE
       )
-  endif(APPLE)
+    
+    add_custom_command(TARGET ${MODULENAME}-pybindings
+      PRE_LINK
+      COMMAND mkdir -p ${CMAKE_BINARY_DIR}/lib/icecube
+      )
+
+    set_target_properties(${MODULENAME}-pybindings
+      PROPERTIES
+      PREFIX ""
+      OUTPUT_NAME ${MODULENAME}
+      DEFINE_SYMBOL I3_PYBINDINGS_MODULE
+      COMPILE_FLAGS "-include ${I3_UBER_HEADER} ${WARNING_FLAGS} -I${CMAKE_SOURCE_DIR}/boost/public"
+      LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}/icecube
+      )
+
+    add_dependencies(pybindings ${MODULENAME}-pybindings)
+
+    message(STATUS "  + ${MODULENAME}-pybindings")
+
+    if(APPLE)
+      set_target_properties(${MODULENAME}-pybindings
+	PROPERTIES 
+	LINK_FLAGS "-bundle -flat_namespace -undefined dynamic_lookup" 
+	#used to be here: -multiply_defined suppress 
+	)
+    endif(APPLE)
+  endif ()
 endmacro(i3_add_pybindings)
 
 #
