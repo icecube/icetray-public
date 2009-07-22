@@ -543,20 +543,25 @@ macro(i3_add_pybindings MODULENAME)
   # this is so you can use these projects with older i3-cmakes that do not yet
   # have this macro
   #
-  set(LIBRARY_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH}/icecube)
-
   i3_add_library(${MODULENAME}-pybindings ${ARGN}
     LINK_LIBRARIES ${BOOST_PYTHON}
     INSTALL_DESTINATION lib/icecube
     NOT_INSPECTABLE
     MODULE
     )
+  
+  add_custom_command(TARGET ${MODULENAME}-pybindings
+    PRE_LINK
+    COMMAND mkdir -p ${CMAKE_BINARY_DIR}/lib/icecube
+    )
+
   set_target_properties(${MODULENAME}-pybindings
     PROPERTIES
     PREFIX ""
     OUTPUT_NAME ${MODULENAME}
     DEFINE_SYMBOL I3_PYBINDINGS_MODULE
     COMPILE_FLAGS "-include ${I3_UBER_HEADER} ${WARNING_FLAGS} -I${CMAKE_SOURCE_DIR}/boost/public"
+    LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}/icecube
     )
 
   add_dependencies(pybindings ${MODULENAME}-pybindings)
