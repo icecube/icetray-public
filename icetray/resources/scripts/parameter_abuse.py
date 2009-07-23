@@ -25,10 +25,10 @@ try:
     t.Execute(1)
     
     t.Finish()
-
-    assert False, "that should throw with descriptive error"
-
 except TypeError, t:
 
     print "OK, threw as expected"
     sys.exit(0)
+else:
+    print "that should throw with descriptive error"
+    sys.exit(1)

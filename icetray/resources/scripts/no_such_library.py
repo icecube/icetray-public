@@ -16,11 +16,12 @@ try:
     tray.AddModule("NoSuchModule","dump")
 
     tray.Execute(5)
-    # Failure: that should throw
-    sys.exit(1)
 except:
     print "Good.  It threw."
     sys.exit(0) # indicate success.
+else:
+    print "should have thrown"
+    sys.exit(1)
 
 
 
