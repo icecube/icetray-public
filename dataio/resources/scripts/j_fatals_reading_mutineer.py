@@ -36,7 +36,8 @@ try:
     tray.Execute()
     tray.Finish()
 
-    print "***\n***\n*** Failure! Script didn't throw as it should have.\n***\n***\n***\n"
-    sys.exit(1) # ought to die, shouldn't get here
 except:
     sys.exit(0)
+else:
+    print "***\n***\n*** Failure! Script didn't throw as it should have.\n***\n***\n***\n"
+    sys.exit(1) # ought to die, shouldn't get here
