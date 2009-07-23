@@ -19,14 +19,15 @@ try:
     print "About to execute    "
     # do it 5 times.
     tray.Execute(10)
-    print "that should have thrown"
-    sys.exit(1)
-
     tray.Finish()
 
 
 except:
     print "ok, at that threw as expected."
+
+else:
+    print "that should have thrown"
+    sys.exit(1)
 
 
 

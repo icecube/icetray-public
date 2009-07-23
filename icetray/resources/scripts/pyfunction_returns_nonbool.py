@@ -14,9 +14,10 @@ try:
     tray.AddModule("BottomlessSource","bs")
     tray.AddModule(f,"shouldfail")
     tray.Execute()
-    assert False, "that should have thrown"
 except RuntimeError, e:
     print "As expected, caught '%s'" % e
-
+else:
+    print "that should have thrown"
+    sys.exit(1)
                    
 

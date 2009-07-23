@@ -14,10 +14,11 @@ tray.AddModule("Dump","dump")
 
 try:
     tray.Execute(5)
-    sys.exit(1)
 except:
     print "Good.  It threw."
     sys.exit(0) # indicate success.
-
+else:
+    print "should have thrown"
+    sys.exit(1)
 
 

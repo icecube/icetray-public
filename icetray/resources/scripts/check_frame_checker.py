@@ -28,10 +28,10 @@ try:
     # This should fail
     tray.Execute(5)
     tray.Finish()
-
-    sys.exit(1)
-
 except:
     print "ok: failure as expected."
     # ok it failed
     sys.exit(0)
+else:
+    sys.exit(1)
+

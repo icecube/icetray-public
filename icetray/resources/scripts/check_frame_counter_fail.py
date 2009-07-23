@@ -34,7 +34,9 @@ tray.AddModule("TrashCan","adios")
 try:
     tray.Execute(7)  # wrong number of frames
     tray.Finish()
-    sys.exit(1)
 except:
     print "ok: failure as expected."
     sys.exit(0)
+else:
+    sys.exit(1)
+

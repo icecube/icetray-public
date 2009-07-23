@@ -16,13 +16,13 @@ tray.AddModule('TrashCan', 'tc')
 
 try:
     tray.Execute(10)
-    print 'that should have complained about not enough arguments'
-    sys.exit(1)
-
 except Exception, e:
     print e
     print "OK, threw as expected"
-    
+else:    
+    print 'that should have complained about not enough arguments'
+    sys.exit(1)
+
 
                    
 

@@ -14,11 +14,12 @@ tray.AddModule("NoSuchModule","dump")
 
 try:
     tray.Execute(5)
-    # Failure: that should throw
-    sys.exit(1)
 except:
     print "Good.  It threw."
     sys.exit(0) # indicate success.
+else:
+    # Failure: that should throw
+    sys.exit(1)
 
 
 

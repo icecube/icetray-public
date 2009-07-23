@@ -19,7 +19,7 @@ try:
 except Exception, e:
     print "ok, threw as expected"
     sys.exit(0)
-
-assert False, "should have thrown"
+else:
+    sys.exit(1)
 
 
