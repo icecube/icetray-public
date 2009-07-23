@@ -261,7 +261,7 @@ I3ConfigurationImpl::is_ok() const
       // both) depending on the value of A
       if (!iter->got_by_module())
 	{
-	  log_warn("parameter %s was set but never Got by the module...?!?",
+	  log_trace("parameter %s was set but never Got by the module...?!?",
 		   iter->name().c_str());
 	}
     }
