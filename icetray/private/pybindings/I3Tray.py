@@ -1,6 +1,3 @@
-"""
-FILE LEVEL DOCSTRING YAY
-"""
 #
 # Copyright (C) 2004-9   Troy D. Straszheim
 #
@@ -68,11 +65,11 @@ class I3Tray:
 
         :param kwargs: parameter values forwarded to the added module
 
-        Example::
+        **Example**::
 
-           tray.AddModule("I3Reader", "reader",
-                          Filename = "/path/to/foo.i3",
-                          SkipKeys = ['I3DST', 'RecoPulses'])
+            tray.AddModule("I3Reader", "reader",
+                           Filename = "/path/to/foo.i3",
+                           SkipKeys = ['I3DST', 'RecoPulses'])
         
         """
         if inspect.isclass(type) and not icetray.I3Module in inspect.getmro(type):

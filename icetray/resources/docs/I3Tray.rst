@@ -16,6 +16,8 @@
 
       :ref:`pyfunction_as_module`
 
+      :ref:`i3tray_keyword_parameters`
+
    .. automethod:: AddService
 
    .. automethod:: ConnectBoxes
