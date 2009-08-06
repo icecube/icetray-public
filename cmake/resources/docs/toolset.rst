@@ -93,6 +93,7 @@ For instance, an override for tool *python* (filename
 
   set(PYTHON_LIBRARIES "/usr/local/strangepython/lib/libpython2.6.so")
   set(PYTHON_INCLUDE_DIR "/usr/local/strangepython/include/python2.6")
+  set(PYTHON_EXECUTABLE "/usr/local/strangepython/bin/python")
   set(PYTHON_VERSION "2.6")
   set(PYTHON_FOUND TRUE)
 
