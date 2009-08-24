@@ -103,7 +103,10 @@ i3-install.sh will perform for you.
 
 * Install the complete IceCube Offline Software tools distribution::
 
-    ./bin/port -dv install i3-tools-v2
+    ./bin/port -dv install <DISTRIBUTION>
+
+  Where **<DISTRIBUTION>** is the package or metapackage appropriate
+  to the software you intend to build.  
 
 Getting the test-data
 -----------------------
