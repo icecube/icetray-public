@@ -158,7 +158,8 @@ A few points regarding updates to tools.
 How do I upgrade an existing I3_PORTS installation?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The port system allows for easy upgrading of your tool installation.  Here are some simple steps::
+The port system allows for easy upgrading of your tool installation.
+Here are some simple steps::
 
   cd $I3_PORTS 
 
@@ -187,16 +188,20 @@ in mind:
   * We recommend you manage the tool installations using a dedicated
     account (user=icecube-sw or similar)
 
-Essentially, you will be making several IceCube tool installations into a common,
-shared disk, one for each OS/Architecture you are working with:
+Essentially, you will be making several IceCube tool installations
+into a common, shared disk, one for each OS/Architecture you are
+working with:
 
-* Make a common area on your shared NFS disk for your tool installs to live in::
+* Make a common area on your shared NFS disk for your tool installs to
+  live in::
   
     mkdir /path/to/NFS/disk (example: /disk02/software/i3tools)</pre>
 
 * Make sure this area is writable by your dedicate account user.
 
-* Make sure you have a dedicated machine that meets all the prerequisites for each OS/Archicture that you wish to build tools for.
+* Make sure you have a dedicated machine that meets all the
+  prerequisites for each OS/Archicture that you wish to build tools
+  for.
 * On each OS/Architecture::
 
      svn co http://code.icecube.wisc.edu/svn/tools/DarwinPorts/trunk port_src
@@ -214,7 +219,7 @@ shared disk, one for each OS/Architecture you are working with:
       ln -s /path/to/NFS/disk/test-data /path/to/NFS/disk/<arch-ident>
 
 Troubleshooting
-----------------------------------------------------------
+---------------
 
 If your :file:``i3-install.sh`` build gets interrupted for some reason
 (other than an error), there is no need to remove all your previous
@@ -223,6 +228,15 @@ the i3-install.sh file.  As long as you are past the "make install"
 step (first couple of minutes), you can simply repeat any of the
 subsequent commands ($1 in this script is your :envvar:`$I3_PORTS`
 directory) This is essentially switching to the manual instructions.
+
+
+Error: Target com.apple.activate returned: No locks available
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If ports appear to build correctly, but you see this error near the
+end of the output (when executing ``port install`` with the ``-vd``
+flags), add the flag ``--enable-broken-nfs-hacks`` to the
+``./configure`` line when building the ports package.
 
 
 See also :ref:`platforms`.
