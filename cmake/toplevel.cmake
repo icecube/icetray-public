@@ -268,7 +268,11 @@ exec_program(${CMAKE_BINARY_DIR}/env-shell.sh ARGS /usr/bin/env > ${NOTES_DIR}/e
 #
 # make_tarball.sh
 #
-set(MAKE_TARBALL_SH ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/make_tarball.sh)
+set(MAKE_TARBALL_SH ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/make_tarball.sh
+  CACHE INTERNAL
+  "Generated file run by 'tarball' target that in turn runs 'tarball_hook.sh'"
+  )
+
 configure_file(
   ${CMAKE_SOURCE_DIR}/cmake/make_tarball.sh.in
   ${MAKE_TARBALL_SH}
