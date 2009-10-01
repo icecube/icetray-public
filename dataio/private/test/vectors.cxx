@@ -75,6 +75,15 @@ void do_vector (std::string classname)
     }
 }
 
+//
+//  Clean Me Up: These tests should be done via the I3VectorWhatever
+//  typedefs in I3Vector.h... not stdint typedefs like uint64_t, as
+//  e.g. I3VectorInt64 might be I3Vector<long>, but int64_t might be
+//  long long.  Although the sizes of the types are the same, "long"
+//  and "long long" are different types for the purposes of
+//  I3_SERIALIZABLE (ie BOOST_CLASS_EXPORT, and therefore registration
+//  of serialization methods by std::type_info*)
+//
 
 TEST(bool) { do_vector<bool>("bool"); }
 TEST(char) { do_vector<char>("char"); }
@@ -82,11 +91,20 @@ TEST(uint16_t) { do_vector<uint16_t>("uint16_t"); }
 TEST(int16_t) { do_vector<int16_t>("int16_t"); }
 TEST(uint32_t) { do_vector<uint32_t>("uint32_t"); }
 TEST(int32_t) { do_vector<int32_t>("int32_t"); }
+
+#if __WORDSIZE == 64 || defined(_LP64)
+typedef long myint64_t;
+typedef unsigned long myuint64_t;
+#else
+typedef long long myint64_t;
+typedef unsigned long long myuint64_t;
+#endif
+
 TEST(int64_t) {
-  do_vector<int64_t>("int64_t");
+  do_vector<myint64_t>("int64_t");
 }
 TEST(uint64_t) {
-  do_vector<uint64_t>("uint64_t");
+  do_vector<myuint64_t>("uint64_t");
 }
 TEST(double) { do_vector<double>("double"); }
 TEST(float) { do_vector<float>("float"); }
