@@ -228,6 +228,7 @@ void register_I3SequentialFile()
     .value("Reading", I3SequentialFile::Reading)
     .value("Writing", I3SequentialFile::Writing)
     .value("Closed", I3SequentialFile::Closed)
+    .export_values()
     ;
 }
   
