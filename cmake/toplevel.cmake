@@ -165,6 +165,7 @@ add_custom_target(tarball-install
   COMMAND ${CMAKE_MAKE_PROGRAM} install
   COMMAND ${CMAKE_MAKE_PROGRAM} install_tool_libs
   COMMAND ${MAKE_TARBALL_SH}
+  COMMAND ${MAKE_TARBALL_ROOTSYS_SH}
   COMMENT "Tarball install"
   )
 add_dependencies(tarball-install tarball-start)
@@ -279,6 +280,19 @@ configure_file(
   @ONLY
   )
 execute_process(COMMAND chmod 755 ${MAKE_TARBALL_SH})
+
+set(MAKE_TARBALL_ROOTSYS_SH ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/make_tarball_rootsys.sh
+  CACHE INTERNAL
+  "Generated file run by 'tarball_rootsys' target that setups tarball ROOTSYS voodoo"
+  )
+
+configure_file(
+  ${CMAKE_SOURCE_DIR}/cmake/make_tarball_rootsys.sh.in
+  ${MAKE_TARBALL_ROOTSYS_SH}
+  @ONLY
+  )
+execute_process(COMMAND chmod 755 ${MAKE_TARBALL_ROOTSYS_SH})
+
 
 if(EXISTS ${CMAKE_SOURCE_DIR}/tarball_hook.sh.in) 
   message(STATUS "Generating tarball_hook.sh")
