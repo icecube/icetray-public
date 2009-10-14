@@ -15,11 +15,13 @@ We use the *system* python.  By default this is the one in
 ``/usr/bin``.  The development packages are required, eg the file
 ``/usr/include/python2.5/Python.h`` and so forth.  If you want to use
 a python in a nonstandard location, tell *cmake* what these locations
-are at configure time::
+are at configure time (see also :ref:`I3_SITE_CMAKE_DIR`) ::
 
    % cmake -DPYTHON_EXECUTABLE=/path/to/my/bin/python2.5 \
        -DPYTHON_LIBRARY=/path/to/my/lib/python2.5/config/libpython2.5.so \
        -DPYTHON_INCLUDE_PATH=/path/to/my/include/python2.5 \
+       -DPYTHON_VERSION=2.5 \
+       -DPYTHON_FOUND=TRUE \
        ../src
 
 You should see these correctly reported in the output of the cmake
@@ -39,6 +41,32 @@ configuration step::
 You will probably need to have your ``PYTHONPATH`` set appropriately,
 the ``env-shell.sh`` file will prepend to but not clobber this
 variable.
+
+Using a nonsystem python
+------------------------
+
+You will need to modify the Portfile for boost (this applies to boost
+1.38.0).  It is located in
+``$I3_PORTS//var/db/dports/sources/rsync.code.icecube.wisc.edu_icecube-tools-ports/devel/boost_1.38.0/Portfile``.
+(Yes, long annoying path, sorry).  Add to ``configure.args`` the
+correct cmake settings for your python::
+
+  configure.args  -DCMAKE_INSTALL_PREFIX=${prefix} \
+  		  -DBUILD_VERSIONED=OFF \
+                  -DCMAKE_IS_EXPERIMENTAL=BUT_BETTER_THAN_BJAM \
+                  -DPYTHON_EXECUTABLE= ... \
+                  -DPYTHON_LIBRARY= ... \
+                  -DPYTHON_INCLUDE_PATH= ... \
+		  -DPYTHON_VERSION= ... \
+		  -DPYTHON_FOUND=TRUE \		  
+		  .
+
+Don't lose the dot at the end.  Replace the ellipsis with the correct settings for your machine.  You can then (re) build boost with::
+ 
+  port install boost_1.38.0 
+
+Ensure that your :ref:`I3_SITE_CMAKE_DIR` contains a file ``python.cmake``
+that contains the same settings as above.
 
 Setting Up additional Python tools
 -----------------------------------

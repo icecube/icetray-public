@@ -59,10 +59,10 @@ of this.
 
 .. _SYSTEM_PACKAGES:
  
-.. index:: SYSTEM_PACKAGES
-
 SYSTEM_PACKAGES
 ---------------
+
+.. index:: SYSTEM_PACKAGES
 
 Most tools are detected are expected to be found in ``I3_PORTS``, and
 system-installed versions are ignored.  If you define
@@ -74,19 +74,22 @@ this option can speed up builds by avoiding the need for an ``I3_PORTS``
 Qt or allow operation of Icetray on systems not supported by the ports
 tools.
 
+.. _I3_SITE_CMAKE_DIR:
+
 I3_SITE_CMAKE_DIR
 -----------------
 
-.. _I3_SITE_CMAKE_DIR:
 .. index:: I3_SITE_CMAKE_DIR
 .. index:: /usr/share/fizzicks/cmake
 
+
 Site specific handling of tools is supported as follows:
 
-For each tool ``T``, the directory :file:`/usr/share/fizzicks/cmake` is
-searched for ``T.cmake`` and if this file is found, it is read in lieu
-of the standard tool definition file.  This directory can be
-overridden by setting ``I3_SITE_CMAKE_DIR`` in your environment.
+For each tool ``T``, the directory :file:`/usr/share/fizzicks/cmake`
+(yes, that is really the path) is searched for ``T.cmake`` and if this
+file is found, it is read in lieu of the standard tool definition
+file.  This directory can be overridden by setting
+``I3_SITE_CMAKE_DIR`` in your environment.
 
 For instance, an override for tool *python* (filename
 ``python.cmake``) might look like::
@@ -97,7 +100,10 @@ For instance, an override for tool *python* (filename
   set(PYTHON_VERSION "2.6")
   set(PYTHON_FOUND TRUE)
 
-
+.. alert:: If you use a nonsystem python as above, your toolset
+   	   (specifically the boost_python component of the boost tool)
+   	   must be built against that same python.  See the page for
+   	   the :ref:`PythonTool` for more information.
 
 Troubleshooting
 ---------------
