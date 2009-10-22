@@ -1,7 +1,5 @@
 #
-#  $Id$
-#  
-#  Copyright (C) 2007
+#  Copyright (C) 2007-2009
 #  Troy D. Straszheim  <troy@icecube.umd.edu>
 #  and the IceCube Collaboration <http://www.icecube.wisc.edu>
 #  
