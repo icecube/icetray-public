@@ -66,6 +66,7 @@ somewhat like that of the source directory.  Main differences:
 * build contains files ``CMakeCache.txt``, ``env-shell.sh``, 
   ``log4cplus.conf`` and ``tarball_hook.sh``.
 ::
+
   $ ls
   CMakeCache.txt  cmake_install.cmake  glshovel/         pfclasses/
   CMakeFiles/     coordinate-service/  icepick/          pfreader/
