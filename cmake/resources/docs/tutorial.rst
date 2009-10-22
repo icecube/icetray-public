@@ -35,7 +35,6 @@ that the build process does not modify the source itself (e.g. no
 temporary files end up laying around in your checkout.  So create a
 work directory and check out source to a directory called ``src``:
 
-
 ::
 
   mkdir -p ~/IceCube/meta-projects/offline-software/trunk
@@ -59,39 +58,41 @@ execute cmake in the object directory to create the build environment::
   -- Generating done
   -- Build files have been written to: ~/IceCube/meta-projects/offline-software/build
                     
-At this point the contents of the object directory should look somewhat
-like that of the source directory, except there isn't any source there, just lots of makefiles::
+At this point the contents of the object directory should look
+somewhat like that of the source directory.  Main differences:
 
+* there are no sourcefiles in the subdirectories of ``build/``
+* build contains directories ``CMakeFiles/``, ``bin/``, and ``lib/``
+* build contains files ``CMakeCache.txt``, ``env-shell.sh``, 
+  ``log4cplus.conf`` and ``tarball_hook.sh``.
+::
   $ ls
-  amanda-core            DartTestfile.txt  interfaces         pfreader
-  analysis-tree          dataclasses       ithon              phys-services
-  bin                    dataio            lib                tarball_hook.sh
-  CMakeCache.txt         DOMcalibrator     log4cplus.conf     testheader.hpp.gch
-  CMakeFiles             env-shell.sh      Makefile           Testing
-  cmake_install.cmake    eventviewer       make_tarball.sh    triggerUtil-C++
-  coordinate-service     examples          monolith-reader    twrclasses
-  CTestCustom.cmake      I3Db              mutineer           twr-decode
-  daq-decode             icepick           payloads-unpacker  TWRReader
-  DartConfiguration.tcl  icetray           pfclasses
+  CMakeCache.txt  cmake_install.cmake  glshovel/         pfclasses/
+  CMakeFiles/     coordinate-service/  icepick/          pfreader/
+  DOMcalibrator/  daq-decode/          icetray/          phys-services/
+  I3Db/           dataclasses/         interfaces/       tarball_hook.sh*
+  Makefile        dataio/              jebclasses/       twr-decode/
+  Testing/        docs/                lib/              twrclasses/
+  amanda-core/    env-shell.sh*        log4cplus.conf    util/
+  bin/            examples/            mutineer/
+  cmake/          filter-tools/        payload-parsing/
+
+And the source directory will have been untouched::
+
   $ ls ../src
-  amanda-core            dataclasses       ithon              pfclasses
-  analysis-tree          dataio            lib                pfreader
-  bin                    DOMcalibrator     local-config.mk    physics-docs
-  build                  env-shell.sh      log4cplus.conf     phys-services
-  cmake                  eventviewer       Makefile           tarball_hook.sh.in
-  CMakeLists.txt         examples          meta-project-docs  triggerUtil-C++
-  coordinate-service     I3Db              monolith-reader    twrclasses
-  CTestConfig.cmake      icepick           mutineer           twr-decode
-  daq-decode             icetray           offline-mk         TWRReader
-  DartConfig.cmake       interfaces        payloads-unpacker
-
-
+  CMakeLists.txt@      dataclasses/   icepick/          pfclasses/
+  DOMcalibrator/       dataio/        icetray/          pfreader/
+  I3Db/                docs/          interfaces/       phys-services/
+  amanda-core/         examples/      jebclasses/       tarball_hook.sh.in
+  cmake/               filter-tools/  twr-decode/       util/ 
+  coordinate-service/  mutineer/      twrclasses/
+  daq-decode/          glshovel/      payload-parsing/  
+  
 While still in the build directory execute ``make``::
 
   $ pwd
   ~/IceCube/meta-projects/offline-software/build
   $ make
-
 
 After ``make`` returns your build results will be in the
 object directory.  Assuming no builds are made inside of the original
