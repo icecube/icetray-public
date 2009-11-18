@@ -238,5 +238,17 @@ end of the output (when executing ``port install`` with the ``-vd``
 flags), add the flag ``--enable-broken-nfs-hacks`` to the
 ``./configure`` line when building the ports package.
 
+Error: Target com.apple.destroot returned: error deleting ... file already exists
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This error has been reported when building tools on a Mac to a network volume::
+
+  Error: Target com.apple.destroot returned: error deleting
+  "/Volumes/Home/toale/tmp/tools/var/db/dports/build/file._Volumes_Home_toale_tmp_tools_var_db_dports_sources_rsync.code.icecube.wisc.edu_icecube-tools-ports_devel_cdk/work/destroot/Volumes/Home/toale/tmp/tools/man/man3":
+  file already exists Warning: the following items did not execute (for
+  cdk): com.apple.activate com.apple.destroot com.apple.archive
+  com.apple.install
+  
+Workaround:  build tools to local disk.
 
 See also :ref:`platforms`.
