@@ -21,6 +21,7 @@
 #define ICETRAY_LOG4CPLUSLOGGING_H_INCLUDED
 
 #include <string>
+#include <stdio.h>
 
 #undef PACKAGE
 #undef HAVE_STAT
