@@ -249,7 +249,7 @@ I3FileImpl::move_y(int delta)
 I3FramePtr
 I3FileImpl::get_raw_frame(unsigned index)
 {
-  log_debug("getting raw frame %u", index);
+  log_debug("getting raw frame %u |skipkeys|=%zu", index, skipkeys_.size());
   ifs_.seekg(frame_infos_[index].pos);
   ifs_.clear();
   assert(!ifs_.fail());
@@ -258,9 +258,12 @@ I3FileImpl::get_raw_frame(unsigned index)
   assert(ifs_.good());
 
   I3FramePtr frame(new I3Frame);
-  frame->load(ifs_, skipkeys_);
-  
-  return frame;
+  bool b = frame->load(ifs_, skipkeys_);
+
+  if (!b)
+    return I3FramePtr();
+  else
+    return frame;
 }
 
 I3FramePtr
