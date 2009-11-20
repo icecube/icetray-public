@@ -36,11 +36,11 @@ TEST_GROUP(common);
   (I3Bool) \
   (I3Double) \
   (I3Position) \
-  (I3Time) \
-  (OMKey)
+  (I3Time)
 
 #define NON_I3FO_ITEMS \
-  (TriggerKey)
+  (TriggerKey)	       \
+  (OMKey)
   
 #define SERIALIZATION_TEST(r,data,t) SERIALIZE(t)
 
