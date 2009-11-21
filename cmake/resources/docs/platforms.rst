@@ -123,3 +123,46 @@ releases of Ubuntu:
 
   (this is just a quirk of the i3-install.sh script)
 
+.. index:: Karmic Koala
+
+Ubuntu 9.10 Karmic Koala
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Support is in as of Nov 20, 2009 for Karmic Koala, with a caveat: nThe
+current ``i3-tools-v3`` 'metatool' requires ``root_5.20.00``.  It
+requires other things as well, you can see them with ``port deps
+i3-tools-v3``::
+
+  % /opt/i3/ports/bin/port deps i3-tools-v3
+  i3-tools-v3 has library dependencies on:
+          gsl_1.8
+          rdmc_2.9.5
+          log4cplus_1.0.2
+          sprng_2.0a
+          slalib-c_0.0
+          mysql_4.1.20
+          photonics_1.67
+          root_5.20.00
+          boost_1.38.0
+          cmake
+          anis_1.0
+          cdk
+          hdf5_1.6.8
+          ptd_1.0.2
+  
+All of that stuff builds with the exception of that version of root.
+The root version that will actually build on ubuntu 9.10 is
+``5.24.00b``.  So to get things going, individually install each of
+the ports in the list above with ``port install`` (e.g. ``port install
+photonics_1.67``), except root, which should be ``root_5.24.00b``.  
+
+If you are using metaprojects which are already released as of Nov 20
+2009 (e.g. those numbered less than 09-11-00) you will also need to
+modify the root detection in the build system; replace
+``$I3_SRC/cmake/tools/root.cmake`` with a more recent version that
+understands ``5.24.00b``, that is, one that contains the following
+code::
+
+    elseif(IS_DIRECTORY ${I3_PORTS}/root-v5.24.00b)
+      set(ROOT_VERSION "5.24.00b")
+
