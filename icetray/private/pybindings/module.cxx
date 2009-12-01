@@ -36,6 +36,8 @@ void register_I3Frame();
 void register_I3FrameObject();
 void register_I3Module();
 void register_I3Context();
+void register_I3Configuration();
+void register_I3ModuleFactory();
 void register_std_cont_pod();
 
 using namespace boost::python;
@@ -78,6 +80,8 @@ BOOST_PYTHON_MODULE(icetray)
   register_I3FrameObject();
   register_I3Module();
   register_I3Context();
+  register_I3Configuration();
+  register_I3ModuleFactory();
   register_std_cont_pod();
   register_I3RUsage();
   register_I3TrayInfo();

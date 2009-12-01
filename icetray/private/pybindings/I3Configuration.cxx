@@ -19,37 +19,14 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include <string>
-#include <icetray/I3Context.h>
-#include <icetray/I3Frame.h>
 #include <icetray/I3Configuration.h>
 
 using namespace boost::python;
 
-bool 
-context_putconfig(I3ContextPtr ctx, 
-		  const std::string& where, I3ConfigurationPtr what)
+void register_I3Configuration()
 {
-  return ctx->Put(where, what);
-}
-
-typedef std::map<std::string, std::pair<FrameFifoPtr, I3ModulePtr> > connections_t;
-
-bool 
-context_putoutboxes(I3ContextPtr ctx, 
-		    const std::string& where, boost::shared_ptr<connections_t> what)
-{
-  return ctx->Put(where, what);
-}
-
-void register_I3Context()
-{
-  class_<I3Context, I3ContextPtr, boost::noncopyable >("I3Context")
+  class_<I3Configuration, I3ConfigurationPtr, boost::noncopyable>("I3Configuration")
     .def(init<>())
-    .def("__setitem__", &context_putconfig)
-    .def("__setitem__", &context_putoutboxes)
-    ;
-
-  class_<connections_t, boost::shared_ptr<connections_t> >("Connections")
+    .def("__setitem__", &I3Configuration::Set)
     ;
 }
