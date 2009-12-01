@@ -34,6 +34,8 @@ set(ICETRAY_PYTHON_SRC
   private/pybindings/I3Frame.cxx
   private/pybindings/I3Module.cxx
   private/pybindings/I3Context.cxx
+  private/pybindings/I3Configuration.cxx
+  private/pybindings/I3ModuleFactory.cxx
   private/pybindings/I3FrameObject.cxx
   private/pybindings/I3TrayInfo.cxx
   private/pybindings/std_cont_pod.cxx)
