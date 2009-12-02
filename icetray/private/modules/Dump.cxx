@@ -44,6 +44,12 @@ class Dump : public I3ConditionalModule
     if (!frame)
       return;
 
+    if(!ShouldProcess(frame))
+      {
+	PushFrame(frame, "OutBox");
+	return;
+      }
+
     frameCount_++;
     cout << "------------------------- Frame #" << frameCount_ << " -------------------------\n" << *frame;
     PushFrame(frame,"OutBox");

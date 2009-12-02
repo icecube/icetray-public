@@ -18,21 +18,57 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
+
+#include <fstream>
+#include <string>
+#include <set>
+#include <icetray/I3ConditionalModule.h>
+#include <icetray/I3TrayHeaders.h>
+#include <icetray/I3Logging.h>
+
 #include <icetray/I3Tray.h>
 #include <icetray/I3TrayInfo.h>
 #include <icetray/I3TrayInfoService.h>
 #include <icetray/Utility.h>
 
-#include <icetray/modules/Delete.h>
-
 #include <boost/regex.hpp>
+
+/**
+ *  Deletes things from frame.  Has special privileges granted by I3Frame.
+ */
+class Delete : public I3ConditionalModule
+{
+  Delete();
+  Delete(const Delete&);
+
+  Delete& operator=(const Delete&);
+
+  std::vector<std::string> delete_keys_;
+
+  void do_delete(I3FramePtr frame);
+
+  public:
+
+  Delete(const I3Context& ctx);
+
+  virtual ~Delete() { }
+
+  void Configure();
+
+  void Process();
+
+  void Finish();
+
+  SET_LOGGER("Delete");
+};
+
 
 using namespace std;
 
 I3_MODULE(Delete);
 
 Delete::Delete(const I3Context& ctx) : 
-  I3Module(ctx)
+  I3ConditionalModule(ctx)
 {
   AddParameter("Keys", 
 	       "Delete keys that match any of the regular expressions in this vector", 
@@ -48,7 +84,8 @@ void Delete::Configure()
 void Delete::Process()
 {
   I3FramePtr frame = PopFrame();
-  do_delete(frame);
+  if(ShouldProcess(frame))
+    do_delete(frame);
   PushFrame(frame, "OutBox");
 }
 

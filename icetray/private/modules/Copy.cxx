@@ -23,16 +23,49 @@
 #include <icetray/I3TrayInfoService.h>
 #include <icetray/Utility.h>
 
-#include <icetray/modules/Copy.h>
-
 #include <boost/regex.hpp>
+
+#include <fstream>
+#include <string>
+#include <set>
+#include <icetray/I3ConditionalModule.h>
+#include <icetray/I3TrayHeaders.h>
+#include <icetray/I3Logging.h>
+
+/**
+ *  Copyies things from frame.  Has special privileges granted by I3Frame.
+ */
+class Copy : public I3ConditionalModule
+{
+  Copy();
+  Copy(const Copy&);
+
+  Copy& operator=(const Copy&);
+
+  std::vector<std::string> copy_keys_;
+
+  void do_copy(I3FramePtr frame);
+
+public:
+
+  Copy(const I3Context& ctx);
+  virtual ~Copy() { }
+
+  void Configure();
+
+  void Process();
+
+  void Finish();
+
+  SET_LOGGER("Copy");
+};
 
 using namespace std;
 
 I3_MODULE(Copy);
 
 Copy::Copy(const I3Context& ctx) : 
-  I3Module(ctx)
+  I3ConditionalModule(ctx)
 {
   AddParameter("Keys", 
 	       "pairs of keys [src_1, dst_1, src_2, dst_2,... src_n, dst_n]",
@@ -50,7 +83,8 @@ void Copy::Configure()
 void Copy::Process()
 {
   I3FramePtr frame = PopFrame();
-  do_copy(frame);
+  if(ShouldProcess(frame))
+    do_copy(frame);
   PushFrame(frame, "OutBox");
 }
 

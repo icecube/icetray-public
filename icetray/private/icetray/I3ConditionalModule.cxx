@@ -122,3 +122,19 @@ bool I3ConditionalModule::ShouldDoPhysics(I3FramePtr frame)
   ++nexecuted_;
   return true;
 }
+
+bool
+I3ConditionalModule::ShouldProcess(I3FramePtr frame)
+{
+  if(frame->GetStop()==I3Frame::Physics)
+    return ShouldDoPhysics(frame);
+  else if (frame->GetStop()==I3Frame::Geometry)
+    return ShouldDoGeometry(frame);
+  else if (frame->GetStop()==I3Frame::Calibration)
+    return ShouldDoCalibration(frame);
+  else if (frame->GetStop()==I3Frame::DetectorStatus)
+    return ShouldDoDetectorStatus(frame);
+  else 
+    return ShouldDoOtherStops(frame);
+}
+
