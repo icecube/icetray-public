@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
 #
-#  Run frames on different streams through a reader/writer tray, verify that extra
-#  cruft doesn't get in to the files
+#  If an I3File is opened Writing it won't give you an iterator.
 #
 from icecube import icetray, dataclasses, dataio
 import sys

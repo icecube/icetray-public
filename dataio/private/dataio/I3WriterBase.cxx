@@ -204,10 +204,16 @@ I3WriterBase<Derived>::Process()
 {
   I3FramePtr frame = PopFrame();
 
+  if(!ShouldProcess(frame))
+    {
+      PushFrame(frame, "OutBox");
+      return;
+    }
   WriteConfig(frame);
 
   if (streams_.size() > 0)
-    if (find(streams_.begin(), streams_.end(), frame->GetStop()) == streams_.end())
+    if (find(streams_.begin(), streams_.end(), frame->GetStop())
+	== streams_.end())
       {
 	PushFrame(frame, "OutBox");
 	return;
