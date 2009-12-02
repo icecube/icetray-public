@@ -39,6 +39,11 @@ class I3ConditionalModule : public I3Module
   ~I3ConditionalModule();
 
   /**
+   *  
+   */
+  bool ShouldProcess(I3FramePtr frame);
+
+  /**
    * @brief The method where frames are sent to IcePicks installed in the context 
    * in order to determine whether the module should run.  The IcePicks are also 
    * configured the first time this method is called.
