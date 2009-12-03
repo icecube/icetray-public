@@ -19,7 +19,7 @@ The MacPorts two-step:
 * Perform a checkout of the project's latest copy of the MacPorts
   source from Subversion::
 
-    svn co http://code.icecube.wisc.edu/svn/tools/DarwinPorts/trunk ~/port_source
+    svn co http://code.icecube.wisc.edu/icetray-dist/tools/DarwinPorts/trunk ~/port_source
 
 * Build MacPorts and the toolset
 
@@ -87,7 +87,7 @@ i3-install.sh will perform for you.
 
 * Perform a checkout of the project's latest copy of the MacPorts source from Subversion::
 
-   svn co http://code.icecube.wisc.edu/svn/tools/DarwinPorts/trunk <path_to_port_src>
+   svn co http://code.icecube.wisc.edu/icetray-dist/tools/DarwinPorts/trunk <path_to_port_src>
 
 * Change your working directory to <path_to_port_src>.  Configure the MacPorts source tree with the installation location::
 
@@ -204,7 +204,7 @@ working with:
   for.
 * On each OS/Architecture::
 
-     svn co http://code.icecube.wisc.edu/svn/tools/DarwinPorts/trunk port_src
+     svn co http://code.icecube.wisc.edu/icetray-dist/tools/DarwinPorts/trunk port_src
 
   * port_src directory can be, but doesn't have to be on the shared NFS disk.
   * cd port_src
