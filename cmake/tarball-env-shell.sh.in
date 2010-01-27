@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Icetray environment script for tarballs.  Sets everything relative
 # to the directory that this shell runs in.  Different than the env-shell.sh
