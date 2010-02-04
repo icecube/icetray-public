@@ -69,35 +69,39 @@ to install the following, which are not there by default::
 
   autoconf
   automake
-  bzip2
-  cmake
   curl
+  doxygen
   g++
   g77
-  gcc
-  libhtml-parser-perl
   libbz2-dev
-  libmysqlclient-dev
-  libgl-dev 
+  libc6-dev
+  libexpat1-dev
+  libglut
   libglut-dev
+  libhtml-parser-perl
   libpcre3-dev
-  libssl-dev
-  libx11-dev 
-  libxft2-dev
+  libx11-dev
+  libxft-dev
   libxi-dev
   libxmu-dev
   libxpm-dev
   libxt-dev
   m4
-  make
   ncurses-dev
+  openssl-dev
   patch
   python-dev
-  rsync
-  subversion (svn)
-  sun-java5-jdk
-  tcl8.4-dev
+  python-setuptools
+  ssl-dev
+  subversion
+  sun-java6-jdk
+  tcl
+  tcl-dev
   texinfo
+  xlibmesa-gl
+  xlibmesa-gl-dev
+  xlibmesa-glu
+  xlibmesa-glu-dev
 
 This list may be incomplete, please contact us with updates.
 
@@ -105,7 +109,7 @@ In order for JAVA_HOME to be set correctly, export using the following
 command: (If you installed the above version of java using the package
 manager)::
 
- export JAVA_HOME=/usr/lib/jvm/java-5-sun
+ export JAVA_HOME=/usr/lib/jvm/java-6-sun
 
 
 The following may not be required for 8.04 (Hardy Heron) and/or newer
@@ -127,6 +131,41 @@ releases of Ubuntu:
 
 Ubuntu 9.10 Karmic Koala
 ^^^^^^^^^^^^^^^^^^^^^^^^
+The following packages are required for Karmic Koala::
+
+  autoconf
+  curl
+  doxygen
+  g++
+  libexpat1-dev
+  libglut
+  libglut-dev
+  libhtml-parser-perl
+  libpcre3-dev
+  libx11-dev
+  libxft-dev
+  libxi-dev
+  libxmu-dev
+  m4
+  ncurses-dev
+  openssl-dev
+  patch
+  python-dev
+  python-setuptools
+  python-sphinx
+  subversion
+  sun-java6-jdk
+  tcl
+  tcl-dev
+  texinfo
+  xlibmesa-gl
+  xlibmesa-gl-dev
+  xlibmesa-glu
+  xlibmesa-glu-dev
+
+Please note that in some cases the normal user distributions must be installed
+before ones tagged with -dev package names. The "svn" command comes with the 
+subversion package as a reminder of how it is listed. 
 
 Support is in as of Nov 20, 2009 for Karmic Koala, with a caveat: nThe
 current ``i3-tools-v3`` 'metatool' requires ``root_5.20.00``.  It
