@@ -98,23 +98,23 @@ show_product_details(const string& project, const factory_t& factory)
       if (iter->second.project != project)
 	continue;
 
+      // This is all (sarcasm) brilliant stuff we have to do
+      // because you can't find out what an T's configuration
+      // space is without creating one.  In the days of
+      // icetray+root-icetray this would have taken an entire
+      // separate implementation of icetray and root-icetray.
+      I3Context context;
+      I3ConfigurationPtr config(new I3Configuration);
+      config->ClassName(iter->first);
+      context.Put(config);      
+
+      // The following is necessary when creating
+      // I3Modules... but not when creating I3ServiceFactories.
+      shared_ptr<map<string, pair<FrameFifoPtr, I3ModulePtr> > > connections
+	(new map<string, pair<FrameFifoPtr, I3ModulePtr> >);
+      context.Put(connections, "OutBoxes");
+
       try {
-	// This is all (sarcasm) brilliant stuff we have to do
-	// because you can't find out what an T's configuration
-	// space is without creating one.  In the days of
-	// icetray+root-icetray this would have taken an entire
-	// separate implementation of icetray and root-icetray.
-	I3Context context;
-	I3ConfigurationPtr config(new I3Configuration);
-	config->ClassName(iter->first);
-	context.Put(config);      
-
-	// The following is necessary when creating
-	// I3Modules... but not when creating I3ServiceFactories.
-	shared_ptr<map<string, pair<FrameFifoPtr, I3ModulePtr> > > connections
-	  (new map<string, pair<FrameFifoPtr, I3ModulePtr> >);
-	context.Put(connections, "OutBoxes");
-
 	// yeah, this is awful to have this here.  If we werent
 	// forced to create objects to find out about their
 	// configs, we wouldn't have to do this.
@@ -137,6 +137,46 @@ show_product_details(const string& project, const factory_t& factory)
       } catch (const std::exception& e) {
 	cerr << "Error constructing \"" << iter->first << "\". Skipping.\n";
 	modules_error++;
+      } catch (const boost::python::error_already_set& e) {
+	using namespace boost::python;
+	cerr << "Error constructing \"" << iter->first << "\".\n"
+	     << "Caught exception from python:\n";
+
+	std::string errtype, errvalue;
+
+	PyObject *type = 0, *val = 0, *tb = 0;
+	PyErr_Fetch(&type, &val, &tb);
+	handle<> e_val(val), e_type(type), e_tb(allow_null(tb));
+
+	try {
+	  object t = extract<object>(e_type.get());
+	  object t_name = t.attr("__name__");
+	  errtype = extract<std::string>(t_name);
+	} catch (error_already_set const &) {
+	  cerr << "Internal error getting error type:\n";
+	  PyErr_Print();
+	}
+
+	try {
+	  object v = extract<object>(e_val.get());
+	  errvalue = extract<std::string>(v.attr("__str__")());
+	} catch (error_already_set const &) {
+	  cerr << "Internal error getting value type:\n";
+	  PyErr_Print();
+	}
+
+	config->Add("*** Python Error ***", errtype, errvalue);
+	if (!xml)
+	  {
+	    cout << *config;
+	    cout << "---------------------------------------\n"; 	  
+	  } 
+	else 
+	  {
+	    cout << config->inspect();
+	  }
+
+	cerr << "Skipping.\n"; 
       }
     } 
 }
@@ -229,6 +269,9 @@ main (int argc, char** argv)
 	load_project(projects[i], false);
       } catch (const std::runtime_error& e) {
 	cerr << "ignoring: " << e.what() << std::endl;
+      } catch (const boost::python::error_already_set& e) {
+	cerr << "Caught exception from python:\n";
+	PyErr_Print();
       }
     }
   cerr << "\n";
