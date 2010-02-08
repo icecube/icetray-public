@@ -84,10 +84,22 @@ static inline char * lowerCamelCase(const char * str)
   return out;
 }
 
+//
+//  This deletes the string returned by snake_case when it goes out of
+//  scope.  Otherwise the WRAP_PROP stuff below leaks.
+//
+struct string_deleter
+{
+  char* s;
+  string_deleter(char* s_) : s(s_) { }
+  operator char*() { return s; }
+  ~string_deleter() { free(s); }
+};
+
 // convert from upper CamelCase to snake_case
 // ATWDBinSize => atwd_bin_size
 // NBinsATWD0 => n_bins_atwd_0
-static inline char * snake_case(const char * str) 
+static inline string_deleter snake_case(const char * str) 
 {
   int i,j,len; 
   char* out; 
@@ -105,7 +117,7 @@ static inline char * snake_case(const char * str)
   } 
   out[len+j] = '\0'; 
   out = (char*)realloc(out,len+j+1); 
-  return out; 
+  return string_deleter(out); 
 } 
 
 #define I3_PYTHON_MODULE(N) BOOST_PYTHON_MODULE(N)
