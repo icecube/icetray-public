@@ -336,8 +336,8 @@ public:
    be found.
   */
   const I3Context& context_;
-  I3Configuration& configuration_;
   outboxmap_t& outboxes_;
+  I3Configuration& configuration_;
   methods_t methods_;
 
   FrameFifoPtr inbox_;

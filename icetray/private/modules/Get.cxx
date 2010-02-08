@@ -59,7 +59,6 @@ Get::Get(const I3Context& context) : I3Module(context)
 	       keys_);
   AddParameter("Streams", "vector of I3Frame::Streams to do the Gets on.  If not specified, do it on Geometry, Calibration, DetectorStatus, and Physics",
 	       streams_);
-  bool get_all_ = false;
 }
 
 void 
