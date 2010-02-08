@@ -69,7 +69,7 @@ PythonFunction::PythonFunction(const I3Context& context)
 
   configkeys = configuration_.keys();
 
-  for (int i = 0; i< configkeys.size(); i++)
+  for (unsigned i = 0; i< configkeys.size(); i++)
     {
       log_trace("param %s", configkeys[i].c_str());
       if (configkeys[i] != "Streams")
@@ -89,7 +89,7 @@ void PythonFunction::Configure()
   GetParameter("Streams", svec);
   streams = std::set<I3Frame::Stream>(svec.begin(), svec.end());
 
-  for (int i = 0; i< configkeys.size(); i++)
+  for (unsigned i = 0; i< configkeys.size(); i++)
     {
       log_trace("param %s", configkeys[i].c_str());
       if (configkeys[i] != "Streams")

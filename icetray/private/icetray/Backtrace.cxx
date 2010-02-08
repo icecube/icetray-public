@@ -31,7 +31,6 @@ print_backtrace (FILE* stream, unsigned depth)
 {
   void *array[depth];
   size_t size;
-  size_t i;
 
   size = backtrace (array, depth);
 
@@ -40,9 +39,7 @@ print_backtrace (FILE* stream, unsigned depth)
   Dl_info info[size];
   int status[size];
 
-  const char* const notavailable = "N/A";
-
-  for (int i=1; i < size && array[i] != 0; i++)
+  for (unsigned i=1; i < size && array[i] != 0; i++)
     {
       status[i] = dladdr(array[i], &info[i]);
       int demangle_status;

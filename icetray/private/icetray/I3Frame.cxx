@@ -530,7 +530,6 @@ bool I3Frame::load_v5(IStreamT& is, const vector<string>& skip)
   if (!is.good())
     log_fatal("attempt to read from stream in error state");
 
-  i3frame_size_t sizeRead;
   i3frame_checksum_t checksumRead;
 
   crc_t crc;
