@@ -24,7 +24,7 @@ SET(_jni_PATH_SUFFIXES jre/lib/i386 jre/lib/i386/server jre/lib/amd64 jre/lib/am
 FIND_PATH(jni_h_include_dir
   NAMES jni.h
   PATHS
-  /System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/Headers
+  $ENV{JAVA_HOME}/Headers
   $ENV{JAVA_HOME}/include
   $ENV{JAVA_HOME}/include/linux
   ${TOOL_SYSTEM_PATH}
@@ -34,7 +34,7 @@ REPORT_FIND(jni jni.h ${jni_h_include_dir})
 FIND_PATH(jni_md_h_include_dir
   NAMES jni_md.h
   PATHS
-  /System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/Headers
+  $ENV{JAVA_HOME}/Headers
   $ENV{JAVA_HOME}/include
   $ENV{JAVA_HOME}/include/linux
   ${TOOL_SYSTEM_PATH}
@@ -47,7 +47,7 @@ REPORT_FIND(jni jni_md.h ${jni_md_h_include_dir})
 FIND_LIBRARY(jni_jvm_lib
   NAMES jvm
   PATHS
-  /System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/Libraries
+  $ENV{JAVA_HOME}/Libraries
   $ENV{JAVA_HOME}
   PATH_SUFFIXES ${_jni_PATH_SUFFIXES}
   ${TOOL_SYSTEM_PATH}
@@ -60,7 +60,7 @@ REPORT_FIND(jni "jvm library" ${jni_jvm_lib})
 FIND_LIBRARY(jni_verify_lib
   NAMES verify
   PATHS
-  /System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/Libraries
+  $ENV{JAVA_HOME}/Libraries
   $ENV{JAVA_HOME}
   PATH_SUFFIXES ${_jni_PATH_SUFFIXES}
   ${TOOL_SYSTEM_PATH}
@@ -74,7 +74,7 @@ IF(NOT APPLE)
   FIND_LIBRARY(jni_zip_lib
     NAMES zip
     PATHS
-    /System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/Libraries
+    $ENV{JAVA_HOME}/Libraries
     $ENV{JAVA_HOME}
     PATH_SUFFIXES ${_jni_PATH_SUFFIXES}
     ${TOOL_SYSTEM_PATH}
@@ -100,3 +100,4 @@ SET(JNI_INCLUDE_DIR ${jni_h_include_dir} ${jni_md_h_include_dir}
 SET(JNI_LIBRARIES ${jni_jvm_lib} ${jni_verify_lib} ${jni_zip_lib}
   CACHE STRING "Libraries for tool jni" FORCE)
 SET(JNI_FOUND TRUE CACHE BOOL "Jni found flag" FORCE)
+
