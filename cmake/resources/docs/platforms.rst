@@ -50,6 +50,46 @@ install of Fedora Core 9:
 * tcl
 * g77
 
+.. index:: CentOS 5.4 & Scientific Linux 5.4
+
+.. _centos:
+
+CentOS 5.4 and Scientific Linux 5.4
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The installation of these packages requires "root" or "sudo" privileges.
+The packages required for both of these OS versions are the same. They need
+to be installed using "yum -y install <package name>"
+
+  compat-gcc-34-g77
+  doxygen
+  expat-devel
+  freeglut-devel
+  gcc
+  gcc-c++
+  gcc-gfortran.i386
+  libX11-devel
+  libXext-devel
+  libXfixes-devel
+  libXft-devel
+  libXi-devel
+  libXmu-devel
+  libXpm-devel
+  libXrandr-devel
+  libXt-devel
+  ncurses-devel
+  openssl-devel
+  pcre-devel
+  python-devel
+  python-setuptools
+  subversion
+  tcl-devel
+  texinfo
+ 
+After installing these packages, run "easy_install -U Sphinx" to install
+Python Sphinx for using the documentation system. 
+
+
 .. index:: Ubuntu
 .. index:: Debian
 
