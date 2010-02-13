@@ -67,7 +67,7 @@ to be installed using "yum -y install <package name>"
   freeglut-devel
   gcc
   gcc-c++
-  gcc-gfortran.i386
+  gcc-gfortran
   libX11-devel
   libXext-devel
   libXfixes-devel
@@ -88,6 +88,11 @@ to be installed using "yum -y install <package name>"
  
 After installing these packages, run "easy_install -U Sphinx" to install
 Python Sphinx for using the documentation system. 
+
+ * If you wish, you may use the following command to install all of the
+   packages and Sphinx at the same time.
+
+    yum -y install compat-gcc-34-g77 doxygen expat-devel freeglut-devel gcc gcc-c++ gcc-gfortran libX11-devel libXext-devel libXfixes-devel libXft-devel libXi-devel libXmu-devel libXpm-devel libXrandr-devel libXt-devel ncurses-devel openssl-devel pcre-devel python-devel python-setuptools subversion tcl-devel texinfo ;easy_install -U Sphinx
 
 
 .. index:: Ubuntu
@@ -206,6 +211,12 @@ The following packages are required for Karmic Koala::
 Please note that in some cases the normal user distributions must be installed
 before ones tagged with -dev package names. The "svn" command comes with the 
 subversion package as a reminder of how it is listed. 
+
+  * For convinence, an apt-get command that includes all the neccesary packages
+    is below. 
+
+    apt-get -y install autoconf automake curl doxygen g++ g77 libbz2-dev libc6-dev libexpat1-dev libglut libglut-dev libhtml-parser-perl libpcre3-dev libx11-dev libxft-dev libxi-dev libxmu-dev libxpm-dev libxt-dev m4 ncurses-dev openssl-dev patch python-dev python-setuptools ssl-dev subversion sun-java6-jdk tcl tcl-dev texinfo xlibmesa-gl xlibmesa-gl-dev xlibmesa-glu xlibmesa-glu-dev
+
 
 Support is in as of Nov 20, 2009 for Karmic Koala, with a caveat: nThe
 current ``i3-tools-v3`` 'metatool' requires ``root_5.20.00``.  It
