@@ -109,15 +109,18 @@ There is a script at
 http://code.icecube.wisc.edu/icetray-dist/distros/ScientificSL.sh
 that will install the necessary packages.
 
-Ubuntu
+CentOS
 ^^^^^^
-  xlibmesa-gl
-  xlibmesa-gl-dev
-  xlibmesa-glu
-  xlibmesa-glu-dev
 
 There is a script at
-http://code.icecube.wisc.edu/icetray-dist/distros/ScientificSL.sh
+http://code.icecube.wisc.edu/icetray-dist/distros/CentOS.sh
+that will install the necessary packages.
+
+Ubuntu
+^^^^^^
+
+There is a script at
+http://code.icecube.wisc.edu/icetray-dist/distros/Ubuntu.sh
 that will install the necessary packages.
 
 To install further packages (emacs and so forth), the easiest thing to
