@@ -25,33 +25,8 @@ Apple Mac OS X
     in 10.5/Leopard, since subversion is now supplied by the OS.
 
 
-.. index:: RHEL4
-.. _RHEL4:
-
-RHEL4
-^^^^^
-
-* TCL dependencies are satisfied only with the tcl-devel package. Try
-  'up2date tcl-devel' as root user.
-
-.. index:: Fedora Core
-.. _fedoracore:
-
-Fedora Core
-^^^^^^^^^^^
-
-* TCL dependencies are satisfied only with the tcl-devel package. Try
-  'yum install tcl-devel'.
-
-Fedora Core 9: The following packages were needed after a fresh
-install of Fedora Core 9:
-
-* curl
-* tcl
-* g77
 
 .. index:: CentOS 5.4 & Scientific Linux 5.4
-
 .. _centos:
 
 CentOS 5.4 and Scientific Linux 5.4
@@ -95,15 +70,102 @@ Python Sphinx for using the documentation system.
     yum -y install compat-gcc-34-g77 doxygen expat-devel freeglut-devel gcc gcc-c++ gcc-gfortran libX11-devel libXext-devel libXfixes-devel libXft-devel libXi-devel libXmu-devel libXpm-devel libXrandr-devel libXt-devel ncurses-devel openssl-devel pcre-devel python-devel python-setuptools subversion tcl-devel texinfo ;easy_install -U Sphinx
 
 
+.. index:: RHEL4
+.. _RHEL4:
+
+RHEL4
+^^^^^
+
+* TCL dependencies are satisfied only with the tcl-devel package. Try
+  'up2date tcl-devel' as root user.
+
+.. index:: Fedora Core
+.. _fedoracore:
+
+Fedora Core
+^^^^^^^^^^^
+
+* TCL dependencies are satisfied only with the tcl-devel package. Try
+  'yum install tcl-devel'.
+
+Fedora Core 9: The following packages were needed after a fresh
+install of Fedora Core 9:
+
+* curl
+* tcl
+* g77
+
+
 .. index:: Ubuntu
 .. index:: Debian
 
 .. _ubuntu:
 .. _debian:
 
-Ubuntu 8.04 (and other Debian/Debian-based OS's)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Ubuntu 9.10 Karmic Koala
+^^^^^^^^^^^^^^^^^^^^^^^^
+The following packages are required for Karmic Koala. 
+Since Ubuntu Linux comes by default on just a single CD, you will need
+to install several packages before installing the IceCube toolset and
+software.  These are pretty standard things, but are generally needed
+only for development purposes, so they are not included on the Ubuntu
+LiveCD.  The easiest thing to do is use the "Synaptic Package
+Manager", which you can start from: System-->Administration.  You need
+to install the following, which are not there by default::
+
+  autoconf
+  curl
+  doxygen
+  g++
+  libexpat1-dev
+  libglut
+  libglut-dev
+  libhtml-parser-perl
+  libpcre3-dev
+  libx11-dev
+  libxft-dev
+  libxi-dev
+  libxmu-dev
+  m4
+  ncurses-dev
+  openssl-dev
+  patch
+  python-dev
+  python-setuptools
+  python-sphinx
+  subversion
+  sun-java6-jdk
+  tcl
+  tcl-dev
+  texinfo
+  xlibmesa-gl
+  xlibmesa-gl-dev
+  xlibmesa-glu
+  xlibmesa-glu-dev
+
+Please note that in some cases the normal user distributions must be installed
+before ones tagged with -dev package names. The "svn" command comes with the 
+subversion package as a reminder of how it is listed. 
+
+  * For convinence, an apt-get command that includes all the neccesary packages
+    is below. 
+
+    apt-get -y install autoconf automake curl doxygen g++ g77 libbz2-dev libc6-dev libexpat1-dev libglut libglut-dev libhtml-parser-perl libpcre3-dev libx11-dev libxft-dev libxi-dev libxmu-dev libxpm-dev libxt-dev m4 ncurses-dev openssl-dev patch python-dev python-setuptools ssl-dev subversion sun-java6-jdk tcl tcl-dev texinfo xlibmesa-gl xlibmesa-gl-dev xlibmesa-glu xlibmesa-glu-dev
+
+
+
+
+.. index:: Ubuntu 8.04
+.. index:: Debian 
+
+.. _ubuntu:
+.. _debian:
+
+Ubuntu 8.04 (and other Debian/Debian-based OS's of the same era)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following packages are needed on Ubuntu Hardy Heron and similar Debians.
 Since Ubuntu Linux comes by default on just a single CD, you will need
 to install several packages before installing the IceCube toolset and
 software.  These are pretty standard things, but are generally needed
@@ -172,53 +234,9 @@ releases of Ubuntu:
 
   (this is just a quirk of the i3-install.sh script)
 
-.. index:: Karmic Koala
-
-Ubuntu 9.10 Karmic Koala
-^^^^^^^^^^^^^^^^^^^^^^^^
-The following packages are required for Karmic Koala::
-
-  autoconf
-  curl
-  doxygen
-  g++
-  libexpat1-dev
-  libglut
-  libglut-dev
-  libhtml-parser-perl
-  libpcre3-dev
-  libx11-dev
-  libxft-dev
-  libxi-dev
-  libxmu-dev
-  m4
-  ncurses-dev
-  openssl-dev
-  patch
-  python-dev
-  python-setuptools
-  python-sphinx
-  subversion
-  sun-java6-jdk
-  tcl
-  tcl-dev
-  texinfo
-  xlibmesa-gl
-  xlibmesa-gl-dev
-  xlibmesa-glu
-  xlibmesa-glu-dev
-
-Please note that in some cases the normal user distributions must be installed
-before ones tagged with -dev package names. The "svn" command comes with the 
-subversion package as a reminder of how it is listed. 
-
-  * For convinence, an apt-get command that includes all the neccesary packages
-    is below. 
-
-    apt-get -y install autoconf automake curl doxygen g++ g77 libbz2-dev libc6-dev libexpat1-dev libglut libglut-dev libhtml-parser-perl libpcre3-dev libx11-dev libxft-dev libxi-dev libxmu-dev libxpm-dev libxt-dev m4 ncurses-dev openssl-dev patch python-dev python-setuptools ssl-dev subversion sun-java6-jdk tcl tcl-dev texinfo xlibmesa-gl xlibmesa-gl-dev xlibmesa-glu xlibmesa-glu-dev
 
 
-Support is in as of Nov 20, 2009 for Karmic Koala, with a caveat: nThe
+Support is in as of Nov 20, 2009 for Karmic Koala, with a caveat: The
 current ``i3-tools-v3`` 'metatool' requires ``root_5.20.00``.  It
 requires other things as well, you can see them with ``port deps
 i3-tools-v3``::
