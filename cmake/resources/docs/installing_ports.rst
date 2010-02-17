@@ -19,20 +19,18 @@ The MacPorts two-step:
 * Perform a checkout of the project's latest copy of the MacPorts
   source from Subversion::
 
-    svn co http://code.icecube.wisc.edu/icetray-dist/tools/DarwinPorts/trunk ~/port_source
+    svn co http://code.icecube.wisc.edu/icetray-dist/tools/DarwinPorts/trunk port_source
 
 * Build MacPorts and the toolset
 
- * Change your working directory to ~/port_source.  This can be any
-   directory where you can checkout and compile the MacPorts tool
-   system::
+ * Cd to the directory just created::
 
-     cd ~/port_source
+     cd port_source
 
  * Define $I3_PORTS location.  This will be the location where your
    new toolset will be installed.  Make sure you have permissions to
    write in this area.  It is recommended that you add this to your
-   startup files (bash_profile/cshrc)::
+   startup files (bashrc/cshrc)::
 
      export I3_PORTS=/path/to/toolspace  (setenv I3_PORTS /path/to/toolspace)
 

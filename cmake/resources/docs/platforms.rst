@@ -102,168 +102,45 @@ install of Fedora Core 9:
 .. _ubuntu:
 .. _debian:
 
+Scientific Linux
+^^^^^^^^^^^^^^^^
 
-Ubuntu 9.10 Karmic Koala
-^^^^^^^^^^^^^^^^^^^^^^^^
-The following packages are required for Karmic Koala. 
-Since Ubuntu Linux comes by default on just a single CD, you will need
-to install several packages before installing the IceCube toolset and
-software.  These are pretty standard things, but are generally needed
-only for development purposes, so they are not included on the Ubuntu
-LiveCD.  The easiest thing to do is use the "Synaptic Package
-Manager", which you can start from: System-->Administration.  You need
-to install the following, which are not there by default::
+There is a script at
+http://code.icecube.wisc.edu/icetray-dist/distros/ScientificSL.sh
+that will install the necessary packages.
 
-  autoconf
-  curl
-  doxygen
-  g++
-  libexpat1-dev
-  libglut
-  libglut-dev
-  libhtml-parser-perl
-  libpcre3-dev
-  libx11-dev
-  libxft-dev
-  libxi-dev
-  libxmu-dev
-  m4
-  ncurses-dev
-  openssl-dev
-  patch
-  python-dev
-  python-setuptools
-  python-sphinx
-  subversion
-  sun-java6-jdk
-  tcl
-  tcl-dev
-  texinfo
+Ubuntu
+^^^^^^
   xlibmesa-gl
   xlibmesa-gl-dev
   xlibmesa-glu
   xlibmesa-glu-dev
 
-Please note that in some cases the normal user distributions must be installed
-before ones tagged with -dev package names. The "svn" command comes with the 
-subversion package as a reminder of how it is listed. 
+There is a script at
+http://code.icecube.wisc.edu/icetray-dist/distros/ScientificSL.sh
+that will install the necessary packages.
 
-  * For convinence, an apt-get command that includes all the neccesary packages
-    is below. 
-
-    apt-get -y install autoconf automake curl doxygen g++ g77 libbz2-dev libc6-dev libexpat1-dev libglut libglut-dev libhtml-parser-perl libpcre3-dev libx11-dev libxft-dev libxi-dev libxmu-dev libxpm-dev libxt-dev m4 ncurses-dev openssl-dev patch python-dev python-setuptools ssl-dev subversion sun-java6-jdk tcl tcl-dev texinfo xlibmesa-gl xlibmesa-gl-dev xlibmesa-glu xlibmesa-glu-dev
-
-
-
-
-.. index:: Ubuntu 8.04
-.. index:: Debian 
-
-.. _ubuntu:
-.. _debian:
-
-Ubuntu 8.04 (and other Debian/Debian-based OS's of the same era)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The following packages are needed on Ubuntu Hardy Heron and similar Debians.
-Since Ubuntu Linux comes by default on just a single CD, you will need
-to install several packages before installing the IceCube toolset and
-software.  These are pretty standard things, but are generally needed
-only for development purposes, so they are not included on the Ubuntu
-LiveCD.  The easiest thing to do is use the "Synaptic Package
-Manager", which you can start from: System-->Administration.  You need
-to install the following, which are not there by default::
-
-  autoconf
-  automake
-  curl
-  doxygen
-  g++
-  g77
-  libbz2-dev
-  libc6-dev
-  libexpat1-dev
-  libglut
-  libglut-dev
-  libhtml-parser-perl
-  libpcre3-dev
-  libx11-dev
-  libxft-dev
-  libxi-dev
-  libxmu-dev
-  libxpm-dev
-  libxt-dev
-  m4
-  ncurses-dev
-  openssl-dev
-  patch
-  python-dev
-  python-setuptools
-  ssl-dev
-  subversion
-  sun-java6-jdk
-  tcl
-  tcl-dev
-  texinfo
-  xlibmesa-gl
-  xlibmesa-gl-dev
-  xlibmesa-glu
-  xlibmesa-glu-dev
-
-This list may be incomplete, please contact us with updates.
+To install further packages (emacs and so forth), the easiest thing to
+do is use the "Synaptic Package Manager", which you can start from menu
+``System --> Administration``. 
 
 In order for JAVA_HOME to be set correctly, export using the following
-command: (If you installed the above version of java using the package
-manager)::
+command (bash/sh version)::
 
- export JAVA_HOME=/usr/lib/jvm/java-6-sun
+  export JAVA_HOME=/usr/lib/jvm/java-6-sun
 
-
-The following may not be required for 8.04 (Hardy Heron) and/or newer
-releases of Ubuntu:
-
-* cernlib-core (some graphics libs included in this package's
-  dependencies are needed. otherwise the ROOT TBrowser will crash
-  horribly. black magic.)  (just search for these names in the package
-  manager)
-
-* In addition, in order for the system to recognize the tcl
-  installation, you will also need to do this::
-
-    ln -s /usr/lib/tcl8.4/tclConfig.sh /usr/lib/.
-
-  (this is just a quirk of the i3-install.sh script)
+which you can set in your ``.bashrc``.
 
 
+Karmic Koala
+""""""""""""
 
 Support is in as of Nov 20, 2009 for Karmic Koala, with a caveat: The
-current ``i3-tools-v3`` 'metatool' requires ``root_5.20.00``.  It
-requires other things as well, you can see them with ``port deps
-i3-tools-v3``::
-
-  % /opt/i3/ports/bin/port deps i3-tools-v3
-  i3-tools-v3 has library dependencies on:
-          gsl_1.8
-          rdmc_2.9.5
-          log4cplus_1.0.2
-          sprng_2.0a
-          slalib-c_0.0
-          mysql_4.1.20
-          photonics_1.67
-          root_5.20.00
-          boost_1.38.0
-          cmake
-          anis_1.0
-          cdk
-          hdf5_1.6.8
-          ptd_1.0.2
+current ``i3-tools-v3`` 'metatool' requires ``root_5.20.00``... but
+that version of root won't build on karmic.  However ``root_5.24.00b``
+*will*.  So install ``i3-tools-v3-karmic``, which uses this updated
+root, instead.
   
-All of that stuff builds with the exception of that version of root.
-The root version that will actually build on ubuntu 9.10 is
-``5.24.00b``.  So to get things going, individually install each of
-the ports in the list above with ``port install`` (e.g. ``port install
-photonics_1.67``), except root, which should be ``root_5.24.00b``.  
-
 If you are using metaprojects which are already released as of Nov 20
 2009 (e.g. those numbered less than 09-11-00) you will also need to
 modify the root detection in the build system; replace
