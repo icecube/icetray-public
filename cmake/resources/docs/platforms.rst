@@ -24,52 +24,6 @@ Apple Mac OS X
   * A system Macports install for things like subversion is not needed
     in 10.5/Leopard, since subversion is now supplied by the OS.
 
-
-
-.. index:: CentOS 5.4 & Scientific Linux 5.4
-.. _centos:
-
-CentOS 5.4 and Scientific Linux 5.4
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The installation of these packages requires "root" or "sudo" privileges.
-The packages required for both of these OS versions are the same. They need
-to be installed using "yum -y install <package name>"
-
-  compat-gcc-34-g77
-  doxygen
-  expat-devel
-  freeglut-devel
-  gcc
-  gcc-c++
-  gcc-gfortran
-  libX11-devel
-  libXext-devel
-  libXfixes-devel
-  libXft-devel
-  libXi-devel
-  libXmu-devel
-  libXpm-devel
-  libXrandr-devel
-  libXt-devel
-  ncurses-devel
-  openssl-devel
-  pcre-devel
-  python-devel
-  python-setuptools
-  subversion
-  tcl-devel
-  texinfo
- 
-After installing these packages, run "easy_install -U Sphinx" to install
-Python Sphinx for using the documentation system. 
-
- * If you wish, you may use the following command to install all of the
-   packages and Sphinx at the same time.
-
-    yum -y install compat-gcc-34-g77 doxygen expat-devel freeglut-devel gcc gcc-c++ gcc-gfortran libX11-devel libXext-devel libXfixes-devel libXft-devel libXi-devel libXmu-devel libXpm-devel libXrandr-devel libXt-devel ncurses-devel openssl-devel pcre-devel python-devel python-setuptools subversion tcl-devel texinfo ;easy_install -U Sphinx
-
-
 .. index:: RHEL4
 .. _RHEL4:
 
@@ -79,28 +33,7 @@ RHEL4
 * TCL dependencies are satisfied only with the tcl-devel package. Try
   'up2date tcl-devel' as root user.
 
-.. index:: Fedora Core
-.. _fedoracore:
-
-Fedora Core
-^^^^^^^^^^^
-
-* TCL dependencies are satisfied only with the tcl-devel package. Try
-  'yum install tcl-devel'.
-
-Fedora Core 9: The following packages were needed after a fresh
-install of Fedora Core 9:
-
-* curl
-* tcl
-* g77
-
-
-.. index:: Ubuntu
-.. index:: Debian
-
-.. _ubuntu:
-.. _debian:
+.. index:: Scientific Linux
 
 Scientific Linux
 ^^^^^^^^^^^^^^^^
@@ -109,6 +42,12 @@ There is a script at
 http://code.icecube.wisc.edu/icetray-dist/distros/ScientificSL.sh
 that will install the necessary packages.
 
+After installing these packages, run "easy_install -U Sphinx" to install
+Python Sphinx for using the documentation system. 
+
+.. index:: CentOS
+.. _centos:
+
 CentOS
 ^^^^^^
 
@@ -116,8 +55,28 @@ There is a script at
 http://code.icecube.wisc.edu/icetray-dist/distros/CentOS.sh
 that will install the necessary packages.
 
-Ubuntu
+
+After installing these packages, run "easy_install -U Sphinx" to install
+Python Sphinx for using the documentation system. 
+
+Fedora
 ^^^^^^
+
+There is a script at
+http://code.icecube.wisc.edu/icetray-dist/distros/Fedora.sh
+that will install the necessary packages.
+
+After installing these packages, run "easy_install -U Sphinx" to install
+Python Sphinx for using the documentation system. 
+
+.. index:: Ubuntu
+.. index:: Debian
+
+.. _ubuntu:
+.. _debian:
+
+Ubuntu or Debian
+^^^^^^^^^^^^^^^^
 
 There is a script at
 http://code.icecube.wisc.edu/icetray-dist/distros/Ubuntu.sh
