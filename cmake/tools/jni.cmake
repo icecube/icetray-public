@@ -19,12 +19,11 @@
 #  
 MESSAGE(STATUS "jni")
 
-SET(_jni_PATH_SUFFIXES jre/lib/i386 jre/lib/i386/server jre/lib/amd64 jre/lib/amd64/server jre/lib/ia64 jre/lib/ia64/server)
+SET(_jni_PATH_SUFFIXES jre/lib/i386 jre/lib/i386/server jre/lib/amd64 jre/lib/amd64/server jre/lib/ia64 jre/lib/ia64/server lib)
 
 FIND_PATH(jni_h_include_dir
   NAMES jni.h
   PATHS
-  $ENV{JAVA_HOME}/Headers
   $ENV{JAVA_HOME}/include
   $ENV{JAVA_HOME}/include/linux
   ${TOOL_SYSTEM_PATH}
@@ -34,7 +33,6 @@ REPORT_FIND(jni jni.h ${jni_h_include_dir})
 FIND_PATH(jni_md_h_include_dir
   NAMES jni_md.h
   PATHS
-  $ENV{JAVA_HOME}/Headers
   $ENV{JAVA_HOME}/include
   $ENV{JAVA_HOME}/include/linux
   ${TOOL_SYSTEM_PATH}
@@ -46,9 +44,7 @@ REPORT_FIND(jni jni_md.h ${jni_md_h_include_dir})
 #
 FIND_LIBRARY(jni_jvm_lib
   NAMES jvm
-  PATHS
-  $ENV{JAVA_HOME}/Libraries
-  $ENV{JAVA_HOME}
+  PATHS $ENV{JAVA_HOME}  
   PATH_SUFFIXES ${_jni_PATH_SUFFIXES}
   ${TOOL_SYSTEM_PATH}
 )
@@ -59,9 +55,7 @@ REPORT_FIND(jni "jvm library" ${jni_jvm_lib})
 #
 FIND_LIBRARY(jni_verify_lib
   NAMES verify
-  PATHS
-  $ENV{JAVA_HOME}/Libraries
-  $ENV{JAVA_HOME}
+  PATHS $ENV{JAVA_HOME}  
   PATH_SUFFIXES ${_jni_PATH_SUFFIXES}
   ${TOOL_SYSTEM_PATH}
 )
@@ -73,9 +67,7 @@ IF(NOT APPLE)
   #
   FIND_LIBRARY(jni_zip_lib
     NAMES zip
-    PATHS
-    $ENV{JAVA_HOME}/Libraries
-    $ENV{JAVA_HOME}
+    PATHS $ENV{JAVA_HOME}    
     PATH_SUFFIXES ${_jni_PATH_SUFFIXES}
     ${TOOL_SYSTEM_PATH}
   )
