@@ -67,8 +67,11 @@ ostream& operator<<(ostream& os, const vector<T>& v)
 
 po::options_description options("dataio-strip Options Summary");
 
-void usage() {
-  cerr << options << "\n";
+void usage(int, char** argv) {
+  cout << argv[0] << ":\n"
+       << "Scans an .i3 file with the I3File class\n"
+       << "(used by glshovel and dataio-shovel)\n";
+  cout << options << "\n";
 }
 
 
@@ -91,26 +94,26 @@ int main(int argc, char* argv[])
 
     po::notify(vm);
   } catch (const std::exception& e) {
-    cout << argv[0] << ": " << e.what() << "\n";
-    usage();
+    std::cout << "error: " << e.what() << "\n";
+    usage(argc,argv);
     return 1;
   }
 
   if (argc == 1)
     {
-      usage();
+      usage(argc, argv);
       return 1;
     }
 
   if (vm.count("help")) {
-    usage();
+    usage(argc, argv);
     return 1;
   }
 
   std::string ifilename;
   if (!vm.count("input-file"))
     {
-      usage();
+      usage(argc, argv);
       return 1;
     }
   ifilename = vm["input-file"].as<string>();
