@@ -77,6 +77,9 @@ int main(int argc, char* argv[])
   options.add_options()
     ("help,h", "this message")
     ("input-file,i", po::value< string >(), "input file")
+    ("whole-frames,w", "Print whole frames")
+    ("streams-only,s", "Print only stream types")
+    ("count,c", "Print total number of frames")
     ;
 
   po::variables_map vm;
@@ -114,9 +117,31 @@ int main(int argc, char* argv[])
   boost::iostreams::filtering_istream ifs;
   I3::dataio::open(ifs, ifilename);
       
-  std::cout << "scanning " << ifilename << "...\n";
   I3File i3f;
   i3f.open_file(ifilename);
+
+  if(vm.count("count"))
+    std::cout << i3f.size() << "\n";
+  
+  if(vm.count("streams-only"))
+    {
+      for (size_t i=0; i<i3f.size(); i++)
+	{
+	  I3FramePtr frame = i3f.get_raw_frame(i);
+	  std::cout << frame->GetStop().id();
+	}
+      std::cout << "\n";
+    }
+  if(vm.count("whole-frames"))
+    {
+      for (size_t i=0; i<i3f.size(); i++)
+	{
+	  I3FramePtr frame = i3f.get_raw_frame(i);
+	  std::cout << *frame << "\n";
+	}
+      std::cout << "\n";
+    }
+
   std::cout << "done.\n";
 }
 
