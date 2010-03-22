@@ -19,7 +19,7 @@
 #  
 MESSAGE(STATUS "jni")
 
-SET(_jni_PATH_SUFFIXES jre/lib/i386 jre/lib/i386/server jre/lib/amd64 jre/lib/amd64/server jre/lib/ia64 jre/lib/ia64/server lib)
+SET(_jni_PATH_SUFFIXES jre/lib/i386 jre/lib/i386/server jre/lib/amd64 jre/lib/amd64/server jre/lib/ia64 jre/lib/ia64/server lib ../Libraries)
 
 FIND_PATH(jni_h_include_dir
   NAMES jni.h
