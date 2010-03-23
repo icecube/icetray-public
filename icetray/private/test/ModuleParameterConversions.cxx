@@ -360,6 +360,7 @@ struct AddsWithoutGetting : public I3Module
 
   AddsWithoutGetting(const I3Context& context) : I3Module(context) 
   { 
+    i=3;
     AddParameter("never_gets_this_int", 
 		 "This here lonesome int is ignored at Configure() time",
 		 i);
