@@ -20,7 +20,6 @@
 #include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/physics/I3EventHeader.h"
 #include "dataclasses/physics/I3StationHit.h"
-#include "dataclasses/physics/I3Filter.h"
 #include "dataclasses/physics/I3TWRFrag.h"
 #include "dataclasses/physics/I3FlasherInfo.h"
 #include "dataclasses/physics/I3TWRLaunch.h"
@@ -49,7 +48,6 @@ TEST_GROUP(physics);
   (I3RecoPulseSeriesMap)			\
   (I3EventHeader)				\
   (I3StationHitMap)				\
-  (I3Filter)					\
   (I3FlasherInfo)				\
   (I3TWRLaunchSeriesMap)			\
   (I3MCHitSeriesMap)				\
