@@ -48,6 +48,8 @@ struct I3TrayInfo : public I3FrameObject
   void 
   serialize (Archive & ar, unsigned version);
 
+  I3TrayInfo();
+
 };
 
 std::ostream& 
