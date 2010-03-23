@@ -1,5 +1,5 @@
 /**
- *  $Id: I3TrayInfo.h 165886 2018-10-01 14:37:58Z nwhitehorn $
+ *  $Id$
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -47,6 +47,8 @@ struct I3TrayInfo : public I3FrameObject
   template <class Archive>
   void 
   serialize (Archive & ar, unsigned version);
+
+  I3TrayInfo();
 
 };
 

@@ -34,6 +34,10 @@
 
 using namespace std;
 
+I3TrayInfo::I3TrayInfo() : svn_revision(0)
+{ }
+
+
 template <class Archive>
 void
 I3TrayInfo::serialize(Archive & ar, unsigned version)
