@@ -51,7 +51,7 @@ class Dump : public I3ConditionalModule
       }
 
     frameCount_++;
-    cout << "------------------------- Frame #" << frameCount_ << " -------------------------\n" << *frame;
+    cout << "------------------------- This is frame number " << frameCount_ << " -------------------------\n" << *frame;
     PushFrame(frame,"OutBox");
   }
 
