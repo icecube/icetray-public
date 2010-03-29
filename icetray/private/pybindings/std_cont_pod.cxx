@@ -21,6 +21,7 @@
 
 #include <icetray/OMKey.h>
 #include <icetray/I3Frame.h>
+#include <icetray/impl.h>
 #include <vector>
 #include <string>
 
@@ -49,6 +50,13 @@ struct std_pair_to_python_converter
 };
 
 template <typename T>
+std::string vector_repr(const std::vector<T>& v)
+{
+  boost::python::list l(v);
+  return repr(l);
+}
+
+template <typename T>
 static
 void reg(const char* name)
 {
@@ -56,6 +64,7 @@ void reg(const char* name)
   s += name;
   class_<vector<T> >(s.c_str())
     .def(vector_indexing_suite<vector<T> >())
+    .def("__repr__", &vector_repr<T>)
     ;
   from_python_sequence<vector<T>, variable_capacity_policy>();
 }
