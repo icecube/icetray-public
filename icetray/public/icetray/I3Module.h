@@ -98,12 +98,12 @@ public:
    */
   virtual void Configure();
 
-  /**
-   * The purpose of this transition is to give this object the opportunity to
-   * process frame. Each occurrence of this transition represents the presence
-   * of a new frame. This is the place where this object does its real 
-   * work, i.e. transform the incoming data into outgoing data.
-   */
+  // if I should process at all
+  virtual bool ShouldDoProcess(I3FramePtr);
+
+  // Process_: check ShouldDoProcess() and thunks to Process()
+  void Process_(); 
+  
   virtual void Process();
 
   /**
@@ -290,6 +290,10 @@ public:
    * @return the next I3Frame in the specified InBox.
    */
   I3FramePtr PopFrame();
+
+  // get the next frame w/o removing it from inbox queue.
+  // careful you don't process frames multiple times.
+  I3FramePtr PeekFrame();
 
   void AddOutBox(const std::string& name);
 

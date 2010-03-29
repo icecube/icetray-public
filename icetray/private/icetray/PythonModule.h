@@ -52,9 +52,16 @@ struct PythonModule : Base, boost::python::wrapper<Base>
   
   void Register(const I3Frame::Stream&, const boost::python::object& method);
 
+  bool ShouldDoGeometry(I3FramePtr frame);
   void Geometry(I3FramePtr frame);
+
+  bool ShouldDoCalibration(I3FramePtr frame);
   void Calibration(I3FramePtr frame);
+
+  bool ShouldDoDetectorStatus(I3FramePtr frame);
   void DetectorStatus(I3FramePtr frame);
+
+  bool ShouldDoPhysics(I3FramePtr frame);
   void Physics(I3FramePtr frame);
 
 
@@ -66,6 +73,7 @@ struct PythonModule : Base, boost::python::wrapper<Base>
   void AddOutBox(const std::string& name);
   I3FramePtr PopFrame();
 
+  SET_LOGGER("PythonModule");
 };
 
 

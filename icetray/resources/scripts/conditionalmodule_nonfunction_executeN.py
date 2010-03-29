@@ -12,7 +12,7 @@ try:
     # generate empty frames
     tray.AddModule("AddNulls","an",
                    where = ['foo'],
-                   If = [1,2,3])
+                   If = ['this is', 'not a', 'function'])
 
     tray.AddModule("TrashCan", "tc")
 

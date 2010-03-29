@@ -1,5 +1,5 @@
 /**
- *  $Id: Keep.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
+ *  $Id$
  *  
  *  Copyright (C) 2007
  *  Dr. Torsten Schmidt <hightech-consulting@gmx.de>
@@ -64,6 +64,7 @@ void Keep::Configure()
 
 void Keep::Process()
 {
+  log_trace("%s", "Processing");
   I3FramePtr frame = PopFrame();
   I3FramePtr newFrame(new I3Frame(frame->GetStop()));
 

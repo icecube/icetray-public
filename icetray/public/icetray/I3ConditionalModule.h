@@ -41,14 +41,21 @@ class I3ConditionalModule : public I3Module
   /**
    *  
    */
-  bool ShouldProcess(I3FramePtr frame);
+  bool ShouldDoProcess(I3FramePtr frame);
+
+  bool ShouldProcess(I3FramePtr frame) 
+  { 
+    log_fatal("%s", "\nThis function does nothing, don't use it."
+	      "ShouldProcess is now calculated by I3Module");
+    return true; 
+  }
 
   /**
    * @brief The method where frames are sent to IcePicks installed in the context 
    * in order to determine whether the module should run.  The IcePicks are also 
    * configured the first time this method is called.
    */
-  bool ShouldDoPhysics(I3FramePtr frame);
+  //  bool ShouldDoPhysics(I3FramePtr frame);
 
   SET_LOGGER("I3ConditionalModule");
     

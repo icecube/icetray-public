@@ -44,8 +44,6 @@ class Copy : public I3ConditionalModule
 
   std::vector<std::string> copy_keys_;
 
-  void do_copy(I3FramePtr frame);
-
 public:
 
   Copy(const I3Context& ctx);
@@ -83,8 +81,11 @@ void Copy::Configure()
 void Copy::Process()
 {
   I3FramePtr frame = PopFrame();
-  if(ShouldProcess(frame))
-    do_copy(frame);
+  for (unsigned i=0; i<copy_keys_.size(); i+=2)
+    {
+      frame->Put(copy_keys_[i+1], 
+		 frame->Get<I3FrameObjectConstPtr>(copy_keys_[i]));
+    }
   PushFrame(frame, "OutBox");
 }
 
@@ -92,11 +93,3 @@ void Copy::Finish()
 {
 }
 
-void Copy::do_copy(I3FramePtr frame)
-{
-  for (unsigned i=0; i<copy_keys_.size(); i+=2)
-    {
-      frame->Put(copy_keys_[i+1], 
-		 frame->Get<I3FrameObjectConstPtr>(copy_keys_[i]));
-    }
-}

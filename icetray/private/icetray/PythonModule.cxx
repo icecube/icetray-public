@@ -27,20 +27,21 @@
 #include <icetray/I3TrayHeaders.h>
 #include <icetray/OMKey.h>
 #include <icetray/PythonModule.h>
+#include <icetray/impl.h>
 #include <boost/python/import.hpp>
 
 namespace bp = boost::python;
 template <typename Base>
 PythonModule<Base>::PythonModule(const I3Context& ctx) : Base(ctx)
 { 
-  log_trace("%s", __PRETTY_FUNCTION__);
+  i3_log("%s", __PRETTY_FUNCTION__);
 }
 
 template <typename Base>
 void 
 PythonModule<Base>::Configure()
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
+  i3_log("%s", __PRETTY_FUNCTION__);
   if (bp::override conf = this->get_override("Configure"))
     conf();
   else
@@ -51,18 +52,24 @@ template <typename Base>
 void 
 PythonModule<Base>::Process()
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
+  i3_log("%s", __PRETTY_FUNCTION__);
   if (bp::override process = this->get_override("Process"))
-    process();
+    {
+      log_trace("%s", "calling override for Process");
+      process();
+    }
   else
-    Base::Process();
+    {
+      log_trace("%s", "calling base Process");
+      Base::Process();
+    }
 }
 
 template <typename Base>
 void 
 PythonModule<Base>::Finish()
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
+  i3_log("%s", __PRETTY_FUNCTION__);
   if (bp::override fin = this->get_override("Finish"))
     fin();
   else
@@ -103,10 +110,21 @@ PythonModule<Base>::GetParameter(const std::string& name)
 }
   
 template <typename Base>
+bool
+PythonModule<Base>::ShouldDoGeometry(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  if (bp::override sd = this->get_override("ShouldDoGeometry"))
+    return sd(frame);
+  else
+    return Base::ShouldDoGeometry(frame);
+}
+
+template <typename Base>
 void 
 PythonModule<Base>::Geometry(I3FramePtr frame)
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
+  i3_log("%s", __PRETTY_FUNCTION__);
   if (bp::override g = this->get_override("Geometry"))
     g(frame);
   else
@@ -114,10 +132,21 @@ PythonModule<Base>::Geometry(I3FramePtr frame)
 }
 
 template <typename Base>
+bool
+PythonModule<Base>::ShouldDoCalibration(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  if (bp::override sd = this->get_override("ShouldDoCalibration"))
+    return sd(frame);
+  else
+    return Base::ShouldDoCalibration(frame);
+}
+
+template <typename Base>
 void 
 PythonModule<Base>::Calibration(I3FramePtr frame)
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
+  i3_log("%s", __PRETTY_FUNCTION__);
   if (bp::override cal = this->get_override("Calibration"))
     cal(frame);
   else
@@ -125,10 +154,21 @@ PythonModule<Base>::Calibration(I3FramePtr frame)
 }
 
 template <typename Base>
+bool
+PythonModule<Base>::ShouldDoDetectorStatus(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  if (bp::override sd = this->get_override("ShouldDoDetectorStatus"))
+    return sd(frame);
+  else
+    return Base::ShouldDoDetectorStatus(frame);
+}
+
+template <typename Base>
 void 
 PythonModule<Base>::DetectorStatus(I3FramePtr frame)
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
+  i3_log("%s", __PRETTY_FUNCTION__);
   if (bp::override ds = this->get_override("DetectorStatus"))
     ds(frame);
   else
@@ -136,10 +176,21 @@ PythonModule<Base>::DetectorStatus(I3FramePtr frame)
 }
 
 template <typename Base>
+bool
+PythonModule<Base>::ShouldDoPhysics(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  if (bp::override sd = this->get_override("ShouldDoPhysics"))
+    return sd(frame);
+  else
+    return Base::ShouldDoPhysics(frame);
+}
+
+template <typename Base>
 void 
 PythonModule<Base>::Physics(I3FramePtr frame)
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
+  i3_log("%s", __PRETTY_FUNCTION__);
   if (bp::override phys = this->get_override("Physics"))
     phys(frame);
   else

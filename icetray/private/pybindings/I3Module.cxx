@@ -8,9 +8,13 @@ using namespace boost::python;
 namespace {
   #define REGMODMETHODS \
       .def("Configure", &module_t::Configure) \
+      .def("ShouldDoPhysics", &module_t::ShouldDoPhysics) \
       .def("Physics", &module_t::Physics) \
+      .def("ShouldDoGeometry", &module_t::ShouldDoGeometry) \
       .def("Geometry", &module_t::Geometry) \
+      .def("ShouldDoCalibration", &module_t::ShouldDoCalibration) \
       .def("Calibration", &module_t::Calibration) \
+      .def("ShouldDoDetectorStatus", &module_t::ShouldDoDetectorStatus) \
       .def("DetectorStatus", &module_t::DetectorStatus) \
       .def("Register", &module_t::Register) \
       .def("AddParameter", \

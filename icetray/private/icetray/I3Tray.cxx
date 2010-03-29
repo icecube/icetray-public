@@ -390,7 +390,10 @@ I3Tray::Execute()
     log_fatal("No driving module?  Did you not add a module with no inbox?");
 
   while (!suspension_requested_)
-    driving_module->Do(&I3Module::Process);
+    {
+      log_trace("icetray dispatching Process_");
+      driving_module->Do(&I3Module::Process_);
+    }
 }
 
 void
@@ -402,8 +405,10 @@ I3Tray::Execute(unsigned maxCount)
     log_fatal("No driving module?  Did you not add a module with no inbox?");
 
   for (unsigned i=0; i<maxCount && !suspension_requested_; i++)
-    driving_module->Do(&I3Module::Process);
-
+    {
+      log_trace("%u/%u icetray dispatching Process_", i, maxCount);
+      driving_module->Do(&I3Module::Process_);
+    }
 }
 
 map<string, I3PhysicsUsage>

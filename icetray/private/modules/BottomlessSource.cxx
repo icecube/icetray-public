@@ -1,5 +1,5 @@
 /**
- *  $Id: BottomlessSource.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
+ *  $Id$
  *  
  *  Copyright (C) 2004-8
  *  The IceCube Collaboration <http://www.icecube.wisc.edu>
@@ -31,6 +31,7 @@ struct BottomlessSource : public I3Module
 
   void Process()
   {
+    log_trace("%s: %s", GetName().c_str(), __PRETTY_FUNCTION__);
     I3FramePtr frame(new I3Frame(I3Frame::Physics));
     PushFrame(frame);
   }
