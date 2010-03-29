@@ -9,6 +9,7 @@
 #include <boost/python/extract.hpp>
 
 #include <icetray/serialization.h>
+#include <icetray/impl.h>
 #include <boost/numeric/conversion/cast.hpp>
 
 #include <boost/mpl/and.hpp>
@@ -53,7 +54,7 @@ string
 I3Parameter::default_value_str() const 
 { 
   if (default_)
-    return boost::python::extract<std::string>(default_->attr("__repr__")());
+    return repr(*default_);
   else
     return "(no default value)";
 }
@@ -62,7 +63,7 @@ string
 I3Parameter::configured_value_str() const 
 { 
   if (configured_)
-    return boost::python::extract<std::string>(configured_->attr("__repr__")());
+    return repr(*configured_);
   else
     return "(no configured value)";
 }
