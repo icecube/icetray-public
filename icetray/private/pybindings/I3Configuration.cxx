@@ -25,8 +25,22 @@ using namespace boost::python;
 
 void register_I3Configuration()
 {
-  class_<I3Configuration, I3ConfigurationPtr, boost::noncopyable>("I3Configuration")
-    .def(init<>())
+  class_<I3Configuration, I3ConfigurationPtr, boost::noncopyable> ("I3Configuration", init<>())
+    .def("keys", &I3Configuration::keys)
     .def("__setitem__", &I3Configuration::Set)
+    .def("__getitem__", 
+	 (object (I3Configuration::*)(const std::string&) const)
+	 &I3Configuration::Get)
+    .add_property("ClassName", 
+		  (std::string (I3Configuration::*)() const) &I3Configuration::ClassName)
+    .add_property("InstanceName", 
+		  (std::string (I3Configuration::*)() const) &I3Configuration::InstanceName)
     ;
+
+  class_<std::map<std::string, I3ConfigurationPtr> >
+    ("map_string_I3Configuration")
+    // the 'true' here is to turn off proxying
+    .def(map_indexing_suite<std::map<std::string, I3ConfigurationPtr>, true>())
+    ;
+						   
 }
