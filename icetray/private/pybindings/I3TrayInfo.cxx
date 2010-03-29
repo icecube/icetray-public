@@ -1,5 +1,5 @@
- //
-//   Copyright (c) 2004, 2005, 2006, 2007   Troy D. Straszheim  
+//
+//   Copyright (c) 2004, 2005, 2006, 2007, 2010   Troy D. Straszheim  
 //   
 //   $Id: ithon.cxx 25598 2006-11-25 02:52:57Z troy $
 //
@@ -23,10 +23,27 @@
 
 using namespace boost::python;
 
+dict host_info(const I3TrayInfo& ti)
+{
+  dict d;
+  for (std::map<std::string, std::string>::const_iterator iter = ti.host_info.begin();
+       iter != ti.host_info.end();
+       iter++)
+    d[iter->first] = iter->second;
+  return d;
+}
+
 void register_I3TrayInfo()
 {
   class_<I3TrayInfo, bases<I3FrameObject>, boost::shared_ptr<I3TrayInfo> >("I3TrayInfo")
-//    .property("modules_in_order", &I3TrayInfo::modules_in_order)
+    .add_property("modules_in_order", &I3TrayInfo::modules_in_order)
+    .add_property("factories_in_order", &I3TrayInfo::factories_in_order)
+    .add_property("module_configs", &I3TrayInfo::module_configs)
+    .add_property("factory_configs", &I3TrayInfo::factory_configs)
+    .add_property("svn_url", &I3TrayInfo::svn_url)
+    .add_property("svn_externals", &I3TrayInfo::svn_externals)
+    .add_property("svn_revision", &I3TrayInfo::svn_revision)
+    .add_property("host_info", &host_info)
 //    .property("factories_in_order", &I3TrayInfo::factories_in_order)
 //    .property("loaded_libs", &I3TrayInfo::loaded_libs)
     .def(self_ns::str(self))
