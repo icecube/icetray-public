@@ -64,6 +64,7 @@ void Keep::Configure()
 
 void Keep::Process()
 {
+  log_trace("%s", "Processing");
   I3FramePtr frame = PopFrame();
   I3FramePtr newFrame(new I3Frame(frame->GetStop()));
 

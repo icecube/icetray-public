@@ -45,8 +45,6 @@ class Delete : public I3ConditionalModule
 
   std::vector<std::string> delete_keys_;
 
-  void do_delete(I3FramePtr frame);
-
   public:
 
   Delete(const I3Context& ctx);
@@ -84,8 +82,14 @@ void Delete::Configure()
 void Delete::Process()
 {
   I3FramePtr frame = PopFrame();
-  if(ShouldProcess(frame))
-    do_delete(frame);
+
+  for (vector<string>::const_iterator iter = delete_keys_.begin();
+       iter != delete_keys_.end();
+       iter++)
+    {
+      frame->Delete(*iter);
+    }
+
   PushFrame(frame, "OutBox");
 }
 
@@ -93,12 +97,3 @@ void Delete::Finish()
 {
 }
 
-void Delete::do_delete(I3FramePtr frame)
-{
-  for (vector<string>::const_iterator iter = delete_keys_.begin();
-       iter != delete_keys_.end();
-       iter++)
-    {
-      frame->Delete(*iter);
-    }
-}

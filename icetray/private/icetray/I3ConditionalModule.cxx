@@ -23,11 +23,15 @@
 #include "icetray/I3ConditionalModule.h"
 
 #include "icetray/I3Context.h"
+#include "icetray/impl.h"
+
+
 
 I3ConditionalModule::I3ConditionalModule(const I3Context& context) :
   I3Module(context),
   pickKey_("")
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
   configured_ = false;
 
   AddParameter("IcePickServiceKey",
@@ -40,7 +44,7 @@ I3ConditionalModule::I3ConditionalModule(const I3Context& context) :
 	       "A python function... if this returns something that evaluates to True,"
 	       " Module runs, else it doesn't",
 	       if_);
-  log_trace("if_=%p", if_.ptr());
+  i3_log("if_=%p", if_.ptr());
 
   AddOutBox("OutBox");
 }
@@ -49,18 +53,19 @@ I3ConditionalModule::~I3ConditionalModule() { }
 
 void I3ConditionalModule::Configure_()
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
   boost::python::object configured_if_;
   GetParameter("If", configured_if_);
 
-  log_trace("configured_if_=%p", configured_if_.ptr());
+  i3_log("configured_if_=%p", configured_if_.ptr());
   if (if_.ptr() != configured_if_.ptr()) // user set the parameter to something
     {
-      log_trace("user passed us something");
+      i3_log("user passed us something");
       if (!PyFunction_Check(configured_if_.ptr()))
 	log_fatal("'If' parameter to module %s must be a python function", GetName().c_str());
       else
 	{
-	  log_trace("user passed us something and it is a PyFunction");
+	  i3_log("user passed us something and it is a PyFunction");
 	  if_ = configured_if_;
 	  use_if_ = true;
 	}
@@ -70,14 +75,14 @@ void I3ConditionalModule::Configure_()
 
   boost::python::object obj;
 
-  log_trace("(%s) Configuring the Conditional Module stuff.",GetName().c_str());
+  i3_log("(%s) Configuring the Conditional Module stuff.",GetName().c_str());
   GetParameter("IcePickServiceKey",pickKey_);
   use_pick_ = false;
   if(pickKey_ != "")
     {
       if (use_if_)
 	log_fatal("Please specify either IcePickServiceKey or If, but not both");
-      log_trace("Looking for pick %s in the context.",pickKey_.c_str());
+      i3_log("Looking for pick %s in the context.",pickKey_.c_str());
       pick_ = GetContext().Get<I3IcePickPtr>(pickKey_);
       if(!pick_)
 	log_fatal("IcePick %s was not found in the context.  "
@@ -91,11 +96,27 @@ void I3ConditionalModule::Configure_()
   I3Module::Configure_();
 }
 
-bool I3ConditionalModule::ShouldDoPhysics(I3FramePtr frame)
+bool I3ConditionalModule::ShouldDoProcess(I3FramePtr frame)
 {
-  log_trace("Time to decide whether to execute or not.");
+  i3_log("%s", __PRETTY_FUNCTION__);
 
-  log_trace("use_if_=%d", use_if_);
+  //
+  //  You only run this function if it is a physics frame, otherwise
+  //  things would get complicated, e.g. 
+  //
+  //    if 'thing' in frame and frame['thing'].value .
+  //
+  //  Otherwise return true so that the module runs...  and it
+  //  probably won't do anything, as it probably doesn't implement
+  //  Geometry(), etc.
+  // 
+  //  Though we're using this to check physics,
+  //  we actually override ShouldDoProcess as some ConditionalModules
+  //  like Keep implement Process(), not Physics()
+  if (frame->GetStop() != I3Frame::Physics)
+    return true;
+
+  i3_log("use_if_=%d", use_if_);
   if (use_if_)
     {
       boost::python::object rv = if_(frame);
@@ -105,36 +126,23 @@ bool I3ConditionalModule::ShouldDoPhysics(I3FramePtr frame)
       else
 	++nskipped_;
 
+      i3_log("ShouldDoPhysics == %d", flag);
       return flag;
     }
 
   if(use_pick_)
     {
-      log_trace("Sending frame to our IcePick.");
+      i3_log("Sending frame to our IcePick.");
       bool flag = pick_->SelectFrameInterface(*frame);
       if (flag)
 	  ++nexecuted_;
       else
 	  ++nskipped_;
+      i3_log("ShouldDoPhysics == %d", flag);
       return flag;
     }
-  log_trace("No conditional execution.");
+  i3_log("%s", "No conditional execution.");
   ++nexecuted_;
+  i3_log("%s", "ShouldDoPhysics == true");
   return true;
 }
-
-bool
-I3ConditionalModule::ShouldProcess(I3FramePtr frame)
-{
-  if(frame->GetStop()==I3Frame::Physics)
-    return ShouldDoPhysics(frame);
-  else if (frame->GetStop()==I3Frame::Geometry)
-    return ShouldDoGeometry(frame);
-  else if (frame->GetStop()==I3Frame::Calibration)
-    return ShouldDoCalibration(frame);
-  else if (frame->GetStop()==I3Frame::DetectorStatus)
-    return ShouldDoDetectorStatus(frame);
-  else 
-    return ShouldDoOtherStops(frame);
-}
-

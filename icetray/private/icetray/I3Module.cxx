@@ -34,6 +34,7 @@
 #include <icetray/I3PhysicsUsage.h>
 #include <icetray/IcetrayFwd.h>
 #include <icetray/I3Frame.h>
+#include <icetray/impl.h>
 
 const double I3Module::min_report_time_ = 10;
 
@@ -61,12 +62,12 @@ class ModuleTimer
   }
 };
 
-
 I3Module::I3Module(const I3Context& context) 
   : context_(context),
     outboxes_(context_.Get<outboxmap_t>("OutBoxes")),
     configuration_(context_.Get<I3Configuration>())
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
   const std::string& instancename = context_.Get<I3Configuration>().InstanceName();
   log_trace("Setting name to %s", instancename.c_str());
   SetName(instancename);
@@ -97,7 +98,7 @@ I3Module::Flush()
 	{
 	  while (fifo->size())
 	    {
-	      nextmodule->Do(&I3Module::Process);
+	      nextmodule->Do(&I3Module::Process_);
 	    }
 	}
     }
@@ -123,13 +124,16 @@ I3Module::Do(void (I3Module::*f)())
       I3ModulePtr nextmodule = iter->second.second;
       FrameFifoPtr fifo = iter->second.first;
 
+      log_trace("%s: %zu frames in fifo %s", 
+		GetName().c_str(), fifo->size(), iter->first.c_str()); 
+
       if (nextmodule)
 	{
-	  if (f == &I3Module::Process)
-	    while (fifo->size())
-	      {
+	  if (f == &I3Module::Process_)
+	    {
+	      while (fifo->size())
 		nextmodule->Do(f);
-	      }
+	    }
 	  else
 	    nextmodule->Do(f);
 	}
@@ -156,9 +160,42 @@ I3Module::Register(const I3Frame::Stream& when, boost::function<void(I3FramePtr)
 }
 
 void
+I3Module::Process_()
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+
+  if (inbox_)
+    log_trace("%s: %zu frames in inbox", GetName().c_str(), inbox_->size());
+
+  I3FramePtr frame = PeekFrame();
+
+  log_trace("frame=%p", frame.get());
+  if (!frame)
+    {
+      log_trace("no frame, calling this->Process() in case we're a driving module");
+      this->Process();
+      return;
+    }
+
+  if (ShouldDoProcess(frame))
+    this->Process();
+  else
+    {
+      PopFrame();
+      PushFrame(frame);
+    }
+}
+
+void
 I3Module::Process()
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
+
+  if (inbox_)
+    log_trace("%zu frames in inbox", inbox_->size());
+
   I3FramePtr frame = PopFrame();
+
   if (!frame)
     return;
 
@@ -170,45 +207,20 @@ I3Module::Process()
       return;
     }
 
-  if(frame->GetStop()==I3Frame::Physics)
+  if(frame->GetStop() == I3Frame::Physics && ShouldDoPhysics(frame))
     {
-      if (ShouldDoPhysics(frame))
-	{
-	  ModuleTimer mt(systime_, usertime_);
-	  ++ncall_;
-	  Physics(frame);
-	}
-      else
-	PushFrame(frame);
+      ModuleTimer mt(systime_, usertime_);
+      ++ncall_;
+      Physics(frame);
     }
-  else if(frame->GetStop()==I3Frame::Geometry)
-    {
-      if (ShouldDoGeometry(frame))
-	Geometry(frame);
-      else
-	PushFrame(frame);
-    }
-  else if(frame->GetStop()==I3Frame::Calibration)
-    {
-      if (ShouldDoCalibration(frame))
-	Calibration(frame);
-      else
-	PushFrame(frame);
-    }
-  else if(frame->GetStop()==I3Frame::DetectorStatus)
-    {
-      if (ShouldDoDetectorStatus(frame))
-	DetectorStatus(frame);
-      else
-	PushFrame(frame);
-    }
-  else
-    {
-      if (ShouldDoOtherStops(frame))
-	OtherStops(frame);
-      else
-	PushFrame(frame);
-    }
+  else if(frame->GetStop() == I3Frame::Geometry && ShouldDoGeometry(frame))
+    Geometry(frame);
+  else if(frame->GetStop() == I3Frame::Calibration && ShouldDoCalibration(frame))
+    Calibration(frame);
+  else if(frame->GetStop() == I3Frame::DetectorStatus && ShouldDoDetectorStatus(frame))
+    DetectorStatus(frame);
+  else if(ShouldDoOtherStops(frame))
+    OtherStops(frame);
 }
 
 void
@@ -262,7 +274,7 @@ I3Module::PushFrame(I3FramePtr frameptr)
        iter++)
     {
       iter->second.first->push_front(frameptr);
-      log_trace("pushed frame onto fifo \"%s\"", iter->first.c_str());
+      log_trace("%s pushed frame onto fifo \"%s\"", GetName().c_str(), iter->first.c_str());
     }
 }
 
@@ -284,19 +296,19 @@ I3Module::Resume()
 void
 I3Module::Finish()
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
+  i3_log("%s", __PRETTY_FUNCTION__);
 }
 
 void
 I3Module::Dispose()
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
+  i3_log("%s", __PRETTY_FUNCTION__);
 }
 
 void
 I3Module::Abort()
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
+  i3_log("%s", __PRETTY_FUNCTION__);
 }
 
 // Stop routines
@@ -304,90 +316,105 @@ I3Module::Abort()
 void
 I3Module::Physics(I3FramePtr frame)
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
   PushFrame(frame);
 }
 
 bool
 I3Module::ShouldDoPhysics(I3FramePtr frame)
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
   return true;
 }
 
 void
 I3Module::Monitoring(I3FramePtr frame)
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
   PushFrame(frame);
 }
 
 bool
 I3Module::ShouldDoMonitoring(I3FramePtr frame)
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
   return true;
 }
 
 void
 I3Module::TimeCal(I3FramePtr frame)
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
   PushFrame(frame);
 }
 
 bool
 I3Module::ShouldDoTimeCal(I3FramePtr frame)
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
   return true;
 }
 
 void 
 I3Module::Geometry(I3FramePtr frame)
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
   PushFrame(frame);
 }
 
 bool
 I3Module::ShouldDoGeometry(I3FramePtr frame)
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
   return true;
 }
 
 void 
 I3Module::Calibration(I3FramePtr frame)
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
   PushFrame(frame);
 }
 
 bool
 I3Module::ShouldDoCalibration(I3FramePtr frame)
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
   return true;
 }
 
 void
 I3Module::DetectorStatus(I3FramePtr frame)
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
   PushFrame(frame);
 }
 
 bool
 I3Module::ShouldDoDetectorStatus(I3FramePtr frame)
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
   return true;
 }
 
 void
 I3Module::OtherStops(I3FramePtr frame)
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
   PushFrame(frame);
 }
 
 bool
 I3Module::ShouldDoOtherStops(I3FramePtr frame)
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
   return true;
 }
 
 void
 I3Module::RequestSuspension() const
 {
+  i3_log("%s", __PRETTY_FUNCTION__);
   I3Tray::RequestSuspension();
 }
 
@@ -402,4 +429,20 @@ I3Module::ReportUsage()
   return pu;
 }
 
+I3FramePtr
+I3Module::PeekFrame()
+{
+  if (!inbox_)
+    return I3FramePtr();
+  if (inbox_->begin() == inbox_->end())
+    return I3FramePtr();
+  return inbox_->back();
+}
+
+bool
+I3Module::ShouldDoProcess(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  return true;
+}
 

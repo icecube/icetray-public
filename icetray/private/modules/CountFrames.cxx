@@ -100,8 +100,7 @@ void CountFrames::Process()
 {
   I3FramePtr frame = PopFrame();
 
-  if(ShouldProcess(frame))
-    actual_framecounts_[frame->GetStop()]++;
+  actual_framecounts_[frame->GetStop()]++;
 
   PushFrame(frame,"OutBox");
 }

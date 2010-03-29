@@ -31,6 +31,7 @@ struct BottomlessSource : public I3Module
 
   void Process()
   {
+    log_trace("%s: %s", GetName().c_str(), __PRETTY_FUNCTION__);
     I3FramePtr frame(new I3Frame(I3Frame::Physics));
     PushFrame(frame);
   }
