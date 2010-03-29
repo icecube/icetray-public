@@ -21,14 +21,12 @@ tray.AddModule(f,"keywordfn",
                bar = 'BARWASSET',
                argdoesntexist = 'oopsie')
 
-tray.AddModule('TrashCan', 'tc')
-
 try:
     tray.Execute(1)
-    print "That should have thrown a typeerror"
+    print "That should have thrown"
     sys.exit(1)
 
-except TypeError, e:
+except RuntimeError, e:
     print e
     print "OK, threw as expected"
 

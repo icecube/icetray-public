@@ -67,12 +67,11 @@ I3Module::I3Module(const I3Context& context)
     outboxes_(context_.Get<outboxmap_t>("OutBoxes")),
     configuration_(context_.Get<I3Configuration>())
 {
-  i3_log("%s", __PRETTY_FUNCTION__);
   const std::string& instancename = context_.Get<I3Configuration>().InstanceName();
-  log_trace("Setting name to %s", instancename.c_str());
   SetName(instancename);
   ncall_ = 0;
   systime_ = usertime_ = 0;
+  i3_log("%s done", __PRETTY_FUNCTION__);
 }
 
 I3Module::~I3Module()

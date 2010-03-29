@@ -1,7 +1,5 @@
 /**
- *  $Id$
- *  
- *  Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007-2010   Troy D. Straszheim  <troy@icecube.umd.edu>
  *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
  *  
  *  This file is free software; you can redistribute it and/or modify
@@ -56,7 +54,6 @@ class PythonFunction : public I3Module
   SET_LOGGER("PythonFunction");
 
 };
-
 I3_MODULE(PythonFunction);
 
 
@@ -65,21 +62,54 @@ PythonFunction::PythonFunction(const I3Context& context)
 {
   i3_log("%s", __PRETTY_FUNCTION__);
   AddOutBox("OutBox");
+
+  configkeys = configuration_.keys();
+
+  obj = context_.Get<bp::object>("object");
+  i3_log("got python object %p", obj.ptr());
+
+  //
+  // this protocol "func_code" and "co_varnames" may change
+  // in a future version of python, and then it will be #ifdef time
+  //
+  bp::object code = obj.attr("func_code");
+  bp::object argnamesobj = code.attr("co_varnames");
+  i3_log("Getting argnames");
+  bp::tuple argnames = bp::extract<bp::tuple>(code.attr("co_varnames"));
+  unsigned argcount = bp::extract<unsigned>(code.attr("co_argcount"));
+  i3_log("Getting defaults");
+  bp::object defobj = obj.attr("__defaults__");
+  bp::tuple deftuple;
+  if (defobj.ptr() != Py_None)
+    deftuple = bp::extract<bp::tuple>(defobj);
+  unsigned ndefaults = bp::len(deftuple);
+  i3_log("varnames are %s", repr(argnames).c_str());
+  i3_log("defaults are %s", repr(deftuple).c_str());
+  i3_log("argcount is %u, with %u defaults", argcount, ndefaults);
+
+  unsigned offset = argcount - ndefaults;
+  for (unsigned i = 1; i< argcount; i++)
+    {
+      std::string aname = bp::extract<std::string>(argnames[i]);
+      i3_log("param[%u] %s", i, aname.c_str());
+
+      std::string desc = "keyword argument '" + aname + "'";
+      bp::object d;
+
+      if ((i-1) + offset < argcount)
+	{
+	  i3_log("default is %s", repr(deftuple[i-1]).c_str());
+	  d = deftuple[i-1];
+	}
+      configuration_.Add(aname, desc, d);
+    }
+
   bp::list l;
   l.append(I3Frame::Physics);
   AddParameter("Streams", 
 	       "A list of frame types which this function should fire on.  By default "
 	       "runs only on physics frames",
 	       l);
-
-  configkeys = configuration_.keys();
-
-  for (unsigned i = 0; i< configkeys.size(); i++)
-    {
-      i3_log("param %s", configkeys[i].c_str());
-      if (configkeys[i] != "Streams")
-	configuration_.Add(configkeys[i], "keyword argument", "(nil)");
-    }
 }
 
 PythonFunction::~PythonFunction()
@@ -90,8 +120,6 @@ PythonFunction::~PythonFunction()
 void PythonFunction::Configure()
 {
   i3_log("%s", __PRETTY_FUNCTION__);
-  obj = context_.Get<bp::object>("object");
-  log_debug("got python object %p", obj.ptr());
   std::vector<I3Frame::Stream> svec;
   GetParameter("Streams", svec);
   streams = std::set<I3Frame::Stream>(svec.begin(), svec.end());
@@ -121,11 +149,13 @@ void PythonFunction::Process()
       PushFrame(frame);
       return;
     }
-  log_debug("process!");
+  i3_log("process!");
   bp::object rawfn = raw_function(obj);
   bp::tuple tupleargs = bp::make_tuple(frame);
   bp::object rv;
 
+  i3_log("tupleargs = %s", repr(tupleargs).c_str());
+  i3_log("paramsd = %s", repr(paramsd).c_str());
   PyObject* p = PyObject_Call(obj.ptr(), tupleargs.ptr(), paramsd.ptr());
   bool flag;
   if (p == NULL)
