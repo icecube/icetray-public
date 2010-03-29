@@ -39,7 +39,6 @@ I3ConditionalModule::I3ConditionalModule(const I3Context& context) :
 	       "before processing physics frames.",
 	       pickKey_);
 
-  if_ = boost::python::object("<some python function>");
   AddParameter("If",
 	       "A python function... if this returns something that evaluates to True,"
 	       " Module runs, else it doesn't",
