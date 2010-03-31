@@ -23,12 +23,27 @@
 #include <string>
 #include <stdio.h>
 
+// we must #undef a bunch of crap that doesn't belong in the public
+// interface of log4cplus
+
+#undef VERSION
 #undef PACKAGE
+#undef PACKAGE_BUGREPORT
+#undef PACKAGE_NAME
+#undef PACKAGE_STRING
+#undef PACKAGE_TARNAME
+#undef PACKAGE_VERSION
 #undef HAVE_STAT
+
 #include <log4cplus/logger.h>
-// irritating, irritating stuff that doesn't belong in the public interface
-// of log4cplus
+
+#undef VERSION
 #undef PACKAGE
+#undef PACKAGE_BUGREPORT
+#undef PACKAGE_NAME
+#undef PACKAGE_STRING
+#undef PACKAGE_TARNAME
+#undef PACKAGE_VERSION
 #undef HAVE_STAT
 
 /**
