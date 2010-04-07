@@ -244,7 +244,7 @@ int main (int argc, char *argv[])
 #ifdef __APPLE__             /* add other keys to the swich below */
 	if (c == 0x1B) {
 	  c = getch();
-	  if (c == 0x4F) {
+	  if ((c == 0x4F) or (c == 0x5B)) {
 	    c = getch();
 	    switch (c) {
 	    case 0x41:
