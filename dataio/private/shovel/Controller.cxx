@@ -240,7 +240,32 @@ int main (int argc, char *argv[])
     while (true)
       {
 	int c = getch();     /* refresh, accept single keystroke of input */
-	
+
+#ifdef __APPLE__             /* add other keys to the swich below */
+	if (c == 0x1B) {
+	  c = getch();
+	  if (c == 0x4F) {
+	    c = getch();
+	    switch (c) {
+	    case 0x41:
+	      c = KEY_UP;
+	      break;
+	    case 0x42:
+	      c = KEY_DOWN;
+	      break;
+	    case 0x43:
+	      c = KEY_RIGHT;
+	      break;
+	    case 0x44:
+	      c = KEY_LEFT;
+	      break;
+	    default:
+	      break;
+	    }
+	  }
+	}
+#endif
+
 	// skip if key not bound
 	if (keybindings.find(c) == keybindings.end())
 	  continue;
