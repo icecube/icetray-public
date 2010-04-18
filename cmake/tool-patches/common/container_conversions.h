@@ -161,8 +161,11 @@ namespace scitbx { namespace boost_python { namespace container_conversions {
                     || std::strcmp(
                          obj_ptr->ob_type->ob_type->tp_name,
                          "Boost.Python.class") != 0)
-                && PyObject_HasAttrString(obj_ptr, "__len__")
-                && PyObject_HasAttrString(obj_ptr, "__getitem__")))) return 0;
+		   && PyObject_HasAttrString(obj_ptr, 
+					     const_cast<char*>("__len__"))
+		   && PyObject_HasAttrString(obj_ptr, 
+					     const_cast<char*>("__getitem__"))))) 
+	return 0;
       boost::python::handle<> obj_iter(
         boost::python::allow_null(PyObject_GetIter(obj_ptr)));
       if (!obj_iter.get()) { // must be convertible to an iterator
