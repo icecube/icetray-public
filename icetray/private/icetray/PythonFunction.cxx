@@ -78,7 +78,11 @@ PythonFunction::PythonFunction(const I3Context& context)
   bp::tuple argnames = bp::extract<bp::tuple>(code.attr("co_varnames"));
   unsigned argcount = bp::extract<unsigned>(code.attr("co_argcount"));
   i3_log("Getting defaults");
+#if PY_MAJOR_VERSION >= 3
   bp::object defobj = obj.attr("__defaults__");
+#else
+  bp::object defobj = obj.attr("func_defaults");
+#endif
   bp::tuple deftuple;
   if (defobj.ptr() != Py_None)
     deftuple = bp::extract<bp::tuple>(defobj);
