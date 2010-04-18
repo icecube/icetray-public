@@ -123,7 +123,7 @@ I3WriterBase<Derived>::Configure()
 
     streams_.clear();
 
-    for (int i =0; i < vs.size(); i++)
+    for (unsigned i =0; i < vs.size(); i++)
       {
 	if (vs[i] == "Geometry")
 	  streams_.push_back(I3Frame::Geometry);

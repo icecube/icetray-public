@@ -71,8 +71,9 @@ namespace dataio = I3::dataio;
 I3_MODULE(I3Reader);
 
 I3Reader::I3Reader(const I3Context& context) : I3Module(context),
-					       cache_(new I3Frame(I3Frame::Stream('!'))),
-					       drop_blobs_(false), nframes_(0)
+					       nframes_(0),
+					       drop_blobs_(false), 
+					       cache_(new I3Frame(I3Frame::Stream('!')))
 {
   string fname;
   push_wo_merging_.push_back(I3Frame::Stream('I')); // don't merge 'I' frames into others
