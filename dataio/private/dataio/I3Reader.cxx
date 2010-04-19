@@ -99,6 +99,7 @@ I3Reader::I3Reader(const I3Context& context) : I3Module(context),
 	       "at the expense of processing speed and the ability to passthru unknown frame objects)",
 	       drop_blobs_);
 
+  AddOutBox("OutBox");
 }
 
 void
