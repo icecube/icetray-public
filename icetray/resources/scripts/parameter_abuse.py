@@ -4,6 +4,8 @@ from icecube import icetray
 from I3Tray import *
 
 
+# some parameter exercise
+
 try:
     t = I3Tray()
 
@@ -21,14 +23,16 @@ try:
     t.AddModule("AllParametersModule", "apm2",
                 intvec_param = [1.1,1,2,3,4])
 
+    t.AddModule("TrashCan", "trash")
 
     t.Execute(1)
-    
     t.Finish()
+
 except TypeError, t:
 
     print "OK, threw as expected"
     sys.exit(0)
+
 else:
     print "that should throw with descriptive error"
     sys.exit(1)

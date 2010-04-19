@@ -26,6 +26,7 @@
 
 #include <boost/bind.hpp>
 #include <boost/preprocessor.hpp>
+#include <boost/foreach.hpp>
 
 #include <icetray/I3Module.h>
 #include <icetray/I3TrayInfo.h>
@@ -144,6 +145,29 @@ I3Module::Configure_()
 {
   this->Configure();
   inbox_ = context_.Get<FrameFifoPtr>("InBox");
+
+  //
+  // HACK HACK HACK
+  //
+  // until we overhaul the way icetray sets up modules, this is a
+  // hack.  ConnectBoxes is called by the framework, which creates
+  // slots in the outboxes_ structure without reference to whether we
+  // AddOutBox them or not.  So after Configure, delete any that
+  // shouldn't have been created.
+  //
+  vector<string> bad_boxes;
+  for (outboxmap_t::iterator iter = outboxes_.begin();
+       iter != outboxes_.end();
+       iter++)
+    {
+      set<string>::iterator boxcheck = added_boxes.find(iter->first);
+      if (boxcheck == added_boxes.end())
+	bad_boxes.push_back(iter->first);
+    }
+  BOOST_FOREACH(const string& box, bad_boxes)
+    {
+      outboxes_.erase(box);
+    }
 }
 
 void
@@ -225,9 +249,18 @@ I3Module::Process()
 void
 I3Module::AddOutBox(const std::string& s)
 {
+  // we *could* check for double-adds of outboxes here, but this isn't likely
+  // to catch very many buggy situations, and it breaks lots of code, for instance
+  // if you switch from I3Module to I3ConditionalModule, you'd have to remove your
+  // AddOutBox()
+
+  // keep a list of outboxes that the user actually adds, for 
+  // sanitychecking in Configure_()
+  added_boxes.insert(s);
+
   // should check that the ConnectBoxes boxes match
   if (!outboxes_.count(s))
-    log_debug("Module \"%s\" attempting to add outbox \"%s\" which isn't connected to anything.",
+    log_fatal("Module \"%s\" attempting to add outbox \"%s\" which isn't connected to anything.\nI3Trays need to be fully connected... do you need to add a TrashCan at the end?",
 	      GetName().c_str(), s.c_str());
 }
 
@@ -268,6 +301,10 @@ I3Module::PushFrame(I3FramePtr frameptr, const string& name)
 void
 I3Module::PushFrame(I3FramePtr frameptr)
 {
+  if (outboxes_.begin() == outboxes_.end())
+    log_fatal("Module \"%s\" of type \"%s\" wants to PushFrame, but created no Outboxes",
+	      GetName().c_str(), I3::name_of(typeid(*this)).c_str());
+
   for (outboxmap_t::iterator iter = outboxes_.begin();
        iter != outboxes_.end();
        iter++)

@@ -18,6 +18,14 @@
 #  
 #
 
+option(USE_I3_FRAMEWORK_LOGGING 
+  "Turn on low level icetray logging (for debugging icetray itself)" 
+  OFF)
+
+if(USE_I3_FRAMEWORK_LOGGING)
+  add_definitions(-DI3_FRAMEWORK_LOGGING)
+endif()
+
 i3_project(icetray
   DOCS_DIR resources/docs
   PYTHON_DIR python)
@@ -158,6 +166,7 @@ i3_test_executable(test
   private/test/typesizes.cxx
   private/test/OMKey.cxx
   private/test/I3ConditionalModuleTest.cxx
+  private/test/NoOutboxModule.cxx
 
   USE_TOOLS root
   USE_PROJECTS icetray)
