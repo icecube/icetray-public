@@ -73,21 +73,21 @@
     (sr)								\
     (deg)								\
     (second)								\
-    (picosecond)							\
-    (nanosecond)							\
     (millisecond)							\
     (microsecond)							\
+    (nanosecond)							\
+    (picosecond)							\
+    (minute)								\
+    (hour)								\
+    (day)								\
+    (gregorianyear)							\
+    (julianyear)							\
     (hertz)								\
     (kilohertz)								\
     (megahertz)								\
     (ns)								\
     (s)									\
     (ms)								\
-    (minute)								\
-    (hour)								\
-    (day)								\
-    (gregorianyear)							\
-    (julianyear)							\
     (electronvolt)							\
     (kiloelectronvolt)							\
     (megaelectronvolt)							\
@@ -113,17 +113,26 @@
     (mA)								\
     (nanoampere)							\
     (nA)								\
-    (millivolt)								\
-    (mV)								\
-    (volt)								\
-    (V)									\
-    (kilovolt)								\
-    (kV)								\
     (microvolt)								\
+    (millivolt) (mV)							\
+    (volt) (V)								\
+    (kilovolt) (kV)							\
     (ohm)								\
+    (kelvin)								\
+    (kilogram)(kg)							\
+    (gram)(g)								\
+    (milligram)(mg)							\
+    (newton)								\
+    (pascal)								\
+    (bar)								\
+    (millipascal)							\
+    (micropascal)							\
+    (nanopascal)							\
     (perCent)								\
     (perThousand)							\
-    (perMillion)
+    (perMillion)							\
+
+
 
 #define I3_UNITS_INTERFACE(r,data,T) \
   static double BOOST_PP_CAT(i3units_return_,T)() { return I3Units::T; }

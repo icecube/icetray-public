@@ -325,11 +325,6 @@ namespace I3Units
   static const double second      = 1.e9;
 
   /**
-   * nanosecond
-   */
-  static const double nanosecond  = 1.e-9 *second;
-
-  /**
    * millisecond
    */ 
   static const double millisecond = 1.e-3 *second;
@@ -338,6 +333,11 @@ namespace I3Units
    * microsecond
    */
   static const double microsecond = 1.e-6 *second;
+
+  /**
+   * nanosecond
+   */
+  static const double nanosecond  = 1.e-9 *second;
 
   /**
    * picosecond
@@ -519,6 +519,7 @@ namespace I3Units
   //
   // Voltage
   //
+
   /**
    * Millivolt
    */
@@ -533,15 +534,16 @@ namespace I3Units
   static const double V = volt;
 
   /**
+   * Microvolt
+   */
+  static const double microvolt = 1.e-6 * volt;
+
+  /**
    * Kilovolt
    */
   static const double kilovolt = 1.e3 * volt;
   static const double kV = kilovolt;
 
-  /**
-   * Microvolt
-   */
-  static const double microvolt = 1.e-6 * volt;
  
   //
   // Resistance
@@ -579,6 +581,21 @@ namespace I3Units
      */ 
     static const double milligram = 1.e-3*gram;
     static const double mg = milligram;    
+
+    /**
+     * Force
+     */
+    static const double newton = joule / meter;
+
+    /**
+     * Pressure
+     */
+    static const double pascal = newton / (meter * meter);
+    static const double bar = 1.e5 * pascal;
+    static const double millipascal = 1.e-3 * pascal;
+    static const double micropascal = 1.e-6 * pascal;
+    static const double nanopascal = 1.e-9 * pascal;
+
 
   //
   // Miscellaneous
