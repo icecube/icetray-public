@@ -24,6 +24,7 @@
 
 #include <cstdlib>
 #include <string>
+#include <set>
 #include <icetray/Version.h>
 #include <icetray/I3Logging.h>
 #include <icetray/I3Context.h>
@@ -374,6 +375,10 @@ protected:
 
   unsigned ncall_;
   double systime_, usertime_;
+
+  // HACK: a set of all boxes added by the module, used for consistency
+  // checking.  See Configure_().
+  std::set<std::string> added_boxes;
 
   /// only report usage times if greater than this
   const static double min_report_time_;
