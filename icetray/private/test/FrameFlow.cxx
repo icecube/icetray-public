@@ -85,7 +85,10 @@ map<string, map<I3Frame::Stream, unsigned> > counts;
 
 struct FFCounter : public I3Module
 {
-  FFCounter(const I3Context& context) : I3Module(context) { }
+  FFCounter(const I3Context& context) : I3Module(context) 
+  {
+    AddOutBox("OutBox");
+  }
   
 #define IMPLEMENT(STOP)							\
   void STOP(I3FramePtr frame) {						\
