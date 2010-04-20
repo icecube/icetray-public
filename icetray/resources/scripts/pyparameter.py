@@ -14,7 +14,6 @@ i3int = icetray.I3Int(777)
 tray.AddModule("GetI3Int","giint",
                obj=i3int)
 
-tray.AddModule("TrashCan", "trash")
 tray.Execute(1)
 
 # see ya.

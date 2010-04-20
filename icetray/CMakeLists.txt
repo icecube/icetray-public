@@ -92,6 +92,7 @@ i3_add_library(icetray
   private/modules/AddNulls.cxx	         
   private/modules/PhysicsBuffer.cxx
   private/modules/BottomlessSource.cxx   
+  private/modules/ManyStreamsSource.cxx   
   private/modules/Rename.cxx
   private/modules/CountFrames.cxx        
   private/modules/CountObject.cxx        

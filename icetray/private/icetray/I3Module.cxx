@@ -164,10 +164,16 @@ I3Module::Configure_()
       if (boxcheck == added_boxes.end())
 	bad_boxes.push_back(iter->first);
     }
+  std::string errmsg;
   BOOST_FOREACH(const string& box, bad_boxes)
     {
-      outboxes_.erase(box);
+      //      outboxes_.erase(box);
+      errmsg += "outbox " + box + " is connected to something, but was never added by the module.\n";
     }
+
+  if (errmsg.size())
+    log_fatal("In module \"%s\":  %s",
+	      GetName().c_str(), errmsg.c_str());
 }
 
 void
@@ -301,10 +307,6 @@ I3Module::PushFrame(I3FramePtr frameptr, const string& name)
 void
 I3Module::PushFrame(I3FramePtr frameptr)
 {
-  if (outboxes_.begin() == outboxes_.end())
-    log_fatal("Module \"%s\" of type \"%s\" wants to PushFrame, but created no Outboxes",
-	      GetName().c_str(), I3::name_of(typeid(*this)).c_str());
-
   for (outboxmap_t::iterator iter = outboxes_.begin();
        iter != outboxes_.end();
        iter++)
