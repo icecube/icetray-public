@@ -98,6 +98,12 @@ map<char, string> keybindings;
 
 int main (int argc, char *argv[])
 {
+  // if we're logging to log4cplus, turn down the level
+  // so as not to disturb our curses
+#ifdef LOG4CPLUS_LOGLEVEL_HEADER_
+  get_logger().setLogLevel(::log4cplus::INFO_LOG_LEVEL);
+#endif
+
   log_trace("%s", __PRETTY_FUNCTION__);
   po::options_description opt("options");
 
