@@ -12,7 +12,10 @@ struct IntCheck : public I3Module
 {
   int ctr_;
   
-  IntCheck(const I3Context& context) : I3Module(context), ctr_(1) { }
+  IntCheck(const I3Context& context) : I3Module(context), ctr_(1) 
+  { 
+    AddOutBox("OutBox");
+  }
 
   void Physics(I3FramePtr frame)
   {
