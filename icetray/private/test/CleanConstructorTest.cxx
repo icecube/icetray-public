@@ -1,5 +1,5 @@
 /**
- *  $Id: CleanConstructorTest.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
+ *  $Id$
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -62,4 +62,21 @@ struct HasCleanConstructor
 TEST(CleanConstructor)
 {
   clean_constructor_test<HasCleanConstructor>();
+}
+
+
+
+class CleanConstModule : public I3Module
+{
+public:
+  CleanConstModule(const I3Context& c) : I3Module(c) {
+    AddOutBox("OutBox");
+  }
+  void Configure() { }
+};
+
+
+TEST(CleanConstModule)
+{
+  clean_constructor_test<CleanConstModule>();
 }

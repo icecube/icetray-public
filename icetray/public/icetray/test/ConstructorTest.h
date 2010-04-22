@@ -1,5 +1,5 @@
 /**
- *  $Id: ConstructorTest.h 165886 2018-10-01 14:37:58Z nwhitehorn $
+ *  $Id$
  *  
  *  Copyright (C) 2007
  *  John Pretz
@@ -24,7 +24,8 @@
 #include "icetray/I3Frame.h"
 
 template <class T>
-void clean_constructor_test(void){
+void clean_constructor_test(const std::string& outbox = "OutBox")
+{
   typedef std::map<std::string, std::pair<FrameFifoPtr, I3ModulePtr> > outboxmap_t;
   I3Context context;
   {
@@ -32,7 +33,9 @@ void clean_constructor_test(void){
     context.Put(config);
     
     shared_ptr<outboxmap_t> ob(new outboxmap_t);
+    (*ob)[outbox] = make_pair(FrameFifoPtr(), I3ModulePtr());
     context.Put("OutBoxes",ob);
+
     T module(context);
   }  
 }
