@@ -25,17 +25,7 @@ add_custom_target(install_tool_libs)
 include(tooldef)
 
 #
-#  These guys are in subdirectory 'tools'
-#
-set(ALL_TOOLS pthread root boost python
-    rdmc expat gsl sprng sla
-    mysql bdb log4cplus photonics ptd
-    ZThread omniORB fox jni ncurses
-    cdk qt4 cfitsio hdf5 
-    )
-
-#
-#   By default, use /usr/share/fizzicks/cmake as I3_SITE_CMAKE_DIR 
+#  By default, use /usr/share/fizzicks/cmake as I3_SITE_CMAKE_DIR 
 # 
 if (NOT IS_DIRECTORY $ENV{I3_SITE_CMAKE_DIR})
   set (I3_SITE_CMAKE_DIR "/usr/share/fizzicks/cmake" 
@@ -47,34 +37,40 @@ else()
   message(STATUS "Using user-configured I3_SITE_CMAKE_DIR=${I3_SITE_CMAKE_DIR}")
 endif()
 
+#
+#  These guys are in subdirectory 'tools'
+#
+set(ALL_TOOLS pthread root boost python
+    rdmc expat gsl sprng sla
+    mysql bdb log4cplus photonics ptd
+    ZThread omniORB fox jni ncurses
+    cdk qt4 cfitsio hdf5 
+    ${I3_EXTRA_TOOLS}   # add the extra tools and dedupe
+    )
+list(REMOVE_DUPLICATES ALL_TOOLS)
+
+#
+#  Load each tool, directory preferences are, in order:
+#  * I3_SITE_CMAKE_DIR
+#  * I3_EXTRA_TOOLS_DIR
+#  * CMAKE_SOURCE_DIR/cmake/tools
+#
 foreach(tool ${ALL_TOOLS})
 
-  if(EXISTS "${I3_SITE_CMAKE_DIR}/${tool}.cmake")
-    message(STATUS "Using site-configured ${tool}")
-    include("${I3_SITE_CMAKE_DIR}/${tool}.cmake")
-  else()
-    include(${CMAKE_SOURCE_DIR}/cmake/tools/${tool}.cmake)
-  endif()
-
-endforeach(tool ${ALL_TOOLS})
-
-#
-# process any extra tools that were added in customization points in
-# the toplevel CMakeLists.txt
-#
-foreach (tool ${I3_EXTRA_TOOLS})
-  if(EXISTS "${I3_SITE_CMAKE_DIR}/${tool}.cmake")
-    message(STATUS "Using site-configured ${tool}")
-    include("${I3_SITE_CMAKE_DIR}/${tool}.cmake")
-  else()
-    if (NOT EXISTS ${I3_EXTRA_TOOLS_DIR}/${tool}.cmake)
-      message(FATAL_ERROR "Trying to include ${I3_EXTRA_TOOLS_DIR}/${tool}.cmake, "
-	"calculated from I3_EXTRA_TOOLS and I3_EXTRA_TOOLS_DIR, but file isn't there")
-    endif()
+  if (EXISTS ${I3_SITE_CMAKE_DIR}/${tool}.cmake)
+    message(STATUS "Reading ${tool} from site cmake dir")
+    include(${I3_SITE_CMAKE_DIR}/${tool}.cmake)
+  elseif(EXISTS "${I3_EXTRA_TOOLS_DIR}/${tool}.cmake")
+    message(STATUS "Reading ${tool} from extra tools dir")
     include(${I3_EXTRA_TOOLS_DIR}/${tool}.cmake)
+  elseif(EXISTS ${CMAKE_SOURCE_DIR}/cmake/tools/${tool}.cmake)
+    include(${CMAKE_SOURCE_DIR}/cmake/tools/${tool}.cmake)
+  else(EXISTS ${I3_SITE_CMAKE_DIR}/${tool}.cmake)
+    message(STATUS "*** ${tool}.cmake not found in I3_SITE_CMAKE_DIR, I3_EXTRA_TOOLS_DIR, or cmake/tools")
+    message(STATUS "*** This is only an error if a projects requires tool '${tool}'")
   endif()
-endforeach()
 
+endforeach()
 
 macro(use_tool TARGET TOOL_)
   string(TOUPPER ${TOOL_} TOOL)
