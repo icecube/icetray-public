@@ -58,6 +58,24 @@ foreach(tool ${ALL_TOOLS})
 
 endforeach(tool ${ALL_TOOLS})
 
+#
+# process any extra tools that were added in customization points in
+# the toplevel CMakeLists.txt
+#
+foreach (tool ${I3_EXTRA_TOOLS})
+  if(EXISTS "${I3_SITE_CMAKE_DIR}/${tool}.cmake")
+    message(STATUS "Using site-configured ${tool}")
+    include("${I3_SITE_CMAKE_DIR}/${tool}.cmake")
+  else()
+    if (NOT EXISTS ${I3_EXTRA_TOOLS_DIR}/${tool}.cmake)
+      message(FATAL_ERROR "Trying to include ${I3_EXTRA_TOOLS_DIR}/${tool}.cmake, "
+	"calculated from I3_EXTRA_TOOLS and I3_EXTRA_TOOLS_DIR, but file isn't there")
+    endif()
+    include(${I3_EXTRA_TOOLS_DIR}/${tool}.cmake)
+  endif()
+endforeach()
+
+
 macro(use_tool TARGET TOOL_)
   string(TOUPPER ${TOOL_} TOOL)
   if(NOT ${TOOL}_FOUND)
