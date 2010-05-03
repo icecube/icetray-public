@@ -263,11 +263,6 @@ I3Module::AddOutBox(const std::string& s)
   // keep a list of outboxes that the user actually adds, for 
   // sanitychecking in Configure_()
   added_boxes.insert(s);
-
-  // should check that the ConnectBoxes boxes match
-  if (!outboxes_.count(s))
-    log_fatal("Module \"%s\" attempting to add outbox \"%s\" which isn't connected to anything.\nI3Trays need to be fully connected... do you need to add a TrashCan at the end?",
-	      GetName().c_str(), s.c_str());
 }
 
 void
