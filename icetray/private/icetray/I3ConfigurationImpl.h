@@ -119,6 +119,7 @@ private:
     }
   };
 
+public:
   /// these are the new parameters.  I3Parameter saves the full type information.
   typedef boost::multi_index_container<
     I3Parameter,
@@ -130,6 +131,7 @@ private:
       > 
     > parameters_t;
 
+private:
   // the parameters
   boost::shared_ptr<parameters_t> parameters;
 
