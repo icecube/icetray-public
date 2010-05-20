@@ -204,6 +204,11 @@ I3WriterBase<Derived>::Process()
 {
   I3FramePtr frame = PopFrame();
 
+  if (!frame)
+    {
+      log_fatal("Module \"%s\" hasn't received a frame in its inbox.  Is it connected to a module that will feed it frames?", GetName().c_str());
+    }
+
   WriteConfig(frame);
 
   if (streams_.size() > 0)
