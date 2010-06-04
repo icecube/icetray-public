@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3ServiceFactory.h 47987 2008-08-08 14:09:48Z troy $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -33,7 +33,7 @@
  * @brief This class defineds the interfaces used to install a service into an
  * I3Tray object.
  *
- * @version $Id$
+ * @version $Id: I3ServiceFactory.h 47987 2008-08-08 14:09:48Z troy $
  * @author patton
  */
 class I3ServiceFactory
@@ -155,6 +155,8 @@ public:
   const std::string GetName() const { return name_; }
 
   virtual void SetName(const std::string& name) { name_ = name; }
+
+  SET_LOGGER("I3ServiceFactory");
 
 protected:
 

@@ -60,36 +60,37 @@ i3_add_library(icetray
   private/icetray/I3FrameObject.cxx      
   private/icetray/portable_binary_iarchive.cxx
   private/icetray/portable_binary_oarchive.cxx
-  private/icetray/I3Logging.cxx	       
-  private/icetray/PythonLogging.cxx	       
+  private/icetray/I3Logging.cxx        
+  private/icetray/PythonLogging.cxx            
   private/icetray/I3Configuration.cxx
   private/icetray/I3ConfigurationImpl.cxx
+  private/icetray/I3Deprecation.cxx
   private/icetray/I3Parameter.cxx
-  private/icetray/OMKey.cxx	       
-  private/icetray/I3Tray.cxx	       
-  private/icetray/I3Module.cxx	       
+  private/icetray/OMKey.cxx            
+  private/icetray/I3Tray.cxx           
+  private/icetray/I3Module.cxx         
   private/icetray/I3ConditionalModule.cxx  
-  private/icetray/I3Context.cxx	       
+  private/icetray/I3Context.cxx        
   private/icetray/I3DSORegistry.cxx      
-  private/icetray/I3Int.cxx	       
+  private/icetray/I3Int.cxx            
   private/icetray/I3Bool.cxx
   private/icetray/I3PhysicsTimer.cxx     
   private/icetray/I3PhysicsUsage.cxx     
   private/icetray/Utility.cxx
   private/icetray/I3ServiceFactory.cxx   
-  private/icetray/I3TrayInfo.cxx	       
+  private/icetray/I3TrayInfo.cxx               
   private/icetray/I3TrayInfoService.cxx  
-  private/icetray/I3IcePick.cxx	       
+  private/icetray/I3IcePick.cxx        
   ${I3_BACKTRACE_CXX}
-  private/icetray/PythonInterpreter.cxx	       
-  private/icetray/PythonFunction.cxx	       
-  private/icetray/PythonModule.cxx	       
-  private/icetray/name_of.cxx	       
+  private/icetray/PythonInterpreter.cxx        
+  private/icetray/PythonFunction.cxx           
+  private/icetray/PythonModule.cxx             
+  private/icetray/name_of.cxx          
 
   #
   #  Modules:  testing and example
   #
-  private/modules/AddNulls.cxx	         
+  private/modules/AddNulls.cxx           
   private/modules/PhysicsBuffer.cxx
   private/modules/BottomlessSource.cxx   
   private/modules/ManyStreamsSource.cxx   
@@ -97,15 +98,15 @@ i3_add_library(icetray
   private/modules/CountFrames.cxx        
   private/modules/CountObject.cxx        
   private/modules/TrashCan.cxx
-  private/modules/Delete.cxx	       
-  private/modules/Copy.cxx	       
-  private/modules/Dump.cxx	       
-  private/modules/Fork.cxx	       
+  private/modules/Delete.cxx           
+  private/modules/Copy.cxx             
+  private/modules/Dump.cxx             
+  private/modules/Fork.cxx             
   private/modules/IntGenerator.cxx       
-  private/modules/Keep.cxx	       
-  private/modules/DeleteUnregistered.cxx	       
-  private/modules/Get.cxx	       
-  private/modules/FrameCheck.cxx	       
+  private/modules/Keep.cxx             
+  private/modules/DeleteUnregistered.cxx               
+  private/modules/Get.cxx              
+  private/modules/FrameCheck.cxx               
   private/modules/AllParametersModule.cxx
 
   ${ICETRAY_PYTHON_SRC}
@@ -135,35 +136,35 @@ i3_executable(inspect
 
 i3_test_executable(test 
   private/test/CleanConstructorTest.cxx  
-  private/test/I3LoggingObjectFirst.cxx	    
+  private/test/I3LoggingObjectFirst.cxx     
   private/test/ServicesAtDestruction.cxx
   private/test/ConfigureServiceTest.cxx  
-  private/test/I3LoggingTest.cxx		    
+  private/test/I3LoggingTest.cxx                    
   private/test/SourceOrderTest.cxx
   private/test/ContextSwitching.cxx      
-  private/test/I3LoggingTest2.cxx		    
+  private/test/I3LoggingTest2.cxx                   
   private/test/TestModule.cxx
   private/test/DefaultFrameNameTest.cxx  
   private/test/TestServiceFactory.cxx
   private/test/InstallService.cxx
-  private/test/EvensAndOdds.cxx	       
-  private/test/I3PhysicsTimerTest.cxx	    
+  private/test/EvensAndOdds.cxx        
+  private/test/I3PhysicsTimerTest.cxx       
   private/test/TestServiceFactoryModule.cxx
   private/test/FailingModuleTest.cxx     
-  private/test/I3TrayTest.cxx		    
+  private/test/I3TrayTest.cxx               
   private/test/Utility.cxx
-  private/test/FrameAccess.cxx	       
+  private/test/FrameAccess.cxx         
   private/test/VectorParameters.cxx
-  private/test/FrameFlow.cxx	       
+  private/test/FrameFlow.cxx           
   private/test/ModuleParameterConversions.cxx  
   private/test/main.cxx
-  private/test/I3ContextTest.cxx	       
-  private/test/NonUniqueNameTest.cxx	    
+  private/test/I3ContextTest.cxx               
+  private/test/NonUniqueNameTest.cxx        
   private/test/shared-ptr-constness.cxx
-  private/test/I3FrameTest.cxx	       
-  private/test/OutOfMemoryModuleTest.cxx	    
+  private/test/I3FrameTest.cxx         
+  private/test/OutOfMemoryModuleTest.cxx            
   private/test/test-throws-not-caught.cxx
-  private/test/PhysicsBuffering.cxx	    
+  private/test/PhysicsBuffering.cxx         
   private/test/typesizes.cxx
   private/test/OMKey.cxx
   private/test/I3ConditionalModuleTest.cxx
