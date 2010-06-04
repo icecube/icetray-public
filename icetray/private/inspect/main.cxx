@@ -1,23 +1,23 @@
 /**
  *  $Id$
- *  
+ *
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
  *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
  *  This file is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 3 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
- *  
+ *
  */
 #include <iostream>
 #include <fstream>
@@ -96,7 +96,7 @@ show_product_details(const string& project, const factory_t& factory)
        iter++)
     {
       if (iter->second.project != project)
-	continue;
+        continue;
 
       // This is all (sarcasm) brilliant stuff we have to do
       // because you can't find out what an T's configuration
@@ -111,72 +111,73 @@ show_product_details(const string& project, const factory_t& factory)
       // The following is necessary when creating
       // I3Modules... but not when creating I3ServiceFactories.
       shared_ptr<map<string, pair<FrameFifoPtr, I3ModulePtr> > > connections
-	(new map<string, pair<FrameFifoPtr, I3ModulePtr> >);
+        (new map<string, pair<FrameFifoPtr, I3ModulePtr> >);
       context.Put(connections, "OutBoxes");
+      // (*connections)["OutBox"] = make_pair(FrameFifoPtr(), I3ModulePtr());
 
       try {
-	// yeah, this is awful to have this here.  If we werent
-	// forced to create objects to find out about their
-	// configs, we wouldn't have to do this.
-	if (iter->first == "I3TrayInfoServiceFactory")
-	  continue;
+        // yeah, this is awful to have this here.  If we werent
+        // forced to create objects to find out about their
+        // configs, we wouldn't have to do this.
+        if (iter->first == "I3TrayInfoServiceFactory")
+          continue;
 
-	factory.Create(iter->first)(context);
+        factory.Create(iter->first)(context);
 
-	const I3Configuration& filledconfig = context.template Get<I3Configuration>();
-	if (!xml)
-	  {
-	    cout << filledconfig;
-	    cout << "---------------------------------------\n"; 	  
-	  } 
-	else 
-	  {
-	    cout << filledconfig.inspect();
-	  }
-	modules_ok++;
+        const I3Configuration& filledconfig = context.template Get<I3Configuration>();
+        if (!xml)
+          {
+            cout << filledconfig;
+            cout << "---------------------------------------\n";          
+          } 
+        else 
+          {
+            cout << filledconfig.inspect();
+          }
+        modules_ok++;
       } catch (const std::exception& e) {
-	cerr << "Error constructing \"" << iter->first << "\". Skipping.\n";
-	modules_error++;
+        cerr << "Error constructing \"" << iter->first << "\". Skipping.\n";
+        modules_error++;
       } catch (const boost::python::error_already_set& e) {
-	using namespace boost::python;
-	cerr << "Error constructing \"" << iter->first << "\".\n"
-	     << "Caught exception from python:\n";
+        using namespace boost::python;
+        cerr << "Error constructing \"" << iter->first << "\".\n"
+             << "Caught exception from python:\n";
 
-	std::string errtype, errvalue;
+        std::string errtype, errvalue;
 
-	PyObject *type = 0, *val = 0, *tb = 0;
-	PyErr_Fetch(&type, &val, &tb);
-	handle<> e_val(val), e_type(type), e_tb(allow_null(tb));
+        PyObject *type = 0, *val = 0, *tb = 0;
+        PyErr_Fetch(&type, &val, &tb);
+        handle<> e_val(val), e_type(type), e_tb(allow_null(tb));
 
-	try {
-	  object t = extract<object>(e_type.get());
-	  object t_name = t.attr("__name__");
-	  errtype = extract<std::string>(t_name);
-	} catch (error_already_set const &) {
-	  cerr << "Internal error getting error type:\n";
-	  PyErr_Print();
-	}
+        try {
+          object t = extract<object>(e_type.get());
+          object t_name = t.attr("__name__");
+          errtype = extract<std::string>(t_name);
+        } catch (error_already_set const &) {
+          cerr << "Internal error getting error type:\n";
+          PyErr_Print();
+        }
 
-	try {
-	  object v = extract<object>(e_val.get());
-	  errvalue = extract<std::string>(v.attr("__str__")());
-	} catch (error_already_set const &) {
-	  cerr << "Internal error getting value type:\n";
-	  PyErr_Print();
-	}
+        try {
+          object v = extract<object>(e_val.get());
+          errvalue = extract<std::string>(v.attr("__str__")());
+        } catch (error_already_set const &) {
+          cerr << "Internal error getting value type:\n";
+          PyErr_Print();
+        }
 
-	config->Add("*** Python Error ***", errtype, errvalue);
-	if (!xml)
-	  {
-	    cout << *config;
-	    cout << "---------------------------------------\n"; 	  
-	  } 
-	else 
-	  {
-	    cout << config->inspect();
-	  }
+        config->Add("*** Python Error ***", errtype, errvalue);
+        if (!xml)
+          {
+            cout << *config;
+            cout << "---------------------------------------\n";          
+          } 
+        else 
+          {
+            cout << config->inspect();
+          }
 
-	cerr << "Skipping.\n"; 
+        cerr << "Skipping.\n"; 
       }
     } 
 }
@@ -214,8 +215,8 @@ main (int argc, char** argv)
 
   try {
     po::store(po::command_line_parser(argc, argv)
-	      .options(options)
-	      .positional(p).run(), vm);
+              .options(options)
+              .positional(p).run(), vm);
 
     po::notify(vm);
   } catch (const std::exception& e) {
@@ -250,7 +251,7 @@ main (int argc, char** argv)
     {
       string libdir = vm["all"].as<string>();
       if (libdir == "")
-	usage();
+        usage();
       projects = all_projects(libdir);
     }
   else if (vm.count("projects"))
@@ -266,12 +267,12 @@ main (int argc, char** argv)
       cerr << "[" << projects[i] << "] ";
       cerr.flush();
       try {
-	load_project(projects[i], false);
+        load_project(projects[i], false);
       } catch (const std::runtime_error& e) {
-	cerr << "ignoring: " << e.what() << std::endl;
+        cerr << "ignoring: " << e.what() << std::endl;
       } catch (const boost::python::error_already_set& e) {
-	cerr << "Caught exception from python:\n";
-	PyErr_Print();
+        cerr << "Caught exception from python:\n";
+        PyErr_Print();
       }
     }
   cerr << "\n";
@@ -281,15 +282,15 @@ main (int argc, char** argv)
   for (unsigned i=0; i<projects.size(); i++)
     {
       if (xml)
-	cout << "<project name=\"" << projects[i] << "\">\n";
+        cout << "<project name=\"" << projects[i] << "\">\n";
       else
-	cout << "*** " << projects[i] << " ***\n";
+        cout << "*** " << projects[i] << " ***\n";
       show_product_details(projects[i], I3::Singleton<I3ModuleFactory>::get_const_instance());
       show_product_details(projects[i], I3::Singleton<I3ServiceFactoryFactory>::get_const_instance());
       if (xml)
-	cout << "</project>\n";
+        cout << "</project>\n";
       else
-	cout << "\n";
+        cout << "\n";
     }
 
   if (xml)
