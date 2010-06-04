@@ -115,38 +115,6 @@ struct StandardCreate
   }
 };
 
-template <class FactoryProductType, class ModuleType>
-struct DeprecatedCreate
-{
-  static
-  shared_ptr<FactoryProductType>
-  Create (const I3Context& c)
-  {
-    std::string productstr = I3::name_of<FactoryProductType>();
-    std::string modulestr = I3::name_of<ModuleType>();
-    const char* product_cstr = productstr.c_str();
-    const char* module_cstr = modulestr.c_str();
-
-    log_warn("\n**\n"
-             "**    You are using the %s '%s'.\n"
-             "**    This %s is DEPRECATED, and soon will.\n"
-             "**    no longer be in meta-project releases\n"
-             "**    Reasons for this can lack of maintainership or a new \n"
-             "**    implementation under a different name.  If you\n"
-             "**    believe %s should not be removed, please email\n"
-             "**    dataclass@icecube.wisc.edu or the appropriate\n"
-             "**    meta-project mailing list.  You can also file a \n"
-             "**    bug report at http://code.icecube.wisc.edu.\n"
-             "**\n",
-             product_cstr, module_cstr, product_cstr, module_cstr);
-
-    shared_ptr<FactoryProductType> module(new ModuleType(c));
-    if (!module)
-      log_fatal("failed to create");
-
-    return module;
-  }
-};
 
 template <class FactoryProductType,
           class ActualDerivedType,
@@ -189,11 +157,11 @@ private:
                                             BOOST_PP_STRINGIZE(PROJECT)); \
   }
 
+
+
 #define I3_MODULE(TYPE) I3_REGISTER(I3Module, TYPE, StandardCreate)
-#define I3_DEPRECATED_MODULE(TYPE) I3_REGISTER(I3Module, TYPE, DeprecatedCreate)
 
 #define I3_SERVICE_FACTORY(TYPE) I3_REGISTER(I3ServiceFactory, TYPE, StandardCreate)
-#define I3_DEPRECATED_SERVICE_FACTORY(TYPE) I3_REGISTER(I3ServiceFactory, TYPE, DeprecatedCreate)
 
 #endif
 #endif
