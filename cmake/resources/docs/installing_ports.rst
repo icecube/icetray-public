@@ -29,10 +29,18 @@ The MacPorts two-step:
 
  * Define $I3_PORTS location.  This will be the location where your
    new toolset will be installed.  Make sure you have permissions to
-   write in this area.  It is recommended that you add this to your
-   startup files (bashrc/cshrc)::
+   write in this area.  A good location is "/opt/i3/ports" or in your
+   home directory in "i3/ports".  Assuming you use your home directory,
+   it is recommended that you add the following to your startup
+   files. 
 
-     export I3_PORTS=/path/to/toolspace  (setenv I3_PORTS /path/to/toolspace)
+  * For ~/.bashrc::
+
+      export I3_PORTS="~/i3/ports"
+
+  * For ~/.cshrc::
+
+      setenv I3_PORTS ~/i3/ports
 
  * Execute i3-install.sh passing $I3_PORTS as the sole argument::
 
