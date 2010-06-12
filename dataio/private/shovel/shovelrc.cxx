@@ -60,7 +60,8 @@ namespace dataio
       shovelrc_grammar(map<char, string>& keybdgs)
 	: keybdgs_(keybdgs) { }
 
-      mutable map<char, string>& keybdgs_;
+      // clang: mutable cannot be applied to references (?)
+      map<char, string>& keybdgs_;
       mutable char tmp_key_;
 
       struct assign_keybinding

@@ -77,6 +77,12 @@ shovel_usage(const std::string& progname)
   exit(1);
 }
 
+void
+shovel_exit()
+{
+  exit(0);
+}
+
 void 
 write_default_shovelrc(const std::string path, const map<char, string>& keybindings)
 {
@@ -241,7 +247,7 @@ int main (int argc, char *argv[])
     actions["save_xml"] = bind(&Model::save_xml, ref(model));
     actions["goto_frame"] = bind(&Model::do_goto_frame, ref(model));
     actions["xml"] = bind(&Model::show_xml, ref(model));
-    actions["quit"] = bind(exit, 0);
+    actions["quit"] = &shovel_exit;
 
     while (true)
       {
