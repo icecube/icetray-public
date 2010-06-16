@@ -104,7 +104,7 @@ I3Tray::AddModule(boost::python::object obj, const std::string& instancename)
       // only in this case... we need the python object whose constructor will get called
       // by the Create function
       context->Put(boost::shared_ptr<boost::python::object>(new boost::python::object(obj)), 
-		   "object");
+                   "object");
     } 
   else if (PyType_Check(obj.ptr()))
     {
@@ -112,14 +112,14 @@ I3Tray::AddModule(boost::python::object obj, const std::string& instancename)
       // only in this case... we need the python object whose constructor will get called
       // by the Create function
       context->Put(boost::shared_ptr<boost::python::object>(new boost::python::object(obj)),
-		   "class");
+                   "class");
     }
   else
     {
       log_fatal("'%s%s' passed to AddModule with instance name %s.  Must be a string, a python function, or a python I3Module.", 
-		PyEval_GetFuncName(obj.ptr()),
-		PyEval_GetFuncDesc(obj.ptr()),
-		instancename.c_str());
+                PyEval_GetFuncName(obj.ptr()),
+                PyEval_GetFuncDesc(obj.ptr()),
+                instancename.c_str());
     }
 
   log_trace("%s : %s", __PRETTY_FUNCTION__, instancename.c_str());
@@ -168,8 +168,8 @@ I3Tray::CreateService (I3Context& context, const std::string& classname)
 }
 
 void dump_config(const vector<string>& names, 
-		 const map<string,I3ContextPtr>& contexts,
-		 ostream& os)
+                 const map<string,I3ContextPtr>& contexts,
+                 ostream& os)
 {
   boost::archive::xml_oarchive xoa(os);
 
@@ -184,8 +184,8 @@ void dump_config(const vector<string>& names,
 
 bool
 I3Tray::ConnectBoxes(const std::string& fromModule,
-		     const std::string& fromOutBox,
-		     const std::string& toModule)
+                     const std::string& fromOutBox,
+                     const std::string& toModule)
 {
   // flag: if we don't connect any boxes, then we later do a default.
   boxes_connected = true;
@@ -201,7 +201,7 @@ I3Tray::ConnectBoxes(const std::string& fromModule,
 
   I3Configuration& config = context->Get<I3Configuration>();
   log_debug("telling config to connect outbox \"%s\" to module \"%s\"", 
-	    fromOutBox.c_str(), toModule.c_str());
+            fromOutBox.c_str(), toModule.c_str());
   config.Connect(fromOutBox, toModule);
   return true;
 }
@@ -217,11 +217,11 @@ I3Tray::Configure()
     {
       vector<std::string>::const_iterator to = ++modules_in_order.begin();
       while(to != modules_in_order.end())
-	{
-	  log_trace("%s => %s", (to-1)->c_str(), to->c_str());
-	  ConnectBoxes(*(to-1), "OutBox", *to);
-	  to++;
-	}
+        {
+          log_trace("%s => %s", (to-1)->c_str(), to->c_str());
+          ConnectBoxes(*(to-1), "OutBox", *to);
+          to++;
+        }
     }
 
   //
@@ -240,8 +240,8 @@ I3Tray::Configure()
       // services into the context we're about to create the next
       // service factory in
       for (map<string, I3ServiceFactoryPtr>::const_iterator iter = factories.begin();
-	   iter != factories.end();  iter++)
-	iter->second->InitializeService(*context_p);
+           iter != factories.end();  iter++)
+        iter->second->InitializeService(*context_p);
       
       // now the context has the services and config in it.
       I3ServiceFactoryPtr factory = CreateService(*context_p, classname);
@@ -268,20 +268,20 @@ I3Tray::Configure()
       // as above, use service factories to install services into the
       // context we're about to create the next module in
       for (map<string, I3ServiceFactoryPtr>::const_iterator iter = factories.begin();
-	   iter != factories.end();  iter++)
-	iter->second->InitializeService(*context_p);
+           iter != factories.end();  iter++)
+        iter->second->InitializeService(*context_p);
       
       shared_ptr<map<string, pair<FrameFifoPtr, I3ModulePtr> > > connections
-	(new map<string, pair<FrameFifoPtr, I3ModulePtr> >);
+        (new map<string, pair<FrameFifoPtr, I3ModulePtr> >);
       const map<string, string>& outboxes = context_p->Get<I3Configuration>().Outboxes();
 
       for (map<string, string>::const_iterator iter = outboxes.begin();
-	   iter != outboxes.end();
-	   iter++)
-	{
-	  log_trace("Registering outbox \"%s\" from configuration.", (iter->first).c_str());
-	  (*connections)[iter->first] = make_pair(FrameFifoPtr(), I3ModulePtr());
-	}
+           iter != outboxes.end();
+           iter++)
+        {
+          log_trace("Registering outbox \"%s\" from configuration.", (iter->first).c_str());
+          (*connections)[iter->first] = make_pair(FrameFifoPtr(), I3ModulePtr());
+        }
       context_p->Put(connections, "OutBoxes");
       // now the context has the services and fifos in it.
 
@@ -303,34 +303,34 @@ I3Tray::Configure()
     {
       I3ContextPtr from_module_context_p = module_contexts[from_module_name];
       const map<string, string>& from_module_outboxes_config_map = 
-	from_module_context_p->Get<I3Configuration>().Outboxes();
+        from_module_context_p->Get<I3Configuration>().Outboxes();
 
       shared_ptr<map<string, pair<FrameFifoPtr, I3ModulePtr> > > from_module_outboxes_map =
-	from_module_context_p->Get<shared_ptr<map<string, pair<FrameFifoPtr, I3ModulePtr> > > >("OutBoxes");
+        from_module_context_p->Get<shared_ptr<map<string, pair<FrameFifoPtr, I3ModulePtr> > > >("OutBoxes");
 
       for (map<string, string>::const_iterator iter = from_module_outboxes_config_map.begin();
-	   iter != from_module_outboxes_config_map.end();  
-	   iter++)
-	{
-	  const string& from_outbox_name = iter->first;
-	  const string& to_module_name   = iter->second;
-	  I3ModulePtr   to_module_ptr    = modules[to_module_name];
+           iter != from_module_outboxes_config_map.end();  
+           iter++)
+        {
+          const string& from_outbox_name = iter->first;
+          const string& to_module_name   = iter->second;
+          I3ModulePtr   to_module_ptr    = modules[to_module_name];
 
-	  FrameFifoPtr connection(new FrameFifo);
+          FrameFifoPtr connection(new FrameFifo);
 
-	  (*from_module_outboxes_map)[from_outbox_name].first = connection;
-	  (*from_module_outboxes_map)[from_outbox_name].second = to_module_ptr;
-	  I3ContextPtr to_module_context = module_contexts[to_module_name];
-	  if (!to_module_context)
-	    log_fatal("\n\tUnable to get context for module \"%s\""
-		      "\n\twhile connecting box \"%s\" from Module \"%s\"."
-		      "\n\tDid you add module \"%s\"?", 
-		      to_module_name.c_str(), 
-		      from_outbox_name.c_str(), 
-		      from_module_name.c_str(),
-		      to_module_name.c_str());
-	  to_module_context->Put(connection,"InBox");
-	}
+          (*from_module_outboxes_map)[from_outbox_name].first = connection;
+          (*from_module_outboxes_map)[from_outbox_name].second = to_module_ptr;
+          I3ContextPtr to_module_context = module_contexts[to_module_name];
+          if (!to_module_context)
+            log_fatal("\n\tUnable to get context for module \"%s\""
+                      "\n\twhile connecting box \"%s\" from Module \"%s\"."
+                      "\n\tDid you add module \"%s\"?", 
+                      to_module_name.c_str(), 
+                      from_outbox_name.c_str(), 
+                      from_module_name.c_str(),
+                      to_module_name.c_str());
+          to_module_context->Put(connection,"InBox");
+        }
     }
 
   // find the module without an inbox and set it as the "driving"
@@ -341,10 +341,10 @@ I3Tray::Configure()
     {
       I3Context& context = *(iter->second);
       if (!context.Has<FrameFifoPtr>("InBox"))
-	{
-	  driving_module = modules[iter->first];
-	  log_trace("Driving module is %s", iter->first.c_str());
-	}
+        {
+          driving_module = modules[iter->first];
+          log_trace("Driving module is %s", iter->first.c_str());
+        }
     }
 
   // when we bang the driving module, it will bang all the modules
@@ -361,10 +361,10 @@ I3Tray::Configure()
     {
       const I3Configuration& config = iter->second->Get<I3Configuration>();
       if (!config.is_ok())
-	{
-	  std::cerr << config;
-	  log_fatal("Configuration error.  Turn up your logging to see just what.");
-	}
+        {
+          std::cerr << config;
+          log_fatal("Configuration error.  Turn up your logging to see just what.");
+        }
     }
 
   for (map<string,I3ContextPtr>::const_iterator iter = factory_contexts.begin();
@@ -373,10 +373,10 @@ I3Tray::Configure()
     {
       const I3Configuration& config = iter->second->Get<I3Configuration>();
       if (!config.is_ok())
-	{
-	  std::cerr << config;
-	  log_fatal("Configuration error.  Turn up your logging to see just what.");
-	}
+        {
+          std::cerr << config;
+          log_fatal("Configuration error.  Turn up your logging to see just what.");
+        }
     }
 }
 
@@ -420,8 +420,8 @@ I3Tray::Usage()
     {
       I3PhysicsUsage ru = iter->second->ReportUsage();
       log_debug("Module %s reports %f %f %u", 
-		iter->first.c_str(),
-		ru.systime, ru.usertime, ru.ncall);
+                iter->first.c_str(),
+                ru.systime, ru.usertime, ru.ncall);
       mspu[iter->first] = ru;
       iter++;
     }
@@ -432,6 +432,8 @@ I3Tray::Usage()
 void
 I3Tray::Finish()
 {
+  if (!driving_module)
+    log_fatal("Attempt to call finish, but there is no driving module.  Did you forget to call Execute()?");
   driving_module->Do(&I3Module::Finish);
   
   for (int i = factories_in_order.size()-1;
@@ -447,8 +449,8 @@ I3Tray::Finish()
 // special overload to help with compiled steering files.
 bool
 I3Tray::SetParameter(const string& module,
-		     const string& parameter,
-		     const char* value)
+                     const string& parameter,
+                     const char* value)
 {
   log_trace("%s", __PRETTY_FUNCTION__);
   return SetParameter(module, parameter, string(value));
@@ -456,8 +458,8 @@ I3Tray::SetParameter(const string& module,
 
 bool 
 I3Tray::SetParameter(const string& module,
-		     const string& parameter,
-		     boost::python::object value)
+                     const string& parameter,
+                     boost::python::object value)
 {
   log_trace("%s", __PRETTY_FUNCTION__);
   shared_ptr<I3Context> context;
@@ -479,7 +481,7 @@ I3Tray::SetParameter(const string& module,
   string value_as_string = boost::python::extract<std::string>(value.attr("__str__")());
   
   log_debug("setting %s (%s => %s) in config record",
-	    module.c_str(), parameter.c_str(), value_as_string.c_str());
+            module.c_str(), parameter.c_str(), value_as_string.c_str());
 
   return true;
 }
