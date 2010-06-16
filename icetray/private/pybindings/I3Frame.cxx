@@ -121,9 +121,9 @@ static void frame_put(I3Frame& f, const std::string& s, I3FrameObjectConstPtr fo
 }
 
 static void frame_put_on_stream(I3Frame& f, 
-				const std::string& s, 
-				I3FrameObjectConstPtr fop,
-				const I3Frame::Stream& stream)
+                                const std::string& s, 
+                                I3FrameObjectConstPtr fop,
+                                const I3Frame::Stream& stream)
 {
   f.Put(s, fop, stream);
 }
@@ -139,7 +139,7 @@ void register_I3Frame()
   void (I3Frame::* put_fn_p)(const std::string&, I3FrameObjectConstPtr) = &I3Frame::Put;
 
   using boost::python::iterator;
-  scope i3frame_scope = 
+  scope i3frame_scope =
     class_<I3Frame, boost::shared_ptr<I3Frame> >("I3Frame")
     .def(init<I3Frame::Stream>())
     .def(init<char>())
@@ -182,6 +182,7 @@ void register_I3Frame()
   class_<I3Frame::Stream>("Stream")
     .def(init<char>())
     .def(self == self) // comparison operator
+    .def(self != self) // comparison operator
     .def(self < self) // comparison operator
     .def("__str__", &I3Frame::Stream::str)
     .def("__repr__", format_stream)
