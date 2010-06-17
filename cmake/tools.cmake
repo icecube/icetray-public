@@ -44,7 +44,7 @@ set(ALL_TOOLS pthread root boost python
     rdmc expat gsl sprng sla
     mysql bdb log4cplus photonics ptd
     ZThread omniORB fox jni ncurses
-    cdk qt4 cfitsio hdf5 
+    cdk qt4 cfitsio hdf5 minuit2
     ${I3_EXTRA_TOOLS}   # add the extra tools and dedupe
     )
 list(REMOVE_DUPLICATES ALL_TOOLS)
