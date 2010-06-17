@@ -1,23 +1,23 @@
 /**
  *  $Id$
- *  
+ *
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
  *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
  *  This file is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 3 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
- *  
+ *
  */
 #include <boost/optional.hpp>
 using boost::optional;
@@ -58,14 +58,14 @@ class I3FileImpl
   static void noop(double) { }
 
 public:
- 
+
   I3FileImpl();
 
   int open_file(const std::string& filename,
-		boost::function<void(double)> cb = noop,
-		boost::optional<vector<I3Frame::Stream> > skipstreams = boost::optional<vector<I3Frame::Stream> >(),
-		boost::optional<unsigned> nframes = boost::optional<unsigned>(),
-		bool verbose = true);
+                boost::function<void(double)> cb = noop,
+                boost::optional<vector<I3Frame::Stream> > skipstreams = boost::optional<vector<I3Frame::Stream> >(),
+                boost::optional<unsigned> nframes = boost::optional<unsigned>(),
+                bool verbose = true);
 
   void close();
 
@@ -83,13 +83,13 @@ public:
   I3Frame::Stream stream(unsigned index);
   std::vector<I3Frame::Stream> streams(unsigned start_index, unsigned length) const;
   std::vector<I3Frame::Stream> streams() const;
-  std::vector<FrameInfo> frames() const; 
+  std::vector<FrameInfo> frames() const;
   size_t size() { return frame_infos_.size(); }
   void set_skipkeys(const vector<string>&);
 };
 
-I3FileImpl::I3FileImpl() : 
-  x_index_(0), 
+I3FileImpl::I3FileImpl() :
+  x_index_(0),
   y_index_(0),
   y_max_(0)
 { }
@@ -110,9 +110,9 @@ I3FileImpl::close()
 
 int
 I3FileImpl::open_file(const std::string& filename, boost::function<void(double)> cb,
-		      boost::optional<vector<I3Frame::Stream> >skipstreams,
-		      boost::optional<unsigned> nframes_opt,
-		      bool verbose)
+                      boost::optional<vector<I3Frame::Stream> >skipstreams,
+                      boost::optional<unsigned> nframes_opt,
+                      bool verbose)
 {
   log_trace("I3FileImpl::open_file(%s)", filename.c_str());
   if (filename.find(".gz") == filename.length() - 3)
@@ -120,21 +120,24 @@ I3FileImpl::open_file(const std::string& filename, boost::function<void(double)>
 
   ifs_.clear();
   ifs_.open(filename.c_str(), ios::binary);
-  if (!ifs_)
-    {
-      cerr << "Can't open file " << filename << " for reading: " << strerror(errno) << "(" << errno << ")\n";
-      return 1;
+  if (!ifs_) {
+    cerr << "Can't open file " << filename << " for reading: " 
+         << strerror(errno) << "(" << errno << ")\n";
+    return 1;
     }
+
+  if (ifs_.peek() == EOF)
+    throw I3File::empty_file_exception();
 
   // get length of file:
   ifs_.seekg (0, ios::end);
   uint64_t length = ifs_.tellg();
   ifs_.seekg (0, ios::beg);
-  if (verbose)
-    {
-      cout << "Scanning " << filename << " (" << length << " bytes)\n";
-      cout.flush();
-    }
+
+  if (verbose) {
+    cout << "Scanning " << filename << " (" << length << " bytes)\n";
+    cout.flush();
+  }
 
   unsigned counter = 0, pct = 0;
 
@@ -143,8 +146,6 @@ I3FileImpl::open_file(const std::string& filename, boost::function<void(double)>
   cb(pct);
 
   std::map<I3Frame::Stream, unsigned> stream_cache;
-
-  bool first = true;
 
   vector<string> tmpskip;
   // revisit:  how to scan file w/o loading every frame object?
@@ -155,39 +156,39 @@ I3FileImpl::open_file(const std::string& filename, boost::function<void(double)>
     {
       FrameInfo frame_info;
       frame_info.pos = ifs_.tellg();
-      
+
       unsigned newpct = (int) ((double)frame_info.pos/(double)length * 100.0);
       if (newpct != pct)
-	{
-	  log_trace("send new percentage complete %u", (unsigned)pct);
-	  pct = newpct;
-	  cb(pct);
-	}
+        {
+          log_trace("send new percentage complete %u", (unsigned)pct);
+          pct = newpct;
+          cb(pct);
+        }
 
       if (ifs_.peek() == EOF)
-	break;
+        break;
 
       I3FramePtr frame(new I3Frame);
 
       try {
-	frame->load(ifs_, tmpskip);
+        frame->load(ifs_, tmpskip);
       } catch (const std::exception& e) {
-	log_info("caught exception %s at frame %zu", 
-		 e.what(), frame_infos_.size());
-	break;
+        log_info("caught exception %s at frame %zu",
+                 e.what(), frame_infos_.size());
+        break;
       }
 
       if (skipstreams)
-	{
-	  bool skipit = false;
-	  BOOST_FOREACH(const I3Frame::Stream& s, *skipstreams)
-	    {
-	      if (frame->GetStop() == s)
-		skipit = true;
-	    }
-	  if (skipit) 
-	    continue;
-	}
+        {
+          bool skipit = false;
+          BOOST_FOREACH(const I3Frame::Stream& s, *skipstreams)
+            {
+              if (frame->GetStop() == s)
+                skipit = true;
+            }
+          if (skipit)
+            continue;
+        }
 
       stream_cache[frame->GetStop()] = counter;
       log_trace("Frame %c at %u (%zu total)", frame->GetStop().id(), counter, stream_cache.size());
@@ -199,7 +200,6 @@ I3FileImpl::open_file(const std::string& filename, boost::function<void(double)>
     }
   return 0;
 }
-
 
 void
 I3FileImpl::move_first()
@@ -222,7 +222,7 @@ I3FileImpl::move_x(int delta)
   //  log_trace("post move x is %u", x_index_);
 }
 
-void 
+void
 I3FileImpl::do_goto_frame()
 {
   //  optional<unsigned> result = view_.dialog<unsigned>(" Goto frame number: ");
@@ -230,7 +230,7 @@ I3FileImpl::do_goto_frame()
   //    goto_frame(*result);
 }
 
-void 
+void
 I3FileImpl::goto_frame(unsigned frame)
 {
   //  x_index_ = frame - 1;
@@ -238,7 +238,7 @@ I3FileImpl::goto_frame(unsigned frame)
   move_x(frame - 1);
 }
 
-void 
+void
 I3FileImpl::move_y(int delta)
 {
   int newy = y_index_ + delta;
@@ -271,7 +271,7 @@ I3FileImpl::get_frame(unsigned index)
 {
   I3FramePtr frame = get_raw_frame(index);
   I3Frame cache;
-  
+
   const FrameInfo& fi = frame_infos_[index];
 
   log_trace("other streams size = %zu", fi.other_streams.size());
@@ -281,10 +281,10 @@ I3FileImpl::get_frame(unsigned index)
     {
       log_trace("prev frame %u on stream %c", iter->second, iter->first.id());
       if (iter->first == frame->GetStop())
-	{
-	  assert(iter->second == index); 
-	  continue;
-	}
+        {
+          assert(iter->second == index);
+          continue;
+        }
       I3FramePtr otherframe = get_raw_frame(iter->second);
       frame->merge(*otherframe);
     }
@@ -298,7 +298,7 @@ I3FileImpl::frames() const
   return frame_infos_;
 }
 
-vector<I3Frame::Stream> 
+vector<I3Frame::Stream>
 I3FileImpl::streams(unsigned start_index, unsigned length) const
 {
   assert(start_index + length <= frame_infos_.size());
@@ -312,7 +312,7 @@ I3FileImpl::streams(unsigned start_index, unsigned length) const
   return ret;
 }
 
-vector<I3Frame::Stream> 
+vector<I3Frame::Stream>
 I3FileImpl::streams() const
 {
   vector<I3Frame::Stream> ret;
@@ -339,24 +339,28 @@ I3File::I3File()
   : impl_(new I3FileImpl)
 { }
 
-I3File::~I3File() 
+I3File::~I3File()
 { }
 
-int 
+int
 I3File::open_file(const std::string& filename,
-		  boost::function<void(double)> cb,
-		  boost::optional<vector<I3Frame::Stream> > skipstreams,
-		  boost::optional<unsigned> nframes,
-		  bool verbose)
+                  boost::function<void(double)> cb,
+                  boost::optional<vector<I3Frame::Stream> > skipstreams,
+                  boost::optional<unsigned> nframes,
+                  bool verbose)
 {
   return impl_->open_file(filename, cb, skipstreams, nframes, verbose);
 }
 
-void 
+void
 I3File::close() { impl_->close(); }
 
-I3FramePtr I3File::get_frame(unsigned u) { return impl_->get_frame(u); }
-I3FramePtr I3File::get_raw_frame(unsigned u) { return impl_->get_raw_frame(u); }
+I3FramePtr I3File::get_frame(unsigned u) {
+  return impl_->get_frame(u);
+}
+I3FramePtr I3File::get_raw_frame(unsigned u) {
+  return impl_->get_raw_frame(u);
+}
 
 void I3File::move_first() { impl_->move_first(); }
 void I3File::move_last() { impl_->move_last(); }
@@ -366,7 +370,7 @@ void I3File::move_y(int delta) { impl_->move_y(delta); }
 void I3File::do_goto_frame() { impl_->do_goto_frame(); }
 void I3File::goto_frame(unsigned frameno) { impl_->goto_frame(frameno); }
 
-I3Frame::Stream 
+I3Frame::Stream
 I3File::stream(unsigned index) { return impl_->stream(index); }
 
 std::vector<I3Frame::Stream> I3File::streams(unsigned start_index, unsigned length) const
@@ -374,7 +378,7 @@ std::vector<I3Frame::Stream> I3File::streams(unsigned start_index, unsigned leng
   return impl_->streams(start_index,length);
 }
 
-std::vector<I3Frame::Stream> 
+std::vector<I3Frame::Stream>
 I3File::streams() const
 {
   return impl_->streams();
@@ -386,13 +390,13 @@ I3File::frames()
   return impl_->frames();
 }
 
-size_t 
-I3File::size() 
-{ 
+size_t
+I3File::size()
+{
   return impl_->size();
 }
 
-void 
+void
 I3File::set_skipkeys(const vector<string>& vs)
 {
   impl_->set_skipkeys(vs);

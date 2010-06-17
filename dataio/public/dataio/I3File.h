@@ -42,6 +42,13 @@ class I3File
 
 public:
 
+  struct empty_file_exception : virtual std::exception
+  {
+    virtual const char* what() const throw() {
+      return ".i3 file has zero size";
+    }
+  };
+
   struct FrameInfo
   {
     I3Frame::Stream stream;
@@ -56,15 +63,15 @@ public:
   ~I3File();
 
   int open_file(const std::string& filename,
-		boost::function<void(double)> cb = noop,
-		boost::optional<vector<I3Frame::Stream> > skipstreams = boost::optional<vector<I3Frame::Stream> >(),
-		boost::optional<unsigned> nframes = boost::optional<unsigned>(),
-		bool verbose = true);
+                boost::function<void(double)> cb = noop,
+                boost::optional<vector<I3Frame::Stream> > skipstreams = boost::optional<vector<I3Frame::Stream> >(),
+                boost::optional<unsigned> nframes = boost::optional<unsigned>(),
+                bool verbose = true);
 
   void async_open_file(const std::string& filename,
-		       boost::function<void(double)> cb = noop,
-		       boost::optional<vector<I3Frame::Stream> > skipstreams = boost::optional<vector<I3Frame::Stream> >(),
-		       boost::optional<unsigned> nframes = boost::optional<unsigned>());
+                       boost::function<void(double)> cb = noop,
+                       boost::optional<vector<I3Frame::Stream> > skipstreams = boost::optional<vector<I3Frame::Stream> >(),
+                       boost::optional<unsigned> nframes = boost::optional<unsigned>());
 
   void close();
 

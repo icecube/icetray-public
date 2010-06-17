@@ -56,7 +56,7 @@ Model::Model(View& view) : view_(view)
 }
 
 namespace {
-  void 
+  void
   fboo(double d)
   {
     View::Instance().scan_progress(d);
@@ -64,10 +64,10 @@ namespace {
 }
 
 int
-Model::open_file(const std::string& filename, 
-		 boost::optional<vector<I3Frame::Stream> > skipstreams,
-		 boost::optional<unsigned> nframes
-		 )
+Model::open_file(const std::string& filename,
+                 boost::optional<vector<I3Frame::Stream> > skipstreams,
+                 boost::optional<unsigned> nframes
+                 )
 {
   View::Instance().start_scan_progress(filename);
 
@@ -75,7 +75,7 @@ Model::open_file(const std::string& filename,
 
   if (i3file_.open_file(filename, fboo, skipstreams, nframes, false))
     log_fatal("error opening file %s", filename.c_str());
-  
+
   View::Instance().end_scan_progress();
 
   log_trace("i3file opened");
@@ -86,7 +86,7 @@ Model::open_file(const std::string& filename,
     {
       frame_infos_.push_back(make_pair(vfi[i], i));
       if (vfi[i].stream != I3Frame::TrayInfo)
-	frame_infos_other_.push_back(make_pair(vfi[i], i));
+        frame_infos_other_.push_back(make_pair(vfi[i], i));
     }
 
   return 0;
@@ -123,7 +123,7 @@ Model::move_x(int delta)
   notify();
 }
 
-void 
+void
 Model::do_goto_frame()
 {
   optional<unsigned> result = view_.dialog<unsigned>("  Goto frame number: ");
@@ -164,7 +164,7 @@ Model::write_frame()
   ofs.close();
 }
 
-void 
+void
 Model::goto_frame(unsigned frame)
 {
   //  x_index_ = frame - 1;
@@ -173,7 +173,7 @@ Model::goto_frame(unsigned frame)
   notify();
 }
 
-void 
+void
 Model::move_y(int delta)
 {
   int newy = y_index_ + delta;

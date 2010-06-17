@@ -54,7 +54,7 @@ namespace I3 { namespace dataio { namespace python {
     I3SequentialFile make_iterator()
     {
       if (mode_ != Reading)
-	throw std::runtime_error("Can only iterate over I3Files opened for reading"); 
+        throw std::runtime_error("Can only iterate over I3Files opened for reading"); 
 
       return I3SequentialFile(path_, mode_);
     }
@@ -85,13 +85,13 @@ namespace I3 { namespace dataio { namespace python {
     open_file(filename, mode);
   }
 
-  I3FramePtr 
+  I3FramePtr
   I3SequentialFile::next()
   {
     if (not more())
       {
-	PyErr_SetObject(PyExc_StopIteration, Py_None);
-	boost::python::throw_error_already_set();
+        PyErr_SetObject(PyExc_StopIteration, Py_None);
+        boost::python::throw_error_already_set();
       }
     return pop_frame();
   }
@@ -119,7 +119,7 @@ namespace I3 { namespace dataio { namespace python {
       I3::dataio::open(ifs_, filename);
     else if (mode_ == Writing)
       I3::dataio::open(ofs_, filename);
-    
+
     return 0;
   }
 
@@ -134,16 +134,16 @@ namespace I3 { namespace dataio { namespace python {
   {
     if (mode_ != Reading)
       log_fatal("can't pop from non-Reading file");
-    if(ifs_.peek() == EOF) 
+    if(ifs_.peek() == EOF)
       return I3FramePtr();
     I3FramePtr f(new I3Frame);
     while(more()) {
       try {
-	f->load(ifs_);  
-	if (s == I3Frame::None || f->GetStop() == s)
-	  return f;
+        f->load(ifs_);
+        if (s == I3Frame::None || f->GetStop() == s)
+          return f;
       } catch (const std::exception& e) {
-	log_fatal("caught exception %s", e.what());
+        log_fatal("caught exception %s", e.what());
       }
     }
     return I3FramePtr();
@@ -194,33 +194,33 @@ void register_I3SequentialFile()
      )
     .def(init<const I3SequentialFile&>("Copy constructor"))
     .def(init<const std::string&>((bp::arg("filename (may be .i3 or .i3.gz)")),
-				  "Create and open and I3File object for reading"))
+                                  "Create and open and I3File object for reading"))
     .def(init<const std::string&, I3SequentialFile::Mode>((bp::arg("filename (may be .i3 or .i3.gz)"), 
-						     bp::arg("Mode")="Reading"),
-						    "Create and open an I3File object, specifying the mode"))
+                                                     bp::arg("Mode")="Reading"),
+                                                    "Create and open an I3File object, specifying the mode"))
     .def("open_file", &I3SequentialFile::open_file,
-	 (bp::arg("filename (may be .i3 or .i3.gz)"), 
-	  bp::arg("Mode")="Reading"),
-	 "Open a .i3 file")
+         (bp::arg("filename (may be .i3 or .i3.gz)"), 
+          bp::arg("Mode")="Reading"),
+         "Open a .i3 file")
     .def("close",&I3SequentialFile::close, 
-	 "Close the file")
+         "Close the file")
     .def("more", &I3SequentialFile::more, 
-	 "Return True if there are more frames in the .i3 file")
+         "Return True if there are more frames in the .i3 file")
     .def("next", &I3SequentialFile::next, 
-	 "Return the next frame if one is available, else throw StopIteration")
+         "Return the next frame if one is available, else throw StopIteration")
     .def("rewind", &I3SequentialFile::rewind, 
-	 "Rewind to beginning of file and reopen")
+         "Rewind to beginning of file and reopen")
     .def("push", &I3SequentialFile::push,
-	 bp::arg("frame"),
-	 "Push a frame to the file (if file opened with Mode.Writing)")
+         bp::arg("frame"),
+         "Push a frame to the file (if file opened with Mode.Writing)")
     .def("pop_frame", (I3FramePtr (I3SequentialFile::*)())&I3SequentialFile::pop_frame,
-	 "Return the next frame on any stream from the file.")
+         "Return the next frame on any stream from the file.")
     .def("pop_frame", (I3FramePtr (I3SequentialFile::*)(I3Frame::Stream))&I3SequentialFile::pop_frame,
-	 (bp::arg("Stream")),
-	 "Return the next frame on stream 'Stream' from the file.")
+         (bp::arg("Stream")),
+         "Return the next frame on stream 'Stream' from the file.")
     .def("pop_physics", &I3SequentialFile::pop_physics,
-	 "Return the next physics frame from the file, skipping frames on "
-	 "other streams.")
+         "Return the next physics frame from the file, skipping frames on "
+         "other streams.")
     .def("__iter__", &I3SequentialFile::make_iterator)
     ;
 
