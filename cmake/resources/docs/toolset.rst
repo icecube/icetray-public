@@ -100,10 +100,10 @@ For instance, an override for tool *python* (filename
   set(PYTHON_VERSION "2.6")
   set(PYTHON_FOUND TRUE)
 
-.. alert:: If you use a nonsystem python as above, your toolset
-   	   (specifically the boost_python component of the boost tool)
-   	   must be built against that same python.  See the page for
-   	   the :ref:`PythonTool` for more information.
+.. warning:: If you use a nonsystem python as above, your toolset
+   	     (specifically the boost_python component of the boost tool)
+	     must be built against that same python.  See the page for
+	     the :ref:`PythonTool` for more information.
 
 Troubleshooting
 ---------------
