@@ -330,11 +330,11 @@ public:
   {
     try {
       value = configuration_.Get<T>(name);
-    } catch (const boost::python::error_already_set& e) {
+    } catch (...) {
       log_error("Error in %s module '%s', getting parameter '%s'",
 		I3::name_of(typeid(*this)).c_str(), GetName().c_str(), name.c_str());
-      boost::python::throw_error_already_set();
-    }
+      throw;
+    } 
   }
 
   /** The context wherein my configuration, outboxes, and so forth can
