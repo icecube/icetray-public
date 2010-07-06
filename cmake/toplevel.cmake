@@ -218,20 +218,27 @@ add_custom_target(env-check ALL
 execute_process(COMMAND mkdir -p ${DOXYGEN_OUTPUT_PATH}/.tagfiles 
   OUTPUT_VARIABLE DEV_NULL)
 
-#
-#  Glob together a list of subdirectories containing a CMakeLists.txt
-#
-file(GLOB cmake_projects RELATIVE ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/*/CMakeLists.txt)
-file(GLOB hidden_projects RELATIVE ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/.*/CMakeLists.txt)
+set(I3_PROJECTS "" CACHE STRING "List of projects to build (if empty, glob for CMakeLists.txt and use all")
 
-if(hidden_projects)
-  list(REMOVE_ITEM cmake_projects ${hidden_projects})
-endif(hidden_projects)
+if (NOT I3_PROJECTS)
+  #
+  #  Glob together a list of subdirectories containing a CMakeLists.txt
+  #
+  file(GLOB cmake_projects RELATIVE ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/*/CMakeLists.txt)
+  file(GLOB hidden_projects RELATIVE ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/.*/CMakeLists.txt)
 
-foreach(d ${cmake_projects})
-  get_filename_component(proj ${d} PATH)
-  set(SUBDIRS ${SUBDIRS} ${proj})
-endforeach(d ${cmake_projects})
+  if(hidden_projects)
+    list(REMOVE_ITEM cmake_projects ${hidden_projects})
+  endif(hidden_projects)
+
+  foreach(d ${cmake_projects})
+    get_filename_component(proj ${d} PATH)
+    set(SUBDIRS ${SUBDIRS} ${proj})
+  endforeach(d ${cmake_projects})
+else()
+  message(STATUS "Using project list manually specified by I3_PROJECTS")
+  set(SUBDIRS ${I3_PROJECTS})
+endif()
 
 i3_add_testing_targets()
 
