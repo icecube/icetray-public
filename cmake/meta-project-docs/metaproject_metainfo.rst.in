@@ -1,5 +1,5 @@
-svn information
----------------
+Svn information for this metaproject
+------------------------------------
 
 :meta-project: @META_PROJECT@
 :url:          @SVN_URL@

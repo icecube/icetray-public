@@ -14,6 +14,37 @@ single, one-stop-shopping experience.  The current toolset is::
 
 Quick start for the impatient
 ------------------------------
+
+Install dependencies
+^^^^^^^^^^^^^^^^^^^^
+
+First you'll need to install dependencies, these are system libraries
+that our software requires in order to build.  The easiest way to do
+this is with one of the scripts here: 
+
+  http://code.icecube.wisc.edu/icetray-dist/distros/
+
+Run these scripts as root and they should install the necessary
+dependencies.  If they don't drop us a mail at
+dataclass@icecube.wisc.edu.
+
+If your platform is not listed, the process may be more
+trial-and-error.  For sure you'll need:
+
+* Subversion
+* Tcl, /usr/lib/tclConfig.sh, and Tcl header files
+* OpenSSL header files
+* Curl
+* X11 libraries (required by ROOT) - specifically, /usr/X11R6/lib/libX11.so must be present (it is usually a symbolic link pointing to /usr/X11R6/lib/libX11.so.?)
+* bzip2 header file (/usr/include/bzlib.h) and libraries (required by Boost build)
+
+You can have a look at some of the scripts for other platforms to get
+an idea of what else is required.
+
+
+Build and install ports
+^^^^^^^^^^^^^^^^^^^^^^^
+
 The MacPorts two-step:
 
 * Perform a checkout of the project's latest copy of the MacPorts
@@ -64,26 +95,6 @@ Important Notes
 * Platform-specific notes and minor required changes can be found at
   the bottom of this page.  Please read the notes appropriate to your
   platform before beginning installation.
-
-Dependencies
-^^^^^^^^^^^^^^
-
-The new tools system depends on:
-
-* Subversion
-* Tcl, /usr/lib/tclConfig.sh, and Tcl header files
-* OpenSSL header files
-* Curl
-* X11 libraries (required by ROOT) - specifically, /usr/X11R6/lib/libX11.so must be present (it is usually a symbolic link pointing to /usr/X11R6/lib/libX11.so.?)
-* bzip2 header file (/usr/include/bzlib.h) and libraries (required by Boost build)
-
-(To get those header files on RedHat systems, install the 'tcl-devel'
-and/or 'openssl-devel' packages.)
-
-Getting started - Manually compiling tools for your personal development
-
-Most people should just use the Quickstart guide
-[[New_Tool_Build_system#Quick_start_for_the_impatient]]
 
 The individual steps
 ---------------------
