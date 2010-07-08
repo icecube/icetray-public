@@ -238,7 +238,7 @@ working with:
 Troubleshooting
 ---------------
 
-If your :file:``i3-install.sh`` build gets interrupted for some reason
+If your :file:`i3-install.sh` build gets interrupted for some reason
 (other than an error), there is no need to remove all your previous
 work and start from scratch.  You can take a look at the contents of
 the i3-install.sh file.  As long as you are past the "make install"
