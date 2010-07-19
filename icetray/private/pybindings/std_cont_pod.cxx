@@ -115,5 +115,6 @@ void register_std_cont_pod()
 
   std_pair_to_python_converter<unsigned long long int, unsigned long long int>();
   std_pair_to_python_converter<string, I3FrameObjectConstPtr>();
+  std_pair_to_python_converter<float, float>();
 }
 
