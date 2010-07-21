@@ -48,6 +48,12 @@ else()
     set(BOOST_LIB_SUFFIX "-mt-d")
   endif()
 
+  if (IS_DIRECTORY  ${I3_PORTS}/lib/boost-${BOOST_VERSION})
+    set(BOOST_LIBRARY_DIR ${I3_PORTS}/lib/boost-${BOOST_VERSION})
+  else()
+    message(ERROR "BOOST_VERSION is set to \"${BOOST_VERSION}\", but I can't find ${I3_PORTS}/lib/boost-${BOOST_VERSION}")
+  endif()
+
   set(BOOST_ALL_LIBRARIES 
     boost_python${BOOST_LIB_SUFFIX} 
     boost_system${BOOST_LIB_SUFFIX} 

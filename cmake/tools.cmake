@@ -40,7 +40,7 @@ endif()
 #
 #  These guys are in subdirectory 'tools'
 #
-set(ALL_TOOLS pthread root boost python
+set(ALL_TOOLS pthread root boost python hippodraw
     rdmc expat gsl sprng sla
     mysql bdb log4cplus photonics ptd
     ZThread omniORB fox jni ncurses
