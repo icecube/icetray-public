@@ -59,7 +59,8 @@ I3Tray::I3Tray() :
   factory_contexts(),
   module_contexts(),
   boxes_connected(false),
-  finish_called(false)
+  finish_called(false),
+  execute_called(false)
 {
   // This is a very special hack, and not sooo bad. We're putting a
   // shared pointer to a bald pointer, in this internal service
@@ -392,6 +393,7 @@ I3Tray::Configure()
 void
 I3Tray::Execute()
 {
+  execute_called = true;
   signal(SIGINT, set_suspend_flag);
 
   Configure();
@@ -409,6 +411,7 @@ I3Tray::Execute()
 void
 I3Tray::Execute(unsigned maxCount)
 {
+  execute_called = true;
   signal(SIGINT, set_suspend_flag);
 
   Configure();
@@ -444,7 +447,7 @@ I3Tray::Usage()
 void
 I3Tray::Finish()
 {
-  if (finish_called)
+  if (finish_called || !execute_called)
     return;
   finish_called = true;
 
