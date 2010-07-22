@@ -23,6 +23,8 @@
 #ifndef ICETRAY_I3TRAY_H_INCLUDED
 #define ICETRAY_I3TRAY_H_INCLUDED
 
+#include <signal.h>
+
 #include <map>
 #include <string>
 #include <exception>
@@ -256,11 +258,13 @@ private:
   I3ModulePtr driving_module;
 
   bool boxes_connected;
-  bool driving_module_already_added;
+  bool finish_called;
 
   SET_LOGGER("I3Tray");
 
-  static bool suspension_requested_;
+  static volatile sig_atomic_t suspension_requested_;
+
+  static void set_suspend_flag(int sig);
 
   friend void I3Module::RequestSuspension() const;
 
