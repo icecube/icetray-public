@@ -259,6 +259,7 @@ private:
 
   bool boxes_connected;
   bool finish_called;
+  bool execute_called;
 
   SET_LOGGER("I3Tray");
 
