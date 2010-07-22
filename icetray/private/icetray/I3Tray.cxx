@@ -21,6 +21,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
+#include <signal.h>
+
 #include <string>
 #include <map>
 #include <iostream>
@@ -41,17 +43,23 @@
 #include <icetray/serialization.h>
 
 
-
-
 using namespace std;
 
-bool I3Tray::suspension_requested_;
+volatile sig_atomic_t I3Tray::suspension_requested_;
+
+void I3Tray::set_suspend_flag(int sig)
+{
+  std::cerr << "\n***\n*** SIGINT received.   Calling Finish() at the end of the current frame. \n*** Hit ^C again to force quit.\n***\n";
+  if (sig == SIGINT)
+    suspension_requested_ = 1;
+}
 
 I3Tray::I3Tray() :
   factories(),
   factory_contexts(),
   module_contexts(),
-  boxes_connected(false)
+  boxes_connected(false),
+  finish_called(false)
 {
   // This is a very special hack, and not sooo bad. We're putting a
   // shared pointer to a bald pointer, in this internal service
@@ -69,6 +77,7 @@ I3Tray::I3Tray() :
 
 I3Tray::~I3Tray()
 {
+  Finish();
   suspension_requested_ = false;
   active_context_ = 0;
 }
@@ -383,6 +392,7 @@ I3Tray::Configure()
 void
 I3Tray::Execute()
 {
+  signal(SIGINT, set_suspend_flag);
 
   Configure();
 
@@ -399,6 +409,8 @@ I3Tray::Execute()
 void
 I3Tray::Execute(unsigned maxCount)
 {
+  signal(SIGINT, set_suspend_flag);
+
   Configure();
 
   if (!driving_module)
@@ -432,6 +444,12 @@ I3Tray::Usage()
 void
 I3Tray::Finish()
 {
+  if (finish_called)
+    return;
+  finish_called = true;
+
+  std::cout << "I3Tray finishing...\n";
+
   if (!driving_module)
     log_fatal("Attempt to call finish, but there is no driving module.  Did you forget to call Execute()?");
   driving_module->Do(&I3Module::Finish);
