@@ -20,8 +20,11 @@ endif()
 if(HIPPO_LIB)
   find_path(HIPPO_PYTHON hippomodule.so
     PATHS
+    ${I3_PORTS}/lib64/${pyver}/site-packages
+    ${I3_PORTS}/lib64/${pyver}/dist-packages
+    ${I3_PORTS}/lib/${pyver}/site-packages
     ${I3_PORTS}/lib/${pyver}/dist-packages)
-  
+
   find_path(HIPPO_LIBRARY_DIR libhippo.so
     PATHS
     ${I3_PORTS}/lib ${TOOL_SYSTEM_PATH})
