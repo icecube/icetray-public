@@ -60,12 +60,22 @@ else(NOT USE_ROOT)
     set(ROOTSYS ${I3_PORTS}/root-v${ROOT_VERSION} CACHE STRING "The beloved ROOTSYS.")
   endif(NOT ROOTSYS)
 
+  find_library(FIND_ROOT_NETX_LIBRARY 
+    Netx 
+    PATHS ${ROOTSYS}/lib
+    NO_DEFAULT_PATH)
+
+  if (FIND_ROOT_NETX_LIBRARY)
+    set(ROOT_NETX_LIBRARY Netx)
+    add_definitions(-DROOT_HAS_NETX)
+  endif()
+
   tooldef (root 
     ${ROOTSYS}/include
     TObject.h
     ${ROOTSYS}/lib
     ${ROOTSYS}/bin
-    ${ROOT_${ROOT_VERSION}_LIBS}
+    ${ROOT_${ROOT_VERSION}_LIBS} ${ROOT_NETX_LIBRARY}
     )
   set(COMMON_TOOLS ${COMMON_TOOLS} root)
   set(ROOT_LIBRARIES ${ROOT_LIBRARIES} ${pthread_LIBRARIES})
