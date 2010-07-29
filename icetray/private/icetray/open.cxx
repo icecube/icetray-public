@@ -27,6 +27,7 @@
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
 #include <boost/iostreams/constants.hpp>
+#include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/device/mapped_file.hpp>
 
@@ -40,6 +41,10 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+
+#ifdef ROOT_HAS_NETX
+#include <TXNetFile.h>
+#endif
 
 #define I3_WITH_MMAPPED_FILE_SOURCE
 
@@ -64,6 +69,41 @@ namespace boost {
 using namespace boost::archive;
 using namespace std;
 
+#ifdef ROOT_HAS_NETX
+struct xrootd_source 
+{
+  typedef char char_type;
+  typedef boost::iostreams::source_tag category;
+
+  std::streamsize bytes_read;
+  std::string name;
+  boost::shared_ptr<TXNetFile> netfile;
+
+  xrootd_source(const std::string& s)
+    : bytes_read(0),
+      name(s + "?filetype=raw"),
+      netfile(new TXNetFile(name.c_str()))
+  { }
+
+  std::streamsize read(char* s, std::streamsize n)
+  {
+    bool b = netfile->ReadBuffer(s, n);
+    if (b == kTRUE) // error
+      {
+	//
+	// FIXME:  how can we tell if this is regular EOF or something
+	//         really bad?
+	//
+	//	log_error("error reading from xrootd");
+	return -1;
+      }
+    std::streamsize newsize = netfile->GetBytesRead();
+    std::streamsize r = newsize-bytes_read;
+    bytes_read = newsize;
+    return r;
+  }
+};
+#endif
 namespace I3 {
   namespace dataio {
 
@@ -92,17 +132,28 @@ namespace I3 {
 	  log_trace("Input file doesn't end in .gz.  Not decompressing.");
 	}
 
-#ifdef I3_WITH_MMAPED_FILE_SOURCE
-      io::mapped_file_source fs(filename);
+      if (filename.find("root://") == 0)
+	{
+#ifdef ROOT_HAS_NETX
+	  xrootd_source src(filename);
+	  ifs.push(src);
 #else
-      io::file_source fs(filename);
+	  log_fatal("IceTray was compiled without xrootd support, unable to open file %s",
+		    filename.c_str());
 #endif
+	} else {
 
-      if (!fs.is_open())
-	log_fatal("problems opening file '%s' for reading.  Check permissions, paths.",
-		  filename.c_str());
+#ifdef I3_WITH_MMAPED_FILE_SOURCE
+	io::mapped_file_source fs(filename);
+#else
+	io::file_source fs(filename);
+#endif
+	if (!fs.is_open())
+	  log_fatal("problems opening file '%s' for reading.  Check permissions, paths.",
+		    filename.c_str());
 
-      ifs.push(fs);
+	ifs.push(fs);
+      }
       
       log_debug("Opened file %s", filename.c_str());
     }
