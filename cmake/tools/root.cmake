@@ -60,10 +60,12 @@ else(NOT USE_ROOT)
     set(ROOTSYS ${I3_PORTS}/root-v${ROOT_VERSION} CACHE STRING "The beloved ROOTSYS.")
   endif(NOT ROOTSYS)
 
-  find_library(FIND_ROOT_NETX_LIBRARY 
-    Netx 
-    PATHS ${ROOTSYS}/lib
-    NO_DEFAULT_PATH)
+  if (EXISTS ${ROOTSYS}/include/TXNetFile.h)
+    find_library(FIND_ROOT_NETX_LIBRARY 
+      Netx 
+      PATHS ${ROOTSYS}/lib
+      NO_DEFAULT_PATH)
+  endif()
 
   if (FIND_ROOT_NETX_LIBRARY)
     set(ROOT_NETX_LIBRARY Netx)
