@@ -26,6 +26,25 @@ if(USE_I3_FRAMEWORK_LOGGING)
   add_definitions(-DI3_FRAMEWORK_LOGGING)
 endif()
 
+# 
+#  Check for dcap
+#  
+find_library(DCAP_LIBRARIES dcap)
+find_file(FIND_DCAP_H dcap.h)
+
+get_filename_component(DCAP_INCLUDE_DIR ${FIND_DCAP_H} PATH)
+
+if (DCAP_LIBRARIES AND DCAP_INCLUDE_DIR)
+  message(STATUS "+ Found libdcap, enabling dcap support")
+  add_definitions(-DI3_WITH_DCAP)
+  include_directories(${DCAP_INCLUDE_DIR})
+else()
+  set(DCAP_LIBRARIES "")  
+endif()  
+
+
+
+
 i3_project(icetray
   DOCS_DIR resources/docs
   PYTHON_DIR python)
@@ -112,7 +131,7 @@ i3_add_library(icetray
   ${ICETRAY_PYTHON_SRC}
 
   USE_TOOLS boost python log4cplus root
-  LINK_LIBRARIES ${BOOST_PYTHON}
+  LINK_LIBRARIES ${BOOST_PYTHON} ${DCAP_LIBRARIES}
   ROOTCINT public/icetray/I3FrameObject.h)
 
 #
