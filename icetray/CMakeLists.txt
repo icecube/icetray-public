@@ -39,6 +39,7 @@ if (DCAP_LIBRARIES AND DCAP_INCLUDE_DIR)
   add_definitions(-DI3_WITH_DCAP)
   include_directories(${DCAP_INCLUDE_DIR})
 else()
+  message(STATUS "+ libdcap *not* found, omitting optional dcap support")
   set(DCAP_LIBRARIES "")  
 endif()  
 
