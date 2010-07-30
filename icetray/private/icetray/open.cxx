@@ -46,6 +46,10 @@
 #include <TXNetFile.h>
 #endif
 
+#ifdef I3_WITH_DCAP
+#include <dcap.h>
+#endif
+
 #define I3_WITH_MMAPPED_FILE_SOURCE
 
 #ifdef I3_WITH_MMAPPED_FILE_SOURCE
@@ -104,6 +108,33 @@ struct xrootd_source
   }
 };
 #endif
+
+#ifdef I3_WITH_DCAP
+struct dcap_source 
+{
+  typedef char char_type;
+  struct category 
+    : boost::iostreams::source_tag,
+      boost::iostreams::closable_tag { };
+
+  std::string name;
+  int fd;
+
+  dcap_source(const std::string& s)
+  { 
+    fd = dc_open(s.c_str(), O_RDONLY);
+  }
+
+  std::streamsize read(char* s, std::streamsize n)
+  {
+    return dc_read(fd, s, n);
+  }
+  void close() {
+    dc_close(fd);
+  }
+};
+#endif
+
 namespace I3 {
   namespace dataio {
 
@@ -141,8 +172,16 @@ namespace I3 {
 	  log_fatal("IceTray was compiled without xrootd support, unable to open file %s",
 		    filename.c_str());
 #endif
-	} else {
-
+	} 
+      else if (filename.find("dcap://") == 0) {
+#ifdef I3_WITH_DCAP
+	dcap_source src(filename);
+	ifs.push(src);
+#else
+	  log_fatal("IceTray was compiled without dcap support, unable to open file %s",
+		    filename.c_str());
+#endif
+      } else {
 #ifdef I3_WITH_MMAPED_FILE_SOURCE
 	io::mapped_file_source fs(filename);
 #else
