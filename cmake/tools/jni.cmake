@@ -105,10 +105,10 @@ SET(JNI_INCLUDE_DIR ${jni_h_include_dir} ${jni_md_h_include_dir}
 
 SET(JNI_LIBRARIES ${jni_jvm_lib} ${jni_verify_lib} ${jni_zip_lib}
   CACHE STRING "Libraries for tool jni" FORCE)
-IF(${CMAKE_SYSTEM} MATCHES "Darwin-10.3.0")
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 SET(JNI_LIBRARIES ${jni_jvm_lib} ${jni_jvmlinkage_lib} ${jni_verify_lib} ${jni_zip_lib}
   CACHE STRING "Libraries for tool jni" FORCE)
-ENDIF(${CMAKE_SYSTEM} MATCHES "Darwin-10.3.0")
+ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 SET(JNI_FOUND TRUE CACHE BOOL "Jni found flag" FORCE)
 
