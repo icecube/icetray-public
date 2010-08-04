@@ -53,7 +53,7 @@ REPORT_FIND(jni "jvm library" ${jni_jvm_lib})
 #
 # libjvmlinkage
 #
-IF(${CMAKE_SYSTEM} MATCHES "Darwin-10.3.0")
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 FIND_LIBRARY(jni_jvmlinkage_lib
 	NAMES jvmlinkage
 	PATHS $ENV{JAVA_HOME}
@@ -61,7 +61,7 @@ FIND_LIBRARY(jni_jvmlinkage_lib
 	${TOOL_SYSTEM_PATH}
 )
 REPORT_FIND(jni "jvmlinkage library" ${jni_jvm_lib})
-ENDIF(${CMAKE_SYSTEM} MATCHES "Darwin-10.3.0")
+ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 #
 # libverify
