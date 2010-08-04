@@ -20,6 +20,7 @@
 using namespace boost::assign;
 
 static bool bool_param;
+static unsigned char uchar_param;
 static int int_param;
 static long long_param;
 static double double_param;
@@ -38,6 +39,9 @@ struct AllParametersModule : I3Module
 
     bool_param = true;
     AddParameter("bool_param", "description of bool", bool_param);
+
+    uchar_param = std::numeric_limits<unsigned char>::max();
+    AddParameter("uchar_param", "description of uchar", uchar_param);
 
     int_param = std::numeric_limits<int>::max();
     AddParameter("int_param", "description of int", int_param);
@@ -75,6 +79,7 @@ struct AllParametersModule : I3Module
   virtual void Configure() 
   { 
     GetParameter("bool_param", bool_param);
+    GetParameter("uchar_param", uchar_param);
     GetParameter("int_param", int_param);
     GetParameter("long_param", long_param);
     GetParameter("double_param", double_param);
