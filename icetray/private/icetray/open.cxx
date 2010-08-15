@@ -120,19 +120,49 @@ struct dcap_source
   std::string name;
   int fd;
 
+  static const std::string prefix;
+
   dcap_source(const std::string& s)
   { 
-    fd = dc_open(s.c_str(), O_RDONLY);
+    dc_setClientActive();
+
+    std::string dcapfile = "";
+    if (s.compare(prefix.size(), 3, "///") == 0) { // file name given as dcap:///pnfs/path/to/file
+      dcapfile = s.substr(prefix.size());
+    } else if (s.compare(prefix.size(), 2, "//") == 0) { // file name given as dcap://site.org/path/to/file
+      dcapfile = s;
+    } else {
+      log_error("Cannot open file '%s' on dCache.", s.c_str());
+      fd = -1;
+      return;
+    }
+
+    fd = dc_open(dcapfile.c_str(), O_RDONLY);
   }
 
   std::streamsize read(char* s, std::streamsize n)
   {
-    return dc_read(fd, s, n);
+    dc_errno = 0;
+    std::streamsize nread = dc_read(fd, s, n);
+
+    if (nread == 0) return -1;   // boost::iostreams indicates eof by return value -1
+    if (nread < 0) {
+      log_error("Error reading file.");
+      return -1;
+    }
+
+    return nread;
   }
+
   void close() {
     dc_close(fd);
   }
+
 };
+
+const std::string dcap_source::prefix = "dcap:";
+
+int dc_errno;
 #endif
 
 namespace I3 {

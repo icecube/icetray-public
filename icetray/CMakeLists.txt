@@ -29,8 +29,8 @@ endif()
 # 
 #  Check for dcap
 #  
-find_library(DCAP_LIBRARIES dcap)
-find_file(FIND_DCAP_H dcap.h)
+find_library(DCAP_LIBRARIES dcap HINTS ${DCAP_INSTALL_PREFIX}/lib ${DCAP_INSTALL_PREFIX}/lib64)
+find_file(FIND_DCAP_H dcap.h HINTS ${DCAP_INSTALL_PREFIX}/include)
 
 get_filename_component(DCAP_INCLUDE_DIR ${FIND_DCAP_H} PATH)
 
