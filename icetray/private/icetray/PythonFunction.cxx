@@ -47,6 +47,8 @@ class PythonFunction : public I3Module
   std::set<I3Frame::Stream> streams;
   bp::dict paramsd;
   std::vector<std::string> configkeys;
+  bp::handle<> numpy_bool_type;
+  bp::handle<> numpy_true, numpy_false;
 
   PythonFunction(const PythonFunction&);
   PythonFunction& operator=(const PythonFunction&);
@@ -110,10 +112,31 @@ PythonFunction::PythonFunction(const I3Context& context)
 
   bp::list l;
   l.append(I3Frame::Physics);
-  AddParameter("Streams", 
+  AddParameter("Streams",
 	       "A list of frame types which this function should fire on.  By default "
 	       "runs only on physics frames",
 	       l);
+
+  // try to get the numpy bool type
+  // don't use a handle, this is okay if it fails
+  PyObject* numpy_module = PyImport_ImportModule("numpy");
+
+  // don't use a handle here either... this is a borrowed reference
+  PyObject* errobj = PyErr_Occurred();
+  PyErr_Clear();
+
+  if (numpy_module != 0 and errobj == 0)
+    {
+      numpy_bool_type = bp::handle<>(PyObject_GetAttrString(numpy_module, 
+							    "bool_"));
+      
+      numpy_true = bp::handle<>(PyObject_GetAttrString(numpy_module,
+						       "True_"));
+      
+      numpy_false = bp::handle<>(PyObject_GetAttrString(numpy_module,
+							"False_"));
+    }
+  Py_XDECREF(numpy_module);
 }
 
 PythonFunction::~PythonFunction()
@@ -167,18 +190,29 @@ void PythonFunction::Process()
       log_error("Error running python function as module:");
       throw bp::error_already_set();
     }
+
   try {
     if (p == Py_None)
       {
 	flag = true;
 	i3_log("Keeping frame because we got None");
       }
+    else if ((void*)p->ob_type == (void*)numpy_bool_type.get())
+      {
+	if (p == numpy_true.get())
+	  flag = true;
+	else if (p == numpy_false.get())
+	  flag = false;
+	else
+	  log_fatal("Python function '%s' returned object of type numpy.bool_, but it isn't either numpy.True_ or numpy.False_... what gives?",
+		    GetName().c_str());
+      }
     else
       {
 	bp::handle<> h(p);
 	rv = bp::object(h);
 	flag = bp::extract<bool>(rv);
-	i3_log("Extracted boolean value %d", flag);
+	i3_log("Extracted value %d", flag);
       }
     i3_log("frame @ %p", frame.get());
 

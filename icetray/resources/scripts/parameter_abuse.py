@@ -30,7 +30,7 @@ try:
 
 except TypeError, t:
 
-    print "OK, threw as expected"
+    print "OK, threw as expected", t
     sys.exit(0)
 
 else:
