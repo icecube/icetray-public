@@ -51,6 +51,11 @@ Try to phrase your question so someone will *not* have to ask:
 * When did the problem start?
 * Can you reduce this to a portion of code that fails?
 
+**If you are not using a meta-project, or have added a module to a
+meta-project, please specify clearly in your email if you did such a
+thing.** Obviously it is difficult to diagnose problems e.g. compiling
+code, when one doesn't know what code is being compiled.
+
 Isolate the problem.
 ^^^^^^^^^^^^^^^^^^^^
 
