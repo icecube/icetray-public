@@ -1,4 +1,4 @@
-Effective mailng-list communication
+Effective mailing-list communication
 -----------------------------------
 
 Don't "top-post"
@@ -107,18 +107,6 @@ individual if you aren't absolutely sure you are correct.  To do so
 will only create confusion and breed antagonism.
 
 
-Google your error messages.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Definitely plug the text of your error message into the 'main' google,
-and to the one at http://internal.icecube.wisc.edu/google.  Error
-messages tend to google well.  If you find something that fixes your
-problem, post to one of the lists that the problem still exists and
-the answer is to be found (include links).  If you don't find anything
-precisely relevant, it can be helpful to included that "I found
-something that appears to be related [here]".
-
-
 Try it out.
 ^^^^^^^^^^^
 
@@ -206,6 +194,17 @@ for diagnosis.  There may be a tremendous amount of output; it might
 make sense to include only the bits that are related to the failure.
 
 
+State clearly what software you are using
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Diagnosing problems can be very difficult if people are unable to
+reproduce them. Therefore, it is important to state what versions
+of projects / meta-projects are causing the problem. The problem
+might already have been fixed in a newer version or on trunk.
 
+Especially, if you include further projects in a meta-project
+release you might be on your own. Meta-project maintainers invest
+a lot of time to make sure that meta-project releases and the trunk
+are working. Extra projects may require dependencies that are not
+satisfied in a given meta-project release. 
 
