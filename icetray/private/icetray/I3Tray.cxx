@@ -47,6 +47,9 @@ using namespace std;
 
 volatile sig_atomic_t I3Tray::suspension_requested_;
 
+namespace bp = boost::python;
+
+
 void I3Tray::set_suspend_flag(int sig)
 {
   std::cerr << "\n***\n*** SIGINT received.   Calling Finish() at the end of the current frame. \n*** Hit ^C again to force quit.\n***\n";
@@ -91,11 +94,11 @@ I3Tray::Abort()
 I3Tray::param_setter
 I3Tray::AddModule(const std::string& classname, const std::string& instancename)
 {
-  return AddModule(boost::python::object(classname), instancename);
+  return AddModule(bp::object(classname), instancename);
 }
 
 I3Tray::param_setter
-I3Tray::AddModule(boost::python::object obj, const std::string& instancename)
+I3Tray::AddModule(bp::object obj, const std::string& instancename)
 {
   modules_in_order.push_back(instancename);
   I3ContextPtr context(new I3Context);
@@ -104,7 +107,7 @@ I3Tray::AddModule(boost::python::object obj, const std::string& instancename)
   if(PyString_Check(obj.ptr())) 
     // obj is a string... construct C++ module later from factory
     {
-      config->ClassName(boost::python::extract<std::string>(obj));
+      config->ClassName(bp::extract<std::string>(obj));
     } 
   else if (PyFunction_Check(obj.ptr()))
     // it is a python function... put the object in the context and 
@@ -113,7 +116,7 @@ I3Tray::AddModule(boost::python::object obj, const std::string& instancename)
       config->ClassName("PythonFunction"); // Used to look up Create function in factory
       // only in this case... we need the python object whose constructor will get called
       // by the Create function
-      context->Put(boost::shared_ptr<boost::python::object>(new boost::python::object(obj)), 
+      context->Put(boost::shared_ptr<bp::object>(new bp::object(obj)), 
                    "object");
     } 
   else if (PyType_Check(obj.ptr()))
@@ -121,7 +124,7 @@ I3Tray::AddModule(boost::python::object obj, const std::string& instancename)
       config->ClassName("PythonModule"); // Used to look up Create function in factory
       // only in this case... we need the python object whose constructor will get called
       // by the Create function
-      context->Put(boost::shared_ptr<boost::python::object>(new boost::python::object(obj)),
+      context->Put(boost::shared_ptr<bp::object>(new bp::object(obj)),
                    "class");
     }
   else
@@ -480,7 +483,7 @@ I3Tray::SetParameter(const string& module,
 bool 
 I3Tray::SetParameter(const string& module,
                      const string& parameter,
-                     boost::python::object value)
+                     bp::object value)
 {
   log_trace("%s", __PRETTY_FUNCTION__);
   shared_ptr<I3Context> context;
@@ -499,7 +502,7 @@ I3Tray::SetParameter(const string& module,
 
   config.Set(parameter, value);
 
-  string value_as_string = boost::python::extract<std::string>(value.attr("__str__")());
+  string value_as_string = bp::extract<std::string>(value.attr("__str__")());
   
   log_debug("setting %s (%s => %s) in config record",
             module.c_str(), parameter.c_str(), value_as_string.c_str());
