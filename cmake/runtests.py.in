@@ -171,8 +171,10 @@ def main():
             print '\t', i
         print '\n'
 
+    return len(fails)
+
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
     
     
 
