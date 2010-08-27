@@ -81,7 +81,11 @@ I3Tray::I3Tray() :
 
 I3Tray::~I3Tray()
 {
-  Finish();
+  // this Finish() is introducing too many bugs.  Bad.  
+  // interferes with checking for 'execute called', etc.
+  // uncomment and run the test suite to see.
+  // Finish();
+
   suspension_requested_ = false;
   active_context_ = 0;
 }
