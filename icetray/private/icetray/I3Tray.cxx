@@ -454,8 +454,12 @@ I3Tray::Usage()
 void
 I3Tray::Finish()
 {
-  if (finish_called || !execute_called)
+  if (finish_called || !execute_called) {
+    const string e = "Finish() already called, or before calling Execute()";
+    log_trace("%s", e.c_str());
+    throw runtime_error(e.c_str());
     return;
+  }
   finish_called = true;
 
   std::cout << "I3Tray finishing...\n";
