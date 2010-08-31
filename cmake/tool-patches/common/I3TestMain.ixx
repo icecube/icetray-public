@@ -456,7 +456,7 @@ int main(int argc, char* argv[])
       ("make-dartfiles,m", po::value< string >(&dartpath), "make dartfiles in directory PATH")
       ("show-spew,s", "pass along any thing the test spews to cout/cerr (you want to see it)")
       ("list,l", "list tests and groups in this suite")
-      ("run-tests", po::value< vector<string> >(), "list of tests to run")
+      ("run-tests,r", po::value< vector<string> >(), "list of tests to run")
       ("timeout,t", po::value< int >(), "timeout unit tests after this many seconds")
       ;
 
