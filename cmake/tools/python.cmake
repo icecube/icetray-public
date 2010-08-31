@@ -72,3 +72,21 @@ if(PYTHON_NUMERIC_VERSION LESS 20400)
   message(STATUS "+ including subprocess module")
   set(INSTALL_PYTHON_SUBPROCESS TRUE)
 endif(PYTHON_NUMERIC_VERSION LESS 20400)
+
+# look for numpy
+execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import numpy"
+    RESULT_VARIABLE NUMPY_FOUND)
+
+if(NOT NUMPY_FOUND EQUAL 0)
+	set(NUMPY_FOUND FALSE CACHE BOOL "Numpy found successfully" FORCE)
+else(NOT NUMPY_FOUND EQUAL 0)
+	set(NUMPY_FOUND TRUE CACHE BOOL "Numpy found successfully" FORCE)
+	execute_process(COMMAND ${PYTHON_EXECUTABLE} -c
+	    "from numpy.distutils.misc_util import get_numpy_include_dirs; print get_numpy_include_dirs()[0]"
+	    OUTPUT_VARIABLE NUMPY_INCLUDE_DIR
+	    OUTPUT_STRIP_TRAILING_WHITESPACE)
+	set(NUMPY_INCLUDE_DIR ${NUMPY_INCLUDE_DIR} CACHE STRING "Numpy inc directory" FORCE)
+	message(STATUS "+    numpy: ${NUMPY_INCLUDE_DIR}")
+endif(NOT NUMPY_FOUND EQUAL 0)
+
+
