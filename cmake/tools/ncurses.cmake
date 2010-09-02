@@ -17,6 +17,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
+MESSAGE(STATUS "ncurses")
+set(CURSES_NEED_NCURSES TRUE)
 find_package(Curses)
 
 # 
@@ -28,6 +30,13 @@ else(NOT CURSES_FOUND)
 
   set(NCURSES_FOUND TRUE)
 
+  if(CURSES_HAVE_NCURSES_NCURSES_H)
+    find_path(CURSES_INCLUDE_PATH ${CURSES_HAVE_NCURSES_NCURSES_H})
+    message(STATUS "+ ncurses.h found at ${CURSES_INCLUDE_DIR} (this should with \"ncurses\")")
+  else(CURSES_HAVE_NCURSES_NCURSES_H)
+    message(STATUS "+ ncurses.h found at ${CURSES_INCLUDE_DIR}")
+  endif(CURSES_HAVE_NCURSES_NCURSES_H)
+      
   set(NCURSES_INCLUDE_DIR ${CURSES_INCLUDE_PATH} 
     CACHE STRING "Include dir for tool 'ncurses'")
   set(NCURSES_LIBRARIES ${CURSES_LIBRARIES}
