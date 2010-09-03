@@ -31,14 +31,19 @@ else(NOT CURSES_FOUND)
   set(NCURSES_FOUND TRUE)
 
   if(CURSES_HAVE_NCURSES_NCURSES_H)
-    find_path(CURSES_INCLUDE_PATH ${CURSES_HAVE_NCURSES_NCURSES_H})
-    message(STATUS "+ ncurses.h found at ${CURSES_INCLUDE_DIR} (this should with \"ncurses\")")
+    unset(CURSES_NCURSES_INCLUDE_PATH)
+    unset(CURSES_NCURSES_INCLUDE_PATH CACHE)
+    get_filename_component(CURSES_NCURSES_INCLUDE_PATH ${CURSES_HAVE_NCURSES_NCURSES_H} PATH CACHE)
+    message(STATUS "+ ncurses.h found at ${CURSES_NCURSES_INCLUD_PATH} (this should end with \"ncurses\")")
+    message(STATUS "+ libncurses found at ${CURSES_NCURSES_LIBRARY}")
   else(CURSES_HAVE_NCURSES_NCURSES_H)
-    message(STATUS "+ ncurses.h found at ${CURSES_INCLUDE_DIR}")
+    message(STATUS "+ ncurses.h found at ${CURSES_NCURSES_INCLUDE_PATH}")
   endif(CURSES_HAVE_NCURSES_NCURSES_H)
       
-  set(NCURSES_INCLUDE_DIR ${CURSES_INCLUDE_PATH} 
+  set(NCURSES_INCLUDE_DIR ${CURSES_NCURSES_INCLUDE_PATH} 
     CACHE STRING "Include dir for tool 'ncurses'")
+  ## setting this to CURSES_LIBRARIES includes libform
+  #set(NCURSES_LIBRARIES ${CURSES_NCURSES_LIBRARY}
   set(NCURSES_LIBRARIES ${CURSES_LIBRARIES}
     CACHE STRING "Libraries for tool 'ncurses'")
 
