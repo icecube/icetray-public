@@ -137,6 +137,12 @@ message(STATUS "HOSTNAME\t${HOSTNAME}")
 set(SITE ${HOSTNAME})
 
 #
+#  Show cmake path and version
+#
+message(STATUS "CMake path\t${CMAKE_COMMAND}")
+message(STATUS "CMake ver\t${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}")
+
+#
 # Find the svn program
 #
 find_program(SVN_EXECUTABLE svn)
