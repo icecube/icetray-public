@@ -48,14 +48,21 @@ else(NOT USE_ROOT)
     endforeach(PROJECT ${ARG_USE_PROJECTS})
 
     set(ROOTCINT_HEADERS "")
+    set(ROOTINTERNAL_HEADERS "")
     foreach(header ${ARG_SOURCES})
-      # If this is a ROOT header, don't add to dependencies or
-      # rootcint flags as root adds these automagically.
-      if(NOT EXISTS ${ROOT_INCLUDE_DIR}/${header})
-	if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${header})
-	  message("In ${CMAKE_CURRENT_SOURCE_DIR}:")
-	  message(FATAL_ERROR "Header '${header}' passed to rootcint does not exist")
-	endif(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${header})
+      if(EXISTS ${ROOT_INCLUDE_DIR}/${header})
+	# If this is a ROOT header, don't add to dependencies or
+	# rootcint flags as root adds these automagically.
+	list(APPEND ROOTINTERNAL_HEADERS ${header})
+      elseif(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${header})
+	# if it isn't in our project (and isn't a root header), it
+	# isn't legal here, the other project needs to build the dict.
+	# I guess.
+	message("In ${CMAKE_CURRENT_SOURCE_DIR}:")
+	message(FATAL_ERROR "Header '${header}' passed to rootcint does not exist")
+      else()
+	# okay, it exists in our project, add it to our commandline
+	# and be dependent on it.
 	list(APPEND ROOTCINT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/${header})
       endif()
     endforeach(header ${ARG_SOURCES})
@@ -65,7 +72,7 @@ else(NOT USE_ROOT)
       DEPENDS ${ARG_LINKDEF} ${ROOTCINT_HEADERS}
       COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh 
       # rootcint found and ROOTSYS set in env-shell.sh path
-      ARGS rootcint -f ${TARGET} -c ${ROOTCINT_INCLUDE_FLAGS} -p ${I3_UBER_HEADER} ${ROOTCINT_HEADERS} ${ARG_LINKDEF}
+      ARGS rootcint -f ${TARGET} -c ${ROOTCINT_INCLUDE_FLAGS} -p ${I3_UBER_HEADER} ${ROOTCINT_HEADERS} ${ROOTINTERNAL_HEADERS} ${ARG_LINKDEF}
       COMMENT "Generating ${TARGET} with rootcint"
       VERBATIM
       )
