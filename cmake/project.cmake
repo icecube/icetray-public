@@ -49,11 +49,15 @@ else(NOT USE_ROOT)
 
     set(ROOTCINT_HEADERS "")
     foreach(header ${ARG_SOURCES})
-      if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${header})
-	message("In ${CMAKE_CURRENT_SOURCE_DIR}:")
-	message(FATAL_ERROR "Header '${header}' passed to rootcint does not exist")
-      endif(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${header})
-      list(APPEND ROOTCINT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/${header})
+      # If this is a ROOT header, don't add to dependencies or
+      # rootcint flags as root adds these automagically.
+      if(NOT EXISTS ${ROOT_INCLUDE_DIR}/${header})
+	if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${header})
+	  message("In ${CMAKE_CURRENT_SOURCE_DIR}:")
+	  message(FATAL_ERROR "Header '${header}' passed to rootcint does not exist")
+	endif(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${header})
+	list(APPEND ROOTCINT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/${header})
+      endif()
     endforeach(header ${ARG_SOURCES})
 
     add_custom_command(
