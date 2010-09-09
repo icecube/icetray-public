@@ -1,5 +1,5 @@
 /**
- *    $Id: I3Logging.h 165886 2018-10-01 14:37:58Z nwhitehorn $
+ *    $Id$
  *
  *    Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
  *    and the IceCube Collaboration <http://www.icecube.wisc.edu>
@@ -38,6 +38,7 @@
 #  else 
 
 #    include <icetray/detail/Log4cplusLogging.h>
+#    define I3_LOG4CPLUS_LOGGING
 
 #  endif
 

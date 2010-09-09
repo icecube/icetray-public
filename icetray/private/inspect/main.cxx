@@ -58,6 +58,11 @@
 #include <icetray/I3Module.h>
 #include <icetray/I3Frame.h>
 #include <icetray/Utility.h>
+#include <icetray/I3Logging.h>
+
+#ifdef I3_LOG4CPLUS_LOGGING
+#include <log4cplus/hierarchy.h>
+#endif
 
 #include "util.h"
 
@@ -239,8 +244,13 @@ main (int argc, char** argv)
   if (vm.count("xml"))
     xml = true;
 
-  if (xml)
+  if (xml) {
+#ifdef I3_LOG4CPLUS_LOGGING
+    // inhibit log4cplus logging messages, they mess up the output
+    ::log4cplus::Logger::getDefaultHierarchy().disableAll();
+#endif
     cout << "<?xml version='1.0'?>\n<icetray-inspect>\n";
+  }
 
   if (vm.count("svn"))
     with_svn = true;
