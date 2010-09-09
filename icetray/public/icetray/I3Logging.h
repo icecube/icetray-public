@@ -38,6 +38,7 @@
 #  else 
 
 #    include <icetray/detail/Log4cplusLogging.h>
+#    define I3_LOG4CPLUS_LOGGING
 
 #  endif
 
