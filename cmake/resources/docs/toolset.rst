@@ -94,11 +94,15 @@ file.  This directory can be overridden by setting
 For instance, an override for tool *python* (filename
 ``python.cmake``) might look like::
 
-  set(PYTHON_LIBRARIES "/usr/local/strangepython/lib/libpython2.6.so")
-  set(PYTHON_INCLUDE_DIR "/usr/local/strangepython/include/python2.6")
-  set(PYTHON_EXECUTABLE "/usr/local/strangepython/bin/python")
-  set(PYTHON_VERSION "2.6")
-  set(PYTHON_FOUND TRUE)
+  set(PYTHON_LIBRARIES "$ENV{HOME}/lib/libpython2.6.so" CACHE FILEPATH "Python library")
+  set(PYTHON_INCLUDE_DIR "$ENV{HOME}/include/python2.6" CACHE PATH "Path the Python include directory")
+  set(PYTHON_EXECUTABLE "$ENV{HOME}/bin/python" CACHE FILEPATH "Python interpreter")
+  set(PYTHON_VERSION "2.6" CACHE STRING "Python version")
+  set(PYTHON_FOUND TRUE CACHE BOOL "Python found")
+
+Note the ``$ENV{HOME}`` sytax used in the example: since CMake doesn't
+automatically mix in environment variables from the shell, you have to be explicit
+when substituting values like ``HOME``.
 
 .. warning:: If you use a nonsystem python as above, your toolset
    	     (specifically the boost_python component of the boost tool)
