@@ -245,6 +245,10 @@ i3_executable
 
       would just generate target ``bar``
 
+   .. cmdoption:: WITHOUT_I3_HEADERS
+
+      As in i3_add_library.
+      
 
 .. _i3_test_executable():
 
