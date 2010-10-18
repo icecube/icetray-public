@@ -19,8 +19,8 @@
 #
 
 tooldef (clhep
-    include/CLHEP
-    ClhepVersion.h
+    include
+    CLHEP/ClhepVersion.h
     lib
     NONE  # bin is n/a, placeholder
     CLHEP
