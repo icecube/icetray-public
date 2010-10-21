@@ -25,29 +25,48 @@ if (CLHEP_CONFIG_ERROR)
 
 else (CLHEP_CONFIG_ERROR)
 
-  find_path (GEANT4_LIB_DIR NAMES libG4event.so
+  message(STATUS "Looking for Geant4 liblist program")
+
+  find_program (GEANT4_LIBLIST liblist
     PATHS ${I3_PORTS}/lib
     PATH_SUFFIXES geant4_4.9.3
     NO_DEFAULT_PATH
     )
-  string (REPLACE "${I3_PORTS}/" "" GEANT4_RELATIVE_LIB_DIR "${GEANT4_LIB_DIR}")
-  
-  file(GLOB GEANT4_LIBRARIES RELATIVE "${GEANT4_LIB_DIR}" "${GEANT4_LIB_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}G4*${CMAKE_SHARED_LIBRARY_SUFFIX}")
-  separate_arguments(GEANT4_LIBRARIES)
 
-  find_path (GEANT4_INC_DIR NAMES G4RunManager.hh
-    PATHS ${I3_PORTS}/include
-    PATH_SUFFIXES geant4_4.9.3
-    NO_DEFAULT_PATH
-    )
-  string (REPLACE "${I3_PORTS}/" "" GEANT4_RELATIVE_INC_DIR "${GEANT4_INC_DIR}")
+  if (${GEANT4_LIBLIST} MATCHES ".*NOTFOUND$")
+
+    message(STATUS "Looking for Geant4 liblist program -- not found")
+    set(GEANT4_CONFIG_ERROR TRUE)
+
+  else (${GEANT4_LIBLIST} MATCHES ".*NOTFOUND$")
+
+    message(STATUS "Looking for Geant4 liblist program -- found")
+
+    get_filename_component(GEANT4_LIB_DIR ${GEANT4_LIBLIST} PATH)
+    string (REPLACE "${I3_PORTS}/" "" GEANT4_RELATIVE_LIB_DIR "${GEANT4_LIB_DIR}")
+
+    execute_process(COMMAND cat ${GEANT4_LIB_DIR}/libname.map
+      COMMAND ${GEANT4_LIBLIST} -m ${GEANT4_LIB_DIR}
+      OUTPUT_VARIABLE LIBLIST_OUTPUT OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
+    string(REGEX REPLACE "-l([^ ]*)" "${CMAKE_SHARED_LIBRARY_PREFIX}\\1${CMAKE_SHARED_LIBRARY_SUFFIX}" GEANT4_LIBRARIES ${LIBLIST_OUTPUT})
+    separate_arguments(GEANT4_LIBRARIES)
+
+    find_path (GEANT4_INC_DIR NAMES G4RunManager.hh
+      PATHS ${I3_PORTS}/include
+      PATH_SUFFIXES geant4_4.9.3
+      NO_DEFAULT_PATH
+      )
+    string (REPLACE "${I3_PORTS}/" "" GEANT4_RELATIVE_INC_DIR "${GEANT4_INC_DIR}")
   
-  tooldef (geant4
-    ${GEANT4_RELATIVE_INC_DIR}
-    G4RunManager.hh
-    ${GEANT4_RELATIVE_LIB_DIR}
-    NONE  # bin is n/a, placeholder
-    ${GEANT4_LIBRARIES}
-    )
+    tooldef (geant4
+      ${GEANT4_RELATIVE_INC_DIR}
+      G4RunManager.hh
+      ${GEANT4_RELATIVE_LIB_DIR}
+      NONE  # bin is n/a, placeholder
+      ${GEANT4_LIBRARIES}
+      )
+
+  endif (${GEANT4_LIBLIST} MATCHES ".*NOTFOUND$")
 
 endif (CLHEP_CONFIG_ERROR)
