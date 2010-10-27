@@ -17,10 +17,19 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
+
+IF(NOT GSL_VERSION)
+	if(IS_DIRECTORY ${I3_PORTS}/include/gsl-1.14)
+		set(GSL_VERSION "1.14")
+	else(IS_DIRECTORY ${I3_PORTS}/include/gsl-1.14)
+		set(GSL_VERSION "1.8")
+	endif(IS_DIRECTORY ${I3_PORTS}/include/gsl-1.14)
+ENDIF(NOT GSL_VERSION)
+
 tooldef(gsl 
-    include/gsl-1.8 
+    include/gsl-${GSL_VERSION}
     gsl/gsl_rng.h
-    lib/gsl-1.8
+    lib/gsl-${GSL_VERSION}
     NONE
     gsl gslcblas
     )
