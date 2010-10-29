@@ -400,6 +400,11 @@ I3Tray::Configure()
 void
 I3Tray::Execute()
 {
+  if (execute_called) {
+    log_error("This I3Tray has already been executed. Ignoring second call to Execute()");
+    return;
+  }
+
   execute_called = true;
   signal(SIGINT, set_suspend_flag);
 
@@ -418,6 +423,11 @@ I3Tray::Execute()
 void
 I3Tray::Execute(unsigned maxCount)
 {
+  if (execute_called) {
+    log_error("This I3Tray has already been executed. Ignoring second call to Execute()");
+    return;
+  }
+
   execute_called = true;
   signal(SIGINT, set_suspend_flag);
 
