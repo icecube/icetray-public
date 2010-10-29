@@ -72,7 +72,7 @@ else(NOT USE_ROOT)
       DEPENDS ${ARG_LINKDEF} ${ROOTCINT_HEADERS}
       COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh 
       # rootcint found and ROOTSYS set in env-shell.sh path
-      ARGS rootcint -f ${TARGET} -c ${ROOTCINT_INCLUDE_FLAGS} -p ${I3_UBER_HEADER} ${ROOTCINT_HEADERS} ${ROOTINTERNAL_HEADERS} ${ARG_LINKDEF}
+      ARGS rootcint -f ${TARGET} -c -DI3_USE_ROOT ${ROOTCINT_INCLUDE_FLAGS} -p ${I3_UBER_HEADER} ${ROOTCINT_HEADERS} ${ROOTINTERNAL_HEADERS} ${ARG_LINKDEF}
       COMMENT "Generating ${TARGET} with rootcint"
       VERBATIM
       )
