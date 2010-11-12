@@ -21,76 +21,79 @@ MESSAGE(STATUS "jni")
 
 SET(_jni_PATH_SUFFIXES jre/lib/i386 jre/lib/i386/server jre/lib/amd64 jre/lib/amd64/server jre/lib/ia64 jre/lib/ia64/server lib ../Libraries)
 
-FIND_PATH(jni_h_include_dir
-  NAMES jni.h
-  PATHS
-  $ENV{JAVA_HOME}/include
-  $ENV{JAVA_HOME}/include/linux
-  ${TOOL_SYSTEM_PATH}
-  )
-REPORT_FIND(jni jni.h ${jni_h_include_dir})
+IF(APPLE)
 
-FIND_PATH(jni_md_h_include_dir
-  NAMES jni_md.h
-  PATHS
-  $ENV{JAVA_HOME}/include
-  $ENV{JAVA_HOME}/include/linux
-  ${TOOL_SYSTEM_PATH}
-  )
-REPORT_FIND(jni jni_md.h ${jni_md_h_include_dir})
+  FIND_PATH(jni_h_include_dir
+    NAMES jni.h
+    PATHS
+    /System/Library/Frameworks/JavaVM.framework/Headers
+    $ENV{JAVA_HOME}/include
+    ${TOOL_SYSTEM_PATH})
+  REPORT_FIND(jni jni.h ${jni_h_include_dir})
 
-#
-# libjvm
-#
-FIND_LIBRARY(jni_jvm_lib
-  NAMES jvm
-  PATHS $ENV{JAVA_HOME}  
-  PATH_SUFFIXES ${_jni_PATH_SUFFIXES}
-  ${TOOL_SYSTEM_PATH}
-)
-REPORT_FIND(jni "jvm library" ${jni_jvm_lib})
+  FIND_PATH(jni_md_h_include_dir
+    NAMES jni_md.h
+    PATHS
+    $ENV{JAVA_HOME}/include
+    /System/Library/Frameworks/JavaVM.framework/Headers
+    ${TOOL_SYSTEM_PATH})
+  REPORT_FIND(jni jni_md.h ${jni_md_h_include_dir})
 
-#
-# libjvmlinkage
-#
-IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-FIND_LIBRARY(jni_jvmlinkage_lib
-	NAMES jvmlinkage
-	PATHS $ENV{JAVA_HOME}
-	PATH_SUFFIXES ${_jni_PATH_SUFFIXES}
-	${TOOL_SYSTEM_PATH}
-)
-REPORT_FIND(jni "jvmlinkage library" ${jni_jvm_lib})
-ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  FIND_LIBRARY(jni_jvm_lib JavaVM)
+  REPORT_FIND(jni "JavaVM library" ${jni_jvm_lib})
 
-#
-# libverify
-#
-FIND_LIBRARY(jni_verify_lib
-  NAMES verify
-  PATHS $ENV{JAVA_HOME}  
-  PATH_SUFFIXES ${_jni_PATH_SUFFIXES}
-  ${TOOL_SYSTEM_PATH}
-)
-REPORT_FIND(jni "verify library" ${jni_verify_lib})
+  SET(JNI_LINK_FLAGS "-framework JavaVM")
 
-IF(NOT APPLE)
+ELSE(APPLE)
+
+  FIND_PATH(jni_h_include_dir
+    NAMES jni.h
+    PATHS
+    $ENV{JAVA_HOME}/include
+    $ENV{JAVA_HOME}/include/linux
+    ${TOOL_SYSTEM_PATH}
+    )
+  REPORT_FIND(jni jni.h ${jni_h_include_dir})
+
+  FIND_PATH(jni_md_h_include_dir
+    NAMES jni_md.h
+    PATHS
+    $ENV{JAVA_HOME}/include
+    $ENV{JAVA_HOME}/include/linux
+    ${TOOL_SYSTEM_PATH}
+    )
+  REPORT_FIND(jni jni_md.h ${jni_md_h_include_dir})
+
   #
-  # libzip
+  # libjvm
   #
+  FIND_LIBRARY(jni_jvm_lib
+    NAMES jvm
+    PATHS $ENV{JAVA_HOME}  
+    PATH_SUFFIXES ${_jni_PATH_SUFFIXES}
+    ${TOOL_SYSTEM_PATH}
+    )
+  REPORT_FIND(jni "jvm library" ${jni_jvm_lib})
+
+  #
+  # libverify
+  #
+  FIND_LIBRARY(jni_verify_lib
+    NAMES verify
+    PATHS $ENV{JAVA_HOME}  
+    PATH_SUFFIXES ${_jni_PATH_SUFFIXES}
+    ${TOOL_SYSTEM_PATH}
+    )
+  REPORT_FIND(jni "verify library" ${jni_verify_lib})
+
   FIND_LIBRARY(jni_zip_lib
     NAMES zip
     PATHS $ENV{JAVA_HOME}    
     PATH_SUFFIXES ${_jni_PATH_SUFFIXES}
     ${TOOL_SYSTEM_PATH}
-  )
+    )
   REPORT_FIND(jni "zip library" ${jni_zip_lib})
-ELSE(NOT APPLE)
-  SET(jni_zip_lib "")
-ENDIF(NOT APPLE)
 
-IF(APPLE)
-  SET(JNI_LINK_FLAGS "-framework JavaVM")
 ENDIF(APPLE)
 
 IF(NOT IS_DIRECTORY $ENV{JAVA_HOME})
@@ -106,9 +109,8 @@ SET(JNI_INCLUDE_DIR ${jni_h_include_dir} ${jni_md_h_include_dir}
 SET(JNI_LIBRARIES ${jni_jvm_lib} ${jni_verify_lib} ${jni_zip_lib}
   CACHE STRING "Libraries for tool jni" FORCE)
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-SET(JNI_LIBRARIES ${jni_jvm_lib} ${jni_jvmlinkage_lib} ${jni_verify_lib} ${jni_zip_lib}
-  CACHE STRING "Libraries for tool jni" FORCE)
+  SET(JNI_LIBRARIES ${jni_jvm_lib} ${jni_jvmlinkage_lib} ${jni_verify_lib} ${jni_zip_lib}
+    CACHE STRING "Libraries for tool jni" FORCE)
 ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 SET(JNI_FOUND TRUE CACHE BOOL "Jni found flag" FORCE)
-
