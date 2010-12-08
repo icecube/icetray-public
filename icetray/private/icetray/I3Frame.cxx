@@ -533,7 +533,11 @@ bool I3Frame::load_v5(IStreamT& is, const vector<string>& skip)
   i3frame_checksum_t checksumRead;
 
   crc_t crc;
+#ifdef BOOST_PORTABLE_BINARY_ARCHIVE_BIG_ENDIAN
+  bool calc_crc = false; /* Blobs probably need to be byte-swapped. */
+#else 
   bool calc_crc = (skip.size() == 0);
+#endif
 
   // read size of the entire (serialized) frame
   // read checksum plus entire frame and process/test checksum
