@@ -23,13 +23,16 @@
 
 #include <boost/serialization/collection_size_type.hpp>
 
+#include <boost/archive/detail/portable_binary_archive.hpp>
+
 namespace boost {
   namespace archive {
 
     template<class Archive, class Elem, class Tr>
     class portable_binary_iarchive_impl : 
       public basic_binary_iprimitive<Archive, Elem, Tr>,
-      public basic_binary_iarchive<Archive>
+      public basic_binary_iarchive<Archive>,
+      public portable_binary_archive
     {
       friend class detail::interface_iarchive<Archive>;
       friend class basic_binary_iarchive<Archive>;
@@ -56,10 +59,38 @@ namespace boost {
         this->basic_binary_iarchive<Archive>::load_override(t, 0L);
       }
 
+/* Swap byte order on big-endian systems */
+#ifdef BOOST_PORTABLE_BINARY_ARCHIVE_BIG_ENDIAN
+#define SWAP_STUB(type)								\
+	void									\
+	load_override(type &t, BOOST_PFTO int)					\
+	{									\
+		this->basic_binary_iarchive<Archive>::load_override(t, 0L); 	\
+		portable_binary_archive::swap(t);				\
+	}
+#else
+#define SWAP_STUB(type)
+#endif
+
+	SWAP_STUB(short)
+	SWAP_STUB(unsigned short)
+	SWAP_STUB(int)
+	SWAP_STUB(unsigned int)
+	SWAP_STUB(long)
+	SWAP_STUB(unsigned long)
+	SWAP_STUB(long long)
+	SWAP_STUB(unsigned long long)
+	SWAP_STUB(float)
+	SWAP_STUB(double)
+
+#undef SWAP_STUB
+	
+
       void load_override(std::string& s, BOOST_PFTO int)
       {
 	uint32_t l;
 	this->load(l);
+	portable_binary_archive::swap(l);
 	s.resize(l);
 	this->load_binary(&(s[0]), l);
       }
@@ -88,6 +119,7 @@ namespace boost {
       {
 	uint32_t l;
 	this->load(l);
+	portable_binary_archive::swap(l);
 	t = l;
       }
     };

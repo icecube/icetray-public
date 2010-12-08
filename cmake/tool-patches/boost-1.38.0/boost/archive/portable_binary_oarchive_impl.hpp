@@ -22,13 +22,16 @@
 
 #include <boost/serialization/collection_size_type.hpp>
 
+#include <boost/archive/detail/portable_binary_archive.hpp>
+
 namespace boost {
   namespace archive {
 
     template<class Archive, class Elem, class Tr>
     class portable_binary_oarchive_impl : 
       public basic_binary_oprimitive<Archive, Elem, Tr>,
-      public basic_binary_oarchive<Archive>
+      public basic_binary_oarchive<Archive>,
+      public portable_binary_archive
     {
       friend class detail::interface_oarchive<Archive>;
       friend class basic_binary_oarchive<Archive>;
@@ -74,6 +77,33 @@ namespace boost {
       {
         this->basic_binary_oarchive<Archive>::save_override(t, 0L);
       }
+
+/* Swap byte order on big-endian systems */
+#ifdef BOOST_PORTABLE_BINARY_ARCHIVE_BIG_ENDIAN
+#define SWAP_STUB(type)								\
+	void									\
+	save_override(const type &t, BOOST_PFTO int)					\
+	{									\
+		type swapee(t);							\
+		portable_binary_archive::swap(swapee);				\
+		this->basic_binary_oarchive<Archive>::save_override(swapee, 0L);\
+	}
+#else
+#define SWAP_STUB(type)
+#endif
+
+	SWAP_STUB(short)
+	SWAP_STUB(unsigned short)
+	SWAP_STUB(int)
+	SWAP_STUB(unsigned int)
+	SWAP_STUB(long)
+	SWAP_STUB(unsigned long)
+	SWAP_STUB(long long)
+	SWAP_STUB(unsigned long long)
+	SWAP_STUB(float)
+	SWAP_STUB(double)
+
+#undef SWAP_STUB
 
       void save_override(const bool& b, BOOST_PFTO int)
       {
