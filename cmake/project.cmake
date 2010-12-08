@@ -20,10 +20,10 @@
 #
 # rootcint() handles root dictionary generation
 #
-if(NOT USE_ROOT)
+if(NOT USE_CINT)
   macro(ROOTCINT)
   endmacro(ROOTCINT)
-else(NOT USE_ROOT)
+else(NOT USE_CINT)
   macro(ROOTCINT TARGET)
     parse_arguments(ARG
       "LINKDEF;SOURCES;INCLUDE_DIRECTORIES;USE_TOOLS;USE_PROJECTS"
@@ -77,7 +77,7 @@ else(NOT USE_ROOT)
       VERBATIM
       )
   ENDMACRO(ROOTCINT)
-ENDIF(NOT USE_ROOT)
+ENDIF(NOT USE_CINT)
 
 #
 # use_projects() helper macro for, uh, using projects.
@@ -134,7 +134,7 @@ macro(i3_add_library THIS_LIB_NAME)
       endif()
     endif(${THIS_LIB_NAME}_ARGS_ROOTCINT)
     
-    if (LINKDEF_FILE AND ${THIS_LIB_NAME}_ARGS_ROOTCINT AND USE_ROOT)
+    if (LINKDEF_FILE AND ${THIS_LIB_NAME}_ARGS_ROOTCINT AND USE_CINT)
 
       set (DICTIONARY_SOURCEFILE 
 	${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${THIS_LIB_NAME}Dict.cxx)
@@ -148,7 +148,7 @@ macro(i3_add_library THIS_LIB_NAME)
 	USE_TOOLS    ${${THIS_LIB_NAME}_ARGS_USE_TOOLS}
 	)
 
-    endif (LINKDEF_FILE AND ${THIS_LIB_NAME}_ARGS_ROOTCINT AND USE_ROOT)
+    endif (LINKDEF_FILE AND ${THIS_LIB_NAME}_ARGS_ROOTCINT AND USE_CINT)
 
     set (ARGS)
     if (${THIS_LIB_NAME}_ARGS_EXCLUDE_FROM_ALL)

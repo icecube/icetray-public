@@ -18,11 +18,17 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
 option(USE_ROOT "Build with root" ON)
+option(USE_CINT "Build dictionaries with rootcint" ON)
+
+if(NOT USE_ROOT AND USE_CINT)
+  message(FATAL_ERROR "Cannot use rootcint without root")
+endif(NOT USE_ROOT AND USE_CINT)
+
 if(NOT USE_ROOT)
   message(STATUS "***************")
   message(STATUS "***************  CONFIGURED WITHOUT \"USE_ROOT\"")
   message(STATUS "***************")
-  add_definitions(-UI3_USE_ROOT)
+  add_definitions(-UI3_USE_ROOT -UI3_USE_CINT)
   set(ROOT_INCLUDE_DIR "" CACHE STRING "USE_ROOT is OFF" FORCE)
   set(ROOT_BIN_DIR "" CACHE STRING "USE_ROOT is OFF" FORCE)
   # this is added to LD_LIBRARY_PATH
@@ -56,6 +62,9 @@ else(NOT USE_ROOT)
   set(ROOT_5.24.00b_LIBS Core Cint RIO Net Hist Graf Graf3d Gpad Tree Rint Postscript Matrix Physics MathCore Thread Minuit Gui)
 
   add_definitions(-DI3_USE_ROOT -fno-strict-aliasing)
+  if (USE_CINT)
+    add_definitions(-DI3_USE_CINT)
+  endif (USE_CINT)
   if(NOT ROOTSYS)
     set(ROOTSYS ${I3_PORTS}/root-v${ROOT_VERSION} CACHE STRING "The beloved ROOTSYS.")
   endif(NOT ROOTSYS)
