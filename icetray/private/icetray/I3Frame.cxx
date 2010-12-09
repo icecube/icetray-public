@@ -349,7 +349,13 @@ namespace
     if (! orly)
       return;
     uint32_t size = container.size();
+#ifdef BOOST_PORTABLE_BINARY_ARCHIVE_BIG_ENDIAN
+    uint32_t swapped = size;
+    boost::archive::portable::swap_impl<sizeof(size)>::swap(swapped);
+    crc.process_bytes(&swapped, sizeof(size));
+#else
     crc.process_bytes(&size, sizeof(size));
+#endif
     crc.process_bytes(&(container[0]), size);
   }
 
@@ -360,7 +366,13 @@ namespace
   {
     if (!orly)
       return;
+#ifdef BOOST_PORTABLE_BINARY_ARCHIVE_BIG_ENDIAN
+    T swapped = pod;
+    boost::archive::portable::swap_impl<sizeof(T)>::swap(swapped);
+    crc.process_bytes(&swapped, sizeof(T));
+#else
     crc.process_bytes(&pod, sizeof(T));
+#endif
   }
 }    
 
@@ -533,11 +545,7 @@ bool I3Frame::load_v5(IStreamT& is, const vector<string>& skip)
   i3frame_checksum_t checksumRead;
 
   crc_t crc;
-#ifdef BOOST_PORTABLE_BINARY_ARCHIVE_BIG_ENDIAN
-  bool calc_crc = false; /* Blobs probably need to be byte-swapped. */
-#else 
   bool calc_crc = (skip.size() == 0);
-#endif
 
   // read size of the entire (serialized) frame
   // read checksum plus entire frame and process/test checksum
@@ -545,14 +553,11 @@ bool I3Frame::load_v5(IStreamT& is, const vector<string>& skip)
     boost::archive::portable_binary_iarchive bia(is);
 
     bia >> make_nvp("stream", stop_);
-    if(calc_crc) 
-      crc.process_byte(stop_.id());
+    crcit(stop_.id(), crc, calc_crc);
 
     i3frame_nslots_t nslots;
     bia >> make_nvp("size", nslots);
-    if(calc_crc) 
-      crc.process_bytes(&nslots, sizeof(nslots));
-
+    crcit(nslots, crc, calc_crc);
 
     for (unsigned int i = 0; i < nslots; i++)
       {
