@@ -95,6 +95,7 @@ class i3_map_extras : public def_visitor<i3_map_extras<Map> >
 void register_std_cont_pod()
 {
   reg<string>("string");
+  reg<vector<string > >("vector_string");
   reg<double>("double");
   reg<int>("int");
   reg<short>("short");
