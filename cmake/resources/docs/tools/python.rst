@@ -253,7 +253,7 @@ http://code.icecube.wisc.edu/tools/distfiles/i3python/Linux
    you should see a matplotlib-0.91.4-py2.4-linux-i686.egg
    entry in your ~/python/lib dir)
 
-7. Intstall Pytables.  First, you need hdf5 libraries.  
+7. Install Pytables.  First, you need hdf5 libraries.  
    These are now in $I3_PORTS::
 
      > $I3_PORTS/bin/port install hdf5_1.6.8
@@ -262,6 +262,15 @@ http://code.icecube.wisc.edu/tools/distfiles/i3python/Linux
 
       > sh -c "export HDF5_DIR=/Users/blaufuss/icework/i3tools; ~/python/bin/easy_install ./tables-2.1.1.tar.gz"
 
+FreeBSD
+^^^^^^^
+
+The python modules in ports work quite well. The recommended set is:
+
+* devel/ipython
+* math/py-matplotlib
+* devel/py-tables
+* science/py-scipy
 
 Taking your new python tools for a test-drive
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
