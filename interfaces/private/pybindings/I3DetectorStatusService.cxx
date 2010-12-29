@@ -24,6 +24,8 @@ namespace bp = boost::python;
 #include <dataclasses/I3Time.h>
 #include <dataclasses/status/I3DetectorStatus.h>
 
+#include "install.h"
+
 struct I3DetectorStatusServiceWrapper : I3DetectorStatusService, wrapper<I3DetectorStatusService>
 {
   I3DetectorStatusConstPtr GetDetectorStatus(I3Time t) 
@@ -43,6 +45,7 @@ void register_I3DetectorStatusService()
 			"Service returns geometries depending on time", 
 			init<>())
     .def("GetDetectorStatus", &I3DetectorStatusServiceWrapper::GetDetectorStatus, bp::arg("time"))
+    .def("Install", &I3InstallService<I3DetectorStatusService>().func)
     ;
 }
 

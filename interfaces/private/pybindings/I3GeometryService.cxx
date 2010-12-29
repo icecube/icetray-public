@@ -24,6 +24,8 @@ namespace bp = boost::python;
 #include <dataclasses/I3Time.h>
 #include <dataclasses/geometry/I3Geometry.h>
 
+#include "install.h"
+
 struct I3GeometryServiceWrapper : I3GeometryService, wrapper<I3GeometryService>
 {
   I3GeometryConstPtr GetGeometry(I3Time t) 
@@ -43,6 +45,7 @@ void register_I3GeometryService()
 			"Service returns geometries depending on time", 
 			init<>())
     .def("GetGeometry", &I3GeometryServiceWrapper::GetGeometry, bp::arg("time"))
+    .def("Install", &I3InstallService<I3GeometryService>().func)
     ;
 }
 

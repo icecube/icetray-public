@@ -39,6 +39,14 @@ class I3EventService
    */
   virtual I3Time PopEvent(I3Frame& frame) = 0;
 
+  /**
+   * @brief This method should delete any keys that have not changed
+   * since the frame was injected into the module chain, i.e. turn
+   * the frame into a diff.
+   */
+  virtual void DiffEvent(I3Frame& frame) { return; }
+  virtual bool DiffEventImplemented() { return false; }
+
   virtual ~I3EventService();
 };
 

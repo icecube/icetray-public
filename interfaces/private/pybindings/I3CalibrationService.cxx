@@ -24,6 +24,8 @@ namespace bp = boost::python;
 #include <dataclasses/I3Time.h>
 #include <dataclasses/calibration/I3Calibration.h>
 
+#include "install.h"
+
 struct I3CalibrationServiceWrapper : I3CalibrationService, wrapper<I3CalibrationService>
 {
   I3CalibrationConstPtr GetCalibration(I3Time t) 
@@ -43,6 +45,7 @@ void register_I3CalibrationService()
 			"Service returns geometries depending on time", 
 			init<>())
     .def("GetCalibration", &I3CalibrationServiceWrapper::GetCalibration, bp::arg("time"))
+    .def("Install", &I3InstallService<I3CalibrationService>().func)
     ;
 }
 

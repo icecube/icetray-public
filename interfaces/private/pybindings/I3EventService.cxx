@@ -24,6 +24,8 @@ namespace bp = boost::python;
 #include <icetray/I3Frame.h>
 #include <dataclasses/I3Time.h>
 
+#include "install.h"
+
 struct I3EventServiceWrapper : I3EventService, wrapper<I3EventService>
 {
   bool MoreEvents() {  return this->get_override("MoreEvents")(); }
@@ -45,5 +47,7 @@ void register_I3EventService()
 			init<>())
     .def("MoreEvents", &I3EventServiceWrapper::MoreEvents)
     .def("PopEvent", &I3EventServiceWrapper::PopEvent, bp::arg("frame"))
+    .def("Install", &I3InstallService<I3EventService>().func)
+
     ;
 }

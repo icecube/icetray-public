@@ -26,6 +26,7 @@ void register_I3CalibrationService();
 void register_I3DetectorStatusService();
 void register_I3GeometryService();
 void register_I3EventService();
+void register_I3MetaService();
 
 BOOST_PYTHON_MODULE(interfaces)
 {
@@ -35,4 +36,5 @@ BOOST_PYTHON_MODULE(interfaces)
   register_I3DetectorStatusService();
   register_I3GeometryService();
   register_I3EventService();
+  register_I3MetaService();
 }
