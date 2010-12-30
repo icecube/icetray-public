@@ -49,16 +49,16 @@ class I3Tray:
         self.last_added = None
         self.the_tray = icetray.I3Tray()
 
-    def AddModule(self, type, name, **kwargs):
+    def AddModule(self, _type, _name, **kwargs):
         """
         Add a module to the tray's processing stream.
 
-        :param type: either a string (search for a registered c++
+        :param _type: either a string (search for a registered c++
         module in the module factory) or a python class (create a
         module of this type), or a python function (create a python
         module to wrap this function).
 
-        :param name: instance name for this module, needed when
+        :param _name: instance name for this module, needed when
         connecting in/outboxes in unusual ways, otherwise just make
         this string unique among the set of *name* parameters passed
         to AddModule and AddService.
@@ -72,22 +72,22 @@ class I3Tray:
                            SkipKeys = ['I3DST', 'RecoPulses'])
         
         """
-        if inspect.isclass(type) and not icetray.I3Module in inspect.getmro(type):
-            raise RuntimeError, "Module %s of type %s doesn't inherit from icecube.icetray.I3Module" % (name, type)
+        if inspect.isclass(_type) and not icetray.I3Module in inspect.getmro(_type):
+            raise RuntimeError, "Module %s of type %s doesn't inherit from icecube.icetray.I3Module" % (_name, _type)
         try:
-            self.the_tray.AddModule(type, name)
-            self.last_added = name
+            self.the_tray.AddModule(_type, _name)
+            self.last_added = _name
             for k,v in kwargs.items():
-                self.the_tray.SetParameter(name, k, v)
+                self.the_tray.SetParameter(_name, k, v)
             return self
         except:
             raise
 
-    def AddService(self, type, name, **kwargs):
-        self.the_tray.AddService(type, name)
-        self.last_added = name
+    def AddService(self, _type, _name, **kwargs):
+        self.the_tray.AddService(_type, _name)
+        self.last_added = _name
         for k,v in kwargs.items():
-            self.the_tray.SetParameter(name, k, v)
+            self.the_tray.SetParameter(_name, k, v)
         return self
     
     def SetParameter(self, module, param, value):
