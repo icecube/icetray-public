@@ -65,6 +65,8 @@ class I3ReaderService : public I3EventService,
   void OpenNextFile();
   I3FramePtr PopFrame();
 
+  SET_LOGGER("I3ReaderService");
+
  public:
 
   I3ReaderService(const std::vector<std::string>& filenames, 

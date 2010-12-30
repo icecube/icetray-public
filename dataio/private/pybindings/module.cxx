@@ -22,14 +22,17 @@
 
 #include <icetray/load_project.h>
 
-void register_I3File();
-void register_I3SequentialFile();
+#define REGISTER_THESE_THINGS \
+	(I3File)(I3SequentialFile)(I3MuxingReaderService)
+
+#define I3_REGISTRATION_FN_DECL(r, data, t) void BOOST_PP_CAT(register_,t)();
+#define I3_REGISTER(r, data, t) BOOST_PP_CAT(register_,t)();
+BOOST_PP_SEQ_FOR_EACH(I3_REGISTRATION_FN_DECL, ~, REGISTER_THESE_THINGS)
 
 BOOST_PYTHON_MODULE(dataio)
 {
   load_project("libdataio", false);
 
-  register_I3File();
-  register_I3SequentialFile();
+  BOOST_PP_SEQ_FOR_EACH(I3_REGISTER, ~, REGISTER_THESE_THINGS);
 }
 

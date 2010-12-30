@@ -19,6 +19,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
 i3_project(dataio
+  PYTHON_DIR python
   DOCS_DIR resources/docs
   )
 
