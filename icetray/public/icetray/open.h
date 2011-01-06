@@ -31,7 +31,7 @@ namespace I3 {
     void open(boost::iostreams::filtering_istream&, const std::string& filename);
     void open(boost::iostreams::filtering_ostream&, 
 	      const std::string& filename, 
-	      unsigned gzip_compression_level_=6, 
+	      int gzip_compression_level_=6, 
 	      std::ios::openmode = std::ios::binary);
 
   } // namespace dataio
