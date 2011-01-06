@@ -93,7 +93,7 @@ I3WriterBase<Derived>::Configure()
   GetParameter("SkipKeys", skip_keys_);
   GetParameter("CompressionLevel", gzip_compression_level_);
 
-  if (iends_with(path_, ".gz"))  // filename ends in .gz
+  if (iends_with(path_, ".gz") || iends_with(path_, ".bz2"))  // filename ends in .gz or .bz2
     {
       if (gzip_compression_level_ == -2) // compression level unset
 	gzip_compression_level_ = 6;    // set to default
