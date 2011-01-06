@@ -26,6 +26,7 @@
 
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
+#include <boost/iostreams/filter/bzip2.hpp>
 #include <boost/iostreams/constants.hpp>
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/device/file.hpp>
@@ -188,9 +189,14 @@ namespace I3 {
 	  ifs.push(io::gzip_decompressor());
 	  log_trace("Input file ends in .gz.  Using gzip decompressor.");
 	}
+      else if (filename.rfind(".bz2") == (filename.length() -4))
+	{
+	  ifs.push(io::bzip2_decompressor());
+	  log_trace("Input file ends in .bz2.  Using bzip2 decompressor.");
+	}
       else
 	{
-	  log_trace("Input file doesn't end in .gz.  Not decompressing.");
+	  log_trace("Input file doesn't end in .gz or .bz2.  Not decompressing.");
 	}
 
       if (filename.find("root://") == 0)
@@ -229,7 +235,7 @@ namespace I3 {
 
     void open(io::filtering_ostream& ofs, 
 	      const std::string& filename, 
-	      unsigned compression_level,
+	      int compression_level,
 	      std::ios::openmode mode)
     {
       if (!ofs.empty())
@@ -241,9 +247,14 @@ namespace I3 {
 	  ofs.push(io::gzip_compressor(compression_level));
 	  log_trace("Input file ends in .gz.  Using gzip decompressor.");
 	}
+      else if (filename.rfind(".bz2") == (filename.length() -4))
+	{
+	  ofs.push(io::bzip2_compressor(compression_level));
+	  log_trace("Input file ends in .bz2.  Using bzip2 decompressor.");
+	}
       else
 	{
-	  log_trace("Input file doesn't end in .gz.  Not decompressing.");
+	  log_trace("Input file doesn't end in .gz or .bz2.  Not decompressing.");
 	}
       ofs.push(io::counter64());
 
