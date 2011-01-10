@@ -51,6 +51,11 @@
 #include <dcap.h>
 #endif
 
+#ifdef I3_WITH_LIBARCHIVE
+#include <archive.h>
+#include <archive_entry.h>
+#endif
+
 #define I3_WITH_MMAPPED_FILE_SOURCE
 
 #ifdef I3_WITH_MMAPPED_FILE_SOURCE
@@ -166,6 +171,122 @@ const std::string dcap_source::prefix = "dcap:";
 int dc_errno;
 #endif
 
+#ifdef I3_WITH_LIBARCHIVE
+
+struct archive_filter {
+	typedef char char_type;
+	typedef boost::iostreams::multichar_input_filter_tag category;
+
+	struct client_data {
+		void *source;
+		char_type buffer[4096];
+		ssize_t capacity;
+	};
+
+	boost::shared_ptr<struct archive> reader_;
+	struct archive_entry *current_entry_;
+	client_data source_info_;
+	bool header_read_, raw_archive_;
+	ssize_t bytes_read_;
+
+	static void archive_destructor(struct archive *ar)
+	{
+		if (!ar) return;
+		
+		archive_read_finish(ar);
+	}
+	
+	archive_filter() : reader_(archive_read_new(), archive_destructor),
+	    header_read_(false), raw_archive_(false), bytes_read_(0)
+	{
+		archive_read_support_format_all(reader_.get());
+		archive_read_support_format_raw(reader_.get());
+	
+		if (archive_read_support_compression_bzip2(reader_.get()) == ARCHIVE_WARN)
+			log_debug("(archive_filter) no built-in bzip2 decompression.");
+		if (archive_read_support_compression_gzip(reader_.get()) == ARCHIVE_WARN)
+			log_debug("(archive_filter) no built-in gzip decompression.");
+		if (archive_read_support_compression_lzma(reader_.get()) == ARCHIVE_WARN)
+			log_debug("(archive_filter) no built-in lzma decompression.");
+		if (archive_read_support_compression_xz(reader_.get()) == ARCHIVE_WARN)
+			log_debug("(archive_filter) no built-in xz decompression.");
+		
+		source_info_.source = NULL;
+		source_info_.capacity = 4096;
+	}
+	
+	template<typename Source>
+	std::streamsize read(Source& src, char_type* s, std::streamsize n)
+	{
+		if (source_info_.source != &src) {
+			source_info_.source = (void*)&src;
+			/* TODO: add a callback for skipping over entries. */
+			archive_read_open(reader_.get(), &source_info_, NULL, &read_stream<Source>, NULL);
+			raw_archive_ = false;
+			log_trace("(archive_filter) opened new source");
+		}
+		
+		while (!header_read_ && !raw_archive_) {
+			if (archive_read_next_header(reader_.get(), &current_entry_) == ARCHIVE_OK) {
+				std::string fname(archive_entry_pathname(current_entry_));
+				/*
+				 * NB: libarchive exposes raw data as an archive with a
+				 * single entry whose pathname is "data".
+				 */
+				if (fname == "data") {
+					log_trace("(archive_filter) Unrecognized archive format!"
+					    " Falling back to raw mode.");
+					raw_archive_ = true;
+					continue;
+				}
+				
+				if (fname.rfind(".i3") != (fname.size() - 3)) {
+					log_trace("(archive_filter) skipping file '%s' (not an I3 file)",
+					    fname.c_str());
+					continue;
+				} else {
+					log_trace("(archive_filter) reading file '%s'", fname.c_str());
+					header_read_ = true;
+					bytes_read_ = 0;
+				}
+			} else {
+				return -1;
+			}
+		}
+
+		ssize_t nread = archive_read_data(reader_.get(), s, n);
+		bytes_read_ += nread;
+	
+		if (nread <= 0)
+			return -1; /* boost::iostreams-style EOF */
+		
+		if (!raw_archive_ && bytes_read_ >= archive_entry_size(current_entry_))
+			header_read_ = false;
+		
+		return nread;
+	}
+	
+	/* A callback for libarchive. */
+	template <typename Source>
+	static ssize_t read_stream(struct archive *a, void *client_data_blob, const void **buff)
+	{
+		client_data *data = (client_data*)client_data_blob;
+		Source &source = *((Source*)data->source);
+		/* FIXME: for now we always read in 4096-byte chunks. Better ideas? */
+		ssize_t nread = boost::iostreams::read(source, data->buffer, data->capacity);
+		*buff = data->buffer;
+		
+		if (nread < 0)
+			return 0; /* libarchive-style EOF */
+		else
+			return nread;
+	}
+
+};
+
+#endif
+
+
 namespace I3 {
   namespace dataio {
 
@@ -184,6 +305,16 @@ namespace I3 {
       log_trace("Constructing with filename %s", 
       		filename.c_str());
 
+#ifdef I3_WITH_LIBARCHIVE
+	/*
+	 * If it's not obviously an I3 file, treat it as a
+	 * gzipped/bzipped/lzma'd/xz'd/uncompressed
+	 * gnutar/pax/ustar/cpio/shar/iso9660 archive
+	 * containing I3 files.
+	 */
+	if (filename.rfind(".i3") != (filename.length() - 3))
+		ifs.push(archive_filter());
+#else
       if (filename.rfind(".gz") == (filename.length() -3))
 	{
 	  ifs.push(io::gzip_decompressor());
@@ -198,6 +329,7 @@ namespace I3 {
 	{
 	  log_trace("Input file doesn't end in .gz or .bz2.  Not decompressing.");
 	}
+#endif
 
       if (filename.find("root://") == 0)
 	{
