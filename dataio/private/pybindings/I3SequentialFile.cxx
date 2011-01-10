@@ -38,9 +38,12 @@ namespace I3 { namespace dataio { namespace python {
     I3SequentialFile() { };
     I3SequentialFile(const I3SequentialFile&);
     I3SequentialFile(const std::string& filename, Mode mode=Reading);
+    I3SequentialFile(const std::string& filename, char mode);
     ~I3SequentialFile();
 
     int open_file(const std::string& filename, Mode mode=Reading);
+    int open_file(const std::string& filename) { return open_file(filename, Reading); };
+    int open_file(const std::string& filename, char mode);
     void close();
     void rewind();
 
@@ -85,6 +88,12 @@ namespace I3 { namespace dataio { namespace python {
     open_file(filename, mode);
   }
 
+  I3SequentialFile::I3SequentialFile(const std::string& filename, char mode)
+    : path_(filename)
+  {
+    open_file(filename, mode);
+  }
+
   I3FramePtr
   I3SequentialFile::next()
   {
@@ -109,6 +118,23 @@ namespace I3 { namespace dataio { namespace python {
     ifs_.reset();
     ofs_.reset();
     mode_ = Closed;
+  }
+
+  int
+  I3SequentialFile::open_file(const std::string& filename, char mode)
+  {
+	switch (mode) { 
+		case 'w':
+			mode_ = Writing;
+			break;
+		case 'x':
+			mode_ = Closed;
+			break;
+		case 'r':
+		default:
+			mode_ = Reading;
+	}
+	return open_file(filename, mode_);
   }
 
   int
@@ -198,10 +224,14 @@ void register_I3SequentialFile()
     .def(init<const std::string&, I3SequentialFile::Mode>((bp::arg("filename (may be .i3 or .i3.gz)"), 
                                                      bp::arg("Mode")="Reading"),
                                                     "Create and open an I3File object, specifying the mode"))
-    .def("open_file", &I3SequentialFile::open_file,
+    .def(init<const std::string&, char>((bp::arg("filename"), bp::arg("mode (r, w, or x)")),
+                                             "Create and open and I3File object, specifiying the mode"))
+    .def("open_file", (int (I3SequentialFile::*)(const std::string&, I3SequentialFile::Mode))&I3SequentialFile::open_file,
          (bp::arg("filename (may be .i3 or .i3.gz)"), 
           bp::arg("Mode")="Reading"),
          "Open a .i3 file")
+    .def("open_file", (int (I3SequentialFile::*)(const std::string&))&I3SequentialFile::open_file)
+    .def("open_file", (int (I3SequentialFile::*)(const std::string&, char))&I3SequentialFile::open_file)
     .def("close",&I3SequentialFile::close, 
          "Close the file")
     .def("more", &I3SequentialFile::more, 
