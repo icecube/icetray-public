@@ -43,7 +43,15 @@ else()
   set(DCAP_LIBRARIES "")  
 endif()  
 
+# Check for libarchive
 
+if(LIBARCHIVE_FOUND)
+	add_definitions(-DI3_WITH_LIBARCHIVE)
+	include_directories(${LIBARCHIVE_INCLUDE_DIR})
+else(LIBARCHIVE_FOUND)
+	message(STATUS "- libarchive *not* found, omitting optional tarfile support")
+	set(LIBARCHIVE_LIBRARIES "")
+endif(LIBARCHIVE_FOUND)
 
 
 i3_project(icetray
@@ -121,7 +129,7 @@ i3_add_library(icetray
   private/modules/Delete.cxx           
   private/modules/Copy.cxx             
   private/modules/Dump.cxx             
-  private/modules/Fork.cxx             
+  private/modules/Fork.cxx
   private/modules/IntGenerator.cxx       
   private/modules/Keep.cxx             
   private/modules/DeleteUnregistered.cxx               
@@ -132,7 +140,7 @@ i3_add_library(icetray
   ${ICETRAY_PYTHON_SRC}
 
   USE_TOOLS boost python log4cplus root
-  LINK_LIBRARIES ${BOOST_PYTHON} ${DCAP_LIBRARIES}
+  LINK_LIBRARIES ${BOOST_PYTHON} ${DCAP_LIBRARIES} ${LIBARCHIVE_LIBRARIES}
   ROOTCINT public/icetray/I3FrameObject.h)
 
 #
