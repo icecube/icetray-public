@@ -182,6 +182,8 @@ struct archive_filter {
 		char_type buffer[4096];
 		ssize_t capacity;
 	};
+	
+	typedef enum { GZIP, BZIP2, LZMA, XZ, NONE } compression_type;
 
 	boost::shared_ptr<struct archive> reader_;
 	struct archive_entry *current_entry_;
@@ -196,20 +198,39 @@ struct archive_filter {
 		archive_read_finish(ar);
 	}
 	
-	archive_filter() : reader_(archive_read_new(), archive_destructor),
+	archive_filter(const std::string& filename) :
+	    reader_(archive_read_new(), archive_destructor),
 	    header_read_(false), raw_archive_(false), bytes_read_(0)
 	{
 		archive_read_support_format_all(reader_.get());
 		archive_read_support_format_raw(reader_.get());
 	
-		if (archive_read_support_compression_bzip2(reader_.get()) == ARCHIVE_WARN)
-			log_debug("(archive_filter) no built-in bzip2 decompression.");
-		if (archive_read_support_compression_gzip(reader_.get()) == ARCHIVE_WARN)
-			log_debug("(archive_filter) no built-in gzip decompression.");
-		if (archive_read_support_compression_lzma(reader_.get()) == ARCHIVE_WARN)
-			log_debug("(archive_filter) no built-in lzma decompression.");
-		if (archive_read_support_compression_xz(reader_.get()) == ARCHIVE_WARN)
-			log_debug("(archive_filter) no built-in xz decompression.");
+		compression_type comp = guess_compression(filename);
+		
+		switch (comp) {
+			case GZIP:
+				if (archive_read_support_compression_gzip(reader_.get()) == ARCHIVE_WARN)
+					log_debug("(archive_filter) no built-in gzip decompression.");
+				break;
+			case BZIP2:
+				if (archive_read_support_compression_bzip2(reader_.get()) == ARCHIVE_WARN)
+					log_debug("(archive_filter) no built-in bzip2 decompression.");
+				break;
+			case LZMA:
+				if (archive_read_support_compression_lzma(reader_.get()) == ARCHIVE_WARN)
+					log_debug("(archive_filter) no built-in lzma decompression.");
+				break;
+			case XZ:
+				if (archive_read_support_compression_xz(reader_.get()) == ARCHIVE_WARN)
+					log_debug("(archive_filter) no built-in xz decompression.");
+				break;
+			default:
+				archive_read_support_compression_all(reader_.get());
+				log_warn("(archive_filter) The compression scheme of file '%s' "
+				    "is not obvious from the name. Attempting autodetection...",
+				    filename.c_str());
+				break;
+		}
 		
 		source_info_.source = NULL;
 		source_info_.capacity = 4096;
@@ -221,7 +242,9 @@ struct archive_filter {
 		if (source_info_.source != &src) {
 			source_info_.source = (void*)&src;
 			/* TODO: add a callback for skipping over entries. */
-			archive_read_open(reader_.get(), &source_info_, NULL, &read_stream<Source>, NULL);
+			int err = archive_read_open(reader_.get(), &source_info_, NULL, &read_stream<Source>, NULL);
+			if (err != ARCHIVE_OK)
+				log_fatal("archive_read_open() failed: %s", archive_error_string(reader_.get()));
 			raw_archive_ = false;
 			log_trace("(archive_filter) opened new source");
 		}
@@ -281,7 +304,21 @@ struct archive_filter {
 		else
 			return nread;
 	}
-
+	
+	static compression_type guess_compression(const std::string &filename)
+	{
+		compression_type comp = NONE;
+		if (filename.rfind(".gz") == (filename.length() - 3))
+			comp = GZIP;
+		else if (filename.rfind(".bz2") == (filename.length() - 4))
+			comp = BZIP2;
+		else if (filename.rfind(".lzma") == (filename.length() - 5))
+			comp = LZMA;
+		else if (filename.rfind(".xz") == (filename.length() - 2))
+			comp = XZ;
+			
+		return comp;
+	}
 };
 
 #endif
@@ -313,7 +350,7 @@ namespace I3 {
 	 * containing I3 files.
 	 */
 	if (filename.rfind(".i3") != (filename.length() - 3))
-		ifs.push(archive_filter());
+		ifs.push(archive_filter(filename));
 #else
       if (filename.rfind(".gz") == (filename.length() -3))
 	{
