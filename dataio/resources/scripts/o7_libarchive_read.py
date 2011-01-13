@@ -20,6 +20,7 @@ fname = os.path.join(os.environ['I3_BUILD'], 'I3DOMLaunchSeriesMap.i3')
 
 if not os.path.exists(fname):
 	print "Can't find test file '%s'; skipping archive-reading tests." % fname
+   sys.exit(0)
 
 from icecube import icetray, dataio
 
