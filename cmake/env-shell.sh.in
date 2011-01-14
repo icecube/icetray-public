@@ -54,6 +54,7 @@ _I3_SHELL=$NEW_SHELL
 _I3_PORTS=@I3_PORTS@
 _I3_SRC=@I3_SRC@
 _I3_BUILD=@I3_BUILD@
+_PYVER=`python --version 2>&1`
 
 # Check for I3_BUILD mismatch
 if [ -n "$I3_BUILD" -a "$I3_BUILD" != "$_I3_BUILD" ]
@@ -113,6 +114,7 @@ if [[ -z "$ARGV" ]]
     printf "   I3_SRC       = %s\n" $_I3_SRC
     printf "   I3_BUILD     = %s\n" $_I3_BUILD
     printf "   I3_PORTS     = %s\n" $_I3_PORTS
+    echo   "   Python       =" $_PYVER
 fi
 
 if [[ -z "$I3_SHELL" ]] # a clean, first invocation
