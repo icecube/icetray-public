@@ -10,7 +10,7 @@
 # @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy$
 #
 
-from icecube.icetray import I3Module
+from icecube.icetray import I3ConditionalModule
 import unittest
 
 def I3TestModuleFactory(*test_cases):
@@ -31,13 +31,14 @@ class I3TimeHorizonCutTest(unittest.TestCase):
 		outlaunches = self.frame['InIceRawData_Horizon']
 		self.assert_(len(outlaunches) <= len(inlaunches))
 		
-tray.AddModule(I3TestModuleFactory(I3TimeHorizonCutTest), 'testify')
+tray.AddModule(icetray.I3TestModuleFactory(I3TimeHorizonCutTest), 'test',
+	If=lambda frame: 'InIceRawData' in frame and len(frame['InIceRawData']) > 0)
 
 	"""
-	class I3TestModule(I3Module):
+	class I3TestModule(I3ConditionalModule):
 		runner = unittest.TextTestRunner()
 		def __init__(self, context):
-			I3Module.__init__(self, context)
+			I3ConditionalModule.__init__(self, context)
 			self.AddOutBox("OutBox")
 			
 			self.suites = []
@@ -49,11 +50,20 @@ tray.AddModule(I3TestModuleFactory(I3TimeHorizonCutTest), 'testify')
 			pass
 		
 		def Physics(self, frame):
-			for case in test_cases:
+			result = None
+			
+			for case in self.test_cases:
 				case.frame = frame
 			for test in self.suites:
-				self.runner.run(test)
-			self.PushFrame(frame)
+				if result is None:
+					result = self.runner.run(test)
+				else:
+					result = self.runner.run(test, result)
+			
+			if not result.wasSuccessful():
+				self.RequestSuspension()
+			else:
+				self.PushFrame(frame)
 		
 		def Finish(self):
 			pass
