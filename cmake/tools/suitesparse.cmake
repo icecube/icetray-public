@@ -4,5 +4,5 @@ TOOLDEF (suitesparse
   suitesparse/cholmod.h
   lib
   NONE
-  amd camd colamd ccolamd cholmod spqr
+  camd ccolamd cholmod spqr amd colamd
   )
