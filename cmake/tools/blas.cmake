@@ -1,4 +1,4 @@
-find_library(BLAS_LIB NAMES goto2 goto acml mkl blas PATHS ${TOOL_SYSTEM_PATH})
+find_library(BLAS_LIB NAMES goto2 goto acml mkl blas)
 
 if (NOT BLAS_LIB)
 	set(BLAS_FOUND FALSE CACHE BOOL "Tool BLAS found successfully" FORCE)
