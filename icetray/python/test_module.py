@@ -11,7 +11,7 @@
 #
 
 from icecube.icetray import I3ConditionalModule
-import unittest
+import unittest, sys
 
 def I3TestModuleFactory(*test_cases):
 	"""
@@ -61,6 +61,9 @@ tray.AddModule(icetray.I3TestModuleFactory(I3TimeHorizonCutTest), 'test',
 					result = self.runner.run(test, result)
 			
 			if not result.wasSuccessful():
+				# XXX TODO: is there a nicer way to pull the handbrake 
+				# so that the failure shows up in runtests.py?
+				raise AssertionError, "A test failed!"
 				self.RequestSuspension()
 			else:
 				self.PushFrame(frame)
