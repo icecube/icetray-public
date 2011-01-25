@@ -54,7 +54,7 @@ _I3_SHELL=$NEW_SHELL
 _I3_PORTS=@I3_PORTS@
 _I3_SRC=@I3_SRC@
 _I3_BUILD=@I3_BUILD@
-_PYVER=`python --version 2>&1`
+_PYVER=`python -V 2>&1`
 
 # Check for I3_BUILD mismatch
 if [ -n "$I3_BUILD" -a "$I3_BUILD" != "$_I3_BUILD" ]
