@@ -1,0 +1,90 @@
+from icecube import icetray, dataclasses, dataio, phys_services
+from icecube.icetray import I3Units
+import I3Tray
+import os, unittest
+
+# The test to run:
+class DAQFrameMuxing(unittest.TestCase):
+	def testPhysFrame(self):
+		self.assert_("I3Geometry" in self.frame)
+		self.assert_("I3Calibration" in self.frame)
+		self.assert_("I3DetectorStatus" in self.frame)
+		self.assert_("InIceRawData" in self.frame)
+		self.assert_(len(self.frame["InIceRawData"]) == 1)
+		self.assert_("DrivingTime" in self.frame)
+		self.assert_("I3EventHeader" in self.frame)
+		self.assertEquals(frame["I3EventHeader"].SubEventID, 1)
+
+# Manufacture a file. 
+fname = os.environ["I3_BUILD"] + "daq_frame_test.i3.gz"
+if os.path.exists(fname):
+	os.unlink(fname)
+the_time = dataclasses.I3Time()
+the_time.SetUTCCalDate(1919, 1, 15, 0, 0, 0, 0)
+f = dataio.I3File(fname, "w")
+geo = dataclasses.I3Geometry()
+geo.startTime = the_time - 100
+geo.endTime = the_time + 100
+calib = dataclasses.I3Calibration()
+calib.startTime = the_time - 100
+calib.endTime = the_time + 100
+status = dataclasses.I3DetectorStatus()
+status.startTime = the_time - 100
+status.endTime = the_time + 100
+frame = icetray.I3Frame(icetray.I3Frame.Geometry)
+frame['I3Geometry'] = geo
+f.push(frame)
+frame = icetray.I3Frame(icetray.I3Frame.Calibration)
+frame['I3Calibration'] = calib
+f.push(frame)
+frame = icetray.I3Frame(icetray.I3Frame.DetectorStatus)
+frame['I3DetectorStatus'] = status
+f.push(frame)
+frame = icetray.I3Frame(icetray.I3Frame.DAQ)
+dlsm = dataclasses.I3DOMLaunchSeriesMap()
+dlsm[icetray.OMKey(7,42)] = dataclasses.I3DOMLaunchSeries()
+frame['InIceRawData'] = dlsm
+t = dataclasses.I3Time()
+t.SetUTCCalDate(1919, 1, 15, 0, 0, 0, 0)
+frame['DrivingTime'] = t
+header = dataclasses.I3EventHeader()
+header.RunID = 7
+header.EventID = 42
+header.SubEventID = 0
+header.StartTime = t
+header.EndTime = t+10*I3Units.microsecond
+frame['I3EventHeader'] = header
+f.push(frame)
+frame = icetray.I3Frame(icetray.I3Frame.Physics) # a mostly-empty Physics frame.
+frame['DrivingTime'] = t + 2
+header.SubEventID = 1
+frame['I3EventHeader'] = header
+f.push(frame)
+f.close()
+
+# Check I3Reader.
+tray = I3Tray.I3Tray()
+tray.AddModule('I3Reader', 'reader', filename=fname)
+tray.AddModule(icetray.I3TestModuleFactory(DAQFrameMuxing), 'testy')
+tray.AddModule('TrashCan', "yeswecan")
+tray.Execute()
+tray.Finish()
+
+# Check I3ReaderService.
+tray = I3Tray.I3Tray()
+tray.AddService('I3ReaderServiceFactory', 'reader', filename=fname)
+tray.AddModule('I3Muxer', 'muxme')
+tray.AddModule(icetray.I3TestModuleFactory(DAQFrameMuxing), 'testy')
+tray.AddModule('TrashCan', "yeswecan")
+tray.Execute()
+tray.Finish()
+
+# Check I3MuxingReaderService.
+tray = I3Tray.I3Tray()
+tray.AddService('I3MuxingReaderServiceFactory', 'reader', filenamelist=[[fname]])
+tray.AddModule('I3Muxer', 'muxme')
+tray.AddModule(icetray.I3TestModuleFactory(DAQFrameMuxing), 'testy')
+tray.AddModule('TrashCan', "yeswecan")
+tray.Execute()
+tray.Finish()
+	

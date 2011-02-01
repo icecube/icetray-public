@@ -248,6 +248,8 @@ I3Module::Process()
     Calibration(frame);
   else if(frame->GetStop() == I3Frame::DetectorStatus && ShouldDoDetectorStatus(frame))
     DetectorStatus(frame);
+  else if(frame->GetStop() == I3Frame::DAQ && ShouldDoDAQ(frame))
+    DAQ(frame);
   else if(ShouldDoOtherStops(frame))
     OtherStops(frame);
 }
@@ -411,6 +413,20 @@ I3Module::Calibration(I3FramePtr frame)
 
 bool
 I3Module::ShouldDoCalibration(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  return true;
+}
+
+void
+I3Module::DAQ(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  PushFrame(frame);
+}
+
+bool
+I3Module::ShouldDoDAQ(I3FramePtr frame)
 {
   i3_log("%s", __PRETTY_FUNCTION__);
   return true;
