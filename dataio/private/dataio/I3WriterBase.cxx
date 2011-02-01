@@ -129,9 +129,10 @@ I3WriterBase<Derived>::Configure()
 	  streams_.push_back(I3Frame::Geometry);
 	else if (vs[i] == "Calibration")
 	  streams_.push_back(I3Frame::Calibration);
-
 	else if (vs[i] == "DetectorStatus")
 	  streams_.push_back(I3Frame::DetectorStatus);
+	else if (vs[i] == "DAQ")
+	  streams_.push_back(I3Frame::DAQ);
 	else if (vs[i] == "Physics")
 	  streams_.push_back(I3Frame::Physics);
 	else if (vs[i] == "TrayInfo")

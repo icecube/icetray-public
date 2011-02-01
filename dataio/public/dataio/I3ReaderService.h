@@ -58,6 +58,7 @@ class I3ReaderService : public I3EventService,
   I3DetectorStatusConstPtr status_;
   I3GeometryConstPtr       geometry_;
   I3CalibrationConstPtr    calibration_;
+  I3FramePtr daqframe_;
 
   std::vector<std::string>::iterator filenames_iter_;
 
