@@ -175,6 +175,7 @@ void register_I3Frame()
     .def_readonly("Geometry", I3Frame::Geometry)
     .def_readonly("Calibration", I3Frame::Calibration)
     .def_readonly("DetectorStatus", I3Frame::DetectorStatus)
+    .def_readonly("DAQ", I3Frame::DAQ)
     .def_readonly("Physics", I3Frame::Physics)
     .def_readonly("TrayInfo", I3Frame::TrayInfo)
     ;

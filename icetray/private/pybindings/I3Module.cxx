@@ -8,6 +8,8 @@ using namespace boost::python;
 namespace {
   #define REGMODMETHODS \
       .def("Configure", &module_t::Configure) \
+      .def("ShouldDoDAQ", &module_t::ShouldDoDAQ) \
+      .def("DAQ", &module_t::DAQ) \
       .def("ShouldDoPhysics", &module_t::ShouldDoPhysics) \
       .def("Physics", &module_t::Physics) \
       .def("ShouldDoGeometry", &module_t::ShouldDoGeometry) \

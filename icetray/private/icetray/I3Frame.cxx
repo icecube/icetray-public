@@ -66,6 +66,9 @@ string I3Frame::Stream::str() const {
   case 'D':
     return "DetectorStatus";
     break;
+  case 'Q':
+    return "DAQ";
+    break;
   case 'P':
     return "Physics";
     break;
@@ -81,6 +84,7 @@ const I3Frame::Stream I3Frame::None('N');
 const I3Frame::Stream I3Frame::Geometry('G');
 const I3Frame::Stream I3Frame::Calibration('C');
 const I3Frame::Stream I3Frame::DetectorStatus('D');
+const I3Frame::Stream I3Frame::DAQ('Q');
 const I3Frame::Stream I3Frame::Physics('P');
 const I3Frame::Stream I3Frame::TrayInfo('I');
 
@@ -201,7 +205,12 @@ void I3Frame::merge(const I3Frame& rhs)
     {
       if (map_.find(it->first) == map_.end())
 	map_[it->first] = it->second;
-      else
+      else if (it->second->stream == stop_)
+        /*
+         * NB: we silently ignore identical keys from other stops; collisions
+         * on "native" keys will still raise an error. This allows for some
+         * degree of aliasing, e.g. DrivingTime in DAQ and Physics frames.
+         */
 	log_fatal("Frame merge collision on frame object %s", it->first.c_str());
     }
 }

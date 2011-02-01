@@ -155,6 +155,28 @@ PythonModule<Base>::Calibration(I3FramePtr frame)
 
 template <typename Base>
 bool
+PythonModule<Base>::ShouldDoDAQ(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  if (bp::override sd = this->get_override("ShouldDoDAQ"))
+    return sd(frame);
+  else
+    return Base::ShouldDoDAQ(frame);
+}
+
+template <typename Base>
+void 
+PythonModule<Base>::DAQ(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  if (bp::override ds = this->get_override("DAQ"))
+    ds(frame);
+  else
+    Base::DAQ(frame);
+}
+
+template <typename Base>
+bool
 PythonModule<Base>::ShouldDoDetectorStatus(I3FramePtr frame)
 {
   i3_log("%s", __PRETTY_FUNCTION__);
