@@ -22,6 +22,7 @@ MESSAGE(STATUS "jni")
 SET(_jni_PATH_SUFFIXES jre/lib/i386 jre/lib/i386/server jre/lib/amd64 jre/lib/amd64/server jre/lib/ia64 jre/lib/ia64/server lib ../Libraries)
 
 IF(APPLE)
+  FOUND_OK("Using the JavaVM Framework because we're on Apple")
 
   FIND_PATH(jni_h_include_dir
     NAMES jni.h
@@ -39,10 +40,11 @@ IF(APPLE)
     ${TOOL_SYSTEM_PATH})
   REPORT_FIND(jni jni_md.h ${jni_md_h_include_dir})
 
-  FIND_LIBRARY(jni_jvm_lib JavaVM)
-  REPORT_FIND(jni "JavaVM library" ${jni_jvm_lib})
+#  FIND_LIBRARY(jni_jvm_lib JavaVM)
+#  REPORT_FIND(jni "JavaVM library" ${jni_jvm_lib})
 
   SET(JNI_LINK_FLAGS "-framework JavaVM")
+  FOUND_OK("Setting JNI_LINK_FLAGS to ${JNI_LINK_FLAGS}")
 
 ELSE(APPLE)
 
@@ -106,11 +108,13 @@ ENDIF(NOT IS_DIRECTORY $ENV{JAVA_HOME})
 SET(JNI_INCLUDE_DIR ${jni_h_include_dir} ${jni_md_h_include_dir}
   CACHE STRING "Include dirs for jni" FORCE)
 
+IF(NOT APPLE)  #if'd because we use Frameworks on Apple
 SET(JNI_LIBRARIES ${jni_jvm_lib} ${jni_verify_lib} ${jni_zip_lib}
   CACHE STRING "Libraries for tool jni" FORCE)
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   SET(JNI_LIBRARIES ${jni_jvm_lib} ${jni_jvmlinkage_lib} ${jni_verify_lib} ${jni_zip_lib}
     CACHE STRING "Libraries for tool jni" FORCE)
 ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+ENDIF(NOT APPLE)
 
 SET(JNI_FOUND TRUE CACHE BOOL "Jni found flag" FORCE)
