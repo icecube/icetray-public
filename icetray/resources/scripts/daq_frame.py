@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from icecube import icetray, dataclasses, dataio, phys_services
 from icecube.icetray import I3Units
 import I3Tray
@@ -16,7 +18,7 @@ class DAQFrameMuxing(unittest.TestCase):
 		self.assertEquals(frame["I3EventHeader"].SubEventID, 1)
 
 # Manufacture a file. 
-fname = os.environ["I3_BUILD"] + "daq_frame_test.i3.gz"
+fname = os.environ["I3_BUILD"] + "/daq_frame_test.i3.gz"
 if os.path.exists(fname):
 	os.unlink(fname)
 the_time = dataclasses.I3Time()
