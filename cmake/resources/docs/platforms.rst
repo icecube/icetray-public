@@ -9,20 +9,55 @@ Details by Platform
 Apple Mac OS X
 ^^^^^^^^^^^^^^
 
-* If you use MacPorts to manage your "extra" system tools, like
-  subversion, then take caution.  After you have "source env.sh", your
-  $PATH variable is updated so that $I3_PORTS/bin is first. So:
+MacPorts
+""""""""
 
-  * Always explicitly run $I3_PORTS/bin/port (never let it come from
-    your path).
+If you use MacPorts to manage your "extra" system tools, like
+subversion, then take caution.  After you have "source env.sh", your
+$PATH variable is updated so that $I3_PORTS/bin is first. So:
 
-  * Never "su" or "sudo" from an xterm where you have "source env.sh",
-    as this altered path might be kept and cause conflicts when you
-    think you are running a "system" port command.  Start a new xterm
-    instead.
+* Always explicitly run $I3_PORTS/bin/port (never let it come from
+  your path).
 
-  * A system Macports install for things like subversion is not needed
-    in 10.5/Leopard, since subversion is now supplied by the OS.
+* Never "su" or "sudo" from an xterm where you have "source env.sh",
+  as this altered path might be kept and cause conflicts when you
+  think you are running a "system" port command.  Start a new xterm
+  instead.
+
+* A system Macports install for things like subversion is not needed
+  in 10.5/Leopard, since subversion is now supplied by the OS.
+
+Java
+""""
+
+As of February  8, 2011, the offline-software meta-project does not
+use Java, and related warnings can be safely ignored.
+
+However, the simulation meta-project requires Java. In order for
+JAVA_HOME to be set correctly, export using the following command
+(bash/sh version)::
+
+  export JAVA_HOME=/Library/Java/Home
+
+which you can set in your ``.bashrc``.
+
+Additionally, as of *Java for Mac OS X 10.6 Update 3 and 10.5 Update
+8* Apple no longer ships the Java Native Interface (JNI) headers and
+libraries as part of its Java package. The JNI files are included in a
+separate Developer package. This package can be installed by doing the
+following:
+
+1) Go to http://connect.apple.com/
+2) Sign with or create an "Apple Developer ID"
+3) Once signed in, in the "Download" sidebar to the right, click "Java"
+4) Select the appropriate developer package that matches your OS and Java Update versions.
+5) Install the .dmg/.pkg as normal
+
+If you still have problems detecting Java/JNI correctly, try replacing
+your ``cmake/tools/jni.cmake`` file with the most current version,
+which can always be found here_.
+
+.. _here: http://code.icecube.wisc.edu/icetray/projects/cmake/trunk/tools/jni.cmake
 
 .. index:: RHEL4
 .. _RHEL4:
