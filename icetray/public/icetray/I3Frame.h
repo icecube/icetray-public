@@ -367,6 +367,11 @@ class I3Frame
   ///  Renames something.
   ///
   void Rename(const std::string& from, const std::string& to);
+
+  ///
+  ///  Changes a frame object's stream.
+  void ChangeStream(const std::string& key, Stream stream);
+
   ///
   /// Deletes something.  
   ///

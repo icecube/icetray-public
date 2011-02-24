@@ -276,6 +276,15 @@ void I3Frame::Rename(const string& fromname, const string& toname)
 
 }
 
+void I3Frame::ChangeStream(const string& key, I3Frame::Stream stream)
+{
+  map_t::const_iterator fromiter = map_.find(key);
+  if (fromiter == map_.end())
+    log_fatal("attempt to change stream of \"%s\", but it doesn't exist",
+      key.c_str());
+
+  fromiter->second->stream = stream;
+}
 
 void I3Frame::Delete(const string& name)
 {
