@@ -21,8 +21,6 @@ if(BUILD_PYBINDINGS)
   i3_add_pybindings(dataio
     I3File.cxx
     I3SequentialFile.cxx
-    I3ReaderService.cxx
-    I3MuxingReaderService.cxx
     module.cxx
     USE_PROJECTS icetray dataio
     USE_TOOLS boost python log4cplus
