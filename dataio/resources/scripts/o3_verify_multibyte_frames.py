@@ -29,11 +29,8 @@ file_list = glob("split.*.i3")
 file_list.sort()
 
 print file_list
-tray.AddService("I3ReaderServiceFactory","readerfactory")(
-    ("FilenameList", file_list)
-    )
 
-tray.AddModule("I3Muxer","muxme")
+tray.AddModule("I3Reader", "reader", FilenameList=file_list)
 
 tray.AddModule("Dump","dump")
 

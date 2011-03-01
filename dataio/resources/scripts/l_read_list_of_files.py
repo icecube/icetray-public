@@ -27,11 +27,7 @@ globspec = expandvars("$I3_PORTS/test-data/string-21/*.i3.gz")
 #  use 'glob' to convert the string with the 'star' in it to a list of real filenames
 file_list = glob(globspec)
 
-tray.AddService("I3ReaderServiceFactory","readerfactory")(
-    ("FilenameList", file_list)
-    )
-
-tray.AddModule("I3Muxer","muxme")
+tray.AddModule("I3Reader","reader", FilenameList=file_list)
 
 tray.AddModule("Dump","dump")
 

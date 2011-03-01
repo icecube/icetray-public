@@ -16,12 +16,7 @@ load("libexamples")
 
 tray = I3Tray()
 
-tray.AddService("I3ReaderServiceFactory","readerfactory")(
-    ("filename", "pass1.i3"),
-    ("skipkeys", ["IceTop.*"])
-    )
-
-tray.AddModule("I3Muxer","muxme")
+tray.AddModule("I3Reader", "reader", Filename="pass1.i3", skipkeys=["IceTop.*"])
 
 tray.AddModule("FrameCheck", "check1")(
     ("ensure_physics_has", ["CalibratedATWD","CalibratedFADC","DrivingTime", 

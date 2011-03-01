@@ -22,12 +22,9 @@ tray = I3Tray()
 # answer is 3.  the C++ string has to be "\\", two backslashes, and
 # python eats one of them.  
 #
-tray.AddService("I3ReaderServiceFactory","readerfactory")(
-    ("filename", "filtered.i3"),
-    ("skipkeys", ["^[par]{3}.{5}\?\\\w$"]) 
-    )
 
-tray.AddModule("I3Muxer","muxme")
+tray.AddModule("I3Reader", "reader", Filename=""filtered.i3",
+    SkipKeys=["^[par]{3}.{5}\?\\\w$"])
 
 tray.AddModule("FrameCheck", "check1")(
     ("ensure_physics_has", ["CalibratedATWD","CalibratedFADC", "DrivingTime", 

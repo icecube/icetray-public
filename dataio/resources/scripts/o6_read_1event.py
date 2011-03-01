@@ -16,11 +16,7 @@ load("libdataio")
 
 tray = I3Tray()
 
-tray.AddService("I3ReaderServiceFactory","readerfactory")(
-    ("Filename", "one_event.i3")
-    )
-
-tray.AddModule("I3Muxer","muxme")
+tray.AddModule("I3Reader", "reader", Filename="one_event.i3")
 
 tray.AddModule("Dump","dump")
 

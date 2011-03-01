@@ -28,11 +28,8 @@ file_list = glob("testm.*.i3.gz")
 file_list.sort()
 
 print file_list
-tray.AddService("I3ReaderServiceFactory","readerfactory")(
-    ("FilenameList", file_list)
-    )
 
-tray.AddModule("I3Muxer","muxme")
+tray.AddModule("I3Reader", FilenameList=file_list)
 
 tray.AddModule("Dump","dump")
 

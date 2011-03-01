@@ -15,11 +15,7 @@ load("libdataio")
 
 tray = I3Tray()
 
-tray.AddService("I3ReaderServiceFactory","readerfactory")(
-    ("Filename", expandvars("withnulls.i3"))
-    )
-
-tray.AddModule("I3Muxer","muxme")
+tray.AddModule("I3Reader", "reader", Filename=expandvars("withnulls.i3"))
 
 tray.AddModule("Dump","dump")
 
