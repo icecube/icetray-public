@@ -22,58 +22,24 @@ load("libexamples")
 tools = expandvars("$I3_PORTS")
 runfile = tools + "/test-data/2006data/Run00089508.i3.gz"
 
-#
-#  The services that provide data to the I3Muxer (multiplexer).
-#
 tray = I3Tray()
 
-#
-# Default configuration of the I3Muxer and the I3ReaderServices.  This
-# is cut-and-pasteable if you're just reading from a .i3 file.
-#
-tray.AddService("I3ReaderServiceFactory","i3reader",
-                Filename = runfile,
-                SkipKeys = ["I3PfFilterMask"])
+tray.AddModule("I3Reader","i3reader")(
+    ("Filename", runfile),
+    ("SkipKeys",["I3PfFilterMask"])
+    )
 
 #
-# The muxer talks to the services above and puts together frames
-# which it sends downstream... 
+# Make sure that SkipKeys above worked
 #
-tray.AddModule("I3Muxer","muxme")
-
-#
-# A DOMCalibrator.  Obviously.
-#
-tray.AddModule("I3DOMcalibrator","merge")
- 
-#
-# And an appropriately named but nonetheless cute feature
-# extractor.
-#
-tray.AddModule("DumbFeatureExtractor","dumbfe")
- 
-#
-# This would probably be better named I3ConstantSeed.  You can imagine
-# what it does.
-#
-tray.AddModule("PutParticle","put",
-               Zenith = 1.28,
-               Azimuth = 3.14,
-               Where =  "somewhere")
-
+tray.AddModule("FrameCheck", "check",
+               Ensure_Physics_Hasnt = ["I3PfFilterMask"])
 #
 # This is the very convenient "Dump" module which spits out the frames
 # as they go by.  This is one of icecube's standard modules (in
 # project icetray.  You get it for free, it's always available.)
 #
 tray.AddModule("Dump","dump")
-
-#
-# And this is the magic writer.  We will make it work harder later.
-#
-tray.AddModule("I3Writer","writer",
-               filename =  "pass1.i3"
-               )
 
 #
 # The TrashCan is another standard module.  Every module's outboxes

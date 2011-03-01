@@ -16,18 +16,9 @@ load("libdataio")
 
 tray = I3Tray()
 
-tray.AddService("I3ReaderServiceFactory","readerfactory")(
-    ("Filename", "pass1.i3")
-    )
-
-tray.AddModule("I3Muxer","muxme")
+tray.AddModule("I3Reader", "reader", Filename="one_event.i3")
 
 tray.AddModule("Dump","dump")
-
-tray.AddModule("I3MultiWriter","writer")(
-    ("filename", "testmulti.%04u.i3"),
-    ("sizelimit", 10**6) # 10^6 bytes
-    )
 
 tray.AddModule("TrashCan", "the can");
 

@@ -17,11 +17,8 @@ tray = I3Tray()
 
 # by default the reader will log_fatal if it can't deserialize something
 #  no longer!  Lazy frame to the rescue.  Unkown class should just flow thru
-tray.AddService("I3ReaderServiceFactory","readerfactory")(
-    ("Filename", "hasmutineer.i3.gz"),
-    )
 
-tray.AddModule("I3Muxer","muxme")
+tray.AddModule("I3Reader", "reader", Filename="hasmutineer.i3.gz")
 
 tray.AddModule("FrameCheck", "checker")(
     ("Ensure_Physics_Has", ["mutineer"])

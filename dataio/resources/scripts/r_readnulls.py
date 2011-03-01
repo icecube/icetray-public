@@ -15,21 +15,9 @@ load("libdataio")
 
 tray = I3Tray()
 
-tray.AddService("I3ReaderServiceFactory","readerfactory")(
-    ("Filename", "pass1.i3")
-    )
-
-tray.AddModule("I3Muxer","muxme")
-
-tray.AddModule("AddNulls", "nulls")(
-    ("where", ["null1", "null2", "null3"])
-    );
+tray.AddModule("I3Reader", "reader", Filename=expandvars("withnulls.i3"))
 
 tray.AddModule("Dump","dump")
-
-tray.AddModule("I3Writer","writer")(
-    ("filename", "withnulls.i3")
-    )
 
 tray.AddModule("TrashCan", "the can");
 
