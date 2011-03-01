@@ -72,21 +72,3 @@ tray.AddModule('TrashCan', "yeswecan")
 tray.Execute()
 tray.Finish()
 
-# Check I3ReaderService.
-tray = I3Tray.I3Tray()
-tray.AddService('I3ReaderServiceFactory', 'reader', filename=fname)
-tray.AddModule('I3Muxer', 'muxme')
-tray.AddModule(icetray.I3TestModuleFactory(DAQFrameMuxing), 'testy')
-tray.AddModule('TrashCan', "yeswecan")
-tray.Execute()
-tray.Finish()
-
-# Check I3MuxingReaderService.
-tray = I3Tray.I3Tray()
-tray.AddService('I3MuxingReaderServiceFactory', 'reader', filenamelist=[[fname]])
-tray.AddModule('I3Muxer', 'muxme')
-tray.AddModule(icetray.I3TestModuleFactory(DAQFrameMuxing), 'testy')
-tray.AddModule('TrashCan', "yeswecan")
-tray.Execute()
-tray.Finish()
-	
