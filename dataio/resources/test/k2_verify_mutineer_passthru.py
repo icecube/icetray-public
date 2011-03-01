@@ -17,7 +17,11 @@ load("libdataio")
 tray = I3Tray()
 
 # by default the reader will log_fatal if it can't deserialize something
-tray.AddModule("I3Muxer","reader", Filename="stillhasmutineer.i3.gz")
+tray.AddService("I3ReaderServiceFactory","readerfactory")(
+    ("Filename", "stillhasmutineer.i3.gz"),
+    )
+
+tray.AddModule("I3Muxer","muxme")
 
 tray.AddModule("FrameCheck", "checker")(
     ("Ensure_Physics_Has", ["mutineer"])

@@ -9,7 +9,10 @@ tray = I3Tray()
 
 runfile = expandvars("$I3_PORTS/test-data/2006data/Run00089508.i3.gz")
 
-tray.AddModule("I3Reader", "reader", Filename = runfile)
+tray.AddService("I3ReaderServiceFactory", "readers",
+		Filename = runfile)
+
+tray.AddModule("I3Muxer", "mux")
 
 def SelectDaq(frame):
 	assert 'DrivingTime' in frame

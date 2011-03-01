@@ -16,7 +16,11 @@ load("libdataio")
 tray = I3Tray()
 
 # by default the reader will log_fatal if it can't deserialize something
-tray.AddModule("I3Reader","reader", Filename=expandvars("hasmutineer.i3.gz"))
+tray.AddService("I3ReaderServiceFactory","readerfactory")(
+    ("Filename", expandvars("hasmutineer.i3.gz"))
+    )
+
+tray.AddModule("I3Muxer","muxme")
 
 
 # this guy actually does the get and causes the error

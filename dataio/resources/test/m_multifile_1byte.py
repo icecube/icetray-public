@@ -16,18 +16,30 @@ load("libdataio")
 
 tray = I3Tray()
 
-tray.AddModule("I3Reader", "reader", Filename="pass1.i3")
+tray.AddService("I3ReaderServiceFactory","readerfactory")(
+    ("Filename", "pass1.i3")
+    )
+
+tray.AddModule("I3Muxer","muxme")
 
 tray.AddModule("Dump","dump")
 
 tray.AddModule("I3MultiWriter","writer")(
-    ("filename", "testmulti.%04u.i3"),
-    ("sizelimit", 10**6) # 10^6 bytes
+    ("filename", "testm.%04u.i3.gz"),  
+    ("sizelimit", 1) # this limit will do one-frame-per-file
     )
 
 tray.AddModule("TrashCan", "the can");
 
 tray.Execute()
 tray.Finish()
+
+filecount_is_correct = (len(glob("testm.????.i3.gz")) == 15)
+
+if filecount_is_correct:
+    sys.exit(0)
+else:
+    print "generated file count is incorrect"
+    sys.exit(1)
 
 

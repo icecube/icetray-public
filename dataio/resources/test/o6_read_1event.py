@@ -8,25 +8,25 @@ from os.path import expandvars
 
 import os
 import sys
+from glob import glob
 
 load("libdataclasses")
 load("libphys-services")
 load("libdataio")
-load("libmutineer")
 
 tray = I3Tray()
 
-tray.AddModule("I3Reader", "reader", Filename="pass1.i3")
+tray.AddService("I3ReaderServiceFactory","readerfactory")(
+    ("Filename", "one_event.i3")
+    )
 
-tray.AddModule("MutineerModule", "mutineer")
+tray.AddModule("I3Muxer","muxme")
 
 tray.AddModule("Dump","dump")
-
-tray.AddModule("I3Writer","writer")(
-    ("filename", "hasmutineer.i3.gz")
-    )
 
 tray.AddModule("TrashCan", "the can");
 
 tray.Execute()
 tray.Finish()
+
+

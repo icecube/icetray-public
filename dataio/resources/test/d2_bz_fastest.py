@@ -11,7 +11,10 @@ import sys
 
 tray = I3Tray()
 
-tray.AddModule("I3Reader", "reader", Filename =  "pass1_best.i3.bz2")
+tray.AddService("I3ReaderServiceFactory","readerfactory",
+                Filename =  "pass1_best.i3.bz2")
+
+tray.AddModule("I3Muxer","muxme")
 
 tray.AddModule("Dump","dump")
 

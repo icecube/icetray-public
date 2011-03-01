@@ -21,21 +21,24 @@ tray = I3Tray()
 #
 
 
+#  expand the I3_PORTS
+globspec = expandvars("$I3_PORTS/test-data/string-21/*.i3.gz")
+
 #  use 'glob' to convert the string with the 'star' in it to a list of real filenames
-file_list = glob("testmulti.*.i3")
+file_list = glob(globspec)
 
-#  puts them in alpha/numeric order 
-file_list.sort()
+tray.AddService("I3ReaderServiceFactory","readerfactory")(
+    ("FilenameList", file_list)
+    )
 
-print file_list
-tray.AddModule("I3Reader", "reader", FilenameList=file_list)
+tray.AddModule("I3Muxer","muxme")
 
 tray.AddModule("Dump","dump")
 
 # verify that 47 frames come through.  That's assumes only two files
 # from test-data match the glob above.
 tray.AddModule("CountFrames", "count")(
-    ("Physics", 10),
+    ("Physics", 44),
     ("Calibration", 1),
     ("DetectorStatus", 1),
     ("Geometry", 1)
@@ -45,4 +48,3 @@ tray.AddModule("TrashCan", "the can");
 
 tray.Execute()
 tray.Finish()
-

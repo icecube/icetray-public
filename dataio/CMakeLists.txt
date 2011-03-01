@@ -47,6 +47,6 @@ i3_executable(scan private/scan/*.cxx
 i3_test_executable(test private/test/*.cxx
   USE_PROJECTS dataio)
 
-i3_test_scripts(resources/scripts/*.py)
+i3_test_scripts(resources/test/*.py)
 
 add_subdirectory(private/pybindings)

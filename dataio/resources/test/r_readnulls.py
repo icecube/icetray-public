@@ -15,7 +15,11 @@ load("libdataio")
 
 tray = I3Tray()
 
-tray.AddModule("I3Reader", "reader", Filename=expandvars("$I3_PORTS/test-data/string-21/MacOSX-libstdc++6-ppc.i3.gz")
+tray.AddService("I3ReaderServiceFactory","readerfactory")(
+    ("Filename", expandvars("withnulls.i3"))
+    )
+
+tray.AddModule("I3Muxer","muxme")
 
 tray.AddModule("Dump","dump")
 

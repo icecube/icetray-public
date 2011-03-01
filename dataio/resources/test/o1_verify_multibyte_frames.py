@@ -22,18 +22,21 @@ tray = I3Tray()
 
 
 #  use 'glob' to convert the string with the 'star' in it to a list of real filenames
-file_list = glob("testm.*.i3.gz")
+file_list = glob("testmulti.*.i3")
 
 #  puts them in alpha/numeric order 
 file_list.sort()
 
 print file_list
+tray.AddService("I3ReaderServiceFactory","readerfactory")(
+    ("FilenameList", file_list)
+    )
 
-tray.AddModule("I3Reader", FilenameList=file_list)
+tray.AddModule("I3Muxer","muxme")
 
 tray.AddModule("Dump","dump")
 
-# verify that 10 frames come through.  That's assumes only two files
+# verify that 47 frames come through.  That's assumes only two files
 # from test-data match the glob above.
 tray.AddModule("CountFrames", "count")(
     ("Physics", 10),
@@ -46,7 +49,4 @@ tray.AddModule("TrashCan", "the can");
 
 tray.Execute()
 tray.Finish()
-
-for f in file_list:
-    os.unlink(f)
 
