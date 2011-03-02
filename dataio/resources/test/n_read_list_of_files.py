@@ -29,7 +29,7 @@ file_list.sort()
 
 print file_list
 
-tray.AddModule("I3Reader", FilenameList=file_list)
+tray.AddModule("I3Reader","reader", FilenameList=file_list)
 
 tray.AddModule("Dump","dump")
 

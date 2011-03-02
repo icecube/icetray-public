@@ -23,7 +23,7 @@ tray = I3Tray()
 # python eats one of them.  
 #
 
-tray.AddModule("I3Reader", "reader", Filename=""filtered.i3",
+tray.AddModule("I3Reader", "reader", Filename="filtered.i3",
     SkipKeys=["^[par]{3}.{5}\?\\\w$"])
 
 tray.AddModule("FrameCheck", "check1")(
