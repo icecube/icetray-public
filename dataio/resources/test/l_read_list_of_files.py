@@ -35,9 +35,9 @@ tray.AddModule("Dump","dump")
 # from test-data match the glob above.
 tray.AddModule("CountFrames", "count")(
     ("Physics", 44),
-    ("Calibration", 1),
-    ("DetectorStatus", 1),
-    ("Geometry", 1)
+    ("Calibration", 2),
+    ("DetectorStatus", 2),
+    ("Geometry", 2)
     )
 
 tray.AddModule("TrashCan", "the can");
