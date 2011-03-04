@@ -276,13 +276,21 @@ main (int argc, char** argv)
     {
       cerr << "[" << projects[i] << "] ";
       cerr.flush();
-      try {
-        load_project(projects[i], false);
-      } catch (const std::runtime_error& e) {
-        cerr << "ignoring: " << e.what() << std::endl;
-      } catch (const boost::python::error_already_set& e) {
-        cerr << "Caught exception from python:\n";
-        PyErr_Print();
+      
+      /* 
+       * First, try to load the project's pybindings, in case modules
+       * take parameters whose to/from-Python converters are defined
+       * there. If that fails, fall back to the C++ library.
+       */
+      if (!PyImport_ImportModule((std::string("icecube.") + projects[i]).c_str())) {
+        try {
+          load_project(projects[i], false);
+        } catch (const std::runtime_error& e) {
+          cerr << "ignoring: " << e.what() << std::endl;
+        } catch (const boost::python::error_already_set& e) {
+          cerr << "Caught exception from python:\n";
+          PyErr_Print();
+        }
       }
     }
   cerr << "\n";
