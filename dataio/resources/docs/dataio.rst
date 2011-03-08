@@ -1,30 +1,19 @@
 IceTray I/O
 ==============
 
-The dataio modules I3Writer, I3MultiWriter and I3ReaderService support on-the-fly compression and exclusion of various frame items via regular expressions.  The .i3 file browser 'dataio-shovel' is a handy utility.
+The dataio modules I3Writer, I3MultiWriter and I3Reader support on-the-fly compression and exclusion of various frame items via regular expressions.  The .i3 file browser 'dataio-shovel' is a handy utility.
 
 Reading in .i3 files from the data warehouse
 ---------------------------------------------
 
-If you are reading an .i3 file(s) that contain all relevant information 
-for your events, using the I3Muxer/I3ReaderService is not required.  If 
-all Geometry, Calibration, Detector status information is included in 
-the .i3 file or files supplied with the Physics event data, then using 
-the Muxer is not required.  You can easily use
-the I3Reader module to read your .i3 files.  This is 
-generally true of simulation and level0, level1,... files
-that are available in the data warehouse.
+Make sure you order the files sent to the I3Reader so that the proper GCD frames are supplied prior to P frames.
 
-**Note:** Just make sure you order the files sent to the I3Reader so
-  that the proper GCD frames are supplied prior to P frames.
-
-When do I need to use the Muxer (see :ref:`I3Muxer`) and
-appropriate source services?
+If any of the following apply, you may need to follow I3Reader with appropriate
+source services and the module I3MetaSynth:
 
 * Using the database as a source of Geometry, Calibration, DetectorStatus
 * This includes decoding RAW data that does not contains GCD frame.
 * Using a database service to replace the G, C and/or D frames in a existing .i3 file.
-* Using the EmptyStream services to fill dummy G, C, D, and/or P frames.
 
 Basically, anytime you are getting information from other sources that
 a single stream of i3 files....
@@ -107,7 +96,7 @@ should get you the same result as just writing to disk and then gzipping, and th
 will compress better at the cost of speed. The I3Reader will recognize
 if the file ends in .gz and turn on decompression if necessary::
 
- tray.AddModule("I3ReaderServiceFactory", "reader",
+ tray.AddModule("I3Reader", "reader",
                 filename = "mystuff.i3.gz")                                                  
 
 It does not need to know what the compression level of the input file is.
@@ -137,7 +126,7 @@ gzipping.
 The I3Reader will just recognize if the file ends in .gz and turn on
 decompression if necessary::
 
- tray.AddService("I3ReaderServiceFactory", "reader",
+ tray.AddModule("I3Reader", "reader",
                  filename = "mystuff.i3.gz")
 
 not much to explain there.
@@ -332,13 +321,13 @@ the list of files from a directory, you might find the python
  from glob import glob
  
  file_list = glob("/my/data/\*.i3.gz")
- tray.AddService("I3ReaderServiceFactory", "readerfactory",
+ tray.AddModule("I3Reader", "reader",
                  FilenameList = file_list)
 
 as usual with vector<string> parameters, you can pass an array
 literal::
 
- tray.AddService("I3ReaderServiceFactory", "readerfactory",
+ tray.AddModule("I3Reader", "reader",
                  FilenameList = ["file1.i3.gz", "file2.i3.gz", file3.i3.gz"])
 
 
@@ -370,7 +359,7 @@ physics_0340.00999.i3.gz::
 
   physics.sort()                            # sort() them (they probably wont glob in alphabetical order)  
 
-  tray.AddService("I3ReaderServiceFactory", "readerfactory",
+  tray.AddModule("I3Reader", "reader",
                   FilenameList = ["GCD_0340.i3.gz"] + physics)
 
 
@@ -402,7 +391,7 @@ left-padded with zeros to a width of 4::
    foo/myfile-0002.i3.gz
 
 etc.  This is so that the files stay in generated order when listed
-with *ls* or passed to the I3ReaderService via glob().
+with *ls* or passed to the I3Reader via glob().
 
 The other necessary parameter is **SizeLimit** which specifies, in
 bytes, a soft limit on the size of each file.  This is not a hard
