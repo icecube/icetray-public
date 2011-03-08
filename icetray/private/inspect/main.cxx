@@ -282,7 +282,8 @@ main (int argc, char** argv)
        * take parameters whose to/from-Python converters are defined
        * there. If that fails, fall back to the C++ library.
        */
-      if (!PyImport_ImportModule((std::string("icecube.") + projects[i]).c_str())) {
+      const std::string modname = (std::string("icecube.") + projects[i]);
+      if (!PyImport_ImportModule(modname.c_str())) {
         try {
           load_project(projects[i], false);
         } catch (const std::runtime_error& e) {
