@@ -20,7 +20,7 @@
  *  
  */
 #ifndef __CINT__
-#  include <pyconfig.h>
+#  include <Python.h>
 #  ifdef __APPLE_CC__
 #    ifdef _POSIX_C_SOURCE
 #      undef _POSIX_C_SOURCE
