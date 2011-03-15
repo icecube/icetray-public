@@ -55,10 +55,10 @@ class ModuleTimer
     if (getrusage(RUSAGE_SELF, &stop) != -1 && !fail)
       {
 	user += (stop.ru_utime.tv_sec - start.ru_utime.tv_sec);
-	user += double(stop.ru_utime.tv_usec - start.ru_utime.tv_usec) / 10E+06;
+	user += double(stop.ru_utime.tv_usec - start.ru_utime.tv_usec) / 1E+06;
 
 	sys += (stop.ru_stime.tv_sec - start.ru_stime.tv_sec);
-	sys += double(stop.ru_stime.tv_usec - start.ru_stime.tv_usec) / 10E+06;
+	sys += double(stop.ru_stime.tv_usec - start.ru_stime.tv_usec) / 1E+06;
       }
   }
 };
