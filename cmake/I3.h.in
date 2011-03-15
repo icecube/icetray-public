@@ -19,6 +19,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
+
+// gives us the tasty bits like INT32_MAX
+#ifdef __cplusplus
+#ifndef __STDC_LIMIT_MACROS
+#define __STDC_LIMIT_MACROS
+#endif
+#endif
+
 #ifndef __CINT__
 #  include <Python.h>
 #  ifdef __APPLE_CC__
@@ -92,9 +100,6 @@ using scitbx::boost_python::container_conversions::variable_capacity_policy;
 #else
 #  define HAVE_STRNLEN 1
 #endif
-
-// gives us the tasty bits like INT32_MAX
-#define __STDC_LIMIT_MACROS
 
 #include <cmath>
 #include <math.h>
