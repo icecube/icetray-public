@@ -27,6 +27,7 @@ void register_I3DetectorStatusService();
 void register_I3GeometryService();
 void register_I3EventService();
 void register_I3MetaService();
+void register_I3OMKey2MBID();
 
 BOOST_PYTHON_MODULE(interfaces)
 {
@@ -37,4 +38,5 @@ BOOST_PYTHON_MODULE(interfaces)
   register_I3GeometryService();
   register_I3EventService();
   register_I3MetaService();
+  register_I3OMKey2MBID();
 }
