@@ -1,5 +1,5 @@
 //
-// $Id$
+// $Id: I3Logging.cxx 50381 2008-11-07 13:50:33Z troy $
 //
 // @author troy d. straszheim
 //
@@ -19,6 +19,12 @@ using std::cerr;
 #include <log4cplus/consoleappender.h>
 #include <log4cplus/configurator.h>
 
+#include <log4cplus/streams.h>
+#include <log4cplus/spi/factory.h>
+#include <log4cplus/spi/loggingevent.h>
+#include <log4cplus/helpers/stringhelper.h>
+#include <log4cplus/helpers/loglog.h>
+#include <log4cplus/helpers/property.h>
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -33,6 +39,79 @@ namespace fs = boost::filesystem;
 
 namespace I3Logging 
 {
+  class IceTrayAppender : public log4cplus::Appender {
+  public:
+    // Ctors
+    IceTrayAppender(bool immediateFlush = false, log4cplus::LogLevel errorLevel = log4cplus::ERROR_LOG_LEVEL)
+      : immediateFlush_(immediateFlush_), errorLevel_(errorLevel)
+    {}
+
+    IceTrayAppender(const log4cplus::helpers::Properties properties)
+      : log4cplus::Appender(properties),
+	immediateFlush_(false), errorLevel_(log4cplus::ERROR_LOG_LEVEL)
+    {
+      if (properties.exists( LOG4CPLUS_TEXT("ImmediateFlush") )) {
+	log4cplus::tstring tmp = properties.getProperty( LOG4CPLUS_TEXT("ImmediateFlush") );
+        immediateFlush_ = (log4cplus::helpers::toLower(tmp) == LOG4CPLUS_TEXT("true"));
+      }
+      if (properties.exists( LOG4CPLUS_TEXT("ErrorLevel") )) {
+	log4cplus::tstring tmp = properties.getProperty( LOG4CPLUS_TEXT("ErrorLevel") );
+	errorLevel_ = log4cplus::getLogLevelManager().fromString(tmp);
+      }
+    }
+
+    // Dtor
+    ~IceTrayAppender() { destructorImpl(); }
+
+    // Methods
+    virtual void close() {
+      getLogLog().debug(LOG4CPLUS_TEXT("Entering IceTrayAppender::close().."));
+      closed = true;
+    }
+
+  protected:
+    // From log4cplus::ConsoleAppender:
+    // Normally, append() methods do not need to be locked since they are
+    // called by doAppend() which performs the locking.  However, this locks
+    // on the LogLog instance, so we don't have multiple threads writing to
+    // tcout and tcerr
+    void append(const log4cplus::spi::InternalLoggingEvent& event)
+    {
+      LOG4CPLUS_BEGIN_SYNCHRONIZE_ON_MUTEX( getLogLog().mutex )
+        log4cplus::tostream& output = (event.getLogLevel() >= errorLevel_ ? log4cplus::tcerr : log4cplus::tcout);
+        layout->formatAndAppend(output, event);
+        if (immediateFlush_) {
+	  output.flush();
+        }
+      LOG4CPLUS_END_SYNCHRONIZE_ON_MUTEX
+    }
+
+
+    /**
+     * Immediate flush means that the underlying output stream
+     * will be flushed at the end of each append operation.
+     */
+    bool immediateFlush_;
+
+    /**
+     * Minimum logging level that goes to stderr.
+     */
+    log4cplus::LogLevel errorLevel_;
+  };
+
+  class IceTrayAppenderFactory : public log4cplus::spi::AppenderFactory {
+  public:
+    log4cplus::SharedAppenderPtr createObject(const log4cplus::helpers::Properties& props)
+    {
+      return log4cplus::SharedAppenderPtr(new I3Logging::IceTrayAppender(props));
+    }
+
+    log4cplus::tstring getTypeName() { 
+      return LOG4CPLUS_TEXT("I3Logging::IceTrayAppender"); 
+    }
+  };
+
+
   char logbuf_[logbuf_size_];
 
   void failsafe_configuration()
@@ -40,7 +119,8 @@ namespace I3Logging
     log4cplus::helpers::Properties properties;
 
     // here's what you get if you use all-default configuration
-    properties.setProperty("log4cplus.appender.default", "log4cplus::ConsoleAppender");
+    //properties.setProperty("log4cplus.appender.default", "log4cplus::ConsoleAppender");
+    properties.setProperty("log4cplus.appender.default", "I3Logging::IceTrayAppender");
     properties.setProperty("log4cplus.appender.default.layout", "log4cplus::PatternLayout");
     properties.setProperty("log4cplus.appender.default.layout.ConversionPattern", "%F:%L: %m%n");
     //    properties.setProperty("log4cplus.logger.default", "DEBUG, default");
@@ -65,6 +145,11 @@ namespace I3Logging
     char * buffer;
     
     buffer = getenv ("I3LOGGING_CONFIG");
+
+    // register our appender
+    log4cplus::spi::AppenderFactoryRegistry& reg = log4cplus::spi::getAppenderFactoryRegistry();
+    std::auto_ptr<log4cplus::spi::AppenderFactory> icetrayAppenderFactory(new I3Logging::IceTrayAppenderFactory());
+    reg.put(icetrayAppenderFactory);
 
     // if the env variable is set, try that file, else default-config
     if (buffer) {
