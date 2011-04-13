@@ -19,8 +19,11 @@
 #
 
 if (CLHEP_CONFIG_ERROR)
+  # we don't use the tooldef() macro, so we have to fudge pretty-printing
+  colormsg("")
+  colormsg(HICYAN "geant4")
 
-  message(STATUS "CLHEP not found - Skipping Geant4")
+  colormsg(CYAN "- CLHEP not found - Skipping Geant4")
   set(GEANT4_CONFIG_ERROR TRUE)
 
 else (CLHEP_CONFIG_ERROR)

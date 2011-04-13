@@ -4,6 +4,7 @@
 #
 #  Single header that includes all the utilities
 #
+include (pretty)
 include (car)
 include (cdr)
 include (filter_out)

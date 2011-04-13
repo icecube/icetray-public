@@ -328,7 +328,7 @@ macro(i3_project PROJECT_NAME)
 
     if(ARG_PYTHON_DIR AND IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR})
       if(ARG_USE_SETUPTOOLS)
-	message(STATUS "  * python [setuptools]")
+	colormsg(GREEN "+-- python [setuptools]")
 
 	#
 	# do the 'setup.py develop' 
@@ -357,7 +357,7 @@ macro(i3_project PROJECT_NAME)
 	  ${PROJECT_NAME}-install-to-tarball)
 
       else(ARG_USE_SETUPTOOLS)
-	message(STATUS "  * python [symlinks]")
+	colormsg(GREEN "+-- python [symlinks]")
 
 	if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/__init__.py)
 	  message(FATAL_ERROR 
@@ -584,7 +584,7 @@ macro(i3_add_pybindings MODULENAME)
 
     add_dependencies(pybindings ${MODULENAME}-pybindings)
 
-    message(STATUS "  + ${MODULENAME}-pybindings")
+    colormsg(GREEN "+-- ${MODULENAME}-pybindings")
 
     if(APPLE)
       set_target_properties(${MODULENAME}-pybindings

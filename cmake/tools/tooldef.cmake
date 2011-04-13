@@ -45,7 +45,8 @@ endif (SYSTEM_PACKAGES)
 #
 macro(tooldef tool_ incdir incfile libdir bindir)
   string(TOUPPER ${tool_} TOOL)
-  message(STATUS "${tool_}")
+  colormsg("")
+  colormsg(HICYAN "${tool_}")
 
   # Set the config error to false by default		
   set(${TOOL}_CONFIG_ERROR FALSE)

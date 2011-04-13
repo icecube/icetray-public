@@ -37,8 +37,10 @@ if(BUILD_SLAVE)
   
 endif(BUILD_SLAVE)
 
-message(STATUS "Configuring test/compile drivers")
-  
+colormsg("")
+colormsg(_HIBLUE_ "Configuring test/compile drivers")
+colormsg("")
+
 if(CMAKE_VERBOSE_MAKEFILE)
   set(DRIVER_VERBOSE True)
 else(CMAKE_VERBOSE_MAKEFILE)

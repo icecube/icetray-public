@@ -17,7 +17,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
-MESSAGE(STATUS "jni")
+
+# we don't use the tooldef() macro, so we have to fudge pretty-printing
+colormsg("")
+colormsg(HICYAN "jni")
 
 SET(_jni_PATH_SUFFIXES jre/lib/i386 jre/lib/i386/server jre/lib/amd64 jre/lib/amd64/server jre/lib/ia64 jre/lib/ia64/server lib ../Libraries)
 

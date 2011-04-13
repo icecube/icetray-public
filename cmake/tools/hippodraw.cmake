@@ -1,6 +1,9 @@
 # make sure this file comes after "python" in "set(ALL_TOOLS" in tools.cmake
 
-message(STATUS "hippodraw")
+# we don't use the tooldef() macro, so we have to fudge pretty-printing
+colormsg("")
+colormsg(HICYAN "hippodraw")
+
 find_library(HIPPO_LIB NAMES hippo PATHS ${I3_PORTS}/lib ${TOOL_SYSTEM_PATH})
 
 if(PYTHON_VERSION)

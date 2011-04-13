@@ -168,7 +168,9 @@
 
 set(Qt4_FIND_QUIETLY FALSE)
 
-message(STATUS "Qt4")
+# we don't use the tooldef() macro, so we have to fudge pretty-printing
+colormsg("")
+colormsg(HICYAN "qt4")
 
 include(CheckSymbolExists)
 include(MacroAddFileDependencies)

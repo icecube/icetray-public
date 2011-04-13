@@ -17,7 +17,9 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
-message(STATUS "Configuring tools...")
+colormsg("")
+colormsg(_HIBLUE_ "Configuring tools...")
+colormsg("")
 
 include_directories(cmake/tool-patches/common)
 add_custom_target(install_tool_libs)
@@ -55,8 +57,9 @@ list(REMOVE_DUPLICATES ALL_TOOLS)
 #  * I3_EXTRA_TOOLS_DIR
 #  * CMAKE_SOURCE_DIR/cmake/tools
 #
-foreach(tool ${ALL_TOOLS})
-
+macro(config_tool tool)
+  string(TOUPPER ${tool} TOOL)
+  if(NOT ${TOOL}_FOUND)
   if (EXISTS ${I3_SITE_CMAKE_DIR}/${tool}.cmake)
     message(STATUS "Reading ${tool} from site cmake dir")
     include(${I3_SITE_CMAKE_DIR}/${tool}.cmake)
@@ -69,7 +72,11 @@ foreach(tool ${ALL_TOOLS})
     message(STATUS "*** ${tool}.cmake not found in I3_SITE_CMAKE_DIR, I3_EXTRA_TOOLS_DIR, or cmake/tools")
     message(STATUS "*** This is only an error if a projects requires tool '${tool}'")
   endif()
+  endif(NOT ${TOOL}_FOUND)
+endmacro(config_tool)
 
+foreach(tool ${ALL_TOOLS})
+  config_tool(${tool})
 endforeach()
 
 macro(use_tool TARGET TOOL_)
@@ -109,5 +116,4 @@ macro(use_tools THIS_USE_TOOLS_TARGET)
     use_tool(${THIS_USE_TOOLS_TARGET} ${USED_TOOL})
   endforeach(USED_TOOL ${${THIS_USE_TOOLS_TARGET}_ALL_TOOLS})
 
-endmacro(use_tools)  
-  
+endmacro(use_tools)

@@ -17,7 +17,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
-MESSAGE(STATUS "ncurses")
+
+# we don't use the tooldef() macro, so we have to fudge pretty-printing
+colormsg("")
+colormsg(HICYAN "ncurses")
+
 set(CURSES_NEED_NCURSES TRUE)
 
 execute_process(COMMAND lsb_release -si OUTPUT_VARIABLE SUSE ERROR_QUIET)

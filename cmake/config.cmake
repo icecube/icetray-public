@@ -17,14 +17,54 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
+colormsg("")
+colormsg(_HIBLUE_ "IceCube Configuration starting")
+colormsg("")
 
 set(BUILD_SHARED_LIBS SHARED)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(DOXYGEN_OUTPUT_PATH ${CMAKE_BINARY_DIR}/docs/doxygen)
 
+#
+#  Check build sanity
+#
+if(DEFINED ENV{I3_BUILD})
+  if(NOT "$ENV{I3_BUILD}" STREQUAL "${I3_BUILD}")
+    message("***")
+    message("*** You appear to be trying to configure cmake from within an environment with a different workspace")
+    message("*** I3_BUILD = $ENV{I3_BUILD}")
+    message("*** CMAKE_BINARY_DIR = ${I3_BUILD}")
+    message("***")
+    message("*** Retry from a clean environment (exit your env-shell.sh)")
+    message("***")
+    message(FATAL_ERROR "Environment corrupt")
+  else()
+    message(STATUS "I3_BUILD appears to be sane.")
+  endif()
+else()
+  #message(STATUS "I3_BUILD not yet set in environment.  ok.")
+endif()
+
+if(DEFINED ENV{I3_SRC})
+  if(NOT "$ENV{I3_SRC}" STREQUAL "${I3_SRC}")
+    message("***")
+    message("*** You appear to be trying to configure cmake from within an environment with a different workspace")
+    message("*** I3_SRC = $ENV{I3_SRC}")
+    message("*** CMAKE_SOURCE_DIR = ${I3_SRC}")
+    message("***")
+    message("*** Retry from a clean environment (exit your env-shell.sh)")
+    message("***")
+    message(FATAL_ERROR "Environment corrupt")
+  else()
+    message(STATUS "I3_SRC appears to be sane.")
+  endif()
+else()
+  #message(STATUS "I3_SRC not yet set in environment.  ok.")
+endif()
+
 if("$ENV{I3_PORTS}" STREQUAL "")
-  message(STATUS "I3_PORTS not set, maybe not a problem.  Trying default of /opt/i3/ports.")
+  #message(STATUS "I3_PORTS not set, maybe not a problem.  Trying default of /opt/i3/ports.")
   set(ENV{I3_PORTS} "/opt/i3/ports")
 endif("$ENV{I3_PORTS}" STREQUAL "")
 
@@ -33,7 +73,7 @@ set(I3_PORTS $ENV{I3_PORTS} CACHE STRING "Path to your icecube ports installatio
 if(NOT IS_DIRECTORY $ENV{I3_PORTS})
   message(FATAL_ERROR "I3_PORTS ($ENV{I3_PORTS}) is unset or doesn't point to a directory.")
 else(NOT IS_DIRECTORY $ENV{I3_PORTS})
-  message(STATUS "I3_PORTS\t${I3_PORTS}")
+  boost_report_value(I3_PORTS)
 endif(NOT IS_DIRECTORY $ENV{I3_PORTS})
 
 #
@@ -101,14 +141,14 @@ execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
 execute_process(COMMAND uname -s 
   COMMAND tr \\n \\0
   OUTPUT_VARIABLE OSTYPE)
-message(STATUS "OSTYPE\t${OSTYPE}")
+boost_report_value(OSTYPE)
 
 #
 # Get OSVERSION
 #
 execute_process(COMMAND uname -r COMMAND tr \\n \\0 
   OUTPUT_VARIABLE OSVERSION)
-message(STATUS "OSVERSION\t${OSVERSION}")
+boost_report_value(OSVERSION)
 
 #
 # Get ARCH
@@ -117,13 +157,13 @@ execute_process(COMMAND uname -m
   COMMAND sed -e "s/Power\\ Macintosh/ppc/"
   COMMAND tr \\n \\0
   OUTPUT_VARIABLE ARCH)
-message(STATUS "ARCH     \t${ARCH}")
+boost_report_value(ARCH)
 
 #
 # Assemble BUILDNAME
 #
 set(BUILDNAME "${OSTYPE}-${OSVERSION}/${ARCH}/gcc-${GCC_VERSION}" CACHE INTERNAL "buildname")
-message(STATUS "BUILDNAME\t${BUILDNAME}")
+boost_report_value(BUILDNAME)
 
 set(TOOLSET "gcc-${GCC_VERSION}/${ARCH}/${CMAKE_BUILD_TYPE}" CACHE INTERNAL "toolset")
 
@@ -133,14 +173,15 @@ set(TOOLSET "gcc-${GCC_VERSION}/${ARCH}/${CMAKE_BUILD_TYPE}" CACHE INTERNAL "too
 execute_process(COMMAND hostname 
   COMMAND tr \\n \\0
   OUTPUT_VARIABLE HOSTNAME)
-message(STATUS "HOSTNAME\t${HOSTNAME}")
+boost_report_value(HOSTNAME)
 set(SITE ${HOSTNAME})
 
 #
 #  Show cmake path and version
 #
-message(STATUS "CMake path\t${CMAKE_COMMAND}")
-message(STATUS "CMake ver\t${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}")
+boost_report_pretty("CMake path" CMAKE_COMMAND)
+set(CMAKE_VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION})
+boost_report_pretty("CMake version" CMAKE_VERSION)
 
 #
 # Find the svn program
@@ -169,7 +210,7 @@ if(NOT HAVE_SVN_REVISION)
     set(SVN_REVISION "0")
   endif(NOT USE_SVN_REVISION_FLAGS)
 
-  message(STATUS "SVN_REVISION\t${SVN_REVISION}")
+  boost_report_value(SVN_REVISION)
   set(SVN_REVISION ${SVN_REVISION} CACHE INTERNAL "svn revision")
 
 endif(NOT HAVE_SVN_REVISION)
@@ -190,7 +231,7 @@ if(NOT HAVE_SVN_URL)
   if (NOT SVN_URL)
     set(SVN_URL "Unknown")
   endif(NOT SVN_URL)
-  message(STATUS "SVN_URL\t${SVN_URL}")
+  boost_report_value(SVN_URL)
 
   set(SVN_URL ${SVN_URL} CACHE INTERNAL "svn url")
 
@@ -220,7 +261,7 @@ if(NOT HAVE_META_PROJECT)
   if(RESULT)
     message(FATAL_ERROR "Problem running sed.")
   endif(RESULT)
-  message(STATUS "META_PROJECT\t${META_PROJECT}")
+  boost_report_value(META_PROJECT)
   set(META_PROJECT ${META_PROJECT} CACHE INTERNAL "meta project")
 endif(NOT HAVE_META_PROJECT)
 
@@ -268,6 +309,10 @@ if(APPLE)
   set(CMAKE_CXX_CREATE_SHARED_LIBRARY "/usr/bin/env MACOSX_DEPLOYMENT_TARGET=10.4 ${CMAKE_CXX_CREATE_SHARED_LIBRARY}")
   set(CMAKE_CXX_CREATE_SHARED_MODULE "/usr/bin/env MACOSX_DEPLOYMENT_TARGET=10.4 ${CMAKE_CXX_CREATE_SHARED_MODULE}")
 endif(APPLE)
+
+colormsg("")
+colormsg(_HIBLUE_ "Setting compiler and compile drivers")
+colormsg("")
 
 #
 #  distcc

@@ -51,45 +51,6 @@ set(I3_SRC ${CMAKE_SOURCE_DIR})
 set(I3_BUILD ${CMAKE_BINARY_DIR})
 
 #
-#  Check build sanity
-#
-if(DEFINED ENV{I3_BUILD})
-  if(NOT "$ENV{I3_BUILD}" STREQUAL "${I3_BUILD}")
-    message("***")
-    message("*** You appear to be trying to configure cmake from within an environment with a different workspace")
-    message("*** I3_BUILD = $ENV{I3_BUILD}")
-    message("*** CMAKE_BINARY_DIR = ${I3_BUILD}")
-    message("***")
-    message("*** Retry from a clean environment (exit your env-shell.sh)")
-    message("***")
-    message(FATAL_ERROR "Environment corrupt")
-  else()
-    message(STATUS "I3_BUILD appears to be sane.")
-  endif()
-else()
-  message(STATUS "I3_BUILD not yet set in environment.  ok.")
-endif()
-
-if(DEFINED ENV{I3_SRC})
-  if(NOT "$ENV{I3_SRC}" STREQUAL "${I3_SRC}")
-    message("***")
-    message("*** You appear to be trying to configure cmake from within an environment with a different workspace")
-    message("*** I3_SRC = $ENV{I3_SRC}")
-    message("*** CMAKE_SOURCE_DIR = ${I3_SRC}")
-    message("***")
-    message("*** Retry from a clean environment (exit your env-shell.sh)")
-    message("***")
-    message(FATAL_ERROR "Environment corrupt")
-  else()
-    message(STATUS "I3_SRC appears to be sane.")
-  endif()
-else()
-  message(STATUS "I3_SRC not yet set in environment.  ok.")
-endif()
-
-
-
-#
 #  This is nice and all, but causes intermittent hangs on the mac
 #  due to an extremely old bash.  And in some places your path gets automagically
 #  prepended with /usr/kerberos/bin.
@@ -242,11 +203,14 @@ endif()
 
 i3_add_testing_targets()
 
-message(STATUS "Configuring projects:")
+colormsg("")
+colormsg(_HIBLUE_ "Configuring projects:")
+colormsg("")
+
 foreach(subdir ${SUBDIRS})
   get_filename_component(pname ${subdir} NAME_WE)
   set(I3_PROJECTS "${I3_PROJECTS}" ${pname})
-  message(STATUS "  ${pname}")
+  message(STATUS "+ ${pname}")
   add_subdirectory(${CMAKE_SOURCE_DIR}/${pname})
   exec_program(test ARGS -h ${CMAKE_BINARY_DIR}/${pname}/resources || ln -s ${CMAKE_SOURCE_DIR}/${pname}/resources ${CMAKE_BINARY_DIR}/${pname}/resources 
     OUTPUT_VARIABLE DEV_NULL)
