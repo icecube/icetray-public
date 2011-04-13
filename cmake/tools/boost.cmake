@@ -17,6 +17,9 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
+SET(BOOST_VERSION "1.38.0" CACHE PATH "The boost version.")
+SET(BOOST_INCLUDE_DIR  ${I3_PORTS}/include/boost-${BOOST_VERSION} CACHE PATH "Path to the boost include directories." )
+SET(BOOST_LIBRARY_PATH  ${I3_PORTS}/lib/boost-${BOOST_VERSION} CACHE PATH "Path to the boost libraries." )
 
 # The following prevent these variables from being cached and force 
 #   them to be rechecked across changes from Release/Debug builds.
@@ -26,53 +29,45 @@ SET(BOOST_SIGNALS "" CACHE FILEPATH "Cleared with rebuild_cache." FORCE)
 SET(BOOST_THREAD "" CACHE FILEPATH "Cleared with rebuild_cache." FORCE)
 SET(BOOST_DATE_TIME "" CACHE FILEPATH "Cleared with rebuild_cache." FORCE)
 
-if (NOT BOOST_VERSION)
-  if (IS_DIRECTORY ${I3_PORTS}/include/boost-1.38.0)
-    set(BOOST_VERSION "1.38.0" CACHE STRING "Boost (from tools) version")
-  else()
-    set(BOOST_VERSION "NOTFOUND" CACHE STRING "Boost (from tools) version")
-  endif()
-endif()
-
-if (BOOST_VERSION STREQUAL "NOTFOUND")
-
-  message(STATUS "Eh, not looking good for boost.  Include directories not found over in $I3_PORTS")
-
-else()
-
+# need to include the right patches 
+if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-${BOOST_VERSION})
   include_directories(${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-${BOOST_VERSION})
+else()
+  message(ERROR " No tool patch found. ${CMAKE_SOURE_DIR}/cmake/tool-patches/boost-${BOOST_VERSION}.  This likely won't build.")
+endif() 
 
-  if(CMAKE_BUILD_TYPE MATCHES "Rel")
-    set(BOOST_LIB_SUFFIX "-mt")
-  else()
-    set(BOOST_LIB_SUFFIX "-mt-d")
-  endif()
+if (NOT IS_DIRECTORY  ${BOOST_LIBRARY_PATH})
+    message(ERROR " ${BOOST_LIBRARY_PATH} is not a valid directory.")
+endif() 
 
-  if (IS_DIRECTORY  ${I3_PORTS}/lib/boost-${BOOST_VERSION})
-    set(BOOST_LIBRARY_DIR ${I3_PORTS}/lib/boost-${BOOST_VERSION})
-  else()
-    message(ERROR "BOOST_VERSION is set to \"${BOOST_VERSION}\", but I can't find ${I3_PORTS}/lib/boost-${BOOST_VERSION}")
-  endif()
+if (NOT IS_DIRECTORY ${BOOST_INCLUDE_DIR} )
+    message(ERROR " ${BOOST_INCLUDE_DIR} is not a valid directory.")
+endif() 
 
-  set(BOOST_ALL_LIBRARIES 
-    boost_python${BOOST_LIB_SUFFIX} 
-    boost_system${BOOST_LIB_SUFFIX} 
-    boost_signals${BOOST_LIB_SUFFIX}  
-    boost_thread${BOOST_LIB_SUFFIX}  
-    boost_date_time${BOOST_LIB_SUFFIX}  
-    boost_serialization${BOOST_LIB_SUFFIX}  
-    boost_filesystem${BOOST_LIB_SUFFIX}  
-    boost_program_options${BOOST_LIB_SUFFIX}  
-    boost_regex${BOOST_LIB_SUFFIX}  
-    boost_iostreams${BOOST_LIB_SUFFIX})
-
-  tooldef (boost
-    ${I3_PORTS}/include/boost-${BOOST_VERSION}
-    boost/version.hpp
-    lib/boost-${BOOST_VERSION}
-    NONE
-    ${BOOST_ALL_LIBRARIES}
-    )
-
+if(CMAKE_BUILD_TYPE MATCHES "Rel")
+  set(BOOST_LIB_SUFFIX "-mt")
+else()
+  set(BOOST_LIB_SUFFIX "-mt-d")
 endif()
+
+set(BOOST_ALL_LIBRARIES 
+  boost_python${BOOST_LIB_SUFFIX} 
+  boost_system${BOOST_LIB_SUFFIX} 
+  boost_signals${BOOST_LIB_SUFFIX}  
+  boost_thread${BOOST_LIB_SUFFIX}  
+  boost_date_time${BOOST_LIB_SUFFIX}  
+  boost_serialization${BOOST_LIB_SUFFIX}  
+  boost_filesystem${BOOST_LIB_SUFFIX}  
+  boost_program_options${BOOST_LIB_SUFFIX}  
+  boost_regex${BOOST_LIB_SUFFIX}  
+  boost_iostreams${BOOST_LIB_SUFFIX})
+
+tooldef (boost
+  ${BOOST_INCLUDE_DIR}
+  boost/version.hpp
+  ${BOOST_LIBRARY_PATH}
+  NONE
+  ${BOOST_ALL_LIBRARIES}
+  )
+
 
