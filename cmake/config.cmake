@@ -138,25 +138,19 @@ execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
 #
 # Get OSTYPE
 #
-execute_process(COMMAND uname -s 
-  COMMAND tr \\n \\0
-  OUTPUT_VARIABLE OSTYPE)
+set(OSTYPE ${CMAKE_SYSTEM_NAME})
 boost_report_value(OSTYPE)
 
 #
 # Get OSVERSION
 #
-execute_process(COMMAND uname -r COMMAND tr \\n \\0 
-  OUTPUT_VARIABLE OSVERSION)
+set(OSVERSION ${CMAKE_SYSTEM_VERSION})
 boost_report_value(OSVERSION)
 
 #
 # Get ARCH
 #
-execute_process(COMMAND uname -m 
-  COMMAND sed -e "s/Power\\ Macintosh/ppc/"
-  COMMAND tr \\n \\0
-  OUTPUT_VARIABLE ARCH)
+set(ARCH ${CMAKE_SYSTEM_PROCESSOR})
 boost_report_value(ARCH)
 
 #
