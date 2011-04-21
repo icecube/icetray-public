@@ -1,22 +1,22 @@
 #
 #  $Id$
-#  
+#
 #  Copyright (C) 2007-9  Troy D. Straszheim  <troy@icecube.umd.edu>
 #  and the IceCube Collaboration <http://www.icecube.wisc.edu>
-#  
+#
 #  This file is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation; either version 3 of the License, or
 #  (at your option) any later version.
-#  
+#
 #  This program is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
-#  
+#
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
-#  
+#
 colormsg("")
 colormsg(_HIBLUE_ "Configuring tools...")
 colormsg("")
@@ -27,10 +27,10 @@ add_custom_target(install_tool_libs)
 include(tooldef)
 
 #
-#  By default, use /usr/share/fizzicks/cmake as I3_SITE_CMAKE_DIR 
-# 
+#  By default, use /usr/share/fizzicks/cmake as I3_SITE_CMAKE_DIR
+#
 if (NOT IS_DIRECTORY $ENV{I3_SITE_CMAKE_DIR})
-  set (I3_SITE_CMAKE_DIR "/usr/share/fizzicks/cmake" 
+  set (I3_SITE_CMAKE_DIR "/usr/share/fizzicks/cmake"
     CACHE PATH "Path to site-specific cmake files")
   message(STATUS "Using default site cmake dir of ${I3_SITE_CMAKE_DIR}")
 else()
@@ -57,9 +57,8 @@ list(REMOVE_DUPLICATES ALL_TOOLS)
 #  * I3_EXTRA_TOOLS_DIR
 #  * CMAKE_SOURCE_DIR/cmake/tools
 #
-macro(config_tool tool)
-  string(TOUPPER ${tool} TOOL)
-  if(NOT ${TOOL}_FOUND)
+foreach(tool ${ALL_TOOLS})
+
   if (EXISTS ${I3_SITE_CMAKE_DIR}/${tool}.cmake)
     message(STATUS "Reading ${tool} from site cmake dir")
     include(${I3_SITE_CMAKE_DIR}/${tool}.cmake)
@@ -72,11 +71,7 @@ macro(config_tool tool)
     message(STATUS "*** ${tool}.cmake not found in I3_SITE_CMAKE_DIR, I3_EXTRA_TOOLS_DIR, or cmake/tools")
     message(STATUS "*** This is only an error if a projects requires tool '${tool}'")
   endif()
-  endif(NOT ${TOOL}_FOUND)
-endmacro(config_tool)
 
-foreach(tool ${ALL_TOOLS})
-  config_tool(${tool})
 endforeach()
 
 macro(use_tool TARGET TOOL_)
@@ -91,7 +86,7 @@ macro(use_tool TARGET TOOL_)
 
   include_directories(${${TOOL}_INCLUDE_DIR})
   target_link_libraries(${TARGET} ${${TOOL}_LIBRARIES})
-  
+
   if(${TOOL}_LINK_FLAGS)
     get_target_property(tmp_LINK_FLAGS ${TARGET} LINK_FLAGS)
     set_target_properties(${TARGET}
