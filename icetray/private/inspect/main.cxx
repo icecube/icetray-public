@@ -283,7 +283,11 @@ main (int argc, char** argv)
        * there. If that fails, fall back to the C++ library.
        */
       const std::string modname = (std::string("icecube.") + projects[i]);
+#if PY_VERSION_HEX >= 0x33882608  // python v2.5.1
       if (!PyImport_ImportModule(modname.c_str())) {
+#else
+      if (!PyImport_ImportModule((char *)modname.c_str())) {
+#endif
         try {
           load_project(projects[i], false);
         } catch (const std::runtime_error& e) {
