@@ -366,6 +366,7 @@ macro(i3_project PROJECT_NAME)
 	
 	if(NOT ARG_PYTHON_DEST) 
 	  set(ARG_PYTHON_DEST icecube/${PROJECT_NAME})
+	  string(REPLACE "-" "_" ARG_PYTHON_DEST "icecube/${PROJECT_NAME}")
 	endif(NOT ARG_PYTHON_DEST)
 
 	#
