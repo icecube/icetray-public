@@ -1,11 +1,11 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # Icetray environment script for tarballs.  Sets everything relative
 # to the directory that this shell runs in.  Different than the env-shell.sh
 # which knows about values of I3_BUILD, etc.
 #
 
-if [ "$1" = "help" ]
+if [[ "$1" = "help" ]]
     then
     echo "Usage: $0 [SHELL]"
     echo "Spawn a new shell with an Icetray environment loaded"
@@ -23,11 +23,11 @@ if [ "$1" = "help" ]
     exit 1
 fi
 
-if [ -z "$1" ]
+if [[ -z "$1" ]]
     then # user did not specify a shell
     NEW_SHELL=$SHELL 
     # only exit if no shell specified on command line *and* env already loaded 
-    if [ -n "$I3_SHELL" ]
+    if [[ -n "$I3_SHELL" ]] 
 	then  
 	echo "****************************************************************"
 	echo "You are currently in a shell with an Icetray environment loaded."
@@ -90,7 +90,7 @@ function printctr()
     printf $FORMAT " " "$*" " "
 }
 
-if [ -z "$ARGV" ]
+if [[ -z "$ARGV" ]]
     then
     printf "$TOPBAR\n"
     printctr ""
@@ -109,7 +109,7 @@ if [ -z "$ARGV" ]
     printf "   I3_PORTS     = %s\n" $_I3_PORTS
 fi
 
-if [ -z "$I3_SHELL" ] # a clean, first invocation
+if [[ -z "$I3_SHELL" ]] # a clean, first invocation
     then
 
     PATH=$_PATH \
