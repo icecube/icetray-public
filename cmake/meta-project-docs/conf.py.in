@@ -102,7 +102,7 @@ html_short_title = "@META_PROJECT@ r@SVN_REVISION@"
 # the sidebar.
 # html_logo = 'cooking.png'
 #html_logo = 'sam.png'
-html_logo = 'ICE_CUBE_LOGO_4c.svg'
+html_logo = 'ICE_CUBE_LOGO_4c.png'
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
