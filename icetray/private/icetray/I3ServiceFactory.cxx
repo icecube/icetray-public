@@ -1,7 +1,7 @@
 /*
  * class: I3ServiceFactory
  *
- * Version $Id$
+ * Version $Id: I3ServiceFactory.cxx 51710 2009-01-06 19:23:39Z troy $
  *
  * Date: 29 Sept 2003
  *
@@ -53,7 +53,7 @@ I3ServiceFactory::Finish()
 }
 
 void 
-I3ServiceFactory::Fatal(const string& message,
+I3ServiceFactory::Fatal(const std::string& message,
 			int status) const 
 {
 }

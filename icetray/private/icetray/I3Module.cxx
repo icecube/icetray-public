@@ -155,17 +155,17 @@ I3Module::Configure_()
   // AddOutBox them or not.  So after Configure, delete any that
   // shouldn't have been created.
   //
-  vector<string> bad_boxes;
+  std::vector<std::string> bad_boxes;
   for (outboxmap_t::iterator iter = outboxes_.begin();
        iter != outboxes_.end();
        iter++)
     {
-      set<string>::iterator boxcheck = added_boxes.find(iter->first);
+      std::set<std::string>::iterator boxcheck = added_boxes.find(iter->first);
       if (boxcheck == added_boxes.end())
 	bad_boxes.push_back(iter->first);
     }
   std::string errmsg;
-  BOOST_FOREACH(const string& box, bad_boxes)
+  BOOST_FOREACH(const std::string& box, bad_boxes)
     {
       //      outboxes_.erase(box);
       errmsg += "outbox " + box + " is connected to something, but was never added by the module.\n";
@@ -288,7 +288,7 @@ I3Module::PopFrame()
 }
 
 void
-I3Module::PushFrame(I3FramePtr frameptr, const string& name)
+I3Module::PushFrame(I3FramePtr frameptr, const std::string& name)
 {
   outboxmap_t::iterator iter = outboxes_.find(name);
 

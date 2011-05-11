@@ -37,8 +37,6 @@
 
 class I3ServiceFactory;
 
-using namespace std;
-
 /**
    This is I3Tray.
 
@@ -97,7 +95,7 @@ public:
     const std::string module_name_;
 
   public:
-    param_setter(I3Tray &tray, const string& module_name) 
+    param_setter(I3Tray &tray, const std::string& module_name) 
       : tray_(tray), module_name_(module_name) { }
     param_setter(const param_setter& rhs)
       : tray_(rhs.tray_), module_name_(rhs.module_name_) { }
@@ -175,7 +173,7 @@ public:
      Report per-module physics ncalls/system/user time usage.  Have to call this
      *after* Execute()
   */
-  map<string, I3PhysicsUsage> Usage(); 
+  std::map<std::string, I3PhysicsUsage> Usage(); 
 
   /**
    * Finishes everything.  It is assumed that if the modules are to be used
@@ -195,8 +193,8 @@ public:
 
   template <class Type>
   bool 
-  SetParameter(const string& module,
-	       const string& parameter,
+  SetParameter(const std::string& module,
+	       const std::string& parameter,
 	       const Type &value)
   {
     return this->SetParameter(module, parameter, boost::python::object(value));
@@ -222,7 +220,7 @@ private:
    */
   void ConnectBoxesInOrderTheyWereAdded();
 
-  bool SetParameterFailure(const string& module, const string& parameter);
+  bool SetParameterFailure(const std::string& module, const std::string& parameter);
 
   /**
    * initialize services
@@ -247,13 +245,13 @@ private:
   void Abort();
 
   /** The set of services to load into each context. */
-  map<string,I3ServiceFactoryPtr> factories;
-  map<string,I3ContextPtr> factory_contexts;
-  map<string,bool> configuredFactories;
+  std::map<std::string,I3ServiceFactoryPtr> factories;
+  std::map<std::string,I3ContextPtr> factory_contexts;
+  std::map<std::string,bool> configuredFactories;
   std::vector<std::string> factories_in_order;
 
-  map<string,I3ContextPtr> module_contexts;
-  map<string,I3ModulePtr> modules;
+  std::map<std::string,I3ContextPtr> module_contexts;
+  std::map<std::string,I3ModulePtr> modules;
   std::vector<std::string> modules_in_order;
   I3ModulePtr driving_module;
 

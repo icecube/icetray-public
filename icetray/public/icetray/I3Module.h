@@ -43,8 +43,6 @@ class I3Configuration;
 class I3Context;
 class I3Frame;
 
-using namespace std;
-
 /**
  * This class defines the interface which should be implementaed by all 
  * modules in IceTray.
@@ -61,9 +59,9 @@ class I3Module
   typedef std::deque<I3FramePtr> FrameFifo;
   I3_POINTER_TYPEDEFS(FrameFifo);
 
-  typedef map<string, pair<FrameFifoPtr, I3ModulePtr> > outboxmap_t;
+  typedef std::map<std::string, std::pair<FrameFifoPtr, I3ModulePtr> > outboxmap_t;
 
-  typedef map<I3Frame::Stream, boost::function<void(I3FramePtr)> > methods_t;
+  typedef std::map<I3Frame::Stream, boost::function<void(I3FramePtr)> > methods_t;
   
 public:
 

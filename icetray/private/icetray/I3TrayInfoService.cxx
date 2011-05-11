@@ -1,5 +1,5 @@
 /**
- *  $Id: I3TrayInfoService.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
+ *  $Id$
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -38,11 +38,11 @@
 #endif
 
 static
-map<string,I3ConfigurationPtr>
-get_configs(const map<string,I3ContextPtr>& from)
+std::map<std::string,I3ConfigurationPtr>
+get_configs(const std::map<std::string,I3ContextPtr>& from)
 {
-  map<string, I3ConfigurationPtr> result;
-  for (map<string,I3ContextPtr>::const_iterator iter = from.begin();
+  std::map<std::string, I3ConfigurationPtr> result;
+  for (std::map<std::string,I3ContextPtr>::const_iterator iter = from.begin();
        iter != from.end();
        iter++)
     {
