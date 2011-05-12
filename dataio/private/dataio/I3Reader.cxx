@@ -75,7 +75,7 @@ I3Reader::I3Reader(const I3Context& context) : I3Module(context),
 					       drop_blobs_(false), 
 					       cache_(new I3Frame(I3Frame::Stream('!')))
 {
-  string fname;
+  std::string fname;
   push_wo_merging_.push_back(I3Frame::Stream('I')); // don't merge 'I' frames into others
 
   AddParameter("Filename", 
@@ -105,7 +105,7 @@ I3Reader::I3Reader(const I3Context& context) : I3Module(context),
 void
 I3Reader::Configure()
 {
-  string fname;
+  std::string fname;
 
   GetParameter("FileNameList", filenames_);
   GetParameter("FileName", fname);
