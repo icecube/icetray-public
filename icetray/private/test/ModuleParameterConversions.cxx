@@ -20,6 +20,9 @@
 #include <boost/assign/std/vector.hpp>
 
 #include <cmath>
+using namespace std;	// Fix broken implemenation of C99/3BSD fpclassify
+			// functions on some GCC versions, where they may or
+			// may not appear in std::
 
 using namespace boost::assign;
 
