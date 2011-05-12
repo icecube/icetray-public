@@ -33,7 +33,6 @@
 #include <icetray/I3Tray.h>
 #include <icetray/OMKey.h>
 
-using std::string;
 
 // AddService: same as AddModule
 I3Tray::param_setter (I3Tray::*AddServiceV)(const std::string& classname, 

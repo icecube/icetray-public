@@ -53,7 +53,7 @@ I3ServiceFactory::Finish()
 }
 
 void 
-I3ServiceFactory::Fatal(const std::string& message,
+I3ServiceFactory::Fatal(const string& message,
 			int status) const 
 {
 }
