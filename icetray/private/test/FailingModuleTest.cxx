@@ -33,7 +33,7 @@ namespace FailingModuleTest
 	tray.Execute(1);
 	FAIL("Failing module should have thrown");
       }
-    catch(exception& e)
+    catch(std::exception& e)
       {
 	// good.  it threw. 
       }

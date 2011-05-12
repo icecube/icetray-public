@@ -81,7 +81,7 @@ struct Nothing : public I3Module
 I3_MODULE(Nothing);
 
 
-map<string, map<I3Frame::Stream, unsigned> > counts;
+std::map<std::string, std::map<I3Frame::Stream, unsigned> > counts;
 
 struct FFCounter : public I3Module
 {

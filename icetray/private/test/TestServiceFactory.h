@@ -9,7 +9,7 @@ class TestServiceFactory : public I3ServiceFactory
 {
  public:
   static double doubleParam;
-  static string stringParam;
+  static std::string stringParam;
   static bool boolParam;
   static float floatParam;
   static int intParam;

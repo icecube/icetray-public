@@ -35,7 +35,7 @@ namespace OutOfMemoryModuleTest
 	tray.Execute(1);
 	FAIL("OutOfMemoryModule didn't throw.");
       }
-    catch(exception& e)
+    catch(std::exception& e)
       {
       }
   }

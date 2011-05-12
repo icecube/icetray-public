@@ -24,12 +24,12 @@ using namespace boost::assign;
 TEST_GROUP(VectorParameters);
 
 //static vector<bool> boolvec_param;
-static vector<int> intvec_param;
-static vector<unsigned long> ulongvec_param;
-static vector<double> doublevec_param;
-static vector<string> stringvec_param;
+static std::vector<int> intvec_param;
+static std::vector<unsigned long> ulongvec_param;
+static std::vector<double> doublevec_param;
+static std::vector<std::string> stringvec_param;
 static OMKey omkey_param;
-static vector<OMKey> omkeyvec_param;
+static std::vector<OMKey> omkeyvec_param;
 
 struct VectorParamsTestModule : I3Module
 {
@@ -84,7 +84,7 @@ I3_MODULE(VectorParamsTestModule);
 
 TEST(dumb_strings)
 {
-  vector<string> stringv;
+  std::vector<std::string> stringv;
   stringv += "c0", "c1", "c2";
   stringvec_param.clear();
   I3Tray tray;
@@ -101,7 +101,7 @@ TEST(dumb_strings)
 
 TEST(leading_trailing_and_embedded_whitespace)
 {
-  vector<string> stringv;
+  std::vector<std::string> stringv;
   stringvec_param.clear();
   stringv += " leadingspace", 
     "trailingspace ", 

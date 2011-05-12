@@ -48,7 +48,7 @@ TEST(test_timer)
   timed_sleep(frame, "1second", 1, 0);
   timed_sleep(frame, "2.38seconds", 2, 380000);
 
-  cout << *frame << "\n";
+  std::cout << *frame << "\n";
 }
 
 

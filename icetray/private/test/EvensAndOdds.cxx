@@ -111,7 +111,7 @@ I3_MODULE(AddsNullsToFramesWithOddInts);
 
 TEST(b_add_nulls_via_should_do_physics)
 {
-  vector<string> odd_musthave_vec, even_mustnothave_vec;
+  std::vector<std::string> odd_musthave_vec, even_mustnothave_vec;
   odd_musthave_vec.push_back("myint");
   odd_musthave_vec.push_back("oddone");
   even_mustnothave_vec.push_back("oddone");

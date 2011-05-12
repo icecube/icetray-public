@@ -37,7 +37,7 @@ I3_MODULE(IntCheck);
 #define DOTEST(NUMA, BATCHSIZEA, NUMB, BATCHSIZEB)	\
   TEST(Buffer_N ## NUMA ## _BATCH ## BATCHSIZEA ## _N ## NUMB ## _BATCH ## BATCHSIZEB) \
   {							\
-    vector<string> physics_has;				\
+    std::vector<std::string> physics_has;               \
     physics_has.push_back("myint");			\
     I3Tray tray;					\
     tray.AddModule("IntGenerator", "generator");	\

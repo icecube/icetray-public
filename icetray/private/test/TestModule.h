@@ -10,7 +10,7 @@ class TestModule : public I3Module
   int intParam;
   double doubleParam;
   long longParam;
-  string stringParam;
+  std::string stringParam;
   bool boolParam;
 
  public:

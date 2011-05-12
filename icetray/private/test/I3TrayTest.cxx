@@ -78,7 +78,7 @@ TEST(convenience_interface_0)
     ("boolParam", (bool)true)
     ("intParam", (int)52)
     ("doubleParam", (double)4.14159)
-    ("stringParam", string("it puts the lotion in the basket"))
+    ("stringParam", std::string("it puts the lotion in the basket"))
     ("longParam", (long)68);
 
   tray.AddModule("TestModule", "test")
@@ -137,14 +137,14 @@ TEST(default_convenience_connectboxes)
     ("boolParam", (bool)true)
     ("intParam", (int)52)
     ("doubleParam", (double)4.14159)
-    ("stringParam", string("it puts the lotion in the basket"))
+    ("stringParam", std::string("it puts the lotion in the basket"))
     ("longParam", (long)68);
 
   tray.AddModule<TestModule>("test")
     ("boolParam", false)
     ("intParam", (int)53)
     ("doubleParam", (double)3.14159)
-    ("stringParam", string("it puts the lotion in the basket"))
+    ("stringParam", std::string("it puts the lotion in the basket"))
     ("longParam", (long)67);
 
   tray.AddModule<TestModule>("test2")("boolParam", true);

@@ -27,12 +27,12 @@ static bool bool_param;
 static int int_param;
 static long long_param;
 static double double_param;
-static string string_param;
-static vector<int> intvec_param;
-static vector<double> doublevec_param;
-static vector<string> stringvec_param;
+static std::string string_param;
+static std::vector<int> intvec_param;
+static std::vector<double> doublevec_param;
+static std::vector<std::string> stringvec_param;
 static OMKey omkey_param;
-static vector<OMKey> omkeyvec_param;
+static std::vector<OMKey> omkeyvec_param;
 
 struct ParamConversionCheckModule : I3Module
 {
@@ -143,7 +143,7 @@ long long ll;
 float f;
 double d; 
 const char *c_str = "some string";
-string s = "some string";
+std::string s = "some string";
 
 TEST(a_nonexistent)
 {
@@ -286,14 +286,14 @@ TEST(f_strings_etc)
     ENSURE(strcmp(c_str, "some string") == 0); 
   }
 
-  vector<int> ivec;
+  std::vector<int> ivec;
   ivec += 1, 2, 3;
-  vector<double> dvec;
+  std::vector<double> dvec;
   dvec += 7.8, 2.04, 0.003;
   GET_SUCCEEDS(intvec_param, ivec);
   GET_SUCCEEDS(doublevec_param, dvec);
 
-  vector<string> svec;
+  std::vector<std::string> svec;
   svec += "foo", "bar", "baz";
   GET_ONLY(stringvec_param, svec);
 }
@@ -301,7 +301,7 @@ TEST(f_strings_etc)
 TEST(g_omkeys)
 {    
   OMKey key(9,9);
-  vector<OMKey> keyvec;
+  std::vector<OMKey> keyvec;
   keyvec += OMKey(0,0), OMKey(3,9), OMKey(4,7);
 
   GET_SUCCEEDS(omkey_param, key);

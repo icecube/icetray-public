@@ -32,7 +32,7 @@ TEST(verify_failure)
       tray.Execute(1);
       FAIL("Should have thrown");
     }
-  catch(exception& e)
+  catch(std::exception& e)
     {
       // good.  it threw. 
     }
