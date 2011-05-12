@@ -95,7 +95,7 @@ class I3IcePickInstaller : public I3ServiceFactory
  private:
 
   shared_ptr<IcePick> pick_;
-  string servicename_;
+  std::string servicename_;
 
   SET_LOGGER("I3IcePickInstaller");
 };

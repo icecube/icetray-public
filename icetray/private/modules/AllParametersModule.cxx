@@ -24,12 +24,12 @@ static unsigned char uchar_param;
 static int int_param;
 static long long_param;
 static double double_param;
-static string string_param;
-static vector<int> intvec_param;
-static vector<double> doublevec_param;
-static vector<string> stringvec_param;
+static std::string string_param;
+static std::vector<int> intvec_param;
+static std::vector<double> doublevec_param;
+static std::vector<std::string> stringvec_param;
 static OMKey omkey_param;
-static vector<OMKey> omkeyvec_param;
+static std::vector<OMKey> omkeyvec_param;
 
 struct AllParametersModule : I3Module
 {
