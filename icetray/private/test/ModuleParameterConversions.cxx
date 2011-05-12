@@ -19,6 +19,8 @@
 #include <icetray/OMKey.h>
 #include <boost/assign/std/vector.hpp>
 
+#include <cmath>
+
 using namespace boost::assign;
 
 TEST_GROUP(ModuleParameterConversions);
