@@ -1,5 +1,5 @@
 /**
- *  $Id: I3IcePickInstaller.h 165886 2018-10-01 14:37:58Z nwhitehorn $
+ *  $Id$
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -95,7 +95,7 @@ class I3IcePickInstaller : public I3ServiceFactory
  private:
 
   shared_ptr<IcePick> pick_;
-  string servicename_;
+  std::string servicename_;
 
   SET_LOGGER("I3IcePickInstaller");
 };
