@@ -34,7 +34,7 @@ I3Context::~I3Context()
 void
 I3Context::dump() const
 {
-  std::ostringstream oss;
+  ostringstream oss;
   oss << "[ I3Context @ " << this << "\n";
   for (map_t::const_iterator iter = map_.begin();
        iter != map_.end();
