@@ -80,16 +80,23 @@ endif(PYTHON_NUMERIC_VERSION LESS 20400)
 execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import numpy"
     RESULT_VARIABLE NUMPY_FOUND)
 
-if(NOT NUMPY_FOUND EQUAL 0)
+# let's make our xxx_FOUND variable like CMake ones
+if(NUMPY_FOUND EQUAL 0)
+  set(NUMPY_FOUND TRUE)
+else(NUMPY_FOUND EQUAL 0)
+  set(NUMPY_FOUND TRUE)
+endif(NUMPY_FOUND EQUAL 0)
+
+if(NOT NUMPY_FOUND)
 	set(NUMPY_FOUND FALSE CACHE BOOL "Numpy found successfully" FORCE)
-else(NOT NUMPY_FOUND EQUAL 0)
+else(NOT NUMPY_FOUND)
 	set(NUMPY_FOUND TRUE CACHE BOOL "Numpy found successfully" FORCE)
 	execute_process(COMMAND ${PYTHON_EXECUTABLE} -c
 	    "import numpy; print numpy.get_include()"
-	    Output_variable NUMPY_INCLUDE_DIR
+           OUTPUT_VARIABLE NUMPY_INCLUDE_DIR
 	    OUTPUT_STRIP_TRAILING_WHITESPACE)
 	set(NUMPY_INCLUDE_DIR ${NUMPY_INCLUDE_DIR} CACHE STRING "Numpy inc directory" FORCE)
 	message(STATUS "+    numpy: ${NUMPY_INCLUDE_DIR}")
-endif(NOT NUMPY_FOUND EQUAL 0)
+endif(NOT NUMPY_FOUND)
 
 
