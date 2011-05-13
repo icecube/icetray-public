@@ -12,10 +12,6 @@ if not 'I3_PORTS' in os.environ:
 	print "I3_PORTS is not set!"
 	sys.exit(1)
 	
-if not os.path.exists(os.path.join(os.environ['I3_PORTS'], 'bin/xz')):
-	print "xz (and thus, libarchive) is not installed; skipping archive-reading tests."
-	sys.exit(0)
-	
 fname = os.path.join(os.environ['I3_BUILD'], 'dataio/resources/data/serialization/r51782/I3DOMLaunchSeriesMap.i3')
 
 if not os.path.exists(fname):

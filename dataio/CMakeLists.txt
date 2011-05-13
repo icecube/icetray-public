@@ -47,6 +47,10 @@ i3_executable(scan private/scan/*.cxx
 i3_test_executable(test private/test/*.cxx
   USE_PROJECTS dataio)
 
-i3_test_scripts(resources/test/*.py)
+no_dotfile_glob(tmp_SCRIPTS resources/test/*.py)
+if (NOT LIBARCHIVE_FOUND)
+  LIST(REMOVE_ITEM tmp_SCRIPTS "${CMAKE_CURRENT_SOURCE_DIR}/resources/test/o7_libarchive_read.py")
+endif (NOT LIBARCHIVE_FOUND)
+i3_test_scripts(${tmp_SCRIPTS})
 
 add_subdirectory(private/pybindings)
