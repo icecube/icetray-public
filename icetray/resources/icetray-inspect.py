@@ -31,6 +31,9 @@ if opts.all:
 
 modcount = 0
 
+# keep our output clean.
+icetray.disable_logging() 
+
 for project in args:
 	
 	print '*** %s ***' % project
@@ -43,7 +46,7 @@ for project in args:
 			icetray.load(project)
 			py_modules = []
 		except RuntimeError as e:
-			sys.stderr.write("Ignoring '%s': %s" % (project, e.message))
+			sys.stderr.write("Ignoring '%s': %s" % (project, e))
 			continue
 		
 	cxx_modules = icetray.modules(project)
@@ -58,7 +61,7 @@ for project in args:
 			config = inspect.get_configuration(mod)
 			desc = config.descriptions
 		except RuntimeError as e:
-			sys.stderr.write("Error constructing '%s': %s" % (mod, e.message))
+			sys.stderr.write("Error constructing '%s': %s" % (mod, e))
 			continue
 			
 		modcount += 1
@@ -72,6 +75,6 @@ for project in args:
 					print ''
 			else:
 				print '    (No parameters)'
-		print '  ' + '-'*77
+			print '  ' + '-'*77
 print ''
 print '%d module configurations reported.' % modcount

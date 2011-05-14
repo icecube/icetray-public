@@ -47,6 +47,22 @@ void load_impl(const std::string& name, bool verbose=false)
   load_project(name, verbose);
 }
 
+#ifdef I3_LOG4CPLUS_LOGGING
+#include <log4cplus/hierarchy.h>
+
+void disable_logging()
+{
+	::log4cplus::Logger::getDefaultHierarchy().disableAll();
+}
+
+#else
+void disable_logging() {}
+#endif
+
+void register_logging()
+{
+	def("disable_logging", &disable_logging);
+}
 
 BOOST_PYTHON_MODULE(icetray)
 {
@@ -87,6 +103,7 @@ BOOST_PYTHON_MODULE(icetray)
   register_I3TrayInfo();
   register_I3Bool();
   register_I3Int();
+  register_logging();
 
 }
 
