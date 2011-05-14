@@ -6,19 +6,19 @@
 #  and the IceCube Collaboration <http://www.icecube.wisc.edu>
 #  
 
-import icecube.icetray as icetray
+from icecube.icetray import I3Context, I3Configuration, Connections, I3Module, _instantiate_module
 import types, sys
 
 def make_context():
 	"""Create a potemkin I3Context suitable for instantiating an I3Module from Python."""
-	context = icetray.I3Context()
+	context = I3Context()
 	
 	# Module configuration parameters go here.
-	config = icetray.I3Configuration()
+	config = I3Configuration()
 	context['I3Configuration'] = config
 	
 	# Fake outboxes.
-	outboxes = icetray.Connections()
+	outboxes = Connections()
 	context['OutBoxes'] = outboxes
 	
 	return context
@@ -27,17 +27,16 @@ def get_configuration(module):
 	"""Get an I3Module's default I3Configuration."""
 	context = make_context()
 	context.configuration.ClassName = str(module)
-	
 	if isinstance(module, str):
-		icetray._instantiate_module(module, context)
-	elif issubclass(module, icetray.I3Module):
+		_instantiate_module(module, context)
+	elif isinstance(module, type) and issubclass(module, I3Module):
 		module(context)
 	else:
 		raise TypeError, "Module must be either a string naming a registered C++ subclass of I3Module or a Python subclass of I3Module, not %s" % type(module)
 	
 	return context.configuration
 	
-def harvest_subclasses(module, klass=icetray.I3Module, memo=None):
+def harvest_subclasses(module, klass=I3Module, memo=None):
 	"""Recursively search through an object for subclasses of I3Module."""
 	# I miss Ruby's ObjectSpace. Sniff.
 	

@@ -29,6 +29,8 @@ if len(args) == 0 and opts.all is None:
 if opts.all:
 	args += [splitext(basename(fname))[0][3:] for fname in glob.glob('%s/lib*' % opts.all)]
 
+modcount = 0
+
 for project in args:
 	
 	print '*** %s ***' % project
@@ -59,6 +61,8 @@ for project in args:
 			sys.stderr.write("Error constructing '%s': %s" % (mod, e.message))
 			continue
 			
+		modcount += 1
+			
 		if not opts.names_only:
 			if len(config.keys()) > 0:
 				for k in config.keys():
@@ -70,4 +74,4 @@ for project in args:
 				print '    (No parameters)'
 		print '  ' + '-'*77
 print ''
-print '%d module configurations reported.' % len(cxx_modules + py_modules)
+print '%d module configurations reported.' % modcount
