@@ -20,27 +20,55 @@
 //
 
 #include <icetray/I3Configuration.h>
+#include <boost/make_shared.hpp>
 
 using namespace boost::python;
 
+namespace {
+	struct DescriptionProxy {
+		I3ConfigurationConstPtr target;
+		DescriptionProxy(I3ConfigurationConstPtr config) : target(config) {};
+		std::string Get(const std::string &name)
+		{
+			return target->GetDescription(name);
+		};
+	};
+
+	DescriptionProxy
+	make_proxy(I3ConfigurationPtr config)
+	{
+		return DescriptionProxy(config);
+	}
+}
+
+
 void register_I3Configuration()
 {
-  class_<I3Configuration, I3ConfigurationPtr, boost::noncopyable> ("I3Configuration", init<>())
-    .def("keys", &I3Configuration::keys)
-    .def("__setitem__", &I3Configuration::Set)
-    .def("__getitem__", 
-	 (object (I3Configuration::*)(const std::string&) const)
-	 &I3Configuration::Get)
-    .add_property("ClassName", 
-		  (std::string (I3Configuration::*)() const) &I3Configuration::ClassName)
-    .add_property("InstanceName", 
-		  (std::string (I3Configuration::*)() const) &I3Configuration::InstanceName)
-    ;
 
   class_<std::map<std::string, I3ConfigurationPtr> >
     ("map_string_I3Configuration")
     // the 'true' here is to turn off proxying
     .def(map_indexing_suite<std::map<std::string, I3ConfigurationPtr>, true>())
     ;
-						   
+
+  scope outer = 
+  class_<I3Configuration, I3ConfigurationPtr, boost::noncopyable> ("I3Configuration", init<>())
+    .def("keys", &I3Configuration::keys)
+    .def("__setitem__", &I3Configuration::Set)
+    .def("__getitem__", 
+	 (object (I3Configuration::*)(const std::string&) const)
+	 &I3Configuration::Get)
+    .add_property("descriptions", &make_proxy)
+    .add_property("ClassName", 
+		  (std::string (I3Configuration::*)() const) &I3Configuration::ClassName,
+		  (void (I3Configuration::*)(const std::string&)) &I3Configuration::ClassName)
+    .add_property("InstanceName", 
+		  (std::string (I3Configuration::*)() const) &I3Configuration::InstanceName)
+    ;
+
+
+  class_<DescriptionProxy>("DescriptionProxy", init<I3ConfigurationConstPtr>())
+    .def("__getitem__", &DescriptionProxy::Get)
+    ;
+
 }

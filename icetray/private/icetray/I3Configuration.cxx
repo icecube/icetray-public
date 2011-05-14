@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3Configuration.cxx 49049 2008-09-06 21:12:21Z troy $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -76,6 +76,12 @@ boost::python::object
 I3Configuration::Get(const string& name_) const
 {
   return impl_->Get(name_);
+}
+
+std::string
+I3Configuration::GetDescription(const string& name_) const
+{
+  return impl_->GetParameter(name_).description();
 }
 
 void

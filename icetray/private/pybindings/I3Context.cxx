@@ -33,6 +33,12 @@ context_putconfig(I3ContextPtr ctx,
   return ctx->Put(where, what);
 }
 
+I3ConfigurationPtr
+context_getconfig(I3ContextPtr ctx)
+{
+	return ctx->Get<I3ConfigurationPtr>();
+}
+
 typedef std::map<std::string, std::pair<FrameFifoPtr, I3ModulePtr> > connections_t;
 
 bool 
@@ -48,6 +54,7 @@ void register_I3Context()
     .def(init<>())
     .def("__setitem__", &context_putconfig)
     .def("__setitem__", &context_putoutboxes)
+    .add_property("configuration", &context_getconfig)
     ;
 
   class_<connections_t, boost::shared_ptr<connections_t> >("Connections")

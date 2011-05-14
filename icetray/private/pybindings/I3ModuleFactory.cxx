@@ -20,6 +20,7 @@
 //
 
 #include <icetray/I3Factory.h>
+#include <boost/foreach.hpp>
 
 using namespace boost::python;
 
@@ -29,7 +30,53 @@ I3ModulePtr create_module(const std::string& name, I3Context& context)
     .Create(name)(context);
 }
 
+/* A potemkin version, just to put its default config in the context. */
+void
+instantiate_module(const std::string& name, I3Context& context)
+{
+	I3::Singleton<I3ModuleFactory>::get_const_instance()
+	    .Create(name)(context);
+}
+
+boost::python::list
+get_modules(const std::string &project)
+{
+	typedef I3ModuleFactory factory_t;
+	typedef factory_t::product_map_t::value_type value_t;
+	
+	boost::python::list module_names;
+	const factory_t &factory = I3::Singleton<factory_t>::get_const_instance();
+	BOOST_FOREACH(const value_t &info, factory) {
+		if (info.second.project == project)
+			module_names.append(info.first);
+	}
+	
+	return module_names;
+}
+
+boost::python::list
+get_projects()
+{
+	typedef I3ModuleFactory factory_t;
+	typedef factory_t::product_map_t::value_type value_t;
+	
+	boost::python::list project_list;
+	std::set<std::string> projects;
+	
+	const factory_t &factory = I3::Singleton<factory_t>::get_const_instance();
+	BOOST_FOREACH(const value_t &info, factory)
+		projects.insert(info.second.project);
+	
+	BOOST_FOREACH(const std::string &project, projects)
+		project_list.append(project);
+	
+	return project_list;
+}
+
 void register_I3ModuleFactory()
 {
   def("create_module", &create_module);
+  def("_instantiate_module", &instantiate_module);
+  def("modules", &get_modules, args("project"));
+  def("projects", &get_projects);
 }

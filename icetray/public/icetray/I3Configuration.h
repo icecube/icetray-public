@@ -77,6 +77,9 @@ public:
   boost::python::object
   Get(const std::string& name) const;
 
+  std::string
+  GetDescription(const std::string& name) const;
+
   template <typename T>
   T
   Get(const std::string& name) const

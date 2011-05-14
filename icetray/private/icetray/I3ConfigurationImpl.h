@@ -63,6 +63,9 @@ public:
   boost::python::object
   Get(const std::string& name) const;
 
+  I3Parameter
+  GetParameter(const std::string& name) const;
+
   std::string ClassName() const 
   { 
     if (classname == "")

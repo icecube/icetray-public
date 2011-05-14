@@ -120,6 +120,17 @@ I3ConfigurationImpl::Get(const string& name_) const
   return iter->value();
 }
 
+I3Parameter
+I3ConfigurationImpl::GetParameter(const string& name_) const
+{
+  parameters_t::const_iterator iter = parameters->find(name_);
+
+  if (iter == parameters->end())
+    log_fatal("Attempt to Get nonexistent parameter \"%s\"", name_.c_str());
+
+  return *iter;
+}
+
 void
 I3ConfigurationImpl::Connect(const std::string& boxname, const std::string& modulename)
 {
