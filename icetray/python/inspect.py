@@ -51,7 +51,7 @@ def harvest_subclasses(module, klass=I3Module, memo=None):
 	memo[ptr] = module
 	
 	# Filter out classes defined in packages other than this one.
-	excluded = lambda klass_: sys.modules[klass.__module__].__package__ != module.__package__
+	excluded = lambda klass_: sys.modules[klass_.__module__].__package__ != module.__package__
 
 	# Get public properties (underscored names are private by convention)
 	harvest = []
@@ -59,10 +59,11 @@ def harvest_subclasses(module, klass=I3Module, memo=None):
 		if item.startswith('_'):
 			continue
 		attr = getattr(module, item)
-		if isinstance(attr, type) and issubclass(attr, klass) and not excluded(klass):
-			harvest.append(attr)
-		elif isinstance(attr, types.ModuleType) and attr.__package__ == module.__package__:
+		if isinstance(attr, types.ModuleType) and attr.__package__ == module.__package__:
 			harvest += harvest_subclasses(attr, klass, memo)
+		elif isinstance(attr, type):
+			if issubclass(attr, klass) and not excluded(attr):
+				harvest.append(attr)
 	
 	# Ensure uniqueness.
 	return list(set(harvest))
