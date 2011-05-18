@@ -3,14 +3,14 @@
 Passing python functions to :meth:`I3Tray.AddModule`
 ====================================================
 
-:meth:`I3Tray.AddModule` has typically accepted only strings in its
-first argument.  These strings are used to look up C++ classes that
-inherit from :class:`I3Module`, like so::
+:py::meth:`I3Tray.AddModule` has typically accepted only strings in
+its first argument.  These strings are used to look up C++ classes
+that inherit from :cpp:class:`I3Module`, like so::
 
   tray.AddModule('Dump', 'dump')
 
-where the C++ module :class:`Dump` has been registered via the C++
-:cmacro:`I3_MODULE()` macro.
+where the C++ module :cpp:class:`Dump` has been registered via the C++
+:c:macro:`I3_MODULE()` macro.
 
 :meth:`I3Tray.AddModule` now additionally accepts python functions in
 its first argument, for instance::
@@ -76,9 +76,9 @@ the frame_printer function to get and print it.
 
    tray.AddModule(frame_printer, 'printer')
 
-Here the function :func:`int_putter` puts :ctype:`I3Int` s with the value 777 in
-into the frames as they go by.  This is reflected in the table of
-contents printed by the :func:`frame_printer` function.
+Here the function :py:func:`int_putter` puts :c:type:`I3Int` with
+the value 777 in into the frames as they go by.  This is reflected in
+the table of contents printed by the :py:func:`frame_printer` function.
 
 Output::
 

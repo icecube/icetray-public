@@ -127,6 +127,7 @@ Requirements on toplevel frame objects
 
 Toplevel frame objects... that is, those which you will directly Put
 and Get to/from the frame must satisfy several requirements:
+
  * Be descendants of I3FrameObject
  * Have at least one virtual, non-inline function (an empty virual
    destructor, declared in the header file but defined in the
