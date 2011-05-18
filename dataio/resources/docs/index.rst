@@ -11,7 +11,6 @@ data in the ``.i3`` file format.
 
    dataio
    serialization
-   using_muxer
    classes
    changes
 
