@@ -65,6 +65,7 @@ somewhat like that of the source directory.  Main differences:
 * build contains directories ``CMakeFiles/``, ``bin/``, and ``lib/``
 * build contains files ``CMakeCache.txt``, ``env-shell.sh``, 
   ``log4cplus.conf`` and ``tarball_hook.sh``.
+
 ::
 
   $ ls

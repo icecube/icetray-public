@@ -143,7 +143,7 @@ Each test group (file) must include the statement::
 
 which pulls in definitions for ``TEST_GROUP``, ``ENSURE``, etc. (see below). 
 
-.. cmacro:: TEST_GROUP(groupname)
+.. c:macro:: TEST_GROUP(groupname)
 
 Valid context: toplevel scope of implementation files in test suite
 directory.
@@ -155,7 +155,7 @@ with the name groupname. groupname must be a valid C++ identifier name
 The individual unit tests found in this file will be organized under
 this test group.
 	
-.. cmacro:: TEST(testname)
+.. c:macro:: TEST(testname)
 
 Valid context: toplevel scope of implementation files in test suite
 directory.
@@ -168,7 +168,7 @@ directory.
 a scope (open curly-brace, statements, close curly-brace), containing
 testing statements.
 	
-.. cmacro:: ENSURE(predicate [, comment] )
+.. c:macro:: ENSURE(predicate [, comment] )
 
 ``ENSURE`` is analogous to ``assert()``. It takes one argument, a predicate,
 and an optional comment.  ``ENSURE`` checks whether the predicate is true
@@ -184,7 +184,7 @@ the failure.
    bool, e.g. ``hits_are_ok();``, and evaluation of pointers for
    nullness are all predicates.
 
-.. cmacro:: ENSURE_EQUAL(left-value, right-value, [, comment])
+.. c:macro:: ENSURE_EQUAL(left-value, right-value, [, comment])
 
 ENSURE_EQUAL ensures that left-value and right-value are, well,
 equal. If they aren't, it will throw a test failure. If the optional
@@ -208,13 +208,13 @@ Whereas ENSURE_EQUAL will show::
 
 Which gives one a better idea what the problem is. 
 
-.. cmacro:: ENSURE_DISTANCE(left-value, right-value, distance [, comment])
+.. c:macro:: ENSURE_DISTANCE(left-value, right-value, distance [, comment])
 
 ENSURE_DISTANCE verifies that left-value is within distance of
 right-value. If it is not, it throws a test failure. If the optional
 comment is specified, the failure will come with that messages.
 
-.. cmacro:: FAIL(comment)
+.. c:macro:: FAIL(comment)
 
 This fails unconditionally. Useful when verifying that an operation
 should throw, or that a certain point in the code is never reached::
