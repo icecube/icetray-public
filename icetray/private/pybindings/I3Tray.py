@@ -18,14 +18,14 @@ def load(filename):
     bindings, making them loadable via the standard python *import*,
     and this sould be obsolete.
 
-    :param filename: -- should be the name of the file to load
-    including the leading ``lib``, but *not* including the trailing
-    ``.so`` or ``.dylib``, eg::
+    :param filename:
+      should be the name of the file to load
+      including the leading ``lib``, but *not* including the trailing
+      ``.so`` or ``.dylib``, eg::
 
-      load("libdataio")
-      load("libexamples")
-
-    
+        load("libdataio")
+        load("libexamples")
+      
     """
     try:
         icetray.load(filename)
@@ -53,15 +53,17 @@ class I3Tray:
         """
         Add a module to the tray's processing stream.
 
-        :param _type: either a string (search for a registered c++
-        module in the module factory) or a python class (create a
-        module of this type), or a python function (create a python
-        module to wrap this function).
+        :param _type:
+          either a string (search for a registered c++
+          module in the module factory) or a python class (create a
+          module of this type), or a python function (create a python
+          module to wrap this function).
 
-        :param _name: instance name for this module, needed when
-        connecting in/outboxes in unusual ways, otherwise just make
-        this string unique among the set of *name* parameters passed
-        to AddModule and AddService.
+        :param _name:
+          instance name for this module, needed when
+          connecting in/outboxes in unusual ways, otherwise just make
+          this string unique among the set of *name* parameters passed
+          to AddModule and AddService.
 
         :param kwargs: parameter values forwarded to the added module
 
