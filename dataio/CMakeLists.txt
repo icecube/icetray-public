@@ -49,6 +49,7 @@ i3_test_executable(test private/test/*.cxx
 
 no_dotfile_glob(tmp_SCRIPTS resources/test/*.py)
 if (NOT LIBARCHIVE_FOUND)
+#  colormsg(CYAN "+-- libarchive *not* found, omitting test \"resources/test/o7_libarchive_read.py\"")
   LIST(REMOVE_ITEM tmp_SCRIPTS "${CMAKE_CURRENT_SOURCE_DIR}/resources/test/o7_libarchive_read.py")
 endif (NOT LIBARCHIVE_FOUND)
 i3_test_scripts(${tmp_SCRIPTS})
