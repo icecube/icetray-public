@@ -33,8 +33,6 @@
 
 class I3FileImpl;
 
-using namespace std;
-
 class I3File
 {
   static void noop(double) { }
@@ -64,13 +62,13 @@ public:
 
   int open_file(const std::string& filename,
                 boost::function<void(double)> cb = noop,
-                boost::optional<vector<I3Frame::Stream> > skipstreams = boost::optional<vector<I3Frame::Stream> >(),
+                boost::optional<std::vector<I3Frame::Stream> > skipstreams = boost::optional<std::vector<I3Frame::Stream> >(),
                 boost::optional<unsigned> nframes = boost::optional<unsigned>(),
                 bool verbose = true);
 
   void async_open_file(const std::string& filename,
                        boost::function<void(double)> cb = noop,
-                       boost::optional<vector<I3Frame::Stream> > skipstreams = boost::optional<vector<I3Frame::Stream> >(),
+                       boost::optional<std::vector<I3Frame::Stream> > skipstreams = boost::optional<std::vector<I3Frame::Stream> >(),
                        boost::optional<unsigned> nframes = boost::optional<unsigned>());
 
   void close();
@@ -94,7 +92,7 @@ public:
 
   std::vector<FrameInfo> frames();
   size_t size();
-  void set_skipkeys(const vector<string>&);
+  void set_skipkeys(const std::vector<std::string>&);
 
 };
 
