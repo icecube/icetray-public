@@ -51,7 +51,7 @@ class I3IceForkModule : public I3Module
     }
 
  private:
-  string decisionName_;
+  std::string decisionName_;
   IcePick pick_;
 };
 

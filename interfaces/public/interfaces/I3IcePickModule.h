@@ -107,7 +107,7 @@ class I3IcePickModule : public I3Module
   }
 
  private:
-  string decisionName_;
+  std::string decisionName_;
   bool discardEvents_;
   bool invertoutput_;
   IcePick pick_;
