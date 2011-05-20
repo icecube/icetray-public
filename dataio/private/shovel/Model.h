@@ -56,8 +56,8 @@ public:
   Model(View& view);
 
   int open_file(const std::string& filename, 
-		boost::optional<vector<I3Frame::Stream> > skipstreams 
-		= boost::optional<vector<I3Frame::Stream> >(),
+		boost::optional<std::vector<I3Frame::Stream> > skipstreams 
+		= boost::optional<std::vector<I3Frame::Stream> >(),
 		boost::optional<unsigned> nframes = boost::optional<unsigned>()
 		);
 
