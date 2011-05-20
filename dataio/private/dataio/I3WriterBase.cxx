@@ -118,7 +118,7 @@ I3WriterBase<Derived>::Configure()
   } catch (const boost::python::error_already_set& e) {
     log_trace("Trying compatibility interface for I3WriterBase's Streams parameter");
     PyErr_Clear();
-    vector<string> vs;
+    std::vector<std::string> vs;
     GetParameter("Streams", vs);
 
     streams_.clear();
