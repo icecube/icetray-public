@@ -24,23 +24,17 @@
 
 using namespace boost::python;
 
-namespace {
-	struct DescriptionProxy {
-		I3ConfigurationConstPtr target;
-		DescriptionProxy(I3ConfigurationConstPtr config) : target(config) {};
-		std::string Get(const std::string &name)
-		{
-			return target->GetDescription(name);
-		};
-	};
-
-	DescriptionProxy
-	make_proxy(I3ConfigurationPtr config)
-	{
-		return DescriptionProxy(config);
+struct I3ConfigurationDescriptionProxy {
+	I3ConfigurationConstPtr target;
+	I3ConfigurationDescriptionProxy(I3ConfigurationConstPtr config) : target(config) {};
+	std::string Get(const std::string &name) {
+		return target->GetDescription(name);
 	}
-}
+};
 
+static I3ConfigurationDescriptionProxy make_proxy(I3ConfigurationPtr config) {
+	return I3ConfigurationDescriptionProxy(config);
+}
 
 void register_I3Configuration()
 {
@@ -67,8 +61,9 @@ void register_I3Configuration()
     ;
 
 
-  class_<DescriptionProxy>("DescriptionProxy", init<I3ConfigurationConstPtr>())
-    .def("__getitem__", &DescriptionProxy::Get)
+  class_<I3ConfigurationDescriptionProxy>("DescriptionProxy",
+    init<I3ConfigurationConstPtr>())
+    .def("__getitem__", &I3ConfigurationDescriptionProxy::Get)
     ;
 
 }
