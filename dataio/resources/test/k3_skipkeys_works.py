@@ -11,7 +11,6 @@ import sys
 
 load("libdataclasses")
 load("libphys-services")
-load("libDOMcalibrator")
 load("libdataio")
 load("libexamples")
 

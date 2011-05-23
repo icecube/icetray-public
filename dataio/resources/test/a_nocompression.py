@@ -26,16 +26,25 @@ tray = I3Tray()
 
 tray.AddModule("I3Reader","reader", Filename = runfile, SkipKeys = ["I3PfFilterMask"])
 
+# This file is super old
+tray.AddModule("QConverter", "qify")
+tray.AddModule(lambda fr: False, "dropps") # Drop all existing P-frames
+
 #
 # A DOMCalibrator.  Obviously.
 #
 tray.AddModule("I3DOMcalibrator","merge")
- 
+
 #
 # And an appropriately named but nonetheless cute feature
 # extractor.
 #
 tray.AddModule("DumbFeatureExtractor","dumbfe")
+
+#
+# Make the Q frames into P
+#
+tray.AddModule("I3NullSplitter", "donothing")
  
 #
 # This would probably be better named I3ConstantSeed.  You can imagine

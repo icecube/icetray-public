@@ -28,7 +28,7 @@ tray.AddModule("I3Writer","gcdwriter")(
 
 tray.AddModule("I3MultiWriter","physwriter")(
     ("filename", "split.physics.%04u.i3"),
-    ("streams", ["Physics"]),
+    ("streams", ["Physics", "DAQ"]),
     ("sizelimit", 10**5)
     )
 
