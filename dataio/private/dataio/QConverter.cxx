@@ -35,6 +35,11 @@ QConverter::QConverter(const I3Context& context) :
 	keys_to_q.push_back("CorsikaWeightMap");
 	keys_to_q.push_back("I3MCTree");
 	keys_to_q.push_back("I3MCWeightDict");
+	keys_to_q.push_back("CalibratedATWD");
+	keys_to_q.push_back("CalibratedFADC");
+	keys_to_q.push_back("I3DAQData");
+	keys_to_q.push_back("InIceRawData");
+	keys_to_q.push_back("IceTopRawData");
 	AddParameter("QKeys", "Names of keys to move to the Q frame",
 	    keys_to_q);
 
