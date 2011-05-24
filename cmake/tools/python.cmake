@@ -50,11 +50,12 @@ execute_process(COMMAND ${PYTHON_EXECUTABLE} -V
 #
 # Provide version in numeric form for comparison
 #
-execute_process(COMMAND ${CMAKE_SOURCE_DIR}/cmake/pythonversion.pl ${PYTHON_VERSION}
-  OUTPUT_VARIABLE PYTHON_NUMERIC_VERSION)
+string(REGEX MATCH "([0-9]+)\\.([0-9]+)\\.?([0-9]*)"
+  tmp_OUT
+  ${PYTHON_VERSION})
+numeric_version(${tmp_OUT} PYTHON)
 
 message(STATUS "+  version: ${PYTHON_VERSION}") 
-set(PYTHON_INCLUDE_DIR ${PYTHON_INCLUDE_PATH})
 
 if(NOT EXISTS "${PYTHON_INCLUDE_DIR}/Python.h")
   message(STATUS "Error configuring python:  ${PYTHON_INCLUDE_DIR}/Python.h does not exist.\n")
