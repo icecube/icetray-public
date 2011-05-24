@@ -77,11 +77,13 @@ else(NOT IS_DIRECTORY $ENV{I3_PORTS})
 endif(NOT IS_DIRECTORY $ENV{I3_PORTS})
 
 #
+#  GCC_VERSION and
 #  GCC_NUMERIC_VERSION is e.g. 40302 (for 4.3.2)
 #
 execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion 
-  COMMAND ${CMAKE_SOURCE_DIR}/cmake/gccversion.pl
-  OUTPUT_VARIABLE GCC_NUMERIC_VERSION)
+  COMMAND tr -d \\n
+  OUTPUT_VARIABLE GCC_VERSION)
+numeric_version(${GCC_VERSION} "gcc")
 set(GCC_NUMERIC_VERSION ${GCC_NUMERIC_VERSION} CACHE INTEGER "Numeric gcc version" FORCE)
 
 # get just the filename
@@ -129,13 +131,6 @@ execute_process(COMMAND ${CMAKE_CXX_COMPILER} --version
   OUTPUT_FILE ${NOTES_DIR}/compiler-version.txt)
 
 #
-# Get GCC_VERSION
-#
-execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
-  COMMAND tr \\n \\0 
-  OUTPUT_VARIABLE GCC_VERSION)
-
-#
 # Get OSTYPE
 #
 set(OSTYPE ${CMAKE_SYSTEM_NAME})
@@ -165,7 +160,7 @@ set(TOOLSET "gcc-${GCC_VERSION}/${ARCH}/${CMAKE_BUILD_TYPE}" CACHE INTERNAL "too
 #  Get HOSTNAME 
 #
 execute_process(COMMAND hostname 
-  COMMAND tr \\n \\0
+  COMMAND tr -d \\n
   OUTPUT_VARIABLE HOSTNAME)
 boost_report_value(HOSTNAME)
 set(SITE ${HOSTNAME})
@@ -174,7 +169,10 @@ set(SITE ${HOSTNAME})
 #  Show cmake path and version
 #
 boost_report_pretty("CMake path" CMAKE_COMMAND)
-set(CMAKE_VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION})
+if(NOT CMAKE_VERSION)
+  set(CMAKE_VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION})
+endif(NOT CMAKE_VERSION)
+math(EXPR CMAKE_VERSION_INT "${CMAKE_MAJOR_VERSION} * 10000 + ${CMAKE_MINOR_VERSION} * 100 + ${CMAKE_PATCH_VERSION}")
 boost_report_pretty("CMake version" CMAKE_VERSION)
 
 #
@@ -183,14 +181,14 @@ boost_report_pretty("CMake version" CMAKE_VERSION)
 find_program(SVN_EXECUTABLE svn)
 
 #
-# Get SVN_REVISION from svn info --xml
+# Get SVN_REVISION from svn info
 #
 option(USE_SVN_REVISION_FLAGS "Add compiled-in svn revision information." ON)
 
 if(NOT HAVE_SVN_REVISION)
   set(HAVE_SVN_REVISION TRUE CACHE INTERNAL "flag")
-  execute_process(COMMAND ${SVN_EXECUTABLE} info --xml ${CMAKE_SOURCE_DIR} 
-    COMMAND perl -e "$_ = join(\"\", <>) ; m{<entry[^>]+revision=\"([0-9]+)}s && print $1"
+  execute_process(COMMAND ${SVN_EXECUTABLE} info ${CMAKE_SOURCE_DIR} 
+    COMMAND awk "/^Revision:/ { printf $2 }"
     OUTPUT_VARIABLE SVN_REVISION
     ERROR_VARIABLE SVN_REVISION_ERROR)
 
@@ -214,8 +212,8 @@ endif(NOT HAVE_SVN_REVISION)
 #
 if(NOT HAVE_SVN_URL)
   set(HAVE_SVN_URL TRUE CACHE INTERNAL "flag")
-  execute_process(COMMAND ${SVN_EXECUTABLE} info --xml ${CMAKE_SOURCE_DIR} 
-    COMMAND perl -e "$_ = join(\"\",<>) ; m{<url>([^<]+)</url>}s && print $1" 
+  execute_process(COMMAND ${SVN_EXECUTABLE} info ${CMAKE_SOURCE_DIR} 
+    COMMAND awk "/^URL:/ { printf $2 }"
     OUTPUT_VARIABLE SVN_URL)
 
   if(NOT SVN_EXECUTABLE)
@@ -232,29 +230,14 @@ if(NOT HAVE_SVN_URL)
 endif(NOT HAVE_SVN_URL)
 
 #
-#  this gets written to the file #included by the I3TrayInfoService.  the 
-#  \n's need to be there.
-#
-execute_process(COMMAND svn pg svn:externals ${CMAKE_SOURCE_DIR}
-  COMMAND perl -ne "s/\n/\\\\n/ ; print"
-  OUTPUT_VARIABLE SVN_EXTERNALS)
-
-#
 #  get META_PROJECT (used by dart) from SVN_URL
 #
 if(NOT HAVE_META_PROJECT)
   set(HAVE_META_PROJECT TRUE CACHE INTERNAL "flag")
-  execute_process(COMMAND echo ${SVN_URL}
-    COMMAND perl -pe "s@http://code.icecube.wisc.edu/svn/meta-projects/@@"
-    COMMAND tr / .
-    COMMAND tr \\n \\0
-    OUTPUT_VARIABLE META_PROJECT
-    RESULT_VARIABLE RESULT
-    )
-
-  if(RESULT)
-    message(FATAL_ERROR "Problem running sed.")
-  endif(RESULT)
+  string(REGEX REPLACE "http://code.icecube.wisc.edu/svn/meta-projects/" ""
+    META_PROJECT ${SVN_URL})
+  string(REGEX REPLACE "/" "." META_PROJECT ${META_PROJECT})
+  string(STRIP "\n" ${META_PROJECT})
   boost_report_value(META_PROJECT)
   set(META_PROJECT ${META_PROJECT} CACHE INTERNAL "meta project")
 endif(NOT HAVE_META_PROJECT)
@@ -300,8 +283,8 @@ set(TESTING_PYTHONPATH ${CMAKE_BINARY_DIR}/lib:${ports}/bin:${CMAKE_BINARY_DIR}/
 set(TESTING_I3_WORK ${CMAKE_SOURCE_DIR})
 
 if(APPLE)
-  set(CMAKE_CXX_CREATE_SHARED_LIBRARY "/usr/bin/env MACOSX_DEPLOYMENT_TARGET=10.4 ${CMAKE_CXX_CREATE_SHARED_LIBRARY}")
-  set(CMAKE_CXX_CREATE_SHARED_MODULE "/usr/bin/env MACOSX_DEPLOYMENT_TARGET=10.4 ${CMAKE_CXX_CREATE_SHARED_MODULE}")
+  set(CMAKE_CXX_CREATE_SHARED_LIBRARY "/usr/bin/env MACOSX_DEPLOYMENT_TARGET=10.5 ${CMAKE_CXX_CREATE_SHARED_LIBRARY}")
+  set(CMAKE_CXX_CREATE_SHARED_MODULE "/usr/bin/env MACOSX_DEPLOYMENT_TARGET=10.5 ${CMAKE_CXX_CREATE_SHARED_MODULE}")
 endif(APPLE)
 
 colormsg("")

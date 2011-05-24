@@ -314,10 +314,8 @@ macro(i3_project PROJECT_NAME)
     endif (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/resources)
 
     if(ARG_DOCS_DIR)
-      execute_process(COMMAND mkdir -p ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/project-doc-links
-	COMMAND 
-	ln -fsn ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_DOCS_DIR} ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/project-doc-links/${PROJECT_NAME}  
-	)
+      file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/project-doc-links")
+      execute_process(COMMAND ln -fsn ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_DOCS_DIR} ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/project-doc-links/${PROJECT_NAME})
     endif(ARG_DOCS_DIR)
     
     if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/public/${PROJECT_NAME} AND INSTALL_HEADERS)
