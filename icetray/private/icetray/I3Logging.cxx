@@ -83,7 +83,7 @@ namespace I3Logging
         if (immediateFlush_) {
 	  output.flush();
         }
-      LOG4CPLUS_END_SYNCHRONIZE_ON_MUTEX
+      LOG4CPLUS_END_SYNCHRONIZE_ON_MUTEX ;
     }
 
 
