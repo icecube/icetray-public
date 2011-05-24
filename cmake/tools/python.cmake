@@ -34,8 +34,8 @@ if(EXISTS ${I3_PORTS}/bin/python)
   message(FATAL_ERROR "Stopping makefile generation.   Sorry.")
 endif(EXISTS ${I3_PORTS}/bin/python)
 
-find_package(PythonInterp)
-find_package(PythonLibs)
+find_package(PythonInterp QUIET)
+find_package(PythonLibs QUIET)
 
 if(NOT PYTHON_EXECUTABLE)
   set(PYTHON_FOUND FALSE)
@@ -56,6 +56,9 @@ string(REGEX MATCH "([0-9]+)\\.([0-9]+)\\.?([0-9]*)"
 numeric_version(${tmp_OUT} PYTHON)
 
 message(STATUS "+  version: ${PYTHON_VERSION}") 
+if(NOT PYTHON_INCLUDE_DIR)
+  set(PYTHON_INCLUDE_DIR ${PYTHON_INCLUDE_PATH})
+endif(NOT PYTHON_INCLUDE_DIR)
 
 if(NOT EXISTS "${PYTHON_INCLUDE_DIR}/Python.h")
   message(STATUS "Error configuring python:  ${PYTHON_INCLUDE_DIR}/Python.h does not exist.\n")
