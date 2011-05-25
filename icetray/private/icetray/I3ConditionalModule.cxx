@@ -99,22 +99,6 @@ bool I3ConditionalModule::ShouldDoProcess(I3FramePtr frame)
 {
   i3_log("%s", __PRETTY_FUNCTION__);
 
-  //
-  //  You only run this function if it is a physics frame, otherwise
-  //  things would get complicated, e.g. 
-  //
-  //    if 'thing' in frame and frame['thing'].value .
-  //
-  //  Otherwise return true so that the module runs...  and it
-  //  probably won't do anything, as it probably doesn't implement
-  //  Geometry(), etc.
-  // 
-  //  Though we're using this to check physics,
-  //  we actually override ShouldDoProcess as some ConditionalModules
-  //  like Keep implement Process(), not Physics()
-  if (frame->GetStop() != I3Frame::Physics)
-    return true;
-
   i3_log("use_if_=%d", use_if_);
   if (use_if_)
     {
