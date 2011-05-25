@@ -362,34 +362,6 @@ I3Module::ShouldDoPhysics(I3FramePtr frame)
   return true;
 }
 
-void
-I3Module::Monitoring(I3FramePtr frame)
-{
-  i3_log("%s", __PRETTY_FUNCTION__);
-  PushFrame(frame);
-}
-
-bool
-I3Module::ShouldDoMonitoring(I3FramePtr frame)
-{
-  i3_log("%s", __PRETTY_FUNCTION__);
-  return true;
-}
-
-void
-I3Module::TimeCal(I3FramePtr frame)
-{
-  i3_log("%s", __PRETTY_FUNCTION__);
-  PushFrame(frame);
-}
-
-bool
-I3Module::ShouldDoTimeCal(I3FramePtr frame)
-{
-  i3_log("%s", __PRETTY_FUNCTION__);
-  return true;
-}
-
 void 
 I3Module::Geometry(I3FramePtr frame)
 {
