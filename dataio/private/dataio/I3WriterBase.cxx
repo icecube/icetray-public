@@ -50,8 +50,7 @@ namespace io = boost::iostreams;
 using boost::archive::portable_binary_oarchive;
 using namespace boost::posix_time;
 
-template <class Derived>
-I3WriterBase<Derived>::I3WriterBase(const I3Context& ctx) 
+I3WriterBase::I3WriterBase(const I3Context& ctx) 
   : I3ConditionalModule(ctx),
     configWritten_(false),
     frameCounter_(0),     
@@ -78,9 +77,8 @@ I3WriterBase<Derived>::I3WriterBase(const I3Context& ctx)
 	       streams_);
 }
 
-template <class Derived>
 void
-I3WriterBase<Derived>::Configure()
+I3WriterBase::Configure()
 {
   log_trace("%s", __PRETTY_FUNCTION__);
 
@@ -144,18 +142,15 @@ I3WriterBase<Derived>::Configure()
   }
 }
 
-template <class Derived>
 void
-I3WriterBase<Derived>::Finish()
+I3WriterBase::Finish()
 {
   log_trace("%s", __PRETTY_FUNCTION__);
-  derived()->Finish_();
   log_info("%u frames written.", frameCounter_);
 }
 
-template <class Derived>
 void 
-I3WriterBase<Derived>::WriteConfig(I3FramePtr frame)
+I3WriterBase::WriteConfig(I3FramePtr frame)
 {
   if (configWritten_)
     return;
@@ -168,7 +163,7 @@ I3WriterBase<Derived>::WriteConfig(I3FramePtr frame)
       }
 
   I3TrayInfoService& srv = 
-    context_.template Get<I3TrayInfoService>("__tray_info_service");
+    context_.Get<I3TrayInfoService>("__tray_info_service");
 
   const I3TrayInfo& config = srv.GetConfig();
   
@@ -193,15 +188,13 @@ I3WriterBase<Derived>::WriteConfig(I3FramePtr frame)
   if (oframe != frame)
     {
       oframe->save(filterstream_, skip_keys_);
-      derived()->Flush();
+      Flush();
     }
   configWritten_ = true;
 }
 
-
-template <class Derived>
 void
-I3WriterBase<Derived>::Process()
+I3WriterBase::Process()
 {
   I3FramePtr frame = PopFrame();
 
@@ -222,16 +215,11 @@ I3WriterBase<Derived>::Process()
 
   frameCounter_++;
 
+  // Write to disk
   frame->save(filterstream_, skip_keys_);
-  derived()->Flush();
+  Flush();
 
   PushFrame(frame,"OutBox");
   log_debug("... done");  
 }
 
-
-#include <dataio/I3Writer.h>
-template class I3WriterBase<I3Writer>;
-
-#include <dataio/I3MultiWriter.h>
-template class I3WriterBase<I3MultiWriter>;

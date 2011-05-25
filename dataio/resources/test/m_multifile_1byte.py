@@ -30,7 +30,7 @@ tray.AddModule("TrashCan", "the can");
 tray.Execute()
 tray.Finish()
 
-filecount_is_correct = (len(glob("testm.????.i3.gz")) == 25)
+filecount_is_correct = (len(glob("testm.????.i3.gz")) == 15)
 
 if filecount_is_correct:
     sys.exit(0)

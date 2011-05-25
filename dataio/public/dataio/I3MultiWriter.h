@@ -25,12 +25,14 @@
 #include <dataio/I3WriterBase.h>
 #include <sstream>
 
-class I3MultiWriter : public I3WriterBase<I3MultiWriter>
+class I3MultiWriter : public I3WriterBase
 {
   I3MultiWriter();
   I3MultiWriter(const I3MultiWriter&);
   
   uint64_t size_limit_;
+  I3Frame::Stream sync_stream_;
+  bool sync_seen_;
   unsigned    file_counter_;
   void NewFile();
   
@@ -43,9 +45,8 @@ public:
   virtual ~I3MultiWriter();
 
   void Configure_();
-  void Flush();
-  void Finish_();
-
+  void Process();
+  void Finish();
 };
 
 #endif

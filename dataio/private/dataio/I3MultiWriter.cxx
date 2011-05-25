@@ -36,13 +36,14 @@ namespace dataio = I3::dataio;
 I3_MODULE(I3MultiWriter);
 
 I3MultiWriter::I3MultiWriter(const I3Context& ctx) 
-  : I3WriterBase<I3MultiWriter>(ctx),
-    size_limit_(0),
-    file_counter_(0)
+  : I3WriterBase(ctx), size_limit_(0), sync_seen_(false), file_counter_(0)
 { 
   AddParameter("SizeLimit",
 	       "Soft Size limit in bytes.  Files will typically exceed this limit by the size of one half of one frame.",
 	       size_limit_);
+  AddParameter("SyncStream",
+	       "Frame type to wait for to split files. New files will always begin with a frame of this type. Useful for frames from which events need to inherit (e.g. DAQ and DetectorStatus frames).",
+	       I3Frame::DAQ);
 }
 
 I3MultiWriter::~I3MultiWriter() { }
@@ -72,6 +73,7 @@ I3MultiWriter::Configure_()
   GetParameter("SizeLimit", size_limit_);
   if (size_limit_ == 0)
     log_fatal("SizeLimit (%llu) must be > 0", (unsigned long long)size_limit_);
+  GetParameter("SyncStream", sync_stream_);
 
   log_trace("path_=%s", path_.c_str());
   log_debug("Starting new file '%s'", current_path().c_str());
@@ -90,8 +92,10 @@ I3MultiWriter::NewFile()
 }
 
 void
-I3MultiWriter::Flush()
+I3MultiWriter::Process()
 {
+  I3FramePtr frame;
+
   log_trace("%s", __PRETTY_FUNCTION__);
 
   uint64_t bytes_written;
@@ -102,12 +106,22 @@ I3MultiWriter::Flush()
 
   log_trace("%llu bytes: %s", (unsigned long long)bytes_written, current_path().c_str());
 
-  if (bytes_written > size_limit_)
-    NewFile();
+  frame = PeekFrame();
+  if (frame == NULL)
+    return;
+
+  if (frame->GetStop() == sync_stream_)
+    sync_seen_ = true;
+
+  if (bytes_written > size_limit_ && (frame->GetStop() == sync_stream_ ||
+    !sync_seen_))
+      NewFile();
+
+  I3WriterBase::Process();
 }
 
 void
-I3MultiWriter::Finish_()
+I3MultiWriter::Finish()
 {
   log_trace("%s", __PRETTY_FUNCTION__);
 
@@ -125,4 +139,7 @@ I3MultiWriter::Finish_()
       log_trace("unlinking %s", current_path().c_str());
       unlink(current_path().c_str());
     }
+
+  I3WriterBase::Finish();
 }
+

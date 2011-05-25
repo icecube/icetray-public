@@ -28,7 +28,7 @@ namespace dataio = I3::dataio;
 I3_MODULE(I3Writer);
 
 I3Writer::I3Writer(const I3Context& ctx) 
-  : I3WriterBase<I3Writer>(ctx)
+  : I3WriterBase(ctx)
 { }
 
 I3Writer::~I3Writer() { }
@@ -42,13 +42,8 @@ I3Writer::Configure_()
 }
 
 void
-I3Writer::Flush()
-{
-  log_trace("%s", __PRETTY_FUNCTION__);
-}
-
-void
-I3Writer::Finish_()
+I3Writer::Finish()
 {
   filterstream_.reset();
+  I3WriterBase::Finish();
 }

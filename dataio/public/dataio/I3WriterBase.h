@@ -31,7 +31,6 @@
 #include <fstream>
 #include <sstream>
 
-template <class Derived>
 class I3WriterBase : public I3ConditionalModule
 {
   std::vector<std::string> skip_keys_;
@@ -41,11 +40,7 @@ class I3WriterBase : public I3ConditionalModule
 
   bool write_geo_, write_cal_, write_status_, write_physics_, write_trayinfo_;
 
-  // yes, static_cast is bad, but this is the Curiously Recurring Template Pattern,
-  // google it for details
-  inline Derived* derived() { return static_cast<Derived*>(this); }
-
-  void WriteConfig(I3FramePtr);
+  void WriteConfig(I3FramePtr ptr);
 
 protected:
 
@@ -65,7 +60,5 @@ public:
 
   void Process();
 };
-
-
 
 #endif
