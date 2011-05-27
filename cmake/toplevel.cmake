@@ -174,6 +174,11 @@ add_custom_target(env-check ALL
   COMMENT "Checking build against environment")
 
 #
+#  extra icetray-inspect docs goodness.
+#
+find_program(XSLTPROC_BIN xsltproc DOC "Location of the XSLT processor")
+
+#
 #  Temp directory for documentation
 #
 file(MAKE_DIRECTORY "${DOXYGEN_OUTPUT_PATH}/.tagfiles")
@@ -340,11 +345,6 @@ add_custom_target(rsync
   )
 
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/docs/inspect")
-
-#
-#  extra icetray-inspect docs goodness.
-#
-find_program(XSLTPROC_BIN xsltproc)
 
 #
 # subprocess.py needed by older Python
