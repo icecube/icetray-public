@@ -199,16 +199,45 @@ I3WriterBase::Process()
 
 	WriteConfig(frame);
 
-	// See if this is a frame type that gets written
+	// See if this is a frame type that actually gets written
 	if (streams_.size() > 0 && find(streams_.begin(), streams_.end(),
 	    frame->GetStop()) == streams_.end()) {
 		PushFrame(frame, "OutBox");
 		return;
 	}
 
-	frameCounter_++;
+	// See if this is one of our potentially orphanable frames. If so,
+	// cache it for now.
+	if (find(dropOrphanStreams_.begin(), dropOrphanStreams_.end(),
+	    frame->GetStop()) != dropOrphanStreams_.end()) {
+		unsigned i;
+		// Replace one of our cached frames if it is the same type
+		for (i = 0; i < orphanarium_.size() &&
+		    orphanarium_[i]->GetStop() != frame->GetStop(); i++); 
+
+		// Duplicate frame so it can't be modified by following modules
+		I3FramePtr orphan(new I3Frame(frame->GetStop()));
+		orphan->merge(*frame);
+		if (i == orphanarium_.size())	// No match, add to end
+			orphanarium_.push_back(orphan);
+		else				// Replace in situ
+			orphanarium_[i] = orphan;
+
+		PushFrame(frame, "OutBox");
+		return;
+	}
+
+	// At this point, we have a frame we (a) want to write, and (b) is not
+	// part of an orphanable stream, so dump the contents of the orphanarium
+	// to disk before the frame and clear it.
+	BOOST_FOREACH(I3FramePtr adopted, orphanarium_) {
+		frameCounter_++;
+		adopted->save(filterstream_, skip_keys_);
+	}
+	orphanarium_.clear();
 
 	// Write to disk
+	frameCounter_++;
 	frame->save(filterstream_, skip_keys_);
 	Flush();
 
