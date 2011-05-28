@@ -365,12 +365,12 @@ exists an exception-throwing function and will allow you to catch there::
 
 
 Profiling C++ Code
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^
 Profilers show you how much time your code is spending in each function. The "80/20 rule" is that on average your code will spend 80% of its time in 20% of the code. This means of course that only 20% of the code is really worth optimizing. We tend to be extremely bad at predicting which 20% that will be.
 
 When one optimizes code, one makes a decision that the loss of clarity introduced by rearranging code is worth the increase in speed that it brings. One therefore wants to do it only when and where necessary.
  
 Furthermore, do not ever optimize code that is not thoroughly, I mean thoroughly tested:
- '''It is much, much easier to make correct code fast than it is to make fast code correct.'''
+   "It is much, much easier to make correct code fast than it is to make fast code correct."
 
 Use the utilities **valgrind** (specifically the callgrind tool) and **kcachegrind** (nice graphical tool for viewing results).  Google them, you'll find stuff.

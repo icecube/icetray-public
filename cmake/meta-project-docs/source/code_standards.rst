@@ -7,7 +7,7 @@ This is the third draft of the IceCube C++ Coding Standards. The first
 draft was provided by Thomas Burgess, the second by Erik Blaufuss.
 
 Introduction
--------------
+------------
 
 These are coding standards and recommendations for developers of
 IceCube software in C++.  This is primarily offline software
@@ -50,7 +50,7 @@ with every single rule, as these are goals to strive for, and many are
 achievably only in degree.  Do your best, and we will refer to this
 document in reviews.
 
-Don't Sweat The Small Stuff 
+Don't Sweat The Small Stuff
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There are things that appear in many coding standards that are
@@ -84,14 +84,14 @@ jump around among several styles in the same piece of code.
 A specific line length is also not specified.  Keep it readable.  
 
 Organizational and Policy Issues
----------------------------------
+--------------------------------
 
 Naming
-^^^^^^^
+^^^^^^
 
 Name classes, functions and enums ``LikeThis``, name variables 
 ``likeThis``, name private member variables ``likeThis_``, and name macros
-and constant fundamental types LIKE_THIS``.
+and constant fundamental types ``LIKE_THIS``.
 
 Never use names that begin with an underscore or that contain a double
 underscore (this is because of how linking works, it's not a matter of
@@ -238,7 +238,7 @@ can use, and look through the dataclasses for some examples.
 
 
 Logging
-^^^^^^^^
+^^^^^^^
 
 Don't use any of the forms of printf, nor C++ iostreams ( ``cout`` and
 friends) for reporting your code's progress or debugging output.
@@ -292,7 +292,7 @@ modules and in standalone documents.  It also allows others to fix
 bugs in documentation with their favorite editor.
 
 Compile cleanly at high warning levels
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The build system will specify ``-Wall``, the maximum warning level, by
 default.  If you don't see any complaints from the compiler, you're
@@ -309,7 +309,7 @@ this item, because the compiler will flag this for you with all
 warnings.
 
 Use a version control system
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Keep your stuff in the code repository, and don't be afraid 
 to check in every time
@@ -319,13 +319,14 @@ ahead of yourself and then forget how to back up to something that
 worked.  Code repositories (SVN) can be a huge help.
 
 Invest in code reviews
-^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^
 ::
+
  > The constructive
  > criticism that I just got from my code review was great.  
 
 Coding Style
--------------
+------------
 
 Declare variables as locally as possible.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -350,7 +351,7 @@ files, otherwise I will have to add those tools to my ``USES_TOOLS``
 when I use your project.
 
 Always write internal #include guards. Never write external #include guards.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Header files should start with::
 
@@ -374,7 +375,7 @@ forever to figure out why, since you definitely wouldn't be expecting
 the include guards to be the problem.
 
 Functions and Operators
-------------------------
+-----------------------
 
 Be clear what kind of class you're writing.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -433,13 +434,14 @@ extra typing required to add some virtuals and change "private" to
 "protected" if you find that you do want to subclass something.
 
 ::
+
  > because you never know when someone might want to subclass your
  > class and override a method.
 
 
 One does not inherit in order to reuse code in the Base class, this is
 looking at it from the wrong perspective.  One inherits from Base in
-order to <i>be reused</i> by classes who talk to pointers to objects
+order to *be reused* by classes who talk to pointers to objects
 of type Base who dont know and don't care whether that is actually a
 Derived on the other end of that pointer.  (This a
 simple restatement of the "Liskov Substitution Principle").  When it
@@ -449,7 +451,7 @@ You can have one as a member, you can use templates, you can use
 private inheritance, you can just use functions.
 
 STL: Containers
-----------------
+---------------
 
 Use vector and string instead of arrays.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -476,7 +478,7 @@ There's a decent reference on strings, vectors, and other STL stuff at
 http://www.cppreference.com/cppstring/.
 
 Use vector (and string::c_str) to exchange data with non-C++ APIs.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you need to get a ``const char*`` out of a  ``string`` so that
 you can pass it to a C function, use the function ``c_str``::
@@ -493,7 +495,7 @@ you can pass it to a C function, use the function ``c_str``::
 
 
 Useful links
----------------
+------------
 
 Bjarne Stroustrup's C++ pages <http://www.research.att.com/%7Ebs/C++.html>
     The pages of the creator of C++ 
