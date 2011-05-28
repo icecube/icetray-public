@@ -202,13 +202,16 @@ Not all of the variables are useful.  Here are some that are:
      - ``ON``  	   
    * - .. attribute:: USE_CCACHE
      - Use ccache (if detected)
-     - ON
+     - OFF
    * - .. attribute:: USE_DISTCC
      - Use distcc (if detected)
      - OFF
    * - .. attribute:: USE_GFILT
      - Use the gfilt stl error message decryptor
      - ON
+   * - .. attribute:: USE_GOLD
+     - Use the new gold linker from GNU binutils. **EXPERIMENTAL**
+     - OFF
    * - .. attribute:: CMAKE_BUILD_TYPE
      - What kind of build you want.  The choices are ``Release``, ``Debug``, ``RelWithDebInfo``, ``MinSizeRel``, or empty for none of the above.
      - ``Debug``
