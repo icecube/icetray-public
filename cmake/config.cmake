@@ -288,8 +288,27 @@ if(APPLE)
 endif(APPLE)
 
 colormsg("")
-colormsg(_HIBLUE_ "Setting compiler and compile drivers")
+colormsg(_HIBLUE_ "Setting compiler, compile drivers, and linker")
 colormsg("")
+
+#
+#  gold
+#
+find_program(GOLD_PROGRAM gold)
+if(GOLD_PROGRAM)
+  message(STATUS "gold linker found at ${GOLD_PROGRAM}")
+
+  option(USE_GOLD "Use gold linker" OFF)
+  if(USE_GOLD)
+    if(GOLD_PROGRAM)
+      set(CMAKE_LINKER ${GOLD_PROGRAM} CACHE FILEPATH "Our linker" FORCE)
+    else(GOLD_PROGRAM)
+      message(STATUS "USE_GOLD enabled, but gold linker not found: disabling.")
+    endif(GOLD_PROGRAM)
+  endif(USE_GOLD)
+else(GOLD_PROGRAM)
+  message(STATUS "gold linker not found")
+endif(GOLD_PROGRAM)
 
 #
 #  distcc
