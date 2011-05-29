@@ -154,7 +154,8 @@ I3Vectors; plain vector and map will do.
 I3Bool and I3Double are two other good examples of classes that exist
 only to contain data such that they are storable in the frame.
 
-== I3Frame::Put() ==
+I3Frame::Put()
+^^^^^^^^^^^^^^
 
 Put() will succeed if no object exists in the frame at the requested
 key. If something already does, Put() throws an exception via a call
@@ -240,9 +241,7 @@ I3Frame::Get<T>()
 This function:
 
  * Verifies that some object exists at the location requested
-
  * Verifies that the object there is actually of the type requested
-
  * Returns a const reference or const shared_ptr to the object,
    depending on the arguments passed.
 
@@ -253,6 +252,7 @@ Getting a reference
 ^^^^^^^^^^^^^^^^^^^
 
 ::
+
  template <typename T>
  const T& 
  I3Frame::Get(const std::string& key);
