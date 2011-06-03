@@ -31,6 +31,7 @@
 #include <icetray/IcetrayFwd.h>
 #include <icetray/I3DefaultName.h>
 #include <icetray/serialization.h>
+#include <icetray/is_shared_ptr.h>
 
 /**
  * @brief This class holds the configuration.
@@ -80,8 +81,21 @@ public:
   std::string
   GetDescription(const std::string& name) const;
 
+  /**
+   * This allows NoneType on the python side 
+   * to translate to a Null pointer on the C++ side 
+   */
   template <typename T>
-  T
+    typename boost::enable_if<is_shared_ptr<T>, T>::type
+  Get(const std::string& name) const
+  {
+    boost::python::object obj(Get(name));
+    if(obj.ptr() == Py_None) return T();
+    return boost::python::extract<T>(obj);
+  }
+
+  template <typename T>
+    typename boost::disable_if<is_shared_ptr<T>, T>::type
   Get(const std::string& name) const
   {
     boost::python::object obj(Get(name));

@@ -39,6 +39,7 @@ void register_I3Context();
 void register_I3Configuration();
 void register_I3ModuleFactory();
 void register_std_cont_pod();
+void register_MyService();
 
 using namespace boost::python;
 
@@ -104,6 +105,7 @@ BOOST_PYTHON_MODULE(icetray)
   register_I3Bool();
   register_I3Int();
   register_logging();
+  register_MyService();
 
 }
 

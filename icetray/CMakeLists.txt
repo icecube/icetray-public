@@ -74,7 +74,8 @@ set(ICETRAY_PYTHON_SRC
   private/pybindings/I3ModuleFactory.cxx
   private/pybindings/I3FrameObject.cxx
   private/pybindings/I3TrayInfo.cxx
-  private/pybindings/std_cont_pod.cxx)
+  private/pybindings/std_cont_pod.cxx
+  private/pybindings/MyService.cxx)
 
 if (NOT ${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
   # On FreeBSD, the backtrace facility is in a separate library.
@@ -136,6 +137,8 @@ i3_add_library(icetray
   private/modules/Get.cxx              
   private/modules/FrameCheck.cxx               
   private/modules/AllParametersModule.cxx
+  private/modules/ContextFreeServiceTestModule.cxx
+  private/modules/MaintainInitialValuesModule.cxx
 
   ${ICETRAY_PYTHON_SRC}
 
@@ -197,7 +200,7 @@ i3_test_executable(test
   private/test/OMKey.cxx
   private/test/I3ConditionalModuleTest.cxx
   private/test/NoOutboxModule.cxx
-
+ 
   USE_TOOLS root
   USE_PROJECTS icetray)
 
