@@ -320,9 +320,15 @@ public:
     try {
       value = configuration_.Get<T>(name);
     } catch (...) {
-      log_error("Error in %s module '%s', getting parameter '%s'",
-		I3::name_of(typeid(*this)).c_str(), GetName().c_str(), name.c_str());
-      throw;
+      try {
+        std::string context_name = configuration_.Get<std::string>(name);
+        value = context_.Get<T>(context_name);
+      } catch (...) {
+        log_error("Error in %s module '%s', getting parameter '%s'",
+		I3::name_of(typeid(*this)).c_str(), GetName().c_str(),
+                name.c_str());
+        throw;
+      }
     } 
   }
 

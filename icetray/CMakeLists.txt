@@ -187,6 +187,7 @@ i3_test_executable(test
   private/test/FrameAccess.cxx         
   private/test/VectorParameters.cxx
   private/test/FrameFlow.cxx           
+  private/test/ModuleGetService.cxx  
   private/test/ModuleParameterConversions.cxx  
   private/test/main.cxx
   private/test/I3ContextTest.cxx               

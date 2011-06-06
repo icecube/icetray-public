@@ -148,8 +148,20 @@ public:
   typename boost::disable_if<boost::is_const<T>, void>::type
   GetParameter(const std::string& name, T& value) const
   {
-    boost::python::object obj(context_.Get<I3Configuration>().Get(name));
-    value = boost::python::extract<T>(obj);
+    I3Configuration &config = context_.Get<I3Configuration>();
+    try {
+      value = config.Get<T>(name);
+    } catch (...) {
+      try {
+        std::string context_name = config.Get<std::string>(name);
+        value = context_.Get<T>(context_name);
+      } catch (...) {
+        log_error("Error in %s service '%s', getting parameter '%s'",
+                I3::name_of(typeid(*this)).c_str(), GetName().c_str(),
+                name.c_str());
+        throw;
+      }
+    }
   }
 
   const std::string GetName() const { return name_; }
