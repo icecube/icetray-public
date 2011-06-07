@@ -68,6 +68,10 @@ QConverter::Configure()
 
 void
 QConverter::Physics(I3FramePtr frame) {
+	// Purge any extraneous Q elements from this P frame left over
+	// from side effects of our subterfuge on I3Reader's frame cache
+	frame->purge(I3Frame::DAQ);
+
 	// Reassign special frame objects' stops from P -> Q
 	for (I3Frame::typename_iterator iter = frame->typename_begin();
 	    iter != frame->typename_end(); iter++) {
