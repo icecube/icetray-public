@@ -37,8 +37,8 @@ void Remix::Process()
 
 	cache_->purge(frame->GetStop());
 	frame->purge();
-	cache_->merge(*frame);
 	frame->merge(*cache_);
+	cache_->merge(*frame);
 
 	PushFrame(frame);
 }
