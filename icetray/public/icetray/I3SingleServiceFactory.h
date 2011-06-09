@@ -4,18 +4,14 @@
 /*
  * @file
  *
- * Version $Id: I3SingleServiceFactory.h 36270 2007-08-31 21:20:32Z boersma $
- * $Date: 2007-08-31 16:20:32 -0500 (Fri, 31 Aug 2007) $
- *
- * This utility not directly essential to Gulliver. If it is deemed
- * useful for other projects, then this should be incorporated into
- * e.g. icetray or into some separate project.
+ * Version $Id$
+ * $Date$
  *
  * (c) IceCube Collaboration 2007
  */
 
+#include <icetray/I3ServiceFactory.h>
 #include <string>
-#include "icetray/I3ServiceFactory.h"
 
 /**
  * @class I3SingleServiceFactory

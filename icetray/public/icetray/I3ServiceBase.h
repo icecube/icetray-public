@@ -26,8 +26,6 @@
  * to specific values. The former is for regular icetray usage through
  * python scripts, the latter makes it easier to write unit tests.
  *
- * @todo This is not gulliver-specific. If it's a good idea, it should move to a more central project.
- *
  * @sa I3ServiceFactory, I3SingleServiceFactory, I3MultiServiceFactory
  */
 
