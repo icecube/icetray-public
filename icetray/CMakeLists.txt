@@ -164,7 +164,7 @@ set_source_files_properties(${ICETRAY_PYTHON_SRC}
 i3_executable(inspect 
   private/inspect/*.cxx
   USE_PROJECTS icetray
-  USE_TOOLS log4cplus boost root)
+  USE_TOOLS log4cplus boost)
 
 i3_test_executable(test 
   private/test/CleanConstructorTest.cxx  
@@ -202,8 +202,8 @@ i3_test_executable(test
   private/test/OMKey.cxx
   private/test/I3ConditionalModuleTest.cxx
   private/test/NoOutboxModule.cxx
+  private/test/iostreams.cxx
  
-  USE_TOOLS root
   USE_PROJECTS icetray)
 
 i3_test_compile(main private/test/main.cxx)
