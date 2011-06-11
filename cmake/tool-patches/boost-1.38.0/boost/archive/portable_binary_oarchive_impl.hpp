@@ -60,16 +60,12 @@ namespace boost {
 	: basic_binary_oprimitive<Archive, Elem, Tr>(bsb, 0 != (flags & no_codecvt)),
 	  basic_binary_oarchive<Archive>(flags)
       { }
-      //        init(flags);
-      //      }
 
       portable_binary_oarchive_impl(std::basic_ostream<Elem, Tr> & os, 
 				    unsigned int flags) 
 	: basic_binary_oprimitive<Archive, Elem, Tr>(* os.rdbuf(), 0 != (flags & no_codecvt)),
 	  basic_binary_oarchive<Archive>(flags)
       { }
-      //        init(flags);
-      //      }
 
       template<class T>
       void 
@@ -114,24 +110,26 @@ namespace boost {
       void save_override(const std::string & s, BOOST_PFTO int)
       {
 	uint32_t l = static_cast<uint32_t>(s.size());
-	this->save(l); // gets swapped inside save()
-	this->save_binary(s.data(), l);
+	portable_binary_archive::swap(l);
+	this->save(l); 
+	this->save_binary(s.data(), s.size());
       }
 
       void save_override(const boost::serialization::collection_size_type& t, BOOST_PFTO int)
       {
 	uint32_t l = t;
+	portable_binary_archive::swap(l);
 	this->save(l);
       }
 
-      /*
       void save_override(const class_name_type & s, BOOST_PFTO int)
       {
-	uint32_t l = static_cast<uint32_t>(s.size());
-	this->save(l); // gets swapped inside save()
-	this->save_binary(s.data(), l);
+	std::string cn(s.t);
+	uint32_t l = static_cast<uint32_t>(cn.size());
+	portable_binary_archive::swap(l);
+	this->save(l); 
+	this->save_binary(cn.data(), cn.size());
       }
-      */
     };
 
   }
