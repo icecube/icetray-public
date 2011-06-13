@@ -887,4 +887,4 @@ template bool I3Frame::load(ifstream& is, const vector<string>&);
 
 template void I3Frame::save(io::filtering_ostream&, const vector<string>&) const;
 template void I3Frame::save(ostream&, const vector<string>&) const;
-template void I3Frame::save(ofstream&, const vector<string>&) const;
+template void I3Frame::save(ofstream&, const std::vector<string>&) const;
