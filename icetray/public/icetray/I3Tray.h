@@ -149,7 +149,6 @@ public:
    * @param fromModule the name to associated with the OutBox's module.
    * @param fromOutBox the name of the OutBox.
    * @param toModule the name to associated with the InBox's module.
-   * @param toInBox the name of the InBox.
    */
   bool ConnectBoxes(const std::string& fromModule,
 		    const std::string& fromOutBox,

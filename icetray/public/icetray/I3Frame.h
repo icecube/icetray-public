@@ -287,6 +287,7 @@ class I3Frame
    * object...  e.g. there might be multiple I3Particles stored at
    * different names like "linefit" and "dipolefit", and there might
    * be only one I3Geometry stored at "I3Geometry".
+   * @param quietly Be quiet or not
    * @return shared_ptr<const T::value_type>.  That is, if Get is
    * called as Get<shared_ptr<const T> >(name), or the equivalent
    * Get<I3SomethingConstPtr>(name), this function returns
@@ -339,6 +340,7 @@ class I3Frame
    * @param name Where to put it.
    * @param element What to put in there. 
    * Must be a shared_ptr to something that inherits from I3FrameObject.
+   * @param stream The stream to act on.
    * @returns Nothing.
    * @throw If something exists already in the frame at key <VAR>name</VAR>,
    * this function will throw via log_fatal.

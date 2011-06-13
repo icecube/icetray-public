@@ -44,8 +44,8 @@ class I3IcePickInstaller : public I3ServiceFactory
    * @brief The constructer.  The context is then passed to the 
    * constructer of the I3IcePick object being installed
    *
-   * @param servicename_ is the name for where the I3IcePick should
-   * be installed in the context
+   * @param context the I3Context where the I3IcePick should
+   * be installed
    */
   I3IcePickInstaller(const I3Context& context) :
     I3ServiceFactory(context),

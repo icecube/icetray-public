@@ -121,7 +121,6 @@ public:
      @param parameter the name of the parameter.
      @param description a desciption of the parameter to the users.
      @param defaultValue the default value of the parameter.
-     @param constraint an object used to constrain the parameter.
      @return void
 
      Values are converted to/from strings by boost::lexical_cast<>

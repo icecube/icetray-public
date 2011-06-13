@@ -43,7 +43,7 @@ class I3OpNewServiceFactory : public I3ServiceFactory
   /**
    * Installs this objects service into the specified services object.
    *
-   * @param services the I3Services into which the service should be installed.
+   * @param context the I3Context into which the service should be installed.
    * @return true if the services is successfully installed.
    */
   virtual 
