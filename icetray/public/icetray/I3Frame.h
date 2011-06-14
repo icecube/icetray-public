@@ -331,6 +331,10 @@ class I3Frame
       log_fatal("object in frame at \"%s\" doesn't exist "
                 "or won't dynamic cast to type \"%s\"",
                 name.c_str(), I3::name_of<T>().c_str());
+    else if (sp_t.unique())
+      log_fatal("cannot get synthetic frame object \"%s\" (\"%s\") "
+                "by reference, only by shared pointer",
+                name.c_str(), I3::name_of<T>().c_str());
     else
       return *sp_t;
   }
