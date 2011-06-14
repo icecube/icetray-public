@@ -22,6 +22,7 @@ class QConverter : public I3Module
 		std::string subevent_stream;
 		std::vector<std::string> keys_to_q;
 		std::vector<std::string> types_to_q;
+		bool output_p_frame;
 };
 
 I3_MODULE(QConverter);
@@ -55,7 +56,12 @@ QConverter::QConverter(const I3Context& context) :
 	types_to_q.push_back("I3Vector<I3MMCTrack>");
 	AddParameter("QTypes", "Types of keys to move to the Q frame",
 	    types_to_q);
-
+	
+	output_p_frame = true;
+	AddParameter("WritePFrame", "If False, P frames are converted into Q"
+	    "frames without the creation of P frames",
+	    output_p_frame);
+	
 	AddOutBox("OutBox");
 }
 
@@ -64,6 +70,7 @@ QConverter::Configure()
 {
 	GetParameter("QKeys", keys_to_q);
 	GetParameter("QTypes", types_to_q);
+	GetParameter("WritePFrame", output_p_frame);
 }
 
 void
@@ -91,13 +98,16 @@ QConverter::Physics(I3FramePtr frame) {
 	daq->SetStop(I3Frame::DAQ);
 	daq->purge(I3Frame::Physics);
 	PushFrame(daq);
-
-	// Rewrite event header in P frame
-	I3EventHeaderPtr header(new I3EventHeader(frame->Get<I3EventHeader>()));
-	header->SetSubEventStream(subevent_stream);
-	header->SetSubEventID(0);
-	frame->Delete("I3EventHeader");
-	frame->Put("I3EventHeader", header);
-	PushFrame(frame);
+	
+	if(output_p_frame) {
+		// Rewrite event header in P frame
+		I3EventHeaderPtr header(new
+		    I3EventHeader(frame->Get<I3EventHeader>()));
+		header->SetSubEventStream(subevent_stream);
+		header->SetSubEventID(0);
+		frame->Delete("I3EventHeader");
+		frame->Put("I3EventHeader", header);
+		PushFrame(frame);
+	}
 }
 
