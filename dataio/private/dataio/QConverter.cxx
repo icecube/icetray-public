@@ -35,6 +35,7 @@ QConverter::QConverter(const I3Context& context) :
 	keys_to_q.push_back("DrivingTime");
 	keys_to_q.push_back("CorsikaWeightMap");
 	keys_to_q.push_back("I3MCTree");
+	keys_to_q.push_back("I3MCTreeGen");
 	keys_to_q.push_back("I3MCWeightDict");
 	keys_to_q.push_back("CalibratedATWD");
 	keys_to_q.push_back("CalibratedFADC");
