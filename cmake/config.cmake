@@ -313,7 +313,9 @@ if(NOT APPLE)
     message(STATUS "gold linker not found")
   endif(GOLD_PROGRAM)
 else(NOT APPLE)
-  message(STATUS "USE_GOLD enabled, but gold does not support linking on Apple: disabling.")
+  if(USE_GOLD)
+    message(STATUS "USE_GOLD enabled, but gold does not support linking on Apple: disabling.")
+  endif(USE_GOLD)
 endif(NOT APPLE)
 
 #
