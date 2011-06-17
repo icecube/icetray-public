@@ -2,7 +2,11 @@ colormsg("")
 colormsg(HICYAN "libarchive")
 
 find_package(PkgConfig)
-pkg_check_modules(PC_LA QUIET libarchive)
+if(${CMAKE_VERSION} VERSION_LESS "2.8.2")
+  pkg_check_modules(PC_LA libarchive)
+else(${CMAKE_VERSION} VERSION_LESS "2.8.2")
+  pkg_check_modules(PC_LA QUIET libarchive)
+endif(${CMAKE_VERSION} VERSION_LESS "2.8.2")
 
 find_library(LIBARCHIVE_LIBRARIES archive
              HINTS ${I3_PORTS}/lib
