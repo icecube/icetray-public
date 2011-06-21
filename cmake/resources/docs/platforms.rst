@@ -12,9 +12,23 @@ Apple Mac OS X
 MacPorts
 """"""""
 
-If you use MacPorts to manage your "extra" system tools, like
-subversion, then take caution.  After you have "source env.sh", your
-$PATH variable is updated so that $I3_PORTS/bin is first. So:
+Do Not Use MacPorts
+...................
+
+MacPorts (and Fink, and Homebrew, etc) can cause all sorts of
+mismatched library issues. The IceCube software is designed for and
+tested against Apple OS X systems without 3rd party package
+managers. They cause major headaches and (when it comes to IceCube)
+are more trouble than they are worth.
+
+But I Want To Pull Out My Hair, Get An Ulcer, Break My Chair And Possibly Kick A Puppy
+......................................................................................
+
+If you do use a 3rd party package manager, and something breaks, you
+will be directed to the above paragaph and told to remove it. That
+being said, if you want to continue, then take caution.  After you
+have "source env.sh", your $PATH variable is updated so that
+$I3_PORTS/bin is first. So:
 
 * Always explicitly run $I3_PORTS/bin/port (never let it come from
   your path).
