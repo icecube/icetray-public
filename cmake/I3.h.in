@@ -94,6 +94,8 @@ using scitbx::boost_python::container_conversions::variable_capacity_policy;
 #endif
 
 #ifdef __APPLE_CC__
+// HACK: included early here to prevent typedef collisions with socklen_t
+#include <sys/socket.h>
 #  define _GLIBCPP_USE_C99 1
 #  define _GLIBCXX_USE_C99 1
 #  define M_PIl          3.1415926535897932384626433832795029L  /* pi */
