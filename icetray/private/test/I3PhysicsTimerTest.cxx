@@ -8,6 +8,9 @@
 #include <icetray/I3Tray.h>
 #include <icetray/Utility.h>
 
+#include <sstream>
+#include <iomanip>
+
 TEST_GROUP(I3PhysicsTimer);
 
 void 
@@ -26,12 +29,23 @@ void timed_sleep(I3FramePtr frame, const std::string name, unsigned sec, unsigne
   const I3RUsage& rusage = frame->Get<I3RUsage>(name + "_rusage");
 
   double mintime = (double) sec * I3Units::second + (double) usec * I3Units::microsecond;
-  ENSURE(rusage.wallclocktime >= mintime);
+  // on the mac, under load, wallclocktime can actually come up short.
+  // so we build in a small tolerance
+#ifdef __APPLE_CC__
+  if (sec >= 2) {
+    mintime = mintime - 50000;
+  }
+#endif
+  std::stringstream s;
+  s << "rusage.wallclocktime: " << setiosflags(std::ios::fixed) << rusage.wallclocktime << std::endl << "\t\t\t\t" << "mintime: " << mintime ;
+  ENSURE(rusage.wallclocktime >= mintime, (const std::string) s.str());
 
   // we can't be sure of the accuracy of this from host to host, it
   // depends on hardware.  Set a *really* sloppy tolerance.
   double maxtime = mintime + 0.5 * I3Units::second;
-  ENSURE(rusage.wallclocktime <= maxtime);
+  s.str(std::string());
+  s << "rusage.wallclocktime: " << setiosflags(std::ios::fixed) << rusage.wallclocktime << std::endl << "\t\t\t\t" << "maxtime: " << maxtime ;
+  ENSURE(rusage.wallclocktime <= maxtime, (const std::string) s.str());
   log_trace("%us %uus => %f", sec, usec, rusage.wallclocktime);
 
 }
