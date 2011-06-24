@@ -168,7 +168,6 @@ macro(i3_add_library THIS_LIB_NAME)
     set_target_properties(${THIS_LIB_NAME}
       PROPERTIES
       DEFINE_SYMBOL PROJECT=${PROJECT_NAME}
-      COMPILE_FLAGS ${WARNING_FLAGS}
       )
 
     add_custom_command(TARGET ${THIS_LIB_NAME}
@@ -429,7 +428,7 @@ macro(i3_executable THIS_EXECUTABLE_NAME)
     set_target_properties(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME}
       PROPERTIES
       DEFINE_SYMBOL PROJECT=${PROJECT_NAME}
-      COMPILE_FLAGS "${WARNING_FLAGS} ${THIS_I3H_FLAGS}"
+      COMPILE_FLAGS "${THIS_I3H_FLAGS}"
       )
     if(APPLE)
       set_target_properties(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME}
@@ -489,7 +488,7 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
 
     set_source_files_properties(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES}
       PROPERTIES
-      COMPILE_FLAGS "-include ${I3_UBER_HEADER} ${WARNING_FLAGS}"
+      COMPILE_FLAGS "-include ${I3_UBER_HEADER}"
       )
 
     file( TO_NATIVE_PATH "${TEST_DRIVER}" NATIVE_TEST_DRIVER )
@@ -577,7 +576,7 @@ macro(i3_add_pybindings MODULENAME)
       PREFIX ""
       OUTPUT_NAME ${MODULENAME}
       DEFINE_SYMBOL I3_PYBINDINGS_MODULE
-      COMPILE_FLAGS "-include ${I3_UBER_HEADER} ${WARNING_FLAGS} -I${CMAKE_SOURCE_DIR}/boost/public"
+      COMPILE_FLAGS "-include ${I3_UBER_HEADER} -I${CMAKE_SOURCE_DIR}/boost/public"
       LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}/icecube
       )
 
