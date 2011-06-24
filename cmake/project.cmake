@@ -1,22 +1,22 @@
 #
 #  $Id$
-#  
+#
 #  Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
 #  and the IceCube Collaboration <http://www.icecube.wisc.edu>
-#  
+#
 #  This file is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation; either version 3 of the License, or
 #  (at your option) any later version.
-#  
+#
 #  This program is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
-#  
+#
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
-#  
+#
 #
 # rootcint() handles root dictionary generation
 #
@@ -70,7 +70,7 @@ else(NOT USE_CINT)
     add_custom_command(
       OUTPUT ${TARGET}
       DEPENDS ${ARG_LINKDEF} ${ROOTCINT_HEADERS}
-      COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh 
+      COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh
       # rootcint found and ROOTSYS set in env-shell.sh path
       ARGS rootcint -f ${TARGET} -c -DI3_USE_ROOT -DI3_USE_CINT ${ROOTCINT_INCLUDE_FLAGS} -p ${I3_UBER_HEADER} ${ROOTCINT_HEADERS} ${ROOTINTERNAL_HEADERS} ${ARG_LINKDEF}
       COMMENT "Generating ${TARGET} with rootcint"
@@ -109,7 +109,7 @@ endmacro(use_projects THIS_TARGET)
 macro(i3_add_library THIS_LIB_NAME)
   if (BUILD_${I3_PROJECT})
     #
-    # Grrr...  this *_ARGS variable has to be unique to the project, otherwise 
+    # Grrr...  this *_ARGS variable has to be unique to the project, otherwise
     # if you have two instances of i3_add_library the second will include the
     # parsed arg values from the first.
     #
@@ -133,10 +133,10 @@ macro(i3_add_library THIS_LIB_NAME)
 	set(LINKDEF_FILE "NOTFOUND")
       endif()
     endif(${THIS_LIB_NAME}_ARGS_ROOTCINT)
-    
+
     if (LINKDEF_FILE AND ${THIS_LIB_NAME}_ARGS_ROOTCINT AND USE_CINT)
 
-      set (DICTIONARY_SOURCEFILE 
+      set (DICTIONARY_SOURCEFILE
 	${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${THIS_LIB_NAME}Dict.cxx)
 
       set (${THIS_LIB_NAME}_ARGS_SOURCES ${${THIS_LIB_NAME}_ARGS_SOURCES} ${DICTIONARY_SOURCEFILE})
@@ -156,7 +156,7 @@ macro(i3_add_library THIS_LIB_NAME)
     endif (${THIS_LIB_NAME}_ARGS_EXCLUDE_FROM_ALL)
     if (${THIS_LIB_NAME}_ARGS_MODULE)
        set(ARGS ${ARGS} MODULE)
-    endif (${THIS_LIB_NAME}_ARGS_MODULE)	       			
+    endif (${THIS_LIB_NAME}_ARGS_MODULE)
 
 
     add_library(${THIS_LIB_NAME} ${ARGS} ${${THIS_LIB_NAME}_ARGS_SOURCES})
@@ -177,8 +177,8 @@ macro(i3_add_library THIS_LIB_NAME)
 
     if(APPLE)
       set_target_properties(${THIS_LIB_NAME}
-	PROPERTIES 
-	LINK_FLAGS "-single_module -undefined dynamic_lookup -flat_namespace" 
+	PROPERTIES
+	LINK_FLAGS "-single_module -undefined dynamic_lookup -flat_namespace"
 	)
     endif(APPLE)
 
@@ -194,7 +194,7 @@ macro(i3_add_library THIS_LIB_NAME)
 	COMPILE_FLAGS ${${THIS_LIB_NAME}_ARGS_COMPILE_FLAGS}
 	)
     endif(${THIS_LIB_NAME}_ARGS_COMPILE_FLAGS)
-      
+
     if (${THIS_LIB_NAME}_ARGS_LINK_LIBRARIES)
       target_link_libraries(${THIS_LIB_NAME} ${${THIS_LIB_NAME}_ARGS_LINK_LIBRARIES})
     endif (${THIS_LIB_NAME}_ARGS_LINK_LIBRARIES)
@@ -212,19 +212,19 @@ macro(i3_add_library THIS_LIB_NAME)
 	INSPECTABLE TRUE)
     endif(${THIS_LIB_NAME}_ARGS_NOT_INSPECTABLE)
 
-    use_projects(${THIS_LIB_NAME} 
+    use_projects(${THIS_LIB_NAME}
       PROJECTS "${${THIS_LIB_NAME}_ARGS_USE_PROJECTS}"
       )
 
-    use_tools(${THIS_LIB_NAME} 
+    use_tools(${THIS_LIB_NAME}
       TOOLS "${${THIS_LIB_NAME}_ARGS_USE_TOOLS}"
       )
 
     if(NOT ${THIS_LIB_NAME}_ARGS_EXCLUDE_FROM_ALL)
       if(${THIS_LIB_NAME}_ARGS_INSTALL_DESTINATION)
-        install(TARGETS ${THIS_LIB_NAME} DESTINATION ${${THIS_LIB_NAME}_ARGS_INSTALL_DESTINATION}) 
+        install(TARGETS ${THIS_LIB_NAME} DESTINATION ${${THIS_LIB_NAME}_ARGS_INSTALL_DESTINATION})
       else(${THIS_LIB_NAME}_ARGS_INSTALL_DESTINATION)
-        install(TARGETS ${THIS_LIB_NAME} DESTINATION lib) 
+        install(TARGETS ${THIS_LIB_NAME} DESTINATION lib)
       endif(${THIS_LIB_NAME}_ARGS_INSTALL_DESTINATION)
     endif(NOT ${THIS_LIB_NAME}_ARGS_EXCLUDE_FROM_ALL)
 
@@ -271,7 +271,7 @@ macro(i3_add_library THIS_LIB_NAME)
 	PROPERTIES
 	INSTALL_RPATH_USE_LINK_PATH TRUE
 	)
-	
+
     endif(DPKG_INSTALL_PREFIX)
 
     boost_post_results(${PROJECT_NAME} ${THIS_LIB_NAME} build ${CMAKE_CURRENT_BINARY_DIR})
@@ -301,7 +301,7 @@ macro(i3_project PROJECT_NAME)
   if(BUILD_${I3_PROJECT})
 
     add_custom_target(${PROJECT_NAME}-doxygen)
-    
+
     i3_add_testing_targets()
 
     if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/resources)
@@ -316,7 +316,7 @@ macro(i3_project PROJECT_NAME)
       file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/project-doc-links")
       execute_process(COMMAND ln -fsn ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_DOCS_DIR} ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/project-doc-links/${PROJECT_NAME})
     endif(ARG_DOCS_DIR)
-    
+
     if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/public/${PROJECT_NAME} AND INSTALL_HEADERS)
       install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/public/${PROJECT_NAME}
 	DESTINATION include
@@ -328,9 +328,9 @@ macro(i3_project PROJECT_NAME)
 	colormsg(GREEN "+-- python [setuptools]")
 
 	#
-	# do the 'setup.py develop' 
+	# do the 'setup.py develop'
 	#
-	execute_process(COMMAND 
+	execute_process(COMMAND
 	  /usr/bin/env PYTHONPATH=${LIBRARY_OUTPUT_PATH}:$ENV{PYTHONPATH}
 	  ${PYTHON_EXECUTABLE} setup.py -q develop
 	  --install-dir ${LIBRARY_OUTPUT_PATH}
@@ -340,7 +340,7 @@ macro(i3_project PROJECT_NAME)
 
 	#
 	# Install targets
-	# 
+	#
 	add_custom_target(${PROJECT_NAME}-install-to-tarball
 	  /usr/bin/env PYTHONPATH=${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}/lib:$ENV{PYTHONPATH}
 	  ${PYTHON_EXECUTABLE} setup.py install
@@ -357,11 +357,11 @@ macro(i3_project PROJECT_NAME)
 	colormsg(GREEN "+-- python [symlinks]")
 
 	if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/__init__.py)
-	  message(FATAL_ERROR 
+	  message(FATAL_ERROR
 	    "Project ${PROJECT_NAME} has PYTHON_DIR specified, but the directory contains no file '__init__.py' and will be useless")
 	endif (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/__init__.py)
-	
-	if(NOT ARG_PYTHON_DEST) 
+
+	if(NOT ARG_PYTHON_DEST)
 	  set(ARG_PYTHON_DEST icecube/${PROJECT_NAME})
 	  string(REPLACE "-" "_" ARG_PYTHON_DEST "icecube/${PROJECT_NAME}")
 	endif(NOT ARG_PYTHON_DEST)
@@ -387,18 +387,18 @@ macro(i3_executable THIS_EXECUTABLE_NAME)
       "NO_PREFIX;WITHOUT_I3_HEADERS"
       ${ARGN}
       )
-    no_dotfile_glob(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES 
+    no_dotfile_glob(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES
       ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_DEFAULT_ARGS})
 
     if(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_NO_PREFIX)
-      set(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME 
+      set(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME
 	${THIS_EXECUTABLE_NAME})
     else(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_NO_PREFIX)
-      set(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME 
+      set(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME
 	${PROJECT_NAME}-${THIS_EXECUTABLE_NAME})
     endif(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_NO_PREFIX)
-    
-    add_executable(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME} 
+
+    add_executable(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME}
       ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES})
 
     boost_post_results(${PROJECT_NAME} ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME} build ${CMAKE_CURRENT_BINARY_DIR})
@@ -414,9 +414,9 @@ macro(i3_executable THIS_EXECUTABLE_NAME)
 
     add_dependencies(test ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME})
 
-    use_projects(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME} 
+    use_projects(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME}
       PROJECTS ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_USE_PROJECTS})
-    use_tools(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME} 
+    use_tools(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME}
       TOOLS "${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_USE_TOOLS}"
       )
 
@@ -450,7 +450,7 @@ endmacro(i3_executable THIS_EXECUTABLE_NAME)
 
 macro(i3_test_executable THIS_EXECUTABLE_NAME)
   if (BUILD_${I3_PROJECT})
-    
+
     parse_arguments(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}
       "USE_TOOLS;USE_PROJECTS;LINK_LIBRARIES"
       ""
@@ -460,7 +460,7 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
       ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_DEFAULT_ARGS}
       )
 
-    add_executable(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} 
+    add_executable(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
       EXCLUDE_FROM_ALL
       ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES}
       )
@@ -514,7 +514,7 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
 	foreach(unittest ${UNITTESTS})
 	  set(TESTNAME ${PROJECT_NAME}-test-${GROUPNAME}-${unittest}-run)
 	  set(THIS_TEST_PREFIX_ARGS
-	    ${PYTHON_EXECUTABLE} ${NATIVE_TEST_DRIVER} ${CMAKE_CURRENT_BINARY_DIR} run ${TESTNAME} 
+	    ${PYTHON_EXECUTABLE} ${NATIVE_TEST_DRIVER} ${CMAKE_CURRENT_BINARY_DIR} run ${TESTNAME}
 	    )
 
 	  file(APPEND ${THIS_TEST_UNIT_LIST} "${testable_file}/${unittest} ${THIS_TEST_PREFIX_ARGS} ${CMAKE_BINARY_DIR}/env-shell.sh ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} -s ${testable_file}/${unittest}\n")
@@ -546,7 +546,7 @@ configure_file(${CMAKE_SOURCE_DIR}/cmake/__init__.py.in
 configure_file(${CMAKE_SOURCE_DIR}/cmake/load_pybindings.py.in
   ${LIBRARY_OUTPUT_PATH}/icecube/load_pybindings.py
   COPYONLY)
-install(FILES ${LIBRARY_OUTPUT_PATH}/icecube/__init__.py 
+install(FILES ${LIBRARY_OUTPUT_PATH}/icecube/__init__.py
   ${LIBRARY_OUTPUT_PATH}/icecube/load_pybindings.py
   DESTINATION lib/icecube
   )
@@ -565,7 +565,7 @@ macro(i3_add_pybindings MODULENAME)
       NOT_INSPECTABLE
       MODULE
       )
-    
+
     add_custom_command(TARGET ${MODULENAME}-pybindings
       PRE_LINK
       COMMAND mkdir -p ${CMAKE_BINARY_DIR}/lib/icecube
@@ -586,9 +586,9 @@ macro(i3_add_pybindings MODULENAME)
 
     if(APPLE)
       set_target_properties(${MODULENAME}-pybindings
-	PROPERTIES 
-	LINK_FLAGS "-bundle -flat_namespace -undefined dynamic_lookup" 
-	#used to be here: -multiply_defined suppress 
+	PROPERTIES
+	LINK_FLAGS "-bundle -flat_namespace -undefined dynamic_lookup"
+	#used to be here: -multiply_defined suppress
 	)
     endif(APPLE)
   endif ()

@@ -1,22 +1,22 @@
 #
 #  $Id$
-#  
+#
 #  Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
 #  and the IceCube Collaboration <http://www.icecube.wisc.edu>
-#  
+#
 #  This file is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation; either version 3 of the License, or
 #  (at your option) any later version.
-#  
+#
 #  This program is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
-#  
+#
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
-#  
+#
 colormsg("")
 colormsg(_HIBLUE_ "IceCube Configuration starting")
 colormsg("")
@@ -80,7 +80,7 @@ endif(NOT IS_DIRECTORY $ENV{I3_PORTS})
 #  GCC_VERSION and
 #  GCC_NUMERIC_VERSION is e.g. 40302 (for 4.3.2)
 #
-execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion 
+execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
   COMMAND tr -d \\n
   OUTPUT_VARIABLE GCC_VERSION)
 numeric_version(${GCC_VERSION} "gcc")
@@ -118,16 +118,16 @@ endif (USE_PYTHON_LOGGING)
 set(NOTES_DIR ${CMAKE_BINARY_DIR}/Testing/Notes)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/Testing/Notes)
 
-execute_process(COMMAND svn info ${CMAKE_SOURCE_DIR} 
+execute_process(COMMAND svn info ${CMAKE_SOURCE_DIR}
   OUTPUT_FILE ${NOTES_DIR}/svn_info.txt)
 
-execute_process(COMMAND /usr/bin/env 
+execute_process(COMMAND /usr/bin/env
   OUTPUT_FILE ${NOTES_DIR}/env.txt)
 
-execute_process(COMMAND uname -a 
+execute_process(COMMAND uname -a
   OUTPUT_FILE ${NOTES_DIR}/uname.txt)
 
-execute_process(COMMAND ${CMAKE_CXX_COMPILER} --version 
+execute_process(COMMAND ${CMAKE_CXX_COMPILER} --version
   OUTPUT_FILE ${NOTES_DIR}/compiler-version.txt)
 
 #
@@ -157,9 +157,9 @@ boost_report_value(BUILDNAME)
 set(TOOLSET "gcc-${GCC_VERSION}/${ARCH}/${CMAKE_BUILD_TYPE}" CACHE INTERNAL "toolset")
 
 #
-#  Get HOSTNAME 
+#  Get HOSTNAME
 #
-execute_process(COMMAND hostname 
+execute_process(COMMAND hostname
   COMMAND tr -d \\n
   OUTPUT_VARIABLE HOSTNAME)
 boost_report_value(HOSTNAME)
@@ -187,7 +187,7 @@ option(USE_SVN_REVISION_FLAGS "Add compiled-in svn revision information." ON)
 
 if(NOT HAVE_SVN_REVISION)
   set(HAVE_SVN_REVISION TRUE CACHE INTERNAL "flag")
-  execute_process(COMMAND ${SVN_EXECUTABLE} info ${CMAKE_SOURCE_DIR} 
+  execute_process(COMMAND ${SVN_EXECUTABLE} info ${CMAKE_SOURCE_DIR}
     COMMAND awk "/^Revision:/ { printf $2 }"
     OUTPUT_VARIABLE SVN_REVISION
     ERROR_VARIABLE SVN_REVISION_ERROR)
@@ -212,7 +212,7 @@ endif(NOT HAVE_SVN_REVISION)
 #
 if(NOT HAVE_SVN_URL)
   set(HAVE_SVN_URL TRUE CACHE INTERNAL "flag")
-  execute_process(COMMAND ${SVN_EXECUTABLE} info ${CMAKE_SOURCE_DIR} 
+  execute_process(COMMAND ${SVN_EXECUTABLE} info ${CMAKE_SOURCE_DIR}
     COMMAND awk "/^URL:/ { printf $2 }"
     OUTPUT_VARIABLE SVN_URL)
 
@@ -350,8 +350,8 @@ if(CCACHE_PROGRAM)
   if(USE_CCACHE)
     if(CCACHE_PROGRAM)
       set(CMAKE_CXX_COMPILE_OBJECT "${CCACHE_PROGRAM} ${CMAKE_CXX_COMPILE_OBJECT}")
-      execute_process(COMMAND ${CCACHE_PROGRAM} -s 
-	OUTPUT_FILE ${NOTES_DIR}/ccache-s.txt 
+      execute_process(COMMAND ${CCACHE_PROGRAM} -s
+	OUTPUT_FILE ${NOTES_DIR}/ccache-s.txt
 	OUTPUT_VARIABLE NOWHERE)
     else(CCACHE_PROGRAM)
       message(STATUS "USE_CCACHE enabled, but ccache not found: disabling.")
@@ -380,7 +380,7 @@ endif(USE_GFILT)
 #
 #  For now, on gcc 4.3.2, add the -Wno-deprecated flag
 #
-if (GCC_NUMERIC_VERSION GREATER 40299) 
+if (GCC_NUMERIC_VERSION GREATER 40299)
   set(CXX_WARNING_SUPRESSION_FLAGS "-Wno-deprecated -Wno-parentheses"
     CACHE STRING "Warning supression flags for this compiler")
 endif (GCC_NUMERIC_VERSION GREATER 40299)
@@ -409,8 +409,8 @@ if(NOT METAPROJECT_CONFIGURED)
   message(STATUS "Setting default compiler flags and build type.")
 
   #
-  #  Check if it is defined...   if somebody has specified it on the 
-  #  cmake commmand line, e.g. 
+  #  Check if it is defined...   if somebody has specified it on the
+  #  cmake commmand line, e.g.
   #  cmake -DCMAKE_BUILD_TYPE:STRING=Debug, we need to use that value
   #
   if (NOT CMAKE_BUILD_TYPE)
@@ -425,7 +425,7 @@ if(NOT METAPROJECT_CONFIGURED)
   string(REPLACE "-Wno-non-virtual-dtor" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}" CACHE STRING
     "Flags used by the compiler during all build types" FORCE)
-  
+
   set(CMAKE_CXX_FLAGS_RELEASE "-O${RELOPTLEVEL} -Wno-unused-variable -DNDEBUG -DI3_OPTIMIZE")
   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}" CACHE STRING
     "Flags used by compiler during release builds" FORCE)
@@ -436,4 +436,4 @@ if(NOT METAPROJECT_CONFIGURED)
 
   set(METAPROJECT_CONFIGURED TRUE CACHE INTERNAL "Metaproject configured")
 endif(NOT METAPROJECT_CONFIGURED)
-  
+
