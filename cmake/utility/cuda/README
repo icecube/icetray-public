@@ -1,0 +1,8 @@
+This directory contains an SVN export of
+https://gforge.sci.utah.edu/svn/findcuda/tags/2.0/CMake/cuda.
+
+These files allow CMake versions less than 2.8.0 to find the CUDA SDK
+and utilities in order for the GPU accelerated version of 'ppc' to
+compile.
+
+This directory will go away, since CMake 2.8.0 has been out since 2009.
