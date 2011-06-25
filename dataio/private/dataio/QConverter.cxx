@@ -94,13 +94,22 @@ QConverter::Physics(I3FramePtr frame) {
 			frame->ChangeStream(*iter, I3Frame::DAQ);
 	}
 
+	// If there is no event header, reassign all keys to the Q frame,
+	// since we can't make a stub P frame
+	if (!frame->Has("I3EventHeader")) {
+		for (I3Frame::typename_iterator iter = frame->typename_begin();
+		    iter != frame->typename_end(); iter++)
+			frame->ChangeStream(iter->first, I3Frame::DAQ);
+	}
+
 	// Clone GCDQ bits to a new Q frame
 	I3FramePtr daq(new I3Frame(*frame));
 	daq->SetStop(I3Frame::DAQ);
 	daq->purge(I3Frame::Physics);
 	PushFrame(daq);
 	
-	if(output_p_frame) {
+	// Write remnant keys, if they exist and it was requested, to a stub P
+	if(output_p_frame && frame->Has("I3EventHeader")) {
 		// Rewrite event header in P frame
 		I3EventHeaderPtr header(new
 		    I3EventHeader(frame->Get<I3EventHeader>()));
