@@ -34,7 +34,7 @@ Table of Contents:
    scripting
    i3units
    newfeaturesv3
-   changes
+   newfeaturesv4
    I3Tray
    icecube.icetray
 

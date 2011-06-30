@@ -52,7 +52,7 @@ Why was it "removed"?
 =====================
 
 Like many things in **C++** (and especially **C**), the utility of
-``using`` is often outweighed by how much rope it gives you to hang
+``using`` is can be outweighed by how much rope it gives you to hang
 yourself. The most common issues with ``using`` relate to
 ::
 
@@ -71,7 +71,40 @@ on context. Sutter and Alexandrescu summarized it best:
   directives or **using** declarations; instead, explicitly
   namespace-qualify all names [*]_.
 
+At best, ``using namespace`` in header files encourages sloppy and
+lazy coding practices. At worst, it introduces bugs cause by namespace
+clashes or undefined behavior. In fact, in IceCube software, some
+subtle bugs were found and subsequently squashed during the ``using
+namespace`` removal.
+
 What does this mean for me?
 ===========================
 
-  .. [*] Section 59, Sutter and Alexnadrescu, C++ Coding Standards (101 Rules, Guidelines and Best Practices)
+In software that you use or may have written, you might run into an
+error similar to the following when compiling::
+
+  In file included from /Users/nega/i3/offline-software/src/icetray/private/icetray/I3Frame.cxx:40:
+  /Users/nega/i3/offline-software/src/icetray/public/icetray/I3Tray.h:95: error: ‘string’ does not name a type
+  /Users/nega/i3/offline-software/src/icetray/public/icetray/I3Tray.h: In constructor ‘I3Tray::param_setter::param_setter(I3Tray&, const std::string&)’:
+  /Users/nega/i3/offline-software/src/icetray/public/icetray/I3Tray.h:99: error: class ‘I3Tray::param_setter’ does not have any field named ‘module_name_’
+  /Users/nega/i3/offline-software/src/icetray/public/icetray/I3Tray.h: In copy constructor ‘I3Tray::param_setter::param_setter(const I3Tray::param_setter&)’:
+  /Users/nega/i3/offline-software/src/icetray/public/icetray/I3Tray.h:101: error: class ‘I3Tray::param_setter’ does not have any field named ‘module_name_’
+  /Users/nega/i3/offline-software/src/icetray/public/icetray/I3Tray.h:101: error: ‘const class I3Tray::param_setter’ has no member named ‘module_name_’
+  /Users/nega/i3/offline-software/src/icetray/public/icetray/I3Tray.h: In member function ‘I3Tray::param_setter& I3Tray::param_setter::operator()(const std::string&, T)’:
+  /Users/nega/i3/offline-software/src/icetray/public/icetray/I3Tray.h:107: error: ‘module_name_’ was not declared in this scope
+  make[3]: *** [icetray/CMakeFiles/icetray.dir/private/icetray/I3Frame.cxx.o] Error 1
+  make[2]: *** [icetray/CMakeFiles/icetray.dir/all] Error 2
+  make[1]: *** [icetray/CMakeFiles/icetray.dir/rule] Error 2
+  make: *** [icetray] Error 2
+
+The key here is the statement ``error: ‘string’ does not name a
+type``. On line 95 of the file ``icetray/public/icetray/I3Tray.h``,
+the type ``string`` was used instead of the correct type
+``std::string``.
+
+In software that you write for private use, you are free to do what
+you will (nobody is looking!), but for software you intend to share,
+please adhere to this guideline and avoid ``using namespace`` in your
+header files.
+
+  .. [*] Sutter, Herb & Alexnadrescu, Andrei. "Don't write namespace usings in a header file or before an #include." :t:`C++ Coding Standards`. Boston: Addison-Wesley, 2005. 108-110.
