@@ -153,6 +153,8 @@ I3Tray::AddModule(bp::object obj, const std::string& instancename)
 I3Tray::param_setter
 I3Tray::AddService(const std::string& classname, const std::string& instancename)
 { 
+  if(factory_contexts.find(instancename)!=factory_contexts.end())
+    log_fatal("More than one service added with the name '%s'",instancename.c_str());
   factories_in_order.push_back(instancename);
 
   log_trace("AddService %s %s", classname.c_str(), instancename.c_str());
