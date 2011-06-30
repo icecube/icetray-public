@@ -1,12 +1,22 @@
 .. _moving_to_v3_faq:
 
 Moving to IceTray v3 FAQ
-===============================================
+========================
 
 While we've made every effort to make the transition from
 older releases of IceTray to the V3 releases, there are a few 
 places where some adjustments to your projects and scripts will be
 needed.
+
+IceTray modules
+---------------
+
+I3Tray considers the first module added to be the 'driving' module.
+This should be a reader or generator, ie a module that does not access
+its outbox.  In the past the semantics of this were a little fuzzier
+as modules had a half-implemented scheme whereby they could add
+inboxes.  (At some point it was decided that modules may have one and
+only one inbox).
 
 Tool python must be explictly listed in USE_TOOLS
 -------------------------------------------------
@@ -18,12 +28,9 @@ flexibility.
 If you're getting an error like this::
 
  In file included from <command line>:5:
- /home/user/offline-trunk/build/CMakeFiles/I3.h:23:24: pyconfig.h: No such file
-   or directory
- In file included from /home/user/tools/include/boost-
-   1.38.0/boost/python/detail/prefix.hpp:13,
- from /home/user/tools/include/boost-
-   1.38.0/boost/python/extract.hpp:8, from
+ /home/user/offline-trunk/build/CMakeFiles/I3.h:23:24: pyconfig.h: No such file or directory
+ In file included from /home/user/tools/include/boost-1.38.0/boost/python/detail/prefix.hpp:13,
+ from /home/user/tools/include/boost-1.38.0/boost/python/extract.hpp:8, from
  /home/user/offline-trunk/src/icetray/public/icetray/I3Configuration.h:30, 
    from /home/user/offline-trunk/src/icetray/public/icetray/I3Module.h:32, from
  /home/user/offline-trunk/src/icetray/public/icetray/I3ConditionalModule.h:24,
