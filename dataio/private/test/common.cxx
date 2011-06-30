@@ -20,7 +20,7 @@
 #include <dataclasses/I3Position.h>
 #include <dataclasses/I3Time.h>
 #include <dataclasses/TriggerKey.h>
-#include <dataclasses/OMKey.h>
+#include <icetray/OMKey.h>
 
 #include "serialization-test.h"
 
