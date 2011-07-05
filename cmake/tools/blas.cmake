@@ -1,2 +1,2 @@
-set(BLA_STATIC BOOL FALSE)
+set(BLA_STATIC FALSE)
 find_package(BLAS)
