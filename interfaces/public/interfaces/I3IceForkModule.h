@@ -2,7 +2,7 @@
 #define INTERFACES_I3ICEFORKMODULE_H
 
 #include <icetray/I3Module.h>
-#include <dataclasses/I3Bool.h>
+#include <icetray/I3Bool.h>
 #include <icetray/I3Frame.h>
 
 /**
