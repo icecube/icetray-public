@@ -15,7 +15,7 @@
 #include <icetray/I3Logging.h>
 
 #include <dataclasses/I3Direction.h>		
-#include <dataclasses/I3Bool.h>
+#include <icetray/I3Bool.h>
 #include <dataclasses/I3Double.h>
 #include <dataclasses/I3Position.h>
 #include <dataclasses/I3Time.h>

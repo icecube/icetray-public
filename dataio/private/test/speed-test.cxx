@@ -12,7 +12,7 @@
 
 #include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
-#include <dataclasses/I3Bool.h>
+#include <icetray/I3Bool.h>
 #include <dataclasses/I3Double.h>
 #include <dataclasses/physics/I3Particle.h>
 #include <dataclasses/physics/I3Waveform.h>
