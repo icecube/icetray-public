@@ -17,7 +17,7 @@ detector global trigger. One or multiple views can be made into these data
 by using a splitter module to produce Physics frames following the DAQ frame.
 Using the mix-in mechanism for multiple streams, all the DAQ information (i.e.
 the readouts) is available to reconstructions also in the subevent frames,
-without duplication on disk. This allows lays the foundation laid
+without duplication on disk. This lays the foundation for
 introduction of other time-varying non-physics data (e.g. monitoring output
 like mainboard temperatures) into the data stream.
 
