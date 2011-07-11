@@ -47,6 +47,12 @@ I3PacketModule
   into which they have been split. This is intended for use by algorithms that
   need to make global decisions (e.g. a module that joins several subevents
   together) based on the entire set of events.
+
+Remix
+  A module that updates mixed-in contents of child P frames when their parent
+  Q frames are modified after the P frame was produced. This may be necessary
+  when redoing some kinds of calibration after event splitting -- this case,
+  and the use of this module, should be avoided whenever possible.
   
 
 Extended Classes
@@ -62,4 +68,11 @@ I3Frame
 
 I3Module
   Added additional stop type (DAQ).
+
+I3Writer
+  Add DropOrphanStreams option to remove parent frames with no children. For
+  example, one may want to discard DAQ frames where all child physics events
+  have been dropped; this can be done by setting
+  ``DropOrphanStreams=[icetray.I3Frame.DAQ]``. A similar procedure can be
+  used to drop redundant GCD frames.
 
