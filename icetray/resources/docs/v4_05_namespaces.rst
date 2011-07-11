@@ -65,7 +65,7 @@ on context. Sutter and Alexandrescu summarized it best:
 
   Namespace **using**\ s are for your convenience, not for you to inflict
   on others: Never write a **using** declaration or a **using** directive
-  before and **#include** directive.
+  before an **#include** directive.
 
   Corollary: In header files, don't write namespace-level **using**
   directives or **using** declarations; instead, explicitly

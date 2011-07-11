@@ -46,10 +46,11 @@ I3ServiceBase imported from Gulliver, changes to I3Module::GetParameter() to
 allow transparent use of named context services or direct python argument
 services.
 
-Miscellaneous Changed Things
-""""""""""""""""""""""""""""
+Miscellaneous Changes
+"""""""""""""""""""""
 - I3RecoHit deprecated, support removed from phys-services
-- I3Muxer removed, I3MetaSynth and I3InfiniteSource added
+- I3Muxer removed
+- I3MetaSynth and I3InfiniteSource added
 - TWR and F2K projects removed
 - I3RecoPulse has new fields and new, lighter-weight serialization
 - I3Waveform source information modified
