@@ -110,6 +110,7 @@ i3_add_library(icetray
   private/icetray/I3TrayInfo.cxx               
   private/icetray/I3TrayInfoService.cxx  
   private/icetray/I3IcePick.cxx        
+  private/icetray/I3PacketModule.cxx  
   ${I3_BACKTRACE_CXX}
   private/icetray/PythonInterpreter.cxx        
   private/icetray/PythonFunction.cxx           
