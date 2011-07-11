@@ -44,7 +44,7 @@ endif()
 #
 set(ALL_TOOLS pthread root boost python hippodraw
     rdmc expat gsl sprng sla libarchive blas lapack
-    mysql bdb log4cplus photonics ptd suitesparse
+    mysql bdb log4cplus photonics suitesparse
     ZThread omniORB fox jni ncurses
     cdk qt4 cfitsio hdf5 minuit2 clhep geant4
     ${I3_EXTRA_TOOLS}   # add the extra tools and dedupe
