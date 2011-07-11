@@ -43,14 +43,6 @@ Also see the `doxygen <../../doxygen/icetray/index.html>`_ docs.
 To Document
 -----------
 
-::
-
-  % python -c 'import icecube.dataclasses'
-  Traceback (most recent call last):
-    File "<string>", line 1, in <module>
-  RuntimeError: extension class wrapper for base class I3FrameObject has not been created yet
-
-
 * The "lazy frame"
 * Frame objects tagged with which stream they are on
 * frame printout
