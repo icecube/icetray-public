@@ -7,8 +7,6 @@
 #define ICETRAY_I3PACKETMODULE_H_INCLUDED
 
 #include <icetray/I3Module.h>
-#include <icetray/I3ConditionalModule.h>
-
 #include <vector>
 
 /**
@@ -20,25 +18,23 @@
  *
  */
 
-template<class Base>
-class I3PacketModuleBase : public Base
+class I3PacketModule : public I3Module
 {
 	public:
-		I3PacketModuleBase(const I3Context& context);
-		~I3PacketModuleBase();
+		I3PacketModule(const I3Context& context);
+		~I3PacketModule();
 
 		void Configure_();
 		void Process();
 		void Finish();
 
-		virtual void FramePacket(std::vector<I3FramePtr> &packet) = 0;
+		virtual void FramePacket(std::vector<I3FramePtr> &packet);
 
 	private:
 		I3Frame::Stream sentinel_;
 		std::vector<I3FramePtr> queue_;
+		boost::python::object if_;
 };
 
-typedef I3PacketModuleBase<I3Module> I3PacketModule;
-typedef I3PacketModuleBase<I3ConditionalModule> I3ConditionalPacketModule;
-
 #endif
+
