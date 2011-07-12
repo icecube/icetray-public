@@ -42,11 +42,12 @@ I3RecoPulseSeriesMapMask
   An object representing a subset of another I3RecoPulseSeriesMap.
 
 I3PacketModule
-  A base class (along with I3ConditionalPacketModule) for modules that want to
-  operate atomically on "packets" of DAQ frames followed by all of the subevents
-  into which they have been split. This is intended for use by algorithms that
-  need to make global decisions (e.g. a module that joins several subevents
-  together) based on the entire set of events.
+  A base class for modules that want to operate atomically on "packets" of DAQ
+  frames followed by all of the subevents into which they have been split.
+  This is intended for use by algorithms that need to make global decisions
+  (e.g. a module that joins several subevents together) based on the entire
+  set of events. Note that thought is required before implementing such a
+  module -- this is very rarely something you actually want to do.
 
 Remix
   A module that updates mixed-in contents of child P frames when their parent
