@@ -23,6 +23,7 @@
 
 #include <icetray/I3Module.h>
 #include <icetray/I3ConditionalModule.h>
+#include <icetray/I3PacketModule.h>
 #include <icetray/I3Logging.h>
 #include <icetray/I3TrayHeaders.h>
 #include <icetray/OMKey.h>
@@ -254,8 +255,21 @@ PythonModule<Base>::AddOutBox(const std::string& name)
   Base::AddOutBox(name);
 }
 
+template <>
+void 
+PythonModule<I3PacketModule>::FramePacket(std::vector<I3FramePtr> &frames)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  if (bp::override pkt = this->get_override("FramePacket"))
+    pkt(frames);
+  else
+    I3PacketModule::FramePacket(frames);
+}
+
+
 template class PythonModule<I3Module>;
 template class PythonModule<I3ConditionalModule>;
+template class PythonModule<I3PacketModule>;
 
 
 

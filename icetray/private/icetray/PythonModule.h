@@ -76,6 +76,9 @@ struct PythonModule : Base, boost::python::wrapper<Base>
   void AddOutBox(const std::string& name);
   I3FramePtr PopFrame();
 
+  // Just for I3PacketModule wrapper
+  void FramePacket(std::vector<I3FramePtr> &);
+
   SET_LOGGER("PythonModule");
 };
 

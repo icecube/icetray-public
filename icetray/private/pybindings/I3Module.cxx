@@ -1,6 +1,7 @@
 #include <boost/python.hpp>
 #include <icetray/I3Module.h>
 #include <icetray/I3ConditionalModule.h>
+#include <icetray/I3PacketModule.h>
 #include <icetray/PythonModule.h>
 
 using namespace boost::python;
@@ -58,6 +59,19 @@ namespace {
 
     implicitly_convertible<boost::shared_ptr<module_t>, boost::shared_ptr<I3Module> >();
   }
+
+  template <>
+  void 
+  wrapderivedmod<I3PacketModule>(const char *name)
+  {
+    typedef PythonModule<I3PacketModule> module_t;
+
+    class_<module_t, bases<PythonModule<I3Module> >,boost::shared_ptr<module_t>, boost::noncopyable>(name, init<const I3Context&>())
+      REGMODMETHODS
+      .def("FramePacket", &module_t::FramePacket);
+
+    implicitly_convertible<boost::shared_ptr<module_t>, boost::shared_ptr<I3Module> >();
+  }
 }
 
 //void fleh(boost::python::object obj)
@@ -71,4 +85,5 @@ void register_I3Module()
 {
   wrapmod<I3Module>("I3Module");
   wrapderivedmod<I3ConditionalModule>("I3ConditionalModule");
+  wrapderivedmod<I3PacketModule>("I3PacketModule");
 }
