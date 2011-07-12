@@ -189,4 +189,9 @@ void register_I3Frame()
     .def("__repr__", format_stream)
     .add_property("id", &I3Frame::Stream::id)
     ;
+
+  class_<std::vector<I3FramePtr> >("vector_I3Frame")
+    .def(vector_indexing_suite<std::vector<I3FramePtr>, true>())
+    ;
+  from_python_sequence<std::vector<I3FramePtr>, variable_capacity_policy>();
 }
