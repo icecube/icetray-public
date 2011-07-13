@@ -46,6 +46,13 @@ class I3IcePickModule : public I3Module
 		   "when the event passes the IcePick (as in the old reverse-Pretzian "
 		   "logic).  This ONLY affects the frame object output.",
 		   invertoutput_);
+
+      streams_.push_back(I3Frame::Physics);
+      AddParameter("Streams",
+                   "Frame stops on which to operate. All other stop types are "
+                   "ignored.",
+                   streams_);
+
       AddOutBox("OutBox");
     }
 
@@ -59,14 +66,27 @@ class I3IcePickModule : public I3Module
 		   nEventsToPick_);
       GetParameter("InvertFrameOutput",
 		   invertoutput_);
+      GetParameter("Streams", streams_);
+      if (streams_.size() == 0)
+          log_fatal("IcePick set to run on no frame types!");
       
       pick_.ConfigureInterface();
       number_Events_Picked = 0;
       number_Events_Tossed = 0;
     }
 
-  void Physics(I3FramePtr frame)
+  void Process()
     {
+      I3FramePtr frame = PopFrame();
+      if (!frame)
+          log_fatal("Icepicks are not driving modules.");
+
+      if (find(streams_.begin(), streams_.end(), frame->GetStop()) ==
+        streams_.end()) {
+          PushFrame(frame);
+          return;
+      }
+
       I3BoolPtr decision(new I3Bool(pick_.SelectFrameInterface(*frame)));
       if (decisionName_!="")
 	{
@@ -114,6 +134,7 @@ class I3IcePickModule : public I3Module
   int nEventsToPick_;
   int number_Events_Picked;
   int number_Events_Tossed;
+  std::vector<I3Frame::Stream> streams_;
   SET_LOGGER("I3IcePickModule");
 };
 
