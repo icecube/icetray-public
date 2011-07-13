@@ -96,7 +96,7 @@ QConverter::Physics(I3FramePtr frame) {
 
 	// If there is no event header, reassign all keys to the Q frame,
 	// since we can't make a stub P frame
-	if (!frame->Has("I3EventHeader")) {
+	if (!output_p_frame || !frame->Has("I3EventHeader")) {
 		for (I3Frame::typename_iterator iter = frame->typename_begin();
 		    iter != frame->typename_end(); iter++)
 			frame->ChangeStream(iter->first, I3Frame::DAQ);
