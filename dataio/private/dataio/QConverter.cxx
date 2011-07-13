@@ -76,9 +76,13 @@ QConverter::Configure()
 
 void
 QConverter::Physics(I3FramePtr frame) {
-	// Purge any extraneous Q elements from this P frame left over
-	// from side effects of our subterfuge on I3Reader's frame cache
-	frame->purge(I3Frame::DAQ);
+	// Cache non P and non Q keys, to be merged back in later
+	I3FramePtr gcdcache(new I3Frame(*frame));
+	gcdcache->purge(I3Frame::DAQ);
+	gcdcache->purge(I3Frame::Physics);
+
+	// Purge all non-native keys, so we don't reassign GCD keys
+	frame->purge();
 
 	// Reassign special frame objects' stops from P -> Q
 	for (I3Frame::typename_iterator iter = frame->typename_begin();
@@ -101,6 +105,9 @@ QConverter::Physics(I3FramePtr frame) {
 		    iter != frame->typename_end(); iter++)
 			frame->ChangeStream(iter->first, I3Frame::DAQ);
 	}
+
+	// Merge all the GCD bits back in
+	frame->merge(*gcdcache);
 
 	// Clone GCDQ bits to a new Q frame
 	I3FramePtr daq(new I3Frame(*frame));
