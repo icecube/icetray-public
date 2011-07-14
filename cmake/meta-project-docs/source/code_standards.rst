@@ -101,15 +101,15 @@ writing a macro that is a common word or abbreviation (including
 common template parameters such as T and U; writing ``#define T``
 *anything* is extremely disruptive.)
 
-Do *not* use complicated hungarian or the ROOT/Taligent-style
+Do *not* use complicated Hungarian or the ROOT/Taligent-style
 quasi-hungarian notation.  One of the main advantages of not using
 them, as Thomas Burgess observes, is that you can talk about the code
-in English as well as Hungarian.  fThey EJust fgMake MThe fCode
-EHarder kTO gRead.  The quasi-hungarian conventions are ten years old,
-and at the time the ROOT people appear to have chosen them only
-because at the time Taligent had "written the largest body of C++ and
-the rules seem well thought out.  No need to invent something else."
-(From http://root.cern.ch/root/Conventions.html, last updated 1999).
+in English as well as Hungarian.  ``"fThey EJust fgMake MThe fCode
+EHarder kTO gRead."`` The Hungarian styled conventions are over
+forty-five years old. When the ROOT people appear to have chosen that
+style, Taligent had "written the largest body of C++ and the rules
+seem well thought out.  No need to invent something else."  (From
+http://root.cern.ch/root/Conventions.html, last updated 1999).
 
 Icecube-specific classes take the prefix ``I3``.  The name should tell
 the reader something about the semantics of the variable, function or
