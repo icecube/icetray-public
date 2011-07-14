@@ -30,23 +30,23 @@ frame = i3f2.pop_frame(icetray.I3Frame.None)
 
 print frame
 assert frame
-stop =  frame.GetStop()
+stop =  frame.Stop
 assert stop.id == 'A'
 
 frame = i3f2.pop_frame()
 assert frame
 print frame
-assert frame.GetStop().id == 'B'
+assert frame.Stop.id == 'B'
 
 frame = i3f2.pop_frame(icetray.I3Frame.Stream('C'))
 assert frame
 print frame
-assert frame.GetStop().id == 'C'
+assert frame.Stop.id == 'C'
 
 frame = i3f2.pop_frame()
 assert frame
 print frame
-assert frame.GetStop().id == 'D'
+assert frame.Stop.id == 'D'
 
 
 

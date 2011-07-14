@@ -31,5 +31,5 @@ i3f.close()
 
 for frame in dataio.I3File("alphabet.i3"):
     print frame
-    assert frame.GetStop().id == streams[0]
+    assert frame.Stop.id == streams[0]
     streams = streams[1:]

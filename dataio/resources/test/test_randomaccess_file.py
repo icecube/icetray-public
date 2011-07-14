@@ -35,51 +35,51 @@ browsable_file.open_file('test.i3')
 frame = browsable_file.get_frame(0)
 assert frame['a'].value == 0
 assert len(frame) == 1
-assert frame.GetStop().id == 'a'
+assert frame.Stop.id == 'a'
 
 frame = browsable_file.get_frame(1)
 assert frame['a'].value == 0
 assert frame['b'].value == 1
 assert len(frame) == 2
-assert frame.GetStop().id == 'b'
+assert frame.Stop.id == 'b'
 
 frame = browsable_file.get_frame(2)
 assert frame['a'].value == 2
 assert frame['b'].value == 1
 assert len(frame) == 2
-assert frame.GetStop().id == 'a'
+assert frame.Stop.id == 'a'
 
 frame = browsable_file.get_frame(3)
 assert frame['a'].value == 2
 assert frame['b'].value == 3
 assert len(frame) == 2
-assert frame.GetStop().id == 'b'
+assert frame.Stop.id == 'b'
 
 frame = browsable_file.get_frame(4)
 assert frame['a'].value == 2
 assert frame['b'].value == 3
 assert frame['c'].value == 4
 assert len(frame) == 3
-assert frame.GetStop().id == 'c'
+assert frame.Stop.id == 'c'
 
 frame = browsable_file.get_frame(5)
 assert frame['a'].value == 2
 assert frame['b'].value == 3
 assert frame['c'].value == 5
 assert len(frame) == 3
-assert frame.GetStop().id == 'c'
+assert frame.Stop.id == 'c'
 
 frame = browsable_file.get_frame(6)
 assert frame['a'].value == 6
 assert frame['b'].value == 3
 assert frame['c'].value == 5
 assert len(frame) == 3
-assert frame.GetStop().id == 'a'
+assert frame.Stop.id == 'a'
 
 frame = browsable_file.get_frame(7)
 assert frame['a'].value == 6
 assert frame['b'].value == 3
 assert frame['c'].value == 7
 assert len(frame) == 3
-assert frame.GetStop().id == 'c'
+assert frame.Stop.id == 'c'
 
