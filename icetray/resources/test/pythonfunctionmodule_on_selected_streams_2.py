@@ -25,7 +25,7 @@ seen = dict(X=0, Y=0, Z=0)
 def fn(frame):
     global seen
     print "running on frame", frame
-    seen[frame.GetStop().id] += 1
+    seen[frame.Stop.id] += 1
     
 tray.AddModule(fn, "fn",
                Streams = streams)
