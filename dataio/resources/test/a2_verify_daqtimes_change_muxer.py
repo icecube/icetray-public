@@ -14,7 +14,7 @@ tray.AddModule("I3Reader", "reader", Filename = runfile)
 def SelectDaq(frame):
 	assert 'DrivingTime' in frame
 	dt = frame.Get("DrivingTime")
-	utcdaq = dt.UTCDaqTime()
+	utcdaq = dt.UTCDaqTime
 	print utcdaq
 	assert SelectDaq.daqtime != utcdaq
 	print "Yup prev time %lu different than new time %lu" % (SelectDaq.daqtime, utcdaq)
