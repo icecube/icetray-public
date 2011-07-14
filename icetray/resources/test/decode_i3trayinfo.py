@@ -24,7 +24,7 @@ f = dataio.I3File("foo.i3")
 
 frame = f.pop_frame(icetray.I3Frame.TrayInfo)
 print frame
-for k in frame.Keys():
+for k in frame.keys():
     print "Getting", k
     print frame[k]
 

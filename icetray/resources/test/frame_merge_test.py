@@ -24,7 +24,7 @@ a2 = makeframe('a', 'a2')
 assert 'a2' in a2
 assert 'a' not in a2
 
-a.Merge(a2)
+a.merge(a2)
 
 assert 'a2' in a
 assert 'a'  in a
@@ -35,7 +35,7 @@ a = makeframe('a')
 b = makeframe('b')
 c = makeframe('c')
 
-a.Merge(b)
+a.merge(b)
 
 assert 'a' in a
 assert 'b' in a
@@ -43,7 +43,7 @@ assert 'b' in a
 assert 'a' not in b
 assert 'b' in b
 
-a.Merge(c)
+a.merge(c)
 
 assert 'a' in a
 assert 'b' in a
@@ -51,13 +51,13 @@ assert 'c' in a
 
 print a
 
-a.Purge(I3Frame.Stream('b'))
+a.purge(I3Frame.Stream('b'))
 
 assert 'a' in a
 assert 'b' not in a
 assert 'c' in a
 
-a.Purge(I3Frame.Stream('c'))
+a.purge(I3Frame.Stream('c'))
 
 assert 'a' in a 
 assert 'b' not in a 
@@ -69,14 +69,14 @@ a = makeframe('a')
 b = makeframe('b')
 c = makeframe('c')
 
-a.Merge(b)
-a.Merge(c)
+a.merge(b)
+a.merge(c)
 
 assert 'a' in a
 assert 'b' in a
 assert 'c' in a
 
-a.Purge()
+a.purge()
 
 assert 'a' in a
 assert 'b' not in a
@@ -90,7 +90,7 @@ a['a'].value = 666
 a2['a'].value = 777
  
 try:
-    a.Merge(a2)
+    a.merge(a2)
 except:
     print "ok,  that threw"
     sys.exit(0)

@@ -27,7 +27,7 @@ tray.Finish()
 
 f = dataio.I3File('infos.i3')
 infoframe = f.pop_frame()
-keys = infoframe.Keys()
+keys = infoframe.keys()
 
 ti = infoframe[keys[0]]
 print ti

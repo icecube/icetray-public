@@ -39,7 +39,7 @@ class Gitter(icetray.I3Module):
 
     def OnB(self, frame):
         print "On b,", frame 
-        assert frame.Stop == icetray.I3Frame.Stream('B')
+        assert frame.GetStop() == icetray.I3Frame.Stream('B')
         assert 'A' in frame
         assert 'B' in frame
         assert not 'C' in frame
@@ -47,7 +47,7 @@ class Gitter(icetray.I3Module):
         
     def OnF(self, frame):
         print "On f,", frame 
-        assert frame.Stop == icetray.I3Frame.Stream('F')
+        assert frame.GetStop() == icetray.I3Frame.Stream('F')
         assert 'A' in frame
         assert 'B' in frame
         assert 'C' in frame

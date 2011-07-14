@@ -20,7 +20,6 @@
  *  
  */
 #include <icetray/OMKey.h>
-#include "pybindings.hpp"
 
 using namespace boost::python;
 
@@ -50,8 +49,10 @@ register_OMKey()
   class_<OMKey>("OMKey")
     //    .def(init<>())
     .def(init<int,unsigned>())
-    PROPERTY(OMKey, String, String)
-    PROPERTY(OMKey, OM, OM)
+    .def("GetString", &OMKey::GetString)
+    .def("SetString", &OMKey::SetString)
+    .def("GetOM", &OMKey::GetOM)
+    .def("SetOM", &OMKey::SetOM)
     .def("__str__", &OMKey::str)
     .def("__repr__", &OMKey::str)
     .def("__hash__", hash_omkey)
