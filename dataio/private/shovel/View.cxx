@@ -22,7 +22,7 @@
 #include <form.h>
 #include <fstream>
 #include <signal.h>
-#ifdef __APPLE_CC__
+#if defined(__APPLE_CC__) && !defined(TIOCGWINSZ)
 #define TIOCGWINSZ
 #endif
 
