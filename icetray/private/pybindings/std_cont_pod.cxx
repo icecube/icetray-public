@@ -61,7 +61,7 @@ static
 void reg(const char* name)
 {
   std::string s = "vector_";
-  s += name;
+  s += name; 
   class_<vector<T> >(s.c_str())
     .def(vector_indexing_suite<vector<T> >())
     .def("__repr__", &vector_repr<T>)
@@ -98,6 +98,7 @@ void register_std_cont_pod()
   reg<vector<string > >("vector_string");
   reg<double>("double");
   reg<int>("int");
+  reg<vector<int> >("vector_int");
   reg<short>("short");
   reg<char>("char");
   reg<unsigned>("unsigned");
