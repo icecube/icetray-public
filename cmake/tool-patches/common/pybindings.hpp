@@ -126,6 +126,7 @@ static inline string_deleter snake_case(const char * str)
 
 // Trinary macros suitable for use with BOOST_PP_SEQ_FOR_EACH
 #define WRAP_PROP(R, Class, Fn) .add_property(snake_case(BOOST_PP_STRINGIZE(Fn)), BOOST_PP_CAT(&Class::Get,Fn), BOOST_PP_CAT(&Class::Set,Fn))
+#define WRAP_PROP_BOOL(R, Class, Fn) .add_property(snake_case(BOOST_PP_STRINGIZE(Fn)), &Class::Fn)
 #define WRAP_PROP_INTERNAL_REFERENCE(R, Class, Fn) 						\
    .add_property(snake_case(BOOST_PP_STRINGIZE(Fn)),					\
                  boost::python::make_function(BOOST_PP_CAT(&Class::Get,Fn), 			\
