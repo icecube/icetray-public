@@ -10,11 +10,18 @@ Introduction
 ------------
 
 These are coding standards and recommendations for developers of
-IceCube software in C++.  This is primarily offline software
+IceCube software in C++ and Python.  This is primarily offline software
 (including IceTray, Dataclasses, Simulation and the event viewer).
 Users are encouraged to write their own private software to these
 standards, to make future code maintence and the adoption of private
 code for production use easier.
+
+Python Coding Standards
+-----------------------
+
+Python coding standards follow the recommendations set forth in `PEP
+0008 <http://www.python.org/dev/peps/pep-0008/>`_. Where they cause
+conflict, the C++ coding standards outlined below, take precedence.
 
 C++ Coding Standards
 --------------------
