@@ -22,7 +22,7 @@ fname = os.environ["I3_BUILD"] + "/daq_frame_test.i3.gz"
 if os.path.exists(fname):
 	os.unlink(fname)
 the_time = dataclasses.I3Time()
-the_time.SetUTCCalDate(1919, 1, 15, 0, 0, 0, 0)
+the_time.set_utc_cal_date(1919, 1, 15, 0, 0, 0, 0)
 f = dataio.I3File(fname, "w")
 geo = dataclasses.I3Geometry()
 geo.startTime = the_time - 100
@@ -47,7 +47,7 @@ dlsm = dataclasses.I3DOMLaunchSeriesMap()
 dlsm[icetray.OMKey(7,42)] = dataclasses.I3DOMLaunchSeries()
 frame['InIceRawData'] = dlsm
 t = dataclasses.I3Time()
-t.SetUTCCalDate(1919, 1, 15, 0, 0, 0, 0)
+t.set_utc_cal_date(1919, 1, 15, 0, 0, 0, 0)
 frame['DrivingTime'] = t
 header = dataclasses.I3EventHeader()
 header.RunID = 7
