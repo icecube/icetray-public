@@ -138,6 +138,7 @@ static inline string_deleter snake_case(const char * str)
                  boost::python::make_function(BOOST_PP_CAT(&Class::Get,Fn), 			\
                                               boost::python::return_internal_reference<1>())) 
 #define WRAP_RW(R, Class, Member) .def_readwrite(BOOST_PP_STRINGIZE(Member), &Class::Member)
+#define WRAP_RW_RECASE(R, Class, Member) .def_readwrite(snake_case(BOOST_PP_STRINGIZE(Member)), &Class::Member)
 #define WRAP_RO(R, Class, Member) .def_readonly(BOOST_PP_STRINGIZE(Member), &Class::Member)
 #define WRAP_DEF(R, Class, Fn) .def(BOOST_PP_STRINGIZE(Fn), &Class::Fn)
 #define WRAP_DEF_RECASE(R, Class, Fn) .def(snake_case(BOOST_PP_STRINGIZE(Fn)), &Class::Fn)
