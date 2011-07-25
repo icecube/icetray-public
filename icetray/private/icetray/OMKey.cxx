@@ -43,7 +43,7 @@ using namespace std;
 
 ostream& operator<<(ostream& os, const OMKey& key)
 {
-  os << "OMKey(" << key.GetString() << "," << key.GetOM() << ")";
+  os << "(" << key.GetString() << "," << key.GetOM() << ")";
   return os;
 }
 
