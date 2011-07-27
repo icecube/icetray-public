@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import inspect
 
 # This attempts to extend the class
 # and returns True if this fails, as it should.
@@ -18,11 +19,6 @@ def ExtendClassFails(c):
 # but also classes we might want keep dynamic.
 # The string is the class name, i.e. "I3Particle" or "vector_I3MCHit"
 def test_all_classes(mod, skip_test_list = list() ):
-    import inspect
-    from icecube.icetray.I3Test import *
-
-    print type(mod)
-    print dir(mod)
     # returns True if all of the class extensions fail
     return_value = True
     # loop over all the members of the
