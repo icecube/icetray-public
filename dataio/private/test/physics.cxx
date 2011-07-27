@@ -19,12 +19,10 @@
 #include "dataclasses/physics/I3DOMLaunch.h"
 #include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/physics/I3EventHeader.h"
-#include "dataclasses/physics/I3StationHit.h"
 #include "dataclasses/physics/I3TWRFrag.h"
 #include "dataclasses/physics/I3FlasherInfo.h"
 #include "dataclasses/physics/I3TWRLaunch.h"
 #include "dataclasses/physics/I3MCHit.h"
-#include "dataclasses/physics/I3TankHit.h"
 #include "dataclasses/physics/I3MCList.h"
 #include "dataclasses/physics/I3Trigger.h"
 #include "dataclasses/physics/I3TriggerHierarchy.h"
@@ -47,7 +45,6 @@ TEST_GROUP(physics);
   (I3DOMLaunchSeriesMap)			\
   (I3RecoPulseSeriesMap)			\
   (I3EventHeader)				\
-  (I3StationHitMap)				\
   (I3FlasherInfo)				\
   (I3TWRLaunchSeriesMap)			\
   (I3MCHitSeriesMap)				\
@@ -76,11 +73,9 @@ TEST_GROUP(physics);
   (I3RecoHit)					\
   (I3RecoPulse)					\
   (I3ResoPulse)					\
-  (I3TankHit)					\
   (I3Trigger)					\
   (I3TWRLaunch)					\
   (I3Waveform)					\
-  (I3StationHit)				\
   (I3Trigger)					\
   (I3Waveform)					\
   (I3TWRFrag) 
