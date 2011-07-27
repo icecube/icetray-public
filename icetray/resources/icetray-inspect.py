@@ -9,7 +9,7 @@
 
 from optparse import OptionParser
 from icecube import icetray, dataclasses
-from icecube.icetray import inspect
+from icecube.icetray import i3inspect as inspect
 import re, glob, sys
 from os.path import splitext, basename
 
