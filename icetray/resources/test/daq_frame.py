@@ -15,7 +15,7 @@ class DAQFrameMuxing(unittest.TestCase):
 		self.assert_(len(self.frame["InIceRawData"]) == 1)
 		self.assert_("DrivingTime" in self.frame)
 		self.assert_("I3EventHeader" in self.frame)
-		self.assertEquals(frame["I3EventHeader"].sub_event_iD, 1)
+		self.assertEquals(frame["I3EventHeader"].subevent_id, 1)
 
 # Manufacture a file. 
 fname = os.environ["I3_BUILD"] + "/daq_frame_test.i3.gz"
@@ -52,14 +52,14 @@ frame['DrivingTime'] = t
 header = dataclasses.I3EventHeader()
 header.run_id = 7
 header.event_id = 42
-header.sub_event_id = 0
+header.subevent_id = 0
 header.start_time = t
 header.end_time = t+10*I3Units.microsecond
 frame['I3EventHeader'] = header
 f.push(frame)
 frame = icetray.I3Frame(icetray.I3Frame.Physics) # a mostly-empty Physics frame.
 frame['DrivingTime'] = t + 2
-header.sub_event_id = 1
+header.subevent_id = 1
 frame['I3EventHeader'] = header
 f.push(frame)
 f.close()
