@@ -18,7 +18,7 @@ def ExtendClassFails(c):
 # classes.  Most likely for classes with non-trivial constructors,
 # but also classes we might want keep dynamic.
 # The string is the class name, i.e. "I3Particle" or "vector_I3MCHit"
-def test_all_classes(mod, skip_test_list = list() ):
+def test_all_classes(mod, skip_test_list = list(), skip_containers = True ):
     # returns True if all of the class extensions fail
     return_value = True
     # loop over all the members of the
@@ -34,6 +34,8 @@ def test_all_classes(mod, skip_test_list = list() ):
                 # create and instance of the class
                 # this will fail for classes with non-trivial constructors
                 o = v()
+                # we want to skip containers
+                if hasattr(o, "__iter__") : continue
                 # now test it
                 if not ExtendClassFails( o ) :
                     print msg_fmt % k
