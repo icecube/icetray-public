@@ -50,16 +50,16 @@ t = dataclasses.I3Time()
 t.set_utc_cal_date(1919, 1, 15, 0, 0, 0, 0)
 frame['DrivingTime'] = t
 header = dataclasses.I3EventHeader()
-header.RunID = 7
-header.EventID = 42
-header.SubEventID = 0
-header.StartTime = t
-header.EndTime = t+10*I3Units.microsecond
+header.run_id = 7
+header.event_id = 42
+header.sub_event_id = 0
+header.start_time = t
+header.end_time = t+10*I3Units.microsecond
 frame['I3EventHeader'] = header
 f.push(frame)
 frame = icetray.I3Frame(icetray.I3Frame.Physics) # a mostly-empty Physics frame.
 frame['DrivingTime'] = t + 2
-header.SubEventID = 1
+header.sub_event_id = 1
 frame['I3EventHeader'] = header
 f.push(frame)
 f.close()
