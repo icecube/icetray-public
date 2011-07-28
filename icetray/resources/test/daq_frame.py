@@ -15,7 +15,7 @@ class DAQFrameMuxing(unittest.TestCase):
 		self.assert_(len(self.frame["InIceRawData"]) == 1)
 		self.assert_("DrivingTime" in self.frame)
 		self.assert_("I3EventHeader" in self.frame)
-		self.assertEquals(frame["I3EventHeader"].SubEventID, 1)
+		self.assertEquals(frame["I3EventHeader"].sub_event_iD, 1)
 
 # Manufacture a file. 
 fname = os.environ["I3_BUILD"] + "/daq_frame_test.i3.gz"
