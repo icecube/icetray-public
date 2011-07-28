@@ -4,7 +4,37 @@
 #include <icetray/I3FrameObject.h>
 #include <I3/name_of.h>
 
-//
+class freeze : public boost::python::def_visitor< freeze >{
+  friend class boost::python::def_visitor_access;
+
+  // also had to make this public
+public:
+  template <class classT>
+  void visit( classT& c) const {
+    c
+      .def("__setattr__", &setattr_with_dynamism_disabled)
+      ;
+    };
+
+  static void setattr_with_dynamism_disabled( const boost::python::object& obj, 
+				       const boost::python::object& name, 
+				       const boost::python::object& value){
+    if( PyObject_HasAttr(obj.ptr(), name.ptr()) ){
+      PyObject_GenericSetAttr( obj.ptr(), name.ptr(), value.ptr());
+    }else{
+      std::stringstream ss;
+      std::string clname = boost::python::extract<std::string>( obj.attr("__class__").attr("__name__") );
+      std::string attname = boost::python::extract<std::string>( name );
+      ss<<"*** The dynamism of this class has been disabled"<<std::endl;
+      ss<<"*** Attribute ("<<attname<<") does not exist in class "<<clname<<std::endl; 
+      // ToDo :  Get this to throw an AttributeError instead of a generic runtime error.
+      //PyErr_SetString(PyExc_AttributeError, ss.str().c_str());
+      throw std::runtime_error( ss.str().c_str() );
+    }
+  }
+};
+
+
 // Tell python about basic conversions to/from const and FrameObject pointers
 //
 template <typename T>
