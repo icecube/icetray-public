@@ -25,14 +25,14 @@ the_time = dataclasses.I3Time()
 the_time.set_utc_cal_date(1919, 1, 15, 0, 0, 0, 0)
 f = dataio.I3File(fname, "w")
 geo = dataclasses.I3Geometry()
-geo.startTime = the_time - 100
-geo.endTime = the_time + 100
+geo.start_time = the_time - 100
+geo.end_time = the_time + 100
 calib = dataclasses.I3Calibration()
-calib.startTime = the_time - 100
-calib.endTime = the_time + 100
+calib.start_time = the_time - 100
+calib.end_time = the_time + 100
 status = dataclasses.I3DetectorStatus()
-status.startTime = the_time - 100
-status.endTime = the_time + 100
+status.start_time = the_time - 100
+status.end_time = the_time + 100
 frame = icetray.I3Frame(icetray.I3Frame.Geometry)
 frame['I3Geometry'] = geo
 f.push(frame)
