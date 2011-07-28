@@ -116,7 +116,6 @@ i3_add_library(icetray
   private/icetray/PythonFunction.cxx           
   private/icetray/PythonModule.cxx             
   private/icetray/name_of.cxx 
-  private/icetray/class_freeze.cpp
 
   #
   #  Modules:  testing and example
