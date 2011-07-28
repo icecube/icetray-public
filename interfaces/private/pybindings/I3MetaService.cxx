@@ -26,7 +26,7 @@ register_I3MetaService()
 {	
 	bp::class_<I3MetaServiceWrapper, boost::shared_ptr<I3MetaServiceWrapper>,
 	    boost::noncopyable>("I3MetaService", bp::init<>())
-		.def("PopMeta", &I3MetaServiceWrapper::PopMeta)
-		.def("Install", &I3InstallService<I3MetaService>().func)
+		.def("pop_meta", &I3MetaServiceWrapper::PopMeta)
+		.def("install", &I3InstallService<I3MetaService>().func)
 	;
 }

@@ -44,8 +44,8 @@ void register_I3CalibrationService()
     boost::noncopyable>("I3CalibrationService", 
 			"Service returns geometries depending on time", 
 			init<>())
-    .def("GetCalibration", &I3CalibrationServiceWrapper::GetCalibration, bp::arg("time"))
-    .def("Install", &I3InstallService<I3CalibrationService>().func)
+    .def("get_calibration", &I3CalibrationServiceWrapper::GetCalibration, bp::arg("time"))
+    .def("install", &I3InstallService<I3CalibrationService>().func)
     ;
 }
 

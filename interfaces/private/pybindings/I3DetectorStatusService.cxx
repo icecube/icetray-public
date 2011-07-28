@@ -44,8 +44,8 @@ void register_I3DetectorStatusService()
     boost::noncopyable>("I3DetectorStatusService", 
 			"Service returns geometries depending on time", 
 			init<>())
-    .def("GetDetectorStatus", &I3DetectorStatusServiceWrapper::GetDetectorStatus, bp::arg("time"))
-    .def("Install", &I3InstallService<I3DetectorStatusService>().func)
+    .def("get_detector_status", &I3DetectorStatusServiceWrapper::GetDetectorStatus, bp::arg("time"))
+    .def("install", &I3InstallService<I3DetectorStatusService>().func)
     ;
 }
 

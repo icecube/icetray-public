@@ -44,8 +44,8 @@ void register_I3GeometryService()
     boost::noncopyable>("I3GeometryService", 
 			"Service returns geometries depending on time", 
 			init<>())
-    .def("GetGeometry", &I3GeometryServiceWrapper::GetGeometry, bp::arg("time"))
-    .def("Install", &I3InstallService<I3GeometryService>().func)
+    .def("get_geometry", &I3GeometryServiceWrapper::GetGeometry, bp::arg("time"))
+    .def("install", &I3InstallService<I3GeometryService>().func)
     ;
 }
 

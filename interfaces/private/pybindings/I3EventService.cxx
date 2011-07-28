@@ -45,9 +45,9 @@ void register_I3EventService()
     boost::noncopyable>("I3EventService", 
 			"Service returns geometries depending on time", 
 			init<>())
-    .def("MoreEvents", &I3EventServiceWrapper::MoreEvents)
-    .def("PopEvent", &I3EventServiceWrapper::PopEvent, bp::arg("frame"))
-    .def("Install", &I3InstallService<I3EventService>().func)
+    .def("more_events", &I3EventServiceWrapper::MoreEvents)
+    .def("pop_event", &I3EventServiceWrapper::PopEvent, bp::arg("frame"))
+    .def("install", &I3InstallService<I3EventService>().func)
 
     ;
 }
