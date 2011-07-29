@@ -76,6 +76,21 @@ else(NOT IS_DIRECTORY $ENV{I3_PORTS})
   boost_report_value(I3_PORTS)
 endif(NOT IS_DIRECTORY $ENV{I3_PORTS})
 
+## HACK try to check if the ports setup is sane
+## re: icetray ticket #250
+
+execute_process(COMMAND find .
+  COMMAND grep -q ${I3_PORTS}
+  RESULT_VARIABLE PORTS_CHECK
+  WORKING_DIRECTORY ${I3_PORTS}/var/db/dports/software/photonics_1.67
+  OUTPUT_QUIET
+  ERROR_QUIET)
+if(PORTS_CHECK)
+  colormsg(HIRED "*** The catalog in \$I3_PORTS doesn't match its location.")
+  colormsg(HIRED "*** Did you copy it from somewhere else?")
+  message(FATAL_ERROR "If you believe this is an error, please report it as a bug on IceCube's dataclasses mailing list.")
+endif(PORTS_CHECK)
+ 
 #
 #  GCC_VERSION and
 #  GCC_NUMERIC_VERSION is e.g. 40302 (for 4.3.2)
