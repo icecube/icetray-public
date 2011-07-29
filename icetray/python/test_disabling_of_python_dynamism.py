@@ -22,19 +22,15 @@ def test_all_classes(mod, skip_test_list = list(), skip_containers = True ):
     # returns True if all of the class extensions fail
     return_value = True
     # loop over all the members of the
-    msg_fmt = "Python dynamism is alive and well for (%s) "
-    #print inspect.getmembers(sys)
     try:
         foo = inspect.getmembers(mod)
     except AttributeError:
-        print "I don't know why this is failing"
         print "Time to inspect inspect..."
         print dir(inspect)
-        print inspect.__name__
-        print inspect.__date__
-        print inspect.__author__
-        print inspect.__doc__
-
+        print "name = ",inspect.__name__
+        print "dumping docs...\n ",inspect.__doc__
+        
+    msg_fmt = "Python dynamism is alive and well for (%s) "
     for k,v in inspect.getmembers(mod):
         # skip classes in this list        
         if k in skip_test_list : continue
