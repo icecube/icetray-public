@@ -192,13 +192,18 @@ if(NOT HAVE_SVN_REVISION)
     OUTPUT_VARIABLE SVN_REVISION
     ERROR_VARIABLE SVN_REVISION_ERROR)
 
+  if (SVN_REVISION STREQUAL "")
+    set(SVN_REVISION_ERROR TRUE)
+  endif (SVN_REVISION STREQUAL "")
+
   if (SVN_REVISION_ERROR OR NOT SVN_EXECUTABLE)
-    message(STATUS "******\tUnable to determine svn revision (does svn info not accept '--xml'?)")
+    colormsg(YELLOW "*** Unable to determine svn revision")
+    colormsg(YELLOW "*** Are you using a non-English locale?")
     set(SVN_REVISION "0")
   endif (SVN_REVISION_ERROR OR NOT SVN_EXECUTABLE)
 
   if(NOT USE_SVN_REVISION_FLAGS)
-    message(STATUS "            \tNot compiling in svn revision information.  Hope you aren't running simprod")
+    colormsg(YELLOW "*** Not compiling in svn revision information.  Hope you aren't running simprod")
     set(SVN_REVISION "0")
   endif(NOT USE_SVN_REVISION_FLAGS)
 
