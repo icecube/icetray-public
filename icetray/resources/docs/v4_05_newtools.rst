@@ -43,5 +43,5 @@ functionality. The following table reflectes the changes.
 |  cfitsio_3.13     |  cfitsio_3.27     |
 +-------------------+-------------------+
 
-  .. [*] the ``cmake`` port points to ``cmake_2.6.4`` in ``i3-tools-v4``, and ``cmake_2.8.4`` in ``i3-tools-v4``
+  .. [*] the ``cmake`` port points to ``cmake_2.6.4`` in ``i3-tools-v3``, and ``cmake_2.8.4`` in ``i3-tools-v4``
   .. [*] ``ptd`` support was removed, so the port was also removed

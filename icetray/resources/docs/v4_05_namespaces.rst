@@ -72,7 +72,7 @@ on context. Sutter and Alexandrescu summarized it best:
   namespace-qualify all names [*]_.
 
 At best, ``using namespace`` in header files encourages sloppy and
-lazy coding practices. At worst, it introduces bugs cause by namespace
+lazy coding practices. At worst, it introduces bugs caused by namespace
 clashes or undefined behavior. In fact, in IceCube software, some
 subtle bugs were found and subsequently squashed during the ``using
 namespace`` removal.
