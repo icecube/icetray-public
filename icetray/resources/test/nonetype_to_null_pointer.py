@@ -15,7 +15,7 @@ class UseRandom(icetray.I3Module):
     def Physics(self, frame):
 
         if self.rs:
-            rnd = self.rs.Gaus(0,1)
+            rnd = self.rs.gaus(0,1)
             
         self.PushFrame(frame)
 
