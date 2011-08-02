@@ -45,8 +45,9 @@ tray.AddModule("Dump", "dump")
 tray.AddModule("CountFrames", "count",
                Calibration = 2,
                Physics = 2,
-               DetectorStatus = 0,
-               Geometry = 0)
+               # The following we get via mix-in
+               DetectorStatus = 1,
+               Geometry = 2)
                
 
 tray.AddModule("TrashCan", "tc")

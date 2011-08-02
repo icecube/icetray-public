@@ -287,15 +287,33 @@ I3Module::PopFrame()
   return frame;
 }
 
+inline void
+I3Module::SyncCache(std::string outbox, I3FramePtr frame)
+{
+  if (cachemap_.find(outbox) == cachemap_.end())
+    cachemap_[outbox] = I3FramePtr(new I3Frame);
+
+  I3FramePtr cache_ = cachemap_[outbox];
+  cache_->purge(frame->GetStop());
+  frame->purge();
+  frame->merge(*cache_);
+
+  // Merge all frames except tray info into the cache frame
+  if (frame->GetStop() != I3Frame::TrayInfo)
+    cache_->merge(*frame);
+}
+
 void
 I3Module::PushFrame(I3FramePtr frameptr, const std::string& name)
 {
+  // Send to outbox
   outboxmap_t::iterator iter = outboxes_.find(name);
 
   if (iter == outboxes_.end())
     log_fatal("Module \"%s\" attempted to push a frame onto an outbox name \"%s\" which either doesn't exist or isn't connected to anything.  Check steering file.",
 	      GetName().c_str(), name.c_str());
 
+  SyncCache(name, frameptr);
   iter->second.first->push_front(frameptr);
 
   log_trace("%s pushed frame onto fifo \"%s\"", GetName().c_str(), name.c_str());
@@ -304,10 +322,12 @@ I3Module::PushFrame(I3FramePtr frameptr, const std::string& name)
 void
 I3Module::PushFrame(I3FramePtr frameptr)
 {
+  // Send to all outboxes
   for (outboxmap_t::iterator iter = outboxes_.begin();
        iter != outboxes_.end();
        iter++)
     {
+      SyncCache(iter->first, frameptr);
       iter->second.first->push_front(frameptr);
       log_trace("%s pushed frame onto fifo \"%s\"", GetName().c_str(), iter->first.c_str());
     }

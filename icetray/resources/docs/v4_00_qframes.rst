@@ -49,13 +49,6 @@ I3PacketModule
   set of events. Note that thought is required before implementing such a
   module -- this is very rarely something you actually want to do.
 
-Remix
-  A module that updates mixed-in contents of child P frames when their parent
-  Q frames are modified after the P frame was produced. This may be necessary
-  when redoing some kinds of calibration after event splitting -- this case,
-  and the use of this module, should be avoided whenever possible.
-  
-
 Extended Classes
 ^^^^^^^^^^^^^^^^
 

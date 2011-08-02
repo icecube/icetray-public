@@ -351,7 +351,7 @@ public:
   ///  Assignment operations make no sense for modules
   I3Module operator=(const I3Module& rhs); 
   
-protected:
+ protected:
 
   virtual void Configure_(); // dispatches to Configure() and sets inbox
 
@@ -374,6 +374,10 @@ protected:
   // HACK: a set of all boxes added by the module, used for consistency
   // checking.  See Configure_().
   std::set<std::string> added_boxes;
+
+  // cache of previous metadata frames (per-outbox)
+  std::map<std::string, I3FramePtr> cachemap_;
+  void SyncCache(std::string outbox, I3FramePtr frame);
 
   /// only report usage times if greater than this
   const static double min_report_time_;

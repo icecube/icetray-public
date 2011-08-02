@@ -127,7 +127,6 @@ i3_add_library(icetray
   private/modules/Rename.cxx
   private/modules/CountFrames.cxx        
   private/modules/CountObject.cxx        
-  private/modules/Remix.cxx
   private/modules/TrashCan.cxx
   private/modules/Delete.cxx           
   private/modules/Copy.cxx             
