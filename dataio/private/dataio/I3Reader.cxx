@@ -40,14 +40,13 @@ class I3Reader : public I3Module
   unsigned nframes_;
   std::vector<std::string> filenames_;
   std::vector<std::string> skip_;
-  std::vector<I3Frame::Stream> push_wo_merging_;
   bool popmeta_done_;
   bool skip_unregistered_;
   bool drop_blobs_;
 
   boost::iostreams::filtering_istream ifs_;
 
-  I3FramePtr cache_, tmp_;
+  I3FramePtr tmp_;
 
   std::vector<std::string>::iterator filenames_iter_;
   std::string current_filename_;
@@ -72,11 +71,9 @@ I3_MODULE(I3Reader);
 
 I3Reader::I3Reader(const I3Context& context) : I3Module(context),
 					       nframes_(0),
-					       drop_blobs_(false), 
-					       cache_(new I3Frame(I3Frame::Stream('!')))
+					       drop_blobs_(false)
 {
   std::string fname;
-  push_wo_merging_.push_back(I3Frame::Stream('I')); // don't merge 'I' frames into others
 
   AddParameter("Filename", 
 	       "Filename to read.  Use either this or Filenamelist, not both.", 
@@ -89,10 +86,6 @@ I3Reader::I3Reader(const I3Context& context) : I3Module(context),
   AddParameter("SkipKeys", 
 	       "Don't load frame objects with these keys", 
 	       skip_);
-
-  AddParameter("DontMergeStreamTypes",
-	       "Don't merge these kinds of frames into these others that go by",
-	       push_wo_merging_);
 
   AddParameter("DropBuffers",
 	       "Tell I3Frames not to cache buffers of serialized frameobject data (this saves memory "
@@ -121,13 +114,8 @@ I3Reader::Configure()
   GetParameter("SkipKeys", skip_);
   filenames_iter_ = filenames_.begin();
 
-  GetParameter("DontMergeStreamTypes",
-	       push_wo_merging_);
-
   GetParameter("DropBuffers",
 	       drop_blobs_);
-
-  cache_->drop_blobs(drop_blobs_);
 
   OpenNextFile();
 }
@@ -157,17 +145,6 @@ I3Reader::Process()
 	return;
   }
 	
-  I3Frame::Stream s = frame->GetStop();
-
-  if (find(push_wo_merging_.begin(), push_wo_merging_.end(), s) == push_wo_merging_.end())
-    {
-      log_trace("Doing a merge");
-      // sync the two up.
-      cache_->purge(frame->GetStop());
-
-      frame->merge(*cache_);
-      *cache_ = *frame;
-    }
   PushFrame(frame, "OutBox");
 }
 

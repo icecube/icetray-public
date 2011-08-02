@@ -25,13 +25,12 @@ class I3InfiniteSource : public I3Module
   private:
 	boost::iostreams::filtering_istream ifs_;
 	I3Frame::Stream stream_;
-	I3FramePtr cache_;
 };
 
 I3_MODULE(I3InfiniteSource);
 
 I3InfiniteSource::I3InfiniteSource(const I3Context& context)
-    : I3Module(context), stream_(I3Frame::DAQ), cache_(new I3Frame)
+    : I3Module(context), stream_(I3Frame::DAQ)
 {
 
 	AddParameter("Stream", "Type of frame to emit", stream_);
@@ -58,19 +57,11 @@ void I3InfiniteSource::Process()
 	log_trace("%s: %s", GetName().c_str(), __PRETTY_FUNCTION__);
 
 	I3FramePtr frame(new I3Frame(stream_));
-	if (ifs_.empty()) {
-		// Merge in cached frames
-		frame->merge(*cache_);
-	} else {
+	if (!ifs_.empty()) {
 		// Get frame from prefix file
 		frame->load(ifs_);
 		if (ifs_.peek() == EOF)
 			ifs_.reset();
-
-		cache_->purge(frame->GetStop());
-		frame->merge(*cache_);
-		if (frame->GetStop() != I3Frame::TrayInfo)
-			*cache_ = *frame;
 	}
 
 	PushFrame(frame);
