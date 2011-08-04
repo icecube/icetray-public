@@ -48,11 +48,10 @@ services.
 
 Miscellaneous Changes
 """""""""""""""""""""
-- I3RecoHit deprecated, support removed from phys-services
-- I3Muxer removed
-- I3MetaSynth and I3InfiniteSource added
-- TWR and F2K projects removed
+- I3RecoHit support removed from most modules, mostly in phys-services
+  - I3RecoHit still fully supported for reading from files
+  - Auto conversion to I3RecoPulse available by the Synthethic pulse support
+- TWR and F2K projects removed from offline-software meta-project
 - I3RecoPulse has new fields and new, lighter-weight serialization
 - I3Waveform source information modified
-- I3ConditionalModule's condition now operates on all frame types.
-- SuperDST in offline-software
+- I3ConditionalModule's condition now operates on all frame types, not just P frames.
