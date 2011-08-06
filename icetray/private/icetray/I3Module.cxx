@@ -70,8 +70,9 @@ I3Module::I3Module(const I3Context& context)
 {
   const std::string& instancename = context_.Get<I3Configuration>().InstanceName();
   SetName(instancename);
-  ncall_ = 0;
-  systime_ = usertime_ = 0;
+  nphyscall_ = ndaqcall_ = 0;
+  sysphystime_ = userphystime_ = 0;
+  sysdaqtime_ = userdaqtime_ = 0;
   i3_log("%s done", __PRETTY_FUNCTION__);
 }
 
@@ -79,9 +80,12 @@ I3Module::~I3Module()
 { 
   // only print if more than 10 seconds used.  This is kind of an
   // arbitrary number.
-  if (usertime_ + systime_ > min_report_time_)
+  if (userphystime_ + sysphystime_ > min_report_time_)
     printf("%40s: %6u calls to physics %9.2fs user %9.2fs system\n",
-	   GetName().c_str(), ncall_, usertime_, systime_);
+	   GetName().c_str(), nphyscall_, userphystime_, sysphystime_);
+  if (userdaqtime_ + sysdaqtime_ > min_report_time_)
+    printf("%40s: %6u calls to DAQ %9.2fs user %9.2fs system\n",
+	   GetName().c_str(), ndaqcall_, userdaqtime_, sysdaqtime_);
 }
 
 void 
@@ -238,8 +242,8 @@ I3Module::Process()
 
   if(frame->GetStop() == I3Frame::Physics && ShouldDoPhysics(frame))
     {
-      ModuleTimer mt(systime_, usertime_);
-      ++ncall_;
+      ModuleTimer mt(sysphystime_, userphystime_);
+      ++nphyscall_;
       Physics(frame);
     }
   else if(frame->GetStop() == I3Frame::Geometry && ShouldDoGeometry(frame))
@@ -248,9 +252,11 @@ I3Module::Process()
     Calibration(frame);
   else if(frame->GetStop() == I3Frame::DetectorStatus && ShouldDoDetectorStatus(frame))
     DetectorStatus(frame);
-  else if(frame->GetStop() == I3Frame::DAQ && ShouldDoDAQ(frame))
+  else if(frame->GetStop() == I3Frame::DAQ && ShouldDoDAQ(frame)) {
+    ModuleTimer mt(sysdaqtime_, userdaqtime_);
+    ++ndaqcall_;
     DAQ(frame);
-  else if(ShouldDoOtherStops(frame))
+  } else if(ShouldDoOtherStops(frame))
     OtherStops(frame);
 }
 
@@ -464,9 +470,9 @@ I3PhysicsUsage
 I3Module::ReportUsage()
 {
   I3PhysicsUsage pu;
-  pu.systime = systime_;
-  pu.usertime = usertime_;
-  pu.ncall = ncall_;
+  pu.systime = sysphystime_ + sysdaqtime_;
+  pu.usertime = userphystime_ + userdaqtime_;
+  pu.ncall = nphyscall_ + ndaqcall_;
   return pu;
 }
 

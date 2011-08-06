@@ -368,8 +368,9 @@ public:
   /** module name */
   std::string name_;
 
-  unsigned ncall_;
-  double systime_, usertime_;
+  unsigned nphyscall_, ndaqcall_;
+  double sysphystime_, userphystime_;
+  double sysdaqtime_, userdaqtime_;
 
   // HACK: a set of all boxes added by the module, used for consistency
   // checking.  See Configure_().
