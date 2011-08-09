@@ -24,7 +24,7 @@ Q Frames: the basics
 Q-frames are designed to hold all information from the DAQ global trigger
 and readout, and anything derived directly from that, and for MC data,
 and MC truth information.  The list of objects
-(types and spefic names) that are expected to live in the Q-frame includes
+(types and specific names) that are expected to live in the Q-frame includes
 
 Specific names (QKeys):
 
@@ -53,7 +53,7 @@ Specific types (QTypes):
 * "I3Vector<I3MMCTrack>"
 
 
-These are taken from the QConvter default lists.  You'll get these lists
+These are taken from the QConverter default lists.  You'll get these lists
 if you do not override the default settings for the "QKeys" and "QTypes"
 parameters.
 
@@ -61,7 +61,7 @@ Note: the FilterMask currently lives in the Q-frame, since
 entire DAQ events are selected in the online-filter.
 
 Other items, including per-event RecoPulseSeriesMasks (from hit
-selection and cleaning), I3Particles, ICutsValues, and any
+selection and cleaning), I3Particles, I3CutValues, and any
 other per-physics-event items live in the P-frame.
 
 But, given the "Mixed In" nature of the frames as seen by each module,
@@ -73,7 +73,7 @@ There are several common usages that are outlined here, each with
 its own Q-frame specific advice.  
 
 1. Reading data already Q-framed.  This case should not require any special
-handling.  Data is alread divided correctly between Q and P frames.  
+handling.  Data is already divided correctly between Q and P frames.  
 
 2. Reading older L2 data.  This high-level data likely requires no
 new low-level processing, but does not have Q-frames in the data file.
@@ -93,7 +93,7 @@ Depending on the level of processing you wish to do, you will need to use the
 QConverter.  The QConverter has two modes, one where it issues P-frames for
 each Q-frame and another where it maps the P-frames in the file to
 Q-frames (saving any P-frame creation for another module (null or
-advanved splitters for example).
+advanced splitters for example).
 
 To not create P-frames from each Q-frame, for example, to create input
 files that you will later split, calibrate, etc, add::
@@ -102,7 +102,7 @@ files that you will later split, calibrate, etc, add::
 
 Simple example of this is available::
 
-   examples/resoures/examples/make_testdata.py
+   examples/resources/examples/make_testdata.py
    examples/resources/test/pass1.py
    daq-decode/resources/examples/dump-i3-online-data.py
 
@@ -115,7 +115,7 @@ Q Frames: Common problems
 You are very likely trying to read older data (pre-Q frames) and
 you are trying to do low-level processing (decoding, calibration
 or feature extraction).  The I3Reader does not automatically convert
-P frames into QFrames.  Try adding the QConverter to your script
+P frames into Q frames.  Try adding the QConverter to your script
 after the I3Reader::
 
       tray.AddModule("QConverter", "qify", WritePFrame=True)
@@ -131,7 +131,7 @@ the appropriate items in the Q-frame.
 Your likely trying to use the I3NullSplitter on events that do not have
 an I3EventHeader (undecoded DST only events, for example). 
 An I3EventHeader is required for the I3NullSplitter to work.  
-You could add a gaurd to make sure all events have an I3EventHeader::
+You could add a guard to make sure all events have an I3EventHeader::
 
     def data_check(frame):
     	if frame.Has("I3EventHeader"):
@@ -167,7 +167,7 @@ the modules in your scripts.  You should generally follow the order:
      and especially the Q-frame.  If you are reading older data, you will
      likely need the QConverter (see #1)
   #. Event calibration and feature extraction.  These operate on the Q-frame
-     items, calibrating all waveforms, and perorming feature extraction,
+     items, calibrating all waveforms, and performing feature extraction,
      generating I3RecoPulseMaps, which also live in the Q-frame.  Depending 
      on your data, these may not be needed as they could already be 
      done (L2 or higher for example).
