@@ -43,16 +43,21 @@ static object pair_getitem(value_type const& x, int i) {
 // __len__ std::pair = 2
 static int pair_len(value_type const& x) { return 2; }
 
+std::string repr(const OMKey& key){
+  std::stringstream s;
+  s << "OMKey(" << key.GetString() << "," << key.GetOM() << ")";
+  return s.str();
+}
+
 void
 register_OMKey()
 {
   class_<OMKey>("OMKey")
-    //    .def(init<>())
     .def(init<int,unsigned>())
     PROPERTY(OMKey, string, String)
     PROPERTY(OMKey, om, OM)
     .def("__str__", &OMKey::str)
-    .def("__repr__", &OMKey::str)
+    .def("__repr__", repr)
     .def("__hash__", hash_omkey)
     .def("__getitem__", pair_getitem)
     .def("__len__", pair_len)
