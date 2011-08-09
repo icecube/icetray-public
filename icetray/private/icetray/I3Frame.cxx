@@ -349,10 +349,11 @@ string I3Frame::type_name(const value_t& value)
   return value.blob.type_name;
 }
 
-void I3Frame::Dump() const
+string I3Frame::Dump() const
 {
   ostringstream o;
   o << *this;
+  return o.str();
 }
 
 namespace 

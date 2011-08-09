@@ -398,7 +398,7 @@ class I3Frame
   bool 
   load(IStreamT& is, const std::vector<std::string>& vs = std::vector<std::string>());
 
-  void Dump() const;
+  std::string Dump() const;
 
   ///
   ///  these are used from unit tests to be sure frame is
