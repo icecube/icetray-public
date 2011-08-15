@@ -87,9 +87,9 @@ macro(use_tool TARGET TOOL_)
   endif(${TOOL}_CONFIG_ERROR)
 
   include_directories(${${TOOL}_INCLUDE_DIRS})
-  if(NOT ${${TOOL}_INCLUDE_DIRS})
+  if(NOT ${TOOL}_INCLUDE_DIRS)
     include_directories(${${TOOL}_INCLUDE_DIR})
-  endif(NOT ${${TOOL}_INCLUDE_DIRS})
+  endif(NOT ${TOOL}_INCLUDE_DIRS)
   target_link_libraries(${TARGET} ${${TOOL}_LIBRARIES})
 
   if(${TOOL}_LINK_FLAGS)
