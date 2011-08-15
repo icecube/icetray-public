@@ -138,6 +138,12 @@ I3Module::Do(void (I3Module::*f)())
 	      while (fifo->size())
 		nextmodule->Do(f);
 	    }
+	  else if (f == &I3Module::Finish)
+	    { 
+	      while (fifo->size())
+		nextmodule->Do(&I3Module::Process_);
+	      nextmodule->Do(f);
+	    }
 	  else
 	    nextmodule->Do(f);
 	}
