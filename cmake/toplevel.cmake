@@ -355,6 +355,18 @@ if(INSTALL_PYTHON_SUBPROCESS)
     COPYONLY)
 endif(INSTALL_PYTHON_SUBPROCESS)
 
+## for exuberant ctags
+add_custom_target(tags
+  COMMAND /usr/local/bin/ctags -eR
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  VERBATIM)
+
+## for (x)emacs etags
+add_custom_target(etags
+  COMMAND find ${CMAKE_SOURCE_DIR} -name '*.cpp' -o -name '*.h' -o -name '*.c' -o -name '*.cc' -o -name '*.cxx' -o -name '*.hpp' | xargs etags
+#  COMMENT "Building TAGS file"
+  VERBATIM)
+
 add_custom_target(deploy-docs
   COMMAND rsync -va --delete ${CMAKE_BINARY_DIR}/docs/ umdgrb.umd.edu:public_html/${META_PROJECT}/
   COMMENT Deploying docs to ${META_PROJECT}
