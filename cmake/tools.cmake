@@ -86,7 +86,10 @@ macro(use_tool TARGET TOOL_)
     message(FATAL_ERROR "There was a problem configuring tool ${TOOL} which is required by target ${TARGET}.  This is probably available via the 'ports' system.  Try the command 'port search ${TOOL_}' and 'port install' what you find.")
   endif(${TOOL}_CONFIG_ERROR)
 
-  include_directories(${${TOOL}_INCLUDE_DIR})
+  include_directories(${${TOOL}_INCLUDE_DIRS})
+  if(NOT ${${TOOL}_INCLUDE_DIRS})
+    include_directories(${${TOOL}_INCLUDE_DIR})
+  endif(NOT ${${TOOL}_INCLUDE_DIRS})
   target_link_libraries(${TARGET} ${${TOOL}_LIBRARIES})
 
   if(${TOOL}_LINK_FLAGS)
