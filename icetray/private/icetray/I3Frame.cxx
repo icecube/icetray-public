@@ -26,6 +26,8 @@
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
+#include <boost/interprocess/streams/bufferstream.hpp>
+#include <boost/interprocess/streams/vectorstream.hpp>
 #include <boost/crc.hpp>
 #include <boost/foreach.hpp>
 #include <boost/regex.hpp>
@@ -885,7 +887,11 @@ I3FrameObjectConstPtr I3Frame::get_impl(map_t::const_reference pr,
 template bool I3Frame::load(io::filtering_istream&, const vector<string>&);
 template bool I3Frame::load(istream& is, const vector<string>&);
 template bool I3Frame::load(ifstream& is, const vector<string>&);
+template bool I3Frame::load(boost::interprocess::bufferstream& is, const vector<string>&);
+template bool I3Frame::load(boost::interprocess::basic_vectorstream<std::vector<
+char> >& is, const vector<string>&);
 
 template void I3Frame::save(io::filtering_ostream&, const vector<string>&) const;
+template void I3Frame::save(boost::interprocess::basic_vectorstream<std::vector<char> >&, const vector<string>&) const;
 template void I3Frame::save(ostream&, const vector<string>&) const;
 template void I3Frame::save(ofstream&, const std::vector<string>&) const;
