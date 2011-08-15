@@ -33,23 +33,23 @@ if(PRINTF_LOGGING)
     )
 else(PRINTF_LOGGING)  # just use log4cplus
 
-    tooldef (log4cplus
-      include/log4cplus-1.0.4
-      log4cplus/logger.h
-      lib/log4cplus-1.0.4
-      NONE
-      log4cplus
-      )
+  if(NOT LOG4CPLUS_VERSION)
+    if(IS_DIRECTORY ${I3_PORTS}/include/log4cplus-1.0.4)
+      set(LOG4CPLUS_VERSION "-1.0.4")
+    elseif(IS_DIRECTORY ${I3_PORTS}/include/log4cplus-1.0.2)
+      set(LOG4CPLUS_VERSION "-1.0.2")
+    else(IS_DIRECTORY ${I3_PORTS}/include/log4cplus-1.0.4)
+      set(LOG4CPLUS_VERSION "")
+    endif(IS_DIRECTORY ${I3_PORTS}/include/log4cplus-1.0.4)
+  endif(NOT LOG4CPLUS_VERSION)
 
-  if(NOT LOG4CPLUS_FOUND)
-    tooldef (log4cplus
-      include/log4cplus-1.0.2
+  tooldef (log4cplus
+      include/log4cplus${LOG4CPLUS_VERSION}
       log4cplus/logger.h
-      lib/log4cplus-1.0.2
+      lib/log4cplus${LOG4CPLUS_VERSION}
       NONE
       log4cplus
       )
-  endif(NOT LOG4CPLUS_FOUND)
 
 endif(PRINTF_LOGGING)
 
