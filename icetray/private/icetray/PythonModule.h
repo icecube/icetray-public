@@ -34,6 +34,7 @@ template <typename Base>
 struct PythonModule : Base, boost::python::wrapper<Base>
 {
   PythonModule(const I3Context& ctx); 
+  PythonModule(const I3Context& ctx, I3Frame::Stream); 
 
   void Configure();
 

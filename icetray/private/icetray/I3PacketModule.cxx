@@ -6,10 +6,9 @@
 
 #include <icetray/I3PacketModule.h>
 
-I3PacketModule::I3PacketModule(const I3Context& context) : I3Module(context)
+I3PacketModule::I3PacketModule(const I3Context& context,
+    I3Frame::Stream sentinel) : I3Module(context), sentinel_(sentinel)
 {
-	AddParameter("PacketSentinelStream", "Frame type that marks the "
-	    "beginning of a new frame packet", I3Frame::DAQ);
 	AddParameter("If", "A python function... if this returns something "
 	    "that evaluates to True, Module runs, else it doesn't", if_);
 }
@@ -28,7 +27,6 @@ void I3PacketModule::Configure_()
 		if_ = configured_if_;
 	}
 
-	GetParameter("PacketSentinelStream", sentinel_);
 	I3Module::Configure_();
 }
 

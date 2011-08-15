@@ -66,7 +66,7 @@ namespace {
   {
     typedef PythonModule<I3PacketModule> module_t;
 
-    class_<module_t, bases<PythonModule<I3Module> >,boost::shared_ptr<module_t>, boost::noncopyable>(name, init<const I3Context&>())
+    class_<module_t, bases<PythonModule<I3Module> >,boost::shared_ptr<module_t>, boost::noncopyable>(name, init<const I3Context&, I3Frame::Stream>())
       REGMODMETHODS
       .def("FramePacket", &module_t::FramePacket);
 

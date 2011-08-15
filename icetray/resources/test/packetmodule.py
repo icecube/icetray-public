@@ -28,7 +28,7 @@ tray.AddModule(SimpleSplit, 'split')
 
 class Mod(I3PacketModule):
     def __init__(self, context):
-        I3PacketModule.__init__(self, context)
+        I3PacketModule.__init__(self, context, icetray.I3Frame.DAQ)
         self.AddOutBox("OutBox")
     def Configure(self):
         pass

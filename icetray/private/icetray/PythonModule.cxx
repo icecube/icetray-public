@@ -38,6 +38,20 @@ PythonModule<Base>::PythonModule(const I3Context& ctx) : Base(ctx)
   i3_log("%s", __PRETTY_FUNCTION__);
 }
 
+template <>
+PythonModule<I3PacketModule>::PythonModule(const I3Context& ctx) :
+  I3PacketModule(ctx, I3Frame::DAQ)
+{ 
+  i3_log("%s", __PRETTY_FUNCTION__);
+}
+
+template <>
+PythonModule<I3PacketModule>::PythonModule(const I3Context& ctx,
+  I3Frame::Stream stream) : I3PacketModule(ctx, stream)
+{ 
+  i3_log("%s", __PRETTY_FUNCTION__);
+}
+
 template <typename Base>
 void 
 PythonModule<Base>::Configure()
