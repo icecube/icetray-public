@@ -40,7 +40,7 @@ class Mod(I3PacketModule):
 	global npackets
         npackets += 1
 
-tray.AddModule(Mod, "mod", PacketSentinelStream=I3Frame.DAQ)
+tray.AddModule(Mod, "mod")
 
 # print em
 tray.AddModule("Dump","dump")
