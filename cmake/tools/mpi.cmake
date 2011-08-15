@@ -1,0 +1,8 @@
+colormsg("")
+colormsg(HICYAN "MPI")
+
+find_package(MPI)
+if (MPI_LIBRARY)
+	set(MPI_INCLUDE_DIR ${MPI_INCLUDE_PATH} CACHE STRING "MPI Include Path")
+	set(MPI_LIBRARIES ${MPI_LIBRARY};${MPI_EXTRA_LIBRARY} CACHE STRING "MPI Libraries")
+endif (MPI_LIBRARY)

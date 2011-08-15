@@ -44,7 +44,7 @@ endif()
 #
 set(ALL_TOOLS pthread root boost python hippodraw
     rdmc expat gsl sprng sla libarchive blas lapack
-    mysql bdb log4cplus photonics suitesparse
+    mysql bdb log4cplus mpi photonics suitesparse
     ZThread omniORB fox jni ncurses
     cdk qt4 cfitsio hdf5 minuit2 clhep geant4 zlib
     ${I3_EXTRA_TOOLS}   # add the extra tools and dedupe
@@ -94,6 +94,9 @@ macro(use_tool TARGET TOOL_)
 
   if(${TOOL}_LINK_FLAGS)
     get_target_property(tmp_LINK_FLAGS ${TARGET} LINK_FLAGS)
+    if(NOT ${tmp_LINK_FLAGS})
+      set(tmp_LINK_FLAGS "")
+    endif(NOT ${tmp_LINK_FLAGS})
     set_target_properties(${TARGET}
       PROPERTIES
       LINK_FLAGS "${tmp_LINK_FLAGS} ${${TOOL}_LINK_FLAGS}"
