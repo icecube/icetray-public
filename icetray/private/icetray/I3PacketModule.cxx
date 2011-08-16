@@ -32,12 +32,16 @@ void I3PacketModule::Configure_()
 
 void I3PacketModule::Finish()
 {
+	FlushQueue();
+}
+
+void I3PacketModule::FlushQueue()
+{
 	if (!queue_.empty()) {
 		if (!if_ || boost::python::extract<bool>(if_(queue_)))
 			FramePacket(queue_);
+		queue_.clear();
 	}
-
-	queue_.clear();
 }
 
 void I3PacketModule::Process()
@@ -46,12 +50,8 @@ void I3PacketModule::Process()
 	if (!frame)
 		log_fatal("Not a driving module!");
 
-	if (frame->GetStop() == sentinel_ && !queue_.empty()) {
-		if (!if_ || boost::python::extract<bool>(if_(queue_)))
-			FramePacket(queue_);
-		queue_.clear();
-	}
-
+	if (frame->GetStop() == sentinel_)
+		FlushQueue();
 	queue_.push_back(frame);
 }
 

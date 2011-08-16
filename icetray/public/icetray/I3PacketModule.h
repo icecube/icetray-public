@@ -27,6 +27,7 @@ class I3PacketModule : public I3Module
 
 		void Configure_();
 		void Process();
+		void FlushQueue();
 		void Finish();
 
 		virtual void FramePacket(std::vector<I3FramePtr> &packet);
