@@ -280,6 +280,25 @@ PythonModule<I3PacketModule>::FramePacket(std::vector<I3FramePtr> &frames)
     I3PacketModule::FramePacket(frames);
 }
 
+template <>
+I3Frame::Stream
+PythonModule<I3PacketModule>::GetSentinel()
+{ return sentinel; }
+
+template <>
+void
+PythonModule<I3PacketModule>::SetSentinel(I3Frame::Stream sent)
+{ sentinel = sent; }
+
+template <>
+const std::vector<I3Frame::Stream> &
+PythonModule<I3PacketModule>::GetPacketTypes()
+{ return packet_types; }
+
+template <>
+void PythonModule<I3PacketModule>::SetPacketTypes(
+    const std::vector<I3Frame::Stream> &types)
+{ packet_types = types; }
 
 template class PythonModule<I3Module>;
 template class PythonModule<I3ConditionalModule>;

@@ -69,7 +69,15 @@ namespace {
     class_<module_t, bases<PythonModule<I3Module> >,boost::shared_ptr<module_t>, boost::noncopyable>(name, init<const I3Context&, I3Frame::Stream>())
       REGMODMETHODS
       .def("FlushQueue", &module_t::FlushQueue)
-      .def("FramePacket", &module_t::FramePacket);
+      .def("FramePacket", &module_t::FramePacket)
+      .add_property("sentinel",
+           (I3Frame::Stream (module_t::*)())&module_t::GetSentinel,
+           (void (module_t::*)(I3Frame::Stream))&module_t::SetSentinel)
+      .add_property("packet_types",
+           make_function((const std::vector<I3Frame::Stream>& (module_t::*)())
+             &module_t::GetPacketTypes, return_internal_reference<1>()),
+           (void (module_t::*)(const std::vector<I3Frame::Stream>&))
+             &module_t::SetPacketTypes);
 
     implicitly_convertible<boost::shared_ptr<module_t>, boost::shared_ptr<I3Module> >();
   }

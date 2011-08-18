@@ -79,6 +79,10 @@ struct PythonModule : Base, boost::python::wrapper<Base>
 
   // Just for I3PacketModule wrapper
   void FramePacket(std::vector<I3FramePtr> &);
+  I3Frame::Stream GetSentinel();
+  void SetSentinel(I3Frame::Stream);
+  const std::vector<I3Frame::Stream> &GetPacketTypes();
+  void SetPacketTypes(const std::vector<I3Frame::Stream> &);
 
   SET_LOGGER("PythonModule");
 };

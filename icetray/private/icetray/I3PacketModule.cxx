@@ -7,10 +7,16 @@
 #include <icetray/I3PacketModule.h>
 
 I3PacketModule::I3PacketModule(const I3Context& context,
-    I3Frame::Stream sentinel) : I3Module(context), sentinel_(sentinel)
+    I3Frame::Stream _sentinel) : I3Module(context), sentinel(_sentinel)
 {
 	AddParameter("If", "A python function... if this returns something "
 	    "that evaluates to True, Module runs, else it doesn't", if_);
+
+	// Set packet_types for the most common use case
+	if (sentinel == I3Frame::DAQ) {
+		packet_types.push_back(I3Frame::DAQ);
+		packet_types.push_back(I3Frame::Physics);
+	}
 }
 
 I3PacketModule::~I3PacketModule() {}
@@ -46,13 +52,20 @@ void I3PacketModule::FlushQueue()
 
 void I3PacketModule::Process()
 {
-	I3FramePtr frame = PopFrame();
+	I3FramePtr frame = PeekFrame();
 	if (!frame)
 		log_fatal("Not a driving module!");
 
-	if (frame->GetStop() == sentinel_)
+	if (!packet_types.empty() && find(packet_types.begin(),
+	    packet_types.end(), frame->GetStop()) == packet_types.end()) {
 		FlushQueue();
-	queue_.push_back(frame);
+		I3Module::Process();
+		return;
+	}
+
+	if (frame->GetStop() == sentinel)
+		FlushQueue();
+	queue_.push_back(PopFrame());
 }
 
 void I3PacketModule::FramePacket(std::vector<I3FramePtr> &frames)

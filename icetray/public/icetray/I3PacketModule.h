@@ -16,6 +16,17 @@
  * that wants to act on a DAQ trigger (DAQ frame) followed by its split
  * subevents (Physics frames) as a single unit.
  *
+ * Packet processing will send a packet starting with a frame of type sentinel
+ * (or stream start) and ending with either another frame of type sentinel, 
+ * or a frame type not found in the packet_types vector. Receipt of a frame
+ * not in packet_types will cause FramePacket() to be called with the current
+ * buffer and the frame to be handled by I3Module::Process() (i.e.
+ * Geometry()/Calibration()/etc.)
+ *
+ * NB: If packet_types is empty, packets will only be terminated by a new
+ * sentinel frame. If sentinel is set to I3Frame::DAQ in the constructor,
+ * packet_types will be initialized to [I3Frame::DAQ, I3Frame::Physics].
+ * Otherwise it will be left blank by default.
  */
 
 class I3PacketModule : public I3Module
@@ -32,8 +43,25 @@ class I3PacketModule : public I3Module
 
 		virtual void FramePacket(std::vector<I3FramePtr> &packet);
 
+	protected:
+		// Packet processing will send a packet starting with a frame
+		// of type sentinel (or stream start) and ending with either
+		// another frame of type sentinel, or a frame type not found
+		// in the packet_types vector. Receipt of a frame not in
+		// packet_types will cause FramePacket() to be called with the
+		// current buffer and the frame to be handled by
+		// I3Module::Process() (i.e. Geometry()/Calibration()/etc.)
+		//
+		// NB: If packet_types is empty, packets will only be
+		// terminated by a new sentinel frame. If sentinel is set to
+		// I3Frame::DAQ in the constructor, packet_types will be
+		// initialized to [I3Frame::DAQ, I3Frame::Physics]. Otherwise
+		// it will be left blank.
+
+		I3Frame::Stream sentinel;
+		std::vector<I3Frame::Stream> packet_types;
+
 	private:
-		I3Frame::Stream sentinel_;
 		std::vector<I3FramePtr> queue_;
 		boost::python::object if_;
 };
