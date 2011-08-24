@@ -10,7 +10,7 @@
 from optparse import OptionParser
 from icecube import icetray, dataclasses
 from icecube.icetray import i3inspect as inspect
-import re, glob, sys
+import re, glob, sys, cgi
 from os.path import splitext, basename
 
 parser = OptionParser("usage: %prog [options] project1 project2 ...")
@@ -63,18 +63,22 @@ def print_xmlconfig(config):
 	if len(config.keys()) > 0:
 		for k in config.keys():
 			print '<parameter>'
-			print '\t<name>%s</name>' % k
-			print '\t<description>%s</description>' % desc[k]
-			print '\t<default_value>%s</default_value>' % config[k]
+			print '\t<name>%s</name>' % cgi.escape(k)
+			print '\t<description>%s</description>' % cgi.escape(desc[k])
+			print '\t<default_value>%s</default_value>' % cgi.escape(config[k].__str__())
 			print '</parameter>'
 
 def display_config(mod, category):
+		if isinstance(mod, str):
+			modname = mod
+		else:
+			modname = mod.__name__
 		if opts.xml:
 			print '<module>'
-			print '<type>%s</type>' % mod
-			print '<kind>%s</kind>' % category
+			print '<type>%s</type>' % cgi.escape(modname)
+			print '<kind>%s</kind>' % cgi.escape(category)
 		else:
-			print '  %s (%s)' % (mod, category)
+			print '  %s (%s)' % (modname, category)
 		
 		try:
 			config = inspect.get_configuration(mod)
