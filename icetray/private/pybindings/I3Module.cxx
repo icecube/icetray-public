@@ -60,6 +60,12 @@ namespace {
     implicitly_convertible<boost::shared_ptr<module_t>, boost::shared_ptr<I3Module> >();
   }
 
+  boost::shared_ptr<I3PacketModule>
+  simple_I3PacketModule(const I3Context& context)
+  {
+	return boost::shared_ptr<I3PacketModule>(new I3PacketModule(context));
+  }
+
   template <>
   void 
   wrapderivedmod<I3PacketModule>(const char *name)
@@ -68,6 +74,7 @@ namespace {
 
     class_<module_t, bases<PythonModule<I3Module> >,boost::shared_ptr<module_t>, boost::noncopyable>(name, init<const I3Context&, I3Frame::Stream>())
       REGMODMETHODS
+      .def("__init__", make_constructor(simple_I3PacketModule))
       .def("FlushQueue", &module_t::FlushQueue)
       .def("FramePacket", &module_t::FramePacket)
       .add_property("sentinel",
