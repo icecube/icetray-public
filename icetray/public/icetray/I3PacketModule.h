@@ -33,7 +33,7 @@ class I3PacketModule : public I3Module
 {
 	public:
 		I3PacketModule(const I3Context& context,
-		    I3Frame::Stream sentinel);
+		    I3Frame::Stream sentinel = I3Frame::DAQ);
 		~I3PacketModule();
 
 		void Configure_();
