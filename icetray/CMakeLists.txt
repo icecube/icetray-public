@@ -161,11 +161,6 @@ set_source_files_properties(${ICETRAY_PYTHON_SRC}
   PROPERTIES
   COMPILE_FLAGS -DI3_PYBINDINGS_MODULE)
 
-i3_executable(inspect 
-  private/inspect/*.cxx
-  USE_PROJECTS icetray
-  USE_TOOLS log4cplus boost)
-
 i3_test_executable(test 
   private/test/CleanConstructorTest.cxx  
   private/test/I3LoggingObjectFirst.cxx     
@@ -231,4 +226,8 @@ endforeach(HEADER ${ALL_HEADERS})
 #
 add_subdirectory(private/pybindings)
 add_subdirectory(private/test-pybindings)
+
+# Install icetray-inspect
+exec_program(ln ARGS -snf ${CMAKE_SOURCE_DIR}/icetray/resources/icetray-inspect.py ${EXECUTABLE_OUTPUT_PATH}/icetray-inspect
+    OUTPUT_VARIABLE DEV_NULL)
 

@@ -61,8 +61,10 @@
 	      </tr>
 	      <xsl:for-each select="module">
 		<tr>
-		  <td class="module" colspan="4">
+		  <td class="module" colspan="2">
 		  <xsl:value-of select="type"/></td>
+		  <td class="module" colspan="2">
+		  <xsl:value-of select="kind"/></td>
 		</tr>
 		
 		<xsl:for-each select="parameter">
