@@ -43,10 +43,11 @@ void register_MyService();
 
 using namespace boost::python;
 
-void load_impl(const std::string& name, bool verbose=false)
+void load_impl(const std::string& name, bool verbose=true)
 {
   load_project(name, verbose);
 }
+BOOST_PYTHON_FUNCTION_OVERLOADS(load_impl_overloads, load_impl, 1, 2);
 
 #ifdef I3_LOG4CPLUS_LOGGING
 #include <log4cplus/hierarchy.h>
@@ -76,7 +77,7 @@ BOOST_PYTHON_MODULE(icetray)
   load_project("icetray", false);
 
   // the shared library loader
-  def("load", (void (*)(const std::string&))load_impl);
+  def("load", &load_impl, load_impl_overloads(args("name", "verbose")));
 
 #ifdef I3_USE_ROOT
   // undo that nasty irritating root signal catching.  Power to the
