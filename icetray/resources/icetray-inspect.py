@@ -52,7 +52,7 @@ def print_config(config):
 		for k in config.keys():
 			print '    %s' % k
 			print '      Description : %s' % desc[k]
-			print '      Default     : %s' % config[k]
+			print '      Default     : %s' % repr(config[k])
 			print ''
 	else:
 		print '    (No parameters)'
@@ -65,14 +65,14 @@ def print_xmlconfig(config):
 			print '<parameter>'
 			print '\t<name>%s</name>' % cgi.escape(k)
 			print '\t<description>%s</description>' % cgi.escape(desc[k])
-			print '\t<default_value>%s</default_value>' % cgi.escape(config[k].__str__())
+			print '\t<default_value>%s</default_value>' % cgi.escape(repr(config[k]))
 			print '</parameter>'
 
 def display_config(mod, category):
 		if isinstance(mod, str):
 			modname = mod
 		else:
-			modname = mod.__name__
+			modname = repr(mod)
 		if opts.xml:
 			print '<module>'
 			print '<type>%s</type>' % cgi.escape(modname)
