@@ -112,7 +112,7 @@ for project in args:
 	try:
 		modname = project.replace('-','_')
 		module = __import__('icecube.%s' % modname, fromlist=[modname])
-		py_modules = icetray.inspect.harvest_subclasses(module)
+		py_modules = inspect.harvest_subclasses(module)
 	except ImportError:
 		try:
 			icetray.load(project, False)
