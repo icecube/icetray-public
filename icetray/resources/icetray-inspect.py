@@ -69,10 +69,10 @@ def print_xmlconfig(config):
 			print '</parameter>'
 
 def display_config(mod, category):
-		if isinstance(mod, str):
-			modname = mod
+		if isinstance(mod, type):
+			modname = '%s.%s' % (mod.__module__, mod.__name__)
 		else:
-			modname = repr(mod)
+			modname = mod
 		if opts.xml:
 			print '<module>'
 			print '<type>%s</type>' % cgi.escape(modname)
