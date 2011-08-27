@@ -154,6 +154,9 @@ public:
       try {
         std::string context_name = config.Get<std::string>(name);
         value = context_.Get<T>(context_name);
+        // NB: we got here by catching an error thrown by boost::python::extract(). 
+        // All subsequent calls will fail unless we clean it up. 
+        PyErr_Clear(); 
       } catch (...) {
         log_error("Error in %s service '%s', getting parameter '%s'",
                 I3::name_of(typeid(*this)).c_str(), GetName().c_str(),
