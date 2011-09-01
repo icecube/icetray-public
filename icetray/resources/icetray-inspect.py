@@ -82,7 +82,7 @@ def display_config(mod, category):
 		
 		try:
 			config = inspect.get_configuration(mod)
-		except RuntimeError as e:
+		except RuntimeError, e:
 			sys.stderr.write("Error constructing '%s': %s" % (mod, e))
 			return False
 			
@@ -117,7 +117,7 @@ for project in args:
 		try:
 			icetray.load(project, False)
 			py_modules = []
-		except RuntimeError as e:
+		except RuntimeError, e:
 			sys.stderr.write("Ignoring '%s': %s" % (project, e))
 			continue
 		
