@@ -34,6 +34,7 @@ namespace {
       .def("PopFrame", &module_t::PopFrame) \
       .def("Process", &module_t::Process) \
       .def("RequestSuspension",&module_t::RequestSuspension) \
+      .add_property("context", make_function(&module_t::GetContext, return_internal_reference<>())) \
 
 
   template <typename Base>
