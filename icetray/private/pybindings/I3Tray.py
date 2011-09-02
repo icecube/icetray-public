@@ -91,6 +91,9 @@ class I3Tray:
         for k,v in kwargs.items():
             self.the_tray.SetParameter(_name, k, v)
         return self
+
+    def AddSegment(self, segment, _name, **kwargs):
+        segment(self, _name, **kwargs)
     
     def SetParameter(self, module, param, value):
         self.the_tray.SetParameter(module, param, value)
