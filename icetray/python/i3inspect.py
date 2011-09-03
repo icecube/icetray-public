@@ -7,7 +7,7 @@
 #  
 
 from icecube.icetray import I3Context, I3Configuration, Connections, I3Module, _instantiate_module
-import types, sys
+import types, sys, os
 
 def make_context():
 	"""Create a potemkin I3Context suitable for instantiating an I3Module from Python."""
@@ -35,6 +35,29 @@ def get_configuration(module):
 		raise TypeError, "Module must be either a string naming a registered C++ subclass of I3Module or a Python subclass of I3Module, not %s" % type(module)
 	
 	return context.configuration
+
+major, minor = sys.version_info[:2]
+if major >= 2 and minor >= 5:
+	def same_package(current, other):
+		return current.__package__ == other.__package__
+else:
+	def hobo_getpackage(mod):
+		"""
+		A stupid hack for ancient Python. This does not work in general,
+		but should be fine for modules installed as $I3_BUILD/lib/icecube/foo.
+		"""
+		# Exclude built-ins
+		if not hasattr(mod, '__file__'):
+			return None
+		i3base = os.path.expandvars('$I3_BUILD/lib/icecube')
+		package = mod.__file__[len(i3base)+1:].split(os.sep)[0]
+		# Maybe we have a compiled extension
+		base, ext = os.path.splitext(package)
+		if ext == '.dylib' or ext == '.so':
+			package = base
+		return package
+	def same_package(current, other):
+		return hobo_getpackage(current) == hobo_getpackage(other)
 	
 def harvest_subclasses(module, klass=I3Module, memo=None):
 	"""Recursively search through an object for subclasses of I3Module."""
@@ -51,7 +74,7 @@ def harvest_subclasses(module, klass=I3Module, memo=None):
 	memo[ptr] = module
 	
 	# Filter out classes defined in packages other than this one.
-	excluded = lambda klass_: sys.modules[klass_.__module__].__package__ != module.__package__
+	excluded = lambda klass_: not same_package(sys.modules[klass_.__module__], module)
 
 	# Get public properties (underscored names are private by convention)
 	harvest = []
@@ -59,7 +82,7 @@ def harvest_subclasses(module, klass=I3Module, memo=None):
 		if item.startswith('_'):
 			continue
 		attr = getattr(module, item)
-		if isinstance(attr, types.ModuleType) and attr.__package__ == module.__package__:
+		if isinstance(attr, types.ModuleType) and same_package(attr, module):
 			harvest += harvest_subclasses(attr, klass, memo)
 		elif isinstance(attr, type):
 			if issubclass(attr, klass) and not excluded(attr):
