@@ -94,6 +94,7 @@ class I3Tray:
 
     def AddSegment(self, segment, _name, **kwargs):
         segment(self, _name, **kwargs)
+    AddConfig=AddSegment
     
     def SetParameter(self, module, param, value):
         self.the_tray.SetParameter(module, param, value)
