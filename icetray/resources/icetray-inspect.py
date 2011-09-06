@@ -84,6 +84,8 @@ def display_config(mod, category):
 			config = inspect.get_configuration(mod)
 		except RuntimeError, e:
 			sys.stderr.write("Error constructing '%s': %s" % (mod, e))
+			if opts.xml:
+				print '</module>'
 			return False
 			
 		if not opts.names_only:
