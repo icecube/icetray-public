@@ -253,7 +253,7 @@ macro(i3_add_library THIS_LIB_NAME)
       set(HTML_OUTPUT ${CMAKE_BINARY_DIR}/docs/inspect/${THIS_LIB_NAME}.html)
       add_custom_target(${PROJECT_NAME}-${THIS_LIB_NAME}-inspect
 	COMMAND mkdir -p ${CMAKE_BINARY_DIR}/docs/inspect
-	COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${EXECUTABLE_OUTPUT_PATH}/icetray-inspect -p ${THIS_LIB_NAME} --xml > ${XML_TMP}
+	COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${EXECUTABLE_OUTPUT_PATH}/icetray-inspect ${THIS_LIB_NAME} --xml > ${XML_TMP}
 	COMMAND ${XSLTPROC_BIN} ${CMAKE_SOURCE_DIR}/icetray/resources/inspect2html.xsl ${XML_TMP} > ${HTML_OUTPUT}
 	COMMENT "Generating html from icetray-inspect of ${THIS_LIB_NAME}"
 	)
