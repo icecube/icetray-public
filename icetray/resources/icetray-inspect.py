@@ -9,8 +9,9 @@
 
 from optparse import OptionParser
 from icecube import icetray, dataclasses
-from icecube.icetray import i3inspect as inspect
-import re, glob, sys, cgi
+from icecube.icetray import i3inspect
+from icecube.icetray import traysegment
+import inspect, re, glob, sys, cgi
 from os.path import splitext, basename
 
 parser = OptionParser("usage: %prog [options] project1 project2 ...")
@@ -28,11 +29,17 @@ parser.add_option('--no-modules', dest='no_modules', action='store_true',
 parser.add_option('--no-services', dest='no_services', action='store_true',
 	help='Skip ServiceFactories',
 	default=False)
+parser.add_option('--no-segments', dest='no_segments', action='store_true',
+	help='Skip I3Tray segments',
+	default=False)
 
 opts, args = parser.parse_args()
 if len(args) == 0 and opts.all is None:
 	parser.print_help()
 	parser.exit(1)
+	
+if opts.xml:
+	opts.no_segments = True
 
 if opts.all:
 	args += [splitext(basename(fname))[0][3:] for fname in glob.glob('%s/lib*' % opts.all)]
@@ -81,7 +88,7 @@ def display_config(mod, category):
 			print '  %s (%s)' % (modname, category)
 		
 		try:
-			config = inspect.get_configuration(mod)
+			config = i3inspect.get_configuration(mod)
 		except RuntimeError, e:
 			sys.stderr.write("Error constructing '%s': %s" % (mod, e))
 			if opts.xml:
@@ -97,6 +104,16 @@ def display_config(mod, category):
 		if opts.xml:
 			print '</module>'
 		return True
+		
+def display_segment(function):
+	shortname = function.__i3name__.split('.')[-1]
+	argspec = inspect.formatargspec(*inspect.getargspec(function))
+	print '  %s (I3Tray segment)' % (function.__i3name__)
+	print '    Signature: %s%s' % (shortname, argspec)
+	print ''
+	print '    ' + inspect.getdoc(function).replace('\n', '\n    ')
+	print ''
+	print '  ' + '-'*77
 
 if opts.xml:
 	print '<?xml version=\'1.0\'?>'
@@ -114,7 +131,7 @@ for project in args:
 	try:
 		modname = project.replace('-','_')
 		module = __import__('icecube.%s' % modname, globals(), locals(), [modname])
-		py_modules = inspect.harvest_subclasses(module)
+		py_modules = i3inspect.harvest_subclasses(module)
 	except ImportError:
 		try:
 			icetray.load(project, False)
@@ -142,6 +159,11 @@ for project in args:
 				continue
 			if display_config(mod, 'C++ ServiceFactory'):
 				servicecount += 1
+				
+	if not opts.no_segments:
+		for segment in traysegment.segments[modname]:
+			display_segment(segment)
+			
 	if opts.xml:
 		print '</project>'
 	
