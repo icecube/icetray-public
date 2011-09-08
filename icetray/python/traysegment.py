@@ -17,6 +17,9 @@ def traysegment(function, name=None):
 	def segment(tray, name, arg=stuff):
 	"""
 
+	if inspect.getdoc(function) is None:
+		raise ValueError, "I3Tray segments must have docstrings!"
+
 	if name is None:
 		module = inspect.getmodule(function)
 		name = "%s.%s" % (module.__name__, function.__name__)
