@@ -7,7 +7,7 @@
 #  
 
 from icecube.icetray import I3Context, I3Configuration, Connections, I3Module, _instantiate_module
-import types, sys, os
+import types, sys, os, inspect
 
 def make_context():
 	"""Create a potemkin I3Context suitable for instantiating an I3Module from Python."""
@@ -22,9 +22,34 @@ def make_context():
 	context['OutBoxes'] = outboxes
 	
 	return context
-	
+
+class I3HoboConfiguration(dict):
+	"""Fake I3Configuration's interface for icetray-inspect."""
+	def __init__(self, args, defaults, descriptions):
+		self.descriptions = {}
+		self.args = list(args)
+		for arg, default, desc in zip(args, defaults, descriptions):
+			self[arg] = default
+			self.descriptions[arg] = desc
+
+	def keys(self):
+		return list(self.args)
+
+	@classmethod
+	def from_traysegment(cls, segment):
+		args, varargs, kwargs, defaultvals = inspect.getargspec(segment)
+		defaults = [None]*len(args)
+		if defaultvals is not None:
+			defaults[-len(defaultvals):] = defaultvals
+		descriptions = ['']*len(args)
+		config = cls(args[2:], defaults[2:], descriptions[2:])
+		config.__doc__ = segment.__doc__
+		return config
+
 def get_configuration(module):
 	"""Get an I3Module's default I3Configuration."""
+	if hasattr(module, "__i3traysegment__"):
+		return I3HoboConfiguration.from_traysegment(module)
 	context = make_context()
 	context.configuration.ClassName = str(module)
 	if isinstance(module, str):
@@ -58,8 +83,14 @@ else:
 		return package
 	def same_package(current, other):
 		return hobo_getpackage(current) == hobo_getpackage(other)
+
+def is_I3Module(obj):
+	return isinstance(obj, type) and issubclass(obj, I3Module)
+
+def is_traysegment(obj):
+	return hasattr(obj, "__i3traysegment__")
 	
-def harvest_subclasses(module, klass=I3Module, memo=None):
+def harvest_objects(module, want=is_I3Module, memo=None):
 	"""Recursively search through an object for subclasses of I3Module."""
 	# I miss Ruby's ObjectSpace. Sniff.
 	
@@ -83,10 +114,10 @@ def harvest_subclasses(module, klass=I3Module, memo=None):
 			continue
 		attr = getattr(module, item)
 		if isinstance(attr, types.ModuleType) and same_package(attr, module):
-			harvest += harvest_subclasses(attr, klass, memo)
-		elif isinstance(attr, type):
-			if issubclass(attr, klass) and not excluded(attr):
-				harvest.append(attr)
+			harvest += harvest_objects(attr, want, memo)
+		elif want(attr) and not excluded(attr):
+			print attr
+			harvest.append(attr)
 	
 	# Ensure uniqueness.
 	return list(set(harvest))

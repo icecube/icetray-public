@@ -38,9 +38,6 @@ if len(args) == 0 and opts.all is None:
 	parser.print_help()
 	parser.exit(1)
 	
-if opts.xml:
-	opts.no_segments = True
-
 if opts.all:
 	args += [splitext(basename(fname))[0][3:] for fname in glob.glob('%s/lib*' % opts.all)]
 
@@ -76,16 +73,26 @@ def print_xmlconfig(config):
 			print '</parameter>'
 
 def display_config(mod, category):
-		if isinstance(mod, type):
+		if i3inspect.is_I3Module(mod) or i3inspect.is_traysegment(mod):
 			modname = '%s.%s' % (mod.__module__, mod.__name__)
+			docs = inspect.getdoc(mod)
+			if docs is None:
+				docs = ''
 		else:
 			modname = mod
+			docs = ''
+
 		if opts.xml:
 			print '<module>'
 			print '<type>%s</type>' % cgi.escape(modname)
 			print '<kind>%s</kind>' % cgi.escape(category)
+			print '<description>%s</description>' % cgi.escape(docs)
 		else:
 			print '  %s (%s)' % (modname, category)
+			if len(docs) > 0:
+				print ''
+				print '    ' + docs.replace('\n', '\n    ')
+				print ''
 		
 		try:
 			config = i3inspect.get_configuration(mod)
@@ -131,7 +138,8 @@ for project in args:
 	try:
 		modname = project.replace('-','_')
 		module = __import__('icecube.%s' % modname, globals(), locals(), [modname])
-		py_modules = i3inspect.harvest_subclasses(module)
+		py_modules = i3inspect.harvest_objects(module, i3inspect.is_I3Module)
+		traysegments = i3inspect.harvest_objects(module, i3inspect.is_traysegment)
 	except ImportError:
 		try:
 			icetray.load(project, False)
@@ -160,9 +168,9 @@ for project in args:
 			if display_config(mod, 'C++ ServiceFactory'):
 				servicecount += 1
 				
-	if not opts.no_segments and modname in traysegment.segments:
-		for segment in traysegment.segments[modname]:
-			display_segment(segment)
+	if not opts.no_segments:
+		for segment in traysegments:
+			display_config(segment, 'I3Tray segment')
 			
 	if opts.xml:
 		print '</project>'

@@ -8,7 +8,7 @@
 
 import inspect # the real inspect
 
-def traysegment(function, name=None):
+def traysegment(function):
 	"""Register a tray segment configuration function with icetray. The
 	segment can then be added to a tray using I3Tray.AddSegment().
 
@@ -18,22 +18,14 @@ def traysegment(function, name=None):
 	"""
 
 	if inspect.getdoc(function) is None:
-		raise ValueError, "I3Tray segments must have docstrings!"
+		function.__doc__ = "I3Tray segments should have docstrings. This one doesn't. Fix it."
 
-	if name is None:
-		module = inspect.getmodule(function)
-		name = "%s.%s" % (module.__name__, function.__name__)
-	
-	function.__i3name__ = name
-	
-	project = name.split('.')[1]
-	if not project in traysegment.segments:
-		traysegment.segments[project] = []
-	traysegment.segments[project].append(function)
+	if len(inspect.getargspec(function)[0]) < 2:
+		raise ValueError, "I3Tray segments must have at least two arguments (tray, name)"
 
+	function.__i3traysegment__ = True
+	
 	return function
-	
-traysegment.segments = dict()
 	
 _modules_by_file = {}
 def find_module(path):
@@ -86,14 +78,7 @@ def module_altconfig(module, **altdefargs):
 
 	Usage: altconfig1 = icetray.module_altconfig('I3ExampleModule', Par1=5)
 	"""
-	
-	# Find out which module we were called from, and the name to which
-	# the return value will be assigned.
-	lastframe = inspect.currentframe().f_back
-	assigned_name = stored_name(lastframe)
-	module_name = find_module(lastframe.f_code.co_filename).__name__
-	name = "%s.%s" % (module_name, assigned_name)
-	
+
 	def segment(tray, name, **args):
 		mergedargs = altdefargs.copy()
 		for userarg in args.keys():
@@ -117,5 +102,15 @@ def module_altconfig(module, **altdefargs):
 	segment.module = module
 	segment.default_overrides = altdefargs
 
-	return traysegment(segment, name)
+	func = traysegment(segment)
+
+	# Find out which module we were called from, and the name to which
+	# the return value will be assigned. This allows icetray-inspect to
+	# find the segment; if we were to leave the function as-is, it would
+	# be identified as icetray.traysegment.traysegment.segment.
+	lastframe = inspect.currentframe().f_back
+	func.__module__ = find_module(lastframe.f_code.co_filename).__name__
+	func.__name__ = stored_name(lastframe)
+
+	return func
 
