@@ -160,7 +160,7 @@ for project in args:
 			if display_config(mod, 'C++ ServiceFactory'):
 				servicecount += 1
 				
-	if not opts.no_segments:
+	if not opts.no_segments and modname in traysegment.segments:
 		for segment in traysegment.segments[modname]:
 			display_segment(segment)
 			

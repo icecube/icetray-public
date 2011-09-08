@@ -24,12 +24,13 @@ def traysegment(function, name=None):
 	function.__i3name__ = name
 	
 	project = name.split('.')[1]
+	if not project in traysegment.segments:
+		traysegment.segments[project] = []
 	traysegment.segments[project].append(function)
 
 	return function
 	
-from collections import defaultdict
-traysegment.segments = defaultdict(list)
+traysegment.segments = dict()
 	
 _modules_by_file = {}
 def find_module(path):
