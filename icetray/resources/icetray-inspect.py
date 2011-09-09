@@ -144,6 +144,7 @@ for project in args:
 		try:
 			icetray.load(project, False)
 			py_modules = []
+			traysegments = []
 		except RuntimeError, e:
 			sys.stderr.write("Ignoring '%s': %s" % (project, e))
 			continue
