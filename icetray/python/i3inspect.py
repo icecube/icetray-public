@@ -62,7 +62,7 @@ def get_configuration(module):
 	return context.configuration
 
 major, minor = sys.version_info[:2]
-if major >= 2 and minor >= 6:
+if major >= 2 and minor >= 5:
 	def same_package(current, other):
 		return current.__package__ == other.__package__
 else:
