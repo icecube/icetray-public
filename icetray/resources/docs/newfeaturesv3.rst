@@ -7,4 +7,5 @@ New in v3
    functions 
    modules
    services
+   segments
    movingtov3

@@ -1,6 +1,6 @@
-=========================
+========================
  Python bindings changed
-=========================
+========================
 
 The interface to many of the dataclasses python bindings have undergone an
 extensive update.  The idea behind this update was to make the python
@@ -19,12 +19,13 @@ With the following guidelines
     items using the I3Time class use names like start_time/end_time.
 #. make sure enums are bound, and included at the proper scope with the class.
 
-As an example, this generally changes the interfaces such as:
-::
+As an example, this generally changes the interfaces such as::
+
   dataclasses.I3EventHeader.EventID -> dataclasses.I3EventHeader.event_id
   dataclasses.I3DOMLaunch.GetLCBit -> dataclasses.I3DOMLaunch.lc_bit
   dataclasses.I3Particle.GetAzimuth -> dataclasses.I3Particle.azimuth   
 
 A good example of the dataclasses examples can be found in the test script
+
 ::
   $I3_SRC/dataclasses/resources/test/workout_pybindings.py

@@ -123,12 +123,14 @@ after the I3Reader::
 This will add a Q-frame ahead of each of your P-frames and keep
 the appropriate items in the Q-frame.  
 
-2. Script complains::
+2. Script complains:
+
+::
 
    RuntimeError: object in frame at "I3EventHeader" doesn't exist 
       or won't dynamic cast to type "I3EventHeader"
 
-Your likely trying to use the I3NullSplitter on events that do not have
+You're likely trying to use the I3NullSplitter on events that do not have
 an I3EventHeader (undecoded DST only events, for example). 
 An I3EventHeader is required for the I3NullSplitter to work.  
 You could add a guard to make sure all events have an I3EventHeader::
@@ -160,6 +162,7 @@ have been cut)::
 
 5. Ordering of modules in script.  Some care should be taken when ordering
 the modules in your scripts.  You should generally follow the order:
+
   #. File reading, DB services (if needed), I3MetaSynth (if needed for
      DB services), and any data decoding.  Depending on your data,
      these may not be needed as they could already be done (L2 or higher 
