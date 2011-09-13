@@ -3,6 +3,21 @@
 Details by Platform
 ===================
 
+Unlike many other projects / experiments, IceCube strives to be as
+Operating System agnostic as possible and maintains no "standard
+platform'. That being said, manpower and hardware are limited, and all
+possible platforms and combinations of platfroms cannot be tested or
+supported. A general rule of thumb is that the latest "long term" or
+"supported" or "regular life cycle" release, as well as the previous
+one, will work with IceCube software. Use common sense and you should
+be safe. If you're curious as to what platforms are regularly tested,
+take a look at our list_.
+
+Below you can find some hints and tips that we've collected about
+various platforms.
+
+.. _list: http://builds.icecube.wisc.edu/
+
 .. index:: OSX
 .. _OSX:
 
@@ -76,8 +91,12 @@ which can always be found here_.
 .. index:: RHEL4
 .. _RHEL4:
 
-RHEL4
-^^^^^
+Red Hat
+^^^^^^^
+
+* Red Hat Enderprise Linux 4, and its derivitives, may not work with
+  IceCube software as they fall outside of the "current/previous" rule
+  of thumb stated above.
 
 * TCL dependencies are satisfied only with the tcl-devel package. Try
   'up2date tcl-devel' as root user.
