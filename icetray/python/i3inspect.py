@@ -116,7 +116,6 @@ def harvest_objects(module, want=is_I3Module, memo=None):
 		if isinstance(attr, types.ModuleType) and same_package(attr, module):
 			harvest += harvest_objects(attr, want, memo)
 		elif want(attr) and not excluded(attr):
-			print attr
 			harvest.append(attr)
 	
 	# Ensure uniqueness.
