@@ -186,5 +186,5 @@ FreeBSD
 
 Offline software is supported on FreeBSD 8 and newer. Versions of ROOT
 earlier than 5.30 will not build on 64-bit FreeBSD hosts, so you may need
-to pass -DUSE_ROOT to cmake while building.
+to pass -DUSE_ROOT=OFF to cmake while building.
 
