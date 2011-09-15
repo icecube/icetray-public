@@ -18,6 +18,7 @@ class QConverter : public I3Module
 		QConverter(const I3Context& context);
 		void Configure();
 		void Physics(I3FramePtr frame);
+		void DAQ(I3FramePtr frame);
 	private:
 		std::string subevent_stream;
 		std::vector<std::string> keys_to_q;
@@ -118,5 +119,11 @@ QConverter::Physics(I3FramePtr frame) {
 		frame->Put("I3EventHeader", header);
 		PushFrame(frame);
 	}
+}
+
+void
+QConverter::DAQ(I3FramePtr frame)
+{
+	log_fatal("Trying to QConvert data already containing Q frames!");
 }
 
