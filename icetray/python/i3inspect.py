@@ -23,6 +23,75 @@ def make_context():
 	
 	return context
 
+try:
+	import docutils.frontend
+	import docutils.utils
+	import docutils.parsers.rst
+	from docutils import nodes
+	
+	class ParamHarvester(nodes.SparseNodeVisitor):
+		"""Extract Sphinxy parameter descriptions from a docstring."""
+		def __init__(self, document):
+			nodes.SparseNodeVisitor.__init__(self, document)
+			self.tags = set(['param', 'parameter', 'arg', 'argument', 'key', 'keyword'])
+
+		def visit_document(self, node):
+			self.params = {}
+			self.field_name = None
+			self.field_body = None
+			self.field_list = None
+
+		def visit_field_list(self, node):
+			self.field_list = node
+
+		def depart_field(self, node):
+			if self.field_list is not None and self.field_name is not None:
+				self.field_list.remove(node)
+			self.field_name = None
+			self.field_body = None
+
+		def visit_field_name(self, node):
+			fields = node.children[0].split()
+			if fields[0] in self.tags and len(fields) > 1:
+				self.field_name = fields[1]
+			else:
+				self.field_name = None
+			self.field_body = None
+
+		def visit_field_body(self, node):
+
+			self.field_body = node.astext()
+			if len(self.field_body) == 0:
+				self.field_body = None
+
+		def depart_field_body(self, node):
+			if self.field_name is not None and self.field_body is not None:
+				self.params[str(self.field_name)] = self.field_body
+	
+	def getdoc(obj):
+		docstring = inspect.getdoc(obj)
+		if docstring is None:
+			return ('', {})
+			
+		parser = docutils.parsers.rst.Parser()
+		settings = docutils.frontend.OptionParser(
+		    components=(docutils.parsers.rst.Parser,)).get_default_values()
+		doc = docutils.utils.new_document('', settings)
+		harvester = ParamHarvester(doc)
+		
+		parser.parse(docstring, doc)
+		doc.walkabout(harvester)
+		return (doc.astext().strip(), harvester.params)
+
+except ImportError:
+	
+	def getdoc(obj):
+		docstring = inspect.getdoc(obj)
+		if docstring is None:
+			return ('', {})
+		else:
+			return (docstring, {})
+
 class I3HoboConfiguration(dict):
 	"""Fake I3Configuration's interface for icetray-inspect."""
 	def __init__(self, args, defaults, descriptions):
@@ -41,9 +110,10 @@ class I3HoboConfiguration(dict):
 		defaults = [None]*len(args)
 		if defaultvals is not None:
 			defaults[-len(defaultvals):] = defaultvals
-		descriptions = ['']*len(args)
-		config = cls(args[2:], defaults[2:], descriptions[2:])
-		config.__doc__ = segment.__doc__
+		doc, descdict = getdoc(segment)
+		descriptions = [descdict.get(k, '') for k in args[2:]]
+		config = cls(args[2:], defaults[2:], descriptions)
+		config.__doc__ = doc
 		return config
 
 def get_configuration(module):

@@ -75,12 +75,19 @@ def print_xmlconfig(config):
 def display_config(mod, category):
 		if i3inspect.is_I3Module(mod) or i3inspect.is_traysegment(mod):
 			modname = '%s.%s' % (mod.__module__, mod.__name__)
-			docs = inspect.getdoc(mod)
-			if docs is None:
-				docs = ''
 		else:
 			modname = mod
+			
+		try:
+			config = i3inspect.get_configuration(mod)
+		except RuntimeError, e:
+			sys.stderr.write("Error constructing '%s': %s" % (mod, e))
+			return False
+			
+		if isinstance(mod, str) or len(inspect.getdoc(config)) == 0:
 			docs = ''
+		else:
+			docs = inspect.getdoc(config)
 
 		if opts.xml:
 			print '<module>'
@@ -93,14 +100,6 @@ def display_config(mod, category):
 				print ''
 				print '    ' + docs.replace('\n', '\n    ')
 				print ''
-		
-		try:
-			config = i3inspect.get_configuration(mod)
-		except RuntimeError, e:
-			sys.stderr.write("Error constructing '%s': %s" % (mod, e))
-			if opts.xml:
-				print '</module>'
-			return False
 			
 		if not opts.names_only:
 			if opts.xml:
