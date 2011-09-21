@@ -310,8 +310,11 @@ I3Module::SyncCache(std::string outbox, I3FramePtr frame)
   frame->purge();
   frame->merge(*cache_);
 
-  // Merge all frames except tray info into the cache frame
-  if (frame->GetStop() != I3Frame::TrayInfo)
+  // Merge all frames except tray info and physics into the cache frame
+  // This prevents spurious keys in the first case and foot-shooting in
+  // the second.
+  if (frame->GetStop() != I3Frame::TrayInfo &&
+   frame->GetStop() != I3Frame::Physics)
     cache_->merge(*frame);
 }
 
