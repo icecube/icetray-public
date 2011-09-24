@@ -104,7 +104,7 @@ class I3Tray(icetray.I3Tray):
         if len(args) == 4:
             super(I3Tray, self).ConnectBoxes(args[0], args[1], args[2], args[3])
         elif len(args) == 3:
-            super(I3tray, self).ConnectBoxes(args[0], args[1], args[2])
+            super(I3Tray, self).ConnectBoxes(args[0], args[1], args[2])
         else:
             print 'Wrong number of arguments', len(args), 'to ConnectBoxes'
         
