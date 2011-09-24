@@ -15,7 +15,7 @@ import re
 import math
 import cgi
 
-import inspect
+import i3inspect
 
 from jinja2 import Template
 
@@ -46,7 +46,7 @@ class ModuleDescription:
         # Get the defaults from the module. This will fail if the module
         # is actually a Python function, but then it has no defaults anyhow.
         try:
-            config = inspect.get_configuration(typename)
+            config = i3inspect.get_configuration(typename)
         except TypeError:
             return
         
@@ -79,7 +79,7 @@ class ModuleInstance:
 
     def set_param(self, pname, pvalue):
         if not self.module.has_param(pname):
-            print "adding parameter %s with value %s to %s %s" % (pname, pvalue, self.module.typename, self.instancename)
+            # print "adding parameter %s with value %s to %s %s" % (pname, pvalue, self.module.typename, self.instancename)
             self.module.add_param(name= pname,
                                   default=None,
                                   description=None)
@@ -106,6 +106,12 @@ class ModuleInstance:
                 result[pdesc.name] = (pdesc.defaultvalue, pdesc.defaultvalue, pdesc.description)
 
         return result
+
+    def __str__(self):
+        rep = "%s '%s'" % (self.module.typename, self.instancename)
+        for pname, pvalue in self.paramvalues.iteritems():
+            rep += '\n    %s=%s' % (pname, repr(pvalue))
+        return rep
 
 class XMLOutput:
     def __init__(self, modules, services):
@@ -167,9 +173,10 @@ class I3TrayDebugger:
     """
         duck-typed replacement for I3Tray to collect information about the steering file
     """
-    def __init__(self, outputfile, **kwargs):
+    def __init__(self, outputfile=None, **kwargs):
         self.outputfile = outputfile
         self.modules  = dict()
+        self.modules_in_order = []
         self.services = dict()
 
         self.last_added_module = None
@@ -192,6 +199,7 @@ class I3TrayDebugger:
     
     def AddModule(self, typename, instancename, **kwargs):
         inst = self.create_instance(typename, instancename, kwargs)
+        self.modules_in_order.append(instancename)
         self.modules[instancename] = inst
         inst.before = self.last_added_module
         if self.last_added_module is not None:
@@ -200,16 +208,42 @@ class I3TrayDebugger:
 
         return inst
 
-    def Execute(self, maxcount=0):
-        print "services:"
-        for name, conf in self.services.iteritems():
-            print name, conf
-        print "modules:"
-        for name, conf in self.modules.iteritems():
-            print name, conf
+    def MoveModule(self, name, anchor, after):
+        self.modules_in_order.remove(name)
+        idx = self.modules_in_order.index(anchor)
+        if after and idx == len(self.modules_in_order)-1:
+            self.modules_in_order.append(name)
+        else:
+            self.modules_in_order.insert(idx, name)
 
-        print "creating graph"
-        XMLOutput(self.modules, self.services).generate(self.outputfile)
+    def AddSegment(self, segment, name):
+        segment(self, name)
+    AddConfig=AddSegment
+
+    def __str__(self):
+        def center(text, fill, size):
+            nf = (size-len(text)-2)/2
+            line = fill*nf + " " + text + " " + fill*nf
+            return line + fill*(size-len(line))
+
+        rep = str()
+        if len(self.services) > 0:
+            rep += center("I3Services", "-", 60)
+            for name, conf in self.services.iteritems():
+                rep += "\n" + str(conf)
+        if len(self.modules) > 0:
+            rep += "\n" + center("I3Modules", "-", 60)
+            for name in self.modules_in_order:
+                rep += "\n" + str(self.modules[name])
+        return rep
+
+    def Execute(self, maxcount=0):
+        print self
+        
+        if self.outputfile is not None:
+            print "creating graph"
+            XMLOutput(self.modules, self.services).generate(self.outputfile)
 
     def Finish(self):
         pass
+

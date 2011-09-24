@@ -8,11 +8,6 @@
 #
 
 from optparse import OptionParser
-from icecube import icetray, dataclasses
-from icecube.icetray import i3inspect
-from icecube.icetray import traysegment
-import inspect, re, glob, sys, cgi
-from os.path import splitext, basename
 
 parser = OptionParser("usage: %prog [options] project1 project2 ...")
 parser.add_option('-a', '--all', dest='all',
@@ -32,11 +27,20 @@ parser.add_option('--no-services', dest='no_services', action='store_true',
 parser.add_option('--no-segments', dest='no_segments', action='store_true',
 	help='Skip I3Tray segments',
 	default=False)
+parser.add_option('--expand-segments', dest='expand_segments', action='store_true',
+	help='Expand I3Tray segments, printing the sequence of modules they add to the tray',
+	default=False)
 
 opts, args = parser.parse_args()
 if len(args) == 0 and opts.all is None:
 	parser.print_help()
 	parser.exit(1)
+	
+from icecube import icetray, dataclasses
+from icecube.icetray import i3inspect
+from icecube.icetray import traysegment
+import inspect, re, glob, sys, cgi
+from os.path import splitext, basename
 	
 if opts.all:
 	args += [splitext(basename(fname))[0][3:] for fname in glob.glob('%s/lib*' % opts.all)]
@@ -61,6 +65,21 @@ def print_config(config):
 	else:
 		print '    (No parameters)'
 	print '  ' + '-'*77
+	
+	
+def print_segment(segment):
+	from icecube.icetray.traydebug import I3TrayDebugger
+	
+	potemkin = I3TrayDebugger()
+	try:
+		potemkin.AddSegment(segment, segment.__name__)
+	except Exception, e:
+		sys.stderr.write("Error constructing '%s': %s" % (segment, e))
+		return
+	
+	print '    Equivalent to:'
+	print '    ' + str(potemkin).replace('\n','\n    ')
+	print ''
 
 def print_xmlconfig(config):
 	desc = config.descriptions
@@ -72,10 +91,8 @@ def print_xmlconfig(config):
 			print '\t<default_value>%s</default_value>' % cgi.escape(repr(config[k]))
 			print '</parameter>'
 
-def display_config(mod, category):
-		if i3inspect.is_I3Module(mod) or i3inspect.is_traysegment(mod):
-			modname = '%s.%s' % (mod.__module__, mod.__name__)
-		else:
+def display_config(mod, category, modname=None):
+		if modname is None:
 			modname = mod
 			
 		try:
@@ -84,7 +101,7 @@ def display_config(mod, category):
 			sys.stderr.write("Error constructing '%s': %s" % (mod, e))
 			return False
 			
-		if isinstance(mod, str) or len(inspect.getdoc(config)) == 0:
+		if isinstance(mod, str) or inspect.getdoc(config) is None or len(inspect.getdoc(config)) == 0:
 			docs = ''
 		else:
 			docs = inspect.getdoc(config)
@@ -96,31 +113,24 @@ def display_config(mod, category):
 			print '<description>%s</description>' % cgi.escape(docs)
 		else:
 			print '  %s (%s)' % (modname, category)
-			if len(docs) > 0:
+			if not opts.names_only and len(docs) > 0:
 				print ''
 				print '    ' + docs.replace('\n', '\n    ')
 				print ''
+			if i3inspect.is_traysegment(mod) and opts.expand_segments:
+				print_segment(mod)
 			
 		if not opts.names_only:
 			if opts.xml:
 				print_xmlconfig(config)
 			else:
 				print_config(config)
+				
 
 		if opts.xml:
 			print '</module>'
 		return True
 		
-def display_segment(function):
-	shortname = function.__i3name__.split('.')[-1]
-	argspec = inspect.formatargspec(*inspect.getargspec(function))
-	print '  %s (I3Tray segment)' % (function.__i3name__)
-	print '    Signature: %s%s' % (shortname, argspec)
-	print ''
-	print '    ' + inspect.getdoc(function).replace('\n', '\n    ')
-	print ''
-	print '  ' + '-'*77
-
 if opts.xml:
 	print '<?xml version=\'1.0\'?>'
 	print '<icetray-inspect>'
@@ -159,7 +169,7 @@ for project in args:
 			if display_config(mod, 'C++ I3Module'):
 				modcount += 1 
 		for mod in py_modules:
-			if display_config(mod, 'Python I3Module'):
+			if display_config(mod, 'Python I3Module', py_modules[mod]):
 				modcount += 1
 	if not opts.no_services:
 		for mod in cxx_services:
@@ -170,7 +180,7 @@ for project in args:
 				
 	if not opts.no_segments:
 		for segment in traysegments:
-			display_config(segment, 'I3Tray segment')
+			display_config(segment, 'I3Tray segment', traysegments[segment])
 			
 	if opts.xml:
 		print '</project>'

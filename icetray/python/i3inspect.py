@@ -131,6 +131,12 @@ def get_configuration(module):
 	
 	return context.configuration
 
+def is_I3Module(obj):
+	return isinstance(obj, type) and issubclass(obj, I3Module)
+
+def is_traysegment(obj):
+	return hasattr(obj, "__i3traysegment__")
+
 major, minor = sys.version_info[:2]
 if major >= 2 and minor >= 5:
 	def same_package(current, other):
@@ -154,11 +160,6 @@ else:
 	def same_package(current, other):
 		return hobo_getpackage(current) == hobo_getpackage(other)
 
-def is_I3Module(obj):
-	return isinstance(obj, type) and issubclass(obj, I3Module)
-
-def is_traysegment(obj):
-	return hasattr(obj, "__i3traysegment__")
 	
 def harvest_objects(module, want=is_I3Module, memo=None):
 	"""Recursively search through an object for subclasses of I3Module."""
@@ -170,24 +171,29 @@ def harvest_objects(module, want=is_I3Module, memo=None):
 	# Avoid circular references like the plague
 	ptr = id(module)
 	if ptr in memo:
-		return []
+		return {}
 	# Mark this module as visited
 	memo[ptr] = module
 	
-	# Filter out classes defined in packages other than this one.
-	excluded = lambda klass_: not same_package(sys.modules[klass_.__module__], module)
+	def priority_update(basedict, otherdict):
+		"""
+		Update the dictionary of objects only if the new name is
+		closer to a root of PYTHONPATH 
+		"""
+		for k, v in otherdict.iteritems():
+			if not k in basedict or len(v.split('.')) < len(basedict[k].split('.')):
+				basedict[k] = v
 
 	# Get public properties (underscored names are private by convention)
-	harvest = []
+	harvest = {}
 	for item in dir(module):
 		if item.startswith('_'):
 			continue
 		attr = getattr(module, item)
 		if isinstance(attr, types.ModuleType) and same_package(attr, module):
-			harvest += harvest_objects(attr, want, memo)
-		elif want(attr) and not excluded(attr):
-			harvest.append(attr)
+			priority_update(harvest, harvest_objects(attr, want, memo))
+		elif want(attr):
+			priority_update(harvest, {attr: module.__name__ + "." + item})
 	
-	# Ensure uniqueness.
-	return list(set(harvest))
+	return harvest
 	
