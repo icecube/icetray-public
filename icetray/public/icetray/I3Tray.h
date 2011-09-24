@@ -141,6 +141,8 @@ public:
   param_setter
   AddModule(const std::string& name, const std::string& instancename);
 
+  void MoveModule(const std::string& name, const std::string& anchor, bool before=true);
+
   /**
    * Connects the specified OutBox to the specified InBox. If not name is
    * specified for the InBox then the OutBox will be connected to the
@@ -263,6 +265,8 @@ private:
   static volatile sig_atomic_t suspension_requested_;
 
   static void set_suspend_flag(int sig);
+  static void die_messily(int sig);
+  static void report_usage(int sig);
 
   friend void I3Module::RequestSuspension() const;
 

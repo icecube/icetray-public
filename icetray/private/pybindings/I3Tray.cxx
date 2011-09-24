@@ -102,6 +102,7 @@ void register_I3Tray()
     .def("AddModule", 
 	 (I3Tray::param_setter (I3Tray::*)(boost::python::object, const std::string&))
 	 &I3Tray::AddModule)
+    .def("MoveModule", &I3Tray::MoveModule, (arg("self"), arg("name"), arg("anchor"), arg("after")=false))
     .def("ConnectBoxes", &I3Tray::ConnectBoxes)
     
     // SetParameter exposure: BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS

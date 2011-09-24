@@ -52,9 +52,44 @@ namespace bp = boost::python;
 
 void I3Tray::set_suspend_flag(int sig)
 {
-  std::cerr << "\n***\n*** SIGINT received.   Calling Finish() at the end of the current frame. \n*** Hit ^C again to force quit.\n***\n";
-  if (sig == SIGINT)
+  if (sig == SIGINT) {
+    std::cerr << "\n***\n*** SIGINT received.   Calling Finish() at the end of the current frame. \n*** Hit ^C again to force quit.\n***\n";
     suspension_requested_ = 1;
+    signal(SIGINT, die_messily);
+  }
+}
+
+void I3Tray::die_messily(int sig)
+{
+  if (sig == SIGINT) {
+    std::cerr << "\n***\n*** SIGINT received again; exiting immediately. \n***\n";
+    exit(1);
+  }
+}
+
+I3Tray *executing_tray = NULL;
+
+void I3Tray::report_usage(int sig)
+{
+	typedef pair<string,I3PhysicsUsage> mru_pair;
+	typedef pair<double,string> name_pair;
+	
+	map<string, I3PhysicsUsage> mru = executing_tray->Usage();
+	map<double, string> inorder;
+	double total_time = 0.;
+	BOOST_FOREACH(const mru_pair &pair, mru) {
+		inorder[pair.second.usertime] = pair.first;
+		total_time += pair.second.usertime;
+	}
+	double acc_time = 0.;
+	BOOST_FOREACH(const name_pair &pair, inorder) {
+		const string &name = pair.second;
+		const I3PhysicsUsage &ru = mru[pair.second];
+		printf("%40s: %6u calls to physics %9.2fs user %9.2fs system\n",
+		    name.c_str(), ru.ncall, ru.usertime, ru.systime);
+		if ((acc_time += ru.usertime)/total_time > 0.9)
+			break;
+	}
 }
 
 I3Tray::I3Tray() :
@@ -199,6 +234,30 @@ void dump_config(const vector<string>& names,
       const I3Configuration& config = context.Get<I3Configuration>();
       xoa << make_nvp("configuration", config);
     }
+}
+
+void
+I3Tray::MoveModule(const std::string& name, const std::string& anchor, bool after)
+{
+	std::vector<std::string>::iterator deleter =
+	    std::find(modules_in_order.begin(), modules_in_order.end(), name);
+	std::vector<std::string>::iterator inserter =
+	    std::find(modules_in_order.begin(), modules_in_order.end(), anchor);
+	if (deleter == modules_in_order.end())
+		log_fatal("Attempted to move module '%s', which hasn't been "
+		    "added to the tray yet!", name.c_str());
+	if (inserter == modules_in_order.end())
+		log_fatal("Attempted to move module '%s' to %s module '%s', "
+		    "but '%s' hasn't been added to the tray yet!", name.c_str(),
+		    (after ? "after" : "before"), anchor.c_str(), anchor.c_str());
+	modules_in_order.erase(deleter);
+	inserter =
+	    std::find(modules_in_order.begin(), modules_in_order.end(), anchor);
+
+	if (after && inserter == modules_in_order.end())
+		modules_in_order.push_back(name);
+	else
+		modules_in_order.insert(after ? inserter+1 : inserter, name);
 }
 
 bool
@@ -409,6 +468,10 @@ I3Tray::Execute()
 
   execute_called = true;
   signal(SIGINT, set_suspend_flag);
+#ifdef SIGINFO
+  executing_tray = this;
+  signal(SIGINFO, report_usage);
+#endif
 
   Configure();
 
@@ -432,6 +495,10 @@ I3Tray::Execute(unsigned maxCount)
 
   execute_called = true;
   signal(SIGINT, set_suspend_flag);
+#ifdef SIGINFO
+  executing_tray = this;
+  signal(SIGINFO, report_usage);
+#endif
 
   Configure();
 
