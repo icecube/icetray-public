@@ -216,8 +216,8 @@ class I3TrayDebugger:
         else:
             self.modules_in_order.insert(idx, name)
 
-    def AddSegment(self, segment, name):
-        segment(self, name)
+    def AddSegment(self, _segment, _name, **kwargs):
+        return _segment(self, _name, **kwargs)
     AddConfig=AddSegment
 
     def __str__(self):
