@@ -53,6 +53,8 @@
 	      <xsl:value-of select="revision"/>
 	    </a>
 
+	    <xsl:value-of select="description" />
+
 	    <table>
 	      <tr>
 		<td class="e" width="30%">Name / Type</td>
