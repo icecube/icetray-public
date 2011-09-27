@@ -50,6 +50,7 @@ bad_libs = ['corsikaXX', 'xppc', 'ppc'] # Libraries that segfault or rudely call
 
 modcount = 0
 servicecount = 0
+segmentcount = 0
 
 # keep our output clean.
 icetray.disable_logging() 
@@ -221,6 +222,7 @@ for project in args:
 	if not opts.no_segments:
 		for segment in traysegments:
 			display_config(segment, 'I3Tray segment', traysegments[segment])
+			segmentcount += 1
 			
 	if opts.xml:
 		print '</project>'
@@ -229,4 +231,4 @@ if opts.xml:
 	print '</icetray-inspect>'
 else:
 	print ''
-	print '%d module and %d service configurations reported.' % (modcount, servicecount)
+	print '%d module, %d service, and %d tray segment configurations reported.' % (modcount, servicecount, segmentcount)
