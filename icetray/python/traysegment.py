@@ -24,7 +24,7 @@ def traysegment(function):
 		raise ValueError, "I3Tray segments must have at least two arguments (tray, name)"
 
 	function.__i3traysegment__ = True
-	
+
 	return function
 
 def module_altconfig(module, **altdefargs):

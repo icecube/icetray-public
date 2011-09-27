@@ -112,7 +112,26 @@ class I3HoboConfiguration(dict):
 			defaults[-len(defaultvals):] = defaultvals
 		doc, descdict = getdoc(segment)
 		descriptions = [descdict.get(k, '') for k in args[2:]]
-		config = cls(args[2:], defaults[2:], descriptions)
+		args = args[2:]
+		defaults = defaults[2:]
+
+		if hasattr(segment, 'module'): # Alt config, merge parent config
+			rootconfig = get_configuration(segment.module)
+			tweaked = dict(rootconfig)
+
+			keycasemap = dict(zip([i.lower() for i in
+			    rootconfig.keys()], rootconfig.keys()))
+			if hasattr(segment, 'default_overrides'):
+				for k in segment.default_overrides.keys():
+					tweaked[keycasemap[k.lower()]] = \
+					    segment.default_overrides[k]
+
+			args += tweaked.keys()
+			defaults += tweaked.values()
+			descriptions += [rootconfig.descriptions[k] for k in
+			    tweaked.keys()]
+
+		config = cls(args, defaults, descriptions)
 		config.__doc__ = doc
 		return config
 
