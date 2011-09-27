@@ -8,24 +8,33 @@
 
 import inspect # the real inspect
 
-def traysegment(function):
-	"""Register a tray segment configuration function with icetray. The
-	segment can then be added to a tray using I3Tray.AddSegment().
+def traysegment(parent=None, defaultoverrides=None, removeopts=None):
+	"""Register a tray segment configuration function with icetray.
+	The segment can then be added to a tray using I3Tray.AddSegment().
 
 	Usage:
 	@icetray.traysegment
 	def segment(tray, name, arg=stuff):
 	"""
 
-	if inspect.getdoc(function) is None:
-		function.__doc__ = "I3Tray segments should have docstrings. This one doesn't. Fix it."
+	def traysegment_(function):
+		if inspect.getdoc(function) is None:
+			function.__doc__ = "I3Tray segments should have docstrings. This one doesn't. Fix it."
 
-	if len(inspect.getargspec(function)[0]) < 2:
-		raise ValueError, "I3Tray segments must have at least two arguments (tray, name)"
+		if len(inspect.getargspec(function)[0]) < 2:
+			raise ValueError, "I3Tray segments must have at least two arguments (tray, name)"
 
-	function.__i3traysegment__ = True
+		function.__i3traysegment__ = True
+		if parent != None:
+			function.module = parent
+			if defaultoverrides != None:
+				function.default_overrides = defaultoverrides
+			if removeopts != None:
+				function.remove_opts = removeopts
 
-	return function
+		return function
+
+	return traysegment_
 
 def module_altconfig(module, **altdefargs):
 	"""Register an alternate [sub]set of defaults for a module.
@@ -59,10 +68,8 @@ def module_altconfig(module, **altdefargs):
 	segment.__doc__ = "Alternate configuration for %s\n\nOverridden defaults:\n" % module
 	for arg in altdefargs.keys():
 		segment.__doc__ += "\t%s=%s\n" % (arg, altdefargs[arg])
-	segment.module = module
-	segment.default_overrides = altdefargs
 
-	func = traysegment(segment)
+	func = traysegment(parent=module, defaultoverrides=altdefargs)(segment)
 
 	return func
 

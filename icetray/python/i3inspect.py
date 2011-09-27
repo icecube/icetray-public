@@ -125,6 +125,9 @@ class I3HoboConfiguration(dict):
 				for k in segment.default_overrides.keys():
 					tweaked[keycasemap[k.lower()]] = \
 					    segment.default_overrides[k]
+			if hasattr(segment, 'remove_opts'):
+				for k in segment.remove_opts:
+					tweaked.pop(k)
 
 			args += tweaked.keys()
 			defaults += tweaked.values()
