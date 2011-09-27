@@ -111,13 +111,13 @@ The example above assumes that I3RandomService has some default name.
 Example: A random number service
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The pattern I3Context follows helps keep modules ignorant of exactly what types of services they are using. For instance, one might want to run simulations with various different random number generators: you don't want to have to recompile when you switch generators, and if you want to run others' modules with your random number generator, you dont want to have to hunt through other people's code and remove/replace all the generators by hand.
+The pattern I3Context follows helps keep modules ignorant of exactly what types of services they are using. For instance, one might want to run simulations with various different random number generators: you don't want to have to recompile when you switch generators, and if you want to run others' modules with your random number generator, you don't want to have to hunt through other people's code and remove/replace all the generators by hand.
 
 Therefore one requires some single interface that all random number generators provide. This interface is specified in an /abstract base class/. Each particular kind of random number generator implements this base interface (that is, it provides implementations of the base classes' pure virtual functions). Modules that use these random number "services" can remain ignorant of exactly what kind of random number service they are using because,
 # They only use the base class' interface.
 # The icetray framework takes care of creating these random number services and putting them where modules can get them.
 
-We'll take a family of random number generators, each of which must supply random doubles and be seedable with an int. The base class specfies what any derived class must be able to do::
+We'll take a family of random number generators, each of which must supply random doubles and be seedable with an int. The base class specifies what any derived class must be able to do::
 
  class RandomNumberService 
  {
@@ -132,7 +132,7 @@ We'll take a family of random number generators, each of which must supply rando
     virtual void   Seed(int) = 0;
  };  
 
-Derived classes implement those pure virtual functions (the ones followed by = 0). Here is one that uses unix's built in rand() function::
+Derived classes implement those pure virtual functions (the ones followed by = 0). Here is one that uses UNIX's built in rand() function::
 
  class UnixRandService : public RandomNumberService 
  { 
@@ -160,7 +160,7 @@ This one isn't random at all, but it illustrates how the derived classes "hide" 
    void   Seed(int i) { d = i * 1.1;       }
  };
 
-And so on. One could implment as many of these random number service derived classes as one likes. The code of the classes that use them don't know and don't care how many random number services exist; they only know (and must only know) that one is available. This is what "object-oriented" is all about.
+And so on. One could implement as many of these random number service derived classes as one likes. The code of the classes that use them don't know and don't care how many random number services exist; they only know (and must only know) that one is available. This is what "object-oriented" is all about.
 
 The steering file instructs the framework to install a UnixRandService object at the name "rand"::
 

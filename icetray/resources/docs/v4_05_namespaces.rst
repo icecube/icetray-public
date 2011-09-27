@@ -8,7 +8,7 @@ What is "using namespace"?
 Namespaces
 ----------
 
-Namespases allow a programmer to group entities (classes, objects,
+Namespaces allow a programmer to group entities (classes, objects,
 functions, etc) under an identifier. This way the "global scope" can
 have "sub-scopes" to logically group entities, and prevent the names
 of entities from colliding. For instance:

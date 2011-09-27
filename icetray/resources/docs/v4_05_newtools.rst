@@ -3,7 +3,7 @@
 =================
 
 Some of the ports have been updated to bring in greater
-functionality. The following table reflectes the changes.
+functionality. The following table reflects the changes.
 
 +-------------------+-------------------+
 |    i3-tools-v3    |    i3-tools-v4    |

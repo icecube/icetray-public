@@ -19,7 +19,7 @@ I3Frame Reference
 ^^^^^^^^^^^^^^^^^
 
 The I3Frame is a flexible container that carries data from I3Module 
-to I3Module as an icetray run proceeds. I3Modules recieve a shared 
+to I3Module as an icetray run proceeds. I3Modules receive a shared 
 pointer to an I3Frame when the framework calls their "stop" methods 
 (Physics, DetectorStatus, Calibration, Geometry, etc.).
 
@@ -129,7 +129,7 @@ Toplevel frame objects... that is, those which you will directly Put
 and Get to/from the frame must satisfy several requirements:
 
  * Be descendants of I3FrameObject
- * Have at least one virtual, non-inline function (an empty virual
+ * Have at least one virtual, non-inline function (an empty virtual
    destructor, declared in the header file but defined in the
    implementation file, will do if the class has no other need for
    virtual functions)
@@ -422,14 +422,14 @@ which is equivalent to::
    frame.Get<shared_ptr<I3Particle> >("seed");
 
 as this const I3ParticlePtr is a const pointer to a nonconst particle;
-the pointer isn't changable, and the particle is. This is of course
+the pointer isn't changeable, and the particle is. This is of course
 the opposite of the desired effect, and by design, the line above
 won't compile. The second typedef, TConstPtr, is the correct one::
 
  I3ParticleConstPtr particle = frame.Get<I3ParticleConstPtr>("seed");
 
 Wherein the pointer to the particle is mutable, but the particle
-itself is not. If you look at the code with the typdefs lifted, you
+itself is not. If you look at the code with the typedefs lifted, you
 can see that the const is associated with the particle, not the
 pointer::
 

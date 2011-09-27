@@ -22,9 +22,9 @@ its first argument, for instance::
 
   tray.AddModule(frame_printer, 'printer')
 
-When icetray recieves a python function as the first argument to
+When icetray receives a python function as the first argument to
 ``AddModule``, it constructs a special ``I3Module`` of type
-*PythonFunction* which forwards the frames that it recieves to the
+*PythonFunction* which forwards the frames that it receives to the
 python function passed.  By default it does this for the *Physics*
 stream only.
 
@@ -222,7 +222,7 @@ This has several disadvantages:
 * There is the possibility for name collisions in the various
   :class:`I3Contexts`.  
 
-If the conditon is complicated, for instance the disjusnction of two
+If the condition is complicated, for instance the disjunction of two
 other conditions, the syntax gets yet more verbose.
 
 The new way
@@ -272,7 +272,7 @@ function ``fn``.  You would use this like this::
                            value = 80))   
 
 A forwarding function is necessary here, but not when passing a
-pfython function directly to :func:`AddModule`.  This assymetry is
+python function directly to :func:`AddModule`.  This asymmetry is
 unfortunate but presently unavoidable.
 
 

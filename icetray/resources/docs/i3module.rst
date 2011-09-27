@@ -51,7 +51,7 @@ Modules that are instances of a template class specify the instance::
 
 The name passed to I3_MODULE() is the name one uses to refer to modules of this type in steering files. e.g. with the code above, one would be able to call::
 
- tray.AddModule("I3IcePickModule<I3EventListFilter","eventpick")(
+ tray.AddModule("I3IcePickModule<I3EventListFilter>","eventpick")(
      # etc
      )
 

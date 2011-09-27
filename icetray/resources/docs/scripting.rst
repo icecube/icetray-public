@@ -200,7 +200,7 @@ not-a-number.  These are for the occasions when one needs to pass NaN
 or Inf to a module parameter, or to initialize e.g. an :class:`I3Double <icecube.dataclasses.I3Double>`
 to NaN.
 
-``NaN`` compared to anything (includng itself) is always false.  To
+``NaN`` compared to anything (including itself) is always false.  To
 tell if a variable is nan, or not, use the functions ``isnan`` and
 ``isinf``.  In python 2.6 and later, these are in module :mod:`math`,
 in earlier versions they are in module :mod:`scipy`::

@@ -162,7 +162,7 @@ Parameters can be input/output
 ------------------------------
 
 Python objects like lists have identity.  That is, if I create a dictionary
-that two python identifers point to, and change the dictionary via one identifier, 
+that two python identifiers point to, and change the dictionary via one identifier, 
 the other will see the change:
 
 .. code-block:: pycon

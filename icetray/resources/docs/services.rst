@@ -177,12 +177,12 @@ here,
 * There is no 'servicefactory' involved.
 
 New in icetray version 11-01-01 to ease with this transition: many modules will still need
-to maintain the fuctionalily to get some services from the context and also as a parameter.
+to maintain the functionality to get some services from the context and also as a parameter.
 You might expect, if you don't explicitly pass a pointer to a service, after the call to GetParameter ``rs``
 (in the example above) should remain uninitialized as a NULL pointer (i.e. the same value it was
 when it was "Add"ed).  This was, in fact, not the case and would throw an error.  Python didn't 
 know how to convert the ``NoneType`` object.  In general it's not clear, but when you have ``None`` 
-on the python side and are expecting a shared pointer it's perfectly reasonable to converrt that 
+on the python side and are expecting a shared pointer it's perfectly reasonable to convert that 
 to NULL pointer.  So now you can decide how to handle that in the code.  Here's an example:
 
 .. code-block:: cpp
@@ -313,7 +313,7 @@ I3RandomService:
        def Gaus(self, mean, stddev):
 	   return self.value
 
-The python implmentation inherits from the abstract base class which
+The python implementation inherits from the abstract base class which
 forms the interface: exactly the same as in C++.  
     
 Putting this class into a file MyServices.py, you can instantiate 

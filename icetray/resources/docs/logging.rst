@@ -53,7 +53,7 @@ function        semantics
 The "standard" logging level is WARN.  If your module is working
 happily, no output at log_warn or higher should be visible.
 
-Here are some guidlines and example statements at each level to help
+Here are some guidelines and example statements at each level to help
 you choose the right logging level:
 
 ==============  =============================================================================

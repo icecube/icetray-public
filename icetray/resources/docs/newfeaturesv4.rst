@@ -10,7 +10,7 @@
 Introduction of DAQ frames
 """"""""""""""""""""""""""
 
-Native extenstions for handling of sub-events by adding a fifth canonical
+Native extensions for handling of sub-events by adding a fifth canonical
 stream type, called DAQ (for Data Acquisition). This frame type holds the
 detector readout information (and simulation information) for a particular
 detector global trigger. One or multiple views can be made into these data
@@ -50,7 +50,7 @@ Miscellaneous Changes
 """""""""""""""""""""
 - I3RecoHit support removed from most modules, mostly in phys-services
   - I3RecoHit still fully supported for reading from files
-  - Auto conversion to I3RecoPulse available by the Synthethic pulse support
+  - Auto conversion to I3RecoPulse available by the synthetic pulse support
 - TWR and F2K projects removed from offline-software meta-project
 - I3RecoPulse has new fields and new, lighter-weight serialization
 - I3Waveform source information modified

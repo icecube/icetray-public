@@ -12,13 +12,13 @@ IceTray modules
 ---------------
 
 I3Tray considers the first module added to be the 'driving' module.
-This should be a reader or generator, ie a module that does not access
-its outbox.  In the past the semantics of this were a little fuzzier
+This should be a reader or generator, i.e. a module that does not access
+its inbox.  In the past the semantics of this were a little fuzzier
 as modules had a half-implemented scheme whereby they could add
 inboxes.  (At some point it was decided that modules may have one and
 only one inbox).
 
-Tool python must be explictly listed in USE_TOOLS
+Tool python must be explicitly listed in USE_TOOLS
 -------------------------------------------------
 
 In older releases, the tool python was often implicitly included
@@ -38,7 +38,7 @@ If you're getting an error like this::
 Then you need to make sure you've got the 'python' entry in your USE_TOOLS
 line in your CMakeLists.txt.
 
-Stream name arguement to modules need additional qualifier
+Stream name argument to modules need additional qualifier
 ----------------------------------------------------------
 
 Some small updates to your scripts if you ever pass a list of streams

@@ -30,7 +30,7 @@
 //
 //  It is less-than-ideal that this module knows that it is normally
 //  found in namespace "icecube".  I'm not sure it matters very much
-//  what scope recieves the symbols that init_module_icetray
+//  what scope receives the symbols that init_module_icetray
 //  receive, as this will only be called if we are loaded by a
 //  commandline binary that has linked to us...  though if that binary
 //  in turn contains an embedded python interpreter...

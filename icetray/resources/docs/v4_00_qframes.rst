@@ -2,7 +2,7 @@
  Q Frames
 ==========
 
-Native extenstions for handling of sub-events by adding a fifth canonical
+Native extensions for handling of sub-events by adding a fifth canonical
 stream type, called DAQ (for Data Acquisition). This frame type holds the
 detector readout information (and simulation information) for a particular
 detector global trigger. One or multiple views can be made into these data
