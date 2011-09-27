@@ -8,7 +8,7 @@
 
 import inspect # the real inspect
 
-def traysegment(parent=None, defaultoverrides=None, removeopts=None):
+def traysegment(function):
 	"""Register a tray segment configuration function with icetray.
 	The segment can then be added to a tray using I3Tray.AddSegment().
 
@@ -17,22 +17,35 @@ def traysegment(parent=None, defaultoverrides=None, removeopts=None):
 	def segment(tray, name, arg=stuff):
 	"""
 
+	if inspect.getdoc(function) is None:
+		function.__doc__ = "I3Tray segments should have docstrings. This one doesn't. Fix it."
+
+	if len(inspect.getargspec(function)[0]) < 2:
+		raise ValueError, "I3Tray segments must have at least two arguments (tray, name)"
+
+	function.__i3traysegment__ = True
+	return function
+
+def traysegment_inherit(parent, defaultoverrides=None, removeopts=None):
+	"""Register a tray segment configuration function with icetray,
+	inheriting icetray-inspect information from another
+	module/service/segment. The segment can then be added to a tray using
+	I3Tray.AddSegment().
+
+	Usage:
+	@icetray.traysegment_inherit('I3ParentMod')
+	def segment(tray, name, arg=stuff):
+	"""
+
 	def traysegment_(function):
-		if inspect.getdoc(function) is None:
-			function.__doc__ = "I3Tray segments should have docstrings. This one doesn't. Fix it."
+		func = traysegment(function)
+		func.module = parent
+		if defaultoverrides != None:
+			func.default_overrides = defaultoverrides
+		if removeopts != None:
+			func.remove_opts = removeopts
 
-		if len(inspect.getargspec(function)[0]) < 2:
-			raise ValueError, "I3Tray segments must have at least two arguments (tray, name)"
-
-		function.__i3traysegment__ = True
-		if parent != None:
-			function.module = parent
-			if defaultoverrides != None:
-				function.default_overrides = defaultoverrides
-			if removeopts != None:
-				function.remove_opts = removeopts
-
-		return function
+		return func
 
 	return traysegment_
 
@@ -69,7 +82,7 @@ def module_altconfig(module, **altdefargs):
 	for arg in altdefargs.keys():
 		segment.__doc__ += "\t%s=%s\n" % (arg, altdefargs[arg])
 
-	func = traysegment(parent=module, defaultoverrides=altdefargs)(segment)
-
+	func = traysegment_inherit(parent=module,
+	    defaultoverrides=altdefargs)(segment)
 	return func
 
