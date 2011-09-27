@@ -53,8 +53,6 @@
 	      <xsl:value-of select="revision"/>
 	    </a>
 
-	    <xsl:value-of select="description" />
-
 	    <table>
 	      <tr>
 		<td class="e" width="30%">Name / Type</td>
@@ -67,6 +65,10 @@
 		  <xsl:value-of select="type"/></td>
 		  <td class="module" colspan="2">
 		  <xsl:value-of select="kind"/></td>
+		</tr>
+		<tr>
+		  <td colspan="3">
+		  <pre><xsl:value-of select="description" /></pre></td>
 		</tr>
 		
 		<xsl:for-each select="parameter">
