@@ -140,10 +140,14 @@ def display_config(mod, category, modname=None):
 			sys.stderr.write("Error constructing '%s': %s" % (mod, e))
 			return False
 			
-		if isinstance(mod, str) or inspect.getdoc(config) is None or len(inspect.getdoc(config)) == 0:
+		if isinstance(mod, str):
 			docs = ''
-		else:
+		elif inspect.getdoc(config) != None and len(inspect.getdoc(config)) > 0:
 			docs = inspect.getdoc(config)
+		elif inspect.getdoc(mod) != None and len(inspect.getdoc(mod)) > 0:
+			docs = inspect.getdoc(mod)
+		else:
+			docs = ''
 
 		if opts.xml:
 			print '<module>'
