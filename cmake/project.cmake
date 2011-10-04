@@ -514,7 +514,7 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
 	foreach(unittest ${UNITTESTS})
 	  set(TESTNAME ${PROJECT_NAME}-test-${GROUPNAME}-${unittest}-run)
 	  set(THIS_TEST_PREFIX_ARGS
-	    ${PYTHON_EXECUTABLE} ${NATIVE_TEST_DRIVER} ${CMAKE_CURRENT_BINARY_DIR} run ${TESTNAME}
+	    time ${PYTHON_EXECUTABLE} ${NATIVE_TEST_DRIVER} ${CMAKE_CURRENT_BINARY_DIR} run ${TESTNAME}
 	    )
 
 	  file(APPEND ${THIS_TEST_UNIT_LIST} "${testable_file}/${unittest} ${THIS_TEST_PREFIX_ARGS} ${CMAKE_BINARY_DIR}/env-shell.sh ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} -s ${testable_file}/${unittest}\n")
