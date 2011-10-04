@@ -616,7 +616,7 @@ macro(i3_test_scripts)
       ${PYTHON_EXECUTABLE} ${NATIVE_TEST_DRIVER} ${CMAKE_CURRENT_BINARY_DIR} run ${TESTNAME}
       )
 
-    file(APPEND ${THIS_TEST_SCRIPT_LIST} "${this_script} ${THIS_TEST_PREFIX_ARGS} ${CMAKE_BINARY_DIR}/env-shell.sh ${script}\n")
+    file(APPEND ${THIS_TEST_SCRIPT_LIST} "${this_script} time ${THIS_TEST_PREFIX_ARGS} ${CMAKE_BINARY_DIR}/env-shell.sh ${script}\n")
 
   endforeach(script ${${PROJECT_NAME}_SCRIPTS_ALPHABETICAL})
 

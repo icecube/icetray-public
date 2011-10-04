@@ -84,13 +84,20 @@ include(tools)
 include(project)
 
 add_custom_target(test
-  COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${EXECUTABLE_OUTPUT_PATH}/runtests.py -v
-  COMMENT ">>>
+  COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${EXECUTABLE_OUTPUT_PATH}/runtests.py
+  COMMENT "
+>>>
 >>>  Running tests via the utility 'runtests.py' in your $I3_BUILD/bin/ directory.\n
 >>>  Run without arguments to see help/options.
->>>")
+>>>
+")
 add_custom_target(test-bins)
 add_dependencies(test test-bins)
+
+add_custom_target(bottest
+  COMMAND ln -sf ${EXECUTABLE_OUTPUT_PATH}/runtests.py ${EXECUTABLE_OUTPUT_PATH}/bottest.py
+  COMMAND ${EXECUTABLE_OUTPUT_PATH}/bottest.py -v
+)
 
 set(INSPECT_ALL_HTML ${CMAKE_BINARY_DIR}/doxygen/inspect/index.html)
 

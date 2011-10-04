@@ -104,7 +104,16 @@ def run_tests(stack, f, d, verbose=False):
                 rslt = False
         return rslt
 
+def bottest():
+    if "bottest" in sys.argv[0]:
+        return True
+    return False
+
 def main():
+    if bottest():
+        print "SVN_URL: @SVN_URL@"
+        print
+
     parser = OptionParser(usage="usage: %prog [options]")
     parser.add_option('-p', '--project',
                       type='string',
