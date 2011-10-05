@@ -50,7 +50,7 @@ def traysegment_inherit(parent, defaultoverrides=None, removeopts=None):
 	return traysegment_
 
 def module_altconfig(module, **altdefargs):
-	"""Register an alternate [sub]set of defaults for a module.
+	"""Register an alternate [sub]set of defaults for a module or segment.
 	Any parameters not specified in module_altconfig will use the
 	original module defaults.
 
@@ -75,7 +75,10 @@ def module_altconfig(module, **altdefargs):
 				# Deduplicate by removing the default key
 				mergedargs.pop(arg)
 			
-		tray.AddModule(module, name, **mergedargs)
+		if hasattr(module, '__i3traysegment__'):
+			tray.AddSegment(module, name, **mergedargs)
+		else:
+			tray.AddModule(module, name, **mergedargs)
 
 	# Mark what we're doing in various interesting places (like the docs)
 	segment.__doc__ = "Alternate configuration for %s\n\nOverridden defaults:\n" % module
