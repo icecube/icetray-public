@@ -82,6 +82,12 @@ BOOST_PP_SEQ_FOR_EACH(I3_SETPARAM_OVERLOAD, ~, ITHON_I3_PARAM_TYPES);
 //
 using namespace boost::python;
 
+static std::string I3TrayString(I3Tray &tray) {
+  std::stringstream str;
+  str << tray;
+  return str.str();
+}
+
 void register_I3Tray()
 {
 
@@ -97,6 +103,7 @@ void register_I3Tray()
     .def("Usage", &I3Tray::Usage)
     .def("Finish", &I3Tray::Finish)
     .def("Print", &I3Tray::Print)
+    .def("__str__", &I3TrayString)
     .def("AddService", 
 	 (I3Tray::param_setter (I3Tray::*)(const std::string&, const std::string&))
 	 &I3Tray::AddService)
