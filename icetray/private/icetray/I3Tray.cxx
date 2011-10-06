@@ -35,6 +35,7 @@
 
 
 #include <icetray/I3Tray.h>
+#include <icetray/I3TrayInfoService.h>
 #include <icetray/I3Module.h>
 #include <icetray/I3OpNewServiceFactory.h>
 #include <icetray/I3Context.h>
@@ -97,6 +98,7 @@ I3Tray::I3Tray() :
   factory_contexts(),
   module_contexts(),
   boxes_connected(false),
+  configure_called(false),
   finish_called(false),
   execute_called(false)
 {
@@ -139,6 +141,9 @@ I3Tray::AddModule(const std::string& classname, const std::string& instancename)
 I3Tray::param_setter
 I3Tray::AddModule(bp::object obj, const std::string& instancename)
 {
+  if (configure_called)
+    log_fatal("I3Tray::Configure() already called -- cannot add new modules");
+
   modules_in_order.push_back(instancename);
   I3ContextPtr context(new I3Context);
   I3ConfigurationPtr config(new I3Configuration);
@@ -188,6 +193,9 @@ I3Tray::AddModule(bp::object obj, const std::string& instancename)
 I3Tray::param_setter
 I3Tray::AddService(const std::string& classname, const std::string& instancename)
 { 
+  if (configure_called)
+    log_fatal("I3Tray::Configure() already called -- cannot add new services");
+
   if(factory_contexts.find(instancename)!=factory_contexts.end())
     log_fatal("More than one service added with the name '%s'",instancename.c_str());
   factories_in_order.push_back(instancename);
@@ -287,6 +295,10 @@ I3Tray::ConnectBoxes(const std::string& fromModule,
 void 
 I3Tray::Configure()
 {
+  if (configure_called)
+      return;
+  configure_called = true;
+
   // 
   //  first, if we never explicity called ConnectBoxes, connect the
   //  modules to one another in the order they were added.
@@ -555,6 +567,22 @@ I3Tray::Finish()
       log_trace("calling finish on factory %s", factname.c_str());
       factories[factname]->Finish();
     }
+}
+
+std::ostream&
+operator<<(std::ostream& os, I3Tray& tray)
+{
+    tray.Configure();
+
+    I3TrayInfoService srv(tray);
+    const I3TrayInfo& config = srv.GetConfig();
+    return (os << config);
+}
+
+void
+I3Tray::Print()
+{
+    std::cout << *this;
 }
 
 // special overload to help with compiled steering files.

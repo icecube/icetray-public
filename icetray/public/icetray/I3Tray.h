@@ -28,6 +28,7 @@
 #include <map>
 #include <string>
 #include <exception>
+#include <iostream>
 #include <icetray/IcetrayFwd.h>
 
 #include <icetray/I3Configuration.h>
@@ -182,6 +183,11 @@ public:
    */
   void Finish();
 
+  /**
+   * Print the tray configuration to stdout.
+   */
+  void Print();
+
   bool
   SetParameter(const std::string& module,
 	       const std::string& parameter,
@@ -224,17 +230,6 @@ private:
   bool SetParameterFailure(const std::string& module, const std::string& parameter);
 
   /**
-   * initialize services
-   */
-  void InitializeServices(I3Context & context);
-
-  /**
-   * loops over all services and tries configures them if they
-   * haven't been configured yet.
-   */
-  void ConfigureServices();
-  
-  /**
      called just before Execute starts.
   */
   void Configure();
@@ -257,6 +252,7 @@ private:
   I3ModulePtr driving_module;
 
   bool boxes_connected;
+  bool configure_called;
   bool finish_called;
   bool execute_called;
 
@@ -275,6 +271,7 @@ private:
   static const I3Context* active_context_;
 
   friend void I3Module::Do(void (I3Module::*)());
+  friend std::ostream& operator<<(std::ostream&, I3Tray&);
 
   friend class I3TrayInfoService;
 
@@ -284,6 +281,8 @@ public:
   static const I3Context& GetActiveContext();
   static void SetActiveContext(const I3Context* newactive);
 };
+
+std::ostream& operator<<(std::ostream& os, I3Tray& tray);
 
 template <class Type>
 I3Tray::param_setter 

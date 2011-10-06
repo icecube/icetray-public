@@ -96,6 +96,7 @@ void register_I3Tray()
     .def("Execute", Execute_1)
     .def("Usage", &I3Tray::Usage)
     .def("Finish", &I3Tray::Finish)
+    .def("Print", &I3Tray::Print)
     .def("AddService", 
 	 (I3Tray::param_setter (I3Tray::*)(const std::string&, const std::string&))
 	 &I3Tray::AddService)
