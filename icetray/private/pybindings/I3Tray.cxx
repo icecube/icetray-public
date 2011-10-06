@@ -88,6 +88,36 @@ static std::string I3TrayString(I3Tray &tray) {
   return str.str();
 }
 
+static std::string I3TrayRepr(I3Tray &tray) {
+  std::stringstream str;
+  BOOST_FOREACH(std::string service, tray.Services()) {
+    if (service == "__config") // Skip internal tray info service
+      continue;
+    const I3Configuration &config = tray.ServiceConfiguration(service);
+    str << "AddService(";
+    str << "'" << config.ClassName() << "', ";
+    str << "'" << config.InstanceName() << "'";
+    BOOST_FOREACH(std::string param, config.keys()) {
+      std::string repr = boost::python::extract<std::string>(config.Get(param).attr("__repr__")());
+      str << ", " << param << "=" << repr;
+    }
+    str << ")\n";
+  }
+  BOOST_FOREACH(std::string mod, tray.Modules()) {
+    const I3Configuration &config = tray.ModuleConfiguration(mod);
+    str << "AddModule(";
+    str << "'" << config.ClassName() << "', ";
+    str << "'" << config.InstanceName() << "'";
+    BOOST_FOREACH(std::string param, config.keys()) {
+      boost::python::object obj = config.Get(param);
+      std::string repr = boost::python::extract<std::string>(config.Get(param).attr("__repr__")());
+      str << ", " << param << "=" << repr;
+    }
+    str << ")\n";
+  }
+  return str.str();
+}
+
 void register_I3Tray()
 {
 
@@ -104,6 +134,7 @@ void register_I3Tray()
     .def("Finish", &I3Tray::Finish)
     .def("Print", &I3Tray::Print)
     .def("__str__", &I3TrayString)
+    .def("__repr__", &I3TrayRepr)
     .def("AddService", 
 	 (I3Tray::param_setter (I3Tray::*)(const std::string&, const std::string&))
 	 &I3Tray::AddService)

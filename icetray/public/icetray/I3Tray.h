@@ -188,6 +188,14 @@ public:
    */
   void Print();
 
+  /**
+   * Read-only access to the configurations of added modules
+   */
+  const std::vector<std::string> &Modules();
+  const I3Configuration &ModuleConfiguration(std::string name);
+  const std::vector<std::string> &Services();
+  const I3Configuration &ServiceConfiguration(std::string name);
+
   bool
   SetParameter(const std::string& module,
 	       const std::string& parameter,

@@ -585,6 +585,28 @@ I3Tray::Print()
     std::cout << *this;
 }
 
+const std::vector<std::string> &
+I3Tray::Modules() {
+    return modules_in_order;
+}
+
+const std::vector<std::string> &
+I3Tray::Services() {
+    return factories_in_order;
+}
+
+const I3Configuration &
+I3Tray::ModuleConfiguration(std::string name) {
+    I3ContextPtr context_p = module_contexts[name];
+    return context_p->Get<I3Configuration>();
+}
+
+const I3Configuration &
+I3Tray::ServiceConfiguration(std::string name) {
+    I3ContextPtr context_p = factory_contexts[name];
+    return context_p->Get<I3Configuration>();
+}
+
 // special overload to help with compiled steering files.
 bool
 I3Tray::SetParameter(const string& module,
