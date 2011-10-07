@@ -114,6 +114,9 @@ class I3Tray(icetray.I3Tray):
             super(I3Tray, self).SetParameter(self.last_added, pair[0], pair[1])
         return self
 
+    def __repr__(self):
+	return self.TrayInfo().__repr__()
+
     def Execute(self, *args):
 
         assert len(args) < 2, "Too many arguments to Execute()"
