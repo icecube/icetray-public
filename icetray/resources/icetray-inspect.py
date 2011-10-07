@@ -80,7 +80,7 @@ def print_segment(segment):
 				component_name = component.__repr__()
 			except TypeError:
 				try:
-					component_name = component.__module__
+					component_name = component.__module__ + component.__name__
 				except AttributeError:
 					component_name = repr(component)
 
