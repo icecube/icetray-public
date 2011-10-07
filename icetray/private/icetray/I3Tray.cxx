@@ -569,20 +569,19 @@ I3Tray::Finish()
     }
 }
 
+I3TrayInfo
+I3Tray::TrayInfo()
+{
+    Configure();
+
+    I3TrayInfoService srv(*this);
+    return srv.GetConfig();
+}
+
 std::ostream&
 operator<<(std::ostream& os, I3Tray& tray)
 {
-    tray.Configure();
-
-    I3TrayInfoService srv(tray);
-    const I3TrayInfo& config = srv.GetConfig();
-    return (os << config);
-}
-
-void
-I3Tray::Print()
-{
-    std::cout << *this;
+    return (os << tray.TrayInfo());
 }
 
 // special overload to help with compiled steering files.

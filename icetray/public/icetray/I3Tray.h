@@ -184,9 +184,11 @@ public:
   void Finish();
 
   /**
-   * Print the tray configuration to stdout.
+   * Get the tray info object for this tray.
+   *
+   * NB: calls Configure(), so no more modules can be added after this call
    */
-  void Print();
+  I3TrayInfo TrayInfo();
 
   bool
   SetParameter(const std::string& module,
@@ -271,8 +273,6 @@ private:
   static const I3Context* active_context_;
 
   friend void I3Module::Do(void (I3Module::*)());
-  friend std::ostream& operator<<(std::ostream&, I3Tray&);
-  friend std::string I3TrayRepr(I3Tray&);
 
   friend class I3TrayInfoService;
 

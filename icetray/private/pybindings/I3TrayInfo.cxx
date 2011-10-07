@@ -33,6 +33,42 @@ dict host_info(const I3TrayInfo& ti)
   return d;
 }
 
+static std::string I3TrayInfoRepr(I3TrayInfo &tray) {
+  std::stringstream str;
+  str << "tray = I3Tray.I3Tray()\n";
+  BOOST_FOREACH(std::string service, tray.factories_in_order) {
+    if (service == "__config") // Skip internal tray info service
+      continue;
+    const I3Configuration &config = *tray.factory_configs[service];
+    str << "tray.AddService(";
+    str << "'" << config.ClassName() << "', ";
+    str << "'" << config.InstanceName() << "'";
+    BOOST_FOREACH(std::string param, config.keys()) {
+      std::string repr = boost::python::extract<std::string>(config.Get(param).attr("__repr__")());
+      str << ", " << param << "=" << repr;
+    }
+    str << ")\n";
+  }
+  BOOST_FOREACH(std::string mod, tray.modules_in_order) {
+    const I3Configuration &config = *tray.module_configs[mod];
+    str << "tray.AddModule(";
+    if (config.ClassName().find(".") != config.ClassName().npos ||
+     config.ClassName().find(" ") != config.ClassName().npos)
+      str << config.ClassName() << ", ";
+    else
+      str << "'" << config.ClassName() << "', ";
+    str << "'" << config.InstanceName() << "'";
+    BOOST_FOREACH(std::string param, config.keys()) {
+      boost::python::object obj = config.Get(param);
+      std::string repr = boost::python::extract<std::string>(config.Get(param).attr("__repr__")());
+      str << ", " << param << "=" << repr;
+    }
+    str << ")\n";
+  }
+
+  return str.str();
+}
+
 void register_I3TrayInfo()
 {
   class_<I3TrayInfo, bases<I3FrameObject>, boost::shared_ptr<I3TrayInfo> >("I3TrayInfo")
@@ -47,6 +83,7 @@ void register_I3TrayInfo()
 //    .property("factories_in_order", &I3TrayInfo::factories_in_order)
 //    .property("loaded_libs", &I3TrayInfo::loaded_libs)
     .def(self_ns::str(self))
+    .def("__repr__", &I3TrayInfoRepr)
     ;
 
   register_pointer_conversions<I3TrayInfo>();

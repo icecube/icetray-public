@@ -88,53 +88,6 @@ static std::string I3TrayString(I3Tray &tray) {
   return str.str();
 }
 
-std::string I3TrayRepr(I3Tray &tray) {
-  std::stringstream str;
-  BOOST_FOREACH(std::string service, tray.factories_in_order) {
-    if (service == "__config") // Skip internal tray info service
-      continue;
-    I3ContextPtr context_p = tray.factory_contexts[service];
-    const I3Configuration &config = context_p->Get<I3Configuration>();
-    str << "AddService(";
-    str << "'" << config.ClassName() << "', ";
-    str << "'" << config.InstanceName() << "'";
-    BOOST_FOREACH(std::string param, config.keys()) {
-      std::string repr = boost::python::extract<std::string>(config.Get(param).attr("__repr__")());
-      str << ", " << param << "=" << repr;
-    }
-    str << ")\n";
-  }
-  BOOST_FOREACH(std::string mod, tray.modules_in_order) {
-    I3ContextPtr context_p = tray.module_contexts[mod];
-    const I3Configuration &config = context_p->Get<I3Configuration>();
-    str << "AddModule(";
-    if (config.ClassName() == "PythonModule") {
-      std::string pymod = boost::python::extract<std::string>(
-        context_p->Get<boost::shared_ptr<boost::python::object> >
-        ("class")->attr("__module__"));
-      std::string pyname = boost::python::extract<std::string>(
-        context_p->Get<boost::shared_ptr<boost::python::object> >
-        ("class")->attr("__name__"));
-      str << pymod << "." << pyname << ", ";
-    } else if (config.ClassName() == "PythonFunction") {
-      std::string repr = boost::python::extract<std::string>(
-        context_p->Get<boost::shared_ptr<boost::python::object> >
-        ("object")->attr("__repr__")());
-      str << repr << ", ";
-    } else {
-      str << "'" << config.ClassName() << "', ";
-    }
-    str << "'" << config.InstanceName() << "'";
-    BOOST_FOREACH(std::string param, config.keys()) {
-      boost::python::object obj = config.Get(param);
-      std::string repr = boost::python::extract<std::string>(config.Get(param).attr("__repr__")());
-      str << ", " << param << "=" << repr;
-    }
-    str << ")\n";
-  }
-  return str.str();
-}
-
 void register_I3Tray()
 {
 
@@ -149,9 +102,8 @@ void register_I3Tray()
     .def("Execute", Execute_1)
     .def("Usage", &I3Tray::Usage)
     .def("Finish", &I3Tray::Finish)
-    .def("Print", &I3Tray::Print)
+    .def("TrayInfo", &I3Tray::TrayInfo)
     .def("__str__", &I3TrayString)
-    .def("__repr__", &I3TrayRepr)
     .def("AddService", 
 	 (I3Tray::param_setter (I3Tray::*)(const std::string&, const std::string&))
 	 &I3Tray::AddService)

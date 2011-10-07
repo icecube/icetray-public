@@ -46,7 +46,25 @@ get_configs(const std::map<std::string,I3ContextPtr>& from)
        iter != from.end();
        iter++)
     {
-      result[iter->first] = iter->second->Get<I3ConfigurationPtr>("I3Configuration");
+      I3ConfigurationPtr ptr(new I3Configuration(*iter->second->Get<I3ConfigurationPtr>("I3Configuration")));
+
+      // Fix up class names for python functions to be more useful
+      if (ptr->ClassName() == "PythonModule") {
+        std::string pymod = boost::python::extract<std::string>(
+          iter->second->Get<boost::shared_ptr<boost::python::object> >
+          ("class")->attr("__module__"));
+        std::string pyname = boost::python::extract<std::string>(
+          iter->second->Get<boost::shared_ptr<boost::python::object> >
+          ("class")->attr("__name__"));
+        ptr->ClassName(pymod + "." + pyname);
+      } else if (ptr->ClassName() == "PythonFunction") {
+        std::string repr = boost::python::extract<std::string>(
+          iter->second->Get<boost::shared_ptr<boost::python::object> >
+          ("object")->attr("__repr__")());
+        ptr->ClassName(repr);
+      }
+
+      result[iter->first] = ptr;
     }
   return result;
 }

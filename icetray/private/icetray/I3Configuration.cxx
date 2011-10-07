@@ -42,6 +42,10 @@ I3Configuration::I3Configuration() :
   impl_(new I3ConfigurationImpl)
 { }
 
+I3Configuration::I3Configuration(const I3Configuration &old) :
+  impl_(new I3ConfigurationImpl(*old.impl_))
+{ }
+
 I3Configuration::~I3Configuration() 
 { }
 
