@@ -299,6 +299,10 @@ I3Tray::Configure()
       return;
   configure_called = true;
 
+  if (modules_in_order.size() == 0)
+      log_fatal("Calling %s with no modules added. You probably want some.",
+        __PRETTY_FUNCTION__);
+
   // 
   //  first, if we never explicity called ConnectBoxes, connect the
   //  modules to one another in the order they were added.
