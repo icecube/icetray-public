@@ -50,13 +50,17 @@ get_configs(const std::map<std::string,I3ContextPtr>& from)
 
       // Fix up class names for python functions to be more useful
       if (ptr->ClassName() == "PythonModule") {
-        std::string pymod = boost::python::extract<std::string>(
-          iter->second->Get<boost::shared_ptr<boost::python::object> >
-          ("class")->attr("__module__"));
         std::string pyname = boost::python::extract<std::string>(
           iter->second->Get<boost::shared_ptr<boost::python::object> >
           ("class")->attr("__name__"));
+#if PY_MAJOR_VERSION >= 2 && PY_MINOR_VERSION > 4
+        std::string pymod = boost::python::extract<std::string>(
+          iter->second->Get<boost::shared_ptr<boost::python::object> >
+          ("class")->attr("__module__"));
         ptr->ClassName(pymod + "." + pyname);
+#else
+        ptr->ClassName(pyname);
+#endif
       } else if (ptr->ClassName() == "PythonFunction") {
         std::string repr = boost::python::extract<std::string>(
           iter->second->Get<boost::shared_ptr<boost::python::object> >
