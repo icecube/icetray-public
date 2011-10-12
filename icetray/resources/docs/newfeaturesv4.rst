@@ -6,6 +6,8 @@
    :glob:
 
    v4_*
+   segments
+
 
 Introduction of DAQ frames
 """"""""""""""""""""""""""
@@ -55,3 +57,17 @@ Miscellaneous Changes
 - I3RecoPulse has new fields and new, lighter-weight serialization
 - I3Waveform source information modified
 - I3ConditionalModule's condition now operates on all frame types, not just P frames.
+
+Tray Segment support
+""""""""""""""""""""
+IceTray has been expanded to include support for the concept of IceTray
+"segments", which are pre-configured modules, services or sets of modules
+and services, each properly configured and released as part of the project
+that defines them.  These segments can easily be joined together to more
+easily form larger segments, and large processing heavy scripts.
+
+These segments allow for pre-defined "alternative" standard configurations
+and are closely integrated into the standard icetray-tools (I3Tray, 
+icetray-inspect, etc).  The TraySegment implementation was heavily
+influenced by the work of the LE/IBEX framework.
+
