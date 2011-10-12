@@ -112,3 +112,33 @@ More complicated conditionals can be specified using longer functions. For examp
      AnotherParameter=False, Seed='SeedParticle',
      If=condition)
 
+I3PacketModule
+--------------
+
+There is one additional I3Module subclass you can inherit from: I3PacketModule. This module processes frames in packets instead of one at a time. Each packet is defined by a sentinel frame followed by zero or more frames of another type; the usual use case is to simultaneously process one DAQ frame along with event Physics frame in the event.
+
+Instead of calling Physics() or DAQ(), I3PacketModule subclasses implement a method called FramePacket(), which is passed an array of I3FramePtrs instead of a single one. The module can then modify the frames, and then must push them to the next module, just like a regular I3Module.
+
+Here is a small example of such a module, written in Python. It operates on packets of DAQ frames and Physics frames and then writes the number of Physics frames in the event to the DAQ frame (the first one)::
+
+ class ExampleMod(icetray.I3PacketModule):
+    def __init__(self, context):
+        I3PacketModule.__init__(self, context)
+        self.AddOutBox('OutBox')
+    def Configure(self):
+        pass
+    def FramePacket(self, frames):
+        i = icetray.I3Int(len(frames) - 1)
+        frames[0].Put('NSplits', i)
+        for fr in frames:
+            self.PushFrame(fr)
+
+ tray.AddModule(ExampleMod, 'mod')
+
+All I3PacketModules can be run conditionally, much like I3ConditionalModule subclasses, except that the function passed to If must operate on a python list of frames instead of on a single one. For instance, to run the above module only on those events triggering more than 15 DOMs::
+
+ tray.AddModule(ExampleMod, 'mod',
+      If=lambda frs: len(frs[0]['InIceRawData']) > 15)
+
+This uses the InIceRawData key in the first frame of the packet (the DAQ frame) to control processing for the entire packet.
+
