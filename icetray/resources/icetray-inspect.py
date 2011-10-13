@@ -103,7 +103,6 @@ def print_segment(segment):
 			self.PrintArgs('Service', module, name, kwargs)
 		def AddSegment(self, module, name, **kwargs):
 			self.PrintArgs('Segment', module, name, kwargs)
-		AddConfig = AddSegment
 
 	potemkin = PotemkinTray()
 	if opts.xml:

@@ -218,7 +218,6 @@ class I3TrayDebugger:
 
     def AddSegment(self, _segment, _name, **kwargs):
         return _segment(self, _name, **kwargs)
-    AddConfig=AddSegment
 
     def __str__(self):
         def center(text, fill, size):

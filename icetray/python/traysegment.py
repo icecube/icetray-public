@@ -56,7 +56,7 @@ def module_altconfig(module, **altdefargs):
 
 	Once added to a module's pybindings, an instance of the module with
 	the specified alternate defaults can then be added to a tray using
-	I3Tray.AddConfig() or I3Tray.AddSegment().
+	I3Tray.AddSegment().
 
 	Usage: altconfig1 = icetray.module_altconfig('I3ExampleModule', Par1=5)
 	"""

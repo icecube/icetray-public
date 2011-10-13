@@ -94,7 +94,6 @@ class I3Tray(icetray.I3Tray):
 
     def AddSegment(self, _segment, _name, **kwargs):
         return _segment(self, _name, **kwargs)
-    AddConfig=AddSegment
     
     def SetParameter(self, module, param, value):
         super(I3Tray, self).SetParameter(module, param, value)

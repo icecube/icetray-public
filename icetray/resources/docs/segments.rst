@@ -96,7 +96,7 @@ used with DOMSimulator-based simulation can be done as follows::
     DOMsimulatorWorkArounds=True, FADCSaturationMargin=1) 
 
 This can then be added to a tray using AddSegment in the same 
-way (or AddConfig, which is a synonym)::
+way::
 
   tray.AddSegment(WaveCalibrator.DOMSimulatorCalibrator, 'calibrator')
 
