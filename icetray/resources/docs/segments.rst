@@ -132,7 +132,3 @@ Expanding segments in the I3Tray
 
 TODO: How to mega-print
 
-Reordering modules within Segments
-""""""""""""""""""""""""""""""""""
-
-TODO: How to reorder your modules.
