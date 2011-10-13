@@ -82,20 +82,3 @@ assert 'a' in a
 assert 'b' not in a
 assert 'c' not in a
 
-################################################################################
-
-a = makeframe('a')
-a2 = makeframe('a')
-a['a'].value = 666
-a2['a'].value = 777
- 
-try:
-    a.merge(a2)
-except:
-    print "ok,  that threw"
-    sys.exit(0)
-else:
-    print "that should have thrown"
-    sys.exit(1)
-
-
