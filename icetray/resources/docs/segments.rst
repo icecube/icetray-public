@@ -122,6 +122,8 @@ Writing a Segment for your Modules
 
 TODO: Where they live, default values, keywords, etc
 
+TODO:  include something about icetray.traysegment_inherit
+
 Segments of Segments
 """"""""""""""""""""
 
