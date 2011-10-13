@@ -207,13 +207,6 @@ void I3Frame::merge(const I3Frame& rhs)
     {
       if (map_.find(it->first) == map_.end())
 	map_[it->first] = it->second;
-      else if (it->second->stream == stop_)
-        /*
-         * NB: we silently ignore identical keys from other stops; collisions
-         * on "native" keys will still raise an error. This allows for some
-         * degree of aliasing, e.g. DrivingTime in DAQ and Physics frames.
-         */
-	log_fatal("Frame merge collision on frame object %s", it->first.c_str());
     }
 }
 
