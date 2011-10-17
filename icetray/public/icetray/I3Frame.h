@@ -255,6 +255,8 @@ class I3Frame
   bool Has(const std::string& key) const { return map_.count(key); }
   bool Has(const std::string& key, const Stream& stream) const;
 
+  I3Frame::Stream GetStop(const std::string& key) const;
+
   void merge(const I3Frame& rhs);
 
   // delete any frame objects we're carrying that are on stream 'what'

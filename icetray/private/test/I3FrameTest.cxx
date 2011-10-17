@@ -87,6 +87,16 @@ TEST(Get)
   ENSURE_EQUAL(ip.get(), ptr.get());
 }
 
+TEST(GetStop)
+{
+	I3Frame f(I3Frame::DAQ);
+	I3IntPtr ptr(new I3Int);
+	ptr->value = 110101;
+	f.Put("f", ptr);
+	ENSURE_EQUAL(f.GetStop("f"), I3Frame::DAQ);
+	THROWS(f.GetStop("doesnotexist"));
+}
+
 TEST(const_iterator_begin)
 {
   I3Frame f;
