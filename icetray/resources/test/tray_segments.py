@@ -27,8 +27,8 @@ tray.AddSegment(addnullsaltconfig, "addnulls")
 # Note: capitalization is deliberately wrong to test deduplication!
 tray.AddSegment(addnullsaltconfig, "addnullsdiff", 
     where=["here", "there", "everywhere", "tonsastuff"])
-tray.AddSegment(checkanddump, "nullcheck",
-    checkfor=["somestuff", "here", "there", "everywhere", "tonsastuff"])
+tray.AddSegment(checkanddump, "nullcheck", # Deliberate miscapitalization below
+    CheckFor=["somestuff", "here", "there", "everywhere", "tonsastuff"])
 tray.AddModule("TrashCan","adios")
 tray.Execute(10)
 tray.Finish()
