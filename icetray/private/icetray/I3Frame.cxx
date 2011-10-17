@@ -199,6 +199,19 @@ void I3Frame::purge()
     Delete(keys[i]);
 }
 
+bool I3Frame::Has(const std::string& key, const Stream& stream) const
+{
+  for(map_t::const_iterator it = map_.begin(); it != map_.end(); it++)
+    {
+      if (it->second->stream != stream)
+        continue;
+      if (it->first == key)
+	return true;
+    }
+
+  return false;
+}
+
 void I3Frame::merge(const I3Frame& rhs)
 {
   for(map_t::const_iterator it = rhs.map_.begin();
