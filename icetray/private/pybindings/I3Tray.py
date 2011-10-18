@@ -94,7 +94,7 @@ class I3Tray(icetray.I3Tray):
 
     def AddSegment(self, _segment, _name, **kwargs):
 	(keys,vals) = (kwargs.keys(), kwargs.values())
-	argnames = inspect.getargspec(_segment).args
+	argnames = inspect.getargspec(_segment)[0]
 	largnames = [a.lower() for a in argnames]
 
 	# Make case-insensitive where possible by matching to signature
