@@ -35,8 +35,8 @@ A more realistic example from the payload-parsing project::
   def I3DOMLaunchExtractor(tray, name, OMKey2MBIDXML=os.path.expandvars("$I3_SRC") + "/phys-services/resources/mainboard_ids.xml", BufferID="I3DAQData", ExceptionId="I3DAQDecodeException"):
       if OMKey2MBIDXML != None:
          tray.AddService("I3XMLOMKey2MBIDFactory", name + "_OmKey2MbId", InFile=OMKey2MBIDXML)
-         tray.AddService("I3PayloadParsingEventDecoderFactory", name + "_EventDecoder")
-         tray.AddModule("I3FrameBufferDecode", name + "_fbdecoder", BufferID=BufferID, ExceptionId=ExceptionId)
+      tray.AddService("I3PayloadParsingEventDecoderFactory", name + "_EventDecoder")
+      tray.AddModule("I3FrameBufferDecode", name + "_fbdecoder", BufferID=BufferID, ExceptionId=ExceptionId)
 
 The decorator (@icetray.traysegment) marks the function 
 as a tray segment, allowing it to be found later (for example, by I3Tray and 
