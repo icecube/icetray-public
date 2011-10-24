@@ -38,11 +38,7 @@ A more realistic example from the payload-parsing project::
       tray.AddService("I3PayloadParsingEventDecoderFactory", name + "_EventDecoder")
       tray.AddModule("I3FrameBufferDecode", name + "_fbdecoder", BufferID=BufferID, ExceptionId=ExceptionId)
 
-The decorator (@icetray.traysegment) marks the function 
-as a tray segment, allowing it to be found later (for example, by I3Tray and 
-icetray-inspect). Note that this also allows you to have multiple tray segments 
-in one file. This segment can be added to
-your tray like so::
+The decorator (@icetray.traysegment) marks the function as a tray segment, allowing it to be found later (for example, by I3Tray and icetray-inspect). Note that this also allows you to have multiple tray segments in one file. The arguments of the segment are specified as keywords (e.g. OMKey2MBIDXML), with default values following the = sign. This segment can be added to your tray like so::
 
   tray.AddSegment(payload_parsing.I3DOMLaunchExtractor, "extract")
 
@@ -120,9 +116,33 @@ These alterative configurations also are reported by icetray-inspect::
 Writing a Segment for your Modules
 """"""""""""""""""""""""""""""""""
 
-TODO: Where they live, default values, keywords, etc
+Segments can be put in any location accessible to python, but those that are part of Icetray projects typically live in the module's pybdindings. They are then imported from the module's namespace.
 
-TODO:  include something about icetray.traysegment_inherit
+Modules without any python component will need to add a PYTHON_DIR directive to their project's CMakeLists.txt::
+
+  i3_project(myproject PYTHON_DIR python)
+
+and an `__init__.py` file to a new python subdirectory like this::
+
+  from icecube import icetray
+  import os
+  icetray.load('myproject', False)
+
+Short segments can be added directly to this file, but longer ones should be added to another .py file, and then brought into the project's namespace with an import command in `__init__.py`.
+
+There is one additional variant of the icetray.traysegment decorator that can be useful in some circumstances. This is an example from the hdfwriter project::
+
+  @icetray.traysegment_inherit(tableio.I3TableWriter)
+  def I3HDFWriter(tray, name, Output=None, **kwargs):
+        """Tabulate data to an HDF5 file.
+
+        :param Output: Path to output file
+        """
+        tabler = I3HDFTableService(Output)
+        tray.AddModule(tableio.I3TableWriter, name, TableService=tabler,
+            **kwargs)
+
+This is a wrapper around tableio.I3TableWriter that adds one additional service. Any options besides `Output` are passed through to tableio.I3TableWriter via the kwargs parameter, but what those available options are would not ordinarily show up in the output of icetray-inspect. The use of traysegment_inherit here makes no functional changes, but causes the options taken by tableio.I3TableWriter to be appended to the segment's own options (in this case, `Output`) when shown in icetray-inspect.
 
 Segments of Segments
 """"""""""""""""""""
