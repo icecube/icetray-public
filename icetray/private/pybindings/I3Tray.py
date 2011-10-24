@@ -136,4 +136,29 @@ class I3Tray(icetray.I3Tray):
         else:
             super(I3Tray, self).Execute()
 
+    def PrintUsage(tray, fraction=0.9):
+    	"""
+    	Pretty-print the time spent in each module, as usually done in the I3Module
+    	destructor.
+    
+    	:param fraction: Print out the usage of modules consuming this much of the
+    	                 total runtime.
+    	"""
+    	usage = tray.Usage()
+	if len(usage) == 0:
+		return
+    	keys = [p.key() for p in usage]
+    	keys.sort(key=lambda k: usage[k].usertime + usage[k].systime)
+    	total_time = sum([p.data().usertime + p.data().systime for p in usage])
+    	acc_time = 0
+    	print '-'*99
+    	for k in keys[::-1]:
+    		pusage = usage[k]
+    		print "%40s: %6u calls to physics %9.2fs user %9.2fs system" % (k, pusage.ncall, pusage.usertime, pusage.systime)
+    
+    		acc_time += pusage.systime + pusage.usertime
+    		if acc_time/total_time > fraction:
+    			break
+    	print '-'*99
+
 
