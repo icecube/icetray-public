@@ -132,5 +132,40 @@ TODO: Putting it all together to make a large scripts suitable for mass processi
 Expanding segments in the I3Tray
 """"""""""""""""""""""""""""""""
 
-TODO: How to mega-print
+There are several ways to see what is inside of a segment. The simplest is using the --expand-segments argument to icetray-inspect::
 
+  [nwhitehorn@wanderer ~/i3/offline/build]$ icetray-inspect --expand-segments --no-modules --no-services payload-parsing
+
+  *** payload-parsing ***
+  -------------------------------------------------------------------------------
+  Logging configured from file ./log4cplus.conf
+    icecube.payload_parsing.I3DOMLaunchExtractor (I3Tray segment)
+
+      Extract DOMLaunches and triggers from raw DAQ data.
+    
+    
+    
+      Extra keyword arguments are passed to I3PayloadParsingEventDecoderFactory.
+
+    Equivalent to:
+      AddService('I3XMLOMKey2MBIDFactory', 'example_OmKey2MbId', InFile='/home/nwhitehorn/i3/offline/src/phys-services/resources/mainboard_ids.xml.gz')
+      AddService('I3PayloadParsingEventDecoderFactory', 'example_EventDecoder')
+      AddModule('I3FrameBufferDecode', 'example_fbdecoder', BufferID='I3DAQData', ExceptionId='I3DAQDecodeException')
+
+
+It is also possible to print out the contents of an I3Tray or TrayInfo object using the Python `print` operator to get the contents and configuration of the entire tray, with all segments expanded, in a human-readable form. The Python `repr` operator can also be used to get a more-tractable (and potentially executable) version of a tray or TrayInfo frame::
+
+  print repr(tray)
+
+gives::
+
+  tray = I3Tray.I3Tray()
+  tray.AddModule('I3Reader', 'reader', DropBuffers=False,
+    Filename='/tmp/bork.i3', FilenameList=[], SkipKeys=[])
+  tray.AddModule('Dump', 'dump', IcePickServiceKey='', If=None)
+  tray.AddModule('I3Writer', 'writer', CompressionLevel=-2,
+    DropOrphanStreams=[], Filename='bork-out.i3', IcePickServiceKey='',
+    If=None, SkipKeys=[], Streams=[])
+  tray.AddModule('TrashCan', 'can')
+
+You can also, of course, read the source code for the segment.
