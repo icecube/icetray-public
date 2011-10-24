@@ -147,7 +147,23 @@ This is a wrapper around tableio.I3TableWriter that adds one additional service.
 Segments of Segments
 """"""""""""""""""""
 
-TODO: Putting it all together to make a large scripts suitable for mass processing
+Segments can of course include tray.AddSegment() calls within them, and in this way large processing chains can be built up. A working example from the IC86 L2 processing::
+
+  @icetray.traysegment
+  def RawDataToPulses(tray, name, superdstname = 'I3SuperDST',
+    pulses='UncleanedPulses'):
+       # Raw Data
+       tray.AddSegment(payload_parsing.I3DOMLaunchExtractor, name + '_launches')
+       tray.AddModule('I3WaveCalibrator', name + '_wavecal')
+       tray.AddModule('I3Wavedeform', name + '_wavedeform', Output=pulses)
+       tray.AddModule('Delete', Keys=['CalibratedWaveforms'])
+
+       # Super DST
+       if superdstname != None:
+          tray.AddModule('Rename', name + '_sdstrename',
+            Keys=[superdstname, pulses], If=lambda fr: pulses not in fr)
+
+For common processing chains like the L2 processing, such a segment would typically live in a pure python project. For small personal projects, they can live in any python file (including in the script from which they are being used).
 
 Expanding segments in the I3Tray
 """"""""""""""""""""""""""""""""
