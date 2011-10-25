@@ -156,7 +156,7 @@ Segments can of course include tray.AddSegment() calls within them, and in this 
        tray.AddSegment(payload_parsing.I3DOMLaunchExtractor, name + '_launches')
        tray.AddModule('I3WaveCalibrator', name + '_wavecal')
        tray.AddModule('I3Wavedeform', name + '_wavedeform', Output=pulses)
-       tray.AddModule('Delete', Keys=['CalibratedWaveforms'])
+       tray.AddModule('Delete', name + '_delete', Keys=['CalibratedWaveforms'])
 
        # Super DST
        if superdstname != None:
