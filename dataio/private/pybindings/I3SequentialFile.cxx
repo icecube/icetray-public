@@ -52,6 +52,7 @@ namespace I3 { namespace dataio { namespace python {
     I3FramePtr pop_frame();
     I3FramePtr next();
     I3FramePtr pop_frame(I3Frame::Stream s);
+    I3FramePtr pop_daq();
     I3FramePtr pop_physics();
 
     I3SequentialFile make_iterator()
@@ -66,6 +67,8 @@ namespace I3 { namespace dataio { namespace python {
 
     boost::iostreams::filtering_istream ifs_;
     boost::iostreams::filtering_ostream ofs_;
+
+    I3Frame cache_;
   
     std::string path_;
     Mode mode_;
@@ -117,6 +120,7 @@ namespace I3 { namespace dataio { namespace python {
   {
     ifs_.reset();
     ofs_.reset();
+    cache_.clear();
     mode_ = Closed;
   }
 
@@ -145,6 +149,7 @@ namespace I3 { namespace dataio { namespace python {
       I3::dataio::open(ifs_, filename);
     else if (mode_ == Writing)
       I3::dataio::open(ofs_, filename);
+    cache_.clear();
 
     return 0;
   }
@@ -166,6 +171,14 @@ namespace I3 { namespace dataio { namespace python {
     while(more()) {
       try {
         f->load(ifs_);
+        cache_.purge(f->GetStop());
+        f->purge();
+        f->merge(cache_);
+        // Act like I3Module: merge all keys except TrayInfo and Physics
+        if (f->GetStop() != I3Frame::TrayInfo &&
+            f->GetStop() != I3Frame::Physics)
+                cache_.merge(*f);
+
         if (s == I3Frame::None || f->GetStop() == s)
           return f;
       } catch (const std::exception& e) {
@@ -184,15 +197,15 @@ namespace I3 { namespace dataio { namespace python {
   }
 
   I3FramePtr
+  I3SequentialFile::pop_daq()
+  {
+    return pop_frame(I3Frame::DAQ);
+  }
+
+  I3FramePtr
   I3SequentialFile::pop_physics()
   {
-    if (mode_ != Reading)
-      log_fatal("can't pop from non-Reading file");
-    I3FramePtr f;
-    do {
-      f = pop_frame();
-    } while (f && f->GetStop() != I3Frame::Physics);
-    return f;
+    return pop_frame(I3Frame::Physics);
   }
 
   bool
@@ -248,6 +261,9 @@ void register_I3SequentialFile()
     .def("pop_frame", (I3FramePtr (I3SequentialFile::*)(I3Frame::Stream))&I3SequentialFile::pop_frame,
          (bp::arg("Stream")),
          "Return the next frame on stream 'Stream' from the file.")
+    .def("pop_daq", &I3SequentialFile::pop_daq,
+         "Return the next DAQ frame from the file, skipping frames on "
+         "other streams.")
     .def("pop_physics", &I3SequentialFile::pop_physics,
          "Return the next physics frame from the file, skipping frames on "
          "other streams.")
