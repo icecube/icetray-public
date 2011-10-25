@@ -61,6 +61,8 @@ counter = 1
 for st in streams:
     theframe = i3f.pop_frame(icetray.I3Frame.Stream(st))
     print theframe
+    theframe.purge()
+    print theframe
     assert len(theframe) == 1
     assert st in theframe
     i3i = theframe[st]
