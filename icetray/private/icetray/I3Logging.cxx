@@ -43,7 +43,7 @@ namespace I3Logging
   public:
     // Ctors
     IceTrayAppender(bool immediateFlush = false, log4cplus::LogLevel errorLevel = log4cplus::ERROR_LOG_LEVEL)
-      : immediateFlush_(immediateFlush_), errorLevel_(errorLevel)
+      : immediateFlush_(immediateFlush), errorLevel_(errorLevel)
     {}
 
     IceTrayAppender(const log4cplus::helpers::Properties properties)
