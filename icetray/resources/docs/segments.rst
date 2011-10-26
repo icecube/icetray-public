@@ -20,7 +20,7 @@ A Basic Tray Segment Example
 
 Tray segments are defined by a python function, such as the following::
 
-  @icetray.tragsegment
+  @icetray.traysegment
   def small_segment(tray, name, NDumps=1): 
     for i in range(0, NDumps):
       tray.AddModule('Dump', name + ('_dump_%d' % i))
