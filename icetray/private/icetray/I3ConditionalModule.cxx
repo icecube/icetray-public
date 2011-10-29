@@ -109,7 +109,7 @@ bool I3ConditionalModule::ShouldDoProcess(I3FramePtr frame)
       else
 	++nskipped_;
 
-      i3_log("ShouldDoPhysics == %d", flag);
+      i3_log("ShouldDoProcess == %d", flag);
       return flag;
     }
 
