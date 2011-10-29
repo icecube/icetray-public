@@ -56,3 +56,4 @@ private:
 }} // namespace icetray::python
 
 #endif
+
