@@ -2,7 +2,13 @@
 
 from icecube import icetray
 from I3Tray import *
-import numpy
+import sys
+
+try:
+	import numpy
+except ImportError:
+	print 'Numpy not found -- skipping test'
+	sys.exit(0)
 
 
 # some parameter exercise
