@@ -20,16 +20,16 @@ public:
 				       const boost::python::object& name, 
 				       const boost::python::object& value){
     if( PyObject_HasAttr(obj.ptr(), name.ptr()) ){
-      PyObject_GenericSetAttr( obj.ptr(), name.ptr(), value.ptr());
+      if( PyObject_GenericSetAttr( obj.ptr(), name.ptr(), value.ptr()) == -1)
+        throw boost::python::error_already_set();
     }else{
       std::stringstream ss;
       std::string clname = boost::python::extract<std::string>( obj.attr("__class__").attr("__name__") );
       std::string attname = boost::python::extract<std::string>( name );
       ss<<"*** The dynamism of this class has been disabled"<<std::endl;
       ss<<"*** Attribute ("<<attname<<") does not exist in class "<<clname<<std::endl; 
-      // ToDo :  Get this to throw an AttributeError instead of a generic runtime error.
-      //PyErr_SetString(PyExc_AttributeError, ss.str().c_str());
-      throw std::runtime_error( ss.str().c_str() );
+      PyErr_SetString(PyExc_AttributeError, ss.str().c_str());
+      throw boost::python::error_already_set();
     }
   }
 };
