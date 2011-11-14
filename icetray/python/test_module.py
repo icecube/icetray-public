@@ -10,7 +10,7 @@
 # @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy$
 #
 
-from icecube.icetray import I3ConditionalModule
+from icecube.icetray import I3ConditionalModule, I3Frame
 import unittest, sys
 
 def I3TestModuleFactory(*test_cases):
@@ -39,6 +39,7 @@ tray.AddModule(icetray.I3TestModuleFactory(I3TimeHorizonCutTest), 'test',
 		runner = unittest.TextTestRunner()
 		def __init__(self, context):
 			I3ConditionalModule.__init__(self, context)
+			self.AddParameter("Streams", "Streams on which to run the test", [I3Frame.Physics])
 			self.AddOutBox("OutBox")
 			
 			self.suites = []
@@ -47,9 +48,11 @@ tray.AddModule(icetray.I3TestModuleFactory(I3TimeHorizonCutTest), 'test',
 			self.test_cases = test_cases
 			
 		def Configure(self):
-			pass
+			streams = self.GetParameter("Streams")
+			for stream in streams:
+				self.Register(stream, self.RunTests)
 		
-		def Physics(self, frame):
+		def RunTests(self, frame):
 			result = None
 			
 			for case in self.test_cases:
