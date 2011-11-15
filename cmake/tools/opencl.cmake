@@ -44,7 +44,7 @@ IF (APPLE)
 
         set(OPENCL_FOUND TRUE CACHE BOOL "Tool 'opencl' found successfully" FORCE)
 
-        REPORT_FIND(OpenCL "OpenCL framework" ${ACCELERATE_LIBRARIES})
+        REPORT_FIND(OpenCL "OpenCL framework" ${OPENCL_LIBRARIES})
 
     endif(OpenCL_FRAMEWORKS)
 
