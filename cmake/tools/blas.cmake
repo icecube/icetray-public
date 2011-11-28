@@ -2,11 +2,9 @@
 ## multiarch system (Ubuntu 11.04+), uncomment the lines around the
 ## find_package() call.
 
-if(META_PROJECT MATCHES "^icerec")
-
 tooldef(blas
-  include
-  cblas.h
+  NONE
+  NONE
   lib
   NONE
   goto2
@@ -24,4 +22,3 @@ else(BLAS_FOUND)
   #unset(CMAKE_REQUIRED_FLAGS)
 endif(BLAS_FOUND)
 
-endif(META_PROJECT MATCHES "^icerec")

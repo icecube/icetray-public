@@ -2,11 +2,9 @@
 ## multiarch system (Ubuntu 11.04+), uncomment the lines around the
 ## find_package() call.
 
-if(META_PROJECT MATCHES "^icerec")
-
 tooldef(lapack
-  include
-  cblas.h
+  NONE
+  NONE
   lib
   NONE
   goto2
@@ -23,8 +21,6 @@ else(LAPACK_FOUND)
   find_package(LAPACK)
   #unset(CMAKE_REQUIRED_FLAGS)
 endif(LAPACK_FOUND)
-
-endif(META_PROJECT MATCHES "^icerec")
 
 ## uncomment the following for debugging...
 #colormsg("BLAS_LIBRARIES: ${BLAS_LIBRARIES}")
