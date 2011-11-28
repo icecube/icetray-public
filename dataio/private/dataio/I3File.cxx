@@ -288,6 +288,11 @@ I3FileImpl::get_frame(unsigned index)
           assert(iter->second == index);
           continue;
         }
+
+      // Don't merge physics and trayinfo frames
+      if (iter->first == I3Frame::Physics || iter->first == I3Frame::TrayInfo)
+        continue;
+
       I3FramePtr otherframe = get_raw_frame(iter->second);
       frame->merge(*otherframe);
     }
