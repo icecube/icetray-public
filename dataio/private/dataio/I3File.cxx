@@ -23,9 +23,13 @@
 using boost::optional;
 
 #include <boost/foreach.hpp>
+#include <boost/iostreams/filtering_stream.hpp>
+#include <boost/iostreams/device/file.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
 
 #include <map>
 #include <dataio/I3File.h>
+#include <icetray/open.h>
 #include <icetray/serialization.h>
 #include <icetray/Utility.h>
 
@@ -44,7 +48,7 @@ class I3FileImpl
 {
   std::vector<I3File::FrameInfo> frame_infos_;
 
-  std::ifstream ifs_;
+  boost::iostreams::filtering_istream ifs_;
 
   unsigned x_index_;
   unsigned y_index_;
@@ -103,7 +107,7 @@ I3FileImpl::set_skipkeys(const vector<string>& sk)
 void
 I3FileImpl::close()
 {
-  ifs_.close();
+  ifs_.reset();
   frame_infos_.clear();
   skipkeys_.clear();
 }
@@ -115,11 +119,8 @@ I3FileImpl::open_file(const std::string& filename, boost::function<void(double)>
                       bool verbose)
 {
   log_trace("I3FileImpl::open_file(%s)", filename.c_str());
-  if (filename.find(".gz") == filename.length() - 3)
-    log_fatal("can't read zipped files... please decompress.");
 
-  ifs_.clear();
-  ifs_.open(filename.c_str(), ios::binary);
+  I3::dataio::open(ifs_, filename.c_str());
   if (!ifs_) {
     cerr << "Can't open file " << filename << " for reading: " 
          << strerror(errno) << "(" << errno << ")\n";
@@ -131,6 +132,8 @@ I3FileImpl::open_file(const std::string& filename, boost::function<void(double)>
 
   // get length of file:
   ifs_.seekg (0, ios::end);
+  if (ifs_.tellg() == -1)
+    throw ios_base::failure("Input stream not seekable - try decompressing");
   uint64_t length = ifs_.tellg();
   ifs_.seekg (0, ios::beg);
 
