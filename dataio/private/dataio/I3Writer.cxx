@@ -22,8 +22,6 @@
 #include <dataio/I3Writer.h>
 #include <icetray/open.h>
 
-#include <boost/iostreams/filter/bzip2.hpp>
-
 namespace io = boost::iostreams;
 namespace dataio = I3::dataio;
 
@@ -46,12 +44,6 @@ I3Writer::Configure_()
 void
 I3Writer::Finish()
 {
-  try {
   filterstream_.reset();
-  } catch(io::bzip2_error &e) {
-  std::cout << typeid(e).name() << '\n';
-  std::cout << e.what() << '\n';
-  std::cout << e.error() << '\n';
-  }
   I3WriterBase::Finish();
 }
