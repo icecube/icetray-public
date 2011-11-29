@@ -132,9 +132,9 @@ I3FileImpl::open_file(const std::string& filename, boost::function<void(double)>
 
   // get length of file:
   ifs_.seekg (0, ios::end);
-  if (ifs_.tellg() == -1)
-    throw ios_base::failure("Input stream not seekable - try decompressing");
   uint64_t length = ifs_.tellg();
+  if (length == (uint64_t)-1)
+    throw ios_base::failure("Input stream not seekable - try decompressing");
   ifs_.seekg (0, ios::beg);
 
   if (verbose) {
