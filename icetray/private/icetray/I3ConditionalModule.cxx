@@ -99,6 +99,10 @@ bool I3ConditionalModule::ShouldDoProcess(I3FramePtr frame)
 {
   i3_log("%s", __PRETTY_FUNCTION__);
 
+  // For all frame types except DAQ and Physics, the answer is always yes
+  if (frame->GetStop() != I3Frame::DAQ && frame->GetStop() != I3Frame::Physics)
+    return true;
+
   i3_log("use_if_=%d", use_if_);
   if (use_if_)
     {
@@ -129,3 +133,4 @@ bool I3ConditionalModule::ShouldDoProcess(I3FramePtr frame)
   i3_log("%s", "ShouldDoPhysics == true");
   return true;
 }
+
