@@ -43,7 +43,7 @@ if(NOT USE_ROOT)
 else(NOT USE_ROOT)
 
   if(NOT ROOT_VERSION)
-    foreach(ROOTVER 5.32.00 5.30.05 5.30.00 5.28.00h 5.28.00d 5.28.00 5.27.06b 5.26.00e 5.24.00b 5.20.00 5.18.00)
+    foreach(ROOTVER 5.32.00 5.30.05 5.30.00 5.28.00h 5.28.00d 5.28.00 5.27.06b 5.26.00e 5.24.00b 5.24.00 5.20.00 5.18.00)
       if(IS_DIRECTORY ${I3_PORTS}/root-v${ROOTVER})
         set(ROOT_VERSION "${ROOTVER}")
         set(ROOT_${ROOT_VERSION}_LIBS Core Cint RIO Net Hist Graf Graf3d Gpad Tree Rint Postscript Matrix Physics MathCore Thread Minuit Gui)
@@ -53,7 +53,7 @@ else(NOT USE_ROOT)
   endif(NOT ROOT_VERSION)
 
   if(NOT ROOT_VERSION)
-    message(FATAL_ERROR "Neither root 5.32.00 5.30.05 5.30.00 5.28.00h 5.28.00d 5.28.00 5.27.06b 5.26.00e 5.24.00b 5.20.00 5.18.00 found. Please install using ports.")
+    message(FATAL_ERROR "Neither root 5.32.00 5.30.05 5.30.00 5.28.00h 5.28.00d 5.28.00 5.27.06b 5.26.00e 5.24.00b 5.24.00 5.20.00 5.18.00 found. Please install using ports.")
   endif(NOT ROOT_VERSION)
 
   set(ROOT_5.18.00_LIBS Core Cint RIO Net Hist Graf Graf3d Gpad Tree Rint Postscript Matrix Physics Minuit)
