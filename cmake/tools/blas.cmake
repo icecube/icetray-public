@@ -14,6 +14,7 @@ if(BLAS_FOUND)
   set(BLASINI3PORTS_FOUND TRUE)
 else(BLAS_FOUND)
   unset(BLAS_CONFIG_ERROR)
+  unset(BLAS_INCLUDE_DIR)
   colormsg(YELLOW "*** GotoBLAS2 not found in \$I3_PORTS")
   colormsg(YELLOW "*** Searching for 3rd party BLAS (I hope you linked it against SuiteSparse)")
 

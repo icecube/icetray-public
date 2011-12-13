@@ -14,6 +14,7 @@ if(LAPACK_FOUND)
   set(LAPACKINI3PORTS_FOUND TRUE)
 else(LAPACK_FOUND)
   unset(LAPACK_CONFIG_ERROR)
+  unset(LAPACK_INCLUDE_DIR)
   colormsg(YELLOW "*** GotoBLAS2 not found in \$I3_PORTS")
   colormsg(YELLOW "*** Searching for 3rd party LAPACK (I hope you linked it against SuiteSparse)")
 
