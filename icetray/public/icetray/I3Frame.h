@@ -219,6 +219,7 @@ class I3Frame
   Stream GetStop() const { return stop_; }
   void SetStop(Stream newstop) { stop_ = newstop; }
 
+  bool drop_blobs() const { return drop_blobs_; }
   /** Determine policy: Drop the blobs after deserialization?
    * 
    * @param drop True corresponds to <em>drop blobs</em>.
