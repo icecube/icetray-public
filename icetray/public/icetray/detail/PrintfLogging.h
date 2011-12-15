@@ -27,7 +27,7 @@
 #define ICETRAY_DETAIL_PRINTFLOGGING_H_INCLUDED
 
 #include <stdexcept>
-#include <iosfwd>
+#include <stdio.h>
 
 #define LOG_TRACE 0
 #define LOG_DEBUG 1
@@ -40,37 +40,37 @@
 #define LOG_IMPL(LEVEL, format, ...) printf("%s:%d\t", __FILE__, __LINE__), printf(format, ##__VA_ARGS__ ), printf("\n")
   
 #if I3_PRINTF_LOGGING_LEVEL <= LOG_TRACE
-#define log_trace(format, ...) LOG_IMPL(LOG_TRACE, format, ##__VA_ARGS__)
+#  define log_trace(format, ...) LOG_IMPL(LOG_TRACE, format, ##__VA_ARGS__)
 #else
-#define log_trace(format, ...)
+#  define log_trace(format, ...)
 #endif
 
 #if I3_PRINTF_LOGGING_LEVEL <= LOG_DEBUG
-#define log_debug(format, ...) LOG_IMPL(LOG_DEBUG, format, ##__VA_ARGS__)
+#  define log_debug(format, ...) LOG_IMPL(LOG_DEBUG, format, ##__VA_ARGS__)
 #else
-#define log_debug(format, ...)
+#  define log_debug(format, ...)
 #endif
 
 #if I3_PRINTF_LOGGING_LEVEL <= LOG_INFO
-#define log_info(format, ...) LOG_IMPL(LOG_INFO, format, ##__VA_ARGS__)
+#  define log_info(format, ...) LOG_IMPL(LOG_INFO, format, ##__VA_ARGS__)
 #else
-#define log_info(format, ...)
+#  define log_info(format, ...)
 #endif
 
 #if I3_PRINTF_LOGGING_LEVEL <= LOG_WARN
-#define log_warn(format, ...) LOG_IMPL(LOG_WARN, format, ##__VA_ARGS__)
+#  define log_warn(format, ...) LOG_IMPL(LOG_WARN, format, ##__VA_ARGS__)
 #else
-#define log_warn(format, ...)
+#  define log_warn(format, ...)
 #endif
 
 #if I3_PRINTF_LOGGING_LEVEL <= LOG_ERROR
-#define log_error(format, ...) LOG_IMPL(LOG_ERROR, format, ##__VA_ARGS__)
+#  define log_error(format, ...) LOG_IMPL(LOG_ERROR, format, ##__VA_ARGS__)
 #else
-#define log_error(format, ...)
+#  define log_error(format, ...)
 #endif
 
 #define log_fatal(format, ...) LOG_IMPL(LOG_FATAL, format, ##__VA_ARGS__), throw std::runtime_error("log_fatal")
 
 #define SET_LOGGER(X)
 
-#endif 
+#endif //ifndef ICETRAY_DETAIL_PRINTFLOGGING_H_INCLUDED

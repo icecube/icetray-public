@@ -57,8 +57,8 @@ namespace I3Logging
 I3Logging::logger& get_logger();
 
 // implmentation macro of macros visible to user.
-#define LOG_IMPL(LEVEL, format, ...)					\
-  get_logger().is_enabled_for(::I3Logging::LEVEL) &&			\
+#define LOG_IMPL(LEVEL, format, ...)                                              \
+  get_logger().is_enabled_for(::I3Logging::LEVEL) &&                              \
   get_logger().log(::I3Logging::LEVEL,	__FILE__, __LINE__, format, ##__VA_ARGS__)
 
 
@@ -124,12 +124,11 @@ I3Logging::logger& get_logger();
  * This function has to contain the call to ::get_logger() to ensure that 
  * the logging system has been configured before we getInstance of our logger.
  */
-#define SET_LOGGER(X)							\
-  static I3Logging::logger& get_logger()				\
-  {									\
-    static I3Logging::logger the_logger;				\
-    return the_logger;							\
+#define SET_LOGGER(X)                        \
+  static I3Logging::logger& get_logger()     \
+  {                                          \
+    static I3Logging::logger the_logger;     \
+    return the_logger;                       \
   }
 
-
-#endif //ndef ICETRAY_PYTHONLOGGING_H_INCLUDED
+#endif //ifndef ICETRAY_PYTHONLOGGING_H_INCLUDED

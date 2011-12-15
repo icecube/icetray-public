@@ -22,28 +22,18 @@
 #define ICETRAY_I3LOGGING_H_INCLUDED
 
 #if defined(__cplusplus)
-
 #  if defined(I3_PRINTF_LOGGING)
-
 #    include <icetray/detail/PrintfLogging.h>
-
 #  elif defined(__CINT__)
-
 #    include <icetray/detail/CintLogging.h>
-
 #  elif defined(I3_PYTHON_LOGGING)
-
 #    include <icetray/detail/PythonLogging.h>
-
 #  else 
-
 #    include <icetray/detail/Log4cplusLogging.h>
 #    define I3_LOG4CPLUS_LOGGING
-
 #  endif
-
 #endif
 
 #include <icetray/detail/CLogging.h>
 
-#endif //ndef ICETRAY_I3LOGGING_H_INCLUDED
+#endif //ifndef ICETRAY_I3LOGGING_H_INCLUDED

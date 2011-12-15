@@ -3,17 +3,19 @@
 //
 // @author troy d. straszheim
 //
+#include <icetray/I3Logging.h>
+
+#if !defined(I3_PRINTF_LOGGING) && !defined(I3_PYTHON_LOGGING)
+
 #include <string>
 using std::string;
 #include <iostream>
 using std::cerr;
 
-#include <icetray/I3Logging.h>
-
-#if !defined(I3_PRINTF_LOGGING) && !defined(I3_PYTHON_LOGGING)
-
-#include <log4cplus/logger.h>
+#include <log4cplus/configurator.h>
+#include <log4cplus/consoleappender.h>
 #include <log4cplus/layout.h>
+#include <log4cplus/logger.h>
 #include <log4cplus/loglevel.h>
 #include <log4cplus/ndc.h>
 #include <log4cplus/consoleappender.h>
@@ -22,54 +24,62 @@ using std::cerr;
 #include <log4cplus/streams.h>
 #include <log4cplus/spi/factory.h>
 #include <log4cplus/spi/loggingevent.h>
-#include <log4cplus/helpers/stringhelper.h>
 #include <log4cplus/helpers/loglog.h>
 #include <log4cplus/helpers/property.h>
+#include <log4cplus/helpers/stringhelper.h>
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
 namespace fs = boost::filesystem;
 
-// 
+//
 //  Used only in this file to announce configuration steps
 //
 #define LOG(MSG) ::log4cplus::Logger::getRoot().log(::log4cplus::DEBUG_LOG_LEVEL, \
-				       MSG,__FILE__,__LINE__);
+                                                    MSG,__FILE__,__LINE__);
 
-namespace I3Logging 
+namespace I3Logging
 {
-  class IceTrayAppender : public log4cplus::Appender {
-  public:
+  class IceTrayAppender : public log4cplus::Appender
+  {
+   public:
     // Ctors
-    IceTrayAppender(bool immediateFlush = false, log4cplus::LogLevel errorLevel = log4cplus::ERROR_LOG_LEVEL)
+    IceTrayAppender(bool immediateFlush = false,
+                    log4cplus::LogLevel errorLevel = log4cplus::ERROR_LOG_LEVEL)
       : immediateFlush_(immediateFlush), errorLevel_(errorLevel)
     {}
 
     IceTrayAppender(const log4cplus::helpers::Properties properties)
       : log4cplus::Appender(properties),
-	immediateFlush_(false), errorLevel_(log4cplus::ERROR_LOG_LEVEL)
+        immediateFlush_(false), errorLevel_(log4cplus::ERROR_LOG_LEVEL)
     {
-      if (properties.exists( LOG4CPLUS_TEXT("ImmediateFlush") )) {
-	log4cplus::tstring tmp = properties.getProperty( LOG4CPLUS_TEXT("ImmediateFlush") );
-        immediateFlush_ = (log4cplus::helpers::toLower(tmp) == LOG4CPLUS_TEXT("true"));
+      if (properties.exists( LOG4CPLUS_TEXT("ImmediateFlush") ))
+      {
+        log4cplus::tstring tmp =
+          properties.getProperty( LOG4CPLUS_TEXT("ImmediateFlush") );
+        immediateFlush_ =
+          (log4cplus::helpers::toLower(tmp) == LOG4CPLUS_TEXT("true"));
       }
-      if (properties.exists( LOG4CPLUS_TEXT("ErrorLevel") )) {
-	log4cplus::tstring tmp = properties.getProperty( LOG4CPLUS_TEXT("ErrorLevel") );
-	errorLevel_ = log4cplus::getLogLevelManager().fromString(tmp);
+      if (properties.exists( LOG4CPLUS_TEXT("ErrorLevel") ))
+      {
+        log4cplus::tstring tmp =
+          properties.getProperty( LOG4CPLUS_TEXT("ErrorLevel") );
+        errorLevel_ = log4cplus::getLogLevelManager().fromString(tmp);
       }
     }
 
     // Dtor
-    ~IceTrayAppender() { destructorImpl(); }
+    virtual ~IceTrayAppender() { destructorImpl(); }
 
     // Methods
-    virtual void close() {
+    virtual void close()
+    {
       getLogLog().debug(LOG4CPLUS_TEXT("Entering IceTrayAppender::close().."));
       closed = true;
     }
 
-  protected:
+   protected:
     // From log4cplus::ConsoleAppender:
     // Normally, append() methods do not need to be locked since they are
     // called by doAppend() which performs the locking.  However, this locks
@@ -78,14 +88,12 @@ namespace I3Logging
     void append(const log4cplus::spi::InternalLoggingEvent& event)
     {
       LOG4CPLUS_BEGIN_SYNCHRONIZE_ON_MUTEX( getLogLog().mutex )
-        log4cplus::tostream& output = (event.getLogLevel() >= errorLevel_ ? log4cplus::tcerr : log4cplus::tcout);
+        log4cplus::tostream& output =
+          (event.getLogLevel() >= errorLevel_ ? log4cplus::tcerr : log4cplus::tcout);
         layout->formatAndAppend(output, event);
-        if (immediateFlush_) {
-	  output.flush();
-        }
+        if (immediateFlush_) output.flush();
       LOG4CPLUS_END_SYNCHRONIZE_ON_MUTEX ;
     }
-
 
     /**
      * Immediate flush means that the underlying output stream
@@ -99,20 +107,20 @@ namespace I3Logging
     log4cplus::LogLevel errorLevel_;
   };
 
-  class IceTrayAppenderFactory : public log4cplus::spi::AppenderFactory {
-  public:
-    log4cplus::SharedAppenderPtr createObject(const log4cplus::helpers::Properties& props)
+  class IceTrayAppenderFactory : public log4cplus::spi::AppenderFactory
+  {
+   public:
+    log4cplus::SharedAppenderPtr
+    createObject(const log4cplus::helpers::Properties& props)
     {
       return log4cplus::SharedAppenderPtr(new I3Logging::IceTrayAppender(props));
     }
 
-    log4cplus::tstring getTypeName() { 
-      return LOG4CPLUS_TEXT("I3Logging::IceTrayAppender"); 
+    log4cplus::tstring getTypeName()
+    {
+      return LOG4CPLUS_TEXT("I3Logging::IceTrayAppender");
     }
   };
-
-
-  char logbuf_[logbuf_size_];
 
   void failsafe_configuration()
   {
@@ -123,7 +131,7 @@ namespace I3Logging
     properties.setProperty("log4cplus.appender.default", "I3Logging::IceTrayAppender");
     properties.setProperty("log4cplus.appender.default.layout", "log4cplus::PatternLayout");
     properties.setProperty("log4cplus.appender.default.layout.ConversionPattern", "%F:%L: %m%n");
-    //    properties.setProperty("log4cplus.logger.default", "DEBUG, default");
+    //properties.setProperty("log4cplus.logger.default", "DEBUG, default");
 
     // no appender for root logger. it duplicates output.
     properties.setProperty("log4cplus.rootLogger", "WARN, default");
@@ -140,70 +148,74 @@ namespace I3Logging
     std::cerr << "Logging configured from file " << config_fname << "\n";
   }
 
-  Configurator::Configurator() 
+  Configurator::Configurator()
   {
-    char * buffer;
-    
-    buffer = getenv ("I3LOGGING_CONFIG");
-
     // register our appender
     log4cplus::spi::AppenderFactoryRegistry& reg = log4cplus::spi::getAppenderFactoryRegistry();
     std::auto_ptr<log4cplus::spi::AppenderFactory> icetrayAppenderFactory(new I3Logging::IceTrayAppenderFactory());
     reg.put(icetrayAppenderFactory);
 
-    // if the env variable is set, try that file, else default-config
-    if (buffer) {
-      fs::path configpath(buffer);
-      if (! fs::exists(configpath) || fs::is_directory(configpath))
-	{
-	  cerr << "Environment variable I3LOGGING_CONFIG which should point\n"
-	       << "to a log4cplus configuration file points to a directory or\n"
-	       << "something nonexistent.\n"
-	       << "value is \"" << buffer << "\".\n"
-	       << "Going to default configuration...\n";
-	  failsafe_configuration();
-	  return;
-	}
-      file_configuration(buffer);
+    // try the config file that I3LOGGING_CONFIG is pointing to
+    const char* buffer = getenv("I3LOGGING_CONFIG");
+    if (buffer)
+    {
+      fs::path propertyFile(buffer);
+      if (!fs::exists(propertyFile) || fs::is_directory(propertyFile))
+      {
+        std::cerr << "Environment variable I3LOGGING_CONFIG which should point\n"
+                  << "to a log4cplus configuration file points to a directory or\n"
+                  << "something nonexistent.\n"
+                  << "value is \"" << buffer << "\".\n"
+                  << "Going to default configuration...\n";
+        failsafe_configuration();
+        return;
+      }
+      file_configuration(propertyFile.string());
       return;
-    } 
+    }
 
-    fs::path workspace_config("./log4cplus.conf");
-    if (fs::exists(workspace_config) && !fs::is_directory(workspace_config))
+    // try the local config file
+    {
+      fs::path propertyFile("./log4cplus.conf");
+      if (fs::exists(propertyFile) && !fs::is_directory(propertyFile))
       {
-	file_configuration(workspace_config.string());
-	return;
+        file_configuration(propertyFile.string());
+        return;
       }
+    }
 
-    const char *i3work = getenv("I3_BUILD");
-    if (i3work)
+    // try the config file within the workspace
+    buffer = getenv("I3_BUILD");
+    if (buffer)
+    {
+      fs::path propertyFile(buffer);
+      propertyFile /= "log4cplus.conf";
+      if (fs::exists(propertyFile) && !fs::is_directory(propertyFile))
       {
-	fs::path workspace_config(i3work);
-	workspace_config /= "log4cplus.conf";
-	if (fs::exists(workspace_config) && !fs::is_directory(workspace_config))
-	  {
-	    file_configuration(workspace_config.string());
-	    return;
-	  }
+        file_configuration(propertyFile.string());
+        return;
       }
+    }
 
     failsafe_configuration();
     LOG("Logging configured.");
   }
 
+#ifdef I3_ONLINE
+  boost::mutex Log4CPlusLogger::mtx_;
+#endif
+  char Log4CPlusLogger::buffer_[Log4CPlusLogger::BUFFER_SIZE];
 }
 
-log4cplus::Logger get_logger() 
+I3Logging::Log4CPlusLogger get_logger()
 {
   // this gets constructed only the first time this function is called
-  static I3Logging::Configurator configurator; 
-  //  static log4cplus::Logger thelogger_(log4cplus::Logger::getInstance("default"));
-  static log4cplus::Logger thelogger_(log4cplus::Logger::getRoot());
+  static I3Logging::Configurator configurator;
 
-  return thelogger_;
+  static I3Logging::Log4CPlusLogger globalLogger;
+
+  return globalLogger;
 }
-
-#include <stdio.h>
 
 extern "C" {
   void i3_clog_trace(const char* loggername, const char* msg)
@@ -238,10 +250,7 @@ extern "C" {
   };
 }
 
-#else // I3_NO_LOGGING
-
-
-#include <stdio.h>
+#else //if !defined(I3_PRINTF_LOGGING) && !defined(I3_PYTHON_LOGGING)
 
 extern "C" {
   void i3_clog_trace(const char* loggername, const char* msg)
@@ -270,4 +279,4 @@ extern "C" {
   };
 }
 
-#endif
+#endif //if !defined(I3_PRINTF_LOGGING) && !defined(I3_PYTHON_LOGGING)
