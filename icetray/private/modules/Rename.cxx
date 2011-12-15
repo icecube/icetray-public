@@ -32,7 +32,7 @@ using namespace std;
 I3_MODULE(Rename);
 
 Rename::Rename(const I3Context& ctx) : 
-  I3Module(ctx)
+  I3ConditionalModule(ctx)
 {
   AddParameter("Keys", 
 	       "Rename objects in frame by name: [From1, To1, From2, To2 ... FromN, ToN]", 
