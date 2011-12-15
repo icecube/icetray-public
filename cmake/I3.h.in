@@ -132,10 +132,23 @@ struct shared_ptr : boost::shared_ptr<T> { };
 #endif
 
 #ifdef I3_PYBINDINGS_MODULE
-
-#include <pybindings.hpp>
-
+#  include <pybindings.hpp>
 #endif
 
-#endif // ICETRAY_I3_H_INCLUDED
-#endif // __cplusplus
+#ifdef I3_ONLINE
+#  include <boost/config.hpp>
+#  if !defined(__GNUC__)
+#    error "Do not use other than GNU C Compiler - it supports thread-safe initialization of local statics"
+#  elif !defined(BOOST_HAS_THREADS)
+#    error "Do not use boost without threading support"
+#  elif defined(BOOST_DISABLE_THREADS)
+#    error "Do not disable boost threading support"
+#  elif defined(BOOST_SP_DISABLE_THREADS)
+#    error "Do not switch boost to ordinary non-atomic reference count updates"
+#  elif defined(I3_PYTHON_LOGGING)
+#    error "Do not use python logging but Log4cplus instead"
+#  endif
+#endif
+
+#endif //ifndef ICETRAY_I3_H_INCLUDED
+#endif //ifdef __cplusplus
