@@ -24,24 +24,7 @@ if(NOT USE_ROOT AND USE_CINT)
   message(FATAL_ERROR "Cannot use rootcint without root")
 endif(NOT USE_ROOT AND USE_CINT)
 
-if(NOT USE_ROOT)
-  message(STATUS "***************")
-  message(STATUS "***************  CONFIGURED WITHOUT \"USE_ROOT\"")
-  message(STATUS "***************")
-  add_definitions(-UI3_USE_ROOT -UI3_USE_CINT)
-  set(ROOT_INCLUDE_DIR "" CACHE STRING "USE_ROOT is OFF" FORCE)
-  set(ROOT_BIN_DIR "" CACHE STRING "USE_ROOT is OFF" FORCE)
-  # this is added to LD_LIBRARY_PATH
-  set(ROOT_LIB_DIR "/USE_ROOT/IS/OFF" CACHE STRING "USE_ROOT is OFF" FORCE)
-  set(ROOT_LIBRARIES "" CACHE STRING "USE_ROOT is OFF" FORCE)
-  set(ROOTSYS "/USE_ROOT/IS/OFF" CACHE STRING "USE_ROOT is OFF" FORCE)
-
-  # ROOT is nothing if USE_ROOT is off, so set ROOT_FOUND to fake out
-  # modules that uncoditionally add USE_TOOLS root
-
-  set(ROOT_FOUND TRUE)
-else(NOT USE_ROOT)
-
+if (USE_ROOT)
   if(NOT ROOT_VERSION)
     foreach(ROOTVER 5.32.00 5.30.05 5.30.00 5.28.00h 5.28.00d 5.28.00 5.27.06b 5.26.00e 5.24.00b 5.24.00 5.20.00 5.18.00)
       if(IS_DIRECTORY ${I3_PORTS}/root-v${ROOTVER})
@@ -53,8 +36,22 @@ else(NOT USE_ROOT)
   endif(NOT ROOT_VERSION)
 
   if(NOT ROOT_VERSION)
-    message(FATAL_ERROR "Neither root 5.32.00 5.30.05 5.30.00 5.28.00h 5.28.00d 5.28.00 5.27.06b 5.26.00e 5.24.00b 5.24.00 5.20.00 5.18.00 found. Please install using ports.")
+    set(USE_ROOT OFF CACHE BOOL "Root not detected" FORCE)
   endif(NOT ROOT_VERSION)
+endif (USE_ROOT)
+
+if(NOT USE_ROOT)
+  colormsg("")
+  colormsg(HICYAN "root")
+  message(STATUS "+ ROOT not found or disabled: building without ROOT support")
+  add_definitions(-UI3_USE_ROOT -UI3_USE_CINT)
+  set(ROOT_INCLUDE_DIR "" CACHE STRING "USE_ROOT is OFF" FORCE)
+  set(ROOT_BIN_DIR "" CACHE STRING "USE_ROOT is OFF" FORCE)
+  # this is added to LD_LIBRARY_PATH
+  set(ROOT_LIB_DIR "/USE_ROOT/IS/OFF" CACHE STRING "USE_ROOT is OFF" FORCE)
+  set(ROOT_LIBRARIES "" CACHE STRING "USE_ROOT is OFF" FORCE)
+  set(ROOTSYS "/USE_ROOT/IS/OFF" CACHE STRING "USE_ROOT is OFF" FORCE)
+else(NOT USE_ROOT)
 
   set(ROOT_5.18.00_LIBS Core Cint RIO Net Hist Graf Graf3d Gpad Tree Rint Postscript Matrix Physics Minuit)
 
@@ -85,6 +82,5 @@ else(NOT USE_ROOT)
     ${ROOTSYS}/bin
     ${ROOT_NETX_LIBRARY} ${ROOT_${ROOT_VERSION}_LIBS}
     )
-  set(COMMON_TOOLS ${COMMON_TOOLS} root)
   set(ROOT_LIBRARIES ${ROOT_LIBRARIES} ${pthread_LIBRARIES})
 endif(NOT USE_ROOT)
