@@ -53,6 +53,11 @@ else(LIBARCHIVE_FOUND)
 	set(LIBARCHIVE_LIBRARIES "")
 endif(LIBARCHIVE_FOUND)
 
+# ROOT
+
+if(USE_ROOT)
+	set(OPTIONAL_TOOLS root)
+endif(USE_ROOT)
 
 i3_project(icetray
   DOCS_DIR resources/docs
@@ -143,7 +148,7 @@ i3_add_library(icetray
 
   ${ICETRAY_PYTHON_SRC}
 
-  USE_TOOLS boost python log4cplus root
+  USE_TOOLS boost python log4cplus ${OPTIONAL_TOOLS}
   LINK_LIBRARIES ${BOOST_PYTHON} ${DCAP_LIBRARIES} ${LIBARCHIVE_LIBRARIES}
   ROOTCINT public/icetray/I3FrameObject.h)
 
