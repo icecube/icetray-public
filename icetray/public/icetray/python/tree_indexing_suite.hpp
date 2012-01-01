@@ -117,8 +117,7 @@ public:
 	{
 		typedef typename Container::sibling_iterator iterator;
 		unsigned maxdepth = len(index)-1;
-		// Get a sibling iterator to the root(s).
-		iterator it = self.begin(self.begin()); it = self.parent(it);
+		iterator it = self.begin();
 		for (unsigned depth=0; depth < maxdepth; depth++) {
 			// Advance among the siblings by the given index
 			int offset = extract<int>(index[depth]);
