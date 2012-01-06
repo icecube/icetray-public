@@ -12,6 +12,8 @@ tooldef(lapack
 
 if(LAPACK_FOUND)
   set(LAPACKINI3PORTS_FOUND TRUE)
+  ## Assume GotoBLAS was built in ports w/ gfortran
+  list(APPEND LAPACK_LIBRARIES "-lgfortran")
 else(LAPACK_FOUND)
   unset(LAPACK_CONFIG_ERROR)
   unset(LAPACK_INCLUDE_DIR)

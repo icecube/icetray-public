@@ -12,6 +12,8 @@ tooldef(blas
 
 if(BLAS_FOUND)
   set(BLASINI3PORTS_FOUND TRUE)
+  ## Assume GotoBLAS was built in ports w/ gfortran
+  list(APPEND BLAS_LIBRARIES "-lgfortran")
 else(BLAS_FOUND)
   unset(BLAS_CONFIG_ERROR)
   unset(BLAS_INCLUDE_DIR)
