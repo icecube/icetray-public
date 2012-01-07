@@ -86,21 +86,22 @@ execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
 numeric_version(${GCC_VERSION} "gcc")
 set(GCC_NUMERIC_VERSION ${GCC_NUMERIC_VERSION} CACHE INTEGER "Numeric gcc version" FORCE)
 
-# get just the filename
-get_filename_component(CXX_COMPILER_BINNAME ${CMAKE_CXX_COMPILER} NAME)
-
 #
 # Unfortunately cmake doesn't do this on its own
 #
-if(CXX_COMPILER_BINNAME STREQUAL "icpc")
+if(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
   set(CMAKE_COMPILER_IS_INTEL TRUE)
-endif(CXX_COMPILER_BINNAME STREQUAL "icpc")
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  set(CMAKE_COMPILER_IS_CLANG TRUE)
+endif(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
 
 if(CMAKE_COMPILER_IS_INTEL)
   set(WARNING_FLAGS "-w1 -Wno-non-virtual-dtor")
-else(CMAKE_COMPILER_IS_INTEL)
+elseif(CMAKE_COMPILER_IS_CLANG)
+  set(WARNING_FLAGS "-Wall -Wno-non-virtual-dtor -Wno-mismatched-tags -Wno-char-subscripts")
+else()
   set(WARNING_FLAGS "-Wall -Wno-non-virtual-dtor")
-endif(CMAKE_COMPILER_IS_INTEL)
+endif()
 
 #
 # temporary switch for testing fast omkey hash
