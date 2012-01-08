@@ -19,16 +19,27 @@
 Toplevel container for icecube projects
 """
 
-import platform,sys
+import sys
 
-if platform.system().startswith('freebsd') or platform.system().startswith('Linux'):
-	# C++ modules are extremely fragile when loaded with RTLD_LOCAL,
-	# which is what Python uses on FreeBSD by default, and maybe other
-	# systems. Convince it to use RTLD_GLOBAL.
-
-	# See thread by Abrahams et al:
-	# http://mail.python.org/pipermail/python-dev/2002-May/024074.html
-	sys.setdlopenflags(0x102)
+# C++ modules are extremely fragile when loaded with RTLD_LOCAL,
+# which is what Python uses on FreeBSD by default, and maybe other
+# systems. Convince it to use RTLD_GLOBAL.
+#
+# See thread by Abrahams et al:
+# http://mail.python.org/pipermail/python-dev/2002-May/024074.html
+try:
+	flags = sys.getdlopenflags()
+	try:
+		import ctypes
+		flags = flags & (~ctypes.RTLD_LOCAL)
+		flags = flags | ctypes.RTLD_GLOBAL
+	except ImportError:
+		import dl
+		flags = flags & (~dl.RTLD_LOCAL)
+		flags = flags | dl.RTLD_GLOBAL
+	sys.setdlopenflags(flags)
+except:
+	print 'WARNING: Unable to set dlopen flags. IceTray may be unreliable!'
 
 
 def load_pybindings(name, path):
