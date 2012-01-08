@@ -21,7 +21,7 @@ Toplevel container for icecube projects
 
 import platform,sys
 
-if platform.system().startswith('freebsd') or platform.system().startswith('linux'):
+if platform.system().startswith('freebsd') or platform.system().startswith('Linux'):
 	# C++ modules are extremely fragile when loaded with RTLD_LOCAL,
 	# which is what Python uses on FreeBSD by default, and maybe other
 	# systems. Convince it to use RTLD_GLOBAL.
