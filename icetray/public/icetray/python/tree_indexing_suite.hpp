@@ -46,85 +46,31 @@ class tree_indexing_suite : public bp::def_visitor<tree_indexing_suite<Container
 public:
 	
 	typedef typename Container::value_type value_type;
-	typedef typename Container::iterator_base iterator_base;
 	typedef typename Container::pre_order_iterator pre_order_iterator;
-	
-	// A basic range wrapper much like boost::python::range
-	template <typename Iterator>
-	class iterator : public Iterator {
-	public:	
-		iterator(Container &target, Iterator &begin, Iterator &end)
-		    : self_(target), begin_(begin), end_(end) {};
-		value_type next()
-		{
-			if (begin_ == end_)
-				objects::stop_iteration_error();
-			return *begin_++;
-		}		
-		operator iterator_base() { return begin_; };
-		operator Iterator() { return begin_; };
-	private:
-		Container &self_;
-		Iterator begin_, end_;
-	};
-	
-	template <typename Iterator>
+	typedef typename Container::post_order_iterator post_order_iterator;
+	typedef typename Container::sibling_iterator sibling_iterator;
+		
 	static void
-	register_iterator(const char *name)
-	{
-		typedef iterator<Iterator> IteratorWrapper;
-		class_<IteratorWrapper>(name, bp::no_init)
-			.def("__iter__", objects::identity_function())
-			.def("next", &IteratorWrapper::next)				
-		;
-	}
-	
-	template <typename Accessor>
-	static inline iterator<Accessor>
-	make_iterator(Container &x, Accessor begin, Accessor end)
-	{
-		return iterator<Accessor>(x, begin, end);
-	}
-	
-	static iterator<pre_order_iterator>
-	get_pre_order_iterator(Container &x)
-	{
-		return make_iterator(x, x.begin(), x.end());
-	};
-	
-	static iterator<typename Container::fixed_depth_iterator>
-	get_fixed_depth_iterator(Container &x, typename Container::iterator_base &pos, unsigned depth)
-	{
-		return make_iterator(x, x.begin_fixed(pos, depth), x.end_fixed(pos, depth));
-	};
-	
-	static iterator<typename Container::sibling_iterator>
-	get_sibling_iterator(Container &x, typename Container::iterator_base &pos)
-	{
-		return make_iterator(x, x.begin(pos), x.end(pos));
-	};
-	
-	static std::range_error
-	index_translation_error(int offset, unsigned depth)
+	index_translation_error(int offset, unsigned depth) throw(python::error_already_set)
 	{
 		std::ostringstream os;
 		os << "Index (" << offset << ") out of range at level " << depth;
-		return std::range_error(os.str());
+		PyErr_SetString(PyExc_IndexError, os.str().c_str());
+		throw python::error_already_set();
 	}
 	
 	static typename Container::sibling_iterator
 	translate_index(Container &self, bp::tuple &index)
 	{
-		typedef typename Container::sibling_iterator iterator;
 		unsigned maxdepth = len(index)-1;
-		iterator it = self.begin();
+		sibling_iterator it = self.begin();
 		for (unsigned depth=0; depth < maxdepth; depth++) {
 			// Advance among the siblings by the given index
 			int offset = extract<int>(index[depth]);
 			it += offset;
 			
 			if (!self.is_valid(it))
-				throw index_translation_error(offset, depth);
+				index_translation_error(offset, depth);
 			// Drop down a level at the indicated position
 			it = self.begin(it);
 		}
@@ -133,12 +79,12 @@ public:
 		it += offset;
 		
 		if (!self.is_valid(it))
-			throw index_translation_error(offset, maxdepth);
+			index_translation_error(offset, maxdepth);
 		return it;
 	}
 	
 	static bp::tuple
-	translate_iterator(Container &self, typename Container::sibling_iterator it)
+	translate_iterator(Container &self, sibling_iterator it)
 	{
 		std::vector<int> indices(self.depth(it)+1, 0);
 		for (unsigned depth = indices.size()-1; depth > 0; depth--) {
@@ -151,10 +97,78 @@ public:
 		return bp::tuple(indices);
 	}
 	
-	static bp::tuple
-	set_head(Container &self, const value_type &v)
+	// A basic range wrapper much like boost::python::range
+	template <typename Iterator>
+	class iterator : public Iterator {
+	public:	
+		iterator(Container &target, Iterator &begin, Iterator &end, bool addr)
+		    : self_(target), begin_(begin), end_(end), return_address_(addr) {};
+		python::object next()
+		{
+			if (begin_ == end_)
+				objects::stop_iteration_error();
+			if (return_address_) {
+				python::tuple addr = translate_iterator(self_, begin_);
+				return python::make_tuple(addr, *begin_++);
+			} else
+				return python::object(*begin_++);
+		}		
+	private:
+		Container &self_;
+		Iterator begin_, end_;
+		bool return_address_;
+	};
+	
+	template <typename Iterator>
+	static void
+	register_iterator(const char *name)
 	{
-		return translate_iterator(self, self.set_head(v));
+		typedef iterator<Iterator> IteratorWrapper;
+		class_<IteratorWrapper>(name, bp::no_init)
+			.def("__iter__", objects::identity_function())
+			.def("next", &IteratorWrapper::next)
+		;
+	}
+	
+	template <typename Accessor>
+	static inline iterator<Accessor>
+	make_iterator(Container &x, Accessor begin, Accessor end, bool addr)
+	{
+		return iterator<Accessor>(x, begin, end, addr);
+	}
+	
+	static iterator<pre_order_iterator>
+	get_iterator(Container &x)
+	{
+		return make_iterator(x, x.begin(), x.end(), false);
+	};
+	
+	static iterator<pre_order_iterator>
+	get_keyed_iterator(Container &x)
+	{
+		return make_iterator(x, x.begin(), x.end(), true);
+	};
+	
+	static iterator<post_order_iterator>
+	get_post_order_iterator(Container &x, bool addr)
+	{
+		return make_iterator(x, x.begin_post(), x.end_post(), addr);
+	};
+	
+	static iterator<sibling_iterator>
+	get_sibling_iterator(Container &x, tuple pos, bool addr)
+	{
+		typename Container::sibling_iterator it = translate_index(x, pos);
+		return make_iterator(x, x.begin(it), x.end(it), addr);
+	};
+	
+	static bp::tuple
+	add_root(Container &self, const value_type &v)
+	{
+		if (self.size() == 0)
+			return translate_iterator(self, self.set_head(v));
+		else
+			return translate_iterator(self, self.insert(self.begin(), v));
 	}
 	
 	static value_type
@@ -231,7 +245,7 @@ public:
 		make_function_impl(F f, S1 s)
 		{
 			return bp::make_function(boost::bind(&Adapter::call_inserter, Adapter(f), _1, _2, _3),
-			    default_call_policies(), WrapperSignature());
+			    default_call_policies(), args("self", "index", "value"), WrapperSignature());
 		}
 		
 		
@@ -246,7 +260,7 @@ public:
 		make_function_impl(F f, S1 s)
 		{
 			return bp::make_function(boost::bind(&Adapter::call_single_iter, Adapter(f), _1, _2),
-			    default_call_policies(), WrapperSignature());
+			    default_call_policies(), args("self", "index"), WrapperSignature());
 			
 		}
 		
@@ -290,8 +304,6 @@ public:
 		return iterator_adapter<F,Sig>::make_function(f, sig);
 	}
 	
-
-	
 	template <class Class>
 	static void
 	visit(Class& cl)
@@ -303,10 +315,6 @@ public:
 		    >::type get_data_return_policy;
 		
 		bp::scope outer = cl;
-				
-		typedef typename Container::pre_order_iterator pre_order_iterator;
-		typedef typename Container::post_order_iterator post_order_iterator;
-		typedef typename Container::sibling_iterator sibling_iterator;
 		
 		register_iterator<pre_order_iterator>("pre_order_iterator");
 		register_iterator<post_order_iterator>("post_order_iterator");
@@ -317,13 +325,16 @@ public:
 				
 		cl
 			.def("__len__", &Container::size)
-			.def("__iter__", &get_pre_order_iterator)
+			.def("__iter__", &get_iterator)
 			.def("__getitem__", &getitem)
 			.def("__getitem__", &getitem_simple)
 			.def("__setitem__", &setitem)
 			.def("__setitem__", &setitem_simple)
-			.def("argfind", &argfind)
-			.def("set_head", &set_head)
+			.def("iteritems", &get_keyed_iterator)
+			.def("iter_children", &get_sibling_iterator,     arg("self"), arg("index"), arg("return_indices")=true)
+			.def("iter_postorder", &get_post_order_iterator, arg("self"), arg("return_indices")=true)
+			.def("argfind", &argfind, arg("self"), arg("keyfunc"))
+			.def("add_root", &add_root, arg("self"), arg("value"))
 			.def("insert",       make_adapter((inserter_func)&Container::insert))
 			.def("insert_after", make_adapter((inserter_func)&Container::insert_after))
 			.def("replace",      make_adapter((inserter_func)&Container::replace))
