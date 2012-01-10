@@ -109,6 +109,11 @@ namespace I3Logging
     {
       logger_.setLogLevel(ll);
     }
+
+    log4cplus::LogLevel getLogLevel()
+    {
+      return logger_.getLogLevel();
+    }
     /** Create and log a message.
      *
      * @note
