@@ -298,6 +298,11 @@ colormsg(_HIBLUE_ "Setting compiler, compile drivers, and linker")
 colormsg("")
 
 #
+# stop binutils stupidity
+#
+set(LINKER_FLAGS "-Wl,--no-as-needed")
+
+#
 #  gold
 #
 find_program(GOLD_PROGRAM gold)
@@ -423,11 +428,11 @@ if(NOT METAPROJECT_CONFIGURED)
     set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel" FORCE)
   endif (NOT CMAKE_BUILD_TYPE)
 
-  set(CMAKE_CXX_FLAGS "${WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPRESSION_FLAGS}")
+  set(CMAKE_CXX_FLAGS "${WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPRESSION_FLAGS} ${LINKER_FLAGS}")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" CACHE STRING
     "Flags used by the compiler during all build types" FORCE)
 
-  set(CMAKE_C_FLAGS "${WARNING_FLAGS} ${CMAKE_C_FLAGS} ${CXX_WARNING_SUPRESSION_FLAGS}")
+  set(CMAKE_C_FLAGS "${WARNING_FLAGS} ${CMAKE_C_FLAGS} ${CXX_WARNING_SUPRESSION_FLAGS} ${LINKER_FLAGS}")
   string(REPLACE "-Wno-non-virtual-dtor" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}" CACHE STRING
     "Flags used by the compiler during all build types" FORCE)
