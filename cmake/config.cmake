@@ -298,11 +298,6 @@ colormsg(_HIBLUE_ "Setting compiler, compile drivers, and linker")
 colormsg("")
 
 #
-# stop binutils stupidity
-#
-set(LINKER_FLAGS "-Wl,--no-as-needed")
-
-#
 #  gold
 #
 find_program(GOLD_PROGRAM gold)
@@ -428,11 +423,11 @@ if(NOT METAPROJECT_CONFIGURED)
     set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel" FORCE)
   endif (NOT CMAKE_BUILD_TYPE)
 
-  set(CMAKE_CXX_FLAGS "${WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPRESSION_FLAGS} ${LINKER_FLAGS}")
+  set(CMAKE_CXX_FLAGS "${WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPRESSION_FLAGS}")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" CACHE STRING
     "Flags used by the compiler during all build types" FORCE)
 
-  set(CMAKE_C_FLAGS "${WARNING_FLAGS} ${CMAKE_C_FLAGS} ${CXX_WARNING_SUPRESSION_FLAGS} ${LINKER_FLAGS}")
+  set(CMAKE_C_FLAGS "${WARNING_FLAGS} ${CMAKE_C_FLAGS} ${CXX_WARNING_SUPRESSION_FLAGS}")
   string(REPLACE "-Wno-non-virtual-dtor" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}" CACHE STRING
     "Flags used by the compiler during all build types" FORCE)
@@ -444,6 +439,15 @@ if(NOT METAPROJECT_CONFIGURED)
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O${RELOPTLEVEL} -Wno-unused-variable -g -DNDEBUG -DI3_OPTIMIZE")
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}" CACHE STRING
     "Flags used by compiler during release builds" FORCE)
+
+  #
+  # stop binutils stupidity
+  #
+  if(NOT APPLE)
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-as-needed" CACHE STRING "Flags used by the linker" FORCE)
+    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--no-as-needed" CACHE STRING "Flags used by the linker" FORCE)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-as-needed" CACHE STRING "Flags used by the linker" FORCE)
+  endif(NOT APPLE)
 
   set(METAPROJECT_CONFIGURED TRUE CACHE INTERNAL "Metaproject configured")
 endif(NOT METAPROJECT_CONFIGURED)
