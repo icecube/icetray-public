@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import inspect
+import warnings
 
 # This attempts to extend the class
 # and returns True if this fails, as it should.
@@ -48,7 +49,7 @@ def test_all_classes(mod, skip_test_list = list(), skip_containers = True ):
                     print msg_fmt % k
                     return_value = False
             except :
-                print "You're on your own with this one : ", k
+                warnings.warn("class %s needs a nullary constructor. Either expose one or add '%s' to skip_test_list." % (k, k))
                 return_value = False
                 continue
     return return_value
