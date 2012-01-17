@@ -274,6 +274,8 @@ macro(i3_add_library THIS_LIB_NAME)
 
     endif(DPKG_INSTALL_PREFIX)
 
+    boost_post_results(${PROJECT_NAME} ${THIS_LIB_NAME} build ${CMAKE_CURRENT_BINARY_DIR})
+
   endif(BUILD_${I3_PROJECT})
 endmacro(i3_add_library)
 
@@ -399,6 +401,8 @@ macro(i3_executable THIS_EXECUTABLE_NAME)
     add_executable(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME}
       ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES})
 
+    boost_post_results(${PROJECT_NAME} ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME} build ${CMAKE_CURRENT_BINARY_DIR})
+
     if(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_WITHOUT_I3_HEADERS)
       message(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_WITHOUT_I3_HEADERS)
       set(THIS_I3H_FLAGS "")
@@ -473,6 +477,8 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
 	LINK_FLAGS "-bind_at_load -multiply_defined suppress"
 	)
     endif(APPLE)
+
+    boost_post_results(${PROJECT_NAME} ${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} test ${CMAKE_CURRENT_BINARY_DIR})
 
     use_projects(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
       PROJECTS ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_USE_PROJECTS})

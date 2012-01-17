@@ -152,6 +152,7 @@ add_dependencies(tarball tarball-finish)
 # this is outside because it contains the test macros, which 
 # might be noops
 include(testing)
+include(BuildSlave)
 
 option(INSTALL_HEADERS "install header files when making tarball" OFF)
 
