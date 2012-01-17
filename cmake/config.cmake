@@ -25,6 +25,8 @@ set(BUILD_SHARED_LIBS SHARED)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(DOXYGEN_OUTPUT_PATH ${CMAKE_BINARY_DIR}/docs/doxygen)
+## this used to be in BuildSlave.cmake
+option(BUILD_SLAVE "Be a build slave, report build/testing" OFF)
 
 #
 #  Check build sanity
