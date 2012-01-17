@@ -38,7 +38,7 @@ struct I3GetLoggerTester
 {
   void say_something() 
   {
-    log_warn("you should *not* see a warning from the logger about initializing the log4cplus system immediately before this line.");
+    log_info("you should *not* see a warning from the logger about initializing the log4cplus system immediately before this line.");
     log_trace("here's a trace message inside I3GetLoggerTester");
     log_debug("here's a debug message inside I3GetLoggerTester");
     log_info("here's an info message inside I3GetLoggerTester");
