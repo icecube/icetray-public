@@ -152,7 +152,12 @@ add_dependencies(tarball tarball-finish)
 # this is outside because it contains the test macros, which 
 # might be noops
 include(testing)
-include(BuildSlave)
+
+# this is what's left of BuildSlave.cmake. don't change it! -nega
+option(BUILD_SLAVE "Be a build slave, report build/testing" OFF)
+file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}" BUILD_SLAVE_PYTHONPATH)
+configure_file(cmake/passthru.py.in ${BUILD_SLAVE_PYTHONPATH}/passthru.py @ONLY)
+file(TO_NATIVE_PATH ${BUILD_SLAVE_PYTHONPATH}/passthru.py TEST_DRIVER)
 
 option(INSTALL_HEADERS "install header files when making tarball" OFF)
 
