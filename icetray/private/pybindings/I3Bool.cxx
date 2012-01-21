@@ -20,6 +20,7 @@
 //
 
 #include <icetray/I3Bool.h>
+#include <icetray/python/boost_serializable_pickle_suite.hpp>
 
 using namespace boost::python;
 
@@ -29,6 +30,7 @@ void register_I3Bool()
     .def(init<>())
     .def(init<bool>())
     .def_readwrite("value", &I3Bool::value)
+    .def_pickle(boost_serializable_pickle_suite<I3Bool>())
     ;
 
   register_pointer_conversions<I3Bool>();

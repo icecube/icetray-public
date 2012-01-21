@@ -21,6 +21,7 @@
 
 #include <icetray/I3Frame.h>
 #include <icetray/serialization.h>
+#include <icetray/python/boost_serializable_pickle_suite.hpp>
 
 using namespace boost::python;
 
@@ -179,6 +180,7 @@ void register_I3Frame()
     .def_readonly("DAQ", I3Frame::DAQ)
     .def_readonly("Physics", I3Frame::Physics)
     .def_readonly("TrayInfo", I3Frame::TrayInfo)
+    .def_pickle(boost_serializable_pickle_suite<I3Frame>())
     ;
 
   class_<I3Frame::Stream>("Stream")

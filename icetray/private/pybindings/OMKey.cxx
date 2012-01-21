@@ -20,6 +20,7 @@
  *  
  */
 #include <icetray/OMKey.h>
+#include <icetray/python/boost_serializable_pickle_suite.hpp>
 
 using namespace boost::python;
 
@@ -63,6 +64,7 @@ register_OMKey()
     .def("__len__", pair_len)
     .def(self == self)
     .def(self < self)
+    .def_pickle(boost_serializable_pickle_suite<OMKey>())
     ;
 
   from_python_sequence<std::vector<OMKey>, variable_capacity_policy>();

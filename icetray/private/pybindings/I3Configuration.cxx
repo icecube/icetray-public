@@ -21,6 +21,7 @@
 
 #include <icetray/I3Configuration.h>
 #include <boost/make_shared.hpp>
+#include <icetray/python/boost_serializable_pickle_suite.hpp>
 
 using namespace boost::python;
 
@@ -58,6 +59,7 @@ void register_I3Configuration()
 		  (void (I3Configuration::*)(const std::string&)) &I3Configuration::ClassName)
     .add_property("InstanceName", 
 		  (std::string (I3Configuration::*)() const) &I3Configuration::InstanceName)
+    .def_pickle(boost_serializable_pickle_suite<I3Configuration>())
     ;
 
 

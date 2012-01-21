@@ -20,6 +20,7 @@
 //
 
 #include <icetray/I3TrayInfo.h>
+#include <icetray/python/boost_serializable_pickle_suite.hpp>
 
 using namespace boost::python;
 
@@ -84,6 +85,7 @@ void register_I3TrayInfo()
 //    .property("loaded_libs", &I3TrayInfo::loaded_libs)
     .def(self_ns::str(self))
     .def("__repr__", &I3TrayInfoRepr)
+    .def_pickle(boost_serializable_pickle_suite<I3TrayInfo>())
     ;
 
   register_pointer_conversions<I3TrayInfo>();
