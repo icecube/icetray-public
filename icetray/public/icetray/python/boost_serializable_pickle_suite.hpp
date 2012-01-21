@@ -68,6 +68,8 @@ inline void from_buffer(I3Frame &element, const char *buffer, std::size_t size)
 
 }};
 
+namespace boost { namespace python {
+
 template<class T>
 struct boost_serializable_pickle_suite : boost::python::pickle_suite
 {
@@ -111,5 +113,7 @@ struct boost_serializable_pickle_suite : boost::python::pickle_suite
 
     static bool getstate_manages_dict() { return true; }
 };
+
+}};
 
 #endif //BOOST_SERIALIZABLE_PICKLE_SUITE_HPP_INCLUDED
