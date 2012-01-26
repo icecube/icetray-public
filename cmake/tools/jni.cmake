@@ -65,6 +65,7 @@ ELSE(APPLE)
     PATHS
     $ENV{JAVA_HOME}/include
     $ENV{JAVA_HOME}/include/linux
+    $ENV{JAVA_HOME}/include/freebsd
     ${TOOL_SYSTEM_PATH}
     )
   REPORT_FIND(jni jni_md.h ${jni_md_h_include_dir})
