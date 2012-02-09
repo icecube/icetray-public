@@ -19,6 +19,11 @@
 #  
 set(TMP_LIBRARY_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH})
 
+i3_add_pybindings(i3math
+  i3math.cxx
+  USE_TOOLS boost python
+)
+
 i3_add_pybindings(icetray
   empty.cxx
   module.cxx
