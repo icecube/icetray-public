@@ -2,6 +2,7 @@
 ## multiarch system (Ubuntu 11.04+), uncomment the lines around the
 ## find_package() call.
 
+if(NOT APPLE)
 tooldef(lapack
   NONE
   NONE
@@ -25,6 +26,12 @@ else(LAPACK_FOUND)
   find_package(LAPACK)
   #unset(CMAKE_REQUIRED_FLAGS)
 endif(LAPACK_FOUND)
+
+else(NOT APPLE)
+  colormsg("")
+  colormsg(HICYAN "lapack")
+  find_package(LAPACK)
+endif(NOT APPLE)
 
 ## uncomment the following for debugging...
 #colormsg("BLAS_LIBRARIES: ${BLAS_LIBRARIES}")

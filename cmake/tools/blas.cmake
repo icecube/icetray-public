@@ -2,6 +2,7 @@
 ## multiarch system (Ubuntu 11.04+), uncomment the lines around the
 ## find_package() call.
 
+if(NOT APPLE)
 tooldef(blas
   NONE
   NONE
@@ -26,3 +27,8 @@ else(BLAS_FOUND)
   #unset(CMAKE_REQUIRED_FLAGS)
 endif(BLAS_FOUND)
 
+else(NOT APPLE)
+  colormsg("")
+  colormsg(HICYAN "blas")
+  find_package(BLAS)
+endif(NOT APPLE)
