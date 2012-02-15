@@ -32,7 +32,7 @@ else (CLHEP_CONFIG_ERROR)
 
   find_program (GEANT4_LIBLIST liblist
     PATHS ${I3_PORTS}/lib
-    PATH_SUFFIXES geant4_4.9.3
+    PATH_SUFFIXES geant4_4.9.4 geant4_4.9.3
     NO_DEFAULT_PATH
     )
 
@@ -57,7 +57,7 @@ else (CLHEP_CONFIG_ERROR)
 
     find_path (GEANT4_INC_DIR NAMES G4RunManager.hh
       PATHS ${I3_PORTS}/include
-      PATH_SUFFIXES geant4_4.9.3
+      PATH_SUFFIXES geant4_4.9.4 geant4_4.9.3
       NO_DEFAULT_PATH
       )
     string (REPLACE "${I3_PORTS}/" "" GEANT4_RELATIVE_INC_DIR "${GEANT4_INC_DIR}")
