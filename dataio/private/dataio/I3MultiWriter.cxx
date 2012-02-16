@@ -128,9 +128,10 @@ I3MultiWriter::Finish()
   uint64_t lastfile_bytes;
   io::counter64* ctr = filterstream_.component<io::counter64>(filterstream_.size() - 2);
   if (!ctr) log_fatal("couldnt get counter from stream");
-  lastfile_bytes = ctr->characters();
 
   filterstream_.reset();
+
+  lastfile_bytes = ctr->characters();
 
   log_trace("lastfile bytes=%llu", (unsigned long long)lastfile_bytes);
 
