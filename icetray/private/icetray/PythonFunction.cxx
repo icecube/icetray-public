@@ -68,6 +68,12 @@ PythonFunction::PythonFunction(const I3Context& context)
   configkeys = configuration_.keys();
 
   obj = context_.Get<bp::object>("object");
+  if (!PyObject_HasAttrString(obj.ptr(), "func_code")) {
+    if (PyObject_HasAttrString(obj.ptr(), "im_func"))
+      obj = obj.attr("im_func");
+    else
+      obj = obj.attr("__call__");
+  }
   i3_log("got python object %p", obj.ptr());
 
   //

@@ -153,16 +153,6 @@ I3Tray::AddModule(bp::object obj, const std::string& instancename)
     {
       config->ClassName(bp::extract<std::string>(obj));
     } 
-  else if (PyFunction_Check(obj.ptr()))
-    // it is a python function... put the object in the context and 
-    // call it a PythonFunction
-    {
-      config->ClassName("PythonFunction"); // Used to look up Create function in factory
-      // only in this case... we need the python object whose constructor will get called
-      // by the Create function
-      context->Put(boost::shared_ptr<bp::object>(new bp::object(obj)), 
-                   "object");
-    } 
   else if (PyType_Check(obj.ptr()))
     {
       config->ClassName("PythonModule"); // Used to look up Create function in factory
@@ -171,6 +161,23 @@ I3Tray::AddModule(bp::object obj, const std::string& instancename)
       context->Put(boost::shared_ptr<bp::object>(new bp::object(obj)),
                    "class");
     }
+  else if (PyCallable_Check(obj.ptr()))
+    // it is a python function... put the object in the context and 
+    // call it a PythonFunction
+    {
+      if (PyObject_HasAttrString(obj.ptr(), "im_func") && (bp::object(obj.attr("im_self")).ptr()) == Py_None)
+        log_fatal("'%s%s', passed to AddModule with instance name %s, is an unbound instance method. "
+                  "Only Python functions, callable classes, and bound instance methods can be run as I3Modules!",
+                  PyEval_GetFuncName(obj.ptr()),
+                  PyEval_GetFuncDesc(obj.ptr()),
+                  instancename.c_str());
+        
+      config->ClassName("PythonFunction"); // Used to look up Create function in factory
+      // only in this case... we need the python object whose constructor will get called
+      // by the Create function
+      context->Put(boost::shared_ptr<bp::object>(new bp::object(obj)), 
+                   "object");
+    } 
   else
     {
       log_fatal("'%s%s' passed to AddModule with instance name %s.  Must be a string, a python function, or a python I3Module.", 
