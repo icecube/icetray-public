@@ -175,12 +175,19 @@ macro(i3_add_library THIS_LIB_NAME)
       COMMAND mkdir -p ${LIBRARY_OUTPUT_PATH}
       )
 
-    if(APPLE)
-      set_target_properties(${THIS_LIB_NAME}
-	PROPERTIES
-	LINK_FLAGS "-single_module -undefined dynamic_lookup -flat_namespace"
-	)
-    endif(APPLE)
+    # Disabled all special linker flags for APPLE:
+    #  - single_module: this is the default anyway
+    #  - undefined dynamic_lookup: it seems not to hurt letting the
+    #      linker throw an error for undefined symbols.
+    #  - flat_namespace: not using the two-level namespace (library+symbol name)
+    #      seems to introduce bugs in exception handling with boost::python.
+    #
+    #if(APPLE)
+    #  set_target_properties(${THIS_LIB_NAME}
+    #  PROPERTIES
+    #    LINK_FLAGS "-single_module -undefined dynamic_lookup -flat_namespace"
+    #    )
+    #endif(APPLE)
 
     if(NOT ${THIS_LIB_NAME}_ARGS_WITHOUT_I3_HEADERS)
       set_target_properties(${THIS_LIB_NAME}
@@ -578,12 +585,17 @@ macro(i3_add_pybindings MODULENAME)
 
     colormsg(GREEN "+-- ${MODULENAME}-pybindings")
 
+    # Disabled special linker flags for APPLE:
+    #  - undefined dynamic_lookup: it seems not to hurt letting the
+    #      linker throw an error for undefined symbols.
+    #  - flat_namespace: not using the two-level namespace (library+symbol name)
+    #      seems to introduce bugs in exception handling with boost::python.
     if(APPLE)
       set_target_properties(${MODULENAME}-pybindings
-	PROPERTIES
-	LINK_FLAGS "-bundle -flat_namespace -undefined dynamic_lookup"
-	#used to be here: -multiply_defined suppress
-	)
+        PROPERTIES
+        LINK_FLAGS "-bundle"
+        #used to be here: -flat_namespace -undefined dynamic_lookup -multiply_defined suppress
+        )
     endif(APPLE)
   endif ()
 endmacro(i3_add_pybindings)
