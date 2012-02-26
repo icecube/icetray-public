@@ -37,7 +37,7 @@ instantiate_module(const std::string& name, I3Context& context)
 	try {
 		I3::Singleton<I3ModuleFactory>::get_const_instance()
 		    .Create(name)(context);
-	} catch (std::runtime_error) {
+	} catch (const std::runtime_error &) {
 		I3::Singleton<I3ServiceFactoryFactory>::get_const_instance()
 		    .Create(name)(context);
 	}
