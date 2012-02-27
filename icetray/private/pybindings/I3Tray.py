@@ -74,6 +74,9 @@ class I3Tray(icetray.I3Tray):
                            SkipKeys = ['I3DST', 'RecoPulses'])
         
         """
+	if hasattr(_type, '__i3traysegment__'):
+            raise RuntimeError, "Trying to add tray segment %s with AddModule. Use AddSegment instead." % _name
+
         if inspect.isclass(_type) and not icetray.I3Module in inspect.getmro(_type):
             raise RuntimeError, "Module %s of type %s doesn't inherit from icecube.icetray.I3Module" % (_name, _type)
         try:
