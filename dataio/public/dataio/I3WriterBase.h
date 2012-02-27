@@ -33,6 +33,7 @@
 
 class I3WriterBase : public I3ConditionalModule
 {
+protected:
   std::vector<std::string> skip_keys_;
   std::vector<I3Frame::Stream> streams_;
   std::vector<I3Frame::Stream> dropOrphanStreams_;
@@ -41,8 +42,6 @@ class I3WriterBase : public I3ConditionalModule
   int frameCounter_;
 
   void WriteConfig(I3FramePtr ptr);
-
-protected:
 
   int gzip_compression_level_;
   

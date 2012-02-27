@@ -22,7 +22,8 @@ tray.AddModule("Dump","dump")
 
 tray.AddModule("I3MultiWriter","writer")(
     ("filename", "testm.%04u.i3.gz"),  
-    ("sizelimit", 1) # this limit will do one-frame-per-file
+    ("sizelimit", 1), # this limit will do one-frame-per-file
+    ("metadatastreams", []) # don't care about GCD per-file
     )
 
 tray.AddModule("TrashCan", "the can");

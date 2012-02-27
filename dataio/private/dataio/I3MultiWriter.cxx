@@ -24,6 +24,7 @@
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/algorithm/string/case_conv.hpp>
 #include <boost/format.hpp>
+#include <boost/foreach.hpp>
 
 #include <icetray/counter64.hpp>
 #include <icetray/open.h>
@@ -42,8 +43,15 @@ I3MultiWriter::I3MultiWriter(const I3Context& ctx)
 	       "Soft Size limit in bytes.  Files will typically exceed this limit by the size of one half of one frame.",
 	       size_limit_);
   AddParameter("SyncStream",
-	       "Frame type to wait for to split files. New files will always begin with a frame of this type. Useful for frames from which events need to inherit (e.g. DAQ and DetectorStatus frames).",
+	       "Frame type to wait for to split files. New files will always begin with a frame of this type. Useful for frames from which events need to inherit (e.g. DAQ frames).",
 	       I3Frame::DAQ);
+  std::vector<I3Frame::Stream> default_metadata;
+  default_metadata.push_back(I3Frame::Geometry);
+  default_metadata.push_back(I3Frame::Calibration);
+  default_metadata.push_back(I3Frame::DetectorStatus);
+  AddParameter("MetadataStreams",
+	       "Frame types to cache and write at the beginning of all new files (e.g. GCD frames). If a frame is not in Streams, even if specified here, it will never be written.",
+	       default_metadata);
 }
 
 I3MultiWriter::~I3MultiWriter() { }
@@ -74,6 +82,7 @@ I3MultiWriter::Configure_()
   if (size_limit_ == 0)
     log_fatal("SizeLimit (%llu) must be > 0", (unsigned long long)size_limit_);
   GetParameter("SyncStream", sync_stream_);
+  GetParameter("MetadataStreams", metadata_streams_);
 
   log_trace("path_=%s", path_.c_str());
   log_debug("Starting new file '%s'", current_path().c_str());
@@ -89,6 +98,9 @@ I3MultiWriter::NewFile()
 
   log_info("Starting new file '%s'", current_path().c_str());
   dataio::open(filterstream_, current_path(), gzip_compression_level_);
+
+  BOOST_FOREACH(I3FramePtr frame, metadata_cache_)
+	frame->save(filterstream_, skip_keys_);
 }
 
 void
@@ -116,6 +128,29 @@ I3MultiWriter::Process()
   if (bytes_written > size_limit_ && (frame->GetStop() == sync_stream_ ||
     !sync_seen_))
       NewFile();
+
+  if (std::find(metadata_streams_.begin(), metadata_streams_.end(),
+    frame->GetStop()) != metadata_streams_.end() &&
+    (streams_.size() == 0 || std::find(streams_.begin(), streams_.end(),
+      frame->GetStop()) != streams_.end())) {
+	// If this is a frame type we need to cache for file-start metadata,
+	// insert it into the cache in a way that preserves the ordering of the
+	// frames as they were first inserted into the stream.
+	
+	// Duplicate frame so it can't be modified by following modules
+	I3FramePtr cache_copy(new I3Frame(frame->GetStop()));
+	cache_copy->merge(*frame);
+
+	int i;
+	for (i = 0; i < metadata_cache_.size(); i++) {
+		if (metadata_cache_[i]->GetStop() == frame->GetStop()) {
+			metadata_cache_[i] = cache_copy;
+			break;
+		}
+	}
+	if (i == metadata_cache_.size())
+		metadata_cache_.push_back(cache_copy);
+  }
 
   I3WriterBase::Process();
 }

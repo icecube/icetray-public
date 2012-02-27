@@ -10,20 +10,16 @@ import os
 import sys
 from glob import glob
 
-load("libdataclasses")
-load("libphys-services")
-load("libdataio")
+from icecube import icetray, dataclasses, dataio
 
 tray = I3Tray()
 
 tray.AddModule("I3Reader", "reader", Filename="pass1.i3")
-
 tray.AddModule("Dump","dump")
-
-tray.AddModule("I3MultiWriter","writer")(
-    ("filename", "testmulti.%04u.i3"),
-    ("sizelimit", 10**6), # 10^6 bytes
-    ("MetadataStreams", [])
+tray.AddModule("I3MultiWriter","writer",
+    Filename = "testmultiD.%04u.i3",
+    Sizelimit = 10**6, # 10^6 bytes
+    MetadataStreams=[icetray.I3Frame.DetectorStatus]
     )
 
 tray.AddModule("TrashCan", "the can");
