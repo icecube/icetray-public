@@ -101,6 +101,14 @@ AsXML(const T& t)
   template std::string AsXML(boost::shared_ptr<const T> const&);	\
   I3_EXPORT(T)
 
+#define I3_SPLIT_SERIALIZABLE(T)					\
+  I3_SERIALIZABLE(T)							\
+  template void T::save(boost::archive::portable_binary_oarchive&, unsigned) const; \
+  template void T::load(boost::archive::portable_binary_iarchive&, unsigned); \
+  template void T::load(boost::archive::xml_iarchive&, unsigned);	\
+  template void T::save(boost::archive::xml_oarchive&, unsigned) const;
+  
+
 #else // __CINT__
 
 #define BOOST_CLASS_VERSION(T,V) 
