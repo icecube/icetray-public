@@ -181,6 +181,20 @@ code::
     elseif(IS_DIRECTORY ${I3_PORTS}/root-v5.24.00b)
       set(ROOT_VERSION "5.24.00b")
 
+Natty Narwhal ( 11.04 )
+""""""""""""""""""""""""
+
+This pretty much works out of the box with the Ubuntu.sh script, with the
+exception of ROOT.  After the ROOT build fails install the remaining three
+packages by hand ( MacPorts isn't smart enough to continue if a build fails ). 
+
+* './bin/port install -vd slalib-c_0.0 sprng_2.0a gmp_4.3.2
+
+Then you're going to want to tell cmake to ignore ROOT.  I just removed
+cmake/tools/root.cmake.  Not elegant but it gets the job done.  This should
+work fine for offline and simulation, but won't work for icerec or std-processing.
+There are too many ROOT dependencies still in reconstruction.
+
 Oneiric Ocelot ( 11.10 )
 """"""""""""""""""""""""
 
