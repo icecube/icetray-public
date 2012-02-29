@@ -186,7 +186,7 @@ Update your tool list from the server::
 
 Now update your tool installs (upgrade the tool meta-package)::
 
-  ./bin/port -vd upgrade i3-tools-v2  
+  ./bin/port -vd upgrade i3-tools-v4  
 
 If you know that there is a specific package you want to force a rebuilt of, you can::
 
