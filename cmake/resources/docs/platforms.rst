@@ -181,6 +181,18 @@ code::
     elseif(IS_DIRECTORY ${I3_PORTS}/root-v5.24.00b)
       set(ROOT_VERSION "5.24.00b")
 
+Oneiric Ocelot ( 11.10 )
+""""""""""""""""""""""""
+
+The Ubuntu.sh script won't work for Ubuntu 11.10.  The following packages 
+need to be installed by hand :
+* libbz2-dev
+* libxpm-dev
+* freeglut3-dev
+* openjdk-6-jre-lib
+
+Also in cmake/tools.cmake set CURSES_HAVE_NCURSES to TRUE.
+
 FreeBSD
 """""""
 
