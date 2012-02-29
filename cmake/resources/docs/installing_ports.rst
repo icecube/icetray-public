@@ -9,7 +9,7 @@ your toolset (often referred to as I3_PORTS.
 There is a single "meta-package" that collects all needed tools into a
 single, one-stop-shopping experience.  The current toolset is::
 
-   i3-tools-v3
+   i3-tools-v4
 
 
 Quick start for the impatient
