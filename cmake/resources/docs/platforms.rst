@@ -188,7 +188,7 @@ This pretty much works out of the box with the Ubuntu.sh script, with the
 exception of ROOT.  After the ROOT build fails install the remaining three
 packages by hand ( MacPorts isn't smart enough to continue if a build fails ). 
 
-* './bin/port install -vd slalib-c_0.0 sprng_2.0a gmp_4.3.2
+* ./bin/port install -vd slalib-c_0.0 sprng_2.0a gmp_4.3.2
 
 Then you're going to want to tell cmake to ignore ROOT.  I just removed
 cmake/tools/root.cmake.  Not elegant but it gets the job done.  This should
@@ -200,6 +200,7 @@ Oneiric Ocelot ( 11.10 )
 
 The Ubuntu.sh script won't work for Ubuntu 11.10.  The following packages 
 need to be installed by hand :
+
 * libbz2-dev
 * libxpm-dev
 * freeglut3-dev
