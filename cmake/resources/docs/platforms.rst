@@ -162,24 +162,11 @@ command (bash/sh version)::
 which you can set in your ``.bashrc``.
 
 
-Karmic Koala
-""""""""""""
-
-Support is in as of Nov 20, 2009 for Karmic Koala, with a caveat: The
-current ``i3-tools-v3`` 'metatool' requires ``root_5.20.00``... but
-that version of root won't build on karmic.  However ``root_5.24.00b``
-*will*.  So install ``i3-tools-v3-karmic``, which uses this updated
-root, instead.
-  
-If you are using metaprojects which are already released as of Nov 20
-2009 (e.g. those numbered less than 09-11-00) you will also need to
-modify the root detection in the build system; replace
-``$I3_SRC/cmake/tools/root.cmake`` with a more recent version that
-understands ``5.24.00b``, that is, one that contains the following
-code::
-
-    elseif(IS_DIRECTORY ${I3_PORTS}/root-v5.24.00b)
-      set(ROOT_VERSION "5.24.00b")
+NB: Its is *highly* recommended to use LTS ( Long-Term Support )
+releases of Ubuntu.  There are known issues with Natty Narwhal 
+( Ubuntu 11.04 ) and Oneiric Ocelot ( Ubuntu 11.10 ) and if you 
+want something newer sit tight for Precise Pangolin ( Ubuntu 12.04 ), 
+which is the next LTS release.
 
 FreeBSD
 """""""
