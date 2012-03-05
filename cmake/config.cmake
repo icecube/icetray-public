@@ -300,6 +300,9 @@ colormsg("")
 #
 #  gold
 #
+
+# -fuse-ld seems to have gone away between lucid and oneiric
+if(${GCC_NUMERIC_VERSION} LESS 40500)
 find_program(GOLD_PROGRAM gold)
 if(NOT APPLE)
   if(GOLD_PROGRAM)
@@ -323,6 +326,7 @@ else(NOT APPLE)
     message(STATUS "USE_GOLD enabled, but gold does not support linking on Apple: disabling.")
   endif(USE_GOLD)
 endif(NOT APPLE)
+endif()
 
 #
 #  distcc
