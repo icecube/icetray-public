@@ -41,7 +41,14 @@ else (${GEANT4_CONFIG} MATCHES ".*NOTFOUND$")
 
     # look for the -L option
     string(REGEX MATCH "-L([^ ]*)" GEANT4_LIB_DIR ${GEANT4_CONFIG_OUTPUT})
-    string(SUBSTRING ${GEANT4_LIB_DIR} 2 -1 GEANT4_LIB_DIR) # remove "-L"
+    
+    # I would like to do this, but it is not supported on cmake < 2.8.5
+    # string(SUBSTRING ${GEANT4_LIB_DIR} 2 -1 GEANT4_LIB_DIR) # remove "-L"
+    # so instead do this:
+    string(LENGTH "${GEANT4_LIB_DIR}" GEANT4_LIB_DIR_length)
+    math(EXPR GEANT4_LIB_DIR_length "${GEANT4_LIB_DIR_length}-2")
+    string(SUBSTRING ${GEANT4_LIB_DIR} 2 ${GEANT4_LIB_DIR_length} GEANT4_LIB_DIR) # remove "-L"
+
     get_filename_component(GEANT4_LIB_DIR ${GEANT4_LIB_DIR} ABSOLUTE)
     string(REPLACE "${I3_PORTS}/" "" GEANT4_RELATIVE_LIB_DIR "${GEANT4_LIB_DIR}")
     
@@ -59,7 +66,13 @@ else (${GEANT4_CONFIG} MATCHES ".*NOTFOUND$")
     
     # look for the -I option
     string(REGEX MATCH "-I([^ ]*)" GEANT4_INC_DIR ${GEANT4_CONFIG_OUTPUT})
-    string(SUBSTRING ${GEANT4_INC_DIR} 2 -1 GEANT4_INC_DIR) # remove "-I"
+
+    # again, length "-1" is not supported on cmake < 2.8.5
+    #string(SUBSTRING ${GEANT4_INC_DIR} 2 -1 GEANT4_INC_DIR) # remove "-I"
+    string(LENGTH "${GEANT4_INC_DIR}" GEANT4_INC_DIR_length)
+    math(EXPR GEANT4_INC_DIR_length "${GEANT4_INC_DIR_length}-2")
+    string(SUBSTRING ${GEANT4_INC_DIR} 2 ${GEANT4_INC_DIR_length} GEANT4_INC_DIR) # remove "-I"
+    
     get_filename_component(GEANT4_INC_DIR ${GEANT4_INC_DIR} ABSOLUTE)
     string(REPLACE "${I3_PORTS}/" "" GEANT4_RELATIVE_INC_DIR "${GEANT4_INC_DIR}")
 
@@ -73,17 +86,23 @@ else (${GEANT4_CONFIG} MATCHES ".*NOTFOUND$")
       ${GEANT4_LIBRARIES}
       )
       
-    if (CLHEP_CONFIG_ERROR)
-      # define a "CLHEP" tool if it has not been found
-      # (it's included with Geant4 now)
+    # (re-)define the "CLHEP" tool
+    # (it's included with Geant4 now)
+    unset(CLHEP_FOUND CACHE)
+    unset(CLHEP_INCLUDE_DIR CACHE)
+    unset(CLHEP_FOUND)
+    unset(CLHEP_INCLUDE_DIR)
+    
+    tooldef (clhep
+      ${GEANT4_RELATIVE_INC_DIR}
+      CLHEP/Units/SystemOfUnits.h
+      ${GEANT4_RELATIVE_LIB_DIR}
+      NONE  # bin is n/a, placeholder
+      )
 
-      tooldef (clhep
-        ${GEANT4_RELATIVE_INC_DIR}
-        CLHEP/Units/SystemOfUnits.h
-        ${GEANT4_RELATIVE_LIB_DIR}
-        NONE  # bin is n/a, placeholder
-        )
-    endif (CLHEP_CONFIG_ERROR)
+    # no extra libraries for the geant4-internal version of clhep
+    unset(CLHEP_LIBRARIES CACHE)
+    unset(CLHEP_LIBRARIES)
     
 endif (${GEANT4_CONFIG} MATCHES ".*NOTFOUND$")
 
