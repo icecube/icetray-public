@@ -60,8 +60,8 @@ void I3ConditionalModule::Configure_()
   if (if_.ptr() != configured_if_.ptr()) // user set the parameter to something
     {
       i3_log("user passed us something");
-      if (!PyFunction_Check(configured_if_.ptr()))
-	log_fatal("'If' parameter to module %s must be a python function", GetName().c_str());
+      if (!PyCallable_Check(configured_if_.ptr()))
+	log_fatal("'If' parameter to module %s must be a callable object", GetName().c_str());
       else
 	{
 	  i3_log("user passed us something and it is a PyFunction");
