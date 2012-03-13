@@ -343,3 +343,4 @@ make_indexed_property(G g, S s)
 }} // namespace boost::python
 
 #endif
+
