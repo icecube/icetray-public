@@ -100,6 +100,7 @@ i3_add_library(icetray
   private/icetray/I3ConfigurationImpl.cxx
   private/icetray/I3Deprecation.cxx
   private/icetray/I3Parameter.cxx
+  private/icetray/OMKey.cxx            
   private/icetray/I3Tray.cxx           
   private/icetray/I3Module.cxx         
   private/icetray/I3ConditionalModule.cxx  
@@ -198,7 +199,6 @@ i3_test_executable(test
   private/test/test-throws-not-caught.cxx
   private/test/PhysicsBuffering.cxx         
   private/test/typesizes.cxx
-  private/test/OMKey.cxx
   private/test/I3ConditionalModuleTest.cxx
   private/test/NoOutboxModule.cxx
   private/test/iostreams.cxx
