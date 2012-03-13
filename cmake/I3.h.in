@@ -84,10 +84,6 @@ using scitbx::boost_python::container_conversions::variable_capacity_policy;
 #define DSOEXPORT
 #endif
 
-#ifdef I3_USE_FAST_OMKEY_MAP
-#define BOOST_STD_EXTENSION_NAMESPACE __gnu_cxx
-#endif
-
 #ifdef __APPLE_CC__
 // another workaround for rootcint dumbness
 #  ifndef __CINT__

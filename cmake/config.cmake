@@ -103,14 +103,6 @@ else()
   set(WARNING_FLAGS "-Wall -Wno-non-virtual-dtor")
 endif()
 
-#
-# temporary switch for testing fast omkey hash
-#
-option(USE_FAST_OMKEY_MAP "Use the experimental fast OMKey map" OFF)
-if (USE_FAST_OMKEY_MAP)
-  add_definitions(-DI3_USE_FAST_OMKEY_MAP)
-endif (USE_FAST_OMKEY_MAP)
-
 option(USE_PYTHON_LOGGING "Log to python, not to log4cplus" OFF)
 if (USE_PYTHON_LOGGING)
   add_definitions(-DI3_PYTHON_LOGGING)
