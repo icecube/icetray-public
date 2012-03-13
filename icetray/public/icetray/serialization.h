@@ -43,13 +43,6 @@
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/map.hpp>
-#ifdef I3_USE_FAST_OMKEY_MAP
-//#define __GLIBCPP__ 1
-#include <boost/serialization/hash_map.hpp>
-// have to undef this.  gcc prior to 3.4 defined this and regex uses it to turn on
-// BOOST_REGEX_BUGGY_CTYPE_FACET
-#undef __GLIBCPP__
-#endif
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/split_member.hpp>
