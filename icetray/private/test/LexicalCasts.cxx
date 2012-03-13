@@ -36,14 +36,14 @@ TEST(OMKey_roundtrip)
 TEST(vector_OMKey_out_only)
 {
   vector<OMKey> vomk;
-  vomk.push_back(OMKey(1,2));
-  vomk.push_back(OMKey(666,12));
-  vomk.push_back(OMKey(0,0));
-  vomk.push_back(OMKey(-1,1));
+  vomk.push_back(OMKey(1,2,0));
+  vomk.push_back(OMKey(666,12,0));
+  vomk.push_back(OMKey(0,0,0));
+  vomk.push_back(OMKey(-1,1,0));
 
   string s = boost::lexical_cast<string>(vomk);
   log_debug("vector<OMKey> s == '%s'", s.c_str());
 
-  ENSURE_EQUAL(s, "[OMKey(1,2), OMKey(666,12), OMKey(0,0), OMKey(-1,1)]");
+  ENSURE_EQUAL(s, "[OMKey(1,2,0), OMKey(666,12,0), OMKey(0,0,0), OMKey(-1,1,0)]");
 
 }

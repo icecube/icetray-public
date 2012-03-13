@@ -27,6 +27,10 @@
 #include <iostream>
 #include <icetray/IcetrayFwd.h>
 #include <icetray/I3FrameObject.h>
+#include <icetray/serialization.h>
+
+static const unsigned omkey_version_ = 1;
+
 /**
  * @brief A small class which is the string number and om number
  * for an om
@@ -36,13 +40,17 @@ class OMKey : public I3FrameObject
 {
   int stringNumber_;
   unsigned int omNumber_;
+  unsigned char pmtNumber_;
 
  public:
 
-  OMKey() : stringNumber_(0), omNumber_(0) {}
+  OMKey() : stringNumber_(0), omNumber_(0), pmtNumber_(0) {}
 
   OMKey(int str,unsigned int om) 
-    : stringNumber_(str), omNumber_(om){}
+    : stringNumber_(str), omNumber_(om), pmtNumber_(0) {}
+
+  OMKey(int str,unsigned int om, unsigned char pmt) 
+    : stringNumber_(str), omNumber_(om), pmtNumber_(pmt) {}
 
   virtual ~OMKey(); 
 
@@ -67,9 +75,21 @@ class OMKey : public I3FrameObject
   void SetOM(unsigned int om){ omNumber_ = om; }
 
   /**
+   * gets the PMT number in the DOM
+   */
+  unsigned char GetPMT() const { return pmtNumber_; }
+    
+  /**
+   * sets the PMT number in the DOM
+   */
+  void SetPMT(unsigned char pmt){ pmtNumber_ = pmt; }
+
+  /**
    * bool function: is it an InIce DOM?
    */
   bool IsInIce() const { 
+      // only strings 1-86 have IceTop
+    if((stringNumber_<1) || (stringNumber_>86)) return true;
     if(omNumber_>=1 && omNumber_<=60) return true;
     else return false;
   }
@@ -78,6 +98,8 @@ class OMKey : public I3FrameObject
    * bool function: is it an IceTop DOM?
    */
   bool IsIceTop() const { 
+    // only strings 1-86 have IceTop
+    if((stringNumber_<1) || (stringNumber_>86)) return false; 
     if(omNumber_>=61 && omNumber_<=64) return true;
     else return false;
   }
@@ -91,7 +113,9 @@ class OMKey : public I3FrameObject
    */
   bool operator==(const OMKey& rhs) const
     {
-      if(rhs.omNumber_ == omNumber_ && rhs.stringNumber_ == stringNumber_)
+      if(rhs.omNumber_ == omNumber_ && 
+         rhs.stringNumber_ == stringNumber_ && 
+         rhs.pmtNumber_ == pmtNumber_)
 	return true;
       return false;
     }
@@ -114,7 +138,9 @@ class OMKey : public I3FrameObject
   {
     size_t operator()(const OMKey& key) const
     {
-      return ((abs(key.GetString()+19) * 64) + key.GetOM()); 
+      return (((static_cast<size_t>(abs(key.GetString()+19)) * 64) + 
+               static_cast<size_t>(key.GetOM()))) * 256 + 
+              static_cast<size_t>(key.GetPMT());
     }
   };
 
@@ -125,6 +151,8 @@ class OMKey : public I3FrameObject
   void serialize(Archive& ar, unsigned version);
 };
 
+BOOST_CLASS_VERSION(OMKey,omkey_version_);
+
 /**
  * comparison operator.  First compares the string numbers, then compares
  * the om numbers.  Required to put OMKeys as the key of a map
@@ -134,13 +162,19 @@ class OMKey : public I3FrameObject
  */
 inline bool operator<(const OMKey& lhs,const OMKey& rhs)
 {
-  if(lhs.GetString() < rhs.GetString())
+  if(lhs.GetString() < rhs.GetString()) {
     return true;
-  if(lhs.GetString() > rhs.GetString())
+  } else if(lhs.GetString() > rhs.GetString()) {
     return false;
-  if(lhs.GetOM() < rhs.GetOM())
+  } else if(lhs.GetOM() < rhs.GetOM()) {
     return true;
-  return false;
+  } else if(lhs.GetOM() > rhs.GetOM()) {
+    return false;
+  } else if(lhs.GetPMT() < rhs.GetPMT()) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 /**

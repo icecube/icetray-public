@@ -31,22 +31,23 @@ hash_omkey (const OMKey& key)
 }
 
 typedef OMKey value_type;
-// make OMKey iterable: string,om = OMKey
-static object pair_getitem(value_type const& x, int i) {
-    if (i==0 || i==-2) return object(x.GetString());
-    else if (i==1 || i==-1) return object(x.GetOM()); 
+// make OMKey iterable: string,om,pmt = OMKey
+static object omkey_getitem(value_type const& x, int i) {
+    if (i==0 || i==-3) return object(x.GetString());
+    else if (i==1 || i==-2) return object(x.GetOM()); 
+    else if (i==2 || i==-1) return object(x.GetPMT()); 
     else {
         PyErr_SetString(PyExc_IndexError,"Index out of range.");
         throw_error_already_set();
         return object(); // None
     }
 }
-// __len__ std::pair = 2
-static int pair_len(value_type const& x) { return 2; }
+// __len__ = 3
+static int omkey_len(value_type const& x) { return 3; }
 
 std::string repr(const OMKey& key){
   std::stringstream s;
-  s << "OMKey(" << key.GetString() << "," << key.GetOM() << ")";
+  s << "OMKey(" << key.GetString() << "," << key.GetOM() << "," << static_cast<unsigned int>(key.GetPMT()) << ")";
   return s.str();
 }
 
@@ -55,13 +56,15 @@ register_OMKey()
 {
   class_<OMKey>("OMKey")
     .def(init<int,unsigned>())
+    .def(init<int,unsigned,unsigned char>())
     PROPERTY(OMKey, string, String)
     PROPERTY(OMKey, om, OM)
+    PROPERTY(OMKey, pmt, PMT)
     .def("__str__", &OMKey::str)
     .def("__repr__", repr)
     .def("__hash__", hash_omkey)
-    .def("__getitem__", pair_getitem)
-    .def("__len__", pair_len)
+    .def("__getitem__", omkey_getitem)
+    .def("__len__", omkey_len)
     .def(self == self)
     .def(self < self)
     .def_pickle(boost_serializable_pickle_suite<OMKey>())
