@@ -34,6 +34,7 @@
 
 #include <boost/regex.hpp>
 #include <boost/foreach.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include <icetray/counter64.hpp>
 
@@ -55,6 +56,8 @@
 #include <archive.h>
 #include <archive_entry.h>
 #endif
+
+using boost::algorithm::ends_with;
 
 #define I3_WITH_MMAPPED_FILE_SOURCE
 
@@ -263,7 +266,7 @@ struct archive_filter {
 					continue;
 				}
 				
-				if (fname.rfind(".i3") != (fname.size() - 3)) {
+				if (ends_with(fname,".i3")) {
 					log_trace("(archive_filter) skipping file '%s' (not an I3 file)",
 					    fname.c_str());
 					continue;
@@ -308,13 +311,13 @@ struct archive_filter {
 	static compression_type guess_compression(const std::string &filename)
 	{
 		compression_type comp = NONE;
-		if (filename.rfind(".gz") == (filename.length() - 3))
+		if (ends_with(filename,".gz"))
 			comp = GZIP;
-		else if (filename.rfind(".bz2") == (filename.length() - 4))
+		else if (ends_with(filename,".bz2"))
 			comp = BZIP2;
-		else if (filename.rfind(".lzma") == (filename.length() - 5))
+		else if (ends_with(filename,".lzma"))
 			comp = LZMA;
-		else if (filename.rfind(".xz") == (filename.length() - 2))
+		else if (ends_with(filename,".xz"))
 			comp = XZ;
 			
 		return comp;
@@ -349,15 +352,15 @@ namespace I3 {
 	 * gnutar/pax/ustar/cpio/shar/iso9660 archive
 	 * containing I3 files.
 	 */
-	if (filename.rfind(".i3") != (filename.length() - 3))
+      if (ends_with(filename,".i3"))
 		ifs.push(archive_filter(filename));
 #else
-      if (filename.rfind(".gz") == (filename.length() -3))
+      if (ends_with(filename,".gz"))
 	{
 	  ifs.push(io::gzip_decompressor());
 	  log_trace("Input file ends in .gz.  Using gzip decompressor.");
 	}
-      else if (filename.rfind(".bz2") == (filename.length() -4))
+      else if (ends_with(filename,".bz2"))
 	{
 	  ifs.push(io::bzip2_decompressor());
 	  log_trace("Input file ends in .bz2.  Using bzip2 decompressor.");
@@ -411,12 +414,12 @@ namespace I3 {
 	ofs.pop();
       ofs.reset();
 
-      if (filename.rfind(".gz") == (filename.length() -3))
+      if (ends_with(filename,".gz"))
 	{
 	  ofs.push(io::gzip_compressor(compression_level));
 	  log_trace("Input file ends in .gz.  Using gzip decompressor.");
 	}
-      else if (filename.rfind(".bz2") == (filename.length() -4))
+      else if (ends_with(filename,".bz2"))
 	{
 	  ofs.push(io::bzip2_compressor(compression_level));
 	  log_trace("Input file ends in .bz2.  Using bzip2 decompressor.");
