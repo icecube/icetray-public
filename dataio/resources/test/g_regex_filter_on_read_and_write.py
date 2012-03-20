@@ -19,8 +19,7 @@ tray = I3Tray()
 tray.AddModule("I3Reader", "reader", Filename="pass1.i3", skipkeys=["IceTop.*"])
 
 tray.AddModule("FrameCheck", "check1")(
-    ("ensure_physics_has", ["CalibratedATWD","CalibratedFADC","DrivingTime", 
-                            "I3EventHeader",
+    ("ensure_physics_has", ["DrivingTime", "I3EventHeader",
                             "InIceRawData", "InIceRecoHitSeries", "somewhere"]),
     ("ensure_physics_hasnt", ["IceTopRawData", "IceTopRecoHitSeries"])
     )

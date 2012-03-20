@@ -11,7 +11,6 @@ import sys
 
 load("libdataclasses")
 load("libphys-services")
-load("libDOMcalibrator")
 load("libdataio")
 load("libexamples")
 
@@ -31,13 +30,7 @@ tray.AddModule("QConverter", "qify")
 tray.AddModule(lambda fr: False, "dropps") # Drop all existing P-frames
 
 #
-# A DOMCalibrator.  Obviously.
-#
-tray.AddModule("I3DOMcalibrator","merge")
-
-#
-# And an appropriately named but nonetheless cute feature
-# extractor.
+# An appropriately named but nonetheless cute feature extractor.
 #
 tray.AddModule("DumbFeatureExtractor","dumbfe")
 

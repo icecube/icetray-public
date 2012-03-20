@@ -37,7 +37,7 @@ tray.AddModule("Dump","dump")
 tray.AddModule("CountFrames", "count")(
     ("Physics", 10),
     ("Calibration", 1),
-    ("DetectorStatus", 2), # One for each subfile
+    ("DetectorStatus", 3), # One for each subfile
     ("Geometry", 1)
     )
 
