@@ -266,7 +266,7 @@ struct archive_filter {
 					continue;
 				}
 				
-				if (ends_with(fname,".i3")) {
+				if (!ends_with(fname,".i3")) {
 					log_trace("(archive_filter) skipping file '%s' (not an I3 file)",
 					    fname.c_str());
 					continue;
@@ -352,7 +352,7 @@ namespace I3 {
 	 * gnutar/pax/ustar/cpio/shar/iso9660 archive
 	 * containing I3 files.
 	 */
-      if (ends_with(filename,".i3"))
+      if (!ends_with(filename,".i3"))
 		ifs.push(archive_filter(filename));
 #else
       if (ends_with(filename,".gz"))
