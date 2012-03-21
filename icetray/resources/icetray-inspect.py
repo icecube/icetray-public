@@ -63,7 +63,11 @@ def print_config(config):
 		for k in sortedkeys:
 			print '    %s' % k
 			print '      Description : %s' % desc[k]
-			print '      Default     : %s' % repr(config[k])
+			try:
+				print '      Default     : %s' % repr(config[k])
+			except RuntimeError:
+				# Sometimes unrepresentable
+				pass
 			print ''
 	else:
 		print '    (No parameters)'
@@ -126,7 +130,11 @@ def print_xmlconfig(config):
 			print '<parameter>'
 			print '\t<name>%s</name>' % cgi.escape(k)
 			print '\t<description>%s</description>' % cgi.escape(desc[k])
-			print '\t<default_value>%s</default_value>' % cgi.escape(repr(config[k]))
+			try:
+				print '\t<default_value>%s</default_value>' % cgi.escape(repr(config[k]))
+			except RuntimeError:
+				# Sometimes unrepresentable
+				pass
 			print '</parameter>'
 
 def display_config(mod, category, modname=None):
