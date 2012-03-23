@@ -7,6 +7,7 @@
 
 /* IceCube magic: */
 #include <stddef.h>
+#include <stdint.h>
 
 #define DYNAMIC_CRC_TABLE
 #define STDC
