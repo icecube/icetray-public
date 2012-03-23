@@ -177,26 +177,24 @@ I3Frame::assign(const I3Frame& rhs)
 
 void I3Frame::purge(const Stream& what)
 {
-  std::vector<std::string> keys;
-  for (map_t::const_iterator it = map_.begin();
-       it != map_.end();
-       it++)
+  map_t::iterator it = map_.begin();
+  while (it != map_.end()) {
     if (it->second->stream == what)
-      keys.push_back(it->first);
-  for (unsigned i=0; i< keys.size(); i++)
-    Delete(keys[i]);
+      map_.erase(it++);
+    else
+      it++;
+  }
 }
 
 void I3Frame::purge()
 {
-  std::vector<std::string> keys;
-  for (map_t::const_iterator it = map_.begin();
-       it != map_.end();
-       it++)
+  map_t::iterator it = map_.begin();
+  while (it != map_.end()) {
     if (it->second->stream != stop_)
-      keys.push_back(it->first);
-  for (unsigned i=0; i< keys.size(); i++)
-    Delete(keys[i]);
+      map_.erase(it++);
+    else
+      it++;
+  }
 }
 
 bool I3Frame::Has(const std::string& key, const Stream& stream) const
@@ -214,13 +212,7 @@ bool I3Frame::Has(const std::string& key, const Stream& stream) const
 
 void I3Frame::merge(const I3Frame& rhs)
 {
-  for(map_t::const_iterator it = rhs.map_.begin();
-      it != rhs.map_.end();
-      it++)
-    {
-      if (map_.find(it->first) == map_.end())
-	map_[it->first] = it->second;
-    }
+  map_.insert(rhs.map_.begin(), rhs.map_.end());
 }
 
 
@@ -279,7 +271,7 @@ void I3Frame::Put(const string& name, I3FrameObjectConstPtr element, const I3Fra
 
 void I3Frame::Rename(const string& fromname, const string& toname)
 {
-  map_t::const_iterator fromiter = map_.find(fromname);
+  map_t::iterator fromiter = map_.find(fromname);
   if (fromiter == map_.end())
     log_fatal("attempt to rename \"%s\" to \"%s\", but the source is empty",
               fromname.c_str(), toname.c_str());
@@ -290,7 +282,7 @@ void I3Frame::Rename(const string& fromname, const string& toname)
               fromname.c_str(), toname.c_str());
 
   map_[toname] = map_[fromname];
-  map_.erase(fromname);
+  map_.erase(fromiter);
 
 }
 
@@ -595,6 +587,7 @@ bool I3Frame::load_v5(IStreamT& is, const vector<string>& skip)
     i3frame_nslots_t nslots;
     bia >> make_nvp("size", nslots);
     crcit(nslots, crc, calc_crc);
+    map_.resize(nslots);
 
     for (unsigned int i = 0; i < nslots; i++)
       {
