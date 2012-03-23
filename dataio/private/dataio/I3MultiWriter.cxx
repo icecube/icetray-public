@@ -141,7 +141,7 @@ I3MultiWriter::Process()
 	I3FramePtr cache_copy(new I3Frame(frame->GetStop()));
 	cache_copy->merge(*frame);
 
-	int i;
+	size_t i;
 	for (i = 0; i < metadata_cache_.size(); i++) {
 		if (metadata_cache_[i]->GetStop() == frame->GetStop()) {
 			metadata_cache_[i] = cache_copy;
