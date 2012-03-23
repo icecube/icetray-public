@@ -417,8 +417,14 @@ unsigned long crc32c(crc, buf, len)
 
     if (has_sse42 == -1) {
 	unsigned int a,b,c,d;
+#ifdef __i386__
+	/* Workaround use of EBX as the PIC base register */
+        __asm__ __volatile__("xchgl %%ebx, %1; cpuid; xchgl %%ebx, %1" :
+	    "=a"(a), "=r"(b), "=c"(c), "=d"(d) : "0"(1));
+#else
         __asm__ __volatile__("cpuid" : "=a"(a), "=b"(b), "=c"(c), "=d"(d) :
             "0"(1));
+#endif
         has_sse42 = ((c & 0x00100000) != 0);
     }
 
