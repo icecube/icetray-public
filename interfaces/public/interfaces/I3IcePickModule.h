@@ -2,7 +2,7 @@
 #define INTERFACES_I3ICEPICKMODULE_H
 
 #include <dataclasses/physics/I3EventHeader.h>
-#include <icetray/I3Module.h>
+#include <icetray/I3ConditionalModule.h>
 #include <icetray/I3Bool.h>
 #include <icetray/I3Frame.h>
 
@@ -17,11 +17,11 @@
  * new template instantiation.
  */
 template <class IcePick>
-class I3IcePickModule : public I3Module
+class I3IcePickModule : public I3ConditionalModule
 {
  public:
   I3IcePickModule(const I3Context& context) :
-    I3Module(context),
+    I3ConditionalModule(context),
     decisionName_(I3::name_of<IcePick>()),
     discardEvents_(false),
     invertoutput_(false),
