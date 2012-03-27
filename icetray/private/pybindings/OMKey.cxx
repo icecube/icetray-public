@@ -66,6 +66,7 @@ register_OMKey()
     .def("__getitem__", omkey_getitem)
     .def("__len__", omkey_len)
     .def(self == self)
+    .def(self != self)
     .def(self < self)
     .def_pickle(boost_serializable_pickle_suite<OMKey>())
     ;
