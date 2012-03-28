@@ -41,7 +41,8 @@ class I3IceForkModule : public I3Module
   void Physics(I3FramePtr frame)
     {
       I3BoolPtr decision(new I3Bool(pick_.SelectFrameInterface(*frame)));
-      frame->Put(decisionName_,decision);
+      if(!decisionName_.empty())
+        frame->Put(decisionName_,decision);
       if(!decision->value)
 	{
 	  PushFrame(frame,"FalseBox");
