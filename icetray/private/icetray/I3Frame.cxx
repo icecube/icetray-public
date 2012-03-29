@@ -434,12 +434,12 @@ typedef uint32_t i3frame_nslots_t;
 typedef char i3frame_tag_t[4];
 const static i3frame_tag_t tag = { '[', 'i', '3', ']' };
 
-const static i3frame_version_t version = 5; // XXX: set to 6 to use CRC32
+const static i3frame_version_t version = 6;
 
 template <typename OStreamT>
 void I3Frame::save(OStreamT& os, const vector<string>& skip) const
 {
-  crc_t crc(version >= 6); // XXX: can delete conditional once using v6 frames
+  crc_t crc;
 
   os.write(tag, sizeof(i3frame_tag_t));
   {
