@@ -125,7 +125,11 @@ struct shared_ptr : boost::shared_ptr<T> { };
 #include "TError.h"
 #include "zlib.h"
 
+#ifdef __FreeBSD__
+class __builtin_va_list; 
 #endif
+
+#endif /* __CINT__ */
 
 #ifdef I3_PYBINDINGS_MODULE
 #  include <pybindings.hpp>
