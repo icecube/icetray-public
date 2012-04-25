@@ -576,11 +576,13 @@ bool I3Frame::load(IStreamT& is, const vector<string>& skip, bool verify_cksum)
 
     if (versionRead == 4)
       return load_v4(is, skip);
-    if (versionRead == 5 || versionRead == 6)
+    else if (versionRead == 5 || versionRead == 6)
       return load_v56(is, skip, versionRead == 6, verify_cksum);
     else
       log_fatal("Frame is version %u, this software can read only up to version %d", versionRead, version);
   }
+
+  return false;
 }
 
 //
