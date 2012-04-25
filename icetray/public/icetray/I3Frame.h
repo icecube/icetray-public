@@ -315,7 +315,7 @@ class I3Frame
 
     I3FrameObjectConstPtr focp = get_impl(*iter, quietly);
     
-    return dynamic_pointer_cast<typename T::value_type>(focp);
+    return boost::dynamic_pointer_cast<typename T::value_type>(focp);
   }
   /** Get a frame object.
    * 
