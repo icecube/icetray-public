@@ -25,3 +25,12 @@ TOOLDEF (photonics
   photoamasim level2amasim photonics photonicsCPPio
   )
 
+if (NOT PHOTONICS_FOUND)
+  TOOLDEF (photonics
+    include/photonics-1.67
+    photonics.h
+    lib/photonics-1.67
+    NONE
+    photoamasim level2amasim photonics photonicsCPPio
+    )
+endif (NOT PHOTONICS_FOUND)
