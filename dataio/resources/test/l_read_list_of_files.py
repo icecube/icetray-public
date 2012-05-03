@@ -10,9 +10,9 @@ import os
 import sys
 from glob import glob
 
-load("libdataclasses")
-load("libphys-services")
-load("libdataio")
+from icecube import dataclasses 
+from icecube import phys_services 
+from icecube import dataio 
 
 tray = I3Tray()
 

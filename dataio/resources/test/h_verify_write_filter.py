@@ -9,10 +9,10 @@ from os.path import expandvars
 import os
 import sys
 
-load("libdataclasses")
-load("libphys-services")
-load("libdataio")
-load("libexamples")
+from icecube import dataclasses 
+from icecube import phys_services 
+from icecube import dataio 
+from icecube import examples 
 
 tray = I3Tray()
 

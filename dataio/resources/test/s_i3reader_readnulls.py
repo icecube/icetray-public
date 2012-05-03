@@ -9,8 +9,8 @@ from os.path import expandvars
 import os
 import sys
 
-load("libdataclasses")
-load("libdataio")
+from icecube import dataclasses 
+from icecube import dataio 
 
 tray = I3Tray()
 

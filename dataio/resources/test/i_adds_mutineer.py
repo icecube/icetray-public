@@ -9,10 +9,10 @@ from os.path import expandvars
 import os
 import sys
 
-load("libdataclasses")
-load("libphys-services")
-load("libdataio")
-load("libmutineer")
+from icecube import dataclasses 
+from icecube import phys_services 
+from icecube import dataio 
+from icecube import mutineer 
 
 tray = I3Tray()
 
