@@ -13,7 +13,7 @@ Inf = float('inf')
 import platform, sys
 from os.path import expandvars
 from ctypes import cdll
-def load(libname):
+def load(libname, verbose = True):
     """
     load the library (via dlopen) into the running tray.  This is
     primarily used for libraries that don't have python bindings
@@ -30,7 +30,8 @@ def load(libname):
         load("libexamples")
       
     """
-    print "Loading ", libname, 50*"."
+    if verbose :
+        print "Loading ", libname, 50*"."
 
     if platform.system() != "Darwin" and \
        platform.system() != "Linux" :
