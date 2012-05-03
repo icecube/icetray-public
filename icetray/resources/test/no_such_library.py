@@ -7,7 +7,7 @@ from I3Tray import *
 tray = I3Tray()
 
 try:
-    load("no_such_library")
+    from icecube import no_such_library 
 
     # generate empty frames
     tray.AddModule("BottomlessSource","bottomless")

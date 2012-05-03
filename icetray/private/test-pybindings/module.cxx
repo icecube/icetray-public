@@ -20,7 +20,6 @@
  *  
  */
 
-#include <icetray/load_project.h>
 
 using namespace boost::python;
 

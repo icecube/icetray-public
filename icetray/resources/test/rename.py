@@ -5,7 +5,7 @@
 import sys
 from I3Tray import *
 
-# load("libicetray")
+from icecube import icetray 
 
 tray = I3Tray()
 
