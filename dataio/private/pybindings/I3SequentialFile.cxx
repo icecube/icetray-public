@@ -181,6 +181,8 @@ namespace I3 { namespace dataio { namespace python {
 
         if (s == I3Frame::None || f->GetStop() == s)
           return f;
+        else
+          f->clear();
       } catch (const std::exception& e) {
         log_fatal("caught exception %s", e.what());
       }
