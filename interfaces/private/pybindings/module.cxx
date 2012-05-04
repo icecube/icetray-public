@@ -20,6 +20,7 @@
  *  
  */
 
+#include <icetray/load_project.h>
 
 void register_I3CalibrationService();
 void register_I3DetectorStatusService();
@@ -30,6 +31,8 @@ void register_I3OMKey2MBID();
 
 BOOST_PYTHON_MODULE(interfaces)
 {
+
+  load_project("interfaces", false); 
 
   register_I3CalibrationService();
   register_I3DetectorStatusService();
