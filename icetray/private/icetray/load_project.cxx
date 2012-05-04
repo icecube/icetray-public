@@ -46,8 +46,8 @@ load_project (std::string path, bool verbose)
       // this has to be an error to keep people from committing stuff
       // that isn't mac/linux portable
       std::cout << "*** Failure loading '" << path << "'.\n"
-		<< "*** Load external libraries without prefix and extension.\n"
-		<< "*** e.g. please omit 'lib' and '.dylib' or '.so'.\n";
+		<< "*** Load external libraries without an extension.\n"
+		<< "*** e.g. please omit '.dylib' or '.so'.\n";
       exit(1);
     }
   else

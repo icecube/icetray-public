@@ -21,6 +21,7 @@
  */
 
 #include <icetray/I3Logging.h>
+#include <icetray/load_project.h>
 #include <signal.h>
 
 void register_OMKey();
@@ -45,6 +46,11 @@ using namespace boost::python;
 #ifdef I3_LOG4CPLUS_LOGGING
 #include <log4cplus/hierarchy.h>
 
+void load_impl(const std::string& name, bool verbose = true ){
+  load_project(name,verbose);
+}
+BOOST_PYTHON_FUNCTION_OVERLOADS(load_impl_overloads, load_impl,1,2);
+
 void disable_logging()
 {
 	::log4cplus::Logger::getDefaultHierarchy().disableAll();
@@ -61,6 +67,15 @@ void register_logging()
 
 BOOST_PYTHON_MODULE(icetray)
 {
+  // 
+  // You *must* do this first, or you get the nasty error 
+  //   void boost::serialization::detail::tkmap::insert(const   
+  //   boost::serialization::extended_type_info*): Assertion `lookup(eti) ==  
+  //   slf->m_map.tend()' failed. 
+  // 
+  load_project("icetray", false); 
+
+  def("load", &load_impl, load_impl_overloads(args("name","verbose")));
 
 #ifdef I3_USE_ROOT
   // undo that nasty irritating root signal catching.  Power to the

@@ -11,63 +11,31 @@ NaN = float('NaN')
 Inf = float('inf')
 
 import platform, sys
-from os.path import expandvars
-from ctypes import cdll
-def load(libname, verbose = True):
+def load(libname):
     """
     load the library (via dlopen) into the running tray.  This is
     primarily used for libraries that don't have python bindings
     (eventually all libraries should have at least stub python
     bindings, making them loadable via the standard python *import*,
     and this sould be obsolete.
-
+    
     :param filename:
-      should be the name of the file to load
-      including the leading ``lib``, but *not* including the trailing
-      ``.so`` or ``.dylib``, eg::
-
-        load("libdataio")
-        load("libexamples")
-      
+    should be the name of the file to load
+    including the leading ``lib``, but *not* including the trailing
+    ``.so`` or ``.dylib``, eg::
+    
+    load("libdataio")
+    load("libexamples")
+    
     """
-    if verbose :
-        print "Loading ", libname, 50*"."
-
-    if platform.system() != "Darwin" and \
-       platform.system() != "Linux" :
-        print "platform ", platform.system(), " not supported"
-        sys.exit(1)
-    
-    if libname.endswith(".dylib" ) or \
-           libname.endswith(".so" ) :
-        print "*** Failure loading '",libname,"'."
-        print "*** Load external libraries without extension."
-        print "*** e.g. please omit '.dylib' or '.so'.\n";
-        sys.exit(1)
-
-    if not libname.startswith("lib") :
-            libname = "lib" + libname
-        
-    if platform.system() == "Darwin" :
-        libname += ".dylib"
-
-    if platform.system() == "Linux" :
-        libname += ".so"
-
-    # look in the "standard" places
     try :
-        cdll.LoadLibrary( libname )
-    except OSError :
-        # look in I3_BUILD
-        libname = expandvars("I3_BUILD/lib/") + libname
-        try :
-            cdll.LoadLibrary( libname )
-        except :
-            print """\n***\n*** Failed to load library. (%s)\n*** %s\n***\n""" % \
-                  (sys.exc_info()[0], sys.exc_info()[1])
+        icetray.load(libname)
+    except:
+        print """\n***\n*** Failed to load library. (%s)\n*** %s\n***\n""" % \
+              (sys.exc_info()[0], sys.exc_info()[1])
         sys.exit(1)
-    
-    
+
+            
 def OMKey(string,omnum):
     return icetray.OMKey(string,omnum)
 
