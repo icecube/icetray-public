@@ -1,7 +1,7 @@
 gfilt, the C++ error message descrambler
 ========================================
 
-:command:`gfilt`, from Leor Zolman at http://www.bdsoft.com s a handy
+:command:`gfilt`, from Leor Zolman at http://www.bdsoft.com is a handy
 utility that reformats and descrambles error messages. For instance
 this program:
 
