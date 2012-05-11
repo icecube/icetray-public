@@ -26,23 +26,9 @@ generates the following error message with gcc:
 .. code-block:: cpp
 
    foo.cxx: In function 'int main()':
-   foo.cxx:9: error: no matching function for call to 'std::multimap<std::str
-   ing, int, std::less<std::string>, std::allocator<std::pair<const std::stri
-   ng, int> > >::insert(int)'
-   /usr/include/gcc/darwin/4.0/c++/bits/stl_multimap.h:347: note: candidates
-   are: typename std::_Rb_tree<_Key, std::pair<const _Key, _Tp>, std::_Select
-   1st<std::pair<const _Key, _Tp> >, _Compare, _Alloc>::iterator std::multima
-   p<_Key, _Tp, _Compare, _Alloc>::insert(const std::pair<const _Key, _Tp>&)
-   [with _Key = std::string, _Tp = int, _Compare = std::less<std::string>, _A
-   lloc = std::allocator<std::pair<const std::string, int> >]
-   /usr/include/gcc/darwin/4.0/c++/bits/stl_multimap.h:371: note:           
-	typename std::_Rb_tree<_Key, std::pair<const _Key, _Tp>, std::_Select
-   1st<std::pair<const _Key, _Tp> >, _Compare, _Alloc>::iterator std::multima
-   p<_Key, _Tp, _Compare, _Alloc>::insert(typename std::_Rb_tree<_Key, std::p
-   air<const _Key, _Tp>, std::_Select1st<std::pair<const _Key, _Tp> >, _Compa
-   re, _Alloc>::iterator, const std::pair<const _Key, _Tp>&) [with _Key = std
-   ::string, _Tp = int, _Compare = std::less<std::string>, _Alloc = std::allo
-   cator<std::pair<const std::string, int> >]
+   foo.cxx:9: error: no matching function for call to 'std::multimap<std::string, int, std::less<std::string>, std::allocator<std::pair<const std::string, int> > >::insert(int)'
+   /usr/include/gcc/darwin/4.0/c++/bits/stl_multimap.h:347: note: candidates are: typename std::_Rb_tree<_Key, std::pair<const _Key, _Tp>, std::_Select1st<std::pair<const _Key, _Tp> >, _Compare, _Alloc>::iterator std::multimap<_Key, _Tp, _Compare, _Alloc>::insert(const std::pair<const _Key, _Tp>&) [with _Key = std::string, _Tp = int, _Compare = std::less<std::string>, _Alloc = std::allocator<std::pair<const std::string, int> >]
+   /usr/include/gcc/darwin/4.0/c++/bits/stl_multimap.h:371: note:                 typename std::_Rb_tree<_Key, std::pair<const _Key, _Tp>, std::_Select1st<std::pair<const _Key, _Tp> >, _Compare, _Alloc>::iterator std::multimap<_Key, _Tp, _Compare, _Alloc>::insert(typename std::_Rb_tree<_Key, std::pair<const _Key, _Tp>, std::_Select1st<std::pair<const _Key, _Tp> >, _Compare, _Alloc>::iterator, const std::pair<const _Key, _Tp>&) [with _Key = std::string, _Tp = int, _Compare = std::less<std::string>, _Alloc = std::allocator<std::pair<const std::string, int> >]
 
 **gfilt** pares this down to::
 
