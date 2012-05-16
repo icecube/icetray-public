@@ -52,7 +52,7 @@ using namespace std;
 
 ostream& operator<<(ostream& os, const OMKey& key)
 {
-  os << "(" << key.GetString() << "," << key.GetOM() << "," << static_cast<unsigned int>(key.GetPMT()) << ")";
+  os << "OMKey(" << key.GetString() << "," << key.GetOM() << "," << static_cast<unsigned int>(key.GetPMT()) << ")";
   return os;
 }
 
@@ -69,7 +69,7 @@ istream& operator>>(istream& is, OMKey& key)
     log_trace("matches: %s %s %s", matches.str(1).c_str(), matches.str(2).c_str(), matches.str(3).c_str());
     newkey.SetString(boost::lexical_cast<int>(matches.str(1)));
     newkey.SetOM(boost::lexical_cast<unsigned>(matches.str(2)));
-    newkey.SetPMT(boost::lexical_cast<unsigned char>(matches.str(3)));
+    newkey.SetPMT(static_cast<unsigned char>(boost::lexical_cast<unsigned int>(matches.str(3))));
     key = newkey;
     return is;
   } else {
