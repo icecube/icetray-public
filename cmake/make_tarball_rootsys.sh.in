@@ -11,5 +11,5 @@ then
 	mkdir -p @CMAKE_INSTALL_PREFIX@/cernroot/etc
 	mkdir -p @CMAKE_INSTALL_PREFIX@/cernroot/lib
 	cp -r @ROOTSYS@/etc/* @CMAKE_INSTALL_PREFIX@/cernroot/etc/
-	cp -P @ROOTSYS@/lib/* @CMAKE_INSTALL_PREFIX@/cernroot/lib/
+	cp -r -P @ROOTSYS@/lib/* @CMAKE_INSTALL_PREFIX@/cernroot/lib/
 fi
