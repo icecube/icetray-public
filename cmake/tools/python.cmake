@@ -22,7 +22,7 @@
 colormsg("")
 colormsg(HICYAN "python")
 
-set(PYTHON_FOUND TRUE)
+set(PYTHON_FOUND TRUE CACHE BOOL "Python found successfully" FORCE)
 if(EXISTS ${I3_PORTS}/bin/python)
   message(STATUS "***")
   message(STATUS "***")
@@ -38,7 +38,7 @@ find_package(PythonInterp QUIET)
 find_package(PythonLibs QUIET)
 
 if(NOT PYTHON_EXECUTABLE)
-  set(PYTHON_FOUND FALSE)
+  set(PYTHON_FOUND FALSE CACHE BOOL "Python found successfully" FORCE)
 endif(NOT PYTHON_EXECUTABLE)
 
 # 
@@ -62,7 +62,7 @@ endif(NOT PYTHON_INCLUDE_DIR)
 
 if(NOT EXISTS "${PYTHON_INCLUDE_DIR}/Python.h")
   message(STATUS "Error configuring python:  ${PYTHON_INCLUDE_DIR}/Python.h does not exist.\n")
-  set(PYTHON_FOUND FALSE)
+  set(PYTHON_FOUND FALSE CACHE BOOL "Python found successfully" FORCE)
   set(PYTHON_CONFIG_ERROR TRUE)
 endif(NOT  EXISTS "${PYTHON_INCLUDE_DIR}/Python.h")
 
