@@ -51,6 +51,9 @@ class Model
 
   I3FramePtr get_frame(unsigned);
 
+  unsigned cached_frame_index_;
+  I3FramePtr cached_frame_;
+    
 public:
   
   Model(View& view);

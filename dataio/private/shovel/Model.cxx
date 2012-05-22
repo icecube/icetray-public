@@ -185,7 +185,13 @@ Model::move_y(int delta)
 I3FramePtr
 Model::get_frame(unsigned index)
 {
-  return i3file_.get_raw_frame(frame_infos_[index].second);
+  if ((!cached_frame_) || (cached_frame_index_ != frame_infos_[index].second))
+  {
+    cached_frame_index_ = frame_infos_[index].second;
+    cached_frame_ = i3file_.get_frame(frame_infos_[index].second);
+  }
+
+  return cached_frame_;
 }
 
 void

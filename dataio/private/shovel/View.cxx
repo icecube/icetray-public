@@ -260,29 +260,38 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
       assert(frameiter != frame->typename_end());
       const string &key = frameiter->first;
       const string &type_name = frameiter->second;
+      const bool on_foreign_stream = frame->GetStop(*iter) != frame->GetStop();
 
-      if (key == selected_key)
-	settext(rev_white);
-      else
-	settext(white);
+      if (key == selected_key) {
+          if (on_foreign_stream)
+              settext(ColorParse("rev_dim_yellow"));
+          else
+              settext(rev_white);
+      } else {
+          if (on_foreign_stream)
+              settext(dim_yellow);
+          else
+              settext(white);
+      }
+
       
       unsigned maxkeylen = COLS/3 - 2 - 1;
       string short_key = key;
       // if it is too long, shorten it
       if (key.length() > maxkeylen)
-	{
-	  short_key = key.substr(0, maxkeylen - 3);
-	  short_key += "...";
-	}
+      {
+          short_key = key.substr(0, maxkeylen - 3);
+          short_key += "...";
+      }
 
       unsigned maxtypelen = COLS-14 - COLS/3 - 1;
       string short_typename = stlfilt(type_name);
       // if it is too long, shorten it
       if (short_typename.length() > maxtypelen)
-	{
-	  short_typename = short_typename.substr(0, maxtypelen - 3);
-	  short_typename += "...";
-	}
+      {
+          short_typename = short_typename.substr(0, maxtypelen - 3);
+          short_typename += "...";
+      }
 
       mvaddstr(count + 3, 2, short_key.c_str());
       mvaddstr(count + 3, COLS/3, short_typename.c_str());
