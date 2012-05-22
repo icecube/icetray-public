@@ -32,8 +32,10 @@
 static const unsigned omkey_version_ = 1;
 
 /**
- * @brief A small class which is the string number and om number
- * for an om
+ * @brief A small class which is the string number, om number
+ * and pmt number for a specific PMT inside a DOM.
+ * For IceCube, the PMT number will always be "0"
+ * and "PMT" is equivalent to "DOM".
  *
  */
 class OMKey : public I3FrameObject

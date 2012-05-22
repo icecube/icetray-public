@@ -187,6 +187,7 @@ i3_test_executable(test
   private/test/FailingModuleTest.cxx     
   private/test/I3TrayTest.cxx               
   private/test/Utility.cxx
+  private/test/LexicalCasts.cxx
   private/test/FrameAccess.cxx         
   private/test/VectorParameters.cxx
   private/test/FrameFlow.cxx           

@@ -12,7 +12,7 @@
 #include <icetray/I3Logging.h>
 #include <icetray/I3Context.h>
 #include <icetray/OMKey.h>
-#include <icetray/lexical_casts.h>
+#include <boost/lexical_cast.hpp>
 #include <string>
 using namespace std;
 
@@ -27,23 +27,15 @@ TEST(OMKey_roundtrip)
   OMKey k2 = boost::lexical_cast<OMKey>(s);
   ENSURE_EQUAL(k, k2);
 
+  // OMKey goes round-trip (with PMT number)
+  k = OMKey(3,14,15);
+  s = boost::lexical_cast<string>(k);
+  cout << s << endl;
+  k2 = boost::lexical_cast<OMKey>(s);
+  ENSURE_EQUAL(k, k2);
+
   k = OMKey(-13,0);
   s = boost::lexical_cast<string>(k);
   k2 = boost::lexical_cast<OMKey>(s);
   ENSURE_EQUAL(k, k2);
-}
-
-TEST(vector_OMKey_out_only)
-{
-  vector<OMKey> vomk;
-  vomk.push_back(OMKey(1,2,0));
-  vomk.push_back(OMKey(666,12,0));
-  vomk.push_back(OMKey(0,0,0));
-  vomk.push_back(OMKey(-1,1,0));
-
-  string s = boost::lexical_cast<string>(vomk);
-  log_debug("vector<OMKey> s == '%s'", s.c_str());
-
-  ENSURE_EQUAL(s, "[OMKey(1,2,0), OMKey(666,12,0), OMKey(0,0,0), OMKey(-1,1,0)]");
-
 }
