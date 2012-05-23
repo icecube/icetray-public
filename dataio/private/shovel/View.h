@@ -41,8 +41,10 @@ class View
   bool scanning_;
   Model* model_;
 
-  void drawtape(unsigned line, unsigned col, I3Frame::Stream stream, 
-		unsigned frameno, int attr = A_NORMAL);
+  void drawtape(unsigned line, unsigned col,
+                I3Frame::Stream stream, 
+                std::string sub_event_stream,
+                unsigned frameno, int attr = A_NORMAL);
 
   void draw_border();
 
@@ -50,8 +52,10 @@ private:
 
   View();
 
-  std::vector<color_pair> colors_;
-
+  std::map<I3Frame::Stream, color_pair> colors_;
+  std::map<std::string, color_pair> subeventstream_colors_;
+  std::vector<color_pair> new_subeventstream_colors_;
+    
 public:
   
   ~View();

@@ -19,6 +19,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
+
+#include <dataclasses/physics/I3EventHeader.h>
+#include <dataclasses/I3Time.h>
+
+#include <limits>
+#include <iostream>
+#include <iomanip>
+
 #include <form.h>
 #include <fstream>
 #include <signal.h>
@@ -39,6 +47,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <icetray/Utility.h>
+
 
 #include <ncurses.h>
 #include <cdk/cdk.h>
@@ -137,10 +146,24 @@ View::start()
   y_top_offset_ = 0;
   signal(SIGWINCH, resize);
 
-  colors_.push_back(green);
-  colors_.push_back(yellow);
-  colors_.push_back(magenta);
-  colors_.push_back(cyan);
+  colors_[I3Frame::Geometry] = cyan;
+  colors_[I3Frame::Calibration] = cyan;
+  colors_[I3Frame::DetectorStatus] = cyan;
+  colors_[I3Frame::TrayInfo] = magenta;
+
+  colors_[I3Frame::DAQ] = white;
+  colors_[I3Frame::Physics] = white; // these get colored by subeventstream
+
+  subeventstream_colors_[""] = blue;
+  subeventstream_colors_["NullSplit"] = red;
+  subeventstream_colors_["IceTopSplit"] = yellow;
+  subeventstream_colors_["InIceSplit"] = green;
+    
+  // colors for new stream names
+  new_subeventstream_colors_.push_back(blue);
+  new_subeventstream_colors_.push_back(red);
+  new_subeventstream_colors_.push_back(yellow);
+  new_subeventstream_colors_.push_back(green);
 }
 
 View::View()
@@ -180,7 +203,7 @@ View::page(const std::string &text)
 }
 
 void
-View::drawtape(unsigned line, unsigned col, I3Frame::Stream stream, unsigned frameno, int attr)
+View::drawtape(unsigned line, unsigned col, I3Frame::Stream stream, std::string sub_event_stream, unsigned frameno, int attr)
 {
   settext(dim_green);
   mvaddch(line, col, ' '|attr);
@@ -203,10 +226,29 @@ View::drawtape(unsigned line, unsigned col, I3Frame::Stream stream, unsigned fra
       mvaddstr(line-2, col - oss.str().length()/2, oss.str().c_str());
     }
 
-  int lineoffset=0;
-  settext(colors_[stream.id() % 4]);
+  color_pair the_color;  
+  if (colors_.find(stream) != colors_.end()) {
+    the_color = colors_[stream];
+  } else {
+    the_color = dim_white;
+  }
 
-  mvaddch(line + lineoffset, col, stream.id() | attr);
+  // if this is a Physics frame, it will get colored
+  // by SubEventStream
+  if (stream == I3Frame::Physics) {
+    std::map<std::string, color_pair>::const_iterator it =
+      subeventstream_colors_.find(sub_event_stream);
+    if (it == subeventstream_colors_.end()) {
+      // make a new color
+      the_color = new_subeventstream_colors_[subeventstream_colors_.size() % 4];
+      subeventstream_colors_[sub_event_stream] = the_color;
+    } else {
+      the_color = it->second;
+    }
+  }
+    
+  settext(the_color);
+  mvaddch(line, col, stream.id() | attr);
 }
 
 void 
@@ -224,7 +266,7 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
   mvaddstr(2, COLS/3, "Type");
   mvaddstr(2, COLS-14, "Bytes");
 
-  unsigned frame_window_height = LINES - 9;
+  unsigned frame_window_height = LINES - 11;
 
   if (y_selected >= (frame_window_height + y_top_offset_))
     y_top_offset_ = y_selected - (frame_window_height-1);
@@ -309,35 +351,126 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
   //  Draw 'longitudinal' status
   // 
   settext(hi_red);
-  mvaddstr(LINES-4, 2, "   Key:");
+  mvaddstr(LINES-6, 2, "           Key:");
 
   settext(white);
   {
     ostringstream oss;
     oss << (the_keys.size() > 0 ? y_selected+1 : 0) << "/" << frame->size();
     settext(yellow);
-    mvaddstr(LINES-4, 10, oss.str().c_str());
+    mvaddstr(LINES-6, 18, oss.str().c_str());
   }
 
   settext(hi_red);
-  mvaddstr(LINES-3, 2, " Frame:");
+  mvaddstr(LINES-5, 2, "         Frame:");
   standend();
   settext(white);
-  unsigned statuslen;
+  std::size_t statuslen=16;
   {
     ostringstream oss;
     oss << index+1 << "/" << model_->totalframes() 
 	<< " (" << (unsigned) (100 * (float)(index+1)/(float)model_->totalframes()) << "%)";  
     settext(yellow);
-    mvaddstr(LINES-3, 10, oss.str().c_str());
-    statuslen = oss.str().size();
+    mvaddstr(LINES-5, 18, oss.str().c_str());
+    statuslen = std::max(oss.str().size(), statuslen);
   }
+
   settext(hi_red);
-  mvaddstr(LINES-2, 2, "Stream:");
+  mvaddstr(LINES-4, 2, "        Stream:");
   settext(yellow);
-  mvaddstr(LINES-2, 10, frame->GetStop().str().c_str());
+  mvaddstr(LINES-4, 18, frame->GetStop().str().c_str());
+  statuslen = std::max(frame->GetStop().str().size(), statuslen);
+
+  {
+    I3EventHeaderConstPtr header = frame->Get<I3EventHeaderConstPtr>(I3DefaultName<I3EventHeader>::value());
+    // no mixed-in items here:
+    if ((header) && (frame->GetStop(I3DefaultName<I3EventHeader>::value()) != frame->GetStop())) header.reset();
+    
+    settext(hi_red);
+    mvaddstr(LINES-3, 2, "     Run/Event:");
+    if (!header) {
+      settext(dim_white);
+      mvaddstr(LINES-3, 18, "(n/a)");
+    } else {
+      settext(yellow);
+      ostringstream oss;
+      oss << header->GetRunID() << "/" << header->GetEventID();
+      mvaddstr(LINES-3, 18, oss.str().c_str());
+      statuslen = std::max(oss.str().size(), statuslen);
+    }
+
+    settext(hi_red);
+    mvaddstr(LINES-2, 2, "SubEventStream:");
+    if ((!header) || ((frame->GetStop() != I3Frame::Physics) && (header->GetSubEventStream()==""))) {
+      settext(dim_white);
+      mvaddstr(LINES-2, 18, "(n/a)");
+    } else {
+      settext(yellow);
+      ostringstream oss;
+      oss << header->GetSubEventStream() << "/" << header->GetSubEventID();
+      mvaddstr(LINES-2, 18, oss.str().c_str());
+      statuslen = std::max(oss.str().size(), statuslen);
+    }
+      
+    I3Time startTime;
+    I3Time endTime;
+    bool has_start_time=false;
+    bool has_end_time=false;
+      
+    if (header) {
+      startTime = header->GetStartTime();
+      endTime = header->GetEndTime();
+      has_start_time=true;
+      has_end_time=true;
+    } else {
+      I3TimeConstPtr frameStartTime = frame->Get<I3TimeConstPtr>("StartTime");
+      I3TimeConstPtr frameEndTime = frame->Get<I3TimeConstPtr>("EndTime");
+      // no mixed-in items here:
+      if ((frameStartTime) && (frame->GetStop("StartTime") != frame->GetStop())) frameStartTime.reset();
+      if ((frameEndTime) && (frame->GetStop("EndTime") != frame->GetStop())) frameEndTime.reset();
+        
+      if (frameStartTime) {
+        startTime = *frameStartTime;
+        has_start_time=true;
+      }
+
+      if (frameEndTime) {
+        endTime = *frameEndTime;
+        has_end_time=true;
+      }
+    }
+      
+    settext(hi_red);
+    mvaddstr(LINES-6, 18+statuslen+2, "StartTime:");
+    mvaddstr(LINES-5, 18+statuslen+2, "  EndTime:");
+
+    if (!has_start_time) {
+      settext(dim_white);
+      mvaddstr(LINES-6, 18+statuslen+2 + 11, "(n/a)");
+    } else {
+      settext(yellow);
+      ostringstream oss;
+      oss.precision(1);
+      oss << startTime.GetUTCString() << " + " << std::fixed << startTime.GetUTCNanoSec() << "ns";
+      mvaddstr(LINES-6, 18+statuslen+2 + 11, oss.str().c_str());
+    }
+
+    if (!has_end_time) {
+      settext(dim_white);
+      mvaddstr(LINES-5, 18+statuslen+2 + 11, "(n/a)");
+    } else {
+      settext(yellow);
+      ostringstream oss;
+      oss.precision(1);
+      oss << endTime.GetUTCString() << " + " << std::fixed << endTime.GetUTCNanoSec() << "ns";
+      mvaddstr(LINES-5, 18+statuslen+2 + 11, oss.str().c_str());
+    }
+
+  }    
+
 
   vector<I3Frame::Stream> streams;
+  vector<std::string> sub_event_streams;
 
   int tape_head_column = COLS/2;
   int tape_head_index = index;
@@ -350,29 +483,32 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
     length_r = model_->totalframes() - tape_head_index;
 
   streams = model_->streams(tape_head_index, length_r);
+  sub_event_streams = model_->sub_event_streams(tape_head_index, length_r);
   for (int i=0; i<length_r; i++)
     {
-      drawtape(LINES-2, tape_head_column+i, streams[i], tape_head_index+i);
+      drawtape(LINES-2, tape_head_column+i, streams[i], sub_event_streams[i], tape_head_index+i);
     }
 
   //
   // draw tape to the left, clip it 
   //
   int tape_l_column = 2;
-  int length_l = tape_head_column - tape_l_column - statuslen - 10;
+  int length_l = tape_head_column - tape_l_column - statuslen - 18;
   if (tape_head_index - length_l <= 0)
     length_l = tape_head_index;
   //  log_trace("length_l = %d", length_l);
 
   streams = model_->streams(tape_head_index-length_l, length_l);
+  sub_event_streams = model_->sub_event_streams(tape_head_index-length_l, length_l);
   for (int i=0; i < length_l; i++)
     {
-      drawtape(LINES-2, tape_head_column-(length_l-i), streams[i], tape_head_index-length_l+i);
+      drawtape(LINES-2, tape_head_column-(length_l-i), streams[i], sub_event_streams[i], tape_head_index-length_l+i);
     }
 
   // draw the head
   streams = model_->streams(tape_head_index, 1);
-  drawtape(LINES-2, tape_head_column, streams[0], tape_head_index, A_REVERSE);
+  sub_event_streams = model_->sub_event_streams(tape_head_index, 1);
+  drawtape(LINES-2, tape_head_column, streams[0], sub_event_streams[0], tape_head_index, A_REVERSE);
   standend();
 
 }
@@ -550,7 +686,7 @@ View::draw_border()
   box(stdscr, ACS_VLINE, ACS_HLINE);
 
   settext(dim_blue);
-  mvhline(LINES-5, 1, ACS_HLINE, COLS-2);
+  mvhline(LINES-7, 1, ACS_HLINE, COLS-2);
 
   settext(hi_yellow);
   mvaddstr(0, 2, " I3 Data Shovel ");

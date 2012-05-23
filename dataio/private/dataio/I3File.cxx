@@ -27,12 +27,15 @@ using boost::optional;
 #include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
 
+#include <dataclasses/physics/I3EventHeader.h>
+
 #include <map>
 #include <dataio/I3File.h>
 #include <icetray/open.h>
 #include <icetray/serialization.h>
 #include <icetray/Utility.h>
 
+#include <limits>
 #include <vector>
 #include <errno.h>
 #include <sys/types.h>
@@ -194,6 +197,17 @@ I3FileImpl::open_file(const std::string& filename, boost::function<void(double)>
             continue;
         }
 
+      // A very special (and moderately evil) hack for SubEventStreams on Physics frames.
+      // It assigns unique ids to the different SubEventStream names.
+      frame_info.sub_event_stream = "";
+      if (frame->GetStop() == I3Frame::Physics) {
+        I3EventHeaderConstPtr header = frame->Get<I3EventHeaderConstPtr>(I3DefaultName<I3EventHeader>::value());
+        if ((header) && (frame->GetStop(I3DefaultName<I3EventHeader>::value()) == frame->GetStop())) {
+          // only use non-mixed-in headers
+          frame_info.sub_event_stream = header->GetSubEventStream();
+        }
+      }
+        
       stream_cache[frame->GetStop()] = counter;
       log_trace("Frame %c at %u (%zu total)", frame->GetStop().id(), counter, stream_cache.size());
 

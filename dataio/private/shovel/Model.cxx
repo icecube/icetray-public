@@ -282,6 +282,23 @@ Model::streams(unsigned start_index, unsigned length)
   return ret;
 }
 
+vector<std::string> 
+Model::sub_event_streams(unsigned start_index, unsigned length)
+{
+    //  log_trace("Get streams for %u, len %u", start_index, length);
+    assert(start_index + length <= frame_infos_.size());
+    vector<std::string> ret;
+    
+    for (unsigned i=0; i<length; i++)
+    {
+        ret.push_back(frame_infos_[start_index + i].first.sub_event_stream);
+        //      log_trace("push %c", ret[i].value);
+    }
+    
+    
+    return ret;
+}
+
 void
 Model::toggle_infoframes()
 {
