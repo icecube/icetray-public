@@ -45,7 +45,7 @@ private:
 		return service;
 	}
 	
-	bool
+	static bool
 	PutInContext(ServicePtr self, I3Context &ctx, const std::string &name)
 	{
 		return ctx.Put(self, name);
