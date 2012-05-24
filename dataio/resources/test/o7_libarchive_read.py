@@ -20,8 +20,8 @@ if not os.path.exists(fname):
 
 from icecube import icetray, dataio
 
-compressors = [ (None, None), ('gz', 'gzip'), ('bz2', 'bzip2'), ('lzma', 'lzma'), ('xz', 'xz')]
-archivers = [ (None, None), ('tar', 'tar cf - %s'), ('pax', 'pax -w %s'), ('cpio', 'echo %s | cpio -o' )]
+compressors = [ ('gz', 'gzip'), ('bz2', 'bzip2'), ('lzma', 'lzma'), ('xz', 'xz')]
+archivers = [ ('tar', 'tar cf - %s'), ('pax', 'pax -w %s'), ('cpio', 'echo %s | cpio -o' )]
 
 def test_read(filename):
 	f = dataio.I3File(filename)
@@ -30,29 +30,42 @@ def test_read(filename):
 		printf("Error reading '%s'!" % filename)
 		sys.exit(1)
 
+# No archiving/compression
+if os.system('cp %s %s' % (fname, os.path.basename(fname))) != 0:
+	print 'Error copying input file'
+archives = [os.path.basename(fname)]
+outfiles = [os.path.basename(fname)]
+
+# Try various archivers
 for ar, ar_args in archivers:
-	for comp, comp_cmd in compressors:
-		if comp_cmd is not None and os.system('which %s > /dev/null' % comp_cmd) != 0:
-			# skip compressor if the binary can't be found
-			continue
-		if ar is not None and os.system('which %s > /dev/null' % ar) != 0:
-			continue
+	if os.system('which %s > /dev/null' % ar) != 0:
+		continue
+	outfile = "%s.%s" % (os.path.basename(fname), ar)
+	cmd = "%s > %s" % (ar_args % fname, outfile)
+	if os.system(cmd) == 0:
+		archives += [outfile]
+		outfiles += [outfile]
+	else:
+		print 'Skipping %s archives due to creation failure.' % ar
+		os.unlink(outfile)
+
+# Compress all combinations of archivers
+for comp, comp_cmd in compressors:
+	if comp_cmd is not None and os.system('which %s > /dev/null' % comp_cmd) != 0:
+		# skip compressor if the binary can't be found
+		continue
 		
-		if ar is None and comp is None:
-			outfile = "%s.i3" % os.path.basename(fname)
-			cmd = "cp %s %s" % (fname, outfile)
-		elif ar is not None and comp is None:
-			outfile = "%s.%s" % (os.path.basename(fname), ar)
-			cmd = "%s > %s" % (ar_args % fname, outfile)
-		elif ar is None and comp is not None:
-			outfile = "%s.%s" % (os.path.basename(fname), comp)
-			cmd = "%s %s -c > %s" % (comp_cmd, fname, outfile)
-		else:
-			outfile = "%s.%s.%s" % (os.path.basename(fname), ar, comp)
-			cmd = "%s  | %s -c > %s" % (ar_args % fname, comp_cmd, outfile)
+	for file in archives:
+		outfile = "%s.%s" % (file, comp)
+		cmd = "%s %s -c > %s" % (comp_cmd, file, outfile)
 
 		if os.system(cmd) == 0:
-			test_read(outfile)
+			outfiles += [outfile]
 		else:
-			print 'Skipping %s/%s archive due to creation failure.' % (ar, cmp)
-		os.unlink(outfile)
+			print 'Failure during %s compression of %s' % (comp, file)
+			os.unlink(outfile)
+
+for file in outfiles:
+	print file
+	test_read(file)
+	os.unlink(file)
