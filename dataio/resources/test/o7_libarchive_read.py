@@ -20,7 +20,7 @@ if not os.path.exists(fname):
 
 from icecube import icetray, dataio
 
-compressors = [ None, 'gz', 'bz2', 'lzma', 'xz']
+compressors = [ (None, None), ('gz', 'gzip'), ('bz2', 'bzip2'), ('lzma', 'lzma'), ('xz', 'xz')]
 archivers = [ (None, None), ('tar', 'tar cf - %s'), ('pax', 'pax -w %s'), ('cpio', 'echo %s | cpio -o' )]
 
 def test_read(filename):
@@ -31,8 +31,8 @@ def test_read(filename):
 		sys.exit(1)
 
 for ar, ar_args in archivers:
-	for comp in compressors:
-		if comp is not None and os.system('which %s > /dev/null' % comp) != 0:
+	for comp, comp_cmd in compressors:
+		if comp_cmd is not None and os.system('which %s > /dev/null' % comp_cmd) != 0:
 			# skip compressor if the binary can't be found
 			continue
 		if ar is 'pax' and (os.getuid() > 65535 or os.getgid() > 65535):
@@ -52,10 +52,10 @@ for ar, ar_args in archivers:
 			cmd = "%s > %s" % (ar_args % fname, outfile)
 		elif ar is None and comp is not None:
 			outfile = "%s.%s" % (os.path.basename(fname), comp)
-			cmd = "%s %s -c > %s" % (comp, fname, outfile)
+			cmd = "%s %s -c > %s" % (comp_cmd, fname, outfile)
 		else:
 			outfile = "%s.%s.%s" % (os.path.basename(fname), ar, comp)
-			cmd = "%s  | %s -c > %s" % (ar_args % fname, comp, outfile)
+			cmd = "%s  | %s -c > %s" % (ar_args % fname, comp_cmd, outfile)
 
 		os.system(cmd)
 		test_read(outfile)
