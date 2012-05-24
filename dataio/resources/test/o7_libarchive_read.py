@@ -35,6 +35,12 @@ for ar, ar_args in archivers:
 		if comp is not None and os.system('which %s > /dev/null' % comp) != 0:
 			# skip compressor if the binary can't be found
 			continue
+		if ar is 'pax' and (os.getuid() > 65535 or os.getgid() > 65535):
+			# Work around stupid problem with the usual PAX archiver
+			# wherein it will fail it you try to run it with a large
+			# UID
+			print 'Skipping PAX on this system due to stupid PAX bugs'
+			continue
 		if ar is not None and os.system('which %s > /dev/null' % ar) != 0:
 			continue
 		
