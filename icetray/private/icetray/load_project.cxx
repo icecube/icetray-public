@@ -61,16 +61,18 @@ load_project (std::string path, bool verbose)
 
   // first try via LD_LIBRARY_PATH search
   void *v = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL);
+  char *errmsg = dlerror();
 
   // not found, then try $I3_BUILD/lib specifically
-  if (!v)
+  if (!v && !errmsg)
     {
       std::string fullpath(getenv("I3_BUILD"));
       fullpath += "/lib/";
       fullpath += path;
       v = dlopen(fullpath.c_str(), RTLD_NOW | RTLD_GLOBAL);
+      errmsg = dlerror();
     }
-  if (v) 
+  if (v && !errmsg) 
     {
       if (verbose) 
 	std::cout << "ok" << std::endl;
