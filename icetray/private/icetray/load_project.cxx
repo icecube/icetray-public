@@ -64,7 +64,7 @@ load_project (std::string path, bool verbose)
   char *errmsg = dlerror();
 
   // not found, then try $I3_BUILD/lib specifically
-  if (!v && !errmsg)
+  if (v == NULL || errmsg != NULL)
     {
       std::string fullpath(getenv("I3_BUILD"));
       fullpath += "/lib/";
@@ -72,14 +72,14 @@ load_project (std::string path, bool verbose)
       v = dlopen(fullpath.c_str(), RTLD_NOW | RTLD_GLOBAL);
       errmsg = dlerror();
     }
-  if (v && !errmsg) 
+  if (v != NULL && errmsg == NULL) 
     {
       if (verbose) 
 	std::cout << "ok" << std::endl;
       return 0;
     }
   std::string errormsg("dlopen() dynamic loading error: ");
-  errormsg += errmsg;
+  errormsg += (errmsg == NULL) ? "unknown error" : errmsg;
 
   throw std::runtime_error(errormsg);
 }
