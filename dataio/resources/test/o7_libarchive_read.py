@@ -35,12 +35,6 @@ for ar, ar_args in archivers:
 		if comp_cmd is not None and os.system('which %s > /dev/null' % comp_cmd) != 0:
 			# skip compressor if the binary can't be found
 			continue
-		if ar is 'pax' and (os.getuid() > 65535 or os.getgid() > 65535):
-			# Work around stupid problem with the usual PAX archiver
-			# wherein it will fail it you try to run it with a large
-			# UID
-			print 'Skipping PAX on this system due to stupid PAX bugs'
-			continue
 		if ar is not None and os.system('which %s > /dev/null' % ar) != 0:
 			continue
 		
@@ -57,6 +51,8 @@ for ar, ar_args in archivers:
 			outfile = "%s.%s.%s" % (os.path.basename(fname), ar, comp)
 			cmd = "%s  | %s -c > %s" % (ar_args % fname, comp_cmd, outfile)
 
-		os.system(cmd)
-		test_read(outfile)
+		if os.system(cmd) == 0:
+			test_read(outfile)
+		else:
+			print 'Skipping %s/%s archive due to creation failure.' % (ar, cmp)
 		os.unlink(outfile)
