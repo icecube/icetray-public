@@ -79,7 +79,7 @@ load_project (std::string path, bool verbose)
       return 0;
     }
   std::string errormsg("dlopen() dynamic loading error: ");
-  errormsg += dlerror();
+  errormsg += errmsg;
 
   throw std::runtime_error(errormsg);
 }
