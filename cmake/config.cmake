@@ -91,17 +91,21 @@ set(GCC_NUMERIC_VERSION ${GCC_NUMERIC_VERSION} CACHE INTEGER "Numeric gcc versio
 #
 if(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
   set(CMAKE_COMPILER_IS_INTEL TRUE)
+  set(CXX_WARNING_FLAGS "-w1 -Wno-non-virtual-dtor")
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   set(CMAKE_COMPILER_IS_CLANG TRUE)
+  set(CXX_WARNING_FLAGS "-Wall -Wno-non-virtual-dtor -Wno-mismatched-tags -Wno-char-subscripts -Wno-unused -Wunneeded-internal-declaration -Wno-parantheses-equality")
+else()
+  set(CXX_WARNING_FLAGS "-Wall -Wno-non-virtual-dtor")
 endif(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
 
-if(CMAKE_COMPILER_IS_INTEL)
-  set(WARNING_FLAGS "-w1 -Wno-non-virtual-dtor")
-elseif(CMAKE_COMPILER_IS_CLANG)
-  set(WARNING_FLAGS "-Wall -Wno-non-virtual-dtor -Wno-mismatched-tags -Wno-char-subscripts -Wno-unused -Wunneeded-internal-declaration -Wno-parantheses-equality")
+if(CMAKE_C_COMPILER_ID MATCHES "Intel")
+  set(C_WARNING_FLAGS "-w1")
+elseif(CMAKE_C_COMPILER_ID MATCHES "Clang")
+  set(C_WARNING_FLAGS "-Wall -Wno-char-subscripts -Wno-unused -Wunneeded-internal-declaration -Wno-parantheses-equality")
 else()
-  set(WARNING_FLAGS "-Wall -Wno-non-virtual-dtor")
-endif()
+  set(C_WARNING_FLAGS "-Wall")
+endif(CMAKE_C_COMPILER_ID MATCHES "Intel")
 
 option(USE_PYTHON_LOGGING "Log to python, not to log4cplus" OFF)
 if (USE_PYTHON_LOGGING)
@@ -420,11 +424,11 @@ if(NOT METAPROJECT_CONFIGURED)
     set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel" FORCE)
   endif (NOT CMAKE_BUILD_TYPE)
 
-  set(CMAKE_CXX_FLAGS "${WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPRESSION_FLAGS}")
+  set(CMAKE_CXX_FLAGS "${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPRESSION_FLAGS}")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" CACHE STRING
     "Flags used by the compiler during all build types" FORCE)
 
-  set(CMAKE_C_FLAGS "${WARNING_FLAGS} ${CMAKE_C_FLAGS} ${CXX_WARNING_SUPRESSION_FLAGS}")
+  set(CMAKE_C_FLAGS "${C_WARNING_FLAGS} ${CMAKE_C_FLAGS} ${CXX_WARNING_SUPRESSION_FLAGS}")
   string(REPLACE "-Wno-non-virtual-dtor" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}" CACHE STRING
     "Flags used by the compiler during all build types" FORCE)
