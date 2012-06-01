@@ -351,18 +351,18 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
   //  Draw 'longitudinal' status
   // 
   settext(hi_red);
-  mvaddstr(LINES-6, 2, "           Key:");
+  mvaddstr(LINES-6, 2, "      Key:");
 
   settext(white);
   {
     ostringstream oss;
     oss << (the_keys.size() > 0 ? y_selected+1 : 0) << "/" << frame->size();
     settext(yellow);
-    mvaddstr(LINES-6, 18, oss.str().c_str());
+    mvaddstr(LINES-6, 13, oss.str().c_str());
   }
 
   settext(hi_red);
-  mvaddstr(LINES-5, 2, "         Frame:");
+  mvaddstr(LINES-5, 2, "    Frame:");
   standend();
   settext(white);
   std::size_t statuslen=16;
@@ -371,14 +371,14 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
     oss << index+1 << "/" << model_->totalframes() 
 	<< " (" << (unsigned) (100 * (float)(index+1)/(float)model_->totalframes()) << "%)";  
     settext(yellow);
-    mvaddstr(LINES-5, 18, oss.str().c_str());
+    mvaddstr(LINES-5, 13, oss.str().c_str());
     statuslen = std::max(oss.str().size(), statuslen);
   }
 
   settext(hi_red);
-  mvaddstr(LINES-4, 2, "        Stream:");
+  mvaddstr(LINES-4, 2, "     Stop:");
   settext(yellow);
-  mvaddstr(LINES-4, 18, frame->GetStop().str().c_str());
+  mvaddstr(LINES-4, 13, frame->GetStop().str().c_str());
   statuslen = std::max(frame->GetStop().str().size(), statuslen);
 
   {
@@ -387,28 +387,28 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
     if ((header) && (frame->GetStop(I3DefaultName<I3EventHeader>::value()) != frame->GetStop())) header.reset();
     
     settext(hi_red);
-    mvaddstr(LINES-3, 2, "     Run/Event:");
+    mvaddstr(LINES-3, 2, "Run/Event:");
     if (!header) {
       settext(dim_white);
-      mvaddstr(LINES-3, 18, "(n/a)");
+      mvaddstr(LINES-3, 13, "(n/a)");
     } else {
       settext(yellow);
       ostringstream oss;
       oss << header->GetRunID() << "/" << header->GetEventID();
-      mvaddstr(LINES-3, 18, oss.str().c_str());
+      mvaddstr(LINES-3, 13, oss.str().c_str());
       statuslen = std::max(oss.str().size(), statuslen);
     }
 
     settext(hi_red);
-    mvaddstr(LINES-2, 2, "SubEventStream:");
-    if ((!header) || ((frame->GetStop() != I3Frame::Physics) && (header->GetSubEventStream()==""))) {
+    mvaddstr(LINES-2, 2, " SubEvent:");
+    if (!header || frame->GetStop() != I3Frame::Physics || header->GetSubEventStream() == "") {
       settext(dim_white);
-      mvaddstr(LINES-2, 18, "(n/a)");
+      mvaddstr(LINES-2, 13, "(n/a)");
     } else {
       settext(yellow);
       ostringstream oss;
       oss << header->GetSubEventStream() << "/" << header->GetSubEventID();
-      mvaddstr(LINES-2, 18, oss.str().c_str());
+      mvaddstr(LINES-2, 13, oss.str().c_str());
       statuslen = std::max(oss.str().size(), statuslen);
     }
       
