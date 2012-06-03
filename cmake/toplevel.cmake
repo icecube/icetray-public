@@ -83,6 +83,7 @@ include(config)
 include(tools)
 include(project)
 
+if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
 add_custom_target(test
   COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${EXECUTABLE_OUTPUT_PATH}/runtests.py
   COMMENT "
@@ -91,6 +92,12 @@ add_custom_target(test
 >>>  Run without arguments to see help/options.
 >>>
 ")
+else(NOT CMAKE_GENERATOR STREQUAL "Ninja")
+add_custom_target(test
+  COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${EXECUTABLE_OUTPUT_PATH}/runtests.py
+  COMMENT "Running tests via the utility 'runtests.py' in your $I3_BUILD/bin/ directory.")
+endif(NOT CMAKE_GENERATOR STREQUAL "Ninja")
+
 add_custom_target(test-bins)
 add_dependencies(test test-bins)
 
