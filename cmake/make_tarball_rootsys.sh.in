@@ -10,6 +10,6 @@ then
 	echo "Generating tarball ROOTSYS"
 	mkdir -p @CMAKE_INSTALL_PREFIX@/cernroot/etc
 	mkdir -p @CMAKE_INSTALL_PREFIX@/cernroot/lib
-	cp -r @ROOTSYS@/etc/* @CMAKE_INSTALL_PREFIX@/cernroot/etc/
-	cp -r -P @ROOTSYS@/lib/* @CMAKE_INSTALL_PREFIX@/cernroot/lib/
+	cp -R @ROOTSYS@/etc/* @CMAKE_INSTALL_PREFIX@/cernroot/etc/
+	cp -R -P @ROOTSYS@/lib/* @CMAKE_INSTALL_PREFIX@/cernroot/lib/
 fi
