@@ -13,80 +13,32 @@ Python
 
 We use the *system* python.  By default this is the one in
 ``/usr/bin``.  The development packages are required, eg the file
-``/usr/include/python2.5/Python.h`` and so forth.  If you want to use
-a python in a nonstandard location, tell *cmake* what these locations
-are at configure time (see also :ref:`I3_SITE_CMAKE_DIR`) ::
+``/usr/include/python2.6/Python.h`` and so forth.  If you want to use
+a python in a nonstandard location refer to :ref:`ns-python`. After
+you have ensured that you have python and your development packages
+installed, you will probably want to set up additional python tools.
 
-   % cmake -DPYTHON_EXECUTABLE=/path/to/my/bin/python2.5 \
-       -DPYTHON_LIBRARY=/path/to/my/lib/python2.5/config/libpython2.5.so \
-       -DPYTHON_INCLUDE_PATH=/path/to/my/include/python2.5 \
-       -DPYTHON_VERSION=2.5 \
-       -DPYTHON_FOUND=TRUE \
-       ../src
+**Note**: At a minimum, you're going to need at Python 2.4 or
+better. Python 2.4 is rapidly becoming deprecated with in IceCube,
+therefore it is *strongly* recommended you use Python 2.6 or better.
 
-You should see these correctly reported in the output of the cmake
-configuration step::
+Setting Up Additional Python Tools
+----------------------------------
 
-   -- python
-   -- +  version: Python 2.5.2
-   -- +   binary: /path/to/my/bin/python2.5
-   -- + includes: /path/to/my/include/python2.5
-   -- +     libs: /path/to/my/lib/python2.5/config/libpython2.5.so
-
-.. warning::
-
-   If this gets botched up, **start from a clean build space**,
-   i.e. delete your ``CMakeCache.txt``.
-
-You will probably need to have your ``PYTHONPATH`` set appropriately,
-the ``env-shell.sh`` file will prepend to but not clobber this
-variable.
-
-Using a nonsystem python
-------------------------
-
-You will need to modify the Portfile for boost (this applies to boost
-1.38.0).  It is located in
-``$I3_PORTS//var/db/dports/sources/rsync.code.icecube.wisc.edu_icecube-tools-ports/devel/boost_1.38.0/Portfile``.
-(Yes, long annoying path, sorry).  Add to ``configure.args`` the
-correct cmake settings for your python::
-
-  configure.args  -DCMAKE_INSTALL_PREFIX=${prefix} \
-  		  -DBUILD_VERSIONED=OFF \
-                  -DCMAKE_IS_EXPERIMENTAL=BUT_BETTER_THAN_BJAM \
-                  -DPYTHON_EXECUTABLE= ... \
-                  -DPYTHON_LIBRARY= ... \
-                  -DPYTHON_INCLUDE_PATH= ... \
-		  -DPYTHON_VERSION= ... \
-		  -DPYTHON_FOUND=TRUE \		  
-		  .
-
-Don't lose the dot at the end.  Replace the ellipsis with the correct settings for your machine.  You can then (re) build boost with::
- 
-  port install boost_1.38.0 
-
-Ensure that your :ref:`I3_SITE_CMAKE_DIR` contains a file ``python.cmake``
-that contains the same settings as above.
-
-Setting Up additional Python tools
------------------------------------
-
-There are several useful python tools that can be added to your local 
-environment to provide analysis-level tools like IPython 
-(http://ipython.scipy.org/), MatPlotLib 
+There are several useful python tools that can be added to your local
+environment to provide analysis-level tools like IPython
+(http://ipython.scipy.org/), MatPlotLib
 (http://matplotlib.sourceforge.net/), Numpy (http://numpy.scipy.org/)
-and PyTables (http://www.pytables.org/). These instructions will
-help you get these additional tools setup and guide you through a few
-examples.  
-
-**Note**: At a minimum, you're going to need at Python 2.4 or better, and 
-it is highly recommended you use Python 2.5 or better.
+and PyTables (http://www.pytables.org/). These instructions will help
+you get these additional tools setup and guide you through a few
+examples.
 
 Ubuntu or Debian Linux
-^^^^^^^^^^^^^^^^^^^^^^^
-On recent Ubuntu (7.10 or better) and Debian (5.0 or better) Linux releases, the
-system provided python tools work very well.  Install the following
-packages and their dependencies:
+^^^^^^^^^^^^^^^^^^^^^^
+
+On recent Ubuntu (7.10 or better) and Debian (5.0 or better) Linux
+releases, the system provided python tools work very well.  Install
+the following packages and their dependencies:
 
 * ipython
 * python-matplotlib
@@ -94,11 +46,12 @@ packages and their dependencies:
 * python-scipy
 
 Mac OS X 10.5 Leopard
-^^^^^^^^^^^^^^^^^^^^^^
-**Note**: These instructions were put together to help get
-the python tools installed on a Mac running 10.5 Leopard.  I've
-tested them on a few different macs with good success.  Comments,
-questions and corrections are encouraged (python@icecube.wisc.edu).
+^^^^^^^^^^^^^^^^^^^^^
+
+**Note**: These instructions were put together to help get the python
+tools installed on a Mac running 10.5 Leopard.  I've tested them on a
+few different macs with good success.  Comments, questions and
+corrections are encouraged (python@icecube.wisc.edu).
 
 All source packages referenced below are available at:
 
@@ -160,14 +113,13 @@ http://code.icecube.wisc.edu/tools/distfiles/i3python/Mac/
 
        > easy_install  ./matplotlib-0.91.4-py2.5-macosx-10.3.egg
 
-   **Note**:This version of the package seems to install correctly, then 
-   will try to go off to the network and
-   fetch the latest (currently, this one) version again and fail 
-   with an error about getting HTML.  Ignore this
-   second attempt, Not sure what's up, but it installed 
-   fine on several machines with this error,
-   you should see a matplotlib-0.91.4-py2.5-macosx-10.3.egg/ 
-   entry in your ~/python/lib dir)
+   **Note**:This version of the package seems to install correctly,
+   then will try to go off to the network and fetch the latest
+   (currently, this one) version again and fail with an error about
+   getting HTML.  Ignore this second attempt, Not sure what's up, but
+   it installed fine on several machines with this error, you should
+   see a matplotlib-0.91.4-py2.5-macosx-10.3.egg/ entry in your
+   ~/python/lib dir)
 
 6. Install numpy. Get ``numpy-1.3.0.zip`` and::
     > easy_install ./numpy-1.3.0.zip
@@ -183,9 +135,10 @@ http://code.icecube.wisc.edu/tools/distfiles/i3python/Mac/
 
 Redhat/Scientific Linux 5
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-**Note**: These instructions were put together to help get
-the python tools installed on Linux installation of RHEL 5.1. Comments,
-questions and corrections are encouraged (python@icecube.wisc.edu).
+
+**Note**: These instructions were put together to help get the python
+tools installed on Linux installation of RHEL 5.1. Comments, questions
+and corrections are encouraged (python@icecube.wisc.edu).
 
 All source packages referenced below are available at:
 
@@ -272,8 +225,46 @@ The python modules in ports work quite well. The recommended set is:
 * devel/py-tables
 * science/py-scipy
 
+.. _ns-python:
+
+Using a non-system python
+-------------------------
+
+While using a non-system python is not difficult, it is more involved
+than just using the python that comes pre-installed with your OS.
+Sometimes though, it is unavoidable. Therefore we provide these
+general guidelines.
+
+Installing Ports
+^^^^^^^^^^^^^^^^
+
+This is the single most important step to success with using a
+non-system python.
+
+When installing ports *do not* follow the all of the instructions at
+:ref:`installing-ports`. When you are asked to do::
+
+    ./i3-install.sh $I3_PORTS
+
+Instead, what you need to do is::
+
+    ./configure --prefix=$I3_PORTS --with-tcl='path to directory containing tclConfig.sh' --with-python='path to python binary'
+
+where ``'path to directory containing tclConfig.sh'`` is typically
+``/usr/lib`` and ``'path to python binary'`` is the *full* path to the
+non-system python executable that you want to use. (For example,
+``/opt/python2.7/bin/python``)
+
+Site CMake
+^^^^^^^^^^
+
+You will *need* to have a site cmake file for python, or else cmake
+will try to use your system python and you will all sorts of ugly
+errors.  More information can be found in the :ref:`I3_SITE_CMAKE_DIR`
+section (which contains a python specific example.)
+
 Taking your new python tools for a test-drive
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------------------------
 All source packages referenced below are available at:
 
 http://code.icecube.wisc.edu/tools/distfiles/i3python/Test

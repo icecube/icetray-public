@@ -1,3 +1,5 @@
+.. _installing-ports:
+
 Tool Build System - Setting up your I3_PORTS toolset
 =====================================================
 
