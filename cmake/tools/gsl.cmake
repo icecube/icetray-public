@@ -26,6 +26,16 @@ IF(NOT GSL_VERSION)
 	endif(IS_DIRECTORY ${I3_PORTS}/include/gsl-1.14)
 ENDIF(NOT GSL_VERSION)
 
+if(BLAS_FOUND)
+tooldef(gsl 
+    include/gsl-${GSL_VERSION}
+    gsl/gsl_rng.h
+    lib/gsl-${GSL_VERSION}
+    NONE
+    gsl
+    )
+list(APPEND GSL_LIBRARIES ${BLAS_LIBRARIES})
+else(BLAS_FOUND)
 tooldef(gsl 
     include/gsl-${GSL_VERSION}
     gsl/gsl_rng.h
@@ -33,3 +43,4 @@ tooldef(gsl
     NONE
     gsl gslcblas
     )
+endif(BLAS_FOUND)
