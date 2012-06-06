@@ -19,7 +19,7 @@ inboxes.  (At some point it was decided that modules may have one and
 only one inbox).
 
 Tool python must be explicitly listed in USE_TOOLS
--------------------------------------------------
+--------------------------------------------------
 
 In older releases, the tool python was often implicitly included
 in the build system, but this is no longer the case for increased 
