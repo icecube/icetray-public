@@ -39,7 +39,8 @@
 
 I3IcePick::I3IcePick(const I3Context& context) :
   context_(context),
-  cache_(false)
+  cache_(false),
+  name_(GetConfiguration().InstanceName())
 {
   AddParameter("CacheResults",
 	       "For each frame evaluated, write the result to the frame, and "
@@ -67,6 +68,7 @@ I3IcePick::ConfigureInterface()
 {
   GetParameter("CacheResults",cache_);
   cachename_ = GetConfiguration().InstanceName() + "_cache";
+  name_ = GetConfiguration().InstanceName();
   Configure();
 }
 

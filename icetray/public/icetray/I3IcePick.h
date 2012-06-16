@@ -86,6 +86,8 @@ class I3IcePick
    * by this IcePick
    */
   unsigned GetFramesFailed(){ return nfailed_; };
+
+  const std::string &GetName(){return name_; };
   
  protected:
 
@@ -134,6 +136,7 @@ class I3IcePick
   unsigned nfailed_;
   bool cache_;
   std::string cachename_;
+  std::string name_;
 };
 
 I3_POINTER_TYPEDEFS(I3IcePick);
