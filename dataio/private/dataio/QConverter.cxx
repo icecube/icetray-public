@@ -31,7 +31,7 @@ I3_MODULE(QConverter);
 QConverter::QConverter(const I3Context& context) :
     I3Module(context)
 {
-	subevent_stream = context.Get<I3Configuration>().InstanceName();
+	subevent_stream = GetName();
 
 	keys_to_q.push_back("DrivingTime");
 	keys_to_q.push_back("CorsikaWeightMap");
