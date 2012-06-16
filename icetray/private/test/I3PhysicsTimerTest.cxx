@@ -75,7 +75,7 @@ struct TimedModule : I3Module
 
   void Physics(I3FramePtr frame)
   {
-    I3PhysicsTimer t(frame, context_.Get<I3Configuration>().InstanceName());
+    I3PhysicsTimer t(frame, GetName());
 
     // do expensie timed physics
     sleep (3);
