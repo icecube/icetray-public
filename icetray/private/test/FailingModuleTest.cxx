@@ -38,6 +38,6 @@ namespace FailingModuleTest
 	// good.  it threw. 
       }
   }
+  I3_MODULE(FailingModule);
 }
 
-I3_MODULE(FailingModuleTest::FailingModule);

@@ -39,7 +39,7 @@ namespace OutOfMemoryModuleTest
       {
       }
   }
+  I3_MODULE(OutOfMemoryModule)
 }
 
-I3_MODULE(OutOfMemoryModuleTest::OutOfMemoryModule)
 

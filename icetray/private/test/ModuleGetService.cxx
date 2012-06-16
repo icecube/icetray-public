@@ -61,6 +61,7 @@ TEST(getting_services_in_modules)
   tray.AddService("IntegerService", "hateservices");
   tray.AddModule("ServiceTest", "source")("Int", service_sentinel);
   tray.AddModule("ServiceTest", "source2")("Int", "int");
+  tray.AddModule("TrashCan", "itisimpressivethatcan");
     
   tray.Execute();
   tray.Finish();
