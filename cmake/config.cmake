@@ -76,6 +76,14 @@ else(NOT IS_DIRECTORY $ENV{I3_PORTS})
   boost_report_value(I3_PORTS)
 endif(NOT IS_DIRECTORY $ENV{I3_PORTS})
 
+## check I3_PORTS sanity. closes #250
+file(STRINGS "${I3_PORTS}/etc/ports/ports.conf" PORTS_CONF REGEX "^prefix[ 	]+([^ 	]+)")
+string(REGEX MATCH "^prefix[ 	]+([^ 	]+)" tmp ${PORTS_CONF})
+if(NOT CMAKE_MATCH_1 STREQUAL I3_PORTS)
+  colormsg(HIRED "Your ports installation is not sane!")
+  message(FATAL_ERROR "Did you copy it from someplace else?")
+endif()
+
 #
 #  GCC_VERSION and
 #  GCC_NUMERIC_VERSION is e.g. 40302 (for 4.3.2)
