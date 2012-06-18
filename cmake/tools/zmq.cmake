@@ -1,8 +1,7 @@
 #
 #  $Id$
 #  
-#  Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
-#  and the IceCube Collaboration <http://www.icecube.wisc.edu>
+#  Copyright (C) 2012 the IceCube Collaboration <http://www.icecube.wisc.edu>
 #  
 #  This file is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
