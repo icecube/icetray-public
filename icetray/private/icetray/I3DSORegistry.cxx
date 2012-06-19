@@ -35,7 +35,7 @@ I3DSORegistry::instance()
 void
 I3DSORegistry::register_dso(const string& lib)
 {
-  if (dsos_.size() == 0)
+  if (dsos_.empty())
     dsos_.push_back(lib);
   else if (dsos_.back() != lib)
     dsos_.push_back(lib);
