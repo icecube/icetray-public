@@ -4,6 +4,8 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 // Modified by Jakob van Santen, September 2010
 
+#warning std_vector_indexing_suite is deprecated. Use dataclass_suite (or list_indexing_suite) instead!
+
 #ifndef ICETRAY_PYTHON_STD_VECTOR_INDEXING_SUITE_HPP_INCLUDED
 # define ICETRAY_PYTHON_STD_VECTOR_INDEXING_SUITE_HPP_INCLUDED
 

@@ -17,7 +17,7 @@
 #include <icetray/python/stream_to_string.hpp>
 #include <icetray/python/boost_serializable_pickle_suite.hpp>
 #include <icetray/python/std_map_indexing_suite.hpp>
-#include <icetray/python/std_vector_indexing_suite.hpp>
+#include <icetray/python/list_indexing_suite.hpp>
 #include <icetray/python/tree_indexing_suite.hpp>
 
 #include <boost/utility/enable_if.hpp>
@@ -52,26 +52,11 @@ HAS_TYPEDEF(key_type, is_map);
 
 #undef HAS_TYPEDEF
 
-template <bool B, typename T>
-struct has_random_access_iterator_impl;
-
-template<typename T>
-struct has_random_access_iterator_impl<false, T>
-{
-	static bool const value = false;
-};
-
-template<typename T>
-struct has_random_access_iterator_impl<true, T>
-{
-	static const bool value = boost::is_same<typename std::iterator_traits<typename T::iterator>::iterator_category,
-		    std::random_access_iterator_tag>::value;
-
-};
-
+// Catch-all for things that have an iterator typedef,
+// but are neither trees nor maps
 template <typename T>
-struct is_vector {
-	static const bool value = has_random_access_iterator_impl<has_iterator<T>::value, T>::value;
+struct is_iterable {
+	static const bool value = has_iterator<T>::value && !(is_map<T>::value || is_tree<T>::value);
 };
 
 namespace has_operator {
@@ -94,8 +79,6 @@ namespace has_operator {
 
 }
 	
-
-	
 template <class T>
 class dataclass_suite : public bp::def_visitor<dataclass_suite<T > > {
 private:
@@ -107,13 +90,13 @@ private:
 	{
 		cl.def(std_map_indexing_suite<U>());
 	}
-
+	
 	template <class Class, typename U>
 	static
-	typename boost::enable_if_c<detail::is_vector<U>::value>::type
+	typename boost::enable_if_c<detail::is_iterable<U>::value>::type
 	add_indexing(Class &cl)
 	{
-		cl.def(std_vector_indexing_suite<U>());
+		cl.def(list_indexing_suite<U>());
 	}
 	
 	template <class Class, typename U>
@@ -123,12 +106,12 @@ private:
 	{
 		cl.def(tree_indexing_suite<U>());
 	}
-
+	
 	template <class Class, typename U>
 	static
 	typename boost::disable_if<boost::mpl::or_<
 		boost::mpl::bool_<detail::is_map<U>::value>,
-		boost::mpl::bool_<detail::is_vector<U>::value>,
+		boost::mpl::bool_<detail::is_iterable<U>::value>,
 		boost::mpl::bool_<detail::is_tree<U>::value> > >::type
 	add_indexing(Class &cl) {}
 	
