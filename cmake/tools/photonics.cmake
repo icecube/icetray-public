@@ -18,12 +18,23 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
 TOOLDEF (photonics
-  include/photonics-1.70
+  include/photonics-1.73
   photonics.h
-  lib/photonics-1.70
+  lib/photonics-1.73
   NONE
   photoamasim level2amasim photonics photonicsCPPio
   )
+
+if (NOT PHOTONICS_FOUND)
+  TOOLDEF (photonics
+    include/photonics-1.70
+    photonics.h
+    lib/photonics-1.70
+    NONE
+    photoamasim level2amasim photonics photonicsCPPio
+    )
+endif (NOT PHOTONICS_FOUND)
+
 
 if (NOT PHOTONICS_FOUND)
   TOOLDEF (photonics
