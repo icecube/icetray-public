@@ -51,8 +51,6 @@ The IceTray software framework.
 A set of generic interface classes to limit module dependencies.
 	<li> <a href="./ithon/index.html">ithon</a> -
 The Python interface to icetray.
-	<li> <a href="./jebclasses/index.html">jebclasses</a> - 
-Classes added and used by online Joint Event Builder and filter. Needed to fully decode data from 2007 and beyond.
 	<li> <a href="inspect/payload-parsing.html">[inspect]</a><a href="./payload-parsing/index.html">payload-parsing</a> - 
 A service to decode the DAQ payload format data (including delta-compressed data).
 	<li> <a href="./pfclasses/index.html">pfclasses</a> - 
