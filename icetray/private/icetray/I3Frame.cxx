@@ -437,12 +437,14 @@ typedef uint32_t i3frame_nslots_t;
 typedef char i3frame_tag_t[4];
 const static i3frame_tag_t tag = { '[', 'i', '3', ']' };
 
-const static i3frame_version_t version = 6;
-
 template <typename OStreamT>
-void I3Frame::save(OStreamT& os, const vector<string>& skip) const
+void I3Frame::save(OStreamT& os, const vector<string>& skip, int vers) const
 {
-  crc_t crc;
+  const i3frame_version_t version = vers;
+  if (vers != 5 && vers != 6)
+    log_fatal("I3Frame can only save version 5 and 6 frames");
+
+  crc_t crc(vers == 6);
 
   os.write(tag, sizeof(i3frame_tag_t));
   {
@@ -579,7 +581,7 @@ bool I3Frame::load(IStreamT& is, const vector<string>& skip, bool verify_cksum)
     else if (versionRead == 5 || versionRead == 6)
       return load_v56(is, skip, versionRead == 6, verify_cksum);
     else
-      log_fatal("Frame is version %u, this software can read only up to version %d", versionRead, version);
+      log_fatal("Frame is version %u, this software can read only up to version %d", versionRead, i3frame_version);
   }
 
   return false;
@@ -931,7 +933,7 @@ template bool I3Frame::load(boost::interprocess::bufferstream& is, const vector<
 template bool I3Frame::load(boost::interprocess::basic_vectorstream<std::vector<
 char> >& is, const vector<string>&, bool);
 
-template void I3Frame::save(io::filtering_ostream&, const vector<string>&) const;
-template void I3Frame::save(boost::interprocess::basic_vectorstream<std::vector<char> >&, const vector<string>&) const;
-template void I3Frame::save(ostream&, const vector<string>&) const;
-template void I3Frame::save(ofstream&, const std::vector<string>&) const;
+template void I3Frame::save(io::filtering_ostream&, const vector<string>&, int) const;
+template void I3Frame::save(boost::interprocess::basic_vectorstream<std::vector<char> >&, const vector<string>&, int) const;
+template void I3Frame::save(ostream&, const vector<string>&, int) const;
+template void I3Frame::save(ofstream&, const std::vector<string>&, int) const;
