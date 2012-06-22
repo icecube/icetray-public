@@ -100,7 +100,7 @@ I3MultiWriter::NewFile()
   dataio::open(filterstream_, current_path(), gzip_compression_level_);
 
   BOOST_FOREACH(I3FramePtr frame, metadata_cache_)
-	frame->save(filterstream_, skip_keys_);
+	frame->save(filterstream_, skip_keys_, i3frame_version_);
 }
 
 void
