@@ -441,28 +441,28 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
     }
       
     settext(hi_red);
-    mvaddstr(LINES-6, 24+statuslen+2, "StartTime:");
-    mvaddstr(LINES-5, 24+statuslen+2, " Duration:");
+    mvaddstr(LINES-6, COLS - 36, "StartTime:");
+    mvaddstr(LINES-5, COLS - 36, " Duration:");
 
     if (!has_start_time) {
       settext(dim_white);
-      mvaddstr(LINES-6, 24+statuslen+2 + 11, "(n/a)");
+      mvaddstr(LINES-6, COLS - 36 + 11, "(n/a)");
     } else {
       settext(yellow);
       ostringstream oss;
       oss.precision(1);
       oss << startTime.GetUTCString();
-      mvaddstr(LINES-6, 24+statuslen+2 + 11, oss.str().c_str());
+      mvaddstr(LINES-6, COLS - 36 + 11, oss.str().c_str());
     }
 
     if (!has_end_time) {
       settext(dim_white);
-      mvaddstr(LINES-5, 24+statuslen+2 + 11, "(n/a)");
+      mvaddstr(LINES-5, COLS - 36 + 11, "(n/a)");
     } else {
       settext(yellow);
       ostringstream oss;
       oss << endTime - startTime << " ns";
-      mvaddstr(LINES-5, 24+statuslen+2 + 11, oss.str().c_str());
+      mvaddstr(LINES-5, COLS - 36 + 11, oss.str().c_str());
     }
 
   }    
