@@ -493,6 +493,8 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
   //
   int tape_l_column = 2;
   int length_l = tape_head_column - tape_l_column - statuslen - 18;
+  if (length_l < 0)
+    length_l = 0;
   if (tape_head_index - length_l <= 0)
     length_l = tape_head_index;
   //  log_trace("length_l = %d", length_l);
