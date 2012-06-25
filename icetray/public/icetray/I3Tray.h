@@ -134,13 +134,12 @@ public:
   template <class Type>
   param_setter 
   AddModule(const std::string& name);
-
-
   param_setter
   AddModule(boost::python::object obj, const std::string& instancename);
-
   param_setter
   AddModule(const std::string& name, const std::string& instancename);
+  param_setter
+  AddModule(I3ModulePtr module, const std::string& instancename);
 
   void MoveModule(const std::string& name, const std::string& anchor, bool before=true);
 
@@ -185,10 +184,14 @@ public:
 
   /**
    * Get the tray info object for this tray.
-   *
-   * NB: calls Configure(), so no more modules can be added after this call
    */
   I3TrayInfo TrayInfo();
+
+  /**
+   * Return the tray's master context. This allows manual inspection and
+   * addition of services.
+   */
+  I3Context &GetContext();
 
   bool
   SetParameter(const std::string& module,
@@ -242,13 +245,11 @@ private:
    */
   void Abort();
 
-  /** The set of services to load into each context. */
+  /** Context, modules, and factories: oh my! */
+  I3Context master_context;
   std::map<std::string,I3ServiceFactoryPtr> factories;
-  std::map<std::string,I3ContextPtr> factory_contexts;
-  std::map<std::string,bool> configuredFactories;
   std::vector<std::string> factories_in_order;
 
-  std::map<std::string,I3ContextPtr> module_contexts;
   std::map<std::string,I3ModulePtr> modules;
   std::vector<std::string> modules_in_order;
   I3ModulePtr driving_module;
@@ -270,17 +271,9 @@ private:
 
   static void RequestSuspension() { suspension_requested_ = true; }
 
-  static const I3Context* active_context_;
-
   friend void I3Module::Do(void (I3Module::*)());
 
   friend class I3TrayInfoService;
-
-public:
-
-  static bool SomeContextIsActive();
-  static const I3Context& GetActiveContext();
-  static void SetActiveContext(const I3Context* newactive);
 };
 
 std::ostream& operator<<(std::ostream& os, I3Tray& tray);
@@ -298,10 +291,5 @@ I3Tray::AddService(const std::string& instancename)
 {
   return this->AddService(I3::name_of<Type>(), instancename);
 }
-
-//
-//  ugly... at the top level.  But necessary for the obnoxious 'GetService'.
-//
-const I3Context& GetActiveContext();
 
 #endif

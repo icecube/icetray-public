@@ -189,10 +189,9 @@ TEST(no_such_module)
     ("Outboxes", to_vector("OutBox"));
   tray.ConnectBoxes("source", "OutBox", "fork");
   tray.ConnectBoxes("fork", "OutBox", "fork2");
-  tray.ConnectBoxes("fork", "BadBox", "NoSuchModule");
 
   try {
-    tray.Execute(0);
+    tray.ConnectBoxes("fork", "BadBox", "NoSuchModule");
     FAIL("That should have thrown... attempt to connect Outbox to nonexistant module.");
   } catch(const std::exception& e) {  
     // ok

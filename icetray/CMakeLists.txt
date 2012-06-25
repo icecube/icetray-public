@@ -175,7 +175,6 @@ i3_test_executable(test
   private/test/ConfigureServiceTest.cxx  
   private/test/I3LoggingTest.cxx                    
   private/test/SourceOrderTest.cxx
-  private/test/ContextSwitching.cxx      
   private/test/I3LoggingTest2.cxx                   
   private/test/TestModule.cxx
   private/test/DefaultFrameNameTest.cxx  

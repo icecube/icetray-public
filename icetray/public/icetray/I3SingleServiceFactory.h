@@ -36,14 +36,6 @@
  *     ("FridgeContents",["yoghurt","granola"]),
  * )
  *
- * Since there is only one service object created per factory, any
- * action by a module which changes the state of the service object
- * has consequences for another module which uses the same service
- * object. Say, if one module empties the fridge, then the next module
- * will find it empty. If each module should have full control over the
- * service object as configured by the factory, then you should produce
- * it with a I3MultiServiceFactory.
- *
  * To use this factory for a specific service, the service class needs
  * to implement at least an I3Context-using constructor and a Configure()
  * method.
@@ -81,9 +73,12 @@ class I3SingleServiceFactory : public I3ServiceFactory {
 
         /// standard factory constructor with context
         I3SingleServiceFactory( const I3Context &context ):
-          I3ServiceFactory(context),
-          name_( context.template Get<I3Configuration>().InstanceName() ),
-          myService_( new MyService(context_) ){
+          I3ServiceFactory(context) {
+            myService_ = boost::shared_ptr<MyService>(new MyService(context));
+            // Synchronize the two configurations via the back door
+            configuration_ = *myService_->configuration_;
+            delete myService_->configuration_;
+            myService_->configuration_ = &configuration_;
         }
 
         /// Let the datamember instance of the service configure itself.
@@ -95,31 +90,27 @@ class I3SingleServiceFactory : public I3ServiceFactory {
         bool InstallService( I3Context &context ){
             if (!myService_){
                 log_fatal( "Failed to create %s service object",
-                           name_.c_str());
+                  GetName().c_str());
             }
-            // here it's different from I3SingleServiceFactory:
-            // for every context we use the *same* service object
-            log_debug("adding service %s to the context",
-                      name_.c_str() );
+            log_debug("adding service %s to the context", GetName().c_str() );
 
             // do it!
             bool success =
-                context.template Put<ItsBaseClass>( myService_, name_ );
+                context.template Put<ItsBaseClass>( myService_,
+                  GetName().c_str());
             if (!success){
                 log_fatal( "FAILED to add %s to context (!?)",
-                           name_.c_str());
+                           GetName().c_str() );
             }
 
             return success;
         }
-    private:
 
-        /// name, used for logging message
-        std::string name_;
-
+    protected:
         /// the instance of the service (one per factory object)
         boost::shared_ptr<MyService> myService_;
 
+    private:
         /// logging configuration thingy
         SET_LOGGER("I3SingleServiceFactory");
 };

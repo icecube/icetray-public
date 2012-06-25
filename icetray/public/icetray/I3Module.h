@@ -97,6 +97,9 @@ public:
    */
   virtual void Configure();
 
+  // internal method: thunks to Configure()
+  virtual void Configure_();
+
   // if I should process at all
   virtual bool ShouldDoProcess(I3FramePtr);
 
@@ -304,7 +307,7 @@ public:
   void 
   AddParameter(const std::string& parameter,
 	       const std::string& description,
-	       T defaultValue) const
+	       T defaultValue)
   {
     configuration_.Add(parameter, description, defaultValue);
   }
@@ -339,8 +342,8 @@ public:
    be found.
   */
   const I3Context& context_;
-  outboxmap_t& outboxes_;
-  I3Configuration& configuration_;
+  outboxmap_t outboxes_;
+  I3Configuration configuration_;
   methods_t methods_;
 
   FrameFifoPtr inbox_;
@@ -354,13 +357,10 @@ public:
   ///  Assignment operations make no sense for modules
   I3Module operator=(const I3Module& rhs); 
   
- protected:
-
-  virtual void Configure_(); // dispatches to Configure() and sets inbox
-
  public:
 
   const I3Context& GetContext() const { return context_; }
+  const I3Configuration& GetConfiguration() const { return configuration_; }
 
   SET_LOGGER("I3Module");
 
@@ -375,10 +375,6 @@ public:
   double sysphystime_, userphystime_;
   double sysdaqtime_, userdaqtime_;
 
-  // HACK: a set of all boxes added by the module, used for consistency
-  // checking.  See Configure_().
-  std::set<std::string> added_boxes;
-
   // cache of previous metadata frames (per-outbox)
   std::map<std::string, I3FramePtr> cachemap_;
   void SyncCache(std::string outbox, I3FramePtr frame);
@@ -387,34 +383,6 @@ public:
   const static double min_report_time_;
 
 };
-
-
-const I3Context& GetActiveContext();
-
-// Use argument
-template <class T>
-T& 
-GetService(const std::string &where = I3DefaultName<T>::value(), 
-	   typename boost::disable_if<is_shared_ptr<T>, bool>::type* enabler = 0)
-{
-  const I3Context& context = GetActiveContext();
-
-  //Fix to get around the 3.2 compiler
-  return context.template Get<T>(where);
-}
-
-template <class T>
-T 
-GetService(const std::string &where = I3DefaultName<typename T::value_type>::value(),
-	   typename boost::enable_if<is_shared_ptr<T>, bool>::type* enabler = 0)
-{
-  const I3Context& context = GetActiveContext();
-
-  //Fix to get around the 3.2 compiler
-  return context.template Get<T>(where);
-}
-
-
 
 #include "icetray/I3Factory.h"
 #endif // I3MODULE_H

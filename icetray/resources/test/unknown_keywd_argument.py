@@ -17,12 +17,10 @@ def f(frame, foo='foo', bar='bar', baz='baz'):
     return True
 
 
-tray.AddModule(f,"keywordfn",
+try:
+    tray.AddModule(f,"keywordfn",
                bar = 'BARWASSET',
                argdoesntexist = 'oopsie')
-
-try:
-    tray.Execute(1)
     print "That should have thrown"
     sys.exit(1)
 

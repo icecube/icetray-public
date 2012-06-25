@@ -104,6 +104,8 @@ void register_I3Tray()
     .def("Finish", &I3Tray::Finish)
     .def("TrayInfo", &I3Tray::TrayInfo)
     .def("__str__", &I3TrayString)
+    .add_property("tray_info", &I3Tray::TrayInfo)
+    .add_property("context", make_function(&I3Tray::GetContext, return_internal_reference<>()))
     .def("AddService", 
 	 (I3Tray::param_setter (I3Tray::*)(const std::string&, const std::string&))
 	 &I3Tray::AddService)

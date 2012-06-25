@@ -18,9 +18,6 @@
 I3ServiceFactory::I3ServiceFactory(const I3Context& context)
   :context_(context)
 {  
-  const std::string& instancename = context_.Get<I3Configuration>().InstanceName();
-  log_trace("Setting name to %s", instancename.c_str());
-  SetName(instancename);
 }
 
 I3ServiceFactory::~I3ServiceFactory()

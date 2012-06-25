@@ -84,9 +84,6 @@ public:
   std::string InstanceName() const { return instancename; }
   void InstanceName(const std::string& s) { instancename = s; }
 
-  const std::map<std::string, std::string>& Outboxes() const { return outboxes; }
-  void Connect(const std::string& boxname, const std::string& modulename);
-
   bool is_ok() const;
 
   ///
@@ -137,9 +134,6 @@ public:
 private:
   // the parameters
   boost::shared_ptr<parameters_t> parameters;
-
-  // this map local_box_name => remote_module_name
-  std::map<std::string, std::string> outboxes;
 
   friend std::ostream& operator<<(std::ostream&, const I3ConfigurationImpl&);
 

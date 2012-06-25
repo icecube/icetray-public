@@ -51,6 +51,7 @@ public:
 
   I3Configuration();
   I3Configuration(const I3Configuration&);
+  I3Configuration& operator = (const I3Configuration&);
 
   void Set(const std::string& key, const boost::python::object& value);
 
@@ -107,9 +108,6 @@ public:
 
   std::string InstanceName() const;
   void InstanceName(const std::string& s);
-
-  const std::map<std::string, std::string>& Outboxes() const;
-  void Connect(const std::string& boxname, const std::string& modulename);
 
   bool is_ok() const;
 

@@ -17,57 +17,17 @@
  *  
  */
 
-#include <iostream>
-#include <set>
-
-#include <icetray/I3Context.h>
+#include "PythonFunction.h"
 
 using namespace std;
-
-class I3Context;
-
-#include <icetray/I3Frame.h>
-#include <icetray/I3Module.h>
-#include <icetray/impl.h>
-#include <boost/python.hpp>
-#include <boost/python/raw_function.hpp>
-
 namespace bp = boost::python;
 
-class PythonFunction : public I3Module
-{
- public:
-  PythonFunction(const I3Context& context);
-  virtual ~PythonFunction();
-  void Configure();
-  void Process();
-
- private:
-  bp::object obj;
-  std::set<I3Frame::Stream> streams;
-  bp::dict paramsd;
-  std::vector<std::string> configkeys;
-  bp::handle<> numpy_bool_type;
-  bp::handle<> numpy_true, numpy_false;
-
-  PythonFunction(const PythonFunction&);
-  PythonFunction& operator=(const PythonFunction&);
-
-  SET_LOGGER("PythonFunction");
-
-};
-I3_MODULE(PythonFunction);
-
-
-PythonFunction::PythonFunction(const I3Context& context)
-  : I3Module(context)
+PythonFunction::PythonFunction(const I3Context& context, bp::object func)
+  : I3Module(context), obj(func)
 {
   i3_log("%s", __PRETTY_FUNCTION__);
   AddOutBox("OutBox");
 
-  configkeys = configuration_.keys();
-
-  obj = context_.Get<bp::object>("object");
   if (!PyObject_HasAttrString(obj.ptr(), "func_code")) {
     if (PyObject_HasAttrString(obj.ptr(), "im_func"))
       obj = obj.attr("im_func");
@@ -112,8 +72,12 @@ PythonFunction::PythonFunction(const I3Context& context)
 	{
 	  i3_log("default is %s", repr(deftuple[i-1]).c_str());
 	  d = deftuple[i-1];
+          configuration_.Add(aname, desc, d);
 	}
-      configuration_.Add(aname, desc, d);
+	else
+	{
+	  configuration_.Add(aname, desc);
+	}
     }
 
   bp::list l;
@@ -157,6 +121,7 @@ void PythonFunction::Configure()
   GetParameter("Streams", svec);
   streams = std::set<I3Frame::Stream>(svec.begin(), svec.end());
 
+  configkeys = configuration_.keys();
   for (unsigned i = 0; i< configkeys.size(); i++)
     {
       i3_log("param %s", configkeys[i].c_str());

@@ -38,9 +38,7 @@
 #include <icetray/I3Bool.h>
 
 I3IcePick::I3IcePick(const I3Context& context) :
-  context_(context),
-  cache_(false),
-  name_(GetConfiguration().InstanceName())
+  I3ServiceBase(context), cache_(false)
 {
   AddParameter("CacheResults",
 	       "For each frame evaluated, write the result to the frame, and "
@@ -73,7 +71,6 @@ I3IcePick::ConfigureInterface()
 {
   GetParameter("CacheResults",cache_);
   cachename_ = GetConfiguration().InstanceName() + "_cache";
-  name_ = GetConfiguration().InstanceName();
   Configure();
 }
 
@@ -114,14 +111,3 @@ I3IcePick::SelectFrameInterface(I3Frame& frame)
     }
 }
 
-I3Configuration& 
-I3IcePick::GetConfiguration()
-{
-    return context_.Get<I3Configuration>();
-}
-
-const I3Configuration& 
-I3IcePick::GetConfiguration() const
-{
-    return context_.Get<I3Configuration>();
-}

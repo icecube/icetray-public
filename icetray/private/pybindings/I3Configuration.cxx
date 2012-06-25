@@ -47,7 +47,7 @@ void register_I3Configuration()
     ;
 
   scope outer = 
-  class_<I3Configuration, I3ConfigurationPtr, boost::noncopyable> ("I3Configuration", init<>())
+  class_<I3Configuration, I3ConfigurationPtr> ("I3Configuration")
     .def("keys", &I3Configuration::keys)
     .def("__setitem__", &I3Configuration::Set)
     .def("__getitem__", 

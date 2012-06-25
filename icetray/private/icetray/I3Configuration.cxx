@@ -46,6 +46,10 @@ I3Configuration::I3Configuration(const I3Configuration &old) :
   impl_(new I3ConfigurationImpl(*old.impl_))
 { }
 
+I3Configuration &
+I3Configuration::operator = (const I3Configuration &old)
+{ impl_.reset(new I3ConfigurationImpl(*old.impl_)); return *this; }
+
 I3Configuration::~I3Configuration() 
 { }
 
@@ -86,12 +90,6 @@ std::string
 I3Configuration::GetDescription(const string& name_) const
 {
   return impl_->GetParameter(name_).description();
-}
-
-void
-I3Configuration::Connect(const std::string& boxname, const std::string& modulename)
-{
-  return impl_->Connect(boxname, modulename);
 }
 
 template <typename Archive>
@@ -147,13 +145,6 @@ I3Configuration::InstanceName(const std::string& s)
 {
   impl_->InstanceName(s);
 }
-
-
-const std::map<std::string, std::string>& 
-I3Configuration::Outboxes() const
-{
-  return impl_->outboxes;
-};
 
 std::vector<std::string>
 I3Configuration::keys() const

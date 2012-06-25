@@ -9,11 +9,10 @@ tray = I3Tray()
 # generate empty frames
 tray.AddModule("BottomlessSource","bottomless")
 
-# print em
-tray.AddModule("NoSuchModule","dump")
 
 try:
-    tray.Execute(5)
+    # print em
+    tray.AddModule("NoSuchModule","dump")
 except:
     print "Good.  It threw."
     sys.exit(0) # indicate success.

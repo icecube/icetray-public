@@ -26,7 +26,7 @@
  * to specific values. The former is for regular icetray usage through
  * python scripts, the latter makes it easier to write unit tests.
  *
- * @sa I3ServiceFactory, I3SingleServiceFactory, I3MultiServiceFactory
+ * @sa I3ServiceFactory
  */
 
 class I3ServiceBase {
@@ -42,7 +42,7 @@ class I3ServiceBase {
          */
         I3ServiceBase(const I3Context &c):
             context_(c),
-            name_( c.Get<I3Configuration>().InstanceName() ),
+            configuration_(new I3Configuration), // deleted externally
             dummyContext_(false){}
 
         /**
@@ -54,11 +54,15 @@ class I3ServiceBase {
          */
         I3ServiceBase(const std::string &name):
             context_(*(new I3Context)),
-            name_(name),dummyContext_(true){}
+	    configuration_(new I3Configuration),
+            dummyContext_(true){}
 
         /// destructor
         virtual ~I3ServiceBase(){
-            if ( dummyContext_ ) delete &context_;
+            if ( dummyContext_ ) {
+                delete &context_;
+                delete configuration_;
+            }
         }
 
         /**
@@ -70,8 +74,8 @@ class I3ServiceBase {
         virtual void Configure() = 0;
 
         /// name (for log messages)
-        virtual const std::string& GetName() const {
-            return name_;
+        virtual const std::string GetName() const {
+            return configuration_->InstanceName();
         }
 
     protected:
@@ -86,10 +90,9 @@ class I3ServiceBase {
                            const ParamType   &defval ){
             if ( dummyContext_ ){
                 log_fatal( "(%s) object created with wrong constructor",
-                           name_.c_str() );
+                           configuration_->InstanceName().c_str() );
             }
-            I3Configuration &config = context_.template Get<I3Configuration>();
-            config.Add(name,description,defval);
+            configuration_->Add(name,description,defval);
         }
 
         /**
@@ -101,23 +104,20 @@ class I3ServiceBase {
                            ParamType         &value ){
             if ( dummyContext_ ){
                 log_fatal( "(%s) object created with wrong constructor",
-                           name_.c_str() );
+                           configuration_->InstanceName().c_str() );
             }
-            I3Configuration &config = context_.template Get<I3Configuration>();
-            value = config.template Get<ParamType>(name);
+            value = configuration_->template Get<ParamType>(name);
         }
 
-        /**
-         * If your service class needs other services, get them from this context.
-         */
-        const I3Context& context_;
+        const I3Configuration& GetConfiguration() { return *configuration_; }
+        const I3Context& GetContext() { return context_; }
 
-        /**
-         * Name, for log messages (should maybe be private)
-         */
-        std::string name_;
+    protected:
+        const I3Context& context_;
+	I3Configuration *configuration_;
 
     private:
+	template<class A, class B> friend class I3SingleServiceFactory;
 
         bool dummyContext_;
         I3ServiceBase();

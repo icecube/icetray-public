@@ -6,22 +6,8 @@
 #  and the IceCube Collaboration <http://www.icecube.wisc.edu>
 #  
 
-from icecube.icetray import I3Context, I3Configuration, Connections, I3Module, _instantiate_module
-import types, sys, os, inspect
-
-def make_context():
-	"""Create a potemkin I3Context suitable for instantiating an I3Module from Python."""
-	context = I3Context()
-	
-	# Module configuration parameters go here.
-	config = I3Configuration()
-	context['I3Configuration'] = config
-	
-	# Fake outboxes.
-	outboxes = Connections()
-	context['OutBoxes'] = outboxes
-	
-	return context
+from icecube.icetray import I3Context, I3Configuration, I3Module, module_default_config
+import types, sys, os, inspect, copy
 
 try:
 	import docutils.frontend
@@ -142,16 +128,17 @@ def get_configuration(module):
 	"""Get an I3Module's default I3Configuration."""
 	if hasattr(module, "__i3traysegment__"):
 		return I3HoboConfiguration.from_traysegment(module)
-	context = make_context()
-	context.configuration.ClassName = str(module)
 	if isinstance(module, str):
-		_instantiate_module(module, context)
+		print module
+		return module_default_config(module)
 	elif isinstance(module, type) and issubclass(module, I3Module):
-		module(context)
+		context = I3Context()
+		print module
+		mod = module(context)
+		config = copy.deepcopy(mod.configuration)
+		return config
 	else:
 		raise TypeError, "Module must be either a string naming a registered C++ subclass of I3Module or a Python subclass of I3Module, not %s" % type(module)
-	
-	return context.configuration
 
 def is_I3Module(obj):
 	return isinstance(obj, type) and issubclass(obj, I3Module)

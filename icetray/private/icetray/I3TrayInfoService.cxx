@@ -37,39 +37,18 @@
 #include <RVersion.h>
 #endif
 
+template<class T>
 static
 std::map<std::string,I3ConfigurationPtr>
-get_configs(const std::map<std::string,I3ContextPtr>& from)
+get_configs(const T& from)
 {
   std::map<std::string, I3ConfigurationPtr> result;
-  for (std::map<std::string,I3ContextPtr>::const_iterator iter = from.begin();
-       iter != from.end();
-       iter++)
-    {
-      I3ConfigurationPtr ptr(new I3Configuration(*iter->second->Get<I3ConfigurationPtr>("I3Configuration")));
-
-      // Fix up class names for python functions to be more useful
-      if (ptr->ClassName() == "PythonModule") {
-        std::string pyname = boost::python::extract<std::string>(
-          iter->second->Get<boost::shared_ptr<boost::python::object> >
-          ("class")->attr("__name__"));
-#if PY_MAJOR_VERSION >= 2 && PY_MINOR_VERSION > 4
-        std::string pymod = boost::python::extract<std::string>(
-          iter->second->Get<boost::shared_ptr<boost::python::object> >
-          ("class")->attr("__module__"));
-        ptr->ClassName(pymod + "." + pyname);
-#else
-        ptr->ClassName(pyname);
-#endif
-      } else if (ptr->ClassName() == "PythonFunction") {
-        std::string repr = boost::python::extract<std::string>(
-          iter->second->Get<boost::shared_ptr<boost::python::object> >
-          ("object")->attr("__repr__")());
-        ptr->ClassName(repr);
-      }
-
-      result[iter->first] = ptr;
-    }
+  for (typename T::const_iterator iter = from.begin(); iter != from.end();
+   iter++) {
+     I3ConfigurationPtr ptr(new I3Configuration(iter->second->GetConfiguration()));
+     result[iter->first] = ptr;
+  }
+ 
   return result;
 }
 
@@ -138,31 +117,9 @@ I3TrayInfoService::GetConfig()
   the_config.modules_in_order = tray_.modules_in_order;
   the_config.factories_in_order = tray_.factories_in_order;
 	
-  the_config.module_configs = get_configs(tray_.module_contexts);
-  the_config.factory_configs = get_configs(tray_.factory_contexts);
+  the_config.module_configs = get_configs(tray_.modules);
+  the_config.factory_configs = get_configs(tray_.factories);
 
   return the_config;
 } 
-
-I3TrayInfoServiceFactory::I3TrayInfoServiceFactory(const I3Context& context)
-  : I3ServiceFactory(context)
-{ 
-  shared_ptr<I3Tray*> tray_pp = context.Get<shared_ptr<I3Tray*> >("__tray");
-  the_tray_ = *tray_pp;
-}
-	
-I3TrayInfoServiceFactory::~I3TrayInfoServiceFactory() 
-{ }
-      
-bool 
-I3TrayInfoServiceFactory::InstallService(I3Context& c)
-{
-  shared_ptr<I3TrayInfoService> nusrv(new I3TrayInfoService(*the_tray_));
-  c.Put(nusrv, "__tray_info_service");
-  return nusrv;
-}
-
-I3_SERVICE_FACTORY(I3TrayInfoServiceFactory);
-
-
 

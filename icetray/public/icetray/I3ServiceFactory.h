@@ -79,6 +79,7 @@ public:
    * transitions.
    */
   virtual void Configure();
+  const I3Configuration &GetConfiguration() {return configuration_;}
 
   /**
    * The purpose of this transition is to give this object the opportunity to
@@ -129,10 +130,10 @@ public:
   template <typename T>
   void AddParameter(const std::string& parameter,
                     const std::string& description,
-                    const T& defaultValue) const
+                    const T& defaultValue)
   {
     boost::python::object o(defaultValue);
-    context_.template Get<I3Configuration>().Add(parameter, description, o);
+    configuration_.Add(parameter, description, o);
   }
 
   /**
@@ -147,12 +148,11 @@ public:
   typename boost::disable_if<boost::is_const<T>, void>::type
   GetParameter(const std::string& name, T& value) const
   {
-    I3Configuration &config = context_.Get<I3Configuration>();
     try {
-      value = config.Get<T>(name);
+      value = configuration_.Get<T>(name);
     } catch (...) {
       try {
-        std::string context_name = config.Get<std::string>(name);
+        std::string context_name = configuration_.Get<std::string>(name);
         value = context_.Get<T>(context_name);
         // NB: we got here by catching an error thrown by boost::python::extract(). 
         // All subsequent calls will fail unless we clean it up. 
@@ -175,6 +175,8 @@ public:
 protected:
 
   const I3Context& context_;
+  I3Configuration configuration_;
+  friend class I3Tray;
 
 private:
 

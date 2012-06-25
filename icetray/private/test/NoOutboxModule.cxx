@@ -25,8 +25,6 @@ TEST(verify_failure)
   tray.AddModule("NoOutboxModule", "test");
   tray.AddModule("NoOutboxModule", "test2");
   tray.AddModule("TrashCan", "trash");
-  tray.ConnectBoxes("test", "OutBox", "test2");
-  tray.ConnectBoxes("test2", "OutBox", "trash");
   try
     {
       tray.Execute(1);

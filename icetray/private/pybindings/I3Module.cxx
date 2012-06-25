@@ -34,6 +34,7 @@ namespace {
       .def("PopFrame", &module_t::PopFrame) \
       .def("Process", &module_t::Process) \
       .def("RequestSuspension",&module_t::RequestSuspension) \
+      .add_property("configuration", make_function(&module_t::GetConfiguration, return_internal_reference<>())) \
       .add_property("context", make_function(&module_t::GetContext, return_internal_reference<>())) \
 
 
@@ -61,10 +62,10 @@ namespace {
     implicitly_convertible<boost::shared_ptr<module_t>, boost::shared_ptr<I3Module> >();
   }
 
-  boost::shared_ptr<I3PacketModule>
+  boost::shared_ptr<PythonModule<I3PacketModule> >
   simple_I3PacketModule(const I3Context& context)
   {
-	return boost::shared_ptr<I3PacketModule>(new I3PacketModule(context));
+	return boost::shared_ptr<PythonModule<I3PacketModule> >(new PythonModule<I3PacketModule>(context));
   }
 
   template <>

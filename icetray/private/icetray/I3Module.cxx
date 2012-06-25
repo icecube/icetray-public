@@ -64,12 +64,8 @@ class ModuleTimer
 };
 
 I3Module::I3Module(const I3Context& context) 
-  : context_(context),
-    outboxes_(context_.Get<outboxmap_t>("OutBoxes")),
-    configuration_(context_.Get<I3Configuration>())
+  : context_(context), inbox_()
 {
-  const std::string& instancename = context_.Get<I3Configuration>().InstanceName();
-  SetName(instancename);
   nphyscall_ = ndaqcall_ = 0;
   sysphystime_ = userphystime_ = 0;
   sysdaqtime_ = userdaqtime_ = 0;
@@ -111,11 +107,7 @@ I3Module::Flush()
 void 
 I3Module::Do(void (I3Module::*f)())
 {
-  I3Tray::SetActiveContext(&context_);
-
   (this->*f)();
-
-  I3Tray::SetActiveContext(0);
 
   for (outboxmap_t::iterator iter = outboxes_.begin();
        iter != outboxes_.end();
@@ -147,45 +139,14 @@ I3Module::Do(void (I3Module::*f)())
 }
 
 void
-I3Module::Configure_()
+I3Module::Configure()
 {
-  this->Configure();
-  inbox_ = context_.Get<FrameFifoPtr>("InBox");
-
-  //
-  // HACK HACK HACK
-  //
-  // until we overhaul the way icetray sets up modules, this is a
-  // hack.  ConnectBoxes is called by the framework, which creates
-  // slots in the outboxes_ structure without reference to whether we
-  // AddOutBox them or not.  So after Configure, delete any that
-  // shouldn't have been created.
-  //
-  std::vector<std::string> bad_boxes;
-  for (outboxmap_t::iterator iter = outboxes_.begin();
-       iter != outboxes_.end();
-       iter++)
-    {
-      std::set<std::string>::iterator boxcheck = added_boxes.find(iter->first);
-      if (boxcheck == added_boxes.end())
-	bad_boxes.push_back(iter->first);
-    }
-  std::string errmsg;
-  BOOST_FOREACH(const std::string& box, bad_boxes)
-    {
-      //      outboxes_.erase(box);
-      errmsg += "outbox " + box + " is connected to something, but was never added by the module.\n";
-    }
-
-  if (errmsg.size())
-    log_fatal("In module \"%s\":  %s",
-	      GetName().c_str(), errmsg.c_str());
 }
 
 void
-I3Module::Configure()
+I3Module::Configure_()
 {
-
+    Configure();
 }
 
 void
@@ -266,13 +227,14 @@ void
 I3Module::AddOutBox(const std::string& s)
 {
   // we *could* check for double-adds of outboxes here, but this isn't likely
-  // to catch very many buggy situations, and it breaks lots of code, for instance
-  // if you switch from I3Module to I3ConditionalModule, you'd have to remove your
-  // AddOutBox()
+  // to catch very many buggy situations, and it breaks lots of code,
+  // for instance if you switch from I3Module to I3ConditionalModule, you'd
+  // have to remove your AddOutBox()
 
-  // keep a list of outboxes that the user actually adds, for 
-  // sanitychecking in Configure_()
-  added_boxes.insert(s);
+  if (outboxes_.find(s) != outboxes_.end())
+    return;
+ 
+  outboxes_[s].first = FrameFifoPtr(new FrameFifo);
 }
 
 void

@@ -20,6 +20,7 @@
 //
 
 #include <icetray/I3Factory.h>
+#include <icetray/I3ServiceFactory.h>
 #include <boost/foreach.hpp>
 
 using namespace boost::python;
@@ -30,17 +31,25 @@ I3ModulePtr create_module(const std::string& name, I3Context& context)
     .Create(name)(context);
 }
 
-/* A potemkin version, just to put its default config in the context. */
-void
-instantiate_module(const std::string& name, I3Context& context)
+I3ConfigurationPtr
+module_default_config(const std::string& name)
 {
+	I3Context context;
+
 	try {
-		I3::Singleton<I3ModuleFactory>::get_const_instance()
+		I3ModulePtr mod =
+		    I3::Singleton<I3ModuleFactory>::get_const_instance()
 		    .Create(name)(context);
+		return I3ConfigurationPtr(new
+		    I3Configuration(mod->GetConfiguration()));
 	} catch (const std::runtime_error &) {
-		I3::Singleton<I3ServiceFactoryFactory>::get_const_instance()
+		I3ServiceFactoryPtr srv = 
+		    I3::Singleton<I3ServiceFactoryFactory>::get_const_instance()
 		    .Create(name)(context);
+		return I3ConfigurationPtr(new
+		    I3Configuration(srv->GetConfiguration()));
 	}
+	return I3ConfigurationPtr();
 }
 
 template <typename factory_t>
@@ -81,7 +90,7 @@ get_projects()
 void register_I3ModuleFactory()
 {
   def("create_module", &create_module);
-  def("_instantiate_module", &instantiate_module);
+  def("module_default_config", &module_default_config);
   def("modules", &get_registrations<I3ModuleFactory>, args("project"));
   def("services", &get_registrations<I3ServiceFactoryFactory>, args("project"));
   def("projects", &get_projects);

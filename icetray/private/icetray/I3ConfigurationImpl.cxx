@@ -60,14 +60,12 @@ I3ConfigurationImpl::Set(const string& name_, const boost::python::object& value
 {
   log_trace("%s (%s)", __PRETTY_FUNCTION__, name_.c_str());
 
-  I3Parameter pb;
-  pb.name(name_);
+  parameters_t::iterator pr = parameters->find(name_);
+  if (pr == parameters->end())
+    log_fatal("Attempt to set parameter %s that doesn't exist", name_.c_str());
+  I3Parameter pb(*pr);
   pb.set_configured(value);
-  // retrieval is case-insensitive
-  pair<parameters_t::iterator, bool> pr = parameters->insert(pb);
-  if (pr.second == false)
-    log_fatal("Attempt to double-set parameter %s?", name_.c_str());
-
+  parameters->replace(pr, pb);
 }
 
 void 
@@ -77,17 +75,15 @@ I3ConfigurationImpl::Add(const string& name_,
 {
   log_trace("%s (%s)", __PRETTY_FUNCTION__, name_.c_str());
 
-  // we don't care if it was inserted or not, we just want what's there
   I3Parameter pb;
   pb.name(name_);
-  parameters_t::iterator iter = parameters->insert(pb).first;
-
-  pb = *iter;
   pb.set_default(default_value);
   pb.description(description);
-  parameters->replace(iter, pb);
+  pair<parameters_t::iterator, bool> pr = parameters->insert(pb);
+  if (pr.second == false)
+    log_fatal("Attempt to double-add parameter %s?", name_.c_str());
 
-  log_trace("%s default=%s", name_.c_str(), iter->default_value_str().c_str());
+  log_trace("%s default=%s", name_.c_str(), pb.default_value_str().c_str());
 }
 
 void 
@@ -98,13 +94,12 @@ I3ConfigurationImpl::Add(const string& name_,
 
   I3Parameter pb;
   pb.name(name_);
-  parameters_t::iterator iter = parameters->insert(pb).first;
-
-  pb = *iter;
   pb.description(description);
-  parameters->replace(iter, pb);
+  pair<parameters_t::iterator, bool> pr = parameters->insert(pb);
+  if (pr.second == false)
+    log_fatal("Attempt to double-add parameter %s?", name_.c_str());
 
-  log_trace("%s default=%s", name_.c_str(), iter->default_value_str().c_str());
+  log_trace("%s default=%s", name_.c_str(), pb.default_value_str().c_str());
 }
 
 boost::python::object
@@ -129,19 +124,6 @@ I3ConfigurationImpl::GetParameter(const string& name_) const
     log_fatal("Attempt to Get nonexistent parameter \"%s\"", name_.c_str());
 
   return *iter;
-}
-
-void
-I3ConfigurationImpl::Connect(const std::string& boxname, const std::string& modulename)
-{
-  if (outboxes.find(boxname) != outboxes.end())
-    log_fatal("trying to connect outbox %s of %s to %s, "
-              "but it's already connected to %s!",
-              boxname.c_str(),
-              InstanceName().c_str(),
-              modulename.c_str(),
-              outboxes.find(boxname)->second.c_str()); 
-  outboxes[boxname] = modulename;
 }
 
 namespace boost {
@@ -184,9 +166,9 @@ template <typename Archive>
 void
 I3ConfigurationImpl::serialize(Archive &ar, unsigned version)
 {
-  if (version > 2)
-    log_fatal("Attempt to read I3ConfigurationImpl version %u, this software knows only versions <= 1",
-	      version);
+  if (version > 3)
+    log_fatal("Attempt to read I3ConfigurationImpl version %u, this software "
+      "knows only versions <= 3", version);
 
   // unfortunately, version 1 was nonportable.  Wasn't ever officially
   // in the wild, though.
@@ -195,9 +177,12 @@ I3ConfigurationImpl::serialize(Archive &ar, unsigned version)
 
   // for parameters_t, use the portable save/load above
   ar & make_nvp("parameters", parameters); 
-  ar & make_nvp("outboxes", outboxes);
+  if (version == 2) {
+    std::map<std::string, std::string> outboxes;
+    ar & make_nvp("outboxes", outboxes);
+  }
   ar & make_nvp("classname", classname);
-  ar & make_nvp("instancname", instancename);
+  ar & make_nvp("instancename", instancename);
 }
 
 I3_BASIC_SERIALIZABLE(I3ConfigurationImpl);
@@ -243,13 +228,6 @@ ostream& operator<<(ostream& os, const I3ConfigurationImpl& config)
       os << *iter << "\n";
     }
      
-  for (map<string,string>::const_iterator iter = config.outboxes.begin();
-       iter != config.outboxes.end();
-       iter++)
-    {
-      os << "  Outbox: " << iter->first << " ==> " << iter->second << "\n";
-    }
-
   return os;
 }
 
@@ -261,13 +239,6 @@ I3ConfigurationImpl::is_ok() const
        iter != parameters->end();
        iter++)
     {
-      if (iter->has_configured() && ! iter->has_default())
-	{
-	  log_error("Parameter '%s' was configured in the steering file" 
-		    "but never Added by the module... misspelled?",
-		    iter->name().c_str());
-	  return false;
-	}
       // Not fatal: a module might check either param B or C (but not
       // both) depending on the value of A
       if (!iter->got_by_module())

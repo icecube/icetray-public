@@ -23,6 +23,7 @@
 
 #include <icetray/I3Context.h>
 #include <icetray/I3Configuration.h>
+#include <icetray/I3ServiceBase.h>
 #include <icetray/I3Frame.h>
 
 #include <boost/python.hpp>
@@ -37,7 +38,7 @@
  * in three ways: I3IcePickModule<XXX>, I3IceForkModule<XXX>, and I3IcePickInstaller<XXX>
  * where XXX is your new kind of selection.
  */
-class I3IcePick
+class I3IcePick : public I3ServiceBase
 {
  public:
   /**
@@ -87,56 +88,13 @@ class I3IcePick
    */
   unsigned GetFramesFailed(){ return nfailed_; };
 
-  const std::string &GetName(){return name_; };
-  
- protected:
-
-  /**
-   * @brief Just like the I3Module 'AddParameter' method this is used
-   * in an identical way.  
-   * @param name is the name that the new parameter should have
-   * @param description is a string description of the parameter
-   * @param defaultValue is the default value of your parameter
-   */
-  template <class ParamType>
-  void 
-  AddParameter(const std::string& name,
-	       const std::string& description,
-	       const ParamType& defaultValue)
-  {
-    boost::python::object o(defaultValue);
-    GetConfiguration().Add(name, description, o);
-  }
-
-  /**
-   * @brief Just like the I3Module 'GetParameter' method it is used
-   * in an identical way.
-   * @param name the name of the parameter you want to retrieve
-   * @param value a reference to the thing you're setting
-   */
-  template <typename T>
-  typename boost::disable_if<boost::is_const<T>, void>::type
-  GetParameter(const std::string& name, T& value) const
-  {
-    I3Configuration& config = context_.Get<I3Configuration>();
-    boost::python::object obj(config.Get(name));
-    value = boost::python::extract<T>(obj);
-  }
-
-  const I3Context& GetContext() const { return context_; };
-
  private:
-  I3Configuration& GetConfiguration();
-  
-  const I3Configuration& GetConfiguration() const;
-  
-  const I3Context& context_;
-
+  template <class A> friend class I3IcePickModule;
+  template <class A> friend class I3IceForkModule;
   unsigned npassed_;
   unsigned nfailed_;
   bool cache_;
   std::string cachename_;
-  std::string name_;
 };
 
 I3_POINTER_TYPEDEFS(I3IcePick);

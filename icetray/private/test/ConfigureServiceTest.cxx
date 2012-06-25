@@ -22,7 +22,7 @@ TEST(one)
   tray.AddModule("TestServiceFactoryModule","mod1");
   tray.AddModule("TrashCan", "trash");
 
-  ENSURE(!TestServiceFactory::instance);
+  ENSURE(TestServiceFactory::instance);
 
   tray.Execute(1);
 
@@ -61,7 +61,7 @@ TEST(finish_called)
   tray.AddModule("BottomlessSource", "mod1");
   tray.AddModule("TrashCan", "trash");
 
-  ENSURE(!TestServiceFactory::instance, "TestServiceFactory shoudn't exist yet");
+  ENSURE(TestServiceFactory::instance, "TestServiceFactory shoud exist now");
 
   tray.Execute(1);
 
