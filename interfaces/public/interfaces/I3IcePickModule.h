@@ -6,6 +6,9 @@
 #include <icetray/I3Bool.h>
 #include <icetray/I3Frame.h>
 
+#include <boost/foreach.hpp>
+#include <boost/python.hpp>
+
 /**
  * @brief This is module that does the event selection.  You put it your 
  * module chain and then modules which don't pass the cut don't make it
@@ -28,6 +31,17 @@ class I3IcePickModule : public I3ConditionalModule
     pick_(context),
     nEventsToPick_ (-1)
     {
+      // Synchronize the two configurations via the back door
+      BOOST_FOREACH(const std::string &key, pick_.configuration_->keys()) {
+         std::string description;
+         boost::python::object def;
+         description = pick_.configuration_->GetDescription(key);
+         def = pick_.configuration_->Get(key);
+         AddParameter(key, description, def);
+      }
+      delete pick_.configuration_;
+      pick_.configuration_ = &configuration_;
+
       AddParameter("DecisionName",
 		   "Name of the filter decision in the Frame",
 		   decisionName_);
