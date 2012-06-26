@@ -50,8 +50,7 @@ I3WriterBase::I3WriterBase(const I3Context& ctx)
   : I3ConditionalModule(ctx),
     configWritten_(false),
     frameCounter_(0),     
-    gzip_compression_level_(-2),
-    i3frame_version_(i3frame_version)
+    gzip_compression_level_(-2)
 {
 	AddOutBox("OutBox");
 	AddParameter("CompressionLevel", "0 == no compression, "
@@ -75,9 +74,6 @@ I3WriterBase::I3WriterBase(const I3Context& ctx)
 	AddParameter("DropOrphanStreams", "Vector of I3Frame.Stream types to "
 	    "drop if they are not followed by other frames. Default: drop "
 	    "nothing", dropOrphanStreams_);
-
-	AddParameter("FrameVersion", "I3Frame version to write. Note that only "
-	    "version 5 and 6 frames are supported.", i3frame_version_);
 }
 
 void
@@ -139,7 +135,6 @@ I3WriterBase::Configure()
 	}
 
 	GetParameter("DropOrphanStreams", dropOrphanStreams_);
-	GetParameter("FrameVersion", i3frame_version_);
 }
 
 void
@@ -185,7 +180,7 @@ I3WriterBase::WriteConfig(I3FramePtr frame)
 	// If we didn't make the frame, don't save it, since it is already in
 	// the output stream. Otherwise we have to insert it.
 	if (oframe != frame) {
-		oframe->save(filterstream_, skip_keys_, i3frame_version_);
+		oframe->save(filterstream_, skip_keys_);
 		Flush();
 	}
 
@@ -237,13 +232,13 @@ I3WriterBase::Process()
 	// to disk before the frame and clear it.
 	BOOST_FOREACH(I3FramePtr adopted, orphanarium_) {
 		frameCounter_++;
-		adopted->save(filterstream_, skip_keys_, i3frame_version_);
+		adopted->save(filterstream_, skip_keys_);
 	}
 	orphanarium_.clear();
 
 	// Write to disk
 	frameCounter_++;
-	frame->save(filterstream_, skip_keys_, i3frame_version_);
+	frame->save(filterstream_, skip_keys_);
 	Flush();
 
 	PushFrame(frame,"OutBox");

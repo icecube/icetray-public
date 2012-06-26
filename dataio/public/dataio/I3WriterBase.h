@@ -45,7 +45,6 @@ protected:
 
   int gzip_compression_level_;
   
-  int i3frame_version_;
   boost::iostreams::filtering_ostream filterstream_;
   std::string path_;
 
