@@ -38,8 +38,6 @@
 #include <icetray/is_shared_ptr.h>
 #include <I3/name_of.h>
 
-const int i3frame_version = 6;
-
 /**
    The I3Frame is the container that I3Modules use to communicate with
    one another.  It is passed from I3Module to I3Module by the icetray
@@ -398,7 +396,7 @@ class I3Frame
 
   template <typename OStreamT>
   void 
-  save(OStreamT& os, const std::vector<std::string>& vs = std::vector<std::string>(), int version = i3frame_version) const;
+  save(OStreamT& os, const std::vector<std::string>& vs = std::vector<std::string>()) const;
 
   template <typename IStreamT>
   bool 
