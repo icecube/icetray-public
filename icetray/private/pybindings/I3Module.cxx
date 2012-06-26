@@ -35,6 +35,7 @@ namespace {
       .def("Process", &module_t::Process) \
       .def("RequestSuspension",&module_t::RequestSuspension) \
       .add_property("configuration", make_function(&module_t::GetConfiguration, return_internal_reference<>())) \
+      .add_property("name", &module_t::GetName) \
       .add_property("context", make_function(&module_t::GetContext, return_internal_reference<>())) \
 
 
