@@ -165,10 +165,9 @@ void test_iostreams(I3Frame& frame, const std::string& filename, unsigned ntimes
 TEST(d_fiftyevents)
 {
   I3FramePtr fr = make_frame();
-#ifdef I3_OPTIMIZE
+#ifdef NDEBUG
   test_iostreams(*fr, "polesimulation.i3", 250);
 #else
   test_iostreams(*fr, "polesimulation.i3", 3);
 #endif
 }
-
