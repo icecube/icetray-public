@@ -69,7 +69,7 @@ I3Logging::logger& get_logger();
  * so no need to specify things like line numbers.  Also the logging system 
  * appends a '\n' so no need to do that when using this macro.
  */
-#ifndef I3_OPTIMIZE
+#ifndef NDEBUG
 
 #  define log_trace(format, ...) LOG_IMPL(TRACE, format, ##__VA_ARGS__)
 #  define log_debug(format, ...) LOG_IMPL(DEBUG, format, ##__VA_ARGS__)

@@ -190,7 +190,7 @@ I3Logging::Log4CPlusLogger get_logger();
   get_logger().Log(::log4cplus::LEVEL ## _LOG_LEVEL, __FILE__, __LINE__,        \
                    format, ##__VA_ARGS__)
 
-#ifndef I3_OPTIMIZE
+#ifndef NDEBUG
 
 /**
  * @brief log a message of the 'trace' priority.
@@ -217,13 +217,13 @@ I3Logging::Log4CPlusLogger get_logger();
  */
 #  define log_info(format, ...) LOG_IMPL(INFO, format, ##__VA_ARGS__)
 
-#else  //ifndef I3_OPTIMIZE
+#else  //ifndef NDEBUG
 
 #  define log_trace(format, ...)
 #  define log_debug(format, ...)
 #  define log_info(format, ...)
 
-#endif  //ifndef I3_OPTIMIZE
+#endif  //ifndef NDEBUG
 
 /**
  * @brief log a message of the 'warn' priority.
