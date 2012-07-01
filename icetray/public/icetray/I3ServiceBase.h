@@ -71,10 +71,10 @@ class I3ServiceBase {
          * with the "factory constructor", so that it has a usable
          * I3Context.
          */
-        virtual void Configure() = 0;
+        virtual void Configure() {}
 
         /// name (for log messages)
-        virtual const std::string GetName() const {
+        const std::string GetName() const {
             return configuration_->InstanceName();
         }
 
