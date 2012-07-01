@@ -85,16 +85,16 @@ These examples get references to services out of the context with the name and t
 These get references to services where the object has a DefaultName, determinable from its type; again, the call succeeds or calls log_fatal()::
 
  I3MediumService& medium = context_.Get<I3MediumService>();
- 
- I3Configuration& config = context_.Get<I3Configuration>();
 
+ I3RandomService& rng = context_.Get<I3RandomService>();
+ 
 The following form gets smart pointers to the same services. Get will return a null shared_ptr if either the context is empty at the relevant slot, or if the contents of the relevant slot are of the wrong type::
 
  I3MediumServicePtr medium_p = context_.Get<I3MediumServicePtr>(); 
  // medium_p == false,  if retrieval failed.
  
- I3ConfigurationPtr config_p = context_.Get<I3ConfigurationPtr>();
- // config_p == false,  if retrieval failed.
+ I3RandomServicePtr rng_p = context_.Get<I3RandomServicePtr>();
+ // rng_p == false,  if retrieval failed.
 
 
 I3Context::Put()
