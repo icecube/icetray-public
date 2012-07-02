@@ -19,7 +19,9 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+#include <icetray/I3Tray.h>
 #include <icetray/I3TrayInfo.h>
+#include <icetray/I3TrayInfoService.h>
 #include <icetray/python/boost_serializable_pickle_suite.hpp>
 
 using namespace boost::python;
@@ -89,4 +91,8 @@ void register_I3TrayInfo()
     ;
 
   register_pointer_conversions<I3TrayInfo>();
+
+  class_<I3TrayInfoService, boost::shared_ptr<I3TrayInfoService> >("I3TrayInfoService", init<const I3Tray *>())
+    .add_property("config", &I3TrayInfoService::GetConfig)
+    ;
 }
