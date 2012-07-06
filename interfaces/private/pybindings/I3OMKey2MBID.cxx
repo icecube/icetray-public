@@ -1,4 +1,4 @@
-
+#include <boost/python.hpp>
 
 #include "interfaces/I3OMKey2MBID.h"
 
@@ -25,6 +25,12 @@ struct I3OMKey2MBIDWrapper : public I3OMKey2MBID, bp::wrapper<I3OMKey2MBID> {
 
 void register_I3OMKey2MBID()
 {
-	bp::class_<I3OMKey2MBIDWrapper, boost::noncopyable>("I3OMKey2MBID")
+	bp::class_<I3OMKey2MBIDWrapper, boost::shared_ptr<I3OMKey2MBIDWrapper>, boost::noncopyable>("I3OMKey2MBID")
+	    .def("OMKeyExists", &I3OMKey2MBIDWrapper::OMKeyExists)
+	    .def("MBIDExists", &I3OMKey2MBIDWrapper::MBIDExists)
+	    .def("GetOMKey", &I3OMKey2MBIDWrapper::GetOMKey)
+	    .def("GetMBID", &I3OMKey2MBIDWrapper::GetMBID)
 	;
+	
+	bp::implicitly_convertible<boost::shared_ptr<I3OMKey2MBIDWrapper>, boost::shared_ptr<I3OMKey2MBID> >();
 }
