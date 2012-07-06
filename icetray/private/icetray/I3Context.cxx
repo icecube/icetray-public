@@ -31,6 +31,20 @@ I3Context::~I3Context()
 {
 }
 
+std::vector<std::string>
+I3Context::keys() const
+{
+  std::vector<std::string> thekeys;
+
+  for (map_t::const_iterator iter = map_.begin();
+       iter != map_.end();
+       iter++)
+    {
+      thekeys.push_back(iter->first);
+    }
+  return thekeys;
+}
+
 void
 I3Context::dump() const
 {

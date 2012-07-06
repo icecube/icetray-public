@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3Context.h 48705 2008-08-27 17:49:32Z troy $
  *  
  *  Copyright (C) 2003-2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -34,6 +34,7 @@
 #include <I3/hash_map.h>
 
 #include <boost/any.hpp>
+#include <boost/python.hpp>
 #include <boost/utility/enable_if.hpp>
 
 /**
@@ -44,7 +45,7 @@
  * this class, but should hand instances of this class to I3ContextAccess to
  * handle such issues.
  *
- * @version $Id$
+ * @version $Id: I3Context.h 48705 2008-08-27 17:49:32Z troy $
  * @author patton
  */
 class I3Context
@@ -56,6 +57,8 @@ class I3Context
 
   virtual ~I3Context();
 
+  std::vector<std::string> keys() const;
+
   template <typename Service>
   DSOLOCAL
   bool
@@ -64,12 +67,19 @@ class I3Context
   {
     //    log_trace("%s at %s", __PRETTY_FUNCTION__, where.c_str());
     map_t::const_iterator iter = map_.find(where);
-    if (iter == map_.end())
-      {
+    if (iter == map_.end()) {
 	log_trace("not found @ %s", where.c_str());
 	return false;
-      }
-    return boost::any_cast<shared_ptr<Service> >(&(iter->second));
+    }
+    try {
+        boost::python::object obj;
+        obj = boost::any_cast<boost::python::object>(iter->second);
+        return boost::python::extract<shared_ptr<Service> >(obj).check();
+    } catch (const boost::bad_any_cast& e) {
+        return boost::any_cast<shared_ptr<Service> >(&(iter->second));
+    }
+
+    return false;
   }
 
   template <typename Service>
@@ -80,12 +90,33 @@ class I3Context
   {
     //    log_trace("%s at %s", __PRETTY_FUNCTION__, where.c_str());
     map_t::const_iterator iter = map_.find(where);
+    if (iter == map_.end()) {
+	log_trace("not found @ %s", where.c_str());
+	return false;
+    }
+    try {
+        boost::python::object obj;
+        obj = boost::any_cast<boost::python::object>(iter->second);
+        return boost::python::extract<shared_ptr<Service> >(obj).check();
+    } catch (const boost::bad_any_cast& e) {
+        return boost::any_cast<Service>(&(iter->second));
+    }
+
+    return false;
+  }
+
+  DSOLOCAL
+  bool
+  Has (const std::string& where) const
+  {
+    //    log_trace("%s at %s", __PRETTY_FUNCTION__, where.c_str());
+    map_t::const_iterator iter = map_.find(where);
     if (iter == map_.end())
       {
 	log_trace("not found @ %s", where.c_str());
 	return false;
       }
-    return boost::any_cast<Service>(&(iter->second));
+    return true;
   }
 
   template <typename T>
@@ -95,7 +126,12 @@ class I3Context
   {
     if (map_.find(where) != map_.end())
       log_fatal("context already contains object named %s", where.c_str());
-    map_[where] = what;
+    try {
+      map_[where] = boost::python::object(what);
+    } catch (const boost::python::error_already_set &e) {
+      map_[where] = what;
+      PyErr_Clear();
+    }
     return true;
   }
     
@@ -105,6 +141,16 @@ class I3Context
   Put (const std::string& where, boost::shared_ptr<T> what)
   {
     return Put(what, where);
+  }
+
+  DSOLOCAL
+  bool
+  Put (const std::string& where, boost::python::object what)
+  {
+    if (map_.find(where) != map_.end())
+      log_fatal("context already contains object named %s", where.c_str());
+    map_[where] = what;
+    return true;
   }
 
   template <typename T>
@@ -118,12 +164,23 @@ class I3Context
     if (iter == map_.end())
       log_fatal("context contains nothing at slot %s", where.c_str());
     shared_ptr<T> sp_t;
-
+    boost::python::object obj;
     try {
-      sp_t = boost::any_cast<shared_ptr<T> >(iter->second);
-    } catch (const boost::bad_any_cast& e) {
-      log_fatal("bad any cast getting object \"%s\" out of context as \"%s\"",
+      obj = boost::any_cast<boost::python::object>(iter->second);
+      sp_t = boost::python::extract<shared_ptr<T> >(obj);
+    } catch (const boost::bad_any_cast &e) {
+      try {
+        sp_t = boost::any_cast<shared_ptr<T> >(iter->second);
+      } catch (const boost::bad_any_cast &e) {
+        log_fatal("error getting object \"%s\" out of context as \"%s\"",
+	  	  where.c_str(), I3::name_of<T>().c_str());
+        sp_t = shared_ptr<T>();
+      }
+    } catch (const boost::python::error_already_set &e) {
+      PyErr_Clear();
+      log_fatal("error getting object \"%s\" out of context as \"%s\"",
 		where.c_str(), I3::name_of<T>().c_str());
+      sp_t = shared_ptr<T>();
     }
 
     if (!sp_t)
@@ -145,20 +202,57 @@ class I3Context
 	return T();
       }
     T sp_t;
+    boost::python::object obj;
     try {
-      sp_t = boost::any_cast<T>(iter->second);
-    } catch (const boost::bad_any_cast& e) {
+      obj = boost::any_cast<boost::python::object>(iter->second);
+      sp_t = boost::python::extract<T>(obj);
+    } catch (const boost::bad_any_cast &e) {
+      try {
+        sp_t = boost::any_cast<T>(iter->second);
+      } catch (const boost::bad_any_cast &e) {
+        log_trace("cast failed, returning null");
+        sp_t = T();
+      }
+    } catch (const boost::python::error_already_set &e) {
+      PyErr_Clear();
       log_trace("cast failed, returning null");
       sp_t = T();
     }
     return sp_t;
   }
 
+  boost::python::object
+  Get (const std::string &where) const
+  {
+    map_t::const_iterator iter = map_.find(where);
+    if (iter == map_.end()) {
+	log_trace("context contains nothing at slot %s", where.c_str());
+	return boost::python::object();
+    }
+    try {
+      return boost::any_cast<boost::python::object>(iter->second);
+    } catch (const boost::bad_any_cast& e) {
+      std::string error_message = "Context item at ";
+      error_message += where;
+      error_message += " of type ";
+      error_message += I3::name_of(typeid(iter->second));
+      error_message += " has no loaded pybindings";
+      PyErr_SetString(PyExc_TypeError, error_message.c_str());
+      boost::python::throw_error_already_set();
+    }
+
+    return boost::python::object();
+  }
+  
+  typedef __gnu_cxx::hash_map<std::string, boost::any> map_t;
+  typedef map_t::const_iterator const_iterator;
+  const_iterator begin() const { return map_.begin(); }
+  const_iterator end() const { return map_.end(); }
+
  private:
 
   DSOLOCAL void dump() const;
 
-  typedef __gnu_cxx::hash_map<std::string, boost::any> map_t;
   map_t map_;
 
   DSOLOCAL I3Context(const I3Context& rhs); // stop default
