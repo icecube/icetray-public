@@ -11,12 +11,10 @@ tooldef(lapack
   goto2
 )
 
-find_library(FORTRAN_LIB NAMES gfortran PATH_SUFFIXES gcc43 gcc44 gcc45 gcc46 gcc47 gcc48)
-
 if(LAPACK_FOUND)
   set(LAPACKINI3PORTS_FOUND TRUE)
   ## Assume GotoBLAS was built in ports w/ gfortran
-  list(APPEND LAPACK_LIBRARIES ${FORTRAN_LIB})
+  list(APPEND LAPACK_LIBRARIES "-lgfortran")
 else(LAPACK_FOUND)
   unset(LAPACK_CONFIG_ERROR)
   unset(LAPACK_INCLUDE_DIR)

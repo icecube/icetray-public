@@ -11,12 +11,10 @@ tooldef(blas
   goto2
 )
 
-find_library(FORTRAN_LIB NAMES gfortran PATH_SUFFIXES gcc43 gcc44 gcc45 gcc46 gcc47 gcc48)
-
 if(BLAS_FOUND)
   set(BLASINI3PORTS_FOUND TRUE)
   ## Assume GotoBLAS was built in ports w/ gfortran
-  list(APPEND BLAS_LIBRARIES ${FORTRAN_LIB})
+  list(APPEND BLAS_LIBRARIES "-lgfortran")
 else(BLAS_FOUND)
   unset(BLAS_CONFIG_ERROR)
   unset(BLAS_INCLUDE_DIR)
