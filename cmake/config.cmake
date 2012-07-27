@@ -102,7 +102,7 @@ endif(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
 if(CMAKE_C_COMPILER_ID MATCHES "Intel")
   set(C_WARNING_FLAGS "-w1")
 elseif(CMAKE_C_COMPILER_ID MATCHES "Clang")
-  set(C_WARNING_FLAGS "-Qunused-arguments -Wall -Wno-char-subscripts -Wno-unused -Wunneeded-internal-declaration -Wno-parantheses-equality")
+  set(C_WARNING_FLAGS "-Qunused-arguments -Wall -Wno-char-subscripts -Wno-unused -Wunneeded-internal-declaration -Wno-parentheses-equality")
 else()
   set(C_WARNING_FLAGS "-Wall")
 endif(CMAKE_C_COMPILER_ID MATCHES "Intel")
@@ -387,10 +387,10 @@ endif(USE_GFILT)
 #
 #  For now, on gcc 4.3.2, add the -Wno-deprecated flag
 #
-if (GCC_NUMERIC_VERSION GREATER 40299)
+if (GCC_NUMERIC_VERSION GREATER 40299 AND CMAKE_COMPILER_IS_CLANG)
   set(CXX_WARNING_SUPRESSION_FLAGS "-Wno-deprecated -Wno-parentheses"
     CACHE STRING "Warning supression flags for this compiler")
-endif (GCC_NUMERIC_VERSION GREATER 40299)
+endif (GCC_NUMERIC_VERSION GREATER 40299 AND CMAKE_COMPILER_IS_CLANG)
 
 #
 #  Detect certain old platforms and reduce optimization levels accordingly
