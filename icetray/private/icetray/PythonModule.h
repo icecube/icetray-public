@@ -36,10 +36,13 @@ struct PythonModule : Base, boost::python::wrapper<Base>
   PythonModule(const I3Context& ctx); 
   PythonModule(const I3Context& ctx, I3Frame::Stream); 
 
+  void PyConfigure();
   void Configure();
 
+  void PyProcess();
   void Process();
 
+  void PyFinish();
   void Finish();
 
   void AddParameter(const std::string& name, 

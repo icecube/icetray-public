@@ -54,6 +54,13 @@ PythonModule<I3PacketModule>::PythonModule(const I3Context& ctx,
 
 template <typename Base>
 void 
+PythonModule<Base>::PyConfigure()
+{
+  Base::Configure();
+}
+
+template <typename Base>
+void 
 PythonModule<Base>::Configure()
 {
   i3_log("%s", __PRETTY_FUNCTION__);
@@ -61,6 +68,13 @@ PythonModule<Base>::Configure()
     conf();
   else
     log_fatal("Python module doesn't implement 'Configure'");
+}
+
+template <typename Base>
+void 
+PythonModule<Base>::PyProcess()
+{
+  Base::Process();
 }
 
 template <typename Base>
@@ -78,6 +92,13 @@ PythonModule<Base>::Process()
       log_trace("%s", "calling base Process");
       Base::Process();
     }
+}
+
+template <typename Base>
+void 
+PythonModule<Base>::PyFinish()
+{
+  Base::Finish();
 }
 
 template <typename Base>

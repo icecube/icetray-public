@@ -8,17 +8,7 @@ using namespace boost::python;
 
 namespace {
   #define REGMODMETHODS \
-      .def("Configure", &module_t::Configure) \
-      .def("ShouldDoDAQ", &module_t::ShouldDoDAQ) \
-      .def("DAQ", &module_t::DAQ) \
-      .def("ShouldDoPhysics", &module_t::ShouldDoPhysics) \
-      .def("Physics", &module_t::Physics) \
-      .def("ShouldDoGeometry", &module_t::ShouldDoGeometry) \
-      .def("Geometry", &module_t::Geometry) \
-      .def("ShouldDoCalibration", &module_t::ShouldDoCalibration) \
-      .def("Calibration", &module_t::Calibration) \
-      .def("ShouldDoDetectorStatus", &module_t::ShouldDoDetectorStatus) \
-      .def("DetectorStatus", &module_t::DetectorStatus) \
+      .def("Configure", &module_t::PyConfigure) \
       .def("Register", &module_t::Register) \
       .def("AddParameter", \
 	   (void (module_t::*)(const std::string&, const std::string&, const boost::python::object&)) \
@@ -27,12 +17,12 @@ namespace {
 	   (void (module_t::*)(const std::string&, const std::string&)) \
 	   &module_t::AddParameter) \
       .def("GetParameter", &module_t::GetParameter) \
-      .def("Finish", &module_t::Finish) \
+      .def("Finish", &module_t::PyFinish) \
       .def("AddOutBox", &module_t::AddOutBox) \
       .def("PushFrame", (void (module_t::*)(I3FramePtr)) &module_t::PushFrame) \
       .def("PushFrame", (void (module_t::*)(I3FramePtr, const std::string&)) &module_t::PushFrame) \
       .def("PopFrame", &module_t::PopFrame) \
-      .def("Process", &module_t::Process) \
+      .def("Process", &module_t::PyProcess) \
       .def("RequestSuspension",&module_t::RequestSuspension) \
       .add_property("configuration", make_function(&module_t::GetConfiguration, return_internal_reference<>())) \
       .add_property("name", &module_t::GetName) \
@@ -79,7 +69,6 @@ namespace {
       REGMODMETHODS
       .def("__init__", make_constructor(simple_I3PacketModule))
       .def("FlushQueue", &module_t::FlushQueue)
-      .def("FramePacket", &module_t::FramePacket)
       .add_property("sentinel",
            (I3Frame::Stream (module_t::*)())&module_t::GetSentinel,
            (void (module_t::*)(I3Frame::Stream))&module_t::SetSentinel)
