@@ -124,8 +124,9 @@ add_dependencies(docs doxygen inspect html)
 # Tarball target
 #
 find_program(MD5SUM_PROGRAM md5sum)
+find_program(MD5SUM_PROGRAM md5)
 if(MD5SUM_PROGRAM)
-  set(MD5SUM_TARBALL_COMMAND md5sum ${CMAKE_INSTALL_PREFIX}.tar.gz > ${CMAKE_INSTALL_PREFIX}.md5sum)
+  set(MD5SUM_TARBALL_COMMAND ${MD5SUM_PROGRAM} ${CMAKE_INSTALL_PREFIX}.tar.gz > ${CMAKE_INSTALL_PREFIX}.md5sum)
 else(MD5SUM_PROGRAM)
   set(MD5SUM_TARBALL_COMMAND /bin/echo Skipping md5sum, as md5sum command was not found.)
 endif(MD5SUM_PROGRAM)
