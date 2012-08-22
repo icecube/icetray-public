@@ -24,6 +24,16 @@ namespace {
       .def("PopFrame", &module_t::PopFrame) \
       .def("Process", &module_t::PyProcess) \
       .def("RequestSuspension",&module_t::RequestSuspension) \
+      .def("ShouldDoGeometry", &module_t::ShouldDoGeometry) \
+      .def("Geometry", &module_t::Geometry) \
+      .def("ShouldDoCalibration", &module_t::ShouldDoCalibration) \
+      .def("Calibration", &module_t::Calibration) \
+      .def("ShouldDoDetectorStatus", &module_t::ShouldDoDetectorStatus) \
+      .def("DetectorStatus", &module_t::DetectorStatus) \
+      .def("ShouldDoDAQ", &module_t::ShouldDoDAQ) \
+      .def("DAQ", &module_t::DAQ) \
+      .def("ShouldDoPhysics", &module_t::ShouldDoPhysics) \
+      .def("Physics", &module_t::Physics) \
       .add_property("configuration", make_function(&module_t::GetConfiguration, return_internal_reference<>())) \
       .add_property("name", &module_t::GetName) \
       .add_property("context", make_function(&module_t::GetContext, return_internal_reference<>())) \
@@ -69,6 +79,7 @@ namespace {
       REGMODMETHODS
       .def("__init__", make_constructor(simple_I3PacketModule))
       .def("FlushQueue", &module_t::FlushQueue)
+      .def("FramePacket", &module_t::FramePacket)
       .add_property("sentinel",
            (I3Frame::Stream (module_t::*)())&module_t::GetSentinel,
            (void (module_t::*)(I3Frame::Stream))&module_t::SetSentinel)
