@@ -5,7 +5,7 @@ Details by Platform
 
 Unlike many other projects / experiments, IceCube strives to be as
 Operating System agnostic as possible and maintains no "standard
-platform'. That being said, manpower and hardware are limited, and all
+platform". That being said, manpower and hardware are limited, and all
 possible platforms and combinations of platfroms cannot be tested or
 supported. A general rule of thumb is that the latest "long term" or
 "supported" or "regular life cycle" release, as well as the previous
@@ -23,6 +23,40 @@ various platforms.
 
 Apple Mac OS X
 ^^^^^^^^^^^^^^
+
+Developer Tools
+"""""""""""""""
+
+You'll need a compiler in order to build the IceCube software. Apple distributes both
+clang and llvm-gcc as part of Xcode.
+
+Xcode 4: Lion (10.7) and later
+..............................
+1) Download Xcode from the App Store.
+2) Open Xcode, and open the Preferences window (Xcode > Preferences).
+3) In the :ref:`Xcode4Prefs`, click the Downloads tab, and install the Command Line Tools.
+
+.. _Xcode4Prefs:
+
+.. figure:: figs/xcode4_prefs.png
+	:width: 432px
+	
+	Xcode Preferences window
+
+4) After the install finishes you should have both clang and llvm-gcc:
+
+.. code-block:: sh
+	
+	bash-3.2$ g++ --version
+	i686-apple-darwin11-llvm-g++-4.2 (GCC) 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2336.11.00)
+	Copyright (C) 2007 Free Software Foundation, Inc.
+	This is free software; see the source for copying conditions.  There is NO
+	warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+	bash-3.2$ clang++ --version
+	Apple clang version 4.0 (tags/Apple/clang-421.0.60) (based on LLVM 3.1svn)
+	Target: x86_64-apple-darwin12.0.0
+	Thread model: posix
 
 MacPorts
 """"""""
