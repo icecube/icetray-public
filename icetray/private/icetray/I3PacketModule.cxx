@@ -49,7 +49,7 @@ void I3PacketModule::FlushQueue()
 		if (!if_ || boost::python::extract<bool>(if_(queue_)))
 			FramePacket(queue_);
 		else
-			BOOST_FOREACH(I3FramePtr frame, frames)
+			BOOST_FOREACH(I3FramePtr frame, queue_)
 				PushFrame(frame);
 		queue_.clear();
 	}
