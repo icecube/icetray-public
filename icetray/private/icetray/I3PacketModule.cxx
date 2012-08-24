@@ -6,6 +6,8 @@
 
 #include <icetray/I3PacketModule.h>
 
+#include <boost/foreach.hpp>
+
 I3PacketModule::I3PacketModule(const I3Context& context,
     I3Frame::Stream _sentinel) : I3Module(context), sentinel(_sentinel)
 {
@@ -46,6 +48,9 @@ void I3PacketModule::FlushQueue()
 	if (!queue_.empty()) {
 		if (!if_ || boost::python::extract<bool>(if_(queue_)))
 			FramePacket(queue_);
+		else
+			BOOST_FOREACH(I3FramePtr frame, frames)
+				PushFrame(frame);
 		queue_.clear();
 	}
 }
@@ -70,5 +75,7 @@ void I3PacketModule::Process()
 
 void I3PacketModule::FramePacket(std::vector<I3FramePtr> &frames)
 {
+	BOOST_FOREACH(I3FramePtr frame, frames)
+		PushFrame(frame);
 }
 
