@@ -31,8 +31,10 @@ endif("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 
 if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
-  cmake_policy(SET CMP0012 NEW)
-  cmake_policy(SET CMP0017 NEW)
+  if(CMAKE_MINOR_VERSION GREATER 7)
+    cmake_policy(SET CMP0012 NEW)
+    cmake_policy(SET CMP0017 NEW)
+  endif(CMAKE_MINOR_VERSION GREATER 7)
 endif(COMMAND cmake_policy)
 
 #
