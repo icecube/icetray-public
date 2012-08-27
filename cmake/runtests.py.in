@@ -132,6 +132,14 @@ def main():
                       default=False,
                       help='Run only compiled unit tests')
 
+    parser.add_option('-X', '--all-except',
+                      type='string',
+                      dest='all_except',
+                      metavar='EXCEPT',
+                      action='append',
+                      default=[],
+                      help='Run tests for all projects except these.')
+
     parser.add_option('-v', '--verbose',
                       action='store_true',
                       default=False,
@@ -166,6 +174,12 @@ def main():
         def g(stack):
             return len(stack) < 1 or stack[0] in options.project
         projectfilter = g
+
+    if options.all_except:
+        def g(stack):
+            return len(stack) < 1 or stack[0] not in options.all_except
+        projectfilter = g
+
         
     run_tests([],
               lambda stack: scriptfilter(stack) and projectfilter(stack),
