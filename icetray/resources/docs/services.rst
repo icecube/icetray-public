@@ -247,6 +247,7 @@ implementation of the UseRandom module, above:
 	   icetray.I3Module.__init__(self, context)
 	   self.AddParameter("I3RandomService", "the service", None)
 	   self.AddParameter("PutWhere", "where the doubles go", None)
+	   self.AddOutBox("OutBox")
 
        def Configure(self):
 	   self.rs = self.GetParameter("I3RandomService")
