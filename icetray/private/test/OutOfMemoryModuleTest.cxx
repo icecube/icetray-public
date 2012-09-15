@@ -20,7 +20,9 @@ namespace OutOfMemoryModuleTest
     void Process()
     {
       uint64_t size = std::numeric_limits<uint64_t>::max();
-      char* array = new char[size];
+      char* array = new(std::nothrow) char[size];
+      if (array == NULL)
+         throw std::bad_alloc();
       for(uint64_t i = 0 ; i< size ; i++)
 	array[i] = i;
     }
@@ -35,7 +37,7 @@ namespace OutOfMemoryModuleTest
 	tray.Execute(1);
 	FAIL("OutOfMemoryModule didn't throw.");
       }
-    catch(std::exception& e)
+    catch(const std::bad_alloc & e)
       {
       }
   }
