@@ -99,14 +99,32 @@ class I3ServiceBase {
          * Convenience method: this allows retrieving a parameter
          * in the same way as in an I3Module.
          */
-        template<typename ParamType>
-        void GetParameter( const std::string &name,
-                           ParamType         &value ){
+        template <typename T>
+        typename boost::disable_if<boost::is_const<T>, void>::type
+        GetParameter(const std::string& name, T& value) const
+        {
             if ( dummyContext_ ){
                 log_fatal( "(%s) object created with wrong constructor",
                            configuration_->InstanceName().c_str() );
             }
-            value = configuration_->template Get<ParamType>(name);
+            try {
+                value = configuration_->Get<T>(name);
+            } catch (...) {
+                try {
+                    std::string context_name =
+                      configuration_->Get<std::string>(name);
+                    value = context_.Get<T>(context_name);
+                    // NB: we got here by catching an error thrown by
+                    // boost::python::extract(). All subsequent calls will fail
+                    // unless we clean it up.
+                    PyErr_Clear();
+                } catch (...) {
+                    log_error("Error in %s module '%s', getting parameter '%s'",
+	                 I3::name_of(typeid(*this)).c_str(), GetName().c_str(),
+                         name.c_str());
+                    throw;
+                }
+           } 
         }
 
         const I3Configuration& GetConfiguration() { return *configuration_; }
