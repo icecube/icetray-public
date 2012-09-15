@@ -137,6 +137,10 @@ I3Tray::AddModule(bp::object obj, const std::string& instancename)
 	if (configure_called)
 		log_fatal("I3Tray::Configure() already called -- "
 		    "cannot add new modules");
+	if (modules.find(instancename) != modules.end())
+		log_fatal("Tray already contains module named \"%s\" of "
+		    "type %s", instancename.c_str(),
+		    modules[instancename]->configuration_.ClassName().c_str());
 
 	I3ModulePtr module;
 	if (PyString_Check(obj.ptr())) {
@@ -197,6 +201,14 @@ I3Tray::AddModule(bp::object obj, const std::string& instancename)
 I3Tray::param_setter
 I3Tray::AddModule(I3ModulePtr module, const std::string& instancename)
 {
+	if (configure_called)
+		log_fatal("I3Tray::Configure() already called -- "
+		    "cannot add new modules");
+	if (modules.find(instancename) != modules.end())
+		log_fatal("Tray already contains module named \"%s\" of "
+		    "type %s", instancename.c_str(),
+		    modules[instancename]->configuration_.ClassName().c_str());
+
 	log_trace("%s : %s", __PRETTY_FUNCTION__, instancename.c_str());
 
 	module->configuration_.ClassName(I3::name_of(typeid(*module)));
