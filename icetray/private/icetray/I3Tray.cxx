@@ -323,7 +323,7 @@ I3Tray::Configure()
 	    modules_in_order.size() - 1]]->outboxes_.size() != 0) {
 		log_info("Last module (\"%s\") has a dangling outbox. Adding "
 		    "TrashCan to end of tray",
-		    modules[modules_in_order[modules_in_order.size() - 1]]);
+		    modules_in_order[modules_in_order.size() - 1].c_str());
 		AddModule("TrashCan", "__automatic_I3Tray_trashcan");
 	}
 
