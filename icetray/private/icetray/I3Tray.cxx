@@ -315,11 +315,19 @@ I3Tray::Configure()
 {
 	if (configure_called)
 		return;
-	configure_called = true;
-
 	if (modules_in_order.size() == 0)
 		log_fatal("Calling %s with no modules added. "
 		    "You probably want some.", __PRETTY_FUNCTION__);
+
+	if (!boxes_connected && modules[modules_in_order[
+	    modules_in_order.size() - 1]]->outboxes_.size() != 0) {
+		log_info("Last module (\"%s\") has a dangling outbox. Adding "
+		    "TrashCan to end of tray",
+		    modules[modules_in_order[modules_in_order.size() - 1]]);
+		AddModule("TrashCan", "__automatic_I3Tray_trashcan");
+	}
+
+	configure_called = true;
 
 	//
 	// Create the services in the order they were added.
