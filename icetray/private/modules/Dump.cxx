@@ -42,7 +42,7 @@ class Dump : public I3ConditionalModule
   void Process(){
     I3FramePtr frame = PopFrame();
     if (!frame)
-      return;
+      log_fatal("Dump is not a driving module!");
 
     frameCount_++;
     cout << "------------------------- This is frame number " << frameCount_ << " -------------------------\n" << *frame;
