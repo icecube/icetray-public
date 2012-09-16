@@ -129,11 +129,9 @@ def get_configuration(module):
 	if hasattr(module, "__i3traysegment__"):
 		return I3HoboConfiguration.from_traysegment(module)
 	if isinstance(module, str):
-		print module
 		return module_default_config(module)
 	elif isinstance(module, type) and issubclass(module, I3Module):
 		context = I3Context()
-		print module
 		mod = module(context)
 		config = copy.deepcopy(mod.configuration)
 		return config
