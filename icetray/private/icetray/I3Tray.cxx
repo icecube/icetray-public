@@ -539,7 +539,6 @@ I3Tray::SetParameter(const string& module, const string& parameter,
     bp::object value)
 {
 	log_trace("%s", __PRETTY_FUNCTION__);
-	shared_ptr<I3Context> context;
 
 	I3Configuration *config;
 	if (modules.find(module) != modules.end())
