@@ -338,6 +338,7 @@ I3Tray::Configure()
 		} catch (...) {
 			log_error("Exception thrown while configuring "
 			    "service factory \"%s\".", objectname.c_str());
+			std::cerr << factory->configuration_;
 			throw;
 		}
 		if (!factory->configuration_.is_ok()) {
@@ -361,6 +362,7 @@ I3Tray::Configure()
 		} catch (...) {
 			log_error("Exception thrown while configuring "
 			    "module \"%s\".", objectname.c_str());
+			std::cerr << module->configuration_;
 			throw;
 		}
 		if (!module->configuration_.is_ok()) {
