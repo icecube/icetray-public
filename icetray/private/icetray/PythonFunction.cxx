@@ -68,10 +68,10 @@ PythonFunction::PythonFunction(const I3Context& context, bp::object func)
       std::string desc = "keyword argument '" + aname + "'";
       bp::object d;
 
-      if ((i-1) + offset < argcount)
+      if (i >= offset)
 	{
-	  i3_log("default is %s", repr(deftuple[i-1]).c_str());
-	  d = deftuple[i-1];
+	  i3_log("default is %s", repr(deftuple[i-offset]).c_str());
+	  d = deftuple[i-offset];
           configuration_.Add(aname, desc, d);
 	}
 	else
