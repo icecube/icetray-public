@@ -336,9 +336,12 @@ I3Tray::Configure()
 		try {
 			factory->Configure();
 		} catch (...) {
+			PyObject *type, *value, *traceback;
+			PyErr_Fetch(&type, &value, &traceback);
 			log_error("Exception thrown while configuring "
 			    "service factory \"%s\".", objectname.c_str());
 			std::cerr << factory->configuration_;
+			PyErr_Restore(type, value, traceback);
 			throw;
 		}
 		if (!factory->configuration_.is_ok()) {
@@ -360,9 +363,12 @@ I3Tray::Configure()
 		try {
 			module->Configure_();
 		} catch (...) {
+			PyObject *type, *value, *traceback;
+			PyErr_Fetch(&type, &value, &traceback);
 			log_error("Exception thrown while configuring "
 			    "module \"%s\".", objectname.c_str());
 			std::cerr << module->configuration_;
+			PyErr_Restore(type, value, traceback);
 			throw;
 		}
 		if (!module->configuration_.is_ok()) {
