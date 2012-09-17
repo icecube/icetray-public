@@ -97,7 +97,7 @@ class I3Context
     try {
         boost::python::object obj;
         obj = boost::any_cast<boost::python::object>(iter->second);
-        return boost::python::extract<shared_ptr<Service> >(obj).check();
+        return boost::python::extract<Service>(obj).check();
     } catch (const boost::bad_any_cast& e) {
         return boost::any_cast<Service>(&(iter->second));
     }
