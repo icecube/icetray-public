@@ -333,11 +333,18 @@ I3Tray::Configure()
 	// 
 	BOOST_FOREACH(const string& objectname, factories_in_order) {
 		I3ServiceFactoryPtr factory = factories[objectname];
-		factory->Configure();
+		try {
+			factory->Configure();
+		} catch (...) {
+			log_error("Exception thrown while configuring "
+			    "service factory \"%s\".", objectname.c_str());
+			throw;
+		}
 		if (!factory->configuration_.is_ok()) {
 			std::cerr << factory->configuration_;
-			log_fatal("Configuration error.  Turn up your logging "
-			    "to see just what.");
+			log_fatal("Error in configuration for service factory "
+			    "\"%s\".  Turn up your logging to see just what.",
+			    objectname.c_str());
 		}
 		factory->InitializeService(master_context);
 	}
@@ -349,11 +356,18 @@ I3Tray::Configure()
 	//
 	BOOST_FOREACH(const string& objectname, modules_in_order) {
 		I3ModulePtr module = modules[objectname];
-		module->Configure_();
+		try {
+			module->Configure_();
+		} catch (...) {
+			log_error("Exception thrown while configuring "
+			    "module \"%s\".", objectname.c_str());
+			throw;
+		}
 		if (!module->configuration_.is_ok()) {
 			std::cerr << module->configuration_;
-			log_fatal("Configuration error.  Turn up your logging "
-			    "to see just what.");
+			log_fatal("Error in configuration for module "
+			    "\"%s\".  Turn up your logging to see just what.",
+			    objectname.c_str());
 		}
 	}
 
