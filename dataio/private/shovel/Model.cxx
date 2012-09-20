@@ -230,14 +230,21 @@ Model::pretty_print()
   if (frame->size() == 0)
     return;
 
-  I3TrayInfoConstPtr ticp = frame->Get<I3TrayInfoConstPtr>(y_keystring_);
-  
+  I3TrayInfoConstPtr ticp;
   ostringstream oss;
 
-  if (!ticp)
-    oss << "\n\n\nCan only pretty-print I3TrayInfo currently.\n\n\n";
-  else
-    oss << *ticp;
+  try{
+      ticp = frame->Get<I3TrayInfoConstPtr>(y_keystring_);
+      if (!ticp)
+        oss << "\n\n\nCan only pretty-print I3TrayInfo currently.\n\n\n";
+      else{
+        oss << *ticp;
+      }
+   }
+  catch( const boost::archive::archive_exception& e ){
+      oss << "\n\n\n Trouble printing this I3TrayInfo: " << e.what() << "\n\n\n";
+  }
+
   view_.page(oss.str());
 }
 
