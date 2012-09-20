@@ -24,12 +24,21 @@
 
 using namespace boost::python;
 
+static std::string
+i3int_prettyprint(const I3Int& i)
+{
+    std::ostringstream oss;
+    oss << "I3Int(" << i.value << ")";
+    return oss.str();
+}
+
 void register_I3Int()
 {
   class_<I3Int, bases<I3FrameObject>, boost::shared_ptr<I3Int> >("I3Int")
     .def(init<>())
     .def(init<int>())
     .def_readwrite("value", &I3Int::value)
+    .def("__repr__",i3int_prettyprint)
     .def_pickle(boost_serializable_pickle_suite<I3Int>())
     ;
 

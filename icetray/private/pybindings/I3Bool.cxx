@@ -24,12 +24,20 @@
 
 using namespace boost::python;
 
+static std::string
+i3bool_prettyprint(const I3Bool& b)
+{
+    if(b.value) return "I3Bool(True)";
+    else        return "I3Bool(False)";
+}
+
 void register_I3Bool()
 {
   class_<I3Bool, bases<I3FrameObject>, boost::shared_ptr<I3Bool> >("I3Bool")
     .def(init<>())
     .def(init<bool>())
     .def_readwrite("value", &I3Bool::value)
+    .def("__repr__",i3bool_prettyprint)
     .def_pickle(boost_serializable_pickle_suite<I3Bool>())
     ;
 
