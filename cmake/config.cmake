@@ -90,8 +90,9 @@ set(GCC_NUMERIC_VERSION ${GCC_NUMERIC_VERSION} CACHE INTEGER "Numeric gcc versio
 #  COMPILER_ID_TAG
 #
 execute_process(COMMAND ${CMAKE_CXX_COMPILER} -v ERROR_VARIABLE COMPILER_ID_TAG)
+set(COMPILER_ID_TAG "REGEXPS IN CMAKE SUCK\n${COMPILER_ID_TAG}")
 STRING(REGEX REPLACE ".*[ 
-\\t]([^ ]+) version ([^ ]+).*" "\\1-\\2" COMPILER_ID_TAG ${COMPILER_ID_TAG})
+\\t]([a-zA-Z]+) version ([^ ]+).*" "\\1-\\2" COMPILER_ID_TAG ${COMPILER_ID_TAG})
 
 #
 # Unfortunately cmake doesn't do this on its own
