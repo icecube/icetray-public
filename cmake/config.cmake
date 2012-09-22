@@ -87,6 +87,13 @@ numeric_version(${GCC_VERSION} "gcc")
 set(GCC_NUMERIC_VERSION ${GCC_NUMERIC_VERSION} CACHE INTEGER "Numeric gcc version" FORCE)
 
 #
+#  COMPILER_ID_TAG
+#
+execute_process(COMMAND ${CMAKE_CXX_COMPILER} -v ERROR_VARIABLE COMPILER_ID_TAG)
+STRING(REGEX REPLACE ".*[ 
+\\t]([^ ]+) version ([^ ]+).*" "\\1-\\2" COMPILER_ID_TAG ${COMPILER_ID_TAG})
+
+#
 # Unfortunately cmake doesn't do this on its own
 #
 if(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
@@ -148,10 +155,10 @@ boost_report_value(ARCH)
 #
 # Assemble BUILDNAME
 #
-set(BUILDNAME "${OSTYPE}-${OSVERSION}/${ARCH}/gcc-${GCC_VERSION}" CACHE INTERNAL "buildname")
+set(BUILDNAME "${OSTYPE}-${OSVERSION}/${ARCH}/${COMPILER_ID_TAG}" CACHE INTERNAL "buildname")
 boost_report_value(BUILDNAME)
 
-set(TOOLSET "gcc-${GCC_VERSION}/${ARCH}/${CMAKE_BUILD_TYPE}" CACHE INTERNAL "toolset")
+set(TOOLSET "${COMPILER_ID_TAG}/${ARCH}/${CMAKE_BUILD_TYPE}" CACHE INTERNAL "toolset")
 
 #
 #  Get HOSTNAME
@@ -253,9 +260,9 @@ endif(NOT HAVE_META_PROJECT)
 #           what a hack.
 if (CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
   if (NOT "${META_PROJECT}" STREQUAL "Unknown")
-    set(CMAKE_INSTALL_PREFIX ${META_PROJECT}.r${SVN_REVISION}.${OSTYPE}-${ARCH}.gcc-${GCC_VERSION} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
+    set(CMAKE_INSTALL_PREFIX ${META_PROJECT}.r${SVN_REVISION}.${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
   else (NOT "${META_PROJECT}" STREQUAL "Unknown")
-    set(CMAKE_INSTALL_PREFIX ${OSTYPE}-${ARCH}.gcc-${GCC_VERSION} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
+    set(CMAKE_INSTALL_PREFIX ${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
   endif (NOT "${META_PROJECT}" STREQUAL "Unknown")
 endif(CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
 
@@ -428,7 +435,7 @@ if(NOT METAPROJECT_CONFIGURED)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" CACHE STRING
     "Flags used by the compiler during all build types" FORCE)
 
-  set(CMAKE_C_FLAGS "${C_WARNING_FLAGS} ${CMAKE_C_FLAGS} ${CXX_WARNING_SUPRESSION_FLAGS}")
+  set(CMAKE_C_FLAGS "${C_WARNING_FLAGS} ${CMAKE_C_FLAGS}")
   string(REPLACE "-Wno-non-virtual-dtor" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}" CACHE STRING
     "Flags used by the compiler during all build types" FORCE)
