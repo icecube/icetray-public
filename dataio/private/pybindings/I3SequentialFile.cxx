@@ -111,8 +111,9 @@ namespace I3 { namespace dataio { namespace python {
   void
   I3SequentialFile::rewind()
   {
-    close();
-    open_file(path_, mode_);
+    Mode oldmode = mode_;
+    close(); // resets mode_
+    open_file(path_, oldmode);
   }
 
   void

@@ -48,6 +48,13 @@ assert frame
 print frame
 assert frame.Stop.id == 'D'
 
+# verify that rewind works
+while(i3f2.more()):
+    i3f2.pop_frame()
+
+i3f2.rewind()
+assert i3f2.more()
+i3f2.pop_frame()
 
 
 
