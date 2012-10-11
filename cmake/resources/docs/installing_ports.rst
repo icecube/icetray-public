@@ -1,7 +1,7 @@
 .. _installing-ports:
 
 Tool Build System - Setting up your I3_PORTS toolset
-=====================================================
+====================================================
 
 Tools are external packages that are required dependencies for IceCube
 Offline software packages. These are distributed as source and built
@@ -15,7 +15,7 @@ single, one-stop-shopping experience.  The current toolset is::
 
 
 Quick start for the impatient
-------------------------------
+-----------------------------
 
 Install dependencies
 ^^^^^^^^^^^^^^^^^^^^
@@ -86,7 +86,7 @@ The MacPorts two-step:
    time and is significantly quicker on a fast system.
 
 Important Notes
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 * **NEVER** manage the port installation as user 'root'.  Running port
   as user root will allow you to install over existing system
@@ -99,7 +99,7 @@ Important Notes
   platform before beginning installation.
 
 The individual steps
----------------------
+--------------------
 
 For an even more manual installation, the following steps are those
 i3-install.sh will perform for you.
@@ -128,7 +128,7 @@ i3-install.sh will perform for you.
   to the software you intend to build.  
 
 Getting the test-data
------------------------
+---------------------
 
 For the unit test and test scripts, a selection of small test-data
 files has been prepared.  These files traditionally were rsynced along
@@ -150,7 +150,7 @@ your I3_PORTS directory.
    rsync -vrlpt code.icecube.wisc.edu::Offline/test-data $I3_PORTS/
 
 Updates to tools
--------------------
+----------------
 
 When new tools or changes to existing tools happen, you will need to
 update your tool installation.
@@ -175,7 +175,7 @@ A few points regarding updates to tools.
   list.
 
 How do I upgrade an existing I3_PORTS installation?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The port system allows for easy upgrading of your tool installation.
 Here are some simple steps::
@@ -186,16 +186,19 @@ Update your tool list from the server::
 
   ./bin/port -vd sync 
 
-Now update your tool installs (upgrade the tool meta-package)::
+Now update your tool installs (update the tool meta-package)::
 
   ./bin/port -vd upgrade i3-tools-v4  
 
-If you know that there is a specific package you want to force a rebuilt of, you can::
+**Do not** upgrade between "meta-tool" versions. I.e., do not use this
+method to move from i3-tools-v3 to i3-tools-v4.
+
+If you know that there is a specific package you want to force a rebuild of, you can::
 
   ./bin/port -fvd install <tool name> 
 
 Compiling tools for one or several platforms for a cluster installation
-------------------------------------------------------------------------
+-----------------------------------------------------------------------
 
 Installing the Icecube tools for a cluster installation is almost the
 same as for a single installation.  Please keep the following things
