@@ -25,9 +25,10 @@ IF(NOT HEALPIX_VERSION)
 ENDIF(NOT HEALPIX_VERSION)
 
 tooldef(healpix-cxx 
-    include/Healpix-2.20a
+    include/
     healpix-cxx/healpix_map.h
-    lib/Healpix-2.20a
+    lib/
     NONE
     healpix_cxx 
+    cxxsupport
     )
