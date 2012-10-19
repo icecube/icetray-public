@@ -168,7 +168,8 @@ set_source_files_properties(${ICETRAY_PYTHON_SRC}
   PROPERTIES
   COMPILE_FLAGS -DI3_PYBINDINGS_MODULE)
 
-i3_test_executable(test 
+i3_test_executable(test
+  private/test/I3Bool.cxx
   private/test/CleanConstructorTest.cxx  
   private/test/I3LoggingObjectFirst.cxx     
   private/test/ServicesAtDestruction.cxx
