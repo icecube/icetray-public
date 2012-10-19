@@ -19,28 +19,26 @@
 #  
 
 IF(NOT GSL_VERSION)
-	if(IS_DIRECTORY ${I3_PORTS}/include/gsl-1.14)
-		set(GSL_VERSION "1.14")
-	else(IS_DIRECTORY ${I3_PORTS}/include/gsl-1.14)
-		set(GSL_VERSION "1.8")
-	endif(IS_DIRECTORY ${I3_PORTS}/include/gsl-1.14)
+  foreach(v 1.15 1.14 1.8)
+    if(IS_DIRECTORY ${I3_PORTS}/include/gsl-${v})
+      set(GSL_VERSION "${v}")
+    endif(IS_DIRECTORY ${I3_PORTS}/include/gsl-${v})
+  foreach(v 1.15 1.14 1.8)
 ENDIF(NOT GSL_VERSION)
 
 if(BLAS_FOUND)
-tooldef(gsl 
+  tooldef(gsl 
     include/gsl-${GSL_VERSION}
     gsl/gsl_rng.h
     lib/gsl-${GSL_VERSION}
     NONE
-    gsl
-    )
-list(APPEND GSL_LIBRARIES ${BLAS_LIBRARIES})
+    gsl)
+  list(APPEND GSL_LIBRARIES ${BLAS_LIBRARIES})
 else(BLAS_FOUND)
-tooldef(gsl 
+  tooldef(gsl 
     include/gsl-${GSL_VERSION}
     gsl/gsl_rng.h
     lib/gsl-${GSL_VERSION}
     NONE
-    gsl gslcblas
-    )
+    gsl gslcblas)
 endif(BLAS_FOUND)
