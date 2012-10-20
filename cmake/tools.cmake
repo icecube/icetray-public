@@ -44,7 +44,7 @@ endif()
 #
 set(ALL_TOOLS pthread root boost python hippodraw
     rdmc expat blas lapack gsl sprng sla libarchive
-    mysql bdb log4cplus mpi photonics suitesparse
+    mysql bdb log4cplus mpi suitesparse
     ZThread omniORB jni ncurses healpix
     cdk qt4 cfitsio hdf5 minuit2 clhep geant4 zlib
     opencl gmp log4cpp xml2 genie zmq
