@@ -19,7 +19,7 @@
 #  
 
 IF(NOT GSL_VERSION)
-  foreach(v 1.15 1.14 1.8)
+  foreach(v 1.8 1.14 1.15)
     if(IS_DIRECTORY ${I3_PORTS}/include/gsl-${v})
       set(GSL_VERSION "${v}")
     endif(IS_DIRECTORY ${I3_PORTS}/include/gsl-${v})
