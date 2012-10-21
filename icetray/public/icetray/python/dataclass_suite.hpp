@@ -83,6 +83,14 @@ template <class T>
 class dataclass_suite : public bp::def_visitor<dataclass_suite<T > > {
 private:
 	
+	static
+	bp::str
+	list_repr(T &seq)
+	{
+		bp::list l(seq);
+		return bp::extract<bp::str>(l.attr("__repr__")());
+	}
+	
 	template <class Class, typename U>
 	static
 	typename boost::enable_if_c<detail::is_map<U>::value>::type
@@ -97,6 +105,9 @@ private:
 	add_indexing(Class &cl)
 	{
 		cl.def(list_indexing_suite<U>());
+		cl.def("__repr__", &list_repr);
+		using namespace scitbx::boost_python::container_conversions;
+		from_python_sequence<U, variable_capacity_policy>();
 	}
 	
 	template <class Class, typename U>
@@ -139,8 +150,8 @@ public:
 		// pattern above.
 		cl.def(copy_suite<T>());
 		cl.def_pickle(boost_serializable_pickle_suite<T>());
-		add_string_to_stream<Class, T>(cl);
 		add_indexing<Class, T>(cl);
+		add_string_to_stream<Class, T>(cl);
 		cl.def(freeze());
 	}
 	
