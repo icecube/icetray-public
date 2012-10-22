@@ -23,7 +23,7 @@ IF(NOT GSL_VERSION)
     if(IS_DIRECTORY ${I3_PORTS}/include/gsl-${v})
       set(GSL_VERSION "${v}")
     endif(IS_DIRECTORY ${I3_PORTS}/include/gsl-${v})
-  endforeach(v 1.15 1.14 1.8)
+  endforeach(v 1.8 1.14 1.15)
 ENDIF(NOT GSL_VERSION)
 
 if(BLAS_FOUND)
