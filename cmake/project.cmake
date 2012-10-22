@@ -241,18 +241,18 @@ macro(i3_add_library THIS_LIB_NAME)
       @ONLY
       )
 
-    if(NOT ${THIS_LIB_NAME}_ARGS_NO_DOXYGEN)
+    if(NOT ${THIS_LIB_NAME}_ARGS_NO_DOXYGEN AND DOXYGEN_FOUND)
 
       add_custom_target(${PROJECT_NAME}-${THIS_LIB_NAME}-doxygen
 	COMMAND mkdir -p ${DOXYGEN_OUTPUT_PATH}/${PROJECT_NAME}
-	COMMAND doxygen ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/doxyfile
+	COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/doxyfile
 	)
       add_dependencies(${PROJECT_NAME}-doxygen
 	${PROJECT_NAME}-${THIS_LIB_NAME}-doxygen
 	)
       add_dependencies(doxygen ${PROJECT_NAME}-doxygen)
 
-    endif(NOT ${THIS_LIB_NAME}_ARGS_NO_DOXYGEN)
+    endif(NOT ${THIS_LIB_NAME}_ARGS_NO_DOXYGEN AND DOXYGEN_FOUND)
 
     if(NOT ${THIS_LIB_NAME}_ARGS_NOT_INSPECTABLE AND XSLTPROC_BIN)
 
@@ -560,10 +560,12 @@ macro(i3_add_pybindings MODULENAME)
     # this is so you can use these projects with older i3-cmakes that do not yet
     # have this macro
     #
+    # NO_DOXYGEN is added here, because otherwise, upper level doxygen gets clobbered
+    #
     i3_add_library(${MODULENAME}-pybindings ${ARGN}
       LINK_LIBRARIES ${BOOST_PYTHON}
       INSTALL_DESTINATION lib/icecube
-      NOT_INSPECTABLE
+      NOT_INSPECTABLE NO_DOXYGEN
       MODULE
       )
 

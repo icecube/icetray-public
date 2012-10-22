@@ -47,7 +47,7 @@ set(ALL_TOOLS pthread root boost python hippodraw
     mysql bdb log4cplus mpi suitesparse
     ZThread omniORB jni ncurses healpix
     cdk qt4 cfitsio hdf5 minuit2 clhep geant4 zlib
-    opencl gmp log4cpp xml2 genie zmq
+    opencl gmp log4cpp xml2 genie zmq doxygen
     ${I3_EXTRA_TOOLS}   # add the extra tools and dedupe
     )
 list(REMOVE_DUPLICATES ALL_TOOLS)
