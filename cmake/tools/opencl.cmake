@@ -7,11 +7,15 @@
 #  OPENCL_INCLUDE_DIRS  - the OpenCL include directory
 #  OPENCL_LIBRARIES    - link these to use OpenCL
 
-IF (APPLE)
-    # we don't use the tooldef() macro, so we have to fudge pretty-printing
-    colormsg("")
-    colormsg(HICYAN "OpenCL")
+# we don't use the tooldef() macro, so we have to fudge pretty-printing
+colormsg("")
+colormsg(HICYAN "OpenCL")
     
+IF (APPLE)
+  if(CMAKE_SYSTEM_VERSION VERSION_LESS "11.0.0")
+    FOUND_NOT_OK("The OpenCL provided by this version of OS X is too old. Disabling.")
+  else(CMAKE_SYSTEM_VERSION VERSION_LESS "11.0.0")
+
     FOUND_OK("Using the OpenCL Framework because we're on Apple")
 
     # Search for the framework on Apple systems.
@@ -48,6 +52,7 @@ IF (APPLE)
 
     endif(OpenCL_FRAMEWORKS)
 
+  endif(CMAKE_SYSTEM_VERSION VERSION_LESS "11.0.0")
 ELSE (APPLE)
     # Unix style platforms
     FIND_LIBRARY(OPENCL_LIBRARIES OpenCL
