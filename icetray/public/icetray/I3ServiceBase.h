@@ -55,7 +55,9 @@ class I3ServiceBase {
         I3ServiceBase(const std::string &name):
             context_(*(new I3Context)),
 	    configuration_(new I3Configuration),
-            dummyContext_(true){}
+            dummyContext_(true){
+		configuration_->InstanceName(name);
+	}
 
         /// destructor
         virtual ~I3ServiceBase(){
