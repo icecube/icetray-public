@@ -364,5 +364,29 @@ i3_test_scripts
 
       
 
-      
+qt4_i3_automoc
+--------------
+
+.. _qt4_i3_automoc():
+
+.. index:: qt4_i3_automoc()
+   single: Cmake macros ; qt4_i3_automoc()
+
+.. cmake:: qt4_i3_automoc(file1 [file2 ... fileN])
+
+   **Example**::
+
+     qt4_i3_automoc( private/mygui/MyWidget.cpp )
+
+   **Targets created**: none; .moc files will be written to the
+   project's build directory.
+
+   **Options**: none
+
+   The moc tool will be run with the -DQT_NO_KEYWORDS option.  This
+   means moc will ignore the keywords 'signals' and 'slots'; use instead
+   the Q_SIGNALS and Q_SLOTS macros in your code.  This is done to ensure
+   compatibility with boost's signals library.
+
+
 
