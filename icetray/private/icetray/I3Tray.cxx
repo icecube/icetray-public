@@ -508,13 +508,12 @@ I3Tray::Finish()
                     "Execute()");
 		return;
 	}
+	if (modules_in_order.size() == 0 || !driving_module)
+		return;
 	finish_called = true;
 
 	std::cout << "I3Tray finishing...\n";
 
-	if (!driving_module)
-		log_fatal("Attempt to call finish, but there is no driving "
-		    "module.  Did you forget to call Execute()?");
 	driving_module->Do(&I3Module::Finish);
   
 	BOOST_FOREACH(const std::string& factname, factories_in_order) {
