@@ -112,10 +112,7 @@ I3Tray::I3Tray() :
 
 I3Tray::~I3Tray()
 {
-	// this Finish() is introducing too many bugs.  Bad.  
-	// interferes with checking for 'execute called', etc.
-	// uncomment and run the test suite to see.
-	// Finish();
+	Finish();
 
 	suspension_requested_ = false;
 }
@@ -507,10 +504,8 @@ void
 I3Tray::Finish()
 {
 	if (finish_called || !execute_called) {
-		const string e = "Finish() already called, or before calling "
-		    "Execute()";
-		log_trace("%s", e.c_str());
-		throw runtime_error(e.c_str());
+		log_warn("Finish() already called, or before calling "
+                    "Execute()");
 		return;
 	}
 	finish_called = true;
