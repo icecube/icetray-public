@@ -338,6 +338,12 @@ public:
     } 
   }
 
+  template<typename T>
+  T GetService(const std::string &name)
+  {
+    return context_.Get<T>(name);
+  }
+
   /** The context wherein my configuration, outboxes, and so forth can
    be found.
   */
