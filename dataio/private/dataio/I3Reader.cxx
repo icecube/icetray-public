@@ -123,7 +123,7 @@ I3Reader::Configure()
 void
 I3Reader::Process()
 {
-  if (ifs_.peek() == EOF)
+  while (ifs_.peek() == EOF)
     {
       if (filenames_iter_ == filenames_.end())
 	{
