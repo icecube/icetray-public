@@ -107,7 +107,12 @@ I3Module::Flush()
 void 
 I3Module::Do(void (I3Module::*f)())
 {
-  (this->*f)();
+  try {
+    (this->*f)();
+  } catch (...) {
+    log_error("%s: Exception thrown", GetName().c_str());
+    throw;
+  }
 
   for (outboxmap_t::iterator iter = outboxes_.begin();
        iter != outboxes_.end();
