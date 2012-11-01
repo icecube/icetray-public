@@ -113,10 +113,30 @@ class I3Frame
     I3Frame::Stream stream;
   };
 
+  struct hashed_str_t
+  {
+    hashed_str_t(const std::string &str) : string(str), hash(__gnu_cxx::hash<std::string>()(str)) {}
+    bool operator == (const hashed_str_t &b) const {
+      if (hash != b.hash) return false;
+      return string == b.string;
+    }
+    hashed_str_t & operator = (const hashed_str_t &b) {
+      string = b.string;
+      hash = b.hash;
+      return *this;
+    }
+    std::string string;
+    size_t hash;
+  };
+  struct hashed_str_t_hash
+  {
+    size_t operator()(const hashed_str_t &h) const { return h.hash; }
+  };
+
 #if 1 //GCC_VERSION <= 40300
-  typedef __gnu_cxx::hash_map<std::string, boost::shared_ptr<value_t> > map_t;
+  typedef __gnu_cxx::hash_map<hashed_str_t, boost::shared_ptr<value_t>, hashed_str_t_hash> map_t;
 #else
-  typedef std::unordered_map<std::string, boost::shared_ptr<value_t> > map_t;
+  typedef std::unordered_map<hashed_str_t, boost::shared_ptr<value_t>, hashed_str_t_hash> map_t;
 #endif
   /// may change type_name field in value
   static std::string type_name(const value_t&);
@@ -148,7 +168,7 @@ class I3Frame
     mutable pair_t result;
     result_type operator()(map_t::const_reference pr) const
     {
-      result.first = pr.first;
+      result.first = pr.first.string;
       result.second = I3Frame::type_name(*pr.second);
 
       return result;
@@ -176,7 +196,7 @@ class I3Frame
     explicit deserialize_transform(const I3Frame* frame) : frame_(frame) { }
     result_type operator()(map_t::const_reference pr) const
     {
-      result.first = pr.first;
+      result.first = pr.first.string;
       result.second = frame_->get_impl(pr);
 
       return result;

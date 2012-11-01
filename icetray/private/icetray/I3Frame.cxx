@@ -140,7 +140,7 @@ I3Frame::keys() const
       iter != map_.end();
       iter++)
     {
-      keys_.push_back(iter->first);
+      keys_.push_back(iter->first.string);
     }  
   std::sort(keys_.begin(), keys_.end());
   return keys_;
@@ -199,11 +199,12 @@ void I3Frame::purge()
 
 bool I3Frame::Has(const std::string& key, const Stream& stream) const
 {
+  hashed_str_t hash_key(key);
   for(map_t::const_iterator it = map_.begin(); it != map_.end(); it++)
     {
       if (it->second->stream != stream)
         continue;
-      if (it->first == key)
+      if (it->first == hash_key)
 	return true;
     }
 
@@ -466,7 +467,7 @@ void I3Frame::save(OStreamT& os, const vector<string>& skip) const
              skipIter++)
           {
             boost::regex reg(*skipIter);
-            skipIt = boost::regex_match(iter->first, reg);
+            skipIt = boost::regex_match(iter->first.string, reg);
           }
 
 	if (iter->second->stream != stop_.id())
@@ -475,7 +476,7 @@ void I3Frame::save(OStreamT& os, const vector<string>& skip) const
         if (skipIt) continue;
         
         if (!mapAsSet.insert(&*iter).second)
-          log_fatal("frame contains a duplicated pointer for \"%s\"", iter->first.c_str());
+          log_fatal("frame contains a duplicated pointer for \"%s\"", iter->first.string.c_str());
       }
 
     i3frame_nslots_t size = mapAsSet.size();
@@ -487,7 +488,7 @@ void I3Frame::save(OStreamT& os, const vector<string>& skip) const
          iter++)
       {
         map_t::value_type& i = **iter;
-        const string &key = i.first;
+        const string &key = i.first.string;
         value_t& value = *i.second;
 
         poa << make_nvp("key", key);
@@ -864,7 +865,7 @@ ostream& operator<<(ostream& os, const I3Frame& frame)
       iter != frame.map_.end();
       iter++)
     {
-      keys.push_back(iter->first);
+      keys.push_back(iter->first.string);
     }  
   std::sort(keys.begin(), keys.end());
 
@@ -916,7 +917,7 @@ I3FrameObjectConstPtr I3Frame::get_impl(map_t::const_reference pr,
   } catch (const ar::archive_exception& e) {
     if (!quietly)
       log_error("frame caught exception \"%s\" while loading class type \"%s\" "
-                "at key \"%s\"", e.what(), value.blob.type_name.c_str(), pr.first.c_str());
+                "at key \"%s\"", e.what(), value.blob.type_name.c_str(), pr.first.string.c_str());
     throw e;
   }
   
