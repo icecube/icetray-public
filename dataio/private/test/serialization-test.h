@@ -5,9 +5,6 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/fstream.hpp>
 
-#include <boost/archive/portable_binary_oarchive.hpp>
-#include <boost/archive/portable_binary_iarchive.hpp>
-
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/string.hpp>
@@ -19,6 +16,7 @@
 #include <fstream>
 
 #include <boost/iostreams/filtering_stream.hpp>
+#include <icetray/portable_binary_archive.hpp>
 #include <icetray/open.h>
 
 using boost::archive::portable_binary_oarchive;
