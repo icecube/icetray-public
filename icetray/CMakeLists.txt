@@ -211,8 +211,6 @@ i3_test_compile(main private/test/main.cxx)
 
 i3_test_scripts(resources/test/*.py)
 
-add_subdirectory(private/compile-fail)
-add_subdirectory(private/compile)
 
 #add_subdirectory(private/test-lib)
 
