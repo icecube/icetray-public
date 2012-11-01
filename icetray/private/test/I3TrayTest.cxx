@@ -42,34 +42,6 @@ TEST(normal_interface)
     
 }
 
-#if 0
-//#warning put this error checking back.  For now we do without it.
-T_EST(last_module_has_disconnected_outbox_0)
-{
-  I3Tray tray;
-  tray.AddModule<TestModule>("test1");
-  tray.AddModule<TestModule>("test2");
-
-  try {
-    tray.Execute(0);
-    FAIL("that should have complained about a disconnected outbox");
-  } catch (const std::exception& e) { }
-}
-
-
-T_EST(last_module_has_disconnected_outbox_1)
-{
-  I3Tray tray;
-  tray.AddModule("TestModule","test1");
-  tray.AddModule("TestModule","test2");
-
-  try {
-    tray.Execute(0);
-    FAIL("that should have complained about a disconnected outbox");
-  } catch (const std::exception& e) { }
-}
-#endif
-
 TEST(convenience_interface_0)
 {
   I3Tray tray;
