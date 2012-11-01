@@ -261,7 +261,7 @@ statements make great documentation, leave clues as to what the author
 intended for the code to do, and assist in future debugging.
 
 
-As a guidline, the following guidlines are provided for choosing a 
+As a guideline, the following guidlines are provided for choosing a 
 logging level::
 
 * log_fatal - Only called for fatal errors, will throw.
@@ -269,7 +269,7 @@ logging level::
 * log_warn - Possible error conditions approaching....
 * log_info - Information to tell operator what's going on.
 * log_debug - Information for system expert.
-* log_trace - Chornic logorrhea. For step by step debugging.
+* log_trace - Chronic logorrhea. For step by step debugging.
 
 For non-CS experts, the guidline is:  Standard logging level is log_warn. Under 
 absolutely normal conditions, no output at log_warn or higher.
