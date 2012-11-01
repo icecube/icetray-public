@@ -69,7 +69,7 @@ namespace boost { namespace python {
          
              // HACK: copyableId shall be the same as the result of id(copyable) in Python
              // please tell me that there is a better way! (and which ;-p)
-             size_t copyableId = (size_t)(copyable.ptr());
+             uintptr_t copyableId = (uintptr_t)(copyable.ptr());
              memo[copyableId] = result;
          
              bp::extract<bp::dict>(result.attr("__dict__"))().update(
