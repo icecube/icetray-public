@@ -429,7 +429,11 @@ if(NOT METAPROJECT_CONFIGURED)
   #  cmake -DCMAKE_BUILD_TYPE:STRING=Debug, we need to use that value
   #
   if (NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel" FORCE)
+    if(NOT META_PROJECT MATCHES "trunk$")
+      set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel" FORCE)
+    else(NOT META_PROJECT MATCHES "trunk$")
+      set(CMAKE_BUILD_TYPE "RelWithAssert" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel" FORCE)
+    endif(NOT META_PROJECT MATCHES "trunk$")
   endif (NOT CMAKE_BUILD_TYPE)
 
   set(CMAKE_CXX_FLAGS "${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPRESSION_FLAGS}")
@@ -449,7 +453,26 @@ if(NOT METAPROJECT_CONFIGURED)
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}" CACHE STRING
     "Flags used by compiler during release builds" FORCE)
 
-## coverage flags
+  ## RelWithAssert flags
+  set(CMAKE_CXX_FLAGS_RELWITHASSERT "-O${RELOPTLEVEL} -Wno-unused-variable" CACHE STRING
+    "Flags used by compiler during Release+Assert builds" FORCE)
+  set(CMAKE_C_FLAGS_RELLWITHASSERT "-O${RELOPTLEVEL} -Wno-unused-variable" CACHE STRING
+    "Flags used by compiler during Release+Assert builds" FORCE)
+  set(CMAKE_EXE_LINKER_FLAGS_RELWITHASSERT "${CMAKE_EXE_LINKER_FLAGS_RELEASE}" CACHE STRING
+    "Flags used for linking binaries during Release+Assert builds." FORCE)
+  set(CMAKE_SHARED_LINKER_FLAGS_RELWITHASSERT "${CMAKE_SHARED_LINKER_FLAGS_RELEASE}" CACHE STRING
+    "Flags used for linking shared libraries during Release+Assert builds." FORCE)
+  mark_as_advanced(
+    CMAKE_CXX_FLAGS_RELWITHASSERT
+    CMAKE_C_FLAGS_RELWITHASSERT
+    CMAKE_EXE_LINKER_FLAGS_RELWITHASSERT
+    CMAKE_SHARED_LINKER_FLAGS_RELWITHASSERT )
+  # Update the documentation string of CMAKE_BUILD_TYPE for GUIs
+  set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
+    "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert."
+    FORCE )
+
+  ## coverage flags
   set(CMAKE_CXX_FLAGS_COVERAGE "-pipe -g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
     "Flags used by the C++ compiler during coverage builds."
     FORCE )
@@ -471,7 +494,7 @@ if(NOT METAPROJECT_CONFIGURED)
     CMAKE_SHARED_LINKER_FLAGS_COVERAGE )
   # Update the documentation string of CMAKE_BUILD_TYPE for GUIs
   set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
-    "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel Coverage."
+    "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert Coverage."
     FORCE )
 
   #
