@@ -1,18 +1,3 @@
-/* 
-   DANGER:  caching results
-
-   pick keeps the address of the previous frame it saw
-
-   it is a frameobject filter
-
-   tray branches
-   first time, object is not there
-
-   second time, it already passsed a module on a diferent banch that put the frameobject there
-
-   get incorrect result 
-*/
-
 /**
  *  $Id$
  *  
