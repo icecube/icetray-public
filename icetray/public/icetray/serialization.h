@@ -31,8 +31,7 @@
 
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
-#include <boost/archive/portable_binary_iarchive.hpp>
-#include <boost/archive/portable_binary_oarchive.hpp>
+#include <icetray/portable_binary_archive.hpp>
 
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>

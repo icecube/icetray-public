@@ -402,9 +402,9 @@ namespace
     if (! orly)
       return;
     uint32_t size = container.size();
-#ifdef BOOST_PORTABLE_BINARY_ARCHIVE_BIG_ENDIAN
+#if BYTE_ORDER == BIG_ENDIAN
     uint32_t swapped = size;
-    boost::archive::portable::swap_impl<sizeof(size)>::swap(swapped);
+    boost::archive::portable::swap(swapped);
     crc.process_bytes(&swapped, sizeof(size));
 #else
     crc.process_bytes(&size, sizeof(size));
@@ -419,9 +419,9 @@ namespace
   {
     if (!orly)
       return;
-#ifdef BOOST_PORTABLE_BINARY_ARCHIVE_BIG_ENDIAN
+#if BYTE_ORDER == BIG_ENDIAN
     T swapped = pod;
-    boost::archive::portable::swap_impl<sizeof(T)>::swap(swapped);
+    boost::archive::portable::swap(swapped);
     crc.process_bytes(&swapped, sizeof(T));
 #else
     crc.process_bytes(&pod, sizeof(T));
@@ -553,8 +553,10 @@ bool I3Frame::load(IStreamT& is, const vector<string>& skip, bool verify_cksum)
   if (frameTagRead[0] != tag[0])
     {  
       // reinterpret tag as version #
-#ifdef BOOST_PORTABLE_BINARY_ARCHIVE_BIG_ENDIAN
-      boost::archive::portable::swap_impl<sizeof(frameTagRead)>::swap(frameTagRead);
+#if BYTE_ORDER == BIG_ENDIAN
+      BOOST_STATIC_ASSERT(sizeof(frameTagRead) == 4);
+      uint32_t &frameTagInt = reinterpret_cast<uint32_t &>(frameTagRead);
+      boost::archive::portable::swap(frameTagInt);
 #endif
       const i3frame_version_t* tmpVersion =
 	reinterpret_cast<i3frame_version_t*>(frameTagRead);

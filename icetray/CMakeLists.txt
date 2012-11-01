@@ -94,8 +94,6 @@ i3_add_library(icetray
   private/icetray/open.cxx
   private/icetray/load_project.cxx
   private/icetray/I3FrameObject.cxx      
-  private/icetray/portable_binary_iarchive.cxx
-  private/icetray/portable_binary_oarchive.cxx
   private/icetray/I3Logging.cxx        
   private/icetray/PythonLogging.cxx            
   private/icetray/I3Configuration.cxx
@@ -118,6 +116,7 @@ i3_add_library(icetray
   private/icetray/I3TrayInfoService.cxx  
   private/icetray/I3IcePick.cxx        
   private/icetray/I3PacketModule.cxx  
+  private/icetray/serialization.cxx  
   ${I3_BACKTRACE_CXX}
   private/icetray/PythonInterpreter.cxx        
   private/icetray/PythonFunction.cxx           

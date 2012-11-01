@@ -20,30 +20,17 @@
  *  
  */
 
-#include <istream>
+#include <iostream>
 
-#include <boost/archive/portable_binary_iarchive.hpp>
-
-#include <boost/archive/impl/basic_binary_iarchive.ipp>
-#include <boost/archive/basic_binary_iprimitive.hpp> // contains init(), etc
-#include <boost/archive/impl/basic_binary_iprimitive.ipp> // contains init(), etc
+#include <icetray/portable_binary_archive.hpp>
 #include <boost/archive/impl/archive_pointer_iserializer.ipp>
-
-#if BOOST_VERSION < 103600
-#define BOOST_ARCHIVE_SOURCE
-#endif
+#include <boost/archive/impl/archive_pointer_oserializer.ipp>
 
 namespace boost {
 namespace archive {
   
-#if BOOST_VERSION > 103301
-  template class basic_binary_iprimitive<portable_binary_iarchive, std::istream::char_type, std::istream::traits_type> ;
-#else
-  template class basic_binary_iprimitive<portable_binary_iarchive, std::istream> ;
-#endif
-  template class basic_binary_iarchive<portable_binary_iarchive> ;
-  //  template class portable_binary_iarchive_impl<portable_binary_iarchive> ;
   template class detail::archive_pointer_iserializer<portable_binary_iarchive> ;
+  template class detail::archive_pointer_oserializer<portable_binary_oarchive> ;
 
 } // namespace archive
 } // namespace boost
