@@ -22,7 +22,7 @@ The I3_MODULE()  macro
 
 Take a small section from a typical steering file::
 
- tray.AddModule('I3SimpleSeed', 'seed', SeedZenith=1.28, SeedAzimuth=3.14)
+ tray.AddModule('I3SimpleSeed', 'seed', SeedZenith=1.28, SeedAzimuth=math.pi)
 
 This tells icetray that it should create an I3Module of type I3SimpleSeed, add it to the tray, and configure a couple of the I3SimpleSeed's parameters. In order to accomplish this, icetray needs to be able to convert the string "I3SimpleSeed" to a function that creates a module of type "I3SimpleSeed".
 
