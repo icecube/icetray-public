@@ -43,21 +43,3 @@ TEST(correctConfiguration_2)
   tray.Finish();
 }
 
-TEST(wrongConfiguration)
-{
-  try 
-  {
-    I3Tray tray;
-    tray.AddModule("BottomlessSource", "source");
-    tray.AddModule<Client>("client");
-      
-    tray.ConnectBoxes("client","OutBox","source");
-      
-//#warning need more robust checking for cycles and pathological tray configurations.
-    // FAIL("This is supposed to generate an error");
-  }
-  catch(const std::exception& e)
-    {
-      // everything's fine
-    }
-}
