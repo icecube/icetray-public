@@ -289,8 +289,8 @@ I3Tray::ConnectBoxes(const std::string& fromModule,
 	log_debug("connecting outbox \"%s\" on module \"%s\" to module \"%s\"", 
 	    fromOutBox.c_str(), fromModule.c_str(), toModule.c_str());
 
-	// XXX: some modules only AddOutBox() at configure time
-	// accomodate this by adding it for them
+	// Some modules only AddOutBox() at configure time. Accomodate this
+	// by adding it for them
 	if (module->outboxes_.find(fromOutBox) == module->outboxes_.end()) {
 		module->AddOutBox(fromOutBox);
 		log_warn("module \"%s\" doesn't have an out box named \"%s\"",
@@ -398,7 +398,6 @@ I3Tray::Configure()
 	}
 
 	// Find the module without an inbox and set to be the "driving" module.
-	// XXX: Isn't this always just the first module?
 	driving_module.reset();
 	BOOST_FOREACH(const std::string &modname, modules_in_order) {
 		I3ModulePtr module = modules[modname];
