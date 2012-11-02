@@ -90,7 +90,7 @@ include(tools)
 include(project)
 
 if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-add_custom_target(test
+add_custom_target(i3test
   COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${EXECUTABLE_OUTPUT_PATH}/runtests.py
   COMMENT "
 >>>
@@ -99,13 +99,13 @@ add_custom_target(test
 >>>
 ")
 else(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-add_custom_target(test
+add_custom_target(i3test
   COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${EXECUTABLE_OUTPUT_PATH}/runtests.py
   COMMENT "Running tests via the utility 'runtests.py' in your $I3_BUILD/bin/ directory.")
 endif(NOT CMAKE_GENERATOR STREQUAL "Ninja")
 
 add_custom_target(test-bins)
-add_dependencies(test test-bins)
+add_dependencies(i3test test-bins)
 
 add_custom_target(bottest
   COMMAND ln -sf ${EXECUTABLE_OUTPUT_PATH}/runtests.py ${EXECUTABLE_OUTPUT_PATH}/bottest.py
@@ -165,7 +165,7 @@ add_dependencies(tarball tarball-finish)
 
 # this is outside because it contains the test macros, which 
 # might be noops
-include(testing)
+#include(testing)
 
 # this is what's left of BuildSlave.cmake. don't change it! -nega
 option(BUILD_SLAVE "Be a build slave, report build/testing" OFF)
@@ -231,7 +231,7 @@ else()
   set(SUBDIRS ${I3_PROJECTS})
 endif()
 
-i3_add_testing_targets()
+#i3_add_testing_targets()
 
 colormsg("")
 colormsg(_HIBLUE_ "Configuring projects:")
@@ -392,3 +392,7 @@ file(DOWNLOAD
   TIMEOUT 0.5
   )
 file(REMOVE ${CMAKE_BINARY_DIR}/.tag)
+
+### ctest testing
+enable_testing()
+

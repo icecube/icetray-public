@@ -162,7 +162,7 @@ macro(i3_add_library THIS_LIB_NAME)
     add_library(${THIS_LIB_NAME} ${ARGS} ${${THIS_LIB_NAME}_ARGS_SOURCES})
     add_dependencies(${THIS_LIB_NAME} env-check)
 
-    add_dependencies(test ${THIS_LIB_NAME})
+    add_dependencies(i3test ${THIS_LIB_NAME})
 
 
     set_target_properties(${THIS_LIB_NAME}
@@ -307,7 +307,7 @@ macro(i3_project PROJECT_NAME)
 
     add_custom_target(${PROJECT_NAME}-doxygen)
 
-    i3_add_testing_targets()
+    #i3_add_testing_targets()
 
     if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/resources)
       install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/resources/
@@ -415,7 +415,7 @@ macro(i3_executable THIS_EXECUTABLE_NAME)
 
     add_dependencies(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME} env-check)
 
-    add_dependencies(test ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME})
+    add_dependencies(i3test ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME})
 
     use_projects(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME}
       PROJECTS ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_USE_PROJECTS})
@@ -453,6 +453,10 @@ endmacro(i3_executable THIS_EXECUTABLE_NAME)
 
 macro(i3_test_executable THIS_EXECUTABLE_NAME)
   if (BUILD_${I3_PROJECT})
+    enable_testing()
+    add_test(NAME "${PROJECT_NAME}::unit_tests" #::${testable_file}/${unittest}"
+             WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+             COMMAND ${PROJECT_NAME}-test -sa)
 
     parse_arguments(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}
       "USE_TOOLS;USE_PROJECTS;LINK_LIBRARIES"
@@ -507,7 +511,7 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
       execute_process(COMMAND grep -l TEST_GROUP ${file} OUTPUT_VARIABLE testable_file)
       string(REGEX REPLACE "[ \n]+" "" testable_file "${testable_file}")
       get_filename_component(testable_file "/${testable_file}" NAME)
-      execute_process(COMMAND perl -ne "m{TEST\\s*\\((\\w+)\\)}s && print \"$1\;\"" ${file}
+      execute_process(COMMAND perl -ne "m{^\\s*TEST\\s*\\((\\w+)\\)}s && print \"$1\;\"" ${file}
 	OUTPUT_VARIABLE UNITTESTS)
 
       if(NOT "${testable_file}" STREQUAL "")
@@ -519,6 +523,10 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
 	    )
 
 	  file(APPEND ${THIS_TEST_UNIT_LIST} "${testable_file}/${unittest} ${THIS_TEST_PREFIX_ARGS} ${CMAKE_BINARY_DIR}/env-shell.sh ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} -s ${testable_file}/${unittest}\n")
+#    # individual tests
+#	  add_test(NAME "${PROJECT_NAME}::${testable_file}/${unittest}"
+#	           WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+#	           COMMAND ${PROJECT_NAME}-test -s ${testable_file}/${unittest})
 
 	endforeach(unittest ${UNITTESTS})
       endif(NOT "${testable_file}" STREQUAL "")
@@ -624,7 +632,11 @@ macro(i3_test_scripts)
       ${PYTHON_EXECUTABLE} ${NATIVE_TEST_DRIVER} ${CMAKE_CURRENT_BINARY_DIR} run ${TESTNAME}
       )
 
-    file(APPEND ${THIS_TEST_SCRIPT_LIST} "${this_script} time ${THIS_TEST_PREFIX_ARGS} ${CMAKE_BINARY_DIR}/env-shell.sh ${script}\n")
+    file(APPEND ${THIS_TEST_SCRIPT_LIST} "${this_script} time ${THIS_TEST_PREFIX_ARGS} ${CMAKE_BINARY_DIR}/env-shell.sh ${script}\n") 
+    get_filename_component(script_basename ${script} NAME)
+    add_test(NAME ${PROJECT_NAME}::${script_basename}
+             WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+             COMMAND ${script})
 
   endforeach(script ${${PROJECT_NAME}_SCRIPTS_ALPHABETICAL})
 

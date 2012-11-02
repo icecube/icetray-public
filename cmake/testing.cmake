@@ -344,7 +344,7 @@ macro(i3_test_compile testname srcfile)
     "${CMAKE_SOURCE_DIR}/cmake/CompileTest"
     "${TESTCOMPILE_DIR}"
     --build-generator "${CMAKE_GENERATOR}"
-    --build-makeprogram "${MAKEPROGRAM}"
+    --build-makeprogram "${CMAKE_MAKE_PROGRAM}"
     --build-project CompileTest
     --build-options -VV -DSOURCE=${TESTCOMPILE_FILE} -DINCLUDES=${TEST_INCLUDES} -DCOMPILE_FLAGS=${COMPILE_FLAGS})
 endmacro(i3_test_compile testname srcfile)
