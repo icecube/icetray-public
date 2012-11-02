@@ -35,6 +35,7 @@
 #include <icetray/I3TrayInfo.h>
 #include <icetray/I3Module.h>
 #include <icetray/I3Context.h>
+#include <icetray/init.h>
 
 class I3ServiceFactory;
 

@@ -25,7 +25,7 @@
 
 #include <icetray/I3Logging.h>
 #include <icetray/Singleton.h>
-#include <icetray/PythonInterpreter.h>
+#include <icetray/init.h>
 #include <boost/python.hpp>
 
 namespace bp = boost::python;
@@ -38,8 +38,7 @@ namespace I3Logging
 
     python_logger() 
     {
-      const I3::InitializeInterpreter& ii 
-	= I3::Singleton<I3::InitializeInterpreter>::get_mutable_instance().init();
+      init_icetray_lib();
 
       main_module = bp::import("__main__");
       main_namespace = main_module.attr("__dict__");
@@ -78,7 +77,7 @@ def cpp_log(level, msg, file, lineno):\n\
     //l.setLoggerClass(CppLogger)\n
   };
 
-  const static python_logger& pylog = I3::Singleton<python_logger>::get_mutable_instance();
+  //const static python_logger& pylog = I3::Singleton<python_logger>::get_mutable_instance();
 
   bool logger::log(int level, const char* file, int line, const char* fmt, ...)
   {

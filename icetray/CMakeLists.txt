@@ -118,7 +118,7 @@ i3_add_library(icetray
   private/icetray/I3PacketModule.cxx  
   private/icetray/serialization.cxx  
   ${I3_BACKTRACE_CXX}
-  private/icetray/PythonInterpreter.cxx        
+  private/icetray/init.cxx        
   private/icetray/PythonFunction.cxx           
   private/icetray/PythonModule.cxx             
   private/icetray/name_of.cxx 
