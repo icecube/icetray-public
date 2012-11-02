@@ -34,6 +34,7 @@ using namespace std;
 #include <setjmp.h>
 
 #include <I3Test.h>
+#include <icetray/init.h>
 #include <boost/program_options.hpp>
 #include <iterator>
 #include <iomanip>
@@ -447,6 +448,7 @@ int main(int argc, char* argv[])
 {
   string xmlfile;
   string dartpath;
+  I3::init_icetray_lib();
   try {
     options.add_options()
       ("help,h", "this message")
