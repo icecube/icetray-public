@@ -27,6 +27,10 @@ Components of this metaproject
    :glob:
    :maxdepth: 2
 
+   projects/cmake/index
+   projects/icetray/index
+   projects/dataio/index
+   projects/dataclasses/index
    projects/*/index
 
 Of general interest
