@@ -107,19 +107,16 @@ a module later in the processing chain, looks like this::
  void 
  OtherModule::Physics(I3FramePtr frame)
  { 
-   // we can get a const reference:
-   const I3Particle& the_particle = frame.Get<I3Particle>("myparticle"); 
- 
-   // or a const shared_ptr
+   // get a const shared_ptr
    I3ParticleConstPtr the_particleptr = 
       frame.Get<I3ParticleConstPtr>("myparticle");
    
    PushFrame(frame); // send the frame downstream
  }
 
-Here we've got a const reference to the I3Particle. This is ideal: we
-don't have to keep track of the addresses of anything, and
-the_particle is const, so the compiler can ensure we don't
+Here we've got a const shared pointer to the I3Particle. This is ideal: you
+can check that you what you asked for (check for non-null pointer) ad 
+the_particleptr is const, so the compiler can ensure we don't
 accidentally modify it.
 
 Requirements on toplevel frame objects
@@ -248,8 +245,47 @@ This function:
 Get takes two forms. One returns a const reference to an object, the
 other returns a shared_ptr to a const object.
 
+Getting a SomethingConstPtr
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You generally want to get objects from the frame as shared pointer.
+
+This form of Get retrieves a shared_ptr to a frame object::
+
+ template <typename T>
+ T
+ Get(const std::string& key);
+
+The frame will first attempt to locate an object
+at key, and an object does exist there, the frame will then attempt to
+dynamic_pointer_cast this object to the template argument T. If either
+of these steps fails, the frame returns a null TPtr (or
+shared_ptr<const > if you like).
+
+Note that this function will only compile if the type T is const. That
+is::
+
+ I3ParticlePtr particle = frame.Get<I3ParticlePtr>("linefit_result");
+
+
+will not compile. The reason for this is that what you're requesting,
+above, is not a const pointer: the module executing the code above
+would be able to change a frame item that it had not put there. Your
+collaborators agree almost unanimously that to allow this is a Bad
+Idea. The code above is easy enough to fix, though::
+
+ I3ParticleConstPtr particle = frame.Get<I3ParticleConstPtr>("linefit_result");
+           
+
+This works fine. Note that I3ParticleConstPtr is a typedef of
+shared_ptr<const I3Particle>. See :ref:`I3_POINTER_TYPEDEFS`.
+
 Getting a reference
 ^^^^^^^^^^^^^^^^^^^
+
+There are times when getting a reference is preferred, for example,
+when you want a fatal error when objects that absolutely should be present
+are somehow missing.
 
 ::
 
@@ -285,42 +321,6 @@ earlier in the module chain::
 
 This one does require a specific key name. ("linefit_result", above.)
 
-Getting a SomethingConstPtr
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-There are certain situations where retrieving a reference to an object
-is insufficient, for example if one wants to hold a shared_ptr to a
-frame object to ensure that it is not deleted.
-
-The second form of Get retrieves a shared_ptr to a frame object::
-
- template <typename T>
- T
- Get(const std::string& key);
-
-As in the other form, the frame will first attempt to locate an object
-at key, and an object does exist there, the frame will then attempt to
-dynamic_pointer_cast this object to the template argument T. If either
-of these steps fails, the frame returns a null TPtr (or
-shared_ptr<const > if you like).
-
-Note that this function will only compile if the type T is const. That
-is::
-
- I3ParticlePtr particle = frame.Get<I3ParticlePtr>("linefit_result");
-
-
-will not compile. The reason for this is that what you're requesting,
-above, is not a const pointer: the module executing the code above
-would be able to change a frame item that it had not put there. Your
-collaborators agree almost unanimously that to allow this is a Bad
-Idea. The code above is easy enough to fix, though::
-
- I3ParticleConstPtr particle = frame.Get<I3ParticleConstPtr>("linefit_result");
-           
-
-This works fine. Note that I3ParticleConstPtr is a typedef of
-shared_ptr<const I3Particle>. See :ref:`I3_POINTER_TYPEDEFS`.
 
 Examples
 ^^^^^^^^
