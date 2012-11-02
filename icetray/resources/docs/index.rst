@@ -42,8 +42,4 @@ Also see the `doxygen <../../doxygen/icetray/index.html>`_ docs.
 To Document
 -----------
 
-* The "lazy frame"
-* Frame objects tagged with which stream they are on
-* frame printout
-
 
