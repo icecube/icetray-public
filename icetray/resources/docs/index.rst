@@ -28,7 +28,6 @@ Table of Contents:
 
    classes
    logging
-   framestreamstop
    inspect
    standard_modules
    scripting
