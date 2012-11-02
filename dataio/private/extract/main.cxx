@@ -72,6 +72,7 @@ void usage() {
 
 int main(int argc, char* argv[])
 {
+  I3::init_icetray_lib();
   options.add_options()
     ("help,h", "this message")
     ("output-file,o", po::value< string >(), "output file")

@@ -103,6 +103,7 @@ map<char, string> keybindings;
 
 int main (int argc, char *argv[])
 {
+  I3::init_icetray_lib();
   // if we're logging to log4cplus, turn down the level
   // so as not to disturb our curses
 #ifdef LOG4CPLUS_LOGLEVEL_HEADER_

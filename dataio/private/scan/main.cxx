@@ -77,6 +77,7 @@ void usage(int, char** argv) {
 
 int main(int argc, char* argv[])
 {
+  I3::init_icetray_lib();
   options.add_options()
     ("help,h", "this message")
     ("input-file,i", po::value< string >(), "input file")
