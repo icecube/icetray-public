@@ -127,6 +127,10 @@ View::start()
   cbreak();       /* take input chars one at a time, no wait for \n */
   noecho();       /* don't echo input */
   curs_set(0);
+  #ifndef NDEBUG
+  if (curs_set(0) == -1)
+     log_debug("Sorry, invisible cursor not supported on this terminal");
+  #endif
 
   /* Declare the labels. */
   cdkscreen = initCDKScreen(stdscr);
