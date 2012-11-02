@@ -4,6 +4,99 @@ Standard I3Modules supplied with IceTray
 The standard modules supplied with icetray are generally small,
 utility-type modules.
 
+Copy
+----
+
+A module to copy one frame object to another, new location.
+
+Example
+^^^^^^^
+
+.. highlight:: python
+
+::
+
+  tray.AddModule("Copy", "copy", 
+                 Keys = ["src1", "dst1", "src2", "dst2"])
+  
+
+Delete
+------
+
+A module to remove specific items from the Frame.
+
+Example
+^^^^^^^
+
+.. highlight:: python
+
+::
+
+  tray.AddModule("Delete", "delete1",
+                  Keys = ["here", "there"])
+
+
+Dump
+----
+
+Print the contents of the Frame for each and every stop seen
+
+Example
+^^^^^^^
+
+.. highlight:: python
+
+::
+
+  tray.AddModule("Dump","Dump")
+
+Keep
+----
+
+This module will clean out the frame.  Only frame object names provided in the
+"Keys" argument will be kept.
+
+
+Example
+^^^^^^^
+
+.. highlight:: python
+
+::
+  tray.AddModule('Keep', 'k',
+                  Keys=['GoodStuff'])
+
+Rename
+------
+
+Rename one frame object to a new, unique name
+
+Example
+^^^^^^^
+
+.. highlight:: python
+
+::
+
+  tray.AddModule("Rename", "rename",
+                  Keys =  ["here", "here2", "there", "there2"])
+
+TrashCan
+--------
+
+The HeftyBag of IceTray.  This module is usually the last module in your Tray, it has an Inbox
+and no Outbox.  Frame check in but they dont check out.  If not provided, the IceTray
+will add one for you.
+
+Example
+^^^^^^^
+
+.. highlight:: python
+
+::
+
+
+
 DeleteUnregistered
 ------------------
 
@@ -47,13 +140,6 @@ Here is an example loop::
     PushFrame(frame, "OutBox"); 
   }
 
-Parameters
-^^^^^^^^^^
-None.
-
-OutBoxes
-^^^^^^^^
-One.
 
 Example
 ^^^^^^^
@@ -86,13 +172,7 @@ Parameters
 
 **Streams**:
 
-  A list of streams. Get on these streams.  If unset, get on GCDP.
-
-
-OutBoxes
-^^^^^^^^
-
-One
+  A list of streams. Get on these streams.  If unset, get on all.
 
 Example
 ^^^^^^^
