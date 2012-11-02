@@ -1,3 +1,5 @@
+.. _tray_segments:
+
 Tray segments
 =============
 

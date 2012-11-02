@@ -20,6 +20,11 @@
 
    .. automethod:: AddService
 
+   .. automethod:: AddSegment
+      .. seealso:: 
+
+      :ref:`tray_segments`
+
    .. automethod:: ConnectBoxes
 
    .. automethod:: Execute
