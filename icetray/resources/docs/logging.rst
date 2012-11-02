@@ -175,17 +175,8 @@ $I3_BUILD/icetray/resources/log4cplus.conf. If you'd like to customize
 your logging, you may modify this file and set your I3LOGGING_CONFIG
 appropriately.
 
-These links might help (all are forks of same code base):
+These links might help):
 
 Log4cplus homepage 
   http://log4cplus.sourceforge.net/
-
-Log4cxx homepage   
-  http://logging.apache.org/log4cxx/
-
-Log4cpp homepage   
-  http://log4cpp.sourceforge.net/
-
-Log4j hompage
-   http://logging.apache.org/log4j/docs/
 
