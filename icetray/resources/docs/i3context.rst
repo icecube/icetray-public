@@ -10,11 +10,10 @@ I3Context Reference
 The I3Context is a container similar to the I3Frame. The main similarities:
  * Both are implemented with a map of strings to smart pointers.
  * With both, one Puts smart pointers in, but can retrieve either smart pointers or references.
- * With both, getting references out is thought to be easier to read and safer.
 
 The main differences are:
- * I3Context is not used to pass event data from module to module as I3Frame is. I3Context is how instances of I3Module access services that the framework has been told to provide to them.
- * Consequently, most modules Put() things into the I3Frame, but only instances of I3ServiceFactory will Put() things into I3Contexts.
+ * I3Context is not used to pass event data from module to module as I3Frame is. I3Context is how instances of I3Module access services and configuration information shared across all modules.
+ * Consequently, only service factories and users of I3Tray can put things into the context but modules cannot -- and then only before the tray starts.
  * I3Context does not dynamic_cast when asked to Get() something. I3Context will only return an object as type T if that object was installed as exactly type T. (In contrast, the I3Frame will return an object as type T if it is a type T or a descendant of T, regardless of how it was Put().)
 
 The icetray passes a const I3Context to I3ServiceFactories and I3Modules in their constructors::
