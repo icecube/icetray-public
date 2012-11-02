@@ -30,7 +30,8 @@ struct TrashCan : public I3Module
   void Process() 
   { 
     log_trace("%s", __PRETTY_FUNCTION__);
-    PopFrame();
+    if (!PopFrame())
+      log_fatal("TrashCan is not a driving module");
   }
   
   SET_LOGGER("TrashCan");
