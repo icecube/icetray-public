@@ -57,6 +57,9 @@ Miscellaneous Changes
 - I3RecoPulse has new fields and new, lighter-weight serialization
 - I3Waveform source information modified
 - I3ConditionalModule's condition now operates on all frame types, not just P frames.
+- C++ programs linking to libicetray should now call I3::init_icetray_lib()
+  (from <icetray/init.h>) from their main().  This replaces a
+  magical static library initialization step in earlier versions.
 
 Tray Segment support
 """"""""""""""""""""
