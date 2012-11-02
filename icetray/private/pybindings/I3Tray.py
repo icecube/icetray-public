@@ -92,6 +92,22 @@ class I3Tray(icetray.I3Tray):
             raise
 
     def AddService(self, _type, _name, **kwargs):
+        """
+        Add a service factory to the tray.
+
+        :param _type:
+          a string (search for a registered c++ service factory)
+
+        :param _name:
+          instance name for this factory
+
+        :param kwargs: parameter values forwarded to the added module
+
+        **Example**::
+
+            tray.AddService("I3GSLRandomServiceFactory", "gslrng")
+        
+        """
         super(I3Tray, self).AddService(_type, _name)
         self.last_added = _name
         for k,v in kwargs.items():
@@ -99,6 +115,24 @@ class I3Tray(icetray.I3Tray):
         return self
 
     def AddSegment(self, _segment, _name, **kwargs):
+        """
+        Add a tray segment to the tray. This is a small scriptlet that can
+        autoconfigure some set of modules and services according to a
+        predefined configuration.
+
+        :param _segment:
+          tray segment (a python callable registered with @icetray.traysegment)
+
+        :param _name:
+          base for names of all added modules and services
+
+        :param kwargs: parameter values forwarded to the added segment
+
+        **Example**::
+
+            tray.AddSegment(icetray.ExampleSegment, "example")
+        
+	"""
 	(keys,vals) = (kwargs.keys(), kwargs.values())
 	argnames = inspect.getargspec(_segment)[0]
 	largnames = [a.lower() for a in argnames]
