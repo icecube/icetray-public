@@ -87,6 +87,13 @@
 
 #include <cmath>
 
+#if defined(__CINT__) && defined(__MAKECINT__)
+#include <TMath.h>
+
+#define M_PI TMath::Pi()
+#define M_E  TMath::E()
+#endif
+
 namespace I3Units
 {
   /**
