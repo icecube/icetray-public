@@ -30,8 +30,3 @@
 
    .. automethod:: Usage
 
-Reordering modules within Segments
-""""""""""""""""""""""""""""""""""
-
-TODO: How to reorder your modules.
-
