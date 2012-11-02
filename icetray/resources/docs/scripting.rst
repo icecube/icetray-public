@@ -67,123 +67,26 @@ There's a gotcha. Python has lists, and it has tuples.  ithon will
 convert either to an STL vector when it configures icetray, so this
 syntax will work too::
 
- tray.AddModule("Jeopardy", "j")(
-   ("I'll_take", "famous_numbers"),
-   ("for", 500), 
-   ("famous_numbers", (0, 1, 3.14159, 1.618034))
+ tray.AddModule("Jeopardy", "j",
+   I'll_take="famous_numbers",
+   for=500, 
+   famous_numbers=(0, 1, 3.14159, 1.618034
    )
 
 here you're implicitly creating a list: notice the parenthesis.  But
 if you want to configure a vector with only one entry, it wont work::
 
-   ("famous_numbers", (3.14159))
+   famous_numbers=3.14159
 
 here the parenthesis just disappear and that becomes just a double,
 fand you get a "cant convert parameter" error when configuring.  But
 tuples stay tuples::
 
-   ("famous_numbers", [3.14159])
+   famous_numbers=[3.14159]
 
 This works, and configures with a vector of length 1 containing pi.
 So just use [square brackets].  They mean the same thing and they're
 easier to see.
-
-
-Running multiple I3Trays in a loop, in the same script
---------------------------------------------------------
-In response to a recent email about running trays in a loop in a script, 
-like this::
-
-  for i in range(10):
-     tray = I3Tray()
-     tray.AddModule("foo") ...
- 
-     tray.Execute()
-
-They would get through several iterations and then die.::
-
- >
- > My hypothesis was (but I can't say for sure) that python wasn't cleaning
- > up the I3Tray completely, and that when the service was deleted from the
- > previous file, it was accessing instead the memory from the current
- > file. 
- >
- 
-It is neither python's nor icetray's fault.  
-To create and destroy I3Trays multiple
-times in the same script (what you're doing in that loop) requires
-that all objects/modules/services/everything that the I3Tray creates
-leak no memory and clean themselves up correctly when they are
-destroyed.  We know for sure this is not the case with ROOT objects
-(they both leak memory and store state in globals and statics) and it
-might very well be the case that some of our other modules don't do
-this cleanly.  This is something we don't test, but should... on the
-other hand it is likely that it would never really work well.  The
-I3Tray should probably just prohibit this kind of thing.
-
-Problems with global state are consistent with getting three or four
-times through the loop and then crashing.  At some point the planets
-align, some object accesses global state that is left over from the
-previous iteration, and kaboom.  That adding a sleep() after each 
-iteration helps a bit also makes sense, since if ROOT (or mysql or 
-the SuchAndSuchService) has threads running in the background doing 
-garbage collection (or perhaps simply
-garbage redistribution), that 1 second pause would get you a few more
-iterations before the crash.  
-
-So one would need to examine all that code for statics/globals and be
-sure that they restart well.  I'm not familiar with most of the code
-you're using, but I bet there are lots of problems with this.
-
-There's a pretty easy fix that is guaranteed to work, though: you
-simply run each tray in a separate process and check the exit status
-of the process.  Nonzero means failure.  One way to do this is to have
-the python script fork() just before you create the I3Tray.  The
-parent waits for the child to exit and collects the exit status of the
-child process, and the child runs the tray and exits.  This uses the
-operating system itself to guarantee any/all global state in the tray
-gets cleaned up after each run::
-
- #!/usr/bin/env python
- 
- import os, sys, time
- 
- # load icetray libraries here
- 
- for i in range(10): # for each of the jobs you're going to do
-    # here you go to your database,
-    # figure out what job is next, calculate parameters, etc
-    pid = os.fork()                                         
-    if pid:        
-        # now there are *two* processes, and we're in the parent
-        print "parent waiting...."
-        (pid, status) = os.wait()
-        if status == 0:
-            print "parent notices that succeeded, marks database"
-            # mark job as success in database
-        else:
-            print "parent notices that FAILED, marks accordingly"
-            # mark job failed in database
-    else:
-        # we're in the child.  What we do here is invisible to the parent.
-        # create and run actual I3Tray.  
-        # tray = I3Tray(), blah blah
-        # tray.Execute()
-        time.sleep(1)
-        print "child running icetray job i=%u" % i
-        time.sleep(1)
-        print "child running icetray job i=%u" % i
-        time.sleep(1)
-        print "child running icetray job i=%u" % i
-        # simulate failure on every other process
-        exitstatus = i%2
-        if i%2 != 0:
-            print "child is gonna throw an exception to simulate icetray having thrown an exception"
-            raise "child oh noooo!"
-        else:
-            print "if child gets to here, nothing bad happened, return zero"
-            sys.exit(0)
-
 
 .. _NaN:
 .. index:: NaN
