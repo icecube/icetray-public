@@ -1,10 +1,10 @@
 /**
    copyright  (C) 2005
    the icecube collaboration
-   $Id: main.ixx 7005 2005-04-27 14:35:24Z troy $
+   $Id$
 
-   @version $Revision: 1.2 $
-   @date $Date: 2005-04-27 16:35:24 +0200 (Wed, 27 Apr 2005) $
+   @version $Revision$
+   @date $Date$
    @author troy d. straszheim
 
    Main testing routine for I3Test

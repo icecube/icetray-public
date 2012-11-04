@@ -212,10 +212,10 @@ Example::
   *
   * (c) 2004
   * the IceCube Collaboration
-  * $Id: standards.dox 14697 2006-01-24 23:06:03Z blaufuss $
+  * $Id$
   *
   * @file Dummy.h
-  * @date $Date: 2006-01-24 18:06:03 -0500 (Tue, 24 Jan 2006) $
+  * @date $Date$
   * @author burgess
   * @author blaufuss
   *
