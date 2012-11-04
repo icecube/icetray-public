@@ -1,12 +1,12 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3ChannelID2OMKey.cxx 7629 2005-05-15 15:35:25Z tschmidt $
+ * $Id$
  *
  * @file I3ChannelID2OMKey.cxx
  * @brief implementation of the class I3ChannelID2OMKey
- * @version $Revision: $
- * @date $Date: 2005-05-15 17:35:25 +0200 (Sun, 15 May 2005) $
+ * @version $Revision$
+ * @date $Date$
  * @author tschmidt
  */
 
