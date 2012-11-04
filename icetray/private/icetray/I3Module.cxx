@@ -1,5 +1,5 @@
 /**
- *  $Id: I3Module.cxx 51710 2009-01-06 19:23:39Z troy $
+ *  $Id$
  *  
  *  Copyright (C) 2004 - 2008
  *  Troy D. Straszheim  <troy@icecube.umd.edu>

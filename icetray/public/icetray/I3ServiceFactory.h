@@ -1,5 +1,5 @@
 /**
- *  $Id: I3ServiceFactory.h 47987 2008-08-08 14:09:48Z troy $
+ *  $Id$
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -33,7 +33,7 @@
  * @brief This class defineds the interfaces used to install a service into an
  * I3Tray object.
  *
- * @version $Id: I3ServiceFactory.h 47987 2008-08-08 14:09:48Z troy $
+ * @version $Id$
  * @author patton
  */
 class I3ServiceFactory

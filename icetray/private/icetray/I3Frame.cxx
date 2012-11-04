@@ -1,5 +1,5 @@
 /**
- *  $Id: I3Frame.h 41943 2008-02-07 15:14:07Z tschmidt $
+ *  $Id$
  *  
  *  Copyright (C) 2007-8
  *  Troy D. Straszheim  <troy@icecube.umd.edu>

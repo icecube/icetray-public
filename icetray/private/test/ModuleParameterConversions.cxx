@@ -1,10 +1,10 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: ServicesAtDestruction.cxx 5468 2005-03-30 14:48:26Z pretz $
+ * $Id$
  *
- * @version $Revision: 1.3 $
- * @date $Date: 2005-03-30 16:48:26 +0200 (Wed, 30 Mar 2005) $
+ * @version $Revision$
+ * @date $Date$
  * @author troy d. straszheim
  *
  * This tests that the global GetService<> works; that the underlying

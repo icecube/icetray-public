@@ -2,10 +2,10 @@
 #
 #   copyright  (c) 2004, 2005
 #   the icecube collaboration
-#   $Id: example.py 8253 2005-05-27 18:03:30Z troy $
+#   $Id$
 #
-#   @version $Revision: 1.1 $
-#   @date $Date: 2005-05-27 14:03:30 -0400 (Fri, 27 May 2005) $
+#   @version $Revision$
+#   @date $Date$
 #   @author John Pretz 
 
 #   dump all units to stdout.  demo showing use of I3Units in python.

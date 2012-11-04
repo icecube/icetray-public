@@ -1,5 +1,5 @@
 //
-// $Id: I3Logging.cxx 50381 2008-11-07 13:50:33Z troy $
+// $Id$
 //
 // @author troy d. straszheim
 //

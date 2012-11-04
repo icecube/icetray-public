@@ -1,5 +1,5 @@
 /**
- *  $Id: I3ConfigurationImpl.cxx 47404 2008-07-22 17:25:47Z troy $
+ *  $Id$
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>

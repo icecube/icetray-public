@@ -1,5 +1,5 @@
 /**
- *  $Id: I3Module.h 49585 2008-10-06 17:23:28Z blaufuss $
+ *  $Id$
  *  
  *  Copyright (C) 2007, 2008
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -47,7 +47,7 @@ class I3Frame;
  * This class defines the interface which should be implementaed by all 
  * modules in IceTray.
  *
- * @version $Id: I3Module.h 49585 2008-10-06 17:23:28Z blaufuss $
+ * @version $Id$
  */
 class I3Module;
 I3_POINTER_TYPEDEFS(I3Module);

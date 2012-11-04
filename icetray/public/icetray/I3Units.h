@@ -9,9 +9,9 @@
  Joules
 
  Modified 2-17-04 by John Pretz from a Geant4 header
- @version $Id: I3Units.h 14493 2006-01-18 16:52:24Z bchristy $
+ @version $Id$
  @file I3Units.h  
- @date $Date: 2006-01-18 17:52:24 +0100 (Wed, 18 Jan 2006) $
+ @date $Date$
  
  Also removed everything but Time, Energy, Length, Angle, Areas and Volumes.
  Pressure, Power, stuff like that is not done, since the redefinition of
@@ -78,7 +78,7 @@
  *      readvoltage = myContainerPtr->GetVoltage()/I3Units::V;
  *
  * @version $Version:$
- * @date $Date: 2006-01-18 17:52:24 +0100 (Wed, 18 Jan 2006) $
+ * @date $Date$
  * @author Geant4 Team (original) M.Maire, S.Giani
  * @author pretz (IceCube modifications)
  * @todo Should we have a 'speed' here too?

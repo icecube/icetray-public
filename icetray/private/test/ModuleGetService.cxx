@@ -1,10 +1,10 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: ServicesAtDestruction.cxx 15801 2006-02-15 18:01:22Z troy $
+ * $Id$
  *
- * @version $Revision: 1.3 $
- * @date $Date: 2006-02-15 19:01:22 +0100 (Wed, 15 Feb 2006) $
+ * @version $Revision$
+ * @date $Date$
  * @author <a href="http://icecube.umd.edu/pretz">John Pretz</a>
  *
  * This tests getting services by various means through module parameters.

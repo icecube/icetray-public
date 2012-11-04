@@ -1,5 +1,5 @@
 /**
- *  $Id: I3Tray.cxx 51710 2009-01-06 19:23:39Z troy $
+ *  $Id$
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>

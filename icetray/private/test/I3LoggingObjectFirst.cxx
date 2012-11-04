@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3LoggingTest3.cxx 7900 2005-05-23 08:22:52Z troy $
+    $Id$
 
-    @version $Revision: 1.3 $
-    @date $Date: 2005-05-23 10:22:52 +0200 (Mon, 23 May 2005) $
+    @version $Revision$
+    @date $Date$
     @author troy d. straszheim <troy@resophonic.com>
 */
 

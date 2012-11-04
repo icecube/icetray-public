@@ -1,7 +1,7 @@
 /*
  * class: I3ServiceFactory
  *
- * Version $Id: I3ServiceFactory.cxx 51710 2009-01-06 19:23:39Z troy $
+ * Version $Id$
  *
  * Date: 29 Sept 2003
  *

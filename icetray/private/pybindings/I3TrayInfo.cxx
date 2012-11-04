@@ -1,7 +1,7 @@
 //
 //   Copyright (c) 2004, 2005, 2006, 2007, 2010   Troy D. Straszheim  
 //   
-//   $Id: ithon.cxx 25598 2006-11-25 02:52:57Z troy $
+//   $Id$
 //
 //   This file is part of IceTray.
 //

@@ -3,7 +3,7 @@
     the icecube collaboration
     $Id$
 
-    @version $Revision: 1.2 $
+    @version $Revision$
     @date $Date$
     @author troy d. straszheim <troy@resophonic.com>
 */

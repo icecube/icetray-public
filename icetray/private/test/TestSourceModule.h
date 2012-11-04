@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: TestSourceModule.h 15950 2006-02-17 18:49:26Z troy $
+ * $Id$
  *
  * @file TestSourceModule.h
- * @version $Revision: 1.1 $
- * @date $Date: 2006-02-17 19:49:26 +0100 (Fri, 17 Feb 2006) $
+ * @version $Revision$
+ * @date $Date$
  * @author pretz
  */
 

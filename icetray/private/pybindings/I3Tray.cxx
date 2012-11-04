@@ -1,5 +1,5 @@
 /**
- *  $Id: ithon.cxx 43705 2008-03-26 20:54:18Z kjmeagher $
+ *  $Id$
  *  
  *  Copyright (C) 2004, 2005, 2006, 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>

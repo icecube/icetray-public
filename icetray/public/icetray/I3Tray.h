@@ -1,5 +1,5 @@
 /**
- *  $Id: I3Tray.h 47987 2008-08-08 14:09:48Z troy $
+ *  $Id$
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>

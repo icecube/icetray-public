@@ -1,5 +1,5 @@
 /**
- *  $Id: I3Context.h 48705 2008-08-27 17:49:32Z troy $
+ *  $Id$
  *  
  *  Copyright (C) 2003-2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -45,7 +45,7 @@
  * this class, but should hand instances of this class to I3ContextAccess to
  * handle such issues.
  *
- * @version $Id: I3Context.h 48705 2008-08-27 17:49:32Z troy $
+ * @version $Id$
  * @author patton
  */
 class I3Context
