@@ -36,7 +36,7 @@
 /**
  * @brief This class holds the configuration.
  * 
- * @version $Id: I3Configuration.h 15721 2006-02-15 12:32:23Z troy $
+ * @version $Id$
  */
 
 class I3ConfigurationImpl;
