@@ -1,7 +1,7 @@
 colormsg("")
 colormsg(HICYAN "doxygen")
 
-find_package(doxygen QUIET)
+find_package(Doxygen)
 if(DOXYGEN_FOUND)
   execute_process(COMMAND ${DOXYGEN_EXECUTABLE} --version
     OUTPUT_VARIABLE DOXYGEN_VERSION
