@@ -1,8 +1,10 @@
 #ifndef ICETRAY_PYBINDINGS_HPP_INCLUDED
 #define ICETRAY_PYBINDINGS_HPP_INCLUDED
 
-#include <icetray/I3FrameObject.h>
-#include <I3/name_of.h>
+#include <cstring>
+#include <cctype>
+#include "icetray/I3FrameObject.h"
+#include "I3/name_of.h"
 
 class freeze : public boost::python::def_visitor< freeze >{
   friend class boost::python::def_visitor_access;
@@ -11,7 +13,6 @@ class freeze : public boost::python::def_visitor< freeze >{
 public:
   template <class classT>
   void visit( classT& c) const {
-    c
       .def("__setattr__", &setattr_with_dynamism_disabled)
       ;
     };
@@ -94,18 +95,23 @@ identity_(T t) { return t; }
 #define PROPERTY(Class, Prop, Fn) .add_property(BOOST_PP_STRINGIZE(Prop), &Class::Get##Fn, &Class::Set##Fn)
 #define PROPERTY_TYPE(Class, Prop, GotType, Fn) .add_property(BOOST_PP_STRINGIZE(Prop), (GotType (Class::*) ()) &Class::Get##Fn, &Class::Set##Fn)
 
-#include <ctype.h>
-#include <string.h>
-// convert from upper to lower CamelCase:
-// ParticleType => particleType
-// ATWDBinSize => atwdBinSize
+/** convert from upper to lower CamelCase:
+ * ParticleType => particleType
+ * ATWDBinSize => atwdBinSize
+ *
+ * The return value must be free()'d by the user.
+ * 
+ * @param str the camel case string to change
+ * @return a pointer to the new malloc()'d string
+ */
 static inline char * lowerCamelCase(const char * str) 
 {
   int len,i;
   char* out;
   len = strlen(str);
   out = (char*)malloc(len+1);
-  strcpy(out,str);
+  memset(out, '\0', len+1);
+  strncat(out,str,len);
   out[0] = tolower(out[0]);
   for (i=1;i<len-1;i++) {
     if (!(isupper(out[i]) && isupper(out[i+1]))) break;
@@ -126,9 +132,13 @@ struct string_deleter
   ~string_deleter() { free(s); }
 };
 
-// convert from upper CamelCase to snake_case
-// ATWDBinSize => atwd_bin_size
-// NBinsATWD0 => n_bins_atwd_0
+/** convert from upper CamelCase to snake_case
+ * ATWDBinSize => atwd_bin_size
+ * NBinsATWD0 => n_bins_atwd_0
+ *
+ * @param str the camel case string to change
+ * @return a pointer to the new string
+ */
 static inline string_deleter snake_case(const char * str) 
 {
   int i,j,len; 
@@ -136,6 +146,7 @@ static inline string_deleter snake_case(const char * str)
   j=0; 
   len = strlen(str); 
   out = (char*)malloc(2*len+1); 
+  memset(out, '\0', 2*len+1);
   for (i=0;i<len;i++) {
     out[i+j] = tolower(str[i]); 
     if ( (!isupper(str[i]) && isupper(str[i+1])) || 
