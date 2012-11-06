@@ -24,6 +24,6 @@
 
 namespace {
 
-  int foo() { return 7; }
+  int __attribute__ ((unused)) foo() { return 7; }
 
 }

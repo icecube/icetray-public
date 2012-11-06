@@ -146,7 +146,7 @@ local void make_crc_table OF((void));
 local void make_crc_table()
 {
     unsigned long c;
-    int n, k;
+    unsigned int n, k;
     unsigned long poly;                 /* polynomial exclusive-or pattern */
     /* terms of polynomial defining this crc (except x^32): */
     static volatile int first = 1;      /* flag to limit concurrent making */

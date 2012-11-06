@@ -126,7 +126,7 @@ TEST(i3int_only)
   if (! ip )
     log_fatal("egh, not ip");
   
-  if (! ip->value == 7777)
+  if (! (ip->value == 7777))
     log_fatal("egh wrong value");
 }
 
@@ -178,7 +178,7 @@ TEST(five)
   if (! ip )
     log_fatal("egh, not ip");
   
-  if (! ip->value == 777)
+  if (! (ip->value == 777))
     log_fatal("egh wrong value");
 }
 
