@@ -13,6 +13,7 @@ class freeze : public boost::python::def_visitor< freeze >{
 public:
   template <class classT>
   void visit( classT& c) const {
+    c
       .def("__setattr__", &setattr_with_dynamism_disabled)
       ;
     };
