@@ -37,11 +37,9 @@ print_backtrace (FILE* stream, unsigned depth)
   printf ("Obtained %zd stack frames.\n", size);
 
   Dl_info info[size];
-  int status[size];
 
   for (unsigned i=1; i < size && array[i] != 0; i++)
     {
-      status[i] = dladdr(array[i], &info[i]);
       int demangle_status;
       char* realname = abi::__cxa_demangle(info[i].dli_sname, 0, 0, &demangle_status);
 
