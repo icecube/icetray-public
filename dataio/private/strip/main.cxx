@@ -112,10 +112,6 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  unsigned nframes = 0;
-  if (vm.count("nframes"))
-    nframes = vm["nframes"].as<unsigned>();
-
   std::string ifilename;
   if (!vm.count("input-file"))
     {
