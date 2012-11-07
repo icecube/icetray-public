@@ -98,8 +98,7 @@ TEST(three)
   io::filtering_istream fis;
   I3::dataio::open(fis, filename);
   bool r = rv->load(fis);
-  if (!r)
-    log_fatal("egh");
+  ENSURE(r, "egh, failed to load frame from file");
 }
 
 TEST(i3int_only)
@@ -123,11 +122,8 @@ TEST(i3int_only)
   }
   ip = boost::dynamic_pointer_cast<I3Int>(fop);
 
-  if (! ip )
-    log_fatal("egh, not ip");
-  
-  if (ip->value != 7777)
-    log_fatal("egh wrong value");
+  ENSURE(ip, "egh, not ip");
+  ENSURE_EQUAL(ip->value, 7777, "egh, wrong value");
 }
 
 TEST(vectorchar_only)
@@ -170,6 +166,7 @@ TEST(six)
   f2.load(ifs);
   
   I3IntConstPtr ip = f2.Get<I3IntConstPtr>("int");
-  assert (ip->value == 7474);
+
+  ENSURE_EQUAL(ip->value, 7474);
 }
 
