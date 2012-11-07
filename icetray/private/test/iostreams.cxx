@@ -126,7 +126,7 @@ TEST(i3int_only)
   if (! ip )
     log_fatal("egh, not ip");
   
-  if (! (ip->value == 7777))
+  if (ip->value != 7777)
     log_fatal("egh wrong value");
 }
 
@@ -152,34 +152,6 @@ TEST(vectorchar_only)
   }
   for (int i=0; i<26; i++)
     ENSURE(vc2[i] == 'A' + i);
-}
-
-TEST(five)
-{
-  I3IntPtr ip(new I3Int(std::numeric_limits<int>::max()));
-  I3FrameObjectPtr fop(ip);
-
-  std::ofstream ofs("i3int", ios::binary);
-  {
-    boost::archive::portable_binary_oarchive boa(ofs);
-    boa << fop;
-  }
-  ofs.close();
-  fop.reset();
-  ip.reset();
-
-  std::ifstream ifs("i3int", ios::binary);
-  {
-    boost::archive::portable_binary_iarchive bia(ifs);
-    bia >> fop;
-  }
-  ip = boost::dynamic_pointer_cast<I3Int>(fop);
-
-  if (! ip )
-    log_fatal("egh, not ip");
-  
-  if (! (ip->value == 777))
-    log_fatal("egh wrong value");
 }
 
 TEST(six)
