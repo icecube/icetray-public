@@ -62,14 +62,14 @@ assert frame['c'].value == 4
 assert len(frame) == 3
 assert frame.Stop.id == 'c'
 
-frame = browsable_file.get_frame(5)
+frame = browsable_file[5]
 assert frame['a'].value == 2
 assert frame['b'].value == 3
 assert frame['c'].value == 5
 assert len(frame) == 3
 assert frame.Stop.id == 'c'
 
-frame = browsable_file.get_frame(6)
+frame = browsable_file[6]
 assert frame['a'].value == 6
 assert frame['b'].value == 3
 assert frame['c'].value == 5

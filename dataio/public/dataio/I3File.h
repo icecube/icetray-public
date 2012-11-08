@@ -87,7 +87,7 @@ public:
   std::vector<I3Frame::Stream> streams(unsigned start_index, unsigned length) const;
   std::vector<I3Frame::Stream> streams() const;
 
-  std::vector<FrameInfo> frames();
+  const std::vector<FrameInfo>& frames() const;
   size_t size();
   void set_skipkeys(const std::vector<std::string>&);
 

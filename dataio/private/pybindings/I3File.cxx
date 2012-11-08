@@ -50,6 +50,9 @@ void register_I3File()
     .def("get_raw_frame", &I3File::get_raw_frame,
 	 bp::arg("index"), 
 	 "Get only frame 'index' (see get_frame())")
+    .def("__getitem__", &I3File::get_frame,
+	 bp::arg("index"),
+	 "Get frame by number, equivalent to index()")
     ;
 
 }

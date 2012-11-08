@@ -79,8 +79,7 @@ Model::open_file(const std::string& filename,
   View::Instance().end_scan_progress();
 
   log_trace("i3file opened");
-  std::vector<I3File::FrameInfo> vfi;
-  vfi = i3file_.frames();
+  const std::vector<I3File::FrameInfo>& vfi = i3file_.frames();
 
   for(unsigned i=0; i<vfi.size(); i++)
     {

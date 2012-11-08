@@ -91,8 +91,8 @@ public:
   I3Frame::Stream stream(unsigned index);
   std::vector<I3Frame::Stream> streams(unsigned start_index, unsigned length) const;
   std::vector<I3Frame::Stream> streams() const;
-  std::vector<FrameInfo> frames() const;
-  size_t size() { return frame_infos_.size(); }
+  const std::vector<FrameInfo>& frames() const;
+  size_t size() const { return frame_infos_.size(); }
   void set_skipkeys(const vector<string>&);
 };
 
@@ -336,7 +336,7 @@ I3FileImpl::get_frame(unsigned index)
   return frame;
 }
 
-vector<I3File::FrameInfo>
+const vector<I3File::FrameInfo>&
 I3FileImpl::frames() const
 {
   return frame_infos_;
@@ -428,8 +428,8 @@ I3File::streams() const
   return impl_->streams();
 }
 
-std::vector<I3File::FrameInfo>
-I3File::frames()
+const std::vector<I3File::FrameInfo>&
+I3File::frames() const
 {
   return impl_->frames();
 }
