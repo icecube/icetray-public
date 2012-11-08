@@ -28,12 +28,6 @@
 #include <iostream>
 #include <sstream>
 
-///
-/// split a string into a set of strings
-///
-std::set<std::string> 
-split(const std::string& split_me, const std::string& on_this_expression);
-
 //
 // works like stlfilt.pl, changes 
 //   std::vector<T, std::allocator<T> > 
@@ -42,27 +36,6 @@ split(const std::string& split_me, const std::string& on_this_expression);
 //
 std::string stlfilt(const std::string& s);
 std::string prettify_xml(const std::string& s);
-
-std::vector<std::string> to_vector(std::string s0,
-				   std::string s1="",
-				   std::string s2="",
-				   std::string s3="",
-				   std::string s4="",
-				   std::string s5="",
-				   std::string s6="",
-				   std::string s7="",
-				   std::string s8="",
-				   std::string s9="",
-				   std::string s10="",
-				   std::string s11="",
-				   std::string s12="",
-				   std::string s13="",
-				   std::string s14="",
-				   std::string s15="",
-				   std::string s16="",
-				   std::string s17="",
-				   std::string s18="",
-				   std::string s19="");
 
 int glob(const std::string& expression, std::vector<std::string>& results);
 

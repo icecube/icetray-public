@@ -10,6 +10,8 @@
 
 #include <sstream>
 #include <iomanip>
+#include <boost/assign/list_of.hpp>
+using boost::assign::list_of;
 
 TEST_GROUP(I3PhysicsTimer);
 
@@ -96,9 +98,9 @@ TEST(test_timed_module)
   tray.AddModule<TimedModule>("timer");
   tray.AddModule("Dump", "dump");
 
+  std::vector<std::string> params = list_of("timer_rusage");
   tray.AddModule<FrameCheck>("framecheck")
-    ("ensure_physics_has", to_vector("timer_rusage"));
-
+    ("ensure_physics_has", params);
 
   tray.AddModule("TrashCan", "trash");
 

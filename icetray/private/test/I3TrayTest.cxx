@@ -7,7 +7,9 @@
 #include "TestModule.h"
 #include "TestServiceFactory.h"
 
+#include <boost/assign/list_of.hpp>
 
+using boost::assign::list_of;
 
 TEST_GROUP(I3TrayTest);
 
@@ -132,10 +134,12 @@ TEST(default_convenience_connectboxes)
 TEST(missing_module_fails_correctly)
 {
   I3Tray tray;
-
+  
   tray.AddModule("BottomlessSource", "source");
+
+  std::vector<std::string> params = list_of("OutBox");
   tray.AddModule("Fork", "fork")
-    ("Outboxes", to_vector("OutBox"));
+    ("Outboxes", params);
 
   tray.ConnectBoxes("source", "OutBox", "fork");
 
@@ -154,11 +158,17 @@ TEST(no_such_module)
 {
   I3Tray tray;
 
+  std::vector<std::string> params;
+
   tray.AddModule("BottomlessSource", "source");
+
+  params = list_of("OutBox")("BadBox");
   tray.AddModule("Fork", "fork")
-    ("Outboxes", to_vector("OutBox", "BadBox"));
+    ("Outboxes", params);
+
+  params = list_of("OutBox");
   tray.AddModule("Fork", "fork2")
-    ("Outboxes", to_vector("OutBox"));
+    ("Outboxes", params);
   tray.ConnectBoxes("source", "OutBox", "fork");
   tray.ConnectBoxes("fork", "OutBox", "fork2");
 
@@ -169,28 +179,6 @@ TEST(no_such_module)
     // ok
   }
 }
-
-#if 0
-T_EST(no_such_box)
-{
-  I3Tray tray;
-
-  tray.AddModule("BottomlessSource", "source");
-  tray.AddModule("TrashCan", "trash");
-  tray.AddModule("TrashCan", "trash2");
-
-  tray.ConnectBoxes("source", "OutBox", "trash");
-  tray.ConnectBoxes("source", "nosuchbox", "trash2");
-
-  try {
-    tray.Execute(0);
-    FAIL("That should have thrown.");
-  } catch(const std::exception& e) {  
-    // ok
-  }
-}
-#endif
-
 
 TEST(multiple_tray_create_destroy)
 {

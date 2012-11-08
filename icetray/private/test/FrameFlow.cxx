@@ -27,6 +27,9 @@
 #include <icetray/I3TrayHeaders.h>
 #include <icetray/Utility.h>
 
+#include <boost/assign/list_of.hpp>
+using boost::assign::list_of;
+
 TEST_GROUP(FrameFlow);
 
 struct FFSource : public I3Module
@@ -129,8 +132,11 @@ TEST(forked)
   
   tray.AddModule("FFSource", "source");
   tray.AddModule("Nothing", "nothing");
+  
+  std::vector<std::string> params = 
+    list_of("left")("middle")("right");
   tray.AddModule("Fork", "fork")
-    ("Outboxes", to_vector("left", "middle", "right"));
+    ("Outboxes", params);
 
   tray.AddModule("FFCounter", "counterleft");
   tray.AddModule("FFCounter", "counterright");
