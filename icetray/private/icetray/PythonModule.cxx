@@ -321,6 +321,6 @@ void PythonModule<I3PacketModule>::SetPacketTypes(
     const std::vector<I3Frame::Stream> &types)
 { packet_types = types; }
 
-template class PythonModule<I3Module>;
-template class PythonModule<I3ConditionalModule>;
-template class PythonModule<I3PacketModule>;
+template struct PythonModule<I3Module>;
+template struct PythonModule<I3ConditionalModule>;
+template struct PythonModule<I3PacketModule>;
