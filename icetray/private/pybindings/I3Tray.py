@@ -52,7 +52,7 @@ class I3Tray(icetray.I3Tray):
         self.last_added = None
         icetray.I3Tray.__init__(self)
 
-    def AddModule(self, _type, _name, **kwargs):
+    def AddModule(self, _type, _name=None, **kwargs):
         """
         Add a module to the tray's processing stream.
 
@@ -77,6 +77,17 @@ class I3Tray(icetray.I3Tray):
                            SkipKeys = ['I3DST', 'RecoPulses'])
         
         """
+        #if the script does not provide a name find a suitable name for this module find a suitable name
+        if _name is None:
+            module_names=self.tray_info.modules_in_order
+            n=0
+            while 1:
+                _name = "%s_%04d"%(_type,n)
+                if _name not in module_names:
+                    break
+                n+=1
+            print "INFO: Adding Anonymous Module of type '%s' with name '%s'"%(_type,_name)
+
 	if hasattr(_type, '__i3traysegment__'):
             raise RuntimeError, "Trying to add tray segment %s with AddModule. Use AddSegment instead." % _name
 
@@ -114,7 +125,7 @@ class I3Tray(icetray.I3Tray):
             super(I3Tray, self).SetParameter(_name, k, v)
         return self
 
-    def AddSegment(self, _segment, _name, **kwargs):
+    def AddSegment(self, _segment, _name=None, **kwargs):
         """
         Add a tray segment to the tray. This is a small scriptlet that can
         autoconfigure some set of modules and services according to a
