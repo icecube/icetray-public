@@ -312,39 +312,10 @@ I3Module::PushFrame(I3FramePtr frameptr)
 }
 
 void
-I3Module::Suspend()
-{
-}
-
-void
-I3Module::Reconfigure()
-{
-}
-
-void
-I3Module::Resume()
-{
-}
-
-void
 I3Module::Finish()
 {
   i3_log("%s", __PRETTY_FUNCTION__);
 }
-
-void
-I3Module::Dispose()
-{
-  i3_log("%s", __PRETTY_FUNCTION__);
-}
-
-void
-I3Module::Abort()
-{
-  i3_log("%s", __PRETTY_FUNCTION__);
-}
-
-// Stop routines
 
 void
 I3Module::Physics(I3FramePtr frame)

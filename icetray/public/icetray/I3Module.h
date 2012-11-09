@@ -109,60 +109,12 @@ public:
   virtual void Process();
 
   /**
-   * The purpose of this transition is to give this object the opportunity
-   * to release any critical resources it may have reserved, as this
-   * transition indicates that there will not be another 'Process' transition
-   * in the immediately future.
-   *
-   * Currently unused.
-   */
-  virtual void Suspend();
-
-  /**
-   * The purpose of this transition is to give this object the opportunity to
-   * re-access all of its parameters as they may have changed since the
-   * previous 'Configure' or 'Reconfigure' transition. In many cases this
-   * may simply take the form of repeating whatever was executed at the
-   *'Configure' transition.
-   *
-   * Of course, this transition, like the 'Configure' transition, also gives
-   * this object the opportunity to reserve any resources that may have been
-   * released during the 'Suspend' transition.
-   *
-   * Currently unused.
-   */
-  virtual void Reconfigure();
-
-  /**
-   * The purpose of this transition is to solely give this object the
-   * opportunity to reserve any resources that may have been released in the
-   * proceding 'Suspend' transition. Implicit in this transition is the fact
-   * that none of a module's parameters have changed since the last
-   * 'Configure' or 'Reconfigure' transition.
-   *
-   * Currently unused.
-   */
-  virtual void Resume();
-
-  /**
    * The purpose of this transition is to give this object the opportunity to
    * wind up gracefully. For example a module can use this transition to
    * create a summary of its activities during the execution of the job. Note
    * that after this transition the module is still in existence.
    */
   virtual void Finish();
-
-  /**
-   * The purpose of this transition is to give this object the opportunity to
-   * clean itself up before it goes out of existence.
-   */
-  virtual void Dispose();
-
-  /**
-   * The purpose of this transition is to give a module the opportunity to
-   * clean up before the framework exits due to a 'fatal' error.
-   */
-  virtual void Abort();
 
   /**
    * Get the name of a module
