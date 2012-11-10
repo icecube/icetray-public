@@ -192,6 +192,10 @@ static inline string_deleter snake_case(const char * str)
 #define WRAP_GETSET_INTERNAL_REFERENCE(R, Class, Name) GETSET_IMPL_NOTYPE(Class, Name, return_internal_reference<1>())
 #define WRAP_ENUM_VALUE(R, Class, Name) .value(BOOST_PP_STRINGIZE(Name),Class::Name)
 
+// Raise a specific built-in Python exception with a formatted message
+#define RAISE(exception, msg) { std::ostringstream s; s << msg; \
+    PyErr_SetString(PyExc_##exception, s.str().c_str()); throw boost::python::error_already_set(); }
+
 // Class registration stuff
 #define I3_REGISTRATION_FN_DECL(r, data, t) void BOOST_PP_CAT(register_,t)();
 
