@@ -95,8 +95,6 @@ struct ParamConversionCheckModule : I3Module
     GetParameter("omkeyvec_param", omkeyvec_param);
   }
 
-  virtual void Reconfigure() { ; }
-
   virtual void Process() 
   { 
     log_trace("%s",__PRETTY_FUNCTION__);

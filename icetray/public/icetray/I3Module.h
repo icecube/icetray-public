@@ -87,9 +87,7 @@ public:
    * This transition is executed immediately before the first 'Process'
    * transition, thus any parameters that has been set, either by a person
    * or a steering file, will be available to this object before it starts
-   * processing data frames. After this transition any changes to these
-   * parameters will not be seen by the module until a 'Reconfigure'
-   * transition.
+   * processing data frames. 
    *
    * This transition also gives this object an opportunity to reserve any
    * resources it will need to use during the subsequent 'Process'

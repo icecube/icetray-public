@@ -82,8 +82,6 @@ struct MaintainInitialValuesModule : I3Module
     assert( service_ptr_param ); 
   }
 
-  virtual void Reconfigure() { ; }
-
   virtual void Process() { 
     I3FramePtr frame = PopFrame(); 
     PushFrame(frame, "OutBox"); 
