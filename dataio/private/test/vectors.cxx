@@ -18,6 +18,7 @@
 #include <icetray/Utility.h>
 
 #include "serialization-test.h"
+#include "dataio-test.h"
 
 #include <boost/preprocessor.hpp>
 #include <boost/foreach.hpp>
@@ -54,12 +55,9 @@ void do_vector (std::string classname)
     ENSURE_EQUAL(v[i], T(i));
 
   log_debug("reading past versions");
-  const char* i3_src = getenv("I3_SRC");
-  if (!i3_src)
-    log_fatal("I3_SRC not set... we need to know this to find the data files.  run your env-shell.sh");
-  string src = i3_src;
+  string src = GetDataDir();
   vector<string> i3files;
-  string globstr = src + "/dataio/resources/data/serialization/*/" + fname;
+  string globstr = src + "/serialization/*/" + fname;
   log_debug("globbing '%s'", globstr.c_str());
   glob(globstr.c_str(), i3files);
   ENSURE(i3files.size() != 0);

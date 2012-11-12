@@ -16,6 +16,7 @@
 #include <icetray/Utility.h>
 
 #include "serialization-test.h"
+#include "dataio-test.h"
 
 #include <boost/preprocessor.hpp>
 #include <boost/foreach.hpp>
@@ -28,12 +29,9 @@ TEST_GROUP(retroaction);
 TEST(read)
 {
   vector<string> i3files;
-  const char* src = getenv("I3_SRC");
-  if (! src)
-    log_fatal("can't find data files w/o I3_SRC set (load your env-shell.sh)");
-  
-  string ports = src;
-  glob((ports + "/dataio/resources/data/serialization/*/*.i3").c_str(), i3files);
+  string ports = GetDataDir();
+
+  glob((ports + "/serialization/*/*.i3").c_str(), i3files);
   ENSURE(i3files.size() != 0);
   BOOST_FOREACH(const string& s, i3files)
     {
