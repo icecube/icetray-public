@@ -27,7 +27,7 @@ i3_add_pybindings(i3math
 i3_add_pybindings(icetray
   empty.cxx
   module.cxx
-  USE_TOOLS boost python log4cplus
+  USE_TOOLS boost python
   USE_PROJECTS icetray
   )
 

@@ -176,7 +176,6 @@ There are several ways to see what is inside of a segment. The simplest is using
 
   *** payload-parsing ***
   -------------------------------------------------------------------------------
-  Logging configured from file ./log4cplus.conf
     icecube.payload_parsing.I3DOMLaunchExtractor (I3Tray segment)
 
       Extract DOMLaunches and triggers from raw DAQ data.

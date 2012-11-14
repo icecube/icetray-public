@@ -73,6 +73,7 @@ set(ICETRAY_PYTHON_SRC
   private/pybindings/I3Tray.cxx
   private/pybindings/I3Units.cxx
   private/pybindings/I3Frame.cxx
+  private/pybindings/I3Logging.cxx
   private/pybindings/I3Module.cxx
   private/pybindings/I3Context.cxx
   private/pybindings/I3Configuration.cxx
@@ -95,7 +96,6 @@ i3_add_library(icetray
   private/icetray/load_project.cxx
   private/icetray/I3FrameObject.cxx      
   private/icetray/I3Logging.cxx        
-  private/icetray/PythonLogging.cxx            
   private/icetray/I3Configuration.cxx
   private/icetray/I3ConfigurationImpl.cxx
   private/icetray/I3Deprecation.cxx
@@ -110,6 +110,7 @@ i3_add_library(icetray
   private/icetray/I3Bool.cxx
   private/icetray/I3PhysicsTimer.cxx     
   private/icetray/I3PhysicsUsage.cxx     
+  private/icetray/I3PrintfLogger.cxx     
   private/icetray/Utility.cxx
   private/icetray/I3ServiceFactory.cxx   
   private/icetray/I3TrayInfo.cxx               
@@ -149,7 +150,7 @@ i3_add_library(icetray
 
   ${ICETRAY_PYTHON_SRC}
 
-  USE_TOOLS boost python log4cplus ${OPTIONAL_TOOLS}
+  USE_TOOLS boost python ${OPTIONAL_TOOLS}
   LINK_LIBRARIES ${BOOST_PYTHON} ${DCAP_LIBRARIES} ${LIBARCHIVE_LIBRARIES}
   ROOTCINT public/icetray/I3FrameObject.h)
 

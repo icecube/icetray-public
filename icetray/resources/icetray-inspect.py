@@ -53,7 +53,7 @@ servicecount = 0
 segmentcount = 0
 
 # keep our output clean.
-icetray.disable_logging() 
+icetray.I3Logger.global_logger = icetray.I3NullLogger()
 
 def print_config(config):
 	desc = config.descriptions
