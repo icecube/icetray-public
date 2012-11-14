@@ -99,7 +99,7 @@ void i3_clogger(I3LogLevel level, const char *unit, const char *file,
 	static inline const char *__icetray_logger_id(void) { return X; }
 
 // Set default logger in global namespace
-SET_LOGGER("icetray");
+SET_LOGGER("Unknown");
 
 #ifndef NDEBUG
 #define log_trace(format, ...) I3_LOGGER(LOG_TRACE, \
