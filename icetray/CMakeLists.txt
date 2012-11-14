@@ -18,14 +18,6 @@
 #  
 #
 
-option(USE_I3_FRAMEWORK_LOGGING 
-  "Turn on low level icetray logging (for debugging icetray itself)" 
-  OFF)
-
-if(USE_I3_FRAMEWORK_LOGGING)
-  add_definitions(-DI3_FRAMEWORK_LOGGING)
-endif()
-
 # 
 #  Check for dcap
 #  
