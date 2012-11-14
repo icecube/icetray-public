@@ -7,7 +7,7 @@ i3_project(interfaces
 i3_add_library(interfaces
   private/interfaces/*.cxx
   USE_PROJECTS icetray
-  USE_TOOLS log4cplus boost
+  USE_TOOLS boost
   )
 
 i3_test_executable(test 
