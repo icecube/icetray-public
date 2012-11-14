@@ -28,11 +28,13 @@ PythonFunction::PythonFunction(const I3Context& context, bp::object func)
   i3_log("%s", __PRETTY_FUNCTION__);
   AddOutBox("OutBox");
 
+  unsigned implicit_args = 1; // frame
   if (!PyObject_HasAttrString(obj.ptr(), "func_code")) {
     if (PyObject_HasAttrString(obj.ptr(), "im_func"))
       obj = obj.attr("im_func");
     else
       obj = obj.attr("__call__");
+    implicit_args = 2; // self, frame
   }
   i3_log("got python object %p", obj.ptr());
 
@@ -60,7 +62,7 @@ PythonFunction::PythonFunction(const I3Context& context, bp::object func)
   i3_log("argcount is %u, with %u defaults", argcount, ndefaults);
 
   unsigned offset = argcount - ndefaults;
-  for (unsigned i = 1; i< argcount; i++)
+  for (unsigned i = implicit_args; i< argcount; i++)
     {
       std::string aname = bp::extract<std::string>(argnames[i]);
       i3_log("param[%u] %s", i, aname.c_str());
