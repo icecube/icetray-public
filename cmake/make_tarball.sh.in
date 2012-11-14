@@ -24,8 +24,6 @@ svn status @CMAKE_SOURCE_DIR@ > @CMAKE_INSTALL_PREFIX@/svn-status.txt
 svn info @CMAKE_SOURCE_DIR@ > @CMAKE_INSTALL_PREFIX@/svn-info.txt
 svn pg svn:externals @CMAKE_SOURCE_DIR@ > @CMAKE_INSTALL_PREFIX@/svn-externals.txt
 
-cp @CMAKE_BINARY_DIR@/log4cplus.conf @CMAKE_INSTALL_PREFIX@/etc
-
 if [ -f @CMAKE_BINARY_DIR@/tarball_hook.sh ]
 then
     echo "Tarball hook script 'tarball_hook.sh' exists in metaproject directory."

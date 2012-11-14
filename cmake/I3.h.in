@@ -144,8 +144,6 @@ class __builtin_va_list;
 #    error "Do not disable boost threading support"
 #  elif defined(BOOST_SP_DISABLE_THREADS)
 #    error "Do not switch boost to ordinary non-atomic reference count updates"
-#  elif defined(I3_PYTHON_LOGGING)
-#    error "Do not use python logging but Log4cplus instead"
 #  endif
 #endif
 

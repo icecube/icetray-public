@@ -256,7 +256,7 @@ commented out or bracketed in ``#if 0``.
 
 Instead, use icetray's logging facilities, which work just like
 printf, with the added feature that you can turn them on and off, by
-module, from a config file, without recompiling.  The logging
+module, without recompiling.  The logging
 statements make great documentation, leave clues as to what the author
 intended for the code to do, and assist in future debugging.
 

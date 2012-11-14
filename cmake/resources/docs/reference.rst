@@ -138,7 +138,7 @@ i3_add_library
 
      i3_add_library (dataio 
        private/dataio/*.cxx
-       USE_TOOLS log4cplus root boost python 
+       USE_TOOLS boost python 
        USE_PROJECTS icetray dataclasses interfaces
        )
 
@@ -211,7 +211,7 @@ i3_executable
      i3_executable(inspect 
        private/inspect/*.cxx
        USE_PROJECTS icetray
-       USE_TOOLS log4cplus boost root)
+       USE_TOOLS boost python)
 
    **Targets created**:
    When called in a project named *PROJ*, creates a target
@@ -306,7 +306,7 @@ i3_add_pybindings
        module.cxx
        OMKey.cxx
        I3Bool.cxx
-       USE_TOOLS boost python log4cplus
+       USE_TOOLS boost python 
        USE_PROJECTS icetray
        )
 

@@ -305,18 +305,6 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/tarball_hook.sh.in)
   execute_process(COMMAND chmod 755 ${CMAKE_BINARY_DIR}/tarball_hook.sh)
 endif(EXISTS ${CMAKE_SOURCE_DIR}/tarball_hook.sh.in) 
 
-if(NOT EXISTS ${CMAKE_BINARY_DIR}/log4cplus.conf)
-  configure_file(
-    ${CMAKE_SOURCE_DIR}/cmake/log4cplus.conf.in
-    ${CMAKE_BINARY_DIR}/log4cplus.conf
-    )
-else(NOT EXISTS ${CMAKE_BINARY_DIR}/log4cplus.conf)
-  message(STATUS "Not configuring log4cplus.conf in ${CMAKE_BINARY_DIR} because the file already exists (ok).")
-endif(NOT EXISTS ${CMAKE_BINARY_DIR}/log4cplus.conf)
-
-install(FILES ${CMAKE_BINARY_DIR}/log4cplus.conf
-  DESTINATION .)
-
 message(STATUS "Configuring 'gfilt' STL decryptor")
 configure_file(
   ${CMAKE_SOURCE_DIR}/cmake/gfilt.in

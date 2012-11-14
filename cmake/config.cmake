@@ -115,11 +115,6 @@ else()
   set(C_WARNING_FLAGS "-Wall")
 endif(CMAKE_C_COMPILER_ID MATCHES "Intel")
 
-option(USE_PYTHON_LOGGING "Log to python, not to log4cplus" OFF)
-if (USE_PYTHON_LOGGING)
-  add_definitions(-DI3_PYTHON_LOGGING)
-endif (USE_PYTHON_LOGGING)
-
 set(NOTES_DIR ${CMAKE_BINARY_DIR}/Testing/Notes)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/Testing/Notes)
 
