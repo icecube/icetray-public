@@ -30,7 +30,11 @@ typedef enum {
 	LOG_FATAL
 } I3LogLevel;
 
+#ifdef NDEBUG
+const I3LogLevel I3DefaultLogLevel = LOG_WARN;
+#else
 const I3LogLevel I3DefaultLogLevel = LOG_INFO;
+#endif
 
 #if defined(__cplusplus)
 
@@ -108,26 +112,22 @@ SET_LOGGER("Unknown");
 #define log_debug(format, ...) I3_LOGGER(LOG_DEBUG, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
     ##__VA_ARGS__)
-#define log_info(format, ...) I3_LOGGER(LOG_INFO, \
-    __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
-    ##__VA_ARGS__)
 #ifdef __cplusplus
 #define log_trace_stream(msg) I3_STREAM_LOGGER(LOG_TRACE, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, msg, )
 #define log_debug_stream(msg) I3_STREAM_LOGGER(LOG_DEBUG, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, msg, )
-#define log_info_stream(msg) I3_STREAM_LOGGER(LOG_INFO, \
-    __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, msg, )
 #endif
 #else
 #define log_trace(format, ...)
 #define log_debug(format, ...)
-#define log_info(format, ...)
 #define log_trace_stream(msg)
 #define log_debug_stream(msg)
-#define log_info_stream(msg)
 #endif
 
+#define log_info(format, ...) I3_LOGGER(LOG_INFO, \
+    __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
+    ##__VA_ARGS__)
 #define log_warn(format, ...) I3_LOGGER(LOG_WARN, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
     ##__VA_ARGS__)
@@ -140,6 +140,8 @@ SET_LOGGER("Unknown");
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
     ##__VA_ARGS__), throw std::runtime_error(I3LoggingStringF(format, \
     ##__VA_ARGS__) + " (in " + __PRETTY_FUNCTION__ + ")")
+#define log_info_stream(msg) I3_STREAM_LOGGER(LOG_INFO, \
+    __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, msg, )
 #define log_warn_stream(msg) I3_STREAM_LOGGER(LOG_WARN, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, msg, )
 #define log_error_stream(msg) I3_STREAM_LOGGER(LOG_ERROR, \
