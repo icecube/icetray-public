@@ -35,10 +35,10 @@ class I3FileImpl;
 
 class I3File
 {
-  static void noop(double) { }
   boost::scoped_ptr<I3FileImpl> impl_;
 
 public:
+  static void noop(double) { }
 
   struct empty_file_exception : virtual std::exception
   {
