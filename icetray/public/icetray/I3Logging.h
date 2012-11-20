@@ -103,7 +103,13 @@ void i3_clogger(I3LogLevel level, const char *unit, const char *file,
 	static inline const char *__icetray_logger_id(void) { return X; }
 
 // Set default logger in global namespace
+#ifdef PROJECT
+#define I3LOGSTR(x) #x
+SET_LOGGER(I3LOGSTR(PROJECT));
+#undef I3LOGSTR
+#else
 SET_LOGGER("Unknown");
+#endif
 
 #define log_custom(level, format, ...) I3_LOGGER(level, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
