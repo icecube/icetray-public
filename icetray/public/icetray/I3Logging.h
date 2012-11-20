@@ -105,6 +105,13 @@ void i3_clogger(I3LogLevel level, const char *unit, const char *file,
 // Set default logger in global namespace
 SET_LOGGER("Unknown");
 
+#define log_custom(level, format, ...) I3_LOGGER(level, \
+    __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
+    ##__VA_ARGS__)
+#define log_custom_unit(level, unit, format, ...) I3_LOGGER(level, \
+    unit, __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
+    ##__VA_ARGS__)
+
 #ifndef NDEBUG
 #define log_trace(format, ...) I3_LOGGER(LOG_TRACE, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
