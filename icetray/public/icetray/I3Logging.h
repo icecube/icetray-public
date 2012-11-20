@@ -104,9 +104,11 @@ void i3_clogger(I3LogLevel level, const char *unit, const char *file,
 
 // Set default logger in global namespace
 #ifdef PROJECT
-#define I3LOGSTR(x) #x
+#define I3LOGSTR1(X) #X
+#define I3LOGSTR(X) I3LOGSTR1(X)
 SET_LOGGER(I3LOGSTR(PROJECT));
 #undef I3LOGSTR
+#undef I3LOGSTR1
 #else
 SET_LOGGER("Unknown");
 #endif
