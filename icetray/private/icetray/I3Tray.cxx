@@ -112,7 +112,8 @@ I3Tray::I3Tray() :
 
 I3Tray::~I3Tray()
 {
-	Finish();
+	if (!finish_called && execute_called)
+		Finish();
 
 	suspension_requested_ = false;
 }
