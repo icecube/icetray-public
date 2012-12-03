@@ -41,6 +41,7 @@ const I3LogLevel I3DefaultLogLevel = LOG_INFO;
 #include <icetray/I3PointerTypedefs.h>
 #include <stdexcept>
 #include <map>
+#include <sstream>
 
 class I3Logger {
 public:
