@@ -73,8 +73,6 @@ public:
   I3FramePtr get_frame(unsigned);
   I3FramePtr get_raw_frame(unsigned);
 
-  void show_frame_history();
-
   void move_first();
   void move_last();
 
