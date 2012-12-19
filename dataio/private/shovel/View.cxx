@@ -202,9 +202,9 @@ View::page(const std::string &text)
   std::string cmd = "/usr/bin/less -x2 -C ";
   cmd += tmpfile_name;
   int ret = system(cmd.c_str());
-  if (!ret)
+  if (ret != 0)
     {
-      log_error("call to system('%s'); returnd value: %d",cmd.c_str(), ret);
+      log_error("call to system('%s'); returned value: %d", cmd.c_str(), ret);
     }
   unlink(tmpfile_name);
   refresh();
