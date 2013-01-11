@@ -215,12 +215,12 @@ Setting Logging Thresholds
 
 The logging threshold is set by default to LOG_WARN for all modules (i.e. only
 ``log_warn()`` and more severe conditions will be logged). If you want to change
-this global threshold, this can be changed by I3Logger's ``setLevel()`` method.
+this global threshold, this can be changed by I3Logger's ``set_level()`` method.
 For example, to get more information, the global log threshold can be reduced to LOG_INFO:
 
 ::
 
-  icetray.I3Logger.global_logger.setLevel(icetray.I3LogLevel.LOG_INFO)
+  icetray.I3Logger.global_logger.set_level(icetray.I3LogLevel.LOG_INFO)
 
 This can also be changed on a per-logging stream level. For example, to get extremely
 verbose information just from I3Tray, while leaving all other subsystems at their normal
@@ -228,5 +228,5 @@ levels:
 
 ::
 
-  icetray.I3Logger.global_logger.setLevelForUnit('I3Tray', icetray.I3LogLevel.LOG_TRACE)
+  icetray.I3Logger.global_logger.set_level_for_unit('I3Tray', icetray.I3LogLevel.LOG_TRACE)
 
