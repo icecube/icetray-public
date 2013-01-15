@@ -23,8 +23,9 @@ class LoggingBridge(I3Logger):
 		return logging.getLogger(name)
 	def log(self, level, unit, file, line, func, msg):
 		logger = self.getLogger(unit)
-		record = logging.LogRecord(logger.name, self.pylevels[level], file, line, msg, tuple(), None, None)
-		logger.handle(record)
+		if logger.isEnabledFor(self.pylevels[level]):
+			record = logging.LogRecord(logger.name, self.pylevels[level], file, line, msg, tuple(), None, None)
+			logger.handle(record)
 	def get_level_for_unit(self, unit):
 		return self.i3levels.get(self.getLogger(unit).getEffectiveLevel(), I3LogLevel.LOG_FATAL)
 	def set_level_for_unit(self, unit, level):
