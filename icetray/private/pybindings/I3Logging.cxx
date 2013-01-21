@@ -97,6 +97,7 @@ void register_I3Logging()
 	class_<I3LoggerWrapper, boost::shared_ptr<I3LoggerWrapper>, boost::noncopyable>
 	    ("I3Logger", "Logging base class")
 		.add_static_property("global_logger", &GetIcetrayLogger, &SetIcetrayLogger)
+		.def("log", &I3Logger::Log)
 		.def("get_level_for_unit", &I3Logger::LogLevelForUnit)
 		.def("set_level_for_unit", &I3Logger::SetLogLevelForUnit)
 		.def("set_level", &I3Logger::SetLogLevel)

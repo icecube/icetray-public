@@ -1,5 +1,5 @@
 
-import logging, string
+import logging, string, traceback
 from icecube.icetray import I3Logger, I3LogLevel
 
 class LoggingBridge(I3Logger):
@@ -81,4 +81,35 @@ def syslog():
 	logging.root.handlers = list()
 	logging.root.addHandler(handler)
 	logging._releaseLock()
-	
+
+def log_trace(message, unit="Python"):
+	tb = traceback.extract_stack(limit=2)[0]
+	I3Logger.global_logger.log(I3LogLevel.LOG_TRACE, unit, tb[0], tb[1],
+	    tb[2], message)
+
+def log_debug(message, unit="Python"):
+	tb = traceback.extract_stack(limit=2)[0]
+	I3Logger.global_logger.log(I3LogLevel.LOG_DEBUG, unit, tb[0], tb[1],
+	    tb[2], message)
+
+def log_info(message, unit="Python"):
+	tb = traceback.extract_stack(limit=2)[0]
+	I3Logger.global_logger.log(I3LogLevel.LOG_INFO, unit, tb[0], tb[1],
+	    tb[2], message)
+
+def log_warn(message, unit="Python"):
+	tb = traceback.extract_stack(limit=2)[0]
+	I3Logger.global_logger.log(I3LogLevel.LOG_WARN, unit, tb[0], tb[1],
+	    tb[2], message)
+
+def log_error(message, unit="Python"):
+	tb = traceback.extract_stack(limit=2)[0]
+	I3Logger.global_logger.log(I3LogLevel.LOG_ERROR, unit, tb[0], tb[1],
+	    tb[2], message)
+
+def log_fatal(message, unit="Python"):
+	tb = traceback.extract_stack(limit=2)[0]
+	I3Logger.global_logger.log(I3LogLevel.LOG_FATAL, unit, tb[0], tb[1],
+	    tb[2], message)
+	raise RuntimeError(message + " (in " + tb[2] + ")")
+
