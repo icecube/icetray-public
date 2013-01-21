@@ -31,9 +31,7 @@ def load(libname):
     try :
         icetray.load(libname)
     except:
-        print """\n***\n*** Failed to load library. (%s)\n*** %s\n***\n""" % \
-              (sys.exc_info()[0], sys.exc_info()[1])
-        sys.exit(1)
+        icetray.logging.log_fatal("Failed to load library (%s): %s" % (sys.exc_info()[0], sys.exc_info()[1]), "I3Tray")
 
             
 def OMKey(string,omnum):
@@ -86,7 +84,7 @@ class I3Tray(icetray.I3Tray):
                 if _name not in module_names:
                     break
                 n+=1
-            print "INFO: Adding Anonymous Module of type '%s' with name '%s'"%(_type,_name)
+            icetray.logging.log_info("Adding Anonymous Module of type '%s' with name '%s'"%(_type,_name), "I3Tray")
 
 	if hasattr(_type, '__i3traysegment__'):
             raise RuntimeError, "Trying to add tray segment %s with AddModule. Use AddSegment instead." % _name
@@ -167,7 +165,7 @@ class I3Tray(icetray.I3Tray):
         elif len(args) == 3:
             super(I3Tray, self).ConnectBoxes(args[0], args[1], args[2])
         else:
-            print 'Wrong number of arguments', len(args), 'to ConnectBoxes'
+            icetray.logging.log_error('Wrong number of arguments %d to ConnectBoxes' % len(args), 'I3Tray')
         
     def __call__(self, *args):
         for pair in args:
