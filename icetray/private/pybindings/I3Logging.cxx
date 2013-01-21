@@ -59,6 +59,24 @@ public:
 	}
 };
 
+static I3LogLevel
+GlobalLogLevelForUnit(const std::string &unit)
+{
+	return GetIcetrayLogger()->LogLevelForUnit(unit);
+}
+
+static void
+GlobalSetLogLevelForUnit(const std::string &unit, I3LogLevel level)
+{
+	GetIcetrayLogger()->SetLogLevelForUnit(unit, level);
+}
+
+static void
+GlobalSetLogLevel(I3LogLevel level)
+{
+	GetIcetrayLogger()->SetLogLevel(level);
+}
+
 void register_I3Logging()
 {
 	// Acquire the Global Interpeter Lock and bless ourselves as
@@ -86,6 +104,11 @@ void register_I3Logging()
 
 	class_<I3NullLogger, bases<I3Logger>, boost::shared_ptr<I3NullLogger>, boost::noncopyable>("I3NullLogger", "Logger that does not log. Useful if you don't want log messages");
 	class_<I3PrintfLogger, bases<I3Logger>, boost::shared_ptr<I3PrintfLogger>, boost::noncopyable>("I3PrintfLogger", "Logger that prints error messages to stderr (in color, if stderr is a tty).", init<I3LogLevel>());
+
+	def("get_level_for_unit", &GlobalLogLevelForUnit);
+	def("set_level_for_unit", &GlobalSetLogLevelForUnit);
+	def("set_level", &GlobalSetLogLevel);
+
 }
 
 
