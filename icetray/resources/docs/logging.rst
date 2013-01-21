@@ -220,7 +220,7 @@ For example, to get more information, the global log threshold can be reduced to
 
 ::
 
-  icetray.I3Logger.global_logger.set_level(icetray.I3LogLevel.LOG_INFO)
+  icetray.set_log_level(icetray.I3LogLevel.LOG_INFO)
 
 This can also be changed on a per-logging stream level. For example, to get extremely
 verbose information just from I3Tray, while leaving all other subsystems at their normal
@@ -228,5 +228,5 @@ levels:
 
 ::
 
-  icetray.I3Logger.global_logger.set_level_for_unit('I3Tray', icetray.I3LogLevel.LOG_TRACE)
+  icetray.set_log_level_for_unit('I3Tray', icetray.I3LogLevel.LOG_TRACE)
 
