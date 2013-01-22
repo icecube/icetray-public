@@ -31,7 +31,6 @@ I3_MODULE(QConverter);
 QConverter::QConverter(const I3Context& context) :
     I3Module(context)
 {
-	subevent_stream = GetName();
 
 	keys_to_q.push_back("DrivingTime");
 	keys_to_q.push_back("CorsikaWeightMap");
@@ -70,13 +69,16 @@ QConverter::QConverter(const I3Context& context) :
 void
 QConverter::Configure()
 {
+	subevent_stream = GetName();
+
 	GetParameter("QKeys", keys_to_q);
 	GetParameter("QTypes", types_to_q);
 	GetParameter("WritePFrame", output_p_frame);
 }
 
 void
-QConverter::Physics(I3FramePtr frame) {
+QConverter::Physics(I3FramePtr frame)
+{
 	// Purge all non-native keys, so we don't reassign GCD keys
 	frame->purge();
 
