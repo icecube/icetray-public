@@ -49,9 +49,9 @@ Of general interest
 Automatically Generated Documentation
 =====================================
 
-`Doxygen <doxygen>`_
+`Doxygen <doxygen/>`_
 
-`Icetray-inspect <inspect>`_
+`Icetray-inspect <inspect/>`_
 
 
 About this documentation
