@@ -46,5 +46,5 @@ functionality. The following table reflects the changes.
   .. [*] the ``cmake`` port points to ``cmake_2.6.4`` in ``i3-tools-v3``,
      and ``cmake_2.8.4`` in ``i3-tools-v4``
   .. [*] ``Qt`` is no longer part of the default tool install. You can use
-     your system ``Qt``, the ``qt_4.6.0`` port, or a binary package from http://qt.nokia.com
+     your system ``Qt``, the ``qt_4.6.0`` port, or a binary package from http://qt.digia.com
   .. [*] ``ptd`` support was removed, so the port was also removed
