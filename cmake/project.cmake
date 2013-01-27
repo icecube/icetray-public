@@ -455,7 +455,7 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
     enable_testing()
     add_test(NAME "${PROJECT_NAME}::${THIS_EXECUTABLE_NAME}" #::${testable_file}/${unittest}"
              WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-             COMMAND ${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} -sa)
+             COMMAND ${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} -saf)
 
     parse_arguments(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}
       "USE_TOOLS;USE_PROJECTS;LINK_LIBRARIES"
