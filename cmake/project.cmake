@@ -453,9 +453,9 @@ endmacro(i3_executable THIS_EXECUTABLE_NAME)
 macro(i3_test_executable THIS_EXECUTABLE_NAME)
   if (BUILD_${I3_PROJECT})
     enable_testing()
-    add_test(NAME "${PROJECT_NAME}::unit_tests" #::${testable_file}/${unittest}"
+    add_test(NAME "${PROJECT_NAME}::${THIS_EXECUTABLE_NAME}" #::${testable_file}/${unittest}"
              WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-             COMMAND ${PROJECT_NAME}-test -sa)
+             COMMAND ${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} -sa)
 
     parse_arguments(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}
       "USE_TOOLS;USE_PROJECTS;LINK_LIBRARIES"
