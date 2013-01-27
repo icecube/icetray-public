@@ -140,6 +140,11 @@ namespace I3Test
 	  {
 	    int child_status;
 	    wait(&child_status);
+	    if (child_status == 0)
+	      successes.insert(unit);
+	    else
+	      failures[i->first] = boost::shared_ptr<test_failure>(new test_failure(unit, -1, "fork", "Forked child failed"));
+	      // Note: text in above never examined
 	  }
 	else
 	  {
@@ -250,7 +255,7 @@ namespace I3Test
 		cout << " FATAL, something not a std::exception thrown." << endl;
 	    }
 	    if (fork_units)
-	      exit(0); // child
+	      exit(failures.find(i->first) != failures.end()); // child
 	  }
       }
   }
