@@ -613,6 +613,7 @@ endmacro(i3_add_pybindings)
 #  Generates testing targets for scripts
 #
 macro(i3_test_scripts)
+  enable_testing()
   set(THIS_TEST_SCRIPT_LIST ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/test.scripts.txt)
   file(REMOVE ${THIS_TEST_SCRIPT_LIST})
   file(APPEND ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tests.list "scripts ${THIS_TEST_SCRIPT_LIST}\n")
