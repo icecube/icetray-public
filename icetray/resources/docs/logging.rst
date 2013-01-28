@@ -211,7 +211,7 @@ More complicated things can be done if desired using the Python logging infrastr
 see the `Python documentation <http://docs.python.org/library/logging.html>`_ for details.
 
 
-In addition to configuring logging from Python, all the C++ logging functions (log_info() etc.) are available from Python under icetray.logging. These functions take two arguments: a warning script and optional logging unit (the default is the "Python" unit). For example:
+In addition to configuring logging from Python, all the C++ logging functions (log_info() etc.) are available from Python under icetray.logging. These functions take two arguments: a log message and optional logging unit (the default is the "Python" unit). For example:
 
 ::
 
