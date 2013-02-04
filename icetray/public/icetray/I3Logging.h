@@ -21,6 +21,8 @@
 #ifndef ICETRAY_I3LOGGING_H_INCLUDED
 #define ICETRAY_I3LOGGING_H_INCLUDED
 
+#include <signal.h>
+
 typedef enum {
 	LOG_TRACE,
 	LOG_DEBUG,
@@ -168,7 +170,14 @@ SET_LOGGER("Unknown");
 #else
 #define log_fatal(format, ...) I3_LOGGER(LOG_FATAL, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
-    ##__VA_ARGS__), exit(1)
+    ##__VA_ARGS__), kill(getpid(), SIGABRT)
+#endif
+
+#define i3_assert(cond) if(!(cond)) log_fatal("Assertion failed: %s", #cond)
+#ifdef NDEBUG
+#define i3_debug_assert(cond)
+#else
+#define i3_debug_assert(cond) if(!(cond)) log_fatal("Assertion failed: %s", #cond)
 #endif
 
 #endif //ifndef ICETRAY_I3LOGGING_H_INCLUDED

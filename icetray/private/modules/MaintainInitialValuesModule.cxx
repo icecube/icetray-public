@@ -72,14 +72,14 @@ struct MaintainInitialValuesModule : I3Module
     GetParameter("omkey_param", omkey_param);
     GetParameter("service_ptr_param",service_ptr_param);
 
-    assert( bool_param == true);
-    assert( uchar_param == std::numeric_limits<unsigned char>::max() );
-    assert( int_param == std::numeric_limits<int>::max());
-    assert( long_param == std::numeric_limits<long>::max());
-    assert( double_param == 3.1415926535897932);
-    assert( string_param == "We can't stop here.  This is Bat Country!");
-    assert( omkey_param == OMKey(-666,666));
-    assert( service_ptr_param ); 
+    i3_assert( bool_param == true);
+    i3_assert( uchar_param == std::numeric_limits<unsigned char>::max() );
+    i3_assert( int_param == std::numeric_limits<int>::max());
+    i3_assert( long_param == std::numeric_limits<long>::max());
+    i3_assert( double_param == 3.1415926535897932);
+    i3_assert( string_param == "We can't stop here.  This is Bat Country!");
+    i3_assert( omkey_param == OMKey(-666,666));
+    i3_assert( service_ptr_param ); 
   }
 
   virtual void Process() { 

@@ -26,7 +26,6 @@
 #include <string>
 #include <map>
 #include <iostream>
-#include <cassert>
 #include <exception>
 #include <deque>
 
@@ -232,7 +231,7 @@ I3Tray::AddService(const std::string& classname,
 
 	log_trace("AddService %s %s", classname.c_str(), instancename.c_str());
 
-	assert(!classname.empty());
+	i3_assert(!classname.empty());
 	I3ServiceFactoryPtr servicefactory = 
 	    I3::Singleton<I3ServiceFactoryFactory>::get_const_instance()
 	    .Create(classname)(master_context);

@@ -131,7 +131,7 @@ void
 I3Configuration::ClassName(const std::string& s) 
 { 
   log_trace("ClassName: %s", s.c_str());
-  assert(!s.empty());
+  i3_assert(!s.empty());
   impl_->ClassName(s); 
 }
 
