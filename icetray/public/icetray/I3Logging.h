@@ -173,11 +173,11 @@ SET_LOGGER("Unknown");
     ##__VA_ARGS__), kill(getpid(), SIGABRT)
 #endif
 
-#define i3_assert(cond) if(!(cond)) log_fatal("Assertion failed: %s", #cond)
+#define i3_assert(cond) do{ if(!(cond)) log_fatal("Assertion failed: %s", #cond); } while(0)
 #ifdef NDEBUG
-#define i3_debug_assert(cond)
+#define i3_debug_assert(cond) do{ /*nothing*/ } while(0)
 #else
-#define i3_debug_assert(cond) if(!(cond)) log_fatal("Assertion failed: %s", #cond)
+#define i3_debug_assert(cond) do{ if(!(cond)) log_fatal("Assertion failed: %s", #cond); } while(0)
 #endif
 
 #endif //ifndef ICETRAY_I3LOGGING_H_INCLUDED
