@@ -7,7 +7,7 @@
 #include <icetray/I3SimpleLoggers.h>
 
 I3PrintfLogger::I3PrintfLogger(I3LogLevel level)
-    : I3Logger(level)
+    : I3Logger(level), TrimFileNames(true)
 {
 	tty_ = isatty(STDERR_FILENO);
 }
@@ -59,7 +59,7 @@ I3PrintfLogger::Log(I3LogLevel level, const std::string &unit,
 
 	std::string trimmed_filename;
 	size_t lastslash = file.rfind('/');
-	if (lastslash != std::string::npos)
+	if (lastslash != std::string::npos && TrimFileNames)
 		trimmed_filename = file.substr(lastslash+1);
 	else
 		trimmed_filename = file;

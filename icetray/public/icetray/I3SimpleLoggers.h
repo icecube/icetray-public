@@ -36,6 +36,8 @@ public:
 	virtual void Log(I3LogLevel level, const std::string &unit,
 	    const std::string &file, int line, const std::string &func,
 	    const std::string &message);
+
+	bool TrimFileNames;
 private:
 	bool tty_;
 };
