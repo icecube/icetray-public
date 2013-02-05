@@ -70,6 +70,6 @@ void register_I3Context()
     .def("__contains__", (bool (I3Context::*)(const std::string &) const)&I3Context::Has)
     .def("__getitem__", (object (I3Context::*)(const std::string &) const)&I3Context::Get)
     .def("__setitem__", (bool (I3Context::*)(const std::string &, object))&I3Context::Put)
-    .def("__iter__", range(&I3Context::begin, &I3Context::end))
+    .def("__iter__", boost::python::range(&I3Context::begin, &I3Context::end))
     ;
 }
