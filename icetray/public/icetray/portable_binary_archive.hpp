@@ -52,11 +52,19 @@ class portable_binary_oarchive :
 
 		// the following have been overridden to provide specific sizes
 		// for these pseudo-primitive types
+#if BOOST_VERSION < 104400
 		#define sv_override(a, b) \
 			void save_override(const a& t, int) { \
 				const b x = t.t; \
 				(*this) << x; \
 			}
+#else
+		#define sv_override(a, b) \
+			void save_override(const a& t, int) { \
+				const b x = t; \
+				(*this) << x; \
+			}
+#endif
 		void save_override(const bool& t, BOOST_PFTO int) {
 			const uint8_t x = t;
 			(*this) << x;
@@ -108,7 +116,12 @@ class portable_binary_oarchive :
 			if (s != (std::streamsize)count)
 				boost::serialization::throw_exception(
 				    archive_exception(
-				    archive_exception::stream_error));
+#if BOOST_VERSION < 104400
+				    archive_exception::stream_error
+#else
+				    archive_exception::output_stream_error
+#endif
+				    ));
 		}
 
 	private:
@@ -144,18 +157,25 @@ class portable_binary_iarchive :
 
 		// the following have been overridden to provide specific sizes
 		// for these pseudo-primitive types
-		#define ld_override(a, b) \
+		#define ld_override(a, b, c, d) \
 			void load_override(a& t, int) { \
-				b x = 0; (*this) >> x; \
-				t = a(x); \
+				d x = 0; (*this) >> x; \
+				t = a((b)(c)(x)); \
 			}
-		ld_override(bool, uint8_t)
-		ld_override(version_type, uint8_t)
-		ld_override(class_id_type, int16_t)
-		ld_override(class_id_reference_type, int16_t)
-		ld_override(object_id_type, uint32_t)
-		ld_override(object_reference_type, uint32_t)
-		ld_override(serialization::collection_size_type, uint32_t)
+	
+		ld_override(bool, uint8_t, uint8_t, uint8_t)
+		ld_override(version_type, unsigned int, unsigned int,
+		    uint8_t)
+		ld_override(class_id_type, size_t, size_t,
+		    int16_t)
+		ld_override(class_id_reference_type, class_id_type, size_t,
+		    int16_t)
+		ld_override(object_id_type, unsigned int, unsigned int,
+		    uint32_t)
+		ld_override(object_reference_type, object_id_type, unsigned int,
+		    uint32_t)
+		ld_override(serialization::collection_size_type, uint32_t,
+		    uint32_t, uint32_t)
 		void load_override(tracking_type &t, int) {
 			char x = 0; (*this) >> x;
 			t = (x != 0);
@@ -203,7 +223,12 @@ class portable_binary_iarchive :
 			if (s != (std::streamsize)count)
 				boost::serialization::throw_exception(
 				    archive_exception(
-				    archive_exception::stream_error));
+#if BOOST_VERSION < 104400
+				    archive_exception::stream_error
+#else
+				    archive_exception::input_stream_error
+#endif
+				    ));
 		}
 	private:
 		friend class load_access;
