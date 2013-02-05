@@ -154,7 +154,7 @@ int main (int argc, char *argv[])
 
   string rcfile_path = getenv("HOME");
   rcfile_path += "/.shovelrc";
-#if BOOST_VERSION > 0104100
+#if BOOST_VERSION > 104100
   if (!fs::exists(fs::path(rcfile_path)))
 #else
   if (!fs::exists(fs::path(rcfile_path, fs::no_check)))
