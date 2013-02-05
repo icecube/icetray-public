@@ -23,6 +23,7 @@
 #include <iostream>
 
 #include <icetray/portable_binary_archive.hpp>
+#if BOOST_VERSION < 104000
 #include <boost/archive/impl/archive_pointer_iserializer.ipp>
 #include <boost/archive/impl/archive_pointer_oserializer.ipp>
 
@@ -34,4 +35,16 @@ namespace archive {
 
 } // namespace archive
 } // namespace boost
+#else
+#include <boost/archive/impl/archive_serializer_map.ipp>
+
+namespace boost {
+namespace archive {
+  
+  template class detail::archive_serializer_map<portable_binary_iarchive> ;
+  template class detail::archive_serializer_map<portable_binary_oarchive> ;
+
+} // namespace archive
+} // namespace boost
+#endif
 

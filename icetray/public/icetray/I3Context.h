@@ -24,6 +24,7 @@
 #define ICETRAY_I3CONTEXT_H_INCLUDED
 
 #include <string>
+#include <vector>
 
 #include <icetray/IcetrayFwd.h>
 #include <icetray/I3Logging.h>

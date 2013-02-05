@@ -41,7 +41,7 @@
 
 #include <cassert>
 #include <boost/noncopyable.hpp>
-#include <icetray/force_include.hpp>
+#include <boost/serialization/force_include.hpp>
 
 namespace I3 { 
 
