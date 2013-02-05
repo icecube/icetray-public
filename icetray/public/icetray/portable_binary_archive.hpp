@@ -198,13 +198,6 @@ class portable_binary_iarchive :
 		}
 		#undef ld_override
 
-#if BOOST_VERSION >= 104400
-		// Icetray uses 1.38 STL serialization formats for all archives
-		library_version_type get_library_version() {
-			return boost::archive::library_version_type(3);
-		}
-#endif
-
 		struct use_array_optimization {
 			template <class T> struct apply :
 			    public boost::serialization::
