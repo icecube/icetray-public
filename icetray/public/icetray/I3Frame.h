@@ -115,7 +115,7 @@ class I3Frame
 
   struct hashed_str_t
   {
-    hashed_str_t(const std::string &str) : string(str), hash(__gnu_cxx::hash<std::string>()(str)) {}
+    hashed_str_t(const std::string &str) : string(str), hash(::hash<std::string>()(str)) {}
     bool operator == (const hashed_str_t &b) const {
       if (hash != b.hash) return false;
       return string == b.string;
@@ -133,11 +133,7 @@ class I3Frame
     size_t operator()(const hashed_str_t &h) const { return h.hash; }
   };
 
-#if 1 //GCC_VERSION <= 40300
-  typedef __gnu_cxx::hash_map<hashed_str_t, boost::shared_ptr<value_t>, hashed_str_t_hash> map_t;
-#else
-  typedef std::unordered_map<hashed_str_t, boost::shared_ptr<value_t>, hashed_str_t_hash> map_t;
-#endif
+  typedef hash_map<hashed_str_t, boost::shared_ptr<value_t>, hashed_str_t_hash> map_t;
   /// may change type_name field in value
   static std::string type_name(const value_t&);
 

@@ -618,7 +618,11 @@ bool I3Frame::load_v56(IStreamT& is, const vector<string>& skip, bool v6, bool v
     bia >> make_nvp("size", nslots);
     if (verify)
       crcit(nslots, crc, calc_crc);
+#ifdef USING_GCC_EXT_HASH_MAP
     map_.resize(nslots);
+#else
+    map_.reserve(nslots);
+#endif
 
     for (unsigned int i = 0; i < nslots; i++)
       {

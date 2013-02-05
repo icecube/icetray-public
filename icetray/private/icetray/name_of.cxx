@@ -31,7 +31,7 @@ namespace icetray
       };
       
       
-      typedef __gnu_cxx::hash_map<const std::type_info*,
+      typedef hash_map<const std::type_info*,
                                   std::string,
                                   type_info_ptr_hash> typename_map_t;
       

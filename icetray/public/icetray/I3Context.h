@@ -245,7 +245,7 @@ class I3Context
     return boost::python::object();
   }
   
-  typedef __gnu_cxx::hash_map<std::string, boost::any> map_t;
+  typedef hash_map<std::string, boost::any> map_t;
   typedef map_t::const_iterator const_iterator;
   const_iterator begin() const { return map_.begin(); }
   const_iterator end() const { return map_.end(); }
