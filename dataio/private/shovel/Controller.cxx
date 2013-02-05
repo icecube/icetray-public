@@ -154,7 +154,11 @@ int main (int argc, char *argv[])
 
   string rcfile_path = getenv("HOME");
   rcfile_path += "/.shovelrc";
+#if BOOST_VERSION > 0104100
+  if (!fs::exists(fs::path(rcfile_path)))
+#else
   if (!fs::exists(fs::path(rcfile_path, fs::no_check)))
+#endif
     write_default_shovelrc(rcfile_path, keybindings);
 
   dataio::shovel::parse_rcfile(rcfile_path, keybindings);
@@ -224,24 +228,24 @@ int main (int argc, char *argv[])
     log_trace("done starting up");
     map<string, boost::function<void(void)> > actions;
 
-    actions["up"] = bind(&Model::move_y, ref(model), -1);
-    actions["down"] = bind(&Model::move_y, ref(model), 1);
-    actions["right"] = bind(&Model::move_x, ref(model), 1);
-    actions["left"] = bind(&Model::move_x, ref(model), -1);
+    actions["up"] = bind(&Model::move_y, boost::ref(model), -1);
+    actions["down"] = bind(&Model::move_y, boost::ref(model), 1);
+    actions["right"] = bind(&Model::move_x, boost::ref(model), 1);
+    actions["left"] = bind(&Model::move_x, boost::ref(model), -1);
     // specify boost::lamba::bind, otherwise something odd happens with
     // that call to var()
-    actions["fast_forward"] = boost::lambda::bind(&Model::move_x, ref(model), var(COLS)-4);
-    actions["fast_reverse"] = boost::lambda::bind(&Model::move_x, ref(model), -(var(COLS)-4));
-    actions["first_frame"] = bind(&Model::move_first, ref(model));
-    actions["last_frame"] = bind(&Model::move_last, ref(model));
-    actions["help"] = bind(&View::do_help, ref(View::Instance()));
-    actions["about"] = bind(&View::do_about, ref(View::Instance()));
-    actions["pretty_print"] = bind(&Model::pretty_print, ref(model));
-    actions["toggle_infoframes"] = bind(&Model::toggle_infoframes, ref(model));
-    actions["write_frame"] = bind(&Model::write_frame, ref(model));
-    actions["save_xml"] = bind(&Model::save_xml, ref(model));
-    actions["goto_frame"] = bind(&Model::do_goto_frame, ref(model));
-    actions["xml"] = bind(&Model::show_xml, ref(model));
+    actions["fast_forward"] = boost::lambda::bind(&Model::move_x, boost::ref(model), var(COLS)-4);
+    actions["fast_reverse"] = boost::lambda::bind(&Model::move_x, boost::ref(model), -(var(COLS)-4));
+    actions["first_frame"] = bind(&Model::move_first, boost::ref(model));
+    actions["last_frame"] = bind(&Model::move_last, boost::ref(model));
+    actions["help"] = bind(&View::do_help, boost::ref(View::Instance()));
+    actions["about"] = bind(&View::do_about, boost::ref(View::Instance()));
+    actions["pretty_print"] = bind(&Model::pretty_print, boost::ref(model));
+    actions["toggle_infoframes"] = bind(&Model::toggle_infoframes, boost::ref(model));
+    actions["write_frame"] = bind(&Model::write_frame, boost::ref(model));
+    actions["save_xml"] = bind(&Model::save_xml, boost::ref(model));
+    actions["goto_frame"] = bind(&Model::do_goto_frame, boost::ref(model));
+    actions["xml"] = bind(&Model::show_xml, boost::ref(model));
     actions["quit"] = &shovel_exit;
 
     while (true)
