@@ -55,7 +55,11 @@ namespace I3Test
     std::string dirname = i3_work + string("/") + i3_platform 
       + "/build/" + project + "/testdata";
 
+#if BOOST_VERSION > 104100
+    boost::filesystem::path datadir(dirname);
+#else
     boost::filesystem::path datadir(dirname, boost::filesystem::native);
+#endif
     boost::filesystem::create_directories(datadir);
     return dirname + std::string("/") + fname;
   }

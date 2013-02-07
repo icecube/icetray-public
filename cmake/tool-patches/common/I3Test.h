@@ -185,6 +185,20 @@ namespace I3Test {
 
 } 
 
+#if BOOST_VERSION > 0104100
+#define TEST_GROUP(GROUPNAME)						\
+  namespace I3Test {							\
+      static test_group *local_test_group() {				\
+	static test_group group;					\
+	return &group;							\
+      }									\
+      namespace {							\
+	  static I3Test::group_registerer				\
+	  registerer(local_test_group(), fs::path(__FILE__).filename().string());	\
+	  static std::string group_name(fs::path(__FILE__).filename().string());		\
+      }									\
+  }
+#else
 #define TEST_GROUP(GROUPNAME)						\
   namespace I3Test {							\
       static test_group *local_test_group() {				\
@@ -197,5 +211,6 @@ namespace I3Test {
 	  static std::string group_name(fs::path(__FILE__).leaf());		\
       }									\
   }
+#endif
 
 #endif
