@@ -29,6 +29,9 @@
 #define BOOST_ARCHIVE_CUSTOM_IARCHIVE_TYPES boost::archive::portable_binary_iarchive
 #endif
 
+#if BOOST_VERSION > 104100
+#include <icetray/i3_extended_type_info.h>
+#endif
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 #include <icetray/portable_binary_archive.hpp>
@@ -73,7 +76,22 @@ AsXML(const T& t)
   template void T::serialize(boost::archive::xml_iarchive&, unsigned);	\
   template void T::serialize(boost::archive::xml_oarchive&, unsigned);
   
-#if BOOST_VERSION > 103310
+#if BOOST_VERSION > 104100
+
+template<class T>
+struct _i3_export_instant {
+public:
+	const char *id_string;
+	_i3_export_instant(const char *guess, T* = NULL) :
+	    id_string(i3_extended_type_info_key_for_type(typeid(T), guess, NULL)) {}
+};
+
+#define I3_EXPORT(T)				\
+  static _i3_export_instant<T> BOOST_PP_CAT(_i3_export_borked_, __LINE__) (BOOST_PP_STRINGIZE(T));	\
+  BOOST_CLASS_EXPORT(T);			\
+  BOOST_SERIALIZATION_SHARED_PTR(T);
+
+#elif BOOST_VERSION > 103310
 
 #define I3_EXPORT(T)				\
   BOOST_SERIALIZATION_SHARED_PTR(T);		\
