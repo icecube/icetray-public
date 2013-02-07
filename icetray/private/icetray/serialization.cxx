@@ -48,7 +48,6 @@ namespace archive {
 
 } // namespace archive
 } // namespace boost
-#endif
 
 const char *i3_extended_type_info_key_for_type(const std::type_info & ti,
     const char *guess, i3_extended_type_info_untemplated_intermediate *eti)
@@ -87,4 +86,5 @@ const char *i3_extended_type_info_key_for_type(const std::type_info & ti,
 
 	return entry;
 }
+#endif
 
