@@ -21,7 +21,7 @@ GetDataDir()
   ENSURE(fs::exists(data_dir), "Directory "
          "'$I3_PORTS/test-data/dataio' doesn't exist.");
 
-#if BOOST_VERSION > 0104100
+#if BOOST_VERSION > 104100
   return data_dir.native();
 #else
   return data_dir.file_string();
