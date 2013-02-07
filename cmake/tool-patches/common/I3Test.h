@@ -185,7 +185,7 @@ namespace I3Test {
 
 } 
 
-#if BOOST_VERSION > 0104100
+#if BOOST_VERSION > 104100
 #define TEST_GROUP(GROUPNAME)						\
   namespace I3Test {							\
       static test_group *local_test_group() {				\
