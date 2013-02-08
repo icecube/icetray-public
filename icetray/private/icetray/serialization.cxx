@@ -48,43 +48,5 @@ namespace archive {
 
 } // namespace archive
 } // namespace boost
-
-const char *i3_extended_type_info_key_for_type(const std::type_info & ti,
-    const char *guess, i3_extended_type_info_untemplated_intermediate *eti)
-{
-	typedef std::map<const std::type_info *, std::pair<char *,
-	    i3_extended_type_info_untemplated_intermediate *> > keymap_type;
-	static keymap_type keys;
-	keymap_type::iterator i;
-	char *entry;
-
-	i = keys.find(&ti);
-
-	if (i == keys.end()) {
-		if (guess == NULL) {
-			entry = new char[255];
-			entry[0] = '+';
-			strncpy(&entry[1], ti.name(), 253);
-			entry[254] = 0;
-		} else {
-			entry = strdup(guess);
-		}
-		keys.insert(i, keymap_type::value_type(&ti, std::pair<char *,
-                    i3_extended_type_info_untemplated_intermediate *>(entry,
-		    eti)));
-	} else {
-		entry = i->second.first;
-		if (guess != NULL) {
-			if (entry[0] == '+') {
-				strncpy(entry, guess, 255);
-				entry[254] = 0;
-				i->second.second->key_register();
-			}
-			assert(strcmp(entry, guess) == 0);
-		}
-	}
-
-	return entry;
-}
 #endif
 

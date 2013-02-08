@@ -78,16 +78,8 @@ AsXML(const T& t)
   
 #if BOOST_VERSION > 104100
 
-template<class T>
-struct _i3_export_instant {
-public:
-	const char *id_string;
-	_i3_export_instant(const char *guess, T* = NULL) :
-	    id_string(i3_extended_type_info_key_for_type(typeid(T), guess, NULL)) {}
-};
-
 #define I3_EXPORT(T)				\
-  static _i3_export_instant<T> BOOST_PP_CAT(_i3_export_borked_, __LINE__) (BOOST_PP_STRINGIZE(T));	\
+  static i3_export_key_setter<T> BOOST_PP_CAT(i3_export_key_setter_, __LINE__) (BOOST_PP_STRINGIZE(T));	\
   BOOST_CLASS_EXPORT(T);			\
   BOOST_SERIALIZATION_SHARED_PTR(T);
 

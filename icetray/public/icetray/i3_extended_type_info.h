@@ -20,40 +20,38 @@
 #include <boost/serialization/extended_type_info_typeid.hpp>
 #undef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
 
-class i3_extended_type_info_untemplated_intermediate;
-const char *i3_extended_type_info_key_for_type(const std::type_info & ti,
-    const char *guess, i3_extended_type_info_untemplated_intermediate *);
-
-class i3_extended_type_info_untemplated_intermediate :
-    public boost::serialization::typeid_system::extended_type_info_typeid_0
-{
-	friend const char *i3_extended_type_info_key_for_type(
-	    const std::type_info & ti, const char *guess,
-	    i3_extended_type_info_untemplated_intermediate *);
-public:
-	i3_extended_type_info_untemplated_intermediate(const char *k) :
-	    boost::serialization::typeid_system::extended_type_info_typeid_0(k)
-	{
-		if (k[0] != '+')
-			key_register();
-	}
-};
+template<class T> struct i3_export_key_setter;
 
 template<class T>
 class i3_extended_type_info :
-    public i3_extended_type_info_untemplated_intermediate,
+    public boost::serialization::typeid_system::extended_type_info_typeid_0,
     public boost::serialization::singleton<i3_extended_type_info< T > >
 {
+private:
+	friend struct i3_export_key_setter<T>;
+
+	char guid_buffer[255];
+	bool registered;
+
+	void set_key(const char *guid) {
+		strncpy(guid_buffer, guid, 254);
+		guid_buffer[254] = 0;
+		assert(!registered);
+		key_register();
+		registered = true;
+	}
+	
 public:
 	i3_extended_type_info() :
-	    i3_extended_type_info_untemplated_intermediate(
-	    i3_extended_type_info_key_for_type(typeid(T), boost::serialization::guid<T>(), this))
+	    boost::serialization::typeid_system::extended_type_info_typeid_0(guid_buffer),
+	    registered(false)
 	{
 		type_register(typeid(T));
 	}
 
 	~i3_extended_type_info() {
-		key_unregister();
+		if (registered)
+			key_unregister();
 		type_unregister();
 	}
 
@@ -107,6 +105,14 @@ typedef ::i3_extended_type_info< T > type;
 };
 } // namespace serialization
 } // namespace boost
+
+template<class T>
+struct i3_export_key_setter {
+	const char *guid;
+	i3_export_key_setter(const char *name) : guid(name) {
+		boost::serialization::singleton<i3_extended_type_info<T> >::get_mutable_instance().set_key(guid);
+	}
+};
 
 #endif
 
