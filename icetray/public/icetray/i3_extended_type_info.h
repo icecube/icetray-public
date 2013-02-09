@@ -20,7 +20,9 @@
 #include <boost/serialization/extended_type_info_typeid.hpp>
 #undef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
 
-template<class T> struct i3_export_key_setter;
+#include <boost/mpl/has_xxx.hpp>
+
+BOOST_MPL_HAS_XXX_TRAIT_DEF(i3_exportable);
 
 template<class T>
 class i3_extended_type_info :
@@ -28,30 +30,29 @@ class i3_extended_type_info :
     public boost::serialization::singleton<i3_extended_type_info< T > >
 {
 private:
-	friend struct i3_export_key_setter<T>;
-
-	char guid_buffer[255];
-	bool registered;
-
-	void set_key(const char *guid) {
-		strncpy(guid_buffer, guid, 254);
-		guid_buffer[254] = 0;
-		assert(!registered);
-		key_register();
-		registered = true;
+	static const char *guid(boost::mpl::false_) { return boost::serialization::guid<T>(); }
+#ifdef __ELF__
+	static const char *guid_extern() __attribute__((weak));
+#elif __APPLE_CC__
+	static const char *guid_extern() __attribute__((weak_import));
+#else
+	#error Don't know how to make weak symbols on this platform
+#endif
+	static const char *guid(boost::mpl::true_) {
+		return (&guid_extern != NULL) ? guid_extern() :
+		    boost::serialization::guid<T>();
 	}
-	
 public:
 	i3_extended_type_info() :
-	    boost::serialization::typeid_system::extended_type_info_typeid_0(guid_buffer),
-	    registered(false)
+	    boost::serialization::typeid_system::extended_type_info_typeid_0(
+	    guid(boost::mpl::bool_<has_i3_exportable<T>::value>()))
 	{
 		type_register(typeid(T));
+		key_register();
 	}
 
 	~i3_extended_type_info() {
-		if (registered)
-			key_unregister();
+		key_unregister();
 		type_unregister();
 	}
 
@@ -95,7 +96,6 @@ public:
 	}
 };
 
-
 #define BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
 namespace boost {
 namespace serialization {
@@ -105,14 +105,6 @@ typedef ::i3_extended_type_info< T > type;
 };
 } // namespace serialization
 } // namespace boost
-
-template<class T>
-struct i3_export_key_setter {
-	const char *guid;
-	i3_export_key_setter(const char *name) : guid(name) {
-		boost::serialization::singleton<i3_extended_type_info<T> >::get_mutable_instance().set_key(guid);
-	}
-};
 
 #endif
 

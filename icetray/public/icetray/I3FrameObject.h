@@ -40,10 +40,10 @@ public:
   // doesn't do anything.  Just for RTTI purposes.
   virtual ~I3FrameObject();
 
+  // Internal magic for serialization
   template <class Archive>
-  void
-  serialize(Archive & ar, unsigned version);
-
+  void serialize(Archive & ar, unsigned version);
+  typedef int i3_exportable;
 };
 
 I3_POINTER_TYPEDEFS(I3FrameObject);
