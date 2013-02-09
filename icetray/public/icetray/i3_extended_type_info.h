@@ -36,7 +36,7 @@ private:
 #elif __APPLE_CC__
 	static const char *guid_extern() __attribute__((weak_import));
 #else
-	#error Don't know how to make weak symbols on this platform
+	#error Do not know how to make weak symbols on this platform
 #endif
 	static const char *guid(boost::mpl::true_) {
 		return (&guid_extern != NULL) ? guid_extern() :
