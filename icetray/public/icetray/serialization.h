@@ -75,13 +75,11 @@ AsXML(const T& t)
   template void T::serialize(boost::archive::portable_binary_iarchive&, unsigned); \
   template void T::serialize(boost::archive::xml_iarchive&, unsigned);	\
   template void T::serialize(boost::archive::xml_oarchive&, unsigned);
-
-#define I3_EXPORTABLE_BASE()	typedef int i3_exportable
   
 #if BOOST_VERSION > 104100
 
 #define I3_EXPORT(T)				\
-  template <> const char *i3_extended_type_info<T>::guid_extern() { return BOOST_PP_STRINGIZE(T); }	\
+  static i3_export_key_setter<T> BOOST_PP_CAT(i3_export_key_setter_, __LINE__) (BOOST_PP_STRINGIZE(T));	\
   BOOST_CLASS_EXPORT(T);			\
   BOOST_SERIALIZATION_SHARED_PTR(T);
 
