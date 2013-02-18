@@ -131,10 +131,7 @@ def get_configuration(module):
 	if isinstance(module, str):
 		return module_default_config(module)
 	elif isinstance(module, type) and issubclass(module, I3Module):
-		context = I3Context()
-		mod = module(context)
-		config = copy.deepcopy(mod.configuration)
-		return config
+		return module(I3Context()).configuration
 	else:
 		raise TypeError, "Module must be either a string naming a registered C++ subclass of I3Module or a Python subclass of I3Module, not %s" % type(module)
 
