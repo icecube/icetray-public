@@ -82,6 +82,36 @@ def syslog():
 	logging.root.addHandler(handler)
 	logging._releaseLock()
 
+def _translate_level(name):
+	if isinstance(name, I3LogLevel):
+		return name
+	elif hasattr(I3LogLevel, 'LOG_'+name.upper()):
+		return getattr(I3LogLevel, 'LOG_'+name.upper())
+	else:
+		raise ValueError("Unknown logging level '%s'" % name)
+
+def set_level(level):
+	"""
+	Set the global logging level.
+	
+	:param level: the log level. This may also be specified as a string.
+	Examples::
+		icetray.logging.set_level(icetray.logging.I3LogLevel.LOG_INFO)
+		icetray.logging.set_level('INFO')
+	"""
+	I3Logger.global_logger.set_level(_translate_level(name))
+
+def set_level_for_unit(unit, name):
+	"""
+	Set the logging level for a specific logging unit.
+	
+	:param level: the log level. This may also be specified as a string.
+	Examples::
+		icetray.logging.set_level_for_unit('I3Reader', icetray.logging.I3LogLevel.LOG_TRACE)
+		icetray.logging.set_level('I3Reader', 'TRACE')
+	"""
+	I3Logger.global_logger.set_level_for_unit(unit, _translate_level(name))
+
 def log_trace(message, unit="Python"):
 	tb = traceback.extract_stack(limit=2)[0]
 	I3Logger.global_logger.log(I3LogLevel.LOG_TRACE, unit, tb[0], tb[1],
