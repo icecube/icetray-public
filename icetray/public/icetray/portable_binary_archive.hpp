@@ -13,6 +13,7 @@
 #include <boost/serialization/array.hpp>
 
 #include <sys/types.h>
+#include <string.h>
 
 namespace boost { namespace archive {
 
