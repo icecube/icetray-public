@@ -190,7 +190,6 @@ i3_test_executable(test
   private/test/NonUniqueNameTest.cxx        
   private/test/shared-ptr-constness.cxx
   private/test/I3FrameTest.cxx         
-  private/test/OutOfMemoryModuleTest.cxx            
   private/test/test-throws-not-caught.cxx
   private/test/PhysicsBuffering.cxx         
   private/test/typesizes.cxx
