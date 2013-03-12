@@ -278,7 +278,7 @@ I3Module::SyncCache(std::string outbox, I3FramePtr frame)
   // the second.
   if (frame->GetStop() != I3Frame::TrayInfo &&
    frame->GetStop() != I3Frame::Physics)
-    cache_->merge(*frame);
+    cache_->assign(*frame);
 }
 
 void
