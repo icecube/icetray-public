@@ -129,8 +129,8 @@ class I3ServiceBase {
            } 
         }
 
-        const I3Configuration& GetConfiguration() { return *configuration_; }
-        const I3Context& GetContext() { return context_; }
+        const I3Configuration& GetConfiguration() const { return *configuration_; }
+        const I3Context& GetContext() const { return context_; }
 
     protected:
         const I3Context& context_;

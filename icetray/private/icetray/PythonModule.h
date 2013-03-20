@@ -80,8 +80,8 @@ struct PythonModule : Base, boost::python::wrapper<Base>
   void AddOutBox(const std::string& name);
   I3FramePtr PopFrame();
 
-  const I3Context& GetContext() { return Base::context_; }
-  const I3Configuration& GetConfiguration() { return Base::configuration_; }
+  const I3Context& GetContext() const { return Base::context_; }
+  const I3Configuration& GetConfiguration() const { return Base::configuration_; }
 
   // Just for I3PacketModule wrapper
   void FramePacket(std::vector<I3FramePtr> &);
