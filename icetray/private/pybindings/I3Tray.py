@@ -48,7 +48,23 @@ class I3Tray(icetray.I3Tray):
         Creates an I3Tray.
         """
         self.last_added = None
+        self.segments_in_order = []
         icetray.I3Tray.__init__(self)
+
+    def _create_name(self, _type, kind, module_names):
+        """
+        :param _type: Thing to be added to the tray (module/service/segment)
+        :param kind: Type of the thing to be added (Module/Service/Segment)
+        :param module_names: List of already-taken names
+        """
+        n=0
+        while 1:
+            name = "%s_%04d"%(_type,n)
+            if name not in module_names:
+                break
+            n+=1
+        icetray.logging.log_info("Adding Anonymous %s of type '%s' with name '%s'"%(kind, _type,name), "I3Tray")
+        return name
 
     def AddModule(self, _type, _name=None, **kwargs):
         """
@@ -77,14 +93,7 @@ class I3Tray(icetray.I3Tray):
         """
         #if the script does not provide a name find a suitable name for this module find a suitable name
         if _name is None:
-            module_names=self.tray_info.modules_in_order
-            n=0
-            while 1:
-                _name = "%s_%04d"%(_type,n)
-                if _name not in module_names:
-                    break
-                n+=1
-            icetray.logging.log_info("Adding Anonymous Module of type '%s' with name '%s'"%(_type,_name), "I3Tray")
+            _name = self._create_name(_type, "Module", self.tray_info.modules_in_order)
 
 	if hasattr(_type, '__i3traysegment__'):
             raise RuntimeError, "Trying to add tray segment %s with AddModule. Use AddSegment instead." % _name
@@ -100,7 +109,7 @@ class I3Tray(icetray.I3Tray):
         except:
             raise
 
-    def AddService(self, _type, _name, **kwargs):
+    def AddService(self, _type, _name=None, **kwargs):
         """
         Add a service factory to the tray.
 
@@ -117,6 +126,8 @@ class I3Tray(icetray.I3Tray):
             tray.AddService("I3GSLRandomServiceFactory", "gslrng")
         
         """
+        if _name is None:
+            _name = self._create_name(_type, "Service", self.tray_info.factories_in_order)
         super(I3Tray, self).AddService(_type, _name)
         self.last_added = _name
         for k,v in kwargs.items():
@@ -141,18 +152,22 @@ class I3Tray(icetray.I3Tray):
 
             tray.AddSegment(icetray.ExampleSegment, "example")
         
-	"""
-	(keys,vals) = (kwargs.keys(), kwargs.values())
-	argnames = inspect.getargspec(_segment)[0]
-	largnames = [a.lower() for a in argnames]
-
-	# Make case-insensitive where possible by matching to signature
-	for k in keys:
-		if not k.lower() in largnames:
-			continue
-		keys[keys.index(k)] = argnames[largnames.index(k.lower())]
-	kwargs = dict(zip(keys, vals))
-
+        """
+        (keys,vals) = (kwargs.keys(), kwargs.values())
+        argnames = inspect.getargspec(_segment)[0]
+        largnames = [a.lower() for a in argnames]
+        
+        if _name is None:
+            _name = self._create_name(_segment.__name__, "Segment", self.segments_in_order)
+        self.segments_in_order.append(_name)
+        
+        # Make case-insensitive where possible by matching to signature
+        for k in keys:
+            if not k.lower() in largnames:
+                continue
+            keys[keys.index(k)] = argnames[largnames.index(k.lower())]
+        kwargs = dict(zip(keys, vals))
+        
         return _segment(self, _name, **kwargs)
     
     def SetParameter(self, module, param, value):
