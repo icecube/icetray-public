@@ -89,6 +89,9 @@ I3BasicLogger::Log(I3LogLevel level, const std::string &unit,
 	case LOG_INFO:
 		log_description = "INFO";
 		break;
+        case LOG_NOTICE:
+                log_description = "NOTICE";
+                break;
 	case LOG_WARN:
 		log_description = "WARN";
 		break;

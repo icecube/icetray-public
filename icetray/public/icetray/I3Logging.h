@@ -3,17 +3,17 @@
  *
  *    Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
  *    and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *    
+ *
  *    This file is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
  *    the Free Software Foundation; either version 3 of the License, or
  *    (at your option) any later version.
- *    
+ *
  *    This program is distributed in the hope that it will be useful,
  *    but WITHOUT ANY WARRANTY; without even the implied warranty of
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *    GNU General Public License for more details.
- *    
+ *
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -27,13 +27,14 @@ typedef enum {
 	LOG_TRACE,
 	LOG_DEBUG,
 	LOG_INFO,
+	LOG_NOTICE,
 	LOG_WARN,
 	LOG_ERROR,
 	LOG_FATAL
 } I3LogLevel;
 
 #ifdef NDEBUG
-const I3LogLevel I3DefaultLogLevel = LOG_WARN;
+const I3LogLevel I3DefaultLogLevel = LOG_NOTICE;
 #else
 const I3LogLevel I3DefaultLogLevel = LOG_INFO;
 #endif
@@ -146,6 +147,9 @@ SET_LOGGER("Unknown");
 #define log_info(format, ...) I3_LOGGER(LOG_INFO, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
     ##__VA_ARGS__)
+#define log_notice(format, ...) I3_LOGGER(LOG_NOTICE, \
+    __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
+    ##__VA_ARGS__)
 #define log_warn(format, ...) I3_LOGGER(LOG_WARN, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
     ##__VA_ARGS__)
@@ -159,6 +163,8 @@ SET_LOGGER("Unknown");
     ##__VA_ARGS__), throw std::runtime_error(I3LoggingStringF(format, \
     ##__VA_ARGS__) + " (in " + __PRETTY_FUNCTION__ + ")")
 #define log_info_stream(msg) I3_STREAM_LOGGER(LOG_INFO, \
+    __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, msg, )
+#define log_notice_stream(msg) I3_STREAM_LOGGER(LOG_NOTICE, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, msg, )
 #define log_warn_stream(msg) I3_STREAM_LOGGER(LOG_WARN, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, msg, )

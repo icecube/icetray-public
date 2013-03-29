@@ -2,7 +2,7 @@
  *  Copyright (C) 2012
  *  Nathan Whitehorn <nwhitehorn@icecube.wisc.edu>
  *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
  */
 
 #include <boost/python.hpp>
@@ -13,7 +13,7 @@
 #include <icetray/I3SimpleLoggers.h>
 
 using namespace boost::python;
- 
+
 class I3LoggerWrapper : public I3Logger, public wrapper<I3Logger> {
 public:
 	void Log(I3LogLevel level, const std::string &unit,
@@ -27,7 +27,7 @@ public:
 			RAISE(NotImplementedError, "I3LoggerBase subclasses must implement log()");
 		}
 	}
-	
+
 	I3LogLevel LogLevelForUnit(const std::string &unit)
 	{
 		detail::gil_holder gil;
@@ -37,7 +37,7 @@ public:
 			return I3Logger::LogLevelForUnit(unit);
 		}
 	}
-	
+
 	void SetLogLevelForUnit(const std::string &unit, I3LogLevel level)
 	{
 		detail::gil_holder gil;
@@ -82,16 +82,17 @@ void register_I3Logging()
 	// Acquire the Global Interpeter Lock and bless ourselves as
 	// the main thread; this is a no-op if already called elsewhere.
 	PyEval_InitThreads();
-	
+
 	enum_<I3LogLevel>("I3LogLevel")
-		.value("LOG_TRACE", LOG_TRACE)
-		.value("LOG_DEBUG", LOG_DEBUG)
-		.value("LOG_INFO",  LOG_INFO)
-		.value("LOG_WARN",  LOG_WARN)
-		.value("LOG_ERROR", LOG_ERROR)
-		.value("LOG_FATAL", LOG_FATAL)
+		.value("LOG_TRACE",  LOG_TRACE)
+		.value("LOG_DEBUG",  LOG_DEBUG)
+		.value("LOG_INFO",   LOG_INFO)
+                .value("LOG_NOTICE", LOG_NOTICE)
+		.value("LOG_WARN",   LOG_WARN)
+		.value("LOG_ERROR",  LOG_ERROR)
+		.value("LOG_FATAL",  LOG_FATAL)
 	;
-	
+
 
 	class_<I3Logger, boost::shared_ptr<I3Logger>, boost::noncopyable>("I3LoggerBase", "C++ logging abstract base class", no_init);
 	class_<I3LoggerWrapper, boost::shared_ptr<I3LoggerWrapper>, boost::noncopyable>
@@ -107,12 +108,11 @@ void register_I3Logging()
 	class_<I3PrintfLogger, bases<I3Logger>, boost::shared_ptr<I3PrintfLogger>, boost::noncopyable>("I3PrintfLogger", "Logger that prints error messages to stderr (in color, if stderr is a tty).", init<I3LogLevel>())
 		.def_readwrite("trim_file_names", &I3PrintfLogger::TrimFileNames)
 	;
-	
+        class_<I3SyslogLogger, bases<I3Logger>, boost::shared_ptr<I3SyslogLogger>, boost::noncopyable>("I3SyslogLogger", "Logger that generates log messages, which will be distributed by syslogd.", init<I3LogLevel>());
+
 
 	def("get_log_level_for_unit", &GlobalLogLevelForUnit);
 	def("set_log_level_for_unit", &GlobalSetLogLevelForUnit);
 	def("set_log_level", &GlobalSetLogLevel);
 
 }
-
-
