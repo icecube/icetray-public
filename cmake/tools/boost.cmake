@@ -17,9 +17,27 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
-SET(BOOST_VERSION "1.38.0" CACHE PATH "The boost version.")
-SET(BOOST_INCLUDE_DIR  ${I3_PORTS}/include/boost-${BOOST_VERSION} CACHE PATH "Path to the boost include directories." )
-SET(BOOST_LIBRARY_PATH  ${I3_PORTS}/lib/boost-${BOOST_VERSION} CACHE PATH "Path to the boost libraries." )
+
+if(SYSTEM_PACKAGES)
+	find_package(Boost COMPONENTS python)
+endif(SYSTEM_PACKAGES)
+
+if(Boost_INCLUDE_DIR)
+	SET(BOOST_VERSION "new" CACHE PATH "The boost version.")
+	SET(BOOST_INCLUDE_DIR ${Boost_INCLUDE_DIR} CACHE PATH "Path to the boost include directories." )
+	SET(BOOST_LIBRARY_PATH ${Boost_LIBRARY_DIRS} CACHE PATH "Path to the boost libraries." )
+	# Boost >= 1.42 has no library suffixes on *nix
+	SET(BOOST_LIB_SUFFIX "")
+else(Boost_INCLUDE_DIR)
+	SET(BOOST_VERSION "1.38.0" CACHE PATH "The boost version.")
+	SET(BOOST_INCLUDE_DIR  ${I3_PORTS}/include/boost-${BOOST_VERSION} CACHE PATH "Path to the boost include directories." )
+	SET(BOOST_LIBRARY_PATH  ${I3_PORTS}/lib/boost-${BOOST_VERSION} CACHE PATH "Path to the boost libraries." )
+	if(CMAKE_BUILD_TYPE MATCHES "Rel")
+		set(BOOST_LIB_SUFFIX "-mt")
+	else()
+		set(BOOST_LIB_SUFFIX "-mt-d")
+	endif()
+endif(Boost_INCLUDE_DIR)
 
 # The following prevent these variables from being cached and force 
 #   them to be rechecked across changes from Release/Debug builds.
@@ -43,12 +61,6 @@ endif()
 if (NOT IS_DIRECTORY ${BOOST_INCLUDE_DIR} )
     message(ERROR " ${BOOST_INCLUDE_DIR} is not a valid directory.")
 endif() 
-
-if(CMAKE_BUILD_TYPE MATCHES "Rel")
-  set(BOOST_LIB_SUFFIX "-mt")
-else()
-  set(BOOST_LIB_SUFFIX "-mt-d")
-endif()
 
 set(BOOST_ALL_LIBRARIES 
   boost_python${BOOST_LIB_SUFFIX} 
