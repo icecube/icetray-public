@@ -96,8 +96,8 @@ private:
   friend class I3::Singleton<I3Factory>;
 };
 
-typedef boost::function<shared_ptr<I3Module>(const I3Context&)> I3Module_ffn_t;
-typedef boost::function<shared_ptr<I3ServiceFactory>(const I3Context&)> I3ServiceFactory_ffn_t;
+typedef boost::function<boost::shared_ptr<I3Module>(const I3Context&)> I3Module_ffn_t;
+typedef boost::function<boost::shared_ptr<I3ServiceFactory>(const I3Context&)> I3ServiceFactory_ffn_t;
 typedef I3Factory<I3Module,I3Module_ffn_t> I3ModuleFactory;
 typedef I3Factory<I3ServiceFactory, I3ServiceFactory_ffn_t> I3ServiceFactoryFactory;
 
@@ -105,10 +105,10 @@ template <class FactoryProductType, class ModuleType>
 struct StandardCreate
 {
   static
-  shared_ptr<FactoryProductType>
+  boost::shared_ptr<FactoryProductType>
   Create (const I3Context& c)
   {
-    shared_ptr<FactoryProductType> module(new ModuleType(c));
+    boost::shared_ptr<FactoryProductType> module(new ModuleType(c));
     if (!module)
       log_fatal("failed to create");
     return module;
@@ -127,7 +127,7 @@ struct I3Registrator : boost::noncopyable
     log_trace("key_register %s %s", productname, projectname);
 
     typedef I3Factory<FactoryProductType,
-      boost::function<shared_ptr<FactoryProductType>(const I3Context&)>
+      boost::function<boost::shared_ptr<FactoryProductType>(const I3Context&)>
       > factory_t;
 
     I3::Singleton<factory_t>::get_mutable_instance()

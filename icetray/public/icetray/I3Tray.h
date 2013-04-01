@@ -218,10 +218,10 @@ private:
   I3Tray(const I3Tray& rhs); // stop default 
   I3Tray& operator=(const I3Tray& rhs); // stop default
 
-  shared_ptr<I3Module> CreateModule(I3Context& context,
+  boost::shared_ptr<I3Module> CreateModule(I3Context& context,
 				    const std::string& clazz);
 
-  shared_ptr<I3ServiceFactory> CreateService(I3Context& context,
+  boost::shared_ptr<I3ServiceFactory> CreateService(I3Context& context,
 					     const std::string& clazz);
 
 

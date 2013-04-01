@@ -75,9 +75,9 @@ class I3Context
     try {
         boost::python::object obj;
         obj = boost::any_cast<boost::python::object>(iter->second);
-        return boost::python::extract<shared_ptr<Service> >(obj).check();
+        return boost::python::extract<boost::shared_ptr<Service> >(obj).check();
     } catch (const boost::bad_any_cast& e) {
-        return boost::any_cast<shared_ptr<Service> >(&(iter->second));
+        return boost::any_cast<boost::shared_ptr<Service> >(&(iter->second));
     }
 
     return false;
@@ -164,24 +164,24 @@ class I3Context
     map_t::const_iterator iter = map_.find(where);
     if (iter == map_.end())
       log_fatal("context contains nothing at slot %s", where.c_str());
-    shared_ptr<T> sp_t;
+    boost::shared_ptr<T> sp_t;
     boost::python::object obj;
     try {
       obj = boost::any_cast<boost::python::object>(iter->second);
-      sp_t = boost::python::extract<shared_ptr<T> >(obj);
+      sp_t = boost::python::extract<boost::shared_ptr<T> >(obj);
     } catch (const boost::bad_any_cast &e) {
       try {
-        sp_t = boost::any_cast<shared_ptr<T> >(iter->second);
+        sp_t = boost::any_cast<boost::shared_ptr<T> >(iter->second);
       } catch (const boost::bad_any_cast &e) {
         log_fatal("error getting object \"%s\" out of context as \"%s\"",
 	  	  where.c_str(), I3::name_of<T>().c_str());
-        sp_t = shared_ptr<T>();
+        sp_t = boost::shared_ptr<T>();
       }
     } catch (const boost::python::error_already_set &e) {
       PyErr_Clear();
       log_fatal("error getting object \"%s\" out of context as \"%s\"",
 		where.c_str(), I3::name_of<T>().c_str());
-      sp_t = shared_ptr<T>();
+      sp_t = boost::shared_ptr<T>();
     }
 
     if (!sp_t)
