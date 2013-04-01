@@ -63,18 +63,24 @@ else()
   #message(STATUS "I3_SRC not yet set in environment.  ok.")
 endif()
 
-if("$ENV{I3_PORTS}" STREQUAL "")
-  #message(STATUS "I3_PORTS not set, maybe not a problem.  Trying default of /opt/i3/ports.")
-  set(ENV{I3_PORTS} "/opt/i3/ports")
-endif("$ENV{I3_PORTS}" STREQUAL "")
-
 set(I3_PORTS $ENV{I3_PORTS} CACHE STRING "Path to your icecube ports installation" FORCE)
 
-if(NOT IS_DIRECTORY $ENV{I3_PORTS})
-  message(FATAL_ERROR "I3_PORTS ($ENV{I3_PORTS}) is unset or doesn't point to a directory.")
-else(NOT IS_DIRECTORY $ENV{I3_PORTS})
-  boost_report_value(I3_PORTS)
-endif(NOT IS_DIRECTORY $ENV{I3_PORTS})
+if(SYSTEM_PACKAGES)
+  if(IS_DIRECTORY $ENV{I3_PORTS})
+    boost_report_value(I3_PORTS)
+  endif(IS_DIRECTORY $ENV{I3_PORTS})
+else(SYSTEM_PACKAGES)
+  if("$ENV{I3_PORTS}" STREQUAL "")
+    message(STATUS "I3_PORTS not set, maybe not a problem.  Trying default of /opt/i3/ports.")
+    set(ENV{I3_PORTS} "/opt/i3/ports")
+  endif("$ENV{I3_PORTS}" STREQUAL "")
+
+  if(NOT IS_DIRECTORY $ENV{I3_PORTS})
+    message(FATAL_ERROR "I3_PORTS ($ENV{I3_PORTS}) is unset or doesn't point to a directory. If this is intentional, please set -DSYSTEM_PACKAGES=True")
+  else(NOT IS_DIRECTORY $ENV{I3_PORTS})
+    boost_report_value(I3_PORTS)
+  endif(NOT IS_DIRECTORY $ENV{I3_PORTS})
+endif(SYSTEM_PACKAGES)
 
 #
 #  GCC_VERSION and

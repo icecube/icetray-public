@@ -35,7 +35,7 @@ macro(found_ok msg)
 endmacro(found_ok msg)
 
 if (SYSTEM_PACKAGES)
-   message(STATUS "Using system packages when I3_PORTS not available (Foot Shooting mode ENABLED)")
+   message(STATUS "Using system packages when I3_PORTS not available")
 else (SYSTEM_PACKAGES)
    set(TOOL_SYSTEM_PATH NO_DEFAULT_PATH)
 endif (SYSTEM_PACKAGES)
