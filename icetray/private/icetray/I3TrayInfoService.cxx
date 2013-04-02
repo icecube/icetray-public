@@ -60,6 +60,7 @@ I3TrayInfoService::GetConfig()
   // load host/build info
   //
   the_config.host_info["gcc_version"] = __VERSION__;
+  the_config.host_info["boost_version"] = BOOST_LIB_VERSION;
 #ifdef I3_USE_ROOT
   the_config.host_info["root_version"] = ROOT_RELEASE;
 #else
@@ -84,7 +85,7 @@ I3TrayInfoService::GetConfig()
   time(&the_time);
   the_config.host_info["start_time"] = ctime(&the_time);
 
-  the_config.host_info["platform"] = BOOST_PP_STRINGIZE(I3_PLATFORM);
+  the_config.host_info["platform"] = I3_PLATFORM;
 
 #if 0
   //
