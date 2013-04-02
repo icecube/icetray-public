@@ -114,7 +114,7 @@ if [[ -z "$ARGV" ]]
     printf "Icetray environment has:\n"
     printf "   I3_SRC       = %s\n" $_I3_SRC
     printf "   I3_BUILD     = %s\n" $_I3_BUILD
-    printf "   I3_PORTS     = %s\n" $_I3_PORTS
+    [[ -z "$_I3_PORTS" ]] || printf "   I3_PORTS     = %s\n" $_I3_PORTS
     echo   "   Python       =" $_PYVER
 fi
 
