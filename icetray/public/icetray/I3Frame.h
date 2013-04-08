@@ -318,20 +318,20 @@ class I3Frame
    */
   template <typename T>
   T
-  Get(const std::string& name = I3DefaultName<typename T::value_type>::value(),
+  Get(const std::string& name = I3DefaultName<typename T::element_type>::value(),
       bool quietly = false,
       typename boost::enable_if<is_shared_ptr<T> >::type * = 0,
-      typename boost::enable_if<boost::is_const<typename T::value_type> >::type* = 0) const
+      typename boost::enable_if<boost::is_const<typename T::element_type> >::type* = 0) const
   {
     log_trace("Get<%s>(\"%s\")", I3::name_of<T>().c_str(), name.c_str());
 
     map_t::iterator iter = map_.find(name);
     if (iter == map_.end())
-      return boost::shared_ptr<typename T::value_type>();
+      return boost::shared_ptr<typename T::element_type>();
 
     I3FrameObjectConstPtr focp = get_impl(*iter, quietly);
     
-    return boost::dynamic_pointer_cast<typename T::value_type>(focp);
+    return boost::dynamic_pointer_cast<typename T::element_type>(focp);
   }
   /** Get a frame object.
    * 
