@@ -27,7 +27,7 @@
 #include <boost/optional.hpp>
 #include <icetray/I3Frame.h>
 
-#include <cdk/cdk.h>
+#include <cdk.h>
 
 class Model;
 

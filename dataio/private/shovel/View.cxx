@@ -50,7 +50,7 @@
 
 
 #include <ncurses.h>
-#include <cdk/cdk.h>
+#include <cdk.h>
 
 using namespace boost::assign;
 using namespace std;
