@@ -25,7 +25,7 @@ tooldef (cdk
     cdk
 )
 if (CDK_FOUND)
-    SET(CDK_INCLUDE_DIR ${CDK_INCLUDE_DIR}/cdk)
+    LIST(APPEND CDK_INCLUDE_DIR ${CDK_INCLUDE_DIR}/cdk)
 else (CDK_FOUND)
     tooldef (cdk
         include
