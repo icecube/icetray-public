@@ -18,9 +18,20 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
 tooldef (cdk
-	include
-	cdk/cdk.h 
-	lib/cdk
-	NONE
-	cdk
-	)
+    include
+    cdk/cdk.h 
+    lib/cdk
+    NONE
+    cdk
+)
+if (CDK_FOUND)
+    SET(CDK_INCLUDE_DIR ${CDK_INCLUDE_DIR}/cdk)
+else (CDK_FOUND)
+    tooldef (cdk
+        include
+        cdk.h 
+        lib
+        NONE
+        cdk
+    )
+endif (CDK_FOUND)
