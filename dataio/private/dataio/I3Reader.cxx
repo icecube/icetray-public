@@ -34,22 +34,26 @@
 #include <icetray/I3TrayInfo.h>
 #include <icetray/I3Module.h>
 
+#include "dataio/I3FileStager.h"
+
 class I3Reader : public I3Module
 {
 
   unsigned nframes_;
-  std::vector<std::string> filenames_;
+  std::vector<std::pair<std::string, I3FileStagerPtr> > filenames_;
   std::vector<std::string> skip_;
   bool popmeta_done_;
   bool skip_unregistered_;
   bool drop_blobs_;
+  std::map<std::string, I3FileStagerPtr> file_stager_map_;
 
   boost::iostreams::filtering_istream ifs_;
 
   I3FramePtr tmp_;
 
-  std::vector<std::string>::iterator filenames_iter_;
+  std::vector<std::pair<std::string, I3FileStagerPtr> >::iterator filenames_iter_;
   std::string current_filename_;
+  I3FileStagerPtr current_file_stager_;
 
   void OpenNextFile();
 
@@ -81,7 +85,7 @@ I3Reader::I3Reader(const I3Context& context) : I3Module(context),
 
   AddParameter("FilenameList", 
 	       "List of files to read, *IN SORTED ORDER*", 
-	       filenames_);
+	       std::vector<std::string>());
 
   AddParameter("SkipKeys", 
 	       "Don't load frame objects with these keys", 
@@ -92,6 +96,11 @@ I3Reader::I3Reader(const I3Context& context) : I3Module(context),
 	       "at the expense of processing speed and the ability to passthru unknown frame objects)",
 	       drop_blobs_);
 
+  AddParameter("FileStagerList",
+               "An optional list of I3FileStager objects used to retrieve files from remote locations. "
+               "They will handle URLs passed in Filename/FilenameList.",
+               std::vector<I3FileStagerPtr>());
+
   AddOutBox("OutBox");
 }
 
@@ -99,23 +108,71 @@ void
 I3Reader::Configure()
 {
   std::string fname;
+  std::vector<std::string> filenames;
 
-  GetParameter("FileNameList", filenames_);
+  GetParameter("FileNameList", filenames);
   GetParameter("FileName", fname);
-  if(!filenames_.empty() && !fname.empty())
+  if(!filenames.empty() && !fname.empty())
     log_fatal("Both Filename and FileNameList were specified.");
 
-  if (filenames_.empty() && fname.empty())
+  if (filenames.empty() && fname.empty())
     log_fatal("Neither 'Filename' nor 'FilenameList' specified");
 
-  if (filenames_.empty())
-    filenames_.push_back(fname);
+  if (filenames.empty())
+    filenames.push_back(fname);
 
   GetParameter("SkipKeys", skip_);
-  filenames_iter_ = filenames_.begin();
 
   GetParameter("DropBuffers",
 	       drop_blobs_);
+
+  std::vector<I3FileStagerPtr> file_stager_list;
+  GetParameter("FileStagerList",
+               file_stager_list);
+  file_stager_map_.clear();
+  for (std::size_t i=0;i<file_stager_list.size();++i) {
+    if (!file_stager_list[i]) log_fatal("FileStager cannot be NULL/None");
+    const std::vector<std::string> schemes = 
+      file_stager_list[i]->Schemes();
+    for (std::size_t j=0;j<schemes.size();++j) {
+      if (file_stager_map_.find(schemes[j])!=file_stager_map_.end()) 
+        log_fatal("Multiple file stagers can handle URL scheme \"%s\". Cannot continue.", schemes[j].c_str());
+      file_stager_map_[schemes[j]] = file_stager_list[i];
+    }
+  }
+
+  // find a stager for each input filename
+  filenames_.clear();
+  for (std::size_t i=0;i<filenames.size();++i) {
+    const std::string &filename=filenames[i];
+    I3FileStagerPtr stager;
+
+    for (std::map<std::string, I3FileStagerPtr>::const_iterator it=file_stager_map_.begin();
+      it!=file_stager_map_.end();++it)
+    {
+      const std::string prefix = it->first + ":";
+      if (filename.size() < prefix.size()) continue; 
+      if (filename.find(prefix) == 0) {
+        stager=it->second;
+        log_debug("Found a file stager (\"%s\") responsible for URL %s",
+          it->first.c_str(), filename.c_str());
+        break;
+      }
+    }
+
+    if (!stager) {
+      log_debug("No stager available (local direct i/o) for URL %s",
+        filename.c_str());
+    }
+
+    if (stager) {
+      stager->WillReadLater(filename);
+    }
+
+    // if there is no stager available, we get a NULL pointer here
+    filenames_.push_back(std::make_pair(filename, stager));
+  }
+  filenames_iter_ = filenames_.begin();
 
   OpenNextFile();
 }
@@ -156,9 +213,19 @@ I3Reader::OpenNextFile()
   ifs_.reset();
   assert(ifs_.empty());
 
-  current_filename_ = *filenames_iter_;
+  if (current_file_stager_) {
+    current_file_stager_->Cleanup(current_filename_);
+  }
+
+  current_filename_ = filenames_iter_->first;
+  current_file_stager_ = filenames_iter_->second;
   nframes_ = 0;
   filenames_iter_++;
+
+  if (current_file_stager_) {
+    // stage from URL to temporary file and replace the current filename
+    current_filename_ = current_file_stager_->StageFile(current_filename_);
+  }
 
   I3::dataio::open(ifs_, current_filename_);
   log_trace("Constructing with filename %s, %zu regexes", 
