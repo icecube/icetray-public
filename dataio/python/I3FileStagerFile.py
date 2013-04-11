@@ -84,14 +84,17 @@ class I3FileStagerFile(I3FileStager):
 			try:
 				f = urllib2.urlopen(url)
 				data = f.read()
-				with open(output_path, "wb") as code:
-					code.write(data)
+				output_file = open(output_path, "wb")
+				output_file.write(data)
 				f.close()
 
 				icetray.logging.log_info("Download finished: %s to %s" % (url, output_path), unit="I3FileStagerFile")
 			except urllib2.HTTPError, e:
 				icetray.logging.log_fatal("Download error: %s" % str(e), unit="I3FileStagerFile")
 				pass
+			except:
+				icetray.logging.log_error("Download error", unit="I3FileStagerFile")
+				raise
 
 		return output_path
 
