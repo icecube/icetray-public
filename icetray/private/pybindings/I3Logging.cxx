@@ -84,13 +84,13 @@ void register_I3Logging()
 	PyEval_InitThreads();
 
 	enum_<I3LogLevel>("I3LogLevel")
-		.value("LOG_TRACE",  LOG_TRACE)
-		.value("LOG_DEBUG",  LOG_DEBUG)
-		.value("LOG_INFO",   LOG_INFO)
-                .value("LOG_NOTICE", LOG_NOTICE)
-		.value("LOG_WARN",   LOG_WARN)
-		.value("LOG_ERROR",  LOG_ERROR)
-		.value("LOG_FATAL",  LOG_FATAL)
+		.value("LOG_TRACE",  I3LOG_TRACE)
+		.value("LOG_DEBUG",  I3LOG_DEBUG)
+		.value("LOG_INFO",   I3LOG_INFO)
+                .value("LOG_NOTICE", I3LOG_NOTICE)
+		.value("LOG_WARN",   I3LOG_WARN)
+		.value("LOG_ERROR",  I3LOG_ERROR)
+		.value("LOG_FATAL",  I3LOG_FATAL)
 	;
 
 
@@ -108,7 +108,10 @@ void register_I3Logging()
 	class_<I3PrintfLogger, bases<I3Logger>, boost::shared_ptr<I3PrintfLogger>, boost::noncopyable>("I3PrintfLogger", "Logger that prints error messages to stderr (in color, if stderr is a tty).", init<optional<I3LogLevel> >())
 		.def_readwrite("trim_file_names", &I3PrintfLogger::TrimFileNames)
 	;
-        class_<I3SyslogLogger, bases<I3Logger>, boost::shared_ptr<I3SyslogLogger>, boost::noncopyable>("I3SyslogLogger", "Logger that generates log messages, which will be distributed by syslogd.", init<optional<I3LogLevel> >());
+	class_<I3SyslogLogger, bases<I3Logger>, boost::shared_ptr<I3SyslogLogger>, boost::noncopyable>("I3SyslogLogger", "Logger that generates log messages, which will be distributed by syslogd.", init<optional<I3LogLevel> >())
+                .def("open", &I3SyslogLogger::Open)
+                .staticmethod("open")
+        ;
 
 
 	def("get_log_level_for_unit", &GlobalLogLevelForUnit);

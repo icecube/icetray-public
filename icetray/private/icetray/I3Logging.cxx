@@ -6,22 +6,46 @@
 #include <icetray/I3Logging.h>
 #include <icetray/I3SimpleLoggers.h>
 
+#ifdef I3_ONLINE
+#  include <boost/thread/locks.hpp>
+#  include <boost/thread/mutex.hpp>
+
+
+   static boost::mutex icetray_global_logger_mtx;
+#endif
 static I3LoggerPtr icetray_global_logger;
 
 I3LoggerPtr
 GetIcetrayLogger()
 {
-	if (!icetray_global_logger)
-		icetray_global_logger = I3LoggerPtr(new I3PrintfLogger);
+#ifdef I3_ONLINE
+        // shared_ptr copy constructor is atomic
+        I3LoggerPtr retVal(icetray_global_logger);
+        if(!retVal)
+        {
+                boost::lock_guard<boost::mutex> lock(icetray_global_logger_mtx);
+#endif
+                if (!icetray_global_logger)
+                        icetray_global_logger = I3LoggerPtr(new I3PrintfLogger);
 
-	return icetray_global_logger;
+                return icetray_global_logger;
+#ifdef I3_ONLINE
+        }
+
+        return retVal;
+#endif
 }
 
 void
 SetIcetrayLogger(I3LoggerPtr logger)
 {
-	//shared_ptr assignment atomic
-	icetray_global_logger = logger;
+#ifdef I3_ONLINE
+        // shared_ptr assignment is atomic
+        // but we might still run into a race condition,
+        // that is logger is overwritten by a I3PrintfLogger
+        boost::lock_guard<boost::mutex> lock(icetray_global_logger_mtx);
+#endif
+        icetray_global_logger = logger;
 }
 
 std::string
@@ -46,6 +70,9 @@ I3Logger::~I3Logger() {}
 I3LogLevel
 I3Logger::LogLevelForUnit(const std::string &unit)
 {
+#ifdef I3_ONLINE
+        boost::shared_lock<boost::shared_mutex> lock(mtx_);
+#endif
 	std::map<std::string, I3LogLevel>::const_iterator iter =
 	    log_levels_.find(unit);
 	if (iter == log_levels_.end())
@@ -57,12 +84,18 @@ I3Logger::LogLevelForUnit(const std::string &unit)
 void
 I3Logger::SetLogLevelForUnit(const std::string &unit, I3LogLevel level)
 {
+#ifdef I3_ONLINE
+        boost::unique_lock<boost::shared_mutex> lock(mtx_);
+#endif
 	log_levels_[unit] = level;
 }
 
 void
 I3Logger::SetLogLevel(I3LogLevel level)
 {
+#ifdef I3_ONLINE
+        boost::unique_lock<boost::shared_mutex> lock(mtx_);
+#endif
 	default_log_level_ = level;
 }
 
@@ -80,25 +113,25 @@ I3BasicLogger::Log(I3LogLevel level, const std::string &unit,
 		return;
 
 	switch (level) {
-	case LOG_TRACE:
+	case I3LOG_TRACE:
 		log_description = "TRACE";
 		break;
-	case LOG_DEBUG:
+	case I3LOG_DEBUG:
 		log_description = "DEBUG";
 		break;
-	case LOG_INFO:
+	case I3LOG_INFO:
 		log_description = "INFO";
 		break;
-        case LOG_NOTICE:
+        case I3LOG_NOTICE:
                 log_description = "NOTICE";
                 break;
-	case LOG_WARN:
+	case I3LOG_WARN:
 		log_description = "WARN";
 		break;
-	case LOG_ERROR:
+	case I3LOG_ERROR:
 		log_description = "ERROR";
 		break;
-	case LOG_FATAL:
+	case I3LOG_FATAL:
 		log_description = "FATAL";
 		break;
 	default:

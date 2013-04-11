@@ -19,16 +19,48 @@
 using namespace std;
 
 
+#ifdef I3_ONLINE
+  boost::shared_mutex I3SyslogLogger::mtx;
+#endif
+bool I3SyslogLogger::isOpen = false;
+std::string I3SyslogLogger::id;
+
+
+void I3SyslogLogger::Open(const std::string& ident) throw(logic_error)
+{
+  Openlog(ident, true);
+}
+
+
+void I3SyslogLogger::Openlog(const std::string& ident, bool doThrow)
+                            throw(logic_error)
+{
+#ifdef I3_ONLINE
+  boost::upgrade_lock<boost::shared_mutex> lock(mtx);
+#endif
+  if(!isOpen)
+  {
+#ifdef I3_ONLINE
+    boost::upgrade_to_unique_lock<boost::shared_mutex> exclusive(lock);
+#endif
+    id = ident;
+    openlog(id.empty() ? NULL : id.c_str(),
+            LOG_CONS | LOG_PID | LOG_NDELAY, LOG_USER);
+    isOpen = true;
+  }
+  else if(doThrow)
+    throw logic_error("subsequent call to open the system logger");
+}
+
+
 I3SyslogLogger::I3SyslogLogger(I3LogLevel level)
   : I3Logger(level)
 {
-  openlog(NULL, LOG_CONS | LOG_PID | LOG_NDELAY, LOG_USER);
 }
 
 
 I3SyslogLogger::~I3SyslogLogger()
 {
-  closelog();
 }
 
 
@@ -44,52 +76,31 @@ I3SyslogLogger::Log(I3LogLevel level, const string& unit,
 
   switch(level)
   {
-#pragma push_macro("LOG_TRACE")
-#undef LOG_TRACE
-    case LOG_TRACE:
-#pragma pop_macro("LOG_TRACE")
+    case I3LOG_TRACE:
       prio_c_str = "TRACE";
       prio = LOG_DEBUG;
       break;
-#pragma push_macro("LOG_DEBUG")
-#undef LOG_DEBUG
-      case LOG_DEBUG:
-#pragma pop_macro("LOG_DEBUG")
+    case I3LOG_DEBUG:
       prio_c_str = "DEBUG";
       prio = LOG_DEBUG;
       break;
-#pragma push_macro("LOG_INFO")
-#undef LOG_INFO
-    case LOG_INFO:
-#pragma pop_macro("LOG_INFO")
+    case I3LOG_INFO:
       prio_c_str = "INFO";
       prio = LOG_INFO;
       break;
-#pragma push_macro("LOG_NOTICE")
-#undef LOG_NOTICE
-    case LOG_NOTICE:
-#pragma pop_macro("LOG_NOTICE")
+    case I3LOG_NOTICE:
       prio_c_str = "NOTICE";
       prio = LOG_NOTICE;
-     break;
-#pragma push_macro("LOG_WARN")
-#undef LOG_WARN
-    case LOG_WARN:
-#pragma pop_macro("LOG_WARN")
+      break;
+    case I3LOG_WARN:
       prio_c_str = "WARN";
       prio = LOG_WARNING;
       break;
-#pragma push_macro("LOG_ERROR")
-#undef LOG_ERROR
-    case LOG_ERROR:
-#pragma pop_macro("LOG_ERROR")
+    case I3LOG_ERROR:
       prio_c_str = "ERROR";
       prio = LOG_ERR;
       break;
-#pragma push_macro("LOG_FATAL")
-#undef LOG_FATAL
-    case LOG_FATAL:
-#pragma pop_macro("LOG_FATAL")
+    case I3LOG_FATAL:
       prio_c_str = "FATAL";
       prio = LOG_CRIT;
       break;
@@ -115,5 +126,10 @@ I3SyslogLogger::Log(I3LogLevel level, const string& unit,
           boost::filesystem::path(file).filename().c_str(),
           line,
           func.c_str());
+
+  // syslog() is thread-safe for linux, but openlog() + syslog() too?
+  // doesn't matter here, since openlog is always called here before any call
+  // to syslog
+  if(!IsOpen()) Openlog("", false);
   syslog(prio, "%s", log_message);
 }
