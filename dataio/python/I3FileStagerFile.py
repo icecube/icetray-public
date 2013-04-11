@@ -37,7 +37,7 @@ class I3FileStagerFile(I3FileStager):
 			icetray.logging.log_info("Removing scratch directory %s" % self.scratch_dir, unit="I3FileStagerFile")
 			try:
 				os.rmdir(self.scratch_dir)
-			except OSError as e:
+			except OSError, e:
 				print e
 
 	def Schemes(self):
@@ -89,7 +89,7 @@ class I3FileStagerFile(I3FileStager):
 				f.close()
 
 				icetray.logging.log_info("Download finished: %s to %s" % (url, output_path), unit="I3FileStagerFile")
-			except urllib2.HTTPError as e:
+			except urllib2.HTTPError, e:
 				icetray.logging.log_fatal("Download error: %s" % str(e), unit="I3FileStagerFile")
 				pass
 
@@ -103,7 +103,7 @@ class I3FileStagerFile(I3FileStager):
 		try:
 			icetray.logging.log_info("Removing file %s" % filename, unit="I3FileStagerFile")
 			os.remove(filename)
-		except OSError as e:
+		except OSError, e:
 			print e
 
 		self.staged_files.remove(filename)
