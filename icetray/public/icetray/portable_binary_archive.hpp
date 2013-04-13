@@ -2,6 +2,7 @@
 #define ICETRAY_PORTABLE_BINARY_IARCHIVE_HPP
 
 #include <iostream>
+#include <boost/version.hpp>
 #include <boost/archive/basic_archive.hpp>
 #include <boost/archive/shared_ptr_helper.hpp>
 #include <boost/archive/detail/register_archive.hpp>
