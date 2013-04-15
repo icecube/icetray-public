@@ -124,45 +124,6 @@ add_dependencies(doxygen inspect)
 add_custom_target(docs)
 add_dependencies(docs doxygen inspect html)
 
-#
-# Tarball target
-#
-find_program(MD5SUM_PROGRAM md5sum)
-find_program(MD5SUM_PROGRAM md5)
-if(MD5SUM_PROGRAM)
-  set(MD5SUM_TARBALL_COMMAND ${MD5SUM_PROGRAM} ${CMAKE_INSTALL_PREFIX}.tar.gz > ${CMAKE_INSTALL_PREFIX}.md5sum)
-else(MD5SUM_PROGRAM)
-  set(MD5SUM_TARBALL_COMMAND /bin/echo Skipping md5sum, as md5sum command was not found.)
-endif(MD5SUM_PROGRAM)
-
-add_custom_target(tarball-start
-  COMMAND /bin/echo Building installation directory ${CMAKE_INSTALL_PREFIX}...
-  COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/etc
-  COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/lib
-  COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/bin
-  COMMENT "Tarball start"
-  )  
-
-add_custom_target(tarball-install
-  COMMAND ${CMAKE_MAKE_PROGRAM} install
-  COMMAND ${CMAKE_MAKE_PROGRAM} install_tool_libs
-  COMMAND ${MAKE_TARBALL_SH}
-  COMMAND ${MAKE_TARBALL_ROOTSYS_SH}
-  COMMENT "Tarball install"
-  )
-add_dependencies(tarball-install tarball-start)
-add_custom_target(tarball-finish
-  COMMAND echo Creating ${CMAKE_INSTALL_PREFIX}.tar.gz
-  COMMAND tar czf ${CMAKE_INSTALL_PREFIX}.tar.gz ${CMAKE_INSTALL_PREFIX}
-  COMMAND echo Checksumming ${CMAKE_INSTALL_PREFIX}.tar.gz
-  COMMAND ${MD5SUM_TARBALL_COMMAND}
-  COMMENT "Finishing tarball of ${CMAKE_INSTALL_PREFIX}"
-  )
-add_dependencies(tarball-finish tarball-install)
-
-add_custom_target(tarball)
-add_dependencies(tarball tarball-finish)
-
 # this is outside because it contains the test macros, which 
 # might be noops
 #include(testing)
@@ -304,6 +265,48 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/tarball_hook.sh.in)
     )
   execute_process(COMMAND chmod 755 ${CMAKE_BINARY_DIR}/tarball_hook.sh)
 endif(EXISTS ${CMAKE_SOURCE_DIR}/tarball_hook.sh.in) 
+
+#
+# Tarball target
+#
+find_program(MD5SUM_PROGRAM md5sum)
+find_program(MD5SUM_PROGRAM md5)
+if(MD5SUM_PROGRAM)
+  set(MD5SUM_TARBALL_COMMAND ${MD5SUM_PROGRAM} ${CMAKE_INSTALL_PREFIX}.tar.gz > ${CMAKE_INSTALL_PREFIX}.md5sum)
+else(MD5SUM_PROGRAM)
+  set(MD5SUM_TARBALL_COMMAND /bin/echo Skipping md5sum, as md5sum command was not found.)
+endif(MD5SUM_PROGRAM)
+
+add_custom_target(tarball-start
+  COMMAND /bin/echo Building installation directory ${CMAKE_INSTALL_PREFIX}...
+  COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/etc
+  COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/lib
+  COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/bin
+  COMMENT "Tarball start"
+  )  
+
+add_custom_target(tarball-install
+  COMMAND ${CMAKE_MAKE_PROGRAM} install
+  COMMAND ${CMAKE_MAKE_PROGRAM} install_tool_libs
+  COMMAND echo "Running make_tarball.sh" ${MAKE_TARBALL_SH}
+  COMMAND ${MAKE_TARBALL_SH}
+  COMMAND ${MAKE_TARBALL_ROOTSYS_SH}
+  COMMENT "Tarball install"
+  )
+add_dependencies(tarball-install tarball-start)
+add_custom_target(tarball-finish
+  COMMAND echo Creating ${CMAKE_INSTALL_PREFIX}.tar.gz
+  COMMAND tar czf ${CMAKE_INSTALL_PREFIX}.tar.gz ${CMAKE_INSTALL_PREFIX}
+  COMMAND echo Checksumming ${CMAKE_INSTALL_PREFIX}.tar.gz
+  COMMAND ${MD5SUM_TARBALL_COMMAND}
+  COMMENT "Finishing tarball of ${CMAKE_INSTALL_PREFIX}"
+  )
+add_dependencies(tarball-finish tarball-install)
+
+add_custom_target(tarball)
+add_dependencies(tarball tarball-finish)
+
+
 
 message(STATUS "Configuring 'gfilt' STL decryptor")
 configure_file(
