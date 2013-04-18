@@ -100,9 +100,9 @@ def set_level(level):
 		icetray.logging.set_level(icetray.logging.I3LogLevel.LOG_INFO)
 		icetray.logging.set_level('INFO')
 	"""
-	I3Logger.global_logger.set_level(_translate_level(name))
+	I3Logger.global_logger.set_level(_translate_level(level))
 
-def set_level_for_unit(unit, name):
+def set_level_for_unit(unit, level):
 	"""
 	Set the logging level for a specific logging unit.
 	
@@ -111,7 +111,7 @@ def set_level_for_unit(unit, name):
 		icetray.logging.set_level_for_unit('I3Reader', icetray.logging.I3LogLevel.LOG_TRACE)
 		icetray.logging.set_level('I3Reader', 'TRACE')
 	"""
-	I3Logger.global_logger.set_level_for_unit(unit, _translate_level(name))
+	I3Logger.global_logger.set_level_for_unit(unit, _translate_level(level))
 
 def log_trace(message, unit="Python"):
 	tb = traceback.extract_stack(limit=2)[0]
