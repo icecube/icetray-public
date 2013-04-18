@@ -65,7 +65,7 @@ ELSE (APPLE)
         GET_FILENAME_COMPONENT(_OPENCL_INC_CAND_2 ${OPENCL_LIB_DIR}/../include ABSOLUTE)
 
         # find it on ubuntu systems (package nvidia-current-dev)
-        SET(_OPENCL_INC_CAND ${_OPENCL_INC_CAND} ${_OPENCL_INC_CAND_2} /usr/include /usr/include/nvidia-current)
+        SET(_OPENCL_INC_CAND ${_OPENCL_INC_CAND} ${_OPENCL_INC_CAND_2} /usr/include /usr/include/nvidia-current /opt/AMDAPP/include)
 
         # The AMD SDK currently does not place its headers
         # in /usr/include, therefore also search relative
