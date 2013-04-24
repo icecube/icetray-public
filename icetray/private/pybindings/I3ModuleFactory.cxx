@@ -68,6 +68,14 @@ get_registrations(const std::string &project)
 	return module_names;
 }
 
+template <typename factory_t>
+bool
+contains(const std::string &name)
+{
+	const factory_t &factory = I3::Singleton<factory_t>::get_const_instance();
+	return factory.find(name) != factory.end();
+}
+
 boost::python::list
 get_projects()
 {
@@ -94,4 +102,6 @@ void register_I3ModuleFactory()
   def("modules", &get_registrations<I3ModuleFactory>, args("project"));
   def("services", &get_registrations<I3ServiceFactoryFactory>, args("project"));
   def("projects", &get_projects);
+  def("is_module", &contains<I3ModuleFactory>);
+  def("is_service", &contains<I3ServiceFactoryFactory>);
 }

@@ -66,6 +66,38 @@ class I3Tray(icetray.I3Tray):
         icetray.logging.log_info("Adding Anonymous %s of type '%s' with name '%s'"%(kind, _type,name), "I3Tray")
         return name
 
+    def Add(self, _type, _name=None, **kwargs):
+        """
+        Add a module, service, or segment to the tray.
+        """
+        import types
+        
+        method = None
+        if isinstance(_type, types.StringType):
+            # Search registries for a C++ factory type
+            if icetray.is_module(_type) and icetray.is_service(_type):
+                raise ValueError("'%s' is registered both as a service and module. Use AddModule()/AddService() to disambiguate." % _type)
+            elif icetray.is_module(_type):
+                method = self.AddModule
+            elif icetray.is_service(_type):
+                method = self.AddService
+            else:
+                raise ValueError("'%s' is registered neither as a service nor a module." % _type)
+        elif hasattr(_type, "__call__"):
+            # Callables are either segments or simple I3Modules
+            if hasattr(_type, "__i3traysegment__"):
+                method = self.AddSegment
+            else:
+                method = self.AddModule
+        elif inspect.isclass(_type) and icetray.I3Module in inspect.getmro(_type):
+            # Python subclass of I3Module
+            method = self.AddModule
+        
+        if method is None:
+            raise ValueError("%s is not a thing that can be added to an I3Tray" % _type)
+        else:
+            return method(_type, _name, **kwargs)
+
     def AddModule(self, _type, _name=None, **kwargs):
         """
         Add a module to the tray's processing stream.
@@ -95,7 +127,7 @@ class I3Tray(icetray.I3Tray):
         if _name is None:
             _name = self._create_name(_type, "Module", self.tray_info.modules_in_order)
 
-	if hasattr(_type, '__i3traysegment__'):
+        if hasattr(_type, '__i3traysegment__'):
             raise RuntimeError, "Trying to add tray segment %s with AddModule. Use AddSegment instead." % _name
 
         if inspect.isclass(_type) and not icetray.I3Module in inspect.getmro(_type):
