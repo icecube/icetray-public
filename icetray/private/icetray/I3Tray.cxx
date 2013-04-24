@@ -511,7 +511,7 @@ I3Tray::Finish()
 		return;
 	finish_called = true;
 
-	std::cout << "I3Tray finishing...\n";
+	log_notice("I3Tray finishing...");
 
 	driving_module->Do(&I3Module::Finish);
   

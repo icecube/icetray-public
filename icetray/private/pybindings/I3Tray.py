@@ -216,7 +216,7 @@ class I3Tray(icetray.I3Tray):
         
     def __call__(self, *args):
         for pair in args:
-            print self.last_added +': ', pair[0], '=', pair[1]
+            icetray.logging.log_info('%s: %s = %s' % (self.last_added, pair[0], pair[1]), unit='I3Tray')
             super(I3Tray, self).SetParameter(self.last_added, pair[0], pair[1])
         return self
 
