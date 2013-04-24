@@ -86,7 +86,7 @@ class I3Context
   template <typename Service>
   DSOLOCAL
   bool
-  Has (const std::string& where = I3DefaultName<typename Service::value_type>::value(),
+  Has (const std::string& where = I3DefaultName<typename Service::element_type>::value(),
        typename boost::enable_if<is_shared_ptr<Service>, bool>::type* enabler = 0) const
   {
     //    log_trace("%s at %s", __PRETTY_FUNCTION__, where.c_str());
