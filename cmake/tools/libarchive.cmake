@@ -17,7 +17,7 @@ find_library(LZMA_LIBRARIES lzma
                    ${PC_LA_LIBRARY_DIRS}
                    ${TOOL_SYSTEM_PATH})
 
-find_path(LIBARCHIVE_INCLUDE_DIR lzma.h
+find_path(LZMA_INCLUDE_DIR lzma.h
           HINTS ${I3_PORTS}/include
                 ${PC_LA_INCLUDEDIR}
                 ${PC_LA_INCLUDE_DIRS})
