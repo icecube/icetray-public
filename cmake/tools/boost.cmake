@@ -19,10 +19,10 @@
 #  
 
 if(NOT SYSTEM_PACKAGES)
-	set(BOOST_PORTSVERSION "1.38.0" CACHE PATH "The boost version.")
-	set(BOOST_INCLUDEDIR ${I3_PORTS}/include/boost-${BOOST_PORTSVERSION})
-	set(BOOST_LIBRARYDIR ${I3_PORTS}/lib/boost-${BOOST_PORTSVERSION})
-	set(Boost_NO_SYSTEM_PATHS TRUE)
+  set(BOOST_PORTSVERSION "1.38.0" CACHE PATH "The boost version.")
+  set(BOOST_INCLUDEDIR ${I3_PORTS}/include/boost-${BOOST_PORTSVERSION})
+  set(BOOST_LIBRARYDIR ${I3_PORTS}/lib/boost-${BOOST_PORTSVERSION})
+  set(Boost_NO_SYSTEM_PATHS TRUE)
 endif(NOT SYSTEM_PACKAGES)
 
 colormsg("")
@@ -37,13 +37,22 @@ else (SYSTEM_PACKAGES)
 endif (SYSTEM_PACKAGES)
 
 if(Boost_FOUND)
-	set(BOOST_FOUND TRUE CACHE BOOL "Boost found successfully" FORCE)
-	set(BOOST_INCLUDE_DIR ${Boost_INCLUDE_DIR} CACHE PATH "Path to the boost include directories.")
-	set(BOOST_LIBRARIES ${Boost_LIBRARIES} CACHE PATH "Boost libraries")
-	if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-${BOOST_PORTSVERSION})
-		include_directories(${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-${BOOST_PORTSVERSION})
-	else()
-		include_directories(${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-new)
-	endif()
+  set(BOOST_FOUND TRUE CACHE BOOL "Boost found successfully" FORCE)
+  set(BOOST_INCLUDE_DIR ${Boost_INCLUDE_DIR} CACHE PATH "Path to the boost include directories.")
+  set(BOOST_LIBRARIES ${Boost_LIBRARIES} CACHE PATH "Boost libraries")
+  if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-${BOOST_PORTSVERSION})
+    include_directories(${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-${BOOST_PORTSVERSION})
+  else()
+    include_directories(${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-new)
+  endif()
+
+  foreach(lib ${BOOST_LIBRARIES})
+    if(NOT ${lib} STREQUAL "optimized" AND NOT ${lib} STREQUAL "debug")
+      add_custom_command(TARGET install_tool_libs
+        PRE_BUILD
+        COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/lib/tools
+        COMMAND ${CMAKE_SOURCE_DIR}/cmake/install_shlib.py ${lib} ${CMAKE_INSTALL_PREFIX}/lib/tools) 
+    endif(NOT ${lib} STREQUAL "optimized" AND NOT ${lib} STREQUAL "debug")
+  endforeach(lib ${BOOST_LIBRARIES})
 endif(Boost_FOUND)
 
