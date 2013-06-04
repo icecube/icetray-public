@@ -20,6 +20,8 @@
 option(USE_ROOT "Build with root" ON)
 option(USE_CINT "Build dictionaries with rootcint" OFF)
 
+set(SYSTEM_PACKAGES_ROOT FALSE)
+
 if(NOT USE_ROOT AND USE_CINT)
   message(FATAL_ERROR "Cannot use rootcint without root")
 endif(NOT USE_ROOT AND USE_CINT)
@@ -33,6 +35,63 @@ if (USE_ROOT)
         break()
       endif()
     endforeach()
+  endif(NOT ROOT_VERSION)
+
+  if(NOT ROOT_VERSION)
+    # try for system root
+    find_program(ROOT_CONFIG_EXECUTABLE root-config
+                 PATHS $ENV{ROOTSYS}/bin)
+    if(ROOT_CONFIG_EXECUTABLE)
+      set(SYSTEM_PACKAGES_ROOT TRUE)
+      execute_process(
+        COMMAND ${ROOT_CONFIG_EXECUTABLE} --prefix 
+        OUTPUT_VARIABLE ROOTSYS 
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+      execute_process(
+        COMMAND ${ROOT_CONFIG_EXECUTABLE} --version 
+        OUTPUT_VARIABLE ROOT_VERSION
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+      execute_process(
+        COMMAND ${ROOT_CONFIG_EXECUTABLE} --incdir
+        OUTPUT_VARIABLE ROOT_INCLUDE_DIR
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+      execute_process(
+        COMMAND ${ROOT_CONFIG_EXECUTABLE} --libs
+        OUTPUT_VARIABLE ROOT_LIB_OUTPUT
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+      message("libs ${ROOT_LIB_OUTPUT}")
+      
+      # look for the -L option
+      string(REGEX MATCH "-L([^ ]*)" ROOT_LIB_DIR ${ROOT_LIB_OUTPUT})
+
+      # I would like to do this, but it is not supported on cmake < 2.8.5
+      # string(SUBSTRING ${ROOT_LIB_DIR} 2 -1 ROOT_LIB_DIR) # remove "-L"
+      # so instead do this:
+      string(LENGTH "${ROOT_LIB_DIR}" ROOT_LIB_DIR_length)
+      math(EXPR ROOT_LIB_DIR_length "${ROOT_LIB_DIR_length}-2")
+      string(SUBSTRING ${ROOT_LIB_DIR} 2 ${ROOT_LIB_DIR_length} ROOT_LIB_DIR) # remove "-L"
+
+      get_filename_component(ROOT_LIB_DIR ${ROOT_LIB_DIR} ABSOLUTE)
+      #string(REPLACE "${I3_PORTS}/" "" ROOT_RELATIVE_LIB_DIR "${ROOT_LIB_DIR}")
+
+      # remove the "-L" option from the argument list
+      # and extract a list of libraries
+      string(REGEX REPLACE "-[L]([^ ]*)" "" ROOT_LIBRARIES ${ROOT_LIB_OUTPUT})
+      string(STRIP ${ROOT_LIBRARIES} ROOT_LIBRARIES)
+      string(REGEX REPLACE "-l([^ ]*)" "${CMAKE_SHARED_LIBRARY_PREFIX}\\1${CMAKE_SHARED_LIBRARY_SUFFIX}" ROOT_LIBRARIES ${ROOT_LIBRARIES})
+      string(REGEX REPLACE "-pthread|-rdynamic" "" ROOT_LIBRARIES ${ROOT_LIBRARIES})
+      separate_arguments(ROOT_LIBRARIES)
+      
+      set(ROOTSYS ${ROOTSYS} CACHE STRING "Found ROOTSYS in ${ROOTSYS}" FORCE)
+      set(ROOT_LIB_DIR ${ROOT_LIB_DIR} CACHE STRING "Found ROOT_LIB_DIR in ${ROOT_LIB_DIR}" FORCE)
+      set(ROOT_INCLUDE_DIR ${ROOT_INCLUDE_DIR} CACHE STRING "Found ROOT include dir in ${ROOT_INCLUDE_DIR}" FORCE)
+      message("rootsys ${ROOTSYS}")
+      message("root_lib_dir ${ROOT_LIB_DIR}")
+      message("root_libraries ${ROOT_LIBRARIES}")
+      message("root_include_dir ${ROOT_INCLUDE_DIR}")
+    else()
+      set(ROOT_LIB_DIR "" CACHE STRING "No ROOT found" FORCE)
+    endif()
   endif(NOT ROOT_VERSION)
 
   if(NOT ROOT_VERSION)
@@ -75,12 +134,23 @@ else(NOT USE_ROOT)
     add_definitions(-DROOT_HAS_NETX)
   endif()
 
-  tooldef (root 
-    ${ROOTSYS}/include
-    TObject.h
-    ${ROOTSYS}/lib
-    ${ROOTSYS}/bin
-    ${ROOT_NETX_LIBRARY} ${ROOT_${ROOT_VERSION}_LIBS}
-    )
-  set(ROOT_LIBRARIES ${ROOT_LIBRARIES} ${pthread_LIBRARIES})
+  if(NOT SYSTEM_PACKAGES_ROOT)
+    tooldef (root 
+      ${ROOTSYS}/include
+      TObject.h
+      ${ROOTSYS}/lib
+      ${ROOTSYS}/bin
+      ${ROOT_NETX_LIBRARY} ${ROOT_${ROOT_VERSION}_LIBS}
+      )
+    set(ROOT_LIBRARIES ${ROOT_LIBRARIES} ${pthread_LIBRARIES})
+  else()
+    tooldef (root
+      ${ROOT_INCLUDE_DIR}
+      TObject.h
+      ${ROOT_LIB_DIR}
+      ${ROOTSYS}/bin
+      ${ROOT_LIBRARIES}
+      )
+    set(ROOT_LIBRARIES ${ROOT_LIBRARIES} ${pthread_LIBRARIES})
+  endif(NOT SYSTEM_PACKAGES_ROOT)
 endif(NOT USE_ROOT)
