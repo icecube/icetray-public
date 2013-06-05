@@ -41,6 +41,7 @@ Of general interest
 
    metaproject_metainfo
    code_standards
+   library_standards
    netiquette
    gdb_python
 

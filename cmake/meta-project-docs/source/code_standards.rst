@@ -10,11 +10,14 @@ Introduction
 ------------
 
 These are coding standards and recommendations for developers of
-IceCube software in C++ and Python.  This is primarily offline software
-(including IceTray, Dataclasses, Simulation and the event viewer).
-Users are encouraged to write their own private software to these
-standards, to make future code maintence and the adoption of private
-code for production use easier.
+IceCube software in C++ and Python.  There is a companion document for
+:ref:`library_standards`.
+
+This document refers primarily to offline software (including IceTray,
+Dataclasses, Simulation and the event viewer).  Users are encouraged
+to write their own private software to these standards, to make future
+code maintence and the adoption of private code for production use
+easier.
 
 Python Coding Standards
 -----------------------
