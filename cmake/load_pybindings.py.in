@@ -21,6 +21,10 @@ Toplevel container for icecube projects
 
 import platform,sys
 
+# Suppress boost::python warning triggered by multiple registrations. It's fine.
+import warnings
+warnings.filterwarnings("ignore", ".*already registered; second conversion method ignored.", RuntimeWarning)
+
 if platform.system().startswith('freebsd'):
 	# C++ modules are extremely fragile when loaded with RTLD_LOCAL,
 	# which is what Python uses on FreeBSD by default, and maybe other
