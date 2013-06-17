@@ -187,7 +187,7 @@ private:
 
 };
 
-typedef shared_ptr<I3ServiceFactory> I3ServiceFactoryPtr;
+typedef boost::shared_ptr<I3ServiceFactory> I3ServiceFactoryPtr;
 
 #include <icetray/I3Factory.h>
 
