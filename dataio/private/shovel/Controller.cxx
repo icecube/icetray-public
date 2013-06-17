@@ -46,7 +46,6 @@
 
 #include <shovel/View.h>
 #include <shovel/Model.h>
-#include <shovel/shovelrc.h>
 
 #include <dlfcn.h>
 #include <boost/program_options.hpp>
@@ -80,22 +79,6 @@ void
 shovel_exit()
 {
   exit(0);
-}
-
-void
-write_default_shovelrc(const std::string path, const map<char, string>& keybindings)
-{
-  ofstream ofs(path.c_str());
-  ofs << "#\n# dataio-shovel keybindings\n#\n";
-
-  for (map<char, string>::const_iterator iter = keybindings.begin();
-       iter!=keybindings.end(); iter++)
-    {
-      ofs << iter->first << " = " << iter->second << "\n";
-      ;
-    }
-  ofs << "\n\n";
-  ofs.close();
 }
 
 
@@ -151,17 +134,6 @@ int main (int argc, char *argv[])
     ('w',"write_frame")
     ('x',"xml")
     ('q',"quit");
-
-  string rcfile_path = getenv("HOME");
-  rcfile_path += "/.shovelrc";
-#if BOOST_VERSION > 104100
-  if (!fs::exists(fs::path(rcfile_path)))
-#else
-  if (!fs::exists(fs::path(rcfile_path, fs::no_check)))
-#endif
-    write_default_shovelrc(rcfile_path, keybindings);
-
-  dataio::shovel::parse_rcfile(rcfile_path, keybindings);
 
   insert(keybindings)
     (KEY_ENTER, "xml")
