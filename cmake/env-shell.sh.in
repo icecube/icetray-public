@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 #
 # $Id$
 #
@@ -13,7 +13,7 @@
 # a bug and you should *report* this to dataclass@icecube.wisc.edu or
 # http://code.icecube.wisc.edu/projects/icecube/ .  Thanks for your help.  
 #
-if [[ "$1" = "help" ]]
+if [ "$1" = "help" ]
     then
     echo "Usage: $0 [SHELL]"
     echo "Spawn a new shell with an Icetray environment loaded"
@@ -30,11 +30,11 @@ if [[ "$1" = "help" ]]
     exit 1
 fi
 
-if [[ -z "$1" ]]
+if [ -z "$1" ]
     then # user did not specify a shell
     NEW_SHELL=$SHELL 
     # only exit if no shell specified on command line *and* env already loaded 
-    if [[ -n "$I3_SHELL" ]] 
+    if [ -n "$I3_SHELL" ] 
 	then  
 	echo "****************************************************************"
 	echo "You are currently in a shell with an Icetray environment loaded."
@@ -46,7 +46,7 @@ if [[ -z "$1" ]]
 else
     NEW_SHELL=$1
     shift
-    ARGV=$*
+    ARGV="$@"
 fi
 
 _I3_SHELL=$NEW_SHELL
@@ -88,7 +88,7 @@ WIDTH=`echo "$TOPBAR" | wc -c`
 
 WIDTH=$(( $WIDTH-2 ))
 
-function printctr()
+printctr()
 {
     LEN=`echo "$*" | wc -c`
     LOFFSET=$(( ($WIDTH-$LEN)/2 ))
@@ -98,7 +98,7 @@ function printctr()
     printf $FORMAT " " "$*" " "
 }
 
-if [[ -z "$ARGV" ]]
+if [ -z "$ARGV" ]
     then
     printf "$TOPBAR\n"
     printctr ""
@@ -114,11 +114,11 @@ if [[ -z "$ARGV" ]]
     printf "Icetray environment has:\n"
     printf "   I3_SRC       = %s\n" $_I3_SRC
     printf "   I3_BUILD     = %s\n" $_I3_BUILD
-    [[ -z "$_I3_PORTS" ]] || printf "   I3_PORTS     = %s\n" $_I3_PORTS
+    [ -z "$_I3_PORTS" ] || printf "   I3_PORTS     = %s\n" $_I3_PORTS
     echo   "   Python       =" $_PYVER
 fi
 
-if [[ -z "$I3_SHELL" ]] # a clean, first invocation
+if [ -z "$I3_SHELL" ] # a clean, first invocation
     then
 
     PATH=$_PATH \
