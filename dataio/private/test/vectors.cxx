@@ -42,7 +42,7 @@ void do_vector (std::string classname)
 {
   log_debug("writing");
   string fname = string("testvector") + classname + ".i3";
-  shared_ptr<I3Vector<T> > t_out(new I3Vector<T>);
+  boost::shared_ptr<I3Vector<T> > t_out(new I3Vector<T>);
   t_out->resize(100);
   for (unsigned i=0; i<100; i++)
     (*t_out)[i] = i;
