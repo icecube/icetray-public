@@ -170,7 +170,7 @@ TEST(has)
   THROWS(c.Get<Cc>("elsewhere"));
   THROWS(c.Get<bool>("boolio"));
 
-  shared_ptr<bool> spb(new bool);
+  boost::shared_ptr<bool> spb(new bool);
   
   c.Put(spb, "boolio");
   ENSURE(c.Has<bool>("boolio"));
