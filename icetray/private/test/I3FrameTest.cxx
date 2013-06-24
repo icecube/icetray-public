@@ -161,12 +161,21 @@ TEST(typename_iterator)
   f.Put("int0", I3IntPtr(new I3Int(1)));
   f.Put("int1", I3IntPtr(new I3Int(1)));
 
+  // I3Frame is a hash map, so there is no defined order
+  // in which these elements will be retrieved.
   I3Frame::typename_iterator iter = f.typename_begin();
-  ENSURE_EQUAL(iter->first, "int0");
+  ENSURE((iter->first=="int0") || (iter->first=="int1"));
   ENSURE_EQUAL(iter->second, "I3Int");
+  bool first_is_int0 = (iter->first=="int0");
+
   iter++;
-  ENSURE_EQUAL(iter->first, "int1");
+  if (first_is_int0) {
+    ENSURE_EQUAL(iter->first, "int1");
+  } else {
+    ENSURE_EQUAL(iter->first, "int0");
+  }
   ENSURE_EQUAL(iter->second, "I3Int");
+
   iter++;
   ENSURE(iter == f.typename_end());
   
