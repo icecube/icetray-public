@@ -41,6 +41,28 @@
 
 #include "crc-ccitt.h"
 
+// working around a libc++ bug in istream::ignore()
+// http://llvm.org/bugs/show_bug.cgi?id=16427
+#if defined(_LIBCPP_VERSION) && (_LIBCPP_VERSION <= 1101)
+#define WORKAROUND_LIBCPP_ISTREAM_IGNORE_ISSUE
+namespace {
+    template <typename IStreamT>
+    inline IStreamT& istream_ignore_workaround(IStreamT& is, std::streamsize n)
+    {
+        std::streamsize count = n;
+        std::streampos old_pos = is.tellg();
+        while (count > 0) {
+            is.ignore(count);
+            std::streampos new_pos = is.tellg();
+            count -= new_pos-old_pos;
+            old_pos = new_pos;
+        }
+        
+        return is;
+    }
+}
+#endif
+
 using namespace std;
 namespace io = boost::iostreams;
 namespace ar = boost::archive;
@@ -649,7 +671,11 @@ bool I3Frame::load_v56(IStreamT& is, const vector<string>& skip, bool v6, bool v
           {
 	    uint32_t count;
 	    bia >> make_nvp("count", count);
+#ifdef WORKAROUND_LIBCPP_ISTREAM_IGNORE_ISSUE
+	    istream_ignore_workaround(is, count);
+#else
 	    is.ignore(count);
+#endif
           }
         else
           {
@@ -746,7 +772,11 @@ bool I3Frame::load_v4(IStreamT& is, const vector<string>& skip)
           {
 	    uint32_t count;
 	    bia >> make_nvp("count", count);
+#ifdef WORKAROUND_LIBCPP_ISTREAM_IGNORE_ISSUE
+	    istream_ignore_workaround(is, count);
+#else
 	    is.ignore(count);
+#endif
           }
         else
           {
@@ -813,7 +843,11 @@ bool I3Frame::load_old(IStream& is,
         {
 	  uint32_t count;
 	  bufArchive >> make_nvp("count", count);
+#ifdef WORKAROUND_LIBCPP_ISTREAM_IGNORE_ISSUE
+	  istream_ignore_workaround(is, count);
+#else
 	  is.ignore(count);
+#endif
 	}
       else
 	{
