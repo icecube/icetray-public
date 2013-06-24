@@ -50,14 +50,15 @@ namespace {
     inline IStreamT& istream_ignore_workaround(IStreamT& is, std::streamsize n)
     {
         std::streamsize count = n;
-        std::streampos old_pos = is.tellg();
-        while (count > 0) {
-            is.ignore(count);
-            std::streampos new_pos = is.tellg();
-            count -= new_pos-old_pos;
-            old_pos = new_pos;
-        }
         
+        const std::streamsize buf_size = 10240;
+        char buffer[buf_size];
+        while (count > 0) {
+            std::streamsize read_bytes = std::min(buf_size, count);
+            is.read(buffer, read_bytes);
+            count -= read_bytes;
+        }
+
         return is;
     }
 }
