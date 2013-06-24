@@ -20,7 +20,7 @@
  *  
  */
 #ifndef ICETRAY_RENAME_H_INCLUDED
-#define ICETRAY_RENAME_H_INLCUDED
+#define ICETRAY_RENAME_H_INCLUDED
 
 #include <fstream>
 #include <string>
