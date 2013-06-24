@@ -193,11 +193,9 @@ void PythonFunction::Process()
       PushFrame(frame,"OutBox");
 
   } catch (const bp::error_already_set& as) {
-    
-    PyObject* o = PyObject_Repr(rv.ptr());
+
     log_fatal("Python function inside PythonFuncton module '%s' returned value %s, which won't convert to True, False, or None", 
-	      GetName().c_str(), PyString_AsString(o));
-    Py_DECREF(o);
+	      GetName().c_str(), repr(rv).c_str());
     throw as;
   }
 
