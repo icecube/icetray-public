@@ -374,13 +374,6 @@ add_custom_target(deploy-docs
   COMMENT Deploying docs to ${META_PROJECT}
   )
 
-file(DOWNLOAD 
-  http://www.icecube.umd.edu/~troy/.workspace_configured.html
-  ${CMAKE_BINARY_DIR}/.tag
-  TIMEOUT 0.5
-  )
-file(REMOVE ${CMAKE_BINARY_DIR}/.tag)
-
 ### ctest testing
 enable_testing()
 
