@@ -39,7 +39,6 @@ script using **r**::
   Starting program: /usr/bin/python ./examples/resources/scripts/pass1.py
   [Thread debugging using libthread_db enabled]
   [New Thread 0xb7ddcad0 (LWP 18082)]
-  Logging configured from file ./log4cplus.conf
   Loading libicetray........................................ok
   Loading libdataclasses....................................ok
   Loading libphys-services..................................ok
@@ -196,7 +195,6 @@ the crashing call to printf, but I don't give it an informative message::
   Starting program: /usr/bin/python ./examples/resources/scripts/pass1.py
   [Thread debugging using libthread_db enabled]
   [New Thread 0xb7d98ad0 (LWP 18183)]
-  Logging configured from file ./log4cplus.conf
   Loading libicetray........................................ok
   Loading libdataclasses....................................ok
   Loading libphys-services..................................ok
@@ -252,7 +250,6 @@ issuing *catch throw*::
   Starting program: /usr/bin/python ./examples/resources/scripts/pass1.py
   [Thread debugging using libthread_db enabled]
   [New Thread 0xb7d5fad0 (LWP 18185)]
-  Logging configured from file ./log4cplus.conf
   Loading libicetray........................................ok
   Loading libdataclasses....................................ok
   Loading libphys-services..................................ok
@@ -353,7 +350,6 @@ exists an exception-throwing function and will allow you to catch there::
   Starting program: /usr/bin/python ./examples/resources/scripts/pass1.py
   [Thread debugging using libthread_db enabled]
   [New Thread 0xb7d8aad0 (LWP 18191)]
-  Logging configured from file ./log4cplus.conf
   Loading libicetray........................................ok
   Loading libdataclasses....................................Quit
     [ etc etc... get dumped back to the prompt ]
