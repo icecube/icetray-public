@@ -54,8 +54,11 @@ def load_pybindings(name, path):
     """
 
     import imp, sys
-    m = imp.load_dynamic(name, path[0] + ".so")
     thismod = sys.modules[name]
+    m = imp.load_dynamic(name, path[0] + ".so")
+    sys.modules[name] = thismod # Some python versions overwrite the Python
+                                # module entry with the C++ one. We don't want
+                                # that
 
     for (k,v) in m.__dict__.items():
         if not k.startswith("_"):
