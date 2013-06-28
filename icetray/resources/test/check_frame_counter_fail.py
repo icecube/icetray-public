@@ -35,7 +35,7 @@ try:
     tray.Execute(7)  # wrong number of frames
     tray.Finish()
 except:
-    print "ok: failure as expected."
+    print("ok: failure as expected.")
     sys.exit(0)
 else:
     sys.exit(1)

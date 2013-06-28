@@ -17,4 +17,4 @@ tray.AddModule("TrashCan","TrashCan")
 
 tray.Execute(5)
 
-print "Okay. Exiting."
+print("Okay. Exiting.")

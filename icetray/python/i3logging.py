@@ -12,7 +12,7 @@ class LoggingBridge(I3Logger):
 		I3LogLevel.LOG_ERROR  : logging.ERROR,
 		I3LogLevel.LOG_FATAL  : logging.CRITICAL,
 	}
-	i3levels = dict([(v, k) for k, v in pylevels.iteritems()])
+	i3levels = dict([(v, k) for k, v in pylevels.items()])
 	def __init__(self):
 		I3Logger.__init__(self)
 		self.getLogger("").setLevel(logging.INFO)

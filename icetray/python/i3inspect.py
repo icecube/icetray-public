@@ -118,7 +118,7 @@ class I3HoboConfiguration(dict):
 			args += tweaked.keys()
 			defaults += tweaked.values()
 			descriptions += [rootconfig.descriptions[k] for k in
-			    tweaked.keys()]
+			    list(tweaked.keys())]
 
 		config = cls(args, defaults, descriptions)
 		config.__doc__ = doc
@@ -133,7 +133,7 @@ def get_configuration(module):
 	elif isinstance(module, type) and issubclass(module, I3Module):
 		return module(I3Context()).configuration
 	else:
-		raise TypeError, "Module must be either a string naming a registered C++ subclass of I3Module or a Python subclass of I3Module, not %s" % type(module)
+		raise TypeError("Module must be either a string naming a registered C++ subclass of I3Module or a Python subclass of I3Module, not %s" % type(module))
 
 def is_I3Module(obj):
 	return isinstance(obj, type) and issubclass(obj, I3Module)
@@ -184,7 +184,7 @@ def harvest_objects(module, want=is_I3Module, memo=None):
 		Update the dictionary of objects only if the new name is
 		closer to a root of PYTHONPATH 
 		"""
-		for k, v in otherdict.iteritems():
+		for k, v in otherdict.items():
 			if not k in basedict or len(v.split('.')) < len(basedict[k].split('.')):
 				basedict[k] = v
 

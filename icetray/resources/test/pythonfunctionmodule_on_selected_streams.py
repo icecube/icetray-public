@@ -27,8 +27,8 @@ tray.AddModule(putint, "putint",
                           icetray.I3Frame.Physics])
 
 def printer(frame):
-    print frame.GetStop()
-    print frame
+    print(frame.GetStop())
+    print(frame)
 
 # tray.AddModule(printer, 'p')
 

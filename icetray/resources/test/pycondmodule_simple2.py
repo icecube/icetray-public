@@ -23,7 +23,7 @@ class Mod(I3ConditionalModule):
         Mod.count += 1
         f = self.PopFrame()
         self.PushFrame(f)
-        print "process!"
+        print("process!")
         
 tray.AddModule(Mod, "PythonConditionalModule",
                If = lambda f: True)
@@ -33,4 +33,4 @@ tray.AddModule("TrashCan","TrashCan")
 tray.Execute(5)
 
 assert Mod.count == 5
-print "Module executed 5 times as expected, okay."
+print("Module executed 5 times as expected, okay.")

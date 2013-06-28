@@ -45,7 +45,7 @@ class pypick(object):
 		if hasattr(other, "__call__"):
 			return do()
 		else:
-			raise TypeError, "PyPick must be constructed with a callable"
+			raise TypeError("PyPick must be constructed with a callable")
 			
 	def __and__(self, other):
 		return self._check_callable(other, lambda : pypick(lambda *args, **kwargs: self(*args, **kwargs) and other(*args, **kwargs)))

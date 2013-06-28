@@ -66,7 +66,7 @@ tray.AddModule(icetray.I3TestModuleFactory(I3TimeHorizonCutTest), 'test',
 			if not result.wasSuccessful():
 				# XXX TODO: is there a nicer way to pull the handbrake 
 				# so that the failure shows up in runtests.py?
-				raise AssertionError, "A test failed!"
+				raise AssertionError("A test failed!")
 				self.RequestSuspension()
 			else:
 				self.PushFrame(frame)

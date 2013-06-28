@@ -16,17 +16,17 @@ try:
 
     tray.AddModule("TrashCan", "tc")
 
-    print "About to execute    "
+    print("About to execute    ")
     # do it 5 times.
     tray.Execute(10)
     tray.Finish()
 
 
 except:
-    print "ok, at that threw as expected."
+    print("ok, at that threw as expected.")
 
 else:
-    print "that should have thrown"
+    print("that should have thrown")
     sys.exit(1)
 
 

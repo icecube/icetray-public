@@ -17,7 +17,7 @@ i3f = dataio.I3File("tmp.i3", dataio.I3File.Mode.Writing)
 streams = ['A', 'B', 'C', 'D', 'E', 'F']
 
 for st in streams:
-    print "=====", st, "====="
+    print("=====%s=====" % st)
     theframe = icetray.I3Frame(icetray.I3Frame.Stream(st))
     theframe[st] = icetray.I3Int(ord(st))
 
@@ -38,7 +38,7 @@ class Gitter(icetray.I3Module):
         self.AddOutBox('OutBox')
 
     def OnB(self, frame):
-        print "On b,", frame 
+        print("On b, %s" % frame) 
         assert frame.GetStop() == icetray.I3Frame.Stream('B')
         assert 'A' in frame
         assert 'B' in frame
@@ -46,7 +46,7 @@ class Gitter(icetray.I3Module):
         assert not 'D' in frame
         
     def OnF(self, frame):
-        print "On f,", frame 
+        print("On f, %s" % frame) 
         assert frame.GetStop() == icetray.I3Frame.Stream('F')
         assert 'A' in frame
         assert 'B' in frame
@@ -69,7 +69,7 @@ tray.AddModule('I3Reader', 'rd',
                Filename = 'tmp.i3')
 
 def p(frame):
-    print "FFFFFFF:", frame
+    print("FFFFFFF: %s" % frame)
     
 tray.AddModule('Get', 'agitter',
                Keys = ['A'],

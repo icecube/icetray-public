@@ -23,8 +23,8 @@ tray.Finish()
 f = dataio.I3File("foo.i3")
 
 frame = f.pop_frame(icetray.I3Frame.TrayInfo)
-print frame
+print(frame)
 for k in frame.keys():
-    print "Getting", k
-    print frame[k]
+    print("Getting %s" % k)
+    print(frame[k])
 

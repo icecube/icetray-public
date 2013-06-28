@@ -26,7 +26,7 @@ try:
     tray.Execute(1)
     assert False, "that should have thrown"
 except:
-    print "okay, that threw as we would have hoped."
+    print("okay, that threw as we would have hoped.")
 
 
 

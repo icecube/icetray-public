@@ -29,7 +29,7 @@ try:
     tray.Execute(5)
     tray.Finish()
 except:
-    print "ok: failure as expected."
+    print("ok: failure as expected.")
     # ok it failed
     sys.exit(0)
 else:

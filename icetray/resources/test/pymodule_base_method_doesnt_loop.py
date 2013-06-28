@@ -11,7 +11,7 @@ class TestModule(icetray.I3Module):
 	def Finish(self):
 		self.recursion_count += 1
 		if self.recursion_count > 1:
-			print 'Finish looping forever!'
+			print('Finish looping forever!')
 			sys.exit(1)
 		icetray.I3Module.Finish(self)
 

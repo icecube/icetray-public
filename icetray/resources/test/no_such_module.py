@@ -14,7 +14,7 @@ try:
     # print em
     tray.AddModule("NoSuchModule","dump")
 except:
-    print "Good.  It threw."
+    print("Good.  It threw.")
     sys.exit(0) # indicate success.
 else:
     # Failure: that should throw

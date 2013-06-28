@@ -14,8 +14,8 @@ try:
                    Startfrom = 0,
                    SumShouldBe = 6)
 except:
-    print "good, it threw."
+    print("good, it threw.")
     sys.exit(0)
 else:
-    print "That should have thrown"
+    print("That should have thrown")
     sys.exit(1)

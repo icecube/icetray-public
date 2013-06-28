@@ -11,7 +11,7 @@ def thing1(frame):
 	
 def thing2(frame):
 	if not 'foo' in frame:
-		raise ValueError, "Modules didn't run in the right order!"
+		raise ValueError("Modules didn't run in the right order!")
 		
 def thing3(frame):
 	frame['bar'] = icetray.I3Bool()

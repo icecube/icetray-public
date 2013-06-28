@@ -25,7 +25,7 @@ tray.AddModule('Keep', 'k',
                Keys=['tag'])
 
 def framecheck(frame):
-    print frame
+    print(frame)
     if 'counter' in frame:
         assert frame['counter'].value % 3 != 0
             

@@ -21,7 +21,7 @@ def traysegment(function):
 		function.__doc__ = "I3Tray segments should have docstrings. This one doesn't. Fix it."
 
 	if len(inspect.getargspec(function)[0]) < 2:
-		raise ValueError, "I3Tray segments must have at least two arguments (tray, name)"
+		raise ValueError("I3Tray segments must have at least two arguments (tray, name)")
 
 	function.__i3traysegment__ = True
 	return function
@@ -82,7 +82,7 @@ def module_altconfig(module, **altdefargs):
 
 	# Mark what we're doing in various interesting places (like the docs)
 	segment.__doc__ = "Alternate configuration for %s\n\nOverridden defaults:\n" % module
-	for arg in altdefargs.keys():
+	for arg in list(altdefargs.keys()):
 		segment.__doc__ += "\t%s=%s\n" % (arg, altdefargs[arg])
 
 	func = traysegment_inherit(parent=module,

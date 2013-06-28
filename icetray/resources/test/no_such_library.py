@@ -17,10 +17,10 @@ try:
 
     tray.Execute(5)
 except:
-    print "Good.  It threw."
+    print("Good.  It threw.")
     sys.exit(0) # indicate success.
 else:
-    print "should have thrown"
+    print("should have thrown")
     sys.exit(1)
 
 

@@ -7,7 +7,7 @@ import sys
 try:
 	import numpy
 except ImportError:
-	print 'Numpy not found -- skipping test'
+	print('Numpy not found -- skipping test')
 	sys.exit(0)
 
 

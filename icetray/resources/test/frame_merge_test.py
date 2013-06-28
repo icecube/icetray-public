@@ -49,7 +49,7 @@ assert 'a' in a
 assert 'b' in a
 assert 'c' in a
 
-print a
+print(a)
 
 a.purge(I3Frame.Stream('b'))
 
