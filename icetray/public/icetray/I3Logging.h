@@ -130,7 +130,7 @@ SET_LOGGER("Unknown");
     unit, __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
     ##__VA_ARGS__)
 
-#ifndef NDEBUG
+#ifndef I3_COMPILE_OUT_VERBOSE_LOGGING
 #define log_trace(format, ...) I3_LOGGER(I3LOG_TRACE, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
     ##__VA_ARGS__)
