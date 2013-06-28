@@ -446,16 +446,16 @@ if(NOT METAPROJECT_CONFIGURED)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}" CACHE STRING
     "Flags used by the compiler during all build types" FORCE)
 
-  set(CMAKE_CXX_FLAGS_RELEASE "-O${RELOPTLEVEL} -Wno-unused-variable -DNDEBUG")
+  set(CMAKE_CXX_FLAGS_RELEASE "-O${RELOPTLEVEL} -Wno-unused-variable -DNDEBUG -DI3_COMPILE_OUT_VERBOSE_LOGGING")
   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}" CACHE STRING
     "Flags used by compiler during release builds" FORCE)
 
-  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O${RELOPTLEVEL} -Wno-unused-variable -g -DNDEBUG")
+  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O${RELOPTLEVEL} -Wno-unused-variable -g -DNDEBUG -DI3_COMPILE_OUT_VERBOSE_LOGGING")
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}" CACHE STRING
     "Flags used by compiler during release builds" FORCE)
 
   ## RelWithAssert flags
-  set(CMAKE_CXX_FLAGS_RELWITHASSERT "-O${RELOPTLEVEL} -Wno-unused-variable" CACHE STRING
+  set(CMAKE_CXX_FLAGS_RELWITHASSERT "-O${RELOPTLEVEL} -Wno-unused-variable -DI3_COMPILE_OUT_VERBOSE_LOGGING" CACHE STRING
     "Flags used by compiler during Release+Assert builds" FORCE)
   set(CMAKE_C_FLAGS_RELLWITHASSERT "-O${RELOPTLEVEL} -Wno-unused-variable" CACHE STRING
     "Flags used by compiler during Release+Assert builds" FORCE)
