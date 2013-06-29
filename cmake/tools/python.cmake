@@ -96,7 +96,7 @@ if(NOT NUMPY_FOUND)
 else(NOT NUMPY_FOUND)
 	set(NUMPY_FOUND TRUE CACHE BOOL "Numpy found successfully" FORCE)
 	execute_process(COMMAND ${PYTHON_EXECUTABLE} -c
-	    "import numpy; print numpy.get_include()"
+	    "import numpy; print(numpy.get_include())"
            OUTPUT_VARIABLE NUMPY_INCLUDE_DIR
 	    OUTPUT_STRIP_TRAILING_WHITESPACE)
 	set(NUMPY_INCLUDE_DIR ${NUMPY_INCLUDE_DIR} CACHE STRING "Numpy inc directory" FORCE)
