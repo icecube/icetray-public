@@ -31,11 +31,13 @@ PythonFunction::PythonFunction(const I3Context& context, bp::object func)
   unsigned implicit_args = 1; // frame
 #if PY_MAJOR_VERSION >= 3
   if (!PyObject_HasAttrString(obj.ptr(), "__code__")) {
+    if (PyObject_HasAttrString(obj.ptr(), "__func__"))
+      obj = obj.attr("__func__");
 #else
   if (!PyObject_HasAttrString(obj.ptr(), "func_code")) {
-#endif
     if (PyObject_HasAttrString(obj.ptr(), "im_func"))
       obj = obj.attr("im_func");
+#endif
     else
       obj = obj.attr("__call__");
     implicit_args = 2; // self, frame
