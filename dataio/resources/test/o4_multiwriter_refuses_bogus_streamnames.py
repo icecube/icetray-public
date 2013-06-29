@@ -30,7 +30,7 @@ try:
 except:
     sys.exit(0)
 else:
-    print "egh, module should have refused that parameter"
+    print("egh, module should have refused that parameter")
     sys.exit(1)
 
 

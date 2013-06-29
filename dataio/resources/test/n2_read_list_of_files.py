@@ -25,7 +25,7 @@ file_list = glob("testm.*.i3.gz")
 #  puts them in alpha/numeric order 
 file_list.sort()
 
-print file_list
+print(file_list)
 tray.AddModule("I3Reader","reader")(
     ("FilenameList", file_list)
     )

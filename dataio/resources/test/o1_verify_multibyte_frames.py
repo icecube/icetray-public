@@ -27,7 +27,7 @@ file_list = glob("testmulti.*.i3")
 #  puts them in alpha/numeric order 
 file_list.sort()
 
-print file_list
+print(file_list)
 tray.AddModule("I3Reader", "reader", FilenameList=file_list)
 
 tray.AddModule("Dump","dump")

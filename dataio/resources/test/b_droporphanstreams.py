@@ -45,10 +45,10 @@ tray.Execute()
 tray.Finish()
 
 if p != j:
-	print "Number of P frames incorrect (%d != %d)" % (p, j)
+	print("Number of P frames incorrect (%d != %d)" % (p, j))
 	sys.exit(1)
 if q != j:
-	print "Number of Q frames incorrect (%d != %d)" % (q, j)
+	print("Number of Q frames incorrect (%d != %d)" % (q, j))
 	sys.exit(1)
 sys.exit(0)
 

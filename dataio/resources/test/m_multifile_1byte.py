@@ -36,7 +36,7 @@ filecount_is_correct = (len(glob("testm.????.i3.gz")) == 15)
 if filecount_is_correct:
     sys.exit(0)
 else:
-    print "generated file count is incorrect"
+    print("generated file count is incorrect")
     sys.exit(1)
 
 

@@ -14,9 +14,9 @@ def SelectDaq(frame):
 	assert 'DrivingTime' in frame
 	dt = frame.Get("DrivingTime")
 	utcdaq = dt.utc_daq_time
-	print utcdaq
+	print(utcdaq)
 	assert SelectDaq.daqtime != utcdaq
-	print "Yup prev time %lu different than new time %lu" % (SelectDaq.daqtime, utcdaq)
+	print("Yup prev time %lu different than new time %lu" % (SelectDaq.daqtime, utcdaq))
 	SelectDaq.daqtime = utcdaq
 	return True
 

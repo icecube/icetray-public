@@ -28,7 +28,7 @@ file_list = glob("split.*.i3")
 #  puts them in alpha/numeric order 
 file_list.sort()
 
-print file_list
+print(file_list)
 tray.AddModule("I3Reader","I3Reader")(
     ("FilenameList", file_list)
     )

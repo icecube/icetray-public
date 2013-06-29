@@ -10,10 +10,10 @@ i3f = dataio.I3File("alphabet.i3", dataio.I3File.Mode.Writing)
 
 try:
     for frame in i3f:
-        print frame
+        print(frame)
 except:
-    print "ok, that threw as expected"
+    print("ok, that threw as expected")
     sys.exit(0)
 else:
-    print "FAIL: that should have thrown"
+    print("FAIL: that should have thrown")
     sys.exit(1)

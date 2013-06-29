@@ -16,7 +16,7 @@ i3f = dataio.I3File("tmp.i3", dataio.I3File.Mode.Writing)
 streams = ['A', 'B', 'C', 'D', 'E', 'F']
 
 for st in streams:
-    print "=====", st, "====="
+    print("=====%s=====" % st)
     theframe = icetray.I3Frame(icetray.I3Frame.Stream(st))
     theframe[st] = icetray.I3Int(ord(st))
 
@@ -28,24 +28,24 @@ i3f2 = dataio.I3File("tmp.i3")
 
 frame = i3f2.pop_frame(icetray.I3Frame.None)
 
-print frame
+print(frame)
 assert frame
 stop =  frame.Stop
 assert stop.id == 'A'
 
 frame = i3f2.pop_frame()
 assert frame
-print frame
+print(frame)
 assert frame.Stop.id == 'B'
 
 frame = i3f2.pop_frame(icetray.I3Frame.Stream('C'))
 assert frame
-print frame
+print(frame)
 assert frame.Stop.id == 'C'
 
 frame = i3f2.pop_frame()
 assert frame
-print frame
+print(frame)
 assert frame.Stop.id == 'D'
 
 # verify that rewind works

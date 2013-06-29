@@ -33,7 +33,7 @@ if os.path.exists("catted.i3.gz") and os.path.isfile("catted.i3.gz"):
     os.unlink("catted.i3.gz")
     
 cmd = "cat " + ' '.join(["catme_%s.i3.gz" % tag for tag in tags]) + " > catted.i3.gz"
-print cmd
+print(cmd)
 status = os.system(cmd)
 
 

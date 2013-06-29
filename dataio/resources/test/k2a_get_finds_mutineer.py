@@ -21,10 +21,10 @@ tray.AddModule("TrashCan", "the can")
 try:
     tray.Execute()
 except:
-    print "It threw as expected"
+    print("It threw as expected")
     sys.exit(0)
 else:
-    print "That should have thrown"
+    print("That should have thrown")
     sys.exit(1)
 
 

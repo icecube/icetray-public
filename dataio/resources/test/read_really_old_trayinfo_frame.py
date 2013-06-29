@@ -16,6 +16,6 @@ frame = i3file.pop_frame()
 # the second is the really old one.  Shouldn't crash.
 frame = i3file.pop_frame()
 
-print "old frame:", frame
+print("old frame: %s" % frame)
 
 
