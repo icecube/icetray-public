@@ -27,7 +27,7 @@ def make_counter(base):
             return True
 
         def Physics(self, frame):
-            print(base.__name__ + " *** sdp == " + self.sdp)
+            print("%s *** sdp == %d" % (base.__name__, self.sdp))
             assert self.sdp == 1
             self.sdp = 0
             self.PushFrame(frame)
