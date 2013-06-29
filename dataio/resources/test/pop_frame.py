@@ -26,7 +26,7 @@ i3f.close()
 
 i3f2 = dataio.I3File("tmp.i3")
 
-frame = i3f2.pop_frame(icetray.I3Frame.None)
+frame = i3f2.pop_frame(icetray.I3Frame.Stream('N'))
 
 print(frame)
 assert frame
