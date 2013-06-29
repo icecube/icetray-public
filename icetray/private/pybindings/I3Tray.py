@@ -70,10 +70,8 @@ class I3Tray(icetray.I3Tray):
         """
         Add a module, service, or segment to the tray.
         """
-        import types
-        
         method = None
-        if isinstance(_type, types.StringType):
+        if isinstance(_type, "".__class__):
             # Search registries for a C++ factory type
             if icetray.is_module(_type) and icetray.is_service(_type):
                 raise ValueError("'%s' is registered both as a service and module. Use AddModule()/AddService() to disambiguate." % _type)
