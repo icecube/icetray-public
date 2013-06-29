@@ -29,7 +29,11 @@ PythonFunction::PythonFunction(const I3Context& context, bp::object func)
   AddOutBox("OutBox");
 
   unsigned implicit_args = 1; // frame
+#if PY_MAJOR_VERSION >= 3
+  if (!PyObject_HasAttrString(obj.ptr(), "__code__")) {
+#else
   if (!PyObject_HasAttrString(obj.ptr(), "func_code")) {
+#endif
     if (PyObject_HasAttrString(obj.ptr(), "im_func"))
       obj = obj.attr("im_func");
     else
@@ -42,7 +46,11 @@ PythonFunction::PythonFunction(const I3Context& context, bp::object func)
   // this protocol "func_code" and "co_varnames" may change
   // in a future version of python, and then it will be #ifdef time
   //
+#if PY_MAJOR_VERSION >= 3
+  bp::object code = obj.attr("__code__");
+#else
   bp::object code = obj.attr("func_code");
+#endif
   bp::object argnamesobj = code.attr("co_varnames");
   i3_log("Getting argnames");
   bp::tuple argnames = bp::extract<bp::tuple>(code.attr("co_varnames"));
