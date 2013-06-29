@@ -37,7 +37,7 @@ class Mod(I3PacketModule):
         frames[0].Put("NSplits", i)
         for fr in frames:
             self.PushFrame(fr)
-	global npackets
+        global npackets
         npackets += 1
 
 tray.AddModule(Mod, "mod")
