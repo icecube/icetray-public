@@ -36,9 +36,9 @@ for i in range(10):
 
 f = dataio.I3File("foo.i3")
 frame = f.pop_frame(icetray.I3Frame.TrayInfo)
-print frame
+print(frame)
 for k in frame.keys():
-    print "KEYS:", k
+    print("KEYS: %s" % k)
 
 assert len(frame.keys()) == 11, "eleven keys expected in frame"
 

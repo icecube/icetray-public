@@ -10,7 +10,7 @@ tray.AddModule("BottomlessSource","bs")
 
 def putints(frame, where, value):
     frame[where] = icetray.I3Int(value)
-    print 'put value', value, 'at', where
+    print('put value %s at %s' % (value, where))
 
 tray.AddModule(putints, 'putter',
                where = 'here',
@@ -19,7 +19,7 @@ tray.AddModule(putints, 'putter',
 def checkints(frame, where, value):
     i3i = frame[where]
     assert i3i.value == value
-    print 'value', value, 'ok '
+    print('value %s ok' % value)
     
 tray.AddModule(checkints, 'ci',
                where = 'here',

@@ -16,7 +16,7 @@ n_should_pass = 17
 def int_putter(frame):
     frame['int'] = I3Int(int_putter.index)
     int_putter.index += 1
-    print "*** int_putter puts frame with", frame['int'].value
+    print("*** int_putter puts frame with %d" % frame['int'].value)
 int_putter.index = 0
 
 tray.AddModule(int_putter, "int_putter")
@@ -33,14 +33,14 @@ class Mod(I3ConditionalModule):
         pass
     
     def Physics(self, frame):
-        print "Value=", frame['int'].value
+        print("Value= %d" % frame['int'].value)
         assert the_condition(frame)
         self.nseen += 1
         self.PushFrame(frame)
 
     def Finish(self):
         global n_should_pass
-        print "saw %d, should have seen %d" % (self.nseen, n_should_pass)
+        print("saw %d, should have seen %d" % (self.nseen, n_should_pass))
         assert self.nseen == n_should_pass
 
 tray.AddModule(Mod, "PythonConditionalModule",

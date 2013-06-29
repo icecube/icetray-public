@@ -61,17 +61,17 @@ def print_config(config):
 		sortedkeys = list(config.keys())
 		sortedkeys.sort()
 		for k in sortedkeys:
-			print '    %s' % k
-			print '      Description : %s' % desc[k]
+			print('    %s' % k)
+			print('      Description : %s' % desc[k])
 			try:
-				print '      Default     : %s' % repr(config[k])
+				print('      Default     : %s' % repr(config[k]))
 			except RuntimeError:
 				# Sometimes unrepresentable
 				pass
-			print ''
+			print('')
 	else:
-		print '    (No parameters)'
-	print '  ' + '-'*77
+		print('    (No parameters)')
+	print('  ' + '-'*77)
 	
 	
 def print_segment(segment):
@@ -90,16 +90,16 @@ def print_segment(segment):
 
 			# Provide a simulacram of what the call looked like
 			if opts.xml:
-				print '\t<segelement type="%s" name="%s" instance="%s">' % (modtype, cgi.escape(component_name), cgi.escape(name))
+				print('\t<segelement type="%s" name="%s" instance="%s">' % (modtype, cgi.escape(component_name), cgi.escape(name)))
 				for i in args.keys():
-					print '\t<argument name="%s">%s</argument>' % (cgi.escape(i), cgi.escape(args[i].__repr__()))
-				print '\t</segelement>'
+					print('\t<argument name="%s">%s</argument>' % (cgi.escape(i), cgi.escape(args[i].__repr__())))
+				print('\t</segelement>')
 			else:
 				line = '    Add%s(%s, \'%s\'' % (modtype, component_name, name)
 				for i in args.keys():
 					line += ', %s=%s' % (i, args[i].__repr__())
 				line += ')'
-				print line
+				print(line)
 			
 		def AddModule(self, module, name, **kwargs):
 			self.PrintArgs('Module', module, name, kwargs)
@@ -110,32 +110,32 @@ def print_segment(segment):
 
 	potemkin = PotemkinTray()
 	if opts.xml:
-		print '<segment>'
+		print('<segment>')
 	else:
-		print '  Equivalent to:'
+		print('  Equivalent to:')
 	try:
 		segment(potemkin, 'example')
 	except:
 		if not opts.xml:
-			print '    Error instantiating segment with default arguments'
+			print('    Error instantiating segment with default arguments')
 	if opts.xml:
-		print '</segment>'
+		print('</segment>')
 	else:
-		print ''
+		print('')
 
 def print_xmlconfig(config):
 	desc = config.descriptions
 	if len(config.keys()) > 0:
 		for k in config.keys():
-			print '<parameter>'
-			print '\t<name>%s</name>' % cgi.escape(k)
-			print '\t<description>%s</description>' % cgi.escape(desc[k])
+			print('<parameter>')
+			print('\t<name>%s</name>' % cgi.escape(k))
+			print('\t<description>%s</description>' % cgi.escape(desc[k]))
 			try:
-				print '\t<default_value>%s</default_value>' % cgi.escape(repr(config[k]))
+				print('\t<default_value>%s</default_value>' % cgi.escape(repr(config[k])))
 			except RuntimeError:
 				# Sometimes unrepresentable
 				pass
-			print '</parameter>'
+			print('</parameter>')
 
 def display_config(mod, category, modname=None):
 		if modname is None:
@@ -157,16 +157,16 @@ def display_config(mod, category, modname=None):
 			docs = ''
 
 		if opts.xml:
-			print '<module>'
-			print '<type>%s</type>' % cgi.escape(modname)
-			print '<kind>%s</kind>' % cgi.escape(category)
-			print '<description>%s</description>' % cgi.escape(docs)
+			print('<module>')
+			print('<type>%s</type>' % cgi.escape(modname))
+			print('<kind>%s</kind>' % cgi.escape(category))
+			print('<description>%s</description>' % cgi.escape(docs))
 		else:
-			print '  %s (%s)' % (modname, category)
+			print('  %s (%s)' % (modname, category))
 			if not opts.names_only and len(docs) > 0:
-				print ''
-				print '    ' + docs.replace('\n', '\n    ')
-				print ''
+				print('')
+				print('    ' + docs.replace('\n', '\n    '))
+				print('')
 		if i3inspect.is_traysegment(mod) and opts.expand_segments:
 			print_segment(mod)
 			
@@ -175,26 +175,26 @@ def display_config(mod, category, modname=None):
 				print_xmlconfig(config)
 			else:
 				if len(docs) > 0:
-					print '  Parameters:'
+					print('  Parameters:')
 				print_config(config)
 				
 
 		if opts.xml:
-			print '</module>'
+			print('</module>')
 		return True
 		
 if opts.xml:
-	print '<?xml version=\'1.0\'?>'
-	print '<icetray-inspect>'
+	print('<?xml version=\'1.0\'?>')
+	print('<icetray-inspect>')
 
 for project in args:
 	if project in bad_libs:
 		continue
 	
 	if opts.xml:
-		print '<project name="%s">' % project
+		print('<project name="%s">' % project)
 	else:
-		print '*** %s ***' % project
+		print('*** %s ***' % project)
 	
 	try:
 		modname = project.replace('-','_')
@@ -214,7 +214,7 @@ for project in args:
 	cxx_services = icetray.services(project)
 
 	if not opts.xml:
-		print '-'*79
+		print('-'*79)
 
 	if not opts.no_modules:
 		for mod in cxx_modules:
@@ -236,10 +236,10 @@ for project in args:
 			segmentcount += 1
 			
 	if opts.xml:
-		print '</project>'
+		print('</project>')
 	
 if opts.xml:
-	print '</icetray-inspect>'
+	print('</icetray-inspect>')
 else:
-	print ''
-	print '%d module, %d service, and %d tray segment configurations reported.' % (modcount, servicecount, segmentcount)
+	print('')
+	print('%d module, %d service, and %d tray segment configurations reported.' % (modcount, servicecount, segmentcount))

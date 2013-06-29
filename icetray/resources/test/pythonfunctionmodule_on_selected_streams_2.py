@@ -24,7 +24,7 @@ seen = dict(X=0, Y=0, Z=0)
 
 def fn(frame):
     global seen
-    print "running on frame", frame
+    print("running on frame %s" % frame)
     seen[frame.Stop.id] += 1
     
 tray.AddModule(fn, "fn",
@@ -37,7 +37,7 @@ tray.AddModule("TrashCan", "tc")
 tray.Execute(9)
 tray.Finish()
 
-print seen
+print(seen)
 assert seen['X'] == 3
 assert seen['Y'] == 3
 assert seen['Z'] == 3

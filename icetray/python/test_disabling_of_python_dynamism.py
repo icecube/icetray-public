@@ -26,10 +26,10 @@ def test_all_classes(mod, skip_test_list = list(), skip_containers = True ):
     try:
         foo = inspect.getmembers(mod)
     except AttributeError:
-        print "Time to inspect inspect..."
-        print dir(inspect)
-        print "name = ",inspect.__name__
-        print "dumping docs...\n ",inspect.__doc__
+        print("Time to inspect inspect...")
+        print(dir(inspect))
+        print("name = %s" % inspect.__name__)
+        print("dumping docs...\n %s" % inspect.__doc__)
         
     msg_fmt = "Python dynamism is alive and well for (%s) "
     for k,v in inspect.getmembers(mod):
@@ -46,7 +46,7 @@ def test_all_classes(mod, skip_test_list = list(), skip_containers = True ):
                 if hasattr(o, "__iter__") : continue
                 # now test it
                 if not ExtendClassFails( o ) :
-                    print msg_fmt % k
+                    print(msg_fmt % k)
                     return_value = False
             except :
                 warnings.warn("class %s needs a nullary constructor. Either expose one or add '%s' to skip_test_list." % (k, k))

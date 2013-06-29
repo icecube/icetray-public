@@ -15,7 +15,7 @@ def f1(frame, x='x', y='y'):
 tray.AddModule(f1, 'f1')
 
 def f2(frame, x='x', y='y'):
-    print "f2: ", x, y
+    print("f2: %s %s" % (x, y))
     assert x == 'configured'
     assert y == 'y'
     
