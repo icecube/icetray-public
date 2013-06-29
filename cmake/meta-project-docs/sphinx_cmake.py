@@ -1,4 +1,4 @@
-print "Loading cmake sphinx extension"
+print("Loading cmake sphinx extension")
 
 def setup(app):
     app.add_description_unit('cmake', 'cmake', None)   

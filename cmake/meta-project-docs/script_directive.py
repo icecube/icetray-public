@@ -1,5 +1,5 @@
 
-import sys, os, glob, shutil, hashlib, imp, warnings, cStringIO
+import sys, os, glob, shutil, hashlib, imp, warnings
 import re
 try:
     from hashlib import md5

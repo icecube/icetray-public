@@ -5,7 +5,7 @@ srcdir = sys.argv[1]
 srcs = sys.argv[2:-1]
 dst = sys.argv[-1]
 
-print "%s => %s" % (srcs, dst)
+print("%s => %s" % (srcs, dst))
 try:
     shutil.rmtree(dst)
 except:

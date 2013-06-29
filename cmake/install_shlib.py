@@ -7,9 +7,9 @@ srcdir = os.path.dirname(srcfile)
 dstdir = sys.argv[2]
 
 realpath = os.path.realpath(srcfile)
-print "%s => %s" % (srcfile, dstdir)
+print("%s => %s" % (srcfile, dstdir))
 
-print "realpath:", realpath
+print("realpath: %s" % realpath)
 
 linkedfiles = []
 
@@ -26,7 +26,7 @@ dst_realfile = os.path.join(dstdir, firstone)
 if not os.path.exists(dstdir):
     os.makedirs(dstdir)
 
-print "cp", realpath, dst_realfile
+print("cp %s %s" % (realpath, dst_realfile))
 
 if os.path.exists(dst_realfile):
     os.unlink(dst_realfile)
@@ -35,7 +35,7 @@ shutil.copy2(realpath, dst_realfile)
 
 for f in linkedfiles:
     to_create = os.path.join(dstdir, f)
-    print "symlink", firstone, to_create
+    print("symlink %s %s" % (firstone, to_create))
     if os.path.exists(to_create):
         os.unlink(to_create)
     os.symlink(firstone, to_create)

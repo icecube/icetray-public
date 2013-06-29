@@ -2,7 +2,7 @@
 
 import os.path, sys
 
-print os.path.realpath(sys.argv[1])
+print(os.path.realpath(sys.argv[1]))
 
 
 
