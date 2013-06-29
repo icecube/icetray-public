@@ -252,7 +252,11 @@ void register_I3SequentialFile()
          "Close the file")
     .def("more", &I3SequentialFile::more, 
          "Return True if there are more frames in the .i3 file")
+#if PY_MAJOR_VERSION >= 3
+    .def("__next__", &I3SequentialFile::next, 
+#else
     .def("next", &I3SequentialFile::next, 
+#endif
          "Return the next frame if one is available, else throw StopIteration")
     .def("rewind", &I3SequentialFile::rewind, 
          "Rewind to beginning of file and reopen")
