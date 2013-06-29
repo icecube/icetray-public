@@ -140,11 +140,7 @@ I3Tray::AddModule(bp::object obj, const std::string& instancename)
 		    modules[instancename]->configuration_.ClassName().c_str());
 
 	I3ModulePtr module;
-#if PY_VERSION_HEX >= 0x02060000
-	if (PyBytes_Check(obj.ptr())) {
-#else
-	if (PyString_Check(obj.ptr())) {
-#endif
+	if (bp::extract<std::string>(obj).check()) {
 		// obj is a string... construct C++ module from factory
 		std::string name = bp::extract<std::string>(obj);
 		module =
