@@ -22,12 +22,12 @@ def make_counter(base):
             pass
 
         def ShouldDoPhysics(self, frame):
-            print base.__name__, "*** ShouldDoPhysics"
+            print(base.__name__ + " *** ShouldDoPhysics")
             self.sdp += 1
             return True
 
         def Physics(self, frame):
-            print base.__name__, "*** sdp ==", self.sdp
+            print(base.__name__ + " *** sdp == " + self.sdp)
             assert self.sdp == 1
             self.sdp = 0
             self.PushFrame(frame)

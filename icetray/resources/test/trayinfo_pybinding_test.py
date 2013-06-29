@@ -30,24 +30,24 @@ infoframe = f.pop_frame()
 keys = infoframe.keys()
 
 ti = infoframe[keys[0]]
-print ti
+print(ti)
 
-print ti.modules_in_order
-print ti.module_configs
+print(ti.modules_in_order)
+print(ti.module_configs)
 for m in ti.modules_in_order:
     config = ti.module_configs[m]
-    print m, config.ClassName, config.InstanceName, config.keys()
+    print("%s: %s %s Configs: %s" % (m, config.ClassName, config.InstanceName, list(config.keys())))
     for k in config.keys():
-        print k, "=", config[k]
+        print("%s = %s" % (k, config[k]))
 
 
 assert ti.module_configs['put_ints']['where'] == 'thisiswhere'
 assert ti.module_configs['put_ints']['value'] == 777
 assert ti.module_configs['put_ints']['somedict'] == { 'five' : 5, 'six' : 6 }
-print ti.host_info
-print ti.svn_url
-print ti.svn_revision
-print ti.svn_externals
+print(ti.host_info)
+print(ti.svn_url)
+print(ti.svn_revision)
+print(ti.svn_externals)
 
 
 

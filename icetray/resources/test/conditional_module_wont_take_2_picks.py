@@ -16,8 +16,8 @@ tray.AddModule("TrashCan", "tc")
 
 try:
     tray.Execute(1)
-except Exception, e:
-    print "ok, threw as expected"
+except:
+    print("ok, threw as expected")
     sys.exit(0)
 else:
     sys.exit(1)

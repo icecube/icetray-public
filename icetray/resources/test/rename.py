@@ -39,20 +39,20 @@ tray.AddModule("TrashCan","adios")
 
 tray.Execute(215)
 
-print "gonna get usage"
+print("gonna get usage")
 
 u = tray.Usage()
 
-print "Got Usage:", u
+print("Got Usage: %s" % u)
 
-print "*****\n"*4
+print("*****\n"*4)
 for entry in u:
-    print "%25s => %s" % (entry.key(), entry.data())
-print "*****\n"*4
+    print("%25s => %s" % (entry.key(), entry.data()))
+print("*****\n"*4)
 
-print "Total system time=", sum([entry.data().systime for entry in u])
-print "Total user time=  ",   sum([entry.data().usertime for entry in u])
-print "Max ncall=        ",   max([entry.data().ncall for entry in u])
+print("Total system time= %f s" % sum([entry.data().systime for entry in u]))
+print("Total user time=   %f s" % sum([entry.data().usertime for entry in u]))
+print("Max ncall=         %f s" % max([entry.data().ncall for entry in u]))
 
 tray.Finish()
 
