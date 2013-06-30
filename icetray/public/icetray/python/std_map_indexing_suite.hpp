@@ -192,9 +192,14 @@ return incref(tuple.attr("__iter__")().ptr());
         {
             object newmap = object(Container());
             int numkeys = extract<int>(keys.attr("__len__")());
+            object keys_iter = keys.attr("__iter__")();
             for(int i=0;i<numkeys;i++) { // 'cuz python is more fun in C++...
-                newmap.attr("__setitem__")
-                  (keys.attr("__getitem__")(i),value);
+#if PY_MAJOR_VERSION >= 3
+                object key = keys_iter.attr("__next__")();
+#else
+                object key = keys_iter.attr("next")();
+#endif
+                newmap.attr("__setitem__")(key,value);
             }
             return newmap;
         }
@@ -240,8 +245,13 @@ return incref(tuple.attr("__iter__")().ptr());
             object key;
             object keys = dictlike.attr("keys")();
             int numkeys = extract<int>(keys.attr("__len__")());
+            object keys_iter = keys.attr("__iter__")();
             for(int i=0;i<numkeys;i++) {
-                key = keys.attr("__getitem__")(i);
+#if PY_MAJOR_VERSION >= 3
+                key = keys_iter.attr("__next__")();
+#else
+                key = keys_iter.attr("next")();
+#endif
                 x.attr("__setitem__")(key,dictlike.attr("__getitem__")(key));
             }
             
