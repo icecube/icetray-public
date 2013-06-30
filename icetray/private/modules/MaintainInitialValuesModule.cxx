@@ -28,10 +28,11 @@ static std::string string_param;
 static OMKey omkey_param;
 
 struct MyService{};
-static shared_ptr<MyService> service_ptr_param;
 
 struct MaintainInitialValuesModule : I3Module
 {
+  shared_ptr<MyService> service_ptr_param;
+
   MaintainInitialValuesModule(const I3Context& context) : I3Module(context) 
   { 
     AddOutBox("OutBox");
