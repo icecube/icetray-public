@@ -32,19 +32,12 @@ namespace boost { namespace python {
 
 namespace detail {
 
-#define HAS_TYPEDEF(def, name)                                           \
-	template<typename T>                                             \
-	struct name                                                      \
-	{                                                                \
-	private:                                                         \
-	    typedef char                      yes;                       \
-	    typedef struct { char array[2]; } no;                        \
-                                                                         \
-	    template<typename C> static yes test(typename C::def*);      \
-	    template<typename C> static no  test(...);                   \
-	public:                                                          \
-	    static const bool value = sizeof(test<T>(0)) == sizeof(yes); \
-	}                                                                \
+#define HAS_TYPEDEF(def, name)                                                 \
+	template<typename T, typename Dummy=void>                                  \
+	struct name : public boost::false_type{};                                  \
+	template<typename T>                                                       \
+	struct name<T,typename boost::mpl::if_c<false,typename T::def,void>::type> \
+	: public boost::true_type{};
 
 HAS_TYPEDEF(iterator, has_iterator);
 HAS_TYPEDEF(fixed_depth_iterator, is_tree);

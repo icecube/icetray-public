@@ -27,6 +27,81 @@ namespace boost { namespace python {
         class final_std_map_derived_policies
             : public std_map_indexing_suite<Container,
                 NoProxy, final_std_map_derived_policies<Container, NoProxy> > {};
+		
+#define HAS_TYPEDEF(def, name)                                                 \
+    template<typename T, typename Dummy=void>                                  \
+    struct name : public boost::false_type{};                                  \
+    template<typename T>                                                       \
+    struct name<T,typename boost::mpl::if_c<false,typename T::def,void>::type> \
+    : public boost::true_type{};
+        
+        HAS_TYPEDEF(hasher, is_hash_map);
+        
+#undef HAS_TYPEDEF
+        
+#define HAS_FUNCTION(func,result_type,name)                         \
+    namespace func ## test {                                        \
+        template <typename U, U> class check { };                   \
+        template <typename C>                                       \
+        static char f(check<typename C::result_type (C::*)() const, \
+                      &C::func>*);                                  \
+        template <typename C> static long f(...);                   \
+    }                                                               \
+    template<typename T, typename Dummy=void>                       \
+    struct name : public boost::false_type{};                       \
+    template <typename T>                                           \
+    struct name<T,typename boost::mpl::if_c<                        \
+        sizeof(func ## test :: f<T>(0)) != sizeof(char),            \
+        int,void>::type>                                            \
+    : public boost::true_type{};
+        
+        HAS_FUNCTION(hash_funct,hasher,is_ext_hash_map);
+        HAS_FUNCTION(hash_function,hasher,is_std_unordered_map);
+        
+#undef HAS_FUNCTION
+        
+        template<typename HashMap>
+        static
+        typename boost::enable_if<
+            is_ext_hash_map<HashMap>,
+            typename HashMap::hasher
+        >::type
+        get_hasher(const HashMap& m){
+            return m.hash_funct();
+        }
+        
+        template<typename HashMap>
+        static
+        typename boost::enable_if<
+            is_std_unordered_map<HashMap>,
+            typename HashMap::hasher
+        >::type
+        get_hasher(const HashMap& m){
+            return m.hash_function();
+        }
+        
+        template<typename Map>
+        static
+        typename boost::disable_if<
+            is_hash_map<Map>,
+            bool
+        >::type
+        compare_keys(Map& m, typename Map::key_type a, typename Map::key_type b){
+            return m.key_comp()(a, b);
+        }
+        
+        template<typename Map>
+        static
+        typename boost::enable_if<
+            is_hash_map<Map>,
+            bool
+        >::type
+        compare_keys(Map& m, typename Map::key_type a, typename Map::key_type b){
+        typename Map::hasher hash = get_hasher(m);
+            if(hash(a)!=hash(b))
+                return false;
+            return m.key_eq()(a, b);
+        }
     }
 
     // The map_indexing_suite class is a predefined indexing_suite derived
@@ -376,7 +451,7 @@ return incref(tuple.attr("__iter__")().ptr());
         static bool
         compare_index(Container& container, index_type a, index_type b)
         {
-            return container.key_comp()(a, b);
+            return detail::compare_keys(container, a, b);
         }
 
         static index_type
