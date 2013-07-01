@@ -14,13 +14,13 @@ import sys
 i3f = dataio.I3File("alphabet.i3", dataio.I3File.Mode.Writing)
 
 streams = [chr(x) for x in
-           range(ord('a'), ord('z')+1)
-           + range(ord('A'), ord('Z')+1) + range(ord('0'), ord('9')+1)]
+           list(range(ord('a'), ord('z')+1))
+           + list(range(ord('A'), ord('Z')+1)) + list(range(ord('0'), ord('9')+1))]
 
 index = 0;
 
 for st in streams:
-    print "=====", st, "====="
+    print("=====", st, "=====")
     theframe = icetray.I3Frame(icetray.I3Frame.Stream(st))
     theframe[st] = icetray.I3Int(ord(st))
     theframe['index'] = icetray.I3Int(index)
@@ -30,6 +30,6 @@ for st in streams:
 i3f.close()
 
 for frame in dataio.I3File("alphabet.i3"):
-    print frame
+    print(frame)
     assert frame.Stop.id == streams[0]
     streams = streams[1:]
