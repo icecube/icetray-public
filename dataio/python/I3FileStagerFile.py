@@ -1,7 +1,11 @@
 import copy
-import os
-import urlparse
-import urllib2
+import os, sys
+
+if sys.version_info[0] >= 3:
+	import urllib.parse
+	import urllib.request, urllib.error, urllib.parse
+else:
+	import urllib
 import tempfile
 import shutil
 
@@ -37,8 +41,8 @@ class I3FileStagerFile(I3FileStager):
 			icetray.logging.log_info("Removing scratch directory %s" % self.scratch_dir, unit="I3FileStagerFile")
 			try:
 				os.rmdir(self.scratch_dir)
-			except OSError, e:
-				print e
+			except OSError as e:
+				print(e)
 
 	def Schemes(self):
 		# we handle "file://" URLs
@@ -51,7 +55,7 @@ class I3FileStagerFile(I3FileStager):
 
 	def StageFile(self, url):
 		# parse the URL
-		parsed_url = urlparse.urlparse(url, scheme="file") # use "file" as the default scheme
+		parsed_url = urllib.parse.urlparse(url, scheme="file") # use "file" as the default scheme
 		if parsed_url[0] not in self.Schemes():
 			icetray.logging.log_fatal("Cannot handle URL scheme \"%s\": %s" % (parsed_url[0], url), unit="I3FileStagerFile")
 		input_path = parsed_url[2]
@@ -82,14 +86,14 @@ class I3FileStagerFile(I3FileStager):
 			icetray.logging.log_info("Downloading %s to %s" % (url, output_path), unit="I3FileStagerFile")
 
 			try:
-				f = urllib2.urlopen(url)
+				f = urllib.request.urlopen(url)
 				data = f.read()
 				output_file = open(output_path, "wb")
 				output_file.write(data)
 				f.close()
 
 				icetray.logging.log_info("Download finished: %s to %s" % (url, output_path), unit="I3FileStagerFile")
-			except urllib2.HTTPError, e:
+			except urllib.error.HTTPError as e:
 				icetray.logging.log_fatal("Download error: %s" % str(e), unit="I3FileStagerFile")
 				pass
 			except:
@@ -106,8 +110,8 @@ class I3FileStagerFile(I3FileStager):
 		try:
 			icetray.logging.log_info("Removing file %s" % filename, unit="I3FileStagerFile")
 			os.remove(filename)
-		except OSError, e:
-			print e
+		except OSError as e:
+			print(e)
 
 		self.staged_files.remove(filename)
 
