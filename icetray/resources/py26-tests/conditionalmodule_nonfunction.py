@@ -18,14 +18,14 @@ try:
     tray.AddModule("Dump", "dump")
     tray.AddModule("TrashCan", "tc")
 
-    print "About to execute    "
+    print("About to execute    ")
     # do it 5 times.
     tray.Execute(3)
-except Exception, e:
-    print e, "ok, at that threw as expected."
+except Exception as e:
+    print(e, "ok, at that threw as expected.")
     sys.exit(0)
 else:
-    print "ERROR Shouldn't get here, that shoudl have thrown."
+    print("ERROR Shouldn't get here, that should have thrown.")
     sys.exit(1)
 
 

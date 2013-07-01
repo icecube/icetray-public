@@ -27,7 +27,7 @@ tray.AddModule("Dump", "dump")
 try:
     tray.Execute(10)
     assert False, "That should have thrown"
-except RuntimeError, e:
-    print "Okay, caught:", e
-    print "thrown as expected."
+except RuntimeError as e:
+    print("Okay, caught:", e)
+    print("thrown as expected.")
 

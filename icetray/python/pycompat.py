@@ -2,6 +2,13 @@
 Provide Python built-in functions introduced after version 2.4.
 """
 
+import sys
+
+try:
+	sys.maxsize
+except AttributeError:
+	sys.maxsize = sys.maxint
+
 try:
 	all	
 except NameError:

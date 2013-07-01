@@ -31,9 +31,9 @@ try:
 
     tray.Execute(11)
     tray.Finish()
-except StandardError, t:
-    print t
-    print "FAIL!!!"
+except Exception as t:
+    print(t)
+    print("FAIL!!!")
     sys.exit(1)
 else:
     # this should run without throwing

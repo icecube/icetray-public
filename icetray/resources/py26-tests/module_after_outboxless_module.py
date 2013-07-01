@@ -30,9 +30,9 @@ tray.AddModule("TrashCan","tc")
 try:
     tray.Execute(15)
     assert False, "That shoudl have thrown"
-except RuntimeError, e:
-    print "good, caught", e
-    print "okay."
+except RuntimeError as e:
+    print("good, caught", e)
+    print("okay.")
 
 
 

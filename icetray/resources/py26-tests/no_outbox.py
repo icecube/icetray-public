@@ -26,9 +26,9 @@ tray.AddModule(NoOutboxModule,"do")
 try:
     tray.Execute(1)
     assert False, "that should have thrown"
-except RuntimeError, e:
-    print "caught:", e
-    print "OK, that threw as we would have hoped."
+except RuntimeError as e:
+    print("caught:", e)
+    print("OK, that threw as we would have hoped.")
 
 
 

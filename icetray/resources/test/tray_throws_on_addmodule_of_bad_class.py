@@ -14,11 +14,11 @@ class Notamodule:
 
 try:
     tray.AddModule(Notamodule,"shouldfail")
-    print "that should have thrown"
+    print("that should have thrown")
     sys.exit(1)
 
-except RuntimeError, e:
-    print "As expected, caught '%s'" % e
+except RuntimeError as e:
+    print("As expected, caught '%s'" % e)
 
                    
 

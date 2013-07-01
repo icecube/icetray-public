@@ -28,11 +28,11 @@ try:
     t.Execute(1)
     t.Finish()
 
-except TypeError, t:
+except TypeError as t:
 
-    print "OK, threw as expected", t
+    print("OK, threw as expected", t)
     sys.exit(0)
 
 else:
-    print "that should throw with descriptive error"
+    print("that should throw with descriptive error")
     sys.exit(1)
