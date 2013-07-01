@@ -15,7 +15,7 @@ import re
 import math
 import cgi
 
-import i3inspect
+from icecube.icetray import i3inspect
 
 from jinja2 import Template
 
@@ -97,11 +97,11 @@ class ModuleInstance:
 
     def get_params(self):
         result = dict()
-        for pname, pvalue in self.paramvalues.iteritems():
+        for pname, pvalue in self.paramvalues.items():
             pdesc = self.module.params[pname]
             result[pdesc.name] = (pvalue, pdesc.defaultvalue, pdesc.description)
 
-        for pname, pdesc in self.module.params.iteritems():
+        for pname, pdesc in self.module.params.items():
             if pdesc.name not in result:
                 result[pdesc.name] = (pdesc.defaultvalue, pdesc.defaultvalue, pdesc.description)
 
@@ -109,7 +109,7 @@ class ModuleInstance:
 
     def __str__(self):
         rep = "%s '%s'" % (self.module.typename, self.instancename)
-        for pname, pvalue in self.paramvalues.iteritems():
+        for pname, pvalue in self.paramvalues.items():
             rep += '\n    %s=%s' % (pname, repr(pvalue))
         return rep
 
@@ -120,13 +120,13 @@ class XMLOutput:
 
         self.modules = []
 
-        for k, mod in itertools.chain(modules.iteritems(), 
-                                      services.iteritems()):
+        for k, mod in itertools.chain(iter(modules.items()), 
+                                      iter(services.items())):
             d = dict()
             d["classname"] = self.escape(mod.module.typename)
             d["instancename"] = self.escape(mod.instancename)
             d["params"] = []
-            for pname,(pvalue,pdefault,pdesc) in mod.get_params().iteritems(): 
+            for pname,(pvalue,pdefault,pdesc) in mod.get_params().items(): 
                 d["params"].append( dict(name=self.escape(pname), 
                                          default=self.escape(pdefault), 
                                          configured=self.escape(pvalue), 
@@ -187,7 +187,7 @@ class I3TrayDebugger:
         mod = ModuleDescription(typename)
         
         inst = ModuleInstance(instancename, mod)
-        for pname, pvalue in paramvalues.iteritems():
+        for pname, pvalue in paramvalues.items():
             inst.set_param(pname, pvalue) 
 
         return inst
@@ -228,7 +228,7 @@ class I3TrayDebugger:
         rep = str()
         if len(self.services) > 0:
             rep += center("I3Services", "-", 60)
-            for name, conf in self.services.iteritems():
+            for name, conf in self.services.items():
                 rep += "\n" + str(conf)
         if len(self.modules) > 0:
             rep += "\n" + center("I3Modules", "-", 60)
@@ -237,10 +237,10 @@ class I3TrayDebugger:
         return rep
 
     def Execute(self, maxcount=0):
-        print self
+        print(self)
         
         if self.outputfile is not None:
-            print "creating graph"
+            print("creating graph")
             XMLOutput(self.modules, self.services).generate(self.outputfile)
 
     def Finish(self):

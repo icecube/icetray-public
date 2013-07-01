@@ -1,10 +1,10 @@
 from icecube.load_pybindings import load_pybindings
 load_pybindings(__name__, __path__)
 
-from test_module import I3TestModuleFactory
-from traysegment import traysegment, traysegment_inherit, module_altconfig
-from pypick import pypick
-import i3logging as logging
+from icecube.icetray.test_module import I3TestModuleFactory
+from icecube.icetray.traysegment import traysegment, traysegment_inherit, module_altconfig
+from icecube.icetray.pypick import pypick
+from icecube.icetray import i3logging as logging
 
 import atexit
 def fix_logging_crash():
@@ -14,6 +14,6 @@ def fix_logging_crash():
 atexit.register(fix_logging_crash)
 
 try:
-	from traydebug import I3TrayDebugger
+	from icecube.icetray.traydebug import I3TrayDebugger
 except ImportError:
 	pass
