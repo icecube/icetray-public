@@ -29,3 +29,10 @@ except NameError:
 			if element:
 				return True
 		return False
+
+try:
+	next
+except NameError:
+	def next(iterable):
+		return iterable.next()
+
