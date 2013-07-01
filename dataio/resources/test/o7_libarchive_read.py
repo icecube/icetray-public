@@ -12,11 +12,11 @@ if not 'I3_PORTS' in os.environ:
 	print("I3_PORTS is not set!")
 	sys.exit(1)
 	
-fname = os.path.join(os.environ['I3_BUILD'], 'dataio/resources/data/serialization/r51782/I3DOMLaunchSeriesMap.i3')
+fname = os.path.join(os.environ['I3_PORTS'], 'test-data/dataio/serialization/r51782/I3DOMLaunchSeriesMap.i3')
 
 if not os.path.exists(fname):
 	print("Can't find test file '%s'; skipping archive-reading tests." % fname)
-        sys.exit(0)
+	sys.exit(0)
 
 from icecube import icetray, dataio
 
