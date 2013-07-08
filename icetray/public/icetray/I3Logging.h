@@ -178,7 +178,7 @@ SET_LOGGER("Unknown");
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, msg, )
 #define log_fatal_stream(msg) I3_STREAM_LOGGER(I3LOG_FATAL, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, msg, \
-    throw std::runtime_error(s.str() + " (in " + __PRETTY_FUNCTION__ + ")");)
+    throw std::runtime_error(_i3_str_logger_str.str() + " (in " + __PRETTY_FUNCTION__ + ")");)
 #else
 #define log_fatal(format, ...) I3_LOGGER(I3LOG_FATAL, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
