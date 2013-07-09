@@ -42,11 +42,6 @@ from icecube.icetray import traysegment
 import inspect, re, glob, sys, cgi
 from os.path import splitext, basename
 
-if sys.version_info[:2] < (2,6):
-	from icecube.icetray.inspecthelpers2 import i3inspect_getconfig,i3inspect_load
-else:
-	from icecube.icetray.inspecthelpers3 import i3inspect_getconfig,i3inspect_load
-	
 if opts.all:
 	args += [splitext(basename(fname))[0][3:] for fname in glob.glob('%s/lib*' % opts.all)]
 
@@ -147,8 +142,10 @@ def display_config(mod, category, modname=None):
 			modname = mod
 			
 		try:
-			config = i3inspect_getconfig(mod)
+			config = i3inspect.get_configuration(mod)
 		except RuntimeError:
+			e = sys.exc_info[1]
+			sys.stderr.write("Error constructing '%s': %s" % (mod, e))
 			return False
 			
 		if isinstance(mod, str):
@@ -206,10 +203,13 @@ for project in args:
 		py_modules = i3inspect.harvest_objects(module, i3inspect.is_I3Module)
 		traysegments = i3inspect.harvest_objects(module, i3inspect.is_traysegment)
 	except ImportError:
-		if i3inspect_load(project):
+		try:
+			icetray.load(project, False)
 			py_modules = []
 			traysegments = []
-		else:
+		except RuntimeError:
+			e = sys.exc_info()[1]
+			sys.stderr.write("Ignoring '%s': %s" % (project, e))
 			continue
 		
 	cxx_modules = icetray.modules(project)
