@@ -97,8 +97,23 @@ else(NOT NUMPY_FOUND)
 	set(NUMPY_FOUND TRUE CACHE BOOL "Numpy found successfully" FORCE)
 	execute_process(COMMAND ${PYTHON_EXECUTABLE} -c
 	    "import numpy; print(numpy.get_include())"
-           OUTPUT_VARIABLE NUMPY_INCLUDE_DIR
+           OUTPUT_VARIABLE _NUMPY_INCLUDE_DIR
 	    OUTPUT_STRIP_TRAILING_WHITESPACE)
+    
+    # look in some other places, too. This should make it 
+    # work on OS X, where the headers are in SDKs within XCode.app,
+    # but python reports them as being available at /.
+    set(NUMPY_INCLUDE_DIR_CANDIDATES ${_NUMPY_INCLUDE_DIR})
+    foreach(prefix ${CMAKE_PREFIX_PATH})
+        list(APPEND NUMPY_INCLUDE_DIR_CANDIDATES ${prefix}/${_NUMPY_INCLUDE_DIR})
+        list(APPEND NUMPY_INCLUDE_DIR_CANDIDATES ${prefix}/../${_NUMPY_INCLUDE_DIR})
+    endforeach(prefix ${CMAKE_PREFIX_PATH})
+    foreach(prefix ${CMAKE_FRAMEWORK_PATH})
+        list(APPEND NUMPY_INCLUDE_DIR_CANDIDATES ${prefix}/${_NUMPY_INCLUDE_DIR})
+        list(APPEND NUMPY_INCLUDE_DIR_CANDIDATES ${prefix}/../../../${_NUMPY_INCLUDE_DIR})
+    endforeach(prefix ${CMAKE_FRAMEWORK_PATH})
+
+	find_path(NUMPY_INCLUDE_DIR NAMES numpy/ndarrayobject.h PATHS ${NUMPY_INCLUDE_DIR_CANDIDATES})
 	set(NUMPY_INCLUDE_DIR ${NUMPY_INCLUDE_DIR} CACHE STRING "Numpy inc directory" FORCE)
 	message(STATUS "+    numpy: ${NUMPY_INCLUDE_DIR}")
 endif(NOT NUMPY_FOUND)

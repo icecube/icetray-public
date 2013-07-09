@@ -40,6 +40,18 @@ if(COMMAND cmake_policy)
 endif(COMMAND cmake_policy)
 
 #
+# search for header, libraries and frameworks inside of the system
+# SDK directory on OS X.
+#
+if (APPLE)
+  list(APPEND CMAKE_PREFIX_PATH ${CMAKE_OSX_SYSROOT}/usr)
+  set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} CACHE PATH "" FORCE)
+
+  list(APPEND CMAKE_FRAMEWORK_PATH ${CMAKE_OSX_SYSROOT}/System/Library/Frameworks)
+  set(CMAKE_FRAMEWORK_PATH ${CMAKE_FRAMEWORK_PATH} CACHE PATH "" FORCE)
+endif (APPLE)
+
+#
 #  this was a failed attempt to fix ticket #181.
 #  
 #

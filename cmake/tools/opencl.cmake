@@ -29,19 +29,19 @@ IF (APPLE)
         FOREACH(dir ${OpenCL_FRAMEWORKS})
             SET(OPENCL_FRAMEWORK_INCLUDES ${OPENCL_FRAMEWORK_INCLUDES} ${dir}/Versions/Current/Headers)
         ENDFOREACH(dir)
-        
+
         FIND_PATH(OPENCL_INCLUDE_DIR
             NAMES cl.h
             PATHS ${OPENCL_FRAMEWORK_INCLUDES}
         )
         
-        REPORT_FIND(OpenCL cl.h ${OPENCL_FRAMEWORK_INCLUDES})
+        REPORT_FIND(OpenCL cl.h ${OPENCL_INCLUDE_DIR})
 
         # If a framework has been selected for the include path,
         # make sure "-framework" is used to link it.
-        IF("${OPENCL_INCLUDE_PATH}" MATCHES "OpenCL\\.framework")
+        IF("${OPENCL_INCLUDE_DIR}" MATCHES "OpenCL\\.framework")
           SET(OPENCL_LIBRARIES "")
-        ENDIF("${OPENCL_INCLUDE_PATH}" MATCHES "OpenCL\\.framework")
+        ENDIF("${OPENCL_INCLUDE_DIR}" MATCHES "OpenCL\\.framework")
         IF(NOT OPENCL_LIBRARIES)
           SET (OPENCL_LIBRARIES "-framework OpenCL" CACHE FILEPATH "OpenCL Framework" FORCE)
         ENDIF(NOT OPENCL_LIBRARIES)
