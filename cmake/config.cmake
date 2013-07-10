@@ -279,6 +279,18 @@ configure_file(${CMAKE_SOURCE_DIR}/cmake/I3.h.in
 add_definitions(-D_REEENTRANT -fPIC)
 
 #
+# New versions of clang changed the default template depth
+# to 128. This is not enough for boost::python. Change it to
+# a somewhat higher value. 
+# 
+# This affects clang as shipped by Apple in OSX 10.9-DP3:
+# "Apple LLVM version 5.0 (clang-500.1.65) (based on LLVM 3.3svn)"
+#
+if (USE_CCACHE OR CMAKE_COMPILER_IS_CLANG)
+  add_definitions(-ftemplate-depth=256)
+endif (USE_CCACHE OR CMAKE_COMPILER_IS_CLANG)
+
+#
 # libraries everybody links to
 #
 if (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
