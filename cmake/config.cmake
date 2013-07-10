@@ -286,9 +286,9 @@ add_definitions(-D_REEENTRANT -fPIC)
 # This affects clang as shipped by Apple in OSX 10.9-DP3:
 # "Apple LLVM version 5.0 (clang-500.1.65) (based on LLVM 3.3svn)"
 #
-if (USE_CCACHE OR CMAKE_COMPILER_IS_CLANG)
+if (CMAKE_COMPILER_IS_CLANG)
   add_definitions(-ftemplate-depth=256)
-endif (USE_CCACHE OR CMAKE_COMPILER_IS_CLANG)
+endif (CMAKE_COMPILER_IS_CLANG)
 
 #
 # libraries everybody links to
