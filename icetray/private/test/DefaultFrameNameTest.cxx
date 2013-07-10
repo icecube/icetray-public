@@ -38,7 +38,7 @@ TEST(default_name_ptr)
   frame.Put(tested);
 
   TestedDataConstPtr testedOut = frame.Get<TestedDataConstPtr>();
-  ENSURE(testedOut);
+  ENSURE((bool)testedOut);
   ENSURE(testedOut->data==56,"Data same when it comes out");
 }
 
@@ -52,7 +52,7 @@ TEST(testing_const_cast_ptr)
   frame.Put(tested);
 
   TestedDataConstPtr testedOut = frame.Get<TestedDataConstPtr>();
-  ENSURE(testedOut);
+  ENSURE((bool)testedOut);
   ENSURE(testedOut->data==56,"Data same when it comes out");
   TestedDataPtr unconst = boost::const_pointer_cast<TestedData>(testedOut);
   unconst->data = 90;

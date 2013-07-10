@@ -437,7 +437,7 @@ class I3Frame
     map_t::const_iterator iter = map_.find(name);
     if (iter == map_.end())
       return false;
-    return iter->second->ptr;
+    return (bool)iter->second->ptr;
   }
 #endif
 

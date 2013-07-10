@@ -122,7 +122,7 @@ TEST(i3int_only)
   }
   ip = boost::dynamic_pointer_cast<I3Int>(fop);
 
-  ENSURE(ip, "egh, not ip");
+  ENSURE((bool)ip, "egh, not ip");
   ENSURE_EQUAL(ip->value, 7777, "egh, wrong value");
 }
 

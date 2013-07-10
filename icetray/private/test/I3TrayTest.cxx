@@ -137,7 +137,8 @@ TEST(missing_module_fails_correctly)
   
   tray.AddModule("BottomlessSource", "source");
 
-  std::vector<std::string> params = list_of("OutBox");
+  std::vector<std::string> params;
+  params.push_back("OutBox");
   tray.AddModule("Fork", "fork")
     ("Outboxes", params);
 
@@ -162,11 +163,13 @@ TEST(no_such_module)
 
   tray.AddModule("BottomlessSource", "source");
 
-  params = list_of("OutBox")("BadBox");
+  params.push_back("OutBox");
+  params.push_back("BadBox");
   tray.AddModule("Fork", "fork")
     ("Outboxes", params);
 
-  params = list_of("OutBox");
+  params.clear();
+  params.push_back("OutBox");
   tray.AddModule("Fork", "fork2")
     ("Outboxes", params);
   tray.ConnectBoxes("source", "OutBox", "fork");

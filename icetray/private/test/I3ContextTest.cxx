@@ -104,7 +104,7 @@ TEST(has)
   THROWS(c.Get<Cc>("constc"));
   c.Get<const Cc>("constc"); // doesnt throw
   ENSURE(!c.Get<CcPtr>("constc")); // returns null.  
-  ENSURE(c.Get<CcConstPtr>("constc")); // success
+  ENSURE((bool)c.Get<CcConstPtr>("constc")); // success
 
   ENSURE(!c.Has<Dd>("dplace"));
   ENSURE(!c.Has<const Dd>("dplace"));
@@ -143,7 +143,7 @@ TEST(has)
   ENSURE(c.Has<DdPtr>());
   ENSURE(!c.Has<DdConstPtr>());
   ENSURE(!c.Has<const DdConstPtr>());
-  ENSURE(c.Get<DdPtr>());
+  ENSURE((bool)c.Get<DdPtr>());
   ENSURE(!c.Get<DdConstPtr>());
 
   c.Get<Cc>();

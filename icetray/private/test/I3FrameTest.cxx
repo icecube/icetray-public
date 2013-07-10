@@ -81,7 +81,7 @@ TEST(Get)
 
   ENSURE(!f.has_blob("t"));
   ENSURE(f.has_ptr("t"));
-  ENSURE(f.Get<I3IntConstPtr>("t"));
+  ENSURE((bool)f.Get<I3IntConstPtr>("t"));
   I3IntConstPtr ip = f.Get<I3IntConstPtr>("t");
   ENSURE_EQUAL(ip->value, ptr->value);
   ENSURE_EQUAL(ip.get(), ptr.get());
@@ -107,7 +107,7 @@ TEST(const_iterator_begin)
   I3Frame::const_iterator iter = f.begin();
 
   ENSURE(iter != f.end());
-  ENSURE(iter->second);
+  ENSURE((bool)iter->second);
   I3IntConstPtr newt = dynamic_pointer_cast<const I3Int>(iter->second);
   // hmm, where's #3?
   ENSURE_EQUAL(ptr.use_count(), 4);
@@ -132,7 +132,7 @@ TEST(saveload)
   ENSURE(!fp->has_ptr("t"));
   ENSURE(fp->Has("t"));
   I3IntConstPtr ip = fp->Get<I3IntConstPtr>("t");
-  ENSURE(ip);
+  ENSURE((bool)ip);
   ENSURE(ip != ptr);
   ENSURE_EQUAL(ip->value, ptr->value);
   ENSURE(fp->has_ptr("t"));
@@ -142,7 +142,7 @@ TEST(saveload)
 TEST(a_t_serializes)
 {
   I3IntPtr ptr(new I3Int(std::numeric_limits<int>::max()));
-  ENSURE(ptr);
+  ENSURE((bool)ptr);
 
   std::ofstream ofs("i3int");
   boost::archive::portable_binary_oarchive poa(ofs);
@@ -240,7 +240,7 @@ TEST(deserialize_iterator)
   I3Frame::const_iterator iter2 = p->begin();
   while(iter2 != p->end())
     {
-      ENSURE(iter2->second);
+      ENSURE((bool)iter2->second);
       iter2++;
     }
 
@@ -347,7 +347,7 @@ TEST(find)
   ENSURE(p->has_ptr("66") == false);
   ENSURE(p->has_blob("66") == true);
   I3IntConstPtr pi = boost::dynamic_pointer_cast<const I3Int>(iter->second);
-  ENSURE(pi);
+  ENSURE((bool)pi);
   std::cout << "66 should be... " << pi->value << "\n";
   ENSURE_EQUAL(pi->value, 66);
 

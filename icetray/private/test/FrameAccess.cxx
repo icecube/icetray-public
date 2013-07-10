@@ -48,11 +48,11 @@ TEST(test)
   }
   frame.Put("daughter",daughter_ptr);
 
-  ENSURE(frame.Get<GrandpaConstPtr>("grandpa"));
+  ENSURE((bool)frame.Get<GrandpaConstPtr>("grandpa"));
   const Grandpa& grandpa = frame.Get<Grandpa>("grandpa");
   ENSURE(&grandpa);
 
-  ENSURE(frame.Get<PaConstPtr>("pa"));
+  ENSURE((bool)frame.Get<PaConstPtr>("pa"));
   try {
     const Pa& pa = frame.Get<Pa>("grandpa");
     std::cout << "got pa @ " << &pa;
@@ -60,14 +60,14 @@ TEST(test)
   } catch (const std::exception& e) {
     // ok
   }
-  ENSURE(frame.Get<SonConstPtr>("son"));
-  ENSURE(frame.Get<DaughterConstPtr>("daughter"));
+  ENSURE((bool)frame.Get<SonConstPtr>("son"));
+  ENSURE((bool)frame.Get<DaughterConstPtr>("daughter"));
     
-  ENSURE(frame.Get<PaConstPtr>("son"));
+  ENSURE((bool)frame.Get<PaConstPtr>("son"));
   frame.Get<Pa>("son");
   frame.Get<Grandpa>("son");
 
-  ENSURE(frame.Get<GrandpaConstPtr>("son"));
+  ENSURE((bool)frame.Get<GrandpaConstPtr>("son"));
 
   const Grandpa& gp = frame.Get<Daughter>("daughter");
   ENSURE(&gp);
