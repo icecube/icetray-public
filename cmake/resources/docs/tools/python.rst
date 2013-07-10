@@ -18,9 +18,9 @@ a python in a nonstandard location refer to :ref:`ns-python`. After
 you have ensured that you have python and your development packages
 installed, you will probably want to set up additional python tools.
 
-**Note**: At a minimum, you're going to need at Python 2.4 or
-better. Python 2.4 is rapidly becoming deprecated with in IceCube,
-therefore it is *strongly* recommended you use Python 2.6 or better.
+**Note**: Python 2.6 or newer (up to 3.3 has been tested) are *strongly*
+recommended. Limited functionality may be available on Python 2.4 and 2.5.
+Python older than 2.4 is completely unsupported and will not work.
 
 Setting Up Additional Python Tools
 ----------------------------------
