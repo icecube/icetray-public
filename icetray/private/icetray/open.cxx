@@ -176,6 +176,16 @@ int dc_errno;
 
 #ifdef I3_WITH_LIBARCHIVE
 
+#if ARCHIVE_VERSION_NUMBER < 3000000
+// Forwards compatibility macros
+#define archive_read_free archive_read_finish
+#define archive_read_support_filter_all archive_read_support_compression_all 
+#define archive_read_support_filter_gzip archive_read_support_compression_gzip
+#define archive_read_support_filter_bzip2 archive_read_support_compression_bzip2
+#define archive_read_support_filter_lzma archive_read_support_compression_lzma
+#define archive_read_support_filter_xz archive_read_support_compression_xz
+#endif
+
 struct archive_filter {
 	typedef char char_type;
 	typedef boost::iostreams::multichar_input_filter_tag category;
@@ -198,7 +208,7 @@ struct archive_filter {
 	{
 		if (!ar) return;
 		
-		archive_read_finish(ar);
+		archive_read_free(ar);
 	}
 	
 	archive_filter(const std::string& filename) :
@@ -212,23 +222,23 @@ struct archive_filter {
 		
 		switch (comp) {
 			case GZIP:
-				if (archive_read_support_compression_gzip(reader_.get()) == ARCHIVE_WARN)
+				if (archive_read_support_filter_gzip(reader_.get()) == ARCHIVE_WARN)
 					log_debug("(archive_filter) no built-in gzip decompression.");
 				break;
 			case BZIP2:
-				if (archive_read_support_compression_bzip2(reader_.get()) == ARCHIVE_WARN)
+				if (archive_read_support_filter_bzip2(reader_.get()) == ARCHIVE_WARN)
 					log_debug("(archive_filter) no built-in bzip2 decompression.");
 				break;
 			case LZMA:
-				if (archive_read_support_compression_lzma(reader_.get()) == ARCHIVE_WARN)
+				if (archive_read_support_filter_lzma(reader_.get()) == ARCHIVE_WARN)
 					log_debug("(archive_filter) no built-in lzma decompression.");
 				break;
 			case XZ:
-				if (archive_read_support_compression_xz(reader_.get()) == ARCHIVE_WARN)
+				if (archive_read_support_filter_xz(reader_.get()) == ARCHIVE_WARN)
 					log_debug("(archive_filter) no built-in xz decompression.");
 				break;
 			default:
-				archive_read_support_compression_all(reader_.get());
+				archive_read_support_filter_all(reader_.get());
 				log_warn("(archive_filter) The compression scheme of file '%s' "
 				    "is not obvious from the name. Attempting autodetection...",
 				    filename.c_str());
