@@ -118,4 +118,9 @@ else(NOT NUMPY_FOUND)
 	message(STATUS "+    numpy: ${NUMPY_INCLUDE_DIR}")
 endif(NOT NUMPY_FOUND)
 
+if (${PYTHON_NUMERIC_VERSION} LESS 20600)
+    colormsg (HIRED "*** WARNING Python 2.6 or above is required for full functionality")
+    colormsg (HIRED "*** you have ${PYTHON_VERSION}: expect some functionality to be broken")
+endif (${PYTHON_NUMERIC_VERSION} LESS 20600)
+
 
