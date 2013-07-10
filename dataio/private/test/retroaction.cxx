@@ -37,7 +37,7 @@ TEST(read)
     {
       log_info("%s", s.c_str());
       I3FramePtr fp = load_i3_file(s);
-      ENSURE(fp);
+      ENSURE((bool)fp);
 	
       cout << "From " << s << ":\n" << *fp << "\n";
       for (I3Frame::const_iterator iter = fp->begin();

@@ -65,7 +65,7 @@ void do_vector (std::string classname)
     {
       log_info("%s", s.c_str());
       I3FramePtr fp = load_i3_file(s);
-      ENSURE(fp);
+      ENSURE((bool)fp);
       cout << "From " << s << ":\n" << *fp << "\n";
       const I3Vector<T>& vd = fp->template Get<I3Vector<T> >("object");
       for (unsigned i=0; i<100; i++)

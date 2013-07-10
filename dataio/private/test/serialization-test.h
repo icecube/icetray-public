@@ -36,7 +36,7 @@ void save_to_i3_file(boost::shared_ptr<T> tptr, std::string fname)
 {
   boost::iostreams::filtering_ostream ofs;
   I3::dataio::open(ofs, fname, 0);
-  ENSURE(ofs, "couldn't open temp file");
+  ENSURE((bool)ofs, "couldn't open temp file");
 
   I3Frame frame;
   frame.Put("object", tptr);
