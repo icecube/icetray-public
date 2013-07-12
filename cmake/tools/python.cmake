@@ -35,7 +35,7 @@ if(EXISTS ${I3_PORTS}/bin/python)
 endif(EXISTS ${I3_PORTS}/bin/python)
 
 find_package(PythonInterp QUIET)
-find_package(PythonLibs QUIET)
+find_package(PythonLibs ${PYTHON_VERSION_STRING} EXACT QUIET)
 
 if(NOT PYTHON_EXECUTABLE)
   set(PYTHON_FOUND FALSE CACHE BOOL "Python found successfully" FORCE)
