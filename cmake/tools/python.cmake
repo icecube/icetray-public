@@ -35,11 +35,6 @@ if(EXISTS ${I3_PORTS}/bin/python)
 endif(EXISTS ${I3_PORTS}/bin/python)
 
 find_package(PythonInterp QUIET)
-find_package(PythonLibs ${PYTHON_VERSION_STRING} EXACT QUIET)
-
-if(NOT PYTHON_EXECUTABLE)
-  set(PYTHON_FOUND FALSE CACHE BOOL "Python found successfully" FORCE)
-endif(NOT PYTHON_EXECUTABLE)
 
 # 
 # determine version of the system python.
@@ -51,11 +46,17 @@ execute_process(COMMAND ${PYTHON_EXECUTABLE} -V
 # Provide version in numeric form for comparison
 #
 string(REGEX MATCH "([0-9]+)\\.([0-9]+)\\.?([0-9]*)"
-  tmp_OUT
+  PYTHON_STRIPPED_VERSION
   ${PYTHON_VERSION})
-numeric_version(${tmp_OUT} PYTHON)
-
+numeric_version(${PYTHON_STRIPPED_VERSION} PYTHON)
 message(STATUS "+  version: ${PYTHON_VERSION}") 
+
+find_package(PythonLibs ${PYTHON_STRIPPED_VERSION} EXACT QUIET)
+
+if(NOT PYTHON_EXECUTABLE)
+  set(PYTHON_FOUND FALSE CACHE BOOL "Python found successfully" FORCE)
+endif(NOT PYTHON_EXECUTABLE)
+
 if(NOT PYTHON_INCLUDE_DIR)
   set(PYTHON_INCLUDE_DIR ${PYTHON_INCLUDE_PATH})
 endif(NOT PYTHON_INCLUDE_DIR)
@@ -120,7 +121,7 @@ endif(NOT NUMPY_FOUND)
 
 if (${PYTHON_NUMERIC_VERSION} LESS 20600)
     colormsg (HIRED "*** WARNING Python 2.6 or above is required for full functionality")
-    colormsg (HIRED "*** you have ${PYTHON_VERSION}: expect some functionality to be broken")
+    colormsg (HIRED "*** you have ${PYTHON_STRIPPED_VERSION}: expect some functionality to be broken")
 endif (${PYTHON_NUMERIC_VERSION} LESS 20600)
 
 
