@@ -64,7 +64,7 @@ load_project (std::string path, bool verbose)
   char *errmsg = dlerror();
 
   // not found, then try $I3_BUILD/lib specifically
-  if (v == NULL || errmsg != NULL)
+  if ((v == NULL || errmsg != NULL) && getenv("I3_BUILD") != NULL)
     {
       std::string fullpath(getenv("I3_BUILD"));
       fullpath += "/lib/";
