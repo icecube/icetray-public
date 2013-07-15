@@ -7,12 +7,24 @@
 #  and the IceCube Collaboration <http://www.icecube.wisc.edu>
 #
 
-from optparse import OptionParser
+from optparse import Option, OptionParser
+import re
+
+def check_regex(option, opt, value):
+	try:
+		return re.compile(value)
+	except:
+		raise OptionValueError("'%s' is not a regular expression" % value)
+	
+Option.TYPES = Option.TYPES + ("regex",)
+Option.TYPE_CHECKER["regex"] = check_regex
 
 parser = OptionParser("usage: %prog [options] project1 project2 ...")
 parser.add_option('-a', '--all', dest='all',
 	help='Examine all projects/libraries in DIRECTORY', metavar='DIRECTORY',
 	default=None)
+parser.add_option('-R', '--regex', dest='regex', type='regex',
+	help='Print only modules/services/segments whose names match this regular expression', default=None)
 parser.add_option('-x', '--xml', dest='xml', help='Output in XML',
 	action='store_true', default=False)
 parser.add_option('--no-params', dest='names_only', action='store_true',
@@ -141,6 +153,8 @@ def display_config(mod, category, modname=None):
 		if modname is None:
 			modname = mod
 			
+		if opts.regex and not opts.regex.match(modname):
+			return False
 		try:
 			config = i3inspect.get_configuration(mod)
 		except RuntimeError:
