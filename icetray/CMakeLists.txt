@@ -203,11 +203,11 @@ i3_test_executable(test
 #i3_test_compile(main private/test/main.cxx)
 
 # Reunify these directories once python < 2.6 support dropped
-if (${PYTHON_NUMERIC_VERSION} LESS 20600)
+if (PYTHON_NUMERIC_VERSION LESS 20600)
 	i3_test_scripts(resources/test/*.py)
-else (${PYTHON_NUMERIC_VERSION} LESS 20600)
+else (PYTHON_NUMERIC_VERSION LESS 20600)
 	i3_test_scripts(resources/test/*.py resources/py26-tests/*.py)
-endif (${PYTHON_NUMERIC_VERSION} LESS 20600)
+endif (PYTHON_NUMERIC_VERSION LESS 20600)
 
 #add_subdirectory(private/test-lib)
 
