@@ -54,11 +54,12 @@ namespace bp = boost::python;
 void
 I3Tray::set_suspend_flag(int sig)
 {
+	suspension_requested_ = 1;
+
 	if (sig == SIGINT) {
 		std::cerr << "\n***\n*** SIGINT received. "
 		    "Calling Finish() at the end of the current frame. \n"
 		    "*** Hit ^C again to force quit.\n***\n";
-		suspension_requested_ = 1;
 		signal(SIGINT, die_messily);
 	}
 }
@@ -445,6 +446,7 @@ I3Tray::Execute()
 
 	execute_called = true;
 	signal(SIGINT, set_suspend_flag);
+	signal(SIGTERM, set_suspend_flag); // Condor sends this to end jobs
 #ifdef SIGINFO
 	executing_tray = this;
 	signal(SIGINFO, report_usage);
