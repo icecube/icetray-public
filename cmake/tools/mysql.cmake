@@ -24,3 +24,13 @@ TOOLDEF (mysql
     NONE
     mysqlclient
     )
+
+if (NOT MYSQL_FOUND)
+  tooldef (mysql
+    /usr/include
+    mysql/mysql.h
+    NONE
+    NONE
+    mysqlclient
+    )
+endif (NOT MYSQL_FOUND)
