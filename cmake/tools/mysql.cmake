@@ -27,7 +27,7 @@ TOOLDEF (mysql
 
 if (NOT MYSQL_FOUND)
   tooldef (mysql
-    /usr/include
+    include
     mysql/mysql.h
     NONE
     NONE
