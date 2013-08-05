@@ -6,3 +6,13 @@ tooldef(gmp
   NONE
   gmp
   )
+if(NOT GMP_FOUND)
+  set(GMP_LIBRARIES)
+  tooldef(gmp
+    "include/x86_64-linux-gnu"
+    gmp.h
+    "lib/x86_64-liunx-gnu"
+    NONE
+    gmp
+    )
+endif(NOT GMP_FOUND)

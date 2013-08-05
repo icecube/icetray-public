@@ -50,6 +50,7 @@ macro(tooldef tool_ incdir incfile libdir bindir)
 
   # Set the config error to false by default		
   set(${TOOL}_CONFIG_ERROR FALSE)
+  set(${TOOL}_LIB_ACCUM)
 
   if(NOT "${incdir}" STREQUAL "NONE")
     find_path(${TOOL}_INCLUDE_DIR NAMES ${incfile} PATHS ${I3_PORTS}/${incdir} ${incdir} ${TOOL_SYSTEM_PATH})
