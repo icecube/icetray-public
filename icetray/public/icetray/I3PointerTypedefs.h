@@ -22,6 +22,8 @@
 #ifndef ICETRAY_I3POINTERTYPEDEFS_H_INCLUDED
 #define ICETRAY_I3POINTERTYPEDEFS_H_INCLUDED
 
+#include <boost/shared_ptr.hpp>
+
 // for generating pointer typedefs in dataclass structures.
 // pointer to const object and pointer to object
 #define I3_POINTER_TYPEDEFS(C)			\
