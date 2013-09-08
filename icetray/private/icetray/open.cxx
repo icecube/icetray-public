@@ -239,7 +239,7 @@ struct archive_filter {
 				break;
 			default:
 				archive_read_support_filter_all(reader_.get());
-				log_warn("(archive_filter) The compression scheme of file '%s' "
+				log_debug("(archive_filter) The compression scheme of file '%s' "
 				    "is not obvious from the name. Attempting autodetection...",
 				    filename.c_str());
 				break;
