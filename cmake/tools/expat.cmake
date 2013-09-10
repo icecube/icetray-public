@@ -17,10 +17,25 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
-TOOLDEF (expat
-  include/expat-1.2
-  xmlparse/xmlparse.h
-  lib/expat-1.2
-  NONE
-  expat)
+
+## as far as I know, only pfauxiliary uses expat. it should probably be
+## tested with a version > 1.2
+
+if (SYSTEM_PACKAGES)
+  find_path(EXPAT_INCLUDE_DIR
+    NAMES include/expat.h)
+  TOOLDEF (expat
+    ${EXPAT_INCLUDE_DIR}
+    expat.h
+    lib
+    NONE
+    expat)
+else (SYSTEM_PACKAGES)  
+  TOOLDEF (expat
+    include/expat-1.2
+    xmlparse/xmlparse.h
+    lib/expat-1.2
+    NONE
+    expat)
+endif (SYSTEM_PACKAGES)
   
