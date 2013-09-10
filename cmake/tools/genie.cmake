@@ -16,6 +16,9 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 
+colormsg("")
+colormsg(HICYAN "genie")
+
 if(NOT GENIE_VERSION)
   message(STATUS "Looking for Genie version")
 
