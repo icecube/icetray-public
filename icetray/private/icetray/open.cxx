@@ -442,7 +442,11 @@ namespace I3 {
         if (s < 0)
           log_fatal("Could not connect to %s:%s: %s", host.c_str(), port.c_str(), strerror(errno));
         log_info("Connect to %s:%s opened successfully", host.c_str(), port.c_str());
+#if BOOST_VERSION < 104400
+        boost::iostreams::file_descriptor_source fs(s, true);
+#else
         boost::iostreams::file_descriptor_source fs(s, boost::iostreams::close_handle);
+#endif
 	ifs.push(fs);
       } else {
 #ifdef I3_WITH_MMAPED_FILE_SOURCE
