@@ -31,6 +31,7 @@
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/device/mapped_file.hpp>
+#include <boost/iostreams/device/file_descriptor.hpp>
 
 #include <boost/regex.hpp>
 #include <boost/foreach.hpp>
@@ -43,6 +44,10 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
 
 #ifdef ROOT_HAS_NETX
 #include <TXNetFile.h>
@@ -399,6 +404,46 @@ namespace I3 {
 	  log_fatal("IceTray was compiled without dcap support, unable to open file %s",
 		    filename.c_str());
 #endif
+      } else if (filename.find("socket://") == 0) {
+        std::string host, port("1313");
+	host = filename.substr(strlen("socket://"));
+	if (host.rfind(':') != std::string::npos) {
+          port = host.substr(host.rfind(':')+1);
+          host.resize(host.rfind(':'));
+        }
+	
+        struct addrinfo hints, *res;
+        int error, s;
+
+        memset(&hints, 0, sizeof(hints));
+        hints.ai_family = PF_UNSPEC;
+        hints.ai_socktype = SOCK_STREAM;
+        error = getaddrinfo(host.c_str(), port.c_str(), &hints, &res);
+        if (error)
+          log_fatal("Host resolution error (%s:%s): %s", host.c_str(),
+             port.c_str(), gai_strerror(error));
+        s = -1;
+        for (struct addrinfo *r = res; res != NULL; res = res->ai_next) {
+          s = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+          if (s < 0)
+            continue;
+
+          if (connect(s, res->ai_addr, res->ai_addrlen) < 0) {
+            close(s);
+            s = -1;
+            continue;
+          }
+
+          break;
+        }
+        if (res != NULL)
+          freeaddrinfo(res);
+
+        if (s < 0)
+          log_fatal("Could not connect to %s:%s: %s", host.c_str(), port.c_str(), strerror(errno));
+        log_info("Connect to %s:%s opened successfully", host.c_str(), port.c_str());
+        boost::iostreams::file_descriptor_source fs(s, boost::iostreams::close_handle);
+	ifs.push(fs);
       } else {
 #ifdef I3_WITH_MMAPED_FILE_SOURCE
 	io::mapped_file_source fs(filename);
