@@ -375,7 +375,8 @@ macro(i3_project PROJECT_NAME)
 	#  Just bare python, no setuptools
 	#
 	if (COPY_PYTHON_DIR)
-	  execute_process(COMMAND cp -pRLP ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR} ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST})
+	  execute_process(COMMAND rm -rf ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST})
+	  execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR} ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST})
         else (COPY_PYTHON_DIR)
 	  execute_process(COMMAND ln -fsn ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR} ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST})
 	endif (COPY_PYTHON_DIR)
