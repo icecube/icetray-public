@@ -375,15 +375,20 @@ macro(i3_project PROJECT_NAME)
 	#  Just bare python, no setuptools
 	#
 	if (COPY_PYTHON_DIR)
-	  execute_process(COMMAND rm -rf ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST})
-	  execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR} ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST})
+	  file(GLOB_RECURSE python_components RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${ARG_PYTHON_DIR}/*.py)
+          string(LENGTH ${ARG_PYTHON_DIR}/ pylen)
+	  foreach(file ${python_components})
+            string(REPLACE ${ARG_PYTHON_DIR}/ "" file ${file})
+            #add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST}/${file} COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/${file} ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST}/${file} COMMAND python -m compile -fq ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST}/${file} OUTPUT_QUIET)
+            configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/${file} ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST}/${file} COPYONLY)
+          endforeach()
         else (COPY_PYTHON_DIR)
 	  execute_process(COMMAND ln -fsn ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR} ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST})
+	  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/
+	    DESTINATION lib/${ARG_PYTHON_DEST}
+	    PATTERN ".svn" EXCLUDE)
+	  execute_process(COMMAND python -m compileall -fq ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST} OUTPUT_QUIET)
 	endif (COPY_PYTHON_DIR)
-	install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/
-	  DESTINATION lib/${ARG_PYTHON_DEST}
-	  PATTERN ".svn" EXCLUDE)
-	execute_process(COMMAND python -m compileall -fq ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST} OUTPUT_QUIET)
       endif(ARG_USE_SETUPTOOLS)
 
     endif(ARG_PYTHON_DIR AND IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR})
