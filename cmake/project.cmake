@@ -359,7 +359,11 @@ macro(i3_project PROJECT_NAME)
 	  ${PROJECT_NAME}-install-to-tarball)
 
       else(ARG_USE_SETUPTOOLS)
-	colormsg(GREEN "+-- python [symlinks]")
+	if (COPY_PYTHON_DIR)
+	  colormsg(GREEN "+-- python [directory copy]")
+	else (COPY_PYTHON_DIR)
+	  colormsg(GREEN "+-- python [symlinks]")
+	endif (COPY_PYTHON_DIR)
 
 	if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/__init__.py)
 	  message(FATAL_ERROR
@@ -376,10 +380,8 @@ macro(i3_project PROJECT_NAME)
 	#
 	if (COPY_PYTHON_DIR)
 	  file(GLOB_RECURSE python_components RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${ARG_PYTHON_DIR}/*.py)
-          string(LENGTH ${ARG_PYTHON_DIR}/ pylen)
 	  foreach(file ${python_components})
             string(REPLACE ${ARG_PYTHON_DIR}/ "" file ${file})
-            #add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST}/${file} COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/${file} ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST}/${file} COMMAND python -m compile -fq ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST}/${file} OUTPUT_QUIET)
             configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/${file} ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST}/${file} COPYONLY)
           endforeach()
         else (COPY_PYTHON_DIR)
