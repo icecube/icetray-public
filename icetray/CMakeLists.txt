@@ -229,6 +229,5 @@ add_subdirectory(private/pybindings)
 add_subdirectory(private/test-pybindings)
 
 # Install icetray-inspect
-exec_program(ln ARGS -snf ${CMAKE_SOURCE_DIR}/icetray/resources/icetray-inspect.py ${EXECUTABLE_OUTPUT_PATH}/icetray-inspect
-    OUTPUT_VARIABLE DEV_NULL)
+configure_file(${CMAKE_SOURCE_DIR}/icetray/resources/icetray-inspect.py ${EXECUTABLE_OUTPUT_PATH}/icetray-inspect COPY_ONLY)
 
