@@ -157,12 +157,27 @@ add_custom_target(tarball-start
 
 add_custom_target(tarball-install
   COMMAND ${CMAKE_MAKE_PROGRAM} install
-  COMMAND ${CMAKE_MAKE_PROGRAM} install_tool_libs
-  COMMAND ${MAKE_TARBALL_SH}
-  COMMAND ${MAKE_TARBALL_ROOTSYS_SH}
   COMMENT "Tarball install"
   )
 add_dependencies(tarball-install tarball-start)
+add_custom_target(tarball-install-tools
+  COMMAND ${CMAKE_MAKE_PROGRAM} install_tool_libs
+  COMMAND ${MAKE_TARBALL_ROOTSYS_SH}
+  COMMENT "Tarball install (tools)"
+  )
+add_dependencies(tarball-install-tools tarball-install)
+add_custom_target(tarball-install-sh
+  COMMAND ${MAKE_TARBALL_SH}
+  COMMENT "Tarball install (env-shell)"
+  )
+add_dependencies(tarball-install-sh tarball-install)
+if(INSTALL_TOOL_LIBS)
+  add_dependencies(tarball-install-sh tarball-install-tools)
+endif(INSTALL_TOOL_LIBS)
+
+add_custom_target(tarball-install-lite)
+add_dependencies(tarball-install-lite tarball-install-sh)
+
 add_custom_target(tarball-finish
   COMMAND echo Creating ${CMAKE_INSTALL_PREFIX}.tar.gz
   COMMAND tar czf ${CMAKE_INSTALL_PREFIX}.tar.gz ${CMAKE_INSTALL_PREFIX}
@@ -170,7 +185,7 @@ add_custom_target(tarball-finish
   COMMAND ${MD5SUM_TARBALL_COMMAND}
   COMMENT "Finishing tarball of ${CMAKE_INSTALL_PREFIX}"
   )
-add_dependencies(tarball-finish tarball-install)
+add_dependencies(tarball-finish tarball-install-sh)
 
 add_custom_target(tarball)
 add_dependencies(tarball tarball-finish)
@@ -186,6 +201,7 @@ configure_file(cmake/passthru.py.in ${BUILD_SLAVE_PYTHONPATH}/passthru.py @ONLY)
 file(TO_NATIVE_PATH ${BUILD_SLAVE_PYTHONPATH}/passthru.py TEST_DRIVER)
 
 option(INSTALL_HEADERS "install header files when making tarball" OFF)
+option(INSTALL_TOOL_LIBS "install libraries from I3_PORTS when making tarball" ON)
 
 #
 #  Environment checking targets
