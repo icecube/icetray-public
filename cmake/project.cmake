@@ -409,7 +409,7 @@ macro(i3_executable_script THIS_EXECUTABLE_NAME THIS_SCRIPT_NAME)
 
     # copy it for local use
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${THIS_SCRIPT_NAME}
-        ${EXECUTABLE_OUTPUT_PATH}/${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME
+        ${EXECUTABLE_OUTPUT_PATH}/${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME}
         COPY_ONLY)
     # and install it in the tarball when the time comes
     install(PROGRAMS ${THIS_SCRIPT_NAME} DESTINATION bin
