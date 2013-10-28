@@ -222,6 +222,7 @@ macro(i3_add_library THIS_LIB_NAME)
     use_projects(${THIS_LIB_NAME}
       PROJECTS "${${THIS_LIB_NAME}_ARGS_USE_PROJECTS}"
       )
+    set(${THIS_LIB_NAME}_PROJECT_DEPENDS ${${THIS_LIB_NAME}_ARGS_USE_PROJECTS} CACHE INTERNAL "Projects needed by library ${THIS_LIB_NAME}")
 
     use_tools(${THIS_LIB_NAME}
       TOOLS "${${THIS_LIB_NAME}_ARGS_USE_TOOLS}"

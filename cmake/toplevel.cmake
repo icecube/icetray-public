@@ -282,7 +282,7 @@ endforeach(subdir ${SUBDIRS})
 #
 # env-shell.sh
 #
-foreach (file env-shell.sh)
+foreach (file env-shell.sh icetray-config)
   message(STATUS "Generating ${file}")
   configure_file(
     ${CMAKE_SOURCE_DIR}/cmake/${file}.in
