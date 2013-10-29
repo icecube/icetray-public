@@ -203,6 +203,11 @@ file(TO_NATIVE_PATH ${BUILD_SLAVE_PYTHONPATH}/passthru.py TEST_DRIVER)
 option(INSTALL_HEADERS "install header files when making tarball" OFF)
 option(INSTALL_TOOL_LIBS "install libraries from I3_PORTS when making tarball" ON)
 
+# if not shipping I3_PORTS, keep existing external links when installing
+if(NOT INSTALL_TOOL_LIBS)
+  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+endif(NOT INSTALL_TOOL_LIBS)
+
 #
 #  Environment checking targets
 #

@@ -215,7 +215,14 @@ Changing the name of the tarball
 Set :data:`CMAKE_INSTALL_PREFIX` as you like in your
 :file:`CMakeCache.txt`.
 
+Lightweight tarballs for CVMFS-enabled grids
+--------------------------------------------
 
-
-
+Some grids (e.g. OpenScienceGrid) support distribution of software via CVMFS,
+which obviates much of the need for tarballs of standard metaprojects. When
+the neded arises for custom metaprojects, however, their tarballs can omit the
+libraries already in the CVMFS repository. To build a lightweight tarball, set
+the :data:`INSTALL_TOOL_LIBS` option to OFF at configure time. The final
+tarball will not include libraries from :envvar:`I3_PORTS`, and RPATH entries
+will not be stripped from the installed libraries.
 
