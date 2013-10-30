@@ -430,6 +430,15 @@ if(EXISTS /etc/issue)
 endif(EXISTS /etc/issue)
 
 #
+# Reduce on RHEL5
+#
+if(${ETC_ISSUE} MATCHES "Red Hat Enterprise Linux Client release 5.5 (Tikanga)")
+  message(STATUS "You're on Red Enterprise Linux 5, an old, buggy, and unsupported platform. Your code will run poorly.")
+  set(RELOPTLEVEL 2)
+endif(${ETC_ISSUE} MATCHES "Red Hat Enterprise Linux Client release 5.5 (Tikanga)")
+
+
+#
 # These are defaults that we need to force into the cache the first time, but not
 # afterwards.  Notice the block around METAPROJECT_CONFIGURED.
 #
