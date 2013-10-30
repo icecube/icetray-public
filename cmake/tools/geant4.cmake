@@ -24,7 +24,6 @@ message(STATUS "Looking for Geant4 geant4-config program")
 
 find_program (GEANT4_CONFIG geant4-config
   PATHS ${I3_PORTS}/bin
-  NO_DEFAULT_PATH
   )
  
 if (${GEANT4_CONFIG} MATCHES ".*NOTFOUND$")
@@ -50,7 +49,11 @@ else (${GEANT4_CONFIG} MATCHES ".*NOTFOUND$")
     string(SUBSTRING ${GEANT4_LIB_DIR} 2 ${GEANT4_LIB_DIR_length} GEANT4_LIB_DIR) # remove "-L"
 
     get_filename_component(GEANT4_LIB_DIR ${GEANT4_LIB_DIR} ABSOLUTE)
-    string(REPLACE "${I3_PORTS}/" "" GEANT4_RELATIVE_LIB_DIR "${GEANT4_LIB_DIR}")
+    if(I3_PORTS)
+      string(REPLACE "${I3_PORTS}/" "" GEANT4_RELATIVE_LIB_DIR "${GEANT4_LIB_DIR}")
+    else(I3_PORTS)
+      set(GEANT4_RELATIVE_LIB_DIR ${GEANT4_LIB_DIR})
+    endif(I3_PORTS)
     
     # remove the "-L" option from the argument list
     # and extract a list of libraries
@@ -74,9 +77,12 @@ else (${GEANT4_CONFIG} MATCHES ".*NOTFOUND$")
     string(SUBSTRING ${GEANT4_INC_DIR} 2 ${GEANT4_INC_DIR_length} GEANT4_INC_DIR) # remove "-I"
     
     get_filename_component(GEANT4_INC_DIR ${GEANT4_INC_DIR} ABSOLUTE)
-    string(REPLACE "${I3_PORTS}/" "" GEANT4_RELATIVE_INC_DIR "${GEANT4_INC_DIR}")
+    if(I3_PORTS)
+      string(REPLACE "${I3_PORTS}/" "" GEANT4_RELATIVE_INC_DIR "${GEANT4_INC_DIR}")
+    else(I3_PORTS)
+      set(GEANT4_RELATIVE_INC_DIR ${GEANT4_INC_DIR})
+    endif(I3_PORTS)
 
-    
     # we got everything we need to define the tool properties
     tooldef (geant4
       ${GEANT4_RELATIVE_INC_DIR}
