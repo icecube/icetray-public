@@ -213,8 +213,8 @@ Not all of the variables are useful.  Here are some that are:
      - Use the new gold linker from GNU binutils. **EXPERIMENTAL**
      - OFF
    * - .. attribute:: CMAKE_BUILD_TYPE
-     - What kind of build you want.  The choices are ``Release``, ``Debug``, ``RelWithDebInfo``, ``MinSizeRel``, or empty for none of the above.
-     - ``Debug``
+     - What kind of build you want.  The choices are ``Release``, ``Debug``, ``RelWithDebInfo``, ``MinSizeRel``, ``RelWithAssert``, ``Coverage``, or empty for none of the above.
+     - ``Release``
 
 Verbose build
 """""""""""""
