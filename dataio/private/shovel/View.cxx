@@ -536,8 +536,8 @@ up/down          Select previous/next frame item\n\
 k/j              \n\
 <                First frame\n\
 >                Last frame\n\
-x                Serialize selected frame to XML (show with less)\n\
-s                Serialize selected frame to XML and save to file\n\
+x                Serialize selected frame object to XML (show with less)\n\
+s                Serialize selected frame object to XML and save to file\n\
 p                Pretty-print selected item (currently I3TrayInfo only)\n\
 w                Write entire frame (binary) to file\n\
 q                Quit\n\
