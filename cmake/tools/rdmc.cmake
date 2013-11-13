@@ -17,6 +17,19 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
+
+if (SYSTEM_PACKAGES)
+  find_path(RDMC_ROOT_DIR
+    NAMES include/rdmc-2.9.5/rdmc/rdmc.h
+  )
+TOOLDEF (rdmc
+    ${RDMC_ROOT_DIR}/include/rdmc-2.9.5
+    rdmc/rdmc.h
+    ${RDMC_ROOT_DIR}/lib/rdmc-2.9.5
+    NONE  # bin is n/a, placeholder
+    rdmc
+    )
+else (SYSTEM_PACKAGES)
 TOOLDEF (rdmc
     include/rdmc-2.9.5
     rdmc/rdmc.h
@@ -24,4 +37,4 @@ TOOLDEF (rdmc
     NONE  # bin is n/a, placeholder
     rdmc
     )
-
+endif (SYSTEM_PACKAGES)
