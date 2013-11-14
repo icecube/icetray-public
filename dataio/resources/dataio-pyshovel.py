@@ -28,8 +28,8 @@ else:
     curses.setupterm()
     term_colors = curses.tigetnum('colors')
 
-from icecube.steamshovel import pprint as i3pprint
-from icecube.steamshovel import fileadaptor
+from icecube.dataio import pprint as i3pprint
+from icecube.dataio import fileadaptor
 
 class UI:
     '''
