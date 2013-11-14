@@ -35,6 +35,8 @@ i3_executable(shovel private/shovel/*.cxx
   USE_TOOLS cdk ncurses
   )
 
+i3_executable_script(pyshovel resources/dataio-pyshovel.py)
+
 i3_executable(extract private/extract/*.cxx
   USE_PROJECTS dataio)
 
