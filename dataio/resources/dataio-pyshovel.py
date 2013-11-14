@@ -199,10 +199,10 @@ class FrameViewer(urwid.Frame):
         self.listbox = ListBoxReporter(contents)
         self.listbox.set_focus(self.key)
         urwid.connect_signal(self.listbox, 'update_status', self.update_status)
-        linebox_kw = {}
+        self.linebox_kw = {}
         if ascii_only:
             # make the linebox use ascii chars
-            linebox_kw = {
+            self.linebox_kw = {
                 'tlcorner': '-',
                 'tline': '-',
                 'lline': '|',
@@ -213,7 +213,7 @@ class FrameViewer(urwid.Frame):
                 'brcorner': '-',
             }
         self.inner_frame = urwid.Frame(self.listbox,header=header)
-        linebox = urwid.LineBox(self.inner_frame, self.framename(frameidx), **linebox_kw)
+        linebox = urwid.LineBox(self.inner_frame, self.framename(frameidx), **self.linebox_kw)
         urwid.Frame.__init__(self, linebox)
         self.overlay = None
 
@@ -280,7 +280,7 @@ class FrameViewer(urwid.Frame):
         listbox = ListBoxReporter( urwid.SimpleListWalker([urwid.Text( m ) for m in message.split('\n')]) )
         urwid.connect_signal(listbox, 'update_status', self.update_status)
         msgbox = urwid.LineBox( listbox,
-                                'Contents of key {0}'.format( i3key ) )
+                                'Contents of key {0}'.format( i3key ) , **self.linebox_kw)
         self.overlay = urwid.Overlay( msgbox, self.body, 
                                       'center', ('relative', 85), 
                                       'middle', ('relative', 85) )

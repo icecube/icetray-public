@@ -5,7 +5,7 @@ from icecube import icetray
 from icecube import dataclasses
 from icecube import dataio
 
-from fileadaptor import FrameWrapper
+from .fileadaptor import FrameWrapper
 
 def format_line( frame, key, maxwidth = None, ellipsis = '...' ):
     '''Given an icecube frame and a key in that frame, return
