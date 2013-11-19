@@ -176,7 +176,7 @@ class ListBoxReporter(urwid.ListBox):
                     format_args['percent'] = int(pos*100/total_len)
                 urwid.emit_signal(self,'update_status',status.format(**format_args))
         except Exception as e:
-            print '%r'%e
+            print('%r'%e)
             pass
         finally:
             return ret
