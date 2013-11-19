@@ -654,6 +654,7 @@ class ViewerMain(urwid.Frame):
         urwid.connect_signal( self.frame_viewer, 'select_key', self.select_key )
         urwid.connect_signal( self.frame_viewer, 'update_status', footer.update_status )
         self.popup = None
+        self._ipy_namespace = dict()
 
     def set_mainloop(self, loop):
         self.mainloop = loop
@@ -732,17 +733,28 @@ class ViewerMain(urwid.Frame):
                 self.body.keypress(size, input)
         elif input in UI.keys['interact']:
             self.mainloop.screen.stop()
-            # put variable 'frame' into scope for IPython interaction
+            # put frame and [readable] contents into scope for IPython interaction
             if isinstance(self.framelist[self.active_view],fileadaptor.FrameWrapper):
                 frame = self.framelist[self.active_view].frame
             else:
                 frame = self.framelist[self.active_view]
+            ns = dict()
+            for k in frame.keys():
+                try:
+                    ns[k] = frame[k]
+                except RuntimeError:
+                    pass
+            ns['frame'] = frame
+            self._ipy_namespace.update(ns)
             try:
-                IPython.embed()
+                IPython.embed(user_ns=self._ipy_namespace, display_banner=False)
             except NameError:
                 import code
-                console = code.InteractiveConsole({"frame":frame})
+                console = code.InteractiveConsole(self._ipy_namespace)
                 console.interact()
+            # clean up inserted variables (but leave user-defined ones)
+            for k in ns:
+                del self._ipy_namespace[k]
             self.mainloop.screen.start()
             self.mainloop.screen.set_mouse_tracking()
         elif input in UI.keys['goto']:
