@@ -8,6 +8,8 @@ from icecube import dataio
 from icecube import dataclasses
 from icecube import icetray
 
+from icecube.icetray.pycompat import * # For next(a) on Python 2.4
+
 # This file is primarily a test of the fileadaptor class,
 # which is used in pyshovel
 from icecube.dataio import fileadaptor
