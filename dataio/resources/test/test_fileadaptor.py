@@ -57,8 +57,8 @@ class AdapatorTest(unittest.TestCase):
         next(i1)
         next(i1)
         i2 = iter(self.adapt)
-        self.assertEqual(i1.next().Stop.id, test_frames[2][0])
-        self.assertEqual(i2.next().Stop.id, test_frames[0][0])
+        self.assertEqual(next(i1).Stop.id, test_frames[2][0])
+        self.assertEqual(next(i2).Stop.id, test_frames[0][0])
 
     def test_basic_indexing(self):
         for x in range(8):

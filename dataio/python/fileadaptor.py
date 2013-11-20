@@ -168,7 +168,8 @@ class I3SequentialAdaptor:
             # Slice indexing of SequentialFiles...
             # Call len() only if we already know the file's length, or if this
             # slice requests indexing from the end of the file
-            if self.file_length or key.start < 0 or key.stop < 0:
+            if self.file_length or key.start is None or key.start < 0 or key.stop is None or key.stop < 0:
+            #if self.file_length or key.start < 0 or key.stop < 0:
                 max_slen = len(self)
             else:
                 # Make a conservative estimate, without scanning to end of file.
