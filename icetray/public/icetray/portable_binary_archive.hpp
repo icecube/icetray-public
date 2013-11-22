@@ -39,9 +39,6 @@ class portable_binary_oarchive :
 		portable_binary_oarchive(std::ostream &stream,
 		    unsigned int flags = boost::archive::no_header) :
 		    os (*stream.rdbuf()) {}
-		portable_binary_oarchive(std::streambuf &streambuf,
-		    unsigned int flags = boost::archive::no_header) :
-		    os (streambuf) {}
 
 		template<class T>
 		void save_override(const T &t, BOOST_PFTO int version) {
@@ -145,9 +142,6 @@ class portable_binary_iarchive :
 		portable_binary_iarchive(std::istream &stream,
 		    unsigned int flags = boost::archive::no_header) :
 		    is (*stream.rdbuf()) {}
-		portable_binary_iarchive(std::streambuf &streambuf,
-		    unsigned int flags = boost::archive::no_header) :
-		    is (streambuf) {}
 
 		template<class T>
 		void load_override(T &t, BOOST_PFTO int version) {
