@@ -47,14 +47,14 @@
 
 using namespace std;
 
-volatile sig_atomic_t I3Tray::suspension_requested_;
+volatile sig_atomic_t I3Tray::global_suspension_requested;
 
 namespace bp = boost::python;
 
 void
 I3Tray::set_suspend_flag(int sig)
 {
-	suspension_requested_ = 1;
+	global_suspension_requested = 1;
 
 	if (sig == SIGINT) {
 		std::cerr << "\n***\n*** SIGINT received. "
@@ -100,10 +100,13 @@ I3Tray::report_usage(int sig)
 	}
 }
 
+void noOpDeleter(I3Tray*){}
+
 I3Tray::I3Tray() :
     boxes_connected(false), configure_called(false), finish_called(false),
-    execute_called(false)
+    execute_called(false), suspension_requested(false)
 {
+	master_context.Put(boost::shared_ptr<I3Tray>(this,noOpDeleter),"I3Tray");
 	// Note that the following is deeply unsafe, but necessary for
 	// tray info service for now
 	master_context.Put(boost::shared_ptr<I3TrayInfoService>(new
@@ -115,7 +118,7 @@ I3Tray::~I3Tray()
 	if (!finish_called && execute_called)
 		Finish();
 
-	suspension_requested_ = false;
+	global_suspension_requested = false;
 }
 
 void
@@ -454,7 +457,7 @@ I3Tray::Execute()
 
 	Configure();
 
-	while (!suspension_requested_) {
+	while (!suspension_requested && !global_suspension_requested) {
 		log_trace("icetray dispatching Process_");
 		driving_module->Do(&I3Module::Process_);
 	}
@@ -478,7 +481,7 @@ I3Tray::Execute(unsigned maxCount)
 
 	Configure();
 
-	for (unsigned i=0; i < maxCount && !suspension_requested_; i++) {
+	for (unsigned i=0; i < maxCount && !suspension_requested && !global_suspension_requested; i++) {
 		log_trace("%u/%u icetray dispatching Process_", i, maxCount);
 		driving_module->Do(&I3Module::Process_);
 	}

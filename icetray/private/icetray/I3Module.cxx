@@ -405,7 +405,11 @@ void
 I3Module::RequestSuspension() const
 {
   i3_log("%s", __PRETTY_FUNCTION__);
-  I3Tray::RequestSuspension();
+  boost::shared_ptr<I3Tray> tray=context_.Get<boost::shared_ptr<I3Tray> >("I3Tray");
+  if(tray)
+    tray->RequestSuspension();
+  else
+    log_warn("Suspension was requested, but this module does not seem to belong to a tray to suspend");
 }
 
 

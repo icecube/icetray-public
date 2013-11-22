@@ -212,6 +212,8 @@ public:
   {
     return this->SetParameter(module, parameter, boost::python::object(value));
   }
+	
+  void RequestSuspension() { suspension_requested=true; }
 
 private:
 
@@ -259,18 +261,15 @@ private:
   bool configure_called;
   bool finish_called;
   bool execute_called;
+  bool suspension_requested;
 
   SET_LOGGER("I3Tray");
 
-  static volatile sig_atomic_t suspension_requested_;
+  static volatile sig_atomic_t global_suspension_requested;
 
   static void set_suspend_flag(int sig);
   static void die_messily(int sig);
   static void report_usage(int sig);
-
-  friend void I3Module::RequestSuspension() const;
-
-  static void RequestSuspension() { suspension_requested_ = true; }
 
   friend void I3Module::Do(void (I3Module::*)());
 

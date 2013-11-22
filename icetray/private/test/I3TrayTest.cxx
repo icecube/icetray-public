@@ -201,7 +201,46 @@ TEST(multiple_tray_create_destroy)
 
 }
 
+//A module with a simple side effect (incrementing a counter)
+//so that we can easily verify that it has been run.
+//It also stops the containing tray by calling RequestSuspension. 
+class SideEffectModule : public I3Module {
+public:
+  SideEffectModule(const I3Context& context) : I3Module(context) {
+    AddOutBox("OutBox");
+    AddParameter("Life", "Number of iterations this module should survive", 0);
+  }
+  
+  void Configure() {
+    GetParameter("Life",life);
+  }
+  
+  void Process() {
+    counter++;
+    if(life){
+      life--;
+      if(!life)
+        RequestSuspension();
+    }
+  }
+  static unsigned int counter;
+  unsigned int life;
+};
+
+I3_MODULE(SideEffectModule);
+unsigned int SideEffectModule::counter=0;
+
 TEST(simultaneous_trays)
 {
+  SideEffectModule::counter=0;
   I3Tray tray1, tray2;
+  tray1.AddModule("SideEffectModule", "counter1")("Life", 5);
+  tray2.AddModule("SideEffectModule", "counter2")("Life", 5);
+  
+  tray1.Execute();
+  ENSURE_EQUAL(SideEffectModule::counter,5);
+  //after one tray has stopped due to a module requesting suspension
+  //another should still be able to run
+  tray2.Execute();
+  ENSURE_EQUAL(SideEffectModule::counter,10);
 }
