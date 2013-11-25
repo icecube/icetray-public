@@ -51,6 +51,7 @@ if (USE_ROOT)
         COMMAND ${ROOT_CONFIG_EXECUTABLE} --version 
         OUTPUT_VARIABLE ROOT_VERSION
         OUTPUT_STRIP_TRAILING_WHITESPACE)
+      string(REPLACE "/" "." ROOT_VERSION ${ROOT_VERSION})
       execute_process(
         COMMAND ${ROOT_CONFIG_EXECUTABLE} --incdir
         OUTPUT_VARIABLE ROOT_INCLUDE_DIR
@@ -59,36 +60,38 @@ if (USE_ROOT)
         COMMAND ${ROOT_CONFIG_EXECUTABLE} --libs
         OUTPUT_VARIABLE ROOT_LIB_OUTPUT
         OUTPUT_STRIP_TRAILING_WHITESPACE)
-      message("libs ${ROOT_LIB_OUTPUT}")
-      
-      # look for the -L option
-      string(REGEX MATCH "-L([^ ]*)" ROOT_LIB_DIR ${ROOT_LIB_OUTPUT})
-
-      # I would like to do this, but it is not supported on cmake < 2.8.5
-      # string(SUBSTRING ${ROOT_LIB_DIR} 2 -1 ROOT_LIB_DIR) # remove "-L"
-      # so instead do this:
-      string(LENGTH "${ROOT_LIB_DIR}" ROOT_LIB_DIR_length)
-      math(EXPR ROOT_LIB_DIR_length "${ROOT_LIB_DIR_length}-2")
-      string(SUBSTRING ${ROOT_LIB_DIR} 2 ${ROOT_LIB_DIR_length} ROOT_LIB_DIR) # remove "-L"
-
+      execute_process(
+        COMMAND ${ROOT_CONFIG_EXECUTABLE} --auxlibs
+        OUTPUT_VARIABLE ROOT_AUXLIB_OUTPUT
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+      string(STRIP ${ROOT_AUXLIB_OUTPUT} ROOT_AUXLIB_OUTPUT)
+      separate_arguments(ROOT_AUXLIB_OUTPUT)
+      execute_process(
+        COMMAND ${ROOT_CONFIG_EXECUTABLE} --libdir
+        OUTPUT_VARIABLE ROOT_LIB_DIR
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+	
       get_filename_component(ROOT_LIB_DIR ${ROOT_LIB_DIR} ABSOLUTE)
-      #string(REPLACE "${I3_PORTS}/" "" ROOT_RELATIVE_LIB_DIR "${ROOT_LIB_DIR}")
 
-      # remove the "-L" option from the argument list
-      # and extract a list of libraries
       string(REGEX REPLACE "-[L]([^ ]*)" "" ROOT_LIBRARIES ${ROOT_LIB_OUTPUT})
       string(STRIP ${ROOT_LIBRARIES} ROOT_LIBRARIES)
-      string(REGEX REPLACE "-l([^ ]*)" "${CMAKE_SHARED_LIBRARY_PREFIX}\\1${CMAKE_SHARED_LIBRARY_SUFFIX}" ROOT_LIBRARIES ${ROOT_LIBRARIES})
-      string(REGEX REPLACE "-pthread|-rdynamic" "" ROOT_LIBRARIES ${ROOT_LIBRARIES})
       separate_arguments(ROOT_LIBRARIES)
-      
+
+      while(ROOT_LIBRARIES)
+	car(foo ${ROOT_LIBRARIES})
+	list(FIND ROOT_AUXLIB_OUTPUT ${foo} bar)
+	if(${bar} EQUAL -1)
+	  string(REGEX REPLACE "-l([^ ]+)" "\\1" foo ${foo})
+	  list(APPEND ROOT_${ROOT_VERSION}_LIBS ${foo})
+	  list(APPEND pewp ${foo})
+	endif(${bar} EQUAL -1)
+	cdr(ROOT_LIBRARIES ${ROOT_LIBRARIES})
+      endwhile(ROOT_LIBRARIES)
+      set(ROOT_${ROOT_VERSION}_LIBS "${ROOT_${ROOT_VERSION}_LIBS}")
+
       set(ROOTSYS ${ROOTSYS} CACHE STRING "Found ROOTSYS in ${ROOTSYS}" FORCE)
       set(ROOT_LIB_DIR ${ROOT_LIB_DIR} CACHE STRING "Found ROOT_LIB_DIR in ${ROOT_LIB_DIR}" FORCE)
       set(ROOT_INCLUDE_DIR ${ROOT_INCLUDE_DIR} CACHE STRING "Found ROOT include dir in ${ROOT_INCLUDE_DIR}" FORCE)
-      message("rootsys ${ROOTSYS}")
-      message("root_lib_dir ${ROOT_LIB_DIR}")
-      message("root_libraries ${ROOT_LIBRARIES}")
-      message("root_include_dir ${ROOT_INCLUDE_DIR}")
     else()
       set(ROOT_LIB_DIR "" CACHE STRING "No ROOT found" FORCE)
     endif()
@@ -149,7 +152,7 @@ else(NOT USE_ROOT)
       TObject.h
       ${ROOT_LIB_DIR}
       ${ROOTSYS}/bin
-      ${ROOT_LIBRARIES}
+      ${ROOT_NETX_LIBRARY} ${ROOT_${ROOT_VERSION}_LIBS}
       )
     set(ROOT_LIBRARIES ${ROOT_LIBRARIES} ${pthread_LIBRARIES})
   endif(NOT SYSTEM_PACKAGES_ROOT)
