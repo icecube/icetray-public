@@ -2,12 +2,19 @@ import copy
 import os, sys
 
 if sys.version_info[0] >= 3:
-	import urllib.parse
-	import urllib.request, urllib.error, urllib.parse
+	import urllib.parse as urlparse
+	from urllib.error import HTTPError
+	from urllib.request import urlopen
 else:
-	import urllib
+	import urlparse
+	from urllib2 import HTTPError
+	from urllib2 import urlopen
 import tempfile
 import shutil
+try:
+	from . import gridftp
+except ImportError:
+	pass
 
 from icecube import icetray
 from icecube.dataio import I3FileStager
@@ -16,9 +23,10 @@ from icecube.dataio import I3FileStager
 class I3FileStagerFile(I3FileStager):
 	file_counter = 0
 
-	def __init__(self, local_scratch_dir):
+	def __init__(self, local_scratch_dir, blocksize=2**16):
 		I3FileStager.__init__(self)
 
+		self.blocksize = blocksize
 		self.local_scratch_dir = local_scratch_dir
 
 		self.scratch_dir = None
@@ -42,11 +50,14 @@ class I3FileStagerFile(I3FileStager):
 			try:
 				os.rmdir(self.scratch_dir)
 			except OSError as e:
-				print(e)
+				icetray.logging.log_error("Cleanup error: %s" % str(e), unit="I3FileStagerFile")
 
 	def Schemes(self):
 		# we handle "file://" URLs
-		return ["http", "https", "ftp", "file"]
+		schemes = ["http", "https", "ftp", "file"]
+		if 'gridftp' in globals():
+			schemes.append("gsiftp")
+		return schemes
 
 	def WillReadLater(self, url):
 		# not used for this implementation, this will
@@ -55,7 +66,7 @@ class I3FileStagerFile(I3FileStager):
 
 	def StageFile(self, url):
 		# parse the URL
-		parsed_url = urllib.parse.urlparse(url, scheme="file") # use "file" as the default scheme
+		parsed_url = urlparse.urlparse(url, scheme="file") # use "file" as the default scheme
 		if parsed_url[0] not in self.Schemes():
 			icetray.logging.log_fatal("Cannot handle URL scheme \"%s\": %s" % (parsed_url[0], url), unit="I3FileStagerFile")
 		input_path = parsed_url[2]
@@ -71,11 +82,8 @@ class I3FileStagerFile(I3FileStager):
 			input_fileext = input_fileext2+input_fileext
 
 		output_file = input_filebase + ('_%06u' % I3FileStagerFile.file_counter) + input_fileext
-		I3FileStagerFile.file_counter += 1
 
 		output_path = self.scratch_dir + '/' + output_file
-
-		self.staged_files.add(output_path)
 
 		# copy the file
 		if parsed_url[0] == "file":
@@ -86,19 +94,26 @@ class I3FileStagerFile(I3FileStager):
 			icetray.logging.log_info("Downloading %s to %s" % (url, output_path), unit="I3FileStagerFile")
 
 			try:
-				f = urllib.request.urlopen(url)
-				data = f.read()
 				output_file = open(output_path, "wb")
-				output_file.write(data)
-				f.close()
+				f = urlopen(url)
+				
+				while True:
+					block = f.read(self.blocksize)
+					output_file.write(block)
+					if len(block) < self.blocksize:
+						break
 
 				icetray.logging.log_info("Download finished: %s to %s" % (url, output_path), unit="I3FileStagerFile")
-			except urllib.error.HTTPError as e:
-				icetray.logging.log_fatal("Download error: %s" % str(e), unit="I3FileStagerFile")
-				pass
-			except:
-				icetray.logging.log_error("Download error", unit="I3FileStagerFile")
-				raise
+			except Exception as e:
+				if os.path.exists(output_path):
+					os.remove(output_path)
+				icetray.logging.log_fatal("Downloading %s: %s" % (url, str(e)), unit="I3FileStagerFile")
+			finally:
+				f.close()
+				output_file.close()
+		
+		I3FileStagerFile.file_counter += 1
+		self.staged_files.add(output_path)
 
 		return output_path
 
@@ -111,7 +126,7 @@ class I3FileStagerFile(I3FileStager):
 			icetray.logging.log_info("Removing file %s" % filename, unit="I3FileStagerFile")
 			os.remove(filename)
 		except OSError as e:
-			print(e)
+			icetray.logging.log_error("Cleanup error: %s" % str(e), unit="I3FileStagerFile")
 
 		self.staged_files.remove(filename)
 
