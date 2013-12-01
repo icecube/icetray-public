@@ -44,8 +44,6 @@ def test_gridftp():
 		raise AssertionError("This file does not actually exist.")
 	except RuntimeError:
 		pass
-	except Exception as e:
-		raise e
 
 def test_file():
 	_test_stage(os.path.expandvars("file://$I3_BUILD/env-shell.sh"))
