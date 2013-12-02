@@ -135,6 +135,7 @@ I3WriterBase::Configure()
 	}
 
 	GetParameter("DropOrphanStreams", dropOrphanStreams_);
+	file_stager_ = context_.Get<I3FileStagerPtr>("I3FileStager");
 }
 
 void

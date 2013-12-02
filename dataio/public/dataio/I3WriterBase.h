@@ -23,6 +23,7 @@
 #define I3_WRITERBASE_H_INCLUDED
 
 #include <icetray/I3ConditionalModule.h>
+#include <dataio/I3FileStager.h>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <zlib.h>
 
@@ -47,6 +48,7 @@ protected:
   
   boost::iostreams::filtering_ostream filterstream_;
   std::string path_;
+  I3FileStagerPtr file_stager_;
 
 public:
 

@@ -4,20 +4,11 @@ load_pybindings(__name__, __path__)
 
 import sys
 if sys.version_info[:2] >= (2,6):
-	from icecube.dataio.I3FileStagerFile import I3FileStagerFile
+	from icecube.dataio.I3FileStagerFile import I3FileStagerFile, GridFTPStager, SCPStager
 
-@icetray.traysegment_inherit('I3Reader', removeopts=['FileStagerList'])
-def I3Reader(tray, name, **kwargs):
-	"""Read an .i3 file. This supports remote files
-	by specifying URLs and will stage them in an auto-configured
-	local scratch directory. Using a URL like
-	file://home/user/file.i3 will stage local files,
-	using plain filenames will read the files directly.
-	"""
-
+def get_stagers(staging_directory=None):
 	import os, pwd
-	from icecube import icetray, dataclasses
-
+	
 	def try_to_make_scratch_dir(basename, fullname):
 		if not os.path.isdir(basename):
 			return False
@@ -31,6 +22,8 @@ def I3Reader(tray, name, **kwargs):
 
 		return True
 
+	if staging_directory is not None:
+		pass
 	# find a local staging directory
 	if "_CONDOR_SCRATCH_DIR" in os.environ:
 		# works on condor (especially npx4)
@@ -51,8 +44,22 @@ def I3Reader(tray, name, **kwargs):
 			icetray.logging.log_fatal("Cannot find a suitable scratch directory on this machine.", unit="I3Reader")
 
 	stager = I3FileStagerFile(staging_directory)
-	tray.AddModule('I3Reader', name,
-		FileStagerList=[stager],
-		**kwargs)
+	return [stager(staging_directory) for stager in I3FileStagerFile, GridFTPStager, SCPStager]
+
+@icetray.traysegment_inherit('I3Reader')
+def I3Reader(tray, name, **kwargs):
+	"""Read an .i3 file. This supports remote files
+	by specifying URLs and will stage them in an auto-configured
+	local scratch directory. Using a URL like
+	file://home/user/file.i3 will stage local files,
+	using plain filenames will read the files directly.
+	"""
+
+	import os, pwd
+	from icecube import icetray, dataclasses
+
+	tray.context['I3FileStager'] = I3FileStagerCollection(get_stagers())
+
+	tray.AddModule('I3Reader', name, **kwargs)
 
 del icetray, interfaces

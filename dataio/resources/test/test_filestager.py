@@ -19,7 +19,7 @@ def test_scratchdir():
 
 def _test_stage(url):
 	stager = I3FileStagerFile('.')
-	local_fname = stager.StageFile(url)
+	local_fname = stager.StageFileIn(url)
 	assert(len(stager.staged_files) == 1)
 	assert(local_fname == iter(stager.staged_files).next())
 	assert(os.path.exists(local_fname))
@@ -30,20 +30,6 @@ def test_http():
 
 def test_https():
 	_test_stage("https://icecube.wisc.edu/index.html")
-
-def test_ftp():
-	_test_stage("ftp://ftp.freebsd.org/pub/FreeBSD/README.TXT")
-
-def test_gridftp():
-	if not 'gsiftp' in I3FileStagerFile('.').Schemes():
-		return
-	_test_stage("gsiftp://gridftp.icecube.wisc.edu/data/sim/sim-new/downloads/spline-tables/README")
-	# ensure that errors are properly reported
-	try:
-		_test_stage("gsiftp://gridftp.icecube.wisc.edu/data/sim/sim-new/downloads/spline-tables/READMEY")
-		raise AssertionError("This file does not actually exist.")
-	except RuntimeError:
-		pass
 
 def test_file():
 	_test_stage(os.path.expandvars("file://$I3_BUILD/env-shell.sh"))
