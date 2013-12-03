@@ -2,48 +2,109 @@
 # Top-level CMake file for a parasitic metaproject build
 #
 # Jakob van Santen (UW-Madison) 2013-12-02
-
+#
 # Use this to add projects to a pre-built meta-project where read-only copies
 # of the source tree and build directory exist at a known and constant path, e.g.
+# in cvmfs. After checking out the cmake project and any others you would like to
+# add, create a CMakeLists.txt containing the line:
 #
-# cmake ../src -DHOST_BUILD=/cvmfs/icecube.wisc.edu/py2-v1/RHEL_6_x86_64/metaprojects/simulation/trunk
+# include(cmake/toplevel-parasite.cmake NO_POLICY_SCOPE)
+#
+# then create a build directory and run e.g.
+#
+# cmake ../src -DMETAPROJECT=simulation/trunk
+#
+# In environments like the one provided by /cvmfs/icecube.wisc.edu/setup.sh,
+# the base metaproject specification will be expanded to the full path to a
+# build for the selected toolset and current architecture. In other
+# environments, the full path to an existing build directory may be used.
 #
 # Tarballs created from this build will be extremely light-weight, containing only
-# the new projects and symlinks to the parasitized metaproject.
+# the new projects and symlinks to the parasitized base metaproject.
 
 cmake_minimum_required(VERSION 2.6.4 FATAL_ERROR)
-
-set(HOST_BUILD "NONE" CACHE STRING "Path to host build directory")
-if(HOST_BUILD STREQUAL "NONE;,")
-  message(FATAL_ERROR "You must specify a host build directory")
-endif(HOST_BUILD STREQUAL "NONE;,")
-
-# Recover source and build directories for pre-built metaprojects
-set(HOST_I3_BUILD ${HOST_BUILD})
-load_cache(${HOST_BUILD} READ_WITH_PREFIX HOST_ icetray_SOURCE_DIR)
-get_filename_component(HOST_I3_SRC ${HOST_icetray_SOURCE_DIR} PATH)
-
-set(I3_SRC ${CMAKE_SOURCE_DIR})
-set(I3_BUILD ${CMAKE_BINARY_DIR})
-
-# pull SVN revision from cache
-load_cache(${HOST_BUILD} READ_WITH_PREFIX "" SVN_REVISION SVN_URL META_PROJECT)
-message(STATUS ${SVN_REVISION})
-message(STATUS ${SVN_URL})
-set(HAVE_META_PROJECT TRUE)
-set(HAVE_SVN_REVISION TRUE)
 
 set(CMAKE_MODULE_PATH
   ${EXTRA_CMAKE_MODULE_PATH} 
   ${CMAKE_SOURCE_DIR}/cmake 
   ${CMAKE_SOURCE_DIR}/cmake/tools 
   ${CMAKE_SOURCE_DIR}/cmake/utility)
+include(utility)
+
+colormsg("")
+colormsg(_HIBLUE_ "Configuring parasitic metaproject")
+colormsg("")
+
+set(METAPROJECT "" CACHE STRING "Path to host build directory")
+if(EXISTS ${METAPROJECT}/env-shell.sh)
+  # user supplied full path
+  set(HOST_I3_BUILD ${METAPROJECT})
+elseif(DEFINED ENV{SROOT} AND EXISTS $ENV{SROOT}/metaprojects)
+  # cvmfs.icecube.wisc.edu-stype $SROOT/metaprojects exists
+  if(NOT METAPROJECT STREQUAL "")
+    get_filename_component(_metaproject_family ${METAPROJECT} PATH)
+    if(_metaproject_family STREQUAL "")
+      set(_metaproject_family ${METAPROJECT})
+    endif(_metaproject_family STREQUAL "")
+  endif()
+    
+  # endif(NOT METAPROJECT STREQUAL "")
+  if(EXISTS $ENV{SROOT}/metaprojects/${METAPROJECT}/env-shell.sh)
+    # specified metaproject/version exists
+    set(HOST_I3_BUILD $ENV{SROOT}/metaprojects/${METAPROJECT})
+  elseif(NOT ${_metaproject_family} STREQUAL "" AND EXISTS $ENV{SROOT}/metaprojects/${_metaproject_family})
+    colormsg(HIRED "No metaproject \"${METAPROJECT}\" in $ENV{SROOT}/metaprojects")
+    colormsg(RED "Available versions of ${_metaproject_family}:")
+    file(GLOB _metaproject_versions RELATIVE $ENV{SROOT}/metaprojects/${_metaproject_family} $ENV{SROOT}/metaprojects/${_metaproject_family}/*/env-shell.sh)
+    foreach(_envshell ${_metaproject_versions})
+      get_filename_component(_version ${_envshell} PATH)
+      colormsg(YELLOW ${_version})
+    endforeach(_envshell ${_metaproject_versions})
+  else()
+    colormsg(HIRED "No metaproject \"${METAPROJECT}\" in $ENV{SROOT}/metaprojects")
+    colormsg(RED "Available metaprojects:")
+    file(GLOB _metaproject_versions RELATIVE $ENV{SROOT}/metaprojects $ENV{SROOT}/metaprojects/*/*/env-shell.sh)
+    foreach(_envshell ${_metaproject_versions})
+      get_filename_component(_version ${_envshell} PATH)
+      colormsg(YELLOW ${_version})
+    endforeach(_envshell ${_metaproject_versions})
+  endif(EXISTS $ENV{SROOT}/metaprojects/${METAPROJECT}/env-shell.sh)
+endif(EXISTS ${METAPROJECT}/env-shell.sh)
+if(NOT DEFINED HOST_I3_BUILD)
+  message(FATAL_ERROR "You must specify a base metaproject/version with e.g. -DMETAPROJECT=simulation/trunk. Alternatively, you may specify the full path to a build directory of a pre-built metaproject")
+endif()
+set(NICKNAME "" CACHE STRING "Nickname for this build. This will be included in the tarball name")
+
+# Recover source director from the pre-built metaproject
+load_cache(${HOST_I3_BUILD} READ_WITH_PREFIX HOST_ icetray_SOURCE_DIR)
+get_filename_component(HOST_I3_SRC ${HOST_icetray_SOURCE_DIR} PATH)
+
+set(I3_SRC ${CMAKE_SOURCE_DIR})
+set(I3_BUILD ${CMAKE_BINARY_DIR})
+
+# pull SVN revision from cache
+load_cache(${HOST_I3_BUILD} READ_WITH_PREFIX "" SVN_REVISION SVN_URL META_PROJECT)
+set(HAVE_META_PROJECT TRUE)
+set(HAVE_SVN_REVISION TRUE)
+# use a more idiomatic name for the tarball
+if(DEFINED ENV{OS_ARCH})
+  set(CMAKE_INSTALL_PREFIX ${META_PROJECT})
+  if(NOT NICKNAME STREQUAL "")
+    set(CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}.${NICKNAME})
+  endif(NOT NICKNAME STREQUAL "")
+  if(META_PROJECT MATCHES "trunk$")
+    set(CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}.r${SVN_REVISION})
+  endif(META_PROJECT MATCHES "trunk$")
+  set(CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}.$ENV{OS_ARCH} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
+endif(DEFINED ENV{OS_ARCH})
+message(STATUS "Base metaproject: ${HOST_I3_BUILD}")
+message(STATUS "Built from:       ${SVN_URL} r${SVN_REVISION}")
+message(STATUS "Install prefix:   ${CMAKE_INSTALL_PREFIX}")
 
 # dummy testing target
 add_custom_target(i3test COMMAND echo "We don't actually have tests.")
 add_custom_target(pybindings)
 
-include(utility)
 set(CMAKE_SOURCE_DIR ${HOST_I3_SRC})
 include(config)
 set(CMAKE_SOURCE_DIR ${I3_SRC})
@@ -70,7 +131,7 @@ macro(use_projects THIS_TARGET)
     if(EXISTS ${HOST_I3_SRC}/${USED_PROJECT}/CMakeLists.txt)
       # pre-compiled project; just find libraries
       include_directories(${HOST_I3_SRC}/${USED_PROJECT}/public)
-      find_library(${${USED_PROJECT}_LIBRARIES} NAMES lib${USED_PROJECT} PATHS ${HOST_BUILD}/lib)
+      find_library(${${USED_PROJECT}_LIBRARIES} NAMES lib${USED_PROJECT} PATHS ${HOST_I3_BUILD}/lib)
       target_link_libraries(${THIS_TARGET} ${${USED_PROJECT}_LIBRARIES})
     elseif(EXISTS ${I3_SRC}/${USED_PROJECT}/CMakeLists.txt)
       # parasite project; add dependencies
@@ -85,7 +146,7 @@ endmacro(use_projects THIS_TARGET)
 # use tools from the previous cache
 macro(use_tool TARGET TOOL_)
   string(TOUPPER ${TOOL_} TOOL)
-  load_cache(${HOST_BUILD} READ_WITH_PREFIX ""
+  load_cache(${HOST_I3_BUILD} READ_WITH_PREFIX ""
     ${TOOL}_FOUND
     ${TOOL}_CONFIG_ERROR
     ${TOOL}_INCLUDE_DIR
