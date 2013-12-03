@@ -23,16 +23,6 @@ colormsg("")
 colormsg(HICYAN "python")
 
 set(PYTHON_FOUND TRUE CACHE BOOL "Python found successfully" FORCE)
-if(EXISTS ${I3_PORTS}/bin/python)
-  message(STATUS "***")
-  message(STATUS "***")
-  message(STATUS "***  $I3_PORTS/bin/python exists in your toolset...  toolset is too old.")
-  message(STATUS "***  You'll probably want to install the toolset fresh from the latest")
-  message(STATUS "***  ports distribution")
-  message(STATUS "***")
-  message(STATUS "***")
-  message(FATAL_ERROR "Stopping makefile generation.   Sorry.")
-endif(EXISTS ${I3_PORTS}/bin/python)
 
 find_package(PythonInterp QUIET)
 
