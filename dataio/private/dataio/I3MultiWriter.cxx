@@ -69,7 +69,7 @@ I3MultiWriter::Configure_()
   GetParameter("MetadataStreams", metadata_streams_);
 
   log_trace("path_=%s", path_.c_str());
-  log_debug("Starting new file '%s'", current_path_.c_str());
+  log_debug("Starting new file '%s'", current_filename_->c_str());
   NewFile();
 }
 
@@ -112,7 +112,7 @@ I3MultiWriter::Process()
   if (!ctr) log_fatal("couldnt get counter from stream");
   bytes_written = ctr->characters();
 
-  log_trace("%llu bytes: %s", (unsigned long long)bytes_written, current_path_.c_str());
+  log_trace("%llu bytes: %s", (unsigned long long)bytes_written, current_filename_->c_str());
 
   frame = PeekFrame();
   if (frame == NULL)
