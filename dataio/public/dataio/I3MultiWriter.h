@@ -37,8 +37,6 @@ class I3MultiWriter : public I3WriterBase
   std::vector<I3Frame::Stream> metadata_streams_;
   std::vector<I3FramePtr> metadata_cache_;
   void NewFile();
-  
-  std::string current_path_;
 
 public:
 

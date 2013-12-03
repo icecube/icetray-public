@@ -8,7 +8,8 @@ from icecube.dataio import I3FileStagerFile
 
 from icecube import icetray
 import os
-icetray.logging.I3Logger.global_logger = icetray.I3NullLogger()
+# icetray.logging.I3Logger.global_logger = icetray.I3NullLogger()
+icetray.logging.set_level('TRACE')
 
 def test_scratchdir():
 	stager = I3FileStagerFile('.')
@@ -19,11 +20,13 @@ def test_scratchdir():
 
 def _test_stage(url):
 	stager = I3FileStagerFile('.')
-	local_fname = stager.StageFileIn(url)
-	assert(len(stager.staged_files) == 1)
-	assert(local_fname == iter(stager.staged_files).next())
-	assert(os.path.exists(local_fname))
-	assert(os.stat(local_fname).st_size > 100)
+	local_fname = stager.GetReadablePath(url)
+	assert(os.path.exists(str(local_fname)))
+	assert(os.stat(str(local_fname)).st_size > 100)
+	local_fname = str(local_fname)
+	# check that staged files are really deleted
+	if stager.CanStageIn(url):
+		assert(not os.path.exists(str(local_fname)))
 
 def test_http():
 	_test_stage("http://code.icecube.wisc.edu/tools/clsim/MD5SUMS")

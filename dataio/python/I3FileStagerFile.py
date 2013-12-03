@@ -22,6 +22,7 @@ class AbstractFileStager(I3FileStager):
 		self.staged_files = set()
 		self.destinations = dict()
 		self.local_scratch_dir = local_scratch_dir
+		self.file_counter = 0
 
 		if not os.path.isdir(self.local_scratch_dir):
 			icetray.logging.log_fatal("The scratch directory %s does not exist!" % self.local_scratch_dir, unit="I3FileStagerFile")
@@ -30,51 +31,7 @@ class AbstractFileStager(I3FileStager):
 
 		icetray.logging.log_info("Created scratch directory %s" % self.scratch_dir, unit="AbstractFileStager")
 	
-	def __del__(self):
-		if self.staged_files is not None and len(self.staged_files)>0:
-			icetray.logging.log_info("Cleaning up staged files..", unit="I3FileStagerFile")
-			for staged_file in copy.copy(self.staged_files):
-				self.Cleanup(staged_file)
-
-		if self.scratch_dir is not None:
-			icetray.logging.log_info("Removing scratch directory %s" % self.scratch_dir, unit="I3FileStagerFile")
-			try:
-				os.rmdir(self.scratch_dir)
-			except OSError as e:
-				icetray.logging.log_error("Cleanup error: %s" % str(e), unit="I3FileStagerFile")
-
-	def WillReadLater(self, url):
-		# not used for this implementation, this will
-		# just block while copying files in StageFile()
-		pass
-	
-	def WillWrite(self, url):
-		self.check_scheme(url)
-		if url in self.destinations:
-			raise KeyError("Duplicate destination %s" % url)
-		fname = self.generate_local_name(url)
-		
-		self.staged_files.add(fname)
-		self.destinations[url] = fname
-		
-		return fname
-	
-	def Cleanup(self, filename):
-		if filename not in self.staged_files:
-			return
-
-		try:
-			icetray.logging.log_info("Removing file %s" % filename, unit="I3FileStagerFile")
-			os.remove(filename)
-		except OSError as e:
-			icetray.logging.log_error("Cleanup error: %s" % str(e), unit="I3FileStagerFile")
-
-		self.staged_files.remove(filename)
-
-	def check_scheme(self, url):
-		pass
-
-	def generate_local_name(self, url):
+	def GenerateLocalFileName(self, url, readable):
 		# parse the URL
 		parsed_url = urlparse.urlparse(url, scheme="file") # use "file" as the default scheme
 		input_path = parsed_url[2]
@@ -89,18 +46,30 @@ class AbstractFileStager(I3FileStager):
 			input_filebase = input_filebase2
 			input_fileext = input_fileext2+input_fileext
 
-		output_file = input_filebase + ('_%06u' % I3FileStagerFile.file_counter) + input_fileext
+		output_file = input_filebase + ('_%06u' % self.file_counter) + input_fileext
 
 		output_path = self.scratch_dir + '/' + output_file
+		self.file_counter += 1
 		
 		return output_path
+	
+	def __del__(self):
+		if self.scratch_dir is not None:
+			icetray.logging.log_info("Removing scratch directory %s" % self.scratch_dir, unit="I3FileStagerFile")
+			try:
+				os.rmdir(self.scratch_dir)
+			except OSError as e:
+				icetray.logging.log_error("Cleanup error: %s" % str(e), unit="I3FileStagerFile")
+
+	def WillReadLater(self, url, fname):
+		# not used for this implementation, this will
+		# just block while copying files in StageFile()
+		pass
+
 
 class I3FileStagerFile(AbstractFileStager):
-	file_counter = 0
-
 	def __init__(self, local_scratch_dir, blocksize=2**16):
 		AbstractFileStager.__init__(self, local_scratch_dir)
-
 		self.blocksize = blocksize
 
 	def ReadSchemes(self):
@@ -112,10 +81,9 @@ class I3FileStagerFile(AbstractFileStager):
 		# we can't actually write anything
 		return []
 
-	def StageFileIn(self, url):
+	def CopyFileIn(self, url, output_path):
 		# parse the URL
 		parsed_url = urlparse.urlparse(url, scheme="file") # use "file" as the default scheme
-		output_path = self.generate_local_name(url)
 
 		# copy the file
 		if parsed_url.scheme == "file":
@@ -145,15 +113,9 @@ class I3FileStagerFile(AbstractFileStager):
 				f.close()
 				output_file.close()
 		
-		I3FileStagerFile.file_counter += 1
-		self.staged_files.add(output_path)
-
 		return output_path
 
-	def StageFileOut(self, url):
-		if not url in self.destinations:
-			raise KeyError("%s was never registered as a destination")
-		local_path = self.destinations[url]
+	def CopyFileOut(self, local_path, url):
 		
 		parsed_url = urlparse.urlparse(url, scheme="file") # use "file" as the default scheme
 		if parsed_url[0] not in self.Schemes():
@@ -177,8 +139,6 @@ class I3FileStagerFile(AbstractFileStager):
 				icetray.logging.log_error("globus-url-copy failed: "+(stderr.strip()), unit="I3FileStagerFile")
 			else:
 				icetray.logging.log_info("Upload finished: %s to %s" % (local_path, url), unit="I3FileStagerFile")
-			
-		self.Cleanup(local_path)
 		
 class GridFTPStager(AbstractFileStager):
 	
@@ -191,11 +151,7 @@ class GridFTPStager(AbstractFileStager):
 	def WriteSchemes(self):
 		return ['ftp', 'gsiftp']
 	
-	def StageFileIn(self, url):
-		self.check_scheme(url)
-		
-		local_path = self.generate_local_name(url)
-		
+	def CopyFileIn(self, url, local_path):
 		icetray.logging.log_info("Downloading %s to %s" % (url, local_path), unit="GridFTPStager")
 		proc = subprocess.Popen(['globus-url-copy', '-nodcau', url, 'file://'+os.path.abspath(local_path)], stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
@@ -207,11 +163,7 @@ class GridFTPStager(AbstractFileStager):
 		self.staged_files.add(local_path)
 		return local_path
 		
-	def StageFileOut(self, url):
-		if not url in self.destinations:
-			raise KeyError("%s was never registered as a destination")
-		local_path = self.destinations[url]
-		
+	def CopyFileOut(self, local_path, url):
 		icetray.logging.log_info("Uploading %s to %s" % (local_path, url), unit="GridFTPStager")
 		proc = subprocess.Popen(['globus-url-copy', '-nodcau', 'file://'+os.path.abspath(local_path), url], stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
@@ -219,8 +171,6 @@ class GridFTPStager(AbstractFileStager):
 			icetray.logging.log_error("globus-url-copy failed: "+(stderr.strip()), unit="GridFTPStager")
 		else:
 			icetray.logging.log_info("Upload finished: %s to %s" % (local_path, url), unit="GridFTPStager")
-		
-		self.Cleanup(local_path)
 
 class SCPStager(AbstractFileStager):
 	
@@ -233,11 +183,9 @@ class SCPStager(AbstractFileStager):
 	def WriteSchemes(self):
 		return ['scp']
 	
-	def StageFileIn(self, url):
-		
-		local_path = self.generate_local_name(url)
-		
+	def CopyFileIn(self, url, local_path):
 		parsed = urlparse.urlparse(url)
+		print 'CopyFileIn', url, parsed, local_path
 		remote_spec = parsed.hostname+":"+parsed.path
 		icetray.logging.log_info("Downloading %s to %s" % (url, local_path), unit="SCPFTPStager")
 		proc = subprocess.Popen(['scp', remote_spec, os.path.abspath(local_path)], stderr=subprocess.PIPE)
@@ -250,12 +198,9 @@ class SCPStager(AbstractFileStager):
 		self.staged_files.add(local_path)
 		return local_path
 		
-	def StageFileOut(self, url):
-		if not url in self.destinations:
-			raise KeyError("%s was never registered as a destination")
-		local_path = self.destinations[url]
-		
+	def CopyFileOut(self, local_path, url):
 		parsed = urlparse.urlparse(url)
+		print 'CopyFileOut', url, parsed, local_path
 		remote_spec = parsed.hostname+":"+parsed.path
 		icetray.logging.log_info("Uploading %s to %s" % (local_path, url), unit="GridFTPStager")
 		proc = subprocess.Popen(['scp', os.path.abspath(local_path), remote_spec], stderr=subprocess.PIPE)
@@ -264,5 +209,3 @@ class SCPStager(AbstractFileStager):
 			icetray.logging.log_error("scp failed: "+(stderr.strip()), unit="GridFTPStager")
 		else:
 			icetray.logging.log_info("Upload finished: %s to %s" % (local_path, url), unit="GridFTPStager")
-		
-		self.Cleanup(local_path)

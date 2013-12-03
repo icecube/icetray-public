@@ -39,6 +39,7 @@
 #include <boost/format.hpp>
 #include <boost/foreach.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/make_shared.hpp>
 
 using boost::algorithm::to_lower;
 using boost::algorithm::iends_with;
@@ -135,12 +136,15 @@ I3WriterBase::Configure()
 	}
 
 	GetParameter("DropOrphanStreams", dropOrphanStreams_);
-	file_stager_ = context_.Get<I3FileStagerPtr>("I3FileStager");
+	file_stager_ = context_.Get<I3FileStagerPtr>();
+	if (!file_stager_)
+		file_stager_ = boost::make_shared<I3TrivialFileStager>();
 }
 
 void
 I3WriterBase::Finish()
 {
+	current_filename_.reset();
 	log_trace("%s", __PRETTY_FUNCTION__);
 	log_info("%u frames written.", frameCounter_);
 }

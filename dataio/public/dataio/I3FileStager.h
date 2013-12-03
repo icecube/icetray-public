@@ -4,17 +4,41 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <boost/function.hpp>
+#include <boost/enable_shared_from_this.hpp>
 
 #include <icetray/I3PointerTypedefs.h>
 #include <icetray/I3Logging.h>
+#include <icetray/I3DefaultName.h>
+
+class I3FileStager;
+
+namespace I3 { namespace dataio {
+class filehandle : public std::string
+{
+public:
+    virtual ~filehandle();
+    
+private:
+    filehandle(const std::string &path);
+    filehandle(const std::string &path, boost::function<void()> on_destroy);
+    friend class ::I3FileStager;
+    
+    boost::function<void()> callback_;
+};
+typedef boost::shared_ptr<filehandle> shared_filehandle;
+}}
+
+class I3FileStagerCollection;
 
 /**
  * A base class interface for staging files
  * to local storage from remote locations.
  */
-class I3FileStager
+class I3FileStager : public boost::enable_shared_from_this<I3FileStager>
 {
 public:
+    
     I3FileStager();
     virtual ~I3FileStager();
 
@@ -36,40 +60,59 @@ public:
      * Allows the reader to tell us what files will
      * be read in the future (in the order this is called).
      */ 
-    virtual void WillReadLater(const std::string &url) = 0;
+    void WillReadLater(const std::string &url);
 
     /**
      * Read a file from a URL and copy it to a local
      * scratch directory. Block until finished and return
-     * a full path to the local copy.
+     * a full path to the local copy. When the last reference
+     * to the return value is deleted, the file will be removed.
      */
-    virtual std::string StageFileIn(const std::string &url) = 0;
+    I3::dataio::shared_filehandle GetReadablePath(const std::string &url);
 
    /**
     * Allows a writer to tell us that it wants to write to
     * the given URL. Return a local filename that the writer
-    * should use instead.
+    * should use instead. When the last reference
+    * to the return value is deleted, the file will be uploaded
+    * to its destination and then removed.
     */ 
-    virtual std::string WillWrite(const std::string &url) = 0;
-   
-   /**
-    * Copy the local file associated with the given url to
-    * its destination, and block until complete
-    */
-    virtual void StageFileOut(const std::string &url) = 0;
+    I3::dataio::shared_filehandle GetWriteablePath(const std::string &url);
 
-    /**
-     * Cleanup a previously staged file. Usually this
-     * means just deleting it.
-     */ 
-    virtual void Cleanup(const std::string &filename) = 0;
-
+protected:
+    std::string GetLocalFileName(const std::string &url, bool reading);
+    
+    virtual std::string GenerateLocalFileName(const std::string &url, bool reading) = 0;
+    virtual void WillReadLater(const std::string &url, const std::string &fname) = 0;
+    virtual void CopyFileIn(const std::string &url, const std::string &fname) = 0;
+    virtual void CopyFileOut(const std::string &fname, const std::string &url) = 0;
+    
+    
 private:
-    I3FileStager(const I3FileStager &); // no copy constructor
+    void Cleanup(const std::string &fname);
+    void StageFileOut(const std::string &url);
+    I3FileStager(const I3FileStager &);
+    friend class I3FileStagerCollection;
 
+    std::map<std::string, std::string> url_to_filename_;
 };
 
 I3_POINTER_TYPEDEFS(I3FileStager);
+I3_DEFAULT_NAME(I3FileStager);
+
+class I3TrivialFileStager : public I3FileStager {
+public:
+    I3TrivialFileStager();
+    virtual ~I3TrivialFileStager();
+    
+    virtual std::vector<std::string> ReadSchemes() const;
+    virtual std::vector<std::string> WriteSchemes() const;
+protected:
+    virtual std::string GenerateLocalFileName(const std::string &url, bool reading);
+    virtual void WillReadLater(const std::string &url, const std::string &fname);
+    virtual void CopyFileIn(const std::string &url, const std::string &fname);
+    virtual void CopyFileOut(const std::string &fname, const std::string &url);
+};
 
 class I3FileStagerCollection : public I3FileStager
 {
@@ -79,11 +122,11 @@ public:
     
     virtual std::vector<std::string> ReadSchemes() const;
     virtual std::vector<std::string> WriteSchemes() const;
-    virtual void WillReadLater(const std::string &url);
-    virtual std::string StageFileIn(const std::string &url);
-    virtual std::string WillWrite(const std::string &url);
-    virtual void StageFileOut(const std::string &url);
-    virtual void Cleanup(const std::string &filename);
+protected:
+    virtual std::string GenerateLocalFileName(const std::string &url, bool reading);
+    virtual void WillReadLater(const std::string &url, const std::string &fname);
+    virtual void CopyFileIn(const std::string &url, const std::string &fname);
+    virtual void CopyFileOut(const std::string &fname, const std::string &url);
 private:
     SET_LOGGER("I3FileStagerCollection");
     I3FileStagerCollection(const I3FileStagerCollection &);
@@ -95,18 +138,6 @@ private:
     
     const I3FileStagerPtr& GetReader(const std::string& url) const;
     const I3FileStagerPtr& GetWriter(const std::string& url) const;
-};
-
-class I3StagingReader : public I3Module {
-public:
-    I3StagingReader(const I3Context&);
-    void Configure();
-    // void OpenNextFile()
-protected:
-    std::vector<std::string> filenames_;
-    std::vector<std::string>::iterator filenames_iter_;
-    std::string current_filename_;
-    I3FileStager file_stager_;
 };
 
 #endif

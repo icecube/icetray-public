@@ -1,5 +1,25 @@
 #include "dataio/I3FileStager.h"
 #include <boost/foreach.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/bind.hpp>
+
+namespace I3 { namespace dataio {
+
+filehandle::filehandle(const std::string &path)
+    : std::string(path)
+{}
+
+filehandle::filehandle(const std::string &path, boost::function<void()> destructor)
+    : std::string(path), callback_(destructor)
+{}
+
+filehandle::~filehandle()
+{
+	if (callback_)
+		callback_();
+}
+}}
 
 I3FileStager::I3FileStager()
 {
@@ -26,6 +46,111 @@ I3FileStager::CanStageOut(const std::string &url)
 	std::vector<std::string> schemes(WriteSchemes());
 	return std::find(schemes.begin(), schemes.end(),
 	    url.substr(0, url.find(":"))) != schemes.end();
+}
+
+std::string
+I3FileStager::GetLocalFileName(const std::string &url, bool reading)
+{
+	std::map<std::string, std::string>::iterator fname = url_to_filename_.find(url);
+	if (fname == url_to_filename_.end())
+		fname = url_to_filename_.insert(std::make_pair(url, GenerateLocalFileName(url, reading))).first;
+	return fname->second;
+}
+
+void
+I3FileStager::WillReadLater(const std::string &url)
+{
+	if (CanStageIn(url))
+		WillReadLater(url, GetLocalFileName(url, true));
+}
+
+namespace {
+void strunlink(const std::string &s) { unlink(s.c_str()); }
+}
+
+I3::dataio::shared_filehandle
+I3FileStager::GetReadablePath(const std::string &url)
+{
+	if (!CanStageIn(url))
+		return I3::dataio::shared_filehandle(new I3::dataio::filehandle(url));
+	std::string fname = GetLocalFileName(url, true);
+	CopyFileIn(url, fname);
+	boost::function<void()> deleter = boost::bind(&I3FileStager::Cleanup, shared_from_this(), url);
+	return I3::dataio::shared_filehandle(new I3::dataio::filehandle(fname, deleter));
+}
+
+I3::dataio::shared_filehandle
+I3FileStager::GetWriteablePath(const std::string &url)
+{
+	if (!CanStageOut(url))
+		return I3::dataio::shared_filehandle(new I3::dataio::filehandle(url));
+	std::string fname = GetLocalFileName(url, false);
+	// Upload, then delete file when done
+	boost::function<void()> deleter = boost::bind(&I3FileStager::StageFileOut, shared_from_this(), url);
+	return I3::dataio::shared_filehandle(new I3::dataio::filehandle(fname, deleter));
+}
+
+void
+I3FileStager::StageFileOut(const std::string &url)
+{
+	namespace fs = boost::filesystem;
+	
+	std::string fname = GetLocalFileName(url, false);
+	if (fs::exists(fname)) {
+		CopyFileOut(fname, url);
+		unlink(fname.c_str());
+	}
+}
+
+void
+I3FileStager::Cleanup(const std::string &url)
+{
+	namespace fs = boost::filesystem;
+	
+	std::string fname = GetLocalFileName(url, true);
+	if (fs::exists(fname))
+		unlink(fname.c_str());
+}
+
+I3TrivialFileStager::I3TrivialFileStager()
+{
+}
+
+I3TrivialFileStager::~I3TrivialFileStager()
+{
+}
+
+std::vector<std::string>
+I3TrivialFileStager::ReadSchemes() const
+{
+	return std::vector<std::string>();
+}
+
+std::vector<std::string>
+I3TrivialFileStager::WriteSchemes() const
+{
+	return std::vector<std::string>();
+}
+
+std::string
+I3TrivialFileStager::GenerateLocalFileName(const std::string &url, bool reading)
+{
+	return url;
+}
+
+void
+I3TrivialFileStager::WillReadLater(const std::string &url, const std::string &fname)
+{
+}
+
+void
+I3TrivialFileStager::CopyFileIn(const std::string &url, const std::string &fname)
+{
+}
+
+void
+I3TrivialFileStager::CopyFileOut(const std::string &fname, const std::string &url)
+{
 }
 
 I3FileStagerCollection::I3FileStagerCollection(const std::vector<I3FileStagerPtr> &stagers)
@@ -88,39 +213,27 @@ I3FileStagerCollection::GetWriter(const std::string &url) const
 	return target->second;
 }
 
-void
-I3FileStagerCollection::WillReadLater(const std::string &url)
-{
-	GetReader(url)->WillReadLater(url); 
-}
-
 std::string
-I3FileStagerCollection::StageFileIn(const std::string &url)
+I3FileStagerCollection::GenerateLocalFileName(const std::string &url, bool reading)
 {
-	return GetReader(url)->StageFileIn(url);
-}
-
-std::string
-I3FileStagerCollection::WillWrite(const std::string &url)
-{
-	return GetWriter(url)->WillWrite(url);
+	return (reading ? GetReader(url) : GetWriter(url))->GenerateLocalFileName(url, reading);
 }
 
 void
-I3FileStagerCollection::StageFileOut(const std::string &url)
+I3FileStagerCollection::WillReadLater(const std::string &url, const std::string &fname)
 {
-	GetWriter(url)->StageFileOut(url);
+	GetReader(url)->WillReadLater(url, fname);
 }
 
 void
-I3FileStagerCollection::Cleanup(const std::string &filename)
+I3FileStagerCollection::CopyFileIn(const std::string &url, const std::string &fname)
 {
-	BOOST_FOREACH(const I3FileStagerPtr &p, stagers_) {
-		try {
-			p->Cleanup(filename);
-		} catch (...) {
-			
-		}
-	}
+	return GetReader(url)->CopyFileIn(url, fname);
+}
+
+void
+I3FileStagerCollection::CopyFileOut(const std::string &fname, const std::string &url)
+{
+	return GetWriter(url)->CopyFileOut(fname, url);
 }
 

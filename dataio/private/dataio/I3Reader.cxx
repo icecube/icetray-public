@@ -26,6 +26,7 @@
 #include <boost/iostreams/filter/gzip.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/foreach.hpp>
+#include <boost/make_shared.hpp>
 
 #include <fstream>
 #include <set>
@@ -53,8 +54,7 @@ class I3Reader : public I3Module
   I3FramePtr tmp_;
 
   std::vector<std::string>::iterator filenames_iter_;
-  std::string current_filename_;
-  bool current_file_staged_;
+  I3::dataio::shared_filehandle current_filename_;
 
   void OpenNextFile();
 
@@ -120,19 +120,14 @@ I3Reader::Configure()
 
   GetParameter("DropBuffers",
 	       drop_blobs_);
-
-  if (file_stager_ = context_.Get<I3FileStagerPtr>("I3FileStager")) {
-    BOOST_FOREACH(const std::string &filename, filenames_) {
-      if (file_stager_->CanStageIn(filename)) {
-        file_stager_->WillReadLater(filename);
-      } else {
-        log_debug("No stager found for %s (will be read directly)", filename.c_str())
-      }
-    }
-  }
+  
+  file_stager_ = context_.Get<I3FileStagerPtr>();
+  if (!file_stager_)
+     file_stager_ = boost::make_shared<I3TrivialFileStager>();
+  BOOST_FOREACH(const std::string &filename, filenames_)
+    file_stager_->WillReadLater(filename);
 
   filenames_iter_ = filenames_.begin();
-  current_file_staged_ = false;
   OpenNextFile();
 }
 
@@ -144,8 +139,7 @@ I3Reader::Process()
       if (filenames_iter_ == filenames_.end())
 	{
 	  RequestSuspension();
-	  if (current_file_staged_)
-	    file_stager_->Cleanup(current_filename_);
+    current_filename_.reset();
 	  return;
 	}
       else
@@ -159,7 +153,7 @@ I3Reader::Process()
 	frame->load(ifs_, skip_);
   } catch (const std::exception &e) {
 	log_fatal("Error reading %s at frame %d: %s!",
-	    current_filename_.c_str(), nframes_, e.what());
+	    current_filename_->c_str(), nframes_, e.what());
 	return;
   }
 	
@@ -174,28 +168,16 @@ I3Reader::OpenNextFile()
   ifs_.reset();
   assert(ifs_.empty());
 
-  if (current_file_staged_) {
-    log_info("Cleaning up %s", current_filename_.c_str());
-    file_stager_->Cleanup(current_filename_);
-  }
-
-  current_filename_ = *filenames_iter_;
+  current_filename_.reset();
+  current_filename_ = file_stager_->GetReadablePath(*filenames_iter_);
   nframes_ = 0;
   filenames_iter_++;
-  
-  if (file_stager_ && file_stager_->CanStageIn(current_filename_)) {
-    // stage from URL to temporary file and replace the current filename
-    current_filename_ = file_stager_->StageFileIn(current_filename_);
-    current_file_staged_ = true;
-  } else {
-    current_file_staged_ = false;
-  }
 
-  I3::dataio::open(ifs_, current_filename_);
+  I3::dataio::open(ifs_, *current_filename_);
   log_trace("Constructing with filename %s, %zu regexes", 
-	    current_filename_.c_str(), skip_.size());
+	    current_filename_->c_str(), skip_.size());
 
-  log_info("Opened file %s", current_filename_.c_str());
+  log_info("Opened file %s", current_filename_->c_str());
 }
 
 I3Reader::~I3Reader() 

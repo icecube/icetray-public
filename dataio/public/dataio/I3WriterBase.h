@@ -49,6 +49,7 @@ protected:
   boost::iostreams::filtering_ostream filterstream_;
   std::string path_;
   I3FileStagerPtr file_stager_;
+  I3::dataio::shared_filehandle current_filename_;
 
 public:
 

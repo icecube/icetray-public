@@ -70,7 +70,7 @@ I3MultiWriter::Configure_()
 
   log_trace("path_=%s", path_.c_str());
   log_debug("Starting new file '%s'", current_path_.c_str());
-  dataio::open(filterstream_, current_path_, gzip_compression_level_);
+  NewFile();
 }
 
 void 
@@ -78,26 +78,20 @@ I3MultiWriter::NewFile()
 {
   log_trace("%s", __PRETTY_FUNCTION__);
 
-  if (file_counter_ > 0 && file_stager_ && file_stager_->CanStageOut(current_path_))
-    file_stager_->StageFileOut(current_path_);
-
-  file_counter_++;
   boost::format f(path_);
   try {
-    f % file_counter_;
+    f % (file_counter_++);
   } catch (const std::exception& e) {
     log_error("Exception caught: %s", e.what());
     log_error("Does your Filename contain a printf-style specifier where the number should go, e.g., '%s'?",
 	      "myfile-%04u.i3.gz");
     throw;
   }
-  current_path_ = f.str();
+  std::string current_path = f.str();
 
-  log_info("Starting new file '%s'", current_path_.c_str());
-  std::string local_path;
-  if (file_stager_ && file_stager_->CanStageOut(current_path_))
-    local_path = file_stager_->WillWrite(current_path_);
-  dataio::open(filterstream_, local_path, gzip_compression_level_);
+  current_filename_ = file_stager_->GetWriteablePath(current_path);
+  log_info("Starting new file '%s'", current_filename_->c_str());
+  dataio::open(filterstream_, *current_filename_, gzip_compression_level_);
 
   BOOST_FOREACH(I3FramePtr frame, metadata_cache_)
 	frame->save(filterstream_, skip_keys_);
@@ -174,14 +168,9 @@ I3MultiWriter::Finish()
 
   if (lastfile_bytes == 0)
     {
-      log_trace("unlinking %s", current_path_.c_str());
-      unlink(current_path_.c_str());
+      log_trace("unlinking %s", current_filename_->c_str());
+      unlink(current_filename_->c_str());
     }
-  else if (file_stager_ && file_stager_->CanStageOut(current_path_))
-    {
-      file_stager_->StageFileOut(current_path_);
-    }
-
   I3WriterBase::Finish();
 }
 

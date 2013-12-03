@@ -4,6 +4,28 @@
 
 namespace bp = boost::python;
 
+std::string
+I3TrivialFileStager::GenerateLocalFileName(const std::string &url, bool reading)
+{
+	return url;
+}
+
+void
+I3TrivialFileStager::WillReadLater(const std::string &url, const std::string &fname)
+{
+}
+
+void
+I3TrivialFileStager::CopyFileIn(const std::string &url, const std::string &fname)
+{
+}
+
+void
+I3TrivialFileStager::CopyFileOut(const std::string &fname, const std::string &url)
+{
+}
+
+
 struct I3FileStagerWrapper : I3FileStager, bp::wrapper<I3FileStager>
 {
     // pure virtual
@@ -19,34 +41,28 @@ struct I3FileStagerWrapper : I3FileStager, bp::wrapper<I3FileStager>
         return this->get_override("WriteSchemes")();
     }
 
-    virtual void WillReadLater(const std::string &url)
+    virtual std::string GenerateLocalFileName(const std::string &url, bool reading)
     {
         boost::python::detail::gil_holder gil;
-        this->get_override("WillReadLater")(url);
+        return this->get_override("GenerateLocalFileName")(url, reading);
     }
 
-    virtual std::string StageFileIn(const std::string &url)
+    virtual void WillReadLater(const std::string &url, const std::string &fname)
     {
         boost::python::detail::gil_holder gil;
-        return this->get_override("StageFileIn")(url);
-    }
-    
-    virtual std::string WillWrite(const std::string &url)
-    {
-        boost::python::detail::gil_holder gil;
-        return this->get_override("WillWrite")(url);
-    }
-    
-    virtual void StageFileOut(const std::string &url)
-    {
-        boost::python::detail::gil_holder gil;
-        this->get_override("StageFileOut")(url);
+        this->get_override("WillReadLater")(url, fname);
     }
 
-    virtual void Cleanup(const std::string &filename)
+    virtual void CopyFileIn(const std::string &url, const std::string &fname)
     {
         boost::python::detail::gil_holder gil;
-        this->get_override("Cleanup")(filename);
+        this->get_override("CopyFileIn")(url, fname);
+    }
+    
+    virtual void CopyFileOut(const std::string &fname, const std::string &url)
+    {
+        boost::python::detail::gil_holder gil;
+        this->get_override("CopyFileOut")(fname, url);
     }
 
 };
@@ -62,11 +78,11 @@ void register_I3FileStager()
         )
         .def("ReadSchemes", bp::pure_virtual(&I3FileStager::ReadSchemes))
         .def("WriteSchemes", bp::pure_virtual(&I3FileStager::WriteSchemes))
-        .def("WillReadLater", bp::pure_virtual(&I3FileStager::WillReadLater))
-        .def("StageFileIn", bp::pure_virtual(&I3FileStager::StageFileIn))
-        .def("WillWrite", bp::pure_virtual(&I3FileStager::WillWrite))
-        .def("StageFileOut", bp::pure_virtual(&I3FileStager::StageFileOut))
-        .def("Cleanup", bp::pure_virtual(&I3FileStager::Cleanup))
+        .def("CanStageIn", &I3FileStager::CanStageIn)
+        .def("CanStageOut", &I3FileStager::CanStageOut)
+        .def("WillReadLater", (void (I3FileStagerWrapper::*)(const std::string&))&I3FileStager::WillReadLater)
+        .def("GetReadablePath", &I3FileStager::GetReadablePath)
+        .def("GetWriteablePath", &I3FileStager::GetWriteablePath)
         ;
     }
     
@@ -88,6 +104,12 @@ void register_I3FileStager()
     bp::implicitly_convertible<boost::shared_ptr<I3FileStagerCollection>, boost::shared_ptr<I3FileStager> >();
     bp::implicitly_convertible<boost::shared_ptr<I3FileStagerCollection>, boost::shared_ptr<const I3FileStagerCollection> >();
     
+    {
+        using namespace I3::dataio;
+        bp::class_<filehandle, shared_filehandle, boost::noncopyable>("filehandle", bp::no_init)
+            .def(str(bp::self))
+        ;
+    }
     
     
 }

@@ -31,7 +31,8 @@ BOOST_PP_SEQ_FOR_EACH(I3_REGISTRATION_FN_DECL, ~, REGISTER_THESE_THINGS)
 BOOST_PYTHON_MODULE(dataio)
 {
 
-  load_project("dataio", false); 
+  load_project("dataio", false);
+  boost::python::import("icecube.icetray");
 
   BOOST_PP_SEQ_FOR_EACH(I3_REGISTER, ~, REGISTER_THESE_THINGS);
 }
