@@ -16,11 +16,23 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
-TOOLDEF (zmq
-  include/zmq-2.1.11
-  zmq.hpp 
-  lib/zmq-2.1.11
-  NONE
-  zmq
-  )
 
+if (SYSTEM_PACKAGES)
+  find_path(ZMQ_INCLUDE_DIR
+    NAMES include/zmq.h)
+  tooldef(zmq
+    ${ZMQ_INCLUDE_DIR}
+    zmq.h
+    lib
+    NONE
+    zmq
+    )
+else (SYSTEM_PACKAGES)
+  TOOLDEF (zmq
+    include/zmq-2.1.11
+    zmq.hpp 
+    lib/zmq-2.1.11
+    NONE
+    zmq
+    )
+endif (SYSTEM_PACKAGES)
