@@ -48,13 +48,13 @@ class I3Reader : public I3Module
   bool skip_unregistered_;
   bool drop_blobs_;
   I3FileStagerPtr file_stager_;
+  I3::dataio::shared_filehandle current_filename_;
 
   boost::iostreams::filtering_istream ifs_;
 
   I3FramePtr tmp_;
 
   std::vector<std::string>::iterator filenames_iter_;
-  I3::dataio::shared_filehandle current_filename_;
 
   void OpenNextFile();
 

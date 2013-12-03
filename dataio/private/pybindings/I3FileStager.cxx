@@ -80,7 +80,7 @@ void register_I3FileStager()
         .def("WriteSchemes", bp::pure_virtual(&I3FileStager::WriteSchemes))
         .def("CanStageIn", &I3FileStager::CanStageIn)
         .def("CanStageOut", &I3FileStager::CanStageOut)
-        .def("WillReadLater", (void (I3FileStagerWrapper::*)(const std::string&))&I3FileStager::WillReadLater)
+        .def("WillReadLater", (void (I3FileStager::*)(const std::string&))&I3FileStager::WillReadLater)
         .def("GetReadablePath", &I3FileStager::GetReadablePath)
         .def("GetWriteablePath", &I3FileStager::GetWriteablePath)
         ;
@@ -97,6 +97,13 @@ void register_I3FileStager()
     
     {
         bp::class_<I3FileStagerCollection, boost::shared_ptr<I3FileStagerCollection>, boost::noncopyable>("I3FileStagerCollection", bp::init<const std::vector<I3FileStagerPtr>& >())
+        .def("ReadSchemes", bp::pure_virtual(&I3FileStager::ReadSchemes))
+        .def("WriteSchemes", bp::pure_virtual(&I3FileStager::WriteSchemes))
+        .def("CanStageIn", &I3FileStager::CanStageIn)
+        .def("CanStageOut", &I3FileStager::CanStageOut)
+        .def("WillReadLater", (void (I3FileStager::*)(const std::string&))&I3FileStager::WillReadLater)
+        .def("GetReadablePath", &I3FileStager::GetReadablePath)
+        .def("GetWriteablePath", &I3FileStager::GetWriteablePath)
         ;
     }
     

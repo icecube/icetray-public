@@ -160,9 +160,6 @@ class GridFTPStager(AbstractFileStager):
 		else:
 			icetray.logging.log_info("Download finished: %s to %s" % (url, local_path), unit="GridFTPStager")
 		
-		self.staged_files.add(local_path)
-		return local_path
-		
 	def CopyFileOut(self, local_path, url):
 		icetray.logging.log_info("Uploading %s to %s" % (local_path, url), unit="GridFTPStager")
 		proc = subprocess.Popen(['globus-url-copy', '-nodcau', 'file://'+os.path.abspath(local_path), url], stderr=subprocess.PIPE)
@@ -194,9 +191,6 @@ class SCPStager(AbstractFileStager):
 			icetray.logging.log_error("scp failed: "+(stderr.strip()), unit="SCPFTPStager")
 		else:
 			icetray.logging.log_info("Download finished: %s to %s" % (url, local_path), unit="SCPFTPStager")
-		
-		self.staged_files.add(local_path)
-		return local_path
 		
 	def CopyFileOut(self, local_path, url):
 		parsed = urlparse.urlparse(url)
