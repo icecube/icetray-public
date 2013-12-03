@@ -31,7 +31,7 @@ if(BLAS_FOUND)
   tooldef(gsl 
     include/${GSL_SUBDIR}
     gsl/gsl_rng.h
-    lib/gsl-${GSL_VERSION}
+    lib/${GSL_SUBDIR}
     NONE
     gsl)
   list(APPEND GSL_LIBRARIES ${BLAS_LIBRARIES})
