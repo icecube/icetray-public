@@ -19,17 +19,9 @@ from icecube.dataio import I3FileStager
 class AbstractFileStager(I3FileStager):
 	def __init__(self, local_scratch_dir):
 		I3FileStager.__init__(self)
-		self.staged_files = set()
-		self.destinations = dict()
 		self.local_scratch_dir = local_scratch_dir
+		self.scratch_dir = None
 		self.file_counter = 0
-
-		if not os.path.isdir(self.local_scratch_dir):
-			icetray.logging.log_fatal("The scratch directory %s does not exist!" % self.local_scratch_dir, unit="I3FileStagerFile")
-	
-		self.scratch_dir = tempfile.mkdtemp(dir=self.local_scratch_dir)
-
-		icetray.logging.log_info("Created scratch directory %s" % self.scratch_dir, unit="AbstractFileStager")
 	
 	def GenerateLocalFileName(self, url, readable):
 		# parse the URL
@@ -48,6 +40,14 @@ class AbstractFileStager(I3FileStager):
 
 		output_file = input_filebase + ('_%06u' % self.file_counter) + input_fileext
 
+		if self.scratch_dir is None:
+			if not os.path.isdir(self.local_scratch_dir):
+				icetray.logging.log_fatal("The scratch directory %s does not exist!" % self.local_scratch_dir, unit="AbstractFileStager")
+	
+			self.scratch_dir = tempfile.mkdtemp(dir=self.local_scratch_dir)
+
+			icetray.logging.log_info("Created scratch directory %s" % self.scratch_dir, unit="AbstractFileStager")
+
 		output_path = self.scratch_dir + '/' + output_file
 		self.file_counter += 1
 		
@@ -55,11 +55,11 @@ class AbstractFileStager(I3FileStager):
 	
 	def __del__(self):
 		if self.scratch_dir is not None:
-			icetray.logging.log_info("Removing scratch directory %s" % self.scratch_dir, unit="I3FileStagerFile")
+			icetray.logging.log_info("Removing scratch directory %s" % self.scratch_dir, unit="AbstractFileStager")
 			try:
 				os.rmdir(self.scratch_dir)
 			except OSError as e:
-				icetray.logging.log_error("Cleanup error: %s" % str(e), unit="I3FileStagerFile")
+				icetray.logging.log_error("Cleanup error: %s" % str(e), unit="AbstractFileStager")
 
 	def WillReadLater(self, url, fname):
 		# not used for this implementation, this will
@@ -78,8 +78,8 @@ class I3FileStagerFile(AbstractFileStager):
 		return schemes
 	
 	def WriteSchemes(self):
-		# we can't actually write anything
-		return []
+		# we can't actually write anything other than local files
+		return ["file"]
 
 	def CopyFileIn(self, url, output_path):
 		# parse the URL
@@ -128,22 +128,14 @@ class I3FileStagerFile(AbstractFileStager):
 			shutil.copyfile(local_path, output_path)
 			icetray.logging.log_info("File copied: %s to %s" % (local_path, output_path), unit="I3FileStagerFile")
 		else:
-			
-			if not parsed_url.scheme in ('ftp', 'gsiftp'):
-				icetray.log_fatal("Can't upload to %s" % url.scheme)
-			
-			icetray.logging.log_info("Uploading %s to %s" % (local_path, url), unit="I3FileStagerFile")
-			proc = subprocess.Popen(['globus-url-copy', '-nodcau', 'file://'+os.path.abspath(local_path), url], stderr=subprocess.PIPE)
-			stdout, stderr = proc.communicate()
-			if proc.returncode != 0:
-				icetray.logging.log_error("globus-url-copy failed: "+(stderr.strip()), unit="I3FileStagerFile")
-			else:
-				icetray.logging.log_info("Upload finished: %s to %s" % (local_path, url), unit="I3FileStagerFile")
+			icetray.log_fatal("Can't upload to %s" % url.scheme)
 		
 class GridFTPStager(AbstractFileStager):
 	
-	def __init__(self, local_scratch_dir):
+	def __init__(self, local_scratch_dir, globus_url_copy='globus-url-copy', options=['-nodcau']):
 		super(type(self), self).__init__(local_scratch_dir)
+		self.globus_url_copy = globus_url_copy
+		self.options = list(options)
 	
 	def ReadSchemes(self):
 		return ['ftp', 'gsiftp']
@@ -153,7 +145,7 @@ class GridFTPStager(AbstractFileStager):
 	
 	def CopyFileIn(self, url, local_path):
 		icetray.logging.log_info("Downloading %s to %s" % (url, local_path), unit="GridFTPStager")
-		proc = subprocess.Popen(['globus-url-copy', '-nodcau', url, 'file://'+os.path.abspath(local_path)], stderr=subprocess.PIPE)
+		proc = subprocess.Popen([self.globus_url_copy] + self.options + [url, 'file://'+os.path.abspath(local_path)], stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		if proc.returncode != 0:
 			icetray.logging.log_error("globus-url-copy failed: "+(stderr.strip()), unit="GridFTPStager")
@@ -162,7 +154,7 @@ class GridFTPStager(AbstractFileStager):
 		
 	def CopyFileOut(self, local_path, url):
 		icetray.logging.log_info("Uploading %s to %s" % (local_path, url), unit="GridFTPStager")
-		proc = subprocess.Popen(['globus-url-copy', '-nodcau', 'file://'+os.path.abspath(local_path), url], stderr=subprocess.PIPE)
+		proc = subprocess.Popen([self.globus_url_copy] + self.options + ['file://'+os.path.abspath(local_path), url], stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		if proc.returncode != 0:
 			icetray.logging.log_error("globus-url-copy failed: "+(stderr.strip()), unit="GridFTPStager")
@@ -182,24 +174,22 @@ class SCPStager(AbstractFileStager):
 	
 	def CopyFileIn(self, url, local_path):
 		parsed = urlparse.urlparse(url)
-		print 'CopyFileIn', url, parsed, local_path
 		remote_spec = parsed.hostname+":"+parsed.path
-		icetray.logging.log_info("Downloading %s to %s" % (url, local_path), unit="SCPFTPStager")
+		icetray.logging.log_info("Downloading %s to %s" % (url, local_path), unit="SCPStager")
 		proc = subprocess.Popen(['scp', remote_spec, os.path.abspath(local_path)], stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		if proc.returncode != 0:
-			icetray.logging.log_error("scp failed: "+(stderr.strip()), unit="SCPFTPStager")
+			icetray.logging.log_error("scp failed: "+(stderr.strip()), unit="SCPStager")
 		else:
-			icetray.logging.log_info("Download finished: %s to %s" % (url, local_path), unit="SCPFTPStager")
+			icetray.logging.log_info("Download finished: %s to %s" % (url, local_path), unit="SCPStager")
 		
 	def CopyFileOut(self, local_path, url):
 		parsed = urlparse.urlparse(url)
-		print 'CopyFileOut', url, parsed, local_path
 		remote_spec = parsed.hostname+":"+parsed.path
-		icetray.logging.log_info("Uploading %s to %s" % (local_path, url), unit="GridFTPStager")
+		icetray.logging.log_info("Uploading %s to %s" % (local_path, url), unit="SCPStager")
 		proc = subprocess.Popen(['scp', os.path.abspath(local_path), remote_spec], stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		if proc.returncode != 0:
-			icetray.logging.log_error("scp failed: "+(stderr.strip()), unit="GridFTPStager")
+			icetray.logging.log_error("scp failed: "+(stderr.strip()), unit="SCPStager")
 		else:
-			icetray.logging.log_info("Upload finished: %s to %s" % (local_path, url), unit="GridFTPStager")
+			icetray.logging.log_info("Upload finished: %s to %s" % (local_path, url), unit="SCPStager")
