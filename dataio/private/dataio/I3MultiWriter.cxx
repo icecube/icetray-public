@@ -69,7 +69,6 @@ I3MultiWriter::Configure_()
   GetParameter("MetadataStreams", metadata_streams_);
 
   log_trace("path_=%s", path_.c_str());
-  log_debug("Starting new file '%s'", current_filename_->c_str());
   NewFile();
 }
 
