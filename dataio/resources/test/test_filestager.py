@@ -11,11 +11,17 @@ import os
 # icetray.logging.I3Logger.global_logger = icetray.I3NullLogger()
 icetray.logging.set_level('TRACE')
 
-def test_scratchdir():
+def test_scratchdir(url=os.path.expandvars("file://$I3_BUILD/env-shell.sh")):
 	stager = I3FileStagerFile('.')
+	# directory is created lazily
+	scratch_dir = stager.scratch_dir
+	assert(scratch_dir is None)
+	# now it should exist
+	stager.GetReadablePath(url)
 	scratch_dir = stager.scratch_dir
 	assert(os.path.isdir(scratch_dir))
 	del stager
+	# now it should be gone
 	assert(not os.path.isdir(scratch_dir))
 
 def _test_stage(url):
