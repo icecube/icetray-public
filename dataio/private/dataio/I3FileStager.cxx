@@ -116,6 +116,12 @@ I3TrivialFileStager::I3TrivialFileStager()
 {
 }
 
+boost::shared_ptr<I3FileStager>
+I3TrivialFileStager::create()
+{
+	return boost::shared_ptr<I3TrivialFileStager>(new I3TrivialFileStager);
+}
+
 I3TrivialFileStager::~I3TrivialFileStager()
 {
 }
@@ -168,6 +174,12 @@ I3FileStagerCollection::I3FileStagerCollection(const std::vector<I3FileStagerPtr
 				writers_[scheme] = p;
 		}
 	}
+}
+
+boost::shared_ptr<I3FileStager>
+I3FileStagerCollection::create(const std::vector<I3FileStagerPtr> &stagers)
+{
+	return boost::shared_ptr<I3FileStagerCollection>(new I3FileStagerCollection(stagers));
 }
 
 I3FileStagerCollection::~I3FileStagerCollection()

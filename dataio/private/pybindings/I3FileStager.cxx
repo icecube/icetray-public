@@ -96,7 +96,8 @@ void register_I3FileStager()
     from_python_sequence<std::vector<I3FileStagerPtr>, variable_capacity_policy>();
     
     {
-        bp::class_<I3FileStagerCollection, boost::shared_ptr<I3FileStagerCollection>, boost::noncopyable>("I3FileStagerCollection", bp::init<const std::vector<I3FileStagerPtr>& >())
+        bp::class_<I3FileStagerCollection, boost::shared_ptr<I3FileStagerCollection>, boost::noncopyable>("I3FileStagerCollection", bp::no_init)
+        .def("__init__", bp::make_constructor(&I3FileStagerCollection::create))
         .def("ReadSchemes", bp::pure_virtual(&I3FileStager::ReadSchemes))
         .def("WriteSchemes", bp::pure_virtual(&I3FileStager::WriteSchemes))
         .def("CanStageIn", &I3FileStager::CanStageIn)

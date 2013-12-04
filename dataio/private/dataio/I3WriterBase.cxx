@@ -138,7 +138,7 @@ I3WriterBase::Configure()
 	GetParameter("DropOrphanStreams", dropOrphanStreams_);
 	file_stager_ = context_.Get<I3FileStagerPtr>();
 	if (!file_stager_)
-		file_stager_ = boost::make_shared<I3TrivialFileStager>();
+		file_stager_ = I3TrivialFileStager::create();
 }
 
 void

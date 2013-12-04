@@ -38,8 +38,6 @@ class I3FileStagerCollection;
 class I3FileStager : public boost::enable_shared_from_this<I3FileStager>
 {
 public:
-    
-    I3FileStager();
     virtual ~I3FileStager();
 
     /**
@@ -80,6 +78,7 @@ public:
     I3::dataio::shared_filehandle GetWriteablePath(const std::string &url);
 
 protected:
+    I3FileStager();
     std::string GetLocalFileName(const std::string &url, bool reading);
     
     virtual std::string GenerateLocalFileName(const std::string &url, bool reading) = 0;
@@ -102,7 +101,7 @@ I3_DEFAULT_NAME(I3FileStager);
 
 class I3TrivialFileStager : public I3FileStager {
 public:
-    I3TrivialFileStager();
+    static boost::shared_ptr<I3FileStager> create();
     virtual ~I3TrivialFileStager();
     
     virtual std::vector<std::string> ReadSchemes() const;
@@ -112,12 +111,14 @@ protected:
     virtual void WillReadLater(const std::string &url, const std::string &fname);
     virtual void CopyFileIn(const std::string &url, const std::string &fname);
     virtual void CopyFileOut(const std::string &fname, const std::string &url);
+private:
+    I3TrivialFileStager();
 };
 
 class I3FileStagerCollection : public I3FileStager
 {
 public:
-    I3FileStagerCollection(const std::vector<I3FileStagerPtr>&);
+    static boost::shared_ptr<I3FileStager> create(const std::vector<I3FileStagerPtr>&);
     virtual ~I3FileStagerCollection();
     
     virtual std::vector<std::string> ReadSchemes() const;
@@ -129,6 +130,8 @@ protected:
     virtual void CopyFileOut(const std::string &fname, const std::string &url);
 private:
     SET_LOGGER("I3FileStagerCollection");
+    
+    I3FileStagerCollection(const std::vector<I3FileStagerPtr>&);
     I3FileStagerCollection(const I3FileStagerCollection &);
     
     std::vector<I3FileStagerPtr> stagers_;
