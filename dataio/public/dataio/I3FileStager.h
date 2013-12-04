@@ -17,10 +17,10 @@ namespace I3 { namespace dataio {
 class filehandle : public std::string
 {
 public:
+    filehandle(const std::string &path);
     virtual ~filehandle();
     
 private:
-    filehandle(const std::string &path);
     filehandle(const std::string &path, boost::function<void()> on_destroy);
     friend class ::I3FileStager;
     
