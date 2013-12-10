@@ -55,7 +55,17 @@ def format_detail( frame, key ):
                 obj = obj.apply(frame.frame)
             else:
                 obj = obj.apply(frame)
-        message = str(obj)
+        if isinstance(obj,dataclasses.I3String):
+            message = obj.value
+        if isinstance(obj,dataclasses.I3Double):
+            message = str(obj.value)
+        elif hasattr(obj, "items"):
+            message = '{\n'
+            for k in obj.keys():
+                message += str(k)+': '+str(obj[k])+'\n'
+            message += '}'
+        else:
+            message = str(obj)
     except (TypeError,RuntimeError) as e:
         message = '({0})'.format(e)
     
