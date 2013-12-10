@@ -846,7 +846,7 @@ def main():
     print('Loading file...')
     default_sequential_cache = 256
     i3file = args[1]
-    stager = dataio.I3FileStagerCollection(dataio.get_stagers())
+    stager = dataio.I3FileStagerCollection(dataio.get_stagers('.'))
     handle = stager.GetReadablePath(i3file)
     i3file = str(handle)
     if opts.sequential or opts.cachesize:

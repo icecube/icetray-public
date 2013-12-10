@@ -25,7 +25,7 @@ def get_stagers(staging_directory=None):
 	if staging_directory is not None:
 		pass
 	# find a local staging directory
-	if "_CONDOR_SCRATCH_DIR" in os.environ:
+	elif "_CONDOR_SCRATCH_DIR" in os.environ:
 		# works on condor (especially npx4)
 		staging_directory = os.environ["_CONDOR_SCRATCH_DIR"]
 	elif "TMPDIR" in os.environ:
