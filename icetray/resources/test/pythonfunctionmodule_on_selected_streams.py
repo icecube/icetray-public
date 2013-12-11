@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-from icecube import icetray, dataclasses, dataio, util
-from I3Tray import *
+from I3Tray import I3Tray
+from icecube import icetray
+from icecube.icetray.round_robin_streams import RoundRobinStreams
 import os
 
 tray = I3Tray()
@@ -9,7 +10,7 @@ tray = I3Tray()
 #
 #  Will issue frames on the 4 rotating streams
 #
-tray.AddModule(util.RoundRobinStreams, "bs",
+tray.AddModule(RoundRobinStreams, "bs",
                Streams = [icetray.I3Frame.Geometry,
                           icetray.I3Frame.DetectorStatus,
                           icetray.I3Frame.Calibration,

@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-from icecube import icetray, dataclasses, dataio, util
-from I3Tray import *
+from I3Tray import I3Tray
+from icecube import icetray
+from icecube.icetray.round_robin_streams import RoundRobinStreams
 import os
 
 tray = I3Tray()
@@ -13,7 +14,7 @@ streams = [icetray.I3Frame.Stream('X'),
            icetray.I3Frame.Stream('Y'),
            icetray.I3Frame.Stream('Z')]
 
-tray.AddModule(util.RoundRobinStreams, "bs",
+tray.AddModule(RoundRobinStreams, "bs",
                Streams = streams
                )
 

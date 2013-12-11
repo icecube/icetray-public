@@ -3,8 +3,10 @@
 # Sample i3module in python 
 #
 
-from icecube import icetray, examples
-from I3Tray import *
+from I3Tray import I3Tray
+from icecube import icetray
+from icecube import dataclasses
+from icecube import examples
 
 tray = I3Tray()
 

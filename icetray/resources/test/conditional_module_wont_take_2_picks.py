@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from icecube import icetray, dataclasses, dataio, util
-from I3Tray import *
+from I3Tray import I3Tray
+from icecube import dataio
 import sys
 
 tray = I3Tray()
