@@ -4,13 +4,10 @@
 #  Run frames on different streams through a reader/writer tray, verify that extra
 #  cruft doesn't get in to the files
 #
-from I3Tray import *
-from icecube import icetray, dataclasses, dataio, util
+from I3Tray import I3Tray
+from icecube import icetray
+from icecube import dataio
 import os
-
-#
-# Generate .i3 file
-#
 
 index = 0;
 
