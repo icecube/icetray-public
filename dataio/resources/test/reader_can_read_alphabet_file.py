@@ -52,10 +52,10 @@ class CountFrames(icetray.I3Module):
         self.PushFrame(frame)
 
     def Finish(self):
-        print self.observed_counts
-        print self.expected_counts
-        assert self.observed_counts == self.expected_counts, \
-               "CountFrames error:\n  Expected:    %s\n  Observed:    %s" % (self.expected_counts, self.observed_counts)
+        print(self.observed_counts)
+        print(self.expected_counts)
+        assert(self.observed_counts == self.expected_counts, \
+               "CountFrames error:\n  Expected:    %s\n  Observed:    %s" % (self.expected_counts, self.observed_counts))
 
 tags = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
 
