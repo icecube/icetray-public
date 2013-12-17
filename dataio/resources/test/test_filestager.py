@@ -47,6 +47,6 @@ def test_file_implicit():
 	_test_stage(os.path.expandvars("$I3_BUILD/env-shell.sh"))
 
 if __name__ == "__main__":
-	for k, v in locals().items():
+	for k, v in list(locals().items()):
 		if k.startswith("test") and hasattr(v, "__call__"):
 			v()
