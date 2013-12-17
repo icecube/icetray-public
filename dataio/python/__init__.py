@@ -43,7 +43,7 @@ def get_stagers(staging_directory=None):
 		else:
 			icetray.logging.log_fatal("Cannot find a suitable scratch directory on this machine.", unit="I3Reader")
 
-	return [stager(staging_directory) for stager in I3FileStagerFile, GridFTPStager, SCPStager]
+	return [stager(staging_directory) for stager in (I3FileStagerFile, GridFTPStager, SCPStager)]
 
 @icetray.traysegment_inherit('I3Reader')
 def I3Reader(tray, name, **kwargs):
