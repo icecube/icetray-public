@@ -178,9 +178,11 @@ endif(INSTALL_TOOL_LIBS)
 add_custom_target(tarball-install-lite)
 add_dependencies(tarball-install-lite tarball-install-sh)
 
+# ensure that only relative paths end up in the tarball
+get_filename_component(_tarball_basename ${CMAKE_INSTALL_PREFIX} NAME)
 add_custom_target(tarball-finish
   COMMAND echo Creating ${CMAKE_INSTALL_PREFIX}.tar.gz
-  COMMAND tar czf ${CMAKE_INSTALL_PREFIX}.tar.gz ${CMAKE_INSTALL_PREFIX}
+  COMMAND tar czf ${_tarball_basename}.tar.gz ${_tarball_basename}
   COMMAND echo Checksumming ${CMAKE_INSTALL_PREFIX}.tar.gz
   COMMAND ${MD5SUM_TARBALL_COMMAND}
   COMMENT "Finishing tarball of ${CMAKE_INSTALL_PREFIX}"
