@@ -47,9 +47,9 @@ _I3_SHELL=$NEW_SHELL
 #
 # Determine directory that this shell lives in.
 #
-pushd `dirname $0`
+pushd `dirname $0` >/dev/null
 BASEDIR=`pwd`
-popd
+popd >/dev/null
 
 _I3_SRC=$BASEDIR
 _I3_BUILD=$BASEDIR
