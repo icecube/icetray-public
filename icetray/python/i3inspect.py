@@ -97,9 +97,13 @@ class I3HoboConfiguration(dict):
 		if defaultvals is not None:
 			defaults[-len(defaultvals):] = defaultvals
 		doc, descdict = getdoc(segment)
-		descriptions = [descdict.get(k, '') for k in args[2:]]
+		
 		args = args[2:]
 		defaults = defaults[2:]
+		if hasattr(segment, 'additional_kwargs'):
+			args += segment.additional_kwargs.keys()
+			defaults += segment.additional_kwargs.values()
+		descriptions = [descdict.get(k, '') for k in args]
 
 		if hasattr(segment, 'module'): # Alt config, merge parent config
 			rootconfig = get_configuration(segment.module)
