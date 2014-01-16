@@ -268,6 +268,13 @@ foreach(fpath ${host_python_packages})
   create_symlink(${fpath} lib/icecube/${pname})
 endforeach(fpath ${host_python_packages})
 
+file(GLOB host_binaries ${HOST_I3_BUILD}/bin/*)
+message(STATUS "Symlinking binaries from ${HOST_I3_BUILD}/bin/")
+foreach(fpath ${host_binaries})
+  get_filename_component(pname ${fpath} NAME)
+  create_symlink(${fpath} bin/${pname})
+endforeach(fpath ${host_binaries})
+
 file(GLOB host_libraries ${HOST_I3_BUILD}/lib/*)
 list(REMOVE_ITEM host_libraries ${HOST_I3_BUILD}/lib/icecube)
 message(STATUS "Symlinking libraries from ${HOST_I3_BUILD}/lib/")
