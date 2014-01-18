@@ -145,7 +145,7 @@ class GridFTPStager(AbstractFileStager):
 	
 	def CopyFileIn(self, url, local_path):
 		icetray.logging.log_info("Downloading %s to %s" % (url, local_path), unit="GridFTPStager")
-		proc = subprocess.Popen([self.globus_url_copy] + self.options + [url, 'file://'+os.path.abspath(local_path)], stderr=subprocess.PIPE)
+		proc = subprocess.Popen([self.globus_url_copy] + self.options + [url, 'file://'+os.path.abspath(local_path)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		if proc.returncode != 0:
 			icetray.logging.log_error("globus-url-copy: %s" % (stdout.strip()), unit="GridFTPStager")
@@ -155,7 +155,7 @@ class GridFTPStager(AbstractFileStager):
 		
 	def CopyFileOut(self, local_path, url):
 		icetray.logging.log_info("Uploading %s to %s" % (local_path, url), unit="GridFTPStager")
-		proc = subprocess.Popen([self.globus_url_copy] + self.options + ['file://'+os.path.abspath(local_path), url], stderr=subprocess.PIPE)
+		proc = subprocess.Popen([self.globus_url_copy] + self.options + ['file://'+os.path.abspath(local_path), url], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		if proc.returncode != 0:
 			icetray.logging.log_error("globus-url-copy: %s" % (stdout.strip()), unit="GridFTPStager")
