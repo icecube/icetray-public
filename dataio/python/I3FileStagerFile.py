@@ -148,7 +148,8 @@ class GridFTPStager(AbstractFileStager):
 		proc = subprocess.Popen([self.globus_url_copy] + self.options + [url, 'file://'+os.path.abspath(local_path)], stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		if proc.returncode != 0:
-			icetray.logging.log_error("globus-url-copy failed: "+(stderr.strip()), unit="GridFTPStager")
+			icetray.logging.log_error("globus-url-copy: %s" % (stdout.strip()), unit="GridFTPStager")
+			icetray.logging.log_fatal("globus-url-copy failed with status %d: %s" % (proc.returncode, stderr.strip()), unit="GridFTPStager")
 		else:
 			icetray.logging.log_info("Download finished: %s to %s" % (url, local_path), unit="GridFTPStager")
 		
@@ -157,7 +158,8 @@ class GridFTPStager(AbstractFileStager):
 		proc = subprocess.Popen([self.globus_url_copy] + self.options + ['file://'+os.path.abspath(local_path), url], stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		if proc.returncode != 0:
-			icetray.logging.log_error("globus-url-copy failed: "+(stderr.strip()), unit="GridFTPStager")
+			icetray.logging.log_error("globus-url-copy: %s" % (stdout.strip()), unit="GridFTPStager")
+			icetray.logging.log_fatal("globus-url-copy failed with status %d: %s" % (proc.returncode, stderr.strip()), unit="GridFTPStager")
 		else:
 			icetray.logging.log_info("Upload finished: %s to %s" % (local_path, url), unit="GridFTPStager")
 
@@ -179,7 +181,7 @@ class SCPStager(AbstractFileStager):
 		proc = subprocess.Popen(['scp', remote_spec, os.path.abspath(local_path)], stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		if proc.returncode != 0:
-			icetray.logging.log_error("scp failed: "+(stderr.strip()), unit="SCPStager")
+			icetray.logging.log_fatal("scp failed: "+(stderr.strip()), unit="SCPStager")
 		else:
 			icetray.logging.log_info("Download finished: %s to %s" % (url, local_path), unit="SCPStager")
 		
@@ -190,6 +192,7 @@ class SCPStager(AbstractFileStager):
 		proc = subprocess.Popen(['scp', os.path.abspath(local_path), remote_spec], stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		if proc.returncode != 0:
-			icetray.logging.log_error("scp failed: "+(stderr.strip()), unit="SCPStager")
+			icetray.logging.log_fatal("scp failed: "+(stderr.strip()), unit="SCPStager")
 		else:
 			icetray.logging.log_info("Upload finished: %s to %s" % (local_path, url), unit="SCPStager")
+
