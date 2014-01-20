@@ -35,11 +35,6 @@
 
 using std::string;
 
-// AddService: same as AddModule
-I3Tray::param_setter (I3Tray::*AddServiceV)(const std::string& classname, 
-					    const std::string& instancename)
-  = &I3Tray::AddService;
-
 //
 // Manual enumeration of overloads for parameters.  For each type in
 // I3_PARAM_TYPES a pointer to a member function with an appropriate
@@ -107,10 +102,10 @@ void register_I3Tray()
     .add_property("tray_info", &I3Tray::TrayInfo)
     .add_property("context", make_function(&I3Tray::GetContext, return_internal_reference<>()))
     .def("AddService", 
-	 (I3Tray::param_setter (I3Tray::*)(const std::string&, const std::string&))
+	 (I3Tray::param_setter (I3Tray::*)(const std::string&, std::string))
 	 &I3Tray::AddService)
     .def("AddModule", 
-	 (I3Tray::param_setter (I3Tray::*)(boost::python::object, const std::string&))
+	 (I3Tray::param_setter (I3Tray::*)(boost::python::object, std::string))
 	 &I3Tray::AddModule)
     .def("MoveModule", &I3Tray::MoveModule, (arg("self"), arg("name"), arg("anchor"), arg("after")=false))
     .def("ConnectBoxes", &I3Tray::ConnectBoxes)

@@ -122,25 +122,25 @@ public:
    * @param name the name associated with services the created by the factory.
    */
   param_setter 
-  AddService(const std::string& clazz, const std::string& name);
+  AddService(const std::string& clazz, std::string name="");
 
   /**
    * Adds the specified I3ServiceFactory to the framework.
    */
   template <class Type>
   param_setter 
-  AddService(const std::string& name);
+  AddService(std::string name="");
 
 
   template <class Type>
   param_setter 
-  AddModule(const std::string& name);
+  AddModule(std::string name="");
   param_setter
-  AddModule(boost::python::object obj, const std::string& instancename);
+  AddModule(boost::python::object obj, std::string instancename="");
   param_setter
-  AddModule(const std::string& name, const std::string& instancename);
+  AddModule(const std::string& name, std::string instancename="");
   param_setter
-  AddModule(I3ModulePtr module, const std::string& instancename);
+  AddModule(I3ModulePtr module, std::string instancename="");
 
   void MoveModule(const std::string& name, const std::string& anchor, bool before=true);
 
@@ -247,6 +247,16 @@ private:
    * appropraite state. Otherwise it does nothing.
    */
   void Abort();
+  
+  /**
+   * Generate a new name for a module or service which had none specified.
+   * 
+   * @param type the type of object being added (e.g. I3Reader)
+   * @param kind the cateogry of object being added (e.g. Module or Service)
+   * @param existingNames the names already in use by objects of the same kind
+   */
+  std::string CreateName(const std::string& type, const std::string& kind,
+                         const std::vector<std::string>& existingNames);
 
   /** Context, modules, and factories: oh my! */
   I3Context master_context;
@@ -280,14 +290,14 @@ std::ostream& operator<<(std::ostream& os, I3Tray& tray);
 
 template <class Type>
 I3Tray::param_setter 
-I3Tray::AddModule(const std::string& instancename)
+I3Tray::AddModule(std::string instancename)
 {
   return this->AddModule(I3::name_of<Type>(), instancename);
 }
 
 template <class Type>
 I3Tray::param_setter 
-I3Tray::AddService(const std::string& instancename)
+I3Tray::AddService(std::string instancename)
 {
   return this->AddService(I3::name_of<Type>(), instancename);
 }

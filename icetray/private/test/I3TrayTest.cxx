@@ -244,3 +244,11 @@ TEST(simultaneous_trays)
   tray2.Execute();
   ENSURE_EQUAL(SideEffectModule::counter,10);
 }
+
+TEST(anonymous_module)
+{
+  I3Tray tray;
+  tray.AddModule("BottomlessSource");
+  tray.AddService("TestServiceFactory");
+  tray.Execute(1);
+}
