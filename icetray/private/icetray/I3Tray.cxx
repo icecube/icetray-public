@@ -604,8 +604,8 @@ I3Tray::CreateName(const std::string& type, const string& kind,
 		std::ostringstream ss;
 		ss << type << '_' << std::setfill('0') << std::setw(4) << i;
 		name=ss.str();
-		if(std::find(modules_in_order.begin(),modules_in_order.end(),name)
-		   == modules_in_order.end())
+		if(std::find(existingNames.begin(),existingNames.end(),name)
+		   == existingNames.end())
 			break;
 		i++;
 	}
