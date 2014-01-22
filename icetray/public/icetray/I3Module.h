@@ -214,8 +214,6 @@ public:
   /**
    * Requests that the Framework change from the current 'Processing'
    * state to a "Suspened' state.
-   *
-   * Currently unused.
    */
   void RequestSuspension() const;
 
