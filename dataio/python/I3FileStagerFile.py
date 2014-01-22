@@ -9,6 +9,7 @@ else:
 	import urlparse
 	from urllib2 import HTTPError
 	from urllib2 import urlopen, Request
+import base64
 import tempfile
 import shutil
 import subprocess
@@ -81,6 +82,24 @@ class I3FileStagerFile(AbstractFileStager):
 		# we can't actually write anything other than local files
 		return ["file"]
 
+	def strip_auth(self, url):
+		"""
+		urlopen() doesn't support inline auth. Strip it out and
+		construct the appropriate header by hand.
+		"""
+		parsed = urlparse.urlparse(url)
+		auth = None
+		if '@' in parsed.netloc:
+			auth, netloc = parsed.netloc.split('@')
+			auth = base64.encodestring(auth)[:-1]
+			parts = list(parsed)
+			parts[1] = netloc
+			url = urlparse.ParseResult(*parts).geturl()
+		req = Request(url)
+		if auth is not None:
+			req.add_header('Authorization', 'Basic ' + auth)
+		return req
+
 	def CopyFileIn(self, url, output_path):
 		# parse the URL
 		parsed_url = urlparse.urlparse(url, scheme="file") # use "file" as the default scheme
@@ -98,7 +117,7 @@ class I3FileStagerFile(AbstractFileStager):
 			output_file = None
 			try:
 				output_file = open(output_path, "wb")
-				f = urlopen(url)
+				f = urlopen(self.strip_auth(url))
 				
 				while True:
 					block = f.read(self.blocksize)

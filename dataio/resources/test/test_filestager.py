@@ -24,11 +24,11 @@ def test_scratchdir(url=os.path.expandvars("file://$I3_BUILD/env-shell.sh")):
 	# now it should be gone
 	assert(not os.path.isdir(scratch_dir))
 
-def _test_stage(url):
+def _test_stage(url, minsize=100):
 	stager = I3FileStagerFile('.')
 	local_fname = stager.GetReadablePath(url)
 	assert(os.path.exists(str(local_fname)))
-	assert(os.stat(str(local_fname)).st_size > 100)
+	assert(os.stat(str(local_fname)).st_size > minsize)
 	local_fname = str(local_fname)
 	# check that staged files are really deleted
 	if stager.CanStageIn(url):
@@ -36,6 +36,9 @@ def _test_stage(url):
 
 def test_http():
 	_test_stage("http://code.icecube.wisc.edu/tools/clsim/MD5SUMS")
+
+def test_http_with_auth():
+	_test_stage("http://icecube:skua@x2100.icecube.wisc.edu/downloads/globus.tar.gz.md5sum", 32)
 
 def test_https():
 	_test_stage("https://icecube.wisc.edu/index.html")
