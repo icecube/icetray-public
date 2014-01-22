@@ -627,3 +627,4 @@ I3Tray::AddFunctionModule<bool>(boost::function<bool(boost::shared_ptr<I3Frame>)
                                 const std::string& instancename){
 	return AddModule(boost::make_shared<FunctionModule>(master_context,func));
 }
+
