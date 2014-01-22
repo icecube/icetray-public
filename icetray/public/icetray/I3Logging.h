@@ -36,13 +36,13 @@ typedef enum {
 	I3LOG_FATAL
 } I3LogLevel;
 
+#if defined(__cplusplus)
+
 #ifdef NDEBUG
 const I3LogLevel I3DefaultLogLevel = I3LOG_NOTICE;
 #else
 const I3LogLevel I3DefaultLogLevel = I3LOG_INFO;
 #endif
-
-#if defined(__cplusplus)
 
 #include <icetray/I3PointerTypedefs.h>
 #include <stdexcept>
