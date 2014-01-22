@@ -6,6 +6,9 @@ from icecube.icetray.traysegment import traysegment, traysegment_inherit, module
 from icecube.icetray.pypick import pypick
 from icecube.icetray import i3logging as logging
 
+set_log_level = logging.set_level
+set_log_level_for_unit = logging.set_level_for_unit
+
 import atexit
 def fix_logging_crash():
 	# Unload any python loggers at exit to prevent Py_DECREF() after

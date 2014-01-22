@@ -65,18 +65,6 @@ GlobalLogLevelForUnit(const std::string &unit)
 	return GetIcetrayLogger()->LogLevelForUnit(unit);
 }
 
-static void
-GlobalSetLogLevelForUnit(const std::string &unit, I3LogLevel level)
-{
-	GetIcetrayLogger()->SetLogLevelForUnit(unit, level);
-}
-
-static void
-GlobalSetLogLevel(I3LogLevel level)
-{
-	GetIcetrayLogger()->SetLogLevel(level);
-}
-
 void register_I3Logging()
 {
 	// Acquire the Global Interpeter Lock and bless ourselves as
@@ -115,7 +103,5 @@ void register_I3Logging()
 
 
 	def("get_log_level_for_unit", &GlobalLogLevelForUnit);
-	def("set_log_level_for_unit", &GlobalSetLogLevelForUnit);
-	def("set_log_level", &GlobalSetLogLevel);
 
 }
