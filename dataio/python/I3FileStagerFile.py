@@ -94,6 +94,8 @@ class I3FileStagerFile(AbstractFileStager):
 		else:
 			icetray.logging.log_info("Downloading %s to %s" % (url, output_path), unit="I3FileStagerFile")
 
+			f = None
+			output_file = None
 			try:
 				output_file = open(output_path, "wb")
 				f = urlopen(url)
@@ -110,8 +112,10 @@ class I3FileStagerFile(AbstractFileStager):
 					os.remove(output_path)
 				icetray.logging.log_fatal("Downloading %s: %s" % (url, str(e)), unit="I3FileStagerFile")
 			finally:
-				f.close()
-				output_file.close()
+				if f is not None:
+					f.close()
+				if output_file is not None:
+					output_file.close()
 		
 		return output_path
 
@@ -148,7 +152,6 @@ class GridFTPStager(AbstractFileStager):
 		proc = subprocess.Popen([self.globus_url_copy] + self.options + [url, 'file://'+os.path.abspath(local_path)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		if proc.returncode != 0:
-			icetray.logging.log_error("globus-url-copy: %s" % (stdout.strip()), unit="GridFTPStager")
 			icetray.logging.log_fatal("globus-url-copy failed with status %d: %s" % (proc.returncode, stderr.strip()), unit="GridFTPStager")
 		else:
 			icetray.logging.log_info("Download finished: %s to %s" % (url, local_path), unit="GridFTPStager")
@@ -158,7 +161,6 @@ class GridFTPStager(AbstractFileStager):
 		proc = subprocess.Popen([self.globus_url_copy] + self.options + ['file://'+os.path.abspath(local_path), url], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 		if proc.returncode != 0:
-			icetray.logging.log_error("globus-url-copy: %s" % (stdout.strip()), unit="GridFTPStager")
 			icetray.logging.log_fatal("globus-url-copy failed with status %d: %s" % (proc.returncode, stderr.strip()), unit="GridFTPStager")
 		else:
 			icetray.logging.log_info("Upload finished: %s to %s" % (local_path, url), unit="GridFTPStager")
