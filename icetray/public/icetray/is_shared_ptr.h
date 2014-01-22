@@ -22,39 +22,26 @@
 #ifndef ICETRAY_IS_SHARED_PTR_H_INCLUDED
 #define ICETRAY_IS_SHARED_PTR_H_INCLUDED
 
+#include <boost/mpl/bool.hpp>
+
 /**
    traits classes that identify if a template parameter is a shared_ptr or not
    @param T
 */
 template <typename T>
-struct is_shared_ptr 
-{
-  const static bool value = false;
-};
+struct is_shared_ptr : public boost::mpl::false_{};
 
 template <typename T>
-struct is_shared_ptr<boost::shared_ptr<T> >
-{
-  const static bool value = true;
-};
+struct is_shared_ptr<boost::shared_ptr<T> > : public boost::mpl::true_{};
 
 template <typename T>
-struct is_shared_ptr<boost::shared_ptr<const T> >
-{
-  const static bool value = true;
-};
+struct is_shared_ptr<boost::shared_ptr<const T> > : public boost::mpl::true_{};
 
 template <typename T>
-struct is_shared_ptr<const boost::shared_ptr<T> >
-{
-  const static bool value = true;
-};
+struct is_shared_ptr<const boost::shared_ptr<T> > : public boost::mpl::true_{};
 
 template <typename T>
-struct is_shared_ptr<const boost::shared_ptr<const T> >
-{
-  const static bool value = true;
-};
+struct is_shared_ptr<const boost::shared_ptr<const T> > : public boost::mpl::true_{};
 
 #endif
 

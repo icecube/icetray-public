@@ -238,11 +238,11 @@ TEST(simultaneous_trays)
   tray2.AddModule("SideEffectModule", "counter2")("Life", 5);
   
   tray1.Execute();
-  ENSURE_EQUAL(SideEffectModule::counter,5);
+  ENSURE_EQUAL(SideEffectModule::counter,5u);
   //after one tray has stopped due to a module requesting suspension
   //another should still be able to run
   tray2.Execute();
-  ENSURE_EQUAL(SideEffectModule::counter,10);
+  ENSURE_EQUAL(SideEffectModule::counter,10u);
 }
 
 TEST(anonymous_module)
@@ -250,5 +250,24 @@ TEST(anonymous_module)
   I3Tray tray;
   tray.AddModule("BottomlessSource");
   tray.AddService("TestServiceFactory");
+  tray.Execute(1);
+}
+
+namespace{
+  void simple_void_function(boost::shared_ptr<I3Frame>){}
+  bool simple_bool_function(boost::shared_ptr<I3Frame>){ return(true); }
+}
+
+TEST(functions_as_modules){
+  I3Tray tray;
+  tray.AddModule("BottomlessSource");
+  //test using function pointers
+  tray.AddModule(&simple_void_function);
+  tray.AddModule(&simple_bool_function);
+#if __cplusplus >= 201103L
+  //test using lambdas if they exist
+  tray.AddModule([](boost::shared_ptr<I3Frame>){});
+  tray.AddModule([](boost::shared_ptr<I3Frame>){ return(true); });
+#endif
   tray.Execute(1);
 }

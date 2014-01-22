@@ -31,8 +31,7 @@
 
 #include <boost/python.hpp>
 #include <boost/foreach.hpp>
-
-#include "PythonFunction.h"
+#include <boost/make_shared.hpp>
 
 #include <icetray/I3Tray.h>
 #include <icetray/I3TrayInfoService.h>
@@ -44,6 +43,7 @@
 #include <icetray/serialization.h>
 
 #include "PythonFunction.h"
+#include "FunctionModule.h"
 
 using namespace std;
 
@@ -612,4 +612,18 @@ I3Tray::CreateName(const std::string& type, const string& kind,
 	log_info_stream("Adding Anonymous " << kind << " of type '"
 	                << type << "' with name '" << name << "'");
 	return(name);
+}
+
+template<>
+I3Tray::param_setter
+I3Tray::AddFunctionModule<void>(boost::function<void(boost::shared_ptr<I3Frame>)> func,
+                                const std::string& instancename){
+	return AddModule(boost::make_shared<FunctionModule>(master_context,func));
+}
+
+template<>
+I3Tray::param_setter
+I3Tray::AddFunctionModule<bool>(boost::function<bool(boost::shared_ptr<I3Frame>)> func,
+                                const std::string& instancename){
+	return AddModule(boost::make_shared<FunctionModule>(master_context,func));
 }
