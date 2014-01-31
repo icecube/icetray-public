@@ -141,7 +141,7 @@ class I3FileStagerFile(AbstractFileStager):
 	def CopyFileOut(self, local_path, url):
 		
 		parsed_url = urlparse.urlparse(url, scheme="file") # use "file" as the default scheme
-		if parsed_url[0] not in self.Schemes():
+		if parsed_url[0] not in self.WriteSchemes():
 			icetray.logging.log_fatal("Cannot handle URL scheme \"%s\": %s" % (parsed_url[0], url), unit="I3FileStagerFile")
 
 		# copy the file
