@@ -25,8 +25,7 @@ namespace __gnu_cxx
   template <> struct hash< std::string > : public djb2_hash{};
 }
 
-//No template aliases in C++03, so do this the risky way:
-#define hash_map __gnu_cxx::hash_map
+using __gnu_cxx::hash_map;
 using __gnu_cxx::hash;
 
 #else
