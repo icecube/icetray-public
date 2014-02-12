@@ -17,6 +17,18 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
+if (SYSTEM_PACKAGES)
+  find_path(ZTHREAD_INCLUDE_DIR
+    NAMES include/zthread/ZThread.h)
+TOOLDEF (ZThread
+  ${ZTHREAD_INCLUDE_DIR}
+  ZThread.h
+  lib
+  NONE
+  ZThread
+  )
+else (SYSTEM_PACKAGES)
+
 TOOLDEF (ZThread
   include/zthread-2.3.2
   zthread/ZThread.h
@@ -25,3 +37,4 @@ TOOLDEF (ZThread
   ZThread
   )
 
+endif (SYSTEM_PACKAGES)
