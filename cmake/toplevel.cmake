@@ -289,7 +289,7 @@ endforeach(subdir ${SUBDIRS})
 #
 # env-shell.sh
 #
-foreach (file env-shell.sh icetray-config)
+foreach (file env-shell.sh)
   message(STATUS "Generating ${file}")
   configure_file(
     ${CMAKE_SOURCE_DIR}/cmake/${file}.in
@@ -299,6 +299,18 @@ foreach (file env-shell.sh icetray-config)
   execute_process(COMMAND chmod 755 ${CMAKE_BINARY_DIR}/${file})
   execute_process(COMMAND cp ${CMAKE_BINARY_DIR}/${file} ${NOTES_DIR})
 endforeach (file env-shell.sh)
+
+#
+# icetray-config
+#
+message(STATUS "Generating icetray-config")
+configure_file(
+  ${CMAKE_SOURCE_DIR}/cmake/icetray-config.in
+  ${CMAKE_CURRENT_BINARY_DIR}/bin/icetray-config
+  @ONLY
+  )
+execute_process(COMMAND chmod 755 ${CMAKE_BINARY_DIR}/bin/icetray-config)
+execute_process(COMMAND cp ${CMAKE_BINARY_DIR}/bin/icetray-config ${NOTES_DIR})
 
 exec_program(${CMAKE_BINARY_DIR}/env-shell.sh ARGS /usr/bin/env > ${NOTES_DIR}/env-post_shell.txt OUTPUT_VARIABLE DEV_NULL)
 
