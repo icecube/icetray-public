@@ -15,6 +15,8 @@
 #include <boost/iostreams/filter/gzip.hpp>
 #include <boost/scoped_ptr.hpp>
 
+#include "dataio/I3FileStager.h"
+
 class I3InfiniteSource : public I3Module
 {
   public:
@@ -23,6 +25,9 @@ class I3InfiniteSource : public I3Module
 	void Process();
 
   private:
+	I3FileStagerPtr file_stager_;
+	I3::dataio::shared_filehandle current_filename_;
+	
 	boost::iostreams::filtering_istream ifs_;
 	I3Frame::Stream stream_;
 };
@@ -47,8 +52,18 @@ void I3InfiniteSource::Configure()
 	GetParameter("Stream", stream_);
 	GetParameter("Prefix", filename);
 	if (filename.length() > 0) {
-		log_info("Prefixing with filename %s", filename.c_str());
-		I3::dataio::open(ifs_, filename);
+		log_info("Prefixing with filename/url %s", filename.c_str());
+
+		file_stager_ = context_.Get<I3FileStagerPtr>();
+		if (!file_stager_) {
+			file_stager_ = I3TrivialFileStager::create();
+		}
+		file_stager_->WillReadLater(filename);
+		current_filename_ = file_stager_->GetReadablePath(filename);
+
+		I3::dataio::open(ifs_, *current_filename_);
+
+		log_debug("Opened file %s", current_filename_->c_str());
 	}
 }
 
@@ -60,8 +75,12 @@ void I3InfiniteSource::Process()
 	if (!ifs_.empty()) {
 		// Get frame from prefix file
 		frame->load(ifs_);
-		if (ifs_.peek() == EOF)
+		if (ifs_.peek() == EOF) {
+			// we will never read anything again. release all the pointers.
 			ifs_.reset();
+			current_filename_.reset();
+			file_stager_.reset();
+		}
 	}
 
 	PushFrame(frame);
