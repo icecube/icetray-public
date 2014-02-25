@@ -91,13 +91,13 @@ class I3FileStagerFile(AbstractFileStager):
 		auth = None
 		if '@' in parsed.netloc:
 			auth, netloc = parsed.netloc.split('@')
-			auth = base64.encodestring(auth)[:-1]
+			auth = base64.encodestring(auth.encode('utf-8'))[:-1]
 			parts = list(parsed)
 			parts[1] = netloc
 			url = urlparse.ParseResult(*parts).geturl()
 		req = Request(url)
 		if auth is not None:
-			req.add_header('Authorization', 'Basic ' + auth)
+			req.add_header('Authorization', 'Basic ' + auth.decode('utf-8'))
 		return req
 
 	def CopyFileIn(self, url, output_path):
