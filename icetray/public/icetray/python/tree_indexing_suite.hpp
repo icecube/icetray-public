@@ -312,12 +312,6 @@ public:
 	static void
 	visit(Class& cl)
 	{
-		typedef typename mpl::if_<
-		    is_class<value_type>
-		    , return_internal_reference<>
-		    , default_call_policies
-		    >::type get_data_return_policy;
-		
 		bp::scope outer = cl;
 		
 		register_iterator<pre_order_iterator>("pre_order_iterator");
