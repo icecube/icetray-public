@@ -28,12 +28,12 @@
 class I3Context;
 
 #include <icetray/I3Frame.h>
-#include <icetray/I3Module.h>
+#include <icetray/I3ConditionalModule.h>
 #include <icetray/impl.h>
 #include <boost/python.hpp>
 #include <boost/python/raw_function.hpp>
 
-class PythonFunction : public I3Module
+class PythonFunction : public I3ConditionalModule
 {
  public:
   PythonFunction(const I3Context& context, boost::python::object func);

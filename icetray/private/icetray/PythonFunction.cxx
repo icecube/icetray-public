@@ -23,7 +23,7 @@ using namespace std;
 namespace bp = boost::python;
 
 PythonFunction::PythonFunction(const I3Context& context, bp::object func)
-  : I3Module(context), obj(func)
+  : I3ConditionalModule(context), obj(func)
 {
   i3_log("%s", __PRETTY_FUNCTION__);
   AddOutBox("OutBox");
@@ -137,7 +137,7 @@ void PythonFunction::Configure()
   for (unsigned i = 0; i< configkeys.size(); i++)
     {
       i3_log("param %s", configkeys[i].c_str());
-      if (configkeys[i] != "Streams")
+      if (configkeys[i] != "Streams" && configkeys[i] != "If" && configkeys[i] != "IcePickServiceKey")
 	paramsd[configkeys[i]] = configuration_.Get(configkeys[i]);
     }
 }
