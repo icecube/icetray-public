@@ -132,6 +132,27 @@ frame to put them:
 
 Note the default parameter values for the function :func:`int_putter`.
 
+Direct Usage of Lambda Functions
+--------------------------------
+
+Here we use a *lambda*, (nameless inline) function. Lambda functions
+are also called lambda expressions because they can only contain simple
+expressions. Note that functions created with lambda expressions cannot 
+contain statements (if, while, for, try, with, ...). Check google for
+more information on this standard python construct.
+
+This makes writing very short modules possible. A simple function::
+
+   def int_putter(frame):
+       frame['some_int'] = icetray.I3Int(777)
+
+   tray.AddModule(int_putter, 'putter')
+
+can become the single line::
+
+   tray.AddModule(lambda fr: fr['a_int'] = icetray.I3Int(777), 'putter')
+
+
 Choosing streams the functions should run on 
 --------------------------------------------
 
@@ -235,9 +256,6 @@ of I3ConditionalModules.  Identical to the above is the following::
                  Where = ['x1', 'x2', 'x3'],
                  If    = lambda frame: 'some_int' in frame)
 
-Here we use a *lambda*, (nameless inline) function.  Check google for
-more information on this standard python construct.
-
 Another example:  run the reconstruction *LineFit* if the :class:`I3Int` at 
 'where' is greater than 80::
 
@@ -275,6 +293,18 @@ A forwarding function is necessary here, but not when passing a
 python function directly to :func:`AddModule`.  This asymmetry is
 unfortunate but presently unavoidable.
 
+Functions as I3ConditionalModules
+---------------------------------
+
+Python functions now support the :class:`I3ConditionalModule` argument syntax,
+with optional arguments **IcePickServiceKey** or **If**.  Use them exactly as
+described above, or for another example, like this::
+
+   def int_putter(frame):
+       frame['other_int'] = icetray.I3Int(frame['some_int']*10)
+   
+   tray.AddModule(int_putter, 'putter',
+                  If = lambda frame: 'some_int' in frame)
 
 Source code organization
 ------------------------
