@@ -9,7 +9,7 @@
 //  (C) 2012 Jakob van Santen <vansanten@wisc.edu>
 //           and the IceCube Collaboration
 
-
+#include <typeinfo>
 
 #include <boost/python/def_visitor.hpp>
 
@@ -19,6 +19,7 @@
 #include <icetray/python/std_map_indexing_suite.hpp>
 #include <icetray/python/list_indexing_suite.hpp>
 #include <icetray/python/tree_indexing_suite.hpp>
+#include <icetray/python/operator_suite.hpp>
 
 #include <boost/utility/enable_if.hpp>
 
@@ -40,10 +41,11 @@ namespace detail {
 	: public boost::true_type{};
 
 HAS_TYPEDEF(iterator, has_iterator);
-HAS_TYPEDEF(fixed_depth_iterator, is_tree);
+HAS_TYPEDEF(pre_order_iterator, is_tree);
 HAS_TYPEDEF(key_type, is_map);
 
 #undef HAS_TYPEDEF
+
 
 // Catch-all for things that have an iterator typedef,
 // but are neither trees nor maps
@@ -71,6 +73,7 @@ namespace has_operator {
 }
 
 }
+
 	
 template <class T>
 class dataclass_suite : public bp::def_visitor<dataclass_suite<T > > {
@@ -145,6 +148,7 @@ public:
 		cl.def_pickle(boost_serializable_pickle_suite<T>());
 		add_indexing<Class, T>(cl);
 		add_string_to_stream<Class, T>(cl);
+		cl.def(operator_suite<T>());
 		cl.def(freeze());
 	}
 	
