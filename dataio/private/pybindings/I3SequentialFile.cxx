@@ -30,6 +30,8 @@
 // versions 4.0 and 4.3.
 namespace I3 { namespace dataio { namespace python {
 
+  class I3SequentialFileIterator;
+  
   class I3SequentialFile
   {
   public:
@@ -37,7 +39,7 @@ namespace I3 { namespace dataio { namespace python {
     enum Mode { Reading, Writing, Closed };
     I3SequentialFile() { };
     I3SequentialFile(const I3SequentialFile&);
-    I3SequentialFile(const std::string& filename, Mode mode=Reading);
+    I3SequentialFile(const std::string& filename, Mode mode=Reading, unsigned int nframe=0);
     I3SequentialFile(const std::string& filename, char mode);
     ~I3SequentialFile();
 
@@ -50,21 +52,14 @@ namespace I3 { namespace dataio { namespace python {
     bool more();
     void push(I3FramePtr f);
     I3FramePtr pop_frame();
-    I3FramePtr next();
     I3FramePtr pop_frame(I3Frame::Stream s);
     I3FramePtr pop_daq();
     I3FramePtr pop_physics();
 
-    I3SequentialFile make_iterator()
-    {
-      if (mode_ != Reading)
-        throw std::runtime_error("Can only iterate over I3Files opened for reading"); 
-
-      return I3SequentialFile(path_, mode_);
-    }
+    I3SequentialFileIterator make_iterator();
 
   private:
-
+  
     boost::iostreams::filtering_istream ifs_;
     boost::iostreams::filtering_ostream ofs_;
 
@@ -72,7 +67,23 @@ namespace I3 { namespace dataio { namespace python {
   
     std::string path_;
     Mode mode_;
+    unsigned int nframe_;
+    
+    void skip_frames(unsigned int);
   };
+
+  class I3SequentialFileIterator
+  {
+  public:
+    I3SequentialFileIterator(const I3SequentialFile&);
+    
+    I3FramePtr next();
+    I3SequentialFileIterator make_iterator();
+  
+  private:
+    I3SequentialFile file_;    
+  };
+  
 
   I3SequentialFile::~I3SequentialFile()
   {
@@ -80,32 +91,42 @@ namespace I3 { namespace dataio { namespace python {
   }
 
   I3SequentialFile::I3SequentialFile(const I3SequentialFile& rhs)
-    : path_(rhs.path_), mode_(rhs.mode_)
+    : path_(rhs.path_), mode_(rhs.mode_), nframe_(0)
   {
     open_file(path_, mode_);
+    skip_frames(rhs.nframe_);
   }
 
-  I3SequentialFile::I3SequentialFile(const std::string& filename, Mode mode)
-    : path_(filename), mode_(mode)
+  I3SequentialFile::I3SequentialFile(const std::string& filename, Mode mode, unsigned int nframe)
+    : path_(filename), mode_(mode), nframe_(0)
   {
     open_file(filename, mode);
+    skip_frames(nframe);
   }
 
   I3SequentialFile::I3SequentialFile(const std::string& filename, char mode)
-    : path_(filename)
+    : path_(filename), nframe_(0)
   {
     open_file(filename, mode);
   }
 
-  I3FramePtr
-  I3SequentialFile::next()
+  void
+  I3SequentialFile::skip_frames(unsigned int nframe)
   {
-    if (not more())
-      {
-        PyErr_SetObject(PyExc_StopIteration, Py_None);
-        boost::python::throw_error_already_set();
-      }
-    return pop_frame();
+    while (nframe-- > 0) {
+      if (not more())
+        {
+          PyErr_SetObject(PyExc_StopIteration, Py_None);
+          boost::python::throw_error_already_set();
+          break;
+        }
+      if (!pop_frame())
+        {
+          PyErr_SetObject(PyExc_StopIteration, Py_None);
+          boost::python::throw_error_already_set();
+          break;
+        }
+    }
   }
 
   void
@@ -180,6 +201,7 @@ namespace I3 { namespace dataio { namespace python {
             f->GetStop() != I3Frame::Physics)
                 cache_.merge(*f);
 
+        nframe_++;
         if (s == I3Frame::None || f->GetStop() == s)
           return f;
         else
@@ -216,6 +238,38 @@ namespace I3 { namespace dataio { namespace python {
   {
     return ifs_.peek() != EOF;
   }
+  
+  I3SequentialFileIterator
+  I3SequentialFile::make_iterator()
+  {
+    if (mode_ != Reading)
+      throw std::runtime_error("Can only iterate over I3Files opened for reading"); 
+    
+    return I3SequentialFileIterator(*this);
+  }
+
+
+  I3SequentialFileIterator::I3SequentialFileIterator(const I3SequentialFile& rhs)
+    : file_(rhs)
+  { }
+
+  I3FramePtr
+  I3SequentialFileIterator::next()
+  {
+    if (not file_.more())
+      {
+        PyErr_SetObject(PyExc_StopIteration, Py_None);
+        boost::python::throw_error_already_set();
+      }
+    return file_.pop_frame();
+  }
+
+  I3SequentialFileIterator
+  I3SequentialFileIterator::make_iterator()
+  {
+    return I3SequentialFileIterator(file_);
+  }
+
 }}}
 
 //
@@ -237,8 +291,9 @@ void register_I3SequentialFile()
     .def(init<const I3SequentialFile&>("Copy constructor"))
     .def(init<const std::string&>((bp::arg("filename (may be .i3 or .i3.gz)")),
                                   "Create and open and I3File object for reading"))
-    .def(init<const std::string&, I3SequentialFile::Mode>((bp::arg("filename (may be .i3 or .i3.gz)"), 
-                                                     bp::arg("Mode")="Reading"),
+    .def(init<const std::string&, I3SequentialFile::Mode, unsigned int>((bp::arg("filename (may be .i3 or .i3.gz)"), 
+                                                     bp::arg("Mode")="Reading",
+                                                     bp::arg("nframe")=0),
                                                     "Create and open an I3File object, specifying the mode"))
     .def(init<const std::string&, char>((bp::arg("filename"), bp::arg("mode (r, w, or x)")),
                                              "Create and open and I3File object, specifiying the mode"))
@@ -252,12 +307,6 @@ void register_I3SequentialFile()
          "Close the file")
     .def("more", &I3SequentialFile::more, 
          "Return True if there are more frames in the .i3 file")
-#if PY_MAJOR_VERSION >= 3
-    .def("__next__", &I3SequentialFile::next, 
-#else
-    .def("next", &I3SequentialFile::next, 
-#endif
-         "Return the next frame if one is available, else throw StopIteration")
     .def("rewind", &I3SequentialFile::rewind, 
          "Rewind to beginning of file and reopen")
     .def("push", &I3SequentialFile::push,
@@ -275,6 +324,20 @@ void register_I3SequentialFile()
          "Return the next physics frame from the file, skipping frames on "
          "other streams.")
     .def("__iter__", &I3SequentialFile::make_iterator)
+    ;
+
+  class_<I3SequentialFileIterator>
+    ("I3FileIterator",
+     "Iterator for I3File",
+     no_init
+     )
+#if PY_MAJOR_VERSION >= 3
+    .def("__next__", &I3SequentialFileIterator::next, 
+#else
+    .def("next", &I3SequentialFileIterator::next, 
+#endif
+         "Return the next frame if one is available, else throw StopIteration")
+    .def("__iter__", &I3SequentialFileIterator::make_iterator)
     ;
 
   enum_<I3SequentialFile::Mode>("Mode")
