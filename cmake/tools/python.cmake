@@ -38,9 +38,42 @@ execute_process(COMMAND ${PYTHON_EXECUTABLE} -V
 string(REGEX MATCH "([0-9]+)\\.([0-9]+)\\.?([0-9]*)"
   PYTHON_STRIPPED_VERSION
   ${PYTHON_VERSION})
+string(REGEX MATCH "([0-9]+)\\.([0-9]+)"
+  PYTHON_STRIPPED_MAJOR_MINOR_VERSION
+  ${PYTHON_VERSION})
 numeric_version(${PYTHON_STRIPPED_VERSION} PYTHON)
 message(STATUS "+  version: ${PYTHON_VERSION}") 
 
+STRING(REPLACE "." "" PYTHON_VERSION_NO_DOTS ${PYTHON_STRIPPED_MAJOR_MINOR_VERSION})
+
+#
+# Get the (probable) root dir of the python install
+#
+get_filename_component(PYTHON_BIN_DIR ${PYTHON_EXECUTABLE} PATH)
+get_filename_component(PYTHON_ROOT ${PYTHON_BIN_DIR} PATH)
+#message(STATUS "+  base dir: ${PYTHON_ROOT}")
+
+#
+# Find the library and header file manually,
+# using the python root that we found above.
+#
+FIND_LIBRARY(PYTHON_LIBRARY
+  NAMES python${PYTHON_VERSION_NO_DOTS} python${PYTHON_STRIPPED_MAJOR_MINOR_VERSION}
+  HINTS ${PYTHON_ROOT} ${PYTHON_ROOT}/lib
+  NO_SYSTEM_ENVIRONMENT_PATH
+)
+FIND_PATH(PYTHON_INCLUDE_DIR
+  NAMES Python.h
+  PATHS
+    ${PYTHON_ROOT}/include
+  PATH_SUFFIXES
+    python${PYTHON_STRIPPED_MAJOR_MINOR_VERSION}
+)
+
+#
+# Now do the full python detection, which includes special
+# things for frameworks detection.
+#
 find_package(PythonLibs ${PYTHON_STRIPPED_VERSION} EXACT QUIET)
 
 if(NOT PYTHON_EXECUTABLE)
