@@ -92,6 +92,27 @@ if (USE_ROOT)
       endwhile(ROOT_LIBRARIES_WORK)
       set(ROOT_${ROOT_VERSION}_LIBS "${ROOT_${ROOT_VERSION}_LIBS}")
 
+      # Get Minuit and Gui libs if they exist
+      find_library(FIND_ROOT_MINUIT_LIB
+      Minuit
+      PATHS ${ROOT_LIB_DIR}
+      NO_DEFAULT_PATH)
+
+      if (FIND_ROOT_MINUIT_LIB)
+        set(ROOT_MINUIT_LIB Minuit)
+        list(APPEND ROOT_${ROOT_VERSION}_LIBS Minuit)
+      endif()
+
+      find_library(FIND_ROOT_GUI_LIB
+      Gui
+      PATHS ${ROOT_LIB_DIR}
+      NO_DEFAULT_PATH)
+
+      if (FIND_ROOT_GUI_LIB)
+        set(ROOT_GUI_LIB Gui)
+        list(APPEND ROOT_${ROOT_VERSION}_LIBS Gui)
+      endif()
+
       set(ROOTSYS ${ROOTSYS} CACHE STRING "Found ROOTSYS in ${ROOTSYS}" FORCE)
       set(ROOT_LIB_DIR ${ROOT_LIB_DIR} CACHE STRING "Found ROOT_LIB_DIR in ${ROOT_LIB_DIR}" FORCE)
       set(ROOT_INCLUDE_DIR ${ROOT_INCLUDE_DIR} CACHE STRING "Found ROOT include dir in ${ROOT_INCLUDE_DIR}" FORCE)
