@@ -103,6 +103,7 @@ message(STATUS "Install prefix:   ${CMAKE_INSTALL_PREFIX}")
 
 # dummy testing target
 add_custom_target(i3test COMMAND echo "We don't actually have tests.")
+add_custom_target(test-bins COMMAND echo "We don't actually have tests.")
 add_custom_target(pybindings)
 
 set(CMAKE_SOURCE_DIR ${HOST_I3_SRC})
@@ -113,6 +114,11 @@ include(project)
 # use pre-generated I3_UBER_HEADER
 set(I3_UBER_HEADER ${HOST_I3_BUILD}${CMAKE_FILES_DIRECTORY}/I3.h)
 include_directories(${HOST_I3_SRC}/cmake/tool-patches/common)
+# add patches for ancient boost versions if we've got 'em
+load_cache(${HOST_I3_BUILD} READ_WITH_PREFIX "" BOOST_VERSION)
+if(IS_DIRECTORY ${HOST_I3_SRC}/cmake/tool-patches/boost-${BOOST_VERSION})
+	include_directories(${HOST_I3_SRC}/cmake/tool-patches/boost-${BOOST_VERSION})
+endif(IS_DIRECTORY ${HOST_I3_SRC}/cmake/tool-patches/boost-${BOOST_VERSION})
 
 # keep existing external links when installing
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
@@ -282,6 +288,14 @@ foreach(fpath ${host_libraries})
   get_filename_component(pname ${fpath} NAME)
   create_symlink(${fpath} lib/${pname})
 endforeach(fpath ${host_libraries})
+
+find_program(MD5SUM_PROGRAM md5sum)
+find_program(MD5SUM_PROGRAM md5)
+if(MD5SUM_PROGRAM)
+  set(MD5SUM_TARBALL_COMMAND ${MD5SUM_PROGRAM} ${CMAKE_INSTALL_PREFIX}.tar.gz > ${CMAKE_INSTALL_PREFIX}.md5sum)
+else(MD5SUM_PROGRAM)
+  set(MD5SUM_TARBALL_COMMAND /bin/echo Skipping md5sum, as md5sum command was not found.)
+endif(MD5SUM_PROGRAM)
 
 # lightweight tarball
 configure_file(${CMAKE_SOURCE_DIR}/cmake/tarball-env-shell.sh.in
