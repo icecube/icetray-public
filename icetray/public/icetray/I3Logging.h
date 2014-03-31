@@ -95,8 +95,8 @@ std::string I3LoggingStringF(const char *format, ...)
     I3LoggingStringF(format, ##__VA_ARGS__))
 
 #define I3_STREAM_LOGGER(level, id, file, line, func, msg, epilogue) \
-    { std::ostringstream _i3_str_logger_str; _i3_str_logger_str << msg; GetIcetrayLogger()->Log(level, \
-    id, file, line, func, _i3_str_logger_str.str()); epilogue }
+    do { std::ostringstream _i3_str_logger_str; _i3_str_logger_str << msg; GetIcetrayLogger()->Log(level, \
+    id, file, line, func, _i3_str_logger_str.str()); epilogue } while (0)
 
 extern "C" {
 #endif // __cplusplus
