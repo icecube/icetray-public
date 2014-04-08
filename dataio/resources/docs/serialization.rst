@@ -1,7 +1,7 @@
 Making a class serializable
 =============================
 
-Classes that are to make the round-trip to disk inside .i3 files need serialize()  methods. Pending more documenation here, see the [http://www.boost.org/libs/serialization boost::serialization documentation] directly for general information on writing serialization methods, or follow one of the many examples in project dataclasses.
+Classes that are to make the round-trip to disk inside .i3 files need serialize()  methods. Pending more documenation here, see the `boost::serialization documentation <http://www.boost.org/libs/serialization>`_ directly for general information on writing serialization methods, or follow one of the many examples in project dataclasses.
 
 I3_SERIALIZABLE 
 ^^^^^^^^^^^^^^^^^^

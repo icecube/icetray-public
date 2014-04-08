@@ -11,6 +11,7 @@ data in the ``.i3`` file format.
 
    dataio
    serialization
+   portable_binary_archive
    classes
    changes
 
