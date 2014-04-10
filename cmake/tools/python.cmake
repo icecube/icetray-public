@@ -69,6 +69,8 @@ FIND_PATH(PYTHON_INCLUDE_DIR
   PATH_SUFFIXES
     python${PYTHON_STRIPPED_MAJOR_MINOR_VERSION}
 )
+# required for ubuntu, because their version of FindPythonLibs is different
+set(PYTHON_INCLUDE_DIR2 ${PYTHON_INCLUDE_DIR})
 
 #
 # Now do the full python detection, which includes special
