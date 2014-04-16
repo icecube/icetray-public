@@ -26,6 +26,7 @@ TOOLDEF (mysql
     )
 
 if (NOT MYSQL_FOUND)
+    set(MYSQL_CONFIG_ERROR)
     IF (MYSQL_INCLUDE_DIR)
         # Already in cache, be silent
         SET(MYSQL_FIND_QUIETLY TRUE)
