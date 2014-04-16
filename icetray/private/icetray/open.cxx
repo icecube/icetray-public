@@ -423,7 +423,7 @@ namespace I3 {
           log_fatal("Host resolution error (%s:%s): %s", host.c_str(),
              port.c_str(), gai_strerror(error));
         s = -1;
-        for (struct addrinfo *r = res; res != NULL; res = res->ai_next) {
+        for (/* struct addrinfo *r = res */; res != NULL; res = res->ai_next) {
           s = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
           if (s < 0)
             continue;
