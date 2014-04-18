@@ -73,7 +73,7 @@ Serialization
 of objects
 ++++++++++
 
-.. code::
+::
 
     if serialized through pointer:
         save_data
@@ -93,7 +93,7 @@ of objects
 of pointers
 +++++++++++
 
-.. code::
+::
     
     if !initialized:
         class_id
@@ -118,7 +118,7 @@ Deserialization
 of objects
 ++++++++++
 
-.. code::
+::
 
     if serialized through pointer:
         save_data
@@ -136,7 +136,7 @@ of objects
 of pointers
 +++++++++++
 
-.. code::
+::
 
     class_id
     if is_null_pointer:
