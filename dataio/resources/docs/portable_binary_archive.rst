@@ -37,7 +37,7 @@ History
 
 2013:
 
-    Updates to be compatible with with the newest version of Boost
+    Updates to be compatible with the newest version of Boost
     (1.52 at the time).
 
 
