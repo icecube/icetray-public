@@ -72,23 +72,25 @@ After the install finishes you should have both clang and llvm-gcc:
 MacPorts
 """"""""
 
-Do Not Use MacPorts
-...................
+Do Not Use MacPorts and I3_PORTS together
+.........................................
 
-MacPorts (and Fink, and Homebrew, etc) can cause all sorts of
-mismatched library issues. The IceCube software is designed for and
-tested against Apple OS X systems without 3rd party package
-managers. They cause major headaches and (when it comes to IceCube)
-are more trouble than they are worth.
+Package managers exist to automate the mundane parts of installing 3rd-party
+software and ensure that it is built against a self-consistent set of headers
+and libraries. If you use a package manager like Homebrew, MacPorts, or Fink
+*and* I3_PORTS at the same time, you're actively interfering with the ability
+of either one to ensure consistency, and increasing the risk of mismatched
+library issues. If you already use a 3rd-party package manager, it's best to
+avoid I3_PORTS altogether and build all IceCube software with
+-DSYSTEM_PACKAGES=True.
 
-But I Want To Pull Out My Hair, Get An Ulcer, Break My Chair And Possibly Kick A Puppy
-......................................................................................
+Tips for pitfall avoidance
+..........................
 
-If you do use a 3rd party package manager, and something breaks, you
-will be directed to the above paragaph and told to remove it. That
-being said, if you want to continue, then take caution.  After you
-have "source env.sh", your $PATH variable is updated so that
-$I3_PORTS/bin is first. So:
+If you do use a 3rd party package manager together with I3_PORTS, and something
+breaks, you will be directed to the above paragaph and told to remove it. That
+being said, if you want to continue, then take caution. After you have "source
+env.sh", your $PATH variable is updated so that $I3_PORTS/bin is first. So:
 
 * Always explicitly run $I3_PORTS/bin/port (never let it come from
   your path).
