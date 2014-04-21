@@ -27,11 +27,22 @@ Apple Mac OS X
 Developer Tools
 """""""""""""""
 
-You'll need a compiler in order to build the IceCube software. Apple distributes both
-clang and llvm-gcc as part of Xcode.
+You'll need a compiler in order to build the IceCube software. Apple distributes
+clang and llvm-gcc both as a stand-alone download and as part of its Xcode IDE,
+but requires you to register for an `Apple ID`_  before you can download either
+one. The Xcode download is 10 times larger than the command-line tools package,
+so you should only download it if you need it for non-IceCube work.
 
-Xcode 4: Lion (10.7) and later
-..............................
+.. _`Apple ID`: https://appleid.apple.com
+
+Command-Line Tools
+..................
+1) Go to the `Apple Developer Downloads page <http://developer.apple.com/downloads>`_,
+   signing in with your `Apple ID`_.
+2) Download and install the latest Command Line Tools.
+
+Xcode
+.....
 1) Download Xcode from the App Store.
 2) Open Xcode, and open the Preferences window (Xcode > Preferences).
 3) In the :ref:`Xcode4Prefs`, click the Downloads tab, and install the Command Line Tools.
@@ -43,7 +54,7 @@ Xcode 4: Lion (10.7) and later
 	
 	Xcode Preferences window
 
-4) After the install finishes you should have both clang and llvm-gcc:
+After the install finishes you should have both clang and llvm-gcc:
 
 .. code-block:: sh
 	
