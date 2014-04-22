@@ -69,40 +69,57 @@ After the install finishes you should have both clang and llvm-gcc:
 	Target: x86_64-apple-darwin12.0.0
 	Thread model: posix
 
-MacPorts
-""""""""
+Package managers
+""""""""""""""""
 
-Do Not Use MacPorts and I3_PORTS together
-.........................................
-
-Package managers exist to automate the mundane parts of installing 3rd-party
-software and ensure that it is built against a self-consistent set of headers
-and libraries. If you use a package manager like Homebrew_, MacPorts_, or Fink_
-*and* I3_PORTS at the same time, you're actively interfering with the ability
-of either one to ensure consistency, and increasing the risk of mismatched
-library issues. If you already use a 3rd-party package manager, it's best to
-avoid I3_PORTS altogether and build all IceCube software with
--DSYSTEM_PACKAGES=True.
+As noted in :ref:`do-i-need-i3ports`, you can set up your environment quite
+quickly if you use a package manager. While Apple doesn't provide an official
+package manager for OS X, there are a number of 3rd implementations to choose
+from.
 
 .. _Homebrew: http://brew.sh
 .. _MacPorts: https://www.macports.org
 .. _Fink: http://www.finkproject.org
 
-Tips for pitfall avoidance
-..........................
+Homebrew
+........
 
-If you do use a 3rd party package manager together with I3_PORTS, and something
-breaks, you will be directed to the above paragraph and told to remove it. That
-being said, if you want to continue, then take caution. After you have "source
-env.sh", your $PATH variable is updated so that $I3_PORTS/bin is first. So:
+Homebrew_ is probably the easiest way to install packages on OS X, and
+distributes the most heavy-weight dependencies (cmake, boost, and Qt) as binary
+packages. Most of the required formulae are in the main distribution, but you
+should also `tap`_ homebrew/science and jvansanten/icecube. The following
+formulae are recommended:
 
-* Always explicitly run $I3_PORTS/bin/port (never let it come from
+* offline-software: boost cmake cdk gsl hdf5 libarchive mysql qt pyqt 
+* IceRec: cfitsio minuit2 suite-sparse
+* simulation: sprng2
+
+.. _tap: https://github.com/Homebrew/homebrew/wiki/brew-tap
+
+.. warning:: Don't install Python from Homebrew. If you do, it will also want to waste a lot of time building boost from source instead of using a binary distribution built against the system Python (2.7.2, which is just fine).
+
+MacPorts
+........
+
+I3_PORTS shares a common ancestor with MacPorts_. As a consequence, they both
+use :command:`port` but expect to be managed at different privilege levels,
+which can lead to all sorts of subtle inconsistencies and outright breakage if
+you confuse them. If you can at all avoid it, do not use I3_PORTS and MacPorts_
+together. If you must, however, here are some pitfalls to avoid:
+
+* Always explicitly run :command:`$I3_PORTS/bin/port` (never let it come from
   your path).
 
-* Never "su" or "sudo" from an xterm where you have "source env.sh",
-  as this altered path might be kept and cause conflicts when you
-  think you are running a "system" port command.  Start a new xterm
-  instead.
+* Never :command:`su` or :command:`sudo` from a terminal windows where you
+  have run :command:`env-shell.sh`, as this altered path might be kept and
+  cause conflicts when you think you are running a "system" :command:`port`
+  command. Start a new terminal instead.
+
+Fink
+....
+
+Does anyone still use Fink_? If you do, and think it's any good, write some
+documentation.
 
 .. index:: RHEL4
 .. _RHEL4:
