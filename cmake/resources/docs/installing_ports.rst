@@ -6,16 +6,48 @@ Tool Build System - Setting up your I3_PORTS toolset
 Tools are external packages that are required dependencies for IceCube
 Offline software packages. These are distributed as source and built
 on your local cluster using the Ports system. This will help you setup
-your toolset (often referred to as I3_PORTS.
+your toolset (often referred to as I3_PORTS). Before you rush off to
+follow the instructions below, there is one very important question to answer:
+
+.. _do-i-need-i3ports:
+
+Do I need I3_PORTS?
+-------------------
+
+Whether or not you need to set up the I3_PORTS system depends on what sort of
+environment you're trying to set up. The I3_PORTS system is designed to provide
+a set of support libraries for IceTray that is as uniform as possible across
+different platforms and can be installed by unprivileged users. In multi-user
+or grid environments this uniformity is important and worth the considerable
+time investment involved in setting up the I3_PORTS environment and compiling
+everything. If you're in such an environment, though, and are not the first
+user at your institution to work with IceTray, chances are there's already a
+central I3_PORTS installation that you can use. Ask around!
+
+For a one-off installation on a machine you control (e.g. your laptop), you're
+usually better off using the package manager that came with your operating
+system to install the necessary support libraries and setting the
+:ref:`SYSTEM_PACKAGES` flag allow the IceTray build system to find them. Since
+most of IceTray's dependencies are common packages that package managers
+distribute in pre-built form, this can shorten the time it takes to set up the
+support environment from hours to a few minutes. See :ref:`platforms` for notes
+specific to your platform.
+
+The simulation software presents a notable exception to the rule, as a few parts
+of it depend on obscure, domain-specific programs (e.g. GEANT, Genie) that are
+not commonly packaged or must be configured in very specific ways to work as
+expected. If you need to run those parts of the simulation, you should install
+I3_PORTS.
+
+Quick start for the impatient
+-----------------------------
 
 There is a single "meta-package" that collects all needed tools into a
 single, one-stop-shopping experience.  The current toolset is::
 
    i3-tools-v4
 
-
-Quick start for the impatient
------------------------------
+Read on for detailed instructions.
 
 Install dependencies
 ^^^^^^^^^^^^^^^^^^^^
@@ -196,6 +228,8 @@ method to move from i3-tools-v3 to i3-tools-v4.
 If you know that there is a specific package you want to force a rebuild of, you can::
 
   ./bin/port -fvd install <tool name> 
+
+.. _clustertools:
 
 Compiling tools for one or several platforms for a cluster installation
 -----------------------------------------------------------------------
