@@ -122,8 +122,10 @@ Fink
 Does anyone still use Fink_? If you do, and think it's any good, write some
 documentation.
 
-Python
-""""""
+.. _osx-python-setup::
+
+Python on OS X
+""""""""""""""
 
 Starting with 10.6, Apple has shipped a fairly up-to-date Python interpreter
 and standard library with OS X, and there's no good reason to replace it. At

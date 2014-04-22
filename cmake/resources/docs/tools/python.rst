@@ -45,93 +45,17 @@ the following packages and their dependencies:
 * python-tables
 * python-scipy
 
-Mac OS X 10.5 Leopard
-^^^^^^^^^^^^^^^^^^^^^
+Mac OS X
+^^^^^^^^
 
-**Note**: These instructions were put together to help get the python
-tools installed on a Mac running 10.5 Leopard.  I've tested them on a
-few different macs with good success.  Comments, questions and
-corrections are encouraged (python@icecube.wisc.edu).
+See :ref:`osx-python-setup` for tips on setting up your Python environment. The
+following packages are quite helpful and can be installed with :command:`pip`:
 
-All source packages referenced below are available at:
-
-http://code.icecube.wisc.edu/tools/distfiles/i3python/Mac/
-
-0. Start with a fresh install of Mac OSX 10.5 with 
-   the Xcode tools installed from the installation CD.
-
-1. Setup I3_PORTS - The recent offline releases  (and trunk) use 
-   the meta-package of tools ``i3-tools-v3``, so either get a fresh,
-   new I3_PORTS install, or::
-
-     > $I3_PORTS/bin/port sync
-     > $I3_PORTS/bin/port install i3-tools-v3
-
-   (includes new boost, new root, etc)
-
-2. Setup setuptools to use your home directory::
-
-     blaufuss@chiclets[~]% more .pydistutils.cfg
-     [install]
-     install_lib = ~/python/lib
-     install_scripts = ~/python/bin
-
-   Create these directories, if needed, and you 
-   need to add these to your .bash_profile as::
-
-     export PATH=~/python/bin:$PATH
-     export PYTHONPATH=~/python/lib
-
-   These settings need to be set in your environment before you continue.
-
-   **Note**:  There is nothing special about these values set 
-   in this ``~/.pydistutils``.  This file is used by the Python Setuptools
-   to see where to install libraries for your use.  The ``.pydistutils.cfg``
-   file has to be in your ``$HOME`` directory.  The values set in there can be
-   any directory you can write to, as long as they match the values you set
-   in ``PATH`` and ``PYTHONPATH``.
-
-3. Install setup tools.  Get ``setuptools-0.6c9-py2.5.egg`` and::
-
-     > sh setuptools-0.6c9-py2.5.egg
-
-   This will install setuptools, now easy_install should be in your path::
-
-     blaufuss@chiclets[~]% which easy_install
-     /Users/blaufuss/python/bin/easy_install
-
-4. This one is optional, but very nice. Install 
-   ipython (A much friendlier python front-end)::
-
-     > easy_install readline
-
-   (This fixes tab completion on the Mac) and::
-
-     > easy_install ipython
-
-5. Install Matplotlib.  Get ``matplotlib-0.91.4-py2.5-macosx-10.3.egg`` and::
-
-       > easy_install  ./matplotlib-0.91.4-py2.5-macosx-10.3.egg
-
-   **Note**:This version of the package seems to install correctly,
-   then will try to go off to the network and fetch the latest
-   (currently, this one) version again and fail with an error about
-   getting HTML.  Ignore this second attempt, Not sure what's up, but
-   it installed fine on several machines with this error, you should
-   see a matplotlib-0.91.4-py2.5-macosx-10.3.egg/ entry in your
-   ~/python/lib dir)
-
-6. Install numpy. Get ``numpy-1.3.0.zip`` and::
-    > easy_install ./numpy-1.3.0.zip
-
-7. Intstall Pytables.  First, you need hdf5 libraries.  
-   These are now in $I3_PORTS::
-
-     > $I3_PORTS/bin/port install hdf5_1.6.8
-
-   And now get ``tables-2.1.1.tar.gz`` and::
-
-      > sh -c "export HDF5_DIR=$I3_PORTS; ~/python/bin/easy_install ./tables-2.1.1.tar.gz"
+* ipython
+* matplotlib
+* pytables
+* numpy
+* scipy
 
 Redhat/Scientific Linux 5
 ^^^^^^^^^^^^^^^^^^^^^^^^^
