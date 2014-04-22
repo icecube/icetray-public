@@ -121,6 +121,48 @@ Fink
 Does anyone still use Fink_? If you do, and think it's any good, write some
 documentation.
 
+Python
+""""""
+
+Starting with 10.6, Apple has shipped a fairly up-to-date Python interpreter
+and standard library with OS X, and there's no good reason to replace it. At
+the same time, it has started shipping 3rd-party libraries with more rapid
+release cycles like :py:mod:`matplotlib`, :py:mod:`numpy`, and
+:py:mod:`ipython` in /Library/Python/X.Y/site-packages. You may wish to upgrade
+these packages to take advantage of new features and performance improvements.
+The problem is that Apple considers that path part of the OS, and will wipe out
+your changes when you update the OS. You can get around this by using
+:py:mod:`virtualenv` to use to create an environment that explicitly
+overrides the system site-packages and is isolated from other environments.
+
+.. highlight:: sh
+
+First, install :command:`pip`, a better package manager for Python::
+	
+	sudo easy_install pip
+
+then, use :command:`pip` to install :py:mod:`virtualenv`::
+	
+	sudo pip install virtualenv
+
+This ends the privileged portion. Now, create a new virtual environment.
+I call mine ".virtualenv/standard"::
+	
+	virtualenv .virtualenv/standard
+among other things, this creates a script :command:`~/.virtualenv/standard/bin/active`
+that can be used to set up the environment. I put these lines in my .bash_login/.zlogin
+script to enter this one automatically whenever I start a new shell::
+	
+	VIRTUAL_ENV_DISABLE_PROMPT=1
+	. ~/.virtualenv/standard/bin/activate
+Inside the environment, :command:`pip` will automatically install packages in
+the environment rather than in /Library/Python. Now you can install bleeding-edge
+versions of Python pacakges to your heart's content::
+	
+	pip install numpy
+	pip install matplotlib
+	pip install ipython
+
 .. index:: RHEL4
 .. _RHEL4:
 
