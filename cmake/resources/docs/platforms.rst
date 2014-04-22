@@ -87,8 +87,9 @@ Homebrew
 Homebrew_ is probably the easiest way to install packages on OS X, and
 distributes the most heavy-weight dependencies (cmake, boost, and Qt) as binary
 packages. Most of the required formulae are in the main distribution, but you
-should also `tap`_ homebrew/science and jvansanten/icecube. The following
-formulae are recommended:
+should also `tap`_ homebrew/science and jvansanten/icecube. Install them like this::
+	brew install cmake
+The following formulae are recommended:
 
 * offline-software: boost cmake cdk gsl hdf5 libarchive mysql qt pyqt 
 * IceRec: cfitsio minuit2 suite-sparse
@@ -244,9 +245,20 @@ want something newer sit tight for Precise Pangolin ( Ubuntu 12.04 ),
 which is the next LTS release.
 
 FreeBSD
-"""""""
+^^^^^^^
 
 Offline software is supported on FreeBSD 8 and newer. Versions of ROOT
 earlier than 5.30 will not build on 64-bit FreeBSD hosts, so you may need
 to pass -DUSE_ROOT=OFF to cmake while building.
 
+The FreeBSD base system includes a complete compiler toolchain, and the
+FreeBSD Ports Collection includes binary packages that can be installed like
+so::
+	pkg install cmake
+
+The following packages are recommended:
+
+* offline-software: bash subversion cmake boost-libs boost-python-libs cdk gsl hdf5
+* IceRec: cfitsio gotoblas suitesparse
+
+.. Note:: suitesparse will automatically install the non-optimized netlib BLAS/LAPACK for you. If you have gotoblas installed, though, CMake will link against it as expected.
