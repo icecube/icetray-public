@@ -34,8 +34,33 @@ i3_executable(shovel private/shovel/*.cxx
   USE_PROJECTS dataio
   USE_TOOLS cdk ncurses
   )
+  
+# look for urwid
+execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import urwid"
+    RESULT_VARIABLE URWID_FOUND)
+if(URWID_FOUND EQUAL 0)
+  set(URWID_FOUND TRUE)
+else(URWID_FOUND EQUAL 0)
+  set(URWID_FOUND FALSE)
+endif(URWID_FOUND EQUAL 0)
 
-i3_executable_script(pyshovel resources/dataio-pyshovel.py)
+if (URWID_FOUND)
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import urwid;print (urwid.__version__)"
+    OUTPUT_VARIABLE URWID_VERSION
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  string(REGEX MATCH "([0-9]+)\\.([0-9]+)\\.?([0-9]*)"
+    URWID_STRIPPED_VERSION
+    ${URWID_VERSION})
+  numeric_version(${URWID_STRIPPED_VERSION} URWID)
+  if (URWID_NUMERIC_VERSION LESS 10100)
+    colormsg(CYAN "+-- dataio-pyshovel *not* included (urwid python package < 1.1.0)")
+  else (URWID_NUMERIC_VERSION LESS 10100)  
+    colormsg(GREEN "+-- dataio-pyshovel")
+    i3_executable_script(pyshovel resources/dataio-pyshovel.py)
+  endif (URWID_NUMERIC_VERSION LESS 10100)  
+else (URWID_FOUND)
+  colormsg(CYAN "+-- dataio-pyshovel *not* included (missing urwid python package)")
+endif (URWID_FOUND)
 
 i3_executable(extract private/extract/*.cxx
   USE_PROJECTS dataio)
