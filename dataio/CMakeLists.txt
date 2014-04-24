@@ -37,7 +37,9 @@ i3_executable(shovel private/shovel/*.cxx
   
 # look for urwid
 execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import urwid"
-    RESULT_VARIABLE URWID_FOUND)
+    RESULT_VARIABLE URWID_FOUND
+    OUTPUT_QUIET
+    ERROR_QUIET)
 if(URWID_FOUND EQUAL 0)
   set(URWID_FOUND TRUE)
 else(URWID_FOUND EQUAL 0)
@@ -47,6 +49,7 @@ endif(URWID_FOUND EQUAL 0)
 if (URWID_FOUND)
   execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import urwid;print (urwid.__version__)"
     OUTPUT_VARIABLE URWID_VERSION
+    ERROR_QUIET
     OUTPUT_STRIP_TRAILING_WHITESPACE)
   string(REGEX MATCH "([0-9]+)\\.([0-9]+)\\.?([0-9]*)"
     URWID_STRIPPED_VERSION
