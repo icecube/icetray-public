@@ -2,6 +2,11 @@
 ## multiarch system (Ubuntu 11.04+), uncomment the lines around the
 ## find_package() call.
 
+if (${OSTYPE} STREQUAL "FreeBSD")
+  set(CMAKE_REQUIRED_FLAGS "-L/usr/local/lib/gcc47")
+  set(BLAS_LINK_FLAGS ${CMAKE_REQUIRED_FLAGS})
+endif ()
+
 if(NOT APPLE)
 tooldef(blas
   NONE
@@ -21,12 +26,8 @@ else(BLAS_FOUND)
 
   set(BLA_STATIC FALSE)
   #set(CMAKE_REQUIRED_FLAGS "-L/usr/lib/i386-linux-gnu -L/usr/lib/x86_64-linux-gnu -lgfortran")
-  if (${OSTYPE} STREQUAL "FreeBSD")
-    set(CMAKE_REQUIRED_FLAGS "-L/usr/local/lib/gcc47")
-    set(BLAS_LINK_FLAGS ${CMAKE_REQUIRED_FLAGS})
-  endif ()
   find_package(BLAS)
-  # make sure we have cblas as well
+  # make sure we have cblas as well (goto2 always includes it)
   if(BLAS_FOUND)
     set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRARIES})
     check_library_exists(${BLAS_LIBRARIES} "cblas_sgemm" "" _have_cblas)
@@ -46,8 +47,6 @@ else(BLAS_FOUND)
     set(BLAS_FOUND TRUE CACHE BOOL "Tool BLAS found successfully" FORCE)
     set(BLAS_LIBRARIES "${BLAS_LIBRARIES}" CACHE PATH "Libraries for tool BLAS" FORCE)
   endif(BLAS_FOUND)
-  unset(CMAKE_REQUIRED_FLAGS)
-  unset(CMAKE_REQUIRED_LIBRARIES)
 endif(BLAS_FOUND)
 
 else(NOT APPLE)
@@ -55,3 +54,6 @@ else(NOT APPLE)
   colormsg(HICYAN "blas")
   find_package(BLAS)
 endif(NOT APPLE)
+
+unset(CMAKE_REQUIRED_FLAGS)
+unset(CMAKE_REQUIRED_LIBRARIES)
