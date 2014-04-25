@@ -84,8 +84,14 @@ if (NOT LIBARCHIVE_FOUND)
 endif (NOT LIBARCHIVE_FOUND)
 i3_test_scripts(${tmp_SCRIPTS})
 
-add_subdirectory(private/pybindings)
-
+i3_add_pybindings(dataio
+  private/pybindings/I3File.cxx
+  private/pybindings/I3SequentialFile.cxx
+  private/pybindings/I3FileStager.cxx
+  private/pybindings/module.cxx
+  USE_PROJECTS icetray dataio
+  USE_TOOLS boost python
+  )
 # force dependencies
 set_property(TEST dataio::a_nocompression.py APPEND PROPERTY DEPENDS dataio::a2_verify_daqtimes_change.py)
 set_property(TEST dataio::b2_bz_default.py APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
