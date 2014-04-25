@@ -17,5 +17,16 @@ i3_test_executable(test
 
 i3_test_scripts(resources/test/*.py)
 
-add_subdirectory(private/pybindings)
+i3_add_pybindings(interfaces
+  private/pybindings/module.cxx
+  private/pybindings/I3GeometryService.cxx
+  private/pybindings/I3CalibrationService.cxx
+  private/pybindings/I3DetectorStatusService.cxx
+  private/pybindings/I3EventService.cxx
+  private/pybindings/I3MetaService.cxx
+  private/pybindings/I3OMKey2MBID.cxx
+  USE_TOOLS boost python
+  USE_PROJECTS interfaces dataclasses
+  )
+
 
