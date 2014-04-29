@@ -241,7 +241,7 @@ a tt:hover {
     color: #2491CF;
 }
 
-pre {
+pre, div.wrapped-code {
     font-family: 'Consolas', 'Deja Vu Sans Mono',
                  'Bitstream Vera Sans Mono', monospace;
     font-size: 12px;
@@ -252,7 +252,12 @@ pre {
     border-left: 2px solid red;
 }
 
-pre a {
+div.wrapped-code {
+    padding: 0.8em 0.8em 0.8em 4.8em;
+    text-indent: -4em;
+}
+
+pre a, div.wrapped-code a {
     color: inherit;
     text-decoration: underline;
 }

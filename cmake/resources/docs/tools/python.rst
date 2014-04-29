@@ -48,7 +48,7 @@ the following packages and their dependencies:
 Mac OS X
 ^^^^^^^^
 
-See :ref:`osx-python-setup` for tips on setting up your Python environment. The
+See :ref:`osxpythonsetup` for tips on setting up your Python environment. The
 following packages are quite helpful and can be installed with :command:`pip`:
 
 * ipython

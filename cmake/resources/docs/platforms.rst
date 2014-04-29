@@ -37,15 +37,20 @@ so you should only download it if you need it for non-IceCube work.
 
 Command-Line Tools
 ..................
+
 1) Go to the `Apple Developer Downloads page <http://developer.apple.com/downloads>`_,
    signing in with your `Apple ID`_.
 2) Download and install the latest Command Line Tools.
 
 Xcode
 .....
+
 1) Download Xcode from the App Store.
+
 2) Open Xcode, and open the Preferences window (Xcode > Preferences).
-3) In the :ref:`Xcode4Prefs`, click the Downloads tab, and install the Command Line Tools.
+
+3) In the :ref:`Xcode4Prefs`, click the Downloads tab, and install the
+   Command Line Tools.
 
 .. _Xcode4Prefs:
 
@@ -87,8 +92,11 @@ Homebrew
 Homebrew_ is probably the easiest way to install packages on OS X, and
 distributes the most heavy-weight dependencies (cmake, boost, and Qt) as binary
 packages. Most of the required formulae are in the main distribution, but you
-should also `tap`_ homebrew/science and jvansanten/icecube. Install them like this::
+should also `tap`_ homebrew/science and jvansanten/icecube. Install them like
+this::
+
 	brew install cmake
+
 The following formulae are recommended:
 
 * offline-software: boost cmake cdk gsl hdf5 libarchive mysql qt pyqt 
@@ -97,7 +105,12 @@ The following formulae are recommended:
 
 .. _tap: https://github.com/Homebrew/homebrew/wiki/brew-tap
 
-.. warning:: Don't install Python from Homebrew. If you do, it will also want to waste a lot of time building boost from source instead of using a binary distribution built against the system Python (2.7.2, which is just fine).
+.. warning::
+
+    Don't install Python from Homebrew. If you do, it will also want 
+    to waste a lot of time building boost from source instead of using a
+    binary distribution built against the system Python (2.7.2, which is 
+    just fine).
 
 MacPorts
 ........
@@ -122,7 +135,8 @@ Fink
 Does anyone still use Fink_? If you do, and think it's any good, write some
 documentation.
 
-.. _osx-python-setup::
+
+.. _osxpythonsetup:
 
 Python on OS X
 """"""""""""""
@@ -152,15 +166,18 @@ This ends the privileged portion. Now, create a new virtual environment.
 I call mine ".virtualenv/standard"::
 	
 	virtualenv .virtualenv/standard
-among other things, this creates a script :command:`~/.virtualenv/standard/bin/active`
-that can be used to set up the environment. I put these lines in my .bash_login/.zlogin
-script to enter this one automatically whenever I start a new shell::
+
+among other things, this creates a script
+:command:`~/.virtualenv/standard/bin/active` that can be used to set up
+the environment. I put these lines in my .bash_login/.zlogin script to 
+enter this one automatically whenever I start a new shell::
 	
 	VIRTUAL_ENV_DISABLE_PROMPT=1
 	. ~/.virtualenv/standard/bin/activate
+
 Inside the environment, :command:`pip` will automatically install packages in
-the environment rather than in /Library/Python. Now you can install bleeding-edge
-versions of Python pacakges to your heart's content::
+the environment rather than in /Library/Python. Now you can install
+bleeding-edge versions of Python pacakges to your heart's content::
 	
 	pip install numpy
 	pip install matplotlib
@@ -169,10 +186,13 @@ versions of Python pacakges to your heart's content::
 .. index:: RHEL4
 .. _RHEL4:
 
-Red Hat
-^^^^^^^
+Red Hat Variants
+^^^^^^^^^^^^^^^^
 
-* Red Hat Enderprise Linux 4, and its derivitives, may not work with
+Red Hat
+"""""""
+
+* Red Hat Enterprise Linux 4, and its derivitives, may not work with
   IceCube software as they fall outside of the "current/previous" rule
   of thumb stated above.
 
@@ -182,7 +202,7 @@ Red Hat
 .. index:: Scientific Linux
 
 Scientific Linux
-^^^^^^^^^^^^^^^^
+""""""""""""""""
 
 There is a script at
 http://code.icecube.wisc.edu/icetray-dist/distros/ScientificSL.sh
@@ -195,7 +215,7 @@ Python Sphinx for using the documentation system.
 .. _centos:
 
 CentOS
-^^^^^^
+""""""
 
 There is a script at
 http://code.icecube.wisc.edu/icetray-dist/distros/CentOS.sh
@@ -206,7 +226,7 @@ After installing these packages, run "easy_install -U Sphinx" to install
 Python Sphinx for using the documentation system. 
 
 Fedora
-^^^^^^
+""""""
 
 There is a script at
 http://code.icecube.wisc.edu/icetray-dist/distros/Fedora.sh
@@ -221,8 +241,63 @@ Python Sphinx for using the documentation system.
 .. _ubuntu:
 .. _debian:
 
-Ubuntu or Debian
-^^^^^^^^^^^^^^^^
+Ubuntu or Debian Variants
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Using the Package Manager
+"""""""""""""""""""""""""
+
+On laptops or user-controlled workstations it is recommended to install
+as much as possible through the package manager.
+
+Basic Packages (offline-software)
+.................................
+
+For a basic system (such as viewing files, basic tasks), install:
+
+.. container:: wrapped-code
+
+    apt-get install build-essential cmake libbz2-dev libgl1-mesa-dev 
+    freeglut3-dev libxml2-dev subversion libboost-python-dev 
+    libboost-system-dev libboost-signals-dev libboost-thread-dev 
+    libboost-date-time-dev libboost-serialization-dev libboost-filesystem-dev 
+    libboost-program-options-dev libboost-regex-dev libboost-iostreams-dev 
+    libgsl0-dev libcdk5-dev libarchive-dev python-scipy ipython-qtconsole 
+    libqt4-dev python-urwid
+
+Simulation Packages
+...................
+
+Simulation doesn't require too much extra. cfitsio is required, the rest
+is optional depending on your use case:
+
+.. container:: wrapped-code
+
+    apt-get install libcfitsio3-dev libsprng2-dev libmysqlclient-dev
+    libsuitesparse-dev
+
+IceRec Packages
+...............
+
+Some packages are easily available:
+
+.. container:: wrapped-code
+
+    apt-get install libcfitsio3-dev libmysqlclient-dev libhdf5-serial-dev
+
+Root is only available in newer releases (Ubuntu 13.10+, Debian 7+):
+
+.. container:: wrapped-code
+
+    apt-get install root-system
+
+Other Tools
+...........
+
+If you want Geant4 or Genie, you'll need to use I3_PORTS.
+
+Using I3_PORTS
+""""""""""""""
 
 There is a script at
 http://code.icecube.wisc.edu/icetray-dist/distros/Ubuntu.sh
@@ -256,11 +331,32 @@ to pass -DUSE_ROOT=OFF to cmake while building.
 The FreeBSD base system includes a complete compiler toolchain, and the
 FreeBSD Ports Collection includes binary packages that can be installed like
 so::
+
 	pkg install cmake
 
-The following packages are recommended:
+The following packages are recommended.
 
-* offline-software: bash subversion cmake boost-libs boost-python-libs cdk gsl hdf5
-* IceRec: cfitsio gotoblas suitesparse
+offline-software
+""""""""""""""""
 
-.. Note:: suitesparse will automatically install the non-optimized netlib BLAS/LAPACK for you. If you have gotoblas installed, though, CMake will link against it as expected.
+Install this to get the basics:
+
+.. container:: wrapped-code
+
+    pkg install bash subversion cmake boost-libs boost-python-libs cdk gsl hdf5
+
+IceRec
+""""""
+
+Install this in addition to the offline-software packages to be able to run
+reconstructions:
+
+.. container:: wrapped-code
+
+    pkg install cfitsio gotoblas suitesparse
+
+.. Note::
+    
+    suitesparse will automatically install the non-optimized netlib
+    BLAS/LAPACK for you. If you have gotoblas installed, though, CMake will
+    link against it as expected.
