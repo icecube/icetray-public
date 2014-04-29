@@ -343,7 +343,7 @@ Install this to get the basics:
 
 .. container:: wrapped-code
 
-    pkg install bash subversion cmake boost-libs boost-python-libs cdk gsl hdf5
+    pkg install bash subversion cmake boost-libs boost-python-libs cdk gsl hdf5 ccache
 
 IceRec
 """"""
@@ -353,7 +353,7 @@ reconstructions:
 
 .. container:: wrapped-code
 
-    pkg install cfitsio gotoblas suitesparse
+    pkg install cfitsio gotoblas suitesparse py27-numpy
 
 .. Note::
     
