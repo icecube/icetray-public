@@ -177,11 +177,25 @@ enter this one automatically whenever I start a new shell::
 
 Inside the environment, :command:`pip` will automatically install packages in
 the environment rather than in /Library/Python. Now you can install
-bleeding-edge versions of Python pacakges to your heart's content::
+bleeding-edge versions of Python packages to your heart's content::
 	
 	pip install numpy
 	pip install matplotlib
 	pip install ipython
+
+Pitfalls
+........
+
+::
+	
+	clang: error: unknown argument: '-mno-fused-madd' [-Wunused-command-line-argument-hard-error-in-future]
+
+The version of clang distributed with XCode 5.1 deprecates some GCC-only flags.
+Whereas they had previously been silently ignored, they now raise errors when
+used. For the time being you can work around this change by setting an
+environment variable::
+	
+	export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
 
 .. index:: RHEL4
 .. _RHEL4:
