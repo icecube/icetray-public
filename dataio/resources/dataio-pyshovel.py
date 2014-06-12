@@ -13,6 +13,14 @@ try:
 except ImportError:
     print("Cannot run without the urwid python module")
     sys.exit(1)
+try:
+    from distutils.version import LooseVersion
+except ImportError:
+    pass
+else:
+    if LooseVersion(urwid.__version__) < LooseVersion('1.1'):
+        print("Your urwid python module is older than 1.1, and is not supported")
+        sys.exit(1)
 
 try:
     import IPython
