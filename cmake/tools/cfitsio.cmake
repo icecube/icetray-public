@@ -28,8 +28,8 @@ TOOLDEF (cfitsio
 ## for Fedora...
 if(NOT CFITSIO_FOUND)
 TOOLDEF (cfitsio
-  cfitsio
-  fitsio.h
+  include
+  cfitsio/fitsio.h
   lib
   NONE
   cfitsio
