@@ -24,3 +24,14 @@ TOOLDEF (cfitsio
   NONE
   cfitsio
   )
+
+## for Fedora...
+if(NOT CFITSIO_FOUND)
+TOOLDEF (cfitsio
+  cfitsio
+  fitsio.h
+  lib
+  NONE
+  cfitsio
+  )
+endif(NOT CFITSIO_FOUND)
