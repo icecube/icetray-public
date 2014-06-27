@@ -55,5 +55,12 @@ else(NOT APPLE)
   find_package(BLAS)
 endif(NOT APPLE)
 
+if (CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
+  list(APPEND BLAS_LIBRARIES "-L/usr/local/lib/gcc47")
+  list(APPEND BLAS_LIBRARIES "-lgfortran")
+  set(BLAS_FOUND TRUE CACHE BOOL "Tool BLAS found successfully" FORCE)
+  set(BLAS_LIBRARIES "${BLAS_LIBRARIES}" CACHE PATH "Libraries for tool BLAS" FORCE)
+endif (CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
+
 unset(CMAKE_REQUIRED_FLAGS)
 unset(CMAKE_REQUIRED_LIBRARIES)
