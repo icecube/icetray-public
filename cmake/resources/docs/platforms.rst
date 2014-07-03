@@ -99,18 +99,11 @@ this::
 
 The following formulae are recommended:
 
-* offline-software: boost cmake cdk gsl hdf5 libarchive mysql qt pyqt 
+* offline-software: boost --with-python cmake cdk gsl hdf5 libarchive mysql qt pyqt 
 * IceRec: cfitsio minuit2 suite-sparse
 * simulation: sprng2
 
 .. _tap: https://github.com/Homebrew/homebrew/wiki/brew-tap
-
-.. warning::
-
-    Don't install Python from Homebrew. If you do, it will also want 
-    to waste a lot of time building boost from source instead of using a
-    binary distribution built against the system Python (2.7.2, which is 
-    just fine).
 
 MacPorts
 ........
