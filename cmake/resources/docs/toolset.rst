@@ -109,6 +109,16 @@ when substituting values like ``HOME``.
 	     must be built against that same python.  See the page for
 	     the :ref:`PythonTool` for more information.
 
+Here is another example override for tools for *blas* and *lapack* (filenames
+``blas.cmake`` and ``lapack.cmake``) used to find the
+`ATLAS <http://math-atlas.sourceforge.net>`_ libraries on a Fedora 20 system::
+        
+        set(ATLAS_BASE "/usr/lib64/atlas")
+        set(BLAS_FOUND TRUE CACHE BOOL "BLAS library found" FORCE)
+        set(BLAS_LIBRARIES "${ATLAS_BASE}/libf77blas.so.3" CACHE FILEPATH "BLAS libraries" FORCE)
+        set(LAPACK_FOUND TRUE CACHE BOOL "LAPACK library found" FORCE)
+        set(LAPACK_LIBRARIES "${ATLAS_BASE}/liblapack.so.3"  CACHE FILEPATH "LAPACK libraries" FORCE)
+
 Troubleshooting
 ---------------
 
