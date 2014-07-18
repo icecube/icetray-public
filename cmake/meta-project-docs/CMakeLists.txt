@@ -56,6 +56,6 @@ execute_process(COMMAND svn pg svn:externals ${CMAKE_SOURCE_DIR}
     @ONLY)
 else()
   colormsg(CYAN "+-- sphinx-build *not* found, disabling build of sphinx documentation.
-       See docs at http://software.icecube.wisc.edu/offline-software.trunk
+       See docs at http://software.icecube.wisc.edu/offline_trunk/
        for details.")
 endif()
