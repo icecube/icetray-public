@@ -9,6 +9,9 @@
 //  (C) 2012 Jakob van Santen <vansanten@wisc.edu>
 //           and the IceCube Collaboration
 
+#ifndef ICETRAY_DATACLASS_SUITE_HPP_INCLUDED
+#define ICETRAY_DATACLASS_SUITE_HPP_INCLUDED
+
 #include <typeinfo>
 
 #include <boost/python/def_visitor.hpp>
@@ -156,3 +159,4 @@ public:
 
 }}
 
+#endif // #ifndef ICETRAY_DATACLASS_SUITE_HPP_INCLUDED
