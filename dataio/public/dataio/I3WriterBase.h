@@ -25,7 +25,6 @@
 #include <icetray/I3ConditionalModule.h>
 #include <dataio/I3FileStager.h>
 #include <boost/iostreams/filtering_stream.hpp>
-#include <zlib.h>
 
 #include <vector>
 #include <string>
