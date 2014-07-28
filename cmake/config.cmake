@@ -408,10 +408,15 @@ endif(USE_GFILT)
 #
 #  For now, on gcc 4.3.2, add the -Wno-deprecated flag
 #
-if (GCC_NUMERIC_VERSION GREATER 40299 OR CMAKE_COMPILER_IS_CLANG)
+if (GCC_NUMERIC_VERSION GREATER 40299)
   set(CXX_WARNING_SUPRESSION_FLAGS "-Wno-deprecated -Wno-parentheses -Wno-unused-local-typedefs"
     CACHE STRING "Warning supression flags for this compiler")
-endif (GCC_NUMERIC_VERSION GREATER 40299 OR CMAKE_COMPILER_IS_CLANG)
+endif (GCC_NUMERIC_VERSION GREATER 40299)
+
+if (CMAKE_COMPILER_IS_CLANG)
+  set(CXX_WARNING_SUPRESSION_FLAGS "-Wno-deprecated -Wno-parentheses"
+    CACHE STRING "Warning supression flags for this compiler")
+endif (CMAKE_COMPILER_IS_CLANG)
 
 #
 #  Detect certain old platforms and reduce optimization levels accordingly
