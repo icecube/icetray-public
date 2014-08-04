@@ -196,6 +196,8 @@ environment variable::
 Red Hat Variants
 ^^^^^^^^^^^^^^^^
 
+For Red Hat variants it is best to use I3_PORTS to install dependent software.
+
 Red Hat
 """""""
 

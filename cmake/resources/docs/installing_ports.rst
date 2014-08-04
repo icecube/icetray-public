@@ -27,8 +27,8 @@ central I3_PORTS installation that you can use. Ask around!
 For a one-off installation on a machine you control (e.g. your laptop), you're
 usually better off using the package manager that came with your operating
 system to install the necessary support libraries and setting the
-:ref:`SYSTEM_PACKAGES` flag allow the IceTray build system to find them. Since
-most of IceTray's dependencies are common packages that package managers
+:ref:`SYSTEM_PACKAGES` flag to allow the IceTray build system to find them. 
+Since most of IceTray's dependencies are common packages that package managers
 distribute in pre-built form, this can shorten the time it takes to set up the
 support environment from hours to a few minutes. See :ref:`platforms` for notes
 specific to your platform.
@@ -48,6 +48,11 @@ single, one-stop-shopping experience.  The current toolset is::
    i3-tools-v5
 
 Read on for detailed instructions.
+
+.. note::
+   Platform-specific notes and minor required changes can be found at
+   :ref:`platforms`.  Please read the notes appropriate to your
+   platform before beginning installation.
 
 Install dependencies
 ^^^^^^^^^^^^^^^^^^^^
@@ -75,9 +80,15 @@ trial-and-error.  For sure you'll need:
 You can have a look at some of the scripts for other platforms to get
 an idea of what else is required.
 
-
 Build and install ports
 ^^^^^^^^^^^^^^^^^^^^^^^
+
+.. warning::
+   **NEVER** manage the port installation as user 'root'.  Running port
+   as user root will allow you to install over existing system
+   software, and possibily cause harm to your system if your $I3_PORT
+   variable somehow gets set incorrectly.  You should always use a
+   non-priveledged account to install the IceCube tools system.
 
 The MacPorts two-step:
 
@@ -116,19 +127,6 @@ The MacPorts two-step:
    Offline Software toolset within MacPorts.  Go read the day's news
    or make a lasagna while you're at it - this step will take some
    time and is significantly quicker on a fast system.
-
-Important Notes
-^^^^^^^^^^^^^^^
-
-* **NEVER** manage the port installation as user 'root'.  Running port
-  as user root will allow you to install over existing system
-  software, and possibily cause harm to your system if your $I3_PORT
-  variable somehow gets set incorrectly.  You should always use a
-  non-priveledged account to install the IceCube tools system.
-
-* Platform-specific notes and minor required changes can be found at
-  the bottom of this page.  Please read the notes appropriate to your
-  platform before beginning installation.
 
 The individual steps
 --------------------
