@@ -95,7 +95,7 @@ get_project_dependencies() {
 	
 	check_project $project
 	
-	projectlist=`grep -m 1 ${project}_PROJECT_DEPENDS:INTERNAL $CMAKECACHE | sed -e 's|;| |g' -e's|^.*INTERNAL=||'`
+	projectlist=`grep -m 1 ^${project}_PROJECT_DEPENDS:INTERNAL $CMAKECACHE | sed -e 's|;| |g' -e's|^.*INTERNAL=||'`
 	for depproj in $projectlist; do
 		get_project_dependencies $depproj
 	done
@@ -130,18 +130,18 @@ fi
 for project in $ALL_PROJECTS; do
 	if [ $COMPILE_FLAGS -eq 1 ]; then
 		#add flags for all of the include directories needed by this project
-		incdirlist=`grep -m 1 ${project}_INCLUDE_DIRS:INTERNAL $CMAKECACHE | sed -e 's|;| |g' -e's|^.*:INTERNAL=||'`
+		incdirlist=`grep -m 1 ^${project}_INCLUDE_DIRS:INTERNAL $CMAKECACHE | sed -e 's|;| |g' -e's|^.*:INTERNAL=||'`
 		for incdir in $incdirlist; do
 			OUTPUT_FLAGS="$OUTPUT_FLAGS -I$incdir"
 		done
 		#grab any other compilation flags for the project; not sure if this is needed
-		proj_compile_flags=`grep -m 1 ${project}_COMPILE_FLAGS:INTERNAL $CMAKECACHE | sed -e 's|;| |g' -e's|^.*:INTERNAL=||'`
+		proj_compile_flags=`grep -m 1 ^${project}_COMPILE_FLAGS:INTERNAL $CMAKECACHE | sed -e 's|;| |g' -e's|^.*:INTERNAL=||'`
 		if [ "$proj_compile_flags" ]; then
 			OUTPUT_FLAGS="$OUTPUT_FLAGS $proj_compile_flags"
 		fi
 	fi
 	if [ $LINK_FLAGS -eq 1 ]; then
-		liblist=`grep -m 1 -m 1 ${project}_LIBRARY_DEPENDS:INTERNAL $CMAKECACHE | sed $library_filter -e 's|;| |g' -e's|^.*:INTERNAL=||'`
+		liblist=`grep -m 1 -m 1 ^${project}_LIBRARY_DEPENDS:INTERNAL $CMAKECACHE | sed $library_filter -e 's|;| |g' -e's|^.*:INTERNAL=||'`
 		for lib in $liblist; do
 			OUTPUT_FLAGS="$OUTPUT_FLAGS `echo $lib | sed -E -e 's_^(.*)/lib(.*)\.(a|dylib|so)$_-L\1 -l\2_' -e 's_^(.*)/([^/]*)\.framework$_-F\1 -framework \2_'`"
 		done
