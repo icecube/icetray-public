@@ -274,6 +274,12 @@ For a basic system (such as viewing files, basic tasks), install:
     libgsl0-dev libcdk5-dev libarchive-dev python-scipy ipython-qtconsole 
     libqt4-dev python-urwid
 
+For newer Ubuntu versions (>=14.04):
+
+.. container:: wrapped-code
+
+    apt-get install libz-dev libqt4-opengl-dev
+
 Simulation Packages
 ...................
 
