@@ -14,6 +14,7 @@
 #ifndef ICETRAY_PYTHON_COPY_SUITE_HPP_INCLUDED
 #define ICETRAY_PYTHON_COPY_SUITE_HPP_INCLUDED
 
+#include <stdint.h>
 #include <boost/python/def_visitor.hpp>
 
 namespace bp = boost::python;
