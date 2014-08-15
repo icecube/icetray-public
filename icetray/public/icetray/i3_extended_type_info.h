@@ -60,7 +60,9 @@ public:
 		// note: this implementation - based on usage of typeid (rtti)
 		// only does something if the class has at least one virtual
 		// function.
+#pragma GCC diagnostic ignored "-Wunused-local-typedef"
 		BOOST_STATIC_WARNING(boost::is_polymorphic< T >::value);
+#pragma GCC diagnostic pop
 		return boost::serialization::typeid_system::extended_type_info_typeid_0::get_extended_type_info(typeid(t));
 	}
 

@@ -39,8 +39,22 @@ void register_I3Module();
 void register_I3Context();
 void register_I3Configuration();
 void register_I3ModuleFactory();
-void register_std_cont_pod();
 void register_MyService();
+
+void register_std_cont_pod_char();
+void register_std_cont_pod_double();
+void register_std_cont_pod_I3Frame_Stream();
+void register_std_cont_pod_int();
+void register_std_cont_pod_map_int_int();
+void register_std_cont_pod_map_omkey_int();
+void register_std_cont_pod_omkey();
+void register_std_cont_pod_pairs();
+void register_std_cont_pod_short();
+void register_std_cont_pod_string();
+void register_std_cont_pod_ulong();
+void register_std_cont_pod_unsigned();
+void register_std_cont_pod_vector_int();
+void register_std_cont_pod_vector_string();
 
 using namespace boost::python;
 
@@ -83,12 +97,24 @@ BOOST_PYTHON_MODULE(icetray)
   register_I3Context();
   register_I3Configuration();
   register_I3ModuleFactory();
-  register_std_cont_pod();
   register_I3RUsage();
   register_I3TrayInfo();
   register_I3Bool();
   register_I3Int();
   register_MyService();
 
+  register_std_cont_pod_char();
+  register_std_cont_pod_double();
+  register_std_cont_pod_I3Frame_Stream();
+  register_std_cont_pod_int();
+  register_std_cont_pod_map_int_int();
+  register_std_cont_pod_map_omkey_int();
+  register_std_cont_pod_omkey();
+  register_std_cont_pod_pairs();
+  register_std_cont_pod_short();
+  register_std_cont_pod_string();
+  register_std_cont_pod_ulong();
+  register_std_cont_pod_unsigned();
+  register_std_cont_pod_vector_int();
+  register_std_cont_pod_vector_string();
 }
-

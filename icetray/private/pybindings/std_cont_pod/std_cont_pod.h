@@ -19,6 +19,9 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+#ifndef __STD_CONT_POD_PYBINDINGS
+#define __STD_CONT_POD_PYBINDINGS
+
 #include <icetray/OMKey.h>
 #include <icetray/I3Frame.h>
 #include <icetray/impl.h>
@@ -92,31 +95,4 @@ class i3_map_extras : public def_visitor<i3_map_extras<Map> >
   friend class boost::python::def_visitor_access;
 };
 
-void register_std_cont_pod()
-{
-  reg<string>("string");
-  reg<vector<string > >("vector_string");
-  reg<double>("double");
-  reg<int>("int");
-  reg<vector<int> >("vector_int");
-  reg<short>("short");
-  reg<char>("char");
-  reg<unsigned>("unsigned");
-  reg<unsigned long>("ulong");
-  reg<OMKey>("OMKey");
-  reg<I3Frame::Stream>("I3Frame_Stream");
-
-  class_<std::map<int, int> >("map_int_int")
-    .def(map_indexing_suite<std::map<int, int> >())
-    .def(i3_map_extras<std::map<int, int> >())
-    ;
-
-  class_<std::map<OMKey, int> >("map_OMKey_int")
-    .def(map_indexing_suite<std::map<OMKey, int> >())
-    ;
-
-  std_pair_to_python_converter<unsigned long long int, unsigned long long int>();
-  std_pair_to_python_converter<string, I3FrameObjectConstPtr>();
-  std_pair_to_python_converter<float, float>();
-}
-
+#endif

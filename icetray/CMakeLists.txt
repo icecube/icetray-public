@@ -72,8 +72,21 @@ set(ICETRAY_PYTHON_SRC
   private/pybindings/I3ModuleFactory.cxx
   private/pybindings/I3FrameObject.cxx
   private/pybindings/I3TrayInfo.cxx
-  private/pybindings/std_cont_pod.cxx
-  private/pybindings/MyService.cxx)
+  private/pybindings/MyService.cxx
+  private/pybindings/std_cont_pod/std_cont_pod_char.cxx
+  private/pybindings/std_cont_pod/std_cont_pod_double.cxx
+  private/pybindings/std_cont_pod/std_cont_pod_I3Frame_Stream.cxx
+  private/pybindings/std_cont_pod/std_cont_pod_int.cxx
+  private/pybindings/std_cont_pod/std_cont_pod_map_int_int.cxx
+  private/pybindings/std_cont_pod/std_cont_pod_map_omkey_int.cxx
+  private/pybindings/std_cont_pod/std_cont_pod_omkey.cxx
+  private/pybindings/std_cont_pod/std_cont_pod_pairs.cxx
+  private/pybindings/std_cont_pod/std_cont_pod_sort.cxx
+  private/pybindings/std_cont_pod/std_cont_pod_string.cxx
+  private/pybindings/std_cont_pod/std_cont_pod_ulong.cxx
+  private/pybindings/std_cont_pod/std_cont_pod_unsigned.cxx
+  private/pybindings/std_cont_pod/std_cont_pod_vector_int.cxx
+  private/pybindings/std_cont_pod/std_cont_pod_vector_string.cxx)
 
 if (NOT ${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
   # On FreeBSD, the backtrace facility is in a separate library.
