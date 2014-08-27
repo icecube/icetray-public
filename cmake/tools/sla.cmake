@@ -24,3 +24,11 @@ TOOLDEF (sla
   NONE
   sla
   )
+
+TOOLDEF (pal
+  include
+  star/pal.h
+  lib
+  NONE
+  pal
+  )
