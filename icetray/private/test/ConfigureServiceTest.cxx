@@ -65,8 +65,8 @@ TEST(finish_called)
 
   tray.Execute(1);
 
-  ENSURE(!TestServiceFactory::instance->finishCalled, "Finish called too soon");
-  tray.Finish();
+  ENSURE(TestServiceFactory::instance->finishCalled, "Finish should have been called");
+  tray.Finish(); // noop
   ENSURE(TestServiceFactory::instance->finishCalled, "Finish should have been called");
     
 }
