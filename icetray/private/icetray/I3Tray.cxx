@@ -103,7 +103,7 @@ I3Tray::report_usage(int sig)
 void noOpDeleter(I3Tray*){}
 
 I3Tray::I3Tray() :
-    boxes_connected(false), configure_called(false), finish_called(false),
+    boxes_connected(false), configure_called(false),
     execute_called(false), suspension_requested(false)
 {
 	master_context.Put(boost::shared_ptr<I3Tray>(this,noOpDeleter),"I3Tray");
@@ -115,9 +115,6 @@ I3Tray::I3Tray() :
 
 I3Tray::~I3Tray()
 {
-	if (!finish_called && execute_called)
-		Finish();
-
 	global_suspension_requested = false;
 }
 
@@ -475,6 +472,20 @@ I3Tray::Execute()
 		log_trace("icetray dispatching Process_");
 		driving_module->Do(&I3Module::Process_);
 	}
+
+	// call every module's Finish() function
+	// (this used to be in I3Tray::Finish())
+	if (modules_in_order.size() == 0 || !driving_module)
+		return;
+
+	log_notice("I3Tray finishing...");
+
+	driving_module->Do(&I3Module::Finish);
+
+	BOOST_FOREACH(const std::string& factname, factories_in_order) {
+		log_trace("calling finish on factory %s", factname.c_str());
+		factories[factname]->Finish();
+	}
 }
 
 void
@@ -499,6 +510,20 @@ I3Tray::Execute(unsigned maxCount)
 		log_trace("%u/%u icetray dispatching Process_", i, maxCount);
 		driving_module->Do(&I3Module::Process_);
 	}
+	
+	// call every module's Finish() function
+	// (this used to be in I3Tray::Finish())
+	if (modules_in_order.size() == 0 || !driving_module)
+		return;
+
+	log_notice("I3Tray finishing...");
+
+	driving_module->Do(&I3Module::Finish);
+
+	BOOST_FOREACH(const std::string& factname, factories_in_order) {
+		log_trace("calling finish on factory %s", factname.c_str());
+		factories[factname]->Finish();
+	}
 }
 
 map<string, I3PhysicsUsage>
@@ -521,23 +546,7 @@ I3Tray::Usage()
 void
 I3Tray::Finish()
 {
-	if (finish_called || !execute_called) {
-		log_warn("Finish() already called, or before calling "
-                    "Execute()");
-		return;
-	}
-	if (modules_in_order.size() == 0 || !driving_module)
-		return;
-	finish_called = true;
-
-	log_notice("I3Tray finishing...");
-
-	driving_module->Do(&I3Module::Finish);
-  
-	BOOST_FOREACH(const std::string& factname, factories_in_order) {
-		log_trace("calling finish on factory %s", factname.c_str());
-		factories[factname]->Finish();
-	}
+	// this is a no-op now (all module->Finish() calls are now made in Execute())
 }
 
 I3TrayInfo
@@ -627,4 +636,3 @@ I3Tray::AddFunctionModule<bool>(boost::function<bool(boost::shared_ptr<I3Frame>)
                                 const std::string& instancename){
 	return AddModule(boost::make_shared<FunctionModule>(master_context,func));
 }
-
