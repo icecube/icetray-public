@@ -19,10 +19,6 @@
 #  
 
 if(NOT SYSTEM_PACKAGES)
-  set(BOOST_PORTSVERSION "1.38.0" CACHE PATH "The boost version.")
-  set(BOOST_INCLUDEDIR ${I3_PORTS}/include/boost-${BOOST_PORTSVERSION})
-  set(BOOST_LIBRARYDIR ${I3_PORTS}/lib/boost-${BOOST_PORTSVERSION})
-  set(Boost_NO_SYSTEM_PATHS TRUE)
 endif(NOT SYSTEM_PACKAGES)
 
 colormsg("")
@@ -32,9 +28,15 @@ set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 if (SYSTEM_PACKAGES)
         find_package(Boost COMPONENTS python system signals thread date_time serialization filesystem program_options regex iostreams)
-else (SYSTEM_PACKAGES)
-        find_package(Boost ${BOOST_PORTSVERSION} EXACT COMPONENTS python system signals thread date_time serialization filesystem program_options regex iostreams)
 endif (SYSTEM_PACKAGES)
+
+if((NOT SYSTEM_PACKAGES) OR (NOT Boost_FOUND))
+  set(BOOST_PORTSVERSION "1.38.0" CACHE PATH "The boost version.")
+  set(BOOST_INCLUDEDIR ${I3_PORTS}/include/boost-${BOOST_PORTSVERSION})
+  set(BOOST_LIBRARYDIR ${I3_PORTS}/lib/boost-${BOOST_PORTSVERSION})
+  set(Boost_NO_SYSTEM_PATHS TRUE)
+  find_package(Boost ${BOOST_PORTSVERSION} EXACT COMPONENTS python system signals thread date_time serialization filesystem program_options regex iostreams)
+endif((NOT SYSTEM_PACKAGES) OR (NOT Boost_FOUND))
 
 if(Boost_FOUND)
   set(BOOST_FOUND TRUE CACHE BOOL "Boost found successfully" FORCE)
