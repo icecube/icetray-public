@@ -30,12 +30,14 @@
 #include <icetray/I3TrayInfo.h>
 #include <icetray/I3Frame.h>
 #include <dataio/I3File.h>
+#include <dataio/I3FileStager.h>
 
 class View;
 
 class Model
 {
   I3File i3file_;
+  I3::dataio::shared_filehandle file_ref_;
 
   std::vector<std::pair<I3File::FrameInfo, unsigned> > frame_infos_;
   std::vector<std::pair<I3File::FrameInfo, unsigned> > frame_infos_other_;

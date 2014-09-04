@@ -26,6 +26,7 @@ using boost::optional;
 #include <boost/lambda/lambda.hpp>
 #include <boost/lambda/bind.hpp>
 #include <boost/ref.hpp>
+#include <boost/python.hpp>
 
 #include <shovel/Model.h>
 #include <shovel/View.h>
@@ -69,11 +70,15 @@ Model::open_file(const std::string& filename,
                  boost::optional<unsigned> nframes
                  )
 {
+  boost::python::object rawStagers = boost::python::import("icecube.dataio").attr("get_stagers")();
+  std::vector<I3FileStagerPtr> stagers=boost::python::extract<std::vector<I3FileStagerPtr> >(rawStagers);
+  boost::shared_ptr<I3FileStager> myStager=I3FileStagerCollection::create(stagers);
+  file_ref_ = myStager->GetReadablePath(filename);
   View::Instance().start_scan_progress(filename);
 
   log_trace("%s", __PRETTY_FUNCTION__);
 
-  if (i3file_.open_file(filename, fboo, skipstreams, nframes, false))
+  if (i3file_.open_file(*file_ref_, fboo, skipstreams, nframes, false))
     log_fatal("error opening file %s", filename.c_str());
 
   View::Instance().end_scan_progress();
