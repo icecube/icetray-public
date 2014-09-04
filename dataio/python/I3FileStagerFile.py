@@ -198,6 +198,10 @@ class SCPStager(AbstractFileStager):
 	def CopyFileIn(self, url, local_path):
 		parsed = urlparse.urlparse(url)
 		remote_spec = parsed.hostname+":"+parsed.path
+		if parsed.username != None:
+			remote_spec = parsed.username+"@"+remote_spec
+		if parsed.password != None:
+			icetray.logging.log_fatal("Passwords in SCP URLs are not supported for security reasons; please use a key pair instead")
 		icetray.logging.log_info("Downloading %s to %s" % (url, local_path), unit="SCPStager")
 		proc = subprocess.Popen(['scp', remote_spec, os.path.abspath(local_path)], stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
@@ -209,6 +213,10 @@ class SCPStager(AbstractFileStager):
 	def CopyFileOut(self, local_path, url):
 		parsed = urlparse.urlparse(url)
 		remote_spec = parsed.hostname+":"+parsed.path
+		if parsed.username != None:
+			remote_spec = parsed.username+"@"+remote_spec
+		if parsed.password != None:
+			icetray.logging.log_fatal("Passwords in SCP URLs are not supported for security reasons; please use a key pair instead")
 		icetray.logging.log_info("Uploading %s to %s" % (local_path, url), unit="SCPStager")
 		proc = subprocess.Popen(['scp', os.path.abspath(local_path), remote_spec], stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
