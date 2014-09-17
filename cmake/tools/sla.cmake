@@ -32,3 +32,14 @@ TOOLDEF (pal
   NONE
   pal
   )
+
+# Debian packages this as starlink-pal
+if (NOT PAL_FOUND)
+TOOLDEF (pal
+  include
+  star/pal.h
+  lib
+  NONE
+  starlink_pal
+  ) 
+endif(NOT PAL_FOUND)
