@@ -155,7 +155,7 @@ class I3FileStagerFile(AbstractFileStager):
 		
 class GridFTPStager(AbstractFileStager):
 	
-	def __init__(self, local_scratch_dir, globus_url_copy='globus-url-copy', options=['-nodcau']):
+	def __init__(self, local_scratch_dir, globus_url_copy='globus-url-copy', options=['-nodcau', '-rst']):
 		super(type(self), self).__init__(local_scratch_dir)
 		self.globus_url_copy = globus_url_copy
 		self.options = list(options)
