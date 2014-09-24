@@ -205,7 +205,8 @@ class FrameViewer(urwid.Frame):
         contents = urwid.SimpleListWalker(self.mkcontents())
         urwid.connect_signal(contents, 'modified', self.modified)
         self.listbox = ListBoxReporter(contents)
-        self.listbox.set_focus(self.key)
+        if self.key >= 0 and self.key < len(contents):
+            self.listbox.set_focus(self.key)
         urwid.connect_signal(self.listbox, 'update_status', self.update_status)
         self.linebox_kw = {}
         if ascii_only:
@@ -266,7 +267,8 @@ class FrameViewer(urwid.Frame):
             self.key = key
         del self.listbox.body[:]
         self.listbox.body.extend(self.mkcontents())
-        self.listbox.set_focus(self.key)
+        if self.key >= 0 and self.key < len(self.listbox.body):
+            self.listbox.set_focus(self.key)
         self.body.set_title(self.framename(frameidx))
 
     def modified(self):
@@ -415,9 +417,9 @@ class EventInfo(urwid.Columns):
         else:
             key_str = '{0:d}/{1:d}'.format(key+1,len(f))
             if self.frames.file_length:
-                frame = str(idx)+'/'+str(self.frames.file_length)
+                frame = str(idx+1)+'/'+str(self.frames.file_length)
             else:
-                frame = str(idx)+'/unk'
+                frame = str(idx+1)+'/unk'
             stop = str(f.Stop)
             if 'I3EventHeader' in f:
                 run = str(f['I3EventHeader'].run_id)
