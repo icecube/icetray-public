@@ -21,6 +21,7 @@
 
 #include <icetray/I3Bool.h>
 #include <icetray/python/boost_serializable_pickle_suite.hpp>
+#include <icetray/python/operator_suite.hpp>
 
 using namespace boost::python;
 
@@ -33,12 +34,16 @@ i3bool_prettyprint(const I3Bool& b)
 
 void register_I3Bool()
 {
-  class_<I3Bool, bases<I3FrameObject>, boost::shared_ptr<I3Bool> >("I3Bool")
+  class_<I3Bool, bases<I3FrameObject>, boost::shared_ptr<I3Bool> >("I3Bool",
+    "A serializable bool. Can compare directly with bool types.\n\
+Note that python assignment is by reference, creating two links to one object.")
     .def(init<>())
     .def(init<bool>())
     .def_readwrite("value", &I3Bool::value)
     .def("__repr__",i3bool_prettyprint)
     .def_pickle(boost_serializable_pickle_suite<I3Bool>())
+    .def(operator_suite<I3Bool>())
+    .def(operator_bool_suite<I3Bool>())
     ;
 
   register_pointer_conversions<I3Bool>();

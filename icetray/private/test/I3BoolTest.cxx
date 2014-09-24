@@ -33,3 +33,19 @@ TEST(assignment_opperator) {
   // barf is bar != true
   ENSURE(bar.value, "Whoa! Assignment failed! bar.value should be true!");
 }
+
+TEST(equal_operator) {
+  I3Bool foo(true);
+  I3Bool bar(true);
+  ENSURE(foo == bar, "I3Bool operator== failed");
+  bar = false;
+  ENSURE(!(foo == bar), "I3Bool ! operator== failed");
+}
+
+TEST(not_equal_operator) {
+  I3Bool foo(true);
+  I3Bool bar(false);
+  ENSURE(foo != bar, "I3Bool operator!= failed");
+  bar = true;
+  ENSURE(!(foo != bar), "I3Bool ! operator!= failed");
+}

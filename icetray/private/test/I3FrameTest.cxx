@@ -136,7 +136,7 @@ TEST(saveload)
   ENSURE(ip != ptr);
   ENSURE_EQUAL(ip->value, ptr->value);
   ENSURE(fp->has_ptr("t"));
-  ENSURE_EQUAL(fp->type_name("t"), "I3Int");
+  ENSURE_EQUAL(fp->type_name("t"), icetray::name_of<I3Int>());
 }
 
 TEST(a_t_serializes)
@@ -165,7 +165,7 @@ TEST(typename_iterator)
   // in which these elements will be retrieved.
   I3Frame::typename_iterator iter = f.typename_begin();
   ENSURE((iter->first=="int0") || (iter->first=="int1"));
-  ENSURE_EQUAL(iter->second, "I3Int");
+  ENSURE_EQUAL(iter->second, icetray::name_of<I3Int>());
   bool first_is_int0 = (iter->first=="int0");
 
   iter++;
@@ -174,7 +174,7 @@ TEST(typename_iterator)
   } else {
     ENSURE_EQUAL(iter->first, "int0");
   }
-  ENSURE_EQUAL(iter->second, "I3Int");
+  ENSURE_EQUAL(iter->second, icetray::name_of<I3Int>());
 
   iter++;
   ENSURE(iter == f.typename_end());
@@ -420,13 +420,13 @@ TEST(typename_survives_serialization)
   I3Frame f;
   f.Put("int", I3IntPtr(new I3Int(16)));
 
-  ENSURE_EQUAL(f.type_name("int"), "I3Int");
+  ENSURE_EQUAL(f.type_name("int"), icetray::name_of<I3Int>());
 
   I3FramePtr fp = saveload(f);
 
   ENSURE(fp->Has("int"));
   ENSURE(!fp->has_ptr("int"));
-  ENSURE_EQUAL(fp->type_name("int"), "I3Int");
+  ENSURE_EQUAL(fp->type_name("int"), icetray::name_of<I3Int>());
 }
 
 TEST(oserialization_has_shared_semantics)

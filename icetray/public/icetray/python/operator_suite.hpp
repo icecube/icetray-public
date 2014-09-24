@@ -9,6 +9,7 @@
 #ifndef ICETRAY_PYTHON_OPERATOR_SUITE_HPP_INCLUDED
 #define ICETRAY_PYTHON_OPERATOR_SUITE_HPP_INCLUDED
 
+#include <boost/preprocessor/cat.hpp>
 #include <boost/python/def_visitor.hpp>
 #include <boost/utility/enable_if.hpp>
 
@@ -60,12 +61,12 @@ namespace operator_detail {
     static bool const value = (chk<T>::value && func<T>::value);        \
   }
 
-HAS_OPERATOR(boost::has_equal_to, has_equal_to);
-HAS_OPERATOR(boost::has_not_equal_to, has_not_equal_to);
-HAS_OPERATOR(boost::has_less, has_less);
-HAS_OPERATOR(boost::has_less_equal, has_less_equal);
-HAS_OPERATOR(boost::has_greater, has_greater);
-HAS_OPERATOR(boost::has_greater_equal, has_greater_equal);
+HAS_OPERATOR(boost::has_equal_to, has_eq);
+HAS_OPERATOR(boost::has_not_equal_to, has_ne);
+HAS_OPERATOR(boost::has_less, has_lt);
+HAS_OPERATOR(boost::has_less_equal, has_lt_eq);
+HAS_OPERATOR(boost::has_greater, has_gt);
+HAS_OPERATOR(boost::has_greater_equal, has_gt_eq);
 
 #undef HAS_OPERATOR
 
@@ -87,12 +88,12 @@ HAS_OPERATOR(boost::has_greater_equal, has_greater_equal);
                                 || sizeof(chk2<T>(0)) == sizeof(yes));  \
     }
 
-HAS_OPERATOR(operator==, bool, has_equal_to);
-HAS_OPERATOR(operator!=, bool, has_not_equal_to);
-HAS_OPERATOR(operator<, bool, has_less);
-HAS_OPERATOR(operator<=, bool, has_less_equal);
-HAS_OPERATOR(operator>, bool, has_greater);
-HAS_OPERATOR(operator>=, bool, has_greater_equal);
+HAS_OPERATOR(operator==, bool, has_eq);
+HAS_OPERATOR(operator!=, bool, has_ne);
+HAS_OPERATOR(operator<, bool, has_lt);
+HAS_OPERATOR(operator<=, bool, has_lt_eq);
+HAS_OPERATOR(operator>, bool, has_gt);
+HAS_OPERATOR(operator>=, bool, has_gt_eq);
 
 #undef HAS_OPERATOR
 
@@ -100,99 +101,48 @@ HAS_OPERATOR(operator>=, bool, has_greater_equal);
 
 }
 
-template <class T>
-class operator_suite : public bp::def_visitor<operator_suite<T > > {
-  public:
-    template <class Class>
-    static void
-    visit(Class& cl)
-    {
-      add_eq<Class, T>(cl);
-      add_ne<Class, T>(cl);
-      add_lt<Class, T>(cl);
-      add_lt_eq<Class, T>(cl);
-      add_gt<Class, T>(cl);
-      add_gt_eq<Class, T>(cl);
-    }
-  private:
-    // operator==
-    template <class Class, typename U>
-    static
-    typename boost::enable_if_c<operator_detail::has_equal_to<U>::value>::type
-    add_eq(Class &cl)
-    {
-      cl.def(self == self);
-    }
-    template <class Class, typename U>
-    static
-    typename boost::disable_if_c<operator_detail::has_equal_to<U>::value>::type
-    add_eq(Class &cl) {}
-    
-    // operator!=
-    template <class Class, typename U>
-    static
-    typename boost::enable_if_c<operator_detail::has_not_equal_to<U>::value>::type
-    add_ne(Class &cl)
-    {
-      cl.def(self == self);
-    }
-    template <class Class, typename U>
-    static
-    typename boost::disable_if_c<operator_detail::has_not_equal_to<U>::value>::type
-    add_ne(Class &cl) {}
-    
-    // operator <
-    template <class Class, typename U>
-    static
-    typename boost::enable_if_c<operator_detail::has_less<U>::value>::type
-    add_lt(Class &cl)
-    {
-      cl.def(self < self);
-    }
-    template <class Class, typename U>
-    static
-    typename boost::disable_if_c<operator_detail::has_less<U>::value>::type
-    add_lt(Class &cl) {}
-    
-    // operator <=
-    template <class Class, typename U>
-    static
-    typename boost::enable_if_c<operator_detail::has_less_equal<U>::value>::type
-    add_lt_eq(Class &cl)
-    {
-      cl.def(self <= self);
-    }
-    template <class Class, typename U>
-    static
-    typename boost::disable_if_c<operator_detail::has_less_equal<U>::value>::type
-    add_lt_eq(Class &cl) {}
-    
-    // operator >
-    template <class Class, typename U>
-    static
-    typename boost::enable_if_c<operator_detail::has_greater<U>::value>::type
-    add_gt(Class &cl)
-    {
-      cl.def(self > self);
-    }
-    template <class Class, typename U>
-    static
-    typename boost::disable_if_c<operator_detail::has_greater<U>::value>::type
-    add_gt(Class &cl) {}
-    
-    // operator >=
-    template <class Class, typename U>
-    static
-    typename boost::enable_if_c<operator_detail::has_greater_equal<U>::value>::type
-    add_gt_eq(Class &cl)
-    {
-      cl.def(self >= self);
-    }
-    template <class Class, typename U>
-    static
-    typename boost::disable_if_c<operator_detail::has_greater_equal<U>::value>::type
-    add_gt_eq(Class &cl) {}
+#define LIST_OF_OPERATORS (eq)(ne)(lt)(lt_eq)(gt)(gt_eq)
+#define MAP_OF_OPERATORS(T)                                             \
+( (eq)(==)(T) )( (ne)(!=)(T) )( (lt)(<)(T) )( (lt_eq)(<=)(T) )( (gt)(>)(T) )( (gt_eq)(>=)(T) )
+
+#define OPERATOR_CALL(r, data, OP) BOOST_PP_CAT(add_, OP) <Class, T>(cl);
+
+#define OPERATOR_DEF(r, data, OP)                                       \
+template <class Class, typename U>                                      \
+static                                                                  \
+typename boost::enable_if_c<operator_detail:: BOOST_PP_CAT(has_,BOOST_PP_SEQ_ELEM(0,OP)) <U>::value>::type \
+BOOST_PP_CAT(add_, BOOST_PP_SEQ_ELEM(0, OP) ) (Class &cl) {             \
+  cl.def(self BOOST_PP_SEQ_ELEM(1, OP) BOOST_PP_SEQ_ELEM(2, OP) );      \
+}                                                                       \
+template <class Class, typename U>                                      \
+static                                                                  \
+typename boost::disable_if_c<operator_detail:: BOOST_PP_CAT(has_,BOOST_PP_SEQ_ELEM(0,OP)) <U>::value>::type \
+BOOST_PP_CAT(add_, BOOST_PP_SEQ_ELEM(0, OP) ) (Class &cl) { }
+
+#define OPERATOR_TYPE_SUITE(NAME, TYPE)                                 \
+template <class T>                                                      \
+class NAME : public bp::def_visitor< NAME <T > > {                      \
+  public:                                                               \
+    template <class Class>                                              \
+    static void                                                         \
+    visit(Class& cl)                                                    \
+    {                                                                   \
+      BOOST_PP_SEQ_FOR_EACH(OPERATOR_CALL, _, LIST_OF_OPERATORS )       \
+    }                                                                   \
+  private:                                                              \
+    BOOST_PP_SEQ_FOR_EACH(OPERATOR_DEF, _, MAP_OF_OPERATORS( TYPE ) ) \
 };
+
+OPERATOR_TYPE_SUITE(operator_suite, self)
+OPERATOR_TYPE_SUITE(operator_bool_suite, bool() )
+OPERATOR_TYPE_SUITE(operator_int_suite, int() )
+OPERATOR_TYPE_SUITE(operator_float_suite, float() )
+
+#undef LIST_OF_OPERATORS
+#undef MAP_OF_OPERATORS
+#undef OPERATOR_CALL
+#undef OPERATOR_DEF
+#undef OPERATOR_TYPE_SUITE
 
 }} // namespace boost::python
 
