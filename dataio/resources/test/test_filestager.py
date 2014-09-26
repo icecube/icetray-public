@@ -38,7 +38,7 @@ def test_http():
 	_test_stage("http://code.icecube.wisc.edu/tools/clsim/MD5SUMS")
 
 def test_http_with_auth():
-	_test_stage("http://icecube:skua@x2100.icecube.wisc.edu/downloads/globus.tar.gz.md5sum", 32)
+	_test_stage("http://icecube:skua@convey.icecube.wisc.edu/data/sim/sim-new/downloads/globus.tar.gz.md5sum", 32)
 
 def test_https():
 	_test_stage("https://icecube.wisc.edu/index.html")
