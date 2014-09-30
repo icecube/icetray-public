@@ -1,0 +1,14 @@
+# $Id: $
+# $Author: $
+# $Date: $
+#
+
+September 30, 2014, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+Release V14-09-02
+
+Bugfix:
+  - Frame-level POD comparisons work now.  This comes with the new I3PODHolder and reworking of the operator suite.
+  - Expose I3Tray::RequestSuspension in pybindings.
+  - Fix for boost 1.56 and shared_ptr changes.
+
