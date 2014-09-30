@@ -4,7 +4,11 @@
 #include <iostream>
 #include <boost/version.hpp>
 #include <boost/archive/basic_archive.hpp>
+#if BOOST_VERSION < 105600
 #include <boost/archive/shared_ptr_helper.hpp>
+#else
+#include <boost/serialization/shared_ptr_helper.hpp>
+#endif
 #include <boost/archive/detail/register_archive.hpp>
 #include <boost/archive/detail/common_iarchive.hpp>
 #include <boost/archive/detail/common_oarchive.hpp>
@@ -33,7 +37,11 @@ namespace portable {
 
 class portable_binary_oarchive :
     public boost::archive::detail::common_oarchive<portable_binary_oarchive>,
+#if BOOST_VERSION < 105600
     public boost::archive::detail::shared_ptr_helper
+#else
+    public boost::serialization::shared_ptr_helper<boost::shared_ptr>
+#endif
 {
 	public:
 		portable_binary_oarchive(std::ostream &stream,
@@ -136,7 +144,11 @@ class portable_binary_oarchive :
 
 class portable_binary_iarchive :
     public boost::archive::detail::common_iarchive<portable_binary_iarchive>,
+#if BOOST_VERSION < 105600
     public boost::archive::detail::shared_ptr_helper
+#else
+    public boost::serialization::shared_ptr_helper<boost::shared_ptr>
+#endif
 {
 	public:
 		portable_binary_iarchive(std::istream &stream,
