@@ -272,6 +272,7 @@ colormsg("")
 colormsg(_HIBLUE_ "Configuring projects:")
 colormsg("")
 
+list(SORT SUBDIRS)
 foreach(subdir ${SUBDIRS})
   get_filename_component(pname ${subdir} NAME_WE)
   set(I3_PROJECTS "${I3_PROJECTS}" ${pname})
