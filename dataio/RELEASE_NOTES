@@ -1,0 +1,14 @@
+# $Id: $
+# $Author: $
+# $Date: $
+#
+
+September 30, 2014, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+ V14-09-00 - Bugfix release
+  o test_filestager.py - Switch from x2100 (SL4) to convey (SL6).
+  o dataio-pyshovel - Check if key exists before setting focus on it. Start frame index at 1 to match old shovel.
+  o I3FileStagerFile.py :
+    o Tell GridFTPStager to try FTP operations multiple times before giving up.
+    o  Make the scp file stager able to work when the username differs on the two machines.
+  o dataio-shovel - Can use file stagers now.
