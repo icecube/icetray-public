@@ -25,7 +25,7 @@ Apple Mac OS X
 ^^^^^^^^^^^^^^
 
 IceTray requires some additional support software to build and function. Before
-you gallop off and try to install all of the dependencie by hand, please read
+you gallop off and try to install all of the dependencies by hand, please read
 these notes in their entirety. Especially:
 
 .. warning:: Do not try to install your own Python over the perfectly good version shipped with the base system. It is very likely to end in tears. This includes the Enthought and Anaconda distributions; they do not play nicely with IceTray. See :ref:`osxpythonsetup` for more information.
