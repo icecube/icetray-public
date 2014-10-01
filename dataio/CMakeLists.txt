@@ -65,14 +65,6 @@ else (URWID_FOUND)
   colormsg(CYAN "+-- dataio-pyshovel *not* included (missing urwid python package)")
 endif (URWID_FOUND)
 
-i3_executable(extract private/extract/*.cxx
-  USE_PROJECTS dataio)
-
-i3_executable(strip private/strip/*.cxx
-  USE_PROJECTS dataio)
-
-i3_executable(scan private/scan/*.cxx
-  USE_PROJECTS dataio)
 
 i3_test_executable(test private/test/*.cxx
   USE_PROJECTS dataio)

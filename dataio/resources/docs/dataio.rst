@@ -1,10 +1,14 @@
 IceTray I/O
-==============
+===========
 
-The dataio modules I3Writer, I3MultiWriter and I3Reader support on-the-fly compression and exclusion of various frame items via regular expressions.  The .i3 file browser 'dataio-shovel' is a handy utility.
+The dataio modules I3Writer, I3MultiWriter and I3Reader support on-the-fly
+compression and exclusion of various frame items via regular expressions. 
+The .i3 file browser 'dataio-shovel' is a handy utility. There is also
+a python variant 'dataio-pyshovel' which can launch an ipython session
+from the active frame.
 
 Reading in .i3 files from the data warehouse
----------------------------------------------
+--------------------------------------------
 
 Make sure you order the files sent to the I3Reader so that the proper GCD frames are supplied prior to P frames.
 
@@ -19,7 +23,7 @@ Basically, anytime you are getting information from other sources that
 a single stream of i3 files....
 
 Usage
-^^^^^^
+^^^^^
 
 Usage is straightforward.  Available parameters are listed below (from
 icetray-inspect dataio)::
@@ -41,20 +45,15 @@ icetray-inspect dataio)::
 An example python script::
 
    #!/usr/bin/env python
-   from I3Tray import *
-   
-   from os.path import expandvars
-   
    import os
    import sys
    
-   load("libdataclasses")
-   load("libdataio")
+   from I3Tray import *
+   from icecube import dataclasses, dataio
    
    tray = I3Tray()
-   tray.AddModule("I3Reader","reader")(
-      ("Filename", "pass1.i3")
-      )
+   tray.AddModule("I3Reader","reader",
+      filename="pass1.i3")
    tray.AddModule("Dump","dump")
    tray.AddModule("TrashCan", "the can");
    
@@ -63,12 +62,12 @@ An example python script::
   
 
 Compression
-^^^^^^^^^^^^
+^^^^^^^^^^^
 
 The writers will automatically compress if you specify a filename that ends in .gz. This::
 
   tray.AddModule("I3Writer", "write",
-                 filename = "mystuff.i3.gz")                                                 
+                 filename="mystuff.i3.gz")                                                 
 
 that will get you run-of-the-mill gzip compression. With CompressionLevel you can specify::
 
@@ -84,20 +83,19 @@ that will get you run-of-the-mill gzip compression. With CompressionLevel you ca
 so this:: 
 
  tray.AddModule("I3Writer", "write",
-     ("filename", "mystuff.i3.gz")                                                  
-     )                                                                             
+     filename="mystuff.i3.gz")                                                                             
 
 should get you the same result as just writing to disk and then gzipping, and this::
 
  tray.AddModule("I3Writer", "write",
-                filename = "mystuff.i3.gz",
-		compressionlevel = 9)
+                filename="mystuff.i3.gz",
+                compressionlevel=9)
 
 will compress better at the cost of speed. The I3Reader will recognize
 if the file ends in .gz and turn on decompression if necessary::
 
  tray.AddModule("I3Reader", "reader",
-                filename = "mystuff.i3.gz")                                                  
+                filename="mystuff.i3.gz")                                                  
 
 It does not need to know what the compression level of the input file is.
 
@@ -105,7 +103,7 @@ The I3Writer will automatically compress if you specify a filename
 that ends in .gz::
 
   tray.AddModule("I3Writer", "write",
-                 filename = "mystuff.i3.gz")
+                 filename="mystuff.i3.gz")
 
 that will get you run-of-the-mill gzip compression.  With
 'CompressionLevel' you can specify the usual::
@@ -118,7 +116,7 @@ that will get you run-of-the-mill gzip compression.  With
 so this::
 
  tray.AddModule("I3Writer", "write",
-                filename = "mystuff.i3.gz")
+                filename="mystuff.i3.gz")
 
 should get you the same result as just writing to disk and then
 gzipping.
@@ -127,12 +125,12 @@ The I3Reader will just recognize if the file ends in .gz and turn on
 decompression if necessary::
 
  tray.AddModule("I3Reader", "reader",
-                 filename = "mystuff.i3.gz")
+                 filename="mystuff.i3.gz")
 
 not much to explain there.
 
 SkipKeys
-^^^^^^^^^^^
+^^^^^^^^
 
 You can specify that the reader not read (or the writer not write)
 certain keys (that is, the names they're stored under) with SkipKeys,
@@ -205,8 +203,8 @@ so given a frame that looks like this::
 This::
 
  tray.AddModule("I3Writer", "writer",
-                filename = "mystuff.i3.gz",
-                skipkeys = ["F2kHitSel_DummyTrig.*"])
+                filename="mystuff.i3.gz",
+                skipkeys=["F2kHitSel_DummyTrig.*"])
 
 Will skip all the f2k dummy triggers.
 
@@ -265,20 +263,20 @@ name, you certainly can::
 will work too.
 
 Splitting off the Geometry, Calibration, and DetectorStatus 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This is useful in sim production.  You use two writers, an I3Writer
 for geometry, calibration and detector status, and an I3MultiWriter
 for the physics::
 
   tray.AddModule("I3Writer","gcdwriter",
-                 filename = "split.gcd.i3",
-                 streams  = ["Geometry", "Calibration", "DetectorStatus"])
+                 filename="split.gcd.i3",
+                 streams=["Geometry", "Calibration", "DetectorStatus"])
  
   tray.AddModule("I3MultiWriter","physwriter",
-                 filename = "split.physics.%04u.i3",
-                 streams = ["Physics"],
-                 sizelimit = 10**5)
+                 filename="split.physics.%04u.i3",
+                 streams=["Physics"],
+                 sizelimit=10**5)
 
 The 'streams' parameter specifies to each writer which streams they
 should react to.  The I3TrayInfo frames get written to all files.  The
@@ -286,7 +284,7 @@ names of the streams are case-sensitive.
 
 
 The dataio-shovel 
-----------------------
+-----------------
 
 The dataio-shovel is a .i3 file browser utility. It has interactive
 help and can be handy to identify what is inside a .i3 file. Try it
@@ -295,8 +293,8 @@ out. Here comes the screenshot:
 .. image:: Dataio_shovel.gif
 
 The bottom part of the display shows a tape-like representation of the
-icecube data stream. The G, C, D, and P represent Geometry,
-Calibration, DetectorStatus and Physics, respectively. The bar in the
+icecube data stream. The G, C, D, Q, and P represent Geometry,
+Calibration, DetectorStatus, DAQ, and Physics, respectively. The bar in the
 middle is the location of the tape read head. On the top half are what
 is currently under the read head: a 'frame'. Each row is one data
 item. On the left is the 'key' the object is stored under, in the
@@ -310,9 +308,24 @@ information, time of run, hostname, compiler and root versions, and
 operating system type. Full help is available in the shovel itself.
 
 
+The dataio-pyshovel
+-------------------
+
+The dataio-pyshovel is a rewrite of dataio-shovel in python instead
+of C++.  This allows I3RecoPulseMapMasks and similar objects to be
+translated to human-readible things, and enables the 'o' or 'enter'
+keys to provide a pretty printout of objects.
+
+The other headline feature is the ability to drop into ipython while
+keeping the frame and its frame objects as local variables.  This
+allows very easy in-depth examination of frame objects.
+
+Other minor changes include only reading partially through a file and
+lazy loading the rest to allow prompt viewing of the first few frames.
+
 
 Reading multiple files
------------------------
+----------------------
 
 To read multiple files use the parameter 'FilenameList'.  To generate
 the list of files from a directory, you might find the python
@@ -322,13 +335,13 @@ the list of files from a directory, you might find the python
  
  file_list = glob("/my/data/\*.i3.gz")
  tray.AddModule("I3Reader", "reader",
-                 FilenameList = file_list)
+                 FilenameList=file_list)
 
 as usual with vector<string> parameters, you can pass an array
 literal::
 
  tray.AddModule("I3Reader", "reader",
-                 FilenameList = ["file1.i3.gz", "file2.i3.gz", file3.i3.gz"])
+                 FilenameList=["file1.i3.gz", "file2.i3.gz", file3.i3.gz"])
 
 
 The files will be read in order.  When then end of one file is
@@ -341,7 +354,7 @@ service will log_fatal() complaining that the configuration is
 ambiguous and tell you to use one or the other.
 
 Reading Geometry/Calibration/Status from a separate file
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Simulation runs have the Geometry, Calibration, and Detector Status
 frames in a separate file from the physics.  You want to read this GCD
@@ -360,11 +373,11 @@ physics_0340.00999.i3.gz::
   physics.sort()                            # sort() them (they probably wont glob in alphabetical order)  
 
   tray.AddModule("I3Reader", "reader",
-                  FilenameList = ["GCD_0340.i3.gz"] + physics)
+                  FilenameList=["GCD_0340.i3.gz"]+physics)
 
 
 Writing Multiple Files
------------------------
+----------------------
 
 The module I3MultiWriter will split the output into multiple data
 files.  The **filename** argument is actually a printf() type
@@ -373,8 +386,8 @@ formatting character, which will be replaced with the index of the
 file in the series written.  For instance::
 
    tray.AddModule("I3MultiWriter", "writer",
-                  Filename = "foo/myfile-%u.i3.gz",
-                  SizeLimit = 10**6)  # Files of 1MB size: double-star is the exponent operator
+                  Filename="foo/myfile-%u.i3.gz",
+                  SizeLimit=10**6)  # Files of 1MB size: double-star is the exponent operator
 
 will cause the I3MultiWriter to write files foo/myfile-0.i3.gz,
 foo/myfile-1.i3.gz, foo/myfile-2.i3.gz, etc.
@@ -401,3 +414,9 @@ written will typically exceed this size by the size of one half of one
 frame.  One consequence of this behavior is that you can write
 one-frame-per-file by specifying a SizeLimit of one byte.
 
+
+Examples
+--------
+
+There are some example python scripts using dataio in the
+`resources/examples` directory.
