@@ -99,7 +99,7 @@ this::
 
 The following formulae are recommended:
 
-* offline-software: boost --with-python cmake cdk gsl hdf5 libarchive mysql qt pyqt 
+* offline-software: boost boost-python cmake cdk gsl hdf5 libarchive mysql qt pyqt 
 * IceRec: cfitsio minuit2 suite-sparse
 * simulation: sprng2
 
