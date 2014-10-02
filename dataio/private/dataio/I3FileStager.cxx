@@ -64,10 +64,6 @@ I3FileStager::WillReadLater(const std::string &url)
 		WillReadLater(url, GetLocalFileName(url, true));
 }
 
-namespace {
-void strunlink(const std::string &s) { unlink(s.c_str()); }
-}
-
 I3::dataio::shared_filehandle
 I3FileStager::GetReadablePath(const std::string &url)
 {
