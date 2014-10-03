@@ -23,7 +23,7 @@ endif(NOT QT_QMAKE_EXECUTABLE)
 
 find_package(OpenGL)
 find_package(GLUT)
-find_package(Qt4)
+find_package(Qt4 4.8)
 
 #
 # Helper Macro for building Qt files
