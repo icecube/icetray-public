@@ -8,7 +8,23 @@
 
 class freeze : public boost::python::def_visitor< freeze >{
   friend class boost::python::def_visitor_access;
+private:
+  static int HasAttrWithException(PyObject *v, PyObject *name){
+    PyObject *res = PyObject_GetAttr(v, name);
+    if (res != NULL) {
+      Py_DECREF(res);
+      return 1;
+    }   
+    
+    if ((PyErr_Occurred() != NULL) &&
+        PyErr_ExceptionMatches(PyExc_RuntimeError)) {
+      PyErr_Clear();
+      return 1;
+    }   
 
+    PyErr_Clear();
+    return 0;
+  };  
   // also had to make this public
 public:
   template <class classT>
@@ -21,7 +37,7 @@ public:
   static void setattr_with_dynamism_disabled( const boost::python::object& obj, 
 				       const boost::python::object& name, 
 				       const boost::python::object& value){
-    if( PyObject_HasAttr(obj.ptr(), name.ptr()) ){
+    if( HasAttrWithException(obj.ptr(), name.ptr()) ){
       if( PyObject_GenericSetAttr( obj.ptr(), name.ptr(), value.ptr()) == -1)
         throw boost::python::error_already_set();
     }else{
