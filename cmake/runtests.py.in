@@ -109,7 +109,19 @@ def bottest():
         return True
     return False
 
+def testdata_ok():
+    if "I3_TESTDATA" not in os.environ:
+        print "I3_TESTDATA not set"
+        return False
+    I3_TESTDATA=os.environ["I3_TESTDATA"] )
+    if not os.path.is_dir( I3_TESTDATA ):
+        print "I3_TESTDATA=%s does not seem to be a directory" %  I3_TESTDATA
+        return False
+    return True
+
 def main():
+    if not testdata_ok():
+        return -1 # FIXME: correct error code for e.g. bots?
     if bottest():
         print "SVN_URL: @SVN_URL@"
         print

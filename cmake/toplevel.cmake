@@ -401,8 +401,9 @@ add_custom_target(wipe-tarball
   )
 
 add_custom_target(rsync
-  COMMAND mkdir -p ${I3_PORTS}
-  COMMAND rsync -vrlpt --delete code.icecube.wisc.edu::Offline/test-data ${I3_PORTS}/
+  COMMAND test -n "${I3_TESTDATA}"
+  COMMAND mkdir -p "${I3_TESTDATA}"
+  COMMAND rsync -vrlpt --delete code.icecube.wisc.edu::Offline/test-data/ ${I3_TESTDATA}/
   COMMENT "Rsyncing test-data to I3_PORTS"
   )
 
