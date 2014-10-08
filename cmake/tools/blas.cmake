@@ -2,11 +2,6 @@
 ## multiarch system (Ubuntu 11.04+), uncomment the lines around the
 ## find_package() call.
 
-if (${OSTYPE} STREQUAL "FreeBSD")
-  set(CMAKE_REQUIRED_FLAGS "-L/usr/local/lib/gcc47")
-  set(BLAS_LINK_FLAGS ${CMAKE_REQUIRED_FLAGS})
-endif ()
-
 if(NOT APPLE)
 tooldef(blas
   NONE
@@ -54,13 +49,6 @@ else(NOT APPLE)
   colormsg(HICYAN "blas")
   find_package(BLAS)
 endif(NOT APPLE)
-
-if (CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
-  list(APPEND BLAS_LIBRARIES "-L/usr/local/lib/gcc47")
-  list(APPEND BLAS_LIBRARIES "-lgfortran")
-  set(BLAS_FOUND TRUE CACHE BOOL "Tool BLAS found successfully" FORCE)
-  set(BLAS_LIBRARIES "${BLAS_LIBRARIES}" CACHE PATH "Libraries for tool BLAS" FORCE)
-endif (CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
 
 unset(CMAKE_REQUIRED_FLAGS)
 unset(CMAKE_REQUIRED_LIBRARIES)
