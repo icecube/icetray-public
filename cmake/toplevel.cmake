@@ -418,9 +418,12 @@ if(INSTALL_PYTHON_SUBPROCESS)
     COPYONLY)
 endif(INSTALL_PYTHON_SUBPROCESS)
 
+string(REGEX REPLACE "s\\.V.*$" "" DEST ${META_PROJECT})
+string(REGEX REPLACE "-software" "" DEST ${DEST})
+string(REGEX REPLACE "\\." "_" DEST ${DEST})
 add_custom_target(deploy-docs
-  COMMAND rsync -va --delete ${CMAKE_BINARY_DIR}/docs/ umdgrb.umd.edu:public_html/${META_PROJECT}/
-  COMMENT Deploying docs to ${META_PROJECT}
+  COMMAND rsync -va --delete ${CMAKE_BINARY_DIR}/docs/ buildmaster@dragon:/opt/docs/${DEST}/
+  COMMENT Deploying docs to ${DEST}
   )
 
 ### ctest testing
