@@ -27,7 +27,7 @@ directory.
      - Lists available targets
    * - rsync
      - Will rsync the latest test data down to your
-       :envvar:`I3_PORTS`/test-data directory
+       :envvar:`I3_TESTDATA` directory
    * - test
      - Will build everything, then run the test driver script to test 
        everything, then print a summary.    See :ref:`testdriver`

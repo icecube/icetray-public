@@ -404,7 +404,7 @@ add_custom_target(rsync
   COMMAND test -n "${I3_TESTDATA}"
   COMMAND mkdir -p "${I3_TESTDATA}"
   COMMAND rsync -vrlpt --delete code.icecube.wisc.edu::Offline/test-data/ ${I3_TESTDATA}/
-  COMMENT "Rsyncing test-data to I3_PORTS"
+  COMMENT "Rsyncing test-data to I3_TESTDATA"
   )
 
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/docs/inspect")

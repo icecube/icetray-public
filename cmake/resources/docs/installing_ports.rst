@@ -39,6 +39,12 @@ not commonly packaged or must be configured in very specific ways to work as
 expected. If you need to run those parts of the simulation, you should install
 I3_PORTS.
 
+Note that in newer releases (V14-10-* or newer) the test data directory
+can/should be referred to with the I3_TESTDATA environment variable.
+If you still use I3_PORTS then I3_TESTDATA will automatically set to
+I3_PORTS/test-data, but if you use SYSTEM_PACKAGES then you should
+define I3_TESTDATA yourself.
+
 Quick start for the impatient
 -----------------------------
 
@@ -178,6 +184,7 @@ your I3_PORTS directory.
   appropriate write permissions::
 
    rsync -vrlpt code.icecube.wisc.edu::Offline/test-data $I3_PORTS/
+
 
 Updates to tools
 ----------------
