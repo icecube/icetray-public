@@ -18,8 +18,8 @@ from icecube import examples
 # This sets up a bunch of paths of files and stuff.  Nice to have a
 # real scripting language at one's disposal for this kind of thing.
 #
-tools = expandvars("$I3_PORTS")
-runfile = tools + "/test-data/2006data/Run00089508.i3.gz"
+testdata = expandvars("$I3_TESTDATA")
+runfile = testdata + "/2006data/Run00089508.i3.gz"
 
 tray = I3Tray()
 

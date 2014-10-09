@@ -22,7 +22,7 @@ tray = I3Tray()
 
 
 #  expand the I3_PORTS
-globspec = expandvars("$I3_PORTS/test-data/string-21/*.i3.gz")
+globspec = expandvars("$I3_TESTDATA/string-21/*.i3.gz")
 
 #  use 'glob' to convert the string with the 'star' in it to a list of real filenames
 file_list = glob(globspec)

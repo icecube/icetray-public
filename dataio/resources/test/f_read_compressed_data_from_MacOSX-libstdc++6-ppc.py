@@ -15,7 +15,7 @@ from icecube import dataio
 
 tray = I3Tray()
 
-tray.AddModule("I3Reader", "reader", Filename=expandvars("$I3_PORTS/test-data/string-21/MacOSX-libstdc++6-ppc.i3.gz"))
+tray.AddModule("I3Reader", "reader", Filename=expandvars("$I3_TESTDATA/string-21/MacOSX-libstdc++6-ppc.i3.gz"))
 
 tray.AddModule("Dump","dump")
 

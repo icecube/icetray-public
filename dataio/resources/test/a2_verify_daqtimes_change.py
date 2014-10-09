@@ -6,7 +6,7 @@ from os.path import expandvars
 
 tray = I3Tray()
 
-runfile = expandvars("$I3_PORTS/test-data/2006data/Run00089508.i3.gz")
+runfile = expandvars("$I3_TESTDATA/2006data/Run00089508.i3.gz")
 
 tray.AddModule("I3Reader", "read", Filename = runfile)
 

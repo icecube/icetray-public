@@ -6,8 +6,8 @@ from os.path import expandvars
 import os
 import sys
 
-tools = expandvars("$I3_PORTS")
-runfile = tools + "/test-data/2006data/Run00089508.i3.gz"
+testdata = expandvars("$I3_TESTDATA")
+runfile = testdata + "/2006data/Run00089508.i3.gz"
 
 i3file = dataio.I3File(runfile)
 
