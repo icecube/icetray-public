@@ -83,13 +83,13 @@ else(SYSTEM_PACKAGES)
 endif(SYSTEM_PACKAGES)
 
 if(DEFINED ENV{I3_TESTDATA})
-    set(I3_TESTDATA $ENV{I3_TESTDATA} CACHE STRING "Path to your icetray test-data")
+    set(I3_TESTDATA $ENV{I3_TESTDATA} CACHE STRING "Path to your icetray test-data" FORCE)
 elseif(DEFINED ENV{I3_PORTS})
-    set(I3_TESTDATA $ENV{I3_PORTS}/test-data CACHE STRING "Path to your icetray test-data")
+    set(I3_TESTDATA $ENV{I3_PORTS}/test-data CACHE STRING "Path to your icetray test-data" FORCE)
 else()
     colormsg(YELLOW "*** Neither I3_PORTS nor I3_TESTDATA set.")
     colormsg(YELLOW "*** Make sure to define at least one of them before calling 'make test' or manually running tests.")
-    set(I3_TESTDATA "" CACHE STRING "Path to your icetray test-data: currently empty, define it if you wish to run unit tests and/or test scripts.")
+    set(I3_TESTDATA "" CACHE STRING "Path to your icetray test-data: currently empty, define it if you wish to run unit tests and/or test scripts." FORCE)
 endif(DEFINED ENV{I3_TESTDATA})
 
 #

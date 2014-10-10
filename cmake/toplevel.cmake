@@ -400,12 +400,18 @@ add_custom_target(wipe-tarball
   COMMENT "Wiping old tarball ${CMAKE_INSTALL_PREFIX}"
   )
 
-add_custom_target(rsync
-  COMMAND test -n "${I3_TESTDATA}"
-  COMMAND mkdir -p "${I3_TESTDATA}"
-  COMMAND rsync -vrlpt --delete code.icecube.wisc.edu::Offline/test-data/ ${I3_TESTDATA}/
-  COMMENT "Rsyncing test-data to I3_TESTDATA"
-  )
+if(I3_TESTDATA)
+  add_custom_target(rsync
+    COMMAND test -n "${I3_TESTDATA}"
+    COMMAND mkdir -p "${I3_TESTDATA}"
+    COMMAND rsync -vrlpt --delete code.icecube.wisc.edu::Offline/test-data/ ${I3_TESTDATA}/
+    COMMENT "Rsyncing test-data to I3_TESTDATA"
+    )
+else()
+  add_custom_target(rsync
+    COMMENT "I3_TESTDATA is not set.  Set it, 'make rebuild_cache' and try again."
+    )
+endif()
 
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/docs/inspect")
 
