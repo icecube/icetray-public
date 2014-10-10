@@ -262,10 +262,10 @@ class portable_binary_iarchive :
 
 }} // end namespace
 
-BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::portable_binary_iarchive);
-BOOST_SERIALIZATION_USE_ARRAY_OPTIMIZATION(boost::archive::portable_binary_iarchive);
-BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::portable_binary_oarchive);
-BOOST_SERIALIZATION_USE_ARRAY_OPTIMIZATION(boost::archive::portable_binary_oarchive);
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::portable_binary_iarchive)
+BOOST_SERIALIZATION_USE_ARRAY_OPTIMIZATION(boost::archive::portable_binary_iarchive)
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::portable_binary_oarchive)
+BOOST_SERIALIZATION_USE_ARRAY_OPTIMIZATION(boost::archive::portable_binary_oarchive)
 
 #endif // ICETRAY_PORTABLE_BINARY_IARCHIVE_HPP
 
