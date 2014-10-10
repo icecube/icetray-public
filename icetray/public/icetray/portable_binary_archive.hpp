@@ -76,6 +76,8 @@ class portable_binary_oarchive :
 			const uint8_t x = t;
 			(*this) << x;
 		}
+		// make these as small as possible, even if they lose precision
+		// (we have so many that file sizes increase a lot otherwise)
 		sv_override(version_type, uint8_t)
 		sv_override(class_id_type, int16_t)
 		sv_override(class_id_reference_type, int16_t)
@@ -171,6 +173,8 @@ class portable_binary_iarchive :
 				t = a((b)(c)(x)); \
 			}
 	
+		// make these as small as possible, even if they lose precision
+		// (we have so many that file sizes increase a lot otherwise)
 		ld_override(bool, uint8_t, uint8_t, uint8_t)
 		ld_override(version_type, unsigned int, unsigned int,
 		    uint8_t)
