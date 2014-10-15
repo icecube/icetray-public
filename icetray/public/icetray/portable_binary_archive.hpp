@@ -57,13 +57,6 @@ class portable_binary_oarchive :
 		// binary files don't include the optional information
 		void save_override(const class_id_optional_type & /* t */, int) {}
 
-// The following block can have precision loss. The ability to read old data
-// is more important than the ability to have more than 65k serializable
-// classes in a file.  Because of this we disable the -Wconversion warning, as
-// for now, it is a known false positive.
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
-
 		// the following have been overridden to provide specific sizes
 		// for these pseudo-primitive types
 #if BOOST_VERSION < 104400
@@ -104,7 +97,6 @@ class portable_binary_oarchive :
 			save_binary(&(s[0]), l);
 		}
 		#undef sv_override
-#pragma GCC diagnostic pop
 
 		struct use_array_optimization {
 			template <class T> struct apply :
