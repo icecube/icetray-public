@@ -75,13 +75,6 @@ shovel_usage(const std::string& progname)
   exit(1);
 }
 
-void
-shovel_exit()
-{
-  exit(0);
-}
-
-
 map<char, string> keybindings;
 
 int main (int argc, char *argv[])
@@ -218,7 +211,6 @@ int main (int argc, char *argv[])
     actions["save_xml"] = bind(&Model::save_xml, boost::ref(model));
     actions["goto_frame"] = bind(&Model::do_goto_frame, boost::ref(model));
     actions["xml"] = bind(&Model::show_xml, boost::ref(model));
-    actions["quit"] = &shovel_exit;
 
     while (true)
       {
@@ -254,7 +246,9 @@ int main (int argc, char *argv[])
           continue;
 
         std::string action = keybindings[(char)c];
-
+        if (action == "quit")
+          break;
+        
         if (actions.find(action) == actions.end())
           {
             endwin();
