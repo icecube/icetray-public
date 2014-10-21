@@ -74,6 +74,7 @@ if (NOT LIBARCHIVE_FOUND)
 #  colormsg(CYAN "+-- libarchive *not* found, omitting test \"resources/test/o7_libarchive_read.py\"")
   LIST(REMOVE_ITEM tmp_SCRIPTS "${CMAKE_CURRENT_SOURCE_DIR}/resources/test/o7_libarchive_read.py")
 endif (NOT LIBARCHIVE_FOUND)
+list(APPEND "resources/test/dataio-shovel-test")
 i3_test_scripts(${tmp_SCRIPTS})
 
 i3_add_pybindings(dataio
@@ -137,3 +138,4 @@ set_property(TEST dataio::s_i3reader_readnulls.py APPEND PROPERTY DEPENDS dataio
 set_property(TEST dataio::test_randomaccess_file.py APPEND PROPERTY DEPENDS dataio::s_i3reader_readnulls.py)
 set_property(TEST dataio::t_skip_infoframes.py APPEND PROPERTY DEPENDS dataio::test_randomaccess_file.py)
 set_property(TEST dataio::writer_is_conditional.py APPEND PROPERTY DEPENDS dataio::t_skip_infoframes.py)
+set_property(TEST dataio::dataio-shovel-test APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
