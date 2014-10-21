@@ -69,12 +69,11 @@ endif (URWID_FOUND)
 i3_test_executable(test private/test/*.cxx
   USE_PROJECTS dataio)
 
-no_dotfile_glob(tmp_SCRIPTS resources/test/*.py)
+no_dotfile_glob(tmp_SCRIPTS resources/test/*)
 if (NOT LIBARCHIVE_FOUND)
 #  colormsg(CYAN "+-- libarchive *not* found, omitting test \"resources/test/o7_libarchive_read.py\"")
   LIST(REMOVE_ITEM tmp_SCRIPTS "${CMAKE_CURRENT_SOURCE_DIR}/resources/test/o7_libarchive_read.py")
 endif (NOT LIBARCHIVE_FOUND)
-list(APPEND "resources/test/dataio-shovel-test")
 i3_test_scripts(${tmp_SCRIPTS})
 
 i3_add_pybindings(dataio
