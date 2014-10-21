@@ -70,9 +70,16 @@ Model::open_file(const std::string& filename,
                  boost::optional<unsigned> nframes
                  )
 {
-  boost::python::object rawStagers = boost::python::import("icecube.dataio").attr("get_stagers")();
-  std::vector<I3FileStagerPtr> stagers=boost::python::extract<std::vector<I3FileStagerPtr> >(rawStagers);
-  boost::shared_ptr<I3FileStager> myStager=I3FileStagerCollection::create(stagers);
+  boost::shared_ptr<I3FileStager> myStager;
+  try {
+    boost::python::object rawStagers = boost::python::import("icecube.dataio").attr("get_stagers")();
+    std::vector<I3FileStagerPtr> stagers=boost::python::extract<std::vector<I3FileStagerPtr> >(rawStagers);
+    myStager=I3FileStagerCollection::create(stagers);
+  } catch (boost::python::error_already_set &err) {
+    PyErr_Print();
+    PyErr_Clear();
+    myStager = I3TrivialFileStager::create();
+  }
   file_ref_ = myStager->GetReadablePath(filename);
   View::Instance().start_scan_progress(filename);
 

@@ -8,6 +8,7 @@ if sys.version_info[:2] >= (2,6):
 
 def get_stagers(staging_directory=None):
 	import os, pwd
+	from icecube import icetray
 	
 	def try_to_make_scratch_dir(basename, fullname):
 		if not os.path.isdir(basename):
