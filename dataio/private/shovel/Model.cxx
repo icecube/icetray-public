@@ -72,9 +72,8 @@ Model::open_file(const std::string& filename,
 {
   boost::shared_ptr<I3FileStager> myStager;
   try {
-    boost::python::object rawStagers = boost::python::import("icecube.dataio").attr("get_stagers")();
-    std::vector<I3FileStagerPtr> stagers=boost::python::extract<std::vector<I3FileStagerPtr> >(rawStagers);
-    myStager=I3FileStagerCollection::create(stagers);
+    boost::python::object rawStager = boost::python::import("icecube.dataio").attr("get_stagers")();
+    myStager = boost::python::extract<I3FileStagerPtr >(rawStager);
   } catch (boost::python::error_already_set &err) {
     PyErr_Print();
     PyErr_Clear();

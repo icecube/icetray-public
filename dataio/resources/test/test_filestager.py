@@ -4,6 +4,7 @@ import sys
 if sys.version_info[:2] < (2,6):
 	sys.exit(0)
 
+from icecube import dataio
 from icecube.dataio import I3FileStagerFile
 
 from icecube import icetray
@@ -11,8 +12,10 @@ import os
 # icetray.logging.I3Logger.global_logger = icetray.I3NullLogger()
 icetray.logging.set_level('TRACE')
 
+dataio.set_local_scratch_dir('.')
+
 def test_scratchdir(url=os.path.expandvars("file://$I3_BUILD/env-shell.sh")):
-	stager = I3FileStagerFile('.')
+	stager = I3FileStagerFile()
 	# directory is created lazily
 	scratch_dir = stager.scratch_dir
 	assert(scratch_dir is None)
@@ -25,7 +28,7 @@ def test_scratchdir(url=os.path.expandvars("file://$I3_BUILD/env-shell.sh")):
 	assert(not os.path.isdir(scratch_dir))
 
 def _test_stage(url, minsize=100):
-	stager = I3FileStagerFile('.')
+	stager = I3FileStagerFile()
 	local_fname = stager.GetReadablePath(url)
 	assert(os.path.exists(str(local_fname)))
 	assert(os.stat(str(local_fname)).st_size > minsize)
@@ -33,6 +36,23 @@ def _test_stage(url, minsize=100):
 	# check that staged files are really deleted
 	if stager.CanStageIn(url):
 		assert(not os.path.exists(str(local_fname)))
+
+def test_double_stage():
+	"""
+	Stager should return handles to existing files
+	"""
+	return
+	url = "http://code.icecube.wisc.edu/tools/clsim/MD5SUMS"
+	stager = I3FileStagerFile()
+	f1 = stager.GetReadablePath(url)
+	f2 = stager.GetReadablePath(url)
+	assert(str(f1) == str(f2))
+	assert(os.path.exists(str(f1)))
+	assert(os.path.exists(str(f2)))
+	del f1
+	assert(os.path.exists(str(f2)))
+	del f2
+	assert(not os.path.exists(str(f2)))
 
 def test_http():
 	_test_stage("http://code.icecube.wisc.edu/tools/clsim/MD5SUMS")

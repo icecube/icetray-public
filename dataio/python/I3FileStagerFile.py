@@ -18,12 +18,61 @@ from icecube import icetray
 from icecube.dataio import I3FileStager
 
 class AbstractFileStager(I3FileStager):
-	def __init__(self, local_scratch_dir):
+	_local_scratch_dir = None
+	def __init__(self):
 		I3FileStager.__init__(self)
-		self.local_scratch_dir = local_scratch_dir
 		self.scratch_dir = None
 		self.file_counter = 0
 	
+	@staticmethod
+	def try_to_make_scratch_dir(basename, fullname):
+		if not os.path.isdir(basename):
+			return False
+		if os.path.isdir(fullname):
+			return True
+		try:
+			os.mkdir(fullname)
+		except OSError:
+			return False
+
+		return True
+	
+	@classmethod
+	def get_local_scratch_dir(cls):
+		if cls._local_scratch_dir is not None:
+			return cls._local_scratch_dir
+		# find a local staging directory
+		elif "_CONDOR_SCRATCH_DIR" in os.environ:
+			# works on condor (especially npx4)
+			staging_directory = os.environ["_CONDOR_SCRATCH_DIR"]
+		elif "TMPDIR" in os.environ:
+			# works on some PBS/TORQUE nodes
+			staging_directory = os.environ["TMPDIR"]
+		else:
+			# try some known locations on interactive nodes
+			import pwd
+			current_username = pwd.getpwuid(os.getuid()).pw_name
+			if cls.try_to_make_scratch_dir('/scratch', '/scratch/'+current_username):
+				staging_directory = '/scratch/'+current_username
+			elif cls.try_to_make_scratch_dir('/global/scratch', '/global/scratch/'+current_username):
+				staging_directory = '/global/scratch/'+current_username
+			else:
+				staging_directory = os.getcwd()
+				icetray.logging.log_info("Cannot find a suitable scratch directory on this machine; falling back to the current working directory (%s). If this is not what you want, set a different path with dataio.set_local_scratch_dir(path)." % staging_directory, unit="I3Reader")
+		
+		cls.set_local_scratch_dir(staging_directory)
+		return cls._local_scratch_dir
+	
+	@classmethod
+	def set_local_scratch_dir(cls, staging_directory):
+		"""
+		Set the directory to use for staging temporary files, overriding the
+		default guesses.
+		"""
+		if not os.path.isdir(staging_directory):
+			icetray.logging.log_fatal("The scratch directory %s does not exist!" % staging_directory, unit="AbstractFileStager")
+		cls._local_scratch_dir = staging_directory
+		
 	def GenerateLocalFileName(self, url, readable):
 		# parse the URL
 		parsed_url = urlparse.urlparse(url, scheme="file") # use "file" as the default scheme
@@ -42,10 +91,7 @@ class AbstractFileStager(I3FileStager):
 		output_file = input_filebase + ('_%06u' % self.file_counter) + input_fileext
 
 		if self.scratch_dir is None:
-			if not os.path.isdir(self.local_scratch_dir):
-				icetray.logging.log_fatal("The scratch directory %s does not exist!" % self.local_scratch_dir, unit="AbstractFileStager")
-	
-			self.scratch_dir = tempfile.mkdtemp(dir=self.local_scratch_dir)
+			self.scratch_dir = tempfile.mkdtemp(dir=self.get_local_scratch_dir())
 
 			icetray.logging.log_info("Created scratch directory %s" % self.scratch_dir, unit="AbstractFileStager")
 
@@ -69,8 +115,8 @@ class AbstractFileStager(I3FileStager):
 
 
 class I3FileStagerFile(AbstractFileStager):
-	def __init__(self, local_scratch_dir, blocksize=2**16):
-		AbstractFileStager.__init__(self, local_scratch_dir)
+	def __init__(self, blocksize=2**16):
+		AbstractFileStager.__init__(self)
 		self.blocksize = blocksize
 
 	def ReadSchemes(self):
@@ -155,8 +201,8 @@ class I3FileStagerFile(AbstractFileStager):
 		
 class GridFTPStager(AbstractFileStager):
 	
-	def __init__(self, local_scratch_dir, globus_url_copy='globus-url-copy', options=['-nodcau', '-rst']):
-		super(type(self), self).__init__(local_scratch_dir)
+	def __init__(self, globus_url_copy='globus-url-copy', options=['-nodcau', '-rst']):
+		super(type(self), self).__init__()
 		self.globus_url_copy = globus_url_copy
 		self.options = list(options)
 	
@@ -186,8 +232,8 @@ class GridFTPStager(AbstractFileStager):
 
 class SCPStager(AbstractFileStager):
 	
-	def __init__(self, local_scratch_dir):
-		super(type(self), self).__init__(local_scratch_dir)
+	def __init__(self):
+		super(type(self), self).__init__()
 	
 	def ReadSchemes(self):
 		return ['scp']

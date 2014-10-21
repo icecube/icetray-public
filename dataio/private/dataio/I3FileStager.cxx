@@ -19,6 +19,7 @@ filehandle::~filehandle()
 	if (callback_)
 		callback_();
 }
+
 }}
 
 I3FileStager::I3FileStager()
@@ -97,7 +98,6 @@ I3FileStager::StageFileOut(const std::string &url)
 		unlink(fname.c_str());
 	}
 }
-
 void
 I3FileStager::Cleanup(const std::string &url)
 {
