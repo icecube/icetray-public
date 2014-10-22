@@ -322,6 +322,27 @@ numeric_version(${GCC_VERSION} "gcc")
 set(GCC_NUMERIC_VERSION ${GCC_NUMERIC_VERSION} CACHE INTEGER "Numeric gcc version" FORCE)
 
 #
+# Ban old gcc versions
+#
+execute_process(COMMAND "date" "+%s" OUTPUT_VARIABLE NOW)
+message(FATAL_ERROR "now: ${NOW}")
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+  if(GCC_NUMERIC_VERSION LESS 40300)
+    message("***")
+    message("*** You're using a gcc version less than 4.3. This is no longer supported.")
+    message("*** Upgrade your complier, or set the CC and CXX environment variables appropriately.")
+    message("***")
+    if(NOW LESS 1429488000)
+      message("*** This will become a fatal error on April 20, 2015.")
+      message("***")
+      message(WARNING "Unsupported gcc version.")
+    else()
+      message(FATAL_ERROR "Unsupported gcc version.")
+    endif()
+  endif()
+endif()
+
+#
 # Set compiler warning flags.  Unfortunately cmake doesn't do this on its own
 #
 if(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
