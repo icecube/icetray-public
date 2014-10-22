@@ -93,43 +93,8 @@ else()
 endif(DEFINED ENV{I3_TESTDATA})
 
 #
-#  GCC_VERSION and
-#  GCC_NUMERIC_VERSION is e.g. 40302 (for 4.3.2)
+# Create various info/debug files
 #
-execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
-  COMMAND tr -d \\n
-  OUTPUT_VARIABLE GCC_VERSION)
-numeric_version(${GCC_VERSION} "gcc")
-set(GCC_NUMERIC_VERSION ${GCC_NUMERIC_VERSION} CACHE INTEGER "Numeric gcc version" FORCE)
-
-#
-#  COMPILER_ID_TAG
-#
-execute_process(COMMAND ${CMAKE_CXX_COMPILER} -v ERROR_VARIABLE COMPILER_ID_TAG)
-set(COMPILER_ID_TAG "REGEXPS IN CMAKE SUCK\n${COMPILER_ID_TAG}")
-STRING(REGEX REPLACE ".*[ 
-\\t]([a-zA-Z]+)[ -][Vv]ersion ([^ ]+).*" "\\1-\\2" COMPILER_ID_TAG ${COMPILER_ID_TAG})
-
-#
-# Unfortunately cmake doesn't do this on its own
-#
-if(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
-  set(CMAKE_COMPILER_IS_INTEL TRUE)
-  set(CXX_WARNING_FLAGS "-w1 -Wno-non-virtual-dtor")
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  set(CMAKE_COMPILER_IS_CLANG TRUE)
-  set(CXX_WARNING_FLAGS "-Qunused-arguments -Wall -Wno-non-virtual-dtor -Wno-mismatched-tags -Wno-char-subscripts -Wno-unused -Wunneeded-internal-declaration -Wno-parentheses-equality")
-else()
-  set(CXX_WARNING_FLAGS "-Wall -Wno-non-virtual-dtor")
-endif(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
-
-if(CMAKE_C_COMPILER_ID MATCHES "Intel")
-  set(C_WARNING_FLAGS "-w1")
-elseif(CMAKE_C_COMPILER_ID MATCHES "Clang")
-  set(C_WARNING_FLAGS "-Qunused-arguments -Wall -Wno-char-subscripts -Wno-unused -Wunneeded-internal-declaration -Wno-parentheses-equality")
-else()
-  set(C_WARNING_FLAGS "-Wall")
-endif(CMAKE_C_COMPILER_ID MATCHES "Intel")
 
 set(NOTES_DIR ${CMAKE_BINARY_DIR}/Testing/Notes)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/Testing/Notes)
@@ -147,34 +112,31 @@ execute_process(COMMAND ${CMAKE_CXX_COMPILER} --version
   OUTPUT_FILE ${NOTES_DIR}/compiler-version.txt)
 
 #
-# Get OSTYPE
+#  COMPILER_ID_TAG
+#
+execute_process(COMMAND ${CMAKE_CXX_COMPILER} -v ERROR_VARIABLE COMPILER_ID_TAG)
+set(COMPILER_ID_TAG "REGEXPS IN CMAKE SUCK\n${COMPILER_ID_TAG}")
+STRING(REGEX REPLACE ".*[ 
+\\t]([a-zA-Z]+)[ -][Vv]ersion ([^ ]+).*" "\\1-\\2" COMPILER_ID_TAG ${COMPILER_ID_TAG})
+
+#
+# Get system info
 #
 set(OSTYPE ${CMAKE_SYSTEM_NAME})
 boost_report_value(OSTYPE)
 
-#
-# Get OSVERSION
-#
 set(OSVERSION ${CMAKE_SYSTEM_VERSION})
 boost_report_value(OSVERSION)
 
-#
-# Get ARCH
-#
 set(ARCH ${CMAKE_SYSTEM_PROCESSOR})
 boost_report_value(ARCH)
 
-#
-# Assemble BUILDNAME
-#
 set(BUILDNAME "${OSTYPE}-${OSVERSION}/${ARCH}/${COMPILER_ID_TAG}" CACHE INTERNAL "buildname")
 boost_report_value(BUILDNAME)
 
 set(TOOLSET "${COMPILER_ID_TAG}/${ARCH}/${CMAKE_BUILD_TYPE}" CACHE INTERNAL "toolset")
+boost_report_value(TOOLSET)
 
-#
-#  Get HOSTNAME
-#
 execute_process(COMMAND hostname
   COMMAND tr -d \\n
   OUTPUT_VARIABLE HOSTNAME)
@@ -182,7 +144,7 @@ boost_report_value(HOSTNAME)
 set(SITE ${HOSTNAME})
 
 #
-#  Show cmake path and version
+# Show cmake path and version
 #
 boost_report_pretty("CMake path" CMAKE_COMMAND)
 if(NOT CMAKE_VERSION)
@@ -229,7 +191,7 @@ if(NOT HAVE_SVN_REVISION)
 endif(NOT HAVE_SVN_REVISION)
 
 #
-# Get SVN_URL from svn info --xml
+# Get SVN_URL from svn info
 #
 if(NOT HAVE_SVN_URL)
   set(HAVE_SVN_URL TRUE CACHE INTERNAL "flag")
@@ -247,7 +209,6 @@ if(NOT HAVE_SVN_URL)
   boost_report_value(SVN_URL)
 
   set(SVN_URL ${SVN_URL} CACHE INTERNAL "svn url")
-
 endif(NOT HAVE_SVN_URL)
 
 #
@@ -282,43 +243,6 @@ set(I3_UBER_HEADER ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/I3.h)
 configure_file(${CMAKE_SOURCE_DIR}/cmake/I3.h.in
   ${I3_UBER_HEADER}
   @ONLY)
-
-#
-# -D's for everybody
-#
-add_definitions(-D_REEENTRANT -fPIC)
-
-#
-# New versions of clang changed the default template depth
-# to 128. This is not enough for boost::python. Change it to
-# a somewhat higher value. 
-# 
-# This affects clang as shipped by Apple in OSX 10.9-DP3:
-# "Apple LLVM version 5.0 (clang-500.1.65) (based on LLVM 3.3svn)"
-#
-if (CMAKE_COMPILER_IS_CLANG)
-  add_definitions(-ftemplate-depth-256)
-endif (CMAKE_COMPILER_IS_CLANG)
-
-#
-# libraries everybody links to
-#
-if (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
-	# FreeBSD keeps libdl stuff in libc
-	link_libraries(m stdc++)
-else (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
-	link_libraries(m dl stdc++)
-endif (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
-
-set(TESTING_LD_LIBRARY_PATH $ENV{LD_LIBRARY_PATH}:${CMAKE_BINARY_DIR}/lib:${I3_PORTS}/lib:${I3_PORTS}/lib/boost-1.33.1)
-set(TESTING_PATH ${I3_PORTS}/bin:${CMAKE_BINARY_DIR}/bin:$ENV{PATH})
-set(TESTING_PYTHONPATH ${CMAKE_BINARY_DIR}/lib:${ports}/bin:${CMAKE_BINARY_DIR}/lib/python)
-set(TESTING_I3_WORK ${CMAKE_SOURCE_DIR})
-
-#if(APPLE)
-#  set(CMAKE_CXX_CREATE_SHARED_LIBRARY "/usr/bin/env MACOSX_DEPLOYMENT_TARGET=10.5 ${CMAKE_CXX_CREATE_SHARED_LIBRARY}")
-#  set(CMAKE_CXX_CREATE_SHARED_MODULE "/usr/bin/env MACOSX_DEPLOYMENT_TARGET=10.5 ${CMAKE_CXX_CREATE_SHARED_MODULE}")
-#endif(APPLE)
 
 colormsg("")
 colormsg(_HIBLUE_ "Setting compiler, compile drivers, and linker")
@@ -385,6 +309,47 @@ if(USE_GFILT)
 endif(USE_GFILT)
 
 #
+# Get compiler information
+#
+
+#
+#  GCC_VERSION and GCC_NUMERIC_VERSION is e.g. 40302 (for 4.3.2)
+#
+execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
+  COMMAND tr -d \\n
+  OUTPUT_VARIABLE GCC_VERSION)
+numeric_version(${GCC_VERSION} "gcc")
+set(GCC_NUMERIC_VERSION ${GCC_NUMERIC_VERSION} CACHE INTEGER "Numeric gcc version" FORCE)
+
+#
+# Set compiler warning flags.  Unfortunately cmake doesn't do this on its own
+#
+if(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+  set(CMAKE_COMPILER_IS_INTEL TRUE)
+  set(CXX_WARNING_FLAGS "-w1 -Wno-non-virtual-dtor")
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  set(CMAKE_COMPILER_IS_CLANG TRUE)
+  set(CXX_WARNING_FLAGS "-Qunused-arguments" "-Wall" "-Wno-non-virtual-dtor"
+                        "-Wno-mismatched-tags" "-Wno-char-subscripts"
+                        "-Wno-unused" "-Wunneeded-internal-declaration"
+                        "-Wno-parentheses-equality")
+else()
+  set(CXX_WARNING_FLAGS "-Wall -Wno-non-virtual-dtor")
+endif(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+string(REPLACE ";" " " CXX_WARNING_FLAGS "${CXX_WARNING_FLAGS}")
+
+if(CMAKE_C_COMPILER_ID MATCHES "Intel")
+  set(C_WARNING_FLAGS "-w1")
+elseif(CMAKE_C_COMPILER_ID MATCHES "Clang")
+  set(C_WARNING_FLAGS "-Qunused-arguments" "-Wall" "-Wno-char-subscripts"
+                      "-Wno-unused" "-Wunneeded-internal-declaration"
+                      "-Wno-parentheses-equality")
+else()
+  set(C_WARNING_FLAGS "-Wall")
+endif(CMAKE_C_COMPILER_ID MATCHES "Intel")
+string(REPLACE ";" " " C_WARNING_FLAGS "${C_WARNING_FLAGS}")
+
+#
 #  For now, on gcc 4.3.2, add the -Wno-deprecated flag
 #  But be wary of -Wno-unused-local-typedefs, which is a gcc 4.4 flag
 #
@@ -400,6 +365,33 @@ if (CMAKE_COMPILER_IS_CLANG)
   set(CXX_WARNING_SUPRESSION_FLAGS "-Wno-deprecated -Wno-parentheses"
     CACHE STRING "Warning supression flags for this compiler")
 endif (CMAKE_COMPILER_IS_CLANG)
+
+#
+# -D's for everybody
+#
+add_definitions(-D_REEENTRANT -fPIC)
+
+#
+# New versions of clang changed the default template depth
+# to 128. This is not enough for boost::python. Change it to
+# a somewhat higher value.
+#
+# This affects clang as shipped by Apple in OSX 10.9-DP3:
+# "Apple LLVM version 5.0 (clang-500.1.65) (based on LLVM 3.3svn)"
+#
+if (CMAKE_COMPILER_IS_CLANG)
+  add_definitions(-ftemplate-depth-256)
+endif (CMAKE_COMPILER_IS_CLANG)
+
+#
+# libraries everybody links to
+#
+if (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
+	# FreeBSD keeps libdl stuff in libc
+	link_libraries(m stdc++)
+else (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
+	link_libraries(m dl stdc++)
+endif (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
 
 #
 #  Detect certain old platforms and reduce optimization levels accordingly
@@ -518,4 +510,3 @@ if(NOT METAPROJECT_CONFIGURED)
 
   set(METAPROJECT_CONFIGURED TRUE CACHE INTERNAL "Metaproject configured")
 endif(NOT METAPROJECT_CONFIGURED)
-
