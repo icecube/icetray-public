@@ -325,37 +325,6 @@ colormsg(_HIBLUE_ "Setting compiler, compile drivers, and linker")
 colormsg("")
 
 #
-#  gold
-#
-
-# -fuse-ld seems to have gone away between lucid and oneiric
-if(${GCC_NUMERIC_VERSION} LESS 40500)
-find_program(GOLD_PROGRAM gold)
-if(NOT APPLE)
-  if(GOLD_PROGRAM)
-    message(STATUS "gold linker found at ${GOLD_PROGRAM}")
-    option(USE_GOLD "Use gold linker" OFF)
-
-    if(USE_GOLD)
-      if(GOLD_PROGRAM)
-        set(CMAKE_LINKER ${GOLD_PROGRAM} CACHE FILEPATH "Our linker" FORCE)
-        set(CMAKE_EXE_LINKER_FLAGS "-fuse-ld=gold" CACHE STRING "Force gcc to use the gold linker" FORCE)
-      else(GOLD_PROGRAM)
-        message(STATUS "USE_GOLD enabled, but gold linker not found: disabling.")
-      endif(GOLD_PROGRAM)
-    endif(USE_GOLD)
-
-  else(GOLD_PROGRAM)
-    message(STATUS "gold linker not found")
-  endif(GOLD_PROGRAM)
-else(NOT APPLE)
-  if(USE_GOLD)
-    message(STATUS "USE_GOLD enabled, but gold does not support linking on Apple: disabling.")
-  endif(USE_GOLD)
-endif(NOT APPLE)
-endif()
-
-#
 #  distcc
 #
 find_program(DISTCC_PROGRAM distcc)
