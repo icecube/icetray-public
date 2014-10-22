@@ -49,20 +49,22 @@ I3FileStager::CanStageOut(const std::string &url)
 	    url.substr(0, url.find(":"))) != schemes.end();
 }
 
-std::string
+std::map<std::string, I3FileStager::handle_pair>::iterator
 I3FileStager::GetLocalFileName(const std::string &url, bool reading)
 {
-	std::map<std::string, std::string>::iterator fname = url_to_filename_.find(url);
-	if (fname == url_to_filename_.end())
-		fname = url_to_filename_.insert(std::make_pair(url, GenerateLocalFileName(url, reading))).first;
-	return fname->second;
+	std::map<std::string, handle_pair>::iterator fname = url_to_handle_.find(url);
+	if (fname == url_to_handle_.end()) {
+		fname = url_to_handle_.insert(std::make_pair(url,
+		    std::make_pair(GenerateLocalFileName(url, reading), weak_filehandle()))).first;
+	}
+	return fname;
 }
 
 void
 I3FileStager::WillReadLater(const std::string &url)
 {
 	if (CanStageIn(url))
-		WillReadLater(url, GetLocalFileName(url, true));
+		WillReadLater(url, GetLocalFileName(url, true)->second.first);
 }
 
 I3::dataio::shared_filehandle
@@ -70,10 +72,23 @@ I3FileStager::GetReadablePath(const std::string &url)
 {
 	if (!CanStageIn(url))
 		return I3::dataio::shared_filehandle(new I3::dataio::filehandle(url));
-	std::string fname = GetLocalFileName(url, true);
-	CopyFileIn(url, fname);
-	boost::function<void()> deleter = boost::bind(&I3FileStager::Cleanup, shared_from_this(), url);
-	return I3::dataio::shared_filehandle(new I3::dataio::filehandle(fname, deleter));
+	
+	I3::dataio::shared_filehandle handle;
+	std::map<std::string, I3FileStager::handle_pair>::iterator
+	    prev_pair = GetLocalFileName(url, true);
+	// If someone still holds a reference to the file, then return it
+	if ((handle = prev_pair->second.second.lock()) == NULL) {
+		// Otherwise, stage the file in and return a new reference
+		const std::string &fname = prev_pair->second.first;
+		// Download now
+		CopyFileIn(url, fname);
+		// Delete file when done
+		boost::function<void()> deleter = boost::bind(&I3FileStager::Cleanup, shared_from_this(), url);
+		handle = I3::dataio::shared_filehandle(new I3::dataio::filehandle(fname, deleter));
+		prev_pair->second.second = handle;
+	} 
+	
+	return handle;
 }
 
 I3::dataio::shared_filehandle
@@ -81,10 +96,21 @@ I3FileStager::GetWriteablePath(const std::string &url)
 {
 	if (!CanStageOut(url))
 		return I3::dataio::shared_filehandle(new I3::dataio::filehandle(url));
-	std::string fname = GetLocalFileName(url, false);
-	// Upload, then delete file when done
-	boost::function<void()> deleter = boost::bind(&I3FileStager::StageFileOut, shared_from_this(), url);
-	return I3::dataio::shared_filehandle(new I3::dataio::filehandle(fname, deleter));
+	
+	I3::dataio::shared_filehandle handle;
+	std::map<std::string, I3FileStager::handle_pair>::iterator
+	    prev_pair = GetLocalFileName(url, false);
+	// If someone still holds a reference to the file, then return it
+	if ((handle = prev_pair->second.second.lock()) == NULL) {
+		// Otherwise, prepare a new reference
+		const std::string &fname = prev_pair->second.first;
+		// Upload, then delete file when done
+		boost::function<void()> deleter = boost::bind(&I3FileStager::StageFileOut, shared_from_this(), url);
+		handle = I3::dataio::shared_filehandle(new I3::dataio::filehandle(fname, deleter));
+		prev_pair->second.second = handle;
+	}
+	
+	return handle;
 }
 
 void
@@ -92,7 +118,7 @@ I3FileStager::StageFileOut(const std::string &url)
 {
 	namespace fs = boost::filesystem;
 	
-	std::string fname = GetLocalFileName(url, false);
+	std::string fname = GetLocalFileName(url, false)->second.first;
 	if (fs::exists(fname)) {
 		CopyFileOut(fname, url);
 		unlink(fname.c_str());
@@ -103,7 +129,7 @@ I3FileStager::Cleanup(const std::string &url)
 {
 	namespace fs = boost::filesystem;
 	
-	std::string fname = GetLocalFileName(url, true);
+	std::string fname = GetLocalFileName(url, true)->second.first;
 	if (fs::exists(fname))
 		unlink(fname.c_str());
 }

@@ -79,7 +79,6 @@ public:
 
 protected:
     I3FileStager();
-    std::string GetLocalFileName(const std::string &url, bool reading);
     
     virtual std::string GenerateLocalFileName(const std::string &url, bool reading) = 0;
     virtual void WillReadLater(const std::string &url, const std::string &fname) = 0;
@@ -92,8 +91,12 @@ private:
     void StageFileOut(const std::string &url);
     I3FileStager(const I3FileStager &);
     friend class I3FileStagerCollection;
+    
+    typedef boost::weak_ptr<I3::dataio::filehandle> weak_filehandle;
+    typedef std::pair<std::string, weak_filehandle> handle_pair;
+    std::map<std::string, handle_pair>::iterator GetLocalFileName(const std::string &url, bool reading);
 
-    std::map<std::string, std::string> url_to_filename_;
+    std::map<std::string, handle_pair> url_to_handle_;
 };
 
 I3_POINTER_TYPEDEFS(I3FileStager);

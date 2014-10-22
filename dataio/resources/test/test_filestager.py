@@ -39,9 +39,9 @@ def _test_stage(url, minsize=100):
 
 def test_double_stage():
 	"""
-	Stager should return handles to existing files
+	Stager should download files only once and return a handle to the existing
+	file if it's still live
 	"""
-	return
 	url = "http://code.icecube.wisc.edu/tools/clsim/MD5SUMS"
 	stager = I3FileStagerFile()
 	f1 = stager.GetReadablePath(url)
@@ -51,8 +51,9 @@ def test_double_stage():
 	assert(os.path.exists(str(f2)))
 	del f1
 	assert(os.path.exists(str(f2)))
+	f2path = str(f2)
 	del f2
-	assert(not os.path.exists(str(f2)))
+	assert(not os.path.exists(f2path))
 
 def test_http():
 	_test_stage("http://code.icecube.wisc.edu/tools/clsim/MD5SUMS")
