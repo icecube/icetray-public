@@ -325,7 +325,6 @@ set(GCC_NUMERIC_VERSION ${GCC_NUMERIC_VERSION} CACHE INTEGER "Numeric gcc versio
 # Ban old gcc versions
 #
 execute_process(COMMAND "date" "+%s" OUTPUT_VARIABLE NOW)
-message(FATAL_ERROR "now: ${NOW}")
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
   if(GCC_NUMERIC_VERSION LESS 40300)
     message("***")
