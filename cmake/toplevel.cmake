@@ -30,6 +30,10 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 endif("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 
 if(COMMAND cmake_policy)
+  if (NOT CMAKE_VERSION VERSION_LESS "2.8.12")
+    cmake_policy(SET CMP0042 OLD)
+    cmake_policy(SET CMP0046 OLD)
+  endif (NOT CMAKE_VERSION VERSION_LESS "2.8.12")
 endif(COMMAND cmake_policy)
 
 #
