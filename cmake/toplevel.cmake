@@ -48,41 +48,8 @@ if (APPLE)
   set(CMAKE_FRAMEWORK_PATH ${CMAKE_FRAMEWORK_PATH} CACHE PATH "" FORCE)
 endif (APPLE)
 
-#
-#  this was a failed attempt to fix ticket #181.
-#  
-#
-# execute_process(COMMAND ${CMAKE_SOURCE_DIR}/cmake/readlink.py ${CMAKE_SOURCE_DIR}
-#   OUTPUT_VARIABLE I3_SRC
-#   )
-# message(STATUS "After resolving links I3_SRC=${I3_SRC}")
-# 
-# execute_process(COMMAND ${CMAKE_SOURCE_DIR}/cmake/readlink.py ${CMAKE_BINARY_DIR}
-#   OUTPUT_VARIABLE I3_BUILD
-#   )
-# message(STATUS "After resolving links I3_BUILD=${I3_BUILD}")
-
 set(I3_SRC ${CMAKE_SOURCE_DIR})
 set(I3_BUILD ${CMAKE_BINARY_DIR})
-
-#
-#  This is nice and all, but causes intermittent hangs on the mac
-#  due to an extremely old bash.  And in some places your path gets automagically
-#  prepended with /usr/kerberos/bin.
-#
-# execute_process(
-#   COMMAND ${CMAKE_SOURCE_DIR}/cmake/envtest/parent.sh ${CMAKE_SOURCE_DIR}/cmake/envtest/child.sh
-#   RESULT_VARIABLE ENVTEST_RESULT
-#   ERROR_QUIET
-#   )
-# 
-# if(ENVTEST_RESULT)
-#   message(FATAL_ERROR 
-#     "Problem with your shell initialization scripts.  Cannot continue,\n"
-#     "as this would just result in very irritating errors later.\n"
-#     "Fix your shell initialization scripts and retry.\n")
-# endif(ENVTEST_RESULT)
-# 
 
 include(${CMAKE_SOURCE_DIR}/CMakeLists.optional.txt OPTIONAL)
 
