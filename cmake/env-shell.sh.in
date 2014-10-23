@@ -61,7 +61,7 @@ _I3_TESTDATA=@I3_TESTDATA@
 # but then set I3_TESTDATA later.
 if [ -d "$I3_TESTDATA" ]
 then 
-    if [ $(readlink -e "$_I3_TESTDATA") != $(readlink -e "$I3_TESTDATA") ]
+    if [ $(readlink "$_I3_TESTDATA") != $(readlink "$I3_TESTDATA") ]
     then
         _I3_TESTDATA=$I3_TESTDATA
     fi
