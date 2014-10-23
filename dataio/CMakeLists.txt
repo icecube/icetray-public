@@ -65,6 +65,8 @@ else (URWID_FOUND)
   colormsg(CYAN "+-- dataio-pyshovel *not* included (missing urwid python package)")
 endif (URWID_FOUND)
 
+## expect is needed for the datio-shovel-test
+find_program(EXPECT expect)
 
 i3_test_executable(test private/test/*.cxx
   USE_PROJECTS dataio)
@@ -74,6 +76,9 @@ if (NOT LIBARCHIVE_FOUND)
 #  colormsg(CYAN "+-- libarchive *not* found, omitting test \"resources/test/o7_libarchive_read.py\"")
   LIST(REMOVE_ITEM tmp_SCRIPTS "${CMAKE_CURRENT_SOURCE_DIR}/resources/test/o7_libarchive_read.py")
 endif (NOT LIBARCHIVE_FOUND)
+if (NOT ${EXPECT} MATCHES "-NOTFOUND")
+  LIST(REMOVE_ITEM tmp_SCRIPTS "${CMAKE_CURRENT_SOURCE_DIR}/resources/test/dataio-shovel-test")
+endif (NOT ${EXPECT} MATCHES "-NOTFOUND")
 i3_test_scripts(${tmp_SCRIPTS})
 
 i3_add_pybindings(dataio
@@ -137,4 +142,6 @@ set_property(TEST dataio::s_i3reader_readnulls.py APPEND PROPERTY DEPENDS dataio
 set_property(TEST dataio::test_randomaccess_file.py APPEND PROPERTY DEPENDS dataio::s_i3reader_readnulls.py)
 set_property(TEST dataio::t_skip_infoframes.py APPEND PROPERTY DEPENDS dataio::test_randomaccess_file.py)
 set_property(TEST dataio::writer_is_conditional.py APPEND PROPERTY DEPENDS dataio::t_skip_infoframes.py)
+if (NOT ${EXPECT} MATCHES "-NOTFOUND")
 set_property(TEST dataio::dataio-shovel-test APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
+endif (NOT ${EXPECT} MATCHES "-NOTFOUND")
