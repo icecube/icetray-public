@@ -49,24 +49,11 @@ else
     ARGV="$@"
 fi
 
-#
-# Determine directory that this shell lives in.
-#
-pushd `dirname $0` >/dev/null
-BASEDIR=`pwd`
-popd >/dev/null
-
 _I3_SHELL=$NEW_SHELL
 
 _I3_PORTS=@I3_PORTS@
-if [ "$BASEDIR" = "@I3_BUILD@" ]; then
-    _I3_SRC=@I3_SRC@
-    _I3_BUILD=@I3_BUILD@
-else
-    # If the build directory has been moved, fall back to mechanism used for tarballs
-    _I3_SRC=$BASEDIR
-    _I3_BUILD=$BASEDIR
-fi
+_I3_SRC=@I3_SRC@
+_I3_BUILD=@I3_BUILD@
 _I3_TESTDATA=@I3_TESTDATA@
 # If the I3_TESTDATA value at cmake time differs from the value
 # that was set just prior to starting env-shell.sh, prefer the latter one.
@@ -95,11 +82,11 @@ then
     exit 2
 fi
 
-_LD_LIBRARY_PATH=$_I3_BUILD/lib:$_I3_BUILD/lib/tools:@ROOTSYS@/lib:$LD_LIBRARY_PATH
-_DYLD_LIBRARY_PATH=$_I3_BUILD/lib:$_I3_BUILD/lib/tools:@ROOTSYS@/lib:$_I3_PORTS/lib:$DYLD_LIBRARY_PATH
+_LD_LIBRARY_PATH=@CMAKE_BINARY_DIR@/lib:@CMAKE_BINARY_DIR@/lib/tools:@ROOTSYS@/lib:$LD_LIBRARY_PATH
+_DYLD_LIBRARY_PATH=@CMAKE_BINARY_DIR@/lib:@CMAKE_BINARY_DIR@/lib/tools:@ROOTSYS@/lib:$_I3_PORTS/lib:$DYLD_LIBRARY_PATH
 
-_PYTHONPATH=$_I3_BUILD/lib:@ROOTSYS@/lib:$PYTHONPATH
-_PATH=$_I3_BUILD/bin:@ROOTSYS@/bin:$_I3_PORTS/bin:$PATH
+_PYTHONPATH=@CMAKE_BINARY_DIR@/lib:@ROOTSYS@/lib:$PYTHONPATH
+_PATH=@CMAKE_BINARY_DIR@/bin:@ROOTSYS@/bin:$_I3_PORTS/bin:$PATH
 
 _HIPPO_FOUND=@HIPPO_FOUND@
 if [ "${_HIPPO_FOUND}" = 1 ]; then
