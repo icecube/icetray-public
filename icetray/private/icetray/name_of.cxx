@@ -77,7 +77,7 @@ namespace icetray
           return names_[&ti];
         }
         
-        int status;
+        int status = 0;
         char* demangled = abi::__cxa_demangle(mangled, 0, 0, &status);
         std::string stlfilted;
         try
