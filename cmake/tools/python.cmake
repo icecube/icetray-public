@@ -96,14 +96,8 @@ message(STATUS "+   binary: ${PYTHON_EXECUTABLE}")
 message(STATUS "+ includes: ${PYTHON_INCLUDE_DIR}")	
 message(STATUS "+     libs: ${PYTHON_LIBRARIES}")	
 
-# Python <2.4 does not include subprocess.py which is used by
-# runtests.py and run_continuous_slave.py. Mark it for installation if
-# needed.
-#
-set(INSTALL_PYTHON_SUBPROCESS FALSE)
 if(PYTHON_NUMERIC_VERSION LESS 20400)
-  message(STATUS "+ including subprocess module")
-  set(INSTALL_PYTHON_SUBPROCESS TRUE)
+  message(FATAL_ERROR "A Python version > 2.4 is required.")
 endif(PYTHON_NUMERIC_VERSION LESS 20400)
 
 # look for numpy

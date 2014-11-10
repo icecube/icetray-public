@@ -379,15 +379,6 @@ endif()
 
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/docs/inspect")
 
-#
-# subprocess.py needed by older Python
-#
-if(INSTALL_PYTHON_SUBPROCESS)
-  configure_file(${CMAKE_SOURCE_DIR}/cmake/subprocess.py
-    ${LIBRARY_OUTPUT_PATH}/subprocess.py
-    COPYONLY)
-endif(INSTALL_PYTHON_SUBPROCESS)
-
 string(REGEX REPLACE "s\\.V.*$" "" DEST ${META_PROJECT})
 string(REGEX REPLACE "-software" "" DEST ${DEST})
 string(REGEX REPLACE "\\." "_" DEST ${DEST})
