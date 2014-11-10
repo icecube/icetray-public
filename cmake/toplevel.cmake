@@ -359,9 +359,3 @@ add_custom_target(deploy-docs
 ### ctest testing
 enable_testing()
 
-foreach (v docs inspect doxygen html)
-get_target_property(p ${v} DEPENDENCY)
-boost_report_value(p)
-get_target_property(p ${v} DEPENDENCIES)
-boost_report_value(p)
-endforeach()
