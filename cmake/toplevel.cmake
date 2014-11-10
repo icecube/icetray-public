@@ -65,28 +65,7 @@ include(config)
 include(tools)
 include(project)
 
-if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-add_custom_target(i3test
-  COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${EXECUTABLE_OUTPUT_PATH}/runtests.py
-  COMMENT "
->>>
->>>  Running tests via the utility 'runtests.py' in your $I3_BUILD/bin/ directory.\n
->>>  Run without arguments to see help/options.
->>>
-")
-else(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-add_custom_target(i3test
-  COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${EXECUTABLE_OUTPUT_PATH}/runtests.py
-  COMMENT "Running tests via the utility 'runtests.py' in your $I3_BUILD/bin/ directory.")
-endif(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-
 add_custom_target(test-bins)
-add_dependencies(i3test test-bins)
-
-add_custom_target(bottest
-  COMMAND ln -sf ${EXECUTABLE_OUTPUT_PATH}/runtests.py ${EXECUTABLE_OUTPUT_PATH}/bottest.py
-  COMMAND ${EXECUTABLE_OUTPUT_PATH}/bottest.py -v
-)
 
 set(INSPECT_ALL_HTML ${CMAKE_BINARY_DIR}/doxygen/inspect/index.html)
 
@@ -160,12 +139,6 @@ add_dependencies(tarball tarball-finish)
 # might be noops
 #include(testing)
 
-# this is what's left of BuildSlave.cmake. don't change it! -nega
-option(BUILD_SLAVE "Be a build slave, report build/testing" OFF)
-file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}" BUILD_SLAVE_PYTHONPATH)
-configure_file(cmake/passthru.py.in ${BUILD_SLAVE_PYTHONPATH}/passthru.py @ONLY)
-file(TO_NATIVE_PATH ${BUILD_SLAVE_PYTHONPATH}/passthru.py TEST_DRIVER)
-
 option(INSTALL_HEADERS "install header files when making tarball" OFF)
 option(INSTALL_TOOL_LIBS "install libraries from I3_PORTS when making tarball" ON)
 
@@ -189,10 +162,6 @@ install(PROGRAMS ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tarball-env-shell.s
   DESTINATION .
   RENAME env-shell.sh
   )
-
-configure_file(${CMAKE_SOURCE_DIR}/cmake/runtests.py.in
-  ${EXECUTABLE_OUTPUT_PATH}/runtests.py
-  @ONLY)
 
 add_custom_target(env-check ALL 
   COMMAND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/env-check.sh

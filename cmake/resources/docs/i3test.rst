@@ -259,30 +259,6 @@ test driver will show the following help::
 One may specify short or long arguments in typical UNIX command-line utility style.
 Test driver arguments in detail (default: off)
 
-.. _runtests.py:
-
-.. index:: runtests.py
-
-The test driver-driver program :command:`runtests.py`
------------------------------------------------------
-
-This program is used by 'make test' to run the test scripts and
-binaries.  It is created by cmake and placed in :file:`$I3_BUILD/bin`.
-You can also just run it by hand.
-
-::
-
-  % ./bin/runtests.py --help
-  Usage: runtests.py [options]
-  
-  Options:
-    -h, --help            show this help message and exit
-    -p PROJECTS, --project=PROJECTS
-                          List of projects to run tests on
-    -s, --scripts-only    Run only test scripts
-    -u, --units-only      Run only compiled unit tests
-    -v, --verbose         Show verbose output
-  
 References
 ----------
 

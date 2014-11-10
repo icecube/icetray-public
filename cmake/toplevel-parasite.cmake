@@ -102,7 +102,6 @@ message(STATUS "Built from:       ${SVN_URL} r${SVN_REVISION}")
 message(STATUS "Install prefix:   ${CMAKE_INSTALL_PREFIX}")
 
 # dummy testing target
-add_custom_target(i3test COMMAND echo "We don't actually have tests.")
 add_custom_target(test-bins COMMAND echo "We don't actually have tests.")
 add_custom_target(pybindings)
 

@@ -162,9 +162,6 @@ macro(i3_add_library THIS_LIB_NAME)
     add_library(${THIS_LIB_NAME} ${ARGS} ${${THIS_LIB_NAME}_ARGS_SOURCES})
     add_dependencies(${THIS_LIB_NAME} env-check)
 
-    add_dependencies(i3test ${THIS_LIB_NAME})
-
-
     set_target_properties(${THIS_LIB_NAME}
       PROPERTIES
       DEFINE_SYMBOL PROJECT=${PROJECT_NAME}
@@ -446,8 +443,6 @@ macro(i3_executable THIS_EXECUTABLE_NAME)
     endif()
 
     add_dependencies(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME} env-check)
-
-    add_dependencies(i3test ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME})
 
     use_projects(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME}
       PROJECTS ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_USE_PROJECTS})

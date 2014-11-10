@@ -291,29 +291,6 @@ run when ``make test`` is issued.  Test binaries are found in
 ``$I3_BUILD/bin``, the workspace target *test-bins* will build these
 test binaries.
 
-There is also a generated file ``runtests.py`` in ``$I3_BUILD/bin``.
-This is a test driver script that you can use to run individual tests
-or groups of tests.::
-
-  % ./bin/runtests.py --help
-  Usage: runtests.py [options]
-
-  Options:
-    -h, --help            show this help message and exit
-    -p PROJECTS, --project=PROJECTS
-			  List of projects to run tests on
-    -s, --scripts-only    Run only test scripts
-    -u, --units-only      Run only compiled unit tests
-    -v, --verbose         Show verbose output
-
-For example, to run the test scripts for project dataio, issue::
-
-    % ./bin/runtests.py -p dataio -s
-    27 projects loaded.
-    0:0  ...  dataio/scripts/a_nocompression.py                                   
-    1:0  ...  dataio/scripts/b_default.py                                         
-
-
 .. [wiki:CMakeAddProject   Adding a project]
 
 .. [wiki:CMakeReference   CMakeLists.txt Reference]
