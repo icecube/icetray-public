@@ -64,7 +64,7 @@ An example python script::
 Compression
 ^^^^^^^^^^^
 
-The writers will automatically compress if you specify a filename that ends in .gz. This::
+The writers will automatically compress if you specify a filename that ends in .gz or .bz2. This::
 
   tray.AddModule("I3Writer", "write",
                  filename="mystuff.i3.gz")                                                 
@@ -97,7 +97,13 @@ if the file ends in .gz and turn on decompression if necessary::
  tray.AddModule("I3Reader", "reader",
                 filename="mystuff.i3.gz")                                                  
 
-It does not need to know what the compression level of the input file is.
+It does not need to know what the compression level of the input file is. In
+addition, I3Reader will transparently read gzip, bzip2, or xz-compressed .i3
+files, or .i3 files inside of compressed tar archives like the PFFilt files 
+packaged and transferred over the satellite link by JADE. Any format that
+libarchive_ supports can be read.
+
+.. _libarchive: http://www.libarchive.org
 
 The I3Writer will automatically compress if you specify a filename
 that ends in .gz::
@@ -128,6 +134,41 @@ decompression if necessary::
                  filename="mystuff.i3.gz")
 
 not much to explain there.
+
+Reading from and writing to remote locations (staging)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Sometimes the files you want to read are not available on your local
+filesystem. For example, if you're running on a random node on the Open Science
+Grid, you will not have direct access to the /data/sim and /data/exp
+filesystems in Madison. For such situations, dataio has built-in support for
+"staging" files in and out of local storage. For example, to read files via
+GridFTP, use the following snippet::
+	
+	from icecube import icetray, dataio
+	tray.Add(dataio.I3Reader, filenamelist=['gsipftp://gridftp.icecube.wisc.edu/data/sim/IceCube/2010/filtered/level3-cscd/CORSIKA-in-ice/9493/92000-92999/Level3_IC79_corsika.009493.092110.i3.bz2 '])
+
+The segment dataio.I3Reader is equivalent to::
+	
+	tray.context['I3FileStager'] = dataio.get_stagers()
+	tray.AddModule('I3Reader', **kwargs)
+
+Behind the scenes the stager will recognize supported URL schemes (currently
+file:// http://, ftp://, gsiftp://, and scp://), download the file to a local
+directory, and provide the reader with a local filename to read instead. As
+soon as the file is no longer needed, it will be automatically deleted. The
+inverse operation works for writing as well. If the staging mechanism has been
+set up (using either of the snippets above), then I3Writer will also recognize
+URL schemes, write the output to a temporary file, and upload it to the
+destination when the file is closed. For example, the following snippet will
+write an .i3 file to my /data/user directory in Madison from anywhere in the
+world::
+	
+	tray.Add('I3Writer', filename='gsiftp://gridftp-users.icecube.wisc.edu/data/user/jvansanten/foo.i3.bz2')
+
+The hdfwriter and rootwriter projects use the same staging mechanism.
+
+.. note:: To use the GridFTP servers in Madison, you will `need a certificate <https://wiki.icecube.wisc.edu/index.php/Using_GridFTP>`_.
 
 SkipKeys
 ^^^^^^^^
