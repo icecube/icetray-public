@@ -20,12 +20,13 @@ def load(libname):
     and this sould be obsolete.
     
     :param filename:
+
     should be the name of the file to load
     including the leading ``lib``, but *not* including the trailing
     ``.so`` or ``.dylib``, eg::
     
-    load("libdataio")
-    load("libexamples")
+      load("libdataio")
+      load("libexamples")
     
     """
     try :
