@@ -96,9 +96,9 @@ message(STATUS "+   binary: ${PYTHON_EXECUTABLE}")
 message(STATUS "+ includes: ${PYTHON_INCLUDE_DIR}")	
 message(STATUS "+     libs: ${PYTHON_LIBRARIES}")	
 
-if(PYTHON_NUMERIC_VERSION LESS 20400)
+if(PYTHON_NUMERIC_VERSION LESS 20500)
   message(FATAL_ERROR "A Python version > 2.4 is required.")
-endif(PYTHON_NUMERIC_VERSION LESS 20400)
+endif(PYTHON_NUMERIC_VERSION LESS 20500)
 
 # look for numpy
 execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import numpy"
