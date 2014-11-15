@@ -26,10 +26,9 @@
 #include "Utility.h"
 #include <iostream>
 #include <icetray/IcetrayFwd.h>
-#include <icetray/I3FrameObject.h>
 #include <icetray/serialization.h>
 
-static const unsigned omkey_version_ = 1;
+static const unsigned omkey_version_ = 2;
 
 /**
  * @brief A small class which is the string number, om number
@@ -38,7 +37,7 @@ static const unsigned omkey_version_ = 1;
  * and "PMT" is equivalent to "DOM".
  *
  */
-class OMKey : public I3FrameObject
+class OMKey 
 {
   int stringNumber_;
   unsigned int omNumber_;
@@ -150,7 +149,12 @@ class OMKey : public I3FrameObject
   friend class boost::serialization::access;
 
   template <class Archive>
-  void serialize(Archive& ar, unsigned version);
+  void save(Archive& ar, unsigned version) const;
+
+  template <class Archive>
+  void load(Archive& ar, unsigned version);
+
+  BOOST_SERIALIZATION_SPLIT_MEMBER();
 };
 
 BOOST_CLASS_VERSION(OMKey,omkey_version_);

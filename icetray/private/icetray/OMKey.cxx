@@ -21,17 +21,29 @@
 #include <icetray/serialization.h>
 #include <icetray/OMKey.h>
 #include <sstream>
+#include <icetray/I3FrameObject.h>
 
 OMKey::~OMKey() { }
 
-template <typename Archive>
-void 
-OMKey::serialize (Archive & ar, unsigned version)
+template <class Archive>
+void OMKey::save(Archive& ar, unsigned version) const
+{
+  ar & make_nvp("StringNumber",  stringNumber_);
+  ar & make_nvp("OMNumber",  omNumber_);
+  ar & make_nvp("PMTNumber",  pmtNumber_);
+}
+
+template <class Archive>
+void OMKey::load(Archive& ar, unsigned version)
 {
   if (version>omkey_version_)
-    log_fatal("Attempting to read version %u from file but running version %u of OMKey class.",version,omkey_version_);
+    log_fatal("Attempting to read version %u from file but running version %u of OMKey class.",
+              version,omkey_version_);
 
-  ar & make_nvp("I3FrameObject", base_object< I3FrameObject >(*this));
+  if (version<=1) {
+    I3FrameObject fo;
+    ar & make_nvp("I3FrameObject", fo);
+  }
   ar & make_nvp("StringNumber",  stringNumber_);
   ar & make_nvp("OMNumber",  omNumber_);
     
@@ -42,7 +54,7 @@ OMKey::serialize (Archive & ar, unsigned version)
   }
 }
 
-I3_SERIALIZABLE(OMKey);
+I3_SPLIT_SERIALIZABLE(OMKey);
 
 #include <sstream>
 #include <boost/regex.hpp>
