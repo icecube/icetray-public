@@ -347,10 +347,15 @@ class I3Frame
     log_trace("Get<%s>(\"%s\")", I3::name_of<T>().c_str(), name.c_str());
 
     boost::shared_ptr<const T> sp_t = this->template Get<boost::shared_ptr<const T> >(name);
-    if (!sp_t)
-      log_fatal("object in frame at \"%s\" doesn't exist "
-                "or won't dynamic cast to type \"%s\"",
-                name.c_str(), I3::name_of<T>().c_str());
+    if (!sp_t){
+      if(!this->Has(name)){
+          log_fatal("object in frame at \"%s\" doesn't exist. ", name.c_str());                    
+        }else{
+          log_fatal("object in frame at \"%s\" exists, but "
+                    "won't dynamic cast to type \"%s\"",
+                    name.c_str(), I3::name_of<T>().c_str());
+        }
+    }
     else if (sp_t.unique())
       log_fatal("cannot get synthetic frame object \"%s\" (\"%s\") "
                 "by reference, only by shared pointer",
