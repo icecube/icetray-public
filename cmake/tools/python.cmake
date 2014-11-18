@@ -97,7 +97,7 @@ message(STATUS "+ includes: ${PYTHON_INCLUDE_DIR}")
 message(STATUS "+     libs: ${PYTHON_LIBRARIES}")	
 
 if(PYTHON_NUMERIC_VERSION LESS 20500)
-  message(FATAL_ERROR "A Python version > 2.4 is required.")
+  message(WARNING "A Python version > 2.4 is required.")
 endif(PYTHON_NUMERIC_VERSION LESS 20500)
 
 # look for numpy
