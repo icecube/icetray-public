@@ -115,6 +115,13 @@ class AbstractFileStager(I3FileStager):
 
 
 class I3FileStagerFile(AbstractFileStager):
+	"""
+	Handles http://, https://, ftp://, and file:// URLs
+	
+	.. note:: A username/password combination may be embedded in http URLs in the
+	          format specified in RFC 3986. This should only be used for "dummy"
+	          shared passwords like the standard IceCube password.
+	"""
 	def __init__(self, blocksize=2**16):
 		AbstractFileStager.__init__(self)
 		self.blocksize = blocksize
@@ -200,7 +207,14 @@ class I3FileStagerFile(AbstractFileStager):
 			icetray.log_fatal("Can't upload to %s" % url.scheme)
 		
 class GridFTPStager(AbstractFileStager):
+	"""
+	Handles ftp:// and gsiftp:// URLs
 	
+	.. note:: GridFTP requires that you have a proxy certificate either in the
+	          standard location or in the location specified by the environment
+	          variable X509_USER_PROXY. See the `Globus Toolkit documentation <http://toolkit.globus.org/toolkit/docs/4.1/admin/docbook/gtadmin-env-var.html#id2565277>`_ for more information.
+	          You will also need to `obtain a user certificate <https://wiki.icecube.wisc.edu/index.php/Using_GridFTP>`_.
+	"""
 	def __init__(self, globus_url_copy='globus-url-copy', options=['-nodcau', '-rst']):
 		super(type(self), self).__init__()
 		self.globus_url_copy = globus_url_copy
@@ -231,7 +245,13 @@ class GridFTPStager(AbstractFileStager):
 			icetray.logging.log_info("Upload finished: %s to %s" % (local_path, url), unit="GridFTPStager")
 
 class SCPStager(AbstractFileStager):
+	"""
+	Handles scp:// URLs
 	
+	.. note:: Since there is no way to enter your password, you must have public
+	          key authentication set up to use the scp stager. If you try to embed
+	          the password in the URL, an error will be raised.
+	"""
 	def __init__(self):
 		super(type(self), self).__init__()
 	

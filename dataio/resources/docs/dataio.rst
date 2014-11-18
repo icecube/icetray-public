@@ -166,9 +166,17 @@ world::
 	
 	tray.Add('I3Writer', filename='gsiftp://gridftp-users.icecube.wisc.edu/data/user/jvansanten/foo.i3.bz2')
 
-The hdfwriter and rootwriter projects use the same staging mechanism.
+Plain POSIX path names, e.g. "/data/user/jvansanten/foo.i3.bz," will not be
+staged, but instead read directly The hdfwriter and rootwriter projects use the
+same staging mechanism. Currently, the following stager classes are implemented:
 
-.. note:: To use the GridFTP servers in Madison, you will `need a certificate <https://wiki.icecube.wisc.edu/index.php/Using_GridFTP>`_.
+.. py:module:: icecube.dataio.I3FileStagerFile
+
+.. autoclass:: I3FileStagerFile
+
+.. autoclass:: GridFTPStager
+
+.. autoclass:: SCPStager
 
 SkipKeys
 ^^^^^^^^
