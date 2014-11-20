@@ -3,6 +3,12 @@
 # $Date: $
 #
 
+November 20, 2014, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+ V14-11-00 - Bugfix release
+  o Fixed bug in I3FileStager that was causing dataio-shovel to seg fault.
+  o Added support for I3_TESTDATA
+
 September 30, 2014, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
  V14-09-00 - Bugfix release
