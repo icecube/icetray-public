@@ -249,6 +249,9 @@ macro(i3_add_library THIS_LIB_NAME)
 	${PROJECT_NAME}-${THIS_LIB_NAME}-doxygen
 	)
       add_dependencies(doxygen ${PROJECT_NAME}-doxygen)
+      foreach(l ${${THIS_LIB_NAME}_PROJECT_DEPENDS})
+	add_dependencies(${PROJECT_NAME}-${THIS_LIB_NAME}-doxygen ${l}-doxygen)
+      endforeach()
 
     endif(NOT ${THIS_LIB_NAME}_ARGS_NO_DOXYGEN AND DOXYGEN_FOUND)
 
