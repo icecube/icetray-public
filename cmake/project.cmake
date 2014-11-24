@@ -99,7 +99,7 @@ macro(use_projects THIS_TARGET)
 
     include_directories(${CMAKE_SOURCE_DIR}/${USED_PROJECT}/public)
     target_link_libraries(${THIS_TARGET} ${USED_PROJECT})
-    file(APPEND @DOXYGEN_OUTPUT_PATH@/.tagfiles/${PROJECT_NAME}.include "TAGFILES=${CMAKE_BINARY_DIR}/doxygen/.tagfiles/${USED_PROJECT}.tag=${CMAKE_BINARY_DIR}/doxygen/${USED_PROJECT}\n")
+    file(APPEND ${DOXYGEN_OUTPUT_PATH}/.tagfiles/${PROJECT_NAME}.include "${DOXYGEN_OUTPUT_PATH}/.tagfiles/${USED_PROJECT}.tag=${DOXYGEN_OUTPUT_PATH}/${USED_PROJECT}\n")
   endforeach(USED_PROJECT ${${THIS_TARGET}_USE_PROJECTS_PROJECTS})
 endmacro(use_projects THIS_TARGET)
 
