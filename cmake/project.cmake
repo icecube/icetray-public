@@ -616,7 +616,7 @@ macro(i3_add_pybindings MODULENAME)
       PREFIX ""
       OUTPUT_NAME ${MODULENAME}
       DEFINE_SYMBOL I3_PYBINDINGS_MODULE
-      COMPILE_FLAGS "-include ${I3_UBER_HEADER} -I${CMAKE_SOURCE_DIR}/boost/public"
+      COMPILE_FLAGS "-include ${I3_UBER_HEADER}"
       LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}/icecube
       )
 
