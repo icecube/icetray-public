@@ -515,6 +515,47 @@ if(NOT METAPROJECT_CONFIGURED)
     "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert Coverage."
     FORCE )
 
+  ## at this point only project CMakeLists.txt's and tools/*.cmake will modify
+  ## the command line. let's check what we have.
+  option(CHECK_FLAGS "Check *some* of the flags passed to the compilers" OFF)
+  if(CHECK_FLAGS)
+    include(CheckCCompilerFlag)
+    include(CheckCXXCompilerFlag)
+
+    ## check C flags
+    set(l ${CMAKE_C_FLAGS})
+    string(TOUPPER ${CMAKE_BUILD_TYPE} l2)
+    set(l2 ${CMAKE_C_FLAGS_${l2}})
+    separate_arguments(l)
+    separate_arguments(l2)
+    message(STATUS "Checking C compiler flags for ${CMAKE_C_COMPILER}")
+    foreach(f "-bar" ${l} ${l2})
+      check_c_compiler_flag("${f}" "HAS_FLAG ${f}")
+      if(NOT "HAS_FLAG ${f}")
+	colormsg(HIRED  "*** Your compiler '${CMAKE_C_COMPILER}' doesn't like the flag '${f}'.")
+	colormsg(HIRED  "*** This is a bug. Please file a ticket at http://code.icecube.wisc.edu/projects/icecube/newticket")
+	message(WARNING "*** Unknown compiler flag, '${f}'.")
+      endif()
+    endforeach()
+    message(STATUS "")
+
+    ## check CXX flags
+    set(l ${CMAKE_CXX_FLAGS})
+    string(TOUPPER ${CMAKE_BUILD_TYPE} l2)
+    set(l2 ${CMAKE_CXX_FLAGS_${l2}})
+    separate_arguments(l)
+    separate_arguments(l2)
+    message(STATUS "Checking CXX compiler flags for ${CMAKE_CXX_COMPILER}")
+    foreach(f "-foo" ${l} ${l2})
+      check_CXX_compiler_flag("${f}" "HAS_FLAG ${f}")
+      if(NOT "HAS_FLAG ${f}")
+	colormsg(HIRED  "*** Your compiler '${CMAKE_CXX_COMPILER}' doesn't like the flag '${f}'.")
+	colormsg(HIRED  "*** This is a bug. Please file a ticket at http://code.icecube.wisc.edu/projects/icecube/newticket")
+	message(WARNING "*** Unknown compiler flag, '${f}'.")
+      endif()
+    endforeach()
+  endif()
+
   #
   # stop binutils stupidity
   #
