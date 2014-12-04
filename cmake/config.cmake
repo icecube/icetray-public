@@ -387,11 +387,6 @@ if (CMAKE_COMPILER_IS_CLANG)
 endif (CMAKE_COMPILER_IS_CLANG)
 
 #
-# -D's for everybody
-#
-add_definitions(-D_REEENTRANT -fPIC)
-
-#
 # New versions of clang changed the default template depth
 # to 128. This is not enough for boost::python. Change it to
 # a somewhat higher value.
