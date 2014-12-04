@@ -30,8 +30,14 @@ find_package(PythonInterp QUIET)
 # determine version of the system python.
 #
 execute_process(COMMAND ${PYTHON_EXECUTABLE} -V
+  OUTPUT_VARIABLE STDOUT_VERSION
   ERROR_VARIABLE PYTHON_VERSION
   ERROR_STRIP_TRAILING_WHITESPACE)
+
+if(STDOUT_VERSION MATCHES "Python")
+  set(PYTHON_VERSION "${STDOUT_VERSION}")
+endif()
+
 #
 # Provide version in numeric form for comparison
 #
