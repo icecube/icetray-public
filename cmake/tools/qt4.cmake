@@ -8,12 +8,13 @@ include(MacroAddFileDependencies)
 set(Qt4_FIND_QUIETLY FALSE)
 set(QT_USE_QTOPENGL TRUE)
 set(QT_USE_FILE ${CMAKE_ROOT}/Modules/UseQt4.cmake)
-set(QT_DEFINITIONS "")
+set(QT_DEFINITIONS "-qt=qt4")
 
 if(NOT QT_QMAKE_EXECUTABLE)
   # check for qmake
   find_program(QT_QMAKE_EXECUTABLE NAMES qmake-qt4 qmake
     PATHS
+    /usr/lib/x86_64-linux-gnu/qt4/bin
     ${I3_PORTS}/qt-4.6.0/bin
     ${I3_PORTS}/qt-4.4.3/bin
     DOC "Qmake executable.  Use this to set the version of Qt that you use."
