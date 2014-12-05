@@ -12,6 +12,7 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/python/def_visitor.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_enum.hpp>
 
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/not.hpp>
@@ -74,19 +75,78 @@ HAS_OPERATOR(boost::has_greater_equal, has_gt_eq);
 // older boost, so do operator detection manually
 // note that this only works for operators that are member functions
 
+#define BASIC_TYPES (bool)(char)(short)(unsigned short)(int)(unsigned)(long)(unsigned long)(float)(double)(long double)\
+(const bool)(const char)(const short)(const unsigned short)(const int)(const unsigned)(const long)(const unsigned long)\
+(const float)(const double)(const long double)
+#define SPECIALIZE_TYPE(r, data, type)                                  \
+  template<typename Dummy> struct inner<type,Dummy> : public boost::true_type{};
+
 #define HAS_OPERATOR(func, ret, name)                                   \
-    template<typename T>                                                \
-    struct name {                                                       \
-        typedef char yes[1];                                            \
-        typedef char no [2];                                            \
-        template <typename U, U> struct type_check;                     \
-        template <typename _1> static yes &chk(type_check<ret(T::*)(const T&) const, &_1::func> *); \
-        template <typename   > static no  &chk(...);                    \
-        template <typename _1> static yes &chk2(type_check<ret(T::*)(const T&), &_1::func> *); \
-        template <typename   > static no  &chk2(...);                   \
-        static bool const value = (sizeof(chk<T>(0)) == sizeof(yes)     \
-                                || sizeof(chk2<T>(0)) == sizeof(yes));  \
-    }
+  template<typename T>                                                  \
+  struct name {                                                         \
+    template<typename TT,typename Dummy=void>                           \
+    struct inner {                                                      \
+      typedef char yes[1];                                              \
+      typedef char no [2];                                              \
+      template <typename U, U> struct type_check;                       \
+      template <typename _1> static yes &chk(type_check<ret(TT::*)(const TT&) const, &_1::func> *); \
+      template <typename   > static no  &chk(...);                      \
+      template <typename _1> static yes &chk2(type_check<ret(TT::*)(const TT&), &_1::func> *); \
+      template <typename   > static no  &chk2(...);                     \
+      static bool const value = (sizeof(chk<TT>(0)) == sizeof(yes)      \
+                                || sizeof(chk2<TT>(0)) == sizeof(yes)); \
+    };                                                                  \
+    BOOST_PP_SEQ_FOR_EACH(SPECIALIZE_TYPE, _, BASIC_TYPES)              \
+    template<typename TT>                                               \
+    struct inner<TT,typename boost::enable_if<boost::is_enum<TT> >::type> \
+      : public boost::true_type{};                                      \
+    template<typename First,typename Second,typename Dummy>             \
+    struct inner<std::pair<First,Second>,Dummy >                        \
+      : public boost::true_type{};                                      \
+    struct std_class : public boost::true_type { static bool const temp = false; }; \
+    template<typename TT,typename Dummy=void>                           \
+    struct exclude : public boost::true_type{};                         \
+    template<typename TT>                                               \
+    struct exclude<TT,typename boost::mpl::if_c<false,typename TT::matrix_temporary_type,void>::type> \
+      : public boost::false_type{};                                     \
+    template<typename TT>                                               \
+    struct exclude<TT,typename boost::mpl::if_c<false,typename TT::iterator_base,void>::type> \
+      : public boost::false_type{};                                     \
+    template<typename TT,typename Dummy=void>                           \
+    struct chkAlloc : public std_class{};                               \
+    template<typename TT>                                               \
+    struct chkAlloc<TT,typename boost::mpl::if_c<false,typename TT::allocator_type,void>::type> \
+    {                                                                   \
+      static bool const value = (name<typename TT::allocator_type>::value); \
+      static bool const temp = true;                                    \
+    };                                                                  \
+    template<typename TT,typename Dummy=void>                           \
+    struct chkMap : public std_class{};                                 \
+    template<typename TT>                                               \
+    struct chkMap<TT,typename boost::mpl::if_c<false,typename TT::key_type,void>::type> \
+    {                                                                   \
+      static bool const value = (name<typename TT::key_type>::value &&  \
+                                 name<typename TT::mapped_type>::value); \
+      static bool const temp = true;                                    \
+    };                                                                  \
+    template<typename TT,typename Dummy=void>                           \
+    struct chk : public std_class{};                                    \
+    template<typename TT>                                               \
+    struct chk<TT,typename boost::mpl::if_c<false,typename TT::value_type,void>::type> \
+    {                                                                   \
+      static bool const value = (chkAlloc<TT>::value && chkMap<TT>::value \
+                                 && name<typename TT::value_type>::value); \
+      static bool const temp = exclude<TT>::value;                      \
+    };                                                                  \
+    template<typename TT>                                               \
+    struct chk<TT,typename boost::mpl::if_c<false,typename TT::first_type,void>::type> \
+    {                                                                   \
+      static bool const value = (name<typename TT::first_type>::value  \
+                                 && name<typename TT::second_type>::value); \
+      static bool const temp = true;                                    \
+    };                                                                  \
+    static bool const value = (chk<T>::value && (chk<T>::temp || inner<T>::value)); \
+  }
 
 HAS_OPERATOR(operator==, bool, has_eq);
 HAS_OPERATOR(operator!=, bool, has_ne);
