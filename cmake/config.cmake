@@ -390,7 +390,7 @@ endif (CMAKE_COMPILER_IS_CLANG)
 # "Apple LLVM version 5.0 (clang-500.1.65) (based on LLVM 3.3svn)"
 #
 if (CMAKE_COMPILER_IS_CLANG)
-  add_definitions(-ftemplate-depth-256)
+  set(CMAKE_CXX_FLAGS "-ftemplate-depth-256")
 endif (CMAKE_COMPILER_IS_CLANG)
 
 #
