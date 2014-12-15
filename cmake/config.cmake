@@ -371,9 +371,9 @@ string(REPLACE ";" " " C_WARNING_FLAGS "${C_WARNING_FLAGS}")
 
 #
 #  For now, on gcc 4.3.2, add the -Wno-deprecated flag
-#  But be wary of -Wno-unused-local-typedefs, which is a gcc 4.4 flag
+#  But be wary of -Wno-unused-local-typedefs, which is a gcc 4.8 flag
 #
-if (GCC_NUMERIC_VERSION GREATER 40399)
+if (GCC_NUMERIC_VERSION GREATER 40799)
   set(CXX_WARNING_SUPRESSION_FLAGS "-Wno-deprecated -Wno-parentheses -Wno-unused-local-typedefs"
     CACHE STRING "Warning supression flags for this compiler")
 elseif (GCC_NUMERIC_VERSION GREATER 40299)
