@@ -349,10 +349,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
   set(CXX_WARNING_FLAGS "-w1 -Wno-non-virtual-dtor")
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   set(CMAKE_COMPILER_IS_CLANG TRUE)
-  set(CXX_WARNING_FLAGS "-Qunused-arguments" "-Wall" "-Wno-non-virtual-dtor"
-                        "-Wno-mismatched-tags" "-Wno-char-subscripts"
-                        "-Wno-unused" "-Wunneeded-internal-declaration"
-                        "-Wno-parentheses-equality")
+  set(CXX_WARNING_FLAGS "-Qunused-arguments" "-Wall" "-Wno-non-virtual-dtor")
 else()
   set(CXX_WARNING_FLAGS "-Wall -Wno-non-virtual-dtor")
 endif(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
@@ -361,9 +358,7 @@ string(REPLACE ";" " " CXX_WARNING_FLAGS "${CXX_WARNING_FLAGS}")
 if(CMAKE_C_COMPILER_ID MATCHES "Intel")
   set(C_WARNING_FLAGS "-w1")
 elseif(CMAKE_C_COMPILER_ID MATCHES "Clang")
-  set(C_WARNING_FLAGS "-Qunused-arguments" "-Wall" "-Wno-char-subscripts"
-                      "-Wno-unused" "-Wunneeded-internal-declaration"
-                      "-Wno-parentheses-equality")
+  set(C_WARNING_FLAGS "-Qunused-arguments" "-Wall")
 else()
   set(C_WARNING_FLAGS "-Wall")
 endif(CMAKE_C_COMPILER_ID MATCHES "Intel")
@@ -374,15 +369,15 @@ string(REPLACE ";" " " C_WARNING_FLAGS "${C_WARNING_FLAGS}")
 #  But be wary of -Wno-unused-local-typedefs, which is a gcc 4.8 flag
 #
 if (GCC_NUMERIC_VERSION GREATER 40799)
-  set(CXX_WARNING_SUPRESSION_FLAGS "-Wno-deprecated -Wno-parentheses -Wno-unused-local-typedefs"
+  set(CXX_WARNING_SUPRESSION_FLAGS "-Wno-deprecated"
     CACHE STRING "Warning supression flags for this compiler")
 elseif (GCC_NUMERIC_VERSION GREATER 40299)
-  set(CXX_WARNING_SUPRESSION_FLAGS "-Wno-deprecated -Wno-parentheses"
+  set(CXX_WARNING_SUPRESSION_FLAGS "-Wno-deprecated"
     CACHE STRING "Warning supression flags for this compiler")
-endif (GCC_NUMERIC_VERSION GREATER 40399)
+endif (GCC_NUMERIC_VERSION GREATER 40799)
 
 if (CMAKE_COMPILER_IS_CLANG)
-  set(CXX_WARNING_SUPRESSION_FLAGS "-Wno-deprecated -Wno-parentheses"
+  set(CXX_WARNING_SUPRESSION_FLAGS "-Wno-deprecated"
     CACHE STRING "Warning supression flags for this compiler")
 endif (CMAKE_COMPILER_IS_CLANG)
 
