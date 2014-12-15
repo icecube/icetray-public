@@ -394,6 +394,12 @@ if (CMAKE_COMPILER_IS_CLANG)
 endif (CMAKE_COMPILER_IS_CLANG)
 
 #
+# The following is needed on OSX to enable "system includes" in tools.cmake 
+if (CMAKE_COMPILER_IS_CLANG)
+  set(CMAKE_INCLUDE_SYSTEM_FLAG_CXX "-isystem ")
+endif (CMAKE_COMPILER_IS_CLANG)
+
+#
 # libraries everybody links to
 #
 if (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
