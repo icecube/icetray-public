@@ -28,6 +28,7 @@ i3_add_pybindings(icetray
   empty.cxx
   module.cxx
   USE_TOOLS boost python
+  LINK_LIBRARIES ${LIBARCHIVE_LIBRARIES}
   USE_PROJECTS icetray
   )
 
