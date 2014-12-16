@@ -34,6 +34,7 @@ Table of Contents:
    i3units
    newfeaturesv3
    newfeaturesv4
+   i3podholder
    I3Tray
    icecube.icetray
 
@@ -41,5 +42,6 @@ Also see the `doxygen <../../doxygen/icetray/index.html>`_ docs.
 
 To Document
 -----------
+
 
 
