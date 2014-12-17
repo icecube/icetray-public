@@ -289,7 +289,20 @@ Testing
 Projects that have test executables or scripts will have their tests
 run when ``make test`` is issued.  Test binaries are found in
 ``$I3_BUILD/bin``, the workspace target *test-bins* will build these
-test binaries.
+test binaries. Python tests do not need building.
+
+The testing system is `CTest <http://www.cmake.org/cmake/help/v2.8.8/ctest.html>`_.
+To run tests only from a single project, do::
+
+  ctest -R <ProjectName>
+
+For example, ``ctest -R icetray`` will run the icetray tests. Hint: The argument
+may be a full regular expression. The command ``ctest -R icetray.*py``
+runs all icetray tests implemented in Python (if there are any).
+
+To see output from the tests for debugging, use option ``-V``.
+
+Information on how to write C++ tests with I3Tests can be found here :doc:`i3test`
 
 .. [wiki:CMakeAddProject   Adding a project]
 
