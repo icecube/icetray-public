@@ -20,3 +20,5 @@ tray.Execute(5)
 
 # see ya.
 tray.Finish()
+
+tray.PrintUsage()

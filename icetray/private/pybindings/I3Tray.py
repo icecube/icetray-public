@@ -32,7 +32,8 @@ def load(libname):
     try :
         icetray.load(libname)
     except:
-        icetray.logging.log_fatal("Failed to load library (%s): %s" % (sys.exc_info()[0], sys.exc_info()[1]), "I3Tray")
+        icetray.logging.log_fatal("Failed to load library (%s): %s" \
+                                  % (sys.exc_info()[0], sys.exc_info()[1]), "I3Tray")
 
             
 def OMKey(string,omnum):
@@ -64,7 +65,8 @@ class I3Tray(icetray.I3Tray):
             if name not in module_names:
                 break
             n+=1
-        icetray.logging.log_info("Adding Anonymous %s of type '%s' with name '%s'"%(kind, _type,name), "I3Tray")
+        icetray.logging.log_info("Adding Anonymous %s of type '%s' with name '%s'" \
+                                 % (kind, _type,name), "I3Tray")
         return name
 
     def Add(self, _type, _name=None, **kwargs):
@@ -231,28 +233,33 @@ class I3Tray(icetray.I3Tray):
         else:
             super(I3Tray, self).Execute()
 
-    def PrintUsage(tray, fraction=0.9):
+    def PrintUsage(self, fraction=0.9):
         """
         Pretty-print the time spent in each module, as usually done in the
         I3Module destructor.
 
         :param fraction: Print out the usage of modules consuming this much of
         the total runtime.
+
+        :return: Returns a list of keys that were printed.  Implemented for testing.
         """
-        usage = tray.Usage()
+        usage = self.Usage()
         if len(usage) == 0:
             return
         keys = [p.key() for p in usage]
-        keys.sort(key=lambda k: usage[k].usertime + usage[k].systime)
+        keys.sort(key = lambda k: usage[k].usertime + usage[k].systime, reverse = True)
         total_time = sum([p.data().usertime + p.data().systime for p in usage])
         acc_time = 0
         print('-'*99)
-        for k in keys[::-1]:
+        printed_keys = list()
+        for k in keys:
             pusage = usage[k]
-            print("%40s: %6u calls to physics %9.2fs user %9.2fs system" % (k, pusage.ncall, pusage.usertime, pusage.systime))
-
+            print("%40s: %6u calls to physics %9.2fs user %9.2fs system" \
+                  % (k, pusage.ncall, pusage.usertime, pusage.systime))
             acc_time += pusage.systime + pusage.usertime
-            if acc_time/total_time > fraction:
+            printed_keys.append(k)
+            if total_time > 0 and acc_time/total_time > fraction:
                 break
         print('-'*99)
+        return printed_keys
 
