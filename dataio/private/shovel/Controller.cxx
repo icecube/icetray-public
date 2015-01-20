@@ -85,6 +85,12 @@ struct fast_forwarder{
   explicit fast_forwarder(bool r):reverse(r){}
   operator int() const{ return((COLS/2-2)*(reverse?-1:1)); }
 };
+//same thing, but for scrolling
+struct fast_scroller{
+  bool reverse; //true=down, false=up
+  explicit fast_scroller(bool r):reverse(r){}
+  operator int() const{ return((LINES-12)*(reverse?1:-1)); }
+};
 
 void
 shovel_usage(const std::string& progname)
@@ -102,7 +108,7 @@ shovel_usage(const std::string& progname)
   exit(1);
 }
 
-map<char, string> keybindings;
+map<int, string> keybindings;
 
 int main (int argc, char *argv[])
 {
@@ -139,11 +145,13 @@ int main (int argc, char *argv[])
   insert(keybindings)
     ('k', "up")
     ('[', "fast_reverse")
-    ('<', "first_frame")
+    ('{', "first_frame")
     ('h',"left")
     ('l',"right")
     (']', "fast_forward")
-    ('>', "last_frame")
+    ('}', "last_frame")
+    ('-', "fast_up")
+    ('=', "fast_down")
     ('j',"down")
     ('?',"help")
     ('a',"about")
@@ -153,16 +161,16 @@ int main (int argc, char *argv[])
     ('t',"toggle_infoframes")
     ('w',"write_frame")
     ('x',"xml")
-    ('q',"quit");
-
-  insert(keybindings)
+    ('q',"quit")
     (KEY_ENTER, "xml")
     (KEY_UP, "up")
     (KEY_DOWN, "down")
     (KEY_LEFT, "left")
     (KEY_RIGHT, "right")
-    (KEY_PPAGE, "fast_reverse")
-    (KEY_NPAGE, "fast_forward");
+    (KEY_HOME, "first_frame")
+    (KEY_END, "last_frame")
+    (KEY_PPAGE, "fast_up")
+    (KEY_NPAGE, "fast_down");
 
   if (vm.count("help"))
     {
@@ -227,6 +235,9 @@ int main (int argc, char *argv[])
     fast_forwarder ff(false),fr(true);
     actions["fast_forward"]=make_lambda(model,&Model::move_x,ff);
     actions["fast_reverse"] = make_lambda(model,&Model::move_x,fr);
+    fast_scroller fu(false),fd(true);
+    actions["fast_up"]=make_lambda(model,&Model::move_y,fu);
+    actions["fast_down"] = make_lambda(model,&Model::move_y,fd);
     actions["first_frame"] = make_lambda(model,&Model::move_first);
     actions["last_frame"] = make_lambda(model,&Model::move_last);
     actions["help"] = make_lambda(View::Instance(),&View::do_help);
@@ -241,7 +252,6 @@ int main (int argc, char *argv[])
     while (true)
       {
         int c = getch();     /* refresh, accept single keystroke of input */
-
 #ifdef __APPLE__             /* add other keys to the swich below */
         if (c == 0x1B) {
           c = getch();
@@ -265,13 +275,18 @@ int main (int argc, char *argv[])
             }
           }
         }
+        else if (c==0x01)
+          c = KEY_HOME;
+        else if (c==0x05)
+          c = KEY_END;
 #endif
 
         // skip if key not bound
         if (keybindings.find(c) == keybindings.end())
           continue;
 
-        std::string action = keybindings[(char)c];
+        std::string action = keybindings[c];
+        
         if (action == "quit")
           break;
         
