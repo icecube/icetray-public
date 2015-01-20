@@ -23,9 +23,6 @@
 using boost::optional;
 
 #include <boost/function.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
-#include <boost/ref.hpp>
 #include <boost/python.hpp>
 
 #include <shovel/Model.h>
@@ -41,10 +38,7 @@ using boost::optional;
 extern int errno;
 
 using namespace std;
-//using namespace boost::lambda;
-//using boost::lambda::bind;
 using namespace boost;
-using boost::ref;
 
 #include <boost/foreach.hpp>
 

@@ -28,36 +28,63 @@
 #include <icetray/I3TrayInfo.h>
 #include <icetray/load_project.h>
 
-#include <boost/function.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
-#include <boost/ref.hpp>
-
 #include <algorithm>
 #include <map>
 #include <string>
 #include <fstream>
-#include <boost/assign/list_inserter.hpp>
 
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
+#include <boost/function.hpp>
+#include <boost/assign/list_inserter.hpp>
+#include <boost/program_options.hpp>
 
 #include <shovel/color.h>
-
 #include <shovel/View.h>
 #include <shovel/Model.h>
 
 #include <dlfcn.h>
-#include <boost/program_options.hpp>
 
 using namespace std;
-using namespace boost::lambda;
-using boost::lambda::bind;
-using boost::ref;
 
 using namespace boost::assign;
-namespace fs = boost::filesystem;
 namespace po = boost::program_options;
+
+//simple implementation of lambda functions with zero or one parameter
+//single argument case
+template<typename TargetType, typename ArgType, typename ActualArgType=ArgType>
+struct simple_lambda{
+  typedef void(TargetType::*FuncType)(ArgType);
+  TargetType& target;
+  FuncType func;
+  ActualArgType arg;
+  simple_lambda(TargetType& t, FuncType f, ActualArgType a):target(t),func(f),arg(a){}
+  void operator()(){ (target.*func)(ArgType(arg)); }
+};
+//no argument case
+template<typename TargetType>
+struct simple_lambda<TargetType,void>{
+  typedef void(TargetType::*FuncType)();
+  TargetType& target;
+  FuncType func;
+  simple_lambda(TargetType& t, FuncType f):target(t),func(f){}
+  void operator()(){ (target.*func)(); }
+};
+//helper functions for making lambdas
+template<typename TargetType, typename ArgType, typename ActualArgType>
+simple_lambda<TargetType,ArgType,ActualArgType>
+make_lambda(TargetType& t, void(TargetType::*f)(ArgType), ActualArgType a){
+  return(simple_lambda<TargetType,ArgType,ActualArgType>(t,f,a));
+}
+template<typename TargetType>
+simple_lambda<TargetType,void>
+make_lambda(TargetType& t, void(TargetType::*f)()){
+  return(simple_lambda<TargetType,void>(t,f));
+}
+//little wrapper object for figuring out how much to fast forward
+struct fast_forwarder{
+  bool reverse; //whether to go backward or forward
+  explicit fast_forwarder(bool r):reverse(r){}
+  operator int() const{ return((COLS/2-2)*(reverse?-1:1)); }
+};
 
 void
 shovel_usage(const std::string& progname)
@@ -193,24 +220,23 @@ int main (int argc, char *argv[])
     log_trace("done starting up");
     map<string, boost::function<void(void)> > actions;
 
-    actions["up"] = bind(&Model::move_y, boost::ref(model), -1);
-    actions["down"] = bind(&Model::move_y, boost::ref(model), 1);
-    actions["right"] = bind(&Model::move_x, boost::ref(model), 1);
-    actions["left"] = bind(&Model::move_x, boost::ref(model), -1);
-    // specify boost::lamba::bind, otherwise something odd happens with
-    // that call to var()
-    actions["fast_forward"] = boost::lambda::bind(&Model::move_x, boost::ref(model), var(COLS)-4);
-    actions["fast_reverse"] = boost::lambda::bind(&Model::move_x, boost::ref(model), -(var(COLS)-4));
-    actions["first_frame"] = bind(&Model::move_first, boost::ref(model));
-    actions["last_frame"] = bind(&Model::move_last, boost::ref(model));
-    actions["help"] = bind(&View::do_help, boost::ref(View::Instance()));
-    actions["about"] = bind(&View::do_about, boost::ref(View::Instance()));
-    actions["pretty_print"] = bind(&Model::pretty_print, boost::ref(model));
-    actions["toggle_infoframes"] = bind(&Model::toggle_infoframes, boost::ref(model));
-    actions["write_frame"] = bind(&Model::write_frame, boost::ref(model));
-    actions["save_xml"] = bind(&Model::save_xml, boost::ref(model));
-    actions["goto_frame"] = bind(&Model::do_goto_frame, boost::ref(model));
-    actions["xml"] = bind(&Model::show_xml, boost::ref(model));
+    actions["up"] = make_lambda(model,&Model::move_y,-1);
+    actions["down"] = make_lambda(model,&Model::move_y,1);
+    actions["right"] = make_lambda(model,&Model::move_x,1);
+    actions["left"] = make_lambda(model,&Model::move_x,-1);
+    fast_forwarder ff(false),fr(true);
+    actions["fast_forward"]=make_lambda(model,&Model::move_x,ff);
+    actions["fast_reverse"] = make_lambda(model,&Model::move_x,fr);
+    actions["first_frame"] = make_lambda(model,&Model::move_first);
+    actions["last_frame"] = make_lambda(model,&Model::move_last);
+    actions["help"] = make_lambda(View::Instance(),&View::do_help);
+    actions["about"] = make_lambda(View::Instance(),&View::do_about);
+    actions["pretty_print"] = make_lambda(model,&Model::pretty_print);
+    actions["toggle_infoframes"] = make_lambda(model,&Model::toggle_infoframes);
+    actions["write_frame"] = make_lambda(model,&Model::write_frame);
+    actions["save_xml"] = make_lambda(model,&Model::save_xml);
+    actions["goto_frame"] = make_lambda(model,&Model::do_goto_frame);
+    actions["xml"] = make_lambda(model,&Model::show_xml);
 
     while (true)
       {
@@ -266,4 +292,3 @@ int main (int argc, char *argv[])
     throw;
   }
 }
-
