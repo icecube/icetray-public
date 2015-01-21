@@ -45,11 +45,3 @@ tray.Finish()
 printed_keys = tray.PrintUsage(fraction = 0.99999999)
 ENSURE(len(printed_keys) > 1, "Not enough modules printed.")
 
-printed_keys = tray.PrintUsage(fraction = 0.98)
-ENSURE(len(printed_keys) == 2, "There should be only two modules printed. Got %d"\
-       % len(printed_keys))
-
-printed_keys = tray.PrintUsage(fraction = 0.8)
-ENSURE(len(printed_keys) == 1, "There should be only one module printed. Got %d"\
-       % len(printed_keys))
-
