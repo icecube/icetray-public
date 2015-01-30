@@ -29,6 +29,7 @@ Table of Contents:
    classes
    logging
    inspect
+   config
    standard_modules
    scripting
    i3units
