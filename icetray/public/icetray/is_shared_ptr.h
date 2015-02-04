@@ -26,7 +26,7 @@
 
 /**
    traits classes that identify if a template parameter is a shared_ptr or not
-   @param T
+   @tparam T typename to evaluate
 */
 template <typename T>
 struct is_shared_ptr : public boost::mpl::false_{};
