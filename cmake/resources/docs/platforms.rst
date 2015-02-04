@@ -109,7 +109,10 @@ The following formulae are recommended:
 * IceRec: cfitsio minuit2 suite-sparse
 * simulation: sprng2
 
+.. warning:: Some Homebrew formulas have Python as a dependency, so a second Python may sneak onto your computer without your knowledge. To avoid this, install formulas that depend on python with the parameter ``--build-from-source``. See `Homebrew's notes on Python`_ for further information.
+
 .. _tap: https://github.com/Homebrew/homebrew/wiki/brew-tap
+.. _`Homebrew's notes on Python`: https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Homebrew-and-Python.md#why-is-homebrews-python-being-installed-as-a-dependency
 
 MacPorts
 ........
