@@ -35,10 +35,6 @@ if(CDK_FOUND AND NCURSES_FOUND)
     USE_PROJECTS dataio
     USE_TOOLS cdk ncurses
     )
-  if(APPLE AND (CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
-    colormsg(CYAN "+-- Enabling Apple Clang + boost 1.57.0 workaround")
-    set_property(SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/private/shovel/Controller.cxx APPEND PROPERTY COMPILE_FLAGS "-std=c++11")
-  endif(APPLE AND (CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
 else()
   colormsg(CYAN "+-- dataio-shovel *not* included (missing CDK or ncurses libraries)")
 endif()
