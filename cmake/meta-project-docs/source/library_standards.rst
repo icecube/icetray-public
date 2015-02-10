@@ -19,12 +19,14 @@ Maintained
 ==========
 
 The library must be maintained. Software with many unaddressed bug
-reports or feature requests are not acceptable. The older the software is.
+reports or feature requests are not acceptable. The older the software
+is, the more stringently this standard will be enforced.
 
 Open Source
 ===========
 
-The software must have an OSI approved open source license or be in
+The software must have an `OSI approved open source license
+<http://opensource.org/licenses>`_ or be in
 the public domain. Open source software with licensing or referencing
 caveats need to be thoroughly examined and discussed, as these
 caveats often invalidate open source licenses.
