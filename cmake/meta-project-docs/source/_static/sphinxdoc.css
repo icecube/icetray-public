@@ -352,3 +352,7 @@ li .toctree-l1 > a {
     text-decoration: plain;
 }
 
+a.footnote-reference, a.fn-backref {
+vertical-align: super;
+font-size: smaller;
+}

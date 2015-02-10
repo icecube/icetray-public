@@ -42,9 +42,7 @@ Good coding standards offer many interrelated advantages:
 * *Uniformity in the right dimension:* This frees developers
   to be creative in directions that matter.
 
-Code reviews will make constant reference to C++ Coding Standards 
-(http://www.gotw.ca/publications/c++cs.htm),
-by Herb Sutter and Andrei Alexandrescu.  If you submit code that
+Code reviews will make constant reference to *C++ Coding Standards* [#]_, by Herb Sutter and Andrei Alexandrescu.  If you submit code that
 gets reviewed, you should have access to a copy: reviewers will refer
 to the book, and everybody will save time if you can read the full
 details/explanations yourself.
@@ -533,3 +531,6 @@ Also handy for C++ programming GCC <http://www.gnu.org/software/gcc/>
 
 
 
+.. rubric:: Footnotes
+
+.. [#] The *C++ Coding Standards* homepage can be found at http://www.gotw.ca/publications/c++cs.htm
