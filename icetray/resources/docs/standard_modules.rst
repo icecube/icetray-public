@@ -95,7 +95,7 @@ Example
 
 ::
 
-
+  tray.AddModule("TrashCan", "thecan")
 
 DeleteUnregistered
 ------------------

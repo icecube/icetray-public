@@ -20,8 +20,19 @@ Icetray
    *index*), is in the python-module sense.  It is not supposed to
    take you to a listing of all I3Modules.
 
+General Overview:
 
-Table of Contents:
+.. toctree::
+   :maxdepth: 3
+
+   summary
+   pybindings
+   logging_basic
+   module_basic
+   services
+   project
+
+Detailed Documentation:
 
 .. toctree::
    :maxdepth: 3
@@ -40,9 +51,3 @@ Table of Contents:
    icecube.icetray
 
 Also see the `doxygen <../../doxygen/icetray/index.html>`_ docs.
-
-To Document
------------
-
-
-
