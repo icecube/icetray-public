@@ -106,20 +106,17 @@ struct xrootd_source
     : bytes_read(0),
       name(s + "?filetype=raw"),
       netfile(new TXNetFile(name.c_str()))
-  { }
+  {
+     if (netfile->TestBits(TXNetFile::kZombie) == kTRUE)
+         log_fatal_stream("Could not open "<<name<<" for reading");
+  }
 
   std::streamsize read(char* s, std::streamsize n)
   {
-    bool b = netfile->ReadBuffer(s, n);
-    if (b == kTRUE) // error
-      {
-	//
-	// FIXME:  how can we tell if this is regular EOF or something
-	//         really bad?
-	//
-	//	log_error("error reading from xrootd");
-	return -1;
-      }
+    if (netfile->ReadBuffer(s, n) == kTRUE) {
+        // end of file
+        return -1;
+    }
     std::streamsize newsize = netfile->GetBytesRead();
     std::streamsize r = newsize-bytes_read;
     bytes_read = newsize;
@@ -348,8 +345,7 @@ struct archive_filter {
 
 	struct client_data {
 		void *source;
-		char_type buffer[4096];
-		ssize_t capacity;
+		char_type buffer[BOOST_IOSTREAMS_DEFAULT_DEVICE_BUFFER_SIZE];
 	};
 	
 	typedef enum { GZIP, BZIP2, LZMA, XZ, NONE } compression_type;
@@ -402,7 +398,6 @@ struct archive_filter {
 		}
 		
 		source_info_.source = NULL;
-		source_info_.capacity = 4096;
 	}
 	
 	template<typename Source>
@@ -410,7 +405,6 @@ struct archive_filter {
 	{
 		if (source_info_.source != &src) {
 			source_info_.source = (void*)&src;
-			/* TODO: add a callback for skipping over entries. */
 			int err = archive_read_open(reader_.get(), &source_info_, NULL, &read_stream<Source>, NULL);
 			if (err != ARCHIVE_OK)
 				log_fatal("archive_read_open() failed: %s", archive_error_string(reader_.get()));
@@ -465,8 +459,8 @@ struct archive_filter {
 	{
 		client_data *data = (client_data*)client_data_blob;
 		Source &source = *((Source*)data->source);
-		/* FIXME: for now we always read in 4096-byte chunks. Better ideas? */
-		ssize_t nread = boost::iostreams::read(source, data->buffer, data->capacity);
+		ssize_t nread = boost::iostreams::read(source, data->buffer,
+		    BOOST_IOSTREAMS_DEFAULT_DEVICE_BUFFER_SIZE);
 		*buff = data->buffer;
 		
 		if (nread < 0)
