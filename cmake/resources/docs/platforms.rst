@@ -137,6 +137,15 @@ Fink
 Does anyone still use Fink_? If you do, and think it's any good, write some
 documentation.
 
+ROOT on OS X
+""""""""""""
+
+Building ROOT dictionaries on OS X Mavericks and beyond is no longer
+supported by ROOT. By default, ROOT dictionaries are not built.
+
+.. warning:: ROOT has been known to completely break builds on OS X Mavericks. If this happens to you, build with :command:`cmake -DUSE_ROOT=OFF ...`. For more information, see the `original bug report`_.
+
+.. _`original bug report`: http://code.icecube.wisc.edu/projects/icecube/ticket/796
 
 .. _osxpythonsetup:
 
