@@ -60,7 +60,7 @@ public:
 		// note: this implementation - based on usage of typeid (rtti)
 		// only does something if the class has at least one virtual
 		// function.
-		BOOST_STATIC_WARNING(boost::is_polymorphic< T >::value);
+		BOOST_STATIC_ASSERT_MSG(boost::is_polymorphic< T >::value, "Serializable types should be polymorphic");
 		return boost::serialization::typeid_system::extended_type_info_typeid_0::get_extended_type_info(typeid(t));
 	}
 
