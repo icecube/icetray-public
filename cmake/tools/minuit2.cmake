@@ -17,10 +17,19 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
+#TOOLDEF (minuit2
+#    include/Minuit2-5.24.00
+#    Minuit2/MnConfig.h
+#    lib/Minuit2-5.24.00
+#    NONE  # bin is n/a, placeholder
+#    Minuit2
+#    )
+
+#macro(tooldef tool_ incdir incfile libdir bindir)
 TOOLDEF (minuit2
-    include/Minuit2-5.24.00
+    include/Minuit2
     Minuit2/MnConfig.h
-    lib/Minuit2-5.24.00
+    lib/Minuit2
     NONE  # bin is n/a, placeholder
     Minuit2
     )

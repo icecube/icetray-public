@@ -104,7 +104,7 @@ macro(tooldef tool_ incdir incfile libdir bindir)
   if (NOT ${TOOL}_CONFIG_ERROR)
     set(${TOOL}_FOUND TRUE CACHE BOOL "Tool '${TOOL}' found successfully" FORCE)
   else (NOT ${TOOL}_CONFIG_ERROR)
-    set(${TOOL}_FOUND FALSE CACHE BOOL "Tool '${TOOL}' found successfully" FORCE)
+    set(${TOOL}_FOUND FALSE CACHE BOOL "Tool '${TOOL}' NOT found successfully...!" FORCE)
   endif (NOT ${TOOL}_CONFIG_ERROR)
 
 endmacro(tooldef)
