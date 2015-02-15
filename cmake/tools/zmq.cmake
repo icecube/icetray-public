@@ -19,19 +19,27 @@
 
 if (SYSTEM_PACKAGES)
   find_path(ZMQ_INCLUDE_DIR
-    NAMES include/zmq.h)
+    NAMES include/zmq.hpp)
   tooldef(zmq
     ${ZMQ_INCLUDE_DIR}
-    zmq.h
+    zmq.hpp
     lib
     NONE
     zmq
     )
 else (SYSTEM_PACKAGES)
+  if(NOT ZMQ_VERSION)
+    foreach(ZMQVER 3.2.4 2.1.11)
+      if(IS_DIRECTORY ${I3_PORTS}/include/zmq-${ZMQVER})
+        set(ZMQ_VERSION "${ZMQVER}")
+        break()
+      endif()
+    endforeach()
+  endif(NOT ZMQ_VERSION)
   TOOLDEF (zmq
-    include/zmq-2.1.11
+    include/zmq-${ZMQ_VERSION}
     zmq.hpp 
-    lib/zmq-2.1.11
+    lib/zmq-${ZMQ_VERSION}
     NONE
     zmq
     )
