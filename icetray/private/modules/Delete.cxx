@@ -19,33 +19,29 @@
  *  
  */
 
-#include <fstream>
 #include <string>
-#include <set>
+#include <vector>
+#include <boost/algorithm/string.hpp>
+
 #include <icetray/I3ConditionalModule.h>
 #include <icetray/I3TrayHeaders.h>
-#include <icetray/I3Logging.h>
 
-#include <icetray/I3Tray.h>
-#include <icetray/I3TrayInfo.h>
-#include <icetray/I3TrayInfoService.h>
-#include <icetray/Utility.h>
-
-#include <boost/regex.hpp>
 
 /**
  *  Deletes things from frame.  Has special privileges granted by I3Frame.
  */
 class Delete : public I3ConditionalModule
 {
+ private:
+
   Delete();
   Delete(const Delete&);
-
   Delete& operator=(const Delete&);
 
   std::vector<std::string> delete_keys_;
+  std::vector<std::string> delete_key_starts_;
 
-  public:
+ public:
 
   Delete(const I3Context& ctx);
 
@@ -69,14 +65,18 @@ Delete::Delete(const I3Context& ctx) :
   I3ConditionalModule(ctx)
 {
   AddParameter("Keys", 
-	       "Delete keys that match any of the regular expressions in this vector", 
+	       "Delete objects with these names or...", 
 	       delete_keys_);
+  AddParameter("KeyStarts",
+               "...objects with names that start with any of these strings",
+               delete_key_starts_);
   AddOutBox("OutBox");
 }
 
 void Delete::Configure()
 {
   GetParameter("Keys", delete_keys_);
+  GetParameter("KeyStarts", delete_key_starts_);
 }
 
 void Delete::Process()
@@ -87,7 +87,31 @@ void Delete::Process()
        iter != delete_keys_.end();
        iter++)
     {
-      frame->Delete(*iter);
+      if (!iter->empty())
+        {
+          frame->Delete(*iter);
+        }
+    }
+  
+  for (vector<string>::const_iterator iter = delete_key_starts_.begin();
+       iter != delete_key_starts_.end();
+       iter++)
+    {
+      if (!iter->empty())
+        {
+          I3Frame::typename_iterator jter = frame->typename_begin();
+          while (jter != frame->typename_end())
+            {
+              if (boost::starts_with(jter->first, *iter))
+                {
+                  frame->Delete((jter++)->first);
+                }
+              else
+                {
+                  ++jter;
+                }
+            }
+        }
     }
 
   PushFrame(frame, "OutBox");
