@@ -31,7 +31,7 @@ if(NOT HEALPIX-CXX_FOUND)
     if(DISTRO MATCHES "Fedora")
         tooldef(healpix-cxx
 	    include
-	    healpix_cxx/healpix_map.h
+	    healpix/healpix_map.h
 	    lib
 	    NONE
 	    healpix_cxx 
