@@ -35,5 +35,6 @@ if(NOT HEALPIX-CXX_FOUND)
 	    lib
 	    NONE
 	    healpix_cxx 
-    )
-endif(DISTRO MATCHES "Fedora")
+        )
+    endif(DISTRO MATCHES "Fedora")
+endif(NOT HEALPIX-CXX_FOUND)
