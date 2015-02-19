@@ -18,27 +18,22 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
 
-IF(NOT HEALPIX_VERSION)
-        if(IS_DIRECTORY ${I3_PORTS}/include/Healpix-2.20a )
-                set(HEALPIX_VERSION "2.20a")
-        endif(IS_DIRECTORY ${I3_PORTS}/include/Healpix-2.20a )
-ENDIF(NOT HEALPIX_VERSION)
-
-if(SYSTEM_PACKAGES)
 tooldef(healpix-cxx
     include
     healpix_cxx/healpix_map.h
     lib
     NONE
     healpix_cxx 
+)
+
+if(NOT HEALPIX-CXX_FOUND)
+    execute_process(COMMAND lsb_release -si OUTPUT_VARIABLE DISTRO ERROR_QUIET)
+    if(DISTRO MATCHES "Fedora")
+        tooldef(healpix-cxx
+	    include
+	    healpix_cxx/healpix_map.h
+	    lib
+	    NONE
+	    healpix_cxx 
     )
-else()
-tooldef(healpix-cxx
-    include/
-    healpix-cxx/healpix_map.h
-    lib/
-    NONE
-    healpix_cxx 
-    cxxsupport
-    )
-endif()
+endif(DISTRO MATCHES "Fedora")
