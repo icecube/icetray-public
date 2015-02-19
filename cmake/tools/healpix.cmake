@@ -24,7 +24,16 @@ IF(NOT HEALPIX_VERSION)
         endif(IS_DIRECTORY ${I3_PORTS}/include/Healpix-2.20a )
 ENDIF(NOT HEALPIX_VERSION)
 
-tooldef(healpix-cxx 
+if(SYSTEM_PACKAGES)
+tooldef(healpix-cxx
+    include
+    healpix_cxx/healpix_map.h
+    lib
+    NONE
+    healpix_cxx 
+    )
+else()
+tooldef(healpix-cxx
     include/
     healpix-cxx/healpix_map.h
     lib/
@@ -32,3 +41,4 @@ tooldef(healpix-cxx
     healpix_cxx 
     cxxsupport
     )
+endif()
