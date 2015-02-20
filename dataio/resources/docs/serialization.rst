@@ -147,12 +147,12 @@ A few other things
 
 If you use a typedef to add other ways to represent your class, for example::
 
- typedef I3Vector<I3Particle> I3ParticleVect;
+ typedef I3Vector<I3Particle> I3VectorI3Particle;
 
 Then you need to make sure that this class is also serializeable. 
 Add to the bottom of I3Particle.cxx::
 
- I3_SERIALIZABLE(I3ParticleVect);
+ I3_SERIALIZABLE(I3VectorI3Particle);
 
 The BOOST system knows how to handle things like std::vectors and 
 std::maps, as long as the class they contain is serializable.  In 

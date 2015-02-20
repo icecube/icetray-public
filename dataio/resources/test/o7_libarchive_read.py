@@ -8,8 +8,8 @@
 
 import os, sys
 
-if not 'I3_PORTS' in os.environ:
-	print("I3_PORTS is not set!")
+if not 'I3_TESTDATA' in os.environ:
+	print("I3_TESTDATA is not set!")
 	sys.exit(1)
 	
 fname = os.path.join(os.environ['I3_TESTDATA'], 'dataio/serialization/r51782/I3DOMLaunchSeriesMap.i3')
