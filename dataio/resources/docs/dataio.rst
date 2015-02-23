@@ -168,8 +168,9 @@ world::
 	tray.Add('I3Writer', filename='gsiftp://gridftp-users.icecube.wisc.edu/data/user/jvansanten/foo.i3.bz2')
 
 Plain POSIX path names, e.g. "/data/user/jvansanten/foo.i3.bz," will not be
-staged, but instead read directly. The hdfwriter and rootwriter projects use the
-same staging mechanism. Currently, the following stager classes are implemented:
+staged, but instead read directly. The :py:func:`hdfwriter.I3HDFWriter` and
+:py:func:`rootwriter.I3ROOTWriter` segments use the same staging mechanism.
+Currently, the following stager classes are implemented:
 
 .. py:module:: icecube.dataio.I3FileStagerFile
 
