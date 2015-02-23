@@ -142,8 +142,9 @@ Sometimes the files you want to read are not available on your local
 filesystem. For example, if you're running on a random node on the Open Science
 Grid, you will not have direct access to the /data/sim and /data/exp
 filesystems in Madison. For such situations, dataio has built-in support for
-"staging" files in and out of local storage. For example, to read files via
-GridFTP, use the following snippet::
+"staging" files in and out of local storage. This support is activated by
+replacing the `"I3Reader"` module with the `dataio.I3Reader` tray segment. For
+example, to read files via GridFTP, use the following snippet::
 	
 	from icecube import icetray, dataio
 	tray.Add(dataio.I3Reader, filenamelist=['gsipftp://gridftp.icecube.wisc.edu/data/sim/IceCube/2010/filtered/level3-cscd/CORSIKA-in-ice/9493/92000-92999/Level3_IC79_corsika.009493.092110.i3.bz2 '])
@@ -167,7 +168,7 @@ world::
 	tray.Add('I3Writer', filename='gsiftp://gridftp-users.icecube.wisc.edu/data/user/jvansanten/foo.i3.bz2')
 
 Plain POSIX path names, e.g. "/data/user/jvansanten/foo.i3.bz," will not be
-staged, but instead read directly The hdfwriter and rootwriter projects use the
+staged, but instead read directly. The hdfwriter and rootwriter projects use the
 same staging mechanism. Currently, the following stager classes are implemented:
 
 .. py:module:: icecube.dataio.I3FileStagerFile
