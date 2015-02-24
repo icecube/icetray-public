@@ -191,8 +191,8 @@ TEST(typename_iterator)
   iter = p->typename_begin();
   while(iter != p->typename_end())
     {
-      iter->first;
-      iter->second;
+      std::string y = iter->first;
+      y = iter->second;
       iter++;
     }
 
