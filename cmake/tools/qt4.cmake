@@ -15,6 +15,7 @@ if(NOT QT_QMAKE_EXECUTABLE)
   find_program(QT_QMAKE_EXECUTABLE NAMES qmake-qt4 qmake
     PATHS
     /usr/lib/x86_64-linux-gnu/qt4/bin
+    ${I3_PORTS}/qt-4.8.6/bin
     ${I3_PORTS}/qt-4.6.0/bin
     ${I3_PORTS}/qt-4.4.3/bin
     DOC "Qmake executable.  Use this to set the version of Qt that you use."
