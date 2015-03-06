@@ -294,9 +294,9 @@ void register_I3SequentialFile()
     .def(init<const std::string&, I3SequentialFile::Mode, unsigned int>((bp::arg("filename (may be .i3 or .i3.gz)"), 
                                                      bp::arg("Mode")="Reading",
                                                      bp::arg("nframe")=0),
-                                                    "Create and open an I3File object, specifying the mode"))
+                                                    "Create and open an I3File object, specifying the mode, e.g. dataio.I3File.Mode.Writing."))
     .def(init<const std::string&, char>((bp::arg("filename"), bp::arg("mode (r, w, or x)")),
-                                             "Create and open and I3File object, specifiying the mode"))
+                                             "Create and open and I3File object, specifiying the mode (r,w, or x)."))
     .def("open_file", (int (I3SequentialFile::*)(const std::string&, I3SequentialFile::Mode))&I3SequentialFile::open_file,
          (bp::arg("filename (may be .i3 or .i3.gz)"), 
           bp::arg("Mode")="Reading"),
