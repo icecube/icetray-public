@@ -40,6 +40,8 @@ Of general interest
    :maxdepth: 2
 
    metaproject_metainfo
+   development_tips
+   code_reviews
    code_standards
    library_standards
    netiquette
