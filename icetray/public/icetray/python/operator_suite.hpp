@@ -75,9 +75,14 @@ HAS_OPERATOR(boost::has_greater_equal, has_gt_eq);
 // older boost, so do operator detection manually
 // note that this only works for operators that are member functions
 
-#define BASIC_TYPES (bool)(char)(short)(unsigned short)(int)(unsigned)(long)(unsigned long)(float)(double)(long double)\
-(const bool)(const char)(const short)(const unsigned short)(const int)(const unsigned)(const long)(const unsigned long)\
-(const float)(const double)(const long double)
+#define BASIC_TYPES (bool)(char)(short)(unsigned short)(int)(unsigned)\
+  (long)(unsigned long)(float)(double)(long double)			\
+  (const bool)(const char)(const short)(const unsigned short)(const int) \
+  (const unsigned)(const long)(const unsigned long)			\
+  (const float)(const double)(const long double)			\
+  (long long)(unsigned long long)\
+  (const long long)(const unsigned long long)
+
 #define SPECIALIZE_TYPE(r, data, type)                                  \
   template<typename Dummy> struct inner<type,Dummy> : public boost::true_type{};
 
