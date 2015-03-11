@@ -98,6 +98,8 @@ INCLUDE_GRAPH          = YES
 COLLABORATION_GRAPH    = YES
 CALL_GRAPH             = NO
 STRICT_PROTO_MATCHING  = NO
+USE_MATHJAX            = YES
+MATHJAX_RELPATH        = https://cdn.mathjax.org/mathjax/latest/
 
 # we're cheating here. glshovel doesn't actually have any doxygen docs
 EXCLUDE                = @CMAKE_CURRENT_SOURCE_DIR@/glshovel
