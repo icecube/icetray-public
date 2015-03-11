@@ -1,5 +1,5 @@
-Don't Sweat The Small Stuff
----------------------------
+I3 Prefix Convention
+--------------------
 
 There are things that appear in many coding standards that are
 unenforceable and a waste of time.  Any programmer can read and write
@@ -57,19 +57,20 @@ style, Taligent had "written the largest body of C++ and the rules
 seem well thought out.  No need to invent something else."  (From
 http://root.cern.ch/root/Conventions.html, last updated 1999).
 
-Icecube-specific classes take the prefix ``I3``.  The name should tell
-the reader something about the semantics of the variable, function or
-class. The name should be concise and in plain English.  Try to avoid
-things like abbreviations, acronyms, and jargon (like the word
-"semantics").  It should say something about what the thing does or
-means.  Think about being choosy with the verbs you use in your
-function names: ``handleCalculation()`` doesn't say much about
-what that routine does.  Acronyms and abbreviations which are inherent
-to IceCube research, like OM, PMT, or BFD are OK.  Examples:
-I3EventViewerModule, I3ParticleDataService.  Maps (key/value
-containers) end with the Dict suffix (*Dict* as in *Dictionary*,
-an association of word and definition).  Examples: 
-``I3RecoResultDict``, ``I3MCParticleDict``.  Vectors end with the Vect
+Classes that inherit from IceTray base classes take the prefix ``I3``.  
+Other classes should not have the ``I3`` prefix.  (NB : There are several 
+classes out there that do not follow this convention.)  The name should 
+tell the reader something about the semantics of the variable, function 
+or class. The name should be concise and in plain English.  Try to avoid 
+things like abbreviations, acronyms, and jargon (like the word "semantics").  
+It should say something about what the thing does or means.  Think about 
+being choosy with the verbs you use in your function names: 
+``handleCalculation()`` doesn't say much about what that routine does.  
+Acronyms and abbreviations which are inherent to IceCube research, like 
+OM, PMT, or BFD are OK.  Examples: I3EventViewerModule, I3ParticleDataService.  
+Maps (key/value containers) end with the Dict suffix (*Dict* as in *Dictionary*,
+an association of word and definition).  Examples: ``I3RecoResultDict``, 
+``I3MCParticleDict``.  Vectors end with the Vect
 suffix, e.g. ``I3MCParticleVect``.
 
 Publicly accessible files (the interface to your class) go under 
