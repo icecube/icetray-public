@@ -350,10 +350,13 @@ if(I3_TESTDATA)
     COMMAND rsync -vrlpt --delete code.icecube.wisc.edu::Offline/test-data/ ${I3_TESTDATA}/
     COMMENT "Rsyncing test-data to I3_TESTDATA"
     )
+  ### ctest testing
+  enable_testing()
 else()
   add_custom_target(rsync
-    COMMENT "I3_TESTDATA is not set.  Set it, 'make rebuild_cache' and try again."
-    )
+    COMMENT "I3_TESTDATA is not set.  Set it, 'make rebuild_cache' and try again.")
+  add_custom_target(test
+    COMMENT "I3_TESTDATA is not set.  Set it, 'make rebuild_cache' and try again.")
 endif()
 
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/docs/inspect")
@@ -366,6 +369,4 @@ add_custom_target(deploy-docs
   COMMENT Deploying docs to ${DEST}
   )
 
-### ctest testing
-enable_testing()
 
