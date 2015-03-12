@@ -14,11 +14,9 @@
 
 #include <icetray/I3Logging.h>
 
-#include <dataclasses/calibration/I3AMANDAOMCalibration.h>		
-#include <dataclasses/calibration/I3AMANDAOM_XTalk.h>		
 #include <dataclasses/calibration/I3Calibration.h>
 #include <dataclasses/calibration/I3DOMCalibration.h>
-
+#include <dataclasses/calibration/I3VEMCalibration.h>
 
 #include "serialization-test.h"
 
@@ -29,9 +27,9 @@ using namespace std;
 
 TEST_GROUP(calibration);
 
-#define TEST_THESE	(I3Calibration)
+#define TEST_THESE (I3Calibration)
 
-#define NON_I3FO_ITEMS (I3AMANDAOM_XTalk)(I3AMANDAOMCalibration)(I3DOMCalibration)(I3TankCalibration)
+#define NON_I3FO_ITEMS (I3DOMCalibration)(I3TankCalibration)(I3VEMCalibration)
 
 #define SERIALIZATION_TEST(r,data,t) SERIALIZE(t)
 
