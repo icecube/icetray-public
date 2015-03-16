@@ -3,6 +3,16 @@
 # $Date: $
 #
 
+March 15, 2015, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+ V15-03-00 
+  o Improve shovel keybindings:
+    -home and end now go to the first and last frame as one would expect (as do '{' and '}')
+    -page up and page down scroll rapidly through the keys (as do '-' and '=')
+    -fast forward and reverse are now bound to 'and?' only
+  o dataio-shovel build is now optional
+  o New event_hunter.py example script for writing interesting events to an I3File.
+
 November 20, 2014, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
  V14-11-00 - Bugfix release
