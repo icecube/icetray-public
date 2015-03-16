@@ -3,6 +3,14 @@
 # $Date: $
 #
 
+March 15, 2015, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+Release V15-03-00
+
+ - Delete module "KeyStarts" can delete all keys that start with the parameter value.
+ - dataio::open (which is in icetray) know about http.
+ - operator_suite : support for old boost version.
+
 November 20, 2014, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
 Release V14-11-00
