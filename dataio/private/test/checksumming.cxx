@@ -41,6 +41,8 @@ void test(I3Frame& frame, const std::string& filename)
     I3FramePtr newframe(new I3Frame);
     newframe->load(ifs);
   }
+
+  unlink(filename.c_str());
 }
 
 void loadframes(const std::string &where, unsigned nframes)

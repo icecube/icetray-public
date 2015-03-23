@@ -54,6 +54,7 @@ void do_archive (std::string classname)
   shared_ptr<T> t_out(new T);
   save_to_i3_file(t_out, fname);
   load_i3_file(fname);
+  remove(fname.c_str());
 }
 
 #endif

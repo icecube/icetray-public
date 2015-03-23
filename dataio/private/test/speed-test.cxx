@@ -160,6 +160,8 @@ void test_iostreams(I3Frame& frame, const std::string& filename, unsigned ntimes
   cout << "\n  Frame read and contents inspected " << ntimes 
        << " times (" << ss.st_size << " bytes) in " << stop-start << " seconds. "
        << " (" << ((stop > start) ? ss.st_size/(stop-start)/megs : std::numeric_limits<double>::max()) << " Mb/sec)" << endl;
+
+  unlink(filename.c_str());
 }
 
 TEST(d_fiftyevents)

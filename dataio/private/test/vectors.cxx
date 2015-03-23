@@ -71,6 +71,8 @@ void do_vector (std::string classname)
       for (unsigned i=0; i<100; i++)
 	ENSURE_EQUAL(vd[i], T(i));
     }
+
+  remove(fname.c_str());
 }
 
 //
