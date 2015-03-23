@@ -66,6 +66,7 @@ I3FramePtr saveload(I3Frame& f, const std::string& filename = "frame.i3")
   if (!r)
     log_fatal("egh");
 
+  remove(filename.c_str());
   return rv;
 }
 
