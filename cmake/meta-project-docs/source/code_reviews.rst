@@ -189,10 +189,12 @@ Potential sources of error
 Although the task of the code review is not to review the physics of a project, you should still report 
 errors if you see them. Also, if you see potential bugs in the code, please report them. Here is a list
 of typical problems:
+
  - When objects are retrieved from the frame, their existence needs to be checked.
  - PushFrame() needs to be called before ''every'' return from Physics.
  - Unsafe code: Some operations have undefined results that may compile fine and work perfectly in some circumstances but fail e.g. at different optimization levels or if compiled with a different compiler.
  - Use of C arrays: 
+
   - Prefer STL containers.  If code uses C-arrays ask the author to justify their choice. 
   - Do loops run over the end of the array? 
   - Character arrays and C string functions: Why not use std::string? Is there enough room at the end of the string for the trailing '\0'?

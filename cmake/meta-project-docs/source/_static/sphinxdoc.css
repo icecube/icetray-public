@@ -217,7 +217,6 @@ cite, code, tt {
     letter-spacing: 0.01em;
 }
 
-
 tt {
     color: #222;
     font-size: 12px;
@@ -225,6 +224,10 @@ tt {
 
 tt.descname, tt.descclassname, tt.xref {
     border: 0;
+}
+
+tt.literal {
+  color: #008000;
 }
 
 hr {

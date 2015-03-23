@@ -220,14 +220,17 @@ i3_executable
    **Options**:
 
    .. cmdoption:: USE_TOOLS tool1 [tool2 tool3 ...]
+      :noindex:
    
       As in i3_add_library.
    
    .. cmdoption:: USE_PROJECTS proj1 [proj2 ... projn]
+      :noindex:
 
       As in i3_add_library.
 
    .. cmdoption:: LINK_LIBRARIES lib1 [lib2 ... libn]
+      :noindex:
 
       As in i3_add_library.
 
@@ -246,6 +249,7 @@ i3_executable
       would just generate target ``bar``
 
    .. cmdoption:: WITHOUT_I3_HEADERS
+      :noindex:
 
       As in i3_add_library.
       
