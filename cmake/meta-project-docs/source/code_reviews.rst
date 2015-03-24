@@ -13,8 +13,8 @@ Method of Code Review Process
 -----------------------------
 
 In general, a code review should be communicated and published on the software mailing list software@icecube.wisc.edu.  
-A copy of the reviews (preferably is rst) should be include in the projects 'resources/code_review' directory.  This
-allows us to easily locate and add to in for future reviews.
+A copy of the reviews (in ReST) should be include in the projects 'resources/docs/' directory and linked to the 
+project's ReST docs.  This allows us to easily locate and add to it for future reviews.
 
 Introduction
 ------------
