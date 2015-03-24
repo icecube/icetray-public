@@ -17,6 +17,15 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
+if(NOT APPLE)
+TOOLDEF (sla
+  include/slalib-0.0
+  slalib/slalib.h
+  lib/slalib-0.0
+  NONE
+  sla
+  )
+else(NOT APPLE)
 TOOLDEF (sla
   include
   slalib/slalib.h
@@ -24,6 +33,7 @@ TOOLDEF (sla
   NONE
   sla
   )
+endif(NOT APPLE)
 
 if(NOT SLA_FOUND)
 TOOLDEF (pal
