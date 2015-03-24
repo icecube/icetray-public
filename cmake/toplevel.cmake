@@ -60,8 +60,25 @@ set(CMAKE_MODULE_PATH
   ${CMAKE_SOURCE_DIR}/cmake/utility)
 
 include(utility)
-
 include(config)
+
+## enable_testing() must be called before add_test() which happens in project.cmake
+if(I3_TESTDATA)
+  add_custom_target(rsync
+    COMMAND test -n "${I3_TESTDATA}"
+    COMMAND mkdir -p "${I3_TESTDATA}"
+    COMMAND rsync -vrlpt --delete code.icecube.wisc.edu::Offline/test-data/ ${I3_TESTDATA}/
+    COMMENT "Rsyncing test-data to I3_TESTDATA"
+    )
+  ### ctest testing
+  enable_testing()
+else()
+  add_custom_target(rsync
+    COMMENT "I3_TESTDATA is not set.  Set it, 'make rebuild_cache' and try again.")
+  add_custom_target(test
+    COMMENT "I3_TESTDATA is not set.  Set it, 'make rebuild_cache' and try again.")
+endif()
+
 include(tools)
 include(project)
 
@@ -342,22 +359,6 @@ add_custom_target(wipe-tarball
   COMMAND rm -f ${CMAKE_INSTALL_PREFIX}.tar.gz
   COMMENT "Wiping old tarball ${CMAKE_INSTALL_PREFIX}"
   )
-
-if(I3_TESTDATA)
-  add_custom_target(rsync
-    COMMAND test -n "${I3_TESTDATA}"
-    COMMAND mkdir -p "${I3_TESTDATA}"
-    COMMAND rsync -vrlpt --delete code.icecube.wisc.edu::Offline/test-data/ ${I3_TESTDATA}/
-    COMMENT "Rsyncing test-data to I3_TESTDATA"
-    )
-  ### ctest testing
-  enable_testing()
-else()
-  add_custom_target(rsync
-    COMMENT "I3_TESTDATA is not set.  Set it, 'make rebuild_cache' and try again.")
-  add_custom_target(test
-    COMMENT "I3_TESTDATA is not set.  Set it, 'make rebuild_cache' and try again.")
-endif()
 
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/docs/inspect")
 
