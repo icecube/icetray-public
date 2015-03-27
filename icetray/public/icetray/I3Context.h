@@ -61,7 +61,6 @@ class I3Context
   std::vector<std::string> keys() const;
 
   template <typename Service>
-  DSOLOCAL
   bool
   Has (const std::string& where = I3DefaultName<Service>::value(),
        typename boost::disable_if<is_shared_ptr<Service>, bool>::type* enabler = 0) const
@@ -84,7 +83,6 @@ class I3Context
   }
 
   template <typename Service>
-  DSOLOCAL
   bool
   Has (const std::string& where = I3DefaultName<typename Service::element_type>::value(),
        typename boost::enable_if<is_shared_ptr<Service>, bool>::type* enabler = 0) const
@@ -106,7 +104,6 @@ class I3Context
     return false;
   }
 
-  DSOLOCAL
   bool
   Has (const std::string& where) const
   {
@@ -121,7 +118,6 @@ class I3Context
   }
 
   template <typename T>
-  DSOLOCAL
   bool
   Put (boost::shared_ptr<T> what, const std::string& where = I3DefaultName<T>::value())
   {
@@ -137,14 +133,12 @@ class I3Context
   }
     
   template <typename T>
-  DSOLOCAL
   bool
   Put (const std::string& where, boost::shared_ptr<T> what)
   {
     return Put(what, where);
   }
 
-  DSOLOCAL
   bool
   Put (const std::string& where, boost::python::object what)
   {
@@ -155,7 +149,6 @@ class I3Context
   }
 
   template <typename T>
-  DSOLOCAL
   T&
   Get (const std::string& where = I3DefaultName<T>::value(),
        typename boost::disable_if<is_shared_ptr<T>, bool>::type* enabler = 0) const
@@ -190,7 +183,6 @@ class I3Context
   }
 
   template <typename T>
-  DSOLOCAL
   T
   Get (const std::string& where = I3DefaultName<T>::value(),
        typename boost::enable_if<is_shared_ptr<T> >::type * = 0) const
@@ -252,12 +244,12 @@ class I3Context
 
  private:
 
-  DSOLOCAL void dump() const;
+  void dump() const;
 
   map_t map_;
 
-  DSOLOCAL I3Context(const I3Context& rhs); // stop default
-  DSOLOCAL I3Context& operator=(const I3Context& rhs); // stop default
+  I3Context(const I3Context& rhs); // stop default
+  I3Context& operator=(const I3Context& rhs); // stop default
 
 };
 
