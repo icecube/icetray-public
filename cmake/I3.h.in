@@ -20,24 +20,22 @@
  *
  */
 
-// gives us the tasty bits like INT32_MAX
+#ifndef ICETRAY_I3_H_INCLUDED
+#define ICETRAY_I3_H_INCLUDED
+
 #ifdef __cplusplus
+
+// gives us the tasty bits like INT32_MAX
 #ifndef __STDC_LIMIT_MACROS
 #define __STDC_LIMIT_MACROS
 #endif
 #ifndef __STDC_FORMAT_MACROS
 #define __STDC_FORMAT_MACROS
 #endif
-#endif
 
 #ifndef __CINT__
 #  include <Python.h>
 #endif
-
-#ifdef __cplusplus
-
-#ifndef ICETRAY_I3_H_INCLUDED
-#define ICETRAY_I3_H_INCLUDED
 
 #include <I3/intel_compatibility.h>
 //
@@ -77,16 +75,6 @@ using scitbx::boost_python::container_conversions::variable_capacity_policy;
 #error gcc < 3.4 is not supported.  Please use gcc 3.4.x or newer.
 #endif
 
-#if 0
-#if (GCC_VERSION >= 30400)
-#define DSOLOCAL __attribute__ ((visibility ("hidden")))
-#define DSOEXPORT __attribute__ ((visibility ("default")))
-#endif
-#else
-#define DSOLOCAL
-#define DSOEXPORT
-#endif
-
 #ifdef __APPLE_CC__
 // another workaround for rootcint dumbness
 #  ifndef __CINT__
@@ -99,10 +87,6 @@ using scitbx::boost_python::container_conversions::variable_capacity_policy;
 #  define HAVE_STRNLEN 1
 #endif
 
-#include <cmath>
-#include <math.h>
-using std::isnan;
-
 #define BOOST_NO_WREGEX
 
 #ifdef NDEBUG
@@ -110,7 +94,6 @@ using std::isnan;
 #endif
 
 #include <boost/version.hpp>
-
 
 #include <boost/shared_ptr.hpp>
 using boost::shared_ptr;
@@ -123,9 +106,6 @@ using boost::dynamic_pointer_cast;
 #ifdef __CINT__
 template <typename T>
 struct shared_ptr : boost::shared_ptr<T> { };
-
-#include "TError.h"
-#include "zlib.h"
 
 #ifdef __FreeBSD__
 class __builtin_va_list;
@@ -150,5 +130,5 @@ class __builtin_va_list;
 #  endif
 #endif
 
-#endif //ifndef ICETRAY_I3_H_INCLUDED
 #endif //ifdef __cplusplus
+#endif //ifndef ICETRAY_I3_H_INCLUDED
