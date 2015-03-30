@@ -37,8 +37,9 @@ def _test_stage(url, minsize=100):
     if stager.CanStageIn(url):
         assert(not os.path.exists(str(local_fname)))
 
-def _make_http(port=8888,usessl=False,basic_auth=False):
+def _make_http(port=None,usessl=False,basic_auth=False):
     import BaseHTTPServer
+    import random
     import ssl
     import threading
     import subprocess
@@ -77,8 +78,17 @@ def _make_http(port=8888,usessl=False,basic_auth=False):
             def do_GET(self):
                 self.do_HEAD()
                 self.wfile.write(data)
-                
-    httpd = BaseHTTPServer.HTTPServer(('localhost', port), Handle)
+    
+    if not port:
+        while True:
+            try:
+                port = random.randint(10000,50000)
+                httpd = BaseHTTPServer.HTTPServer(('localhost', port), Handle)
+            except socket.error:
+                continue
+            break
+    else:
+        httpd = BaseHTTPServer.HTTPServer(('localhost', port), Handle)
     if usessl:
         print 'ssl'
         p = subprocess.Popen(['openssl','req','-new','-x509',
@@ -113,7 +123,7 @@ def _make_http(port=8888,usessl=False,basic_auth=False):
             os.remove('key.pem')
         if os.path.exists('cacert.pem'):
             os.remove('cacert.pem')
-    return shutdown
+    return port,shutdown
 
 
 def test_double_stage():
@@ -121,9 +131,8 @@ def test_double_stage():
     Stager should download files only once and return a handle to the existing
     file if it's still live
     """
-    port = 12345
+    port,stop = _make_http()
     url = "http://localhost:%d"%port
-    stop = _make_http(port=port)
     try:
         stager = I3FileStagerFile()
         f1 = stager.GetReadablePath(url)
@@ -140,36 +149,32 @@ def test_double_stage():
         stop()
 
 def test_http():
-    port = 12345
+    port,stop = _make_http()
     address = "http://localhost:%d"%port
-    stop = _make_http(port=port)
     try:
         _test_stage(address)
     finally:
         stop()
 
 def test_http_with_auth():
-    port = 12345
+    port,stop = _make_http(basic_auth=True)
     address = "http://test:test@localhost:%d"%port
-    stop = _make_http(port=port,basic_auth=True)
     try:
         _test_stage(address)
     finally:
         stop()
 
 def test_https():
-    port = 12345
+    port,stop = _make_http(usessl=True)
     address = "https://localhost:%d"%port
-    stop = _make_http(port=port,usessl=True)
     try:
         _test_stage(address)
     finally:
         stop()
 
 def test_https_with_auth():
-    port = 12345
+    port,stop = _make_http(usessl=True,basic_auth=True)
     address = "https://test:test@localhost:%d"%port
-    stop = _make_http(port=port,usessl=True,basic_auth=True)
     try:
         _test_stage(address)
     finally:
