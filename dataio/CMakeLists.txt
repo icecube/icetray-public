@@ -80,9 +80,16 @@ if (NOT LIBARCHIVE_FOUND)
 #  colormsg(CYAN "+-- libarchive *not* found, omitting test \"resources/test/o7_libarchive_read.py\"")
   LIST(REMOVE_ITEM tmp_SCRIPTS "${CMAKE_CURRENT_SOURCE_DIR}/resources/test/o7_libarchive_read.py")
 endif (NOT LIBARCHIVE_FOUND)
+
 if (${EXPECT} MATCHES "-NOTFOUND")
   LIST(REMOVE_ITEM tmp_SCRIPTS "${CMAKE_CURRENT_SOURCE_DIR}/resources/test/dataio-shovel-test")
 endif (${EXPECT} MATCHES "-NOTFOUND")
+
+## something's busted w/ lucid's python+ssl
+execute_process(COMMAND lsb_release -sc OUTPUT_VARIABLE LUCID ERROR_QUIET)
+if (LUCID MATCHES "lucid")
+  list(REMOVE_ITEM tmp_SCRIPTS "${CMAKE_CURRENT_SOURCE_DIR}/resources/test/test_filestager.py")
+endif ()
 i3_test_scripts(${tmp_SCRIPTS})
 
 i3_add_pybindings(dataio
