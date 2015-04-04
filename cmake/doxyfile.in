@@ -70,9 +70,9 @@ EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = */test/* */pybindings/*
 EXCLUDE_SYMBOLS        = boost boost::* BOOST_*
 #EXAMPLE_PATH           = resources/docs
-EXAMPLE_PATH           = ..
-EXAMPLE_PATTERNS       = 
-EXAMPLE_RECURSIVE      = YES
+#EXAMPLE_PATH           = ..
+#EXAMPLE_PATTERNS       = 
+#EXAMPLE_RECURSIVE      = YES
 IMAGE_PATH             = @CMAKE_CURRENT_SOURCE_DIR@/resources/docs
 INPUT_FILTER           = 
 FILTER_SOURCE_FILES    = NO
@@ -103,3 +103,4 @@ MATHJAX_RELPATH        = https://cdn.mathjax.org/mathjax/latest/
 
 # we're cheating here. glshovel doesn't actually have any doxygen docs
 EXCLUDE                = @CMAKE_CURRENT_SOURCE_DIR@/glshovel
+EXTENSION_MAPPING      = h=C++
