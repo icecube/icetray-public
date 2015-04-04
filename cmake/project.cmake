@@ -99,7 +99,6 @@ macro(use_projects THIS_TARGET)
 
     include_directories(${CMAKE_SOURCE_DIR}/${USED_PROJECT}/public)
     target_link_libraries(${THIS_TARGET} ${USED_PROJECT})
-    file(APPEND ${DOXYGEN_OUTPUT_PATH}/.tagfiles/${PROJECT_NAME}.include "${DOXYGEN_OUTPUT_PATH}/.tagfiles/${USED_PROJECT}.tag=../${USED_PROJECT}\n")
   endforeach(USED_PROJECT ${${THIS_TARGET}_USE_PROJECTS_PROJECTS})
 endmacro(use_projects THIS_TARGET)
 
@@ -250,6 +249,7 @@ macro(i3_add_library THIS_LIB_NAME)
 	)
       add_dependencies(doxygen ${PROJECT_NAME}-doxygen)
       foreach(l ${${THIS_LIB_NAME}_PROJECT_DEPENDS})
+	file(APPEND ${DOXYGEN_OUTPUT_PATH}/.tagfiles/${PROJECT_NAME}.include "${DOXYGEN_OUTPUT_PATH}/.tagfiles/${l}.tag=../${l}\n")
 	add_dependencies(${PROJECT_NAME}-${THIS_LIB_NAME}-doxygen ${l}-doxygen)
       endforeach()
 
