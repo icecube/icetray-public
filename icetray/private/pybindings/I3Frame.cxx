@@ -48,48 +48,6 @@ boost::shared_ptr<T> frame_get(const I3Frame* f, const std::string& where)
   }
 }
 
-//struct I3FrameProxy : I3Frame
-//{
-//  typedef map<string, I3FrameObjectConstPtr>::value_type value_type;
-//  typedef map<string, I3FrameObjectConstPtr>::key_type key_type;
-//  typedef map<string, I3FrameObjectConstPtr>::difference_type difference_type;
-//  typedef map<string, I3FrameObjectConstPtr>::iterator iterator;
-//  typedef map<string, I3FrameObjectConstPtr>::key_compare key_compare;
-//  key_compare key_comp() { return std::less<std::string>(); }
-//  I3FrameObjectPtr operator[](const std::string& key)
-//  {
-//    return frame_get<I3FrameObject>(this, key);
-//  }
-//};
-
-// static vector<string>
-// keys(I3Frame* f)
-// {
-//   vector<string> v;
-//   I3Frame::typename_iterator iter = f->typename_begin();
-//   while(iter != f->typename_end())
-//     {
-//       v.push_back(iter->first);
-//       iter++;
-//     }
-//   return v;
-// }
-
-
-// template <typename T>
-// std::pair<T, T> range(const I3Frame& f)
-// {
-//     return frame_range(f.begin(), f.end());
-// }
-
-// struct frame_iterators
-// {
-//   typedef I3Frame::const_iterator iterator;
-//   static iterator begin(I3Frame& x) { return x.begin(); }
-//   static iterator end(I3Frame& x) { return x.end(); }
-// };
-// 
-
 static list frame_keys(I3Frame const& x)
 {
         list t;
