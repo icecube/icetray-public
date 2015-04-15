@@ -372,3 +372,17 @@ add_custom_target(deploy-docs
   )
 
 
+## coverage target
+if("$ENV{USER}" MATCHES "^buildslave")
+add_custom_target(coverage
+  COMMAND if [ ! -d ../output ]; then mkdir ../output\; fi
+  COMMAND lcov -d . -z
+  COMMAND lcov -d . -c -i -o test_base.info
+  COMMAND ./env-shell.sh make test
+  COMMAND lcov -d . -c -o test.info
+  COMMAND lcov -r test.info '/usr/include/*' '$ENV{I3_PORTS}/*' -o reports.info
+  COMMAND genhtml -o ../output/`date +%Y-%m-%d`
+  COMMAND rm -f ../output/00_LATEST \; ln -sf `ls -1tr ../output |tail -1` ../output/00_LATEST
+  COMMAND rsync -an ../output/ buildmaster@dragon:/opt/docs/coverage
+)
+endif()
