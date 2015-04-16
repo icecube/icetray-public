@@ -43,7 +43,7 @@ endif()
 #  These guys are in subdirectory 'tools'
 #
 set(ALL_TOOLS pthread root boost boostnumpy python
-    rdmc expat blas lapack gsl sprng sla libarchive
+    rdmc blas lapack gsl sprng sla libarchive
     mysql bdb mpi suitesparse ZThread omniORB ncurses cdk
     healpix qt4 cfitsio hdf5 minuit2 clhep geant4 zlib
     opencl gmp log4cpp xml2 genie zmq doxygen
