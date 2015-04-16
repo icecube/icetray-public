@@ -27,7 +27,9 @@ if (SYSTEM_PACKAGES)
     NONE
     zmq
     )
-else (SYSTEM_PACKAGES)
+endif (SYSTEM_PACKAGES)
+
+if (NOT ZMQ_FOUND)
   if(NOT ZMQ_VERSION)
     foreach(ZMQVER 3.2.4 2.1.11)
       if(IS_DIRECTORY ${I3_PORTS}/include/zmq-${ZMQVER})
@@ -43,4 +45,4 @@ else (SYSTEM_PACKAGES)
     NONE
     zmq
     )
-endif (SYSTEM_PACKAGES)
+endif (NOT ZMQ_FOUND)

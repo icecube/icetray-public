@@ -8,7 +8,9 @@ if (SYSTEM_PACKAGES)
     NONE
     gmp
   )
-else (SYSTEM_PACKAGES)
+endif (SYSTEM_PACKAGES)
+
+if (NOT GMP_FOUND)
   set(GMP_VERSION "4.3.2")
   tooldef(gmp
     include/gmp-${GMP_VERSION}/gmp
@@ -17,4 +19,4 @@ else (SYSTEM_PACKAGES)
     NONE
     gmp
   )
-endif (SYSTEM_PACKAGES)
+endif (NOT GMP_FOUND)

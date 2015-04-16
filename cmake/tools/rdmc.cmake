@@ -29,7 +29,9 @@ TOOLDEF (rdmc
     NONE  # bin is n/a, placeholder
     rdmc
     )
-else (SYSTEM_PACKAGES)
+endif (SYSTEM_PACKAGES)
+
+if (NOT RDMC_FOUND)
 TOOLDEF (rdmc
     include/rdmc-2.9.5
     rdmc/rdmc.h
@@ -37,4 +39,4 @@ TOOLDEF (rdmc
     NONE  # bin is n/a, placeholder
     rdmc
     )
-endif (SYSTEM_PACKAGES)
+endif (NOT RDMC_FOUND)
