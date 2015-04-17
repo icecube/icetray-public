@@ -3,6 +3,12 @@
 # $Date: $
 #
 
+April 17, 2015, don la dieu  (nega@icecube.umd.edu)
+--------------------------------------------------------------------
+ V15-04-00 
+  o Localize file stager test
+  o Clean up stray test data
+
 March 15, 2015, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
  V15-03-00 
