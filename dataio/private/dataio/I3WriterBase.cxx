@@ -185,6 +185,7 @@ I3WriterBase::WriteConfig(I3FramePtr frame)
 	// If we didn't make the frame, don't save it, since it is already in
 	// the output stream. Otherwise we have to insert it.
 	if (oframe != frame) {
+		frameCounter_++;
 		oframe->save(filterstream_, skip_keys_);
 		Flush();
 	}
