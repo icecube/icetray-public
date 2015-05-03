@@ -94,9 +94,20 @@ std::string I3LoggingStringF(const char *format, ...)
     GetIcetrayLogger()->Log(level, id, file, line, func, \
     I3LoggingStringF(format, ##__VA_ARGS__))
 
+#define I3_HIFREQ_LOGGER(level, id, file, line, func, format, ...) \
+    do { if(GetIcetrayLogger()->LogLevelForUnit(id)<=level) \
+    GetIcetrayLogger()->Log(level, id, file, line, func, \
+    I3LoggingStringF(format, ##__VA_ARGS__)); \
+    } while (0)
+
 #define I3_STREAM_LOGGER(level, id, file, line, func, msg, epilogue) \
     do { std::ostringstream _i3_str_logger_str; _i3_str_logger_str << msg; GetIcetrayLogger()->Log(level, \
     id, file, line, func, _i3_str_logger_str.str()); epilogue } while (0)
+
+#define I3_HIFREQ_STREAM_LOGGER(level, id, file, line, func, msg, epilogue) \
+    do { if(GetIcetrayLogger()->LogLevelForUnit(id)<=level) { \
+    std::ostringstream _i3_str_logger_str; _i3_str_logger_str << msg; GetIcetrayLogger()->Log(level, \
+    id, file, line, func, _i3_str_logger_str.str()); epilogue } } while (0)
 
 extern "C" {
 #endif // __cplusplus
@@ -131,16 +142,16 @@ SET_LOGGER("Unknown");
     ##__VA_ARGS__)
 
 #ifndef I3_COMPILE_OUT_VERBOSE_LOGGING
-#define log_trace(format, ...) I3_LOGGER(I3LOG_TRACE, \
+#define log_trace(format, ...) I3_HIFREQ_LOGGER(I3LOG_TRACE, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
     ##__VA_ARGS__)
-#define log_debug(format, ...) I3_LOGGER(I3LOG_DEBUG, \
+#define log_debug(format, ...) I3_HIFREQ_LOGGER(I3LOG_DEBUG, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
     ##__VA_ARGS__)
 #ifdef __cplusplus
-#define log_trace_stream(msg) I3_STREAM_LOGGER(I3LOG_TRACE, \
+#define log_trace_stream(msg) I3_HIFREQ_STREAM_LOGGER(I3LOG_TRACE, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, msg, )
-#define log_debug_stream(msg) I3_STREAM_LOGGER(I3LOG_DEBUG, \
+#define log_debug_stream(msg) I3_HIFREQ_STREAM_LOGGER(I3LOG_DEBUG, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, msg, )
 #endif
 #else
