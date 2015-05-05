@@ -51,6 +51,11 @@ if(USE_ROOT)
 	set(OPTIONAL_TOOLS root)
 endif(USE_ROOT)
 
+if(USE_CINT)
+    colormsg(HIYELLOW "*** CINT dictionaries are deprecated and will disappear November 1, 2015")
+    set(ROOTCINT "ROOTCINT public/icetray/I3FrameObject.h")
+endif(USE_CINT)
+
 i3_project(icetray
   DOCS_DIR resources/docs
   PYTHON_DIR python)
@@ -159,8 +164,7 @@ i3_add_library(icetray
 
   USE_TOOLS boost python ${OPTIONAL_TOOLS}
   LINK_LIBRARIES ${BOOST_PYTHON} ${DCAP_LIBRARIES} ${LIBARCHIVE_LIBRARIES}
-  ROOTCINT public/icetray/I3FrameObject.h)
-
+  ${ROOTCINT})
 #
 #  Configure/create directory containing inneresting workspace-wide #defines
 #
