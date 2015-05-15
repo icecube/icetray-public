@@ -440,3 +440,56 @@ I3Module::ShouldDoProcess(I3FramePtr frame)
   return true;
 }
 
+void
+I3Module::ConnectOutBox(const std::string& outBoxName, I3ModulePtr targetModule)
+{
+  // Make sure the outbox exists.
+  // This can be correct when the module doesn't add its outboxes until Configure()
+  if (outboxes_.find(outBoxName) == outboxes_.end()) {
+    AddOutBox(outBoxName);
+    log_warn_stream("module \"" << GetName() <<
+                    "\" doesn't have an out box named \"" << outBoxName << '"');
+  }
+  outboxes_[outBoxName].second = targetModule;
+  // Make the target module know that our outbox is its inbox
+  targetModule->inbox_ = outboxes_[outBoxName].first;
+}
+
+bool
+I3Module::AllOutBoxesConnected() const
+{
+  for (outboxmap_t::const_iterator iter = outboxes_.begin();
+       iter != outboxes_.end();
+       iter++)
+  {
+    if (!iter->second.second)
+      return false;
+  }
+  return true;
+}
+
+void
+I3Module::EnforceOutBoxesConnected() const
+{
+  for (outboxmap_t::const_iterator iter = outboxes_.begin();
+       iter != outboxes_.end();
+       iter++)
+  {
+    if (!iter->second.second)
+      log_fatal_stream("Module \"" << GetName() << "\" outbox \""
+                       << iter->first << "\" not connected");
+  }
+}
+
+bool
+I3Module::HasOutBox(const std::string& outBoxName) const
+{
+  return outboxes_.find(outBoxName)!=outboxes_.end();
+}
+
+bool
+I3Module::HasInBox() const
+{
+  return (bool)inbox_;
+}
+

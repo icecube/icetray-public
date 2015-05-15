@@ -140,7 +140,7 @@ I3Tray::AddModule(bp::object obj, std::string instancename)
 	if (modules.find(instancename) != modules.end())
 		log_fatal("Tray already contains module named \"%s\" of "
 		    "type %s", instancename.c_str(),
-		    modules[instancename]->configuration_.ClassName().c_str());
+		    modules[instancename]->GetConfiguration().ClassName().c_str());
 
 	I3ModulePtr module;
 	if (bp::extract<std::string>(obj).check()) {
@@ -151,7 +151,7 @@ I3Tray::AddModule(bp::object obj, std::string instancename)
 		module =
 		    I3::Singleton<I3ModuleFactory>::get_const_instance()
 		    .Create(name)(master_context);
-		module->configuration_.ClassName(name);
+		module->GetConfiguration().ClassName(name);
 	} else if (PyType_Check(obj.ptr())) {
 		// Try to instantiate a python I3Module
 		bp::object instance = obj(bp::ptr(&master_context));
@@ -163,9 +163,9 @@ I3Tray::AddModule(bp::object obj, std::string instancename)
 #if PY_MAJOR_VERSION >= 2 && PY_MINOR_VERSION > 4
 		std::string pymod = boost::python::extract<std::string>(
 		    obj.attr("__module__"));
-		module->configuration_.ClassName(pymod + "." + pyname);
+		module->GetConfiguration().ClassName(pymod + "." + pyname);
 #else
-		module->configuration_.ClassName(pyname);
+		module->GetConfiguration().ClassName(pyname);
 #endif
 	} else if (PyCallable_Check(obj.ptr())) {
 		// it is a python function... put the object in the context and 
@@ -183,7 +183,7 @@ I3Tray::AddModule(bp::object obj, std::string instancename)
 		module = I3ModulePtr(new PythonFunction(master_context, obj));
 		std::string repr = boost::python::extract<std::string>(
 		    obj.attr("__repr__")());
-		module->configuration_.ClassName(repr);
+		module->GetConfiguration().ClassName(repr);
 		if (instancename.empty())
 			instancename=CreateName(repr,"Module",modules_in_order);
 	} else {
@@ -196,7 +196,7 @@ I3Tray::AddModule(bp::object obj, std::string instancename)
 
 	log_trace("%s : %s", __PRETTY_FUNCTION__, instancename.c_str());
 
-	module->configuration_.InstanceName(instancename);
+	module->GetConfiguration().InstanceName(instancename);
 	module->SetName(instancename);
 	modules[instancename] = module;
 	modules_in_order.push_back(instancename);
@@ -210,18 +210,18 @@ I3Tray::AddModule(I3ModulePtr module, std::string instancename)
 	if (configure_called)
 		log_fatal("I3Tray::Configure() already called -- "
 		    "cannot add new modules");
-	module->configuration_.ClassName(I3::name_of(typeid(*module)));
+	module->GetConfiguration().ClassName(I3::name_of(typeid(*module)));
 	if (instancename.empty())
-		instancename=CreateName(module->configuration_.ClassName(),"Module",
+		instancename=CreateName(module->GetConfiguration().ClassName(),"Module",
 		                        modules_in_order);
 	if (modules.find(instancename) != modules.end())
 		log_fatal("Tray already contains module named \"%s\" of "
 		    "type %s", instancename.c_str(),
-		    modules[instancename]->configuration_.ClassName().c_str());
+		    modules[instancename]->GetConfiguration().ClassName().c_str());
 
 	log_trace("%s : %s", __PRETTY_FUNCTION__, instancename.c_str());
 
-	module->configuration_.InstanceName(instancename);
+	module->GetConfiguration().InstanceName(instancename);
 	module->SetName(instancename);
 	modules[instancename] = module;
 	modules_in_order.push_back(instancename);
@@ -304,21 +304,12 @@ I3Tray::ConnectBoxes(const std::string& fromModule,
 	log_debug("connecting outbox \"%s\" on module \"%s\" to module \"%s\"", 
 	    fromOutBox.c_str(), fromModule.c_str(), toModule.c_str());
 
-	// Some modules only AddOutBox() at configure time. Accomodate this
-	// by adding it for them
-	if (module->outboxes_.find(fromOutBox) == module->outboxes_.end()) {
-		module->AddOutBox(fromOutBox);
-		log_warn("module \"%s\" doesn't have an out box named \"%s\"",
-		    fromModule.c_str(), fromOutBox.c_str());
-	}
-
 	map<string, I3ModulePtr>::const_iterator toiter =
 	    modules.find(toModule);
 	if (toiter == modules.end())
 		log_fatal("couldn't find module \"%s\"", toModule.c_str());
 
-	toiter->second->inbox_ = module->outboxes_[fromOutBox].first;
-	module->outboxes_[fromOutBox].second = toiter->second;
+	module->ConnectOutBox(fromOutBox, toiter->second);
 	return true;
 }
 
@@ -332,7 +323,7 @@ I3Tray::Configure()
 		    "You probably want some.", __PRETTY_FUNCTION__);
 
 	if (!boxes_connected &&
-	    modules[modules_in_order.back()]->outboxes_.size() != 0) {
+        !modules[modules_in_order.back()]->AllOutBoxesConnected()) {
 		log_info("Last module (\"%s\") has a dangling outbox. Adding "
 		    "TrashCan to end of tray", modules_in_order.back().c_str());
 		AddModule("TrashCan", "__automatic_I3Tray_trashcan");
@@ -379,12 +370,12 @@ I3Tray::Configure()
 			PyErr_Fetch(&type, &value, &traceback);
 			log_error("Exception thrown while configuring "
 			    "module \"%s\".", objectname.c_str());
-			std::cerr << module->configuration_;
+			std::cerr << module->GetConfiguration();
 			PyErr_Restore(type, value, traceback);
 			throw;
 		}
-		if (!module->configuration_.is_ok()) {
-			std::cerr << module->configuration_;
+		if (!module->GetConfiguration().is_ok()) {
+			std::cerr << module->GetConfiguration();
 			log_fatal("Error in configuration for module "
 			    "\"%s\".  Turn up your logging to see just what.",
 			    objectname.c_str());
@@ -401,8 +392,7 @@ I3Tray::Configure()
 		while (to != modules_in_order.end()) {
 			log_trace("%s => %s", (to-1)->c_str(), to->c_str());
 			I3ModulePtr frommod = modules[*(to-1)];
-			if (frommod->outboxes_.find("OutBox") ==
-			    frommod->outboxes_.end())
+			if (!frommod->HasOutBox("OutBox"))
 				log_fatal("Module \'%s\' does not have an "
 				    "OutBox, but has following modules.",
 				    (to-1)->c_str());
@@ -416,7 +406,7 @@ I3Tray::Configure()
 	driving_module.reset();
 	BOOST_FOREACH(const std::string &modname, modules_in_order) {
 		I3ModulePtr module = modules[modname];
-		if (!module->inbox_) {
+		if (!module->HasInBox()) {
 			driving_module = module;
 			log_debug("Driving module is %s", modname.c_str());
 		}
@@ -430,22 +420,15 @@ I3Tray::Configure()
 	// driving module have an inbox, and that every outbox is connected
 	BOOST_FOREACH(const std::string &modname, modules_in_order) {
 		I3ModulePtr module = modules[modname];
-		if (!module->configuration_.is_ok()) {
-			std::cerr << module->configuration_;
+		if (!module->GetConfiguration().is_ok()) {
+			std::cerr << module->GetConfiguration();
 			log_fatal("Configuration error.  Turn up your logging "
 			    "to see just what.");
 		}
-		if (module != driving_module && !module->inbox_)
+		if (module != driving_module && !module->HasInBox())
 			log_fatal("Module %s has a disconnected inbox",
 			    modname.c_str());
-		for (I3Module::outboxmap_t::const_iterator i =
-		    module->outboxes_.begin(); i != module->outboxes_.end();
-		    i++) {
-			if (!i->second.second)
-				log_fatal("Module \"%s\" outbox \"%s\" not "
-				    "connected", modname.c_str(),
-				    i->first.c_str());
-		}
+		module->EnforceOutBoxesConnected();
 	}
 }
 
@@ -585,7 +568,7 @@ I3Tray::SetParameter(const string& module, const string& parameter,
 
 	I3Configuration *config;
 	if (modules.find(module) != modules.end())
-		config = &modules[module]->configuration_;
+		config = &modules[module]->GetConfiguration();
 	else if (factories.find(module) != factories.end())
 		config = &factories[module]->configuration_;
 	else

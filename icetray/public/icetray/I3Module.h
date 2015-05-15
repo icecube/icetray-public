@@ -54,8 +54,6 @@ I3_POINTER_TYPEDEFS(I3Module);
 
 class I3Module
 {
-  friend class I3Tray;
-
   typedef std::deque<I3FramePtr> FrameFifo;
   I3_POINTER_TYPEDEFS(FrameFifo);
 
@@ -322,7 +320,22 @@ public:
  public:
 
   const I3Context& GetContext() const { return context_; }
+  I3Configuration& GetConfiguration() { return configuration_; }
   const I3Configuration& GetConfiguration() const { return configuration_; }
+  ///Connect one of this module's outboxes to another module
+  ///\param outBoxName the outbox to be connected
+  ///\param targetModule the module to which the outbox will connect
+  void ConnectOutBox(const std::string& outBoxName, I3ModulePtr targetModule);
+  ///Check whether all of this module's outboxes connect to other modules
+  bool AllOutBoxesConnected() const;
+  ///Throw an exception and print a nice error message if any of this module's
+  ///outboxes is not connected
+  void EnforceOutBoxesConnected() const;
+  ///Test whether this module has a particular outbox
+  ///\param outBoxName the name for which to check
+  bool HasOutBox(const std::string& outBoxName) const;
+  ///Test whether this module has a valid inbox from which it can receive frames
+  bool HasInBox() const;
 
   SET_LOGGER("I3Module");
 

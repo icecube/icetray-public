@@ -216,6 +216,7 @@ i3_test_executable(test
   private/test/I3ConditionalModuleTest.cxx
   private/test/NoOutboxModule.cxx
   private/test/iostreams.cxx
+  private/test/I3ModulePlumbing.cxx
  
   USE_PROJECTS icetray)
 
