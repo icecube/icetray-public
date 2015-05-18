@@ -163,7 +163,7 @@ i3_add_library(icetray
 
   USE_TOOLS boost python ${OPTIONAL_TOOLS}
   LINK_LIBRARIES ${BOOST_PYTHON} ${DCAP_LIBRARIES} ${LIBARCHIVE_LIBRARIES}
-  ROOTCINT public/icetray/I3FrameObject.h}
+  ROOTCINT public/icetray/I3FrameObject.h)
 #
 #  Configure/create directory containing inneresting workspace-wide #defines
 #
