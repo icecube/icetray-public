@@ -153,6 +153,7 @@ set_property(TEST dataio::s_i3reader_readnulls.py APPEND PROPERTY DEPENDS dataio
 set_property(TEST dataio::test_randomaccess_file.py APPEND PROPERTY DEPENDS dataio::s_i3reader_readnulls.py)
 set_property(TEST dataio::t_skip_infoframes.py APPEND PROPERTY DEPENDS dataio::test_randomaccess_file.py)
 set_property(TEST dataio::writer_is_conditional.py APPEND PROPERTY DEPENDS dataio::t_skip_infoframes.py)
+set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS writer_is_conditional.py)
 if (NOT ${EXPECT} MATCHES "-NOTFOUND")
 set_property(TEST dataio::dataio-shovel-test APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
 endif (NOT ${EXPECT} MATCHES "-NOTFOUND")

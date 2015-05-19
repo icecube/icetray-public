@@ -36,6 +36,9 @@ cmd = "cat " + ' '.join(["catme_%s.i3.gz" % tag for tag in tags]) + " > catted.i
 print(cmd)
 status = os.system(cmd)
 
+for tag in tags:
+    if os.path.exists("catme_%s.i3.gz" % tag):
+        os.unlink("catme_%s.i3.gz" % tag)
 
 tray = I3Tray()
 

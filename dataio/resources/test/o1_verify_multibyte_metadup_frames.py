@@ -46,3 +46,6 @@ tray.AddModule("TrashCan", "the can");
 tray.Execute()
 tray.Finish()
 
+for fname in file_list:
+    if os.path.exists(fname):
+        os.unlink(fname)

@@ -31,4 +31,8 @@ tray.AddModule("TrashCan", "the can")
 tray.Execute()
 tray.Finish()
 
+fname = "hasmutineer.i3.gz"
+if os.path.exists(fname):
+    os.unlink(fname)
+
 sys.exit(0)

@@ -50,3 +50,6 @@ for frame in dataio.I3File("evens.i3", dataio.I3File.Reading):
         assert frame['index'].value == i
         i += 2
 
+fname = "evens.i3"
+if os.path.exists(fname) and os.path.isfile(fname):
+    os.unlink(fname)
