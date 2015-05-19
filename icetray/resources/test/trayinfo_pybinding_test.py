@@ -50,6 +50,6 @@ print(ti.svn_url)
 print(ti.svn_revision)
 print(ti.svn_externals)
 
-
-
-
+fname = "infos.i3"
+if os.path.exists(fname):
+	os.unlink(fname)

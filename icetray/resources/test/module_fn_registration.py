@@ -7,6 +7,7 @@
 from icecube import icetray, dataclasses, dataio
 from I3Tray import I3Tray
 import sys
+import os
 
 #
 # Generate .i3 file
@@ -81,3 +82,6 @@ tray.AddModule('TrashCan', 'tc')
 tray.Execute()
 tray.Finish()
 
+fname = "tmp.i3"
+if os.path.exists(fname):
+    os.unlink(fname)

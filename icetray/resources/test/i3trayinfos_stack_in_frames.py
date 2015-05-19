@@ -47,3 +47,6 @@ frame = f.pop_frame()
 
 assert not frame, "only one frame expected in file"
 
+fname = "foo.i3"
+if os.path.exists(fname):
+	os.unlink(fname)

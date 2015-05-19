@@ -29,3 +29,6 @@ for k in frame.keys():
     print("Getting %s" % k)
     print(frame[k])
 
+fname = "foo.i3"
+if os.path.exists(fname):
+	os.unlink(fname)
