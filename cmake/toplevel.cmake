@@ -381,7 +381,7 @@ add_custom_target(coverage
   COMMAND ./env-shell.sh ctest -j2
   COMMAND lcov -b ../ -d . -c -o test.info
   COMMAND lcov -r test.info '/usr/include/*' '$ENV{I3_PORTS}/*' -o reports.info
-  COMMAND genhtml -o ../output/`date +%Y-%m-%d` reports.info
+  COMMAND genhtml --legend -o ../output/`date +%Y-%m-%d` reports.info
   COMMAND rm -f ../output/00_LATEST \; ln -sf `ls -1tr ../output |tail -1` ../output/00_LATEST
   COMMAND rsync -av ../output/ buildmaster@dragon:/opt/docs/coverage
 )
