@@ -24,3 +24,23 @@ TOOLDEF (hdf5
   NONE
   hdf5 hdf5_hl 
   )
+
+if(NOT HDF5_FOUND)
+
+  unset(HDF5_CONFIG_ERROR)
+  unset(HDF5_INCLUDE_DIR)
+
+  TOOLDEF (hdf5
+    /usr/include/hdf5/serial
+    hdf5.h
+    lib/x86_64-linux-gnu
+    NONE
+    hdf5_serial hdf5_serial_hl 
+    )
+
+  if(HDF5_FOUND)
+    set(HDF5_FOUND TRUE CACHE BOOL "Tool HDF5 found successfully" FORCE)
+    set(HDF5_LIBRARIES "${HDF5_LIBRARIES}" CACHE PATH "Libraries for tool HDF5" FORCE)
+  endif(HDF5_FOUND)
+
+endif(NOT HDF5_FOUND)
