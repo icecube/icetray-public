@@ -4,20 +4,26 @@ load_pybindings(__name__, __path__)
 
 import sys
 if sys.version_info[:2] >= (2,6):
-	from icecube.dataio.I3FileStagerFile import AbstractFileStager, I3FileStagerFile, GridFTPStager, SCPStager
+	from icecube.dataio.I3FileStagerFile import AbstractFileStager
 	set_local_scratch_dir = AbstractFileStager.set_local_scratch_dir
 
-def get_stagers(staging_directory=None):
+def get_stagers(staging_directory=None, extra_stagers=[]):
 	"""
 	Set up file stagers for all supported URL schemes.
 	
-	:params staging_directory: use this directory for temporary files. If not
+	:param staging_directory: use this directory for temporary files. If not
 	specified, the staging directory will be guessed.
+	:param extra_stagers: a list of stager classes to instatiate in addition to
+	the those included with the base distribution
 	"""
 	if staging_directory is not None:
 		set_local_scratch_dir(staging_directory)
 
-	return I3FileStagerCollection([stager() for stager in (I3FileStagerFile, GridFTPStager, SCPStager)])
+	impls = set(extra_stagers)
+	for stager in AbstractFileStager.get_subclasses():
+		impls.add(stager)
+
+	return I3FileStagerCollection([stager() for stager in impls])
 
 @icetray.traysegment_inherit('I3Reader')
 def I3Reader(tray, name, **kwargs):

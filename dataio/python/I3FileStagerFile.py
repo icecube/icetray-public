@@ -38,6 +38,15 @@ class AbstractFileStager(I3FileStager):
 		return True
 	
 	@classmethod
+	def get_subclasses(cls):
+		"""
+		Assemble a list of all subclasses defined in the current module
+		"""
+		import inspect
+		module = inspect.getmodule(cls)
+		return [klass for name, klass in inspect.getmembers(module, inspect.isclass) if klass != cls and issubclass(klass, cls)]
+	
+	@classmethod
 	def get_local_scratch_dir(cls):
 		if cls._local_scratch_dir is not None:
 			return cls._local_scratch_dir
@@ -72,7 +81,7 @@ class AbstractFileStager(I3FileStager):
 		if not os.path.isdir(staging_directory):
 			icetray.logging.log_fatal("The scratch directory %s does not exist!" % staging_directory, unit="AbstractFileStager")
 		cls._local_scratch_dir = staging_directory
-		
+	
 	def GenerateLocalFileName(self, url, readable):
 		# parse the URL
 		parsed_url = urlparse.urlparse(url, scheme="file") # use "file" as the default scheme
@@ -290,4 +299,40 @@ class SCPStager(AbstractFileStager):
 			icetray.logging.log_fatal("scp failed: "+(stderr.strip()), unit="SCPStager")
 		else:
 			icetray.logging.log_info("Upload finished: %s to %s" % (local_path, url), unit="SCPStager")
+
+class DCacheStager(AbstractFileStager):
+	"""
+	Handles dcap:// URLs
+	"""
+	def __init__(self):
+		super(type(self), self).__init__()
+	
+	def ReadSchemes(self):
+		return ['dcap']
+	
+	def WriteSchemes(self):
+		return ['dcap']
+	
+	def dccp(self, *args):
+		proc = subprocess.Popen(('dccp',) + args, stderr=subprocess.PIPE)
+		stdout, stderr = proc.communicate()
+		if proc.returncode != 0:
+			icetray.logging.log_fatal("dccp failed: "+(stderr.strip()), unit="DCacheStager")
+	
+	def CopyFileIn(self, url, local_path):
+		parsed = urlparse.urlparse(url)
+		icetray.logging.log_info("Downloading %s to %s" % (url, local_path), unit="DCacheStager")
+		self.dccp(parsed.path, os.path.abspath(local_path))
+	
+	def WillReadLater(self, url, fname):
+		"""
+		Tell the DCache gateway to move the file into disk cache
+		"""
+		parsed = urlparse.urlparse(url)
+		self.dccp("-P", "-t", "3600", parsed.path)
+	
+	def CopyFileOut(self, local_path, url):
+		parsed = urlparse.urlparse(url)
+		icetray.logging.log_info("Uploading %s to %s" % (local_path, url), unit="DCacheStager")
+		self.dccp(os.path.abspath(local_path), parsed.path)
 

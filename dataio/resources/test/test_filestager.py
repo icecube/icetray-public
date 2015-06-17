@@ -5,7 +5,7 @@ if sys.version_info[:2] < (2,6):
     sys.exit(0)
 
 from icecube import dataio
-from icecube.dataio import I3FileStagerFile
+from icecube.dataio.I3FileStagerFile import I3FileStagerFile
 
 from icecube import icetray
 import os
