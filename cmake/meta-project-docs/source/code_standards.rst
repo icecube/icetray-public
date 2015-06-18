@@ -112,6 +112,7 @@ Class Design and Inheritance
    :titlesonly:
 
    cpp_standards/be_clear_what_kind_of_class_youre_writing
+   cpp_standards/blend_static_and_dynamic_polymorphism_judiciously
 
 Construction, Destruction, and Copying
 --------------------------------------
@@ -148,6 +149,7 @@ STL: Containers
 .. toctree::
    :titlesonly:
 
+   cpp_standards/use_vector_by_default
    cpp_standards/use_vector_and_string_instead_of_arrays
    cpp_standards/use_vector_to_exchange_data_with_non_cpp_APIs
    cpp_standards/store_only_values_and_smart_pointers_in_containers
