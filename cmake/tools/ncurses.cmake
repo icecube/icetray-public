@@ -47,9 +47,10 @@ else(NOT CURSES_FOUND)
   if(CURSES_HAVE_NCURSES_NCURSES_H)
 
     get_filename_component(CURSES_NCURSES_INCLUDE_PATH ${CURSES_HAVE_NCURSES_NCURSES_H} PATH CACHE)
+    set(CURSES_NCURSES_INCLUDE_PATH "${CURSES_NCURSES_INCLUDE_PATH}/ncurses")
     message(STATUS "+ ncurses.h found at ${CURSES_NCURSES_INCLUDE_PATH} (this should end with \"ncurses\")")
     message(STATUS "+ libncurses found at ${CURSES_NCURSES_LIBRARY}")
-    set(NCURSES_INCLUDE_DIR ${CURSES_NCURSES_INCLUDE_PATH} 
+    set(NCURSES_INCLUDE_DIR ${CURSES_NCURSES_INCLUDE_PATH}
       CACHE STRING "Include dir for tool 'ncurses'")
 
   elseif(CURSES_HAVE_NCURSES_H)
