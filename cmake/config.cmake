@@ -377,7 +377,7 @@ elseif (GCC_NUMERIC_VERSION GREATER 40299)
 endif (GCC_NUMERIC_VERSION GREATER 40799)
 
 if (CMAKE_COMPILER_IS_CLANG)
-  set(CXX_WARNING_SUPRESSION_FLAGS "-Wno-deprecated"
+  set(CXX_WARNING_SUPRESSION_FLAGS "-Wno-deprecated -Wno-unused-local-typedef"
     CACHE STRING "Warning supression flags for this compiler")
 endif (CMAKE_COMPILER_IS_CLANG)
 
