@@ -379,7 +379,7 @@ foreach(f -Wno-deprecated -Wno-unused-local-typedef -Wno-unused-local-typedefs)
   endforeach()
 string(REPLACE ";" " " CXX_WARNING_SUPPRESSION_FLAGS "${CXX_WARNING_SUPPRESSION_FLAGS}")
 set(CXX_WARNING_SUPPRESSION_FLAGS ${CXX_WARNING_SUPPRESSION_FLAGS}
-  CACHE STRING "Warning supression flags for this compiler")
+  CACHE STRING "Warning suppression flags for this compiler")
 
 #
 # New versions of clang changed the default template depth
