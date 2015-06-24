@@ -365,21 +365,21 @@ endif(CMAKE_C_COMPILER_ID MATCHES "Intel")
 string(REPLACE ";" " " C_WARNING_FLAGS "${C_WARNING_FLAGS}")
 
 #
-#  For now, on gcc 4.3.2, add the -Wno-deprecated flag
-#  But be wary of -Wno-unused-local-typedefs, which is a gcc 4.8 flag
+#  Set warning suppression flags for our compilers
+#  This should work for gcc/clang/intel
 #
-if (GCC_NUMERIC_VERSION GREATER 40799)
-  set(CXX_WARNING_SUPRESSION_FLAGS "-Wno-deprecated -Wno-unused-local-typedefs"
-    CACHE STRING "Warning supression flags for this compiler")
-elseif (GCC_NUMERIC_VERSION GREATER 40299)
-  set(CXX_WARNING_SUPRESSION_FLAGS "-Wno-deprecated"
-    CACHE STRING "Warning supression flags for this compiler")
-endif (GCC_NUMERIC_VERSION GREATER 40799)
 
-if (CMAKE_COMPILER_IS_CLANG)
-  set(CXX_WARNING_SUPRESSION_FLAGS "-Wno-deprecated -Wno-unused-local-typedef"
-    CACHE STRING "Warning supression flags for this compiler")
-endif (CMAKE_COMPILER_IS_CLANG)
+include(CheckCXXCompilerFlag)
+unset(CXX_WARNING_SUPPRESSION_FLAGS)
+foreach(f -Wno-deprecated -Wno-unused-local-typedef -Wno-unused-local-typedefs)
+  check_cxx_compiler_flag(${f} CXX_HAS_${f})
+  if (CXX_HAS_${f})
+    list(APPEND CXX_WARNING_SUPPRESSION_FLAGS ${f})
+    endif()
+  endforeach()
+string(REPLACE ";" " " CXX_WARNING_SUPPRESSION_FLAGS "${CXX_WARNING_SUPPRESSION_FLAGS}")
+set(CXX_WARNING_SUPPRESSION_FLAGS ${CXX_WARNING_SUPPRESSION_FLAGS}
+  CACHE STRING "Warning supression flags for this compiler")
 
 #
 # New versions of clang changed the default template depth
@@ -454,7 +454,7 @@ if(NOT METAPROJECT_CONFIGURED)
     endif(NOT META_PROJECT MATCHES "trunk$")
   endif (NOT CMAKE_BUILD_TYPE)
 
-  set(CMAKE_CXX_FLAGS "${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPRESSION_FLAGS}")
+  set(CMAKE_CXX_FLAGS "${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPPRESSION_FLAGS}")
   string(REGEX REPLACE "[ ]+" " " CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" CACHE STRING
     "Flags used by the compiler during all build types" FORCE)
