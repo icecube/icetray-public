@@ -3,6 +3,13 @@
 # $Date: $
 #
 
+--------------------------------------------------------------------
+
+  o Work around the lazy-initialization bug in Boost < 1.44's bzip2
+    compressor by always writing an I frame if the output file would otherwise
+    be empty. The workaround is accompanied by a long-winded warning message.
+  o Add DCache support to I3FileStager
+
 April 17, 2015, don la dieu  (nega@icecube.umd.edu)
 --------------------------------------------------------------------
  V15-04-00 
