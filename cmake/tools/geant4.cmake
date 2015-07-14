@@ -63,7 +63,7 @@ else (${GEANT4_CONFIG} MATCHES ".*NOTFOUND$")
     separate_arguments(GEANT4_LIBRARIES)
 
     # extract the include path from geant4-config
-    execute_process(COMMAND ${GEANT4_CONFIG} --cflags
+    execute_process(COMMAND ${GEANT4_CONFIG} --cflags-without-gui
       OUTPUT_VARIABLE GEANT4_CONFIG_OUTPUT OUTPUT_STRIP_TRAILING_WHITESPACE
       )
     
