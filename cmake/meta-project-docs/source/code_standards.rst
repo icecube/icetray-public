@@ -96,7 +96,10 @@ Coding Style
    cpp_standards/declare_variables_as_locally_as_possible
    cpp_standards/make_header_files_self_sufficient
    cpp_standards/always_write_internal_include_guards
-
+   cpp_standards/prefer_composition_to_inheritance
+   cpp_standards/consider_making_virtual_functions_nonpublic_and_public_functions_nonvirtual
+   cpp_standards/make_data_members_private_except_in_behaviorless_aggreggates
+   cpp_standards/dont_give_away_your_internals
 
 Functions and Operators
 -----------------------
@@ -105,6 +108,7 @@ Functions and Operators
    :titlesonly:
 
    cpp_standards/take_parameters_appropriately
+   cpp_standards/always_provide_new_and_delete_together
 
 Class Design and Inheritance
 ----------------------------
