@@ -380,7 +380,8 @@ string I3Frame::type_name(const value_t& value)
 
   string* strp = const_cast<string*>(&value.blob.type_name);
 
-  *strp = value.ptr ? I3::name_of(typeid(*(value.ptr.get()))) : "(null)";
+  const I3FrameObject& obj=*(value.ptr.get());
+  *strp = value.ptr ? I3::name_of(typeid(obj)) : "(null)";
 
   // and return that
   return value.blob.type_name;
@@ -526,7 +527,8 @@ void I3Frame::save(OStreamT& os, const vector<string>& skip) const
           }
         else
           {
-            value.blob.type_name = value.ptr ? I3::name_of(typeid(*(value.ptr.get()))) : "(null)";
+            const I3FrameObject& obj=*(value.ptr.get());
+            value.blob.type_name = value.ptr ? I3::name_of(typeid(obj)) : "(null)";
             poa << make_nvp("type_name", value.blob.type_name);
 	    crcit(value.blob.type_name, crc);
 	    typedef io::stream<io::back_insert_device<vector<char> > > vecstream_t;

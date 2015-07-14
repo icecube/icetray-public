@@ -210,7 +210,8 @@ I3Tray::AddModule(I3ModulePtr module, std::string instancename)
 	if (configure_called)
 		log_fatal("I3Tray::Configure() already called -- "
 		    "cannot add new modules");
-	module->GetConfiguration().ClassName(I3::name_of(typeid(*module)));
+	I3Module& modRef=*module;
+	module->GetConfiguration().ClassName(I3::name_of(typeid(modRef)));
 	if (instancename.empty())
 		instancename=CreateName(module->GetConfiguration().ClassName(),"Module",
 		                        modules_in_order);
