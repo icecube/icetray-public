@@ -28,7 +28,18 @@ def test_scratchdir(url=os.path.expandvars("file://$I3_BUILD/env-shell.sh")):
     assert(not os.path.isdir(scratch_dir))
 
 def _test_stage(url, minsize=100):
-    stager = I3FileStagerFile()
+    import ssl
+    if 'https' in url:
+        # TODO: Make the actual cacert work.
+        #       It just seems to hang when using this line.
+        #stager = I3FileStagerFile(ssl={'cafile':'cacert.pem','capath':os.getcwd()})
+        try:
+            # accept self-signed certs
+            stager = I3FileStagerFile(ssl={'context':ssl._create_unverified_context()})
+        except AttributeError:
+            stager = I3FileStagerFile()
+    else:
+        stager = I3FileStagerFile()
     local_fname = stager.GetReadablePath(url)
     assert(os.path.exists(str(local_fname)))
     assert(os.stat(str(local_fname)).st_size > minsize)

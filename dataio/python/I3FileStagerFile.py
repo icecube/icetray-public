@@ -130,10 +130,13 @@ class I3FileStagerFile(AbstractFileStager):
 	.. note:: A username/password combination may be embedded in http URLs in the
 	          format specified in RFC 3986. This should only be used for "dummy"
 	          shared passwords like the standard IceCube password.
+	          
+	          A ssl parameter is available for ssl configuration.
 	"""
-	def __init__(self, blocksize=2**16):
+	def __init__(self, blocksize=2**16, ssl=None):
 		AbstractFileStager.__init__(self)
 		self.blocksize = blocksize
+		self.ssl = ssl if ssl else {}
 
 	def ReadSchemes(self):
 		# we handle "file://" URLs
@@ -179,7 +182,10 @@ class I3FileStagerFile(AbstractFileStager):
 			output_file = None
 			try:
 				output_file = open(output_path, "wb")
-				f = urlopen(self.strip_auth(url))
+				try:
+					f = urlopen(self.strip_auth(url),**self.ssl)
+				except TypeError:
+					f = urlopen(self.strip_auth(url))
 				
 				while True:
 					block = f.read(self.blocksize)
