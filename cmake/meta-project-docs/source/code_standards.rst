@@ -96,10 +96,6 @@ Coding Style
    cpp_standards/declare_variables_as_locally_as_possible
    cpp_standards/make_header_files_self_sufficient
    cpp_standards/always_write_internal_include_guards
-   cpp_standards/prefer_composition_to_inheritance
-   cpp_standards/consider_making_virtual_functions_nonpublic_and_public_functions_nonvirtual
-   cpp_standards/make_data_members_private_except_in_behaviorless_aggreggates
-   cpp_standards/dont_give_away_your_internals
 
 Functions and Operators
 -----------------------
@@ -108,7 +104,6 @@ Functions and Operators
    :titlesonly:
 
    cpp_standards/take_parameters_appropriately
-   cpp_standards/always_provide_new_and_delete_together
 
 Class Design and Inheritance
 ----------------------------
@@ -116,7 +111,17 @@ Class Design and Inheritance
    :titlesonly:
 
    cpp_standards/be_clear_what_kind_of_class_youre_writing
-   cpp_standards/blend_static_and_dynamic_polymorphism_judiciously
+   cpp_standards/prefer_composition_to_inheritance
+   cpp_standards/35_Avoid_Inheriting_From_Classes_Not_Base
+   cpp_standards/consider_making_virtual_functions_nonpublic_and_public_functions_nonvirtual
+   cpp_standards/40_Avoid_Providing_Implicit_Conversions
+   cpp_standards/dont_give_away_your_internals
+   cpp_standards/make_data_members_private_except_in_behaviorless_aggreggates
+   cpp_standards/prefer_composition_to_inheritance
+   cpp_standards/43_Pimpl_Judiciously
+   cpp_standards/44_Prefer_Writing_Nonmember_Nonfriend_Functions
+   cpp_standards/always_provide_new_and_delete_together
+   cpp_standards/46_If_You_Provide_Any_Class_Specific_new_Provide_Standard_Forms
 
 Construction, Destruction, and Copying
 --------------------------------------
@@ -138,6 +143,7 @@ Templates and Genericity
    :titlesonly:
 
    cpp_standards/dont_write_unintentionally_nongeneric_code
+   cpp_standards/blend_static_and_dynamic_polymorphism_judiciously
 
 Error handling and Exceptions
 -----------------------------
