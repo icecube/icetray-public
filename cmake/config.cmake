@@ -65,6 +65,15 @@ endif()
 
 set(I3_PORTS $ENV{I3_PORTS} CACHE STRING "Path to your icecube ports installation" FORCE)
 
+#
+# Find CVMFS software
+# (designed for py2-v2 port-less software)
+#
+if(DEFINED ENV{SROOT} AND NOT SYSTEM_PACKAGES)
+  set(CMAKE_PREFIX_PATH $ENV{SROOT})
+  set(SYSTEM_PACKAGES True)
+endif(DEFINED ENV{SROOT})
+
 if(SYSTEM_PACKAGES)
   if(IS_DIRECTORY $ENV{I3_PORTS})
     boost_report_value(I3_PORTS)
