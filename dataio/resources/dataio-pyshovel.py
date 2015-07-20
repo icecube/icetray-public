@@ -68,7 +68,7 @@ class UI:
             'up': ('up','k'),
             'down': ('down','j'),
             'interact': ('i', 'I'),
-            'libs': ('L'),
+            'libs': ('L',),
             'goto':('g','G'),
             'help':('?',),
            }
@@ -570,6 +570,29 @@ class Popup(urwid.Edit):
     
     signals = ['close_popup','select_frame']
     
+    def __init__(self, *args, **kwargs):
+        urwid.Edit.__init__(self, *args, **kwargs)
+        # change key bindings so we can write all letters
+        self._keys = UI.keys.copy()
+        UI.keys = {'select': ('return','enter'),
+            'xml': tuple(),
+            'escape': ('esc',),
+            'left': ('left',),
+            'right': ('right',),
+            'up': ('up',),
+            'down': ('down',),
+            'interact': tuple(),
+            'libs': tuple(),
+            'goto': tuple(),
+            'help':('?',),
+           }
+        urwid.connect_signal( self, 'close_popup', self.destroy )
+    
+    def destroy(self):
+        UI.keys = self._keys
+        urwid.disconnect_signal( self, 'close_popup', self.destroy )
+        urwid.emit_signal(self, 'close_popup')
+    
     def closing_action(self):
         pass
     
@@ -578,10 +601,10 @@ class Popup(urwid.Edit):
             return key
         key = urwid.Edit.keypress(self,size,key)
         
-        if key == 'esc':
+        if key in UI.keys['escape']:
             urwid.emit_signal(self, 'close_popup')
             return None
-        elif key in ('enter','return'):
+        elif key in UI.keys['select']:
             self.closing_action()
             urwid.emit_signal(self, 'close_popup')
             return None
@@ -609,6 +632,7 @@ class GotoInput(Popup):
             pass
         else:
             urwid.emit_signal(self, 'select_frame', f )
+        Popup.closing_action(self)
 
 class LibInput(Popup):
 
@@ -627,6 +651,7 @@ class LibInput(Popup):
 #                urwid.emit_signal(self, 'select_frame', None )
         except ValueError:
             pass
+        Popup.closing_action(self)
     
 class HelpScreen(urwid.Frame):
 
