@@ -17,7 +17,7 @@ else(LAPACK_FOUND)
   unset(LAPACK_CONFIG_ERROR)
   unset(LAPACK_INCLUDE_DIR)
   
-  find_package(OpenBLAS)
+  find_package(OpenBLAS QUIET)
   if(OpenBLAS_FOUND)
     colormsg("+ OpenBLAS")    
     colormsg("+  version: ${OpenBLAS_VERSION}")

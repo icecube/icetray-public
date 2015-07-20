@@ -16,8 +16,8 @@ if(BLAS_FOUND)
 else(BLAS_FOUND)
   unset(BLAS_CONFIG_ERROR)
   unset(BLAS_INCLUDE_DIR)
-  
-  find_package(OpenBLAS)
+
+  find_package(OpenBLAS QUIET)
   if(OpenBLAS_FOUND)
     colormsg("+ OpenBLAS")
     colormsg("+  version: ${OpenBLAS_VERSION}")
