@@ -14,16 +14,17 @@
 
       .. seealso:: 
 
-      :ref:`pyfunction_as_module`
+         :ref:`pyfunction_as_module`
 
-      :ref:`i3tray_keyword_parameters`
+         :ref:`i3tray_keyword_parameters`
 
    .. automethod:: AddService
 
    .. automethod:: AddSegment
+      
       .. seealso:: 
 
-      :ref:`tray_segments`
+         :ref:`tray_segments`
 
    .. automethod:: ConnectBoxes
 
