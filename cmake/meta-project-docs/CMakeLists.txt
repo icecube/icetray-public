@@ -10,7 +10,12 @@ set(SPHINX_EXTRA_OPTIONS "-N;-a;-E" CACHE STRING "Sphinx options")
 
 find_program(SPHINX_BUILD sphinx-build)
 
-if(SPHINX_BUILD)
+execute_process(COMMAND touch ${CMAKE_BINARY_DIR}/test_write 2>/dev/null && rm ${CMAKE_BINARY_DIR}/test_write
+		RESULT_VARIABLE SPHINX_DIR_NOT_WRITABLE
+		OUTPUT_QUIET
+		ERROR_QUIET)
+
+if(SPHINX_BUILD AND NOT SPHINX_DIR_NOT_WRITABLE)
   colormsg(GREEN "+-- sphinx-build found, building sphinx documentation")
   set(SPHINX_PAPER_SIZE "letter" CACHE STRING "Size of paper when generating latex/pdf of documentation.  Options are 'letter' or 'a4'")
   set(SPHINX_EXTRA_OPTIONS "" CACHE STRING "Extra options to pass to sphinx")
@@ -54,8 +59,12 @@ execute_process(COMMAND svn pg svn:externals ${CMAKE_SOURCE_DIR}
     @ONLY)
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/conf.py.in ${CMAKE_CURRENT_SOURCE_DIR}/source/conf.py
     @ONLY)
-else()
+elseif(NOT SPHINX_BUILD)
   colormsg(CYAN "+-- sphinx-build *not* found, disabling build of sphinx documentation.
+       See docs at http://software.icecube.wisc.edu/offline_trunk/
+       for details.")
+else()
+  colormsg(CYAN "+-- cmake docs source *not* writable, disabling build of sphinx documentation.
        See docs at http://software.icecube.wisc.edu/offline_trunk/
        for details.")
 endif()
