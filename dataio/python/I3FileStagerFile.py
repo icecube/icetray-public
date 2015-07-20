@@ -171,6 +171,8 @@ class I3FileStagerFile(AbstractFileStager):
 
 		# copy the file
 		if parsed_url.scheme == "file":
+			if parsed_url.netloc != "":
+				icetray.logging.log_fatal("%s is not a valid URI (file:// URIs must use absolute paths)" % url, unit="I3FileStagerFile")
 			input_path = parsed_url.path
 			icetray.logging.log_info("Copying file %s to %s" % (input_path, output_path), unit="I3FileStagerFile")
 			shutil.copyfile(input_path, output_path)
@@ -215,6 +217,8 @@ class I3FileStagerFile(AbstractFileStager):
 		# copy the file
 		if parsed_url[0] == "file":
 			output_path = parsed_url[2]
+			if parsed_url.netloc != "":
+				icetray.logging.log_fatal("%s is not a valid URI (file:// URIs must use absolute paths)" % url, unit="I3FileStagerFile")
 			icetray.logging.log_info("Copying file %s to %s" % (local_path, output_path), unit="I3FileStagerFile")
 			shutil.copyfile(local_path, output_path)
 			icetray.logging.log_info("File copied: %s to %s" % (local_path, output_path), unit="I3FileStagerFile")

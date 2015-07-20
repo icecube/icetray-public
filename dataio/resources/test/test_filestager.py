@@ -193,6 +193,14 @@ def test_https_with_auth():
 
 def test_file():
     _test_stage(os.path.expandvars("file://$I3_BUILD/env-shell.sh"))
+
+def test_file_with_relative_path():
+    relative = os.path.relpath(os.path.expandvars('$I3_BUILD/env-shell.sh'))
+    try:
+        _test_stage('file://'+relative)
+        raise AssertionError("An error should have been raised")
+    except RuntimeError:
+        pass
     
 def test_file_implicit():
     _test_stage(os.path.expandvars("$I3_BUILD/env-shell.sh"))
