@@ -10,7 +10,8 @@ set(SPHINX_EXTRA_OPTIONS "-N;-a;-E" CACHE STRING "Sphinx options")
 
 find_program(SPHINX_BUILD sphinx-build)
 
-execute_process(COMMAND touch ${CMAKE_BINARY_DIR}/test_write 2>/dev/null && rm ${CMAKE_BINARY_DIR}/test_write
+execute_process(COMMAND touch ${CMAKE_BINARY_DIR}/test_write
+		COMMAND rm -f ${CMAKE_BINARY_DIR}/test_write
 		RESULT_VARIABLE SPHINX_DIR_NOT_WRITABLE
 		OUTPUT_QUIET
 		ERROR_QUIET)
