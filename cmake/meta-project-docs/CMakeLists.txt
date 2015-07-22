@@ -10,11 +10,12 @@ set(SPHINX_EXTRA_OPTIONS "-N;-a;-E" CACHE STRING "Sphinx options")
 
 find_program(SPHINX_BUILD sphinx-build)
 
-execute_process(COMMAND touch ${CMAKE_BINARY_DIR}/test_write
-		COMMAND rm -f ${CMAKE_BINARY_DIR}/test_write
+execute_process(COMMAND touch test_write
+		COMMAND rm -f test_write
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 		RESULT_VARIABLE SPHINX_DIR_NOT_WRITABLE
-		OUTPUT_QUIET
-		ERROR_QUIET)
+		OUTPUT_VARIABLE QUIET
+		ERROR_VARIABLE QUIET)
 
 if(SPHINX_BUILD AND NOT SPHINX_DIR_NOT_WRITABLE)
   colormsg(GREEN "+-- sphinx-build found, building sphinx documentation")
