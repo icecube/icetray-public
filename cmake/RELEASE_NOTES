@@ -1,11 +1,11 @@
-# $Id: $
-# $Author: $
-# $Date: $
-#
+Release Notes
+=============
 
 Ocbober 1, 2014, don la dieu  (nega@icecube.umd.edu)
---------------------------------------------------------------------
- V14-09-02 - 
-  o initial pal/erfa detection
-  o boost and boost-python detection tweaks
-  o boost/boost-python doc updates for OS X
+----------------------------------------------------
+
+V14-09-02
+
+* initial pal/erfa detection
+* boost and boost-python detection tweaks
+* boost/boost-python doc updates for OS X

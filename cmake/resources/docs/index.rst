@@ -12,6 +12,7 @@ CMake: icetray's build system
 
 .. toctree::
 
+   release_notes
    tutorial
    organization
    documentation
