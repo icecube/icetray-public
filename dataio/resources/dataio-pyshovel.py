@@ -56,6 +56,7 @@ class UI:
                 ('interact', 'Open an IPython session with the current frame in scope with name "frame"'),
                 ('libs', 'Import an additional library'),
                 ('goto', 'Go to frame by number'),
+                ('gotoevent', 'Go to event by id'),
                 ('help', 'This help screen'),
               ]
 
@@ -70,6 +71,7 @@ class UI:
             'interact': ('i', 'I'),
             'libs': ('L',),
             'goto':('g','G'),
+            'gotoevent':('e','E'),
             'help':('?',),
            }
 
@@ -568,24 +570,23 @@ class TapeFooter(urwid.Pile):
 
 class Popup(urwid.Edit):
     
-    signals = ['close_popup','select_frame']
+    signals = ['close_popup','select_frame','select_event']
     
     def __init__(self, *args, **kwargs):
         urwid.Edit.__init__(self, *args, **kwargs)
         # change key bindings so we can write all letters
         self._keys = UI.keys.copy()
         UI.keys = {'select': ('return','enter'),
-            'xml': tuple(),
             'escape': ('esc',),
             'left': ('left',),
             'right': ('right',),
             'up': ('up',),
             'down': ('down',),
-            'interact': tuple(),
-            'libs': tuple(),
-            'goto': tuple(),
             'help':('?',),
            }
+        for k in self._keys:
+            if k not in UI.keys:
+                UI.keys[k] = tuple()
         urwid.connect_signal( self, 'close_popup', self.destroy )
     
     def destroy(self):
@@ -632,6 +633,20 @@ class GotoInput(Popup):
             pass
         else:
             urwid.emit_signal(self, 'select_frame', f )
+        Popup.closing_action(self)
+
+class GotoEventInput(GotoInput):
+
+    def __init__(self):
+        Popup.__init__(self, 'Go to event id:')
+
+    def closing_action(self):
+        try:
+            f = int(self.get_edit_text())
+        except ValueError:
+            pass
+        else:
+            urwid.emit_signal(self, 'select_event', f )
         Popup.closing_action(self)
 
 class LibInput(Popup):
@@ -727,6 +742,40 @@ class ViewerMain(urwid.Frame):
         del old_widget
         self.drop_focus()
     
+    def select_event(self, event ):
+        '''
+        Attempt to access an event number in the file.  If 'event' is
+        negative or otherwise invalid, do nothing
+        '''
+        def get_id(frame):
+            if 'I3EventHeader' in frame:
+                return frame['I3EventHeader'].event_id
+            return -1
+        if event is None or event < 0 or get_id(self.framelist[self.active_view]) == event:
+            return
+        
+        # start a search through the framelist for the event id
+        frame = self.active_view
+        while True:
+            frame += 1
+            if frame == self.active_view:
+                return # we looped, and didn't find anything
+            try:
+                if get_id(self.framelist[frame]) == event:
+                    self.active_view = frame
+                    break
+            except IndexError:
+                frame = -1
+
+        old_widget = self.body
+        self.maxkeylen = len(self.framelist[self.active_view])
+        if self.key >= self.maxkeylen:
+            self.key = self.maxkeylen-1
+        self.frame_viewer.set_view( self.framelist[self.active_view], self.active_view, key=self.key )
+        self.footer.set_view( self.active_view, key=self.key )
+        del old_widget
+        self.drop_focus()
+    
     def select_key(self, key):
         '''Attempt to select a new key'''
         if key >= 0 and key < self.maxkeylen:
@@ -737,6 +786,7 @@ class ViewerMain(urwid.Frame):
         self.popup = obj
         urwid.connect_signal( self.popup, 'close_popup', self.close_popup )
         urwid.connect_signal( self.popup, 'select_frame', self.select_frame )
+        urwid.connect_signal( self.popup, 'select_event', self.select_event )
         popupbox = urwid.Filler(urwid.LineBox(obj))
         self.body = urwid.Overlay(popupbox, self.body, ('fixed left',5), 30, ('fixed top',5), 5)
 
@@ -794,6 +844,8 @@ class ViewerMain(urwid.Frame):
             self.mainloop.screen.set_mouse_tracking()
         elif input in UI.keys['goto']:
             self.open_popup(GotoInput())
+        elif input in UI.keys['gotoevent']:
+            self.open_popup(GotoEventInput())
         elif input in UI.keys['libs']:
             self.open_popup(LibInput())
         elif input in UI.keys['help']:
