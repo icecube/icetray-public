@@ -25,6 +25,7 @@ General Overview:
 .. toctree::
    :maxdepth: 3
 
+   release_notes
    summary
    pybindings
    logging_basic
