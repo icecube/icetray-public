@@ -1,43 +1,54 @@
-# $Id: $
-# $Author: $
-# $Date: $
-#
+Release Notes
+=============
 
+Trunk
 --------------------------------------------------------------------
 
-  o Work around the lazy-initialization bug in Boost < 1.44's bzip2
-    compressor by always writing an I frame if the output file would otherwise
-    be empty. The workaround is accompanied by a long-winded warning message.
-  o Add DCache support to I3FileStager
+* Work around the lazy-initialization bug in Boost < 1.44's bzip2
+  compressor by always writing an I frame if the output file would otherwise
+  be empty. The workaround is accompanied by a long-winded warning message.
+* Add DCache support to I3FileStager
 
 April 17, 2015, don la dieu  (nega@icecube.umd.edu)
 --------------------------------------------------------------------
- V15-04-00 
-  o Localize file stager test
-  o Clean up stray test data
+
+V15-04-00 
+
+* Localize file stager test
+* Clean up stray test data
 
 March 15, 2015, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
- V15-03-00 
-  o Improve shovel keybindings:
-    -home and end now go to the first and last frame as one would expect (as do '{' and '}')
-    -page up and page down scroll rapidly through the keys (as do '-' and '=')
-    -fast forward and reverse are now bound to 'and?' only
-  o dataio-shovel build is now optional
-  o New event_hunter.py example script for writing interesting events to an I3File.
+
+V15-03-00 
+
+* Improve shovel keybindings:
+
+  * home and end now go to the first and last frame as one would expect (as do '{' and '}')
+  * page up and page down scroll rapidly through the keys (as do '-' and '=')
+  * fast forward and reverse are now bound to 'and?' only
+
+* dataio-shovel build is now optional
+* New event_hunter.py example script for writing interesting events to an I3File.
 
 November 20, 2014, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
- V14-11-00 - Bugfix release
-  o Fixed bug in I3FileStager that was causing dataio-shovel to seg fault.
-  o Added support for I3_TESTDATA
+
+V14-11-00 - Bugfix release
+
+* Fixed bug in I3FileStager that was causing dataio-shovel to seg fault.
+* Added support for I3_TESTDATA
 
 September 30, 2014, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
- V14-09-00 - Bugfix release
-  o test_filestager.py - Switch from x2100 (SL4) to convey (SL6).
-  o dataio-pyshovel - Check if key exists before setting focus on it. Start frame index at 1 to match old shovel.
-  o I3FileStagerFile.py :
-    o Tell GridFTPStager to try FTP operations multiple times before giving up.
-    o  Make the scp file stager able to work when the username differs on the two machines.
-  o dataio-shovel - Can use file stagers now.
+
+V14-09-00 - Bugfix release
+
+* test_filestager.py - Switch from x2100 (SL4) to convey (SL6).
+* dataio-pyshovel - Check if key exists before setting focus on it. Start frame index at 1 to match old shovel.
+* I3FileStagerFile.py :
+
+  * Tell GridFTPStager to try FTP operations multiple times before giving up.
+  * Make the scp file stager able to work when the username differs on the two machines.
+
+* dataio-shovel - Can use file stagers now.

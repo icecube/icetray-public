@@ -9,6 +9,7 @@ data in the ``.i3`` file format.
 .. toctree::
    :maxdepth: 3
 
+   release_notes
    dataio
    serialization
    portable_binary_archive
