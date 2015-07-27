@@ -1,22 +1,22 @@
 #
 #  $Id$
-#  
+#
 #  Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
 #  and the IceCube Collaboration <http://www.icecube.wisc.edu>
-#  
+#
 #  This file is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation; either version 3 of the License, or
 #  (at your option) any later version.
-#  
+#
 #  This program is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
-#  
+#
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
-#  
+#
 macro(report_find tool what where)
   if(${where} MATCHES ".*NOTFOUND$")
     message(STATUS "- ${what}")
@@ -35,9 +35,9 @@ macro(found_ok msg)
 endmacro(found_ok msg)
 
 if (SYSTEM_PACKAGES)
-   message(STATUS "Using system packages when I3_PORTS not available")
+  message(STATUS "Using system packages when I3_PORTS not available")
 else (SYSTEM_PACKAGES)
-   set(TOOL_SYSTEM_PATH NO_DEFAULT_PATH)
+  set(TOOL_SYSTEM_PATH NO_DEFAULT_PATH)
 endif (SYSTEM_PACKAGES)
 
 #
@@ -48,7 +48,7 @@ macro(tooldef tool_ incdir incfile libdir bindir)
   colormsg("")
   colormsg(HICYAN "${tool_}")
 
-  # Set the config error to false by default		
+  # Set the config error to false by default
   set(${TOOL}_CONFIG_ERROR FALSE)
   set(${TOOL}_LIB_ACCUM)
 
@@ -74,10 +74,10 @@ macro(tooldef tool_ incdir incfile libdir bindir)
     set(foundlib${lib} "NOTFOUND" CACHE INTERNAL "tmp" FORCE)
     if (NOT ${lib})
       # if it is nothing, go find it
-      find_library(foundlib${lib} 
-	${lib} 
-	${I3_PORTS}/${libdir} ${libdir}
-	${TOOL_SYSTEM_PATH})
+      find_library(foundlib${lib}
+        ${lib}
+        ${I3_PORTS}/${libdir} ${libdir}
+        ${TOOL_SYSTEM_PATH})
     else (NOT ${lib})
       #else go try to find it
       set(foundlib${lib} ${lib})
@@ -87,14 +87,14 @@ macro(tooldef tool_ incdir incfile libdir bindir)
       set(${TOOL}_CONFIG_ERROR TRUE)
     else(${foundlib${lib}} MATCHES ".*NOTFOUND$" AND NOT ${libdir} STREQUAL "NONE")
       if(NOT ${libdir} STREQUAL "NONE")
-	found_ok("${foundlib${lib}}")
-	list(APPEND ${TOOL}_LIB_ACCUM ${foundlib${lib}})
-	add_custom_command(TARGET install_tool_libs
-	  PRE_BUILD
-	  COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/lib/tools
-	  COMMAND ${CMAKE_SOURCE_DIR}/cmake/install_shlib.py ${foundlib${lib}} ${CMAKE_INSTALL_PREFIX}/lib/tools
-	  ) 
-	add_dependencies(install_tool_libs install_${TOOL}_libs)
+        found_ok("${foundlib${lib}}")
+        list(APPEND ${TOOL}_LIB_ACCUM ${foundlib${lib}})
+        add_custom_command(TARGET install_${TOOL}_libs
+          PRE_BUILD
+          COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/lib/tools
+          COMMAND ${CMAKE_SOURCE_DIR}/cmake/install_shlib.py ${foundlib${lib}} ${CMAKE_INSTALL_PREFIX}/lib/tools
+          )
+        add_dependencies(install_tool_libs install_${TOOL}_libs)
       endif(NOT ${libdir} STREQUAL "NONE")
     endif(${foundlib${lib}} MATCHES ".*NOTFOUND$" AND NOT ${libdir} STREQUAL "NONE")
   endforeach(lib ${ARGN})
@@ -108,4 +108,3 @@ macro(tooldef tool_ incdir incfile libdir bindir)
   endif (NOT ${TOOL}_CONFIG_ERROR)
 
 endmacro(tooldef)
-
