@@ -43,7 +43,7 @@ else(NOT GENIE_VERSION)
     else(GENIE_VERSION VERSION_LESS "2.8.6")
     message(STATUS "Configuring for Genie version ${GENIE_VERSION}.")
 
-    set(GENIE_PATH ${I3_PORTS}/Genie-${GENIE_VERSION} CACHE STRING "Genie's very own ROOTSYS equivalent.." FORCE)
+    set(GENIE_PATH ${I3_PORTS}/Genie-${GENIE_VERSION} CACHE STRING "Genie's very own ROOTSYS equivalent.." )
 
     #message(STATUS "Looking for Genie genie-config program")
 
