@@ -359,3 +359,7 @@ a.footnote-reference, a.fn-backref {
 vertical-align: super;
 font-size: smaller;
 }
+
+.strikethrough {
+    text-decoration: line-through;
+}
