@@ -321,8 +321,17 @@ namespace I3Test
 
     cout << boost::format("%-67s") % boost::io::group(std::setfill('='), "");
     cout << "\nPass: " << successes << "\nFail: " << failures << "\n";
-    if (failures)
-      cout << " ***** SOME TESTS FAIL *****\n\n";
+    if (failures){
+      cout << " ***** THESE TESTS FAIL *****\n";
+      for (map<string, test_group*>::iterator i = groups.begin();
+           i != groups.end(); i++)
+        for(std::map<std::string, boost::shared_ptr<test_failure> >::const_iterator
+              failure = i->second->failures.begin();
+            failure != i->second->failures.end();
+            failure++)
+          cout << "    " << i->first << '/' << failure->first << '\n';
+      cout << endl;
+    }
 
     if (failures)
       return true;
