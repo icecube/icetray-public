@@ -131,7 +131,7 @@ add_custom_target(tarball-install-sh
   COMMENT "Tarball install (env-shell)"
   )
 add_dependencies(tarball-install-sh tarball-install)
-if(((I3_PORTS MATCHES "/cvmfs/icecube.opensciencegrid.org") AND (NOT SYSTEM_PACKAGES)) OR (NOT INSTALL_TOOL_LIBS))
+if(USE_CVMFS OR (NOT INSTALL_TOOL_LIBS))
 else()
   add_dependencies(tarball-install-sh tarball-install-tools)
 endif()
