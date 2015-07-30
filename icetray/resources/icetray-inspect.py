@@ -158,7 +158,7 @@ def display_config(mod, category, modname=None):
 		try:
 			config = i3inspect.get_configuration(mod)
 		except RuntimeError:
-			e = sys.exc_info[1]
+			e = sys.exc_info()[1]
 			sys.stderr.write("Error constructing '%s': %s" % (mod, e))
 			return False
 			
