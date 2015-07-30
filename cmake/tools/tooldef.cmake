@@ -89,7 +89,7 @@ macro(tooldef tool_ incdir incfile libdir bindir)
       if(NOT ${libdir} STREQUAL "NONE")
         found_ok("${foundlib${lib}}")
         list(APPEND ${TOOL}_LIB_ACCUM ${foundlib${lib}})
-        add_custom_command(TARGET install_${TOOL}_libs
+        add_custom_command(TARGET install_tool_libs
           PRE_BUILD
           COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/lib/tools
           COMMAND ${CMAKE_SOURCE_DIR}/cmake/install_shlib.py ${foundlib${lib}} ${CMAKE_INSTALL_PREFIX}/lib/tools
