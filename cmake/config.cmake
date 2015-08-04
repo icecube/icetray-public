@@ -466,12 +466,12 @@ if(NOT METAPROJECT_CONFIGURED)
 
   set(CMAKE_CXX_FLAGS "${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPPRESSION_FLAGS}")
   string(REGEX REPLACE "[ ]+" " " CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" CACHE STRING
+  set(CMAKE_CXX_FLAGS "-pipe ${CMAKE_CXX_FLAGS}" CACHE STRING
     "Flags used by the compiler during all build types" FORCE)
 
   set(CMAKE_C_FLAGS "${C_WARNING_FLAGS} ${CMAKE_C_FLAGS}")
   string(REPLACE "-Wno-non-virtual-dtor" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}" CACHE STRING
+  set(CMAKE_C_FLAGS "-pipe ${CMAKE_C_FLAGS}" CACHE STRING
     "Flags used by the compiler during all build types" FORCE)
 
   set(CMAKE_CXX_FLAGS_RELEASE "-O${RELOPTLEVEL} -Wno-deprecated -Wno-unused-variable -DNDEBUG -DI3_COMPILE_OUT_VERBOSE_LOGGING")
@@ -502,18 +502,18 @@ if(NOT METAPROJECT_CONFIGURED)
     FORCE )
 
   ## coverage flags
-  set(CMAKE_CXX_FLAGS_COVERAGE "-pipe -g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
+  set(CMAKE_CXX_FLAGS_COVERAGE "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
     "Flags used by the C++ compiler during coverage builds."
     FORCE )
-  set(CMAKE_C_FLAGS_COVERAGE "-pipe -g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
+  set(CMAKE_C_FLAGS_COVERAGE "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
     "Flags used by the C compiler during coverage builds."
     FORCE )
   set(CMAKE_EXE_LINKER_FLAGS_COVERAGE
-    "-pipe -g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
+    "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
     "Flags used for linking binaries during coverage builds."
     FORCE )
   set(CMAKE_SHARED_LINKER_FLAGS_COVERAGE
-    "-pipe -g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
+    "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
     "Flags used by the shared libraries linker during coverage builds."
     FORCE )
   mark_as_advanced(
