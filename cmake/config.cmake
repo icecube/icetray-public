@@ -71,8 +71,8 @@ set(I3_PORTS $ENV{I3_PORTS} CACHE STRING "Path to your icecube ports installatio
 #
 if($ENV{SROOT} MATCHES "^/cvmfs/icecube" AND NOT SYSTEM_PACKAGES)
   set(CMAKE_PREFIX_PATH $ENV{SROOT})
-  set(SYSTEM_PACKAGES True)
-  set(USE_CVMFS True CACHE BOOL "Are we using CVMFS?")
+  set(SYSTEM_PACKAGES TRUE)
+  set(USE_CVMFS TRUE CACHE BOOL "Are we using CVMFS?")
 endif()
 
 if(SYSTEM_PACKAGES)
