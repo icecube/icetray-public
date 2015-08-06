@@ -17,7 +17,10 @@ Components of this metaproject
 .. toctree::
    :glob:
    :maxdepth: 2
-
+   :sorted:
+   :ignorecase:
+   :first: cmake, icetray, dataio, dataclasses
+   
    projects/cmake/index
    projects/icetray/index
    projects/dataio/index
