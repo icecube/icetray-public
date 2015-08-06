@@ -28,16 +28,14 @@
 
 
 I3ConditionalModule::I3ConditionalModule(const I3Context& context) :
-  I3Module(context),
-  pickKey_("")
+  I3Module(context)
 {
   i3_log("%s", __PRETTY_FUNCTION__);
-  configured_ = false;
 
   AddParameter("IcePickServiceKey",
 	       "Key for an IcePick in the context that this module should check "
 	       "before processing physics frames.",
-	       pickKey_);
+	       "");
 
   AddParameter("If",
 	       "A python function... if this returns something that evaluates to True,"
@@ -61,13 +59,13 @@ void I3ConditionalModule::Configure_()
     {
       i3_log("user passed us something");
       if (!PyCallable_Check(configured_if_.ptr()))
-	log_fatal("'If' parameter to module %s must be a callable object", GetName().c_str());
+        log_fatal("'If' parameter to module %s must be a callable object", GetName().c_str());
       else
-	{
-	  i3_log("user passed us something and it is a PyFunction");
-	  if_ = configured_if_;
-	  use_if_ = true;
-	}
+      {
+        i3_log("user passed us something and it is a PyFunction");
+        if_ = configured_if_;
+        use_if_ = true;
+      }
     }
   else // got nothing from user
     use_if_ = false;
@@ -75,19 +73,20 @@ void I3ConditionalModule::Configure_()
   boost::python::object obj;
 
   i3_log("(%s) Configuring the Conditional Module stuff.",GetName().c_str());
-  GetParameter("IcePickServiceKey",pickKey_);
+  std::string pickKey;
+  GetParameter("IcePickServiceKey",pickKey);
   use_pick_ = false;
-  if(pickKey_ != "")
+  if(pickKey != "")
     {
       if (use_if_)
-	log_fatal("Please specify either IcePickServiceKey or If, but not both");
-      i3_log("Looking for pick %s in the context.",pickKey_.c_str());
-      pick_ = GetContext().Get<I3IcePickPtr>(pickKey_);
+        log_fatal("Please specify either IcePickServiceKey or If, but not both");
+      i3_log("Looking for pick %s in the context.",pickKey.c_str());
+      pick_ = GetContext().Get<I3IcePickPtr>(pickKey);
       if(!pick_)
-	log_fatal("IcePick %s was not found in the context.  "
-		  "Did you install it?",pickKey_.c_str());
+        log_fatal("IcePick %s was not found in the context.  "
+		  "Did you install it?",pickKey.c_str());
       else
-	use_pick_ = true;
+        use_pick_ = true;
     }
 
   // bounce this guy back to I3Module, which will in turn bounce to whoever derives
@@ -109,9 +108,9 @@ bool I3ConditionalModule::ShouldDoProcess(I3FramePtr frame)
       boost::python::object rv = if_(frame);
       bool flag = boost::python::extract<bool>(rv);
       if (flag)
-	++nexecuted_;
+        ++nexecuted_;
       else
-	++nskipped_;
+        ++nskipped_;
 
       i3_log("ShouldDoProcess == %d", flag);
       return flag;
@@ -122,9 +121,9 @@ bool I3ConditionalModule::ShouldDoProcess(I3FramePtr frame)
       i3_log("Sending frame to our IcePick.");
       bool flag = pick_->SelectFrameInterface(*frame);
       if (flag)
-	  ++nexecuted_;
+        ++nexecuted_;
       else
-	  ++nskipped_;
+        ++nskipped_;
       i3_log("ShouldDoPhysics == %d", flag);
       return flag;
     }
