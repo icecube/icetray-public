@@ -22,7 +22,7 @@
 colormsg("")
 colormsg(HICYAN "python")
 
-set(PYTHON_FOUND TRUE CACHE BOOL "Python found successfully" FORCE)
+set(PYTHON_FOUND TRUE CACHE BOOL "Python found successfully")
 
 find_package(PythonInterp QUIET)
 
@@ -85,7 +85,7 @@ set(PYTHON_INCLUDE_DIR2 ${PYTHON_INCLUDE_DIR})
 find_package(PythonLibs ${PYTHON_STRIPPED_VERSION} EXACT QUIET)
 
 if(NOT PYTHON_EXECUTABLE)
-  set(PYTHON_FOUND FALSE CACHE BOOL "Python found successfully" FORCE)
+  set(PYTHON_FOUND FALSE CACHE BOOL "Python found successfully")
 endif(NOT PYTHON_EXECUTABLE)
 
 if(NOT PYTHON_INCLUDE_DIR)
@@ -94,7 +94,7 @@ endif(NOT PYTHON_INCLUDE_DIR)
 
 if(NOT EXISTS "${PYTHON_INCLUDE_DIR}/Python.h")
   message(STATUS "Error configuring python:  ${PYTHON_INCLUDE_DIR}/Python.h does not exist.\n")
-  set(PYTHON_FOUND FALSE CACHE BOOL "Python found successfully" FORCE)
+  set(PYTHON_FOUND FALSE CACHE BOOL "Python found successfully")
   set(PYTHON_CONFIG_ERROR TRUE)
 endif(NOT  EXISTS "${PYTHON_INCLUDE_DIR}/Python.h")
 
@@ -118,9 +118,9 @@ else(NUMPY_FOUND EQUAL 0)
 endif(NUMPY_FOUND EQUAL 0)
 
 if(NOT NUMPY_FOUND)
-	set(NUMPY_FOUND FALSE CACHE BOOL "Numpy found successfully" FORCE)
+	set(NUMPY_FOUND FALSE CACHE BOOL "Numpy found successfully")
 else(NOT NUMPY_FOUND)
-	set(NUMPY_FOUND TRUE CACHE BOOL "Numpy found successfully" FORCE)
+	set(NUMPY_FOUND TRUE CACHE BOOL "Numpy found successfully")
 	execute_process(COMMAND ${PYTHON_EXECUTABLE} -c
 	    "import numpy; print(numpy.get_include())"
            OUTPUT_VARIABLE _NUMPY_INCLUDE_DIR
@@ -140,7 +140,7 @@ else(NOT NUMPY_FOUND)
     endforeach(prefix ${CMAKE_FRAMEWORK_PATH})
 
 	find_path(NUMPY_INCLUDE_DIR NAMES numpy/ndarrayobject.h PATHS ${NUMPY_INCLUDE_DIR_CANDIDATES})
-	set(NUMPY_INCLUDE_DIR ${NUMPY_INCLUDE_DIR} CACHE STRING "Numpy inc directory" FORCE)
+	set(NUMPY_INCLUDE_DIR ${NUMPY_INCLUDE_DIR} CACHE STRING "Numpy inc directory")
 	message(STATUS "+    numpy: ${NUMPY_INCLUDE_DIR}")
 endif(NOT NUMPY_FOUND)
 

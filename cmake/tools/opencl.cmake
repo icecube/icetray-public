@@ -43,10 +43,10 @@ IF (APPLE)
           SET(OPENCL_LIBRARIES "")
         ENDIF("${OPENCL_INCLUDE_DIR}" MATCHES "OpenCL\\.framework")
         IF(NOT OPENCL_LIBRARIES)
-          SET (OPENCL_LIBRARIES "-framework OpenCL" CACHE FILEPATH "OpenCL Framework" FORCE)
+          SET (OPENCL_LIBRARIES "-framework OpenCL" CACHE FILEPATH "OpenCL Framework")
         ENDIF(NOT OPENCL_LIBRARIES)
 
-        set(OPENCL_FOUND TRUE CACHE BOOL "Tool 'opencl' found successfully" FORCE)
+        set(OPENCL_FOUND TRUE CACHE BOOL "Tool 'opencl' found successfully")
 
         REPORT_FIND(OpenCL "OpenCL framework" ${OPENCL_LIBRARIES})
 

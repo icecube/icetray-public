@@ -63,7 +63,7 @@ else()
   #message(STATUS "I3_SRC not yet set in environment.  ok.")
 endif()
 
-set(I3_PORTS $ENV{I3_PORTS} CACHE STRING "Path to your icecube ports installation" FORCE)
+set(I3_PORTS $ENV{I3_PORTS} CACHE STRING "Path to your icecube ports installation")
 
 #
 # Find CVMFS software
@@ -93,13 +93,13 @@ else(SYSTEM_PACKAGES)
 endif(SYSTEM_PACKAGES)
 
 if(DEFINED ENV{I3_TESTDATA})
-    set(I3_TESTDATA $ENV{I3_TESTDATA} CACHE STRING "Path to your icetray test-data" FORCE)
+    set(I3_TESTDATA $ENV{I3_TESTDATA} CACHE STRING "Path to your icetray test-data")
 elseif(DEFINED ENV{I3_PORTS})
-    set(I3_TESTDATA $ENV{I3_PORTS}/test-data CACHE STRING "Path to your icetray test-data" FORCE)
+    set(I3_TESTDATA $ENV{I3_PORTS}/test-data CACHE STRING "Path to your icetray test-data")
 else()
     colormsg(YELLOW "*** Neither I3_PORTS nor I3_TESTDATA set.")
     colormsg(YELLOW "*** Make sure to define at least one of them before calling 'make test' or manually running tests.")
-    set(I3_TESTDATA "" CACHE STRING "Path to your icetray test-data: currently empty, define it if you wish to run unit tests and/or test scripts." FORCE)
+    set(I3_TESTDATA "" CACHE STRING "Path to your icetray test-data: currently empty, define it if you wish to run unit tests and/or test scripts.")
 endif(DEFINED ENV{I3_TESTDATA})
 
 #
@@ -243,9 +243,9 @@ endif(NOT HAVE_META_PROJECT)
 #           what a hack.
 if (CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
   if (NOT "${META_PROJECT}" STREQUAL "Unknown")
-    set(CMAKE_INSTALL_PREFIX ${META_PROJECT}.r${SVN_REVISION}.${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
+    set(CMAKE_INSTALL_PREFIX ${META_PROJECT}.r${SVN_REVISION}.${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball.")
   else (NOT "${META_PROJECT}" STREQUAL "Unknown")
-    set(CMAKE_INSTALL_PREFIX ${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
+    set(CMAKE_INSTALL_PREFIX ${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball.")
   endif (NOT "${META_PROJECT}" STREQUAL "Unknown")
 endif(CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
 
@@ -329,7 +329,7 @@ execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
   COMMAND tr -d \\n
   OUTPUT_VARIABLE GCC_VERSION)
 numeric_version(${GCC_VERSION} "gcc")
-set(GCC_NUMERIC_VERSION ${GCC_NUMERIC_VERSION} CACHE INTEGER "Numeric gcc version" FORCE)
+set(GCC_NUMERIC_VERSION ${GCC_NUMERIC_VERSION} CACHE INTEGER "Numeric gcc version")
 
 #
 # Ban old gcc versions
@@ -458,73 +458,67 @@ if(NOT METAPROJECT_CONFIGURED)
   #
   if (NOT CMAKE_BUILD_TYPE)
     if(NOT META_PROJECT MATCHES "trunk$")
-      set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel" FORCE)
+      set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel")
     else(NOT META_PROJECT MATCHES "trunk$")
-      set(CMAKE_BUILD_TYPE "RelWithAssert" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel" FORCE)
+      set(CMAKE_BUILD_TYPE "RelWithAssert" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel")
     endif(NOT META_PROJECT MATCHES "trunk$")
   endif (NOT CMAKE_BUILD_TYPE)
 
   set(CMAKE_CXX_FLAGS "${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPPRESSION_FLAGS}")
   string(REGEX REPLACE "[ ]+" " " CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
   set(CMAKE_CXX_FLAGS "-pipe ${CMAKE_CXX_FLAGS}" CACHE STRING
-    "Flags used by the compiler during all build types" FORCE)
+    "Flags used by the compiler during all build types")
 
   set(CMAKE_C_FLAGS "${C_WARNING_FLAGS} ${CMAKE_C_FLAGS}")
   string(REPLACE "-Wno-non-virtual-dtor" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
   set(CMAKE_C_FLAGS "-pipe ${CMAKE_C_FLAGS}" CACHE STRING
-    "Flags used by the compiler during all build types" FORCE)
+    "Flags used by the compiler during all build types")
 
   set(CMAKE_CXX_FLAGS_RELEASE "-O${RELOPTLEVEL} -Wno-deprecated -Wno-unused-variable -DNDEBUG -DI3_COMPILE_OUT_VERBOSE_LOGGING")
   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}" CACHE STRING
-    "Flags used by compiler during release builds" FORCE)
+    "Flags used by compiler during release builds")
 
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O${RELOPTLEVEL} -Wno-deprecated -Wno-unused-variable -g -DNDEBUG -DI3_COMPILE_OUT_VERBOSE_LOGGING")
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}" CACHE STRING
-    "Flags used by compiler during release builds" FORCE)
+    "Flags used by compiler during release builds")
 
   ## RelWithAssert flags
   set(CMAKE_CXX_FLAGS_RELWITHASSERT "-O${RELOPTLEVEL} -Wno-deprecated -Wno-unused-variable -DI3_COMPILE_OUT_VERBOSE_LOGGING" CACHE STRING
-    "Flags used by compiler during Release+Assert builds" FORCE)
+    "Flags used by compiler during Release+Assert builds")
   set(CMAKE_C_FLAGS_RELLWITHASSERT "-O${RELOPTLEVEL} -Wno-deprecated -Wno-unused-variable" CACHE STRING
-    "Flags used by compiler during Release+Assert builds" FORCE)
+    "Flags used by compiler during Release+Assert builds")
   set(CMAKE_EXE_LINKER_FLAGS_RELWITHASSERT "${CMAKE_EXE_LINKER_FLAGS_RELEASE}" CACHE STRING
-    "Flags used for linking binaries during Release+Assert builds." FORCE)
+    "Flags used for linking binaries during Release+Assert builds.")
   set(CMAKE_SHARED_LINKER_FLAGS_RELWITHASSERT "${CMAKE_SHARED_LINKER_FLAGS_RELEASE}" CACHE STRING
-    "Flags used for linking shared libraries during Release+Assert builds." FORCE)
+    "Flags used for linking shared libraries during Release+Assert builds.")
   mark_as_advanced(
     CMAKE_CXX_FLAGS_RELWITHASSERT
     CMAKE_C_FLAGS_RELWITHASSERT
     CMAKE_EXE_LINKER_FLAGS_RELWITHASSERT
-    CMAKE_SHARED_LINKER_FLAGS_RELWITHASSERT )
+    CMAKE_SHARED_LINKER_FLAGS_RELWITHASSERT)
   # Update the documentation string of CMAKE_BUILD_TYPE for GUIs
   set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
-    "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert."
-    FORCE )
+    "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert.")
 
   ## coverage flags
   set(CMAKE_CXX_FLAGS_COVERAGE "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
-    "Flags used by the C++ compiler during coverage builds."
-    FORCE )
+    "Flags used by the C++ compiler during coverage builds.")
   set(CMAKE_C_FLAGS_COVERAGE "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
-    "Flags used by the C compiler during coverage builds."
-    FORCE )
+    "Flags used by the C compiler during coverage builds.")
   set(CMAKE_EXE_LINKER_FLAGS_COVERAGE
     "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
-    "Flags used for linking binaries during coverage builds."
-    FORCE )
+    "Flags used for linking binaries during coverage builds.")
   set(CMAKE_SHARED_LINKER_FLAGS_COVERAGE
     "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
-    "Flags used by the shared libraries linker during coverage builds."
-    FORCE )
+    "Flags used by the shared libraries linker during coverage builds.")
   mark_as_advanced(
     CMAKE_CXX_FLAGS_COVERAGE
     CMAKE_C_FLAGS_COVERAGE
     CMAKE_EXE_LINKER_FLAGS_COVERAGE
-    CMAKE_SHARED_LINKER_FLAGS_COVERAGE )
+    CMAKE_SHARED_LINKER_FLAGS_COVERAGE)
   # Update the documentation string of CMAKE_BUILD_TYPE for GUIs
   set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
-    "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert Coverage."
-    FORCE )
+    "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert Coverage.")
 
   ## at this point only project CMakeLists.txt's and tools/*.cmake will modify
   ## the command line. let's check what we have.
@@ -571,9 +565,9 @@ if(NOT METAPROJECT_CONFIGURED)
   # stop binutils stupidity
   #
   if(NOT APPLE)
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-as-needed" CACHE STRING "Flags used by the linker" FORCE)
-    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--no-as-needed" CACHE STRING "Flags used by the linker" FORCE)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-as-needed" CACHE STRING "Flags used by the linker" FORCE)
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-as-needed" CACHE STRING "Flags used by the linker")
+    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--no-as-needed" CACHE STRING "Flags used by the linker")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-as-needed" CACHE STRING "Flags used by the linker")
   endif(NOT APPLE)
 
   set(METAPROJECT_CONFIGURED TRUE CACHE INTERNAL "Metaproject configured")

@@ -39,8 +39,8 @@ if(NOT HDF5_FOUND)
     )
 
   if(HDF5_FOUND)
-    set(HDF5_FOUND TRUE CACHE BOOL "Tool HDF5 found successfully" FORCE)
-    set(HDF5_LIBRARIES "${HDF5_LIBRARIES}" CACHE PATH "Libraries for tool HDF5" FORCE)
+    set(HDF5_FOUND TRUE CACHE BOOL "Tool HDF5 found successfully")
+    set(HDF5_LIBRARIES "${HDF5_LIBRARIES}" CACHE PATH "Libraries for tool HDF5")
   endif(HDF5_FOUND)
 
 endif(NOT HDF5_FOUND)

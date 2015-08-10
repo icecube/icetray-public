@@ -110,15 +110,15 @@ ELSE(NOT IS_DIRECTORY $ENV{JAVA_HOME})
 ENDIF(NOT IS_DIRECTORY $ENV{JAVA_HOME})
 
 SET(JNI_INCLUDE_DIR ${jni_h_include_dir} ${jni_md_h_include_dir}
-  CACHE STRING "Include dirs for jni" FORCE)
+  CACHE STRING "Include dirs for jni")
 
 IF(NOT APPLE)  #if'd because we use Frameworks on Apple
 SET(JNI_LIBRARIES ${jni_jvm_lib} ${jni_verify_lib} ${jni_zip_lib}
-  CACHE STRING "Libraries for tool jni" FORCE)
+  CACHE STRING "Libraries for tool jni")
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   SET(JNI_LIBRARIES ${jni_jvm_lib} ${jni_jvmlinkage_lib} ${jni_verify_lib} ${jni_zip_lib}
-    CACHE STRING "Libraries for tool jni" FORCE)
+    CACHE STRING "Libraries for tool jni")
 ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 ENDIF(NOT APPLE)
 
-SET(JNI_FOUND TRUE CACHE BOOL "Jni found flag" FORCE)
+SET(JNI_FOUND TRUE CACHE BOOL "Jni found flag")

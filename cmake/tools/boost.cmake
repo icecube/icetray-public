@@ -42,7 +42,7 @@ if((NOT SYSTEM_PACKAGES) OR (NOT Boost_FOUND))
 endif((NOT SYSTEM_PACKAGES) OR (NOT Boost_FOUND))
 
 if(Boost_FOUND)
-  set(BOOST_FOUND TRUE CACHE BOOL "Boost found successfully" FORCE)
+  set(BOOST_FOUND TRUE CACHE BOOL "Boost found successfully")
   set(BOOST_INCLUDE_DIR ${Boost_INCLUDE_DIR} CACHE PATH "Path to the boost include directories.")
   set(BOOST_LIBRARIES ${Boost_LIBRARIES} CACHE PATH "Boost libraries")
   if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-${BOOST_PORTSVERSION})
