@@ -151,7 +151,7 @@ execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import scipy"
 # let's make our xxx_FOUND variable like CMake ones
 if(SCIPY_FOUND EQUAL 0)
   set(SCIPY_FOUND TRUE)
-  message(STATUS "+    scipy: ${SCIPY_FOUND}")
+  message(STATUS "+    scipy: FOUND")
 else()
   set(SCIPY_FOUND FALSE)
 endif()
