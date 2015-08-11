@@ -144,6 +144,19 @@ else(NOT NUMPY_FOUND)
 	message(STATUS "+    numpy: ${NUMPY_INCLUDE_DIR}")
 endif(NOT NUMPY_FOUND)
 
+## look for scipy
+execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import scipy"
+    RESULT_VARIABLE SCIPY_FOUND)
+
+# let's make our xxx_FOUND variable like CMake ones
+if(SCIPY_FOUND EQUAL 0)
+  set(SCIPY_FOUND TRUE)
+  message(STATUS "+    scipy: ${SCIPY_FOUND}")
+else()
+  set(SCIPY_FOUND FALSE)
+endif()
+set(SCIPY_FOUND ${SCIPY_FOUND} CACHE BOOL "Scipy found successfully")
+
 if (${PYTHON_NUMERIC_VERSION} LESS 20600)
     colormsg (HIRED "*** WARNING Python 2.6 or above is required for full functionality")
     colormsg (HIRED "*** you have ${PYTHON_STRIPPED_VERSION}: expect some functionality to be broken")
