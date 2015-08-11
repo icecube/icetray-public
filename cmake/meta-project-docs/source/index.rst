@@ -33,6 +33,7 @@ Of general interest
 .. toctree::
    :maxdepth: 2
 
+   submitting_tickets
    metaproject_metainfo
    development_tips
    code_reviews
