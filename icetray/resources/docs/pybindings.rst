@@ -4,25 +4,30 @@ Python Bindings (PyBindings)
 Allow python to import c++ libraries.
 
 
-Trivial Pybindings
+No Pybindings
 ------------------
 
-If you don't have real pybindings, use this.
-
-Note: don't mix this with real pybindings.
+If you don't have any pybindings, add the following to your python/__init__.py.  
+This will allow your project to be loaded with a simple import in python.  If you
+implement python bindings to your classes, skip to the next section.
 
 python/__init__.py::
 
-    form icecube.icetray imprt load
-    load('project_name', False)
+    from icecube.icetray import load
+    load('<project_name>', False)
     del load
 
 icetray.load's second argument controls printing status.  False disables printing
 the load output status.
 
 
-Real Pybindings
+Pybindings
 ---------------
+
+For more information check out the docs for `boost::python`_ (Version 1.58.0)
+
+.. _boost::python: http://www.boost.org/doc/libs/1_58_0/libs/python/doc/tutorial/doc/html/index.html
+
 
 private/pybindings/module.cxx::
     
