@@ -45,8 +45,11 @@ Detailed Documentation:
    standard_modules
    scripting
    i3units
-   newfeaturesv3
-   newfeaturesv4
+   keywordparams
+   functions 
+   modules
+   services   
+   qframes
    i3podholder
    I3Tray
    icecube.icetray
