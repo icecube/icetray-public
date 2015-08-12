@@ -197,7 +197,7 @@ class FrameViewer(urwid.Frame):
     Note that an urwid.Frame has no particular connection to an icetray frame.
     Avoid using generic 'frame' as a variable name for this reason.'''
     
-    signals = ['select_key','update_status']
+    signals = ['select_key','goto_matching_frame','update_status']
 
     def __init__(self, i3frame, frameidx, ascii_only=False, key=0):
         self.i3frame = i3frame
@@ -267,11 +267,19 @@ class FrameViewer(urwid.Frame):
         self.i3frame = i3frame
         if key:
             self.key = key
+
         del self.listbox.body[:]
         self.listbox.body.extend(self.mkcontents())
         if self.key >= 0 and self.key < len(self.listbox.body):
             self.listbox.set_focus(self.key)
-        self.body.set_title(self.framename(frameidx))
+
+        if self.overlay:
+            self.overlay.bottom_w.set_title(self.framename(frameidx))
+            self.body = self.overlay.bottom_w
+            i3key, xml = self.overlay.args
+            self.open_detail( i3frame, i3key, xml )
+        else:
+            self.body.set_title(self.framename(frameidx))
 
     def modified(self):
         try:
@@ -296,6 +304,7 @@ class FrameViewer(urwid.Frame):
         self.overlay = urwid.Overlay( msgbox, self.body, 
                                       'center', ('relative', 85), 
                                       'middle', ('relative', 85) )
+        self.overlay.args = (i3key, xml)
         self.body = self.overlay
 
     def keypress( self, size, key ):
@@ -305,6 +314,10 @@ class FrameViewer(urwid.Frame):
                 urwid.disconnect_signal(self.overlay.top_w.original_widget, 'update_status', self.update_status)
                 self.body = self.overlay.bottom_w
                 self.overlay = None
+            if key in UI.keys['left']:
+                urwid.emit_signal( self, 'goto_matching_frame', -1 )
+            if key in UI.keys['right']:
+                urwid.emit_signal( self, 'goto_matching_frame', 1 )
             return None
         else:
             return key
@@ -703,6 +716,7 @@ class ViewerMain(urwid.Frame):
         urwid.Frame.__init__(self, self.frame_viewer, header=header, footer = footer )
         urwid.connect_signal( self.frame_viewer, 'select_key', self.select_key )
         urwid.connect_signal( self.frame_viewer, 'update_status', footer.update_status )
+        urwid.connect_signal( self.frame_viewer, 'goto_matching_frame', self.goto_matching_frame )
         self.popup = None
         self._ipy_namespace = dict()
 
@@ -718,7 +732,20 @@ class ViewerMain(urwid.Frame):
     def drop_focus(self):
         self.focus_position = 'body'
 
-    def select_frame(self, frame ):
+    def goto_matching_frame(self, delta):
+        frame = self.active_view
+        current_stop = self.framelist[frame].Stop
+        while True:
+            frame += 1 if delta > 0 else -1
+            try:
+                f = self.framelist[frame]
+                if f.Stop == current_stop:
+                    self.select_frame( frame )
+                    break
+            except IndexError:
+                return
+
+    def select_frame(self, frame):
         '''
         Attempt to access the frame'th I3Frame in the file.  If 'frame' is
         negative or otherwise invalid, do nothing
