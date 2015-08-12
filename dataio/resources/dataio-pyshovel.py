@@ -274,12 +274,11 @@ class FrameViewer(urwid.Frame):
             self.listbox.set_focus(self.key)
 
         if self.overlay:
-            self.overlay.bottom_w.set_title(self.framename(frameidx))
             self.body = self.overlay.bottom_w
+        self.body.set_title(self.framename(frameidx))
+        if self.overlay:
             i3key, xml = self.overlay.args
             self.open_detail( i3frame, i3key, xml )
-        else:
-            self.body.set_title(self.framename(frameidx))
 
     def modified(self):
         try:
@@ -741,7 +740,7 @@ class ViewerMain(urwid.Frame):
                 f = self.framelist[frame]
                 if f.Stop == current_stop:
                     self.select_frame( frame )
-                    break
+                    return
             except IndexError:
                 return
 
