@@ -461,6 +461,9 @@ if (NOT CMAKE_BUILD_TYPE)
 endif()
 set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel")
 
+#
+# set flags common to all build types
+#
 set(CMAKE_CXX_FLAGS "${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPPRESSION_FLAGS}")
 string(REGEX REPLACE "[ ]+" " " CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 set(CMAKE_CXX_FLAGS "-pipe ${CMAKE_CXX_FLAGS}" CACHE STRING
@@ -471,10 +474,12 @@ string(REPLACE "-Wno-non-virtual-dtor" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
 set(CMAKE_C_FLAGS "-pipe ${CMAKE_C_FLAGS}" CACHE STRING
   "Flags used by the compiler during all build types")
 
+## set RELEASE flags
 set(CMAKE_CXX_FLAGS_RELEASE "-O${RELOPTLEVEL} -Wno-deprecated -Wno-unused-variable -DNDEBUG -DI3_COMPILE_OUT_VERBOSE_LOGGING")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}" CACHE STRING
   "Flags used by compiler during release builds")
 
+## set Release With Debug Info flags
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O${RELOPTLEVEL} -Wno-deprecated -Wno-unused-variable -g -DNDEBUG -DI3_COMPILE_OUT_VERBOSE_LOGGING")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}" CACHE STRING
   "Flags used by compiler during release builds")
