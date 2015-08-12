@@ -16,6 +16,9 @@
 #error Included too late
 #endif
 
+#include <cstring>
+#include <cassert>
+
 #define BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
 #include <boost/serialization/extended_type_info_typeid.hpp>
 #undef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO

@@ -3,6 +3,8 @@
 //
 // @author troy d. straszheim
 //
+#include <cstdio>
+
 #include <icetray/I3Logging.h>
 #include <icetray/I3SimpleLoggers.h>
 

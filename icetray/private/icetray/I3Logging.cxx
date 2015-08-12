@@ -3,8 +3,11 @@
 //
 // @author troy d. straszheim
 //
-#include <icetray/I3Logging.h>
-#include <icetray/I3SimpleLoggers.h>
+#include <cstdio>
+#include <cstdarg>
+
+#include "icetray/I3Logging.h"
+#include "icetray/I3SimpleLoggers.h"
 
 #ifdef I3_ONLINE
 #  include <boost/thread/locks.hpp>

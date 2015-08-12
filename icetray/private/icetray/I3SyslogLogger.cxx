@@ -8,16 +8,15 @@
  * @date $Date$
  * @author tschmidt
  */
-#include <icetray/I3SimpleLoggers.h>
-
 #include <syslog.h>
+#include <cstdio>
+
 #include <boost/filesystem/path.hpp>
 
-#include <icetray/I3Logging.h>
-
+#include "icetray/I3Logging.h"
+#include "icetray/I3SimpleLoggers.h"
 
 using namespace std;
-
 
 #ifdef I3_ONLINE
   boost::shared_mutex I3SyslogLogger::mtx;
