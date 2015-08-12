@@ -23,8 +23,6 @@
 #ifndef ICETRAY_I3_H_INCLUDED
 #define ICETRAY_I3_H_INCLUDED
 
-#ifdef __cplusplus
-
 // gives us the tasty bits like INT32_MAX
 #ifndef __STDC_LIMIT_MACROS
 #define __STDC_LIMIT_MACROS
@@ -33,15 +31,22 @@
 #define __STDC_FORMAT_MACROS
 #endif
 
-#ifndef __CINT__
-#  include <Python.h>
+#ifdef __cplusplus
+
+// This headedr fixes a boost issue and a boost+cint issue under ICC.
+// It's probably been long fixed. We're not really using ICC anywhere,
+// so let's disable it until we get some complaints. There's more work
+// I need to do re: icc anyway.
+
+#if 0
+#include <I3/intel_compatibility.h>
 #endif
 
-#include <I3/intel_compatibility.h>
 //
 //  Preprocessor def is set if we're building python bindings.
 //
 #ifdef I3_PYBINDINGS_MODULE
+#include <pybindings.hpp>
 
 // this has to match the type of libs you link to.  This should
 // probably be configured by the boost tool and put on the command
@@ -118,10 +123,6 @@ class __builtin_va_list;
 #endif
 
 #endif /* __CINT__ */
-
-#ifdef I3_PYBINDINGS_MODULE
-#  include <pybindings.hpp>
-#endif
 
 #ifdef I3_ONLINE
 #  include <boost/config.hpp>
