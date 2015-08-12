@@ -16,20 +16,23 @@ If you're submitting a ticket, please, please, please set the following five fie
 * **Summary** - Please begin with '[<project-name>] ...' (e.g. '[icetray] Test is failing on RHEL666.'). Please keep the description succinct.
 * **Description** - This is where you should include a complete description of the problem, with enough information for the owner to reproduce the problem.
 * **Type** - What kind of issue are you reporting?
- - **defect** : Something is broken.
- - **enhancement** : Wishlist feature that would be nice, but isn't urgent.
- - **task** : Something to do that's not a bugfix, enhancement, or cleanup.
- - **rumor/allegation** :  You're not really sure this is a problem, but you think it might be.
- - **cleanup** : The code "works" just fine, but you're reporting something that should be cleaned up.
+
+  - **defect** : Something is broken.
+  - **enhancement** : Wishlist feature that would be nice, but isn't urgent.
+  - **task** : Something to do that's not a bugfix, enhancement, or cleanup.
+  - **rumor/allegation** :  You're not really sure this is a problem, but you think it might be.
+  - **cleanup** : The code "works" just fine, but you're reporting something that should be cleaned up.
+
 * **Component** : These fields should be pretty self-explanatory.
 * **Priority** - How urgent is this?
- - **blocker** : You're stuck and need this fixed to get unstuck.
- - **critical** : It's pretty serious.
- - **major** : Serious, but not critical.
- - **normal** : It'll get resolved on a natural timescale.
- - **minor** : Maybe it'll get resolved in a few years.
- - **trivial** : Why are you submitting this ticket if it's trivial?
- - **README** : Don't use this.
+
+  - **blocker** : You're stuck and need this fixed to get unstuck.
+  - **critical** : It's pretty serious.
+  - **major** : Serious, but not critical.
+  - **normal** : It'll get resolved on a natural timescale.
+  - **minor** : Maybe it'll get resolved in a few years.
+  - **trivial** : Why are you submitting this ticket if it's trivial?
+  - **README** : Don't use this.
 
 Optional Fields
 ---------------

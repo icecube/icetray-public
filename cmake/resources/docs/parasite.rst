@@ -10,14 +10,17 @@ metaproject, for example, to add a private analysis project to an IceRec
 release distributed via CVMFS. The cmake project includes a second, "parasitic"
 build system for this purpose. To create a parasitic metaproject, start by
 creating and empty source directory and adding the cmake project::
+
 	> mkdir src && cd src
 	> svn co http://code.icecube.wisc.edu/icetray/projects/cmake/trunk cmake
 
 Then, add a CMakeLists.txt file with the following contents::
+
 	cmake_minimum_required(VERSION 2.6.4 FATAL_ERROR)
 	include(cmake/toplevel-parasite.cmake NO_POLICY_SCOPE)
 
 Now, make a build directory and run cmake::
+
 	> mkdir ../build && cd ../build
 	> cmake ../src -DMETAPROJECT=/path/to/build/directory -DCMAKE_INSTALL_PREFIX=icerec-plus.${OS_ARCH}
 	-- The C compiler identification is AppleClang 6.0.0.6000054
@@ -39,6 +42,7 @@ Now, make a build directory and run cmake::
 	-- Configuring done
 	-- Generating done
 	-- Build files have been written to: /Users/jakob/Documents/IceCube/metaprojects/parasite/build
+
 The argument to ``-DMETAPROJECT`` can specify a pre-build metaproject
 distributed via CVMFS, e.g. ``icerec/V04-11-10``, or the full path to an
 existing build directory.
@@ -46,6 +50,7 @@ existing build directory.
 At this point, you have a metaproject that consists entirely of symbolic links
 to the parent metaproject. A tarball created from the metaproject in this stage
 is extremely small::
+
 	> make tarball
 	Scanning dependencies of target tarball-install
 	[ 50%] Tarball install
@@ -67,6 +72,7 @@ is extremely small::
 	-rw-r--r--  1 jakob  staff   4.1K Aug 12 21:48 icerec-plus.osx_10_x86_64.tar.gz
 
 Now you can add extra projects, for example, simclasses::
+
 	> svn co http://code.icecube.wisc.edu/svn/projects/simclasses/trunk ../src/simclasses
 	> make rebuild_cache
 	...
@@ -78,6 +84,7 @@ Now you can add extra projects, for example, simclasses::
 	-- Syminking resources from host projects
 	...
 	> make
+
 This metaproject will contain simclasses, linked against libraries in the
 parent metaproject, plus symbolic links to every other project in the parent
 metaproject. Since the symbolic links take up virtually no disk space, the
