@@ -33,6 +33,12 @@
 
 #ifdef __cplusplus
 
+#ifdef APPLE
+#ifndef __CINT__
+#  include <Python.h>
+#endif
+#endif
+
 // This headedr fixes a boost issue and a boost+cint issue under ICC.
 // It's probably been long fixed. We're not really using ICC anywhere,
 // so let's disable it until we get some complaints. There's more work
