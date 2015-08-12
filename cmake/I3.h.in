@@ -33,7 +33,7 @@
 
 #ifdef __cplusplus
 
-#ifdef APPLE
+#ifdef __APPLE__
 #ifndef __CINT__
 #  include <Python.h>
 #endif
