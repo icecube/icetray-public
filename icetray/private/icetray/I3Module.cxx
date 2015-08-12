@@ -20,22 +20,23 @@
  *  
  */
 
-#include <boost/python.hpp>
+#include "icetray/I3Module.h"
+
 #include <sys/time.h>
 #include <sys/resource.h>
 
 #include <boost/bind.hpp>
 #include <boost/preprocessor.hpp>
 #include <boost/foreach.hpp>
+#include <boost/python.hpp>
 
-#include <icetray/I3Module.h>
-#include <icetray/I3TrayInfo.h>
-#include <icetray/I3Context.h>
-#include <icetray/I3Tray.h>
-#include <icetray/I3PhysicsUsage.h>
-#include <icetray/IcetrayFwd.h>
-#include <icetray/I3Frame.h>
-#include <icetray/impl.h>
+#include "icetray/I3TrayInfo.h"
+#include "icetray/I3Context.h"
+#include "icetray/I3Tray.h"
+#include "icetray/I3PhysicsUsage.h"
+#include "icetray/IcetrayFwd.h"
+#include "icetray/I3Frame.h"
+#include "icetray/impl.h"
 
 const double I3Module::min_report_time_ = 10;
 
