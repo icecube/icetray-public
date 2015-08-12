@@ -380,16 +380,17 @@ string(REPLACE ";" " " C_WARNING_FLAGS "${C_WARNING_FLAGS}")
 #
 
 include(CheckCXXCompilerFlag)
-unset(CXX_WARNING_SUPPRESSION_FLAGS)
-foreach(f -Wno-deprecated -Wno-unused-local-typedef -Wno-unused-local-typedefs)
-  check_cxx_compiler_flag(${f} CXX_HAS_${f})
-  if (CXX_HAS_${f})
-    list(APPEND CXX_WARNING_SUPPRESSION_FLAGS ${f})
+if (NOT CXX_WARNING_SUPPRESSION_FLAGS)
+  foreach(f -Wno-deprecated -Wno-unused-local-typedef -Wno-unused-local-typedefs)
+    check_cxx_compiler_flag(${f} CXX_HAS_${f})
+    if (CXX_HAS_${f})
+      list(APPEND CXX_WARNING_SUPPRESSION_FLAGS ${f})
     endif()
   endforeach()
-string(REPLACE ";" " " CXX_WARNING_SUPPRESSION_FLAGS "${CXX_WARNING_SUPPRESSION_FLAGS}")
-set(CXX_WARNING_SUPPRESSION_FLAGS ${CXX_WARNING_SUPPRESSION_FLAGS}
-  CACHE STRING "Warning suppression flags for this compiler")
+  string(REPLACE ";" " " CXX_WARNING_SUPPRESSION_FLAGS "${CXX_WARNING_SUPPRESSION_FLAGS}")
+  set(CXX_WARNING_SUPPRESSION_FLAGS ${CXX_WARNING_SUPPRESSION_FLAGS}
+    CACHE STRING "Warning suppression flags for this compiler")
+endif()
 
 #
 # New versions of clang changed the default template depth
