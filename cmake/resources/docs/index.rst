@@ -18,6 +18,7 @@ CMake: icetray's build system
    documentation
    targets
    tarball
+   parasite
    toolset
    i3test
    reference

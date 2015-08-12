@@ -206,14 +206,15 @@ is actually run), you can commit to the copy ``tarball_hook.sh.in`` in
 the toplevel directory of your metaproject.  The changes will then get
 run each time a user makes ``tarball``.
 
-
 Changing the name of the tarball
 --------------------------------
 
 .. index:: CMAKE_INSTALL_PREFIX
 
 Set :data:`CMAKE_INSTALL_PREFIX` as you like in your
-:file:`CMakeCache.txt`.
+:file:`CMakeCache.txt`, or pass ``-DCMAKE_INSTALL_PREFIX=tarball_name`` when 
+you invoke ``cmake``. If you want to use the tarball together with
+``icetray-start``, pass ``-DCMAKE_INSTALL_PREFIX=tarball_name.${OS_ARCH}``.
 
 Lightweight tarballs for CVMFS-enabled grids
 --------------------------------------------

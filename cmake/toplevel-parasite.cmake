@@ -136,8 +136,8 @@ macro(use_projects THIS_TARGET)
     if(EXISTS ${HOST_I3_SRC}/${USED_PROJECT}/CMakeLists.txt)
       # pre-compiled project; just find libraries
       include_directories(${HOST_I3_SRC}/${USED_PROJECT}/public)
-      find_library(${USED_PROJECT}_LIBRARIES NAMES lib${USED_PROJECT}.so PATHS ${HOST_I3_BUILD}/lib NO_DEFAULT_PATH)
-      #message(STATUS " ${${USED_PROJECT}_LIBRARIES}")
+      find_library(${USED_PROJECT}_LIBRARIES NAMES lib${USED_PROJECT}${CMAKE_SHARED_LIBRARY_SUFFIX} PATHS ${HOST_I3_BUILD}/lib NO_DEFAULT_PATH)
+      # message(STATUS " ${${USED_PROJECT}_LIBRARIES}")
       target_link_libraries(${THIS_TARGET} ${${USED_PROJECT}_LIBRARIES})
     elseif(EXISTS ${I3_SRC}/${USED_PROJECT}/CMakeLists.txt)
       # parasite project; add dependencies
