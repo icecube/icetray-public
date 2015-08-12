@@ -40,7 +40,7 @@ IF (APPLE)
         # If a framework has been selected for the include path,
         # make sure "-framework" is used to link it.
         IF("${OPENCL_INCLUDE_DIR}" MATCHES "OpenCL\\.framework")
-          SET(OPENCL_LIBRARIES "")
+          UNSET(OPENCL_LIBRARIES)
         ENDIF("${OPENCL_INCLUDE_DIR}" MATCHES "OpenCL\\.framework")
         IF(NOT OPENCL_LIBRARIES)
           SET (OPENCL_LIBRARIES "-framework OpenCL" CACHE FILEPATH "OpenCL Framework")
