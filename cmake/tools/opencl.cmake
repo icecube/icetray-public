@@ -83,3 +83,41 @@ ELSE (APPLE)
     ENDIF (OPENCL_LIBRARIES)
 
 ENDIF (APPLE)
+
+#=============================================================================
+# Copyright 2003-2011 Kitware, Inc.
+#
+# Distributed under the OSI-approved BSD License (the "License");
+# see accompanying file Copyright.txt for details.
+#
+# This software is distributed WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the License for more information.
+#=============================================================================
+IF (OPENCL_FOUND)
+  include(CheckSymbolExists)
+  foreach(VERSION "2_0" "1_2" "1_1" "1_0")
+    if(APPLE)
+      CHECK_SYMBOL_EXISTS(
+        CL_VERSION_${VERSION}
+        "${OPENCL_INCLUDE_DIR}/cl.h"
+        OPENCL_VERSION_${VERSION})
+    else()
+      CHECK_SYMBOL_EXISTS(
+        CL_VERSION_${VERSION}
+        "${OPENCL_INCLUDE_DIR}/cl.h"
+        OPENCL_VERSION_${VERSION})
+    endif()
+
+    if(OPENCL_VERSION_${VERSION})
+      string(REPLACE "_" "." VERSION "${VERSION}")
+      set(OPENCL_VERSION_STRING ${VERSION} CACHE STRING "OpenCL version")
+      string(REGEX MATCHALL "[0-9]+" version_components "${VERSION}")
+      list(GET version_components 0 major_version)
+      list(GET version_components 1 minor_version)
+      set(OPENCL_VERSION_MAJOR ${major_version} CACHE INT "OpenCL major version number")
+      set(OPENCL_VERSION_MINOR ${minor_version} CACHE INT "OpenCL minor version number")
+      break()
+    endif()
+  endforeach()
+ENDIF (OPENCL_FOUND)
