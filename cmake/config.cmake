@@ -381,7 +381,7 @@ string(REPLACE ";" " " C_WARNING_FLAGS "${C_WARNING_FLAGS}")
 
 include(CheckCXXCompilerFlag)
 if (NOT CXX_WARNING_SUPPRESSION_FLAGS)
-  foreach(f -Wno-deprecated -Wno-unused-local-typedef -Wno-unused-local-typedefs)
+  foreach(f -Wno-deprecated -Wno-unused-variable -Wno-unused-local-typedef -Wno-unused-local-typedefs)
     check_cxx_compiler_flag(${f} CXX_HAS_${f})
     if (CXX_HAS_${f})
       list(APPEND CXX_WARNING_SUPPRESSION_FLAGS ${f})
@@ -459,7 +459,7 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
   endif()
 endif()
-set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel")
+set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel" FORCE)
 
 #
 # set flags common to all build types
@@ -475,19 +475,19 @@ set(CMAKE_C_FLAGS "-pipe ${CMAKE_C_FLAGS}" CACHE STRING
   "Flags used by the compiler during all build types")
 
 ## set RELEASE flags
-set(CMAKE_CXX_FLAGS_RELEASE "-O${RELOPTLEVEL} -Wno-deprecated -Wno-unused-variable -DNDEBUG -DI3_COMPILE_OUT_VERBOSE_LOGGING")
+set(CMAKE_CXX_FLAGS_RELEASE "-O${RELOPTLEVEL} -DNDEBUG -DI3_COMPILE_OUT_VERBOSE_LOGGING")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}" CACHE STRING
   "Flags used by compiler during release builds")
 
 ## set Release With Debug Info flags
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O${RELOPTLEVEL} -Wno-deprecated -Wno-unused-variable -g -DNDEBUG -DI3_COMPILE_OUT_VERBOSE_LOGGING")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O${RELOPTLEVEL} -g -DNDEBUG -DI3_COMPILE_OUT_VERBOSE_LOGGING")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}" CACHE STRING
   "Flags used by compiler during release builds")
 
 ## RelWithAssert flags
-set(CMAKE_CXX_FLAGS_RELWITHASSERT "-O${RELOPTLEVEL} -Wno-deprecated -Wno-unused-variable -DI3_COMPILE_OUT_VERBOSE_LOGGING" CACHE STRING
+set(CMAKE_CXX_FLAGS_RELWITHASSERT "-O${RELOPTLEVEL} -DI3_COMPILE_OUT_VERBOSE_LOGGING" CACHE STRING
   "Flags used by compiler during Release+Assert builds")
-set(CMAKE_C_FLAGS_RELLWITHASSERT "-O${RELOPTLEVEL} -Wno-deprecated -Wno-unused-variable" CACHE STRING
+set(CMAKE_C_FLAGS_RELLWITHASSERT "-O${RELOPTLEVEL}" CACHE STRING
   "Flags used by compiler during Release+Assert builds")
 set(CMAKE_EXE_LINKER_FLAGS_RELWITHASSERT "${CMAKE_EXE_LINKER_FLAGS_RELEASE}" CACHE STRING
   "Flags used for linking binaries during Release+Assert builds.")
@@ -500,7 +500,7 @@ mark_as_advanced(
   CMAKE_SHARED_LINKER_FLAGS_RELWITHASSERT)
 # Update the documentation string of CMAKE_BUILD_TYPE for GUIs
 set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
-  "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert.")
+  "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert." FORCE)
 
 ## coverage flags
 set(CMAKE_CXX_FLAGS_COVERAGE "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
@@ -520,7 +520,7 @@ mark_as_advanced(
   CMAKE_SHARED_LINKER_FLAGS_COVERAGE)
 # Update the documentation string of CMAKE_BUILD_TYPE for GUIs
 set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
-  "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert Coverage.")
+  "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert Coverage." FORCE)
 
 ## at this point only project CMakeLists.txt's and tools/*.cmake will modify
 ## the command line. let's check what we have.
