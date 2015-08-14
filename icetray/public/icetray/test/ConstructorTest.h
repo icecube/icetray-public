@@ -1,3 +1,5 @@
+#ifndef CONSTRUCTOR_TEST_H
+#define CONSTRUCTOR_TEST_H
 /**
  *  $Id$
  *  
@@ -39,3 +41,5 @@ void clean_constructor_test(const std::string& outbox = "OutBox")
     T module(context);
   }  
 }
+
+#endif
