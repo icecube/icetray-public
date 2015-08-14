@@ -105,7 +105,7 @@ IF (OPENCL_FOUND)
     else()
       CHECK_SYMBOL_EXISTS(
         CL_VERSION_${VERSION}
-        "${OPENCL_INCLUDE_DIR}/cl.h"
+        "${OPENCL_INCLUDE_DIR}/CL/cl.h"
         OPENCL_VERSION_${VERSION})
     endif()
 
