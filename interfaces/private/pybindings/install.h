@@ -1,3 +1,5 @@
+#ifndef INSTALL_H
+#define INSTALL_H
 /**
  * copyright  (C) 2010
  * The Icecube Collaboration
@@ -19,3 +21,5 @@ struct I3InstallService {
 		return ctx->Put(where, what);
 	}	
 };
+
+#endif
