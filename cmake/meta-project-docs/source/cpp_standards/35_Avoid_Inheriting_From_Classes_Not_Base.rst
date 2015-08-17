@@ -91,7 +91,7 @@ Composition is typically "has a" or "uses a" relationship. Here the Employee cla
 
 * Composition over Inheritance:
 
-.. highlight:: C++
+.. highlight:: c++
 
 Now say you want to create a Manager type so you end up with::
 

@@ -3,7 +3,7 @@ Avoid Providing Implicit Conversions
 
 Constructors that can be called with one argument and are not declared ``explicit`` interact poorly with overloading and foster invisible temporary objects that pop up all over.  Conversions defined as member functions of the form ``operator T`` (where "T" is a type) are no better -- they interact poorly with implicit constructors and can allow all sorts of nonsensical code to compile.
 
-.. highlight:: C++
+.. highlight:: c++
 
 Example::
 
