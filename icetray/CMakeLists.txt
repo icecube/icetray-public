@@ -47,9 +47,9 @@ endif(LIBARCHIVE_FOUND)
 
 # ROOT
 
-if(USE_ROOT)
+if(ROOT_FOUND)
 	set(OPTIONAL_TOOLS root)
-endif(USE_ROOT)
+endif(ROOT_FOUND)
 
 if(USE_CINT)
     colormsg(HIYELLOW "*** CINT dictionaries are deprecated and will disappear November 1, 2015")
