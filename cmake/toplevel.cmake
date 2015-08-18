@@ -386,3 +386,16 @@ add_custom_target(coverage
   COMMAND rsync -av ../output/ buildmaster@dragon:/opt/docs/coverage
 )
 endif()
+
+## python coverage
+configure_file(${CMAKE_SOURCE_DIR}/cmake/pycoverage.in
+  ${CMAKE_CURRENT_BINARY_DIR}/bin/pycoverage
+  @ONLY)
+add_custom_target(pycoverage
+  COMMAND ./env-shell.sh pycoverage -d pycoverage/`date +%Y-%m-%d`
+  COMMAND rm -f pycoverage/00_LATEST \; ln -sf `ls -1tr pycoverage |tail -1` pycoverage/00_LATEST
+)
+add_custom_target(pycoverage_verbose
+  COMMAND ./env-shell.sh pycoverage -d pycoverage/`date +%Y-%m-%d` -v
+  COMMAND rm -f pycoverage/00_LATEST \; ln -sf `ls -1tr pycoverage |tail -1` pycoverage/00_LATEST
+)
