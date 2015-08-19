@@ -1,5 +1,10 @@
+trunk :
+* Removed I3ChannelID2OMKey.  This was only needed for AMANDA.
+* Added some docs (one-liners) about the classes in this project.
+* Remove the test directories and references to tests in CMakeLists.txt.
+  Tests really aren't relevant for this project, since most are ABCs, 
+  and tests are more appropriate for the classes that derive from them.
 
 Release Notes
 =============
 
-These aren't the droids you're looking for. Move along.

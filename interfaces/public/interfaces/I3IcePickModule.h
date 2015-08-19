@@ -11,12 +11,12 @@
 
 /**
  * @brief This is module that does the event selection.  You put it your 
- * module chain and then modules which don't pass the cut don't make it
+ * module chain and then frames which don't pass the cut don't make it
  * past this module.
  *
  * This module is a template, so when you want to add this module you 
  * need to specify a subclass of I3IcePick that you want to use as the
- * template parameter.  Don't forget to generate a dicitionary for the 
+ * template parameter.  Don't forget to generate a dictionary for the 
  * new template instantiation.
  */
 template <class IcePick>
