@@ -20,10 +20,10 @@
 #
 # rootcint() handles root dictionary generation
 #
-if(NOT USE_CINT)
+if(NOT ROOT_FOUND OR NOT USE_CINT)
   macro(ROOTCINT)
   endmacro(ROOTCINT)
-else(NOT USE_CINT)
+else()
   macro(ROOTCINT TARGET)
     parse_arguments(ARG
       "LINKDEF;SOURCES;INCLUDE_DIRECTORIES;USE_TOOLS;USE_PROJECTS"
@@ -77,7 +77,7 @@ else(NOT USE_CINT)
       VERBATIM
       )
   ENDMACRO(ROOTCINT)
-ENDIF(NOT USE_CINT)
+ENDIF()
 
 #
 # use_projects() helper macro for, uh, using projects.
