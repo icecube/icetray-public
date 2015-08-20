@@ -49,11 +49,11 @@ endif(LIBARCHIVE_FOUND)
 
 if(ROOT_FOUND)
 	set(OPTIONAL_TOOLS root)
-endif(ROOT_FOUND)
 
-if(USE_CINT)
-    colormsg(HIYELLOW "*** CINT dictionaries are deprecated and will disappear November 1, 2015")
-endif(USE_CINT)
+    if(USE_CINT)
+        colormsg(HIYELLOW "*** CINT dictionaries are deprecated and will disappear November 1, 2015")
+    endif(USE_CINT)
+endif(ROOT_FOUND)
 
 i3_project(icetray
   DOCS_DIR resources/docs
@@ -228,8 +228,6 @@ else (PYTHON_NUMERIC_VERSION LESS 20600)
 	i3_test_scripts(resources/test/*.py resources/py26-tests/*.py)
 endif (PYTHON_NUMERIC_VERSION LESS 20600)
 
-#add_subdirectory(private/test-lib)
-
 #
 #  Special tests: each header file compiles on its own
 #
@@ -242,10 +240,50 @@ foreach(HEADER ${ALL_HEADERS})
 endforeach(HEADER ${ALL_HEADERS})
 
 #
-# Python bindings are in there
+# Python bindings
 #
-add_subdirectory(private/pybindings)
-add_subdirectory(private/test-pybindings)
+set(TMP_LIBRARY_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH})
+
+i3_add_pybindings(i3math
+  private/pybindings/i3math.cxx
+  USE_TOOLS boost python
+)
+
+i3_add_pybindings(icetray
+  private/pybindings/empty.cxx
+  private/pybindings/module.cxx
+  USE_TOOLS boost python
+  LINK_LIBRARIES ${LIBARCHIVE_LIBRARIES}
+  USE_PROJECTS icetray
+  )
+
+# 
+# This is special, goes in the toplevel 'lib' directory for
+# backwards compatibility
+#
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/private/pybindings/I3Tray.py 
+  DESTINATION lib)
+
+add_custom_command(OUTPUT ${TMP_LIBRARY_OUTPUT_PATH}/I3Tray.py
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/private/pybindings/I3Tray.py
+  COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/private/pybindings/I3Tray.py ${TMP_LIBRARY_OUTPUT_PATH}
+  )
+
+add_custom_target(I3Tray.py
+  DEPENDS ${TMP_LIBRARY_OUTPUT_PATH}/I3Tray.py
+  )
+
+add_dependencies(icetray-pybindings I3Tray.py)
+
+#
+# Test pybindings
+#
+i3_add_pybindings(icetray_test
+  private/test-pybindings/module.cxx
+  USE_TOOLS boost python
+  LINK_LIBRARIES ${LIBARCHIVE_LIBRARIES}
+  USE_PROJECTS icetray
+  )
 
 # Install icetray-inspect
 i3_executable_script(inspect resources/icetray-inspect.py)
