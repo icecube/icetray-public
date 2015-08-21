@@ -27,6 +27,7 @@
 #include <iostream>
 #include <iomanip>
 #include <stdexcept>
+#include <cstdlib>
 
 int 
 load_project (std::string path, bool verbose)
