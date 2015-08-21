@@ -51,7 +51,7 @@ template <class T>
 void do_archive (std::string classname)
 {
   std::string fname = classname + ".i3";
-  shared_ptr<T> t_out(new T);
+  boost::shared_ptr<T> t_out(new T);
   save_to_i3_file(t_out, fname);
   load_i3_file(fname);
   remove(fname.c_str());
