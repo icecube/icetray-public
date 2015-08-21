@@ -22,6 +22,8 @@
 #ifndef I3TEST_H_INCLUDED
 #define I3TEST_H_INCLUDED
 
+#include <string>
+#include <boost/version.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/shared_ptr.hpp>
