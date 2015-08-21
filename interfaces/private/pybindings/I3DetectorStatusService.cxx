@@ -36,9 +36,9 @@ struct I3DetectorStatusServiceWrapper : I3DetectorStatusService, wrapper<I3Detec
 
 void register_I3DetectorStatusService()
 {
-  implicitly_convertible<shared_ptr<I3DetectorStatusServiceWrapper>, shared_ptr<const I3DetectorStatusService> >();
-  implicitly_convertible<shared_ptr<I3DetectorStatusServiceWrapper>, shared_ptr<I3DetectorStatusService> >();
-  implicitly_convertible<shared_ptr<I3DetectorStatusServiceWrapper>, shared_ptr<const I3DetectorStatusServiceWrapper> >();
+  implicitly_convertible<boost::shared_ptr<I3DetectorStatusServiceWrapper>, boost::shared_ptr<const I3DetectorStatusService> >();
+  implicitly_convertible<boost::shared_ptr<I3DetectorStatusServiceWrapper>, boost::shared_ptr<I3DetectorStatusService> >();
+  implicitly_convertible<boost::shared_ptr<I3DetectorStatusServiceWrapper>, boost::shared_ptr<const I3DetectorStatusServiceWrapper> >();
 
   class_<I3DetectorStatusServiceWrapper, boost::shared_ptr<I3DetectorStatusServiceWrapper>, 
     boost::noncopyable>("I3DetectorStatusService", 

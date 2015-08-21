@@ -34,12 +34,12 @@ struct I3EventServiceWrapper : I3EventService, wrapper<I3EventService>
 
 void register_I3EventService()
 {
-  implicitly_convertible<shared_ptr<I3EventServiceWrapper>, 
-    shared_ptr<const I3EventService> >();
-  implicitly_convertible<shared_ptr<I3EventServiceWrapper>, 
-    shared_ptr<I3EventService> >();
-  implicitly_convertible<shared_ptr<I3EventServiceWrapper>, 
-    shared_ptr<const I3EventServiceWrapper> >();
+  implicitly_convertible<boost::shared_ptr<I3EventServiceWrapper>, 
+    boost::shared_ptr<const I3EventService> >();
+  implicitly_convertible<boost::shared_ptr<I3EventServiceWrapper>, 
+    boost::shared_ptr<I3EventService> >();
+  implicitly_convertible<boost::shared_ptr<I3EventServiceWrapper>, 
+    boost::shared_ptr<const I3EventServiceWrapper> >();
 
   class_<I3EventServiceWrapper, boost::shared_ptr<I3EventServiceWrapper>, 
     boost::noncopyable>("I3EventService", 

@@ -36,9 +36,9 @@ struct I3CalibrationServiceWrapper : I3CalibrationService, wrapper<I3Calibration
 
 void register_I3CalibrationService()
 {
-  implicitly_convertible<shared_ptr<I3CalibrationServiceWrapper>, shared_ptr<const I3CalibrationService> >();
-  implicitly_convertible<shared_ptr<I3CalibrationServiceWrapper>, shared_ptr<I3CalibrationService> >();
-  implicitly_convertible<shared_ptr<I3CalibrationServiceWrapper>, shared_ptr<const I3CalibrationServiceWrapper> >();
+  implicitly_convertible<boost::shared_ptr<I3CalibrationServiceWrapper>, boost::shared_ptr<const I3CalibrationService> >();
+  implicitly_convertible<boost::shared_ptr<I3CalibrationServiceWrapper>, boost::shared_ptr<I3CalibrationService> >();
+  implicitly_convertible<boost::shared_ptr<I3CalibrationServiceWrapper>, boost::shared_ptr<const I3CalibrationServiceWrapper> >();
 
   class_<I3CalibrationServiceWrapper, boost::shared_ptr<I3CalibrationServiceWrapper>, 
     boost::noncopyable>("I3CalibrationService", 

@@ -36,9 +36,9 @@ struct I3GeometryServiceWrapper : I3GeometryService, wrapper<I3GeometryService>
 
 void register_I3GeometryService()
 {
-  implicitly_convertible<shared_ptr<I3GeometryServiceWrapper>, shared_ptr<const I3GeometryService> >();
-  implicitly_convertible<shared_ptr<I3GeometryServiceWrapper>, shared_ptr<I3GeometryService> >();
-  implicitly_convertible<shared_ptr<I3GeometryServiceWrapper>, shared_ptr<const I3GeometryServiceWrapper> >();
+  implicitly_convertible<boost::shared_ptr<I3GeometryServiceWrapper>, boost::shared_ptr<const I3GeometryService> >();
+  implicitly_convertible<boost::shared_ptr<I3GeometryServiceWrapper>, boost::shared_ptr<I3GeometryService> >();
+  implicitly_convertible<boost::shared_ptr<I3GeometryServiceWrapper>, boost::shared_ptr<const I3GeometryServiceWrapper> >();
 
   class_<I3GeometryServiceWrapper, boost::shared_ptr<I3GeometryServiceWrapper>, 
     boost::noncopyable>("I3GeometryService", 
