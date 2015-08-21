@@ -109,7 +109,7 @@ TEST(const_iterator_begin)
 
   ENSURE(iter != f.end());
   ENSURE((bool)iter->second);
-  I3IntConstPtr newt = dynamic_pointer_cast<const I3Int>(iter->second);
+  I3IntConstPtr newt = boost::dynamic_pointer_cast<const I3Int>(iter->second);
   // hmm, where's #3?
   ENSURE_EQUAL(ptr.use_count(), 4);
 
