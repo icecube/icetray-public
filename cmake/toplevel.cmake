@@ -29,12 +29,13 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 ")
 endif("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 
-if(COMMAND cmake_policy)
-  if (NOT CMAKE_VERSION VERSION_LESS "3.0")
+## set cmake policies
+if(POLICY CMP0042)
     cmake_policy(SET CMP0042 OLD)
+endif()
+if(POLICY CMP0046)
     cmake_policy(SET CMP0046 OLD)
-  endif (NOT CMAKE_VERSION VERSION_LESS "3.0")
-endif(COMMAND cmake_policy)
+endif()
 
 #
 # search for header, libraries and frameworks inside of the system
