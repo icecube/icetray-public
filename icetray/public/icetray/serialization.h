@@ -22,6 +22,8 @@
 #ifndef ICETRAY_SERIALIZATION_H_INCLUDED
 #define ICETRAY_SERIALIZATION_H_INCLUDED
 
+#include <boost/version.hpp>
+
 #ifndef __CINT__
 
 #if BOOST_VERSION < 103600
