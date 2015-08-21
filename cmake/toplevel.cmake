@@ -36,6 +36,9 @@ endif()
 if(POLICY CMP0046)
     cmake_policy(SET CMP0046 OLD)
 endif()
+if(POLICY CMP0054)
+    cmake_policy(SET CMP0054 NEW)
+endif()
 
 #
 # search for header, libraries and frameworks inside of the system
