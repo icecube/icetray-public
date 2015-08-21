@@ -32,7 +32,7 @@ static OMKey omkey_param;
 static std::vector<OMKey> omkeyvec_param;
 
 struct MyService{};
-static shared_ptr<MyService> service_ptr_param;
+static boost::shared_ptr<MyService> service_ptr_param;
 
 struct AllParametersModule : I3Module
 {
@@ -78,7 +78,7 @@ struct AllParametersModule : I3Module
     omkeyvec_param += OMKey(0,0), OMKey(-1,1), OMKey(-2,2), OMKey(-3,3);
     AddParameter("omkeyvec_param", "OMG a vector of omkeys lol", omkeyvec_param);
 
-    service_ptr_param = shared_ptr<MyService>();
+    service_ptr_param = boost::shared_ptr<MyService>();
     AddParameter("service_ptr_param", "pointer to service.",service_ptr_param);
   }
 

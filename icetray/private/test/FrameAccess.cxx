@@ -27,10 +27,10 @@ TEST(test)
 {
   I3Frame frame(I3Frame::None);
     
-  shared_ptr<Grandpa> grandpa_ptr(new Grandpa);
-  shared_ptr<Grandpa> pa_ptr(new Pa);      
-  shared_ptr<Grandpa> son_ptr(new Son);
-  shared_ptr<Grandpa> daughter_ptr(new Daughter);
+  boost::shared_ptr<Grandpa> grandpa_ptr(new Grandpa);
+  boost::shared_ptr<Grandpa> pa_ptr(new Pa);      
+  boost::shared_ptr<Grandpa> son_ptr(new Son);
+  boost::shared_ptr<Grandpa> daughter_ptr(new Daughter);
 
   ENSURE(!frame.count("grandpa"));
   ENSURE(!frame.count("pa"));

@@ -31,7 +31,7 @@ struct MyService{};
 
 struct MaintainInitialValuesModule : I3Module
 {
-  shared_ptr<MyService> service_ptr_param;
+  boost::shared_ptr<MyService> service_ptr_param;
 
   MaintainInitialValuesModule(const I3Context& context) : I3Module(context) 
   { 
@@ -58,7 +58,7 @@ struct MaintainInitialValuesModule : I3Module
     omkey_param = OMKey(-666,666);
     AddParameter("omkey_param", "OMKey!", omkey_param);
 
-    service_ptr_param = shared_ptr<MyService>( new MyService);
+    service_ptr_param = boost::shared_ptr<MyService>( new MyService);
     AddParameter("service_ptr_param", "pointer to service.",service_ptr_param);
   }
 

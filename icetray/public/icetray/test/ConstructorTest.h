@@ -34,7 +34,7 @@ void clean_constructor_test(const std::string& outbox = "OutBox")
     I3ConfigurationPtr config(new I3Configuration());
     context.Put(config);
     
-    shared_ptr<outboxmap_t> ob(new outboxmap_t);
+    boost::shared_ptr<outboxmap_t> ob(new outboxmap_t);
     (*ob)[outbox] = make_pair(FrameFifoPtr(), I3ModulePtr());
     context.Put("OutBoxes",ob);
 

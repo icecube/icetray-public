@@ -20,7 +20,7 @@
 using namespace boost::assign;
 
 struct MyService{};
-static shared_ptr<MyService> service_ptr_param;
+static boost::shared_ptr<MyService> service_ptr_param;
 
 struct ContextFreeServiceTestModule : I3Module
 {
@@ -28,7 +28,7 @@ struct ContextFreeServiceTestModule : I3Module
   { 
     AddOutBox("OutBox");
 
-    service_ptr_param = shared_ptr<MyService>();
+    service_ptr_param = boost::shared_ptr<MyService>();
     AddParameter("service_ptr_param", "pointer to service.",service_ptr_param);
   }
 

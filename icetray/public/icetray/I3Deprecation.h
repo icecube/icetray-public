@@ -31,13 +31,13 @@ template <class FactoryProductType, class ModuleType>
 struct DeprecatedCreate
 {
   static
-  shared_ptr<FactoryProductType>
+  boost::shared_ptr<FactoryProductType>
   Create (const I3Context& c)
   {
     std::string productstr = I3::name_of<FactoryProductType>();
     std::string modulestr = I3::name_of<ModuleType>();
     emitDeprecationWarning(productstr.c_str(), modulestr.c_str());
-    shared_ptr<FactoryProductType> module(new ModuleType(c));
+    boost::shared_ptr<FactoryProductType> module(new ModuleType(c));
     if (!module)
       log_fatal("failed to create");
 

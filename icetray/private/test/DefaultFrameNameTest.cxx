@@ -10,8 +10,8 @@ struct TestedData : public I3FrameObject
   int data;
 };
 
-typedef shared_ptr<TestedData> TestedDataPtr;
-typedef shared_ptr<const TestedData> TestedDataConstPtr;
+typedef boost::shared_ptr<TestedData> TestedDataPtr;
+typedef boost::shared_ptr<const TestedData> TestedDataConstPtr;
 
 I3_DEFAULT_NAME(TestedData);
 

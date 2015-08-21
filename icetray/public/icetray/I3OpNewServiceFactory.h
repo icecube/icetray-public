@@ -22,6 +22,8 @@
 #ifndef ICETRAY_I3OPNEWSERVICEFACTORY_H_INCLUDED
 #define ICETRAY_I3OPNEWSERVICEFACTORY_H_INCLUDED
 
+#include <boost/shared_ptr.hpp>
+
 #include <icetray/I3ServiceFactory.h>
 #include <icetray/I3Context.h>
 
@@ -50,7 +52,7 @@ class I3OpNewServiceFactory : public I3ServiceFactory
   bool 
   InstallService(I3Context& context)
   {
-    shared_ptr<InstallAs> srv_p(new Service(context));
+    boost::shared_ptr<InstallAs> srv_p(new Service(context));
     return context.Put(srv_p);
   }
 

@@ -40,7 +40,7 @@ public:
   void Process()
   {
     I3FramePtr frame(new I3Frame(I3Frame::Physics));
-    shared_ptr<I3Int> data(new I3Int(++i));
+    boost::shared_ptr<I3Int> data(new I3Int(++i));
     frame->Put("myint", data);
     PushFrame(frame,"OutBox");
   }
