@@ -109,10 +109,6 @@ using std::isnan;
 #define BOOST_DISABLE_ASSERTS
 #endif
 
-#include <boost/shared_ptr.hpp>
-using boost::shared_ptr;
-using boost::dynamic_pointer_cast;
-
 // workaround for braindead rootcint.  doesn't recognize the using
 // boost::shared_ptr.  I can just see this popping up to cause us
 // unspeakable aggravation in the future...

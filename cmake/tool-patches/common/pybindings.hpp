@@ -3,6 +3,7 @@
 
 #include <cstring>
 #include <cctype>
+#include <boost/shared_ptr.hpp>
 #include "icetray/I3FrameObject.h"
 #include "I3/name_of.h"
 
@@ -61,9 +62,9 @@ register_pointer_conversions()
 {
   using boost::python::implicitly_convertible;
 
-  implicitly_convertible<shared_ptr<T>, shared_ptr<I3FrameObject> >();
-  implicitly_convertible<shared_ptr<T>, shared_ptr<const T> >();
-  implicitly_convertible<shared_ptr<T>, shared_ptr<const I3FrameObject> >();
+  implicitly_convertible<boost::shared_ptr<T>, boost::shared_ptr<I3FrameObject> >();
+  implicitly_convertible<boost::shared_ptr<T>, boost::shared_ptr<const T> >();
+  implicitly_convertible<boost::shared_ptr<T>, boost::shared_ptr<const I3FrameObject> >();
 
   //  implicitly_convertible<shared_ptr<I3FrameObject>, shared_ptr<T> >();
   //  implicitly_convertible<shared_ptr<const I3FrameObject>, shared_ptr<const T> >();
