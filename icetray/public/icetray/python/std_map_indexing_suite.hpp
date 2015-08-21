@@ -5,7 +5,7 @@
 //  Modified by Troy D. Straszheim and Jakob van Santen, 2009-03-26
 
 #ifndef ICETRAY_PYTHON_STD_MAP_INDEXING_SUITE_HPP_INCLUDED
-# define ICETRAY_PYTHON_STD_MAP_INDEXING_SUITE_HPP_INCLUDED
+#define ICETRAY_PYTHON_STD_MAP_INDEXING_SUITE_HPP_INCLUDED
 
 # include <boost/python/suite/indexing/indexing_suite.hpp>
 # include <boost/python/iterator.hpp>
