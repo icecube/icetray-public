@@ -19,13 +19,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
+#include <boost/regex.hpp>
+
 #include <icetray/I3Tray.h>
 #include <icetray/I3TrayInfo.h>
 #include <icetray/I3TrayInfoService.h>
 #include <icetray/Utility.h>
 #include <icetray/modules/Rename.h>
-
-#include <boost/regex.hpp>
 
 using namespace std;
 

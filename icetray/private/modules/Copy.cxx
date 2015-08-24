@@ -18,19 +18,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
-#include <icetray/I3Tray.h>
-#include <icetray/I3TrayInfo.h>
-#include <icetray/I3TrayInfoService.h>
-#include <icetray/Utility.h>
-
 #include <boost/regex.hpp>
 
 #include <fstream>
 #include <string>
 #include <set>
-#include <icetray/I3ConditionalModule.h>
-#include <icetray/I3TrayHeaders.h>
-#include <icetray/I3Logging.h>
+
+#include "icetray/I3Tray.h"
+#include "icetray/I3TrayInfo.h"
+#include "icetray/I3TrayInfoService.h"
+#include "icetray/Utility.h"
+#include "icetray/I3ConditionalModule.h"
+#include "icetray/I3TrayHeaders.h"
+#include "icetray/I3Logging.h"
 
 /**
  *  Copyies things from frame.  Has special privileges granted by I3Frame.

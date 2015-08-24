@@ -27,11 +27,11 @@
 #include <map>
 #include <iosfwd>
 #include <boost/scoped_ptr.hpp>
-#include <boost/python/extract.hpp>
 #include <icetray/IcetrayFwd.h>
 #include <icetray/I3DefaultName.h>
 #include <icetray/serialization.h>
 #include <icetray/is_shared_ptr.h>
+#include <boost/python/extract.hpp>
 
 /**
  * @brief This class holds the configuration.
