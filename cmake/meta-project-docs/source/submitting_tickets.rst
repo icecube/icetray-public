@@ -23,7 +23,20 @@ If you're submitting a ticket, please, please, please set the following five fie
   - **rumor/allegation** :  You're not really sure this is a problem, but you think it might be.
   - **cleanup** : The code "works" just fine, but you're reporting something that should be cleaned up.
 
-* **Component** : These fields should be pretty self-explanatory.
+* **Component** : These fields should be pretty self-explanatory, but here's a little help just in case :
+
+  - **cmake** : Issues with build system.
+  - **cvmfs** : Issues with cvmfs.
+  - **icecube offline** : Any project that exists in the offline-software meta-project.  Look at the externals `here <http://code.icecube.wisc.edu/projects/icecube/browser/IceCube/meta-projects/offline-software/trunk>`_ .
+  - **iceprod** : Issues with the production software (IceProd 1 or IceProd 2).
+  - **icerec** : Any project that exists in the icerec meta-project that's not part of offline.  Look at the externals `here <http://code.icecube.wisc.edu/projects/icecube/browser/IceCube/meta-projects/icerec/trunk>`_ .
+  - **infrastructure** : You know...roads, bridges, plumbing, etc...
+  - **jeb + pnf** : Issues with online (pole) processing.  Projects that belong to 
+  - **other** : Doesn't fit in any other component.
+  - **RASTA** : Not used.
+  - **simulation** : Any project that exists in the simulation meta-project that's not part of offline.  Look at the externals `here <http://code.icecube.wisc.edu/projects/icecube/browser/IceCube/meta-projects/simulation/trunk>`_ .
+  - **tools/ports** : Issues with either ports or builds against system packages.
+
 * **Priority** - How urgent is this?
 
   - **blocker** : You're stuck and need this fixed to get unstuck.
