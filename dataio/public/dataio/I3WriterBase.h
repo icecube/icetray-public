@@ -22,14 +22,15 @@
 #ifndef I3_WRITERBASE_H_INCLUDED
 #define I3_WRITERBASE_H_INCLUDED
 
-#include <icetray/I3ConditionalModule.h>
-#include <dataio/I3FileStager.h>
-#include <boost/iostreams/filtering_stream.hpp>
-
 #include <vector>
 #include <string>
 #include <fstream>
 #include <sstream>
+
+#include <boost/iostreams/filtering_stream.hpp>
+
+#include "icetray/I3ConditionalModule.h"
+#include "dataio/I3FileStager.h"
 
 class I3WriterBase : public I3ConditionalModule
 {

@@ -19,29 +19,30 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
-#include <boost/optional.hpp>
-using boost::optional;
+#include "shovel/Model.h"
 
-#include <boost/function.hpp>
-#include <boost/python.hpp>
-
-#include <shovel/Model.h>
-#include <shovel/View.h>
-#include <icetray/serialization.h>
-#include <icetray/Utility.h>
-#include <dataio/I3File.h>
-#include <vector>
-#include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <errno.h>
+
+#include <vector>
+
+#include <boost/optional.hpp>
+#include <boost/function.hpp>
+#include <boost/foreach.hpp>
+#include <boost/python.hpp>
+
+#include "icetray/serialization.h"
+#include "icetray/Utility.h"
+#include "dataio/I3File.h"
+#include "shovel/View.h"
+
+using boost::optional;
 
 extern int errno;
 
 using namespace std;
 using namespace boost;
-
-#include <boost/foreach.hpp>
-
 
 Model::Model(View& view) : view_(view)
 {

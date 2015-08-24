@@ -19,27 +19,27 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
-#include <icetray/I3Module.h>
-#include <icetray/I3Frame.h>
-#include <icetray/I3TrayInfo.h>
-#include <icetray/I3TrayInfoService.h>
-#include <icetray/Utility.h>
-
-#include <dataio/I3WriterBase.h>
-
-#include <boost/iostreams/device/back_inserter.hpp>
-#include <boost/iostreams/filter/gzip.hpp>
 #include <ostream>
 #include <set>
 
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/iostreams/device/back_inserter.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
 #include <boost/iostreams/stream.hpp>
 #include <boost/ref.hpp>
 #include <boost/algorithm/string/case_conv.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/format.hpp>
 #include <boost/foreach.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/make_shared.hpp>
+
+#include "icetray/I3Module.h"
+#include "icetray/I3Frame.h"
+#include "icetray/I3TrayInfo.h"
+#include "icetray/I3TrayInfoService.h"
+#include "icetray/Utility.h"
+
+#include "dataio/I3WriterBase.h"
 
 using boost::algorithm::to_lower;
 using boost::algorithm::iends_with;
