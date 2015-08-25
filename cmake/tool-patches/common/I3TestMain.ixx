@@ -35,6 +35,7 @@ using namespace std;
 
 #include <I3Test.h>
 #include <icetray/init.h>
+#include <icetray/I3Logging.h>
 #include <boost/program_options.hpp>
 #include <iterator>
 #include <iomanip>
@@ -443,6 +444,37 @@ namespace I3Test
 }
 vector<string> tests_to_run;
 
+void validate(boost::any &v, const std::vector<std::string>& values,
+    I3LogLevel* target_type, int)
+{
+    using namespace boost::program_options;
+    
+    // Make sure no previous assignment to 'a' was made.
+    validators::check_first_occurrence(v);
+    // Extract the first string from 'values'. If there is more than
+    // one string, it's an error, and exception will be thrown.
+    const string& s = validators::get_single_string(values);
+    std::string supper;
+    std::transform(s.begin(), s.end(), std::back_inserter(supper), ::toupper);
+    
+    if (supper == "TRACE")
+        v = boost::any(I3LOG_TRACE);
+    else if (supper == "DEBUG")
+        v = boost::any(I3LOG_DEBUG);
+    else if (supper == "INFO")
+        v = boost::any(I3LOG_INFO);
+    else if (supper == "NOTICE")
+        v = boost::any(I3LOG_NOTICE);
+    else if (supper == "WARN")
+        v = boost::any(I3LOG_WARN);
+    else if (supper == "ERROR")
+        v = boost::any(I3LOG_ERROR);
+    else if (supper == "FATAL")
+        v = boost::any(I3LOG_FATAL);
+    else
+        throw validation_error(validation_error::invalid_option_value);
+}
+
 namespace po = boost::program_options;
 
 // A helper function to simplify the main part.
@@ -478,6 +510,7 @@ int main(int argc, char* argv[])
       ("list,l", "list tests and groups in this suite")
       ("run-tests,r", po::value< vector<string> >(), "list of tests to run")
       ("timeout,t", po::value< int >(), "timeout unit tests after this many seconds")
+      ("log-level", po::value<I3LogLevel>(), "set the global logging level")
       ;
 
     po::positional_options_description p;
@@ -517,7 +550,13 @@ int main(int argc, char* argv[])
     if (vm.count("timeout")) {
       unit_test_time_limit = vm["timeout"].as< int >();
     }
-
+    
+    if (vm.count("log-level")) {
+        if (I3LoggerPtr logger = GetIcetrayLogger()) {
+            logger->SetLogLevel(vm["log-level"].as<I3LogLevel>());
+        }
+    }
+    
     if (vm.count("all")) {
       cout << "Running all tests:" << endl;
       suite().runtests();
