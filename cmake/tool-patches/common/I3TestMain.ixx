@@ -472,7 +472,7 @@ void validate(boost::any &v, const std::vector<std::string>& values,
     else if (supper == "FATAL")
         v = boost::any(I3LOG_FATAL);
     else
-#if BOOST_NUMERIC_VERSION < 10400
+#if BOOST_VERSION < 104000
         throw validation_error("invalid value");
 #else
         throw validation_error(validation_error::invalid_option_value);
