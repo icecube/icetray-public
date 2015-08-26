@@ -30,6 +30,8 @@ i3_add_library (dataio
 )
 target_link_libraries(dataio ${BOOST_DATE_TIME})
 
+add_subdirectory(private/test_unregistered)
+
 if(CDK_FOUND AND NCURSES_FOUND)
   i3_executable(shovel private/shovel/*.cxx
     USE_PROJECTS dataio

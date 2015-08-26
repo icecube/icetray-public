@@ -1,21 +1,16 @@
 #!/usr/bin/env python
 from I3Tray import I3Tray
 from icecube import dataio
-from icecube.examples.mutineer import MutineerModule
+from icecube import dataclasses
+
+from test_unregistered import UnregisteredTrack
 
 tray = I3Tray()
-
-tray.AddModule("I3Reader", "reader", Filename="pass1.i3")
-
-tray.AddModule(MutineerModule, "mutineer")
-
-tray.AddModule("Dump","dump")
-
-tray.AddModule("I3Writer","writer")(
-    ("filename", "hasmutineer.i3.gz")
-    )
-
-tray.AddModule("TrashCan", "the can");
+tray.AddModule("I3Reader", Filename="pass1.i3")
+tray.AddModule(lambda frame : \
+               frame.Put("mutineer", UnregisteredTrack()))
+tray.AddModule("Dump")
+tray.AddModule("I3Writer", Filename = "hasmutineer.i3.gz")
 
 tray.Execute()
 tray.Finish()
