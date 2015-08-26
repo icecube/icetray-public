@@ -10,3 +10,6 @@ trunk
 * Remove the test directories and references to tests in CMakeLists.txt.
   Tests really aren't relevant for this project, since most are ABCs, 
   and tests are more appropriate for the classes that derive from them.
+* Added missing include guards.
+
+
