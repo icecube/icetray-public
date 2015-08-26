@@ -19,6 +19,7 @@ find_package(Boost REQUIRED COMPONENTS
   ${BOOST_COMPONENTS} )
 include_directories(${Boost_INCLUDE_DIRS})
 set(LINK_LIBRARIES ${Boost_LIBRARIES})
+list(APPEND LINK_LIBRARIES ${PYTHON_LIBRARIES})
 if(APPLE)
   list(APPEND LINK_LIBRARIES ${CMAKE_BINARY_DIR}/lib/libicetray.dylib)
   list(APPEND LINK_LIBRARIES ${CMAKE_BINARY_DIR}/lib/libdataclasses.dylib)
