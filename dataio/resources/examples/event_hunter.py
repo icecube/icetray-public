@@ -34,9 +34,25 @@ def hunt(events,input_files):
                                 f['I3EventHeader'].run_id if event[0] != -1 else -1,
                                 f['I3EventHeader'].event_id
                             )
-                            logging.info('index %d has run %d event %d',index,input_files[index]['start_event'][0],input_files[index]['start_event'][1])
                             break
+                if input_files[index]['start_event']:
+                    logging.info('index %d has run %d event %d',index,input_files[index]['start_event'][0],input_files[index]['start_event'][1])
+                else:
+                    logging.info('index is empty. should be file %s',input_files[index]['filename'])
+                    input_files[index]['start_event'] = False
+                    new_index = index + 1
+                    if new_index > index_max:
+                        new_index = index - 1
+                        if new_index < index_min:
+                            logging.error('binary search failure')
+                            break
+                        else:
+                            index = new_index
+                    else:
+                        index = new_index
+                    continue
                 if event == input_files[index]['start_event']:
+                    logging.debug('found event')
                     break
                 elif event < input_files[index]['start_event']:
                     new_index = int(math.floor((index_min+index)/2))
@@ -46,6 +62,7 @@ def hunt(events,input_files):
                         index = index_min
                         break
                     else:
+                        logging.debug('go to lower half')
                         index_max = index
                         index = new_index
                 else:
@@ -54,6 +71,7 @@ def hunt(events,input_files):
                         logging.debug('> new_index == index (%d)',index)
                         break
                     else:
+                        logging.debug('go to upper half')
                         index_min = index
                         index = new_index
             if index:
