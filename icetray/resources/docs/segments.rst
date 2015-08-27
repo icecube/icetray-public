@@ -13,9 +13,16 @@ meta-projects.  This is designed to reduce configuration duplication
 scripts in several cases (by building massive data processing 
 scripts from segments of segments).  With this in mind, segments provide a way to:
 
-1. Logically connected sets of services and modules that together perform a single task (e.g. Gulliver-based reconstructions or pulse extraction with NFE)
+1. Logically connect sets of services and modules that together perform a single task (e.g. Gulliver-based reconstructions or pulse extraction with NFE)
 2. Build large segments of standard processing (e.g. modularization of bulk filtering and processing scripts)
 3. Support modules with widely used alternate set of defaults for some specific use (e.g. when different settings are required for real data vs MC data)
+
+.. note::
+
+  When creating a segment for use in production, adhere to the 
+  "Give one entity, one cohesive responsibility." standard.  
+  We've seen several cases of segments taking on too much responsibilty.
+
 
 A Basic Tray Segment Example
 """"""""""""""""""""""""""""

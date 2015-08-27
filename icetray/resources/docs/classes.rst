@@ -4,6 +4,6 @@ Icetray classes
 .. toctree::
    :maxdepth: 4
 
-   i3frame
-   i3module
-   i3context
+   classes/i3frame
+   classes/i3module
+   classes/i3context

@@ -49,6 +49,7 @@ Detailed Documentation:
    functions 
    modules
    services   
+   segments
    qframes
    i3podholder
    I3Tray
