@@ -30,4 +30,5 @@ void register_I3FrameObject()
     ("I3FrameObject",
      "Base class for all objects that live in the I3Frame")
     ;
+    register_pointer_conversions<I3FrameObject>();
 }
