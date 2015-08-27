@@ -3,6 +3,11 @@ Logging
 
 .. contents::
 
+.. toctree::
+   :maxdepth: 4
+
+   logging/logging_basic
+
 How to Use the Logging System
 -----------------------------
 Call logging functions like you would call ``printf()``:

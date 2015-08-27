@@ -28,8 +28,7 @@ General Overview:
    release_notes
    summary
    pybindings
-   logging_basic
-   module_basic
+   icetray_quick_reference
    services
    project
 

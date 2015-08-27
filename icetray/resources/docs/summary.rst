@@ -60,7 +60,7 @@ python code::
     tray.Execute()
     tray.Finish()
 
-IceTray Specifics
+IceTray Summary
 =================
 
 tray.Execute

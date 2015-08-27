@@ -1,5 +1,5 @@
-I3Tray Internals
-================
+I3Tray Quick Reference
+======================
 
 Modules
 -------

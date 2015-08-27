@@ -1,7 +1,7 @@
-IceTray Logging
-===============
+IceTray Logging Quick Reference
+===============================
 
-Log Levels:
+Log Levels in order of increasing verbosity and severity:
 
 - trace
 - debug
@@ -14,17 +14,16 @@ Log Levels:
 Trace and debug are compiled out in release mode.  The default in debug
 mode is info; the default in release mode is warn.
 
-New Functions
--------------
+Functions
+---------
 
-* log_*_stream() - allows %d like syntax.
-
+* log_* - (e.g. log_trace) allows %d like syntax.
+* log_*_stream() - (e.g. log_trace_stream) allows stream i/o syntax.
 * i3_assert() - logs a message and asserts.
-
 * i3_debug_assert() - debug log and assert.
 
-Python Logging
---------------
+Python Logging Example
+----------------------
 
 Can connect to python logging.  Makes lots of options available:
 

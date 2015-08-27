@@ -28,8 +28,8 @@ Project Layout
              PublicInterface.h
 
 
-i3 Declarations
----------------
+IceCube cmake macros
+--------------------
 
 i3_project
 ^^^^^^^^^^
@@ -75,8 +75,15 @@ USE_PROJECTS icetray projects
 
 i3_test_scripts
 ^^^^^^^^^^^^^^^
+This registers scripts with the test system and automatically runs them on the build bots.
+Check out (http://builds.icecube.wisc.edu/) after every commit to see if you broke 
+anything on other platforms.
 
-(see Thursday)
+It's common to include the following in your CMakeLists.txt file.  This will
+automatically register every python script in 'resources/test'.
+::
+
+  i3_test_scripts(resources/test/*.py)
                   
 Cmake syntax
 ------------
