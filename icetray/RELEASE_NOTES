@@ -1,6 +1,21 @@
 Release Notes
 =============
 
+On the trunk :
+
+* Added an examples dir with a simple example. also included a test that runs this example, which is the new standard.
+* use ROOT_FOUND instead of USE_ROOT
+* Missing include guards fixed.
+* I3.h uber header is cleaned up and going away soon.
+* Docs cleaned up significantly.
+* Remove unused variables, clean up comments, fix indentation in I3ConditionalModule.
+* Eliminate unnecessary Wpotentially-evaluated-expression warnings
+* Reduce coupling between I3Module and I3Tray
+* CINT dicts will be deprecated this November.
+* Logging calls for higher log levels are usually disabled even in debug builds. This change inlines the logging level check into the caller, so that if the current logging level is not high enough, evaluating the log message and allocating memory to store it can be skipped. 
+* No more DSOLOCAL
+* clean up stray test output
+
 March 15, 2015, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
 Release V15-03-00
