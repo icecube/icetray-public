@@ -30,8 +30,6 @@ i3_add_library (dataio
 )
 target_link_libraries(dataio ${BOOST_DATE_TIME})
 
-add_subdirectory(private/test_unregistered)
-
 if(CDK_FOUND AND NCURSES_FOUND)
   i3_executable(shovel private/shovel/*.cxx
     USE_PROJECTS dataio
@@ -159,3 +157,12 @@ set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS writer_is_condit
 if (NOT ${EXPECT} MATCHES "-NOTFOUND")
 set_property(TEST dataio::dataio-shovel-test APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
 endif (NOT ${EXPECT} MATCHES "-NOTFOUND")
+
+# The following is used to test features
+# related to dealing with unregistered classes.
+# So it gets its own separate library.
+i3_add_pybindings(test_unregistered
+  private/test_unregistered/unregistered_track.cxx
+  USE_PROJECTS icetray dataclasses
+  USE_TOOLS boost python
+  )
