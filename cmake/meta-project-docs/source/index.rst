@@ -34,6 +34,7 @@ Of general interest
    :maxdepth: 2
 
    submitting_tickets
+   writing_release_notes
    metaproject_metainfo
    development_tips
    code_reviews
