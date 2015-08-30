@@ -23,53 +23,23 @@ runfile = testdata + "/2007data/2007_I3Only_Run109732_Nch20.i3.gz"
 
 tray = I3Tray()
 
-tray.AddModule("I3Reader","reader", Filename = runfile, SkipKeys = ["I3PfFilterMask","CalibratedFADC","CalibratedATWD"])
+tray.AddModule("I3Reader",
+               Filename = runfile,
+               SkipKeys = ["I3PfFilterMask","CalibratedFADC","CalibratedATWD"])
 
 # This file is super old
-tray.AddModule("QConverter", "qify")
-tray.AddModule(lambda fr: False, "dropps") # Drop all existing P-frames
-
-#
-# An appropriately named but nonetheless cute feature extractor.
-#
-tray.AddModule("DumbFeatureExtractor","dumbfe")
+tray.AddModule("QConverter")
+tray.AddModule(lambda fr: False) # Drop all existing P-frames
 
 #
 # Make the Q frames into P
 #
-tray.AddModule("I3NullSplitter", "donothing")
- 
-#
-# This would probably be better named I3ConstantSeed.  You can imagine
-# what it does.
-#
-tray.AddModule("PutParticle","put",
-               Zenith = 1.28,
-               Azimuth = 3.14,
-               Where =  "somewhere")
-
-#
-# This is the very convenient "Dump" module which spits out the frames
-# as they go by.  This is one of icecube's standard modules (in
-# project icetray.  You get it for free, it's always available.)
-#
-tray.AddModule("Dump","dump")
+tray.AddModule("I3NullSplitter")
 
 #
 # And this is the magic writer.  We will make it work harder later.
 #
-tray.AddModule("I3Writer","writer",
-               filename =  "pass1.i3"
-               )
-
-#
-# The TrashCan is another standard module.  Every module's outboxes
-# must be connected to something.  The I3Writer, above, sends things
-# downstream after it has written them because it doesn't know if it
-# really is going to be the last module in the chain.  This moduleb
-# catches whatever comes through and just discards it.
-#
-tray.AddModule("TrashCan", "the can");
+tray.AddModule("I3Writer", filename =  "pass1.i3")
 
 #
 # Here we specify how many frames to process, or we can omit the
