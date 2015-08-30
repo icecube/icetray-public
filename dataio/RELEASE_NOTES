@@ -3,6 +3,7 @@ Release Notes
 
 Trunk
 --------------------------------------------------------------------
+* (r2270) - Tests adapted to work with the examples project.
 * UI enhancement: while viewing a frame object, you can use the "left"/"right"
   arrows to browse through instances of this frame object in other frames
 * Work around the lazy-initialization bug in Boost < 1.44's bzip2
