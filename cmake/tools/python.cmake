@@ -102,9 +102,9 @@ message(STATUS "+   binary: ${PYTHON_EXECUTABLE}")
 message(STATUS "+ includes: ${PYTHON_INCLUDE_DIR}")	
 message(STATUS "+     libs: ${PYTHON_LIBRARIES}")	
 
-if(PYTHON_NUMERIC_VERSION LESS 20500)
-  message(WARNING "A Python version > 2.4 is required.")
-endif(PYTHON_NUMERIC_VERSION LESS 20500)
+if(PYTHON_NUMERIC_VERSION LESS 20600)
+  message(FATAL_ERROR "A Python version >= 2.6 is required.")
+endif(PYTHON_NUMERIC_VERSION LESS 20600)
 
 # look for numpy
 execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import numpy"
@@ -156,10 +156,4 @@ else()
   set(SCIPY_FOUND FALSE)
 endif()
 set(SCIPY_FOUND ${SCIPY_FOUND} CACHE BOOL "Scipy found successfully")
-
-if (${PYTHON_NUMERIC_VERSION} LESS 20600)
-    colormsg (HIRED "*** WARNING Python 2.6 or above is required for full functionality")
-    colormsg (HIRED "*** you have ${PYTHON_STRIPPED_VERSION}: expect some functionality to be broken")
-endif (${PYTHON_NUMERIC_VERSION} LESS 20600)
-
 
