@@ -3,6 +3,7 @@ Release Notes
 
 Trunk
 --------------------------------------------------------------------
+* (r2279) - Move event_hunter.py example to phys-services.
 * (r2275) - Added tests that ensure the example scripts run.
 * (r2270) - Tests adapted to work without the examples project.
 * UI enhancement: while viewing a frame object, you can use the "left"/"right"
