@@ -245,7 +245,6 @@ i3_add_pybindings(i3math
 )
 
 i3_add_pybindings(icetray
-  private/pybindings/empty.cxx
   private/pybindings/module.cxx
   USE_TOOLS boost python
   LINK_LIBRARIES ${LIBARCHIVE_LIBRARIES}
