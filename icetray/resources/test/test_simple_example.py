@@ -1,19 +1,13 @@
 #!/usr/bin/env python
 
-import os
 import unittest
-import subprocess
+from icecube.icetray import I3Test
 
-class TestSimpleExample(unittest.TestCase):
+class TestSimpleExample(I3Test.TestExampleScripts):
 
-    def run_example(self, example_name):
-        return_code = subprocess.call(
-            ("../examples/" + example_name),
-            cwd = os.path.dirname(__file__)
-            )
-        self.assertEqual(return_code, 0, "Return code should be 0.")
-
-    def test_run(self):
+    project_name = "icetray"
+    
+    def test_simple_example(self):
         self.run_example('simple_example.py')
 
 unittest.main()

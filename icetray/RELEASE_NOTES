@@ -3,6 +3,7 @@ Release Notes
 
 On the trunk :
 
+* (r2272) - Tests no longer depend on the examples project.
 * (r2266) - All python 2.6 tests are part of the normal test suite now.  Python support for 2.5 and earlier has been dropped.
 * Added an examples dir with a simple example. also included a test that runs this example, which is the new standard.
 * use ROOT_FOUND instead of USE_ROOT
