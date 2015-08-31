@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python
 """
 Take input files and an event list, and make an output file with only
 those events.
