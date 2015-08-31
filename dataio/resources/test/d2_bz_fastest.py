@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-#
-#  use the standard messy monolith reader to get some data going.
-#
+
 from I3Tray import *
 from icecube import icetray, dataclasses, phys_services, dataio
 from os.path import expandvars
