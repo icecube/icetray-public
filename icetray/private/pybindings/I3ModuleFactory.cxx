@@ -25,12 +25,6 @@
 
 using namespace boost::python;
 
-I3ModulePtr create_module(const std::string& name, I3Context& context)
-{
-  return I3::Singleton<I3ModuleFactory>::get_const_instance()
-    .Create(name)(context);
-}
-
 I3ConfigurationPtr
 module_default_config(const std::string& name)
 {
@@ -97,7 +91,6 @@ get_projects()
 
 void register_I3ModuleFactory()
 {
-  def("create_module", &create_module);
   def("module_default_config", &module_default_config);
   def("modules", &get_registrations<I3ModuleFactory>, args("project"));
   def("services", &get_registrations<I3ServiceFactoryFactory>, args("project"));
