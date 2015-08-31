@@ -8,15 +8,24 @@ from icecube import icetray
 from icecube import dataclasses
 from icecube import examples
 
+class GetI3Int(icetray.I3Module):
+    def __init__(self, context):
+        icetray.I3Module.__init__(self, context)
+        self.AddOutBox("OutBox")
+
+        self.AddParameter("obj", "Python wrapped C++ class", None)
+
+    def Configure(self):
+        self.parameter = self.GetParameter("obj")
+
+
 tray = I3Tray()
 
 i3int = icetray.I3Int(777)
 
 # generate empty frames
-tray.AddModule("GetI3Int","giint",
-               obj=i3int)
+tray.AddModule(GetI3Int, obj=i3int)
 
 tray.Execute(1)
 
-# see ya.
 tray.Finish()
