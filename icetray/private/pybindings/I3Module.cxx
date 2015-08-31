@@ -93,13 +93,6 @@ namespace {
   }
 }
 
-//void fleh(boost::python::object obj)
-//{
-//  log_error("PyType_Check: %d", PyType_Check(obj.ptr()));
-//  log_error("PyEval_GetFuncName: %s", PyEval_GetFuncName(obj.ptr()));
-//  log_error("PyEval_GetGlobals: %p", PyEval_GetGlobals());
-//}
-
 void register_I3Module()
 {
   wrapmod<I3Module>("I3Module");
