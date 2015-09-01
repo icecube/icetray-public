@@ -5,6 +5,10 @@ Release Notes
 trunk
 -----
 
+August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+Release V15-08-00
+
 * Removed I3ChannelID2OMKey.  This was only needed for AMANDA.
 * Added some docs (one-liners) about the classes in this project.
 * Remove the test directories and references to tests in CMakeLists.txt.
