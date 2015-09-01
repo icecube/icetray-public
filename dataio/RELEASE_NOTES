@@ -2,7 +2,12 @@ Release Notes
 =============
 
 Trunk
+
+August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
+
+Release V15-08-00 
+
 * (r2279) - Move event_hunter.py example to phys-services.
 * (r2275) - Added tests that ensure the example scripts run.
 * (r2270) - Tests adapted to work without the examples project.
