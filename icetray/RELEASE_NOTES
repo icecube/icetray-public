@@ -3,6 +3,10 @@ Release Notes
 
 On the trunk :
 
+August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+Release V15-08-00
+
 * (r2282) - I3ModuleFactory no longer has bindings to create_module.  It wasn't clear when it stopped working, but it was sometime in the last 6 years.  It's not used though.
 * (r2283) - Increased test coverage a bit.
 * (r2273) - Included a helper class that inherits from unittest.TestCase that makes testing that example scripts run a little easier.
