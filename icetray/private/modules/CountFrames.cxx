@@ -61,6 +61,7 @@ CountFrames::CountFrames(const I3Context& context) :
   AddOutBox("OutBox");
 
   insert(required_framecounts_)
+    (I3Frame::DAQ, 0)
     (I3Frame::Physics, 0)
     (I3Frame::Geometry, 0)
     (I3Frame::DetectorStatus, 0)
