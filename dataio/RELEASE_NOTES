@@ -3,6 +3,8 @@ Release Notes
 
 Trunk
 
+* Test scripts count the Q frames now too.  While I was in there I updated the to the more pythonic format.
+
 August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
 
