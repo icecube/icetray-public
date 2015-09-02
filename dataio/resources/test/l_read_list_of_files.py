@@ -13,11 +13,6 @@ from icecube import dataio
 
 tray = I3Tray()
 
-#
-#  This takes a list of files.  You could use the python glob() function as well.
-#
-
-
 #  expand the I3_PORTS
 globspec = expandvars("$I3_TESTDATA/string-21/*.i3.gz")
 
@@ -28,8 +23,7 @@ tray.AddModule("I3Reader","reader", FilenameList=file_list)
 
 tray.AddModule("Dump","dump")
 
-# verify that 47 frames come through.  That's assumes only two files
-# from test-data match the glob above.
+# verify that 50 frames come through.
 tray.AddModule("CountFrames", "count")(
     ("Physics", 44),
     ("Calibration", 2),

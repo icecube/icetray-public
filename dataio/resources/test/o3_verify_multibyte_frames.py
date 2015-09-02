@@ -14,11 +14,6 @@ from icecube import dataio
 
 tray = I3Tray()
 
-#
-#  This takes a list of files.  You could use the python glob() function as well.
-#
-
-
 #  use 'glob' to convert the string with the 'star' in it to a list of real filenames
 #  ... 'gcd' comes before 'physics'
 file_list = glob("split.*.i3")
@@ -28,20 +23,19 @@ file_list.sort()
 
 print(file_list)
 
-tray.AddModule("I3Reader", "reader", FilenameList=file_list)
+tray.AddModule("I3Reader", FilenameList=file_list)
 
-tray.AddModule("Dump","dump")
+tray.AddModule("Dump")
 
-# verify that 47 frames come through.  That's assumes only two files
+# verify that 23 frames come through.  That's assumes only two files
 # from test-data match the glob above.
-tray.AddModule("CountFrames", "count")(
-    ("Physics", 10),
-    ("Calibration", 1),
-    ("DetectorStatus", 1),
-    ("Geometry", 1)
+tray.AddModule("CountFrames",
+    DAQ = 10,
+    Physics = 10,
+    Calibration = 1,
+    DetectorStatus = 1,
+    Geometry = 1
     )
-
-tray.AddModule("TrashCan", "the can");
 
 tray.Execute()
 tray.Finish()

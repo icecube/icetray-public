@@ -6,27 +6,24 @@ from icecube import dataio
 tray = I3Tray()
 
 # by default the reader will log_fatal if it can't deserialize something
-tray.AddModule("I3Reader","reader",
-               Filename = "hasmutineer.i3.gz")
+tray.AddModule("I3Reader", Filename = "hasmutineer.i3.gz")               
 
-tray.AddModule("FrameCheck", "check1",
-               Ensure_Physics_Has = ["mutineer"])
+tray.AddModule("FrameCheck", Ensure_Physics_Has = ["mutineer"])               
 
-tray.AddModule("DeleteUnregistered", "du")
+tray.AddModule("DeleteUnregistered")
 
-tray.AddModule("FrameCheck", "check2",
-               Ensure_Physics_Hasnt = ["mutineer"])
+tray.AddModule("FrameCheck", Ensure_Physics_Hasnt = ["mutineer"])               
 
-tray.AddModule("Get", "getter")
+tray.AddModule("Get")
 
-tray.AddModule("Dump","dump")
+tray.AddModule("Dump")
+
 tray.AddModule("CountFrames", "count",
+               DAQ = 10,
                Physics = 10,
                Geometry = 1,
                Calibration = 1,
                DetectorStatus = 1)
-
-tray.AddModule("TrashCan", "the can")
 
 tray.Execute()
 tray.Finish()
