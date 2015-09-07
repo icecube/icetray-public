@@ -5,6 +5,17 @@ colormsg(HICYAN "qt4")
 include(CheckSymbolExists)
 include(MacroAddFileDependencies)
 
+function(_QT4_QUERY_QMAKE VAR RESULT)
+  execute_process(COMMAND "${QT_QMAKE_EXECUTABLE}" -query ${VAR}
+    RESULT_VARIABLE return_code
+    OUTPUT_VARIABLE output ERROR_VARIABLE output
+    OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_STRIP_TRAILING_WHITESPACE)
+  if(NOT return_code)
+    file(TO_CMAKE_PATH "${output}" output)
+    set(${RESULT} ${output} PARENT_SCOPE)
+  endif(NOT return_code)
+endfunction(_QT4_QUERY_QMAKE)
+
 set(Qt4_FIND_QUIETLY FALSE)
 set(QT_USE_QTOPENGL TRUE)
 set(QT_USE_FILE ${CMAKE_ROOT}/Modules/UseQt4.cmake)
@@ -12,15 +23,32 @@ set(QT_DEFINITIONS "-qt=qt4")
 
 if(NOT QT_QMAKE_EXECUTABLE)
   # check for qmake
-  find_program(QT_QMAKE_EXECUTABLE NAMES qmake-qt4 qmake
-    PATHS
+  # first, try various paths one by one, looking for one that is recent enough
+  set(_test_paths
     /usr/lib/x86_64-linux-gnu/qt4/bin
-    ${I3_PORTS}/qt-4.8.6/bin
-    ${I3_PORTS}/qt-4.6.0/bin
-    ${I3_PORTS}/qt-4.4.3/bin
-    DOC "Qmake executable.  Use this to set the version of Qt that you use."
-    ${TOOL_SYSTEM_PATH}
-    )
+    ${I3_PORTS}/qt-4.8.6/bin)
+  set(QTVERSION 0)
+  foreach(_test_path ${_test_paths})
+    find_program(QT_QMAKE_EXECUTABLE NAMES qmake-qt4 qmake
+      PATHS
+      ${_test_path}
+      DOC "Qmake executable.  Use this to set the version of Qt that you use."
+      NO_DEFAULT_PATH
+      )
+    _qt4_query_qmake(QT_VERSION QTVERSION)
+    if (${QTVERSION} VERSION_LESS "4.8")
+      unset(QT_QMAKE_EXECUTABLE CACHE)
+    else()
+      break()
+    endif()
+  endforeach()
+  # if all else fails, fall back to default search paths
+  if(NOT QT_QMAKE_EXECUTABLE)
+    find_program(QT_QMAKE_EXECUTABLE NAMES qmake-qt4 qmake
+      DOC "Qmake executable.  Use this to set the version of Qt that you use."
+      ${TOOL_SYSTEM_PATH}
+      )
+  endif(NOT QT_QMAKE_EXECUTABLE)
 endif(NOT QT_QMAKE_EXECUTABLE)
 
 find_package(OpenGL)
