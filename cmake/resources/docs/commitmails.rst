@@ -24,7 +24,7 @@ If you would like to track activity in any project, simply add your
 email address to the file :file:`.mailinglist` in the projects' root
 directory. If one does not exist, you may create one:
 
-::
+.. code-block:: shell-session
 
   % echo "me@somewhere.edu" > .mailinglist
   % svn add .mailinglist

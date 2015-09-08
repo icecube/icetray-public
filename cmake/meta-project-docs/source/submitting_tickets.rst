@@ -1,6 +1,6 @@
 Submitting Tickets
 ==================
-Submitting tickets via Trac (http://code.icecube.wisc.edu/projects/icecube/newticket) is 
+Submitting tickets via Trac (`<http://code.icecube.wisc.edu/projects/icecube/newticket>`_) is 
 pretty self-explanatory, but there are a few things to keep in mind.  The most important
 of which is **DON'T SUBMIT TICKETS AS USER 'ICECUBE'!!!**  We often need to follow up 
 with the reporter and there's no way to do that if you don't submit under your own name.
@@ -27,14 +27,14 @@ If you're submitting a ticket, please, please, please set the following five fie
 
   - **cmake** : Issues with build system.
   - **cvmfs** : Issues with cvmfs.
-  - **icecube offline** : Any project that exists in the offline-software meta-project.  Look at the externals `here <http://code.icecube.wisc.edu/projects/icecube/browser/IceCube/meta-projects/offline-software/trunk>`_ .
+  - **icecube offline** : Any project that exists in the offline-software meta-project.  Look at the externals `here <http://code.icecube.wisc.edu/projects/icecube/browser/IceCube/meta-projects/offline-software/trunk>`__ .
   - **iceprod** : Issues with the production software (IceProd 1 or IceProd 2).
-  - **icerec** : Any project that exists in the icerec meta-project that's not part of offline.  Look at the externals `here <http://code.icecube.wisc.edu/projects/icecube/browser/IceCube/meta-projects/icerec/trunk>`_ .
+  - **icerec** : Any project that exists in the icerec meta-project that's not part of offline.  Look at the externals `here <http://code.icecube.wisc.edu/projects/icecube/browser/IceCube/meta-projects/icerec/trunk>`__ .
   - **infrastructure** : You know...roads, bridges, plumbing, etc...
   - **jeb + pnf** : Issues with online (pole) processing.  Projects that belong to 
   - **other** : Doesn't fit in any other component.
   - **RASTA** : Not used.
-  - **simulation** : Any project that exists in the simulation meta-project that's not part of offline.  Look at the externals `here <http://code.icecube.wisc.edu/projects/icecube/browser/IceCube/meta-projects/simulation/trunk>`_ .
+  - **simulation** : Any project that exists in the simulation meta-project that's not part of offline.  Look at the externals `here <http://code.icecube.wisc.edu/projects/icecube/browser/IceCube/meta-projects/simulation/trunk>`__ .
   - **tools/ports** : Issues with either ports or builds against system packages.
 
 * **Priority** - How urgent is this?
