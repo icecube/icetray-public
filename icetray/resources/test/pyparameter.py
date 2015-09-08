@@ -6,7 +6,6 @@
 from I3Tray import I3Tray
 from icecube import icetray
 from icecube import dataclasses
-from icecube import examples
 
 class GetI3Int(icetray.I3Module):
     def __init__(self, context):
