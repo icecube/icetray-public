@@ -11,7 +11,6 @@ from icecube import icetray
 from icecube import dataclasses 
 from icecube import phys_services 
 from icecube import dataio 
-from icecube import examples 
 
 class PutParticle(icetray.I3Module):
     def __init__(self, context):

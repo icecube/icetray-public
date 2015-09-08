@@ -10,7 +10,6 @@ import sys
 from icecube import dataclasses 
 from icecube import phys_services 
 from icecube import dataio 
-from icecube import examples 
 
 #
 # This sets up a bunch of paths of files and stuff.  Nice to have a
