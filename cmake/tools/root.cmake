@@ -137,6 +137,7 @@ if(NOT USE_ROOT OR NOT ROOT_VERSION)
   set(ROOT_LIB_DIR "/USE_ROOT/IS/OFF" CACHE STRING "USE_ROOT is OFF")
   set(ROOT_LIBRARIES "" CACHE STRING "USE_ROOT is OFF")
   set(ROOTSYS "/USE_ROOT/IS/OFF" CACHE STRING "USE_ROOT is OFF")
+  set(USE_CINT OFF CACHE BOOL "USE_ROOT is OFF (Can't have CINT without ROOT)")
 else()
 
   set(ROOT_5.18.00_LIBS Core Cint RIO Net Hist Graf Graf3d Gpad Tree Rint Postscript Matrix Physics Minuit)
