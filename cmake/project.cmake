@@ -619,7 +619,7 @@ macro(i3_add_pybindings MODULENAME)
     #
 
     parse_arguments(${MODULENAME}_ARGS
-      "USE_PROJECTS;USE_TOOLS"
+        "USE_PROJECTS;USE_TOOLS;LINK_LIBRARIES"
       ${ARGN}
       )
 
