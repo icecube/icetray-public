@@ -103,6 +103,27 @@ macro(use_projects THIS_TARGET)
 endmacro(use_projects THIS_TARGET)
 
 #
+# use_pybindings() helper macro for, uh, using pybindings.
+#
+macro(use_pybindings THIS_TARGET)
+  parse_arguments(${THIS_TARGET}_USE_PROJECTS
+    "PROJECTS"
+    ""
+    ${ARGN}
+    )
+  foreach(USED_PROJECT ${${THIS_TARGET}_USE_PROJECTS_PROJECTS})
+    if(NOT IS_DIRECTORY ${CMAKE_SOURCE_DIR}/${USED_PROJECT})
+      message(FATAL_ERROR "Attempt to use nonexistent project '${USED_PROJECT}'")
+    endif(NOT IS_DIRECTORY ${CMAKE_SOURCE_DIR}/${USED_PROJECT})
+    if(NOT EXISTS ${CMAKE_SOURCE_DIR}/${USED_PROJECT}/CMakeLists.txt)
+      message(FATAL_ERROR "Attempt to use project '${USED_PROJECT}'. There is a directory but no CMakeLists.txt... don't know what to do.")
+    endif(NOT EXISTS ${CMAKE_SOURCE_DIR}/${USED_PROJECT}/CMakeLists.txt)
+
+    add_dependencies(${THIS_TARGET} ${USED_PROJECT}-pybindings)
+  endforeach(USED_PROJECT ${${THIS_TARGET}_USE_PROJECTS_PROJECTS})
+endmacro(use_pybindings THIS_TARGET)
+
+#
 #  i3_add_library
 #
 macro(i3_add_library THIS_LIB_NAME)
@@ -596,6 +617,13 @@ macro(i3_add_pybindings MODULENAME)
     # this is so you can use these projects with older i3-cmakes that do not yet
     # have this macro
     #
+
+    parse_arguments(${MODULENAME}_ARGS
+      "USE_PROJECTS;USE_TOOLS"
+      ${ARGN}
+      )
+
+    #
     # NO_DOXYGEN is added here, because otherwise, upper level doxygen gets clobbered
     #
     i3_add_library(${MODULENAME}-pybindings ${ARGN}
@@ -620,7 +648,10 @@ macro(i3_add_pybindings MODULENAME)
       )
 
     add_dependencies(pybindings ${MODULENAME}-pybindings)
-
+    use_pybindings("${MODULENAME}-pybindings"
+      PROJECTS "${${MODULENAME}_ARGS_USE_PROJECTS}"
+      )
+    
     colormsg(GREEN "+-- ${MODULENAME}-pybindings")
 
     # Disabled special linker flags for APPLE:
