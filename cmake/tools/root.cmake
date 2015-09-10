@@ -28,6 +28,7 @@ endif(NOT USE_ROOT AND USE_CINT)
 
 if(APPLE)
   unset(USE_CINT)
+  unset(USE_CINT CACHE)
 endif()
 
 if (USE_ROOT)
