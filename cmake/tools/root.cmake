@@ -26,6 +26,10 @@ if(NOT USE_ROOT AND USE_CINT)
   message(FATAL_ERROR "Cannot use rootcint without root")
 endif(NOT USE_ROOT AND USE_CINT)
 
+if(APPLE)
+  unset(USE_CINT)
+endif()
+
 if (USE_ROOT)
   if(NOT ROOT_VERSION)
     foreach(ROOTVER 5.34.19 5.34.18 5.34.04 5.34.03 5.32.00 5.30.06 5.30.05 5.30.00 5.28.00h 5.28.00d 5.28.00 5.27.06b 5.26.00e 5.24.00b 5.24.00 5.20.00 5.18.00)
