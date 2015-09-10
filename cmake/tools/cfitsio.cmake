@@ -35,6 +35,6 @@ TOOLDEF (cfitsio
   cfitsio
   )
 if(CFITSIO_FOUND)
-  set(CFITSIO_INCLUDE_DIR ${CFITSIO_INCLUDE_DIR}/cfitsio CACHE FILEPATH "cfitsio header path")
+  set(CFITSIO_INCLUDE_DIR ${CFITSIO_INCLUDE_DIR}/cfitsio CACHE FILEPATH "cfitsio header path" FORCE)
 endif(CFITSIO_FOUND)
 endif(NOT CFITSIO_FOUND)
