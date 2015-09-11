@@ -325,7 +325,7 @@ I3Tray::Configure()
 
 	if (!boxes_connected &&
         !modules[modules_in_order.back()]->AllOutBoxesConnected()) {
-		log_info("Last module (\"%s\") has a dangling outbox. Adding "
+		log_debug("Last module (\"%s\") has a dangling outbox. Adding "
 		    "TrashCan to end of tray", modules_in_order.back().c_str());
 		AddModule("TrashCan", "__automatic_I3Tray_trashcan");
 	}
@@ -602,7 +602,7 @@ I3Tray::CreateName(const std::string& type, const string& kind,
 			break;
 		i++;
 	}
-	log_info_stream("Adding Anonymous " << kind << " of type '"
+	log_debug_stream("Adding Anonymous " << kind << " of type '"
 	                << type << "' with name '" << name << "'");
 	return(name);
 }
