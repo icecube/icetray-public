@@ -70,7 +70,7 @@ set(I3_PORTS $ENV{I3_PORTS} CACHE STRING "Path to your icecube ports installatio
 # (designed for py2-v2 port-less software)
 #
 if($ENV{SROOT} MATCHES "^/cvmfs/icecube" AND NOT SYSTEM_PACKAGES)
-  if($ENV{SROOT} MATCHES "py2-v2$")
+  if($ENV{SROOTBASE} MATCHES "py2-v2$")
     set(SYSTEM_PACKAGES TRUE)
   endif()
   set(CMAKE_PREFIX_PATH $ENV{SROOT})
