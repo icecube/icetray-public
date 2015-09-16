@@ -174,10 +174,14 @@ if (NOT GEANT4_CONFIG_TOOL_FOUND)
 
 endif (NOT GEANT4_CONFIG_TOOL_FOUND)
 
-# if Geant4 was found, get the version number
 if (GEANT4_FOUND)
 
-  execute_process (COMMAND cat ${GEANT4_INC_DIR}/G4Version.hh
+  # Extract G4 version number
+  # GEANT4_VERSION is a number with this format: ABC
+  # A is the major version number, B the minor, and C the patch number.
+  # The major version number may have more than one digit, the others do not.
+  execute_process (COMMAND
+    cat ${GEANT4_INC_DIR}/G4Version.hh
     OUTPUT_VARIABLE VERSION_OUTPUT
     )
 
@@ -187,8 +191,16 @@ if (GEANT4_FOUND)
     "\\1"
     GEANT4_VERSION ${VERSION_OUTPUT})
 
-  # GEANT4_VERSION is a number with this format: ABC
-  # A is the major version number, B the minor, and C the patch number.
-  # The major version number may have more than one digit, the others do not.
+  # Generate the shell commands to setup the environment
+  # variables in env-shell.sh
+  find_program (GEANT4_SH geant4.sh
+    PATHS ${I3_PORTS}/bin
+    )
+
+  execute_process (COMMAND 
+    ${CMAKE_SOURCE_DIR}/cmake/make_geant4_env.py ${GEANT4_SH} ${GEANT4_VERSION}
+    OUTPUT_VARIABLE GEANT4_ENV_VARS
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
 
 endif (GEANT4_FOUND)
