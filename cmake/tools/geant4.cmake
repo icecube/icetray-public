@@ -173,3 +173,22 @@ if (NOT GEANT4_CONFIG_TOOL_FOUND)
   endif (CLHEP_CONFIG_ERROR)
 
 endif (NOT GEANT4_CONFIG_TOOL_FOUND)
+
+# if Geant4 was found, get the version number
+if (GEANT4_FOUND)
+
+  execute_process (COMMAND cat ${GEANT4_INC_DIR}/G4Version.hh
+    OUTPUT_VARIABLE VERSION_OUTPUT
+    )
+
+  # weird cmake way of extracting only a subexpression
+  string (REGEX REPLACE
+    ".*#define +G4VERSION_NUMBER +([0-9]+).*"
+    "\\1"
+    GEANT4_VERSION ${VERSION_OUTPUT})
+
+  # GEANT4_VERSION is a number with this format: ABC
+  # A is the major version number, B the minor, and C the patch number.
+  # The major version number may have more than one digit, the others do not.
+
+endif (GEANT4_FOUND)
