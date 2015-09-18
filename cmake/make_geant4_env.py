@@ -27,8 +27,9 @@ geant4_vars = {
 }
 
 geant4_env = {}
+
+# try to get vars from geant4.sh script
 if os.path.isfile(geant4_sh):
-    # try to get vars from geant4.sh script
     p = subp.Popen("/bin/bash",
                    stdin=subp.PIPE,
                    stdout=subp.PIPE,
@@ -75,16 +76,21 @@ for var in geant4_vars:
 
     value = None
     if var in os.environ:
+        # warn user that existing environment variables override this script,
+        # but don't complain if we are just running inside an env-shell.sh
         value = os.environ[var]
-        sys.stderr.write("Geant4 environment variable {} already set: {}\n"
-                         .format(var, value))
+        if not "I3_SHELL" in os.environ:
+            sys.stderr.write(("Warning: Geant4 environment variable already set {}={}, "
+                              "this overrides automatic detection\n")
+                              .format(var, value))
     elif var in geant4_env:
         value = geant4_env[var]
 
     if value is None:
-        sys.stderr.write(("Geant4 environment variable {} could not be set, "
+        sys.stderr.write(("Warning: Geant4 environment variable {} could not be set, "
                           "g4-based modules may crash\n").format(var))
     else:
         formatted_pairs.append("{}={}".format(var, value))           
-        
+
+# extra formatting for env-shell.sh        
 sys.stdout.write(" \\\n\t".join(formatted_pairs))
