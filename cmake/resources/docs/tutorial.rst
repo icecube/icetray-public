@@ -286,19 +286,34 @@ private/mylib/file2.cxx''.  There are two ways to handle this:
 Testing
 ^^^^^^^
 
-Projects that have test executables or scripts will have their tests
-run when ``make test`` is issued.  Test binaries are found in
-``$I3_BUILD/bin``, the workspace target *test-bins* will build these
-test binaries. Python tests do not need building.
+Projects can have compiled test executables and Python tests. The
+compiled tests are created with the command::
+
+  make test-bins
+
+The Python tests do not need building.
+
+Tests are run with::
+
+  make test
+
+Beware: The tests need to be run inside ``env-shell.sh``, or they won't work.
+
+If you do ``make test`` in the build directory of your meta-project,
+it will run all tests of all projects in the meta-project. That is
+usually not what you want, as it takes a long time to complete. 
+To run only the tests for a particular project, ``cd`` into its
+subdirectory and run ``make test`` there.
 
 The testing system is `CTest <http://www.cmake.org/cmake/help/v2.8.8/ctest.html>`_.
-To run tests only from a single project, do::
+If you want to run only a specific test or more fine-grained control,
+you can call ``ctest`` directly, like so::
 
-  ctest -R <ProjectName>
+  ctest -R <regex>
 
-For example, ``ctest -R icetray`` will run the icetray tests. Hint: The argument
-may be a full regular expression. The command ``ctest -R icetray.*py``
-runs all icetray tests implemented in Python (if there are any).
+where <regex> is a regular expression which matched against the test labels.
+For example, ``ctest -R dataio.*.py`` will run the only the python tests
+of dataio.
 
 To see output from the tests for debugging, use option ``-V``.
 
