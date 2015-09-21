@@ -213,12 +213,4 @@ static inline string_deleter snake_case(const char * str)
 #define RAISE(exception, msg) { std::ostringstream s; s << msg; \
     PyErr_SetString(PyExc_##exception, s.str().c_str()); throw boost::python::error_already_set(); }
 
-// Class registration stuff
-#define I3_REGISTRATION_FN_DECL(r, data, t) void BOOST_PP_CAT(register_,t)();
-
-// Hey jvs:  this conflicts with the I3_REGISTER in project icetray
-// #define I3_REGISTER(r, data, t) BOOST_PP_CAT(register_,t)();
-
-
-
 #endif
