@@ -508,7 +508,7 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
              COMMAND ${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} -saf)
 
     parse_arguments(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}
-      "USE_TOOLS;USE_PROJECTS;LINK_LIBRARIES"
+      "USE_TOOLS;USE_PROJECTS;USE_PYBINDINGS;LINK_LIBRARIES"
       ""
       ${ARGN}
       )
@@ -522,6 +522,7 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
       )
 
     add_dependencies(test-bins ${PROJECT_NAME}-${THIS_EXECUTABLE_NAME})
+    add_dependencies(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} icetray-pybindings)
 
     set_target_properties(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
       PROPERTIES
@@ -536,6 +537,9 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
 
     use_projects(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
       PROJECTS ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_USE_PROJECTS})
+
+    use_pybindings(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
+      PROJECTS ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_USE_PYBINDINGS})
 
     use_tools(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
       TOOLS "${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_USE_TOOLS};python")
