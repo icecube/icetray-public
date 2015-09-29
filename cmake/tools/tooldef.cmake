@@ -36,6 +36,10 @@ endmacro(found_ok msg)
 
 if (SYSTEM_PACKAGES)
   message(STATUS "Using system packages when I3_PORTS not available")
+  find_program(BREW brew)
+  if(BREW)
+    execute_process(COMMAND brew --prefix COMMAND tr -d \\n RESULT_VARIABLE BREW_RESULT OUTPUT_VARIABLE BREW_PREFIX)
+  endif()
 else (SYSTEM_PACKAGES)
   set(TOOL_SYSTEM_PATH NO_DEFAULT_PATH)
 endif (SYSTEM_PACKAGES)
@@ -53,7 +57,7 @@ macro(tooldef tool_ incdir incfile libdir bindir)
   set(${TOOL}_LIB_ACCUM)
 
   if(NOT "${incdir}" STREQUAL "NONE")
-    find_path(${TOOL}_INCLUDE_DIR NAMES ${incfile} PATHS ${I3_PORTS}/${incdir} ${incdir} ${TOOL_SYSTEM_PATH})
+    find_path(${TOOL}_INCLUDE_DIR NAMES ${incfile} PATHS ${I3_PORTS}/${incdir} ${BREW_PREFIX}/${incdir} ${incdir} ${TOOL_SYSTEM_PATH})
     if(${${TOOL}_INCLUDE_DIR} MATCHES ".*NOTFOUND$")
       found_not_ok("${incfile} not found in ${incdir}")
       set(${TOOL}_CONFIG_ERROR TRUE)
@@ -74,10 +78,7 @@ macro(tooldef tool_ incdir incfile libdir bindir)
     set(foundlib${lib} "NOTFOUND" CACHE INTERNAL "tmp" FORCE)
     if (NOT ${lib})
       # if it is nothing, go find it
-      find_library(foundlib${lib}
-        ${lib}
-        ${I3_PORTS}/${libdir} ${libdir}
-        ${TOOL_SYSTEM_PATH})
+      find_library(foundlib${lib} ${lib} ${I3_PORTS}/${libdir} ${BREW_PREFIX}/${libdir} ${libdir} ${TOOL_SYSTEM_PATH})
     else (NOT ${lib})
       #else go try to find it
       set(foundlib${lib} ${lib})
