@@ -17,6 +17,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
+
+if(NOT SYSTEM_PACKAGES)
 tooldef (sprng
   include/sprng-2.0a
   sprng/sprng.h
@@ -24,5 +26,13 @@ tooldef (sprng
   NONE
   sprng
   )
-
+else()
+  tooldef (sprng
+    include
+    sprng/sprng.h
+    lib
+    NONE
+    sprng
+    )
+endif()
 
