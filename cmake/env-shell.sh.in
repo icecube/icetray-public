@@ -125,7 +125,7 @@ printctr()
     printf $FORMAT " " "$*" " "
 }
 
-if [ -z "$ARGV" ]
+if [ -z "$@" ]
     then
     printf "$TOPBAR\n"
     printctr ""
@@ -167,15 +167,15 @@ if [ -z "$I3_SHELL" ] # a clean, first invocation
 	ROOTSYS=$_ROOTSYS \
 	I3_SHELL=$_I3_SHELL \
 	@GEANT4_ENV_VARS@ \
-	$NEW_SHELL $ARGV
+	$NEW_SHELL "$@"
 
 else  # not clean, use previous environment
-    $NEW_SHELL $ARGV
+    $NEW_SHELL "$@"
 fi
 
 STATUS=$?
 
-if [ -z "$ARGV" ]
+if [ -z "$@" ]
 then
     echo "Exited Icetray Environment."
 fi
