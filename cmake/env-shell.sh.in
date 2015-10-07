@@ -125,7 +125,7 @@ printctr()
     printf $FORMAT " " "$*" " "
 }
 
-if [ -z "$@" ]
+if [ -z "$ARGV" ]
     then
     printf "$TOPBAR\n"
     printctr ""
@@ -175,7 +175,7 @@ fi
 
 STATUS=$?
 
-if [ -z "$@" ]
+if [ -z "$ARGV" ]
 then
     echo "Exited Icetray Environment."
 fi
