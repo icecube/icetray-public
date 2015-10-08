@@ -25,7 +25,7 @@ i3_project(dataio
 
 i3_add_library (dataio 
   private/dataio-modules/*.cxx private/dataio/*.cxx
-  USE_PROJECTS icetray dataclasses interfaces
+  USE_PROJECTS icetray dataclasses 
   USE_TOOLS boost python 
 )
 target_link_libraries(dataio ${BOOST_DATE_TIME})

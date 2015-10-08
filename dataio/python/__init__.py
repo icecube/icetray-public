@@ -1,4 +1,4 @@
-from icecube import icetray, interfaces
+from icecube import icetray
 from icecube.load_pybindings import load_pybindings
 load_pybindings(__name__, __path__)
 
@@ -43,4 +43,4 @@ def I3Reader(tray, name, **kwargs):
 
 	tray.AddModule('I3Reader', name, **kwargs)
 
-del icetray, interfaces
+del icetray
