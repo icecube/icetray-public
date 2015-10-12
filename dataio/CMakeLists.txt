@@ -94,7 +94,7 @@ i3_test_scripts(${tmp_SCRIPTS})
 
 i3_add_pybindings(dataio
   private/pybindings/I3File.cxx
-  private/pybindings/I3SequentialFile.cxx
+  private/pybindings/I3BrowsableFile.cxx
   private/pybindings/I3FileStager.cxx
   private/pybindings/module.cxx
   USE_PROJECTS icetray dataio

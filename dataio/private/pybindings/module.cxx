@@ -22,7 +22,7 @@
 #include <icetray/load_project.h>
 
 #define REGISTER_THESE_THINGS \
-	(I3File)(I3SequentialFile)(I3FileStager)
+	(I3File)(I3BrowsableFile)(I3FileStager)
 
 #define I3_REGISTRATION_FN_DECL(r, data, t) void BOOST_PP_CAT(register_,t)();
 #define I3_REGISTER(r, data, t) BOOST_PP_CAT(register_,t)();
