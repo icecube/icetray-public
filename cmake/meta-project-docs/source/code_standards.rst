@@ -87,6 +87,15 @@ Organizational and Policy Issues
    cpp_standards/use_a_version_control_system
    cpp_standards/invest_in_code_reviews
 
+Design Style
+------------
+
+.. toctree::
+   :titlesonly:
+   
+   cpp_standards/dont_optimize_prematurely
+   cpp_standards/minimize_global_data
+
 Coding Style
 ------------
 
@@ -104,6 +113,7 @@ Functions and Operators
    :titlesonly:
 
    cpp_standards/take_parameters_appropriately
+   cpp_standards/order_of_evaluation_of_function_args
 
 Class Design and Inheritance
 ----------------------------
