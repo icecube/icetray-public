@@ -20,16 +20,16 @@ Building with cmake
 ^^^^^^^^^^^^^^^^^^^
 
 To begin building with CMake start with a clean workspace.  Set your
-``I3_PORTS`` and ``JAVA_HOME`` environment variables.  You'll also need
-``LD_LIBRARY_PATH`` set to include the architecture-dependent directory
-containing ``libzip.so`` for anything that will require Java (the
+``I3_PORTS`` or enable the CVMFS environment if it is available. (The
 following examples use ``bash`` as an example)::
 
   $ export I3_PORTS=~/IceCube/i3tools
-  $ export JAVA_HOME=/usr/java/j2sdk1.4.2
-  $ export LD_LIBRARY_PATH=${JAVA_HOME}/jre/lib/amd64
 
-With cmake one does "out-of-source" builds.  This makes it easier to
+or::
+
+  $ eval $(/cvmfs/icecube.opensciencegrid.org/py2-v1/setup.sh)
+
+With CMake, one creates "out-of-source" builds.  This makes it easier to
 build several configurations against one set of source, and to be sure
 that the build process does not modify the source itself (e.g. no
 temporary files end up laying around in your checkout.  So create a
@@ -44,7 +44,7 @@ work directory and check out source to a directory called ``src``:
 *Note the "src" on the end of the svn co command*
 
 Create the object directory parallel to the source directory and
-execute cmake in the object directory to create the build environment::
+execute ``cmake`` in the object directory to create the build environment::
 
   $ pwd
   ~/IceCube/meta-projects/offline-software/trunk
@@ -96,7 +96,7 @@ While still in the build directory execute ``make``::
   ~/IceCube/meta-projects/offline-software/build
   $ make
 
-After ``make`` returns your build results will be in the
+After ``make`` returns, your build results will be in the
 object directory.  Assuming no builds are made inside of the original
 source directory that directory can be reused for other builds, even if
 the platforms or build configurations differ.
@@ -122,7 +122,7 @@ Editing the CMake cache
 """""""""""""""""""""""
 
 Having run ``cmake`` and generated a ''build'' directory full of
-makefiles, one sets build options by editing the cmake cache.  You can
+makefiles, one sets build options by editing the CMake cache.  You can
 start the editor with "make edit_cache", or by invoking the cache
 editor, ``ccmake``, directly::
 
@@ -157,7 +157,7 @@ description is shown at the bottom of the window::
 
  
 After you have set things as you like them press **c** to run the
-configuration.  *You may have to do this twice*.  When cmake feels
+configuration.  *You may have to do this twice*.  When CMake is
 ready to generate makefiles, an option **g** will appear in the menu.
 Press **g** to generate the new makefiles and exit.
 
@@ -169,12 +169,10 @@ command line.  For instance, I have checked out source to directory
 ``src/`` and am in a parallel directory ``build/``.  I want to build
 the "release" variant, the one with optimizations on, i issue::
 
-   cmake -DCMAKE_BUILD_TYPE:STRING=Release ../src
+   cmake -DCMAKE_BUILD_TYPE=Release ../src
 
-You will notice that the *type* of the variable is represented after
-the colon.  Almost everything can be handled with ``STRING`` and
-``BOOL``.  For ``BOOL``, use the values ``ON`` and ``OFF``.
-
+Common CMake Settings
+~~~~~~~~~~~~~~~~~~~~~
 Not all of the variables are useful.  Here are some that are:
 
 .. _USE_GFILT: use_gfilt
@@ -195,26 +193,69 @@ Not all of the variables are useful.  Here are some that are:
    * - Option
      - Description
      - Default
-   * - BUILD\_\ *PROJECT*
+   * - .. attribute:: BUILD_PROJECT
      - Toggles the build of project *PROJECT*.
        e.g. ``BUILD_ICETRAY``, ``BUILD_DATAIO``.  One should appear
        per project in the current workspace.
-     - ``ON``  	   
-   * - .. attribute:: USE_CCACHE
-     - Use ccache (if detected)
-     - OFF
-   * - .. attribute:: USE_DISTCC
-     - Use distcc (if detected)
-     - OFF
-   * - .. attribute:: USE_GFILT
-     - Use the gfilt stl error message decryptor
      - ON
-   * - .. attribute:: USE_GOLD
-     - Use the new gold linker from GNU binutils. **EXPERIMENTAL**
+   * - .. attribute:: USE_ROOT
+     - Build with `ROOT <http://root.cern.ch>`_ support. Disabling this option will cause some projects to be skipped when building. IceTop users will want this option to be on.
+     - ON
+   * - .. attribute:: USE_CINT
+     - Build dictionaries with `rootcint <https://root.cern.ch/root/RootCintMan.html>`_. rootcint support is deprecated as of April 1st, 2015, and this option will soon do nothing.
+     - OFF
+   * - .. attribute:: USE_CCACHE
+     - Use `ccache <https://ccache.samba.org/>`_ to aid in compilation. Requires administrator setup in order to use efficiently on multi-user systems.
      - OFF
    * - .. attribute:: CMAKE_BUILD_TYPE
-     - What kind of build you want.  The choices are ``Release``, ``Debug``, ``RelWithDebInfo``, ``MinSizeRel``, ``RelWithAssert``, ``Coverage``, or empty for none of the above.
-     - ``Release``
+     - Set the cmake build type. Choices are: *None Debug Release RelWithAssert RelWithDebInfo MinSizeRel Coverage*.
+     - *Release* or *RelWithAssert*
+   * - .. attribute:: SYSTEM_PACKAGES
+     - Use your operating system's installed versions of supporting libraries. Safe to use on modern (2015 and newer) OS's, but some more obscure libraries may need to be installed by hand.
+     - OFF
+
+Uncommon CMake settings
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table:: Less common configuration variables 
+   :header-rows: 1
+   
+   * - Option
+     - Description
+     - Default
+   * - .. attribute:: ROOT_VERSION
+     - Override ROOT version detection if you want to use a specific version of ROOT.
+     - autodetected
+   * - .. attribute:: GENIE_VERSION
+     - Override the Genie version detection if you want to use a specific version of Genie.
+     - autodetected
+   * - .. attribute:: GENIE_PATH
+     - Override the Genie path detection of if you want to use a specific version of Genie.
+     - autodetected
+   * - .. attribute:: SPHINX_EXTRA_OPTIONS
+     - A semicolon delimited list of options to pass to `sphinx <http://sphinx-doc.org/>`_. Useful for developers and documentation writers.
+     - "-N;-a;-E"
+   * - .. attribute:: USE_DISTCC
+     - Use the `distcc <https://github.com/distcc/distcc>`_ distributed compilation system.
+     - OFF
+   * - .. attribute:: USE_GFILT
+     - Use gfilt STL error decryptor. gfilt makes sense of the often long and cryptic C++ compilation errors. However, if you get an unusually confusing compilation error, try building with this option off.
+     - ON (under most conditions)
+   * - .. attribute:: CHECK_FLAGS
+     - Check **some** of the flags passed to the compilers. This option is mostly of interest to developers when adding new compilation/linking flags.
+     - OFF
+   * - .. attribute:: BUILD_PYBINDINGS
+     - Build python bindings. Users will never want to turn this option off, as effective use of the IceCube software stack requires the use of pybindings.
+     - ON
+   * - .. attribute:: USE_SVN_REVISION_FLAGS
+     - Add compiled-in svn revision information. Do not disable this option unless you want to have a bad time.
+     - ON
+   * - .. attribute:: INSTALL_HEADERS
+     - Install header files when making tarball.
+     - OFF
+   * - .. attribute:: INSTALL_TOOL_LIBS
+     - Install libraries from I3_PORTS when making tarball.
+     - ON
 
 Verbose build
 """""""""""""
