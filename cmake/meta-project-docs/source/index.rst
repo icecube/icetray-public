@@ -42,6 +42,7 @@ Of general interest
    library_standards
    netiquette
    gdb_python
+   backing_out_commits
 
 
 
