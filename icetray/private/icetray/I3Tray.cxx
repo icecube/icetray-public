@@ -436,6 +436,12 @@ I3Tray::Configure()
 void
 I3Tray::Execute()
 {
+  Execute(std::numeric_limits<unsigned>::max());
+}
+
+void
+I3Tray::Execute(unsigned maxCount)
+{
 	if (execute_called) {
 		log_error("This I3Tray has already been executed. "
 		    "Ignoring second call to Execute()");
@@ -452,45 +458,9 @@ I3Tray::Execute()
 
 	Configure();
 
-	while (!suspension_requested && !global_suspension_requested) {
-		log_trace("icetray dispatching Process_");
-		driving_module->Do(&I3Module::Process_);
-	}
-
-	// call every module's Finish() function
-	// (this used to be in I3Tray::Finish())
-	if (modules_in_order.size() == 0 || !driving_module)
-		return;
-
-	log_notice("I3Tray finishing...");
-
-	driving_module->Do(&I3Module::Finish);
-
-	BOOST_FOREACH(const std::string& factname, factories_in_order) {
-		log_trace("calling finish on factory %s", factname.c_str());
-		factories[factname]->Finish();
-	}
-}
-
-void
-I3Tray::Execute(unsigned maxCount)
-{
-	if (execute_called) {
-		log_error("This I3Tray has already been executed. "
-		    "Ignoring second call to Execute()");
-		return;
-	}
-
-	execute_called = true;
-	signal(SIGINT, set_suspend_flag);
-#ifdef SIGINFO
-	executing_tray = this;
-	signal(SIGINFO, report_usage);
-#endif
-
-	Configure();
-
-	for (unsigned i=0; i < maxCount && !suspension_requested && !global_suspension_requested; i++) {
+	for (unsigned i=0; 
+             (i < maxCount) && !suspension_requested && !global_suspension_requested;               
+             i++) {
 		log_trace("%u/%u icetray dispatching Process_", i, maxCount);
 		driving_module->Do(&I3Module::Process_);
 	}
