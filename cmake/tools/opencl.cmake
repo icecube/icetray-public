@@ -96,7 +96,12 @@ ENDIF (APPLE)
 #=============================================================================
 IF (OPENCL_FOUND)
   include(CheckSymbolExists)
+  include(CMakePushCheckState)
+
+  CMAKE_PUSH_CHECK_STATE()
   foreach(VERSION "2_0" "1_2" "1_1" "1_0")
+    set(CMAKE_REQUIRED_INCLUDES "${OPENCL_INCLUDE_DIR}")
+
     if(APPLE)
       CHECK_SYMBOL_EXISTS(
         CL_VERSION_${VERSION}
@@ -120,4 +125,5 @@ IF (OPENCL_FOUND)
       break()
     endif()
   endforeach()
+  CMAKE_POP_CHECK_STATE()
 ENDIF (OPENCL_FOUND)
