@@ -34,6 +34,7 @@
 
 #include "icetray/serialization.h"
 #include "icetray/Utility.h"
+#include "icetray/open.h"
 #include "dataio/I3File.h"
 #include "shovel/View.h"
 
@@ -143,15 +144,15 @@ Model::save_xml()
   if (!result)
     return;
 
-  std::ofstream ofs(result->c_str());
+  boost::iostreams::filtering_ostream ofs;
+  I3::dataio::open(ofs,*result,6,ios::binary | ios::app);
 
   unsigned fileindex = frame_infos_[x_index_].second;
   I3FramePtr frame = i3file_.get_raw_frame(fileindex);
 
   string xml = frame->as_xml(y_keystring_);
 
-  ofs <<  prettify_xml(xml);
-  ofs.close();
+  ofs << prettify_xml(xml);
 }
 
 void
@@ -161,12 +162,29 @@ Model::write_frame()
   if (!result)
     return;
 
-  std::ofstream ofs(result->c_str(), ios::binary | ios::app);
+  boost::iostreams::filtering_ostream ofs;
+  I3::dataio::open(ofs,*result,6,ios::binary | ios::app);
 
   unsigned fileindex = frame_infos_[x_index_].second;
   I3FramePtr fp = i3file_.get_raw_frame(fileindex);
   fp->save(ofs, vector<string>());
-  ofs.close();
+}
+
+void
+Model::write_frame_with_dependencies()
+{
+  optional<string> result = view_.get_file("Write frame and dependencies to file: ");
+  if (!result)
+    return;
+
+  boost::iostreams::filtering_ostream ofs;
+  I3::dataio::open(ofs,*result,6,ios::binary | ios::app);
+
+  unsigned fileindex = frame_infos_[x_index_].second;
+  std::vector<boost::shared_ptr<I3Frame> > frames = 
+   i3file_.get_related_frames(fileindex);
+  for(size_t i=0; i<frames.size(); i++)
+    frames[i]->save(ofs);
 }
 
 void

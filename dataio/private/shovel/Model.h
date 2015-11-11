@@ -78,6 +78,7 @@ public:
   void do_goto_frame();
   void goto_frame(unsigned frameno);
   void write_frame();
+  void write_frame_with_dependencies();
   void save_xml();
 
   void notify();

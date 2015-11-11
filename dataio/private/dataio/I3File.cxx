@@ -30,8 +30,10 @@ using boost::optional;
 #include <dataclasses/physics/I3EventHeader.h>
 
 #include <map>
+#include <queue>
 #include <dataio/I3File.h>
 #include <icetray/open.h>
+#include <icetray/I3FrameMixing.h>
 #include <icetray/serialization.h>
 #include <icetray/Utility.h>
 
@@ -79,6 +81,8 @@ public:
 
   I3FramePtr get_frame(unsigned);
   I3FramePtr get_raw_frame(unsigned);
+  I3FramePtr get_raw_frame_cached(I3Frame::Stream,unsigned);
+  std::vector<I3FramePtr> get_related_frames(unsigned);
 
   void move_first();
   void move_last();
@@ -287,53 +291,79 @@ I3FileImpl::get_raw_frame(unsigned index)
 }
 
 I3FramePtr
+I3FileImpl::get_raw_frame_cached(I3Frame::Stream stop, unsigned index)
+{
+  I3FramePtr frame;
+  frame_cache_map_t::iterator cache_it =
+    frame_cache_.find(stop);
+  if (cache_it != frame_cache_.end()) {
+    if (cache_it->second.first == index) {
+      // it's in the cache, retrieve the frame
+      frame = cache_it->second.second;
+    } else {
+      // there's something at this stop in the cache,
+      // but it's the wrong frame. get the correct one.
+      frame = get_raw_frame(index);
+      frame_cache_[stop] = std::make_pair(index, frame);
+    }
+  } else {
+    // no frame of this stream type is in the cache
+    frame = get_raw_frame(index);
+    frame_cache_[stop] = std::make_pair(index, frame);
+  }
+  return frame;
+}
+
+struct earlierIndex{
+  typedef std::pair<I3Frame::Stream, unsigned> value_type;
+  bool operator()(const value_type& f1, const value_type& f2){
+    return(f1.second>f2.second);
+  }
+};
+
+I3FramePtr
 I3FileImpl::get_frame(unsigned index)
 {
-  I3FramePtr frame = get_raw_frame(index);
-  I3Frame cache;
+  const FrameInfo& fi = frame_infos_[index];
+  I3FramePtr frame = get_raw_frame_cached(fi.stream, index);
 
+  log_trace("other streams size = %zu", fi.other_streams.size());
+  std::priority_queue<earlierIndex::value_type,std::vector<earlierIndex::value_type>,earlierIndex> other_frames;
+  for (FrameInfo::stream_map_t::const_iterator iter = fi.other_streams.begin();
+       iter != fi.other_streams.end();
+       iter++){
+    other_frames.push(*iter);
+  }
+  I3FrameMixer frame_mixer;
+  while(!other_frames.empty()){
+    earlierIndex::value_type fr=other_frames.top();
+	other_frames.pop();
+	frame_mixer.Mix(*get_raw_frame_cached(fr.first, fr.second));
+  }
+  frame_mixer.Mix(*frame);
+
+  return frame;
+}
+
+std::vector<I3FramePtr>
+I3FileImpl::get_related_frames(unsigned index) {
   const FrameInfo& fi = frame_infos_[index];
 
   log_trace("other streams size = %zu", fi.other_streams.size());
+  std::priority_queue<earlierIndex::value_type,std::vector<earlierIndex::value_type>,earlierIndex> other_indices;
   for (FrameInfo::stream_map_t::const_iterator iter = fi.other_streams.begin();
        iter != fi.other_streams.end();
-       iter++)
-    {
-      log_trace("prev frame %u on stream %c", iter->second, iter->first.id());
-      if (iter->first == frame->GetStop())
-        {
-          assert(iter->second == index);
-          continue;
-        }
-
-      // Don't merge physics and trayinfo frames
-      if (iter->first == I3Frame::Physics || iter->first == I3Frame::TrayInfo)
-        continue;
-
-      I3FramePtr otherframe;
-        
-      frame_cache_map_t::iterator cache_it =
-        frame_cache_.find(iter->first);
-      if (cache_it != frame_cache_.end()) {
-        if (cache_it->second.first == iter->second) {
-          // it's in the cache, retrieve the frame
-          otherframe = cache_it->second.second;
-        } else {
-          // there's something at this stop in the cache,
-          // but it's the wrong frame. get the correct one.
-          otherframe = get_raw_frame(iter->second);
-          frame_cache_[iter->first] = std::make_pair(iter->second, otherframe);
-        }
-      } else {
-        // no frame of this stream type is in the cache
-        otherframe = get_raw_frame(iter->second);
-        frame_cache_[iter->first] = std::make_pair(iter->second, otherframe);
-      }
-        
-      frame->merge(*otherframe);
-    }
-
-  return frame;
+	   iter++)
+    other_indices.push(*iter);
+  I3FrameMixer frame_mixer(true);
+  while(!other_indices.empty()){
+     earlierIndex::value_type fr=other_indices.top();
+	 other_indices.pop();
+     frame_mixer.Mix(*get_raw_frame_cached(fr.first, fr.second));
+  }
+  std::vector<I3FramePtr> frames=frame_mixer.GetMixedFrames(fi.stream);
+  frames.push_back(get_raw_frame_cached(fi.stream,index));
+  return frames;
 }
 
 const vector<I3File::FrameInfo>&
@@ -404,6 +434,9 @@ I3FramePtr I3File::get_frame(unsigned u) {
 }
 I3FramePtr I3File::get_raw_frame(unsigned u) {
   return impl_->get_raw_frame(u);
+}
+std::vector<I3FramePtr> I3File::get_related_frames(unsigned u) {
+  return impl_->get_related_frames(u);
 }
 
 void I3File::move_first() { impl_->move_first(); }

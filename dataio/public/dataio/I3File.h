@@ -70,8 +70,13 @@ public:
 
   void close();
 
+  ///fetch a frame by index with all suiatbel keys from earlier frames mixed in
   I3FramePtr get_frame(unsigned);
+  ///fecth a frame by index with only its native keys
   I3FramePtr get_raw_frame(unsigned);
+  ///fetch a frame by index, along with the correctly ordered sequence of all
+  ///other frames on which it depends
+  std::vector<I3FramePtr> get_related_frames(unsigned);
 
   void move_first();
   void move_last();

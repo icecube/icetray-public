@@ -160,6 +160,7 @@ int main (int argc, char *argv[])
     ('s',"save_xml")
     ('t',"toggle_infoframes")
     ('w',"write_frame")
+    ('W',"write_frame_with_dependencies")
     ('x',"xml")
     ('q',"quit")
     (KEY_ENTER, "xml")
@@ -245,6 +246,8 @@ int main (int argc, char *argv[])
     actions["pretty_print"] = make_lambda(model,&Model::pretty_print);
     actions["toggle_infoframes"] = make_lambda(model,&Model::toggle_infoframes);
     actions["write_frame"] = make_lambda(model,&Model::write_frame);
+    actions["write_frame_with_dependencies"] = 
+     make_lambda(model,&Model::write_frame_with_dependencies);
     actions["save_xml"] = make_lambda(model,&Model::save_xml);
     actions["goto_frame"] = make_lambda(model,&Model::do_goto_frame);
     actions["xml"] = make_lambda(model,&Model::show_xml);
