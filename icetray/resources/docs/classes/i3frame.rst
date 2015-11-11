@@ -60,7 +60,7 @@ which follows the general scheme::
   ]
 
 where **which_stream** is the stream that the frame is 'on', (in
-IceCube, this is *Physics*, *DetectorStatus*, *Calibration*,
+IceCube, this is *Physics*, *DAQ*, *DetectorStatus*, *Calibration*,
 *Geometry*, or *TrayInfo*).  For each frame object, there is a line
 that shows the key, which stream that object is on, the type of the
 object, and the size, either an integer, or **unk**, meaning that the
@@ -92,7 +92,7 @@ contain the new particle::
 
  [ I3Frame :
    'Calibration' ==> I3Calibration
-   'DetectorStatus' ==> I3DetectorStatus
+   '
    'EventHeader' ==> I3EventHeader
    'Geometry' ==> I3Geometry
    'InIceRawData' ==> I3Map<OMKey, I3Vector<I3DOMLaunch> >
@@ -519,6 +519,41 @@ I3RandomService. It is these service base classes that benefit from
 the default name::
 
  I3RandomService& random = context_.Get<I3RandomService>();
+
+Frame Mixing
+^^^^^^^^^^^^
+
+I3Frames are intended to be processed in an ordered sequence, with keys 
+contained in frames of each type ('stream') being made available in later 
+frames of other streams. The process by which keys are shared between frames 
+of different streams is known as 'mixing'. This makes it easy for I3Modules to 
+process only the types of frames which matter to them, while allowing modules 
+working primarily with other streams to still conveniently obtain their output. 
+For example, a pulse extraction module may run only on DAQ frames, but a 
+reconstruction module running only on Physics frames will be able to directly 
+access the extracted pulses, as they are 'mixed' from the DAQ frame into the 
+Physics frame. 
+
+While a frame has a stream, so does each key stored in the frame. The 
+individual keys' streams simply identify whether that key was directly added to
+the frame using `Put()`, or whether it was mixed from a preceding frame on 
+another stream, and if so from which stream. Directly added keys—those whose
+streams match that of the containing frame—are termed 'native'. 
+
+Within any sequence of frames being processed, the following conditions should 
+hold:
+
+1. The contents of TrayInfo ('I') and Physics ('P') frames shall not be mixed 
+   into any succeeding frames. (These frame types are 'immiscible'.)
+2. Every frame shall contain all of the keys from the most closely preceding 
+   frame of every other stream which is not 'immiscible' and for which a 
+   'native' key was not already present in the frame. 
+3. A frame shall contain no non-'native' keys which were not present in the 
+most closely preceding frame on the stream corresponding to each key. 
+
+These rules are intended to be enforced by I3Module and other frame sequence 
+handling abstractions provided by IceTray; they should not need to be 
+reimplemented by users.
 
 
 In Python

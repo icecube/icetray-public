@@ -29,6 +29,7 @@
 #include <boost/preprocessor.hpp>
 #include <boost/foreach.hpp>
 #include <boost/python.hpp>
+#include <boost/make_shared.hpp>
 
 #include "icetray/I3TrayInfo.h"
 #include "icetray/I3Context.h"
@@ -36,6 +37,7 @@
 #include "icetray/I3PhysicsUsage.h"
 #include "icetray/IcetrayFwd.h"
 #include "icetray/I3Frame.h"
+#include "icetray/I3FrameMixing.h"
 #include "icetray/impl.h"
 
 const double I3Module::min_report_time_ = 10;
@@ -266,20 +268,11 @@ I3Module::PopFrame()
 inline void
 I3Module::SyncCache(std::string outbox, I3FramePtr frame)
 {
-  if (cachemap_.find(outbox) == cachemap_.end())
-    cachemap_[outbox] = I3FramePtr(new I3Frame);
-
-  I3FramePtr cache_ = cachemap_[outbox];
-  cache_->purge(frame->GetStop());
-  frame->purge();
-  frame->merge(*cache_);
-
-  // Merge all frames except tray info and physics into the cache frame
-  // This prevents spurious keys in the first case and foot-shooting in
-  // the second.
-  if (frame->GetStop() != I3Frame::TrayInfo &&
-   frame->GetStop() != I3Frame::Physics)
-    cache_->assign(*frame);
+	if (cachemap_.find(outbox) == cachemap_.end())
+		cachemap_[outbox] = boost::make_shared<I3FrameMixer>();
+	
+	boost::shared_ptr<I3FrameMixer> cache_ = cachemap_[outbox];
+	cache_->Mix(*frame);
 }
 
 void

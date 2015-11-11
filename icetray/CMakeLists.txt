@@ -99,6 +99,7 @@ endif (NOT ${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
 
 i3_add_library(icetray
   private/icetray/I3Frame.cxx 
+  private/icetray/I3FrameMixing.cxx 
   private/icetray/crc-ccitt.c
   private/icetray/crc32.c
   private/icetray/open.cxx
@@ -208,7 +209,8 @@ i3_test_executable(test
   private/test/I3ContextTest.cxx               
   private/test/NonUniqueNameTest.cxx        
   private/test/shared-ptr-constness.cxx
-  private/test/I3FrameTest.cxx         
+  private/test/I3FrameTest.cxx
+  private/test/I3FrameMixing.cxx
   private/test/test-throws-not-caught.cxx
   private/test/PhysicsBuffering.cxx         
   private/test/typesizes.cxx

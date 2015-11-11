@@ -42,6 +42,7 @@
 class I3Configuration;
 class I3Context;
 class I3Frame;
+class I3FrameMixer;
 
 /**
  * This class defines the interface which should be implementaed by all 
@@ -351,7 +352,7 @@ public:
   double sysdaqtime_, userdaqtime_;
 
   // cache of previous metadata frames (per-outbox)
-  std::map<std::string, I3FramePtr> cachemap_;
+  std::map<std::string, boost::shared_ptr<I3FrameMixer> > cachemap_;
   void SyncCache(std::string outbox, I3FramePtr frame);
 
   /// only report usage times if greater than this
