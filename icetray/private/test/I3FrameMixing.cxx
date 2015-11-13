@@ -13,7 +13,7 @@ TEST(FirstFrameUnaltered){
 	mixer.Mix(f);
 	
 	ENSURE(f.Has("i1"),"Frame should retain original keys");
-	ENSURE_EQUAL(f.keys().size(),1,"Frame should gain no additional keys");
+	ENSURE_EQUAL(f.keys().size(),1UL,"Frame should gain no additional keys");
 }
 
 TEST(Immiscible_TrayInfo){
@@ -26,7 +26,7 @@ TEST(Immiscible_TrayInfo){
 	mixer.Mix(f1);
 	mixer.Mix(f2);
 	
-	ENSURE_EQUAL(f2.keys().size(),0,"I frame keys should not mix into other streams");
+	ENSURE_EQUAL(f2.keys().size(),0UL,"I frame keys should not mix into other streams");
 }
 
 TEST(Immiscible_Physics){
@@ -39,7 +39,7 @@ TEST(Immiscible_Physics){
 	mixer.Mix(f1);
 	mixer.Mix(f2);
 	
-	ENSURE_EQUAL(f2.keys().size(),0,"P frame keys should not mix into other streams");
+	ENSURE_EQUAL(f2.keys().size(),0UL,"P frame keys should not mix into other streams");
 }
 
 TEST(MixQToP){
@@ -53,7 +53,7 @@ TEST(MixQToP){
 	mixer.Mix(f2);
 	
 	ENSURE(f2.Has("i1"),"Q frame keys should mix into P frames");
-	ENSURE_EQUAL(f2.keys().size(),1,"Only one key should be added");
+	ENSURE_EQUAL(f2.keys().size(),1UL,"Only one key should be added");
 }
 
 TEST(MixMany){
@@ -79,29 +79,29 @@ TEST(MixMany){
 	mixer.Mix(f6);
 	
 	ENSURE(f2.Has("i1"),"Other streams should mix into C frames");
-	ENSURE_EQUAL(f2.keys().size(),2,"All previous keys should be added, and no more");
+	ENSURE_EQUAL(f2.keys().size(),2UL,"All previous keys should be added, and no more");
 	
 	ENSURE(f3.Has("i1"),"Other streams should mix into D frames");
 	ENSURE(f3.Has("i2"),"Other streams should mix into D frames");
-	ENSURE_EQUAL(f3.keys().size(),3,"All previous keys should be added, and no more");
+	ENSURE_EQUAL(f3.keys().size(),3UL,"All previous keys should be added, and no more");
 	
 	ENSURE(f4.Has("i1"),"Other streams should mix into Q frames");
 	ENSURE(f4.Has("i2"),"Other streams should mix into Q frames");
 	ENSURE(f4.Has("i3"),"Other streams should mix into Q frames");
-	ENSURE_EQUAL(f4.keys().size(),4,"All previous keys should be added, and no more");
+	ENSURE_EQUAL(f4.keys().size(),4UL,"All previous keys should be added, and no more");
 	
 	ENSURE(f5.Has("i1"),"Other streams should mix into made-up frames");
 	ENSURE(f5.Has("i2"),"Other streams should mix into made-up frames");
 	ENSURE(f5.Has("i3"),"Other streams should mix into made-up frames");
 	ENSURE(f5.Has("i4"),"Other streams should mix into made-up frames");
-	ENSURE_EQUAL(f5.keys().size(),5,"All previous keys should be added, and no more");
+	ENSURE_EQUAL(f5.keys().size(),5UL,"All previous keys should be added, and no more");
 	
 	ENSURE(f6.Has("i1"),"Other streams should mix into P frames");
 	ENSURE(f6.Has("i2"),"Other streams should mix into P frames");
 	ENSURE(f6.Has("i3"),"Other streams should mix into P frames");
 	ENSURE(f6.Has("i4"),"Other streams should mix into P frames");
 	ENSURE(f6.Has("i5"),"Other streams should mix into P frames");
-	ENSURE_EQUAL(f6.keys().size(),5,"All previous keys should be added, and no more");
+	ENSURE_EQUAL(f6.keys().size(),5UL,"All previous keys should be added, and no more");
 }
 
 TEST(MixingDoesNotOverrideNative){
@@ -116,7 +116,7 @@ TEST(MixingDoesNotOverrideNative){
 	mixer.Mix(f2);
 	
 	ENSURE(f2.Has("i1"),"Key should still be present");
-	ENSURE_EQUAL(f2.keys().size(),1,"No other keys should be added");
+	ENSURE_EQUAL(f2.keys().size(),1UL,"No other keys should be added");
 	ENSURE_EQUAL(f2.Get<I3Int>("i1").value,15,"Mixing should not overwrite native keys");
 }
 
@@ -134,7 +134,7 @@ TEST(MostRecentKeysAreMixed){
 	mixer.Mix(f3);
 	
 	ENSURE(f3.Has("i1"),"Q frame keys should mix into P frames");
-	ENSURE_EQUAL(f3.keys().size(),1,"Only one key should be added");
+	ENSURE_EQUAL(f3.keys().size(),1UL,"Only one key should be added");
 	ENSURE_EQUAL(f3.Get<I3Int>("i1").value,2,"Most recent value from other stream should be present");
 }
 
@@ -153,7 +153,7 @@ TEST(OldMixedKeysArePurged){
 	
 	ENSURE(not f3.Has("i1"),"Old mixed keys should be removed");
 	ENSURE(f3.Has("i2"),"Q frame keys should mix into P frames");
-	ENSURE_EQUAL(f3.keys().size(),1,"Only one key should be added");
+	ENSURE_EQUAL(f3.keys().size(),1UL,"Only one key should be added");
 }
 
 TEST(MixedFrameRetrieval){
@@ -176,7 +176,7 @@ TEST(MixedFrameRetrieval){
 		std::vector<boost::shared_ptr<I3Frame> > frames =
 		 mixer.GetMixedFrames(I3Frame::Physics);
 		
-		ENSURE_EQUAL(frames.size(),2);
+		ENSURE_EQUAL(frames.size(),2UL);
 		ENSURE_EQUAL(frames[0]->GetStop(),I3Frame::DetectorStatus);
 		ENSURE_EQUAL(frames[1]->GetStop(),I3Frame::Calibration);
 		ENSURE(frames[0]->Has("i4"));
@@ -193,7 +193,7 @@ TEST(MixedFrameRetrieval){
 		std::vector<boost::shared_ptr<I3Frame> > frames =
 		mixer.GetMixedFrames(I3Frame::Calibration);
 		
-		ENSURE_EQUAL(frames.size(),1);
+		ENSURE_EQUAL(frames.size(),1UL);
 		ENSURE_EQUAL(frames[0]->GetStop(),I3Frame::DetectorStatus);
 		ENSURE(frames[0]->Has("i4"));
 	}
@@ -208,7 +208,7 @@ TEST(MixedFrameRetrieval){
 		std::vector<boost::shared_ptr<I3Frame> > frames =
 		mixer.GetMixedFrames(I3Frame::Physics);
 		
-		ENSURE_EQUAL(frames.size(),2);
+		ENSURE_EQUAL(frames.size(),2UL);
 		if(frames[0]->GetStop()!=I3Frame::DetectorStatus)
 			std::swap(frames[0],frames[1]);
 		ENSURE_EQUAL(frames[0]->GetStop(),I3Frame::DetectorStatus);
@@ -227,8 +227,67 @@ TEST(MixedFrameRetrieval){
 		std::vector<boost::shared_ptr<I3Frame> > frames =
 		mixer.GetMixedFrames(I3Frame::Calibration);
 		
-		ENSURE_EQUAL(frames.size(),1);
+		ENSURE_EQUAL(frames.size(),1UL);
 		ENSURE_EQUAL(frames[0]->GetStop(),I3Frame::DetectorStatus);
 		ENSURE(frames[0]->Has("i4"));
 	}
 }
+
+TEST(MostRecentMixedStream){
+	I3Frame f1(I3Frame::Geometry);
+	I3Frame f2(I3Frame::DAQ);
+	I3Frame f3(I3Frame::Physics);
+
+	{ //mixer without order tracking
+		I3FrameMixer mixer(false);
+		mixer.Mix(f1);
+		mixer.Mix(f2);
+		mixer.Mix(f3);
+		try{
+			mixer.MostRecentMixedStream(I3Frame::Physics);
+			FAIL("MostRecentMixedStream should throw with no order tracking");
+		}catch(...){/*squash*/}
+	}
+
+	{ //empty mixer
+		I3FrameMixer mixer(true);
+		boost::optional<I3Frame::Stream> s=mixer.MostRecentMixedStream(I3Frame::Physics);
+		ENSURE(!s,"Empty mixer should not have return a stream type");
+	}
+
+	{ //no previous frames
+		I3FrameMixer mixer(true);
+		mixer.Mix(f3);
+		boost::optional<I3Frame::Stream> s=mixer.MostRecentMixedStream(I3Frame::Physics);
+		ENSURE(!s,"No stream should be returned when there are no previous frames");
+	}
+
+	{ //miscable frame type
+		I3FrameMixer mixer(true);
+		mixer.Mix(f1);
+		mixer.Mix(f2);
+		boost::optional<I3Frame::Stream> s=mixer.MostRecentMixedStream(I3Frame::DAQ);
+		ENSURE((bool)s,"Should return a stream when there is a previous frame");
+		ENSURE_EQUAL(*s,I3Frame::Geometry,"Should find correct previous stream");
+	}
+
+	{ //immiscable frame type
+		I3FrameMixer mixer(true);
+		mixer.Mix(f1);
+		mixer.Mix(f2);
+		mixer.Mix(f3);
+		boost::optional<I3Frame::Stream> s=mixer.MostRecentMixedStream(I3Frame::Physics);
+		ENSURE((bool)s,"Should return a stream when there is a previous frame");
+		ENSURE_EQUAL(*s,I3Frame::DAQ,"Should find correct previous stream");
+	}
+
+	{ //immiscable frame type, not yet mixed
+		I3FrameMixer mixer(true);
+		mixer.Mix(f1);
+		mixer.Mix(f2);
+		boost::optional<I3Frame::Stream> s=mixer.MostRecentMixedStream(I3Frame::Physics);
+		ENSURE((bool)s,"Should return a stream when there is a previous frame");
+		ENSURE_EQUAL(*s,I3Frame::DAQ,"Should find correct previous stream");
+	}
+}
+

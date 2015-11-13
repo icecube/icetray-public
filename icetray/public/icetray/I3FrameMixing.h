@@ -1,6 +1,7 @@
 #ifndef ICETRAY_I3FRAMEMIXING_H
 #define ICETRAY_I3FRAMEMIXING_H
 
+#include <boost/optional.hpp>
 #include "icetray/I3Frame.h"
 
 /**
@@ -32,6 +33,19 @@ public:
    * returned in an arbitrary order.
    */
   std::vector<boost::shared_ptr<I3Frame> > GetMixedFrames(I3Frame::Stream stop);
+
+  /**
+   * Get the stop type of the most recent frame to be mixed which has been or
+   * will eligible for mixing into the given stream. Note that the stream in
+   * questin should generally be the one for which Mix() has most recently been 
+   * called. 
+   *
+   * \pre Order tracking must be active
+   * \param stop The stream into which mixing is to be considered. 
+   * \return The most recently seen miscable stream, if any
+   */
+  boost::optional<I3Frame::Stream> 
+  MostRecentMixedStream(I3Frame::Stream stop) const;
 
   bool TrackOrder() const{ return(track_order_); }
   void TrackOrder(bool t){ track_order_ = t; }

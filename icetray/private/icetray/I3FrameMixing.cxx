@@ -68,3 +68,21 @@ I3FrameMixer::GetMixedFrames(I3Frame::Stream stop)
   }
 }
 
+boost::optional<I3Frame::Stream> 
+I3FrameMixer::MostRecentMixedStream(I3Frame::Stream stop) const{
+  if(!track_order_)
+    throw std::logic_error("MostRecentMixedStream called on an I3FrameMixer "
+	                       "which has not been set to track stream order");
+  std::vector<boost::shared_ptr<I3Frame> >::const_iterator sit =
+  std::find_if(parent_cache_.begin(),parent_cache_.end(),sameStop(stop));
+  if(sit==parent_cache_.begin()) //no previous frames seen, no answer exists
+    return(boost::optional<I3Frame::Stream>());
+  if(sit==parent_cache_.end()) //stop not in cache, return last thing which is
+    return(parent_cache_.empty() ? //which might be nothing. . . 
+	       boost::optional<I3Frame::Stream>() : 
+		   parent_cache_.back()->GetStop());
+  //otherwise return the previous stop type
+  sit--;
+  return((*sit)->GetStop());
+}
+
