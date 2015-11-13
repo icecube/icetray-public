@@ -21,6 +21,7 @@
  */
 
 #include <icetray/I3Frame.h>
+#include <icetray/I3FrameMixing.h>
 #include <icetray/open.h>
 #include <fstream>
 #include <boost/iostreams/filtering_stream.hpp>
@@ -56,18 +57,22 @@ namespace I3 { namespace dataio { namespace python {
     I3FramePtr pop_daq();
     I3FramePtr pop_physics();
 
-    I3SequentialFileIterator make_iterator();
+    // get the frames mixed into the current frame
+    std::vector<I3FramePtr> get_mixed_frames();
 
+    I3SequentialFileIterator make_iterator();
+    
   private:
   
     boost::iostreams::filtering_istream ifs_;
     boost::iostreams::filtering_ostream ofs_;
 
-    I3Frame cache_;
+    I3FrameMixer cache_;
   
     std::string path_;
     Mode mode_;
     unsigned int nframe_;
+    I3Frame::Stream last_stop_;
     
     void skip_frames(unsigned int);
   };
@@ -91,21 +96,21 @@ namespace I3 { namespace dataio { namespace python {
   }
 
   I3SequentialFile::I3SequentialFile(const I3SequentialFile& rhs)
-    : path_(rhs.path_), mode_(rhs.mode_), nframe_(0)
+    : cache_(true), path_(rhs.path_), mode_(rhs.mode_), nframe_(0), last_stop_(I3Frame::None)
   {
     open_file(path_, mode_);
     skip_frames(rhs.nframe_);
   }
 
   I3SequentialFile::I3SequentialFile(const std::string& filename, Mode mode, unsigned int nframe)
-    : path_(filename), mode_(mode), nframe_(0)
+    : cache_(true), path_(filename), mode_(mode), nframe_(0), last_stop_(I3Frame::None)
   {
     open_file(filename, mode);
     skip_frames(nframe);
   }
 
   I3SequentialFile::I3SequentialFile(const std::string& filename, char mode)
-    : path_(filename), nframe_(0)
+    : cache_(true), path_(filename), nframe_(0), last_stop_(I3Frame::None)
   {
     open_file(filename, mode);
   }
@@ -142,7 +147,7 @@ namespace I3 { namespace dataio { namespace python {
   {
     ifs_.reset();
     ofs_.reset();
-    cache_.clear();
+    cache_.Reset();
     mode_ = Closed;
   }
 
@@ -171,7 +176,7 @@ namespace I3 { namespace dataio { namespace python {
       I3::dataio::open(ifs_, filename);
     else if (mode_ == Writing)
       I3::dataio::open(ofs_, filename);
-    cache_.clear();
+    cache_.Reset();
 
     return 0;
   }
@@ -193,16 +198,10 @@ namespace I3 { namespace dataio { namespace python {
     while(more()) {
       try {
         f->load(ifs_);
-        cache_.purge(f->GetStop());
-        f->purge();
-        f->merge(cache_);
-        // Act like I3Module: merge all keys except TrayInfo and Physics
-        if (f->GetStop() != I3Frame::TrayInfo &&
-            f->GetStop() != I3Frame::Physics)
-                cache_.merge(*f);
-
+        cache_.Mix(*f);
+        last_stop_ = f->GetStop();
         nframe_++;
-        if (s == I3Frame::None || f->GetStop() == s)
+        if (s == I3Frame::None || last_stop_ == s)
           return f;
         else
           f->clear();
@@ -238,7 +237,17 @@ namespace I3 { namespace dataio { namespace python {
   {
     return ifs_.peek() != EOF;
   }
-  
+
+  std::vector<I3FramePtr>
+  I3SequentialFile::get_mixed_frames()
+  {
+    if (last_stop_ == I3Frame::None) {
+      std::vector<I3FramePtr> ret;
+      return ret;
+    } else
+        return cache_.GetMixedFrames(last_stop_);
+  }
+
   I3SequentialFileIterator
   I3SequentialFile::make_iterator()
   {
@@ -323,6 +332,8 @@ void register_I3File()
     .def("pop_physics", &I3SequentialFile::pop_physics,
          "Return the next physics frame from the file, skipping frames on "
          "other streams.")
+    .def("get_mixed_frames", &I3SequentialFile::get_mixed_frames,
+         "Return the frames that are mixed into the current frame.")
     .def("__iter__", &I3SequentialFile::make_iterator)
     ;
 
