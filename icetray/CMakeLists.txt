@@ -75,6 +75,7 @@ set(ICETRAY_PYTHON_SRC
   private/pybindings/I3Configuration.cxx
   private/pybindings/I3ModuleFactory.cxx
   private/pybindings/I3FrameObject.cxx
+  private/pybindings/I3FrameMixing.cxx
   private/pybindings/I3TrayInfo.cxx
   private/pybindings/MyService.cxx
   private/pybindings/std_cont_pod/std_cont_pod_char.cxx
