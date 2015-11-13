@@ -57,6 +57,7 @@ class UI:
                 ('libs', 'Import an additional library'),
                 ('goto', 'Go to frame by number'),
                 ('gotoevent', 'Go to event by id'),
+                ('writeframe', 'Write current frame to file'),
                 ('help', 'This help screen'),
               ]
 
@@ -72,6 +73,7 @@ class UI:
             'libs': ('L',),
             'goto':('g','G'),
             'gotoevent':('e','E'),
+            'writeframe':('w','W'),
             'help':('?',),
            }
 
@@ -582,7 +584,7 @@ class TapeFooter(urwid.Pile):
 
 class Popup(urwid.Edit):
     
-    signals = ['close_popup','select_frame','select_event']
+    signals = ['close_popup','select_frame','select_event','write_frame']
     
     def __init__(self, *args, **kwargs):
         urwid.Edit.__init__(self, *args, **kwargs)
@@ -661,6 +663,16 @@ class GotoEventInput(GotoInput):
             urwid.emit_signal(self, 'select_event', f )
         Popup.closing_action(self)
 
+class WriteFrameInput(Popup):
+
+    def __init__(self):
+        Popup.__init__(self, 'Write frame to file:')
+
+    def closing_action(self):
+        filename = self.get_edit_text()
+        urwid.emit_signal(self, 'write_frame', filename)
+        Popup.closing_action(self)
+
 class LibInput(Popup):
 
     def __init__(self):
@@ -707,6 +719,17 @@ class ViewerMain(urwid.Frame):
     def __init__(self, framelist, header, footer, ascii_only=False):
         self.framelist = framelist
         self.active_view = 0
+        self.frame_hierarchy = icetray.I3FrameMixer(True)
+        try:
+            if isinstance(self.framelist[self.active_view],fileadaptor.FrameWrapper):
+                frame_obj = self.framelist[self.active_view].frame
+            else:
+                frame_obj = self.framelist[self.active_view]
+            f = icetray.I3Frame(frame_obj)
+            f.purge()
+            self.frame_hierarchy.mix(f)
+        except Exception:
+            raise Exception('No frames in file!')
         self.key = 0
         self.maxkeylen = len(self.framelist[self.active_view])
         urwid.connect_signal( footer, 'select_frame', self.select_frame )
@@ -758,8 +781,28 @@ class ViewerMain(urwid.Frame):
         except IndexError:
             return
 
+        # iterate through the framelist to determine the frame hierarchy
+        if frame < self.active_view:
+            self.active_view = 0
+            self.frame_hierarchy.reset()
+            if isinstance(self.framelist[self.active_view],fileadaptor.FrameWrapper):
+                frame_obj = self.framelist[self.active_view].frame
+            else:
+                frame_obj = self.framelist[self.active_view]
+            f = icetray.I3Frame(frame_obj)
+            f.purge()
+            self.frame_hierarchy.mix(f)
+        while (self.active_view < frame):
+            self.active_view += 1
+            if isinstance(self.framelist[self.active_view],fileadaptor.FrameWrapper):
+                frame_obj = self.framelist[self.active_view].frame
+            else:
+                frame_obj = self.framelist[self.active_view]
+            f = icetray.I3Frame(frame_obj)
+            f.purge()
+            self.frame_hierarchy.mix(f)
+
         old_widget = self.body
-        self.active_view = frame
         self.maxkeylen = len(self.framelist[self.active_view])
         if self.key >= self.maxkeylen:
             self.key = self.maxkeylen-1
@@ -782,25 +825,34 @@ class ViewerMain(urwid.Frame):
         
         # start a search through the framelist for the event id
         frame = self.active_view
+        new_frame = -1
         while True:
             frame += 1
             if frame == self.active_view:
                 return # we looped, and didn't find anything
             try:
                 if get_id(self.framelist[frame]) == event:
-                    self.active_view = frame
+                    new_frame = frame
                     break
             except IndexError:
                 frame = -1
 
-        old_widget = self.body
-        self.maxkeylen = len(self.framelist[self.active_view])
-        if self.key >= self.maxkeylen:
-            self.key = self.maxkeylen-1
-        self.frame_viewer.set_view( self.framelist[self.active_view], self.active_view, key=self.key )
-        self.footer.set_view( self.active_view, key=self.key )
-        del old_widget
-        self.drop_focus()
+        if new_frame != -1:
+            self.select_frame(new_frame)
+
+    def write_frame(self, filename):
+        try:
+            f = dataio.I3File(filename,'w')
+            if isinstance(self.framelist[self.active_view],fileadaptor.FrameWrapper):
+                frame_obj = self.framelist[self.active_view].frame
+            else:
+                frame_obj = self.framelist[self.active_view]
+            for fr in self.frame_hierarchy.get_mixed_frames(frame_obj.Stop):
+                f.push(fr)
+            f.push(frame_obj)
+            f.close()
+        except Exception:
+            raise
     
     def select_key(self, key):
         '''Attempt to select a new key'''
@@ -813,6 +865,7 @@ class ViewerMain(urwid.Frame):
         urwid.connect_signal( self.popup, 'close_popup', self.close_popup )
         urwid.connect_signal( self.popup, 'select_frame', self.select_frame )
         urwid.connect_signal( self.popup, 'select_event', self.select_event )
+        urwid.connect_signal( self.popup, 'write_frame', self.write_frame )
         popupbox = urwid.Filler(urwid.LineBox(obj))
         self.body = urwid.Overlay(popupbox, self.body, ('fixed left',5), 30, ('fixed top',5), 5)
 
@@ -821,6 +874,8 @@ class ViewerMain(urwid.Frame):
             self.body = self.body.bottom_w
             urwid.disconnect_signal( self.popup, 'close_popup', self.close_popup )
             urwid.disconnect_signal( self.popup, 'select_frame', self.select_frame )
+            urwid.disconnect_signal( self.popup, 'select_event', self.select_event )
+            urwid.disconnect_signal( self.popup, 'write_frame', self.write_frame )
             self.popup = None
 
     def keypress(self, size, input):
@@ -872,11 +927,13 @@ class ViewerMain(urwid.Frame):
             self.open_popup(GotoInput())
         elif input in UI.keys['gotoevent']:
             self.open_popup(GotoEventInput())
+        elif input in UI.keys['writeframe']:
+            self.open_popup(WriteFrameInput())
         elif input in UI.keys['libs']:
             self.open_popup(LibInput())
         elif input in UI.keys['help']:
             self.mainloop.widget = self.helpscreen
-        else: 
+        else:
             return self.body.keypress(size, input)
 
 def run_viewer(filename, i3file, colors=False, ascii_only=False):
