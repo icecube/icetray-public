@@ -2,8 +2,14 @@ Release Notes
 =============
 
 Trunk
+-----
 
-* Test scripts count the Q frames now too.  While I was in there I updated the to the more pythonic format.
+* (r2342-2345) - Use new I3FrameMixer for I3File, dataio-shovel,
+  dataio-pyshovel. pyshovel can also write a frame to file now.
+* (r2331) - Shuffle names for I3File pybindings to match python classes
+* (r2299) - Remove dependence on examples project
+* (r2293) - Test scripts count the Q frames now too.  While I was in there
+  I updated the to the more pythonic format.
 
 August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
