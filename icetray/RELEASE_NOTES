@@ -1,7 +1,15 @@
 Release Notes
 =============
 
-On the trunk :
+Trunk
+-----
+
+* (r2347) - Remove deprecated CINT dictionary generation
+* (r2341-2346) - Create a single I3FrameMixer implementation
+* (r2338) - Remove duplicate code in I3Tray::Execute
+* (r2325) - Add test for expected failure in production
+* (r2296,2298) - Remove examples project dependencies
+* (r2292) - Teach CountFrames about DAQ frames
 
 August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
