@@ -18,6 +18,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 
+# search for ROOT's Minuit2
 TOOLDEF (minuit2
     ${ROOTSYS}/include/Minuit2
     MnConfig.h
@@ -26,12 +27,25 @@ TOOLDEF (minuit2
     Minuit2
     )
 
+# search for the system installed Minuit2
 if (NOT MINUIT2_FOUND)
   unset(minuit2_INCLUDE_DIR)
   TOOLDEF (minuit2
       include/Minuit2
       Minuit2/MnConfig.h
       lib/Minuit2
+      NONE  # bin is n/a, placeholder
+      Minuit2
+  )
+endif(NOT MINUIT2_FOUND)
+
+# search the I3_PORTS Minuit2
+if (NOT MINUIT2_FOUND)
+  unset(minuit2_INCLUDE_DIR)
+  TOOLDEF (minuit2
+      include/Minuit2-5.24.00
+      Minuit2/MnConfig.h
+      lib/Minuit2-5.24.00
       NONE  # bin is n/a, placeholder
       Minuit2
   )
