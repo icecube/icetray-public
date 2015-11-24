@@ -549,7 +549,7 @@ hold:
    frame of every other stream which is not 'immiscible' and for which a 
    'native' key was not already present in the frame. 
 3. A frame shall contain no non-'native' keys which were not present in the 
-most closely preceding frame on the stream corresponding to each key. 
+   most closely preceding frame on the stream corresponding to each key. 
 
 These rules are intended to be enforced by I3Module and other frame sequence 
 handling abstractions provided by IceTray; they should not need to be 
