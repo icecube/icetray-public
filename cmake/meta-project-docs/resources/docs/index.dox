@@ -24,8 +24,8 @@ Modules contained in the offline-software meta-project:<p>
 Core AMANDA functionality including calibrations and reading f2k-format data.
 	<li> <a href="http://code.icecube.wisc.edu/projects/icecube/wiki/CMake">cmake</a> - 
 Makefiles and configuration information for the software build system.
-	<li> <a href="./coordinate-service/index.html">coordinate-service</a> -
-A set of functions for transforming from one coordinate system to another (Local, equitorial, etc)
+	<li> <a href="./astro/index.html">astro</a> -
+A set of functions for transforming from one astronomical coordinate system to another (Local, equitorial, etc)
 	<li> <a href="inspect/daq-decode.html">[inspect]</a> <a href="./daq-decode/index.html">daq-decode</a> - 
 Services that utilize the payload object decoder services (e.g. payload-parsing)
 to decode the DAQ event format and fill the dataclasses structures.
