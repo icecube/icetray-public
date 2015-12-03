@@ -24,6 +24,10 @@ colormsg(HICYAN "python")
 
 set(PYTHON_FOUND TRUE CACHE BOOL "Python found successfully")
 
+find_program(PYTHON_EXECUTABLE python
+      PATHS ENV PATH         # look in the PATH environment variable
+      NO_DEFAULT_PATH        # do not look anywhere else...
+      )
 find_package(PythonInterp QUIET)
 
 # 
