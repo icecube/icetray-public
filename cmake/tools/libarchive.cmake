@@ -1,15 +1,22 @@
 colormsg("")
 colormsg(HICYAN "libarchive")
 
-find_package(PkgConfig)
-if(${CMAKE_VERSION} VERSION_LESS "2.8.2")
-  pkg_check_modules(PC_LA libarchive)
-else(${CMAKE_VERSION} VERSION_LESS "2.8.2")
-  pkg_check_modules(PC_LA QUIET libarchive)
-endif(${CMAKE_VERSION} VERSION_LESS "2.8.2")
+find_package(PkgConfig QUIET)
+pkg_check_modules(PC_LA QUIET libarchive)
 
 ## lzma is optional for libarchive, but we don't have a clean way to
 ## check if it's linked in or not. so, let's look for it then include it
+pkg_check_modules(PC_LZMA QUIET liblzma)
+
+find_library(LZMA_LIBRARIES lzma
+             HINTS ${PC_LZMA_LIBDIR}
+                   ${PC_LZMA_LIBRARY_DIRS}
+		   /usr/local)
+
+find_path(LZMA_INCLUDE_DIR lzma.h
+          HINTS ${PC_LZMA_INCLUDEDIR}
+                ${PC_LZMA_INCLUDE_DIRS}
+		/usr/local)
 
 find_library(LZMA_LIBRARIES lzma
              HINTS ${I3_PORTS}/lib
@@ -21,6 +28,18 @@ find_path(LZMA_INCLUDE_DIR lzma.h
           HINTS ${I3_PORTS}/include
                 ${PC_LA_INCLUDEDIR}
                 ${PC_LA_INCLUDE_DIRS})
+
+## look in Homebrew for libarchive
+if(APPLE)
+  find_library(LIBARCHIVE_LIBRARIES archive
+    PATHS /usr/local/opt/libarchive
+          /usr/local/opt/libarchive/lib
+    NO_DEFAULT_PATH)
+  find_path(LIBARCHIVE_INCLUDE_DIR archive.h
+    PATHS /usr/local/opt/libarchive
+          /usr/local/opt/libarchive/include
+    NO_DEFAULT_PATH)
+endif()
 
 ## give cmake a chance to find a custom install of libarchive
 find_library(LIBARCHIVE_LIBRARIES archive
