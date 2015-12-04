@@ -105,7 +105,7 @@ this::
 
 The following formulae are recommended:
 
-* offline-software: boost boost-python cmake cdk gsl hdf5 libarchive mysql qt pyqt 
+* offline-software: boost boost-python cmake cdk gsl hdf5 libarchive mysql qt pyqt pal 
 * IceRec: cfitsio minuit2 suite-sparse
 * simulation: sprng2
 
@@ -113,6 +113,14 @@ The following formulae are recommended:
 
 .. _tap: https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/brew-tap.md
 .. _`Homebrew's notes on Python`: https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Homebrew-and-Python.md#why-is-homebrews-python-being-installed-as-a-dependency
+
+The version of boost which is provided by homebrew is incompatable with IceTray, you need to use an older version.
+Homebrew provides version 1.55 in its versions tap.::
+
+	brew install homebrew/versions/boost155 --with-python
+	brew link -f homebrew/versions/boost155
+
+However, many homebrew packages will still try to install newer versions of boost, which will cause problems. I am not aware of any way to prevent this other than not installing any homebrew package which depend on boost, mysql is one such package.
 
 MacPorts
 ........
@@ -149,6 +157,10 @@ supported by ROOT. By default, ROOT dictionaries are not built.
 
 .. _osxpythonsetup:
 
+ROOT can be installed with homebrew::
+
+	brew install --build-from-source homebrew/science/root
+  
 Python on OS X
 """"""""""""""
 
@@ -194,6 +206,9 @@ bleeding-edge versions of Python packages to your heart's content::
 	pip install matplotlib
 	pip install ipython
 
+
+reccomended packages: urwid sphinx numpy scipy matplotlib ipython tables qtconsole
+
 Pitfalls
 ........
 
@@ -208,6 +223,40 @@ environment variable::
 	
 	export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
 
+Step-By-Step Instructions
+"""""""""""""""""""""""""
+
+With a fresh install of El Capitan I was able to get IceRec and Simulation running by running the following commands:
+
+.. code-block:: sh
+
+	#install hombebrew
+	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+	#install packages with homebrew
+	brew install homebrew/versions/boost155 --with-python
+	brew link -f homebrew/versions/boost155
+	brew install cmake cdk gsl minuit2 libarchive wget doxygen qt4 pyqt
+
+	brew tap homebrew/science
+	brew install healpix hdf5
+	brew install --build-from-source homebrew/science/root
+
+	brew tap IceCube-SPNO/homebrew-icecube
+	brew install multinest pal rdmc suite-sparse pal sprng2
+	
+	#install virtualenv
+	sudo easy_install pip
+	sudo pip install virtualenv
+	virtualenv .virtualenv/standard
+	VIRTUAL_ENV_DISABLE_PROMPT=1
+	. ~/.virtualenv/standard/bin/activate
+	echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> .virtualenv/standard/lib/python2.7/site-packages/homebrew.pth
+
+	#install python packages
+	pip install urwid sphinx numpy scipy matplotlib ipython tables qtconsole
+
+This worked on December 2015, with the trunk of offlines software on El Capitan. As homebrew updates, these instructions might not work as well. Your mileage may vary.
 .. index:: RHEL4
 .. _RHEL4:
 
