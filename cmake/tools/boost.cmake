@@ -33,15 +33,15 @@ if (SYSTEM_PACKAGES)
         endif (NOT Boost_FOUND)
 endif (SYSTEM_PACKAGES)
 
-if (Boost_VERSION EQUAL 105800)
+if (Boost_VERSION GREATER 105700)
     colormsg(HIRED 
 "***
-   *** Your Boost version is 1.58.0. This version is known to have issues with
-   *** serialization. A fix is in the works. If you have questions, email
-   *** software@icecube.wisc.edu, or join #software on slack.
+   *** Your Boost version is 1.58.0 or newer. These versions are known to have issues
+   *** with serialization. A fix is in the works. If you have questions,
+   *** email software@icecube.wisc.edu, or join #software on slack.
    ***")
     message(FATAL_ERROR "Incompatible Boost version")
-endif (Boost_VERSION EQUAL 105800)
+endif (Boost_VERSION GREATER 105700)
 
 if((NOT SYSTEM_PACKAGES) OR (NOT Boost_FOUND))
   set(BOOST_PORTSVERSION "1.38.0" CACHE PATH "The boost version.")
