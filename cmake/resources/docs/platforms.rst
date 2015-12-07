@@ -105,7 +105,7 @@ this::
 
 The following formulae are recommended:
 
-* offline-software: boost boost-python cmake cdk gsl hdf5 libarchive mysql qt pyqt pal 
+* offline-software: boost boost-python cmake cdk gsl hdf5 libarchive qt pyqt pal 
 * IceRec: cfitsio minuit2 suite-sparse
 * simulation: sprng2
 
@@ -209,6 +209,11 @@ bleeding-edge versions of Python packages to your heart's content::
 
 reccomended packages: urwid sphinx numpy scipy matplotlib ipython tables qtconsole
 
+In order for python packages installed by homebrew (such as Qt4) to be accessable from your virtual environment, you need to tell python where to find the libraries. This can be accomplished by running::
+
+        echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> ~/.virtualenv/standard/lib/python2.7/site-packages/homebrew.pth
+
+
 Pitfalls
 ........
 
@@ -251,12 +256,13 @@ With a fresh install of El Capitan I was able to get IceRec and Simulation runni
 	virtualenv .virtualenv/standard
 	VIRTUAL_ENV_DISABLE_PROMPT=1
 	. ~/.virtualenv/standard/bin/activate
-	echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> .virtualenv/standard/lib/python2.7/site-packages/homebrew.pth
+	echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> ~/.virtualenv/standard/lib/python2.7/site-packages/homebrew.pth
 
 	#install python packages
 	pip install urwid sphinx numpy scipy matplotlib ipython tables qtconsole
 
 This worked on December 2015, with the trunk of offlines software on El Capitan. As homebrew updates, these instructions might not work as well. Your mileage may vary.
+
 .. index:: RHEL4
 .. _RHEL4:
 
