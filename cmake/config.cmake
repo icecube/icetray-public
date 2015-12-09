@@ -63,6 +63,7 @@ else()
   #message(STATUS "I3_SRC not yet set in environment.  ok.")
 endif()
 
+option(SYSTEM_PACKAGES "Use tools provided by the operating system" ON)
 set(I3_PORTS $ENV{I3_PORTS} CACHE STRING "Path to your icecube ports installation")
 
 #
