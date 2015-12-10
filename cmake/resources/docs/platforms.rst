@@ -105,8 +105,8 @@ this::
 
 The following formulae are recommended:
 
-* offline-software: boost boost-python cmake cdk gsl hdf5 libarchive qt pyqt pal 
-* IceRec: cfitsio minuit2 suite-sparse
+* offline-software: boost boost-python cmake cdk gsl hdf5 libarchive qt pyqt pal doxygen wget
+* IceRec: cfitsio minuit2 suite-sparse healpix multinest rdmc
 * simulation: sprng2
 
 .. warning:: Some Homebrew formulas have Python as a dependency, so a second Python may sneak onto your computer without your knowledge. To avoid this, install formulas that depend on python with the parameter ``--build-from-source``. See `Homebrew's notes on Python`_ for further information.
@@ -164,6 +164,8 @@ ROOT can be installed with homebrew::
 Python on OS X
 """"""""""""""
 
+.. highlight:: sh
+
 Starting with 10.6, Apple has shipped a fairly up-to-date Python interpreter
 and standard library with OS X, and there's no good reason to replace it. At
 the same time, it has started shipping 3rd-party libraries with more rapid
@@ -171,11 +173,66 @@ release cycles like :py:mod:`matplotlib`, :py:mod:`numpy`, and
 :py:mod:`ipython` in /Library/Python/X.Y/site-packages. You may wish to upgrade
 these packages to take advantage of new features and performance improvements.
 The problem is that Apple considers that path part of the OS, and will wipe out
-your changes when you update the OS. You can get around this by using
-:py:mod:`virtualenv` to use to create an environment that explicitly
-overrides the system site-packages and is isolated from other environments.
+your changes when you update the OS. The best way to install python packages is
+to use the python package manager :command:`pip`.
+Unfortunatly, by default :command:`pip` tries to install packages into your
+system python directory, which is not writable to normal users. Many people suggest
+to get around this by using :command:`sudo` to write to this directory,
+this should be highly discouraged.
 
-.. highlight:: sh
+There are two ways to get around this unfortunate default behavior:
+one is to install new python modules in your own ``.local`` directory, the
+other is to use :py:mod:`virtualenv`. Both of these methods will install
+python modules in a subfolder of your home directory, which will overide the
+system defaults. For both of them you will need to first install :command:`pip`.
+
+Installing in ~/Library/
+........................
+
+The system python will check for python modules installed by the user in
+``~/Library/Python/2.7/lib/python/site-packages``, The first thing you need
+to do is let python know where the python modules installed by homebrew are.
+To do this run::
+
+        echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> ${HOME}/Library/Python/2.7/lib/python/site-packages/homebrew.pth
+
+Next install :command:`pip`::
+
+        easy_install --user pip
+
+The ``--user`` option will install the :command:`pip` in ``~/Library/Python/2.7/bin/``
+which is not in your path. So you will then need to run::
+
+        export PATH="${HOME}/Library/Python/2.7/bin/:${PATH}"
+
+And you will need to add the same line to your ``.bash_profile`` so that
+:command:`pip` and other executable python files placed in this directory can
+be run in the future.
+
+Once this is done you can install all the modules you
+want using :command:`pip` as long as you remember to include
+the ``--user`` option.::
+
+        pip install --user urwid sphinx ipython qtconsole 
+  
+Like :command:`easy_install`, the ``-user`` option in :command:`pip` will
+install executables to ``~/Library/Python/2.7/bin/`` and python libraries
+to ``~/Library/Python/2.7/lib/python/site-packages``. IceTray will work
+fine with the versions of :py:mod:`numpy`, :py:mod:`scipy`, and
+:py:mod:`matplotlib` which come with the system, but you can upgrade them
+to the newest version with::
+
+        pip install --user --upgrade numpy scipy matplotlib
+
+Again, these will be installed in in your home directory, but will override
+the modules provided by the system.
+
+
+Installing with virtualenv
+..........................
+
+:py:mod:`virtualenv` is used to create an environment that explicitly
+overrides the system site-packages and is isolated from other environments.
 
 First, install :command:`pip`, a better package manager for Python::
 	
@@ -185,6 +242,8 @@ then, use :command:`pip` to install :py:mod:`virtualenv`::
 	
 	sudo pip install virtualenv
 
+Even though using :command:`sudo` on :command:`easy_install` and
+:command:`pip` is highly discouraged, it won't hurt much for these two packages.
 This ends the privileged portion. Now, create a new virtual environment.
 I call mine ".virtualenv/standard"::
 	
@@ -198,6 +257,11 @@ enter this one automatically whenever I start a new shell::
 	VIRTUAL_ENV_DISABLE_PROMPT=1
 	. ~/.virtualenv/standard/bin/activate
 
+In order for python packages installed by homebrew (such as Qt4) to be accessable from your virtual environment, you need to tell python where to find the libraries. This can be accomplished by running::
+
+        echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> ~/.virtualenv/standard/lib/python2.7/site-packages/homebrew.pth
+
+
 Inside the environment, :command:`pip` will automatically install packages in
 the environment rather than in /Library/Python. Now you can install
 bleeding-edge versions of Python packages to your heart's content::
@@ -206,13 +270,7 @@ bleeding-edge versions of Python packages to your heart's content::
 	pip install matplotlib
 	pip install ipython
 
-
 reccomended packages: urwid sphinx numpy scipy matplotlib ipython tables qtconsole
-
-In order for python packages installed by homebrew (such as Qt4) to be accessable from your virtual environment, you need to tell python where to find the libraries. This can be accomplished by running::
-
-        echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> ~/.virtualenv/standard/lib/python2.7/site-packages/homebrew.pth
-
 
 Pitfalls
 ........
@@ -249,17 +307,14 @@ With a fresh install of El Capitan I was able to get IceRec and Simulation runni
 
 	brew tap IceCube-SPNO/homebrew-icecube
 	brew install multinest pal rdmc suite-sparse pal sprng2
-	
-	#install virtualenv
-	sudo easy_install pip
-	sudo pip install virtualenv
-	virtualenv .virtualenv/standard
-	VIRTUAL_ENV_DISABLE_PROMPT=1
-	. ~/.virtualenv/standard/bin/activate
-	echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> ~/.virtualenv/standard/lib/python2.7/site-packages/homebrew.pth
 
-	#install python packages
-	pip install urwid sphinx numpy scipy matplotlib ipython tables qtconsole
+	echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> ${HOME}/Library/Python/2.7/lib/python/site-packages/homebrew.pth
+
+	export PATH="${HOME}/Library/Python/2.7/bin/:${PATH}" >> ${HOME}/.bash_profile 
+	easy_install --user pip
+	pip install --user urwid sphinx ipython qtconsole tables
+	pip install --user --upgrade numpy scipy matplotlib
+	
 
 This worked on December 2015, with the trunk of offlines software on El Capitan. As homebrew updates, these instructions might not work as well. Your mileage may vary.
 
