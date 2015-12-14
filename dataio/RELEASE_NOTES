@@ -1,8 +1,9 @@
 Release Notes
 =============
 
-Trunk
------
+December 14, 2015, don la dieu  (nega@icecube.umd.edu)
+------------------------------------------------------
+Release V15-12-00
 
 * (r2342-2345) - Use new I3FrameMixer for I3File, dataio-shovel,
   dataio-pyshovel. pyshovel can also write a frame to file now.
