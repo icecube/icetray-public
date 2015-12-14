@@ -1,12 +1,45 @@
 Release Notes
 =============
 
+* make SYSTEM_PACKAGES=ON the default
+* update OS X documentation
+* use python in the path, fixing virtual envs
+* document PAL
 * look for PAL before SLALIB
+* update standalone Minuit2 support
+* update cmake user guide
+* documentation fixes (content and presentation)
+* added some code standards to the docs
+* allow quoted arguments to env-shell.sh
+* clean up the environment when building w/o root
+* add the homebrew prefix to search paths
+* sprng search fixes
+* add USE_PYBINDINGS to i3_test_executable()
+* make icetray-pybindings a dependency of all EXE tests
+* correct typos in status messages
+* prune dead code
+* update tutorial docs
+* add and support cmake variable GEANT4_VERSION
+* disable cint on OS X
+* force disabling cint if root is not found
+* setup dependencies for pybindings
+* general documentation fixes
+* Qt detection fixes
 
-Ocbober 1, 2014, don la dieu  (nega@icecube.umd.edu)
-----------------------------------------------------
+V15-08-00 - Setember 1, 2015 - Alex Olivas (olivas@icecube.umd.edu)
+-------------------------------------------------------------------
 
-V14-09-02
+V15-04-00 - April 2, 2015 - don la dieu  (nega@icecube.umd.edu)
+---------------------------------------------------------------
+
+V15-03-00 - March 15, 2015 - Alex Olivas (olivas@icecube.umd.edu)
+-----------------------------------------------------------------
+
+V14-11-00 - November 20, 2014 - Alex Olivas (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+
+V14-10-00 - Ocbober 1, 2014 - don la dieu  (nega@icecube.umd.edu)
+-----------------------------------------------------------------
 
 * initial pal/erfa detection
 * boost and boost-python detection tweaks
