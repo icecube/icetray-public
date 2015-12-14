@@ -1,6 +1,9 @@
 Release Notes
 =============
 
+V15-12-00 - December 14, 2015 - don la dieu  (nega@icecube.umd.edu)
+-------------------------------------------------------------------
+
 * make SYSTEM_PACKAGES=ON the default
 * update OS X documentation
 * use python in the path, fixing virtual envs
