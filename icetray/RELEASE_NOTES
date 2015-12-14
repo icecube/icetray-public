@@ -1,8 +1,9 @@
 Release Notes
 =============
 
-Trunk
------
+December 14, 2015, don la dieu  (nega@icecube.umd.edu)
+------------------------------------------------------
+Release V15-12-00
 
 * (r2347) - Remove deprecated CINT dictionary generation
 * (r2341-2346) - Create a single I3FrameMixer implementation
