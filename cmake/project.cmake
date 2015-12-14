@@ -522,7 +522,7 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
       )
 
     add_dependencies(test-bins ${PROJECT_NAME}-${THIS_EXECUTABLE_NAME})
-    add_dependencies(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} icetray-pybindings)
+    use_pybindings(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} PROJECTS icetray)
 
     set_target_properties(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
       PROPERTIES

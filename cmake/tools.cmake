@@ -39,19 +39,7 @@ else()
   message(STATUS "Using user-configured I3_SITE_CMAKE_DIR=${I3_SITE_CMAKE_DIR}")
 endif()
 
-#
-#  These guys are in subdirectory 'tools'
-#
-set(ALL_TOOLS pthread root boost boostnumpy python
-    rdmc blas lapack gsl sprng sla libarchive
-    mysql bdb mpi suitesparse ZThread omniORB ncurses cdk
-    healpix qt4 cfitsio hdf5 minuit2 clhep geant4 zlib
-    opencl gmp log4cpp xml2 genie zmq doxygen
-    multinest
-    ${I3_EXTRA_TOOLS}   # add the extra tools and dedupe
-    )
-list(REMOVE_DUPLICATES ALL_TOOLS)
-
+include(all_tools)
 #
 #  Load each tool, directory preferences are, in order:
 #  * I3_SITE_CMAKE_DIR

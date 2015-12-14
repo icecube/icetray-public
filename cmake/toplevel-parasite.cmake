@@ -38,7 +38,7 @@ colormsg("")
 set(METAPROJECT "" CACHE STRING "Path to host build directory")
 if(EXISTS ${METAPROJECT}/env-shell.sh)
   # user supplied full path
-  set(HOST_I3_BUILD ${METAPROJECT})
+  get_filename_component(HOST_I3_BUILD ${METAPROJECT} ABSOLUTE)
 elseif(DEFINED ENV{SROOT} AND EXISTS $ENV{SROOT}/metaprojects)
   # cvmfs.icecube.wisc.edu-stype $SROOT/metaprojects exists
   if(NOT METAPROJECT STREQUAL "")
@@ -137,7 +137,6 @@ macro(use_projects THIS_TARGET)
       # pre-compiled project; just find libraries
       include_directories(${HOST_I3_SRC}/${USED_PROJECT}/public)
       find_library(${USED_PROJECT}_LIBRARIES NAMES lib${USED_PROJECT}${CMAKE_SHARED_LIBRARY_SUFFIX} PATHS ${HOST_I3_BUILD}/lib NO_DEFAULT_PATH)
-      # message(STATUS " ${${USED_PROJECT}_LIBRARIES}")
       target_link_libraries(${THIS_TARGET} ${${USED_PROJECT}_LIBRARIES})
     elseif(EXISTS ${I3_SRC}/${USED_PROJECT}/CMakeLists.txt)
       # parasite project; add dependencies
@@ -149,8 +148,35 @@ macro(use_projects THIS_TARGET)
   endforeach(USED_PROJECT ${${THIS_TARGET}_USE_PROJECTS_PROJECTS})
 endmacro(use_projects THIS_TARGET)
 
-# use tools from the previous cache
-macro(use_tool TARGET TOOL_)
+#
+# A bare-bones version of use_pybindings() 
+#
+macro(use_pybindings THIS_TARGET)
+  parse_arguments(${THIS_TARGET}_USE_PROJECTS
+    "PROJECTS"
+    ""
+    ${ARGN}
+    )
+  foreach(USED_PROJECT ${${THIS_TARGET}_USE_PROJECTS_PROJECTS})
+    if(EXISTS ${HOST_I3_SRC}/${USED_PROJECT}/CMakeLists.txt)
+      # pre-compiled project; do nothing
+    elseif(EXISTS ${I3_SRC}/${USED_PROJECT}/CMakeLists.txt)
+      # parasite project; add dependencies
+      add_dependencies(${THIS_TARGET} ${USED_PROJECT}-pybindings)
+    else()
+      message(FATAL_ERROR "Attempt to use nonexistent project '${USED_PROJECT}'")
+    endif(EXISTS ${HOST_I3_SRC}/${USED_PROJECT}/CMakeLists.txt)
+  endforeach(USED_PROJECT ${${THIS_TARGET}_USE_PROJECTS_PROJECTS})
+endmacro(use_pybindings THIS_TARGET)
+
+#
+#  Greedily load info about all known tools
+#
+include(all_tools)
+# Some tools don't have their own file
+list(APPEND ALL_TOOLS scipy numpy)
+list(REMOVE_DUPLICATES ALL_TOOLS)
+foreach(TOOL_ ${ALL_TOOLS})
   string(TOUPPER ${TOOL_} TOOL)
   load_cache(${HOST_I3_BUILD} READ_WITH_PREFIX ""
     ${TOOL}_FOUND
@@ -158,7 +184,12 @@ macro(use_tool TARGET TOOL_)
     ${TOOL}_INCLUDE_DIR
     ${TOOL}_INCLUDE_DIRS
     ${TOOL}_LIBRARIES
-    ${TOOL}_LINK_FLAGS)
+    ${TOOL}_LINK_FLAGS)  
+endforeach(TOOL_ ${ALL_TOOLS})
+
+# use tools from the previous cache
+macro(use_tool TARGET TOOL_)
+  string(TOUPPER ${TOOL_} TOOL)
   if(NOT ${TOOL}_FOUND)
     message(FATAL_ERROR "Attempt to use tool '${TOOL_}' which wasn't found")
   endif(NOT ${TOOL}_FOUND)
@@ -320,3 +351,14 @@ add_custom_target(tarball-finish
   )
 
 add_custom_target(tarball DEPENDS tarball-finish)
+
+#
+#  Environment checking targets
+#
+configure_file(${CMAKE_SOURCE_DIR}/cmake/env-check.sh.in
+  ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/env-check.sh
+  @ONLY)
+
+add_custom_target(env-check ALL 
+  COMMAND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/env-check.sh
+  COMMENT "Checking build against environment")

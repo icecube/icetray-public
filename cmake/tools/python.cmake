@@ -87,6 +87,8 @@ set(PYTHON_INCLUDE_DIR2 ${PYTHON_INCLUDE_DIR})
 # things for frameworks detection.
 #
 find_package(PythonLibs ${PYTHON_STRIPPED_VERSION} EXACT QUIET)
+# Store in plural form for consistency with other tools
+set(PYTHON_LIBRARIES "${PYTHON_LIBRARIES}" CACHE FILEPATH "")
 
 if(NOT PYTHON_EXECUTABLE)
   set(PYTHON_FOUND FALSE CACHE BOOL "Python found successfully")
