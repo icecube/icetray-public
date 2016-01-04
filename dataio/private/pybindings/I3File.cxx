@@ -27,6 +27,8 @@
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/python/errors.hpp>
 
+namespace bp = boost::python;
+
 // This calls out for an anonymous namespace. But doing that breaks GCC between
 // versions 4.0 and 4.3.
 namespace I3 { namespace dataio { namespace python {
@@ -62,6 +64,9 @@ namespace I3 { namespace dataio { namespace python {
 
     I3SequentialFileIterator make_iterator();
     
+    I3SequentialFile& enter_context();
+    void exit_context(bp::object,bp::object,bp::object);
+
   private:
   
     boost::iostreams::filtering_istream ifs_;
@@ -257,6 +262,17 @@ namespace I3 { namespace dataio { namespace python {
     return I3SequentialFileIterator(*this);
   }
 
+  I3SequentialFile&
+  I3SequentialFile::enter_context()
+  {
+    return *this;
+  }
+
+  void
+  I3SequentialFile::exit_context(bp::object,bp::object,bp::object)
+  {
+      this->close();
+  }
 
   I3SequentialFileIterator::I3SequentialFileIterator(const I3SequentialFile& rhs)
     : file_(rhs)
@@ -288,7 +304,6 @@ namespace I3 { namespace dataio { namespace python {
 //
 using namespace boost::python;
 using namespace I3::dataio::python;
-namespace bp = boost::python;
 
 void register_I3File()
 {
@@ -335,6 +350,8 @@ void register_I3File()
     .def("get_mixed_frames", &I3SequentialFile::get_mixed_frames,
          "Return the frames that are mixed into the current frame.")
     .def("__iter__", &I3SequentialFile::make_iterator)
+    .def("__enter__", &I3SequentialFile::enter_context, return_value_policy<reference_existing_object>() )
+    .def("__exit__", &I3SequentialFile::exit_context)
     ;
 
   class_<I3SequentialFileIterator>
