@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-#  $Id$
+#  $Id: j_fatals_reading_mutineer.py 1636 2013-06-29 03:02:36Z nwhitehorn $
 #
 from I3Tray import *
 
