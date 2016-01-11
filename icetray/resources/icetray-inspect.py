@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # 
-#  $Id$
+#  $Id: icetray-inspect.py 2188 2015-07-30 04:09:28Z nega $
 #  
 #  Copyright (C) 2011
 #  Jakob van Santen <vansanten@wisc.edu>

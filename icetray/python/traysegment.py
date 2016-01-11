@@ -1,5 +1,5 @@
 # 
-#  $Id$
+#  $Id: traysegment.py 1635 2013-06-28 21:33:24Z nwhitehorn $
 #  
 #  Copyright (C) 2011
 #  Nathan Whitehorn <nwhitehorn@icecube.wisc.edu>

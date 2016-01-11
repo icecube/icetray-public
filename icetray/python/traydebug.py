@@ -1,5 +1,5 @@
 # 
-#  $Id$
+#  $Id: traydebug.py 1667 2013-07-01 21:30:57Z nwhitehorn $
 #  
 #  Copyright (C) 2011
 #  Eike Middell <eike.middell@desy.de>

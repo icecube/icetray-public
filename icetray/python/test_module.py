@@ -3,11 +3,11 @@
 # copyright  (C) 2011
 # The Icecube Collaboration
 # 
-# $Id$
+# $Id: test_module.py 1635 2013-06-28 21:33:24Z nwhitehorn $
 # 
-# @version $Revision$
-# @date $LastChangedDate$
-# @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy$
+# @version $Revision: 1635 $
+# @date $LastChangedDate: 2013-06-28 17:33:24 -0400 (Fri, 28 Jun 2013) $
+# @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy: nwhitehorn $
 #
 
 from icecube.icetray import I3ConditionalModule, I3Frame

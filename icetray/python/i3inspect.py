@@ -1,5 +1,5 @@
 # 
-#  $Id$
+#  $Id: i3inspect.py 1793 2014-01-15 16:57:49Z jvansanten $
 #  
 #  Copyright (C) 2011
 #  Jakob van Santen <vansanten@wisc.edu>

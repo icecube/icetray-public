@@ -2,10 +2,10 @@
 #
 #   copyright  (c) 2004, 2005
 #   the icecube collaboration
-#   $Id$
+#   $Id: show_all_I3Units.py 1667 2013-07-01 21:30:57Z nwhitehorn $
 #
-#   @version $Revision$
-#   @date $Date$
+#   @version $Revision: 1667 $
+#   @date $Date: 2013-07-01 17:30:57 -0400 (Mon, 01 Jul 2013) $
 #   @author John Pretz 
 
 #   dump all units to stdout.  demo showing use of I3Units in python.
