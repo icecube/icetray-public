@@ -456,7 +456,7 @@ message(STATUS "Setting default compiler flags and build type.")
 #  cmake commmand line, e.g.
 #  cmake -DCMAKE_BUILD_TYPE:STRING=Debug, we need to use that value
 #
-if (NOT CMAKE_BUILD_TYPE)
+if ((NOT CMAKE_BUILD_TYPE) OR (CMAKE_BUILD_TYPE MATCHES "^None"))
   if(META_PROJECT MATCHES "trunk$")
     set(CMAKE_BUILD_TYPE "RelWithAssert")
   else()
@@ -468,23 +468,25 @@ set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING "Choose the type of buil
 #
 # set flags common to all build types
 #
-set(CMAKE_CXX_FLAGS "${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPPRESSION_FLAGS}")
+set(CMAKE_CXX_FLAGS "-pipe ${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPPRESSION_FLAGS}")
 string(REGEX REPLACE "[ ]+" " " CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
-set(CMAKE_CXX_FLAGS "-pipe ${CMAKE_CXX_FLAGS}" CACHE STRING
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" CACHE STRING
   "Flags used by the compiler during all build types")
 
-set(CMAKE_C_FLAGS "${C_WARNING_FLAGS} ${CMAKE_C_FLAGS}")
+set(CMAKE_C_FLAGS "-pipe ${C_WARNING_FLAGS} ${CMAKE_C_FLAGS}")
 string(REPLACE "-Wno-non-virtual-dtor" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
-set(CMAKE_C_FLAGS "-pipe ${CMAKE_C_FLAGS}" CACHE STRING
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}" CACHE STRING
   "Flags used by the compiler during all build types")
 
 ## set RELEASE flags
 set(CMAKE_CXX_FLAGS_RELEASE "-O${RELOPTLEVEL} -DNDEBUG -DI3_COMPILE_OUT_VERBOSE_LOGGING")
+set(CMAKE_C_FLAGS_RELEASE   "${CMAKE_CXX_FLAGS_RELEASE}")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}" CACHE STRING
   "Flags used by compiler during release builds")
 
 ## set Release With Debug Info flags
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O${RELOPTLEVEL} -g -DNDEBUG -DI3_COMPILE_OUT_VERBOSE_LOGGING")
+set(CMAKE_C_FLAGS_RELWITHDEBINFO   "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}" CACHE STRING
   "Flags used by compiler during release builds")
 
