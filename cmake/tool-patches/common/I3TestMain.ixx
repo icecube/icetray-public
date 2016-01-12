@@ -1,3 +1,4 @@
+/* -*- mode: c++; -*- vim: set ft=cpp: */
 /**
    copyright  (C) 2005
    the icecube collaboration
