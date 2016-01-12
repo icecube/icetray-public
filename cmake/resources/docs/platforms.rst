@@ -109,7 +109,18 @@ The following formulae are recommended:
 * IceRec: cfitsio minuit2 suite-sparse healpix multinest rdmc
 * simulation: sprng2
 
-.. warning:: Some Homebrew formulas have Python as a dependency, so a second Python may sneak onto your computer without your knowledge. To avoid this, install formulas that depend on python with the parameter ``--build-from-source``. See `Homebrew's notes on Python`_ for further information.
+.. warning:: Newer versions of boost have broken our serialization
+   methods. This a known issue that is being worked on. In the
+   meantime it is recommended that you use boost v1.55. This can be
+   installed from Homebrew with::
+
+   brew install boost155 --with-python && brew link boost155
+
+.. warning:: Some Homebrew formulas have Python as a dependency, so a
+   second Python may sneak onto your computer without your
+   knowledge. To avoid this, install formulas that depend on python
+   with the parameter ``--build-from-source``. See `Homebrew's notes
+   on Python`_ for further information.
 
 .. _tap: https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/brew-tap.md
 .. _`Homebrew's notes on Python`: https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Homebrew-and-Python.md#why-is-homebrews-python-being-installed-as-a-dependency
@@ -449,14 +460,6 @@ that will install the necessary packages.
 To install further packages (emacs and so forth), the easiest thing to
 do is use the "Synaptic Package Manager", which you can start from menu
 ``System --> Administration``. 
-
-In order for JAVA_HOME to be set correctly, export using the following
-command (bash/sh version)::
-
-  export JAVA_HOME=/usr/lib/jvm/java-6-sun
-
-which you can set in your ``.bashrc``.
-
 
 NB: Its is *highly* recommended to use LTS ( Long-Term Support )
 releases of Ubuntu.  There are known issues with Natty Narwhal 
