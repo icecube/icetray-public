@@ -20,8 +20,8 @@
 
 # search for ROOT's Minuit2
 TOOLDEF (minuit2
-    ${ROOTSYS}/include/Minuit2
-    MnConfig.h
+    ${ROOTSYS}/include
+    Minuit2/MnConfig.h
     ${ROOTSYS}/lib
     NONE  # bin is n/a, placeholder
     Minuit2
