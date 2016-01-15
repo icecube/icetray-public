@@ -238,11 +238,6 @@ endforeach(HEADER ${ALL_HEADERS})
 #
 set(TMP_LIBRARY_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH})
 
-i3_add_pybindings(i3math
-  private/pybindings/i3math.cxx
-  USE_TOOLS boost python
-)
-
 i3_add_pybindings(icetray
   private/pybindings/module.cxx
   USE_TOOLS boost python
