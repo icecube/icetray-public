@@ -90,6 +90,8 @@ I3Frame objects have names, streams, and data (key, metadata, value).
 Every time you see a frame name, all values get merged into subsequent
 frames until you see that frame name again.
 
+Details for advanced frame mixing can be found :ref:`here <frame-mixing-details>`.
+
 I3Frame::merge
 ^^^^^^^^^^^^^^
 

@@ -520,6 +520,8 @@ the default name::
 
  I3RandomService& random = context_.Get<I3RandomService>();
 
+.. _frame-mixing-details:
+
 Frame Mixing
 ^^^^^^^^^^^^
 
