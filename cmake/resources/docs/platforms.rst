@@ -28,7 +28,13 @@ IceTray requires some additional support software to build and function. Before
 you gallop off and try to install all of the dependencies by hand, please read
 these notes in their entirety. Especially:
 
-.. warning:: Do not try to install your own Python over the perfectly good version shipped with the base system. It is very likely to end in tears. This includes the Enthought and Anaconda distributions as well as the Python formula in homebrew; they do not play nicely with IceTray. See :ref:`osxpythonsetup` for more information.
+.. warning::
+
+   Do not try to install your own Python over the perfectly good version
+   shipped with the base system. It is very likely to end in tears. This
+   includes the Enthought and Anaconda distributions as well as the Python
+   formula in homebrew; they do not play nicely with IceTray. See
+   :ref:`osxpythonsetup` for more information.
 
 Developer Tools
 """""""""""""""
@@ -166,11 +172,11 @@ supported by ROOT. By default, ROOT dictionaries are not built.
 
 .. _`original bug report`: http://code.icecube.wisc.edu/projects/icecube/ticket/796
 
-.. _osxpythonsetup:
-
 ROOT can be installed with homebrew::
 
 	brew install --build-from-source homebrew/science/root
+
+.. _osxpythonsetup:
   
 Python on OS X
 """"""""""""""
