@@ -26,7 +26,8 @@ if(NOT QT_QMAKE_EXECUTABLE)
   # first, try various paths one by one, looking for one that is recent enough
   set(_test_paths
     /usr/lib/x86_64-linux-gnu/qt4/bin
-    ${I3_PORTS}/qt-4.8.6/bin)
+    ${I3_PORTS}/qt-4.8.6/bin
+    $ENV{SROOT}/bin)
   set(QTVERSION 0)
   foreach(_test_path ${_test_paths})
     find_program(QT_QMAKE_EXECUTABLE NAMES qmake-qt4 qmake
