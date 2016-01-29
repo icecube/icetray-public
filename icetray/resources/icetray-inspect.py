@@ -156,7 +156,11 @@ def display_config(mod, category, modname=None):
 		if opts.regex and not opts.regex.match(modname):
 			return False
 		try:
+                        if opts.xml:
+                                print('<!--')
 			config = i3inspect.get_configuration(mod)
+                        if opts.xml:
+                                print('-->')
 		except RuntimeError:
 			e = sys.exc_info()[1]
 			sys.stderr.write("Error constructing '%s': %s" % (mod, e))
@@ -172,7 +176,6 @@ def display_config(mod, category, modname=None):
 			docs = ''
 
 		if opts.xml:
-                        print('-->')
 			print('<module>')
 			print('<type>%s</type>' % cgi.escape(modname))
 			print('<kind>%s</kind>' % cgi.escape(category))
@@ -209,7 +212,6 @@ for project in args:
 	
 	if opts.xml:
 		print('<project name="%s">' % project)
-                print('<!--')
 	else:
 		print('*** %s ***' % project)
 	
