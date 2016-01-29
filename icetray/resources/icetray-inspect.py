@@ -172,6 +172,7 @@ def display_config(mod, category, modname=None):
 			docs = ''
 
 		if opts.xml:
+                        print('-->')
 			print('<module>')
 			print('<type>%s</type>' % cgi.escape(modname))
 			print('<kind>%s</kind>' % cgi.escape(category))
@@ -208,6 +209,7 @@ for project in args:
 	
 	if opts.xml:
 		print('<project name="%s">' % project)
+                print('<!--')
 	else:
 		print('*** %s ***' % project)
 	
