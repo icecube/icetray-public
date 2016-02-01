@@ -91,12 +91,6 @@ using scitbx::boost_python::container_conversions::variable_capacity_policy;
 #  define HAVE_STRNLEN 1
 #endif
 
-// this is actually a seatbuilt protecting users from the subtle
-// differences between std::isnan() and C's isnan()
-#include <cmath> 
-#include <math.h> 
-using std::isnan; 
-
 #define BOOST_NO_WREGEX
 
 #ifdef NDEBUG

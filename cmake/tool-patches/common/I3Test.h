@@ -115,7 +115,7 @@ namespace I3Test {
 			const std::string& msg = "unspecified")
 
   {
-    if (isnan(expected) || isnan(actual) || isnan(distance))
+    if (std::isnan(expected) || std::isnan(actual) || std::isnan(distance))
       {
 	std::stringstream ss;
 	ss << "ENSURE_DISTANCE(" << left_txt << ", " << right_txt << ", " << distance_txt
