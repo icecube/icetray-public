@@ -261,20 +261,20 @@ TEST(e_doubles)
 
   d = NAN;
   GET_ONLY(double_param, d);
-  ENSURE(isnan(double_param));
+  ENSURE(std::isnan(double_param));
 
   d = std::numeric_limits<double>::max() * -2.;
-  ENSURE(isinf(d));
+  ENSURE(std::isinf(d));
   ENSURE(d < 0);
   GET_ONLY(double_param, d);
-  ENSURE(isinf(double_param));
+  ENSURE(std::isinf(double_param));
   ENSURE(double_param < 0);
 
   d = std::numeric_limits<double>::max() * 2.;
-  ENSURE(isinf(d));
+  ENSURE(std::isinf(d));
   ENSURE(d > 0);
   GET_ONLY(double_param, d);
-  ENSURE(isinf(double_param));
+  ENSURE(std::isinf(double_param));
 
 }
 
