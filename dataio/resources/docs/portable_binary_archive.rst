@@ -40,6 +40,11 @@ History
     Updates to be compatible with the newest version of Boost
     (1.52 at the time).
 
+2015:
+
+    Boost 1.58 makes large changes to the internals, rendering
+    our patches invalid. A new strategy is needed. For now, ban all
+    boost versions >= 1.58.
 
 The *Rules*
 -----------
@@ -449,11 +454,11 @@ OMKey
 
 Say we have an OMKey(25,45,0).  The serialization is::
 
-    0x010100000000010001000000190000002d00000000
+    0x01010000000000190000002d00000000
 
 Note that this is a little different than normal because the OMKey is not
-meant to be directly added to the frame. The object is not a pointer, and
-serializes differently to reflect that.
+meant to be directly added to the frame. The object is not an I3FrameObject,
+and serializes differently to reflect that.
 
 We break this up into pieces:
 
@@ -464,14 +469,6 @@ We break this up into pieces:
   * version_id - 1 byte = 1
   
   * object_id - 4 bytes = 0
-
-* I3FrameObject base class - 6 bytes (0x010001000000)
-
-  * tracking_id - 1 byte = 1
-
-  * version_id - 1 byte = 0
-
-  * object_id - 4 bytes = 1
 
 * string number - 4 bytes (0x19000000) = 25
 
@@ -485,8 +482,8 @@ I3VectorOMKey
 Say we have an I3VectorOMKey() with [OMKey(35,56,0),OMKey(25,45,0)]. 
 The serialization is::
 
-    0x0100000000000100000000000200000001010200000003000000230000003800
-    0x0000000400000005000000190000002d00000000
+    0x01000000000001000000000002000000010102000000230000003800
+    0x00000003000000190000002d00000000
 
 We break this up into pieces:
 
@@ -524,23 +521,15 @@ We break this up into pieces:
   
   * object_id = 2
 
-* I3FrameObject base class - 4 bytes (0x03000000)
-
-  * object_id = 3
-
 * string number - 4 bytes (0x23000000) = 35
 
 * OM number - 4 bytes (0x38000000) = 56
 
 * PMT number - 1 byte (0x00) = 0
 
-* OMKey - 4 bytes (0x040000)
+* OMKey - 4 bytes (0x030000)
 
-  * object_id = 4
-
-* I3FrameObject base class - 4 bytes (0x05000000)
-
-  * object_id = 5
+  * object_id = 3
 
 * string number - 4 bytes (0x19000000) = 25
 
