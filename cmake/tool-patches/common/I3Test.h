@@ -33,6 +33,7 @@
 #include <stdexcept>
 #include <map>
 #include <set>
+#include <cmath>
 
 namespace fs = boost::filesystem;
 namespace I3Test {
