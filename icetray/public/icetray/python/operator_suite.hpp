@@ -52,14 +52,21 @@ namespace operator_detail {
                                  name<typename TT::mapped_type>::value); \
     };                                                                  \
     template<typename TT,typename Dummy=void>                           \
-    struct chk : public boost::true_type{};                             \
+    struct chk { static bool const value = func<TT>::value; };          \
+    template<typename TT>                                               \
+    struct chk<TT,typename boost::mpl::if_c<false,typename TT::first_type,void>::type> \
+    {                                                                   \
+      static bool const value = (name<typename TT::first_type>::value && \
+                                 name<typename TT::second_type>::value); \
+    };                                                                  \
     template<typename TT>                                               \
     struct chk<TT,typename boost::mpl::if_c<false,typename TT::value_type,void>::type> \
     {                                                                   \
       static bool const value = (chkAlloc<TT>::value && chkMap<TT>::value \
-                                 && name<typename TT::value_type>::value); \
+                                 && name<typename TT::value_type>::value \
+                                 && func<TT>::value);                   \
     };                                                                  \
-    static bool const value = (chk<T>::value && func<T>::value);        \
+    static bool const value = chk<T>::value;                            \
   }
 
 HAS_OPERATOR(boost::has_equal_to, has_eq);
