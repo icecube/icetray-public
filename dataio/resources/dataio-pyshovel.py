@@ -642,7 +642,9 @@ class GotoInput(Popup):
     
     def closing_action(self):
         try:
-            f = int(self.get_edit_text())
+            f = int(self.get_edit_text())-1
+            if f < 0:
+                f = 0
         except ValueError:
             pass
         else:
