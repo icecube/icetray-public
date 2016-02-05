@@ -54,6 +54,9 @@ Command-Line Tools
    signing in with your `Apple ID`_.
 2) Download and install the latest Command Line Tools.
 
+Alternativly you can just type `xcode-select --install` at the command-line to install
+the command line tools.
+
 Xcode
 .....
 
@@ -176,6 +179,22 @@ ROOT can be installed with homebrew::
 
 	brew install --build-from-source homebrew/science/root
 
+If you get an error message like this:
+
+.. code-block::
+   Error: cannot open file "AvailabilityMacros.h" include/RConfig.h:376:
+   Warning: Error occurred during reading source files
+
+   Warning: Error occurred during dictionary source generation
+
+   !!!Removing core/base/src/G__Base1.cxx core/base/src/G__Base1.h !!!
+
+   Error: core/utils/src/rootcint_tmp: error loading headers...
+
+   make: *** [core/base/src/G__Base1.cxx] Error 1
+
+You are probabally missing the xcode command-line tools, see above for installing it.
+
 .. _osxpythonsetup:
   
 Python on OS X
@@ -241,8 +260,17 @@ to the newest version with::
 
         pip install --user --upgrade numpy scipy matplotlib
 
-Again, these will be installed in in your home directory, but will override
-the modules provided by the system.
+Unfortunately, by default pip will install these packages to a location
+where they will be found after the packages installed by the system.
+To change the search path run the following:
+
+        echo "import sys; sys.path.insert(1,'${HOME}/Library/Python/2.7/lib/python/site-packages')" >> ${HOME}/Library/Python/2.7/lib/python/site-packages/local.pth
+
+This will alter python's package search path to to look in your home
+directory site-package first before searching the system site-package
+directory. I am not sure if this is a good idea or not but it seems
+to work. 
+
 
 
 Installing with virtualenv
@@ -310,6 +338,9 @@ With a fresh install of El Capitan I was able to get IceRec and Simulation runni
 
 .. code-block:: sh
 
+	#install xcode command line tools (dont worry if it says it is already installed)
+	xcode-select --install
+	
 	#install hombebrew
 	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
@@ -325,11 +356,14 @@ With a fresh install of El Capitan I was able to get IceRec and Simulation runni
 	brew tap IceCube-SPNO/homebrew-icecube
 	brew install multinest pal rdmc suite-sparse pal sprng2
 
+	#install python packages to home home directory
 	echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> ${HOME}/Library/Python/2.7/lib/python/site-packages/homebrew.pth
-
-	export PATH="${HOME}/Library/Python/2.7/bin/:${PATH}" >> ${HOME}/.bash_profile 
+	echo 'export PATH="${HOME}/Library/Python/2.7/bin/:${PATH}"' >> ${HOME}/.bash_profile 
 	easy_install --user pip
 	pip install --user urwid sphinx ipython qtconsole tables
+
+	#install scipy and friends overriding system python packages
+	echo "import sys; sys.path.insert(1,'${HOME}/Library/Python/2.7/lib/python/site-packages')" >> ${HOME}/Library/Python/2.7/lib/python/site-packages/local.pth
 	pip install --user --upgrade numpy scipy matplotlib
 	
 
