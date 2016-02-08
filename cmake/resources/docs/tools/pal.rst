@@ -1,7 +1,7 @@
 PAL
 ===
 
-PAl stands for Positional Astronomy Library it provides standard routines
+PAL stands for Positional Astronomy Library it provides standard routines
 for astronomical calculations. IceCube's astronomical coordinate software
 `astro <../../astro/index.html>`_ requires either SLALIB or PAL to work. SLALIB is an old Fortran
 library which was translated into c, it is no longer updated and has a weird
@@ -26,7 +26,8 @@ for other systems it must be installed from source.
 Install from Source
 --------------------
 
-PAL depends on a library called ERFA which can be downloaded from github and installed:
+PAL depends on a library called ERFA which can either be downloaded from github or 
+istalled from system packages (e.g. 'sudo apt-get install liberfa-dev' on Ubuntu platforms.).
 
 .. code-block:: bash
 
@@ -37,6 +38,9 @@ PAL depends on a library called ERFA which can be downloaded from github and ins
   make
   make install
   
+For Ubuntu you may also have to install **autoconf** and **libtool**, depending on your 
+specific distribution. :
+
 PAL can be installed by downloading from github and compiling:
 
 .. code-block:: bash
