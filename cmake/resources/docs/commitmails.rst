@@ -7,12 +7,21 @@
   # Add your email address here to receive automatic email 
   # notification of commits to this project.
   # 
-  troy@resophonic.com
+  # Maintainer
   you@your.institution.edu
+  # Observer
+  someone.else@some.other.institution.edu
+
+The email of the project owner is the first entry in the list.
 
 If you are involved in development, you may want to make use of svn's
 ability to automatically notify you when someone commits to certain
-projects.
+projects.  
+
+If you are involved in development, then your email should be in 
+the **Maintainer** section.  If you just want to track what's going on,
+with no intention of helping with development, then add your email to
+the **Observer** section.
 
 On every commit to directory R in the icecube repository, subversion
 sends an email out to all the email addresses listed in all files
