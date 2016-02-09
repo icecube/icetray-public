@@ -22,6 +22,7 @@
 #ifndef I3TEST_H_INCLUDED
 #define I3TEST_H_INCLUDED
 
+#include <cmath>
 #include <string>
 #include <boost/version.hpp>
 #include <boost/preprocessor/stringize.hpp>
