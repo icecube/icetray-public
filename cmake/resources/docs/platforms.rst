@@ -115,7 +115,7 @@ this::
 The following formulae are recommended:
 
 * offline-software: boost boost-python cmake cdk gsl hdf5 libarchive qt pyqt pal doxygen wget
-* IceRec: cfitsio minuit2 suite-sparse healpix multinest rdmc
+* IceRec: cfitsio minuit2 suite-sparse healpix multinest
 * simulation: sprng2
 
 .. warning:: Newer versions of boost have broken our serialization
@@ -354,7 +354,7 @@ With a fresh install of El Capitan I was able to get IceRec and Simulation runni
 	brew install --build-from-source homebrew/science/root
 
 	brew tap IceCube-SPNO/homebrew-icecube
-	brew install multinest pal rdmc suite-sparse pal sprng2
+	brew install multinest pal suite-sparse pal sprng2
 
 	#install python packages to home home directory
 	echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> ${HOME}/Library/Python/2.7/lib/python/site-packages/homebrew.pth
