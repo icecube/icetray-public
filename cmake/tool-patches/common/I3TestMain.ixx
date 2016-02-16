@@ -46,21 +46,19 @@ using namespace std;
 using namespace I3Test;
 namespace I3Test 
 {
-  std::string 
-  tempfile(const std::string& fname, const std::string& project)
+  const std::string 
+  testfile(const std::string& fname, const std::string& project)
   {
-    const char* i3_work = getenv("I3_SRC");
+    const char* i3_work = getenv("I3_BUILD");
     ENSURE(i3_work != NULL);
-    const char* i3_platform = getenv("I3_PLATFORM");
-    ENSURE(i3_platform != NULL);
   
-    std::string dirname = i3_work + string("/") + i3_platform 
-      + "/build/" + project + "/testdata";
+    const std::string dirname = i3_work + string("/") 
+      + project + "/testdata";
 
 #if BOOST_VERSION > 104100
-    boost::filesystem::path datadir(dirname);
+    const boost::filesystem::path datadir(dirname);
 #else
-    boost::filesystem::path datadir(dirname, boost::filesystem::native);
+    const boost::filesystem::path datadir(dirname, boost::filesystem::native);
 #endif
     boost::filesystem::create_directories(datadir);
     return dirname + std::string("/") + fname;

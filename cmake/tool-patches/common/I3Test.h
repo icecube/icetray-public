@@ -180,12 +180,14 @@ namespace I3Test {
     static void local_test_routine_ ## TESTNAME() 
   
   /**
-     Creates the correct directory for temporary files to go in,
-     returns the full path. 
+     Creates "temporary" file and a directory to place it in. Temporary in
+     the sense that it is meant as a junk file for unit tests. It still
+     needs to be deleted by hand.
+     Returns the full path.
   */
 
-  std::string 
-  tempfile(const std::string& fname, const std::string& project = BOOST_PP_STRINGIZE(PROJECT));
+  const std::string 
+  testfile(const std::string& fname, const std::string& project = BOOST_PP_STRINGIZE(PROJECT));
 
 } 
 
