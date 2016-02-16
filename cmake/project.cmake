@@ -184,7 +184,7 @@ macro(i3_add_library THIS_LIB_NAME)
 
     set_target_properties(${THIS_LIB_NAME}
       PROPERTIES
-      DEFINE_SYMBOL PROJECT=${PROJECT_NAME}
+      COMPILE_DEFINITIONS PROJECT=${PROJECT_NAME}
       )
 
     add_custom_command(TARGET ${THIS_LIB_NAME}
@@ -526,7 +526,7 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
 
     set_target_properties(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
       PROPERTIES
-      DEFINE_SYMBOL PROJECT=${PROJECT_NAME}
+      COMPILE_DEFINITIONS PROJECT=${PROJECT_NAME}
       )
     if(APPLE)
       set_target_properties(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
