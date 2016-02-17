@@ -35,6 +35,7 @@ Of general interest
 
    submitting_tickets
    writing_release_notes
+   release_checklist_for_project_maintainers
    metaproject_metainfo
    development_tips
    code_reviews
