@@ -39,6 +39,7 @@ Of general interest
    development_tips
    code_reviews
    code_standards
+   complete_testing_guide
    library_standards
    netiquette
    gdb_python
