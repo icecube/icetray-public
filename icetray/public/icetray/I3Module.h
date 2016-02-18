@@ -128,7 +128,6 @@ public:
 
  protected:
 
-  // void Register(const I3Frame::Stream& when, void(I3Module::*what)(I3FramePtr));
   void Register(const I3Frame::Stream& when, boost::function<void(I3FramePtr)>);
 
   template <class T>
