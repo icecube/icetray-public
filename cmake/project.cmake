@@ -724,7 +724,6 @@ macro(i3_add_pybindings_for_lazy_people MODULENAME)
         endif()
       endif()
     endforeach()
-    message(STATUS ${MODULENAME}_MODULE_CXX)
     set_source_files_properties(${${MODULENAME}_MODULE_CXX}
       PROPERTIES
       COMPILE_DEFINITIONS CLASSES_TO_REGISTER=${${MODULENAME}_PYBINDINGS_SEQ}
