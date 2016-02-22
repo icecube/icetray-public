@@ -379,15 +379,17 @@ string(REPLACE ";" " " C_WARNING_FLAGS "${C_WARNING_FLAGS}")
 
 #
 #  Set warning suppression flags for our compilers
-#  This should work for gcc/clang/intel
+#  This should work for gcc/clang/intel. Note: we test for the warning, and
+#  assume it hass a corresponding '-Wno-*' flag.
 #
 
 include(CheckCXXCompilerFlag)
 if (NOT CXX_WARNING_SUPPRESSION_FLAGS)
-  foreach(f -Wno-deprecated -Wno-unused-variable -Wno-unused-local-typedef -Wno-unused-local-typedefs)
+  foreach(f -Wdeprecated -Wunused-variable -Wunused-local-typedef -Wunused-local-typedefs)
     string(REPLACE "-" "_" FLAG ${f})
     check_cxx_compiler_flag(${f} CXX_HAS${FLAG})
     if (CXX_HAS${FLAG})
+      string(REGEX REPLACE "^-W" "-Wno-" f ${f})
       list(APPEND CXX_WARNING_SUPPRESSION_FLAGS ${f})
     endif()
   endforeach()
