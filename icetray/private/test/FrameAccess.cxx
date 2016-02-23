@@ -50,7 +50,7 @@ TEST(test)
 
   ENSURE((bool)frame.Get<GrandpaConstPtr>("grandpa"));
   const Grandpa& grandpa = frame.Get<Grandpa>("grandpa");
-  ENSURE(&grandpa);
+  ENSURE(&grandpa==grandpa_ptr.get());
 
   ENSURE((bool)frame.Get<PaConstPtr>("pa"));
   try {
@@ -70,7 +70,7 @@ TEST(test)
   ENSURE((bool)frame.Get<GrandpaConstPtr>("son"));
 
   const Grandpa& gp = frame.Get<Daughter>("daughter");
-  ENSURE(&gp);
+  ENSURE(&gp==dynamic_cast<const Grandpa*>(daughter_ptr.get()));
 
   try {
     frame.Get<Daughter>("son");
