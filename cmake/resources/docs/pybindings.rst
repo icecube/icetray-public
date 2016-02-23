@@ -361,8 +361,10 @@ _______
 <unresolved overloaded function type> errors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You may be mystified by errors like these::
-	
+You may be mystified by errors like these:
+
+.. code-block:: none
+
 	error: No match for 'boost::python::class_<
 	    I3MCPMTResponse, boost::shared_ptr<I3MCPMTResponse>,
 	    boost::python::detail::not_specified,

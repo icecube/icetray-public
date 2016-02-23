@@ -23,7 +23,7 @@ this program:
 
 generates the following error message with gcc:
 
-.. code-block:: cpp
+.. code-block:: none
 
    foo.cxx: In function 'int main()':
    foo.cxx:9: error: no matching function for call to 'std::multimap<std::string, int, std::less<std::string>, std::allocator<std::pair<const std::string, int> > >::insert(int)'

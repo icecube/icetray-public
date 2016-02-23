@@ -7,7 +7,7 @@ you use unittest for your test cases.  It has some nice features.
 
   #!/usr/bin/env python
   import unittest
-  
+
   from icecube.dataclasses import I3Particle
 
   class I3ParticleTest(unittest.TestCase):
@@ -20,9 +20,17 @@ you use unittest for your test cases.  It has some nice features.
 
 Common pitfalls:
 
-* Not Executable 
+* Not Executable
 
-  - Before adding to svn : 'chmod +x path/to/the/test.py'  
-  - After adding to svn : 'svn ps svn:executable "*" path/to/the/test.py' (don't forget to commit this change).
+  - Before adding to svn : ``chmod +x path/to/the/test.py``
+  - After adding to svn : ``svn ps svn:executable "*"
+    path/to/the/test.py`` (don't forget to commit this change).
 
-* Not registered: Edit your project's CMakeList.txt file and add it to 'i3_test_scripts'.  Many projects just do something like 'i3_test_scripts(resources/test/*.py' which automatically registers all python scripts in 'resources/test' as tests.
+* Not registered
+
+  - Edit your project's CMakeList.txt file and add it to
+    ``i3_test_scripts``.
+  - Many projects just do something like
+    ``i3_test_scripts(resources/test/*.py)`` which automatically
+    registers all python scripts in ``resources/test`` as tests.
+

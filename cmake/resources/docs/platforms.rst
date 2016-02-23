@@ -177,11 +177,12 @@ supported by ROOT. By default, ROOT dictionaries are not built.
 
 ROOT can be installed with homebrew::
 
-	brew install --build-from-source homebrew/science/root
+   brew install --build-from-source homebrew/science/root
 
 If you get an error message like this:
 
-.. code-block::
+.. code-block:: none
+
    Error: cannot open file "AvailabilityMacros.h" include/RConfig.h:376:
    Warning: Error occurred during reading source files
 
