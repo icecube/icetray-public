@@ -6,86 +6,20 @@
 #  Jakob van Santen <vansanten@wisc.edu>
 #  and the IceCube Collaboration <http://www.icecube.wisc.edu>
 #
-import os.path
-from optparse import Option, OptionParser
-import re
-import xml.etree.ElementTree as ET
-
 
 def check_regex(option, opt, value):
 	try:
 		return re.compile(value)
 	except:
-		raise OptionValueError("'%s' is not a regular expression" % value)
-	
-Option.TYPES = Option.TYPES + ("regex",)
-Option.TYPE_CHECKER["regex"] = check_regex
-
-parser = OptionParser("usage: %prog [options] project1 project2 ...")
-parser.add_option('-a', '--all', dest='all',
-	help='Examine all projects/libraries in DIRECTORY', metavar='DIRECTORY',
-	default=None)
-parser.add_option('-R', '--regex', dest='regex', type='regex',
-	help='Print only modules/services/segments whose names match this regular expression',
-	default=None)
-parser.add_option('-s', '--sphinx', dest='sphinx', help='Output in XML',
-	action='store_true', default=False)
-parser.add_option('-x', '--xml', dest='xml', help='Output in XML',
-	action='store_true', default=False)
-parser.add_option('-o', '--output-file',dest='output',default=None,
-	help='filename to write output')
-parser.add_option('--verbose-docs', dest='verbose_docs', action='store_true',
-	help='Print long form of docs strings',
-	default=False)
-parser.add_option('--no-params', dest='names_only', action='store_true',
-	help='Print the names of modules only, not their parameters',
-	default=False)
-parser.add_option('--no-modules', dest='no_modules', action='store_true',
-	help='Skip I3Modules',
-	default=False)
-parser.add_option('--no-services', dest='no_services', action='store_true',
-	help='Skip ServiceFactories',
-	default=False)
-parser.add_option('--no-segments', dest='no_segments', action='store_true',
-	help='Skip I3Tray segments',
-	default=False)
-parser.add_option('--expand-segments', dest='expand_segments', action='store_true',
-	help='Expand I3Tray segments, printing the sequence of modules they add to the tray',
-	default=False)
-
-opts, args = parser.parse_args()
-if len(args) == 0 and opts.all is None:
-	parser.print_help()
-	parser.exit(1)
-	
-from icecube import icetray, dataclasses,tableio
-from icecube.icetray import i3inspect
-from icecube.icetray import traysegment
-import inspect, re, glob, sys, cgi
-from os.path import splitext, basename
-
-if opts.all:
-	args += [splitext(basename(fname))[0][3:] for fname in glob.glob('%s/lib*' % opts.all)]
-
-bad_services = ['I3TrayInfoServiceFactory'] # Services that crash on instantiation
-bad_libs = ['corsikaXX', 'xppc', 'ppc'] # Libraries that segfault or rudely call exit()
-
-modcount = 0
-servicecount = 0
-segmentcount = 0
-convcount = 0
-
-# keep our output clean.
-icetray.I3Logger.global_logger = icetray.I3NullLogger()
-
+		raise OptionValueError("'%s' is not a regular expression" % value)		
 
 class sphinx_writer:
 	def __init__(self,file):
 		self.file = file
 
 	def file_header(self):
-		self.file.write('IceTray Module Reference\n')
-		self.file.write('========================\n\n')
+		self.file.write(opts.title+'\n')
+		self.file.write(len(opts.title)*'='+'\n\n')
 
 	def file_footer(self):
 		pass
@@ -113,16 +47,17 @@ class sphinx_writer:
 		self.file.write('\n')
 
 	def parameters(self,config):
-		desc = config.descriptions
-		for k in config.keys():
-			try:
-				default = repr(config[k])				
-			except RuntimeError:
-				default = "<Unprintable>"
+		if config:
+			desc = config.descriptions
+			for k in config.keys():
+				try:
+					default = repr(config[k])				
+				except RuntimeError:
+					default = "<Unprintable>"
+					
+				self.file.write('-  **%s**, Default = %s, %s\n'
+								%(k,default,desc[k].replace('\n', '')))
 				
-			self.file.write('-  **%s**, Default = %s, %s\n'
-							%(k,default,desc[k].replace('\n', '')))
-
 	def segment_header(self):		
 		pass
 
@@ -174,19 +109,20 @@ class xml_writer:
 		self.file.write('</segment>\n')
 
 	def parameters(self,config):
-		desc = config.descriptions
-		for k in config.keys():
-			self.file.write('<parameter>\n')
-			self.file.write('\t<name>%s</name>\n' % cgi.escape(k))
-			self.file.write('\t<description>%s</description>\n'
+		if config:
+			desc = config.descriptions
+			for k in config.keys():
+				self.file.write('<parameter>\n')
+				self.file.write('\t<name>%s</name>\n' % cgi.escape(k))
+				self.file.write('\t<description>%s</description>\n'
 							% cgi.escape(desc[k]))
-			try:
-				default = repr(config[k])				
-			except RuntimeError:
-				default = "[Unprintable]"
-			self.file.write('\t<default_value>%s</default_value>\n'
-							% cgi.escape(default))
-			self.file.write('</parameter>\n')
+				try:
+					default = repr(config[k])				
+				except RuntimeError:
+					default = "[Unprintable]"
+				self.file.write('\t<default_value>%s</default_value>\n'
+								% cgi.escape(default))
+				self.file.write('</parameter>\n')
 
 	def segelement(self,modtype,component_name,name,args):
 		self.file.write('\t<segelement type="%s" name="%s" instance="%s">\n'
@@ -204,9 +140,10 @@ class human_writer:
 		self.file.write('**** IceTray Inspect ****\n\n')
 
 	def file_footer(self):
-		self.file.write(
-			'\n%d module, %d service, and %d tray segment configurations reported.\n'
-			% (modcount, servicecount, segmentcount))
+		#self.file.write(
+		#	'\n%d module, %d service, and %d tray segment configurations reported.\n'
+		#	% (modcount, servicecount, segmentcount))
+		pass
 
 	def project_header(self,project):
 		self.file.write('*** %s ***\n' % project)		
@@ -217,7 +154,7 @@ class human_writer:
 
 	def module_header(self,modname,category,docs):
 		self.file.write('  %s (%s)\n' % (modname, category))
-		if not opts.names_only and len(docs) > 0:
+		if not opts.names_only and docs > 0:
 			self.file.write('\n')
 			self.file.write('    ' + docs.replace('\n', '\n    '))
 			self.file.write('\n\n')
@@ -231,24 +168,25 @@ class human_writer:
 		self.file.write('\n')
 
 	def parameters(self,config):
-		desc = config.descriptions
-		if len(config.keys()) > 0:
-			self.file.write('  Parameters:\n')
-			sortedkeys = list(config.keys())
-			sortedkeys.sort()
-			for k in sortedkeys:
-				self.file.write('    %s\n' % k)
-				if  desc[k]:
-					self.file.write('      Description : %s\n' % desc[k])
-				try:
-					default = repr(config[k])
-				except RuntimeError:
-					default = "[Unpritable]"
-				self.file.write('      Default     : %s\n' % default)
-
-				self.file.write('\n')
-		else:
-			self.file.write('    (No parameters)\n')
+		if config:
+			desc = config.descriptions
+			if len(config.keys()) > 0:
+				self.file.write('  Parameters:\n')
+				sortedkeys = list(config.keys())
+				sortedkeys.sort()
+				for k in sortedkeys:
+					self.file.write('    %s\n' % k)
+					if  desc[k]:
+						self.file.write('      Description : %s\n' % desc[k])
+					try:
+						default = repr(config[k])
+					except RuntimeError:
+						default = "[Unpritable]"
+					self.file.write('      Default     : %s\n' % default)
+					
+					self.file.write('\n')
+			else:
+				self.file.write('    (No parameters)\n')
 		self.file.write('  ' + '-'*77 + '\n')
 
 
@@ -296,7 +234,7 @@ def print_segment(segment):
 	output.segment_footer()
 
 
-def get_doxygen_docstring(modulename):
+def get_doxygen_docstring(project,modulename):
 	xmlfile = os.path.join(os.environ["I3_BUILD"],"docs","doxygen",
 						   project,"xml","class"+modulename+".xml")
 	try:
@@ -317,30 +255,13 @@ def get_doxygen_docstring(modulename):
 	return doc.strip()
 	
 
-def display_config(mod, category, modname=None):
-	if modname is None:
-		modname = mod
+def display_config(mod, category, modname,config,docs):
 			
 	if opts.regex and not opts.regex.match(modname):
 		return False
-	try:
-		config = i3inspect.get_configuration(mod)
-	except RuntimeError:
-		e = sys.exc_info()[1]
-		sys.stderr.write("Error constructing '%s': %s\n" % (mod, e))
-		return False
 
-
-	if isinstance(mod, str):
-		docs = get_doxygen_docstring(modname)
-	elif inspect.getdoc(config) != None and len(inspect.getdoc(config)) > 0:
-		docs = inspect.getdoc(config)
-	elif inspect.getdoc(mod) != None and len(inspect.getdoc(mod)) > 0:
-		docs = inspect.getdoc(mod)
-	else:
-		docs = ''
-
-	if not opts.verbose_docs:
+	#print mod, category, modname,config,docs
+	if not opts.verbose_docs and docs:
 		docs = docs.strip().split('\n')[0]
 		
 	output.module_header(modname,category,docs)
@@ -363,11 +284,131 @@ def get_converters(project):
 	return converters
 
 
+def display_project(project):
+	
+	#degeneracy of the word "module" is a real problem
+	
+	projname = project.replace('-','_')
+	try:
+		pymodule = __import__('icecube.%s' % projname, globals(), locals(), [projname])
+	except ImportError:
+		try:
+			icetray.load(project, False)
+			pymodule = None
+		except RuntimeError:
+			e = sys.exc_info()[1]
+			sys.stderr.write("Ignoring '%s': %s\n" % (project, e))
+			return
+
+	modules = []
+	
+	if not opts.no_modules:
+		for mod in icetray.modules(project):
+			config =  i3inspect.module_default_config(mod)
+			docs = get_doxygen_docstring(project,mod)
+			modules.append((mod, 'C++ I3Module',mod,config,docs))
+			
+		python_modules = i3inspect.harvest_objects(pymodule, i3inspect.is_I3Module)
+		for mod,py_mod in python_modules.items():
+			config = mod(icetray.I3Context()).configuration
+			docs = inspect.getdoc(mod)
+			modules.append((mod, 'Python I3Module', py_mod,config,docs))
+			
+	if not opts.no_services:
+		for mod in icetray.services(project):
+
+			config =  i3inspect.module_default_config(mod)
+			docs = get_doxygen_docstring(project,mod)
+			modules.append((mod, 'C++ ServiceFactory',mod,config,docs))
+				
+	if not opts.no_segments:
+		segments = i3inspect.harvest_objects(pymodule, i3inspect.is_traysegment)
+		for segment,pyseg in segments.items():
+			config = i3inspect.I3HoboConfiguration.from_traysegment(segment)
+			docs = inspect.getdoc(config)
+			modules.append((segment, 'I3Tray segment', pyseg,config,docs))
+
+	if not opts.no_converters:
+		for converter in get_converters(project):
+			doc = converter.__doc__
+			convname =  pymodule.__name__ + "." + converter.__name__
+			modules.append((converter, 'TableIO converter',convname, None,doc))
+
+	if modules:
+		output.project_header(project)
+
+		for module in modules:
+			display_config(*module)
+
+		output.project_footer()
+
+from optparse import Option, OptionParser
+import re,os.path,glob
+
+Option.TYPES = Option.TYPES + ("regex",)
+Option.TYPE_CHECKER["regex"] = check_regex
+
+parser = OptionParser("usage: %prog [options] project1 project2 ...")
+parser.add_option('-a', '--all', action='store_true',
+	help='Examine all projects/libraries in DIRECTORY', metavar='DIRECTORY',
+	default=False)
+parser.add_option('-R', '--regex', dest='regex', type='regex',
+	help='Print only modules/services/segments whose names match this regular expression',
+	default=None)
+parser.add_option('-s', '--sphinx', dest='sphinx', help='Output in XML',
+	action='store_true', default=False)
+parser.add_option('-x', '--xml', dest='xml', help='Output in XML',
+	action='store_true', default=False)
+parser.add_option('-o', '--output-file',dest='output',default=None,
+	help='filename to write output')
+parser.add_option('--verbose-docs', dest='verbose_docs', action='store_true',
+	help='Print long form of docs strings',
+	default=False)
+parser.add_option('--no-params', dest='names_only', action='store_true',
+	help='Print the names of modules only, not their parameters',
+	default=False)
+parser.add_option('--no-modules', dest='no_modules', action='store_true',
+	help='Skip I3Modules',
+	default=False)
+parser.add_option('--no-services', dest='no_services', action='store_true',
+	help='Skip ServiceFactories',
+	default=False)
+parser.add_option('--no-segments', dest='no_segments', action='store_true',
+	help='Skip I3Tray segments',
+	default=False)
+parser.add_option('--expand-segments', dest='expand_segments', action='store_true',
+	help='Expand I3Tray segments, printing the sequence of modules they add to the tray',
+	default=False)
+parser.add_option('--no-converters', dest='no_converters', action='store_true',
+	help='Skip tableio segments',
+	default=False)
+parser.add_option('--title', dest='title',
+	default='IceTray Inspect',
+	help='title to place at top of output')
+
+opts, args = parser.parse_args()
+
+if opts.all:
+	files = glob.glob(os.path.join(os.environ['I3_BUILD'],'lib','*'))
+	args += [os.path.splitext(os.path.basename(fname))[0][3:] for fname in files]
+elif len(args) == 0:
+	parser.print_help()
+	parser.exit(1)
+
+import inspect, sys, cgi
+import xml.etree.ElementTree as ET
+
+from icecube import icetray, dataclasses,tableio
+from icecube.icetray import i3inspect
+from icecube.icetray import traysegment
+
+icetray.I3Logger.global_logger = icetray.I3NullLogger()
+
 if opts.output:
 	outfile = open(opts.output,'wt')
 else:
 	outfile = sys.stdout
-
+	
 if opts.sphinx:
 	output = sphinx_writer(outfile)
 elif opts.xml:
@@ -375,60 +416,8 @@ elif opts.xml:
 else:
 	output = human_writer(outfile)
 
-
 output.file_header()
-for project in args:
-	if project in bad_libs:
-		continue
+for p in sorted(set(args)):
+	display_project(p)
 	
-	try:
-		modname = project.replace('-','_')
-		module = __import__('icecube.%s' % modname, globals(), locals(), [modname])
-		py_modules = i3inspect.harvest_objects(module, i3inspect.is_I3Module)
-		traysegments = i3inspect.harvest_objects(module, i3inspect.is_traysegment)
-	except ImportError:
-		try:
-			icetray.load(project, False)
-			py_modules = []
-			traysegments = []
-		except RuntimeError:
-			e = sys.exc_info()[1]
-			sys.stderr.write("Ignoring '%s': %s\n" % (project, e))
-			continue
-		
-	cxx_modules = icetray.modules(project)
-	cxx_services = icetray.services(project)
-
-	#converters = get_converters(project)
-		
-	output.project_header(project)
-	
-	if not opts.no_modules:
-		for mod in cxx_modules:
-			if display_config(mod, 'C++ I3Module'):
-				modcount += 1 
-		for mod in py_modules:
-			if display_config(mod, 'Python I3Module', py_modules[mod]):
-				modcount += 1
-	if not opts.no_services:
-		for mod in cxx_services:
-			if mod in bad_services:
-				continue
-			if display_config(mod, 'C++ ServiceFactory'):
-				servicecount += 1
-				
-	if not opts.no_segments:
-		for segment in traysegments:
-			display_config(segment, 'I3Tray segment', traysegments[segment])
-			segmentcount += 1
-
-
-	if False:
-		for converter in converters:
-			display_config(converter, 'TableIO Converter')
-			convcount += 1
-
-	output.project_footer()
-			
 output.file_footer()
-
