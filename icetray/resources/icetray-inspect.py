@@ -256,12 +256,12 @@ def get_doxygen_docstring(project,modulename):
 	
 
 def display_config(mod, category, modname,config,docs):
-			
 	if opts.regex and not opts.regex.match(modname):
 		return False
 
-	#print mod, category, modname,config,docs
-	if not opts.verbose_docs and docs:
+	if docs is None:
+		docs = ''		
+	elif not opts.verbose_docs:
 		docs = docs.strip().split('\n')[0]
 		
 	output.module_header(modname,category,docs)
