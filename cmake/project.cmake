@@ -280,11 +280,21 @@ macro(i3_add_library THIS_LIB_NAME)
 
       set(XML_TMP ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${THIS_LIB_NAME}-inspection.xml)
       set(HTML_OUTPUT ${CMAKE_BINARY_DIR}/docs/inspect/${THIS_LIB_NAME}.html)
+      set(RST_OUTPUT ${SPHINX_DIR}/source/icetray/${THIS_LIB_NAME}.rst)
       add_custom_target(${PROJECT_NAME}-${THIS_LIB_NAME}-inspect
-	COMMAND mkdir -p ${CMAKE_BINARY_DIR}/docs/inspect
-	COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${EXECUTABLE_OUTPUT_PATH}/icetray-inspect ${THIS_LIB_NAME} --xml > ${XML_TMP}
+      	COMMAND mkdir -p ${CMAKE_BINARY_DIR}/docs/inspect
+	COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${EXECUTABLE_OUTPUT_PATH}/icetray-inspect ${THIS_LIB_NAME} --xml -o ${XML_TMP}
 	COMMAND ${XSLTPROC_BIN} ${CMAKE_SOURCE_DIR}/icetray/resources/inspect2html.xsl ${XML_TMP} > ${HTML_OUTPUT}
-	COMMENT "Generating html from icetray-inspect of ${THIS_LIB_NAME}"
+	
+	COMMAND mkdir -p ${SPHINX_DIR}/source/icetray/
+	COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh
+	${EXECUTABLE_OUTPUT_PATH}/icetray-inspect ${THIS_LIB_NAME}
+	--sphinx --subsection-headers --sphinx-functions
+	--verbose-docs
+	#--expand-segments
+	--title=""
+	-o ${RST_OUTPUT}
+	COMMENT "Generating rst from icetray-inspect of ${THIS_LIB_NAME}"
 	)
 
       add_dependencies(inspect
@@ -340,8 +350,10 @@ macro(i3_project PROJECT_NAME)
     endif (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/resources)
 
     if(ARG_DOCS_DIR)
-      file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/project-doc-links")
-      execute_process(COMMAND ln -fsn ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_DOCS_DIR} ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/project-doc-links/${PROJECT_NAME})
+      file(MAKE_DIRECTORY "${SPHINX_DIR}/source/projects")
+      execute_process(COMMAND ln -fsn
+      	${CMAKE_CURRENT_SOURCE_DIR}/${ARG_DOCS_DIR}
+        ${SPHINX_DIR}/source/projects/${PROJECT_NAME})
     endif(ARG_DOCS_DIR)
 
     if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/public/${PROJECT_NAME} AND INSTALL_HEADERS)
@@ -414,6 +426,12 @@ macro(i3_project PROJECT_NAME)
 	  execute_process(COMMAND python -m compileall -fq ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST} OUTPUT_QUIET)
 	endif (COPY_PYTHON_DIR)
       endif(ARG_USE_SETUPTOOLS)
+
+      string(REPLACE "-" "_" PYTHON_MODULE_NAME ${PROJECT_NAME})	
+      configure_file(
+	${CMAKE_SOURCE_DIR}/cmake/meta-project-docs/python_package.rst.in
+      	${SPHINX_DIR}/source/python/${PYTHON_MODULE_NAME}.rst
+      )
 
     endif(ARG_PYTHON_DIR AND IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR})
 
@@ -670,6 +688,13 @@ macro(i3_add_pybindings MODULENAME)
         #used to be here: -flat_namespace -undefined dynamic_lookup -multiply_defined suppress
         )
     endif(APPLE)
+
+    set(PYTHON_MODULE_NAME ${MODULENAME})
+    configure_file(
+      ${CMAKE_SOURCE_DIR}/cmake/meta-project-docs/python_package.rst.in
+      ${SPHINX_DIR}/source/python/${PYTHON_MODULE_NAME}.rst
+      )
+
   endif ()
 endmacro(i3_add_pybindings)
 

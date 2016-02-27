@@ -34,6 +34,8 @@ class SortedTocTree(TocTree):
     def run(self):
         rst = super(SortedTocTree, self).run()
         if 'sorted' in self.options:
+            if not 'entries' in rst[0][0]:
+                return rst            
             first = []
             if 'first' in self.options:
                 first = [x.strip() for x in self.options.get('first').split(',')]

@@ -51,10 +51,22 @@ Of general interest
 Automatically Generated Documentation
 =====================================
 
-`Doxygen <doxygen/>`_
+.. toctree::
+   :maxdepth: 1
 
-`Icetray-inspect <inspect/>`_
+   icetray_quick_reference
+   icetray_reference
+   python_reference	
+	      
+* `Icetray-inspect <inspect/>`_
+* `Doxygen <doxygen/>`_
 
+Indices and tables
+==================
+  
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
 
 About this documentation
 ========================
@@ -62,18 +74,7 @@ About this documentation
 See :ref:`Documentation`
 
 
-..  FAQ
 
-..  API Reference
-..  -------------
-.. `Epydoc-generated reference available here <../epydoc/index.html>`_
-
-
-.. Indices and tables
-   ------------------
-	* :ref:`genindex`
-	* :ref:`modindex`
-..	* :ref:`search`
 
 
 

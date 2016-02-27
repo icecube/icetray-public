@@ -1,0 +1,7 @@
+@PYTHON_MODULE_NAME@ Python API Reference
+================================================================================
+
+.. automodule:: icecube.@PYTHON_MODULE_NAME@
+    :members:
+    :undoc-members:
+    :show-inheritance:

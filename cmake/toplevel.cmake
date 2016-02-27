@@ -90,8 +90,18 @@ add_custom_target(test-bins)
 
 set(INSPECT_ALL_HTML ${CMAKE_BINARY_DIR}/doxygen/inspect/index.html)
 
+set(SPHINX_DIR "${CMAKE_BINARY_DIR}/sphinx")
+
 add_custom_target(doxygen)
-add_custom_target(inspect)
+add_custom_target(inspect
+	COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh
+	${EXECUTABLE_OUTPUT_PATH}/icetray-inspect ${THIS_LIB_NAME}
+	--sphinx --sphinx-references
+	--all --no-params
+	--title="IceTracy Quick Reference"
+	-o ${SPHINX_DIR}/source/icetray_quick_reference.rst
+	COMMENT "Generating rst from icetray-inspect of QuickReference"
+	)
 add_dependencies(inspect icetray-inspect)
 
 add_custom_target(pybindings)

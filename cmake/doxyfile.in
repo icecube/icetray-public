@@ -104,3 +104,4 @@ MATHJAX_RELPATH        = https://cdn.mathjax.org/mathjax/latest/
 # we're cheating here. glshovel doesn't actually have any doxygen docs
 EXCLUDE                = @CMAKE_CURRENT_SOURCE_DIR@/glshovel
 EXTENSION_MAPPING      = h=C++
+GENERATE_XML           = YES

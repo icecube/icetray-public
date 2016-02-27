@@ -22,18 +22,26 @@ if(SPHINX_BUILD AND NOT SPHINX_DIR_NOT_WRITABLE)
   set(SPHINX_PAPER_SIZE "letter" CACHE STRING "Size of paper when generating latex/pdf of documentation.  Options are 'letter' or 'a4'")
   set(SPHINX_EXTRA_OPTIONS "" CACHE STRING "Extra options to pass to sphinx")
 
+  add_custom_target(sphinx
+	COMMAND mkdir -p ${SPHINX_DIR}
+	COMMAND cp -r ${CMAKE_SOURCE_DIR}/cmake/meta-project-docs/* ${SPHINX_DIR}
+	COMMAND mkdir -p ${SPHINX_DIR}/build
+	)
+
   add_custom_target(html
-    COMMAND mkdir -p ${CMAKE_BINARY_DIR}/docs ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/doctrees 
-    COMMAND ln -fsn ${CMAKE_SOURCE_DIR}/docs ${CMAKE_CURRENT_SOURCE_DIR}/source/metaproject
-    COMMAND ln -fsn ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/project-doc-links ${CMAKE_CURRENT_SOURCE_DIR}/source/projects
-    COMMAND 
-    ${CMAKE_BINARY_DIR}/env-shell.sh ${SPHINX_BUILD} ${SPHINX_EXTRA_OPTIONS} 
+    COMMAND mkdir -p
+            ${CMAKE_BINARY_DIR}/docs
+            ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/doctrees 
+    COMMAND ln -fsn ${CMAKE_SOURCE_DIR}/docs
+            ${SPHINX_DIR}/source/metaproject
+    COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${SPHINX_BUILD}
+            ${SPHINX_EXTRA_OPTIONS} 
     -b html 
     -d ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/doctrees 
     -D latex_paper_size=${SPHINX_PAPER_SIZE} 
-    source
+    ${SPHINX_DIR}/source 
     ${CMAKE_BINARY_DIR}/docs
-    DEPENDS icetray-pybindings
+    DEPENDS icetray-pybindings sphinx 
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "Generating docs to ${CMAKE_BINARY_DIR}/docs")
 
@@ -44,8 +52,9 @@ if(SPHINX_BUILD AND NOT SPHINX_DIR_NOT_WRITABLE)
     -b latex 
     -d ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/doctrees 
     -D latex_paper_size=${SPHINX_PAPER_SIZE} 
-    source
+    ${SPHINX_DIR}/source 
     ${CMAKE_BINARY_DIR}/latex
+    DEPENDS icetray-pybindings sphinx 
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "Generating latex to ${CMAKE_BINARY_DIR}/latex")
 
@@ -57,10 +66,16 @@ if(SPHINX_BUILD AND NOT SPHINX_DIR_NOT_WRITABLE)
 execute_process(COMMAND svn pg svn:externals ${CMAKE_SOURCE_DIR}
   OUTPUT_FILE ${CMAKE_CURRENT_SOURCE_DIR}/source/svn-externals.txt)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/metaproject_metainfo.rst.in ${CMAKE_CURRENT_SOURCE_DIR}/source/metaproject_metainfo.rst
+  configure_file(
+    ${CMAKE_SOURCE_DIR}/cmake/meta-project-docs/metaproject_metainfo.rst.in
+    ${SPHINX_DIR}/source/metaproject_metainfo.rst
     @ONLY)
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/conf.py.in ${CMAKE_CURRENT_SOURCE_DIR}/source/conf.py
+
+  configure_file(
+    ${CMAKE_SOURCE_DIR}/cmake/meta-project-docs/conf.py.in
+    ${SPHINX_DIR}/source/conf.py
     @ONLY)
+    
 elseif(NOT SPHINX_BUILD)
   colormsg(CYAN "+-- sphinx-build *not* found, disabling build of sphinx documentation.
        See docs at http://software.icecube.wisc.edu/offline_trunk/
