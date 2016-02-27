@@ -33,18 +33,26 @@ class sphinx_writer:
 
 	def module_header(self,modname,category,docs):
 
-		self.file.write("**%s** (%s)\n\n"
-						%(modname,category))
+		if opts.sphinx_functions:
+			self.file.write(".. js:function:: %s(%s)\n\n"
+							%(modname,category))
+		elif opts.sphinx_references:
+			self.file.write("* :js:func:`%s` - "%(modname))
+		else: 
+			self.file.write("**%s** (%s)\n\n"
+							%(modname,category))
 		
 		if docs:
 			for d in docs.strip().splitlines():
 				self.file.write('    %s\n' % d)
 			self.file.write('\n')
 			
-
-
 	def module_footer(self):
 		self.file.write('\n')
+
+	def subsection(self,subsection):
+		self.file.write('%s\n'%subsection)
+		self.file.write('^'*len(subsection)+'\n\n')
 
 	def parameters(self,config):
 		if config:
@@ -100,7 +108,9 @@ class xml_writer:
 
 	def module_footer(self):
 		self.file.write('</module>\n')
-
+        
+	def subsection(self,subsection):
+		pass
 
 	def segment_header(self):
 		self.file.write('<segment>\n')
@@ -160,7 +170,10 @@ class human_writer:
 			self.file.write('\n\n')
 	def module_footer(self):
 		pass
-
+    
+	def subsection(self,subsection):
+		self.file.write('%s\n'%subsection)
+    
 	def segment_header(self):
 		self.file.write('  Equivalent to:\n')
 
@@ -287,13 +300,13 @@ def get_converters(project):
 def display_project(project):
 	
 	#degeneracy of the word "module" is a real problem
-	
 	projname = project.replace('-','_')
 	try:
-		pymodule = __import__('icecube.%s' % projname, globals(), locals(), [projname])
+		pymodule = __import__('icecube.%s' % projname,
+							  globals(), locals(), [projname])
 	except ImportError:
 		try:
-			icetray.load(project, False)
+			icetray.load(project.replace('_','-'), False)
 			pymodule = None
 		except RuntimeError:
 			e = sys.exc_info()[1]
@@ -336,10 +349,13 @@ def display_project(project):
 
 	if modules:
 		output.project_header(project)
-
+		subsection = None
+        
 		for module in modules:
+			if module[1]!=subsection:
+				subsection = module[1]
+				output.subsection(subsection+'s')
 			display_config(*module)
-
 		output.project_footer()
 
 from optparse import Option, OptionParser
@@ -355,9 +371,19 @@ parser.add_option('-a', '--all', action='store_true',
 parser.add_option('-R', '--regex', dest='regex', type='regex',
 	help='Print only modules/services/segments whose names match this regular expression',
 	default=None)
-parser.add_option('-s', '--sphinx', dest='sphinx', help='Output in XML',
+parser.add_option('-s', '--sphinx', dest='sphinx',
+    help='Output in rst',
+	action='store_true', default=False)
+parser.add_option('--sphinx-functions', dest='sphinx_functions',
+    help='output functions ',
+	action='store_true', default=False)
+parser.add_option('--sphinx-references', dest='sphinx_references',
+    help='output functions ',
 	action='store_true', default=False)
 parser.add_option('-x', '--xml', dest='xml', help='Output in XML',
+	action='store_true', default=False)
+parser.add_option('--subsection-headers', dest='subsection_headers',
+    help='headers between different types of output',
 	action='store_true', default=False)
 parser.add_option('-o', '--output-file',dest='output',default=None,
 	help='filename to write output')
@@ -376,11 +402,11 @@ parser.add_option('--no-services', dest='no_services', action='store_true',
 parser.add_option('--no-segments', dest='no_segments', action='store_true',
 	help='Skip I3Tray segments',
 	default=False)
-parser.add_option('--expand-segments', dest='expand_segments', action='store_true',
-	help='Expand I3Tray segments, printing the sequence of modules they add to the tray',
-	default=False)
 parser.add_option('--no-converters', dest='no_converters', action='store_true',
 	help='Skip tableio segments',
+	default=False)
+parser.add_option('--expand-segments', dest='expand_segments', action='store_true',
+	help='Expand I3Tray segments, printing the sequence of modules they add to the tray',
 	default=False)
 parser.add_option('--title', dest='title',
 	default='IceTray Inspect',
@@ -388,9 +414,27 @@ parser.add_option('--title', dest='title',
 
 opts, args = parser.parse_args()
 
-if opts.all:
-	files = glob.glob(os.path.join(os.environ['I3_BUILD'],'lib','*'))
-	args += [os.path.splitext(os.path.basename(fname))[0][3:] for fname in files]
+if opts.all:	
+	libdir = os.path.join(os.environ['I3_BUILD'],'lib')
+	
+	compiled_libs = glob.glob(os.path.join(libdir,'lib*'))
+	args = [os.path.splitext(os.path.basename(fname))[0][3:].replace('-','_')
+			for fname in compiled_libs]
+	
+	python_libs = glob.glob(os.path.join(libdir,'icecube','*.so'))
+	args += [os.path.splitext(os.path.basename(fname))[0]
+			 for fname in python_libs
+			 if os.path.isfile(fname)]
+	
+	python_dirs = glob.glob(os.path.join(libdir,'icecube','*'))
+	args += [os.path.basename(fname)
+			 for fname in python_dirs
+			 if os.path.isdir(fname)]
+
+	args = sorted(set(args),key=lambda s: s.lower())
+
+	print args
+
 elif len(args) == 0:
 	parser.print_help()
 	parser.exit(1)
