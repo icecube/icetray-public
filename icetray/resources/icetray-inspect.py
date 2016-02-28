@@ -300,38 +300,45 @@ def get_converters(project):
 def display_project(project):
 	
 	#degeneracy of the word "module" is a real problem
-	projname = project.replace('-','_')
+	pyproject = project.replace('-','_')
+	cppproject = project.replace('_','-')
 	try:
-		pymodule = __import__('icecube.%s' % projname,
-							  globals(), locals(), [projname])
+		pymodule = __import__('icecube.%s' %pyproject,
+							  globals(), locals(), [pyproject])
 	except ImportError:
 		try:
-			icetray.load(project.replace('_','-'), False)
+			icetray.load(cppproject, False)
 			pymodule = None
 		except RuntimeError:
 			e = sys.exc_info()[1]
-			sys.stderr.write("Ignoring '%s': %s\n" % (project, e))
+			sys.stderr.write("Ignoring '%s': %s\n" % (cppproject, e))
 			return
 
+
+	icetray.modules(cppproject)
 	modules = []
 	
 	if not opts.no_modules:
-		for mod in icetray.modules(project):
+		for mod in icetray.modules(cppproject):
 			config =  i3inspect.module_default_config(mod)
-			docs = get_doxygen_docstring(project,mod)
+			docs = get_doxygen_docstring(cppproject,mod)
 			modules.append((mod, 'C++ I3Module',mod,config,docs))
 			
 		python_modules = i3inspect.harvest_objects(pymodule, i3inspect.is_I3Module)
 		for mod,py_mod in python_modules.items():
-			config = mod(icetray.I3Context()).configuration
+			try:
+				config = mod(icetray.I3Context()).configuration
+			except:
+				sys.stderr.write("Ignoring '%s': %s\n" % (pyproject, sys.exc_info()[1]))
+				return
 			docs = inspect.getdoc(mod)
 			modules.append((mod, 'Python I3Module', py_mod,config,docs))
 			
 	if not opts.no_services:
-		for mod in icetray.services(project):
+		for mod in icetray.services(cppproject):
 
 			config =  i3inspect.module_default_config(mod)
-			docs = get_doxygen_docstring(project,mod)
+			docs = get_doxygen_docstring(cppproject,mod)
 			modules.append((mod, 'C++ ServiceFactory',mod,config,docs))
 				
 	if not opts.no_segments:
@@ -342,7 +349,7 @@ def display_project(project):
 			modules.append((segment, 'I3Tray segment', pyseg,config,docs))
 
 	if not opts.no_converters:
-		for converter in get_converters(project):
+		for converter in get_converters(pyproject):
 			doc = converter.__doc__
 			convname =  pymodule.__name__ + "." + converter.__name__
 			modules.append((converter, 'TableIO converter',convname, None,doc))
@@ -418,22 +425,19 @@ if opts.all:
 	libdir = os.path.join(os.environ['I3_BUILD'],'lib')
 	
 	compiled_libs = glob.glob(os.path.join(libdir,'lib*'))
-	args = [os.path.splitext(os.path.basename(fname))[0][3:].replace('-','_')
+	args = [os.path.splitext(os.path.basename(fname))[0][3:]
 			for fname in compiled_libs]
 	
 	python_libs = glob.glob(os.path.join(libdir,'icecube','*.so'))
-	args += [os.path.splitext(os.path.basename(fname))[0]
+	args += [os.path.splitext(os.path.basename(fname))[0].replace('_','-')
 			 for fname in python_libs
 			 if os.path.isfile(fname)]
 	
 	python_dirs = glob.glob(os.path.join(libdir,'icecube','*'))
-	args += [os.path.basename(fname)
+	args += [os.path.basename(fname).replace('_','-')
 			 for fname in python_dirs
 			 if os.path.isdir(fname)]
 
-	args = sorted(set(args),key=lambda s: s.lower())
-
-	print args
 
 elif len(args) == 0:
 	parser.print_help()
@@ -461,7 +465,7 @@ else:
 	output = human_writer(outfile)
 
 output.file_header()
-for p in sorted(set(args)):
+for p in sorted(set(args),key=lambda s: s.lower()):
 	display_project(p)
 	
 output.file_footer()
