@@ -24,7 +24,7 @@ if(SPHINX_BUILD AND NOT SPHINX_DIR_NOT_WRITABLE)
 
   add_custom_target(sphinx
 	COMMAND mkdir -p ${SPHINX_DIR}
-	COMMAND cp -r ${CMAKE_SOURCE_DIR}/cmake/meta-project-docs/* ${SPHINX_DIR}
+	COMMAND cp -rf ${CMAKE_SOURCE_DIR}/cmake/meta-project-docs/* ${SPHINX_DIR}
 	COMMAND mkdir -p ${SPHINX_DIR}/build
 	)
 

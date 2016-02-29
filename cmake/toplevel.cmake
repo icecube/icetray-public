@@ -90,7 +90,7 @@ add_custom_target(test-bins)
 
 set(INSPECT_ALL_HTML ${CMAKE_BINARY_DIR}/doxygen/inspect/index.html)
 
-set(SPHINX_DIR "${CMAKE_BINARY_DIR}/sphinx")
+set(SPHINX_DIR "${CMAKE_BINARY_DIR}/sphinx_src")
 
 add_custom_target(doxygen)
 add_custom_target(inspect
