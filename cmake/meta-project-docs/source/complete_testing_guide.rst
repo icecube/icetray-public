@@ -6,8 +6,8 @@ The purpose of these guidelines is to give some guidance as to what should be...
 Test Overview
 -------------
 In order to run the tests you must have I3_TESTDATA set.  To get the test data, in 
-your build directory, simply type :
-::
+your build directory, simply type::
+
    $ make rsync
 
 That's pretty much it.
