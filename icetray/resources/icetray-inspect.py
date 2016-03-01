@@ -33,11 +33,18 @@ class sphinx_writer:
 
 	def module_header(self,modname,category,docs):
 
+		if category in ['C++ I3Module','C++ ServiceFactory']:
+			usage = '"%s"'%modname
+			altname = modname.replace("<","_").replace(">","")
+		else:
+			usage = modname
+			altname = modname.split('.')[-1]		   			
+
 		if opts.sphinx_functions:
-			self.file.write(".. js:function:: %s(%s)\n\n"
-							%(modname,category))
+			self.file.write(".. js:function:: %s(%s)\n\n    ``%s``\n\n"
+							%(altname,category,usage))
 		elif opts.sphinx_references:
-			self.file.write("* :js:func:`%s` - "%(modname))
+			self.file.write("* :js:func:`%s` - "%(altname))
 		else: 
 			self.file.write("**%s** (%s)\n\n"
 							%(modname,category))
@@ -63,7 +70,7 @@ class sphinx_writer:
 				except RuntimeError:
 					default = "<Unprintable>"
 					
-				self.file.write('-  **%s**, Default = %s, %s\n'
+				self.file.write('    :param %s: *Default* = ``%s``, %s\n'
 								%(k,default,desc[k].replace('\n', '')))
 				
 	def segment_header(self):		
@@ -131,7 +138,7 @@ class xml_writer:
 				except RuntimeError:
 					default = "[Unprintable]"
 				self.file.write('\t<default_value>%s</default_value>\n'
-								% cgi.escape(default))
+							% cgi.escape(default))
 				self.file.write('</parameter>\n')
 
 	def segelement(self,modtype,component_name,name,args):
@@ -258,11 +265,20 @@ def get_doxygen_docstring(project,modulename):
 	root = tree.getroot()
 	comp = root.find("compounddef")
 	brief = comp.find('briefdescription')
-
+	
 	doc = ET.tostring(brief, encoding='utf8', method='text')
 
 	if opts.verbose_docs:
+
 		detail = comp.find('detaileddescription')
+
+		#remove metadata tags 
+		for c in detail:
+			for s in c.findall('simplesect'):
+				#element tree is weird and this is more complicated than it needs to be
+				for t in list(s):
+					s.remove(t)
+			
 		doc+='\n\n'+ET.tostring(detail, encoding='utf8', method='text')
 
 	return doc.strip()
@@ -305,7 +321,7 @@ def display_project(project):
 	try:
 		pymodule = __import__('icecube.%s' %pyproject,
 							  globals(), locals(), [pyproject])
-	except ImportError:
+	except ImportError,RuntimeError:
 		try:
 			icetray.load(cppproject, False)
 			pymodule = None
