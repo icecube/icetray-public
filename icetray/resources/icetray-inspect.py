@@ -315,21 +315,33 @@ def get_converters(project):
 
 def display_project(project):
 	
-	#degeneracy of the word "module" is a real problem
-	pyproject = project.replace('-','_')
-	cppproject = project.replace('_','-')
-	try:
+	if project in python_libs+python_dirs:
+		pyproject = project
+	else:
+		pyproject = None
+
+	dashproject = project.replace('_','-')
+	if project in compiled_libs:
+		cppproject = project
+	elif dashproject in compiled_libs:
+		cppproject = dashproject
+	else:
+		cppproject = ""
+
+	if pyproject:
 		pymodule = __import__('icecube.%s' %pyproject,
 							  globals(), locals(), [pyproject])
-	except ImportError,RuntimeError:
-		try:
-			icetray.load(cppproject, False)
-			pymodule = None
-		except RuntimeError:
-			e = sys.exc_info()[1]
-			sys.stderr.write("Ignoring '%s': %s\n" % (cppproject, e))
-			return
+	elif cppproject:
+		icetray.load(cppproject, False)		
+		pymodule=None
+	else:
+		sys.stderr.write("Error cant load '%s'\n" % (project))
+		sys.exit(-1)
 
+	if cppproject:
+		proj_name = cppproject
+	else:
+		proj_name = pyproject
 
 	icetray.modules(cppproject)
 	modules = []
@@ -371,7 +383,7 @@ def display_project(project):
 			modules.append((converter, 'TableIO converter',convname, None,doc))
 
 	if modules:
-		output.project_header(project)
+		output.project_header(proj_name)
 		subsection = None
         
 		for module in modules:
@@ -437,23 +449,21 @@ parser.add_option('--title', dest='title',
 
 opts, args = parser.parse_args()
 
-if opts.all:	
-	libdir = os.path.join(os.environ['I3_BUILD'],'lib')
-	
-	compiled_libs = glob.glob(os.path.join(libdir,'lib*'))
-	args = [os.path.splitext(os.path.basename(fname))[0][3:]
-			for fname in compiled_libs]
-	
-	python_libs = glob.glob(os.path.join(libdir,'icecube','*.so'))
-	args += [os.path.splitext(os.path.basename(fname))[0].replace('_','-')
-			 for fname in python_libs
-			 if os.path.isfile(fname)]
-	
-	python_dirs = glob.glob(os.path.join(libdir,'icecube','*'))
-	args += [os.path.basename(fname).replace('_','-')
-			 for fname in python_dirs
-			 if os.path.isdir(fname)]
+libdir = os.path.join(os.environ['I3_BUILD'],'lib')
 
+compiled_libs = [os.path.splitext(os.path.basename(fname))[0][3:]
+				 for fname in glob.glob(os.path.join(libdir,'lib*'))]
+	
+python_libs = [os.path.splitext(os.path.basename(fname))[0]
+			   for fname in glob.glob(os.path.join(libdir,'icecube','*.so'))
+			   if os.path.isfile(fname)]
+	
+python_dirs = [os.path.basename(fname)
+			   for fname in glob.glob(os.path.join(libdir,'icecube','*'))
+			   if os.path.isdir(fname)]
+
+if opts.all:	
+	args = compiled_libs + python_libs + python_dirs
 
 elif len(args) == 0:
 	parser.print_help()
@@ -481,7 +491,11 @@ else:
 	output = human_writer(outfile)
 
 output.file_header()
-for p in sorted(set(args),key=lambda s: s.lower()):
+
+args = sorted(set([a.replace('-','_') for a in args]),
+			  key=lambda s:s.lower())
+
+for p in args:
 	display_project(p)
 	
 output.file_footer()
