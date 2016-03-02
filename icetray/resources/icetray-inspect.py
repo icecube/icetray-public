@@ -41,10 +41,10 @@ class sphinx_writer:
 			altname = modname.split('.')[-1]		   			
 
 		if opts.sphinx_functions:
-			self.file.write(".. js:function:: %s(%s)\n\n    ``%s``\n\n"
-							%(altname,category,usage))
+			self.file.write(".. js:data:: %s\n\n    ``%s`` *(%s)*\n\n"
+							%(altname,usage,category))
 		elif opts.sphinx_references:
-			self.file.write("* :js:func:`%s` *(%s)* "%(altname,category))
+			self.file.write("* :js:data:`%s` *(%s)* "%(altname,category))
 		else: 
 			self.file.write("**%s** (%s)\n\n"
 							%(modname,category))
