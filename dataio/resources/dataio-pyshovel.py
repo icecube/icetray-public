@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+import string
 import optparse
 from functools import partial
 
@@ -50,8 +51,13 @@ class UI:
                 ('right', 'Go forward one frame'),
                 ('up', 'Select previous frame object'),
                 ('down', 'Select next frame object'),
+                ('home', 'Go to first frame'),
+                ('end', 'Go to last frame'),
                 ('select', 'Inspect the selected frame object'),
                 ('xml', 'Inspect the selected frame object (XML output)'),
+                ('search', 'Search the inspected text'),
+                ('search_reverse', 'Search the inspected text in reverse direction'),
+                ('search_next', 'Find the next item while searching'),
                 ('escape', 'Exit help screen or dialog box, or quit program'),
                 ('interact', 'Open an IPython session with the current frame in scope with name "frame"'),
                 ('libs', 'Import an additional library'),
@@ -65,16 +71,22 @@ class UI:
             'xml': ('x','X'),
             #'save_xml': ('s','S'),
             'escape': ('esc','q','Q'),
-            'left': ('left','h'),
-            'right': ('right','l'),
-            'up': ('up','k'),
-            'down': ('down','j'),
+            'left': ('left',),
+            'right': ('right',),
+            'up': ('up',),
+            'down': ('down',),
+            'home': ('home',),
+            'end': ('end',),
             'interact': ('i', 'I'),
+            'search': ('/',),
+            'search_reverse': ('?',),
+            'search_next': ('n',),
+            'search_next_reverse': ('N',),
             'libs': ('L',),
             'goto':('g','G'),
             'gotoevent':('e','E'),
             'writeframe':('w','W'),
-            'help':('?',),
+            'help':('h','H'),
            }
 
     fg = 'light gray'
@@ -150,15 +162,134 @@ class FrameObjectItem(urwid.Columns):
     def selectable( self ):
         return True
 
+class Searcher():
+    def __init__(self, listbox, line=-1, direction='forward'):
+        if direction == 'forward':
+            self.direction = 1
+        elif direction == 'backward':
+            self.direction = -1
+        else:
+            raise Exception('bad direction')
+        self.line_number = line
+        self.listbox = listbox
+        self.contents = listbox.message
+        self.text = ''
+        self.writing = True
+
+    def reverse(self):
+        if self.direction == -1:
+            self.direction = 1
+        else:
+            self.direction = -1
+
+    def status(self):
+        if self.direction == -1:
+            return '?'+self.text
+        else:
+            return '/'+self.text
+
+    def highlight(self,line):
+        min_line = 0 if line < 100 else line-100
+        max_line = line+100 if line+100 < len(self.contents) else len(self.contents)
+        try:
+            for i in range(min_line,max_line):
+                highlight = []
+                if not self.text:
+                    highlight.extend([self.contents[i],None])
+                else:
+                    for p in self.contents[i].split(self.text):
+                        highlight.append(p)
+                        highlight.append(('hilite',self.text))
+                self.listbox.body[i].set_text(highlight[:-1])
+        except Exception:
+            pass
+
+    def find(self):
+        self.writing = False
+        line = self.line_number+self.direction
+        found = False
+        while not found and line < len(self.contents):
+            found = self.text in self.contents[line]
+            if not found:
+                line += self.direction
+        if not found:
+            raise IndexError()
+        # update line
+        self.highlight(line)
+        if line != self.line_number:
+            self.line_number = line
+            self.listbox.set_focus(self.line_number)
+            self.listbox.set_focus_valign('top')
+
 class ListBoxReporter(urwid.ListBox):
-    
     signals = ['update_status']
-    
-    def __init__(self,contents):
+
+    def __init__(self,contents,message=None,usefocusposition=False):
         super(ListBoxReporter,self).__init__(contents)
-    
+        self.message = message
+        self.search = None
+        self.usefocusposition=usefocusposition
+
+    def get_position(self,size):
+        if self.usefocusposition:
+            return self.focus_position
+        else:
+            ret = super(ListBoxReporter,self).calculate_visible(size, self.focus is not None)[1]
+            return self.focus_position-(len(ret[1]) if ret else 0)
+
+    def keypress( self, size, key ):
+        if (not self.search or not self.search.writing) and key in UI.keys['search']:
+            self.search = Searcher(self,line=self.get_position(size),direction='forward')
+            urwid.emit_signal(self,'update_status','/')
+            return
+        elif (not self.search or not self.search.writing) and key in UI.keys['search_reverse']:
+            self.search = Searcher(self,line=self.get_position(size),direction='backward')
+            urwid.emit_signal(self,'update_status','?')
+            return
+        elif self.search:
+            if (((not self.search.writing) and key in UI.keys['search_next'])
+                or (self.search.writing and key == 'enter')):
+                if not self.search.text:
+                    self.search.highlight(self.search.line_number)
+                    self.search = None
+                    status = ':'
+                else:
+                    try:
+                        self.search.find()
+                        status = ':'
+                    except Exception:
+                        self.search = None
+                        status = 'Pattern not found'
+            elif (not self.search.writing) and key in UI.keys['search_next_reverse']:
+                try:
+                    self.search.reverse()
+                    self.search.find()
+                    status = ':'
+                except Exception:
+                    self.search = None
+                    status = 'Pattern not found'
+            elif self.search.writing and key == 'backspace':
+                if not self.search.text:
+                    self.search = None
+                    status = ':'
+                else:
+                    self.search.text = self.search.text[:-1]
+                    status = self.search.status()
+            elif self.search.writing and key in string.printable:
+                self.search.text += key
+                status = self.search.status()
+            else:
+                self.search = None
+                return super(ListBoxReporter,self).keypress(size,key);
+            urwid.emit_signal(self,'update_status',status)
+            return None
+        return super(ListBoxReporter,self).keypress(size,key);
+
     def calculate_visible(self, size, focus=False):
         ret = super(ListBoxReporter,self).calculate_visible(size, focus)
+        if self.search and not self.search.writing:
+            line = self.focus_position-(len(ret[1][1]) if ret[1] else 0)
+            self.search.highlight(line)
         try:
             middle,top,bottom = ret
             if middle is None:
@@ -167,26 +298,27 @@ class ListBoxReporter(urwid.ListBox):
                 row_offset,w,pos,rows,c = middle
                 trim_top, above = top
                 trim_bottom, below = bottom
-                
+
                 total_len = len(self.body)
-                
+
                 n_top_hidden = pos-len(above)
                 n_bottom_hidden = total_len-pos-len(below)-1
-                
-                status = 'scroll: {pos:>5}  '
-                format_args = {'pos':pos}
-                if n_top_hidden == 0 and n_bottom_hidden == 0:
-                    status = ''
-                    format_args = {}
-                    #status += 'All'
-                elif n_top_hidden == 0:
-                    status += 'Top'
-                elif n_bottom_hidden == 0:
-                    status += 'Bot'
-                else:
-                    status += '{percent:2d}%'
-                    format_args['percent'] = int(pos*100/total_len)
-                urwid.emit_signal(self,'update_status',status.format(**format_args))
+
+                if not self.search:
+                    status = 'scroll: {pos:>5}  '
+                    format_args = {'pos':pos}
+                    if n_top_hidden == 0 and n_bottom_hidden == 0:
+                        status = ''
+                        format_args = {}
+                        #status += 'All'
+                    elif n_top_hidden == 0:
+                        status += 'Top'
+                    elif n_bottom_hidden == 0:
+                        status += 'Bot'
+                    else:
+                        status += '{percent:2d}%'
+                        format_args['percent'] = int(pos*100/total_len)
+                    urwid.emit_signal(self,'update_status',status.format(**format_args))
         except Exception as e:
             print('%r'%e)
             pass
@@ -208,7 +340,13 @@ class FrameViewer(urwid.Frame):
         header = urwid.Pile([ urwid.AttrMap( self.mkcols( 'Key:', 'Type:', 'Contains:', 'Bytes:', plain_columns = True ), 'list_header') ])
         contents = urwid.SimpleListWalker(self.mkcontents())
         urwid.connect_signal(contents, 'modified', self.modified)
-        self.listbox = ListBoxReporter(contents)
+        message = []
+        for x in contents:
+            cols = []
+            for y in x.original_widget.contents:
+                cols.append(y[0].text)
+            message.append(' '.join(cols))
+        self.listbox = ListBoxReporter(contents,message=message,usefocusposition=True)
         if self.key >= 0 and self.key < len(contents):
             self.listbox.set_focus(self.key)
         urwid.connect_signal(self.listbox, 'update_status', self.update_status)
@@ -271,7 +409,15 @@ class FrameViewer(urwid.Frame):
             self.key = key
 
         del self.listbox.body[:]
-        self.listbox.body.extend(self.mkcontents())
+        contents = self.mkcontents()
+        self.listbox.body.extend(contents)
+        message = []
+        for x in contents:
+            cols = []
+            for y in x.original_widget.contents:
+                cols.append(y[0].text)
+            message.append(' '.join(cols))
+        self.listbox.message = message
         if self.key >= 0 and self.key < len(self.listbox.body):
             self.listbox.set_focus(self.key)
 
@@ -298,7 +444,8 @@ class FrameViewer(urwid.Frame):
             message = i3pprint.format_xml( i3frame, i3key )
         else:
             message = i3pprint.format_detail( i3frame, i3key )
-        listbox = ListBoxReporter( urwid.SimpleListWalker([urwid.Text( m ) for m in message.split('\n')]) )
+        listbox = ListBoxReporter( urwid.SimpleListWalker([urwid.Text(m) for m in message.split('\n')]),
+                                   message=message.split('\n') )
         urwid.connect_signal(listbox, 'update_status', self.update_status)
         msgbox = urwid.LineBox( listbox,
                                 'Contents of key {0}'.format( i3key ) , **self.linebox_kw)
@@ -317,7 +464,7 @@ class FrameViewer(urwid.Frame):
                 self.overlay = None
             if key in UI.keys['left']:
                 urwid.emit_signal( self, 'goto_matching_frame', -1 )
-            if key in UI.keys['right']:
+            elif key in UI.keys['right']:
                 urwid.emit_signal( self, 'goto_matching_frame', 1 )
             return None
         else:
@@ -772,16 +919,23 @@ class ViewerMain(urwid.Frame):
     def select_frame(self, frame):
         '''
         Attempt to access the frame'th I3Frame in the file.  If 'frame' is
-        negative or otherwise invalid, do nothing
+        negative, access in reverse order. If 'frame' is invalid, do nothing.
         '''
         if frame is None or frame < 0 or frame == self.active_view: 
             return
+        if frame == 'end':
+            frame = -1
+
         # rather than checking against the maximum length of the list,
         # which is slow for sequential files, just try to access the frame
         try:
             self.framelist[frame]
         except IndexError:
             return
+
+        if frame < 0:
+            # reverse direction
+            frame = len(self.framelist)+frame
 
         # iterate through the framelist to determine the frame hierarchy
         if frame < self.active_view:
@@ -889,6 +1043,10 @@ class ViewerMain(urwid.Frame):
             self.select_frame( self.active_view-1)
         elif input in UI.keys['right']:
             self.select_frame( self.active_view+1 )
+        elif input in UI.keys['home']:
+            self.select_frame(0)
+        elif input in UI.keys['end']:
+            self.select_frame('end')
         elif input in UI.keys['up']:
             if self.key > 0:
                 self.key -= 1
