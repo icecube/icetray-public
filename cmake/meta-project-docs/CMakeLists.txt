@@ -22,12 +22,6 @@ if(SPHINX_BUILD AND NOT SPHINX_DIR_NOT_WRITABLE)
   set(SPHINX_PAPER_SIZE "letter" CACHE STRING "Size of paper when generating latex/pdf of documentation.  Options are 'letter' or 'a4'")
   set(SPHINX_EXTRA_OPTIONS "" CACHE STRING "Extra options to pass to sphinx")
 
-  add_custom_target(sphinx
-	COMMAND mkdir -p ${SPHINX_DIR}
-	COMMAND cp -rf ${CMAKE_SOURCE_DIR}/cmake/meta-project-docs/* ${SPHINX_DIR}
-	COMMAND mkdir -p ${SPHINX_DIR}/build
-	)
-
   add_custom_target(html
     COMMAND mkdir -p
             ${CMAKE_BINARY_DIR}/docs
