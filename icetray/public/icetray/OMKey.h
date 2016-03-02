@@ -104,8 +104,14 @@ class OMKey
     if(omNumber_>=61 && omNumber_<=64) return true;
     else return false;
   }
-  
 
+  /**
+   * bool function: is it a scintillator DOM?
+   */
+  bool IsScintillator() const {
+    if(omNumber_>=65 && omNumber_<=66) return true;
+    else return false;
+  }
 
   /**
    * equality operator.  
