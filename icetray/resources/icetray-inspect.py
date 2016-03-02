@@ -44,7 +44,7 @@ class sphinx_writer:
 			self.file.write(".. js:function:: %s(%s)\n\n    ``%s``\n\n"
 							%(altname,category,usage))
 		elif opts.sphinx_references:
-			self.file.write("* :js:func:`%s` - "%(altname))
+			self.file.write("* :js:func:`%s` *(%s)* "%(altname,category))
 		else: 
 			self.file.write("**%s** (%s)\n\n"
 							%(modname,category))
@@ -387,7 +387,7 @@ def display_project(project):
 		subsection = None
         
 		for module in modules:
-			if module[1]!=subsection:
+			if opts.subsection_headers and module[1]!=subsection:
 				subsection = module[1]
 				output.subsection(subsection+'s')
 			display_config(*module)
