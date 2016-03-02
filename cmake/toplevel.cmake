@@ -87,12 +87,13 @@ include(tools)
 include(project)
 
 add_custom_target(test-bins)
+add_custom_target(pybindings)
 
+## these doxygen settings need to happen before configuring projects
 set(INSPECT_ALL_HTML ${CMAKE_BINARY_DIR}/doxygen/inspect/index.html)
-
 set(SPHINX_DIR "${CMAKE_BINARY_DIR}/sphinx_src")
-
 add_custom_target(doxygen)
+
 add_custom_target(inspect
 	COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh
 	${EXECUTABLE_OUTPUT_PATH}/icetray-inspect ${THIS_LIB_NAME}
@@ -101,15 +102,8 @@ add_custom_target(inspect
 	--title="IceTracy Quick Reference"
 	-o ${SPHINX_DIR}/source/icetray_quick_reference.rst
 	COMMENT "Generating rst from icetray-inspect of QuickReference"
+    DEPENDS ${CMAKE_BINARY_DIR}/bin/icetray-inspect
 	)
-add_dependencies(inspect icetray-inspect)
-
-add_custom_target(pybindings)
-add_dependencies(doxygen inspect)
-
-add_custom_target(docs)
-add_dependencies(docs doxygen inspect html)
-
 #
 # Tarball target
 #
@@ -261,6 +255,21 @@ foreach(subdir ${SUBDIRS})
   exec_program(test ARGS -h ${CMAKE_BINARY_DIR}/${pname}/resources -a -e ${CMAKE_BINARY_DIR}/${pname}/resources || ln -snf ${CMAKE_SOURCE_DIR}/${pname}/resources ${CMAKE_BINARY_DIR}/${pname}/resources
     OUTPUT_VARIABLE DEV_NULL)
 endforeach(subdir ${SUBDIRS})
+
+## documentation targets
+add_custom_target(inspect-docs)
+add_dependencies(inspect-docs inspect)
+
+add_custom_target(doxygen-docs)
+add_dependencies(doxygen-docs doxygen)
+
+add_custom_target(html-docs)
+add_dependencies(html-docs html)
+
+add_custom_target(docs)
+add_dependencies(inspect-docs doxygen-docs)
+add_dependencies(html-docs inspect-docs)
+add_dependencies(docs html-docs)
 
 #
 # env-shell.sh
