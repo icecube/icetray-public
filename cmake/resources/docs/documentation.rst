@@ -11,7 +11,7 @@ Requirements
 A recent version of sphinx is required.  The easiest way to install
 this version is::
 
-   easy_install -U Sphinx
+   pip install --upgrade Sphinx
 
 We use automatically-generated "doxyen" for C++ code-level
 documentation and reStructuredText (rst, the standard for Python
