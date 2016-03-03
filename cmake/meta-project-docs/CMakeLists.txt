@@ -24,8 +24,11 @@ if(SPHINX_BUILD AND NOT SPHINX_DIR_NOT_WRITABLE)
 
   add_custom_target(html
     COMMAND mkdir -p
+    	    ${SPHINX_DIR} 
+    	    ${SPHINX_DIR}/build 
             ${CMAKE_BINARY_DIR}/docs
-            ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/doctrees 
+            ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/doctrees
+    COMMAND cp -rf ${CMAKE_SOURCE_DIR}/cmake/meta-project-docs/* ${SPHINX_DIR}	   
     COMMAND ln -fsn ${CMAKE_SOURCE_DIR}/docs
             ${SPHINX_DIR}/source/metaproject
     COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${SPHINX_BUILD}
@@ -35,7 +38,6 @@ if(SPHINX_BUILD AND NOT SPHINX_DIR_NOT_WRITABLE)
     -D latex_paper_size=${SPHINX_PAPER_SIZE} 
     ${SPHINX_DIR}/source 
     ${CMAKE_BINARY_DIR}/docs
-    DEPENDS icetray-pybindings sphinx 
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "Generating docs to ${CMAKE_BINARY_DIR}/docs")
 
@@ -48,7 +50,6 @@ if(SPHINX_BUILD AND NOT SPHINX_DIR_NOT_WRITABLE)
     -D latex_paper_size=${SPHINX_PAPER_SIZE} 
     ${SPHINX_DIR}/source 
     ${CMAKE_BINARY_DIR}/latex
-    DEPENDS icetray-pybindings sphinx 
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "Generating latex to ${CMAKE_BINARY_DIR}/latex")
 
