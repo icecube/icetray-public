@@ -65,10 +65,6 @@ register_pointer_conversions()
   implicitly_convertible<boost::shared_ptr<T>, boost::shared_ptr<I3FrameObject> >();
   implicitly_convertible<boost::shared_ptr<T>, boost::shared_ptr<const T> >();
   implicitly_convertible<boost::shared_ptr<T>, boost::shared_ptr<const I3FrameObject> >();
-
-  //  implicitly_convertible<shared_ptr<I3FrameObject>, shared_ptr<T> >();
-  //  implicitly_convertible<shared_ptr<const I3FrameObject>, shared_ptr<const T> >();
-  //  boost::python::register_ptr_to_python<boost::shared_ptr<T> >();
 }
 
 template <typename T> 
