@@ -322,6 +322,21 @@ if(USE_GFILT)
 endif(USE_GFILT)
 
 #
+# include-what-you-use
+#
+if(USE_IWYU AND (CMAKE_BUILD_TYPE MATCHES "Debug"))
+    find_program(IWYU_PROGRAM NAMES "iwyu" "include-what-you-use" HINTS ENV PATH)
+    if(IWYU_PROGRAM)
+        message(STATUS "iwyu found at ${IWYU_PROGRAM}")
+    else()
+        message(STATUS "iwyu not found.")
+        set(USE_IWYU OFF)
+    endif()
+else()
+set(USE_IWYU OFF)
+endif()
+
+#
 # Get compiler information
 #
 

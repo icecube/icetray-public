@@ -135,7 +135,7 @@ macro(i3_add_library THIS_LIB_NAME)
     #
     parse_arguments(${THIS_LIB_NAME}_ARGS
       "USE_TOOLS;USE_PROJECTS;ROOTCINT;INSTALL_DESTINATION;LINK_LIBRARIES;COMPILE_FLAGS"
-      "NOT_INSPECTABLE;MODULE;EXCLUDE_FROM_ALL;WITHOUT_I3_HEADERS;NO_DOXYGEN"
+      "NOT_INSPECTABLE;MODULE;EXCLUDE_FROM_ALL;WITHOUT_I3_HEADERS;NO_DOXYGEN;IWYU"
       ${ARGN}
       )
 
@@ -186,6 +186,13 @@ macro(i3_add_library THIS_LIB_NAME)
       PROPERTIES
       COMPILE_DEFINITIONS PROJECT=${PROJECT_NAME}
       )
+
+    if(${THIS_LIB_NAME}_ARGS_IWYU AND USE_IWYU)
+      set_target_properties(${THIS_LIB_NAME}
+        PROPERTIES
+        CXX_INCLUDE_WHAT_YOU_USE ${IWYU_PROGRAM}
+        )
+    endif()
 
     add_custom_command(TARGET ${THIS_LIB_NAME}
       PRE_LINK
@@ -641,7 +648,7 @@ macro(i3_add_pybindings MODULENAME)
     #
 
     parse_arguments(${MODULENAME}_ARGS
-        "USE_PROJECTS;USE_TOOLS;LINK_LIBRARIES"
+        "USE_PROJECTS;USE_TOOLS;LINK_LIBRARIES;IWYU"
       ${ARGN}
       )
 
@@ -668,6 +675,13 @@ macro(i3_add_pybindings MODULENAME)
       COMPILE_FLAGS "-include ${I3_UBER_HEADER}"
       LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}/icecube
       )
+
+    if(${MODULENAME}_ARGS_IWYU AND USE_IWYU)
+      set_target_properties(${MODULENAME}
+        PROPERTIES
+        CXX_INCLUDE_WHAT_YOU_USE ${IWYU_PROGRAM}
+        )
+    endif()
 
     add_dependencies(pybindings ${MODULENAME}-pybindings)
     use_pybindings("${MODULENAME}-pybindings"
