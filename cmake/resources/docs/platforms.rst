@@ -123,6 +123,7 @@ The following formulae are recommended:
    meantime it is recommended that you use boost v1.55. This can be
    installed from Homebrew with::
 
+       brew tap homebrew/versions
        brew install boost155 --with-python && brew link boost155
 
 .. warning:: Some Homebrew formulas have Python as a dependency, so a
