@@ -1,6 +1,6 @@
 .. index:: CmakeIndex
-.. _CmakeIndex:
 
+.. _cmake:
 
 CMake: icetray's build system
 =============================
