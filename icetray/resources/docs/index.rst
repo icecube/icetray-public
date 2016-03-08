@@ -4,6 +4,8 @@
 ..  $HeadURL$
 ..  $Id$
 
+.. _icetray:
+
 Icetray
 =======
 
