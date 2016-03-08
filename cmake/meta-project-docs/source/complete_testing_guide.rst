@@ -77,3 +77,4 @@ locally, read on.
    :titlesonly:
 
    test_guides/testing_coverage
+   test_guides/testing_python_coverage
