@@ -1,4 +1,4 @@
-.. -*- mode:rst mode:flyspell mode: fci mode: auto-fill -*-
+.. -*- mode:rst; mode:flyspell; mode:fci; mode:auto-fill -*-
 
 Running Coverage Locally
 ========================
@@ -45,7 +45,7 @@ For Scientific Linux (or CentOS, or Fedora)::
   $ yum install lcov
 
 Once that's done we can get to work. We'll need to build the bits we
-want to get a report on (`Icetray`_ and :ref:`dataclasses`), make sure our
+want to get a report on (:ref:`icetray` and :ref:`dataclasses`), make sure our
 stats are zeroed out, run the tests, collect our stats, and finally
 generate the report.
 
