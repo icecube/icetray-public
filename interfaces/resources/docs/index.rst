@@ -1,3 +1,5 @@
+.. _interfaces:
+
 Interfaces Documentation
 ========================
 The interfaces project is designed to be a holder for generic 
