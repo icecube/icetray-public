@@ -402,8 +402,9 @@ add_custom_target(coverage
   COMMAND lcov -b ../ -d . -z
   COMMAND lcov -b ../ -d . -c -i -o test_base.info
   COMMAND ./env-shell.sh ctest -j2
-  COMMAND lcov -b ../ -d . -c -o test.info
-  COMMAND lcov -r test.info '/usr/include/*' '$ENV{I3_PORTS}/*' -o reports.info
+  COMMAND lcov -b ../ -d . -c -o test_run.info
+  COMMAND lcov -b ../ -d . -a test_base.info -a test_run.info -o test_total.info
+  COMMAND lcov -r test_total.info '/usr/include/*' '$ENV{I3_PORTS}/*' '*/numpy' '/usr/lib/gcc/*' -o reports.info
   COMMAND genhtml --legend -o ../output/`date +%Y-%m-%d` reports.info
   COMMAND rm -f ../output/00_LATEST \; ln -sf `ls -1tr ../output |tail -1` ../output/00_LATEST
 )
