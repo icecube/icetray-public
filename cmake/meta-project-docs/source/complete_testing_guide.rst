@@ -69,4 +69,11 @@ Check out the last coverage report to see what kind of coverage your project has
 `Latest Coverage Report <http://software.icecube.wisc.edu/coverage/00_LATEST/>`_
 
 Coverage builds are run weekly, so if you want to see the effect your test had 
-on your project's coverage, you'll need to be patient.
+on your project's coverage, you'll need to be patient. If you don't
+want to be patient, and would rather generate coverage reports
+locally, read on.
+
+.. toctree::
+   :titlesonly:
+
+   test_guides/testing_coverage
