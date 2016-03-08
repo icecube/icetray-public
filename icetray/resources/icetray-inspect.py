@@ -24,9 +24,10 @@ class sphinx_writer:
 	def file_footer(self):
 		pass
 		
-	def project_header(self,project):
+	def project_header(self,project,loadstr):
 		self.file.write('Project %s\n' % project)
 		self.file.write('-'*(len(project)+8)+'\n\n')
+		self.file.write("Invoke with: ``%s``\n\n"%loadstr)
 
 	def project_footer(self):
 		pass
@@ -44,7 +45,7 @@ class sphinx_writer:
 			self.file.write(".. js:data:: %s\n\n    ``%s`` *(%s)*\n\n"
 							%(altname,usage,category))
 		elif opts.sphinx_references:
-			self.file.write("* :js:data:`%s` *(%s)* "%(altname,category))
+			self.file.write("* :js:data:`%s` *(%s)* - "%(altname,category))
 		else: 
 			self.file.write("**%s** (%s)\n\n"
 							%(modname,category))
@@ -101,7 +102,7 @@ class xml_writer:
 	def file_footer(self):
 		self.file.write('</icetray-inspect>\n')	
 		
-	def project_header(self,project):
+	def project_header(self,project,loadstr):
 		self.file.write('<project name="%s">\n' % project)
 
 	def project_footer(self):
@@ -162,9 +163,10 @@ class human_writer:
 		#	% (modcount, servicecount, segmentcount))
 		pass
 
-	def project_header(self,project):
+	def project_header(self,project,loadstr):
 		self.file.write('*** %s ***\n' % project)		
 		self.file.write('-'*79+'\n')
+		self.file.write('Invoke with: "%s"\n'%loadstr)
 		
 	def project_footer(self):
 		pass
@@ -331,9 +333,11 @@ def display_project(project):
 	if pyproject:
 		pymodule = __import__('icecube.%s' %pyproject,
 							  globals(), locals(), [pyproject])
+		loadstr = "import icecube.%s"%pyproject
 	elif cppproject:
 		icetray.load(cppproject, False)		
 		pymodule=None
+		loadstr = "icetray.load('%s',False)"%cppproject
 	else:
 		sys.stderr.write("Error cant load '%s'\n" % (project))
 		sys.exit(-1)
@@ -342,7 +346,7 @@ def display_project(project):
 		proj_name = cppproject
 	else:
 		proj_name = pyproject
-
+		
 	icetray.modules(cppproject)
 	modules = []
 	
@@ -382,8 +386,9 @@ def display_project(project):
 			convname =  pymodule.__name__ + "." + converter.__name__
 			modules.append((converter, 'TableIO converter',convname, None,doc))
 
+
 	if modules:
-		output.project_header(proj_name)
+		output.project_header(proj_name,loadstr)
 		subsection = None
         
 		for module in modules:

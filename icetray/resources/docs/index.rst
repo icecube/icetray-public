@@ -52,6 +52,5 @@ Detailed Documentation:
    qframes
    i3podholder
    I3Tray
-   icecube.icetray
 
 Also see the `doxygen <../../doxygen/icetray/index.html>`_ docs.

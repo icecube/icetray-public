@@ -562,6 +562,7 @@ In Python
 ^^^^^^^^^
 
 .. class:: icecube.icetray.I3Frame
+   :noindex:
 
    The ``I3Frame`` is the main container class for data in the icetray
    framework.  Data including but not limited to detector geometries,
@@ -573,10 +574,12 @@ In Python
    ``boost::shared_ptr<I3FrameObject>``.
 
    .. method:: I3Frame()
+      :noindex:
 
       Create an I3Frame.  By default the stream will be *None*, or ``N``. 
 
    .. method:: I3Frame(stream)
+      :noindex:
 
       Create an I3Frame on stream *stream*::
       
@@ -587,7 +590,9 @@ In Python
         >>> frame = I3Frame('P')
 
    .. method:: Has(name)
+      :noindex:
    .. method:: __contains__(name)
+      :noindex:
 
       Returns a boolean indicating whether or not *name* is found in
       frame.  Note the double-underscore version which supports python's 'in' syntax::
@@ -609,7 +614,9 @@ In Python
 	True
        
    .. method:: Put(where, what)
+      :noindex:
    .. method:: __setitem__(where, what)
+      :noindex:      
 
         Put object *what* at slot *where* in the frame.  This is
         also used by ``__setitem__``, so bracket-syntax works::
@@ -623,6 +630,7 @@ In Python
         See the next form to specify the stream.
 
    .. method:: Put(where, what, stream)
+      :noindex:
 
         Put object *what* into frame at *where*, tagged with stream
         *stream*.  Note the subtleties of how streams are tagged::
@@ -646,7 +654,9 @@ In Python
            ]
 
    .. method:: Get(where)
+      :noindex:
    .. method:: __getitem__(where)
+      :noindex:
 
         Get and return object from *where* in the frame.  If the frame
 	was read from a file and this is the first attempt to Get the
@@ -669,6 +679,7 @@ In Python
            KeyError: 'nope'
 
    .. method:: keys()
+      :noindex:
 
         Return a list of the frame's keys::
 
@@ -676,6 +687,7 @@ In Python
            ['blah', 'foo']
 
    .. method:: values()
+      :noindex:
 
         Return a list of the frame's values::
 
@@ -683,6 +695,7 @@ In Python
            [<icecube.icetray.I3Int object at 0xb7d58824>, <icecube.icetray.I3Int object at 0xb7d587d4>]
 
    .. method:: items()
+      :noindex:
 
         Return a list of the frame's key/value pairs as 2-tuples::
 
@@ -691,7 +704,9 @@ In Python
             ('foo', <icecube.icetray.I3Int object at 0xb7d587d4>)]
 
    .. method:: size()
+      :noindex:
    .. method:: __len__()
+      :noindex:
  
         Return the number of entries in the frame::
 
@@ -704,6 +719,7 @@ In Python
 	   	  frame object key name.
 
    .. method:: size(name)
+      :noindex:
 
        Return the size of the buffer associated with frame object
        *name*.  If the frame has not been read from or written to disk
@@ -713,7 +729,7 @@ In Python
          150
 
    .. method:: __str__()
-
+      :noindex:
 
         Pretty-print the frame to a string and return it::
 
@@ -742,6 +758,7 @@ In Python
         case display of the size will be suppressed.
  	 
    .. method:: type_name(name)
+      :noindex:
 
       Return the type of the object named *name*::
  
@@ -749,6 +766,7 @@ In Python
           'I3Particle'
 
    .. method:: assign(otherframe)
+      :noindex:
 
       Erase all contents of the current frame, and assign the stream
       type and all contents of *otherframe* to *self*::
@@ -784,11 +802,14 @@ In Python
         ]
         
    .. method:: clear()
+      :noindex:
 
       Delete all entries in the frame.
 
    .. method:: Delete(name)
+      :noindex:
    .. method:: __delitem__(name)
+      :noindex:
 
       Delete *name* from the frame.  the ``__delitem__`` version
       enables the more pythonic ``del`` style::
@@ -809,6 +830,7 @@ In Python
         ]
 
    .. method:: Rename(from, to)
+      :noindex:
 
       Move frame object at *from* to slot *to*::
 
@@ -852,6 +874,7 @@ In Python
 
 
    .. method:: GetStop()
+      :noindex:
 
       Return the frame's stop::
 
@@ -859,6 +882,7 @@ In Python
         >>> icetray.I3Frame.Physics
 
    .. method:: SetStop()
+      :noindex:
 
       Set the frame's stop::
 
