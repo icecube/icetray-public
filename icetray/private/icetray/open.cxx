@@ -49,10 +49,6 @@
 #include <sys/socket.h>
 #include <netdb.h>
 
-#ifdef ROOT_HAS_NETX
-#include <TXNetFile.h>
-#endif
-
 #ifdef I3_WITH_DCAP
 #include <dcap.h>
 #endif
@@ -91,39 +87,6 @@ namespace boost {
 #endif
 using namespace boost::archive;
 using namespace std;
-
-#ifdef ROOT_HAS_NETX
-struct xrootd_source 
-{
-  typedef char char_type;
-  typedef boost::iostreams::source_tag category;
-
-  std::streamsize bytes_read;
-  std::string name;
-  boost::shared_ptr<TXNetFile> netfile;
-
-  xrootd_source(const std::string& s)
-    : bytes_read(0),
-      name(s + "?filetype=raw"),
-      netfile(new TXNetFile(name.c_str()))
-  {
-     if (netfile->TestBits(TXNetFile::kZombie) == kTRUE)
-         log_fatal_stream("Could not open "<<name<<" for reading");
-  }
-
-  std::streamsize read(char* s, std::streamsize n)
-  {
-    if (netfile->ReadBuffer(s, n) == kTRUE) {
-        // end of file
-        return -1;
-    }
-    std::streamsize newsize = netfile->GetBytesRead();
-    std::streamsize r = newsize-bytes_read;
-    bytes_read = newsize;
-    return r;
-  }
-};
-#endif
 
 #ifdef I3_WITH_DCAP
 struct dcap_source 
@@ -531,17 +494,7 @@ namespace I3 {
 	}
 #endif
 
-      if (filename.find("root://") == 0)
-	{
-#ifdef ROOT_HAS_NETX
-	  xrootd_source src(filename);
-	  ifs.push(src);
-#else
-	  log_fatal("IceTray was compiled without xrootd support, unable to open file %s",
-		    filename.c_str());
-#endif
-	} 
-      else if (filename.find("dcap://") == 0) {
+      if (filename.find("dcap://") == 0) {
 #ifdef I3_WITH_DCAP
 	dcap_source src(filename);
 	ifs.push(src);
