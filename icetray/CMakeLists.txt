@@ -18,23 +18,6 @@
 #  
 #
 
-# 
-#  Check for dcap
-#  
-find_library(DCAP_LIBRARIES dcap HINTS ${DCAP_INSTALL_PREFIX}/lib ${DCAP_INSTALL_PREFIX}/lib64)
-find_file(FIND_DCAP_H dcap.h HINTS ${DCAP_INSTALL_PREFIX}/include)
-
-get_filename_component(DCAP_INCLUDE_DIR ${FIND_DCAP_H} PATH)
-
-if (DCAP_LIBRARIES AND DCAP_INCLUDE_DIR)
-  colormsg(GREEN "+-- Found libdcap, enabling dcap support")
-  add_definitions(-DI3_WITH_DCAP)
-  include_directories(${DCAP_INCLUDE_DIR})
-else()
-  colormsg(CYAN "+-- libdcap *not* found, omitting optional dcap support")
-  set(DCAP_LIBRARIES "")  
-endif()  
-
 # Check for libarchive
 
 if(LIBARCHIVE_FOUND)
@@ -159,8 +142,9 @@ i3_add_library(icetray
 
   ${ICETRAY_PYTHON_SRC}
 
+  IWYU
   USE_TOOLS boost python ${OPTIONAL_TOOLS}
-  LINK_LIBRARIES ${BOOST_PYTHON} ${DCAP_LIBRARIES} ${LIBARCHIVE_LIBRARIES}
+  LINK_LIBRARIES ${BOOST_PYTHON} ${LIBARCHIVE_LIBRARIES}
   )
 #
 #  Configure/create directory containing inneresting workspace-wide #defines
@@ -275,4 +259,3 @@ i3_add_pybindings(icetray_test
 
 # Install icetray-inspect
 i3_executable_script(inspect resources/icetray-inspect.py)
-
