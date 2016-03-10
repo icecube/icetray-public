@@ -8,8 +8,8 @@ These docs were generated with Sphinx: http://www.sphinx-doc.org/
 Requirements
 ------------
 
-A recent version of sphinx is required.  The easiest way to install
-this version is::
+A recent version of sphinx (at least version 1.3) is required.  The
+easiest way to install this version is::
 
    pip install --upgrade Sphinx
 
