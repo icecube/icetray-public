@@ -25,6 +25,7 @@ class sphinx_writer:
 		pass
 		
 	def project_header(self,project,loadstr):
+		self.file.write('\n')
 		self.file.write('Project %s\n' % project)
 		self.file.write('-'*(len(project)+8)+'\n\n')
 		self.file.write("Invoke with: ``%s``\n\n"%loadstr)
@@ -52,8 +53,9 @@ class sphinx_writer:
 		
 		if docs:
 			for d in docs.strip().splitlines():
-				self.file.write('    %s\n' % d)
-			self.file.write('\n')
+				self.file.write('    %s' % d)
+			if not opts.sphinx_references:
+				self.file.write('\n')
 			
 	def module_footer(self):
 		self.file.write('\n')
@@ -352,7 +354,11 @@ def display_project(project):
 	
 	if not opts.no_modules:
 		for mod in icetray.modules(cppproject):
-			config =  i3inspect.module_default_config(mod)
+			try:
+				config =  i3inspect.module_default_config(mod)
+			except:
+				sys.stderr.write("WARNING Ignoring '%s': %s\n" % (mod, sys.exc_info()[1]))
+				continue
 			docs = get_doxygen_docstring(cppproject,mod)
 			modules.append((mod, 'C++ I3Module',mod,config,docs))
 			
@@ -361,15 +367,18 @@ def display_project(project):
 			try:
 				config = mod(icetray.I3Context()).configuration
 			except:
-				sys.stderr.write("Ignoring '%s': %s\n" % (pyproject, sys.exc_info()[1]))
-				return
+				sys.stderr.write("WARNING Ignoring '%s': %s\n" % (mod, sys.exc_info()[1]))
+				continue
 			docs = inspect.getdoc(mod)
 			modules.append((mod, 'Python I3Module', py_mod,config,docs))
 			
 	if not opts.no_services:
 		for mod in icetray.services(cppproject):
-
-			config =  i3inspect.module_default_config(mod)
+			try:
+				config =  i3inspect.module_default_config(mod)
+			except:
+				sys.stderr.write("WARNING Ignoring '%s': %s\n" % (mod, sys.exc_info()[1]))
+				continue
 			docs = get_doxygen_docstring(cppproject,mod)
 			modules.append((mod, 'C++ ServiceFactory',mod,config,docs))
 				
