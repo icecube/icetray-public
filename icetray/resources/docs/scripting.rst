@@ -63,24 +63,29 @@ and you pass these to a module like this::
 Python details for experts
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-There's a gotcha. Python has lists, and it has tuples.  ithon will
+There's a gotcha. Python has lists, and it has tuples.  Python will
 convert either to an STL vector when it configures icetray, so this
 syntax will work too::
 
  tray.AddModule("Jeopardy", "j",
    I'll_take="famous_numbers",
    for=500, 
-   famous_numbers=(0, 1, 3.14159, 1.618034
+   famous_numbers=(0, 1, 3.14159, 1.618034)
    )
 
-here you're implicitly creating a list: notice the parenthesis.  But
-if you want to configure a vector with only one entry, it wont work::
+here you are creating a tuple: notice the parenthesis.  But if you
+want to configure a vector with only one entry, it won't work::
 
-   famous_numbers=3.14159
+   famous_numbers=(3.14159)
 
-here the parenthesis just disappear and that becomes just a double,
-fand you get a "cant convert parameter" error when configuring.  But
-tuples stay tuples::
+here the parenthesis is just ignored and that becomes just a double,
+and you get a "can't convert parameter" error when configuring.  To
+tell Python that this is supposed to be tuple, use this syntax::
+
+   famous_numbers=(3.14159,)
+
+which is a bit awkward.  We recommend to use lists, where this issue
+does not occur::
 
    famous_numbers=[3.14159]
 
