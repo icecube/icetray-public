@@ -23,3 +23,7 @@ ENSURE( icetray.I3Int(12) <= 13. , "I3Int <= float failed" )
 ENSURE( icetray.I3Int(14) > 13. , "I3Int > float failed" )
 ENSURE( icetray.I3Int(14) >= 13. , "I3Int >= float failed" )
 
+ENSURE( icetray.I3Int(0) == False, "I3Int == False failed" )
+ENSURE( icetray.I3Int(0) != True, "I3Int != True failed" )
+ENSURE( icetray.I3Int(1) == True, "I3Int == True failed" )
+ENSURE( icetray.I3Int(1) != False, "I3Int != False failed" )

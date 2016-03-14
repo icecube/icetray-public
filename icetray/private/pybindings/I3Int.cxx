@@ -33,6 +33,11 @@ i3int_prettyprint(const I3Int& i)
     return oss.str();
 }
 
+bool i3int_bool(const I3Int& i)
+{
+    return i.value != 0;
+}
+
 void register_I3Int()
 {
   class_<I3Int, bases<I3FrameObject>, boost::shared_ptr<I3Int> >("I3Int",
@@ -46,6 +51,7 @@ Note that python assignment is by reference, creating two links to one object.")
     .def(operator_suite<I3Int>())
     .def(operator_int_suite<I3Int>())
     .def(operator_float_suite<I3Int>())
+    .def("__nonzero__", i3int_bool)
     ;
 
   register_pointer_conversions<I3Int>();

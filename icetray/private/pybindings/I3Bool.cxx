@@ -32,6 +32,11 @@ i3bool_prettyprint(const I3Bool& b)
     else        return "I3Bool(False)";
 }
 
+bool i3bool_bool(const I3Bool& b)
+{
+    return b.value;
+}
+
 void register_I3Bool()
 {
   class_<I3Bool, bases<I3FrameObject>, boost::shared_ptr<I3Bool> >("I3Bool",
@@ -44,6 +49,7 @@ Note that python assignment is by reference, creating two links to one object.")
     .def_pickle(boost_serializable_pickle_suite<I3Bool>())
     .def(operator_suite<I3Bool>())
     .def(operator_bool_suite<I3Bool>())
+    .def("__nonzero__", i3bool_bool)
     ;
 
   register_pointer_conversions<I3Bool>();
