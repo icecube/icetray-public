@@ -33,10 +33,6 @@
 #include <pwd.h>
 #include <time.h>
 
-#ifdef I3_USE_ROOT
-#include <RVersion.h>
-#endif
-
 template<class T>
 static
 std::map<std::string,I3ConfigurationPtr>

@@ -28,12 +28,6 @@ else(LIBARCHIVE_FOUND)
 	set(LIBARCHIVE_LIBRARIES "")
 endif(LIBARCHIVE_FOUND)
 
-# ROOT
-
-if(ROOT_FOUND)
-	set(OPTIONAL_TOOLS root)
-endif(ROOT_FOUND)
-
 i3_project(icetray
   DOCS_DIR resources/docs
   PYTHON_DIR python)
@@ -155,6 +149,12 @@ configure_file(resources/workspace_config.h.in
 set_source_files_properties(private/icetray/I3TrayInfoService.cxx
   PROPERTIES
   COMPILE_FLAGS "-include ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/workspace_config.h")
+
+if(ROOT_FOUND)
+  set_source_files_properties(private/icetray/I3TrayInfoService.cxx
+    PROPERTIES
+    COMPILE_DEFINITIONS ROOT_RELEASE="${ROOT_VERSION}")
+endif(ROOT_FOUND)
 
 set_source_files_properties(${ICETRAY_PYTHON_SRC}
   PROPERTIES
