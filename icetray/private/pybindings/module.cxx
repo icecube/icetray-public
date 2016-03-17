@@ -85,6 +85,7 @@ BOOST_PYTHON_MODULE(icetray)
   signal(SIGTSTP, SIG_DFL);
   signal(SIGHUP, SIG_DFL);
   signal(SIGCHLD, SIG_DFL);
+  signal(SIGPIPE, SIG_DFL);
 #endif
 
   register_OMKey();
