@@ -4,7 +4,22 @@ Release Notes
 trunk
 -----
 
+* lots and lots of documentation updates
 * remove rdmc
+* add support for include what you use, see `r2450/IceTray`_ 
+* resurect ``I3Test::tempfile()``
+* use std::is(nan|inf)
+* mark all thrid-pary libraries as "system" libraries for the compiler
+* Minuit2 detection fixes
+* compiler flag checks and fixes
+* parasitic build fixes
+
+.. _r2450/IceTray: http://code.icecube.wisc.edu/projects/icecube/changeset/2450/IceTray/projects/cmake/trunk
+
+V15-12-01 - December 14, 2015 - don la dieu  (nega@icecube.umd.edu)
+-------------------------------------------------------------------
+
+* boost/cvmfs detection fix
 
 V15-12-00 - December 14, 2015 - don la dieu  (nega@icecube.umd.edu)
 -------------------------------------------------------------------
