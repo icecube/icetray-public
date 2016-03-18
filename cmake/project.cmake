@@ -1,3 +1,4 @@
+# -*- tab-width: 8; indent-tabs-mode -*- ex: ts=8 noet: 
 #
 #  $Id$
 #
