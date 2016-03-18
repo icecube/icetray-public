@@ -1,6 +1,21 @@
 Release Notes
 =============
 
+trunk
+-----
+
+March 18, 2016, don la dieu  (nega@icecube.umd.edu)
+---------------------------------------------------
+Release V16-03-00
+
+* implement ``__nonzero__`` in ``I3Bool`` and ``I3Int``
+* documentation fixes
+* prune dead code
+* ``icetray-inspect`` fixes for better documentation
+* udpates for C++11
+* remove hand-rolled ``isnan()``
+
+
 December 14, 2015, don la dieu  (nega@icecube.umd.edu)
 ------------------------------------------------------
 Release V15-12-00
