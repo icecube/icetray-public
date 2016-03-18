@@ -95,15 +95,15 @@ set(SPHINX_DIR "${CMAKE_BINARY_DIR}/sphinx_src")
 add_custom_target(doxygen)
 
 add_custom_target(inspect
-  COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh
-          ${EXECUTABLE_OUTPUT_PATH}/icetray-inspect
-	  --sphinx --sphinx-references
-	  --all --no-params
-	  --title=\"IceTray Quick Reference\"
-	  -o ${SPHINX_DIR}/source/icetray_quick_reference.rst
-  COMMENT "Generating rst from icetray-inspect of QuickReference"
-  DEPENDS ${CMAKE_BINARY_DIR}/bin/icetray-inspect
-  )
+	COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh
+	${EXECUTABLE_OUTPUT_PATH}/icetray-inspect ${THIS_LIB_NAME}
+	--sphinx --sphinx-references
+	--all --no-params
+	--title="IceTracy Quick Reference"
+	-o ${SPHINX_DIR}/source/icetray_quick_reference.rst
+	COMMENT "Generating rst from icetray-inspect of QuickReference"
+    DEPENDS ${CMAKE_BINARY_DIR}/bin/icetray-inspect
+	)
 #
 # Tarball target
 #
