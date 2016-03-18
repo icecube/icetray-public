@@ -247,15 +247,5 @@ add_custom_target(I3Tray.py
 
 add_dependencies(icetray-pybindings I3Tray.py)
 
-#
-# Test pybindings
-#
-i3_add_pybindings(icetray_test
-  private/test-pybindings/module.cxx
-  USE_TOOLS boost python
-  LINK_LIBRARIES ${LIBARCHIVE_LIBRARIES}
-  USE_PROJECTS icetray
-  )
-
 # Install icetray-inspect
 i3_executable_script(inspect resources/icetray-inspect.py)
