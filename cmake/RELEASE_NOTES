@@ -4,7 +4,10 @@ Release Notes
 trunk
 -----
 
-* lots and lots of documentation updates
+V16-03-00 - March 18, 2016, don la dieu  (nega@icecube.umd.edu)
+---------------------------------------------------------------
+
+* Lots and lots of documentation updates
 * remove rdmc
 * add support for include what you use, see `r2450/IceTray`_ 
 * resurect ``I3Test::tempfile()``
