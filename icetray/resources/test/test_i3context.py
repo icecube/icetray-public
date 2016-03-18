@@ -10,6 +10,8 @@ class test_I3Context(unittest.TestCase):
         self.ctx['fun'] = lambda foo : True
                 
     def test_pybindings(self):
+        print("%s" % str(self.ctx))
+
         self.assertEqual(len(self.ctx), 1,
                          "wrong number of items in the context.")
 

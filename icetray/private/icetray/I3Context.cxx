@@ -23,14 +23,6 @@
 #include <icetray/I3Module.h>
 #include <icetray/I3Context.h>
 
-I3Context::I3Context()
-{
-}
-
-I3Context::~I3Context()
-{
-}
-
 std::vector<std::string>
 I3Context::keys() const
 {
@@ -45,7 +37,7 @@ I3Context::keys() const
   return thekeys;
 }
 
-void
+std::string
 I3Context::dump() const
 {
   std::ostringstream oss;
@@ -57,6 +49,6 @@ I3Context::dump() const
       oss << "   '" << iter->first << " ==> " << I3::name_of(typeid(iter->second)) << "\n";
     }
   oss << "]\n";
-  log_trace("%s", oss.str().c_str());
+  return oss.str();
 }
 

@@ -54,9 +54,9 @@ class I3Context
 
  public:
 
-  I3Context();
+  I3Context(){};
 
-  virtual ~I3Context();
+  virtual ~I3Context(){};
 
   std::vector<std::string> keys() const;
 
@@ -242,9 +242,9 @@ class I3Context
   const_iterator begin() const { return map_.begin(); }
   const_iterator end() const { return map_.end(); }
 
- private:
+  std::string dump() const;
 
-  void dump() const;
+ private:
 
   map_t map_;
 
