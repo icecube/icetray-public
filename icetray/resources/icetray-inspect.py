@@ -333,8 +333,13 @@ def display_project(project):
 		cppproject = ""
 
 	if pyproject:
-		pymodule = __import__('icecube.%s' %pyproject,
-							  globals(), locals(), [pyproject])
+		try:
+			pymodule = __import__('icecube.%s' %pyproject,
+								  globals(), locals(), [pyproject])
+		except Exception,e:
+			sys.stderr.write("Error cant load '%s': %s\n" % (project,str(e)))
+			return
+            
 		loadstr = "import icecube.%s"%pyproject
 	elif cppproject:
 		icetray.load(cppproject, False)		
@@ -342,7 +347,7 @@ def display_project(project):
 		loadstr = "icetray.load('%s',False)"%cppproject
 	else:
 		sys.stderr.write("Error cant load '%s'\n" % (project))
-		sys.exit(-1)
+		return
 
 	if cppproject:
 		proj_name = cppproject
@@ -408,7 +413,7 @@ def display_project(project):
 		output.project_footer()
 
 from optparse import Option, OptionParser
-import re,os.path,glob
+import re,os.path
 
 Option.TYPES = Option.TYPES + ("regex",)
 Option.TYPE_CHECKER["regex"] = check_regex
@@ -463,34 +468,27 @@ parser.add_option('--title', dest='title',
 
 opts, args = parser.parse_args()
 
-libdir = os.path.join(os.environ['I3_BUILD'],'lib')
-
-compiled_libs = [os.path.splitext(os.path.basename(fname))[0][3:]
-				 for fname in glob.glob(os.path.join(libdir,'lib*'))]
-	
-python_libs = [os.path.splitext(os.path.basename(fname))[0]
-			   for fname in glob.glob(os.path.join(libdir,'icecube','*.so'))
-			   if os.path.isfile(fname)]
-	
-python_dirs = [os.path.basename(fname)
-			   for fname in glob.glob(os.path.join(libdir,'icecube','*'))
-			   if os.path.isdir(fname)]
-
-if opts.all:	
-	args = compiled_libs + python_libs + python_dirs
-
-elif len(args) == 0:
+if len(args) == 0 and not opts.all:
 	parser.print_help()
 	parser.exit(1)
 
-import inspect, sys, cgi
+import inspect, sys, cgi,signal
 import xml.etree.ElementTree as ET
 
 from icecube import icetray, dataclasses,tableio
 from icecube.icetray import i3inspect
 from icecube.icetray import traysegment
 
+def sig_handler(signum, frame):
+	raise Exception("Segfault")
+signal.signal(signal.SIGSEGV, sig_handler)
+
 icetray.I3Logger.global_logger = icetray.I3NullLogger()
+
+compiled_libs,python_libs,python_dirs= i3inspect.get_inspectable_projects()
+
+if opts.all:	
+	args = compiled_libs + python_libs + python_dirs
 
 if opts.output:
 	outfile = open(opts.output,'wt')

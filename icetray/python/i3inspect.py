@@ -6,6 +6,7 @@
 #  and the IceCube Collaboration <http://www.icecube.wisc.edu>
 #  
 
+from glob import glob
 from icecube.icetray import I3Context, I3Configuration, I3Module, module_default_config
 import types, sys, os, inspect, copy
 
@@ -205,3 +206,17 @@ def harvest_objects(module, want=is_I3Module, memo=None):
 	
 	return harvest
 	
+def get_inspectable_projects():
+
+	libdir = os.path.join(os.environ['I3_BUILD'],'lib')
+	
+	cpp_libs = [os.path.splitext(os.path.basename(fname))[0][3:]
+				for fname in glob(os.path.join(libdir,'lib*'))]
+	python_libs = [os.path.splitext(os.path.basename(fname))[0]
+				   for fname in glob(os.path.join(libdir,'icecube','*.so'))
+				   if os.path.isfile(fname)]
+	python_dirs = [os.path.basename(fname)
+				   for fname in glob(os.path.join(libdir,'icecube','*'))
+				   if os.path.isdir(fname)]
+
+	return cpp_libs,python_libs,python_dirs
