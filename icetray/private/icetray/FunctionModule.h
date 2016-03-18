@@ -29,8 +29,6 @@ private:
 	boost::function<bool(boost::shared_ptr<I3Frame>)> bf;
 	///The streams on which this module should run
 	std::set<I3Frame::Stream> streams;
-	
-	SET_LOGGER("FunctionModule");
 };
 
 #endif

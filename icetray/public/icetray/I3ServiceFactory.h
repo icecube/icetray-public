@@ -40,13 +40,10 @@ class I3ServiceFactory
 {
 public:
 
-  I3ServiceFactory(const I3Context& context);
+ I3ServiceFactory(const I3Context& context) :
+  context_(context){};
 
-  // Constructors and destructor
-
-  virtual ~I3ServiceFactory();
-
-  // public member functions
+  virtual ~I3ServiceFactory(){};
 
   /**
    * Initialize a service object (initialize and parameters coming from I3Tray
@@ -55,7 +52,9 @@ public:
    * @param services the I3Services into which the service should be installed.
    * @return true if the services is successfully installed.
    */
-  bool InitializeService(I3Context& services);
+  bool InitializeService(I3Context& services){
+    return InstallService(services);
+  };
 
   /**
    * Installed this objects service into the specified services object
@@ -70,29 +69,14 @@ public:
    * This transition is executed immediately before the first 'Process'
    * transition, thus any parameters that has been set, either by a person
    * or a steering file, will be available to this object before it starts
-   * processing data frames. After this transition any changes to these
-   * parameters will not be seen by the service factory until a 'Reconfigure'
-   * transition.
+   * processing data frames. 
    *
    * This transition also gives this object an opportunity to reserve any
    * resources it will need to use during the subsequent 'Process'
    * transitions.
    */
-  virtual void Configure();
+  virtual void Configure(){};
   const I3Configuration &GetConfiguration() {return configuration_;}
-
-  /**
-   * The purpose of this transition is to give this object the opportunity to
-   * re-access all of its parameters as they may have changed since the
-   * previous 'Configure' or 'Reconfigure' transition. In many cases this
-   * may simply take the form of repeating whatever was executed at the
-   *'Configure' transition.
-   *
-   * Of course, this transition, like the 'Configure' transition, also gives
-   * this object the opportunity to reserve any resources that may have been
-   * released during the 'Suspend' transition.
-   */
-  virtual void Reconfigure();
 
   /**
    * The purpose of this transition is to give this object the opportunity to
@@ -100,21 +84,9 @@ public:
    * to create a summary of its activities during the execution of the job.
    * Note that after this transition the service factory is still in existence.
    */
-  virtual void Finish();
-
-
-  /**
-   * Signals to the Framework that an I3ServiceFactory has encountered a fatal
-   * error and that it wishes the Framework to terminate execution by
-   * sending 'Abort' transistions to all modules.
-   *
-   * @param message the message explaining what cause the Fatal call.
-   * @param status the status value to use on exit.
-   */
-  void Fatal(const std::string& message,
-             int status = EXIT_FAILURE) const;
-
-  
+  virtual void Finish(){
+    log_trace("%s", __PRETTY_FUNCTION__);
+  };
 
   /**
      Adds a new parameter to the local configuration.

@@ -66,11 +66,6 @@ set(ICETRAY_PYTHON_SRC
   private/pybindings/std_cont_pod/std_cont_pod_vector_int.cxx
   private/pybindings/std_cont_pod/std_cont_pod_vector_string.cxx)
 
-if (NOT ${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
-  # On FreeBSD, the backtrace facility is in a separate library.
-  set(I3_BACKTRACE_CXX private/icetray/Backtrace.cxx)
-endif (NOT ${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
-
 i3_add_library(icetray
   private/icetray/I3Frame.cxx 
   private/icetray/I3FrameMixing.cxx 

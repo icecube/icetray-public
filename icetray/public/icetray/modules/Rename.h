@@ -60,7 +60,6 @@ public:
 
   void Finish();
 
-  SET_LOGGER("Rename");
 };
 
 

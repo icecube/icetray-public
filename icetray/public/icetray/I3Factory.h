@@ -39,7 +39,6 @@ template <class Product, typename FactoryFn>
 class I3Factory : boost::noncopyable
 {
 public:
-  //  typedef boost::function<shared_ptr<Product>(const I3Context& c)> factory_fn_t;
   typedef FactoryFn factory_fn_t;
 
   struct product_info_t {
