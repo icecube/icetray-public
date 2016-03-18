@@ -4,6 +4,9 @@ Release Notes
 trunk
 -----
 
+* Removed Backtrace, which I'm pretty sure isn't used.
+* Removed Fatal and Reconfigure methods from I3ServiceFactory base class.
+
 March 18, 2016, don la dieu  (nega@icecube.umd.edu)
 ---------------------------------------------------
 Release V16-03-00
