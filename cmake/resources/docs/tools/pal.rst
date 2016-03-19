@@ -26,8 +26,7 @@ for other systems it must be installed from source.
 Install from Source
 --------------------
 
-PAL depends on a library called ERFA which can either be downloaded from github or 
-istalled from system packages (e.g. 'sudo apt-get install liberfa-dev' on Ubuntu platforms.).
+PAL depends on a library called ERFA which can be downloaded from github.
 
 .. code-block:: bash
 
