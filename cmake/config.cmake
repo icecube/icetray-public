@@ -246,9 +246,9 @@ endif(NOT HAVE_META_PROJECT)
 #           what a hack.
 if (CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
   if (NOT "${META_PROJECT}" STREQUAL "Unknown")
-    set(CMAKE_INSTALL_PREFIX ${META_PROJECT}.r${SVN_REVISION}.${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball.")
+    set(CMAKE_INSTALL_PREFIX ${META_PROJECT}.r${SVN_REVISION}.${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
   else (NOT "${META_PROJECT}" STREQUAL "Unknown")
-    set(CMAKE_INSTALL_PREFIX ${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball.")
+    set(CMAKE_INSTALL_PREFIX ${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
   endif (NOT "${META_PROJECT}" STREQUAL "Unknown")
 endif(CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
 
