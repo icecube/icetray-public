@@ -36,39 +36,6 @@
 using std::string;
 
 //
-// Manual enumeration of overloads for parameters.  For each type in
-// I3_PARAM_TYPES a pointer to a member function with an appropriate
-// signature is generated.  Each of these must be individually exposed
-// to python via "def()"
-//
-typedef std::vector<int> ithon_vector_int;
-typedef std::vector<double> ithon_vector_double;
-typedef std::vector<std::string> ithon_vector_string;
-typedef std::vector<OMKey> ithon_vector_omkey;
-
-#define ITHON_I3_PARAM_TYPES			\
-  (ithon_vector_int)				\
-    (ithon_vector_double)			\
-    (ithon_vector_string)			\
-    (ithon_vector_omkey)			\
-    (string)					\
-    (double)					\
-    (int)					\
-    (int64_t)					\
-    (OMKey)
-
-
-#define I3_SETPARAM_OVERLOAD(r,data,t) \
-  bool (I3Tray::*BOOST_PP_CAT(sp_,t) )(const std::string& something, const std::string& somethingelse, const t&) = &I3Tray::SetParameter;
-
-BOOST_PP_SEQ_FOR_EACH(I3_SETPARAM_OVERLOAD, ~, ITHON_I3_PARAM_TYPES);
-
-// this is used in the interface definition to expose these function
-// to python
-#define I3_SETPARAM_OVERLOAD_DEF(r,data,t) .def("SetParameter", BOOST_PP_CAT(sp_,t)) 
-
-
-//
 // Main python interface definition.  The name "ithon" must match
 // the filename of the library that it is loaded from.  A C-linkage
 // function named initithon() is generated and put in the library.
@@ -122,8 +89,6 @@ void register_I3Tray()
     .def("SetParameter", (bool (I3Tray::*)(const std::string&,
 					   const std::string&,
 					   const boost::python::object&))&I3Tray::SetParameter)
-	 
-    // BOOST_PP_SEQ_FOR_EACH(I3_SETPARAM_OVERLOAD_DEF, ~, ITHON_I3_PARAM_TYPES)
     ;
   
 }
