@@ -49,8 +49,6 @@ Modules for selecting events from the event stream for further processing
 The IceTray software framework.
 	<li> <a href="./interfaces/index.html">interfaces</a> -
 A set of generic interface classes to limit module dependencies.
-	<li> <a href="./ithon/index.html">ithon</a> -
-The Python interface to icetray.
 	<li> <a href="inspect/payload-parsing.html">[inspect]</a><a href="./payload-parsing/index.html">payload-parsing</a> - 
 A service to decode the DAQ payload format data (including delta-compressed data).
 	<li> <a href="./pfclasses/index.html">pfclasses</a> - 
