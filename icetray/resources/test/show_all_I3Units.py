@@ -9,10 +9,6 @@
 #   @author John Pretz 
 
 #   dump all units to stdout.  demo showing use of I3Units in python.
-#   note that a list of such units are in ithon.cxx and has to be kept
-#   in sync with icetray/I3Units.h
-#   does this via the I3Units python module rather than the underlying
-#   ithon one
 
 from os.path import expandvars 
 

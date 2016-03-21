@@ -25,7 +25,6 @@
 
 //
 // these correspond to I3UNITS in icetray/I3Units.h.
-// only those I3Units listed here will be visible from within ithon
 //
 #define I3_UNITS (meter)						\
     (meter2)								\

@@ -36,11 +36,7 @@
 using std::string;
 
 //
-// Main python interface definition.  The name "ithon" must match
-// the filename of the library that it is loaded from.  A C-linkage
-// function named initithon() is generated and put in the library.
-// When python loads a file name libX.so it calls a function named
-// initX().  If it can't find it, it bails out.
+// Main python interface definition.
 //
 using namespace boost::python;
 
