@@ -33,9 +33,10 @@ static const unsigned omkey_version_ = 2;
 /**
  * @brief A small class which is the string number, om number
  * and pmt number for a specific PMT inside a DOM.
- * For IceCube, the PMT number will always be "0"
- * and "PMT" is equivalent to "DOM".
  *
+ * For IceCube, the PMT number will always be 0
+ * and "PMT" is equivalent to "DOM". For IceTop, the PMT number
+ * can be 0 or 1.
  */
 class OMKey 
 {
