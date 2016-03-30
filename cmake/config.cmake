@@ -400,7 +400,7 @@ string(REPLACE ";" " " C_WARNING_FLAGS "${C_WARNING_FLAGS}")
 
 include(CheckCXXCompilerFlag)
 if (NOT CXX_WARNING_SUPPRESSION_FLAGS)
-  foreach(f -Wdeprecated -Wunused-variable -Wunused-local-typedef -Wunused-local-typedefs)
+    foreach(f -Wdeprecated -Wunused-variable -Wunused-local-typedef -Wunused-local-typedefs -Wpotentially-evaluated-expression)
     string(REPLACE "-" "_" FLAG ${f})
     check_cxx_compiler_flag(${f} CXX_HAS${FLAG})
     if (CXX_HAS${FLAG})
