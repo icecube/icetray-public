@@ -22,6 +22,24 @@ if(SPHINX_BUILD AND NOT SPHINX_DIR_NOT_WRITABLE)
   set(SPHINX_PAPER_SIZE "letter" CACHE STRING "Size of paper when generating latex/pdf of documentation.  Options are 'letter' or 'a4'")
   set(SPHINX_EXTRA_OPTIONS "" CACHE STRING "Extra options to pass to sphinx")
 
+  ## this is for extensions in the "sphinx.ext" namespace, and could
+  ## be made more generic. the file "conf.py.in" needs to have the
+  ## corresponding variables inserted in the "extensions" directive.
+  foreach(e "napoleon" "email")
+    string(TOUPPER ${e} eU)
+    execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sphinx.ext.${e}"
+      RESULT_VARIABLE sphinx_${eU}
+      OUTPUT_QUIET
+      ERROR_QUIET)
+    if(NOT sphinx_${eU})
+      set(sphinx_${eU} "sphinx.ext.${e}")
+    else()
+      set(sphinx_${eU} "")
+    endif()
+  endforeach()
+  unset(e)
+  unset(eU)
+
   add_custom_target(html
     COMMAND mkdir -p
     	    ${SPHINX_DIR} 
