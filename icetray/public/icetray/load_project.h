@@ -25,10 +25,5 @@
 //
 // "proj" here is "dataio" or "dataclasses", not "libdataio.so" or "libdataio" 
 //
-int load_project(std::string proj, bool verbose);
-
-//
-// we do this instead of default-argument for the sake of boost::python
-//
-int load_project(std::string proj) { return load_project(proj, true); }
+int load_project(std::string proj, __attribute__((unused)) bool verbose = false);
 #endif

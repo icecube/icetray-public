@@ -32,12 +32,6 @@
 int 
 load_project (std::string path, bool verbose)
 {
-  if (verbose)  
-    {
-      std::cout << "Loading " << std::setw(50) << std::setfill('.') << std::left 
-		<< path; 
-      std::cout.flush();
-    }
   if (path.find("lib") != 0)
     path = std::string("lib") + path;
 
@@ -75,8 +69,6 @@ load_project (std::string path, bool verbose)
     }
   if (v != NULL && errmsg == NULL) 
     {
-      if (verbose) 
-	std::cout << "ok" << std::endl;
       return 0;
     }
   std::string errormsg("dlopen() dynamic loading error: ");
