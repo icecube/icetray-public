@@ -89,7 +89,7 @@ public:
 		;
 	}
 	
-	static bp::object get_value_type()
+	static boost::python::object get_value_type()
 	{
 		return get_class<value_type>();
 	}
