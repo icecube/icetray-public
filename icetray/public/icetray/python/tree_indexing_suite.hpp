@@ -22,6 +22,8 @@
 #include <boost/mpl/erase.hpp>
 #include <boost/mpl/replace.hpp>
 
+#include <icetray/python/get_class.hpp>
+
 namespace bp = boost::python;
 
 namespace boost { namespace python {
@@ -49,7 +51,12 @@ public:
 	typedef typename Container::pre_order_iterator pre_order_iterator;
 	typedef typename Container::post_order_iterator post_order_iterator;
 	typedef typename Container::sibling_iterator sibling_iterator;
-		
+	
+	static bp::object get_value_type()
+	{
+		return get_class<value_type>();
+	}
+	
 	static void
 	index_translation_error(int offset, unsigned depth) throw(python::error_already_set)
 	{
@@ -338,6 +345,8 @@ public:
 			.def("replace",      make_adapter((inserter_func)&Container::replace))
 			.def("append_child", make_adapter((inserter_func)&Container::append_child))
 			.def("erase",        make_adapter((itermanip_func)&Container::erase))
+			.def("__value_type__", &get_value_type)
+			.staticmethod("__value_type__")
 		;
 		
 	}

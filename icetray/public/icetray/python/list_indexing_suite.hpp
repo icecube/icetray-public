@@ -37,6 +37,7 @@
 #include <boost/python/suite/indexing/container_utils.hpp>
 #include <boost/python/iterator.hpp>
 #include <boost/next_prior.hpp>
+#include <icetray/python/get_class.hpp>
 
 namespace boost { namespace python {
 
@@ -83,7 +84,14 @@ public:
 			.def("__init__", make_constructor(&container_from_object))
 			.def("append", &base_append)
 			.def("extend", &base_extend)
+			.def("__value_type__", &get_value_type)
+			.staticmethod("__value_type__")
 		;
+	}
+	
+	static bp::object get_value_type()
+	{
+		return get_class<value_type>();
 	}
 	
 	static 

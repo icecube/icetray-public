@@ -12,6 +12,7 @@
 # include <boost/python/call_method.hpp>
 # include <boost/python/tuple.hpp>
 # include <boost/iterator/transform_iterator.hpp>
+# include <icetray/python/get_class.hpp>
 
 namespace bp = boost::python;
 
@@ -194,6 +195,14 @@ return incref(tuple.attr("__iter__")().ptr());
           for(typename Container::const_iterator it = x.begin(); it != x.end(); it++)
             t.append(bp::make_tuple(it->first, it->second));
           return t;
+        }
+        static bp::object get_key_type()
+        {
+          return get_class<key_type>();
+        }
+        static bp::object get_value_type()
+        {
+          return get_class<data_type>();
         }
 
         // return a shallow copy of the map
@@ -544,6 +553,10 @@ return incref(tuple.attr("__iter__")().ptr());
                 .def("itervalues", 
                  make_transform<itervalues>(),
                  "D.itervalues() -> an iterator over the values of D\n")
+                .def("__key_type__", &get_key_type)
+                .staticmethod("__key_type__")
+                .def("__value_type__", &get_value_type)
+                .staticmethod("__value_type__")
               ;
         }
 
