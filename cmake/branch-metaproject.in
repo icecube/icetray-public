@@ -1,0 +1,58 @@
+#!/bin/bash
+##
+## Script to branch a meta-project. It does all the "svn cp"-ing so
+## you don't have to. It will also generate the list of externals for
+## your copied branch.
+
+## set E to "" to actually run this script. set it to "echo" or "true"
+## for debugging
+E=echo
+
+###
+
+MP=$1
+B=$2
+
+if [ -z $1 ]; then
+    >&2 echo "Missing meta-project name"
+    exit 1
+fi
+
+if [ -z $2 ]; then
+    >&2 echo "Missing branch name"
+    exit 1
+fi
+
+###
+
+CODE=http://code.icecube.wisc.edu/svn
+CODET=${CODE/svn/icetray}
+
+svn ls $CODE/meta-projects/$MP | egrep 'branches|candidates|releases|trunk' > /dev/null 2>&1
+if [ $? == 0 ]; then
+    >&2 echo "$MP looks like the root of a meta-project. Try again."
+    exit 1
+fi
+
+$E svn cp $CODE/meta-projects/$MP $CODE/meta-projects/${MP%/*}/branches/${B}
+declare -a external
+declare -a projects=(`svn pg svn:externals $CODE/meta-projects/$MP | grep -v '^#' |grep $CODE  | cut -d' ' -f2`)
+for i in "${projects[@]}"; do
+    p="${i##${CODE}/projects/}"
+    external+=("${p%%/trunk} ${i%/*}/branches/${B}")
+    $E svn cp "$i ${i%/*}/branches/${B}"
+done
+
+declare -a projectst=(`svn pg svn:externals $CODE/meta-projects/$MP | grep -v '^#' |grep $CODET | cut -d' ' -f2`)
+for i in "${projectst[@]}"; do
+    p="${i##${CODET}/projects/}"
+    external+=("${p%%/trunk} ${i%/*}/branches/${B}")
+    $E svn cp "$i ${i%/*}/branches/${B}"
+done
+
+echo
+echo "Set the following externals with: svn pe $CODE/meta-projects/${MP%/*}/branches/${B}"
+echo
+for i in "${external[@]}"; do
+    echo $i
+done
