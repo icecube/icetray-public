@@ -25,7 +25,7 @@ if(SPHINX_BUILD AND NOT SPHINX_DIR_NOT_WRITABLE)
   ## this is for extensions in the "sphinx.ext" namespace, and could
   ## be made more generic. the file "conf.py.in" needs to have the
   ## corresponding variables inserted in the "extensions" directive.
-  foreach(e "napoleon" "email")
+  foreach(e "napoleon")
     string(TOUPPER ${e} eU)
     execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sphinx.ext.${e}"
       RESULT_VARIABLE sphinx_${eU}
@@ -39,6 +39,17 @@ if(SPHINX_BUILD AND NOT SPHINX_DIR_NOT_WRITABLE)
   endforeach()
   unset(e)
   unset(eU)
+
+  ## for sphinxcontrib-email
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sphinxcontrib.email"
+      RESULT_VARIABLE sphinx_EMAIL
+      OUTPUT_QUIET
+      ERROR_QUIET)
+  if(NOT sphinx_EMAIL)
+    set(sphinx_EMAIL "sphinxcontrib.email")
+  else()
+    set(sphinx_EMAIL "")
+  endif()
 
   add_custom_target(html
     COMMAND mkdir -p
