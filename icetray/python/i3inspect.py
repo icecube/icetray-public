@@ -14,7 +14,7 @@ try:
 	import docutils.frontend
 	import docutils.utils
 	import docutils.parsers.rst
-	from docutils import nodes
+	from docutils import nodes        
 	
 	class ParamHarvester(nodes.SparseNodeVisitor):
 		"""Extract Sphinxy parameter descriptions from a docstring."""
@@ -208,13 +208,17 @@ def harvest_objects(module, want=is_I3Module, memo=None):
 	
 def get_inspectable_projects():
 
+	inspectdir = [ os.path.basename(fname) for fname in
+				   glob(os.path.join(os.environ['I3_BUILD'],'inspect','*'))]
+
 	libdir = os.path.join(os.environ['I3_BUILD'],'lib')
 	
 	cpp_libs = [os.path.splitext(os.path.basename(fname))[0][3:]
-				for fname in glob(os.path.join(libdir,'lib*'))]
+				for fname in glob(os.path.join(libdir,'lib*'))
+				if fname in inspectdir]
 	python_libs = [os.path.splitext(os.path.basename(fname))[0]
 				   for fname in glob(os.path.join(libdir,'icecube','*.so'))
-				   if os.path.isfile(fname)]
+				   if os.path.isfile(fname) and fname in inspectdir]
 	python_dirs = [os.path.basename(fname)
 				   for fname in glob(os.path.join(libdir,'icecube','*'))
 				   if os.path.isdir(fname)]
