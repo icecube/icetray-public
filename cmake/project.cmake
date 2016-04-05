@@ -286,6 +286,8 @@ macro(i3_add_library THIS_LIB_NAME)
 
     if(NOT ${THIS_LIB_NAME}_ARGS_NOT_INSPECTABLE AND XSLTPROC_BIN)
 
+      file(WRITE ${CMAKE_BINARY_DIR}/inspect/${THIS_LIB_NAME} "")
+
       set(XML_TMP ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${THIS_LIB_NAME}-inspection.xml)
       set(HTML_OUTPUT ${CMAKE_BINARY_DIR}/docs/inspect/${THIS_LIB_NAME}.html)
       set(RST_OUTPUT ${SPHINX_DIR}/source/icetray/${THIS_LIB_NAME}.rst)

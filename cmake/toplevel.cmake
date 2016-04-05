@@ -83,6 +83,8 @@ else()
     COMMENT "I3_TESTDATA is not set.  Set it, 'make rebuild_cache' and try again.")
 endif()
 
+file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/inspect)
+
 include(tools)
 include(project)
 
