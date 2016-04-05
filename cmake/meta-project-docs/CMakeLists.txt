@@ -41,15 +41,20 @@ if(SPHINX_BUILD AND NOT SPHINX_DIR_NOT_WRITABLE)
   unset(eU)
 
   ## for sphinxcontrib-email
-  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sphinxcontrib.email"
-      RESULT_VARIABLE sphinx_EMAIL
+  foreach(e "email" "traclinks")
+    string(TOUPPER ${e} eU)
+    execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sphinxcontrib.${e}"
+      RESULT_VARIABLE sphinx_${eU}
       OUTPUT_QUIET
       ERROR_QUIET)
-  if(NOT sphinx_EMAIL)
-    set(sphinx_EMAIL "sphinxcontrib.email")
-  else()
-    set(sphinx_EMAIL "")
-  endif()
+    if(NOT sphinx_${eU})
+      set(sphinx_${eU} "sphinxcontrib.${e}")
+    else()
+      set(sphinx_${eU} "")
+    endif()
+  endforeach()
+  unset(e)
+  unset(eU)
 
   add_custom_target(html
     COMMAND mkdir -p

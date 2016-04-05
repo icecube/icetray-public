@@ -27,6 +27,7 @@ sys.path = [os.path.abspath('../')] + sys.path
 extensions = filter(None, ['sphinx.ext.autodoc', 
                            'sphinx.ext.mathjax',
                            '@sphinx_NAPOLEON@',
+                           '@sphinx_TRACLINKS@',
                            '@sphinx_EMAIL@',
                            'sphinx_cmake',
                            'script_directive',
@@ -193,3 +194,5 @@ latex_documents = [
 
 # If false, no module index is generated.
 #latex_use_modindex = True
+
+traclinks_base_url = "http://code.icecube.wisc.edu/projects/icecube"
