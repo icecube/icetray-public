@@ -19,77 +19,14 @@ project's ReST docs.  This allows us to easily locate and add to it for future r
 Introduction
 ------------
 
-Code review work is divided into four roles :
- - **Author**
- - **Sponsor**
- - **Consumers**
- - **Everyone Else** 
+FAQ: What does and does not need to be reviewed? 
 
-If you are involved in a review process, think about what role(s) you are most likely assuming and 
-look at what your tasks are.
+A:  At the very least all projects that are going to be part of a production meta-project (i.e. offline, 
+simulation, or icerec) needs to be reviewed, regardless of the language ( C++, pyython, etc...).
 
-The Author
-..........
 
-First, we have the **Author**. The Author (or Authors) is obviously the author of the project 
-that is getting reviewed. The Author is responsible for ensuring that their code is ready to be reviewed.
-Tests have been written. Documentation has been written. Coding Standards have been followed.
-
-The Sponsor
-...........
-
-Next, we have the **Sponsor**. The Sponsor is responsible for ensuring that the Author has done their 
-job (Tests, docs, code standards, etc), for collating the responses and comments of the review, and for 
-making sure the Author implements them. Finally the Sponsor is responsible for ensuring there are 
-enough "sign offs" to finalize and close the review. Sponsors will get a "Signed-off by:" line in the 
-SVN commit.
-
-The Author, of course, can be self-sponsored. But, ideally this role will be taken on by someone other 
-than the Author. Additionally, the Sponsor can be a primary **Consumer**.
-
-Consumers
-.........
-
-**Consumers** are those projects/work/good-night's-sleep/lives will be effected by promotion and adoption 
-of the project under review. This is the primary group of people who should be involved in the review process 
-(but often aren't). The review is the time to raise objections, not after promotion, adoption and implementation.
-
-Everyone Else
-.............
-
-Finally, we have **Everyone Else**. This is, well, everyone else. Code reviews are the responsibility of 
-everyone who uses any code at all. We are in a collaboration after all. Additionally, code reviews are a 
-fantastic way to get involved, and/or get your feet wet with IceCube code. Are you super organized, and 
-can herd cats like no one else? You can help! Are you annoyed by the quality of some of the documentation? 
-Here's your chance to make sure good docs get included! Are you new to IceCube and confused about why we 
-do some of the things we do? Here's your chance to learn the how's and the why's!
-
-Examples
---------
-
-Project CommonVariables
-.......................
- - Author: Martin Wolf
- - Sponsor: Emanuel Jacobi (assisted by Don)
-
-A Consumer should download and see how CommonVariables will help their project. When they see that 
-CommonVariables::Foo() breaks their Widget::Bar() they should send an email to dataclasses 
-(referencing the code review) that demonstrates the breakage. This can then be used fix a bug in either 
-project or as a new way of achieving Foo().
-
-An 'Everyone Else' who likes clear documentation can send a patch that reformats Martin's docs so that 
-they're more clear to a general user.
-
-Project pybdt
-.............
- - Author: Mike Richman
- - Sponsor: Andreas Homeier (as a primary Consumer, and assisted by Don)
-
-Andreas, who wants to run pybdt at pole, needs to help Mike ensure that his code runs as expected on 
-the pole test systems. In the mean time he needs to ensure that other Consumers are looking at Mike's code too.
-
-Points to be addressed during Code Review (mostly by the Sponsor)
------------------------------------------------------------------
+Points to be addressed during Code Review
+-----------------------------------------
 
 First glance
 ............
