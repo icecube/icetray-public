@@ -410,7 +410,6 @@ add_custom_target(coverage
   COMMAND genhtml --legend -o ../output/`date +%Y-%m-%d` reports.info
   COMMAND rm -f ../output/00_LATEST \; ln -sf `ls -1tr ../output |tail -1` ../output/00_LATEST
 )
-endif()
 
 ## python coverage
 configure_file(${CMAKE_SOURCE_DIR}/cmake/pycoverage.in
