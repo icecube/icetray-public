@@ -1,7 +1,7 @@
 .. -*- mode:rst; mode:flyspell; mode:fci; mode:auto-fill -*-
 
-Running Coverage Locally
-========================
+Running Python Coverage Locally
+===============================
 
 .. highlight:: console
 

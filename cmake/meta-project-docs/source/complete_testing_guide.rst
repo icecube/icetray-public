@@ -56,6 +56,7 @@ out the docs on `I3Test <projects/cmake/i3test.html>`_.
 Running the Tests
 -----------------
 To run the tests as they would be run on the build bots use **ctest**.
+
 * Only run the tests for your project. 'ctest -R <project_name>'
 * Note that this needs to be run from your build directory.
 
