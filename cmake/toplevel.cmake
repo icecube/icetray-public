@@ -399,7 +399,6 @@ add_custom_target(deploy-docs
 
 
 ## coverage target
-if("$ENV{USER}" MATCHES "^buildslave")
 add_custom_target(coverage
   COMMAND if test ! -d ../output \; then mkdir ../output\; fi
   COMMAND lcov -b ../ -d . -z
