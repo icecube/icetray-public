@@ -13,8 +13,12 @@ pre-requisites are:
   lcov
     this can be installed via your package manager
 
-Once you've ensured that these programs are installed, you can just
-run::
+NB : You need to set the CMAKE_BUILD_TYPE to 'Coverage' by either
+hacking your CMakeCache.txt file or passing it directly to cmake on
+the command line (e.g. "cmake ../src/ -DCMAKE_BUILD_TYPE=Coverage").
+
+Once you've ensured that these programs are installed and your
+CMAKE_BUILD_TYPE is set to **Coverage**, you can just run::
 
   $ cd $I3_BUILD
   $ make
