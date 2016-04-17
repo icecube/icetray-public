@@ -1122,7 +1122,7 @@ def run_viewer(filename, i3file, colors=False, ascii_only=False):
         return keys
 
     header_t1 = urwid.Text( ('titletext', '  Shoveling through file {0}'.format(filename)), wrap='clip' )
-    header_t2 = urwid.Text( ('titletext', 'For help press ?'), wrap='clip', align='right')
+    header_t2 = urwid.Text( ('titletext', 'For help press h'), wrap='clip', align='right')
     header = urwid.Columns( [header_t1, header_t2] )
     footer = Footer( frames )
     main = ViewerMain( frames, header, footer, ascii_only=ascii_only )
