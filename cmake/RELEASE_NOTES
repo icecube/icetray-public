@@ -6,6 +6,7 @@ trunk
 
 * add a new warning suppression flag
 * fix an unusal bug in boost 1.38.0 triggered by pybdt
+* add tool for NLopt minimization library
 
 V16-03-01 - March 25, 2016, don la dieu  (nega@icecube.umd.edu)
 ---------------------------------------------------------------
