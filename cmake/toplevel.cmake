@@ -67,6 +67,16 @@ include(utility)
 include(config)
 
 ## enable_testing() must be called before add_test() which happens in project.cmake
+if(DEFINED ENV{I3_TESTDATA})
+    set(I3_TESTDATA $ENV{I3_TESTDATA} CACHE STRING "Path to your icetray test-data")
+elseif(DEFINED ENV{I3_PORTS})
+    set(I3_TESTDATA $ENV{I3_PORTS}/test-data CACHE STRING "Path to your icetray test-data")
+else()
+    colormsg(YELLOW "*** Neither I3_PORTS nor I3_TESTDATA set.")
+    colormsg(YELLOW "*** Make sure to define at least one of them before calling 'make test' or manually running tests.")
+    set(I3_TESTDATA "" CACHE STRING "Path to your icetray test-data: currently empty, define it if you wish to run unit tests and/or test scripts.")
+endif(DEFINED ENV{I3_TESTDATA})
+
 if(I3_TESTDATA)
   add_custom_target(rsync
     COMMAND test -n "${I3_TESTDATA}"
