@@ -48,9 +48,7 @@ foreach(v Boost ROOT PYTHON GEANT4 GENIE)
   set(d "${d}'${v}': '${${v}}',")
 endforeach()
 
-execute_process(COMMAND python -c "from __future__ import print_function; \
-                                   import urllib; \
-                                   print(urllib.urlencode({${d}}), end='')"
+execute_process(COMMAND python -c "from __future__ import print_function; import urllib; print(urllib.urlencode({${d}}), end='')"
   OUTPUT_VARIABLE out)
 
 # execute_process(COMMAND wget -q "http://code.icecube.wisc.edu/report/?${out}"
