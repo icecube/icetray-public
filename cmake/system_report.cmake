@@ -40,17 +40,14 @@ set(HOSTID ${HOSTID} CACHE INTERNAL "HOSTID ala gethostid()")
 
 set(d "")
 foreach(v MACHASH HOSTID HOSTNAME COMPILER_ID_TAG CMAKE_VERSION CMAKE_INSTALL_PREFIX)
-  set(d "${d}'${v}': '${${v}}',")
+  set(d "${d}${v}:${${v}},")
 endforeach()
 
 foreach(v Boost ROOT PYTHON GEANT4 GENIE)
   set(v "${v}_VERSION")
-  set(d "${d}'${v}': '${${v}}',")
+  set(d "${d}${v}:${${v}},")
 endforeach()
 
-execute_process(COMMAND python -c "from __future__ import print_function; import urllib; print(urllib.urlencode({${d}}), end='')"
-  OUTPUT_VARIABLE out)
-
-# execute_process(COMMAND wget -q "http://code.icecube.wisc.edu/report/?${out}"
-#   OUTPUT_QUIET
-#   ERROR_QUIET)
+execute_process(COMMAND ${CMAKE_SOURCE_DIR}/cmake/system_report.py ${d}
+                OUTPUT_QUIET
+                ERROR_QUIET)
