@@ -12,7 +12,7 @@ struct djb2_hash{
     int c;
     while ((c = *str++))
       hash = ((hash << 5) + hash) + c; // hash * 33 + c
-      return hash;
+    return hash;
   }
 };
 
