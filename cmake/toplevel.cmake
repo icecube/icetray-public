@@ -96,7 +96,7 @@ endif()
 file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/inspect)
 
 include(tools)
-#include(system_report)
+include(system_report)
 include(project)
 
 add_custom_target(test-bins)
