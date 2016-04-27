@@ -127,6 +127,8 @@ if (USE_ROOT)
   endif(NOT ROOT_VERSION)
 
   if(NOT ROOT_VERSION)
+    # make sure to clear the old value from the cache first
+    unset(USE_ROOT CACHE)
     set(USE_ROOT OFF CACHE BOOL "Root not detected")
   endif(NOT ROOT_VERSION)
 endif (USE_ROOT)
