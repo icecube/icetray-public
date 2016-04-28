@@ -1,6 +1,6 @@
 //
-//   Copyright (c) 2004, 2005, 2006, 2007   Troy D. Straszheim  
-//   
+//   Copyright (c) 2004, 2005, 2006, 2007   Troy D. Straszheim
+//
 //   $Id$
 //
 //   This file is part of IceTray.
@@ -26,7 +26,7 @@
 using namespace boost::python;
 
 template <typename T>
-inline static 
+inline static
 boost::shared_ptr<T> frame_get(const I3Frame* f, const std::string& where)
 {
   if (!f->Has(where))
@@ -39,11 +39,11 @@ boost::shared_ptr<T> frame_get(const I3Frame* f, const std::string& where)
   try {
     boost::shared_ptr<const T> thing = f->Get<boost::shared_ptr<const T> >(where,true);
     return boost::const_pointer_cast<T>(thing);
-  } catch (const boost::archive::archive_exception& e) { 
+  } catch (const boost::archive::archive_exception& e) {
     std::ostringstream message;
     message << "Frame caught exception \"" << e.what() << "\" for key \"" << where << "\" of type " << f->type_name(where);
     PyErr_SetString(PyExc_RuntimeError,message.str().c_str());
-    throw boost::python::error_already_set(); 
+    throw boost::python::error_already_set();
     return boost::shared_ptr<T>();
   }
 }
@@ -79,8 +79,8 @@ static void frame_put(I3Frame& f, const std::string& s, I3FrameObjectConstPtr fo
   f.Put(s, fop);
 }
 
-static void frame_put_on_stream(I3Frame& f, 
-                                const std::string& s, 
+static void frame_put_on_stream(I3Frame& f,
+                                const std::string& s,
                                 I3FrameObjectConstPtr fop,
                                 const I3Frame::Stream& stream)
 {
@@ -91,6 +91,29 @@ static void frame_put_on_stream(I3Frame& f,
 std::string format_stream(const I3Frame::Stream& s)
 {
   return std::string("icetray.I3Frame.") + s.str();
+}
+
+static str frame_dumps(I3Frame const&f)
+{
+  std::vector<char> blobBuffer;
+  boost::iostreams::filtering_ostream blobBufStream(boost::iostreams::back_inserter(blobBuffer));
+  {
+      f.save(blobBufStream);
+  }
+  blobBufStream.flush();
+
+  return str( &(blobBuffer[0]), blobBuffer.size() );
+}
+
+static void frame_loads(I3Frame &f, str &data)
+{
+  const char *buffer = extract<char const*>(data);
+  std::size_t size = len(data);
+
+  boost::iostreams::array_source src(buffer, size);
+  boost::iostreams::filtering_istream fis(src);
+
+  f.load(fis);
 }
 
 void register_I3Frame()
@@ -135,6 +158,8 @@ void register_I3Frame()
     .def("type_name", (std::string (I3Frame::*)(const std::string&) const) &I3Frame::type_name)
     .def("size", (I3Frame::size_type (I3Frame::*)(const std::string&) const) &I3Frame::size)
     .def("as_xml", &I3Frame::as_xml)
+    .def("dumps", frame_dumps)
+    .def("loads", frame_loads)
     .def_readonly("None", I3Frame::None)
     .def_readonly("Geometry", I3Frame::Geometry)
     .def_readonly("Calibration", I3Frame::Calibration)
