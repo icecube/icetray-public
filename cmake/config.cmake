@@ -443,15 +443,14 @@ endif (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
 set(RELOPTLEVEL 3)
 
 #
-#  Reduce on FC4 (gah)
+#  Ban any Fedora Core release
 #
 if(EXISTS /etc/issue)
   file(READ /etc/issue ETC_ISSUE)
-  if(${ETC_ISSUE} MATCHES "Fedora Core release 4")
-    message(STATUS "You're on FC4, a buggy platform.  Reducing compiler optimizations.  Your code will run more slowly.")
-    set(RELOPTLEVEL 2)
-  endif(${ETC_ISSUE} MATCHES "Fedora Core release 4")
-endif(EXISTS /etc/issue)
+  if(${ETC_ISSUE} MATCHES "Fedora Core")
+    message(FATAL_ERROR "You're running a Fedora Core release, a known old and buggy platform. Upgrade your OS.")
+  endif()
+endif()
 
 #
 # Reduce on RHEL5
