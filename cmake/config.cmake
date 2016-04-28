@@ -453,13 +453,11 @@ if(EXISTS /etc/issue)
 endif()
 
 #
-# Reduce on RHEL5
+# Ban RHEL5. Should also ban other RH5 OSes (SL, CentOS, etc)
 #
 if(${ETC_ISSUE} MATCHES "Red Hat Enterprise Linux Client release 5.5 (Tikanga)")
-  message(STATUS "You're on Red Enterprise Linux 5, an old, buggy, and unsupported platform. Your code will run poorly.")
-  set(RELOPTLEVEL 2)
-endif(${ETC_ISSUE} MATCHES "Red Hat Enterprise Linux Client release 5.5 (Tikanga)")
-
+  message(FATAL_ERROR "You're on Red Enterprise Linux 5, an old, buggy, and unsupported platform. Upgrade your OS.")
+endif()
 
 message(STATUS "Setting default compiler flags and build type.")
 
