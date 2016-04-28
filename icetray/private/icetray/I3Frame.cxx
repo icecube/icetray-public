@@ -480,7 +480,7 @@ void I3Frame::save(OStreamT& os, const vector<string>& skip) const
 
     // save map values in a set to check, if keys (guaranteed in a map) and pointers are
     // unique.  skip values, where key matches an element in vector skip.
-    set<map_t::value_type*> mapAsSet;
+    std::set<std::string> mapAsSet;
     for (map_t::iterator iter = map_.begin();
          iter != map_.end();
          iter++)
@@ -494,44 +494,42 @@ void I3Frame::save(OStreamT& os, const vector<string>& skip) const
             skipIt = boost::regex_match(iter->first.string, reg);
           }
 
-	if (iter->second->stream != stop_.id())
-	  skipIt = true;
+        if (iter->second->stream != stop_.id())
+          skipIt = true;
 
         if (skipIt) continue;
-        
-        if (!mapAsSet.insert(&*iter).second)
-          log_fatal("frame contains a duplicated pointer for \"%s\"", iter->first.string.c_str());
+
+        mapAsSet.insert(iter->first.string);
       }
 
     i3frame_nslots_t size = mapAsSet.size();
     poa << make_nvp("size", size);
     crcit(size, crc);
-    
-    for (set<map_t::value_type*>::iterator iter = mapAsSet.begin();
+
+    for (std::set<std::string>::iterator iter = mapAsSet.begin();
          iter != mapAsSet.end();
          iter++)
       {
-        map_t::value_type& i = **iter;
-        const string &key = i.first.string;
-        value_t& value = *i.second;
+        const string &key = *iter;
+        value_t& value = *map_[key];
 
         poa << make_nvp("key", key);
-	crcit(key, crc);
-        if (value.blob.buf.size()) // there's a buffer there.  use it and it's type_name.
+        crcit(key, crc);
+        if (value.blob.buf.size()) // there's a buffer there.  use it and its type_name.
           {
             string type_name = value.blob.type_name;
             poa << make_nvp("type_name", type_name);
-	    crcit(type_name, crc);
+            crcit(type_name, crc);
             poa << make_nvp("buf", value.blob.buf);
-	    crcit(value.blob.buf, crc);
+            crcit(value.blob.buf, crc);
           }
         else
           {
             const I3FrameObject& obj=*(value.ptr.get());
             value.blob.type_name = value.ptr ? I3::name_of(typeid(obj)) : "(null)";
             poa << make_nvp("type_name", value.blob.type_name);
-	    crcit(value.blob.type_name, crc);
-	    typedef io::stream<io::back_insert_device<vector<char> > > vecstream_t;
+            crcit(value.blob.type_name, crc);
+            typedef io::stream<io::back_insert_device<vector<char> > > vecstream_t;
             vecstream_t blobBufStream(value.blob.buf);
             {
               boost::archive::portable_binary_oarchive blobBufArchive(blobBufStream);
@@ -544,7 +542,7 @@ void I3Frame::save(OStreamT& os, const vector<string>& skip) const
             }
             blobBufStream.flush();
             poa << make_nvp("buf", value.blob.buf);
-	    crcit(value.blob.buf, crc);
+            crcit(value.blob.buf, crc);
             if (drop_blobs_)
               value.blob.reset();
           }
