@@ -21,14 +21,17 @@ colormsg("")
 colormsg(_HIBLUE_ "IceCube Configuration starting")
 colormsg("")
 
+## set some cmake flags - see cmake_variables(7)
 set(BUILD_SHARED_LIBS SHARED)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+## this is our flag, but in the above style
 set(DOXYGEN_OUTPUT_PATH ${CMAKE_BINARY_DIR}/docs/doxygen)
 
 #
 #  Check build sanity
 #
+## ensure that we're not cmake'ing under an env-shell from another workspace
 if(DEFINED ENV{I3_BUILD})
   if(NOT "$ENV{I3_BUILD}" STREQUAL "${I3_BUILD}")
     message("***")
@@ -63,7 +66,9 @@ else()
   #message(STATUS "I3_SRC not yet set in environment.  ok.")
 endif()
 
+## default the option SYSTEM_PACKAGES to ON
 option(SYSTEM_PACKAGES "Use tools provided by the operating system" ON)
+## import I3_PORTS from the environment into the cmake variable I3_PORTS
 set(I3_PORTS $ENV{I3_PORTS} CACHE STRING "Path to your icecube ports installation")
 
 #
@@ -78,6 +83,7 @@ if($ENV{SROOT} MATCHES "^/cvmfs/icecube")
   set(USE_CVMFS TRUE CACHE BOOL "Are we using CVMFS?")
 endif()
 
+## use a default if I3_PORTS isn't set, and report its value
 if(SYSTEM_PACKAGES)
   if(IS_DIRECTORY $ENV{I3_PORTS})
     boost_report_value(I3_PORTS)
@@ -98,7 +104,6 @@ endif(SYSTEM_PACKAGES)
 #
 # Create various info/debug files
 #
-
 set(NOTES_DIR ${CMAKE_BINARY_DIR}/Testing/Notes)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/Testing/Notes)
 
@@ -242,6 +247,8 @@ if (CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
   endif (NOT "${META_PROJECT}" STREQUAL "Unknown")
 endif(CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
 
+## set the uber header. this file is included via command line for
+## every compiled file.
 set(I3_UBER_HEADER ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/I3.h)
 configure_file(${CMAKE_SOURCE_DIR}/cmake/I3.h.in
   ${I3_UBER_HEADER}
@@ -252,7 +259,7 @@ colormsg(_HIBLUE_ "Setting compiler, compile drivers, and linker")
 colormsg("")
 
 #
-#  distcc
+#  distcc - distributed compilation
 #
 find_program(DISTCC_PROGRAM distcc)
 if(DISTCC_PROGRAM)
@@ -273,7 +280,7 @@ endif(DISTCC_PROGRAM)
 
 
 #
-#  ccache
+#  ccache - local object file caching. can speed compilation times
 #
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
@@ -298,7 +305,7 @@ else(CCACHE_PROGRAM)
 endif(CCACHE_PROGRAM)
 
 #
-#  gfilt
+#  gfilt - filter STL error messages into something understandable
 #
 if (USE_CCACHE OR CMAKE_COMPILER_IS_CLANG)
   option(USE_GFILT "Use gfilt STL error decryptor" OFF)
@@ -387,7 +394,6 @@ string(REPLACE ";" " " C_WARNING_FLAGS "${C_WARNING_FLAGS}")
 #  This should work for gcc/clang/intel. Note: we test for the warning, and
 #  assume it hass a corresponding '-Wno-*' flag.
 #
-
 include(CheckCXXCompilerFlag)
 if (NOT CXX_WARNING_SUPPRESSION_FLAGS)
     foreach(f -Wdeprecated -Wunused-variable -Wunused-local-typedef -Wunused-local-typedefs -Wpotentially-evaluated-expression)
@@ -461,7 +467,7 @@ message(STATUS "Setting default compiler flags and build type.")
 #
 #  Check if it is defined...   if somebody has specified it on the
 #  cmake commmand line, e.g.
-#  cmake -DCMAKE_BUILD_TYPE:STRING=Debug, we need to use that value
+#  cmake -DCMAKE_BUILD_TYPE=Debug, we need to use that value
 #
 if ((NOT CMAKE_BUILD_TYPE) OR (CMAKE_BUILD_TYPE MATCHES "^None"))
   if(META_PROJECT MATCHES "trunk$")
@@ -472,6 +478,7 @@ if ((NOT CMAKE_BUILD_TYPE) OR (CMAKE_BUILD_TYPE MATCHES "^None"))
 endif()
 set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel" FORCE)
 
+## turning this flag on enables outputting a JSON file that is used
 ## for clang's libtooling. cache/force is needed
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE BOOL "Export a JSON 'database' of compilation commands for each source file. Useful for clang's libtooling" FORCE)
 
