@@ -52,19 +52,22 @@ if (APPLE)
   set(CMAKE_FRAMEWORK_PATH ${CMAKE_FRAMEWORK_PATH} CACHE PATH "")
 endif (APPLE)
 
+## set some convenience variables
 set(I3_SRC ${CMAKE_SOURCE_DIR})
 set(I3_BUILD ${CMAKE_BINARY_DIR})
 
+## pull in optional meta-project CMakeLists
 include(${CMAKE_SOURCE_DIR}/CMakeLists.optional.txt OPTIONAL)
 
+## expand the module path to include our own directories
 set(CMAKE_MODULE_PATH
   ${EXTRA_CMAKE_MODULE_PATH}
   ${CMAKE_SOURCE_DIR}/cmake
   ${CMAKE_SOURCE_DIR}/cmake/tools
   ${CMAKE_SOURCE_DIR}/cmake/utility)
 
-include(utility)
-include(config)
+include(utility)  # load utility functions (pretty print, etc)
+include(config)   # trigger the configuation meat (build types, etc)
 
 ## enable_testing() must be called before add_test() which happens in project.cmake
 if(DEFINED ENV{I3_TESTDATA})
@@ -93,19 +96,27 @@ else()
     COMMENT "I3_TESTDATA is not set.  Set it, 'make rebuild_cache' and try again.")
 endif()
 
-file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/inspect)
+include(tools)          # trigger tool/library detection
+include(system_report)  # generate/upload a system report
+include(project)        # load the i3_*() macros
 
-include(tools)
-include(system_report)
-include(project)
-
+## this must be set before any call to i3_test_executable() - see "meat" below
 add_custom_target(test-bins)
+## this must be set before any call to i3_add_pybindings() - see "meat" below
 add_custom_target(pybindings)
 
 ## these doxygen settings need to happen before configuring projects
 set(INSPECT_ALL_HTML ${CMAKE_BINARY_DIR}/doxygen/inspect/index.html)
 set(SPHINX_DIR "${CMAKE_BINARY_DIR}/sphinx_src")
 add_custom_target(doxygen)
+
+## manipulate some directories before configuring projects
+file(MAKE_DIRECTORY "${DOXYGEN_OUTPUT_PATH}/.tagfiles")
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/docs/inspect")
+file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/inspect")
+
+## look for xlstproc, required by icetray-inspect
+find_program(XSLTPROC_BIN xsltproc DOC "Location of the XSLT processor")
 
 add_custom_target(inspect
   COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh
@@ -116,6 +127,16 @@ add_custom_target(inspect
           -o ${SPHINX_DIR}/source/icetray_quick_reference.rst
   COMMENT "Generating rst from icetray-inspect of QuickReference"
   DEPENDS ${CMAKE_BINARY_DIR}/bin/icetray-inspect
+  )
+
+## generate a URL and target to deploy docs to
+string(REGEX REPLACE "s\\.V.*$" "" DEST ${META_PROJECT})
+string(REGEX REPLACE "-software" "" DEST ${DEST})
+string(REGEX REPLACE "\\." "_" DEST ${DEST})
+string(REGEX REPLACE "_release$" "" DEST ${DEST})
+add_custom_target(deploy-docs
+  COMMAND rsync -va --delete ${CMAKE_BINARY_DIR}/docs/ buildmaster@dragon:/opt/docs/${DEST}/
+  COMMENT Deploying docs to ${DEST}
   )
 
 include(tarball)
@@ -140,15 +161,10 @@ add_custom_target(env-check ALL
   COMMAND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/env-check.sh
   COMMENT "Checking build against environment")
 
-#
-#  extra icetray-inspect docs goodness.
-#
-find_program(XSLTPROC_BIN xsltproc DOC "Location of the XSLT processor")
-
-#
-#  Temp directory for documentation
-#
-file(MAKE_DIRECTORY "${DOXYGEN_OUTPUT_PATH}/.tagfiles")
+## this is the meat, where individual projects get configured
+colormsg("")
+colormsg(_HIBLUE_ "Configuring projects:")
+colormsg("")
 
 set(I3_PROJECTS "" CACHE STRING "List of projects to build (if empty, glob for CMakeLists.txt and use all")
 
@@ -171,12 +187,6 @@ else()
   message(STATUS "Using project list manually specified by I3_PROJECTS")
   set(SUBDIRS ${I3_PROJECTS})
 endif()
-
-#i3_add_testing_targets()
-
-colormsg("")
-colormsg(_HIBLUE_ "Configuring projects:")
-colormsg("")
 
 list(SORT SUBDIRS)
 foreach(subdir ${SUBDIRS})
@@ -282,17 +292,6 @@ if(DPKG_INSTALL_PREFIX)
     COMMAND chmod 755 ${CMAKE_INSTALL_PREFIX}/env-shell.sh
     )
 endif(DPKG_INSTALL_PREFIX)
-
-file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/docs/inspect")
-
-string(REGEX REPLACE "s\\.V.*$" "" DEST ${META_PROJECT})
-string(REGEX REPLACE "-software" "" DEST ${DEST})
-string(REGEX REPLACE "\\." "_" DEST ${DEST})
-string(REGEX REPLACE "_release$" "" DEST ${DEST})
-add_custom_target(deploy-docs
-  COMMAND rsync -va --delete ${CMAKE_BINARY_DIR}/docs/ buildmaster@dragon:/opt/docs/${DEST}/
-  COMMENT Deploying docs to ${DEST}
-  )
 
 ## coverage target
 add_custom_target(coverage
