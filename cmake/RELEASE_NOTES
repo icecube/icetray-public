@@ -4,6 +4,9 @@ Release Notes
 trunk
 -----
 
+V16-04-00 - April 29, 2016, Alex Olivas  (olivas@icecube.umd.edu)
+---------------------------------------------------------------
+
 * add a new warning suppression flag
 * fix an unusal bug in boost 1.38.0 triggered by pybdt
 * add tool for NLopt minimization library
