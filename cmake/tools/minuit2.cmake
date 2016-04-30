@@ -18,26 +18,20 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 
-set(MINUIT2_FOUND FALSE)
+
 
 # search for ROOT's Minuit2
-if(ROOT_FOUND)
-    if(${ROOT_VERSION} GREATER 5.29)
-        TOOLDEF(minuit2
-            ${ROOTSYS}/include
-            Minuit2/MnConfig.h
-            ${ROOTSYS}/lib
-            NONE # bin is n/a, placeholder
-            Minuit2
-            )
-    else(${ROOT_VERSION} GREATER 5.29)
-        message(STATUS "+ minuit2 disabled: ROOT version less 5.30 detected")
-    endif(${ROOT_VERSION} GREATER 5.29)
-endif(ROOT_FOUND)
+TOOLDEF(minuit2
+    ${ROOTSYS}/include
+    Minuit2/MnConfig.h
+    ${ROOTSYS}/lib
+    NONE # bin is n/a, placeholder
+    Minuit2
+    )
 
 # search for the system installed Minuit2
 if(NOT MINUIT2_FOUND)
-    unset(minuit2_INCLUDE_DIR)
+    unset(MINUIT2_INCLUDE_DIR)
     TOOLDEF(minuit2
         include/Minuit2
         Minuit2/MnConfig.h
@@ -46,3 +40,11 @@ if(NOT MINUIT2_FOUND)
         Minuit2
     )
 endif(NOT MINUIT2_FOUND)
+
+if(ROOT_FOUND)
+    if(${ROOT_VERSION} LESS 5.30)
+        set(MINUIT2_FOUND FALSE)
+        unset(MINUIT2_INCLUDE_DIR)
+        message(STATUS "- Minuit2: ROOT < 5.30 not supported")
+    endif(${ROOT_VERSION} LESS 5.30)
+endif(ROOT_FOUND)
