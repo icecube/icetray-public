@@ -18,35 +18,31 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 
+set(MINUIT2_FOUND FALSE)
+
 # search for ROOT's Minuit2
-TOOLDEF (minuit2
-    ${ROOTSYS}/include
-    Minuit2/MnConfig.h
-    ${ROOTSYS}/lib
-    NONE  # bin is n/a, placeholder
-    Minuit2
-    )
+if(ROOT_FOUND)
+    if(${ROOT_VERSION} GREATER 5.29)
+        TOOLDEF(minuit2
+            ${ROOTSYS}/include
+            Minuit2/MnConfig.h
+            ${ROOTSYS}/lib
+            NONE # bin is n/a, placeholder
+            Minuit2
+            )
+    else(${ROOT_VERSION} GREATER 5.29)
+        message(STATUS "+ minuit2 disabled: ROOT version less 5.30 detected")
+    endif(${ROOT_VERSION} GREATER 5.29)
+endif(ROOT_FOUND)
 
 # search for the system installed Minuit2
-if (NOT MINUIT2_FOUND)
-  unset(minuit2_INCLUDE_DIR)
-  TOOLDEF (minuit2
-      include/Minuit2
-      Minuit2/MnConfig.h
-      lib/Minuit2
-      NONE  # bin is n/a, placeholder
-      Minuit2
-  )
-endif(NOT MINUIT2_FOUND)
-
-# search the I3_PORTS Minuit2
-if (NOT MINUIT2_FOUND)
-  unset(minuit2_INCLUDE_DIR)
-  TOOLDEF (minuit2
-      include/Minuit2-5.24.00
-      Minuit2/MnConfig.h
-      lib/Minuit2-5.24.00
-      NONE  # bin is n/a, placeholder
-      Minuit2
-  )
+if(NOT MINUIT2_FOUND)
+    unset(minuit2_INCLUDE_DIR)
+    TOOLDEF(minuit2
+        include/Minuit2
+        Minuit2/MnConfig.h
+        lib/Minuit2
+        NONE # bin is n/a, placeholder
+        Minuit2
+    )
 endif(NOT MINUIT2_FOUND)
