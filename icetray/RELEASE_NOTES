@@ -4,6 +4,12 @@ Release Notes
 trunk
 -----
 
+May 2, 2016, Alex Olivas  (olivas@icecube.umd.edu)
+---------------------------------------------------
+Release V16-04-01
+* Update logging test scripts to account for different
+  logging defaults in release and debug builds.
+
 April 29, 2016, Alex Olivas  (olivas@icecube.umd.edu)
 ---------------------------------------------------
 Release V16-04-00
