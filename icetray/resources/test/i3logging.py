@@ -7,8 +7,9 @@ from icecube import icetray
 
 def main():
     lvl = icetray.get_log_level_for_unit('blah')
-    if lvl != icetray.I3LogLevel.LOG_INFO:
-        raise Exception('default level is not INFO')
+    if lvl != icetray.I3LogLevel.LOG_INFO and\
+      lvl != icetray.I3LogLevel.LOG_NOTICE :
+        raise Exception('default level is not INFO or NOTICE')
 
     l = icetray.I3Logger()
 
@@ -25,7 +26,8 @@ def main():
     gl.log(icetray.I3LogLevel.LOG_INFO,'blah','file',123,'func','message')
 
     lvl = l.get_level_for_unit('blah')
-    if lvl != icetray.I3LogLevel.LOG_INFO:
+    if lvl != icetray.I3LogLevel.LOG_INFO and\
+      lvl != icetray.I3LogLevel.LOG_NOTICE:
         raise Exception('default level is not INFO')
 
     l.set_level_for_unit('blah2',icetray.I3LogLevel.LOG_WARN)
