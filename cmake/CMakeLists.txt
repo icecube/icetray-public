@@ -4,5 +4,6 @@ i3_project(cmake
 add_subdirectory(meta-project-docs)
 
 configure_file(review.in ${I3_BUILD}/bin/review @ONLY)
+configure_file(coverage.sh.in ${I3_BUILD}/bin/coverage.sh @ONLY)
 configure_file(branch-metaproject.in ${I3_BUILD}/bin/branch-metaproject @ONLY)
-execute_process(COMMAND chmod a+x ${I3_BUILD}/bin/review ${I3_BUILD}/bin/branch-metaproject)
+execute_process(COMMAND chmod a+x ${I3_BUILD}/bin/review ${I3_BUILD}/bin/coverage.sh ${I3_BUILD}/bin/branch-metaproject)
