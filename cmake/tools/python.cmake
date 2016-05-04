@@ -28,7 +28,10 @@ find_program(PYTHON_EXECUTABLE python
       PATHS ENV PATH         # look in the PATH environment variable
       NO_DEFAULT_PATH        # do not look anywhere else...
       )
-find_package(PythonInterp QUIET)
+find_package(PythonInterp QUIET
+      PATHS ENV PATH
+      NO_DEFAULT_PATH
+      )
 
 # 
 # determine version of the system python.
@@ -57,10 +60,10 @@ message(STATUS "+  version: ${PYTHON_VERSION}")
 STRING(REPLACE "." "" PYTHON_VERSION_NO_DOTS ${PYTHON_STRIPPED_MAJOR_MINOR_VERSION})
 
 #
-# Get the (probable) root dir of the python install
+# Get the root dir of the python install
 #
-get_filename_component(PYTHON_BIN_DIR ${PYTHON_EXECUTABLE} PATH)
-get_filename_component(PYTHON_ROOT ${PYTHON_BIN_DIR} PATH)
+execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; sys.stdout.write(sys.prefix)"
+                OUTPUT_VARIABLE PYTHON_ROOT)
 #message(STATUS "+  base dir: ${PYTHON_ROOT}")
 
 #
@@ -71,6 +74,7 @@ FIND_LIBRARY(PYTHON_LIBRARY
   NAMES python${PYTHON_VERSION_NO_DOTS} python${PYTHON_STRIPPED_MAJOR_MINOR_VERSION}
   HINTS ${PYTHON_ROOT} ${PYTHON_ROOT}/lib
   NO_SYSTEM_ENVIRONMENT_PATH
+  NO_DEFAULT_PATH
 )
 FIND_PATH(PYTHON_INCLUDE_DIR
   NAMES Python.h
@@ -78,10 +82,10 @@ FIND_PATH(PYTHON_INCLUDE_DIR
     ${PYTHON_ROOT}/include
   PATH_SUFFIXES
     python${PYTHON_STRIPPED_MAJOR_MINOR_VERSION}
+  NO_DEFAULT_PATH
 )
 # required for ubuntu, because their version of FindPythonLibs is different
 set(PYTHON_INCLUDE_DIR2 ${PYTHON_INCLUDE_DIR})
-
 #
 # Now do the full python detection, which includes special
 # things for frameworks detection.
