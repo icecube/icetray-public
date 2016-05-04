@@ -164,8 +164,9 @@ boost_report_pretty("CMake version" CMAKE_VERSION)
 #
 # Find the svn program
 #
-find_program(SVN_EXECUTABLE svn)
-
+find_program(SVN_EXECUTABLE svn
+             PATHS ENV PATH /usr/bin
+             NO_DEFAULT_PATH)
 #
 # Get SVN_REVISION from svn info
 #
