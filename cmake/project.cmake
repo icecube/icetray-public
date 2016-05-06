@@ -284,34 +284,40 @@ macro(i3_add_library THIS_LIB_NAME)
 
     endif(NOT ${THIS_LIB_NAME}_ARGS_NO_DOXYGEN AND DOXYGEN_FOUND)
 
-    if(NOT ${THIS_LIB_NAME}_ARGS_NOT_INSPECTABLE AND XSLTPROC_BIN)
+    if(XSLTPROC_BIN)
+      
+      if(${THIS_LIB_NAME}_ARGS_NOT_INSPECTABLE)
 
-      file(WRITE ${CMAKE_BINARY_DIR}/inspect/${THIS_LIB_NAME} "")
-
-      set(XML_TMP ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${THIS_LIB_NAME}-inspection.xml)
-      set(HTML_OUTPUT ${CMAKE_BINARY_DIR}/docs/inspect/${THIS_LIB_NAME}.html)
-      set(RST_OUTPUT ${SPHINX_DIR}/source/icetray/${THIS_LIB_NAME}.rst)
-      add_custom_target(${PROJECT_NAME}-${THIS_LIB_NAME}-inspect
-      	COMMAND mkdir -p ${CMAKE_BINARY_DIR}/docs/inspect
-	COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${EXECUTABLE_OUTPUT_PATH}/icetray-inspect ${THIS_LIB_NAME} --xml -o ${XML_TMP}
-	COMMAND ${XSLTPROC_BIN} ${CMAKE_SOURCE_DIR}/icetray/resources/inspect2html.xsl ${XML_TMP} > ${HTML_OUTPUT}
+        file(WRITE ${CMAKE_BINARY_DIR}/docs/no_inspect/${THIS_LIB_NAME} "")
 	
-	COMMAND mkdir -p ${SPHINX_DIR}/source/icetray/
-	COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh
-	${EXECUTABLE_OUTPUT_PATH}/icetray-inspect ${THIS_LIB_NAME}
-	--sphinx --subsection-headers --sphinx-functions
-	--verbose-docs
-	#--expand-segments
-	--title=""
-	-o ${RST_OUTPUT}
-	COMMENT "Generating rst from icetray-inspect of ${THIS_LIB_NAME}"
-	)
+      else(${THIS_LIB_NAME}_ARGS_NOT_INSPECTABLE)
+    
+        set(XML_TMP ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${THIS_LIB_NAME}-inspection.xml)
+        set(HTML_OUTPUT ${CMAKE_BINARY_DIR}/docs/inspect/${THIS_LIB_NAME}.html)
+        set(RST_OUTPUT ${SPHINX_DIR}/source/icetray/${THIS_LIB_NAME}.rst)
+        add_custom_target(${PROJECT_NAME}-${THIS_LIB_NAME}-inspect
+        	COMMAND mkdir -p ${CMAKE_BINARY_DIR}/docs/inspect
+    	  	COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${EXECUTABLE_OUTPUT_PATH}/icetray-inspect ${THIS_LIB_NAME} --xml -o ${XML_TMP}
+		COMMAND ${XSLTPROC_BIN} ${CMAKE_SOURCE_DIR}/icetray/resources/inspect2html.xsl ${XML_TMP} > ${HTML_OUTPUT}
+	
+		COMMAND mkdir -p ${SPHINX_DIR}/source/icetray/
+		COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh
+		${EXECUTABLE_OUTPUT_PATH}/icetray-inspect ${THIS_LIB_NAME}
+		--sphinx --subsection-headers --sphinx-functions
+		--verbose-docs
+		#--expand-segments
+		--title=""
+		-o ${RST_OUTPUT}
+		COMMENT "Generating rst from icetray-inspect of ${THIS_LIB_NAME}"
+		)
 
-      add_dependencies(inspect
-	${PROJECT_NAME}-${THIS_LIB_NAME}-inspect
-	)
+        add_dependencies(inspect
+	  ${PROJECT_NAME}-${THIS_LIB_NAME}-inspect
+	  )
+	  
+      endif(${THIS_LIB_NAME}_ARGS_NOT_INSPECTABLE)
 
-    endif()
+    endif(XSLTPROC_BIN)	
 
 
 
