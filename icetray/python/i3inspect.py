@@ -208,19 +208,30 @@ def harvest_objects(module, want=is_I3Module, memo=None):
 	
 def get_inspectable_projects():
 
-	inspectdir = [ os.path.basename(fname) for fname in
-				   glob(os.path.join(os.environ['I3_BUILD'],'inspect','*'))]
+	noinspect = [ os.path.basename(fname) for fname in
+					 glob(os.path.join(os.environ['I3_BUILD'],
+									   'docs','no_inspect','*'))]
+	
+	noinspect+=[ d.replace("-","_") for d in noinspect]
+	noinspect=set(noinspect)
 
 	libdir = os.path.join(os.environ['I3_BUILD'],'lib')
 	
-	cpp_libs = [os.path.splitext(os.path.basename(fname))[0][3:]
-				for fname in glob(os.path.join(libdir,'lib*'))
-				if fname in inspectdir]
-	python_libs = [os.path.splitext(os.path.basename(fname))[0]
+	cpp_libs = [os.path.basename(fname).split('.')[0][3:]
+				for fname in glob(os.path.join(libdir,'lib*'))]
+
+	cpp_libs = [ l for l in cpp_libs if l not in noinspect]
+
+	python_libs = [os.path.basename(fname).split('.')[0]
 				   for fname in glob(os.path.join(libdir,'icecube','*.so'))
-				   if os.path.isfile(fname) and fname in inspectdir]
+				   if os.path.isfile(fname) ]
+
+	python_libs = [ l for l in python_libs if l not in noinspect]
+
 	python_dirs = [os.path.basename(fname)
 				   for fname in glob(os.path.join(libdir,'icecube','*'))
 				   if os.path.isdir(fname)]
+
+	python_dirs = [ l for l in python_dirs if l not in noinspect]
 
 	return cpp_libs,python_libs,python_dirs

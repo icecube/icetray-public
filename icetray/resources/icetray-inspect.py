@@ -342,7 +342,12 @@ def display_project(project):
             
 		loadstr = "import icecube.%s"%pyproject
 	elif cppproject:
-		icetray.load(cppproject, False)		
+		try:
+			icetray.load(cppproject, False)
+		except Exception,e:
+			sys.stderr.write("Error cant load '%s': %s\n" % (project,str(e)))
+			return
+			
 		pymodule=None
 		loadstr = "icetray.load('%s',False)"%cppproject
 	else:
@@ -479,6 +484,7 @@ from icecube import icetray, dataclasses,tableio
 from icecube.icetray import i3inspect
 from icecube.icetray import traysegment
 
+
 def sig_handler(signum, frame):
 	raise Exception("Segfault")
 signal.signal(signal.SIGSEGV, sig_handler)
@@ -508,8 +514,7 @@ args = sorted(set([a.replace('-','_') for a in args]),
 			  key=lambda s:s.lower())
 
 for p in args:
-	if p == "icetray.dylib" or p == "IceHive":
-		continue
+
 	display_project(p)
 	
 output.file_footer()
