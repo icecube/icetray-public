@@ -49,34 +49,13 @@ class portable_binary_oarchive :
 		    os (*stream.rdbuf()) {}
 
 		template<class T>
-#if BOOST_VERSION < 105900
 		void save_override(const T &t, BOOST_PFTO int version) {
 			this->detail::common_oarchive<portable_binary_oarchive>
 			    ::save_override(t, static_cast<int>(version));
 		}
-#else
-		void save_override(const T &t) {
-			this->detail::common_oarchive<portable_binary_oarchive>
-			    ::save_override(t);
-		}
-#endif
 
 		// binary files don't include the optional information
-#if BOOST_VERSION < 105900
 		void save_override(const class_id_optional_type & /* t */, int) {}
-#else
-		void save_override(const class_id_optional_type & /* t */) {}
-#endif
-
-		// bool is a full byte
-#if BOOST_VERSION < 105900
-		void save_override(const bool& t, BOOST_PFTO int) {
-#else
-		void save_override(const bool& t) {
-#endif
-			const uint8_t x = t;
-			(*this) << x;
-		}
 
 		// the following have been overridden to provide specific sizes
 		// for these pseudo-primitive types
@@ -86,19 +65,17 @@ class portable_binary_oarchive :
 				const b x = t.t; \
 				(*this) << x; \
 			}
-#elif BOOST_VERSION < 105900
+#else
 		#define sv_override(a, b) \
 			void save_override(const a& t, int) { \
 				const b x = t; \
 				(*this) << x; \
 			}
-#else
-		#define sv_override(a, b) \
-			void save_override(const a& t) { \
-				const b x = t; \
-				(*this) << x; \
-			}
 #endif
+		void save_override(const bool& t, BOOST_PFTO int) {
+			const uint8_t x = t;
+			(*this) << x;
+		}
 		// make these as small as possible, even if they lose precision
 		// (we have so many that file sizes increase a lot otherwise)
 		sv_override(version_type, uint8_t)
@@ -108,20 +85,12 @@ class portable_binary_oarchive :
 		sv_override(object_reference_type, uint32_t)
 		sv_override(serialization::collection_size_type, uint32_t)
 		sv_override(tracking_type, char)
-#if BOOST_VERSION < 105900
 		void save_override(const std::string& s, BOOST_PFTO int) {
-#else
-		void save_override(const std::string& s) {
-#endif
 			uint32_t l = static_cast<uint32_t>(s.size());
 			save(l);
 			save_binary(&(s[0]), l);
 		}
-#if BOOST_VERSION < 105900
 		void save_override(const class_name_type& t, BOOST_PFTO int) {
-#else
-		void save_override(const class_name_type& t) {
-#endif
 			std::string s(t.t);
 			uint32_t l = static_cast<uint32_t>(s.size());
 			save(l);
@@ -135,13 +104,8 @@ class portable_binary_oarchive :
 			    is_bitwise_serializable<T> {};
 		};
 
-                
 		template <class T>
-#if BOOST_VERSION < 106100
 		void save_array(serialization::array<T> const &a, unsigned int v)
-#else
-		void save_array(serialization::array_wrapper<T> const &a, unsigned int v)
-#endif
 		{
 			#if BYTE_ORDER == BIG_ENDIAN
 			for (unsigned i = 0; i < a.count(); i++)
@@ -151,11 +115,7 @@ class portable_binary_oarchive :
 			#endif
 		}
 
-#if BOOST_VERSION < 106100
 		void save_array(serialization::array<char> const &a,
-#else
-		void save_array(serialization::array_wrapper<char> const &a,
-#endif
 		    unsigned int) {
 			save_binary(a.address(), a.count());
 		}
@@ -198,41 +158,21 @@ class portable_binary_iarchive :
 		    is (*stream.rdbuf()) {}
 
 		template<class T>
-#if BOOST_VERSION < 105900
 		void load_override(T &t, BOOST_PFTO int version) {
 			this->detail::common_iarchive<portable_binary_iarchive>
 			    ::load_override(t, static_cast<int>(version));
 		}
-#else
-		void load_override(T &t) {
-			this->detail::common_iarchive<portable_binary_iarchive>
-			    ::load_override(t);
-		}
-#endif
-
 		// binary files don't include the optional information
-#if BOOST_VERSION < 105900
 		void load_override(class_id_optional_type & /* t */, int) {}
-#else
-		void load_override(class_id_optional_type & /* t */) {}
-#endif
 
 		// the following have been overridden to provide specific sizes
 		// for these pseudo-primitive types
-#if BOOST_VERSION < 105900
 		#define ld_override(a, b, c, d) \
 			void load_override(a& t, int) { \
 				d x = 0; (*this) >> x; \
 				t = a((b)(c)(x)); \
 			}
-#else
-		#define ld_override(a, b, c, d) \
-			void load_override(a& t) { \
-				d x = 0; (*this) >> x; \
-				t = a((b)(c)(x)); \
-			}
-#endif
-
+	
 		// make these as small as possible, even if they lose precision
 		// (we have so many that file sizes increase a lot otherwise)
 		ld_override(bool, uint8_t, uint8_t, uint8_t)
@@ -248,36 +188,20 @@ class portable_binary_iarchive :
 		    uint32_t)
 		ld_override(serialization::collection_size_type, uint32_t,
 		    uint32_t, uint32_t)
-#if BOOST_VERSION < 105900
 		void load_override(tracking_type &t, int) {
-#else
-		void load_override(tracking_type &t) {
-#endif
 			char x = 0; (*this) >> x;
 			t = (x != 0);
 		}
-#if BOOST_VERSION < 105900
 		void load_override(std::string& s, BOOST_PFTO int) {
-#else
-		void load_override(std::string& s) {
-#endif
 			uint32_t l;
 			load(l);
 			s.resize(l);
 			load_binary(&(s[0]), l);
 		}
-#if BOOST_VERSION < 105900
 		void load_override(class_name_type& t, BOOST_PFTO int) {
-#else
-		void load_override(class_name_type& t) {
-#endif
 			std::string cn;
 			cn.reserve(BOOST_SERIALIZATION_MAX_KEY_SIZE);
-#if BOOST_VERSION < 105900
 			load_override(cn, 0);
-#else
-			load_override(cn);
-#endif
 			if (cn.size() > (BOOST_SERIALIZATION_MAX_KEY_SIZE - 1))
 				boost::throw_exception(archive_exception(
 				    archive_exception::invalid_class_name));
@@ -293,11 +217,7 @@ class portable_binary_iarchive :
 		};
 
 		template <class T>
-#if BOOST_VERSION < 106100
 		void load_array(serialization::array<T> &a, unsigned int v) {
-#else
-		void load_array(serialization::array_wrapper<T> &a, unsigned int v) {
-#endif
 			#if BYTE_ORDER == BIG_ENDIAN
 			for (unsigned i = 0; i < a.count(); i++)
 				load_override(a.address()[i], v);
@@ -306,11 +226,7 @@ class portable_binary_iarchive :
 			#endif
 		}
 
-#if BOOST_VERSION < 106100
 		void load_array(serialization::array<char> &a, unsigned int) {
-#else
-		void load_array(serialization::array_wrapper<char> &a, unsigned int) {
-#endif
 			load_binary(a.address(), a.count());
 		}
 
