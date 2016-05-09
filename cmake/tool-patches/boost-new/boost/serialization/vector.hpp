@@ -50,7 +50,7 @@ inline void save(
     const unsigned int /* file_version */,
     mpl::false_
 ){
-    boost::serialization::stl::save_collection<Archive, STD::vector<U, Allocator> >(
+    boost::serialization::stl::save_collection<Archive, std::vector<U, Allocator> >(
         ar, t
     );
 }
@@ -66,9 +66,9 @@ inline void load(
         Archive,
         std::vector<U, Allocator>,
         boost::serialization::stl::archive_input_seq<
-            Archive, STD::vector<U, Allocator> 
+            Archive, std::vector<U, Allocator> 
         >,
-        boost::serialization::stl::reserve_imp<STD::vector<U, Allocator> >
+        boost::serialization::stl::reserve_imp<std::vector<U, Allocator> >
     >(ar, t);
 }
 

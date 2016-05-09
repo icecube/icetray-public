@@ -27,21 +27,21 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 if (SYSTEM_PACKAGES)
-        find_package(Boost 1.46.0 COMPONENTS python system signals thread date_time serialization filesystem program_options regex iostreams)
-        if (NOT Boost_FOUND)
-            colormsg(RED ${Boost_ERROR_REASON})
-        endif (NOT Boost_FOUND)
+  find_package(Boost 1.46.0 COMPONENTS python system signals thread date_time serialization filesystem program_options regex iostreams)
+  if (NOT Boost_FOUND)
+    colormsg(RED ${Boost_ERROR_REASON})
+  endif (NOT Boost_FOUND)
 endif (SYSTEM_PACKAGES)
 
-if (Boost_VERSION GREATER 105700)
+if (Boost_VERSION GREATER 106000)
     colormsg(HIRED 
 "***
-   *** Your Boost version is 1.58.0 or newer. These versions are known to have issues
+   *** Your Boost version is 1.61.0 or newer. These versions are known to have issues
    *** with serialization. A fix is in the works. If you have questions,
    *** email software@icecube.wisc.edu, or join #software on slack.
    ***")
     message(FATAL_ERROR "Incompatible Boost version")
-endif (Boost_VERSION GREATER 105700)
+endif (Boost_VERSION GREATER 106000)
 
 if((NOT SYSTEM_PACKAGES) OR (NOT Boost_FOUND))
   set(BOOST_PORTSVERSION "1.38.0" CACHE PATH "The boost version.")
