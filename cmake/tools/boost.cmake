@@ -33,16 +33,6 @@ if (SYSTEM_PACKAGES)
   endif (NOT Boost_FOUND)
 endif (SYSTEM_PACKAGES)
 
-if (Boost_VERSION GREATER 106000)
-    colormsg(HIRED 
-"***
-   *** Your Boost version is 1.61.0 or newer. These versions are known to have issues
-   *** with serialization. A fix is in the works. If you have questions,
-   *** email software@icecube.wisc.edu, or join #software on slack.
-   ***")
-    message(FATAL_ERROR "Incompatible Boost version")
-endif (Boost_VERSION GREATER 106000)
-
 if((NOT SYSTEM_PACKAGES) OR (NOT Boost_FOUND))
   set(BOOST_PORTSVERSION "1.38.0" CACHE PATH "The boost version.")
   set(BOOST_INCLUDEDIR ${I3_PORTS}/include/boost-${BOOST_PORTSVERSION})
@@ -55,10 +45,17 @@ if(Boost_FOUND)
   set(BOOST_FOUND TRUE CACHE BOOL "Boost found successfully")
   set(BOOST_INCLUDE_DIR ${Boost_INCLUDE_DIR} CACHE PATH "Path to the boost include directories.")
   set(BOOST_LIBRARIES ${Boost_LIBRARIES} CACHE PATH "Boost libraries")
+
   if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-${BOOST_PORTSVERSION})
     include_directories(${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-${BOOST_PORTSVERSION})
   else()
     include_directories(${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-new)
+    if (Boost_VERSION GREATER 105700)
+      # we're freezing serialization at 1.57 until we switch (maybe) to the boost standard
+      # once they get an official portable archive
+      message("USING OLD SERIALIZATION 1.57")
+      include_directories(${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-serialization-1.57.0/)
+    endif (Boost_VERSION GREATER 105700)
   endif()
 
   foreach(lib ${BOOST_LIBRARIES})

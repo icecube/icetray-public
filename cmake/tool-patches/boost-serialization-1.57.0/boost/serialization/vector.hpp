@@ -2,7 +2,7 @@
 #define BOOST_SERIALIZATION_VECTOR_HPP
 
 // MS compatible compilers support #pragma once
-#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#if defined(_MSC_VER)
 # pragma once
 #endif
 
@@ -21,6 +21,7 @@
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
+#include <boost/type_traits/is_arithmetic.hpp> 
 
 #include <boost/serialization/collections_save_imp.hpp>
 #include <boost/serialization/collections_load_imp.hpp>
@@ -30,16 +31,23 @@
 #include <boost/mpl/bool.hpp>
 
 // default is being compatible with version 1.34.1 files, not 1.35 files
-#ifndef BOOST_SERIALIZATION_VECTOR_VERSION
-#define BOOST_SERIALIZATION_VECTOR_VERSION 3
+#ifndef BOOST_SERIALIZATION_VECTOR_VERSIONED
+#define BOOST_SERIALIZATION_VECTOR_VERSIONED(V) (V==4 || V==5)
 #endif
 
+// function specializations must be defined in the appropriate
+// namespace - boost::serialization
+#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+#define STD _STLP_STD
+#else
+#define STD std
+#endif
 
 namespace boost { 
 namespace serialization {
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// vector<T>
+// vector< T >
 
 // the default versions
 
@@ -83,14 +91,8 @@ inline void save(
 ){
     const collection_size_type count(t.size());
     ar << BOOST_SERIALIZATION_NVP(count);
-    /* I3_HACK
-    if(BOOST_SERIALIZATION_VECTOR_VERSION < ar.get_library_version()) {
-      const unsigned int item_version = version<U>::value;
-      ar << BOOST_SERIALIZATION_NVP(item_version);
-    }
-    */
-   if (!t.empty())
-      ar << make_array(detail::get_data(t),t.size());
+    if (!t.empty())
+        ar << make_array(detail::get_data(t),t.size());
 }
 
 template<class Archive, class U, class Allocator>
@@ -103,13 +105,12 @@ inline void load(
     collection_size_type count(t.size());
     ar >> BOOST_SERIALIZATION_NVP(count);
     t.resize(count);
-    /* I3_HACK
     unsigned int item_version=0;
-    if(BOOST_SERIALIZATION_VECTOR_VERSION < ar.get_library_version())
+    if(BOOST_SERIALIZATION_VECTOR_VERSIONED(ar.get_library_version())) {
         ar >> BOOST_SERIALIZATION_NVP(item_version);
-    */
+    }
     if (!t.empty())
-      ar >> make_array(detail::get_data(t),t.size());
+        ar >> make_array(detail::get_data(t),t.size());
   }
 
 // dispatch to either default or optimized versions
@@ -120,7 +121,11 @@ inline void save(
     const std::vector<U, Allocator> &t,
     const unsigned int file_version
 ){
-    save(ar,t,file_version, BOOST_DEDUCED_TYPENAME use_array_optimization<Archive>::template apply<U>::type());
+    typedef typename 
+    boost::serialization::use_array_optimization<Archive>::template apply<
+        typename remove_const<U>::type 
+    >::type use_optimized;
+    save(ar,t,file_version, use_optimized());
 }
 
 template<class Archive, class U, class Allocator>
@@ -129,7 +134,18 @@ inline void load(
     std::vector<U, Allocator> &t,
     const unsigned int file_version
 ){
-    load(ar,t,file_version, BOOST_DEDUCED_TYPENAME use_array_optimization<Archive>::template apply<U>::type());
+#ifdef BOOST_SERIALIZATION_VECTOR_135_HPP
+    if (ar.get_library_version()==boost::archive::library_version_type(5))
+    {
+      load(ar,t,file_version, boost::is_arithmetic<U>());
+      return;
+    }
+#endif
+    typedef typename 
+    boost::serialization::use_array_optimization<Archive>::template apply<
+        typename remove_const<U>::type 
+    >::type use_optimized;
+    load(ar,t,file_version, use_optimized());
 }
 
 // split non-intrusive serialization function member into separate
@@ -142,8 +158,6 @@ inline void serialize(
 ){
     boost::serialization::split_free(ar, t, file_version);
 }
-
-#if ! BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // vector<bool>
@@ -191,13 +205,12 @@ inline void serialize(
     boost::serialization::split_free(ar, t, file_version);
 }
 
-#endif // BOOST_WORKAROUND
-
 } // serialization
 } // namespace boost
 
 #include <boost/serialization/collection_traits.hpp>
 
 BOOST_SERIALIZATION_COLLECTION_TRAITS(std::vector)
+#undef STD
 
 #endif // BOOST_SERIALIZATION_VECTOR_HPP
