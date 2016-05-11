@@ -294,7 +294,7 @@ macro(i3_add_library THIS_LIB_NAME)
     
         set(XML_TMP ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${THIS_LIB_NAME}-inspection.xml)
         set(HTML_OUTPUT ${CMAKE_BINARY_DIR}/docs/inspect/${THIS_LIB_NAME}.html)
-        set(RST_OUTPUT ${SPHINX_DIR}/source/icetray/${THIS_LIB_NAME}.rst)
+        set(RST_OUTPUT ${SPHINX_DIR}/source/inspect/${THIS_LIB_NAME}.rst)
         add_custom_target(${PROJECT_NAME}-${THIS_LIB_NAME}-inspect
         	COMMAND mkdir -p ${CMAKE_BINARY_DIR}/docs/inspect
     	  	COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${EXECUTABLE_OUTPUT_PATH}/icetray-inspect ${THIS_LIB_NAME} --xml -o ${XML_TMP}

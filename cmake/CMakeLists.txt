@@ -1,6 +1,8 @@
 i3_project(cmake
   DOCS_DIR resources/docs)
 
+i3_executable_script(docs resources/scripts/cmake-docs.py)
+
 add_subdirectory(meta-project-docs)
 
 configure_file(review.in ${I3_BUILD}/bin/review @ONLY)

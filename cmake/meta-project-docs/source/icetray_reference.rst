@@ -15,4 +15,4 @@ IceTray Reference
    :sorted:
    :ignorecase:
 
-   icetray/*
+   inspect/*
