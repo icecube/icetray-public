@@ -55,7 +55,7 @@ class sphinx_writer:
 			for d in docs.strip().splitlines():
 				self.file.write('    %s' % d)
 			if not opts.sphinx_references:
-				self.file.write('\n')
+				self.file.write('\n\n')
 			
 	def module_footer(self):
 		self.file.write('\n')
@@ -171,7 +171,7 @@ class human_writer:
 		self.file.write('Invoke with: "%s"\n'%loadstr)
 		
 	def project_footer(self):
-		pass
+		self.file.write('\n')
 
 	def module_header(self,modname,category,docs):
 		self.file.write('  %s (%s)\n' % (modname, category))
@@ -333,12 +333,22 @@ def display_project(project):
 		cppproject = ""
 
 	if pyproject:
+		import_name = 'icecube.%s' %pyproject
 		try:
-			pymodule = __import__('icecube.%s' %pyproject,
+			pymodule = __import__(import_name,
 								  globals(), locals(), [pyproject])
 		except Exception,e:
-			sys.stderr.write("Error cant load '%s': %s\n" % (project,str(e)))
+			sys.stderr.write("ERROR: cant load '%s': %s\n" % (import_name,str(e)))
 			return
+
+		if hasattr(pymodule,"__path__"):
+	
+			for subpackage in pkgutil.walk_packages(pymodule.__path__,prefix=import_name+'.'):
+				try:
+					pymodule = __import__(subpackage[1],
+										  globals(), locals(), [pyproject])
+				except Exception,e:
+					sys.stderr.write("WARNING: cant load subpackage '%s': %s\n" % (subpackage[1],str(e)))
             
 		loadstr = "import icecube.%s"%pyproject
 	elif cppproject:
@@ -374,6 +384,12 @@ def display_project(project):
 			
 		python_modules = i3inspect.harvest_objects(pymodule, i3inspect.is_I3Module)
 		for mod,py_mod in python_modules.items():
+
+			#reject modules imported by python files which should show up elsewhere
+			#without this we get a bunch of `I3ConditionalModules` everywhere
+			if not mod.__module__.startswith(import_name):
+				continue
+			
 			try:
 				config = mod(icetray.I3Context()).configuration
 			except:
@@ -477,7 +493,7 @@ if len(args) == 0 and not opts.all:
 	parser.print_help()
 	parser.exit(1)
 
-import inspect, sys, cgi,signal
+import inspect, sys, cgi,signal,pkgutil
 import xml.etree.ElementTree as ET
 
 from icecube import icetray, dataclasses,tableio
