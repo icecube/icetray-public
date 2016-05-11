@@ -342,11 +342,9 @@ def display_project(project):
 			return
 
 		if hasattr(pymodule,"__path__"):
-	
 			for subpackage in pkgutil.walk_packages(pymodule.__path__,prefix=import_name+'.'):
 				try:
-					pymodule = __import__(subpackage[1],
-										  globals(), locals(), [pyproject])
+					__import__(subpackage[1],globals(), locals(), [pyproject])
 				except Exception,e:
 					sys.stderr.write("WARNING: cant load subpackage '%s': %s\n" % (subpackage[1],str(e)))
             

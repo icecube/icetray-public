@@ -169,41 +169,16 @@ else:
 	def same_package(current, other):
 		return hobo_getpackage(current) == hobo_getpackage(other)
 
-	
-def harvest_objects(module, want=is_I3Module, memo=None):
-	"""Recursively search through an object for subclasses of I3Module."""
-	# I miss Ruby's ObjectSpace. Sniff.
-	
-	if memo is None:
-		memo = {}
-	
-	# Avoid circular references like the plague
-	ptr = id(module)
-	if ptr in memo:
-		return {}
-	# Mark this module as visited
-	memo[ptr] = module
-	
-	def priority_update(basedict, otherdict):
-		"""
-		Update the dictionary of objects only if the new name is
-		closer to a root of PYTHONPATH 
-		"""
-		for k, v in otherdict.items():
-			if not k in basedict or len(v.split('.')) < len(basedict[k].split('.')):
-				basedict[k] = v
-
-	# Get public properties (underscored names are private by convention)
+def harvest_objects(module,want):
 	harvest = {}
 	for item in dir(module):
 		if item.startswith('_'):
 			continue
 		attr = getattr(module, item)
-		if isinstance(attr, types.ModuleType) and same_package(attr, module):
-			priority_update(harvest, harvest_objects(attr, want, memo))
-		elif want(attr):
-			priority_update(harvest, {attr: module.__name__ + "." + item})
-	
+		if isinstance(attr, types.ModuleType) and attr.__name__.startswith(module.__name__):
+			harvest.update(harvest_objects(attr,want))
+		elif want(attr) and attr.__module__.startswith(module.__name__):
+			harvest[attr]=item
 	return harvest
 	
 def get_inspectable_projects():
