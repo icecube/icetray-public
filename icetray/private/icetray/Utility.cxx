@@ -30,7 +30,7 @@ using namespace boost;
 string
 stlfilt(const string& what)
 {
-  const static regex stdregex("std::");
+  const static regex stdregex("(?:std::)|(?:__1::)");
   string newstring = regex_replace(what, stdregex, "");
 
   const static regex vecreg("vector<(\\w+), allocator<(\\w+)> >");
@@ -39,7 +39,7 @@ stlfilt(const string& what)
   const static regex mapreg("map<(\\w+), (\\w+), less<(\\w+)>, allocator<pair<const (\\w+), (\\w+)> > >");
   newstring = regex_replace(newstring, mapreg, "map<$1, $2>");
 
-  const static regex stringreg("string");
+  const static regex stringreg("basic_string<char, char_traits<char>, allocator<char> >");
   newstring = regex_replace(newstring, stringreg, "string");
 
   return newstring;
