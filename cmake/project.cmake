@@ -443,12 +443,6 @@ macro(i3_project PROJECT_NAME)
 	endif (COPY_PYTHON_DIR)
       endif(ARG_USE_SETUPTOOLS)
 
-      string(REPLACE "-" "_" PYTHON_MODULE_NAME ${PROJECT_NAME})	
-      configure_file(
-	${CMAKE_SOURCE_DIR}/cmake/meta-project-docs/python_package.rst.in
-      	${SPHINX_DIR}/source/python/${PYTHON_MODULE_NAME}.rst
-      )
-
     endif(ARG_PYTHON_DIR AND IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR})
 
   endif(BUILD_${I3_PROJECT})
@@ -711,12 +705,6 @@ macro(i3_add_pybindings MODULENAME)
         #used to be here: -flat_namespace -undefined dynamic_lookup -multiply_defined suppress
         )
     endif(APPLE)
-
-    set(PYTHON_MODULE_NAME ${MODULENAME})
-    configure_file(
-      ${CMAKE_SOURCE_DIR}/cmake/meta-project-docs/python_package.rst.in
-      ${SPHINX_DIR}/source/python/${PYTHON_MODULE_NAME}.rst
-      )
 
   endif ()
 endmacro(i3_add_pybindings)

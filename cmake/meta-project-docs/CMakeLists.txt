@@ -65,6 +65,10 @@ if(SPHINX_BUILD AND NOT SPHINX_DIR_NOT_WRITABLE)
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/cmake/meta-project-docs/ ${SPHINX_DIR}	   
     COMMAND ln -fsn ${CMAKE_SOURCE_DIR}/docs
             ${SPHINX_DIR}/source/metaproject
+    COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh sphinx-apidoc
+            -lMf -H "Python API Reference"
+            -o ${SPHINX_DIR}/source/python/
+            ${I3_BUILD}/lib
     COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${SPHINX_BUILD}
             ${SPHINX_EXTRA_OPTIONS} 
     -b html 

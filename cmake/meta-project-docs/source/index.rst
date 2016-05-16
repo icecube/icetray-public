@@ -56,7 +56,7 @@ Automatically Generated Documentation
 
    icetray_quick_reference
    icetray_reference
-   python_reference	
+   python/modules
 	      
 * `Icetray-inspect <inspect/>`_
 * `Doxygen <doxygen/>`_
