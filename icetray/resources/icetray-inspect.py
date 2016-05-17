@@ -528,7 +528,8 @@ args = sorted(set([a.replace('-','_') for a in args]),
 			  key=lambda s:s.lower())
 
 for p in args:
-
+    if p == "IceHive":
+        continue
 	display_project(p)
 	
 output.file_footer()
