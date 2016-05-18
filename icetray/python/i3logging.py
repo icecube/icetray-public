@@ -96,6 +96,7 @@ def set_level(level):
 	Set the global logging level.
 	
 	:param level: the log level. This may also be specified as a string.
+
 	Examples::
 		icetray.logging.set_level(icetray.logging.I3LogLevel.LOG_INFO)
 		icetray.logging.set_level('INFO')
@@ -107,6 +108,7 @@ def set_level_for_unit(unit, level):
 	Set the logging level for a specific logging unit.
 	
 	:param level: the log level. This may also be specified as a string.
+
 	Examples::
 		icetray.logging.set_level_for_unit('I3Reader', icetray.logging.I3LogLevel.LOG_TRACE)
 		icetray.logging.set_level('I3Reader', 'TRACE')

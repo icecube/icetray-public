@@ -5,8 +5,8 @@ class pypick(object):
 	Construct lazily-evaluated boolean expressions from callables with
 	identical signatures.
 	
-	pypicks can be combined using the bitwise operators &, |, ~, and ^.
-	The result e.g. of pypick(a) | pypick(b) is another pypick that, when
+	pypicks can be combined using the bitwise operators \&, \|, \~, and \^.
+	The result e.g. of pypick(a) \| pypick(b) is another pypick that, when
 	calles as pick(foo) returns (a(foo) or b(foo)).
 	
 	Examples

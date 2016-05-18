@@ -239,7 +239,7 @@ class I3Tray(icetray.I3Tray):
         I3Module destructor.
 
         :param fraction: Print out the usage of modules consuming this much of
-        the total runtime.
+                         the total runtime.
 
         :return: Returns a list of keys that were printed.  Implemented for testing.
         """
