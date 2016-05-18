@@ -46,7 +46,7 @@ Xcode
 
 .. _Xcode4Prefs:
 
-.. figure:: figs/xcode4_prefs.png
+.. figure:: ../figs/xcode4_prefs.png
 	:width: 432px
 	
 	Xcode Preferences window
