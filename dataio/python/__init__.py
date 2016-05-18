@@ -11,10 +11,10 @@ def get_stagers(staging_directory=None, extra_stagers=[]):
 	"""
 	Set up file stagers for all supported URL schemes.
 	
-	:param staging_directory: use this directory for temporary files. If not
-	specified, the staging directory will be guessed.
-	:param extra_stagers: a list of stager classes to instatiate in addition to
-	the those included with the base distribution
+	:param staging_directory: use this directory for temporary files. If not\
+	    specified, the staging directory will be guessed.
+	:param extra_stagers: a list of stager classes to instatiate in addition to\
+        the those included with the base distribution
 	"""
 	if staging_directory is not None:
 		set_local_scratch_dir(staging_directory)

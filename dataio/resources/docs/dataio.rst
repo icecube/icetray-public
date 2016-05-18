@@ -175,10 +175,13 @@ Currently, the following stager classes are implemented:
 .. py:module:: icecube.dataio.I3FileStagerFile
 
 .. autoclass:: I3FileStagerFile
+   :noindex:
 
 .. autoclass:: GridFTPStager
+   :noindex:
 
 .. autoclass:: SCPStager
+   :noindex:
 
 SkipKeys
 ^^^^^^^^

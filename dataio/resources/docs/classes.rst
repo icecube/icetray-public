@@ -5,11 +5,15 @@
    :synopsis: python bindings to Data I/O utilities
 
 .. class:: I3File
+   :noindex:
 
    Simple sequential reader/writer of ``.i3`` files.
 
    .. data:: Writing
+      :noindex:
+	     
    .. data:: Reading
+      :noindex:
 
       Used to indicate the mode with which to open a file. Possible
       values are ``Reading`` and ``Writing``.  Obviously you can only
@@ -17,6 +21,7 @@
       ``Reading`` file.
 
    .. method:: I3File()
+      :noindex:
 
       Create an I3File object w/o an actual associated file::
 
@@ -24,6 +29,7 @@
         f = I3File()      	     
 
    .. method:: open_file(path, mode = I3File.Reading)
+      :noindex:
 
       Open file at *path*.  Default mode is for reading::
 
@@ -39,12 +45,14 @@
        gzip-compresed files (applies for both **Reading** and **Writing**)
 
    .. method:: I3File(path, mode = I3File.Reading)
+      :noindex:
 
       Create an I3File, then call::
 
         self.open_file(path, mode)
 
    .. method:: pop_frame()
+      :noindex:
 
       Return the next frame of any type from the file::
 
@@ -52,6 +60,7 @@
         print frame	
 
    .. method:: pop_frame(stream)
+      :noindex:
 
       Return the next frame of with stream type *stream* from the file::
 
@@ -59,12 +68,14 @@
         print frame
 
    .. method:: pop_physics()
+      :noindex:
 
       Shorthand for::
       
          pop_frame(icetray.I3Frame.Physics)
 
    .. method:: push(frame)
+      :noindex:
 
       Push frame onto file (file must be open for writing)::
 
@@ -73,14 +84,17 @@
 	i3file.push(frame)
 
    .. method:: close()
+      :noindex:
 
       Close the file.
       
    .. method:: rewind()
+      :noindex:
 
       Close and reopen the file to the beginning.   
       
    .. method:: more()
+      :noindex:
 
       Returns true if there are more frames available.  This prints
       all the event ids in a file::
@@ -94,6 +108,7 @@
       explicit loop.
 
    .. method:: next()
+      :noindex:
 
       Returns the next frame, if available, else throws StopIteration.
       This is part of the python 'iterator protocol'; this function
@@ -101,6 +116,7 @@
       list comprehensions (see __iter__() below):
 
    .. method:: __iter__()
+      :noindex:
 
       Return an iterator to the I3File (just a freshly-opened copy of
       the I3File object itself, since I3File implements the iterator
