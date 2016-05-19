@@ -1,10 +1,8 @@
 #include <icetray/name_of.h>
 
 #include <cxxabi.h>
-#ifdef I3_ONLINE
 #  include <boost/thread/locks.hpp>
 #  include <boost/thread/mutex.hpp>
-#endif
 
 #include <I3/hash_map.h>
 #include <icetray/Utility.h>
@@ -36,9 +34,7 @@ namespace icetray
                                   type_info_ptr_hash> typename_map_t;
       
       
-#ifdef I3_ONLINE
       boost::mutex mtx_;
-#endif
       typename_map_t names_;
       
      public:
@@ -62,9 +58,7 @@ namespace icetray
        */
       const std::string& GetName(const std::type_info& ti)
       {
-#ifdef I3_ONLINE
         boost::lock_guard<boost::mutex> g(mtx_);
-#endif
         
         typename_map_t::iterator iter = names_.find(&ti);
         if(iter != names_.end())

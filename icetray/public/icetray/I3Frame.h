@@ -152,6 +152,8 @@ class I3Frame
   I3FrameObjectConstPtr get_impl(map_t::const_reference value,
                                  bool quietly = false) const;
 
+  static void create_blob_impl(value_t &value);
+
   map_t::size_type size(const value_t& value) const { return value.blob.buf.size(); }
 
  public:
@@ -414,6 +416,9 @@ class I3Frame
   std::string type_name(const std::string& key) const;
 
   std::vector<std::string> keys() const;
+
+  void create_blob(bool drop_memory_data, const std::string &key) const;
+  void create_blobs(bool drop_memory_data, const std::vector<std::string>& skip = std::vector<std::string>()) const;
 
   template <typename OStreamT>
   void 

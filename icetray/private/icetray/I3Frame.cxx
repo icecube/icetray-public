@@ -464,6 +464,68 @@ const static i3frame_tag_t tag = { '[', 'i', '3', ']' };
 
 const static i3frame_version_t version = 6;
 
+
+void I3Frame::create_blob_impl(I3Frame::value_t &value)
+{
+  const I3FrameObject& obj=*(value.ptr.get());
+  value.blob.type_name = value.ptr ? I3::name_of(typeid(obj)) : "(null)";
+
+  typedef io::stream<io::back_insert_device<vector<char> > > vecstream_t;
+  vecstream_t blobBufStream(value.blob.buf);
+  {
+    boost::archive::portable_binary_oarchive blobBufArchive(blobBufStream);
+    blobBufArchive << make_nvp("T", value.ptr);
+  }
+  blobBufStream.flush();
+}
+
+void I3Frame::create_blob(bool drop_memory_data, const std::string &key) const
+{
+  map_t::const_iterator iter = map_.find(key);
+  if (iter == map_.end())
+    log_fatal("Tried to create a blob for unknown key %s", key.c_str());
+  value_t& value = *(iter->second);
+
+  if (value.blob.buf.size() == 0) {
+    // only create a blob if there is none yet
+    try {
+      create_blob_impl(value);
+    } catch (const exception &e) {
+      log_fatal("caught \"%s\" while writing frame object \"%s\" of type \"%s\"",
+                e.what(), key.c_str(), value.blob.type_name.c_str());
+    }
+  }
+
+  if (drop_memory_data) {
+    // drop the memory shared pointer if requested
+    value.ptr.reset();
+  }
+}
+
+void I3Frame::create_blobs(bool drop_memory_data, const std::vector<std::string>& skip) const
+{
+  for (map_t::iterator iter = map_.begin();
+       iter != map_.end();
+       iter++)
+  {
+    bool skipIt = false;
+    for (vector<string>::const_iterator skipIter = skip.begin();
+         !skipIt && (skipIter != skip.end());
+         skipIter++)
+      {
+        boost::regex reg(*skipIter);
+        skipIt = boost::regex_match(iter->first.string, reg);
+      }
+
+    if (iter->second->stream != stop_.id())
+      skipIt = true;
+
+    if (skipIt) continue;
+
+    create_blob(drop_memory_data, iter->first.string);
+  }
+}
+
 template <typename OStreamT>
 void I3Frame::save(OStreamT& os, const vector<string>& skip) const
 {
@@ -525,24 +587,19 @@ void I3Frame::save(OStreamT& os, const vector<string>& skip) const
           }
         else
           {
-            const I3FrameObject& obj=*(value.ptr.get());
-            value.blob.type_name = value.ptr ? I3::name_of(typeid(obj)) : "(null)";
-            poa << make_nvp("type_name", value.blob.type_name);
-            crcit(value.blob.type_name, crc);
-            typedef io::stream<io::back_insert_device<vector<char> > > vecstream_t;
-            vecstream_t blobBufStream(value.blob.buf);
-            {
-              boost::archive::portable_binary_oarchive blobBufArchive(blobBufStream);
               try {
-                blobBufArchive << make_nvp("T", value.ptr);
+              create_blob_impl(value);
               } catch (const exception &e) {
                 log_fatal("caught \"%s\" while writing frame object \"%s\" of type \"%s\"", 
                           e.what(), key.c_str(), value.blob.type_name.c_str());
               } 
-            }
-            blobBufStream.flush();
+
+            string type_name = value.blob.type_name;
+            poa << make_nvp("type_name", type_name);
+            crcit(type_name, crc);
             poa << make_nvp("buf", value.blob.buf);
             crcit(value.blob.buf, crc);
+
             if (drop_blobs_)
               value.blob.reset();
           }

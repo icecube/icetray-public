@@ -128,6 +128,7 @@ i3_add_library(icetray
   private/modules/AllParametersModule.cxx
   private/modules/ContextFreeServiceTestModule.cxx
   private/modules/MaintainInitialValuesModule.cxx
+  private/modules/CreateBlobs.cxx
 
   ${ICETRAY_PYTHON_SRC}
 
