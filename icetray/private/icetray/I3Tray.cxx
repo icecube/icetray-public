@@ -453,7 +453,14 @@ I3Tray::Execute(unsigned maxCount)
 	signal(SIGTERM, set_suspend_flag); // Condor sends this to end jobs
 #ifdef SIGINFO
 	executing_tray = this;
-	signal(SIGINFO, report_usage);
+	{
+		struct sigaction oldact;
+		sigaction(SIGINFO, NULL, &oldact);
+		// only install a SIGINFO handler if there is none yet
+		if (oldact.sa_sigaction==NULL) {
+			signal(SIGINFO, report_usage);
+		}
+	}
 #endif
 
 	Configure();
