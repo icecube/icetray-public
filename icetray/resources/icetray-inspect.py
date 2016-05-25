@@ -319,15 +319,15 @@ def get_converters(project):
 
 def display_project(project):
 
-    if project in python_libs+python_dirs:
+    if project in python_projects:
         pyproject = project
     else:
         pyproject = None
 
     dashproject = project.replace('_','-')
-    if project in compiled_libs:
+    if project in compiled_projects:
         cppproject = project
-    elif dashproject in compiled_libs:
+    elif dashproject in compiled_projects:
         cppproject = dashproject
     else:
         cppproject = ""
@@ -493,6 +493,7 @@ if len(args) == 0 and not opts.all:
 
 import inspect, sys, cgi,signal,pkgutil
 import xml.etree.ElementTree as ET
+from glob import glob
 
 from icecube import icetray, dataclasses,tableio
 from icecube.icetray import i3inspect
@@ -505,10 +506,10 @@ signal.signal(signal.SIGSEGV, sig_handler)
 
 icetray.I3Logger.global_logger = icetray.I3NullLogger()
 
-compiled_libs,python_libs,python_dirs= i3inspect.get_inspectable_projects()
+compiled_projects,python_projects,all_projects = i3inspect.get_inspectable_projects()
 
 if opts.all:
-    args = compiled_libs + python_libs + python_dirs
+    args = all_projects
 
 if opts.output:
     outfile = open(opts.output,'wt')
@@ -525,10 +526,13 @@ else:
 output.file_header()
 
 args = sorted(set([a.replace('-','_') for a in args]),
-                          key=lambda s:s.lower())
+              key=lambda s:s.lower())
+
+noinspect = i3inspect.get_uninspectable_projects()
 
 for p in args:
-    if p == "IceHive":
+    if p in noinspect:
+        print "WARNING: Skipping uninspectable project:", p
         continue
     display_project(p)
 

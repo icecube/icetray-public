@@ -8,7 +8,7 @@
 
 from glob import glob
 from icecube.icetray import I3Context, I3Configuration, I3Module, module_default_config
-import types, sys, os, inspect, copy
+import types, sys, os, inspect, copy, pkgutil
 
 try:
     import docutils.frontend
@@ -181,32 +181,28 @@ def harvest_objects(module,want):
             harvest[attr]=item
     return harvest
 
+
+def get_uninspectable_projects():
+    
+    return [ os.path.basename(fname).replace('-','_') for fname in
+             glob(os.path.join(os.environ['I3_BUILD'],
+                               'docs','no_inspect','*'))]
+
 def get_inspectable_projects():
 
-    noinspect = [ os.path.basename(fname) for fname in
-                                     glob(os.path.join(os.environ['I3_BUILD'],
-                                                                       'docs','no_inspect','*'))]
-
-    noinspect+=[ d.replace("-","_") for d in noinspect]
-    noinspect=set(noinspect)
-
     libdir = os.path.join(os.environ['I3_BUILD'],'lib')
+    
+    if sys.platform=='darwin':
+        suffix='.dylib'        
+    else:
+        suffix = '.so'
+    cpp_libs = [os.path.basename(fname).split('.')[0][3:].replace('-','_')
+                for fname in glob(os.path.join(libdir,'lib*'+suffix))]
 
-    cpp_libs = [os.path.basename(fname).split('.')[0][3:]
-                            for fname in glob(os.path.join(libdir,'lib*'))]
+    moduleitr = pkgutil.iter_modules(path=[libdir+'/icecube'])
+    python_libs = [ x[1] for x in moduleitr]
 
-    cpp_libs = [ l for l in cpp_libs if l not in noinspect]
+    libs = sorted(set(cpp_libs+python_libs),key=lambda x: x.lower())
+    libs = [ l for l in libs if l not in  get_uninspectable_projects()]
 
-    python_libs = [os.path.basename(fname).split('.')[0]
-                               for fname in glob(os.path.join(libdir,'icecube','*.so'))
-                               if os.path.isfile(fname) ]
-
-    python_libs = [ l for l in python_libs if l not in noinspect]
-
-    python_dirs = [os.path.basename(fname)
-                               for fname in glob(os.path.join(libdir,'icecube','*'))
-                               if os.path.isdir(fname)]
-
-    python_dirs = [ l for l in python_dirs if l not in noinspect]
-
-    return cpp_libs,python_libs,python_dirs
+    return cpp_libs,python_libs,libs
