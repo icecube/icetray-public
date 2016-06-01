@@ -300,7 +300,7 @@ macro(i3_add_library THIS_LIB_NAME)
     	  	COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${EXECUTABLE_OUTPUT_PATH}/icetray-inspect ${THIS_LIB_NAME} --xml -o ${XML_TMP}
 		COMMAND ${XSLTPROC_BIN} ${CMAKE_SOURCE_DIR}/icetray/resources/inspect2html.xsl ${XML_TMP} > ${HTML_OUTPUT}
 	
-		COMMAND mkdir -p ${SPHINX_DIR}/source/icetray/
+		COMMAND mkdir -p ${SPHINX_DIR}/source/inspect/
 		COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh
 		${EXECUTABLE_OUTPUT_PATH}/icetray-inspect ${THIS_LIB_NAME}
 		--sphinx --subsection-headers --sphinx-functions
