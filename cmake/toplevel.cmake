@@ -224,8 +224,9 @@ add_custom_target(html-docs)
 add_dependencies(html-docs html)
 
 add_custom_target(docs)
-add_dependencies(inspect-docs doxygen-docs)
-add_dependencies(html-docs inspect-docs)
+#add_dependencies(inspect-docs doxygen-docs)
+#add_dependencies(html-docs inspect-docs)
+add_dependencies(html-docs doxygen-docs)
 add_dependencies(docs html-docs)
 
 #
