@@ -44,7 +44,7 @@
 using boost::algorithm::to_lower;
 using boost::algorithm::iends_with;
 namespace io = boost::iostreams;
-using boost::archive::portable_binary_oarchive;
+using icecube::archive::portable_binary_oarchive;
 using namespace boost::posix_time;
 
 I3WriterBase::I3WriterBase(const I3Context& ctx) 

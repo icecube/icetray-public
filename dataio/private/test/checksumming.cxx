@@ -20,7 +20,7 @@
 #include <boost/preprocessor.hpp>
 #include <boost/lexical_cast.hpp>
 
-using namespace boost::archive;
+using namespace icecube::archive;
 using namespace std;
 using namespace boost::iostreams;
 

@@ -21,7 +21,7 @@
 #include <boost/preprocessor.hpp>
 #include <boost/foreach.hpp>
 
-using namespace boost::archive;
+using namespace icecube::archive;
 using namespace std;
 
 TEST_GROUP(retroaction);

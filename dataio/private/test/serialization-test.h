@@ -5,9 +5,9 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/fstream.hpp>
 
-#include <boost/serialization/shared_ptr.hpp>
-#include <boost/serialization/vector.hpp>
-#include <boost/serialization/string.hpp>
+#include <serialization/shared_ptr.hpp>
+#include <serialization/vector.hpp>
+#include <serialization/string.hpp>
 #include <boost/lexical_cast.hpp>
 
 #include <I3Test.h>
@@ -19,11 +19,11 @@
 #include <icetray/portable_binary_archive.hpp>
 #include <icetray/open.h>
 
-using boost::archive::portable_binary_oarchive;
-using boost::archive::portable_binary_iarchive;
+using icecube::archive::portable_binary_oarchive;
+using icecube::archive::portable_binary_iarchive;
 
-using boost::serialization::make_nvp;
-using boost::serialization::base_object;
+using icecube::serialization::make_nvp;
+using icecube::serialization::base_object;
 
 #define SERIALIZE(TYPE)				\
   TEST(TYPE) {					\

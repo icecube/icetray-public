@@ -26,7 +26,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-using namespace boost::archive;
+using namespace icecube::archive;
 using namespace std;
 using namespace boost::iostreams;
 
@@ -35,7 +35,7 @@ namespace dataio = I3::dataio;
 TEST_GROUP(performance);
 I3_SERIALIZABLE(I3Vector<I3Vector<char> >);
 
-namespace ar = boost::archive;
+namespace ar = icecube::archive;
 
 
 //

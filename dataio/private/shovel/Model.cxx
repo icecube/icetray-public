@@ -264,7 +264,7 @@ Model::pretty_print()
         oss << *ticp;
       }
    }
-  catch( const boost::archive::archive_exception& e ){
+  catch( const icecube::archive::archive_exception& e ){
       oss << "\n\n\n Trouble printing this I3TrayInfo: " << e.what() << "\n\n\n";
   }
 

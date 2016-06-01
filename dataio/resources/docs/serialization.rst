@@ -55,7 +55,7 @@ To be able to serialize this class' data members you only need to add the follow
  ....
  private:
   ...
-  friend class boost::serialization::access;
+  friend class icecube::serialization::access;
   template <class Archive> void serialize(Archive & ar, unsigned version);
   ... 
 
@@ -179,7 +179,7 @@ Schema Evolution or Class Versioning
 
 Suppose you want to add a member variable to your class,
 but you want the new code to be able to read old data files.
-You do this by simply adding the boost macro BOOST_CLASS_VERSION
+You do this by simply adding the macro I3_CLASS_VERSION
 to your class.  By default the version of all classes is 0, so
 the first modifcation will be version 1.
 
