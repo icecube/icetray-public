@@ -26,7 +26,9 @@
 #include <serialization/force_include.hpp>
 #include <serialization/type_info_implementation.hpp>
 #include <serialization/extended_type_info.hpp>
+#if BOOST_VERSION >= 103900
 #include <boost/type_traits/is_virtual_base_of.hpp>
+#endif
 #include <serialization/void_cast_fwd.hpp>
 
 #include <serialization/config.hpp>
@@ -247,6 +249,9 @@ template <class Derived, class Base>
 struct void_caster_base :
     public void_caster
 {
+#if BOOST_VERSION < 103900
+    typedef void_cast_detail::void_caster_primitive<Derived, Base> type;
+#else
     typedef
         typename boost::mpl::eval_if<boost::is_virtual_base_of<Base,Derived>,
             boost::mpl::identity<
@@ -257,6 +262,7 @@ struct void_caster_base :
                 void_cast_detail::void_caster_primitive<Derived, Base>
             >
         >::type type;
+#endif
 };
 
 } // void_cast_detail 
@@ -267,6 +273,9 @@ inline const void_cast_detail::void_caster & void_cast_register(
     Derived const * /* dnull = NULL */, 
     Base const * /* bnull = NULL */
 ){
+#if BOOST_VERSION < 103900
+    typedef void_cast_detail::void_caster_primitive<Derived, Base> typex;
+#else
     typedef
         typename boost::mpl::eval_if<boost::is_virtual_base_of<Base,Derived>,
             boost::mpl::identity<
@@ -277,6 +286,7 @@ inline const void_cast_detail::void_caster & void_cast_register(
                 void_cast_detail::void_caster_primitive<Derived, Base>
             >
         >::type typex;
+#endif
     return singleton<typex>::get_const_instance();
 }
 

@@ -57,7 +57,7 @@ namespace std{
 #include <boost/type_traits/is_polymorphic.hpp>
 
 #include <serialization/assume_abstract.hpp>
-#if ! ( defined(__BORLANDC__) || BOOST_WORKAROUND(__IBMCPP__, < 1210) || defined(__SUNPRO_CC) && (__SUNPRO_CC < 0x590) )
+#if ! ( BOOST_VERSION<103900 || defined(__BORLANDC__) || BOOST_WORKAROUND(__IBMCPP__, < 1210) || defined(__SUNPRO_CC) && (__SUNPRO_CC < 0x590) )
 #include <boost/type_traits/has_new_operator.hpp>
 #endif
 
@@ -200,7 +200,7 @@ I3_DLLEXPORT void iserializer<Archive, T>::load_object_data(
 template<class T>
 struct heap_allocation {
     // boost::has_new_operator< T > doesn't work on these compilers
-    #if ( defined(__BORLANDC__) || BOOST_WORKAROUND(__IBMCPP__, < 1210) || defined(__SUNPRO_CC) && (__SUNPRO_CC < 0x590) )
+    #if ( BOOST_VERSION<103900 || defined(__BORLANDC__) || BOOST_WORKAROUND(__IBMCPP__, < 1210) || defined(__SUNPRO_CC) && (__SUNPRO_CC < 0x590) )
         // This doesn't handle operator new overload for class T
         static T * invoke_new(){
             return static_cast<T *>(operator new(sizeof(T)));
