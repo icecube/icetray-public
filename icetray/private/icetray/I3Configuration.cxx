@@ -24,7 +24,7 @@
 #include <icetray/I3ConfigurationImpl.h>
 
 #include <icetray/serialization.h>
-#include <boost/serialization/scoped_ptr.hpp>
+#include <serialization/scoped_ptr.hpp>
 
 #include <icetray/Utility.h>
 

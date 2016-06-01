@@ -1,28 +1,27 @@
 /**
  *  $Id$
- *  
+ *
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
  *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
  *  This file is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 3 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
- *  
+ *
  */
 #include <icetray/I3Frame.h>
 #include <icetray/I3FrameObject.h>
 #include <icetray/Utility.h>
-#include <icetray/serialization.h>
 
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
@@ -55,8 +54,8 @@
 #endif
 
 #include <boost/asio.hpp>
-#include <boost/archive/iterators/base64_from_binary.hpp>
-#include <boost/archive/iterators/transform_width.hpp>
+#include <archive/iterators/base64_from_binary.hpp>
+#include <archive/iterators/transform_width.hpp>
 using boost::asio::ip::tcp;
 
 using boost::algorithm::ends_with;
@@ -71,7 +70,7 @@ namespace boost {
       struct optimal_buffer_size_impl<mapped_file_source>
       {
 	template <typename T>
-	  static std::streamsize 
+	  static std::streamsize
 	  optimal_buffer_size(const T& t)
 	{
 	  return 4096;
@@ -81,13 +80,12 @@ namespace boost {
   }
 }
 #endif
-using namespace boost::archive;
 using namespace std;
 
 // http://stackoverflow.com/a/16775827
 const std::string base64_padding[] = {"", "==","="};
 std::string base64_encode(std::string::const_iterator begin, std::string::const_iterator &end) {
-  namespace bai = boost::archive::iterators;
+  namespace bai = icecube::archive::iterators;
 
   std::stringstream os;
 
@@ -106,7 +104,7 @@ std::string base64_encode(std::string::const_iterator begin, std::string::const_
 struct http_source
 {
   typedef char char_type;
-  struct category 
+  struct category
     : boost::iostreams::source_tag,
       boost::iostreams::closable_tag { };
   http_source(const std::string &url) : io_service_(new boost::asio::io_service),
@@ -115,19 +113,19 @@ struct http_source
     // parse the parts of the URL (based on http://stackoverflow.com/a/2616217)
     std::pair<std::string::const_iterator, std::string::const_iterator>
       protocol, auth, host, path, query;
-    
+
     query.first = std::find(url.begin(), url.end(), '?');
     path.second = query.first;
-    
+
     path.second = query.first;
     if (query.first != url.end())
       query.first++;
-    
+
     protocol.first = url.begin();
     protocol.second = url.begin() + url.find("://");
     host.first = (protocol.second == url.end()) ? url.begin() : protocol.second + 3;
     host.second = std::find(host.first, query.first, '/');
-    
+
     auth.second = std::find(host.first, host.second, '@');
     auth.first = auth.second;
     if (auth.second != host.second) {
@@ -135,16 +133,16 @@ struct http_source
       host.first = auth.second+1;
     }
     path.first = host.second;
-    
+
     // following boost/libs/asio/example/http/client/sync_client.cpp
-    
+
     // Get a list of endpoints corresponding to the server name.
     tcp::resolver resolver(*io_service_);
     tcp::resolver::query dns_query(std::string(host.first, host.second),
       std::string(protocol.first, protocol.second));
     tcp::resolver::iterator endpoint_iterator = resolver.resolve(dns_query);
     tcp::resolver::iterator end;
- 
+
     // Try each endpoint until we successfully establish a connection.
     boost::system::error_code error = boost::asio::error::host_not_found;
     while (error && endpoint_iterator != end)
@@ -154,7 +152,7 @@ struct http_source
     }
     if (error)
       throw boost::system::system_error(error);
-    
+
     // Form the request. We specify the "Connection: close" header so that the
     // server will close the socket after transmitting the response. This will
     // allow us to treat all data up until the EOF as the content.
@@ -167,15 +165,15 @@ struct http_source
       request_stream << "Authorization: Basic " << base64_encode(auth.first, auth.second) << "\r\n";
     }
     request_stream << "Connection: close\r\n\r\n";
-    
+
     // Send the request.
     boost::asio::write(*socket_, request);
- 
+
     // Read the response status line. The response streambuf will automatically
     // grow to accommodate the entire line. The growth may be limited by passing
     // a maximum size to the streambuf constructor.
     boost::asio::read_until(*socket_, *buffer_, "\r\n");
- 
+
     // Check that response is OK.
     std::istream response_stream(buffer_.get());
     std::string http_version;
@@ -196,35 +194,35 @@ struct http_source
       socket_->close();
       return;
     }
- 
+
     // Read the response headers, which are terminated by a blank line.
     // NB: read_until() may read an arbitrary number of bytes
     boost::asio::read_until(*socket_, *buffer_, "\r\n\r\n");
- 
+
     // Consume the response headers to arrive at the content.
     std::string header;
     while (std::getline(response_stream, header) && header != "\r") {}
   }
-  
+
   std::streamsize read(char *s, std::streamsize size)
   {
     if (size > buffer_->in_avail())
       boost::asio::read(*socket_, *buffer_,
         boost::asio::transfer_at_least(size-buffer_->in_avail()));
-    
+
     size_t n = std::min(size, buffer_->in_avail());
     std::copy(boost::asio::buffers_begin(buffer_->data()),
       boost::asio::buffers_begin(buffer_->data())+n, s);
     buffer_->consume(n);
-    
+
     return n;
   }
-  
+
   void close()
   {
     socket_->close();
   }
-  
+
   boost::shared_ptr<boost::asio::io_service> io_service_;
   boost::shared_ptr<tcp::socket> socket_;
   boost::shared_ptr<boost::asio::streambuf> buffer_;
@@ -235,7 +233,7 @@ struct http_source
 #if ARCHIVE_VERSION_NUMBER < 3000000
 // Forwards compatibility macros
 #define archive_read_free archive_read_finish
-#define archive_read_support_filter_all archive_read_support_compression_all 
+#define archive_read_support_filter_all archive_read_support_compression_all
 #define archive_read_support_filter_gzip archive_read_support_compression_gzip
 #define archive_read_support_filter_bzip2 archive_read_support_compression_bzip2
 #define archive_read_support_filter_lzma archive_read_support_compression_lzma
@@ -250,7 +248,7 @@ struct archive_filter {
 		void *source;
 		char_type buffer[BOOST_IOSTREAMS_DEFAULT_DEVICE_BUFFER_SIZE];
 	};
-	
+
 	typedef enum { GZIP, BZIP2, LZMA, XZ, NONE } compression_type;
 
 	boost::shared_ptr<struct archive> reader_;
@@ -262,19 +260,19 @@ struct archive_filter {
 	static void archive_destructor(struct archive *ar)
 	{
 		if (!ar) return;
-		
+
 		archive_read_free(ar);
 	}
-	
+
 	archive_filter(const std::string& filename) :
 	    reader_(archive_read_new(), archive_destructor),
 	    header_read_(false), raw_archive_(false), bytes_read_(0)
 	{
 		archive_read_support_format_all(reader_.get());
 		archive_read_support_format_raw(reader_.get());
-	
+
 		compression_type comp = guess_compression(filename);
-		
+
 		switch (comp) {
 			case GZIP:
 				if (archive_read_support_filter_gzip(reader_.get()) == ARCHIVE_WARN)
@@ -299,10 +297,10 @@ struct archive_filter {
 				    filename.c_str());
 				break;
 		}
-		
+
 		source_info_.source = NULL;
 	}
-	
+
 	template<typename Source>
 	std::streamsize read(Source& src, char_type* s, std::streamsize n)
 	{
@@ -314,7 +312,7 @@ struct archive_filter {
 			raw_archive_ = false;
 			log_trace("(archive_filter) opened new source");
 		}
-		
+
 		while (!header_read_ && !raw_archive_) {
 			if (archive_read_next_header(reader_.get(), &current_entry_) == ARCHIVE_OK) {
 				std::string fname(archive_entry_pathname(current_entry_));
@@ -328,7 +326,7 @@ struct archive_filter {
 					raw_archive_ = true;
 					continue;
 				}
-				
+
 				if (!ends_with(fname,".i3")) {
 					log_trace("(archive_filter) skipping file '%s' (not an I3 file)",
 					    fname.c_str());
@@ -346,16 +344,16 @@ struct archive_filter {
 		ssize_t nread = archive_read_data(reader_.get(), s, n);
 
 		bytes_read_ += nread;
-	
+
 		if (nread <= 0)
 			return -1; /* boost::iostreams-style EOF */
-		
+
 		if (!raw_archive_ && bytes_read_ >= archive_entry_size(current_entry_))
 			header_read_ = false;
-		
+
 		return nread;
 	}
-	
+
 	/* A callback for libarchive. */
 	template <typename Source>
 	static ssize_t read_stream(struct archive *a, void *client_data_blob, const void **buff)
@@ -365,13 +363,13 @@ struct archive_filter {
 		ssize_t nread = boost::iostreams::read(source, data->buffer,
 		    BOOST_IOSTREAMS_DEFAULT_DEVICE_BUFFER_SIZE);
 		*buff = data->buffer;
-		
+
 		if (nread < 0)
 			return 0; /* libarchive-style EOF */
 		else
 			return nread;
 	}
-	
+
 	static compression_type guess_compression(const std::string &filename)
 	{
 		compression_type comp = NONE;
@@ -383,7 +381,7 @@ struct archive_filter {
 			comp = LZMA;
 		else if (ends_with(filename,".xz"))
 			comp = XZ;
-			
+
 		return comp;
 	}
 };
@@ -395,7 +393,6 @@ namespace I3 {
   namespace dataio {
 
     namespace io = boost::iostreams;
-    namespace ar = boost::archive;
     //
     //  open compressed streams
     //
@@ -405,8 +402,8 @@ namespace I3 {
 	ifs.pop();
       ifs.reset();
       if (!ifs.empty()) log_fatal("ifs isn't empty!");
-	
-      log_trace("Constructing with filename %s", 
+
+      log_trace("Constructing with filename %s",
       		filename.c_str());
 
 #ifdef I3_WITH_LIBARCHIVE
@@ -441,7 +438,7 @@ namespace I3 {
           port = host.substr(host.rfind(':')+1);
           host.resize(host.rfind(':'));
         }
-	
+
         struct addrinfo hints, *res;
         int error, s;
 
@@ -492,12 +489,12 @@ namespace I3 {
 
 	ifs.push(fs);
       }
-      
+
       log_debug("Opened file %s", filename.c_str());
     }
 
-    void open(io::filtering_ostream& ofs, 
-	      const std::string& filename, 
+    void open(io::filtering_ostream& ofs,
+	      const std::string& filename,
 	      int compression_level,
 	      std::ios::openmode mode)
     {
@@ -530,4 +527,3 @@ namespace I3 {
 
   } // namespace dataio
 }  //  namespace I3
-

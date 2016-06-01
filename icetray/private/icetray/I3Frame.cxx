@@ -66,7 +66,7 @@ namespace {
 
 using namespace std;
 namespace io = boost::iostreams;
-namespace ar = boost::archive;
+namespace ar = icecube::archive;
 
 template <class Archive>
 void I3Frame::Stream::serialize(Archive& ar, unsigned version)
@@ -428,7 +428,7 @@ namespace
     uint32_t size = container.size();
 #if BYTE_ORDER == BIG_ENDIAN
     uint32_t swapped = size;
-    boost::archive::portable::swap(swapped);
+    icecube::archive::portable::swap(swapped);
     crc.process_bytes(&swapped, sizeof(size));
 #else
     crc.process_bytes(&size, sizeof(size));
@@ -445,7 +445,7 @@ namespace
       return;
 #if BYTE_ORDER == BIG_ENDIAN
     T swapped = pod;
-    boost::archive::portable::swap(swapped);
+    icecube::archive::portable::swap(swapped);
     crc.process_bytes(&swapped, sizeof(T));
 #else
     crc.process_bytes(&pod, sizeof(T));
@@ -473,7 +473,7 @@ void I3Frame::create_blob_impl(I3Frame::value_t &value)
   typedef io::stream<io::back_insert_device<vector<char> > > vecstream_t;
   vecstream_t blobBufStream(value.blob.buf);
   {
-    boost::archive::portable_binary_oarchive blobBufArchive(blobBufStream);
+    icecube::archive::portable_binary_oarchive blobBufArchive(blobBufStream);
     blobBufArchive << make_nvp("T", value.ptr);
   }
   blobBufStream.flush();
@@ -533,7 +533,7 @@ void I3Frame::save(OStreamT& os, const vector<string>& skip) const
 
   os.write(tag, sizeof(i3frame_tag_t));
   {
-    boost::archive::portable_binary_oarchive poa(os);
+    icecube::archive::portable_binary_oarchive poa(os);
     poa << make_nvp("version", version);
     // version does *not* get crc'ed
 
@@ -636,7 +636,7 @@ bool I3Frame::load(IStreamT& is, const vector<string>& skip, bool verify_cksum)
 #if BYTE_ORDER == BIG_ENDIAN
       BOOST_STATIC_ASSERT(sizeof(frameTagRead) == 4);
       uint32_t &frameTagInt = reinterpret_cast<uint32_t &>(frameTagRead);
-      boost::archive::portable::swap(frameTagInt);
+      icecube::archive::portable::swap(frameTagInt);
 #endif
       const i3frame_version_t* tmpVersion =
 	reinterpret_cast<i3frame_version_t*>(frameTagRead);
@@ -652,7 +652,7 @@ bool I3Frame::load(IStreamT& is, const vector<string>& skip, bool verify_cksum)
 
   // if we are here, this looks like an .i3 file.  Get the frame serialization version.
   {
-    boost::archive::portable_binary_iarchive bufArchive(is);
+    icecube::archive::portable_binary_iarchive bufArchive(is);
     // this might return garbage and set eof() on stream
     i3frame_version_t versionRead;
     bufArchive >> make_nvp("i3version", versionRead);
@@ -688,7 +688,7 @@ bool I3Frame::load_v56(IStreamT& is, const vector<string>& skip, bool v6, bool v
   // read size of the entire (serialized) frame
   // read checksum plus entire frame and process/test checksum
   {
-    boost::archive::portable_binary_iarchive bia(is);
+    icecube::archive::portable_binary_iarchive bia(is);
 
     bia >> make_nvp("stream", stop_);
     if (verify)
@@ -781,7 +781,7 @@ bool I3Frame::load_v4(IStreamT& is, const vector<string>& skip)
   // read size of the entire (serialized) frame
   // read checksum plus entire frame and process/test checksum
   {
-    boost::archive::portable_binary_iarchive bia(is);
+    icecube::archive::portable_binary_iarchive bia(is);
 
     bia >> make_nvp("size", sizeRead);
     bia >> make_nvp("checksum", checksumRead);
@@ -802,7 +802,7 @@ bool I3Frame::load_v4(IStreamT& is, const vector<string>& skip)
 
     //    io::array_source bufSource(&(buf_[0]), buf_.size());
     //    io::filtering_istream fis(bufSource);
-    //    boost::archive::portable_binary_iarchive bia(fis);
+    //    icecube::archive::portable_binary_iarchive bia(fis);
 
     bia >> make_nvp("Stream", stop_);
     std::vector<event_t> tmp_history_;
@@ -873,7 +873,7 @@ bool I3Frame::load_old(IStream& is,
   if (!is.good())
     log_fatal("attempt to read from stream in error state");
 
-  boost::archive::portable_binary_iarchive bufArchive(is);
+  icecube::archive::portable_binary_iarchive bufArchive(is);
 
   std::vector<event_t> history_;
   if (versionRead > 1)
@@ -1005,7 +1005,7 @@ I3FrameObjectConstPtr I3Frame::get_impl(map_t::const_reference pr,
 
   io::array_source src(&(value.blob.buf[0]), value.blob.buf.size());
   io::filtering_istream fis(src);
-  boost::archive::portable_binary_iarchive pia(fis);
+  icecube::archive::portable_binary_iarchive pia(fis);
   I3FrameObjectPtr fop;
   try {
     pia >> fop;

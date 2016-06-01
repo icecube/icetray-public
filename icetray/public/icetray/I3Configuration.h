@@ -113,7 +113,7 @@ public:
 
   ///
   /// prints in xml format for consumption by xsltproc.  You can't just use
-  /// the boost::serialization xml since this isn't well formed
+  /// the icecube::serialization xml since this isn't well formed
   /// due to <px class_id="9" class_name="typeholder<bool>" ...
   ///
   std::string inspect() const;
@@ -122,7 +122,7 @@ public:
 
 private:
 
-  friend class boost::serialization::access;
+  friend class icecube::serialization::access;
 
   template <typename Archive>
   void

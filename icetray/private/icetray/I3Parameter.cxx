@@ -4,7 +4,7 @@
 #include <icetray/serialization.h>
 #include <icetray/Utility.h>
 
-#include <boost/serialization/optional.hpp>
+#include <serialization/optional.hpp>
 #include <boost/python.hpp>
 #include <boost/python/extract.hpp>
 

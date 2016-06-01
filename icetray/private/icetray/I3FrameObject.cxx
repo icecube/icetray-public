@@ -32,6 +32,4 @@ I3FrameObject::serialize(Archive & ar, unsigned version)
 
 I3_BASIC_SERIALIZABLE(I3FrameObject);
 
-#if BOOST_VERSION >= 103600
-BOOST_SERIALIZATION_SHARED_PTR(I3FrameObject);
-#endif
+I3_SERIALIZATION_SHARED_PTR(I3FrameObject);

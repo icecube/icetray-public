@@ -29,7 +29,7 @@ inline void to_vector(const T &element, std::vector<char> &blobBuffer)
     typedef boost::iostreams::stream<boost::iostreams::back_insert_device<std::vector<char> > > vecstream_t;
     vecstream_t blobBufStream(blobBuffer);
     {
-        boost::archive::portable_binary_oarchive blobBufArchive(blobBufStream);
+        icecube::archive::portable_binary_oarchive blobBufArchive(blobBufStream);
         blobBufArchive << make_nvp("T", element);
     }
     blobBufStream.flush();
@@ -40,7 +40,7 @@ inline void from_buffer(T &element, const char *buffer, std::size_t size)
 {
     boost::iostreams::array_source src(buffer, size);
     boost::iostreams::filtering_istream fis(src);
-    boost::archive::portable_binary_iarchive pia(fis);
+    icecube::archive::portable_binary_iarchive pia(fis);
 
     pia >> element;
 }

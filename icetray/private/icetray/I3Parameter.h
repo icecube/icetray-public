@@ -26,6 +26,7 @@
 #include <boost/python/object.hpp>
 #include <boost/optional.hpp>
 #include <string>
+#include <icetray/serialization.h>
 	
 struct I3Parameter
 {
@@ -62,7 +63,7 @@ public:
   boost::python::object value() const;
 
 private:
-  friend class boost::serialization::access;
+  friend class icecube::serialization::access;
 
   template <typename Archive>
   void

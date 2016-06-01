@@ -33,8 +33,8 @@
 #include <string>
 #include <fstream>
 
-#include <boost/archive/binary_iarchive.hpp>
-#include <boost/archive/binary_oarchive.hpp>
+#include <archive/binary_iarchive.hpp>
+#include <archive/binary_oarchive.hpp>
 
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
@@ -120,7 +120,7 @@ TEST(i3int_only)
 
   std::ofstream ofs(file, ios::binary);
   {
-    boost::archive::portable_binary_oarchive boa(ofs);
+    icecube::archive::portable_binary_oarchive boa(ofs);
     boa << fop;
   }
   ofs.close();
@@ -129,7 +129,7 @@ TEST(i3int_only)
 
   std::ifstream ifs(file, ios::binary);
   {
-    boost::archive::portable_binary_iarchive bia(ifs);
+    icecube::archive::portable_binary_iarchive bia(ifs);
     bia >> fop;
   }
   ip = boost::dynamic_pointer_cast<I3Int>(fop);
@@ -149,7 +149,7 @@ TEST(vectorchar_only)
 
   std::ofstream ofs(file, ios::binary);
   {
-    boost::archive::portable_binary_oarchive boa(ofs);
+    icecube::archive::portable_binary_oarchive boa(ofs);
     boa << vc;
   }
   ofs.close();
@@ -158,7 +158,7 @@ TEST(vectorchar_only)
   
   std::ifstream ifs(file, ios::binary);
   {
-    boost::archive::portable_binary_iarchive bia(ifs);
+    icecube::archive::portable_binary_iarchive bia(ifs);
     bia >> vc2;
   }
   for (int i=0; i<26; i++)

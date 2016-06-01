@@ -12,23 +12,23 @@
 #ifndef ICETRAY_EXTENDED_TYPE_INFO_H_INCLUDED
 #define ICETRAY_EXTENDED_TYPE_INFO_H_INCLUDED
 
-#ifdef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
+#ifdef I3_SERIALIZATION_DEFAULT_TYPE_INFO
 #error Included too late
 #endif
 
 #include <cstring>
 #include <cassert>
 
-#define BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
-#include <boost/serialization/extended_type_info_typeid.hpp>
-#undef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
+#define I3_SERIALIZATION_DEFAULT_TYPE_INFO
+#include <serialization/extended_type_info_typeid.hpp>
+#undef I3_SERIALIZATION_DEFAULT_TYPE_INFO
 
 template<class T> struct i3_export_key_setter;
 
 template<class T>
 class i3_extended_type_info :
-    public boost::serialization::typeid_system::extended_type_info_typeid_0,
-    public boost::serialization::singleton<i3_extended_type_info< T > >
+    public icecube::serialization::typeid_system::extended_type_info_typeid_0,
+    public icecube::serialization::singleton<i3_extended_type_info< T > >
 {
 private:
 	friend struct i3_export_key_setter<T>;
@@ -46,7 +46,7 @@ private:
 	
 public:
 	i3_extended_type_info() :
-	    boost::serialization::typeid_system::extended_type_info_typeid_0(guid_buffer),
+	    icecube::serialization::typeid_system::extended_type_info_typeid_0(guid_buffer),
 	    registered(false)
 	{
 		type_register(typeid(T));
@@ -63,8 +63,12 @@ public:
 		// note: this implementation - based on usage of typeid (rtti)
 		// only does something if the class has at least one virtual
 		// function.
+#ifdef BOOST_STATIC_ASSERT_MSG
 		BOOST_STATIC_ASSERT_MSG(boost::is_polymorphic< T >::value, "Serializable types should be polymorphic");
-		return boost::serialization::typeid_system::extended_type_info_typeid_0::get_extended_type_info(typeid(t));
+#else
+		BOOST_STATIC_ASSERT(boost::is_polymorphic< T >::value && "Serializable types should be polymorphic");
+#endif
+		return icecube::serialization::typeid_system::extended_type_info_typeid_0::get_extended_type_info(typeid(t));
 	}
 
 	virtual void * construct(unsigned int count, ...) const{
@@ -74,15 +78,15 @@ public:
 
 		switch(count){
 		case 0:
-			return boost::serialization::factory<BOOST_DEDUCED_TYPENAME boost::remove_const< T >::type, 0>(ap);
+			return icecube::serialization::factory<BOOST_DEDUCED_TYPENAME boost::remove_const< T >::type, 0>(ap);
 		case 1:
-			return boost::serialization::factory<BOOST_DEDUCED_TYPENAME boost::remove_const< T >::type, 1>(ap);
+			return icecube::serialization::factory<BOOST_DEDUCED_TYPENAME boost::remove_const< T >::type, 1>(ap);
 		case 2:
-			return boost::serialization::factory<BOOST_DEDUCED_TYPENAME boost::remove_const< T >::type, 2>(ap);
+			return icecube::serialization::factory<BOOST_DEDUCED_TYPENAME boost::remove_const< T >::type, 2>(ap);
 		case 3:
-			return boost::serialization::factory<BOOST_DEDUCED_TYPENAME boost::remove_const< T >::type, 3>(ap);
+			return icecube::serialization::factory<BOOST_DEDUCED_TYPENAME boost::remove_const< T >::type, 3>(ap);
 		case 4:
-			return boost::serialization::factory<BOOST_DEDUCED_TYPENAME boost::remove_const< T >::type, 4>(ap);
+			return icecube::serialization::factory<BOOST_DEDUCED_TYPENAME boost::remove_const< T >::type, 4>(ap);
 		default:
 			BOOST_ASSERT(false); // too many arguments
 			// throw exception here?
@@ -91,7 +95,7 @@ public:
 	}
 
 	virtual void destroy(void const * const p) const {
-		boost::serialization::access::destroy(
+		icecube::serialization::access::destroy(
 			static_cast<T const *>(p)
 		);
 		//delete static_cast<T const * const>(p);
@@ -99,8 +103,8 @@ public:
 };
 
 
-#define BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
-namespace boost {
+#define I3_SERIALIZATION_DEFAULT_TYPE_INFO
+namespace icecube {
 namespace serialization {
 template<class T>
 struct extended_type_info_impl {
@@ -113,9 +117,8 @@ template<class T>
 struct i3_export_key_setter {
 	const char *guid;
 	i3_export_key_setter(const char *name) : guid(name) {
-		boost::serialization::singleton<i3_extended_type_info<T> >::get_mutable_instance().set_key(guid);
+		icecube::serialization::singleton<i3_extended_type_info<T> >::get_mutable_instance().set_key(guid);
 	}
 };
 
 #endif
-

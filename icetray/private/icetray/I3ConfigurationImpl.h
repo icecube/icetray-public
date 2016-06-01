@@ -32,6 +32,7 @@
 #include <icetray/serialization.h>
 #include <iosfwd>
 
+#define BOOST_MULTI_INDEX_DISABLE_SERIALIZATION
 #include <boost/multi_index_container_fwd.hpp>
 #include <boost/multi_index/ordered_index_fwd.hpp>
 #include <boost/multi_index/mem_fun.hpp>
@@ -88,7 +89,7 @@ public:
 
   ///
   /// prints in xml format for consumption by xsltproc.  You can't just use
-  /// the boost::serialization xml since this isn't well formed
+  /// the icecube::serialization xml since this isn't well formed
   /// due to <px class_id="9" class_name="typeholder<bool>" ...
   ///
   std::string inspect() const;
@@ -100,7 +101,7 @@ private:
   std::string classname;
   std::string instancename;
 
-  friend class boost::serialization::access;
+  friend class icecube::serialization::access;
   friend class I3Configuration;
 
   template <typename Archive> void serialize(Archive&, unsigned);
@@ -142,6 +143,6 @@ private:
 std::ostream& operator<<(std::ostream&, const I3ConfigurationImpl&);
 
 I3_POINTER_TYPEDEFS(I3ConfigurationImpl);
-BOOST_CLASS_VERSION(I3ConfigurationImpl, 2);
+I3_CLASS_VERSION(I3ConfigurationImpl, 2);
 
 #endif

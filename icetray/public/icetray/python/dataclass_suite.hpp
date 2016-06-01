@@ -3,7 +3,7 @@
 //  - indexing (for maps, vectors, and trees)
 //  - copy constructors
 //  - __str__ representations
-//  - boost::serialization-backed pickling
+//  - icecube::serialization-backed pickling
 //  - disabling __setattr__ to avoid API confusion
 //  
 //  (C) 2012 Jakob van Santen <vansanten@wisc.edu>

@@ -25,28 +25,14 @@
 
 #include <icetray/serialization.h>
 
-#if BOOST_VERSION < 104000
-#include <boost/archive/impl/archive_pointer_iserializer.ipp>
-#include <boost/archive/impl/archive_pointer_oserializer.ipp>
+#include <archive/impl/archive_serializer_map.ipp>
 
-namespace boost {
-namespace archive {
-  
-  template class detail::archive_pointer_iserializer<portable_binary_iarchive> ;
-  template class detail::archive_pointer_oserializer<portable_binary_oarchive> ;
-
-} // namespace archive
-} // namespace boost
-#else
-#include <boost/archive/impl/archive_serializer_map.ipp>
-
-namespace boost {
+namespace icecube {
 namespace archive {
   
   template class detail::archive_serializer_map<portable_binary_iarchive> ;
   template class detail::archive_serializer_map<portable_binary_oarchive> ;
 
 } // namespace archive
-} // namespace boost
-#endif
+} // namespace icecube
 

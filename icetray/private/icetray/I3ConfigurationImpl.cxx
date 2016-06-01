@@ -36,7 +36,7 @@
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/python/object.hpp>
 #include <boost/foreach.hpp>
-#include <boost/serialization/split_free.hpp>
+#include <serialization/split_free.hpp>
 
 
 using namespace std;
@@ -126,7 +126,7 @@ I3ConfigurationImpl::GetParameter(const string& name_) const
   return *iter;
 }
 
-namespace boost {
+namespace icecube {
   namespace serialization {
     //
     //  Careful: multi_index has nonportable serialization (doesn't
@@ -138,29 +138,29 @@ namespace boost {
     void save(Archive& ar, const I3ConfigurationImpl::parameters_t& params, unsigned)
     {
       uint16_t count = params.size();
-      ar & make_nvp("nparams", count);
+      ar & icecube::serialization::make_nvp("nparams", count);
       for(I3ConfigurationImpl::parameters_t::const_iterator ci = params.begin();
-	  ci != params.end();
-	  ci++)
-	ar & make_nvp("param", *ci);
+          ci != params.end();
+          ci++)
+        ar & icecube::serialization::make_nvp("param", *ci);
     }
 
     template <class Archive>
     void load(Archive& ar, I3ConfigurationImpl::parameters_t& params, unsigned)
     {
       uint16_t count;
-      ar & make_nvp("nparams", count);
+      ar & icecube::serialization::make_nvp("nparams", count);
       for (unsigned i = 0; i< count; i++)
-	{
-	  I3Parameter p;
-	  ar & make_nvp("param", p);
-	  params.insert(p);
-	}
+      {
+        I3Parameter p;
+        ar & icecube::serialization::make_nvp("param", p);
+        params.insert(p);
+      }
     }
   }
 }
 
-BOOST_SERIALIZATION_SPLIT_FREE(I3ConfigurationImpl::parameters_t);
+I3_SERIALIZATION_SPLIT_FREE(I3ConfigurationImpl::parameters_t);
 
 template <typename Archive>
 void
@@ -173,16 +173,16 @@ I3ConfigurationImpl::serialize(Archive &ar, unsigned version)
   // unfortunately, version 1 was nonportable.  Wasn't ever officially
   // in the wild, though.
   if (version < 2)
-    throw boost::archive::archive_exception(boost::archive::archive_exception::unsupported_version);
+    throw icecube::archive::archive_exception(icecube::archive::archive_exception::unsupported_version);
 
   // for parameters_t, use the portable save/load above
-  ar & make_nvp("parameters", parameters); 
+  ar & icecube::serialization::make_nvp("parameters", parameters);
   if (version == 2) {
     std::map<std::string, std::string> outboxes;
-    ar & make_nvp("outboxes", outboxes);
+    ar & icecube::serialization::make_nvp("outboxes", outboxes);
   }
-  ar & make_nvp("classname", classname);
-  ar & make_nvp("instancename", instancename);
+  ar & icecube::serialization::make_nvp("classname", classname);
+  ar & icecube::serialization::make_nvp("instancename", instancename);
 }
 
 I3_BASIC_SERIALIZABLE(I3ConfigurationImpl);

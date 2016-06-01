@@ -43,7 +43,7 @@ void
 I3TrayInfo::serialize(Archive & ar, unsigned version)
 {
   if (version <= 1)
-    throw boost::archive::archive_exception(boost::archive::archive_exception::unsupported_version);
+    throw icecube::archive::archive_exception(icecube::archive::archive_exception::unsupported_version);
 
   ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
   ar & make_nvp("host_info", host_info);

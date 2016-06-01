@@ -121,7 +121,7 @@ template <class FactoryProductType,
 struct I3Registrator : boost::noncopyable
 {
   I3Registrator& key_register(const char* productname,
-                              const char* projectname) BOOST_USED
+                              const char* projectname) I3_USED
   {
     log_trace("key_register %s %s", productname, projectname);
 

@@ -146,7 +146,7 @@ TEST(a_t_serializes)
   ENSURE((bool)ptr);
 
   std::ofstream ofs("i3int");
-  boost::archive::portable_binary_oarchive poa(ofs);
+  icecube::archive::portable_binary_oarchive poa(ofs);
   poa << make_nvp("t", ptr);
 }
   

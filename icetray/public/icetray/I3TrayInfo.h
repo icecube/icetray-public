@@ -57,7 +57,7 @@ operator<<(std::ostream& os, const I3TrayInfo& config);
 
 I3_DEFAULT_NAME(I3TrayInfo);
 I3_POINTER_TYPEDEFS(I3TrayInfo);
-BOOST_CLASS_VERSION(I3TrayInfo, 2);
+I3_CLASS_VERSION(I3TrayInfo, 2);
 #endif
 
 

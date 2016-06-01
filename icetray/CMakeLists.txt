@@ -133,6 +133,7 @@ i3_add_library(icetray
   ${ICETRAY_PYTHON_SRC}
 
   IWYU
+  USE_PROJECTS serialization
   USE_TOOLS boost python ${OPTIONAL_TOOLS}
   LINK_LIBRARIES ${BOOST_PYTHON} ${LIBARCHIVE_LIBRARIES}
   )

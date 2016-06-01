@@ -25,7 +25,7 @@
 #include <icetray/I3Frame.h>
 #include <icetray/I3Logging.h>
 #include <icetray/I3Module.h>
-#include <boost/archive/archive_exception.hpp>
+#include <archive/archive_exception.hpp>
 
 using namespace std;
 
@@ -74,10 +74,10 @@ void DeleteUnregistered::Process()
     {
       try {
 	I3FrameObjectConstPtr fop = frame->Get<I3FrameObjectConstPtr>(iter->first, true);
-      } catch (const boost::archive::archive_exception& e) {
+      } catch (const icecube::archive::archive_exception& e) {
 	switch (e.code) {
-	case boost::archive::archive_exception::unregistered_class:
-	case boost::archive::archive_exception::unsupported_version:
+	case icecube::archive::archive_exception::unregistered_class:
+	case icecube::archive::archive_exception::unsupported_version:
 	  deleteme.push_back(iter->first);
 	  break;
 	default:

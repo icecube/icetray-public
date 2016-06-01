@@ -68,8 +68,8 @@ BOOST_PYTHON_MODULE(icetray)
 {
   // 
   // You *must* do this first, or you get the nasty error 
-  //   void boost::serialization::detail::tkmap::insert(const   
-  //   boost::serialization::extended_type_info*): Assertion `lookup(eti) ==  
+  //   void icecube::serialization::detail::tkmap::insert(const
+  //   icecube::serialization::extended_type_info*): Assertion `lookup(eti) ==  
   //   slf->m_map.tend()' failed. 
   // 
   load_project("icetray", false); 
