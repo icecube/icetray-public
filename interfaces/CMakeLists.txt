@@ -7,7 +7,7 @@ i3_project(interfaces
 
 i3_add_library(interfaces
   private/interfaces/*.cxx
-  USE_PROJECTS icetray
+  USE_PROJECTS serialization icetray
   USE_TOOLS boost
   )
 
