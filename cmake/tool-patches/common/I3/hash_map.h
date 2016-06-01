@@ -46,11 +46,11 @@ using hash = i3hash<T>;
 
 #endif // __cplusplus < 201103L
 
-#include <boost/serialization/collections_save_imp.hpp>
-#include <boost/serialization/collections_load_imp.hpp>
-#include <boost/serialization/split_free.hpp>
+#include <serialization/collections_save_imp.hpp>
+#include <serialization/collections_load_imp.hpp>
+#include <serialization/split_free.hpp>
 
-namespace boost {
+namespace icecube {
   namespace serialization {
     
     template<class Archive, class Type, class Key, class Hash, class Equal, class Allocator >
@@ -58,7 +58,7 @@ namespace boost {
                      const hash_map<Key, Type, Hash, Equal, Allocator> &t,
                      const unsigned int /* file_version */
                      ){
-      boost::serialization::stl::save_collection<
+      icecube::serialization::stl::save_collection<
         Archive,
         hash_map<Key, Type, Hash, Equal, Allocator>
       >(ar, t);
@@ -69,12 +69,12 @@ namespace boost {
                      hash_map<Key, Type, Hash, Equal, Allocator> &t,
                      const unsigned int /* file_version */
                      ){
-      boost::serialization::stl::load_collection<
+      icecube::serialization::stl::load_collection<
         Archive,
         hash_map<Key, Type, Hash, Equal, Allocator>,
-        boost::serialization::stl::archive_input_map<
+        icecube::serialization::stl::archive_input_map<
           Archive, hash_map<Key, Type, Hash, Equal, Allocator> >,
-          boost::serialization::stl::no_reserve_imp<hash_map<
+          icecube::serialization::stl::no_reserve_imp<hash_map<
             Key, Type, Hash, Equal, Allocator
           >
         >
@@ -88,7 +88,7 @@ namespace boost {
                           hash_map<Key, Type, Hash, Equal, Allocator> &t,
                           const unsigned int file_version
                           ){
-      boost::serialization::split_free(ar, t, file_version);
+      icecube::serialization::split_free(ar, t, file_version);
     }
   }
 }
