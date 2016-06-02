@@ -66,20 +66,8 @@ After the install finishes you should have both clang and llvm-gcc:
 	Target: x86_64-apple-darwin12.0.0
 	Thread model: posix
 
-Package managers
-""""""""""""""""
-
-As noted in :ref:`do-i-need-i3ports`, you can set up your environment quite
-quickly if you use a package manager. While Apple doesn't provide an official
-package manager for OS X, there are a number of 3rd implementations to choose
-from.
-
-.. _Homebrew: http://brew.sh
-.. _MacPorts: https://www.macports.org
-.. _Fink: http://www.finkproject.org
-
 Homebrew
-........
+""""""""
 
 Homebrew_ is probably the easiest way to install packages on OS X, and
 distributes the most heavy-weight dependencies (cmake, boost, and Qt) as binary
@@ -95,53 +83,18 @@ The following formulae are recommended:
 * IceRec: cfitsio minuit2 suite-sparse healpix multinest nlopt
 * simulation: sprng2
 
-.. warning:: Newer versions of boost have broken our serialization
-   methods. This a known issue that is being worked on. In the
-   meantime it is recommended that you use boost v1.55. This can be
-   installed from Homebrew with::
-
-       brew tap homebrew/versions
-       brew install boost155 --with-python && brew link boost155
-
 .. warning:: Some Homebrew formulas have Python as a dependency, so a
    second Python may sneak onto your computer without your
    knowledge. To avoid this, install formulas that depend on python
    with the parameter ``--build-from-source``. See `Homebrew's notes
    on Python`_ for further information.
 
+.. tip:: use ``brew deps --tree`` to see which dependencies are trying
+   to intall python
+
 .. _tap: https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/brew-tap.md
-.. _`Homebrew's notes on Python`: https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Homebrew-and-Python.md#why-is-homebrews-python-being-installed-as-a-dependency
-
-The version of boost which is provided by homebrew is incompatable with IceTray, you need to use an older version.
-Homebrew provides version 1.55 in its versions tap.::
-
-	brew install homebrew/versions/boost155 --with-python
-	brew link -f homebrew/versions/boost155
-
-However, many homebrew packages will still try to install newer versions of boost, which will cause problems. I am not aware of any way to prevent this other than not installing any homebrew package which depend on boost, mysql is one such package.
-
-MacPorts
-........
-
-I3_PORTS shares a common ancestor with MacPorts_. As a consequence, they both
-use :command:`port` but expect to be managed at different privilege levels,
-which can lead to all sorts of subtle inconsistencies and outright breakage if
-you confuse them. If you can at all avoid it, do not use I3_PORTS and MacPorts_
-together. If you must, however, here are some pitfalls to avoid:
-
-* Always explicitly run :command:`$I3_PORTS/bin/port` (never let it come from
-  your path).
-
-* Never :command:`su` or :command:`sudo` from a terminal windows where you
-  have run :command:`env-shell.sh`, as this altered path might be kept and
-  cause conflicts when you think you are running a "system" :command:`port`
-  command. Start a new terminal instead.
-
-Fink
-....
-
-Does anyone still use Fink_? If you do, and think it's any good, write some
-documentation.
+.. _`Homebrew's notes on Python`: https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Homebrew-and-Python.md                                  
+.. _Homebrew: http://brew.sh
 
 ROOT on OS X
 """"""""""""
@@ -324,9 +277,7 @@ With a fresh install of El Capitan I was able to get IceRec and Simulation runni
 	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 	#install packages with homebrew
-	brew install homebrew/versions/boost155 --with-python
-	brew link -f homebrew/versions/boost155
-	brew install cmake cdk gsl minuit2 libarchive wget doxygen qt4 pyqt
+	brew install cmake boost boost-python cdk gsl minuit2 libarchive wget doxygen qt4 pyqt
 
 	brew tap homebrew/science
 	brew install healpix hdf5
@@ -336,13 +287,15 @@ With a fresh install of El Capitan I was able to get IceRec and Simulation runni
 	brew install multinest pal suite-sparse nlopt sprng2
 
 	#install python packages to home home directory
-	echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> ${HOME}/Library/Python/2.7/lib/python/site-packages/homebrew.pth
+	echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' \
+	>> ${HOME}/Library/Python/2.7/lib/python/site-packages/homebrew.pth
 	echo 'export PATH="${HOME}/Library/Python/2.7/bin/:${PATH}"' >> ${HOME}/.bash_profile 
 	easy_install --user pip
 	pip install --user urwid sphinx ipython qtconsole tables
 
 	#install scipy and friends overriding system python packages
-	echo "import sys; sys.path.insert(1,'${HOME}/Library/Python/2.7/lib/python/site-packages')" >> ${HOME}/Library/Python/2.7/lib/python/site-packages/local.pth
+	echo "import sys; sys.path.insert(1,'${HOME}/Library/Python/2.7/lib/python/site-packages')" \>>
+	${HOME}/Library/Python/2.7/lib/python/site-packages/local.pth
 	pip install --user --upgrade numpy scipy matplotlib
 	
 
