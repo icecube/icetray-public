@@ -18,9 +18,6 @@ Officially Supported Platforms
 * Scientific Linux : 7 and 6
 * Ubuntu : 16.04 and 14.04
 * Mac OS X : 10.11 and 10.10
-
-Additionaly Tested Platforms
-++++++++++++++++++++++++++++
 * openSUSE : 13.2 (in lieu of SUSE Enterprise Linux)
 
 If you'd like a platform added to the list please generate a 
