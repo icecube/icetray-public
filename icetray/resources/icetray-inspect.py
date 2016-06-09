@@ -295,7 +295,7 @@ def display_config(mod, category, modname,config,docs):
     if docs is None:
         docs = ''
     elif not opts.verbose_docs:
-        docs = docs.strip().split('\n')[0]
+        docs = docs.strip().split('\n\n')[0]
 
     output.module_header(modname,category,docs)
 
@@ -528,7 +528,8 @@ output.file_header()
 args = sorted(set([a.replace('-','_') for a in args]),
               key=lambda s:s.lower())
 
-noinspect = i3inspect.get_uninspectable_projects()
+#level3_filter_cascade calls the segfaulting IceHive
+noinspect = i3inspect.get_uninspectable_projects()+["level3_filter_cascade"]
 
 for p in args:
     if p in noinspect:
