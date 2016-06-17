@@ -216,11 +216,11 @@ namespace pointer_map {
     {
         // multiply by golden ratio of pointer size
 #if INTPTR_MAX == INT64_MAX
-        return ((uint64_t)p) * UINT64_C(11400714819323198485);
+        return ((uint64_t)p) * 11400714819323198485ull;
 #elif INTPTR_MAX == INT32_MAX
-        return ((uint32_t)p) * UINT32_C(2654435761);
+        return ((uint32_t)p) * 2654435761u;
 #elif INTPTR_MAX == INT16_MAX
-        return ((uint16_t)p) * UINT16_C(106039);
+        return ((uint16_t)p) * 106039u;
 #else
 #error Unknown pointer size
 #endif
