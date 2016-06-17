@@ -18,16 +18,16 @@ def load(libname):
     (eventually all libraries should have at least stub python
     bindings, making them loadable via the standard python *import*,
     and this sould be obsolete.
-    
+
     :param filename:
 
     should be the name of the file to load
     including the leading ``lib``, but *not* including the trailing
     ``.so`` or ``.dylib``, eg::
-    
+
       load("libdataio")
       load("libexamples")
-    
+
     """
     try :
         icetray.load(libname)
@@ -35,7 +35,7 @@ def load(libname):
         icetray.logging.log_fatal("Failed to load library (%s): %s" \
                                   % (sys.exc_info()[0], sys.exc_info()[1]), "I3Tray")
 
-            
+
 def OMKey(string,omnum):
     return icetray.OMKey(string,omnum)
 
@@ -60,8 +60,14 @@ class I3Tray(icetray.I3Tray):
         :param module_names: List of already-taken names
         """
         n=0
+        if hasattr(_type,'func_name'):
+            prefix = _type.func_name
+        elif hasattr(_type,'__name__'):
+            prefix = _type.__name__
+        else:
+            prefix = str(_type)
         while 1:
-            name = "%s_%04d"%(_type,n)
+            name = "%s_%04d"%(prefix,n)
             if name not in module_names:
                 break
             n+=1
@@ -93,7 +99,7 @@ class I3Tray(icetray.I3Tray):
         elif inspect.isclass(_type) and icetray.I3Module in inspect.getmro(_type):
             # Python subclass of I3Module
             method = self.AddModule
-        
+
         if method is None:
             raise ValueError("%s is not a thing that can be added to an I3Tray" % _type)
         else:
@@ -122,7 +128,7 @@ class I3Tray(icetray.I3Tray):
             tray.AddModule("I3Reader", "reader",
                            Filename = "/path/to/foo.i3",
                            SkipKeys = ['I3DST', 'RecoPulses'])
-        
+
         """
         #if the script does not provide a name find a suitable name for this module find a suitable name
         if _name is None:
@@ -157,7 +163,7 @@ class I3Tray(icetray.I3Tray):
         **Example**::
 
             tray.AddService("I3GSLRandomServiceFactory", "gslrng")
-        
+
         """
         if _name is None:
             _name = self._create_name(_type, "Service", self.tray_info.factories_in_order)
@@ -184,29 +190,29 @@ class I3Tray(icetray.I3Tray):
         **Example**::
 
             tray.AddSegment(icetray.ExampleSegment, "example")
-        
+
         """
         (keys,vals) = (list(kwargs.keys()), list(kwargs.values()))
         argnames = inspect.getargspec(_segment)[0]
         largnames = [a.lower() for a in argnames]
-        
+
         if _name is None:
             _name = self._create_name(_segment.__name__, "Segment", self.segments_in_order)
         self.segments_in_order.append(_name)
-        
+
         # Make case-insensitive where possible by matching to signature
         for k in keys:
             if not k.lower() in largnames:
                 continue
             keys[keys.index(k)] = argnames[largnames.index(k.lower())]
         kwargs = dict(zip(keys, vals))
-        
+
         return _segment(self, _name, **kwargs)
-    
+
     def SetParameter(self, module, param, value):
         super(I3Tray, self).SetParameter(module, param, value)
         return self
-    
+
     def ConnectBoxes(self, *args):
         if len(args) == 4:
             super(I3Tray, self).ConnectBoxes(args[0], args[1], args[2], args[3])
@@ -214,7 +220,7 @@ class I3Tray(icetray.I3Tray):
             super(I3Tray, self).ConnectBoxes(args[0], args[1], args[2])
         else:
             icetray.logging.log_error('Wrong number of arguments %d to ConnectBoxes' % len(args), 'I3Tray')
-        
+
     def __call__(self, *args):
         for pair in args:
             icetray.logging.log_info('%s: %s = %s' % (self.last_added, pair[0], pair[1]), unit='I3Tray')
@@ -227,7 +233,7 @@ class I3Tray(icetray.I3Tray):
     def Execute(self, *args):
 
         assert len(args) < 2, "Too many arguments to Execute()"
-            
+
         if len(args) == 1:
             super(I3Tray, self).Execute(args[0])
         else:

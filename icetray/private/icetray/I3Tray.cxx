@@ -1,25 +1,25 @@
 /**
  *  $Id$
- *  
+ *
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
  *  Simon Patton
  *  John Pretz
  *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
  *  This file is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 3 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
- *  
+ *
  */
 #include <signal.h>
 
@@ -41,6 +41,7 @@
 #include <icetray/I3Frame.h>
 #include <icetray/I3PhysicsUsage.h>
 #include <icetray/serialization.h>
+#include <icetray/memory.h>
 
 #include "PythonFunction.h"
 #include "FunctionModule.h"
@@ -81,7 +82,7 @@ I3Tray::report_usage(int sig)
 {
 	typedef pair<string,I3PhysicsUsage> mru_pair;
 	typedef pair<double,string> name_pair;
-	
+
 	map<string, I3PhysicsUsage> mru = executing_tray->Usage();
 	map<double, string> inorder;
 	double total_time = 0.;
@@ -106,6 +107,7 @@ I3Tray::I3Tray() :
     boxes_connected(false), configure_called(false),
     execute_called(false), suspension_requested(false)
 {
+	memory::set_label("I3Tray");
 	master_context.Put(boost::shared_ptr<I3Tray>(this,noOpDeleter),"I3Tray");
 	// Note that the following is deeply unsafe, but necessary for
 	// tray info service for now
@@ -168,7 +170,7 @@ I3Tray::AddModule(bp::object obj, std::string instancename)
 		module->GetConfiguration().ClassName(pyname);
 #endif
 	} else if (PyCallable_Check(obj.ptr())) {
-		// it is a python function... put the object in the context and 
+		// it is a python function... put the object in the context and
 		// call it a PythonFunction
 		if (PyObject_HasAttrString(obj.ptr(), "im_func") &&
 		    (bp::object(obj.attr("im_self")).ptr()) == Py_None)
@@ -179,10 +181,18 @@ I3Tray::AddModule(bp::object obj, std::string instancename)
 			    PyEval_GetFuncName(obj.ptr()),
 			    PyEval_GetFuncDesc(obj.ptr()),
 			    instancename.c_str());
-        
+
 		module = I3ModulePtr(new PythonFunction(master_context, obj));
-		std::string repr = boost::python::extract<std::string>(
-		    obj.attr("__repr__")());
+		std::string repr;
+		if (PyObject_HasAttrString(obj.ptr(), "func_name"))
+			repr = boost::python::extract<std::string>(
+			    obj.attr("func_name"));
+		else if (PyObject_HasAttrString(obj.ptr(), "__name__"))
+			repr = boost::python::extract<std::string>(
+			    obj.attr("__name__"));
+		else
+			repr = boost::python::extract<std::string>(
+			    obj.attr("__repr__")());
 		module->GetConfiguration().ClassName(repr);
 		if (instancename.empty())
 			instancename=CreateName(repr,"Module",modules_in_order);
@@ -233,7 +243,7 @@ I3Tray::AddModule(I3ModulePtr module, std::string instancename)
 I3Tray::param_setter
 I3Tray::AddService(const std::string& classname,
     std::string instancename)
-{ 
+{
 	if (configure_called)
 		log_fatal("I3Tray::Configure() already called -- "
 		    "cannot add new services");
@@ -248,7 +258,7 @@ I3Tray::AddService(const std::string& classname,
 	log_trace("AddService %s %s", classname.c_str(), instancename.c_str());
 
 	i3_assert(!classname.empty());
-	I3ServiceFactoryPtr servicefactory = 
+	I3ServiceFactoryPtr servicefactory =
 	    I3::Singleton<I3ServiceFactoryFactory>::get_const_instance()
 	    .Create(classname)(master_context);
 	servicefactory->configuration_.ClassName(classname);
@@ -302,7 +312,7 @@ I3Tray::ConnectBoxes(const std::string& fromModule,
 		log_fatal("couldn't find module \"%s\"", fromModule.c_str());
 
 	I3ModulePtr module = iter->second;
-	log_debug("connecting outbox \"%s\" on module \"%s\" to module \"%s\"", 
+	log_debug("connecting outbox \"%s\" on module \"%s\" to module \"%s\"",
 	    fromOutBox.c_str(), fromModule.c_str(), toModule.c_str());
 
 	map<string, I3ModulePtr>::const_iterator toiter =
@@ -314,7 +324,7 @@ I3Tray::ConnectBoxes(const std::string& fromModule,
 	return true;
 }
 
-void 
+void
 I3Tray::Configure()
 {
 	if (configure_called)
@@ -334,8 +344,9 @@ I3Tray::Configure()
 
 	//
 	// Create the services in the order they were added.
-	// 
+	//
 	BOOST_FOREACH(const string& objectname, factories_in_order) {
+		memory::set_label(objectname);
 		I3ServiceFactoryPtr factory = factories[objectname];
 		try {
 			factory->Configure();
@@ -363,6 +374,7 @@ I3Tray::Configure()
 	// set up yet
 	//
 	BOOST_FOREACH(const string& objectname, modules_in_order) {
+		memory::set_label(objectname);
 		I3ModulePtr module = modules[objectname];
 		try {
 			module->Configure_();
@@ -382,8 +394,9 @@ I3Tray::Configure()
 			    objectname.c_str());
 		}
 	}
+	memory::set_label("I3Tray");
 
-	// 
+	//
 	//  If we never explicity called ConnectBoxes, connect the
 	//  modules to one another in the order they were added.
 	//
@@ -465,13 +478,13 @@ I3Tray::Execute(unsigned maxCount)
 
 	Configure();
 
-	for (unsigned i=0; 
-             (i < maxCount) && !suspension_requested && !global_suspension_requested;               
+	for (unsigned i=0;
+             (i < maxCount) && !suspension_requested && !global_suspension_requested;
              i++) {
 		log_trace("%u/%u icetray dispatching Process_", i, maxCount);
 		driving_module->Do(&I3Module::Process_);
 	}
-	
+
 	// call every module's Finish() function
 	// (this used to be in I3Tray::Finish())
 	if (modules_in_order.size() == 0 || !driving_module)
@@ -482,9 +495,11 @@ I3Tray::Execute(unsigned maxCount)
 	driving_module->Do(&I3Module::Finish);
 
 	BOOST_FOREACH(const std::string& factname, factories_in_order) {
+		memory::set_label(factname);
 		log_trace("calling finish on factory %s", factname.c_str());
 		factories[factname]->Finish();
 	}
+	memory::set_label("I3Tray");
 }
 
 map<string, I3PhysicsUsage>
@@ -494,7 +509,7 @@ I3Tray::Usage()
 	map<string, I3PhysicsUsage> mspu;
 	while(iter != modules.end()) {
 		I3PhysicsUsage ru = iter->second->ReportUsage();
-		log_debug("Module %s reports %f %f %u", 
+		log_debug("Module %s reports %f %f %u",
 		    iter->first.c_str(),
 		    ru.systime, ru.usertime, ru.ncall);
 		mspu[iter->first] = ru;
@@ -538,7 +553,7 @@ I3Tray::SetParameter(const string& module, const string& parameter,
 	return SetParameter(module, parameter, string(value));
 }
 
-bool 
+bool
 I3Tray::SetParameter(const string& module, const string& parameter,
     bp::object value)
 {
@@ -552,7 +567,7 @@ I3Tray::SetParameter(const string& module, const string& parameter,
 	else
 		log_fatal("couldn't find configuration for \"%s\"",
 		    module.c_str());
-	
+
 	config->Set(parameter, value);
 
 	string value_as_string =

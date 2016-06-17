@@ -54,5 +54,6 @@ Detailed Documentation:
    qframes
    i3podholder
    I3Tray
+   memory
 
 Also see the `doxygen <../../doxygen/icetray/index.html>`_ docs.

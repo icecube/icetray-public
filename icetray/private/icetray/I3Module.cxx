@@ -1,23 +1,23 @@
 /**
  *  $Id$
- *  
+ *
  *  Copyright (C) 2004 - 2008
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
  *  Simon Patton, John Pretz, and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
  *  This file is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 3 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
- *  
+ *
  */
 
 #include "icetray/I3Module.h"
@@ -39,6 +39,7 @@
 #include "icetray/I3Frame.h"
 #include "icetray/I3FrameMixing.h"
 #include "icetray/impl.h"
+#include "icetray/memory.h"
 
 const double I3Module::min_report_time_ = 10;
 
@@ -66,7 +67,7 @@ class ModuleTimer
   }
 };
 
-I3Module::I3Module(const I3Context& context) 
+I3Module::I3Module(const I3Context& context)
   : context_(context), inbox_()
 {
   nphyscall_ = ndaqcall_ = 0;
@@ -76,7 +77,7 @@ I3Module::I3Module(const I3Context& context)
 }
 
 I3Module::~I3Module()
-{ 
+{
   // only print if more than 10 seconds used.  This is kind of an
   // arbitrary number.
   if (userphystime_ + sysphystime_ > min_report_time_)
@@ -87,7 +88,7 @@ I3Module::~I3Module()
 	   GetName().c_str(), ndaqcall_, userdaqtime_, sysdaqtime_);
 }
 
-void 
+void
 I3Module::Flush()
 {
   for (outboxmap_t::iterator iter = outboxes_.begin();
@@ -107,9 +108,10 @@ I3Module::Flush()
     }
 }
 
-void 
+void
 I3Module::Do(void (I3Module::*f)())
 {
+  memory::set_label(GetName());
   try {
     (this->*f)();
   } catch (...) {
@@ -124,8 +126,8 @@ I3Module::Do(void (I3Module::*f)())
       I3ModulePtr nextmodule = iter->second.second;
       FrameFifoPtr fifo = iter->second.first;
 
-      log_trace("%s: %zu frames in fifo %s", 
-		GetName().c_str(), fifo->size(), iter->first.c_str()); 
+      log_trace("%s: %zu frames in fifo %s",
+		GetName().c_str(), fifo->size(), iter->first.c_str());
 
       if (nextmodule)
 	{
@@ -135,7 +137,7 @@ I3Module::Do(void (I3Module::*f)())
 		nextmodule->Do(f);
 	    }
 	  else if (f == &I3Module::Finish)
-	    { 
+	    {
 	      while (fifo->size())
 		nextmodule->Do(&I3Module::Process_);
 	      nextmodule->Do(f);
@@ -241,7 +243,7 @@ I3Module::AddOutBox(const std::string& s)
 
   if (outboxes_.find(s) != outboxes_.end())
     return;
- 
+
   outboxes_[s].first = FrameFifoPtr(new FrameFifo);
 }
 
@@ -270,7 +272,7 @@ I3Module::SyncCache(std::string outbox, I3FramePtr frame)
 {
 	if (cachemap_.find(outbox) == cachemap_.end())
 		cachemap_[outbox] = boost::make_shared<I3FrameMixer>();
-	
+
 	boost::shared_ptr<I3FrameMixer> cache_ = cachemap_[outbox];
 	cache_->Mix(*frame);
 }
@@ -325,7 +327,7 @@ I3Module::ShouldDoPhysics(I3FramePtr frame)
   return true;
 }
 
-void 
+void
 I3Module::Geometry(I3FramePtr frame)
 {
   i3_log("%s", __PRETTY_FUNCTION__);
@@ -339,7 +341,7 @@ I3Module::ShouldDoGeometry(I3FramePtr frame)
   return true;
 }
 
-void 
+void
 I3Module::Calibration(I3FramePtr frame)
 {
   i3_log("%s", __PRETTY_FUNCTION__);
