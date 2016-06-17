@@ -2,17 +2,19 @@
 .. _MetaProjectTop:
 
 
-Metaproject documentation
-=========================
+Basic Info
+==========
 
 .. toctree::
    :maxdepth: 2
 
-   metaproject/index
+   info/overview
+   info/quickstart
+   info/cvmfs
 
 
-Components of this metaproject
-==============================
+Project Details
+===============
 
 .. toctree::
    :glob:
