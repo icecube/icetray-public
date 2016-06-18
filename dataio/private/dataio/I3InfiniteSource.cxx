@@ -70,6 +70,9 @@ void I3InfiniteSource::Configure()
 void I3InfiniteSource::Process()
 {
 	log_trace("%s: %s", GetName().c_str(), __PRETTY_FUNCTION__);
+	
+	if(PeekFrame())
+		log_fatal("I3InfiniteSource should only be used as a driving module");
 
 	I3FramePtr frame(new I3Frame(stream_));
 	if (!ifs_.empty()) {
