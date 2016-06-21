@@ -94,9 +94,9 @@ namespace memory_map {
         // remember to clear the key of the active buckets
         while(num_buckets > 0)
         {
+            num_buckets--;
             if (buckets[num_buckets].key != NULL)
                 free(buckets[num_buckets].key);
-            num_buckets--;
         }
         free(buckets);
     }
