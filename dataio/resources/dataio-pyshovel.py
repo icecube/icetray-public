@@ -9,6 +9,12 @@ from icecube import icetray
 from icecube import dataio
 from icecube import dataclasses
 
+# for convenience, try to import recclasses and simclasses
+try: from icecube import recclasses
+except ImportError: pass
+try: from icecube import simclasses
+except ImportError: pass
+
 try:
     import urwid
 except ImportError:
