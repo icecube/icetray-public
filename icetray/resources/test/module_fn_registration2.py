@@ -86,3 +86,7 @@ tray.AddModule('TrashCan', 'tc')
 tray.Execute()
 tray.Finish()
 
+import os
+os.unlink('tmp.i3')
+
+
