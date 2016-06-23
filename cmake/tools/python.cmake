@@ -151,7 +151,7 @@ else(NOT NUMPY_FOUND)
         list(APPEND NUMPY_INCLUDE_DIR_CANDIDATES ${prefix}/../../../${_NUMPY_INCLUDE_DIR})
     endforeach(prefix ${CMAKE_FRAMEWORK_PATH})
 
-	find_path(NUMPY_INCLUDE_DIR NAMES numpy/ndarrayobject.h PATHS ${NUMPY_INCLUDE_DIR_CANDIDATES})
+	find_path(NUMPY_INCLUDE_DIR NAMES numpy/ndarrayobject.h HINTS ${NUMPY_INCLUDE_DIR_CANDIDATES})
 	set(NUMPY_INCLUDE_DIR ${NUMPY_INCLUDE_DIR} CACHE STRING "Numpy inc directory")
 	message(STATUS "+    numpy: ${NUMPY_INCLUDE_DIR}")
 endif(NOT NUMPY_FOUND)
