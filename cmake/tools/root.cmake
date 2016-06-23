@@ -46,7 +46,7 @@ if (USE_ROOT)
   if(NOT ROOT_VERSION)
     # try for system root
     find_program(ROOT_CONFIG_EXECUTABLE root-config
-                 PATHS $ENV{ROOTSYS}/bin)
+                 HINTS $ENV{ROOTSYS}/bin)
     if(ROOT_CONFIG_EXECUTABLE)
       set(SYSTEM_PACKAGES_ROOT TRUE)
       execute_process(
