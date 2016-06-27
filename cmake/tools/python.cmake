@@ -173,15 +173,18 @@ set(SCIPY_FOUND ${SCIPY_FOUND} CACHE BOOL "Scipy found successfully")
 ## look for PIL
 execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import Image"
     RESULT_VARIABLE PIL_FOUND ERROR_QUIET)
+## look for Pillow - the successor to PIL
+execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import PIL.Image"
+    RESULT_VARIABLE PILLOW_FOUND ERROR_QUIET)
 
 # let's make our xxx_FOUND variable like CMake ones
-if(PIL_FOUND EQUAL 0)
+if(PIL_FOUND EQUAL 0 OR PILLOW_FOUND EQUAL 0)
   set(PIL_FOUND TRUE)
-  message(STATUS "+    PIL: found")
+  message(STATUS "+      PIL: found")
 else()
   set(PIL_FOUND FALSE)
-  message(STATUS "+    PIL: NOT FOUND")
+  message(STATUS "+      PIL: NOT FOUND")
 endif()
-set(PIL_FOUND ${PIL_FOUND} CACHE BOOL "PIL found successfully")
+set(PIL_FOUND ${PIL_FOUND} CACHE BOOL "PIL or Pillow found successfully")
 
 
