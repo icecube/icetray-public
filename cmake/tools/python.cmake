@@ -158,27 +158,29 @@ endif(NOT NUMPY_FOUND)
 
 ## look for scipy
 execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import scipy"
-    RESULT_VARIABLE SCIPY_FOUND)
+    RESULT_VARIABLE SCIPY_FOUND ERROR_QUIET)
 
 # let's make our xxx_FOUND variable like CMake ones
 if(SCIPY_FOUND EQUAL 0)
   set(SCIPY_FOUND TRUE)
-  message(STATUS "+    scipy: FOUND")
+  message(STATUS "+    scipy: found")
 else()
   set(SCIPY_FOUND FALSE)
+  message(STATUS "+    scipy: NOT FOUND")
 endif()
 set(SCIPY_FOUND ${SCIPY_FOUND} CACHE BOOL "Scipy found successfully")
 
 ## look for PIL
 execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import Image"
-    RESULT_VARIABLE PIL_FOUND)
+    RESULT_VARIABLE PIL_FOUND ERROR_QUIET)
 
 # let's make our xxx_FOUND variable like CMake ones
 if(PIL_FOUND EQUAL 0)
   set(PIL_FOUND TRUE)
-  message(STATUS "+    PIL: FOUND")
+  message(STATUS "+    PIL: found")
 else()
   set(PIL_FOUND FALSE)
+  message(STATUS "+    PIL: NOT FOUND")
 endif()
 set(PIL_FOUND ${PIL_FOUND} CACHE BOOL "PIL found successfully")
 
