@@ -162,6 +162,8 @@ else()
   endif(NOT ROOTSYS)
 
   if(NOT SYSTEM_PACKAGES_ROOT)
+    set(old_TOOL_SYSTEM_PATH ${TOOL_SYSTEM_PATH})
+    set(TOOL_SYSTEM_PATH NO_DEFAULT_PATH)
     tooldef (root 
       ${ROOTSYS}/include
       TObject.h
@@ -169,6 +171,7 @@ else()
       ${ROOTSYS}/bin
       ${ROOT_${ROOT_VERSION}_LIBS}
       )
+    set(TOOL_SYSTEM_PATH ${old_TOOL_SYSTEM_PATH})
     set(ROOT_LIBRARIES ${ROOT_LIBRARIES} ${pthread_LIBRARIES})
   else()
     tooldef (root
