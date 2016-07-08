@@ -577,41 +577,10 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
       COMPILE_FLAGS "-include ${I3_UBER_HEADER}"
       )
 
-    file( TO_NATIVE_PATH "${TEST_DRIVER}" NATIVE_TEST_DRIVER )
     if(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_LINK_LIBRARIES)
       target_link_libraries(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
 	${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_LINK_LIBRARIES})
     endif(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_LINK_LIBRARIES)
-
-    set(THIS_TEST_UNIT_LIST ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}.units.txt)
-    file(REMOVE ${THIS_TEST_UNIT_LIST})
-    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tests.list "${THIS_EXECUTABLE_NAME} ${THIS_TEST_UNIT_LIST}\n")
-
-    list(SORT ${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES)
-    foreach(file ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES})
-      execute_process(COMMAND grep -l TEST_GROUP ${file} OUTPUT_VARIABLE testable_file)
-      string(REGEX REPLACE "[ \n]+" "" testable_file "${testable_file}")
-      get_filename_component(testable_file "/${testable_file}" NAME)
-      execute_process(COMMAND perl -ne "m{^\\s*TEST\\s*\\((\\w+)\\)}s && print \"$1\;\"" ${file}
-	OUTPUT_VARIABLE UNITTESTS)
-
-      if(NOT "${testable_file}" STREQUAL "")
-	get_filename_component(GROUPNAME ${testable_file} NAME_WE)
-	foreach(unittest ${UNITTESTS})
-	  set(TESTNAME ${PROJECT_NAME}-test-${GROUPNAME}-${unittest}-run)
-	  set(THIS_TEST_PREFIX_ARGS
-	    time ${PYTHON_EXECUTABLE} ${NATIVE_TEST_DRIVER} ${CMAKE_CURRENT_BINARY_DIR} run ${TESTNAME}
-	    )
-
-	  file(APPEND ${THIS_TEST_UNIT_LIST} "${testable_file}/${unittest} ${THIS_TEST_PREFIX_ARGS} ${CMAKE_BINARY_DIR}/env-shell.sh ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} -s ${testable_file}/${unittest}\n")
-#    # individual tests
-#	  add_test(NAME "${PROJECT_NAME}::${testable_file}/${unittest}"
-#	           WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-#	           COMMAND ${PROJECT_NAME}-test -s ${testable_file}/${unittest})
-
-	endforeach(unittest ${UNITTESTS})
-      endif(NOT "${testable_file}" STREQUAL "")
-    endforeach(file ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_files})
 
     if(DPKG_INSTALL_PREFIX)
       set_target_properties(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
