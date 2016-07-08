@@ -718,9 +718,15 @@ macro(i3_test_scripts)
   sort(${PROJECT_NAME}_SCRIPTS_ALPHABETICAL "${${PROJECT_NAME}_SCRIPTS}")
   foreach(script ${${PROJECT_NAME}_SCRIPTS_ALPHABETICAL})
     get_filename_component(script_basename ${script} NAME)
-    add_test(NAME ${PROJECT_NAME}::${script_basename}
-             WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-             COMMAND ${script})
+    if(${script} MATCHES "\\.py$")
+      add_test(NAME ${PROJECT_NAME}::${script_basename}
+               WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+               COMMAND ${PYTHON_EXECUTABLE} ${script})
+    else()
+      add_test(NAME ${PROJECT_NAME}::${script_basename}
+               WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+               COMMAND ${script})
+    endif()
   endforeach()
 endmacro(i3_test_scripts)
 
