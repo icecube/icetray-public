@@ -714,32 +714,14 @@ endmacro(i3_add_pybindings)
 #  Generates testing targets for scripts
 #
 macro(i3_test_scripts)
-  set(THIS_TEST_SCRIPT_LIST ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/test.scripts.txt)
-  file(REMOVE ${THIS_TEST_SCRIPT_LIST})
-  file(APPEND ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tests.list "scripts ${THIS_TEST_SCRIPT_LIST}\n")
   no_dotfile_glob(${PROJECT_NAME}_SCRIPTS ${ARGN})
-
   sort(${PROJECT_NAME}_SCRIPTS_ALPHABETICAL "${${PROJECT_NAME}_SCRIPTS}")
   foreach(script ${${PROJECT_NAME}_SCRIPTS_ALPHABETICAL})
-
-    get_filename_component(this_script ${script} NAME)
-
-    set(TESTNAME ${PROJECT_NAME}-test-${this_script}-run)
-
-    file( TO_NATIVE_PATH "${TEST_DRIVER}" NATIVE_TEST_DRIVER )
-
-    set(THIS_TEST_PREFIX_ARGS
-      ${PYTHON_EXECUTABLE} ${NATIVE_TEST_DRIVER} ${CMAKE_CURRENT_BINARY_DIR} run ${TESTNAME}
-      )
-
-    file(APPEND ${THIS_TEST_SCRIPT_LIST} "${this_script} time ${THIS_TEST_PREFIX_ARGS} ${CMAKE_BINARY_DIR}/env-shell.sh ${script}\n") 
     get_filename_component(script_basename ${script} NAME)
     add_test(NAME ${PROJECT_NAME}::${script_basename}
              WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
              COMMAND ${script})
-
-  endforeach(script ${${PROJECT_NAME}_SCRIPTS_ALPHABETICAL})
-
+  endforeach()
 endmacro(i3_test_scripts)
 
 macro(project_moved_to NEWLOCATION)
