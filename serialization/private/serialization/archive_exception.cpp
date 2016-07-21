@@ -109,6 +109,7 @@ archive_exception::archive_exception(
         length = append(length, "programming error");
         break;
     }
+    (void)length; //tell static analysis not to get upset about dead stores
 }
 I3_ARCHIVE_DECL(BOOST_PP_EMPTY())
 archive_exception::~archive_exception() throw() {}
