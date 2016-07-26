@@ -841,8 +841,8 @@ class LibInput(Popup):
                     __import__( 'icecube.'+lib )
             except ImportError as e:
                 pass
-#            else:
-#                urwid.emit_signal(self, 'select_frame', None )
+            else:
+                urwid.emit_signal(self, 'select_frame', None )
         except ValueError:
             pass
         Popup.closing_action(self)
@@ -927,7 +927,11 @@ class ViewerMain(urwid.Frame):
         Attempt to access the frame'th I3Frame in the file.  If 'frame' is
         negative, access in reverse order. If 'frame' is invalid, do nothing.
         '''
-        if frame is None or frame < 0 or frame == self.active_view: 
+        if frame is None:
+            # called for a reload
+            frame = self.active_view
+            self.select_frame(self.active_view+1 if frame == 0 else self.active_view-1)
+        elif frame < 0 or frame == self.active_view:
             return
         if frame == 'end':
             frame = -1
