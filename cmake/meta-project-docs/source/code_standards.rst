@@ -105,6 +105,7 @@ Coding Style
    cpp_standards/declare_variables_as_locally_as_possible
    cpp_standards/make_header_files_self_sufficient
    cpp_standards/always_write_internal_include_guards
+   cpp_standards/use_nullptr_instead_of_0_and_NULL
 
 Functions and Operators
 -----------------------
