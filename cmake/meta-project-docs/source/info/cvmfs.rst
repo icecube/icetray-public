@@ -62,17 +62,17 @@ Distributions and Platforms
 
 * py2-v1 - python 2.7 and I3_PORTS
 
-    * SL5
+    * RedHat / CentOS / SL 6
     
-    * SL6
-    
-    * Ubuntu 12.04
-    
-    * Ubuntu 14.04
+    * Ubuntu 12.04, 14.04
 
-* py2-v2 - python 2.7, boost 1.57, "nearly PORT-less"
+* py2-v2 - python 2.7 and software releases as of 2015
 
-    * SL6
+    * RedHat / CentOS / SL:  6 - 7
+    
+    * Ubuntu: 12.04 - 16.04
+    
+    * Debian: 8
 
 Self-contained IceTray Scripts
 ------------------------------
