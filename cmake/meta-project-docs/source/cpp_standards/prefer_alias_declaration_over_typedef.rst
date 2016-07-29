@@ -22,6 +22,7 @@ You can also use an alias declaration as a synonym for a function, or pointer to
 ::
     // myfunc is a synonym to a function that takes a float and an int as arguments and returns a float
     using myfunc = float (float, int);
+
 ::
     // myfuncptr is a synonym to a pointer to a function that takes an int and a const std::string& and returns nothing
     using myfuncptr = void (*)(int, const std::string&);
@@ -31,10 +32,8 @@ Alias declaratiuons can also be templatized (then called alias templates), unlik
     // vector and matrix are synonyms for a tensor of order 1 and 2, respectively
     template <unsigned Order, typename Value>
     class tensor { ... };
-::
     template <typename Value>
     using vector = tensor<1, Value>;
-::
     template <typename Value>
     using matrix = tensor<2, Value>;
 
@@ -92,10 +91,8 @@ Below are the alias declaration examples from above, but rewritten to use ``type
     typedef double mydouble;
     typedef double mydouble[10];
     typedef std::unique_ptr<std::unordered_map<std::string, std::string>> UPtrMapSS;
-::
     // myfunc is a synonym to a function that takes a float and an int as arguments and returns a float
     typedef float myfunc(float, int);
-::
     // myfuncptr is a synonym to a pointer to a function that takes an int and a const std::string& and returns nothing
     typedef void (*myfuncptr)(int, const std::string&);
 
