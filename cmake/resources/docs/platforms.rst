@@ -1,6 +1,6 @@
 .. _platforms:
 
-Details by Platform
+Supported Platforms
 ===================
 
 With limited manpower and resources it's not possible to test and
@@ -8,6 +8,8 @@ support all platforms.  When choosing a platform for your laptop,
 desktop, or institution cluster, use common sense and you should be
 safe.  You'd be doing yourself a favor by choosing one of the
 officially suppported platforms tested on the buildbots_.
+
+.. _buildbots: http://builds.icecube.wisc.edu/
 
 Variants should also generally work without too much trouble. For
 instance, you should be fine using a version of Linux Mint that is in
@@ -31,13 +33,11 @@ all developers submit commits that keep the buildbots green.
 Extending this list to accomodate a few collaborators puts an 
 undue burden on the entire development team.
 
-Hints and Tips 
-++++++++++++++
+Detailed Instructions 
++++++++++++++++++++++
 
-Below you can find some hints and tips that we've collected about
+Below you can find detailed instructions and tips that we've collected about
 various platforms.
-
-.. _buildbots: http://builds.icecube.wisc.edu/
 
 .. toctree::
 

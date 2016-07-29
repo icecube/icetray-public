@@ -11,28 +11,47 @@ CMake: icetray's build system
 .. highlight:: sh 
 
 .. toctree::
+   :maxdepth: 1
 
    release_notes
+
+Quick User Guide
+----------------
+
+.. toctree::
+   :maxdepth: 2
+
+   platforms
    tutorial
+   parasite
+   tarball
+
+Advanced
+--------
+
+.. toctree::
+   :maxdepth: 2
+
+   cmake_advanced
    organization
    documentation
    targets
-   tarball
-   parasite
    toolset
    i3test
    reference
    pybindings
    ports
-   platforms
    svn_intro
    env-shell.sh
    commitmails
    icc
    gfilt
 
+Old Documentation Archive
+-------------------------
+
 Information on particular tools
--------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. toctree::
    :glob:

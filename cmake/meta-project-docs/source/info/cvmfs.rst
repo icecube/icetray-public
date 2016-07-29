@@ -1,6 +1,8 @@
 
 .. highlight:: bash
 
+.. _cvmfs:
+
 CVMFS
 =====
 
