@@ -191,6 +191,13 @@ Type Safety
 
    cpp_standards/dont_use_C_style_casts
 
+Modern C++
+----------------------
+.. toctree::
+   :titlesonly:
+
+   cpp_standards/prefer_alias_declaration_over_typedef
+
 
 Useful links
 ------------
