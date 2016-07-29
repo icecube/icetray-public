@@ -155,6 +155,7 @@ Templates and Genericity
 
    cpp_standards/dont_write_unintentionally_nongeneric_code
    cpp_standards/blend_static_and_dynamic_polymorphism_judiciously
+   cpp_standards/use_auto
 
 Error handling and Exceptions
 -----------------------------
@@ -190,13 +191,6 @@ Type Safety
    :titlesonly:
 
    cpp_standards/dont_use_C_style_casts
-
-Modern C++
-----------------------
-.. toctree::
-   :titlesonly:
-
-   cpp_standards/prefer_alias_declaration_over_typedef
 
 
 Useful links
