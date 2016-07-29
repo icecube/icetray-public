@@ -4,8 +4,8 @@ Prefer alias declaration over typedef
 
 **The Gist:**
 
-If you do not want to write out long and tedious type names (like std::unique_ptr<std::unordered_map<std::string, std::string>>),
-or short and easy type names (like double) for that matter, you can give them a name of your own.
+If you do not want to write out long and tedious type names (like ``std::unique_ptr<std::unordered_map<std::string, std::string>>``),
+or short and easy type names (like ``double``) for that matter, you can give them a name of your own.
 The best way to do this is to use an alias declaration (since C++11) with the keyword ``using``.
 Earlier, one would use ``typedef`` for this purpose, but this is not recommended anymore.
 
@@ -78,8 +78,8 @@ Additionally, when creating a vector inside a template it must be preceeded by `
     ...
     };
 
-This leads us into the problem with hacking together templates with ``typedef``s, namely that
-the compiler doesn't know if vector<...>::type refers to an actual type or something else, e.g. a data member.
+This leads us into the problem with hacking together templates with ``typedef``, namely that
+the compiler doesn't know if ``vector<...>::type`` refers to an actual type or something else, e.g. a data member.
 
 Please see *Meyers*, pp 63-67, for further explanations.
 
@@ -103,4 +103,5 @@ Below are the alias declaration examples from above, but rewritten to use ``type
 **Examples taken from:**
 
 S. Meyers, *Effective Modern C++*
+
 P. Gottschling, *Discovering Modern C++*
