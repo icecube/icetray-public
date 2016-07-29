@@ -56,7 +56,7 @@ Additionally, vectors and matrices can be created inside templates::
 
 **Hacking templatization with typedef:**
 
-Firstly: ** *Don't do this!* **
+Firstly: **Don't do this!**
 
 A template with a ``typedef`` could certainly be hacked together, using a ``typedef`` nested inside a struct::
 
