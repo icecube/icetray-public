@@ -86,7 +86,7 @@ Please see *Meyers*, pp 63-67, for further explanations.
 
 **Readability difference:**
 
-There is also a (subjective) readability improvement when using alias declarations over ``typedef``s, especially whn it comes to functions.
+There is also a (subjective) readability improvement when using alias declarations over ``typedef``, especially whn it comes to functions.
 Below are the alias declaration examples from above, but rewritten to use ``typedef``:
 
     typedef double mydouble;
