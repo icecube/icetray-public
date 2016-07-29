@@ -22,8 +22,6 @@ You can also use an alias declaration as a synonym for a function, or pointer to
 ::
     // myfunc is a synonym to a function that takes a float and an int as arguments and returns a float
     using myfunc = float (float, int);
-
-::
     // myfuncptr is a synonym to a pointer to a function that takes an int and a const std::string& and returns nothing
     using myfuncptr = void (*)(int, const std::string&);
 
