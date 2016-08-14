@@ -22,6 +22,7 @@
 #include <icetray/I3Configuration.h>
 #include <boost/make_shared.hpp>
 #include <icetray/python/boost_serializable_pickle_suite.hpp>
+#include <icetray/python/dataclass_suite.hpp>
 
 using namespace boost::python;
 
@@ -43,7 +44,7 @@ void register_I3Configuration()
   class_<std::map<std::string, I3ConfigurationPtr> >
     ("map_string_I3Configuration")
     // the 'true' here is to turn off proxying
-    .def(map_indexing_suite<std::map<std::string, I3ConfigurationPtr>, true>())
+    .def(dataclass_suite<std::map<std::string, I3ConfigurationPtr> >())
     ;
 
   scope outer = 
