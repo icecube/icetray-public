@@ -64,17 +64,26 @@ Distributions and Platforms
 
 * py2-v1 - python 2.7 and I3_PORTS
 
-    * RedHat / CentOS / SL 6
-    
-    * Ubuntu 12.04, 14.04
+  * RedHat / CentOS / SL 6
+  
+  * Ubuntu 12.04, 14.04
+  
+  .. note:
+  
+     Works for IceTray releases before April 2016. No support
+     after that date.
 
 * py2-v2 - python 2.7 and software releases as of 2015
 
-    * RedHat / CentOS / SL:  6 - 7
-    
-    * Ubuntu: 12.04 - 16.04
-    
-    * Debian: 8
+  * RedHat / CentOS / SL:  6 - 7
+  
+  * Ubuntu: 12.04 - 16.04
+  
+  * Debian: 8
+  
+  .. note:
+  
+     Works for IceTray releases after April 2016.
 
 Self-contained IceTray Scripts
 ------------------------------
