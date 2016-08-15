@@ -347,18 +347,78 @@ execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
 numeric_version(${GCC_VERSION} "gcc")
 set(GCC_NUMERIC_VERSION ${GCC_NUMERIC_VERSION} CACHE INTEGER "Numeric gcc version")
 
+
 #
 # Ban old gcc versions
 #
 execute_process(COMMAND "date" "+%s" OUTPUT_VARIABLE NOW)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-  if(GCC_NUMERIC_VERSION LESS 40300)
+  if(GCC_NUMERIC_VERSION LESS 40801)
     message("***")
-    message("*** You're using a gcc version less than 4.3. This is no longer supported.")
+    message("*** You're using a gcc version less than 4.8.1. This is no longer supported.")
     message("*** Upgrade your complier, or set the CC and CXX environment variables appropriately.")
     message("***")
-    if(NOW LESS 1429488000)
-      message("*** This will become a fatal error on April 20, 2015.")
+    if(NOW LESS 1470355200)
+      message("*** This will become a fatal error on September 5, 2016.")
+      message("***")
+      message(WARNING "Unsupported gcc version.")
+    else()
+      message(FATAL_ERROR "Unsupported gcc version.")
+    endif()
+  endif()
+endif()
+
+#
+# Ban old clang versions. This will probably break for non-Apple clang
+# on Apple. :(
+#
+if((CMAKE_CXX_COMPILER_ID MATCHES "AppleClang") OR
+    (APPLE AND (CMAKE_CXX_COMPILER_ID MATCHES "Clang") AND (CMAKE_CXX_COMPILER MATCHES "/Applications/Xcode")))
+  numeric_version(${CMAKE_CXX_COMPILER_VERSION} "clang")
+  if(CLANG_NUMERIC_VERSION LESS 70000)
+    message("***")
+    message("*** You're using an Xcode version less than 7. This is no longer supported.")
+    message("*** Upgrade your copy of Xcode, or set the CC and CXX environment variables appropriately.")
+    message("***")
+    if(NOW LESS 1470355200)
+      message("*** This will become a fatal error on September 5, 2016.")
+      message("***")
+      message(WARNING "Unsupported Xcode version.")
+    else()
+      message(FATAL_ERROR "Unsupported Xcode version.")
+    endif()
+  endif()
+endif()
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  numeric_version(${CMAKE_CXX_COMPILER_VERSION} "clang")
+  if(CLANG_NUMERIC_VERSION LESS 30400)
+    message("***")
+    message("*** You're using a clang version less than 3.4. This is no longer supported.")
+    message("*** Upgrade your complier, or set the CC and CXX environment variables appropriately.")
+    message("***")
+    if(NOW LESS 1470355200)
+      message("*** This will become a fatal error on September 5, 2016.")
+      message("***")
+      message(WARNING "Unsupported clang version.")
+    else()
+      message(FATAL_ERROR "Unsupported clang version.")
+    endif()
+  endif()
+endif()
+
+#
+# Ban old Intel icc versions
+#
+if(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+  numeric_version(${CMAKE_CXX_COMPILER_VERSION} "intel")
+  if(INTEL_NUMERIC_VERSION LESS 150000)
+    message("***")
+    message("*** You're using an icc version less than 15. This is no longer supported.")
+    message("*** Upgrade your complier, or set the CC and CXX environment variables appropriately.")
+    message("***")
+    if(NOW LESS 1470355200)
+      message("*** This will become a fatal error on September 5, 2016.")
       message("***")
       message(WARNING "Unsupported gcc version.")
     else()
@@ -483,12 +543,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE BOOL "Export a JSON 'database' of com
 #
 # set flags common to all build types
 #
-set(CMAKE_CXX_FLAGS "-pipe ${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPPRESSION_FLAGS}")
+set(CMAKE_CXX_FLAGS "-pipe -std=c++14 ${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPPRESSION_FLAGS}")
 string(REGEX REPLACE "[ ]+" " " CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" CACHE STRING
   "Flags used by the compiler during all build types")
 
-set(CMAKE_C_FLAGS "-pipe ${C_WARNING_FLAGS} ${CMAKE_C_FLAGS}")
+set(CMAKE_C_FLAGS "-pipe -std=gnu89 ${C_WARNING_FLAGS} ${CMAKE_C_FLAGS}")
 string(REPLACE "-Wno-non-virtual-dtor" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}" CACHE STRING
   "Flags used by the compiler during all build types")
