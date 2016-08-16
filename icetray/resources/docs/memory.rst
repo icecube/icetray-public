@@ -49,6 +49,8 @@ API Documentation
 
 .. autoclass:: icecube.icetray.memory
    :members:
+   :noindex:
 
 .. automodule:: icecube.icetray.memory_util
    :members:
+   :noindex:
