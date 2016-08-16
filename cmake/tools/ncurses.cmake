@@ -72,7 +72,8 @@ else(NOT CURSES_FOUND)
       
   ## setting this to CURSES_LIBRARIES includes libform
   #set(NCURSES_LIBRARIES ${CURSES_NCURSES_LIBRARY}
-  set(NCURSES_LIBRARIES "${CURSES_LIBRARIES} -ltinfo"
+  list(APPEND CURSES_LIBRARIES "-ltinfo")
+  set(NCURSES_LIBRARIES ${CURSES_LIBRARIES}
     CACHE STRING "Libraries for tool 'ncurses'")
 
 endif(NOT CURSES_FOUND)
