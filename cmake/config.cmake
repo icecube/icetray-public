@@ -341,11 +341,11 @@ endif()
 #
 #  GCC_VERSION and GCC_NUMERIC_VERSION is e.g. 40302 (for 4.3.2)
 #
-execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
-  COMMAND tr -d \\n
-  OUTPUT_VARIABLE GCC_VERSION)
-numeric_version(${GCC_VERSION} "gcc")
-set(GCC_NUMERIC_VERSION ${GCC_NUMERIC_VERSION} CACHE INTEGER "Numeric gcc version")
+# execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
+#   COMMAND tr -d \\n
+#   OUTPUT_VARIABLE GCC_VERSION)
+# numeric_version(${GCC_VERSION} "gcc")
+# set(GCC_NUMERIC_VERSION ${GCC_NUMERIC_VERSION} CACHE INTEGER "Numeric gcc version")
 
 
 #
@@ -353,6 +353,7 @@ set(GCC_NUMERIC_VERSION ${GCC_NUMERIC_VERSION} CACHE INTEGER "Numeric gcc versio
 #
 execute_process(COMMAND "date" "+%s" OUTPUT_VARIABLE NOW)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+  numeric_version(${CMAKE_CXX_COMPILER_VERSION} "gnu")
   if(GCC_NUMERIC_VERSION LESS 40801)
     message("***")
     message("*** You're using a gcc version less than 4.8.1. This is no longer supported.")
