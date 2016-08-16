@@ -499,6 +499,7 @@ if(CMAKE_COMPILER_IS_CLANG AND
 else()
   set(CXX14_FLAG "-std=c++14")
 endif()
+set(CXX14_FLAGS "-std=c++11")
 
 #
 # libraries everybody links to
