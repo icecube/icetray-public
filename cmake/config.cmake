@@ -507,7 +507,7 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
 	# FreeBSD keeps libdl stuff in libc
 	link_libraries(m stdc++)
 else (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
-	link_libraries(m dl stdc++)
+	link_libraries(m dl) # stdc++)
 endif (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
 
 #
