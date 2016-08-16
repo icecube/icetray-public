@@ -98,7 +98,7 @@ Build the Software
 
 Building the software is broken up into two parts:
 
-* Generating local Makefiles using the 'cmake' program (see :ref:`CmakeIndex`)
+* Generating local Makefiles using the 'cmake' program (see :ref:`cmake`)
 * Building libraries and binary executables with make.
 
 Running cmake
