@@ -493,13 +493,12 @@ endif (CMAKE_COMPILER_IS_CLANG)
 # Set the compiler flag for C++14
 #
 if(CMAKE_COMPILER_IS_CLANG AND
-    (CLANG_NUMERIC_VERSION GREATER "30399") AND
     (CLANG_NUMERIC_VERSION LESS "30500"))
   set(CXX14_FLAG "-std=c++1y")
 else()
   set(CXX14_FLAG "-std=c++14")
 endif()
-set(CXX14_FLAGS "-std=c++11")
+set(CXX14_FLAG "-std=c++11")
 
 #
 # libraries everybody links to
