@@ -264,7 +264,7 @@ TEST(functions_as_modules){
   //test using function pointers
   tray.AddModule(&simple_void_function);
   tray.AddModule(&simple_bool_function);
-#if __cplusplus >= 201103L
+#if __cplusplus >= 201103L && BOOST_VERSION > 105500
   //test using lambdas if they exist
   tray.AddModule([](boost::shared_ptr<I3Frame>){});
   tray.AddModule([](boost::shared_ptr<I3Frame>){ return(true); });
