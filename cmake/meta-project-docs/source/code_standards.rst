@@ -154,7 +154,8 @@ Templates and Genericity
 
    cpp_standards/dont_write_unintentionally_nongeneric_code
    cpp_standards/blend_static_and_dynamic_polymorphism_judiciously
-   cpp_standards/use_auto 
+   cpp_standards/use_auto
+   cpp_standards/lambda_expressions 
 
 Error handling and Exceptions
 -----------------------------
