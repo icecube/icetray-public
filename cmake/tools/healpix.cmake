@@ -34,7 +34,9 @@ if(NOT HEALPIX-CXX_FOUND)
 	    healpix/healpix_map.h
 	    lib
 	    NONE
-	    healpix_cxx 
-        )
+	    healpix_cxx)
+        if(HEALPIX-CXX_FOUND)
+	    set(HEALPIX_CXX_ON_FEDORA True)
+	endif()
     endif(DISTRO MATCHES "Fedora")
 endif(NOT HEALPIX-CXX_FOUND)
