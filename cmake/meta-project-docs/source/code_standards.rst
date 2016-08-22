@@ -199,6 +199,7 @@ Modern C++
 
    cpp_standards/prefer_alias_declaration_over_typedef
    cpp_standards/use_nullptr_instead_of_0_and_NULL
+   cpp_standards/smart_pointers
 
 
 Useful links
