@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ## this bash script, given the existance of a local project, will
 ## display to the user the Trac url of the latest relase of the
