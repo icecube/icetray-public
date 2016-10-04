@@ -1,7 +1,14 @@
 Making a class serializable
 =============================
 
-Classes that are to make the round-trip to disk inside .i3 files need serialize()  methods. Pending more documenation here, see the `boost::serialization documentation <http://www.boost.org/libs/serialization>`_ directly for general information on writing serialization methods, or follow one of the many examples in project dataclasses.
+Classes that are to make the round-trip to disk inside .i3 files need serialize()
+methods. Pending more documenation here, see the `boost::serialization documentation <http://www.boost.org/doc/libs/1_57_0/libs/serialization/doc/index.html>`_
+directly for general information on writing serialization methods, or follow
+one of the many examples in project dataclasses.  Note, that even though
+we've switched from boost::serialization to icecube::serialization, the docs
+linked previously are still valid.  That links to boost 1.57 docs, which is where
+we're frozen at.  A simple change of the namespace from boost to icecube
+should be pretty much all the change you'll need.
 
 I3_SERIALIZABLE 
 ^^^^^^^^^^^^^^^^^^
