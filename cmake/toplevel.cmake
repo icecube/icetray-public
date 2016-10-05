@@ -84,7 +84,7 @@ if(I3_TESTDATA)
   add_custom_target(rsync
     COMMAND test -n "${I3_TESTDATA}"
     COMMAND mkdir -p "${I3_TESTDATA}"
-    COMMAND rsync -vrlpt --delete code.icecube.wisc.edu::Offline/test-data/ ${I3_TESTDATA}/
+    COMMAND rsync -vrlpt --delete code.icecube.wisc.edu::Offline/test-data/trunk/ ${I3_TESTDATA}/
     COMMENT "Rsyncing test-data to I3_TESTDATA"
     )
   ### ctest testing
