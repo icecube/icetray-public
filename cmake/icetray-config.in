@@ -42,6 +42,8 @@ fi
 #a couple of globally necessary flags
 if [ $COMPILE_FLAGS -eq 1 ]; then
 	OUTPUT_FLAGS="$OUTPUT_FLAGS -include $BUILD_DIR/CMakeFiles/I3.h"
+	cmake_cxx_flags=`grep -m 1 ^CMAKE_CXX_FLAGS:STRING $CMAKECACHE | sed -e's|^.*:STRING=||'`
+	OUTPUT_FLAGS="$OUTPUT_FLAGS $cmake_cxx_flags"
 fi
 if [ $LINK_FLAGS -eq 1 ]; then
 	OUTPUT_FLAGS="$OUTPUT_FLAGS -L$BUILD_DIR/lib"
