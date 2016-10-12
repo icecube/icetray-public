@@ -442,6 +442,11 @@ if (NOT CXX_WARNING_SUPPRESSION_FLAGS)
     CACHE STRING "Warning suppression flags for this compiler")
 endif()
 
+# 
+# Blow away whatever is in CMAKE_CXX_FLAGS. We will cache it (by force) later.
+#
+set(CMAKE_CXX_FLAGS "")
+
 #
 # New versions of clang changed the default template depth
 # to 128. This is not enough for boost::python. Change it to
@@ -529,7 +534,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE BOOL "Export a JSON 'database' of com
 set(CMAKE_CXX_FLAGS "-pipe ${CXX14_FLAG} ${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPPRESSION_FLAGS}")
 string(REGEX REPLACE "[ ]+" " " CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" CACHE STRING
-  "Flags used by the compiler during all build types")
+  "Flags used by the compiler during all build types" FORCE)
 
 set(CMAKE_C_FLAGS "-pipe -std=gnu89 ${C_WARNING_FLAGS} ${CMAKE_C_FLAGS}")
 string(REPLACE "-Wno-non-virtual-dtor" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
