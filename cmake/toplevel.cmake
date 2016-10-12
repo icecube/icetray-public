@@ -295,13 +295,15 @@ if(DPKG_INSTALL_PREFIX)
 endif(DPKG_INSTALL_PREFIX)
 
 ## coverage target
+## there is an incompatibility between gcc-5.4/cmake-3.5/lcov-1.12 and gcc-4.8/cmake-2.8/lcov-1.10
+## the target below may not work on combinations of older software. see http://code.icecube.wisc.edu/projects/icecube/ticket/1891 for more info
 add_custom_target(coverage
   COMMAND if test ! -d ../output \; then mkdir ../output\; fi
-  COMMAND lcov -b ../ -d . -z
-  COMMAND lcov -b ../ -d . -c -i -o test_base.info
+  COMMAND lcov -b CMakeFiles/ -d . -z
+  COMMAND lcov -b CMakeFiles/ -d . -c -i -o test_base.info
   COMMAND ./env-shell.sh ctest -j2
-  COMMAND lcov -b ../ -d . -c -o test_run.info
-  COMMAND lcov -b ../ -d . -a test_base.info -a test_run.info -o test_total.info
+  COMMAND lcov -b CMakeFiles/ -d . -c -o test_run.info
+  COMMAND lcov -b CMakeFiles/ -d . -a test_base.info -a test_run.info -o test_total.info
   COMMAND lcov  -o reports.info -r test_total.info '/usr/include/*' '/usr/local/*' '/cvmfs/*' '$ENV{I3_PORTS}/*' '*/numpy' '/usr/lib/gcc/*'
   COMMAND genhtml --legend -o ../output/`date +%Y-%m-%d` reports.info
   COMMAND rm -f ../output/00_LATEST \; ln -sf `ls -1tr ../output |tail -1` ../output/00_LATEST
