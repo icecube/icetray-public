@@ -301,7 +301,7 @@ add_custom_target(coverage
   COMMAND if test ! -d ../output \; then mkdir ../output\; fi
   COMMAND lcov -b CMakeFiles/ -d . -z
   COMMAND lcov -b CMakeFiles/ -d . -c -i -o test_base.info
-  COMMAND ./env-shell.sh ctest -j2
+  COMMAND ./env-shell.sh ctest -j2 || true
   COMMAND lcov -b CMakeFiles/ -d . -c -o test_run.info
   COMMAND lcov -b CMakeFiles/ -d . -a test_base.info -a test_run.info -o test_total.info
   COMMAND lcov  -o reports.info -r test_total.info '/usr/include/*' '/usr/local/*' '/cvmfs/*' '$ENV{I3_PORTS}/*' '*/numpy' '/usr/lib/gcc/*'
