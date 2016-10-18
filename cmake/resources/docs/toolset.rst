@@ -104,6 +104,11 @@ Note the ``$ENV{HOME}`` sytax used in the example: since CMake doesn't
 automatically mix in environment variables from the shell, you have to be explicit
 when substituting values like ``HOME``.
 
+.. note:: If you override *python* you **must** also test for *scipy*
+          and *numpy*. See the `current tests
+          <http://code.icecube.wisc.edu/projects/icecube/browser/IceTray/projects/cmake/trunk/tools/python.cmake>`_
+          for an example.
+
 .. warning:: If you use a nonsystem python as above, your toolset
    	     (specifically the boost_python component of the boost tool)
 	     must be built against that same python.  See the page for
