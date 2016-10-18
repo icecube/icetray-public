@@ -124,7 +124,7 @@ execute_process(COMMAND ${CMAKE_CXX_COMPILER} --version
 #
 execute_process(COMMAND ${CMAKE_CXX_COMPILER} -v ERROR_VARIABLE COMPILER_ID_TAG)
 set(COMPILER_ID_TAG "REGEXPS IN CMAKE SUCK\n${COMPILER_ID_TAG}")
-STRING(REGEX REPLACE "^.*(g(cc|[+][+])|clang)[ -][Vv]ers(ion|ión|io|ão) ([^ ]+) .*"
+STRING(REGEX REPLACE "^.*(g(cc|[+][+])|clang|Apple LLVM)[ -][Vv]ers(ion|ión|io|ão) ([^ ]+) .*"
                      "\\1-\\4" COMPILER_ID_TAG ${COMPILER_ID_TAG})
 
 #
