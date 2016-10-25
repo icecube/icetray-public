@@ -36,6 +36,9 @@ if(BLAS_FOUND)
     gsl)
   list(APPEND GSL_LIBRARIES ${BLAS_LIBRARIES})
   list(APPEND GSL_LINK_FLAGS ${BLAS_LINK_FLAGS})
+  if(BUILDNAME MATCHES "ARCH")
+    list(APPEND GSL_LIBRARIES "-lgslcblas")
+  endif()
 else(BLAS_FOUND)
   tooldef(gsl 
     include/${GSL_SUBDIR}
