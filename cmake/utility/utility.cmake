@@ -14,4 +14,5 @@ include (numeric_version)
 include (parse_arguments)
 include (sort)
 include (unique)
+include (deprecation_warning)
 
