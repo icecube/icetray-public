@@ -304,7 +304,7 @@ else()
 endif()
 add_custom_target(coverage
   COMMAND if test ! -d ../output \; then mkdir ../output\; fi
-  COMMAND rm -f ${CMAKE_BINARY_DIR}/CMakeFiles/*.moc ${CMAKE_BINARY_DIR}/CMakeFiles/.h
+  COMMAND rm -f ${CMAKE_BINARY_DIR}/CMakeFiles/*.moc ${CMAKE_BINARY_DIR}/CMakeFiles/*.h
   COMMAND ln -s ${CMAKE_BINARY_DIR}/steamshovel/*.moc ${CMAKE_BINARY_DIR}/CMakeFiles/
   COMMAND ln -s ${CMAKE_BINARY_DIR}/steamshovel/*.h   ${CMAKE_BINARY_DIR}/CMakeFiles/
   COMMAND lcov -b CMakeFiles/ -d . -z
@@ -313,7 +313,7 @@ add_custom_target(coverage
   COMMAND lcov -b CMakeFiles/ -d . -c -o test_run.info
   COMMAND lcov -b CMakeFiles/ -d . -a test_base.info -a test_run.info -o test_total.info
   COMMAND lcov -o reports.info -r test_total.info '/usr/include/*' '/usr/local/*' '/cvmfs/*' '*/numpy' '/usr/lib/gcc/*' ${p} '${CMAKE_BINARY_DIR}/CMakeFiles/' '${CMAKE_BINARY_DIR}/steamshovel/*'
-  COMMAND genhtml --legend -o ../output/`date +%Y-%m-%d` reports.info
+  COMMAND genhtml --ignore-errors source --legend -o ../output/`date +%Y-%m-%d` reports.info
   COMMAND rm -f ../output/00_LATEST \; ln -sf `ls -1tr ../output |tail -1` ../output/00_LATEST
   COMMAND rm -f ${CMAKE_BINARY_DIR}/CMakeFiles/*.moc ${CMAKE_BINARY_DIR}/CMakeFiles/.h
 )
