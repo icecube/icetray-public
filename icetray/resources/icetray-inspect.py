@@ -175,7 +175,7 @@ class human_writer:
 
     def module_header(self,modname,category,docs):
         self.file.write('  %s (%s)\n' % (modname, category))
-        if not opts.names_only and docs > 0:
+        if not opts.names_only and len(docs) > 0:
             self.file.write('\n')
             self.file.write('    ' + docs.replace('\n', '\n    '))
             self.file.write('\n\n')
@@ -337,7 +337,7 @@ def display_project(project):
         try:
             pymodule = __import__(import_name,
                                                       globals(), locals(), [pyproject])
-        except Exception,e:
+        except Exception as e:
             sys.stderr.write("ERROR: cant load '%s': %s\n" % (import_name,str(e)))
             return
 
@@ -345,14 +345,14 @@ def display_project(project):
             for subpackage in pkgutil.walk_packages(pymodule.__path__,prefix=import_name+'.'):
                 try:
                     __import__(subpackage[1],globals(), locals(), [pyproject])
-                except Exception,e:
+                except Exception as e:
                     sys.stderr.write("WARNING: cant load subpackage '%s': %s\n" % (subpackage[1],str(e)))
 
         loadstr = "import icecube.%s"%pyproject
     elif cppproject:
         try:
             icetray.load(cppproject, False)
-        except Exception,e:
+        except Exception as e:
             sys.stderr.write("Error cant load '%s': %s\n" % (project,str(e)))
             return
 
@@ -533,7 +533,7 @@ noinspect = i3inspect.get_uninspectable_projects()+["level3_filter_cascade"]
 
 for p in args:
     if p in noinspect:
-        print "WARNING: Skipping uninspectable project:", p
+        print("WARNING: Skipping uninspectable project:", p)
         continue
     display_project(p)
 

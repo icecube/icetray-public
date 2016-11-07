@@ -61,7 +61,7 @@ def print_frames(frame):
     You just need to write a function that takes a frame
     and it can be inserted into the tray just like a module.
     '''
-    print frame
+    print(frame)
 
 
 tray = I3Tray()

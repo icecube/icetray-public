@@ -43,6 +43,7 @@ tray.AddModule(icetray.I3TestModuleFactory(I3TimeHorizonCutTest), 'test',
 			self.AddOutBox("OutBox")
 			
 			self.suites = []
+
 			for case in test_cases:
 				self.suites.append(unittest.defaultTestLoader.loadTestsFromTestCase(case))
 			self.test_cases = test_cases
@@ -57,8 +58,10 @@ tray.AddModule(icetray.I3TestModuleFactory(I3TimeHorizonCutTest), 'test',
 			
 			for case in self.test_cases:
 				case.frame = frame
-			for test in self.suites:
-				if result is None:
+			for test in self.suites:                                                               
+				if test._tests[0]==None:
+ 					return
+				elif result is None:
 					result = self.runner.run(test)
 				else:
 					result = self.runner.run(test, result)

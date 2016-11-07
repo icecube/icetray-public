@@ -64,7 +64,7 @@ class TestExampleScripts(unittest.TestCase):
         cmd = [script]
         for arg in args:
             cmd.append(arg)
-        print cmd
+        print(cmd)
         return_code = subprocess.call(cmd)
         self.assertEqual(return_code, 0,
                          "Example %s did not finish successfully." % script)
