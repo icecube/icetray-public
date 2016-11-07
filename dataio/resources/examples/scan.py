@@ -6,7 +6,7 @@ import sys
 try:
     from icecube import icetray,dataio
 except ImportError:
-    print 'You must be inside an IceCube metaproject environment.'
+    print('You must be inside an IceCube metaproject environment.')
     sys.exit(1)
 
 def files(args):
@@ -33,29 +33,29 @@ def main():
     (options,args) = parser.parse_args()
     
     if len(args) < 1:
-        print 'ERROR: no input file'
-        print ''
+        print('ERROR: no input file')
+        print('')
         parser.print_help()
     
     # make sure only one of frames, streams, and count are selected
     elif ((options.frames and (options.streams or options.count)) or
         (options.streams and (options.frames or options.count)) or
         (options.count and (options.frames or options.streams))):
-        print 'ERROR: only select one of --whole-frames, --streams-only, or --count'
-        print ''
+        print('ERROR: only select one of --whole-frames, --streams-only, or --count')
+        print('')
         parser.print_help()
     
     else:
         count = 0
         for frame in files(args):
             if options.frames:
-                print frame
+                print(frame)
             elif options.streams:
                 sys.stdout.write(frame.Stop.id)
             elif options.count:
                 count += 1
         if options.count:
-            print 'Total:',count,'frames'
+            print('Total:',count,'frames')
 
 if __name__ == '__main__':
     main()

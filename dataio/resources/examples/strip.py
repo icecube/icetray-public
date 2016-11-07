@@ -7,7 +7,7 @@ import os
 try:
     from icecube import icetray,dataio
 except ImportError:
-    print 'You must be inside an IceCube metaproject environment.'
+    print('You must be inside an IceCube metaproject environment.')
     sys.exit(1)
 
 def files(args):
@@ -34,13 +34,13 @@ def main():
     (options,args) = parser.parse_args()
     
     if len(args) < 2:
-        print 'ERROR: require an input and output file'
-        print ''
+        print('ERROR: require an input and output file')
+        print('')
         parser.print_help()
     
     elif os.path.exists(args[-1]):
-        print 'ERROR: output file',args[-1],'already exists!'
-        print ''
+        print('ERROR: output file',args[-1],'already exists!')
+        print('')
         parser.print_help()
     
     else:

@@ -49,16 +49,20 @@ def _test_stage(url, minsize=100):
         assert(not os.path.exists(str(local_fname)))
 
 def _make_http(port=None,usessl=False,basic_auth=False):
-    import BaseHTTPServer
+
+    try:
+        from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
+    except ImportError:
+        from http.server import BaseHTTPRequestHandler,HTTPServer
     import random
     import ssl
     import threading
     import subprocess
     
-    data = ''.join(['test' for _ in range(1000)])
+    data = b''.join([b'test' for _ in range(1000)])
     
     if basic_auth:
-        class Handle(BaseHTTPServer.BaseHTTPRequestHandler):
+        class Handle(BaseHTTPRequestHandler):
             def do_HEAD(self):
                 self.send_response(200)
                 self.send_header('Content-type','text')
@@ -69,19 +73,19 @@ def _make_http(port=None,usessl=False,basic_auth=False):
                 self.send_header('Content-type','text')
                 self.end_headers()
             def do_GET(self):
-                if self.headers.getheader('Authorization') == None:
+                if self.headers['Authorization'] == None:
                     self.do_AUTHHEAD()
                     self.wfile.write('no auth header received')
-                elif self.headers.getheader('Authorization') == 'Basic dGVzdDp0ZXN0':
+                elif self.headers['Authorization'] == 'Basic dGVzdDp0ZXN0':
                     self.do_HEAD()
-                    self.wfile.write(self.headers.getheader('Authorization'))
+                    self.wfile.write(bytes(self.headers['Authorization'],'ascii'))
                     self.wfile.write(data)
                 else:
                     self.do_AUTHHEAD()
-                    self.wfile.write(self.headers.getheader('Authorization'))
+                    self.wfile.write(self.headers['Authorization'])
                     self.wfile.write('not authenticated')
     else:
-        class Handle(BaseHTTPServer.BaseHTTPRequestHandler):
+        class Handle(BaseHTTPRequestHandler):
             def do_HEAD(self):
                 self.send_response(200)
                 self.send_header('Content-type','text')
@@ -94,20 +98,20 @@ def _make_http(port=None,usessl=False,basic_auth=False):
         while True:
             try:
                 port = random.randint(10000,50000)
-                httpd = BaseHTTPServer.HTTPServer(('localhost', port), Handle)
+                httpd = HTTPServer(('localhost', port), Handle)
             except socket.error:
                 continue
             break
     else:
-        httpd = BaseHTTPServer.HTTPServer(('localhost', port), Handle)
+        httpd = HTTPServer(('localhost', port), Handle)
     if usessl:
-        print 'ssl'
+        print('ssl')
         p = subprocess.Popen(['openssl','req','-new','-x509',
                               '-keyout','privkey.pem',
                               '-out','cacert.pem','-days','1',
                               '-batch','-passout','pass:passkey'],
                               stdin=subprocess.PIPE)
-        p.communicate(input='passkey')
+        p.communicate(input=b'passkey')
         if p.returncode:
             raise Exception('cannot generate self-signed cert')
         try:
