@@ -78,7 +78,7 @@ def _make_http(port=None,usessl=False,basic_auth=False):
                     self.wfile.write('no auth header received')
                 elif self.headers['Authorization'] == 'Basic dGVzdDp0ZXN0':
                     self.do_HEAD()
-                    self.wfile.write(bytes(self.headers['Authorization'],'ascii'))
+                    self.wfile.write(bytearray(self.headers['Authorization'],'ascii'))
                     self.wfile.write(data)
                 else:
                     self.do_AUTHHEAD()
