@@ -8,7 +8,7 @@ print("Loading toctree_sort extension")
 def sort_ignore_case(input,first=None):
     if first:
         input = sort_first(input,first)
-    if isinstance(input,basestring):
+    if isinstance(input,("".__class__,u"".__class__)):
         return input.lower()
     elif isinstance(input,(list,tuple)):
         return [sort_ignore_case(x,first=first) for x in input]
@@ -18,7 +18,7 @@ def sort_ignore_case(input,first=None):
 def sort_first(input,first=None,**kwargs):
     if not first or not isinstance(first,(tuple,list)):
         return input
-    if isinstance(input,basestring):
+    if isinstance(input,("".__class__,u"".__class__)):
         for k in first:
             if k.lower() in input.lower():
                 return '_'
