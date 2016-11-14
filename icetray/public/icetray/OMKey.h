@@ -87,34 +87,6 @@ class OMKey
   void SetPMT(unsigned char pmt){ pmtNumber_ = pmt; }
 
   /**
-   * bool function: is it an InIce DOM?
-   */
-  bool IsInIce() const { 
-      // only strings 1-86 have IceTop
-    if((stringNumber_<1) || (stringNumber_>86)) return true;
-    if(omNumber_>=1 && omNumber_<=60) return true;
-    else return false;
-  }
-
-  /**
-   * bool function: is it an IceTop DOM?
-   */
-  bool IsIceTop() const { 
-    // only strings 1-86 have IceTop
-    if((stringNumber_<1) || (stringNumber_>86)) return false; 
-    if(omNumber_>=61 && omNumber_<=64) return true;
-    else return false;
-  }
-
-  /**
-   * bool function: is it a scintillator DOM?
-   */
-  bool IsScintillator() const {
-    if(omNumber_>=65 && omNumber_<=66) return true;
-    else return false;
-  }
-
-  /**
    * equality operator.  
    * @return true if the string and om numbers of the two OMKey's match
    * @param rhs the OMKey to compare this one to.
