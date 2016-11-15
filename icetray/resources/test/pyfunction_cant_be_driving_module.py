@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 #
-# Sample i3module in python 
+# Test that icetray throws if you start the chain with a python function
+# They can't be driving modules.  Meaning they can't emit frames and
+# IceTray won't emmit for them.
 #
 
 from icecube.icetray import *
@@ -11,14 +13,9 @@ tray = I3Tray()
 def pyfunction(frame):
     pass
 
-tray.AddModule(pyfunction, "pyfunction") 
+tray.AddModule(pyfunction) 
+tray.AddModule("Dump")
 
-# print em
-tray.AddModule("Dump","Dump")
-# throw em out
-tray.AddModule("TrashCan","TrashCan")
-
-# do it 5 times.
 try:
     tray.Execute()
     assert False, "that should have claimed that pyfunctions can't be driving modules"
