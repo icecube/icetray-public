@@ -78,7 +78,6 @@ i3_add_library(icetray
   private/icetray/I3Logging.cxx
   private/icetray/I3Configuration.cxx
   private/icetray/I3ConfigurationImpl.cxx
-  private/icetray/I3Deprecation.cxx
   private/icetray/I3Parameter.cxx
   private/icetray/OMKey.cxx
   private/icetray/I3Tray.cxx
