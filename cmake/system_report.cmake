@@ -33,6 +33,7 @@ if(NOT APPLE)
     ERROR_QUIET)
 else()
   execute_process(COMMAND sysctl kern.hostid
+    COMMAND tr -d \\n
     OUTPUT_VARIABLE HOSTID
     ERROR_QUIET)
 endif()
