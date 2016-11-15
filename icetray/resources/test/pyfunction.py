@@ -9,12 +9,9 @@ from I3Tray import *
 tray = I3Tray()
 
 # generate empty frames
-tray.AddModule("BottomlessSource","bottomless")
-
-tray.AddModule(lambda f: None, "function")
-
-tray.AddModule("TrashCan","TrashCan")
-
+tray.AddModule("BottomlessSource")
+tray.AddModule(lambda f: None)
+tray.AddModule(lambda f: None, streams = [icetray.I3Frame.DAQ])
 tray.Execute(5)
 
 print("Okay. Exiting.")
