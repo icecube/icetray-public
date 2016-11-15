@@ -363,3 +363,7 @@ font-size: smaller;
 .strikethrough {
     text-decoration: line-through;
 }
+
+table.footnote td, table.footnote th {
+    font-size: smaller;
+}
