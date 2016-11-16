@@ -137,8 +137,7 @@ and Get to/from the frame must satisfy several requirements:
 
 These requirements allow toplevel frame objects to work correctly with
 the frame's Get<> methods and to function correctly in the I3Writer,
-I3ReaderService, and other applications like the dataio-shovel and
-dataio-filter.
+I3Reader, and other applications like the dataio-shovel.
 
 I3Map<> and I3Vector<> exist strictly to help std::vector and std::map
 satisfy the requirements above, so that these maps/vectors are
