@@ -84,8 +84,7 @@ i3_add_library(icetray
   private/icetray/I3Module.cxx
   private/icetray/I3ConditionalModule.cxx
   private/icetray/I3Context.cxx
-  private/icetray/I3DSORegistry.cxx
-  private/icetray/I3Int.cxx
+   private/icetray/I3Int.cxx
   private/icetray/I3Bool.cxx
   private/icetray/I3PhysicsTimer.cxx
   private/icetray/I3PhysicsUsage.cxx

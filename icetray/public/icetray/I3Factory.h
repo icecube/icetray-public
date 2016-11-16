@@ -28,7 +28,6 @@
 #include <icetray/I3TrayInfo.h>
 #include <icetray/I3Module.h>
 #include <icetray/I3Logging.h>
-#include <icetray/I3DSORegistry.h>
 
 #include <boost/function.hpp>
 #include <map>
@@ -133,7 +132,6 @@ struct I3Registrator : boost::noncopyable
       .Register(productname,
                 projectname,
                 Creator<FactoryProductType, ActualDerivedType>::Create);
-    I3DSORegistry::register_dso(projectname);
     return *this;
   }
 
