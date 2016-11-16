@@ -20,7 +20,7 @@
  *  
  */
 //
-//  loads a project's shared library.  Used in various utilities.
+//  loads a project's shared library.
 //
 #include <dlfcn.h>
 #include <string>
@@ -35,29 +35,16 @@ load_project (std::string path, bool verbose)
   if (path.find("lib") != 0)
     path = std::string("lib") + path;
 
-  if (path.find(".dylib") != std::string::npos
-      || path.find(".so") != std::string::npos)
-    {
-      // this has to be an error to keep people from committing stuff
-      // that isn't mac/linux portable
-      std::cout << "*** Failure loading '" << path << "'.\n"
-		<< "*** Load external libraries without an extension.\n"
-		<< "*** e.g. please omit '.dylib' or '.so'.\n";
-      exit(1);
-    }
-  else
-    {
 #ifdef __APPLE_CC__
-      path += ".dylib";
+  path += ".dylib";
 #else
-      path += ".so";
+  path += ".so";
 #endif
-    }
 
   // first try via LD_LIBRARY_PATH search
   void *v = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL);
   char *errmsg = dlerror();
-
+  
   // not found, then try $I3_BUILD/lib specifically
   if ((v == NULL || errmsg != NULL) && getenv("I3_BUILD") != NULL)
     {
