@@ -4,6 +4,9 @@ Release Notes
 trunk
 -----
 
+* Removed I3Deprecation and I3DSORegistry.
+
+
 May 2, 2016, Alex Olivas  (olivas@icecube.umd.edu)
 ---------------------------------------------------
 Release V16-04-01
