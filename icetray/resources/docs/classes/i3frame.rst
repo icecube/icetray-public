@@ -115,7 +115,7 @@ a module later in the processing chain, looks like this::
  }
 
 Here we've got a const shared pointer to the I3Particle. This is ideal: you
-can check that you what you asked for (check for non-null pointer) ad 
+can check that you got what you asked for (check for non-null pointer) and 
 the_particleptr is const, so the compiler can ensure we don't
 accidentally modify it.
 
