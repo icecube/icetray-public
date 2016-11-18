@@ -190,14 +190,6 @@ I3Frame::size_type I3Frame::size(const string& key) const
   return size(*iter->second);
 }
 
-
-
-void
-I3Frame::assign(const I3Frame& rhs)
-{
-  *this = rhs;
-}
-
 void I3Frame::purge(const Stream& what)
 {
   map_t::iterator it = map_.begin();
@@ -220,29 +212,9 @@ void I3Frame::purge()
   }
 }
 
-bool I3Frame::Has(const std::string& key, const Stream& stream) const
-{
-  hashed_str_t hash_key(key);
-  for(map_t::const_iterator it = map_.begin(); it != map_.end(); it++)
-    {
-      if (it->second->stream != stream)
-        continue;
-      if (it->first == hash_key)
-	return true;
-    }
-
-  return false;
-}
-
 void I3Frame::merge(const I3Frame& rhs)
 {
   map_.insert(rhs.map_.begin(), rhs.map_.end());
-}
-
-
-void I3Frame::swap(I3Frame& rhs)
-{
-  map_.swap(rhs.map_);
 }
 
 void I3Frame::take(const I3Frame& rhs, const string& what, const string& as)

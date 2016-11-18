@@ -33,7 +33,6 @@
 #include <icetray/I3DefaultName.h>
 #include <icetray/I3FrameObject.h>
 #include <icetray/I3Logging.h>
-//#include <icetray/I3Tray.h>
 #include <icetray/IcetrayFwd.h>
 #include <icetray/is_shared_ptr.h>
 #include <I3/name_of.h>
@@ -247,9 +246,6 @@ class I3Frame
   size_type size() const { return map_.size(); }
   void clear() { map_.clear(); }
 
-  // just calls operator=
-  void assign(const I3Frame& rhs);
-
   const_iterator begin() const { return const_iterator(map_.begin(), this); } 
   const_iterator end() const { return const_iterator(map_.end(), this); } 
 
@@ -272,7 +268,6 @@ class I3Frame
    * @return true, if something exists in the frame at slot <VAR>key</VAR>, otherwise false.
    */
   bool Has(const std::string& key) const { return map_.count(key); }
-  bool Has(const std::string& key, const Stream& stream) const;
 
   I3Frame::Stream GetStop(const std::string& key) const;
 
@@ -283,8 +278,6 @@ class I3Frame
 
   // delete all frame objects we're carrying that aren't on our stream 
   void purge();
-
-  void swap(I3Frame& rhs);
 
   //
   //  takes "what" from rhs into *this as "as", buffers and all.

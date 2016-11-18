@@ -763,42 +763,6 @@ In Python
  
           >>> frame.type_name('PoleIcLinefit')
           'I3Particle'
-
-   .. method:: assign(otherframe)
-      :noindex:
-
-      Erase all contents of the current frame, and assign the stream
-      type and all contents of *otherframe* to *self*::
-
-        >>> print frame
-        [ I3Frame  (Physics):
-          'CoincifyCombinedPulses' [Physics] ==> I3Map<OMKey, std::vector<I3RecoPulse, std::allocator<I3RecoPulse> > > (42274)
-          'DrivingTime' [Physics] ==> I3Time (38)
-          'I3EventHeader' [Physics] ==> I3EventHeader (91)
-          'IceTopRawData' [Physics] ==> I3Map<OMKey, std::vector<I3DOMLaunch, std::allocator<I3DOMLaunch> > > (46)
-          'PoleCombinedLinefit' [Physics] ==> I3Particle (150)
-          'PoleIcLinefit' [Physics] ==> I3Particle (150)
-          'PoleTrackLlhFit' [Physics] ==> I3Particle (150)
-          'PoleTrackLlhFit2' [Physics] ==> I3Particle (150)
-          'TWCleanPulses' [Physics] ==> I3Map<OMKey, std::vector<I3RecoPulse, std::allocator<I3RecoPulse> > > (42562)
-        ]
-        >>> newframe = icetray.I3Frame()
-        >>> print newframe
-        [ I3Frame  (None):
-        ]
-        >>> newframe.assign(frame)
-        >>> print newframe
-        [ I3Frame  (Physics):
-          'CoincifyCombinedPulses' [Physics] ==> I3Map<OMKey, std::vector<I3RecoPulse, std::allocator<I3RecoPulse> > > (42274)
-          'DrivingTime' [Physics] ==> I3Time (38)
-          'I3EventHeader' [Physics] ==> I3EventHeader (91)
-          'IceTopRawData' [Physics] ==> I3Map<OMKey, std::vector<I3DOMLaunch, std::allocator<I3DOMLaunch> > > (46)
-          'PoleCombinedLinefit' [Physics] ==> I3Particle (150)
-          'PoleIcLinefit' [Physics] ==> I3Particle (150)
-          'PoleTrackLlhFit' [Physics] ==> I3Particle (150)
-          'PoleTrackLlhFit2' [Physics] ==> I3Particle (150)
-          'TWCleanPulses' [Physics] ==> I3Map<OMKey, std::vector<I3RecoPulse, std::allocator<I3RecoPulse> > > (42562)
-        ]
         
    .. method:: clear()
       :noindex:
