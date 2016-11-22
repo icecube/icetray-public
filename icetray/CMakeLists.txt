@@ -65,45 +65,46 @@ set(ICETRAY_PYTHON_SRC
   private/pybindings/std_cont_pod/std_cont_pod_ulong.cxx
   private/pybindings/std_cont_pod/std_cont_pod_unsigned.cxx
   private/pybindings/std_cont_pod/std_cont_pod_vector_int.cxx
-  private/pybindings/std_cont_pod/std_cont_pod_vector_string.cxx)
+  private/pybindings/std_cont_pod/std_cont_pod_vector_string.cxx
+  )
 
 i3_add_library(icetray
+  private/icetray/I3Tray.cxx
   private/icetray/I3Frame.cxx
-  private/icetray/I3FrameMixing.cxx
-  private/icetray/crc-ccitt.c
-  private/icetray/crc32.c
-  private/icetray/open.cxx
-  private/icetray/load_project.cxx
   private/icetray/I3FrameObject.cxx
-  private/icetray/I3Logging.cxx
+  private/icetray/I3FrameMixing.cxx
   private/icetray/I3Configuration.cxx
   private/icetray/I3ConfigurationImpl.cxx
+  private/icetray/I3Context.cxx
   private/icetray/I3Parameter.cxx
-  private/icetray/OMKey.cxx
-  private/icetray/I3Tray.cxx
   private/icetray/I3Module.cxx
   private/icetray/I3ConditionalModule.cxx
-  private/icetray/I3Context.cxx
-   private/icetray/I3Int.cxx
-  private/icetray/I3Bool.cxx
-  private/icetray/I3PhysicsTimer.cxx
-  private/icetray/I3PhysicsUsage.cxx
-  private/icetray/I3PrintfLogger.cxx
-  private/icetray/I3SyslogLogger.cxx
-  private/icetray/Utility.cxx
+  private/icetray/I3PacketModule.cxx  
   private/icetray/I3ServiceFactory.cxx
   private/icetray/I3TrayInfo.cxx
   private/icetray/I3TrayInfoService.cxx
   private/icetray/I3IcePick.cxx
-  private/icetray/I3PacketModule.cxx
-  private/icetray/serialization.cxx
-  ${I3_BACKTRACE_CXX}
-  private/icetray/init.cxx
+  private/icetray/I3PrintfLogger.cxx
+  private/icetray/I3SyslogLogger.cxx
+  private/icetray/I3Logging.cxx
   private/icetray/PythonFunction.cxx
   private/icetray/FunctionModule.cxx
   private/icetray/PythonModule.cxx
+  private/icetray/OMKey.cxx
+  private/icetray/I3Int.cxx
+  private/icetray/I3Bool.cxx
+  private/icetray/I3PhysicsTimer.cxx
+  private/icetray/I3PhysicsUsage.cxx
+  private/icetray/Utility.cxx
+  private/icetray/serialization.cxx
+  private/icetray/init.cxx
+  private/icetray/crc-ccitt.c
+  private/icetray/crc32.c
+  private/icetray/load_project.cxx
   private/icetray/name_of.cxx
   private/icetray/memory.cxx
+  private/open/open.cxx
+  private/open/http_source.cpp
 
   #
   #  Modules:  testing and example
