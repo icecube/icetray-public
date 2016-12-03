@@ -93,12 +93,12 @@ macro(QT4_I3_AUTOMOC)
       
       get_filename_component(_abs_PATH ${_abs_FILE} PATH)
       
-      string(REGEX MATCHALL "#include +[^ ]+\\.moc[\">]" _match "${_contents}")
+      string(REGEX MATCHALL "#include +[\"<]moc_[^\\.]+\\.cpp[\">]" _match "${_contents}")
       if(_match)
         foreach (_current_MOC_INC ${_match})
-          string(REGEX MATCH "[^ <\"]+\\.moc" _current_MOC "${_current_MOC_INC}")
+          string(REGEX MATCH "moc_([^\\.]+.cpp)" _current_MOC "${_current_MOC_INC}")
           
-          get_filename_component(_basename ${_current_MOC} NAME_WE)
+          get_filename_component(_basename ${CMAKE_MATCH_1} NAME_WE)
 
           # Since the common default header path is in public/${PROJECT_NAME}, check there first
           if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/public/${PROJECT_NAME}/${_basename}.h)
