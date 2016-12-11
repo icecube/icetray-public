@@ -550,7 +550,7 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
       )
 
     add_dependencies(test-bins ${PROJECT_NAME}-${THIS_EXECUTABLE_NAME})
-    use_pybindings(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} PROJECTS icetray)
+    use_pybindings(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME})
 
     set_target_properties(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
       PROPERTIES
@@ -570,7 +570,7 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
       PROJECTS ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_USE_PYBINDINGS})
 
     use_tools(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
-      TOOLS "${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_USE_TOOLS};python")
+      TOOLS "${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_USE_TOOLS}")
 
     set_source_files_properties(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES}
       PROPERTIES

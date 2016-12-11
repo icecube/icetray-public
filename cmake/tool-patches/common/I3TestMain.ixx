@@ -30,13 +30,17 @@ using namespace std;
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 #include <boost/format.hpp>
-#include <boost/python.hpp>
+#ifndef NO_ICETRAY
+	#include <boost/python.hpp>
+#endif
 #include <sys/wait.h>
 #include <setjmp.h>
 
 #include <I3Test.h>
-#include <icetray/init.h>
-#include <icetray/I3Logging.h>
+#ifndef NO_ICETRAY
+	#include <icetray/init.h>
+	#include <icetray/I3Logging.h>
+#endif
 #include <boost/program_options.hpp>
 #include <iterator>
 #include <iomanip>
@@ -236,6 +240,7 @@ namespace I3Test
 	      else
 		cout << " UNCAUGHT:" << e.what() << endl;
 	      failures[i->first] = boost::shared_ptr<test_failure>(new test_failure("?", 0, "uncaught exception", "uncaught exception"));
+#ifndef NO_ICETRAY
 	    } catch (const boost::python::error_already_set& e) {
 	      PyErr_Print();
 	      untrap_signals();
@@ -248,6 +253,7 @@ namespace I3Test
 	      else
 		; //cout << " UNCAUGHT:" << e.what() << endl;
 	      failures[i->first] = boost::shared_ptr<test_failure>(new test_failure("?", 0, "uncaught exception", "uncaught exception"));
+#endif
 	    } catch (...) {
 	      untrap_signals();
 	      cout.rdbuf(cout_buf);
@@ -443,6 +449,7 @@ namespace I3Test
 }
 vector<string> tests_to_run;
 
+#ifndef NO_ICETRAY
 void validate(boost::any &v, const std::vector<std::string>& values,
     I3LogLevel* target_type, int)
 {
@@ -477,6 +484,7 @@ void validate(boost::any &v, const std::vector<std::string>& values,
         throw validation_error(validation_error::invalid_option_value);
 #endif
 }
+#endif //!NO_ICETRAY
 
 namespace po = boost::program_options;
 
@@ -501,7 +509,9 @@ int main(int argc, char* argv[])
 {
   string xmlfile;
   string dartpath;
+#ifndef NO_ICETRAY
   I3::init_icetray_lib();
+#endif
   try {
     options.add_options()
       ("help,h", "this message")
@@ -513,7 +523,9 @@ int main(int argc, char* argv[])
       ("list,l", "list tests and groups in this suite")
       ("run-tests,r", po::value< vector<string> >(), "list of tests to run")
       ("timeout,t", po::value< int >(), "timeout unit tests after this many seconds")
+#ifndef NO_ICETRAY
       ("log-level", po::value<I3LogLevel>(), "set the global logging level")
+#endif
       ;
 
     po::positional_options_description p;
@@ -553,13 +565,13 @@ int main(int argc, char* argv[])
     if (vm.count("timeout")) {
       unit_test_time_limit = vm["timeout"].as< int >();
     }
-    
+#ifndef NO_ICETRAY
     if (vm.count("log-level")) {
         if (I3LoggerPtr logger = GetIcetrayLogger()) {
             logger->SetLogLevel(vm["log-level"].as<I3LogLevel>());
         }
     }
-    
+#endif
     if (vm.count("all")) {
       cout << "Running all tests:" << endl;
       suite().runtests();
