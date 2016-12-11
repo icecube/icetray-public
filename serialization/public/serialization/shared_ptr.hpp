@@ -121,6 +121,7 @@ inline void load(
     boost::shared_ptr< T > &t,
     const unsigned int file_version
 ){
+    // The most common cause of trapping here would be serializing
     // something like shared_ptr<int>.  This occurs because int
     // is never tracked by default.  Wrap int in a trackable type
     BOOST_STATIC_ASSERT((tracking_level< T >::value != track_never));
@@ -195,7 +196,6 @@ inline void serialize(
 // version 1 to distinguish from boost 1.32 version. Note: we can only do this
 // for a template when the compiler supports partial template specialization
 
-#if 0 //temporarily remove new smart pointers
 #ifndef BOOST_NO_CXX11_SMART_PTR
 #include <boost/static_assert.hpp>
 
@@ -286,5 +286,4 @@ inline void serialize(
 } // namespace icecube
 
 #endif // BOOST_NO_CXX11_SMART_PTR
-#endif //temporarily remove new smart pointers
 #endif // I3_SERIALIZATION_SHARED_PTR_HPP

@@ -19,36 +19,36 @@ struct A {
 };
 
 // should compile w/o problem
-void f1(boost::archive::text_oarchive & oa, const A & a){
+void f1(icecube::archive::text_oarchive & oa, const A & a){
     oa & a;
-    oa & BOOST_SERIALIZATION_NVP(a);
+    oa & I3_SERIALIZATION_NVP(a);
     oa << a;
-    oa << BOOST_SERIALIZATION_NVP(a);
+    oa << I3_SERIALIZATION_NVP(a);
 }
-void f2(boost::archive::text_oarchive & oa, const A * const & a){
+void f2(icecube::archive::text_oarchive & oa, const A * const & a){
     oa & a;
-    oa & BOOST_SERIALIZATION_NVP(a);
+    oa & I3_SERIALIZATION_NVP(a);
     oa << a;
-    oa << BOOST_SERIALIZATION_NVP(a);
+    oa << I3_SERIALIZATION_NVP(a);
 }
-void f3(boost::archive::text_iarchive & ia, A & a){
+void f3(icecube::archive::text_iarchive & ia, A & a){
     ia & a;
-    ia & BOOST_SERIALIZATION_NVP(a);
+    ia & I3_SERIALIZATION_NVP(a);
     ia >> a;
-    ia >> BOOST_SERIALIZATION_NVP(a);
+    ia >> I3_SERIALIZATION_NVP(a);
 }
-void f4(boost::archive::text_iarchive & ia, A * & a){
+void f4(icecube::archive::text_iarchive & ia, A * & a){
     ia & a;
-    ia & BOOST_SERIALIZATION_NVP(a);
+    ia & I3_SERIALIZATION_NVP(a);
     ia >> a;
-    ia >> BOOST_SERIALIZATION_NVP(a);
+    ia >> I3_SERIALIZATION_NVP(a);
 }
 #if 0
-void f5(boost::archive::text_oarchive & oa, const A * & a){
+void f5(icecube::archive::text_oarchive & oa, const A * & a){
     oa & a;
-    oa & BOOST_SERIALIZATION_NVP(a);
+    oa & I3_SERIALIZATION_NVP(a);
     oa << a;
-    oa << BOOST_SERIALIZATION_NVP(a);
+    oa << I3_SERIALIZATION_NVP(a);
 }
 #endif
 

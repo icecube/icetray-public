@@ -29,7 +29,7 @@
 class DLL_DECL(BOOST_PP_EMPTY()) polymorphic_derived2 : 
     public polymorphic_base
 {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void serialize(
         Archive &ar, 
@@ -45,12 +45,12 @@ class DLL_DECL(BOOST_PP_EMPTY()) polymorphic_derived2 :
 // we do so!!!.  If we don't do this, we end up with the same
 // code in BOTH the DLL which implements polymorphic_derived2
 // as well as the main program.
-BOOST_CLASS_EXPORT_KEY(polymorphic_derived2)
+I3_CLASS_EXPORT_KEY(polymorphic_derived2)
 
 // note the mixing of type_info systems is supported.
-BOOST_CLASS_TYPE_INFO(
+I3_CLASS_TYPE_INFO(
     polymorphic_derived2,
-    boost::serialization::extended_type_info_typeid<polymorphic_derived2>
+    icecube::serialization::extended_type_info_typeid<polymorphic_derived2>
 )
 
 #undef DLL_DECL

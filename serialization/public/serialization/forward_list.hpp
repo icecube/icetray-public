@@ -31,6 +31,7 @@ namespace std{
 #include <serialization/collections_load_imp.hpp>
 #include <serialization/split_free.hpp>
 #include <serialization/nvp.hpp>
+#include <archive/basic_archive.hpp>
 
 namespace icecube { 
 namespace serialization {
@@ -41,11 +42,10 @@ inline void save(
     const std::forward_list<U, Allocator> &t,
     const unsigned int file_version
 ){
-    const collection_size_type count(std::distance(t.cbegin(), t.cend()));
     icecube::serialization::stl::save_collection<
         Archive,
         std::forward_list<U, Allocator>
-    >(ar, t, count);
+    >(ar, t);
 }
 
 template<class Archive, class U, class Allocator>

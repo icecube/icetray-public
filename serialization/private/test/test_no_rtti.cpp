@@ -33,9 +33,7 @@ namespace std{
 #include <serialization/export.hpp>
 #include <serialization/nvp.hpp>
 
-#include "test_tools.hpp"
-#include <boost/preprocessor/stringize.hpp>
-#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
+#include <I3Test.h>
 
 #include "polymorphic_base.hpp"
 #include "polymorphic_derived1.hpp"
@@ -46,60 +44,63 @@ void polymorphic_derived2::serialize(
     Archive &ar, 
     const unsigned int /* file_version */
 ){
-    ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
+    ar & I3_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
 }
 
-template void polymorphic_derived2::serialize(
+/*template void polymorphic_derived2::serialize(
     test_oarchive & ar,
     const unsigned int version
 );
 template void polymorphic_derived2::serialize(
     test_iarchive & ar,
     const unsigned int version
-);
+);*/
 
 // save derived polymorphic class
+template <typename TS /*test settings*/>
 void save_derived(const char *testfile)
 {
-    test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os);
+    typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
 
-    polymorphic_derived1 *rd1 = new polymorphic_derived1;
-    polymorphic_derived2 *rd2 = new polymorphic_derived2;
+    polymorphic_derived1* rd1 = new polymorphic_derived1;
+    polymorphic_derived2* rd2 = new polymorphic_derived2;
 
     std::cout << "saving polymorphic_derived1 (no_rtti)\n";
-    oa << BOOST_SERIALIZATION_NVP(rd1);
+    oa << I3_SERIALIZATION_NVP(rd1);
 
     std::cout << "saving polymorphic_derived2\n";
-    oa << BOOST_SERIALIZATION_NVP(rd2);
+    oa << I3_SERIALIZATION_NVP(rd2);
 
     const polymorphic_base *rb1 =  rd1;
     polymorphic_base *rb2 =  rd2;
     std::cout << "saving polymorphic_derived1 (no_rtti) through base (no_rtti)\n";
-    oa << BOOST_SERIALIZATION_NVP(rb1);
+    oa << I3_SERIALIZATION_NVP(rb1);
     std::cout << "saving polymorphic_derived2 through base\n";
-    oa << BOOST_SERIALIZATION_NVP(rb2);
+    oa << I3_SERIALIZATION_NVP(rb2);
 
     delete rd1;
     delete rd2;
 }
 
+// load derived polymorphic class
+template <typename TS /*test settings*/>
 void load_derived(const char *testfile)
 {
-    test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is);
+    typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
 
     polymorphic_derived1 *rd1 = NULL;
     polymorphic_derived2 *rd2 = NULL;
 
     std::cout << "loading polymorphic_derived1 (no_rtti)\n";
-    ia >> BOOST_SERIALIZATION_NVP(rd1);
-    BOOST_CHECK_MESSAGE(
-        boost::serialization::type_info_implementation<
+    ia >> I3_SERIALIZATION_NVP(rd1);
+    ENSURE(
+        icecube::serialization::type_info_implementation<
             polymorphic_derived1
         >::type::get_const_instance()
         == 
-        * boost::serialization::type_info_implementation<
+        *icecube::serialization::type_info_implementation<
             polymorphic_derived1
         >::type::get_const_instance().get_derived_extended_type_info(*rd1)
         ,
@@ -107,13 +108,13 @@ void load_derived(const char *testfile)
     );
 
     std::cout << "loading polymorphic_derived2\n";
-    ia >> BOOST_SERIALIZATION_NVP(rd2);
-    BOOST_CHECK_MESSAGE(
-        boost::serialization::type_info_implementation<
+    ia >> I3_SERIALIZATION_NVP(rd2);
+    ENSURE(
+        icecube::serialization::type_info_implementation<
             polymorphic_derived2
         >::type::get_const_instance()
         == 
-        * boost::serialization::type_info_implementation<
+        *icecube::serialization::type_info_implementation<
             polymorphic_derived2
         >::type::get_const_instance().get_derived_extended_type_info(*rd2)
         ,
@@ -126,37 +127,37 @@ void load_derived(const char *testfile)
     // effect.  Hence, instances can now be correctly serialized through
     // a base class pointer.
     std::cout << "loading polymorphic_derived1 (no_rtti) through base (no_rtti)\n";
-    ia >> BOOST_SERIALIZATION_NVP(rb1);
+    ia >> I3_SERIALIZATION_NVP(rb1);
 
-    BOOST_CHECK_MESSAGE(
+    ENSURE(
         rb1 == dynamic_cast<polymorphic_base *>(rd1),
         "serialized pointers not correctly restored"
     );
 
-    BOOST_CHECK_MESSAGE(
-        boost::serialization::type_info_implementation<
+    ENSURE(
+        icecube::serialization::type_info_implementation<
             polymorphic_derived1
         >::type::get_const_instance()
         == 
-        * boost::serialization::type_info_implementation<
+        *icecube::serialization::type_info_implementation<
             polymorphic_base
         >::type::get_const_instance().get_derived_extended_type_info(*rb1)
         ,
         "restored pointer b1 not of correct type"
     );
     std::cout << "loading polymorphic_derived2 through base (no_rtti)\n";
-    ia >> BOOST_SERIALIZATION_NVP(rb2);
+    ia >> I3_SERIALIZATION_NVP(rb2);
 
-    BOOST_CHECK_MESSAGE(
+    ENSURE(
         rb2 ==  dynamic_cast<polymorphic_base *>(rd2),
         "serialized pointers not correctly restored"
     );
-    BOOST_CHECK_MESSAGE(
-        boost::serialization::type_info_implementation<
+    ENSURE(
+        icecube::serialization::type_info_implementation<
             polymorphic_derived2
         >::type::get_const_instance()
         == 
-        * boost::serialization::type_info_implementation<
+        *icecube::serialization::type_info_implementation<
             polymorphic_base
         >::type::get_const_instance().get_derived_extended_type_info(*rb2)
         ,
@@ -166,18 +167,35 @@ void load_derived(const char *testfile)
     delete rb2;
 }
 
-int
-test_main( int /* argc */, char* /* argv */[] )
-{
-    const char * testfile = boost::archive::tmpnam(NULL);
-    
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void do_test(){
+    auto testfile = I3Test::testfile("test_mi");
 
-    save_derived(testfile);
-    load_derived(testfile);
+    save_derived<TS>(testfile.c_str());
+    load_derived<TS>(testfile.c_str());
 
-    std::remove(testfile);
-    return EXIT_SUCCESS;
+    std::remove(testfile.c_str());
 }
+
+TEST_GROUP(no_rtti)
+
+#define TEST_SET(name) \
+TEST(name ## _no_rtti){ \
+    do_test<test_settings>(); \
+}
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)
 
 // EOF

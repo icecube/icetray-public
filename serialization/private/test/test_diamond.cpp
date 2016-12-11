@@ -20,7 +20,7 @@ namespace std{
 }
 #endif
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 
 #include <serialization/map.hpp>
 #include <serialization/utility.hpp>
@@ -30,8 +30,10 @@ namespace std{
 #include <serialization/nvp.hpp>
 #include <serialization/export.hpp>
 
+namespace{
 int save_count = 0; // used to detect when base class is saved multiple times
 int load_count = 0; // used to detect when base class is loaded multiple times
+}
 
 class base {
 public:
@@ -45,8 +47,8 @@ public:
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
         std::cout << "Saving base\n";
-        ar << BOOST_SERIALIZATION_NVP(i);
-        ar << BOOST_SERIALIZATION_NVP(m);
+        ar << I3_SERIALIZATION_NVP(i);
+        ar << I3_SERIALIZATION_NVP(m);
         ++save_count;
     }
 
@@ -54,12 +56,12 @@ public:
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         std::cout << "Restoring base\n";
-        ar >> BOOST_SERIALIZATION_NVP(i);
-        ar >> BOOST_SERIALIZATION_NVP(m);
+        ar >> I3_SERIALIZATION_NVP(i);
+        ar >> I3_SERIALIZATION_NVP(m);
         ++load_count;
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
 
     bool operator==(const base& another) const 
     {
@@ -84,7 +86,7 @@ private:
 // (It is concievable that this might someday be detected automatically
 // but for now, this is not done so we have to rely on the programmer
 // to specify this trait)
-BOOST_CLASS_TRACKING(base, track_always)
+I3_CLASS_TRACKING(base, track_always)
 
 class derived1 : virtual public base {
 public:
@@ -92,17 +94,17 @@ public:
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
         std::cout << "Saving derived1\n";
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(base);
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(base);
     }
 
     template<class Archive>
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         std::cout << "Restoring derived1\n";
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(base);
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(base);
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
 };
 
 class derived2 : virtual public base {
@@ -111,17 +113,17 @@ public:
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
         std::cout << "Saving derived2\n";
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(base);
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(base);
     }
 
     template<class Archive>
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         std::cout << "Restoring derived2\n";
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(base);
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(base);
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
 };
 
 class final : public derived1, public derived2 {
@@ -133,72 +135,87 @@ public:
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
         std::cout << "Saving final\n";
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(derived1);    
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(derived2);
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(derived1);
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(derived2);
     }
 
     template<class Archive>
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         std::cout << "Restoring final\n";
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(derived1);  
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(derived2);
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(derived1);
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(derived2);
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
 };
 
-BOOST_CLASS_EXPORT(final)
+I3_CLASS_EXPORT(final)
 
-int
-test_main( int /* argc */, char* /* argv */[] )
-{
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void do_test(){
+    auto testfile = I3Test::testfile("test_diamond");
     
     const final b(3);   
     {
-        test_ostream ofs(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(ofs);
-        oa << boost::serialization::make_nvp("b", b);
+        typename TS::test_ostream ofs(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(ofs, TS::TEST_ARCHIVE_FLAGS);
+        oa << icecube::serialization::make_nvp("b", b);
     }
 
     final b2;
     {
-        test_istream ifs(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(ifs);
-        ia >> boost::serialization::make_nvp("b2", b2);
+        typename TS::test_istream ifs(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(ifs, TS::TEST_ARCHIVE_FLAGS);
+        ia >> icecube::serialization::make_nvp("b2", b2);
     }
-    BOOST_CHECK(1 == save_count);
-    BOOST_CHECK(1 == load_count);
-    BOOST_CHECK(b2 == b);
-    std::remove(testfile);
+    ENSURE(1 == save_count);
+    ENSURE(1 == load_count);
+    ENSURE(b2 == b);
+    std::remove(testfile.c_str());
 
     // do the same test with pointers
-    testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
 
     save_count = 0;
     load_count = 0;
 
     const base* bp = new final( 3 );
     {
-        test_ostream ofs(testfile);    
-        test_oarchive oa(ofs);
-        oa << BOOST_SERIALIZATION_NVP(bp);
+        typename TS::test_ostream ofs(testfile);
+        typename TS::test_oarchive oa(ofs);
+        oa << I3_SERIALIZATION_NVP(bp);
     }
 
     base* bp2;
     {
-        test_istream ifs(testfile);
-        test_iarchive ia(ifs);
-        ia >> BOOST_SERIALIZATION_NVP(bp2);
+        typename TS::test_istream ifs(testfile);
+        typename TS::test_iarchive ia(ifs);
+        ia >> I3_SERIALIZATION_NVP(bp2);
     }
 
-    BOOST_CHECK(1 == save_count);
-    BOOST_CHECK(1 == load_count);
-    BOOST_CHECK(*bp2 == *bp);
-    std::remove(testfile);
-
-    return EXIT_SUCCESS;
+    ENSURE(1 == save_count);
+    ENSURE(1 == load_count);
+    ENSURE(*bp2 == *bp);
+    std::remove(testfile.c_str());
 }
+
+TEST_GROUP(test_diamond)
+
+#define TEST_SET(name) \
+TEST(name ## _test_diamond){ \
+    do_test<test_settings>(); \
+}
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)

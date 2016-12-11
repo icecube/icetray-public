@@ -9,7 +9,7 @@
 // compile only
 
 #include <archive/text_iarchive.hpp>
-using namespace boost::archive;
+using namespace icecube::archive;
 
 struct A {
     template<class Archive>

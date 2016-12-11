@@ -32,14 +32,17 @@ namespace std{
 #endif
 
 #include <archive/archive_exception.hpp>
-#include "test_tools.hpp"
+#include <serialization/access.hpp>
+#include <serialization/nvp.hpp>
+#include <I3Test.h>
 
+namespace{
 ///////////////////////////////////////////////////////
 // simple class test - using non-intrusive syntax
 // illustrates the usage of the non-intrusve syntax
 class A
 {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
 
     // note const values can only be initialized with a non
     // non-default constructor
@@ -56,12 +59,12 @@ class A
 
     template<class Archive>
     void serialize(Archive & ar,const unsigned int /* file_version */){
-        ar & BOOST_SERIALIZATION_NVP(s);
-        ar & BOOST_SERIALIZATION_NVP(t);
-        ar & BOOST_SERIALIZATION_NVP(u);
-        ar & BOOST_SERIALIZATION_NVP(v);
-        ar & BOOST_SERIALIZATION_NVP(w);
-        ar & BOOST_SERIALIZATION_NVP(x);
+        ar & I3_SERIALIZATION_NVP(s);
+        ar & I3_SERIALIZATION_NVP(t);
+        ar & I3_SERIALIZATION_NVP(u);
+        ar & I3_SERIALIZATION_NVP(v);
+        ar & I3_SERIALIZATION_NVP(w);
+        ar & I3_SERIALIZATION_NVP(x);
     }
     A(const A & rhs);
     A & operator=(const A & rhs);
@@ -120,18 +123,19 @@ bool A::operator<(const A &rhs) const
         return false;
     return false;
 }
+}
 
-namespace boost { 
+namespace icecube {
 namespace serialization {
 
 template<class Archive>
 inline void save_construct_data(
     Archive & ar, 
     const A * a, 
-    const BOOST_PFTO unsigned int /* file_version */
+    const I3_PFTO unsigned int /* file_version */
 ){
     // variable used for construction
-    ar << boost::serialization::make_nvp("i", a->get_i());
+    ar << icecube::serialization::make_nvp("i", a->get_i());
 }
 
 template<class Archive>
@@ -141,58 +145,79 @@ inline void load_construct_data(
     const unsigned int /* file_version */
 ){
     int i;
-    ar >> boost::serialization::make_nvp("i", i);
+    ar >> icecube::serialization::make_nvp("i", i);
     ::new(a)A(i);
 }
 
 } // serialization
 } // namespace boost
 
-void save(const char * testfile){
-    test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
+template <typename TS /*test settings*/>
+void save(const char* testfile){
+    typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
     A a(2);
 
-    oa << BOOST_SERIALIZATION_NVP(a);
+    oa << I3_SERIALIZATION_NVP(a);
     
     // save a copy pointer to this item
-    A *pa1 = &a;
-    oa << BOOST_SERIALIZATION_NVP(pa1);
+    A* pa1 = &a;
+    oa << I3_SERIALIZATION_NVP(pa1);
 
     // save pointer to a new object
-    A *pa2 = new A(4);
-    oa << BOOST_SERIALIZATION_NVP(pa2);
+    A* pa2 = new A(4);
+    oa << I3_SERIALIZATION_NVP(pa2);
 
     delete pa2;
 }
+
+template <typename TS /*test settings*/>
 void load(const char * testfile){
-    test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
+    typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
 
     A a(4);
-    ia >> BOOST_SERIALIZATION_NVP(a);
+    ia >> I3_SERIALIZATION_NVP(a);
 
-    A *pa1;
-    ia >> BOOST_SERIALIZATION_NVP(pa1);
-    BOOST_CHECK_MESSAGE(pa1 == &a, "Copy of pointer not correctly restored");
+    A* pa1;
+    ia >> I3_SERIALIZATION_NVP(pa1);
+    ENSURE(pa1 == &a, "Copy of pointer not correctly restored");
 
-    A *pa2;
-    ia >> BOOST_SERIALIZATION_NVP(pa2);
-    BOOST_CHECK_MESSAGE(pa2 != &a, "Pointer not correctly restored");
+    A* pa2;
+    ia >> I3_SERIALIZATION_NVP(pa2);
+    ENSURE(pa2 != &a, "Pointer not correctly restored");
 
     delete pa2;
 }
 
-int
-test_main( int /* argc */, char* /* argv */[] )
-{
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
-    save(testfile);
-    load(testfile);
-    BOOST_CHECK(0 == A::count);
-    std::remove(testfile);
-    return EXIT_SUCCESS;
+template <typename TS /*test settings*/>
+void do_test(){
+    auto testfile = I3Test::testfile("test_non_default_ctor");
+    save<TS>(testfile.c_str());
+    load<TS>(testfile.c_str());
+    ENSURE(0 == A::count);
+    std::remove(testfile.c_str());
 }
+
+TEST_GROUP(test_non_default_ctor)
+
+#define TEST_SET(name) \
+TEST(name ## _test_non_default_ctor){ \
+    do_test<test_settings>(); \
+}
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)
 
 // EOF

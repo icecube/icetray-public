@@ -6,8 +6,17 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 // xml_warchive
 #include <archive/xml_woarchive.hpp>
-typedef boost::archive::xml_woarchive test_oarchive;
-typedef std::wofstream test_ostream;
 #include <archive/xml_wiarchive.hpp>
-typedef boost::archive::xml_wiarchive test_iarchive;
-typedef std::wifstream test_istream;
+
+struct xml_warchive_test_settings{
+    typedef icecube::archive::xml_woarchive test_oarchive;
+    typedef std::wofstream test_ostream;
+    
+    typedef icecube::archive::xml_wiarchive test_iarchive;
+    typedef std::wifstream test_istream;
+    
+    static constexpr int TEST_STREAM_FLAGS = 0;
+    static constexpr int TEST_ARCHIVE_FLAGS = 0;
+};
+
+#define test_settings xml_warchive_test_settings

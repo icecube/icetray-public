@@ -7,24 +7,25 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 // should pass compilation and execution
-namespace boost {
+namespace icecube {
 namespace archive {
     class polymorphic_oarchive;
     class polymorphic_iarchive;
 }
 }
 
+namespace polymorphic2{
 struct A {
 public:
     A() {}
     virtual ~A() {}
 
     void serialize(
-        boost::archive::polymorphic_oarchive &ar, 
+        icecube::archive::polymorphic_oarchive &ar,
         const unsigned int /*version*/
     );
     void serialize(
-        boost::archive::polymorphic_iarchive &ar, 
+        icecube::archive::polymorphic_iarchive &ar,
         const unsigned int /*version*/
     );
 
@@ -33,11 +34,12 @@ public:
 
 struct B : A {
     void serialize(
-        boost::archive::polymorphic_oarchive &ar, 
+        icecube::archive::polymorphic_oarchive &ar,
         const unsigned int /*version*/
     );
     void serialize(
-        boost::archive::polymorphic_iarchive &ar, 
+        icecube::archive::polymorphic_iarchive &ar,
         const unsigned int /*version*/
     );
 };
+}

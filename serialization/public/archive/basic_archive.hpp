@@ -34,7 +34,7 @@ namespace archive {
 #endif
 
 /* NOTE : Warning  : Warning : Warning : Warning : Warning
- * Don't ever changes this.  If you do, they previously created
+ * Don't ever change this.  If you do, previously created
  * binary archives won't be readable !!!
  */
 class library_version_type {

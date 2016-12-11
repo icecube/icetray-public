@@ -32,7 +32,7 @@ namespace std{
 
 #include <archive/archive_exception.hpp>
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 
 #include <serialization/nvp.hpp>
 #include <serialization/set.hpp>
@@ -40,51 +40,49 @@ namespace std{
 #include "A.hpp"
 #include "A.ipp"
 
-void
-test_set(){
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void test_set(){
+    auto testfile = I3Test::testfile("test_set");
 
     // test array of objects
     std::set<A> aset;
     aset.insert(A());
     aset.insert(A());
     {   
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("aset", aset);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << icecube::serialization::make_nvp("aset", aset);
     }
     std::set<A> aset1;
     {
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("aset", aset1);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> icecube::serialization::make_nvp("aset", aset1);
     }
-    BOOST_CHECK(aset == aset1);
-    std::remove(testfile);    
+    ENSURE(aset == aset1);
+    std::remove(testfile.c_str());
 }
 
-void
-test_multiset(){
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void test_multiset(){
+    auto testfile = I3Test::testfile("test_multiset");
 
     std::multiset<A> amultiset;
     amultiset.insert(A());
     amultiset.insert(A());
     {   
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("amultiset", amultiset);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << icecube::serialization::make_nvp("amultiset", amultiset);
     }
     std::multiset<A> amultiset1;
     {
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("amultiset", amultiset1);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> icecube::serialization::make_nvp("amultiset", amultiset1);
     }
-    BOOST_CHECK(amultiset == amultiset1);
-    std::remove(testfile);
+    ENSURE(amultiset == amultiset1);
+    std::remove(testfile.c_str());
 }
 
 #ifdef BOOST_HAS_HASH
@@ -100,10 +98,9 @@ namespace BOOST_STD_EXTENSION_NAMESPACE {
     };
 }
 
-void
-test_hash_set(){
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void test_hash_set(){
+    auto testfile = I3Test::testfile("test_hash_set");
 
     // test array of objects
     BOOST_STD_EXTENSION_NAMESPACE::hash_set<A> ahash_set;
@@ -111,15 +108,15 @@ test_hash_set(){
     ahash_set.insert(a);
     ahash_set.insert(a1);
     {   
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("ahash_set", ahash_set);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << icecube::serialization::make_nvp("ahash_set", ahash_set);
     }
     BOOST_STD_EXTENSION_NAMESPACE::hash_set<A> ahash_set1;
     {
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("ahash_set", ahash_set1);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> icecube::serialization::make_nvp("ahash_set", ahash_set1);
     }
     std::vector<A> tvec, tvec1;
     tvec.clear();
@@ -128,28 +125,27 @@ test_hash_set(){
     std::sort(tvec.begin(), tvec.end());
     std::copy(ahash_set1.begin(), ahash_set1.end(), std::back_inserter(tvec1));
     std::sort(tvec1.begin(), tvec1.end());
-    BOOST_CHECK(tvec == tvec1);
-    std::remove(testfile);
+    ENSURE(tvec == tvec1);
+    std::remove(testfile.c_str());
 }
 
-void
-test_hash_multiset(){
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void test_hash_multiset(){
+    auto testfile = I3Test::testfile("test_hash_multiset");
 
     BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<A> ahash_multiset;
     ahash_multiset.insert(A());
     ahash_multiset.insert(A());
     {   
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("ahash_multiset", ahash_multiset);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << icecube::serialization::make_nvp("ahash_multiset", ahash_multiset);
     }
     BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<A> ahash_multiset1;
     {
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("ahash_multiset", ahash_multiset1);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> icecube::serialization::make_nvp("ahash_multiset", ahash_multiset1);
     }
 
     std::vector<A> tvec, tvec1;
@@ -159,13 +155,11 @@ test_hash_multiset(){
     std::sort(tvec.begin(), tvec.end());
     std::copy(ahash_multiset1.begin(), ahash_multiset1.end(), std::back_inserter(tvec1));
     std::sort(tvec1.begin(), tvec1.end());
-    BOOST_CHECK(tvec == tvec1);
+    ENSURE(tvec == tvec1);
 
-    std::remove(testfile);
+    std::remove(testfile.c_str());
 }
 #endif
-
-#ifndef BOOST_NO_CXX11_HDR_UNORDERED_SET
 
 #include <serialization/unordered_set.hpp>
 #include <functional> // requires changeset [69520]; Ticket #5254
@@ -179,10 +173,9 @@ namespace std {
     };
 } // namespace std
 
-void
-test_unordered_set(){
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void test_unordered_set(){
+    auto testfile = I3Test::testfile("test_unordered_set");
 
     // test array of objects
     std::unordered_set<A> anunordered_set;
@@ -190,15 +183,15 @@ test_unordered_set(){
     anunordered_set.insert(a);
     anunordered_set.insert(a1);
     {   
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("anunordered_set", anunordered_set);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << icecube::serialization::make_nvp("anunordered_set", anunordered_set);
     }
     std::unordered_set<A> anunordered_set1;
     {
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("anunordered_set", anunordered_set1);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> icecube::serialization::make_nvp("anunordered_set", anunordered_set1);
     }
     std::vector<A> tvec, tvec1;
     tvec.clear();
@@ -207,28 +200,27 @@ test_unordered_set(){
     std::sort(tvec.begin(), tvec.end());
     std::copy(anunordered_set1.begin(), anunordered_set1.end(), std::back_inserter(tvec1));
     std::sort(tvec1.begin(), tvec1.end());
-    BOOST_CHECK(tvec == tvec1);
-    std::remove(testfile);
+    ENSURE(tvec == tvec1);
+    std::remove(testfile.c_str());
 }
 
-void
-test_unordered_multiset(){
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void test_unordered_multiset(){
+    auto testfile = I3Test::testfile("test_unordered_multiset");
 
     std::unordered_multiset<A> anunordered_multiset;
     anunordered_multiset.insert(A());
     anunordered_multiset.insert(A());
     {   
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("anunordered_multiset", anunordered_multiset);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << icecube::serialization::make_nvp("anunordered_multiset", anunordered_multiset);
     }
     std::unordered_multiset<A> anunordered_multiset1;
     {
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("anunordered_multiset", anunordered_multiset1);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> icecube::serialization::make_nvp("anunordered_multiset", anunordered_multiset1);
     }
 
     std::vector<A> tvec, tvec1;
@@ -238,25 +230,50 @@ test_unordered_multiset(){
     std::sort(tvec.begin(), tvec.end());
     std::copy(anunordered_multiset1.begin(), anunordered_multiset1.end(), std::back_inserter(tvec1));
     std::sort(tvec1.begin(), tvec1.end());
-    BOOST_CHECK(tvec == tvec1);
+    ENSURE(tvec == tvec1);
 
-    std::remove(testfile);
+    std::remove(testfile.c_str());
 }
+
+TEST_GROUP(test_map)
+
+#ifdef BOOST_HAS_HASH
+    #define HASH_SET_TEST(name) \
+    TEST(name ## _hash_set){ \
+        test_hash_setp<test_settings>(); \
+    } \
+    TEST(name ## _hash_multiset){ \
+        test_hash_multiset<test_settings>(); \
+    }
+#else
+    #define HASH_SET_TEST(name)
 #endif
 
-int test_main( int /* argc */, char* /* argv */[] ){
-    test_set();
-    test_multiset();
-    
-    #ifdef BOOST_HAS_HASH
-    test_hash_set();
-    test_hash_multiset();
-    #endif
-    
-    #ifndef BOOST_NO_CXX11_HDR_UNORDERED_SET
-	test_unordered_set();
-	test_unordered_multiset();
-    #endif
-    
-    return EXIT_SUCCESS;
+#define TEST_SET(name) \
+TEST(name ## _map){ \
+    test_set<test_settings>(); \
+} \
+TEST(name ## _multiset){ \
+    test_multiset<test_settings>(); \
+} \
+HASH_SET_TEST(name) \
+TEST(name ## _unordered_set){ \
+    test_unordered_set<test_settings>(); \
+} \
+TEST(name ## _hash_multiset){ \
+    test_unordered_multiset<test_settings>(); \
 }
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)

@@ -12,7 +12,7 @@
 #include <serialization/nvp.hpp>
 #include <serialization/tracking.hpp>
 
-using namespace boost::archive;
+using namespace icecube::archive;
 
 struct A {
     template<class Archive>
@@ -21,6 +21,6 @@ struct A {
 };
 
 void f1(text_oarchive & oa, A & a){
-    oa << BOOST_SERIALIZATION_NVP(a);
+    oa << I3_SERIALIZATION_NVP(a);
 }
 

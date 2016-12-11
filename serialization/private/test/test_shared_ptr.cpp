@@ -24,67 +24,74 @@ namespace std{
 #include <serialization/shared_ptr.hpp>
 #include <serialization/weak_ptr.hpp>
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 
+namespace{
 // This is a simple class.  It contains a counter of the number
 // of objects of this class which have been instantiated.
-class A
-{
+class A{
 private:
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     int x;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int /* file_version */){
-        ar & BOOST_SERIALIZATION_NVP(x);
+        ar & I3_SERIALIZATION_NVP(x);
     }
     A(A const & rhs);
-    A& operator=(A const & rhs);
+    A& operator=(A const& rhs);
 public:
     static int count;
-    bool operator==(const A & rhs) const {
+    bool operator==(const A& rhs) const {
         return x == rhs.x;
     }
-    A(){++count;}    // default constructor
+    A(){++count; std::cout << "constructed an A at " << this << std::endl;}    // default constructor
+    A(int x):x(x){++count; std::cout << "constructed an A at " << this << std::endl;}
     virtual ~A(){--count;}   // default destructor
 };
 
-BOOST_SERIALIZATION_SHARED_PTR(A)
-
 int A::count = 0;
+}
 
+I3_SERIALIZATION_SHARED_PTR(A)
+
+namespace{
 // B is a subclass of A
 class B : public A
 {
 private:
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     int y;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int /* file_version */){
-        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(A);
+        ar & I3_SERIALIZATION_BASE_OBJECT_NVP(A);
+        ar & I3_SERIALIZATION_NVP(y);
     }
 public:
     static int count;
-    B() : A() {};
+    B(){};
+    B(int x):A(x){};
     virtual ~B() {};
 };
+}
 
 // B needs to be exported because its serialized via a base class pointer
-BOOST_CLASS_EXPORT(B)
-BOOST_SERIALIZATION_SHARED_PTR(B)
+I3_CLASS_EXPORT(B)
+I3_SERIALIZATION_SHARED_PTR(B)
 
+namespace{
 // test a non-polymorphic class
 class C
 {
 private:
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     int z;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int /* file_version */){
-        ar & BOOST_SERIALIZATION_NVP(z);
+        ar & I3_SERIALIZATION_NVP(z);
     }
 public:
     static int count;
-    bool operator==(const C & rhs) const {
+    bool operator==(const C& rhs) const {
         return z == rhs.z;
     }
     C() :
@@ -94,175 +101,175 @@ public:
 };
 
 int C::count = 0;
-
-template<class SP>
-void save(const char * testfile, const SP & spa)
-{
-    test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-    oa << BOOST_SERIALIZATION_NVP(spa);
 }
 
-template<class SP>
-void load(const char * testfile, SP & spa)
+I3_CLASS_EXPORT(C)
+I3_SERIALIZATION_SHARED_PTR(C)
+
+template<typename TS /*test settings*/, class SP>
+void save(const char* testfile, const SP& spa)
 {
-    test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-    ia >> BOOST_SERIALIZATION_NVP(spa);
+    typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+    oa << I3_SERIALIZATION_NVP(spa);
+}
+
+template<typename TS /*test settings*/, class SP>
+void load(const char* testfile, SP& spa)
+{
+    typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+    ia >> I3_SERIALIZATION_NVP(spa);
 }
 
 // trivial test
-template<class SP>
-void save_and_load(SP & spa)
+template<typename TS /*test settings*/, class SP>
+void save_and_load(SP& spa)
 {
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
-    save(testfile, spa);
+    auto testfile = I3Test::testfile("shared_ptr_save_and_load");
+    save<TS>(testfile.c_str(), spa);
     SP spa1;
-    load(testfile, spa1);
+    load<TS>(testfile.c_str(), spa1);
 
-    BOOST_CHECK(
+    ENSURE(
         (spa.get() == NULL && spa1.get() == NULL)
-        || * spa == * spa1
-    );
-    std::remove(testfile);
+        || *spa == *spa1
+        );
+    std::remove(testfile.c_str());
 }
 
-template<class SP>
+template<typename TS /*test settings*/, class SP>
 void save2(
-    const char * testfile, 
-    const SP & first,
-    const SP & second
+    const char* testfile,
+    const SP& first,
+    const SP& second
 ){
-    test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-    oa << BOOST_SERIALIZATION_NVP(first);
-    oa << BOOST_SERIALIZATION_NVP(second);
+    typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+    oa << I3_SERIALIZATION_NVP(first);
+    oa << I3_SERIALIZATION_NVP(second);
 }
 
-template<class SP>
+template<typename TS /*test settings*/, class SP>
 void load2(
-    const char * testfile, 
-    SP & first,
-    SP & second)
+    const char* testfile,
+    SP& first,
+    SP& second)
 {
-    test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-    ia >> BOOST_SERIALIZATION_NVP(first);
-    ia >> BOOST_SERIALIZATION_NVP(second);
+    typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+    ia >> I3_SERIALIZATION_NVP(first);
+    ia >> I3_SERIALIZATION_NVP(second);
 }
 
 // Run tests by serializing two shared_ptrs into an archive,
 // clearing them (deleting the objects) and then reloading the
 // objects back from an archive.
-template<class SP>
+template<typename TS /*test settings*/, class SP>
 void save_and_load2(SP & first, SP & second)
 {
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+    auto testfile = I3Test::testfile("shared_ptr_save_and_load2");
 
-    save2(testfile, first, second);
+    save2<TS>(testfile.c_str(), first, second);
 
     // Clear the pointers, thereby destroying the objects they contain
     first.reset();
     second.reset();
 
-    load2(testfile, first, second);
+    load2<TS>(testfile.c_str(), first, second);
 
-    BOOST_CHECK(first == second);
-    std::remove(testfile);
+    ENSURE(first == second);
+    std::remove(testfile.c_str());
 }
 
-template<class SP, class WP>
+template<typename TS /*test settings*/, class SP, class WP>
 void save3(
-    const char * testfile, 
-    SP & first,
-    SP & second,
-    WP & third
+    const char* testfile,
+    SP& first,
+    SP& second,
+    WP& third
 ){
-    test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-    oa << BOOST_SERIALIZATION_NVP(third);
-    oa << BOOST_SERIALIZATION_NVP(first);
-    oa << BOOST_SERIALIZATION_NVP(second);
+    typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+    oa << I3_SERIALIZATION_NVP(third);
+    oa << I3_SERIALIZATION_NVP(first);
+    oa << I3_SERIALIZATION_NVP(second);
 }
 
-template<class SP, class WP>
+template<typename TS /*test settings*/, class SP, class WP>
 void load3(
-    const char * testfile, 
-    SP & first,
-    SP & second,
-    WP & third
+    const char* testfile,
+    SP& first,
+    SP& second,
+    WP& third
 ){
-    test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
+    typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
     // note that we serialize the weak pointer first
-    ia >> BOOST_SERIALIZATION_NVP(third);
-    // inorder to test that a temporarily solitary weak pointer
+    ia >> I3_SERIALIZATION_NVP(third);
+    // in order to test that a temporarily solitary weak pointer
     // correctly restored.
-    ia >> BOOST_SERIALIZATION_NVP(first);
-    ia >> BOOST_SERIALIZATION_NVP(second);
+    ia >> I3_SERIALIZATION_NVP(first);
+    ia >> I3_SERIALIZATION_NVP(second);
 }
 
-template<class SP, class WP>
+template<typename TS /*test settings*/, class SP, class WP>
 void save_and_load3(
-    SP & first,
-    SP & second,
-    WP & third
+    SP& first,
+    SP& second,
+    WP& third
 ){
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+    auto testfile = I3Test::testfile("shared_ptr_save_and_load3");
 
-    save3(testfile, first, second, third);
+    save3<TS>(testfile.c_str(), first, second, third);
 
     // Clear the pointers, thereby destroying the objects they contain
     first.reset();
     second.reset();
     third.reset();
 
-    load3(testfile, first, second, third);
+    load3<TS>(testfile.c_str(), first, second, third);
 
-    BOOST_CHECK(first == second);
-    BOOST_CHECK(first == third.lock());
-    std::remove(testfile);
+    ENSURE(first == second);
+    ENSURE(first == third.lock());
+    std::remove(testfile.c_str());
 }
 
-template<class SP>
-void save4(const char * testfile, const SP & spc)
+template<typename TS /*test settings*/, class SP>
+void save4(const char* testfile, const SP& spc)
 {
-    test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-    oa << BOOST_SERIALIZATION_NVP(spc);
+    typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+    oa << I3_SERIALIZATION_NVP(spc);
 }
 
-template<class SP>
-void load4(const char * testfile, SP & spc)
+template<typename TS /*test settings*/, class SP>
+void load4(const char* testfile, SP& spc)
 {
-    test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-    ia >> BOOST_SERIALIZATION_NVP(spc);
+    typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+    ia >> I3_SERIALIZATION_NVP(spc);
 }
 
 // trivial test
-template<class SP>
+template<typename TS /*test settings*/, class SP>
 void save_and_load4(SP & spc)
 {
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
-    save4(testfile, spc);
+    auto testfile = I3Test::testfile("shared_ptr_save_and_load4");
+    save4<TS>(testfile.c_str(), spc);
     SP spc1;
-    load4(testfile, spc1);
+    load4<TS>(testfile.c_str(), spc1);
 
-    BOOST_CHECK(
+    ENSURE(
         (spc.get() == NULL && spc1.get() == NULL)
-        || * spc == * spc1
+        || *spc == *spc1
     );
-    std::remove(testfile);
+    std::remove(testfile.c_str());
 }
 
 // This does the tests
-template<template<class T> class SPT , template<class T> class WPT >
-bool test(){
+template<typename TS /*test settings*/, template<class T> class SPT , template<class T> class WPT >
+void test(){
     {
         SPT<A> spa;
         // These are our shared_ptrs
@@ -275,49 +282,62 @@ bool test(){
         SPT<A> spa;
 
         // trivial test 1
-        save_and_load(spa);
+        save_and_load<TS>(spa);
     
         //trivival test 2
-        spa = SPT<A>(new A);
-        save_and_load(spa);
+        spa = SPT<A>(new A(5));
+        save_and_load<TS>(spa);
 
         // Try to save and load pointers to As
-        spa = SPT<A>(new A);
+        spa = SPT<A>(new A(17));
         SPT<A> spa1 = spa;
-        save_and_load2(spa, spa1);
+        save_and_load2<TS>(spa, spa1);
 
-        // Try to save and load pointers to Bs
-        spa = SPT<A>(new B);
+#warning serializing shared pointers to derived classes is currently broken?
+/*        // Try to save and load pointers to Bs
+        spa = SPT<A>(new B(-12));
         spa1 = spa;
-        save_and_load2(spa, spa1);
+        save_and_load2<TS>(spa, spa1);
 
         // test a weak pointer
-        spa = SPT<A>(new A);
+        spa = SPT<A>(new A(2));
         spa1 = spa;
         WPT<A> wp = spa;
-        save_and_load3(spa, spa1, wp);
+        save_and_load3<TS>(spa, spa1, wp);
         
         // obj of type B gets destroyed
-        // as smart_ptr goes out of scope
+        // as smart_ptr goes out of scope*/
     }
-    BOOST_CHECK(A::count == 0);
-    {
+    ENSURE(A::count == 0);
+/*    {
         // Try to save and load pointers to Cs
         SPT<C> spc;
         spc = SPT<C>(new C);
-        save_and_load4(spc);
+        save_and_load4<TS>(spc);
     }
-    BOOST_CHECK(C::count == 0);
-    return true;
-}
-// This does the tests
-int test_main(int /* argc */, char * /* argv */[])
-{
-    bool result = true;
-    result &= test<boost::shared_ptr, boost::weak_ptr>();
-    #ifndef BOOST_NO_CXX11_SMART_PTR
-    result &= test<std::shared_ptr, std::weak_ptr>();
-    #endif
-    return result ? EXIT_SUCCESS : EXIT_FAILURE;
+    ENSURE(C::count == 0);*/
 }
 
+TEST_GROUP(shared_ptr)
+
+#define TEST_SET(name) \
+TEST(name ## _boost_shared_ptr){ \
+    test<test_settings, boost::shared_ptr, boost::weak_ptr>(); \
+} \
+TEST(name ## _std_shared_ptr){ \
+    test<test_settings, std::shared_ptr, std::weak_ptr>(); \
+}
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)

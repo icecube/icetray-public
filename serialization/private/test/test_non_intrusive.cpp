@@ -31,8 +31,10 @@ namespace std{
 #endif
 
 #include <archive/archive_exception.hpp>
-#include "test_tools.hpp"
+#include <serialization/nvp.hpp>
+#include <I3Test.h>
 
+namespace{
 ///////////////////////////////////////////////////////
 // simple class test - using non-intrusive syntax
 // illustrates the usage of the non-intrusve syntax
@@ -88,12 +90,13 @@ bool A::operator<(const A &rhs) const
         return false;
     return false;
 }
+}
 
 // note the following:
 
 // function specializations must be defined in the appropriate
 // namespace - boost::serialization
-namespace boost { 
+namespace icecube {
 namespace serialization {
 
 // This first set of overrides should work with all compilers.
@@ -113,62 +116,82 @@ void serialize(
     A & a, 
     const unsigned int /* file_version */
 ){
-    ar & boost::serialization::make_nvp("s", a.s);
-    ar & boost::serialization::make_nvp("t", a.t);
-    ar & boost::serialization::make_nvp("u", a.u);
-    ar & boost::serialization::make_nvp("v", a.v);
-    ar & boost::serialization::make_nvp("w", a.w);
-    ar & boost::serialization::make_nvp("x", a.x);
+    ar & icecube::serialization::make_nvp("s", a.s);
+    ar & icecube::serialization::make_nvp("t", a.t);
+    ar & icecube::serialization::make_nvp("u", a.u);
+    ar & icecube::serialization::make_nvp("v", a.v);
+    ar & icecube::serialization::make_nvp("w", a.w);
+    ar & icecube::serialization::make_nvp("x", a.x);
 }
 
 } // serialization
 } // namespace boost
 
+template <typename TS /*test settings*/>
 void save(const char * testfile){
-    test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
+    typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
     A a;
 
-    oa << BOOST_SERIALIZATION_NVP(a);
+    oa << I3_SERIALIZATION_NVP(a);
     
     // save a copy pointer to this item
-    A *pa1 = &a;
-    oa << BOOST_SERIALIZATION_NVP(pa1);
+    A* pa1 = &a;
+    oa << I3_SERIALIZATION_NVP(pa1);
 
     // save pointer to a new object
-    A *pa2 = new A();
-    oa << BOOST_SERIALIZATION_NVP(pa2);
+    A* pa2 = new A();
+    oa << I3_SERIALIZATION_NVP(pa2);
 
     delete pa2;
 }
 
+template <typename TS /*test settings*/>
 void load(const char * testfile){
-    test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
+    typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
 
     A a;
-    ia >> BOOST_SERIALIZATION_NVP(a);
+    ia >> I3_SERIALIZATION_NVP(a);
 
-    A *pa1;
-    ia >> BOOST_SERIALIZATION_NVP(pa1);
-    BOOST_CHECK_MESSAGE(pa1 == &a, "Copy of pointer not correctly restored");
+    A* pa1;
+    ia >> I3_SERIALIZATION_NVP(pa1);
+    ENSURE(pa1 == &a, "Copy of pointer not correctly restored");
 
-    A *pa2;
-    ia >> BOOST_SERIALIZATION_NVP(pa2);
-    BOOST_CHECK_MESSAGE(pa2 != &a, "Pointer not correctly restored");
+    A* pa2;
+    ia >> I3_SERIALIZATION_NVP(pa2);
+    ENSURE(pa2 != &a, "Pointer not correctly restored");
 
     delete pa2;
 }
 
-int
-test_main( int /* argc */, char* /* argv */[] )
-{
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
-    save(testfile);
-    load(testfile);
-    std::remove(testfile);
-    return EXIT_SUCCESS;
+template <typename TS /*test settings*/>
+void do_test(){
+    auto testfile = I3Test::testfile("test_complex");
+    save<TS>(testfile.c_str());
+    load<TS>(testfile.c_str());
+    std::remove(testfile.c_str());
 }
+
+TEST_GROUP(test_non_intrusive)
+
+#define TEST_SET(name) \
+TEST(name ## _test_non_intrusive){ \
+    do_test<test_settings>(); \
+}
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)
 
 // EOF

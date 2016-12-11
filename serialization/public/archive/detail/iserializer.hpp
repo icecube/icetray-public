@@ -202,8 +202,8 @@ struct heap_allocation {
     // boost::has_new_operator< T > doesn't work on these compilers
     #if ( BOOST_VERSION<103900 || defined(__BORLANDC__) || BOOST_WORKAROUND(__IBMCPP__, < 1210) || defined(__SUNPRO_CC) && (__SUNPRO_CC < 0x590) )
         // This doesn't handle operator new overload for class T
-        static T * invoke_new(){
-            return static_cast<T *>(operator new(sizeof(T)));
+        static T* invoke_new(){
+            return static_cast<T*>(operator new(sizeof(T)));
         }
         static void invoke_delete(T *t){
             (operator delete(t));
@@ -214,9 +214,9 @@ struct heap_allocation {
         // as a class specific new operator.
         struct has_new_operator {
             static T * invoke_new() {
-                return static_cast<T *>((T::operator new)(sizeof(T)));
+                return static_cast<T*>((T::operator new)(sizeof(T)));
             }
-            static void invoke_delete(T * t) {
+            static void invoke_delete(T* t) {
                 // if compilation fails here, the likely cause that the class
                 // T has a class specific new operator but no class specific
                 // delete operator which matches the following signature.  Fix
@@ -234,14 +234,14 @@ struct heap_allocation {
         };
         struct doesnt_have_new_operator {
             static T* invoke_new() {
-                return static_cast<T *>(operator new(sizeof(T)));
+                return static_cast<T*>(operator new(sizeof(T)));
             }
             static void invoke_delete(T * t) {
                 // Note: I'm reliance upon automatic conversion from T * to void * here
                 (operator delete)(t);
             }
         };
-        static T * invoke_new() {
+        static T* invoke_new() {
             typedef typename
                 boost::mpl::eval_if<
                     boost::has_new_operator< T >,
@@ -250,7 +250,7 @@ struct heap_allocation {
                 >::type typex;
             return typex::invoke_new();
         }
-        static void invoke_delete(T *t) {
+        static void invoke_delete(T* t) {
             typedef typename
                 boost::mpl::eval_if<
                     boost::has_new_operator< T >,
@@ -285,11 +285,9 @@ class pointer_iserializer :
     public basic_pointer_iserializer
 {
 private:
-    virtual void * heap_allocation() const {
+    virtual void* heap_allocation() const {
         detail::heap_allocation<T> h;
-        T * t = h.get();
-        h.release();
-        return t;
+        return(h.release());
     }
     virtual const basic_iserializer & get_basic_serializer() const {
         return icecube::serialization::singleton<

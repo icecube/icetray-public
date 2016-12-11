@@ -20,8 +20,6 @@ namespace std{
 }
 #endif
 
-#include "test_tools.hpp"
-
 #include <serialization/map.hpp>
 #include <serialization/utility.hpp>
 #include <serialization/split_member.hpp>
@@ -30,8 +28,12 @@ namespace std{
 #include <serialization/nvp.hpp>
 #include <serialization/export.hpp>
 
+#include <I3Test.h>
+
+namespace{
 int save_count = 0; // used to detect when EXnLevel1 class is saved multiple times
 int load_count = 0; // used to detect when EXnLevel1 class is loaded multiple times
+}
 
 // inheritance structure
 //
@@ -59,8 +61,8 @@ public:
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
         std::cout << "Saving EX1Level1\n";
-        ar << BOOST_SERIALIZATION_NVP(i);
-        ar << BOOST_SERIALIZATION_NVP(m);
+        ar << I3_SERIALIZATION_NVP(i);
+        ar << I3_SERIALIZATION_NVP(m);
         ++save_count;
     }
 
@@ -68,12 +70,12 @@ public:
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         std::cout << "Restoring EX1Level1\n";
-        ar >> BOOST_SERIALIZATION_NVP(i);
-        ar >> BOOST_SERIALIZATION_NVP(m);
+        ar >> I3_SERIALIZATION_NVP(i);
+        ar >> I3_SERIALIZATION_NVP(m);
         ++load_count;
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
 
     bool operator==(const EX1Level1& another) const 
     {
@@ -98,7 +100,7 @@ private:
 // (It is concievable that this might someday be detected automatically
 // but for now, this is not done so we have to rely on the programmer
 // to specify this trait)
-BOOST_CLASS_TRACKING(EX1Level1, track_always)
+I3_CLASS_TRACKING(EX1Level1, track_always)
 
 class EX1Level2_A : virtual public EX1Level1 {
 public:
@@ -106,17 +108,17 @@ public:
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
         std::cout << "Saving EX1Level2_A\n";
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX1Level1);
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(EX1Level1);
     }
 
     template<class Archive>
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         std::cout << "Restoring EX1Level2_A\n";
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX1Level1);
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(EX1Level1);
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
 };
 
 class EX1Level2_B : virtual public EX1Level1 {
@@ -125,17 +127,17 @@ public:
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
         std::cout << "Saving EX1Level2_B\n";
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX1Level1);
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(EX1Level1);
     }
 
     template<class Archive>
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         std::cout << "Restoring EX1Level2_B\n";
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX1Level1);
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(EX1Level1);
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
 };
 
 class EX1Level3_A : public EX1Level2_A, public EX1Level2_B {
@@ -147,19 +149,19 @@ public:
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
         std::cout << "Saving EX1Level3_A\n";
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX1Level2_A);    
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX1Level2_B);
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(EX1Level2_A);
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(EX1Level2_B);
     }
 
     template<class Archive>
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         std::cout << "Restoring EX1Level3_A\n";
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX1Level2_A);  
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX1Level2_B);
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(EX1Level2_A);
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(EX1Level2_B);
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
 };
 
 
@@ -172,19 +174,19 @@ public:
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
         std::cout << "Saving EX1Level3_B\n";
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX1Level2_A);    
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX1Level2_B);
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(EX1Level2_A);
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(EX1Level2_B);
     }
 
     template<class Archive>
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         std::cout << "Restoring EX1Level3_B\n";
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX1Level2_A);  
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX1Level2_B);
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(EX1Level2_A);
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(EX1Level2_B);
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
 };
 
 class EX1Level4 : public EX1Level3_B {
@@ -196,17 +198,17 @@ public:
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
         std::cout << "Saving EX1Level4\n";
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX1Level3_B);    
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(EX1Level3_B);
     }
 
     template<class Archive>
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         std::cout << "Restoring EX1Level4\n";
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX1Level3_B);  
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(EX1Level3_B);
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
 };
 
 
@@ -222,8 +224,8 @@ public:
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
         std::cout << "Saving EX2Level1\n";
-        ar << BOOST_SERIALIZATION_NVP(i);
-        ar << BOOST_SERIALIZATION_NVP(m);
+        ar << I3_SERIALIZATION_NVP(i);
+        ar << I3_SERIALIZATION_NVP(m);
         ++save_count;
     }
 
@@ -231,12 +233,12 @@ public:
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         std::cout << "Restoring EX2Level1\n";
-        ar >> BOOST_SERIALIZATION_NVP(i);
-        ar >> BOOST_SERIALIZATION_NVP(m);
+        ar >> I3_SERIALIZATION_NVP(i);
+        ar >> I3_SERIALIZATION_NVP(m);
         ++load_count;
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
 
     bool operator==(const EX2Level1& another) const 
     {
@@ -261,7 +263,7 @@ private:
 // (It is concievable that this might someday be detected automatically
 // but for now, this is not done so we have to rely on the programmer
 // to specify this trait)
-BOOST_CLASS_TRACKING(EX2Level1, track_always)
+I3_CLASS_TRACKING(EX2Level1, track_always)
 
 class EX2Level2_A : virtual public EX2Level1 {
 public:
@@ -269,17 +271,17 @@ public:
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
         std::cout << "Saving EX2Level2_A\n";
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX2Level1);
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(EX2Level1);
     }
 
     template<class Archive>
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         std::cout << "Restoring EX2Level2_A\n";
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX2Level1);
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(EX2Level1);
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
 };
 
 class EX2Level2_B : virtual public EX2Level1 {
@@ -288,17 +290,17 @@ public:
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
         std::cout << "Saving EX2Level2_B\n";
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX2Level1);
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(EX2Level1);
     }
 
     template<class Archive>
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         std::cout << "Restoring EX2Level2_B\n";
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX2Level1);
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(EX2Level1);
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
 };
 
 class EX2Level3_A : public EX2Level2_A, public EX2Level2_B {
@@ -310,19 +312,19 @@ public:
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
         std::cout << "Saving EX2Level3_A\n";
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX2Level2_A);    
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX2Level2_B);
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(EX2Level2_A);
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(EX2Level2_B);
     }
 
     template<class Archive>
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         std::cout << "Restoring EX2Level3_A\n";
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX2Level2_A);  
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX2Level2_B);
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(EX2Level2_A);
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(EX2Level2_B);
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
 };
 
 
@@ -335,19 +337,19 @@ public:
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
         std::cout << "Saving EX2Level3_B\n";
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX2Level2_A);    
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX2Level2_B);
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(EX2Level2_A);
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(EX2Level2_B);
     }
 
     template<class Archive>
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         std::cout << "Restoring EX2Level3_B\n";
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX2Level2_A);  
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX2Level2_B);
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(EX2Level2_A);
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(EX2Level2_B);
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
 };
 
 class EX2Level4 : public EX2Level3_B {
@@ -359,122 +361,140 @@ public:
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
         std::cout << "Saving EX2Level4\n";
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX2Level3_B);    
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(EX2Level3_B);
     }
 
     template<class Archive>
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         std::cout << "Restoring EX2Level4\n";
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(EX2Level3_B);  
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(EX2Level3_B);
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
 };
 
-BOOST_CLASS_EXPORT(EX1Level4)
-BOOST_CLASS_EXPORT(EX1Level3_A)
+I3_CLASS_EXPORT(EX1Level4)
+I3_CLASS_EXPORT(EX1Level3_A)
 
-BOOST_CLASS_EXPORT(EX2Level3_A)
-BOOST_CLASS_EXPORT(EX2Level4)
+I3_CLASS_EXPORT(EX2Level3_A)
+I3_CLASS_EXPORT(EX2Level4)
 
-int
-test_main( int /* argc */, char* /* argv */[] )
-{
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void do_test(){
+    auto testfile = I3Test::testfile("test_diamond_complex");
     
-	{
-		save_count = 0;
-		load_count = 0;
+    {
+        save_count = 0;
+        load_count = 0;
 
-		const EX1Level3_A ex1L3a_save(3);
-		const EX1Level1 *ex1L1_save = &ex1L3a_save;
-		{
-			test_ostream ofs(testfile, TEST_STREAM_FLAGS);
-			test_oarchive oa(ofs);
-			oa << boost::serialization::make_nvp("ex1L1_save", ex1L1_save);
-		}
+        const EX1Level3_A ex1L3a_save(3);
+        const EX1Level1 *ex1L1_save = &ex1L3a_save;
+        {
+            typename TS::test_ostream ofs(testfile, TS::TEST_STREAM_FLAGS);
+            typename TS::test_oarchive oa(ofs, TS::TEST_ARCHIVE_FLAGS);
+            oa << icecube::serialization::make_nvp("ex1L1_save", ex1L1_save);
+        }
 
-		EX1Level1 *ex1L1_load;
-		{
-			test_istream ifs(testfile, TEST_STREAM_FLAGS);
-			test_iarchive ia(ifs);
-			ia >> boost::serialization::make_nvp("ex1L1_load", ex1L1_load);
-		}
-		BOOST_CHECK(1 == save_count);
-		BOOST_CHECK(1 == load_count);
-		BOOST_CHECK(*ex1L1_save == *ex1L1_load);
-		std::remove(testfile);
-	}
-	{
-		save_count = 0;
-		load_count = 0;
+        EX1Level1* ex1L1_load;
+        {
+            typename TS::test_istream ifs(testfile, TS::TEST_STREAM_FLAGS);
+            typename TS::test_iarchive ia(ifs, TS::TEST_ARCHIVE_FLAGS);
+            ia >> icecube::serialization::make_nvp("ex1L1_load", ex1L1_load);
+        }
+        ENSURE(1 == save_count);
+        ENSURE(1 == load_count);
+        ENSURE(*ex1L1_save == *ex1L1_load);
+        std::remove(testfile.c_str());
+    }
+    {
+        save_count = 0;
+        load_count = 0;
 
-		const EX1Level4 ex1L4_save(3);   
-		const EX1Level1 *ex1L1_save = &ex1L4_save;
-		{
-			test_ostream ofs(testfile, TEST_STREAM_FLAGS);
-			test_oarchive oa(ofs);
-			oa << boost::serialization::make_nvp("ex1L1_save", ex1L1_save);
-		}
+        const EX1Level4 ex1L4_save(3);   
+        const EX1Level1 *ex1L1_save = &ex1L4_save;
+        {
+            typename TS::test_ostream ofs(testfile, TS::TEST_STREAM_FLAGS);
+            typename TS::test_oarchive oa(ofs, TS::TEST_ARCHIVE_FLAGS);
+            oa << icecube::serialization::make_nvp("ex1L1_save", ex1L1_save);
+        }
 
-		EX1Level1 *ex1L1_load;
-		{
-			test_istream ifs(testfile, TEST_STREAM_FLAGS);
-			test_iarchive ia(ifs);
-			ia >> boost::serialization::make_nvp("ex1L1_load", ex1L1_load);
-		}
-		BOOST_CHECK(1 == save_count);
-		BOOST_CHECK(1 == load_count);
-		BOOST_CHECK(*ex1L1_save == *ex1L1_load);
-		std::remove(testfile);
-	}
-	{
-		save_count = 0;
-		load_count = 0;
+        EX1Level1* ex1L1_load;
+        {
+            typename TS::test_istream ifs(testfile, TS::TEST_STREAM_FLAGS);
+            typename TS::test_iarchive ia(ifs, TS::TEST_ARCHIVE_FLAGS);
+            ia >> icecube::serialization::make_nvp("ex1L1_load", ex1L1_load);
+        }
+        ENSURE(1 == save_count);
+        ENSURE(1 == load_count);
+        ENSURE(*ex1L1_save == *ex1L1_load);
+        std::remove(testfile.c_str());
+    }
+    {
+        save_count = 0;
+        load_count = 0;
 
-		const EX2Level3_A ex2L3a_save(3);
-		const EX2Level1 *ex2L1_save = &ex2L3a_save;
-		{
-			test_ostream ofs(testfile, TEST_STREAM_FLAGS);
-			test_oarchive oa(ofs);
-			oa << boost::serialization::make_nvp("ex2L1_save", ex2L1_save);
-		}
+        const EX2Level3_A ex2L3a_save(3);
+        const EX2Level1 *ex2L1_save = &ex2L3a_save;
+        {
+            typename TS::test_ostream ofs(testfile, TS::TEST_STREAM_FLAGS);
+            typename TS::test_oarchive oa(ofs, TS::TEST_ARCHIVE_FLAGS);
+            oa << icecube::serialization::make_nvp("ex2L1_save", ex2L1_save);
+        }
 
-		EX2Level1 *ex2L1_load;
-		{
-			test_istream ifs(testfile, TEST_STREAM_FLAGS);
-			test_iarchive ia(ifs);
-			ia >> boost::serialization::make_nvp("ex2L1_load", ex2L1_load);
-		}
-		BOOST_CHECK(1 == save_count);
-		BOOST_CHECK(1 == load_count);
-		BOOST_CHECK(*ex2L1_save == *ex2L1_load);
-		std::remove(testfile);
-	}
-	{
-		save_count = 0;
-		load_count = 0;
+        EX2Level1* ex2L1_load;
+        {
+            typename TS::test_istream ifs(testfile, TS::TEST_STREAM_FLAGS);
+            typename TS::test_iarchive ia(ifs, TS::TEST_ARCHIVE_FLAGS);
+            ia >> icecube::serialization::make_nvp("ex2L1_load", ex2L1_load);
+        }
+        ENSURE(1 == save_count);
+        ENSURE(1 == load_count);
+        ENSURE(*ex2L1_save == *ex2L1_load);
+        std::remove(testfile.c_str());
+    }
+    {
+        save_count = 0;
+        load_count = 0;
 
-		const EX2Level4 ex2L4_save(3);   
-		const EX2Level1 *ex2L1_save = &ex2L4_save;
-		{
-			test_ostream ofs(testfile, TEST_STREAM_FLAGS);
-			test_oarchive oa(ofs);
-			oa << boost::serialization::make_nvp("ex2L1_save", ex2L1_save);
-		}
+        const EX2Level4 ex2L4_save(3);   
+        const EX2Level1 *ex2L1_save = &ex2L4_save;
+        {
+            typename TS::test_ostream ofs(testfile, TS::TEST_STREAM_FLAGS);
+            typename TS::test_oarchive oa(ofs, TS::TEST_ARCHIVE_FLAGS);
+            oa << icecube::serialization::make_nvp("ex2L1_save", ex2L1_save);
+        }
 
-		EX2Level1 *ex2L1_load;
-		{
-			test_istream ifs(testfile, TEST_STREAM_FLAGS);
-			test_iarchive ia(ifs);
-			ia >> boost::serialization::make_nvp("ex2L1_load", ex2L1_load);
-		}
-		BOOST_CHECK(1 == save_count);
-		BOOST_CHECK(1 == load_count);
-		BOOST_CHECK(*ex2L1_save == *ex2L1_load);
-		std::remove(testfile);
-	}
-    return EXIT_SUCCESS;
+        EX2Level1* ex2L1_load;
+        {
+            typename TS::test_istream ifs(testfile, TS::TEST_STREAM_FLAGS);
+            typename TS::test_iarchive ia(ifs, TS::TEST_ARCHIVE_FLAGS);
+            ia >> icecube::serialization::make_nvp("ex2L1_load", ex2L1_load);
+        }
+        ENSURE(1 == save_count);
+        ENSURE(1 == load_count);
+        ENSURE(*ex2L1_save == *ex2L1_load);
+        std::remove(testfile.c_str());
+    }
 }
+
+TEST_GROUP(complex)
+
+#define TEST_SET(name) \
+TEST(name ## _test_diamond_complex){ \
+    do_test<test_settings>(); \
+}
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)

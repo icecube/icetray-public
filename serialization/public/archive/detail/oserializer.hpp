@@ -408,7 +408,7 @@ struct save_pointer_type {
                 return;
             }
             // convert pointer to more derived type. if this is thrown
-            // it means that the base/derived relationship hasn't be registered
+            // it means that the base/derived relationship hasn't been registered
             vp = serialization::void_downcast(
                 *true_type, 
                 *this_type, 

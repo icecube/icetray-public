@@ -20,93 +20,130 @@ namespace std{
 #endif
 
 #include <archive/archive_exception.hpp>
-#include "test_tools.hpp"
+#include <I3Test.h>
 
 #include "A.hpp"
 #include "A.ipp"
 
 #include <serialization/list.hpp>
+
+template <typename TS /*test settings*/>
 void test_list(){
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+    auto testfile = I3Test::testfile("test_list");
 
     std::list<A> alist;
     alist.push_back(A());
     alist.push_back(A());
     {   
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("alist",alist);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << icecube::serialization::make_nvp("alist",alist);
     }
 
     std::list<A> alist1;
     {
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("alist",alist1);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> icecube::serialization::make_nvp("alist",alist1);
     }
-    BOOST_CHECK(alist == alist1);
-    std::remove(testfile);
+    ENSURE(alist == alist1);
+    std::remove(testfile.c_str());
 }
 
 #ifdef BOOST_HAS_SLIST
 #include <serialization/slist.hpp>
+
+template <typename TS /*test settings*/>
 void test_slist(){
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_STD_EXTENSION_NAMESPACE::slist<A> aslist;
+    auto testfile = I3Test::testfile("test_slist");
+    
     aslist.push_front(A());
     aslist.push_front(A());
     {   
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("aslist", aslist);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << icecube::serialization::make_nvp("aslist", aslist);
     }
     BOOST_STD_EXTENSION_NAMESPACE::slist<A> aslist1;{
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("aslist", aslist1);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> icecube::serialization::make_nvp("aslist", aslist1);
     }
-    BOOST_CHECK(aslist == aslist1);
-    std::remove(testfile);
+    ENSURE(aslist == aslist1);
+    std::remove(testfile.c_str());
 }
 #endif
 
 #ifndef BOOST_NO_CXX11_HDR_FORWARD_LIST
 #include <serialization/forward_list.hpp>
+
+template <typename TS /*test settings*/>
 void test_forward_list(){
-    const char * testfile = boost::archive::tmpnam(NULL);
+    auto testfile = I3Test::testfile("test_forward_list");
+    
+    try{
     std::forward_list<A> aslist;
     aslist.push_front(A());
     aslist.push_front(A());
     {   
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("aslist", aslist);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << icecube::serialization::make_nvp("aslist", aslist);
     }
-    std::forward_list<A> aslist1;{
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("aslist", aslist1);
+    std::forward_list<A> aslist1;
+    {
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> icecube::serialization::make_nvp("aslist", aslist1);
     }
-    BOOST_CHECK(aslist == aslist1);
-    std::remove(testfile);
+    ENSURE(aslist == aslist1);
+    }catch(icecube::archive::archive_exception& ae){
+        std::cout << "Exception: " << ae.code << ' ' << ae.what() << std::endl;
+    }
+    std::remove(testfile.c_str());
 }
 #endif
 
-int test_main( int /* argc */, char* /* argv */[] )
-{
-    test_list();
-    
-    #ifdef BOOST_HAS_SLIST
-    test_slist();
-    #endif
-    
-    #ifndef BOOST_NO_CXX11_HDR_FORWARD_LIST
-    test_forward_list();
-    #endif
-    
-    return EXIT_SUCCESS;
-}
+TEST_GROUP(test_list)
+
+#ifdef BOOST_HAS_SLIST
+    #define SLIST_TEST(name) \
+    TEST(name ## _slist){ \
+        test_slist<test_settings>(); \
+    }
+#else
+    #define SLIST_TEST(name)
+#endif
+
+#ifndef BOOST_NO_CXX11_HDR_FORWARD_LIST
+    #define FORWARD_LIST_TEST(name) \
+    TEST(name ## _test_forward_list){ \
+        test_forward_list<test_settings>(); \
+    }
+#else
+    #define BOOST_NO_CXX11_HDR_FORWARD_LIST(name)
+#endif
+
+#define TEST_SET(name) \
+TEST(name ## _list){ \
+    test_list<test_settings>(); \
+} \
+SLIST_TEST(name) \
+FORWARD_LIST_TEST(name)
+
+//#define I3_ARCHIVE_TEST binary_archive.hpp
+//#include "select_archive.hpp"
+//TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+//#undef I3_ARCHIVE_TEST
+//#define I3_ARCHIVE_TEST xml_archive.hpp
+//#include "select_archive.hpp"
+//TEST_SET(xml_archive)
 
 // EOF
 

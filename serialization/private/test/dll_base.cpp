@@ -38,18 +38,18 @@ void base::serialize(
 //BOOST_CLASS_EXPORT(polymorphic_base)
 
 template EXPORT_DECL(void) base::serialize(
-    boost::archive::text_oarchive & ar,
+    icecube::archive::text_oarchive & ar,
     const unsigned int version
 );
 template EXPORT_DECL(void) base::serialize(
-    boost::archive::text_iarchive & ar,
+    icecube::archive::text_iarchive & ar,
     const unsigned int version
 );
 template EXPORT_DECL(void) base::serialize(
-    boost::archive::polymorphic_oarchive & ar,
+    icecube::archive::polymorphic_oarchive & ar,
     const unsigned int version
 );
 template EXPORT_DECL(void) base::serialize(
-    boost::archive::polymorphic_iarchive & ar,
+    icecube::archive::polymorphic_iarchive & ar,
     const unsigned int version
 );

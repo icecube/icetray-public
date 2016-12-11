@@ -19,7 +19,7 @@ namespace std{
 }
 #endif
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 
 #include <serialization/vector.hpp>
 #include <serialization/priority_queue.hpp>
@@ -27,10 +27,9 @@ namespace std{
 #include "A.hpp"
 #include "A.ipp"
 
-int test_main( int /* argc */, char* /* argv */[] )
-{
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void do_test(){
+    auto testfile = I3Test::testfile("test_priority_queue");
 
     // test array of objects
     std::priority_queue<A, std::vector<A> > a_priority_queue, a_priority_queue1;
@@ -39,27 +38,47 @@ int test_main( int /* argc */, char* /* argv */[] )
     a_priority_queue.push(A());
     a_priority_queue.push(A());
     {
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("a_priority_queue",a_priority_queue);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << icecube::serialization::make_nvp("a_priority_queue",a_priority_queue);
     }
     {
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("a_priority_queue",a_priority_queue1);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> icecube::serialization::make_nvp("a_priority_queue",a_priority_queue1);
     }
-    BOOST_CHECK(a_priority_queue.size() == a_priority_queue1.size());
+    ENSURE(a_priority_queue.size() == a_priority_queue1.size());
     
-    for(int i = a_priority_queue.size(); i-- > 0;){
+    while(!a_priority_queue.empty()){
         const A & a1 = a_priority_queue.top();
         const A & a2 = a_priority_queue1.top();
-        BOOST_CHECK(a1 == a2);
+        ENSURE(a1 == a2);
         a_priority_queue.pop();
         a_priority_queue1.pop();
     }
     
-    std::remove(testfile);
-    return EXIT_SUCCESS;
+    std::remove(testfile.c_str());
 }
+
+TEST_GROUP(priority_queue)
+
+#define TEST_SET(name) \
+TEST(name ## _priority_queue){ \
+    do_test<test_settings>(); \
+}
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)
 
 // EOF

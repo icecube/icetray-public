@@ -8,7 +8,7 @@
 
 #include <sstream>
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 
 #include <serialization/vector.hpp>
 
@@ -16,8 +16,8 @@
 #include <archive/text_oarchive.hpp>
 
 class V {
-    friend int test_main(int /* argc */, char * /* argv */[]);
-    friend class boost::serialization::access;
+    friend void do_test();
+    friend class icecube::serialization::access;
     int m_i;    
     V() :
         m_i(0)
@@ -33,19 +33,23 @@ class V {
     }
 };
 
-int test_main(int /* argc */, char * /* argv */[])
-{
+void do_test(){
     std::stringstream ss;
     const V v;
     {
-        boost::archive::text_oarchive oa(ss);
+        icecube::archive::text_oarchive oa(ss);
         oa << v;
     }
     V v1;
     {
-        boost::archive::text_iarchive ia(ss);
+        icecube::archive::text_iarchive ia(ss);
         ia >> v1;
     }
-    BOOST_CHECK(v == v1);
-    return EXIT_SUCCESS;
+    ENSURE(v == v1);
+}
+
+TEST_GROUP(private_ctor)
+
+TEST(test_private_ctor){
+    do_test();
 }

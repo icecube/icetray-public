@@ -48,7 +48,7 @@ class wchar_from_mb
         wchar_from_mb<Base>, 
         Base, 
         wchar_t,
-        single_pass_traversal_tag,
+        boost::single_pass_traversal_tag,
         wchar_t
     >
 {
@@ -57,7 +57,7 @@ class wchar_from_mb
         wchar_from_mb<Base>, 
         Base, 
         wchar_t,
-        single_pass_traversal_tag,
+        boost::single_pass_traversal_tag,
         wchar_t
     > super_t;
 

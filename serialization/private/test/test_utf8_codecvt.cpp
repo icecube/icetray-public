@@ -39,19 +39,20 @@ namespace std{
     using ::std::wint_t;
 #endif
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 
 #include <archive/add_facet.hpp>
 
 #ifndef BOOST_NO_CXX11_HDR_CODECVT
     #include <codecvt>
-    namespace boost { namespace archive { namespace detail {
+    namespace icecube { namespace archive { namespace detail {
         typedef std::codecvt_utf8<wchar_t> utf8_codecvt_facet;
     } } }
 #else
     #include <archive/detail/utf8_codecvt_facet.hpp>
 #endif
 
+namespace{
 template<std::size_t s>
 struct test_data
 {
@@ -122,13 +123,15 @@ wchar_t test_data<4>::wchar_encoding[] = {
     (wchar_t)0x7fffffff
     */
 };
+}
 
-int
-test_main(int /* argc */, char * /* argv */[]) {
+TEST_GROUP(utf8_codecvt)
+
+TEST(utf8_codecvt){
     std::locale * utf8_locale
-        = boost::archive::add_facet(
+        = icecube::archive::add_facet(
             std::locale::classic(),
-            new boost::archive::detail::utf8_codecvt_facet
+            new icecube::archive::detail::utf8_codecvt_facet
         );
 
     typedef char utf8_t;
@@ -177,13 +180,13 @@ test_main(int /* argc */, char * /* argv */[]) {
     // compare the data read back in with the orginal
     #if ! defined(__BORLANDC__)
         // borland 5.60 complains about this
-        BOOST_CHECK(from_file.size() == sizeof(td::wchar_encoding)/sizeof(wchar_t));
+        ENSURE(from_file.size() == sizeof(td::wchar_encoding)/sizeof(wchar_t));
     #else
         // so use this instead
-        BOOST_CHECK(from_file.size() == 6);
+        ENSURE(from_file.size() == 6);
     #endif
 
-    BOOST_CHECK(std::equal(from_file.begin(), from_file.end(), td::wchar_encoding));
+    ENSURE(std::equal(from_file.begin(), from_file.end(), td::wchar_encoding));
   
     // Send the UCS4_data back out, converting to UTF-8
     {
@@ -212,7 +215,7 @@ test_main(int /* argc */, char * /* argv */[]) {
         std::vector<utf8_t> data2;
         std::copy(it2, end_iter, std::back_inserter(data2));
 
-        BOOST_CHECK(data1 == data2);
+        ENSURE(data1 == data2);
     }
 
     // some libraries have trouble that only shows up with longer strings
@@ -264,7 +267,7 @@ test_main(int /* argc */, char * /* argv */[]) {
         ifs.imbue(*utf8_locale);
         ifs.open("test3.dat");
         ifs >> std::noskipws;
-        BOOST_CHECK(
+        ENSURE(
             std::equal(
                 test3_data,
                 test3_data + l,
@@ -274,5 +277,4 @@ test_main(int /* argc */, char * /* argv */[]) {
     }
 
     delete utf8_locale;
-    return EXIT_SUCCESS;
 }

@@ -19,12 +19,14 @@ namespace std{
 }
 #endif
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 #include <serialization/base_object.hpp>
+#include <serialization/nvp.hpp>
 
+namespace{
 class polymorphic_base
 {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void serialize(Archive & /* ar */, const unsigned int /* file_version */){
     }
@@ -34,56 +36,77 @@ public:
 
 class polymorphic_derived1 : public polymorphic_base
 {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int /* file_version */){
-        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
+        ar & I3_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
     }
 };
+}
 
 // save unregistered polymorphic classes
-void save(const char *testfile)
+template <typename TS /*test settings*/>
+void save(const char* testfile)
 {
-    test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
+    typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
 
-    polymorphic_base *rb1 =  NULL;
-    polymorphic_derived1 *rd1 = NULL;
+    polymorphic_base* rb1 =  nullptr;
+    polymorphic_derived1* rd1 = nullptr;
     
-    oa << BOOST_SERIALIZATION_NVP(rb1);
-    oa << BOOST_SERIALIZATION_NVP(rd1);
+    oa << I3_SERIALIZATION_NVP(rb1);
+    oa << I3_SERIALIZATION_NVP(rd1);
 }
 
 // load unregistered polymorphic classes
-void load(const char *testfile)
+template <typename TS /*test settings*/>
+void load(const char* testfile)
 {
-    test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
+    typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
 
     polymorphic_derived1 dummy;
 
-    polymorphic_base *rb1 = & dummy;
-    polymorphic_derived1 *rd1 = & dummy;
+    polymorphic_base* rb1 = &dummy;
+    polymorphic_derived1* rd1 = &dummy;
 
-    ia >> BOOST_SERIALIZATION_NVP(rb1);
-    BOOST_CHECK_MESSAGE(NULL == rb1, "Null pointer not restored");
+    ia >> I3_SERIALIZATION_NVP(rb1);
+    ENSURE(nullptr == rb1, "Null pointer not restored");
 
-    ia >> BOOST_SERIALIZATION_NVP(rd1);
-    BOOST_CHECK_MESSAGE(NULL == rd1, "Null pointer not restored");
+    ia >> I3_SERIALIZATION_NVP(rd1);
+    ENSURE(nullptr == rd1, "Null pointer not restored");
 
     delete rb1;
     delete rd1;
 }
 
-int
-test_main( int /* argc */, char* /* argv */[] )
-{
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
-    save(testfile);
-    load(testfile);
-    std::remove(testfile);
-    return EXIT_SUCCESS;
+template <typename TS /*test settings*/>
+void do_test(){
+    auto testfile = I3Test::testfile("test_complex");
+    save<TS>(testfile.c_str());
+    load<TS>(testfile.c_str());
+    std::remove(testfile.c_str());
 }
+
+TEST_GROUP(test_null_ptr)
+
+#define TEST_SET(name) \
+TEST(name ## _null_ptr){ \
+    do_test<test_settings>(); \
+}
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)
 
 // EOF

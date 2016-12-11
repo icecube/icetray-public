@@ -62,18 +62,18 @@ namespace detail
     struct base_register
     {
         struct polymorphic {
-            static void const * invoke(){
-                Base const * const b = 0;
-                Derived const * const d = 0;
-                return & void_cast_register(d, b);
+            static void const* invoke(){
+                Base const* const b = 0;
+                Derived const* const d = 0;
+                return &void_cast_register(d, b);
             }
         };
         struct non_polymorphic {
-            static void const * invoke(){
+            static void const* invoke(){
                 return 0;
             }
         };
-        static void const * invoke(){
+        static void const* invoke(){
             typedef typename boost::mpl::eval_if<
                 boost::is_polymorphic<Base>,
                 boost::mpl::identity<polymorphic>,

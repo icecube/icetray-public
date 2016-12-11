@@ -26,13 +26,14 @@ namespace std{
 }
 #endif
 
-#include "test_tools.hpp"
-
 #include <archive/add_facet.hpp>
 #include <archive/codecvt_null.hpp>
 #include <archive/iterators/ostream_iterator.hpp>
 #include <archive/iterators/istream_iterator.hpp>
 
+#include <I3Test.h>
+
+namespace{
 template<std::size_t S>
 struct test_data
 {
@@ -65,16 +66,18 @@ wchar_t test_data<4>::wchar_encoding[] = {
     0x04000000,
     0x7fffffff
 };
+}
 
 #include <iostream>
 
-int test_main( int /* argc */, char* /* argv */[] ) {
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+TEST_GROUP(test_codecvt_null)
+
+TEST(test_codecvt_null){
+    auto testfile = I3Test::testfile("test_codecvt_null");
 
     std::locale old_loc;
     std::locale * null_locale = 
-        boost::archive::add_facet(old_loc, new boost::archive::codecvt_null<wchar_t>);
+        icecube::archive::add_facet(old_loc, new icecube::archive::codecvt_null<wchar_t>);
 
     typedef test_data<sizeof(wchar_t)> td;
     {
@@ -90,7 +93,7 @@ int test_main( int /* argc */, char* /* argv */[] ) {
                 // so use this instead
                 td::wchar_encoding + 6,
             #endif
-            boost::archive::iterators::ostream_iterator<wchar_t>(ofs)
+            icecube::archive::iterators::ostream_iterator<wchar_t>(ofs)
         );
     }
     bool ok = false;
@@ -107,11 +110,11 @@ int test_main( int /* argc */, char* /* argv */[] ) {
                 // so use this instead
                 td::wchar_encoding + 6,
             #endif
-            boost::archive::iterators::istream_iterator<wchar_t>(ifs)
+            icecube::archive::iterators::istream_iterator<wchar_t>(ifs)
         );
     }
 
-    BOOST_CHECK(ok);
+    ENSURE(ok);
     {
         std::wofstream ofs("testfile2");
         ofs.imbue(*null_locale);
@@ -125,12 +128,10 @@ int test_main( int /* argc */, char* /* argv */[] ) {
         ifs >> i2;
         std::cout << "i=" << i << std::endl;
         std::cout << "i2=" << i2 << std::endl;
-        BOOST_CHECK(i == i2);
+        ENSURE(i == i2);
         ifs.close();
     }
  
     delete null_locale;
-    std::remove(testfile);
-    return EXIT_SUCCESS;
+    std::remove(testfile.c_str());
 }
-

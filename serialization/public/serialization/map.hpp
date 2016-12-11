@@ -92,7 +92,7 @@ inline void load(
     icecube::serialization::stl::load_collection<
         Archive,
         std::multimap<Key, Type, Compare, Allocator>,
-        icecube::serialization::stl::archive_input_map<
+        icecube::serialization::stl::archive_input_multimap<
             Archive, std::multimap<Key, Type, Compare, Allocator>
         >,
         icecube::serialization::stl::no_reserve_imp<

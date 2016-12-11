@@ -1,4 +1,4 @@
-#ifndef BOOST_SERIALIZATION_TEST_B_HPP
+#ifndef I3_SERIALIZATION_TEST_B_HPP
 #define I3_SERIALIZATION_TEST_B_HPP
 
 // MS compatible compilers support #pragma once
@@ -38,43 +38,43 @@ namespace std{
 class B : public A
 {
 private:
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
         // write any base class info to the archive
-        ar << BOOST_SERIALIZATION_BASE_OBJECT_NVP(A);
+        ar << I3_SERIALIZATION_BASE_OBJECT_NVP(A);
 
         // write out members
-        ar << BOOST_SERIALIZATION_NVP(s);
-        ar << BOOST_SERIALIZATION_NVP(t);
-        ar << BOOST_SERIALIZATION_NVP(u);
-        ar << BOOST_SERIALIZATION_NVP(v);
-        ar << BOOST_SERIALIZATION_NVP(w);
-        ar << BOOST_SERIALIZATION_NVP(x);
+        ar << I3_SERIALIZATION_NVP(s);
+        ar << I3_SERIALIZATION_NVP(t);
+        ar << I3_SERIALIZATION_NVP(u);
+        ar << I3_SERIALIZATION_NVP(v);
+        ar << I3_SERIALIZATION_NVP(w);
+        ar << I3_SERIALIZATION_NVP(x);
     }
 
     template<class Archive>
     void load(Archive & ar, const unsigned int file_version)
     {
         // read any base class info to the archive
-        ar >> BOOST_SERIALIZATION_BASE_OBJECT_NVP(A);
+        ar >> I3_SERIALIZATION_BASE_OBJECT_NVP(A);
         switch(file_version){
         case 1:
         case 2:
-            ar >> BOOST_SERIALIZATION_NVP(s);
-            ar >> BOOST_SERIALIZATION_NVP(t);
-            ar >> BOOST_SERIALIZATION_NVP(u);
-            ar >> BOOST_SERIALIZATION_NVP(v);
-            ar >> BOOST_SERIALIZATION_NVP(w);
-            ar >> BOOST_SERIALIZATION_NVP(x);
+            ar >> I3_SERIALIZATION_NVP(s);
+            ar >> I3_SERIALIZATION_NVP(t);
+            ar >> I3_SERIALIZATION_NVP(u);
+            ar >> I3_SERIALIZATION_NVP(v);
+            ar >> I3_SERIALIZATION_NVP(w);
+            ar >> I3_SERIALIZATION_NVP(x);
             break;
         default:
             break;
         }
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
     signed char s;
     unsigned char t;
     signed int u;
@@ -82,34 +82,28 @@ private:
     float w;
     double x;
 public:
-    B();
-    virtual ~B(){};
-    bool operator==(const B &rhs) const;
-};
-
-B::B() :
+    B() :
     s(static_cast<signed char>(std::rand())),
     t(static_cast<unsigned char>(std::rand())),
     u(std::rand()),
     v(std::rand()),
     w((float)std::rand() / std::rand()),
     x((double)std::rand() / std::rand())
-{
-}
-
-BOOST_CLASS_VERSION(B, 2)
-
-inline bool B::operator==(const B &rhs) const
-{
-    return
+    {}
+    virtual ~B(){};
+    bool operator==(const B &rhs) const{
+        return
         A::operator==(rhs)
-        && s == rhs.s 
-        && t == rhs.t 
-        && u == rhs.u 
+        && s == rhs.s
+        && t == rhs.t
+        && u == rhs.u
         && v == rhs.v
         && std::abs( boost::math::float_distance(w, rhs.w)) < 2
         && std::abs( boost::math::float_distance(x, rhs.x)) < 2
-    ;
-}
+        ;
+    }
+};
 
-#endif // BOOST_SERIALIZATION_TEST_B_HPP
+I3_CLASS_VERSION(B, 2)
+
+#endif // I3_SERIALIZATION_TEST_B_HPP

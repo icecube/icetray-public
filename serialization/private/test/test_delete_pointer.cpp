@@ -18,41 +18,42 @@ namespace std{
 }
 #endif
 
-#include "test_tools.hpp"
-#include <boost/detail/no_exceptions_support.hpp>
+#include <archive/archive_exception.hpp>
 #include <serialization/throw_exception.hpp>
-
 #include <serialization/nvp.hpp>
 #include <serialization/split_member.hpp>
 
+#include <I3Test.h>
+
+namespace{
 //A holds a pointer to another A, but doesn't own the pointer.
 //objCount
 class A
 {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
-        ar << BOOST_SERIALIZATION_NVP(next_);
+        ar << I3_SERIALIZATION_NVP(next_);
     }
     template<class Archive>
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         static int i = 0;
-        ar >> BOOST_SERIALIZATION_NVP(next_);
+        ar >> I3_SERIALIZATION_NVP(next_);
         //if(++i == 3)
-        //    boost::serialization::throw_exception(boost::archive::archive_exception(
-        //        boost::archive::archive_exception::no_exception
+        //    icecube::serialization::throw_exception(icecube::archive::archive_exception(
+        //        icecube::archive::archive_exception::no_exception
         //    ));
         ++loadcount;
     }
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
 public:
     A()
     {
         if(test && objcount == 3)
-            boost::serialization::throw_exception(boost::archive::archive_exception(
-                boost::archive::archive_exception::no_exception
+            icecube::serialization::throw_exception(icecube::archive::archive_exception(
+                icecube::archive::archive_exception::no_exception
             ));
         next_ = 0;
         ++objcount;
@@ -71,54 +72,70 @@ public:
 int A::objcount = 0;
 int A::loadcount = 0;
 bool A::test = false;
+}
 
-int
-test_main( int /* argc */, char* /* argv */[] )
-{
-
+template <typename TS /*test settings*/>
+void do_test(){
     //fill the vector with chained A's. The vector is assumed
     //to own the objects - we will destroy the objects through this vector.
 
-    A * head = new A;
+    A* head = new A;
     A* last = head;
     unsigned int i;
-    for(i = 1; i < 9; ++i)
-    {
-        A *a = new A;
+    for(i = 1; i < 9; ++i){
+        A* a = new A;
         last->next_ = a;
         last = a;
     }
 
-    const char * testfile = boost::archive::tmpnam(0);
-    BOOST_REQUIRE(NULL != testfile);
+    auto testfile = I3Test::testfile("test_delete_pointer");
 
     //output the list
     {
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << BOOST_SERIALIZATION_NVP(head);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << I3_SERIALIZATION_NVP(head);
     }
 
     delete head;
-    BOOST_CHECK(A::objcount == 0);
+    ENSURE(A::objcount == 0);
 
     head = NULL;
     A::test = true;
     //read the list back
     {
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        BOOST_TRY {
-            ia >> BOOST_SERIALIZATION_NVP(head);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        try{
+            ia >> I3_SERIALIZATION_NVP(head);
         }
-        BOOST_CATCH (...){
+        catch(...){
             ia.delete_created_pointers();
         }
-        BOOST_CATCH_END
     }
 
     //identify the leaks
-    BOOST_CHECK(A::loadcount == 0);
-    std::remove(testfile);
-    return EXIT_SUCCESS;
+    ENSURE(A::loadcount == 0);
+    std::remove(testfile.c_str());
 }
+
+TEST_GROUP(test_delete_pointer)
+
+#define TEST_SET(name) \
+TEST(name ## _delete_pointer){ \
+    do_test<test_settings>(); \
+}
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)

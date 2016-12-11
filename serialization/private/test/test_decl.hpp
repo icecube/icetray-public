@@ -1,4 +1,4 @@
-#ifndef BOOST_TEST_DECL_HPP
+#ifndef I3_TEST_DECL_HPP
 #define I3_TEST_DECL_HPP 
 
 // MS compatible compilers support #pragma once
@@ -71,4 +71,4 @@
     #define EXPORT_DECL(T) T
 #endif // BOOST_HAS_DECLSPEC
 
-#endif // BOOST_TEST_DECL_HPP
+#endif // I3_TEST_DECL_HPP

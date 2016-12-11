@@ -34,27 +34,27 @@ namespace std{
 #include <archive/iterators/istream_iterator.hpp>
 #include <archive/iterators/ostream_iterator.hpp>
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 
 #ifndef BOOST_NO_CWCHAR
 
 void test_wchar_from_mb(const wchar_t *la, const char * a, const unsigned int size){
-    typedef boost::archive::iterators::wchar_from_mb<const char *> translator;
-    BOOST_CHECK((
+    typedef icecube::archive::iterators::wchar_from_mb<const char *> translator;
+    ENSURE((
         std::equal(
-            translator(BOOST_MAKE_PFTO_WRAPPER(a)),
-            translator(BOOST_MAKE_PFTO_WRAPPER(a + size)),
+            translator(I3_MAKE_PFTO_WRAPPER(a)),
+            translator(I3_MAKE_PFTO_WRAPPER(a + size)),
             la
         )
     ));
 }
 
 void test_mb_from_wchar(const char * a, const wchar_t *la, const unsigned int size){
-    typedef boost::archive::iterators::mb_from_wchar<const wchar_t *> translator;
-    BOOST_CHECK(
+    typedef icecube::archive::iterators::mb_from_wchar<const wchar_t *> translator;
+    ENSURE(
         std::equal(
-            translator(BOOST_MAKE_PFTO_WRAPPER(la)), 
-            translator(BOOST_MAKE_PFTO_WRAPPER(la + size)), 
+            translator(I3_MAKE_PFTO_WRAPPER(la)),
+            translator(I3_MAKE_PFTO_WRAPPER(la + size)),
             a
         )
     );
@@ -68,12 +68,12 @@ void test_xml_escape(
     const CharType * xml, 
     unsigned int size
 ){
-    typedef boost::archive::iterators::xml_escape<const CharType *> translator;
+    typedef icecube::archive::iterators::xml_escape<const CharType *> translator;
 
-    BOOST_CHECK(
+    ENSURE(
         std::equal(
-            translator(BOOST_MAKE_PFTO_WRAPPER(xml)),
-            translator(BOOST_MAKE_PFTO_WRAPPER(xml + size)),
+            translator(I3_MAKE_PFTO_WRAPPER(xml)),
+            translator(I3_MAKE_PFTO_WRAPPER(xml + size)),
             xml_escaped
         )
     );
@@ -87,12 +87,12 @@ void test_xml_unescape(
 ){
 
     // test xml_unescape
-    typedef boost::archive::iterators::xml_unescape<const CharType *> translator;
+    typedef icecube::archive::iterators::xml_unescape<const CharType *> translator;
 
-    BOOST_CHECK(
+    ENSURE(
         std::equal(
-            translator(BOOST_MAKE_PFTO_WRAPPER(xml_escaped)),
-            translator(BOOST_MAKE_PFTO_WRAPPER(xml_escaped + size)),
+            translator(I3_MAKE_PFTO_WRAPPER(xml_escaped)),
+            translator(I3_MAKE_PFTO_WRAPPER(xml_escaped + size)),
             xml
         )
     );
@@ -108,39 +108,39 @@ void test_transform_width(unsigned int size){
         *rptr = static_cast<char>(0xff & std::rand());
 
     // convert 8 to 6 bit characters
-    typedef boost::archive::iterators::transform_width<
+    typedef icecube::archive::iterators::transform_width<
         char *, BitsOut, BitsIn 
     > translator1;
 
     std::vector<char> vout;
 
     std::copy(
-        translator1(BOOST_MAKE_PFTO_WRAPPER(static_cast<char *>(rawdata))),
-        translator1(BOOST_MAKE_PFTO_WRAPPER(rawdata + size)),
+        translator1(I3_MAKE_PFTO_WRAPPER(static_cast<char *>(rawdata))),
+        translator1(I3_MAKE_PFTO_WRAPPER(rawdata + size)),
         std::back_inserter(vout)
     );
 
     // check to see we got the expected # of characters out
     if(0 ==  size)
-        BOOST_CHECK(vout.size() == 0);
+        ENSURE(vout.size() == 0);
     else
-        BOOST_CHECK(vout.size() == (size * BitsIn - 1 ) / BitsOut + 1);
+        ENSURE(vout.size() == (size * BitsIn - 1 ) / BitsOut + 1);
 
-    typedef boost::archive::iterators::transform_width<
+    typedef icecube::archive::iterators::transform_width<
         std::vector<char>::iterator, BitsIn, BitsOut
     > translator2;
 
     std::vector<char> vin;
     std::copy(
-        translator2(BOOST_MAKE_PFTO_WRAPPER(vout.begin())),
-        translator2(BOOST_MAKE_PFTO_WRAPPER(vout.end())),
+        translator2(I3_MAKE_PFTO_WRAPPER(vout.begin())),
+        translator2(I3_MAKE_PFTO_WRAPPER(vout.end())),
         std::back_inserter(vin)
     );
 
     // check to see we got the expected # of characters out
-    BOOST_CHECK(vin.size() == size);
+    ENSURE(vin.size() == size);
 
-    BOOST_CHECK(
+    ENSURE(
         std::equal(
             rawdata,
             rawdata + size,
@@ -155,20 +155,20 @@ void test_stream_iterators(
     unsigned int size
 ){
     std::basic_stringstream<CharType> ss;
-    boost::archive::iterators::ostream_iterator<CharType> osi =
-        boost::archive::iterators::ostream_iterator<CharType>(ss);
+    icecube::archive::iterators::ostream_iterator<CharType> osi =
+        icecube::archive::iterators::ostream_iterator<CharType>(ss);
     std::copy(test_data, test_data + size, osi);
 
-    BOOST_CHECK(size == ss.str().size());
+    ENSURE(size == ss.str().size());
 
-    boost::archive::iterators::istream_iterator<CharType> isi =
-        boost::archive::iterators::istream_iterator<CharType>(ss);
-    BOOST_CHECK(std::equal(test_data, test_data + size,isi));
+    icecube::archive::iterators::istream_iterator<CharType> isi =
+        icecube::archive::iterators::istream_iterator<CharType>(ss);
+    ENSURE(std::equal(test_data, test_data + size,isi));
 }
 
-int
-test_main(int /* argc */, char* /* argv */ [] )
-{
+TEST_GROUP(test_iterators)
+
+TEST(test_iterators){
     const char xml[] = "<+>+&+\"+'";
     const char xml_escaped[] = "&lt;+&gt;+&amp;+&quot;+&apos;";
     test_xml_escape<const char>(
@@ -217,6 +217,4 @@ test_main(int /* argc */, char* /* argv */ [] )
     test_transform_width<6, 8>(6);
     test_transform_width<6, 8>(7);
     test_transform_width<6, 8>(8);
-
-    return EXIT_SUCCESS;
 }

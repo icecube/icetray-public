@@ -19,32 +19,30 @@ namespace std{
 }
 #endif
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 
 #include "D.hpp"
 #include "A.ipp"
 
-int test_main( int /* argc */, char* /* argv */[] )
-{
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void do_test(){
+    auto testfile = I3Test::testfile("test_complex");
 
     const A a;
     A a1;
 
     {   
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("a", a);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << icecube::serialization::make_nvp("a", a);
     }
     {
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("a", a1);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> icecube::serialization::make_nvp("a", a1);
     }
-    BOOST_CHECK(a == a1);
-    std::remove(testfile);
-    return EXIT_SUCCESS;
+    ENSURE(a == a1);
+    std::remove(testfile.c_str());
 }
 
 // EOF

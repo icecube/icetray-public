@@ -36,7 +36,9 @@ template<class Archive, class Container>
 inline void save_collection(Archive & ar, const Container &s)
 {
     // record number of elements
-    collection_size_type const count(s.size());
+    // use this very pedantic method of getting the container size to cover cases
+    // like std::forward_list which have no size()
+    const collection_size_type count(std::distance(s.cbegin(), s.cend()));
     ar <<  I3_SERIALIZATION_NVP(count);
     // make sure the target type is registered so we can retrieve
     // the version when we load

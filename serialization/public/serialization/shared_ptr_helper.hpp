@@ -178,7 +178,7 @@ public:
         if(i == m_o_sp->end()){
             s.reset(t);
             std::pair<typename object_shared_pointer_map::iterator, bool> result;
-            result = m_o_sp->insert(std::make_pair(oid, s));
+            result = m_o_sp->insert(std::make_pair(oid, SPT<const void>(s)));
             BOOST_ASSERT(result.second);
         }
         // if the object has already been seen

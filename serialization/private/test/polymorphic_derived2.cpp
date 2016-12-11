@@ -20,7 +20,7 @@ void polymorphic_derived2::serialize(
     Archive &ar, 
     const unsigned int /* file_version */
 ){
-    ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
+    ar & I3_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
 }
 
 // instantiate code for text archives
@@ -28,11 +28,11 @@ void polymorphic_derived2::serialize(
 #include <archive/text_iarchive.hpp>
 
 template EXPORT_DECL(void) polymorphic_derived2::serialize(
-    boost::archive::text_oarchive & ar,
+    icecube::archive::text_oarchive & ar,
     const unsigned int version
 );
 template EXPORT_DECL(void) polymorphic_derived2::serialize(
-    boost::archive::text_iarchive & ar,
+    icecube::archive::text_iarchive & ar,
     const unsigned int version
 );
 
@@ -41,25 +41,25 @@ template EXPORT_DECL(void) polymorphic_derived2::serialize(
 #include <archive/polymorphic_oarchive.hpp>
 
 template EXPORT_DECL(void) polymorphic_derived2::serialize(
-    boost::archive::polymorphic_oarchive & ar,
+    icecube::archive::polymorphic_oarchive & ar,
     const unsigned int version
 );
 template EXPORT_DECL(void) polymorphic_derived2::serialize(
-    boost::archive::polymorphic_iarchive & ar,
+    icecube::archive::polymorphic_iarchive & ar,
     const unsigned int version
 );
 
 // MWerks users can do this to make their code work
-BOOST_SERIALIZATION_MWERKS_BASE_AND_DERIVED(polymorphic_base, polymorphic_derived2)
+I3_SERIALIZATION_MWERKS_BASE_AND_DERIVED(polymorphic_base, polymorphic_derived2)
 
 // note: export has to be AFTER #includes for all archive classes
-BOOST_CLASS_EXPORT_IMPLEMENT(polymorphic_derived2)
+I3_CLASS_EXPORT_IMPLEMENT(polymorphic_derived2)
 
 #if 0
 #include <serialization/factory.hpp>
-BOOST_SERIALIZATION_FACTORY_0(polymorphic_derived2)
+I3_SERIALIZATION_FACTORY_0(polymorphic_derived2)
 
 template
 EXPORT_DECL(polymorphic_derived2 *)
-boost::serialization::factory<polymorphic_derived2, 0>(std::va_list ap);
+icecube::serialization::factory<polymorphic_derived2, 0>(std::va_list ap);
 #endif

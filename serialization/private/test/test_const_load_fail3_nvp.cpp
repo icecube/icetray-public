@@ -11,7 +11,7 @@
 #include <archive/text_iarchive.hpp>
 #include <serialization/nvp.hpp>
 
-using namespace boost::archive;
+using namespace icecube::archive;
 
 struct A {
     template<class Archive>
@@ -20,5 +20,5 @@ struct A {
 };
 
 void f2(text_iarchive & ia, const A * const & a){
-    ia >> BOOST_SERIALIZATION_NVP(a);
+    ia >> I3_SERIALIZATION_NVP(a);
 }

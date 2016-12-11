@@ -13,12 +13,18 @@
 
 // binary_archive
 #include <archive/binary_oarchive.hpp>
-typedef boost::archive::binary_oarchive test_oarchive;
-typedef std::ofstream test_ostream;
 
 #include <archive/binary_iarchive.hpp>
-typedef boost::archive::binary_iarchive test_iarchive;
-typedef std::ifstream test_istream;
 
-//#define TEST_STREAM_FLAGS (std::ios::binary | std::ios::in | std::ios::out)
-#define TEST_STREAM_FLAGS (std::ios::binary)
+struct binary_archive_test_settings{
+    typedef icecube::archive::binary_oarchive test_oarchive;
+    typedef std::ofstream test_ostream;
+    
+    typedef icecube::archive::binary_iarchive test_iarchive;
+    typedef std::ifstream test_istream;
+    
+    static constexpr int TEST_STREAM_FLAGS = (std::ios::binary);
+    static constexpr int TEST_ARCHIVE_FLAGS = 0;
+};
+
+#define test_settings binary_archive_test_settings

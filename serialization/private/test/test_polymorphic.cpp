@@ -29,7 +29,7 @@ namespace std{
 #include "polymorphic_xml_warchive.hpp"
 */
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 
 #include <archive/polymorphic_oarchive.hpp>
 #include <archive/polymorphic_iarchive.hpp>
@@ -37,58 +37,77 @@ namespace std{
 #include <serialization/nvp.hpp>
 #include "test_polymorphic_A.hpp"
 
-int test_main(int /* argc */, char * /* argv */ [])
-{
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void do_test(){
+    auto testfile = I3Test::testfile("test_polymorphic");
     const data d;
     data d1;
     // test using using polymorphic interface
     {
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa_implementation(os, TEST_ARCHIVE_FLAGS);
-        boost::archive::polymorphic_oarchive & oa_interface = oa_implementation;
-        oa_interface << BOOST_SERIALIZATION_NVP(d);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa_implementation(os, TS::TEST_ARCHIVE_FLAGS);
+        icecube::archive::polymorphic_oarchive& oa_interface = oa_implementation;
+        oa_interface << I3_SERIALIZATION_NVP(d);
     }
     {
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive  ia_implementation(is, TEST_ARCHIVE_FLAGS);
-        boost::archive::polymorphic_iarchive & ia_interface = ia_implementation;
-        ia_interface >> BOOST_SERIALIZATION_NVP(d1);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia_implementation(is, TS::TEST_ARCHIVE_FLAGS);
+        icecube::archive::polymorphic_iarchive& ia_interface = ia_implementation;
+        ia_interface >> I3_SERIALIZATION_NVP(d1);
     }
-    BOOST_CHECK(d == d1);
-    std::remove(testfile);
+    ENSURE(d == d1);
+    std::remove(testfile.c_str());
 
     // test using using polymorphic implementation.
     {
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa_implementation(os, TEST_ARCHIVE_FLAGS);
-        oa_implementation << BOOST_SERIALIZATION_NVP(d);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa_implementation(os, TS::TEST_ARCHIVE_FLAGS);
+        oa_implementation << I3_SERIALIZATION_NVP(d);
     }
     {
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive  ia_implementation(is, TEST_ARCHIVE_FLAGS);
-        ia_implementation >> BOOST_SERIALIZATION_NVP(d1);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia_implementation(is, TS::TEST_ARCHIVE_FLAGS);
+        ia_implementation >> I3_SERIALIZATION_NVP(d1);
     }
-    BOOST_CHECK(d == d1);
-    std::remove(testfile);
+    ENSURE(d == d1);
+    std::remove(testfile.c_str());
 
     // test using using polymorphic implementation.
     {
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        boost::archive::polymorphic_oarchive * oa_implementation 
-            = new test_oarchive(os, TEST_ARCHIVE_FLAGS);
-        *oa_implementation << BOOST_SERIALIZATION_NVP(d);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        icecube::archive::polymorphic_oarchive* oa_implementation
+            = new typename TS::test_oarchive(os, TS::TEST_ARCHIVE_FLAGS);
+        *oa_implementation << I3_SERIALIZATION_NVP(d);
         delete oa_implementation;
     }
     {
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        boost::archive::polymorphic_iarchive * ia_implementation
-            = new test_iarchive(is, TEST_ARCHIVE_FLAGS);
-        *ia_implementation >> BOOST_SERIALIZATION_NVP(d1);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        icecube::archive::polymorphic_iarchive* ia_implementation
+            = new typename TS::test_iarchive(is, TS::TEST_ARCHIVE_FLAGS);
+        *ia_implementation >> I3_SERIALIZATION_NVP(d1);
         delete ia_implementation;
     }
-    BOOST_CHECK(d == d1);
-    std::remove(testfile);
-    return EXIT_SUCCESS;
+    ENSURE(d == d1);
+    std::remove(testfile.c_str());
 }
+
+TEST_GROUP(polymorphic)
+
+#define TEST_SET(name) \
+TEST(name ## _polymorphic){ \
+    do_test<test_settings>(); \
+}
+
+#define I3_ARCHIVE_TEST polymorphic_binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(polymorphic_binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST polymorphic_text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(polymorphic_text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST polymorphic_xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(polymorphic_xml_archive)

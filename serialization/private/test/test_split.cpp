@@ -19,14 +19,16 @@ namespace std{
 }
 #endif
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 
+#include <serialization/nvp.hpp>
 #include <serialization/split_member.hpp>
 #include <serialization/split_free.hpp>
 
+namespace{
 class A
 {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void save(
         Archive & /* ar */, 
@@ -41,18 +43,18 @@ class A
     ){
         --count;
     }
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
     int count;
 public:
     A() : count(0) {}
     ~A() {
-        BOOST_CHECK(0 == count);
+        ENSURE(0 == count);
     }
 };
 
 class B
 {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void save(
         Archive & /* ar */, 
@@ -71,13 +73,14 @@ class B
 public:
     B() : count(0) {}
     ~B() {
-        BOOST_CHECK(0 == count);
+        ENSURE(0 == count);
     }
 };
+}
 
 // function specializations must be defined in the appropriate
-// namespace - boost::serialization
-namespace boost { 
+// namespace - icecube::serialization
+namespace icecube {
 namespace serialization {
 
 template<class Archive>
@@ -86,23 +89,25 @@ void serialize(
     B & b,
     const unsigned int file_version
 ){ 
-    boost::serialization::split_member(ar, b, file_version);
+    icecube::serialization::split_member(ar, b, file_version);
 } 
 
 } // serialization
-} // namespace boost
+} // icecube
 
+namespace{
 class C
 {
 public:
     int count;
     C() : count(0) {}
     ~C() {
-        BOOST_CHECK(0 == count);
+        ENSURE(0 == count);
     }
 };
+}
 
-namespace boost { 
+namespace icecube {
 namespace serialization {
 
 template<class Archive>
@@ -124,42 +129,62 @@ void load(
 }
 
 } // serialization
-} // namespace boost
+} // icecube
 
-BOOST_SERIALIZATION_SPLIT_FREE(C)
+I3_SERIALIZATION_SPLIT_FREE(C)
 
-void out(const char *testfile, A & a, B & b, C & c)
+template <typename TS /*test settings*/>
+void out(const char* testfile, A & a, B & b, C & c)
 {
-    test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-    oa << BOOST_SERIALIZATION_NVP(a);
-    oa << BOOST_SERIALIZATION_NVP(b);
-    oa << BOOST_SERIALIZATION_NVP(c);
+    typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+    oa << I3_SERIALIZATION_NVP(a);
+    oa << I3_SERIALIZATION_NVP(b);
+    oa << I3_SERIALIZATION_NVP(c);
 }
 
-void in(const char *testfile, A & a, B & b, C & c)
+template <typename TS /*test settings*/>
+void in(const char* testfile, A & a, B & b, C & c)
 {
-    test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-    ia >> BOOST_SERIALIZATION_NVP(a);
-    ia >> BOOST_SERIALIZATION_NVP(b);
-    ia >> BOOST_SERIALIZATION_NVP(c);
+    typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+    ia >> I3_SERIALIZATION_NVP(a);
+    ia >> I3_SERIALIZATION_NVP(b);
+    ia >> I3_SERIALIZATION_NVP(c);
 }
 
-int
-test_main( int /* argc */, char* /* argv */[] )
-{
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void do_test(){
+    auto testfile = I3Test::testfile("test_split");
 
     A a;
     B b;
     C c;
 
-    out(testfile, a, b, c);
-    in(testfile, a, b, c);
-    std::remove(testfile);
-    return EXIT_SUCCESS;
+    out<TS>(testfile.c_str(), a, b, c);
+    in<TS>(testfile.c_str(), a, b, c);
+    std::remove(testfile.c_str());
 }
+
+TEST_GROUP(test_split)
+
+#define TEST_SET(name) \
+TEST(name ## _test_split){ \
+    do_test<test_settings>(); \
+}
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)
 
 // EOF

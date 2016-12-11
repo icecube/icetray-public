@@ -24,60 +24,78 @@ namespace std{
 }
 #endif
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 
 #include "A.hpp"
 #include "A.ipp"
 
 bool A::check_equal(const A &rhs) const
 {
-    BOOST_CHECK_EQUAL(b, rhs.b);
-    BOOST_CHECK_EQUAL(l, rhs.l);
+    ENSURE_EQUAL(b, rhs.b);
+    ENSURE_EQUAL(l, rhs.l);
     #ifndef BOOST_NO_INT64_T
-    BOOST_CHECK_EQUAL(f, rhs.f);
-    BOOST_CHECK_EQUAL(g, rhs.g);
+    ENSURE_EQUAL(f, rhs.f);
+    ENSURE_EQUAL(g, rhs.g);
     #endif
-    BOOST_CHECK_EQUAL(m, rhs.m);
-    BOOST_CHECK_EQUAL(n, rhs.n);
-    BOOST_CHECK_EQUAL(o, rhs.o);
-    BOOST_CHECK_EQUAL(p, rhs.p);
-    BOOST_CHECK_EQUAL(q, rhs.q);
+    ENSURE_EQUAL(m, rhs.m);
+    ENSURE_EQUAL(n, rhs.n);
+    ENSURE_EQUAL(o, rhs.o);
+    ENSURE_EQUAL(p, rhs.p);
+    ENSURE_EQUAL(q, rhs.q);
     #ifndef BOOST_NO_CWCHAR
-    BOOST_CHECK_EQUAL(r, rhs.r);
+    ENSURE_EQUAL(r, rhs.r);
     #endif
-    BOOST_CHECK_EQUAL(c, rhs.c);
-    BOOST_CHECK_EQUAL(s, rhs.s);
-    BOOST_CHECK_EQUAL(t, rhs.t);
-    BOOST_CHECK_EQUAL(u, rhs.u);
-    BOOST_CHECK_EQUAL(v, rhs.v);
-    BOOST_CHECK_EQUAL(l, rhs.l);
-    BOOST_CHECK(std::abs( boost::math::float_distance(w, rhs.w)) < 2);
-    BOOST_CHECK(std::abs( boost::math::float_distance(x, rhs.x)) < 2);
-    BOOST_CHECK(!(0 != y.compare(rhs.y)));
+    ENSURE_EQUAL(c, rhs.c);
+    ENSURE_EQUAL(s, rhs.s);
+    ENSURE_EQUAL(t, rhs.t);
+    ENSURE_EQUAL(u, rhs.u);
+    ENSURE_EQUAL(v, rhs.v);
+    ENSURE_EQUAL(l, rhs.l);
+    ENSURE(std::abs( boost::math::float_distance(w, rhs.w)) < 2);
+    ENSURE(std::abs( boost::math::float_distance(x, rhs.x)) < 2);
+    ENSURE(!(0 != y.compare(rhs.y)));
     #ifndef BOOST_NO_STD_WSTRING
-    BOOST_CHECK(!(0 != z.compare(rhs.z)));
+    ENSURE(!(0 != z.compare(rhs.z)));
     #endif      
     return true;
 }
 
-int 
-test_main( int /* argc */, char* /* argv */[] )
-{
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void do_test(){
+    auto testfile = I3Test::testfile("test_simple_class");
 
     A a, a1;
     {   
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("a", a);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << icecube::serialization::make_nvp("a", a);
     }
     {
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("a", a1);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> icecube::serialization::make_nvp("a", a1);
     }
     a.check_equal(a1);
-    std::remove(testfile);
-    return 0;
+    std::remove(testfile.c_str());
 }
+
+TEST_GROUP(simple_class)
+
+#define TEST_SET(name) \
+TEST(name ## _simple_class){ \
+    do_test<test_settings>(); \
+}
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)

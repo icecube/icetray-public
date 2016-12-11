@@ -9,6 +9,8 @@
 // Should pass compilation and execution
 // 16.09.2004, updated 04.03.2009
 
+#include <I3Test.h>
+
 #include <cstddef> // NULL
 #include <cstdio> // remove
 #include <fstream>
@@ -22,15 +24,12 @@ namespace std
 }
 #endif
 
-#include "test_tools.hpp"
-
 #include <serialization/bitset.hpp>
 #include <serialization/nvp.hpp>
 
-int test_main( int /* argc */, char* /* argv */[] )
-{
-    const char* testfile = boost::archive::tmpnam( NULL );
-    BOOST_REQUIRE( NULL != testfile );
+template <typename TS /*test settings*/>
+void do_test(){
+    auto testfile = I3Test::testfile("test_bitset");
 
     std::bitset<8> bitsetA;
     bitsetA.set( 0, false );
@@ -43,22 +42,42 @@ int test_main( int /* argc */, char* /* argv */[] )
     bitsetA.set( 7, true  );
     
     {
-        test_ostream os( testfile, TEST_STREAM_FLAGS );
-        test_oarchive oa( os );
-        oa << boost::serialization::make_nvp( "bitset", bitsetA );
+        typename TS::test_ostream os( testfile, TS::TEST_STREAM_FLAGS );
+        typename TS::test_oarchive oa( os, TS::TEST_ARCHIVE_FLAGS );
+        oa << icecube::serialization::make_nvp( "bitset", bitsetA );
     }
     
     std::bitset<8> bitsetB;
     {
-        test_istream is( testfile, TEST_STREAM_FLAGS );
-        test_iarchive ia( is );
-        ia >> boost::serialization::make_nvp( "bitset", bitsetB );
+        typename TS::test_istream is( testfile, TS::TEST_STREAM_FLAGS );
+        typename TS::test_iarchive ia( is, TS::TEST_ARCHIVE_FLAGS );
+        ia >> icecube::serialization::make_nvp( "bitset", bitsetB );
     }
     
-    BOOST_CHECK( bitsetA == bitsetB );
+    ENSURE( bitsetA == bitsetB );
     
-    std::remove( testfile );
-    return EXIT_SUCCESS;
+    std::remove(testfile.c_str());
 }
+
+TEST_GROUP(bitset)
+
+#define TEST_SET(name) \
+TEST(name ## _std_bitset){ \
+    do_test<test_settings>(); \
+}
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)
 
 // EOF

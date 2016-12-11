@@ -11,7 +11,7 @@
 #include <archive/text_oarchive.hpp>
 #include <serialization/nvp.hpp>
 
-using namespace boost::archive;
+using namespace icecube::archive;
 
 struct A {
     template<class Archive>
@@ -35,5 +35,5 @@ struct A {
 // std::list<pair<trip_info, const bus_route_info * const> > schedule
 
 void f4(text_oarchive & oa, A * const & a){
-    oa << BOOST_SERIALIZATION_NVP(a);
+    oa << I3_SERIALIZATION_NVP(a);
 }

@@ -5,8 +5,8 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 #include <archive/polymorphic_xml_woarchive.hpp>
-typedef boost::archive::polymorphic_xml_woarchive test_oarchive;
+typedef icecube::archive::polymorphic_xml_woarchive test_oarchive;
 typedef std::wofstream test_ostream;
 #include <archive/polymorphic_xml_wiarchive.hpp>
-typedef boost::archive::polymorphic_xml_wiarchive test_iarchive;
+typedef icecube::archive::polymorphic_xml_wiarchive test_iarchive;
 typedef std::wifstream test_istream;

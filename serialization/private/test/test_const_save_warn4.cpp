@@ -11,7 +11,7 @@
 #include <archive/text_oarchive.hpp>
 #include <serialization/nvp.hpp>
 
-using namespace boost::archive;
+using namespace icecube::archive;
 
 struct A {
     template<class Archive>

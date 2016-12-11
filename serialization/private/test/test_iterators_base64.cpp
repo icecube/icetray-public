@@ -32,7 +32,7 @@ namespace std{
 #include <archive/iterators/remove_whitespace.hpp>
 #include <archive/iterators/transform_width.hpp>
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 
 #include <iostream>
 
@@ -48,9 +48,9 @@ void test_base64(unsigned int size){
     text_base64_type text_base64;
 
     typedef 
-        boost::archive::iterators::insert_linebreaks<
-            boost::archive::iterators::base64_from_binary<
-                boost::archive::iterators::transform_width<
+        icecube::archive::iterators::insert_linebreaks<
+            icecube::archive::iterators::base64_from_binary<
+                icecube::archive::iterators::transform_width<
                     CharType *
                     ,6
                     ,sizeof(CharType) * 8
@@ -61,16 +61,16 @@ void test_base64(unsigned int size){
         translate_out;
 
     std::copy(
-        translate_out(BOOST_MAKE_PFTO_WRAPPER(static_cast<CharType *>(rawdata))),
-        translate_out(BOOST_MAKE_PFTO_WRAPPER(rawdata + size)),
+        translate_out(I3_MAKE_PFTO_WRAPPER(static_cast<CharType *>(rawdata))),
+        translate_out(I3_MAKE_PFTO_WRAPPER(rawdata + size)),
         std::back_inserter(text_base64)
     );
 
     // convert from base64 to binary and compare with the original 
     typedef 
-        boost::archive::iterators::transform_width<
-            boost::archive::iterators::binary_from_base64<
-                boost::archive::iterators::remove_whitespace<
+        icecube::archive::iterators::transform_width<
+            icecube::archive::iterators::binary_from_base64<
+                icecube::archive::iterators::remove_whitespace<
                     typename text_base64_type::iterator
                 >
             >,
@@ -78,19 +78,19 @@ void test_base64(unsigned int size){
             6
         > translate_in;
     
-    BOOST_CHECK(
+    ENSURE(
         std::equal(
             rawdata,
             rawdata + size,
-            translate_in(BOOST_MAKE_PFTO_WRAPPER(text_base64.begin()))
+            translate_in(I3_MAKE_PFTO_WRAPPER(text_base64.begin()))
         )
     );
 
 }
 
-int
-test_main( int /*argc*/, char* /*argv*/[] )
-{
+TEST_GROUP(test_iterators_base64)
+
+TEST(test_iterators_base64){
     test_base64<char>(1);
     test_base64<char>(2);
     test_base64<char>(3);
@@ -103,5 +103,4 @@ test_main( int /*argc*/, char* /*argv*/[] )
     test_base64<wchar_t>(4);
     test_base64<wchar_t>(150);
     #endif
-    return EXIT_SUCCESS;
 }

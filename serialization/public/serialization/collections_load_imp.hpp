@@ -37,6 +37,7 @@ namespace std{
 #include <serialization/nvp.hpp>
 #include <serialization/detail/stack_constructor.hpp>
 #include <serialization/collection_size_type.hpp>
+#include <serialization/item_version_type.hpp>
 
 namespace icecube{
 namespace serialization {
@@ -185,7 +186,7 @@ inline void load_collection(Archive & ar, Container &s)
         ar >> I3_SERIALIZATION_NVP(item_version);
     else
     */
-        item_version = 0;
+    item_version = 0;
     R rx;
     rx(s, count);
     std::size_t c = count;

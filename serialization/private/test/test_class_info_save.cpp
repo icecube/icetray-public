@@ -12,25 +12,25 @@
 #include <fstream>
 #include <string>
 
-#include <boost/static_assert.hpp>
-#include <archive/tmpdir.hpp>
 #include <boost/preprocessor/stringize.hpp>
-#include "test_tools.hpp"
 
 #include <serialization/level.hpp>
 #include <serialization/version.hpp>
 #include <serialization/tracking.hpp>
 #include <serialization/nvp.hpp>
 
+#include <I3Test.h>
+
 // first case : serialize WITHOUT class information
 class A
 {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void serialize(Archive & /*ar*/, const unsigned int file_version){
-        // class that don't save class info always have a version number of 0
-        BOOST_CHECK(file_version == 0);
-        BOOST_STATIC_ASSERT(0 == ::boost::serialization::version<A>::value);
+        // classes that don't save class info always have a version number of 0
+        ENSURE(file_version == 0);
+        static_assert(0 == ::icecube::serialization::version<A>::value,
+                      "classes that don't save class info always have a version number of 0");
         ++count;
     }
 public:
@@ -38,23 +38,23 @@ public:
     A() : count(0) {}
 };
 
-BOOST_CLASS_IMPLEMENTATION(A, ::boost::serialization::object_serializable)
-BOOST_CLASS_TRACKING(A, ::boost::serialization::track_never)
+I3_CLASS_IMPLEMENTATION(A, ::icecube::serialization::object_serializable)
+I3_CLASS_TRACKING(A, ::icecube::serialization::track_never)
 
 // second case : serialize WITH class information
 // note: GCC compile fails if this is after the class declaration
 class B;
-BOOST_CLASS_VERSION(B, 2)
+I3_CLASS_VERSION(B, 2)
 
 class B
 {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void serialize(Archive & /*ar*/, const unsigned int file_version){
         // verify at execution that correct version number is passed on save
-        BOOST_CHECK(
+        ENSURE(
             static_cast<const int>(file_version) 
-            == ::boost::serialization::version<B>::value
+            == ::icecube::serialization::version<B>::value
         );
         ++count;
     }
@@ -63,38 +63,48 @@ public:
     B() : count(0) {}
 };
 
-BOOST_CLASS_IMPLEMENTATION(B, ::boost::serialization::object_class_info)
-BOOST_CLASS_TRACKING(B, boost::serialization::track_always)
+I3_CLASS_IMPLEMENTATION(B, ::icecube::serialization::object_class_info)
+I3_CLASS_TRACKING(B, icecube::serialization::track_always)
 
 #include <iostream>
 
+template <typename TS /*test settings*/>
 void out(const char *testfile, const A & a, const B & b)
 {
-    test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
+    typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
     // write object twice to check tracking
-    oa << BOOST_SERIALIZATION_NVP(a);
-    oa << BOOST_SERIALIZATION_NVP(a);
-    BOOST_CHECK(a.count == 2);  // no tracking => redundant saves
-    std::cout << "a.count=" << a.count << '\n' ;
-    oa << BOOST_SERIALIZATION_NVP(b);
-    oa << BOOST_SERIALIZATION_NVP(b);
-    BOOST_CHECK(b.count == 1);  // tracking => no redundant saves
-    std::cout << "b.count=" << b.count << '\n' ;
+    oa << I3_SERIALIZATION_NVP(a);
+    oa << I3_SERIALIZATION_NVP(a);
+    ENSURE(a.count == 2);  // no tracking => redundant saves
+    oa << I3_SERIALIZATION_NVP(b);
+    oa << I3_SERIALIZATION_NVP(b);
+    ENSURE(b.count == 1);  // tracking => no redundant saves
 }
 
-int
-test_main( int /* argc */, char* /* argv */[] )
-{
-    A a;
-    B b;
-    std::string filename;
-    filename += boost::archive::tmpdir();
-    filename += '/';
-    filename += BOOST_PP_STRINGIZE(testfile_);
-    filename += BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST);
-    out(filename.c_str(), a, b);
-    return EXIT_SUCCESS;
+TEST_GROUP(class_info_save)
+
+#define TEST_SET(name)\
+TEST(name ## _test_class_info_save){ \
+    A a; \
+    B b; \
+    std::string filename = I3Test::testfile(BOOST_PP_STRINGIZE(name) "_class_info_load_" BOOST_PP_STRINGIZE(I3_ARCHIVE_TEST)); \
+    out<test_settings>(filename.c_str(), a, b); \
 }
+//do _not_ remove files, as they are needed by test_class_info_load
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)
 
 // EOF

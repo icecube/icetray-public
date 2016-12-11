@@ -21,11 +21,12 @@ namespace std{
 #include <serialization/access.hpp>
 #include <serialization/base_object.hpp>
 #include <serialization/export.hpp>
+#include <serialization/nvp.hpp>
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 
 class Base {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     int m_i;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version){
@@ -46,11 +47,11 @@ public:
 };
 
 class Derived :  private Base {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
 private:
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version){
-        ar & boost::serialization::base_object<Base>(*this);
+        ar & icecube::serialization::base_object<Base>(*this);
     }
 public:
     virtual bool operator==(const Derived &rhs) const {
@@ -59,48 +60,46 @@ public:
     Derived(int i = 0) :
         Base(i)
     {}
+    static Base* make_base(int i=0){
+        return((Base*)new Derived(i));
+    }
 };
 
-BOOST_CLASS_EXPORT(Derived)
+I3_CLASS_EXPORT(Derived)
 
-int 
-test_main( int /* argc */, char* /* argv */[] )
-{
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void do_test(){
+    auto testfile = I3Test::testfile("test_private_base");
 
     Derived a(1), a1(2);
     {   
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("a", a);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << icecube::serialization::make_nvp("a", a);
     }
     {
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("a", a1);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> icecube::serialization::make_nvp("a", a1);
     }
-    BOOST_CHECK_EQUAL(a, a1);
-    std::remove(testfile);
+    ENSURE(a == a1);
+    std::remove(testfile.c_str());
 
-    Base *ta = new Derived(1);
-    Base *ta1 = NULL;
-
+    Base* ta = Derived::make_base(1);
+    Base* ta1 = NULL;
     {   
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("ta", ta);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << icecube::serialization::make_nvp("ta", ta);
     }
     {
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("ta", ta1);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> icecube::serialization::make_nvp("ta", ta1);
     }
-    BOOST_CHECK(ta != ta1);
-    BOOST_CHECK(*ta == *ta1);
-    //BOOST_CHECK(*static_cast<Derived *>(ta) == *static_cast<Derived *>(ta1));
+    ENSURE(ta != ta1);
+    ENSURE(*ta == *ta1);
+    ENSURE(*dynamic_cast<Derived*>(ta) == *dynamic_cast<Derived*>(ta1));
     
-    std::remove(testfile);
-
-    return 0;
+    std::remove(testfile.c_str());
 }

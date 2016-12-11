@@ -20,11 +20,13 @@
 #include <serialization/type_info_implementation.hpp>
 #include <serialization/version.hpp> 
 
+#include <I3Test.h>
+
 struct foo
 {
     int x;
 private:
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
 
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version)
@@ -32,11 +34,12 @@ private:
         // In compilers implementing 2-phase lookup, the call to
         // make_nvp is resolved even if foo::serialize() is never
         // instantiated.
-        ar & boost::serialization::make_nvp("x",x);
+        ar & icecube::serialization::make_nvp("x",x);
     }
 };
 
-int
-main(int /*argc*/, char * /*argv*/[]){
-    return 0;
+TEST_GROUP(test_inclusion)
+
+TEST(inclusion){
+    foo(); //we mostly just care that this compiles
 }

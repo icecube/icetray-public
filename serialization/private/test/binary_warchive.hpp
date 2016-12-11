@@ -6,9 +6,17 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 // binary_warchive
 #include <archive/binary_woarchive.hpp>
-typedef boost::archive::binary_woarchive test_oarchive;
-typedef std::wofstream test_ostream;
 #include <archive/binary_wiarchive.hpp>
-typedef boost::archive::binary_wiarchive test_iarchive;
-typedef std::wifstream test_istream;
-#define TEST_STREAM_FLAGS std::wios::binary
+
+struct binary_warchive_test_settings{
+    typedef icecube::archive::binary_woarchive test_oarchive;
+    typedef std::wofstream test_ostream;
+    
+    typedef icecube::archive::binary_wiarchive test_iarchive;
+    typedef std::wifstream test_istream;
+    
+    static constexpr int TEST_STREAM_FLAGS = std::wios::binary;
+    static constexpr int TEST_ARCHIVE_FLAGS = 0;
+};
+
+#define test_settings binary_warchive_test_settings

@@ -11,6 +11,8 @@
 #include <algorithm>
 #include <cstddef>
 #include <fstream>
+#include <string>
+#include <vector>
 
 #include <cstdio> // remove
 #include <boost/config.hpp>
@@ -20,12 +22,10 @@ namespace std{
 }
 #endif
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 #include <boost/lexical_cast.hpp>
 #include <serialization/split_free.hpp>
 #include <serialization/vector.hpp>
-#include <string>
-#include <vector>
 
 class my_string:public std::string
 {
@@ -46,9 +46,9 @@ struct my_string_helper
   table m_t;
 };
 
-BOOST_SERIALIZATION_SPLIT_FREE(my_string)
+I3_SERIALIZATION_SPLIT_FREE(my_string)
 
-namespace boost {
+namespace icecube {
 namespace serialization {
 
 template<class Archive>
@@ -96,30 +96,50 @@ void load(Archive & ar, my_string & str, const unsigned int /* version */)
 }
 
 } // namespace serialization
-} // namespace boost
+} // namespace icecube
 
-int test_main( int /* argc */, char* /* argv */[] ){
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void do_test(){
+    auto testfile = I3Test::testfile("test_complex");
 
     std::vector<my_string> v1;
     for(int i=0; i<1000; ++i){
         v1.push_back(my_string(boost::lexical_cast<std::string>(i % 100)));
     }
     {
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("vector", v1);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << icecube::serialization::make_nvp("vector", v1);
     }
     {
         std::vector<my_string> v2;
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("vector", v2);
-        BOOST_CHECK(v1 == v2);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> icecube::serialization::make_nvp("vector", v2);
+        ENSURE(v1 == v2);
     }
-    std::remove(testfile);
-    return EXIT_SUCCESS;
+    std::remove(testfile.c_str());
 }
+
+TEST_GROUP(test_helper_support)
+
+#define TEST_SET(name) \
+TEST(name ## _helper_support){ \
+    do_test<test_settings>(); \
+}
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)
 
 // EOF

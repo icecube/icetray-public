@@ -19,66 +19,77 @@ namespace std{
 }
 #endif
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 #include <serialization/tracking.hpp>
+#include <serialization/tracking_enum.hpp>
 #include <serialization/nvp.hpp>
 
 #define TEST_CLASS(N, TRACKING) \
+namespace{ \
 class N \
 { \
-    friend class boost::serialization::access; \
+    friend class icecube::serialization::access; \
     template<class Archive> \
     void serialize(Archive & /* ar */, const unsigned int /* file_version */){ \
         ++count; \
     } \
 public: \
     static unsigned int count; \
+    static void reset_count(){ count=0; } \
 }; \
-unsigned int N::count = 0;\
-BOOST_CLASS_TRACKING(N, TRACKING)
+unsigned int N::count = 0; \
+} \
+I3_CLASS_TRACKING(N, TRACKING)
 
-TEST_CLASS(AN, ::boost::serialization::track_never)
-TEST_CLASS(AS, ::boost::serialization::track_selectively)
-TEST_CLASS(AA, ::boost::serialization::track_always)
+TEST_CLASS(AN, ::icecube::serialization::track_never)
+TEST_CLASS(AS, ::icecube::serialization::track_selectively)
+TEST_CLASS(AA, ::icecube::serialization::track_always)
 
 // test pointers
-TEST_CLASS(PAN, ::boost::serialization::track_never)
-TEST_CLASS(PAS, ::boost::serialization::track_selectively)
-TEST_CLASS(PAA, ::boost::serialization::track_always)
+TEST_CLASS(PAN, ::icecube::serialization::track_never)
+TEST_CLASS(PAS, ::icecube::serialization::track_selectively)
+TEST_CLASS(PAA, ::icecube::serialization::track_always)
 
-void out(const char *testfile)
-{
-    test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
+template <typename TS /*test settings*/>
+void out(const char* testfile){
+    typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+    // reset counts in case other tests have already run and set them
+    AN::count = 0;
+    AS::count = 0;
+    AA::count = 0;
     // write object twice to check tracking
     AN an;
     AS as;
     AA aa;
-    oa << BOOST_SERIALIZATION_NVP(an) << BOOST_SERIALIZATION_NVP(an);
-    BOOST_CHECK(an.count == 2);
-    oa << BOOST_SERIALIZATION_NVP(as) << BOOST_SERIALIZATION_NVP(as);
-    BOOST_CHECK(as.count == 2);
-    oa << BOOST_SERIALIZATION_NVP(aa) << BOOST_SERIALIZATION_NVP(aa);
-    BOOST_CHECK(aa.count == 1);
+    oa << I3_SERIALIZATION_NVP(an) << I3_SERIALIZATION_NVP(an);
+    ENSURE_EQUAL(an.count,2);
+    oa << I3_SERIALIZATION_NVP(as) << I3_SERIALIZATION_NVP(as);
+    ENSURE_EQUAL(as.count,2);
+    oa << I3_SERIALIZATION_NVP(aa) << I3_SERIALIZATION_NVP(aa);
+    ENSURE_EQUAL(aa.count,1);
 
+    PAN::count = 0;
+    PAS::count = 0;
+    PAA::count = 0;
     PAN *pan = new PAN;
     PAS *pas = new PAS;
     PAA *paa = new PAA;
-    oa << BOOST_SERIALIZATION_NVP(pan) << BOOST_SERIALIZATION_NVP(pan);
-    BOOST_CHECK(pan->count == 2);
-    oa << BOOST_SERIALIZATION_NVP(pas) << BOOST_SERIALIZATION_NVP(pas);
-    BOOST_CHECK(pas->count == 1);
-    oa << BOOST_SERIALIZATION_NVP(paa) << BOOST_SERIALIZATION_NVP(paa);
-    BOOST_CHECK(paa->count == 1);
+    oa << I3_SERIALIZATION_NVP(pan) << I3_SERIALIZATION_NVP(pan);
+    ENSURE_EQUAL(pan->count,2);
+    oa << I3_SERIALIZATION_NVP(pas) << I3_SERIALIZATION_NVP(pas);
+    ENSURE_EQUAL(pas->count,1);
+    oa << I3_SERIALIZATION_NVP(paa) << I3_SERIALIZATION_NVP(paa);
+    ENSURE_EQUAL(paa->count,1);
     delete pan;
     delete pas;
     delete paa;
 }
 
-void in(const char *testfile)
-{
-    test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
+template <typename TS /*test settings*/>
+void in(const char* testfile){
+    typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+    typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
     // read object twice to check tracking
     AN an;
     AS as;
@@ -88,12 +99,12 @@ void in(const char *testfile)
     AS::count = 0;
     AA::count = 0;
 
-    ia >> BOOST_SERIALIZATION_NVP(an) >> BOOST_SERIALIZATION_NVP(an);
-    BOOST_CHECK(an.count == 2);
-    ia >> BOOST_SERIALIZATION_NVP(as) >> BOOST_SERIALIZATION_NVP(as);
-    BOOST_CHECK(as.count == 2);
-    ia >> BOOST_SERIALIZATION_NVP(aa) >> BOOST_SERIALIZATION_NVP(aa);
-    BOOST_CHECK(aa.count == 1);
+    ia >> I3_SERIALIZATION_NVP(an) >> I3_SERIALIZATION_NVP(an);
+    ENSURE(an.count == 2);
+    ia >> I3_SERIALIZATION_NVP(as) >> I3_SERIALIZATION_NVP(as);
+    ENSURE(as.count == 2);
+    ia >> I3_SERIALIZATION_NVP(aa) >> I3_SERIALIZATION_NVP(aa);
+    ENSURE(aa.count == 1);
 
     PAN::count = 0;
     PAS::count = 0;
@@ -102,29 +113,40 @@ void in(const char *testfile)
     PAN *pan = NULL;
     PAS *pas = NULL;
     PAA *paa = NULL;
-    ia >> BOOST_SERIALIZATION_NVP(pan);
-    ia >> BOOST_SERIALIZATION_NVP(pan);
-    BOOST_CHECK(pan->count == 2);
-    ia >> BOOST_SERIALIZATION_NVP(pas);
-    ia >> BOOST_SERIALIZATION_NVP(pas);
-    BOOST_CHECK(pas->count == 1);
-    ia >> BOOST_SERIALIZATION_NVP(paa);
-    ia >> BOOST_SERIALIZATION_NVP(paa);
-    BOOST_CHECK(paa->count == 1);
+    ia >> I3_SERIALIZATION_NVP(pan);
+    ia >> I3_SERIALIZATION_NVP(pan);
+    ENSURE(pan->count == 2);
+    ia >> I3_SERIALIZATION_NVP(pas);
+    ia >> I3_SERIALIZATION_NVP(pas);
+    ENSURE(pas->count == 1);
+    ia >> I3_SERIALIZATION_NVP(paa);
+    ia >> I3_SERIALIZATION_NVP(paa);
+    ENSURE(paa->count == 1);
     delete pan;
     delete pas;
     delete paa;
 }
 
-int
-test_main( int /* argc */, char* /* argv */[] )
-{
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+TEST_GROUP(tracking)
 
-    out(testfile);
-    in(testfile);
-    std::remove(testfile);
-    return EXIT_SUCCESS;
+#define TEST_SET(name) \
+TEST(name ## _test_tracking){ \
+    auto testfile = I3Test::testfile("test_tracking_" BOOST_PP_STRINGIZE(name) ); \
+    out<test_settings>(testfile.c_str()); \
+    in<test_settings>(testfile.c_str()); \
+    std::remove(testfile.c_str()); \
 }
 
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)

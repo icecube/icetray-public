@@ -7,29 +7,25 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // <gennadiy.rozental@tfn.com>
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 #include <serialization/singleton.hpp>
 
-class x {
-};
+class x {};
 
-void
-test1(const x & x1, const x & x2){
-    BOOST_CHECK(& x1 == & x2);
+void test1(const x& x1, const x& x2){
+    ENSURE(&x1 == &x2);
 }
 
-int
-test_main( int /* argc */, char* /* argv */[] )
-{
-    const x & x1 = boost::serialization::singleton<x>::get_const_instance();
-    const x & x2 = boost::serialization::singleton<x>::get_const_instance();
+TEST_GROUP(test_singleton)
 
-    BOOST_CHECK(& x1 == & x2);
+TEST(test_singleton){
+    const x& x1 = icecube::serialization::singleton<x>::get_const_instance();
+    const x& x2 = icecube::serialization::singleton<x>::get_const_instance();
+
+    ENSURE(&x1 == &x2);
 
     test1(
-        boost::serialization::singleton<x>::get_const_instance(),
-        boost::serialization::singleton<x>::get_const_instance()
+        icecube::serialization::singleton<x>::get_const_instance(),
+        icecube::serialization::singleton<x>::get_const_instance()
     );
-
-    return EXIT_SUCCESS;
 }

@@ -54,10 +54,10 @@ inline void serialize(
     std::priority_queue< T, Container, Compare> & t,
     const unsigned int file_version 
 ){
-    typedef typename mpl::eval_if<
+    typedef typename boost::mpl::eval_if<
         typename Archive::is_saving,
-        mpl::identity<detail::priority_queue_save<T, Container, Compare> >,
-        mpl::identity<detail::priority_queue_load<T, Container, Compare> >
+        boost::mpl::identity<detail::priority_queue_save<T, Container, Compare> >,
+        boost::mpl::identity<detail::priority_queue_load<T, Container, Compare> >
     >::type typex;
     static_cast<typex &>(t)(ar, file_version);
 }

@@ -54,10 +54,10 @@ inline void serialize(
     std::queue< T, C> & t,
     const unsigned int file_version 
 ){
-    typedef typename mpl::eval_if<
+    typedef typename boost::mpl::eval_if<
         typename Archive::is_saving,
-        mpl::identity<detail::queue_save<T, C> >,
-        mpl::identity<detail::queue_load<T, C> >
+        boost::mpl::identity<detail::queue_save<T, C> >,
+        boost::mpl::identity<detail::queue_load<T, C> >
     >::type typex;
     static_cast<typex &>(t)(ar, file_version);
 }

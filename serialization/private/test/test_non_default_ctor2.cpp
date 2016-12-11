@@ -15,7 +15,9 @@
 
 #include <boost/config.hpp>
 
-#include "test_tools.hpp"
+#include <serialization/nvp.hpp>
+
+#include <I3Test.h>
 
 class IntValueHolder
 {
@@ -33,12 +35,12 @@ public:
 private:
     int value;
 
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
 
     template <class ArchiveT>
     void serialize(ArchiveT& ar, const unsigned int /* file_version */)
     {
-        ar & BOOST_SERIALIZATION_NVP(value);
+        ar & I3_SERIALIZATION_NVP(value);
     }
 };
 
@@ -58,15 +60,16 @@ public:
 private:
     float value;
 
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
 
     template <class ArchiveT>
     void serialize(ArchiveT& ar, const unsigned int /* file_version */)
     {
-        ar & BOOST_SERIALIZATION_NVP(value);
+        ar & I3_SERIALIZATION_NVP(value);
     }
 };
 
+namespace{
 class A
 {
 public:
@@ -83,25 +86,26 @@ public:
     FloatValueHolder* floatValue;
 
 private:
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
 
     template <class ArchiveT>
     void serialize(ArchiveT& ar, const unsigned int /* file_version */)
     {
-        ar & BOOST_SERIALIZATION_NVP(floatValue);
+        ar & I3_SERIALIZATION_NVP(floatValue);
     }
 };
+}
 
-namespace boost { 
+namespace icecube {
 namespace serialization {
 
 template <class ArchiveT>
 void save_construct_data(
     ArchiveT& archive, 
     const A* p, 
-    const BOOST_PFTO unsigned int /*version*/
+    const I3_PFTO unsigned int /*version*/
 ){
-    archive & boost::serialization::make_nvp("initialValue", p->value);
+    archive & icecube::serialization::make_nvp("initialValue", p->value);
 }
 
 template <class ArchiveT>
@@ -111,34 +115,55 @@ void load_construct_data(
     const unsigned int /*version*/
 ){
     IntValueHolder initialValue;
-    archive & boost::serialization::make_nvp("initialValue", initialValue);
+    archive & icecube::serialization::make_nvp("initialValue", initialValue);
 
     ::new (p) A(initialValue);
 }
 
 } // serialization
-} // namespace boost
+} // icecube
 
-int test_main( int /* argc */, char* /* argv */[] )
-{
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void do_test(){
+    auto testfile = I3Test::testfile("test_non_default_ctor_2");
     A* a = new A(5);
 
     {   
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << BOOST_SERIALIZATION_NVP(a);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << I3_SERIALIZATION_NVP(a);
     }
 
     A* a_new;
 
     {
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> BOOST_SERIALIZATION_NVP(a_new);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> I3_SERIALIZATION_NVP(a_new);
     }
+    ENSURE(a->value.GetValue() == a_new->value.GetValue());
+    ENSURE(a->floatValue->GetValue() == a_new->floatValue->GetValue());
     delete a;
     delete a_new;
-    return EXIT_SUCCESS;
 }
+
+TEST_GROUP(test_non_default_ctor_2)
+
+#define TEST_SET(name) \
+TEST(name ## _test_non_default_ctor_2){ \
+    do_test<test_settings>(); \
+}
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)

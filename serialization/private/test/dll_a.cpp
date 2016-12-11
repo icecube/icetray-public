@@ -21,12 +21,12 @@
 
 template
 EXPORT_DECL(void) A::serialize(
-    boost::archive::text_oarchive &ar,
+    icecube::archive::text_oarchive &ar,
     const unsigned int /* file_version */
 );
 template
 EXPORT_DECL(void) A::serialize(
-    boost::archive::text_iarchive &ar,
+    icecube::archive::text_iarchive &ar,
     const unsigned int /* file_version */
 );
 
@@ -37,12 +37,12 @@ EXPORT_DECL(void) A::serialize(
 
 template
 EXPORT_DECL(void) A::serialize(
-    boost::archive::polymorphic_oarchive &ar,
+    icecube::archive::polymorphic_oarchive &ar,
     const unsigned int /* file_version */
 );
 template
 EXPORT_DECL(void) A::serialize(
-    boost::archive::polymorphic_iarchive &ar,
+    icecube::archive::polymorphic_iarchive &ar,
     const unsigned int /* file_version */
 );
 

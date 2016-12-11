@@ -6,8 +6,17 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 // text_archive
 #include <archive/text_oarchive.hpp>
-typedef boost::archive::text_oarchive test_oarchive;
-typedef std::ofstream test_ostream;
 #include <archive/text_iarchive.hpp>
-typedef boost::archive::text_iarchive test_iarchive;
-typedef std::ifstream test_istream;
+
+struct text_archive_test_settings{
+    typedef icecube::archive::text_oarchive test_oarchive;
+    typedef std::ofstream test_ostream;
+    
+    typedef icecube::archive::text_iarchive test_iarchive;
+    typedef std::ifstream test_istream;
+    
+    static constexpr int TEST_STREAM_FLAGS = 0;
+    static constexpr int TEST_ARCHIVE_FLAGS = 0;
+};
+
+#define test_settings text_archive_test_settings

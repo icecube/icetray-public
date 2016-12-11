@@ -139,18 +139,16 @@ void serialize(Archive& ar, boost::array<T,N>& a, const unsigned int /* version 
     ar & icecube::serialization::make_nvp("elems", a.elems);
 }
 
-//#ifndef BOOST_NO_CXX11_HDR_ARRAY
-//// implement serialization for std::array
-//template <class Archive, class T, std::size_t N>
-//void serialize(Archive& ar, std::array<T,N>& a, const unsigned int /* version */)
-//{
-//    ar & icecube::serialization::make_nvp(
-//        "elems",
-//        *static_cast<T (*)[N]>(static_cast<void *>(a.data()))
-//    );
-//    
-//}
-//#endif
+// implement serialization for std::array
+template <class Archive, class T, std::size_t N>
+void serialize(Archive& ar, std::array<T,N>& a, const unsigned int /* version */)
+{
+    ar & icecube::serialization::make_nvp(
+        "elems",
+        *static_cast<T (*)[N]>(static_cast<void *>(a.data()))
+    );
+    
+}
 
 } } // end namespace icecube::serialization
 

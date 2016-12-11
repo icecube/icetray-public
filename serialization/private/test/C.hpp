@@ -1,4 +1,4 @@
-#ifndef BOOST_SERIALIZATION_TEST_A_HPP
+#ifndef I3_SERIALIZATION_TEST_A_HPP
 #define I3_SERIALIZATION_TEST_A_HPP
 
 // MS compatible compilers support #pragma once
@@ -27,18 +27,18 @@
 class C
 {
 private:
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
-    void save(Archive &ar, boost::archive::version_type file_version) const;
+    void save(Archive &ar, icecube::archive::version_type file_version) const;
     template<class Archive>
-    void load(Archive & ar, boost::archive::version_type file_version);
-    BOOST_SERIALIZATION_MEMBER_SPLIT()
+    void load(Archive & ar, icecube::archive::version_type file_version);
+    I3_SERIALIZATION_MEMBER_SPLIT()
     B b;
 public:
     bool operator==(const C &rhs) const;
 };
 
-BOOST_CLASS_VERSION(C, 1)
+I3_CLASS_VERSION(C, 1)
 
 inline bool C::operator==(const C &rhs) const
 {
@@ -46,13 +46,13 @@ inline bool C::operator==(const C &rhs) const
 }
 
 template<class Archive>
-inline void save(Archive &ar, boost::archive::version_type file_version) const
+inline void save(Archive &ar, icecube::archive::version_type file_version) const
 {
     ar << b;
 }
 
 template<class Archive>
-inline void load(Archive & ar, boost::archive::version_type file_version){
+inline void load(Archive & ar, icecube::archive::version_type file_version){
 {
     switch(file_version){
     case 1:
@@ -65,4 +65,4 @@ inline void load(Archive & ar, boost::archive::version_type file_version){
     }
 }
 
-#endif // BOOST_SERIALIZATION_TEST_C_HPP
+#endif // I3_SERIALIZATION_TEST_C_HPP

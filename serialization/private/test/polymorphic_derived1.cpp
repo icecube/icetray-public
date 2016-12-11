@@ -15,9 +15,9 @@
 
 const char * polymorphic_derived1::get_key() const {
     return 
-        boost::serialization::type_info_implementation<
+        icecube::serialization::type_info_implementation<
             polymorphic_derived1
         >::type::get_const_instance().get_key();
 }
 
-BOOST_CLASS_EXPORT_IMPLEMENT(polymorphic_derived1)
+I3_CLASS_EXPORT_IMPLEMENT(polymorphic_derived1)

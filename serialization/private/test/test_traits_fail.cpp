@@ -11,25 +11,25 @@
 #include <serialization/level.hpp>
 #include <serialization/version.hpp>
 
-class A
-{
-};
+namespace{
+class A{};
+}
 
-BOOST_CLASS_IMPLEMENTATION(A, boost::serialization::not_serializable)
+I3_CLASS_IMPLEMENTATION(A, icecube::serialization::not_serializable)
 // It can make no sense to assign a version number to a class that 
 // is not serialized with class information
-BOOST_CLASS_VERSION(A, 2) // should fail during compile
+I3_CLASS_VERSION(A, 2) // should fail during compile
 // It can make no sense to assign tracking behavior to a class that 
 // is not serializable. Should fail during compile.
-BOOST_CLASS_TRACKING(A, boost::serialization::track_never) 
+I3_CLASS_TRACKING(A, boost::serialization::track_never)
 
 class B
 {
 };
 
-BOOST_CLASS_IMPLEMENTATION(B, boost::serialization::object_class_info)
-BOOST_CLASS_VERSION(B, 2)
-BOOST_CLASS_TRACKING(B, boost::serialization::track_always)
+I3_CLASS_IMPLEMENTATION(B, icecube::serialization::object_class_info)
+I3_CLASS_VERSION(B, 2)
+I3_CLASS_TRACKING(B, icecube::serialization::track_always)
 
 int
 test_main( int /* argc */, char* /* argv */[] )

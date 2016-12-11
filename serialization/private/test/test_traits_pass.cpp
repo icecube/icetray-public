@@ -17,9 +17,9 @@ class B
 {
 };
 
-BOOST_CLASS_IMPLEMENTATION(B, boost::serialization::object_class_info)
-BOOST_CLASS_VERSION(B, 2)
-BOOST_CLASS_TRACKING(B, boost::serialization::track_always)
+I3_CLASS_IMPLEMENTATION(B, icecube::serialization::object_class_info)
+I3_CLASS_VERSION(B, 2)
+I3_CLASS_TRACKING(B, icecube::serialization::track_always)
 
 int
 test_main( int argc, char* argv[] )

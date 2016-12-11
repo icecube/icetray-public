@@ -98,18 +98,18 @@ namespace serialization {                    \
 template<>                                   \
 struct tracking_level< T >                   \
 {                                            \
-    typedef mpl::integral_c_tag tag;         \
-    typedef mpl::int_< E> type;              \
+    typedef boost::mpl::integral_c_tag tag;  \
+    typedef boost::mpl::int_< E> type;       \
     BOOST_STATIC_CONSTANT(                   \
         int,                                 \
         value = tracking_level::type::value  \
     );                                       \
     /* tracking for a class  */              \
     BOOST_STATIC_ASSERT((                    \
-        mpl::greater<                        \
+        boost::mpl::greater<                 \
             /* that is a prmitive */         \
             implementation_level< T >,       \
-            mpl::int_<primitive_type>        \
+            boost::mpl::int_<primitive_type> \
         >::value                             \
     ));                                      \
 };                                           \

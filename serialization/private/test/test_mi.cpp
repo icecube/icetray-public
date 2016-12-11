@@ -21,77 +21,68 @@ namespace std{
 }
 #endif
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 
 #include <serialization/nvp.hpp>
 #include <serialization/base_object.hpp>
 
-class A
-{
+namespace{
+class A{
 private:
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     int x;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int /* file_version */){
-        ar & BOOST_SERIALIZATION_NVP(x);
+        ar & I3_SERIALIZATION_NVP(x);
     }
 public:
     explicit A(int x = 0): x(x) {}
-    virtual ~A(); // = 0;
-    int get_x() const
-    {
+    virtual ~A(){}
+    int get_x() const{
         return x;
     }
 };
 
-inline A::~A()
-{
-}
-
-class B
-{
+class B{
 private:
     int y;
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int /* file_version */){
-        ar & BOOST_SERIALIZATION_NVP(y);
+        ar & I3_SERIALIZATION_NVP(y);
     }
 public:
     explicit B(int y = 0): y(y) {}
     virtual ~B(){}
-    int get_y() const
-    {
+    int get_y() const{
         return y;
     }
 };
 
-class C: public A, public B
-{
+class C: public A, public B{
 private:
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int /* file_version */){
-        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(A);
-        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(B);
+        ar & I3_SERIALIZATION_BASE_OBJECT_NVP(A);
+        ar & I3_SERIALIZATION_BASE_OBJECT_NVP(B);
     }
 public:
     C(){}
     C(int x, int y): A(x), B(y){}
 };
+}
 
-int
-test_main( int /* argc */, char* /* argv */[] )
-{
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void do_test(){
+    auto testfile = I3Test::testfile("test_mi");
 
-    C * pc = new C(1, 2);
-    A * pa = pc;
-    B * pb = pc;
+    C* pc = new C(1, 2);
+    A* pa = pc;
+    B* pb = pc;
 
-    BOOST_CHECK(pa == pc);
-    BOOST_CHECK(pb == pc);
+    ENSURE(pa == pc);
+    ENSURE(pb == pc);
 
     int x = pa->get_x();
     int y = pb->get_y();
@@ -100,11 +91,11 @@ test_main( int /* argc */, char* /* argv */[] )
     std::cout << "pb->get_y(): " << pb->get_y() << std::endl;
 
     {
-        test_ostream ofs(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(ofs);
-        oa << BOOST_SERIALIZATION_NVP(pc);
-        oa << BOOST_SERIALIZATION_NVP(pa);
-        oa << BOOST_SERIALIZATION_NVP(pb);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << I3_SERIALIZATION_NVP(pc);
+        oa << I3_SERIALIZATION_NVP(pa);
+        oa << I3_SERIALIZATION_NVP(pb);
     }
 
     delete pc;
@@ -113,23 +104,43 @@ test_main( int /* argc */, char* /* argv */[] )
     pb = NULL;
 
     {
-        test_istream ifs(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(ifs);
-        ia >> BOOST_SERIALIZATION_NVP(pc);
-        ia >> BOOST_SERIALIZATION_NVP(pa);
-        ia >> BOOST_SERIALIZATION_NVP(pb);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> I3_SERIALIZATION_NVP(pc);
+        ia >> I3_SERIALIZATION_NVP(pa);
+        ia >> I3_SERIALIZATION_NVP(pb);
     }
 
-    BOOST_CHECK(pa == pc);
-    BOOST_CHECK(pb == pc);
+    ENSURE(pa == pc);
+    ENSURE(pb == pc);
 
-    BOOST_CHECK(x == pa->get_x());
-    BOOST_CHECK(y == pb->get_y());
+    ENSURE(x == pa->get_x());
+    ENSURE(y == pb->get_y());
 
     std::cout << "pa->get_x(): " << pa->get_x() << std::endl;
     std::cout << "pb->get_y(): " << pb->get_y() << std::endl;
 
     delete pc;
-    std::remove(testfile);
-    return EXIT_SUCCESS;
+    std::remove(testfile.c_str());
 }
+
+TEST_GROUP(mi)
+
+#define TEST_SET(name) \
+TEST(name ## _multiple_inheritance){ \
+    do_test<test_settings>(); \
+}
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)

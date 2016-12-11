@@ -20,36 +20,56 @@ namespace std{
 #endif
 
 #include <archive/archive_exception.hpp>
-#include "test_tools.hpp"
 
 #include <serialization/deque.hpp>
 
 #include "A.hpp"
 #include "A.ipp"
 
-int test_main( int /* argc */, char* /* argv */[] )
-{
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+#include <I3Test.h>
+
+template <typename TS /*test settings*/>
+void do_test(){
+    auto testfile = I3Test::testfile("test_complex");
 
     // test array of objects
     std::deque<A> adeque, adeque1;
     adeque.push_front(A());
     adeque.push_front(A());
     {
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << boost::serialization::make_nvp("adeque",adeque);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << icecube::serialization::make_nvp("adeque",adeque);
     }
     {
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> boost::serialization::make_nvp("adeque",adeque1);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> icecube::serialization::make_nvp("adeque",adeque1);
     }
-    BOOST_CHECK(adeque == adeque1);
+    ENSURE(adeque == adeque1);
     
-    std::remove(testfile);
-    return EXIT_SUCCESS;
+    std::remove(testfile.c_str());
 }
+
+TEST_GROUP(deque)
+
+#define TEST_SET(name) \
+TEST(name ## _std_deque){ \
+    do_test<test_settings>(); \
+}
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)
 
 // EOF

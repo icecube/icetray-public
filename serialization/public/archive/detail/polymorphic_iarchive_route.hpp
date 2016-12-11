@@ -66,7 +66,7 @@ private:
         void * & t,
         const basic_pointer_iserializer * bpis_ptr,
         const basic_pointer_iserializer * (*finder)(
-            const iceucbe::serialization::extended_type_info & type
+            const icecube::serialization::extended_type_info & type
         )
     ){
         return ArchiveImplementation::load_pointer(t, bpis_ptr, finder);
@@ -173,8 +173,8 @@ private:
 public:
     // this can't be inheriteded because they appear in mulitple
     // parents
-    typedef mpl::bool_<true> is_loading;
-    typedef mpl::bool_<false> is_saving;
+    typedef boost::mpl::bool_<true> is_loading;
+    typedef boost::mpl::bool_<false> is_saving;
     // the >> operator
     template<class T>
     polymorphic_iarchive & operator>>(T & t){

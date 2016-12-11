@@ -1,4 +1,4 @@
-#ifndef BOOST_SERIALIZATION_TEST_DERIVED2_HPP
+#ifndef I3_SERIALIZATION_TEST_DERIVED2_HPP
 #define I3_SERIALIZATION_TEST_DERIVED2_HPP
 
 // MS compatible compilers support #pragma once
@@ -35,7 +35,7 @@
 class DLL_DECL(BOOST_PP_EMPTY()) derived2 : 
     public base
 {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int /* file_version */);
 public:
@@ -47,4 +47,4 @@ public:
 // MWerks users can do this to make their code work
 BOOST_SERIALIZATION_MWERKS_BASE_AND_DERIVED(base, derived2)
 
-#endif // BOOST_SERIALIZATION_TEST_DERIVED2_HPP
+#endif // I3_SERIALIZATION_TEST_DERIVED2_HPP

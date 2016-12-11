@@ -163,8 +163,8 @@ private:
 public:
     // this can't be inheriteded because they appear in mulitple
     // parents
-    typedef mpl::bool_<false> is_loading;
-    typedef mpl::bool_<true> is_saving;
+    typedef boost::mpl::bool_<false> is_loading;
+    typedef boost::mpl::bool_<true> is_saving;
     // the << operator
     template<class T>
     polymorphic_oarchive & operator<<(T & t){

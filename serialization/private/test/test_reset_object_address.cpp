@@ -19,7 +19,7 @@ namespace std{
 }
 #endif
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 
 #include <archive/text_oarchive.hpp>
 #include <archive/text_iarchive.hpp>
@@ -37,30 +37,33 @@ namespace std{
 #include "A.hpp"
 #include "A.ipp"
 
-void test1(){
+TEST_GROUP(reset_object_address)
+
+TEST(test1){
     std::stringstream ss;
     const A a;
     {
-        boost::archive::text_oarchive oa(ss);
+        icecube::archive::text_oarchive oa(ss);
         oa << a;
     }
     A a1;
     {
-        boost::archive::text_iarchive ia(ss);
+        icecube::archive::text_iarchive ia(ss);
         // load to temporary
         A a2;
         ia >> a2;
-        BOOST_CHECK_EQUAL(a, a2);
+        ENSURE(a==a2);
         // move to final destination
         a1 = a2;
         ia.reset_object_address(& a1, & a2);
     }
-    BOOST_CHECK_EQUAL(a, a1);
+    ENSURE(a==a1);
 }
 
+namespace{
 // simple test of tracked value
 class B {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     int m_i;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int /*file_version*/){
@@ -74,39 +77,39 @@ public:
         m_i(std::rand())
     {}
 };
+}
 
-//BOOST_TEST_DONT_PRINT_LOG_VALUE( B )
-
-void test2(){
+TEST(test2){
     std::stringstream ss;
     B const b;
-    B const * const b_ptr = & b;
-    BOOST_CHECK_EQUAL(& b, b_ptr);
+    B const* const b_ptr = & b;
+    ENSURE_EQUAL(&b, b_ptr);
     {
-        boost::archive::text_oarchive oa(ss);
+        icecube::archive::text_oarchive oa(ss);
         oa << b;
         oa << b_ptr;
     }
     B b1;
-    B * b1_ptr;
+    B* b1_ptr;
     {
-        boost::archive::text_iarchive ia(ss);
+        icecube::archive::text_iarchive ia(ss);
         // load to temporary
         B b2;
         ia >> b2;
-        BOOST_CHECK_EQUAL(b, b2);
+        ENSURE(b==b2);
         // move to final destination
         b1 = b2;
-        ia.reset_object_address(& b1, & b2);
+        ia.reset_object_address(&b1, &b2);
         ia >> b1_ptr;
     }
-    BOOST_CHECK_EQUAL(b, b1);
-    BOOST_CHECK_EQUAL(& b1, b1_ptr);
+    ENSURE(b==b1);
+    ENSURE_EQUAL(&b1, b1_ptr);
 }
 
+namespace{
 // check that nested member values are properly moved
 class D {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int /*file_version*/){
         ar & m_b;
@@ -118,36 +121,36 @@ public:
     }
     D(){}
 };
+}
 
-//BOOST_TEST_DONT_PRINT_LOG_VALUE( D )
-
-void test3(){
+TEST(test3){
     std::stringstream ss;
     D const d;
     B const * const b_ptr = & d.m_b;
     {
-        boost::archive::text_oarchive oa(ss);
+        icecube::archive::text_oarchive oa(ss);
         oa << d;
         oa << b_ptr;
     }
     D d1;
-    B * b1_ptr;
+    B* b1_ptr;
     {
-        boost::archive::text_iarchive ia(ss);
+        icecube::archive::text_iarchive ia(ss);
         D d2;
         ia >> d2;
         d1 = d2;
-        ia.reset_object_address(& d1, & d2);
+        ia.reset_object_address(&d1, &d2);
         ia >> b1_ptr;
     }
-    BOOST_CHECK_EQUAL(d, d1);
-    BOOST_CHECK_EQUAL(* b_ptr, * b1_ptr);
+    ENSURE(d==d1);
+    ENSURE(*b_ptr==*b1_ptr);
 }
 
+namespace{
 // check that data pointed to by pointer members is NOT moved
 class E {
     int m_i;
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int /*file_version*/){
         ar & m_i;
@@ -163,11 +166,10 @@ public:
         m_i(rhs.m_i)
     {}
 };
-//BOOST_TEST_DONT_PRINT_LOG_VALUE( E )
 
 // check that moves don't move stuff pointed to
 class F {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     E * m_eptr;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int /*file_version*/){
@@ -191,30 +193,30 @@ public:
         delete m_eptr;
     }
 };
+}
 
-//BOOST_TEST_DONT_PRINT_LOG_VALUE( F )
-
-void test4(){
+TEST(test4){
     std::stringstream ss;
     const F f;
     {
-        boost::archive::text_oarchive oa(ss);
+        icecube::archive::text_oarchive oa(ss);
         oa << f;
     }
     F f1;
     {
-        boost::archive::text_iarchive ia(ss);
+        icecube::archive::text_iarchive ia(ss);
         F f2;
         ia >> f2;
         f1 = f2;
         ia.reset_object_address(& f1, & f2);
     }
-    BOOST_CHECK_EQUAL(f, f1);
+    ENSURE(f==f1);
 }
 
+namespace{
 // check that multiple moves keep track of the correct target
 class G {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     A m_a1;
     A m_a2;
     A *m_pa2;
@@ -235,7 +237,7 @@ class G {
         ar.reset_object_address(& m_a2, & a);
         ar & m_pa2;
     }
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    I3_SERIALIZATION_SPLIT_MEMBER()
 public:
     bool operator==(const G &rhs) const {
         return 
@@ -257,25 +259,24 @@ public:
     }
     ~G(){}
 };
+}
 
-//BOOST_TEST_DONT_PRINT_LOG_VALUE( G )
-
-void test5(){
+TEST(test5){
     std::stringstream ss;
     const G g;
     {
-        boost::archive::text_oarchive oa(ss);
+        icecube::archive::text_oarchive oa(ss);
         oa << g;
     }
     G g1;
     {
-        boost::archive::text_iarchive ia(ss);
+        icecube::archive::text_iarchive ia(ss);
         ia >> g1;
     }
-    BOOST_CHECK_EQUAL(g, g1);
+    ENSURE(g==g1);
 }
 
-// joaquin's test - this tests the case where rest_object_address
+// joaquin's test - this tests the case where reset_object_address
 // is applied to an item which in fact is not tracked so that 
 // the call is in fact superfluous.
 struct foo
@@ -283,12 +284,10 @@ struct foo
   int x;
 
 private:
-  friend class boost::serialization::access;
+  friend class icecube::serialization::access;
 
   template<class Archive>
-  void serialize(Archive &,const unsigned int)
-  {
-  }
+  void serialize(Archive &,const unsigned int){}
 };
 
 struct bar
@@ -297,8 +296,8 @@ struct bar
   foo* pf[2];
 
 private:
-  friend class boost::serialization::access;
-  BOOST_SERIALIZATION_SPLIT_MEMBER()
+  friend class icecube::serialization::access;
+  I3_SERIALIZATION_SPLIT_MEMBER()
 
   template<class Archive>
   void save(Archive& ar,const unsigned int)const
@@ -328,8 +327,7 @@ private:
   }
 };
 
-int test6()
-{
+TEST(test6){
   bar b;
   b.f[0].x=0;
   b.f[1].x=1;
@@ -338,7 +336,7 @@ int test6()
 
   std::ostringstream oss;
   {
-    boost::archive::text_oarchive oa(oss);
+    icecube::archive::text_oarchive oa(oss);
     oa<<const_cast<const bar&>(b);
   }
 
@@ -347,66 +345,51 @@ int test6()
   b1.pf[1]=0;
 
   std::istringstream iss(oss.str());
-  boost::archive::text_iarchive ia(iss);
+  icecube::archive::text_iarchive ia(iss);
   ia>>b1;
-  BOOST_CHECK(b1.pf[0]==&b1.f[0]&&b1.pf[1]==&b1.f[1]);
-
-  return 0;
+  ENSURE(b1.pf[0]==&b1.f[0]&&b1.pf[1]==&b1.f[1]);
 }
 
 // test one of the collections
-void test7(){
+TEST(test7){
     std::stringstream ss;
     B const b;
-    B const * const b_ptr = & b;
-    BOOST_CHECK_EQUAL(& b, b_ptr);
+    B const* const b_ptr = & b;
+    ENSURE_EQUAL(& b, b_ptr);
     {
         std::list<const B *> l;
         l.push_back(b_ptr);
-        boost::archive::text_oarchive oa(ss);
+        icecube::archive::text_oarchive oa(ss);
         oa << const_cast<const std::list<const B *> &>(l);
     }
     B b1;
     {
         std::list<B *> l;
-        boost::archive::text_iarchive ia(ss);
+        icecube::archive::text_iarchive ia(ss);
         ia >> l;
         delete l.front(); // prevent memory leak
     }
 }
 
 // test one of the collections with polymorphic archive
-void test8(){
+TEST(test8){
     std::stringstream ss;
     B const b;
-    B const * const b_ptr = & b;
-    BOOST_CHECK_EQUAL(& b, b_ptr);
+    B const* const b_ptr = & b;
+    ENSURE_EQUAL(& b, b_ptr);
     {
-        std::list<const B *> l;
+        std::list<const B*> l;
         l.push_back(b_ptr);
-        boost::archive::polymorphic_text_oarchive oa(ss);
-        boost::archive::polymorphic_oarchive & poa = oa;
+        icecube::archive::polymorphic_text_oarchive oa(ss);
+        icecube::archive::polymorphic_oarchive & poa = oa;
         poa << const_cast<const std::list<const B *> &>(l);
     }
     B b1;
     {
-        std::list<B *> l;
-        boost::archive::polymorphic_text_iarchive ia(ss);
-        boost::archive::polymorphic_iarchive & pia = ia;
+        std::list<B*> l;
+        icecube::archive::polymorphic_text_iarchive ia(ss);
+        icecube::archive::polymorphic_iarchive & pia = ia;
         pia >> l;
         delete l.front(); // prevent memory leak
     }
-}
-
-int test_main(int /* argc */, char * /* argv */[])
-{
-    test1();
-    test2();
-    test3();
-    test4();
-    test5();
-    test6();
-    test7();
-    test8();
-    return EXIT_SUCCESS;
 }

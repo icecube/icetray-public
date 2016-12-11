@@ -1,4 +1,4 @@
-#ifndef BOOST_SERIALIZATION_TEST_BASE_HPP
+#ifndef I3_SERIALIZATION_TEST_BASE_HPP
 #define I3_SERIALIZATION_TEST_BASE_HPP
 
 // MS compatible compilers support #pragma once
@@ -32,15 +32,15 @@
 
 class DLL_DECL(BOOST_PP_EMPTY()) base
 {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void serialize(Archive & /* ar */, const unsigned int /* file_version */);
 public:
     virtual ~base(){};
 };
 
-BOOST_SERIALIZATION_ASSUME_ABSTRACT(base)
+I3_SERIALIZATION_ASSUME_ABSTRACT(base)
 
 #undef  DLL_DECL
 
-#endif // BOOST_SERIALIZATION_TEST_BASE_HPP
+#endif // I3_SERIALIZATION_TEST_BASE_HPP

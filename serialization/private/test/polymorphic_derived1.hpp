@@ -26,18 +26,18 @@
 
 class polymorphic_derived1 : public polymorphic_base
 {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int  /* file_version */){
-        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
+        ar & I3_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
     }
 public:
     virtual const char * get_key() const ;
 };
 
-BOOST_CLASS_EXPORT_KEY(polymorphic_derived1)
+I3_CLASS_EXPORT_KEY(polymorphic_derived1)
 
-BOOST_CLASS_TYPE_INFO(
+I3_CLASS_TYPE_INFO(
     polymorphic_derived1,
     extended_type_info_no_rtti<polymorphic_derived1>
 )

@@ -89,7 +89,7 @@ inline void load(
     icecube::serialization::stl::load_collection<
         Archive,
         std::multiset<Key, Compare, Allocator>,
-        icecube::serialization::stl::archive_input_set<
+        icecube::serialization::stl::archive_input_multiset<
             Archive, std::multiset<Key, Compare, Allocator> 
         >,
         icecube::serialization::stl::no_reserve_imp<

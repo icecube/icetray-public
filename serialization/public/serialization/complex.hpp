@@ -68,12 +68,12 @@ struct is_bitwise_serializable<std::complex< T > >
 
 template <class T>
 struct implementation_level<std::complex< T > >
-    : mpl::int_<object_serializable> {} ;
+    : boost::mpl::int_<object_serializable> {} ;
 
 // treat complex just like builtin arithmetic types for tracking
 template <class T>
 struct tracking_level<std::complex< T > >
-    : mpl::int_<track_never> {} ;
+    : boost::mpl::int_<track_never> {} ;
 
 } // serialization
 } // namespace icecube

@@ -6,8 +6,17 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 // xml_archive
 #include <archive/xml_oarchive.hpp>
-typedef boost::archive::xml_oarchive test_oarchive;
-typedef std::ofstream test_ostream;
 #include <archive/xml_iarchive.hpp>
-typedef boost::archive::xml_iarchive test_iarchive;
-typedef std::ifstream test_istream;
+
+struct xml_archive_test_settings{
+    typedef icecube::archive::xml_oarchive test_oarchive;
+    typedef std::ofstream test_ostream;
+    
+    typedef icecube::archive::xml_iarchive test_iarchive;
+    typedef std::ifstream test_istream;
+    
+    static constexpr int TEST_STREAM_FLAGS = 0;
+    static constexpr int TEST_ARCHIVE_FLAGS = 0;
+};
+
+#define test_settings xml_archive_test_settings

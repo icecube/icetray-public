@@ -17,53 +17,61 @@ namespace std{
 }
 #endif
 
+#include <archive/binary_oarchive.hpp>
+#include <archive/binary_iarchive.hpp>
 #include <archive/text_oarchive.hpp>
 #include <archive/text_iarchive.hpp>
 #include <archive/xml_oarchive.hpp>
 #include <archive/xml_iarchive.hpp>
-#include "test_tools.hpp"
+#include <I3Test.h>
 
 #include <serialization/export.hpp>
 #include <serialization/nvp.hpp>
 
+namespace{
 // This is a simple class.  It contains a counter of the number
 // of objects of this class which have been instantiated.
 class A
 {
 private:
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     int x;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int /* file_version */){
-        ar & BOOST_SERIALIZATION_NVP(x);
+        ar & I3_SERIALIZATION_NVP(x);
     }
 public:
     static int count;
     A(){++count;}    // default constructor
     virtual ~A(){--count;}   // default destructor
 };
+}
 
-BOOST_CLASS_EXPORT(A)
+I3_CLASS_EXPORT(A)
 
+namespace{
 // B is a subclass of A
 class B : public A
 {
 private:
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     int y;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int /* file_version */){
-        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(A);
+        ar & I3_SERIALIZATION_BASE_OBJECT_NVP(A);
     }
 public:
     static int count;
     B() : A() {};
     virtual ~B() {};
 };
+}
 
-BOOST_CLASS_EXPORT(B)
+I3_CLASS_EXPORT(B)
 
+namespace{
 int A::count = 0;
+}
 
 // Run tests by serializing two shared_ptrs into an archive of type
 // OARCH, clearing them (deleting the objects) and then reloading the
@@ -71,37 +79,48 @@ int A::count = 0;
 template<class OA, class IA>
 void test_save_and_load(A * first, A * second)
 {
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+    auto testfile = I3Test::testfile("mult_archive_types");
 
     // Save
     {
         std::ofstream os(testfile);
         OA oa(os);
-        oa << BOOST_SERIALIZATION_NVP(first);
-        oa << BOOST_SERIALIZATION_NVP(second);
+        oa << I3_SERIALIZATION_NVP(first);
+        oa << I3_SERIALIZATION_NVP(second);
     }
 
     // Clear the pointers, thereby destroying the objects they contain
-    first = NULL;
-    second = NULL;
+    first = nullptr;
+    second = nullptr;
 
     // Load
     {
         std::ifstream is(testfile);
         IA ia(is);
-        ia >> BOOST_SERIALIZATION_NVP(first);
-        ia >> BOOST_SERIALIZATION_NVP(second);
+        ia >> I3_SERIALIZATION_NVP(first);
+        ia >> I3_SERIALIZATION_NVP(second);
     }
-    BOOST_CHECK(first == second);
-    std::remove(testfile);
+    ENSURE(first == second);
+    std::remove(testfile.c_str());
 }
 
-using namespace boost::archive;
+using namespace icecube::archive;
 
-// This does the tests
-int test_main(int /* argc */, char * /* argv */[])
-{
+TEST_GROUP(mult_archive_types)
+
+TEST(binary_archive){
+    // Try to save and load pointers to As, to a binary archive
+    A * a = new A;
+    A * a1 = a;
+    test_save_and_load<binary_oarchive, binary_iarchive>(a, a1);
+
+    // Try to save and load pointers to Bs, to a binary archive
+    B * b = new B;
+    B * b1 = b;
+    test_save_and_load<binary_oarchive, binary_iarchive>(b, b1);
+}
+
+TEST(text_archive){
     // Try to save and load pointers to As, to a text archive
     A * a = new A;
     A * a1 = a;
@@ -111,12 +130,16 @@ int test_main(int /* argc */, char * /* argv */[])
     B * b = new B;
     B * b1 = b;
     test_save_and_load<text_oarchive, text_iarchive>(b, b1);
+}
 
-    // Try to save and load pointers to As, to an xml archive
+TEST(xml_archive){
+    // Try to save and load pointers to As, to a text archive
+    A * a = new A;
+    A * a1 = a;
     test_save_and_load<xml_oarchive, xml_iarchive>(a, a1);
 
-    // Try to save and load pointers to Bs, to an xml archive
+    // Try to save and load pointers to Bs, to a text archive
+    B * b = new B;
+    B * b1 = b;
     test_save_and_load<xml_oarchive, xml_iarchive>(b, b1);
-
-    return EXIT_SUCCESS;
 }

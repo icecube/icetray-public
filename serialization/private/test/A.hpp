@@ -1,4 +1,4 @@
-#ifndef BOOST_SERIALIZATION_TEST_A_HPP
+#ifndef I3_SERIALIZATION_TEST_A_HPP
 #define I3_SERIALIZATION_TEST_A_HPP
 
 // MS compatible compilers support #pragma once
@@ -57,7 +57,7 @@ namespace std{
 class DLL_DECL(BOOST_PP_EMPTY()) A
 {
 private:
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     // note: from an aesthetic perspective, I would much prefer to have this
     // defined out of line.  Unfortunately, this trips a bug in the VC 6.0
     // compiler. So hold our nose and put it her to permit running of tests.
@@ -69,42 +69,42 @@ private:
             Archive &ar,
             const unsigned int /* file_version */
         ){
-            ar & BOOST_SERIALIZATION_NVP(b);
+            ar & I3_SERIALIZATION_NVP(b);
             #ifndef BOOST_NO_INT64_T
-            ar & BOOST_SERIALIZATION_NVP(f);
-            ar & BOOST_SERIALIZATION_NVP(g);
+            ar & I3_SERIALIZATION_NVP(f);
+            ar & I3_SERIALIZATION_NVP(g);
             #endif
             #if BOOST_WORKAROUND(__BORLANDC__,  <= 0x551 )
                 int i;
                 if(BOOST_DEDUCED_TYPENAME Archive::is_saving::value){
                     i = l;
-                    ar & BOOST_SERIALIZATION_NVP(i);
+                    ar & I3_SERIALIZATION_NVP(i);
                 }
                 else{
-                    ar & BOOST_SERIALIZATION_NVP(i);
+                    ar & I3_SERIALIZATION_NVP(i);
                     l = i;
                 }
             #else
-                ar & BOOST_SERIALIZATION_NVP(l);
+                ar & I3_SERIALIZATION_NVP(l);
             #endif
-            ar & BOOST_SERIALIZATION_NVP(m);
-            ar & BOOST_SERIALIZATION_NVP(n);
-            ar & BOOST_SERIALIZATION_NVP(o);
-            ar & BOOST_SERIALIZATION_NVP(p);
-            ar & BOOST_SERIALIZATION_NVP(q);
+            ar & I3_SERIALIZATION_NVP(m);
+            ar & I3_SERIALIZATION_NVP(n);
+            ar & I3_SERIALIZATION_NVP(o);
+            ar & I3_SERIALIZATION_NVP(p);
+            ar & I3_SERIALIZATION_NVP(q);
             #ifndef BOOST_NO_CWCHAR
-            ar & BOOST_SERIALIZATION_NVP(r);
+            ar & I3_SERIALIZATION_NVP(r);
             #endif
-            ar & BOOST_SERIALIZATION_NVP(c);
-            ar & BOOST_SERIALIZATION_NVP(s);
-            ar & BOOST_SERIALIZATION_NVP(t);
-            ar & BOOST_SERIALIZATION_NVP(u);
-            ar & BOOST_SERIALIZATION_NVP(v);
-            ar & BOOST_SERIALIZATION_NVP(w);
-            ar & BOOST_SERIALIZATION_NVP(x);
-            ar & BOOST_SERIALIZATION_NVP(y);
+            ar & I3_SERIALIZATION_NVP(c);
+            ar & I3_SERIALIZATION_NVP(s);
+            ar & I3_SERIALIZATION_NVP(t);
+            ar & I3_SERIALIZATION_NVP(u);
+            ar & I3_SERIALIZATION_NVP(v);
+            ar & I3_SERIALIZATION_NVP(w);
+            ar & I3_SERIALIZATION_NVP(x);
+            ar & I3_SERIALIZATION_NVP(y);
             #ifndef BOOST_NO_STD_WSTRING
-            ar & BOOST_SERIALIZATION_NVP(z);
+            ar & I3_SERIALIZATION_NVP(z);
             #endif
         }
     #else
@@ -156,4 +156,4 @@ public:
 
 #undef DLL_DECL
 
-#endif // BOOST_SERIALIZATION_TEST_A_HPP
+#endif // I3_SERIALIZATION_TEST_A_HPP

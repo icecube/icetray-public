@@ -19,13 +19,14 @@ namespace std{
 }
 #endif
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 
 #include <serialization/access.hpp>
 #include <serialization/base_object.hpp>
 #include <serialization/nvp.hpp>
 #include <serialization/export.hpp>
 
+namespace{
 struct Base1 {
     int m_x;
     Base1(){}
@@ -35,10 +36,10 @@ struct Base1 {
         return m_x == rhs.m_x;
     }
     // serialize
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int /* file_version */) {
-        ar & BOOST_SERIALIZATION_NVP(m_x);
+        ar & I3_SERIALIZATION_NVP(m_x);
     }
 };
 
@@ -53,10 +54,10 @@ struct Base2 {
         return m_x == rhs.m_x;
     }
     // serialize
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int /* file_version */) {
-        ar & BOOST_SERIALIZATION_NVP(m_x);
+        ar & I3_SERIALIZATION_NVP(m_x);
     }
 };
 
@@ -83,43 +84,62 @@ struct Sub :
     virtual ~Sub() {}
 
     // serialize
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int /* file_version */)
     {
-        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Base1);
-        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Base2);
-        ar & BOOST_SERIALIZATION_NVP(m_x);
+        ar & I3_SERIALIZATION_BASE_OBJECT_NVP(Base1);
+        ar & I3_SERIALIZATION_BASE_OBJECT_NVP(Base2);
+        ar & I3_SERIALIZATION_NVP(m_x);
     }
 };
+}
 
-BOOST_CLASS_EXPORT(Sub)
+I3_CLASS_EXPORT(Sub)
 
-int
-test_main( int /* argc */, char* /* argv */[] )
-{
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
-    Base2 * pb2;
+template <typename TS /*test settings*/>
+void do_test(){
+    auto testfile = I3Test::testfile("test_mi");
+    Base2* pb2;
     {
         // serialize
         pb2 = new Sub(2);
 
-        test_ostream ofs(testfile);
-        test_oarchive oa(ofs);
-        oa << boost::serialization::make_nvp("Base2", pb2);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << icecube::serialization::make_nvp("Base2", pb2);
     }
-    Base2 * pb2_1;
+    Base2* pb2_1;
     {
         // de-serialize
-        test_istream ifs(testfile);
-        test_iarchive ia(ifs);
-        ia >> boost::serialization::make_nvp("Base2", pb2_1);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> icecube::serialization::make_nvp("Base2", pb2_1);
     }
-    Sub *s1 = dynamic_cast<Sub *>(pb2);
-    BOOST_CHECK(0 != s1);
-    Sub *s2 = dynamic_cast<Sub *>(pb2_1);
-    BOOST_CHECK(0 != s2);
-    BOOST_CHECK(*s1 == *s2);
-    return EXIT_SUCCESS;
+    Sub* s1 = dynamic_cast<Sub*>(pb2);
+    ENSURE(0 != s1);
+    Sub* s2 = dynamic_cast<Sub*>(pb2_1);
+    ENSURE(0 != s2);
+    ENSURE(*s1 == *s2);
 }
+
+TEST_GROUP(multiple_inheritance)
+
+#define TEST_SET(name) \
+TEST(name ## _multiple_inheritance){ \
+    do_test<test_settings>(); \
+}
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)

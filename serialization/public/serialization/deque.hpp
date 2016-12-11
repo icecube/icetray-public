@@ -33,7 +33,7 @@ inline void save(
     const std::deque<U, Allocator> &t,
     const unsigned int /* file_version */
 ){
-    iccecube::serialization::stl::save_collection<
+    icecube::serialization::stl::save_collection<
         Archive, std::deque<U, Allocator> 
     >(ar, t);
 }
@@ -44,13 +44,13 @@ inline void load(
     std::deque<U, Allocator> &t,
     const unsigned int /*file_version*/
 ){
-    iccecube::serialization::stl::load_collection<
+    icecube::serialization::stl::load_collection<
         Archive,
         std::deque<U, Allocator>,
-        iccecube::serialization::stl::archive_input_seq<
+        icecube::serialization::stl::archive_input_seq<
         Archive, std::deque<U, Allocator> 
         >,
-        iccecube::serialization::stl::no_reserve_imp<std::deque<U, Allocator> >
+        icecube::serialization::stl::no_reserve_imp<std::deque<U, Allocator> >
     >(ar, t);
 }
 
@@ -62,7 +62,7 @@ inline void serialize(
     std::deque<U, Allocator> &t,
     const unsigned int file_version
 ){
-    iccecube::serialization::split_free(ar, t, file_version);
+    icecube::serialization::split_free(ar, t, file_version);
 }
 
 } // namespace serialization

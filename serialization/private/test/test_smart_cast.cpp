@@ -10,11 +10,14 @@
 #include <exception>
 #include <serialization/smart_cast.hpp>
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 #include <boost/noncopyable.hpp>
 
-using namespace boost::serialization;
+TEST_GROUP(smart_cast)
 
+using namespace icecube::serialization;
+
+namespace{
 class Base1 : public boost::noncopyable
 {
     char a;
@@ -38,85 +41,87 @@ class Derived : public Base1, public Base2
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
+}
 
 // if compiler doesn't support TPS, the smart_cast syntax doesn't
 // work for references.  One has to use the smart_cast_reference
 // syntax (tested below ) instead.
 
-void test_static_reference_cast_2(){
+TEST(static_reference_cast_2){
     Derived d;
-    Base1 & b1 = static_cast<Base1 &>(d);
-    Base2 & b2 = static_cast<Base2 &>(d);
+    Base1& b1 = static_cast<Base1&>(d);
+    Base2& b2 = static_cast<Base2&>(d);
 
-    Base1 & scb1 = smart_cast<Base1 &, Derived &>(d);
-    Base2 & scb2 = smart_cast<Base2 &, Derived &>(d);
-    BOOST_CHECK_EQUAL(& b1, & scb1);
-    BOOST_CHECK_EQUAL(& b2, & scb2);
+    Base1& scb1 = smart_cast<Base1&, Derived&>(d);
+    Base2& scb2 = smart_cast<Base2&, Derived&>(d);
+    ENSURE_EQUAL(&b1, &scb1);
+    ENSURE_EQUAL(&b2, &scb2);
 
     // downcast
 //    BOOST_CHECK_EQUAL(& d, & (smart_cast<Derived &, Base1 &>(b1)));
 //    BOOST_CHECK_EQUAL(& d, & (smart_cast<Derived &, Base2 &>(b2)));
 
     // crosscast pointers fails at compiler time
-    // BOOST_CHECK_EQUAL(pB2,smart_cast<B2 *>(pB1));
+    // ENSURE_EQUAL(pB2,smart_cast<B2 *>(pB1));
     // though explicit cross cast will always work
-    BOOST_CHECK_EQUAL(& b2,(
-        & smart_cast<Base2 &, Derived &>(
-            smart_cast<Derived &, Base1 &>(b1)
+    ENSURE_EQUAL(&b2,(
+        &smart_cast<Base2&, Derived&>(
+            smart_cast<Derived&, Base1&>(b1)
         ))
     );
 }
 
-void test_static_reference_cast_1(){
+TEST(static_reference_cast_1){
     Derived d;
-    Base1 & b1 = static_cast<Base1 &>(d);
-    Base2 & b2 = static_cast<Base2 &>(d);
+    Base1& b1 = static_cast<Base1&>(d);
+    Base2& b2 = static_cast<Base2&>(d);
 
-    Base1 & scb1 = smart_cast_reference<Base1 &>(d);
-    Base2 & scb2 = smart_cast_reference<Base2 &>(d);
-    BOOST_CHECK_EQUAL(& b1, & scb1);
-    BOOST_CHECK_EQUAL(& b2, & scb2);
+    Base1& scb1 = smart_cast_reference<Base1&>(d);
+    Base2& scb2 = smart_cast_reference<Base2&>(d);
+    ENSURE_EQUAL(&b1, &scb1);
+    ENSURE_EQUAL(&b2, &scb2);
 
     // downcast
-    BOOST_CHECK_EQUAL(& d, & (smart_cast_reference<Derived &>(b1)));
-    BOOST_CHECK_EQUAL(& d, & (smart_cast_reference<Derived &>(b2)));
+    ENSURE_EQUAL(&d, &(smart_cast_reference<Derived&>(b1)));
+    ENSURE_EQUAL(&d, &(smart_cast_reference<Derived&>(b2)));
 
     // crosscast pointers fails at compiler time
-    // BOOST_CHECK_EQUAL(pB2,smart_cast<B2 *>(pB1));
+    // ENSURE_EQUAL(pB2,smart_cast<B2 *>(pB1));
     // though explicit cross cast will always work
-    BOOST_CHECK_EQUAL(& b2,(
-        & smart_cast_reference<Base2 &>(
-            smart_cast_reference<Derived &>(b1)
+    ENSURE_EQUAL(&b2,(
+        &smart_cast_reference<Base2&>(
+            smart_cast_reference<Derived&>(b1)
         ))
     );
 }
 
-void test_static_pointer_cast(){
+TEST(static_pointer_cast){
     // pointers
     Derived d;
-    Derived *pD = & d;
-    Base1 *pB1 = pD;
-    Base2 *pB2 = pD;
+    Derived* pD = &d;
+    Base1* pB1 = pD;
+    Base2* pB2 = pD;
 
     // upcast
-    BOOST_CHECK_EQUAL(pB1, smart_cast<Base1 *>(pD));
-    BOOST_CHECK_EQUAL(pB2, smart_cast<Base2 *>(pD));
+    ENSURE_EQUAL(pB1, smart_cast<Base1 *>(pD));
+    ENSURE_EQUAL(pB2, smart_cast<Base2 *>(pD));
 
     // downcast
-    BOOST_CHECK_EQUAL(pD, smart_cast<Derived *>(pB1));
-    BOOST_CHECK_EQUAL(pD, smart_cast<Derived *>(pB2));
+    ENSURE_EQUAL(pD, smart_cast<Derived *>(pB1));
+    ENSURE_EQUAL(pD, smart_cast<Derived *>(pB2));
 
     // crosscast pointers fails at compiler time
-    // BOOST_CHECK_EQUAL(pB2, smart_cast<Base2 *>(pB1));
+    // ENSURE_EQUAL(pB2, smart_cast<Base2 *>(pB1));
 
     // though explicit cross cast will always work
-    BOOST_CHECK_EQUAL(pB2,
-        smart_cast<Base2 *>(
-            smart_cast<Derived *>(pB1)
+    ENSURE_EQUAL(pB2,
+        smart_cast<Base2*>(
+            smart_cast<Derived*>(pB1)
         )
     );
 }
 
+namespace{
 class VBase1 : public boost::noncopyable
 {
     char a;
@@ -146,91 +151,79 @@ public:
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
+}
 
 // see above
 
-void test_dynamic_reference_cast_2(){
+TEST(dynamic_reference_cast_2){
     VDerived d;
-    VBase1 &b1 = dynamic_cast<VBase1 &>(d);
-    VBase2 &b2 = static_cast<VBase2 &>(d);
+    VBase1& b1 = dynamic_cast<VBase1&>(d);
+    VBase2& b2 = static_cast<VBase2&>(d);
 
-    VBase1 & vb1 = smart_cast<VBase1 &, VDerived &>(d);
-    BOOST_CHECK_EQUAL(& b1, & vb1);
-    BOOST_CHECK_EQUAL(& b2, (& smart_cast<VBase2 &, VDerived &>(d)));
+    VBase1& vb1 = smart_cast<VBase1&, VDerived&>(d);
+    ENSURE_EQUAL(&b1, &vb1);
+    ENSURE_EQUAL(&b2, (&smart_cast<VBase2&, VDerived&>(d)));
 
     // downcast
-    BOOST_CHECK_EQUAL(& d, (& smart_cast<VDerived &, VBase1 &>(b1)));
-    BOOST_CHECK_EQUAL(& d, (& smart_cast<VDerived &, VBase2 &>(b2)));
+    ENSURE_EQUAL(&d, (&smart_cast<VDerived&, VBase1&>(b1)));
+    ENSURE_EQUAL(&d, (&smart_cast<VDerived&, VBase2&>(b2)));
 
     // crosscast
-     BOOST_CHECK_EQUAL(& b2, (& smart_cast<VBase2 &, VBase1 &>(b1)));
+    ENSURE_EQUAL(&b2, (&smart_cast<VBase2&, VBase1&>(b1)));
 
     // explicit cross cast should always work
-    BOOST_CHECK_EQUAL(& b2, (
-        & smart_cast<VBase2 &, VDerived &>(
-            smart_cast<VDerived &, VBase1 &>(b1)
+    ENSURE_EQUAL(&b2, (
+        &smart_cast<VBase2&, VDerived&>(
+            smart_cast<VDerived&, VBase1&>(b1)
         ))
     );
 }
 
-void test_dynamic_reference_cast_1(){
+TEST(dynamic_reference_cast_1){
     VDerived d;
-    VBase1 &b1 = dynamic_cast<VBase1 &>(d);
-    VBase2 &b2 = static_cast<VBase2 &>(d);
+    VBase1& b1 = dynamic_cast<VBase1&>(d);
+    VBase2& b2 = static_cast<VBase2&>(d);
 
-    VBase1 & vb1 = smart_cast_reference<VBase1 &>(d);
-    BOOST_CHECK_EQUAL(& b1, & vb1);
-    BOOST_CHECK_EQUAL(& b2, (& smart_cast_reference<VBase2 &>(d)));
+    VBase1& vb1 = smart_cast_reference<VBase1&>(d);
+    ENSURE_EQUAL(&b1, &vb1);
+    ENSURE_EQUAL(&b2, (&smart_cast_reference<VBase2&>(d)));
 
     // downcast
-    BOOST_CHECK_EQUAL(& d, (& smart_cast_reference<VDerived &>(b1)));
-    BOOST_CHECK_EQUAL(& d, (& smart_cast_reference<VDerived &>(b2)));
+    ENSURE_EQUAL(&d, (&smart_cast_reference<VDerived&>(b1)));
+    ENSURE_EQUAL(&d, (&smart_cast_reference<VDerived&>(b2)));
 
     // crosscast
-     BOOST_CHECK_EQUAL(& b2, (& smart_cast_reference<VBase2 &>(b1)));
+    ENSURE_EQUAL(&b2, (&smart_cast_reference<VBase2&>(b1)));
 
     // explicit cross cast should always work
-    BOOST_CHECK_EQUAL(& b2, (
-        & smart_cast_reference<VBase2 &>(
-            smart_cast_reference<VDerived &>(b1)
+    ENSURE_EQUAL(&b2, (
+        &smart_cast_reference<VBase2&>(
+            smart_cast_reference<VDerived&>(b1)
         ))
     );
 }
 
-void test_dynamic_pointer_cast(){
+TEST(dynamic_pointer_cast){
     // pointers
     VDerived d;
-    VDerived *pD = & d;
-    VBase1 *pB1 = pD;
-    VBase2 *pB2 = pD;
+    VDerived* pD = &d;
+    VBase1* pB1 = pD;
+    VBase2* pB2 = pD;
 
     // upcast
-    BOOST_CHECK_EQUAL(pB1, smart_cast<VBase1 *>(pD));
-    BOOST_CHECK_EQUAL(pB2, smart_cast<VBase2 *>(pD));
+    ENSURE_EQUAL(pB1, smart_cast<VBase1*>(pD));
+    ENSURE_EQUAL(pB2, smart_cast<VBase2*>(pD));
 
     // downcast
-    BOOST_CHECK_EQUAL(pD, smart_cast<VDerived *>(pB1));
-    BOOST_CHECK_EQUAL(pD, smart_cast<VDerived *>(pB2));
+    ENSURE_EQUAL(pD, smart_cast<VDerived*>(pB1));
+    ENSURE_EQUAL(pD, smart_cast<VDerived*>(pB2));
 
     // crosscast pointers fails at compiler time
-    BOOST_CHECK_EQUAL(pB2, smart_cast<VBase2 *>(pB1));
+    ENSURE_EQUAL(pB2, smart_cast<VBase2*>(pB1));
     // though explicit cross cast will always work
-    BOOST_CHECK_EQUAL(pB2,
-        smart_cast<VBase2 *>(
-            smart_cast<VDerived *>(pB1)
+    ENSURE_EQUAL(pB2,
+        smart_cast<VBase2*>(
+            smart_cast<VDerived*>(pB1)
         )
     );
-}
-
-int
-test_main(int /* argc */, char * /* argv */[])
-{
-    test_static_reference_cast_2();
-    test_static_reference_cast_1();
-    test_static_pointer_cast();
-    test_dynamic_reference_cast_2();
-    test_dynamic_reference_cast_1();
-    test_dynamic_pointer_cast();
-
-    return EXIT_SUCCESS;
 }

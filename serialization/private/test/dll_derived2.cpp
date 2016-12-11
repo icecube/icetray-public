@@ -19,7 +19,7 @@ void derived2::serialize(
     Archive &ar, 
     const unsigned int /* file_version */
 ){
-    ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(base);
+    ar & I3_SERIALIZATION_BASE_OBJECT_NVP(base);
 }
 
 // instantiate code for text archives
@@ -27,11 +27,11 @@ void derived2::serialize(
 #include <archive/text_iarchive.hpp>
 
 template EXPORT_DECL(void) derived2::serialize(
-    boost::archive::text_oarchive & ar,
+    icecube::archive::text_oarchive & ar,
     const unsigned int version
 );
 template EXPORT_DECL(void) derived2::serialize(
-    boost::archive::text_iarchive & ar,
+    icecube::archive::text_iarchive & ar,
     const unsigned int version
 );
 
@@ -39,16 +39,16 @@ template EXPORT_DECL(void) derived2::serialize(
 #include <archive/polymorphic_iarchive.hpp>
 
 template EXPORT_DECL(void) derived2::serialize(
-    boost::archive::polymorphic_oarchive & ar,
+    icecube::archive::polymorphic_oarchive & ar,
     const unsigned int version
 );
 template EXPORT_DECL(void) derived2::serialize(
-    boost::archive::polymorphic_iarchive & ar,
+    icecube::archive::polymorphic_iarchive & ar,
     const unsigned int version
 );
 
 // note: export has to be AFTER #includes for all archive classes
 
 #include <serialization/factory.hpp>
-BOOST_SERIALIZATION_FACTORY_0(derived2)
-BOOST_CLASS_EXPORT(derived2)
+I3_SERIALIZATION_FACTORY_0(derived2)
+I3_CLASS_EXPORT(derived2)

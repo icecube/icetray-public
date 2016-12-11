@@ -35,7 +35,7 @@ namespace std{
 #  pragma warning (disable : 4786) // too long name, harmless warning
 #endif
 
-#include "test_tools.hpp"
+#include <I3Test.h>
 
 #include <archive/archive_exception.hpp>
 
@@ -85,25 +85,24 @@ public:
     }
 };
 
-template <class T>
+template <typename TS /*test settings*/, class T>
 void test_type(const T& gets_written){
-   const char * testfile = boost::archive::tmpnam(NULL);
-   BOOST_REQUIRE(testfile != NULL);
+   auto testfile = I3Test::testfile("variant_test_type");
    {
-      test_ostream os(testfile, TEST_STREAM_FLAGS);
-      test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-      oa << boost::serialization::make_nvp("written", gets_written);
+      typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+      typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+      oa << icecube::serialization::make_nvp("written", gets_written);
    }
 
    T got_read;
    {
-      test_istream is(testfile, TEST_STREAM_FLAGS);
-      test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-      ia >> boost::serialization::make_nvp("written", got_read);
+      typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+      typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+      ia >> icecube::serialization::make_nvp("written", got_read);
    }
-   BOOST_CHECK(boost::apply_visitor(are_equal(), gets_written, got_read));
+   ENSURE(boost::apply_visitor(are_equal(), gets_written, got_read));
 
-   std::remove(testfile);
+   std::remove(testfile.c_str());
 }
 
 // this verifies that if you try to read in a variant from a file
@@ -113,57 +112,71 @@ void test_type(const T& gets_written){
 // sequence length as well, but this would add size to the archive for
 // dubious benefit.
 //
+template <typename TS /*test settings*/>
 void do_bad_read()
 {
-    // Compiling this test invokes and ICE on msvc 6
+    // Compiling this test causes an ICE on msvc 6
     // So, we'll just to skip it for this compiler
     #if defined(_MSC_VER) && (_MSC_VER <= 1020)
         boost::variant<bool, float, int, std::string> big_variant;
         big_variant = std::string("adrenochrome");
 
-        const char * testfile = boost::archive::tmpnam(NULL);
-        BOOST_REQUIRE(testfile != NULL);
+        auto testfile = I3Test::testfile("variant_bad_read");
         {
-            test_ostream os(testfile, TEST_STREAM_FLAGS);
-            test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-            oa << BOOST_SERIALIZATION_NVP(big_variant);
+            typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+            typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+            oa << I3_SERIALIZATION_NVP(big_variant);
         }
         boost::variant<bool, float, int> little_variant;
         {
-            test_istream is(testfile, TEST_STREAM_FLAGS);
-            test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
+            typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+            typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
             bool exception_invoked = false;
-            BOOST_TRY {
-                ia >> BOOST_SERIALIZATION_NVP(little_variant);
-            } BOOST_CATCH (boost::archive::archive_exception e) {
-                BOOST_CHECK(boost::archive::archive_exception::unsupported_version == e.code);
+            try{
+                ia >> I3_SERIALIZATION_NVP(little_variant);
+            }catch(icecube::archive::archive_exception e) {
+                ENSURE(icecube::archive::archive_exception::unsupported_version == e.code);
                 exception_invoked = true;
             }
-            BOOST_CATCH_END
-            BOOST_CHECK(exception_invoked);
+            ENSURE(exception_invoked);
         }
     #endif
 }
 
-int test_main( int /* argc */, char* /* argv */[] )
-{
-   {
-      boost::variant<bool, int, float, double, A, std::string> v;
-      v = false;
-      test_type(v);
-      v = 1;
-      test_type(v);
-      v = (float) 2.3;
-      test_type(v);
-      v = (double) 6.4;
-      test_type(v);
-      v = std::string("we can't stop here, this is Bat Country");
-      test_type(v);
-      v = A();
-      test_type(v);
-   }
-   do_bad_read();
-   return EXIT_SUCCESS;
+TEST_GROUP(variant)
+
+#define TEST_SET(name) \
+TEST(name ## _boost_variant){ \
+   { \
+      boost::variant<bool, int, float, double, A, std::string> v; \
+      v = false; \
+      test_type<test_settings>(v); \
+      v = 1; \
+      test_type<test_settings>(v); \
+      v = (float) 2.3; \
+      test_type<test_settings>(v); \
+      v = (double) 6.4; \
+      test_type<test_settings>(v); \
+      v = std::string("we can't stop here, this is Bat Country"); \
+      test_type<test_settings>(v); \
+      v = A(); \
+      test_type<test_settings>(v); \
+   } \
+   do_bad_read<test_settings>(); \
 }
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)
 
 // EOF

@@ -34,7 +34,7 @@
 
 class DLL_DECL(BOOST_PP_EMPTY()) polymorphic_base
 {
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void serialize(
         Archive & /* ar */, 
@@ -48,14 +48,14 @@ public:
     virtual ~polymorphic_base(){};
 };
 
-BOOST_SERIALIZATION_ASSUME_ABSTRACT(polymorphic_base)
+I3_SERIALIZATION_ASSUME_ABSTRACT(polymorphic_base)
 
 // the no_rtti system requires this !!!
-BOOST_CLASS_EXPORT_KEY(polymorphic_base)
+I3_CLASS_EXPORT_KEY(polymorphic_base)
 
-BOOST_CLASS_TYPE_INFO(
+I3_CLASS_TYPE_INFO(
     polymorphic_base,
-    boost::serialization::extended_type_info_no_rtti<polymorphic_base>
+    icecube::serialization::extended_type_info_no_rtti<polymorphic_base>
 )
 
 #endif // POLYMORPHIC_BASE_HPP

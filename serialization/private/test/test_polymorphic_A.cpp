@@ -15,19 +15,20 @@
 data::data() :
     a(new A)
 {}
+
 data::~data(){
     delete a;
 }
 
 bool data::operator==(const data & rhs) const {
-    return * (a) == *(rhs.a);
+    return (*a == *(rhs.a));
 }
 
 #if 0 // this method fails with msvc 6.0 and borland
 // now we can define the serialization for class A
 template<class Archive>
 void data::serialize(Archive & ar, const unsigned int /* file_version */){
-    ar & BOOST_SERIALIZATION_NVP(a);
+    ar & I3_SERIALIZATION_NVP(a);
 }
 
 // without the explicit instantiations below, the program will
@@ -35,24 +36,24 @@ void data::serialize(Archive & ar, const unsigned int /* file_version */){
 // note: the following failed to fix link errors for vc 7.0 !
 #include <archive/polymorphic_oarchive.hpp>
 
-template void data::serialize<boost::archive::polymorphic_oarchive>(
-    boost::archive::polymorphic_oarchive & ar, 
+template void data::serialize<icecube::archive::polymorphic_oarchive>(
+    icecube::archive::polymorphic_oarchive & ar,
     const unsigned int file_version
 );
 
 #include <archive/polymorphic_iarchive.hpp>
 
-template void data::serialize<boost::archive::polymorphic_iarchive>(
-    boost::archive::polymorphic_iarchive & ar, 
+template void data::serialize<icecube::archive::polymorphic_iarchive>(
+    icecube::archive::polymorphic_iarchive & ar,
     const unsigned int file_version
 );
 #endif
 
 // so use this
-void data::serialize(boost::archive::polymorphic_oarchive & ar, const unsigned int /* file_version */){
-    ar & BOOST_SERIALIZATION_NVP(a);
+void data::serialize(icecube::archive::polymorphic_oarchive & ar, const unsigned int /* file_version */){
+    ar & I3_SERIALIZATION_NVP(a);
 }
 
-void data::serialize(boost::archive::polymorphic_iarchive & ar, const unsigned int /* file_version */){
-    ar & BOOST_SERIALIZATION_NVP(a);
+void data::serialize(icecube::archive::polymorphic_iarchive & ar, const unsigned int /* file_version */){
+    ar & I3_SERIALIZATION_NVP(a);
 }

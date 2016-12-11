@@ -1,4 +1,4 @@
-#include "../../../boost/config.hpp"
+#include <boost/config.hpp>
 
 #if defined(__clang__)
 #pragma message "__clang__ defined"
@@ -12,6 +12,6 @@
 #pragma message "__GNUC__ defined"
 #endif
 
-#include "../../../boost/mpl/print.hpp"
+#include <boost/mpl/print.hpp>
 
 typedef int x;

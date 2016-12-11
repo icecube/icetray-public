@@ -42,7 +42,7 @@ basic_serializer_map::type_info_pointer_compare::operator()(
 
 I3_ARCHIVE_DECL(bool) 
 basic_serializer_map::insert(const basic_serializer * bs){
-    // attempt to insert serializer into it's map
+    // attempt to insert serializer into its map
     // the following is commented out - rather than being just
     // deleted as a reminder not to try this.
 
@@ -56,7 +56,7 @@ basic_serializer_map::insert(const basic_serializer * bs){
     // But it seems that it's just too hard for many users to implement.
 
     // Ideally, I would like to make this exception a warning -
-    // but there isn't anyway to do that.
+    // but there isn't any way to do that.
 
     // if this fails, it's because it's been instantiated
     // in multiple modules - DLLS - a recipe for problems.

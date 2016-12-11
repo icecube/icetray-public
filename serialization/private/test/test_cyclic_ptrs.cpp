@@ -19,12 +19,12 @@ namespace std{
 }
 #endif
 
-#include "test_tools.hpp"
-#include <boost/detail/no_exceptions_support.hpp>
-
+#include <archive/archive_exception.hpp>
 #include <serialization/nvp.hpp>
 #include <serialization/version.hpp>
 #include <serialization/base_object.hpp>
+
+#include <I3Test.h>
 
 #include "A.hpp"
 #include "A.ipp"
@@ -34,11 +34,11 @@ namespace std{
 class J : public A
 {
 private:
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int /* file_version */){
-        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(A);
-        ar & BOOST_SERIALIZATION_NVP(j);
+        ar & I3_SERIALIZATION_BASE_OBJECT_NVP(A);
+        ar & I3_SERIALIZATION_NVP(j);
     }
 public:
     bool operator==(const J &rhs) const;
@@ -47,7 +47,7 @@ public:
     J() : j(NULL){}
 };
 
-BOOST_CLASS_VERSION(J, 6)
+I3_CLASS_VERSION(J, 6)
 
 bool J::operator==(const J &rhs) const
 {
@@ -71,15 +71,15 @@ class K
     J j1;
     J j2;
     J j3;
-    friend class boost::serialization::access;
+    friend class icecube::serialization::access;
     template<class Archive>
     void serialize(
         Archive &ar,
         const unsigned int /* file_version */
     ){
-        ar & BOOST_SERIALIZATION_NVP(j1);
-        ar & BOOST_SERIALIZATION_NVP(j2);
-        ar & BOOST_SERIALIZATION_NVP(j3);
+        ar & I3_SERIALIZATION_NVP(j1);
+        ar & I3_SERIALIZATION_NVP(j2);
+        ar & I3_SERIALIZATION_NVP(j3);
     }
 public:
     bool operator==(const K &rhs) const;
@@ -103,101 +103,116 @@ bool K::operator==(const K &rhs) const
     ;
 }
 
-int test1(){
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void test1(){
+    auto testfile = I3Test::testfile("test_cyclic_ptrs_1");
 
     J j1, j2;
     {
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << BOOST_SERIALIZATION_NVP(j1);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << I3_SERIALIZATION_NVP(j1);
     }
     {
         // try to read the archive
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> BOOST_SERIALIZATION_NVP(j2);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> I3_SERIALIZATION_NVP(j2);
     }
-    BOOST_CHECK(j1 == j2);
-    std::remove(testfile);
-    return EXIT_SUCCESS;
+    ENSURE(j1 == j2);
+    std::remove(testfile.c_str());
 }
 
-int test2(){
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void test2(){
+    auto testfile = I3Test::testfile("test_cyclic_ptrs_2");
 
     J *j1 = new J;
     j1->j = j1;
     J *j2 = reinterpret_cast<J *>(0xBAADF00D);
     {
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        oa << BOOST_SERIALIZATION_NVP(j1);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        oa << I3_SERIALIZATION_NVP(j1);
     }
     {
         // try to read the archive
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        ia >> BOOST_SERIALIZATION_NVP(j2);
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        ia >> I3_SERIALIZATION_NVP(j2);
     }
-    BOOST_CHECK(*j1 == *j2);
-    BOOST_CHECK(j2 == j2->j);
-    std::remove(testfile);
-    return EXIT_SUCCESS;
+    ENSURE(*j1 == *j2);
+    ENSURE(j2 == j2->j);
+    std::remove(testfile.c_str());
 }
 
-int test3(){
-    const char * testfile = boost::archive::tmpnam(NULL);
-    BOOST_REQUIRE(NULL != testfile);
+template <typename TS /*test settings*/>
+void test3(){
+    auto testfile = I3Test::testfile("test_cyclic_ptrs_3");
 
     K k;
-    boost::archive::archive_exception exception(
-        boost::archive::archive_exception::no_exception
+    icecube::archive::archive_exception exception(
+        icecube::archive::archive_exception::no_exception
     );
     {   
-        test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
-        BOOST_TRY {
-            oa << BOOST_SERIALIZATION_NVP(k);
+        typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
+        try{
+            oa << I3_SERIALIZATION_NVP(k);
         }
-        BOOST_CATCH (boost::archive::archive_exception ae){
+        catch(icecube::archive::archive_exception ae){
             exception = ae;
         }
-        BOOST_CATCH_END
-        BOOST_CHECK(
-            exception.code == boost::archive::archive_exception::pointer_conflict
+        ENSURE(
+            exception.code == icecube::archive::archive_exception::pointer_conflict
         );
     }
     // if exception wasn't invoked
-    if(exception.code == boost::archive::archive_exception::no_exception){
+    if(exception.code == icecube::archive::archive_exception::no_exception){
         // try to read the archive
-        test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
-        exception = boost::archive::archive_exception(
-            boost::archive::archive_exception::no_exception
+        typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
+        typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
+        exception = icecube::archive::archive_exception(
+            icecube::archive::archive_exception::no_exception
         );
-        BOOST_TRY {
-            ia >> BOOST_SERIALIZATION_NVP(k);
+        try{
+            ia >> I3_SERIALIZATION_NVP(k);
         }
-        BOOST_CATCH (boost::archive::archive_exception ae){
+        catch(icecube::archive::archive_exception ae){
             exception = ae;
         }
-        BOOST_CATCH_END
-        BOOST_CHECK(
-            exception.code == boost::archive::archive_exception::pointer_conflict
+        ENSURE(
+            exception.code == icecube::archive::archive_exception::pointer_conflict
         );
     }
-    std::remove(testfile);
-    return EXIT_SUCCESS;
+    std::remove(testfile.c_str());
 }
 
-int test_main( int /* argc */, char* /* argv */[] ){
-    test1();
-    test2();
-    test3();
-    return EXIT_SUCCESS;
+TEST_GROUP(cyclic_ptrs)
+
+#define TEST_SET(name) \
+TEST(name ## _test1){ \
+    test1<test_settings>(); \
+} \
+TEST(name ## _test2){ \
+    test2<test_settings>(); \
+} \
+TEST(name ## _test3){ \
+    test3<test_settings>(); \
 }
+
+#define I3_ARCHIVE_TEST binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(binary_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST text_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(text_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST xml_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(xml_archive)
 
 // EOF
