@@ -15,8 +15,8 @@ struct xml_warchive_test_settings{
     typedef icecube::archive::xml_wiarchive test_iarchive;
     typedef std::wifstream test_istream;
     
-    static constexpr std::ios_base::openmode TEST_STREAM_FLAGS = 0;
-    static constexpr std::ios_base::openmode TEST_ARCHIVE_FLAGS = 0;
+    static constexpr std::ios_base::openmode TEST_STREAM_FLAGS = (std::ios_base::openmode)0;
+    static constexpr std::ios_base::openmode TEST_ARCHIVE_FLAGS = (std::ios_base::openmode)0;
 };
 
 #define test_settings xml_warchive_test_settings

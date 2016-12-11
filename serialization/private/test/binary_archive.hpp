@@ -24,7 +24,7 @@ struct binary_archive_test_settings{
     typedef std::ifstream test_istream;
     
     static constexpr std::ios_base::openmode TEST_STREAM_FLAGS = (std::ios::binary);
-    static constexpr std::ios_base::openmode TEST_ARCHIVE_FLAGS = 0;
+    static constexpr std::ios_base::openmode TEST_ARCHIVE_FLAGS = (std::ios_base::openmode)0;
 };
 
 #define test_settings binary_archive_test_settings
