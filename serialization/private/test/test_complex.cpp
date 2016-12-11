@@ -32,7 +32,7 @@ namespace std{
 
 #include <iostream>
 
-#include <I3test.h>
+#include <I3Test.h>
 
 template <typename TS /*test settings*/>
 void do_test(){
