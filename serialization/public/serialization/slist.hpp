@@ -31,6 +31,7 @@ namespace std{
 #include <serialization/collections_load_imp.hpp>
 #include <serialization/split_free.hpp>
 #include <serialization/nvp.hpp>
+#include <archive/basic_archive.hpp>
 
 namespace icecube { 
 namespace serialization {
