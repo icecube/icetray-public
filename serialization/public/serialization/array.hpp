@@ -10,9 +10,7 @@
 
 #include <iostream>
 #include <cstddef> // std::size_t
-//#ifndef BOOST_NO_CXX11_HDR_ARRAY
-//#include <array>
-//#endif
+#include <array>
 
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
