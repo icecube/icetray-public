@@ -15,8 +15,8 @@ struct text_archive_test_settings{
     typedef icecube::archive::text_iarchive test_iarchive;
     typedef std::ifstream test_istream;
     
-    static constexpr int TEST_STREAM_FLAGS = 0;
-    static constexpr int TEST_ARCHIVE_FLAGS = 0;
+    static constexpr std::ios_base::openmode TEST_STREAM_FLAGS = 0;
+    static constexpr std::ios_base::openmode TEST_ARCHIVE_FLAGS = 0;
 };
 
 #define test_settings text_archive_test_settings
