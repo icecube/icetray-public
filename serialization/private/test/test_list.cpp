@@ -57,6 +57,7 @@ template <typename TS /*test settings*/>
 void test_slist(){
     auto testfile = I3Test::testfile("test_slist");
     
+    BOOST_STD_EXTENSION_NAMESPACE::slist<A> aslist;
     aslist.push_front(A());
     aslist.push_front(A());
     {   
@@ -64,7 +65,8 @@ void test_slist(){
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << icecube::serialization::make_nvp("aslist", aslist);
     }
-    BOOST_STD_EXTENSION_NAMESPACE::slist<A> aslist1;{
+    BOOST_STD_EXTENSION_NAMESPACE::slist<A> aslist1;
+    {
         typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
         ia >> icecube::serialization::make_nvp("aslist", aslist1);
