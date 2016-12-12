@@ -260,7 +260,7 @@ HASH_SET_TEST(name) \
 TEST(name ## _unordered_set){ \
     test_unordered_set<test_settings>(); \
 } \
-TEST(name ## _hash_multiset){ \
+TEST(name ## _unordered_multiset){ \
     test_unordered_multiset<test_settings>(); \
 }
 
