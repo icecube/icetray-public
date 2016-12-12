@@ -14,8 +14,8 @@ struct polymorphic_xml_archive_test_settings{
     typedef icecube::archive::polymorphic_xml_iarchive test_iarchive;
     typedef std::ifstream test_istream;
     
-    static constexpr int TEST_STREAM_FLAGS = 0;
-    static constexpr int TEST_ARCHIVE_FLAGS = 0;
+    static constexpr std::ios_base::openmode TEST_STREAM_FLAGS = (std::ios_base::openmode)0;
+    static constexpr std::ios_base::openmode TEST_ARCHIVE_FLAGS = (std::ios_base::openmode)0;
 };
 
 #define test_settings polymorphic_xml_archive_test_settings

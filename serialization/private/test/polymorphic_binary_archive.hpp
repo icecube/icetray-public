@@ -14,8 +14,8 @@ struct polymorphic_binary_archive_test_settings{
     typedef icecube::archive::polymorphic_binary_iarchive test_iarchive;
     typedef std::ifstream test_istream;
     
-    static constexpr int TEST_STREAM_FLAGS = std::ios::binary;
-    static constexpr int TEST_ARCHIVE_FLAGS = 0;
+    static constexpr std::ios_base::openmode TEST_STREAM_FLAGS = std::ios::binary;
+    static constexpr std::ios_base::openmode TEST_ARCHIVE_FLAGS = (std::ios_base::openmode)0;
 };
 
 #define test_settings polymorphic_binary_archive_test_settings
