@@ -240,7 +240,7 @@ TEST_GROUP(test_map)
 #ifdef BOOST_HAS_HASH
     #define HASH_SET_TEST(name) \
     TEST(name ## _hash_set){ \
-        test_hash_setp<test_settings>(); \
+        test_hash_set<test_settings>(); \
     } \
     TEST(name ## _hash_multiset){ \
         test_hash_multiset<test_settings>(); \
