@@ -306,7 +306,7 @@ HASH_MAP_TEST(name) \
 TEST(name ## _unordered_map){ \
     test_unordered_map<test_settings>(); \
 } \
-TEST(name ## _hash_multimap){ \
+TEST(name ## _unordered_multimap){ \
     test_unordered_multimap<test_settings>(); \
 }
 
