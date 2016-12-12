@@ -52,6 +52,7 @@ namespace typeid_system {
 class I3_SERIALIZATION_DECL(BOOST_PP_EMPTY()) extended_type_info_typeid_0 :
     public extended_type_info
 {
+public:
     virtual const char * get_debug_info() const {
         if(static_cast<const std::type_info *>(0) == m_ti)
             return static_cast<const char *>(0);
