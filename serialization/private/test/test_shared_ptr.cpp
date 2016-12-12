@@ -44,9 +44,9 @@ public:
     bool operator==(const A& rhs) const {
         return x == rhs.x;
     }
-    A(){++count; std::cout << "constructed an A at " << this << std::endl;}    // default constructor
-    A(int x):x(x){++count; std::cout << "constructed an A at " << this << std::endl;}
-    virtual ~A(){--count;}   // default destructor
+    A(){++count;}    // default constructor
+    A(int x):x(x){++count;}
+    virtual ~A(){--count;}   // destructor
 };
 
 int A::count = 0;
@@ -97,7 +97,7 @@ public:
     C() :
         z(++count)    // default constructor
     {}
-    virtual ~C(){--count;}   // default destructor
+    virtual ~C(){--count;}   // destructor
 };
 
 int C::count = 0;
@@ -293,8 +293,7 @@ void test(){
         SPT<A> spa1 = spa;
         save_and_load2<TS>(spa, spa1);
 
-#warning serializing shared pointers to derived classes is currently broken?
-/*        // Try to save and load pointers to Bs
+        // Try to save and load pointers to Bs
         spa = SPT<A>(new B(-12));
         spa1 = spa;
         save_and_load2<TS>(spa, spa1);
@@ -306,16 +305,16 @@ void test(){
         save_and_load3<TS>(spa, spa1, wp);
         
         // obj of type B gets destroyed
-        // as smart_ptr goes out of scope*/
+        // as smart_ptr goes out of scope
     }
     ENSURE(A::count == 0);
-/*    {
+    {
         // Try to save and load pointers to Cs
         SPT<C> spc;
         spc = SPT<C>(new C);
         save_and_load4<TS>(spc);
     }
-    ENSURE(C::count == 0);*/
+    ENSURE(C::count == 0);
 }
 
 TEST_GROUP(shared_ptr)

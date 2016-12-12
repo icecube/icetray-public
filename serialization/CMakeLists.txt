@@ -91,8 +91,6 @@ i3_test_executable(test
   private/test/test_reset_object_address.cpp
   private/test/test_set.cpp
   private/test/test_shared_ptr_132.cpp
-  private/test/test_shared_ptr.cpp
-  private/test/test_shared_ptr_multi_base.cpp
   private/test/test_simple_class_ptr.cpp
   private/test/test_simple_class.cpp
   private/test/test_singleton.cpp
@@ -131,6 +129,20 @@ i3_test_executable(test_exported
   private/test/main.cxx
   private/test/polymorphic_base.cpp
   private/test/test_exported.cpp
+  USE_TOOLS boost
+  USE_PROJECTS serialization
+)
+
+i3_test_executable(test_shared_ptr
+  private/test/main.cxx
+  private/test/test_shared_ptr.cpp
+  USE_TOOLS boost
+  USE_PROJECTS serialization
+)
+
+i3_test_executable(test_shared_ptr_multi_base
+  private/test/main.cxx
+  private/test/test_shared_ptr_multi_base.cpp
   USE_TOOLS boost
   USE_PROJECTS serialization
 )
