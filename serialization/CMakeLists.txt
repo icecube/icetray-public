@@ -105,21 +105,21 @@ i3_test_executable(test
   private/test/test_vector.cpp
   private/test/test_void_cast.cpp
 
-  USE_TOOLS boost
+  USE_TOOLS boost python
   USE_PROJECTS serialization
 )
 
 i3_test_executable(test_class_info_save
   private/test/main.cxx
   private/test/test_class_info_save.cpp
-  USE_TOOLS boost
+  USE_TOOLS boost python
   USE_PROJECTS serialization
 )
 
 i3_test_executable(test_class_info_load
   private/test/main.cxx
   private/test/test_class_info_load.cpp
-  USE_TOOLS boost
+  USE_TOOLS boost python
   USE_PROJECTS serialization
 )
 
@@ -129,21 +129,21 @@ i3_test_executable(test_exported
   private/test/main.cxx
   private/test/polymorphic_base.cpp
   private/test/test_exported.cpp
-  USE_TOOLS boost
+  USE_TOOLS boost python
   USE_PROJECTS serialization
 )
 
 i3_test_executable(test_shared_ptr
   private/test/main.cxx
   private/test/test_shared_ptr.cpp
-  USE_TOOLS boost
+  USE_TOOLS boost python
   USE_PROJECTS serialization
 )
 
 i3_test_executable(test_shared_ptr_multi_base
   private/test/main.cxx
   private/test/test_shared_ptr_multi_base.cpp
-  USE_TOOLS boost
+  USE_TOOLS boost python
   USE_PROJECTS serialization
 )
 
