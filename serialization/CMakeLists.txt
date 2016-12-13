@@ -21,6 +21,7 @@ i3_add_library (serialization
   private/serialization/extended_type_info.cpp
   private/serialization/polymorphic_iarchive.cpp
   private/serialization/polymorphic_oarchive.cpp
+  private/serialization/portable_binary_archive.cpp
   private/serialization/stl_port.cpp
   private/serialization/text_iarchive.cpp
   private/serialization/text_oarchive.cpp
