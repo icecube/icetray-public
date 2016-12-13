@@ -16,7 +16,7 @@
 #include <fstream>
 
 #include <boost/iostreams/filtering_stream.hpp>
-#include <icetray/portable_binary_archive.hpp>
+#include <archive/portable_binary_archive.hpp>
 #include <icetray/open.h>
 
 using icecube::archive::portable_binary_oarchive;
