@@ -96,7 +96,6 @@ i3_add_library(icetray
   private/icetray/I3PhysicsTimer.cxx
   private/icetray/I3PhysicsUsage.cxx
   private/icetray/Utility.cxx
-  private/icetray/serialization.cxx
   private/icetray/init.cxx
   private/icetray/crc-ccitt.c
   private/icetray/crc32.c
