@@ -29,7 +29,7 @@
 #include <icetray/i3_extended_type_info.h>
 #include <archive/xml_iarchive.hpp>
 #include <archive/xml_oarchive.hpp>
-#include <icetray/portable_binary_archive.hpp>
+#include <archive/portable_binary_archive.hpp>
 
 #include <serialization/serialization.hpp>
 #include <serialization/nvp.hpp>
