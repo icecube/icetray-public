@@ -62,12 +62,12 @@ inline void load(
     if(collection_size_type(0) == count)
         return;
     item_version_type item_version(0);
-    const icecube::archive::library_version_type library_version(
-        ar.get_library_version()
-    );
-    if(icecube::archive::library_version_type(3) < library_version){
-        ar >> I3_SERIALIZATION_NVP(item_version);
-    }
+    //const icecube::archive::library_version_type library_version(
+    //    ar.get_library_version()
+    //);
+    //if(icecube::archive::library_version_type(3) < library_version){
+    //    ar >> I3_SERIALIZATION_NVP(item_version);
+    //}
     icecube::serialization::detail::stack_construct<Archive, U> u(ar, item_version);
     ar >> icecube::serialization::make_nvp("item", u.reference());
     t.push_front(u.reference());

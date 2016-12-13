@@ -57,7 +57,7 @@ i3_test_executable(test
   private/test/test_inclusion.cpp
   private/test/test_iterators_base64.cpp
   private/test/test_iterators.cpp
-  #private/test/test_list_ptrs.cpp # broken right now
+  private/test/test_list_ptrs.cpp
   private/test/test_list.cpp
   private/test/test_map.cpp
   private/test/test_mi.cpp

@@ -129,11 +129,9 @@ TEST_GROUP(test_list)
 #define TEST_SET(name) \
 TEST(name ## _list){ \
     test_list<test_settings>(); \
-}
-#warning slist tests disabled
-//SLIST_TEST(name)
-#warning slist tests disabled
-//FORWARD_LIST_TEST(name)
+}\
+SLIST_TEST(name) \
+FORWARD_LIST_TEST(name)
 
 #define I3_ARCHIVE_TEST binary_archive.hpp
 #include "select_archive.hpp"
