@@ -38,27 +38,6 @@ typedef char __signed;
 #include <icetray/I3Logging.h>
 #include <icetray/I3PointerTypedefs.h>
 
-namespace boost {
-  namespace serialization {
-    class access;
-  }
-  namespace python { 
-    namespace api
-    {
-      class object;
-    }
-    using api::object;
-  }
-}
-
-namespace I3 {
-  namespace Tray {
-    namespace Config {
-      class Service;
-    }
-  }
-}
-
 class I3Module;  I3_POINTER_TYPEDEFS(I3Module);
 class I3Context;  I3_POINTER_TYPEDEFS(I3Context);
 class I3ServiceFactory; I3_POINTER_TYPEDEFS(I3ServiceFactory);
