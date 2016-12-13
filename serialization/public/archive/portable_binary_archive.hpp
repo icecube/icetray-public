@@ -1,8 +1,7 @@
 #ifndef ICETRAY_PORTABLE_BINARY_IARCHIVE_HPP
 #define ICETRAY_PORTABLE_BINARY_IARCHIVE_HPP
 
-#include <iostream>
-#include <boost/version.hpp>
+#include <streambuf>
 #include <archive/basic_archive.hpp>
 #include <archive/shared_ptr_helper.hpp>
 #include <serialization/shared_ptr_helper.hpp>
@@ -15,7 +14,7 @@
 #include <serialization/array.hpp>
 
 #include <sys/types.h>
-#include <string.h>
+#include <cstring>
 
 namespace icecube { namespace archive {
 
