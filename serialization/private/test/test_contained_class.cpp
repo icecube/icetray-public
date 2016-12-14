@@ -88,4 +88,9 @@ TEST_SET(text_archive)
 #include "select_archive.hpp"
 TEST_SET(xml_archive)
 
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST portable_binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(portable_binary_archive)
+
 // EOF

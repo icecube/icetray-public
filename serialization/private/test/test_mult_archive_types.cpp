@@ -23,6 +23,7 @@ namespace std{
 #include <archive/text_iarchive.hpp>
 #include <archive/xml_oarchive.hpp>
 #include <archive/xml_iarchive.hpp>
+#include <archive/portable_binary_archive.hpp>
 #include <I3Test.h>
 
 #include <serialization/export.hpp>
@@ -110,36 +111,48 @@ TEST_GROUP(mult_archive_types)
 
 TEST(binary_archive){
     // Try to save and load pointers to As, to a binary archive
-    A * a = new A;
-    A * a1 = a;
+    A* a = new A;
+    A* a1 = a;
     test_save_and_load<binary_oarchive, binary_iarchive>(a, a1);
 
     // Try to save and load pointers to Bs, to a binary archive
-    B * b = new B;
-    B * b1 = b;
+    B* b = new B;
+    B* b1 = b;
     test_save_and_load<binary_oarchive, binary_iarchive>(b, b1);
 }
 
 TEST(text_archive){
     // Try to save and load pointers to As, to a text archive
-    A * a = new A;
-    A * a1 = a;
+    A* a = new A;
+    A* a1 = a;
     test_save_and_load<text_oarchive, text_iarchive>(a, a1);
 
     // Try to save and load pointers to Bs, to a text archive
-    B * b = new B;
-    B * b1 = b;
+    B* b = new B;
+    B* b1 = b;
     test_save_and_load<text_oarchive, text_iarchive>(b, b1);
 }
 
 TEST(xml_archive){
-    // Try to save and load pointers to As, to a text archive
-    A * a = new A;
-    A * a1 = a;
+    // Try to save and load pointers to As, to a xml archive
+    A* a = new A;
+    A* a1 = a;
     test_save_and_load<xml_oarchive, xml_iarchive>(a, a1);
 
-    // Try to save and load pointers to Bs, to a text archive
-    B * b = new B;
-    B * b1 = b;
+    // Try to save and load pointers to Bs, to a xml archive
+    B* b = new B;
+    B* b1 = b;
     test_save_and_load<xml_oarchive, xml_iarchive>(b, b1);
+}
+
+TEST(portable_binary_archive){
+    // Try to save and load pointers to As, to a portable binary archive
+    A* a = new A;
+    A* a1 = a;
+    test_save_and_load<portable_binary_oarchive, portable_binary_iarchive>(a, a1);
+    
+    // Try to save and load pointers to Bs, to a portable binary archive
+    B* b = new B;
+    B* b1 = b;
+    test_save_and_load<portable_binary_oarchive, portable_binary_iarchive>(b, b1);
 }

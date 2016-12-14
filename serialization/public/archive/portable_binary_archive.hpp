@@ -77,6 +77,15 @@ class portable_binary_oarchive :
 			save(l);
 			save_binary(&(s[0]), l);
 		}
+        #ifndef BOOST_NO_STD_WSTRING
+		void save_override(const std::wstring& s, I3_PFTO int) {
+			uint32_t l = static_cast<uint32_t>(s.size());
+			save(l);
+            //individual wide characters may need byte swapping
+            for(wchar_t c : s)
+                save(c);
+		}
+        #endif
 		void save_override(const class_name_type& t, I3_PFTO int) {
 			std::string s(t.t);
 			uint32_t l = static_cast<uint32_t>(s.size());
@@ -130,7 +139,7 @@ class portable_binary_oarchive :
 
 class portable_binary_iarchive :
     public icecube::archive::detail::common_iarchive<portable_binary_iarchive>,
-    public icecube::serialization::shared_ptr_helper<boost::shared_ptr>
+    public icecube::archive::detail::shared_ptr_helper
 {
 	public:
 		portable_binary_iarchive(std::istream &stream,
@@ -180,6 +189,15 @@ class portable_binary_iarchive :
 			s.resize(l);
 			load_binary(&(s[0]), l);
 		}
+        #ifndef BOOST_NO_STD_WSTRING
+        void load_override(std::wstring& s, I3_PFTO int) {
+            uint32_t l;
+            load(l);
+            s.resize(l);
+            for(uint32_t i=0; i<l; i++)
+                load(s[i]);
+        }
+        #endif
 		void load_override(class_name_type& t, I3_PFTO int) {
 			std::string cn;
 			cn.reserve(I3_SERIALIZATION_MAX_KEY_SIZE);

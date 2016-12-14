@@ -5,28 +5,18 @@
 
 // See http://www.boost.org for updates, documentation, and revision history.
 // file includes for testing a custom archive.
-// as an example this tests the portable binary archive
 
-#include <fstream>
-#warning NEED TO REFER TO OUR PORTABLE BINARY ARCHIVE!
+#include <archive/portable_binary_archive.hpp>
 
-// #include output archive header
-#include "../example/portable_binary_oarchive.hpp"
-// define output archive class to be used 
-typedef portable_binary_oarchive test_oarchive;
-// and corresponding stream
-typedef std::ofstream test_ostream;
+struct portable_binary_archive_test_settings{
+    typedef icecube::archive::portable_binary_oarchive test_oarchive;
+    typedef std::ofstream test_ostream;
+    
+    typedef icecube::archive::portable_binary_iarchive test_iarchive;
+    typedef std::ifstream test_istream;
+    
+    static constexpr std::ios_base::openmode TEST_STREAM_FLAGS = (std::ios::binary);
+    static constexpr std::ios_base::openmode TEST_ARCHIVE_FLAGS = (std::ios_base::openmode)0;
+};
 
-// repeat the above for correspondng input archive
-#include "../example/portable_binary_iarchive.hpp"
-typedef portable_binary_iarchive test_iarchive;
-typedef std::ifstream test_istream;
-
-// since this archive class isn't compiled into the 
-// boost serialization library, include this here
-// so that things get instantiated
-#include "../example/portable_binary_oarchive.cpp"
-#include "../example/portable_binary_iarchive.cpp"
-
-// and stream open flags
-#define TEST_STREAM_FLAGS std::ios::binary
+#define test_settings portable_binary_archive_test_settings

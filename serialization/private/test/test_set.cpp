@@ -250,7 +250,7 @@ TEST_GROUP(test_map)
 #endif
 
 #define TEST_SET(name) \
-TEST(name ## _map){ \
+TEST(name ## _set){ \
     test_set<test_settings>(); \
 } \
 TEST(name ## _multiset){ \
@@ -277,3 +277,8 @@ TEST_SET(text_archive)
 #define I3_ARCHIVE_TEST xml_archive.hpp
 #include "select_archive.hpp"
 TEST_SET(xml_archive)
+
+#undef I3_ARCHIVE_TEST
+#define I3_ARCHIVE_TEST portable_binary_archive.hpp
+#include "select_archive.hpp"
+TEST_SET(portable_binary_archive)
