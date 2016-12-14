@@ -5,6 +5,9 @@
 #include <sys/socket.h>
 #include <netdb.h>
 
+#include <boost/iostreams/device/file_descriptor.hpp>
+#include <boost/version.hpp>
+
 boost::iostreams::file_descriptor_source
 create_socket_source(const std::string filename){
   std::string port("1313");
