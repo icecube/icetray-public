@@ -35,6 +35,8 @@ if(CDK_FOUND AND NCURSES_FOUND)
     USE_PROJECTS dataio
     USE_TOOLS cdk ncurses
     )
+    target_compile_options(dataio-shovel BEFORE PUBLIC "-pthread")
+    set_target_properties(dataio-shovel PROPERTIES LINK_FLAGS "-pthread")
 else()
   colormsg(CYAN "+-- dataio-shovel *not* included (missing CDK or ncurses libraries)")
 endif()
