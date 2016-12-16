@@ -507,6 +507,13 @@ macro(i3_executable THIS_EXECUTABLE_NAME)
       ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_LINK_LIBRARIES})
     endif(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_LINK_LIBRARIES)
 
+    ## FIXME: temporarily force pthread linking
+    target_compile_options(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME}
+      BEFORE PUBLIC "-pthread")
+    set_target_properties(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME}
+      PROPERTIES LINK_FLAGS "-pthread")
+    ## :FIXME
+
     set_target_properties(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME}
       PROPERTIES
       COMPILE_FLAGS "${THIS_I3H_FLAGS} -DPROJECT=${PROJECT_NAME}"
@@ -551,6 +558,13 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
 
     add_dependencies(test-bins ${PROJECT_NAME}-${THIS_EXECUTABLE_NAME})
     use_pybindings(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME})
+
+    ## FIXME: temporarily force pthread linking
+    target_compile_options(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
+      BEFORE PUBLIC "-pthread")
+    set_target_properties(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
+      PROPERTIES LINK_FLAGS "-pthread")
+    ## :FIXME
 
     set_target_properties(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
       PROPERTIES
