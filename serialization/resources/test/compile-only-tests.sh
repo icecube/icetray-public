@@ -9,11 +9,13 @@ It accepts the following options:
 
   -h, --help                  Display this help message
   -q, --quiet                 Hide ouput from test compile commands
-                              (This is the default)
   -r [pattern],
   --run-tests [pattern]       Only run tests whose names match the given pattern
   -v, --verbose               Show ouput from test compile commands
+                              (This is the default)
 "
+
+VERBOSE=1
 
 # parse arguments
 
