@@ -58,6 +58,13 @@ CMAKE_CXX_COMPILER=`grep -m 1 ^CMAKE_CXX_COMPILER:FILEPATH $CMAKECACHE | sed -e'
 # fetch the necessary compiler flags
 CXX_FLAGS=`${I3_BUILD}/bin/icetray-config serialization`
 
+# GNU ld is retarded and demands symbols from python which are ultimately never used, 
+# due to cmake mixing boost_python in everwhere whether it is needed or not. 
+# For now, manually link in python to shut it up. 
+PYTHON_LIB_DIR=`grep -m 1 ^PYTHON_LIBRARY:FILEPATH $CMAKECACHE | sed -e's|^.*:FILEPATH=||' -e's|/[^/]*$||'`
+PYTHON_LIB=`grep -m 1 ^PYTHON_LIBRARY:FILEPATH $CMAKECACHE | sed -e's|^.*:FILEPATH=.*/lib||' -e's|\.[^.]*$||'`
+CXX_FLAGS="$CXX_FLAGS -L${PYTHON_LIB_DIR} -l${PYTHON_LIB}"
+
 TEST_DIR="${I3_SRC}/${PROJECT}/private/test"
 
 should_skip() {
