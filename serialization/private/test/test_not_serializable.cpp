@@ -33,12 +33,10 @@ void in(A & a){
     ia >> I3_SERIALIZATION_NVP(a);
 }
 
-int
-test_main( int /* argc */, char* /* argv */[] ){
+void test(){
     A a;
     out(a);
     in(a);
-    return EXIT_SUCCESS;
 }
 
 // EOF

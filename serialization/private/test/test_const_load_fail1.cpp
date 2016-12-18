@@ -12,6 +12,7 @@
 
 using namespace icecube::archive;
 
+namespace{
 struct A {
     template<class Archive>
     void serialize(Archive & ar, unsigned int version) {
@@ -20,4 +21,5 @@ struct A {
 
 void f1(text_iarchive & ia, const A & a){
     ia >> a;
+}
 }

@@ -148,29 +148,12 @@ i3_test_executable(test_shared_ptr_multi_base
   USE_PROJECTS serialization
 )
 
+add_test(NAME serialization::test_compile_only
+  WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+  COMMAND ${CMAKE_BINARY_DIR}/serialization/resources/test/compile-only-tests.sh
+)
+
 #probably need own executables?
 # test_dll_exported.cpp
 # test_dll_plugin.cpp
 # test_dll_simple.cpp
-
-#compile only tests
-# test_check.cpp
-# test_const_load_fail1_nvp.cpp
-# test_const_load_fail1.cpp
-# test_const_load_fail2_nvp.cpp
-# test_const_load_fail2.cpp
-# test_const_load_fail3_nvp.cpp
-# test_const_load_fail3.cpp
-# test_const_pass.cpp
-# test_const_save_warn1_nvp.cpp
-# test_const_save_warn1.cpp
-# test_const_save_warn2_nvp.cpp
-# test_const_save_warn2.cpp
-# test_const_save_warn3_nvp.cpp
-# test_const_save_warn3.cpp
-# test_const_save_warn4_nvp.cpp
-# test_const_save_warn4.cpp
-# test_not_serializable.cpp
-# test_static_warning.cpp
-# test_traits_fail.cpp
-# test_traits_pass.cpp

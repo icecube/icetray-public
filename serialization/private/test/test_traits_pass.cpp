@@ -7,7 +7,6 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 // compile test for traits
-#include "test_tools.hpp"
 
 #include <serialization/level.hpp>
 #include <serialization/tracking.hpp>
@@ -20,11 +19,5 @@ class B
 I3_CLASS_IMPLEMENTATION(B, icecube::serialization::object_class_info)
 I3_CLASS_VERSION(B, 2)
 I3_CLASS_TRACKING(B, icecube::serialization::track_always)
-
-int
-test_main( int argc, char* argv[] )
-{
-    return EXIT_SUCCESS;
-}
 
 // EOF

@@ -49,7 +49,7 @@ BOOST_STATIC_WARNING(sizeof(a1) != sizeof(a1)); // Warn.
 BOOST_STATIC_WARNING(! boost::is_polymorphic<polymorphic>::value); // Warn.
 BOOST_STATIC_WARNING(boost::is_polymorphic<non_polymorphic>::value); // Warn.
 
-int main(int /* argc */, char * /* argv */[]){
+void test(){
     // should show NO warning message
     BOOST_STATIC_WARNING(true);
 
@@ -59,5 +59,4 @@ int main(int /* argc */, char * /* argv */[]){
     BOOST_STATIC_WARNING(sizeof(a1) != sizeof(a1)); // Warn.
     BOOST_STATIC_WARNING(! boost::is_polymorphic<polymorphic>::value); // Warn.
     BOOST_STATIC_WARNING(boost::is_polymorphic<non_polymorphic>::value); // Warn.
-    return 0;
 }
