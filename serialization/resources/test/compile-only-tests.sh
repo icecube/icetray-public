@@ -55,6 +55,11 @@ echo ${I3_BUILD?"I3_BUILD is not set"} > /dev/null
 CMAKECACHE=${I3_BUILD}/CMakeCache.txt
 CMAKE_CXX_COMPILER=`grep -m 1 ^CMAKE_CXX_COMPILER:FILEPATH $CMAKECACHE | sed -e's|^.*:FILEPATH=||'`
 
+if [ -z "$CMAKE_CXX_COMPILER" ] ; then
+    echo "Failed to extract compiler used by cmake" 1>&2
+    exit 1
+fi
+
 # fetch the necessary compiler flags
 CXX_FLAGS=`${I3_BUILD}/bin/icetray-config serialization`
 
