@@ -50,28 +50,19 @@ PROJECT="serialization"
 # make sure necessary inputs are set
 echo ${I3_SRC?"I3_SRC is not set"} > /dev/null
 echo ${I3_BUILD?"I3_BUILD is not set"} > /dev/null
+echo ${CMAKE_CXX_COMPILER?"CMAKE_CXX_COMPILER is not set"} > /dev/null
 
-# figure out which compiler to use
+# fetch the necessary compiler flags
+CXX_FLAGS=`${I3_BUILD}/bin/icetray-config $PROJECT`
+
+# GNU ld is retarded and demands symbols from python which are ultimately never used, 
+# due to cmake mixing boost_python in everwhere whether it is needed or not. 
+# For now, manually link in python to shut it up.
 CMAKECACHE=${I3_BUILD}/CMakeCache.txt
 if [ ! -f "$CMAKECACHE" ]; then
     echo "CMakeCache.txt not found; expected location was $CMAKECACHE" 1>&2
     exit 1
 fi
-
-CMAKE_CXX_COMPILER=`grep -m 1 ^CMAKE_CXX_COMPILER:FILEPATH $CMAKECACHE | sed -e's|^.*:FILEPATH=||'`
-
-if [ -z "$CMAKE_CXX_COMPILER" ] ; then
-    echo "Failed to extract compiler used by cmake" 1>&2
-    grep '^CMAKE_CXX_COMPILER' $CMAKECACHE
-    exit 1
-fi
-
-# fetch the necessary compiler flags
-CXX_FLAGS=`${I3_BUILD}/bin/icetray-config serialization`
-
-# GNU ld is retarded and demands symbols from python which are ultimately never used, 
-# due to cmake mixing boost_python in everwhere whether it is needed or not. 
-# For now, manually link in python to shut it up. 
 PYTHON_LIB_DIR=`grep -m 1 ^PYTHON_LIBRARY:FILEPATH $CMAKECACHE | sed -e's|^.*:FILEPATH=||' -e's|/[^/]*$||'`
 PYTHON_LIB=`grep -m 1 ^PYTHON_LIBRARY:FILEPATH $CMAKECACHE | sed -e's|^.*:FILEPATH=.*/lib||' -e's|\.[^.]*$||'`
 CXX_FLAGS="$CXX_FLAGS -L${PYTHON_LIB_DIR} -l${PYTHON_LIB}"

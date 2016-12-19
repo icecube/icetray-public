@@ -153,6 +153,9 @@ add_test(NAME serialization::test_compile_only
   COMMAND ${CMAKE_BINARY_DIR}/serialization/resources/test/compile-only-tests.sh
 )
 
+SET_TESTS_PROPERTIES(serialization::test_compile_only
+  PROPERTIES ENVIRONMENT "CMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}")
+
 #probably need own executables?
 # test_dll_exported.cpp
 # test_dll_plugin.cpp
