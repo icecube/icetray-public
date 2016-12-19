@@ -53,10 +53,16 @@ echo ${I3_BUILD?"I3_BUILD is not set"} > /dev/null
 
 # figure out which compiler to use
 CMAKECACHE=${I3_BUILD}/CMakeCache.txt
+if [ ! -f "$CMAKECACHE" ]; then
+    echo "CMakeCache.txt not found; expected location was $CMAKECACHE" 1>&2
+    exit 1
+fi
+
 CMAKE_CXX_COMPILER=`grep -m 1 ^CMAKE_CXX_COMPILER:FILEPATH $CMAKECACHE | sed -e's|^.*:FILEPATH=||'`
 
 if [ -z "$CMAKE_CXX_COMPILER" ] ; then
     echo "Failed to extract compiler used by cmake" 1>&2
+    grep '^CMAKE_CXX_COMPILER' $CMAKECACHE
     exit 1
 fi
 
