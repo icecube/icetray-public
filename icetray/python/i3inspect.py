@@ -186,7 +186,7 @@ def get_uninspectable_projects():
     
     return [ os.path.basename(fname).replace('-','_') for fname in
              glob(os.path.join(os.environ['I3_BUILD'],
-                               'docs','no_inspect','*'))]
+                               'docs','no_inspect','*'))] +["level3_filter_cascade"]
 
 def get_inspectable_projects():
 
@@ -196,13 +196,21 @@ def get_inspectable_projects():
         suffix='.dylib'        
     else:
         suffix = '.so'
-    cpp_libs = [os.path.basename(fname).split('.')[0][3:].replace('-','_')
+    cpp_libs = [os.path.basename(fname).split('.')[0][3:]
                 for fname in glob(os.path.join(libdir,'lib*'+suffix))]
 
     moduleitr = pkgutil.iter_modules(path=[libdir+'/icecube'])
     python_libs = [ x[1] for x in moduleitr]
 
+    return cpp_libs,python_libs
+
+def get_all_projects():
+
+    cpp_libs,python_libs = get_inspectable_projects()
+
+    cpp_libs = [ l.replace("-","_") for l in cpp_libs ]
+    
     libs = sorted(set(cpp_libs+python_libs),key=lambda x: x.lower())
     libs = [ l for l in libs if l not in  get_uninspectable_projects()]
 
-    return cpp_libs,python_libs,libs
+    return libs

@@ -336,7 +336,7 @@ def display_project(project):
         import_name = 'icecube.%s' %pyproject
         try:
             pymodule = __import__(import_name,
-                                                      globals(), locals(), [pyproject])
+                                  globals(), locals(), [pyproject])
         except Exception as e:
             sys.stderr.write("ERROR: cant load '%s': %s\n" % (import_name,str(e)))
             return
@@ -506,10 +506,10 @@ signal.signal(signal.SIGSEGV, sig_handler)
 
 icetray.I3Logger.global_logger = icetray.I3NullLogger()
 
-compiled_projects,python_projects,all_projects = i3inspect.get_inspectable_projects()
+compiled_projects,python_projects = i3inspect.get_inspectable_projects()
 
 if opts.all:
-    args = all_projects
+    args = compiled_projects+python_projects
 
 if opts.output:
     outfile = open(opts.output,'wt')
@@ -533,7 +533,7 @@ noinspect = i3inspect.get_uninspectable_projects()+["level3_filter_cascade"]
 
 for p in args:
     if p in noinspect:
-        print("WARNING: Skipping uninspectable project:", p)
+        sys.stderr.write("WARNING: Skipping uninspectable project: {}".format(p))
         continue
     display_project(p)
 
