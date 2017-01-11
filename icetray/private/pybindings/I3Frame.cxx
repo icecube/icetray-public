@@ -93,7 +93,7 @@ std::string format_stream(const I3Frame::Stream& s)
   return std::string("icetray.I3Frame.") + s.str();
 }
 
-static str frame_dumps(I3Frame const&f)
+static object frame_dumps(I3Frame const&f)
 {
   std::vector<char> blobBuffer;
   boost::iostreams::filtering_ostream blobBufStream(boost::iostreams::back_inserter(blobBuffer));
@@ -102,18 +102,29 @@ static str frame_dumps(I3Frame const&f)
   }
   blobBufStream.flush();
 
+#if PY_MAJOR_VERSION >= 3
+  return object(handle<>( PyBytes_FromStringAndSize(&(blobBuffer[0]), blobBuffer.size()) ));
+#else
   return str( &(blobBuffer[0]), blobBuffer.size() );
+#endif
 }
 
-static void frame_loads(I3Frame &f, str &data)
+static void frame_loads(I3Frame &f, object &data)
 {
+#if PY_MAJOR_VERSION >= 3
+  Py_buffer buffer;
+  PyObject_GetBuffer(data.ptr(), &buffer, PyBUF_SIMPLE);
+  boost::iostreams::array_source src((char const*)(buffer.buf), (size_t)(buffer.len));
+  boost::iostreams::filtering_istream fis(src);
+  f.load(fis);
+  PyBuffer_Release(&buffer);
+#else
   const char *buffer = extract<char const*>(data);
   std::size_t size = len(data);
-
   boost::iostreams::array_source src(buffer, size);
   boost::iostreams::filtering_istream fis(src);
-
   f.load(fis);
+#endif
 }
 
 void register_I3Frame()
@@ -167,6 +178,7 @@ void register_I3Frame()
     .def_readonly("TrayInfo", I3Frame::TrayInfo)
     .def_pickle(boost_serializable_pickle_suite<I3Frame>())
     ;
+  register_ptr_to_python<boost::shared_ptr<I3Frame> >();
 
   class_<I3Frame::Stream>("Stream")
     .def(init<char>())

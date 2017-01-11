@@ -4,6 +4,7 @@
 #ifndef BOOST_SERIALIZABLE_PICKLE_SUITE_HPP_INCLUDED
 #define BOOST_SERIALIZABLE_PICKLE_SUITE_HPP_INCLUDED
 
+
 #include <vector>
 
 #include "icetray/serialization.h"
@@ -84,7 +85,11 @@ struct boost_serializable_pickle_suite : boost::python::pickle_suite
         return boost::python::make_tuple
         (
          element_obj.attr("__dict__"),
+#if PY_MAJOR_VERSION >= 3
+         boost::python::handle<>( PyBytes_FromStringAndSize(&(blobBuffer[0]), blobBuffer.size()) )
+#else
          boost::python::str( &(blobBuffer[0]), blobBuffer.size() )
+#endif
         );
     }
 
@@ -106,9 +111,16 @@ struct boost_serializable_pickle_suite : boost::python::pickle_suite
         d.update(state[0]);
 
         // restore the C++ object
+#if PY_MAJOR_VERSION >= 3
+        Py_buffer buffer;
+        boost::python::object obj = boost::python::extract<boost::python::object>(state[1]);
+        PyObject_GetBuffer(obj.ptr(), &buffer, PyBUF_SIMPLE);
+        I3::detail::from_buffer(element, (char const*)(buffer.buf), (size_t)(buffer.len));
+        PyBuffer_Release(&buffer);
+#else
         boost::python::str buffer = boost::python::extract<boost::python::str>(state[1]);
-
         I3::detail::from_buffer(element, boost::python::extract<char const*>(buffer), boost::python::len(buffer));
+#endif
     }
 
     static bool getstate_manages_dict() { return true; }
