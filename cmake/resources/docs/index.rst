@@ -47,9 +47,6 @@ Advanced
    icc
    gfilt
 
-Old Documentation Archive
--------------------------
-
 Information on particular tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -58,15 +55,6 @@ Information on particular tools
    :maxdepth: 1
 
    tools/*
-
-Write me
-^^^^^^^^
-
-* How tools are detected
-* build slave and trac plugin
-* I3_OPTIMIZE
-* using a different version of a tool
-* testing
 
 
 
