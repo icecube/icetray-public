@@ -1,4 +1,4 @@
-If you Provide Any Class-Specific new, Provide All of the Standard Forms (pain, in-place, and nothrow)
+If you Provide Any Class-Specific new, Provide All of the Standard Forms (plain, in-place, and nothrow)
 ------------------------------------------------------------------------------------------------------
 
 If a class defines any overload of operator ``operator new``, it should provide overloads of all three of plain, in-place, and non-throwing ``operator new``.  If you don't, they'll be hidden and unavailable to users of your class.
