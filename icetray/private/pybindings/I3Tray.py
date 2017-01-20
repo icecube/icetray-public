@@ -51,6 +51,7 @@ class I3Tray(icetray.I3Tray):
         """
         self.last_added = None
         self.segments_in_order = []
+        self.current_condition = None
         icetray.I3Tray.__init__(self)
 
     def _create_name(self, _type, kind, module_names):
@@ -105,7 +106,7 @@ class I3Tray(icetray.I3Tray):
         else:
             return method(_type, _name, **kwargs)
 
-    def AddModule(self, _type, _name=None, **kwargs):
+    def AddModule(self, _type, _name=None, If=None, **kwargs):
         """
         Add a module to the tray's processing stream.
 
@@ -143,7 +144,12 @@ class I3Tray(icetray.I3Tray):
             super(I3Tray, self).AddModule(_type, _name)
             self.last_added = _name
             for k,v in kwargs.items():
-                super(I3Tray, self).SetParameter(_name, k, v)
+                super(I3Tray, self).SetParameter(_name, k, v)                
+            # Handle module conditions as a special case
+            if If is None and self.current_condition is not None:
+                If = self.current_condition
+            if If is not None:
+                super(I3Tray, self).SetParameter(_name, 'If', If)
             return self
         except:
             raise
@@ -173,7 +179,7 @@ class I3Tray(icetray.I3Tray):
             super(I3Tray, self).SetParameter(_name, k, v)
         return self
 
-    def AddSegment(self, _segment, _name=None, **kwargs):
+    def AddSegment(self, _segment, _name=None, If=None, **kwargs):
         """
         Add a tray segment to the tray. This is a small scriptlet that can
         autoconfigure some set of modules and services according to a
@@ -207,8 +213,12 @@ class I3Tray(icetray.I3Tray):
             keys[keys.index(k)] = argnames[largnames.index(k.lower())]
         kwargs = dict(zip(keys, vals))
 
-        return _segment(self, _name, **kwargs)
-
+        try:
+            self.current_condition = If
+            return _segment(self, _name, **kwargs)
+        finally:
+            self.current_condition = None
+     
     def SetParameter(self, module, param, value):
         super(I3Tray, self).SetParameter(module, param, value)
         return self
