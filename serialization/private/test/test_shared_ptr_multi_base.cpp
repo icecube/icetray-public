@@ -141,15 +141,13 @@ void load2(
 // objects back from an archive.
 
 template<class T, class U>
-boost::shared_ptr<T> dynamic_pointer_cast(boost::shared_ptr<U> const& u)
-BOOST_NOEXCEPT
+boost::shared_ptr<T> my_dynamic_pointer_cast(boost::shared_ptr<U> const& u)
 {
     return boost::dynamic_pointer_cast<T>(u);
 }
 
 template<class T, class U>
-std::shared_ptr<T> dynamic_pointer_cast(std::shared_ptr<U> const& u)
-BOOST_NOEXCEPT
+std::shared_ptr<T> my_dynamic_pointer_cast(std::shared_ptr<U> const& u)
 {
     return std::dynamic_pointer_cast<T>(u);
 }
@@ -180,8 +178,8 @@ void shared_weak(
     ENSURE(firstm == first->m_x);
     ENSURE(secondm == second.lock()->m_x);
     // Check pointer to vtable
-    ENSURE(!!::dynamic_pointer_cast<Sub>(first));
-    ENSURE(!!::dynamic_pointer_cast<Sub>(second.lock()));
+    ENSURE(!!my_dynamic_pointer_cast<Sub>(first));
+    ENSURE(!!my_dynamic_pointer_cast<Sub>(second.lock()));
 
     std::remove(testfile.c_str());
 }
@@ -211,8 +209,8 @@ void weak_shared(
     ENSURE(firstm == first.lock()->m_x);
     ENSURE(secondm == second->m_x);
     // Check pointer to vtable
-    ENSURE(!!::dynamic_pointer_cast<Sub>(first.lock()));
-    ENSURE(!!::dynamic_pointer_cast<Sub>(second));
+    ENSURE(!!my_dynamic_pointer_cast<Sub>(first.lock()));
+    ENSURE(!!my_dynamic_pointer_cast<Sub>(second));
 
     std::remove(testfile.c_str());
 }
