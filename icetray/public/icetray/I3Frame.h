@@ -149,8 +149,7 @@ class I3Frame
 
   /// Internal implementation of Get, where the actual deserialization
   /// is done.
-  I3FrameObjectConstPtr get_impl(map_t::const_reference value,
-                                 bool quietly = false) const;
+  I3FrameObjectConstPtr get_impl(map_t::const_reference value) const;
 
   static void create_blob_impl(value_t &value);
 
@@ -303,8 +302,6 @@ class I3Frame
    * object...  e.g. there might be multiple I3Particles stored at
    * different names like "linefit" and "dipolefit", and there might
    * be only one I3Geometry stored at "I3Geometry".
-   * @param quietly Whether a non-deserializable frame object is treated as an 
-   * error or not.
    * @return shared_ptr<const T::value_type>.  That is, if Get is
    * called as Get<shared_ptr<const T> >(name), or the equivalent
    * Get<I3SomethingConstPtr>(name), this function returns
@@ -312,13 +309,10 @@ class I3Frame
    * shared_ptr, const is added: e.g. Get<I3SomethingPtr>(name)
    * returns I3SomethingConstPtr.
    * More generally, Get<shared_ptr<T> >(name) returns shared_ptr<const T>.
-   * @throw If quietly is false and the frame object cannot be deserialized, 
-   * a boost::archive::archive_exception will be thrown.
    */
   template <typename T>
   T
   Get(const std::string& name = I3DefaultName<typename T::element_type>::value(),
-      bool quietly = false,
       typename boost::enable_if<is_shared_ptr<T> >::type * = 0,
       typename boost::enable_if<boost::is_const<typename T::element_type> >::type* = 0) const
   {
@@ -328,19 +322,7 @@ class I3Frame
     if (iter == map_.end())
       return boost::shared_ptr<typename T::element_type>();
 
-    I3FrameObjectConstPtr focp;
-
-    try{
-      focp = get_impl(*iter, quietly);
-    } catch (const icecube::archive::archive_exception& e) {
-      //This will happen if the the frame object could not be deserialized.
-      //If we were asked to run quietly, just treat it as not being a valid
-      //instance of T::element_type, and return a null pointer.
-      if (quietly)
-        return T();
-      //otherwise, propagate the exception to the user
-      throw;
-    }
+    I3FrameObjectConstPtr focp = get_impl(*iter);
          
     return boost::dynamic_pointer_cast<typename T::element_type>(focp);
   }
@@ -421,7 +403,7 @@ class I3Frame
 
   std::string as_xml(const std::string& key) const;
 
-  const std::type_info* type_id(const std::string& key, bool quietly = false) const;
+  const std::type_info* type_id(const std::string& key) const;
   std::string type_name(const std::string& key) const;
 
   std::vector<std::string> keys() const;

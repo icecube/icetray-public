@@ -36,16 +36,8 @@ boost::shared_ptr<T> frame_get(const I3Frame* f, const std::string& where)
       return boost::shared_ptr<T>();
     }
 
-  try {
-    boost::shared_ptr<const T> thing = f->Get<boost::shared_ptr<const T> >(where,true);
-    return boost::const_pointer_cast<T>(thing);
-  } catch (const icecube::archive::archive_exception& e) {
-    std::ostringstream message;
-    message << "Frame caught exception \"" << e.what() << "\" for key \"" << where << "\" of type " << f->type_name(where);
-    PyErr_SetString(PyExc_RuntimeError,message.str().c_str());
-    throw boost::python::error_already_set();
-    return boost::shared_ptr<T>();
-  }
+  boost::shared_ptr<const T> thing = f->Get<boost::shared_ptr<const T> >(where);
+  return boost::const_pointer_cast<T>(thing);
 }
 
 static list frame_keys(I3Frame const& x)

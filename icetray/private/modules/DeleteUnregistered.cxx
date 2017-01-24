@@ -73,7 +73,7 @@ void DeleteUnregistered::Process()
        iter++)
     {
       try {
-	I3FrameObjectConstPtr fop = frame->Get<I3FrameObjectConstPtr>(iter->first, true);
+	I3FrameObjectConstPtr fop = frame->Get<I3FrameObjectConstPtr>(iter->first);
       } catch (const icecube::archive::archive_exception& e) {
 	switch (e.code) {
 	case icecube::archive::archive_exception::unregistered_class:

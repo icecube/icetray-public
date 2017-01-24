@@ -306,7 +306,7 @@ void I3Frame::Delete(const string& name)
 string I3Frame::as_xml(const string& key) const
 {
   try {
-    I3FrameObjectConstPtr focp = Get<I3FrameObjectConstPtr>(key, true);
+    I3FrameObjectConstPtr focp = Get<I3FrameObjectConstPtr>(key);
     const I3FrameObject *tobj_p(focp.get());
 
     ostringstream oss;
@@ -330,12 +330,12 @@ string I3Frame::type_name(const string& key) const
   return type_name(*iter->second);
 }
 
-const type_info* I3Frame::type_id(const string& key, bool quietly) const
+const type_info* I3Frame::type_id(const string& key) const
 {
   map_t::const_iterator iter = map_.find(key);
   if (iter == map_.end())
     return NULL;
-  const I3FrameObject* fo = get_impl(*iter, quietly).get();
+  const I3FrameObject* fo = get_impl(*iter).get();
   if (fo == NULL)
     return NULL;
 
@@ -963,13 +963,14 @@ ostream& operator<<(ostream& os, const I3Frame& frame)
 
 
 
-I3FrameObjectConstPtr I3Frame::get_impl(map_t::const_reference pr,
-                                        bool quietly) const
+I3FrameObjectConstPtr I3Frame::get_impl(map_t::const_reference pr) const
 {
   value_t& value = const_cast<value_t&>(*pr.second);
   if (value.ptr) 
     {
-      if (drop_blobs_) value.blob.reset();
+      if (drop_blobs_)
+	value.blob.reset();
+      
       return value.ptr;
     }
   if (!value.ptr && value.blob.buf.size() == 0)
@@ -985,10 +986,9 @@ I3FrameObjectConstPtr I3Frame::get_impl(map_t::const_reference pr,
     if (drop_blobs_)
       value.blob.reset();
   } catch (const ar::archive_exception& e) {
-    if (!quietly)
-      log_error("frame caught exception \"%s\" while loading class type \"%s\" "
+      log_debug("frame caught exception \"%s\" while loading class type \"%s\" "
                 "at key \"%s\"", e.what(), value.blob.type_name.c_str(), pr.first.string.c_str());
-    throw e;
+    return I3FrameObjectConstPtr();
   }
   
   return value.ptr;
