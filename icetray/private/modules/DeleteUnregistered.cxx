@@ -70,21 +70,11 @@ void DeleteUnregistered::Process()
   vector<string> deleteme;
   for (I3Frame::typename_iterator iter = frame->typename_begin();
        iter != frame->typename_end();
-       iter++)
-    {
-      try {
-	I3FrameObjectConstPtr fop = frame->Get<I3FrameObjectConstPtr>(iter->first);
-      } catch (const icecube::archive::archive_exception& e) {
-	switch (e.code) {
-	case icecube::archive::archive_exception::unregistered_class:
-	case icecube::archive::archive_exception::unsupported_version:
-	  deleteme.push_back(iter->first);
-	  break;
-	default:
-	  throw;
-	}
-      }
-    }
+       iter++){
+    I3FrameObjectConstPtr fop = frame->Get<I3FrameObjectConstPtr>(iter->first);
+    if(!fop && frame->Has(iter->first))
+       deleteme.push_back(iter->first);
+  }
   for (unsigned i=0; i<deleteme.size(); i++)
     frame->Delete(deleteme[i]);
   PushFrame(frame, "OutBox"); 

@@ -23,7 +23,6 @@
 #include <icetray/I3Module.h>
 #include <icetray/I3Frame.h>
 #include <boost/foreach.hpp>
-#include <boost/bind.hpp>
 #include <vector>
 #include <string>
 
@@ -92,7 +91,9 @@ Get::impl(I3FramePtr frame)
 
   BOOST_FOREACH(const std::string& key, keys_)
     {
-      frame->Get<I3FrameObjectConstPtr>(key);
+      I3FrameObjectConstPtr fop = frame->Get<I3FrameObjectConstPtr>(key);
+      if(!fop && frame->Has(key))
+	log_fatal("Came across an unregistered class.");
       log_info("Got %s", key.c_str());
     }
   PushFrame(frame, "OutBox");
