@@ -30,6 +30,7 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_const.hpp>
 
+#include "icetray/serialization.h"
 #include <icetray/I3DefaultName.h>
 #include <icetray/I3FrameObject.h>
 #include <icetray/I3Logging.h>
@@ -302,7 +303,8 @@ class I3Frame
    * object...  e.g. there might be multiple I3Particles stored at
    * different names like "linefit" and "dipolefit", and there might
    * be only one I3Geometry stored at "I3Geometry".
-   * @param quietly Be quiet or not
+   * @param quietly Whether a non-deserializable frame object is treated as an 
+   * error or not.
    * @return shared_ptr<const T::value_type>.  That is, if Get is
    * called as Get<shared_ptr<const T> >(name), or the equivalent
    * Get<I3SomethingConstPtr>(name), this function returns
@@ -310,6 +312,8 @@ class I3Frame
    * shared_ptr, const is added: e.g. Get<I3SomethingPtr>(name)
    * returns I3SomethingConstPtr.
    * More generally, Get<shared_ptr<T> >(name) returns shared_ptr<const T>.
+   * @throw If quietly is false and the frame object cannot be deserialized, 
+   * a boost::archive::archive_exception will be thrown.
    */
   template <typename T>
   T
@@ -324,8 +328,20 @@ class I3Frame
     if (iter == map_.end())
       return boost::shared_ptr<typename T::element_type>();
 
-    I3FrameObjectConstPtr focp = get_impl(*iter, quietly);
-    
+    I3FrameObjectConstPtr focp;
+
+    try{
+      focp = get_impl(*iter, quietly);
+    } catch (const icecube::archive::archive_exception& e) {
+      //This will happen if the the frame object could not be deserialized.
+      //If we were asked to run quietly, just treat it as not being a valid
+      //instance of T::element_type, and return a null pointer.
+      if (quietly)
+        return T();
+      //otherwise, propagate the exception to the user
+      throw;
+    }
+         
     return boost::dynamic_pointer_cast<typename T::element_type>(focp);
   }
   /** Get a frame object.
