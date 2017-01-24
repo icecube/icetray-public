@@ -17,7 +17,9 @@ def format_line( frame, key, maxwidth = None, ellipsis = '...' ):
 
     Clip to an optional maximum width with a trailing ellipsis'''
     try:
-        obj = frame[key]
+        obj = frame[key]        
+        if (obj is None) and (key in frame):
+            return '(Unreadable)'
         if hasattr(obj, "apply"):
             if isinstance(frame,FrameWrapper):
                 obj = obj.apply(frame.frame)
