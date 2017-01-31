@@ -127,7 +127,6 @@ Class Design and Inheritance
    cpp_standards/40_Avoid_Providing_Implicit_Conversions
    cpp_standards/dont_give_away_your_internals
    cpp_standards/make_data_members_private_except_in_behaviorless_aggreggates
-   cpp_standards/prefer_composition_to_inheritance
    cpp_standards/43_Pimpl_Judiciously
    cpp_standards/44_Prefer_Writing_Nonmember_Nonfriend_Functions
    cpp_standards/always_provide_new_and_delete_together
