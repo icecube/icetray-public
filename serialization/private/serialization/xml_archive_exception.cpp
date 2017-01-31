@@ -31,15 +31,16 @@ xml_archive_exception::xml_archive_exception(
     ) : 
         archive_exception(other_exception, e1, e2)
     {
+        unsigned int len=0;
         switch(c){
         case xml_archive_parsing_error:
             archive_exception::append(0, "unrecognized XML syntax");
             break;
         case xml_archive_tag_mismatch:
-            archive_exception::append(0, "XML start/end tag mismatch");
+            len=archive_exception::append(len, "XML start/end tag mismatch");
             if(NULL != e1){
-                archive_exception::append(0, " - ");
-                archive_exception::append(0, e1);
+                len=archive_exception::append(len, " - ");
+                len=archive_exception::append(len, e1);
             }    
             break;
         case xml_archive_tag_name_error:
