@@ -214,7 +214,13 @@ class I3Tray(icetray.I3Tray):
         kwargs = dict(zip(keys, vals))
 
         try:
-            self.current_condition = If
+            # if the segment handles If itself, then let it
+            # otherwise, save for submodules
+            if 'If' in argnames:
+                self.current_condition = None
+                kwargs['If'] = If
+            else:
+                self.current_condition = If
             return _segment(self, _name, **kwargs)
         finally:
             self.current_condition = None
