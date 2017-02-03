@@ -216,7 +216,7 @@ class I3Tray(icetray.I3Tray):
         try:
             # if the segment handles If itself, then let it
             # otherwise, save for submodules
-            if 'If' in argnames:
+            if 'If' in argnames and If is not None:
                 self.current_condition = None
                 kwargs['If'] = If
             else:
