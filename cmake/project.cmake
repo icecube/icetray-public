@@ -20,8 +20,7 @@
 #
 #
 # rootcint() handles root dictionary generation
-#
-if(NOT ROOT_FOUND OR NOT USE_CINT)
+#if(NOT ROOT_FOUND OR NOT USE_CINT)
   macro(ROOTCINT)
   endmacro(ROOTCINT)
 else()
@@ -176,6 +175,7 @@ macro(i3_add_library THIS_LIB_NAME)
        set(ARGS EXCLUDE_FROM_ALL)
     endif (${THIS_LIB_NAME}_ARGS_EXCLUDE_FROM_ALL)
     if (${THIS_LIB_NAME}_ARGS_MODULE)
+      cmake_print_variables(${THIS_LIB_NAME}_ARGS_MODULE)
        set(ARGS ${ARGS} MODULE)
     endif (${THIS_LIB_NAME}_ARGS_MODULE)
 
@@ -632,7 +632,6 @@ install(FILES ${LIBRARY_OUTPUT_PATH}/icecube/__init__.py
   DESTINATION lib/icecube
   )
 
-
 macro(i3_add_pybindings MODULENAME)
   if (BUILD_${I3_PROJECT})
     #
@@ -642,32 +641,54 @@ macro(i3_add_pybindings MODULENAME)
     #
 
     parse_arguments(${MODULENAME}_ARGS
-        "USE_PROJECTS;USE_TOOLS;LINK_LIBRARIES;IWYU"
+        "USE_PROJECTS;USE_TOOLS;LINK_LIBRARIES"
+        "IWYU;PYBIND11"
       ${ARGN}
       )
 
     #
     # NO_DOXYGEN is added here, because otherwise, upper level doxygen gets clobbered
     #
-    i3_add_library(${MODULENAME}-pybindings ${ARGN}
-      LINK_LIBRARIES ${BOOST_PYTHON}
-      INSTALL_DESTINATION lib/icecube
-      NOT_INSPECTABLE NO_DOXYGEN
-      MODULE
-      )
+    if (${MODULENAME}_ARGS_PYBIND11)
+      colormsg(GREEN "+-- ${MODULENAME}-pybindings w/ pybind11")
+
+      i3_add_library(${MODULENAME}-pybindings ${ARGN}
+        USE_TOOLS python
+        INSTALL_DESTINATION lib/icecube
+        NOT_INSPECTABLE NO_DOXYGEN
+        MODULE
+        )
+      include_directories(pybind11/include)
+
+      set_target_properties(${MODULENAME}-pybindings
+        PROPERTIES
+        PREFIX ""
+        OUTPUT_NAME ${MODULENAME}
+        LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}/icecube
+        )
+    else()
+      colormsg(GREEN "+-- ${MODULENAME}-pybindings")
+
+      i3_add_library(${MODULENAME}-pybindings ${ARGN}
+        LINK_LIBRARIES ${BOOST_PYTHON}
+        INSTALL_DESTINATION lib/icecube
+        NOT_INSPECTABLE NO_DOXYGEN
+        MODULE
+        )
+
+      set_target_properties(${MODULENAME}-pybindings
+        PROPERTIES
+        PREFIX ""
+        OUTPUT_NAME ${MODULENAME}
+        DEFINE_SYMBOL I3_PYBINDINGS_MODULE
+        COMPILE_FLAGS "-include ${I3_UBER_HEADER}"
+        LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}/icecube
+        )
+    endif()
 
     add_custom_command(TARGET ${MODULENAME}-pybindings
       PRE_LINK
       COMMAND mkdir -p ${CMAKE_BINARY_DIR}/lib/icecube
-      )
-
-    set_target_properties(${MODULENAME}-pybindings
-      PROPERTIES
-      PREFIX ""
-      OUTPUT_NAME ${MODULENAME}
-      DEFINE_SYMBOL I3_PYBINDINGS_MODULE
-      COMPILE_FLAGS "-include ${I3_UBER_HEADER}"
-      LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}/icecube
       )
 
     if(${MODULENAME}_ARGS_IWYU AND USE_IWYU)
@@ -682,8 +703,6 @@ macro(i3_add_pybindings MODULENAME)
       PROJECTS "${${MODULENAME}_ARGS_USE_PROJECTS}"
       )
     
-    colormsg(GREEN "+-- ${MODULENAME}-pybindings")
-
     # Disabled special linker flags for APPLE:
     #  - undefined dynamic_lookup: it seems not to hurt letting the
     #      linker throw an error for undefined symbols.
