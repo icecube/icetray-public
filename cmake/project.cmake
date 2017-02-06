@@ -20,7 +20,8 @@
 #
 #
 # rootcint() handles root dictionary generation
-#if(NOT ROOT_FOUND OR NOT USE_CINT)
+#
+if(NOT ROOT_FOUND OR NOT USE_CINT)
   macro(ROOTCINT)
   endmacro(ROOTCINT)
 else()
@@ -175,7 +176,6 @@ macro(i3_add_library THIS_LIB_NAME)
        set(ARGS EXCLUDE_FROM_ALL)
     endif (${THIS_LIB_NAME}_ARGS_EXCLUDE_FROM_ALL)
     if (${THIS_LIB_NAME}_ARGS_MODULE)
-      cmake_print_variables(${THIS_LIB_NAME}_ARGS_MODULE)
        set(ARGS ${ARGS} MODULE)
     endif (${THIS_LIB_NAME}_ARGS_MODULE)
 
