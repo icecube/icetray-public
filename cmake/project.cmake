@@ -660,22 +660,30 @@ macro(i3_add_pybindings MODULENAME)
         )
       include_directories(${CMAKE_BINARY_DIR}/pybind11/include)
 
-      if(NOT TARGET pybind11)
-	include(ExternalProject)
-	ExternalProject_Add(pybind11 EXCLUDE_FROM_ALL 1
-	  URL https://github.com/pybind/pybind11/archive/master.zip
-	  DOWNLOAD_NO_PROGRESS 1
-	  DOWNLOAD_DIR ${CMAKE_BINARY_DIR}
-	  SOURCE_DIR ${CMAKE_BINARY_DIR}/pybind11
-	  PREFIX ${CMAKE_BINARY_DIR}
-	  CONFIGURE_COMMAND ""
-	  PATCH_COMMAND ""
-	  BUILD_COMMAND ""
-	  INSTALL_COMMAND ""
-	  #GIT_REPOSITORY https://github.com/pybind/pybind11.git
-	  )
+      if(CMAKE_VERSION VERSION_LESS 3.1.0)
+	colormsg(YELLOW "+-- You need to download pybind11 from GitHub with")
+	colormsg(YELLOW "+--   wget https://github.com/pybind/pybind11/archive/master.zip")
+	colormsg(YELLOW "+-- or")
+	colormsg(YELLOW "+--   curl -O https://github.com/pybind/pybind11/archive/master.zip")
+	colormsg(YELLOW "+-- and unpack it in ${CMAKE_BINARY_DIR} before running 'make'")
+      else()
+	if(NOT TARGET pybind11)
+	  include(ExternalProject)
+	  ExternalProject_Add(pybind11 EXCLUDE_FROM_ALL 1
+	    URL https://github.com/pybind/pybind11/archive/master.zip
+	    DOWNLOAD_NO_PROGRESS 1
+	    DOWNLOAD_DIR ${CMAKE_BINARY_DIR}
+	    SOURCE_DIR ${CMAKE_BINARY_DIR}/pybind11
+	    PREFIX ${CMAKE_BINARY_DIR}
+	    CONFIGURE_COMMAND ""
+	    PATCH_COMMAND ""
+	    BUILD_COMMAND ""
+	    INSTALL_COMMAND ""
+	    #GIT_REPOSITORY https://github.com/pybind/pybind11.git
+	    )
+	endif()
+	add_dependencies(${MODULENAME}-pybindings pybind11)
       endif()
-      add_dependencies(${MODULENAME}-pybindings pybind11)
 
       set_target_properties(${MODULENAME}-pybindings
         PROPERTIES
