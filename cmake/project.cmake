@@ -1,4 +1,4 @@
-# -*- tab-width: 8; indent-tabs-mode -*- ex: ts=8 noet: 
+# -*- tab-width: 8; indent-tabs-mode: t -*- ex: ts=8 noet: 
 #
 #  $Id$
 #
@@ -136,7 +136,7 @@ macro(i3_add_library THIS_LIB_NAME)
     #
     parse_arguments(${THIS_LIB_NAME}_ARGS
       "USE_TOOLS;USE_PROJECTS;ROOTCINT;INSTALL_DESTINATION;LINK_LIBRARIES;COMPILE_FLAGS"
-      "NOT_INSPECTABLE;MODULE;EXCLUDE_FROM_ALL;WITHOUT_I3_HEADERS;NO_DOXYGEN;IWYU"
+      "NOT_INSPECTABLE;MODULE;EXCLUDE_FROM_ALL;WITHOUT_I3_HEADERS;NO_DOXYGEN;IWYU;PYBIND11"
       ${ARGN}
       )
 
@@ -658,7 +658,24 @@ macro(i3_add_pybindings MODULENAME)
         NOT_INSPECTABLE NO_DOXYGEN
         MODULE
         )
-      include_directories(pybind11/include)
+      include_directories(${CMAKE_BINARY_DIR}/pybind11/include)
+
+      if(NOT TARGET pybind11)
+	include(ExternalProject)
+	ExternalProject_Add(pybind11 EXCLUDE_FROM_ALL 1
+	  URL https://github.com/pybind/pybind11/archive/master.zip
+	  DOWNLOAD_NO_PROGRESS 1
+	  DOWNLOAD_DIR ${CMAKE_BINARY_DIR}
+	  SOURCE_DIR ${CMAKE_BINARY_DIR}/pybind11
+	  PREFIX ${CMAKE_BINARY_DIR}
+	  CONFIGURE_COMMAND ""
+	  PATCH_COMMAND ""
+	  BUILD_COMMAND ""
+	  INSTALL_COMMAND ""
+	  #GIT_REPOSITORY https://github.com/pybind/pybind11.git
+	  )
+      endif()
+      add_dependencies(${MODULENAME}-pybindings pybind11)
 
       set_target_properties(${MODULENAME}-pybindings
         PROPERTIES
