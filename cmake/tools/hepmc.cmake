@@ -8,5 +8,5 @@ TOOLDEF (hepmc
   HepMC/HepMCDefs.h
   lib
   NONE
-  HepMC HepMCfio
+  HepMC
   )
