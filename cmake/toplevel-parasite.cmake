@@ -293,7 +293,16 @@ file(GLOB host_resources ${HOST_I3_SRC}/*/resources)
 foreach(fpath ${host_resources})
   get_filename_component(pdir ${fpath} PATH)
   get_filename_component(pname ${pdir} NAME)
-  create_symlink(${pdir}/resources ${pname}/resources)
+
+  ## if rpath and spath match, the project is *not* parasitic, and we don't want to overwrite
+  ## the 'resources/' symlink
+  get_filename_component(rpath ${CMAKE_BINARY_DIR}/${pname}/resources REALPATH)
+  get_filename_component(spath ${CMAKE_SOURCE_DIR}/${pname}/resources REALPATH)
+  if(NOT (EXISTS ${spath} AND (${spath} MATCHES ${rpath})))
+    create_symlink(${pdir}/resources ${pname}/resources)
+  else()
+    colormsg(YELLOW "Skipping symlink of ${pname}, as it is not parasitic")
+  endif()
 endforeach(fpath ${SUBDIRS})
 
 file(GLOB host_python_packages ${HOST_I3_BUILD}/lib/icecube/*)
