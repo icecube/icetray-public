@@ -42,7 +42,7 @@ fi
 #a couple of globally necessary flags
 if [ $COMPILE_FLAGS -eq 1 ]; then
 	OUTPUT_FLAGS="$OUTPUT_FLAGS -include $BUILD_DIR/CMakeFiles/I3.h"
-	cmake_cxx_flags=`grep -m 1 ^CMAKE_CXX_FLAGS:STRING $CMAKECACHE | sed -e's|^.*:STRING=||'`
+	cmake_cxx_flags="@CMAKE_CXX_FLAGS@"
 	OUTPUT_FLAGS="$OUTPUT_FLAGS $cmake_cxx_flags"
 fi
 if [ $LINK_FLAGS -eq 1 ]; then
@@ -118,7 +118,7 @@ done
 #echo "Topological list of all necessary projects: $ALL_PROJECTS"
 
 #fetch the in-use build type
-build_type=`grep -m 1 CMAKE_BUILD_TYPE:STRING $CMAKECACHE | sed -e's|^.*:STRING=||'`
+build_type=@CMAKE_BUILD_TYPE@
 #compute the correct filter for libraries
 if [ $build_type = "Debug" ]; then
 	#remove all libraries marked 'optimized', throw away any 'debug' or 'general' flags on others
