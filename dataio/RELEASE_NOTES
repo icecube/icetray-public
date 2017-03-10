@@ -4,6 +4,17 @@ Release Notes
 trunk
 -----
 
+V17-03-00
+---------
+
+* (r2773) - if key exists and None is returned, pprint Unreadable
+* (r2740) - switch to new portable binary archive header
+* (r2628) - dataio-pyshovel - automatically reload frame after importing library. #2628
+* (r2611) - dataio-pyshovel now imports simclasses and recclasses by default. #2628
+* (r2610) - Prevent I3InfiniteSource accidentally being used in the middle of a tray. 
+* (r2597) - Switch to icetray serialization.
+* (r2555) - Fix test dependencies. #1574
+
 April 29, 2016, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------
 Release V16-04-00
