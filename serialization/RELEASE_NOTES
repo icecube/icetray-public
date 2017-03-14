@@ -1,0 +1,12 @@
+.. serialization
+.. Maintainer: Chris Weaver
+
+Release Notes
+=============
+
+March 14, 2017 Chris Weaver (chris.weaver@icecube.wisc.edu)
+--------------------------------------------------------------------
+
+- Initial release, based on boost 1.57, with support for all current serialization use in icetray. 
+
+  -- Chris Weaver
