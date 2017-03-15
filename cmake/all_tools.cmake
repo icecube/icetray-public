@@ -3,7 +3,7 @@
 #
 set(ALL_TOOLS pthread root python boost boostnumpy
     blas lapack gsl sprng sla libarchive
-    mysql bdb mpi suitesparse ZThread omniORB ncurses cdk
+    mysql mpi suitesparse ncurses cdk
     cfitsio healpix qt4 hdf5 minuit2 clhep geant4 zlib
     opencl gmp log4cpp xml2 genie zmq doxygen
     multinest nlopt hepmc
