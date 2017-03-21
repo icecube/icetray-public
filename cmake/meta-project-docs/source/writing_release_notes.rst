@@ -15,15 +15,16 @@ already stretched pretty thin.
 
 Write as you go
 ---------------
-Why?
+This is a recommendation for projects with a lot of development by several people, and it's
+| not required that all maintainers follow it.
 
-* **Higher Quality Notes** - If you write the note at the time of commit, you're more likely to write a better note.  The change is fresh in your mind.
-  * **Quicker Releases** - The most time consuming and tedious part of putting releases together is writing the release notes.  Actually making a release takes about 5-10 minutes.  Writing sub-par, low-quality release notes takes about a day.  For one person managing almost 100 projects, it can easily take a week or more to write high-quality release notes.  This is impractical.
+| * **Higher Quality Notes** - If you write the note at the time of commit, you're more likely to write a better note.  The change is fresh in your mind.
+| * **Quicker Releases** - The most time consuming and tedious part of putting releases together is writing the release notes.  Actually making a release takes about 5-10 minutes.  Writing sub-par, low-quality release notes takes about a day.  For one person managing almost 100 projects, it can easily take a week or more to write high-quality release notes.  This is impractical.
 
-Project Version Number
----------------------------------
-Project maintainers should feel free to recommend the next version number based on
-a semantic versioning scheme MAJOR-MINOR-PATCH (e.g. V01-03-05):
+| Project Version Number
+| ---------------------------------
+| Project maintainers should feel free to recommend the next version number based on
+| a semantic versioning scheme MAJOR-MINOR-PATCH (e.g. V01-03-05):
 * MAJOR version when you make incompatible API changes,
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
