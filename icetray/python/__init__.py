@@ -5,6 +5,7 @@ from icecube.icetray.test_module import I3TestModuleFactory
 from icecube.icetray.traysegment import traysegment, traysegment_inherit, module_altconfig
 from icecube.icetray.pypick import pypick
 from icecube.icetray import i3logging as logging
+from icecube.icetray import memory_util
 
 set_log_level = logging.set_level
 set_log_level_for_unit = logging.set_level_for_unit
