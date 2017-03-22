@@ -91,6 +91,9 @@ string I3Frame::Stream::str() const {
   case 'D':
     return "DetectorStatus";
     break;
+  case 'S':
+    return "Simulation";
+    break;
   case 'Q':
     return "DAQ";
     break;
@@ -109,6 +112,7 @@ const I3Frame::Stream I3Frame::None('N');
 const I3Frame::Stream I3Frame::Geometry('G');
 const I3Frame::Stream I3Frame::Calibration('C');
 const I3Frame::Stream I3Frame::DetectorStatus('D');
+const I3Frame::Stream I3Frame::Simulation('S');
 const I3Frame::Stream I3Frame::DAQ('Q');
 const I3Frame::Stream I3Frame::Physics('P');
 const I3Frame::Stream I3Frame::TrayInfo('I');

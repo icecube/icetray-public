@@ -65,6 +65,9 @@ struct PythonModule : Base, boost::python::wrapper<Base>
   bool ShouldDoDetectorStatus(I3FramePtr frame);
   void DetectorStatus(I3FramePtr frame);
 
+  bool ShouldDoSimulation(I3FramePtr frame);
+  void Simulation(I3FramePtr frame);
+
   bool ShouldDoDAQ(I3FramePtr frame);
   void DAQ(I3FramePtr frame);
 

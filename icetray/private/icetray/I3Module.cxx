@@ -225,6 +225,8 @@ I3Module::Process()
     Calibration(frame);
   else if(frame->GetStop() == I3Frame::DetectorStatus && ShouldDoDetectorStatus(frame))
     DetectorStatus(frame);
+  else if(frame->GetStop() == I3Frame::Simulation && ShouldDoSimulation(frame))
+    Simulation(frame);
   else if(frame->GetStop() == I3Frame::DAQ && ShouldDoDAQ(frame)) {
     ModuleTimer mt(sysdaqtime_, userdaqtime_);
     ++ndaqcall_;
@@ -378,6 +380,20 @@ I3Module::DetectorStatus(I3FramePtr frame)
 
 bool
 I3Module::ShouldDoDetectorStatus(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  return true;
+}
+
+void
+I3Module::Simulation(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  PushFrame(frame);
+}
+
+bool
+I3Module::ShouldDoSimulation(I3FramePtr frame)
 {
   i3_log("%s", __PRETTY_FUNCTION__);
   return true;

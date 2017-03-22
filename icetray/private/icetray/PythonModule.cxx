@@ -235,6 +235,28 @@ PythonModule<Base>::DetectorStatus(I3FramePtr frame)
 
 template <typename Base>
 bool
+PythonModule<Base>::ShouldDoSimulation(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  if (bp::override sd = this->get_override("ShouldDoSimulation"))
+    return sd(frame);
+  else
+    return Base::ShouldDoSimulation(frame);
+}
+
+template <typename Base>
+void 
+PythonModule<Base>::Simulation(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  if (bp::override ds = this->get_override("Simulation"))
+    ds(frame);
+  else
+    Base::Simulation(frame);
+}
+
+template <typename Base>
+bool
 PythonModule<Base>::ShouldDoPhysics(I3FramePtr frame)
 {
   i3_log("%s", __PRETTY_FUNCTION__);

@@ -30,6 +30,8 @@ namespace {
       .def("Calibration", &module_t::Calibration) \
       .def("ShouldDoDetectorStatus", &module_t::ShouldDoDetectorStatus) \
       .def("DetectorStatus", &module_t::DetectorStatus) \
+      .def("ShouldDoSimulation", &module_t::ShouldDoSimulation)\
+      .def("Simulation", &module_t::Simulation)\
       .def("ShouldDoDAQ", &module_t::ShouldDoDAQ) \
       .def("DAQ", &module_t::DAQ) \
       .def("ShouldDoPhysics", &module_t::ShouldDoPhysics) \

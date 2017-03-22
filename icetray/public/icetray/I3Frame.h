@@ -89,6 +89,7 @@ class I3Frame
   const static Stream Geometry;
   const static Stream Calibration;
   const static Stream DetectorStatus;
+  const static Stream Simulation;
   const static Stream DAQ;
   const static Stream Physics;
   const static Stream TrayInfo;
