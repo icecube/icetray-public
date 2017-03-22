@@ -414,8 +414,6 @@ namespace memory {
     void*
     malloc_override(size_t size)
     {
-        boost::lock_guard<boost::mutex> guard(lock);
-
         // skip tracking if we've disabled it
         if (default_label == NULL)
             return malloc(size);
@@ -426,6 +424,7 @@ namespace memory {
             return NULL;
 
         // save pointer info
+        boost::lock_guard<boost::mutex> guard(lock);
         pointer_map::MemData d;
         d.str = strdup(default_label);
         d.size = size;
