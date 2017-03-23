@@ -4,6 +4,14 @@ Release Notes
 trunk
 -----
 
+* (r2808) Simulation 'S' frames become first class frames.
+* (r2770) Conditional propagates from segments to modules.
+* (r2739) portable_binary_archived moved to serialization. 
+* (r2698) Remove OMKey::IsInIce and OMKey::IsIceTop.
+* (r2605) Added memory tracking.
+* (r2595) Uses serialization project.   
+* (r2585) Expose I3Frame blob creation interface.
+* (r2582) Added meta-project-diff.py script.
 * Removed I3Deprecation and I3DSORegistry.
 
 
