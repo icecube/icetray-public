@@ -4,6 +4,30 @@ Release Notes
 trunk
 -----
 
+* general documentation clean-up
+* move PnF specific tool detection to PnF
+* add pybind11 support to i3_add_pybindings()
+* special tool detections tweaks for special Fedora 
+* add docs for using Homebrew on OSX and Linux
+* Arch Linux tweakes including rectifing the python situation
+* support for AppleClang (as opposed to Apple && Clang)
+* update I3_SITE_CMAKE_DIR docs
+* tweaks to the coverage target including generating reports despite
+  test failures
+* add a macro for deprecation warning/enforcement
+  (deprecation_warning())
+* simplifiy link-time requirements
+* update cvmfs docs
+* enforce C++11 support with compiler flags
+* bump minimum required cmake version
+* reorganize cmake docs
+* updated "coding standards" and "modern features"for C++11/C++14
+  features (auto, nullptr, etc)
+* clean cruft in i3_*() macros
+* run tests as "python test.py" instead of "./test.py"
+* fix install rules for parasite projects
+* drop unused PIL/pillow detection
+
 V16-04-00 - April 29, 2016, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------------------
 
