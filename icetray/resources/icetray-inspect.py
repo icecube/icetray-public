@@ -338,7 +338,7 @@ def display_project(project):
             pymodule = __import__(import_name,
                                   globals(), locals(), [pyproject])
         except Exception as e:
-            sys.stderr.write("ERROR: cant load '%s': %s\n" % (import_name,str(e)))
+            sys.stderr.write("ERROR: can't load '%s': %s\n" % (import_name,str(e)))
             return
 
         if hasattr(pymodule,"__path__"):
@@ -346,20 +346,20 @@ def display_project(project):
                 try:
                     __import__(subpackage[1],globals(), locals(), [pyproject])
                 except Exception as e:
-                    sys.stderr.write("WARNING: cant load subpackage '%s': %s\n" % (subpackage[1],str(e)))
+                    sys.stderr.write("WARNING: can't load subpackage '%s': %s\n" % (subpackage[1],str(e)))
 
         loadstr = "import icecube.%s"%pyproject
     elif cppproject:
         try:
             icetray.load(cppproject, False)
         except Exception as e:
-            sys.stderr.write("Error cant load '%s': %s\n" % (project,str(e)))
+            sys.stderr.write("Error: can't load '%s': %s\n" % (project,str(e)))
             return
 
         pymodule=None
         loadstr = "icetray.load('%s',False)"%cppproject
     else:
-        sys.stderr.write("Error cant load '%s'\n" % (project))
+        sys.stderr.write("Error: can't load '%s'\n" % (project))
         return
 
     if cppproject:
