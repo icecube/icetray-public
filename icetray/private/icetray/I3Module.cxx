@@ -81,10 +81,10 @@ I3Module::~I3Module()
   // only print if more than 10 seconds used.  This is kind of an
   // arbitrary number.
   if (userphystime_ + sysphystime_ > min_report_time_)
-    log_info("%40s: %6u calls to physics %9.2fs user %9.2fs system\n",
+    log_info("%40s: %6u calls to physics %9.2fs user %9.2fs system",
 	   GetName().c_str(), nphyscall_, userphystime_, sysphystime_);
   if (userdaqtime_ + sysdaqtime_ > min_report_time_)
-    log_info("%40s: %6u calls to DAQ %9.2fs user %9.2fs system\n",
+    log_info("%40s: %6u calls to DAQ %9.2fs user %9.2fs system",
 	   GetName().c_str(), ndaqcall_, userdaqtime_, sysdaqtime_);
 }
 

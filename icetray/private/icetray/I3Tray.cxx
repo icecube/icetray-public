@@ -94,7 +94,7 @@ I3Tray::report_usage(int sig)
 	BOOST_FOREACH(const name_pair &pair, inorder) {
 		const string &name = pair.second;
 		const I3PhysicsUsage &ru = mru[pair.second];
-		log_info("%40s: %6u calls to physics %9.2fs user %9.2fs system\n",
+		log_info("%40s: %6u calls to daq + physics %9.2fs user %9.2fs system",
 		    name.c_str(), ru.ncall, ru.usertime, ru.systime);
 		if ((acc_time += ru.usertime)/total_time > 0.9)
 			break;
