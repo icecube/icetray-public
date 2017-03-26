@@ -14,6 +14,12 @@ import tempfile
 import shutil
 import subprocess
 
+try:
+	import requests
+	have_requests=True
+except:
+	have_requests=False
+
 from icecube import icetray
 from icecube.dataio import I3FileStager
 
@@ -145,7 +151,8 @@ class I3FileStagerFile(AbstractFileStager):
 	
 	def WriteSchemes(self):
 		# we can't actually write anything other than local files
-		return ["file"]
+		# unless we have the "requests" library
+		return ["http", "https", "file"]
 
 	def strip_auth(self, url):
 		"""
@@ -209,7 +216,6 @@ class I3FileStagerFile(AbstractFileStager):
 		return output_path
 
 	def CopyFileOut(self, local_path, url):
-		
 		parsed_url = urlparse.urlparse(url, scheme="file") # use "file" as the default scheme
 		if parsed_url[0] not in self.WriteSchemes():
 			icetray.logging.log_fatal("Cannot handle URL scheme \"%s\": %s" % (parsed_url[0], url), unit="I3FileStagerFile")
@@ -222,8 +228,23 @@ class I3FileStagerFile(AbstractFileStager):
 			icetray.logging.log_info("Copying file %s to %s" % (local_path, output_path), unit="I3FileStagerFile")
 			shutil.copyfile(local_path, output_path)
 			icetray.logging.log_info("File copied: %s to %s" % (local_path, output_path), unit="I3FileStagerFile")
+		elif (parsed_url[0] == "http" or parsed_url[0] == "https") and have_requests:
+			icetray.logging.log_info("Uploading file %s to %s" % (local_path, url), unit="I3FileStagerFile")
+			f = None
+			try:
+				f = open(local_path, 'rb')
+				r = requests.put(url, data=f)
+				r.raise_for_status()
+			except Exception as e:
+				icetray.logging.log_fatal("Error uploading file: %s to %s: %s" % (local_path, url, str(e)))
+			finally:
+				if f is not None:
+					f.close()
+			icetray.logging.log_info("File uploaded: %s to %s" % (local_path, url), unit="I3FileStagerFile")
+		elif (parsed_url[0] == "http" or parsed_url[0] == "https") and not have_requests:
+			icetray.logging.log_fatal("Can't upload to %s (you need to install the \"requests\" python library to enable this)" % url)
 		else:
-			icetray.log_fatal("Can't upload to %s" % url.scheme)
+			icetray.logging.log_fatal("Can't upload to %s" % url)
 		
 class GridFTPStager(AbstractFileStager):
 	"""
@@ -345,4 +366,3 @@ class DCacheStager(AbstractFileStager):
 		parsed = urlparse.urlparse(url)
 		icetray.logging.log_info("Uploading %s to %s" % (local_path, url), unit="DCacheStager")
 		self.dccp(os.path.abspath(local_path), parsed.path)
-

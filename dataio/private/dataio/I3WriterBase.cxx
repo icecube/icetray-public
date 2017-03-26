@@ -51,7 +51,7 @@ I3WriterBase::I3WriterBase(const I3Context& ctx)
   : I3ConditionalModule(ctx),
     configWritten_(false),
     frameCounter_(0),     
-    gzip_compression_level_(-2)
+    gzip_compression_level_(6)
 {
 	AddOutBox("OutBox");
 	AddParameter("CompressionLevel", "0 == no compression, "
@@ -90,19 +90,6 @@ I3WriterBase::Configure()
 
 	GetParameter("SkipKeys", skip_keys_);
 	GetParameter("CompressionLevel", gzip_compression_level_);
-
-	if (iends_with(path_, ".gz") || iends_with(path_, ".bz2")) {
-		if (gzip_compression_level_ == -2)   // compression level unset
-			gzip_compression_level_ = 6; // set to default
-	} else { 
-		if (gzip_compression_level_ == -2)   // compression level unset
-			gzip_compression_level_ = 0;
-	}
-
-	if (gzip_compression_level_ > 0)
-		log_info("Compressing at level %d", gzip_compression_level_);
-	else 
-		log_info("Not compressing.");
 
 	try {
 		GetParameter("Streams", streams_);
@@ -250,4 +237,3 @@ I3WriterBase::Process()
 	PushFrame(frame,"OutBox");
 	log_debug("... done");  
 }
-
