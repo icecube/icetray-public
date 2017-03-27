@@ -4,6 +4,13 @@ Release Notes
 trunk
 -----
 
+March 27, 2016, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+V17-03-01
+---------
+
+* (r2827) - allow HTTP PUT uploads in file stagers. Also fix a nasty bug in when it comes to compression detection in URLs by just removing some useless code (compression_level==-2 makes bz2 crash).
+
 V17-03-00
 ---------
 
