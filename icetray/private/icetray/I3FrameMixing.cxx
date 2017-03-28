@@ -33,13 +33,15 @@ void I3FrameMixer::Mix(I3Frame& frame)
     //if this type is in the cache and we are tracking the order, reshuffle to
     //move it to the end
     else if(track_order_){
+      boost::shared_ptr<I3Frame> old_entry=*sit;
       std::copy(sit+1,parent_cache_.end(),sit);
-      parent_cache_.back()=boost::make_shared<I3Frame>(frame);
+      parent_cache_.back()=old_entry;
+      *parent_cache_.back()=frame;
       //update the pointer to this cache entry
       sit=parent_cache_.end()-1;
     }
     else //otherwise update the cache entry in place
-      *sit=boost::make_shared<I3Frame>(frame);
+      **sit=frame;
   }
 
   //copy keys from all other frame types in the cache into this frame
