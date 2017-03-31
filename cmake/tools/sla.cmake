@@ -18,6 +18,13 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 
+tooldef(erfa
+  include
+  erfa.h
+  lib
+  NONE
+  erfa
+)
 
 TOOLDEF (pal
   include
