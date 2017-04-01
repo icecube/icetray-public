@@ -111,7 +111,9 @@ I3Module::Flush()
 void
 I3Module::Do(void (I3Module::*f)())
 {
+#ifdef MEMORY_TRACKING
   memory::set_label(GetName());
+#endif
   try {
     (this->*f)();
   } catch (...) {

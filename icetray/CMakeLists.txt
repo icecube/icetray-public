@@ -154,7 +154,7 @@ if ((${CMAKE_BUILD_TYPE} STREQUAL "DEBUG") AND (NOT DEFINED MEMORY_TRACKING))
   set(MEMORY_TRACKING ON)
 endif ((${CMAKE_BUILD_TYPE} STREQUAL "DEBUG") AND (NOT DEFINED MEMORY_TRACKING))
 if (${MEMORY_TRACKING})
-  set_source_files_properties(private/icetray/memory.cxx
+  set_source_files_properties(private/icetray/memory.cxx private/icetray/I3Module.cxx
     PROPERTIES
     COMPILE_FLAGS "-DMEMORY_TRACKING")
 endif (${MEMORY_TRACKING})
