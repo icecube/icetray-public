@@ -102,9 +102,13 @@ namespace I3 {
       ofs.reset();
 
       if (ends_with(filename,".gz")){
+        if(compression_level<=0)
+          compression_level=6;
         ofs.push(io::gzip_compressor(compression_level));
         log_trace("Output file ends in .gz.  Using gzip decompressor.");
-      }else if (ends_with(filename,".bz2"))      {
+      }else if (ends_with(filename,".bz2")){
+        if(compression_level<=0)
+          compression_level=6;
         ofs.push(io::bzip2_compressor(compression_level));
         log_trace("Output file ends in .bz2.  Using bzip2 decompressor.");
       }else{

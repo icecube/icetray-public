@@ -29,10 +29,22 @@ namespace I3 {
   namespace dataio {
 
     void open(boost::iostreams::filtering_istream&, const std::string& filename);
+
+    /**
+     * Open an output file using compression if indicated by an extension on the
+     * file name.
+     * \param filename the path to which the file must be written
+     * \param compression_level_ the compression level to use if writing a 
+     *        compressed format. The default value of zero will be interpreted 
+     *        in a format dependent way, being replaced by:
+     *         6 for gzip (.gz)
+     *         6 for bzip2 (.bz2)
+     * \param mode the mode to use when writing
+     */
     void open(boost::iostreams::filtering_ostream&, 
-	      const std::string& filename, 
-	      int gzip_compression_level_ = 6, 
-	      std::ios::openmode = std::ios::binary);
+              const std::string& filename,
+              int compression_level_ = 0,
+              std::ios::openmode mode = std::ios::binary);
 
   } // namespace dataio
 }  //  namespace I3
