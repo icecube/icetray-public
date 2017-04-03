@@ -51,10 +51,10 @@ namespace I3 {
     void open(io::filtering_istream& ifs, const std::string& filename)
     {
       if (!ifs.empty())
-	ifs.pop();
+        ifs.pop();
       ifs.reset();
       if (!ifs.empty())
-	log_fatal("ifs isn't empty!");
+        log_fatal("ifs isn't empty!");
 #ifdef I3_WITH_LIBARCHIVE
 
 	/*
@@ -67,26 +67,26 @@ namespace I3 {
 		ifs.push(archive_filter(filename));
 #else
       if (ends_with(filename,".gz")){
-	ifs.push(io::gzip_decompressor());
-	log_trace("Input file ends in .gz.  Using gzip decompressor.");
+        ifs.push(io::gzip_decompressor());
+        log_trace("Input file ends in .gz.  Using gzip decompressor.");
       }else if (ends_with(filename,".bz2")){
-	ifs.push(io::bzip2_decompressor());
+        ifs.push(io::bzip2_decompressor());
       }else{
-	log_trace("Input file doesn't end in .gz or .bz2.  Not decompressing.");
+        log_trace("Input file doesn't end in .gz or .bz2.  Not decompressing.");
       }
 #endif
 
       if (filename.find("socket://") == 0) {
-	boost::iostreams::file_descriptor_source fs = create_socket_source(filename);
-	ifs.push(fs);
+        boost::iostreams::file_descriptor_source fs = create_socket_source(filename);
+        ifs.push(fs);
       } else if (filename.find("http://") == 0) {
         ifs.push(http_source(filename));
       } else {
-	boost::iostreams::file_source fs(filename);
-	if (!fs.is_open())
-	  log_fatal("problems opening file '%s' for reading.  Check permissions, paths.",
+        boost::iostreams::file_source fs(filename);
+        if (!fs.is_open())
+        log_fatal("problems opening file '%s' for reading.  Check permissions, paths.",
 		    filename.c_str());
-	ifs.push(fs);
+        ifs.push(fs);
       }
 
       log_debug("Opened file %s", filename.c_str());
@@ -98,23 +98,23 @@ namespace I3 {
 	      std::ios::openmode mode)
     {
       if (!ofs.empty())
-	ofs.pop();
+        ofs.pop();
       ofs.reset();
 
       if (ends_with(filename,".gz")){
-	ofs.push(io::gzip_compressor(compression_level));
-	log_trace("Input file ends in .gz.  Using gzip decompressor.");
+        ofs.push(io::gzip_compressor(compression_level));
+        log_trace("Output file ends in .gz.  Using gzip decompressor.");
       }else if (ends_with(filename,".bz2"))      {
-	ofs.push(io::bzip2_compressor(compression_level));
-	log_trace("Input file ends in .bz2.  Using bzip2 decompressor.");
+        ofs.push(io::bzip2_compressor(compression_level));
+        log_trace("Output file ends in .bz2.  Using bzip2 decompressor.");
       }else{
-	log_trace("Input file doesn't end in .gz or .bz2.  Not decompressing.");
+        log_trace("Output file doesn't end in .gz or .bz2.  Not decompressing.");
       }
       ofs.push(io::counter64());
 
       io::file_sink fs(filename, mode);
       if (!fs.is_open())
-	log_fatal("Fatal error opening output file '%s'.  Check permissions, paths, etc.",
+        log_fatal("Fatal error opening output file '%s'.  Check permissions, paths, etc.",
 		  filename.c_str());
       ofs.push(fs);
     }
