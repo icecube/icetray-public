@@ -51,10 +51,10 @@ I3WriterBase::I3WriterBase(const I3Context& ctx)
   : I3ConditionalModule(ctx),
     configWritten_(false),
     frameCounter_(0),     
-    gzip_compression_level_(6)
+    gzip_compression_level_(0)
 {
 	AddOutBox("OutBox");
-	AddParameter("CompressionLevel", "0 == no compression, "
+	AddParameter("CompressionLevel", "0 == default compression, "
 	    "1 == best speed, 9 == best compression (6 by default)",
 	    gzip_compression_level_);
 
