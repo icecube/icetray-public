@@ -1,5 +1,3 @@
-#include <icetray/I3Module.h>
-
 #include <atomic>
 #include <fstream>
 #include <future>
@@ -7,14 +5,15 @@
 #include <set>
 #include <thread>
 
-#include <boost/make_shared.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/make_shared.hpp>
 
-#include <icetray/open.h>
-#include <icetray/I3Frame.h>
-#include <icetray/I3TrayInfoService.h>
 #include <dataio/I3FileStager.h>
+#include <icetray/I3Frame.h>
+#include <icetray/I3Module.h>
+#include <icetray/I3TrayInfoService.h>
+#include <icetray/open.h>
 
 class I3AsyncWriter : public I3Module{
 private:
