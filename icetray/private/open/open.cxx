@@ -35,6 +35,7 @@
 
 #include "http_source.hpp"
 #include "socket_source.hpp"
+#include "zstd_filter.hpp"
 
 #ifdef I3_WITH_LIBARCHIVE
 #include "archive_filter.hpp"
@@ -75,6 +76,10 @@ namespace I3 {
         log_trace("Input file doesn't end in .gz or .bz2.  Not decompressing.");
       }
 #endif
+      if (ends_with(filename,".zst")){
+        ifs.push(zstd_decompressor());
+        log_trace("Input file ends in .zst. Using zstd decompressor.");
+	  }
 
       if (filename.find("socket://") == 0) {
         boost::iostreams::file_descriptor_source fs = create_socket_source(filename);
@@ -111,6 +116,11 @@ namespace I3 {
           compression_level=6;
         ofs.push(io::bzip2_compressor(compression_level));
         log_trace("Output file ends in .bz2.  Using bzip2 decompressor.");
+      }else if (ends_with(filename,".zst")){
+        if(compression_level<=0)
+          compression_level=4;
+        ofs.push(zstd_compressor(compression_level));
+        log_trace("Output file ends in .zst. Using zstd decompressor.");
       }else{
         log_trace("Output file doesn't end in .gz or .bz2.  Not decompressing.");
       }

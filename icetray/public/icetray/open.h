@@ -39,6 +39,7 @@ namespace I3 {
      *        in a format dependent way, being replaced by:
      *         6 for gzip (.gz)
      *         6 for bzip2 (.bz2)
+     *         4 for zstd (.zst)
      * \param mode the mode to use when writing
      */
     void open(boost::iostreams::filtering_ostream&, 
