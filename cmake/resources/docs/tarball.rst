@@ -196,7 +196,7 @@ There is a script in the build space called
     #
     uname -a > @CMAKE_INSTALL_PREFIX@/uname.txt
     
-Which is copied to ``tarball_hook.sh`` when cmake runs, and hose
+Which is copied to ``tarball_hook.sh`` when cmake runs, and
 variables ``@INSIDE_AT_SIGNS@`` are expanded.  For instance
 ``@CMAKE_INSTALL_PREFIX@`` might become
 ``offline-software.trunk.r47978.Linux-i686.gcc-4.2.3``.  If your
