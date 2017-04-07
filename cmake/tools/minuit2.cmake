@@ -22,12 +22,22 @@
 
 # search for ROOT's Minuit2
 TOOLDEF(minuit2
-    ${ROOTSYS}/include
+   ${ROOTSYS}/include
+   Minuit2/MnConfig.h
+   ${ROOTSYS}/lib
+   NONE # bin is n/a, placeholder
+   Minuit2
+   )
+
+if(NOT MINUIT2_FOUND)
+  TOOLDEF(minuit2
+    ${ROOTSYS}/include/root
     Minuit2/MnConfig.h
-    ${ROOTSYS}/lib
+    ${ROOTSYS}/lib/root
     NONE # bin is n/a, placeholder
     Minuit2
     )
+endif(NOT MINUIT2_FOUND)
 
 # search for the system installed Minuit2
 if(NOT MINUIT2_FOUND)
