@@ -81,6 +81,7 @@ if($ENV{SROOT} MATCHES "^/cvmfs/icecube")
   endif()
   set(CMAKE_PREFIX_PATH $ENV{SROOT})
   set(USE_CVMFS TRUE CACHE BOOL "Are we using CVMFS?")
+  set(CVMFS_SROOTBASE "$ENV{SROOTBASE}" CACHE STRING "CVMFS toolset path" )
 endif()
 
 ## use a default if I3_PORTS isn't set, and report its value

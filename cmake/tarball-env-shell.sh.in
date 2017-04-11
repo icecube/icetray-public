@@ -76,6 +76,9 @@ _DYLD_LIBRARY_PATH=$BASEDIR/lib:$_ROOTSYS/lib:$BASEDIR/lib/tools
 ## extra CVMFS library paths
 _USE_CVMFS=@USE_CVMFS@
 if [[ "${_USE_CVMFS}" == "TRUE" ]]; then
+if [[ "$SROOTBASE" != "@CVMFS_SROOTBASE@" ]]; then
+	eval $(@CVMFS_SROOTBASE@/setup.sh)
+fi
 _GSL_FOUND=@GSL_FOUND@
 if [[ "${_GSL_FOUND}" == "TRUE" ]]; then
     GSL_LIBRARY_DIR=`gsl-config_@GSL_VERSION@ --prefix`/lib/gsl-@GSL_VERSION@
