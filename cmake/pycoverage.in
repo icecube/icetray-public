@@ -47,8 +47,12 @@ done
 
 echo "Directory: $DIRECTORY"
 
-python -c "import coverage"
-if [ $? != 0 ] ; then
+# test for coverage
+if command -v coverage >/dev/null; then
+    COVERAGE="coverage"
+elif command -v python-coverage >/dev/null; then
+    COVERAGE="python-coverage"
+else
     echo "Install the python \"coverage\" package to use pycoverage:"
     echo "  pip install coverage"
     exit 1
@@ -59,7 +63,7 @@ if [ -z $I3_BUILD ]; then
     exit 1
 fi
 
-coverage erase
+$COVERAGE erase
 
 TESTS="$I3_BUILD/*/resources/test/*.py $I3_BUILD/*/resources/tests/*.py $I3_BUILD/*/resources/resources/test/*.py"
 set +e
@@ -68,9 +72,9 @@ TOTAL=$(echo $TESTS | awk 'BEGIN{FS=" "} {print NF}')
 for file in $TESTS;
 do
     if [ $VERBOSE != 0 ]; then
-        coverage run --branch -p --source ../src,lib --omit "*resources*" $file
+        $COVERAGE run --branch -p --source ../src,lib --omit "*resources*" $file
     else
-        coverage run --branch -p --source ../src,lib --omit "*resources*" $file >/dev/null 2>/dev/null
+        $COVERAGE run --branch -p --source ../src,lib --omit "*resources*" $file >/dev/null 2>/dev/null
     fi
     COUNT=$((COUNT+1))
     PROGRESS=$(expr $COUNT \* 100 / $TOTAL)
@@ -79,11 +83,11 @@ done
 set -e
 
 if [ $VERBOSE != 0 ]; then
-    coverage combine
-    coverage html -i -d $DIRECTORY
+    $COVERAGE combine
+    $COVERAGE html -i -d $DIRECTORY
 else
-    coverage combine >/dev/null 2>/dev/null
-    coverage html -i -d $DIRECTORY >/dev/null 2>/dev/null
+    $COVERAGE combine >/dev/null 2>/dev/null
+    $COVERAGE html -i -d $DIRECTORY >/dev/null 2>/dev/null
 fi
 
 # fix up names
