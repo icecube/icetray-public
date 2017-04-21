@@ -592,6 +592,25 @@ mark_as_advanced(
 set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
   "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert Coverage." FORCE)
 
+## optimization remarks
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  if(NOT REMARK_TYPE)
+    set(REMARK_TYPE ".*")
+  endif()
+set(CMAKE_CXX_FLAGS_REMARKS "${CMAKE_CXX_FLAGS_RELEASE} -gline-tables-only -gcolumn-info -Rpass='${REMARK_TYPE}' -Rpass-missed='${REMARK_TYPE}' -Rpass-analysis='${REMARK_TYPE}'" CACHE STRING
+  "Flags used by the C compiler to output remarks about how it's optimizing")
+set(CMAKE_C_FLAGS_REMARKS ${CMAKE_CXX_FLAGS_REMARKS} CACHE STRING
+  "Flags used by the C++ compiler to output remarks about how it's optimizing")
+mark_as_advanced(
+  CMAKE_CXX_FLAGS_REMARKS
+  CMAKE_C_FLAGS_REMARKS)
+# Update the documentation string of CMAKE_BUILD_TYPE for GUIs
+set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
+  "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert Coverage Remarks." FORCE)
+else()
+  message(FATAL_ERROR "Sorry, the 'Remarks' build-type is Clang specific.")
+endif()
+
 ## at this point only project CMakeLists.txt's and tools/*.cmake will modify
 ## the command line. let's check what we have.
 option(CHECK_FLAGS "Check *some* of the flags passed to the compilers" OFF)
