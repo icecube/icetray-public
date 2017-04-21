@@ -593,7 +593,7 @@ set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
   "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert Coverage." FORCE)
 
 ## optimization remarks
-if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+#if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   if(NOT REMARK_TYPE)
     set(REMARK_TYPE ".*")
   endif()
@@ -607,9 +607,9 @@ mark_as_advanced(
 # Update the documentation string of CMAKE_BUILD_TYPE for GUIs
 set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
   "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert Coverage Remarks." FORCE)
-else()
-  message(FATAL_ERROR "Sorry, the 'Remarks' build-type is Clang specific.")
-endif()
+#else()
+#  message(FATAL_ERROR "Sorry, the 'Remarks' build-type is Clang specific.")
+#endif()
 
 ## at this point only project CMakeLists.txt's and tools/*.cmake will modify
 ## the command line. let's check what we have.
