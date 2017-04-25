@@ -19,11 +19,11 @@ class command_queue:
                 newrunning.append((args,popen))
             else:
                 if st:
-                    print "\033[1;31mWARNING\033[0mExit Status",args,":",st
+                    print("\033[1;31mWARNING\033[0mExit Status",args,":",st)
         self.running = newrunning
         while len(self.queue) and len(self.running) < self.max_processes:
             args = self.queue.popleft()
-            print "running ",args
+            print("running ",args)
             self.running.append((args,subprocess.Popen(*args)))
     def call(self,*args):
         self.queue.append(args)
@@ -35,13 +35,13 @@ class command_queue:
 
 def mkdir_p(dir):
     if not os.path.isdir(dir):
-        print "making directory "+dir
+        print("making directory "+dir)
         os.mkdir(dir)
 
 def symlink(src,dst):
     if os.path.islink(dst):
         os.unlink(dst)
-    print "linking {}->{}".format(src,dst)
+    print("linking {}->{}".format(src,dst))
     os.symlink(src,dst)
     
 def symlinkdir(srcdir,destdir):
@@ -69,10 +69,10 @@ def use_this_project(proj):
             )
 
 def call(*args):
-    print "calling",str(args)
+    print("calling",str(args))
     status = subprocess.call(args)
     if status:
-        print "###ERROR### {} returned {}".format(args[0],status)
+        print("###ERROR### {} returned {}".format(args[0],status))
 
 
 cppautodoctxt = """
@@ -129,7 +129,7 @@ def main():
     I3_BUILD = os.environ["I3_BUILD"]
     I3_SRC = os.environ["I3_SRC"]
 
-    print args.build_dir
+    print(args.build_dir)
     builddir=os.path.join(I3_BUILD,args.build_dir)
     sphinxdir=os.path.join(I3_BUILD,"sphinx_src")
     sourcedir = os.path.join(builddir,"source")
@@ -173,7 +173,7 @@ def main():
                 os.path.join(sourcedir,"metaproject"))
 
     if not args.no_project_docs:
-        print "symlink projocts' docs dir"
+        print("symlink projocts' docs dir")
         for projdocdir in glob(os.path.join(os.environ["I3_SRC"],"*","resources","docs")):
             proj = projdocdir.split(os.sep)[-3]
             if not use_this_project(proj):
@@ -183,7 +183,7 @@ def main():
                 symlink(projdocdir,os.path.join(sourcedir,"projects",proj))
 
     if not args.no_python:
-        print "Generating Python references"
+        print("Generating Python references")
         pymoduledir = os.path.join(I3_BUILD,"lib")
 
         #call program which generates rsts for all python moudles in libdir
@@ -224,16 +224,16 @@ def main():
         queue.wait()
 
     if not args.no_cpp:
-        print "Generating C++ references from Doxygen XML"
+        print("Generating C++ references from Doxygen XML")
         for doxygen_dir in glob(os.path.join(doxygendir,"*","xml")):
 
 
             project_name = os.path.basename(os.path.dirname(doxygen_dir))
-            print "@",doxygen_dir,project_name
+            print("@",doxygen_dir,project_name)
             if not use_this_project(project_name):
                 continue    
             outfilename = sourcedir+"/cpp/"+project_name+".rst"
-            print "writing",outfilename
+            print("writing",outfilename)
             with open(outfilename,'wt') as f:
                 f.write(cppautodoctxt.format(PROJECT_NAME=project_name,
                                              DOXYGEN_PROJECT_PATH=doxygen_dir))
@@ -242,7 +242,7 @@ def main():
                 #os.path.join(sourcedir,x))
 
     if not args.no_inspect:
-        print "Generating icetray reference from icetray-inspect"        
+        print("Generating icetray reference from icetray-inspect")
         quick_rst = os.path.join(sourcedir,"icetray_quick_reference.rst")
         cmd = ["icetray-inspect",
                "--sphinx","--sphinx-references","--no-params",
@@ -252,14 +252,11 @@ def main():
             cmd += args.projects
         else:
             cmd += ["--all"]
-        print "Writing", quick_rst
+        print("Writing", quick_rst)
         queue.call(cmd)
         
         inspectlibs = i3inspect.get_all_projects()
 
-        print inspectlibs
-
-        
         for proj in inspectlibs:
             if not use_this_project(proj):
                 continue
@@ -272,7 +269,7 @@ def main():
                    #--expand-segments,#"--verbose-docs" #these options might work in the future
                    "--title=",
                    "-o",rst_out]
-            print "Writing",rst_out
+            print("Writing",rst_out)
             queue.call(cmd)
 
             #symlink(os.path.join(I3_SRC,"cmake","meta-project-docs","source","icetray_reference.rst"),
