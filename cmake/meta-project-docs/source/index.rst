@@ -11,7 +11,7 @@ Basic Info
    info/overview
    info/quickstart
    info/cvmfs
-
+   metaproject/index.rst 
 
 Project Details
 ===============
