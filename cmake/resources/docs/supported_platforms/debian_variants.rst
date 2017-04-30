@@ -28,7 +28,7 @@ For newer Ubuntu versions (>=14.04):
 
 .. container:: wrapped-code
 
-    apt-get install libz-dev libqt4-opengl-dev libstarlink-pal-dev
+    apt-get install libz-dev libqt5opengl5-dev libstarlink-pal-dev
     python-sphinx libopenblas-dev
 
 Simulation Packages

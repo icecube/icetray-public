@@ -234,7 +234,7 @@ enter this one automatically whenever I start a new shell::
 	VIRTUAL_ENV_DISABLE_PROMPT=1
 	. ~/.virtualenv/standard/bin/activate
 
-In order for python packages installed by homebrew (such as Qt4) to be accessable from your virtual environment, you need to tell python where to find the libraries. This can be accomplished by running::
+In order for python packages installed by homebrew (such as Qt5) to be accessable from your virtual environment, you need to tell python where to find the libraries. This can be accomplished by running::
 
         echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> ~/.virtualenv/standard/lib/python2.7/site-packages/homebrew.pth
 
@@ -277,7 +277,7 @@ With a fresh install of El Capitan I was able to get IceRec and Simulation runni
 	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 	#install packages with homebrew
-	brew install cmake boost boost-python cdk gsl minuit2 libarchive wget doxygen qt4 pyqt
+	brew install cmake boost boost-python cdk gsl minuit2 libarchive wget doxygen qt pyqt
 
 	brew tap homebrew/science
 	brew install healpix hdf5
