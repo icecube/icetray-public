@@ -196,6 +196,7 @@ void I3AsyncWriter::Finish(){
 	}
 #endif
 	filterstream_.flush();
+	close(filterstream_);
 	
 	current_filename_.reset(); //release staged file handle
 	log_debug_stream(queued_ << " frames queued for writing.");
