@@ -4,6 +4,9 @@
 #include <dataio/I3FileStager.h>
 #include <dataio/I3File.h>
 
+//Older boosts choke on lambdas
+#if BOOST_VERSION > 105500
+
 TEST_GROUP(AsyncStaging)
 
 boost::shared_ptr<I3FileStager> enable_file_staging(I3Tray& tray){
@@ -60,3 +63,5 @@ TEST(AsyncStagedRead){
 	}
 	std::remove(file.c_str());
 }
+
+#endif //BOOST_VERSION > 105500
