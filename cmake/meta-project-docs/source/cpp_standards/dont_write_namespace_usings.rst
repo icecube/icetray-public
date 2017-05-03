@@ -1,8 +1,8 @@
 
-Don't write namespace **using** in a header file or before and **#include**
----------------------------------------------------------------------------
+Don't write namespace **using** in a header file or before an **#include** statement
+------------------------------------------------------------------------------------
 
-Namespace **using** are for your convenience, not for you to inflict on others :
+Namespace **using** are for your convenience, not for you to inflict on others.
 Never write a **using** declaration or a **using** directive before an **include** directive.
 
 The only reason to use "using namespace" is to reduce typing.  It, unfortunately,
