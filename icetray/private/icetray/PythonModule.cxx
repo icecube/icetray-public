@@ -67,7 +67,7 @@ PythonModule<Base>::Configure()
   if (bp::override conf = this->get_override("Configure"))
     conf();
   else
-    log_fatal("Python module doesn't implement 'Configure'");
+    log_debug("Python module doesn't implement 'Configure'");
 }
 
 template <typename Base>

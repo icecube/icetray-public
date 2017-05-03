@@ -153,6 +153,10 @@ I3Module::Do(void (I3Module::*f)())
 void
 I3Module::Configure()
 {
+  // if the user hasn't added an outbox at this point
+  // give them a default outbox.
+  if (outboxes_.empty())
+    AddOutBox("OutBox");
 }
 
 void
