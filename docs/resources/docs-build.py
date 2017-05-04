@@ -125,7 +125,7 @@ def main():
     builddir=os.path.join(sphinxdir,'build')
     sourcedir=os.path.join(sphinxdir,'source')
     confdir=os.path.join(sphinxdir,'conf')
-    doxygendir=os.path.join(builddir,"doxygen")
+    doxygendir=os.path.join(sphinxdir,"doxygen")
 
     queue = command_queue(args.j)
 
