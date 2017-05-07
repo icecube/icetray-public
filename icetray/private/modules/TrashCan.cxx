@@ -27,6 +27,10 @@ struct TrashCan : public I3Module
 {
   TrashCan(const I3Context& context) : I3Module(context) { }
 
+  // an empty configure to avoid the default one
+  void Configure()
+  { }
+
   void Process() 
   { 
     log_trace("%s", __PRETTY_FUNCTION__);

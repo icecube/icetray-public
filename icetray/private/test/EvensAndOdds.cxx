@@ -14,6 +14,9 @@ public:
 
   OddCan(const I3Context& context) : I3Module(context) { }
 
+  void Configure()
+  { }
+
   void Physics(I3FramePtr frame)
   {
     log_trace("%s",__PRETTY_FUNCTION__);
@@ -32,6 +35,9 @@ public:
   int num_tossed;
 
   EvenCan(const I3Context& context) : I3Module(context) { }
+
+  void Configure()
+  { }
 
   void Physics(I3FramePtr frame)
   {

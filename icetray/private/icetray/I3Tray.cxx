@@ -333,15 +333,6 @@ I3Tray::Configure()
 		log_fatal("Calling %s with no modules added. "
 		    "You probably want some.", __PRETTY_FUNCTION__);
 
-	if (!boxes_connected &&
-        !modules[modules_in_order.back()]->AllOutBoxesConnected()) {
-		log_debug("Last module (\"%s\") has a dangling outbox. Adding "
-		    "TrashCan to end of tray", modules_in_order.back().c_str());
-		AddModule("TrashCan", "__automatic_I3Tray_trashcan");
-	}
-
-	configure_called = true;
-
 	//
 	// Create the services in the order they were added.
 	//
@@ -394,6 +385,16 @@ I3Tray::Configure()
 			    objectname.c_str());
 		}
 	}
+
+	if (!boxes_connected &&
+        !modules[modules_in_order.back()]->AllOutBoxesConnected()) {
+		log_error("Last module (\"%s\") has a dangling outbox. Adding "
+		    "TrashCan to end of tray", modules_in_order.back().c_str());
+		AddModule("TrashCan", "__automatic_I3Tray_trashcan");
+	}
+
+	configure_called = true;
+
 	memory::set_label("I3Tray");
 
 	//
