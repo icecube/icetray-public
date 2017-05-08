@@ -388,7 +388,7 @@ I3Tray::Configure()
 
 	if (!boxes_connected &&
         !modules[modules_in_order.back()]->AllOutBoxesConnected()) {
-		log_error("Last module (\"%s\") has a dangling outbox. Adding "
+		log_debug("Last module (\"%s\") has a dangling outbox. Adding "
 		    "TrashCan to end of tray", modules_in_order.back().c_str());
 		AddModule("TrashCan", "__automatic_I3Tray_trashcan");
 	}
