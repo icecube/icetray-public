@@ -9,7 +9,7 @@ Must "load" each library.  Parameter list of tuples.
 python code::
 
     import sys
-    from I3Tray import *
+    from I3Tray import I3Tray
     load('libicetray')
     load('libdataclasses')
     load('libdataio')
@@ -30,7 +30,7 @@ Python bindings for every project.  Parameters as python arguments
 python code::
     
     import sys
-    from I3Tray import *
+    from I3Tray import I3Tray
     from icecube import icetray,dataclasses,dataio,phys_service
     
     tray = I3Tray()
@@ -41,8 +41,8 @@ python code::
     tray.Execute()
     tray.Finish()
 
-2013 and Later
---------------
+2013
+----
 
 Module names unnecessary. TrashCan module is added automatically.
 Tray.Add figures out if it's a module or a service.
@@ -50,15 +50,33 @@ Tray.Add figures out if it's a module or a service.
 python code::
     
     import sys
-    from I3Tray import *
-    from icecube import icetray,dataclasses,dataio,phys_service
+    from I3Tray import I3Tray
+    from icecube import icetray,dataclasses,dataio,phys_services
     
     tray = I3Tray()
-    tray.Add('I3GSLRandomServiceFactory,'gsl',Seed=42)
-    tray.Add('I3Reader',Filenamelist=sys.argv[1:])
+    tray.Add('I3GSLRandomServiceFactory, Seed=42)
+    tray.Add('I3Reader', Filenamelist=sys.argv[1:])
     tray.Add('Dump')
     tray.Execute()
     tray.Finish()
+
+2014
+----
+
+No need to call Finish after executing.  This is done automatically.
+
+python code::
+    
+    import sys
+    from I3Tray import I3Tray
+    from icecube import icetray,dataclasses,dataio,phys_services
+    
+    tray = I3Tray()
+    tray.Add('I3GSLRandomServiceFactory, Seed=42)
+    tray.Add('I3Reader', Filenamelist=sys.argv[1:])
+    tray.Add('Dump')
+    tray.Execute()
+   
 
 IceTray Summary
 =================

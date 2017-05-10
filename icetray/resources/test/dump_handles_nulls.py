@@ -18,5 +18,4 @@ tray.Add("FrameCheck", ensure_physics_has = ["here", "there", "everywhere", "ton
 tray.Add("Dump")
 
 tray.Execute(15)
-tray.Finish()
 

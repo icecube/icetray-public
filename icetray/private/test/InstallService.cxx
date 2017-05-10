@@ -43,6 +43,5 @@ TEST(name)
   tray.AddModule("BottomlessSource", "bs");
   tray.AddModule("TrashCan", "trash");
   tray.Execute(10);
-  tray.Finish();
 }
 

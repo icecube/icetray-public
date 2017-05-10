@@ -7,31 +7,22 @@ import os
 
 tray = I3Tray()
 
-tray.AddModule("BottomlessSource", "bs")
+tray.Add("BottomlessSource")
 
-tray.AddModule("I3Writer", "writer",
-               Filename = "foo.i3")
-
-tray.AddModule("TrashCan", "tc")
+tray.Add("I3Writer", Filename = "foo.i3")               
 
 tray.Execute(1)
-tray.Finish()
 
 
 for i in range(10):
     
     tray = I3Tray()
 
-    tray.AddModule("I3Reader", "read",
-                   Filename = "foo.i3")
+    tray.Add("I3Reader", Filename = "foo.i3")                   
 
-    tray.AddModule("I3Writer", "writer",
-                   Filename = "foonew.i3")
-
-    tray.AddModule("TrashCan", "tc")
+    tray.Add("I3Writer", Filename = "foonew.i3")                   
 
     tray.Execute()
-    tray.Finish()
     os.unlink("foo.i3")
     os.rename("foonew.i3", "foo.i3")
 

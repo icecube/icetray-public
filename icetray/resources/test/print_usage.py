@@ -26,7 +26,7 @@ class ComputeSomething(icetray.I3Module) :
         self.PushFrame(frame)
 
 # generate empty frames
-tray.AddModule("BottomlessSource","bottomless")
+tray.AddModule("BottomlessSource")
 
 tray.AddModule(ComputeSomething, n = 100000)
 tray.AddModule(ComputeSomething, n = 10000)
@@ -37,9 +37,6 @@ tray.AddModule(ComputeSomething, n = 1)
 
 # do it 5 times.
 tray.Execute(5)
-
-# see ya.
-tray.Finish()
 
 printed_keys = tray.PrintUsage(fraction = 0.99999999)
 ENSURE(len(printed_keys) > 1, "Not enough modules printed.")

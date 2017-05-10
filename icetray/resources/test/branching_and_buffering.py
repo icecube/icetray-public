@@ -3,7 +3,7 @@
 # Big script with lots of branching and buffering
 #
 
-from I3Tray import *
+from I3Tray import I3Tray
 tray = I3Tray()
 
 nframes = 10000
@@ -24,8 +24,6 @@ tray.ConnectBoxes("c1", "OutBox", "f1")
 
 
 
-
-
 tray.AddModule("AddNulls", "an1",
     where =  ["an1"])
 tray.ConnectBoxes("f1", "one",    "an1")
@@ -37,9 +35,6 @@ tray.ConnectBoxes("an1", "OutBox", "b2")
 tray.AddModule("FrameCheck", "c2",
     ensure_physics_has =  ["myint", "an1"])
 tray.ConnectBoxes("b2", "OutBox", "c2")
-
-tray.AddModule("TrashCan", "t1")
-tray.ConnectBoxes("c2", "OutBox", "t1")
 
 
 tray.AddModule("AddNulls", "an2",
@@ -71,13 +66,6 @@ tray.AddModule("CountFrames", "a-cnt1",
    physics =  nframes)
 tray.ConnectBoxes("a-c4", "OutBox", "a-cnt1")
 
-tray.AddModule("TrashCan", "a-t3")
-tray.ConnectBoxes("a-cnt1", "OutBox", "a-t3")
-
-tray.AddModule("TrashCan", "ttt")
-tray.ConnectBoxes("f2", "two", "ttt")
-
-
 
 tray.AddModule("AddNulls", "an3",
     where =  ["an3"])
@@ -96,11 +84,5 @@ tray.AddModule("CountFrames", "cnt1",
     physics =  nframes)
 tray.ConnectBoxes("c4", "OutBox", "cnt1")
 
-tray.AddModule("TrashCan", "t3")
-tray.ConnectBoxes("cnt1", "OutBox", "t3")
-
 # do it nframes times.
 tray.Execute(nframes)
-
-# see ya.
-tray.Finish()

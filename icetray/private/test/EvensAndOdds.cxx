@@ -85,7 +85,6 @@ TEST(a_evens_and_odds_to_different_modules)
   tray.ConnectBoxes("sorter","Odds","oddcan");
 
   tray.Execute(1000);
-  tray.Finish();
 }
 
 // puts evens in one outbox, odds in the other.
@@ -153,6 +152,5 @@ TEST(b_add_nulls_via_should_do_physics)
   tray.ConnectBoxes("oddcount", "OutBox", "oddcan");
 
   tray.Execute(1000);
-  tray.Finish();
 
 }

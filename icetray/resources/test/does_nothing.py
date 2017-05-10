@@ -3,22 +3,16 @@
 # Simplest possible icetray script.
 #
 
-from I3Tray import *
+from I3Tray import I3Tray
 tray = I3Tray()
 
 # generate empty frames
-tray.AddModule("BottomlessSource","bottomless")
+tray.AddModule("BottomlessSource")
 
 # print em
-tray.AddModule("Dump","dump")
-
-# throw em out
-tray.AddModule("TrashCan","adios")
+tray.AddModule("Dump")
 
 # do it 5 times.
 tray.Execute(5)
-
-# see ya.
-tray.Finish()
 
 tray.PrintUsage()

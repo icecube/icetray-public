@@ -22,7 +22,7 @@ public:
   void Physics(I3FramePtr frame)
   {
     frame->Put("fired", I3FrameObjectPtr());
-    PushFrame(frame,"OutBox");
+    PushFrame(frame);
   }
 };
 I3_MODULE(TestConditionalPutModule);
@@ -113,7 +113,6 @@ TEST(none)
     ("expected", 4);
 
   tray.Execute(10);
-  tray.Finish();
 }
 
 TEST(on_mod_two)
@@ -147,7 +146,6 @@ TEST(on_mod_two)
   tray.AddModule("Dump");
 
   tray.Execute(10);
-  tray.Finish();
 }
 
 TEST(on_mod_three)
@@ -170,5 +168,4 @@ TEST(on_mod_three)
   tray.AddModule("Dump", "dump");
 
   tray.Execute(10);
-  tray.Finish();
 }

@@ -33,10 +33,7 @@ tray.AddModule(fn, "fn",
 
 tray.AddModule("Dump", "dump")
 
-tray.AddModule("TrashCan", "tc")
-
 tray.Execute(9)
-tray.Finish()
 
 print(seen)
 assert seen['X'] == 3

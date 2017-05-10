@@ -4,7 +4,7 @@ Test reordering of modules within an I3Tray.
 """
 
 from icecube import icetray, dataio
-from I3Tray import *
+from I3Tray import I3Tray
 
 def thing1(frame):
 	frame['foo'] = icetray.I3Int(42)
@@ -18,15 +18,16 @@ def thing3(frame):
 
 def run(hook=lambda tray: None):
 	tray = I3Tray()
-	tray.AddModule("I3InfiniteSource", "maw", Stream=icetray.I3Frame.Physics)
-	tray.AddModule(thing3, 'thing3')
-	tray.AddModule(thing2, 'thing2')
-	tray.AddModule(thing1, 'thing1')
+	tray.Add("I3InfiniteSource", Stream=icetray.I3Frame.Physics)
+	tray.Add(thing3, "thing3")
+	tray.Add(thing2, "thing2")
+	tray.Add(thing1, "thing1")
 	hook(tray)
-	tray.AddModule('TrashCan', 'YesWeCan')
 	tray.Execute(1)
-	tray.Finish()
 
+#FIXME: assert throws an AssertionError, which is caught by the except.
+#       this is bad, bad, bad.  this always passes.
+        
 # Without reordering, thing2 should fail
 try:
 	run()

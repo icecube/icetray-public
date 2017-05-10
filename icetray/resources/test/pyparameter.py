@@ -22,7 +22,5 @@ i3int = icetray.I3Int(777)
 
 # generate empty frames
 tray.AddModule(GetI3Int, obj=i3int)
-
 tray.Execute(1)
 
-tray.Finish()

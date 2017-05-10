@@ -53,6 +53,3 @@ tray.AddModule("TrashCan","TrashCan")
 
 # do it 5 times.
 tray.Execute(n_should_pass * 2)
-
-# see ya.
-tray.Finish()

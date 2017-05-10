@@ -66,11 +66,9 @@ f.close()
 
 # Check I3Reader.
 tray = I3Tray.I3Tray()
-tray.AddModule('I3Reader', 'reader', filename=fname)
-tray.AddModule(icetray.I3TestModuleFactory(DAQFrameMuxing), 'testy')
-tray.AddModule('TrashCan', "yeswecan")
+tray.Add('I3Reader', filename=fname)
+tray.Add(icetray.I3TestModuleFactory(DAQFrameMuxing))
 tray.Execute()
-tray.Finish()
 
 if os.path.exists(fname):
 	os.unlink(fname)

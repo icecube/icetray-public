@@ -7,24 +7,25 @@ import os
 
 tray = I3Tray()
 
-tray.AddModule("BottomlessSource", "bs")
+tray.Add("BottomlessSource")
 
-def put_ints(frame, where="there", value=999, somedict=dict(three=3, four=4)):
+def put_ints(frame,
+             where="there",
+             value=999,
+             somedict=dict(three=3, four=4)):
     frame[where] = icetray.I3Int(value)
     
-tray.AddModule(put_ints, "put_ints",
-               where = 'thisiswhere',
-               value = 777,
-               somedict = dict(five=5, six=6))
+tray.Add(put_ints, "put_ints",
+         where = 'thisiswhere',
+         value = 777,
+         somedict = dict(five=5, six=6))
 
-tray.AddModule("I3Writer", "writer",
-               Filename = "infos.i3",
-               SkipKeys = ['one', 'two', 'three'])
+tray.Add("I3Writer", 
+         Filename = "infos.i3",
+         SkipKeys = ['one', 'two', 'three'])
 
-tray.AddModule("TrashCan", "tc")
 
 tray.Execute(1)
-tray.Finish()
 
 f = dataio.I3File('infos.i3')
 infoframe = f.pop_frame()

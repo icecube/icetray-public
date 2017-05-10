@@ -8,9 +8,6 @@ from icecube import icetray, dataclasses, dataio
 from I3Tray import I3Tray
 import sys
 
-#
-# Generate .i3 file
-#
 
 i3f = dataio.I3File("tmp.i3", dataio.I3File.Mode.Writing)
 
@@ -80,7 +77,6 @@ tray.Add('Get',
                     icetray.I3Frame.Stream('C')])
 
 tray.Execute()
-tray.Finish()
 
 import os
 os.unlink('tmp.i3')

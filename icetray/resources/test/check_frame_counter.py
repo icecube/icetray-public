@@ -28,8 +28,4 @@ tray.AddModule("FrameCheck","checker")(
     ("ensure_physics_has", ["foo", "bar", "baz"]),
     )
 
-# throw em out
-tray.AddModule("TrashCan","adios")
-
 tray.Execute(11)
-tray.Finish()

@@ -20,7 +20,6 @@ TEST(one)
   tray.SetParameter("serv1","longParam",(long)12345678);
 
   tray.AddModule("TestServiceFactoryModule","mod1");
-  tray.AddModule("TrashCan", "trash");
 
   ENSURE(TestServiceFactory::instance);
 
@@ -47,11 +46,9 @@ TEST(configure_service_after_module_added)
   I3Tray tray;
   tray.AddService<TestServiceFactory>("serv1");
   tray.AddModule<TestServiceFactoryModule>("mod1");
-  tray.AddModule("TrashCan", "trash");
 
   tray.SetParameter("serv1","intParam",(int)42);
   tray.Execute(1);
-  tray.Finish();
 }
 
 TEST(finish_called)
@@ -59,16 +56,12 @@ TEST(finish_called)
   I3Tray tray;
   tray.AddService<TestServiceFactory>("serv1");
   tray.AddModule("BottomlessSource", "mod1");
-  tray.AddModule("TrashCan", "trash");
 
   ENSURE(TestServiceFactory::instance, "TestServiceFactory shoud exist now");
 
   tray.Execute(1);
 
-  ENSURE(TestServiceFactory::instance->finishCalled, "Finish should have been called");
-  tray.Finish(); // noop
-  ENSURE(TestServiceFactory::instance->finishCalled, "Finish should have been called");
-    
+  ENSURE(TestServiceFactory::instance->finishCalled, "Finish should have been called");    
 }
 
 

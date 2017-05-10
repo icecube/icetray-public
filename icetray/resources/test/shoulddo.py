@@ -33,11 +33,6 @@ def make_counter(base):
 tray.AddModule(make_counter(I3Module), "modulecounter")
 tray.AddModule(make_counter(I3ConditionalModule), "conditionalmodulecounter")
 
-# throw em out
-tray.AddModule("TrashCan","adios")
-
 # do it 5 times.
 tray.Execute(5)
 
-# see ya.
-tray.Finish()

@@ -6,7 +6,7 @@ import os
 
 tray = I3Tray()
 
-tray.AddModule("BottomlessSource", "bs")
+tray.AddModule("BottomlessSource")
 
 def f1(frame, x='x', y='y'):
     assert x == 'x'
@@ -30,7 +30,4 @@ tray.AddModule(f3, 'f3',
                x = 'configured',
                y = 'configured')
 
-tray.AddModule("TrashCan", "tc")
-
 tray.Execute(1)
-tray.Finish()

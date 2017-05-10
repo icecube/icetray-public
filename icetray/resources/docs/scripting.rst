@@ -14,10 +14,9 @@ best illustration of this is a simple example::
  
  import os
  import sys
- 
- load("libicetray")
- load("libdataio")
- 
+
+ from icecube import icetray, dataio
+  
  tray = I3Tray()
  
  tray.AddModule("I3Reader","reader", 
@@ -25,10 +24,7 @@ best illustration of this is a simple example::
 
  tray.AddModule("Dump","dump")
 
- tray.AddModule("TrashCan","trash")
- 
  tray.Execute()
- tray.Finish()
 
 **TODO**  Flush out these docs more fully.
 
@@ -67,7 +63,7 @@ There's a gotcha. Python has lists, and it has tuples.  Python will
 convert either to an STL vector when it configures icetray, so this
 syntax will work too::
 
- tray.AddModule("Jeopardy", "j",
+ tray.AddModule("Jeopardy",
    I'll_take="famous_numbers",
    for=500, 
    famous_numbers=(0, 1, 3.14159, 1.618034)

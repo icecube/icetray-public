@@ -57,12 +57,11 @@ TEST(getting_services_in_modules)
 {
   I3Tray tray;
 
-  tray.AddService("IntegerService", "hateservices");
-  tray.AddModule("ServiceTest", "source")("Int", service_sentinel);
-  tray.AddModule("ServiceTest", "source2")("Int", "int");
+  tray.AddService("IntegerService");
+  tray.AddModule("ServiceTest")("Int", service_sentinel);
+  tray.AddModule("ServiceTest")("Int", "int");
     
   tray.Execute();
-  tray.Finish();
     
 }
 

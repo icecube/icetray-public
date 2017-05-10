@@ -9,10 +9,6 @@ from I3Tray import I3Tray
 import sys
 import os
 
-#
-# Generate .i3 file
-#
-
 i3f = dataio.I3File("tmp.i3", dataio.I3File.Mode.Writing)
 
 streams = ['A', 'B', 'C', 'D', 'E', 'F']
@@ -65,19 +61,16 @@ class Gitter(icetray.I3Module):
 #
 tray = I3Tray()
 
-tray.AddModule('I3Reader', 
-               Filename = 'tmp.i3')
+tray.AddModule('I3Reader', Filename = 'tmp.i3')               
 
 def p(frame):
     print("FFFFFFF: %s" % frame)
     
-tray.AddModule(p, 'dmp',
-               Streams = [icetray.I3Frame.Stream(a) for a in streams])
-
+tray.AddModule(p, Streams = [icetray.I3Frame.Stream(a) for a in streams])
+               
 tray.AddModule(Gitter)
 
 tray.Execute()
-tray.Finish()
 
 fname = "tmp.i3"
 if os.path.exists(fname):

@@ -9,7 +9,7 @@ from I3Tray import *
 tray = I3Tray()
 
 # generate empty frames
-tray.AddModule("BottomlessSource","bottomless")
+tray.AddModule("BottomlessSource")
 
 class Mod(I3Module):
     def __init__(self, context):
@@ -35,7 +35,7 @@ class Mod(I3Module):
         assert self.startfrom == self.sumshouldbe
 
 
-tray.AddModule(Mod, "mod",
+tray.AddModule(Mod, 
                Startfrom = 0,
                SumShouldBe = 6)
 
@@ -44,6 +44,3 @@ tray.AddModule("Dump")
 
 # do it 5 times.
 tray.Execute(6)
-
-# see ya.
-tray.Finish()

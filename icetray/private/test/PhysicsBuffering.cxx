@@ -54,7 +54,6 @@ I3_MODULE(IntCheck);
       ("physics", 1000);				\
     tray.AddModule("TrashCan", "can");			\
     tray.Execute(1000);					\
-    tray.Finish();					\
   }
 
 

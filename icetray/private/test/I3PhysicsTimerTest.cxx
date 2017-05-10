@@ -101,9 +101,6 @@ TEST(test_timed_module)
     ("ensure_physics_has", params);
 
   tray.Execute(2);
-
-  tray.Finish();
-
 }
 
 

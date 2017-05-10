@@ -121,7 +121,6 @@ TEST(plural)
   tray.AddService<ServiceAtDestructionPluralFactory>("serv");
   tray.AddModule("ServicesAtDestructionModule");    
   tray.Execute();
-  tray.Finish();
     
 }
 
@@ -131,6 +130,5 @@ TEST(single)
   tray.AddService<ServiceAtDestructionServiceSingletonFactory>("serv");
   tray.AddModule("ServicesAtDestructionModule");    
   tray.Execute();
-  tray.Finish();
 }
 

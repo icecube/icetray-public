@@ -1,33 +1,26 @@
 #!/usr/bin/env python
-#
-# Checking that the driving time exists
-#
+
 import sys
-from I3Tray import *
+from I3Tray import I3Tray
 
 from icecube import icetray 
 
 tray = I3Tray()
 
 # generate empty frames
-tray.AddModule("BottomlessSource","bottomless")
+tray.AddModule("BottomlessSource")
 
 # print em
-tray.AddModule("Dump","dump")
+tray.AddModule("Dump")
 
 # check whether frame element 'foo' exists (it shouldn't)
-tray.AddModule("FrameCheck","checker")(
-    ("ensure_physics_hasnt", ["foo", "bar", "baz"]),
-    ("ensure_physics_has", ["this-will-cause-error"])
-    )
-
-# throw em out
-tray.AddModule("TrashCan","adios")
+tray.AddModule("FrameCheck",
+    ensure_physics_hasnt =["foo", "bar", "baz"],
+    ensure_physics_has = ["this-will-cause-error"])
 
 try:
     # This should fail
     tray.Execute(5)
-    tray.Finish()
 except:
     print("ok: failure as expected.")
     # ok it failed

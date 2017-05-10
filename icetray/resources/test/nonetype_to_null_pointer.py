@@ -35,7 +35,6 @@ try:
     tray.AddModule("ContextFreeServiceTestModule")
 
     tray.Execute(11)
-    tray.Finish()
 except Exception as t:
     print(t)
     print("FAIL!!!")
