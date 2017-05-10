@@ -515,7 +515,8 @@ I3Tray::Usage()
 void
 I3Tray::Finish()
 {
-  // this is a no-op now (all module->Finish() calls are now made in Execute())
+  log_warn("This does absolutely nothing and safe to remove.  "
+	      "This will throw by August 2017.");
 }
 
 I3TrayInfo
