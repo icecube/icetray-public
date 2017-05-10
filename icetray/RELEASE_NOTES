@@ -4,6 +4,9 @@ Release Notes
 trunk
 -----
 
+* (r2878) No need for a TrashCan anymore.  If the user
+  doesn't specify an outbox configuration one is added for them.
+
 March 23, 2017, Alex Olivas  (olivas@icecube.umd.edu)
 ---------------------------------------------------
 Release V17-03-00
