@@ -124,9 +124,7 @@ Here is a small example of such a module, written in Python. It operates on pack
  class ExampleMod(icetray.I3PacketModule):
     def __init__(self, context):
         I3PacketModule.__init__(self, context)
-        self.AddOutBox('OutBox')
-    def Configure(self):
-        pass
+
     def FramePacket(self, frames):
         i = icetray.I3Int(len(frames) - 1)
         frames[0].Put('NSplits', i)

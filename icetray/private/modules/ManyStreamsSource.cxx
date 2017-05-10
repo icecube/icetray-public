@@ -32,7 +32,6 @@ struct ManyStreamsSource : public I3Module
 
   ManyStreamsSource(const I3Context& context)  : I3Module(context)
   {
-    AddOutBox("OutBox");
     index = 0;
     frame_types = "GCDPPXGCXDPP";
   }

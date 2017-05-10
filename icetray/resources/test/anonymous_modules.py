@@ -5,16 +5,10 @@ from icecube import icetray
 class SimpleModule(icetray.I3Module):
     def __init__(self, context):
         icetray.I3Module.__init__(self, context)
-        self.AddOutBox("OutBox")
-    def Configure(self):
-        pass
-    def DAQ(self, fr):
-        pass
 
 @icetray.traysegment
 def simple_segment(tray, name):
     tray.AddModule("Dump")
-
 
 tray=I3Tray()
 

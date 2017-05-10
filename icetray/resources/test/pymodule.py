@@ -20,7 +20,6 @@ class Mod(I3Module):
         self.AddParameter("SumShouldBe",
                           "at the end",
                           5)
-        self.AddOutBox("OutBox")
         
     def Configure(self):
         self.startfrom = self.GetParameter("Startfrom")
@@ -41,9 +40,7 @@ tray.AddModule(Mod, "mod",
                SumShouldBe = 6)
 
 # print em
-tray.AddModule("Dump","dump")
-# throw em out
-tray.AddModule("TrashCan","adios")
+tray.AddModule("Dump")
 
 # do it 5 times.
 tray.Execute(6)

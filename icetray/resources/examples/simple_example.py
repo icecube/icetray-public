@@ -21,10 +21,6 @@ class SimplePhysicsSource(icetray.I3Module):
     '''
     def __init__(self, context):
         icetray.I3Module.__init__(self, context)
-        self.AddOutBox("OutBox")
-        
-    def Configure(self):
-        pass
         
     def Process(self):
         frame = icetray.I3Frame(icetray.I3Frame.Physics)
@@ -37,8 +33,7 @@ class AddStuffToFrames(icetray.I3Module):
     '''
     def __init__(self, context):
         icetray.I3Module.__init__(self, context)
-        self.AddOutBox("OutBox")
-
+        
         self.AddParameter("frame_object_name",
                           "Name of the frame object to add",
                           "my_object")

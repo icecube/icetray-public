@@ -26,8 +26,6 @@ struct ContextFreeServiceTestModule : I3Module
 {
   ContextFreeServiceTestModule(const I3Context& context) : I3Module(context) 
   { 
-    AddOutBox("OutBox");
-
     service_ptr_param = boost::shared_ptr<MyService>();
     AddParameter("service_ptr_param", "pointer to service.",service_ptr_param);
   }

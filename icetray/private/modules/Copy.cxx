@@ -68,7 +68,6 @@ Copy::Copy(const I3Context& ctx) :
   AddParameter("Keys", 
 	       "pairs of keys [src_1, dst_1, src_2, dst_2,... src_n, dst_n]",
 	       copy_keys_);
-  AddOutBox("OutBox");
 }
 
 void Copy::Configure()
@@ -86,7 +85,7 @@ void Copy::Process()
       frame->Put(copy_keys_[i+1], 
 		 frame->Get<I3FrameObjectConstPtr>(copy_keys_[i]));
     }
-  PushFrame(frame, "OutBox");
+  PushFrame(frame);
 }
 
 void Copy::Finish()

@@ -71,9 +71,7 @@ TEST(test_timer)
 struct TimedModule : I3Module
 {
   TimedModule(const I3Context& context) : I3Module(context) 
-  { 
-    AddOutBox("OutBox");
-  }
+  { }
 
   void Physics(I3FramePtr frame)
   {
@@ -82,7 +80,7 @@ struct TimedModule : I3Module
     // do expensie timed physics
     sleep (3);
 
-    PushFrame(frame, "OutBox");
+    PushFrame(frame);
   }
 };
 
@@ -94,15 +92,13 @@ TEST(test_timed_module)
 
   I3Tray tray;
 
-  tray.AddModule("BottomlessSource", "source");
+  tray.AddModule("BottomlessSource");
   tray.AddModule<TimedModule>("timer");
-  tray.AddModule("Dump", "dump");
+  tray.AddModule("Dump");
 
   std::vector<std::string> params = list_of("timer_rusage");
   tray.AddModule<FrameCheck>("framecheck")
     ("ensure_physics_has", params);
-
-  tray.AddModule("TrashCan", "trash");
 
   tray.Execute(2);
 

@@ -36,7 +36,6 @@ class DeleteUnregistered : public I3Module
   DeleteUnregistered(const I3Context& context);
 
   virtual ~DeleteUnregistered();
-  void Configure();
   void Process();
 
  private:
@@ -53,14 +52,9 @@ I3_MODULE(DeleteUnregistered);
 
 DeleteUnregistered::DeleteUnregistered(const I3Context& context)
   : I3Module(context)
-{
-  AddOutBox("OutBox");
-}
+{}
 
 DeleteUnregistered::~DeleteUnregistered() 
-{ }
-
-void DeleteUnregistered::Configure()
 { }
 
 void DeleteUnregistered::Process()
@@ -77,7 +71,7 @@ void DeleteUnregistered::Process()
   }
   for (unsigned i=0; i<deleteme.size(); i++)
     frame->Delete(deleteme[i]);
-  PushFrame(frame, "OutBox"); 
+  PushFrame(frame); 
 }
 
 

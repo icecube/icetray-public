@@ -7,7 +7,6 @@ class UseRandom(icetray.I3Module):
     def __init__(self, context):
         icetray.I3Module.__init__(self, context)
         self.AddParameter("I3RandomService", "the service", None)
-        self.AddOutBox("OutBox")
 
     def Configure(self):
         self.rs = self.GetParameter("I3RandomService")
@@ -23,19 +22,17 @@ try:
     tray = I3Tray()
 
     # generate empty frames
-    tray.AddModule("BottomlessSource","bottomless")
+    tray.AddModule("BottomlessSource")
 
-    tray.AddModule(UseRandom,"noservice")
+    tray.AddModule(UseRandom)
     
-    tray.AddModule(UseRandom,"service",
+    tray.AddModule(UseRandom,
                    I3RandomService = phys_services.I3GSLRandomService(3141579)  )
     
-    tray.AddModule(UseRandom,"explicit",
+    tray.AddModule(UseRandom,
                    I3RandomService = None)
 
-    tray.AddModule("ContextFreeServiceTestModule","livefreeordie")
-
-    tray.AddModule("TrashCan","adios")
+    tray.AddModule("ContextFreeServiceTestModule")
 
     tray.Execute(11)
     tray.Finish()

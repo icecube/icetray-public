@@ -25,10 +25,6 @@ passed::
 
       def __init__(self, context):
           icetray.I3Module.__init__(self, context)
-	  self.AddOutBox("OutBox")
-
-      def Configure(self):
-          pass
 
       def Physics(self, frame):
           print frame
@@ -44,11 +40,9 @@ follows::
 
    tray = I3Tray()
 
-   tray.AddModule('BottomlessSource', 'bs')
+   tray.AddModule('BottomlessSource')
    
-   tray.AddModule(PyDump, 'pydump')
-
-   tray.AddModule('TrashCan', 'tc')
+   tray.AddModule(PyDump)
 
    tray.Execute(10)
 
@@ -74,7 +68,6 @@ that go by, with consecutive increasing values::
 	  self.AddParameter('StartWith',                 # name
                             'Start at this value',       # doc
                             0)                           # default
-	  self.AddOutBox("OutBox")	   
 
       def Configure(self):
           self.where = self.GetParameter('Where')
@@ -131,7 +124,6 @@ the values found in the dictionary::
       def __init__(self, context):
 	  I3Module.__init__(self, context)
 	  self.AddParameter("values", "key/value pairs to put into the frame", None)
-	  self.AddOutBox("OutBox")
 
       def Configure(self):
 	  self.d = self.GetParameter("values")
@@ -190,7 +182,6 @@ collects the values of passing I3Ints in the frame::
 	  I3Module.__init__(self, context)
 	  self.AddParameter("where", "where to get the ints from", None)
 	  self.AddParameter("dest", "where to put the collected values", None)
-	  self.AddOutBox("OutBox")
 
       def Configure(self):
 	  self.where = self.GetParameter("where")

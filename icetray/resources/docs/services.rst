@@ -34,8 +34,6 @@ to get random numbers and put them into the frame inside an :class:`I3Double`:
       AddParameter("PutWhere",
 		   "where the doubles go",
 		   dest_key_);
-
-      AddOutBox("OutBox");
     }
 
     void Configure()
@@ -134,8 +132,6 @@ the :class:`UseRandom` module above to take this service via parameter:
        AddParameter("PutWhere",
 		    "where the doubles go",
 		    key);
-
-       AddOutBox("OutBox");
      }
 
      void Configure()
@@ -203,8 +199,6 @@ to NULL pointer.  So now you can decide how to handle that in the code.  Here's 
        AddParameter("PutWhere",
 		    "where the doubles go",
 		    key);
-
-       AddOutBox("OutBox");
      }
 
      void Configure()
@@ -247,7 +241,6 @@ implementation of the UseRandom module, above:
 	   icetray.I3Module.__init__(self, context)
 	   self.AddParameter("I3RandomService", "the service", None)
 	   self.AddParameter("PutWhere", "where the doubles go", None)
-	   self.AddOutBox("OutBox")
 
        def Configure(self):
 	   self.rs = self.GetParameter("I3RandomService")

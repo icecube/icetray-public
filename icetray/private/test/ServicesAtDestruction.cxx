@@ -89,9 +89,7 @@ struct ServicesAtDestructionModule : public I3Module
 
 public:
   ServicesAtDestructionModule(const I3Context& context) : I3Module(context)
-  {
-    AddOutBox("OutBox");
-  }
+  {}
     
   ~ServicesAtDestructionModule()
   {
@@ -121,10 +119,7 @@ TEST(plural)
 {
   I3Tray tray;
   tray.AddService<ServiceAtDestructionPluralFactory>("serv");
-
-  tray.AddModule("ServicesAtDestructionModule", "source");
-  tray.AddModule("TrashCan", "trash");
-    
+  tray.AddModule("ServicesAtDestructionModule");    
   tray.Execute();
   tray.Finish();
     
@@ -134,10 +129,7 @@ TEST(single)
 {
   I3Tray tray;
   tray.AddService<ServiceAtDestructionServiceSingletonFactory>("serv");
-
-  tray.AddModule("ServicesAtDestructionModule", "source");
-  tray.AddModule("TrashCan", "trash");
-    
+  tray.AddModule("ServicesAtDestructionModule");    
   tray.Execute();
   tray.Finish();
 }

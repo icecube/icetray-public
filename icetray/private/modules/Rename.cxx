@@ -37,7 +37,6 @@ Rename::Rename(const I3Context& ctx) :
   AddParameter("Keys", 
 	       "Rename objects in frame by name: [From1, To1, From2, To2 ... FromN, ToN]", 
 	       rename_keys_);
-  AddOutBox("OutBox");
 }
 
 void Rename::Configure()
@@ -52,7 +51,7 @@ void Rename::Process()
 {
   I3FramePtr frame = PopFrame();
   do_rename(frame);
-  PushFrame(frame, "OutBox");
+  PushFrame(frame);
 }
 
 void Rename::Finish()

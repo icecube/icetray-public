@@ -95,7 +95,6 @@ public:
   AddsNullsToFramesWithOddInts(const I3Context& context) : I3Module(context)
   {
     log_trace("%s",__PRETTY_FUNCTION__);
-    AddOutBox("OutBox");
   }
 
   bool ShouldDoPhysics(I3FramePtr frame)

@@ -12,26 +12,22 @@ ndaq = 5
 npackets = 0
 
 # generate empty frames
-tray.AddModule("BottomlessSource","bottomless", Stream=I3Frame.DAQ)
+tray.AddModule("BottomlessSource", Stream=I3Frame.DAQ)
 
 class SimpleSplit(I3Module):
     def __init__(self, context):
         I3Module.__init__(self, context)
-        self.AddOutBox("OutBox")
-    def Configure(self):
-        pass
+
     def DAQ(self, fr):
         self.PushFrame(fr)
         self.PushFrame(I3Frame(I3Frame.Physics))
 
-tray.AddModule(SimpleSplit, 'split')
+tray.Add(SimpleSplit)
 
 class Mod(I3PacketModule):
     def __init__(self, context):
         I3PacketModule.__init__(self, context, icetray.I3Frame.DAQ)
-        self.AddOutBox("OutBox")
-    def Configure(self):
-        pass
+
     def FramePacket(self, frames):
         i = icetray.I3Int(len(frames) - 1)
         frames[0].Put("NSplits", i)
@@ -40,18 +36,15 @@ class Mod(I3PacketModule):
         global npackets
         npackets += 1
 
-tray.AddModule(Mod, "mod")
+tray.Add(Mod)
 
 # print em
-tray.AddModule("Dump","dump")
+tray.Add("Dump")
 
 def test(fr):
 	print('Frame has %d splits.' % fr["NSplits"].value)
 	assert fr["NSplits"].value == 1
-tray.AddModule(test, "test", Streams=[I3Frame.DAQ])
-
-# throw em out
-tray.AddModule("TrashCan","adios")
+tray.Add(test, Streams=[I3Frame.DAQ])
 
 tray.Execute(ndaq)
 tray.Finish()

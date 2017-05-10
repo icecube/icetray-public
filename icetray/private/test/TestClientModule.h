@@ -41,8 +41,6 @@ class TestClientModule : public I3Module, public Type
   TestClientModule(const I3Context& context) : I3Module(context)
     {
       nextFrame = &TestClientModule::template DoNextFrame<0>;
-
-      AddOutBox("OutBox");
     }
 
   /**
@@ -52,7 +50,7 @@ class TestClientModule : public I3Module, public Type
   void Physics(I3FramePtr frame)
     {
       HandleFrame(frame);
-      PushFrame(frame,"OutBox");
+      PushFrame(frame);
     }
 
   /**
@@ -62,7 +60,7 @@ class TestClientModule : public I3Module, public Type
   void Geometry(I3FramePtr frame)
     {
       HandleFrame(frame);
-      PushFrame(frame,"OutBox");
+      PushFrame(frame);
     }
 
   /**
@@ -72,7 +70,7 @@ class TestClientModule : public I3Module, public Type
   void Calibration(I3FramePtr frame)
     {
       HandleFrame(frame);
-      PushFrame(frame,"OutBox");
+      PushFrame(frame);
     }
 
   /**
@@ -82,7 +80,7 @@ class TestClientModule : public I3Module, public Type
   void DetectorStatus(I3FramePtr frame)
     {
       HandleFrame(frame);
-      PushFrame(frame,"OutBox");
+      PushFrame(frame);
     }
 
   /**
@@ -92,7 +90,7 @@ class TestClientModule : public I3Module, public Type
   void Monitor(I3FramePtr frame)
     {
       HandleFrame(frame);
-      PushFrame(frame,"OutBox");
+      PushFrame(frame);
     }
 
   /**

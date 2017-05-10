@@ -38,8 +38,6 @@ struct AllParametersModule : I3Module
 {
   AllParametersModule(const I3Context& context) : I3Module(context) 
   { 
-    AddOutBox("OutBox");
-
     bool_param = true;
     AddParameter("bool_param", "description of bool", bool_param);
 

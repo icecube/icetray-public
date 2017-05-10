@@ -58,8 +58,6 @@ I3_MODULE(CountFrames);
 CountFrames::CountFrames(const I3Context& context) : 
   I3ConditionalModule(context)
 {
-  AddOutBox("OutBox");
-
   insert(required_framecounts_)
     (I3Frame::DAQ, 0)
     (I3Frame::Physics, 0)

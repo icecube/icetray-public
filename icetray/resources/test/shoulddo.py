@@ -15,11 +15,7 @@ def make_counter(base):
     class ShouldCounter(base):
         def __init__(self, context):
             base.__init__(self, context)
-            self.AddOutBox("OutBox")
             self.sdp = 0
-
-        def Configure(self):
-            pass
 
         def ShouldDoPhysics(self, frame):
             print(base.__name__ + " *** ShouldDoPhysics")

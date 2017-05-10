@@ -31,13 +31,9 @@ class Dump : public I3ConditionalModule
  public:
   Dump(const I3Context& context)  : I3ConditionalModule(context),
 				    frameCount_(0u)
-  {
-    AddOutBox("OutBox");
-  }
+  {}
 
   virtual ~Dump() { }
-
-  void Configure(){ }
 
   void Process(){
     I3FramePtr frame = PopFrame();

@@ -18,7 +18,6 @@ class ComputeSomething(icetray.I3Module) :
     def __init__(self, context):
         icetray.I3Module.__init__(self, context)
         self.AddParameter("N", "Number of times to compute something.", 0)
-        self.AddOutBox("OutBox") # let's make the default "OutBox"
     def Configure(self):
         self.n = self.GetParameter("N")
     def Physics(self, frame):

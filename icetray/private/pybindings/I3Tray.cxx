@@ -46,6 +46,12 @@ static std::string I3TrayString(I3Tray &tray) {
   return str.str();
 }
 
+void deprecated_finish(const I3Tray& tray){
+  std::cerr<<"I3Tray.Finish() no longer does anything. "<<std::endl
+	   <<"Remove that line from your script."<<std::endl
+	   <<"WARNING: This will break soon."<<std::endl;
+}
+
 void register_I3Tray()
 {
 
@@ -59,7 +65,7 @@ void register_I3Tray()
     .def("Execute", Execute_0)
     .def("Execute", Execute_1)
     .def("Usage", &I3Tray::Usage)
-    .def("Finish", &I3Tray::Finish)
+    .def("Finish", deprecated_finish)
     .def("RequestSuspension", &I3Tray::RequestSuspension)
     .def("TrayInfo", &I3Tray::TrayInfo)
     .def("__str__", &I3TrayString)

@@ -69,10 +69,7 @@ TEST(CleanConstructor)
 class CleanConstModule : public I3Module
 {
 public:
-  CleanConstModule(const I3Context& c) : I3Module(c) {
-    AddOutBox("OutBox");
-  }
-  void Configure() { }
+  CleanConstModule(const I3Context& c) : I3Module(c) {}
 };
 
 

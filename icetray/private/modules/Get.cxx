@@ -53,7 +53,6 @@ I3_MODULE(Get);
 
 Get::Get(const I3Context& context) : I3Module(context)
 {
-  AddOutBox("OutBox");
   AddParameter("Keys", "Keys to Get<I3FrameObject> on.  If not specified, get all.",
 	       keys_);
   AddParameter("Streams", "vector of I3Frame::Streams to do the Gets on.  If not specified, do it on Geometry, Calibration, DetectorStatus, and Physics",

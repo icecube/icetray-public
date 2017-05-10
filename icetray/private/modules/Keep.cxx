@@ -44,15 +44,9 @@ Keep::Keep(const I3Context& context)
   AddParameter("Keys", 
                "Keep frame objects with names that match any of these keys", 
                keysParam_);
-
-  AddOutBox("OutBox");
 }
 
-
-Keep::~Keep()
-{
-}
-
+Keep::~Keep(){}
 
 void Keep::Configure()
 {

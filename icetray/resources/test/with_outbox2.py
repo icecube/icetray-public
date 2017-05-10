@@ -12,20 +12,13 @@ class M(I3Module):
     def __init__(self, context):
         I3Module.__init__(self, context)
 
-    def Configure(self):
-        self.AddOutBox('OutBox')
-
     def Physics(self, frame):
         self.PushFrame(frame, "OutBox")
 
 # generate empty frames
-tray.AddModule("BottomlessSource","bottomless")
+tray.AddModule("BottomlessSource")
 
 # 2 dumps, both
-tray.AddModule(M, "m")
-tray.AddModule("TrashCan","tc")
+tray.AddModule(M)
 
 tray.Execute(1)
-
-
-7854674

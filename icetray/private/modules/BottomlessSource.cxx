@@ -27,7 +27,6 @@ struct BottomlessSource : public I3Module
   BottomlessSource(const I3Context& context)  : I3Module(context)
   {
     AddParameter("Stream", "Frame type to generate", I3Frame::Physics);
-    AddOutBox("OutBox");
   }
 
   void Configure()

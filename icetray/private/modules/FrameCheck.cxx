@@ -36,8 +36,6 @@ I3_MODULE(FrameCheck);
 FrameCheck::FrameCheck(const I3Context& context) : 
   I3Module(context)
 {
-  AddOutBox("OutBox");
-
   insert(keys_)
     (I3Frame::Physics, predicates())
     (I3Frame::Geometry, predicates())

@@ -515,7 +515,7 @@ I3Tray::Usage()
 void
 I3Tray::Finish()
 {
-	// this is a no-op now (all module->Finish() calls are now made in Execute())
+  // this is a no-op now (all module->Finish() calls are now made in Execute())
 }
 
 I3TrayInfo

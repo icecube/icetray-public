@@ -22,8 +22,6 @@ TEST(normal_interface)
 {
   I3Tray tray;
   tray.AddModule<TestModule>("test");
-  tray.AddModule("TrashCan", "trash");
-
   tray.SetParameter("test","boolParam", true);
   tray.SetParameter("test","intParam", 54);
   tray.SetParameter("test","stringParam", "foobar");
@@ -183,7 +181,6 @@ TEST(multiple_tray_create_destroy)
 class SideEffectModule : public I3Module {
 public:
   SideEffectModule(const I3Context& context) : I3Module(context) {
-    AddOutBox("OutBox");
     AddParameter("Life", "Number of iterations this module should survive", 0);
   }
   

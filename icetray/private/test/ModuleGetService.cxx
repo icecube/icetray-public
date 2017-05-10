@@ -36,7 +36,6 @@ class IntegerService : public I3ServiceFactory {
 class ServiceTest : public I3Module {
 	public:
 		ServiceTest(const I3Context& context) : I3Module(context) {
-			AddOutBox("OutBox");
 			AddParameter("Int", "Integer to test", -1);
 		}
 
@@ -61,7 +60,6 @@ TEST(getting_services_in_modules)
   tray.AddService("IntegerService", "hateservices");
   tray.AddModule("ServiceTest", "source")("Int", service_sentinel);
   tray.AddModule("ServiceTest", "source2")("Int", "int");
-  tray.AddModule("TrashCan", "itisimpressivethatcan");
     
   tray.Execute();
   tray.Finish();

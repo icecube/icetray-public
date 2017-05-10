@@ -35,7 +35,6 @@ def pa(obj, fn):
 class Gitter(icetray.I3Module):
     def __init__(self, context):
         icetray.I3Module.__init__(self, context)
-        self.AddOutBox('OutBox')
 
     def OnB(self, frame):
         print("On b, %s" % frame) 
@@ -65,23 +64,20 @@ class Gitter(icetray.I3Module):
 #
 tray = I3Tray()
 
-tray.AddModule('I3Reader', 'rd',
-               Filename = 'tmp.i3')
+tray.Add('I3Reader', Filename = 'tmp.i3')               
 
 def p(frame):
     print("FFFFFFF: %s" % frame)
     
-tray.AddModule('Get', 'agitter',
-               Keys = ['A'],
-               Streams = [icetray.I3Frame.Stream('A')])
+tray.Add('Get', 
+         Keys = ['A'],
+         Streams = [icetray.I3Frame.Stream('A')])
 
-tray.AddModule('Get', 'cgitter',
-               Keys = ['A', 'B', 'C'],
-               Streams = [icetray.I3Frame.Stream('A'),
-                          icetray.I3Frame.Stream('B'),
-                          icetray.I3Frame.Stream('C')])
-
-tray.AddModule('TrashCan', 'tc')
+tray.Add('Get', 
+         Keys = ['A', 'B', 'C'],
+         Streams = [icetray.I3Frame.Stream('A'),
+                    icetray.I3Frame.Stream('B'),
+                    icetray.I3Frame.Stream('C')])
 
 tray.Execute()
 tray.Finish()

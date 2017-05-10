@@ -70,7 +70,6 @@ Delete::Delete(const I3Context& ctx) :
   AddParameter("KeyStarts",
                "...objects with names that start with any of these strings",
                delete_key_starts_);
-  AddOutBox("OutBox");
 }
 
 void Delete::Configure()

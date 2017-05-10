@@ -11,11 +11,7 @@ namespace NonUniqueNames
   {
   public:
     NonUniqueNamesSource(I3Context& context) : I3Module(context) 
-    {
-      AddOutBox("OutBox");
-    }
-    
-    void Configure(){}
+    {}
     
     void Process(){
       // and so this function should never be called:

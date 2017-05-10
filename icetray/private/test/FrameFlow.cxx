@@ -38,7 +38,6 @@ struct FFSource : public I3Module
 
   FFSource(const I3Context& context) : I3Module(context) 
   { 
-    AddOutBox("OutBox");
     nextstop = 1;
   }
 
@@ -72,9 +71,8 @@ I3_MODULE(FFSource);
 struct Nothing : public I3Module
 {
   Nothing(const I3Context& context) : I3Module(context)
-  {
-    AddOutBox("OutBox");
-  }
+  {}
+  
   void Physics(I3FramePtr frame)
   {
     PushFrame(frame);
@@ -88,10 +86,8 @@ std::map<std::string, std::map<I3Frame::Stream, unsigned> > counts;
 
 struct FFCounter : public I3Module
 {
-  FFCounter(const I3Context& context) : I3Module(context) 
-  {
-    AddOutBox("OutBox");
-  }
+  FFCounter(const I3Context& context) : I3Module(context)  
+ {}
   
 #define IMPLEMENT(STOP)							\
   void STOP(I3FramePtr frame) {						\

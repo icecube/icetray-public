@@ -43,8 +43,6 @@ struct ParamConversionCheckModule : I3Module
 {
   ParamConversionCheckModule(const I3Context& context) : I3Module(context) 
   { 
-    AddOutBox("OutBox");
-
     bool_param = true;
     AddParameter("bool_param", "description of bool", bool_param);
 
@@ -112,7 +110,6 @@ I3_MODULE(ParamConversionCheckModule);
 #define GET_FAILS(name, value)						\
   {									\
     try { I3Tray tray; tray.AddModule<ParamConversionCheckModule>("mod"); \
-      tray.AddModule("TrashCan", "trash");				\
       tray.SetParameter("mod", BOOST_PP_STRINGIZE(name), value);	\
       log_trace("egh, about to execute");				\
       tray.Execute(0);							\

@@ -10,8 +10,6 @@ from icecube import dataclasses
 class GetI3Int(icetray.I3Module):
     def __init__(self, context):
         icetray.I3Module.__init__(self, context)
-        self.AddOutBox("OutBox")
-
         self.AddParameter("obj", "Python wrapped C++ class", None)
 
     def Configure(self):

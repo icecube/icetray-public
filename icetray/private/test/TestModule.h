@@ -28,8 +28,6 @@ class TestModule : public I3Module
       AddParameter("stringParam","",stringParam);
       longParam = 123123123;
       AddParameter("longParam","",longParam);
-      
-      AddOutBox("OutBox");
     }
 
   void Configure()

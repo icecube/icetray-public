@@ -32,7 +32,6 @@ class CreateBlobs : public I3ConditionalModule
   CreateBlobs(const I3Context& context)  : I3ConditionalModule(context)
   {
     AddParameter("DropMemoryData", "Drop the in-memory shared_ptr after creating the blob.", false);
-    AddOutBox("OutBox");
   }
 
   virtual ~CreateBlobs() { }
