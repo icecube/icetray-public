@@ -25,8 +25,9 @@ public:
     std::vector<std::string> outboxNames;
     GetParameter("ExtraOutBoxes",outboxNames);
     for(std::vector<std::string>::const_iterator nameIt=outboxNames.begin();
-        nameIt!=outboxNames.end(); nameIt++)
+        nameIt!=outboxNames.end(); nameIt++){
       AddOutBox(*nameIt);
+    }
   }
 };
 
@@ -72,10 +73,6 @@ TEST(OutBoxesConnected){
   
   //we haven't connected anything yet. . .
   ENSURE(!ctm.AllOutBoxesConnected());
-  try{
-    ctm.EnforceOutBoxesConnected();
-    FAIL("Unconnected OutBoxes should be detected");
-  }catch(std::runtime_error){/*squash*/}
   
   boost::shared_ptr<I3Module> dummy1(new I3Module(ctx));
   boost::shared_ptr<I3Module> dummy2(new I3Module(ctx));
@@ -84,36 +81,14 @@ TEST(OutBoxesConnected){
   ctm.ConnectOutBox("Box1",dummy1);
   //still two boxes not connected
   ENSURE(!ctm.AllOutBoxesConnected());
-  try{
-    ctm.EnforceOutBoxesConnected();
-    FAIL("Unconnected OutBoxes should be detected");
-  }catch(std::runtime_error){/*squash*/}
   
   ctm.ConnectOutBox("Box2",dummy2);
   //still one box not connected
   ENSURE(!ctm.AllOutBoxesConnected());
-  try{
-    ctm.EnforceOutBoxesConnected();
-    FAIL("Unconnected OutBoxes should be detected");
-  }catch(std::runtime_error){/*squash*/}
   
   ctm.ConnectOutBox("Box3",dummy3);
   //now they're all connected
   ENSURE(ctm.AllOutBoxesConnected());
-  try{
-    ctm.EnforceOutBoxesConnected();
-  }catch(std::runtime_error){
-    FAIL("All OutBoxes should be connected");
-  }
-  
-  //while we're at it, make sure a module with no outboxes reports them 'all'
-  //being connected
-  ENSURE(dummy1->AllOutBoxesConnected());
-  try{
-    dummy1->EnforceOutBoxesConnected();
-  }catch(std::runtime_error){
-    FAIL("All OutBoxes should be connected");
-  }
 }
 
 TEST(HasInBox){

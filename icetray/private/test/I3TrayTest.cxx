@@ -131,30 +131,6 @@ TEST(default_convenience_connectboxes)
   tray.Execute(0);
 }
 
-TEST(missing_module_fails_correctly)
-{
-  I3Tray tray;
-  
-  tray.AddModule("BottomlessSource", "source");
-
-  std::vector<std::string> params;
-  params.push_back("OutBox");
-  tray.AddModule("Fork", "fork")
-    ("Outboxes", params);
-
-  tray.ConnectBoxes("source", "OutBox", "fork");
-
-  // up until the icetray-idlib module, this was a fail at Execute(0)
-  // time, not at Execute(1) time.  Tray sanity-checking needs
-  // improvement.
-  try {
-    tray.Execute(5);
-    FAIL("That should have thrown... attempt to connect Outbox to nothing");
-  } catch(const std::exception& e) {  
-    // ok
-  }
-}
-
 TEST(no_such_module)
 {
   I3Tray tray;

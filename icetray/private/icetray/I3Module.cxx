@@ -150,19 +150,17 @@ I3Module::Do(void (I3Module::*f)())
     }
 }
 
-void
-I3Module::Configure()
-{
-  // if the user hasn't added an outbox at this point
-  // give them a default outbox.
-  if (outboxes_.empty())
-    AddOutBox("OutBox");
-}
+void I3Module::Configure(){}
 
 void
 I3Module::Configure_()
 {
-    Configure();
+  Configure();
+  // give the user the opportunity to configure the outboxes
+  // any way they wish.  if they haven't added an outbox
+  // then add one for them.
+  if(outboxes_.empty())
+    AddOutBox("OutBox");
 }
 
 void
@@ -292,7 +290,9 @@ I3Module::PushFrame(I3FramePtr frameptr, const std::string& name)
   outboxmap_t::iterator iter = outboxes_.find(name);
 
   if (iter == outboxes_.end())
-    log_fatal("Module \"%s\" attempted to push a frame onto an outbox name \"%s\" which either doesn't exist or isn't connected to anything.  Check steering file.",
+    log_fatal("Module \"%s\" attempted to push a frame onto an outbox "
+	      "name \"%s\" which either doesn't exist or isn't connected "
+	      "to anything.  Check steering file.",
 	      GetName().c_str(), name.c_str());
 
   SyncCache(name, frameptr);
@@ -478,25 +478,14 @@ I3Module::AllOutBoxesConnected() const
 {
   for (outboxmap_t::const_iterator iter = outboxes_.begin();
        iter != outboxes_.end();
-       iter++)
-  {
-    if (!iter->second.second)
+       iter++){
+    if (!iter->second.second){
+      log_error_stream("Module \"" << name_  << "\" outbox \""
+		       << iter->first << "\" not connected");
       return false;
+    }
   }
   return true;
-}
-
-void
-I3Module::EnforceOutBoxesConnected() const
-{
-  for (outboxmap_t::const_iterator iter = outboxes_.begin();
-       iter != outboxes_.end();
-       iter++)
-  {
-    if (!iter->second.second)
-      log_fatal_stream("Module \"" << GetName() << "\" outbox \""
-                       << iter->first << "\" not connected");
-  }
 }
 
 bool

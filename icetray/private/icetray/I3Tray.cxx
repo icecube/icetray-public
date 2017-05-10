@@ -386,13 +386,6 @@ I3Tray::Configure()
 		}
 	}
 
-	if (!boxes_connected &&
-        !modules[modules_in_order.back()]->AllOutBoxesConnected()) {
-		log_debug("Last module (\"%s\") has a dangling outbox. Adding "
-		    "TrashCan to end of tray", modules_in_order.back().c_str());
-		AddModule("TrashCan", "__automatic_I3Tray_trashcan");
-	}
-
 	configure_called = true;
 
 	memory::set_label("I3Tray");
@@ -440,10 +433,9 @@ I3Tray::Configure()
 			log_fatal("Configuration error.  Turn up your logging "
 			    "to see just what.");
 		}
-		if (module != driving_module && !module->HasInBox())
-			log_fatal("Module %s has a disconnected inbox",
-			    modname.c_str());
-		module->EnforceOutBoxesConnected();
+		if (module != driving_module && !module->HasInBox()){
+		  log_fatal("Module %s has a disconnected inbox",modname.c_str());
+		}
 	}
 }
 

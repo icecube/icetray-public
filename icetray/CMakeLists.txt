@@ -242,7 +242,6 @@ i3_test_executable(test
   private/test/PhysicsBuffering.cxx
   private/test/typesizes.cxx
   private/test/I3ConditionalModuleTest.cxx
-  private/test/NoOutboxModule.cxx
   private/test/iostreams.cxx
   private/test/I3ModulePlumbing.cxx
   private/test/CompressedIO.cxx

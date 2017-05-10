@@ -335,9 +335,6 @@ public:
   void ConnectOutBox(const std::string& outBoxName, I3ModulePtr targetModule);
   ///Check whether all of this module's outboxes connect to other modules
   bool AllOutBoxesConnected() const;
-  ///Throw an exception and print a nice error message if any of this module's
-  ///outboxes is not connected
-  void EnforceOutBoxesConnected() const;
   ///Test whether this module has a particular outbox
   ///\param outBoxName the name for which to check
   bool HasOutBox(const std::string& outBoxName) const;
