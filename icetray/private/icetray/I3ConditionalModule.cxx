@@ -42,8 +42,6 @@ I3ConditionalModule::I3ConditionalModule(const I3Context& context) :
 	       " Module runs, else it doesn't",
 	       if_);
   i3_log("if_=%p", if_.ptr());
-
-  AddOutBox("OutBox");
 }
 
 I3ConditionalModule::~I3ConditionalModule() { }
@@ -91,7 +89,7 @@ void I3ConditionalModule::Configure_()
 
   // bounce this guy back to I3Module, which will in turn bounce to whoever derives
   // from us
-  I3Module::Configure_();
+  I3Module::Configure_(); // this also adds a default OutBox
 }
 
 bool I3ConditionalModule::ShouldDoProcess(I3FramePtr frame)
