@@ -46,6 +46,7 @@ Advanced
    commitmails
    icc
    gfilt
+   homebrew
 
 Information on particular tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

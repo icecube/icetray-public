@@ -69,7 +69,7 @@ After the install finishes you should have both clang and llvm-gcc:
 Homebrew
 """"""""
 
-Homebrew_ is probably the easiest way to install packages on OS X, and
+:doc:`../homebrew` is probably the easiest way to install packages on OS X, and
 distributes the most heavy-weight dependencies (cmake, boost, and Qt) as binary
 packages. Most of the required formulae are in the main distribution, but you
 should also `tap`_ homebrew/science and IceCube-SPNO/icecube. Install them like
@@ -263,6 +263,26 @@ environment variable::
 	
 	export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
 
+
+Qt5
+"""
+
+Steamshovel development has now been moved to Qt version 5.
+With Qt4, there was no reason to have to do anything special to detect Qt
+because cmake had its own Qt4 dectection routine.
+However, with Qt5, things are differet.
+Homebrew will only install Qt5 as keg-only which means it will not be symlinked
+into the ``/usr/local/`` directory.
+In addition, Qt5 now ships with its own cmake instructions.
+These two things together means that you need to tell cmake where to find Qt5.
+This can be accomblished by adding ``CMAKE_PREFIX_PATH`` to your cmake command line:
+
+.. code-block:: sh
+		
+  cmake ../src -DCMAKE_PREFIX_PATH=/usr/local/Cellar/qt/5.8.0_2/
+
+where ``5.8.0_2`` is the most recent version of Qt5 installed by homebrew.
+
 Step-By-Step Instructions
 """""""""""""""""""""""""
 
@@ -273,7 +293,7 @@ With a fresh install of El Capitan I was able to get IceRec and Simulation runni
 	#install xcode command line tools (dont worry if it says it is already installed)
 	xcode-select --install
 	
-	#install hombebrew
+	#install homebrew
 	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 	#install packages with homebrew
@@ -298,6 +318,5 @@ With a fresh install of El Capitan I was able to get IceRec and Simulation runni
 	${HOME}/Library/Python/2.7/lib/python/site-packages/local.pth
 	pip install --user --upgrade numpy scipy matplotlib
 	
-
 This worked on December 2015, with the trunk of offlines software on El Capitan. As homebrew updates, these instructions might not work as well. Your mileage may vary.
 
