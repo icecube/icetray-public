@@ -23,12 +23,10 @@
 #include "dataclasses/physics/I3FlasherInfo.h"
 #include "dataclasses/physics/I3TWRLaunch.h"
 #include "dataclasses/physics/I3MCHit.h"
-#include "dataclasses/physics/I3MCList.h"
 #include "dataclasses/physics/I3Trigger.h"
 #include "dataclasses/physics/I3TriggerHierarchy.h"
 #include "dataclasses/physics/I3Waveform.h"
 #include "dataclasses/physics/I3Particle.h"
-
 
 #include "serialization-test.h"
 
@@ -48,7 +46,6 @@ TEST_GROUP(physics);
   (I3FlasherInfo)				\
   (I3TWRLaunchSeriesMap)			\
   (I3MCHitSeriesMap)				\
-  (I3MCList)					\
   (I3TriggerHierarchy)				\
   (I3WaveformSeriesMap)				\
   (I3MapStringDouble)				\
@@ -69,7 +66,6 @@ TEST_GROUP(physics);
   (I3AMANDAAnalogReadout)			\
   (I3DOMLaunch)					\
   (I3MCHit)					\
-  (I3MCList)					\
   (I3RecoHit)					\
   (I3RecoPulse)					\
   (I3ResoPulse)					\
