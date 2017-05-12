@@ -594,9 +594,11 @@ class EventInfo(urwid.Columns):
                 run = str(f['I3EventHeader'].run_id)
                 subrun = str(f['I3EventHeader'].sub_run_id)
                 event = str(f['I3EventHeader'].event_id)
-                subevent = str(f['I3EventHeader'].sub_event_stream)
-                if not subevent:
+                if not f['I3EventHeader'].sub_event_stream:
                     subevent = '(n/a)'
+                else:
+                    subevent = '{0} {1}'.format(f['I3EventHeader'].sub_event_id,
+                                                f['I3EventHeader'].sub_event_stream)
                 duration = '{0:.0f} ns'.format(f['I3EventHeader'].end_time-f['I3EventHeader'].start_time)
         
         self.contents[0][0].contents[0][0].set_text([('list_header',' Key: '),('fobj_other',key_str)])
