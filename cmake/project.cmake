@@ -669,9 +669,24 @@ macro(i3_add_pybindings MODULENAME)
 	colormsg(YELLOW "+--   unzip master.zip && mv pybind11-master pybind11")
       else()
 	if(NOT TARGET pybind11)
+	  ## if it's not already there, download pybind11 from github.
+	  ## this shouldn't be necessary but cmake in CVMFS doesn't have
+	  ## SSL support. not sure if it's worth adding for py2-v2.
+	  if(NOT EXISTS ${CMAKE_BINARY_DIR}/master.zip)
+	    find_program(WGET_EXECUTABLE wget)
+	    find_program(CURL_EXECUTABLE curl)
+	    if(WGET_EXECUTABLE)
+	      execute_process(COMMAND ${WGET_EXECUTABLE} https://github.com/pybind/pybind11/archive/master.zip)
+	    elseif(CURL_EXECUTABLE)
+	      execute_process(COMMAND ${CURL_EXECUTABLE} -OL https://github.com/pybind/pybind11/archive/master.zip)
+	    else()
+	      colormsg(YELLOW "+-- You need to download pybind11 from GitHub from https://github.com/pybind/pybind11/archive/master.zip")
+	      colormsg(YELLOW "+-- and place it in ${CMAKE_BINARY_DIR} before running 'make'")
+	    endif()
+	  endif()
 	  include(ExternalProject)
 	  ExternalProject_Add(pybind11 EXCLUDE_FROM_ALL 1
-	    URL https://github.com/pybind/pybind11/archive/master.zip
+	    URL ${CMAKE_BINARY_DIR}/master.zip
 	    DOWNLOAD_NO_PROGRESS 1
 	    DOWNLOAD_DIR ${CMAKE_BINARY_DIR}
 	    SOURCE_DIR ${CMAKE_BINARY_DIR}/pybind11
@@ -684,6 +699,9 @@ macro(i3_add_pybindings MODULENAME)
 	    )
 	endif()
 	add_dependencies(${MODULENAME}-pybindings pybind11)
+	## this is the wrong place to set C++11 support, but works for now 
+	## until pybind11 is a first-class tool.
+	set_target_properties(${MODULENAME}-pybindings PROPERTIES COMPILE_FLAGS "-std=gnu++11")
       endif()
 
       set_target_properties(${MODULENAME}-pybindings
