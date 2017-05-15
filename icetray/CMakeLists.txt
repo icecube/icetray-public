@@ -189,7 +189,7 @@ endif(ZSTD_FOUND)
 #
 string( TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_LOWER )
 if ((${CMAKE_BUILD_TYPE_LOWER} STREQUAL "debug") AND (NOT DEFINED MEMORY_TRACKING))
-  set(MEMORY_TRACKING ON)
+#  set(MEMORY_TRACKING ON)
 endif ((${CMAKE_BUILD_TYPE_LOWER} STREQUAL "debug") AND (NOT DEFINED MEMORY_TRACKING))
 if (${MEMORY_TRACKING})
   set_source_files_properties(private/icetray/memory.cxx private/icetray/I3Module.cxx
