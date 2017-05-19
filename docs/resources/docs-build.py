@@ -89,10 +89,13 @@ def main():
          
     parser = argparse.ArgumentParser(description='Generate Documentation for IceTray')
     parser.add_argument('--verbose', '-v', action='count')
+    parser.add_argument('--clean',action='store_true',
+                        help='clean out the old files in documentaiton build '
+                        'directory before generating any new files')
     parser.add_argument('--projects', nargs='+',metavar='proj',
                         help='only generate documentation for these projects')
     parser.add_argument('--build-type', default='html',
-                        help="type of output to build (see "
+                        help="type of output to build [default=html] (see "
                         "http://www.sphinx-doc.org/en/stable/invocation.html"
                         "#invocation-of-sphinx-build for complete list)")
     parser.add_argument('--no-general-docs',action='store_true',
@@ -107,8 +110,8 @@ def main():
                         help="don't generate C++ API reference docs from doxygen XML")
     parser.add_argument('--no-inspect', action='store_true',
                         help="don't generate IceTray reference docs using icetray-inspect")
-    parser.add_argument('--no-html',action='store_true',
-                        help='convenience option to generate the html')
+    parser.add_argument('--no-sphinx',action='store_true',
+                        help='don''t run sphinx')
     parser.add_argument('--open',action='store_true',
                         help='convenience option to open a browser with the output of the html')
     parser.add_argument('-j',default=1,type=int,
@@ -129,8 +132,10 @@ def main():
 
     queue = command_queue(args.j)
 
-    call("rm","-rfv",builddir)
-    call("rm","-rfv",sourcedir)
+    if args.clean:
+        print("cleaning out old files first:")
+        call("rm","-rfv",builddir)
+        call("rm","-rfv",sourcedir)
 
     mkdir_p(builddir)
     mkdir_p(sourcedir)
@@ -205,7 +210,7 @@ def main():
 
         queue.wait()
     else:
-        print("Generating Doxygen Documentation")        
+        print("Skipping Doxygen Documentation")        
 
     if not args.no_cpp:
         print("Generating C++ references from Doxygen XML")
@@ -264,11 +269,8 @@ def main():
                 filelength = len(f.read().strip())
             if filelength ==0 :
                 os.unlink(rst_out)
-
-
-
-    
-    if not args.no_html:
+                
+    if not args.no_sphinx:
         doctreedir = os.path.join(builddir,"doctrees")
         finaldir = os.path.join(builddir,args.build_type)
     
