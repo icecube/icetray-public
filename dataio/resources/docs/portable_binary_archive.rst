@@ -46,6 +46,11 @@ History
     our patches invalid. A new strategy is needed. For now, ban all
     boost versions >= 1.58.
 
+2016:
+
+    The new strategy is to fork boost::serialization at 1.57 and
+    embed this into all software.  Not ideal, but a good patch.
+
 The *Rules*
 -----------
 

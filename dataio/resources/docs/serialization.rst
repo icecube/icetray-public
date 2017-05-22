@@ -1,17 +1,22 @@
 Making a class serializable
-=============================
+===========================
+
+.. highlight:: c++
 
 Classes that are to make the round-trip to disk inside .i3 files need serialize()
-methods. Pending more documenation here, see the `boost::serialization documentation <http://www.boost.org/doc/libs/1_57_0/libs/serialization/doc/index.html>`_
+methods. Pending more documentation here, see the `boost::serialization documentation <http://www.boost.org/doc/libs/1_57_0/libs/serialization/doc/index.html>`_
 directly for general information on writing serialization methods, or follow
-one of the many examples in project dataclasses.  Note, that even though
-we've switched from boost::serialization to icecube::serialization, the docs
-linked previously are still valid.  That links to boost 1.57 docs, which is where
-we're frozen at.  A simple change of the namespace from boost to icecube
-should be pretty much all the change you'll need.
+one of the many examples in project dataclasses.
+
+.. note::
+
+   Even though we've switched from boost::serialization to icecube::serialization,
+   the docs linked previously are still valid.  That links to boost 1.57 docs, 
+   which is where we're frozen at.  A simple change of the namespace from boost 
+   to icecube should be pretty much all the change you'll need.
 
 I3_SERIALIZABLE 
-^^^^^^^^^^^^^^^^^^
+---------------
 
 This is a convenience macro that instantiates the serialization methods for its argument. In order to do its job, this macro must be located somewhere after the full definition of the serialization method for it's argument. Take I3Position.cxx for example::
 
@@ -36,15 +41,18 @@ This is a convenience macro that instantiates the serialization methods for its 
 
 How to write serialization methods
 -----------------------------------
-To be able to be written to or read from an i3 file, a serialization method must be supplied.
+
+To be able to be written to or read from an i3 file, a serialization method
+must be supplied.
 
 A basic serialize method
-^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Writing a new class means writing a serialize method so that your
 class or struct can be written to an i3 file.  Mostly this is done through example.
 
-I use I3Hit as an example of the simplest case. I3Hit has only two data members. A double and an integer.  In I3Hit.h::
+I use I3Hit as an example of the simplest case. I3Hit has only two data 
+members. A double and an integer.  In I3Hit.h::
 
  static const unsigned i3hit_version_ = 0;
  ....
@@ -90,7 +98,7 @@ The I3_SERIALIZABLE() macro registers the class as something the
 BOOST system can write out.
 
 My class includes other classes or structures
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If your class has objects for data members and you want to serialize those as well you'll simply need to add a serialize method to those classes as well. Then they can be serialized just like primitive types. For example, say you want to add a data member to I3Hit of type I3Time. I3Time 
 already has a serialization method so we don't need to add one.
@@ -117,7 +125,7 @@ The serialization method is modified as shown below::
   }
 
 My object is an I3FrameObject (inherits from I3FrameObject)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If your class is an I3FrameObject (inherits from I3FrameObject), you need
 to a little more in your serialize method.  To be able to live as
@@ -146,11 +154,11 @@ In the serialize method, you need to add one thing::
     ...
   }
 
-Here, the I3FrameObjbect is serialized as a base_object using it's serialize
+Here, the I3FrameObject is serialized as a base_object using it's serialize
 method and included in the serialized output of this class.
 
 A few other things
-^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^
 
 If you use a typedef to add other ways to represent your class, for example::
 
@@ -165,21 +173,21 @@ The BOOST system knows how to handle things like std::vectors and
 std::maps, as long as the class they contain is serializable.  In 
 this case, I3Particle has a serialize method we already talked about, 
 so the typedef of vector<I3Particle> is now serializable with this one line.
- 
-**Caution**
 
-Once you specify a serializable name with I3_SERIALIZABLE that's that type's name forever more.  If you write a file with this::
+.. caution:: 
 
-  class C { ... }
-  I3_SERIALIZABLE(C);
+   Once you specify a serializable name with I3_SERIALIZABLE that's that type's name forever more.  If you write a file with this::
+
+    class C { ... }
+    I3_SERIALIZABLE(C);
   
-then if you try to read it with this::
+   then if you try to read it with this::
 
-  class C { ... }
-  typedef C TypedefofC;
-  I3_SERIALIZABLE(TypedefofC);
+    class C { ... }
+    typedef C TypedefofC;
+    I3_SERIALIZABLE(TypedefofC);
 
-it wont work.
+   it wont work.
 
 Schema Evolution or Class Versioning
 -------------------------------------
@@ -197,7 +205,10 @@ You would add the following lines to your class::
 
  BOOST_CLASS_VERSION(I3MyClass,i3myclass_version_)
 
-** Very important, the static const assignment and the MACRO need to be in the HEADER file (.h) that defines your class/structure.**
+.. note::
+  
+   The static const assignment and the `BOOST_CLASS_VERSION` macro need
+   to be in the header file (.h) that defines your class/structure.
 
 ...and modify the serialize method accordingly::
 
