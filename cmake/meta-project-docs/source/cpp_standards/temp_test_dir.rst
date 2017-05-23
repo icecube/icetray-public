@@ -15,7 +15,7 @@ For python script tests, set up a temporary directory like such::
     import shutil
     
     orig_dir = os.getcwd()
-    tmp_dir = tempfile.mkdtemp(cwd=orig_dir)
+    tmp_dir = tempfile.mkdtemp(dir=orig_dir)
     os.chdir(tmp_dir)
     try:
         # do tests here
@@ -38,7 +38,7 @@ If you are using the :py:mod:`unittest` framework, there is an alternate way::
             super(MyTest,self).setUp()
             
             orig_dir = os.getcwd()
-            tmp_dir = tempfile.mkdtemp(cwd=orig_dir)
+            tmp_dir = tempfile.mkdtemp(dir=orig_dir)
             os.chdir(tmp_dir)
             def clean_dir():
                 os.chdir(orig_dir)
