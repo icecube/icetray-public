@@ -134,4 +134,5 @@ TEST(test_codecvt_null){
  
     delete null_locale;
     std::remove(testfile.c_str());
+    std::remove("testfile2");
 }
