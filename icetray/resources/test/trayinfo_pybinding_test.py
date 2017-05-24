@@ -38,7 +38,10 @@ print(ti.modules_in_order)
 print(ti.module_configs)
 for m in ti.modules_in_order:
     config = ti.module_configs[m]
-    print("%s: %s %s Configs: %s" % (m, config.ClassName, config.InstanceName, list(config.keys())))
+    print(type(m))
+    print(type(config))
+    keys = config.keys()
+    print("%s: %s %s Configs: %s" % (m, config.ClassName, config.InstanceName, keys))
     for k in config.keys():
         print("%s = %s" % (k, config[k]))
 
