@@ -54,7 +54,7 @@ foreach(e "breathe" )
 
 i3_project(docs)
 
-i3_executable_script(build resources/docs-build.py)
+i3_executable_script(build resources/scripts/docs-build.py)
 
 set(SPHINX_DIR "${CMAKE_BINARY_DIR}/docs")
 

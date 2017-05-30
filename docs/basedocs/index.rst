@@ -21,8 +21,9 @@ Project Details
    :maxdepth: 2
    :sorted:
    :ignorecase:
-   :first: cmake, icetray, dataio, dataclasses
-   
+   :first: docs, cmake, icetray, dataio, dataclasses
+
+   projects/docs/index	   
    projects/cmake/index
    projects/icetray/index
    projects/dataio/index

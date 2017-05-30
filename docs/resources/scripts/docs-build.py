@@ -17,9 +17,9 @@ class command_queue:
             st = popen.poll()
             if st is None:
                 newrunning.append((args,popen))
-            else:
-                if st:
-                    print("\033[1;31mWARNING\033[0mExit Status",args,":",st)
+            elif st:
+                sys.stderr.write("\033[1;31mWARNING\033[0mExit Status %s: %s\n".format(args[0],st))
+                
         self.running = newrunning
         while len(self.queue) and len(self.running) < self.max_processes:
             args = self.queue.popleft()
@@ -72,8 +72,8 @@ def call(*args):
     print("calling",str(args))
     status = subprocess.call(args)
     if status:
-        print("###ERROR### {} returned {}".format(args[0],status))
-
+        sys.stderr.write("\033[1;31mWARNING\033[0mExit Status {}: {}\n".format(args[0],status))
+    return status
 
 cppautodoctxt = """
 {PROJECT_NAME} C++ API Reference
@@ -136,6 +136,8 @@ def main():
         print("cleaning out old files first:")
         call("rm","-rfv",builddir)
         call("rm","-rfv",sourcedir)
+        if not args.no_doxygen:
+            call("rm","-rfv",doxygendir)
 
     mkdir_p(builddir)
     mkdir_p(sourcedir)
@@ -241,12 +243,14 @@ def main():
         queue.call(cmd)
         
         inspectlibs = i3inspect.get_all_projects()
+        rstfiles=[]
 
         for proj in inspectlibs:
             if not use_this_project(proj):
                 continue
         
             rst_out= os.path.join(sourcedir,"inspect",proj+".rst")
+            rstfiles.append(rstfiles)
         
             cmd = ["icetray-inspect",
                    proj,
@@ -261,10 +265,7 @@ def main():
 
         #some projects don't have any output,
         #delete these so the docs look nice
-        for proj in inspectlibs:
-            if not use_this_project(proj):
-                continue
-            rst_out= os.path.join(sourcedir,"inspect",proj+".rst")
+        for rst_out in rstfiles:
             with open(rst_out) as f:
                 filelength = len(f.read().strip())
             if filelength ==0 :
@@ -276,17 +277,17 @@ def main():
     
         mkdir_p(doctreedir)
 
-        call("sphinx-build",
-             #"-N",#no color
-             "-a",#all
-             "-j",str(args.j),
-             "-b",args.build_type,
-             "-d",doctreedir,
-             "-E",sourcedir,
-             #"-c",configdir,
-             finaldir)
-    
-        if args.open:
+        retvalue = call("sphinx-build",
+                        #"-N",#no color
+                        "-a",#all
+                        "-j",str(args.j),
+                        "-b",args.build_type,
+                        "-d",doctreedir,
+                        "-E",sourcedir,
+                        #"-c",configdir,
+                        finaldir)
+        
+        if args.open and not retvalue:
             if args.build_type=='html':
                 outfile = os.path.join(finaldir,"index.html")
             else:
@@ -298,6 +299,11 @@ def main():
                 else:
                     opencmd = 'xdg-open'
                 call(opencmd,outfile)
-        
+
+        return retvalue
+    else:
+        return 0
+            
+                
 if __name__=="__main__":
-    main()
+    sys.exit(main())
