@@ -18,7 +18,7 @@ class command_queue:
             if st is None:
                 newrunning.append((args,popen))
             elif st:
-                sys.stderr.write("\033[1;31mWARNING\033[0mExit Status %s: %s\n".format(args[0],st))
+                sys.stderr.write("\033[1;31mWARNING:\033[0m Exit Status %s: %s\n".format(args[0],st))
                 
         self.running = newrunning
         while len(self.queue) and len(self.running) < self.max_processes:
@@ -72,7 +72,7 @@ def call(*args):
     print("calling",str(args))
     status = subprocess.call(args)
     if status:
-        sys.stderr.write("\033[1;31mWARNING\033[0mExit Status {}: {}\n".format(args[0],status))
+        sys.stderr.write("\033[1;31mWARNING:\033[0m Exit Status {}: {}\n".format(args[0],status))
     return status
 
 cppautodoctxt = """
@@ -250,7 +250,7 @@ def main():
                 continue
         
             rst_out= os.path.join(sourcedir,"inspect",proj+".rst")
-            rstfiles.append(rstfiles)
+            rstfiles.append(rst_out)
         
             cmd = ["icetray-inspect",
                    proj,
