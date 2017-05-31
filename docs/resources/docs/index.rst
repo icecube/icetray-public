@@ -72,12 +72,12 @@ contain the primary documentation for that project. These docs should serve an
 an overview for the project and other information not directly linked to
 specific pieces of code. This documentation is written in a format called
 ReStructuredText or (``rst``) which is a fairly easy format to learn.
-An introduction to ``rst`` can be found `here <http://docutils.sourceforge.net/rst.html>`_.
+An introduction to ``rst`` can be found at `<http://docutils.sourceforge.net/rst.html>`_.
 
 A really handy resource for writing ``rst`` is `<http://rst.ninjs.org/>`_
 which will allow you to type in ``rst`` and get immediate feedback as to
 weather you are properly formatting the document. Unfortunately, cross references
 will show up as errors. Many editors also have support for ``rst``: emacs support
-can be found `here <http://docutils.sourceforge.net/docs/user/emacs.html>`_.
+can be found at `<http://docutils.sourceforge.net/docs/user/emacs.html>`_.
 vim has support with `riv <https://github.com/Rykka/riv.vim>`_.
 
