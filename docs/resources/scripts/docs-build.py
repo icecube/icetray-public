@@ -277,15 +277,29 @@ def main():
     
         mkdir_p(doctreedir)
 
-        retvalue = call("sphinx-build",
-                        #"-N",#no color
-                        "-a",#all
-                        "-j",str(args.j),
-                        "-b",args.build_type,
-                        "-d",doctreedir,
-                        "-E",sourcedir,
-                        #"-c",configdir,
-                        finaldir)
+        if args.verbose:
+            mkdir_p(I3_BUILD + "/docs/build/html")
+            retvalue = call("sphinx-build",
+                            "-N",#no color
+                            "-a",#all
+                            "-v",
+                            "-w",str(I3_BUILD + "/docs/build/html/sphinx_build_warnings.txt"),
+                            "-j",str(args.j),
+                            "-b",args.build_type,
+                            "-d",doctreedir,
+                            "-E",sourcedir,
+                            #"-c",configdir,
+                            finaldir)
+        else:
+            retvalue = call("sphinx-build",
+                            #"-N",#no color
+                            "-a",#all
+                            "-j",str(args.j),
+                            "-b",args.build_type,
+                            "-d",doctreedir,
+                            "-E",sourcedir,
+                            #"-c",configdir,
+                            finaldir)
         
         if args.open and not retvalue:
             if args.build_type=='html':
