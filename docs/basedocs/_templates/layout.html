@@ -17,4 +17,4 @@ pageTracker._trackPageview();
     {{ super() }}
 {% endblock %}
 
-{% block sidebarsearch %}{% endblock %}
+{% block sidebarsearch %}{%- include "searchbox.html" %}{% endblock %}
