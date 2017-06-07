@@ -86,6 +86,7 @@ Organizational and Policy Issues
    cpp_standards/compile_cleanly_at_high_warning_levels
    cpp_standards/use_a_version_control_system
    cpp_standards/invest_in_code_reviews
+   cpp_standards/temp_test_dir
 
 Design Style
 ------------

@@ -11,6 +11,7 @@ Basic Info
    info/overview
    info/quickstart
    info/cvmfs
+   info/meta_projects/index
 
 
 Project Details
