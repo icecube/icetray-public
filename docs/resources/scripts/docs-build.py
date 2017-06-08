@@ -76,6 +76,8 @@ def call(*args):
     return status
 
 cppautodoctxt = """
+.. _{PROJECT_NAME}-cpp:
+
 {PROJECT_NAME} C++ API Reference
 ================================================================================
 
@@ -165,7 +167,7 @@ def main():
    
     if not args.no_project_docs:
         print("symlink projocts' docs dir")
-        for projdocdir in glob(os.path.join(I3_SRC,"*","resources","docs")):
+        for projdocdir in glob(os.path.join(I3_BUILD,"*","resources","docs")):
             proj = projdocdir.split(os.sep)[-3]
             if not use_this_project(proj):
                 continue        
@@ -233,7 +235,7 @@ def main():
         quick_rst = os.path.join(sourcedir,"icetray_quick_reference.rst")
         cmd = ["icetray-inspect",
                "--sphinx","--sphinx-references","--no-params",
-               "--title=IceTracy Quick Reference",
+               "--title=IceTray Inspect Quick Reference",
                "-o",quick_rst]
         if args.projects:
             cmd += args.projects
