@@ -538,8 +538,8 @@ Physics frame.
 While a frame has a stream, so does each key stored in the frame. The 
 individual keys' streams simply identify whether that key was directly added to
 the frame using `Put()`, or whether it was mixed from a preceding frame on 
-another stream, and if so from which stream. Directly added keys—those whose
-streams match that of the containing frame—are termed 'native'. 
+another stream, and if so from which stream. Directly added keys - those whose
+streams match that of the containing frame - are termed 'native'. 
 
 Within any sequence of frames being processed, the following conditions should 
 hold:
