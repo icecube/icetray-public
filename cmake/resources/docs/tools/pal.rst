@@ -2,12 +2,16 @@ PAL
 ===
 
 PAL stands for Positional Astronomy Library it provides standard routines
-for astronomical calculations. IceCube's astronomical coordinate software
+for astronomical calculations. The PAL library is a partial re-implementation
+of Pat Wallace's popular SLALIB library written in C using a Gnu GPL license
+and layered on top of the IAU's SOFA library (or the BSD-licensed ERFA) where
+appropriate. IceCube's astronomical coordinate software
 `astro <../../astro/index.html>`_ requires either SLALIB or PAL to work. SLALIB is an old Fortran
 library which was translated into c, it is no longer updated and has a weird
-license and is hard to find. SLALIB can be installed is by
-the `I3_PORTS <../ports.html>`_ system. The PAL source code is available on `github <https://github.com/Starlink/pal>`_,
-but it is difficult to compile. A fork provided by IceCube which is much easier
+license and is hard to find.
+The PAL source code is available on `github <https://github.com/Starlink/pal>`_,
+but it is difficult to compile. A `fork  <https://github.com/IceCube-SPNO/pal>`_
+provided by IceCube which is much easier
 to compile is available from the IceCube github repository,
 it depends on a library called ERFA.
 
@@ -52,3 +56,7 @@ PAL can be installed by downloading from github and compiling:
   make install
 
   
+See Also
+--------
+- `cvmfs script <https://github.com/WIPACrepo/cvmfs/blob/master/builders/tools/pal.py>`_
+- `homebrew script <https://github.com/IceCube-SPNO/homebrew-icecube/blob/master/pal.rb>`_
