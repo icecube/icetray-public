@@ -17,6 +17,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
+if(NOT SYSTEM_PACKAGES)
 TOOLDEF (mysql
     include/mysql-4.1.20
     mysql/mysql.h
@@ -24,6 +25,7 @@ TOOLDEF (mysql
     NONE
     mysqlclient
     )
+endif()
 
 if (NOT MYSQL_FOUND)
     set(MYSQL_CONFIG_ERROR)
