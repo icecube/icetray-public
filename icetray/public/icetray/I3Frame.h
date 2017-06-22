@@ -110,6 +110,7 @@ class I3Frame
   struct value_t
   {
     blob_t blob;
+    size_t size;
     I3FrameObjectConstPtr ptr;
     I3Frame::Stream stream;
   };
@@ -148,13 +149,17 @@ class I3Frame
 
   mutable map_t map_;
 
+ public:
+  typedef map_t::size_type size_type;
+
+ private:
   /// Internal implementation of Get, where the actual deserialization
   /// is done.
   I3FrameObjectConstPtr get_impl(map_t::const_reference value) const;
 
   static void create_blob_impl(value_t &value);
 
-  map_t::size_type size(const value_t& value) const { return value.blob.buf.size(); }
+  size_type size(const value_t& value) const { return value.size; }
 
  public:
   struct typename_transform
@@ -224,8 +229,6 @@ class I3Frame
       return *this;
     }
   };
-
-  typedef map_t::size_type size_type;
 
 
   explicit I3Frame(Stream stop = I3Frame::None);

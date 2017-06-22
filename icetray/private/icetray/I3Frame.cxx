@@ -265,6 +265,7 @@ void I3Frame::Put(const string& name, I3FrameObjectConstPtr element, const I3Fra
   boost::shared_ptr<value_t> sptr(new value_t);
   map_[name] = sptr;
   value_t& value = *sptr;
+  value.size = 0;
   value.ptr = element;
   value.stream = on_stream;
 }
@@ -453,6 +454,7 @@ void I3Frame::create_blob_impl(I3Frame::value_t &value)
     blobBufArchive << make_nvp("T", value.ptr);
   }
   blobBufStream.flush();
+  value.size = value.blob.buf.size();
 }
 
 void I3Frame::create_blob(bool drop_memory_data, const std::string &key) const
@@ -727,6 +729,7 @@ bool I3Frame::load_v56(IStreamT& is, const vector<string>& skip, bool v6, bool v
             if (verify)
 	      crcit(blob.buf, crc, calc_crc);
             blob.type_name = type_name;
+            vp->size = blob.buf.size();
           }
       }
 
@@ -826,6 +829,7 @@ bool I3Frame::load_v4(IStreamT& is, const vector<string>& skip)
             if (blob.buf.size() == 0)
               log_fatal("read a zero-size buffer from input stream?");
             blob.type_name = type_name;
+            vp->size = blob.buf.size();
           }
       }
   }
@@ -903,6 +907,7 @@ bool I3Frame::load_old(IStream& is,
 	  blob.buf.resize(buf.size());
 
 	  std::copy(buf.begin(), buf.end(), blob.buf.begin());
+	  spv->size = blob.buf.size();
 	}
     }
   // as of version 4 this is a no-op since the iarchive itself no
