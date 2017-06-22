@@ -12,16 +12,12 @@ namespace{
   };
 }
 
-void I3FrameMixer::Mix(I3Frame& frame)
+std::vector<boost::shared_ptr<I3Frame> >::iterator
+I3FrameMixer::UpdateDependenciesImpl(const I3Frame& frame)
 {
   I3Frame::Stream stop=frame.GetStop();
   std::vector<boost::shared_ptr<I3Frame> >::iterator sit =
   std::find_if(parent_cache_.begin(),parent_cache_.end(),sameStop(stop));
-
-  frame.purge();
-
-  //while the frame contains only its native keys, see if we should put it in
-  //the cache
   if (stop != I3Frame::TrayInfo &&
       stop != I3Frame::Physics){
     //if this frame type is not in the cache, put it there
@@ -43,6 +39,29 @@ void I3FrameMixer::Mix(I3Frame& frame)
     else //otherwise update the cache entry in place
       **sit=frame;
   }
+  return(sit);
+}
+
+void I3FrameMixer::UpdateDependencies(const I3Frame& frame){
+  if(!disable_mixing_)
+    log_fatal("UpdateDependencies() called on an I3FrameMixer without disable_mixing set.\n"
+              "disable_mixing is intended to indicate that the Mixer instance "
+              "will only be used for dependency tracking via UpdateDependencies() "
+              "and never for actual mixing.");
+  UpdateDependenciesImpl(frame);
+}
+
+void I3FrameMixer::Mix(I3Frame& frame)
+{
+  if(disable_mixing_)
+    log_fatal("Mix() called on an I3FrameMixer with disable_mixing set.\n"
+              "disable_mixing is intended to indicate that the Mixer instance "
+              "will only be used for dependency tracking via UpdateDependencies() "
+              "and never for actual mixing.");
+  frame.purge();
+  //while the frame contains only its native keys, see if we should put it in
+  //the cache
+  auto sit = UpdateDependenciesImpl(frame);
 
   //copy keys from all other frame types in the cache into this frame
   for(std::vector<boost::shared_ptr<I3Frame> >::iterator it=parent_cache_.begin(),
