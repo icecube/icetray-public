@@ -469,15 +469,9 @@ if (CMAKE_COMPILER_IS_CLANG)
 endif (CMAKE_COMPILER_IS_CLANG)
 
 #
-# Set the compiler flag for C++14
+# Set the C++ standard flag.
 #
-if(CMAKE_COMPILER_IS_CLANG AND
-    (CLANG_NUMERIC_VERSION LESS "30500"))
-  set(CXX14_FLAG "-std=c++1y")
-else()
-  set(CXX14_FLAG "-std=c++14")
-endif()
-set(CXX14_FLAG "-std=c++11")
+set(CXX_STANDARD "-std=c++11")
 
 #
 # libraries everybody links to
@@ -534,7 +528,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE BOOL "Export a JSON 'database' of com
 #
 # set flags common to all build types
 #
-set(CMAKE_CXX_FLAGS "-pipe ${CXX14_FLAG} ${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPPRESSION_FLAGS}")
+set(CMAKE_CXX_FLAGS "-pipe ${CXX_STANDARD} ${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPPRESSION_FLAGS}")
 string(REGEX REPLACE "[ ]+" " " CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" CACHE STRING
   "Flags used by the compiler during all build types")
