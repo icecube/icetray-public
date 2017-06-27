@@ -37,6 +37,18 @@ boost::shared_ptr<T> frame_get(const I3Frame* f, const std::string& where)
     }
 
   boost::shared_ptr<const T> thing = f->Get<boost::shared_ptr<const T> >(where);
+  if(!thing){
+    // we already know some object exists in the 'where' slot otherwise
+    // we would have thrown just a few lines up.
+    // this means deserialization failed and is almost always due to the
+    // user not importing the appropriate library.
+    std::stringstream err_msg;
+    err_msg <<"deserialization failed for object at frame key '"<<where<<"' \n"
+	    <<"make sure the appropriate library (e.g. dataclasses, simclasses, recclasses, etc..) is imported."; 
+    PyErr_SetString(PyExc_KeyError, err_msg.str().c_str());
+    throw_error_already_set();
+    return boost::shared_ptr<T>();    
+  }
   return boost::const_pointer_cast<T>(thing);
 }
 
