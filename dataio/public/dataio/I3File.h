@@ -1,101 +1,132 @@
-/**
- *  $Id$
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
- *  This file is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 3 of the License, or
- *  (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *  
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>
- *  
- */
-#ifndef DATAIO_I3FILE_H_INCLUDED
-#define DATAIO_I3FILE_H_INCLUDED
+#ifndef I3_FILE_H_INCLUDED
+#define I3_FILE_H_INCLUDED
 
 #include <string>
-#include <iostream>
 #include <vector>
-#include <fstream>
+
+#include <boost/iostreams/filtering_stream.hpp>
+
 #include <icetray/I3Frame.h>
-#include <boost/optional.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/function.hpp>
+#include <icetray/I3FrameMixing.h>
 
-class I3FileImpl;
+namespace dataio {
 
-class I3File
-{
-  boost::scoped_ptr<I3FileImpl> impl_;
+    // forward declaration of I3FrameSequence
+    class I3FrameSequence;
 
-public:
-  static void noop(double) { }
+    /** An IceCube file interface.
+     *
+     *  A class to easily access an IceCube (.i3) file. Provides read/write
+     *  support and can open compressed files, web addresses, or raw sockets.
+     */
+    class I3File
+    {
+    public:
+        //! An enum type for the file mode.
+        enum class Mode : char {
+            read = 'r', //!< reading (default)
+            write = 'w', //!< writing, truncating if file exists
+            create = 'x', //!< writing, fail if file exists
+            append = 'a' //!< writing, append to end of file if file exists
+        };
 
-  struct empty_file_exception : virtual std::exception
-  {
-    virtual const char* what() const throw() {
-      return ".i3 file has zero size";
-    }
-  };
+        //! An enum type for the file type.
+        enum class Type : uint8_t {
+            closed, //!< file is closed
+            empty, //!< file is empty
+            singlepass, //!< file is a stream
+            multipass //!< file can be rewinded
+        };
 
-  struct FrameInfo
-  {
-    I3Frame::Stream stream;
-    typedef std::map<I3Frame::Stream, unsigned> stream_map_t;
-    stream_map_t other_streams;
-      
-    std::string sub_event_stream;
+        //! Copy constructor.
+        I3File(const I3File&);
 
-    std::ios::pos_type pos;
-    FrameInfo() : stream(I3Frame::None) { }
-  };
+        /** A constructor
+         *
+         *  /param path The path to the file.
+         */
+        explicit I3File(const std::string&);
+        // ^ need this constructor to make boost::python happy
 
-  I3File();
-  ~I3File();
+        /** A constructor
+         *
+         *  /param path The path to the file.
+         *  /param mode The file mode (r, w, x, a).
+         *  /param frames The number of frames to skip.
+         */
+        explicit I3File(const std::string&, const std::string&, size_t = 0);
 
-  int open_file(const std::string& filename,
-                boost::function<void(double)> cb = noop,
-                boost::optional<std::vector<I3Frame::Stream> > skipstreams = boost::optional<std::vector<I3Frame::Stream> >(),
-                boost::optional<unsigned> nframes = boost::optional<unsigned>(),
-                bool verbose = true);
+        /** A special constructor for controlling mixing.
+         * 
+         *  /param path The path to the file.
+         *  /param mode The file mode using the Mode enum.
+         *  /param frames The number of frames to skip.
+         *  /param mixing Whether to use mixing mode or tracking mode.
+         */
+        explicit I3File(const std::string&, Mode, size_t = 0, bool = true);
 
-  void close();
+        //! Destructor. Automatically closes the file.
+        ~I3File();
 
-  ///fetch a frame by index with all suiatbel keys from earlier frames mixed in
-  I3FramePtr get_frame(unsigned);
-  ///fecth a frame by index with only its native keys
-  I3FramePtr get_raw_frame(unsigned);
-  ///fetch a frame by index, along with the correctly ordered sequence of all
-  ///other frames on which it depends
-  std::vector<I3FramePtr> get_related_frames(unsigned);
+        //! Close the file.
+        void close();
 
-  void move_first();
-  void move_last();
+        //! Go to the beginning of a MultiPass file.
+        void rewind();
 
-  void move_x(int delta);
-  void move_y(int delta);
-  void do_goto_frame();
-  void goto_frame(unsigned frameno);
+        //! Test if there is another frame in a readable file.
+        bool more();
 
-  I3Frame::Stream stream(unsigned index);
-  std::vector<I3Frame::Stream> streams(unsigned start_index, unsigned length) const;
-  std::vector<I3Frame::Stream> streams() const;
+        //! Push a frame onto a writable file.
+        void push(I3FramePtr);
 
-  const std::vector<FrameInfo>& frames() const;
-  size_t size();
-  void set_skipkeys(const std::vector<std::string>&);
+        //! Get a frame of a specific stream from a readable file.
+        I3FramePtr pop_frame(I3Frame::Stream = I3Frame::None); 
 
-};
+        //! Get a DAQ frame from a readable file.
+        inline I3FramePtr pop_daq() { return pop_frame(I3Frame::DAQ); }
 
-#endif
+        //! Get a Physics frame from a readable file.
+        inline I3FramePtr pop_physics() { return pop_frame(I3Frame::Physics); }
 
+        //! Seek to a frame by number.
+        void seek(size_t);
 
+        //! Get the parent frames mixed into the current frame.
+        std::vector<I3FramePtr> get_mixed_frames();
+
+        //! Get the inclusive list of [parent ... current] frames
+        std::vector<I3FramePtr> get_current_frame_and_deps();
+
+        // Getters for private variables
+        std::string get_path() const;
+        ssize_t get_frameno() const;
+        size_t get_size() const;
+        I3Frame::Stream get_stream() const;
+        Mode get_mode() const;
+        Type get_type() const;
+
+    private:
+        boost::iostreams::filtering_istream ifs_; //!< input file stream
+        boost::iostreams::filtering_ostream ofs_; //!< output file stream
+        std::string path_; //!< file path
+        I3FrameMixer cache_; //!< frame cache
+        I3FramePtr curr_frame_; //!< current frame
+        size_t frameno_; //!< current frame number
+        size_t size_; //!< file size
+        Mode mode_; //!< file mode
+        Type type_; //!< file type
+
+        //! Open currently specified file. Used by constructors.
+        void open_file();
+
+        //! Skip frames in the current file.
+        void skip_frames(size_t);
+    };
+
+    using I3FilePtr = boost::shared_ptr<I3File>;
+    using I3FileConstPtr = boost::shared_ptr<const I3File>;
+
+} // end namespace dataio
+
+#endif //I3_FILE_H_INCLUDED

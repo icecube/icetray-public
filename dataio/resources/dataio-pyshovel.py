@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+import os
 import string
 import optparse
 from functools import partial
@@ -44,7 +45,7 @@ else:
     term_colors = curses.tigetnum('colors')
 
 from icecube.dataio import pprint as i3pprint
-from icecube.dataio import fileadaptor
+from icecube.dataio import I3FrameSequence
 
 class UI:
     '''
@@ -377,11 +378,11 @@ class FrameViewer(urwid.Frame):
     def framename(self,frameidx):
         return "Frame {0}: {1}".format( frameidx, self.i3frame.Stop )
 
-    def mkcols(self, key, typ, content, bytes, plain_columns = False ):
+    def mkcols(self, key, typ, content, byte_size, plain_columns = False ):
         cols = [ ( 'weight', 30, EllipsesText(' '+key) ),
                  ( 'weight', 32, EllipsesText(' '+typ) ),
                  ( 'weight', 40, EllipsesText(' '+content)),
-                 ( 'weight', 9, urwid.Text(str(bytes)+' ', align='right')) ]
+                 ( 'weight', 9, urwid.Text(str(byte_size)+' ', align='right')) ]
         if plain_columns:
             return urwid.Columns( cols )
         else:
@@ -564,13 +565,13 @@ class EventInfo(urwid.Columns):
 
     def __init__(self, frames):
         self.frames = frames
+        self.cache = [-1, None]
         self.width = -1
         urwid.Columns.__init__(self,[('weight', 10, EventInfo.Col()),
                                      ('weight', 20, EventInfo.Col())])
         self.set_view(0)
     
     def set_view(self, idx, key=0):
-        
         key_str = ''
         frame = ''
         stop = ''
@@ -579,16 +580,24 @@ class EventInfo(urwid.Columns):
         event = ''
         subevent = ''
         duration = ''
-        try:
-            f = self.frames[idx]
-        except IndexError:
-             pass
+
+        f = None
+        if idx == self.cache[0]:
+            f = self.cache[1]
         else:
-            key_str = '{0:d}/{1:d}'.format(key+1,len(f))
-            if self.frames.file_length:
-                frame = str(idx+1)+'/'+str(self.frames.file_length)
+            try:
+                f = self.frames[idx]
+            except IndexError:
+                 pass
             else:
+                self.cache = [idx,f]
+
+        if f is not None:
+            key_str = '{0:d}/{1:d}'.format(key+1,len(f))
+            if self.frames.size == -1:
                 frame = str(idx+1)+'/unk'
+            else:
+                frame = str(idx+1)+'/'+str(len(self.frames))
             stop = str(f.Stop)
             if 'I3EventHeader' in f:
                 run = str(f['I3EventHeader'].run_id)
@@ -640,6 +649,7 @@ class TapeFooter(urwid.Pile):
     def __init__(self, framelist):
         self.frames = framelist
         self.idx = 0
+        self.max_idx = None
         self.size = (0,)
         self.width = -1
         self.stopids = []
@@ -665,6 +675,7 @@ class TapeFooter(urwid.Pile):
                     f = self.frames[i]
                 except IndexError:
                     # stop is larger than len(frames)
+                    self.max_idx = i-1
                     del self.stopids[i:]
                     break
                 else:
@@ -687,7 +698,7 @@ class TapeFooter(urwid.Pile):
 
     def set_view(self, idx):
         '''Set the view to a selection of frame idx with a column width of size[0]'''
-        if( self.idx == idx and self.width == self.size ):
+        if( self.idx == idx and self.width == self.size[0] ):
             # No visible change
             return
 
@@ -874,19 +885,10 @@ class HelpScreen(urwid.Frame):
 class ViewerMain(urwid.Frame):
 
     def __init__(self, framelist, header, footer, ascii_only=False):
+        if not framelist.more():
+            raise Exception('No frames in file!')
         self.framelist = framelist
         self.active_view = 0
-        self.frame_hierarchy = icetray.I3FrameMixer(True)
-        try:
-            if isinstance(self.framelist[self.active_view],fileadaptor.FrameWrapper):
-                frame_obj = self.framelist[self.active_view].frame
-            else:
-                frame_obj = self.framelist[self.active_view]
-            f = icetray.I3Frame(frame_obj)
-            f.purge()
-            self.frame_hierarchy.mix(f)
-        except Exception:
-            raise Exception('No frames in file!')
         self.key = 0
         self.maxkeylen = len(self.framelist[self.active_view])
         urwid.connect_signal( footer, 'select_frame', self.select_frame )
@@ -940,45 +942,36 @@ class ViewerMain(urwid.Frame):
 
         # rather than checking against the maximum length of the list,
         # which is slow for sequential files, just try to access the frame
-        try:
-            self.framelist[frame]
-        except IndexError:
-            return
+
 
         if frame < 0:
-            # reverse direction
-            frame = len(self.framelist)+frame
+            # first, go to the end to get the size
+            try:
+                self.framelist[2**31]
+            except IndexError:
+                pass
+            # now, subtract index from size repeatedly
+            while frame < 0:
+                frame = len(self.framelist)+frame
 
-        # iterate through the framelist to determine the frame hierarchy
-        if frame < self.active_view:
-            self.active_view = 0
-            self.frame_hierarchy.reset()
-            if isinstance(self.framelist[self.active_view],fileadaptor.FrameWrapper):
-                frame_obj = self.framelist[self.active_view].frame
-            else:
-                frame_obj = self.framelist[self.active_view]
-            f = icetray.I3Frame(frame_obj)
-            f.purge()
-            self.frame_hierarchy.mix(f)
-        while (self.active_view < frame):
-            self.active_view += 1
-            if isinstance(self.framelist[self.active_view],fileadaptor.FrameWrapper):
-                frame_obj = self.framelist[self.active_view].frame
-            else:
-                frame_obj = self.framelist[self.active_view]
-            f = icetray.I3Frame(frame_obj)
-            f.purge()
-            self.frame_hierarchy.mix(f)
+        # now, go to frame
+        fr = {}
+        try:
+            fr = self.framelist[frame]
+        except IndexError:
+            return
+        else:
+            self.active_view = frame
 
         old_widget = self.body
-        self.maxkeylen = len(self.framelist[self.active_view])
+        self.maxkeylen = len(fr)
         if self.key >= self.maxkeylen:
             self.key = self.maxkeylen-1
-        self.frame_viewer.set_view( self.framelist[self.active_view], self.active_view, key=self.key )
+        self.frame_viewer.set_view( fr, self.active_view, key=self.key )
         self.footer.set_view( self.active_view, key=self.key )
         del old_widget
         self.drop_focus()
-    
+
     def select_event(self, event ):
         '''
         Attempt to access an event number in the file.  If 'event' is
@@ -990,7 +983,7 @@ class ViewerMain(urwid.Frame):
             return -1
         if event is None or event < 0 or get_id(self.framelist[self.active_view]) == event:
             return
-        
+
         # start a search through the framelist for the event id
         frame = self.active_view
         new_frame = -1
@@ -1011,13 +1004,10 @@ class ViewerMain(urwid.Frame):
     def write_frame(self, filename):
         try:
             f = dataio.I3File(filename,'w')
-            if isinstance(self.framelist[self.active_view],fileadaptor.FrameWrapper):
-                frame_obj = self.framelist[self.active_view].frame
-            else:
-                frame_obj = self.framelist[self.active_view]
-            for fr in self.frame_hierarchy.get_mixed_frames(frame_obj.Stop):
+            
+            self.framelist[self.active_view] # set current frame as active
+            for fr in self.framelist.get_current_frame_and_deps():
                 f.push(fr)
-            f.push(frame_obj)
             f.close()
         except Exception:
             raise
@@ -1072,10 +1062,7 @@ class ViewerMain(urwid.Frame):
         elif input in UI.keys['interact']:
             self.mainloop.screen.stop()
             # put frame and [readable] contents into scope for IPython interaction
-            if isinstance(self.framelist[self.active_view],fileadaptor.FrameWrapper):
-                frame = self.framelist[self.active_view].frame
-            else:
-                frame = self.framelist[self.active_view]
+            frame = self.framelist[self.active_view]
             ns = dict()
             for k in frame.keys():
                 try:
@@ -1108,9 +1095,7 @@ class ViewerMain(urwid.Frame):
         else:
             return self.body.keypress(size, input)
 
-def run_viewer(filename, i3file, colors=False, ascii_only=False):
-
-    frames = i3file
+def run_viewer(filenames, frames, colors=False, ascii_only=False):
 
     def quit_keys(input):
         if input in UI.keys['escape']:
@@ -1133,7 +1118,9 @@ def run_viewer(filename, i3file, colors=False, ascii_only=False):
                     keys[0] = 'down'
         return keys
 
-    header_t1 = urwid.Text( ('titletext', '  Shoveling through file {0}'.format(filename)), wrap='clip' )
+    filenames = ','.join(os.path.basename(f) for f in filenames)
+
+    header_t1 = urwid.Text( ('titletext', '  Shoveling through files {0}'.format(filenames)), wrap='clip' )
     header_t2 = urwid.Text( ('titletext', 'For help press h'), wrap='clip', align='right')
     header = urwid.Columns( [header_t1, header_t2] )
     footer = Footer( frames )
@@ -1159,12 +1146,8 @@ def libs_callback(option, opt, value, parser):
 
 def main():
     op = optparse.OptionParser()
-    op.add_option('-s','--sequential', dest='sequential', action='store_true',
-                  help='Force sequential file API (quick initial load, slower random access, supports compressed files)')
-    op.add_option('-b','--browsable', dest='browsable', action='store_true',
-                  help='Force browsable file API (slower initial load, fast random access, uncompressed files)')
-    op.add_option('-c','--cachesize', dest='cachesize', type=int,
-                  help='Specify a frame cache size (implies sequential API)')
+    op.add_option('-c','--cachesize', dest='cachesize', type=int, default=256,
+                  help='Specify a frame cache size')
     op.add_option('-l','--libs', dest='libs', type="string",
                   action='callback', callback=libs_callback,
                   help='Comma-separated list of additional icecube libraries to load')
@@ -1174,35 +1157,24 @@ def main():
                   help='Display in ascii only (unicode disabled)')
     (opts, args) = op.parse_args(sys.argv)
 
-    if len(args) != 2:
-        op.error('Need exactly one argument: a file to load')
+    #icetray.logging.rotating_files('logfile')
+    #icetray.set_log_level(icetray.I3LogLevel.LOG_WARN)
 
-    if opts.browsable and (opts.sequential or opts.cachesize):
-        op.error('Contradictory file loading specifiers')
+    if len(args) < 2:
+        op.error('Need a file to load')
 
     if opts.libs is not None:
         print('Importing libraries...')
         for lib in opts.libs:
             __import__( 'icecube.'+lib )
 
-    print('Loading file...')
-    default_sequential_cache = 256
-    i3file = args[1]
+    print('Loading files...')
+    files = args[1:]
     stager = dataio.get_stagers()
-    handle = stager.GetReadablePath(i3file)
-    i3file = str(handle)
-    if opts.sequential or opts.cachesize:
-        opts.ensure_value('cachesize', default_sequential_cache)
-        i3file = fileadaptor.I3SequentialAdaptor(dataio.I3File(i3file), opts.cachesize)
-    elif opts.browsable:
-        ibf = dataio.I3BrowsableFile()
-        ibf.open_file(i3file)
-        i3file = fileadaptor.I3BrowsableAdaptor(ibf)
-    else:
-        # file type will be inferred
-        i3file = fileadaptor.I3FileAdaptor(i3file, sequential_cache_size=default_sequential_cache)
+    frames = I3FrameSequence([str(stager.GetReadablePath(f)) for f in files],
+                             opts.cachesize)
     print('Creating GUI...')
-    run_viewer(args[1], i3file, colors=opts.colors, ascii_only=opts.ascii)
+    run_viewer(files, frames, colors=opts.colors, ascii_only=opts.ascii)
 
 
 if __name__ == '__main__':

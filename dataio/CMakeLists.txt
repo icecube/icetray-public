@@ -23,21 +23,30 @@ i3_project(dataio
   DOCS_DIR resources/docs
   )
 
-i3_add_library (dataio 
+i3_add_library(dataio 
   private/dataio-modules/*.cxx private/dataio/*.cxx
   USE_PROJECTS serialization icetray dataclasses 
   USE_TOOLS boost python 
 )
 target_link_libraries(dataio ${BOOST_DATE_TIME})
 
-if(CDK_FOUND AND NCURSES_FOUND)
-  i3_executable(shovel private/shovel/*.cxx
-    USE_PROJECTS dataio
-    USE_TOOLS cdk ncurses
-    )
-else()
-  colormsg(CYAN "+-- dataio-shovel *not* included (missing CDK or ncurses libraries)")
-endif()
+i3_add_pybindings(dataio
+  private/pybindings/I3File.cxx
+  private/pybindings/I3FrameSequence.cxx
+  private/pybindings/I3FileStager.cxx
+  private/pybindings/module.cxx
+  USE_PROJECTS icetray dataio
+  USE_TOOLS boost python
+  )
+
+#if(CDK_FOUND AND NCURSES_FOUND)
+#  i3_executable(shovel private/shovel/*.cxx
+#    USE_PROJECTS dataio
+#    USE_TOOLS cdk ncurses
+#    )
+#else()
+#  colormsg(CYAN "+-- dataio-shovel *not* included (missing CDK or ncurses libraries)")
+#endif()
   
 # look for urwid
 execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import urwid"
@@ -92,14 +101,6 @@ if (LUCID MATCHES "lucid")
 endif ()
 i3_test_scripts(${tmp_SCRIPTS})
 
-i3_add_pybindings(dataio
-  private/pybindings/I3File.cxx
-  private/pybindings/I3BrowsableFile.cxx
-  private/pybindings/I3FileStager.cxx
-  private/pybindings/module.cxx
-  USE_PROJECTS icetray dataio
-  USE_TOOLS boost python
-  )
 # force dependencies
 set_property(TEST dataio::a_nocompression.py APPEND PROPERTY DEPENDS dataio::a2_verify_daqtimes_change.py)
 set_property(TEST dataio::b2_bz_default.py APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
@@ -150,8 +151,6 @@ set_property(TEST dataio::reader_can_read_alphabet_file.py APPEND PROPERTY DEPEN
 set_property(TEST dataio::read_really_old_trayinfo_frame.py APPEND PROPERTY DEPENDS dataio::reader_can_read_alphabet_file.py)
 set_property(TEST dataio::r_readnulls.py APPEND PROPERTY DEPENDS dataio::read_really_old_trayinfo_frame.py)
 set_property(TEST dataio::s_i3reader_readnulls.py APPEND PROPERTY DEPENDS dataio::r_readnulls.py)
-set_property(TEST dataio::test_randomaccess_file.py APPEND PROPERTY DEPENDS dataio::s_i3reader_readnulls.py)
-set_property(TEST dataio::t_skip_infoframes.py APPEND PROPERTY DEPENDS dataio::test_randomaccess_file.py)
 set_property(TEST dataio::writer_is_conditional.py APPEND PROPERTY DEPENDS dataio::t_skip_infoframes.py)
 set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::writer_is_conditional.py)
 if (NOT ${EXPECT} MATCHES "-NOTFOUND")
