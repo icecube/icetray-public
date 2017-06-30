@@ -93,6 +93,14 @@ namespace {
 
     I3FileIterator make_iterator(I3FilePtr f)
     {
+        if (f->get_mode() != I3File::Mode::read) {
+            PyErr_SetString(PyExc_RuntimeError, "Cannot iterate on non-reading file.");
+            throw_error_already_set();
+        }
+        if (f->get_type() == I3File::Type::closed) {
+            PyErr_SetString(PyExc_RuntimeError, "Cannot iterate on closed file.");
+            throw_error_already_set();
+        }
         return I3FileIterator(f);
     }
 

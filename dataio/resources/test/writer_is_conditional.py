@@ -44,7 +44,7 @@ tray.Finish()
 
 
 i = 0
-for frame in dataio.I3File("evens.i3", dataio.I3File.Reading):
+for frame in dataio.I3File("evens.i3", 'r'):
     print(frame)
     if frame.Stop == icetray.I3Frame.Physics:
         assert frame['index'].value == i
