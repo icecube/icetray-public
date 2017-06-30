@@ -11,7 +11,7 @@ import sys
 # Generate .i3 file
 #
 
-i3f = dataio.I3File("alphabet.i3", dataio.I3File.Mode.Writing)
+i3f = dataio.I3File("alphabet.i3", 'w')
 
 streams = [chr(x) for x in
            list(range(ord('a'), ord('z')+1))

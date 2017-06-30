@@ -11,7 +11,7 @@ import sys
 # Generate .i3 file
 #
 
-i3f = dataio.I3File("tmp.i3", dataio.I3File.Mode.Writing)
+i3f = dataio.I3File("tmp.i3", 'w')
 
 streams = ['A', 'B', 'C', 'D', 'E', 'F']
 

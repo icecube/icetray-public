@@ -66,7 +66,7 @@ fname = 'alpha.i3'
 if os.path.exists(fname) and os.path.isfile(fname):
     os.unlink(fname)
     
-i3f = dataio.I3File(fname, dataio.I3File.Mode.Writing)
+i3f = dataio.I3File(fname, 'w')
 
 for tag in tags:
     theframe = icetray.I3Frame(icetray.I3Frame.Stream(tag))

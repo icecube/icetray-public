@@ -16,7 +16,7 @@ fname = 'ints.i3'
 if os.path.exists(fname) and os.path.isfile(fname):
     os.unlink(fname)
     
-i3f = dataio.I3File(fname, dataio.I3File.Writing)
+i3f = dataio.I3File(fname, 'w')
 
 for i in range(100):
     frame = icetray.I3Frame(icetray.I3Frame.Physics)

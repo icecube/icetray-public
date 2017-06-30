@@ -12,7 +12,7 @@ import sys
 # Generate .i3 file
 #
 
-i3f = dataio.I3File("tmp.i3", dataio.I3File.Mode.Writing)
+i3f = dataio.I3File("tmp.i3", 'w')
 
 streams = ['A', 'B', 'C', 'D', 'E', 'F'] * 10
 counter = 1
@@ -53,7 +53,7 @@ tray.Finish()
 #
 #   Now read 'em back, verify that the frames are 'clean' and have correct values
 #
-i3f = dataio.I3File("tmp2.i3", dataio.I3File.Mode.Reading)
+i3f = dataio.I3File("tmp2.i3", 'r')
 
 f = i3f.pop_frame(icetray.I3Frame.Stream('I'))
 

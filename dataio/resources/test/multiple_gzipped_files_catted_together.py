@@ -21,7 +21,7 @@ tags = ['a', 'b', 'c', 'd', 'e']
 index = 0;
 
 for tag in tags:
-    i3f = dataio.I3File("catme_%s.i3.gz" % tag, dataio.I3File.Mode.Writing)
+    i3f = dataio.I3File("catme_%s.i3.gz" % tag, 'w')
     theframe = icetray.I3Frame(icetray.I3Frame.Physics)
     theframe[tag] = icetray.I3Int(ord(tag))
     theframe['index'] = icetray.I3Int(index)

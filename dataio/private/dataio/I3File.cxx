@@ -40,8 +40,9 @@ namespace dataio {
         path_(path), cache_(true), frameno_(frames), size_(0),
         mode_(Mode::read), type_(Type::closed)
     {
-        if (strchr("rwxa", mode[0])) {
-            mode_ = static_cast<Mode>(mode[0]);
+        char m = ::tolower(mode[0]);
+        if (strchr("rwxa", m)) {
+            mode_ = static_cast<Mode>(m);
         } else {
             log_fatal("bad mode");
         }
