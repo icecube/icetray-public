@@ -9,7 +9,7 @@ from I3Tray import I3Tray
 import sys
 
 
-i3f = dataio.I3File("tmp.i3", dataio.I3File.Mode.Writing)
+i3f = dataio.I3File("tmp.i3", 'w')
 
 streams = ['A', 'B', 'C', 'D', 'E', 'F']
 
