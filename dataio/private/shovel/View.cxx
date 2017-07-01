@@ -376,8 +376,11 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
   std::size_t statuslen=16;
   {
     ostringstream oss;
-    oss << index+1 << "/" << model_->totalframes() 
-	<< " (" << (unsigned) (100 * (float)(index+1)/(float)model_->totalframes()) << "%)";  
+    oss << index+1 << "/" << model_->totalframes();
+    if(!model_->totalframes_exact())
+      oss << '+';
+    else
+      oss << " (" << (unsigned) (100 * (float)(index+1)/(float)model_->totalframes()) << "%)";
     settext(yellow);
     mvaddstr(LINES-5, 13, oss.str().c_str());
     statuslen = std::max(oss.str().size(), statuslen);
@@ -731,9 +734,9 @@ View::start_scan_progress(const std::string& filename)
 {
   log_trace("%s", __PRETTY_FUNCTION__);
   scanning_ = true;
-  string msg = "Scanning " + filename;
+  string msg = "Scanning" + filename;
 
-  progresshist_ = newCDKHistogram(cdkscreen, 
+  progresshist_ = newCDKHistogram(cdkscreen,
 				  CENTER,  // xpos
 				  CENTER,  // ypos
 				  1, // height

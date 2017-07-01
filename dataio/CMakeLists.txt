@@ -39,14 +39,14 @@ i3_add_pybindings(dataio
   USE_TOOLS boost python
   )
 
-#if(CDK_FOUND AND NCURSES_FOUND)
-#  i3_executable(shovel private/shovel/*.cxx
-#    USE_PROJECTS dataio
-#    USE_TOOLS cdk ncurses
-#    )
-#else()
-#  colormsg(CYAN "+-- dataio-shovel *not* included (missing CDK or ncurses libraries)")
-#endif()
+if(CDK_FOUND AND NCURSES_FOUND)
+  i3_executable(shovel private/shovel/*.cxx
+    USE_PROJECTS dataio
+    USE_TOOLS cdk ncurses
+    )
+else()
+  colormsg(CYAN "+-- dataio-shovel *not* included (missing CDK or ncurses libraries)")
+endif()
   
 # look for urwid
 execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import urwid"

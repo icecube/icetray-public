@@ -304,9 +304,18 @@ int main (int argc, char *argv[])
 
         model.notify();
       }
-  } catch (const std::exception& e) {
+  }
+  catch (const boost::python::error_already_set& e) {
     clear();
     endwin();
-    throw;
+    std::cerr << "Fatal python error:\n";
+    PyErr_Print();
+    return(1);
+  }
+  catch (const std::exception& e) {
+    clear();
+    endwin();
+    std::cerr << "Caught exception:\n" << e.what() << '\n';
+    return(1);
   }
 }

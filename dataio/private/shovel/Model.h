@@ -29,18 +29,29 @@
 #include <boost/optional.hpp>
 #include <icetray/I3TrayInfo.h>
 #include <icetray/I3Frame.h>
-#include <dataio/I3File.h>
+#include <dataio/I3FrameSequence.h>
 #include <dataio/I3FileStager.h>
 
 class View;
 
 class Model
 {
-  I3File i3file_;
-  I3::dataio::shared_filehandle file_ref_;
-
-  std::vector<std::pair<I3File::FrameInfo, unsigned> > frame_infos_;
-  std::vector<std::pair<I3File::FrameInfo, unsigned> > frame_infos_other_;
+  dataio::I3FrameSequence files_;
+  std::vector<I3::dataio::shared_filehandle> file_refs_;
+  
+  //I3File i3file_;
+  //I3::dataio::shared_filehandle file_ref_;
+  //
+  //std::vector<std::pair<I3File::FrameInfo, unsigned> > frame_infos_;
+  //std::vector<std::pair<I3File::FrameInfo, unsigned> > frame_infos_other_;
+  
+  struct FrameInfo{
+    I3Frame::Stream stream;
+    std::string sub_event_stream;
+    FrameInfo() : stream(I3Frame::None){}
+    FrameInfo(I3Frame::Stream stream) : stream(stream){}
+  };
+  std::vector<FrameInfo> frame_infos_;
 
   View& view_;
 
@@ -55,6 +66,8 @@ class Model
 
   unsigned cached_frame_index_;
   I3FramePtr cached_frame_;
+  
+  bool prescan_frames(unsigned index);
     
 public:
   
@@ -84,10 +97,12 @@ public:
   void notify();
 
   unsigned totalframes();
+  bool totalframes_exact();
 
   std::vector<I3Frame::Stream> streams(unsigned start_index, unsigned length);
   std::vector<std::string> sub_event_streams(unsigned start_index, unsigned length);
 
+  SET_LOGGER("shovel::Model");
 };
 
 
