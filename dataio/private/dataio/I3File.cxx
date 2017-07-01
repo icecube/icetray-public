@@ -149,6 +149,7 @@ namespace dataio {
         if (index_num < frameno_) {
             rewind();
         }
+        log_trace_stream("Skipping frames: index_num=" << index_num << " frameno_=" << frameno_);
         skip_frames(index_num-frameno_-1);
         if (!more()) {
             log_fatal("index not in file");
@@ -283,7 +284,7 @@ namespace dataio {
             log_debug("skipping frame");
         }
         if (n < skip_n) {
-            log_fatal("not enough frames in file to skip");
+            log_fatal_stream("not enough frames in file (" << n << ") to skip " << skip_n);
         }
     }
 
