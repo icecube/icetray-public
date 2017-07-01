@@ -760,9 +760,11 @@ View::start_scan_progress(const std::string& filename)
 void 
 View::scan_progress(double d)
 {
-  log_trace("scan_progress(%f)", d);
-  setCDKHistogramValue(progresshist_, 0, 100, (int)d);
-  drawCDKHistogram(progresshist_, true);
+  if(scanning_){
+    log_trace("scan_progress(%f)", d);
+    setCDKHistogramValue(progresshist_, 0, 100, (int)d);
+    drawCDKHistogram(progresshist_, true);
+  }
 }
 
 void

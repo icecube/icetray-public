@@ -26,6 +26,12 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <chrono>
+#include <queue>
+#include <atomic>
 #include <boost/optional.hpp>
 #include <icetray/I3TrayInfo.h>
 #include <icetray/I3Frame.h>
@@ -36,14 +42,9 @@ class View;
 
 class Model
 {
+  View& view_;
   dataio::I3FrameSequence files_;
   std::vector<I3::dataio::shared_filehandle> file_refs_;
-  
-  //I3File i3file_;
-  //I3::dataio::shared_filehandle file_ref_;
-  //
-  //std::vector<std::pair<I3File::FrameInfo, unsigned> > frame_infos_;
-  //std::vector<std::pair<I3File::FrameInfo, unsigned> > frame_infos_other_;
   
   struct FrameInfo{
     I3Frame::Stream stream;
@@ -52,8 +53,36 @@ class Model
     FrameInfo(I3Frame::Stream stream) : stream(stream){}
   };
   std::vector<FrameInfo> frame_infos_;
-
-  View& view_;
+  
+  struct ProgressManager{
+  private:
+    View& view_;
+    std::mutex mut_;
+    std::condition_variable cond_;
+    bool stop_;
+    std::thread thread_;
+    std::atomic<bool> showingProgress_;
+    std::atomic<bool> actuallyShowingProgress_;
+    float progress_;
+    std::chrono::system_clock::time_point progressStart_;
+    struct WorkItem{
+      std::chrono::system_clock::time_point time_;
+      std::function<void()> work_;
+      WorkItem(){}
+      WorkItem(std::chrono::system_clock::time_point t, std::function<void()> w);
+      bool operator<(const WorkItem&) const;
+    };
+    std::priority_queue<WorkItem> work_;
+  public:
+    explicit ProgressManager(View& view);
+    ~ProgressManager();
+    
+    void MaybeStartShowingProgress();
+    ///\param value a fraction in [0,1]
+    void SetProgress(float value);
+    void StopShowingProgress();
+  };
+  ProgressManager pman_;
 
   std::ifstream ifs_;
 
@@ -73,9 +102,7 @@ public:
   
   Model(View& view);
 
-  int open_file(const std::string& filename, 
-		boost::optional<std::vector<I3Frame::Stream> > skipstreams 
-		= boost::optional<std::vector<I3Frame::Stream> >(),
+  int open_file(const std::string& filename,
 		boost::optional<unsigned> nframes = boost::optional<unsigned>()
 		);
 
@@ -84,7 +111,6 @@ public:
 
   void move_first();
   void move_last();
-  void toggle_infoframes();
 
   void move_x(int delta);
   void move_y(int delta);
@@ -102,7 +128,7 @@ public:
   std::vector<I3Frame::Stream> streams(unsigned start_index, unsigned length);
   std::vector<std::string> sub_event_streams(unsigned start_index, unsigned length);
 
-  SET_LOGGER("shovel::Model");
+  SET_LOGGER("dataio-shovel::Model");
 };
 
 

@@ -25,7 +25,7 @@
 #include <sys/stat.h>
 
 #include <vector>
-#include <chrono>
+#include <atomic>
 
 #include <boost/optional.hpp>
 #include <boost/function.hpp>
@@ -39,73 +39,134 @@
 #include "dataio/I3File.h"
 #include "shovel/View.h"
 
-class I3FileLogger : public I3Logger{
-private:
-  std::string path;
-  std::ofstream out;
-  bool TrimFileNames;
-public:
-  explicit I3FileLogger(std::string path):path(path),out(path.c_str()),TrimFileNames(true){
-    if(!out)
-      throw std::runtime_error("Failed to open "+path+" for logging");
-  }
-  
-  void Log(I3LogLevel level, const std::string &unit,
-           const std::string &file, int line, const std::string &func,
-           const std::string &message)
-  {
-    if (LogLevelForUnit(unit) > level)
-      return;
-    std::string trimmed_filename;
-	size_t lastslash = file.rfind('/');
-	if (lastslash != std::string::npos && TrimFileNames)
-      trimmed_filename = file.substr(lastslash+1);
-	else
-      trimmed_filename = file;
-    switch (level) {
-      case I3LOG_TRACE:
-		out << "TRACE";
-		break;
-      case I3LOG_DEBUG:
-		out << "DEBUG";
-		break;
-      case I3LOG_INFO:
-		out << "INFO";
-		break;
-      case I3LOG_NOTICE:
-        out << "NOTICE";
-        break;
-      case I3LOG_WARN:
-		out << "WARN";
-		break;
-      case I3LOG_ERROR:
-		out << "ERROR";
-		break;
-      case I3LOG_FATAL:
-		out << "FATAL";
-		break;
-      default:
-		out << "UNKNOWN";
-		break;
-	}
-    out << " (" << unit << "):" << message << " (" << trimmed_filename << ':'
-    << line << " in " << func << ')' << std::endl;
-  }
-};
+//==============================================================================
+#pragma mark Model::ProgressManager
+//==============================================================================
 
-Model::Model(View& view) : files_(std::vector<std::string>{},1000),view_(view)
+Model::ProgressManager::ProgressManager(View& view):
+view_(view),
+stop_(false),
+thread_([this](){
+  using std::chrono::system_clock;
+  using duration=system_clock::time_point::duration;
+  using mduration=std::chrono::duration<long long,std::milli>;
+  duration sleepLen=std::chrono::duration_cast<duration>(mduration(1000));//one second
+  system_clock::time_point nextTick=system_clock::now();
+  nextTick+=sleepLen;
+  
+  WorkItem w;
+  while(true){
+    bool doNext=false;
+    
+    { //hold lock
+      std::unique_lock<std::mutex> lock(this->mut_);
+      //Wait for something to happen
+      this->cond_.wait_until(lock,nextTick,
+                             [this]{ return(this->stop_ || !this->work_.empty()); });
+      //Figure out why we woke up
+      if(this->stop_)
+        return;
+      //See if there's any work
+      if(this->work_.empty()){
+        //Nope. Back to sleep.
+        nextTick+=sleepLen;
+        continue;
+      }
+      //There is work. Should it be done now?
+      nextTick=this->work_.top().time_;
+      if(system_clock::now()>=nextTick){ //time to do it
+        w=std::move(this->work_.top());
+        this->work_.pop();
+        //Update the time to next sleep until
+        if(!this->work_.empty())
+          nextTick=this->work_.top().time_;
+        else
+          nextTick+=sleepLen;
+        doNext=true;
+      }
+    } //release lock
+    if(doNext){
+      w.work_();
+      doNext=false;
+    }
+  }
+}),
+showingProgress_(false)
+{}
+
+Model::ProgressManager::~ProgressManager(){
+  {
+    std::unique_lock<std::mutex> lock(mut_);
+    stop_=true;
+  }
+  cond_.notify_all();
+  thread_.join();
+}
+
+Model::ProgressManager::WorkItem::WorkItem(std::chrono::system_clock::time_point t,
+                                  std::function<void()> w):
+time_(t),work_(w){}
+
+bool Model::ProgressManager::WorkItem::operator<(const Model::ProgressManager::WorkItem& other) const{
+  return(time_<other.time_);
+}
+
+void Model::ProgressManager::MaybeStartShowingProgress(){
+  std::unique_lock<std::mutex> lock(this->mut_);
+  if(!showingProgress_){
+    //note when we got the request
+    progressStart_=std::chrono::system_clock::now();
+    showingProgress_=true;
+    progress_=0;
+    //schedule actually showing the progress bar in 50 milliseconds
+    using duration=std::chrono::system_clock::time_point::duration;
+    using sduration=std::chrono::duration<long long,std::milli>;
+    work_.emplace(progressStart_+std::chrono::duration_cast<duration>(sduration(50)),
+                  [this]()->void{
+                    std::unique_lock<std::mutex> lock(this->mut_);
+                    if(this->showingProgress_){ //check for cancellation in the meantime!
+                      this->view_.start_scan_progress(". . . ");
+                      this->actuallyShowingProgress_=true;
+                      if(progress_>0)
+                        view_.scan_progress(100*progress_);
+                    }
+                  });
+    cond_.notify_all();
+  }
+}
+
+void Model::ProgressManager::SetProgress(float value){
+  if(actuallyShowingProgress_){
+    progress_=value;
+    std::unique_lock<std::mutex> lock(this->mut_);
+    view_.scan_progress(100*progress_);
+  }
+}
+
+void Model::ProgressManager::StopShowingProgress(){
+  std::unique_lock<std::mutex> lock(this->mut_);
+  if(showingProgress_){
+    showingProgress_=false;
+    actuallyShowingProgress_=false;
+    view_.end_scan_progress();
+    //while we're here with the lock held, remove pending start operations
+    while(!work_.empty())
+      work_.pop();
+  }
+}
+
+//==============================================================================
+#pragma mark Model
+//==============================================================================
+
+Model::Model(View& view) : view_(view),files_(std::vector<std::string>{},1000),pman_(view)
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
   x_index_=0;
   y_index_=0;
-  
-  SetIcetrayLogger(boost::make_shared<I3FileLogger>("dataio-shovel.log"));
-  GetIcetrayLogger()->SetLogLevelForUnit("shovel::Model",I3LOG_INFO);
 }
 
 int
 Model::open_file(const std::string& filename,
-                 boost::optional<std::vector<I3Frame::Stream> > skipstreams,
                  boost::optional<unsigned> nframes
                  )
 {
@@ -119,8 +180,6 @@ Model::open_file(const std::string& filename,
     myStager = I3TrivialFileStager::create();
   }
   file_refs_.push_back(myStager->GetReadablePath(filename));
-
-  log_trace("%s", __PRETTY_FUNCTION__);
 
   files_.add_file(*file_refs_.back());
   
@@ -143,7 +202,7 @@ bool Model::prescan_frames(unsigned index)
   }
   else
     log_info_stream(" Max size is unknown");
-  View::Instance().start_scan_progress(". . . ");
+  pman_.MaybeStartShowingProgress();
   
   //jump to the last known frame
   if(!frame_infos_.empty()){
@@ -152,7 +211,7 @@ bool Model::prescan_frames(unsigned index)
     files_.pop_frame();
     if(!files_.more()){
       log_info_stream(" No more frames!");
-      View::Instance().end_scan_progress();
+      pman_.StopShowingProgress();
       return(false);
     }
     log_info_stream(" Popped one frame");
@@ -176,15 +235,13 @@ bool Model::prescan_frames(unsigned index)
     max_size=files_.get_size();
     if(max_size>0 && index>max_size)
       index=max_size;
-    log_info_stream(" Updating progress; numerator=" << (frame_infos_.size()-start)
-                    << " denominator=" << (index-start));
-    View::Instance().scan_progress(100*double(frame_infos_.size()-start)/(index-start));
+    pman_.SetProgress(double(frame_infos_.size()-start)/(index-start));
     if(!files_.more()){
       log_info_stream(" No more frames!");
       break;
     }
   }
-  View::Instance().end_scan_progress();
+  pman_.StopShowingProgress();
   return(frame_infos_.size()>index);
 }
 
@@ -416,11 +473,7 @@ Model::streams(unsigned start_index, unsigned length)
   std::vector<I3Frame::Stream> ret;
 
   for (unsigned i=0; i<length; i++)
-    {
-      ret.push_back(frame_infos_[start_index + i].stream);
-      //      log_trace("push %c", ret[i].value);
-    }
-
+    ret.push_back(frame_infos_[start_index + i].stream);
   
   return ret;
 }
@@ -435,21 +488,7 @@ Model::sub_event_streams(unsigned start_index, unsigned length)
     std::vector<std::string> ret;
     
     for (unsigned i=0; i<length; i++)
-    {
-        ret.push_back(frame_infos_[start_index + i].sub_event_stream);
-        //      log_trace("push %c", ret[i].value);
-    }
-    
+      ret.push_back(frame_infos_[start_index + i].sub_event_stream);
     
     return ret;
-}
-
-void
-Model::toggle_infoframes()
-{
-  log_error_stream(__PRETTY_FUNCTION__ << " not implemented");
-  //frame_infos_.swap(frame_infos_other_);
-  //if (x_index_ >= frame_infos_.size())
-  //  x_index_ = frame_infos_.size() - 1;
-  notify();
 }

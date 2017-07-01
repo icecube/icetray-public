@@ -19,7 +19,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
-#include <stdlib.h>
+#include <cstdlib>
 #include <ncurses.h>
 #include <signal.h>
 #include <unistd.h>
@@ -33,8 +33,6 @@
 #include <string>
 #include <fstream>
 
-#include <boost/function.hpp>
-#include <boost/assign/list_inserter.hpp>
 #include <boost/program_options.hpp>
 
 #include <shovel/color.h>
@@ -43,86 +41,89 @@
 
 #include <dlfcn.h>
 
-using namespace std;
-
-using namespace boost::assign;
 namespace po = boost::program_options;
 
-//simple implementation of lambda functions with zero or one parameter
-//single argument case
-template<typename TargetType, typename ArgType, typename ActualArgType=ArgType>
-struct simple_lambda{
-  typedef void(TargetType::*FuncType)(ArgType);
-  TargetType& target;
-  FuncType func;
-  ActualArgType arg;
-  simple_lambda(TargetType& t, FuncType f, ActualArgType a):target(t),func(f),arg(a){}
-  void operator()(){ (target.*func)(ArgType(arg)); }
-};
-//no argument case
-template<typename TargetType>
-struct simple_lambda<TargetType,void>{
-  typedef void(TargetType::*FuncType)();
-  TargetType& target;
-  FuncType func;
-  simple_lambda(TargetType& t, FuncType f):target(t),func(f){}
-  void operator()(){ (target.*func)(); }
-};
-//helper functions for making lambdas
-template<typename TargetType, typename ArgType, typename ActualArgType>
-simple_lambda<TargetType,ArgType,ActualArgType>
-make_lambda(TargetType& t, void(TargetType::*f)(ArgType), ActualArgType a){
-  return(simple_lambda<TargetType,ArgType,ActualArgType>(t,f,a));
-}
-template<typename TargetType>
-simple_lambda<TargetType,void>
-make_lambda(TargetType& t, void(TargetType::*f)()){
-  return(simple_lambda<TargetType,void>(t,f));
-}
-//little wrapper object for figuring out how much to fast forward
-struct fast_forwarder{
-  bool reverse; //whether to go backward or forward
-  explicit fast_forwarder(bool r):reverse(r){}
-  operator int() const{ return((COLS/2-2)*(reverse?-1:1)); }
-};
-//same thing, but for scrolling
-struct fast_scroller{
-  bool reverse; //true=down, false=up
-  explicit fast_scroller(bool r):reverse(r){}
-  operator int() const{ return((LINES-12)*(reverse?1:-1)); }
+class I3FileLogger : public I3Logger{
+private:
+  std::string path;
+  std::ofstream out;
+  bool TrimFileNames;
+public:
+  explicit I3FileLogger(std::string path):path(path),out(path.c_str()),TrimFileNames(true){
+    if(!out)
+      throw std::runtime_error("Failed to open "+path+" for logging");
+  }
+  
+  void Log(I3LogLevel level, const std::string &unit,
+           const std::string &file, int line, const std::string &func,
+           const std::string &message)
+  {
+    if (LogLevelForUnit(unit) > level)
+      return;
+    std::string trimmed_filename;
+	size_t lastslash = file.rfind('/');
+	if (lastslash != std::string::npos && TrimFileNames)
+      trimmed_filename = file.substr(lastslash+1);
+	else
+      trimmed_filename = file;
+    switch (level) {
+      case I3LOG_TRACE:
+		out << "TRACE";
+		break;
+      case I3LOG_DEBUG:
+		out << "DEBUG";
+		break;
+      case I3LOG_INFO:
+		out << "INFO";
+		break;
+      case I3LOG_NOTICE:
+        out << "NOTICE";
+        break;
+      case I3LOG_WARN:
+		out << "WARN";
+		break;
+      case I3LOG_ERROR:
+		out << "ERROR";
+		break;
+      case I3LOG_FATAL:
+		out << "FATAL";
+		break;
+      default:
+		out << "UNKNOWN";
+		break;
+	}
+    out << " (" << unit << "):" << message << " (" << trimmed_filename << ':'
+    << line << " in " << func << ')' << std::endl;
+  }
 };
 
 void
 shovel_usage(const std::string& progname)
 {
-  cerr << "Usage: " << progname << " [options] file.i3 [proj1 proj2 ... projN]\n"
+  std::cerr << "Usage: " << progname << " [options] file.i3 [proj1 proj2 ... projN]\n"
        << "\n"
        << "  file.i3             path to the .i3 file to browse.\n\n"
        << "  [proj1 ... projN]   (optional) load these projects'\n"
        << "                      libraries at startup.\n"
        << "\n\nOptions:\n"
-       << "  --no_trayinfo, -n   Do not display/count trayinfo frames\n"
        << "  --frames=N, -f N    Scan/Display only N frames\n\n"
        << "Example:\n  " << progname << " -f 100 -n data.i3 muon-llh-reco linefit dipolefit\n"
-       << endl;
+       << std::endl;
   exit(1);
 }
-
-map<int, string> keybindings;
 
 int main (int argc, char *argv[])
 {
   I3::init_icetray_lib();
 
-  log_trace("%s", __PRETTY_FUNCTION__);
   po::options_description opt("options");
 
   opt.add_options()
     ("help,?", "this message")
     ("i3file", "the .i3 file")
     ("frames,f", po::value<unsigned>(), "scan only this many frames of file")
-    ("no_trayinfo,n", "skip trayinfo frames")
-    ("projects", po::value< vector<string> >(), "libs to load before opening .i3 file")
+    ("projects", po::value< std::vector<std::string> >(), "libs to load before opening .i3 file")
+    ("log", "write log messages to a file")
     ;
 
   po::positional_options_description popt;
@@ -137,66 +138,76 @@ int main (int argc, char *argv[])
               .run(), vm);
     po::notify(vm);
   } catch (const std::exception& e) {
-    cout << argv[0] << ": " << e.what() << "\n";
+    std::cout << argv[0] << ": " << e.what() << "\n";
     shovel_usage(argv[0]);
     return 1;
   }
-
-  insert(keybindings)
-    ('k', "up")
-    ('[', "fast_reverse")
-    ('{', "first_frame")
-    ('h',"left")
-    ('l',"right")
-    (']', "fast_forward")
-    ('}', "last_frame")
-    ('-', "fast_up")
-    ('=', "fast_down")
-    ('j',"down")
-    ('?',"help")
-    ('a',"about")
-    ('g',"goto_frame")
-    ('p',"pretty_print")
-    ('s',"save_xml")
-    ('t',"toggle_infoframes")
-    ('w',"write_frame")
-    ('W',"write_frame_with_dependencies")
-    ('x',"xml")
-    ('q',"quit")
-    (KEY_ENTER, "xml")
-    (KEY_UP, "up")
-    (KEY_DOWN, "down")
-    (KEY_LEFT, "left")
-    (KEY_RIGHT, "right")
-    (KEY_HOME, "first_frame")
-    (KEY_END, "last_frame")
-    (KEY_PPAGE, "fast_up")
-    (KEY_NPAGE, "fast_down");
+  
+  std::map<int, std::string> keybindings={
+    {'k',"up"},
+    {'[',"fast_reverse"},
+    {'{',"first_frame"},
+    {'h',"left"},
+    {'l',"right"},
+    {']',"fast_forward"},
+    {'}',"last_frame"},
+    {'-',"fast_up"},
+    {'=',"fast_down"},
+    {'j',"down"},
+    {'?',"help"},
+    {'a',"about"},
+    {'g',"goto_frame"},
+    {'p',"pretty_print"},
+    {'s',"save_xml"},
+    {'w',"write_frame"},
+    {'W',"write_frame_with_dependencies"},
+    {'x',"xml"},
+    {'q',"quit"},
+    {KEY_ENTER,"xml"},
+    {KEY_UP,   "up"},
+    {KEY_DOWN, "down"},
+    {KEY_LEFT, "left"},
+    {KEY_RIGHT,"right"},
+    {KEY_HOME, "first_frame"},
+    {KEY_END,  "last_frame"},
+    {KEY_PPAGE,"fast_up"},
+    {KEY_NPAGE,"fast_down"}
+  };
 
   if (vm.count("help"))
     {
       shovel_usage(argv[0]);
       return 1;
     }
+  
+  if (vm.count("log"))
+    {
+      SetIcetrayLogger(boost::make_shared<I3FileLogger>("dataio-shovel.log"));
+      GetIcetrayLogger()->SetLogLevelForUnit("dataio-shovel::Model",I3LOG_INFO);
+    }
+  else
+    {
+      GetIcetrayLogger()->SetLogLevelForUnit("dataio-shovel::Model",I3LOG_WARN);
+    }
 
   if (vm.count("projects"))
     {
-      cout << "Loading project libraries: ";
-      cout.flush();
-      const vector<string>& projects = vm["projects"].as< vector<string> >();
+      std::cout << "Loading project libraries: ";
+      std::cout.flush();
+      const std::vector<std::string>& projects = vm["projects"].as<std::vector<std::string>>();
       for (unsigned i=0; i<projects.size(); i++)
         {
-          cout << "[" << projects[i] << "] ";
-          cout.flush();
+          std::cout << "[" << projects[i] << "] ";
+          std::cout.flush();
           if (load_project(projects[i]))
             shovel_usage(argv[0]);
         }
-      cout << " done." << endl;
+      std::cout << " done." << std::endl;
     }
 
-  string thefile;
+  std::string thefile;
   if (vm.count("i3file"))
-    thefile = vm["i3file"].as<string>();
+    thefile = vm["i3file"].as<std::string>();
 
   if (!thefile.length())
     shovel_usage(argv[0]);
@@ -215,42 +226,32 @@ int main (int argc, char *argv[])
 
     log_trace("opening file");
 
-    vector<I3Frame::Stream> skipvector;
-
-    if (vm.count("no_trayinfo"))
-      skipvector.push_back(I3Frame::TrayInfo);
-
     model.open_file(thefile,
-                    skipvector,
                     vm.count("frames") ? vm["frames"].as<unsigned>() : boost::optional<unsigned>()
                     );
 
     model.notify();
     log_trace("done starting up");
-    map<string, boost::function<void(void)> > actions;
+    std::map<std::string, std::function<void(void)>> actions;
 
-    actions["up"] = make_lambda(model,&Model::move_y,-1);
-    actions["down"] = make_lambda(model,&Model::move_y,1);
-    actions["right"] = make_lambda(model,&Model::move_x,1);
-    actions["left"] = make_lambda(model,&Model::move_x,-1);
-    fast_forwarder ff(false),fr(true);
-    actions["fast_forward"]=make_lambda(model,&Model::move_x,ff);
-    actions["fast_reverse"] = make_lambda(model,&Model::move_x,fr);
-    fast_scroller fu(false),fd(true);
-    actions["fast_up"]=make_lambda(model,&Model::move_y,fu);
-    actions["fast_down"] = make_lambda(model,&Model::move_y,fd);
-    actions["first_frame"] = make_lambda(model,&Model::move_first);
-    actions["last_frame"] = make_lambda(model,&Model::move_last);
-    actions["help"] = make_lambda(View::Instance(),&View::do_help);
-    actions["about"] = make_lambda(View::Instance(),&View::do_about);
-    actions["pretty_print"] = make_lambda(model,&Model::pretty_print);
-    actions["toggle_infoframes"] = make_lambda(model,&Model::toggle_infoframes);
-    actions["write_frame"] = make_lambda(model,&Model::write_frame);
-    actions["write_frame_with_dependencies"] = 
-     make_lambda(model,&Model::write_frame_with_dependencies);
-    actions["save_xml"] = make_lambda(model,&Model::save_xml);
-    actions["goto_frame"] = make_lambda(model,&Model::do_goto_frame);
-    actions["xml"] = make_lambda(model,&Model::show_xml);
+    actions["up"] = [&](){model.move_y(-1);};
+    actions["down"] = [&](){model.move_y(1);};
+    actions["right"] = [&](){model.move_x(1);};
+    actions["left"] = [&](){model.move_x(-1);};
+    actions["fast_forward"] = [&](){model.move_x(COLS/2-2);};
+    actions["fast_reverse"] = [&](){model.move_x(-(COLS/2-2));};
+    actions["fast_up"] = [&](){model.move_y(-(LINES-12));};
+    actions["fast_down"] = [&](){model.move_y(LINES-12);};
+    actions["first_frame"] = [&](){model.move_first();};
+    actions["last_frame"] = [&](){model.move_last();};
+    actions["help"] = [](){View::Instance().do_help();};
+    actions["about"] = [](){View::Instance().do_about();};
+    actions["pretty_print"] = [&](){model.pretty_print();};
+    actions["write_frame"] = [&](){model.write_frame();};
+    actions["write_frame_with_dependencies"] = [&](){model.write_frame_with_dependencies();};
+    actions["save_xml"] = [&](){model.save_xml();};
+    actions["goto_frame"] = [&](){model.do_goto_frame();};
+    actions["xml"] = [&](){model.show_xml();};
 
     while (true)
       {
@@ -282,6 +283,8 @@ int main (int argc, char *argv[])
           c = KEY_HOME;
         else if (c==0x05)
           c = KEY_END;
+        else if (c==0x0A)
+          c = KEY_ENTER;
 #endif
 
         // skip if key not bound
