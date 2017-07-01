@@ -528,32 +528,32 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
 void
 View::do_help()
 {
-  std::string the_help ="\
-Key              Action\n\
-============================================================\n\
-?                This help.\n\
-left/right       Previous/next frame\n\
-pgup/pgdn        Back/forward a screenful of frames\n\
-[/]              \n\
-up/down          Select previous/next frame item\n\
-k/j              \n\
-<                First frame\n\
->                Last frame\n\
-x                Serialize selected frame object to XML (show with less)\n\
-s                Serialize selected frame object to XML and save to file\n\
-p                Pretty-print selected item (currently I3TrayInfo only)\n\
-w                Write entire frame (binary) to file\n\
-q                Quit\n\
-a                About\n\
-g                Go to frame\n\
-t                Toggle display of TrayInfo frames\n\
-\n\
-The 'tape' display at the bottom shows activity on each of IceTrays's data\n\
-'streams'.\n\
-\n\
-If you don't like these keybindings you can customize them in $HOME/shovelrc.\n\
-This message does/will not reflect any customizations.\n\
-";
+  std::string the_help =R"(Key              Action
+============================================================
+?                This help.
+left/right, h/l  Previous/next frame
+[/]              Back/forward a screenful of frames
+up/down, k/j     Select previous/next frame item
+{, home,         First frame
+}, end           Last frame
+pgup/pgdn, -/=   Up/down a screenful of frame items
+x, enter         Serialize selected frame object to XML (show with less)
+s                Serialize selected frame object to XML and save to file
+p                Pretty-print selected item (currently I3TrayInfo only)
+w                Write entire frame (binary) to file
+W                Write entire frame (binary) to file, along with all frames
+                   on which it depends
+q                Quit
+a                About
+g                Go to frame
+L                Load project
+
+The 'tape' display at the bottom shows activity on each of IceTrays's data
+'streams'.
+
+If you don't like these keybindings you can customize them in $HOME/shovelrc.
+This message does/will not reflect any customizations.
+)";
   page(the_help);
 }
 
@@ -635,6 +635,7 @@ View::dialog(const std::string& prompt)
       switch(ch)
 	{
 	case '\b':
+	case 0x7F:
 	  form_driver(form, REQ_DEL_PREV);
 	  //	  form_driver(form, REQ_PREV_CHAR);
 	  break;

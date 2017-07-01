@@ -102,12 +102,13 @@ shovel_usage(const std::string& progname)
 {
   std::cerr << "Usage: " << progname << " [options] file.i3 [proj1 proj2 ... projN]\n"
        << "\n"
-       << "  file.i3             path to the .i3 file to browse.\n\n"
-       << "  [proj1 ... projN]   (optional) load these projects'\n"
-       << "                      libraries at startup.\n"
-       << "\n\nOptions:\n"
-       << "  --frames=N, -f N    Scan/Display only N frames\n\n"
-       << "Example:\n  " << progname << " -f 100 -n data.i3 muon-llh-reco linefit dipolefit\n"
+       << "  file.i3 [file2.i3 ...]  path to the .i3 file to browse.\n"
+       << "\nOptions:\n"
+       << "  --frames=N, -f N                  Scan only N frames on startup\n"
+       << "  --projects=project, -l project    Load these project's\n"
+       << "                                    libraries on startup\n"
+       << "  --log                             Write debug information to a log file\n\n"
+       << "Example:\n  " << progname << " -f 100 -l linefit -l dipolefit data.i3\n"
        << std::endl;
   exit(1);
 }
@@ -120,15 +121,14 @@ int main (int argc, char *argv[])
 
   opt.add_options()
     ("help,?", "this message")
-    ("i3file", "the .i3 file")
+    ("i3file", po::value< std::vector<std::string> >(), "the .i3 file(s) to load")
     ("frames,f", po::value<unsigned>(), "scan only this many frames of file")
-    ("projects", po::value< std::vector<std::string> >(), "libs to load before opening .i3 file")
+    ("projects,l", po::value< std::vector<std::string> >(), "libs to load before opening .i3 file")
     ("log", "write log messages to a file")
     ;
 
   po::positional_options_description popt;
-  popt.add("i3file", 1);
-  popt.add("projects", -1);
+  popt.add("i3file", -1);
 
   po::variables_map vm;
   try {
@@ -163,6 +163,7 @@ int main (int argc, char *argv[])
     {'W',"write_frame_with_dependencies"},
     {'x',"xml"},
     {'q',"quit"},
+    {'L',"load_project"},
     {KEY_ENTER,"xml"},
     {KEY_UP,   "up"},
     {KEY_DOWN, "down"},
@@ -205,30 +206,26 @@ int main (int argc, char *argv[])
       std::cout << " done." << std::endl;
     }
 
-  std::string thefile;
+  std::vector<std::string> files;
   if (vm.count("i3file"))
-    thefile = vm["i3file"].as<std::string>();
-
-  if (!thefile.length())
+    files=vm["i3file"].as<std::vector<std::string>>();
+  if(files.empty())
     shovel_usage(argv[0]);
-
-  Model model(View::Instance());
 
   log_trace("starting view");
 
   // whole thing is blocked with a try/catch.. the catch
   // just endwin()s and rethrows
   try {
-
     View::Instance().start();
+    
+    log_trace("opening file(s)");
+    Model model(View::Instance(),files,
+                vm.count("frames") ? vm["frames"].as<unsigned>() : boost::optional<unsigned>());
+
     log_trace("setting model");
     View::Instance().model(&model);
 
-    log_trace("opening file");
-
-    model.open_file(thefile,
-                    vm.count("frames") ? vm["frames"].as<unsigned>() : boost::optional<unsigned>()
-                    );
 
     model.notify();
     log_trace("done starting up");
@@ -252,6 +249,12 @@ int main (int argc, char *argv[])
     actions["save_xml"] = [&](){model.save_xml();};
     actions["goto_frame"] = [&](){model.do_goto_frame();};
     actions["xml"] = [&](){model.show_xml();};
+    actions["load_project"] = [&](){
+      boost::optional<std::string> proj =
+        View::Instance().dialog<std::string>("  Project to load: ");
+      if(proj)
+        load_project(*proj);
+    };
 
     while (true)
       {

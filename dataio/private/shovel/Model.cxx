@@ -22,21 +22,14 @@
 #include "shovel/Model.h"
 
 #include <sys/types.h>
-#include <sys/stat.h>
-
-#include <vector>
-#include <atomic>
 
 #include <boost/optional.hpp>
-#include <boost/function.hpp>
-#include <boost/foreach.hpp>
 #include <boost/python.hpp>
 
 #include "icetray/serialization.h"
 #include "icetray/Utility.h"
 #include "icetray/open.h"
 #include <dataclasses/physics/I3EventHeader.h>
-#include "dataio/I3File.h"
 #include "shovel/View.h"
 
 //==============================================================================
@@ -159,35 +152,30 @@ void Model::ProgressManager::StopShowingProgress(){
 #pragma mark Model
 //==============================================================================
 
-Model::Model(View& view) : view_(view),files_(std::vector<std::string>{},1000),pman_(view)
+Model::Model(View& view, const std::vector<std::string> filenames,
+             boost::optional<unsigned> nframes):
+view_(view),files_(std::vector<std::string>{},1000),pman_(view)
 {
   x_index_=0;
   y_index_=0;
-}
-
-int
-Model::open_file(const std::string& filename,
-                 boost::optional<unsigned> nframes
-                 )
-{
+  
   boost::shared_ptr<I3FileStager> myStager;
   try {
     boost::python::object rawStager = boost::python::import("icecube.dataio").attr("get_stagers")();
-    myStager = boost::python::extract<I3FileStagerPtr >(rawStager);
+    myStager = boost::python::extract<I3FileStagerPtr>(rawStager);
   } catch (boost::python::error_already_set &err) {
     PyErr_Print();
     PyErr_Clear();
     myStager = I3TrivialFileStager::create();
   }
-  file_refs_.push_back(myStager->GetReadablePath(filename));
-
-  files_.add_file(*file_refs_.back());
+  
+  for(auto filename : filenames){
+    file_refs_.push_back(myStager->GetReadablePath(filename));
+    files_.add_file(*file_refs_.back());
+    log_info_stream("added " << *file_refs_.back());
+  }
   
   prescan_frames(((bool)nframes?*nframes:100));
-
-  log_trace_stream("opened " << *file_refs_.back());
-
-  return 0;
 }
 
 bool Model::prescan_frames(unsigned index)

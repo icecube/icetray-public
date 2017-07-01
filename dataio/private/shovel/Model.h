@@ -100,11 +100,8 @@ class Model
     
 public:
   
-  Model(View& view);
-
-  int open_file(const std::string& filename,
-		boost::optional<unsigned> nframes = boost::optional<unsigned>()
-		);
+  Model(View& view, const std::vector<std::string> filenames,
+        boost::optional<unsigned> nframes = boost::optional<unsigned>());
 
   void show_xml();
   void pretty_print();
