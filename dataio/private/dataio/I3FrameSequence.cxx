@@ -248,7 +248,7 @@ namespace {
         std::lock_guard<std::mutex> lock(mutex_);
         I3FrameMixer mixer(true, true);
         ssize_t tmp_index(frame_index);
-        //log_debug("FileGroup: get_frame %lu", frame_index);
+        log_debug("FileGroup: get_frame %lu", frame_index);
 
         // find correct file
         for (auto& fs : files_) {
@@ -257,7 +257,9 @@ namespace {
                 if (tmp_index < static_cast<ssize_t>(fs.file.get_size())) {
                     // seek to frame, mix the frames, and return
                     fs.file.seek(tmp_index);
+                    fs.file.pop_frame();
                     auto frames = fs.file.get_current_frame_and_deps();
+                    i3_assert(!frames.empty());
                     for (const auto& f : frames) {
                         mixer.UpdateDependencies(*f);
                     }

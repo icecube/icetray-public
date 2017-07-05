@@ -149,10 +149,12 @@ namespace dataio {
         if (index_num < frameno_) {
             rewind();
         }
-        log_trace_stream("Skipping frames: index_num=" << index_num << " frameno_=" << frameno_);
-        skip_frames(index_num-frameno_-1);
-        if (!more()) {
-            log_fatal("index not in file");
+        if (index_num != frameno_) {
+            log_trace_stream("Skipping frames: index_num=" << index_num << " frameno_=" << frameno_);
+            skip_frames(index_num-frameno_-1);
+            if (!more()) {
+                log_fatal("index not in file");
+            }
         }
     }
 

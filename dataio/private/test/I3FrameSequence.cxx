@@ -7,9 +7,26 @@
 
 using dataio::I3FrameSequence;
 
+std::string random_string( size_t length )
+{
+    auto randchar = []() -> char
+    {
+        const char charset[] =
+        "0123456789"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "abcdefghijklmnopqrstuvwxyz";
+        const size_t max_index = (sizeof(charset) - 1);
+        return charset[ rand() % max_index ];
+    };
+    std::string str(length,0);
+    std::generate_n( str.begin(), length, randchar );
+    return str;
+}
+
 class testfile{
 public:
-	explicit testfile(const std::string& name):path(I3Test::testfile(name)){}
+	testfile() : path(random_string(10)) {}
+	explicit testfile(const std::string& name) : path(name) {}
 	testfile(const testfile&)=delete;
 	testfile(testfile&& other):path(other.path){ other.path.clear(); }
 	~testfile(){
@@ -29,7 +46,7 @@ private:
 };
 
 testfile make_testfile(const std::string& contents, int counter_base=0){
-	testfile file(contents);
+	testfile file;
 	std::ofstream out(file.getPath());
 	I3Frame frame;
 	int counter=counter_base;
@@ -39,7 +56,7 @@ testfile make_testfile(const std::string& contents, int counter_base=0){
 		frame.Put("Index",boost::make_shared<I3Int>(counter++));
 		frame.save(out);
 	}
-	return(file);
+	return file;
 }
 
 TEST_GROUP(I3FrameSequence)
@@ -157,6 +174,7 @@ TEST(Seek){
 TEST(Seek_MultiFile){
 	testfile f1=make_testfile("QQQQQ");
 	testfile f2=make_testfile("QQQQQ",5);
+	
 	I3FrameSequence s({f1.getPath(),f2.getPath()},5);
 	//skip around the sequence
 	for(int i=0; i<10; i++){
