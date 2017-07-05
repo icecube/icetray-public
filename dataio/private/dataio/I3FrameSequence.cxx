@@ -253,7 +253,7 @@ namespace {
         // find correct file
         for (auto& fs : files_) {
             if (fs.has_size) {
-                //log_debug("fs.has_size: %lu", fs.file.get_size());
+                log_trace("fs.has_size: %lu", fs.file.get_size());
                 if (tmp_index < static_cast<ssize_t>(fs.file.get_size())) {
                     // seek to frame, mix the frames, and return
                     fs.file.seek(tmp_index);
@@ -278,13 +278,18 @@ namespace {
                     }
                 }
             } else {
-                //log_debug("!fs.has_size, frameno: %ld", fs.file.get_frameno());
-                while (tmp_index > fs.file.get_frameno() && fs.file.more()) {
-                    fs.file.pop_frame();
+                log_trace("!fs.has_size, frameno: %ld", fs.file.get_frameno());
+                if (tmp_index < fs.file.get_frameno()) {
+                    fs.file.rewind();
+                }
+                if (tmp_index != fs.file.get_frameno()) {
+                    while (tmp_index > fs.file.get_frameno() && fs.file.more()) {
+                        fs.file.pop_frame();
+                    }
                 }
                 if (tmp_index == fs.file.get_frameno()) {
                     // found frame
-                    //log_debug("found frame");
+                    log_trace("found frame");
                     auto frames = fs.file.get_current_frame_and_deps();
                     i3_assert(!frames.empty());
                     for (const auto& f : frames) {
@@ -295,7 +300,7 @@ namespace {
                     return ret;
                 } else {
                     // end of file
-                    //log_debug("EOF");
+                    log_trace("EOF");
                     fs.has_size = true;
                     auto frames = fs.file.get_current_frame_and_deps();
                     i3_assert(!frames.empty());
@@ -306,6 +311,7 @@ namespace {
                     }
                 }
             }
+            log_trace("file size: %lu, index: %ld", fs.file.get_size(), tmp_index);
             i3_assert(static_cast<ssize_t>(fs.file.get_size()) <= tmp_index);
             tmp_index -= fs.file.get_size();
         }
@@ -314,7 +320,7 @@ namespace {
         std::vector<I3FramePtr> ret;
         return ret;
     }
-    
+
     std::vector<std::string> FileGroup::get_paths() const
     {
         std::vector<std::string> ret;

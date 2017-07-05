@@ -159,7 +159,7 @@ TEST(Seek){
 	I3FrameSequence s({f.getPath()},5);
 	//skip around the file
 	for(int i=0; i<10; i++){
-		unsigned int idx=(i%2==0 ? 10-i/2-1 : i/2);
+		int idx=(i%2==0 ? 10-i/2-1 : i/2);
 		//log_info_stream("Seeking to frame " << idx);
 		try{
 			s.seek(idx);
@@ -178,7 +178,7 @@ TEST(Seek_MultiFile){
 	I3FrameSequence s({f1.getPath(),f2.getPath()},5);
 	//skip around the sequence
 	for(int i=0; i<10; i++){
-		unsigned int idx=(i%2==0 ? 10-i/2-1 : i/2);
+		int idx=(i%2==0 ? 10-i/2-1 : i/2);
 		//log_info_stream("Seeking to frame " << idx);
 		try{
 			s.seek(idx);
@@ -195,7 +195,7 @@ TEST(Indexing){
 	I3FrameSequence s({f.getPath()},5);
 	//skip around the file
 	for(int i=0; i<10; i++){
-		unsigned int idx=(i%2==0 ? 10-i/2-1 : i/2);
+		int idx=(i%2==0 ? 10-i/2-1 : i/2);
 		//log_info_stream("Fetching frame " << idx);
 		auto frame=s[idx];
 		ENSURE_EQUAL(frame->Get<I3Int>("Index").value,idx,"Seek should go to the correct index");
@@ -208,7 +208,7 @@ TEST(Indexing_MultiFile){
 	I3FrameSequence s({f1.getPath(),f2.getPath()},5);
 	//skip around the sequence
 	for(int i=0; i<10; i++){
-		unsigned int idx=(i%2==0 ? 10-i/2-1 : i/2);
+		int idx=(i%2==0 ? 10-i/2-1 : i/2);
 		//log_info_stream("Fetching frame " << idx);
 		auto frame=s[idx];
 		ENSURE_EQUAL(frame->Get<I3Int>("Index").value,idx,"Seek should go to the correct index");
@@ -233,4 +233,27 @@ TEST(SeekBeforeCache){
 	s.seek(5);
 	frame=s.pop_frame();
 	ENSURE_EQUAL(frame->Get<I3Int>("Index").value,5,"Seek should go to the correct index");
+}
+
+TEST(BigSeek){
+	testfile f=make_testfile(std::string(250,'Q'));
+	I3FrameSequence s({f.getPath()},5);
+	s.seek(100);
+	auto frame=s.pop_frame();
+	ENSURE_EQUAL(frame->Get<I3Int>("Index").value,100,"Seek should go to the correct index");
+	s.seek(5);
+	frame=s.pop_frame();
+	ENSURE_EQUAL(frame->Get<I3Int>("Index").value,5,"Seek should go to the correct index");
+	s.seek(199);
+	frame=s.pop_frame();
+	ENSURE_EQUAL(frame->Get<I3Int>("Index").value,199,"Seek should go to the correct index");
+	s.seek(31);
+	frame=s.pop_frame();
+	ENSURE_EQUAL(frame->Get<I3Int>("Index").value,31,"Seek should go to the correct index");
+	s.seek(249);
+	frame=s.pop_frame();
+	ENSURE_EQUAL(frame->Get<I3Int>("Index").value,249,"Seek should go to the correct index");
+	s.seek(0);
+	frame=s.pop_frame();
+	ENSURE_EQUAL(frame->Get<I3Int>("Index").value,0,"Seek should go to the correct index");
 }
