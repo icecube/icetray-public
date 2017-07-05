@@ -223,3 +223,14 @@ TEST(CheckSizeBeforeRead){
 	auto frame=s.pop_frame();
 	ENSURE(!!frame);
 }
+
+TEST(SeekBeforeCache){
+	testfile f=make_testfile(std::string(25,'Q'));
+	I3FrameSequence s({f.getPath()},5);
+	s.seek(10);
+	auto frame=s.pop_frame();
+	ENSURE_EQUAL(frame->Get<I3Int>("Index").value,10,"Seek should go to the correct index");
+	s.seek(5);
+	frame=s.pop_frame();
+	ENSURE_EQUAL(frame->Get<I3Int>("Index").value,5,"Seek should go to the correct index");
+}
