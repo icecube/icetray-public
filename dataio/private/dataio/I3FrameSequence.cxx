@@ -253,8 +253,11 @@ namespace {
         // find correct file
         for (auto& fs : files_) {
             if (fs.has_size) {
-                log_trace("fs.has_size: %lu", fs.file.get_size());
-                if (tmp_index < static_cast<ssize_t>(fs.file.get_size())) {
+                size_t file_size = fs.file.get_size();
+                log_trace("fs.has_size: %lu", file_size);
+                if (file_size == 0) {
+                    continue; // empty file
+                } else if (tmp_index < static_cast<ssize_t>(file_size)) {
                     // seek to frame, mix the frames, and return
                     fs.file.seek(tmp_index);
                     fs.file.pop_frame();
@@ -302,6 +305,9 @@ namespace {
                     // end of file
                     log_trace("EOF");
                     fs.has_size = true;
+                    if (fs.file.get_size() == 0) {
+                        continue; // empty file
+                    }
                     auto frames = fs.file.get_current_frame_and_deps();
                     i3_assert(!frames.empty());
                     fs.last_frames.clear();

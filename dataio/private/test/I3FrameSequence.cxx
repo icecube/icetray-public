@@ -257,3 +257,8 @@ TEST(BigSeek){
 	frame=s.pop_frame();
 	ENSURE_EQUAL(frame->Get<I3Int>("Index").value,0,"Seek should go to the correct index");
 }
+
+TEST(EmptyFile){
+	testfile f=make_testfile("");
+	I3FrameSequence s({f.getPath()},5);
+}
