@@ -175,7 +175,7 @@ view_(view),files_(std::vector<std::string>{},1000),pman_(view)
     log_info_stream("added " << *file_refs_.back());
   }
   
-  prescan_frames(((bool)nframes?*nframes:100));
+  prescan_frames(((bool)nframes?*nframes:COLS));
 }
 
 bool Model::prescan_frames(unsigned index)
@@ -280,7 +280,7 @@ Model::move_x(int delta)
   int newx = x_index_ + delta;
   x_index_ = newx < 0 ? 0 : newx;
   if(x_index_ >= frame_infos_.size())
-    if(!prescan_frames(x_index_))
+    if(!prescan_frames(x_index_+1))
       x_index_ = frame_infos_.size() -1;
   notify();
 }
@@ -365,10 +365,18 @@ Model::get_frame(unsigned index)
     if(frame_infos_.size()<=index)
       return I3FramePtr();
     cached_frame_index_=index;
+    pman_.MaybeStartShowingProgress();
     cached_frame_=files_[index];
+    pman_.SetProgress(1.);
+    pman_.StopShowingProgress();
   }
   
   return(cached_frame_);
+}
+
+I3FramePtr
+Model::current_frame(){
+  return(get_frame(x_index_));
 }
 
 void

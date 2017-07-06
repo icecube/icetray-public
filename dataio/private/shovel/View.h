@@ -22,6 +22,7 @@
 #ifndef DATAIO_SHOVEL_VIEW_H_INCLUDED
 #define DATAIO_SHOVEL_VIEW_H_INCLUDED
 
+#include <unordered_map>
 #include <ncurses.h>
 #include "color.h"
 #include <boost/optional.hpp>
@@ -55,6 +56,8 @@ private:
   std::map<I3Frame::Stream, color_pair> colors_;
   std::map<std::string, color_pair> subeventstream_colors_;
   std::vector<color_pair> new_subeventstream_colors_;
+  std::unordered_map<std::string,std::string> clean_typenames_;
+  unsigned maxtypelen_;
     
 public:
   

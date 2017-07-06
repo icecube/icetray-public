@@ -171,6 +171,8 @@ View::start()
 }
 
 View::View()
+:
+maxtypelen_(0)
 {
 }
 
@@ -302,7 +304,15 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
   bool more = (iter != the_keys.end());
 
   count = 0;
-
+  
+  unsigned maxkeylen = COLS/3 - 2 - 1;
+  unsigned maxtypelen = COLS-14 - COLS/3 - 1;
+  // if the window width has changed, invalidate cached names
+  if (maxtypelen!=maxtypelen_){
+    clean_typenames_.clear();
+    maxtypelen_=maxtypelen;
+  }
+  
   for (vector<string>::iterator iter = keys.begin();
        iter != keys.end(); iter++, count++)
     {
@@ -323,9 +333,7 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
           else
               settext(white);
       }
-
       
-      unsigned maxkeylen = COLS/3 - 2 - 1;
       string short_key = key;
       // if it is too long, shorten it
       if (key.length() > maxkeylen)
@@ -333,18 +341,20 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
           short_key = key.substr(0, maxkeylen - 3);
           short_key += "...";
       }
-
-      unsigned maxtypelen = COLS-14 - COLS/3 - 1;
-      string short_typename = stlfilt(type_name);
-      // if it is too long, shorten it
-      if (short_typename.length() > maxtypelen)
-      {
-          short_typename = short_typename.substr(0, maxtypelen - 3);
-          short_typename += "...";
+      
+      auto short_name_it=clean_typenames_.find(type_name);
+      // if the type name is not in the cache, add it
+      if(short_name_it==clean_typenames_.end()){
+        short_name_it=clean_typenames_.emplace(type_name,stlfilt(type_name)).first;
+        // if it is too long, shorten it
+        if(short_name_it->second.length() > maxtypelen){
+          short_name_it->second = short_name_it->second.substr(0, maxtypelen - 3);
+          short_name_it->second += "...";
+        }
       }
-
       mvaddstr(count + 3, 2, short_key.c_str());
-      mvaddstr(count + 3, COLS/3, short_typename.c_str());
+      mvaddstr(count + 3, COLS/3, short_name_it->second.c_str());
+
       ostringstream oss;
       oss << frame->size(*iter);
       mvaddstr(count + 3, COLS-14, oss.str().c_str());
@@ -489,10 +499,15 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
   // draw to the right
   int tape_r_column = COLS-2;
   int length_r = tape_r_column - tape_head_column;
-  if (tape_head_index + length_r >= (int)model_->totalframes())
+  if(!model_->totalframes_exact()){
+    //if the model doesn't know how many frames there are, try once to get it to
+    //look at least as far out as we are interested in.
+    streams = model_->streams(tape_head_index, length_r);
+  }
+  if (model_->totalframes_exact() && tape_head_index + length_r >= (int)model_->totalframes())
     length_r = model_->totalframes() - tape_head_index;
-
-  streams = model_->streams(tape_head_index, length_r);
+  if (streams.empty())
+    streams = model_->streams(tape_head_index, length_r);
   sub_event_streams = model_->sub_event_streams(tape_head_index, length_r);
   for (int i=0; i<length_r; i++)
     {
@@ -547,6 +562,7 @@ q                Quit
 a                About
 g                Go to frame
 L                Load project
+i                Run an interactive python shell with the current frame
 
 The 'tape' display at the bottom shows activity on each of IceTrays's data
 'streams'.

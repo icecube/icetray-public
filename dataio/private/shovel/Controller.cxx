@@ -34,6 +34,7 @@
 #include <fstream>
 
 #include <boost/program_options.hpp>
+#include <boost/python.hpp>
 
 #include <shovel/color.h>
 #include <shovel/View.h>
@@ -113,6 +114,90 @@ shovel_usage(const std::string& progname)
   exit(1);
 }
 
+void
+do_pyshell(char* argv[], Model& model, View& view){
+  struct suspend_curses{
+    View& view;
+    suspend_curses(View& view):view(view){
+      clear();
+      endwin();
+    }
+    ~suspend_curses(){
+      view.notify();
+      refresh();
+    }
+  } suspender(view);
+  
+  namespace bp = boost::python;
+#if PY_MAJOR_VERSION < 3
+  Py_SetProgramName(argv[0]);
+  Py_Initialize();
+  PySys_SetArgv(1, &argv[0]);
+#else
+  wchar_t *wprogname = new wchar_t[255];
+  mbstowcs(wprogname, argv[0], 255);
+  Py_SetProgramName(argv[0]);
+  Py_Initialize();
+  PySys_SetArgv(1, &wprogname);
+#endif
+  PyEval_InitThreads();
+  
+  //handle things like arrow keys properly
+  try{ bp::import("readline"); }
+  catch( bp::error_already_set& e ){ PyErr_Clear(); }
+  
+  //try to use this if it exists
+  try{ bp::import("IPython"); }
+  catch( bp::error_already_set& e ){
+    log_debug("Unable to load IPython");
+    PyErr_Clear();
+  }
+  
+  bp::object code_module;
+  try{ code_module=bp::import("code"); }
+  catch( bp::error_already_set& e ){
+    log_error("Unable to import 'code'");
+    PyErr_Clear();
+    return;
+  }
+  
+  bp::object main_module = bp::import("__main__");
+  bp::object main_namespace = main_module.attr("__dict__");
+  //load things users will probably need
+  try{
+    main_namespace["icetray"]=bp::import("icecube.icetray");
+    main_namespace["dataclasses"]=bp::import("icecube.dataclasses");
+    main_namespace["dataio"]=bp::import("icecube.dataio");
+  }
+  catch( bp::error_already_set& e ){
+    log_error_stream("Problem loading icecube python bindings:\n"
+                     << "Are there unbuilt pybindings?");
+    PyErr_Clear();
+    return;
+  }
+  try{ main_namespace["recclasses"]=bp::import("icecube.recclasses"); }
+  catch( bp::error_already_set& e){ PyErr_Clear(); }
+  try{ main_namespace["simclasses"]=bp::import("icecube.simclasses"); }
+  catch( bp::error_already_set& e ){ PyErr_Clear(); }
+  //inject the frame
+  main_namespace["frame"]=model.current_frame();
+  
+  try{
+    auto console=code_module.attr("InteractiveConsole")(main_namespace);
+    console.attr("interact")(R"(
+    Interactive python shell
+    The current frame is available as `frame`
+    Press ^D to return to the dataio-shovel interface
+    )");
+  }catch( bp::error_already_set& e ){
+    log_error("Python error");
+    PyErr_Clear();
+  }
+  
+  //!!!: Do not make this call; it will segfault!
+  //Py_Finalize();
+}
+
 int main (int argc, char *argv[])
 {
   I3::init_icetray_lib();
@@ -164,6 +249,7 @@ int main (int argc, char *argv[])
     {'x',"xml"},
     {'q',"quit"},
     {'L',"load_project"},
+    {'i',"interactive_shell"},
     {KEY_ENTER,"xml"},
     {KEY_UP,   "up"},
     {KEY_DOWN, "down"},
@@ -231,30 +317,31 @@ int main (int argc, char *argv[])
     log_trace("done starting up");
     std::map<std::string, std::function<void(void)>> actions;
 
-    actions["up"] = [&](){model.move_y(-1);};
-    actions["down"] = [&](){model.move_y(1);};
-    actions["right"] = [&](){model.move_x(1);};
-    actions["left"] = [&](){model.move_x(-1);};
-    actions["fast_forward"] = [&](){model.move_x(COLS/2-2);};
-    actions["fast_reverse"] = [&](){model.move_x(-(COLS/2-2));};
-    actions["fast_up"] = [&](){model.move_y(-(LINES-12));};
-    actions["fast_down"] = [&](){model.move_y(LINES-12);};
-    actions["first_frame"] = [&](){model.move_first();};
-    actions["last_frame"] = [&](){model.move_last();};
-    actions["help"] = [](){View::Instance().do_help();};
-    actions["about"] = [](){View::Instance().do_about();};
-    actions["pretty_print"] = [&](){model.pretty_print();};
-    actions["write_frame"] = [&](){model.write_frame();};
-    actions["write_frame_with_dependencies"] = [&](){model.write_frame_with_dependencies();};
-    actions["save_xml"] = [&](){model.save_xml();};
-    actions["goto_frame"] = [&](){model.do_goto_frame();};
-    actions["xml"] = [&](){model.show_xml();};
-    actions["load_project"] = [&](){
+    actions["up"] = [&]{model.move_y(-1);};
+    actions["down"] = [&]{model.move_y(1);};
+    actions["right"] = [&]{model.move_x(1);};
+    actions["left"] = [&]{model.move_x(-1);};
+    actions["fast_forward"] = [&]{model.move_x(COLS/2-2);};
+    actions["fast_reverse"] = [&]{model.move_x(-(COLS/2-2));};
+    actions["fast_up"] = [&]{model.move_y(-(LINES-12));};
+    actions["fast_down"] = [&]{model.move_y(LINES-12);};
+    actions["first_frame"] = [&]{model.move_first();};
+    actions["last_frame"] = [&]{model.move_last();};
+    actions["help"] = []{View::Instance().do_help();};
+    actions["about"] = []{View::Instance().do_about();};
+    actions["pretty_print"] = [&]{model.pretty_print();};
+    actions["write_frame"] = [&]{model.write_frame();};
+    actions["write_frame_with_dependencies"] = [&]{model.write_frame_with_dependencies();};
+    actions["save_xml"] = [&]{model.save_xml();};
+    actions["goto_frame"] = [&]{model.do_goto_frame();};
+    actions["xml"] = [&]{model.show_xml();};
+    actions["load_project"] = [&]{
       boost::optional<std::string> proj =
         View::Instance().dialog<std::string>("  Project to load: ");
       if(proj)
         load_project(*proj);
     };
+    actions["interactive_shell"] = [&]{ do_pyshell(argv,model,View::Instance()); };
 
     while (true)
       {

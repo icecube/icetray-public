@@ -121,6 +121,8 @@ public:
 
   unsigned totalframes();
   bool totalframes_exact();
+  
+  I3FramePtr current_frame();
 
   std::vector<I3Frame::Stream> streams(unsigned start_index, unsigned length);
   std::vector<std::string> sub_event_streams(unsigned start_index, unsigned length);
