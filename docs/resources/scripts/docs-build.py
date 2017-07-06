@@ -146,7 +146,7 @@ def main():
     mkdir_p(sourcedir+'/python')
     mkdir_p(sourcedir+'/projects')
     mkdir_p(sourcedir+'/inspect')
-    mkdir_p(sourcedir+'/cpp/')
+    mkdir_p(sourcedir + '/doxygen/')
 
     symlink(os.path.join(confdir,"conf.py"),
             os.path.join(sourcedir,"conf.py"))
@@ -222,7 +222,8 @@ def main():
             project_name = os.path.basename(os.path.dirname(doxygen_dir))
             if not use_this_project(project_name):
                 continue    
-            outfilename = os.path.join(sourcedir,"cpp",project_name+".rst")
+            mkdir_p(os.path.join(sourcedir, "doxygen", project_name))
+            outfilename = os.path.join(sourcedir, "doxygen", project_name, "index.rst")
             print("writing",outfilename)
             with open(outfilename,'wt') as f:
                 f.write(cppautodoctxt.format(PROJECT_NAME=project_name,
