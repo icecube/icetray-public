@@ -76,7 +76,7 @@ namespace dataio {
     void I3File::rewind()
     {
         if (type_ != Type::multipass) {
-            log_fatal("file cannot be rewinded");
+            log_fatal("file cannot be rewound");
         }
 
         Type old_type = type_;
