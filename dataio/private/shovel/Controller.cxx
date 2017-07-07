@@ -138,7 +138,7 @@ do_pyshell(char* argv[], Model& model, View& view){
   mbstowcs(program, argv[0], 255);
   Py_SetProgramName(program);
   Py_Initialize();
-  PySys_SetArgvEx(1, &program, 0);
+  PySys_SetArgvEx(1, (wchar_t**)&program, 0);
 #endif
   PyEval_InitThreads();
 
