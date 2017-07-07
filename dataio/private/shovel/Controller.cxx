@@ -132,42 +132,22 @@ do_pyshell(char* argv[], Model& model, View& view){
 #if PY_MAJOR_VERSION < 3
   Py_SetProgramName(argv[0]);
   Py_Initialize();
-  PySys_SetArgv(1, &argv[0]);
+  PySys_SetArgvEx(1, &argv[0], 0);
 #else
-  wchar_t *wprogname = new wchar_t[255];
-  mbstowcs(wprogname, argv[0], 255);
-  Py_SetProgramName(argv[0]);
+  wchar_t program[255];
+  mbstowcs(program, argv[0], 255);
+  Py_SetProgramName(program);
   Py_Initialize();
-  PySys_SetArgv(1, &wprogname);
+  PySys_SetArgvEx(1, &program, 0);
 #endif
   PyEval_InitThreads();
-  
-  //handle things like arrow keys properly
-  try{ bp::import("readline"); }
-  catch( bp::error_already_set& e ){ PyErr_Clear(); }
-  
-  //try to use this if it exists
-  try{ bp::import("IPython"); }
-  catch( bp::error_already_set& e ){
-    log_debug("Unable to load IPython");
-    PyErr_Clear();
-  }
-  
-  bp::object code_module;
-  try{ code_module=bp::import("code"); }
-  catch( bp::error_already_set& e ){
-    log_error("Unable to import 'code'");
-    PyErr_Clear();
-    return;
-  }
-  
-  bp::object main_module = bp::import("__main__");
-  bp::object main_namespace = main_module.attr("__dict__");
+
   //load things users will probably need
+  bp::dict ns;
   try{
-    main_namespace["icetray"]=bp::import("icecube.icetray");
-    main_namespace["dataclasses"]=bp::import("icecube.dataclasses");
-    main_namespace["dataio"]=bp::import("icecube.dataio");
+    ns["icetray"]=bp::import("icecube.icetray");
+    ns["dataclasses"]=bp::import("icecube.dataclasses");
+    ns["dataio"]=bp::import("icecube.dataio");
   }
   catch( bp::error_already_set& e ){
     log_error_stream("Problem loading icecube python bindings:\n"
@@ -175,27 +155,57 @@ do_pyshell(char* argv[], Model& model, View& view){
     PyErr_Clear();
     return;
   }
-  try{ main_namespace["recclasses"]=bp::import("icecube.recclasses"); }
+  try{ ns["recclasses"]=bp::import("icecube.recclasses"); }
   catch( bp::error_already_set& e){ PyErr_Clear(); }
-  try{ main_namespace["simclasses"]=bp::import("icecube.simclasses"); }
+  try{ ns["simclasses"]=bp::import("icecube.simclasses"); }
   catch( bp::error_already_set& e ){ PyErr_Clear(); }
   //inject the frame
-  main_namespace["frame"]=model.current_frame();
-  
+  ns["frame"]=model.current_frame();
+
   try{
-    auto console=code_module.attr("InteractiveConsole")(main_namespace);
-    console.attr("interact")(R"(
-    Interactive python shell
-    The current frame is available as `frame`
-    Press ^D to return to the dataio-shovel interface
-    )");
-  }catch( bp::error_already_set& e ){
-    log_error("Python error");
+    //try to use IPython if it exists
+    bp::object ipython_embed=bp::import("IPython");
+    bp::tuple arguments;
+    bp::dict options;
+    options["user_ns"] = ns;
+    ipython_embed.attr("start_ipython")(*arguments,**options);
+  }
+  catch( bp::error_already_set& e ){
+    log_warn("Unable to load IPython");
     PyErr_Clear();
+
+    //try using the regular python shell
+
+    //handle things like arrow keys properly
+    try{ bp::import("readline"); }
+    catch( bp::error_already_set& e ){ PyErr_Clear(); }
+    
+    bp::object main_module = bp::import("__main__");
+    bp::dict main_ns = bp::extract<bp::dict>(main_module.attr("__dict__"));
+    main_ns.update(ns);
+
+    bp::object code_module;
+    try{ code_module=bp::import("code"); }
+    catch( bp::error_already_set& e ){
+      log_error("Unable to import 'code'");
+      PyErr_Clear();
+      return;
+    }
+
+    try{
+      auto console=code_module.attr("InteractiveConsole")(main_ns);
+      console.attr("interact")(R"(
+      Interactive python shell
+      The current frame is available as `frame`
+      Press ^D to return to the dataio-shovel interface
+      )");
+    }catch( bp::error_already_set& e ){
+      log_error("Python error");
+      PyErr_Clear();
+    }
   }
   
-  //!!!: Do not make this call; it will segfault!
-  //Py_Finalize();
+  // Not finalizing python, as that destroys the frame
 }
 
 int main (int argc, char *argv[])
