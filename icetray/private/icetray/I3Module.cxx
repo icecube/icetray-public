@@ -295,10 +295,11 @@ I3Module::PushFrame(I3FramePtr frameptr, const std::string& name)
 	      "to anything.  Check steering file.",
 	      GetName().c_str(), name.c_str());
 
-  SyncCache(name, frameptr);
-  iter->second.first->push_front(frameptr);
-
-  log_trace("%s pushed frame onto fifo \"%s\"", GetName().c_str(), name.c_str());
+  if(iter->second.second){ //Only do the push if this outbox goes somewhere
+    SyncCache(name, frameptr);
+    iter->second.first->push_front(frameptr);
+    log_trace_stream(GetName() << " pushed frame onto fifo \"" << name << '"');
+  }
 }
 
 void
@@ -309,9 +310,11 @@ I3Module::PushFrame(I3FramePtr frameptr)
        iter != outboxes_.end();
        iter++)
     {
-      SyncCache(iter->first, frameptr);
-      iter->second.first->push_front(frameptr);
-      log_trace("%s pushed frame onto fifo \"%s\"", GetName().c_str(), iter->first.c_str());
+      if(iter->second.second){ //Only do the push if this outbox goes somewhere
+        SyncCache(iter->first, frameptr);
+        iter->second.first->push_front(frameptr);
+        log_trace_stream(GetName() << " pushed frame onto fifo \"" << iter->first << '"');
+      }
     }
 }
 

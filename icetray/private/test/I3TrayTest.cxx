@@ -244,3 +244,27 @@ TEST(functions_as_modules){
 #endif
   tray.Execute(1);
 }
+
+namespace{
+  struct CountedFrameObject : public I3FrameObject{
+    static int count; ///< Count of living instances
+    CountedFrameObject(){ count++; }
+    ~CountedFrameObject(){ count--; }
+  };
+  int CountedFrameObject::count;
+}
+
+#if BOOST_VERSION > 105500
+TEST(no_survivors){
+  CountedFrameObject::count=0; //there are no objects
+  I3Tray tray;
+  tray.AddModule("BottomlessSource");
+  tray.AddModule([](boost::shared_ptr<I3Frame> f){
+    f->Put("dummy",boost::make_shared<CountedFrameObject>());
+  });
+  tray.Execute(100);
+  //Don't destroy the tray yet; that would definitely clean up all modules and
+  //fifos, masking any effective leaks they have.
+  ENSURE_EQUAL(CountedFrameObject::count,0,"No objects should remain");
+}
+#endif
