@@ -563,6 +563,7 @@ a                About
 g                Go to frame
 L                Load project
 i                Run an interactive python shell with the current frame
+e                Search for an event by event ID, or run/event ID
 
 The 'tape' display at the bottom shows activity on each of IceTrays's data
 'streams'.
@@ -613,10 +614,10 @@ View::dialog(const std::string& prompt)
   //  log_trace(__PRETTY_FUNCTION__);
   FIELD* field[2];
 
-  char value[20];
-  memset(value, 0, 20);
+  char value[26];
+  memset(value, 0, 26);
   
-  field[0] = new_field(1,10,0,2,0,1);
+  field[0] = new_field(1,26,0,2,0,1);
   set_field_back(field[0], A_UNDERLINE);
   form_traits<T>::configure_field(field[0]);
   set_field_buffer(field[0], 0, value);
@@ -646,18 +647,19 @@ View::dialog(const std::string& prompt)
       int ch = wgetch(win);
       //      log_info("<%c>", ch);
       if (ch == '\n')
-	break;
+        break;
+      if (ch == 0x1B) //ESC
+        return optional<T>();
 
       switch(ch)
-	{
-	case '\b':
-	case 0x7F:
-	  form_driver(form, REQ_DEL_PREV);
-	  //	  form_driver(form, REQ_PREV_CHAR);
-	  break;
-	default:
-	  form_driver(form, ch);
-	}
+      {
+        case '\b':
+        case 0x7F:
+          form_driver(form, REQ_DEL_PREV);
+          break;
+        default:
+          form_driver(form, ch);
+      }
       wrefresh(win);
     }
   form_driver(form, REQ_VALIDATION);
@@ -739,19 +741,11 @@ View::Instance()
   return the_view;
 }
 
-boost::optional<string>
-View::get_file(const std::string& msg)
-{
-  std::string file = getString(cdkscreen, const_cast<char*>(msg.c_str()), 0, 0);
-  return file;
-}
-
 void
-View::start_scan_progress(const std::string& filename)
+View::start_scan_progress(const std::string& message)
 {
   log_trace("%s", __PRETTY_FUNCTION__);
   scanning_ = true;
-  string msg = "Scanning" + filename;
 
   progresshist_ = newCDKHistogram(cdkscreen,
 				  CENTER,  // xpos
@@ -759,7 +753,7 @@ View::start_scan_progress(const std::string& filename)
 				  1, // height
 				  -6, // width (full minus 6)
 				  HORIZONTAL, // orientation
-				  const_cast<char*>(msg.c_str()), // label
+				  const_cast<char*>(message.c_str()), // label
 				  true, // box
 				  false); // shadow
 

@@ -260,6 +260,7 @@ int main (int argc, char *argv[])
     {'q',"quit"},
     {'L',"load_project"},
     {'i',"interactive_shell"},
+    {'e',"find_event"},
     {KEY_ENTER,"xml"},
     {KEY_UP,   "up"},
     {KEY_DOWN, "down"},
@@ -344,6 +345,7 @@ int main (int argc, char *argv[])
     actions["write_frame_with_dependencies"] = [&]{model.write_frame_with_dependencies();};
     actions["save_xml"] = [&]{model.save_xml();};
     actions["goto_frame"] = [&]{model.do_goto_frame();};
+    actions["find_event"] = [&]{model.do_find_event();};
     actions["xml"] = [&]{model.show_xml();};
     actions["load_project"] = [&]{
       boost::optional<std::string> proj =

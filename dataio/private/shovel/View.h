@@ -74,14 +74,12 @@ public:
 
   void do_help();
   void do_about();
-  void start_scan_progress(const std::string& filename);
+  void start_scan_progress(const std::string& message);
   void scan_progress(double d);
   void end_scan_progress();
 
   template<typename T>
   boost::optional<T> dialog(const std::string& prompt);
-
-  boost::optional<std::string> get_file(const std::string& prompt);
 
   void usage();
 
