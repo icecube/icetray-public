@@ -107,7 +107,7 @@ documentation for
 `the-python-domain <http://www.sphinx-doc.org/en/stable/domains.html#the-python-domain>`_.
 
 To cross reference the C++ documentation provided by breathe can be done either
-by path with ``:doc:`/cpp/myproject``` or by label ``:ref:`myproject-cpp```.
+by path with ``:doc:`/doxygen/myproject/index``` or by label ``:ref:`myproject-cpp```.
 Individual classes and struct can be referenced with ``:cpp:class:`MyClass```
 and functions with ``:cpp:func:`MyFunction```.
 See the complete list of available directives on Sphinx's documentation for
@@ -133,7 +133,7 @@ The cross references by path can also be used in toctrees:
      :maxdepth: 1
 	      
      /python/icecube.myproject
-     /cpp/myproject
+     /doxygen/myproject/index
      /inspect/myproject
 
 Or if you don't like using the titles of the page as the link provide your own:
@@ -144,7 +144,7 @@ Or if you don't like using the titles of the page as the link provide your own:
      :maxdepth: 1
 	      
      Python API Reference </python/icecube.myproject>
-     C++ API Reference </cpp/myproject>
+     C++ API Reference </doxygen/myproject/index>
      IceTray Inspect Reference </inspect/myproject>
 
 

@@ -7,4 +7,4 @@ C++ API Reference
    :sorted:
    :ignorecase:
 
-   cpp/*
+   doxygen/*/index
