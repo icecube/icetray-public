@@ -885,7 +885,7 @@ class HelpScreen(urwid.Frame):
 class ViewerMain(urwid.Frame):
 
     def __init__(self, framelist, header, footer, ascii_only=False):
-        if not framelist.more():
+        if not framelist.more() and not framelist:
             raise Exception('No frames in file!')
         self.framelist = framelist
         self.active_view = 0
