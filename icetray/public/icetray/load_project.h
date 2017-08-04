@@ -22,8 +22,12 @@
 #ifndef ICETRAY_LOAD_PROJECT_H_INCLUDED
 #define ICETRAY_LOAD_PROJECT_H_INCLUDED
 
-//
-// "proj" here is "dataio" or "dataclasses", not "libdataio.so" or "libdataio" 
-//
+///\brief Dynamically load an icetray project
+///
+///\param proj the name of the project to be loaded. No filename extension
+///            should be included, and the 'lib' prefix is optional. 
+///\param verbose unused
+///\return 0 on success
+///\throw std::runtime_error if loading does not succeed
 int load_project(std::string proj, __attribute__((unused)) bool verbose = false);
 #endif
