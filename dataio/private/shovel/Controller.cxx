@@ -27,6 +27,7 @@
 #include <icetray/I3Tray.h>
 #include <icetray/I3TrayInfo.h>
 #include <icetray/load_project.h>
+#include <icetray/I3SimpleLoggers.h>
 
 #include <algorithm>
 #include <map>
@@ -36,6 +37,8 @@
 #include <boost/program_options.hpp>
 #include <boost/python.hpp>
 
+#include <dataio/I3FileStager.h>
+
 #include <shovel/color.h>
 #include <shovel/View.h>
 #include <shovel/Model.h>
@@ -43,60 +46,6 @@
 #include <dlfcn.h>
 
 namespace po = boost::program_options;
-
-class I3FileLogger : public I3Logger{
-private:
-  std::string path;
-  std::ofstream out;
-  bool TrimFileNames;
-public:
-  explicit I3FileLogger(std::string path):path(path),out(path.c_str()),TrimFileNames(true){
-    if(!out)
-      throw std::runtime_error("Failed to open "+path+" for logging");
-  }
-  
-  void Log(I3LogLevel level, const std::string &unit,
-           const std::string &file, int line, const std::string &func,
-           const std::string &message)
-  {
-    if (LogLevelForUnit(unit) > level)
-      return;
-    std::string trimmed_filename;
-	size_t lastslash = file.rfind('/');
-	if (lastslash != std::string::npos && TrimFileNames)
-      trimmed_filename = file.substr(lastslash+1);
-	else
-      trimmed_filename = file;
-    switch (level) {
-      case I3LOG_TRACE:
-		out << "TRACE";
-		break;
-      case I3LOG_DEBUG:
-		out << "DEBUG";
-		break;
-      case I3LOG_INFO:
-		out << "INFO";
-		break;
-      case I3LOG_NOTICE:
-        out << "NOTICE";
-        break;
-      case I3LOG_WARN:
-		out << "WARN";
-		break;
-      case I3LOG_ERROR:
-		out << "ERROR";
-		break;
-      case I3LOG_FATAL:
-		out << "FATAL";
-		break;
-      default:
-		out << "UNKNOWN";
-		break;
-	}
-    out << " (" << unit << "):" << message << " (" << trimmed_filename << ':'
-    << line << " in " << func << ')' << std::endl;
-  }
-};
 
 void
 shovel_usage(const std::string& progname)
