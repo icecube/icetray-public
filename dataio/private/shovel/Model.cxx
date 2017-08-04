@@ -136,6 +136,9 @@ void Model::ProgressManager::MaybeStartShowingProgress(std::string message){
 void Model::ProgressManager::SetProgress(float value){
   if(nestingLevel)
     return;
+  //ignore redundant values which would be displayed the same
+  if((int)(100*value)==(int)(100*progress_))
+    return;
   if(actuallyShowingProgress_){
     progress_=value;
     std::unique_lock<std::mutex> lock(this->mut_);
