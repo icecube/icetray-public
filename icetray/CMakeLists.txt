@@ -107,6 +107,7 @@ i3_add_library(icetray
   private/icetray/I3IcePick.cxx
   private/icetray/I3PrintfLogger.cxx
   private/icetray/I3SyslogLogger.cxx
+  private/icetray/I3FileLogger.cxx
   private/icetray/I3Logging.cxx
   private/icetray/PythonFunction.cxx
   private/icetray/FunctionModule.cxx
@@ -249,6 +250,7 @@ i3_test_executable(test
   private/test/iostreams.cxx
   private/test/I3ModulePlumbing.cxx
   private/test/CompressedIO.cxx
+  private/test/I3FileLogging.cxx
 
   USE_PROJECTS icetray)
 

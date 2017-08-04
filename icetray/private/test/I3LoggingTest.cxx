@@ -28,6 +28,7 @@ TEST(one)
   log_error("here's an error message");
   try {
     log_fatal("here's a fatal message");
+    FAIL("log_fatal() should throw");
   } catch (std::exception& e) {
     // we should be here
   }

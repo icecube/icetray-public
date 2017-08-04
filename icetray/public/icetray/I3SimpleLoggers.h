@@ -22,6 +22,7 @@
 #define ICETRAY_I3SIMPLELOGGERS_H_INCLUDED
 
 #include <stdexcept>
+#include <fstream>
 #ifdef I3_ONLINE
 #  include <boost/thread/locks.hpp>
 #  include <boost/thread/shared_mutex.hpp>
@@ -119,6 +120,28 @@ public:
         virtual void Log(I3LogLevel level, const std::string &unit,
             const std::string &file, int line, const std::string &func,
             const std::string &message);
+};
+
+/**
+ * A logger which writes messages to a file.
+ */
+class I3FileLogger : public I3Logger{
+private:
+	std::string path;
+	std::ofstream out;
+	bool TrimFileNames;
+public:
+	/**
+	 * Construct a file logger. The chosen output file will be overwritten.
+	 * @param path the filesystem path to which to write the log
+	 */
+	explicit I3FileLogger(std::string path):path(path),out(path.c_str()),TrimFileNames(true){
+		if(!out)
+			throw std::runtime_error("Failed to open "+path+" for logging");
+	}
+	void Log(I3LogLevel level, const std::string &unit,
+			 const std::string &file, int line, const std::string &func,
+			 const std::string &message);
 };
 
 #endif //ifndef ICETRAY_I3SIMPLELOGGERS_H_INCLUDED
