@@ -350,8 +350,13 @@ int main (int argc, char *argv[])
     actions["load_project"] = [&]{
       boost::optional<std::string> proj =
         View::Instance().dialog<std::string>("  Project to load: ");
-      if(proj)
-        load_project(*proj);
+      if(proj){
+        try{
+          load_project(*proj);
+        }catch(std::runtime_error& err){
+          log_error_stream(err.what());
+        }
+      }
     };
     actions["interactive_shell"] = [&]{ do_pyshell(argv,model,View::Instance()); };
 
