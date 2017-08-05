@@ -1,23 +1,29 @@
 #include "FunctionModule.h"
 
-FunctionModule::FunctionModule(const I3Context& context,
-                               boost::function<void(boost::shared_ptr<I3Frame>)> f):
-I3ConditionalModule(context),funcReturns(false),
-vf(f){
+FunctionModule::FunctionModule(const I3Context& context):
+I3ConditionalModule(context){
 	AddParameter("Streams",
 	             "A list of frame types which this function should fire on. "
 	             "By default runs only on physics frames",
-	             std::vector<I3Frame::Stream>(1,I3Frame::Physics));
+	             std::vector<I3Frame::Stream>{I3Frame::Physics});
 }
 
 FunctionModule::FunctionModule(const I3Context& context,
-                               boost::function<bool(boost::shared_ptr<I3Frame>)> f):
-I3ConditionalModule(context),funcReturns(true),
-bf(f){
-	AddParameter("Streams",
-	             "A list of frame types which this function should fire on. "
-	             "By default runs only on physics frames",
-	             std::vector<I3Frame::Stream>(1,I3Frame::Physics));
+                               std::function<void(boost::shared_ptr<I3Frame>)> f):
+FunctionModule(context){
+	func=[this,f](boost::shared_ptr<I3Frame> frame){
+		f(frame);
+		PushFrame(frame);
+	};
+}
+
+FunctionModule::FunctionModule(const I3Context& context,
+                               std::function<bool(boost::shared_ptr<I3Frame>)> f):
+FunctionModule(context){
+	func=[this,f](boost::shared_ptr<I3Frame> frame){
+		if(f(frame))
+			PushFrame(frame);
+	};
 }
 
 void FunctionModule::Configure(){
@@ -30,19 +36,9 @@ void FunctionModule::Process(){
 	boost::shared_ptr<I3Frame> frame = PopFrame();
 	if(!frame)
 		log_fatal("No frame in inbox:  function modules cannot be driving modules.");
-	if(streams.find(frame->GetStop()) == streams.end()){
+	if(!streams.count(frame->GetStop()))
 		//not a stream we're supposed to process, so just hand it off
 		PushFrame(frame);
-		return;
-	}
-	if(!funcReturns){ //wrapped function is void
-		vf(frame);
-		PushFrame(frame);
-	}
-	else{ //wrapped function returns bool
-		bool flag=bf(frame);
-		if(flag)
-			PushFrame(frame);
-	}
+	else
+		func(frame); //calls PushFrame if appropriate
 }
-
