@@ -595,14 +595,14 @@ I3Tray::CreateName(const std::string& type, const string& kind,
 
 template<>
 I3Tray::param_setter
-I3Tray::AddFunctionModule<void>(boost::function<void(boost::shared_ptr<I3Frame>)> func,
+I3Tray::AddFunctionModule<void>(std::function<void(boost::shared_ptr<I3Frame>)> func,
                                 const std::string& instancename){
 	return AddModule(boost::make_shared<FunctionModule>(master_context,func));
 }
 
 template<>
 I3Tray::param_setter
-I3Tray::AddFunctionModule<bool>(boost::function<bool(boost::shared_ptr<I3Frame>)> func,
+I3Tray::AddFunctionModule<bool>(std::function<bool(boost::shared_ptr<I3Frame>)> func,
                                 const std::string& instancename){
 	return AddModule(boost::make_shared<FunctionModule>(master_context,func));
 }

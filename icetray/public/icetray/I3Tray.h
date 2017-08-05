@@ -28,6 +28,7 @@
 #include <map>
 #include <string>
 #include <exception>
+#include <functional>
 #include <iostream>
 #include <icetray/IcetrayFwd.h>
 
@@ -282,7 +283,7 @@ private:
    */
   template<typename RetType>
   param_setter
-  AddFunctionModule(boost::function<RetType(boost::shared_ptr<I3Frame>)>,
+  AddFunctionModule(std::function<RetType(boost::shared_ptr<I3Frame>)>,
                     const std::string& instancename);
 
   /** Context, modules, and factories: oh my! */
@@ -341,7 +342,7 @@ I3Tray::AddService(std::string instancename)
 
 template<typename RetType>
 I3Tray::param_setter
-I3Tray::AddFunctionModule(boost::function<RetType(boost::shared_ptr<I3Frame>)>,
+I3Tray::AddFunctionModule(std::function<RetType(boost::shared_ptr<I3Frame>)>,
                           const std::string& instancename){
   BOOST_STATIC_ASSERT(sizeof(RetType) == 0 &&
     "Only callable objects returning void or bool may be added to I3Tray as modules");
@@ -349,11 +350,11 @@ I3Tray::AddFunctionModule(boost::function<RetType(boost::shared_ptr<I3Frame>)>,
 }
 template<>
 I3Tray::param_setter
-I3Tray::AddFunctionModule<void>(boost::function<void(boost::shared_ptr<I3Frame>)>,
+I3Tray::AddFunctionModule<void>(std::function<void(boost::shared_ptr<I3Frame>)>,
                                 const std::string& instancename);
 template<>
 I3Tray::param_setter
-I3Tray::AddFunctionModule<bool>(boost::function<bool(boost::shared_ptr<I3Frame>)>,
+I3Tray::AddFunctionModule<bool>(std::function<bool(boost::shared_ptr<I3Frame>)>,
                                 const std::string& instancename);
 
 #endif
