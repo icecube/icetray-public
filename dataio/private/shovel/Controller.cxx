@@ -111,12 +111,16 @@ do_pyshell(char* argv[], Model& model, View& view){
   //inject the frame
   ns["frame"]=model.current_frame();
 
+  bp::object main_module = bp::import("__main__");
+  bp::dict main_ns = bp::extract<bp::dict>(main_module.attr("__dict__"));
+  main_ns.update(ns);
+
   try{
     //try to use IPython if it exists
     bp::object ipython_embed=bp::import("IPython");
     bp::tuple arguments;
     bp::dict options;
-    options["user_ns"] = ns;
+    options["user_ns"] = ns; // need this for first invocation
     ipython_embed.attr("start_ipython")(*arguments,**options);
   }
   catch( bp::error_already_set& e ){
@@ -128,10 +132,6 @@ do_pyshell(char* argv[], Model& model, View& view){
     //handle things like arrow keys properly
     try{ bp::import("readline"); }
     catch( bp::error_already_set& e ){ PyErr_Clear(); }
-    
-    bp::object main_module = bp::import("__main__");
-    bp::dict main_ns = bp::extract<bp::dict>(main_module.attr("__dict__"));
-    main_ns.update(ns);
 
     bp::object code_module;
     try{ code_module=bp::import("code"); }
