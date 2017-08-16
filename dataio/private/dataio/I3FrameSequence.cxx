@@ -311,7 +311,7 @@ namespace {
                     auto frames = fs.file.get_current_frame_and_deps();
                     i3_assert(!frames.empty());
                     fs.last_frames.clear();
-                    for (const auto& f : fs.last_frames) {
+                    for (const auto& f : frames) {
                         fs.last_frames.emplace_back(new I3Frame(*f));
                         mixer.UpdateDependencies(*f);
                     }

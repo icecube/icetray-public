@@ -262,3 +262,85 @@ TEST(EmptyFile){
 	testfile f=make_testfile("");
 	I3FrameSequence s({f.getPath()},5);
 }
+
+TEST(FramePopping_InfoFrame){
+	testfile f;
+	{
+		std::ofstream out(f.getPath());
+		int counter=0;
+		for(char c : "IGCDIQP"){
+			I3Frame frame;
+			frame.SetStop(I3Frame::Stream(c));
+			std::string key("Index");
+			key += c;
+			frame.Put(key,boost::make_shared<I3Int>(counter++));
+			frame.save(out);
+		};
+	}
+	I3FrameSequence s({f.getPath()},5);
+	I3FramePtr frame=s.pop_frame(I3Frame::Stream('D'));
+	ENSURE_EQUAL(frame->GetStop(),I3Frame::Stream('D'),"pop_frame(D) should skip to next D frame");
+	ENSURE_EQUAL(frame->Get<I3Int>("IndexD").value,3,"pop_frame(D) should skip to next D frame");
+	ENSURE_EQUAL(frame->Get<I3Int>("IndexG").value,1,"pop_frame(D) should have G frame merged");
+	frame=s.pop_daq();
+	ENSURE_EQUAL(frame->GetStop(),I3Frame::Stream('Q'),"pop_daq() should skip to next Q frame");
+	ENSURE_EQUAL(frame->Get<I3Int>("IndexQ").value,5,"pop_frame(Q) should skip to next Q frame");
+	ENSURE_EQUAL(frame->Get<I3Int>("IndexD").value,3,"pop_frame(Q) should have D frame merged");
+	ENSURE_EQUAL(frame->Get<I3Int>("IndexG").value,1,"pop_frame(Q) should have G frame merged");
+	frame=s.pop_physics();
+	ENSURE_EQUAL(frame->GetStop(),I3Frame::Stream('P'),"pop_physics() should skip to next P frame");
+	ENSURE_EQUAL(frame->Get<I3Int>("IndexP").value,6,"pop_physics() should skip to next P frame");
+	ENSURE_EQUAL(frame->Get<I3Int>("IndexQ").value,5,"pop_physics() should have Q frame merged");
+	ENSURE_EQUAL(frame->Get<I3Int>("IndexD").value,3,"pop_physics() should have D frame merged");
+	ENSURE_EQUAL(frame->Get<I3Int>("IndexG").value,1,"pop_physics() should have G frame merged");
+}
+
+TEST(FramePopping_InfoFrame_MultiFile){
+	testfile f,f2;
+	int counter=0;
+	{
+		std::ofstream out(f.getPath());
+		for(char c : "IGCD"){
+			if (!c)
+				continue;
+			std::cout<<"|"<<c<<"|\n";
+			I3Frame frame;
+			frame.SetStop(I3Frame::Stream(c));
+			std::string key("Index");
+			key += c;
+			frame.Put(key,boost::make_shared<I3Int>(counter++));
+			frame.save(out);
+		};
+	}
+	{
+		std::ofstream out(f2.getPath());
+		for(char c : "IQP"){
+			if (!c)
+				continue;
+			std::cout<<"|"<<c<<"|\n";
+			I3Frame frame;
+			frame.SetStop(I3Frame::Stream(c));
+			std::string key("Index");
+			key += c;
+			frame.Put(key,boost::make_shared<I3Int>(counter++));
+			frame.save(out);
+		};
+	}
+	I3FrameSequence s({f.getPath(),f2.getPath()},10);
+	I3FramePtr frame=s.pop_frame(I3Frame::Stream('D'));
+	ENSURE_EQUAL(frame->GetStop(),I3Frame::Stream('D'),"pop_frame(D) should skip to next D frame");
+	ENSURE_EQUAL(frame->Get<I3Int>("IndexD").value,3,"pop_frame(D) should skip to next D frame");
+	ENSURE_EQUAL(frame->Get<I3Int>("IndexG").value,1,"pop_frame(D) should have G frame merged");
+	std::cout << std::endl;
+	frame=s.pop_daq();
+	ENSURE_EQUAL(frame->GetStop(),I3Frame::Stream('Q'),"pop_daq() should skip to next Q frame");
+	ENSURE_EQUAL(frame->Get<I3Int>("IndexQ").value,5,"pop_frame(Q) should skip to next Q frame");
+	ENSURE_EQUAL(frame->Get<I3Int>("IndexD").value,3,"pop_frame(Q) should have D frame merged");
+	ENSURE_EQUAL(frame->Get<I3Int>("IndexG").value,1,"pop_frame(Q) should have G frame merged");
+	frame=s.pop_physics();
+	ENSURE_EQUAL(frame->GetStop(),I3Frame::Stream('P'),"pop_physics() should skip to next P frame");
+	ENSURE_EQUAL(frame->Get<I3Int>("IndexP").value,6,"pop_physics() should skip to next P frame");
+	ENSURE_EQUAL(frame->Get<I3Int>("IndexQ").value,5,"pop_physics() should have Q frame merged");
+	ENSURE_EQUAL(frame->Get<I3Int>("IndexD").value,3,"pop_physics() should have D frame merged");
+	ENSURE_EQUAL(frame->Get<I3Int>("IndexG").value,1,"pop_physics() should have G frame merged");
+}
