@@ -34,12 +34,12 @@ class Model;
 
 class View
 {
+private:
 
   unsigned totalframes_;
   unsigned y_top_offset_;
   CDKSCREEN* cdkscreen;
   CDKHISTOGRAM* progresshist_;
-  bool scanning_;
   Model* model_;
 
   void drawtape(unsigned line, unsigned col,
@@ -49,8 +49,6 @@ class View
 
   void draw_border();
 
-private:
-
   View();
 
   std::map<I3Frame::Stream, color_pair> colors_;
@@ -58,6 +56,7 @@ private:
   std::vector<color_pair> new_subeventstream_colors_;
   std::unordered_map<std::string,std::string> clean_typenames_;
   unsigned maxtypelen_;
+  bool scanning_;
     
 public:
   

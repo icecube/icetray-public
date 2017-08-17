@@ -18,13 +18,17 @@
 class I3AsyncWriter : public I3Module{
 private:
 	unsigned buffer_size_; //read only after Configure()
+	int compression_level_; //read only after Configure()
 	std::vector<std::string> skip_keys_; //read only after Configure()
 	std::vector<I3Frame::Stream> streams_; //read only after Configure()
 	std::vector<I3Frame::Stream> dropOrphanStreams_; //read only after Configure()
 	std::vector<boost::shared_ptr<I3Frame>> orphanarium_; //worker thread only
 	bool configWritten_; //main thread only
+	//indicates that no more writes will be queued
+	std::atomic<bool> stop_flag_; //both threads
+	//indicates that a failure has occurred and all in-flight writes should be dumped
+	std::atomic<bool> abort_flag_; //both threads
 	std::atomic<std::size_t> frameCounter_; //both threads
-	int compression_level_; //read only after Configure()
 	boost::iostreams::filtering_ostream filterstream_; //worker thread only after Configure and WriteConfig
 	boost::shared_ptr<I3FileStager> file_stager_; //main thread only
 	I3::dataio::shared_filehandle current_filename_; //main thread only
@@ -35,10 +39,6 @@ private:
 	std::mutex write_lock_; //both threads, protects read_queue_
 	std::queue<std::future<boost::shared_ptr<I3Frame>>> frame_queue_; //main thread
 	std::condition_variable condition_; //both threads
-	//indicates that no more writes will be queued
-	std::atomic<bool> stop_flag_; //both threads
-	//indicates that a failure has occurred and all in-flight writes should be dumped
-	std::atomic<bool> abort_flag_; //both threads
 	std::size_t queued_;
 	
 	void QueueWrite(boost::shared_ptr<I3Frame> frame); //main thread only
@@ -61,12 +61,12 @@ I3_MODULE(I3AsyncWriter);
 I3AsyncWriter::I3AsyncWriter(const I3Context& context):
 I3Module(context),
 buffer_size_(128),
-configWritten_(false),
-frameCounter_(0),
 compression_level_(0),
-a_while_ago_(std::chrono::steady_clock::now()),
+configWritten_(false),
 stop_flag_(false),
 abort_flag_(false),
+frameCounter_(0),
+a_while_ago_(std::chrono::steady_clock::now()),
 queued_(0)
 {
 	AddOutBox("OutBox");

@@ -75,14 +75,14 @@ class Model
   struct ProgressManager{
   private:
     View& view_;
-    std::mutex mut_;
-    std::condition_variable cond_;
     bool stop_;
-    std::thread thread_;
     std::atomic<bool> showingProgress_;
     std::atomic<bool> actuallyShowingProgress_;
     unsigned int nestingLevel;
     float progress_;
+    std::mutex mut_;
+    std::condition_variable cond_;
+    std::thread thread_;
     std::chrono::system_clock::time_point progressStart_;
     struct WorkItem{
       std::chrono::system_clock::time_point time_;
@@ -111,17 +111,19 @@ class Model
   unsigned y_index_;
   ///The number of keys in the current frame
   unsigned y_max_;
-  ///The currently selected key
-  std::string y_keystring_;
-  ///The most recently selected key for each distinct FrameInfo which has been seen
-  std::unordered_map<FrameInfo,std::string,FrameInfoHash> recent_frame_keys_;
 
   ///The index of the last frame fetched by get_frame (the current frame index)
   unsigned cached_frame_index_;
   ///The last frame fetched by get_frame (the current frame)
   I3FramePtr cached_frame_;
-  ///Th ekeys in the current frame, in sorted order
+  ///The keys in the current frame, in sorted order
   std::vector<std::string> cached_frame_keys_;
+
+  ///The currently selected key
+  std::string y_keystring_;
+  ///The most recently selected key for each distinct FrameInfo which has been seen
+  std::unordered_map<FrameInfo,std::string,FrameInfoHash> recent_frame_keys_;
+
   
   ///Fetch the frame at the given index
   I3FramePtr get_frame(unsigned);

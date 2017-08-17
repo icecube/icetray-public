@@ -42,11 +42,11 @@ class I3Reader : public I3Module
 {
 
   unsigned nframes_;
+  bool drop_blobs_;
   std::vector<std::string> filenames_;
   std::vector<std::string> skip_;
   // bool popmeta_done_;
   // bool skip_unregistered_;
-  bool drop_blobs_;
   I3FileStagerPtr file_stager_;
   I3::dataio::shared_filehandle current_filename_;
 

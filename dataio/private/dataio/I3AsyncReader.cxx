@@ -19,9 +19,10 @@ class I3AsyncReader : public I3Module{
 	unsigned buffer_size_; //read only after Configure()
 	unsigned nframes_; //worker thread only after Configure()
 	unsigned npushed_;
+	bool drop_blobs_; //read only after Configure()
+	std::atomic<bool> stop_flag_; //both threads
 	std::vector<std::string> filenames_; //read only after Configure()
 	std::vector<std::string> skip_; //read only after Configure()
-	bool drop_blobs_; //read only after Configure()
 	I3FileStagerPtr file_stager_; //worker thread only after Configure()
 	I3::dataio::shared_filehandle current_filename_; //worker thread only after Configure()
 	boost::iostreams::filtering_istream ifs_; //worker thread only after Configure()
@@ -33,7 +34,6 @@ class I3AsyncReader : public I3Module{
 	std::mutex read_lock_; //both threads, protects read_queue_
 	std::queue<std::future<boost::shared_ptr<I3Frame>>> frame_queue_; //main thread
 	std::condition_variable condition_; //both threads
-	std::atomic<bool> stop_flag_; //both threads
 	
 	void QueueRead(); //main thread only
 	bool FetchNext(); //main thread only
@@ -57,8 +57,8 @@ buffer_size_(128),
 nframes_(0),
 npushed_(0),
 drop_blobs_(false),
-a_while_ago_(std::chrono::steady_clock::now()),
-stop_flag_(false){
+stop_flag_(false),
+a_while_ago_(std::chrono::steady_clock::now()){
 	AddParameter("Filename",
 	             "Filename to read.  Use either this or Filenamelist, not both.",
 	             std::string());

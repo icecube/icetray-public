@@ -35,21 +35,21 @@
 class I3WriterBase : public I3ConditionalModule
 {
 protected:
+  bool configWritten_;
+  int frameCounter_;
   std::vector<std::string> skip_keys_;
   std::vector<I3Frame::Stream> streams_;
   std::vector<I3Frame::Stream> dropOrphanStreams_;
   std::vector<I3FramePtr> orphanarium_;
-  bool configWritten_;
-  int frameCounter_;
 
   void WriteConfig(I3FramePtr ptr);
-
-  int gzip_compression_level_;
   
   boost::iostreams::filtering_ostream filterstream_;
   std::string path_;
   I3FileStagerPtr file_stager_;
   I3::dataio::shared_filehandle current_filename_;
+
+  int gzip_compression_level_;
 
 public:
 

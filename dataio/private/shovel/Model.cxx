@@ -41,6 +41,7 @@
 Model::ProgressManager::ProgressManager(View& view):
 view_(view),
 stop_(false),
+showingProgress_(false),
 thread_([this](){
   using std::chrono::system_clock;
   using duration=system_clock::time_point::duration;
@@ -85,8 +86,7 @@ thread_([this](){
       doNext=false;
     }
   }
-}),
-showingProgress_(false)
+})
 {}
 
 Model::ProgressManager::~ProgressManager(){
