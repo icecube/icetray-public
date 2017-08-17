@@ -91,10 +91,10 @@ class I3IcePick : public I3ServiceBase
  private:
   template <class A> friend class I3IcePickModule;
   template <class A> friend class I3IceForkModule;
-  unsigned npassed_;
-  unsigned nfailed_;
   bool cache_;
+  unsigned npassed_;
   std::string cachename_;
+  unsigned nfailed_;
 };
 
 I3_POINTER_TYPEDEFS(I3IcePick);

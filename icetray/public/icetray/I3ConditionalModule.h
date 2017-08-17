@@ -74,10 +74,10 @@ class I3ConditionalModule : public I3Module
   I3IcePickPtr pick_;
   boost::python::object if_;
 
-  bool use_if_;
-  bool use_pick_;
   unsigned nexecuted_;
   unsigned nskipped_;
+  bool use_if_;
+  bool use_pick_;
 };
 
 #endif
