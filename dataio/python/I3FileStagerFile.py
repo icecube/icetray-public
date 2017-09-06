@@ -56,26 +56,8 @@ class AbstractFileStager(I3FileStager):
 	def get_local_scratch_dir(cls):
 		if cls._local_scratch_dir is not None:
 			return cls._local_scratch_dir
-		# find a local staging directory
-		elif "_CONDOR_SCRATCH_DIR" in os.environ:
-			# works on condor (especially npx4)
-			staging_directory = os.environ["_CONDOR_SCRATCH_DIR"]
-		elif "TMPDIR" in os.environ:
-			# works on some PBS/TORQUE nodes
-			staging_directory = os.environ["TMPDIR"]
-		else:
-			# try some known locations on interactive nodes
-			import pwd
-			current_username = pwd.getpwuid(os.getuid()).pw_name
-			if cls.try_to_make_scratch_dir('/scratch', '/scratch/'+current_username):
-				staging_directory = '/scratch/'+current_username
-			elif cls.try_to_make_scratch_dir('/global/scratch', '/global/scratch/'+current_username):
-				staging_directory = '/global/scratch/'+current_username
-			else:
-				staging_directory = os.getcwd()
-				icetray.logging.log_info("Cannot find a suitable scratch directory on this machine; falling back to the current working directory (%s). If this is not what you want, set a different path with dataio.set_local_scratch_dir(path)." % staging_directory, unit="I3Reader")
 		
-		cls.set_local_scratch_dir(staging_directory)
+		cls.set_local_scratch_dir(icetray.get_scratch_directory())
 		return cls._local_scratch_dir
 	
 	@classmethod
