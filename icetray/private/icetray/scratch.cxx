@@ -2,6 +2,7 @@
 #include <icetray/I3Logging.h>
 
 #include <cstdlib> //for getenv
+#include <cstring> //for strlen
 #include <sys/errno.h> //for errno, EEXIST
 #include <sys/stat.h> //for mkdir
 #include <unistd.h> //for getcwd, getuid
@@ -78,6 +79,7 @@ namespace I3 {
 			if(!cwd_res)
 				log_fatal_stream("Unable to get current working directory: error "
 				                 << errno);
+			scratch_dir.resize(strlen(cwd_res));
 			log_warn_stream("Cannot find a suitable scratch directory on this machine; "
 			                << "falling back to the current working directory ("
 			                << scratch_dir << ").");
