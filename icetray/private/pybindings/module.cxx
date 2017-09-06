@@ -22,6 +22,7 @@
 
 #include <icetray/I3Logging.h>
 #include <icetray/load_project.h>
+#include <icetray/scratch.h>
 #include <signal.h>
 
 void register_OMKey();
@@ -76,6 +77,8 @@ BOOST_PYTHON_MODULE(icetray)
   load_project("icetray", false); 
 
   def("load", &load_impl, load_impl_overloads(args("name","verbose")));
+  def("get_scratch_directory", &I3::dataio::GetScratchDirectory);
+  def("set_scratch_directory", &I3::dataio::SetScratchDirectory);
 
 #ifdef I3_USE_ROOT
   // undo that nasty irritating root signal catching.  Power to the

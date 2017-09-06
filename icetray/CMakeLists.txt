@@ -124,6 +124,7 @@ i3_add_library(icetray
   private/icetray/load_project.cxx
   private/icetray/name_of.cxx
   private/icetray/memory.cxx
+  private/icetray/scratch.cxx
   private/open/open.cxx
   private/open/http_source.cpp
 
@@ -251,6 +252,7 @@ i3_test_executable(test
   private/test/I3ModulePlumbing.cxx
   private/test/CompressedIO.cxx
   private/test/I3FileLogging.cxx
+  private/test/ScratchDir.cxx
 
   USE_PROJECTS icetray)
 
