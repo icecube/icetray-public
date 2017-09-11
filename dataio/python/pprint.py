@@ -5,8 +5,6 @@ from icecube import icetray
 from icecube import dataclasses
 from icecube import dataio
 
-from .fileadaptor import FrameWrapper
-
 def format_line( frame, key, maxwidth = None, ellipsis = '...' ):
     '''Given an icecube frame and a key in that frame, return
     exactly one line of text describing the I3FrameObject with that key.
@@ -21,10 +19,7 @@ def format_line( frame, key, maxwidth = None, ellipsis = '...' ):
         if (obj is None) and (key in frame):
             return '(Unreadable)'
         if hasattr(obj, "apply"):
-            if isinstance(frame,FrameWrapper):
-                obj = obj.apply(frame.frame)
-            else:
-                obj = obj.apply(frame)
+            obj = obj.apply(frame)
         haslength = isinstance( obj, collections.Iterable )
     except (TypeError, RuntimeError) as e:
         obstr = '(Unreadable)'
@@ -53,10 +48,7 @@ def format_detail( frame, key ):
     try:
         obj = frame[key]
         if hasattr(obj, "apply"):
-            if isinstance(frame,FrameWrapper):
-                obj = obj.apply(frame.frame)
-            else:
-                obj = obj.apply(frame)
+            obj = obj.apply(frame)
         if isinstance(obj,dataclasses.I3String):
             message = obj.value
         if isinstance(obj,dataclasses.I3Double):
