@@ -21,7 +21,7 @@ def format_line( frame, key, maxwidth = None, ellipsis = '...' ):
         if hasattr(obj, "apply"):
             obj = obj.apply(frame)
         haslength = isinstance( obj, collections.Iterable )
-    except (TypeError, RuntimeError) as e:
+    except Exception as e:
         obstr = '(Unreadable)'
     else:
         if( haslength ):
@@ -60,7 +60,7 @@ def format_detail( frame, key ):
             message += '}'
         else:
             message = str(obj)
-    except (TypeError,RuntimeError) as e:
+    except Exception as e:
         message = '({0})'.format(e)
     
     if re.match('<icecube\.[\S]*\.[\S]* object at [0-9xa-f]*>', message):
@@ -79,7 +79,7 @@ def format_xml( frame, key ):
             message = frame.as_xml(key)
         else:
             message = key+' not in frame'
-    except RuntimeError as e:
+    except Exception as e:
         message = '({0})'.format(e)
     
     return message.expandtabs(4)
