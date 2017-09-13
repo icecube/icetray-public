@@ -4,8 +4,20 @@ Release Notes
 trunk
 -----
 
+* (r2966) Remove memory usage code from IceTray. Will be an external
+  library using LD_PRELOAD in the future.
+* (r2961) Put functionality for locating a scratch directory into the core.
+* (r2952) Move the file logger from dataio-shovel to icetray.
+* (r2924) Throw in python with a nice error message if deserialization fails.
+* (r2921) Keep serialized frame object sizes around in a cached value.
+* (r2920) Add a mode for I3FrameMixer to only track frame dependencies,
+  without mixing.
+* (r2901) Fill in the python bindings for I3Configuration.
 * (r2878) No need for a TrashCan anymore.  If the user
   doesn't specify an outbox configuration one is added for them.
+* (r2868) Don't require implementing Configure.
+* (r2851) Add support for zstd compression.
+* (r2836) Reduce frame mixing overhead by reusing cached frames.
 
 March 23, 2017, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------
