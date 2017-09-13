@@ -51,7 +51,6 @@ set(ICETRAY_PYTHON_SRC
   private/pybindings/I3FrameMixing.cxx
   private/pybindings/I3TrayInfo.cxx
   private/pybindings/MyService.cxx
-  private/pybindings/Memory.cxx
   private/pybindings/std_cont_pod/std_cont_pod_char.cxx
   private/pybindings/std_cont_pod/std_cont_pod_double.cxx
   private/pybindings/std_cont_pod/std_cont_pod_I3Frame_Stream.cxx
@@ -191,10 +190,13 @@ endif(ZSTD_FOUND)
 #
 string( TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_LOWER )
 if ((${CMAKE_BUILD_TYPE_LOWER} STREQUAL "debug") AND (NOT DEFINED MEMORY_TRACKING))
-#  set(MEMORY_TRACKING ON)
+  set(MEMORY_TRACKING ON)
 endif ((${CMAKE_BUILD_TYPE_LOWER} STREQUAL "debug") AND (NOT DEFINED MEMORY_TRACKING))
 if (${MEMORY_TRACKING})
-  set_source_files_properties(private/icetray/memory.cxx private/icetray/I3Module.cxx
+  set_source_files_properties(
+    private/icetray/memory.cxx
+    private/icetray/I3Tray.cxx
+    private/icetray/I3Module.cxx
     PROPERTIES
     COMPILE_FLAGS "-DMEMORY_TRACKING")
   colormsg(GREEN "+-- memory tracking enabled")

@@ -41,7 +41,10 @@
 #include <icetray/I3Frame.h>
 #include <icetray/I3PhysicsUsage.h>
 #include <icetray/serialization.h>
+
+#ifdef MEMORY_TRACKING
 #include <icetray/memory.h>
+#endif
 
 #include "PythonFunction.h"
 #include "FunctionModule.h"
@@ -107,7 +110,9 @@ I3Tray::I3Tray() :
     boxes_connected(false), configure_called(false),
     execute_called(false), suspension_requested(false)
 {
-	memory::set_label("I3Tray");
+#ifdef MEMORY_TRACKING
+	memory::set_scope("I3Tray");
+#endif
 	master_context.Put(boost::shared_ptr<I3Tray>(this,noOpDeleter),"I3Tray");
 	// Note that the following is deeply unsafe, but necessary for
 	// tray info service for now
@@ -337,7 +342,9 @@ I3Tray::Configure()
 	// Create the services in the order they were added.
 	//
 	BOOST_FOREACH(const string& objectname, factories_in_order) {
-		memory::set_label(objectname);
+#ifdef MEMORY_TRACKING
+		memory::set_scope(objectname);
+#endif
 		I3ServiceFactoryPtr factory = factories[objectname];
 		try {
 			factory->Configure();
@@ -365,7 +372,9 @@ I3Tray::Configure()
 	// set up yet
 	//
 	BOOST_FOREACH(const string& objectname, modules_in_order) {
-		memory::set_label(objectname);
+#ifdef MEMORY_TRACKING
+		memory::set_scope(objectname);
+#endif
 		I3ModulePtr module = modules[objectname];
 		try {
 			module->Configure_();
@@ -388,7 +397,9 @@ I3Tray::Configure()
 
 	configure_called = true;
 
-	memory::set_label("I3Tray");
+#ifdef MEMORY_TRACKING
+	memory::set_scope("I3Tray");
+#endif
 
 	//
 	//  If we never explicity called ConnectBoxes, connect the
@@ -488,11 +499,15 @@ I3Tray::Execute(unsigned maxCount)
 	driving_module->Do(&I3Module::Finish);
 
 	BOOST_FOREACH(const std::string& factname, factories_in_order) {
-		memory::set_label(factname);
+#ifdef MEMORY_TRACKING
+		memory::set_scope(factname);
+#endif
 		log_trace("calling finish on factory %s", factname.c_str());
 		factories[factname]->Finish();
 	}
-	memory::set_label("I3Tray");
+#ifdef MEMORY_TRACKING
+	memory::set_scope("I3Tray");
+#endif
 }
 
 map<string, I3PhysicsUsage>

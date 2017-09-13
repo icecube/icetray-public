@@ -42,7 +42,6 @@ void register_I3Context();
 void register_I3Configuration();
 void register_I3ModuleFactory();
 void register_MyService();
-void register_Memory();
 
 void register_std_cont_pod_char();
 void register_std_cont_pod_double();
@@ -109,7 +108,6 @@ BOOST_PYTHON_MODULE(icetray)
   register_I3Bool();
   register_I3Int();
   register_MyService();
-  register_Memory();
 
   register_std_cont_pod_char();
   register_std_cont_pod_double();

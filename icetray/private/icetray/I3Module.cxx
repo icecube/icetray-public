@@ -39,7 +39,10 @@
 #include "icetray/I3Frame.h"
 #include "icetray/I3FrameMixing.h"
 #include "icetray/impl.h"
+
+#ifdef MEMORY_TRACKING
 #include "icetray/memory.h"
+#endif
 
 const double I3Module::min_report_time_ = 10;
 
@@ -112,7 +115,7 @@ void
 I3Module::Do(void (I3Module::*f)())
 {
 #ifdef MEMORY_TRACKING
-  memory::set_label(GetName());
+  memory::set_scope(GetName());
 #endif
   try {
     (this->*f)();
