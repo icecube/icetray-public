@@ -45,22 +45,3 @@ TOOLDEF (pal
   ) 
 endif(NOT PAL_FOUND)
 
-if (NOT PAL_FOUND)
-if(NOT APPLE)
-TOOLDEF (sla
-  include/slalib-0.0
-  slalib/slalib.h
-  lib/slalib-0.0
-  NONE
-  sla
-  )
-else(NOT APPLE)
-TOOLDEF (sla
-  include
-  slalib/slalib.h
-  lib
-  NONE
-  sla
-  )
-endif(NOT APPLE)
-endif(NOT PAL_FOUND)

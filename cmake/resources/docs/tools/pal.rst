@@ -5,10 +5,11 @@ PAL stands for Positional Astronomy Library it provides standard routines
 for astronomical calculations. The PAL library is a partial re-implementation
 of Pat Wallace's popular SLALIB library written in C using a Gnu GPL license
 and layered on top of the IAU's SOFA library (or the BSD-licensed ERFA) where
-appropriate. IceCube's astronomical coordinate software
-`astro <../../astro/index.html>`_ requires either SLALIB or PAL to work. SLALIB is an old Fortran
-library which was translated into c, it is no longer updated and has a weird
-license and is hard to find.
+appropriate.  SLALIB is an old Fortran
+library which was translated into c, it is no longer updated, has a weird
+license, and is hard to find.
+IceCube's astronomical coordinate software
+`astro <../../astro/index.html>`_ requires PAL to work.
 The PAL source code is available on `github <https://github.com/Starlink/pal>`_,
 but it is difficult to compile. A `fork  <https://github.com/IceCube-SPNO/pal>`_
 provided by IceCube which is much easier

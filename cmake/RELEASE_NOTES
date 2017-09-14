@@ -4,6 +4,8 @@ Release Notes
 trunk
 -----
 
+* remove support for SLALIB
+
 V17-03-00 - March 24, 2017, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------------------
 
