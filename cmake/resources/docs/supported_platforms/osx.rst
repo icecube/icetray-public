@@ -108,7 +108,7 @@ supported by ROOT. By default, ROOT dictionaries are not built.
 
 ROOT can be installed with homebrew::
 
-   brew install --build-from-source homebrew/science/root
+   brew install --build-from-source root
 
 If you get an error message like this:
 
@@ -297,25 +297,23 @@ With a fresh install of El Capitan I was able to get IceRec and Simulation runni
 	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 	#install packages with homebrew
-	brew install cmake boost boost-python cdk gsl minuit2 libarchive wget doxygen qt pyqt
+	brew install cmake boost boost-python cdk qt pyqt libarchive wget doxygen cfitsio hdf5 nlopt gsl minuit2 suite-sparse
+	brew install --build-from-source root
 
 	brew tap homebrew/science
-	brew install healpix hdf5
-	brew install --build-from-source homebrew/science/root
+	brew install hdf5
 
 	brew tap IceCube-SPNO/homebrew-icecube
-	brew install multinest pal suite-sparse nlopt sprng2
+	brew install multinest pal sprng2
 
 	#install python packages to home home directory
-	echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' \
-	>> ${HOME}/Library/Python/2.7/lib/python/site-packages/homebrew.pth
+	echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> ${HOME}/Library/Python/2.7/lib/python/site-packages/homebrew.pth
 	echo 'export PATH="${HOME}/Library/Python/2.7/bin/:${PATH}"' >> ${HOME}/.bash_profile 
 	easy_install --user pip
 	pip install --user urwid sphinx ipython qtconsole tables
 
 	#install scipy and friends overriding system python packages
-	echo "import sys; sys.path.insert(1,'${HOME}/Library/Python/2.7/lib/python/site-packages')" \>>
-	${HOME}/Library/Python/2.7/lib/python/site-packages/local.pth
+	echo "import sys; sys.path.insert(1,'${HOME}/Library/Python/2.7/lib/python/site-packages')" >> ${HOME}/Library/Python/2.7/lib/python/site-packages/local.pth
 	pip install --user --upgrade numpy scipy matplotlib
 	
 This worked in earyl September 2017, with the trunk of offline-software on macOS High Sierra (beta). As homebrew updates, these instructions might not work as well. Your mileage may vary.
