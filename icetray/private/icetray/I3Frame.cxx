@@ -624,9 +624,11 @@ bool I3Frame::load(IStreamT& is, const vector<string>& skip, bool verify_cksum)
 
   // dispatch to load_old didn't happen. verify that this is an .i3 file
   int cmp = memcmp(frameTagRead, tag, 4);
-  if (cmp != 0)
-    log_fatal("Frame tag found is %c%c%c%c, not [i3] as expected.  Is this really an .i3 file?",
+  if (cmp != 0){
+    log_debug("Frame tag found is %c%c%c%c, not [i3] as expected.  Is this really an .i3 file?",	      
 	      frameTagRead[0], frameTagRead[1], frameTagRead[2], frameTagRead[3]);
+    log_fatal("Your I3File is corrupt.");
+  }
 
   // if we are here, this looks like an .i3 file.  Get the frame serialization version.
   {
