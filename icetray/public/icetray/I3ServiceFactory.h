@@ -76,7 +76,8 @@ public:
    * transitions.
    */
   virtual void Configure(){};
-  const I3Configuration &GetConfiguration() {return configuration_;}
+  const I3Configuration &GetConfiguration() const {return configuration_;}
+  I3Configuration &GetConfiguration() {return configuration_;}
 
   /**
    * The purpose of this transition is to give this object the opportunity to
@@ -148,7 +149,6 @@ protected:
 
   const I3Context& context_;
   I3Configuration configuration_;
-  friend class I3Tray;
 
 private:
 

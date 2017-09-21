@@ -266,8 +266,8 @@ I3Tray::AddService(const std::string& classname,
 	I3ServiceFactoryPtr servicefactory =
 	    I3::Singleton<I3ServiceFactoryFactory>::get_const_instance()
 	    .Create(classname)(master_context);
-	servicefactory->configuration_.ClassName(classname);
-	servicefactory->configuration_.InstanceName(instancename);
+	servicefactory->GetConfiguration().ClassName(classname);
+	servicefactory->GetConfiguration().InstanceName(instancename);
 	servicefactory->SetName(instancename);
 
 	factories[instancename] = servicefactory;
@@ -353,12 +353,12 @@ I3Tray::Configure()
 			PyErr_Fetch(&type, &value, &traceback);
 			log_error("Exception thrown while configuring "
 			    "service factory \"%s\".", objectname.c_str());
-			std::cerr << factory->configuration_;
+			std::cerr << factory->GetConfiguration();
 			PyErr_Restore(type, value, traceback);
 			throw;
 		}
-		if (!factory->configuration_.is_ok()) {
-			std::cerr << factory->configuration_;
+		if (!factory->GetConfiguration().is_ok()) {
+			std::cerr << factory->GetConfiguration();
 			log_fatal("Error in configuration for service factory "
 			    "\"%s\".  Turn up your logging to see just what.",
 			    objectname.c_str());
@@ -572,7 +572,7 @@ I3Tray::SetParameter(const string& module, const string& parameter,
 	if (modules.find(module) != modules.end())
 		config = &modules[module]->GetConfiguration();
 	else if (factories.find(module) != factories.end())
-		config = &factories[module]->configuration_;
+		config = &factories[module]->GetConfiguration();
 	else
 		log_fatal("couldn't find configuration for \"%s\"",
 		    module.c_str());
