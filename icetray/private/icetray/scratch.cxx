@@ -43,10 +43,10 @@ namespace I3 {
 			}
 			
 			//try some somewhat common locations
-			std::string username;
 			//TODO: getpwuid is discouraged on darwin but getpwuid_r is not
 			//available on common (old) linux versions (like RHEL 6)
 			passwd* pw=getpwuid(getuid());
+			std::string username=pw->pw_name;
 			{
 				std::string tmpPath="/scratch/"+username;
 				if(find_or_make_dir(tmpPath)){
