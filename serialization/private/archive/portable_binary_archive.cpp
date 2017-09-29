@@ -28,9 +28,7 @@ namespace detail {
             T x = 0;
             pba >> x;
             if (x == ff) {
-                uint64_t y;
-                pba >> y;
-                t = y;
+                pba >> t;
             } else {
                 t = x;
             }
@@ -86,7 +84,7 @@ void portable_binary_iarchive::load_override(serialization::collection_size_type
 }
 
 void portable_binary_iarchive::load_override(std::string& s, I3_PFTO int) {
-    size_t l;
+    uint64_t l;
     detail::variable_int<uint32_t> v;
     v.load(*this, l);
     s.resize(l);
@@ -95,7 +93,7 @@ void portable_binary_iarchive::load_override(std::string& s, I3_PFTO int) {
 
 #ifndef BOOST_NO_STD_WSTRING
 void portable_binary_iarchive::load_override(std::wstring& s, I3_PFTO int) {
-    size_t l;
+    uint64_t l;
     detail::variable_int<uint32_t> v;
     v.load(*this, l);
     s.resize(l);
