@@ -1,6 +1,7 @@
 i3_project(serialization)
 
 i3_add_library (serialization 
+  private/archive/portable_binary_archive.cpp
   private/serialization/archive_exception.cpp
   private/serialization/basic_archive.cpp
   private/serialization/basic_iarchive.cpp
@@ -21,7 +22,6 @@ i3_add_library (serialization
   private/serialization/extended_type_info.cpp
   private/serialization/polymorphic_iarchive.cpp
   private/serialization/polymorphic_oarchive.cpp
-  private/serialization/portable_binary_archive.cpp
   private/serialization/stl_port.cpp
   private/serialization/text_iarchive.cpp
   private/serialization/text_oarchive.cpp
@@ -43,6 +43,7 @@ i3_test_executable(test
   private/test/test_binary.cpp
   private/test/test_bitset.cpp
   private/test/test_codecvt_null.cpp
+  private/test/test_collection_size_type.cpp
   private/test/test_complex.cpp
   private/test/test_contained_class.cpp
   private/test/test_cyclic_ptrs.cpp
@@ -98,12 +99,14 @@ i3_test_executable(test
   private/test/test_smart_cast.cpp
   private/test/test_split.cpp
   private/test/test_stack.cpp
+  #private/test/test_string_4g.cpp # need >4GB memory
   private/test/test_tracking.cpp
   private/test/test_unique_ptr.cpp
   #private/test/test_utf8_codecvt.cpp # broken on linux
   private/test/test_valarray.cpp
   private/test/test_variant.cpp
   private/test/test_vector.cpp
+  private/test/test_version_type.cpp
   private/test/test_void_cast.cpp
 
   USE_TOOLS boost python

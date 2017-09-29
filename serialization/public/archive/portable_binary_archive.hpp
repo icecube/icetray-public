@@ -31,6 +31,10 @@ namespace portable {
 	}
 }
 
+class portable_binary_oarchive;
+class portable_binary_iarchive;
+
+
 class portable_binary_oarchive :
     public icecube::archive::detail::common_oarchive<portable_binary_oarchive>,
     public icecube::archive::detail::shared_ptr_helper
@@ -65,34 +69,20 @@ class portable_binary_oarchive :
 			}
 		// make these as small as possible, even if they lose precision
 		// (we have so many that file sizes increase a lot otherwise)
-		sv_override(version_type, uint8_t)
+		void save_override(const version_type& t, I3_PFTO int);
 		sv_override(class_id_type, int16_t)
 		sv_override(class_id_reference_type, int16_t)
 		sv_override(object_id_type, uint32_t)
 		sv_override(object_reference_type, uint32_t)
-		sv_override(serialization::collection_size_type, uint32_t)
+		void save_override(const serialization::collection_size_type& t, I3_PFTO int);
 		sv_override(tracking_type, char)
-		void save_override(const std::string& s, I3_PFTO int) {
-			uint32_t l = static_cast<uint32_t>(s.size());
-			save(l);
-			save_binary(&(s[0]), l);
-		}
-        #ifndef BOOST_NO_STD_WSTRING
-		void save_override(const std::wstring& s, I3_PFTO int) {
-			uint32_t l = static_cast<uint32_t>(s.size());
-			save(l);
-            //individual wide characters may need byte swapping
-            for(wchar_t c : s)
-                save(c);
-		}
-        #endif
-		void save_override(const class_name_type& t, I3_PFTO int) {
-			std::string s(t.t);
-			uint32_t l = static_cast<uint32_t>(s.size());
-			save(l);
-			save_binary(&(s[0]), l);
-		}
 		#undef sv_override
+
+		void save_override(const std::string& s, I3_PFTO int);
+        #ifndef BOOST_NO_STD_WSTRING
+		void save_override(const std::wstring& s, I3_PFTO int);
+        #endif
+		void save_override(const class_name_type& t, I3_PFTO int);
 
 		struct use_array_optimization {
 			template <class T> struct apply :
@@ -100,7 +90,6 @@ class portable_binary_oarchive :
 			    is_bitwise_serializable<T> {};
 		};
 
-                
 		template <class T>
 		void save_array(serialization::array<T> const &a, unsigned int v)
 		{
@@ -152,9 +141,15 @@ class portable_binary_iarchive :
 			    ::load_override(t, static_cast<int>(version));
 		}
 
-
 		// binary files don't include the optional information
 		void load_override(class_id_optional_type & /* t */, int) {}
+
+		// bool is a full byte
+		void load_override(bool& t, I3_PFTO int) {
+			uint8_t x = 0;
+			(*this) >> x;
+			t = (bool)x;
+		}
 
 		// the following have been overridden to provide specific sizes
 		// for these pseudo-primitive types
@@ -166,9 +161,7 @@ class portable_binary_iarchive :
 
 		// make these as small as possible, even if they lose precision
 		// (we have so many that file sizes increase a lot otherwise)
-		ld_override(bool, uint8_t, uint8_t, uint8_t)
-		ld_override(version_type, unsigned int, unsigned int,
-		    uint8_t)
+		void load_override(version_type &t, int);
 		ld_override(class_id_type, size_t, size_t,
 		    int16_t)
 		ld_override(class_id_reference_type, class_id_type, size_t,
@@ -177,27 +170,16 @@ class portable_binary_iarchive :
 		    uint32_t)
 		ld_override(object_reference_type, object_id_type, unsigned int,
 		    uint32_t)
-		ld_override(serialization::collection_size_type, uint32_t,
-		    uint32_t, uint32_t)
+		#undef ld_override
+		void load_override(serialization::collection_size_type &t, int);
 		void load_override(tracking_type &t, int) {
 			char x = 0; (*this) >> x;
 			t = (x != 0);
 		}
-		void load_override(std::string& s, I3_PFTO int) {
-			uint32_t l;
-			load(l);
-			s.resize(l);
-			load_binary(&(s[0]), l);
-		}
-        #ifndef BOOST_NO_STD_WSTRING
-        void load_override(std::wstring& s, I3_PFTO int) {
-            uint32_t l;
-            load(l);
-            s.resize(l);
-            for(uint32_t i=0; i<l; i++)
-                load(s[i]);
-        }
-        #endif
+		void load_override(std::string& s, I3_PFTO int);
+		#ifndef BOOST_NO_STD_WSTRING
+		void load_override(std::wstring& s, I3_PFTO int);
+		#endif
 		void load_override(class_name_type& t, I3_PFTO int) {
 			std::string cn;
 			cn.reserve(I3_SERIALIZATION_MAX_KEY_SIZE);
@@ -208,7 +190,6 @@ class portable_binary_iarchive :
 			memcpy(t, cn.data(), cn.size());
 			t.t[cn.size()] = '\0';
 		}
-		#undef ld_override
 
 		struct use_array_optimization {
 			template <class T> struct apply :
