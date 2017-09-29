@@ -4,9 +4,15 @@
 Release Notes
 =============
 
+Trunk
+-----
+
+* (r2977) - Allow variable sizes for version_type, collection_size_type,
+  and strings.  This allows for larger than 4GB frame objects.
+
 March 14, 2017 Chris Weaver (chris.weaver@icecube.wisc.edu)
 --------------------------------------------------------------------
 
-- Initial release, based on boost 1.57, with support for all current serialization use in icetray. 
+* Initial release, based on boost 1.57, with support for all current serialization use in icetray. 
 
   -- Chris Weaver
