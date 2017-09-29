@@ -28,7 +28,9 @@ namespace detail {
             T x = 0;
             pba >> x;
             if (x == ff) {
-                pba >> t;
+                uint64_t y;
+                pba >> y;
+                t = y;
             } else {
                 t = x;
             }
