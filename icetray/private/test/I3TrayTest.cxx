@@ -237,11 +237,9 @@ TEST(functions_as_modules){
   //test using function pointers
   tray.AddModule(&simple_void_function);
   tray.AddModule(&simple_bool_function);
-#if __cplusplus >= 201103L && BOOST_VERSION > 105500
-  //test using lambdas if they exist
+  //test using lambdas
   tray.AddModule([](boost::shared_ptr<I3Frame>){});
   tray.AddModule([](boost::shared_ptr<I3Frame>){ return(true); });
-#endif
   tray.Execute(1);
 }
 
@@ -254,7 +252,6 @@ namespace{
   int CountedFrameObject::count;
 }
 
-#if BOOST_VERSION > 105500
 TEST(no_survivors){
   CountedFrameObject::count=0; //there are no objects
   I3Tray tray;
@@ -267,4 +264,3 @@ TEST(no_survivors){
   //fifos, masking any effective leaks they have.
   ENSURE_EQUAL(CountedFrameObject::count,0,"No objects should remain");
 }
-#endif
