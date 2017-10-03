@@ -316,5 +316,5 @@ With a fresh install of El Capitan I was able to get IceRec and Simulation runni
 	echo "import sys; sys.path.insert(1,'${HOME}/Library/Python/2.7/lib/python/site-packages')" >> ${HOME}/Library/Python/2.7/lib/python/site-packages/local.pth
 	pip install --user --upgrade numpy scipy matplotlib
 	
-This worked in earyl September 2017, with the trunk of offline-software on macOS High Sierra (beta). As homebrew updates, these instructions might not work as well. Your mileage may vary.
+This worked in early September 2017, with the trunk of offline-software on macOS High Sierra (beta). As homebrew updates, these instructions might not work as well. Your mileage may vary.
 
