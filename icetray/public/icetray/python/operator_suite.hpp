@@ -11,6 +11,7 @@
 
 #include <boost/preprocessor/cat.hpp>
 #include <boost/python/def_visitor.hpp>
+#include <boost/python/operators.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_enum.hpp>
 

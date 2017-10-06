@@ -20,6 +20,7 @@
 #include <boost/python/str.hpp>
 #include <boost/python/dict.hpp>
 #include <boost/python/extract.hpp>
+#include <boost/python/object/pickle_support.hpp>
 
 
 namespace I3 {namespace detail {

@@ -15,6 +15,12 @@
 #define ICETRAY_PYTHON_COPY_SUITE_HPP_INCLUDED
 
 #include <stdint.h>
+#include <boost/python/object.hpp>
+#include <boost/python/dict.hpp>
+#include <boost/python/init.hpp>
+#include <boost/python/extract.hpp>
+#include <boost/python/import.hpp>
+#include <boost/python/manage_new_object.hpp>
 #include <boost/python/def_visitor.hpp>
 
 namespace bp = boost::python;

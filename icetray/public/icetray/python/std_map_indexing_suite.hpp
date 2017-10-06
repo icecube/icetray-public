@@ -11,6 +11,7 @@
 # include <boost/python/iterator.hpp>
 # include <boost/python/call_method.hpp>
 # include <boost/python/tuple.hpp>
+# include <boost/python/overloads.hpp>
 # include <boost/iterator/transform_iterator.hpp>
 # include <icetray/python/get_class.hpp>
 
