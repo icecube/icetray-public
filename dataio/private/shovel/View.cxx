@@ -552,9 +552,9 @@ up/down, k/j     Select previous/next frame item
 {, home,         First frame
 }, end           Last frame
 pgup/pgdn, -/=   Up/down a screenful of frame items
-x, enter         Serialize selected frame object to XML (show with less)
+x                Serialize selected frame object to XML (show with less)
 s                Serialize selected frame object to XML and save to file
-p                Pretty-print selected item (currently I3TrayInfo only)
+p, enter         Pretty-print selected item
 w                Write entire frame (binary) to file
 W                Write entire frame (binary) to file, along with all frames
                    on which it depends

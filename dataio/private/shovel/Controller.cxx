@@ -210,7 +210,7 @@ int main (int argc, char *argv[])
     {'L',"load_project"},
     {'i',"interactive_shell"},
     {'e',"find_event"},
-    {KEY_ENTER,"xml"},
+    {KEY_ENTER,"pretty_print"},
     {KEY_UP,   "up"},
     {KEY_DOWN, "down"},
     {KEY_LEFT, "left"},

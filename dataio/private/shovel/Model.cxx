@@ -566,19 +566,15 @@ Model::pretty_print()
   if (frame->size() == 0)
     return;
 
-  I3TrayInfoConstPtr ticp;
   std::ostringstream oss;
-
+  oss << y_keystring_ << " [" << frame->type_name(y_keystring_) << "]:\n";
   try{
-      ticp = frame->Get<I3TrayInfoConstPtr>(y_keystring_);
-      if (!ticp)
-        oss << "\n\n\nCan only pretty-print I3TrayInfo currently.\n\n\n";
-      else{
-        oss << *ticp;
-      }
-   }
-  catch( const icecube::archive::archive_exception& e ){
-      oss << "\n\n\n Trouble printing this I3TrayInfo: " << e.what() << "\n\n\n";
+    frame->Get<I3FrameObject>(y_keystring_).Print(oss);
+  }catch(std::exception& ex){
+    oss << "Exception: " << ex.what();
+    if(std::string(ex.what()).find("exists, but won't dynamic cast")!=std::string::npos)
+      oss << "\n (This may indicate that the project needed to read this object"
+      " has not been loaded)";
   }
 
   view_.page(oss.str());
