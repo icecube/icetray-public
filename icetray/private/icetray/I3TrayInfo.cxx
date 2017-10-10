@@ -70,35 +70,33 @@ const V& at(const map<K,V>& m, const K2& k)
 ostream& 
 operator<<(ostream& os, const I3TrayInfo& config)
 {
+  return(config.Print(os));
+}
+
+std::ostream& I3TrayInfo::Print(std::ostream& os) const
+{
   os << "============================= configuration ==============================\n";
-  os << "      Icetray run started:  " << at(config.host_info, "start_time") // ctime has a newline already
-     << "                  on host:  " << at(config.host_info, "hostname") 
-     << " (" << at(config.host_info, "platform") << ")\n"
-     << "                  as user:  " << at(config.host_info,"username") << "\n"
-     << "  built with root version:  " << at(config.host_info, "root_version") << "\n"
-     << "          and gcc version:  " << at(config.host_info, "gcc_version")  << "\n"
-     << "                  svn url:  " << config.svn_url << "\n"
-     << "             svn revision:  " << config.svn_revision << "\n\n";
+  os << "      Icetray run started:  " << at(host_info, "start_time") // ctime has a newline already
+     << "                  on host:  " << at(host_info, "hostname")
+     << " (" << at(host_info, "platform") << ")\n"
+     << "                  as user:  " << at(host_info,"username") << "\n"
+     << "  built with root version:  " << at(host_info, "root_version") << "\n"
+     << "          and gcc version:  " << at(host_info, "gcc_version")  << "\n"
+     << "                  svn url:  " << svn_url << "\n"
+     << "             svn revision:  " << svn_revision << "\n\n";
 
   os << "===========================   svn:externals   ============================\n"
-     << config.svn_externals << "\n";
+     << svn_externals << "\n";
 
   os << "=============================   services    ==============================\n";
-  for (vector<string>::const_iterator iter = config.factories_in_order.begin();
-       iter != config.factories_in_order.end();
-       iter++)
-    {
-      os << *at(config.factory_configs,*iter) << "\n";
-    }
+
+  for (const auto& factory : factories_in_order)
+    os << *at(factory_configs,factory) << "\n";
 
   os << "=============================    modules    ==============================\n";
 
-  for (vector<string>::const_iterator iter = config.modules_in_order.begin();
-       iter != config.modules_in_order.end();
-       iter++)
-    {
-      os << *at(config.module_configs,*iter) << "\n\n";
-    }
+  for (const auto& module : modules_in_order)
+    os << *at(module_configs,module) << "\n\n";
 
   os << "==========================================================================\n";
 
@@ -106,7 +104,3 @@ operator<<(ostream& os, const I3TrayInfo& config)
 }
 
 I3_SERIALIZABLE(I3TrayInfo);
-
-
-
-

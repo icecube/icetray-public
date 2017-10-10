@@ -53,6 +53,14 @@ struct I3PODHolder : public I3FrameObject
     return *this;
   }
   
+  std::ostream& Print(std::ostream& os) const override{
+    std::ios_base::fmtflags oldFlags=os.flags();
+    os.setf(oldFlags|std::ios::boolalpha);
+    os << value;
+    os.setf(oldFlags);
+    return os;
+  }
+  
   BOOST_PP_SEQ_FOR_EACH(REGISTER_PODHOLDER_OPERATORS, I3PODHolder<T>, (==)(!=)(<)(<=)(>)(>=) )
 
   template <typename Archive>
@@ -62,6 +70,11 @@ struct I3PODHolder : public I3FrameObject
     ar & make_nvp("value", value);
   }
 };
+
+template<typename T>
+std::ostream& operator<<(std::ostream& os, const I3PODHolder<T>& t){
+  return(t.Print(os));
+}
 
 #undef REGISTER_PODHOLDER_OPERATORS
 

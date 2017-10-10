@@ -47,6 +47,8 @@ struct I3TrayInfo : public I3FrameObject
   template <class Archive>
   void 
   serialize (Archive & ar, unsigned version);
+  
+  std::ostream& Print(std::ostream&) const override;
 
   I3TrayInfo();
 

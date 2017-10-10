@@ -21,6 +21,9 @@
  */
 #include <icetray/serialization.h>
 #include <icetray/I3FrameObject.h>
+#include <icetray/Utility.h>
+
+#include <cxxabi.h>
 
 I3FrameObject::~I3FrameObject() { }
 
@@ -33,3 +36,13 @@ I3FrameObject::serialize(Archive & ar, unsigned version)
 I3_BASIC_SERIALIZABLE(I3FrameObject);
 
 I3_SERIALIZATION_SHARED_PTR(I3FrameObject);
+
+std::ostream& I3FrameObject::Print(std::ostream& os) const
+{
+  const char* mangled=typeid(*this).name();
+  int status = 0;
+  char* demangled = abi::__cxa_demangle(mangled, 0, 0, &status);
+  os << "[I3FrameObject: " << (status==0 ? stlfilt(demangled) : mangled) << "]";
+  free(demangled);
+  return(os);
+}
