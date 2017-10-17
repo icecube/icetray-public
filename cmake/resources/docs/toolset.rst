@@ -64,15 +64,19 @@ SYSTEM_PACKAGES
 
 .. index:: SYSTEM_PACKAGES
 
-Most tools are detected are expected to be found in ``I3_PORTS``, and
-system-installed versions are ignored.  If you define
-``SYSTEM_PACKAGES``, the cmake flag ``NO_DEFAULT_PATH`` is omitted and
-system-installed packages may be used if versions installed from 
-``I3_PORTS`` cannot be found.  This is an experimental
-feature and may cause problems in the event of version conflicts, but 
-this option can speed up builds by avoiding the need for an ``I3_PORTS``
-Qt or allow operation of Icetray on systems not supported by the ports
-tools.
+By default, tools are expected to be found on your system, and managed
+by your system package manager. The major exception to this is if you
+are running on one of the major clusters that supports CVMFS (UW
+Madison, U. Maryland, DESY, etc). Tools there are managed in CVMFS,
+transparently to the user.
+
+Historically, most tools were expected to be found in ``I3_PORTS``, and
+system-installed versions are ignored.  If you defined
+``SYSTEM_PACKAGES``, the cmake flag ``NO_DEFAULT_PATH`` was omitted and
+system-installed packages may have been used, if versions installed from 
+``I3_PORTS`` could not be found. Note that this is historic behavior,
+only necessary if you're using old software.
+
 
 .. _I3_SITE_CMAKE_DIR:
 
