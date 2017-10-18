@@ -19,4 +19,4 @@ as a module in an I3Tray.
  tray.Add('I3Reader', Filename = "some_input_file.i3.bz2')
  tray.Add(icetray.I3TestModuleFactory(MyTestCase), Streams=[icetray.I3Frame.DAQ])
  tray.Execute()
- tray.Finish()
+ 
