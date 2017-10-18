@@ -45,7 +45,7 @@ tray.AddModule(p, 'dmp',
 tray.AddModule('I3Writer', 'wr',
                Filename = 'tmp2.i3')
 
-tray.AddModule('TrashCan', 'tc')
+
 
 tray.Execute()
 

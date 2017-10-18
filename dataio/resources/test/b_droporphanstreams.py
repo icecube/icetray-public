@@ -24,7 +24,7 @@ tray.AddModule(drop_some_pframes, "drop")
 tray.AddModule("Dump","dump")
 tray.AddModule("I3Writer","writer", Filename = "orphanarium.i3",
     DropOrphanStreams=[icetray.I3Frame.Calibration, icetray.I3Frame.DAQ])
-tray.AddModule("TrashCan", "the can");
+
 tray.Execute()
 
 
@@ -40,7 +40,7 @@ def count_p(fr):
 	p += 1
 tray.AddModule(count_q, "count_q", Streams=[icetray.I3Frame.DAQ])
 tray.AddModule(count_p, "count_p", Streams=[icetray.I3Frame.Physics])
-tray.AddModule("TrashCan", "the can");
+
 tray.Execute()
 
 

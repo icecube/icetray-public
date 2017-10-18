@@ -30,7 +30,7 @@ tray.AddModule("I3MultiWriter","physwriter")(
     ("sizelimit", 10**5)
     )
 
-tray.AddModule("TrashCan", "the can");
+
 
 tray.Execute()
 

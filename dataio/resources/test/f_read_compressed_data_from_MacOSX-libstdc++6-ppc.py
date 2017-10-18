@@ -17,7 +17,7 @@ tray.AddModule("I3Reader", "reader", Filename=expandvars("$I3_TESTDATA/string-21
 
 tray.AddModule("Dump","dump")
 
-tray.AddModule("TrashCan", "the can");
+
 
 tray.Execute()
 

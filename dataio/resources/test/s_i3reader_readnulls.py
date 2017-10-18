@@ -29,7 +29,7 @@ tray.AddModule("FrameCheck", "checker")(
      ["I3Geometry"])
     )
 
-tray.AddModule("TrashCan", "the can");
+
 
 tray.Execute()
 

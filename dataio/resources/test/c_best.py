@@ -19,7 +19,7 @@ tray.AddModule("I3Writer","writer",
                filename =  expandvars("pass1_best.i3.gz"),
                CompressionLevel =  9)
 
-tray.AddModule("TrashCan", "the can")
+
 
 tray.Execute()
 

@@ -86,7 +86,7 @@ tray.AddModule(CountFrames, 'count',
                Counts = dict([(x, 1) for x in tags])
                )
 
-tray.AddModule("TrashCan", "trashcan")
+
 
 tray.Execute()
 

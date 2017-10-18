@@ -24,7 +24,7 @@ tray.AddModule("I3MultiWriter","writer")(
     ("metadatastreams", []) # don't care about GCD per-file
     )
 
-tray.AddModule("TrashCan", "the can");
+
 
 tray.Execute()
 

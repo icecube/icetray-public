@@ -31,7 +31,7 @@ tray.AddModule("CountFrames", "count")(
     ("Geometry", 2)
     )
 
-tray.AddModule("TrashCan", "the can");
+
 
 tray.Execute()
 

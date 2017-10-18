@@ -22,7 +22,7 @@ tray.AddModule("I3Writer","writer")(
     ("filename", "one_event.i3")
     )
 
-tray.AddModule("TrashCan", "the can");
+
 
 tray.Execute(5)
 

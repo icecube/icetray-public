@@ -27,6 +27,6 @@ tray.AddModule(SelectDaq,"pickdaq",
 
 tray.AddModule("Dump","dump")
 
-tray.AddModule("TrashCan","trash")
+
 tray.Execute()
 

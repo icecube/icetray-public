@@ -15,7 +15,7 @@ tray.AddModule("FrameCheck", "check1",
 tray.AddModule("Get", "getter")
 
 tray.AddModule("Dump","dump")
-tray.AddModule("TrashCan", "the can")
+
 
 
 try:

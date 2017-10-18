@@ -24,7 +24,7 @@ tray.AddModule("I3MultiWriter","writer")(
     ("MetadataStreams", [])
     )
 
-tray.AddModule("TrashCan", "the can");
+
 
 tray.Execute()
 

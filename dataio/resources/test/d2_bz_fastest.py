@@ -17,7 +17,7 @@ tray.AddModule("I3Writer","writer",
                filename =  "pass1_fastest.i3.bz2",
                CompressionLevel =  1)
 
-tray.AddModule("TrashCan", "the can")
+
 
 tray.Execute()
 

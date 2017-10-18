@@ -18,7 +18,7 @@ tray.AddModule("I3Reader", "reader", Filename="one_event.i3")
 
 tray.AddModule("Dump","dump")
 
-tray.AddModule("TrashCan", "the can");
+
 
 tray.Execute()
 

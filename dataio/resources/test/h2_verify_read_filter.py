@@ -30,7 +30,7 @@ tray.AddModule("FrameCheck", "check1")(
     )
 
 tray.AddModule("Dump", "dump");
-tray.AddModule("TrashCan", "the can");
+
 
 tray.Execute()
 

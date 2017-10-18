@@ -19,7 +19,7 @@ tray.AddModule("Dump","dump")
 tray.AddModule("I3Writer", "writer")(
     ("Filename", "stillhasmutineer.i3.gz")
     )
-tray.AddModule("TrashCan", "the can");
+
 
 tray.Execute()
 

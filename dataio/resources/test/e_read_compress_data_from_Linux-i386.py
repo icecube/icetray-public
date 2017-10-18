@@ -19,7 +19,7 @@ tray.AddModule("I3Writer","writer")(
     ("CompressionLevel", 1)
     )
 
-tray.AddModule("TrashCan", "the can");
+
 
 tray.Execute()
 

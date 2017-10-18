@@ -25,7 +25,7 @@ tray.AddModule("I3Writer","writer")(
     ("filename", "withnulls.i3")
     )
 
-tray.AddModule("TrashCan", "the can");
+
 
 tray.Execute()
 

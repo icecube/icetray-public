@@ -20,7 +20,7 @@ tray.AddModule("Dump","dump")
 tray.AddModule("I3Writer","writer",
                filename =  expandvars("pass1_default.i3.gz"))
 
-tray.AddModule("TrashCan", "the can");
+
 
 tray.Execute()
 

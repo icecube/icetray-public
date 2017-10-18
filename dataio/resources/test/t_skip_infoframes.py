@@ -35,7 +35,7 @@ tray.AddModule("I3Writer", "writer")(
     ("Streams", ["Geometry", "Calibration", "DetectorStatus", "Physics"])
     )
  
-tray.AddModule("TrashCan", "the can");
+
 
 tray.Execute()
 

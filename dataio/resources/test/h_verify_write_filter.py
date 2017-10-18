@@ -29,7 +29,7 @@ tray.AddModule("FrameCheck", "check1")(
                               "InIceRecoHitSeries", "somewhere", "particle?\w"])
     )
 
-tray.AddModule("TrashCan", "the can");
+
 
 tray.Execute()
 

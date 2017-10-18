@@ -20,7 +20,7 @@ tray.AddModule("I3MultiWriter","writer",
     MetadataStreams=[icetray.I3Frame.DetectorStatus]
     )
 
-tray.AddModule("TrashCan", "the can");
+
 
 tray.Execute()
 

@@ -37,7 +37,7 @@ tray.AddModule("I3Writer", "writer",
 tray.AddModule("Dump", "dump",
                If = lambda f: f['index'].value % 2 == 0)
 
-tray.AddModule("TrashCan", "trashcan")
+
 
 tray.Execute()
 

@@ -38,15 +38,6 @@ tray.AddModule("FrameCheck", "check",
 tray.AddModule("Dump","dump")
 
 #
-# The TrashCan is another standard module.  Every module's outboxes
-# must be connected to something.  The I3Writer, above, sends things
-# downstream after it has written them because it doesn't know if it
-# really is going to be the last module in the chain.  This moduleb
-# catches whatever comes through and just discards it.
-#
-tray.AddModule("TrashCan", "the can");
-
-#
 # Here we specify how many frames to process, or we can omit the
 # argument to Execute() and the the tray will run until a module tells
 # it to stop (via RequestSuspension()).  We'll do a few frames so

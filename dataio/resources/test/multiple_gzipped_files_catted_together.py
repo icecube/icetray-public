@@ -46,7 +46,7 @@ tray.AddModule("I3Reader", "reader",
                filename = "catted.i3.gz")
 
 tray.AddModule("Dump", "dump")
-tray.AddModule("TrashCan", "trashcan")
+
 tray.Execute()
 
 
