@@ -42,4 +42,4 @@ tray.AddModule("CountFrames",
     )
 
 tray.Execute()
-tray.Finish()
+

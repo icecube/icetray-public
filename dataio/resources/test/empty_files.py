@@ -18,7 +18,7 @@ def write_empty_file(fname):
         filename=fname)
 
     tray.Execute(1)
-    tray.Finish()
+    
 
 # all of these should exit cleanly
 for ext in '.i3', '.i3.gz', '.i3.bz2':

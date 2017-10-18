@@ -48,7 +48,7 @@ tray.AddModule("I3Reader", "reader",
 tray.AddModule("Dump", "dump")
 tray.AddModule("TrashCan", "trashcan")
 tray.Execute()
-tray.Finish()
+
 
 #for frame in dataio.I3File("alphabet.i3"):
 #    print frame

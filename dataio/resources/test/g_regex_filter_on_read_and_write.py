@@ -50,5 +50,5 @@ tray.AddModule("I3Writer",
     )
 
 tray.Execute()
-tray.Finish()
+
 

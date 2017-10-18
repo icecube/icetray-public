@@ -23,6 +23,6 @@ tray.AddModule("I3MultiWriter","writer",
 tray.AddModule("TrashCan", "the can");
 
 tray.Execute()
-tray.Finish()
+
 
 

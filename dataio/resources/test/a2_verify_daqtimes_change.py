@@ -29,4 +29,4 @@ tray.AddModule("Dump","dump")
 
 tray.AddModule("TrashCan","trash")
 tray.Execute()
-tray.Finish()
+

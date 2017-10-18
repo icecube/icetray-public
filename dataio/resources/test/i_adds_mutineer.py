@@ -13,4 +13,4 @@ tray.AddModule("Dump")
 tray.AddModule("I3Writer", Filename = "hasmutineer.i3.gz")
 
 tray.Execute()
-tray.Finish()
+

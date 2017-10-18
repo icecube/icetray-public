@@ -48,7 +48,7 @@ tray.AddModule('I3Writer', 'wr',
 tray.AddModule('TrashCan', 'tc')
 
 tray.Execute()
-tray.Finish()
+
 
 #
 #   Now read 'em back, verify that the frames are 'clean' and have correct values

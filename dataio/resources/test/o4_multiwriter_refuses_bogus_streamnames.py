@@ -24,7 +24,7 @@ tray.AddModule("TrashCan", "the can");
 
 try:
     tray.Execute()
-    tray.Finish()
+    
 except:
     sys.exit(0)
 else:

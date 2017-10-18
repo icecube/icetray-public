@@ -35,7 +35,7 @@ tray.AddModule("CountFrames",
     )
 
 tray.Execute()
-tray.Finish()
+
 
 for fname in file_list:
     if os.path.exists(fname):

@@ -27,7 +27,7 @@ tray.AddModule("Dump","dump")
 tray.AddModule("TrashCan", "the can")
 
 tray.Execute()
-tray.Finish()
+
 
 fname = "stillhasmutineer.i3.gz"
 if os.path.exists(fname):

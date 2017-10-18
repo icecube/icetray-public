@@ -45,4 +45,4 @@ tray.AddModule("I3Writer", filename =  "pass1.i3")
 # there's a chunk of data involved.
 #
 tray.Execute(15)
-tray.Finish()
+

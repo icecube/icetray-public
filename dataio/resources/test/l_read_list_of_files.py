@@ -34,4 +34,4 @@ tray.AddModule("CountFrames", "count")(
 tray.AddModule("TrashCan", "the can");
 
 tray.Execute()
-tray.Finish()
+

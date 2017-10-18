@@ -42,7 +42,7 @@ tray.AddModule("CountFrames",
     )
 
 tray.Execute()
-tray.Finish()
+
 
 for f in file_list:
     os.unlink(f)

@@ -40,7 +40,7 @@ tray.AddModule("Dump", "dump",
 tray.AddModule("TrashCan", "trashcan")
 
 tray.Execute()
-tray.Finish()
+
 
 
 i = 0

@@ -26,7 +26,7 @@ tray.AddModule("I3Writer","writer", Filename = "orphanarium.i3",
     DropOrphanStreams=[icetray.I3Frame.Calibration, icetray.I3Frame.DAQ])
 tray.AddModule("TrashCan", "the can");
 tray.Execute()
-tray.Finish()
+
 
 tray = I3Tray()
 tray.AddModule("I3Reader", "reader", Filename = "orphanarium.i3")
@@ -42,7 +42,7 @@ tray.AddModule(count_q, "count_q", Streams=[icetray.I3Frame.DAQ])
 tray.AddModule(count_p, "count_p", Streams=[icetray.I3Frame.Physics])
 tray.AddModule("TrashCan", "the can");
 tray.Execute()
-tray.Finish()
+
 
 if p != j:
 	print("Number of P frames incorrect (%d != %d)" % (p, j))

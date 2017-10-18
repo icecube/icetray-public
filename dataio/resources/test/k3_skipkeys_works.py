@@ -50,4 +50,4 @@ tray.AddModule("TrashCan", "the can");
 # there's a chunk of data involved.
 #
 tray.Execute()
-tray.Finish()
+

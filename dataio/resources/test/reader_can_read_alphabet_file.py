@@ -89,5 +89,5 @@ tray.AddModule(CountFrames, 'count',
 tray.AddModule("TrashCan", "trashcan")
 
 tray.Execute()
-tray.Finish()
+
 

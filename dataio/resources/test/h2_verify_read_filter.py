@@ -33,5 +33,5 @@ tray.AddModule("Dump", "dump");
 tray.AddModule("TrashCan", "the can");
 
 tray.Execute()
-tray.Finish()
+
 

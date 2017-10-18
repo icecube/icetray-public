@@ -27,7 +27,7 @@ tray.AddModule("I3MultiWriter","writer")(
 tray.AddModule("TrashCan", "the can");
 
 tray.Execute()
-tray.Finish()
+
 
 filecount_is_correct = (len(glob("testm.????.i3.gz")) == 15)
 

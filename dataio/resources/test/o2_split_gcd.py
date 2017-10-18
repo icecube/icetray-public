@@ -33,7 +33,7 @@ tray.AddModule("I3MultiWriter","physwriter")(
 tray.AddModule("TrashCan", "the can");
 
 tray.Execute()
-tray.Finish()
+
 
     
 

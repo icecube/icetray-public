@@ -32,5 +32,5 @@ tray.AddModule("FrameCheck", "check1")(
 tray.AddModule("TrashCan", "the can");
 
 tray.Execute()
-tray.Finish()
+
 

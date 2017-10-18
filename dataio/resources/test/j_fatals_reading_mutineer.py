@@ -27,7 +27,7 @@ tray.AddModule("Dump","dump")
 
 try:
     tray.Execute()
-    tray.Finish()
+    
 
 except:
     sys.exit(0)
