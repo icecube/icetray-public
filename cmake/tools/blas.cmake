@@ -56,7 +56,7 @@ endif()
 
 set(BLA_VENDOR "OpenBLAS")
 message(STATUS "Searching for OpenBLAS in IceCube's CVMFS (or Arch's AUR)")
-find_package(${BLA_VENDOR})
+find_package(${BLA_VENDOR} QUIET)
 if(OpenBLAS_FOUND)
   set(BLAS_FOUND TRUE CACHE BOOL "Tool BLAS found successfully" FORCE)
   set(BLAS_INCLUDE_DIR ${OpenBLAS_INCLUDE_DIRS} CACHE PATH "Headers for OpenBLAS" FORCE)
@@ -81,30 +81,33 @@ set(BLA_VENDOR "OpenBLAS")
 message(STATUS "Searching for ${BLA_VENDOR} via pkg-config")
 find_package(PkgConfig QUIET)
 pkg_check_modules(PC_${BLA_VENDOR} QUIET blas-openblas)
+
 if(PC_${BLA_VENDOR}_FOUND)
-  set(${BLA_VENDOR}_INCLUDE_DIR ${PC_${BLA_VENDOR}_INCLUDE_DIRS})
   find_library(${BLA_VENDOR}_LIBRARIES openblas HINTS ${PC_${BLA_VENDOR}_LIBRARY_DIRS})
-  find_file(${BLA_VENDOR}_BUILDINFO openblas_config.h HINTS ${${BLA_VENDOR}_INCLUDE_DIR})
+
+  find_file(${BLA_VENDOR}_BUILDINFO openblas_config.h HINTS ${PC_${BLA_VENDOR}_INCLUDE_DIRS})
   execute_process(COMMAND grep VERSION ${${BLA_VENDOR}_BUILDINFO}
     COMMAND grep -Eo "[0-9][0-9]?\\.[0-9][0-9]?\\.[0-9][0-9]?"
     OUTPUT_VARIABLE ${BLA_VENDOR}_VERSION
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-  if(${BLA_VENDOR}_INCLUDE_DIR AND ${BLA_VENDOR}_LIBRARIES)
+  if(PC_${BLA_VENDOR}_INCLUDE_DIRS AND ${BLA_VENDOR}_LIBRARIES)
     set(BLAS_FOUND TRUE CACHE BOOL "Tool BLAS found successfully" FORCE)
-    set(BLAS_INCLUDE_DIR ${${BLA_VENDOR}_INCLUDE_DIR} CACHE PATH "Headers for BLAS" FORCE)
+    set(BLAS_INCLUDE_DIR ${PC_${BLA_VENDOR}_INCLUDE_DIRS} CACHE PATH "Headers for BLAS" FORCE)
     set(BLAS_LIBRARIES ${${BLA_VENDOR}_LIBRARIES} CACHE PATH "Libraries for BLAS" FORCE)
+
     pkg_check_modules(PC_LAPACK QUIET lapack-openblas)
     find_library(LAPACK_LIBRARIES lapack HINTS ${PC_LAPACK_LIBRARY_DIRS})
     list(INSERT LAPACK_LIBRARIES 0 ${BLAS_LIBRARIES})
+    if(LAPACK_LIBRARIES)
+      set(LAPACK_FOUND TRUE CACHE BOOL "Tool LAPACK found successfully" FORCE)
+    endif()
+
     found_ok(${BLA_VENDOR})
     found_ok(" version: ${${BLA_VENDOR}_VERSION}")
     found_ok("includes: ${BLAS_INCLUDE_DIR}")
     found_ok("    libs: ${BLAS_LIBRARIES}")
     found_ok("  lapack: ${LAPACK_LIBRARIES}")
-    if(LAPACK_LIBRARIES)
-      set(LAPACK_FOUND TRUE CACHE BOOL "Tool LAPACK found successfully" FORCE)
-    endif()      
     return()
   endif()
 endif()
@@ -112,6 +115,7 @@ endif()
 # }}}
 
 # {{{ Not on Ubuntu? Maybe you have "red hat"'s OpenBLAS?
+
 ## use `yum install openblas-devel` to get it
 
 set(BLA_VENDOR "OpenBLAS")
@@ -143,25 +147,30 @@ set(BLA_VENDOR "ATLAS")
 message(STATUS "Searching for ${BLA_VENDOR} via pkg-config")
 find_package(PkgConfig QUIET)
 pkg_check_modules(PC_atlas QUIET atlas)
-set(${BLA_VENDOR}_INCLUDE_DIR ${PC_${BLA_VENDOR}_INCLUDE_DIRS})
-find_library(${BLA_VENDOR}_LIBRARIES tatlas HINTS ${PC_${BLA_VENDOR}_LIBRARY_DIRS})
-find_file(${BLA_VENDOR}_BUILDINFO atlas_buildinfo.h HINTS ${PC_${BLA_VENDOR}_INCLUDE_DIRS})
-execute_process(COMMAND grep ATL_VERS ${${BLA_VENDOR}_BUILDINFO}
-  COMMAND grep -Eo "[0-9][0-9]?\\.[0-9][0-9]?\\.[0-9][0-9]?"
-  OUTPUT_VARIABLE ${BLA_VENDOR}_VERSION
-  OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-if(${BLA_VENDOR}_INCLUDE_DIR AND ${BLA_VENDOR}_LIBRARIES)
-  set(BLAS_FOUND TRUE CACHE BOOL "Tool BLAS found successfully" FORCE)
-  set(BLAS_INCLUDE_DIR ${${BLA_VENDOR}_INCLUDE_DIR} CACHE PATH "Headers for BLAS" FORCE)
-  set(BLAS_LIBRARIES ${${BLA_VENDOR}_LIBRARIES} CACHE PATH "Libraries for BLAS" FORCE)
-  find_package(LAPACK QUIET)
-  found_ok(${BLA_VENDOR})
-  found_ok(" version: ${${BLA_VENDOR}_VERSION}")
-  found_ok("includes: ${BLAS_INCLUDE_DIR}")
-  found_ok("    libs: ${BLAS_LIBRARIES}")
-  found_ok("  lapack: ${LAPACK_LIBRARIES}")
-  return()
+if(PC_${BLA_VENDOR}_FOUND)
+  find_library(${BLA_VENDOR}_LIBRARIES tatlas HINTS ${PC_${BLA_VENDOR}_LIBRARY_DIRS})
+
+  find_file(${BLA_VENDOR}_BUILDINFO atlas_buildinfo.h HINTS ${PC_${BLA_VENDOR}_INCLUDE_DIRS})
+  execute_process(COMMAND grep ATL_VERS ${${BLA_VENDOR}_BUILDINFO}
+    COMMAND grep -Eo "[0-9][0-9]?\\.[0-9][0-9]?\\.[0-9][0-9]?"
+    OUTPUT_VARIABLE ${BLA_VENDOR}_VERSION
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  if(PC_${BLA_VENDOR}_INCLUDE_DIRS AND ${BLA_VENDOR}_LIBRARIES)
+    set(BLAS_FOUND TRUE CACHE BOOL "Tool BLAS found successfully" FORCE)
+    set(BLAS_INCLUDE_DIR ${PC_${BLA_VENDOR}_INCLUDE_DIRS} CACHE PATH "Headers for BLAS" FORCE)
+    set(BLAS_LIBRARIES ${${BLA_VENDOR}_LIBRARIES} CACHE PATH "Libraries for BLAS" FORCE)
+
+    find_package(LAPACK QUIET)	## cmake will possibly override our above BLAS_* settings
+
+    found_ok(${BLA_VENDOR})
+    found_ok(" version: ${${BLA_VENDOR}_VERSION}")
+    found_ok("includes: ${BLAS_INCLUDE_DIR}")
+    found_ok("    libs: ${BLAS_LIBRARIES}")
+    found_ok("  lapack: ${LAPACK_LIBRARIES}")
+    return()
+  endif()
 endif()
 
 # }}}
