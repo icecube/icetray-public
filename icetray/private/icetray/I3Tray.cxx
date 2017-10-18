@@ -527,12 +527,7 @@ I3Tray::Usage()
 }
 
 
-void
-I3Tray::Finish()
-{
-  log_warn("This does absolutely nothing and safe to remove.  "
-	      "This will throw by August 2017.");
-}
+void I3Tray::Finish(){}
 
 I3TrayInfo
 I3Tray::TrayInfo()
