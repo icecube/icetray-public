@@ -16,6 +16,7 @@
 
 #include <boost/python/def_visitor.hpp>
 
+#include <icetray/has_operator.h>
 #include <icetray/python/copy_suite.hpp>
 #include <icetray/python/stream_to_string.hpp>
 #include <icetray/python/boost_serializable_pickle_suite.hpp>
@@ -56,24 +57,6 @@ template <typename T>
 struct is_iterable {
 	static const bool value = has_iterator<T>::value && !(is_map<T>::value || is_tree<T>::value);
 };
-
-namespace has_operator {
-    typedef char yes;
-    typedef struct { char array[2]; } no;
-    
-    struct anyx { template <class T> anyx(const T &); };
-    no operator << (const anyx &, const anyx &);
-    
-    template <class T> yes check(T const&);
-    no check(no);
-    
-    template <typename StreamType, typename T>
-    struct insertion {
-        static StreamType & stream;
-        static T & x;
-        static const bool value = sizeof(check(stream << x)) == sizeof(yes);
-    };
-}
 
 }
 
@@ -127,7 +110,7 @@ private:
 	
 	template <class Class, typename U>
 	static
-	typename boost::enable_if_c<detail::has_operator::insertion<std::ostream, U>::value>::type
+	typename boost::enable_if_c<has_operator::insertion<std::ostream, U>::value>::type
 	add_string_to_stream(Class &cl)
 	{
 		cl.def("__str__", &stream_to_string<U>);
@@ -135,7 +118,7 @@ private:
 
 	template <class Class, typename U>
 	static
-	typename boost::disable_if_c<detail::has_operator::insertion<std::ostream, U>::value>::type
+	typename boost::disable_if_c<has_operator::insertion<std::ostream, U>::value>::type
 	add_string_to_stream(Class &cl) {}
 	
 public:
