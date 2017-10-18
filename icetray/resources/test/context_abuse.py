@@ -31,4 +31,4 @@ tray.AddModule(UseRandom, I3RandomService = "rng")
 tray.AddModule("AllParametersModule", int_param = 3)
 
 tray.Execute(1)
-tray.Finish()
+

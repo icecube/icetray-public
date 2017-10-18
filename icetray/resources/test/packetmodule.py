@@ -47,6 +47,6 @@ def test(fr):
 tray.Add(test, Streams=[I3Frame.DAQ])
 
 tray.Execute(ndaq)
-tray.Finish()
+
 
 assert npackets == ndaq

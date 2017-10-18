@@ -19,7 +19,7 @@ python code::
     tray.AddModule('Dump','dumper')
     tray.AddModule('TrashCan','can')
     tray.Execute()
-    tray.Finish()
+    
 
 Pre-2012
 --------
@@ -39,7 +39,7 @@ python code::
     tray.AddModule('Dump','dumper')
     tray.AddModule('TrashCan','can')
     tray.Execute()
-    tray.Finish()
+    
 
 2013
 ----
@@ -58,7 +58,7 @@ python code::
     tray.Add('I3Reader', Filenamelist=sys.argv[1:])
     tray.Add('Dump')
     tray.Execute()
-    tray.Finish()
+    
 
 2014
 ----

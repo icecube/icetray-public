@@ -19,7 +19,7 @@ tray.AddModule("I3Writer", "writer",
 tray.AddModule("TrashCan", "tc")
 
 tray.Execute(1)
-tray.Finish()
+
 
 f = dataio.I3File("foo.i3")
 
