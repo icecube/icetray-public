@@ -146,9 +146,6 @@ TEST(forked)
   tray.ConnectBoxes("fork", "left", "counterleft");
   tray.ConnectBoxes("fork", "right", "counterright");
   tray.ConnectBoxes("fork", "middle", "countermiddle");
-  tray.ConnectBoxes("counterleft", "OutBox", "trashleft");
-  tray.ConnectBoxes("counterright", "OutBox", "trashright");
-  tray.ConnectBoxes("countermiddle", "OutBox", "trashmiddle");
 
   tray.Execute(40);
 
