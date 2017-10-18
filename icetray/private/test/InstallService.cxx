@@ -41,7 +41,7 @@ TEST(name)
   tray.AddService<NameTestService>("TESTNAME");
 
   tray.AddModule("BottomlessSource", "bs");
-  tray.AddModule("TrashCan", "trash");
+  
   tray.Execute(10);
 }
 

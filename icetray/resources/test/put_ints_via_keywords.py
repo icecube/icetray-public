@@ -26,7 +26,7 @@ tray.AddModule(checkints, 'ci',
                value = 777)
 
 tray.AddModule('Dump', 'dump')
-tray.AddModule('TrashCan', 'tc')
+
 
 tray.Execute(10)
 

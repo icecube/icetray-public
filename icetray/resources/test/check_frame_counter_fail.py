@@ -29,7 +29,7 @@ tray.AddModule("FrameCheck","checker")(
     )
 
 # throw em out
-tray.AddModule("TrashCan","adios")
+
 
 try:
     tray.Execute(7)  # wrong number of frames

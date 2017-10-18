@@ -23,7 +23,7 @@ try:
     t.AddModule("AllParametersModule", "apm2",
                 intvec_param = [1.1,1,2,3,4])
 
-    t.AddModule("TrashCan", "trash")
+    
 
     t.Execute(1)
     t.Finish()

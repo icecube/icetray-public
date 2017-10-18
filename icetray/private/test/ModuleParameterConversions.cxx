@@ -120,7 +120,7 @@ I3_MODULE(ParamConversionCheckModule);
 #define GET_SUCCEEDS(name, value)					\
   {									\
     I3Tray tray;   tray.AddModule<ParamConversionCheckModule>("mod");	\
-    tray.AddModule("TrashCan", "trash");				\
+    				\
     ENSURE(tray.SetParameter("mod", BOOST_PP_STRINGIZE(name), value));	\
     tray.Execute(0);							\
     ENSURE(name == value);						\
@@ -129,7 +129,7 @@ I3_MODULE(ParamConversionCheckModule);
 #define GET_ONLY(name, value)						\
   {									\
     I3Tray tray;   tray.AddModule<ParamConversionCheckModule>("mod");	\
-    tray.AddModule("TrashCan", "trash");				\
+    				\
     ENSURE(tray.SetParameter("mod", BOOST_PP_STRINGIZE(name), value));	\
     tray.Execute(0);							\
   }
@@ -280,7 +280,7 @@ TEST(f_strings_etc)
   {
     I3Tray tray;   
     tray.AddModule<ParamConversionCheckModule>("mod");
-    tray.AddModule("TrashCan", "trash");
+    
     ENSURE(tray.SetParameter("mod", "string_param", "some string"));
     tray.Execute(1);
     ENSURE(strcmp(c_str, "some string") == 0); 
@@ -320,7 +320,7 @@ TEST(case_insensitivity)
   int_param = 0;
   I3Tray tray;   
   tray.AddModule<ParamConversionCheckModule>("mod");
-  tray.AddModule("TrashCan", "trash");
+  
   ENSURE(tray.SetParameter("mod", "DoUbLe_PaRaM", 3.14159));
   ENSURE(tray.SetParameter("mod", "int_paraM", 314159));
   tray.Execute(1);

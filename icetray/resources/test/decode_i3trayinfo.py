@@ -16,7 +16,7 @@ tray.AddModule("I3Writer", "writer",
                If = lambda f: True
                )
 
-tray.AddModule("TrashCan", "tc")
+
 
 tray.Execute(1)
 

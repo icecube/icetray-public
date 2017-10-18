@@ -81,21 +81,6 @@ Example
   tray.AddModule("Rename", "rename",
                   Keys =  ["here", "here2", "there", "there2"])
 
-TrashCan
---------
-
-The HeftyBag of IceTray.  This module is usually the last module in your Tray, it has an Inbox
-and no Outbox.  Frame check in but they dont check out.  If not provided, the IceTray
-will add one for you.
-
-Example
-^^^^^^^
-
-.. highlight:: python
-
-::
-
-  tray.AddModule("TrashCan", "thecan")
 
 DeleteUnregistered
 ------------------
@@ -152,8 +137,6 @@ Example
 
   tray.AddModule("DeleteUnregistered", "deleter")
 
-  tray.AddModule("TrashCan", "trash")
-
 
 Get
 ---
@@ -185,7 +168,6 @@ Example
                  Streams = [icetray.I3Frame.Physics,
                             icetray.I3Frame.DetectorStatus])
 
-  tray.AddModule("TrashCan", "trash")
 
 
   

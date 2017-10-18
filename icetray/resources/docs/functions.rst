@@ -47,8 +47,7 @@ stream only.
 
 
 If you put that function between a :class:`BottomlessSource`, (which
-just pushed empty physics frames) and a :class:`TrashCan` and run a
-couple of frames, the output should look like this::
+just pushed empty physics frames), the output should look like this::
 
   Frame is:
   [ I3Frame :

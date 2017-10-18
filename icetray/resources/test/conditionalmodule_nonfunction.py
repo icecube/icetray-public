@@ -16,7 +16,7 @@ try:
                    If = [1,2,3])
 
     tray.AddModule("Dump", "dump")
-    tray.AddModule("TrashCan", "tc")
+    
 
     print("About to execute    ")
     # do it 5 times.

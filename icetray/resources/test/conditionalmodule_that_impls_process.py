@@ -32,7 +32,7 @@ def framecheck(frame):
             
 tray.AddModule(framecheck, 'check')
 
-tray.AddModule("TrashCan", "tc")
+
 
 tray.Execute(100)
 

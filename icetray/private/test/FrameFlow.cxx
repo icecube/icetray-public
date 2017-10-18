@@ -112,7 +112,7 @@ TEST(straight_line)
   tray.AddModule("FFSource", "source");
   tray.AddModule("Nothing", "nothing");
   tray.AddModule("FFCounter", "counter");
-  tray.AddModule("TrashCan", "trash");
+  
   tray.Execute(12);
 
   ENSURE_EQUAL(counts["counter"][I3Frame::Geometry], 3u);
@@ -137,9 +137,9 @@ TEST(forked)
   tray.AddModule("FFCounter", "counterleft");
   tray.AddModule("FFCounter", "counterright");
   tray.AddModule("FFCounter", "countermiddle");
-  tray.AddModule("TrashCan",  "trashleft");
-  tray.AddModule("TrashCan",  "trashmiddle");
-  tray.AddModule("TrashCan",  "trashright");
+  
+  
+  
 
   tray.ConnectBoxes("source", "OutBox", "nothing");
   tray.ConnectBoxes("nothing", "OutBox", "fork");

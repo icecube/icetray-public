@@ -12,7 +12,7 @@ tray.AddModule("AddNulls", "N",
                IcePickServiceKey = "key",
                If = lambda f: True)
 tray.AddModule("Dump", "d")
-tray.AddModule("TrashCan", "tc")
+
 
 try:
     tray.Execute(1)

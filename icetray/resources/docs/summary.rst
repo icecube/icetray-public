@@ -17,7 +17,6 @@ python code::
     tray = I3Tray()
     tray.AddModule('I3Reader','reader')(('Filenamelist',sys.argv[1:]))
     tray.AddModule('Dump','dumper')
-    tray.AddModule('TrashCan','can')
     tray.Execute()
     
 
@@ -37,7 +36,6 @@ python code::
     tray.AddService('I3GSLRandomServiceFactory,'gsl',Seed=42)
     tray.AddModule('I3Reader','reader',Filenamelist=sys.argv[1:])
     tray.AddModule('Dump','dumper')
-    tray.AddModule('TrashCan','can')
     tray.Execute()
     
 

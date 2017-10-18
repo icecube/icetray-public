@@ -21,7 +21,7 @@ def f(frame, foo='foo', bar='bar', baz='baz'):
 tray.AddModule(f,"keywordfn",
                bar = 'BARWASSET')
 
-tray.AddModule('TrashCan', 'tc')
+
 
 tray.Execute(1)
 

@@ -52,7 +52,7 @@ I3_MODULE(IntCheck);
     tray.AddModule("IntCheck", "postbuffercheckb");	\
     tray.AddModule("CountFrames", "postbuffercounter")	\
       ("physics", 1000);				\
-    tray.AddModule("TrashCan", "can");			\
+    			\
     tray.Execute(1000);					\
   }
 

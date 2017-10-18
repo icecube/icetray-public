@@ -210,6 +210,5 @@ gives::
   tray.AddModule('I3Writer', 'writer', CompressionLevel=-2,
     DropOrphanStreams=[], Filename='bork-out.i3', IcePickServiceKey='',
     If=None, SkipKeys=[], Streams=[])
-  tray.AddModule('TrashCan', 'can')
 
 You can also, of course, read the source code for the segment.

@@ -25,6 +25,6 @@ t.AddModule(lambda x: numpy.False_, "falsemodule")
 t.AddModule("CountFrames", "count2",
             Physics = 0)
 
-t.AddModule("TrashCan", "tc")
+
 t.Execute(15)
 t.Finish()

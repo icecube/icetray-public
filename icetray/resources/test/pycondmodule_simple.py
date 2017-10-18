@@ -24,7 +24,7 @@ class Mod(I3ConditionalModule):
 tray.AddModule(Mod, "PythonConditionalModule",
                If = lambda f: False)
 
-tray.AddModule("TrashCan","TrashCan")
+
 
 tray.Execute(5)
 

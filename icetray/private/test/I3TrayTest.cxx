@@ -59,7 +59,7 @@ TEST(convenience_interface_0)
     ("doubleParam", (double)3.14159)
     ("stringParam", "it puts the lotion in the basket")
     ("longParam", (long)67);
-  tray.AddModule("TrashCan", "trash");
+  
 
   tray.Execute(0);
 
@@ -92,7 +92,7 @@ TEST(convenience_interface_1)
   tray.AddModule<TestModule>("test")
     ("boolParam", false)
     ("intParam", (int)99);
-  tray.AddModule("TrashCan", "trash");
+  
 
   tray.Execute(0);
 
@@ -124,7 +124,7 @@ TEST(default_convenience_connectboxes)
   tray.AddModule<TestModule>("test4")("boolParam", true);
   tray.AddModule<TestModule>("test5")("boolParam", true);
 
-  tray.AddModule("TrashCan", "trash");
+  
 
   tray.Execute(0);
 }
@@ -162,14 +162,14 @@ TEST(multiple_tray_create_destroy)
   {
     I3Tray tray;
     tray.AddModule("BottomlessSource", "source");
-    tray.AddModule("TrashCan", "trash");
+    
     tray.Execute(1);
   }
 
   {
     I3Tray tray2;
     tray2.AddModule("BottomlessSource", "source");
-    tray2.AddModule("TrashCan", "trash");
+    
     tray2.Execute(1);
   }
 

@@ -12,7 +12,7 @@ def takesthree(frame, where, value):
 tray.AddModule('BottomlessSource', 'bs')
 tray.AddModule(takesthree, '3',
                value = 'blam')
-tray.AddModule('TrashCan', 'tc')
+
 
 try:
     tray.Execute(10)
