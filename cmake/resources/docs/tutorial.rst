@@ -46,7 +46,7 @@ execute ``cmake`` in the object directory to create the build environment::
   <lots of cmake output omitted>
   -- Configuring done
   -- Generating done
-  -- Build files have been written to: ~/IceCube/meta-projects/offline-software/build
+  -- Build files have been written to: ~/IceCube/meta-projects/offline-software/trunk/build
 
 At this point the contents of the object directory should look
 somewhat like that of the source directory.  Main differences:
@@ -59,7 +59,7 @@ somewhat like that of the source directory.  Main differences:
 While still in the build directory execute ``make``::
 
   $ pwd
-  ~/IceCube/meta-projects/offline-software/build
+  ~/IceCube/meta-projects/offline-software/trunk/build
   $ make
 
 After ``make`` returns, your build results will be in the
@@ -71,7 +71,7 @@ The ``make`` target ``help`` will provide a list of
 valid targets in the CMake-generated ``Makefile``::
 
   $ pwd
-  ~/IceCube/meta-projects/offline-software/build
+  ~/IceCube/meta-projects/offline-software/trunk/build
   $ make help
   The following are some of the valid targets for this Makefile:
   ... all (the default if no target is provided)
