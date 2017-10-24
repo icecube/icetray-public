@@ -157,6 +157,19 @@ do_pyshell(char* argv[], Model& model, View& view){
   // Not finalizing python, as that destroys the frame
 }
 
+///Attempt to load a project which may not be available
+///\param proj the name of the project to load
+///\return whether the project was loaded
+bool try_load_project(const std::string& proj){
+  try{
+    load_project(proj);
+  } catch(std::runtime_error& err){
+    log_debug_stream("Failed to load project " << proj);
+    return false;
+  }
+  return true;
+}
+
 int main (int argc, char *argv[])
 {
   I3::init_icetray_lib();
@@ -237,6 +250,9 @@ int main (int argc, char *argv[])
       GetIcetrayLogger()->SetLogLevelForUnit("dataio-shovel::Model",I3LOG_WARN);
     }
 
+  try_load_project("simclasses");
+  try_load_project("recclasses");
+  
   if (vm.count("projects"))
     {
       std::cout << "Loading project libraries: ";
