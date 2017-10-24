@@ -48,35 +48,10 @@ else()
   colormsg(CYAN "+-- dataio-shovel *not* included (missing CDK or ncurses libraries)")
 endif()
   
-# look for urwid
-execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import urwid"
-    RESULT_VARIABLE URWID_FOUND
-    OUTPUT_QUIET
-    ERROR_QUIET)
-if(URWID_FOUND EQUAL 0)
-  set(URWID_FOUND TRUE)
-else(URWID_FOUND EQUAL 0)
-  set(URWID_FOUND FALSE)
-endif(URWID_FOUND EQUAL 0)
 
-if (URWID_FOUND)
-  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import urwid;print (urwid.__version__)"
-    OUTPUT_VARIABLE URWID_VERSION
-    ERROR_QUIET
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
-  string(REGEX MATCH "([0-9]+)\\.([0-9]+)\\.?([0-9]*)"
-    URWID_STRIPPED_VERSION
-    ${URWID_VERSION})
-  numeric_version(${URWID_STRIPPED_VERSION} URWID)
-  if (URWID_NUMERIC_VERSION LESS 10100)
-    colormsg(YELLOW "+-- urwid found, but too old (< v1.1.0), skipping dataio-pyshovel")
-  else (URWID_NUMERIC_VERSION LESS 10100)  
-    colormsg(GREEN "+-- dataio-pyshovel")
-    i3_executable_script(pyshovel resources/dataio-pyshovel.py)
-  endif (URWID_NUMERIC_VERSION LESS 10100)  
-else (URWID_FOUND)
-  colormsg(CYAN "+-- dataio-pyshovel *not* included (missing urwid python package)")
-endif (URWID_FOUND)
+# symlink for dataio-pyshovel
+execute_process(COMMAND ln -s dataio-shovel dataio-pyshovel
+                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 ## expect is needed for the datio-shovel-test
 find_program(EXPECT expect)
