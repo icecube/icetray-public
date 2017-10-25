@@ -351,13 +351,13 @@ int main (int argc, char *argv[])
             }
           }
         }
-        else if (c==0x01)
+#endif
+        if (c==0x01)
           c = KEY_HOME;
         else if (c==0x05)
           c = KEY_END;
         else if (c==0x0A)
           c = KEY_ENTER;
-#endif
 
         // skip if key not bound
         if (keybindings.find(c) == keybindings.end())
