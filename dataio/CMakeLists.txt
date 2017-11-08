@@ -50,7 +50,7 @@ endif()
   
 
 # symlink for dataio-pyshovel
-execute_process(COMMAND ln -s dataio-shovel dataio-pyshovel
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink dataio-shovel dataio-pyshovel
                 WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 ## expect is needed for the datio-shovel-test
