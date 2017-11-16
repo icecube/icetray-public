@@ -198,7 +198,7 @@ if (GEANT4_FOUND)
     )
 
   execute_process (COMMAND 
-    ${CMAKE_SOURCE_DIR}/cmake/make_geant4_env.py ${GEANT4_SH} ${GEANT4_VERSION}
+    ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/cmake/make_geant4_env.py ${GEANT4_SH} ${GEANT4_VERSION}
     OUTPUT_VARIABLE GEANT4_ENV_VARS
     OUTPUT_STRIP_TRAILING_WHITESPACE
     )
