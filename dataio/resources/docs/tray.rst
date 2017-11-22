@@ -96,7 +96,7 @@ replacing the `"I3Reader"` module with the `dataio.I3Reader` tray segment. For
 example, to read files via GridFTP, use the following snippet::
 	
 	from icecube import icetray, dataio
-	tray.Add(dataio.I3Reader, filenamelist=['gsipftp://gridftp.icecube.wisc.edu/data/sim/IceCube/2010/filtered/level3-cscd/CORSIKA-in-ice/9493/92000-92999/Level3_IC79_corsika.009493.092110.i3.bz2 '])
+	tray.Add(dataio.I3Reader, filenamelist=['gsiftp://gridftp.icecube.wisc.edu/data/sim/IceCube/2010/filtered/level3-cscd/CORSIKA-in-ice/9493/92000-92999/Level3_IC79_corsika.009493.092110.i3.bz2 '])
 
 The segment dataio.I3Reader is equivalent to::
 	
