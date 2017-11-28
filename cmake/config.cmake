@@ -314,7 +314,7 @@ endif(CCACHE_PROGRAM)
 if (USE_CCACHE OR CMAKE_COMPILER_IS_CLANG)
   option(USE_GFILT "Use gfilt STL error decryptor" OFF)
 else()
-  option(USE_GFILT "Use gfilt STL error decryptor" ON)
+  option(USE_GFILT "Use gfilt STL error decryptor" OFF)
 endif()
 
 if(USE_GFILT)
