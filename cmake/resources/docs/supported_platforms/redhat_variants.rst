@@ -52,9 +52,4 @@ that will install the necessary packages.
 After installing these packages, run "easy_install -U Sphinx" to install
 Python Sphinx for using the documentation system. 
 
-.. index:: Ubuntu
-.. index:: Debian
-
-.. _ubuntu:
-.. _debian:
 

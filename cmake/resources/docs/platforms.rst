@@ -45,3 +45,4 @@ various platforms.
    supported_platforms/redhat_variants
    supported_platforms/debian_variants
    supported_platforms/suse
+   supported_platforms/arch_linux

@@ -1,3 +1,6 @@
+.. _debian:
+.. _ubuntu:
+
 Ubuntu or Debian Variants
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
