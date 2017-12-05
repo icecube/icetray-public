@@ -51,12 +51,7 @@ Reccomended Packages
 
 The following reccomended packages are also available from the AUR::
 
-  pacaur -S libcdk nlopt minuit2 icecube-pal-git
-
-``geant4`` is also avaiable from the AUR but it takes a long time to build,
-so only build it if you need it for simulation::
-
-  pacaur -S geant4
+  pacaur -S healpix libcdk nlopt minuit2 icecube-pal-git python-mysqlclient
 
 Building Documentation
 ----------------------
@@ -87,6 +82,9 @@ There are other alternatives available in the AUR see the `ArchWiki <https://wik
 Packages that Need Modification
 -------------------------------
 
+Geant4
+""""""
+
 The AUR script for ``geant4`` turns on multithreading which doesn't play nice
 with icetray. In order to turn it off you need to edit the PKGBUILD::
 
@@ -94,6 +92,9 @@ with icetray. In order to turn it off you need to edit the PKGBUILD::
 
 when the PKGBUILD comes up change the option ``-DGEANT4_BUILD_MULTITHREADED=ON``
 to ``OFF``
+
+ROOT
+""""
 
 ``ROOT`` is also available in the AUR, but ROOT has some headerfile stupidness
 that needs to be corrected *after* installation::
@@ -106,18 +107,22 @@ once this is completed, you have to edit one of the header files it installed::
 
 and change ``#define R__HAS_STD_EXPERIMENTAL_STRING_VIEW`` to ``#undef``
 
+
+Linuxbrew
+---------
+
+The homebrew formulas produced by IceCube for use on OSX can also be used in linux with linuxbrew. Theses can be used for packages for which there are no Arch or AUR packages available. ::
+  
+  pacman -S ruby
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+  export PATH="/home/linuxbrew/.linuxbrew/bin:${PATH}"
+  brew tap IceCube-SPNO/homebrew-icecube
+  brew install --ignore-dependencies sprng2 multinest
+
 Unsupported Packages
 --------------------
 
-The following is a list of dependencies for which there are currently no suitable available packages in Arch:
-
- - ``healpix`` - There is an AUR package available, but it only provides
-   the C interface, whereas icetray uses on the C++ interface
- - ``sprng`` - no AUR package
- - ``genie`` - no AUR package
- - ``multinest`` - no AUR package
-
-These programs must be installed by hand if needed.
+``genie`` remains unsupported at this time.
 
  
 
