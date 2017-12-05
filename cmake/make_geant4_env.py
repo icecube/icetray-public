@@ -11,6 +11,7 @@ import os
 import sys
 import re
 import subprocess as subp
+from codecs import encode,decode
 
 geant4_sh, geant4_version = sys.argv[1:]
 
@@ -35,7 +36,7 @@ if os.path.isfile(geant4_sh):
                    stdout=subp.PIPE,
                    cwd=os.path.dirname(geant4_sh),
                    env={})
-    penv = p.communicate("source geant4.sh && env")[0].strip()
+    penv = decode(p.communicate(encode("source geant4.sh && env"))[0].strip())
     for line in penv.split("\n"):
         sep = line.index("=")
         var = line[:sep]
@@ -47,7 +48,7 @@ if os.path.isfile(geant4_sh):
 if not geant4_env:
     i3ports = os.environ["I3_PORTS"]
     cmd = "find {0}/share -type d".format(i3ports)
-    out = subp.Popen(cmd.split(), stdout=subp.PIPE).communicate()[0]
+    out = decode(subp.Popen(cmd.split(), stdout=subp.PIPE).communicate()[0])
 
     # collect all candidates
     candidates = {}
