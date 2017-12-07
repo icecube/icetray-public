@@ -240,6 +240,17 @@ I3Frame::GetStop(const std::string& key) const
 		return iter->second->stream;
 }
 
+void I3Frame::validate_name(const std::string& name)
+{
+  // this should be more exhausive than just space tab newline.
+  if (name.empty())
+    log_fatal("attempt to Put an element into frame with an empty string used as the key");
+  if (name.find_first_of(" \t\n") != string::npos)
+    log_fatal("attempt to Put an element into frame at name \"%s\", "
+              "which contains an illegal whitespace character",
+              name.c_str());
+}
+
 void I3Frame::Put(const string& name, I3FrameObjectConstPtr element)
 {
   Put(name, element, stop_);
@@ -254,13 +265,7 @@ void I3Frame::Put(const string& name, I3FrameObjectConstPtr element, const I3Fra
                 name.c_str(), type_name(name).c_str());
     }
 
-  // this should be more exhausive than just space tab newline.
-  if (name.size() == 0)
-    log_fatal("attempt to Put an element into frame with an empty string used as the key");
-  if (name.find_first_of(" \t\n") != string::npos)
-    log_fatal("attempt to Put an element into frame at name \"%s\", "
-              "which contains an illegal whitespace character",
-              name.c_str());
+  validate_name(name);
   
   boost::shared_ptr<value_t> sptr(new value_t);
   map_[name] = sptr;
@@ -270,8 +275,26 @@ void I3Frame::Put(const string& name, I3FrameObjectConstPtr element, const I3Fra
   value.stream = on_stream;
 }
 
+void I3Frame::Replace(const std::string& name, I3FrameObjectConstPtr element)
+{
+  validate_name(name);
+  
+  auto it=map_.find(name);
+  if(it==map_.end())
+    log_fatal_stream("Attempt to replace object at key '" << name << 
+                     "' but there is nothing there.");
+  boost::shared_ptr<value_t> sptr(new value_t);
+  map_[name] = sptr;
+  value_t& value = *sptr;
+  value.size = 0;
+  value.ptr = element;
+  value.stream = stop_;
+}
+
 void I3Frame::Rename(const string& fromname, const string& toname)
 {
+  validate_name(toname);
+  
   map_t::iterator fromiter = map_.find(fromname);
   if (fromiter == map_.end())
     log_fatal("attempt to rename \"%s\" to \"%s\", but the source is empty",
@@ -284,7 +307,6 @@ void I3Frame::Rename(const string& fromname, const string& toname)
 
   map_[toname] = map_[fromname];
   map_.erase(fromiter);
-
 }
 
 void I3Frame::ChangeStream(const string& key, I3Frame::Stream stream)

@@ -98,6 +98,30 @@ TEST(GetStop)
 	THROWS(f.GetStop("doesnotexist"));
 }
 
+TEST(Replace)
+{
+  I3Frame f(I3Frame::DAQ);
+  I3IntPtr i1(new I3Int(7));
+  f.Put("MyInt",i1);
+  ENSURE_EQUAL(f.Get<I3Int>("MyInt"), *i1);
+  I3IntPtr i2(new I3Int(22));
+  f.Replace("MyInt",i2);
+  ENSURE_EQUAL(f.Get<I3Int>("MyInt"), *i2);
+  ENSURE_EQUAL(f.GetStop("MyInt"), I3Frame::DAQ);
+}
+
+TEST(ReplaceNotFound)
+{
+  I3Frame f(I3Frame::DAQ);
+  I3IntPtr i2(new I3Int(22));
+  try{
+    f.Replace("MyInt",i2);
+    FAIL("I3Frame::Replace should fail on a nonexistant key");
+  }catch(...){
+    //expect an exception. do nothing.
+  }
+}
+
 TEST(const_iterator_begin)
 {
   I3Frame f;

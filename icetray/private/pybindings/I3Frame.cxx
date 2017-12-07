@@ -91,6 +91,11 @@ static void frame_put_on_stream(I3Frame& f,
   f.Put(s, fop, stream);
 }
 
+static void frame_replace(I3Frame& f, const std::string& s, I3FrameObjectConstPtr fop)
+{
+  f.Replace(s, fop);
+}
+
 // used for I3Frame::Stream::__repr__
 std::string format_stream(const I3Frame::Stream& s)
 {
@@ -149,7 +154,7 @@ void register_I3Frame()
     .def("Put", frame_put)
     .def("Put", frame_put_on_stream)
     .def("Get", &frame_get<I3FrameObject>)
-    // more pythonic interface
+    .def("Replace", frame_replace)
     .def("__contains__", (bool (I3Frame::*)(const std::string &) const)&I3Frame::Has)
     .def("__getitem__", &frame_get<I3FrameObject>)
     .def("__setitem__", put_fn_p)

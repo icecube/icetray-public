@@ -160,6 +160,12 @@ class I3Frame
   static void create_blob_impl(value_t &value);
 
   size_type size(const value_t& value) const { return value.size; }
+  
+  /**
+   * Checks whether a name is acceptable for use as a key in the frame
+   * @throws std::runtime_error if the name is not allowed
+   */
+  void validate_name(const std::string& name);
 
  public:
   struct typename_transform
@@ -390,6 +396,14 @@ class I3Frame
   {
     Put(I3DefaultName<T>::value(),element);
   }
+  
+  /**
+   * Puts something into the frame, even if there is already something else there
+   * @param name Where to put it.
+   * @param element What to put in there.
+   */
+  void Replace(const std::string& name, 
+	   boost::shared_ptr<const I3FrameObject> element);
 
   ///
   ///  Renames something.
