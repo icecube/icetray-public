@@ -109,7 +109,8 @@ def _make_http(port=None,usessl=False,basic_auth=False):
         p = subprocess.Popen(['openssl','req','-new','-x509',
                               '-keyout','privkey.pem',
                               '-out','cacert.pem','-days','1',
-                              '-batch','-passout','pass:passkey'],
+                              '-batch','-passout','pass:passkey',
+                              '-subj', '/'],
                               stdin=subprocess.PIPE)
         p.communicate(input=b'passkey')
         if p.returncode:
