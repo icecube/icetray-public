@@ -47,7 +47,6 @@ public:
 	
 	void Configure() override;
 	void Process() override;
-	void Finish() override;
 };
 
 I3_MODULE(I3AsyncReader);
