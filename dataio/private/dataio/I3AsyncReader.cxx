@@ -45,8 +45,9 @@ public:
 	I3AsyncReader(const I3Context&);
 	~I3AsyncReader();
 	
-	void Configure();
-	void Process();
+	void Configure() override;
+	void Process() override;
+	void Finish() override;
 };
 
 I3_MODULE(I3AsyncReader);
@@ -176,12 +177,15 @@ I3AsyncReader::Process(){
 	//wait can block until something finshes reading, there is determined to
 	//be no more input, or an error occurs
 	log_debug("Waiting to push a frame");
+	PyThreadState* pyTState=PyEval_SaveThread();
 	frame_queue_.front().wait();
+	PyEval_RestoreThread(pyTState);
 	log_debug("Got a frame to push");
 	FetchNext();
-//	Flush();
 }
 
+///\pre frame_queue_ must not be empty and the first future in it must be ready
+///     (or blocking and a python GIL deadlock may occur if the GIL has not been released)
 ///\return true if a valid frame was fetched and pushed, false if end of input reached
 bool I3AsyncReader::FetchNext(){
 	try{
