@@ -602,7 +602,6 @@ namespace dataio {
         if (fr.empty()) {
             log_fatal("previous frame not in the cache");
         }
-        fr.pop_back();
         return fr;
     }
 
