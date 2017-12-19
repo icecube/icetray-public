@@ -419,8 +419,8 @@ namespace dataio {
     {
         // pre-fetch 10 frames
         for(uint8_t i=0;i<10;i++) {
-            tr_cache_.emplace(frameno_+i,tr_.push(
-                    std::bind(&FileGroup::get_frame, std::ref(files_), frameno_+i)));
+            auto idx=frameno_+i;
+            tr_cache_.emplace(frameno_+i,tr_.push([=]{return files_.get_frame(idx);}));                    
         }
     }
 
@@ -437,8 +437,7 @@ namespace dataio {
             if (cache_.get(newframeno).empty()) {
                 const auto tr_cache_iter = tr_cache_.find(newframeno);
                 if (tr_cache_iter == tr_cache_.end()) {
-                    tr_cache_.emplace(newframeno,tr_.push(
-                            std::bind(&FileGroup::get_frame, std::ref(files_), newframeno)));
+                    tr_cache_.emplace(newframeno,tr_.push([=]{return files_.get_frame(newframeno);}));                            
                 }
             }
         }
@@ -472,8 +471,7 @@ namespace dataio {
             if (cache_.get(newframeno).empty()) {
                 const auto tr_cache_iter = tr_cache_.find(newframeno);
                 if (tr_cache_iter == tr_cache_.end()) {
-                    tr_cache_.emplace(newframeno,tr_.push(
-                            std::bind(&FileGroup::get_frame, std::ref(files_), newframeno)));
+                    tr_cache_.emplace(newframeno,tr_.push([=]{return files_.get_frame(newframeno);}));                            
                 }
             }
         }
@@ -491,8 +489,7 @@ namespace dataio {
                 tr_cache_.erase(tr_cache_iter);
             } else {
                 // make future, then wait on it
-                auto f = tr_.push(
-                    std::bind(&FileGroup::get_frame, std::ref(files_), frameno_));
+                auto f = tr_.push([=]{return files_.get_frame(frameno_);});
                 fr = f.get();
             }
             if (!fr.empty()) {
@@ -519,8 +516,7 @@ namespace dataio {
                 } else {
                     //log_info("pop_frame from new future");
                     // make future, then wait on it
-                    auto f = tr_.push(
-                        std::bind(&FileGroup::get_frame, std::ref(files_), frameno_));
+                    auto f = tr_.push([=]{return files_.get_frame(frameno_);});
                     fr = f.get();
                 }
                 if (!fr.empty()) {
@@ -529,7 +525,7 @@ namespace dataio {
                 }
             } //else { //log_info("pop_frame from frame cache"); }
             if (fr.empty()) {
-                log_fatal("no frame at that index");
+                log_fatal_stream("no frame at index " << frameno_);
             }
             frameno_++;
             if (s == I3Frame::None || s == fr.back()->GetStop()) {
@@ -547,7 +543,7 @@ namespace dataio {
                     const auto tr_cache_iter = tr_cache_.find(newframeno);
                     if (tr_cache_iter == tr_cache_.end()) {
                         tr_cache_.emplace(newframeno,tr_.push(
-                                std::bind(&FileGroup::get_frame, std::ref(files_), newframeno)));
+                                [=]{return files_.get_frame(newframeno);}));
                     }
                 }
             }
@@ -576,7 +572,7 @@ namespace dataio {
                 const auto tr_cache_iter = tr_cache_.find(newframeno);
                 if (tr_cache_iter == tr_cache_.end()) {
                     tr_cache_.emplace(newframeno,tr_.push(
-                            std::bind(&FileGroup::get_frame, std::ref(files_), newframeno)));
+                            [=]{return files_.get_frame(newframeno);}));
                 }
             }
         }
