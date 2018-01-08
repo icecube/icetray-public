@@ -429,13 +429,22 @@ class I3Frame
   void create_blob(bool drop_memory_data, const std::string &key) const;
   void create_blobs(bool drop_memory_data, const std::vector<std::string>& skip = std::vector<std::string>()) const;
 
+  /// Serialize the frame to an output stream
+  /// @param os the stream to which to write
+  /// @param skip a collection of keys which should not be written
   template <typename OStreamT>
   void 
-  save(OStreamT& os, const std::vector<std::string>& vs = std::vector<std::string>()) const;
+  save(OStreamT& os, const std::vector<std::string>& skip = std::vector<std::string>()) const;
 
+  /// Deserialize a frame from an input stream, 
+  /// replacing the current contents of this frame.
+  /// @param is the stream from which to read
+  /// @param skip a collection of keys which should not be read
+  /// @param verify_checksums whether to verify that the data being read matches
+  ///        the saved checksum
   template <typename IStreamT>
   bool 
-  load(IStreamT& is, const std::vector<std::string>& vs = std::vector<std::string>(), bool verify_checksums = true);
+  load(IStreamT& is, const std::vector<std::string>& skip = std::vector<std::string>(), bool verify_checksums = true);
 
   std::string Dump() const;
 
