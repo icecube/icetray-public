@@ -20,8 +20,8 @@ def traysegment(function):
 	if inspect.getdoc(function) is None:
 		function.__doc__ = "I3Tray segments should have docstrings. This one doesn't. Fix it."
 
-	if len(inspect.getargspec(function)[0]) < 1:
-		raise ValueError("I3Tray segments must have at least one argument (tray)")
+	if len(inspect.getargspec(function)[0]) < 2:
+		raise ValueError("I3Tray segments must have at least two arguments (tray and name)")
 
 	function.__i3traysegment__ = True
 	return function
