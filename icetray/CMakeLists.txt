@@ -204,12 +204,6 @@ else (${MEMORY_TRACKING})
   colormsg(CYAN "+-- memory tracking disabled")
 endif (${MEMORY_TRACKING})
 
-if(ROOT_FOUND)
-  set_source_files_properties(private/icetray/I3TrayInfoService.cxx
-    PROPERTIES
-    COMPILE_DEFINITIONS ROOT_RELEASE="${ROOT_VERSION}")
-endif(ROOT_FOUND)
-
 set_source_files_properties(${ICETRAY_PYTHON_SRC}
   PROPERTIES
   COMPILE_FLAGS -DI3_PYBINDINGS_MODULE)

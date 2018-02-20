@@ -80,7 +80,6 @@ std::ostream& I3TrayInfo::Print(std::ostream& os) const
      << "                  on host:  " << at(host_info, "hostname")
      << " (" << at(host_info, "platform") << ")\n"
      << "                  as user:  " << at(host_info,"username") << "\n"
-     << "  built with root version:  " << at(host_info, "root_version") << "\n"
      << "          and gcc version:  " << at(host_info, "gcc_version")  << "\n"
      << "                  svn url:  " << svn_url << "\n"
      << "             svn revision:  " << svn_revision << "\n\n";

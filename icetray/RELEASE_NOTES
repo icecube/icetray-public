@@ -4,6 +4,7 @@ Release Notes
 trunk
 -----
 
+* (r3031) Remove ROOT version from I3TrayInfo
 * (r2966) Remove memory usage code from IceTray. Will be an external
   library using LD_PRELOAD in the future.
 * (r2961) Put functionality for locating a scratch directory into the core.

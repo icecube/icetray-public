@@ -57,11 +57,6 @@ I3TrayInfoService::GetConfig()
   //
   the_config.host_info["gcc_version"] = __VERSION__;
   the_config.host_info["boost_version"] = BOOST_LIB_VERSION;
-#ifdef I3_USE_ROOT
-  the_config.host_info["root_version"] = ROOT_RELEASE;
-#else
-  the_config.host_info["root_version"] = "Compiled w/o ROOT support";
-#endif
 
   the_config.svn_externals = SVN_EXTERNALS;
   the_config.svn_url = SVN_URL;
