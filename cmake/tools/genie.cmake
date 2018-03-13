@@ -43,12 +43,7 @@ else(NOT GENIE_VERSION)
     else(GENIE_VERSION VERSION_LESS "2.8.6")
     message(STATUS "Configuring for Genie version ${GENIE_VERSION}.")
 
-    if(IS_DIRECTORY $ENV{GENIE})
-      set(GENIE_PATH $ENV{GENIE})
-    else()
-      set(GENIE_PATH ${I3_PORTS}/Genie-${GENIE_VERSION})
-    endif()
-    set(GENIE_PATH ${GENIE_PATH} CACHE STRING "Genie's very own ROOTSYS equivalent.." )
+    set(GENIE_PATH ${I3_PORTS}/Genie-${GENIE_VERSION} CACHE STRING "Genie's very own ROOTSYS equivalent.." )
 
     #message(STATUS "Looking for Genie genie-config program")
 
@@ -83,20 +78,13 @@ else(NOT GENIE_VERSION)
       string(STRIP ${GENIE_LIB_DIR} GENIE_LIB_DIR)
       #message(STATUS "Genie lib dir: \"${GENIE_LIB_DIR}\"")
 
-      if(I3_PORTS)
-	string (REPLACE "${I3_PORTS}/" "" GENIE_RELATIVE_LIB_DIR "${GENIE_LIB_DIR}")
-      else()
-	set(GENIE_RELATIVE_LIB_DIR ${GENIE_LIB_DIR})
-      endif()
+      string (REPLACE "${I3_PORTS}/" "" GENIE_RELATIVE_LIB_DIR "${GENIE_LIB_DIR}")
       #message(STATUS "Genie relative lib dir: \"${GENIE_RELATIVE_LIB_DIR}\"")
 
 
       set(GENIE_INC_DIR ${GENIE_PATH}/include/GENIE)
-      if(I3_PORTS)
-	string (REPLACE "${I3_PORTS}/" "" GENIE_RELATIVE_INC_DIR "${GENIE_INC_DIR}")
-      else()
-	set(GENIE_RELATIVE_INC_DIR ${GENIE_INC_DIR})
-      endif()
+      string (REPLACE "${I3_PORTS}/" "" GENIE_RELATIVE_INC_DIR "${GENIE_INC_DIR}")
+
       #message(STATUS "Genie include dir: \"${GENIE_INC_DIR}\"")
       #message(STATUS "Genie relative include dir: \"${GENIE_RELATIVE_INC_DIR}\"")
 
