@@ -120,7 +120,9 @@ macro(use_pybindings THIS_TARGET)
       message(FATAL_ERROR "Attempt to use project '${USED_PROJECT}'. There is a directory but no CMakeLists.txt... don't know what to do.")
     endif(NOT EXISTS ${CMAKE_SOURCE_DIR}/${USED_PROJECT}/CMakeLists.txt)
 
-    add_dependencies(${THIS_TARGET} ${USED_PROJECT}-pybindings)
+    string(REPLACE "-" "_" PYBINDING_TARGET ${USED_PROJECT})
+    string(CONCAT PYBINDING_TARGET ${PYBINDING_TARGET} "-pybindings")
+    add_dependencies(${THIS_TARGET} ${PYBINDING_TARGET})
   endforeach(USED_PROJECT ${${THIS_TARGET}_USE_PROJECTS_PROJECTS})
 endmacro(use_pybindings THIS_TARGET)
 
