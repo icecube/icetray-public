@@ -97,7 +97,9 @@ macro(tooldef tool_ incdir incfile libdir bindir)
           COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/lib/tools
           COMMAND ${CMAKE_SOURCE_DIR}/cmake/install_shlib.py ${foundlib${lib}} ${CMAKE_INSTALL_PREFIX}/lib/tools
           )
-        add_dependencies(install_tool_libs install_${TOOL}_libs)
+        if(TARGET "install_${TOOL}_libs")
+          add_dependencies(install_tool_libs install_${TOOL}_libs)
+        endif()
       endif(NOT ${libdir} STREQUAL "NONE")
     endif(${foundlib${lib}} MATCHES ".*NOTFOUND$" AND NOT ${libdir} STREQUAL "NONE")
   endforeach(lib ${ARGN})
