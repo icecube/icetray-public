@@ -75,9 +75,8 @@ if(DEFINED ENV{I3_TESTDATA})
 elseif(DEFINED ENV{I3_PORTS})
     set(I3_TESTDATA $ENV{I3_PORTS}/test-data CACHE STRING "Path to your icetray test-data")
 else()
-    colormsg(YELLOW "*** Neither I3_PORTS nor I3_TESTDATA set.")
+    set(I3_TESTDATA "${CMAKE_BINARY_DIR}/test-data" CACHE STRING "Path to your icetray test-data. This is the default value")
     colormsg(YELLOW "*** Make sure to define at least one of them before calling 'make test' or manually running tests.")
-    set(I3_TESTDATA "" CACHE STRING "Path to your icetray test-data: currently empty, define it if you wish to run unit tests and/or test scripts.")
 endif(DEFINED ENV{I3_TESTDATA})
 
 if(I3_TESTDATA)
@@ -89,6 +88,8 @@ if(I3_TESTDATA)
     )
   ### ctest testing
   enable_testing()
+else()
+  message(FATAL_ERROR "Something strange happened here. I3_TESTDATA should have been set to a default value.")
 endif()
 
 include(tools)          # trigger tool/library detection
