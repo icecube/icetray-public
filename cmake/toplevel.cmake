@@ -75,7 +75,7 @@ if(DEFINED ENV{I3_TESTDATA})
 elseif(DEFINED ENV{I3_PORTS})
     set(I3_TESTDATA $ENV{I3_PORTS}/test-data CACHE STRING "Path to your icetray test-data")
 else()
-    set(I3_TESTDATA "${CMAKE_BINARY_DIR}" CACHE STRING "Path to your icetray test-data: currently empty, define it if you wish to run unit tests and/or test scripts.")
+    set(I3_TESTDATA "${CMAKE_BINARY_DIR}/test-data" CACHE STRING "Path to your icetray test-data: currently empty, define it if you wish to run unit tests and/or test scripts.")
     colormsg(YELLOW "*** Neither I3_PORTS nor I3_TESTDATA set. Using the default of ${I3_TESTDATA}")
 endif(DEFINED ENV{I3_TESTDATA})
 
