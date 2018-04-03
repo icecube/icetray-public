@@ -121,10 +121,11 @@ class I3FileStagerFile(AbstractFileStager):
 	          
 	          A ssl parameter is available for ssl configuration.
 	"""
-	def __init__(self, blocksize=2**16, ssl=None):
+	def __init__(self, blocksize=2**16, ssl=None, retry=5):
 		AbstractFileStager.__init__(self)
 		self.blocksize = blocksize
 		self.ssl = ssl if ssl else {}
+		self.retry=retry
 
 	def ReadSchemes(self):
 		# we handle "file://" URLs
@@ -168,32 +169,53 @@ class I3FileStagerFile(AbstractFileStager):
 			icetray.logging.log_info("File copied: %s to %s" % (input_path, output_path), unit="I3FileStagerFile")
 		else:
 			icetray.logging.log_info("Downloading %s to %s" % (url, output_path), unit="I3FileStagerFile")
+			import time
 
-			f = None
-			output_file = None
-			try:
-				output_file = open(output_path, "wb")
+			retries=self.retry
+			delay=1 # number of seconds to wait before retrying
+			while retries>0:
+				f = None
+				output_file = None
+				total_read=0
+				expected_length=None
 				try:
-					f = urlopen(self.strip_auth(url),**self.ssl)
-				except TypeError:
-					f = urlopen(self.strip_auth(url))
+					output_file = open(output_path, "wb")
+					try:
+						f = urlopen(self.strip_auth(url),**self.ssl)
+						if "Content-Length" in f.headers:
+							expected_length=int(f.headers["Content-Length"])
+					except TypeError:
+						f = urlopen(self.strip_auth(url))
 				
-				while True:
-					block = f.read(self.blocksize)
-					output_file.write(block)
-					if len(block) < self.blocksize:
-						break
+					while True:
+						block = f.read(self.blocksize)
+						output_file.write(block)
+						total_read+=len(block)
+						if len(block) < self.blocksize:
+							break
 
-				icetray.logging.log_info("Download finished: %s to %s" % (url, output_path), unit="I3FileStagerFile")
-			except Exception as e:
-				if os.path.exists(output_path):
-					os.remove(output_path)
-				icetray.logging.log_fatal("Downloading %s: %s" % (url, str(e)), unit="I3FileStagerFile")
-			finally:
-				if f is not None:
-					f.close()
-				if output_file is not None:
-					output_file.close()
+					icetray.logging.log_info("Download finished: %s to %s" % (url, output_path), unit="I3FileStagerFile")
+				except Exception as e:
+					if os.path.exists(output_path):
+						os.remove(output_path)
+					icetray.logging.log_fatal("Downloading %s: %s" % (url, str(e)), unit="I3FileStagerFile")
+				finally:
+					if f is not None:
+						f.close()
+					if output_file is not None:
+						output_file.close()
+				if not expected_length is None and total_read<expected_length:
+					if os.path.exists(output_path):
+						os.remove(output_path)
+					if retries<1:
+						icetray.logging.log_fatal("Error downloading %s: Expected %i bytes but got %i"%(url,expected_length,total_read), unit="I3FileStagerFile")
+					else:
+						retries-=1
+						time.sleep(delay) # add a short delay
+						delay*=2 # back off exponentially
+						icetray.logging.log_warn("Error downloading %s: Expected %i bytes but got %i; %i retries remaining"%(url,expected_length,total_read,retries), unit="I3FileStagerFile")
+				else:
+					break
 		
 		return output_path
 
