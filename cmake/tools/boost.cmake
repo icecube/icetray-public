@@ -30,7 +30,7 @@ if (SYSTEM_PACKAGES)
   find_package(Boost 1.38.0 COMPONENTS system signals thread date_time filesystem program_options regex iostreams)
 
   if (Boost_FOUND)
-    if (Boost_VERSION GREATER_EQUAL 106700)
+    if ((Boost_VERSION GREATER 106700) OR (Boost_VERSION EQUAL 106700))
       if (PYTHON_VERSION MATCHES "Python 2")
         find_package(Boost ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION} EXACT COMPONENTS python27)
       else()
