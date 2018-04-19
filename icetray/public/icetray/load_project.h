@@ -23,11 +23,17 @@
 #define ICETRAY_LOAD_PROJECT_H_INCLUDED
 
 ///\brief Dynamically load an icetray project
+///\param proj The name of the project to be loaded. 
+///\throw std::runtime_error if loading does not succeed
+void load_icecube_library(const std::string& project_name);
+
+///\brief Dynamically load an icetray project
 ///
 ///\param proj the name of the project to be loaded. No filename extension
 ///            should be included, and the 'lib' prefix is optional. 
 ///\param verbose unused
 ///\return 0 on success
 ///\throw std::runtime_error if loading does not succeed
-int load_project(std::string proj, __attribute__((unused)) bool verbose = false);
+int load_project(std::string project_name, __attribute__((unused)) bool verbose = false);
+		 
 #endif

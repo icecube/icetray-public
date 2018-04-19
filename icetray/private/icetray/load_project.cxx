@@ -19,9 +19,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
-//
-//  loads a project's shared library.
-//
+
 #include <dlfcn.h>
 #include <string>
 #include <iostream>
@@ -29,38 +27,99 @@
 #include <stdexcept>
 #include <cstdlib>
 
-int 
-load_project (std::string path, bool verbose)
-{
-  if (path.find("lib") != 0)
-    path = std::string("lib") + path;
+#include <boost/filesystem.hpp>
+namespace fs = boost::filesystem;
 
+namespace{
+
+  /**
+   * The project_name should *not* have the preceding 'lib' unless
+   * that's acutally part of the project name.  For example, if the
+   * project is actually library_reader, then the shared library
+   * that's built (on linux) is liblibrary_reader.so.
+   */
+  std::string construct_libname(const std::string& project_name){
+    const std::string prefix("lib");    
 #ifdef __APPLE_CC__
-  path += ".dylib";
+    const std::string suffix(".dylib");
 #else
-  path += ".so";
+    const std::string suffix(".so");
 #endif
-
-  // first try via LD_LIBRARY_PATH search
-  void *v = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL);
-  char *errmsg = dlerror();
+    return prefix + project_name + suffix;
+  }
   
-  // not found, then try $I3_BUILD/lib specifically
-  if ((v == NULL || errmsg != NULL) && getenv("I3_BUILD") != NULL)
-    {
-      std::string fullpath(getenv("I3_BUILD"));
-      fullpath += "/lib/";
-      fullpath += path;
-      v = dlopen(fullpath.c_str(), RTLD_NOW | RTLD_GLOBAL);
-      errmsg = dlerror();
+  /**
+   * The filename is passed directly to dlopen, so can accept
+   * libfoo.so and will search in LD_LIBRARY_PATH, or path
+   * names (both absolute and relative) like /usr/local/lib/libfoo.so.
+   * or ../lib/libfoobar.so.
+   *
+   * This functions throws std::runtime_error on error.
+   */
+  void load_dynamic_library(const std::string& filename){
+    void* v = dlopen(filename.c_str(), RTLD_NOW | RTLD_GLOBAL);
+    char* errmsg = dlerror();
+    
+    if(v == NULL || errmsg != NULL){
+      std::string errormsg("dynamic loading error ");
+      errormsg += "(" + filename + ")\n"; 
+      errormsg += (errmsg == NULL) ? "dlopen: unknown error" : errmsg;
+      errormsg += '\n';
+      throw std::runtime_error(errormsg);
     }
-  if (v != NULL && errmsg == NULL) 
-    {
-      return 0;
-    }
-  std::string errormsg("dlopen() dynamic loading error: ");
-  errormsg += (errmsg == NULL) ? "unknown error" : errmsg;
+  }
+  
+}
 
-  throw std::runtime_error(errormsg);
+/**
+ * This takes the project_name...and when I say project name, I mean
+ * PROJECT NAME...it's the name of the project, not the library.
+ * There's no '.so' suffix nor is there a 'lib' prefix, unless that's
+ * actually part of the project's name.  For example, if the project
+ * name is 'librarians_rock' then it's entirely appropriate to look
+ * for and load the library called liblibrarians_rock.so (on linux).
+ */
+void
+load_icecube_library(const std::string& project_name){
+  load_dynamic_library(construct_libname(project_name));
+}
+
+/**
+ * This should typically just thunk to 'load_icecube_library'
+ * but has two functions:
+ * 1) Maintain the interface, so no downstream code has to change.
+ * 2) Provide functionality for any projects out there that might
+ *    be constructing their own paths and using this function to
+ *    dynamically load a (possibly) non-IceCube project.
+ */
+int 
+load_project(std::string path, bool verbose){
+  if (path.find("/") == std::string::npos){
+    // The 'path' is not a path, but a project name, which is
+    // actually standard-ish, with the exception of sometimes
+    // leading 'lib's
+
+    // Also to maintain the old pathology for this function, 
+    // if there's a leading 'lib' assume it's *not* part
+    // of the project name, so lop it off...it'll be added back
+    // later.
+    std::string project_name(path);
+    const std::string lib("lib");
+    if(project_name.find(lib) == 0){
+      // 'lib' is at the beginning
+      project_name = path.substr(lib.size());
+    }
+    std::cerr<<"project_name = "<<project_name<<std::endl;
+    load_icecube_library(project_name);
+  }else{
+
+    if(!fs::exists(fs::path(path))){
+      std::string errormsg("Cannot find library ");
+      errormsg += path;
+      throw std::runtime_error(errormsg);
+    }
+    load_dynamic_library(path);    
+  }
+  return 0;
 }
 
