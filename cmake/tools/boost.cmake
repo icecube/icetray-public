@@ -46,7 +46,6 @@ if (SYSTEM_PACKAGES)
     colormsg(RED ${Boost_ERROR_REASON})
   endif (NOT Boost_FOUND)
 endif (SYSTEM_PACKAGES)
-message(FATAL_ERROR "")
 
 if((NOT SYSTEM_PACKAGES) OR (NOT Boost_FOUND))
   set(BOOST_PORTSVERSION "1.38.0" CACHE PATH "The boost version.")
