@@ -109,7 +109,6 @@ load_project(std::string path, bool verbose){
       // 'lib' is at the beginning
       project_name = path.substr(lib.size());
     }
-    std::cerr<<"project_name = "<<project_name<<std::endl;
     load_icecube_library(project_name);
   }else{
 
