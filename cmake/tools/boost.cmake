@@ -28,9 +28,22 @@ set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 if (SYSTEM_PACKAGES)
   set(BASE_COMPONENTS system signals thread date_time filesystem program_options regex iostreams)
-  find_package(Boost 1.38.0 COMPONENTS python ${BASE_COMPONENTS})
+  # From the cmake docs:
+  # Boost Python components require a Python version suffix (Boost 1.67 and later),
+  # e.g. python36 or python27 for the versions built against Python 3.6 and 2.7, respectively.
+  #
+  # Make a first pass at finding boost, with no components specified, just to figure out
+  # what version of boost we're dealing with.  We'll add the components later.
+  find_package(Boost 1.38.0) # NB: 1.38.0 is the minimum version required.
 
-  if (NOT Boost_FOUND)
+  # If the first find failed, there's little hope of either of the next three searches
+  # successfully finding boost, especially in the cases where Boost_VERSION* isn't set.
+  # In that case the last find_package fails with a cryptic error message, since the
+  # boost version you're passing is effectively '.' ...not helpful.
+  # So, there's no point in continuing if boost isn't found.
+  if (Boost_FOUND) 
+    # Now that boost was found and we know which version, we can choose the correct
+    # boost::python libraries that match the python version we're building against.
     if ((Boost_VERSION GREATER 106700) OR (Boost_VERSION EQUAL 106700))
       if (PYTHON_VERSION MATCHES "Python 2")
         find_package(Boost ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION} EXACT COMPONENTS python27 ${BASE_COMPONENTS})
@@ -38,14 +51,15 @@ if (SYSTEM_PACKAGES)
         find_package(Boost ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION} EXACT COMPONENTS python36 ${BASE_COMPONENTS})
       endif()
     else()
+      # Old boost, so find using the old method
       find_package(Boost ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION} COMPONENTS python ${BASE_COMPONENTS})
     endif()
   endif()
-
-  if (NOT Boost_FOUND)
+  
+  if(NOT Boost_FOUND)
     colormsg(RED ${Boost_ERROR_REASON})
-  endif (NOT Boost_FOUND)
-endif (SYSTEM_PACKAGES)
+  endif ()
+endif ()
 
 if((NOT SYSTEM_PACKAGES) OR (NOT Boost_FOUND))
   set(BOOST_PORTSVERSION "1.38.0" CACHE PATH "The boost version.")
