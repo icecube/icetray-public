@@ -67,7 +67,7 @@ class TestExampleScripts(unittest.TestCase):
         print(cmd)
         return_code = subprocess.call(cmd)
         if return_code != 0 :
-                print("Script returned error code %d" % error_code)
+                print("Script returned error code %d" % return_code)
         self.assertEqual(return_code, 0,
                          "Example %s did not finish successfully." % script)
 
