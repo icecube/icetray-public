@@ -303,10 +303,13 @@ def main():
                             "-E",sourcedir,
                             #"-c",configdir,
                             finaldir)
-        
+
         if args.open and not retvalue:
             if args.build_type=='html':
-                outfile = os.path.join(finaldir,"index.html")
+                if args.projects:
+                    outfile = os.path.join(finaldir,"projects",args.projects[0],"index.html")
+                else:
+                    outfile = os.path.join(finaldir,"index.html")
             else:
                 outfile = None
 
