@@ -98,13 +98,18 @@ py2-v2
 py2-v3
 ^^^^^^
 
+.. note::
+
+   py2-v3.0.1 is a minor fix for some software.
+   py2-v3 is deprecated.
+
 * python 2.7 and software releases as of 2017
 
 * Supported OS:
 
   * RedHat / CentOS / SL:  6 - 7
   
-  * Ubuntu: 14.04 - 16.04
+  * Ubuntu: 14.04 - 18.04
   
   * Debian: 8 - 9
   
