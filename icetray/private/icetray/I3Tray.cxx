@@ -36,7 +36,6 @@
 #include <icetray/I3Tray.h>
 #include <icetray/I3TrayInfoService.h>
 #include <icetray/I3Module.h>
-#include <icetray/I3OpNewServiceFactory.h>
 #include <icetray/I3Context.h>
 #include <icetray/I3Frame.h>
 #include <icetray/I3PhysicsUsage.h>
