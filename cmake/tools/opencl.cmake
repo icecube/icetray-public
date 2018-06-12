@@ -59,7 +59,7 @@ ELSE (APPLE)
       HINTS ENV LD_RUN_PATH ENV LD_LIBRARY_PATH
     )
 
-    IF (OPENCL_LIBRARIES)
+    IF (OPENCL_LIBRARIES)      
         GET_FILENAME_COMPONENT(OPENCL_LIB_DIR ${OPENCL_LIBRARIES} PATH)
         GET_FILENAME_COMPONENT(_OPENCL_INC_CAND ${OPENCL_LIB_DIR}/../../include ABSOLUTE)
         GET_FILENAME_COMPONENT(_OPENCL_INC_CAND_2 ${OPENCL_LIB_DIR}/../include ABSOLUTE)
@@ -80,6 +80,22 @@ ELSE (APPLE)
           NONE
           OpenCL
           )
+    ELSE (OPENCL_LIBRARIES)
+      # find_package works just fine on some systems
+      # where find_library fails, for reasons that aren't
+      # entirely clear.  so if find_library fails, try find_package.
+      find_package(OpenCL)
+      set(OPENCL_FOUND ${OpenCL_FOUND})
+      if(OpenCL_FOUND)
+	get_filename_component(OPENCL_LIB_DIR ${OpenCL_LIBRARIES} PATH)
+	tooldef(opencl
+          ${OpenCL_INCLUDE_DIRS}
+          CL/cl.h
+          ${OPENCL_LIB_DIR}
+          NONE
+          OpenCL
+          )
+      endif()
     ENDIF (OPENCL_LIBRARIES)
 
 ENDIF (APPLE)
