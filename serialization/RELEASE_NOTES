@@ -7,6 +7,10 @@ Release Notes
 Trunk
 -----
 
+June 13, 2018 Alex Olivas (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+Release V18-06-00
+
 * (r2977) - Allow variable sizes for version_type, collection_size_type,
   and strings.  This allows for larger than 4GB frame objects.
 
