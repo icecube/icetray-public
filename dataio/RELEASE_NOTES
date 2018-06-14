@@ -4,14 +4,32 @@ Release Notes
 trunk
 -----
 
+June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+V18-06-00
+---------
+* (r3048) Add error handling and retries to HTTP staging
+* (r3028) copy-paste bug fix for #2125
+* (r3025) GIL defense
+
+November 15, 2017, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+V17-11-00
+---------
 * (r2933+) - dataio-shovel using I3FrameSequence. Add python shell feature.
 * (r2927+) - Merge c++ and python I3File interface. Create I3FrameSequence multi-file interface.
 * (r2890) - Add sub event id to dataio-pyshovel display.
+
+May 9, 2017, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+V17-05-00
+---------
+* support for zstd
 * (r2869) - import dataclasses when you import dataio.
 * (r2862) - Fix file truncation when writing a compressed file asynchronously with staging.
 * (r2848) - Modules for reading and writing files on a secondary thread.
 
-March 27, 2016, Alex Olivas  (olivas@icecube.umd.edu)
+March 27, 2017, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------
 V17-03-01
 ---------
