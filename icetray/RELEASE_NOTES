@@ -4,6 +4,13 @@ Release Notes
 trunk
 -----
 
+* (r3063) Removed I3OpNewServiceFactory.
+
+June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+Release V18-06-00
+
+* (r3053) Added new function to load icetray libraries.
 * (r3031) Remove ROOT version from I3TrayInfo
 * (r2966) Remove memory usage code from IceTray. Will be an external
   library using LD_PRELOAD in the future.
