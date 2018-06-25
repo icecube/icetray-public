@@ -18,6 +18,7 @@ tray.AddModule("Dump")
 
 try:
     tray.Execute()
-    assert False, "that should have claimed that pyfunctions can't be driving modules"
 except:
-    print("Threw as expected")
+    pass
+else:
+    raise Exception("That should have claimed that pyfunctions can't be driving modules")

@@ -8,12 +8,11 @@ from I3Tray import *
 
 tray = I3Tray()
 
-
 class Notamodule:
     pass
 
 try:
-    tray.AddModule(Notamodule,"shouldfail")
+    tray.AddModule(Notamodule)
     print("that should have thrown")
     sys.exit(1)
 

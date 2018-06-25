@@ -5,7 +5,7 @@ from I3Tray import *
 tray = I3Tray()
 
 
-tray.AddModule("BottomlessSource","bs")
+tray.AddModule("BottomlessSource")
 
 # can't convert that return value to bool or none
 def f(frame, foo='foo', bar='bar', baz='baz'):
@@ -13,9 +13,7 @@ def f(frame, foo='foo', bar='bar', baz='baz'):
     assert foo == 'foo', 'foo didnt get set'
     assert bar == 'BARWASSET', 'bar didnt get set'
     assert baz == 'baz', 'baz didnt get set'
-
     return True
-
 
 try:
     tray.AddModule(f,"keywordfn",

@@ -1,19 +1,12 @@
 #!/usr/bin/env python
-#
-# Simplest possible icetray script.
-#
 
 from I3Tray import *
 tray = I3Tray()
 
 try:
     from icecube import no_such_library 
-
-    # generate empty frames
-    tray.AddModule("BottomlessSource","bottomless")
-
-    # print em
-    tray.AddModule("NoSuchModule","dump")
+    tray.AddModule("BottomlessSource")
+    tray.AddModule("NoSuchModule")
 
     tray.Execute(5)
 except:

@@ -25,30 +25,30 @@ def run(hook=lambda tray: None):
 	hook(tray)
 	tray.Execute(1)
 
-#FIXME: assert throws an AssertionError, which is caught by the except.
-#       this is bad, bad, bad.  this always passes.
-        
 # Without reordering, thing2 should fail
 try:
 	run()
-	assert False, "Module should have raised an error when run out-of-order"
 except:
 	pass
-
+else:
+        raise Exception("Module should have raised an error when run out-of-order")
+        
 # With reordering, everything is hunky-dory
 run(lambda tray: tray.MoveModule('thing1', 'thing2'))
 
 # Moving a nonexistent module fails
 try:
 	run(lambda tray: tray.MoveModule('no_name', 'thing2'))
-	assert False, "Reordering should fail with nonexistent target module"
 except:
 	pass
+else:
+        raise Exception("Reordering should fail with nonexistent target module")
 
 # Moving a module to before a nonexistant module also fails
 try:
 	run(lambda tray: tray.MoveModule('thing1', 'no_anchor'))
-	assert False, "Reordering should fail with nonexistent anchor module"
 except:
 	pass
+else:
+        raise Exception("Reordering should fail with nonexistent anchor module")
 

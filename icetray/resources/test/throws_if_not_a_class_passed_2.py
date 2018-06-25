@@ -1,7 +1,4 @@
 #!/usr/bin/env python
-#
-# Sample i3module in python 
-#
 
 from icecube.icetray import *
 from I3Tray import *
@@ -12,7 +9,7 @@ class C:
     pass
 
 try:
-    tray.AddModule(C, "mod",
+    tray.AddModule(C, 
                    Startfrom = 0,
                    SumShouldBe = 6)
 except:

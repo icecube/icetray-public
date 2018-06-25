@@ -10,30 +10,14 @@ from icecube import icetray
 tray = I3Tray()
 
 # generate empty frames
-tray.AddModule("BottomlessSource","bottomless")
-
-tray.AddModule("AddNulls", "stuff")(
-    ("where", ["foo", "bar", "baz"])
-    )
- 
-tray.AddModule("CountFrames", "count")(
-    ("Physics", 11)
-    )
-
-# print em
-tray.AddModule("Dump","dump")
-
-# check whether frame element 'foo' exists (it shouldn't)
-tray.AddModule("FrameCheck","checker")(
-    ("ensure_physics_has", ["foo", "bar", "baz"]),
-    )
-
-# throw em out
-
+tray.Add("BottomlessSource")
+tray.Add("AddNulls", where = ["foo", "bar", "baz"])    
+tray.AddModule("CountFrames", Physics = 11)
+tray.AddModule("Dump")
+tray.AddModule("FrameCheck", ensure_physics_has = ["foo", "bar", "baz"])    
 
 try:
-    tray.Execute(7)  # wrong number of frames
-    
+    tray.Execute(7)  # wrong number of frames    
 except:
     print("ok: failure as expected.")
     sys.exit(0)

@@ -1,18 +1,12 @@
 #!/usr/bin/env python
-#
-# Simplest possible icetray script.
-#
 
 from I3Tray import *
 tray = I3Tray()
 
 # generate empty frames
-tray.AddModule("BottomlessSource","bottomless")
-
-
+tray.AddModule("BottomlessSource")
 try:
-    # print em
-    tray.AddModule("NoSuchModule","dump")
+    tray.AddModule("NoSuchModule")
 except:
     print("Good.  It threw.")
     sys.exit(0) # indicate success.

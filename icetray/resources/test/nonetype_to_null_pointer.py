@@ -22,17 +22,17 @@ try:
     tray = I3Tray()
 
     # generate empty frames
-    tray.AddModule("BottomlessSource")
+    tray.Add("BottomlessSource")
 
-    tray.AddModule(UseRandom)
+    tray.Add(UseRandom)
     
-    tray.AddModule(UseRandom,
-                   I3RandomService = phys_services.I3GSLRandomService(3141579)  )
+    tray.Add(UseRandom,
+             I3RandomService = phys_services.I3GSLRandomService(3141579)  )
     
-    tray.AddModule(UseRandom,
-                   I3RandomService = None)
+    tray.Add(UseRandom,
+             I3RandomService = None)
 
-    tray.AddModule("ContextFreeServiceTestModule")
+    tray.Add("ContextFreeServiceTestModule")
 
     tray.Execute(11)
 except Exception as t:

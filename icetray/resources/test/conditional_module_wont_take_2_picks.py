@@ -6,13 +6,12 @@ import sys
 
 tray = I3Tray()
 
-tray.AddModule("BottomlessSource", "bs")
-tray.AddModule("AddNulls", "N",
+tray.AddModule("BottomlessSource")
+tray.AddModule("AddNulls", 
                Where = ['foo'],
                IcePickServiceKey = "key",
                If = lambda f: True)
-tray.AddModule("Dump", "d")
-
+tray.AddModule("Dump")
 
 try:
     tray.Execute(1)

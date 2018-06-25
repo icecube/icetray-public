@@ -23,9 +23,7 @@ try:
 
     # generate empty frames
     tray.AddModule("BottomlessSource")
-
     tray.AddModule("MaintainInitialValuesModule")
-
     tray.Execute(11)
 
 except Exception as t:

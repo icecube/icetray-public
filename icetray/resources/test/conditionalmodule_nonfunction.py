@@ -8,18 +8,11 @@ import sys
 tray = I3Tray()
 
 try:
-    tray.AddModule("BottomlessSource", "bs")
-
-    # generate empty frames
-    tray.AddModule("AddNulls","an",
-                   where = ['foo'],
-                   If = [1,2,3])
-
-    tray.AddModule("Dump", "dump")
-    
-
-    print("About to execute    ")
-    # do it 5 times.
+    tray.Add("BottomlessSource")
+    tray.Add("AddNulls",
+             where = ['foo'],
+             If = [1,2,3])
+    tray.Add("Dump")    
     tray.Execute(3)
 except Exception as e:
     print(e, "ok, at that threw as expected.")

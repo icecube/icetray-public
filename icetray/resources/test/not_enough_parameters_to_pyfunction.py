@@ -9,10 +9,8 @@ def takesthree(frame, where, value):
     print(frame)
     return False
 
-tray.AddModule('BottomlessSource', 'bs')
-tray.AddModule(takesthree, '3',
-               value = 'blam')
-
+tray.AddModule('BottomlessSource')
+tray.AddModule(takesthree, value = 'blam')               
 
 try:
     tray.Execute(10)
