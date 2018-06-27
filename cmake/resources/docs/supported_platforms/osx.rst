@@ -72,16 +72,15 @@ Homebrew
 :doc:`../homebrew` is probably the easiest way to install packages on OS X, and
 distributes the most heavy-weight dependencies (cmake, boost, and Qt) as binary
 packages. Most of the required formulae are in the main distribution, but you
-should also `tap`_ homebrew/science and IceCube-SPNO/icecube. Install them like
-this::
+should also `tap` IceCube-SPNO/icecube. Install them like this::
 
 	brew install cmake
 
 The following formulae are recommended:
 
-* offline-software: boost boost-python cmake cdk gsl hdf5 libarchive qt pyqt pal doxygen wget
-* IceRec: cfitsio minuit2 suite-sparse healpix multinest nlopt
-* simulation: sprng2
+* offline-software: boost boost-python cmake cdk gsl hdf5 libarchive qt pal doxygen wget zstd 
+* IceRec: cfitsio minuit2 suite-sparse multinest nlopt
+* simulation: sprng2 zmq cppzmq
 
 .. warning:: Some Homebrew formulas have Python as a dependency, so a
    second Python may sneak onto your computer without your
@@ -166,7 +165,8 @@ To do this run::
 
 Next install :command:`pip`::
 
-        easy_install --user pip
+     curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+     python get-pip.py --user
 
 The ``--user`` option will install the :command:`pip` in ``~/Library/Python/2.7/bin/``
 which is not in your path. So you will then need to run::
@@ -268,20 +268,17 @@ Qt5
 """
 
 Steamshovel development has now been moved to Qt version 5.
-With Qt4, there was no reason to have to do anything special to detect Qt
-because cmake had its own Qt4 dectection routine.
-However, with Qt5, things are differet.
-Homebrew will only install Qt5 as keg-only which means it will not be symlinked
-into the ``/usr/local/`` directory.
-In addition, Qt5 now ships with its own cmake instructions.
-These two things together means that you need to tell cmake where to find Qt5.
-This can be accomblished by adding ``CMAKE_PREFIX_PATH`` to your cmake command line:
+Qt5 should be automatically detected by cmake. so there is no need to do anyhting special.
 
-.. code-block:: sh
-		
-  cmake ../src -DCMAKE_PREFIX_PATH=/usr/local/Cellar/qt/5.8.0_2/
 
-where ``5.8.0_2`` is the most recent version of Qt5 installed by homebrew.
+Healpix
+"""""""
+
+Healpix has always had a suboptimal build system. Its formula was recently 
+dropped from homebrew, presumably because they couldn't get it to compile on the 
+latest version of MacOS. This author has been able to compile it as well.
+But as it is an optional dependency it can usually be skipped.
+
 
 Step-By-Step Instructions
 """""""""""""""""""""""""
@@ -297,24 +294,23 @@ With a fresh install of El Capitan I was able to get IceRec and Simulation runni
 	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 	#install packages with homebrew
-	brew install cmake boost boost-python cdk qt pyqt libarchive wget doxygen cfitsio hdf5 nlopt gsl minuit2 suite-sparse
+	brew install cmake boost boost-python cdk qt libarchive wget doxygen cfitsio hdf5 nlopt gsl minuit2 suite-sparse zmq zstd
 	brew install --build-from-source root
 
-	brew tap homebrew/science
-	brew install hdf5
-
+        #install brews writen by icecube 
 	brew tap IceCube-SPNO/homebrew-icecube
-	brew install multinest pal sprng2
+	brew install multinest pal sprng2 cppzmq
 
 	#install python packages to home home directory
 	echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> ${HOME}/Library/Python/2.7/lib/python/site-packages/homebrew.pth
 	echo 'export PATH="${HOME}/Library/Python/2.7/bin/:${PATH}"' >> ${HOME}/.bash_profile 
-	easy_install --user pip
+        curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+        python get-pip.py --user
 	pip install --user urwid sphinx ipython qtconsole tables
 
 	#install scipy and friends overriding system python packages
 	echo "import sys; sys.path.insert(1,'${HOME}/Library/Python/2.7/lib/python/site-packages')" >> ${HOME}/Library/Python/2.7/lib/python/site-packages/local.pth
 	pip install --user --upgrade numpy scipy matplotlib
 	
-This worked in early September 2017, with the trunk of offline-software on macOS High Sierra (beta). As homebrew updates, these instructions might not work as well. Your mileage may vary.
+This worked in early June 2018, with the trunk of offline-software on macOS Sierra. As homebrew updates, these instructions might not work as well. Your mileage may vary.
 
