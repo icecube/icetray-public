@@ -95,6 +95,13 @@ namespace I3Test {
 #define FAIL(...) \
   I3Test::ensure(__FILE__,__LINE__,false,"FAIL",##__VA_ARGS__)
 
+#define EXPECT_THROW(CMD)                           \
+  try {                                             \
+    CMD;                                            \
+    FAIL("that should have thrown");                \
+   }catch (const std::exception &e) {/* good. */}
+  
+  
   inline 
   void ensure (const std::string& file, unsigned line, bool cond, const std::string& cond_txt,
 	       const std::string& msg = "unspecified")

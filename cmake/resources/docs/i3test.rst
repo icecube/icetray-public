@@ -222,10 +222,15 @@ should throw, or that a certain point in the code is never reached::
   try {
     operation_that_throws();
     FAIL("that should have thrown");
-  } catch ( ... ) {
+  } catch (const std::exception& e) {
+    // NB: DO NOT catch-all, meaning NEVER, EVER, EVER 'catch(...)'
+    //     In that case your test will alway pass and test nothing.
     // OK.  That operation threw and therefore we didn't hit FAIL()
   }
 
+Even better::
+  EXPECT_THROW(operation_that_throws);    
+  
 
 Building and running I3Tests
 ----------------------------
