@@ -109,29 +109,15 @@ TEST(fail_reading_truncated_file)
   //  and it missed certain objects.  with v4 we have clean
   //  checksumming, but not when loading v3 files.
   //
-  try 
-    {
-      loadframes(string(getenv("I3_SRC")) 
-		 + "/dataio/resources/data/serialization/truncated_hundred_doubles-v4.i3.gz",1);
-      FAIL("that should have thrown");
-    } 
-  catch (...)
-    { 
-      // ok.  we caught something.
-    }
+  EXPECT_THROW(loadframes(string(getenv("I3_SRC")) 
+			  + "/dataio/resources/data/serialization/truncated_hundred_doubles-v4.i3.gz",1),
+	       "This should throw.");
 }  
   
 TEST(fail_reading_corrupted_file)
 {
-  try 
-    {
-      loadframes(string(getenv("I3_SRC"))
-		 + "/dataio/resources/data/serialization/corrupt_hundred_doubles-v4.i3.gz",1);
-      FAIL("that should have thrown");
-    }
-  catch (...) 
-    {
-      // ok.  we caught something.
-    }
+  EXPECT_THROW(loadframes(string(getenv("I3_SRC"))
+			  + "/dataio/resources/data/serialization/corrupt_hundred_doubles-v4.i3.gz",1),
+	       "This should throw.");
 }
 
