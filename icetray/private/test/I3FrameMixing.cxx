@@ -243,10 +243,8 @@ TEST(MostRecentMixedStream){
 		mixer.Mix(f1);
 		mixer.Mix(f2);
 		mixer.Mix(f3);
-		try{
-			mixer.MostRecentMixedStream(I3Frame::Physics);
-			FAIL("MostRecentMixedStream should throw with no order tracking");
-		}catch(...){/*squash*/}
+		EXPECT_THROW(mixer.MostRecentMixedStream(I3Frame::Physics), 
+			     "MostRecentMixedStream should throw with no order tracking");
 	}
 
 	{ //empty mixer
@@ -300,21 +298,15 @@ TEST(MixUpdateDependenciesMutualExclusion){
 		}catch(...){
 			FAIL("A Mixer with disable_mixing unset must be able to Mix");
 		}
-		try{
-			mixer.UpdateDependencies(f);
-			FAIL("A Mixer with disable_mixing unset must not be able to UpdateDependencies");
-		}catch(...){
-			//ignore
-		}
+
+		EXPECT_THROW(mixer.UpdateDependencies(f),
+			     "A Mixer with disable_mixing unset must not be able to UpdateDependencies");
 	}
 	{
 		I3FrameMixer mixer(false,true);
-		try{
-			mixer.Mix(f);
-			FAIL("A Mixer with disable_mixing set must not be able to Mix");
-		}catch(...){
-			//ignore
-		}
+		EXPECT_THROW(mixer.Mix(f),
+			     "A Mixer with disable_mixing set must not be able to Mix");
+		
 		try{
 			mixer.UpdateDependencies(f);
 		}catch(...){
@@ -410,10 +402,8 @@ TEST(MostRecentMixedStream_NoMixing){
 		mixer.UpdateDependencies(f1);
 		mixer.UpdateDependencies(f2);
 		mixer.UpdateDependencies(f3);
-		try{
-			mixer.MostRecentMixedStream(I3Frame::Physics);
-			FAIL("MostRecentMixedStream should throw with no order tracking");
-		}catch(...){/*squash*/}
+		EXPECT_THROW(mixer.MostRecentMixedStream(I3Frame::Physics),
+			     "MostRecentMixedStream should throw with no order tracking");
 	}
 	
 	{ //empty mixer

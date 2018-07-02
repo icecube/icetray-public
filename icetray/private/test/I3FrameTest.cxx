@@ -42,9 +42,6 @@ using namespace std;
 
 TEST_GROUP(I3Frame);
 
-#define THROWS(CMD) try { CMD; FAIL("that should have thrown"); }	\
-  catch (const std::exception &e) { /* good. */ }
-
 //
 // saves a frame and loads it again to reset the internal buffers
 //
@@ -95,7 +92,7 @@ TEST(GetStop)
 	ptr->value = 110101;
 	f.Put("f", ptr);
 	ENSURE_EQUAL(f.GetStop("f"), I3Frame::DAQ);
-	THROWS(f.GetStop("doesnotexist"));
+	EXPECT_THROW(f.GetStop("doesnotexist"), "This should throw.");
 }
 
 TEST(Replace)

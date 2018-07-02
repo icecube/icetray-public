@@ -249,6 +249,7 @@ i3_test_executable(test
   private/test/CompressedIO.cxx
   private/test/I3FileLogging.cxx
   private/test/ScratchDir.cxx
+  private/test/I3Parameter.cxx
 
   USE_PROJECTS icetray)
 
