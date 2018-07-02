@@ -95,10 +95,10 @@ namespace I3Test {
 #define FAIL(...) \
   I3Test::ensure(__FILE__,__LINE__,false,"FAIL",##__VA_ARGS__)
 
-#define EXPECT_THROW(CMD)                           \
+#define EXPECT_THROW(CMD, MSG)			    \
   try {                                             \
     CMD;                                            \
-    FAIL("that should have thrown");                \
+    FAIL(MSG);                \
    }catch (const std::exception &e) {/* good. */}
   
   
