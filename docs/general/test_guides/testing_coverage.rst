@@ -64,7 +64,7 @@ When that's completed successfully, we need to zero out our stats::
 
   $ cd $I3_BUILD
   $ lcov -d . -z
-  $ lcov -d. -c -i -o test_base.info
+  $ lcov -d . -c -i -o test_base.info
 
 You'll see some output from ``lcov`` about it scanning ``*.gcno``
 files. This is good. Next, we run our tests. That's the whole point,
@@ -80,9 +80,15 @@ step and re-zero our stats, and then re-run the tests. Continuing with
 failed tests is going to give us erroneous results in our coverage
 report.
 
-Assuming your tests have completed successfully, it's time to generate
-our coverage report. First we need to combine our zeroed-stat baseline
-with the results of running the tests.
+Assuming your tests have completed successfully, let's capture the
+results of running the tests.
+
+::
+
+  $ lcov -d . -c -o test_run.info
+
+Let's generate our coverage report. First, we need to combine our
+zeroed-stat baseline with the results of running the tests.
 
 ::
 
@@ -100,7 +106,7 @@ Now, finally, we generate our HTML report.
 ::
 
    $ mkdir $I3_BUILD/coverage
-   $ genhtml --legened -o $I3_BUILD/coverage reports.info
+   $ genhtml --legend -o $I3_BUILD/coverage reports.info
 
 The resulting report is in standard HTML and can be viewed locally in
 your web browser.
