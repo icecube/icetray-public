@@ -151,6 +151,9 @@ I3Module::Do(void (I3Module::*f)())
 	    nextmodule->Do(f);
 	}
     }
+#ifdef MEMORY_TRACKING
+  memory::set_scope("icetray");
+#endif
 }
 
 void I3Module::Configure(){}
