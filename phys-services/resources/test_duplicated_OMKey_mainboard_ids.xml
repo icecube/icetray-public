@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!DOCTYPE boost_serialization>
+<boost_serialization signature="serialization::archive" version="3">
+<MBID_OMKey class_id="0" tracking_level="0" version="0">
+	<count>6</count>
+	<item class_id="1" tracking_level="0" version="0">
+		<first>1</first>
+		<second class_id="2" tracking_level="1" version="0" object_id="_0">
+			<I3FrameObject class_id="3" tracking_level="1" version="0" object_id="_1"></I3FrameObject>
+			<StringNumber>1</StringNumber>
+			<OMNumber>1</OMNumber>
+		</second>
+	</item>
+	<item>
+		<first>2</first>
+		<second object_id="_2">
+			<I3FrameObject object_id="_3"></I3FrameObject>
+			<StringNumber>1</StringNumber>
+			<OMNumber>2</OMNumber>
+		</second>
+	</item>
+	<item>
+		<first>3</first>
+		<second object_id="_4">
+			<I3FrameObject object_id="_5"></I3FrameObject>
+			<StringNumber>1</StringNumber>
+			<OMNumber>3</OMNumber>
+		</second>
+	</item>
+	<item>
+		<first>4</first>
+		<second object_id="_6">
+			<I3FrameObject object_id="_7"></I3FrameObject>
+			<StringNumber>1</StringNumber>
+			<OMNumber>4</OMNumber>
+		</second>
+	</item>
+	<item>
+		<first>5</first>
+		<second object_id="_8">
+			<I3FrameObject object_id="_9"></I3FrameObject>
+			<StringNumber>1</StringNumber>
+			<OMNumber>4</OMNumber>
+		</second>
+	</item>
+	<item>
+		<first>6</first>
+		<second object_id="_10">
+			<I3FrameObject object_id="_11"></I3FrameObject>
+			<StringNumber>1</StringNumber>
+			<OMNumber>6</OMNumber>
+		</second>
+	</item>
+</MBID_OMKey>
+</boost_serialization>

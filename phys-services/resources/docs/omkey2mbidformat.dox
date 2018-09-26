@@ -1,0 +1,9 @@
+/**
+@page omkey2mbidformat I3FileOMKey2MBID expected format
+
+Following is an example of the format expected by the I3FileOMKey2MBID 
+service.  Note that lines beginning with '#' are interpreted as comments.
+
+@include doms.txt
+
+*/

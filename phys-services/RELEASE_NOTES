@@ -1,0 +1,125 @@
+
+Release Notes
+=============
+
+trunk
+-----
+
+June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------
+Release V18-06-00
+
+* r161877 - Fix ExtrudedPolygon fatal error (#2143)
+* r161772 - Remove flaringDOMFilter
+* r161127 - Remove I3TRandomService
+* r160150 - Add I3MT19937 RNG from modern C++
+* r159940 - Fixed bug in ExtrudedPolygon::GetDistanceToHull
+
+
+November 15, 2017, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------
+Release V17-11-00
+
+* r161127 - Remove unused random service `I3TRandomService`
+* r158277 - Add flaring DOM filter module (jbraun)
+* r159414, 159560 - Improved the goodrunlist script (joertlin)
+* r159561 - Updated the GCD_inserter accordingly to the new goodrunlist interface (joertlin)
+
+March 23, 2017, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+Release V17-03-00
+
+* r148815 - Splitters should set `sub_event_stream_name_` by hand.  This will allow us to stop using the I3Configuration instance name.
+* r148776 - Empty streams are gone.
+* r147881 - Exposing Cherenkov functions so that they can be used from python.
+
+April 29, 2016, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+Release V16-04-00
+
+* r145068 - SPEFitInjector can now read compressed files.
+* r143803 and r143909 - Support for scintillators.
+
+March 18, 2016, don la dieu  (nega@icecube.umd.edu)
+---------------------------------------------------
+Release V16-03-00
+
+* documentation udpates
+* mainboard id updates
+* Add goodrunlist interpretor script
+  -- Marcel Zoll
+* Add module for adding GCD-frames to the event stream on the fly according to goodrunlist
+  -- Marcel Zoll
+
+December 14, 2015, don la dieu  (nega@icecube.umd.edu)
+------------------------------------------------------
+Release V15-12-00
+
+* remove deprecated cint dictionary generation
+* flip a sign and add a missing factor of 1/2 in the acceptance calculation
+* document I3NullSPlitter
+* fix file ordering
+* fix a bug that cause event_hunter.py to mis the last P frame in every file
+
+August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+* Added event_hunter example, moved from dataio.
+
+  -- david.schultz
+* Added function in_shower_system, which is used by IceTop 
+
+  -- hdembinski
+* Add convenience module 'CountEventID' for file inspection and debugging
+
+  -- mzoll
+* Refactor Surface classes from MuonGun into phys-services, separating the
+  general functionality (calculating areas and finding intersections) with
+  MuonGun specific bits (equality comparison and flux integration)
+
+  -- jvansanten
+
+May 15, 2015, don la dieu  (nega@icecube.umd.edu)
+--------------------------------------------------------------------
+Bug-fix Release V15-05-00
+* remove the log_trace calls from which_split
+
+April 22, 2015, Alex Olivas (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+
+Bug-fix Release V15-04-01
+
+* I3SPEFitInjector correctly sets the FADC and ATWD charges.
+
+April 17, 2015, don la dieu  (nega@icecube.umd.edu)
+--------------------------------------------------------------------
+
+* New feature - Added module that loads SPE fit constants into the 
+  calibration frame from a JSON file.
+
+March 15, 2015, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+
+Release V15-03-00 - Bugfix release
+
+* I3GCDAuditor knows about the new calibration SPE corrections.
+* GSLRandomService is able to save its state too.  Welcome to the club!
+* New I3ScaleCalculator::I3ScaleIceCubeDetectorPolygon, which scales 
+  the area of the boundary polygon of IceCube?, similar to 
+  I3ScaleCalculator::I3ScaleInIceCascade
+
+November 20, 2014, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+
+Release V14-11-00 - Bugfix release
+
+* Added support for I3_TESTDATA
+
+September 30, 2014, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+
+Release V14-09-00
+
+Feature:
+
+* which_split was added and should be considered the standard now.
+

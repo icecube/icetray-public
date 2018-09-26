@@ -1,0 +1,99 @@
+DISCLAIMER
+==========
+
+This collection of ice tables is merely provided as a convenience for writing
+icetray python scripts, for example for testing and for studying properties of
+reconstruction algorithms.
+
+For an authoritive source of these and other ice models, please check: 
+
+http://wiki.icecube.wisc.edu/index.php/Ice_tables_for_photonics
+
+and related wiki pages, and consult with ice experts, in particular
+with Kurt Woschnagg and Dmitry Chirkin.
+
+Some of these ice models are outdated, and only kept for historical reasons and
+because some of the older scripts and testing code still uses these older
+models. For instance, it does not make sense to use an ice model in AMANDA
+coordinates for IceCube data.
+
+The list is not complete, in particular the models with <cos theta>=0.94 are
+not yet included.
+
+The tables in this directory are all formatted as specified in this wiki page:
+http://wiki.icecube.wisc.edu/index.php/Ice_table
+
+
+DESCRIPTION OF THE AVAILABLE TABLES
+===================================
+
+-----------------------------------------------------------------------------------
+Filename: Ice_table.aha.i3coords.cos080.17may2007.txt
+Ice model: AHA, <cos theta>=0.8
+Range: -855.4m ... +854.6m
+Coordinate system: IceCube
+
+The AHA model, used for many AMANDA and early icecube analyses.
+
+-----------------------------------------------------------------------------------
+Filename: Ice_table.wham.i3coords.cos080.11jul2011.txt
+Ice model: WHAM!, <cos theta>=0.8
+Range: -861.93m ... +848.07m
+Coordinate system: IceCube
+
+Successor of AHA, based on new analysis and new data, presented first in 2010,
+updated in 2011. Part of the newer simulations are performed with 
+this ice model. ("new" relative to January 20, 2012)
+
+-----------------------------------------------------------------------------------
+Filename: Ice_table.spice.i3coords.cos080.10feb2010.txt
+Ice model: SPICE1, <cos theta>=0.8
+Range: -855.4m ... +854.6m
+Coordinate system: IceCube
+
+The SPICE1 model is the first version (out of many) of Dima Chirkin's new ice model.
+Dima actually uses a different file format to specify his SPICE ice model; this model
+is a translation of Dima's format into Kurt's ice table format. All disclaimers apply
+here in full force.
+
+-----------------------------------------------------------------------------------
+Filename: Ice_table.mie.i3coords.cos090.08Apr2011.txt
+Ice model: SPICE MIE, <cos theta>=0.9
+Range: -855.4m ... +854.6m
+Coordinate system: IceCube
+
+The SPICE MIE model is the most recent version (out of many) of Dima Chirkin's new ice model.
+Dima actually uses a different file format to specify his SPICE ice model; this model
+is a translation of Dima's format into Kurt's ice table format. All disclaimers apply
+here in full force. In particular the SPICE MIE model features tilted ice layers, while the
+ice table format does not support tilted layers, so this table only gives the model for 
+the central axis (x=y=0) of the detector.
+
+-----------------------------------------------------------------------------------
+Filename: homo_ice.dat
+Ice model: homogeneous ice
+Range: -1000m ... +1000m
+Coordinate system: any (AMANDA or IceCube)
+
+This is homogeneous ice, but it does not provide the same but not the same
+parameters as the standard H2 Pandel configuration in ipdf/lilliput. Could be
+useful for reconstruction studies.
+
+-----------------------------------------------------------------------------------
+Filename: ice_table_2000.dat
+Ice model: Millennium
+Range: -670m ... +630m
+Coordinate system: AMANDA
+
+Mostly used for the AMANDA analyses in 2000-2005. Should not be used anymore
+for any serious purpose.
+
+-----------------------------------------------------------------------------------
+Filename: iceProperties.dat
+Ice model: unknown (pre-millennium?)
+Range: -600m ... +630m
+Coordinate system: AMANDA
+
+This ice model has been in phys-services since ages. If someone recognizes
+which model it is, then please mention it here. It's used by several test
+scripts in muon-llh-reco, ipdf and phys-services.
