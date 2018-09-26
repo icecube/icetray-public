@@ -1,0 +1,59 @@
+.. $Id$
+
+Release Notes
+=============
+
+trunk
+-----
+
+June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+Release V18-06-00
+
+* minor cleanups
+
+
+November 15, 2017, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+Release V17-11-00
+
+* remove support for SLALIB
+
+March 27, 2017, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+Release V17-03-00
+
+* Add deprication notices for SLALIB
+* Add support for serialization
+* Add fractional_mjd() python funciton
+* Update diagram in docs to include I3SuperGalactic
+* Python3 compliance
+* Loosen criteria for azimuth on horizons test
+* Cleanup after tests
+
+March 18, 2016, don la dieu  (nega@icecube.umd.edu)
+---------------------------------------------------
+Release V16-03-00
+
+* documentation updates
+* test updates
+* Add converters for supergalactic coordinates
+
+December 14, 2015, don la dieu  (nega@icecube.umd.edu)
+------------------------------------------------------
+Release V15-12-00
+
+* improve test coverage
+* convert from tables to ra,da
+* Add table_to_equa to directly convert tables
+* Add numpy array functions for quick access to booked data
+* Switch to using palOap and palOap to convert between apparent and
+  observed place, insead of doing it manually
+* Switch to using palMap and palAmp to calculate precession, nutation,
+  and annual aberration instead of just precession
+* add constructors for I3Equatorial and I3Galactic
+* pybindings load icetray first to prevent I3FrameObject error
+
+August 31, 2015 Alex Olivas (olivas@icecube.umd.edu)
+----------------------------------------------------
+V15-08-00 : First release

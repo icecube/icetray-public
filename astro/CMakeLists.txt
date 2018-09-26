@@ -1,0 +1,36 @@
+#
+# $Id$
+#
+
+
+if (PAL_FOUND)
+
+  colormsg(GREEN "  + PAL found") 
+
+  i3_project(astro		
+    PYTHON_DIR python
+    DOCS_DIR resources/docs)
+    
+  i3_add_library(astro private/astro/*.cxx
+    USE_TOOLS boost pal
+    USE_PROJECTS serialization icetray dataclasses tableio
+    )
+
+  i3_test_scripts(resources/test/*.py)
+  set_tests_properties(
+    astro::test_inverse.py
+    astro::test_radec.py
+    PROPERTIES LABELS RUN_LONG
+    )
+
+  i3_add_pybindings(astro
+      private/pybindings/I3Astro.cxx
+      USE_TOOLS python 
+      USE_PROJECTS astro  tableio
+      )
+
+else(PAL_FOUND)
+  colormsg(YELLOW "  - PAL not found, skipping build of ${PROJECT_NAME}
+       Ask your admin to install PAL. Instructions for PAL can be found at:
+       http://software.icecube.wisc.edu/documentation/projects/cmake/tools/pal.html")
+endif(PAL_FOUND)
