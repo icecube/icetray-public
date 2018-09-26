@@ -1,0 +1,229 @@
+
+Release Notes
+=============
+
+trunk
+-----
+
+
+June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
+----------------------------------------------------
+Release V18-06-00
+
+* Add Gen2 R&D modules
+
+* I3LinearizedMCTree bug fix for reading old data
+
+* I3TimeWindow gets an intersection operator
+
+* add get_heads to I3MCTree pybindings
+
+
+November 15, 2017, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+Release V17-11-00
+
+* Fix a memory leak in new I3MCTree serialization.
+
+* Add GetModJulianMicroSec() to I3Time which avoids using floats so that
+  conversion to python datetime can occur without any floating point arithmetic.
+
+* Add I3SuperDSTTrigger pybinidngs.
+
+* Expose both I3ParticleID constructors.
+
+* Fix nasty quadratic behavior in I3LinearizedMCTree serialization.
+
+* Add the SMP particle for exotic physics.
+
+* Deprecate I3MCList.
+
+* Add support for storing flasher configurations in the D-frame.
+
+* Truncate I3Time pybindings to nearest microsecond.
+
+* Add pretty print for I3TimeWindow. Also, add fractional seconds to the
+  I3EventHeader pretty print.
+
+* Add __repr__ to TriggerKey pybinding.
+
+March 23, 2017, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+Release V17-03-01
+* Added support for flasher data in the D-frame. 
+
+March 23, 2017, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+Release V17-03-00
+
+* Don't populate the cache until we have a good map. Allows the errors to keep
+  appearing in dataio-pyshovel.
+
+* Added I3Particle::CascadeSegment shape to address ticket #1763.
+
+* I3Time::GetModJulianDateDouble now always divides the date by 86400 seconds even
+  on days with leapseconds 
+
+* Added I3OMGeo OMType for Scintillators and IceACT. Resolved #1698 (jan.oertlin@icecube.wisc.edu)
+
+* Issue #1491 resolved: moved TriggerKey python scope from
+  dataclasses.I3Trigger to dataclasses
+
+May 2, 2016, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------
+Release V16-04-01
+* Protect against zero width pulses in sDST for tpx.
+
+April 29, 2016, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+Release V16-04-00
+* Add contained-type introspection (r144128)  
+
+March 18, 2016, don la dieu  (nega@icecube.umd.edu)
+---------------------------------------------------
+Release V16-03-00
+
+* documentation updates
+* TankKey updates
+* implement ``__nonzero__`` for I3Double
+* use ``std::isnan`` and ``std::isinf``
+* Pybindings for TriggerHierarchy moved out of I3Trigger.cxx to a separate file
+  (tickets 1476/1478)
+* Pybindings for TriggerKey moved out of I3Trigger.cxx to a separate file
+  (ticket 1405).
+
+  Still to do: change scope for TriggerKey's enumerates (ticket 1491)
+
+December 14, 2015, don la dieu  (nega@icecube.umd.edu)
+------------------------------------------------------
+Release V15-12-00
+
+* pybindings and debugging support for frame_object_diff
+* remove deprecated cint dictionary generation
+* increase test coverage for I3SuperDSTTrigger
+* added tests for I3RecoHit
+* added tests for I3SuperDSTTrigger constructors
+* add test to I3Orientation
+* update I3MCTreeUtils tests
+* increase test coverage of I3String to 100%
+* update QuadraticFit pybindings
+* update I3DOMCalibration tests
+* update I3Trigger tests
+* add TriggerKey test
+* updated test for I3ModuleGeo, I3Waveform equal operators
+* pretty repr for I3Position
+* dependency updates
+* (r138288) - Make loading old trees with lots of primaries faster.
+* pybinding updates
+* (r137642) - add tests for I3Particle == operator
+* (r137375) - remove test dependence on the examples project
+
+August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+
+* (r137088, r137087) - The equality operator was broken for the following classes in python on boost1.38 systems.  This is fixed now.
+
+  - I3VEMCalibration
+  - I3TriggerReadoutConfig
+  - LinearFit
+  - QuadraticFit
+  - SPEChargeDistribution
+  - TauParam
+
+* (r137069) - Added pybindings for I3DOMCalibrationMap and I3VEMCalibrationMap.
+
+* I3MCTreePhysicsLibrary::GetMostEnergeticPrimary now returns the correct primary
+  even if the shape is not set to Primary.  If now depends only on the position
+  in the tree.  Closes ticket #958.
+  --- Alex Olivas (olivas@icecube.umd.edu)
+
+* Speed up ShiftXXXTrack functions and added functionality:
+
+  * Added ShiftTimeTrack function returning the position of a track at a given time relative to vertex time
+  * scraped cascading function calls in ShiftAlongTrack and just go through properties with less conversions
+  * made arguments const as they are
+  * added documentation to both functions in C and python
+  * added unit tests for both functions
+
+  --- Marcel Zoll (marcel.zoll@fysik.su.se)
+
+* Reimplemented I3MCTree's copy ctor to avoid O(n^2) performance on large trees
+  --- Jakob van Santen (jakob.van.santen@desy.de)
+
+* Added Angle function for I3Direction for convenience
+  --- Marcel (marcel.zoll@fysik.su.se)
+
+April 17, 2015, don la dieu  (nega@icecube.umd.edu)
+--------------------------------------------------------------------
+
+V15-04-01 
+
+Interface Changes : 
+
+* Updated python bindings
+* SPEChargeDistribution : public members of data aggregates don't get the
+  trailing underscore.  Those denote private members of classes.
+* SPEChargeDistribution gets python bindings
+* I3DOMCalibration the following methods are exposed to python :
+
+  * Get/SetMeanFADCCharge
+  * Get/SetMeanATWDCharge
+  * Get/SetCombinedSPEChargeDistribution
+  * IsMeanATWD/FADCChargeValid
+
+New Features :
+
+Bug Fixes :
+
+* The new I3MCTree sets the type of old 'Dark' particles correctly now.
+
+* SPEChargeDistribution::IsValid - This has the correct logic now.
+  (isnan(x) || isnan(y)) == (false || false) == false when x and y 
+  are non-NaN.  IsValid should return true in this case.  The method 
+  has been changed to the equivalent of (!isnan(x) && !isnan(y)).
+  Tests have been added as well.
+
+* IsMeanATWD/FADCChargeValid - Logic was reversed.  It's correct now
+  (with tests) and returns true if std::isfinite(charge) and charge > 0.
+   
+April 2, 2015, don la dieu  (nega@icecube.umd.edu)
+--------------------------------------------------------------------
+
+V15-03-00 
+
+* better operator support
+* add equality for I3RecoPulseSeriesMap masks/unions
+
+March 15, 2015, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+
+V15-03-00 
+
+* AMANDA classes are no longer visible.
+* Give wavedeform the ability to apply per digitizer s.p.e. corrections. 
+  Add necessary calibration constants to I3DOMCalibration. 
+  Remove unused old constants from I3DOMCalibration.
+* I3MCHit.weight is no longer accessible from python
+* New MJD for the leap second test.  Go Navy!
+* I3Particle::Clone returns a copy of the particle, but with a new ID.
+* new I3MCTree, I3MCTreePhysicsLibrary, and revamped I3MCTreeUtils
+
+November 20, 2014, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+
+V14-11-00 - Minor release
+
+* I3Particles now have mass.  Welcome to the Standard Model.
+* Added support for I3_TESTDATA
+* I3MCTree::GetParent is exposed.
+
+September 30, 2014, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+
+V14-10-00 - Bugfix release
+
+* I3PODHolder added.  This cleans up the frame-level POD classes and, with the 
+  new operator suite, fixes object comparison, e.g. I3Double comparisons to double
+  work as expected.
+
+
