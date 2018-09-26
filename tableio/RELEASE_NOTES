@@ -1,0 +1,129 @@
+.. $Id$
+.. $Author$
+.. $Date$
+
+Release Notes
+=============
+
+trunk
+-----
+
+June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+Release V18-06-00
+
+* (r159919) latest version of pytables deprecates camelcase method names, switch to snakecase
+
+November 15, 2017, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+Release V17-11-00
+
+* very minor cleanups
+
+March 23, 2017, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+Release V17-03-00
+* (r1488889) Replace fractured but precise representation of event start and end in MJD with a double-precision value. This introduces a discretization of 300 ns that will increase to 600 ns in the next 100 years and 2500 in the next 1000. These are much smaller than the duration of a typical event, and can be ignored in coordinate calculations.
+
+
+April 29, 2016, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+Release V16-04-00
+* Add a test that runs all the converters
+
+March 21, 2016, don la dieu  (nega@icecube.umd.edu)
+---------------------------------------------------
+Release V16-03-00
+
+* (r143491/IceCube) correct conversion of derived types
+* accept keys in any iterable container
+* use ``std::is(nan|inf)``
+* documentation updates
+
+December 14, 2015, don la dieu  (nega@icecube.umd.edu)
+------------------------------------------------------
+Release V15-12-00
+
+* update tests
+* remove dead code
+
+August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
+------------------------------------------------------
+
+Release V15-08-00 
+
+* I3MCTree converter is back. It's still useless, but apparently it found its
+  way into PINGU processing.
+* Allow converters to accept subclasses of their handled types. This makes it
+  possible to book I3LinearizedMCTree, a thing that was blocked for no good
+  reason.
+
+March 15, 2015, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+
+Release V15-03-00 
+
+* "weight" is now NPE and type uint64_t.
+
+* No more converter for I3MCTree.  We'll start providing individual
+  converters like "the primary"
+
+November 20, 2014, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------
+
+Release V14-11-00 - Bugfix release.
+
+* Align all tables before closing
+
+* Changed I3TableTranscriber to skip files containing no events 
+  and throwing a warning instead of a fatal error.
+
+
+August 11, 2011, Alex Olivas  (olivas@icecube.umd.edu)
+------------------------------------------------------
+
+Release V11-08-00
+
+This is a minor bugfix release.
+
+Feature:
+
+* A converter for I3VectorTankKey
+  -- Fabian Kislat
+
+Bugfix:
+
+* Fix a bug (introduced in the previous release) that prevented
+  I3TableWriter from writing to multiple I3TableServices at once.
+  -- Jakob van Santen
+
+August 2, 2011, Erik Blaufuss  (blaufuss@icecube.umd.edu)
+---------------------------------------------------------
+
+Release V11-07-00
+
+This is a major release, adding support for Q frames and
+I3RecoPulse masks.
+
+Features added:
+
+* A converter for I3RecoPulseSeriesMapMask.
+  -- Jakob van Santen
+
+* Support for booking multiple P frames that inherit from the same
+  Q frame.
+  -- Jakob van Santen
+
+* Enable booking of geometry and waveform length in
+  I3WaveformSeriesMapConverter.
+  -- Fabian Kislat
+
+Documentation:
+
+* Add a list of common converters and their projects.
+  -- Fabian Kislat
+
+Bugfix:
+
+* Make I3WaveformSeriesMapConverter work for FADC waveforms.
+  -- Jakob van Santen
