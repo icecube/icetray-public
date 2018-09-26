@@ -1,0 +1,106 @@
+from __future__ import print_function
+import sys
+import os
+if sys.version_info[0] < 3:
+    import thread as _thread
+else:
+    import _thread
+import ctypes
+import __main__
+
+# Importing this ensures that code.InteractiveConsole will not ignore our PyOS_InputHook
+import readline
+
+# Private module variable providing a persistant reference to a ctypes input hook.
+# Don't fool with this.
+_steamshovel_input_hook = None
+
+# If using the native (vanilla) python interpreter, this will be set to a code.InteractiveConsole object
+_native_console = None
+
+class ScriptDrop:
+    '''Message queue between main GUI thread and secondary console thread'''
+
+    paths = []
+    lock = _thread.allocate_lock()
+
+    @staticmethod
+    def addPath( path ):
+        '''Add a file path to a script to be executed in the worker thread'''
+        if ScriptDrop.lock.acquire( False ):
+            try:
+                ScriptDrop.paths.append(path)
+            finally:
+                ScriptDrop.lock.release()
+
+    @staticmethod
+    def getPath():
+        '''Pick up a file path from the message queue, if any'''
+        if ScriptDrop.lock.acquire( False ):
+            try:
+                return ScriptDrop.paths.pop(0)
+            except IndexError:
+                return None
+            finally:
+                ScriptDrop.lock.release()
+
+
+def myInputHook():
+    global _native_console
+    path = ScriptDrop.getPath()
+    if(path):
+        print("Executing user script", path)
+        if( _native_console ):
+            # FIXME: This is unlikely to work in python 3. 
+            # See execScript() in console_widget.py for guidance.
+            _native_console.runsource( 'execfile("{0}")'.format(path) )
+        else:
+            from IPython import get_ipython
+            ip = get_ipython()
+            ip.safe_execfile(path,(__main__.__dict__))
+    return 0
+
+def setInputHook():
+    global _steamshovel_input_hook
+    pyos_inputhook_ptr = ctypes.c_void_p.in_dll(ctypes.pythonapi, "PyOS_InputHook")
+    try:
+        # First ensure that PyQt4/PyQt5 won't install its own input hook at some later time.
+        # It does so as part of its module initialization, because PyQt4/PyQt5 is a bad person.
+        from PyQt@_pyqtver@ import QtCore  # noqa: E999
+        QtCore.pyqtRemoveInputHook()
+    except ImportError:
+        pass
+
+    # Borrow a technique from IPython to set the PyOS_InputHook to our function.
+    # If we were actually using ipython, we could use its InputHookManager.set_inputhook() method
+    # to do this in an even more robust way.  However, we cannot assume IPython exists.
+    try:
+        PYFUNC = ctypes.PYFUNCTYPE(ctypes.c_int)
+        _steamshovel_input_hook = PYFUNC( myInputHook )
+        pyos_inputhook_ptr.value = ctypes.cast( _steamshovel_input_hook, ctypes.c_void_p ).value
+    except Exception as e:
+        print("Exception while setting steamshovel input hook:", file=sys.stderr)
+        print(e, file=sys.stderr)
+
+
+def launchConsoleThread( *args ):
+    setInputHook()
+    _thread.start_new_thread( consoleThread, args )
+
+
+def consoleThread( ipython = True ):
+    if( ipython ):
+        try:
+            import IPython
+            IPython.embed(user_module=__main__)
+            __main__.app.quit()
+            return
+        except Exception as e:
+            print(e)
+            pass
+    import code
+    global _native_console
+    _native_console = code.InteractiveConsole( __main__.__dict__ )
+    _native_console.interact()
+    __main__.app.quit()
+    return

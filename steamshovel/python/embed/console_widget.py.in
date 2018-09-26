@@ -1,0 +1,137 @@
+# Do not import IPython, sip, PyQt4/PyQt5, or other optional packages from here
+# This module must always import successfully, even if those packages are missing
+from __future__ import print_function
+from . import console
+import sys
+
+# Private module variables
+_kmgr = None
+_kclient = None
+widget = None
+
+def init_embedded_kernel():
+    '''
+    Attempt to initialize an in-process ipython kernel
+
+    Return True on success.
+    If the kernel could not be created (e.g. if IPython is missing,
+    or is a pre-1.0 version), return False.
+    '''
+    global _kmgr, _kclient
+    try:
+        import IPython
+    except ImportError as e:
+        print(e)
+        return False
+
+    # warn if pyside is installed, which causes an error in the embedded shell
+    try:
+        import PySide
+        print("You have PySide installed, which creates a conflict with "
+              "Steamshovel's use of IPython and PyQt4/PyQt5. The embedded Python "
+              "shell in Steamshovel will be disabled. Remove PySide to "
+              "correct this issue.")
+        return False
+    except ImportError:
+        pass
+
+    try:
+        from qtconsole import inprocess
+    except ImportError:
+        try:
+            from IPython.qt import inprocess
+        except ImportError:
+            print("Could not get QtInProcessKernelManager for IPython {0:s} ".format(IPython.__version__))
+            return False
+
+    _kmgr = inprocess.QtInProcessKernelManager()
+    _kmgr.start_kernel()
+
+    _kclient = _kmgr.client()
+    _kclient.start_channels()
+    return True
+
+def embed_shell_widget( parent_ptr ):
+    '''
+    Create a RichIPythonWidget as a child of the given parent QWidget.
+
+    Parent is assumed to be an integer and is wrapped into a QWidget using sip.
+
+    This function may only be called when init_embedded_python() previously
+    returned True.  It may throw an ImportError if sip or PyQt4/PyQt5 is missing.
+    If it successfully returns, the widget was successfully embedded.
+    '''
+    global _kmgr, _kclient, widget
+    if( _kmgr is None ):
+        raise RuntimeError( "Kernel manager not initialized!" )
+    #print "embedding interactive python widget", parent_ptr, type(parent_ptr)
+    import IPython
+    from IPython.lib import guisupport
+    if IPython.version_info[0] < 4:
+        from IPython.qt.console.rich_ipython_widget import RichIPythonWidget as RichWidget
+    else:
+        from qtconsole.rich_jupyter_widget import RichJupyterWidget as RichWidget
+    import sip
+
+    pyqt_module = "PyQt@_pyqtver@"
+    if pyqt_module == "PyQt5":
+      from PyQt5.QtWidgets import QWidget as QWidget
+    else: # Default to Qt4
+      from PyQt4.QtGui import QWidget as QWidget
+
+    # Wave the magic wand and turn an integer into a QWidget object.
+    parent = sip.wrapinstance(parent_ptr, QWidget)
+
+    widget = RichWidget(parent=parent, local_kernel=True)
+    widget.kernel_manager = _kmgr
+    widget.kernel_client = _kclient
+    parent.layout().addWidget(widget)
+    widget.change_font_size(-2)
+    import __main__
+    __main__.ipw = widget
+
+def execScript( path ):
+    '''
+    Execute the python script at the given path as if the user had run execfile() on it
+
+    The mechanism of doing this varies by whether the widget or the threaded console is active.
+    '''
+    global widget, _kclient
+    if widget:
+        # widget.execute_file uses %run, but not %run -i, which we need
+        execstr = "%run -i {0}".format(path)
+        r = widget.execute( execstr )
+    else:
+        if( console._steamshovel_input_hook ):
+            # A thread is running and will pick up this request
+            console.ScriptDrop.addPath( path )
+        else:
+            # No console exists: execute script in a separate Python thread
+            import threading
+
+            class ScriptRunner(threading.Thread):
+                def __init__(self, path):
+                    threading.Thread.__init__(self)
+                    self.path = path
+
+                def run(self):
+                    import __main__
+                    import os
+                    import sys
+                    import traceback
+                    save = sys.path[:]
+                    sys.path.append( os.path.dirname( self.path ) )
+                    try:
+                        if sys.version_info[0] < 3:
+                            execfile( path, __main__.__dict__ )
+                        else:
+                            exec(compile(open( path ).read(), path, 'exec'), __main__.__dict__) in globals(), locals()
+                    except:
+                        traceback.print_exception(*sys.exc_info())
+                        # quit app when there is an exception
+                        getattr(__main__, "app").quit(1)
+                    finally:
+                        sys.path = save
+
+            thread = ScriptRunner(path)
+            thread.start()

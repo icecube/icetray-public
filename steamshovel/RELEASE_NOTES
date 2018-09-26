@@ -1,0 +1,415 @@
+
+Release Notes
+=============
+
+June 13, 2018, Alex Olivas (olivas@icecube.umd.edu)
+------------------------------------------------------------
+Release V18-06-00
+
+* Various Qt cleanups
+
+November 15, 2017, Alex Olivas (olivas@icecube.umd.edu)
+------------------------------------------------------------
+Release V17-11-00
+
+* Update automatic time ranging when using a track to not ignore
+  IceTop. (#2061)
+
+* Split screenshot dialog into a screenshot functionality which only
+  captures the (any) active view, and a projection functionality
+  specifically for the 3D view.
+  This breaks the python screenshot interface.
+
+* flip Qt5 to the default
+
+* flip some docs to Qt5
+
+
+March 27, 2017, Sander Vanheule (svanheule@icecube.wisc.edu)
+------------------------------------------------------------
+Release V17-03-00
+
+General:
+
+* New LedDisplay artists to support USB LED event displays
+
+* Add support for Qt5 ("cmake -DUSE_QT5=ON ../src")
+
+* Fixed a bug that caused TextSummary overlays to move to top left corner
+  when screenshot dialog is opened
+
+* Remember parameters in screenshot dialog as part of application settings
+
+* Added option in screenshot dialog to make HESE-style plots (dschultz)
+
+* Added new FAQs to the FAQ section
+
+* More robust image comparison in test_shovelscripts.py
+
+* Workaround for Qt MOC bug, affects boost-1.57 and Qt-4.8
+  on SL6 (jvansanten)
+
+Artist IceTopViewer:
+
+* Added visualization of Scintillators
+
+* Produce an error if IceTopViewer is added and matplotlib version is too old
+
+* Fix of a bug that prevented correct update of very first 
+  frame in a file if IceTopViewer is active at startup
+
+* Simplified code by using new facilities in I3LaputopParams;
+  get LDF function, front-time model, and error models from
+  Params instead of using duplicated code
+
+March 18, 2016, don la dieu  (nega@icecube.umd.edu)
+---------------------------------------------------
+Release V16-03-00
+
+General:
+
+* Fixed a critical rare bug, which may have caused old
+  frames to be shown if user first closed a file with the
+  "close last file" action and then opened a new file
+
+* Interactivity greatly improved while frames are still
+  loaded from a file or filtered
+
+* Editor widget for ShovelSlider now has usable size even
+  on a Mac
+
+* Reduced interaction delay when user tries to rotate the 3D
+  view with the mouse on some systems with Intel graphics
+  (dschultz)
+
+* Performance improvement for SceneStepFunction and
+  SceneLinterpFunction (replaced O(N) search with O(logN)),
+  improves animation of very long events (jvansanten)
+
+* Fixed detection of qtconsole in different versions of
+  IPython
+
+* --reset now also affects settings in FileService
+
+* added code to create custom color maps (berghaus)
+
+* Fixed an error in the rare case when RangeFinder
+  would return an empty time interval 
+
+* Fixed a C++11 compatibility issue with clang (cweaver)
+
+User interface:
+
+* New convenience feature: user may select a default
+  I3Geometry object which is added to frames which do not
+  already have an I3Geometry object (from frame mixing)
+
+* Added "New Window" action to Window menu, which opens 
+  a secondary main window showing the same frame; this
+  allows for example to look at IceTop in one window,
+  and at the same time at the deep detector in the other
+
+* Added "Reload all" action to File menu
+
+* Internal errors now cause the log viewer to be opened
+  automatically (can be turned off in the preferences)
+
+* Allow main window to become very small
+
+Artist Particles:
+
+* Scales Particle arrows as a function
+  of their energy (can be turned off by setting "power" to 
+  zero) (introduced by berghaus, modified by hdembinski)
+
+* Angle of Cherenkov cone now adapts to particle speed
+
+Artist IceTopViewer: 
+
+* IceTopViewer gained two additional settings to display
+  several particles simultaneously; this is useful to compare
+  simulated shower and reconstructed shower, and the likes
+
+* Fixed a bug where an event was not displayed at all if
+  the I3Particle has NaN position or NaN direction
+
+* Improved handling of plot margins, stopping axis labels
+  from overlapping
+
+* New option to show tanks without hits in the LDF plot
+
+* Added support for new I3LaputopParams object
+
+* Fixed a bug that prevented correct update of IceTopViewer
+  on the very first frame in a file, if IceTopViewer is the
+  active view on startup
+
+Artist Position:
+
+* Also handles collections of things with positions now,
+  like I3VectorI3Position or I3VectorI3Particles
+
+Documentation:
+
+* Greatly expanded artist documentation of Bubbles and
+  IceTopViewer
+
+* Added more practical filter examples
+
+December 14, 2015, don la dieu  (nega@icecube.umd.edu)
+------------------------------------------------------
+Release V15-12-00
+
+General:
+
+* Revived the Map app
+
+* Added Steamshovel LogViewer (accessible from menu Help) to 
+  allow users of the Mac app to look at log messages
+
+* Added GUI support for really long events (in time)
+
+* Added more tests, in particular some tests that run a 
+  steamshovel script and check its output
+
+* Improved/updated docs (hdembinski, berghaus)
+
+* Fixed a bug that occurs if steamshovel is called with several
+  start-up scripts
+
+* Fixed movie generation and support more encoders:
+  ffmpeg, avconv, mencoder
+
+User interface:
+
+* Allow user to open more than one file at once
+
+* Simplified online filter and made it easier to use
+
+* Speed of event playback is now defined in absolute units,
+  nanoseconds (in event) per second (real time), and can be set
+  to precise values with a spin box, in addition to the slider
+
+* Enhanced "Save Frame" dialog
+
+  - added a field to specify individual frames or ranges to save
+  - added check box to automatically "Save parents" or not
+    ("parent" frames contain data needed in the current frame, 
+    e.g. the Geometry frame is a parent of most other frames)
+
+* Added option in configuration dialog to change the default
+  font and font size used in Steamshovel
+
+* RangeSettings are now edited with a new widget that combines 
+  a slider and spin box (ShovelSlider), which makes it easier
+  to set specific numeric values
+
+* Delete key removes Artists in the Display tab
+
+* IPython widget is now hidden by default, and only shown if the
+  user activates it by pressing Ctrl+T (or through the menu);
+  when it is active, it gets more space by replacing the tabbed
+  widget in the top right corner
+
+shovelio:
+
+* shovelio uses central I3FrameMixer now, so that frame mixing 
+  is consistent with icetray
+
+* Fixed several bugs in shovelio and made it simpler
+
+Artists:
+
+* Added IceTopViewer, the first Aven... erm, WidgetArtist 
+
+* Particles
+
+  - added option to draw light fronts in Cherenhov blue (berghaus)
+  - added option to draw secondary particles in color code,
+    if particles are visualized from an I3MCTree
+    (see documentation for meaning of colors) (berghaus)
+
+* Bubbles
+
+  - added option to draw hits as a kind of after glow, with
+    user-defined decay length (david.schultz)
+  - added option to use a secondary time window for coloring,
+    instead of the central one (added to ChargeBubbles by berghaus,
+    ported to Bubbles by hdembinski)
+
+* Removed ChargedBubbles, its features were ported into Bubbles
+
+* TextSummary supports D4R objects (hbretz)
+
+* Detector
+
+  - outline option is back with new edge detection algorithm
+
+August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+
+New Artist:
+
+* CoordinateSystem shows the arrows of the IceCube coordinate
+  system; the location and length of arrows
+  can be set in physical units (Python version based on C++
+  code from M. Zoll)
+
+Interface Changes:
+
+* Artist classes were renamed and joined, focussing on the type
+  of visualization rather than the association to an I3FrameObject
+  (one Artist can typically visualize a range of related types)
+
+* Mapping from old names of artists in Steamshovel to new names::
+
+     Animated I3Particle,
+        I3Postion marker -> Position
+     Accumulated charge,
+        Animated charge -> ChargeBubbles
+     Accumulated MC charge,
+        DOMLaunch start times,
+        DOMs in list,
+        DOMs in map,
+        MCHit start times,
+        MCPE start times -> Bubbles
+     DOMLaunch time histogram -> DOMLaunchHistogram
+     I3Geometry -> Detector
+     I3EventHeader summary,
+        I3FilterMask,
+        I3MCTree summary,
+        I3Particle summary,
+        I3Time,
+        Value label -> TextSummary 
+     I3Particle,
+        MCTree -> Particles
+     I3Particle Uncertainty estimation -> ParticleUncertainty
+     IceCube logo -> StaticImage
+     Pulse plot -> RecoPulseWaveform
+     Selected DOM label -> DOMLabel
+     Uncalibrated waveform -> Waveform
+
+* Descriptions of Artists in Steamshovel now agree with their
+  class name, making it easier to talk about them and find them
+  in the code
+
+New Features:
+
+* The Ice artist got an optional alternative dust layer visualization,
+  enabled by the setting "3D dust" (feedback is appreciated)
+
+* The color of DOMs can be customized in the Detector artist
+
+* New cmd line option "--testmode" runs Steamshovel in a sandbox,
+  without touching user settings (good for running test scripts)
+
+* New option "Save frame" in the "File" menu saves the current frame into an i3 file
+
+* Open files can be closed now
+
+* PyArtists can draw arrows on the scene, using .addArrow(...)
+
+* Filter interface allows to set arbitrary filters to pick out frames of interest
+
+* Steamshovel got a lot faster by avoiding the unnecessary de-serialization of I3FrameObjects
+
+* RangeFinder key is now saved as part of the session, solution to ticket 953
+
+* RangeFinder finds keys for range computation in the frame much
+  faster -> significant speed-up when switching frames
+
+* New menu "Help" to show steamshovel's documentation
+
+* New dialog to inform users about updates in the GUI that change work flow
+
+* IO system re-written: users can start browsing immediately, frames are loaded in the background
+
+* New dialog "Configuration" in "Windows" menu, to set cache sizes and frame keys to ignore
+
+* New filter system: users can define Python filters to show only selected frames
+
+* Steamshovel remembers window geometry
+
+* Big speed boost when browsing frames through internal switch to string-based type identification
+
+* Steamshovel compiles with Python-3.4 (some PyArtists may be broken, as Python-3.4 is not yet officially supported)
+
+Bug Fixes:
+
+* New artist "I3Particle(s)" fixes bugs in "MCTree" and "I3Particle" (tickets 939, 926)
+
+* Corrected directions in AngleClock which sometimes displayed wrong angles
+
+* Screenshots turned out too bright in some viewers, solved by making formerly fixed
+  gamma correction an option in the "Screenshot" dialog
+
+March 15, 2015, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+
+V15-03-00
+
+* Plot paraboloid fits as cones using the uncertainty estimate
+
+* Add a DMG target to facilitate automatic Steamshovel builds.
+
+* Implements session menu
+
+  * artists are sorted alphabetically when "add ..." button is clicked
+
+  * in focus menu: . new focus point "IceCenter", between IceTop and
+
+  * IceCube, for looking at coincident events.
+
+  * New item "Reset camera" to place camera back in default position.
+
+  * added docu about new session menu
+
+* New CoordSysArtist
+
+* Angleclock shows I3Directions too, also make the legend plot the
+  name of the displayed object
+
+* I3Particles show how they are incomping/outgoing if they happen to
+  be reconstructed as contained
+
+* Tweaks for new I3MCTree
+
+November 20, 2014, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+
+V14-11-00
+
+Under the hood:
+
+* Added new Artist settings: KeySetting and ChoiceSetting
+
+* Changed internal interfaces such that RangeSetting, KeySetting and ChoiceSetting are
+  treated consistenty and uniformly
+
+* Added unit test for new setting types that check proper behavior in Python (test_setting.py)
+
+* MPLArtist can request to updates to steamshovels colormap and time line
+
+* Added automatic conversion from PyString to QString and vice versa
+
+* Store position of and focus of camera between steamshovel sessions
+
+* Store "active" state of artists between steamshovel sessions
+
+* Added OS-dependent keyboard shortcuts to jump to next/previous P frame (PageDown, PageUp)
+
+* Added OS-dependent keyboard shortcut to close application (Ctrl+Q on Linux)
+
+* New artists are automatically discovered by steamshovel if placed in the python/artists folder
+
+Artists:
+
+* Major update of IceTopLDF artist, with many new features and configuration options that make
+  use of KeySetting, ChoiceSetting
+
+* Added AngleClock artist which shows zenith and azimuth angle in a playful way
+
+* Minor update of GeometryArtist: added option to hide IceCube for pure IceTop users and
+  vice versa
+
+* Minor update of Ice artist: added options to chose colors for ice/dust/bedrock layers

@@ -1,0 +1,38 @@
+import __main__
+import os
+
+def show():
+    path = os.path.abspath(__file__)
+    while path:
+        path = path[:path.rfind("/")]
+        # specialize for Mac app bundle
+        p = path
+        if path.endswith(".app/Contents"):
+            p += "/Resources"
+        p += "/docs/projects/steamshovel/index.html"
+        if os.path.exists(p):
+            path = p
+            break
+    if not path:
+        return False
+
+    try:
+        import IPython
+        from PyQt@_pyqtver@.QtWebKit import QWebView  # noqa: E999
+        from PyQt@_pyqtver@.QtCore import QUrl        # noqa: E999
+
+        view = QWebView()
+        view.setUrl(QUrl(path))
+        view.show()
+        view.raise_()
+        view.activateWindow()
+        __main__.view = view  # keep view alive
+        return True
+    except ImportError:
+        # fall back to webbrowser module
+        import webbrowser as wb
+        w = wb.get()
+        # work-around for bug in Python2.7 on MacOS, only Safari works
+        if isinstance(w, wb.MacOSXOSAScript):
+            w = wb.get("Safari")
+        return w.open(path)

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# This script is set as the entry point for Steamshovel.app from within Info.plist.
+# It enforces a self-contained software environment so that the incorrect versions of
+# things do not get pulled from anywhere on the system.
+
+THISDIR=${0%/*}
+export PATH=${THISDIR}:/usr/bin:/usr/sbin
+export DYLD_FRAMEWORK_PATH=${THISDIR}/../Frameworks
+export DYLD_LIBRARY_PATH=${THISDIR}/../Frameworks:${THISDIR}/../Frameworks/icecube:${THISDIR}/../Frameworks/python
+export PYTHONPATH=${THISDIR}/../Frameworks:${THISDIR}/../Frameworks/icecube:${THISDIR}/../Frameworks/python
+steamshovel "$@" --trace all
+LOGFILE=/tmp/steamshovel_${USER}.log
+if [ -e ${LOGFILE} ]; then
+	if grep -q "<!-- Steamshovel Normal Exit -->" ${LOGFILE}; then
+		echo "shutdown is clean"
+	else
+		steamshovel-logviewer ${LOGFILE}
+	fi
+fi

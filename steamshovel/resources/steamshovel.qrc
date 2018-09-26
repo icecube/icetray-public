@@ -1,0 +1,15 @@
+ <!DOCTYPE RCC><RCC version="1.0">
+ <qresource prefix="resources">
+     <file>shader/sphere_billboard.vert</file>
+     <file>shader/sphere_shiny.frag</file>
+     <file>shader/sphere_matte.frag</file>
+     <file>shader/sphere_cheerio.frag</file>
+     <file>IceCubeIcon.png</file>     
+     <file>IceCube_official_logo.png</file>
+     <file>IceCube_official_logo_greyLetters.png</file>
+     <file>FastForward.png</file>
+     <file>Rewind.png</file>
+     <file>Play.png</file>
+     <file>doms.txt</file>
+ </qresource>
+ </RCC>

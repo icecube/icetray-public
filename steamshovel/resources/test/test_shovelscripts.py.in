@@ -1,0 +1,138 @@
+#! /usr/bin/env python
+import unittest
+import sys
+import os
+import platform
+import re
+import tempfile
+import shutil
+import subprocess as subp
+try:
+    import numpy as np
+    from PyQt@_pyqtver@.QtGui import QImage, qRed, qGreen, qBlue  # noqa: E999
+except ImportError:
+    pass
+
+base_path = os.path.dirname( __file__ )
+
+def test_image(tst, ref, rebin, threshold):
+    'Compares two images'
+
+    def data( fn, rebin ):
+        img = QImage( fn )
+        d = np.zeros((int(img.width() / rebin),
+                      int(img.height() / rebin), 3),
+                     dtype=np.int16)
+        for i in range(d.shape[0]):
+            for j in range(d.shape[1]):
+                n = 0
+                for k in range(rebin * i, min(rebin * (i + 1), img.width())):
+                    for l in range(rebin * j, min(rebin * (j + 1), img.height())):
+                        raw_col = img.pixel(k, l)
+                        d[i,j][0] += qRed(raw_col)
+                        d[i,j][1] += qGreen(raw_col)
+                        d[i,j][2] += qBlue(raw_col)
+                        n += 1
+                d[i,j] /= n
+        return d
+
+    a = data( tst, rebin )
+    b = data( ref, rebin )
+
+    assert a.shape == b.shape
+    no_pixels = np.prod(a.shape[:2])
+
+    # fail if tst is just one solid color, but ref is not
+    if (np.sum(a[:,:] == a[0,0]) == 3 * no_pixels and
+        np.sum(b[:,:] == b[0,0]) != 3 * no_pixels):
+      return -1.0
+
+    no_accepted_pixels = 0
+    diff = np.abs(a - b)
+    for ix in range(a.shape[0]):
+        for iy in range(a.shape[1]):
+            if (diff[ix, iy, 0] < threshold and
+                diff[ix, iy, 1] < threshold and
+                diff[ix, iy, 2] < threshold):
+                no_accepted_pixels += 1
+
+    return round(float(no_accepted_pixels) / no_pixels, 2)
+
+
+@unittest.skipIf(platform.system() == "Darwin" and 
+                 os.environ["USER"] == "buildslave",
+                 "suite does not work on Mac buildbots")
+@unittest.skipIf(platform.system() == "Linux" and
+                 "DISPLAY" not in os.environ,
+                 "suite requires X-server")
+class TestShovelScripts( unittest.TestCase ):
+
+    def setUp(self):
+        super(TestShovelScripts,self).setUp()
+        orig_dir = os.getcwd()
+        tmp_dir = tempfile.mkdtemp(dir=orig_dir)
+        os.chdir(tmp_dir)
+        def clean_dir():
+            os.chdir(orig_dir)
+            shutil.rmtree(tmp_dir)
+        self.addCleanup(clean_dir)
+
+    def assertImage(self, testcase, threshold):
+        'Compares a testcase with a reference image'
+
+        reference = "{0}/refs/{1}".format(base_path, testcase)
+        score = test_image(testcase, reference, 3, threshold)
+
+        self.assertTrue(score == 1.0,
+                        "Image %s at threshold %i failed with score %.2f"
+                        % (testcase, threshold, score))
+
+    def runtest( self, script ):
+        p = subp.Popen(
+            ("steamshovel", "--testmode", "--batch", "--noconsole", "-s",
+             "{}/shovelscripts/{}.py".format(base_path, script)), 
+            stdout=subp.PIPE, stderr=subp.STDOUT
+        )
+        output = p.communicate()[0].lower()
+        ret_code = p.returncode
+        self.assertEqual( ret_code, 0,
+                          "script {0}: return code {1} is not zero (output below):\n{2}"
+                          .format(script, ret_code, output) )
+        self.assertTrue( re.search(r"\berror\b", output) is None and
+                         re.search(r"\bfatal\b", output) is None and
+                         re.search(r"\bexception\b", output) is None,
+                         "script {0}: found error messages (output below):\n{1}"
+                         .format(script, output) )
+
+    def test_run_and_quit( self ):
+        self.runtest( "run_and_quit" )
+
+    def test_frame_reading( self ):
+        self.runtest( "frame_reading" )
+
+    def test_create_all_artists( self ):
+        self.runtest( "create_all_artists" )
+
+    @unittest.skipIf("QImage" not in globals(),
+                     "test requires PyQt4")
+    def test_particles_artist_draws_tracks( self ):
+        name = "particles_artist_draws_tracks"
+        self.runtest( name )
+        self.assertImage( name + ".png", 30 )
+
+    @unittest.skipIf("QImage" not in globals(),
+                     "test requires PyQt4")
+    def test_cherenkov_cone( self ):
+        name = "cherenkov_cone"
+        self.runtest( name )
+        self.assertImage( name + ".png", 60 )
+
+    @unittest.skipIf("QImage" not in globals(),
+                     "test requires PyQt4")
+    def test_cylinder( self ):
+        name = "cylinder"
+        self.runtest( name )
+        self.assertImage( name + ".png", 30 )
+
+if __name__ == "__main__":
+    unittest.main()
