@@ -217,6 +217,8 @@ I3TableService::~I3TableService() {
             log_error("Table '%s' is still connected, which means that the "
                 "output file was never properly closed. This is a BUG!\n",
                 table_it->first.c_str());
+	    log_error("This can happen when FilterMask changes defintions in the middle of an I3Tray run.");
+	    log_error("Check to make sure different years of processing haven't been merged together.");
             break;
         } 
     }
