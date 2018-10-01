@@ -1,0 +1,80 @@
+/**
+@mainpage Offline Software Meta-Project Docs
+@author Erik Blaufuss
+
+
+@section intro Introduction
+
+The Offline Software metaproject is a collection of software tools for
+use as a base for development of other projects (reconstruction, 
+simulation, etc).  These tools include things like the IceTray framework
+and the dataclasses event structures.
+
+A much larger set of documentation is available on the
+IceCube Offline Software Wiki:
+http://wiki.icecube.wisc.edu/index.php/Offline_Software_Main_Page
+
+@section contents Contents of Meta-Project
+
+<a href="inspect/index.html">List of all modules and their parameters</a>
+
+Modules contained in the offline-software meta-project:<p>
+<ul>
+	<li> <a href="inspect/amanda-core.html">[inspect]</a> <a href="./amanda-core/index.html">amanda-core</a> - 
+Core AMANDA functionality including calibrations and reading f2k-format data.
+	<li> <a href="http://code.icecube.wisc.edu/projects/icecube/wiki/CMake">cmake</a> - 
+Makefiles and configuration information for the software build system.
+	<li> <a href="./coordinate-service/index.html">coordinate-service</a> -
+A set of functions for transforming from one coordinate system to another (Local, equitorial, etc)
+	<li> <a href="inspect/daq-decode.html">[inspect]</a> <a href="./daq-decode/index.html">daq-decode</a> - 
+Services that utilize the payload object decoder services (e.g. payload-parsing)
+to decode the DAQ event format and fill the dataclasses structures.
+	<li> <a href="./dataclasses/index.html">dataclasses</a> - 
+The "in memory" storage classes that hold an event and provide access methods.
+	<li> <a href="inspect/dataio.html">[inspect]</a> <a href="./dataio/index.html">dataio</a> - 
+I/O modules for writing/reading IceCube data.
+        <li> <a href="inspect/DOMcalibrator.html">[inspect]</a><a href="./DOMcalibrator/index.html">DOMcalibrator</a> -
+A module to merge and calibrated the (up to) 3 raw ATWD readouts into a single waveform, and calibrate FADC readouts
+	<li> <a href="inspect/examples.html">[inspect]</a><a href="./examples/index.html">examples</a> - 
+A collection of example scripts. 
+	<li> <a href="inspect/filter-tools.html">[inspect]</a>filter-tools - 
+A few modules to help work with filtered data from JEB.
+	<li> <a href="http://wiki.icecube.wisc.edu/index.php/Glshovel">glshovel</a> - 
+A nice 3D event viewer for IceCube data.
+	<li> <a href="inspect/I3Db.html">[inspect]</a><a href="./I3Db/index.html">I3Db</a> - 
+A module to provide database access for geometry, calibrations and detector status information.
+	<li> <a href="inspect/icepick.html">[inspect]</a><a href="./icepick/index.html">icepick</a> -
+Modules for selecting events from the event stream for further processing
+	<li> <a href="inspect/icetray.html">[inspect]</a><a href="./icetray/index.html">icetray</a> - 
+The IceTray software framework.
+	<li> <a href="./interfaces/index.html">interfaces</a> -
+A set of generic interface classes to limit module dependencies.
+	<li> <a href="./ithon/index.html">ithon</a> -
+The Python interface to icetray.
+	<li> <a href="./jebclasses/index.html">jebclasses</a> - 
+Classes added and used by online Joint Event Builder and filter. Needed to fully decode data from 2007 and beyond.
+	<li> <a href="inspect/payload-parsing.html">[inspect]</a><a href="./payload-parsing/index.html">payload-parsing</a> - 
+A service to decode the DAQ payload format data (including delta-compressed data).
+	<li> <a href="./pfclasses/index.html">pfclasses</a> - 
+Mostly simple utility structures for the PnF system (2006) and the pfreader project.
+	<li> <a href="inspect/pfreader.html">[inspect]</a><a href="./pfreader/index.html">pfreader</a> - 
+A service to read PnF binary output files from the South Pole (2006).
+	<li> <a href="inspect/phys-services.html">[inspect]</a><a href="./phys-services/index.html">phys-services</a> - 
+A set of IceTray services that are availble to all modules.
+        <li> <a href="./twrclasses/index.html">twrclasses</a> -
+Classes added and used by twr-decoder.
+        <li> <a href="inspect/twr-decode.html">[inspect]</a><a href="./twr-decode/index.html">twr-decode</a> -
+TWR raw binary data decoder.
+</ul>
+
+Additionally, some additional docs are included in the following collections:
+<p>
+<ul>
+	<li> <a href="./physics-docs/index.html">physics-docs</a> -
+Contains useful information for physics analysis, like descriptions of configuration information.
+	<li> <a href="./codingstandards.html">IceCube C++ Coding Standards</a> -
+These are coding standards and recommendations for developers of IceCube software in C++.
+</ul>
+
+
+*/

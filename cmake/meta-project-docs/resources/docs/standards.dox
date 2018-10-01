@@ -1,0 +1,888 @@
+/**
+
+@page codingstandards IceCube C++ Coding Standards
+
+@image html brazil.jpg
+
+@author troy d. straszheim <a href="http://www.resophonic.com">@<troy@resophonic.com@></a>
+
+This is the third draft of the IceCube C++ Coding Standards. The first
+draft was provided by Thomas Burgess, the second by Erik Blaufuss. 
+
+@section Introduction
+
+These are coding standards and recommendations for developers of
+IceCube software in C++.  This is primarily offline software
+(including IceTray, Dataclasses, Simulation and the event viewer).
+Users are encouraged to write their own private software to these
+standards, to make future code maintence and the adoption of private
+code for production use easier.
+
+@section thebook C++ Coding Standards
+
+Good coding standards offer many interrelated advantages:
+
+@li <i> Improved code quality:</i> Encouranging developers to do the
+right things in a consistent way directly works to improve software
+quality and maintainability.
+@li <i> Faster development:</i> Developers dont need to always make
+decisions starting from first principles.
+@li <i> Better Teamwork:</i> They help reduce needless debates on
+inconsequential issues and make it easier for teammates to read and
+maintain each other's code.
+@li <i> Uniformity in the right dimension: </i> This frees developers
+to be creative in directions that matter.
+
+Code reviews will make constant reference to <a
+href="http://www.gotw.ca/publications/c++cs.htm">C++ Coding Standards,
+by Herb Sutter and Andrei Alexandrescu</a>.  If you submit code that
+gets reviewed, you should have access to a copy: reviewers will refer
+to the book, and everybody will save time if you can read the full
+details/explanations yourself.
+
+This document borrows the book's structure, and you will find direct
+quotes from the book throughout (like the opening paragraph of this
+section).  Each of the headings below corresponds to a several-page
+long chapter in the book, where one can find Sutter's treatment, so
+look there for more information.  Icecube-specific elaborations,
+modifications, and excerpts from code reviews are found here.  You are
+@em not expected to memorize them or to submit code in full compliance
+with every single rule, as these are goals to strive for, and many are
+achievably only in degree.  Do your best, and we will refer to this
+document in reviews.
+
+@subsection sec0 Don't Sweat The Small Stuff 
+
+There are things that appear in many coding standards that are
+unenforceable and a waste of time.  Any programmer can read and write
+code that is indented slightly differently than he/she is used to.
+For instance,
+
+@code
+if (x > y) {
+  putsLotionIn(basket);
+} else {
+  getsHoseAgain();
+}
+@endcode
+is not much different in readability than
+@code
+if (x > y)
+{
+  puts_lotion_in (basket);
+} 
+else
+{
+  gets_hose_again ();
+}
+@endcode
+
+So exactly how much to indent isn't specified.  If you are an emacs
+user, "gnu" indentation style (the default) will produce good,
+standard indentation, but in any case @em do indent to show structure
+and be consistent within at least each file, because it is jarring to
+jump around among several styles in the same piece of code.
+
+A specific line length is also not specified.  Keep it readable.  
+
+@section Contents 
+
+Organizational and Policy Issues<hr>
+@ref Naming<br>
+@ref Comments<br>
+@ref Logging<br>
+@ref Documentation<br>
+@ref TestSuites<br>
+@ref sec1<br>
+@ref sec2<br>
+@ref sec3<br>
+@ref sec4<br>
+<br>Design Style<hr>
+@ref sec5<br>
+@ref sec6<br>
+@ref sec7<br>
+@ref sec8<br>
+@ref sec9<br>
+@ref sec10<br>
+@ref sec11<br>
+@ref sec12<br>
+@ref sec13<br>
+<br>Coding style<hr>
+@ref sec14<br>
+@ref sec15<br>
+@ref sec16<br>
+@ref sec17<br>
+@ref sec18<br>
+@ref sec19<br>
+@ref sec20<br>
+@ref sec21<br>
+@ref sec22<br>
+@ref sec23<br>
+@ref sec24<br>
+<br>Functions and Operators<hr>
+@ref sec25<br>
+@ref sec26<br>
+@ref sec27<br>
+@ref sec28<br>
+@ref sec29<br>
+@ref sec30<br>
+@ref sec31<br>
+<br>Design and Inheritance<hr>
+@ref sec32<br>
+@ref sec33<br>
+@ref sec34<br>
+@ref sec35<br>
+@ref sec36<br>
+@ref sec37<br>
+@ref sec38<br>
+@ref sec39<br>
+@ref sec40<br>
+@ref sec41<br>
+@ref sec42<br>
+@ref sec43<br>
+@ref sec44<br>
+@ref sec45<br>
+@ref sec46<br>
+<br>Construction, Destruction, and Copying<hr>
+@ref sec47<br>
+@ref sec48<br>
+@ref sec49<br>
+@ref sec50<br>
+@ref sec51<br>
+@ref sec52<br>
+@ref sec53<br>
+@ref sec54<br>
+@ref sec55<br>
+@ref sec56<br>
+<br>Namespaces and Modules<hr>
+@ref sec57<br>
+@ref sec58<br>
+@ref sec59<br>
+@ref sec60<br>
+@ref sec61<br>
+@ref sec62<br>
+@ref sec63<br>
+<br>Templates and Genericity<hr>
+@ref sec64<br>
+@ref sec65<br>
+@ref sec66<br>
+@ref sec67<br>
+<br>Error Handling and Exceptions<hr>
+@ref sec68<br>
+@ref sec69<br>
+@ref sec70<br>
+@ref sec71<br>
+@ref sec72<br>
+@ref sec73<br>
+@ref sec74<br>
+@ref sec75<br>
+<br>STL: Containers<hr>
+@ref sec76<br>
+@ref sec77<br>
+@ref sec78<br>
+@ref sec79<br>
+@ref sec80<br>
+@ref sec81<br>
+@ref sec82<br>
+<br>STL: Algorithms<hr>
+@ref sec83<br>
+@ref sec84<br>
+@ref sec85<br>
+@ref sec86<br>
+@ref sec87<br>
+@ref sec88<br>
+@ref sec89<br>
+<br>Type Safety<hr>
+@ref sec90<br>
+@ref sec91<br>
+@ref sec92<br>
+@ref sec93<br>
+@ref sec94<br>
+@ref sec95<br>
+@ref sec96<br>
+@ref sec97<br>
+@ref sec98<br>
+@ref sec99<br>
+@ref sec100<br>
+
+@ref links<br>
+
+<br>
+<hr>
+<br>
+@section org Organizational and Policy Issues
+
+<hr>@subsection Naming
+
+Name classes, functions and enums @c LikeThis, name variables @c
+likeThis, name private member variables @c likeThis_, and name macros
+and constant fundamental types @c LIKE_THIS.
+
+Never use names that begin with an underscore or that contain a double
+underscore (this is because of how linking works, it's not a matter of
+taste.)  Internal single underscores and trailing underscores are OK.
+Always use @c ONLY_UPPERCASE_NAMES for macros and never think about
+writing a macro that is a common word or abbreviation (including
+common template parameters such as T and U; writing @c #define @c T
+@em anything is extremely disruptive.)
+
+Do @em not use complicated hungarian or the ROOT/Taligent-style
+quasi-hungarian notation.  One of the main advantages of not using
+them, as Thomas Burgess observes, is that you can talk about the code
+in English as well as Hungarian.  fThey EJust fgMake MThe fCode
+EHarder kTO gRead.  The quasi-hungarian conventions are ten years old,
+and at the time the ROOT people appear to have chosen them only
+because at the time Taligent had "written the largest body of C++ and
+the rules seem well thought out.  No need to invent something else."
+(From <a href="http://root.cern.ch/root/Conventions.html">this
+page</a>, last updated 1999).
+
+More on English/Hungarian has been freeze-dried for posterity <a
+href="http://icecube.wisc.edu/mailing-list-archives/dataclass_archive/msg01721.html">here</a>.
+
+Icecube-specific classes take the prefix @c I3.  The name should tell
+the reader something about the semantics of the variable, function or
+class. The name should be concise and in plain English.  Try to avoid
+things like abbreviations, acronyms, and jargon (like the word
+"semantics").  It should say something about what the thing does or
+means.  Think about being choosy with the verbs you use in your
+function names: <tt>handleCalculation()</tt> doesn't say much about
+what that routine does.  Acronyms and abbreviations which are inherent
+to IceCube research, like OM, PMT, or BFD are OK.  Examples:
+I3EventViewerModule, I3ParticleDataService.  Maps (key/value
+containers) end with the Dict suffix (@em Dict as in @em Dictionary,
+an association of word and definition).  Examples: @c
+I3RecoResultDict, @c I3MCParticleDict.  Vectors end with the Vect
+suffix, e.g. @c I3MCParticleVect.
+
+Publicly accessible files (the interface to your class) go under @c
+public/.  Private files go under @c private/.  The difference is not
+just header files vs. implementation files.  Some headers should not
+be visible to other projects.  Keep #includes of other header files
+out of your header files, see @ref sec23 and @ref sec22.  
+
+Do @em not use the verbose root-style typedefs for plain old types,
+unless you find that you need them for some specific reason, which you
+won't.  Full discussion <a
+href="http://icecube.wisc.edu/mailing-list-archives/icerec_archive/msg00233.html">here</a>.
+These typedefs address problems that we don't have.  They just make
+the code more verbose and most importantly bind every line of our code
+to the ROOT headers.  Just write the names of the types, it's easier
+and it's completely safe.  Write @c double and not @c Double_t, @c
+char and not @c Char_t, @c int instead of @c Int_t.
+
+A class is declared in a header file with the same name as the class
+and with suffix @c .h.  For example, the <tt>I3Position</tt> class
+declaration is located in <tt>I3Position.h</tt>, and defined in a
+source file with the same name as the class and with suffix @c .cxx
+For example, <tt>class I3Position</tt> source is located in
+<tt>I3Position.cxx</tt>
+
+Files containing root scripts should have suffix @c .C.
+
+@subsection Comments
+
+Comments need to be intelligible to @c doxygen, our documentation
+generator, and doxygen markup is our standard documentation format.
+
+Don't write comments that just duplicate the code: they get out of
+sync, add no additional information and just make the files longer.
+Do explain approach and rationale.  A constructor that takes no
+arguments is the default constructor, it couldn't be anything else and
+the comment "default constructor" does not help.  Doxygen will extract
+the function anyway.
+
+Compare
+@verbatim
+  /**
+   *  The weight
+   */
+   float weight_;
+@endverbatim
+to 
+@verbatim
+float weight_;
+@endverbatim
+
+They are equally descriptive.
+
+Avoid writing jargon, Latin, acronyms, abbreviations or other non
+English words. The idea is to make things easier to understand!
+Acronyms and abbreviations which are inherent to icecube research,
+like OM or PMT allowed, but should be used judiciously.  
+
+@subsubsection filedescriptionblock File description block
+
+The file description block is a special documentation comment that
+should be in the head of every file. It contains a few lines with very
+basic information about the file. The lines should be, example is below:
+
+@li A very short file description (preferably one line), followed by a
+      blank line
+@li (c) 2004 (year as appropriate)
+@li the IceCube Collaboration
+@li Revision number tag (Id) , followed by a blank line
+@li @@file - Doxygen command to indecate file description
+@li @@date - Followed by the Date  tag
+@li @@author name to identify author
+
+Example:
+
+@verbatim
+/**
+ *
+ * Definition of Dummy class
+ *
+ * (c) 2004
+ * the IceCube Collaboration
+ * $Id: standards.dox 14697 2006-01-24 23:06:03Z blaufuss $
+ *
+ * @file Dummy.h
+ * @date $Date: 2006-01-24 18:06:03 -0500 (Tue, 24 Jan 2006) $
+ * @author burgess
+ * @author blaufuss
+ *
+ */
+@endverbatim
+
+Doxygen auto generates documentation from the code with the help
+of specially formated comments:
+
+@c @@brief -  Used for brief descriptions and is written in  C style comment
+block. 
+
+@c /** - Used for detailed descriptions and is writen like a C style
+comment block starting with an extra star. 
+
+@c /// - Used for member variable descriptions.
+
+@c @@ - Used to start special documentation commands. (@c @@todo, @c @@author)
+
+@subsubsection doxylinks Doxygen Links
+
+Please see the doxygen documentation at <a
+href="http://www.stack.nl/~dimitri/doxygen/manual.html"> the doxygen
+website</a> for an overview.  Specifically, see the <a
+href="http://www.stack.nl/~dimitri/doxygen/commands.html">commands</a>
+for a list of things like @c @@param, @c @@author, @c @@todo that you
+can use, and look through the dataclasses for some examples.
+
+See also @ref Documentation.
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<hr>@subsection Logging
+
+Don't use any of the forms of printf, nor C++ iostreams (@c cout and
+friends) for reporting your code's progress or debugging output.
+There should @em not be @c printf or @c cout statements in your code,
+unless your code has a well-defined command line interface, (I3
+Modules don't), which include @c printf or @c cout statements that are
+commented out or bracketed in <tt>#if 0</tt>.  
+
+Instead, use icetray's logging facilities, which work just like
+printf, with the added feature that you can turn them on and off, by
+module, from a config file, without recompiling.  The logging
+statements make great documentation, leave clues as to what the author
+intended for the code to do, and assist in future debugging.
+
+Details here:
+http://software.icecube.wisc.edu/OFFLINE-SOFTWARE/icetray/logging.html
+
+As a guidline, the following guidlines are provided for choosing a 
+logging level:
+<ul>
+<li> log_fatal - Only called for fatal errors, will throw.
+<li> log_error - Non-fatal (recoverable) exception. No exception thrown
+<li> log_warn - Possible error conditions approaching....
+<li> log_info - Information to tell operator what's going on.
+<li> log_debug - Information for system expert.
+<li> log_trace - Chornic logorrhea. For step by step debugging.
+</ul>
+For non-CS experts, the guidline is:  Standard logging level is log_warn. Under absolutely normal conditions, no output at log_warn or higher.
+The following list are examples of some messages you might see at each logging level:
+<ul>
+<li> log_fatal - only when you want to exit.
+<li> log_error - won't exit, but your module has a serious problem that needs attention, single bad event, divide by zero detected in a module.
+<li> log_warn : OM key out of range, minor config errors, <1TB disk space remains?, no AMANDA data in >5 minutes....
+<li> log_info : (<< 1/event) Major transitions, new files open, "processed 1000 events" type statements,
+<li> log_debug: One or two lines output for each process call (per event, config, etc) per module
+<li> log_trace: line by line debugging is possible.
+</ul>
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<hr>@subsection Documentation
+
+Check out the examples for what your module's documentation should
+finally look like, for instance Ty's <a
+href="http://www-zeuthen.desy.de/~schlenst/icecube/docs-trunk/cleanhits/index.html">cleanhits</a>.
+Don't check in html, openoffice or word documents.  Write your
+documentation in @c doxygen markup.  This allows everybody to use the
+same markup scheme for documenting their code both in their source
+modules and in standalone documents.  It also allows others to fix
+bugs in documentation with their favorite editor.
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<hr>@subsection TestSuites
+
+Your module must have some test suites, detailed at
+http://software.icecube.wisc.edu/OFFLINE-SOFTWARE/i3book/index.html
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+<hr>@subsection sec1 Compile cleanly at high warning levels.
+
+The build system will specify @c -Wall, the maximum warning level, by
+default.  If you don't see any complaints from the compiler, you're
+golden.  If you do, pay attention to them.  The compiler is your
+friend.  The normal state of affairs must be that the code compiles
+without warning, otherwise people will start to ignore the warnings
+and we will end up spending lots of time chasing bugs that were
+actually very easy to find: the compiler was telling us about them all
+the time.
+
+This also makes our coding standard much much shorter.  For instance
+"Dont return a pointer or reference to a temporary", is covered under
+this item, because the compiler will flag this for you with all
+warnings.
+
+<hr>@subsection sec2 Use an automated build system.
+
+This is taken care of for you. See    
+http://software.icecube.wisc.edu/OFFLINE-SOFTWARE/i3book/index.html
+
+<hr>@subsection sec3 Use a version control system.
+
+Keep your stuff in the code repository, and don't be afraid to check in every time
+your software builds, and don't be afraid to tag every time it works.
+It often happens, when big changes are necessary, that you can get
+ahead of yourself and then forget how to back up to something that
+worked.  Code repositories (SVN) can be a huge help.
+
+<hr>@subsection sec4 Invest in code reviews.
+@verbatim 
+ > The constructive
+ > criticism that I just got from my code review was great.  
+@endverbatim
+   <tt> :-) </tt>
+
+@section design Design Style
+
+<hr>@subsection sec5 Give one entity one cohesive responsibility.
+
+<hr>@subsection sec6 Correctness, simplicity, and clarity come first.
+
+<hr>@subsection sec7 Know when and how to code for scalability.
+
+<hr>@subsection sec8 Don't optimize prematurely. 
+
+<hr>@subsection sec9 Don't pessimize prematurely.
+
+<hr>@subsection sec10 Minimize global and shared data.
+
+<hr>@subsection sec11 Hide information.
+
+<hr>@subsection sec12 Know when and how to code for concurrency.
+
+<hr>@subsection sec13 Ensure resources are owned by objects. Use explicit RAII and smart pointers.
+
+Use smart pointers.  The general problem is described in
+http://software.icecube.wisc.edu/OFFLINE-SOFTWARE/dataclasses/memorymanagement.html
+and the solution, smart pointers, is described at
+http://software.icecube.wisc.edu/OFFLINE-SOFTWARE/dataclasses/sharedpointer.html
+Except where people are dealing directly with interfaces that insist
+on hands-on new/delete (like when having pointer thumby-wars with a
+root tree) you should be giving dynamically allocated objects directly
+to a smart pointer and thereafter not touching the bald pointer and
+not calling @c delete.
+
+@section sutterstyle Coding Style
+
+<hr>@subsection sec14 Prefer compile- and link-time errors to run-time errors.
+
+<hr>@subsection sec15 Use const proactively.
+
+<hr>@subsection sec16 Avoid macros.
+
+<hr>@subsection sec17 Avoid magic numbers.
+
+<hr>@subsection sec18 Declare variables as locally as possible.
+
+Avoid leaving variables laying around whose scope is larger than their
+actual usefulness.  You shouldn't declare a variable until you have
+enough information to initialize it and are ready to use it.  Don't
+make variables members of your class if they can be local to one of
+the classes' member functions.  Globals are the worst, only use them
+when necessary.
+
+Define each variable as locally as you can, which is usually exactly
+at the point where you also have enough data to initalize it, and
+immediately before its first use.   
+
+<hr>@subsection sec19 Always initialize variables.
+
+<hr>@subsection sec20 Avoid long functions.  Avoid deep nesting.  Break up long series of pointer traversals.
+
+See the linefit review, at
+http://software.icecube.wisc.edu/OFFLINE-SOFTWARE/dataclasses/linefitreview.html
+for a discussion of carefully walking through the event and doing the
+necessary casts and dereferences.  
+
+
+<hr>@subsection sec21 Avoid initialization dependencies across compilation units.
+
+<hr>@subsection sec22 Minimize definitional dependencies. Avoid cyclic dependencies.
+
+<hr>@subsection sec23 Make header files self-sufficient.
+
+Be sure that the path to your public header files, as seen from other
+projects, makes sense.  Don't put #includes of tools in your header
+files, otherwise I will have to add those tools to my @c USES_TOOLS
+when I use your project.
+
+<hr>@subsection sec24 Always write internal #include guards. Never write external #include guards.
+
+Header files should start with
+
+@code
+#ifndef DATACLASSES_I3MYHEADER_H_INCLUDED
+#define DATACLASSES_I3MYHEADER_H_INCLUDED
+@endcode
+and end with
+@code
+#endif // DATACLASSES_I3MYHEADER_H_INCLUDED
+@endcode
+
+Where @c DATACLASSES represents the name of your project, and @c
+I3MYHEADER_H is the name of your header file.  This is different than
+what you'll see in the code in a lot of places, we are missing the
+DATACLASSES part.  One has to be careful that this
+PROJECTNAME_CLASSNAME_H_INCLUDED does not clash with other such
+include guard @c #defines elsewhere.  For instance, if <tt> #define
+TRACK_H </tt> appeared in one of your files and somebody else's, could
+silently prevent inclusion of that foreign file, and it could take
+forever to figure out why, since you definitely wouldn't be expecting
+the include guards to be the problem.
+
+@section functionsops Functions and Operators
+
+<hr>@subsection sec25 Take parameters appropriately by value, (smart) pointer, or reference.
+
+<hr>@subsection sec26 Preserve natural semantics for overloaded operators.
+
+<hr>@subsection sec27 Prefer the canonical forms of arithmetic and assignment operators.
+
+<hr>@subsection sec28 Prefer the canonical form of ++ and --. Prefer calling the prefix forms.
+
+<hr>@subsection sec29 Consider overloading to avoid implicit type conversions.
+
+<hr>@subsection sec30 Avoid overloading &&, ||, or , (comma) .
+
+<hr>@subsection sec31 Don't write code that depends on the order of evaluation of function arguments.
+
+@section designandinheritance Class Design and Inheritance
+
+<hr>@subsection sec32 Be clear what kind of class you're writing.
+
+@verbatim
+ > My C++ books are at home, and I'm at work now, but I'm pretty sure at least one
+ > of them says destructors should ALWAYS be virtual.  There's always a
+ > possibility that someone will want to subclass your class, and if the
+ > superclass destructor isn't called, it could be disasterous.  I've also
+ > been told that ALL methods should be declared virtual, because you never
+ > know when someone might want to subclass your class and override a method.
+ > I never saw that in writing, and it never made much sense to me, but I
+ > thought I saw some I3 classes with everything virtual, so I thought maybe
+ > someone else heard the same thing I did.  
+@endverbatim
+
+Sutter writes: 
+
+@verbatim
+   For a base class Base, calling code might try to delete derived
+   objects through pointers to Base.  If Base's destructor is public and
+   nonvirtual (the default) it can be accidentally called on a pointer
+   that actually points to a derived object, in which case the behavior
+   of the attempted deletion is undefined.  This state of affairs has led
+   older coding standards to impose a blanket requirement that all base
+   class destructors must be virtual.  This is overkill (even if it is
+   the common case); instead, the rule should be to make base class
+   destructors virtual if and only if they are public.
+@endverbatim
+
+So even in base classes the virtual destructor requirement is
+overkill; for classes generally, it's just nonsense.
+
+Then why do so many I3 classes have virtual destructors?  The reason
+is a not good one ("a not good one" in the sense of "an evil one", not
+in the sense of "not carefully thought through".)  All the I3 classes
+have virtual destructors because they inherit from TObject, and
+TObject has a virtual destructor, so our subclasses have to, because
+of your deletion disaster scenario above.  The reason for inheritance
+form TObject has nothing to do with class design, it is because it was
+assumed that *everything* absolutely had to inherit from TObject
+because *everything* had to be usable from the interpreter.  Nightmare
+scenario, but we tried.  Now things are changing.
+
+The advice on "there's always a possibility that someone will want to
+subclass your class" is really bad.  The first thing everybody learns
+about object-oriented programming is inheritance, and it is the most
+overused feature of the language.   See @ref sec34
+
+Base classes define an interface to a set of abstractions and should
+be carefully designed as such.  One does very different and often
+contrary things when designing standalone classes.
+
+All classes Derived that inherit from Base *are* also base, as
+inheritance models "IS-A".  Classes chosen at random are almost never
+good candidates for such abstractions.  Base classes and their
+subclasses are very tightly coupled (read: they quickly become hard to
+change later).  For instance, the cost of changing Base is very high:
+you have to change all the subclasses and everybody who interacts with
+the base class or any of the subclasses.  I could go on.
+
+The guideline in the quote at the start of this item surely came from
+someone who saw that if you made everything protected/virtual you
+could do unlimited subclassing, but who didn't understand that the
+problems of unlimited effortless subclassing are much greater than the
+extra typing required to add some virtuals and change "private" to
+"protected" if you find that you do want to subclass something.
+See @ref sec35
+@verbatim
+ > because you never know when someone might want to subclass your
+ > class and override a method.
+@endverbatim
+
+One does not inherit in order to reuse code in the Base class, this is
+looking at it from the wrong perspective.  One inherits from Base in
+order to <i>be reused</i> by classes who talk to pointers to objects
+of type Base who dont know and don't care whether that is actually a
+Derived on the other end of that pointer.  See @ref sec37 (This a
+simple restatement of the "Liskov Substitution Principle").  When it
+comes to reusing code there are plenty of other, more straightforward
+ways to do it that don't create the couplings that inheritance does.
+You can have one as a member, you can use templates, you can use
+private inheritance, you can just use functions.
+
+
+<hr>@subsection sec33 Prefer minimal classes to monolithic classes.
+
+<hr>@subsection sec34 Prefer composition to inheritance.
+
+<hr>@subsection sec35 Avoid inheriting from classes that were not designed to be base classes.
+
+<hr>@subsection sec36 Prefer providing abstract interfaces.
+
+<hr>@subsection sec37 Public inheritance is substitutability. Inherit, not to reuse, but to be reused.
+
+<hr>@subsection sec38 Practice safe overriding.
+
+<hr>@subsection sec39 Consider making virtual functions nonpublic, and public functions nonvirtual.
+
+<hr>@subsection sec40 Avoid providing implicit conversions.
+
+<hr>@subsection sec41 Make data members private, except in behaviorless aggregates (C-style structs).
+
+<hr>@subsection sec42 Don't give away your internals.
+
+<hr>@subsection sec43 Pimpl judiciously.
+
+<hr>@subsection sec44 Prefer writing nonmember nonfriend functions.
+
+<hr>@subsection sec45 Always provide new and delete together.
+
+<hr>@subsection sec46 If you provide any class-specific new, provide all of the standard forms (plain, in-place, and nothrow).
+
+@section cdc Construction, Destruction, and Copying
+
+<hr>@subsection sec47 Define and initialize member variables in the same order.
+
+<hr>@subsection sec48 Prefer initialization to assignment in constructors. 
+
+<hr>@subsection sec49 Avoid calling virtual functions in constructors and destructors.
+
+<hr>@subsection sec50 Make base class destructors public and virtual, or protected and nonvirtual.
+
+<hr>@subsection sec51 Destructors, deallocation, and swap never fail.
+
+<hr>@subsection sec52 Copy and destroy consistently.
+
+<hr>@subsection sec53 Explicitly enable or disable copying.
+
+<hr>@subsection sec54 Avoid slicing. Consider Clone instead of copying in base classes.
+
+<hr>@subsection sec55 Prefer the canonical form of assignment.
+
+<hr>@subsection sec56 Whenever it makes sense, provide a no-fail swap (and provide it correctly).
+
+@section namespaces Namespaces and Modules
+
+<hr>@subsection sec57 Keep a type and its nonmember function interface in the same namespace.
+
+<hr>@subsection sec58 Keep types and functions in separate namespaces unless they're specifically intended to work together.
+
+<hr>@subsection sec59 Don't write namespace usings in a header file or before an #include.
+
+<hr>@subsection sec60 Avoid allocating and deallocating memory in different modules.
+
+<hr>@subsection sec61 Don't define entities with linkage in a header file.
+
+<hr>@subsection sec62 Don't allow exceptions to propagate across module boundaries.
+
+<hr>@subsection sec63 Use sufficiently portable types in a module's interface.
+
+@section tandgen Templates and Genericity
+
+<hr>@subsection sec64 Blend static and dynamic polymorphism judiciously.
+
+<hr>@subsection sec65 Customize intentionally and explicitly.
+
+<hr>@subsection sec66 Don't specialize function templates.
+
+<hr>@subsection sec67 Don't write unintentionally nongeneric code.
+
+@section errors Error Handling and Exceptions
+
+<hr>@subsection sec68 Assert liberally to document internal assumptions and invariants.
+
+<hr>@subsection sec69 Establish a rational error handling policy, and follow it strictly.
+
+<hr>@subsection sec70 Distinguish between errors and non-errors.
+
+<hr>@subsection sec71 Design and write error-safe code.
+
+<hr>@subsection sec72 Prefer to use exceptions to report errors.
+
+<hr>@subsection sec73 Throw by value, catch by reference.
+
+<hr>@subsection sec74 Report, handle, and translate errors appropriately.
+
+<hr>@subsection sec75 Avoid exception specifications.
+
+@section stl STL: Containers
+
+<hr>@subsection sec76 Use vector by default. Otherwise, choose an appropriate container.
+
+<hr>@subsection sec77 Use vector and string instead of arrays.
+
+Don't use C-style const char *'s, arrays, @c strcmp, @c strcpy, or @c
+strncmp.  C-style arrays (@c float[3]) can be used if their size is
+known at compile time.
+Use STL strings instead: 
+
+@code
+
+string s1, s2;
+
+s1 == s2; // equality comparison
+if (s1 < s2) { } // dictionary comparison
+
+s1 = s2; // assignment
+
+s1 = "heeheehee";
+
+s1 += s2; // concatenation
+
+cout << "length of s1 is " << s1.length();
+
+@endcode
+
+There's a decent reference on strings, vectors, and other STL stuff at
+http://www.cppreference.com/cppstring/.
+
+<hr>@subsection sec78 Use vector (and string::c_str) to exchange data with non-C++ APIs.
+
+
+If you need to get a <tt>const char*</tt> out of a @c string so that
+you can pass it to a C function, use the function @c c_str:
+@code
+void takes_a_c_style_string(const char*);
+void takes_an_stl_string(const string&);
+string cpp_string;
+cpp_string = "something";
+
+takes_an_stl_string(cpp_string); // OK
+takes_a_c_style_string(cpp_string); // error, string doesnt convert to const char*
+takes_a_c_style_string(cpp_string.c_str()); // ok, explictly convert it
+takes_an_stl_string("some string literal"); // ok, const char* does convert to string
+@endcode
+
+<hr>@subsection sec79 Store only values and smart pointers in containers.
+
+<hr>@subsection sec80 Prefer push_back to other ways of expanding a sequence.
+
+<hr>@subsection sec81 Prefer range operations to single-element operations.
+
+<hr>@subsection sec82 Use the accepted idioms to really shrink capacity and really erase elements.
+
+@section alogrithms STL: Algorithms
+
+<hr>@subsection sec83 Use a checked STL implementation.
+
+<hr>@subsection sec84 Prefer algorithm calls to handwritten loops.
+
+<hr>@subsection sec85 Use the right STL search algorithm.
+
+<hr>@subsection sec86 Use the right STL sort algorithm.
+
+<hr>@subsection sec87 Make predicates pure functions.
+
+<hr>@subsection sec88 Prefer function objects over functions as algorithm and comparer arguments.
+
+<hr>@subsection sec89 Write function objects correctly.
+
+@section safetly Type Safety
+
+<hr>@subsection sec90 Avoid type switching; prefer polymorphism.
+
+<hr>@subsection sec91 Rely on types, not on representations.
+
+<hr>@subsection sec92 Avoid using reinterpret_cast.
+
+<hr>@subsection sec93 Avoid using static_cast on pointers.
+
+<hr>@subsection sec94 Avoid casting away const.
+
+<hr>@subsection sec95 Don't use C-style casts.
+
+<hr>@subsection sec96 Don't memcpy or memcmp non-PODs.
+
+<hr>@subsection sec97 Don't use unions to reinterpret representation.
+
+<hr>@subsection sec98 Don't use varargs (ellipsis).
+
+<hr>@subsection sec99 Don't use invalid objects. Don't use unsafe functions.
+
+<hr>@subsection sec100 Don't treat arrays polymorphically.
+
+<hr>
+@section links Useful links
+
+Bjarne Stroustrup's C++ pages <http://www.research.att.com/%7Ebs/C++.html>
+    The pages of the creator of C++ 
+
+Effective C++ <http://www.aristeia.com/books_frames.html>
+    Effective C++ and More Effective C++ contains many very useful items
+    for C++ programmers. 
+
+C/C++ reference <http://www.cppreference.com/>
+    General C/C++, standard C libraries, C++ I/0, strings and STL
+    reference. 
+
+C++ FAQ lite <http://www.parashift.com/c++-faq-lite/>
+    Many useful answers on most C++ topics 
+
+C++ Notes <http://www.fredosaurus.com/notes-cpp/index.html>
+    Small useful examples illustrating basic C++ usage. 
+
+Doxygen <http://www.doxygen.org/>
+    Generates code documentation from source code comments 
+
+IceCube Java Coding Standards
+<http://icecube.wisc.edu/software/IceCubeCodeConv.htm>
+
+    Also handy for C++ programming 
+GCC <http://www.gnu.org/software/gcc/>
+    GNU Compiler Collection - many compilers, including the g++ C++
+    compiler! 
+
+*/

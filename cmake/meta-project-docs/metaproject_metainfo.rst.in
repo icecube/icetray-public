@@ -1,0 +1,11 @@
+svn information
+---------------
+
+:meta-project: @META_PROJECT@
+:url:          @SVN_URL@
+:revision:     @SVN_REVISION@
+
+externals
+^^^^^^^^^
+.. literalinclude:: svn-externals.txt
+
