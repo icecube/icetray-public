@@ -1,7 +1,7 @@
 //
 //   Copyright (c) 2004, 2005, 2006, 2007   Troy D. Straszheim  
 //   
-//   $Id: ithon.cxx 25598 2006-11-25 02:52:57Z troy $
+//   $Id$
 //
 //   This file is part of IceTray.
 //
@@ -22,164 +22,327 @@
 #include <vector>
 
 #include <icetray/I3Module.h>
+#include <icetray/I3ConditionalModule.h>
+#include <icetray/I3PacketModule.h>
 #include <icetray/I3Logging.h>
 #include <icetray/I3TrayHeaders.h>
 #include <icetray/OMKey.h>
 #include <icetray/PythonModule.h>
+#include <icetray/impl.h>
 #include <boost/python/import.hpp>
 
 namespace bp = boost::python;
-
-PythonModule::PythonModule(const I3Context& ctx) : I3Module(ctx)
+template <typename Base>
+PythonModule<Base>::PythonModule(const I3Context& ctx) : Base(ctx)
 { 
-  log_trace("%s", __PRETTY_FUNCTION__);
+  i3_log("%s", __PRETTY_FUNCTION__);
 }
 
+template <>
+PythonModule<I3PacketModule>::PythonModule(const I3Context& ctx) :
+  I3PacketModule(ctx, I3Frame::DAQ)
+{ 
+  i3_log("%s", __PRETTY_FUNCTION__);
+}
+
+template <>
+PythonModule<I3PacketModule>::PythonModule(const I3Context& ctx,
+  I3Frame::Stream stream) : I3PacketModule(ctx, stream)
+{ 
+  i3_log("%s", __PRETTY_FUNCTION__);
+}
+
+template <typename Base>
 void 
-PythonModule::Configure()
+PythonModule<Base>::PyConfigure()
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
+  Base::Configure();
+}
+
+template <typename Base>
+void 
+PythonModule<Base>::Configure()
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
   if (bp::override conf = this->get_override("Configure"))
     conf();
   else
-    log_fatal("Python module doesn't implement 'Configure'");
+    log_debug("Python module doesn't implement 'Configure'");
 }
 
+template <typename Base>
 void 
-PythonModule::Process()
+PythonModule<Base>::PyProcess()
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
+  Base::Process();
+}
+
+template <typename Base>
+void 
+PythonModule<Base>::Process()
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
   if (bp::override process = this->get_override("Process"))
-    process();
+    {
+      log_trace("%s", "calling override for Process");
+      process();
+    }
   else
-    I3Module::Process();
+    {
+      log_trace("%s", "calling base Process");
+      Base::Process();
+    }
 }
 
+template <typename Base>
 void 
-PythonModule::Finish()
+PythonModule<Base>::PyFinish()
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
+  Base::Finish();
+}
+
+template <typename Base>
+void 
+PythonModule<Base>::Finish()
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
   if (bp::override fin = this->get_override("Finish"))
     fin();
   else
-    I3Module::Finish();
+    Base::Finish();
 }
 
+template <typename Base>
 void
-PythonModule::AddParameter(const std::string& name, 
+PythonModule<Base>::AddParameter(const std::string& name, 
 			   const std::string& description, 
 			   const bp::object& value)
 {
-  I3Module::AddParameter(name, description, value);
+  Base::AddParameter(name, description, value);
 }
 
+template <typename Base>
 void
-PythonModule::AddParameter(const std::string& name, 
+PythonModule<Base>::AddParameter(const std::string& name, 
 			   const std::string& description) 
 {
-  I3Module::AddParameter(name, description);
+  Base::AddParameter(name, description);
 }
 
+template <typename Base>
 void
-PythonModule::Register(const I3Frame::Stream& s, const boost::python::object& method)
+PythonModule<Base>::Register(const I3Frame::Stream& s, const boost::python::object& method)
 {
-  I3Module::Register(s, method);
+  Base::Register(s, method);
 }
 
+template <typename Base>
 bp::object
-PythonModule::GetParameter(const std::string& name)
+PythonModule<Base>::GetParameter(const std::string& name)
 {
   bp::object obj;
-  I3Module::GetParameter(name, obj);
+  Base::GetParameter(name, obj);
   return obj;
 }
   
-void 
-PythonModule::Geometry(I3FramePtr frame)
+template <typename Base>
+bool
+PythonModule<Base>::ShouldDoGeometry(I3FramePtr frame)
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
+  i3_log("%s", __PRETTY_FUNCTION__);
+  if (bp::override sd = this->get_override("ShouldDoGeometry"))
+    return sd(frame);
+  else
+    return Base::ShouldDoGeometry(frame);
+}
+
+template <typename Base>
+void 
+PythonModule<Base>::Geometry(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
   if (bp::override g = this->get_override("Geometry"))
     g(frame);
   else
-    I3Module::Geometry(frame);
+    Base::Geometry(frame);
 }
 
-void 
-PythonModule::Calibration(I3FramePtr frame)
+template <typename Base>
+bool
+PythonModule<Base>::ShouldDoCalibration(I3FramePtr frame)
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
+  i3_log("%s", __PRETTY_FUNCTION__);
+  if (bp::override sd = this->get_override("ShouldDoCalibration"))
+    return sd(frame);
+  else
+    return Base::ShouldDoCalibration(frame);
+}
+
+template <typename Base>
+void 
+PythonModule<Base>::Calibration(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
   if (bp::override cal = this->get_override("Calibration"))
     cal(frame);
   else
-    I3Module::Calibration(frame);
+    Base::Calibration(frame);
 }
 
-void 
-PythonModule::DetectorStatus(I3FramePtr frame)
+template <typename Base>
+bool
+PythonModule<Base>::ShouldDoDAQ(I3FramePtr frame)
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
+  i3_log("%s", __PRETTY_FUNCTION__);
+  if (bp::override sd = this->get_override("ShouldDoDAQ"))
+    return sd(frame);
+  else
+    return Base::ShouldDoDAQ(frame);
+}
+
+template <typename Base>
+void 
+PythonModule<Base>::DAQ(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  if (bp::override ds = this->get_override("DAQ"))
+    ds(frame);
+  else
+    Base::DAQ(frame);
+}
+
+template <typename Base>
+bool
+PythonModule<Base>::ShouldDoDetectorStatus(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  if (bp::override sd = this->get_override("ShouldDoDetectorStatus"))
+    return sd(frame);
+  else
+    return Base::ShouldDoDetectorStatus(frame);
+}
+
+template <typename Base>
+void 
+PythonModule<Base>::DetectorStatus(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
   if (bp::override ds = this->get_override("DetectorStatus"))
     ds(frame);
   else
-    I3Module::DetectorStatus(frame);
+    Base::DetectorStatus(frame);
 }
 
-void 
-PythonModule::Physics(I3FramePtr frame)
+template <typename Base>
+bool
+PythonModule<Base>::ShouldDoSimulation(I3FramePtr frame)
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
+  i3_log("%s", __PRETTY_FUNCTION__);
+  if (bp::override sd = this->get_override("ShouldDoSimulation"))
+    return sd(frame);
+  else
+    return Base::ShouldDoSimulation(frame);
+}
+
+template <typename Base>
+void 
+PythonModule<Base>::Simulation(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  if (bp::override ds = this->get_override("Simulation"))
+    ds(frame);
+  else
+    Base::Simulation(frame);
+}
+
+template <typename Base>
+bool
+PythonModule<Base>::ShouldDoPhysics(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  if (bp::override sd = this->get_override("ShouldDoPhysics"))
+    return sd(frame);
+  else
+    return Base::ShouldDoPhysics(frame);
+}
+
+template <typename Base>
+void 
+PythonModule<Base>::Physics(I3FramePtr frame)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
   if (bp::override phys = this->get_override("Physics"))
     phys(frame);
   else
-    I3Module::Physics(frame);
+    Base::Physics(frame);
 }
 
+template <typename Base>
 I3FramePtr
-PythonModule::PopFrame()
+PythonModule<Base>::PopFrame()
 {
-  return I3Module::PopFrame();
+  return Base::PopFrame();
 }
 
+template <typename Base>
 void
-PythonModule::PushFrame(I3FramePtr f)
+PythonModule<Base>::PushFrame(I3FramePtr f)
 {
-  return I3Module::PushFrame(f);
+  return Base::PushFrame(f);
 }
 
+template <typename Base>
 void
-PythonModule::PushFrame(I3FramePtr f, const std::string& where)
+PythonModule<Base>::PushFrame(I3FramePtr f, const std::string& where)
 {
-  return I3Module::PushFrame(f, where);
+  return Base::PushFrame(f, where);
 }
 
+template <typename Base>
 void
-PythonModule::AddOutBox(const std::string& name)
+PythonModule<Base>::RequestSuspension()
 {
-  I3Module::AddOutBox(name);
+  return Base::RequestSuspension();
 }
 
-//
-//  Custom module creator policy for python modules.  Python class
-//  is put in the context by the I3Tray at location 'class'
-//
-template <class FactoryProductType, class ModuleType>
-struct PythonCreate
+template <typename Base>
+void
+PythonModule<Base>::AddOutBox(const std::string& name)
 {
-  static 
-  shared_ptr<FactoryProductType> 
-  Create (const I3Context& c)
-  {
-    try {
-      bp::object cls = c.Get<bp::object>("class");
-      log_trace("about to cls(c)");
-      // use 'ptr' to avoid pass-by-value of context
-      bp::object instance = cls(bp::ptr(&c));
-      return bp::extract<boost::shared_ptr<FactoryProductType> >(instance);
-    } catch (...) {
-      log_warn("Unable to get a boost::python::object named 'class' out of the context... this will be a braindead pythonmodule");
-      return boost::shared_ptr<FactoryProductType>(new PythonModule(c));
-    }
-  }
-};
+  Base::AddOutBox(name);
+}
 
-I3_REGISTER(I3Module, PythonModule, PythonCreate);
+template <>
+void 
+PythonModule<I3PacketModule>::FramePacket(std::vector<I3FramePtr> &frames)
+{
+  i3_log("%s", __PRETTY_FUNCTION__);
+  if (bp::override pkt = this->get_override("FramePacket"))
+    pkt(frames);
+  else
+    I3PacketModule::FramePacket(frames);
+}
+
+template <>
+I3Frame::Stream
+PythonModule<I3PacketModule>::GetSentinel()
+{ return sentinel; }
+
+template <>
+void
+PythonModule<I3PacketModule>::SetSentinel(I3Frame::Stream sent)
+{ sentinel = sent; }
+
+template <>
+const std::vector<I3Frame::Stream> &
+PythonModule<I3PacketModule>::GetPacketTypes()
+{ return packet_types; }
+
+template <>
+void PythonModule<I3PacketModule>::SetPacketTypes(
+    const std::vector<I3Frame::Stream> &types)
+{ packet_types = types; }
+
+template struct PythonModule<I3Module>;
+template struct PythonModule<I3ConditionalModule>;
+template struct PythonModule<I3PacketModule>;

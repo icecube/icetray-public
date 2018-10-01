@@ -23,6 +23,7 @@
 #ifndef I3DEFAULTNAME_H_INCLUDED
 #define I3DEFAULTNAME_H_INCLUDED
 
+#include <boost/shared_ptr.hpp>
 #include <boost/preprocessor/stringize.hpp>
 
 template <typename T>

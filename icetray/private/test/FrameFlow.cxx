@@ -27,6 +27,9 @@
 #include <icetray/I3TrayHeaders.h>
 #include <icetray/Utility.h>
 
+#include <boost/assign/list_of.hpp>
+using boost::assign::list_of;
+
 TEST_GROUP(FrameFlow);
 
 struct FFSource : public I3Module
@@ -35,7 +38,6 @@ struct FFSource : public I3Module
 
   FFSource(const I3Context& context) : I3Module(context) 
   { 
-    AddOutBox("OutBox");
     nextstop = 1;
   }
 
@@ -69,9 +71,8 @@ I3_MODULE(FFSource);
 struct Nothing : public I3Module
 {
   Nothing(const I3Context& context) : I3Module(context)
-  {
-    AddOutBox("OutBox");
-  }
+  {}
+  
   void Physics(I3FramePtr frame)
   {
     PushFrame(frame);
@@ -81,11 +82,12 @@ struct Nothing : public I3Module
 I3_MODULE(Nothing);
 
 
-map<string, map<I3Frame::Stream, unsigned> > counts;
+std::map<std::string, std::map<I3Frame::Stream, unsigned> > counts;
 
 struct FFCounter : public I3Module
 {
-  FFCounter(const I3Context& context) : I3Module(context) { }
+  FFCounter(const I3Context& context) : I3Module(context)  
+ {}
   
 #define IMPLEMENT(STOP)							\
   void STOP(I3FramePtr frame) {						\
@@ -110,7 +112,7 @@ TEST(straight_line)
   tray.AddModule("FFSource", "source");
   tray.AddModule("Nothing", "nothing");
   tray.AddModule("FFCounter", "counter");
-  tray.AddModule("TrashCan", "trash");
+  
   tray.Execute(12);
 
   ENSURE_EQUAL(counts["counter"][I3Frame::Geometry], 3u);
@@ -126,24 +128,24 @@ TEST(forked)
   
   tray.AddModule("FFSource", "source");
   tray.AddModule("Nothing", "nothing");
+  
+  std::vector<std::string> params = 
+    list_of("left")("middle")("right");
   tray.AddModule("Fork", "fork")
-    ("Outboxes", to_vector("left", "middle", "right"));
+    ("Outboxes", params);
 
   tray.AddModule("FFCounter", "counterleft");
   tray.AddModule("FFCounter", "counterright");
   tray.AddModule("FFCounter", "countermiddle");
-  tray.AddModule("TrashCan",  "trashleft");
-  tray.AddModule("TrashCan",  "trashmiddle");
-  tray.AddModule("TrashCan",  "trashright");
+  
+  
+  
 
   tray.ConnectBoxes("source", "OutBox", "nothing");
   tray.ConnectBoxes("nothing", "OutBox", "fork");
   tray.ConnectBoxes("fork", "left", "counterleft");
   tray.ConnectBoxes("fork", "right", "counterright");
   tray.ConnectBoxes("fork", "middle", "countermiddle");
-  tray.ConnectBoxes("counterleft", "OutBox", "trashleft");
-  tray.ConnectBoxes("counterright", "OutBox", "trashright");
-  tray.ConnectBoxes("countermiddle", "OutBox", "trashmiddle");
 
   tray.Execute(40);
 

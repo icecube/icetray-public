@@ -33,8 +33,8 @@
 #include <string>
 #include <fstream>
 
-#include <boost/archive/binary_iarchive.hpp>
-#include <boost/archive/binary_oarchive.hpp>
+#include <archive/binary_iarchive.hpp>
+#include <archive/binary_oarchive.hpp>
 
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
@@ -51,36 +51,45 @@ TEST_GROUP(iostreams);
 TEST(zero)
 {
   io::filtering_ostream fos;
+  const char * file = "sink";
 
-  io::file_sink fs("sink");
+  io::file_sink fs(file);
   fos.push(fs);
   for (unsigned i =0; i< 100000; i++)
     fos << "HI" << i << "\n";
   fos.flush();
+
+  remove(file);
 }  
 
 TEST(one)
 {
   io::filtering_ostream fos;
+  const char * file = "sink.gz";
 
-  io::file_sink fs("sink.gz");
+  io::file_sink fs(file);
   fos.push(io::gzip_compressor(9));
   fos.push(fs);
   
   for (unsigned i =0; i< 100000; i++)
     fos << "HI" << i << "\n";
   fos.flush();
+
+  remove(file);
 }  
 
 TEST(two)
 {
   io::filtering_ostream fos;
+  const char * file = "sinky.gz";
 
-  I3::dataio::open(fos, "sinky.gz");
+  I3::dataio::open(fos, file);
   
   for (unsigned i =0; i< 100000; i++)
     fos << "HI" << i << "\n";
   fos.flush();
+
+  remove(file);
 }  
 
 TEST(three)
@@ -98,106 +107,85 @@ TEST(three)
   io::filtering_istream fis;
   I3::dataio::open(fis, filename);
   bool r = rv->load(fis);
-  if (!r)
-    log_fatal("egh");
+  ENSURE(r, "egh, failed to load frame from file");
+
+  remove(filename.c_str());
 }
 
 TEST(i3int_only)
 {
   I3IntPtr ip(new I3Int(7777));
   I3FrameObjectPtr fop(ip);
+  const char * file = "i3int";
 
-  std::ofstream ofs("i3int", ios::binary);
+  std::ofstream ofs(file, ios::binary);
   {
-    boost::archive::portable_binary_oarchive boa(ofs);
+    icecube::archive::portable_binary_oarchive boa(ofs);
     boa << fop;
   }
   ofs.close();
   fop.reset();
   ip.reset();
 
-  std::ifstream ifs("i3int", ios::binary);
+  std::ifstream ifs(file, ios::binary);
   {
-    boost::archive::portable_binary_iarchive bia(ifs);
+    icecube::archive::portable_binary_iarchive bia(ifs);
     bia >> fop;
   }
   ip = boost::dynamic_pointer_cast<I3Int>(fop);
 
-  if (! ip )
-    log_fatal("egh, not ip");
-  
-  if (! ip->value == 7777)
-    log_fatal("egh wrong value");
+  ENSURE((bool)ip, "egh, not ip");
+  ENSURE_EQUAL(ip->value, 7777, "egh, wrong value");
+
+  remove(file);
 }
 
 TEST(vectorchar_only)
 {
+  const char * file = "vectorchar";
   vector<char> vc;
   for (char letter='A'; letter <= 'Z'; letter++)
     vc.push_back(letter);
 
-  std::ofstream ofs("vectorchar", ios::binary);
+  std::ofstream ofs(file, ios::binary);
   {
-    boost::archive::portable_binary_oarchive boa(ofs);
+    icecube::archive::portable_binary_oarchive boa(ofs);
     boa << vc;
   }
   ofs.close();
 
   vector<char> vc2;
   
-  std::ifstream ifs("vectorchar", ios::binary);
+  std::ifstream ifs(file, ios::binary);
   {
-    boost::archive::portable_binary_iarchive bia(ifs);
+    icecube::archive::portable_binary_iarchive bia(ifs);
     bia >> vc2;
   }
   for (int i=0; i<26; i++)
     ENSURE(vc2[i] == 'A' + i);
-}
 
-TEST(five)
-{
-  I3IntPtr ip(new I3Int(std::numeric_limits<int>::max()));
-  I3FrameObjectPtr fop(ip);
-
-  std::ofstream ofs("i3int", ios::binary);
-  {
-    boost::archive::portable_binary_oarchive boa(ofs);
-    boa << fop;
-  }
-  ofs.close();
-  fop.reset();
-  ip.reset();
-
-  std::ifstream ifs("i3int", ios::binary);
-  {
-    boost::archive::portable_binary_iarchive bia(ifs);
-    bia >> fop;
-  }
-  ip = boost::dynamic_pointer_cast<I3Int>(fop);
-
-  if (! ip )
-    log_fatal("egh, not ip");
-  
-  if (! ip->value == 777)
-    log_fatal("egh wrong value");
+  remove(file);
 }
 
 TEST(six)
 {
   I3Frame f;
+  const char * file = "framez.i3";
 
   f.Put("int", I3IntPtr(new I3Int(7474)));
 
-  std::ofstream ofs("framez.i3", ios::binary);
+  std::ofstream ofs(file, ios::binary);
   f.save(ofs);
   ofs.close();
 
   I3Frame f2;
-  std::ifstream ifs("framez.i3", ios::binary);
+  std::ifstream ifs(file, ios::binary);
 
   f2.load(ifs);
   
   I3IntConstPtr ip = f2.Get<I3IntConstPtr>("int");
-  assert (ip->value == 7474);
+
+  ENSURE_EQUAL(ip->value, 7474);
+  remove(file);
 }
 

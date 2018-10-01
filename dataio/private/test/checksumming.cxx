@@ -11,7 +11,7 @@
 
 #include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
-#include <dataclasses/I3Bool.h>
+#include <icetray/I3Bool.h>
 #include <dataclasses/I3Double.h>
 #include <dataclasses/physics/I3Particle.h>
 #include <icetray/I3Frame.h>
@@ -20,7 +20,7 @@
 #include <boost/preprocessor.hpp>
 #include <boost/lexical_cast.hpp>
 
-using namespace boost::archive;
+using namespace icecube::archive;
 using namespace std;
 using namespace boost::iostreams;
 
@@ -41,6 +41,8 @@ void test(I3Frame& frame, const std::string& filename)
     I3FramePtr newframe(new I3Frame);
     newframe->load(ifs);
   }
+
+  unlink(filename.c_str());
 }
 
 void loadframes(const std::string &where, unsigned nframes)
@@ -107,29 +109,15 @@ TEST(fail_reading_truncated_file)
   //  and it missed certain objects.  with v4 we have clean
   //  checksumming, but not when loading v3 files.
   //
-  try 
-    {
-      loadframes(string(getenv("I3_SRC")) 
-		 + "/dataio/resources/data/serialization/truncated_hundred_doubles-v4.i3.gz",1);
-      FAIL("that should have thrown");
-    } 
-  catch (...)
-    { 
-      // ok.  we caught something.
-    }
+  EXPECT_THROW(loadframes(string(getenv("I3_SRC")) 
+			  + "/dataio/resources/data/serialization/truncated_hundred_doubles-v4.i3.gz",1),
+	       "This should throw.");
 }  
   
 TEST(fail_reading_corrupted_file)
 {
-  try 
-    {
-      loadframes(string(getenv("I3_SRC"))
-		 + "/dataio/resources/data/serialization/corrupt_hundred_doubles-v4.i3.gz",1);
-      FAIL("that should have thrown");
-    }
-  catch (...) 
-    {
-      // ok.  we caught something.
-    }
+  EXPECT_THROW(loadframes(string(getenv("I3_SRC"))
+			  + "/dataio/resources/data/serialization/corrupt_hundred_doubles-v4.i3.gz",1),
+	       "This should throw.");
 }
 

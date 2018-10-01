@@ -22,6 +22,9 @@
 #ifndef I3TEST_H_INCLUDED
 #define I3TEST_H_INCLUDED
 
+#include <cmath>
+#include <string>
+#include <boost/version.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/shared_ptr.hpp>
@@ -31,20 +34,19 @@
 #include <stdexcept>
 #include <map>
 #include <set>
+#include <cmath>
 
 namespace fs = boost::filesystem;
 namespace I3Test {
-
-  using namespace std;
 
   typedef void (*voidfunc)();
 
   class I3TestException
   {
-    string message;
+    std::string message;
 
   public:
-    explicit I3TestException(const string& s) : message(s) { }
+    explicit I3TestException(const std::string& s) : message(s) { }
     virtual ~I3TestException() throw() { };
     virtual const char* what() const throw() { return message.c_str(); }
   };
@@ -52,38 +54,38 @@ namespace I3Test {
   struct test_failure : I3TestException
   {
     unsigned line;
-    string file, predicate, message;
+    std::string file, predicate, message;
 
-    test_failure(const string& file_, unsigned line_, 
-		 const string& predicate_, const string& message_ = "(none)"); 
+    test_failure(const std::string& file_, unsigned line_, 
+		 const std::string& predicate_, const std::string& message_ = "(none)"); 
   
     ~test_failure() throw() { } 
-    string to_string(const string &name) const;
+    std::string to_string(const std::string &name) const;
   };
 
   struct test_group 
   {
-    map<string, voidfunc> units;
-    map<string, boost::shared_ptr<test_failure> > failures;
-    set<string> successes;
+    std::map<std::string, voidfunc> units;
+    std::map<std::string, boost::shared_ptr<test_failure> > failures;
+    std::set<std::string> successes;
 
     void runtests(bool xml=false);
-    void run(const string &unit, bool xml = false);
-    void report(const string& group_name);
-    static void first(const string &s, const pair<string, voidfunc>& p); 
-    void list(const string& s);
+    void run(const std::string &unit, bool xml = false);
+    void report(const std::string& group_name);
+    static void first(const std::string &s, const std::pair<std::string, voidfunc>& p); 
+    void list(const std::string& s);
   };
 
   struct test_suite 
   {
-    map <string, test_group*>  groups;
+    std::map <std::string, test_group*>  groups;
 
     void runtests(bool xml=false);
     bool report();
-    static void first(const pair<string, test_group*>& p);
+    static void first(const std::pair<std::string, test_group*>& p);
     void list();
-    void make_dartfiles(const string& path);
-    void run(const string& s);
+    void make_dartfiles(const std::string& path);
+    void run(const std::string& s);
 
   };
 
@@ -93,9 +95,16 @@ namespace I3Test {
 #define FAIL(...) \
   I3Test::ensure(__FILE__,__LINE__,false,"FAIL",##__VA_ARGS__)
 
+#define EXPECT_THROW(CMD, MSG)			    \
+  try {                                             \
+    CMD;                                            \
+    FAIL(MSG);                \
+   }catch (const std::exception &e) {/* good. */}
+  
+  
   inline 
-  void ensure (const string& file, unsigned line, bool cond, const string& cond_txt,
-	       const string& msg = "unspecified")
+  void ensure (const std::string& file, unsigned line, bool cond, const std::string& cond_txt,
+	       const std::string& msg = "unspecified")
   {
     if (!cond)
       throw test_failure(file, line, cond_txt, msg);
@@ -109,15 +118,15 @@ namespace I3Test {
 
   template <typename LeftType, typename RightType, typename ResultType>
   inline
-  void ensure_distance (const string& file, unsigned line, 
-			const string& left_txt, const string& right_txt, const string& distance_txt,
+  void ensure_distance (const std::string& file, unsigned line, 
+			const std::string& left_txt, const std::string& right_txt, const std::string& distance_txt,
 			const LeftType& actual, const RightType& expected, const ResultType& distance,
-			const string& msg = "unspecified")
+			const std::string& msg = "unspecified")
 
   {
-    if (isnan(expected) || isnan(actual) || isnan(distance))
+    if (std::isnan(expected) || std::isnan(actual) || std::isnan(distance))
       {
-	stringstream ss;
+	std::stringstream ss;
 	ss << "ENSURE_DISTANCE(" << left_txt << ", " << right_txt << ", " << distance_txt
 	   << "): " << left_txt << " == " << actual
 	   << " " << right_txt << " == " << expected 
@@ -126,7 +135,7 @@ namespace I3Test {
       }
     if( expected-distance >= actual || expected+distance <= actual )
       {
-	stringstream ss;
+	std::stringstream ss;
 	ss << "ensure_distance: expected [" << expected-distance << ";" 
 	   << expected+distance << "] actual " << std::setprecision(16) << actual;
 	throw test_failure(file, line, ss.str(), msg);
@@ -142,14 +151,14 @@ namespace I3Test {
 
   template <typename LeftType, typename RightType>
   inline
-  void ensure_equal (const string& file, unsigned line, 
-		     const string& left_txt, const string& right_txt,
+  void ensure_equal (const std::string& file, unsigned line, 
+		     const std::string& left_txt, const std::string& right_txt,
 		     const LeftType& left, const RightType& right,
-		     const string& msg = "unspecified")
+		     const std::string& msg = "unspecified")
   {
     if(!(left == right))
       {
-	stringstream predstream;
+	std::stringstream predstream;
 	predstream << "ENSURE_EQUAL(" << left_txt << ", " << right_txt << "): "
 		   << left_txt << " == " << left << ", " 
 		  << right_txt << " == " << right;
@@ -161,12 +170,12 @@ namespace I3Test {
 
   struct test_registerer 
   {
-    test_registerer(const string& group, const string& unit, voidfunc f);
+    test_registerer(const std::string& group, const std::string& unit, voidfunc f);
   };
 
   struct group_registerer 
   {
-    group_registerer(test_group* group, const string& name);
+    group_registerer(test_group* group, const std::string& name);
   };
 
 #define TEST(TESTNAME)							\
@@ -178,15 +187,31 @@ namespace I3Test {
     static void local_test_routine_ ## TESTNAME() 
   
   /**
-     Creates the correct directory for temporary files to go in,
-     returns the full path. 
+     Creates "temporary" file and a directory to place it in. Temporary in
+     the sense that it is meant as a junk file for unit tests. It still
+     needs to be deleted by hand.
+     Returns the full path.
   */
 
-  std::string 
-  tempfile(const std::string& fname, const std::string& project = BOOST_PP_STRINGIZE(PROJECT));
+  const std::string 
+  testfile(const std::string& fname, const std::string& project = BOOST_PP_STRINGIZE(PROJECT));
 
 } 
 
+#if BOOST_VERSION > 104100
+#define TEST_GROUP(GROUPNAME)						\
+  namespace I3Test {							\
+      static test_group *local_test_group() {				\
+	static test_group group;					\
+	return &group;							\
+      }									\
+      namespace {							\
+	  static I3Test::group_registerer				\
+	  registerer(local_test_group(), fs::path(__FILE__).filename().string());	\
+	  static std::string group_name(fs::path(__FILE__).filename().string());		\
+      }									\
+  }
+#else
 #define TEST_GROUP(GROUPNAME)						\
   namespace I3Test {							\
       static test_group *local_test_group() {				\
@@ -196,8 +221,9 @@ namespace I3Test {
       namespace {							\
 	  static I3Test::group_registerer				\
 	  registerer(local_test_group(), fs::path(__FILE__).leaf());	\
-	  static string group_name(fs::path(__FILE__).leaf());		\
+	  static std::string group_name(fs::path(__FILE__).leaf());		\
       }									\
   }
+#endif
 
 #endif

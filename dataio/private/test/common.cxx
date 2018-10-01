@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: HasBool.cxx 7856 2005-05-20 17:43:47Z olivas $
+    $Id$
 
-    @version $Revision: 1.2 $
-    @date $Date: 2005-05-20 19:43:47 +0200 (Fri, 20 May 2005) $
+    @version $Revision$
+    @date $Date$
 
 */
 
@@ -15,18 +15,18 @@
 #include <icetray/I3Logging.h>
 
 #include <dataclasses/I3Direction.h>		
-#include <dataclasses/I3Bool.h>
+#include <icetray/I3Bool.h>
 #include <dataclasses/I3Double.h>
 #include <dataclasses/I3Position.h>
 #include <dataclasses/I3Time.h>
 #include <dataclasses/TriggerKey.h>
-#include <dataclasses/OMKey.h>
+#include <icetray/OMKey.h>
 
 #include "serialization-test.h"
 
 #include <boost/preprocessor.hpp>
 
-using namespace boost::archive;
+using namespace icecube::archive;
 using namespace std;
 
 TEST_GROUP(common);
@@ -36,11 +36,11 @@ TEST_GROUP(common);
   (I3Bool) \
   (I3Double) \
   (I3Position) \
-  (I3Time) \
-  (OMKey)
+  (I3Time)
 
 #define NON_I3FO_ITEMS \
-  (TriggerKey)
+  (TriggerKey)	       \
+  (OMKey)
   
 #define SERIALIZATION_TEST(r,data,t) SERIALIZE(t)
 

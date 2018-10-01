@@ -7,7 +7,9 @@
 #include "TestModule.h"
 #include "TestServiceFactory.h"
 
+#include <boost/assign/list_of.hpp>
 
+using boost::assign::list_of;
 
 TEST_GROUP(I3TrayTest);
 
@@ -20,8 +22,6 @@ TEST(normal_interface)
 {
   I3Tray tray;
   tray.AddModule<TestModule>("test");
-  tray.AddModule("TrashCan", "trash");
-
   tray.SetParameter("test","boolParam", true);
   tray.SetParameter("test","intParam", 54);
   tray.SetParameter("test","stringParam", "foobar");
@@ -42,34 +42,6 @@ TEST(normal_interface)
     
 }
 
-#if 0
-//#warning put this error checking back.  For now we do without it.
-T_EST(last_module_has_disconnected_outbox_0)
-{
-  I3Tray tray;
-  tray.AddModule<TestModule>("test1");
-  tray.AddModule<TestModule>("test2");
-
-  try {
-    tray.Execute(0);
-    FAIL("that should have complained about a disconnected outbox");
-  } catch (const std::exception& e) { }
-}
-
-
-T_EST(last_module_has_disconnected_outbox_1)
-{
-  I3Tray tray;
-  tray.AddModule("TestModule","test1");
-  tray.AddModule("TestModule","test2");
-
-  try {
-    tray.Execute(0);
-    FAIL("that should have complained about a disconnected outbox");
-  } catch (const std::exception& e) { }
-}
-#endif
-
 TEST(convenience_interface_0)
 {
   I3Tray tray;
@@ -78,7 +50,7 @@ TEST(convenience_interface_0)
     ("boolParam", (bool)true)
     ("intParam", (int)52)
     ("doubleParam", (double)4.14159)
-    ("stringParam", string("it puts the lotion in the basket"))
+    ("stringParam", std::string("it puts the lotion in the basket"))
     ("longParam", (long)68);
 
   tray.AddModule("TestModule", "test")
@@ -87,7 +59,7 @@ TEST(convenience_interface_0)
     ("doubleParam", (double)3.14159)
     ("stringParam", "it puts the lotion in the basket")
     ("longParam", (long)67);
-  tray.AddModule("TrashCan", "trash");
+  
 
   tray.Execute(0);
 
@@ -120,7 +92,7 @@ TEST(convenience_interface_1)
   tray.AddModule<TestModule>("test")
     ("boolParam", false)
     ("intParam", (int)99);
-  tray.AddModule("TrashCan", "trash");
+  
 
   tray.Execute(0);
 
@@ -137,14 +109,14 @@ TEST(default_convenience_connectboxes)
     ("boolParam", (bool)true)
     ("intParam", (int)52)
     ("doubleParam", (double)4.14159)
-    ("stringParam", string("it puts the lotion in the basket"))
+    ("stringParam", std::string("it puts the lotion in the basket"))
     ("longParam", (long)68);
 
   tray.AddModule<TestModule>("test")
     ("boolParam", false)
     ("intParam", (int)53)
     ("doubleParam", (double)3.14159)
-    ("stringParam", string("it puts the lotion in the basket"))
+    ("stringParam", std::string("it puts the lotion in the basket"))
     ("longParam", (long)67);
 
   tray.AddModule<TestModule>("test2")("boolParam", true);
@@ -152,70 +124,147 @@ TEST(default_convenience_connectboxes)
   tray.AddModule<TestModule>("test4")("boolParam", true);
   tray.AddModule<TestModule>("test5")("boolParam", true);
 
-  tray.AddModule("TrashCan", "trash");
+  
 
   tray.Execute(0);
-}
-
-TEST(missing_module_fails_correctly)
-{
-  I3Tray tray;
-
-  tray.AddModule("BottomlessSource", "source");
-  tray.AddModule("Fork", "fork")
-    ("Outboxes", to_vector("OutBox"));
-
-  tray.ConnectBoxes("source", "OutBox", "fork");
-
-  // up until the icetray-idlib module, this was a fail at Execute(0)
-  // time, not at Execute(1) time.  Tray sanity-checking needs
-  // improvement.
-  try {
-    tray.Execute(5);
-    FAIL("That should have thrown... attempt to connect Outbox to nothing");
-  } catch(const std::exception& e) {  
-    // ok
-  }
 }
 
 TEST(no_such_module)
 {
   I3Tray tray;
 
+  std::vector<std::string> params;
+
   tray.AddModule("BottomlessSource", "source");
+
+  params.push_back("OutBox");
+  params.push_back("BadBox");
   tray.AddModule("Fork", "fork")
-    ("Outboxes", to_vector("OutBox", "BadBox"));
+    ("Outboxes", params);
+
+  params.clear();
+  params.push_back("OutBox");
   tray.AddModule("Fork", "fork2")
-    ("Outboxes", to_vector("OutBox"));
+    ("Outboxes", params);
   tray.ConnectBoxes("source", "OutBox", "fork");
   tray.ConnectBoxes("fork", "OutBox", "fork2");
-  tray.ConnectBoxes("fork", "BadBox", "NoSuchModule");
 
   try {
-    tray.Execute(0);
+    tray.ConnectBoxes("fork", "BadBox", "NoSuchModule");
     FAIL("That should have thrown... attempt to connect Outbox to nonexistant module.");
   } catch(const std::exception& e) {  
     // ok
   }
 }
 
-#if 0
-T_EST(no_such_box)
+TEST(multiple_tray_create_destroy)
+{
+  {
+    I3Tray tray;
+    tray.AddModule("BottomlessSource", "source");
+    
+    tray.Execute(1);
+  }
+
+  {
+    I3Tray tray2;
+    tray2.AddModule("BottomlessSource", "source");
+    
+    tray2.Execute(1);
+  }
+
+}
+
+//A module with a simple side effect (incrementing a counter)
+//so that we can easily verify that it has been run.
+//It also stops the containing tray by calling RequestSuspension. 
+class SideEffectModule : public I3Module {
+public:
+  SideEffectModule(const I3Context& context) : I3Module(context) {
+    AddParameter("Life", "Number of iterations this module should survive", 0);
+  }
+  
+  void Configure() {
+    GetParameter("Life",life);
+  }
+  
+  void Process() {
+    counter++;
+    if(life){
+      life--;
+      if(!life)
+        RequestSuspension();
+    }
+  }
+  static unsigned int counter;
+  unsigned int life;
+};
+
+I3_MODULE(SideEffectModule);
+unsigned int SideEffectModule::counter=0;
+
+TEST(simultaneous_trays)
+{
+  SideEffectModule::counter=0;
+  I3Tray tray1, tray2;
+  tray1.AddModule("SideEffectModule", "counter1")("Life", 5);
+  tray2.AddModule("SideEffectModule", "counter2")("Life", 5);
+  
+  tray1.Execute();
+  ENSURE_EQUAL(SideEffectModule::counter,5u);
+  //after one tray has stopped due to a module requesting suspension
+  //another should still be able to run
+  tray2.Execute();
+  ENSURE_EQUAL(SideEffectModule::counter,10u);
+}
+
+TEST(anonymous_module)
 {
   I3Tray tray;
+  tray.AddModule("BottomlessSource");
+  tray.AddService("TestServiceFactory");
+  tray.Execute(1);
+}
 
-  tray.AddModule("BottomlessSource", "source");
-  tray.AddModule("TrashCan", "trash");
-  tray.AddModule("TrashCan", "trash2");
+namespace{
+  void simple_void_function(boost::shared_ptr<I3Frame>){}
+  bool simple_bool_function(boost::shared_ptr<I3Frame>){ return(true); }
+}
 
-  tray.ConnectBoxes("source", "OutBox", "trash");
-  tray.ConnectBoxes("source", "nosuchbox", "trash2");
+TEST(functions_as_modules){
+  I3Tray tray;
+  tray.AddModule("BottomlessSource");
+  //test using function pointers
+  tray.AddModule(&simple_void_function);
+  tray.AddModule(&simple_bool_function);
+  //test using lambdas
+#if BOOST_VERSION > 105500
+  tray.AddModule([](boost::shared_ptr<I3Frame>){});
+  tray.AddModule([](boost::shared_ptr<I3Frame>){ return(true); });
+#endif
+  tray.Execute(1);
+}
 
-  try {
-    tray.Execute(0);
-    FAIL("That should have thrown.");
-  } catch(const std::exception& e) {  
-    // ok
-  }
+namespace{
+  struct CountedFrameObject : public I3FrameObject{
+    static int count; ///< Count of living instances
+    CountedFrameObject(){ count++; }
+    ~CountedFrameObject(){ count--; }
+  };
+  int CountedFrameObject::count;
+}
+
+#if BOOST_VERSION > 105500
+TEST(no_survivors){
+  CountedFrameObject::count=0; //there are no objects
+  I3Tray tray;
+  tray.AddModule("BottomlessSource");
+  tray.AddModule([](boost::shared_ptr<I3Frame> f){
+    f->Put("dummy",boost::make_shared<CountedFrameObject>());
+  });
+  tray.Execute(100);
+  //Don't destroy the tray yet; that would definitely clean up all modules and
+  //fifos, masking any effective leaks they have.
+  ENSURE_EQUAL(CountedFrameObject::count,0,"No objects should remain");
 }
 #endif

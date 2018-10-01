@@ -1,7 +1,7 @@
 /**
  *  $Id$
  *  
- *  Copyright (C) 2007
+ *  Copyright (C) 2007, 2008, 2009
  *  Troy Straszheim <troy@icecube.umd.edu>
  *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
  *  
@@ -11,7 +11,7 @@
  *  (at your option) any later version.
  *  
  *  This program is distributed in the hope that it will be useful,
-n *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  
@@ -25,6 +25,7 @@ n *  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #include <icetray/I3Frame.h>
 #include <icetray/I3Logging.h>
 #include <icetray/I3Module.h>
+#include <archive/archive_exception.hpp>
 
 using namespace std;
 
@@ -35,7 +36,6 @@ class DeleteUnregistered : public I3Module
   DeleteUnregistered(const I3Context& context);
 
   virtual ~DeleteUnregistered();
-  void Configure();
   void Process();
 
  private:
@@ -52,14 +52,9 @@ I3_MODULE(DeleteUnregistered);
 
 DeleteUnregistered::DeleteUnregistered(const I3Context& context)
   : I3Module(context)
-{
-  AddOutBox("OutBox");
-}
+{}
 
 DeleteUnregistered::~DeleteUnregistered() 
-{ }
-
-void DeleteUnregistered::Configure()
 { }
 
 void DeleteUnregistered::Process()
@@ -69,17 +64,14 @@ void DeleteUnregistered::Process()
   vector<string> deleteme;
   for (I3Frame::typename_iterator iter = frame->typename_begin();
        iter != frame->typename_end();
-       iter++)
-    {
-      try {
-	I3FrameObjectConstPtr fop = frame->Get<I3FrameObjectConstPtr>(iter->first, true);
-      } catch (const std::exception& e) {
-	deleteme.push_back(iter->first);
-      }
-    }
+       iter++){
+    I3FrameObjectConstPtr fop = frame->Get<I3FrameObjectConstPtr>(iter->first);
+    if(!fop && frame->Has(iter->first))
+       deleteme.push_back(iter->first);
+  }
   for (unsigned i=0; i<deleteme.size(); i++)
     frame->Delete(deleteme[i]);
-  PushFrame(frame, "OutBox"); 
+  PushFrame(frame); 
 }
 
 

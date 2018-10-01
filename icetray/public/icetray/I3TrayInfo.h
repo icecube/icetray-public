@@ -47,6 +47,10 @@ struct I3TrayInfo : public I3FrameObject
   template <class Archive>
   void 
   serialize (Archive & ar, unsigned version);
+  
+  std::ostream& Print(std::ostream&) const override;
+
+  I3TrayInfo();
 
 };
 
@@ -55,7 +59,7 @@ operator<<(std::ostream& os, const I3TrayInfo& config);
 
 I3_DEFAULT_NAME(I3TrayInfo);
 I3_POINTER_TYPEDEFS(I3TrayInfo);
-BOOST_CLASS_VERSION(I3TrayInfo, 2);
+I3_CLASS_VERSION(I3TrayInfo, 2);
 #endif
 
 

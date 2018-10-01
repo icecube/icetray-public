@@ -1,10 +1,10 @@
 /**
    copyright  (C) 2004
    the icecube collaboration
-   $Id: I3LoggingTest.cxx 15877 2006-02-16 14:00:11Z troy $
+   $Id$
 
-   @version $Revision: 1.2 $
-   @date $Date: 2006-02-16 15:00:11 +0100 (Thu, 16 Feb 2006) $
+   @version $Revision$
+   @date $Date$
    @author troy d. straszheim <troy@resophonic.com>
 */
 
@@ -104,7 +104,7 @@ TEST(has)
   THROWS(c.Get<Cc>("constc"));
   c.Get<const Cc>("constc"); // doesnt throw
   ENSURE(!c.Get<CcPtr>("constc")); // returns null.  
-  ENSURE(c.Get<CcConstPtr>("constc")); // success
+  ENSURE((bool)c.Get<CcConstPtr>("constc")); // success
 
   ENSURE(!c.Has<Dd>("dplace"));
   ENSURE(!c.Has<const Dd>("dplace"));
@@ -143,7 +143,7 @@ TEST(has)
   ENSURE(c.Has<DdPtr>());
   ENSURE(!c.Has<DdConstPtr>());
   ENSURE(!c.Has<const DdConstPtr>());
-  ENSURE(c.Get<DdPtr>());
+  ENSURE((bool)c.Get<DdPtr>());
   ENSURE(!c.Get<DdConstPtr>());
 
   c.Get<Cc>();
@@ -170,7 +170,7 @@ TEST(has)
   THROWS(c.Get<Cc>("elsewhere"));
   THROWS(c.Get<bool>("boolio"));
 
-  shared_ptr<bool> spb(new bool);
+  boost::shared_ptr<bool> spb(new bool);
   
   c.Put(spb, "boolio");
   ENSURE(c.Has<bool>("boolio"));

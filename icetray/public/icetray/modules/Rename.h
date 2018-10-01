@@ -20,12 +20,12 @@
  *  
  */
 #ifndef ICETRAY_RENAME_H_INCLUDED
-#define ICETRAY_RENAME_H_INLCUDED
+#define ICETRAY_RENAME_H_INCLUDED
 
 #include <fstream>
 #include <string>
 #include <set>
-#include <icetray/I3Module.h>
+#include <icetray/I3ConditionalModule.h>
 #include <icetray/I3TrayHeaders.h>
 #include <icetray/I3Logging.h>
 
@@ -33,7 +33,7 @@
  *  Renames things in the frame.  Has special privileges granted by
  *  I3Frame.
  */
-class Rename : public I3Module
+class Rename : public I3ConditionalModule
 {
   Rename();
   Rename(const Rename&);
@@ -60,7 +60,6 @@ public:
 
   void Finish();
 
-  SET_LOGGER("Rename");
 };
 
 

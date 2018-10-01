@@ -10,7 +10,7 @@ class TestModule : public I3Module
   int intParam;
   double doubleParam;
   long longParam;
-  string stringParam;
+  std::string stringParam;
   bool boolParam;
 
  public:
@@ -28,13 +28,11 @@ class TestModule : public I3Module
       AddParameter("stringParam","",stringParam);
       longParam = 123123123;
       AddParameter("longParam","",longParam);
-      
-      AddOutBox("OutBox");
     }
 
   void Configure()
     {
-      log_debug(__PRETTY_FUNCTION__);
+      log_debug("%s",__PRETTY_FUNCTION__);
       GetParameter("boolParam",boolParam);
       GetParameter("intParam",intParam);
       GetParameter("doubleParam",doubleParam);
@@ -44,7 +42,7 @@ class TestModule : public I3Module
 
   void Process()
     {
-      log_debug(__PRETTY_FUNCTION__);
+      log_debug("%s",__PRETTY_FUNCTION__);
     }
 
   virtual ~TestModule()

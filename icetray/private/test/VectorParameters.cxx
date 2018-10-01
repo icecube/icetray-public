@@ -1,10 +1,10 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: ServicesAtDestruction.cxx 5468 2005-03-30 14:48:26Z pretz $
+ * $Id$
  *
- * @version $Revision: 1.3 $
- * @date $Date: 2005-03-30 16:48:26 +0200 (Wed, 30 Mar 2005) $
+ * @version $Revision$
+ * @date $Date$
  * @author troy d. straszheim
  *
  * This tests that the global GetService<> works; that the underlying
@@ -23,24 +23,17 @@ using namespace boost::assign;
 
 TEST_GROUP(VectorParameters);
 
-//static vector<bool> boolvec_param;
-static vector<int> intvec_param;
-static vector<unsigned long> ulongvec_param;
-static vector<double> doublevec_param;
-static vector<string> stringvec_param;
+static std::vector<int> intvec_param;
+static std::vector<unsigned long> ulongvec_param;
+static std::vector<double> doublevec_param;
+static std::vector<std::string> stringvec_param;
 static OMKey omkey_param;
-static vector<OMKey> omkeyvec_param;
+static std::vector<OMKey> omkeyvec_param;
 
 struct VectorParamsTestModule : I3Module
 {
   VectorParamsTestModule(const I3Context& context) : I3Module(context) 
   { 
-    AddOutBox("OutBox");
-
-//    boolvec_param.clear();
-//    boolvec_param += true, false, true, true, true, false;
-//    AddParameter("boolvec_param", "vector of bools", boolvec_param);
-
     intvec_param.clear();
     intvec_param += 0,1,2,3,4,5,6,7,8,9; 
     AddParameter("intvec_param", "vector of ints", intvec_param);
@@ -64,7 +57,6 @@ struct VectorParamsTestModule : I3Module
 
   virtual void Configure() 
   { 
-    //    GetParameter("boolvec_param", boolvec_param);
     GetParameter("intvec_param", intvec_param);
     GetParameter("doublevec_param", doublevec_param);
     GetParameter("ULongVec_Param", ulongvec_param);
@@ -74,9 +66,9 @@ struct VectorParamsTestModule : I3Module
 
   virtual void Process() 
   { 
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     I3FramePtr frame(new I3Frame(I3Frame::Physics));
-    PushFrame(frame, "OutBox");
+    PushFrame(frame);
   }
 };
 
@@ -84,13 +76,12 @@ I3_MODULE(VectorParamsTestModule);
 
 TEST(dumb_strings)
 {
-  vector<string> stringv;
+  std::vector<std::string> stringv;
   stringv += "c0", "c1", "c2";
   stringvec_param.clear();
   I3Tray tray;
-  tray.AddModule("VectorParamsTestModule", "vpt")
+  tray.AddModule("VectorParamsTestModule")
     ("stringvec_param", stringv);
-  tray.AddModule("TrashCan", "tc");
   tray.Execute(0);
 
   ENSURE_EQUAL(stringvec_param.size(), 3u);
@@ -101,7 +92,7 @@ TEST(dumb_strings)
 
 TEST(leading_trailing_and_embedded_whitespace)
 {
-  vector<string> stringv;
+  std::vector<std::string> stringv;
   stringvec_param.clear();
   stringv += " leadingspace", 
     "trailingspace ", 
@@ -112,9 +103,8 @@ TEST(leading_trailing_and_embedded_whitespace)
     ".. \t\n .. \r\n\t ..";
 
   I3Tray tray;
-  tray.AddModule("VectorParamsTestModule", "vpt")
+  tray.AddModule("VectorParamsTestModule")
     ("stringvec_param", stringv);
-  tray.AddModule("TrashCan", "tc");
   tray.Execute(0);
 
   ENSURE_EQUAL(stringvec_param.size(), stringv.size());

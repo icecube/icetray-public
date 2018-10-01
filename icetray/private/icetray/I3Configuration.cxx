@@ -24,7 +24,7 @@
 #include <icetray/I3ConfigurationImpl.h>
 
 #include <icetray/serialization.h>
-#include <boost/serialization/scoped_ptr.hpp>
+#include <serialization/scoped_ptr.hpp>
 
 #include <icetray/Utility.h>
 
@@ -41,6 +41,14 @@ using namespace std;
 I3Configuration::I3Configuration() :
   impl_(new I3ConfigurationImpl)
 { }
+
+I3Configuration::I3Configuration(const I3Configuration &old) :
+  impl_(new I3ConfigurationImpl(*old.impl_))
+{ }
+
+I3Configuration &
+I3Configuration::operator = (const I3Configuration &old)
+{ impl_.reset(new I3ConfigurationImpl(*old.impl_)); return *this; }
 
 I3Configuration::~I3Configuration() 
 { }
@@ -78,10 +86,10 @@ I3Configuration::Get(const string& name_) const
   return impl_->Get(name_);
 }
 
-void
-I3Configuration::Connect(const std::string& boxname, const std::string& modulename)
+std::string
+I3Configuration::GetDescription(const string& name_) const
 {
-  return impl_->Connect(boxname, modulename);
+  return impl_->GetParameter(name_).description();
 }
 
 template <typename Archive>
@@ -123,7 +131,7 @@ void
 I3Configuration::ClassName(const std::string& s) 
 { 
   log_trace("ClassName: %s", s.c_str());
-  assert(!s.empty());
+  i3_assert(!s.empty());
   impl_->ClassName(s); 
 }
 
@@ -137,13 +145,6 @@ I3Configuration::InstanceName(const std::string& s)
 {
   impl_->InstanceName(s);
 }
-
-
-const std::map<std::string, std::string>& 
-I3Configuration::Outboxes() const
-{
-  return impl_->outboxes;
-};
 
 std::vector<std::string>
 I3Configuration::keys() const

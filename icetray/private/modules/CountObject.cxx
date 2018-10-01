@@ -38,8 +38,6 @@ CountObject::CountObject(const I3Context& context) :
   expected_(0),
   seen_(0)
 {
-  AddOutBox("OutBox");
-
   AddParameter("where", "where to count frame objects", where_);
   AddParameter("expected", "expected count of objects at this location", expected_);
 }
@@ -54,25 +52,25 @@ CountObject::Configure()
 void CountObject::Physics(I3FramePtr frame)
 {
   if (frame->Has(where_)) seen_++;
-  PushFrame(frame,"OutBox");
+  PushFrame(frame);
 }
 
 void CountObject::DetectorStatus(I3FramePtr frame)
 {
   if (frame->Has(where_)) seen_++;
-  PushFrame(frame,"OutBox");
+  PushFrame(frame);
 }
 
 void CountObject::Geometry(I3FramePtr frame)
 {
   if (frame->Has(where_)) seen_++;
-  PushFrame(frame,"OutBox");
+  PushFrame(frame);
 }
 
 void CountObject::Calibration(I3FramePtr frame)
 {
   if (frame->Has(where_)) seen_++;
-  PushFrame(frame,"OutBox");
+  PushFrame(frame);
 }
 
 void

@@ -44,6 +44,9 @@ public:
   void
   serialize(Archive & ar, unsigned version);
 
+  ///Print a human-readable representation of the object
+  ///\param os the stream to which the representation is written
+  virtual std::ostream& Print(std::ostream& os) const;
 };
 
 I3_POINTER_TYPEDEFS(I3FrameObject);

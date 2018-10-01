@@ -36,8 +36,6 @@ I3_MODULE(FrameCheck);
 FrameCheck::FrameCheck(const I3Context& context) : 
   I3Module(context)
 {
-  AddOutBox("OutBox");
-
   insert(keys_)
     (I3Frame::Physics, predicates())
     (I3Frame::Geometry, predicates())
@@ -119,15 +117,15 @@ void FrameCheck::CheckFrameForKeys(I3FramePtr frame,
   BOOST_FOREACH(string key, keys_[stream].has)
     {
       if(!frame->Has(key))
-	log_fatal("Frame on stream %s doesn't contain key %s, which it must.",
-		  stream.str().c_str(), key.c_str());
+	log_fatal("%s: Frame on stream %s doesn't contain key %s, which it must.",
+		  GetName().c_str(), stream.str().c_str(), key.c_str());
     }
 
   BOOST_FOREACH(string key, keys_[stream].hasnt)
     {
       if(frame->Has(key))
-	log_fatal("Frame on stream %s contains key %s, which it must not.",
-		  stream.str().c_str(), key.c_str());
+	log_fatal("%s: Frame on stream %s contains key %s, which it must not.",
+		  GetName().c_str(), stream.str().c_str(), key.c_str());
     }
 
 

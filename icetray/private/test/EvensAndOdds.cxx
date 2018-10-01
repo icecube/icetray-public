@@ -14,9 +14,12 @@ public:
 
   OddCan(const I3Context& context) : I3Module(context) { }
 
+  void Configure()
+  { }
+
   void Physics(I3FramePtr frame)
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     const I3Int& data = frame->Get<I3Int>("myint");
     ENSURE(data.value % 2 != 0);
   }
@@ -33,9 +36,12 @@ public:
 
   EvenCan(const I3Context& context) : I3Module(context) { }
 
+  void Configure()
+  { }
+
   void Physics(I3FramePtr frame)
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     const I3Int& data = frame->Get<I3Int>("myint");
     ENSURE(data.value % 2 == 0);
   }
@@ -49,14 +55,14 @@ class IntSorter : public I3Module
 public:
   IntSorter(const I3Context& context) : I3Module(context)
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     AddOutBox("Evens");
     AddOutBox("Odds");
   }
 
   void Physics(I3FramePtr frame)
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     const I3Int& data = frame->Get<I3Int>("myint");
     if(data.value % 2 == 0)
       PushFrame(frame,"Evens");
@@ -79,7 +85,6 @@ TEST(a_evens_and_odds_to_different_modules)
   tray.ConnectBoxes("sorter","Odds","oddcan");
 
   tray.Execute(1000);
-  tray.Finish();
 }
 
 // puts evens in one outbox, odds in the other.
@@ -88,8 +93,7 @@ class AddsNullsToFramesWithOddInts : public I3Module
 public:
   AddsNullsToFramesWithOddInts(const I3Context& context) : I3Module(context)
   {
-    log_trace(__PRETTY_FUNCTION__);
-    AddOutBox("OutBox");
+    log_trace("%s",__PRETTY_FUNCTION__);
   }
 
   bool ShouldDoPhysics(I3FramePtr frame)
@@ -102,7 +106,7 @@ public:
   // myint.value
   void Physics(I3FramePtr frame)
   {
-    log_trace(__PRETTY_FUNCTION__);
+    log_trace("%s",__PRETTY_FUNCTION__);
     frame->Put("oddone", I3FrameObjectPtr());
     PushFrame(frame);
   }
@@ -111,7 +115,7 @@ I3_MODULE(AddsNullsToFramesWithOddInts);
 
 TEST(b_add_nulls_via_should_do_physics)
 {
-  vector<string> odd_musthave_vec, even_mustnothave_vec;
+  std::vector<std::string> odd_musthave_vec, even_mustnothave_vec;
   odd_musthave_vec.push_back("myint");
   odd_musthave_vec.push_back("oddone");
   even_mustnothave_vec.push_back("oddone");
@@ -148,6 +152,5 @@ TEST(b_add_nulls_via_should_do_physics)
   tray.ConnectBoxes("oddcount", "OutBox", "oddcan");
 
   tray.Execute(1000);
-  tray.Finish();
 
 }

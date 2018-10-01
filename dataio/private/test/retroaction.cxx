@@ -1,10 +1,10 @@
 /**
    copyright  (C) 2004
    the icecube collaboration
-   $Id: HasBool.cxx 7856 2005-05-20 17:43:47Z olivas $
+   $Id$
 
-   @version $Revision: 1.2 $
-   @date $Date: 2005-05-20 19:43:47 +0200 (Fri, 20 May 2005) $
+   @version $Revision$
+   @date $Date$
 
 */
 
@@ -16,11 +16,12 @@
 #include <icetray/Utility.h>
 
 #include "serialization-test.h"
+#include "dataio-test.h"
 
 #include <boost/preprocessor.hpp>
 #include <boost/foreach.hpp>
 
-using namespace boost::archive;
+using namespace icecube::archive;
 using namespace std;
 
 TEST_GROUP(retroaction);
@@ -28,14 +29,20 @@ TEST_GROUP(retroaction);
 TEST(read)
 {
   vector<string> i3files;
-  string ports = getenv("I3_SRC");
-  glob((ports + "/dataio/resources/data/serialization/*/*.i3").c_str(), i3files);
+  string ports = GetDataDir();
+
+  glob((ports + "/serialization/*/*.i3").c_str(), i3files);
   ENSURE(i3files.size() != 0);
   BOOST_FOREACH(const string& s, i3files)
     {
       log_info("%s", s.c_str());
       I3FramePtr fp = load_i3_file(s);
-      ENSURE(fp);
+      ENSURE((bool)fp);
+	
       cout << "From " << s << ":\n" << *fp << "\n";
+      for (I3Frame::const_iterator iter = fp->begin();
+	   iter != fp->end();
+	   iter++)
+	cout << iter->first << " deserialized\n";
     }
 }

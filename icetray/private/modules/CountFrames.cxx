@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
-#include <icetray/I3Module.h>
+#include <icetray/I3ConditionalModule.h>
 #include <icetray/I3Frame.h>
 #include <icetray/Utility.h>
 
@@ -28,7 +28,7 @@
  * @brief An icetray module which will check whether a configurable
  * set of frame elements is (or is not) present on each stream.
  */
-class CountFrames : public I3Module
+class CountFrames : public I3ConditionalModule
 {
  public:
   CountFrames(const I3Context& context);
@@ -56,11 +56,10 @@ using namespace std;
 I3_MODULE(CountFrames);
 
 CountFrames::CountFrames(const I3Context& context) : 
-  I3Module(context)
+  I3ConditionalModule(context)
 {
-  AddOutBox("OutBox");
-
   insert(required_framecounts_)
+    (I3Frame::DAQ, 0)
     (I3Frame::Physics, 0)
     (I3Frame::Geometry, 0)
     (I3Frame::DetectorStatus, 0)

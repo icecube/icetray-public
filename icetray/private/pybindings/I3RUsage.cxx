@@ -1,7 +1,7 @@
  //
 //   Copyright (c) 2004, 2005, 2006, 2007   Troy D. Straszheim  
 //   
-//   $Id: ithon.cxx 25598 2006-11-25 02:52:57Z troy $
+//   $Id$
 //
 //   This file is part of IceTray.
 //
@@ -20,6 +20,7 @@
 //
 
 #include <icetray/I3PhysicsTimer.h>
+#include <icetray/python/boost_serializable_pickle_suite.hpp>
 
 using namespace boost::python;
 
@@ -29,6 +30,7 @@ void register_I3RUsage()
     .def_readwrite("SystemTime",&I3RUsage::systemtime)
     .def_readwrite("UserTime",&I3RUsage::usertime)
     .def_readwrite("WallClockTime", &I3RUsage::wallclocktime)
+    .def_pickle(boost_serializable_pickle_suite<I3RUsage>())
     ;
 
   register_pointer_conversions<I3RUsage>();

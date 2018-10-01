@@ -9,9 +9,9 @@
  Joules
 
  Modified 2-17-04 by John Pretz from a Geant4 header
- @version $Id: I3Units.h 14493 2006-01-18 16:52:24Z bchristy $
+ @version $Id$
  @file I3Units.h  
- @date $Date: 2006-01-18 17:52:24 +0100 (Wed, 18 Jan 2006) $
+ @date $Date$
  
  Also removed everything but Time, Energy, Length, Angle, Areas and Volumes.
  Pressure, Power, stuff like that is not done, since the redefinition of
@@ -20,24 +20,24 @@
  Here's the original Geant4 header:
  
 <b>
- DISCLAIMER                                                       
- 
+ DISCLAIMER
+
  The following disclaimer summarizes all the specific disclaimers 
  of contributors to this software. The specific disclaimers,which 
- govern, are listed with their locations in:                      
- http://cern.ch/geant4/license                                  
+ govern, are listed with their locations in:
+ http://cern.ch/geant4/license
  
  Neither the authors of this software system, nor their employing 
  institutes,nor the agencies providing financial support for this 
  work  make  any representation or  warranty, express or implied, 
  regarding  this  software system or assume any liability for its 
- use.                                                             
- 
+ use.
+
  This  code  implementation is the  intellectual property  of the 
- GEANT4 collaboration.                                            
+ GEANT4 collaboration.
  By copying,  distributing  or modifying the Program (or any work 
  based  on  the Program)  you indicate  your  acceptance of  this 
- statement, and all its terms.                                    
+ statement, and all its terms.
 </b>
 */
 /**
@@ -51,14 +51,14 @@
  * 
  * The basic units are those of the International System:<br>
  *                                                       <br>
- *  		meter                                    <br>            
- * 		second                                   <br>
- * 		kilogram                                 <br>   
- * 		ampere                                   <br>
- * 		degree kelvin                            <br>
+ *              meter                                    <br>
+ *              second                                   <br>
+ *              kilogram                                 <br>
+ *              ampere                                   <br>
+ *              kelvin                                   <br>
  *              the amount of substance (mole)           <br>
  *              luminous intensity      (candela)        <br>
- * 		radian                                   <br>
+ *              radian                                   <br>
  *              steradian                                <br>
  *<br>
  *
@@ -76,21 +76,31 @@
  *
  *      .....
  *      readvoltage = myContainerPtr->GetVoltage()/I3Units::V;
- * 
+ *
  * @version $Version:$
- * @date $Date: 2006-01-18 17:52:24 +0100 (Wed, 18 Jan 2006) $
+ * @date $Date$
  * @author Geant4 Team (original) M.Maire, S.Giani
  * @author pretz (IceCube modifications)
  * @todo Should we have a 'speed' here too?
  * @todo add 'ergs'
  */
+
+#include <cmath>
+
+#if defined(__CINT__) && defined(__MAKECINT__)
+#include <TMath.h>
+
+#define M_PI TMath::Pi()
+#define M_E  TMath::E()
+#endif
+
 namespace I3Units
 {
   /**
    * meter
    */
   static const double meter  = 1.;
-  
+
   /**
    * square meter
    */
@@ -100,7 +110,7 @@ namespace I3Units
    * cubic meter
    */
   static const double meter3 = meter*meter*meter;
-  
+
   /**
    * millimeter
    */ 
@@ -115,11 +125,11 @@ namespace I3Units
    * cubic millimeter
    */
   static const double millimeter3 = millimeter*millimeter*millimeter;
-  
+
   /**
    * centimeter
    */
-  static const double centimeter  = 10.*millimeter;   
+  static const double centimeter  = 10.*millimeter;
 
   /**
    * square centimeter
@@ -130,11 +140,11 @@ namespace I3Units
    * cubic centimeter
    */
   static const double centimeter3 = centimeter*centimeter*centimeter;
-  
+
   /**
    * kilometer
    */
-  static const double kilometer = 1000.*meter;                   
+  static const double kilometer = 1000.*meter;
 
   /**
    * square kilometer
@@ -145,16 +155,16 @@ namespace I3Units
    * cubic kilometer
    */
   static const double kilometer3 = kilometer*kilometer*kilometer;
-  
+
   /**
    * parsec
    */
   static const double parsec = 3.0856775807e+16*meter;
-  
+
   /**
    * micrometer
    */
-  static const double micrometer = 1.e-6 *meter;             
+  static const double micrometer = 1.e-6 *meter;
 
   /**
    * nanometer
@@ -170,7 +180,7 @@ namespace I3Units
    * fermi
    */
   static const double fermi     = 1.e-15*meter;
-  
+
   /**
    * barn
    */
@@ -195,17 +205,17 @@ namespace I3Units
    * picobarn
    */
   static const double picobarn = 1.e-12*barn;
-  
+
   /**
    * feet
    */
   static const double feet = 0.3048*meter;
-  
+
   // symbols
   /**
    * millimeter
    */
-  static const double mm  = millimeter;                        
+  static const double mm  = millimeter;
 
   /**
    * square millimeter
@@ -216,11 +226,11 @@ namespace I3Units
    * cubic millimeter
    */
   static const double mm3 = millimeter3;
-  
+
   /**
    * centimeter
    */
-  static const double cm  = centimeter;   
+  static const double cm  = centimeter;
 
   /**
    * square centimeter
@@ -231,11 +241,11 @@ namespace I3Units
    * cubic centimeter
    */
   static const double cm3 = centimeter3;
-  
+
   /**
    * meter
    */
-  static const double m  = meter;                  
+  static const double m  = meter;
 
   /**
    * square meter
@@ -246,11 +256,11 @@ namespace I3Units
    * cubic meter
    */
   static const double m3 = meter3;
-  
+
   /**
    * kilometer
    */
-  static const double km  = kilometer;                   
+  static const double km  = kilometer;
 
   /**
    * square kilometer
@@ -261,25 +271,25 @@ namespace I3Units
    * cubic kilometer
    */
   static const double km3 = kilometer3;
-  
+
   /**
    * parsec
    */
   static const double pc = parsec;
-  
+
   /**
    * feet
    */
   static const double ft = feet;
-  
+
   //
   // Angle
   //
   /**
    * radian
    */
-  static const double radian      = 1.;                  
-  
+  static const double radian      = 1.;
+
   /**
    * milliradian
    */
@@ -288,18 +298,18 @@ namespace I3Units
   /**
    * degree
    */
-  static const double degree = (3.14159265358979323846/180.0)*radian;
-  
+  static const double degree = (M_PI/180.0)*radian;
+
   /**
    * steradian
    */
   static const double   steradian = 1.;
-  
+
   // symbols
   /**
    * radian
    */
-  static const double rad  = radian;	
+  static const double rad  = radian;
 
   /**
    * milliradian
@@ -315,7 +325,7 @@ namespace I3Units
    * degree
    */
   static const double deg  = degree;
-  
+
   //
   // Time [T]
   //
@@ -323,11 +333,6 @@ namespace I3Units
    * second
    */
   static const double second      = 1.e9;
-
-  /**
-   * nanosecond
-   */
-  static const double nanosecond  = 1.e-9 *second;
 
   /**
    * millisecond
@@ -338,6 +343,11 @@ namespace I3Units
    * microsecond
    */
   static const double microsecond = 1.e-6 *second;
+
+  /**
+   * nanosecond
+   */
+  static const double nanosecond  = 1.e-9 *second;
 
   /**
    * picosecond
@@ -362,14 +372,14 @@ namespace I3Units
 
   /**
    * Gregorian Year
-   */ 
-  static const double gregoianyear = 365.2425*day;
+   */
+  static const double gregorianyear = 365.2425*day;
 
   /**
    * Julian Year
-   */ 
+   */
   static const double julianyear = 365.25*day;
-   
+
   /**
    * hertz
    */
@@ -384,12 +394,12 @@ namespace I3Units
    * megahertz
    */
   static const double megahertz = 1.e+6*hertz;
-  
+
   // symbols
   /**
    * nanosecond
    */
-  static const double ns = nanosecond;			
+  static const double ns = nanosecond;
 
   /**
    * second
@@ -400,15 +410,10 @@ namespace I3Units
    * millisecond
    */
   static const double ms = millisecond;
-  
+
   //
   // Energy [E]
   //
-  /**
-   * joule
-   */
-  //  static const double joule = kg*m*m/(s*s);
-  
   /**
    * eV
    */
@@ -438,7 +443,7 @@ namespace I3Units
    * PeV
    */
   static const double petaelectronvolt = 1.e+15*electronvolt;
-  
+
   // symbols
   /**
    * MeV
@@ -469,56 +474,65 @@ namespace I3Units
    * PeV
    */
   static const double PeV = petaelectronvolt;
-   
+
   //
   // Charge
   //
   /**
    * Charge
    */
-   static const double eplus = 1.;		   // positron charge
-   static const double eSI   = 1.602176462e-19;  // positron charge in coulomb  
-   
+   static const double eplus = 1.;               // positron charge
+   static const double eSI   = 1.602176462e-19;  // positron charge in coulomb
+
   /**
    * Coulomb
    */ 
    static const double coulomb = eplus/eSI;      // coulomb = 6.24150e18*eplus 
    static const double C = coulomb;
-    
+
   /**
    * Picocoulomb
    */
    static const double picocoulomb = 1.e-12*coulomb;
    static const double pC = picocoulomb;
-  
+
+
+  //
+  // Energy in joule
+  //
+  /**
+   * joule
+   */
+  static const double joule = electronvolt/eSI;  // joule = 6.24150 e+12 * MeV;
+
   //
   // Current
   //
-  /* 
+  /*
    * Ampere
    */
    static const double ampere = coulomb/second;  // ampere = 6.24150 e+9 * eplus/ns
    static const double A = ampere;
-    
-  /* 
+
+  /*
    * Milliampere
    */
    static const double milliampere = 1.e-3*ampere;
    static const double mA = milliampere;
-    
-  /* 
+
+  /*
    * Nanoampere
    */
    static const double nanoampere = 1.e-9*ampere;
    static const double nA = nanoampere;
-    
+
   //
   // Voltage
   //
+
   /**
    * Millivolt
    */
-  //static const double millivolt = 1.;
   static const double millivolt = (electronvolt*1.e-3)/eplus;
   static const double mV = millivolt;
 
@@ -529,16 +543,17 @@ namespace I3Units
   static const double V = volt;
 
   /**
+   * Microvolt
+   */
+  static const double microvolt = 1.e-6 * volt;
+
+  /**
    * Kilovolt
    */
   static const double kilovolt = 1.e3 * volt;
   static const double kV = kilovolt;
 
-  /**
-   * Microvolt
-   */
-  static const double microvolt = 1.e-6 * volt;
- 
+
   //
   // Resistance
   //
@@ -550,11 +565,46 @@ namespace I3Units
     //
     // Temperature
     //
-    /** 
+    /**
      * Kelvin
-     */ 
+     */
     static const double kelvin = 1.0;
-    
+
+    //
+    // Mass [E][T^2][L^-2]
+    //
+    /**
+     * Kilogram
+     */
+    static const double kilogram = joule*second*second/(meter*meter);
+    static const double kg = kilogram;
+
+    /**
+     * Gram
+     */
+    static const double gram = 1.e-3*kilogram;
+    static const double g = gram;
+
+    /**
+     * Milligram
+     */
+    static const double milligram = 1.e-3*gram;
+    static const double mg = milligram;
+
+    /**
+     * Force
+     */
+    static const double newton = joule / meter;
+
+    /**
+     * Pressure
+     */
+    static const double pascal = newton / (meter * meter);
+    static const double bar = 1.e5 * pascal;
+    static const double millipascal = 1.e-3 * pascal;
+    static const double micropascal = 1.e-6 * pascal;
+    static const double nanopascal = 1.e-9 * pascal;
+
 
   //
   // Miscellaneous
@@ -573,8 +623,8 @@ namespace I3Units
    * perMillion
    */
   static const double perMillion  = 0.000001;
-  
+
 };
 
-#endif 
+#endif
 

@@ -34,8 +34,6 @@ to get random numbers and put them into the frame inside an :class:`I3Double`:
       AddParameter("PutWhere",
 		   "where the doubles go",
 		   dest_key_);
-
-      AddOutBox("OutBox");
     }
 
     void Configure()
@@ -134,8 +132,6 @@ the :class:`UseRandom` module above to take this service via parameter:
        AddParameter("PutWhere",
 		    "where the doubles go",
 		    key);
-
-       AddOutBox("OutBox");
      }
 
      void Configure()
@@ -176,6 +172,57 @@ here,
 * Configuration is shorter
 * There is no 'servicefactory' involved.
 
+New in icetray version 11-01-01 to ease with this transition: many modules will still need
+to maintain the functionality to get some services from the context and also as a parameter.
+You might expect, if you don't explicitly pass a pointer to a service, after the call to GetParameter ``rs``
+(in the example above) should remain uninitialized as a NULL pointer (i.e. the same value it was
+when it was "Add"ed).  This was, in fact, not the case and would throw an error.  Python didn't 
+know how to convert the ``NoneType`` object.  In general it's not clear, but when you have ``None`` 
+on the python side and are expecting a shared pointer it's perfectly reasonable to convert that 
+to NULL pointer.  So now you can decide how to handle that in the code.  Here's an example:
+
+.. code-block:: cpp
+
+   class UseRandom : public I3Module
+   {
+     I3RandomServicePtr rs;
+     std::string key;
+
+    public:
+
+     UseRandom(const I3Context& ctx) : I3Module(ctx)
+     {
+       AddParameter("I3RandomService",           //  not 'key' anymore, not a string
+		    "my random service",
+		    rs);
+
+       AddParameter("PutWhere",
+		    "where the doubles go",
+		    key);
+     }
+
+     void Configure()
+     {
+       GetParameter("I3RandomService", rs);       // Get a randomservice right from the tray
+       if(!rs){
+        // This script is still using the old method and has loaded the service
+	// with a Factory.  Without the change to I3Configuration
+	// the above call to GetParameter would have thrown an error.
+	rs = ctx_.Get<I3RandomServicePtr>()
+       }
+       log_debug("rndserv is at %p", rs.get());
+       GetParameter("PutWhere", key);
+     }
+
+     void Physics(I3FramePtr frame)
+     {
+       log_debug("rndserv is at %p", rs.get());
+       double d = rs->Gaus(0, 1);
+       I3DoublePtr dp(new I3Double(d));
+       frame->Put(key, dp);
+       PushFrame(frame);
+     }
+   };
 
 Using services from python modules
 ----------------------------------
@@ -260,7 +307,7 @@ I3RandomService:
        def Gaus(self, mean, stddev):
 	   return self.value
 
-The python implmentation inherits from the abstract base class which
+The python implementation inherits from the abstract base class which
 forms the interface: exactly the same as in C++.  
     
 Putting this class into a file MyServices.py, you can instantiate 

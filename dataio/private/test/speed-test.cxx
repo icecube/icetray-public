@@ -12,7 +12,7 @@
 
 #include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
-#include <dataclasses/I3Bool.h>
+#include <icetray/I3Bool.h>
 #include <dataclasses/I3Double.h>
 #include <dataclasses/physics/I3Particle.h>
 #include <dataclasses/physics/I3Waveform.h>
@@ -26,7 +26,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-using namespace boost::archive;
+using namespace icecube::archive;
 using namespace std;
 using namespace boost::iostreams;
 
@@ -35,7 +35,7 @@ namespace dataio = I3::dataio;
 TEST_GROUP(performance);
 I3_SERIALIZABLE(I3Vector<I3Vector<char> >);
 
-namespace ar = boost::archive;
+namespace ar = icecube::archive;
 
 
 //
@@ -160,15 +160,16 @@ void test_iostreams(I3Frame& frame, const std::string& filename, unsigned ntimes
   cout << "\n  Frame read and contents inspected " << ntimes 
        << " times (" << ss.st_size << " bytes) in " << stop-start << " seconds. "
        << " (" << ((stop > start) ? ss.st_size/(stop-start)/megs : std::numeric_limits<double>::max()) << " Mb/sec)" << endl;
+
+  unlink(filename.c_str());
 }
 
 TEST(d_fiftyevents)
 {
   I3FramePtr fr = make_frame();
-#ifdef I3_OPTIMIZE
+#ifdef NDEBUG
   test_iostreams(*fr, "polesimulation.i3", 250);
 #else
   test_iostreams(*fr, "polesimulation.i3", 3);
 #endif
 }
-

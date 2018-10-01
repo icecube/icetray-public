@@ -1,0 +1,130 @@
+#!/bin/sh
+#
+# Python coverage script
+#
+
+# usage info
+usage()
+{
+cat << EOF
+usage: $0 options passthrough-args
+
+Iceprod core framework starter script.
+
+OPTIONS:
+ -h   Show this message
+ -d   Directory to write to
+ -v   Verbose output
+
+EOF
+}
+
+VERBOSE=0
+DIRECTORY='pycoverage'
+
+# get args
+while getopts ":hvd:" opt; do
+    case $opt in
+        h)
+            usage
+            exit
+            ;;
+        v)
+            VERBOSE=1
+            ;;
+        d)
+            DIRECTORY=$OPTARG
+            ;;
+        \?)
+            break
+            ;;
+        :)
+            echo "Option -$OPTARG requires an argument." >&2
+            exit 1
+            ;;
+    esac
+done
+
+echo "Directory: $DIRECTORY"
+
+# test for coverage
+if command -v coverage >/dev/null; then
+    COVERAGE="coverage"
+elif command -v python-coverage >/dev/null; then
+    COVERAGE="python-coverage"
+else
+    echo "Install the python \"coverage\" package to use pycoverage:"
+    echo "  pip install coverage"
+    exit 1
+fi
+
+if [ -z $I3_BUILD ]; then
+    echo "Run pycoverage from inside env-shell.sh"
+    exit 1
+fi
+
+$COVERAGE erase
+
+TESTS="$I3_BUILD/*/resources/test/*.py $I3_BUILD/*/resources/tests/*.py $I3_BUILD/*/resources/resources/test/*.py"
+set +e
+COUNT=0
+TOTAL=$(echo $TESTS | awk 'BEGIN{FS=" "} {print NF}')
+for file in $TESTS;
+do
+    if [ $VERBOSE != 0 ]; then
+        $COVERAGE run --branch -p --source ../src,lib --omit "*resources*" $file
+    else
+        $COVERAGE run --branch -p --source ../src,lib --omit "*resources*" $file >/dev/null 2>/dev/null
+    fi
+    COUNT=$((COUNT+1))
+    PROGRESS=$(expr $COUNT \* 100 / $TOTAL)
+    printf '%3s%% %s\n' "$PROGRESS" "$file"
+done
+set -e
+
+if [ $VERBOSE != 0 ]; then
+    $COVERAGE combine
+    $COVERAGE html -i -d $DIRECTORY
+else
+    $COVERAGE combine >/dev/null 2>/dev/null
+    $COVERAGE html -i -d $DIRECTORY >/dev/null 2>/dev/null
+fi
+
+# fix up names
+python << END
+import os
+import pickle
+pwd = os.environ['I3_SRC']
+if not pwd.endswith('/'):
+    pwd += '/'
+pwd_fake = pwd.replace('/','_')
+
+for r,dirs,files in os.walk("$DIRECTORY"):
+    for f in files:
+        if not f.endswith('.html'):
+            continue
+        fname = os.path.join(r,f)
+        data = open(fname).read()
+        if pwd_fake in f:
+            os.remove(fname)
+            fname = fname.replace(pwd_fake,'')
+        open(fname,'w').write(data.replace(pwd,'').replace(pwd_fake,''))
+END
+
+# fix up sorting
+python << END
+import os
+f_name = os.path.join("$DIRECTORY",'index.html')
+data = []
+for line in open(f_name):
+    if 'jQuery(document).ready' in line:
+        data.extend(['jQuery(document).ready(function(){',
+            'coverage.index_ready(jQuery);',
+            'if (jQuery("table.index th.headerSortDown,th.headerSortUp").length == 0) {',
+                'jQuery("table.index th.name").trigger("click");',
+            '} });',
+        ])
+    else:
+        data.append(line)
+open(f_name,'w').write('\n'.join(data))
+END

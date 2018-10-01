@@ -42,9 +42,6 @@ using namespace std;
 
 TEST_GROUP(I3Frame);
 
-#define THROWS(CMD) try { CMD; FAIL("that should have thrown"); }	\
-  catch (const std::exception &e) { /* good. */ }
-
 //
 // saves a frame and loads it again to reset the internal buffers
 //
@@ -66,6 +63,7 @@ I3FramePtr saveload(I3Frame& f, const std::string& filename = "frame.i3")
   if (!r)
     log_fatal("egh");
 
+  remove(filename.c_str());
   return rv;
 }
 
@@ -81,10 +79,44 @@ TEST(Get)
 
   ENSURE(!f.has_blob("t"));
   ENSURE(f.has_ptr("t"));
-  ENSURE(f.Get<I3IntConstPtr>("t"));
+  ENSURE((bool)f.Get<I3IntConstPtr>("t"));
   I3IntConstPtr ip = f.Get<I3IntConstPtr>("t");
   ENSURE_EQUAL(ip->value, ptr->value);
   ENSURE_EQUAL(ip.get(), ptr.get());
+}
+
+TEST(GetStop)
+{
+	I3Frame f(I3Frame::DAQ);
+	I3IntPtr ptr(new I3Int);
+	ptr->value = 110101;
+	f.Put("f", ptr);
+	ENSURE_EQUAL(f.GetStop("f"), I3Frame::DAQ);
+	EXPECT_THROW(f.GetStop("doesnotexist"), "This should throw.");
+}
+
+TEST(Replace)
+{
+  I3Frame f(I3Frame::DAQ);
+  I3IntPtr i1(new I3Int(7));
+  f.Put("MyInt",i1);
+  ENSURE_EQUAL(f.Get<I3Int>("MyInt"), *i1);
+  I3IntPtr i2(new I3Int(22));
+  f.Replace("MyInt",i2);
+  ENSURE_EQUAL(f.Get<I3Int>("MyInt"), *i2);
+  ENSURE_EQUAL(f.GetStop("MyInt"), I3Frame::DAQ);
+}
+
+TEST(ReplaceNotFound)
+{
+  I3Frame f(I3Frame::DAQ);
+  I3IntPtr i2(new I3Int(22));
+  try{
+    f.Replace("MyInt",i2);
+    FAIL("I3Frame::Replace should fail on a nonexistant key");
+  }catch(...){
+    //expect an exception. do nothing.
+  }
 }
 
 TEST(const_iterator_begin)
@@ -97,8 +129,8 @@ TEST(const_iterator_begin)
   I3Frame::const_iterator iter = f.begin();
 
   ENSURE(iter != f.end());
-  ENSURE(iter->second);
-  I3IntConstPtr newt = dynamic_pointer_cast<const I3Int>(iter->second);
+  ENSURE((bool)iter->second);
+  I3IntConstPtr newt = boost::dynamic_pointer_cast<const I3Int>(iter->second);
   // hmm, where's #3?
   ENSURE_EQUAL(ptr.use_count(), 4);
 
@@ -122,20 +154,20 @@ TEST(saveload)
   ENSURE(!fp->has_ptr("t"));
   ENSURE(fp->Has("t"));
   I3IntConstPtr ip = fp->Get<I3IntConstPtr>("t");
-  ENSURE(ip);
+  ENSURE((bool)ip);
   ENSURE(ip != ptr);
   ENSURE_EQUAL(ip->value, ptr->value);
   ENSURE(fp->has_ptr("t"));
-  ENSURE_EQUAL(fp->type_name("t"), "I3Int");
+  ENSURE_EQUAL(fp->type_name("t"), icetray::name_of<I3Int>());
 }
 
 TEST(a_t_serializes)
 {
   I3IntPtr ptr(new I3Int(std::numeric_limits<int>::max()));
-  ENSURE(ptr);
+  ENSURE((bool)ptr);
 
   std::ofstream ofs("i3int");
-  boost::archive::portable_binary_oarchive poa(ofs);
+  icecube::archive::portable_binary_oarchive poa(ofs);
   poa << make_nvp("t", ptr);
 }
   
@@ -151,12 +183,21 @@ TEST(typename_iterator)
   f.Put("int0", I3IntPtr(new I3Int(1)));
   f.Put("int1", I3IntPtr(new I3Int(1)));
 
+  // I3Frame is a hash map, so there is no defined order
+  // in which these elements will be retrieved.
   I3Frame::typename_iterator iter = f.typename_begin();
-  ENSURE_EQUAL(iter->first, "int0");
-  ENSURE_EQUAL(iter->second, "I3Int");
+  ENSURE((iter->first=="int0") || (iter->first=="int1"));
+  ENSURE_EQUAL(iter->second, icetray::name_of<I3Int>());
+  bool first_is_int0 = (iter->first=="int0");
+
   iter++;
-  ENSURE_EQUAL(iter->first, "int1");
-  ENSURE_EQUAL(iter->second, "I3Int");
+  if (first_is_int0) {
+    ENSURE_EQUAL(iter->first, "int1");
+  } else {
+    ENSURE_EQUAL(iter->first, "int0");
+  }
+  ENSURE_EQUAL(iter->second, icetray::name_of<I3Int>());
+
   iter++;
   ENSURE(iter == f.typename_end());
   
@@ -172,8 +213,8 @@ TEST(typename_iterator)
   iter = p->typename_begin();
   while(iter != p->typename_end())
     {
-      iter->first;
-      iter->second;
+      std::string y = iter->first;
+      y = iter->second;
       iter++;
     }
 
@@ -221,7 +262,7 @@ TEST(deserialize_iterator)
   I3Frame::const_iterator iter2 = p->begin();
   while(iter2 != p->end())
     {
-      ENSURE(iter2->second);
+      ENSURE((bool)iter2->second);
       iter2++;
     }
 
@@ -328,7 +369,7 @@ TEST(find)
   ENSURE(p->has_ptr("66") == false);
   ENSURE(p->has_blob("66") == true);
   I3IntConstPtr pi = boost::dynamic_pointer_cast<const I3Int>(iter->second);
-  ENSURE(pi);
+  ENSURE((bool)pi);
   std::cout << "66 should be... " << pi->value << "\n";
   ENSURE_EQUAL(pi->value, 66);
 
@@ -401,13 +442,13 @@ TEST(typename_survives_serialization)
   I3Frame f;
   f.Put("int", I3IntPtr(new I3Int(16)));
 
-  ENSURE_EQUAL(f.type_name("int"), "I3Int");
+  ENSURE_EQUAL(f.type_name("int"), icetray::name_of<I3Int>());
 
   I3FramePtr fp = saveload(f);
 
   ENSURE(fp->Has("int"));
   ENSURE(!fp->has_ptr("int"));
-  ENSURE_EQUAL(fp->type_name("int"), "I3Int");
+  ENSURE_EQUAL(fp->type_name("int"), icetray::name_of<I3Int>());
 }
 
 TEST(oserialization_has_shared_semantics)
@@ -475,9 +516,9 @@ TEST(type_id)
 
 TEST(merge_doesnt_mutate_stream)
 {
-  I3Frame f(I3Frame::Geometry), g(I3Frame::Calibration);
+  I3Frame f('a'), g('b');
   f.merge(g);
-  ENSURE_EQUAL(f.GetStop(), I3Frame::Geometry);
+  ENSURE_EQUAL(f.GetStop().id(), 'a');
 }
 
 TEST(assign_mutates_stream)
@@ -497,9 +538,8 @@ TEST(merge)
   ENSURE(!f.Has("j"));
   ENSURE(!g.Has("i"));
   ENSURE(g.Has("j"));
-  // things will 'bounce off' of g since they're on the same stream
   g.merge(f);
-  ENSURE(!g.Has("i"));
+  ENSURE(g.Has("i"));
   ENSURE(g.Has("j"));
 }
 
@@ -525,5 +565,25 @@ TEST(assign)
   ENSURE(!g.Has("j"));
   ENSURE_EQUAL(f.size(), 1u); 
   ENSURE_EQUAL(g.size(), 1u); 
+}
+
+TEST(putemptystringframeobjname)
+{ 
+  I3Frame f;
+  I3IntPtr i(new I3Int(661));
+  try {
+    f.Put("", i);
+    FAIL("Should have failed to add a empty string named item");
+  } catch (const std::exception& e) { }
+}
+
+TEST(putspacefilledstringframeobjname)
+{
+  I3Frame f;
+  I3IntPtr i(new I3Int(661));
+  try {
+    f.Put("  ", i);
+    FAIL("Should have failed to add a space only string named item");
+  } catch (const std::exception& e) { }
 }
 

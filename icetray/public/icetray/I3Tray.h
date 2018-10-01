@@ -23,19 +23,28 @@
 #ifndef ICETRAY_I3TRAY_H_INCLUDED
 #define ICETRAY_I3TRAY_H_INCLUDED
 
+#include <signal.h>
+
 #include <map>
 #include <string>
 #include <exception>
+#include <functional>
+#include <iostream>
 #include <icetray/IcetrayFwd.h>
 
 #include <icetray/I3Configuration.h>
 #include <icetray/I3TrayInfo.h>
 #include <icetray/I3Module.h>
 #include <icetray/I3Context.h>
+#include <icetray/init.h>
+#include <icetray/is_shared_ptr.h>
+
+#include <boost/mpl/or.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/utility/result_of.hpp>
+#include <boost/type_traits/is_base_of.hpp>
 
 class I3ServiceFactory;
-
-using namespace std;
 
 /**
    This is I3Tray.
@@ -95,7 +104,7 @@ public:
     const std::string module_name_;
 
   public:
-    param_setter(I3Tray &tray, const string& module_name) 
+    param_setter(I3Tray &tray, const std::string& module_name) 
       : tray_(tray), module_name_(module_name) { }
     param_setter(const param_setter& rhs)
       : tray_(rhs.tray_), module_name_(rhs.module_name_) { }
@@ -103,7 +112,7 @@ public:
     template <typename T>
     param_setter& operator()(const std::string& param, T value)
     {
-      log_trace(__PRETTY_FUNCTION__);
+      log_trace("%s", __PRETTY_FUNCTION__);
       tray_.SetParameter(module_name_.c_str(), param.c_str(), value);
       return *this;
     }
@@ -120,26 +129,38 @@ public:
    * @param name the name associated with services the created by the factory.
    */
   param_setter 
-  AddService(const std::string& clazz, const std::string& name);
+  AddService(const std::string& clazz, std::string name="");
 
   /**
    * Adds the specified I3ServiceFactory to the framework.
    */
   template <class Type>
   param_setter 
-  AddService(const std::string& name);
+  AddService(std::string name="");
 
 
   template <class Type>
-  param_setter 
-  AddModule(const std::string& name);
-
-
+  typename boost::enable_if<boost::is_base_of<I3Module,Type>,param_setter>::type
+  AddModule(std::string name="");
   param_setter
-  AddModule(boost::python::object obj, const std::string& instancename);
-
+  AddModule(boost::python::object obj, std::string instancename="");
   param_setter
-  AddModule(const std::string& name, const std::string& instancename);
+  AddModule(const std::string& name, std::string instancename="");
+  param_setter
+  AddModule(I3ModulePtr module, std::string instancename="");
+  /**
+   * Adds an arbitrary object as a module which is callable with an I3FramePtr
+   * and returns nothing or a boolean result. 
+   */
+  template<typename Type>
+  typename boost::disable_if<boost::mpl::or_<boost::is_base_of<I3Module,Type>,
+                                             boost::is_same<boost::python::object,Type>,
+                                             boost::is_convertible<Type,std::string>,
+                                             is_shared_ptr<Type> >,
+                             param_setter>::type
+  AddModule(Type func, std::string instancename="");
+
+  void MoveModule(const std::string& name, const std::string& anchor, bool before=true);
 
   /**
    * Connects the specified OutBox to the specified InBox. If not name is
@@ -149,7 +170,6 @@ public:
    * @param fromModule the name to associated with the OutBox's module.
    * @param fromOutBox the name of the OutBox.
    * @param toModule the name to associated with the InBox's module.
-   * @param toInBox the name of the InBox.
    */
   bool ConnectBoxes(const std::string& fromModule,
 		    const std::string& fromOutBox,
@@ -173,13 +193,24 @@ public:
      Report per-module physics ncalls/system/user time usage.  Have to call this
      *after* Execute()
   */
-  map<string, I3PhysicsUsage> Usage(); 
+  std::map<std::string, I3PhysicsUsage> Usage(); 
 
   /**
    * Finishes everything.  It is assumed that if the modules are to be used
    * again that they will be freshly 'Configured'
    */
   void Finish();
+
+  /**
+   * Get the tray info object for this tray.
+   */
+  I3TrayInfo TrayInfo();
+
+  /**
+   * Return the tray's master context. This allows manual inspection and
+   * addition of services.
+   */
+  I3Context &GetContext();
 
   bool
   SetParameter(const std::string& module,
@@ -193,22 +224,24 @@ public:
 
   template <class Type>
   bool 
-  SetParameter(const string& module,
-	       const string& parameter,
+  SetParameter(const std::string& module,
+	       const std::string& parameter,
 	       const Type &value)
   {
     return this->SetParameter(module, parameter, boost::python::object(value));
   }
+	
+  void RequestSuspension() { suspension_requested=true; }
 
 private:
 
   I3Tray(const I3Tray& rhs); // stop default 
   I3Tray& operator=(const I3Tray& rhs); // stop default
 
-  shared_ptr<I3Module> CreateModule(I3Context& context,
+  boost::shared_ptr<I3Module> CreateModule(I3Context& context,
 				    const std::string& clazz);
 
-  shared_ptr<I3ServiceFactory> CreateService(I3Context& context,
+  boost::shared_ptr<I3ServiceFactory> CreateService(I3Context& context,
 					     const std::string& clazz);
 
 
@@ -220,19 +253,8 @@ private:
    */
   void ConnectBoxesInOrderTheyWereAdded();
 
-  bool SetParameterFailure(const string& module, const string& parameter);
+  bool SetParameterFailure(const std::string& module, const std::string& parameter);
 
-  /**
-   * initialize services
-   */
-  void InitializeServices(I3Context & context);
-
-  /**
-   * loops over all services and tries configures them if they
-   * haven't been configured yet.
-   */
-  void ConfigureServices();
-  
   /**
      called just before Execute starts.
   */
@@ -243,77 +265,96 @@ private:
    * appropraite state. Otherwise it does nothing.
    */
   void Abort();
+  
+  /**
+   * Generate a new name for a module or service which had none specified.
+   * 
+   * @param type the type of object being added (e.g. I3Reader)
+   * @param kind the cateogry of object being added (e.g. Module or Service)
+   * @param existingNames the names already in use by objects of the same kind
+   */
+  std::string CreateName(const std::string& type, const std::string& kind,
+                         const std::vector<std::string>& existingNames);
+  
+  /*
+   * Overloading doesn't work properly with boost::function types, so we
+   * depend on AddModule deducing the return type and then dispatching to
+   * this helper function
+   */
+  template<typename RetType>
+  param_setter
+  AddFunctionModule(std::function<RetType(boost::shared_ptr<I3Frame>)>,
+                    const std::string& instancename);
 
-  /** The set of services to load into each context. */
-  map<string,I3ServiceFactoryPtr> factories;
-  map<string,I3ContextPtr> factory_contexts;
-  map<string,bool> configuredFactories;
+  /** Context, modules, and factories: oh my! */
+  I3Context master_context;
+  std::map<std::string,I3ServiceFactoryPtr> factories;
   std::vector<std::string> factories_in_order;
 
-  map<string,I3ContextPtr> module_contexts;
-  map<string,I3ModulePtr> modules;
+  std::map<std::string,I3ModulePtr> modules;
   std::vector<std::string> modules_in_order;
   I3ModulePtr driving_module;
 
   bool boxes_connected;
-  bool driving_module_already_added;
+  bool configure_called;
+  bool execute_called;
+  bool suspension_requested;
 
   SET_LOGGER("I3Tray");
 
-  static bool suspension_requested_;
+  static volatile sig_atomic_t global_suspension_requested;
 
-  friend void I3Module::RequestSuspension() const;
-
-  static void RequestSuspension() { suspension_requested_ = true; }
-
-  static const I3Context* active_context_;
+  static void set_suspend_flag(int sig);
+  static void die_messily(int sig);
+  static void report_usage(int sig);
 
   friend void I3Module::Do(void (I3Module::*)());
 
   friend class I3TrayInfoService;
-
-public:
-
-  static bool SomeContextIsActive();
-  static const I3Context& GetActiveContext();
-  static void SetActiveContext(const I3Context* newactive);
 };
 
+std::ostream& operator<<(std::ostream& os, I3Tray& tray);
+
 template <class Type>
-I3Tray::param_setter 
-I3Tray::AddModule(const std::string& instancename)
+typename boost::enable_if<boost::is_base_of<I3Module,Type>,I3Tray::param_setter>::type
+I3Tray::AddModule(std::string instancename)
 {
   return this->AddModule(I3::name_of<Type>(), instancename);
 }
 
+template<typename Type>
+typename boost::disable_if<boost::mpl::or_<boost::is_base_of<I3Module,Type>,
+                                           boost::is_same<boost::python::object,Type>,
+                                           boost::is_convertible<Type,std::string>,
+                                           is_shared_ptr<Type> >,
+                           I3Tray::param_setter>::type
+I3Tray::AddModule(Type func, std::string instancename){
+  typedef typename boost::result_of<Type(boost::shared_ptr<I3Frame>)>::type ResultType;
+  return this->AddFunctionModule<ResultType>(func, instancename);
+}
+
 template <class Type>
 I3Tray::param_setter 
-I3Tray::AddService(const std::string& instancename)
+I3Tray::AddService(std::string instancename)
 {
   return this->AddService(I3::name_of<Type>(), instancename);
 }
 
-// Use argument
-template <class T>
-T& 
-GetService(const std::string &where = I3DefaultName<T>::value(), 
-	   typename boost::disable_if<is_shared_ptr<T>, bool>::type* enabler = 0)
-{
-  const I3Context& context = I3Tray::GetActiveContext();
-
-  //Fix to get around the 3.2 compiler
-  return context.template Get<T>(where);
+template<typename RetType>
+I3Tray::param_setter
+I3Tray::AddFunctionModule(std::function<RetType(boost::shared_ptr<I3Frame>)>,
+                          const std::string& instancename){
+  BOOST_STATIC_ASSERT(sizeof(RetType) == 0 &&
+    "Only callable objects returning void or bool may be added to I3Tray as modules");
+  return param_setter(*this,"never_used");
 }
-
-template <class T>
-T 
-GetService(const std::string &where = I3DefaultName<typename T::value_type>::value(),
-	   typename boost::enable_if<is_shared_ptr<T>, bool>::type* enabler = 0)
-{
-  const I3Context& context = I3Tray::GetActiveContext();
-
-  //Fix to get around the 3.2 compiler
-  return context.template Get<T>(where);
-}
+template<>
+I3Tray::param_setter
+I3Tray::AddFunctionModule<void>(std::function<void(boost::shared_ptr<I3Frame>)>,
+                                const std::string& instancename);
+template<>
+I3Tray::param_setter
+I3Tray::AddFunctionModule<bool>(std::function<bool(boost::shared_ptr<I3Frame>)>,
+                                const std::string& instancename);
 
 #endif

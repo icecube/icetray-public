@@ -2,7 +2,8 @@ Icetray classes
 ===============
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 4
 
-   i3frame
-
+   classes/i3frame
+   classes/i3module
+   classes/i3context

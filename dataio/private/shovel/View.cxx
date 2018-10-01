@@ -1,7 +1,7 @@
 /**
  *  $Id$
  *  
- *  Copyright (C) 2007
+ *  Copyright (C) 2007, 2008, 2009
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
  *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
  *  
@@ -19,10 +19,18 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
+
+#include <dataclasses/physics/I3EventHeader.h>
+#include <dataclasses/I3Time.h>
+
+#include <limits>
+#include <iostream>
+#include <iomanip>
+
 #include <form.h>
 #include <fstream>
 #include <signal.h>
-#ifdef __APPLE_CC__
+#if defined(__APPLE_CC__) && !defined(TIOCGWINSZ)
 #define TIOCGWINSZ
 #endif
 
@@ -37,11 +45,12 @@
 #include <boost/assign/list_of.hpp>
 #include <boost/optional.hpp>
 #include <boost/algorithm/string.hpp>
-
+#include <boost/format.hpp>
 #include <icetray/Utility.h>
 
+
 #include <ncurses.h>
-#include <cdk/cdk.h>
+#include <cdk.h>
 
 using namespace boost::assign;
 using namespace std;
@@ -118,6 +127,10 @@ View::start()
   cbreak();       /* take input chars one at a time, no wait for \n */
   noecho();       /* don't echo input */
   curs_set(0);
+  #ifndef NDEBUG
+  if (curs_set(0) == -1)
+     log_debug("Sorry, invisible cursor not supported on this terminal");
+  #endif
 
   /* Declare the labels. */
   cdkscreen = initCDKScreen(stdscr);
@@ -137,9 +150,29 @@ View::start()
   y_top_offset_ = 0;
   signal(SIGWINCH, resize);
 
+  colors_[I3Frame::Geometry] = cyan;
+  colors_[I3Frame::Calibration] = cyan;
+  colors_[I3Frame::DetectorStatus] = cyan;
+  colors_[I3Frame::TrayInfo] = magenta;
+
+  colors_[I3Frame::DAQ] = white;
+  colors_[I3Frame::Physics] = white; // these get colored by subeventstream
+
+  subeventstream_colors_[""] = blue;
+  subeventstream_colors_["NullSplit"] = red;
+  subeventstream_colors_["IceTopSplit"] = yellow;
+  subeventstream_colors_["InIceSplit"] = green;
+    
+  // colors for new stream names
+  new_subeventstream_colors_.push_back(blue);
+  new_subeventstream_colors_.push_back(red);
+  new_subeventstream_colors_.push_back(yellow);
+  new_subeventstream_colors_.push_back(green);
 }
 
 View::View()
+:
+maxtypelen_(0)
 {
 }
 
@@ -159,124 +192,104 @@ View::page(const std::string &text)
   ofstream of(tmpfile_name);
   assert(of.good());
   of << text;
+  if(!of.good()){
+    unlink(tmpfile_name);
+    log_fatal("Error writing to /tmp/shovel-XXXX file.  (Maybe xml version of too large?)");
+  }
+  assert(of.good());
   of.close();
   
   def_prog_mode();
   endwin();
   std::string cmd = "/usr/bin/less -x2 -C ";
   cmd += tmpfile_name;
-  system(cmd.c_str());
+  int ret = system(cmd.c_str());
+  if (ret != 0)
+    {
+      log_error("call to system('%s'); returned value: %d", cmd.c_str(), ret);
+    }
   unlink(tmpfile_name);
   refresh();
 }
 
 void
-View::drawtape(unsigned line, unsigned col, I3Frame::Stream stream, unsigned frameno, int attr)
+View::drawtape(unsigned line, unsigned col, I3Frame::Stream stream, std::string sub_event_stream, unsigned frameno, int attr)
 {
-  settext(dim_magenta);
-  mvaddch(line-3, col, ' '|attr);
-  settext(dim_cyan);
-  mvaddch(line-2, col, ' '|attr);
-  settext(dim_yellow);
-  mvaddch(line-1, col, ' '|attr);
   settext(dim_green);
   mvaddch(line, col, ' '|attr);
-  
+
   if (attr)
     settext(hi_white);
   else
     settext(dim_white);
 
   if ((frameno+1)%5 == 0)
-    mvaddch(line-4, col, '.');
+    mvaddch(line-1, col, '.');
 
   if ((frameno+1)%10 == 0)
-    mvaddch(line-4, col, '|');
+    mvaddch(line-1, col, '|');
 
   if ((frameno+1) % 20 == 0)
     {
       ostringstream oss;
       oss << frameno+1;
-      mvaddstr(line-5, col - oss.str().length()/2, oss.str().c_str());
+      mvaddstr(line-2, col - oss.str().length()/2, oss.str().c_str());
     }
 
-  int lineoffset=0;
-  if (stream == I3Frame::None)
-    settext(red);
-  if (stream == I3Frame::Geometry)
-    settext(magenta), lineoffset = -3;
-  if (stream == I3Frame::Calibration)
-    settext(cyan), lineoffset = -2;
-  if (stream == I3Frame::DetectorStatus)
-    settext(yellow), lineoffset = -1;
-  if (stream == I3Frame::Physics)
-    settext(green);
+  color_pair the_color;  
+  if (colors_.find(stream) != colors_.end()) {
+    the_color = colors_[stream];
+  } else {
+    the_color = dim_white;
+  }
 
-  mvaddch(line + lineoffset, col, stream.id() | attr);
-
-  if (stream == I3Frame::TrayInfo)
-    {
-      settext(hi_red), lineoffset = -3;
-      mvaddch(line + lineoffset, col, ACS_VLINE | attr);
-      settext(hi_red), lineoffset = -2;
-      mvaddch(line + lineoffset, col, ACS_VLINE | attr);
-      settext(hi_red), lineoffset = -1;
-      mvaddch(line + lineoffset, col, ACS_VLINE | attr);
-      settext(hi_red), lineoffset = 0;
-      mvaddch(line + lineoffset, col, ACS_VLINE | attr);
+  // if this is a Physics frame, it will get colored
+  // by SubEventStream
+  if (stream == I3Frame::Physics) {
+    std::map<std::string, color_pair>::const_iterator it =
+      subeventstream_colors_.find(sub_event_stream);
+    if (it == subeventstream_colors_.end()) {
+      // make a new color
+      the_color = new_subeventstream_colors_[subeventstream_colors_.size() % 4];
+      subeventstream_colors_[sub_event_stream] = the_color;
+    } else {
+      the_color = it->second;
     }
+  }
+    
+  settext(the_color);
+  mvaddch(line, col, stream.id() | attr);
 }
 
 void 
 View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
 {
-  //  log_trace("display frame index=%u y_selected=%u", index, y_selected);
   erase();
   draw_border();
   standend();
 
   vector<string> keys, the_keys = frame->keys();
 
-  settext(hi_red);
-  mvaddstr(2, 2, "Frame:");
-  standend();
-  settext(white);
-  {
-    ostringstream oss;
-    oss << index+1 << "/" << model_->totalframes();
-    mvaddstr(2, 9, oss.str().c_str());
-  }
-  settext(hi_red);
-  mvaddstr(3, 2, "Key:");
-
-  settext(white);
-  {
-    ostringstream oss;
-    oss << (the_keys.size() > 0 ? y_selected+1 : 0) << "/" << frame->size();
-    mvaddstr(3, 9, oss.str().c_str());
-  }
 
   settext(hi_red);
-  mvaddstr(3, COLS/3, "Type");
-  mvaddstr(3, COLS-14, "Size (bytes)");
+  mvaddstr(2, 2, "Name");
+  mvaddstr(2, COLS/3, "Type");
+  mvaddstr(2, COLS-14, "Bytes");
 
-  unsigned frame_window_height = LINES - 12;
+  unsigned frame_window_height = LINES - 11;
 
   if (y_selected >= (frame_window_height + y_top_offset_))
     y_top_offset_ = y_selected - (frame_window_height-1);
   if (y_selected < y_top_offset_)
     y_top_offset_ = y_selected;
 
-  // log_trace("y_selected = %u, frame_window_height = %u, y_top_offset_ = %u",
-  // y_selected, frame_window_height, y_top_offset_);
-
   // generate the list of keys we're actually going to display
   string selected_key;
   unsigned skip = 0, count = 0;
 
-  for (vector<string>::iterator iter = the_keys.begin();
-       iter != the_keys.end() && count < frame_window_height;
-       iter++, skip++)
+
+  vector<string>::iterator iter = the_keys.begin();
+  while (iter != the_keys.end() && count < frame_window_height)
     {
       if (skip >= y_top_offset_)
 	{
@@ -285,10 +298,21 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
 	}
       if (skip == y_selected)
 	selected_key = *iter;
+      iter++; 
+      skip++;
     }
+  bool more = (iter != the_keys.end());
 
   count = 0;
-
+  
+  unsigned maxkeylen = COLS/3 - 2 - 1;
+  unsigned maxtypelen = COLS-14 - COLS/3 - 1;
+  // if the window width has changed, invalidate cached names
+  if (maxtypelen!=maxtypelen_){
+    clean_typenames_.clear();
+    maxtypelen_=maxtypelen;
+  }
+  
   for (vector<string>::iterator iter = keys.begin();
        iter != keys.end(); iter++, count++)
     {
@@ -296,38 +320,177 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
       assert(frameiter != frame->typename_end());
       const string &key = frameiter->first;
       const string &type_name = frameiter->second;
+      const bool on_foreign_stream = frame->GetStop(*iter) != frame->GetStop();
 
-      if (key == selected_key)
-	settext(rev_white);
-      else
-	settext(white);
+      if (key == selected_key) {
+          if (on_foreign_stream)
+              settext(ColorParse("rev_dim_yellow"));
+          else
+              settext(rev_white);
+      } else {
+          if (on_foreign_stream)
+              settext(dim_yellow);
+          else
+              settext(white);
+      }
       
-      unsigned maxkeylen = COLS/3 - 2 - 1;
       string short_key = key;
       // if it is too long, shorten it
       if (key.length() > maxkeylen)
-	{
-	  short_key = key.substr(0, maxkeylen - 3);
-	  short_key += "...";
-	}
+      {
+          short_key = key.substr(0, maxkeylen - 3);
+          short_key += "...";
+      }
+      
+      auto short_name_it=clean_typenames_.find(type_name);
+      // if the type name is not in the cache, add it
+      if(short_name_it==clean_typenames_.end()){
+        short_name_it=clean_typenames_.emplace(type_name,stlfilt(type_name)).first;
+        // if it is too long, shorten it
+        if(short_name_it->second.length() > maxtypelen){
+          short_name_it->second = short_name_it->second.substr(0, maxtypelen - 3);
+          short_name_it->second += "...";
+        }
+      }
+      mvaddstr(count + 3, 2, short_key.c_str());
+      mvaddstr(count + 3, COLS/3, short_name_it->second.c_str());
 
-      unsigned maxtypelen = COLS-14 - COLS/3 - 1;
-      string short_typename = stlfilt(type_name);
-      // if it is too long, shorten it
-      if (short_typename.length() > maxtypelen)
-	{
-	  short_typename = short_typename.substr(0, maxtypelen - 3);
-	  short_typename += "...";
-	}
-
-      mvaddstr(count + 4, 2, short_key.c_str());
-      mvaddstr(count + 4, COLS/3, short_typename.c_str());
       ostringstream oss;
       oss << frame->size(*iter);
-      mvaddstr(count + 4, COLS-14, oss.str().c_str());
+      mvaddstr(count + 3, COLS-14, oss.str().c_str());
     }
 
+  settext(yellow);
+
+  if (more)
+    mvaddstr(count+3, COLS/3, "[scroll down for more]");
+
+  //
+  //  Draw 'longitudinal' status
+  // 
+  settext(hi_red);
+  mvaddstr(LINES-6, 2, "      Key:");
+
+  settext(white);
+  {
+    ostringstream oss;
+    oss << (the_keys.size() > 0 ? y_selected+1 : 0) << "/" << frame->size();
+    settext(yellow);
+    mvaddstr(LINES-6, 13, oss.str().c_str());
+  }
+
+  settext(hi_red);
+  mvaddstr(LINES-5, 2, "    Frame:");
+  standend();
+  settext(white);
+  std::size_t statuslen=16;
+  {
+    ostringstream oss;
+    oss << index+1 << "/" << model_->totalframes();
+    if(!model_->totalframes_exact())
+      oss << '+';
+    else
+      oss << " (" << (unsigned) (100 * (float)(index+1)/(float)model_->totalframes()) << "%)";
+    settext(yellow);
+    mvaddstr(LINES-5, 13, oss.str().c_str());
+    statuslen = std::max(oss.str().size(), statuslen);
+  }
+
+  settext(hi_red);
+  mvaddstr(LINES-4, 2, "     Stop:");
+  settext(yellow);
+  mvaddstr(LINES-4, 13, frame->GetStop().str().c_str());
+  statuslen = std::max(frame->GetStop().str().size(), statuslen);
+
+  {
+    I3EventHeaderConstPtr header = frame->Get<I3EventHeaderConstPtr>(I3DefaultName<I3EventHeader>::value());
+    // no mixed-in items here:
+    if ((header) && (frame->GetStop(I3DefaultName<I3EventHeader>::value()) != frame->GetStop())) header.reset();
+    
+    settext(hi_red);
+    mvaddstr(LINES-3, 2, "Run/Event:");
+    if (!header) {
+      settext(dim_white);
+      mvaddstr(LINES-3, 13, "(n/a)");
+    } else {
+      settext(yellow);
+      ostringstream oss;
+      oss << header->GetRunID() << "/" << header->GetEventID();
+      mvaddstr(LINES-3, 13, oss.str().c_str());
+      statuslen = std::max(oss.str().size(), statuslen);
+    }
+
+    settext(hi_red);
+    mvaddstr(LINES-2, 2, " SubEvent:");
+    if (!header || frame->GetStop() != I3Frame::Physics || header->GetSubEventStream() == "") {
+      settext(dim_white);
+      mvaddstr(LINES-2, 13, "(n/a)");
+    } else {
+      settext(yellow);
+      ostringstream oss;
+      oss << header->GetSubEventStream() << "/" << header->GetSubEventID();
+      mvaddstr(LINES-2, 13, oss.str().c_str());
+      statuslen = std::max(oss.str().size(), statuslen);
+    }
+      
+    I3Time startTime;
+    I3Time endTime;
+    bool has_start_time=false;
+    bool has_end_time=false;
+      
+    if (header) {
+      startTime = header->GetStartTime();
+      endTime = header->GetEndTime();
+      has_start_time=true;
+      has_end_time=true;
+    } else {
+      I3TimeConstPtr frameStartTime = frame->Get<I3TimeConstPtr>("StartTime");
+      I3TimeConstPtr frameEndTime = frame->Get<I3TimeConstPtr>("EndTime");
+      // no mixed-in items here:
+      if ((frameStartTime) && (frame->GetStop("StartTime") != frame->GetStop())) frameStartTime.reset();
+      if ((frameEndTime) && (frame->GetStop("EndTime") != frame->GetStop())) frameEndTime.reset();
+        
+      if (frameStartTime) {
+        startTime = *frameStartTime;
+        has_start_time=true;
+      }
+
+      if (frameEndTime) {
+        endTime = *frameEndTime;
+        has_end_time=true;
+      }
+    }
+      
+    settext(hi_red);
+    mvaddstr(LINES-6, COLS - 36, "StartTime:");
+    mvaddstr(LINES-5, COLS - 36, " Duration:");
+
+    if (!has_start_time) {
+      settext(dim_white);
+      mvaddstr(LINES-6, COLS - 36 + 11, "(n/a)");
+    } else {
+      settext(yellow);
+      ostringstream oss;
+      oss.precision(1);
+      oss << startTime.GetUTCString();
+      mvaddstr(LINES-6, COLS - 36 + 11, oss.str().c_str());
+    }
+
+    if (!has_end_time) {
+      settext(dim_white);
+      mvaddstr(LINES-5, COLS - 36 + 11, "(n/a)");
+    } else {
+      settext(yellow);
+      ostringstream oss;
+      oss << endTime - startTime << " ns";
+      mvaddstr(LINES-5, COLS - 36 + 11, oss.str().c_str());
+    }
+
+  }    
+
+
   vector<I3Frame::Stream> streams;
+  vector<std::string> sub_event_streams;
 
   int tape_head_column = COLS/2;
   int tape_head_index = index;
@@ -336,68 +499,78 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
   // draw to the right
   int tape_r_column = COLS-2;
   int length_r = tape_r_column - tape_head_column;
-  if (tape_head_index + length_r >= (int)model_->totalframes())
+  if(!model_->totalframes_exact()){
+    //if the model doesn't know how many frames there are, try once to get it to
+    //look at least as far out as we are interested in.
+    streams = model_->streams(tape_head_index, length_r);
+  }
+  if (model_->totalframes_exact() && tape_head_index + length_r >= (int)model_->totalframes())
     length_r = model_->totalframes() - tape_head_index;
-
-  streams = model_->streams(tape_head_index, length_r);
+  if (streams.empty())
+    streams = model_->streams(tape_head_index, length_r);
+  sub_event_streams = model_->sub_event_streams(tape_head_index, length_r);
   for (int i=0; i<length_r; i++)
     {
-      drawtape(LINES-2, tape_head_column+i, streams[i], tape_head_index+i);
+      drawtape(LINES-2, tape_head_column+i, streams[i], sub_event_streams[i], tape_head_index+i);
     }
 
-  // draw to the left
+  //
+  // draw tape to the left, clip it 
+  //
   int tape_l_column = 2;
-  int length_l = tape_head_column - tape_l_column - 1;
+  int length_l = tape_head_column - tape_l_column - statuslen - 18;
+  if (length_l < 0)
+    length_l = 0;
   if (tape_head_index - length_l <= 0)
     length_l = tape_head_index;
   //  log_trace("length_l = %d", length_l);
 
   streams = model_->streams(tape_head_index-length_l, length_l);
+  sub_event_streams = model_->sub_event_streams(tape_head_index-length_l, length_l);
   for (int i=0; i < length_l; i++)
     {
-      drawtape(LINES-2, tape_head_column-(length_l-i), streams[i], tape_head_index-length_l+i);
+      drawtape(LINES-2, tape_head_column-(length_l-i), streams[i], sub_event_streams[i], tape_head_index-length_l+i);
     }
 
   // draw the head
   streams = model_->streams(tape_head_index, 1);
-  drawtape(LINES-2, tape_head_column, streams[0], tape_head_index, A_REVERSE);
+  sub_event_streams = model_->sub_event_streams(tape_head_index, 1);
+  drawtape(LINES-2, tape_head_column, streams[0], sub_event_streams[0], tape_head_index, A_REVERSE);
   standend();
+
 }
 
 void
 View::do_help()
 {
-  std::string the_help ="\
-Key              Action\n\
-============================================================\n\
-?                This help.\n\
-left/right       Previous/next frame\n\
-pgup/pgdn        Back/forward a screenful of frames\n\
-[/]              \n\
-up/down          Select previous/next frame item\n\
-k/j              \n\
-<                First frame\n\
->                Last frame\n\
-x                Serialize selected frame to XML\n\
-p                Pretty-print selected item (currently I3TrayInfo only)\n\
-w                Write frame (binary) to file\n\
-q                Quit\n\
-a                About\n\
-g                Go to frame\n\
-t                Toggle display of TrayInfo frames\n\
-\n\
-The 'tape' display at the bottom shows activity on each of Icecube's data\n\
-'streams':\n\
-  G:  Geometry\n\
-  C:  Calibration\n\
-  D:  Detector Status\n\
-  P:  Physics (event data)\n\
-\n\
-And vertical lines represent splices (tray configurations).\n\
-\n\
-If you don't like these keybindings you can customize them in $HOME/shovelrc.\n\
-This message does/will not reflect any customizations.\n\
-";
+  std::string the_help =R"(Key              Action
+============================================================
+?                This help.
+left/right, h/l  Previous/next frame
+[/]              Back/forward a screenful of frames
+up/down, k/j     Select previous/next frame item
+{, home,         First frame
+}, end           Last frame
+pgup/pgdn, -/=   Up/down a screenful of frame items
+x                Serialize selected frame object to XML (show with less)
+s                Serialize selected frame object to XML and save to file
+p, enter         Pretty-print selected item
+w                Write entire frame (binary) to file
+W                Write entire frame (binary) to file, along with all frames
+                   on which it depends
+q                Quit
+a                About
+g                Go to frame
+L                Load project
+i                Run an interactive python shell with the current frame
+e                Search for an event by event ID, or run/event ID
+
+The 'tape' display at the bottom shows activity on each of IceTrays's data
+'streams'.
+
+If you don't like these keybindings you can customize them in $HOME/shovelrc.
+This message does/will not reflect any customizations.
+)";
   page(the_help);
 }
 
@@ -438,90 +611,13 @@ template <typename T>
 optional<T>
 View::dialog(const std::string& prompt)
 {
-#if 0
-  /* Declare variables. */
-  CDKLABEL *stopSign	= 0;
-  CDKLABEL *title	= 0;
-  WINDOW *cursesWin	= 0;
-  int currentLight	= 0;
-  char *mesg[5], *sign[4];
-  chtype key;
-  boolean functionKey;
-
-  /* Set up CDK. */
-  //   cursesWin = initscr();
-  //   cdkscreen = initCDKScreen (cursesWin);
-
-  /* Start CDK Colors. */
-  //initCDKColor();
-
-  /* Set the labels up. */
-  mesg[0] = "<C><#HL(40)>";
-  mesg[1] = "<C>Press </B/16>r<!B!16> for the </B/16>red light";
-  mesg[2] = "<C>Press </B/32>y<!B!32> for the </B/32>yellow light";
-  mesg[3] = "<C>Press </B/24>g<!B!24> for the </B/24>green light";
-  mesg[4] = "<C><#HL(40)>";
-  sign[0] = " <#DI> ";
-  sign[1] = " <#DI> ";
-  sign[2] = " <#DI> ";
-
-  assert(cdkscreen);
-  title = newCDKLabel (cdkscreen, CENTER, TOP, mesg, 5, FALSE, FALSE);
-  stopSign = newCDKLabel (cdkscreen, CENTER, CENTER, sign, 3, TRUE, TRUE);
-
-  /* Do this until they hit q or escape. */
-  for (;;)
-    {
-      drawCDKLabel (title, FALSE);
-      drawCDKLabel (stopSign, TRUE);
-
-      key = getchCDKObject (ObjOf(stopSign), &functionKey);
-      if (key == KEY_ESC || key == 'q' || key == 'Q')
-	{
-	  break;
-	}
-      else if (key == 'r' || key == 'R')
-	{
-	  sign[0] = " </B/16><#DI> ";
-	  sign[1] = " o ";
-	  sign[2] = " o ";
-	  currentLight = 0;
-	}
-      else if (key == 'y' || key == 'Y')
-	{
-	  sign[0] = " o ";
-	  sign[1] = " </B/32><#DI> ";
-	  sign[2] = " o ";
-	  currentLight = 1;
-	}
-      else if (key == 'g' || key == 'G')
-	{
-	  sign[0] = " o ";
-	  sign[1] = " o ";
-	  sign[2] = " </B/24><#DI> ";
-	  currentLight = 2;
-	}
-
-      /* Set the contents of the label and re-draw it. */
-      setCDKLabel (stopSign, sign, 3, TRUE);
-    }
-
-  /* Clean up. */
-  destroyCDKLabel (title);
-  destroyCDKLabel (stopSign);
-  //   destroyCDKScreen (cdkscreen);
-
-  //   endCDK();
-  //   ExitProgram (EXIT_SUCCESS);
-#endif
-
   //  log_trace(__PRETTY_FUNCTION__);
   FIELD* field[2];
 
-  char value[20];
-  memset(value, 0, 20);
+  char value[26];
+  memset(value, 0, 26);
   
-  field[0] = new_field(1,10,0,2,0,1);
+  field[0] = new_field(1,26,0,2,0,1);
   set_field_back(field[0], A_UNDERLINE);
   form_traits<T>::configure_field(field[0]);
   set_field_buffer(field[0], 0, value);
@@ -551,17 +647,19 @@ View::dialog(const std::string& prompt)
       int ch = wgetch(win);
       //      log_info("<%c>", ch);
       if (ch == '\n')
-	break;
+        break;
+      if (ch == 0x1B) //ESC
+        return optional<T>();
 
       switch(ch)
-	{
-	case '\b':
-	  form_driver(form, REQ_DEL_PREV);
-	  //	  form_driver(form, REQ_PREV_CHAR);
-	  break;
-	default:
-	  form_driver(form, ch);
-	}
+      {
+        case '\b':
+        case 0x7F:
+          form_driver(form, REQ_DEL_PREV);
+          break;
+        default:
+          form_driver(form, ch);
+      }
       wrefresh(win);
     }
   form_driver(form, REQ_VALIDATION);
@@ -576,7 +674,6 @@ View::dialog(const std::string& prompt)
   free_field(field[0]);
 
   delwin(win);
-  //  log_trace("END %s", __PRETTY_FUNCTION__);
   return rv;
 }
 
@@ -591,8 +688,8 @@ View::do_about()
   
   vector<string> about_txt;
 
-  about_txt += "written in 2006 for the icecube collaboration",
-    "by troy d. straszheim <troy@icecube.umd.edu>";
+  about_txt += "Written 2006-2009 for the IceCube Collaboration",
+    "By Troy D. Straszheim <troy@icecube.umd.edu>";
 
   settext(white);
   for (unsigned i=0; i<about_txt.size(); i++)
@@ -620,7 +717,7 @@ View::draw_border()
   box(stdscr, ACS_VLINE, ACS_HLINE);
 
   settext(dim_blue);
-  mvhline(LINES-8, 1, ACS_HLINE, COLS-2);
+  mvhline(LINES-7, 1, ACS_HLINE, COLS-2);
 
   settext(hi_yellow);
   mvaddstr(0, 2, " I3 Data Shovel ");
@@ -644,27 +741,19 @@ View::Instance()
   return the_view;
 }
 
-boost::optional<string>
-View::get_file(const std::string& msg)
-{
-  std::string file = selectFile(cdkscreen, const_cast<char*>(msg.c_str()));
-  return file;
-}
-
 void
-View::start_scan_progress(const std::string& filename)
+View::start_scan_progress(const std::string& message)
 {
   log_trace("%s", __PRETTY_FUNCTION__);
   scanning_ = true;
-  string msg = "Scanning " + filename;
 
-  progresshist_ = newCDKHistogram(cdkscreen, 
+  progresshist_ = newCDKHistogram(cdkscreen,
 				  CENTER,  // xpos
 				  CENTER,  // ypos
 				  1, // height
 				  -6, // width (full minus 6)
 				  HORIZONTAL, // orientation
-				  const_cast<char*>(msg.c_str()), // label
+				  const_cast<char*>(message.c_str()), // label
 				  true, // box
 				  false); // shadow
 
@@ -682,9 +771,11 @@ View::start_scan_progress(const std::string& filename)
 void 
 View::scan_progress(double d)
 {
-  log_trace("scan_progress(%f)", d);
-  setCDKHistogramValue(progresshist_, 0, 100, (int)d);
-  drawCDKHistogram(progresshist_, true);
+  if(scanning_){
+    log_trace("scan_progress(%f)", d);
+    setCDKHistogramValue(progresshist_, 0, 100, (int)d);
+    drawCDKHistogram(progresshist_, true);
+  }
 }
 
 void

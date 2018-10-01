@@ -1,5 +1,5 @@
 /**
- *  $Id: I3Frame.h 41943 2008-02-07 15:14:07Z tschmidt $
+ *  $Id$
  *  
  *  Copyright (C) 2007-8
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -18,8 +18,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-#include <icetray/I3Frame.h>
-#include <icetray/I3Tray.h>
 
 #include <algorithm>
 #include <fstream>
@@ -28,7 +26,8 @@
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
-#include <boost/crc.hpp>
+#include <boost/interprocess/streams/bufferstream.hpp>
+#include <boost/interprocess/streams/vectorstream.hpp>
 #include <boost/foreach.hpp>
 #include <boost/regex.hpp>
 #include <boost/format.hpp>
@@ -37,11 +36,37 @@
 
 #include <icetray/serialization.h>
 #include <icetray/Utility.h>
+#include <icetray/I3Frame.h>
+#include <icetray/I3Tray.h>
 
+#include "crc-ccitt.h"
+
+// working around a libc++ bug in istream::ignore()
+// http://llvm.org/bugs/show_bug.cgi?id=16427
+#if defined(_LIBCPP_VERSION) && (_LIBCPP_VERSION <= 1101)
+#define WORKAROUND_LIBCPP_ISTREAM_IGNORE_ISSUE
+namespace {
+    template <typename IStreamT>
+    inline IStreamT& istream_ignore_workaround(IStreamT& is, std::streamsize n)
+    {
+        std::streamsize count = n;
+        
+        const std::streamsize buf_size = 10240;
+        char buffer[buf_size];
+        while (count > 0) {
+            std::streamsize read_bytes = std::min(buf_size, count);
+            is.read(buffer, read_bytes);
+            count -= read_bytes;
+        }
+
+        return is;
+    }
+}
+#endif
 
 using namespace std;
 namespace io = boost::iostreams;
-namespace ar = boost::archive;
+namespace ar = icecube::archive;
 
 template <class Archive>
 void I3Frame::Stream::serialize(Archive& ar, unsigned version)
@@ -66,6 +91,12 @@ string I3Frame::Stream::str() const {
   case 'D':
     return "DetectorStatus";
     break;
+  case 'S':
+    return "Simulation";
+    break;
+  case 'Q':
+    return "DAQ";
+    break;
   case 'P':
     return "Physics";
     break;
@@ -81,6 +112,8 @@ const I3Frame::Stream I3Frame::None('N');
 const I3Frame::Stream I3Frame::Geometry('G');
 const I3Frame::Stream I3Frame::Calibration('C');
 const I3Frame::Stream I3Frame::DetectorStatus('D');
+const I3Frame::Stream I3Frame::Simulation('S');
+const I3Frame::Stream I3Frame::DAQ('Q');
 const I3Frame::Stream I3Frame::Physics('P');
 const I3Frame::Stream I3Frame::TrayInfo('I');
 
@@ -113,9 +146,12 @@ namespace {
 I3Frame::I3Frame(Stream stop)
   : stop_(stop),
     drop_blobs_(true)
-{ 
-}
+{ }
 
+I3Frame::I3Frame(char stop)
+  : stop_(I3Frame::Stream(stop)),
+    drop_blobs_(true)
+{ }
 
 I3Frame::I3Frame(const I3Frame& rhs)
 {
@@ -131,7 +167,7 @@ I3Frame::keys() const
       iter != map_.end();
       iter++)
     {
-      keys_.push_back(iter->first);
+      keys_.push_back(iter->first.string);
     }  
   std::sort(keys_.begin(), keys_.end());
   return keys_;
@@ -158,52 +194,32 @@ I3Frame::size_type I3Frame::size(const string& key) const
   return size(*iter->second);
 }
 
-
-
-void
-I3Frame::copy(const I3Frame& rhs)
+void I3Frame::purge(const Stream& what)
 {
-  *this = rhs;
+  map_t::iterator it = map_.begin();
+  while (it != map_.end()) {
+    if (it->second->stream == what)
+      map_.erase(it++);
+    else
+      it++;
+  }
+}
+
+void I3Frame::purge()
+{
+  map_t::iterator it = map_.begin();
+  while (it != map_.end()) {
+    if (it->second->stream != stop_)
+      map_.erase(it++);
+    else
+      it++;
+  }
 }
 
 void I3Frame::merge(const I3Frame& rhs)
 {
-  map_t cleanmap;
-
-  for(map_t::const_iterator it = rhs.map_.begin();
-      it != rhs.map_.end();
-      it++)
-    {
-      // take only those that aren't on *our* stream
-      if (it->second->stream != stop_)
-	{
-	  cleanmap[it->first] = it->second;
-	  log_trace("merging %s from rhs", it->first.c_str());
-	}
-    }
-
-  for(map_t::const_iterator it = map_.begin();
-      it != map_.end();
-      it++)
-    {
-      // keep only those that are on our stream
-      if (it->second->stream == stop_)
-	{
-	  cleanmap[it->first] = it->second;
-	  log_trace("keeping %s from lhs", it->first.c_str());
-	}
-    }
-
-  // now we're merged.  yay.
-  map_ = cleanmap;
+  map_.insert(rhs.map_.begin(), rhs.map_.end());
 }
-
-
-void I3Frame::swap(I3Frame& rhs)
-{
-  map_.swap(rhs.map_);
-}
-
 
 void I3Frame::take(const I3Frame& rhs, const string& what, const string& as)
 {
@@ -212,6 +228,27 @@ void I3Frame::take(const I3Frame& rhs, const string& what, const string& as)
     map_[as] = iter->second;
   else
     log_fatal("attempt to take \"%s\" from a frame that doesn't have one", what.c_str());
+}
+
+I3Frame::Stream
+I3Frame::GetStop(const std::string& key) const
+{
+	map_t::const_iterator iter = map_.find(key);
+	if (iter == map_.end())
+		log_fatal("The key '%s' doesn't exist in this frame", key.c_str());
+	else
+		return iter->second->stream;
+}
+
+void I3Frame::validate_name(const std::string& name)
+{
+  // this should be more exhausive than just space tab newline.
+  if (name.empty())
+    log_fatal("attempt to Put an element into frame with an empty string used as the key");
+  if (name.find_first_of(" \t\n") != string::npos)
+    log_fatal("attempt to Put an element into frame at name \"%s\", "
+              "which contains an illegal whitespace character",
+              name.c_str());
 }
 
 void I3Frame::Put(const string& name, I3FrameObjectConstPtr element)
@@ -228,22 +265,37 @@ void I3Frame::Put(const string& name, I3FrameObjectConstPtr element, const I3Fra
                 name.c_str(), type_name(name).c_str());
     }
 
-  // this should be more exhausive than just space tab newline.
-  if (name.find_first_of(" \t\n") != string::npos)
-    log_fatal("attempt to Put an element into frame at name \"%s\", "
-              "which contains an illegal whitespace character",
-              name.c_str());
+  validate_name(name);
   
   boost::shared_ptr<value_t> sptr(new value_t);
   map_[name] = sptr;
   value_t& value = *sptr;
+  value.size = 0;
   value.ptr = element;
   value.stream = on_stream;
 }
 
+void I3Frame::Replace(const std::string& name, I3FrameObjectConstPtr element)
+{
+  validate_name(name);
+  
+  auto it=map_.find(name);
+  if(it==map_.end())
+    log_fatal_stream("Attempt to replace object at key '" << name << 
+                     "' but there is nothing there.");
+  boost::shared_ptr<value_t> sptr(new value_t);
+  map_[name] = sptr;
+  value_t& value = *sptr;
+  value.size = 0;
+  value.ptr = element;
+  value.stream = stop_;
+}
+
 void I3Frame::Rename(const string& fromname, const string& toname)
 {
-  map_t::const_iterator fromiter = map_.find(fromname);
+  validate_name(toname);
+  
+  map_t::iterator fromiter = map_.find(fromname);
   if (fromiter == map_.end())
     log_fatal("attempt to rename \"%s\" to \"%s\", but the source is empty",
               fromname.c_str(), toname.c_str());
@@ -254,10 +306,21 @@ void I3Frame::Rename(const string& fromname, const string& toname)
               fromname.c_str(), toname.c_str());
 
   map_[toname] = map_[fromname];
-  map_.erase(fromname);
-
+  map_.erase(fromiter);
 }
 
+void I3Frame::ChangeStream(const string& key, I3Frame::Stream stream)
+{
+  map_t::iterator fromiter = map_.find(key);
+  if (fromiter == map_.end())
+    log_fatal("attempt to change stream of \"%s\", but it doesn't exist",
+      key.c_str());
+
+  // Duplicate value_t to avoid potential caching issues
+  boost::shared_ptr<value_t> sptr(new value_t(*fromiter->second));
+  sptr->stream = stream;
+  fromiter->second = sptr;
+}
 
 void I3Frame::Delete(const string& name)
 {
@@ -294,12 +357,12 @@ string I3Frame::type_name(const string& key) const
   return type_name(*iter->second);
 }
 
-const type_info* I3Frame::type_id(const string& key, bool quietly) const
+const type_info* I3Frame::type_id(const string& key) const
 {
   map_t::const_iterator iter = map_.find(key);
   if (iter == map_.end())
     return NULL;
-  const I3FrameObject* fo = get_impl(*iter, quietly).get();
+  const I3FrameObject* fo = get_impl(*iter).get();
   if (fo == NULL)
     return NULL;
 
@@ -316,21 +379,43 @@ string I3Frame::type_name(const value_t& value)
 
   string* strp = const_cast<string*>(&value.blob.type_name);
 
-  *strp = value.ptr ? I3::name_of(typeid(*(value.ptr.get()))) : "(null)";
+  const I3FrameObject& obj=*(value.ptr.get());
+  *strp = value.ptr ? I3::name_of(typeid(obj)) : "(null)";
 
   // and return that
   return value.blob.type_name;
 }
 
-void I3Frame::Dump() const
+string I3Frame::Dump() const
 {
   ostringstream o;
   o << *this;
+  return o.str();
 }
+
+extern "C" unsigned long crc32c(unsigned long crc, const uint8_t *buf, unsigned int len);
 
 namespace 
 {
-  typedef boost::crc_optimal<16, 0x1021, 0xFFFF, 0, false, false> crc_t;
+  typedef struct crc_ {
+    uint32_t crc;
+    bool is_crc32;
+
+    crc_(bool crc32 = true) : crc(crc32 ? 0 : 0xffff), is_crc32(crc32) {}
+    uint32_t checksum() { return crc; }
+    inline void process_bytes(const void *bytes, size_t size) {
+       if (is_crc32)
+         crc = crc32c(crc, (const uint8_t *)bytes, size);
+       else
+         crc = crc_ccitt(crc, (const uint8_t *)bytes, size);
+    }
+    inline void process_byte(uint8_t byte) {
+       if (is_crc32)
+         crc = crc32c(crc, &byte, 1);
+       else
+         crc = crc_ccitt_byte(crc, byte);
+    }
+  } crc_t;
 
   template <typename T, typename CRC>
   inline void
@@ -340,7 +425,13 @@ namespace
     if (! orly)
       return;
     uint32_t size = container.size();
+#if BYTE_ORDER == BIG_ENDIAN
+    uint32_t swapped = size;
+    icecube::archive::portable::swap(swapped);
+    crc.process_bytes(&swapped, sizeof(size));
+#else
     crc.process_bytes(&size, sizeof(size));
+#endif
     crc.process_bytes(&(container[0]), size);
   }
 
@@ -351,7 +442,13 @@ namespace
   {
     if (!orly)
       return;
+#if BYTE_ORDER == BIG_ENDIAN
+    T swapped = pod;
+    icecube::archive::portable::swap(swapped);
+    crc.process_bytes(&swapped, sizeof(T));
+#else
     crc.process_bytes(&pod, sizeof(T));
+#endif
   }
 }    
 
@@ -364,7 +461,70 @@ typedef uint32_t i3frame_nslots_t;
 typedef char i3frame_tag_t[4];
 const static i3frame_tag_t tag = { '[', 'i', '3', ']' };
 
-const static i3frame_version_t version = 5;
+const static i3frame_version_t version = 6;
+
+
+void I3Frame::create_blob_impl(I3Frame::value_t &value)
+{
+  const I3FrameObject& obj=*(value.ptr.get());
+  value.blob.type_name = value.ptr ? I3::name_of(typeid(obj)) : "(null)";
+
+  typedef io::stream<io::back_insert_device<vector<char> > > vecstream_t;
+  vecstream_t blobBufStream(value.blob.buf);
+  {
+    icecube::archive::portable_binary_oarchive blobBufArchive(blobBufStream);
+    blobBufArchive << make_nvp("T", value.ptr);
+  }
+  blobBufStream.flush();
+  value.size = value.blob.buf.size();
+}
+
+void I3Frame::create_blob(bool drop_memory_data, const std::string &key) const
+{
+  map_t::const_iterator iter = map_.find(key);
+  if (iter == map_.end())
+    log_fatal("Tried to create a blob for unknown key %s", key.c_str());
+  value_t& value = *(iter->second);
+
+  if (value.blob.buf.size() == 0) {
+    // only create a blob if there is none yet
+    try {
+      create_blob_impl(value);
+    } catch (const exception &e) {
+      log_fatal("caught \"%s\" while writing frame object \"%s\" of type \"%s\"",
+                e.what(), key.c_str(), value.blob.type_name.c_str());
+    }
+  }
+
+  if (drop_memory_data) {
+    // drop the memory shared pointer if requested
+    value.ptr.reset();
+  }
+}
+
+void I3Frame::create_blobs(bool drop_memory_data, const std::vector<std::string>& skip) const
+{
+  for (map_t::iterator iter = map_.begin();
+       iter != map_.end();
+       iter++)
+  {
+    bool skipIt = false;
+    for (vector<string>::const_iterator skipIter = skip.begin();
+         !skipIt && (skipIter != skip.end());
+         skipIter++)
+      {
+        boost::regex reg(*skipIter);
+        skipIt = boost::regex_match(iter->first.string, reg);
+      }
+
+    if (iter->second->stream != stop_.id())
+      skipIt = true;
+
+    if (skipIt) continue;
+
+    create_blob(drop_memory_data, iter->first.string);
+  }
+}
 
 template <typename OStreamT>
 void I3Frame::save(OStreamT& os, const vector<string>& skip) const
@@ -373,7 +533,7 @@ void I3Frame::save(OStreamT& os, const vector<string>& skip) const
 
   os.write(tag, sizeof(i3frame_tag_t));
   {
-    boost::archive::portable_binary_oarchive poa(os);
+    icecube::archive::portable_binary_oarchive poa(os);
     poa << make_nvp("version", version);
     // version does *not* get crc'ed
 
@@ -382,7 +542,7 @@ void I3Frame::save(OStreamT& os, const vector<string>& skip) const
 
     // save map values in a set to check, if keys (guaranteed in a map) and pointers are
     // unique.  skip values, where key matches an element in vector skip.
-    set<map_t::value_type*> mapAsSet;
+    std::set<std::string> mapAsSet;
     for (map_t::iterator iter = map_.begin();
          iter != map_.end();
          iter++)
@@ -393,59 +553,53 @@ void I3Frame::save(OStreamT& os, const vector<string>& skip) const
              skipIter++)
           {
             boost::regex reg(*skipIter);
-            skipIt = boost::regex_match(iter->first, reg);
+            skipIt = boost::regex_match(iter->first.string, reg);
           }
 
-	if (iter->second->stream != stop_.id())
-	  skipIt = true;
+        if (iter->second->stream != stop_.id())
+          skipIt = true;
 
         if (skipIt) continue;
-        
-        if (!mapAsSet.insert(&*iter).second)
-          log_fatal("frame contains a duplicated pointer for \"%s\"", iter->first.c_str());
+
+        mapAsSet.insert(iter->first.string);
       }
 
     i3frame_nslots_t size = mapAsSet.size();
     poa << make_nvp("size", size);
     crcit(size, crc);
-    
-    for (set<map_t::value_type*>::iterator iter = mapAsSet.begin();
+
+    for (std::set<std::string>::iterator iter = mapAsSet.begin();
          iter != mapAsSet.end();
          iter++)
       {
-        map_t::value_type& i = **iter;
-        const string &key = i.first;
-        value_t& value = *i.second;
+        const string &key = *iter;
+        value_t& value = *map_[key];
 
         poa << make_nvp("key", key);
-	crcit(key, crc);
-        if (value.blob.buf.size()) // there's a buffer there.  use it and it's type_name.
+        crcit(key, crc);
+        if (value.blob.buf.size()) // there's a buffer there.  use it and its type_name.
           {
             string type_name = value.blob.type_name;
             poa << make_nvp("type_name", type_name);
-	    crcit(type_name, crc);
+            crcit(type_name, crc);
             poa << make_nvp("buf", value.blob.buf);
-	    crcit(value.blob.buf, crc);
+            crcit(value.blob.buf, crc);
           }
         else
           {
-            value.blob.type_name = value.ptr ? I3::name_of(typeid(*(value.ptr.get()))) : "(null)";
-            poa << make_nvp("type_name", value.blob.type_name);
-	    crcit(value.blob.type_name, crc);
-	    typedef io::stream<io::back_insert_device<vector<char> > > vecstream_t;
-            vecstream_t blobBufStream(value.blob.buf);
-            {
-              boost::archive::portable_binary_oarchive blobBufArchive(blobBufStream);
               try {
-                blobBufArchive << make_nvp("T", value.ptr);
+              create_blob_impl(value);
               } catch (const exception &e) {
                 log_fatal("caught \"%s\" while writing frame object \"%s\" of type \"%s\"", 
                           e.what(), key.c_str(), value.blob.type_name.c_str());
               } 
-            }
-            blobBufStream.flush();
+
+            string type_name = value.blob.type_name;
+            poa << make_nvp("type_name", type_name);
+            crcit(type_name, crc);
             poa << make_nvp("buf", value.blob.buf);
-	    crcit(value.blob.buf, crc);
+            crcit(value.blob.buf, crc);
+
             if (drop_blobs_)
               value.blob.reset();
           }
@@ -460,7 +614,7 @@ void I3Frame::save(OStreamT& os, const vector<string>& skip) const
 //  Toplevel load interface, dispatches to versioned versions
 //
 template <typename IStreamT>
-bool I3Frame::load(IStreamT& is, const vector<string>& skip)
+bool I3Frame::load(IStreamT& is, const vector<string>& skip, bool verify_cksum)
 {
   if (!is.good())
     log_fatal("attempt to read from stream in error state");
@@ -479,8 +633,10 @@ bool I3Frame::load(IStreamT& is, const vector<string>& skip)
   if (frameTagRead[0] != tag[0])
     {  
       // reinterpret tag as version #
-#ifdef BOOST_PORTABLE_BINARY_ARCHIVE_BIG_ENDIAN
-      boost::archive::portable::swap_impl<sizeof(frameTagRead)>::swap(frameTagRead);
+#if BYTE_ORDER == BIG_ENDIAN
+      BOOST_STATIC_ASSERT(sizeof(frameTagRead) == 4);
+      uint32_t &frameTagInt = reinterpret_cast<uint32_t &>(frameTagRead);
+      icecube::archive::portable::swap(frameTagInt);
 #endif
       const i3frame_version_t* tmpVersion =
 	reinterpret_cast<i3frame_version_t*>(frameTagRead);
@@ -490,67 +646,77 @@ bool I3Frame::load(IStreamT& is, const vector<string>& skip)
 
   // dispatch to load_old didn't happen. verify that this is an .i3 file
   int cmp = memcmp(frameTagRead, tag, 4);
-  if (cmp != 0)
-    log_fatal("Frame tag found is %c%c%c%c, not [i3] as expected.  Is this really an .i3 file?",
+  if (cmp != 0){
+    log_debug("Frame tag found is %c%c%c%c, not [i3] as expected.  Is this really an .i3 file?",	      
 	      frameTagRead[0], frameTagRead[1], frameTagRead[2], frameTagRead[3]);
+    log_fatal("Your I3File is corrupt.");
+  }
 
   // if we are here, this looks like an .i3 file.  Get the frame serialization version.
   {
-    boost::archive::portable_binary_iarchive bufArchive(is);
+    icecube::archive::portable_binary_iarchive bufArchive(is);
     // this might return garbage and set eof() on stream
     i3frame_version_t versionRead;
     bufArchive >> make_nvp("i3version", versionRead);
 
     if (versionRead == 4)
       return load_v4(is, skip);
-    if (versionRead == 5)
-      return load_v5(is, skip);
+    else if (versionRead == 5 || versionRead == 6)
+      return load_v56(is, skip, versionRead == 6, verify_cksum);
     else
-      log_fatal("Frame is version %u, this software can read only up to version 5", versionRead);
+      log_fatal("Frame is version %u, this software can read only up to version %d", versionRead, version);
   }
+
+  return false;
 }
 
 //
 //
-//  load_old.
+//  load versions 5 and 6 (latest)
+//  these differ in using CRC16-CCITT vs. CRC32
 //
 //
 template <typename IStreamT>
-bool I3Frame::load_v5(IStreamT& is, const vector<string>& skip)
+bool I3Frame::load_v56(IStreamT& is, const vector<string>& skip, bool v6, bool verify)
 {
   if (!is.good())
     log_fatal("attempt to read from stream in error state");
 
-  i3frame_size_t sizeRead;
   i3frame_checksum_t checksumRead;
 
-  crc_t crc;
+  crc_t crc(v6);
   bool calc_crc = (skip.size() == 0);
 
   // read size of the entire (serialized) frame
   // read checksum plus entire frame and process/test checksum
   {
-    boost::archive::portable_binary_iarchive bia(is);
+    icecube::archive::portable_binary_iarchive bia(is);
 
     bia >> make_nvp("stream", stop_);
-    if(calc_crc) 
-      crc.process_byte(stop_.id());
+    if (verify)
+      crcit(stop_.id(), crc, calc_crc);
 
     i3frame_nslots_t nslots;
     bia >> make_nvp("size", nslots);
-    if(calc_crc) 
-      crc.process_bytes(&nslots, sizeof(nslots));
-
+    if (verify)
+      crcit(nslots, crc, calc_crc);
+#ifdef USING_GCC_EXT_HASH_MAP
+    map_.resize(nslots);
+#else
+    map_.reserve(nslots);
+#endif
 
     for (unsigned int i = 0; i < nslots; i++)
       {
         string key, type_name;
 
         bia >> make_nvp("key", key);
-	crcit(key, crc, calc_crc);
+        if (verify)
+	  crcit(key, crc, calc_crc);
 
         bia >> make_nvp("type_name", type_name);
-	crcit(type_name, crc, calc_crc);
+        if (verify)
+	  crcit(type_name, crc, calc_crc);
 
         bool skipIt = false;
         for (vector<string>::const_iterator skipIter = skip.begin();
@@ -565,7 +731,11 @@ bool I3Frame::load_v5(IStreamT& is, const vector<string>& skip)
           {
 	    uint32_t count;
 	    bia >> make_nvp("count", count);
+#ifdef WORKAROUND_LIBCPP_ISTREAM_IGNORE_ISSUE
+	    istream_ignore_workaround(is, count);
+#else
 	    is.ignore(count);
+#endif
           }
         else
           {
@@ -580,13 +750,15 @@ bool I3Frame::load_v5(IStreamT& is, const vector<string>& skip)
 	    }
             if (blob.buf.size() == 0)
               log_fatal("read a zero-size buffer from input stream?");
-	    crcit(blob.buf, crc, calc_crc);
+            if (verify)
+	      crcit(blob.buf, crc, calc_crc);
             blob.type_name = type_name;
+            vp->size = blob.buf.size();
           }
       }
 
     bia >> make_nvp("checksum", checksumRead);
-    if (calc_crc && (crc.checksum() != checksumRead))
+    if (verify && calc_crc && (crc.checksum() != checksumRead))
       log_fatal("checksums don't match");
   }
 
@@ -612,7 +784,7 @@ bool I3Frame::load_v4(IStreamT& is, const vector<string>& skip)
   // read size of the entire (serialized) frame
   // read checksum plus entire frame and process/test checksum
   {
-    boost::archive::portable_binary_iarchive bia(is);
+    icecube::archive::portable_binary_iarchive bia(is);
 
     bia >> make_nvp("size", sizeRead);
     bia >> make_nvp("checksum", checksumRead);
@@ -633,7 +805,7 @@ bool I3Frame::load_v4(IStreamT& is, const vector<string>& skip)
 
     //    io::array_source bufSource(&(buf_[0]), buf_.size());
     //    io::filtering_istream fis(bufSource);
-    //    boost::archive::portable_binary_iarchive bia(fis);
+    //    icecube::archive::portable_binary_iarchive bia(fis);
 
     bia >> make_nvp("Stream", stop_);
     std::vector<event_t> tmp_history_;
@@ -661,7 +833,11 @@ bool I3Frame::load_v4(IStreamT& is, const vector<string>& skip)
           {
 	    uint32_t count;
 	    bia >> make_nvp("count", count);
+#ifdef WORKAROUND_LIBCPP_ISTREAM_IGNORE_ISSUE
+	    istream_ignore_workaround(is, count);
+#else
 	    is.ignore(count);
+#endif
           }
         else
           {
@@ -677,6 +853,7 @@ bool I3Frame::load_v4(IStreamT& is, const vector<string>& skip)
             if (blob.buf.size() == 0)
               log_fatal("read a zero-size buffer from input stream?");
             blob.type_name = type_name;
+            vp->size = blob.buf.size();
           }
       }
   }
@@ -700,7 +877,7 @@ bool I3Frame::load_old(IStream& is,
   if (!is.good())
     log_fatal("attempt to read from stream in error state");
 
-  boost::archive::portable_binary_iarchive bufArchive(is);
+  icecube::archive::portable_binary_iarchive bufArchive(is);
 
   std::vector<event_t> history_;
   if (versionRead > 1)
@@ -728,7 +905,11 @@ bool I3Frame::load_old(IStream& is,
         {
 	  uint32_t count;
 	  bufArchive >> make_nvp("count", count);
+#ifdef WORKAROUND_LIBCPP_ISTREAM_IGNORE_ISSUE
+	  istream_ignore_workaround(is, count);
+#else
 	  is.ignore(count);
+#endif
 	}
       else
 	{
@@ -750,6 +931,7 @@ bool I3Frame::load_old(IStream& is,
 	  blob.buf.resize(buf.size());
 
 	  std::copy(buf.begin(), buf.end(), blob.buf.begin());
+	  spv->size = blob.buf.size();
 	}
     }
   // as of version 4 this is a no-op since the iarchive itself no
@@ -786,7 +968,7 @@ ostream& operator<<(ostream& os, const I3Frame& frame)
       iter != frame.map_.end();
       iter++)
     {
-      keys.push_back(iter->first);
+      keys.push_back(iter->first.string);
     }  
   std::sort(keys.begin(), keys.end());
 
@@ -801,6 +983,9 @@ ostream& operator<<(ostream& os, const I3Frame& frame)
 
       if (frame.size(*iter) > 0)
 	os << " (" << frame.size(*iter) << ")";
+      else
+	os << " (unk)";
+	
       os << "\n";
     }
   os << "]\n";
@@ -811,13 +996,14 @@ ostream& operator<<(ostream& os, const I3Frame& frame)
 
 
 
-I3FrameObjectConstPtr I3Frame::get_impl(map_t::const_reference pr,
-                                        bool quietly) const
+I3FrameObjectConstPtr I3Frame::get_impl(map_t::const_reference pr) const
 {
   value_t& value = const_cast<value_t&>(*pr.second);
   if (value.ptr) 
     {
-      if (drop_blobs_) value.blob.reset();
+      if (drop_blobs_)
+	value.blob.reset();
+      
       return value.ptr;
     }
   if (!value.ptr && value.blob.buf.size() == 0)
@@ -825,7 +1011,7 @@ I3FrameObjectConstPtr I3Frame::get_impl(map_t::const_reference pr,
 
   io::array_source src(&(value.blob.buf[0]), value.blob.buf.size());
   io::filtering_istream fis(src);
-  boost::archive::portable_binary_iarchive pia(fis);
+  icecube::archive::portable_binary_iarchive pia(fis);
   I3FrameObjectPtr fop;
   try {
     pia >> fop;
@@ -833,20 +1019,23 @@ I3FrameObjectConstPtr I3Frame::get_impl(map_t::const_reference pr,
     if (drop_blobs_)
       value.blob.reset();
   } catch (const ar::archive_exception& e) {
-    if (!quietly)
-      log_error("frame caught exception \"%s\" while loading class type \"%s\" "
-                "at key \"%s\"", e.what(), value.blob.type_name.c_str(), pr.first.c_str());
-    throw e;
+      log_debug("frame caught exception \"%s\" while loading class type \"%s\" "
+                "at key \"%s\"", e.what(), value.blob.type_name.c_str(), pr.first.string.c_str());
+    return I3FrameObjectConstPtr();
   }
   
   return value.ptr;
 }
 
 
-template bool I3Frame::load(io::filtering_istream&, const vector<string>&);
-template bool I3Frame::load(istream& is, const vector<string>&);
-template bool I3Frame::load(ifstream& is, const vector<string>&);
+template bool I3Frame::load(io::filtering_istream&, const vector<string>&, bool);
+template bool I3Frame::load(istream& is, const vector<string>&, bool);
+template bool I3Frame::load(ifstream& is, const vector<string>&, bool);
+template bool I3Frame::load(boost::interprocess::bufferstream& is, const vector<string>&, bool);
+template bool I3Frame::load(boost::interprocess::basic_vectorstream<std::vector<
+char> >& is, const vector<string>&, bool);
 
 template void I3Frame::save(io::filtering_ostream&, const vector<string>&) const;
+template void I3Frame::save(boost::interprocess::basic_vectorstream<std::vector<char> >&, const vector<string>&) const;
 template void I3Frame::save(ostream&, const vector<string>&) const;
-template void I3Frame::save(ofstream&, const vector<string>&) const;
+template void I3Frame::save(ofstream&, const std::vector<string>&) const;

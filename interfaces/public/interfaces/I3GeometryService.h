@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3GeometryService.h 17239 2006-03-14 17:51:36Z troy $
+ * $Id$
  *
  * @file I3GeometryService.h
- * @version $Revision:$
- * @date $Date: 2006-03-14 12:51:36 -0500 (Tue, 14 Mar 2006) $
+ * @version $Revision$
+ * @date $Date$
  */
 
 #ifndef INTERFACES_I3GEOMETRYSERVICE_H_INCLUDED

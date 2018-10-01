@@ -19,17 +19,20 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
-
 #include <icetray/load_project.h>
 
-void register_I3File();
-void register_I3LootFile();
+#define REGISTER_THESE_THINGS \
+	(I3File)(I3FrameSequence)(I3FileStager)
+
+#define I3_REGISTRATION_FN_DECL(r, data, t) void BOOST_PP_CAT(register_,t)();
+#define I3_REGISTER(r, data, t) BOOST_PP_CAT(register_,t)();
+BOOST_PP_SEQ_FOR_EACH(I3_REGISTRATION_FN_DECL, ~, REGISTER_THESE_THINGS)
 
 BOOST_PYTHON_MODULE(dataio)
 {
-  load_project("libdataio", false);
+  load_project("dataio", false);
+  boost::python::import("icecube.icetray");
 
-  register_I3File();
-  register_I3LootFile();
+  BOOST_PP_SEQ_FOR_EACH(I3_REGISTER, ~, REGISTER_THESE_THINGS);
 }
 

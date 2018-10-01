@@ -1,5 +1,5 @@
 /**
- *  $Id: ithon.cxx 43705 2008-03-26 20:54:18Z kjmeagher $
+ *  $Id$
  *  
  *  Copyright (C) 2004, 2005, 2006, 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -31,161 +31,22 @@
 
 #include <icetray/I3Logging.h>
 #include <icetray/I3Tray.h>
-#include <icetray/I3Units.h>
 #include <icetray/OMKey.h>
 
-
-// AddService: same as AddModule
-I3Tray::param_setter (I3Tray::*AddServiceV)(const std::string& classname, 
-					    const std::string& instancename)
-  = &I3Tray::AddService;
+using std::string;
 
 //
-// Manual enumeration of overloads for parameters.  For each type in
-// I3_PARAM_TYPES a pointer to a member function with an appropriate
-// signature is generated.  Each of these must be individually exposed
-// to python via "def()"
-//
-typedef std::vector<int> ithon_vector_int;
-typedef std::vector<double> ithon_vector_double;
-typedef std::vector<std::string> ithon_vector_string;
-typedef std::vector<OMKey> ithon_vector_omkey;
-
-#define ITHON_I3_PARAM_TYPES			\
-  (ithon_vector_int)				\
-    (ithon_vector_double)			\
-    (ithon_vector_string)			\
-    (ithon_vector_omkey)			\
-    (string)					\
-    (double)					\
-    (int)					\
-    (int64_t)					\
-    (OMKey)
-
-
-#define I3_SETPARAM_OVERLOAD(r,data,t) \
-  bool (I3Tray::*BOOST_PP_CAT(sp_,t) )(const std::string& something, const std::string& somethingelse, const t&) = &I3Tray::SetParameter;
-
-BOOST_PP_SEQ_FOR_EACH(I3_SETPARAM_OVERLOAD, ~, ITHON_I3_PARAM_TYPES);
-
-// this is used in the interface definition to expose these function
-// to python
-#define I3_SETPARAM_OVERLOAD_DEF(r,data,t) .def("SetParameter", BOOST_PP_CAT(sp_,t)) 
-
-//
-// these correspond to I3UNITS in dataclasses/I3Units.h.
-// only those I3Units listed here will be visible from within ithon
-//
-#define I3_UNITS (meter)						\
-    (meter2)								\
-    (meter3)								\
-    (millimeter)							\
-    (millimeter2)							\
-    (millimeter3)							\
-    (centimeter)							\
-    (centimeter2)							\
-    (centimeter3)							\
-    (kilometer)								\
-    (kilometer2)							\
-    (kilometer3)							\
-    (parsec)								\
-    (micrometer)							\
-    (angstrom)								\
-    (fermi)								\
-    (barn)								\
-    (millibarn)								\
-    (microbarn)								\
-    (nanobarn)								\
-    (picobarn)								\
-    (feet)								\
-    (mm)								\
-    (mm2)								\
-    (mm3)								\
-    (cm)								\
-    (cm2)								\
-    (cm3)								\
-    (m)									\
-    (m2)								\
-    (m3)								\
-    (km)								\
-    (km2)								\
-    (km3)								\
-    (pc)								\
-    (ft)								\
-    (radian)								\
-    (milliradian)							\
-    (degree)								\
-    (steradian)								\
-    (rad)								\
-    (mrad)								\
-    (sr)								\
-    (deg)								\
-    (second)								\
-    (nanosecond)							\
-    (millisecond)							\
-    (microsecond)							\
-    (hertz)								\
-    (kilohertz)								\
-    (megahertz)								\
-    (ns)								\
-    (s)									\
-    (ms)								\
-    (minute)								\
-    (hour)								\
-    (day)								\
-    (gregoianyear)							\
-    (julianyear)							\
-    (electronvolt)							\
-    (kiloelectronvolt)							\
-    (megaelectronvolt)							\
-    (gigaelectronvolt)							\
-    (teraelectronvolt)							\
-    (petaelectronvolt)							\
-    (MeV)								\
-    (eV)								\
-    (keV)								\
-    (GeV)								\
-    (TeV)								\
-    (PeV)								\
-    (eplus)								\
-    (eSI)								\
-    (coulomb)								\
-    (C)									\
-    (picocoulomb)							\
-    (pC)								\
-    (ampere)								\
-    (A)									\
-    (milliampere)							\
-    (mA)								\
-    (nanoampere)							\
-    (nA)								\
-    (millivolt)								\
-    (mV)								\
-    (volt)								\
-    (V)									\
-    (kilovolt)								\
-    (kV)								\
-    (microvolt)								\
-    (ohm)								\
-    (perCent)								\
-    (perThousand)							\
-    (perMillion)
-
-#define I3_UNITS_INTERFACE(r,data,t) \
-  double t(double d) { return I3Units::t * d; }
-
-#define I3_UNITS_DEF(r,data,t) def(BOOST_PP_STRINGIZE(t),&t);
-
-BOOST_PP_SEQ_FOR_EACH(I3_UNITS_INTERFACE,~,I3_UNITS)
-
-//
-// Main python interface definition.  The name "ithon" must match
-// the filename of the library that it is loaded from.  A C-linkage
-// function named initithon() is generated and put in the library.
-// When python loads a file name libX.so it calls a function named
-// initX().  If it can't find it, it bails out.
+// Main python interface definition.
 //
 using namespace boost::python;
+
+static std::string I3TrayString(I3Tray &tray) {
+  std::stringstream str;
+  str << tray;
+  return str.str();
+}
+
+void do_no_harm(const I3Tray& tray){}
 
 void register_I3Tray()
 {
@@ -200,13 +61,19 @@ void register_I3Tray()
     .def("Execute", Execute_0)
     .def("Execute", Execute_1)
     .def("Usage", &I3Tray::Usage)
-    .def("Finish", &I3Tray::Finish)
+    .def("Finish", do_no_harm)
+    .def("RequestSuspension", &I3Tray::RequestSuspension)
+    .def("TrayInfo", &I3Tray::TrayInfo)
+    .def("__str__", &I3TrayString)
+    .add_property("tray_info", &I3Tray::TrayInfo)
+    .add_property("context", make_function(&I3Tray::GetContext, return_internal_reference<>()))
     .def("AddService", 
-	 (I3Tray::param_setter (I3Tray::*)(const std::string&, const std::string&))
+	 (I3Tray::param_setter (I3Tray::*)(const std::string&, std::string))
 	 &I3Tray::AddService)
     .def("AddModule", 
-	 (I3Tray::param_setter (I3Tray::*)(boost::python::object, const std::string&))
+	 (I3Tray::param_setter (I3Tray::*)(boost::python::object, std::string))
 	 &I3Tray::AddModule)
+    .def("MoveModule", &I3Tray::MoveModule, (arg("self"), arg("name"), arg("anchor"), arg("after")=false))
     .def("ConnectBoxes", &I3Tray::ConnectBoxes)
     
     // SetParameter exposure: BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS
@@ -220,13 +87,8 @@ void register_I3Tray()
     .def("SetParameter", (bool (I3Tray::*)(const std::string&,
 					   const std::string&,
 					   const boost::python::object&))&I3Tray::SetParameter)
-	 
-    // BOOST_PP_SEQ_FOR_EACH(I3_SETPARAM_OVERLOAD_DEF, ~, ITHON_I3_PARAM_TYPES)
     ;
   
-  // inserts a toplevel "def" command for each unit in I3_UNITS, above.
-  // glue to these functions is provided in I3Units.py
-  BOOST_PP_SEQ_FOR_EACH(I3_UNITS_DEF,~,I3_UNITS)
 }
 
 

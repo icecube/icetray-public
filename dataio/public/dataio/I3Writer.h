@@ -24,12 +24,12 @@
 
 #include <dataio/I3WriterBase.h>
 
-class I3Writer : public I3WriterBase<I3Writer>
+class I3Writer : public I3WriterBase
 {
   I3Writer();
   I3Writer(const I3Writer&);
   
-  vector<char> buf_;
+  std::vector<char> buf_;
 
 public:
 
@@ -38,8 +38,7 @@ public:
   virtual ~I3Writer();
 
   void Configure_();
-  void Flush();
-  void Finish_();
+  void Finish();
 
 };
 

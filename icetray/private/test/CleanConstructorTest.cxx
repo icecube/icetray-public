@@ -63,3 +63,17 @@ TEST(CleanConstructor)
 {
   clean_constructor_test<HasCleanConstructor>();
 }
+
+
+
+class CleanConstModule : public I3Module
+{
+public:
+  CleanConstModule(const I3Context& c) : I3Module(c) {}
+};
+
+
+TEST(CleanConstModule)
+{
+  clean_constructor_test<CleanConstModule>();
+}

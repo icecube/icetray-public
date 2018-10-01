@@ -1,0 +1,7 @@
+#!/usr/bin/env expect
+
+spawn bin/dataio-shovel pass1.i3
+expect "I3 Data Shovel"
+send q
+exit 0
+

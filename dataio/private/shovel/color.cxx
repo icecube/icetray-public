@@ -87,6 +87,8 @@ color_pair ColorParse(string in_color)
     ret.index = COLOR_CYAN;
   else if (clr == "white")
     ret.index = COLOR_WHITE;
+  else // black by default
+    ret.index = COLOR_BLACK;
 
   if (ret.index != -1) {
     ret.pair = COLOR_PAIR(ret.index);

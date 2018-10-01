@@ -21,17 +21,24 @@
  */
 
 #include <icetray/I3Module.h>
+#include <icetray/I3Logging.h>
 
 struct TrashCan : public I3Module
 {
   TrashCan(const I3Context& context) : I3Module(context) { }
-  void Physics(I3FramePtr frame) { }
-  void Monitor(I3FramePtr frame) { }
-  void TimeCal(I3FramePtr frame) { }
-  void Geometry(I3FramePtr frame) { }
-  void Calibration(I3FramePtr frame) { }
-  void DetectorStatus(I3FramePtr frame) { }
-  void OtherStops(I3FramePtr frame) { }
+
+  // an empty configure to avoid the default one
+  void Configure()
+  { }
+
+  void Process() 
+  { 
+    log_trace("%s", __PRETTY_FUNCTION__);
+    if (!PopFrame())
+      log_fatal("TrashCan is not a driving module");
+  }
+  
+  SET_LOGGER("TrashCan");
 };
 
 I3_MODULE(TrashCan);

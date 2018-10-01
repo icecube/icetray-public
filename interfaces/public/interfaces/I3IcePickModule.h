@@ -2,32 +2,46 @@
 #define INTERFACES_I3ICEPICKMODULE_H
 
 #include <dataclasses/physics/I3EventHeader.h>
-#include <icetray/I3Module.h>
-#include <dataclasses/I3Bool.h>
+#include <icetray/I3ConditionalModule.h>
+#include <icetray/I3Bool.h>
 #include <icetray/I3Frame.h>
+
+#include <boost/foreach.hpp>
+#include <boost/python.hpp>
 
 /**
  * @brief This is module that does the event selection.  You put it your 
- * module chain and then modules which don't pass the cut don't make it
+ * module chain and then frames which don't pass the cut don't make it
  * past this module.
  *
  * This module is a template, so when you want to add this module you 
  * need to specify a subclass of I3IcePick that you want to use as the
- * template parameter.  Don't forget to generate a dicitionary for the 
+ * template parameter.  Don't forget to generate a dictionary for the 
  * new template instantiation.
  */
 template <class IcePick>
-class I3IcePickModule : public I3Module
+class I3IcePickModule : public I3ConditionalModule
 {
  public:
   I3IcePickModule(const I3Context& context) :
-    I3Module(context),
+    I3ConditionalModule(context),
     decisionName_(I3::name_of<IcePick>()),
     discardEvents_(false),
     invertoutput_(false),
     pick_(context),
     nEventsToPick_ (-1)
     {
+      // Synchronize the two configurations via the back door
+      BOOST_FOREACH(const std::string &key, pick_.configuration_->keys()) {
+         std::string description;
+         boost::python::object def;
+         description = pick_.configuration_->GetDescription(key);
+         def = pick_.configuration_->Get(key);
+         AddParameter(key, description, def);
+      }
+      delete pick_.configuration_;
+      pick_.configuration_ = &configuration_;
+
       AddParameter("DecisionName",
 		   "Name of the filter decision in the Frame",
 		   decisionName_);
@@ -46,6 +60,13 @@ class I3IcePickModule : public I3Module
 		   "when the event passes the IcePick (as in the old reverse-Pretzian "
 		   "logic).  This ONLY affects the frame object output.",
 		   invertoutput_);
+
+      streams_.push_back(I3Frame::Physics);
+      AddParameter("Streams",
+                   "Frame stops on which to operate. All other stop types are "
+                   "ignored.",
+                   streams_);
+
       AddOutBox("OutBox");
     }
 
@@ -59,14 +80,27 @@ class I3IcePickModule : public I3Module
 		   nEventsToPick_);
       GetParameter("InvertFrameOutput",
 		   invertoutput_);
+      GetParameter("Streams", streams_);
+      if (streams_.size() == 0)
+          log_fatal("IcePick set to run on no frame types!");
       
       pick_.ConfigureInterface();
       number_Events_Picked = 0;
       number_Events_Tossed = 0;
     }
 
-  void Physics(I3FramePtr frame)
+  void Process()
     {
+      I3FramePtr frame = PopFrame();
+      if (!frame)
+          log_fatal("Icepicks are not driving modules.");
+
+      if (find(streams_.begin(), streams_.end(), frame->GetStop()) ==
+        streams_.end()) {
+          PushFrame(frame);
+          return;
+      }
+
       I3BoolPtr decision(new I3Bool(pick_.SelectFrameInterface(*frame)));
       if (decisionName_!="")
 	{
@@ -107,13 +141,14 @@ class I3IcePickModule : public I3Module
   }
 
  private:
-  string decisionName_;
+  std::string decisionName_;
   bool discardEvents_;
   bool invertoutput_;
   IcePick pick_;
   int nEventsToPick_;
   int number_Events_Picked;
   int number_Events_Tossed;
+  std::vector<I3Frame::Stream> streams_;
   SET_LOGGER("I3IcePickModule");
 };
 

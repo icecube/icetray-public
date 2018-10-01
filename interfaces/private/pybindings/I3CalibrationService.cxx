@@ -24,6 +24,8 @@ namespace bp = boost::python;
 #include <dataclasses/I3Time.h>
 #include <dataclasses/calibration/I3Calibration.h>
 
+#include "install.h"
+
 struct I3CalibrationServiceWrapper : I3CalibrationService, wrapper<I3CalibrationService>
 {
   I3CalibrationConstPtr GetCalibration(I3Time t) 
@@ -34,15 +36,16 @@ struct I3CalibrationServiceWrapper : I3CalibrationService, wrapper<I3Calibration
 
 void register_I3CalibrationService()
 {
-  implicitly_convertible<shared_ptr<I3CalibrationServiceWrapper>, shared_ptr<const I3CalibrationService> >();
-  implicitly_convertible<shared_ptr<I3CalibrationServiceWrapper>, shared_ptr<I3CalibrationService> >();
-  implicitly_convertible<shared_ptr<I3CalibrationServiceWrapper>, shared_ptr<const I3CalibrationServiceWrapper> >();
+  implicitly_convertible<boost::shared_ptr<I3CalibrationServiceWrapper>, boost::shared_ptr<const I3CalibrationService> >();
+  implicitly_convertible<boost::shared_ptr<I3CalibrationServiceWrapper>, boost::shared_ptr<I3CalibrationService> >();
+  implicitly_convertible<boost::shared_ptr<I3CalibrationServiceWrapper>, boost::shared_ptr<const I3CalibrationServiceWrapper> >();
 
   class_<I3CalibrationServiceWrapper, boost::shared_ptr<I3CalibrationServiceWrapper>, 
     boost::noncopyable>("I3CalibrationService", 
 			"Service returns geometries depending on time", 
 			init<>())
-    .def("GetCalibration", &I3CalibrationServiceWrapper::GetCalibration, bp::arg("time"))
+    .def("get_calibration", &I3CalibrationServiceWrapper::GetCalibration, bp::arg("time"))
+    .def("install", &I3InstallService<I3CalibrationService>().func)
     ;
 }
 

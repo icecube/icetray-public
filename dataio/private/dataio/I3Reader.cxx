@@ -25,6 +25,8 @@
 #include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/foreach.hpp>
+#include <boost/make_shared.hpp>
 
 #include <fstream>
 #include <set>
@@ -34,20 +36,23 @@
 #include <icetray/I3TrayInfo.h>
 #include <icetray/I3Module.h>
 
+#include "dataio/I3FileStager.h"
+
 class I3Reader : public I3Module
 {
 
   unsigned nframes_;
+  bool drop_blobs_;
   std::vector<std::string> filenames_;
   std::vector<std::string> skip_;
-  std::vector<I3Frame::Stream> push_wo_merging_;
-  bool popmeta_done_;
-  bool skip_unregistered_;
-  bool drop_blobs_;
+  // bool popmeta_done_;
+  // bool skip_unregistered_;
+  I3FileStagerPtr file_stager_;
+  I3::dataio::shared_filehandle current_filename_;
 
   boost::iostreams::filtering_istream ifs_;
 
-  I3FramePtr cache_, tmp_;
+  I3FramePtr tmp_;
 
   std::vector<std::string>::iterator filenames_iter_;
 
@@ -70,11 +75,10 @@ namespace dataio = I3::dataio;
 I3_MODULE(I3Reader);
 
 I3Reader::I3Reader(const I3Context& context) : I3Module(context),
-					       cache_(new I3Frame(I3Frame::Stream('!'))),
+					       nframes_(0),
 					       drop_blobs_(false)
 {
-  string fname;
-  push_wo_merging_.push_back(I3Frame::Stream('I')); // don't merge 'I' frames into others
+  std::string fname;
 
   AddParameter("Filename", 
 	       "Filename to read.  Use either this or Filenamelist, not both.", 
@@ -82,27 +86,24 @@ I3Reader::I3Reader(const I3Context& context) : I3Module(context),
 
   AddParameter("FilenameList", 
 	       "List of files to read, *IN SORTED ORDER*", 
-	       filenames_);
+	       std::vector<std::string>());
 
   AddParameter("SkipKeys", 
 	       "Don't load frame objects with these keys", 
 	       skip_);
-
-  AddParameter("DontMergeStreamTypes",
-	       "Don't merge these kinds of frames into these others that go by",
-	       push_wo_merging_);
 
   AddParameter("DropBuffers",
 	       "Tell I3Frames not to cache buffers of serialized frameobject data (this saves memory "
 	       "at the expense of processing speed and the ability to passthru unknown frame objects)",
 	       drop_blobs_);
 
+  AddOutBox("OutBox");
 }
 
 void
 I3Reader::Configure()
 {
-  string fname;
+  std::string fname;
 
   GetParameter("FileNameList", filenames_);
   GetParameter("FileName", fname);
@@ -116,27 +117,29 @@ I3Reader::Configure()
     filenames_.push_back(fname);
 
   GetParameter("SkipKeys", skip_);
-  filenames_iter_ = filenames_.begin();
-
-  GetParameter("DontMergeStreamTypes",
-	       push_wo_merging_);
 
   GetParameter("DropBuffers",
 	       drop_blobs_);
+  
+  file_stager_ = context_.Get<I3FileStagerPtr>();
+  if (!file_stager_)
+     file_stager_ = I3TrivialFileStager::create();
+  BOOST_FOREACH(const std::string &filename, filenames_)
+    file_stager_->WillReadLater(filename);
 
-  cache_->drop_blobs(drop_blobs_);
-
+  filenames_iter_ = filenames_.begin();
   OpenNextFile();
 }
 
 void
 I3Reader::Process()
 {
-  if (ifs_.peek() == EOF)
+  while (ifs_.peek() == EOF)
     {
       if (filenames_iter_ == filenames_.end())
 	{
 	  RequestSuspension();
+    current_filename_.reset();
 	  return;
 	}
       else
@@ -145,17 +148,15 @@ I3Reader::Process()
 
   I3FramePtr frame(new I3Frame);
   frame->drop_blobs(drop_blobs_);
-  frame->load(ifs_, skip_);
-  I3Frame::Stream s = frame->GetStop();
-
-  if (find(push_wo_merging_.begin(), push_wo_merging_.end(), s) == push_wo_merging_.end())
-    {
-      log_trace("Doing a merge");
-      // sync the two up.
-
-      frame->merge(*cache_);
-      *cache_ = *frame;
-    }
+  try {
+	nframes_++;
+	frame->load(ifs_, skip_);
+  } catch (const std::exception &e) {
+	log_fatal("Error reading %s at frame %d: %s!",
+	    current_filename_->c_str(), nframes_, e.what());
+	return;
+  }
+	
   PushFrame(frame, "OutBox");
 }
 
@@ -167,14 +168,16 @@ I3Reader::OpenNextFile()
   ifs_.reset();
   assert(ifs_.empty());
 
-  string filename = *filenames_iter_;
+  current_filename_.reset();
+  current_filename_ = file_stager_->GetReadablePath(*filenames_iter_);
+  nframes_ = 0;
   filenames_iter_++;
 
-  I3::dataio::open(ifs_, filename);
+  I3::dataio::open(ifs_, *current_filename_);
   log_trace("Constructing with filename %s, %zu regexes", 
-	    filename.c_str(), skip_.size());
+	    current_filename_->c_str(), skip_.size());
 
-  log_info("Opened file %s", filename.c_str());
+  log_info("Opened file %s", current_filename_->c_str());
 }
 
 I3Reader::~I3Reader() 

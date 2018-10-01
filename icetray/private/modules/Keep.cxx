@@ -44,15 +44,9 @@ Keep::Keep(const I3Context& context)
   AddParameter("Keys", 
                "Keep frame objects with names that match any of these keys", 
                keysParam_);
-
-  AddOutBox("OutBox");
 }
 
-
-Keep::~Keep()
-{
-}
-
+Keep::~Keep(){}
 
 void Keep::Configure()
 {
@@ -64,8 +58,10 @@ void Keep::Configure()
 
 void Keep::Process()
 {
+  log_trace("%s", "Processing");
   I3FramePtr frame = PopFrame();
   I3FramePtr newFrame(new I3Frame(frame->GetStop()));
+  newFrame->drop_blobs(frame->drop_blobs());
 
   for(set<string>::const_iterator iter = keys_.begin(); iter != keys_.end(); ++iter)
   {

@@ -1,7 +1,7 @@
 //
-//   Copyright (c) 2004, 2005, 2006, 2007   Troy D. Straszheim  
-//   
-//   $Id: ithon.cxx 25598 2006-11-25 02:52:57Z troy $
+//   Copyright (c) 2004, 2005, 2006, 2007   Troy D. Straszheim
+//
+//   $Id$
 //
 //   This file is part of IceTray.
 //
@@ -21,62 +21,36 @@
 
 #include <icetray/I3Frame.h>
 #include <icetray/serialization.h>
+#include <icetray/python/boost_serializable_pickle_suite.hpp>
 
 using namespace boost::python;
 
 template <typename T>
-inline static 
+inline static
 boost::shared_ptr<T> frame_get(const I3Frame* f, const std::string& where)
 {
-  try {
-    boost::shared_ptr<const T> thing = f->Get<boost::shared_ptr<const T> >(where);
-    return boost::const_pointer_cast<T>(thing);
-  } catch (const boost::archive::archive_exception& e) { 
-    return boost::shared_ptr<T>();
+  if (!f->Has(where))
+    {
+      PyErr_SetString(PyExc_KeyError, where.c_str());
+      throw_error_already_set();
+      return boost::shared_ptr<T>();
+    }
+
+  boost::shared_ptr<const T> thing = f->Get<boost::shared_ptr<const T> >(where);
+  if(!thing){
+    // we already know some object exists in the 'where' slot otherwise
+    // we would have thrown just a few lines up.
+    // this means deserialization failed and is almost always due to the
+    // user not importing the appropriate library.
+    std::stringstream err_msg;
+    err_msg <<"deserialization failed for object at frame key '"<<where<<"' \n"
+	    <<"make sure the appropriate library (e.g. dataclasses, simclasses, recclasses, etc..) is imported."; 
+    PyErr_SetString(PyExc_KeyError, err_msg.str().c_str());
+    throw_error_already_set();
+    return boost::shared_ptr<T>();    
   }
+  return boost::const_pointer_cast<T>(thing);
 }
-
-//struct I3FrameProxy : I3Frame
-//{
-//  typedef map<string, I3FrameObjectConstPtr>::value_type value_type;
-//  typedef map<string, I3FrameObjectConstPtr>::key_type key_type;
-//  typedef map<string, I3FrameObjectConstPtr>::difference_type difference_type;
-//  typedef map<string, I3FrameObjectConstPtr>::iterator iterator;
-//  typedef map<string, I3FrameObjectConstPtr>::key_compare key_compare;
-//  key_compare key_comp() { return std::less<std::string>(); }
-//  I3FrameObjectPtr operator[](const std::string& key)
-//  {
-//    return frame_get<I3FrameObject>(this, key);
-//  }
-//};
-
-// static vector<string>
-// keys(I3Frame* f)
-// {
-//   vector<string> v;
-//   I3Frame::typename_iterator iter = f->typename_begin();
-//   while(iter != f->typename_end())
-//     {
-//       v.push_back(iter->first);
-//       iter++;
-//     }
-//   return v;
-// }
-
-
-// template <typename T>
-// std::pair<T, T> range(const I3Frame& f)
-// {
-//     return frame_range(f.begin(), f.end());
-// }
-
-// struct frame_iterators
-// {
-//   typedef I3Frame::const_iterator iterator;
-//   static iterator begin(I3Frame& x) { return x.begin(); }
-//   static iterator end(I3Frame& x) { return x.end(); }
-// };
-// 
 
 static list frame_keys(I3Frame const& x)
 {
@@ -109,10 +83,57 @@ static void frame_put(I3Frame& f, const std::string& s, I3FrameObjectConstPtr fo
   f.Put(s, fop);
 }
 
+static void frame_put_on_stream(I3Frame& f,
+                                const std::string& s,
+                                I3FrameObjectConstPtr fop,
+                                const I3Frame::Stream& stream)
+{
+  f.Put(s, fop, stream);
+}
+
+static void frame_replace(I3Frame& f, const std::string& s, I3FrameObjectConstPtr fop)
+{
+  f.Replace(s, fop);
+}
+
 // used for I3Frame::Stream::__repr__
 std::string format_stream(const I3Frame::Stream& s)
 {
   return std::string("icetray.I3Frame.") + s.str();
+}
+
+static object frame_dumps(I3Frame const&f)
+{
+  std::vector<char> blobBuffer;
+  boost::iostreams::filtering_ostream blobBufStream(boost::iostreams::back_inserter(blobBuffer));
+  {
+      f.save(blobBufStream);
+  }
+  blobBufStream.flush();
+
+#if PY_MAJOR_VERSION >= 3
+  return object(handle<>( PyBytes_FromStringAndSize(&(blobBuffer[0]), blobBuffer.size()) ));
+#else
+  return str( &(blobBuffer[0]), blobBuffer.size() );
+#endif
+}
+
+static void frame_loads(I3Frame &f, object &data)
+{
+#if PY_MAJOR_VERSION >= 3
+  Py_buffer buffer;
+  PyObject_GetBuffer(data.ptr(), &buffer, PyBUF_SIMPLE);
+  boost::iostreams::array_source src((char const*)(buffer.buf), (size_t)(buffer.len));
+  boost::iostreams::filtering_istream fis(src);
+  f.load(fis);
+  PyBuffer_Release(&buffer);
+#else
+  const char *buffer = extract<char const*>(data);
+  std::size_t size = len(data);
+  boost::iostreams::array_source src(buffer, size);
+  boost::iostreams::filtering_istream fis(src);
+  f.load(fis);
+#endif
 }
 
 void register_I3Frame()
@@ -120,19 +141,21 @@ void register_I3Frame()
   void (I3Frame::* put_fn_p)(const std::string&, I3FrameObjectConstPtr) = &I3Frame::Put;
 
   using boost::python::iterator;
-  scope i3frame_scope = 
+  scope i3frame_scope =
     class_<I3Frame, boost::shared_ptr<I3Frame> >("I3Frame")
     .def(init<I3Frame::Stream>())
-    .def("Dump", &I3Frame::Dump)
-    .def("Has", &I3Frame::Has)
+    .def(init<char>())
+    .def(init<I3Frame>())
+    .def("Has", (bool (I3Frame::*)(const std::string &) const)&I3Frame::Has)
     .def("Delete", &I3Frame::Delete)
+    .def("__delitem__", &I3Frame::Delete)
     .def("Rename", &I3Frame::Rename)
     .def(self_ns::str(self))
     .def("Put", frame_put)
+    .def("Put", frame_put_on_stream)
     .def("Get", &frame_get<I3FrameObject>)
-    // more pythonic interface
-    .def("has_key", &I3Frame::Has)
-    .def("__contains__", &I3Frame::Has)
+    .def("Replace", frame_replace)
+    .def("__contains__", (bool (I3Frame::*)(const std::string &) const)&I3Frame::Has)
     .def("__getitem__", &frame_get<I3FrameObject>)
     .def("__setitem__", put_fn_p)
     .def("__delitem__", &I3Frame::Delete)
@@ -141,27 +164,44 @@ void register_I3Frame()
     .def("items", &frame_items)
     .def("size", (I3Frame::size_type (I3Frame::*)() const)&I3Frame::size)
     .def("__len__", (I3Frame::size_type (I3Frame::*)() const)&I3Frame::size)
-    .def("GetStop", &I3Frame::GetStop)
-    .def("SetStop", &I3Frame::SetStop)
+    .add_property("Stop", (I3Frame::Stream (I3Frame::*)() const)&I3Frame::GetStop, &I3Frame::SetStop)
+    .def("get_stop", (I3Frame::Stream (I3Frame::*)(const std::string&) const)&I3Frame::GetStop)
+    .def("change_stream", &I3Frame::ChangeStream)
     .def("merge", &I3Frame::merge)
-    .def("copy", &I3Frame::copy)
+    .def("take", (void (I3Frame::*)(const I3Frame&,const std::string&)) &I3Frame::take)
+    .def("take", (void (I3Frame::*)(const I3Frame&,const std::string&,const std::string&)) &I3Frame::take)
+    .def("purge", (void (I3Frame::*)())&I3Frame::purge)
+    .def("purge", (void (I3Frame::*)(const I3Frame::Stream&))&I3Frame::purge)
     .def("clear", &I3Frame::clear)
     .def("type_name", (std::string (I3Frame::*)(const std::string&) const) &I3Frame::type_name)
     .def("size", (I3Frame::size_type (I3Frame::*)(const std::string&) const) &I3Frame::size)
+    .def("as_xml", &I3Frame::as_xml)
+    .def("dumps", frame_dumps)
+    .def("loads", frame_loads)
     .def_readonly("None", I3Frame::None)
     .def_readonly("Geometry", I3Frame::Geometry)
     .def_readonly("Calibration", I3Frame::Calibration)
     .def_readonly("DetectorStatus", I3Frame::DetectorStatus)
+    .def_readonly("Simulation", I3Frame::Simulation)
+    .def_readonly("DAQ", I3Frame::DAQ)
     .def_readonly("Physics", I3Frame::Physics)
     .def_readonly("TrayInfo", I3Frame::TrayInfo)
+    .def_pickle(boost_serializable_pickle_suite<I3Frame>())
     ;
+  register_ptr_to_python<boost::shared_ptr<I3Frame> >();
 
   class_<I3Frame::Stream>("Stream")
     .def(init<char>())
     .def(self == self) // comparison operator
+    .def(self != self) // comparison operator
     .def(self < self) // comparison operator
     .def("__str__", &I3Frame::Stream::str)
     .def("__repr__", format_stream)
     .add_property("id", &I3Frame::Stream::id)
     ;
+
+  class_<std::vector<I3FramePtr> >("vector_I3Frame")
+    .def(vector_indexing_suite<std::vector<I3FramePtr>, true>())
+    ;
+  from_python_sequence<std::vector<I3FramePtr>, variable_capacity_policy>();
 }

@@ -27,8 +27,15 @@
 
 struct I3PhysicsUsage
 {
-  double systime, usertime;
+  double systime;
+  double usertime;
   unsigned ncall;
+  
+  I3PhysicsUsage():
+    systime(0),
+    usertime(0),
+    ncall(0){};
+  
 };
 
 std::ostream& 

@@ -1,25 +1,25 @@
 /**
  *  $Id$
- *  
+ *
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
  *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
  *  This file is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 3 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
- *  
+ *
  */
-#include <stdlib.h>
+#include <cstdlib>
 #include <ncurses.h>
 #include <signal.h>
 #include <unistd.h>
@@ -27,239 +27,370 @@
 #include <icetray/I3Tray.h>
 #include <icetray/I3TrayInfo.h>
 #include <icetray/load_project.h>
-
-#include <boost/function.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
-#include <boost/ref.hpp>
+#include <icetray/I3SimpleLoggers.h>
 
 #include <algorithm>
 #include <map>
 #include <string>
 #include <fstream>
-#include <boost/assign/list_inserter.hpp>
 
-#include <boost/archive/portable_binary_iarchive.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
+#include <boost/program_options.hpp>
+#include <boost/python.hpp>
+
+#include <dataio/I3FileStager.h>
 
 #include <shovel/color.h>
-
 #include <shovel/View.h>
 #include <shovel/Model.h>
-#include <shovel/shovelrc.h>
 
 #include <dlfcn.h>
-#include <boost/program_options.hpp>
 
-using namespace std;
-using namespace boost::lambda;
-using boost::lambda::bind;
-using boost::ref;
-
-using namespace boost::assign;
-namespace fs = boost::filesystem;
 namespace po = boost::program_options;
 
-void 
+void
 shovel_usage(const std::string& progname)
 {
-  cerr << "Usage: " << progname << " [options] file.i3 [proj1 proj2 ... projN]\n"
+  std::cerr << "Usage: " << progname << " [options] file.i3 [proj1 proj2 ... projN]\n"
        << "\n"
-       << "  file.i3             path to the .i3 file to browse.\n\n"
-       << "  [proj1 ... projN]   (optional) load these projects'\n"
-       << "                      libraries at startup.\n"
-       << "\n\nOptions:\n"
-       << "  --no_trayinfo, -n   Do not display/count trayinfo frames\n"
-       << "  --frames=N, -f N    Scan/Display only N frames\n\n"
-       << "Example:\n  " << progname << " -f 100 -n data.i3 muon-llh-reco linefit dipolefit\n"
-       << endl;
+       << "  file.i3 [file2.i3 ...]  path to the .i3 file to browse.\n"
+       << "\nOptions:\n"
+       << "  --frames=N, -f N                  Scan only N frames on startup\n"
+       << "  --projects=project, -l project    Load these project's\n"
+       << "                                    libraries on startup\n"
+       << "  --log                             Write debug information to a log file\n\n"
+       << "Example:\n  " << progname << " -f 100 -l linefit -l dipolefit data.i3\n"
+       << std::endl;
   exit(1);
 }
 
-void 
-write_default_shovelrc(const std::string path, const map<char, string>& keybindings)
-{
-  ofstream ofs(path.c_str());
-  ofs << "#\n# dataio-shovel keybindings\n#\n";
-  
-  for (map<char, string>::const_iterator iter = keybindings.begin();
-       iter!=keybindings.end(); iter++)
-    {
-      ofs << iter->first << " = " << iter->second << "\n";
-      ;
+void
+do_pyshell(char* argv[], Model& model, View& view){
+  struct suspend_curses{
+    View& view;
+    suspend_curses(View& view):view(view){
+      clear();
+      endwin();
     }
-  ofs << "\n\n";
-  ofs.close();
+    ~suspend_curses(){
+      view.notify();
+      refresh();
+    }
+  } suspender(view);
+  
+  namespace bp = boost::python;
+#if PY_MAJOR_VERSION < 3
+  Py_SetProgramName(argv[0]);
+  Py_Initialize();
+  PySys_SetArgvEx(1, &argv[0], 0);
+#else
+  wchar_t program[255];
+  mbstowcs(program, argv[0], 255);
+  Py_SetProgramName(program);
+  Py_Initialize();
+  PySys_SetArgvEx(1, (wchar_t**)&program, 0);
+#endif
+  PyEval_InitThreads();
+
+  //load things users will probably need
+  bp::dict ns;
+  try{
+    ns["icetray"]=bp::import("icecube.icetray");
+    ns["dataclasses"]=bp::import("icecube.dataclasses");
+    ns["dataio"]=bp::import("icecube.dataio");
+  }
+  catch( bp::error_already_set& e ){
+    log_error_stream("Problem loading icecube python bindings:\n"
+                     << "Are there unbuilt pybindings?");
+    PyErr_Clear();
+    return;
+  }
+  try{ ns["recclasses"]=bp::import("icecube.recclasses"); }
+  catch( bp::error_already_set& e){ PyErr_Clear(); }
+  try{ ns["simclasses"]=bp::import("icecube.simclasses"); }
+  catch( bp::error_already_set& e ){ PyErr_Clear(); }
+  //inject the frame
+  ns["frame"]=model.current_frame();
+
+  bp::object main_module = bp::import("__main__");
+  bp::dict main_ns = bp::extract<bp::dict>(main_module.attr("__dict__"));
+  main_ns.update(ns);
+
+  try{
+    //try to use IPython if it exists
+    bp::object ipython_embed=bp::import("IPython");
+    bp::tuple arguments;
+    bp::dict options;
+    options["user_ns"] = ns; // need this for first invocation
+    ipython_embed.attr("start_ipython")(*arguments,**options);
+  }
+  catch( bp::error_already_set& e ){
+    log_warn("Unable to load IPython");
+    PyErr_Clear();
+
+    //try using the regular python shell
+
+    //handle things like arrow keys properly
+    try{ bp::import("readline"); }
+    catch( bp::error_already_set& e ){ PyErr_Clear(); }
+
+    bp::object code_module;
+    try{ code_module=bp::import("code"); }
+    catch( bp::error_already_set& e ){
+      log_error("Unable to import 'code'");
+      PyErr_Clear();
+      return;
+    }
+
+    try{
+      auto console=code_module.attr("InteractiveConsole")(main_ns);
+      console.attr("interact")(R"(
+      Interactive python shell
+      The current frame is available as `frame`
+      Press ^D to return to the dataio-shovel interface
+      )");
+    }catch( bp::error_already_set& e ){
+      log_error("Python error");
+      PyErr_Clear();
+    }
+  }
+  
+  // Not finalizing python, as that destroys the frame
 }
 
-
-map<char, string> keybindings;
+///Attempt to load a project which may not be available
+///\param proj the name of the project to load
+///\return whether the project was loaded
+bool try_load_project(const std::string& proj){
+  try{
+    load_project(proj);
+  } catch(std::runtime_error& err){
+    log_debug_stream("Failed to load project " << proj);
+    return false;
+  }
+  return true;
+}
 
 int main (int argc, char *argv[])
 {
-  log_trace("%s", __PRETTY_FUNCTION__);
+  I3::init_icetray_lib();
+
   po::options_description opt("options");
 
   opt.add_options()
-    ("help,?", "this message") 
-    ("i3file", "the .i3 file")
+    ("help,?", "this message")
+    ("i3file", po::value< std::vector<std::string> >(), "the .i3 file(s) to load")
     ("frames,f", po::value<unsigned>(), "scan only this many frames of file")
-    ("no_trayinfo,n", "skip trayinfo frames")
-    ("projects", po::value< vector<string> >(), "libs to load before opening .i3 file")
+    ("projects,l", po::value< std::vector<std::string> >(), "libs to load before opening .i3 file")
+    ("log", "write log messages to a file")
     ;
 
   po::positional_options_description popt;
-  popt.add("i3file", 1);
-  popt.add("projects", -1);
+  popt.add("i3file", -1);
 
   po::variables_map vm;
   try {
     po::store(po::command_line_parser(argc, argv)
-	      .options(opt)
-	      .positional(popt)
-	      .run(), vm);
+              .options(opt)
+              .positional(popt)
+              .run(), vm);
     po::notify(vm);
   } catch (const std::exception& e) {
-    cout << argv[0] << ": " << e.what() << "\n";
+    std::cout << argv[0] << ": " << e.what() << "\n";
     shovel_usage(argv[0]);
     return 1;
   }
-
-  insert(keybindings)
-    ('k', "up")
-    ('[', "fast_reverse")
-    ('<', "first_frame")
-    ('h',"left")
-    ('l',"right")
-    (']', "fast_forward")
-    ('>', "last_frame")
-    ('j',"down")
-    ('?',"help")
-    ('a',"about")
-    ('g',"goto_frame")
-    ('p',"pretty_print")
-    ('t',"toggle_infoframes")
-    ('w',"write_frame")
-    ('x',"xml")
-    ('q',"quit");
-
-  string rcfile_path = getenv("HOME");
-  rcfile_path += "/.shovelrc";
-  if (!fs::exists(fs::path(rcfile_path, fs::no_check)))
-    write_default_shovelrc(rcfile_path, keybindings);
-
-  dataio::shovel::parse_rcfile(rcfile_path, keybindings);
-
-  insert(keybindings)
-    (KEY_ENTER, "xml")
-    (KEY_UP, "up")
-    (KEY_DOWN, "down")
-    (KEY_LEFT, "left")
-    (KEY_RIGHT, "right")
-    (KEY_PPAGE, "fast_reverse")
-    (KEY_NPAGE, "fast_forward");
+  
+  std::map<int, std::string> keybindings={
+    {'k',"up"},
+    {'[',"fast_reverse"},
+    {'{',"first_frame"},
+    {'h',"left"},
+    {'l',"right"},
+    {']',"fast_forward"},
+    {'}',"last_frame"},
+    {'-',"fast_up"},
+    {'=',"fast_down"},
+    {'j',"down"},
+    {'?',"help"},
+    {'a',"about"},
+    {'g',"goto_frame"},
+    {'p',"pretty_print"},
+    {'s',"save_xml"},
+    {'w',"write_frame"},
+    {'W',"write_frame_with_dependencies"},
+    {'x',"xml"},
+    {'q',"quit"},
+    {'L',"load_project"},
+    {'i',"interactive_shell"},
+    {'e',"find_event"},
+    {KEY_ENTER,"pretty_print"},
+    {KEY_UP,   "up"},
+    {KEY_DOWN, "down"},
+    {KEY_LEFT, "left"},
+    {KEY_RIGHT,"right"},
+    {KEY_HOME, "first_frame"},
+    {KEY_END,  "last_frame"},
+    {KEY_PPAGE,"fast_up"},
+    {KEY_NPAGE,"fast_down"}
+  };
 
   if (vm.count("help"))
     {
       shovel_usage(argv[0]);
       return 1;
     }
-
-  if (vm.count("projects"))
+  
+  if (vm.count("log"))
     {
-      cout << "Loading project libraries: ";
-      cout.flush();
-      const vector<string>& projects = vm["projects"].as< vector<string> >();
-      for (unsigned i=0; i<projects.size(); i++)
-	{
-	  cout << "[" << projects[i] << "] ";
-	  cout.flush();
-	  if (load_project(projects[i]))
-	    shovel_usage(argv[0]);
-	}
-      cout << " done." << endl;
+      SetIcetrayLogger(boost::make_shared<I3FileLogger>("dataio-shovel.log"));
+      GetIcetrayLogger()->SetLogLevelForUnit("dataio-shovel::Model",I3LOG_INFO);
+    }
+  else
+    {
+      GetIcetrayLogger()->SetLogLevelForUnit("dataio-shovel::Model",I3LOG_WARN);
     }
 
-  string thefile;
+  try_load_project("simclasses");
+  try_load_project("recclasses");
+  
+  if (vm.count("projects"))
+    {
+      std::cout << "Loading project libraries: ";
+      std::cout.flush();
+      const std::vector<std::string>& projects = vm["projects"].as<std::vector<std::string>>();
+      for (unsigned i=0; i<projects.size(); i++)
+        {
+          std::cout << "[" << projects[i] << "] ";
+          std::cout.flush();
+          if (load_project(projects[i]))
+            shovel_usage(argv[0]);
+        }
+      std::cout << " done." << std::endl;
+    }
+
+  std::vector<std::string> files;
   if (vm.count("i3file"))
-    thefile = vm["i3file"].as<string>();
-
-  if (!thefile.length())
+    files=vm["i3file"].as<std::vector<std::string>>();
+  if(files.empty())
     shovel_usage(argv[0]);
-
-  Model model(View::Instance());
 
   log_trace("starting view");
 
   // whole thing is blocked with a try/catch.. the catch
   // just endwin()s and rethrows
-  try { 
-    
+  try {
     View::Instance().start();
+    
+    log_trace("opening file(s)");
+    Model model(View::Instance(),files,
+                vm.count("frames") ? vm["frames"].as<unsigned>() : boost::optional<unsigned>());
+
     log_trace("setting model");
     View::Instance().model(&model);
 
-    log_trace("opening file");
-
-    vector<I3Frame::Stream> skipvector;
-  
-    if (vm.count("no_trayinfo"))
-      skipvector.push_back(I3Frame::TrayInfo);
-
-    model.open_file(thefile, 
-		    skipvector,
-		    vm.count("frames") ? vm["frames"].as<unsigned>() : boost::optional<unsigned>()
-		    );
 
     model.notify();
     log_trace("done starting up");
-    map<string, boost::function<void(void)> > actions;
+    std::map<std::string, std::function<void(void)>> actions;
 
-    actions["up"] = bind(&Model::move_y, ref(model), -1);
-    actions["down"] = bind(&Model::move_y, ref(model), 1);
-    actions["right"] = bind(&Model::move_x, ref(model), 1);
-    actions["left"] = bind(&Model::move_x, ref(model), -1);
-    // specify boost::lamba::bind, otherwise something odd happens with
-    // that call to var()
-    actions["fast_forward"] = boost::lambda::bind(&Model::move_x, ref(model), var(COLS)-4);
-    actions["fast_reverse"] = boost::lambda::bind(&Model::move_x, ref(model), -(var(COLS)-4));
-    actions["first_frame"] = bind(&Model::move_first, ref(model));
-    actions["last_frame"] = bind(&Model::move_last, ref(model));
-    actions["help"] = bind(&View::do_help, ref(View::Instance()));
-    actions["about"] = bind(&View::do_about, ref(View::Instance()));
-    actions["pretty_print"] = bind(&Model::pretty_print, ref(model));
-    actions["toggle_infoframes"] = bind(&Model::toggle_infoframes, ref(model));
-    actions["write_frame"] = bind(&Model::write_frame, ref(model));
-    actions["goto_frame"] = bind(&Model::do_goto_frame, ref(model));
-    actions["xml"] = bind(&Model::show_xml, ref(model));
-    actions["quit"] = bind(exit, 0);
+    actions["up"] = [&]{model.move_y(-1);};
+    actions["down"] = [&]{model.move_y(1);};
+    actions["right"] = [&]{model.move_x(1);};
+    actions["left"] = [&]{model.move_x(-1);};
+    actions["fast_forward"] = [&]{model.move_x(COLS/2-2);};
+    actions["fast_reverse"] = [&]{model.move_x(-(COLS/2-2));};
+    actions["fast_up"] = [&]{model.move_y(-(LINES-12));};
+    actions["fast_down"] = [&]{model.move_y(LINES-12);};
+    actions["first_frame"] = [&]{model.move_first();};
+    actions["last_frame"] = [&]{model.move_last();};
+    actions["help"] = []{View::Instance().do_help();};
+    actions["about"] = []{View::Instance().do_about();};
+    actions["pretty_print"] = [&]{model.pretty_print();};
+    actions["write_frame"] = [&]{model.write_frame();};
+    actions["write_frame_with_dependencies"] = [&]{model.write_frame_with_dependencies();};
+    actions["save_xml"] = [&]{model.save_xml();};
+    actions["goto_frame"] = [&]{model.do_goto_frame();};
+    actions["find_event"] = [&]{model.do_find_event();};
+    actions["xml"] = [&]{model.show_xml();};
+    actions["load_project"] = [&]{
+      boost::optional<std::string> proj =
+        View::Instance().dialog<std::string>("  Project to load: ");
+      if(proj){
+        try{
+          load_project(*proj);
+        }catch(std::runtime_error& err){
+          log_error_stream(err.what());
+        }
+      }
+    };
+    actions["interactive_shell"] = [&]{ do_pyshell(argv,model,View::Instance()); };
 
     while (true)
       {
-	int c = getch();     /* refresh, accept single keystroke of input */
-	
-	// skip if key not bound
-	if (keybindings.find(c) == keybindings.end())
-	  continue;
+        int c = getch();     /* refresh, accept single keystroke of input */
+#ifdef __APPLE__             /* add other keys to the swich below */
+        if (c == 0x1B) {
+          c = getch();
+          if ((c == 0x4F) or (c == 0x5B)) {
+            c = getch();
+            switch (c) {
+            case 0x41:
+              c = KEY_UP;
+              break;
+            case 0x42:
+              c = KEY_DOWN;
+              break;
+            case 0x43:
+              c = KEY_RIGHT;
+              break;
+            case 0x44:
+              c = KEY_LEFT;
+              break;
+            default:
+              break;
+            }
+          }
+        }
+#endif
+        if (c==0x01)
+          c = KEY_HOME;
+        else if (c==0x05)
+          c = KEY_END;
+        else if (c==0x0A)
+          c = KEY_ENTER;
 
-	std::string action = keybindings[(char)c];
+        // skip if key not bound
+        if (keybindings.find(c) == keybindings.end())
+          continue;
 
-	if (actions.find(action) == actions.end())
-	  {
-	    endwin();
-	    log_fatal("unable to find code for keystroke \'%c\', action %s",
-		      c, action.c_str());
-	  }
+        std::string action = keybindings[c];
+        
+        if (action == "quit")
+          break;
+        
+        if (actions.find(action) == actions.end())
+          {
+            endwin();
+            log_fatal("unable to find code for keystroke \'%c\', action %s",
+                      c, action.c_str());
+          }
 
-	actions[action]();
+        actions[action]();
 
-	model.notify();
+        model.notify();
       }
-  } catch (const std::exception& e) {
+  }
+  catch (const boost::python::error_already_set& e) {
     clear();
     endwin();
-    throw;
+    std::cerr << "Fatal python error:\n";
+    PyErr_Print();
+    return(1);
+  }
+  catch (const std::exception& e) {
+    clear();
+    endwin();
+    std::cerr << "Caught exception:\n" << e.what() << '\n';
+    return(1);
   }
 }
-

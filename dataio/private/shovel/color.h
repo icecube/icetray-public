@@ -27,8 +27,6 @@
 #include <map>
 #include <string>
 
-using namespace std;
-
 struct color_pair 
 {
   int index, pair;

@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3ModuleTestConfig.h 14186 2006-01-09 18:25:42Z troy $
+ * $Id$
  *
  * @file I3ModuleTestConfig.h
- * @version $Revision: 1.1 $
- * @date $Date: 2006-01-09 19:25:42 +0100 (Mon, 09 Jan 2006) $
+ * @version $Revision$
+ * @date $Date$
  * @author pretz
  */
 

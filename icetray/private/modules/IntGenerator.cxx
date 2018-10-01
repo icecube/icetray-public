@@ -33,14 +33,13 @@ public:
   IntGenerator(const I3Context& context) : I3Module(context)
   {      
     log_trace("%s", __PRETTY_FUNCTION__);
-    AddOutBox("OutBox");
     i = 0;
   }
 
   void Process()
   {
     I3FramePtr frame(new I3Frame(I3Frame::Physics));
-    shared_ptr<I3Int> data(new I3Int(++i));
+    boost::shared_ptr<I3Int> data(new I3Int(++i));
     frame->Put("myint", data);
     PushFrame(frame,"OutBox");
   }

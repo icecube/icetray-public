@@ -196,7 +196,7 @@ There is a script in the build space called
     #
     uname -a > @CMAKE_INSTALL_PREFIX@/uname.txt
     
-Which is copied to ``tarball_hook.sh`` when cmake runs, and hose
+Which is copied to ``tarball_hook.sh`` when cmake runs, and
 variables ``@INSIDE_AT_SIGNS@`` are expanded.  For instance
 ``@CMAKE_INSTALL_PREFIX@`` might become
 ``offline-software.trunk.r47978.Linux-i686.gcc-4.2.3``.  If your
@@ -206,16 +206,24 @@ is actually run), you can commit to the copy ``tarball_hook.sh.in`` in
 the toplevel directory of your metaproject.  The changes will then get
 run each time a user makes ``tarball``.
 
-
 Changing the name of the tarball
 --------------------------------
 
 .. index:: CMAKE_INSTALL_PREFIX
 
 Set :data:`CMAKE_INSTALL_PREFIX` as you like in your
-:file:`CMakeCache.txt`.
+:file:`CMakeCache.txt`, or pass ``-DCMAKE_INSTALL_PREFIX=tarball_name`` when 
+you invoke ``cmake``. If you want to use the tarball together with
+``icetray-start``, pass ``-DCMAKE_INSTALL_PREFIX=tarball_name.${OS_ARCH}``.
 
+Lightweight tarballs for CVMFS-enabled grids
+--------------------------------------------
 
-
-
+Some grids (e.g. OpenScienceGrid) support distribution of software via CVMFS,
+which obviates much of the need for tarballs of standard metaprojects. When
+the neded arises for custom metaprojects, however, their tarballs can omit the
+libraries already in the CVMFS repository. To build a lightweight tarball, set
+the :data:`INSTALL_TOOL_LIBS` option to OFF at configure time. The final
+tarball will not include libraries from :envvar:`I3_PORTS`, and RPATH entries
+will not be stripped from the installed libraries.
 

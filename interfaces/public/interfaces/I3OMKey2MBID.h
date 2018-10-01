@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3OMKey2MBID.h 29246 2007-02-15 20:44:54Z tschmidt $
+ * $Id$
  *
  * @file I3OMKey2MBID.h
- * @version $Revision:$
- * @date $Date: 2007-02-15 15:44:54 -0500 (Thu, 15 Feb 2007) $
+ * @version $Revision$
+ * @date $Date$
  */
 
 #ifndef INTERFACES_I3OMKEY2MBID_H_INCLUDED

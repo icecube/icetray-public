@@ -42,7 +42,6 @@ using namespace std;
 
 AddNulls::AddNulls(const I3Context& context) : I3ConditionalModule(context)
 {
-  AddOutBox("OutBox");
   AddParameter("where", "vector of keys:  null pointer gets added to each", keys_);
 }
 

@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+## this bash script, given the existance of a local project, will
+## display to the user the Trac url of the latest relase of the
+## project
+
+PROJ=$1
+CODE=http://code.icecube.wisc.edu
+TRAC=${CODE}/projects/icecube
+I3_SRC=@I3_SRC@
+
+function get_release() {
+    base_url=$(dirname $(svn info ${I3_SRC}/${PROJ} |grep '^URL' |sed 's/^URL: //'))
+    release_url=${base_url}/releases/$(svn ls ${base_url}/releases |grep ^V |tail -1)
+    release_rev=$(svn info ${release_url} |grep ^Last |grep Rev: |cut -d\  -f4)
+}
+
+function get_trac_url() {
+    get_release
+    if [[ $base_url == *"svn/projects"* ]]; then
+        instance="IceCube"
+    elif [[ $base_url == *"icetray/projects"* ]]; then
+        instance="IceTray"
+    else
+        >&2 echo "Unknown base URL: ${base_url}"
+        exit 1
+    fi
+
+    trac_url="${TRAC}/changeset/${release_rev}/${instance}/projects/${PROJ}"
+}
+
+if [ -z $1 ]; then
+    >&2 echo "Missing project name to review"
+    exit 1
+fi
+
+if [ ! -d ${I3_SRC}/${PROJ} ]; then
+   >&2 echo "Invalid local project: ${PROJ}"
+   exit 1
+fi
+
+get_trac_url
+echo $trac_url
