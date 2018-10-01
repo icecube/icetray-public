@@ -1,0 +1,32 @@
+#!/bin/bash
+
+function printerr()
+{
+    echo "[----]" $*
+}
+
+function exit_error() 
+{
+    printerr 
+    printerr BUILD ENVIRONMENT CORRUPTION
+    printerr
+    printerr Environment says I3_BUILD is \'$I3_BUILD\'
+    printerr    But current build dir is \'@CMAKE_BINARY_DIR@\'
+    printerr
+    printerr  Environment says I3_SRC is \'$I3_SRC\'
+    printerr   But current source dir is \'@CMAKE_SOURCE_DIR@\'
+    printerr
+    exit 2
+}
+
+if [ -n "$I3_BUILD" -a "$I3_BUILD" != "@CMAKE_BINARY_DIR@" ]
+    then 
+    exit_error
+fi
+
+if [ -n "$I3_SRC" -a "$I3_SRC" != "@CMAKE_SOURCE_DIR@" ]
+    then 
+    exit_error
+fi
+
+exit 0

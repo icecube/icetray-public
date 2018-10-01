@@ -1,0 +1,175 @@
+#!/usr/bin/python
+"""
+
+Runner of tests.
+
+"""
+import os, os.path, sys, subprocess
+from pprint import pprint
+from optparse import OptionParser
+
+i3_build='@CMAKE_BINARY_DIR@'
+
+top = '@CMAKE_BINARY_DIR@@CMAKE_FILES_DIRECTORY@/tests.list'
+linelen = 79
+slave = '@BUILD_SLAVE@'
+slave_pythonpath = '@BUILD_SLAVE_PYTHONPATH@'
+
+passes = 0
+fails  = []
+
+def load_tests(fname, accum):
+    if not os.path.isfile(fname):
+        return
+    f = open(fname)
+    lines = f.read().splitlines()
+    if fname.endswith('.list'):
+        for line in lines:
+            (id, nextfname) = line.split()
+            accum[id] = {}
+            load_tests(nextfname, accum[id])
+    else:
+        for testname in lines:
+            argv = testname.replace(';', ' ').split()
+            accum[argv[0]] = argv[1:]
+
+def start_test(testname):
+    global passes, fails
+    s = ' %d:%d  ...  %s' % (passes, len(fails), testname)
+    print ' ' * linelen, '\r',
+    print s[:linelen], '\r',
+    sys.stdout.flush()
+
+def end_test(testname, returncode, stdout, stderr, verbose):
+    s = 'ERROR %d in %s' % (returncode, testname)
+    if returncode != 0:
+        if not verbose:  # if verbose, this was already printed
+            print "\nSTDOUT:\n", stdout
+            print "\nSTDERR:\n", stderr
+        print s[:linelen]
+    else:
+        print '\r',
+
+def run_tests(stack, f, d, verbose=False):
+    global passes, fails
+    path = '/'.join(stack)
+    if type(d) == list:
+        if not f(stack):
+            return False
+        start_test(path)
+
+        try:
+            subproc = subprocess.Popen(d, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            if verbose:
+                print 'EXEC> ', ' '.join(d)
+            (stdout, stderr) = subproc.communicate()
+        except Exception, e:
+            print "exception", e
+        if verbose:
+            if stdout:
+                print stdout
+            if stderr:
+                print stderr
+            print
+        end_test(path, subproc.returncode, stdout, stderr, verbose)
+        if subproc.returncode != 0:
+            fails += [path]
+        else:
+            passes += 1
+        return True
+    else:
+        rslt = False
+        for k in sorted(d.keys()):
+            if len(stack) == 0:
+                marshalfile = i3_build + "/" + k + "/Log.marshal"
+                try:
+                    os.unlink(marshalfile)
+                except:
+                    pass
+            rslt = run_tests(stack + [k], f, d[k], verbose) or rslt
+            if len(stack) == 0 and rslt and slave != 'OFF':
+                marshalfile = i3_build + "/" + k + "/Log.marshal"
+                print "\n***\n*** Posting tests of", k, "\n*** from", marshalfile, "\n***"
+                cmd = [slave_pythonpath + '/post.py', k, k, 'test', i3_build + "/" + k]
+                subproc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                if verbose:
+                    print 'EXEC>', ' '.join(cmd)
+                (stdout, stderr) = subproc.communicate()
+                if subproc.returncode != 0:
+                    print stdout, stderr
+                rslt = False
+        return rslt
+
+def main():
+    parser = OptionParser(usage="usage: %prog [options]")
+    parser.add_option('-p', '--project',
+                      type='string',
+                      metavar='PROJECTS',
+                      action='append',
+                      default=[],
+                      help='List of projects to run tests on')
+
+    parser.add_option('-s', '--scripts-only',
+                      action='store_true',
+                      default=False,
+                      help='Run only test scripts')
+
+    parser.add_option('-u', '--units-only',
+                      action='store_true',
+                      default=False,
+                      help='Run only compiled unit tests')
+
+    parser.add_option('-v', '--verbose',
+                      action='store_true',
+                      default=False,
+                      help='Show verbose output')
+
+    (options, args) = parser.parse_args(sys.argv[1:])
+                      
+    d = {}
+    load_tests(top, d)
+    print len(d), "projects loaded."
+
+    def scriptfilter(stack):
+        return True
+
+    def projectfilter(stack):
+        return True
+
+    if options.scripts_only and options.units_only:
+        parser.print_help()
+        sys.exit(1)
+        
+    if options.scripts_only:
+        def g(stack):
+            return len(stack) < 1 or 'scripts' in stack
+        scriptfilter = g
+    elif options.units_only:
+        def g(stack):
+            return len(stack) < 1 or not 'scripts' in stack
+        scriptfilter = g
+        
+    if options.project:
+        def g(stack):
+            return len(stack) < 1 or stack[0] in options.project
+        projectfilter = g
+        
+    run_tests([],
+              lambda stack: scriptfilter(stack) and projectfilter(stack),
+              d,
+              options.verbose)
+                      
+    print '=' * linelen, "\nPass: %d\nFail: %d" % (passes, len(fails))
+
+    if len(fails) > 0:
+        print 'Failures:\n'
+        for i in fails:
+            print '\t', i
+        print '\n'
+
+if __name__ == "__main__":
+    main()
+    
+    
+
+

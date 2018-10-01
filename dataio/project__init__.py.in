@@ -1,0 +1,10 @@
+import sys, imp
+
+mod = imp.load_dynamic('@MODULENAME@', __path__[0] + "/@MODULENAME@.so")
+
+destdict = sys.modules[__name__].__dict__
+
+for (k,v) in mod.__dict__.iteritems():
+    if not k in destdict:
+        destdict[k] = v
+
