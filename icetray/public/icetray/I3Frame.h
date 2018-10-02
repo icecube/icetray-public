@@ -244,7 +244,9 @@ class I3Frame
   I3Frame& operator=(const I3Frame& rhs);
 
   Stream GetStop() const { return stop_; }
-  void SetStop(Stream newstop) { stop_ = newstop; }
+  Stream GetStop(const std::string& key) const;
+  
+  void SetStop(Stream newstop) { stop_ = newstop; }  
 
   bool drop_blobs() const { return drop_blobs_; }
   /** Determine policy: Drop the blobs after deserialization?
@@ -278,8 +280,6 @@ class I3Frame
    * @return true, if something exists in the frame at slot <VAR>key</VAR>, otherwise false.
    */
   bool Has(const std::string& key) const { return map_.count(key); }
-
-  I3Frame::Stream GetStop(const std::string& key) const;
 
   void merge(const I3Frame& rhs);
 
