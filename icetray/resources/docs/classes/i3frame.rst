@@ -836,20 +836,17 @@ In Python
           ]
 
 
-   .. method:: GetStop()
+   .. method:: get_stop()
       :noindex:
 
-      Return the frame's stop::
+      Return the frame's stop for the given frame key (helpful when dealing with mixed frames)::
 
-        >>> frame.GetStop()
-        >>> icetray.I3Frame.Physics
+        >>> frame.get_stop('I3Geometry')
+        >>> icetray.I3Frame.Geometry
 
-   .. method:: SetStop()
-      :noindex:
+      To set the frame's stop::
 
-      Set the frame's stop::
-
-        >>> frame.SetStop(icetray.I3Frame.Geometry)
+        >>> frame.stop = icetray.I3Frame.Geometry
 
 .. index:: I3FrameObject
 .. _I3FrameObject:
