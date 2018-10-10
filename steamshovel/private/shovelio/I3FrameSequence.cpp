@@ -138,10 +138,11 @@ I3FrameSequence::MergeParents(const unsigned idx, I3FramePtr frame)
                         << " in cache, nkeys="
                         << pframe->size() );
     }else{
-      // try to load frame from file
-      pframe.reset( new I3Frame() );
-      if( !files_.AtStreamPos(pframe, item.pos_, filter_) )
-        log_fatal( "could not merge parent!" );
+      // try to load parent frame from file. this will recursively load, merge,
+      // and cache its parents in turn
+      pframe = Fetch(pidx);
+      if( !pframe )
+        log_fatal( "could not load parent!" );
       log_trace_stream( "merging: got stream=" << item.stream_.str()
                         << " from file, nkeys="
                         << pframe->size() );
