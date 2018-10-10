@@ -16,6 +16,7 @@
 #include <dataclasses/I3MapOMKeyMask.h>
 #include <dataclasses/I3MapOMKeyUnion.h>
 #include <dataclasses/I3RecoPulseSeriesMapApplySPECorrection.h>
+#include <dataclasses/physics/I3RecoPulseSeriesMapCombineByModule.h>
 #include <dataclasses/physics/I3RecoHit.h>
 #include <dataclasses/physics/I3RecoPulse.h>
 #include <dataclasses/payload/I3SuperDST.h>
@@ -62,6 +63,13 @@ I3Frame::Get(const std::string& name, void*, void*) const
 
 	if (spe_shift)
 		return spe_shift->Apply(*this);
+	
+	{
+		I3RecoPulseSeriesMapCombineByModuleConstPtr combined = 
+		    boost::dynamic_pointer_cast<const I3RecoPulseSeriesMapCombineByModule>(focp);
+		if (combined)
+			return combined->Apply(*this);
+	}
 	
 	I3SuperDSTConstPtr superdst = 
 	    boost::dynamic_pointer_cast<const I3SuperDST>(focp);
