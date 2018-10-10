@@ -125,7 +125,7 @@ void Detector::create( I3FramePtr ptr, SceneGroup* g, const SceneState& state ){
 		if( geo.omtype == I3OMGeo::IceTop ){
 		  if ( hide_icetop )
 		    continue;
-		}else if ( geo.omtype == I3OMGeo::IceCube) {
+		}else if ( geo.omtype == I3OMGeo::IceCube || geo.omtype == I3OMGeo::mDOM) {
 		  if( hide_icecube )
 		    continue;
 		}else{
