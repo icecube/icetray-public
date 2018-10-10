@@ -1,9 +1,9 @@
 from icecube.shovelart import *
 
 from icecube import dataclasses
+import math
 try: from icecube import simclasses
 except: pass # don't complain if simclasses is not available
-
 
 class Bubbles( PyArtist ):
     """
@@ -18,7 +18,7 @@ class Bubbles( PyArtist ):
             "scale", RangeSetting( 0.0, 100.0, 100, 10.0 ),
             "power", RangeSetting( 0.0, 0.5, 50, 0.15 ),
             "static", PyQColor.fromRgb( 255, 0, 255 ),
-            "log10(delay/ns)", RangeSetting( 1.0, 5.0, 40, 5.0 ),
+            "log10(delay/ns)", RangeSetting( 1.0, 6.0, 50, 5.0 ),
             "custom color window", ""
         ))
 
@@ -61,9 +61,17 @@ class Bubbles( PyArtist ):
             # an I3Map of OMKeys
             ommap = fobj
             for omkey, val in ommap:
-                pos = omgeo[omkey].position
-                sphere = output.addSphere( scale, pos )
-                sphere.setSelectionContent( omkey )
+                try:
+                    geo = omgeo[omkey]
+                except KeyError:
+                    raise KeyError("OMGeo doesn't contain %s" % (omkey))
+                pos = geo.position
+                if geo.omtype == geo.IceCube or geo.omtype == geo.IceTop:
+                    sphere = output.addSphere( scale, pos )
+                    sphere.setSelectionContent( omkey )
+                elif geo.omtype == geo.mDOM:
+                    radius = scale*math.sqrt(geo.area)
+                    sphere = output.addCylinder( pos, vec3d(geo.orientation.dir), radius, radius)
 
                 if hasattr(val, "__len__"):
                     # val is a series
@@ -73,7 +81,7 @@ class Bubbles( PyArtist ):
                     self.discover_features( series[0] )
 
                     if self.has_time:
-                        if delay < 1e5: # keep in sync with upper limit of RangeSetting
+                        if delay < 1e6: # keep in sync with upper limit of RangeSetting
                             self.handle_integral_bubble_delay( output, sphere, series,
                                                                scale, power, colormap,
                                                                delay, custom_time_range )
@@ -110,12 +118,27 @@ class Bubbles( PyArtist ):
             self.has_scale = hasattr(obj, self.name_scale)
             if self.has_scale:
                 return # self.name_scale now also has correct value
+    
+    @staticmethod
+    def set_size(obj, sizes):
+        if isinstance(obj, Sphere):
+            sizefunc = StepFunctionFloat(0)
+            for size, tc in sizes:
+                sizefunc.add( size, tc )
+            obj.setSize( sizefunc )
+        elif isinstance(obj, Cylinder):
+            axis = obj.axis(0)
+            axisfunc = StepFunctionVec3d(vec3d(0,0,0))
+            for size, tc in sizes:
+                axisfunc.add( size*axis, tc )
+            obj.setAxis( axisfunc )
+        else:
+            raise TypeError("Don't know how to scale %s object" % (type(Sphere)))
 
     def handle_integral_bubble_delay( self, output, sphere, series,
                                       scale, power, colormap, delay,
                                       custom_time_range ):
         times = [x.time for x in series]
-        sizefunc = StepFunctionFloat(0)
         chargemap = {}
         change_points = []
         for obj in series:
@@ -127,6 +150,7 @@ class Bubbles( PyArtist ):
             change_points.append(t)
             change_points.append(t + delay)
         change_points.sort()
+        sizes = []
         for i,tc in enumerate(change_points):
             accum = 0.0
             j = i
@@ -140,7 +164,7 @@ class Bubbles( PyArtist ):
                     accum += chargemap[t]
                 j -= 1
             size = scale * ( 0.2 * accum ) ** power
-            sizefunc.add( size, tc )
+            sizes.append( (size, tc) )
         if custom_time_range:
             # prevent garbage collection of new TimeWindow
             output.custom_tw = TimeWindow( *custom_time_range )
@@ -148,21 +172,21 @@ class Bubbles( PyArtist ):
         else:
             tw = output
         sphere.setColor( TimeWindowColor( tw, times, colormap ) )
-        sphere.setSize( sizefunc )
+        self.set_size( sphere, sizes )
 
     def handle_integral_bubble( self, output, sphere, series,
                                 scale, power, colormap,
                                 custom_time_range ):
         t0 = series[0].time
-        sizefunc = StepFunctionFloat(0)
         accum = 0
+        sizes = []
         for obj in series:
             if self.has_scale:
                 accum += getattr(obj, self.name_scale)
             else:
                 accum += 1.0
             size = scale * ( 0.2 * accum ) ** power
-            sizefunc.add( size, obj.time )
+            sizes.append( (size, obj.time) )
         if custom_time_range:
             # prevent garbage collection of new TimeWindow
             output.custom_tw = TimeWindow( *custom_time_range )
@@ -170,7 +194,7 @@ class Bubbles( PyArtist ):
         else:
             tw = output
         sphere.setColor( TimeWindowColor( tw, t0, colormap ) )
-        sphere.setSize( sizefunc )
+        self.set_size( sphere, sizes )
 
     def handle_time_bubble( self, output, sphere, obj,
                             scale, colormap,
@@ -185,7 +209,7 @@ class Bubbles( PyArtist ):
         else:
             tw = output
         sphere.setColor( TimeWindowColor( tw, t0, colormap ) )
-        sphere.setSize( sizefunc )
+        self.set_size( sphere, [(scale, t0)] )
 
     def handle_const_bubble( self, sphere, static_color ):
         sphere.setColor( static_color )

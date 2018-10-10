@@ -335,6 +335,14 @@ void Particles::drawParticle( const I3Particle& p,
       }
     }
     g->add( bubble );
+    {
+        const double length = 10*setting<RangeSetting>("scale");
+        ArrowObject* obj =  new ArrowObject(
+            VariantVec3dPtr(new SceneConstant<vec3d>(from_I3Position(p.GetPos()))),
+            VariantVec3dPtr(new SceneConstant<vec3d>(from_I3Position(p.GetPos() + length*p.GetDir()))),
+            std::atan(kArrowHeadRatio), arrowsize);
+        g->add(obj);
+    }
 
     if( setting<bool>("labels") ){
       std::ostringstream label;

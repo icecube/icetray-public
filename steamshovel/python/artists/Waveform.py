@@ -1,9 +1,13 @@
 from .mplart import MPLArtist
 from icecube.shovelart import *
 from icecube import dataclasses
+from icecube.icetray import I3Units
 import matplotlib.gridspec as gridspec
 from matplotlib.colors import colorConverter as mplcol
+from matplotlib import rcParams
 from cycler import cycler
+from itertools import cycle
+import numpy
 
 class Waveform(MPLArtist):
 
@@ -11,7 +15,7 @@ class Waveform(MPLArtist):
     def isValidKey(self, frame, key_idx, key):
         'Accept I3DOMLaunchSeriesMap'
         tn = frame.type_name(key)
-        return "I3DOMLaunch" in tn and "Map" in tn
+        return ("I3DOMLaunch" in tn or "I3Waveform" in tn) and "Map" in tn
 
     def __init__(self):
         MPLArtist.__init__(self)
@@ -47,9 +51,49 @@ class Waveform(MPLArtist):
             starttime = time + 25*(max_sample-1)
             self._stepped_plot( axis, starttime, 25, rawcharge, **kw )
 
-
     def create_plot( self, frame, fig ):
+        launchmap = frame[list(self.keys())[0]]
+        if isinstance(launchmap, dataclasses.I3DOMLaunchSeriesMap):
+            self.create_plot_raw( frame, fig )
+        else:
+            self.create_plot_calibrated( frame, fig )
 
+    def create_plot_calibrated( self, frame, fig ):
+        waveformmap = frame[list(self.keys())[0]]
+        oms = self.setting( 'OMKeys' )
+        
+        axis = fig.add_subplot(111)
+        
+        geom = None
+        if( 'I3Geometry' in frame.keys() ):
+            geom = frame['I3Geometry']
+        
+        props = cycle(cycler(rcParams['axes.prop_cycle']))
+        for omkey in oms:
+            if omkey not in waveformmap:
+                continue
+            waveforms = waveformmap[omkey]
+
+            prop = next(props)
+            label = 'OM({},{})'.format(omkey.string, omkey.om)
+            for wf in waveforms:
+                if wf.status != wf.VIRGINAL:
+                    pass
+                if not ((wf.source == wf.ATWD) and (wf.channel == 0)):
+                    continue
+                trace = numpy.array(wf.waveform) / I3Units.mV
+                self._stepped_plot( axis, wf.time, wf.bin_width, trace, label=label, **prop)
+                label = "__nolabel"
+                break
+            
+            if( geom ):
+                self.addOverlayLine( geom.omgeo[omkey].position, mplcol.to_rgb(prop['color']) )
+        if( self.setting('legend') ):
+            axis.legend()
+            
+
+    def create_plot_raw( self, frame, fig ):
+        
         launchmap = frame[list(self.keys())[0]]
         oms = self.setting( 'OMKeys' )
         legend = ''
@@ -85,27 +129,28 @@ class Waveform(MPLArtist):
         if( 'I3Geometry' in frame.keys() ):
             geom = frame['I3Geometry']
 
-        colors = cycler('color', ['b', 'r', 'c', 'm'])
+        props = cycle(cycler(rcParams['axes.prop_cycle']))
         for omkey in oms:
             if omkey not in launchmap:
                 continue
             launches = launchmap[omkey]
 
-            color = next(colors)
+            prop = next(props)
             label = str(omkey)
             for launch in launches:
-                self._plot_fadc( fadc, launch, color=color, label=label )
+                self._plot_fadc( fadc, launch, label=label, **prop)
                 # change the label to None so that only one label appears for any omkey
                 label = None
                 for i in range(0,numchannels):
                     self._plot_atwd( atwd[i], launch.time, launch.raw_atwd[i],
-                                     color=color )
+                                     **prop )
 
             if( geom ):
-                self.addOverlayLine( geom.omgeo[omkey].position, mplcol.to_rgb(color) )
+                self.addOverlayLine( geom.omgeo[omkey].position, mplcol.to_rgb(prop['color']) )
 
         if( self.setting('legend') ):
             fadc.legend(bbox_to_anchor=(0, 0, 1, 1),
                         bbox_transform=fig.transFigure,
                         loc=3, ncol=2, mode='expand', prop={'size':'small'})
+        
 
