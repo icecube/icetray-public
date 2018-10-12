@@ -31,6 +31,7 @@ i3_add_library(phys-services
   private/phys-services/I3Calculator.cxx
   private/phys-services/I3CascadeCutValues.cxx
   private/phys-services/I3Cuts.cxx
+  private/phys-services/I3CrossSection.cxx
   private/phys-services/I3CutsModule.cxx
   private/phys-services/I3EventCounter.cxx
   private/phys-services/I3FileOMKey2MBID.cxx
@@ -101,6 +102,7 @@ i3_test_scripts(resources/test/*.py)
 i3_add_pybindings(phys_services
   private/pybindings/I3Calculator.cxx
   private/pybindings/I3ScaleCalculator.cxx
+  private/pybindings/I3CrossSection.cxx
   private/pybindings/I3CutValues.cxx
   private/pybindings/I3CascadeCutValues.cxx
   private/pybindings/Converter.cxx
