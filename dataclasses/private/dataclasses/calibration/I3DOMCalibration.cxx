@@ -413,9 +413,15 @@ I3_SERIALIZABLE(QuadraticFit);
 template <class Archive>
 void
 SPEChargeDistribution::save(Archive& ar, unsigned version) const
-{
-  ar & make_nvp("ExpAmp", exp_amp);
-  ar & make_nvp("ExpWidth", exp_width);
+{	
+  ar & make_nvp("Exp2Amp", exp2_amp); 		
+  ar & make_nvp("Exp2Width", exp2_width);
+  if (version >= 2){	
+    ar & make_nvp("Exp1Amp", exp1_amp);
+    ar & make_nvp("Exp1Width", exp1_width);
+    ar & make_nvp("CompensationFactor", compensation_factor);
+    ar & make_nvp("SLCGausMean", SLC_gaus_mean);
+  }
   ar & make_nvp("GausAmp", gaus_amp);
   ar & make_nvp("GausMean", gaus_mean);
   ar & make_nvp("GausWidth", gaus_width);
@@ -428,27 +434,35 @@ SPEChargeDistribution::load(Archive& ar, unsigned version)
   if (version>SPEChargeDistribution_version_)
     log_fatal("Attempting to read version %u from file but running version %u of SPEChargeDistribution class.",version,SPEChargeDistribution_version_);
 
-  ar & make_nvp("ExpAmp", exp_amp);
-  ar & make_nvp("ExpWidth", exp_width);
+  ar & make_nvp("Exp2Amp", exp2_amp);
+  ar & make_nvp("Exp2Width", exp2_width);
+  if (version >= 2){
+    ar & make_nvp("Exp1Amp", exp1_amp);
+    ar & make_nvp("Exp1Width", exp1_width);
+    ar & make_nvp("CompensationFactor", compensation_factor);
+    ar & make_nvp("SLCGasuMean", SLC_gaus_mean);
+  }
   ar & make_nvp("GausAmp", gaus_amp);
   ar & make_nvp("GausMean", gaus_mean);
   ar & make_nvp("GausWidth", gaus_width);
-  if (version==0)
-  {
-    // the isValid flag existed in version 0. replaced by setting member
-    // variables to NAN. The struct is considered invalid if any member
-    // variable is NAN.
-    bool isValid(false);
-    ar & make_nvp("IsValid", isValid);
-    if (!isValid)
-    {
-      // make sure the structure is invalid if marked as such
-      exp_amp=NAN;
-      exp_width=NAN;
-      gaus_amp=NAN;
-      gaus_mean=NAN;
-      gaus_width=NAN;
-    }
+  if (version == 1){
+    //If we have read old data, we need to decide what to do for the parameters which
+	//did not exist at the time it was written. 
+	//If any of the old parameters was invalid, use invalid values for the new parts
+    if(std::isnan(exp2_amp) || std::isnan(exp2_width) ||
+	   std::isnan(gaus_amp) || std::isnan(gaus_mean) || std::isnan(gaus_width) ||  std::isnan(compensation_factor) ||std::isnan(SLC_gaus_mean) ){
+      exp1_amp=NAN;
+	  exp1_width=NAN;
+	  compensation_factor=NAN;
+	  SLC_gaus_mean=NAN;
+	}
+	//otherwise use values which are valid but cause the new term to vanish
+	else{
+      exp1_amp=0.;
+	  exp1_width=1.;
+	  compensation_factor = 1.;
+        SLC_gaus_mean = 1.;
+	}
   }
 }
 
@@ -730,12 +744,17 @@ std::ostream& operator<<(std::ostream& oss, const QuadraticFit& f)
 
 std::ostream& operator<<(std::ostream& oss, const SPEChargeDistribution& spe)
 {
+
   oss << "[ SPEChargeDistribution :: " << std::endl
-      << "                 exp_amp : " << spe.exp_amp << std::endl
-      << "               exp_width : " << spe.exp_width << std::endl
-      << "                gaus_amp : " << spe.gaus_amp << std::endl
-      << "               gaus_mean : " << spe.gaus_mean << std::endl
-      << "              gaus_width : " << spe.gaus_width << std::endl
+      << "               Exp1 Amp. : " << spe.exp1_amp << std::endl
+      << "              Exp1 Width : " << spe.exp1_width << std::endl
+      << "               Exp2 Amp. : " << spe.exp2_amp << std::endl
+      << "              Exp2 Width : " << spe.exp2_width << std::endl
+      << "           Gaussian Amp. : " << spe.gaus_amp << std::endl
+      << "           Gaussian Mean : " << spe.gaus_mean << std::endl
+      << "          Gaussian Width : " << spe.gaus_width << std::endl
+      << "     Compensation Factor : " << spe.compensation_factor << std::endl
+      << "       SLC Gaussian Mean : " << spe.SLC_gaus_mean << std::endl
       << "]" ;
   return oss;
 }

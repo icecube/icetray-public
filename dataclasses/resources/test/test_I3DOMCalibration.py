@@ -38,22 +38,28 @@ class TestI3DOMCalibration(unittest.TestCase):
 
     def test_SPEChargeDistribution_equality(self):
         d1 = dataclasses.SPEChargeDistribution()
-        d1.exp_amp = 0.5772
-        d1.exp_width = 1.645
-        d1.gaus_amp = 1.202
-        d1.gaus_mean = 1.0823
-        d1.gaus_width = 2.612
+        d1.exp1_amp   = 6.68282
+        d1.exp1_width = 0.0342546
+        d1.exp2_amp   = 0.521208
+        d1.exp2_width = 0.445405
+        d1.gaus_amp   = 0.688097
+        d1.gaus_mean  = 1.
+        d1.gaus_width = 0.312677
+        d1.compensation_factor = 1.3
 
         d2 = dataclasses.SPEChargeDistribution()
-        d2.exp_amp = 0.5772
-        d2.exp_width = 1.645
-        d2.gaus_amp = 1.202
-        d2.gaus_mean = 1.0823
-        d2.gaus_width = 2.612
-        
+        d2.exp1_amp   = 6.68282
+        d2.exp1_width = 0.0342546
+        d2.exp2_amp   = 0.521208
+        d2.exp2_width = 0.445405
+        d2.gaus_amp   = 0.688097
+        d2.gaus_mean  = 1.
+        d2.gaus_width = 0.312677
+	d2.compensation_factor = 1.3        
+
         self.assertEqual(d1, d2, "these should be the same.")
 
-        d2.exp_amp = 0.
+        d2.exp1_amp = 0.
         self.assertNotEqual(d1, d2, "these should be the same.")
 
     def test_TauParam_equality(self):
@@ -159,18 +165,25 @@ class TestI3DOMCalibration(unittest.TestCase):
 
     def test_SPEChargeDistribution_string(self):
         d1 = dataclasses.SPEChargeDistribution()
-        d1.exp_amp = 0.5772
-        d1.exp_width = 1.645
-        d1.gaus_amp = 1.202
-        d1.gaus_mean = 1.0823
-        d1.gaus_width = 2.612
-        d2 = dataclasses.SPEChargeDistribution()
-        d2.exp_amp = 0.5772
-        d2.exp_width = 1.645
-        d2.gaus_amp = 1.202
-        d2.gaus_mean = 1.0823
-        d2.gaus_width = 2.612
+        d1.exp1_amp   = 6.68282
+        d1.exp1_width = 0.0342546
+        d1.exp2_amp   = 0.521208
+        d1.exp2_width = 0.445405
+        d1.gaus_amp   = 0.688097
+        d1.gaus_mean  = 1.
+        d1.gaus_width = 0.312677
+	d1.compensation_factor = 1.3
 
+        d2 = dataclasses.SPEChargeDistribution()
+        d2.exp1_amp   = 6.68282
+        d2.exp1_width = 0.0342546
+        d2.exp2_amp   = 0.521208
+        d2.exp2_width = 0.445405
+        d2.gaus_amp   = 0.688097
+        d2.gaus_mean  = 1.
+        d2.gaus_width = 0.312677
+	d2.compensation_factor = 1.3
+	
         self.assertEqual(d1.__str__(), d2.__str__(), "these should be the same.")
 
 

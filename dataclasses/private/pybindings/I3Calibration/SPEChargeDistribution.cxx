@@ -27,12 +27,16 @@ using namespace boost::python;
 void register_SPEChargeDistribution()
 {
   class_<SPEChargeDistribution>("SPEChargeDistribution")
-    .def_readwrite("exp_amp", &SPEChargeDistribution::exp_amp)
-    .def_readwrite("exp_width", &SPEChargeDistribution::exp_width)
-    .def_readwrite("gaus_amp", &SPEChargeDistribution::gaus_amp)
-    .def_readwrite("gaus_mean", &SPEChargeDistribution::gaus_mean)
-    .def_readwrite("gaus_width", &SPEChargeDistribution::gaus_width)
-    .add_property("is_valid", &SPEChargeDistribution::IsValid)
+    .def_readwrite("exp1_amp", 		&SPEChargeDistribution::exp1_amp)
+    .def_readwrite("exp1_width", 	&SPEChargeDistribution::exp1_width)
+    .def_readwrite("exp2_amp", 		&SPEChargeDistribution::exp2_amp)
+    .def_readwrite("exp2_width", 	&SPEChargeDistribution::exp2_width)
+    .def_readwrite("gaus_amp", 		&SPEChargeDistribution::gaus_amp)
+    .def_readwrite("gaus_mean", 	&SPEChargeDistribution::gaus_mean)
+    .def_readwrite("gaus_width", 	&SPEChargeDistribution::gaus_width)
+    .def_readwrite("compensation_factor", 	&SPEChargeDistribution::compensation_factor)
+    .def_readwrite("slc_gaus_mean", 	&SPEChargeDistribution::SLC_gaus_mean)
+    .add_property("is_valid", 		&SPEChargeDistribution::IsValid)
     .def(dataclass_suite<SPEChargeDistribution>())
     ;
 }

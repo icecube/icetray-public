@@ -32,7 +32,7 @@ static const unsigned i3domcalibration_version_ = 12;
 static const unsigned linearfit_version_ = 0;
 static const unsigned quadraticfit_version_ = 0;
 static const unsigned tauparam_version_ = 0;
-static const unsigned SPEChargeDistribution_version_ = 1;
+static const unsigned SPEChargeDistribution_version_ = 2;
 
 /**
  * @brief A struct to hold a linear fit 
@@ -98,13 +98,16 @@ struct QuadraticFit
 I3_CLASS_VERSION(QuadraticFit, quadraticfit_version_);
 
 /**
- *  @brief: A struct to hold the parameters of an exponential + Gaussian
+ *  @brief: A struct to hold the parameters of an two exponential + gaussian
  *  fit to the SPE charge distribution:
- *  dF/dQ = exp_amp * exp(-Q / exp_width) +
- *              gaus_amp * exp(-0.5 * ((Q - gaus_mean) / gaus_width)^2) /
- *                                                   (sqrt(2*pi) * gaus_width)
- *  where amp_ratio is the ratio of the Gaussian amplitude to the
- *  exponential amplitude.
+ *  P(q) = exp1_amp * exp(-q/exp1_width) +
+ *         exp2_amp * exp(-q / exp2_width) +
+ *         gaus_amp * np.exp(-0.5*(q - gaus_mean)**2/gaus_width**2))
+ * 
+ * The Compensation Factor is simply the mean charge of the TA0003 distribution divided by the 
+ * average SPE Template charge. 
+ * CF = (dintt_0^inf q f(q)_spe dq) / (dintt_0^inf q f(q)_ta0003 dq)
+ * Given the current SPE Templates, this factor is rougly 1.3
  */
 struct SPEChargeDistribution
 {
@@ -112,51 +115,86 @@ struct SPEChargeDistribution
   template <class Archive> void save(Archive& ar, unsigned version) const;
   I3_SERIALIZATION_SPLIT_MEMBER();
 
-  SPEChargeDistribution() : exp_amp(NAN),
-                            exp_width(NAN),
+  SPEChargeDistribution() : exp1_amp(NAN),
+                            exp1_width(NAN),
+                            exp2_amp(NAN),
+                            exp2_width(NAN),
                             gaus_amp(NAN),
                             gaus_mean(NAN),
-                            gaus_width(NAN) { }
+                            gaus_width(NAN),
+							compensation_factor(NAN),
+                            SLC_gaus_mean(NAN) { }
 
-  SPEChargeDistribution(double amp_exp,
-                        double width_exp,
+  SPEChargeDistribution(double amp_exp1,
+                        double width_exp1,
+                        double amp_exp2,
+                        double width_exp2,
                         double amp_gaus,
                         double mean_gaus,
-                        double width_gaus) :
-    exp_amp(amp_exp),
-    exp_width(width_exp),
+                        double width_gaus,
+						double factor_compensation,
+						double gaus_mean_SLC) :
+    exp1_amp(amp_exp1),
+    exp1_width(width_exp1),
+    exp2_amp(amp_exp2),
+    exp2_width(width_exp2),
     gaus_amp(amp_gaus),
     gaus_mean(mean_gaus),
-    gaus_width(width_gaus) { }
+  	gaus_width(width_gaus),
+	compensation_factor(factor_compensation),
+	SLC_gaus_mean(gaus_mean_SLC) { }
 
-  double exp_amp;
-  double exp_width;
+  double exp1_amp;
+  double exp1_width;
+  double exp2_amp;
+  double exp2_width;
   double gaus_amp;
   double gaus_mean;
   double gaus_width;
-  
+  double compensation_factor;
+  double SLC_gaus_mean;
+
   bool IsValid() const
   {
     // consider valid only if no value is NaN
-    return (!std::isnan(exp_amp) &&
-        !std::isnan(exp_width) &&
-        !std::isnan(gaus_amp) &&
-        !std::isnan(gaus_mean) &&
-        !std::isnan(gaus_width));
+    return(!std::isnan(exp1_amp) &&
+           !std::isnan(exp1_width) &&
+           !std::isnan(exp2_amp) &&
+           !std::isnan(exp2_width) &&
+           !std::isnan(gaus_amp) &&
+           !std::isnan(gaus_mean) &&
+           !std::isnan(gaus_width) &&
+		   !std::isnan(compensation_factor) &&
+		   !std::isnan(SLC_gaus_mean));
   }
   
   bool operator==(const SPEChargeDistribution& rhs) const
   {
-    return (CompareFloatingPoint::Compare_NanEqual(exp_amp, rhs.exp_amp) &&
-        CompareFloatingPoint::Compare_NanEqual(exp_width, rhs.exp_width) &&
-        CompareFloatingPoint::Compare_NanEqual(gaus_amp, rhs.gaus_amp) &&
-        CompareFloatingPoint::Compare_NanEqual(gaus_mean, rhs.gaus_mean) &&
-        CompareFloatingPoint::Compare_NanEqual(gaus_width, rhs.gaus_width));
+    return(CompareFloatingPoint::Compare_NanEqual(exp1_amp	, rhs.exp1_amp) &&
+           CompareFloatingPoint::Compare_NanEqual(exp1_width, rhs.exp1_width) &&
+           CompareFloatingPoint::Compare_NanEqual(exp2_amp	, rhs.exp2_amp) &&
+           CompareFloatingPoint::Compare_NanEqual(exp2_width, rhs.exp2_width) &&
+           CompareFloatingPoint::Compare_NanEqual(gaus_amp	, rhs.gaus_amp) &&
+           CompareFloatingPoint::Compare_NanEqual(gaus_mean	, rhs.gaus_mean) &&
+           CompareFloatingPoint::Compare_NanEqual(gaus_width, rhs.gaus_width) &&
+           CompareFloatingPoint::Compare_NanEqual(compensation_factor, rhs.compensation_factor) &&
+           CompareFloatingPoint::Compare_NanEqual(SLC_gaus_mean, rhs.SLC_gaus_mean));
   }
+
   bool operator!=(const SPEChargeDistribution& rhs) const
   {
     return !operator==(rhs);
-  }  
+  }
+
+  ///Evaluate the probability density for amplification of a photoelectron
+  ///to a particular charge
+  ///\param q the amplification charge in units of the ideal amplification
+  double operator()(double q) const{
+     double e=(q-gaus_mean)/gaus_width;
+     return(exp1_amp*exp(-q/exp1_width)
+	        + exp2_amp*exp(-q/exp2_width)
+			+ gaus_amp*exp(-.5*e*e));
+  }
 };
 
 I3_CLASS_VERSION(SPEChargeDistribution, SPEChargeDistribution_version_);
@@ -834,7 +872,7 @@ class I3DOMCalibration {
   double noiseScintillationHits_;
 
   /**
-   *  Combined-fit SPE distribution function (exponential + Gaussian)
+   *  Combined-fit SPE distribution function (exponential1 + exponential2 + Gaussian)
    */
   SPEChargeDistribution combinedSPEFit_;
 

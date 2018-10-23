@@ -70,11 +70,15 @@ dc.mean_atwd_charge = 0.7
 
 spe_charge_dist = dataclasses.SPEChargeDistribution()
 
-spe_charge_dist.exp_amp = 0.1
-spe_charge_dist.exp_width = 0.2
+spe_charge_dist.exp1_amp = 0.1
+spe_charge_dist.exp1_width = 0.2
+spe_charge_dist.exp2_amp = 0.1
+spe_charge_dist.exp2_width = 0.2
 spe_charge_dist.gaus_amp = 0.3
 spe_charge_dist.gaus_mean = 0.4
 spe_charge_dist.gaus_width = 0.5
+spe_charge_dist.compensation_factor = 0.9
+spe_charge_dist.slc_gaus_mean = 0.5
 
 dc.combined_spe_charge_distribution = spe_charge_dist
 ENSURE(dc.combined_spe_charge_distribution.is_valid == True, "This should be true.")
@@ -215,7 +219,6 @@ ENSURE(dl.lc_bit == True, 'Got wrong LCBit')
 dl.trigger_type = dataclasses.I3DOMLaunch.SPE_DISCRIMINATOR_TRIGGER
 dl.trigger_mode = dataclasses.I3DOMLaunch.LC_UPPER
 dl.which_atwd = dataclasses.I3DOMLaunch.ATWDb
-
 
 #TODO This needs some better pretty print
 print(dl)
