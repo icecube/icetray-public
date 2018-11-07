@@ -60,19 +60,3 @@ Root is only available in newer releases (Ubuntu 13.10+, Debian 7+):
 
     apt-get install root-system
 
-Other Tools
-...........
-
-If you want Geant4 or Genie, you'll need to use I3_PORTS.
-
-Using I3_PORTS
-""""""""""""""
-
-There is a script at
-http://code.icecube.wisc.edu/icetray-dist/distros/Ubuntu.sh
-that will install the necessary packages.
-
-To install further packages (emacs and so forth), the easiest thing to
-do is use the "Synaptic Package Manager", which you can start from menu
-``System --> Administration``. 
-
