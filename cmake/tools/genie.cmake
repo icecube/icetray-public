@@ -36,8 +36,50 @@ endif(NOT GENIE_VERSION)
 
 # does Genie exist at all?
 if(NOT GENIE_VERSION)
-    message(STATUS "Genie not installed.")
+    #message(STATUS "Looking for Genie genie-config program")
+
+    find_program (GENIE_CONFIG genie-config)
+
+    if (${GENIE_CONFIG} MATCHES ".*NOTFOUND$")
+      message(STATUS "Looking for Genie genie-config program -- not found")
+      set(GENIE_CONFIG_ERROR TRUE)
+
+    else (${GENIE_CONFIG} MATCHES ".*NOTFOUND$")
+      message(STATUS "Looking for Genie genie-config program -- found")
+
+      #message(STATUS "Genie-config: ${GENIE_CONFIG}")
+
+      execute_process(#COMMAND export }
+        COMMAND bash -c "${GENIE_CONFIG} --libs"
+        OUTPUT_VARIABLE GENIE_CONFIG_OUTPUT OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+
+      #message(STATUS "Genie-config output: ${GENIE_CONFIG_OUTPUT}")
+
+      string(REGEX REPLACE "-l([^ ]*)" "${CMAKE_SHARED_LIBRARY_PREFIX}\\1${CMAKE_SHARED_LIBRARY_SUFFIX}" GENIE_LIBRARIES ${GENIE_CONFIG_OUTPUT})
+      string(REGEX REPLACE "-L([^ ]*)" "" GENIE_LIBRARIES ${GENIE_LIBRARIES})
+      separate_arguments(GENIE_LIBRARIES)
+      #message(STATUS "Genie libraries: ${GENIE_LIBRARIES}")
+
+      string(REGEX REPLACE "-L([^ ]*)" "\\1" GENIE_LIB_DIR ${GENIE_CONFIG_OUTPUT})
+      string(REGEX REPLACE "-l([^ ]*)" "" GENIE_LIB_DIR ${GENIE_LIB_DIR})
+      string(STRIP ${GENIE_LIB_DIR} GENIE_LIB_DIR)
+      #message(STATUS "Genie lib dir: \"${GENIE_LIB_DIR}\"")
+
+      set(GENIE_INC_DIR $ENV{GENIE}/include/GENIE)
+      #message(STATUS "Genie include dir: \"${GENIE_INC_DIR}\"")
+
+      TOOLDEF (genie
+        ${GENIE_INC_DIR}
+        EVGCore/EventRecord.h
+        ${GENIE_LIB_DIR}
+        NONE  # bin is n/a, placeholder
+        ${GENIE_LIBRARIES}
+        )
+
+    endif (${GENIE_CONFIG} MATCHES ".*NOTFOUND$")
 else(NOT GENIE_VERSION)
+    # Genie in I3_PORTS
     if(GENIE_VERSION VERSION_LESS "2.8.6")
         message(STATUS "Genie v${GENIE_VERSION} is too old. Genie v2.8.6 or greater is required")
     else(GENIE_VERSION VERSION_LESS "2.8.6")
