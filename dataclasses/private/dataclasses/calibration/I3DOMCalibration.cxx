@@ -432,13 +432,16 @@ SPEChargeDistribution::load(Archive& ar, unsigned version)
   if (version>SPEChargeDistribution_version_)
     log_fatal("Attempting to read version %u from file but running version %u of SPEChargeDistribution class.",version,SPEChargeDistribution_version_);
 
-  ar & make_nvp("Exp2Amp", exp2_amp);
-  ar & make_nvp("Exp2Width", exp2_width);
   if (version >= 2){
+    ar & make_nvp("Exp2Amp", exp2_amp);
+    ar & make_nvp("Exp2Width", exp2_width);
     ar & make_nvp("Exp1Amp", exp1_amp);
     ar & make_nvp("Exp1Width", exp1_width);
     ar & make_nvp("CompensationFactor", compensation_factor);
     ar & make_nvp("SLCGasuMean", SLC_gaus_mean);
+  }else{
+    ar & make_nvp("ExpAmp", exp2_amp);
+    ar & make_nvp("ExpWidth", exp2_width);
   }
   ar & make_nvp("GausAmp", gaus_amp);
   ar & make_nvp("GausMean", gaus_mean);
