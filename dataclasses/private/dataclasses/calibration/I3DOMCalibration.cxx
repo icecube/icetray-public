@@ -442,29 +442,14 @@ SPEChargeDistribution::load(Archive& ar, unsigned version)
   }else{
     ar & make_nvp("ExpAmp", exp2_amp);
     ar & make_nvp("ExpWidth", exp2_width);
+    exp1_amp=0.;
+    exp1_width=1.;
+    compensation_factor  = 1.;
+    SLC_gaus_mean = 1.;
   }
   ar & make_nvp("GausAmp", gaus_amp);
   ar & make_nvp("GausMean", gaus_mean);
   ar & make_nvp("GausWidth", gaus_width);
-  if (version == 1){
-    //If we have read old data, we need to decide what to do for the parameters which
-	//did not exist at the time it was written. 
-	//If any of the old parameters was invalid, use invalid values for the new parts
-    if(std::isnan(exp2_amp) || std::isnan(exp2_width) ||
-	   std::isnan(gaus_amp) || std::isnan(gaus_mean) || std::isnan(gaus_width) ||  std::isnan(compensation_factor) ||std::isnan(SLC_gaus_mean) ){
-      exp1_amp=NAN;
-	  exp1_width=NAN;
-	  compensation_factor=NAN;
-	  SLC_gaus_mean=NAN;
-	}
-	//otherwise use values which are valid but cause the new term to vanish
-	else{
-      exp1_amp=0.;
-	  exp1_width=1.;
-	  compensation_factor = 1.;
-        SLC_gaus_mean = 1.;
-	}
-  }
 }
 
 I3_SPLIT_SERIALIZABLE(SPEChargeDistribution);

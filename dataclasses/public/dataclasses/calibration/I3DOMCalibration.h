@@ -122,7 +122,7 @@ struct SPEChargeDistribution
                             gaus_amp(NAN),
                             gaus_mean(NAN),
                             gaus_width(NAN),
-							compensation_factor(NAN),
+                            compensation_factor(NAN),
                             SLC_gaus_mean(NAN) { }
 
   SPEChargeDistribution(double amp_exp1,
@@ -132,17 +132,17 @@ struct SPEChargeDistribution
                         double amp_gaus,
                         double mean_gaus,
                         double width_gaus,
-						double factor_compensation,
-						double gaus_mean_SLC) :
-    exp1_amp(amp_exp1),
-    exp1_width(width_exp1),
-    exp2_amp(amp_exp2),
-    exp2_width(width_exp2),
-    gaus_amp(amp_gaus),
-    gaus_mean(mean_gaus),
-  	gaus_width(width_gaus),
-	compensation_factor(factor_compensation),
-	SLC_gaus_mean(gaus_mean_SLC) { }
+			double factor_compensation,
+			double gaus_mean_SLC) :
+      exp1_amp(amp_exp1),
+      exp1_width(width_exp1),
+      exp2_amp(amp_exp2),
+      exp2_width(width_exp2),
+      gaus_amp(amp_gaus),
+      gaus_mean(mean_gaus),
+      gaus_width(width_gaus),
+      compensation_factor(factor_compensation),
+      SLC_gaus_mean(gaus_mean_SLC) { }
 
   double exp1_amp;
   double exp1_width;
