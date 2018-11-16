@@ -416,12 +416,10 @@ SPEChargeDistribution::save(Archive& ar, unsigned version) const
 {	
   ar & make_nvp("Exp2Amp", exp2_amp); 		
   ar & make_nvp("Exp2Width", exp2_width);
-  if (version >= 2){	
-    ar & make_nvp("Exp1Amp", exp1_amp);
-    ar & make_nvp("Exp1Width", exp1_width);
-    ar & make_nvp("CompensationFactor", compensation_factor);
-    ar & make_nvp("SLCGausMean", SLC_gaus_mean);
-  }
+  ar & make_nvp("Exp1Amp", exp1_amp);
+  ar & make_nvp("Exp1Width", exp1_width);
+  ar & make_nvp("CompensationFactor", compensation_factor);
+  ar & make_nvp("SLCGausMean", SLC_gaus_mean);
   ar & make_nvp("GausAmp", gaus_amp);
   ar & make_nvp("GausMean", gaus_mean);
   ar & make_nvp("GausWidth", gaus_width);
