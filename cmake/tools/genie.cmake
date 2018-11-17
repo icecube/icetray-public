@@ -69,9 +69,19 @@ if(NOT GENIE_VERSION)
       set(GENIE_INC_DIR $ENV{GENIE}/include/GENIE)
       #message(STATUS "Genie include dir: \"${GENIE_INC_DIR}\"")
 
+      find_path(GENIE_INCLUDE_DIR NAMES EVGCore/EventRecord.h PATHS ${GENIE_INC_DIR} ${TOOL_SYSTEM_PATH})
+      if(${GENIE_INCLUDE_DIR} MATCHES ".*NOTFOUND$")
+        set(GENIE_VERSION "3.0.0")
+        set(GENIE_HEADER "Framework/EventGen/EventRecord.h")
+        find_path(GENIE_INCLUDE_DIR NAMES Framework/EventGen/EventRecord.h PATHS ${GENIE_INC_DIR} ${TOOL_SYSTEM_PATH})
+      else(${GENIE_INCLUDE_DIR} MATCHES ".*NOTFOUND$")
+        set(GENIE_VERSION "2.8.6")
+        set(GENIE_HEADER "EVGCore/EventRecord.h")
+      endif(${GENIE_INCLUDE_DIR} MATCHES ".*NOTFOUND$")
+
       TOOLDEF (genie
         ${GENIE_INC_DIR}
-        EVGCore/EventRecord.h
+        ${GENIE_HEADER}
         ${GENIE_LIB_DIR}
         NONE  # bin is n/a, placeholder
         ${GENIE_LIBRARIES}
