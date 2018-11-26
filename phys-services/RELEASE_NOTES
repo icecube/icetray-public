@@ -5,6 +5,13 @@ Release Notes
 trunk
 -----
 
+November 26, 2018, Juan Carlos Diaz Velez (juancarlos@icecube.wisc.edu)
+--------------------------------------------------------
+Release V18-11-00
+
+* r163838 - Fixes bad test pattern.
+
+
 June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------
 Release V18-06-00
