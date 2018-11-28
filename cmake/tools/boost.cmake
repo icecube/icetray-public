@@ -45,11 +45,8 @@ if (SYSTEM_PACKAGES)
     # Now that boost was found and we know which version, we can choose the correct
     # boost::python libraries that match the python version we're building against.
     if ((Boost_VERSION GREATER 106700) OR (Boost_VERSION EQUAL 106700))
-      if (PYTHON_VERSION MATCHES "Python 2")
-        find_package(Boost ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION} EXACT COMPONENTS python27 ${BASE_COMPONENTS})
-      else()
-        find_package(Boost ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION} EXACT COMPONENTS python36 ${BASE_COMPONENTS})
-      endif()
+      find_package(Boost ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION} EXACT COMPONENTS
+                   python${PYTHON_STRIPPED_MAJOR_MINOR_VERSION} ${BASE_COMPONENTS})
     else()
       # Old boost, so find using the old method
       find_package(Boost ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION} COMPONENTS python ${BASE_COMPONENTS})
