@@ -6,7 +6,7 @@
 from icecube import icetray, dataclasses, dataio
 import sys
 
-i3f = dataio.I3File("alphabet.i3", 'w')
+i3f = dataio.I3File("alphabet2.i3", 'w')
 
 try:
     for frame in i3f:

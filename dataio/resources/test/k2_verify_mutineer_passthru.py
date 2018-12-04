@@ -27,10 +27,3 @@ tray.AddModule("Dump","dump")
 
 
 tray.Execute()
-
-
-fname = "stillhasmutineer.i3.gz"
-if os.path.exists(fname):
-    os.unlink(fname)
-
-sys.exit(0)

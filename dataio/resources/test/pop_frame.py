@@ -11,7 +11,7 @@ import sys
 # Generate .i3 file
 #
 
-i3f = dataio.I3File("tmp.i3", 'w')
+i3f = dataio.I3File("tmp3.i3", 'w')
 
 streams = ['A', 'B', 'C', 'D', 'E', 'F']
 
@@ -24,7 +24,7 @@ for st in streams:
 
 i3f.close()
 
-i3f2 = dataio.I3File("tmp.i3")
+i3f2 = dataio.I3File("tmp3.i3")
 
 frame = i3f2.pop_frame(icetray.I3Frame.Stream('N'))
 

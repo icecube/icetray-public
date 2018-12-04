@@ -35,8 +35,3 @@ tray.AddModule("CountFrames",
     )
 
 tray.Execute()
-
-
-for fname in file_list:
-    if os.path.exists(fname):
-        os.unlink(fname)

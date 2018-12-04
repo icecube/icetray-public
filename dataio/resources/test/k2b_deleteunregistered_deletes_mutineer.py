@@ -28,8 +28,4 @@ tray.AddModule("CountFrames", "count",
 tray.Execute()
 
 
-fname = "hasmutineer.i3.gz"
-if os.path.exists(fname):
-    os.unlink(fname)
-
 sys.exit(0)
