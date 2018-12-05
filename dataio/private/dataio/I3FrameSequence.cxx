@@ -485,12 +485,21 @@ namespace dataio {
             // check future cache
             const auto tr_cache_iter = tr_cache_.find(frameno_);
             if (tr_cache_iter != tr_cache_.end()) {
-                fr = tr_cache_iter->second.get(); // get from future
+		try {
+                    fr = tr_cache_iter->second.get(); // get from future
+                } catch(icecube::archive::archive_exception& ex) {
+                    log_warn_stream("Unexpected end of input file: " << ex.what());
+                }
                 tr_cache_.erase(tr_cache_iter);
             } else {
                 // make future, then wait on it
-                auto f = tr_.push([=]{return files_.get_frame(frameno_);});
-                fr = f.get();
+		auto f = tr_.push([=]{return files_.get_frame(frameno_);});
+                try {
+                    fr = f.get();
+                } catch(icecube::archive::archive_exception& ex) {
+                    log_warn_stream("Unexpected end of input file: " << ex.what());
+                    return false;
+                }	
             }
             if (!fr.empty()) {
                 // add to frame cache
