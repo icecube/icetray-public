@@ -93,6 +93,7 @@ set_property(TEST dataio::o0_multibyte_metadatadup.py APPEND PROPERTY DEPENDS da
 set_property(TEST dataio::o2_split_gcd.py APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
 set_property(TEST dataio::o5_write_1event.py APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
 set_property(TEST dataio::q_writenulls.py APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
+set_property(TEST dataio::zst_test.py APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
 if (NOT ${EXPECT} MATCHES "-NOTFOUND")
 set_property(TEST dataio::dataio-shovel-test APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
 endif (NOT ${EXPECT} MATCHES "-NOTFOUND")
@@ -185,6 +186,7 @@ set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::r_readnu
 set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::s_i3reader_readnulls.py)
 set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::t_skip_infoframes.py)
 set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::writer_is_conditional.py)
+set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::zst_test.py)
 
 # Move this test to the end.  It occasionally fails when run concurrently with
 # other tests for some unknown reason.  It does not seem to share common files.
