@@ -53,14 +53,14 @@ The writers will automatically compress if you specify a filename that ends in .
 
 will get you run-of-the-mill gzip compression. With CompressionLevel you can specify:
 
-    =================  ================
-    Compression Level  Meaning
-    =================  ================
-    0                  no compression
-    1                  fastest
-    6                  default
-    9                  best compression
-    =================  ================
+    ======================  ================
+    GZip Compression Level  Meaning
+    ======================  ================
+    0                       no compression
+    1                       fastest
+    6                       default
+    9                       best compression
+    ======================  ================
  
 so this:: 
 
@@ -83,6 +83,29 @@ Similarly, the I3Writer will automatically compress if you specify a filename
 that ends in .gz::
 
     tray.Add("I3Writer", filename="mystuff.i3.gz")
+    
+Other compression strategies can similarly be selected by the filename suffix:
+
+    ====================  ====================
+    Compression Strategy  I3Writer File Suffix
+    ====================  ====================
+    gzip                  .gz
+    bzip2                 .bz2
+    zstd                  .zst
+    ====================  ====================
+
+The meanings of bzip2 compression levels are the same as GZip, i.e. 1-9, with
+1 the fastest and 9 the best compression.  ZSTD compression levels are slightly
+different:
+
+    ======================  ================
+    ZSTD Compression Level  Meaning
+    ======================  ================
+    0                       no compression
+    1                       fastest
+    4                       default
+    22                      best compression
+    ======================  ================
 
 Reading from and writing to remote locations (staging)
 ------------------------------------------------------
