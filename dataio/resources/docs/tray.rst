@@ -2,7 +2,7 @@ IceTray I/O
 ===========
 
 The dataio modules I3Writer, I3MultiWriter and I3Reader support on-the-fly
-compression and exclusion of various frame items via regular expressions. 
+compression and exclusion of various frame items via regular expressions.
 
 Reading in .i3 files
 --------------------
@@ -15,30 +15,30 @@ Usage
 
 Usage is straightforward.  Available parameters are listed below (from
 icetray-inspect dataio)::
- 
+
    I3Reader
     Filename (string)
       Description :  Filename to read.  Use either this or Filenamelist, not both.
       Default     :  ""
-  
+
     FilenameList (vector<string>)
       Description :  List of files to read, *IN SORTED ORDER*
       Default     :  []
-  
+
     SkipKeys (vector<string>)
       Description :  Don't load frame objects with these keys
       Default     :  []
-  
+
 
 An example python script::
 
     #!/usr/bin/env python
     import os
     import sys
-    
+
     from I3Tray import *
     from icecube import dataclasses, dataio
-    
+
     tray = I3Tray()
     tray.Add("I3Reader", filename="pass1.i3")
     tray.Add("Dump","dump")
@@ -46,10 +46,12 @@ An example python script::
 
 Compression
 ^^^^^^^^^^^
+The writers will automatically compress the data using one of the following
+compression algorithms: gzip, bzip2, or zstd. The actual to-be-used algorithm
+can be specified by given the file a filename that ends in .gz, .bz2, or .zst,
+respectively. This::
 
-The writers will automatically compress if you specify a filename that ends in .gz or .bz2. This::
-
-    tray.Add("I3Writer", filename="mystuff.i3.gz")                                      
+    tray.Add("I3Writer", filename="mystuff.i3.gz")
 
 will get you run-of-the-mill gzip compression. With CompressionLevel you can specify:
 
@@ -61,8 +63,8 @@ will get you run-of-the-mill gzip compression. With CompressionLevel you can spe
     6                       default
     9                       best compression
     ======================  ================
- 
-so this:: 
+
+so this::
 
     tray.Add("I3Writer", filename="mystuff.i3.gz")
 
@@ -72,18 +74,22 @@ should get you the same result as just writing to disk and then gzipping, and th
 
 will compress better at the cost of speed.
 
-In addition, I3Reader will transparently read gzip, bzip2, or xz-compressed .i3
-files, or .i3 files inside of compressed tar archives like the PFFilt files 
+In addition, I3Reader will transparently read gzip, bzip2, zstd, or xz-compressed .i3
+files, or .i3 files inside of compressed tar archives like the PFFilt files
 packaged and transferred over the satellite link by JADE. Any format that
 libarchive_ supports can be read.
 
 .. _libarchive: http://www.libarchive.org
 
-Similarly, the I3Writer will automatically compress if you specify a filename
-that ends in .gz::
+General information about the Zstandard compression library can be found in the
+zstd_ online documentation, and a more technical documentation in the `zstd manual`_.
+The documentation starts with "zstd, short for Zstandard, is a fast lossless
+compression algorithm, targeting real-time compression scenarios at zlib-level
+and better compression ratios.".
 
-    tray.Add("I3Writer", filename="mystuff.i3.gz")
-    
+.. _zstd: https://facebook.github.io/zstd
+.. _`zstd manual`: https://facebook.github.io/zstd/zstd_manual.html
+
 Other compression strategies can similarly be selected by the filename suffix:
 
     ====================  ====================
@@ -117,12 +123,12 @@ filesystems in Madison. For such situations, dataio has built-in support for
 "staging" files in and out of local storage. This support is activated by
 replacing the `"I3Reader"` module with the `dataio.I3Reader` tray segment. For
 example, to read files via GridFTP, use the following snippet::
-	
+
 	from icecube import icetray, dataio
 	tray.Add(dataio.I3Reader, filenamelist=['gsiftp://gridftp.icecube.wisc.edu/data/sim/IceCube/2010/filtered/level3-cscd/CORSIKA-in-ice/9493/92000-92999/Level3_IC79_corsika.009493.092110.i3.bz2 '])
 
 The segment dataio.I3Reader is equivalent to::
-	
+
 	tray.context['I3FileStager'] = dataio.get_stagers()
 	tray.AddModule('I3Reader', **kwargs)
 
@@ -136,7 +142,7 @@ URL schemes, write the output to a temporary file, and upload it to the
 destination when the file is closed. For example, the following snippet will
 write an .i3 file to my /data/user directory in Madison from anywhere in the
 world::
-	
+
 	tray.Add('I3Writer', filename='gsiftp://gridftp-users.icecube.wisc.edu/data/user/jvansanten/foo.i3.bz2')
 
 Plain POSIX path names, e.g. "/data/user/jvansanten/foo.i3.bz," will not be
@@ -168,66 +174,66 @@ vector of perl-style regular expressions.
 
 so given a frame that looks like this::
 
- Frame: 5/8                                                                      
+ Frame: 5/8
  Key:   1/59               Type                                      Size (bytes)
- DrivingTime               I3Time                                    38          
- F2kEventHeader            I3EventHeader                             83          
- F2kHitSel_DummyTrig5      I3Vector<int>                             291         
- F2kHitSel_DummyTrig6      I3Vector<int>                             291         
- F2kHitSel_DummyTrig7      I3Vector<int>                             291         
- F2kHitSel_DummyTrig8      I3Vector<int>                             291         
- F2kHitSel_FinalHitSel     I3Vector<int>                             171         
- F2kHitSel_HitSel0         I3Vector<int>                             283         
- F2kHitSel_HitSel1         I3Vector<int>                             199         
- F2kHitSel_HitSel2         I3Vector<int>                             171         
- F2kMCPrimaryTrack00       I3Particle                                152         
- F2kMCTracks               I3Vector<I3Particle>                      9098        
- F2kMuonDAQ                I3Map<OMKey, I3AMANDAAnalogReadout>       4242        
- F2kMuonDAQ_uncalib        I3Map<OMKey, I3AMANDAAnalogReadout>       4242        
- F2kSoftwareTriggerFlags   I3Vector<std::string>                     78          
- F2kTrack00                I3Particle                                152         
- F2kTrack00HitSel          I3Vector<int>                             411         
- F2kTrack00Params          I3Map<std::string, double>                180         
- F2kTrack01                I3Particle                                152         
- F2kTrack01HitSel          I3Vector<int>                             411         
- F2kTrack01Params          I3Map<std::string, double>                180         
- F2kTrack02                I3Particle                                152         
- F2kTrack02HitSel          I3Vector<int>                             411         
- F2kTrack02Params          I3Map<std::string, double>                180         
- F2kTrack03                I3Particle                                152         
- F2kTrack03HitSel          I3Vector<int>                             411         
- F2kTrack03Params          I3Map<std::string, double>                180         
- F2kTrack04                I3Particle                                152         
- F2kTrack04HitSel          I3Vector<int>                             411         
- F2kTrack04Params          I3Map<std::string, double>                180         
- F2kTrack05                I3Particle                                152         
- F2kTrack05HitSel          I3Vector<int>                             411         
- F2kTrack05Params          I3Map<std::string, double>                180         
- F2kTrack06                I3Particle                                152         
- F2kTrack06HitSel          I3Vector<int>                             411         
- F2kTrack06Params          I3Map<std::string, double>                180         
- F2kTrack07                I3Particle                                152         
- F2kTrack07HitSel          I3Vector<int>                             411         
- F2kTrack07Params          I3Map<std::string, double>                180         
- F2kTrack08                I3Particle                                152         
- F2kTrack08HitSel          I3Vector<int>                             411         
- F2kTrack08Params          I3Map<std::string, double>                180         
- F2kTrack09                I3Particle                                152         
- F2kTrack09HitSel          I3Vector<int>                             411         
- F2kTrack09Params          I3Map<std::string, double>                180         
- F2kTrack10                I3Particle                                152         
- F2kTrack10HitSel          I3Vector<int>                             411         
- F2kTrack10Params          I3Map<std::string, double>                180         
- F2kTrack11                I3Particle                                152         
- F2kTrack11HitSel          I3Vector<int>                             411         
- F2kTrack11Params          I3Map<std::string, double>                43          
- F2kTrack12                I3Particle                                152         
- F2kTrack12HitSel          I3Vector<int>                             411         
- F2kTrack12Params          I3Map<std::string, double>                180         
- F2kTrack13                I3Particle                                152         
- F2kTrack13HitSel          I3Vector<int>                             411         
- F2kTrack13Params          I3Map<std::string, double>                180         
- F2kTriggers               I3Tree<I3Trigger>                         122          
+ DrivingTime               I3Time                                    38
+ F2kEventHeader            I3EventHeader                             83
+ F2kHitSel_DummyTrig5      I3Vector<int>                             291
+ F2kHitSel_DummyTrig6      I3Vector<int>                             291
+ F2kHitSel_DummyTrig7      I3Vector<int>                             291
+ F2kHitSel_DummyTrig8      I3Vector<int>                             291
+ F2kHitSel_FinalHitSel     I3Vector<int>                             171
+ F2kHitSel_HitSel0         I3Vector<int>                             283
+ F2kHitSel_HitSel1         I3Vector<int>                             199
+ F2kHitSel_HitSel2         I3Vector<int>                             171
+ F2kMCPrimaryTrack00       I3Particle                                152
+ F2kMCTracks               I3Vector<I3Particle>                      9098
+ F2kMuonDAQ                I3Map<OMKey, I3AMANDAAnalogReadout>       4242
+ F2kMuonDAQ_uncalib        I3Map<OMKey, I3AMANDAAnalogReadout>       4242
+ F2kSoftwareTriggerFlags   I3Vector<std::string>                     78
+ F2kTrack00                I3Particle                                152
+ F2kTrack00HitSel          I3Vector<int>                             411
+ F2kTrack00Params          I3Map<std::string, double>                180
+ F2kTrack01                I3Particle                                152
+ F2kTrack01HitSel          I3Vector<int>                             411
+ F2kTrack01Params          I3Map<std::string, double>                180
+ F2kTrack02                I3Particle                                152
+ F2kTrack02HitSel          I3Vector<int>                             411
+ F2kTrack02Params          I3Map<std::string, double>                180
+ F2kTrack03                I3Particle                                152
+ F2kTrack03HitSel          I3Vector<int>                             411
+ F2kTrack03Params          I3Map<std::string, double>                180
+ F2kTrack04                I3Particle                                152
+ F2kTrack04HitSel          I3Vector<int>                             411
+ F2kTrack04Params          I3Map<std::string, double>                180
+ F2kTrack05                I3Particle                                152
+ F2kTrack05HitSel          I3Vector<int>                             411
+ F2kTrack05Params          I3Map<std::string, double>                180
+ F2kTrack06                I3Particle                                152
+ F2kTrack06HitSel          I3Vector<int>                             411
+ F2kTrack06Params          I3Map<std::string, double>                180
+ F2kTrack07                I3Particle                                152
+ F2kTrack07HitSel          I3Vector<int>                             411
+ F2kTrack07Params          I3Map<std::string, double>                180
+ F2kTrack08                I3Particle                                152
+ F2kTrack08HitSel          I3Vector<int>                             411
+ F2kTrack08Params          I3Map<std::string, double>                180
+ F2kTrack09                I3Particle                                152
+ F2kTrack09HitSel          I3Vector<int>                             411
+ F2kTrack09Params          I3Map<std::string, double>                180
+ F2kTrack10                I3Particle                                152
+ F2kTrack10HitSel          I3Vector<int>                             411
+ F2kTrack10Params          I3Map<std::string, double>                180
+ F2kTrack11                I3Particle                                152
+ F2kTrack11HitSel          I3Vector<int>                             411
+ F2kTrack11Params          I3Map<std::string, double>                43
+ F2kTrack12                I3Particle                                152
+ F2kTrack12HitSel          I3Vector<int>                             411
+ F2kTrack12Params          I3Map<std::string, double>                180
+ F2kTrack13                I3Particle                                152
+ F2kTrack13HitSel          I3Vector<int>                             411
+ F2kTrack13Params          I3Map<std::string, double>                180
+ F2kTriggers               I3Tree<I3Trigger>                         122
 
 This::
 
@@ -250,7 +256,7 @@ But note the dot-star in there, these are perl-style regular
 expressions, not the filesystem-globbing stuff that you use in your
 shell when doing things like 'ls *.f2k'.  To match anything once,
 (like ? in the shell) use a dot.  To match anything any number of
-times, use dot-star, like F2k.* 
+times, use dot-star, like F2k.*
 
 The syntax is a little different, and they can be both absurdly
 powerful and, well, simply absurd, if you geek out on them::
@@ -263,30 +269,30 @@ regular expressions.  If you just want to type out every single track
 name, you certainly can::
 
      skipkeys =  ["DrivingTime",
-                  "F2kEventHeader",          
-                  "F2kHitSel_DummyTrig5",    
-                  "F2kHitSel_DummyTrig6",    
-                  "F2kHitSel_DummyTrig7",    
-                  "F2kHitSel_DummyTrig8",    
-                  "F2kHitSel_FinalHitSel",   
-                  "F2kHitSel_HitSel0",       
-                  "F2kHitSel_HitSel1",       
-                  "F2kHitSel_HitSel2",       
-                  "F2kMCPrimaryTrack00",     
-                  "F2kMCTracks",             
-                  "F2kMuonDAQ",              
+                  "F2kEventHeader",
+                  "F2kHitSel_DummyTrig5",
+                  "F2kHitSel_DummyTrig6",
+                  "F2kHitSel_DummyTrig7",
+                  "F2kHitSel_DummyTrig8",
+                  "F2kHitSel_FinalHitSel",
+                  "F2kHitSel_HitSel0",
+                  "F2kHitSel_HitSel1",
+                  "F2kHitSel_HitSel2",
+                  "F2kMCPrimaryTrack00",
+                  "F2kMCTracks",
+                  "F2kMuonDAQ",
                   "F2k_all_the_others_etc"
-                  "F2kMuonDAQ_uncalib",      
-                  "F2kSoftwareTriggerFlags", 
-                  "F2kTrack00",              
-                  "F2kTrack00HitSel",        
-                  "F2kTrack11Params",        
-                  "F2kTrack12",              
-                  "F2kTrack12HitSel",        
-                  "F2kTrack12Params",        
-                  "F2kTrack13",              
-                  "F2kTrack13HitSel",        
-                  "F2kTrack13Params",        
+                  "F2kMuonDAQ_uncalib",
+                  "F2kSoftwareTriggerFlags",
+                  "F2kTrack00",
+                  "F2kTrack00HitSel",
+                  "F2kTrack11Params",
+                  "F2kTrack12",
+                  "F2kTrack12HitSel",
+                  "F2kTrack12Params",
+                  "F2kTrack13",
+                  "F2kTrack13HitSel",
+                  "F2kTrack13Params",
                   "F2kTriggers"]
 
 will work too.
@@ -298,7 +304,7 @@ If a filter module operates only on 'P' frames, but an input file contains
 both 'Q' and 'P' frames, the output at the end can look like::
 
     QQQQQPQQQQQQQQQPQQQQQQQPQQQQQQPQQQ
-    
+
 There are a lot of left over 'Q' frames that we should drop to save space.
 The easy option to take care of that is `DropOrphanStreams`::
 
@@ -345,7 +351,7 @@ written will typically exceed this size by the size of one half of one
 frame.  One consequence of this behavior is that you can write
 one-frame-per-file by specifying a SizeLimit of one byte.
 
-Splitting off the Geometry, Calibration, and DetectorStatus 
+Splitting off the Geometry, Calibration, and DetectorStatus
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This is useful in sim production.  You use two writers, an I3Writer
@@ -355,7 +361,7 @@ for the physics::
   tray.Add("I3Writer","gcdwriter",
            filename="split.gcd.i3",
            streams=["Geometry", "Calibration", "DetectorStatus"])
- 
+
   tray.Add("I3MultiWriter","physwriter",
            filename="split.physics.%04u.i3",
            streams=["Physics"],
@@ -374,7 +380,7 @@ the list of files from a directory, you might find the python
 <code>glob()</code> function convenient::
 
  from glob import glob
- 
+
  file_list = glob("/my/data/\*.i3.gz")
  tray.Add("I3Reader", FilenameList=file_list)
 
@@ -405,11 +411,11 @@ you.  Assuming the GCD is in GCD_0340.i3.gz and the associated physics
 frames are in files physics_0340.00001.i3.gz through, say,
 physics_0340.00999.i3.gz::
 
-  from glob import glob 
+  from glob import glob
 
   physics = glob("physics_0340.*.i3.gz")    # glob() the list of files from the disk
 
-  physics.sort()                            # sort() them (they probably wont glob in alphabetical order)  
+  physics.sort()                            # sort() them (they probably wont glob in alphabetical order)
 
   tray.Add("I3Reader", FilenameList=["GCD_0340.i3.gz"]+physics)
 
