@@ -56,6 +56,11 @@ namespace I3 {
       ifs.reset();
       if (!ifs.empty())
         log_fatal("ifs isn't empty!");
+
+      if (ends_with(filename,".zst")){
+        ifs.push(zstd_decompressor());
+        log_trace("Input file ends in .zst. Using zstd decompressor.");
+      }
 #ifdef I3_WITH_LIBARCHIVE
 
 	/*
@@ -64,22 +69,18 @@ namespace I3 {
 	 * gnutar/pax/ustar/cpio/shar/iso9660 archive
 	 * containing I3 files.
 	 */
-      if (!ends_with(filename,".i3"))
+      else if (!ends_with(filename,".i3"))
 		ifs.push(archive_filter(filename));
 #else
-      if (ends_with(filename,".gz")){
+      else if (ends_with(filename,".gz")){
         ifs.push(io::gzip_decompressor());
         log_trace("Input file ends in .gz.  Using gzip decompressor.");
       }else if (ends_with(filename,".bz2")){
         ifs.push(io::bzip2_decompressor());
       }else{
-        log_trace("Input file doesn't end in .gz or .bz2.  Not decompressing.");
+        log_trace("Input file doesn't end in .gz, .bz2, or .zst.  Not decompressing.");
       }
 #endif
-      if (ends_with(filename,".zst")){
-        ifs.push(zstd_decompressor());
-        log_trace("Input file ends in .zst. Using zstd decompressor.");
-	  }
 
       if (filename.find("socket://") == 0) {
         boost::iostreams::file_descriptor_source fs = create_socket_source(filename);
