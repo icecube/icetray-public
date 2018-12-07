@@ -51,7 +51,7 @@ C++ Tests
 ..........
 If you have a C++ class that either has no python bindings or you want to test some 
 class method that's not bound in C++, then you have to write tests in C++.  Check
-out the docs on `I3Test <projects/cmake/i3test.html>`_.
+out the docs on :ref:`I3Test <cmake-i3test>`.
 
 Running the Tests
 -----------------
