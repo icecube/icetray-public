@@ -38,7 +38,7 @@ namespace bp = boost::python;
 #define REGISTER_THESE_THINGS						\
   (I3CutValues)(I3CascadeCutValues)(I3Calculator)(RandomServices)(I3Cuts)\
   (Converter)(I3Splitter)(I3XMLOMKey2MBID)(I3GCDFileService)(I3ScaleCalculator)\
-  (Surface)
+  (Surface)(I3CrossSection)
 
 #define I3_REGISTRATION_FN_DECL(r, data, t) void BOOST_PP_CAT(register_,t)();
 #define I3_REGISTER(r, data, t) BOOST_PP_CAT(register_,t)();
