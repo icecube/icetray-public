@@ -24,6 +24,7 @@ class QConverter : public I3Module
 		std::vector<std::string> keys_to_q;
 		std::vector<std::string> types_to_q;
 		bool output_p_frame;
+                SET_LOGGER("QConverter");
 };
 
 I3_MODULE(QConverter);

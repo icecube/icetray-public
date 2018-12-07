@@ -66,6 +66,7 @@ class I3Reader : public I3Module
   void Process();
 
   ~I3Reader();
+  SET_LOGGER("I3Reader");
 
 };
 

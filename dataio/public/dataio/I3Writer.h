@@ -39,6 +39,8 @@ public:
 
   void Configure_();
   void Finish();
+  SET_LOGGER("I3Writer");
+  
 
 };
 

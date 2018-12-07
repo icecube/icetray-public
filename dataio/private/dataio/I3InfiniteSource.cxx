@@ -30,6 +30,7 @@ class I3InfiniteSource : public I3Module
 	
 	boost::iostreams::filtering_istream ifs_;
 	I3Frame::Stream stream_;
+        SET_LOGGER("I3InfiniteSource");
 };
 
 I3_MODULE(I3InfiniteSource);
