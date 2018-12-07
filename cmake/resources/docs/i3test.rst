@@ -1,3 +1,5 @@
+.. _cmake-i3test:
+
 I3Test Reference
 ================
 
