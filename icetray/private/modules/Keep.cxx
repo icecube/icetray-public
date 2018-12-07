@@ -44,6 +44,10 @@ Keep::Keep(const I3Context& context)
   AddParameter("Keys", 
                "Keep frame objects with names that match any of these keys", 
                keysParam_);
+  AddParameter("Streams",
+	       "A list of frame types which this function should fire on. "
+	       "By default runs only on DAQ and physics frames",
+	       std::vector<I3Frame::Stream>{I3Frame::DAQ,I3Frame::Physics});
 }
 
 Keep::~Keep(){}
@@ -53,6 +57,10 @@ void Keep::Configure()
   GetParameter("Keys", keysParam_);
   set<string> tmp(keysParam_.begin(), keysParam_.end());
   keys_.swap(tmp);
+  
+  std::vector<I3Frame::Stream> svec;
+  GetParameter("Streams", svec);
+  streams_ = std::set<I3Frame::Stream>(svec.begin(), svec.end());
 }
 
 
@@ -60,14 +68,20 @@ void Keep::Process()
 {
   log_trace("%s", "Processing");
   I3FramePtr frame = PopFrame();
-  I3FramePtr newFrame(new I3Frame(frame->GetStop()));
-  newFrame->drop_blobs(frame->drop_blobs());
 
-  for(set<string>::const_iterator iter = keys_.begin(); iter != keys_.end(); ++iter)
-  {
-    I3Frame::typename_iterator jter = frame->typename_find(*iter);
-    if(jter != frame->typename_end()) newFrame->take(*frame, *iter);
+  if(!streams_.count(frame->GetStop()))
+    // Don't remove anything from this frame!
+    PushFrame(frame);
+  else {
+    // Supposed to run here
+    I3FramePtr newFrame(new I3Frame(frame->GetStop()));
+    newFrame->drop_blobs(frame->drop_blobs());
+    
+    for(set<string>::const_iterator iter = keys_.begin(); iter != keys_.end(); ++iter){
+      I3Frame::typename_iterator jter = frame->typename_find(*iter);
+      if(jter != frame->typename_end()) newFrame->take(*frame, *iter);
+    }
+  
+    PushFrame(newFrame, "OutBox"); 
   }
- 
-  PushFrame(newFrame, "OutBox"); 
 }

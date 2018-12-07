@@ -65,8 +65,8 @@ class Keep : public I3ConditionalModule
  private:
   std::vector<std::string> keysParam_;
   std::set<std::string> keys_;
-
-
+  std::set<I3Frame::Stream> streams_;
+  
   // private copy constructors and assignment
   Keep(const Keep&);
   Keep& operator=(const Keep&);
