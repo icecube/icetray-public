@@ -55,7 +55,7 @@ class TestI3DOMCalibration(unittest.TestCase):
         d2.gaus_amp   = 0.688097
         d2.gaus_mean  = 1.
         d2.gaus_width = 0.312677
-	d2.compensation_factor = 1.3        
+        d2.compensation_factor = 1.3        
 
         self.assertEqual(d1, d2, "these should be the same.")
 
@@ -172,7 +172,7 @@ class TestI3DOMCalibration(unittest.TestCase):
         d1.gaus_amp   = 0.688097
         d1.gaus_mean  = 1.
         d1.gaus_width = 0.312677
-	d1.compensation_factor = 1.3
+        d1.compensation_factor = 1.3
 
         d2 = dataclasses.SPEChargeDistribution()
         d2.exp1_amp   = 6.68282
@@ -182,8 +182,8 @@ class TestI3DOMCalibration(unittest.TestCase):
         d2.gaus_amp   = 0.688097
         d2.gaus_mean  = 1.
         d2.gaus_width = 0.312677
-	d2.compensation_factor = 1.3
-	
+        d2.compensation_factor = 1.3
+        
         self.assertEqual(d1.__str__(), d2.__str__(), "these should be the same.")
 
 
