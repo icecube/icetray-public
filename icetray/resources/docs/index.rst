@@ -31,7 +31,6 @@ General Overview:
    summary
    pybindings
    icetray_quick_reference
-   services
    project
 
 Detailed Documentation:
