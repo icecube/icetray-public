@@ -6,6 +6,14 @@ trunk
 -----
 
 
+December 11, 2018, Alex Olivas  (olivas@icecube.umd.edu)
+----------------------------------------------------
+Release V18-12-00
+* Support of double expontential SPE fits.
+* Bug fix for sDST.
+* New I3RecoPulseSeriesMapCombineByModule.
+* Add equality operators for I3SuperDST and I3FilterResult.
+
 June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
 ----------------------------------------------------
 Release V18-06-00
