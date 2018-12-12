@@ -8,6 +8,11 @@ Release Notes
 trunk
 -----
 
+December 11, 2018, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+Release V18-12-00
+* trivial cleanups to tests and logging.
+
 June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------
 Release V18-06-00
