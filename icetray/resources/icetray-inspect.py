@@ -270,7 +270,7 @@ def get_doxygen_docstring(project,modulename):
     comp = root.find("compounddef")
     brief = comp.find('briefdescription')
 
-    doc = ET.tostring(brief, encoding='utf8', method='text')
+    doc = ET.tostring(brief, encoding='unicode', method='text')
 
     if opts.verbose_docs:
 
@@ -283,7 +283,7 @@ def get_doxygen_docstring(project,modulename):
                 for t in list(s):
                     s.remove(t)
 
-        doc+='\n\n'+ET.tostring(detail, encoding='utf8', method='text')
+        doc+='\n\n'+ET.tostring(detail, encoding='unicode', method='text')
 
     return doc.strip()
 
