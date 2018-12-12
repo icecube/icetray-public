@@ -2,6 +2,12 @@
 Release Notes
 =============
 
+December 11, 2018, Alex Olivas (olivas@icecube.umd.edu)
+------------------------------------------------------------
+Release V18-12-00
+* Support for mDOM vizualization.
+* Bug fix to reduced chi^2
+
 June 13, 2018, Alex Olivas (olivas@icecube.umd.edu)
 ------------------------------------------------------------
 Release V18-06-00
