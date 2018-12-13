@@ -25,9 +25,6 @@ now = datetime.datetime.now()
 
 filename = os.path.join(os.getenv("I3_TESTDATA"),'tai-utc.dat')
 
-if now-datetime.datetime.fromtimestamp(os.path.getmtime(filename)) > datetime.timedelta(215,0):
-    raise RuntimeError("tai-utc.dat is older than seven months, re-download from http://maia.usno.navy.mil/ser7/tai-utc.dat")
-
 #store Modified julian date of days with leap seconds here
 leap_sec_mjd = []
 
