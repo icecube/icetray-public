@@ -605,6 +605,20 @@ namespace I3Units
     static const double micropascal = 1.e-6 * pascal;
     static const double nanopascal = 1.e-9 * pascal;
 
+  /**
+   * Magnetic Field Strength
+   */
+
+  static const double tesla = volt * second / m2;
+  static const double Tesla = tesla;
+
+  static const double millitesla = 1.e-3 * tesla;
+  static const double mT = 1.e-3 * tesla;
+  static const double microtesla = 1.e-6 * tesla;
+  static const double uT = 1.e-6 * tesla;
+  static const double nanotesla = 1.e-9 * tesla;
+  static const double nT = 1.e-9 * tesla;
+
 
   //
   // Miscellaneous

@@ -127,6 +127,10 @@
     (millipascal)							\
     (micropascal)							\
     (nanopascal)							\
+    (tesla) (Tesla)                         \
+    (millitesla) (mT)                       \
+    (microtesla) (uT)                       \
+    (nanotesla) (nT)                        \
     (perCent)								\
     (perThousand)							\
     (perMillion)							\
