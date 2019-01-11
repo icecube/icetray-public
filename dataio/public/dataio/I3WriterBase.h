@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3WriterBase.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -22,34 +22,37 @@
 #ifndef I3_WRITERBASE_H_INCLUDED
 #define I3_WRITERBASE_H_INCLUDED
 
+#include <icetray/I3ConditionalModule.h>
+#include <boost/iostreams/filtering_stream.hpp>
+#include <zlib.h>
+
 #include <vector>
 #include <string>
 #include <fstream>
 #include <sstream>
 
-#include <boost/iostreams/filtering_stream.hpp>
-
-#include "icetray/I3ConditionalModule.h"
-#include "dataio/I3FileStager.h"
-
+template <class Derived>
 class I3WriterBase : public I3ConditionalModule
 {
-protected:
-  bool configWritten_;
-  int frameCounter_;
   std::vector<std::string> skip_keys_;
   std::vector<I3Frame::Stream> streams_;
-  std::vector<I3Frame::Stream> dropOrphanStreams_;
-  std::vector<I3FramePtr> orphanarium_;
+  bool configWritten_;
+  int frameCounter_;
 
-  void WriteConfig(I3FramePtr ptr);
+  bool write_geo_, write_cal_, write_status_, write_physics_, write_trayinfo_;
+
+  // yes, static_cast is bad, but this is the Curiously Recurring Template Pattern,
+  // google it for details
+  inline Derived* derived() { return static_cast<Derived*>(this); }
+
+  void WriteConfig(I3FramePtr);
+
+protected:
+
+  int gzip_compression_level_;
   
   boost::iostreams::filtering_ostream filterstream_;
   std::string path_;
-  I3FileStagerPtr file_stager_;
-  I3::dataio::shared_filehandle current_filename_;
-
-  int gzip_compression_level_;
 
 public:
 
@@ -62,5 +65,7 @@ public:
 
   void Process();
 };
+
+
 
 #endif

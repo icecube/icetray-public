@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: View.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -22,42 +22,33 @@
 #ifndef DATAIO_SHOVEL_VIEW_H_INCLUDED
 #define DATAIO_SHOVEL_VIEW_H_INCLUDED
 
-#include <unordered_map>
 #include <ncurses.h>
-#include "color.h"
 #include <boost/optional.hpp>
 #include <icetray/I3Frame.h>
 
-#include <cdk.h>
+#include <cdk/cdk.h>
 
 class Model;
 
 class View
 {
-private:
 
   unsigned totalframes_;
   unsigned y_top_offset_;
   CDKSCREEN* cdkscreen;
   CDKHISTOGRAM* progresshist_;
+  bool scanning_;
   Model* model_;
 
-  void drawtape(unsigned line, unsigned col,
-                I3Frame::Stream stream, 
-                std::string sub_event_stream,
-                unsigned frameno, int attr = A_NORMAL);
+  void drawtape(unsigned line, unsigned col, I3Frame::Stream stream, 
+		unsigned frameno, int attr = A_NORMAL);
 
   void draw_border();
 
+private:
+
   View();
 
-  std::map<I3Frame::Stream, color_pair> colors_;
-  std::map<std::string, color_pair> subeventstream_colors_;
-  std::vector<color_pair> new_subeventstream_colors_;
-  std::unordered_map<std::string,std::string> clean_typenames_;
-  unsigned maxtypelen_;
-  bool scanning_;
-    
 public:
   
   ~View();
@@ -73,12 +64,14 @@ public:
 
   void do_help();
   void do_about();
-  void start_scan_progress(const std::string& message);
+  void start_scan_progress(const std::string& filename);
   void scan_progress(double d);
   void end_scan_progress();
 
   template<typename T>
   boost::optional<T> dialog(const std::string& prompt);
+
+  boost::optional<std::string> get_file(const std::string& prompt);
 
   void usage();
 

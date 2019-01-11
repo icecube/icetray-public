@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3MultiWriter.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -25,18 +25,16 @@
 #include <dataio/I3WriterBase.h>
 #include <sstream>
 
-class I3MultiWriter : public I3WriterBase
+class I3MultiWriter : public I3WriterBase<I3MultiWriter>
 {
   I3MultiWriter();
   I3MultiWriter(const I3MultiWriter&);
   
   uint64_t size_limit_;
-  I3Frame::Stream sync_stream_;
-  bool sync_seen_;
   unsigned    file_counter_;
-  std::vector<I3Frame::Stream> metadata_streams_;
-  std::vector<I3FramePtr> metadata_cache_;
   void NewFile();
+  
+  std::string current_path();
 
 public:
 
@@ -45,8 +43,9 @@ public:
   virtual ~I3MultiWriter();
 
   void Configure_();
-  void Process();
-  void Finish();
+  void Flush();
+  void Finish_();
+
 };
 
 #endif

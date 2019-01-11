@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id$
+    $Id: geometry.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
 
-    @version $Revision$
-    @date $Date$
+    @version $Revision: 165886 $
+    @date $Date: 2018-10-01 07:37:58 -0700 (Mon, 01 Oct 2018) $
 
 */
 
@@ -22,9 +22,13 @@
 
 #include <boost/preprocessor.hpp>
 
+using namespace boost::archive;
+using namespace std;
+
 TEST_GROUP(geometry);
 
 // (I3OMGeo)(I3TankGeo)
+
 
 #define TEST_THESE (I3Geometry)
 
@@ -33,3 +37,4 @@ TEST_GROUP(geometry);
 #define SERIALIZATION_TEST(r,data,t) SERIALIZE(t)
 
 BOOST_PP_SEQ_FOR_EACH(SERIALIZATION_TEST, ~, TEST_THESE);
+

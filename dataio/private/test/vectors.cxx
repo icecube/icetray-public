@@ -1,10 +1,10 @@
 /**
    copyright  (C) 2004
    the icecube collaboration
-   $Id$
+   $Id: vectors.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
 
-   @version $Revision$
-   @date $Date$
+   @version $Revision: 165886 $
+   @date $Date: 2018-10-01 07:37:58 -0700 (Mon, 01 Oct 2018) $
 
 */
 
@@ -18,12 +18,11 @@
 #include <icetray/Utility.h>
 
 #include "serialization-test.h"
-#include "dataio-test.h"
 
 #include <boost/preprocessor.hpp>
 #include <boost/foreach.hpp>
 
-using namespace icecube::archive;
+using namespace boost::archive;
 using namespace std;
 
 TEST_GROUP(vectors);
@@ -42,7 +41,7 @@ void do_vector (std::string classname)
 {
   log_debug("writing");
   string fname = string("testvector") + classname + ".i3";
-  boost::shared_ptr<I3Vector<T> > t_out(new I3Vector<T>);
+  shared_ptr<I3Vector<T> > t_out(new I3Vector<T>);
   t_out->resize(100);
   for (unsigned i=0; i<100; i++)
     (*t_out)[i] = i;
@@ -55,9 +54,9 @@ void do_vector (std::string classname)
     ENSURE_EQUAL(v[i], T(i));
 
   log_debug("reading past versions");
-  string src = GetDataDir();
+  string src = getenv("I3_SRC");
   vector<string> i3files;
-  string globstr = src + "/serialization/*/" + fname;
+  string globstr = src + "/dataio/resources/data/serialization/*/" + fname;
   log_debug("globbing '%s'", globstr.c_str());
   glob(globstr.c_str(), i3files);
   ENSURE(i3files.size() != 0);
@@ -65,25 +64,14 @@ void do_vector (std::string classname)
     {
       log_info("%s", s.c_str());
       I3FramePtr fp = load_i3_file(s);
-      ENSURE((bool)fp);
+      ENSURE(fp);
       cout << "From " << s << ":\n" << *fp << "\n";
       const I3Vector<T>& vd = fp->template Get<I3Vector<T> >("object");
       for (unsigned i=0; i<100; i++)
 	ENSURE_EQUAL(vd[i], T(i));
     }
-
-  remove(fname.c_str());
 }
 
-//
-//  Clean Me Up: These tests should be done via the I3VectorWhatever
-//  typedefs in I3Vector.h... not stdint typedefs like uint64_t, as
-//  e.g. I3VectorInt64 might be I3Vector<long>, but int64_t might be
-//  long long.  Although the sizes of the types are the same, "long"
-//  and "long long" are different types for the purposes of
-//  I3_SERIALIZABLE (ie BOOST_CLASS_EXPORT, and therefore registration
-//  of serialization methods by std::type_info*)
-//
 
 TEST(bool) { do_vector<bool>("bool"); }
 TEST(char) { do_vector<char>("char"); }
@@ -91,20 +79,11 @@ TEST(uint16_t) { do_vector<uint16_t>("uint16_t"); }
 TEST(int16_t) { do_vector<int16_t>("int16_t"); }
 TEST(uint32_t) { do_vector<uint32_t>("uint32_t"); }
 TEST(int32_t) { do_vector<int32_t>("int32_t"); }
-
-#if __WORDSIZE == 64 || defined(_LP64)
-typedef long myint64_t;
-typedef unsigned long myuint64_t;
-#else
-typedef long long myint64_t;
-typedef unsigned long long myuint64_t;
-#endif
-
 TEST(int64_t) {
-  do_vector<myint64_t>("int64_t");
+  do_vector<long long>("int64_t");
 }
 TEST(uint64_t) {
-  do_vector<myuint64_t>("uint64_t");
+  do_vector<unsigned long long>("uint64_t");
 }
 TEST(double) { do_vector<double>("double"); }
 TEST(float) { do_vector<float>("float"); }

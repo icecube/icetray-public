@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: module.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2008
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -19,20 +19,17 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
+
 #include <icetray/load_project.h>
 
-#define REGISTER_THESE_THINGS \
-	(I3File)(I3FrameSequence)(I3FileStager)
-
-#define I3_REGISTRATION_FN_DECL(r, data, t) void BOOST_PP_CAT(register_,t)();
-#define I3_REGISTER(r, data, t) BOOST_PP_CAT(register_,t)();
-BOOST_PP_SEQ_FOR_EACH(I3_REGISTRATION_FN_DECL, ~, REGISTER_THESE_THINGS)
+void register_I3File();
+void register_I3LootFile();
 
 BOOST_PYTHON_MODULE(dataio)
 {
-  load_project("dataio", false);
-  boost::python::import("icecube.icetray");
+  load_project("libdataio", false);
 
-  BOOST_PP_SEQ_FOR_EACH(I3_REGISTER, ~, REGISTER_THESE_THINGS);
+  register_I3File();
+  register_I3LootFile();
 }
 

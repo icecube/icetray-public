@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3Writer.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -24,12 +24,12 @@
 
 #include <dataio/I3WriterBase.h>
 
-class I3Writer : public I3WriterBase
+class I3Writer : public I3WriterBase<I3Writer>
 {
   I3Writer();
   I3Writer(const I3Writer&);
   
-  std::vector<char> buf_;
+  vector<char> buf_;
 
 public:
 
@@ -38,7 +38,8 @@ public:
   virtual ~I3Writer();
 
   void Configure_();
-  void Finish();
+  void Flush();
+  void Finish_();
 
 };
 
