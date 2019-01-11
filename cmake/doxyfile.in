@@ -1,0 +1,95 @@
+#
+#  $Id$
+#  
+#  Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
+#  and the IceCube Collaboration <http://www.icecube.wisc.edu>
+#  
+#  This file is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>
+#  
+
+PROJECT_NAME           = @PROJECT_NAME@ 
+
+OUTPUT_DIRECTORY       = @DOXYGEN_OUTPUT_PATH@/@PROJECT_NAME@
+OUTPUT_LANGUAGE        = English
+#GENERATE_AUTOGEN_DEF   = YES
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+HIDE_UNDOC_MEMBERS     = NO
+HIDE_UNDOC_CLASSES     = NO
+HIDE_FRIEND_COMPOUNDS  = NO
+BRIEF_MEMBER_DESC      = YES
+REPEAT_BRIEF           = YES
+ALWAYS_DETAILED_SEC    = NO
+INLINE_INHERITED_MEMB  = NO
+FULL_PATH_NAMES        = NO
+STRIP_FROM_PATH        = 
+INTERNAL_DOCS          = YES
+STRIP_CODE_COMMENTS    = YES
+CASE_SENSE_NAMES       = YES
+SHORT_NAMES            = NO
+HIDE_SCOPE_NAMES       = NO
+VERBATIM_HEADERS       = YES
+SHOW_INCLUDE_FILES     = YES
+JAVADOC_AUTOBRIEF      = NO
+MULTILINE_CPP_IS_BRIEF = YES
+DETAILS_AT_TOP         = NO
+INHERIT_DOCS           = YES
+INLINE_INFO            = YES
+SORT_MEMBER_DOCS       = YES
+DISTRIBUTE_GROUP_DOC   = NO
+TAB_SIZE               = 8
+GENERATE_TODOLIST      = YES
+GENERATE_TESTLIST      = YES
+GENERATE_BUGLIST       = YES
+GENERATE_DEPRECATEDLIST= YES
+QUIET                  = NO
+WARNINGS               = YES
+#WARN_IF_UNDOCUMENTED   = YES
+#WARN_FORMAT            = "$file:$line: $text"
+#WARN_LOGFILE           = 
+INPUT                  = @CMAKE_CURRENT_SOURCE_DIR@
+FILE_PATTERNS          = *.h *.dox *.cxx *.cpp  
+RECURSIVE              = YES
+EXCLUDE                = 
+EXCLUDE_SYMLINKS       = NO
+EXCLUDE_PATTERNS       = 
+#EXAMPLE_PATH           = resources/docs
+EXAMPLE_PATH           = ..
+EXAMPLE_PATTERNS       = 
+EXAMPLE_RECURSIVE      = YES
+IMAGE_PATH             = @CMAKE_CURRENT_SOURCE_DIR@/resources/docs
+INPUT_FILTER           = 
+FILTER_SOURCE_FILES    = NO
+GENERATE_HTML          = YES
+HTML_OUTPUT            = ./
+HTML_FILE_EXTENSION    = .html
+# HTML_STYLESHEET        = @CMAKE_SOURCE_DIR@../offline-mk/resources/doxygen-style.css
+HTML_ALIGN_MEMBERS     = YES
+GENERATE_HTMLHELP      = NO
+GENERATE_LATEX         = NO
+@INCLUDE_PATH	       = @DOXYGEN_OUTPUT_PATH@/.tagfiles
+@INCLUDE	       = @PROJECT_NAME@.include
+GENERATE_TAGFILE       = @DOXYGEN_OUTPUT_PATH@/.tagfiles/@PROJECT_NAME@.tag 
+ALLEXTERNALS           = NO
+EXTERNAL_GROUPS        = YES
+PERL_PATH              = /usr/bin/perl
+ALPHABETICAL_INDEX     = YES
+QUIET 		       = YES
+GRAPHICAL_HIERARCHY    = YES
+CLASS_GRAPH 	       = YES
+INCLUDE_GRAPH          = YES
+COLLABORATION_GRAPH    = YES
+CALL_GRAPH 	       = NO
