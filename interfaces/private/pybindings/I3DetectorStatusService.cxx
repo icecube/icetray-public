@@ -24,8 +24,6 @@ namespace bp = boost::python;
 #include <dataclasses/I3Time.h>
 #include <dataclasses/status/I3DetectorStatus.h>
 
-#include "install.h"
-
 struct I3DetectorStatusServiceWrapper : I3DetectorStatusService, wrapper<I3DetectorStatusService>
 {
   I3DetectorStatusConstPtr GetDetectorStatus(I3Time t) 
@@ -36,16 +34,15 @@ struct I3DetectorStatusServiceWrapper : I3DetectorStatusService, wrapper<I3Detec
 
 void register_I3DetectorStatusService()
 {
-  implicitly_convertible<boost::shared_ptr<I3DetectorStatusServiceWrapper>, boost::shared_ptr<const I3DetectorStatusService> >();
-  implicitly_convertible<boost::shared_ptr<I3DetectorStatusServiceWrapper>, boost::shared_ptr<I3DetectorStatusService> >();
-  implicitly_convertible<boost::shared_ptr<I3DetectorStatusServiceWrapper>, boost::shared_ptr<const I3DetectorStatusServiceWrapper> >();
+  implicitly_convertible<shared_ptr<I3DetectorStatusServiceWrapper>, shared_ptr<const I3DetectorStatusService> >();
+  implicitly_convertible<shared_ptr<I3DetectorStatusServiceWrapper>, shared_ptr<I3DetectorStatusService> >();
+  implicitly_convertible<shared_ptr<I3DetectorStatusServiceWrapper>, shared_ptr<const I3DetectorStatusServiceWrapper> >();
 
   class_<I3DetectorStatusServiceWrapper, boost::shared_ptr<I3DetectorStatusServiceWrapper>, 
     boost::noncopyable>("I3DetectorStatusService", 
 			"Service returns geometries depending on time", 
 			init<>())
-    .def("get_detector_status", &I3DetectorStatusServiceWrapper::GetDetectorStatus, bp::arg("time"))
-    .def("install", &I3InstallService<I3DetectorStatusService>().func)
+    .def("GetDetectorStatus", &I3DetectorStatusServiceWrapper::GetDetectorStatus, bp::arg("time"))
     ;
 }
 

@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: module.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2008
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -26,18 +26,13 @@ void register_I3CalibrationService();
 void register_I3DetectorStatusService();
 void register_I3GeometryService();
 void register_I3EventService();
-void register_I3MetaService();
-void register_I3OMKey2MBID();
 
 BOOST_PYTHON_MODULE(interfaces)
 {
-
-  load_project("interfaces", false); 
+  load_project("libinterfaces", false);
 
   register_I3CalibrationService();
   register_I3DetectorStatusService();
   register_I3GeometryService();
   register_I3EventService();
-  register_I3MetaService();
-  register_I3OMKey2MBID();
 }

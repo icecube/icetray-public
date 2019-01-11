@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id$
+ * $Id: I3EventService.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *
  * @file I3EventService.h
- * @version $Revision$
- * @date $Date$
+ * @version $Revision: 165886 $
+ * @date $Date: 2018-10-01 07:37:58 -0700 (Mon, 01 Oct 2018) $
  */
 
 #ifndef INTERFACES_I3EVENTSERVICE_H_INCLUDED
@@ -38,14 +38,6 @@ class I3EventService
    * frame data.  Returned is the time of the event.
    */
   virtual I3Time PopEvent(I3Frame& frame) = 0;
-
-  /**
-   * @brief This method should delete any keys that have not changed
-   * since the frame was injected into the module chain, i.e. turn
-   * the frame into a diff.
-   */
-  virtual void DiffEvent(I3Frame& frame) { return; }
-  virtual bool DiffEventImplemented() { return false; }
 
   virtual ~I3EventService();
 };

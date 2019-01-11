@@ -2,7 +2,7 @@
 #define INTERFACES_I3ICEFORKMODULE_H
 
 #include <icetray/I3Module.h>
-#include <icetray/I3Bool.h>
+#include <dataclasses/I3Bool.h>
 #include <icetray/I3Frame.h>
 
 /**
@@ -23,11 +23,6 @@ class I3IceForkModule : public I3Module
     decisionName_(I3::name_of<IcePick>()),
     pick_(context) 
     {
-      // Synchronize the two configurations via the back door
-      configuration_ = *pick_.configuration_;
-      delete pick_.configuration_;
-      pick_.configuration_ = &configuration_;
-
       AddParameter("DecisionName",
 		   "Name of the filter decision in the Frame",
 		   decisionName_);
@@ -46,8 +41,7 @@ class I3IceForkModule : public I3Module
   void Physics(I3FramePtr frame)
     {
       I3BoolPtr decision(new I3Bool(pick_.SelectFrameInterface(*frame)));
-      if(!decisionName_.empty())
-        frame->Put(decisionName_,decision);
+      frame->Put(decisionName_,decision);
       if(!decision->value)
 	{
 	  PushFrame(frame,"FalseBox");
@@ -57,7 +51,7 @@ class I3IceForkModule : public I3Module
     }
 
  private:
-  std::string decisionName_;
+  string decisionName_;
   IcePick pick_;
 };
 

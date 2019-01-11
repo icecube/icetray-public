@@ -1,9 +1,7 @@
 #
 # put your email address here if you would like notification emails
 # about commits to this project.
-# $Id$
+# $Id: .mailinglist 165886 2018-10-01 14:37:58Z nwhitehorn $
 #
-# Maintainer
-olivas@icecube.umd.edu
 blaufuss@icecube.umd.edu
-kmeagher@icecube.wisc.edu
+proth@icecube.umd.edu

@@ -24,8 +24,6 @@ namespace bp = boost::python;
 #include <dataclasses/I3Time.h>
 #include <dataclasses/geometry/I3Geometry.h>
 
-#include "install.h"
-
 struct I3GeometryServiceWrapper : I3GeometryService, wrapper<I3GeometryService>
 {
   I3GeometryConstPtr GetGeometry(I3Time t) 
@@ -36,16 +34,15 @@ struct I3GeometryServiceWrapper : I3GeometryService, wrapper<I3GeometryService>
 
 void register_I3GeometryService()
 {
-  implicitly_convertible<boost::shared_ptr<I3GeometryServiceWrapper>, boost::shared_ptr<const I3GeometryService> >();
-  implicitly_convertible<boost::shared_ptr<I3GeometryServiceWrapper>, boost::shared_ptr<I3GeometryService> >();
-  implicitly_convertible<boost::shared_ptr<I3GeometryServiceWrapper>, boost::shared_ptr<const I3GeometryServiceWrapper> >();
+  implicitly_convertible<shared_ptr<I3GeometryServiceWrapper>, shared_ptr<const I3GeometryService> >();
+  implicitly_convertible<shared_ptr<I3GeometryServiceWrapper>, shared_ptr<I3GeometryService> >();
+  implicitly_convertible<shared_ptr<I3GeometryServiceWrapper>, shared_ptr<const I3GeometryServiceWrapper> >();
 
   class_<I3GeometryServiceWrapper, boost::shared_ptr<I3GeometryServiceWrapper>, 
     boost::noncopyable>("I3GeometryService", 
 			"Service returns geometries depending on time", 
 			init<>())
-    .def("get_geometry", &I3GeometryServiceWrapper::GetGeometry, bp::arg("time"))
-    .def("install", &I3InstallService<I3GeometryService>().func)
+    .def("GetGeometry", &I3GeometryServiceWrapper::GetGeometry, bp::arg("time"))
     ;
 }
 

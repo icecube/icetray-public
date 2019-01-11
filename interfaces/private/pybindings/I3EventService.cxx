@@ -24,8 +24,6 @@ namespace bp = boost::python;
 #include <icetray/I3Frame.h>
 #include <dataclasses/I3Time.h>
 
-#include "install.h"
-
 struct I3EventServiceWrapper : I3EventService, wrapper<I3EventService>
 {
   bool MoreEvents() {  return this->get_override("MoreEvents")(); }
@@ -34,20 +32,18 @@ struct I3EventServiceWrapper : I3EventService, wrapper<I3EventService>
 
 void register_I3EventService()
 {
-  implicitly_convertible<boost::shared_ptr<I3EventServiceWrapper>, 
-    boost::shared_ptr<const I3EventService> >();
-  implicitly_convertible<boost::shared_ptr<I3EventServiceWrapper>, 
-    boost::shared_ptr<I3EventService> >();
-  implicitly_convertible<boost::shared_ptr<I3EventServiceWrapper>, 
-    boost::shared_ptr<const I3EventServiceWrapper> >();
+  implicitly_convertible<shared_ptr<I3EventServiceWrapper>, 
+    shared_ptr<const I3EventService> >();
+  implicitly_convertible<shared_ptr<I3EventServiceWrapper>, 
+    shared_ptr<I3EventService> >();
+  implicitly_convertible<shared_ptr<I3EventServiceWrapper>, 
+    shared_ptr<const I3EventServiceWrapper> >();
 
   class_<I3EventServiceWrapper, boost::shared_ptr<I3EventServiceWrapper>, 
     boost::noncopyable>("I3EventService", 
 			"Service returns geometries depending on time", 
 			init<>())
-    .def("more_events", &I3EventServiceWrapper::MoreEvents)
-    .def("pop_event", &I3EventServiceWrapper::PopEvent, bp::arg("frame"))
-    .def("install", &I3InstallService<I3EventService>().func)
-
+    .def("MoreEvents", &I3EventServiceWrapper::MoreEvents)
+    .def("PopEvent", &I3EventServiceWrapper::PopEvent, bp::arg("frame"))
     ;
 }
