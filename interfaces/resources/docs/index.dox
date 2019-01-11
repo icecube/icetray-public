@@ -1,0 +1,13 @@
+/**
+   @mainpage Doxygen docs for interfaces
+
+
+
+   @author E. Blaufuss 
+
+   @section Overview
+   
+   The interfaces project is designed to be a holder for generic interfaces between
+   IceTray projects.  It should help minimize project inter-dependencies.
+
+*/
