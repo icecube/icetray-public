@@ -45,11 +45,6 @@ several cmake variables.  For a tool *ZZZ*,
   Not often used but available if the tool provides executables for
   some reason.
 
-**ZZZ_FOUND**:
-
-  A flag needed by the rest of the build system to know that detection
-  of **ZZZ** succeeded.
-
 tooldef
 -------
 
@@ -59,74 +54,18 @@ of this.
 
 .. _SYSTEM_PACKAGES:
  
+.. index:: SYSTEM_PACKAGES
+
 SYSTEM_PACKAGES
 ---------------
 
-.. index:: SYSTEM_PACKAGES
-
-By default, tools are expected to be found on your system, and managed
-by your system package manager. The major exception to this is if you
-are running on one of the major clusters that supports CVMFS (UW
-Madison, U. Maryland, DESY, etc). Tools there are managed in CVMFS,
-transparently to the user.
-
-Historically, most tools were expected to be found in ``I3_PORTS``, and
-system-installed versions are ignored.  If you defined
-``SYSTEM_PACKAGES``, the cmake flag ``NO_DEFAULT_PATH`` was omitted and
-system-installed packages may have been used, if versions installed from 
-``I3_PORTS`` could not be found. Note that this is historic behavior,
-only necessary if you're using old software.
-
-
-.. _I3_SITE_CMAKE_DIR:
-
-I3_SITE_CMAKE_DIR
------------------
-
-.. index:: I3_SITE_CMAKE_DIR
-.. index:: /usr/share/fizzicks/cmake
-
-
-Site specific handling of tools is supported as follows:
-
-For each tool ``T``, the directory :file:`/usr/share/fizzicks/cmake`
-(yes, that is really the path) is searched for ``T.cmake`` and if this
-file is found, it is read in lieu of the standard tool definition
-file.  This directory can be overridden by setting
-``I3_SITE_CMAKE_DIR`` in your environment.
-
-For instance, an override for tool *python* (filename
-``python.cmake``) might look like::
-
-  set(PYTHON_LIBRARIES "$ENV{HOME}/lib/libpython2.6.so" CACHE FILEPATH "Python library")
-  set(PYTHON_INCLUDE_DIR "$ENV{HOME}/include/python2.6" CACHE PATH "Path the Python include directory")
-  set(PYTHON_EXECUTABLE "$ENV{HOME}/bin/python" CACHE FILEPATH "Python interpreter")
-  set(PYTHON_VERSION "2.6" CACHE STRING "Python version")
-  set(PYTHON_FOUND TRUE CACHE BOOL "Python found")
-
-Note the ``$ENV{HOME}`` sytax used in the example: since CMake doesn't
-automatically mix in environment variables from the shell, you have to be explicit
-when substituting values like ``HOME``.
-
-.. note:: If you override *python* you **must** also test for *scipy*
-          and *numpy*. See the `current tests
-          <http://code.icecube.wisc.edu/projects/icecube/browser/IceTray/projects/cmake/trunk/tools/python.cmake>`_
-          for an example.
-
-.. warning:: If you use a nonsystem python as above, your toolset
-   	     (specifically the boost_python component of the boost tool)
-	     must be built against that same python.  See the page for
-	     the :ref:`PythonTool` for more information.
-
-Here is another example override for tools for *blas* and *lapack* (filenames
-``blas.cmake`` and ``lapack.cmake``) used to find the
-`ATLAS <http://math-atlas.sourceforge.net>`_ libraries on a Fedora 20 system::
-        
-        set(ATLAS_BASE "/usr/lib64/atlas")
-        set(BLAS_FOUND TRUE CACHE BOOL "BLAS library found" FORCE)
-        set(BLAS_LIBRARIES "${ATLAS_BASE}/libf77blas.so.3" CACHE FILEPATH "BLAS libraries" FORCE)
-        set(LAPACK_FOUND TRUE CACHE BOOL "LAPACK library found" FORCE)
-        set(LAPACK_LIBRARIES "${ATLAS_BASE}/liblapack.so.3"  CACHE FILEPATH "LAPACK libraries" FORCE)
+Most tools are detected are expected to be found in ``I3_PORTS``, and
+system-installed versions are ignored.  If you define
+``SYSTEM_PACKAGES``, the cmake flag ``NO_DEFAULT_PATH`` is omitted and
+system-installed versions may be found.  This is an experimental
+feature and will probably not work... but some who are capable of
+diagnosing their own build problems find it useful, as one can avoid
+e.g. building the *Qt* in ``I3_PORTS`` by using the system version.
 
 Troubleshooting
 ---------------

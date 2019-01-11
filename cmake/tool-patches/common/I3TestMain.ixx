@@ -1,11 +1,10 @@
-/* -*- mode: c++; -*- vim: set ft=cpp: */
 /**
    copyright  (C) 2005
    the icecube collaboration
-   $Id$
+   $Id: I3TestMain.ixx 165886 2018-10-01 14:37:58Z nwhitehorn $
 
-   @version $Revision$
-   @date $Date$
+   @version $Revision: 165886 $
+   @date $Date: 2018-10-01 07:37:58 -0700 (Mon, 01 Oct 2018) $
    @author troy d. straszheim
 
    Main testing routine for I3Test
@@ -30,17 +29,11 @@ using namespace std;
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 #include <boost/format.hpp>
-#ifndef NO_ICETRAY
-	#include <boost/python.hpp>
-#endif
+#include <boost/python.hpp>
 #include <sys/wait.h>
 #include <setjmp.h>
 
 #include <I3Test.h>
-#ifndef NO_ICETRAY
-	#include <icetray/init.h>
-	#include <icetray/I3Logging.h>
-#endif
 #include <boost/program_options.hpp>
 #include <iterator>
 #include <iomanip>
@@ -50,20 +43,18 @@ using namespace std;
 using namespace I3Test;
 namespace I3Test 
 {
-  const std::string 
-  testfile(const std::string& fname, const std::string& project)
+  std::string 
+  tempfile(const std::string& fname, const std::string& project)
   {
-    const char* i3_work = getenv("I3_BUILD");
+    const char* i3_work = getenv("I3_SRC");
     ENSURE(i3_work != NULL);
+    const char* i3_platform = getenv("I3_PLATFORM");
+    ENSURE(i3_platform != NULL);
   
-    const std::string dirname = i3_work + string("/") 
-      + project + "/testdata";
+    std::string dirname = i3_work + string("/") + i3_platform 
+      + "/build/" + project + "/testdata";
 
-#if BOOST_VERSION > 104100
-    const boost::filesystem::path datadir(dirname);
-#else
-    const boost::filesystem::path datadir(dirname, boost::filesystem::native);
-#endif
+    boost::filesystem::path datadir(dirname, boost::filesystem::native);
     boost::filesystem::create_directories(datadir);
     return dirname + std::string("/") + fname;
   }
@@ -148,11 +139,6 @@ namespace I3Test
 	  {
 	    int child_status;
 	    wait(&child_status);
-	    if (child_status == 0)
-	      successes.insert(unit);
-	    else
-	      failures[i->first] = boost::shared_ptr<test_failure>(new test_failure(unit, -1, "fork", "Forked child failed"));
-	      // Note: text in above never examined
 	  }
 	else
 	  {
@@ -240,7 +226,6 @@ namespace I3Test
 	      else
 		cout << " UNCAUGHT:" << e.what() << endl;
 	      failures[i->first] = boost::shared_ptr<test_failure>(new test_failure("?", 0, "uncaught exception", "uncaught exception"));
-#ifndef NO_ICETRAY
 	    } catch (const boost::python::error_already_set& e) {
 	      PyErr_Print();
 	      untrap_signals();
@@ -253,7 +238,6 @@ namespace I3Test
 	      else
 		; //cout << " UNCAUGHT:" << e.what() << endl;
 	      failures[i->first] = boost::shared_ptr<test_failure>(new test_failure("?", 0, "uncaught exception", "uncaught exception"));
-#endif
 	    } catch (...) {
 	      untrap_signals();
 	      cout.rdbuf(cout_buf);
@@ -265,7 +249,7 @@ namespace I3Test
 		cout << " FATAL, something not a std::exception thrown." << endl;
 	    }
 	    if (fork_units)
-	      exit(failures.find(i->first) != failures.end()); // child
+	      exit(0); // child
 	  }
       }
   }
@@ -327,17 +311,8 @@ namespace I3Test
 
     cout << boost::format("%-67s") % boost::io::group(std::setfill('='), "");
     cout << "\nPass: " << successes << "\nFail: " << failures << "\n";
-    if (failures){
-      cout << " ***** THESE TESTS FAIL *****\n";
-      for (map<string, test_group*>::iterator i = groups.begin();
-           i != groups.end(); i++)
-        for(std::map<std::string, boost::shared_ptr<test_failure> >::const_iterator
-              failure = i->second->failures.begin();
-            failure != i->second->failures.end();
-            failure++)
-          cout << "    " << i->first << '/' << failure->first << '\n';
-      cout << endl;
-    }
+    if (failures)
+      cout << " ***** SOME TESTS FAIL *****\n\n";
 
     if (failures)
       return true;
@@ -449,43 +424,6 @@ namespace I3Test
 }
 vector<string> tests_to_run;
 
-#ifndef NO_ICETRAY
-void validate(boost::any &v, const std::vector<std::string>& values,
-    I3LogLevel* target_type, int)
-{
-    using namespace boost::program_options;
-    
-    // Make sure no previous assignment to 'a' was made.
-    validators::check_first_occurrence(v);
-    // Extract the first string from 'values'. If there is more than
-    // one string, it's an error, and exception will be thrown.
-    const string& s = validators::get_single_string(values);
-    std::string supper;
-    std::transform(s.begin(), s.end(), std::back_inserter(supper), ::toupper);
-    
-    if (supper == "TRACE")
-        v = boost::any(I3LOG_TRACE);
-    else if (supper == "DEBUG")
-        v = boost::any(I3LOG_DEBUG);
-    else if (supper == "INFO")
-        v = boost::any(I3LOG_INFO);
-    else if (supper == "NOTICE")
-        v = boost::any(I3LOG_NOTICE);
-    else if (supper == "WARN")
-        v = boost::any(I3LOG_WARN);
-    else if (supper == "ERROR")
-        v = boost::any(I3LOG_ERROR);
-    else if (supper == "FATAL")
-        v = boost::any(I3LOG_FATAL);
-    else
-#if BOOST_VERSION < 104200
-        throw validation_error("invalid value");
-#else
-        throw validation_error(validation_error::invalid_option_value);
-#endif
-}
-#endif //!NO_ICETRAY
-
 namespace po = boost::program_options;
 
 // A helper function to simplify the main part.
@@ -509,9 +447,6 @@ int main(int argc, char* argv[])
 {
   string xmlfile;
   string dartpath;
-#ifndef NO_ICETRAY
-  I3::init_icetray_lib();
-#endif
   try {
     options.add_options()
       ("help,h", "this message")
@@ -521,11 +456,8 @@ int main(int argc, char* argv[])
       ("make-dartfiles,m", po::value< string >(&dartpath), "make dartfiles in directory PATH")
       ("show-spew,s", "pass along any thing the test spews to cout/cerr (you want to see it)")
       ("list,l", "list tests and groups in this suite")
-      ("run-tests,r", po::value< vector<string> >(), "list of tests to run")
+      ("run-tests", po::value< vector<string> >(), "list of tests to run")
       ("timeout,t", po::value< int >(), "timeout unit tests after this many seconds")
-#ifndef NO_ICETRAY
-      ("log-level", po::value<I3LogLevel>(), "set the global logging level")
-#endif
       ;
 
     po::positional_options_description p;
@@ -565,13 +497,7 @@ int main(int argc, char* argv[])
     if (vm.count("timeout")) {
       unit_test_time_limit = vm["timeout"].as< int >();
     }
-#ifndef NO_ICETRAY
-    if (vm.count("log-level")) {
-        if (I3LoggerPtr logger = GetIcetrayLogger()) {
-            logger->SetLogLevel(vm["log-level"].as<I3LogLevel>());
-        }
-    }
-#endif
+
     if (vm.count("all")) {
       cout << "Running all tests:" << endl;
       suite().runtests();

@@ -1,0 +1,40 @@
+/**
+@mainpage Physics Documentation Home.
+
+@author E. Blaufuss <blaufuss@icecube.umd.edu>
+
+@section overview1 Overview
+
+Note (Oct 19, 2007): Somewhat dated, needs some updating
+
+This set of documentation is intended to provide some connections between many
+of the items in the offline software projects, mostly the dataclasses data structures
+and offline-software database tables, and the physical reality of the detector
+readouts and configuration to help with analysis tasks.
+
+All comments, corrections and additions are welcome.
+
+
+@section streaminfo IceTray Streams
+
+IceCube data is segmented into streams based on what time scale the 
+information in that category changes.  This model separates the data 
+flow into several 'streams,' based on the rate at which the data in
+ that stream changes. For example, IceCube will have a Geometry stream, 
+with new records coming only at a glacial pace; a Physics stream that 
+records the event-by-event output of the DAQ; and several streams on 
+intermediate time scales such as OM Status, Monitoring, Time Calibration, 
+and so forth.
+
+Here, we will examine the individual streams and look at the contents of each,
+and try to provide physics analysis specific information for the content of
+each.
+
+
+@li @ref GeometryStream 
+@li @ref CalibrationStream
+@li @ref DetectorStatusStream 
+@li MonitoringStream - Info coming soon 
+@li @ref EventStream 
+
+*/

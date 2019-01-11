@@ -4,7 +4,7 @@ Using the Intel C++ compiler
 Intel's C++ compiler is said to generate faster code than gcc and is free for 
 noncommerical use on Linux platforms. Available here:
 
-  http://software.intel.com/en-us/c-compilers/
+  http://www.intel.com/cd/software/products/asmo-na/eng/compilers/284264.htm#cplusplus
 
 Configuration
 -------------
@@ -26,21 +26,21 @@ Specify the path to ``icc`` and ``icpc`` on the command line at cmake-time:
   -- Detecting CXX compiler ABI info - done
 
 Gotchas
--------
+^^^^^^^
 
 __sync_fetch_and_add
-^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""
 
 See this thread:
 
-  http://software.intel.com/en-us/forums/topic/304565
+  http://softwarecommunity.intel.com/isn/Community/en-US/forums/thread/30240835.aspx
 
 for details on a link error involving undefined symbol ``__sync_fetch_and_add``,
 which is found in gcc 4.2 stl headers.  The patch is in 
 ``cmake/tool-patches/common/I3/intel_compatibility.h``.
 
 libimf.so
-^^^^^^^^^
+"""""""""
 
 If you see::
 

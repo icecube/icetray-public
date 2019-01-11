@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#  $Id$
+#  $Id: parent.sh 165886 2018-10-01 14:37:58Z nwhitehorn $
 #  
 #  Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
 #  and the IceCube Collaboration <http://www.icecube.wisc.edu>

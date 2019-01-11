@@ -1,22 +1,22 @@
 #
-#  $Id$
-#
+#  $Id: tooldef.cmake 165886 2018-10-01 14:37:58Z nwhitehorn $
+#  
 #  Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
 #  and the IceCube Collaboration <http://www.icecube.wisc.edu>
-#
+#  
 #  This file is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation; either version 3 of the License, or
 #  (at your option) any later version.
-#
+#  
 #  This program is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
-#
+#  
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
-#
+#  
 macro(report_find tool what where)
   if(${where} MATCHES ".*NOTFOUND$")
     message(STATUS "- ${what}")
@@ -35,13 +35,9 @@ macro(found_ok msg)
 endmacro(found_ok msg)
 
 if (SYSTEM_PACKAGES)
-  message(STATUS "Using system packages when I3_PORTS not available")
-  find_program(BREW brew)
-  if(BREW)
-    execute_process(COMMAND brew --prefix COMMAND tr -d \\n RESULT_VARIABLE BREW_RESULT OUTPUT_VARIABLE BREW_PREFIX)
-  endif()
+   message(STATUS "Using system packages when I3_PORTS not available (Foot Shooting mode ENABLED)")
 else (SYSTEM_PACKAGES)
-  set(TOOL_SYSTEM_PATH NO_DEFAULT_PATH)
+   set(TOOL_SYSTEM_PATH NO_DEFAULT_PATH)
 endif (SYSTEM_PACKAGES)
 
 #
@@ -49,24 +45,21 @@ endif (SYSTEM_PACKAGES)
 #
 macro(tooldef tool_ incdir incfile libdir bindir)
   string(TOUPPER ${tool_} TOOL)
-  colormsg("")
-  colormsg(HICYAN "${tool_}")
+  message(STATUS "${tool_}")
 
-  # Set the config error to false by default
-  set(${TOOL}_CONFIG_ERROR FALSE)
-  set(${TOOL}_LIB_ACCUM)
+  # Set the config error to false by default		
+  set(${TOOL}_CONFIG_ERROR)
 
   if(NOT "${incdir}" STREQUAL "NONE")
-    find_path(${TOOL}_INCLUDE_DIR NAMES ${incfile} PATHS ${I3_PORTS}/${incdir} ${BREW_PREFIX}/${incdir} ${incdir} ${TOOL_SYSTEM_PATH})
+    find_path(${TOOL}_INCLUDE_DIR ${incfile} ${I3_PORTS}/${incdir} ${incdir})
     if(${${TOOL}_INCLUDE_DIR} MATCHES ".*NOTFOUND$")
       found_not_ok("${incfile} not found in ${incdir}")
       set(${TOOL}_CONFIG_ERROR TRUE)
     else(${${TOOL}_INCLUDE_DIR} MATCHES ".*NOTFOUND$")
-      STRING(REGEX REPLACE "//" "/" ${TOOL}_INCLUDE_DIR ${${TOOL}_INCLUDE_DIR})
       found_ok("${incfile} found at ${${TOOL}_INCLUDE_DIR}")
     endif(${${TOOL}_INCLUDE_DIR} MATCHES ".*NOTFOUND$")
   else(NOT "${incdir}" STREQUAL "NONE")
-    set(${TOOL}_INCLUDE_DIR "/doesnt/exist" CACHE PATH "${TOOL} include dir")
+    set(${TOOL}_INCLUDE_DIR "" CACHE PATH "${TOOL} include dir")
   endif(NOT "${incdir}" STREQUAL "NONE")
 
   if(NOT "${bindir}" STREQUAL "NONE")
@@ -76,30 +69,23 @@ macro(tooldef tool_ incdir incfile libdir bindir)
   endif(NOT "${bindir}" STREQUAL "NONE")
 
   foreach(lib ${ARGN})
-    set(foundlib${lib} "NOTFOUND" CACHE INTERNAL "tmp" FORCE)
-    if (NOT ${lib})
-      # if it is nothing, go find it
-      find_library(foundlib${lib} ${lib} ${I3_PORTS}/${libdir} ${BREW_PREFIX}/${libdir} ${libdir} ${TOOL_SYSTEM_PATH})
-    else (NOT ${lib})
-      #else go try to find it
-      set(foundlib${lib} ${lib})
-    endif(NOT ${lib})
+    find_library(foundlib${lib} 
+      ${lib} 
+      ${I3_PORTS}/${libdir} ${libdir}
+      NO_DEFAULT_PATH)
     if(${foundlib${lib}} MATCHES ".*NOTFOUND$" AND NOT ${libdir} STREQUAL "NONE")
       found_not_ok("${lib}")
       set(${TOOL}_CONFIG_ERROR TRUE)
     else(${foundlib${lib}} MATCHES ".*NOTFOUND$" AND NOT ${libdir} STREQUAL "NONE")
       if(NOT ${libdir} STREQUAL "NONE")
-        STRING(REGEX REPLACE "//" "/" foundlib${lib} "${foundlib${lib}}")
-        found_ok("${foundlib${lib}}")
-        list(APPEND ${TOOL}_LIB_ACCUM ${foundlib${lib}})
-        add_custom_command(TARGET install_tool_libs
-          PRE_BUILD
-          COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/lib/tools
-          COMMAND ${CMAKE_SOURCE_DIR}/cmake/install_shlib.py ${foundlib${lib}} ${CMAKE_INSTALL_PREFIX}/lib/tools
-          )
-        if(TARGET "install_${TOOL}_libs")
-          add_dependencies(install_tool_libs install_${TOOL}_libs)
-        endif()
+	found_ok("${foundlib${lib}}")
+	list(APPEND ${TOOL}_LIB_ACCUM ${foundlib${lib}})
+	add_custom_command(TARGET install_tool_libs
+	  PRE_BUILD
+	  COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/lib/tools
+	  COMMAND ${CMAKE_SOURCE_DIR}/cmake/install_shlib.pl ${foundlib${lib}} ${CMAKE_INSTALL_PREFIX}/lib/tools
+	  ) 
+	add_dependencies(install_tool_libs install_${TOOL}_libs)
       endif(NOT ${libdir} STREQUAL "NONE")
     endif(${foundlib${lib}} MATCHES ".*NOTFOUND$" AND NOT ${libdir} STREQUAL "NONE")
   endforeach(lib ${ARGN})
@@ -109,7 +95,8 @@ macro(tooldef tool_ incdir incfile libdir bindir)
   if (NOT ${TOOL}_CONFIG_ERROR)
     set(${TOOL}_FOUND TRUE CACHE BOOL "Tool '${TOOL}' found successfully" FORCE)
   else (NOT ${TOOL}_CONFIG_ERROR)
-    set(${TOOL}_FOUND FALSE CACHE BOOL "Tool '${TOOL}' NOT found successfully...!" FORCE)
+    set(${TOOL}_FOUND FALSE CACHE BOOL "Tool '${TOOL}' found successfully" FORCE)
   endif (NOT ${TOOL}_CONFIG_ERROR)
 
 endmacro(tooldef)
+

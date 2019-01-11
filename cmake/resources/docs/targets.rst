@@ -1,11 +1,8 @@
 .. _targets:
 .. _workspace-targets:
 
-Targets
-=======
-
-Workspace level
----------------
+Workspace level targets
+=======================
 
 As the name suggests, workspace-level targets are available from the
 workspace directory. These are a superset of the targets available in
@@ -27,7 +24,7 @@ directory.
      - Lists available targets
    * - rsync
      - Will rsync the latest test data down to your
-       :envvar:`I3_TESTDATA` directory
+       :envvar:`I3_PORTS`/test-data directory
    * - test
      - Will build everything, then run the test driver script to test 
        everything, then print a summary.    See :ref:`testdriver`
@@ -54,8 +51,8 @@ directory.
    * - edit_cache 
      - See documentation for cmake and :ref:`rebuild_cache`
 
-Project level
--------------
+Project level targets
+=====================
 
 Project level targets include several standard targets like *clean*
 and *all*, as well as whatever targets are created by calling 

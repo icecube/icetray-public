@@ -1,5 +1,5 @@
 #
-#  $Id$
+#  $Id: doxyfile.in 165886 2018-10-01 14:37:58Z nwhitehorn $
 #  
 #  Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
 #  and the IceCube Collaboration <http://www.icecube.wisc.edu>
@@ -23,7 +23,6 @@ PROJECT_NAME           = @PROJECT_NAME@
 OUTPUT_DIRECTORY       = @DOXYGEN_OUTPUT_PATH@/@PROJECT_NAME@
 OUTPUT_LANGUAGE        = English
 #GENERATE_AUTOGEN_DEF   = YES
-BUILTIN_STL_SUPPORT    = YES
 EXTRACT_ALL            = YES
 EXTRACT_PRIVATE        = YES
 EXTRACT_STATIC         = YES
@@ -46,6 +45,7 @@ VERBATIM_HEADERS       = YES
 SHOW_INCLUDE_FILES     = YES
 JAVADOC_AUTOBRIEF      = NO
 MULTILINE_CPP_IS_BRIEF = YES
+DETAILS_AT_TOP         = NO
 INHERIT_DOCS           = YES
 INLINE_INFO            = YES
 SORT_MEMBER_DOCS       = YES
@@ -57,22 +57,19 @@ GENERATE_BUGLIST       = YES
 GENERATE_DEPRECATEDLIST= YES
 QUIET                  = NO
 WARNINGS               = YES
-WARN_IF_UNDOCUMENTED   = YES
-WARN_IF_DOC_ERROR      = YES
-WARN_NO_PARAMDOC       = YES
+#WARN_IF_UNDOCUMENTED   = YES
 #WARN_FORMAT            = "$file:$line: $text"
 #WARN_LOGFILE           = 
 INPUT                  = @CMAKE_CURRENT_SOURCE_DIR@
-FILE_PATTERNS          = *.hh *.h *.dox *.cxx *.cpp *.py *.hpp
+FILE_PATTERNS          = *.h *.dox *.cxx *.cpp  
 RECURSIVE              = YES
 EXCLUDE                = 
 EXCLUDE_SYMLINKS       = NO
-EXCLUDE_PATTERNS       = */test/* */pybindings/*
-EXCLUDE_SYMBOLS        = boost boost::* BOOST_*
+EXCLUDE_PATTERNS       = 
 #EXAMPLE_PATH           = resources/docs
-#EXAMPLE_PATH           = ..
-#EXAMPLE_PATTERNS       = 
-#EXAMPLE_RECURSIVE      = YES
+EXAMPLE_PATH           = ..
+EXAMPLE_PATTERNS       = 
+EXAMPLE_RECURSIVE      = YES
 IMAGE_PATH             = @CMAKE_CURRENT_SOURCE_DIR@/resources/docs
 INPUT_FILTER           = 
 FILTER_SOURCE_FILES    = NO
@@ -80,28 +77,19 @@ GENERATE_HTML          = YES
 HTML_OUTPUT            = ./
 HTML_FILE_EXTENSION    = .html
 # HTML_STYLESHEET        = @CMAKE_SOURCE_DIR@../offline-mk/resources/doxygen-style.css
-# HTML_ALIGN_MEMBERS     = YES
+HTML_ALIGN_MEMBERS     = YES
 GENERATE_HTMLHELP      = NO
 GENERATE_LATEX         = NO
-INCLUDE_PATH           = @CMAKE_CURRENT_SOURCE_DIR@/public
-@INCLUDE_PATH           = @DOXYGEN_OUTPUT_PATH@/.tagfiles
-@INCLUDE                = @PROJECT_NAME@.include
+@INCLUDE_PATH	       = @DOXYGEN_OUTPUT_PATH@/.tagfiles
+@INCLUDE	       = @PROJECT_NAME@.include
 GENERATE_TAGFILE       = @DOXYGEN_OUTPUT_PATH@/.tagfiles/@PROJECT_NAME@.tag 
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = YES
 PERL_PATH              = /usr/bin/perl
 ALPHABETICAL_INDEX     = YES
-QUIET                  = YES
+QUIET 		       = YES
 GRAPHICAL_HIERARCHY    = YES
-CLASS_GRAPH            = YES
+CLASS_GRAPH 	       = YES
 INCLUDE_GRAPH          = YES
 COLLABORATION_GRAPH    = YES
-CALL_GRAPH             = NO
-STRICT_PROTO_MATCHING  = NO
-USE_MATHJAX            = YES
-MATHJAX_RELPATH        = https://cdn.mathjax.org/mathjax/latest/
-
-# we're cheating here. glshovel doesn't actually have any doxygen docs
-EXCLUDE                = @CMAKE_CURRENT_SOURCE_DIR@/glshovel
-EXTENSION_MAPPING      = h=C++
-GENERATE_XML           = YES
+CALL_GRAPH 	       = NO

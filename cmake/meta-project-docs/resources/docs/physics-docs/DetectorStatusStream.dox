@@ -1,0 +1,177 @@
+/** 
+
+@page DetectorStatusStream Detector Status Stream
+
+@author Erik Blaufuss <blaufuss@icecube.umd.edu>
+
+@section statusator Detector Status Stream (Run configuration information)
+
+General information
+
+@section runstatus Detector Status details
+
+Several things are needed to understand the configuration of the DAQ when data
+was collected:
+
+@li List of all DOMs participating in Run (list of OMKey)
+
+@li List of all DOMHubs participating in Run
+
+@li List of all active triggers in Run
+
+@li Run type (physics data run, calibration, others?) - 
+If run type is special, need additional information, for example for a flasher run, will need
+with DOM is flashing, LED mask, brightness, rate and delay settings.
+
+@subsection domconfig DOM configuration items
+
+Each DOM has several configuration items, identified by their DAQ XML schema tag:
+
+@li Domhub name which this DOM is connected - character hostname
+@li moni_hw_ivalue - # seconds between HW moni events
+@li moni_conf_ivalue - # seconds between config moni events
+@li atwd_sample_size_chan_0 - Number of bytes used per ATWD sample on chan 0 WFs
+@li atwd_sample_size_chan_1 - Number of bytes used per ATWD sample on chan 1 WFs
+@li atwd_sample_size_chan_2 - Number of bytes used per ATWD sample on chan 2 WFs
+@li atwd_sample_size_chan_3 - Number of bytes used per ATWD sample on chan 3 WFs
+@li atwd_samples_chan_0 - Number of samples read from chan 0
+@li atwd_samples_chan_1 - Number of samples read from chan 1
+@li atwd_samples_chan_2 - Number of samples read from chan 2
+@li atwd_samples_chan_3 - Number of samples read from chan 3
+@li num_fadc_samples - Number of samples read from FADC
+@li dac_atwd0_trigger_bias - DAC 0 - Sets ATWD0 sampling speed.  Higher DAC setting is faster sample rate. DOMCAL provides
+a calibration (linear fit, slope (m) and intercept (b)) to the relation:
+@verbatim
+sampling speed (MHz) = 20.0 * ( m * (DAC 0) + b )
+@endverbatim 
+This is a current source.
+@li dac_atwd0_ramp_top - DAC 1 - Sets the basline of the ATWD pulse (voltage for 0 ATWD counts).  Full details in ATWD manual.  
+Setting value is converted to a voltage (V):  (2.5V/4096)*2*DAC_setting.
+@li dac_atwd0_ramp_rate - DAC 2 - Controls the digitization gain (higher setting = more mV per ADC count) of ATWD readout.
+This is a current source.
+@li dac_atwd_analog_ref - DAC 3 - Sets the "reference voltage" for the ATWD and FADC (the most positive voltage in the ATWD system).  
+Full details in ATWD manual.  Setting value is converted to a voltage (V):  (2.5V/4096)*2*DAC_setting.
+@li dac_atwd1_trigger_bias - DAC 4 - Same as DAC 0, for ATWD 1
+@li dac_atwd1_ramp_top - DAC 5 - Same as DAC 1, for ATWD 1
+@li dac_atwd1_ramp_rate - DAC 6 - Same as DAC 2, for ATWD 1
+@li dac_pmt_fe_pedestal - DAC 7 - the Pedestal voltage of the analog front end.
+Setting value is converted to a voltage (V):  (2.5V/4096)*2*DAC_setting.
+@li dac_multiple_spe_thresh - DAC 8 - Multi PE (MPE) discriminator level.  Threshold (V) = DAC8(V) - DAV7(V) 
+Setting value is converted to a voltage (V):  (2.5V/1024)*2*DAC_setting.
+@li dac_single_spe_thresh - DAC 9 - Single PE (MPE) discriminator level.  Threshold (V) = (DAC9(V) - DAV7(V))/10
+Setting value is converted to a voltage (V):  (2.5V/1024)*2*DAC_setting.
+@li dac_fast_adc_ref - DAC 10 - FADC reference level (scale offset).
+Setting value is converted to a voltage (V):  (2.5V/1024)*DAC_setting.
+@li dac_internal_pulser - DAC 11 - Amplitude of internal electronic pulse generator.
+Setting value is converted to a voltage (V):  (2.5V/1024)*2*DAC_setting.
+@li dac_led_brightness - DAC 12 - Amplitude of LED pulser pulse. 
+Setting value is converted to a voltage (V):  (2.5V/1024)*DAC_setting.
+@li dac_fe_amp_lower_clamp - DAC 13 - Unused
+@li dac_fl_ref - DAC 14 - Pedestal used in the ATWD3 digitization of LED current pulse
+Setting value is converted to a voltage (V):  (2.5V/1024)*DAC_setting.
+@li dac_mux_bias - DAC 15 - "pedestal" of the communication signal and onboard LED monitor.
+Setting value is converted to a voltage (V):  (2.5V/1024)*DAC_setting.
+@li trig_mode - Integer flag- sets internal digitization trigger mode<br>
+o 0 = test pattern trigger<br>
+o 1 = CPU triggers<br>
+o 2 = Discriminator trigger<br>
+o 3 = Flasher board trigger, include LED current WF 
+@li atwd_select - Choose ATWD chip 0 or 1 (From testDOMapp, not used in real domapp)
+@li analog_mux_select - Used to select what information is read out in ATWD 3 (Ask Jerry Przybylski (gtp@lbl.gov))
+@li pmt_hv_limit - Maximum allowed HV setting (John J. : No longer used in real DOMapp)
+@li pmt_hv - Current HV setting (DAC units : 2 * Volts)
+@li dom_pulse_rate - Frequency of DOM heardbeats (beacon) (1 Hz generally)
+@li fe_pulser_state - Set front end pulser state, on or off
+@li scalar_deadtime - Supernova scaler deadtime following a single "count"
+@li local_coin_mode - Choose local coincidence mode<br>
+o 0 = no local coincidence required<br>
+o 1 = require local coincidence; enable receive from both UPPER and LOWER DOMs (either, not AND)<br>
+o 2 = require local coincidence; enable receive from UPPER DOM only<br>
+o 3 = require local coincidence; enable receive from LOWER DOM only
+@li local_coin_win_up_pre- Local coincidence window size, before ATWD launch window
+@li local_coin_win_up_post - Local coincidence window size, after ATWD launch window
+@li local_coin_type - Local coincidence type<br>
+o 1=soft<br>
+o 2=hard (DEFAULT)<br>
+o 3=flabby<br>
+@li local_coin_tx - LC transmission mode<br>
+o 0 = no transmit<br>
+o 1 = TX down only<br>
+o 2 = TX up only<br>
+o 3 = TX both up and down (DEFAULT)
+@li local_coin_src - Select LC source<br>
+o 0 = SPE  trigger (DEFAULT)<br>
+o 1 = MPE trigger
+@li local_coin_span - Number of nearest neighbors to consider in LC search.(1,2,3 or 4)
+@li local_coin_cablelength_up0 - Cable length for time offset correct in LC calc.
+@li local_coin_cablelength_up1 - 
+@li local_coin_cablelength_up2 - 
+@li local_coin_cablelength_up3 - 
+@li local_coin_cablelength_dn0 - 
+@li local_coin_cablelength_dn1 - 
+@li local_coin_cablelength_dn2 - 
+@li local_coin_cablelength_dn3 - 
+@li flasher_board_state - Flasher board state  (on/off)
+@li fb_brightness - flasher brightness: int 0-127
+@li fb_window - Length of flasher board flash (ns)
+@li fb_delay - Time delay between LED trigger and ATWD launch (ns)
+@li fb_mask - Flasher board mask, tells which LEDS fire.<br>
+o bit 0 -> LED 1 ... bit 11 -> LED 12
+@li fb_rate- Flasher board flash rate in Hz
+@li data_format - Select the Dom data format coming out of DOM<br>
+o 0 = Engineering format (uncompressed)<br>
+o 1 = Default compression format<br>
+@li compression_mode - Data compression mode<br>
+o 0 = none<br>
+o 1 = Road Grader compression<br>
+o 2 = delta compression<br>
+
+Any item marked with (?) still needs clear definition from DAQ HW/SW folks.
+
+@subsection domhubconfig DOMHub configuration items
+
+Each DOMHub has configuration items as well:
+
+@li TCalPeriod - Time in seconds between RAPCAL events being generated.
+
+@subsection triggerconfig Trigger configuration items
+
+Each trigger defined will have a set of settable parameters, which
+could include:
+
+@li name - String
+@li triggerType - Integer, unique ID per system
+@li sourceID -  which system is the source, Integer<br>
+o 4000 = InIce trigger<br>
+o 5000 = IceTop trigger<br>
+o ??     = Global trigger<br>
+o ??     = AMANDA trigger<br>
+@li numberOfRequiredHits - Integer, number of coincident hits required
+@li slidingTimeWindow - Integer, number of ns, width of trigger search window
+@li timeExtensionPast - Integer, number of ns, readout time before trigger time
+@li timeExtensionFuture - Integer, number of ns, readout time past trigger time
+@li prescale - Integer, prescale factor (1/N triggers) for min bias type triggers
+
+@section dcstructstatus Dataclass Structures used to store detector status information
+
+These structures are still being developed, and more information will be available 
+as soon as possible.
+
+@section dbstatus Offline database table for detector status
+
+IceCube Offline Database - http://icedb.umh.ac.be
+
+@section dbmodstat I3Db service for detector status
+
+Please refer to the I3Db service documentation
+
+@section statuslinks Links to other docs.
+
+@li Offline configuration information docushare docs:<br>
+http://docushare.icecube.wisc.edu/docushare/dsweb/View/Collection-2597<br>
+@li Analog Transient Waveform Digitizer R1.1, G.T. Przybylski (LBNL)
+@li Private communications, John Joseph (LBNL)
+@li DOMCAL docushare docs:<br>
+http://docushare.icecube.wisc.edu/docushare/dsweb/View/Collection-2597<br>
+Specifically, the DOMCAL XML users guide is very helpful.
+*/

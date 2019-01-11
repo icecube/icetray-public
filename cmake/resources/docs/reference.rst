@@ -1,13 +1,10 @@
 .. _macroreference:
 
-Icetray-specific cmake macro reference
-======================================
+CMake macro reference
+---------------------
 
 See the cmake documentation for macros not listed here (not written by
 us).
-
-i3_project
-----------
 
 .. _i3_project:
 .. index:: i3_project 
@@ -51,12 +48,6 @@ i3_project
       Note that, due to the way
       python packages work, these directories will need a file
       ``__init__.py`` in order to be importable.
-
-      NB: If you use both pybindings and python code, you should code like
-      this in your __init__.py::
-	
-	from icecube.load_pybindings import load_pybindings
-	load_pybindings(__name__, __path__)
 
       See also :ref:`USE_SETUPTOOLS <USE_SETUPTOOLS>`
 
@@ -122,9 +113,6 @@ i3_project
 
       will be used to install the python into the tarball.
 
-i3_add_library
---------------
-
 .. _i3_add_library:
 
 .. index:: i3_add_library 
@@ -138,7 +126,7 @@ i3_add_library
 
      i3_add_library (dataio 
        private/dataio/*.cxx
-       USE_TOOLS boost python 
+       USE_TOOLS log4cplus root boost python 
        USE_PROJECTS icetray dataclasses interfaces
        )
 
@@ -196,9 +184,6 @@ i3_add_library
       See cmake documentation of ``add_library``
 
 
-i3_executable
--------------
-
 .. index:: i3_executable 
    single: CMake macros ; i3_executable
 
@@ -211,7 +196,7 @@ i3_executable
      i3_executable(inspect 
        private/inspect/*.cxx
        USE_PROJECTS icetray
-       USE_TOOLS boost python)
+       USE_TOOLS log4cplus boost root)
 
    **Targets created**:
    When called in a project named *PROJ*, creates a target
@@ -220,17 +205,14 @@ i3_executable
    **Options**:
 
    .. cmdoption:: USE_TOOLS tool1 [tool2 tool3 ...]
-      :noindex:
    
       As in i3_add_library.
    
    .. cmdoption:: USE_PROJECTS proj1 [proj2 ... projn]
-      :noindex:
 
       As in i3_add_library.
 
    .. cmdoption:: LINK_LIBRARIES lib1 [lib2 ... libn]
-      :noindex:
 
       As in i3_add_library.
 
@@ -248,11 +230,6 @@ i3_executable
 
       would just generate target ``bar``
 
-   .. cmdoption:: WITHOUT_I3_HEADERS
-      :noindex:
-
-      As in i3_add_library.
-      
 
 .. _i3_test_executable():
 
@@ -294,9 +271,6 @@ i3_executable
    also :ref:`testdriver`
 
 
-i3_add_pybindings
------------------
-
 .. index:: i3_add_pybindings 
    single: CMake macros ; i3_add_pybindings
 
@@ -310,7 +284,7 @@ i3_add_pybindings
        module.cxx
        OMKey.cxx
        I3Bool.cxx
-       USE_TOOLS boost python 
+       USE_TOOLS boost python log4cplus
        USE_PROJECTS icetray
        )
 
@@ -339,9 +313,6 @@ i3_add_pybindings
    **Options**:  Same as ``i3_add_library()``
        
 
-i3_test_scripts
----------------
-
 .. _i3_test_scripts():
 
 .. index:: i3_test_scripts()
@@ -368,29 +339,5 @@ i3_test_scripts
 
       
 
-qt4_i3_automoc
---------------
-
-.. _qt4_i3_automoc():
-
-.. index:: qt4_i3_automoc()
-   single: Cmake macros ; qt4_i3_automoc()
-
-.. cmake:: qt4_i3_automoc(file1 [file2 ... fileN])
-
-   **Example**::
-
-     qt4_i3_automoc( private/mygui/MyWidget.cpp )
-
-   **Targets created**: none; .moc files will be written to the
-   project's build directory.
-
-   **Options**: none
-
-   The moc tool will be run with the -DQT_NO_KEYWORDS option.  This
-   means moc will ignore the keywords 'signals' and 'slots'; use instead
-   the Q_SIGNALS and Q_SLOTS macros in your code.  This is done to ensure
-   compatibility with boost's signals library.
-
-
+      
 

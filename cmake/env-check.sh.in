@@ -1,11 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 
-printerr ()
+function printerr()
 {
     echo "[----]" $*
 }
 
-exit_error () 
+function exit_error() 
 {
     printerr 
     printerr BUILD ENVIRONMENT CORRUPTION

@@ -1,5 +1,5 @@
 #
-#  $Id$
+#  $Id: list_contains.cmake 165886 2018-10-01 14:37:58Z nwhitehorn $
 #
 
 # This utility macro determines whether a particular string value

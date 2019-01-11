@@ -1,0 +1,77 @@
+#!/usr/bin/python
+#
+#  Build slave script.
+#
+
+import pysvn, os, time
+from optparse import OptionParser
+
+parser = OptionParser()
+
+parser.add_option("-b", "--build-first",
+                  action="store_true", dest="build_first", default=False,
+                  help="Build on startup")
+
+parser.add_option("-c", "--clean-first",
+                  action="store_true", dest="clean_first", default=False,
+                  help="Clean on startup")
+
+parser.add_option("-C", "--clean-every-time",
+                  action="store_true", dest="clean_every_time", default=False,
+                  help="Clean before every build")
+
+parser.add_option("-k", "--keep-rebuilding",
+                  action="store_true", dest="keep_rebuilding", default=False,
+                  help="Rebuild even if there are no updates to svn")
+
+(options, args) = parser.parse_args()
+
+
+client = pysvn.Client()
+
+wc_path = r'@CMAKE_SOURCE_DIR@'
+
+def do_build(clean_):
+    if clean_:
+        clean = 'clean'
+    else:
+        clean = ''
+    if os.name == 'nt':
+        cmd = 'nmake /I ' + clean + ' slave-start test slave-finish'
+    else:
+        cmd = 'make -i ' + clean + ' slave-start test slave-finish'
+    print "Starting build:\n>>> ", cmd
+    os.system(cmd)
+    
+
+if options.build_first:
+    do_build(options.clean_first)
+
+while True:
+    try:
+        svn_entry = client.info(wc_path)
+
+        print "Wc has url %s rev %d.\nChecking for updates." \
+            % (svn_entry.url, svn_entry.revision.number)
+
+        client.update(wc_path)
+
+        newsvnentry = client.info(wc_path)
+        if newsvnentry.revision.number > svn_entry.revision.number:
+            print "Updated to r%d" % newsvnentry.revision.number
+        else:
+            print "No updates, still at r%d" % svn_entry.revision.number
+
+        if newsvnentry.revision.number > svn_entry.revision.number or options.keep_rebuilding:
+            do_build(options.clean_every_time)
+
+
+    except Exception, e:
+        print e
+        print "Error.  Will retry."
+    
+    print "Sleeping %d seconds" % @BUILD_SLAVE_SLEEP_DURATION@
+    time.sleep(@BUILD_SLAVE_SLEEP_DURATION@)
+
+        
+
