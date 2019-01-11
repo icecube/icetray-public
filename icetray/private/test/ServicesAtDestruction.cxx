@@ -1,10 +1,10 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id$
+ * $Id: ServicesAtDestruction.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
  *
- * @version $Revision$
- * @date $Date$
+ * @version $Revision: 165886 $
+ * @date $Date: 2018-10-01 07:37:58 -0700 (Mon, 01 Oct 2018) $
  * @author <a href="http://icecube.umd.edu/pretz">John Pretz</a>
  *
  * This is a test which tests that the services are available to modules during
@@ -16,36 +16,36 @@
 #include "icetray/I3Tray.h"
 #include "icetray/I3ServiceFactory.h"
 
-#include <set>
-
-
 TEST_GROUP(ServicesAtDestruction);
 
 // The service we're looking for at destruction
-struct ServiceAtDestructionService;
-
-typedef std::set<ServiceAtDestructionService*> set_t;
-set_t existing_services;
-
 struct ServiceAtDestructionService
 {
+  vector<bool*> watched_;
   ServiceAtDestructionService()
   {
-    existing_services.insert(this);
+    log_trace(__PRETTY_FUNCTION__);
   }  
   
   ~ServiceAtDestructionService()
   {
-    existing_services.erase(this);
+    log_trace(__PRETTY_FUNCTION__);
+    for(unsigned int i = 0 ; i < watched_.size() ; i++)
+      {
+	log_trace("falsifying the bool at %p which is already set to %d",
+		  watched_[i], *watched_[i]);
+	(*watched_[i]) = false;
+	log_trace("And now is set to %d", *watched_[i]);
+      }
   }
     
-  ServiceAtDestructionService* that()
+  void AddMonitoredBool(bool* b)
   {
-    return this;
+    watched_.push_back(b);
+    *b = true;
   }
 };
   
-
 // something that installs this service one instance into each
 // context that comes by.
 struct ServiceAtDestructionPluralFactory : public I3ServiceFactory
@@ -84,30 +84,32 @@ I3_SERVICE_FACTORY(ServiceAtDestructionServiceSingletonFactory);
 // a module to check for whether or not the service exists
 struct ServicesAtDestructionModule : public I3Module
 {
-
-  ServiceAtDestructionService* that;
-
+  bool serviceExists_;
 public:
   ServicesAtDestructionModule(const I3Context& context) : I3Module(context)
-  {}
+  {
+    AddOutBox("OutBox");
+  }
     
   ~ServicesAtDestructionModule()
   {
-    ENSURE(existing_services.find(that) != existing_services.end());
+    log_trace(__PRETTY_FUNCTION__);
+    log_trace("service status at destruction: address: %p value: %d",
+	      &serviceExists_, serviceExists_);
+    ENSURE(serviceExists_);
   }
     
   void Configure()
   {
-    log_trace("%s",__PRETTY_FUNCTION__);
+    log_trace(__PRETTY_FUNCTION__);
     ENSURE(context_.Has<ServiceAtDestructionService>("Foo"));
     ServiceAtDestructionService& sads = context_.Get<ServiceAtDestructionService>("Foo");
-    that = sads.that();
-    ENSURE(existing_services.find(that) != existing_services.end());
+    sads.AddMonitoredBool(&serviceExists_);
   }
 
   void Process()
   {
-    ENSURE(existing_services.find(that) != existing_services.end());
+    ENSURE(serviceExists_);
     RequestSuspension();
   }
 };
@@ -119,8 +121,12 @@ TEST(plural)
 {
   I3Tray tray;
   tray.AddService<ServiceAtDestructionPluralFactory>("serv");
-  tray.AddModule("ServicesAtDestructionModule");    
+
+  tray.AddModule("ServicesAtDestructionModule", "source");
+  tray.AddModule("TrashCan", "trash");
+    
   tray.Execute();
+  tray.Finish();
     
 }
 
@@ -128,7 +134,11 @@ TEST(single)
 {
   I3Tray tray;
   tray.AddService<ServiceAtDestructionServiceSingletonFactory>("serv");
-  tray.AddModule("ServicesAtDestructionModule");    
+
+  tray.AddModule("ServicesAtDestructionModule", "source");
+  tray.AddModule("TrashCan", "trash");
+    
   tray.Execute();
+  tray.Finish();
 }
 

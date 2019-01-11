@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3PhysicsTimer.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>

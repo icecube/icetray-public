@@ -40,10 +40,13 @@ class I3ServiceFactory
 {
 public:
 
- I3ServiceFactory(const I3Context& context) :
-  context_(context){};
+  I3ServiceFactory(const I3Context& context);
 
-  virtual ~I3ServiceFactory(){};
+  // Constructors and destructor
+
+  virtual ~I3ServiceFactory();
+
+  // public member functions
 
   /**
    * Initialize a service object (initialize and parameters coming from I3Tray
@@ -52,9 +55,7 @@ public:
    * @param services the I3Services into which the service should be installed.
    * @return true if the services is successfully installed.
    */
-  bool InitializeService(I3Context& services){
-    return InstallService(services);
-  };
+  bool InitializeService(I3Context& services);
 
   /**
    * Installed this objects service into the specified services object
@@ -69,15 +70,28 @@ public:
    * This transition is executed immediately before the first 'Process'
    * transition, thus any parameters that has been set, either by a person
    * or a steering file, will be available to this object before it starts
-   * processing data frames. 
+   * processing data frames. After this transition any changes to these
+   * parameters will not be seen by the service factory until a 'Reconfigure'
+   * transition.
    *
    * This transition also gives this object an opportunity to reserve any
    * resources it will need to use during the subsequent 'Process'
    * transitions.
    */
-  virtual void Configure(){};
-  const I3Configuration &GetConfiguration() const {return configuration_;}
-  I3Configuration &GetConfiguration() {return configuration_;}
+  virtual void Configure();
+
+  /**
+   * The purpose of this transition is to give this object the opportunity to
+   * re-access all of its parameters as they may have changed since the
+   * previous 'Configure' or 'Reconfigure' transition. In many cases this
+   * may simply take the form of repeating whatever was executed at the
+   *'Configure' transition.
+   *
+   * Of course, this transition, like the 'Configure' transition, also gives
+   * this object the opportunity to reserve any resources that may have been
+   * released during the 'Suspend' transition.
+   */
+  virtual void Reconfigure();
 
   /**
    * The purpose of this transition is to give this object the opportunity to
@@ -85,9 +99,21 @@ public:
    * to create a summary of its activities during the execution of the job.
    * Note that after this transition the service factory is still in existence.
    */
-  virtual void Finish(){
-    log_trace("%s", __PRETTY_FUNCTION__);
-  };
+  virtual void Finish();
+
+
+  /**
+   * Signals to the Framework that an I3ServiceFactory has encountered a fatal
+   * error and that it wishes the Framework to terminate execution by
+   * sending 'Abort' transistions to all modules.
+   *
+   * @param message the message explaining what cause the Fatal call.
+   * @param status the status value to use on exit.
+   */
+  void Fatal(const std::string& message,
+             int status = EXIT_FAILURE) const;
+
+  
 
   /**
      Adds a new parameter to the local configuration.
@@ -95,6 +121,7 @@ public:
      @param parameter the name of the parameter.
      @param description a desciption of the parameter to the users.
      @param defaultValue the default value of the parameter.
+     @param constraint an object used to constrain the parameter.
      @return void
 
      Values are converted to/from strings by boost::lexical_cast<>
@@ -103,10 +130,10 @@ public:
   template <typename T>
   void AddParameter(const std::string& parameter,
                     const std::string& description,
-                    const T& defaultValue)
+                    const T& defaultValue) const
   {
     boost::python::object o(defaultValue);
-    configuration_.Add(parameter, description, o);
+    context_.template Get<I3Configuration>().Add(parameter, description, o);
   }
 
   /**
@@ -121,34 +148,17 @@ public:
   typename boost::disable_if<boost::is_const<T>, void>::type
   GetParameter(const std::string& name, T& value) const
   {
-    try {
-      value = configuration_.Get<T>(name);
-    } catch (...) {
-      try {
-        std::string context_name = configuration_.Get<std::string>(name);
-        value = context_.Get<T>(context_name);
-        // NB: we got here by catching an error thrown by boost::python::extract(). 
-        // All subsequent calls will fail unless we clean it up. 
-        PyErr_Clear(); 
-      } catch (...) {
-        log_error("Error in %s service '%s', getting parameter '%s'",
-                I3::name_of(typeid(*this)).c_str(), GetName().c_str(),
-                name.c_str());
-        throw;
-      }
-    }
+    boost::python::object obj(context_.Get<I3Configuration>().Get(name));
+    value = boost::python::extract<T>(obj);
   }
 
   const std::string GetName() const { return name_; }
 
   virtual void SetName(const std::string& name) { name_ = name; }
 
-  SET_LOGGER("I3ServiceFactory");
-
 protected:
 
   const I3Context& context_;
-  I3Configuration configuration_;
 
 private:
 
@@ -159,7 +169,7 @@ private:
 
 };
 
-typedef boost::shared_ptr<I3ServiceFactory> I3ServiceFactoryPtr;
+typedef shared_ptr<I3ServiceFactory> I3ServiceFactoryPtr;
 
 #include <icetray/I3Factory.h>
 

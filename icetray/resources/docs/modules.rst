@@ -26,6 +26,9 @@ passed::
       def __init__(self, context):
           icetray.I3Module.__init__(self, context)
 
+      def Configure(self):
+          pass
+
       def Physics(self, frame):
           print frame
           self.PushFrame(frame)
@@ -33,16 +36,18 @@ passed::
 one puts all of this into a file :file:`PyDump.py`, and uses it as
 follows::
 
-   #!/usr/bin/env python
+   #!/usr/bin/python
 
    from PyDump import PyDump
    from I3Tray import *
 
    tray = I3Tray()
 
-   tray.AddModule('BottomlessSource')
+   tray.AddModule('BottomlessSource', 'bs)
    
-   tray.AddModule(PyDump)
+   tray.AddModule(PyDump, 'pydump')
+
+   tray.AddModule('TrashCan', 'tc)
 
    tray.Execute(10)
 
@@ -157,7 +162,7 @@ Parameters can be input/output
 ------------------------------
 
 Python objects like lists have identity.  That is, if I create a dictionary
-that two python identifiers point to, and change the dictionary via one identifier, 
+that two python identifers point to, and change the dictionary via one identifier, 
 the other will see the change:
 
 .. code-block:: pycon

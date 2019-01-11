@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3IcePickInstaller.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -23,7 +23,7 @@
 #ifndef ICETRAY_I3ICEPICKINSTALLER_H_INCLUDED
 #define ICETRAY_I3ICEPICKINSTALLER_H_INCLUDED
 
-#include <icetray/I3SingleServiceFactory.h>
+#include <icetray/I3ServiceFactory.h>
 #include <icetray/I3IcePick.h>
 
 /**
@@ -36,7 +36,7 @@
  */
 
 template <class IcePick>
-class I3IcePickInstaller : public I3SingleServiceFactory<IcePick, I3IcePick>
+class I3IcePickInstaller : public I3ServiceFactory
 {
  public:
 
@@ -44,17 +44,39 @@ class I3IcePickInstaller : public I3SingleServiceFactory<IcePick, I3IcePick>
    * @brief The constructer.  The context is then passed to the 
    * constructer of the I3IcePick object being installed
    *
-   * @param context the I3Context where the I3IcePick should
-   * be installed
+   * @param servicename_ is the name for where the I3IcePick should
+   * be installed in the context
    */
   I3IcePickInstaller(const I3Context& context) :
-    I3SingleServiceFactory<IcePick, I3IcePick>(context)
+    I3ServiceFactory(context),
+    servicename_()
     {
-      I3ServiceFactory::AddParameter("ServiceName",
+      log_trace("Creating I3IcePickService");
+      AddParameter("ServiceName",
 		   "Name that the service will have in the context."
 		   "This is typically redundant... by default, it uses "
 		   "The name of the installer",
-		   "");
+		   servicename_);
+      
+      log_trace("Need to create a new logic object");
+      pick_ = shared_ptr<IcePick>(new IcePick(context));
+    };
+
+  /**
+   * @brief Where the I3IcePick is actually put into the frame
+   */
+  bool InstallService(I3Context& context)
+    {
+      if(pick_)
+	{
+	  context.Put<I3IcePick>(pick_,servicename_);
+	  return true;
+	}
+      else
+	{
+	  log_fatal("The logic object has not been initialized.");
+	  return false;
+	}
     };
 
   /**
@@ -63,12 +85,19 @@ class I3IcePickInstaller : public I3SingleServiceFactory<IcePick, I3IcePick>
    */
   void Configure()
     {
-      std::string servicename;
-      I3ServiceFactory::GetParameter("ServiceName",servicename);
-      if (!servicename.empty())
-	I3ServiceFactory::SetName(servicename);
-      I3SingleServiceFactory<IcePick, I3IcePick>::myService_->ConfigureInterface();
+      GetParameter("ServiceName",servicename_);
+      if (servicename_.empty())
+	servicename_ = GetName();
+      log_debug("Using servicename=%s", servicename_.c_str());
+      pick_->ConfigureInterface();
     };
+
+ private:
+
+  shared_ptr<IcePick> pick_;
+  string servicename_;
+
+  SET_LOGGER("I3IcePickInstaller");
 };
 
 #endif

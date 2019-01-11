@@ -3,10 +3,9 @@
 
 #ifndef __CINT__
 #include <string>
-#include <typeinfo>
 
-namespace icetray
-{
+namespace icetray {
+
   const std::string& name_of(const std::type_info &ti);
 
   template <typename T>
@@ -14,6 +13,7 @@ namespace icetray
   {
     return name_of(typeid(T));
   }
+
 }
 
 #endif

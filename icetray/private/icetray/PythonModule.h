@@ -1,9 +1,7 @@
-#ifndef ICETRAY_PYTHONOMODULE_H_INCLUDED
-#define ICETRAY_PYTHONOMODULE_H_INCLUDED
 //
 //   Copyright (c) 2004, 2005, 2006, 2007   Troy D. Straszheim  
 //   
-//   $Id$
+//   $Id: PythonModule.h 165886 2018-10-01 14:37:58Z nwhitehorn $
 //
 //   This file is part of IceTray.
 //
@@ -30,19 +28,14 @@
 #include <boost/python.hpp>
 
 
-template <typename Base>
-struct PythonModule : Base, boost::python::wrapper<Base>
+struct PythonModule : I3Module, boost::python::wrapper<I3Module>
 {
   PythonModule(const I3Context& ctx); 
-  PythonModule(const I3Context& ctx, I3Frame::Stream); 
 
-  void PyConfigure();
   void Configure();
 
-  void PyProcess();
   void Process();
 
-  void PyFinish();
   void Finish();
 
   void AddParameter(const std::string& name, 
@@ -56,45 +49,18 @@ struct PythonModule : Base, boost::python::wrapper<Base>
   
   void Register(const I3Frame::Stream&, const boost::python::object& method);
 
-  bool ShouldDoGeometry(I3FramePtr frame);
   void Geometry(I3FramePtr frame);
-
-  bool ShouldDoCalibration(I3FramePtr frame);
   void Calibration(I3FramePtr frame);
-
-  bool ShouldDoDetectorStatus(I3FramePtr frame);
   void DetectorStatus(I3FramePtr frame);
-
-  bool ShouldDoSimulation(I3FramePtr frame);
-  void Simulation(I3FramePtr frame);
-
-  bool ShouldDoDAQ(I3FramePtr frame);
-  void DAQ(I3FramePtr frame);
-
-  bool ShouldDoPhysics(I3FramePtr frame);
   void Physics(I3FramePtr frame);
 
 
   void PushFrame(I3FramePtr frame);
   void PushFrame(I3FramePtr frame, const std::string& where);
 
-  void RequestSuspension();
-
   void AddOutBox(const std::string& name);
   I3FramePtr PopFrame();
 
-  const I3Context& GetContext() const { return Base::context_; }
-  const I3Configuration& GetConfiguration() const { return Base::configuration_; }
-
-  // Just for I3PacketModule wrapper
-  void FramePacket(std::vector<I3FramePtr> &);
-  I3Frame::Stream GetSentinel();
-  void SetSentinel(I3Frame::Stream);
-  const std::vector<I3Frame::Stream> &GetPacketTypes();
-  void SetPacketTypes(const std::vector<I3Frame::Stream> &);
-
-  SET_LOGGER("PythonModule");
 };
 
 
-#endif

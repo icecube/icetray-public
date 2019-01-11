@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: Rename.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -19,24 +19,25 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
-#include <boost/regex.hpp>
-
 #include <icetray/I3Tray.h>
 #include <icetray/I3TrayInfo.h>
 #include <icetray/I3TrayInfoService.h>
 #include <icetray/Utility.h>
 #include <icetray/modules/Rename.h>
 
+#include <boost/regex.hpp>
+
 using namespace std;
 
 I3_MODULE(Rename);
 
 Rename::Rename(const I3Context& ctx) : 
-  I3ConditionalModule(ctx)
+  I3Module(ctx)
 {
   AddParameter("Keys", 
 	       "Rename objects in frame by name: [From1, To1, From2, To2 ... FromN, ToN]", 
 	       rename_keys_);
+  AddOutBox("OutBox");
 }
 
 void Rename::Configure()
@@ -51,7 +52,7 @@ void Rename::Process()
 {
   I3FramePtr frame = PopFrame();
   do_rename(frame);
-  PushFrame(frame);
+  PushFrame(frame, "OutBox");
 }
 
 void Rename::Finish()

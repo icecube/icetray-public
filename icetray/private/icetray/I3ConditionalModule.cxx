@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3ConditionalModule.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -23,111 +23,102 @@
 #include "icetray/I3ConditionalModule.h"
 
 #include "icetray/I3Context.h"
-#include "icetray/impl.h"
-
-
 
 I3ConditionalModule::I3ConditionalModule(const I3Context& context) :
-  I3Module(context)
+  I3Module(context),
+  pickKey_("")
 {
-  i3_log("%s", __PRETTY_FUNCTION__);
+  configured_ = false;
 
   AddParameter("IcePickServiceKey",
 	       "Key for an IcePick in the context that this module should check "
 	       "before processing physics frames.",
-	       "");
+	       pickKey_);
 
+  if_ = boost::python::object("<some python function>");
   AddParameter("If",
 	       "A python function... if this returns something that evaluates to True,"
 	       " Module runs, else it doesn't",
 	       if_);
-  i3_log("if_=%p", if_.ptr());
+  log_trace("if_=%p", if_.ptr());
+
+  AddOutBox("OutBox");
 }
 
 I3ConditionalModule::~I3ConditionalModule() { }
 
 void I3ConditionalModule::Configure_()
 {
-  i3_log("%s", __PRETTY_FUNCTION__);
   boost::python::object configured_if_;
   GetParameter("If", configured_if_);
 
-  i3_log("configured_if_=%p", configured_if_.ptr());
+  log_trace("configured_if_=%p", configured_if_.ptr());
   if (if_.ptr() != configured_if_.ptr()) // user set the parameter to something
     {
-      i3_log("user passed us something");
-      if (!PyCallable_Check(configured_if_.ptr()))
-        log_fatal("'If' parameter to module %s must be a callable object", GetName().c_str());
+      log_trace("user passed us something");
+      if (!PyFunction_Check(configured_if_.ptr()))
+	log_fatal("'If' parameter to module %s must be a python function", GetName().c_str());
       else
-      {
-        i3_log("user passed us something and it is a PyFunction");
-        if_ = configured_if_;
-        use_if_ = true;
-      }
+	{
+	  log_trace("user passed us something and it is a PyFunction");
+	  if_ = configured_if_;
+	  use_if_ = true;
+	}
     }
   else // got nothing from user
     use_if_ = false;
 
   boost::python::object obj;
 
-  i3_log("(%s) Configuring the Conditional Module stuff.",GetName().c_str());
-  std::string pickKey;
-  GetParameter("IcePickServiceKey",pickKey);
+  log_trace("(%s) Configuring the Conditional Module stuff.",GetName().c_str());
+  GetParameter("IcePickServiceKey",pickKey_);
   use_pick_ = false;
-  if(pickKey != "")
+  if(pickKey_ != "")
     {
       if (use_if_)
-        log_fatal("Please specify either IcePickServiceKey or If, but not both");
-      i3_log("Looking for pick %s in the context.",pickKey.c_str());
-      pick_ = GetContext().Get<I3IcePickPtr>(pickKey);
+	log_fatal("Please specify either IcePickServiceKey or If, but not both");
+      log_trace("Looking for pick %s in the context.",pickKey_.c_str());
+      pick_ = GetContext().Get<I3IcePickPtr>(pickKey_);
       if(!pick_)
-        log_fatal("IcePick %s was not found in the context.  "
-		  "Did you install it?",pickKey.c_str());
+	log_fatal("IcePick %s was not found in the context.  "
+		  "Did you install it?",pickKey_.c_str());
       else
-        use_pick_ = true;
+	use_pick_ = true;
     }
 
   // bounce this guy back to I3Module, which will in turn bounce to whoever derives
   // from us
-  I3Module::Configure_(); // this also adds a default OutBox
+  I3Module::Configure_();
 }
 
-bool I3ConditionalModule::ShouldDoProcess(I3FramePtr frame)
+bool I3ConditionalModule::ShouldDoPhysics(I3FramePtr frame)
 {
-  i3_log("%s", __PRETTY_FUNCTION__);
+  log_trace("Time to decide whether to execute or not.");
 
-  // For all frame types except DAQ and Physics, the answer is always yes
-  if (frame->GetStop() != I3Frame::DAQ && frame->GetStop() != I3Frame::Physics)
-    return true;
-
-  i3_log("use_if_=%d", use_if_);
+  log_trace("use_if_=%d", use_if_);
   if (use_if_)
     {
       boost::python::object rv = if_(frame);
       bool flag = boost::python::extract<bool>(rv);
       if (flag)
-        ++nexecuted_;
+	++nexecuted_;
       else
-        ++nskipped_;
+	++nskipped_;
 
-      i3_log("ShouldDoProcess == %d", flag);
       return flag;
     }
 
   if(use_pick_)
     {
-      i3_log("Sending frame to our IcePick.");
+      log_trace("Sending frame to our IcePick.");
       bool flag = pick_->SelectFrameInterface(*frame);
       if (flag)
-        ++nexecuted_;
+	  ++nexecuted_;
       else
-        ++nskipped_;
-      i3_log("ShouldDoPhysics == %d", flag);
+	  ++nskipped_;
       return flag;
     }
-  i3_log("%s", "No conditional execution.");
+  log_trace("No conditional execution.");
   ++nexecuted_;
-  i3_log("%s", "ShouldDoPhysics == true");
   return true;
 }
-

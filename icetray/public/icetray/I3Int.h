@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3Int.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -22,12 +22,29 @@
 #ifndef ICETRAY_I3INT_H_INCLUDED
 #define ICETRAY_I3INT_H_INCLUDED
 
-#include <icetray/I3DefaultName.h>
-#include <icetray/I3PODHolder.h>
+#include <icetray/IcetrayFwd.h>
+#include <icetray/I3FrameObject.h>
 
-typedef I3PODHolder<int> I3Int;
+//
+//  Dumb-struct holders of PODS should *not* automatically convert
+//  to/from the underlying type lest people think that it is necessary
+//  to use, say, vector<I3Double> instead of just vector<double>.
+//  They are instead holders of values, with member "value".
+//
+struct I3Int : public I3FrameObject
+{
+  int value;
+
+  I3Int();
+  I3Int(int i);
+  I3Int(const I3Int&);
+  I3Int& operator=(const I3Int&);
+
+  template <typename Archive>
+    void serialize(Archive&,unsigned);
+
+};
 
 I3_POINTER_TYPEDEFS(I3Int);
-I3_DEFAULT_NAME(I3Int);
 
 #endif

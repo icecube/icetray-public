@@ -1,11 +1,3 @@
-..  $Date$
-..  $Revision$
-..  $Author$
-..  $HeadURL$
-..  $Id$
-
-.. _icetray:
-
 Icetray
 =======
 
@@ -22,37 +14,27 @@ Icetray
    *index*), is in the python-module sense.  It is not supposed to
    take you to a listing of all I3Modules.
 
-General Overview:
 
-.. toctree::
-   :maxdepth: 3
-
-   release_notes
-   summary
-   pybindings
-   icetray_quick_reference
-   services
-   project
-
-Detailed Documentation:
+Table of Contents:
 
 .. toctree::
    :maxdepth: 3
 
    classes
    logging
+   framestreamstop
    inspect
-   config
-   standard_modules
-   scripting
-   i3units
-   keywordparams
-   functions 
-   modules
-   services   
-   segments
-   qframes
-   i3podholder
-   I3Tray
+   newfeaturesv3
+   changes
 
-Also see the `doxygen <../../doxygen/icetray/index.html>`_ docs.
+To Document
+-----------
+
+::
+
+  % python -c 'import icecube.dataclasses'
+  Traceback (most recent call last):
+    File "<string>", line 1, in <module>
+  RuntimeError: extension class wrapper for base class I3FrameObject has not been created yet
+
+

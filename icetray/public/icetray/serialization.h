@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: serialization.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -22,43 +22,54 @@
 #ifndef ICETRAY_SERIALIZATION_H_INCLUDED
 #define ICETRAY_SERIALIZATION_H_INCLUDED
 
-#include <boost/version.hpp>
-
 #ifndef __CINT__
 
-#include <icetray/i3_extended_type_info.h>
-#include <archive/xml_iarchive.hpp>
-#include <archive/xml_oarchive.hpp>
-#include <archive/portable_binary_archive.hpp>
+#if BOOST_VERSION < 103600
+#define BOOST_ARCHIVE_CUSTOM_OARCHIVE_TYPES boost::archive::portable_binary_oarchive
+#define BOOST_ARCHIVE_CUSTOM_IARCHIVE_TYPES boost::archive::portable_binary_iarchive
+#endif
 
-#include <serialization/serialization.hpp>
-#include <serialization/nvp.hpp>
-#include <serialization/base_object.hpp>
-// #include <serialization/is_abstract.hpp>
-#include <serialization/access.hpp>
-#include <serialization/export.hpp>
-#include <serialization/vector.hpp>
-#include <serialization/string.hpp>
-#include <serialization/map.hpp>
-#include <serialization/shared_ptr.hpp>
-#include <serialization/utility.hpp>
-#include <serialization/split_member.hpp>
-#include <serialization/version.hpp>
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
+#include <boost/archive/portable_binary_iarchive.hpp>
+#include <boost/archive/portable_binary_oarchive.hpp>
+
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/nvp.hpp>
+#include <boost/serialization/base_object.hpp>
+// #include <boost/serialization/is_abstract.hpp>
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/export.hpp>
+#include <boost/serialization/vector.hpp>
+#include <boost/serialization/string.hpp>
+#include <boost/serialization/map.hpp>
+#ifdef I3_USE_FAST_OMKEY_MAP
+#define __GLIBCPP__ 1
+#define BOOST_HAS_HASH 1
+#include <boost/serialization/hash_map.hpp>
+// have to undef this.  gcc prior to 3.4 defined this and regex uses it to turn on
+// BOOST_REGEX_BUGGY_CTYPE_FACET
+#undef __GLIBCPP__
+#endif
+#include <boost/serialization/shared_ptr.hpp>
+#include <boost/serialization/utility.hpp>
+#include <boost/serialization/split_member.hpp>
+#include <boost/serialization/version.hpp>
 
 #include <icetray/is_shared_ptr.h>
 #include <boost/utility/enable_if.hpp>
 
 #include <sstream>
 
-using icecube::serialization::make_nvp;
-using icecube::serialization::base_object;
+using boost::serialization::make_nvp;
+using boost::serialization::base_object;
 
 template <typename T>
 std::string
 AsXML(const T& t)
 {
   std::ostringstream oss;
-  icecube::archive::xml_oarchive xoa(oss, icecube::archive::no_header);
+  boost::archive::xml_oarchive xoa(oss, boost::archive::no_header);
   xoa << make_nvp("obj", t);
   return oss.str();
 }
@@ -66,15 +77,23 @@ AsXML(const T& t)
 //
 
 #define I3_BASIC_SERIALIZABLE(T) \
-  template void T::serialize(icecube::archive::portable_binary_oarchive&, unsigned); \
-  template void T::serialize(icecube::archive::portable_binary_iarchive&, unsigned); \
-  template void T::serialize(icecube::archive::xml_iarchive&, unsigned);	\
-  template void T::serialize(icecube::archive::xml_oarchive&, unsigned);
+  template void T::serialize(boost::archive::portable_binary_oarchive&, unsigned); \
+  template void T::serialize(boost::archive::portable_binary_iarchive&, unsigned); \
+  template void T::serialize(boost::archive::xml_iarchive&, unsigned);	\
+  template void T::serialize(boost::archive::xml_oarchive&, unsigned);
+  
+#if BOOST_VERSION > 103310
 
 #define I3_EXPORT(T)				\
-  static i3_export_key_setter<T> BOOST_PP_CAT(i3_export_key_setter_, __LINE__) (BOOST_PP_STRINGIZE(T));	\
-  I3_CLASS_EXPORT(T);			\
-  I3_SERIALIZATION_SHARED_PTR(T);
+  BOOST_SERIALIZATION_SHARED_PTR(T);		\
+  BOOST_CLASS_EXPORT(T);
+
+#else
+
+#define I3_EXPORT(T)				\
+  BOOST_CLASS_EXPORT(T);
+
+#endif
 
 #define I3_SERIALIZABLE(T)						\
   I3_BASIC_SERIALIZABLE(T)						\
@@ -83,23 +102,15 @@ AsXML(const T& t)
   template std::string AsXML(boost::shared_ptr<const T> const&);	\
   I3_EXPORT(T)
 
-#define I3_SPLIT_SERIALIZABLE(T)					\
-  I3_SERIALIZABLE(T)							    \
-  template void T::save(icecube::archive::portable_binary_oarchive&, unsigned) const; \
-  template void T::load(icecube::archive::portable_binary_iarchive&, unsigned); \
-  template void T::load(icecube::archive::xml_iarchive&, unsigned);	\
-  template void T::save(icecube::archive::xml_oarchive&, unsigned) const;
-  
-
 #else // __CINT__
 
-#define I3_CLASS_VERSION(T,V) 
-#define I3_IS_ABSTRACT(X)
-#define I3_CLASS_EXPORT(X) 
-#define I3_SHARED_POINTER_EXPORT(X) 
-#define I3_SERIALIZATION_SPLIT_MEMBER()
+#define BOOST_CLASS_VERSION(T,V) 
+#define BOOST_IS_ABSTRACT(X)
+#define BOOST_CLASS_EXPORT(X) 
+#define BOOST_SHARED_POINTER_EXPORT(X) 
+#define BOOST_SERIALIZATION_SPLIT_MEMBER()
 
-namespace icecube
+namespace boost 
 {
   namespace serialization 
   {
@@ -111,7 +122,7 @@ namespace icecube
       Retval base_object(Derived);
   }
 }
-using icecube::serialization::make_nvp;
+using boost::serialization::make_nvp;
 
 #endif
 

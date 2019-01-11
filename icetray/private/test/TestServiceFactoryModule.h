@@ -7,7 +7,9 @@ struct TestServiceFactoryModule : public I3Module
 {
   TestServiceFactoryModule(const I3Context& context) 
     : I3Module(context)
-  {}
+  {
+    AddOutBox("OutBox");
+  }
 };
 
 #endif 

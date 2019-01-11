@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id$
+ * $Id: TestClientModule.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *
  * @file TestClientModule.h
- * @version $Revision$
- * @date $Date$
+ * @version $Revision: 165886 $
+ * @date $Date: 2018-10-01 07:37:58 -0700 (Mon, 01 Oct 2018) $
  * @author pretz
  */
 
@@ -41,6 +41,8 @@ class TestClientModule : public I3Module, public Type
   TestClientModule(const I3Context& context) : I3Module(context)
     {
       nextFrame = &TestClientModule::template DoNextFrame<0>;
+
+      AddOutBox("OutBox");
     }
 
   /**
@@ -50,7 +52,7 @@ class TestClientModule : public I3Module, public Type
   void Physics(I3FramePtr frame)
     {
       HandleFrame(frame);
-      PushFrame(frame);
+      PushFrame(frame,"OutBox");
     }
 
   /**
@@ -60,7 +62,7 @@ class TestClientModule : public I3Module, public Type
   void Geometry(I3FramePtr frame)
     {
       HandleFrame(frame);
-      PushFrame(frame);
+      PushFrame(frame,"OutBox");
     }
 
   /**
@@ -70,7 +72,7 @@ class TestClientModule : public I3Module, public Type
   void Calibration(I3FramePtr frame)
     {
       HandleFrame(frame);
-      PushFrame(frame);
+      PushFrame(frame,"OutBox");
     }
 
   /**
@@ -80,7 +82,7 @@ class TestClientModule : public I3Module, public Type
   void DetectorStatus(I3FramePtr frame)
     {
       HandleFrame(frame);
-      PushFrame(frame);
+      PushFrame(frame,"OutBox");
     }
 
   /**
@@ -90,7 +92,7 @@ class TestClientModule : public I3Module, public Type
   void Monitor(I3FramePtr frame)
     {
       HandleFrame(frame);
-      PushFrame(frame);
+      PushFrame(frame,"OutBox");
     }
 
   /**

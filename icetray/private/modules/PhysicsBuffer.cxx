@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: PhysicsBuffer.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -30,6 +30,7 @@ PhysicsBuffer::PhysicsBuffer(const I3Context& context)
   : I3Module(context),
     desired_buffersize_(0)
 {
+  AddOutBox("OutBox");
   AddParameter("buffersize", "number frames to buffer", desired_buffersize_);
   batchpush_n_ = 13;
   AddParameter("batchpush", "batch-push every N events", batchpush_n_);

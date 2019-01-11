@@ -1,5 +1,3 @@
-.. _i3tray_keyword_parameters:
-
 More natural parameter-passing syntax to I3Tray
 ===============================================
 
@@ -8,11 +6,9 @@ pythonic keyword-parameter syntax for passing parameters to modules
 and services.  The standard way to configure modules has been this:
 
 .. code-block:: python
+   :linenos:
 
-   #
-   #    Deprecated, old syntax
-   #
-   tray.AddModule("I3DOMcalibrator", "calibrate-inice")(   
+   tray.AddModule("I3DOMcalibrator", "calibrate-inice")(
        ("CalibrationMode", 0),
        ("OutputToFile", False),
        ("InputRawDataName", "InIceRawData"),
@@ -55,9 +51,9 @@ provokes a much more sensible error message should you forget a comma:
 
 .. note::
 
-   *Currently, both syntaxes work*, and may be mixed together in the same
+   *Now, both syntaxes work*, and may be mixed together in the same
    file, but the keyword-parameters version is preferred.  In some
-   future version of icetray the tuple-of-tuples version will
+   future version of icetray the tuple-of-tuples version may
    disappear.
 
 

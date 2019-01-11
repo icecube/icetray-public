@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id$
+    $Id: I3LoggingObjectFirst.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
 
-    @version $Revision$
-    @date $Date$
+    @version $Revision: 165886 $
+    @date $Date: 2018-10-01 07:37:58 -0700 (Mon, 01 Oct 2018) $
     @author troy d. straszheim <troy@resophonic.com>
 */
 
@@ -38,6 +38,7 @@ struct I3GetLoggerTester
 {
   void say_something() 
   {
+    log_warn("you should *not* see a warning from the logger about initializing the log4cplus system immediately before this line.");
     log_trace("here's a trace message inside I3GetLoggerTester");
     log_debug("here's a debug message inside I3GetLoggerTester");
     log_info("here's an info message inside I3GetLoggerTester");

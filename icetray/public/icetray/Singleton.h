@@ -41,7 +41,7 @@
 
 #include <cassert>
 #include <boost/noncopyable.hpp>
-#include <serialization/force_include.hpp>
+#include <icetray/force_include.hpp>
 
 namespace I3 { 
 
@@ -116,10 +116,10 @@ namespace I3 {
 
 
   private:
-    I3_DLLEXPORT static T & instance;
+    BOOST_DLLEXPORT static T & instance;
     // include this to provoke instantiation at pre-execution time
     static void use(T const &) {}
-    I3_DLLEXPORT static T & get_instance() {
+    BOOST_DLLEXPORT static T & get_instance() {
       static Wrapper t;
       // refer to instance, causing it to be instantiated (and
       // initialized at startup on working compilers)
@@ -128,23 +128,23 @@ namespace I3 {
       return t;
     }
   public:
-    I3_DLLEXPORT static T & get_mutable_instance(){
+    BOOST_DLLEXPORT static T & get_mutable_instance(){
       assert(! is_locked());
       return get_instance();
     }
-    I3_DLLEXPORT static const T & get_const_instance(){
+    BOOST_DLLEXPORT static const T & get_const_instance(){
       return get_instance();
     }
-    I3_DLLEXPORT static bool is_destroyed(){
+    BOOST_DLLEXPORT static bool is_destroyed(){
         return Wrapper::m_is_destroyed;
     }
   };
 
   template<class T>
-  I3_DLLEXPORT T & Singleton<T>::instance = Singleton<T>::get_instance();
+  BOOST_DLLEXPORT T & Singleton<T>::instance = Singleton<T>::get_instance();
 
   template<class T>
-  I3_DLLEXPORT bool Singleton<T>::Wrapper::m_is_destroyed = false;
+  BOOST_DLLEXPORT bool Singleton<T>::Wrapper::m_is_destroyed = false;
 
 } // namespace I3
 

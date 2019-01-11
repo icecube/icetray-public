@@ -27,10 +27,10 @@ TEST(test)
 {
   I3Frame frame(I3Frame::None);
     
-  boost::shared_ptr<Grandpa> grandpa_ptr(new Grandpa);
-  boost::shared_ptr<Grandpa> pa_ptr(new Pa);      
-  boost::shared_ptr<Grandpa> son_ptr(new Son);
-  boost::shared_ptr<Grandpa> daughter_ptr(new Daughter);
+  shared_ptr<Grandpa> grandpa_ptr(new Grandpa);
+  shared_ptr<Grandpa> pa_ptr(new Pa);      
+  shared_ptr<Grandpa> son_ptr(new Son);
+  shared_ptr<Grandpa> daughter_ptr(new Daughter);
 
   ENSURE(!frame.count("grandpa"));
   ENSURE(!frame.count("pa"));
@@ -48,29 +48,29 @@ TEST(test)
   }
   frame.Put("daughter",daughter_ptr);
 
-  ENSURE((bool)frame.Get<GrandpaConstPtr>("grandpa"));
+  ENSURE(frame.Get<GrandpaConstPtr>("grandpa"));
   const Grandpa& grandpa = frame.Get<Grandpa>("grandpa");
-  ENSURE(&grandpa==grandpa_ptr.get());
+  assert(&grandpa);
 
-  ENSURE((bool)frame.Get<PaConstPtr>("pa"));
+  ENSURE(frame.Get<PaConstPtr>("pa"));
   try {
     const Pa& pa = frame.Get<Pa>("grandpa");
-    std::cout << "got pa @ " << &pa;
+    assert(&pa);
     FAIL("that should have thrown");
   } catch (const std::exception& e) {
     // ok
   }
-  ENSURE((bool)frame.Get<SonConstPtr>("son"));
-  ENSURE((bool)frame.Get<DaughterConstPtr>("daughter"));
+  ENSURE(frame.Get<SonConstPtr>("son"));
+  ENSURE(frame.Get<DaughterConstPtr>("daughter"));
     
-  ENSURE((bool)frame.Get<PaConstPtr>("son"));
+  ENSURE(frame.Get<PaConstPtr>("son"));
   frame.Get<Pa>("son");
   frame.Get<Grandpa>("son");
 
-  ENSURE((bool)frame.Get<GrandpaConstPtr>("son"));
+  ENSURE(frame.Get<GrandpaConstPtr>("son"));
 
   const Grandpa& gp = frame.Get<Daughter>("daughter");
-  ENSURE(&gp==dynamic_cast<const Grandpa*>(daughter_ptr.get()));
+  assert(&gp);
 
   try {
     frame.Get<Daughter>("son");

@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3PhysicsUsage.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -27,15 +27,8 @@
 
 struct I3PhysicsUsage
 {
-  double systime;
-  double usertime;
+  double systime, usertime;
   unsigned ncall;
-  
-  I3PhysicsUsage():
-    systime(0),
-    usertime(0),
-    ncall(0){};
-  
 };
 
 std::ostream& 

@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3TrayInfoService.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -25,17 +25,30 @@
 #include <icetray/I3ServiceFactory.h>
 
 class I3Tray;
+class I3Context;
+
+class I3TrayInfoServiceFactory : public I3ServiceFactory
+{
+  I3Tray *the_tray_;
+
+public:
+  I3TrayInfoServiceFactory(const I3Context& context);
+	
+  virtual ~I3TrayInfoServiceFactory();
+  bool InstallService(I3Context& c);
+  
+};
 
 class I3TrayInfoService
 {
+  const I3Tray& tray_;
+	
 public:
 	
-  I3TrayInfoService(const I3Tray *tray) : tray_(*tray) { }
+  I3TrayInfoService(const I3Tray& tray) : tray_(tray) { }
 
   I3TrayInfo GetConfig();
 
-private:
-  const I3Tray& tray_;
 };
 
 #endif

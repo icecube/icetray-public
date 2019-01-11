@@ -1,7 +1,7 @@
 //
 //   Copyright (c) 2004, 2005, 2006, 2007   Troy D. Straszheim  
 //   
-//   $Id$
+//   $Id: I3FrameObject.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
 //
 //   This file is part of IceTray.
 //
@@ -30,5 +30,4 @@ void register_I3FrameObject()
     ("I3FrameObject",
      "Base class for all objects that live in the I3Frame")
     ;
-    register_pointer_conversions<I3FrameObject>();
 }

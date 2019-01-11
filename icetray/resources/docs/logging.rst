@@ -1,14 +1,10 @@
 Logging
 =======
 
-.. contents::
+The IceTray framework has a built in logging system that uses
+*log4cplus* (http://log4cplus.sourceforge.net/) as a base.
 
-.. toctree::
-   :maxdepth: 4
-
-   logging/logging_basic
-
-How to Use the Logging System
+How to use the logging system
 -----------------------------
 Call logging functions like you would call ``printf()``:
 
@@ -27,26 +23,11 @@ Call logging functions like you would call ``printf()``:
 
 Will output:
 
-  **DEBUG (MyClass)**:  here is a debug message, j is 6 (**MyClass.h:14** in **void MyClass::doSomething()**)
-
-Each of the ``printf()``-style logging functions has an ``iostreams``-style analogue that can be
-useful for easily formatting non-POD types. For example, both of following logging calls: 
+.. highlight:: none
 
 ::
-   
-   #include <icetray/I3Logging.h>
-  
-    void doSomething() {
-      OMKey key(64, 26);
-      std::string name("InIceRawData")
-      log_debug("Looking for OMKey(%d,%d) in %s", key.GetString(), key.GetOM(), name.c_str());
-      log_debug_stream("Looking for " << key << " in " << name);
-    }
 
-would yield identical output:
-
-    **DEBUG (MyClass)**:  Looking for OMKey(64,26) in InIceRawData (**MyClass.h:14** in **void MyClass::doSomething()**)
-
+  MyClass.h:14  here is a debug message j is 6
 
 There are several logging levels available.  Each has a different meaning:
 
@@ -56,13 +37,13 @@ There are several logging levels available.  Each has a different meaning:
 .. _log_info:
 .. _log_debug:
 .. _log_trace:
-.. index:: log_fatal, log_error, log_warn, log_info, log_debug, log_trace
+.. index:: log_trace, log_error, log_warn, log_info, log_debug, log_trace
 
 =============   ====================================================================================
-Function        Semantics
+function        semantics
 =============   ====================================================================================
 ``log_fatal``   Only called for fatal errors, will throw an exception and data processing will stop.
-``log_error``  	Non-fatal (recoverable) error. No exception thrown.
+``log_error``  	Non-fatal (recoverable) exception. No exception thrown.
 ``log_warn``   	Possible error conditions approaching....
 ``log_info``   	Information to tell operator what's going on.
 ``log_debug``  	Information for system expert.
@@ -72,11 +53,11 @@ Function        Semantics
 The "standard" logging level is WARN.  If your module is working
 happily, no output at log_warn or higher should be visible.
 
-Here are some guidelines and example statements at each level to help
+Here are some guidlines and example statements at each level to help
 you choose the right logging level:
 
 ==============  =============================================================================
-Function        Example
+function        example
 ==============  =============================================================================
 ``log_fatal``   (will cause exit) "Unable to open input file", "No DB connection available"
 ``log_error``   (won't exit, but your module has a serious problem that needs attention) "Found malformed event data", "divide by zero detected in module".
@@ -90,10 +71,10 @@ Function        Example
 
   If you compile in ``Release`` mode (see :ref:`CMAKE_BUILD_TYPE
   <CMAKE_BUILD_TYPE>`), log_trace and log_debug are "compiled out"
-  (removed by the C preprocessor) and will not be available, no
+  (removed by the C preprocessor) and will not be available, not
   matter how you configure your logging output.
 
-How to Add a Custom Logging Channel to your Module
+How to add a custom logging channel to your module
 --------------------------------------------------
 
 .. index:: SET_LOGGER
@@ -107,138 +88,104 @@ I3SimpleModule.h:
 
 ::
 
- class I3SimpleModule : public I3Module
+ class I3SimpleModule : public I3PhysicsModule
  {
 
   public:
 
    I3SimpleModule(const I3Context& context);
    void Configure();
-   void Physics(I3FramePtr frame);
+   void Physics(I3Frame& frame);
    void Finish();
 
   private:
 
-   std::string outputFilename_;
+   string outputFilename_;
 
    SET_LOGGER("I3SimpleModule");
  };
 
-That opens up a configurable logging channel called I3SimpleModule. This lets you configure
-logging for I3SimpleModule separately than the global logging preferences. For example, you
-can show log messages for I3SimpleModule at a different level (e.g. debug) than the global
-preferences. In addition, "I3SimpleModule" will be printed at the beginning of every log
-output and, for some logging backends, output from I3SimpleModule can be diverted to a
-different destination (e.g. to its own log file). 
+That opens up a configurable logging channel called I3SimpleModule for
+you to independently configure the logging level for...
 
 Configuring the logger's output
 -------------------------------
 
-Icetray logging messages can be routed to different places (e.g. the console or to a file)
-by choosing a specific logger module or changing the logging threshold either for a specific
-logging unit (e.g. MySimpleModule above) or the default for all logging units. Like most
-aspects of Icetray, this behavior can be controlled programmatically from Python as part
-of an Icetray script.
+Consider the following configuration file, located either at
+$I3_BUILD/log4cplus.conf, or pointed to by the environment variable
+$I3LOGGING_CONFIG. (A template is provided in
+icetray/resources/log4cplus.conf)
 
-Setting the default logger
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-There are three logging backends provided with Icetray: I3NullLogger, I3PrintfLogger, and
-the Python logging facility. The logger currently in use by Icetray is accessible from 
-Python at ``icetray.I3Logger.global_logger`` and can be changed by assignment to an instance
-of a different logging class. The equivalent C++ routine is the global function
-``SetIcetrayLogger``. The logger can be changed at any time -- although it is usually
-set at the beginning of an Icetray script after the icetray library has been loaded.
-
-I3NullLogger
-____________
-
-I3NullLogger is a logger that does not log anything. This can be useful if log messages
-are never desired (although ``log_fatal()`` calls will still cause program termination).
-Logging can be disabled by:
-
-.. highlight:: python
+.. highlight:: sh
 
 ::
 
-  icetray.I3Logger.global_logger = icetray.I3NullLogger()
+   #
+   # configure the format of the output, these defaults are fine
+   #
+   log4cplus.appender.default=log4cplus::ConsoleAppender
+   log4cplus.appender.default.layout=log4cplus::PatternLayout
+   log4cplus.appender.default.layout.ConversionPattern=%F:%L %m%n
+   
+   #
+   # set the threshold of the default "rootLogger
+   #
+   log4cplus.rootLogger=ERROR, default
+   
+   #
+   # set the threshold and non-additivity of your logger.
+   # if you have more classes, just copy and modify these lines.
+   #
+   log4cplus.logger.I3SimpleModule=DEBUG, default
+   log4cplus.additivity.I3SimpleModule=false
 
-I3PrintfLogger
-______________
+Compilation Units
+-----------------
 
-I3PrintfLogger sends log messages to the standard error stream (usually the console),
-including decorative colors unless standard error has been redirected to a file. This is
-the default logging module. Error messages look like this:
+You can specify a logger local to a file or other scope. See the
+I3Logging header file to see what SET_LOGGER() provides, and provide
+that. Remember that it is C++ scope rules that determine which logger
+will be found.
 
-  **ERROR (I3Tray):** This I3Tray has already been executed. Ignoring second call to Execute() (**I3Tray.cxx:442** in **void I3Tray::Execute()**)
+Emacs Tricks
+------------
 
-The first section in bold shows the level of the log message (ERROR) and the logging unit
-(I3Tray) producing the error. The next part in normal text is the message passed to, in this
-case, ``log_error()``, and the final sections in bold give the file, line number, and
-function from which the logging system was called.
+Here is a favorite emacs trick. These log messages (file and line
+error-message) are in the same format as gcc compilation errors. When
+put the output of your application into an emacs buffer with
+compilation minor mode enabled M-x compilation-minor-mode, emacs will
+interpret the file and line numbers, and if you put the cursor on one
+of these log messages and hit enter, emacs will take you, in another
+window, to that line at that file.
 
-The default logger can be set to I3PrintfLogger by:
+One way to do this is: save the output of the program to a file, load
+it in emacs and enable compilation-minor-mode. One can start up a
+shell buffer, enable compilation-minor-mode there, and run the make in
+this window. Or one can, upon invoking "compile" ( C-x v m ) respond
+to the prompt Compile command: with make && ./run_my_app. This is good
+for iterative work on hard bugs.
 
-::
+More information about configuring logging output
+-------------------------------------------------
 
-  icetray.I3Logger.global_logger = icetray.I3PrintfLogger()
+The logging subsystem configures itself via a configuration file
+pointed to by the environment variable I3LOGGING_CONFIG. A sample
+logging file is located at
+$I3_BUILD/icetray/resources/log4cplus.conf. If you'd like to customize
+your logging, you may modify this file and set your I3LOGGING_CONFIG
+appropriately.
 
-Python Logging
-______________
+These links might help (all are forks of same code base):
 
-Icetray also includes a bridge to the `python logging facility <http://docs.python.org/library/logging.html>`_, which contains a number
-of handlers able to do things like write log messages to a rotating set of files, to the
-system logging daemon, to email, or to a web server. You can also define your own.
+Log4cplus homepage 
+  http://log4cplus.sourceforge.net/
 
-Several convenience functions are provided for standard uses of the logging facility either
-to write to standard error (like I3PrintfLogger), to rotating log files, or to the syslog
-daemon.
+Log4cxx homepage   
+  http://logging.apache.org/log4cxx/
 
-To use python logging to the console, do:
+Log4cpp homepage   
+  http://log4cpp.sourceforge.net/
 
-::
-
-  icetray.logging.console()
-
-To use python logging to log files, do:
-
-::
-
-  icetray.logging.rotating_files('/path/to/filename')
-
-To log to syslogd (e.g. the ``Console`` program on Mac OS X):
-
-::
-
-  icetray.logging.syslog()
-
-More complicated things can be done if desired using the Python logging infrastructure --
-see the `Python documentation <http://docs.python.org/library/logging.html>`_ for details.
-
-
-In addition to configuring logging from Python, all the C++ logging functions (log_info() etc.) are available from Python under icetray.logging. These functions take two arguments: a log message and optional logging unit (the default is the "Python" unit). For example:
-
-::
-
-  icetray.logging.log_fatal("Things are irreparably broken!", "I3FooModule")
-
-Setting Logging Thresholds
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The logging threshold is set by default to LOG_WARN for all modules (i.e. only
-``log_warn()`` and more severe conditions will be logged). If you want to change
-this global threshold, this can be changed by I3Logger's ``set_level()`` method.
-For example, to get more information, the global log threshold can be reduced to LOG_INFO:
-
-::
-
-  icetray.set_log_level(icetray.I3LogLevel.LOG_INFO)
-
-This can also be changed on a per-logging stream level. For example, to get extremely
-verbose information just from I3Tray, while leaving all other subsystems at their normal
-levels:
-
-::
-
-  icetray.set_log_level_for_unit('I3Tray', icetray.I3LogLevel.LOG_TRACE)
+Log4j hompage
+   http://logging.apache.org/log4j/docs/
 

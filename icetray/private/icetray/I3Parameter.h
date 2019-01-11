@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3Parameter.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -26,7 +26,6 @@
 #include <boost/python/object.hpp>
 #include <boost/optional.hpp>
 #include <string>
-#include <icetray/serialization.h>
 	
 struct I3Parameter
 {
@@ -54,8 +53,8 @@ public:
   std::string default_value_str() const; 
   std::string configured_value_str() const;
 
-  bool has_default() const { return bool(default_); }
-  bool has_configured() const { return bool(configured_); }
+  bool has_default() const { return default_; }
+  bool has_configured() const { return configured_; }
   bool got_by_module() const { return got_by_module_; }
 
   void set_configured(const boost::python::object& t);
@@ -63,7 +62,7 @@ public:
   boost::python::object value() const;
 
 private:
-  friend class icecube::serialization::access;
+  friend class boost::serialization::access;
 
   template <typename Archive>
   void

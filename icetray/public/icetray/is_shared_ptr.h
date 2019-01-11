@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: is_shared_ptr.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -22,26 +22,39 @@
 #ifndef ICETRAY_IS_SHARED_PTR_H_INCLUDED
 #define ICETRAY_IS_SHARED_PTR_H_INCLUDED
 
-#include <boost/mpl/bool.hpp>
-
 /**
    traits classes that identify if a template parameter is a shared_ptr or not
-   @tparam T typename to evaluate
+   @param T
 */
 template <typename T>
-struct is_shared_ptr : public boost::mpl::false_{};
+struct is_shared_ptr 
+{
+  const static bool value = false;
+};
 
 template <typename T>
-struct is_shared_ptr<boost::shared_ptr<T> > : public boost::mpl::true_{};
+struct is_shared_ptr<shared_ptr<T> >
+{
+  const static bool value = true;
+};
 
 template <typename T>
-struct is_shared_ptr<boost::shared_ptr<const T> > : public boost::mpl::true_{};
+struct is_shared_ptr<shared_ptr<const T> >
+{
+  const static bool value = true;
+};
 
 template <typename T>
-struct is_shared_ptr<const boost::shared_ptr<T> > : public boost::mpl::true_{};
+struct is_shared_ptr<const shared_ptr<T> >
+{
+  const static bool value = true;
+};
 
 template <typename T>
-struct is_shared_ptr<const boost::shared_ptr<const T> > : public boost::mpl::true_{};
+struct is_shared_ptr<const shared_ptr<const T> >
+{
+  const static bool value = true;
+};
 
 #endif
 

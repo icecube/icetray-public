@@ -1,10 +1,10 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id$
+ * $Id: ModuleParameterConversions.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
  *
- * @version $Revision$
- * @date $Date$
+ * @version $Revision: 165886 $
+ * @date $Date: 2018-10-01 07:37:58 -0700 (Mon, 01 Oct 2018) $
  * @author troy d. straszheim
  *
  * This tests that the global GetService<> works; that the underlying
@@ -19,11 +19,6 @@
 #include <icetray/OMKey.h>
 #include <boost/assign/std/vector.hpp>
 
-#include <cmath>
-using namespace std;	// Fix broken implemenation of C99/3BSD fpclassify
-			// functions on some GCC versions, where they may or
-			// may not appear in std::
-
 using namespace boost::assign;
 
 TEST_GROUP(ModuleParameterConversions);
@@ -32,17 +27,19 @@ static bool bool_param;
 static int int_param;
 static long long_param;
 static double double_param;
-static std::string string_param;
-static std::vector<int> intvec_param;
-static std::vector<double> doublevec_param;
-static std::vector<std::string> stringvec_param;
+static string string_param;
+static vector<int> intvec_param;
+static vector<double> doublevec_param;
+static vector<string> stringvec_param;
 static OMKey omkey_param;
-static std::vector<OMKey> omkeyvec_param;
+static vector<OMKey> omkeyvec_param;
 
 struct ParamConversionCheckModule : I3Module
 {
   ParamConversionCheckModule(const I3Context& context) : I3Module(context) 
   { 
+    AddOutBox("OutBox");
+
     bool_param = true;
     AddParameter("bool_param", "description of bool", bool_param);
 
@@ -52,6 +49,7 @@ struct ParamConversionCheckModule : I3Module
     long_param = std::numeric_limits<long>::max();
     AddParameter("long_param", "description of long", long_param);
 
+    //      double_param = std::numeric_limits<double>::max();
     double_param = 3.1415926535897932;
     AddParameter("double_param", "description of double", double_param);
 
@@ -92,9 +90,11 @@ struct ParamConversionCheckModule : I3Module
     GetParameter("omkeyvec_param", omkeyvec_param);
   }
 
+  virtual void Reconfigure() { ; }
+
   virtual void Process() 
   { 
-    log_trace("%s",__PRETTY_FUNCTION__);
+    log_trace(__PRETTY_FUNCTION__);
     I3FramePtr frame(new I3Frame(I3Frame::Physics));
     PushFrame(frame, "OutBox");
   }
@@ -106,24 +106,21 @@ struct ParamConversionCheckModule : I3Module
 
 I3_MODULE(ParamConversionCheckModule);
 
-#define _EXPECT_THROW(name, value, obj)					  \
-  {									  \
-    try {                                                                 \
-      I3Tray tray;                                                        \
-      tray.AddModule<ParamConversionCheckModule>("mod");		  \
-      tray.SetParameter("mod", BOOST_PP_STRINGIZE(name), value);	  \
-      log_trace("egh, about to execute");				  \
-      tray.Execute(0);							  \
-      FAIL("This should have thrown.");                                   \
-    } catch (const obj& e) {                             		  \
-      PyErr_Clear();                                                      \
-    }						                          \
+#define GET_FAILS(name, value)						\
+  {									\
+    try { I3Tray tray; tray.AddModule<ParamConversionCheckModule>("mod"); \
+      tray.AddModule("TrashCan", "trash");				\
+      tray.SetParameter("mod", BOOST_PP_STRINGIZE(name), value);	\
+      log_trace("egh, about to execute");				\
+      tray.Execute(0);							\
+      FAIL ("tray.Execute should have thrown."); } catch (...) {	\
+      log_warn("catch!"); PyErr_Clear(); }				\
   }
 
 #define GET_SUCCEEDS(name, value)					\
   {									\
-    I3Tray tray;                                                        \
-    tray.AddModule<ParamConversionCheckModule>("mod");	                \
+    I3Tray tray;   tray.AddModule<ParamConversionCheckModule>("mod");	\
+    tray.AddModule("TrashCan", "trash");				\
     ENSURE(tray.SetParameter("mod", BOOST_PP_STRINGIZE(name), value));	\
     tray.Execute(0);							\
     ENSURE(name == value);						\
@@ -131,8 +128,8 @@ I3_MODULE(ParamConversionCheckModule);
 
 #define GET_ONLY(name, value)						\
   {									\
-    I3Tray tray;                                                        \
-    tray.AddModule<ParamConversionCheckModule>("mod");			\
+    I3Tray tray;   tray.AddModule<ParamConversionCheckModule>("mod");	\
+    tray.AddModule("TrashCan", "trash");				\
     ENSURE(tray.SetParameter("mod", BOOST_PP_STRINGIZE(name), value));	\
     tray.Execute(0);							\
   }
@@ -146,18 +143,23 @@ long long ll;
 float f;
 double d; 
 const char *c_str = "some string";
-std::string s = "some string";
+string s = "some string";
 
 TEST(a_nonexistent)
 {
   // bool converts to everything
   b = true;
-  _EXPECT_THROW(nonexistent_parameter, b, std::runtime_error);
+
+  GET_FAILS(nonexistent_parameter, b);
 }
 
 TEST(a2_nonexistent)
 {
-  _EXPECT_THROW(nonexistent_parameter, i, std::runtime_error);
+  GET_FAILS(nonexistent_parameter, i);
+  //  GET_FAILS(nonexistent_parameter, l);
+  //  GET_FAILS(nonexistent_parameter, d);
+  //  GET_FAILS(nonexistent_parameter, s);
+
 }
 
 TEST(b_bool)
@@ -167,23 +169,28 @@ TEST(b_bool)
   GET_SUCCEEDS(long_param, b);
   GET_SUCCEEDS(double_param, b);
 
-  _EXPECT_THROW(string_param, b, boost::python::error_already_set);
+  GET_FAILS(string_param, b);
 
   b = false;
   GET_SUCCEEDS(bool_param, b);
   GET_SUCCEEDS(int_param, b);
   GET_SUCCEEDS(long_param, b);
   GET_SUCCEEDS(double_param, b);
+
+
 }
 
 TEST(c_ints)
 {
   i = 0;
-  GET_SUCCEEDS(bool_param, false); 
+  GET_SUCCEEDS(bool_param, i); // convert
   i = 1;
-  GET_SUCCEEDS(bool_param, false); 
-  GET_SUCCEEDS(bool_param, true);
-  GET_SUCCEEDS(bool_param, true); 
+  GET_SUCCEEDS(bool_param, i); // convert
+
+  i = 2;
+  GET_FAILS(bool_param, 2); 
+
+  GET_FAILS(bool_param, -1); 
 
   i = 13;
   GET_SUCCEEDS(int_param, i);
@@ -198,11 +205,13 @@ TEST(c_ints)
 TEST(d_longs)
 {
   l = 0;
-  GET_SUCCEEDS(bool_param, l); 
+  GET_SUCCEEDS(bool_param, l); // convert
 
   l = 1;
-  GET_SUCCEEDS(bool_param, l); 
+  GET_SUCCEEDS(bool_param, l); // convert
 
+  GET_FAILS(bool_param, 2); 
+  GET_FAILS(bool_param, -1); 
   l = 13;
   GET_SUCCEEDS(int_param, l);
   GET_SUCCEEDS(long_param, l);
@@ -215,10 +224,10 @@ TEST(d_longs)
     {
       l = INT_MAX;
       l++;
-      _EXPECT_THROW(int_param, l, boost::python::error_already_set);
+      GET_FAILS(int_param, l);
       l = INT_MIN;
       l--;
-      _EXPECT_THROW(int_param, l, boost::python::error_already_set);
+      GET_FAILS(int_param, l);
     }
   else
     {
@@ -235,9 +244,9 @@ TEST(d_longs)
 TEST(e_doubles)
 {
   d = 6.0;
-  _EXPECT_THROW(bool_param, d, boost::python::error_already_set);
-  _EXPECT_THROW(int_param, d, boost::python::error_already_set);
-  _EXPECT_THROW(long_param, d, boost::python::error_already_set);
+  GET_FAILS(bool_param, d);
+  GET_FAILS(int_param, d);
+  GET_FAILS(long_param, d);
   GET_SUCCEEDS(double_param, d);
 
   GET_SUCCEEDS(string_param, s);
@@ -249,20 +258,20 @@ TEST(e_doubles)
 
   d = NAN;
   GET_ONLY(double_param, d);
-  ENSURE(std::isnan(double_param));
+  ENSURE(isnan(double_param));
 
   d = std::numeric_limits<double>::max() * -2.;
-  ENSURE(std::isinf(d));
+  ENSURE(isinf(d));
   ENSURE(d < 0);
   GET_ONLY(double_param, d);
-  ENSURE(std::isinf(double_param));
+  ENSURE(isinf(double_param));
   ENSURE(double_param < 0);
 
   d = std::numeric_limits<double>::max() * 2.;
-  ENSURE(std::isinf(d));
+  ENSURE(isinf(d));
   ENSURE(d > 0);
   GET_ONLY(double_param, d);
-  ENSURE(std::isinf(double_param));
+  ENSURE(isinf(double_param));
 
 }
 
@@ -271,20 +280,20 @@ TEST(f_strings_etc)
   {
     I3Tray tray;   
     tray.AddModule<ParamConversionCheckModule>("mod");
-    
+    tray.AddModule("TrashCan", "trash");
     ENSURE(tray.SetParameter("mod", "string_param", "some string"));
     tray.Execute(1);
     ENSURE(strcmp(c_str, "some string") == 0); 
   }
 
-  std::vector<int> ivec;
+  vector<int> ivec;
   ivec += 1, 2, 3;
-  std::vector<double> dvec;
+  vector<double> dvec;
   dvec += 7.8, 2.04, 0.003;
   GET_SUCCEEDS(intvec_param, ivec);
   GET_SUCCEEDS(doublevec_param, dvec);
 
-  std::vector<std::string> svec;
+  vector<string> svec;
   svec += "foo", "bar", "baz";
   GET_ONLY(stringvec_param, svec);
 }
@@ -292,16 +301,17 @@ TEST(f_strings_etc)
 TEST(g_omkeys)
 {    
   OMKey key(9,9);
-  std::vector<OMKey> keyvec;
+  vector<OMKey> keyvec;
   keyvec += OMKey(0,0), OMKey(3,9), OMKey(4,7);
 
   GET_SUCCEEDS(omkey_param, key);
   GET_SUCCEEDS(omkeyvec_param, keyvec);
 
-  _EXPECT_THROW(omkey_param, b, boost::python::error_already_set);
-  _EXPECT_THROW(omkey_param, i, boost::python::error_already_set);
-  _EXPECT_THROW(omkey_param, d, boost::python::error_already_set);
-  _EXPECT_THROW(omkey_param, s, std::runtime_error);
+  //  GET_FAILS(doublevec_param, ivec);
+  GET_FAILS(omkey_param, b);
+  GET_FAILS(omkey_param, i);
+  GET_FAILS(omkey_param, d);
+  GET_FAILS(omkey_param, s);
 }
 
 TEST(case_insensitivity)
@@ -310,7 +320,7 @@ TEST(case_insensitivity)
   int_param = 0;
   I3Tray tray;   
   tray.AddModule<ParamConversionCheckModule>("mod");
-  
+  tray.AddModule("TrashCan", "trash");
   ENSURE(tray.SetParameter("mod", "DoUbLe_PaRaM", 3.14159));
   ENSURE(tray.SetParameter("mod", "int_paraM", 314159));
   tray.Execute(1);
@@ -350,7 +360,6 @@ struct AddsWithoutGetting : public I3Module
 
   AddsWithoutGetting(const I3Context& context) : I3Module(context) 
   { 
-    i=3;
     AddParameter("never_gets_this_int", 
 		 "This here lonesome int is ignored at Configure() time",
 		 i);

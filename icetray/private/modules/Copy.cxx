@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: Copy.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
  *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
@@ -18,56 +18,26 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
+#include <icetray/I3Tray.h>
+#include <icetray/I3TrayInfo.h>
+#include <icetray/I3TrayInfoService.h>
+#include <icetray/Utility.h>
+
+#include <icetray/modules/Copy.h>
+
 #include <boost/regex.hpp>
-
-#include <fstream>
-#include <string>
-#include <set>
-
-#include "icetray/I3Tray.h"
-#include "icetray/I3TrayInfo.h"
-#include "icetray/I3TrayInfoService.h"
-#include "icetray/Utility.h"
-#include "icetray/I3ConditionalModule.h"
-#include "icetray/I3TrayHeaders.h"
-#include "icetray/I3Logging.h"
-
-/**
- *  Copyies things from frame.  Has special privileges granted by I3Frame.
- */
-class Copy : public I3ConditionalModule
-{
-  Copy();
-  Copy(const Copy&);
-
-  Copy& operator=(const Copy&);
-
-  std::vector<std::string> copy_keys_;
-
-public:
-
-  Copy(const I3Context& ctx);
-  virtual ~Copy() { }
-
-  void Configure();
-
-  void Process();
-
-  void Finish();
-
-  SET_LOGGER("Copy");
-};
 
 using namespace std;
 
 I3_MODULE(Copy);
 
 Copy::Copy(const I3Context& ctx) : 
-  I3ConditionalModule(ctx)
+  I3Module(ctx)
 {
   AddParameter("Keys", 
 	       "pairs of keys [src_1, dst_1, src_2, dst_2,... src_n, dst_n]",
 	       copy_keys_);
+  AddOutBox("OutBox");
 }
 
 void Copy::Configure()
@@ -80,15 +50,19 @@ void Copy::Configure()
 void Copy::Process()
 {
   I3FramePtr frame = PopFrame();
-  for (unsigned i=0; i<copy_keys_.size(); i+=2)
-    {
-      frame->Put(copy_keys_[i+1], 
-		 frame->Get<I3FrameObjectConstPtr>(copy_keys_[i]));
-    }
-  PushFrame(frame);
+  do_copy(frame);
+  PushFrame(frame, "OutBox");
 }
 
 void Copy::Finish()
 {
 }
 
+void Copy::do_copy(I3FramePtr frame)
+{
+  for (unsigned i=0; i<copy_keys_.size(); i+=2)
+    {
+      frame->Put(copy_keys_[i+1], 
+		 frame->Get<I3FrameObjectConstPtr>(copy_keys_[i]));
+    }
+}

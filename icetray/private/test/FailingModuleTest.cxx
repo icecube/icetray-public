@@ -10,7 +10,11 @@ namespace FailingModuleTest
   {
   public:
     FailingModule(const I3Context& context) : I3Module(context) 
-    {}
+    {
+      AddOutBox("OutBox");
+    }
+    
+    void Configure(){}
     
     void Process(){
       log_fatal("Don't be fooled by this 'fatal' message.  This module is supposed to fail");
@@ -23,17 +27,17 @@ namespace FailingModuleTest
   TEST(verify_failure)
   {
     I3Tray tray;
-    tray.AddModule("FailingModule");
+    tray.AddModule("FailingModule", "test");
     try
       {
 	tray.Execute(1);
 	FAIL("Failing module should have thrown");
       }
-    catch(std::exception& e)
+    catch(exception& e)
       {
 	// good.  it threw. 
       }
   }
-  I3_MODULE(FailingModule);
 }
 
+I3_MODULE(FailingModuleTest::FailingModule);

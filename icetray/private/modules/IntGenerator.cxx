@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: IntGenerator.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -33,13 +33,14 @@ public:
   IntGenerator(const I3Context& context) : I3Module(context)
   {      
     log_trace("%s", __PRETTY_FUNCTION__);
+    AddOutBox("OutBox");
     i = 0;
   }
 
   void Process()
   {
     I3FramePtr frame(new I3Frame(I3Frame::Physics));
-    boost::shared_ptr<I3Int> data(new I3Int(++i));
+    shared_ptr<I3Int> data(new I3Int(++i));
     frame->Put("myint", data);
     PushFrame(frame,"OutBox");
   }

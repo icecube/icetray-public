@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3DefaultName.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -23,7 +23,6 @@
 #ifndef I3DEFAULTNAME_H_INCLUDED
 #define I3DEFAULTNAME_H_INCLUDED
 
-#include <boost/shared_ptr.hpp>
 #include <boost/preprocessor/stringize.hpp>
 
 template <typename T>

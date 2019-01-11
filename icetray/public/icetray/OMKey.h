@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: OMKey.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2003-2007
  *  The IceCube Collaboration <http://www.icecube.wisc.edu>
@@ -26,33 +26,23 @@
 #include "Utility.h"
 #include <iostream>
 #include <icetray/IcetrayFwd.h>
-#include <icetray/serialization.h>
-
-static const unsigned omkey_version_ = 2;
-
+#include <icetray/I3FrameObject.h>
 /**
- * @brief A small class which is the string number, om number
- * and pmt number for a specific PMT inside a DOM.
+ * @brief A small class which is the string number and om number
+ * for an om
  *
- * For IceCube, the PMT number will always be 0
- * and "PMT" is equivalent to "DOM". For IceTop, the PMT number
- * can be 0 or 1.
  */
-class OMKey 
+class OMKey : public I3FrameObject
 {
   int stringNumber_;
   unsigned int omNumber_;
-  unsigned char pmtNumber_;
 
  public:
 
-  OMKey() : stringNumber_(0), omNumber_(0), pmtNumber_(0) {}
+  OMKey() : stringNumber_(0), omNumber_(0) {}
 
   OMKey(int str,unsigned int om) 
-    : stringNumber_(str), omNumber_(om), pmtNumber_(0) {}
-
-  OMKey(int str,unsigned int om, unsigned char pmt) 
-    : stringNumber_(str), omNumber_(om), pmtNumber_(pmt) {}
+    : stringNumber_(str), omNumber_(om){}
 
   virtual ~OMKey(); 
 
@@ -77,14 +67,22 @@ class OMKey
   void SetOM(unsigned int om){ omNumber_ = om; }
 
   /**
-   * gets the PMT number in the DOM
+   * bool function: is it an InIce DOM?
    */
-  unsigned char GetPMT() const { return pmtNumber_; }
-    
+  bool IsInIce() const { 
+    if(omNumber_>=1 && omNumber_<=60) return true;
+    else return false;
+  }
+
   /**
-   * sets the PMT number in the DOM
+   * bool function: is it an IceTop DOM?
    */
-  void SetPMT(unsigned char pmt){ pmtNumber_ = pmt; }
+  bool IsIceTop() const { 
+    if(omNumber_>=61 && omNumber_<=64) return true;
+    else return false;
+  }
+  
+
 
   /**
    * equality operator.  
@@ -93,9 +91,7 @@ class OMKey
    */
   bool operator==(const OMKey& rhs) const
     {
-      if(rhs.omNumber_ == omNumber_ && 
-         rhs.stringNumber_ == stringNumber_ && 
-         rhs.pmtNumber_ == pmtNumber_)
+      if(rhs.omNumber_ == omNumber_ && rhs.stringNumber_ == stringNumber_)
 	return true;
       return false;
     }
@@ -118,25 +114,16 @@ class OMKey
   {
     size_t operator()(const OMKey& key) const
     {
-      return (((static_cast<size_t>(abs(key.GetString()+19)) * 64) + 
-               static_cast<size_t>(key.GetOM()))) * 256 + 
-              static_cast<size_t>(key.GetPMT());
+      return ((abs(key.GetString()+19) * 64) + key.GetOM()); 
     }
   };
 
  private:
-  friend class icecube::serialization::access;
+  friend class boost::serialization::access;
 
   template <class Archive>
-  void save(Archive& ar, unsigned version) const;
-
-  template <class Archive>
-  void load(Archive& ar, unsigned version);
-
-  I3_SERIALIZATION_SPLIT_MEMBER();
+  void serialize(Archive& ar, unsigned version);
 };
-
-I3_CLASS_VERSION(OMKey,omkey_version_);
 
 /**
  * comparison operator.  First compares the string numbers, then compares
@@ -147,19 +134,13 @@ I3_CLASS_VERSION(OMKey,omkey_version_);
  */
 inline bool operator<(const OMKey& lhs,const OMKey& rhs)
 {
-  if(lhs.GetString() < rhs.GetString()) {
+  if(lhs.GetString() < rhs.GetString())
     return true;
-  } else if(lhs.GetString() > rhs.GetString()) {
+  if(lhs.GetString() > rhs.GetString())
     return false;
-  } else if(lhs.GetOM() < rhs.GetOM()) {
+  if(lhs.GetOM() < rhs.GetOM())
     return true;
-  } else if(lhs.GetOM() > rhs.GetOM()) {
-    return false;
-  } else if(lhs.GetPMT() < rhs.GetPMT()) {
-    return true;
-  } else {
-    return false;
-  }
+  return false;
 }
 
 /**

@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3ConfigurationImpl.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -32,7 +32,6 @@
 #include <icetray/serialization.h>
 #include <iosfwd>
 
-#define BOOST_MULTI_INDEX_DISABLE_SERIALIZATION
 #include <boost/multi_index_container_fwd.hpp>
 #include <boost/multi_index/ordered_index_fwd.hpp>
 #include <boost/multi_index/mem_fun.hpp>
@@ -64,9 +63,6 @@ public:
   boost::python::object
   Get(const std::string& name) const;
 
-  I3Parameter
-  GetParameter(const std::string& name) const;
-
   std::string ClassName() const 
   { 
     if (classname == "")
@@ -74,8 +70,7 @@ public:
     return classname; 
   }
 
-  void ClassName(const std::string& s) 
-  { 
+  void ClassName(const std::string& s) { 
     log_trace("classname: <<<%s>>>", s.c_str());
     if (s.empty())
       log_fatal("classname is empty?");
@@ -85,11 +80,14 @@ public:
   std::string InstanceName() const { return instancename; }
   void InstanceName(const std::string& s) { instancename = s; }
 
+  const std::map<std::string, std::string>& Outboxes() const { return outboxes; }
+  void Connect(const std::string& boxname, const std::string& modulename);
+
   bool is_ok() const;
 
   ///
   /// prints in xml format for consumption by xsltproc.  You can't just use
-  /// the icecube::serialization xml since this isn't well formed
+  /// the boost::serialization xml since this isn't well formed
   /// due to <px class_id="9" class_name="typeholder<bool>" ...
   ///
   std::string inspect() const;
@@ -101,14 +99,15 @@ private:
   std::string classname;
   std::string instancename;
 
-  friend class icecube::serialization::access;
+  friend class boost::serialization::access;
   friend class I3Configuration;
 
-  template <typename Archive> void serialize(Archive&, unsigned);
+  template <typename Archive>
+  void
+  serialize(Archive&, unsigned);
 
   // case-insensitive string compare
-  struct case_insensitive_lt 
-  {
+  struct case_insensitive_lt {
     static int lowercase(int c) { return std::tolower(c); }
     bool operator()(const std::string& lhs, const std::string& rhs) const
     {
@@ -120,7 +119,6 @@ private:
     }
   };
 
-public:
   /// these are the new parameters.  I3Parameter saves the full type information.
   typedef boost::multi_index_container<
     I3Parameter,
@@ -132,9 +130,11 @@ public:
       > 
     > parameters_t;
 
-private:
   // the parameters
   boost::shared_ptr<parameters_t> parameters;
+
+  // this map local_box_name => remote_module_name
+  std::map<std::string, std::string> outboxes;
 
   friend std::ostream& operator<<(std::ostream&, const I3ConfigurationImpl&);
 
@@ -143,6 +143,6 @@ private:
 std::ostream& operator<<(std::ostream&, const I3ConfigurationImpl&);
 
 I3_POINTER_TYPEDEFS(I3ConfigurationImpl);
-I3_CLASS_VERSION(I3ConfigurationImpl, 2);
+BOOST_CLASS_VERSION(I3ConfigurationImpl, 1);
 
 #endif

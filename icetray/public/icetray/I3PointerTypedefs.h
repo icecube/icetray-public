@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3PointerTypedefs.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -22,13 +22,11 @@
 #ifndef ICETRAY_I3POINTERTYPEDEFS_H_INCLUDED
 #define ICETRAY_I3POINTERTYPEDEFS_H_INCLUDED
 
-#include <boost/shared_ptr.hpp>
-
 // for generating pointer typedefs in dataclass structures.
 // pointer to const object and pointer to object
 #define I3_POINTER_TYPEDEFS(C)			\
-  typedef boost::shared_ptr<C> C##Ptr;			\
-  typedef boost::shared_ptr<const C> C##ConstPtr
+  typedef shared_ptr<C> C##Ptr;			\
+  typedef shared_ptr<const C> C##ConstPtr;
 
 #define I3_FORWARD_DECLARATION(C)  class C;	I3_POINTER_TYPEDEFS(C)
 

@@ -1,10 +1,10 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id$
+ * $Id: AllParametersModule.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
  *
- * @version $Revision$
- * @date $Date$
+ * @version $Revision: 165886 $
+ * @date $Date: 2018-10-01 07:37:58 -0700 (Mon, 01 Oct 2018) $
  * @author troy d. straszheim
  *
  * This tests that the global GetService<> works; that the underlying
@@ -20,29 +20,24 @@
 using namespace boost::assign;
 
 static bool bool_param;
-static unsigned char uchar_param;
 static int int_param;
 static long long_param;
 static double double_param;
-static std::string string_param;
-static std::vector<int> intvec_param;
-static std::vector<double> doublevec_param;
-static std::vector<std::string> stringvec_param;
+static string string_param;
+static vector<int> intvec_param;
+static vector<double> doublevec_param;
+static vector<string> stringvec_param;
 static OMKey omkey_param;
-static std::vector<OMKey> omkeyvec_param;
-
-struct MyService{};
-static boost::shared_ptr<MyService> service_ptr_param;
+static vector<OMKey> omkeyvec_param;
 
 struct AllParametersModule : I3Module
 {
   AllParametersModule(const I3Context& context) : I3Module(context) 
   { 
+    AddOutBox("OutBox");
+
     bool_param = true;
     AddParameter("bool_param", "description of bool", bool_param);
-
-    uchar_param = std::numeric_limits<unsigned char>::max();
-    AddParameter("uchar_param", "description of uchar", uchar_param);
 
     int_param = std::numeric_limits<int>::max();
     AddParameter("int_param", "description of int", int_param);
@@ -75,15 +70,11 @@ struct AllParametersModule : I3Module
     omkeyvec_param.clear();
     omkeyvec_param += OMKey(0,0), OMKey(-1,1), OMKey(-2,2), OMKey(-3,3);
     AddParameter("omkeyvec_param", "OMG a vector of omkeys lol", omkeyvec_param);
-
-    service_ptr_param = boost::shared_ptr<MyService>();
-    AddParameter("service_ptr_param", "pointer to service.",service_ptr_param);
   }
 
   virtual void Configure() 
   { 
     GetParameter("bool_param", bool_param);
-    GetParameter("uchar_param", uchar_param);
     GetParameter("int_param", int_param);
     GetParameter("long_param", long_param);
     GetParameter("double_param", double_param);
@@ -93,7 +84,6 @@ struct AllParametersModule : I3Module
     GetParameter("stringvec_param", stringvec_param);
     GetParameter("omkey_param", omkey_param);
     GetParameter("omkeyvec_param", omkeyvec_param);
-    GetParameter("service_ptr_param",service_ptr_param);
   }
 
   virtual void Reconfigure() { ; }

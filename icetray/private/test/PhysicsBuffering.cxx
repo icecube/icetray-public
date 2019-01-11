@@ -12,8 +12,7 @@ struct IntCheck : public I3Module
 {
   int ctr_;
   
-  IntCheck(const I3Context& context) : I3Module(context), ctr_(1) 
-  { }
+  IntCheck(const I3Context& context) : I3Module(context), ctr_(1) { }
 
   void Physics(I3FramePtr frame)
   {
@@ -35,7 +34,7 @@ I3_MODULE(IntCheck);
 #define DOTEST(NUMA, BATCHSIZEA, NUMB, BATCHSIZEB)	\
   TEST(Buffer_N ## NUMA ## _BATCH ## BATCHSIZEA ## _N ## NUMB ## _BATCH ## BATCHSIZEB) \
   {							\
-    std::vector<std::string> physics_has;               \
+    vector<string> physics_has;				\
     physics_has.push_back("myint");			\
     I3Tray tray;					\
     tray.AddModule("IntGenerator", "generator");	\
@@ -52,8 +51,9 @@ I3_MODULE(IntCheck);
     tray.AddModule("IntCheck", "postbuffercheckb");	\
     tray.AddModule("CountFrames", "postbuffercounter")	\
       ("physics", 1000);				\
-    			\
+    tray.AddModule("TrashCan", "can");			\
     tray.Execute(1000);					\
+    tray.Finish();					\
   }
 
 

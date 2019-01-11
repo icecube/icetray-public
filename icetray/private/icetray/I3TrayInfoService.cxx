@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3TrayInfoService.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -33,18 +33,21 @@
 #include <pwd.h>
 #include <time.h>
 
-template<class T>
+#ifdef I3_USE_ROOT
+#include <RVersion.h>
+#endif
+
 static
-std::map<std::string,I3ConfigurationPtr>
-get_configs(const T& from)
+map<string,I3ConfigurationPtr>
+get_configs(const map<string,I3ContextPtr>& from)
 {
-  std::map<std::string, I3ConfigurationPtr> result;
-  for (typename T::const_iterator iter = from.begin(); iter != from.end();
-   iter++) {
-     I3ConfigurationPtr ptr(new I3Configuration(iter->second->GetConfiguration()));
-     result[iter->first] = ptr;
-  }
- 
+  map<string, I3ConfigurationPtr> result;
+  for (map<string,I3ContextPtr>::const_iterator iter = from.begin();
+       iter != from.end();
+       iter++)
+    {
+      result[iter->first] = iter->second->Get<I3ConfigurationPtr>("I3Configuration");
+    }
   return result;
 }
 
@@ -56,7 +59,11 @@ I3TrayInfoService::GetConfig()
   // load host/build info
   //
   the_config.host_info["gcc_version"] = __VERSION__;
-  the_config.host_info["boost_version"] = BOOST_LIB_VERSION;
+#ifdef I3_USE_ROOT
+  the_config.host_info["root_version"] = ROOT_RELEASE;
+#else
+  the_config.host_info["root_version"] = "Compiled w/o ROOT support";
+#endif
 
   the_config.svn_externals = SVN_EXTERNALS;
   the_config.svn_url = SVN_URL;
@@ -76,7 +83,7 @@ I3TrayInfoService::GetConfig()
   time(&the_time);
   the_config.host_info["start_time"] = ctime(&the_time);
 
-  the_config.host_info["platform"] = I3_PLATFORM;
+  the_config.host_info["platform"] = BOOST_PP_STRINGIZE(I3_PLATFORM);
 
 #if 0
   //
@@ -109,9 +116,31 @@ I3TrayInfoService::GetConfig()
   the_config.modules_in_order = tray_.modules_in_order;
   the_config.factories_in_order = tray_.factories_in_order;
 	
-  the_config.module_configs = get_configs(tray_.modules);
-  the_config.factory_configs = get_configs(tray_.factories);
+  the_config.module_configs = get_configs(tray_.module_contexts);
+  the_config.factory_configs = get_configs(tray_.factory_contexts);
 
   return the_config;
 } 
+
+I3TrayInfoServiceFactory::I3TrayInfoServiceFactory(const I3Context& context)
+  : I3ServiceFactory(context)
+{ 
+  shared_ptr<I3Tray*> tray_pp = context.Get<shared_ptr<I3Tray*> >("__tray");
+  the_tray_ = *tray_pp;
+}
+	
+I3TrayInfoServiceFactory::~I3TrayInfoServiceFactory() 
+{ }
+      
+bool 
+I3TrayInfoServiceFactory::InstallService(I3Context& c)
+{
+  shared_ptr<I3TrayInfoService> nusrv(new I3TrayInfoService(*the_tray_));
+  c.Put(nusrv, "__tray_info_service");
+  return nusrv;
+}
+
+I3_SERVICE_FACTORY(I3TrayInfoServiceFactory);
+
+
 

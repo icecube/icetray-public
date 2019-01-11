@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: load_project.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -22,18 +22,13 @@
 #ifndef ICETRAY_LOAD_PROJECT_H_INCLUDED
 #define ICETRAY_LOAD_PROJECT_H_INCLUDED
 
-///\brief Dynamically load an icetray project
-///\param proj The name of the project to be loaded. 
-///\throw std::runtime_error if loading does not succeed
-void load_icecube_library(const std::string& project_name);
+//
+// "proj" here is "dataio" or "dataclasses", not "libdataio.so" or "libdataio" 
+//
+int load_project(std::string proj, bool verbose);
 
-///\brief Dynamically load an icetray project
-///
-///\param proj the name of the project to be loaded. No filename extension
-///            should be included, and the 'lib' prefix is optional. 
-///\param verbose unused
-///\return 0 on success
-///\throw std::runtime_error if loading does not succeed
-int load_project(std::string project_name, __attribute__((unused)) bool verbose = false);
-		 
+//
+// we do this instead of default-argument for the sake of boost::python
+//
+int load_project(std::string proj) { return load_project(proj, true); }
 #endif

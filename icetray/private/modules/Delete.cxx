@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: Delete.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
  *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
@@ -18,101 +18,37 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  *  
  */
+#include <icetray/I3Tray.h>
+#include <icetray/I3TrayInfo.h>
+#include <icetray/I3TrayInfoService.h>
+#include <icetray/Utility.h>
 
-#include <string>
-#include <vector>
-#include <boost/algorithm/string.hpp>
+#include <icetray/modules/Delete.h>
 
-#include <icetray/I3ConditionalModule.h>
-#include <icetray/I3TrayHeaders.h>
-
-
-/**
- *  Deletes things from frame.  Has special privileges granted by I3Frame.
- */
-class Delete : public I3ConditionalModule
-{
- private:
-
-  Delete();
-  Delete(const Delete&);
-  Delete& operator=(const Delete&);
-
-  std::vector<std::string> delete_keys_;
-  std::vector<std::string> delete_key_starts_;
-
- public:
-
-  Delete(const I3Context& ctx);
-
-  virtual ~Delete() { }
-
-  void Configure();
-
-  void Process();
-
-  void Finish();
-
-  SET_LOGGER("Delete");
-};
-
+#include <boost/regex.hpp>
 
 using namespace std;
 
 I3_MODULE(Delete);
 
 Delete::Delete(const I3Context& ctx) : 
-  I3ConditionalModule(ctx)
+  I3Module(ctx)
 {
   AddParameter("Keys", 
-	       "Delete objects with these names or...", 
+	       "Delete keys that match any of the regular expressions in this vector", 
 	       delete_keys_);
-  AddParameter("KeyStarts",
-               "...objects with names that start with any of these strings",
-               delete_key_starts_);
+  AddOutBox("OutBox");
 }
 
 void Delete::Configure()
 {
   GetParameter("Keys", delete_keys_);
-  GetParameter("KeyStarts", delete_key_starts_);
 }
 
 void Delete::Process()
 {
   I3FramePtr frame = PopFrame();
-
-  for (vector<string>::const_iterator iter = delete_keys_.begin();
-       iter != delete_keys_.end();
-       iter++)
-    {
-      if (!iter->empty())
-        {
-          frame->Delete(*iter);
-        }
-    }
-  
-  for (vector<string>::const_iterator iter = delete_key_starts_.begin();
-       iter != delete_key_starts_.end();
-       iter++)
-    {
-      if (!iter->empty())
-        {
-          I3Frame::typename_iterator jter = frame->typename_begin();
-          while (jter != frame->typename_end())
-            {
-              if (boost::starts_with(jter->first, *iter))
-                {
-                  frame->Delete((jter++)->first);
-                }
-              else
-                {
-                  ++jter;
-                }
-            }
-        }
-    }
-
+  do_delete(frame);
   PushFrame(frame, "OutBox");
 }
 
@@ -120,3 +56,12 @@ void Delete::Finish()
 {
 }
 
+void Delete::do_delete(I3FramePtr frame)
+{
+  for (vector<string>::const_iterator iter = delete_keys_.begin();
+       iter != delete_keys_.end();
+       iter++)
+    {
+      frame->Delete(*iter);
+    }
+}

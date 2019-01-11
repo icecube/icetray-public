@@ -17,12 +17,16 @@ class TestConditionalPutModule : public I3ConditionalModule
 public:
   TestConditionalPutModule(const I3Context& context) :
     I3ConditionalModule(context)
-  {}
+  {
+    AddOutBox("OutBox");
+  }
+
+  void Configure() { }
 
   void Physics(I3FramePtr frame)
   {
     frame->Put("fired", I3FrameObjectPtr());
-    PushFrame(frame);
+    PushFrame(frame,"OutBox");
   }
 };
 I3_MODULE(TestConditionalPutModule);
@@ -61,7 +65,9 @@ public:
   TesterSource(const I3Context& context) :
     I3Module(context),
     called(0)
-  {}
+  {
+    AddOutBox("OutBox");
+  }
 
   void Process()
   {
@@ -79,7 +85,7 @@ public:
     if(called % 3 == 0) 
       frame->Put("mod_three",I3FrameObjectPtr());
 
-    PushFrame(frame);
+    PushFrame(frame,"OutBox");
     ++called;
   }
 private:
@@ -91,28 +97,31 @@ TEST(none)
 {
   I3Tray tray;
 
-  tray.AddModule("TesterSource");
+  tray.AddModule("TesterSource","thesource");
 
-  tray.AddModule("TestConditionalPutModule")
+  tray.AddModule("TestConditionalPutModule","dumbmodule")
     ("IcePickServiceKey","");
 
-  tray.AddModule("CountObject")
+  tray.AddModule("CountObject", "lt_two_count")
     ("where", "lt_two")
     ("expected", 2);
 
-  tray.AddModule("CountObject")
+  tray.AddModule("CountObject", "ge_two_count")
     ("where", "ge_two")
     ("expected", 8);
 
-  tray.AddModule("CountObject")
+  tray.AddModule("CountObject", "mod_two_count")
     ("where", "mod_two")
     ("expected", 5);
 
-  tray.AddModule("CountObject")
+  tray.AddModule("CountObject", "mod_three_count")
     ("where", "mod_three")
     ("expected", 4);
 
+  tray.AddModule("TrashCan","thecan");
+
   tray.Execute(10);
+  tray.Finish();
 }
 
 TEST(on_mod_two)
@@ -123,29 +132,31 @@ TEST(on_mod_two)
     ("CacheResults", true)
     ("CheckThisKeyInFrame","mod_two");
 
-  tray.AddModule("TesterSource");
+  tray.AddModule("TesterSource","thesource");
 
-  tray.AddModule("TestConditionalPutModule")
+  tray.AddModule("TestConditionalPutModule", "mod")
     ("IcePickServiceKey","mod_two_pick");
 
-  tray.AddModule("CountObject")
+  tray.AddModule("CountObject", "co")
     ("where", "fired")
     ("expected", 5)
     ;
 
-  tray.AddModule("CountObject")
+  tray.AddModule("CountObject", "co2")
     ("where", "mod_two")
     ("expected", 5)
     ;
 				      
-  tray.AddModule("CountObject")
+  tray.AddModule("CountObject", "co3")
     ("where", "mod_two_pick_cache")
     ("expected", 10)
     ;
 				      
-  tray.AddModule("Dump");
+  tray.AddModule("Dump", "dump");
+  tray.AddModule("TrashCan", "thecan");
 
   tray.Execute(10);
+  tray.Finish();
 }
 
 TEST(on_mod_three)
@@ -155,17 +166,19 @@ TEST(on_mod_three)
   tray.AddService("I3IcePickInstaller<DumbPick>","mod_three_pick")
     ("CheckThisKeyInFrame","mod_three");
 
-  tray.AddModule("TesterSource");
+  tray.AddModule("TesterSource","thesource");
 
-  tray.AddModule("TestConditionalPutModule")
+  tray.AddModule("TestConditionalPutModule","dumbmodule")
     ("IcePickServiceKey","mod_three_pick");
 
-  tray.AddModule("CountObject")
+  tray.AddModule("CountObject", "co")
     ("where", "fired")
     ("expected", 4)
     ;
 
   tray.AddModule("Dump", "dump");
+  tray.AddModule("TrashCan","thecan");
 
   tray.Execute(10);
+  tray.Finish();
 }

@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: Rename.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -20,12 +20,12 @@
  *  
  */
 #ifndef ICETRAY_RENAME_H_INCLUDED
-#define ICETRAY_RENAME_H_INCLUDED
+#define ICETRAY_RENAME_H_INLCUDED
 
 #include <fstream>
 #include <string>
 #include <set>
-#include <icetray/I3ConditionalModule.h>
+#include <icetray/I3Module.h>
 #include <icetray/I3TrayHeaders.h>
 #include <icetray/I3Logging.h>
 
@@ -33,7 +33,7 @@
  *  Renames things in the frame.  Has special privileges granted by
  *  I3Frame.
  */
-class Rename : public I3ConditionalModule
+class Rename : public I3Module
 {
   Rename();
   Rename(const Rename&);
@@ -60,6 +60,7 @@ public:
 
   void Finish();
 
+  SET_LOGGER("Rename");
 };
 
 

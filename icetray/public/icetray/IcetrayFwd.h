@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: IcetrayFwd.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -23,20 +23,31 @@
 #ifndef ICETRAYFWD_H_INCLUDED
 #define ICETRAYFWD_H_INCLUDED
 
-#if defined(__APPLE__) && defined(__CINT__) && (__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ > 1085)
-// Workaround for CINT problems with stdint.h. Affects OS X >= 10.9; see
-// https://root.cern.ch/phpBB3/viewtopic.php?f=5&t=17360
-typedef char __signed;
-#include <sys/_types/_int8_t.h>
-#include <sys/_types/_int16_t.h>
-#include <sys/_types/_int32_t.h>
-#include <sys/_types/_int64_t.h>
-#else
 #include <stdint.h> //int64_t, etc
-#endif
 
 #include <icetray/I3Logging.h>
 #include <icetray/I3PointerTypedefs.h>
+
+namespace boost {
+  namespace serialization {
+    class access;
+  }
+  namespace python { 
+    namespace api
+    {
+      class object;
+    }
+    using api::object;
+  }
+}
+
+namespace I3 {
+  namespace Tray {
+    namespace Config {
+      class Service;
+    }
+  }
+}
 
 class I3Module;  I3_POINTER_TYPEDEFS(I3Module);
 class I3Context;  I3_POINTER_TYPEDEFS(I3Context);

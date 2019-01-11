@@ -1,10 +1,10 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id$
+ * $Id: InstallService.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
  *
- * @version $Revision$
- * @date $Date$
+ * @version $Revision: 165886 $
+ * @date $Date: 2018-10-01 07:37:58 -0700 (Mon, 01 Oct 2018) $
  * @author <a href="http://icecube.umd.edu/pretz">John Pretz</a>
  *
  * This is a test which tests that the services are available to modules during
@@ -41,7 +41,8 @@ TEST(name)
   tray.AddService<NameTestService>("TESTNAME");
 
   tray.AddModule("BottomlessSource", "bs");
-  
+  tray.AddModule("TrashCan", "trash");
   tray.Execute(10);
+  tray.Finish();
 }
 

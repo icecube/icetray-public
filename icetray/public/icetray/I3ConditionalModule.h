@@ -28,7 +28,7 @@
  * @brief This class is meant to be a wedge between an I3Module and any module
  * that wants to take advantage of conditional execution functionality.  That 
  * functionality resides here because the very general I3Module class doesn't
- * want to get too specialized.
+ * want to get to specialized.
  *
  */
 
@@ -39,30 +39,28 @@ class I3ConditionalModule : public I3Module
   ~I3ConditionalModule();
 
   /**
-   * @brief The function where frames are sent to IcePicks installed in the context
-   * in order to determine whether the module should run.
+   * @brief The method where frames are sent to IcePicks installed in the context 
+   * in order to determine whether the module should run.  The IcePicks are also 
+   * configured the first time this method is called.
    */
-  bool ShouldDoProcess(I3FramePtr frame);
-
-  bool ShouldProcess(I3FramePtr frame) 
-  { 
-    log_fatal("%s", "\nThis function does nothing, don't use it."
-	      "ShouldProcess is now calculated by I3Module");
-    return true; 
-  }
+  bool ShouldDoPhysics(I3FramePtr frame);
 
   SET_LOGGER("I3ConditionalModule");
+    
+  //  bool (op_*)(const I3FramePtr& frame);
 
  protected:
+  std::string pickKey_;
+
   /**
    * @brief Simple method that allows derived modules to access information about 
-   * how many times their Physics() function has been executed.
+   * how many times they're Physics() method has been executed.
    */
   unsigned GetTimesExecuted() { return nexecuted_; };
 
   /**
    * @brief Simple method that allows derived modules to access information about 
-   * how many times their Physics() function has been skipped due to conditional
+   * how many times they're Physics() method has been skipped due to conditional 
    * execution.
    */
   unsigned GetTimesSkipped() { return nskipped_; };
@@ -74,10 +72,11 @@ class I3ConditionalModule : public I3Module
   I3IcePickPtr pick_;
   boost::python::object if_;
 
-  unsigned nexecuted_;
-  unsigned nskipped_;
+  bool configured_;
   bool use_if_;
   bool use_pick_;
+  unsigned nexecuted_;
+  unsigned nskipped_;
 };
 
 #endif

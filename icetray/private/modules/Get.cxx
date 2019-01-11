@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: Get.cxx 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -23,6 +23,7 @@
 #include <icetray/I3Module.h>
 #include <icetray/I3Frame.h>
 #include <boost/foreach.hpp>
+#include <boost/bind.hpp>
 #include <vector>
 #include <string>
 
@@ -35,7 +36,6 @@ class Get : public I3Module
 {
   std::vector<std::string> keys_;
   std::vector<I3Frame::Stream> streams_;
-  bool get_all_;
 
  public:
 
@@ -53,9 +53,10 @@ I3_MODULE(Get);
 
 Get::Get(const I3Context& context) : I3Module(context)
 {
-  AddParameter("Keys", "Keys to Get<I3FrameObject> on.  If not specified, get all.",
+  AddOutBox("OutBox");
+  AddParameter("Keys", "Keys to Get<I3FrameObject> on",
 	       keys_);
-  AddParameter("Streams", "vector of I3Frame::Streams to do the Gets on.  If not specified, do it on Geometry, Calibration, DetectorStatus, and Physics",
+  AddParameter("Streams", "vector of streams to do these gets on, in additon to GCDP",
 	       streams_);
 }
 
@@ -63,19 +64,7 @@ void
 Get::Configure()
 {
   GetParameter("Keys", keys_);
-  if (keys_.size() == 0)
-    {
-      log_info("no Keys passed to Get module...  will Get all frame objects");
-      get_all_ = true;
-    }
   GetParameter("Streams", streams_);
-  if (streams_.size() == 0)
-    {
-      streams_.push_back(I3Frame::Stream('G'));
-      streams_.push_back(I3Frame::Stream('C'));
-      streams_.push_back(I3Frame::Stream('D'));
-      streams_.push_back(I3Frame::Stream('P'));
-    }
   BOOST_FOREACH(const I3Frame::Stream& stream, streams_)
     {
       Register(stream, &Get::impl);
@@ -85,16 +74,10 @@ Get::Configure()
 void 
 Get::impl(I3FramePtr frame)
 {
-  if (get_all_)
-    keys_ = frame->keys();
-
   BOOST_FOREACH(const std::string& key, keys_)
     {
-      I3FrameObjectConstPtr fop = frame->Get<I3FrameObjectConstPtr>(key);
-      if(!fop && frame->Has(key))
-	log_fatal("Came across an unregistered class.");
+      frame->Get<I3FrameObjectConstPtr>(key);
       log_info("Got %s", key.c_str());
     }
-  PushFrame(frame, "OutBox");
 }
 

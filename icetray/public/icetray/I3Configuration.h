@@ -1,5 +1,5 @@
 /**
- *  $Id$
+ *  $Id: I3Configuration.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  *  
  *  Copyright (C) 2007
  *  Troy D. Straszheim  <troy@icecube.umd.edu>
@@ -27,16 +27,15 @@
 #include <map>
 #include <iosfwd>
 #include <boost/scoped_ptr.hpp>
+#include <boost/python/extract.hpp>
 #include <icetray/IcetrayFwd.h>
 #include <icetray/I3DefaultName.h>
 #include <icetray/serialization.h>
-#include <icetray/is_shared_ptr.h>
-#include <boost/python/extract.hpp>
 
 /**
  * @brief This class holds the configuration.
  * 
- * @version $Id$
+ * @version $Id: I3Configuration.h 165886 2018-10-01 14:37:58Z nwhitehorn $
  */
 
 class I3ConfigurationImpl;
@@ -51,7 +50,6 @@ public:
 
   I3Configuration();
   I3Configuration(const I3Configuration&);
-  I3Configuration& operator = (const I3Configuration&);
 
   void Set(const std::string& key, const boost::python::object& value);
 
@@ -79,24 +77,8 @@ public:
   boost::python::object
   Get(const std::string& name) const;
 
-  std::string
-  GetDescription(const std::string& name) const;
-
-  /**
-   * This allows NoneType on the python side 
-   * to translate to a Null pointer on the C++ side 
-   */
   template <typename T>
-    typename boost::enable_if<is_shared_ptr<T>, T>::type
-  Get(const std::string& name) const
-  {
-    boost::python::object obj(Get(name));
-    if(obj.ptr() == Py_None) return T();
-    return boost::python::extract<T>(obj);
-  }
-
-  template <typename T>
-    typename boost::disable_if<is_shared_ptr<T>, T>::type
+  T
   Get(const std::string& name) const
   {
     boost::python::object obj(Get(name));
@@ -109,11 +91,14 @@ public:
   std::string InstanceName() const;
   void InstanceName(const std::string& s);
 
+  const std::map<std::string, std::string>& Outboxes() const;
+  void Connect(const std::string& boxname, const std::string& modulename);
+
   bool is_ok() const;
 
   ///
   /// prints in xml format for consumption by xsltproc.  You can't just use
-  /// the icecube::serialization xml since this isn't well formed
+  /// the boost::serialization xml since this isn't well formed
   /// due to <px class_id="9" class_name="typeholder<bool>" ...
   ///
   std::string inspect() const;
@@ -122,7 +107,7 @@ public:
 
 private:
 
-  friend class icecube::serialization::access;
+  friend class boost::serialization::access;
 
   template <typename Archive>
   void
