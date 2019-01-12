@@ -1,10 +1,12 @@
+#
+# put your email address here if you would like notification emails
+# about commits to this project.
+# $Id: .mailinglist 3064 2018-06-11 20:15:02Z kjmeagher $
+#
 # Maintainer
-ckopper@icecube.wisc.edu
-# Maintainer
-benedikt.riedel@icecube.wisc.edu
-# Maintainer
-ryan.eagan@icecube.wisc.edu
-# Maintainer
-jvansanten@icecube.wisc.edu
-# Maintainer
-kai.krings@icecube.wisc.edu
+olivas@icecube.umd.edu
+blaufuss@icecube.umd.edu
+hightech-consulting@gmx.de
+nega@icecube.umd.edu
+david.schultz@icecube.wisc.edu
+kmeagher@icecube.wisc.edu
