@@ -98,7 +98,7 @@ ConfigDialog::loadGeometry(){
 	QString filename = QFileDialog::getOpenFileName( 0,
 		"Open a file with an I3Geometry object",
 		QString(),
-		"I3 files (*.i3 *.i3.gz *.i3.bz2)"
+		"I3 files (*.i3 *.i3.gz *.i3.bz2 *.i3.zst);;All files (*)"
 	);
 	if (filename.isEmpty())
 		return;

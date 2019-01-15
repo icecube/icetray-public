@@ -115,7 +115,7 @@ int main(int argc, char* argv[]){
 		("ignore", po::value< string_vector >(&ignored_keys)->composing(),
 		           "keys to not load from files into frames")
 		("input", po::value< string_vector >(&files)->composing(),
-		          "Path to a .i3(.gz|.bz2) file to load" )
+		          "Path to a .i3(.gz|.bz2|.zst) file to load" )
 		("testmode", "Run in test mode. Session memory is off and shell console is active." )
 		;
 

@@ -12,7 +12,7 @@ Opening/closing files
 Use the ``Open file...`` option from the File menu to choose data files to load.
 
 Steamshovel can load standard ``.i3`` data files as well as their compressed forms
-(usually ``.i3.gz`` or ``.i3.bz2``).  Multiple files may be opened. Frame contents propagate to
+(usually ``.i3.gz`` or ``.i3.bz2`` or ``.i3.zst``).  Multiple files may be opened. Frame contents propagate to
 subsequent files as though the group of files had been processed by an ``I3Module``.
 It is common to open two file: first a GCD file specifying the detector geometry and status,
 and then an events file with physics data.

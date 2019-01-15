@@ -623,7 +623,7 @@ void ShovelMainWindow::doFileOpen(){
 	QStringList filenames = QFileDialog::getOpenFileNames(
 	    this, "Choose i3 files...",
 	    file_directory_,
-	    "I3 files (*.i3 *.i3.bz2 *.i3.gz)" );
+	    "I3 files (*.i3 *.i3.bz2 *.i3.gz *.i3.zst);;All files (*)" );
 	if( filenames.isEmpty() ){
 		log_trace( "User canceled file select" );
 		return;

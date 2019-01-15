@@ -21,7 +21,7 @@ SaveFrameDialog::SaveFrameDialog( QWidget* parent ) :
 	QFileDialog( parent,
 	             "Choose a path for an i3 file...",
 	             QString(),
-	             "I3 files (*.i3 *.i3.bz2 *.i3.gz)" ),
+	             "I3 files (*.i3 *.i3.gz *.i3.bz2 *.i3.zst);;All files (*)" ),
 	lineedit_( new QLineEdit( this ) ),
 	checkbox_( new QCheckBox( "Save parents", this ) )
 {
@@ -63,7 +63,7 @@ QString SaveFrameDialog::getSaveFileName() const
 	QString filename = files[0];
 	// add the .i3.gz extension if no valid extension is provided
 	if( !filename.endsWith(".i3") && !filename.endsWith(".i3.gz") 
-	    && !filename.endsWith(".i3.bz2") ){
+	    && !filename.endsWith(".i3.bz2") && !filename.endsWith(".i3.zst") && !filename.endsWith(".i3.zstd")){
 		filename += ".i3.gz";
 	}
 	return filename;
