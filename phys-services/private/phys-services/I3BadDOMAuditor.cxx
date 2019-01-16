@@ -179,7 +179,7 @@ I3BadDOMAuditor::DAQ(I3FramePtr frame)
 
     // If the good run times should be considered, try to get the start time of the event
     // from the eader
-    if(use_good_run_times_ && !skip_check && good_run_end_time_ && good_run_end_time_) {
+    if(use_good_run_times_ && !skip_check && good_run_start_time_ && good_run_end_time_) {
         boost::shared_ptr<const I3EventHeader> header = frame->Get<boost::shared_ptr<const I3EventHeader> >("I3EventHeader");
 
         if(header) {
