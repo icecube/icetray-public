@@ -27,7 +27,7 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 if (SYSTEM_PACKAGES)
-  set(BASE_COMPONENTS system signals thread date_time filesystem program_options regex iostreams)
+  set(BASE_COMPONENTS system thread date_time filesystem program_options regex iostreams)
   # From the cmake docs:
   # Boost Python components require a Python version suffix (Boost 1.67 and later),
   # e.g. python36 or python27 for the versions built against Python 3.6 and 2.7, respectively.
@@ -63,7 +63,7 @@ if((NOT SYSTEM_PACKAGES) OR (NOT Boost_FOUND))
   set(BOOST_INCLUDEDIR ${I3_PORTS}/include/boost-${BOOST_PORTSVERSION})
   set(BOOST_LIBRARYDIR ${I3_PORTS}/lib/boost-${BOOST_PORTSVERSION})
   set(Boost_NO_SYSTEM_PATHS TRUE)
-  find_package(Boost ${BOOST_PORTSVERSION} EXACT REQUIRED COMPONENTS python system signals thread date_time filesystem program_options regex iostreams)
+  find_package(Boost ${BOOST_PORTSVERSION} EXACT REQUIRED COMPONENTS python system thread date_time filesystem program_options regex iostreams)
 endif((NOT SYSTEM_PACKAGES) OR (NOT Boost_FOUND))
 
 if(Boost_FOUND)
