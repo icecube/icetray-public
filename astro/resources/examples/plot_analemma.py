@@ -38,11 +38,11 @@ plt.figure()
 plt.plot_date(day,sun_elevation,ls='-',marker=None)
 plt.ylabel("Sun Elevation")
 plt.title("Sun Elevation")
-plt.axes().yaxis.set_major_formatter(FormatStrFormatter(u'%d\u00b0'))
+plt.gca().yaxis.set_major_formatter(FormatStrFormatter(u'%d\u00b0'))
 
 
 plt.figure()
-ax = plt.axes()
+ax = plt.gca()
 plt_info = ax.plot(sun_azimuth,sun_elevation)
 
 for n,d in enumerate(day):
