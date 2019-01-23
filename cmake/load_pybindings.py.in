@@ -25,6 +25,15 @@ import platform,sys
 import warnings
 warnings.filterwarnings("ignore", ".*already registered; second conversion method ignored.", RuntimeWarning)
 
+PYTHON_VERSION = "@PYTHON_STRIPPED_VERSION@"
+if PYTHON_VERSION != platform.python_version():
+    raise Exception("IceTray was compiled with version {} but is curently being run with {}"
+                    .format(PYTHON_VERSION,platform.python_version()))
+
+#omit python2 warning for now
+#if sys.version_info.major < 3:
+#    print("""\033[0;31m@PYTHON_WARNING@\033[0;0m""")
+                  
 if platform.system().startswith('freebsd'):
 	# C++ modules are extremely fragile when loaded with RTLD_LOCAL,
 	# which is what Python uses on FreeBSD by default, and maybe other

@@ -326,3 +326,8 @@ add_custom_target(pycoverage_verbose
   COMMAND ./env-shell.sh pycoverage -d pycoverage/`date +%Y-%m-%d` -v
   COMMAND rm -f pycoverage/00_LATEST \; ln -sf `ls -1tr pycoverage |tail -1` pycoverage/00_LATEST
 )
+
+#omit python2 warning for now
+#if(PYTHON_NUMERIC_VERSION LESS 30000)
+#  colormsg(RED "${PYTHON_WARNING}")
+#endif(PYTHON_NUMERIC_VERSION LESS 30000)

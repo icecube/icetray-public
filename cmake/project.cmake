@@ -628,7 +628,7 @@ configure_file(${CMAKE_SOURCE_DIR}/cmake/__init__.py.in
   COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/cmake/load_pybindings.py.in
   ${LIBRARY_OUTPUT_PATH}/icecube/load_pybindings.py
-  COPYONLY)
+  @ONLY)
 install(FILES ${LIBRARY_OUTPUT_PATH}/icecube/__init__.py
   ${LIBRARY_OUTPUT_PATH}/icecube/load_pybindings.py
   DESTINATION lib/icecube

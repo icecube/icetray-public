@@ -55,7 +55,7 @@ string(REGEX MATCH "([0-9]+)\\.([0-9]+)"
   PYTHON_STRIPPED_MAJOR_MINOR_VERSION
   ${PYTHON_VERSION})
 numeric_version(${PYTHON_STRIPPED_VERSION} PYTHON)
-message(STATUS "+  version: ${PYTHON_VERSION}") 
+message(STATUS "+  version: ${PYTHON_STRIPPED_VERSION}") 
 
 STRING(REPLACE "." "" PYTHON_VERSION_NO_DOTS ${PYTHON_STRIPPED_MAJOR_MINOR_VERSION})
 
@@ -64,7 +64,7 @@ STRING(REPLACE "." "" PYTHON_VERSION_NO_DOTS ${PYTHON_STRIPPED_MAJOR_MINOR_VERSI
 #
 execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; sys.stdout.write(sys.prefix)"
                 OUTPUT_VARIABLE PYTHON_ROOT)
-#message(STATUS "+  base dir: ${PYTHON_ROOT}")
+message(STATUS "+ base dir: ${PYTHON_ROOT}")
 
 #
 # Find the library and header file manually,
@@ -112,7 +112,7 @@ endif(NOT  EXISTS "${PYTHON_INCLUDE_DIR}/Python.h")
 
 message(STATUS "+   binary: ${PYTHON_EXECUTABLE}")	
 message(STATUS "+ includes: ${PYTHON_INCLUDE_DIR}")	
-message(STATUS "+     libs: ${PYTHON_LIBRARIES}")	
+message(STATUS "+     libs: ${PYTHON_LIBRARIES}")
 
 if(PYTHON_NUMERIC_VERSION LESS 20600)
   message(FATAL_ERROR "A Python version >= 2.6 is required.")
@@ -169,3 +169,19 @@ else()
 endif()
 set(SCIPY_FOUND ${SCIPY_FOUND} CACHE BOOL "Scipy found successfully")
 
+
+if(PYTHON_NUMERIC_VERSION LESS 30000)
+  colormsg(RED "-  WARNING: Python<3.0 detected")
+#omit python2 warning for now  
+#  set(PYTHON_WARNING
+#"WARNING: Your current version of python is ${PYTHON_STRIPPED_VERSION}.
+#Python 2.7 is being retired and will not be maintained upstream past January 1, 
+#2020. Therefore IceCube software must transition to python 3. You do not need to
+#do anything at this moment, this version of IceCube software will still work 
+#with python 2.7. However, you should consider migrating to python 3 at the next
+# available opportunity.  Please see 
+#http://software.icecube.wisc.edu/documentation/projects/cmake/tools/python.html
+#for more details on how to migrate.")
+else(PYTHON_NUMERIC_VERSION LESS 30000)
+  set(PYTHON_WARNING "")
+endif(PYTHON_NUMERIC_VERSION LESS 30000)
