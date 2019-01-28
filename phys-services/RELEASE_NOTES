@@ -4,6 +4,7 @@ Release Notes
 
 trunk
 -----
+- move `Cylinder::GetAreaForZenith` to public and add `Cylinder::GetAreaForZenithAntiDerivative`
 
 November 26, 2018, Juan Carlos Diaz Velez (juancarlos@icecube.wisc.edu)
 --------------------------------------------------------

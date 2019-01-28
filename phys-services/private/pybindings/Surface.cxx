@@ -70,6 +70,8 @@ void register_Surface()
 	
 	class_<Cylinder, CylinderPtr, bases<SamplingSurface> >("Cylinder",
 	    init<double, double, I3Position>((arg("length"), arg("radius"), arg("center")=I3Position(0,0,0))))
+          .def("GetAreaForZenith",&Cylinder::GetAreaForZenith)
+          .def("GetAreaForZenithAntiDerivative",&Cylinder::GetAreaForZenithAntiDerivative)
 	    .def(copy_suite<Cylinder>())
 	    #define PROPS (Length)(Radius)(Center)
 	    BOOST_PP_SEQ_FOR_EACH(WRAP_PROP, Cylinder, PROPS)

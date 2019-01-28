@@ -181,16 +181,27 @@ public:
 	void SetCenter(const I3Position &v) { center_ = v; }
 	I3Position GetCenter() const { return center_; }
 
+  double GetAreaForZenith(const double coszen) const
+  {
+    const double cap = M_PI*radius_*radius_;
+    const double sides = 2*radius_*length_;
+    return cap*fabs(coszen) + sides*sqrt(1.-coszen*coszen);
+  }
+  
+  double GetAreaForZenithAntiDerivative(const double coszen) const
+  {
+    const double cap = M_PI*radius_*radius_;
+    const double sides = 2*radius_*length_;
+    
+    const double A = cap * coszen * fabs(coszen);
+    const double B = sides * (coszen * sqrt(1 - coszen*coszen) + asin(coszen));
+    return (A+B)/2.;
+  }
+  
 protected:
 	CylinderBase() {}
 
 private:
-	double GetAreaForZenith(double coszen) const
-	{
-		double cap = M_PI*radius_*radius_;
-		double sides = 2*radius_*length_;
-		return cap*fabs(coszen) + sides*sqrt(1.-coszen*coszen);
-	}
 
 	friend class icecube::serialization::access;
 	template <typename Archive>
