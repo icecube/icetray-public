@@ -67,7 +67,7 @@ then
     fi
 fi
 _PYVER=`python -V 2>&1 | awk '{print $2}'`
-_I3_PYTHON_VERSION=@PYTHON_STRIPPED_VERSION@
+_I3_PYTHON_VERSION=@PYTHON_VERSION@
 
 if [ "${_PYVER}" != "${_I3_PYTHON_VERSION}" ]
 then

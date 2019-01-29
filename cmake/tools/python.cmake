@@ -41,6 +41,14 @@ execute_process(COMMAND ${PYTHON_EXECUTABLE} -V
   ERROR_VARIABLE PYTHON_VERSION
   ERROR_STRIP_TRAILING_WHITESPACE)
 
+#
+# 'python -V' returns 'Python 2.7.15rc1'
+# I think we can trust that the version refers to the python
+# version and discard the name.
+#
+string(REPLACE " " ";" PYTHON_VERSION_LIST ${PYTHON_VERSION})
+list(GET PYTHON_VERSION_LIST 1 PYTHON_VERSION)
+
 if(STDOUT_VERSION MATCHES "Python")
   set(PYTHON_VERSION "${STDOUT_VERSION}")
 endif()
