@@ -24,14 +24,6 @@ sort(std::pair<double, double> &pair)
 		pair.second = aux;
 	}
 }
-
-inline double
-integrate_area(double a, double b, double cap, double sides)
-{
-	return M_PI*(cap*(b*b-a*a) +
-	    sides*(acos(a) - acos(b) - sqrt(1-a*a)*a + sqrt(1-b*b)*b));
-}
-
 }
 
 namespace I3Surfaces { namespace detail {
@@ -114,18 +106,12 @@ public:
 	}
 	virtual double GetAcceptance(double cosMin=0, double cosMax=1) const
 	{
-		double cap = M_PI*radius_*radius_;
-		double sides = 2*radius_*length_;
-		if (cosMin >= 0 && cosMax >= 0)
-			return integrate_area(cosMin, cosMax, cap, sides);
-		else if (cosMin < 0 && cosMax <= 0)
-			return integrate_area(-cosMax, -cosMin, cap, sides);
-		else if (cosMin < 0 && cosMax > 0)
-			return integrate_area(0, -cosMin, cap, sides)
-			    + integrate_area(0, cosMax, cap, sides);
-		else
-			log_fatal("Can't deal with zenith range [%.1e, %.1e]", cosMin, cosMax);
-		return NAN;
+          double a=cosMin;
+          double b=cosMax;                
+          double cap = M_PI*radius_*radius_;
+          double sides = 2*radius_*length_;
+          return M_PI*(cap*(b*fabs(b)-a*fabs(a)) +
+                       sides*(acos(a) - acos(b) - sqrt(1-a*a)*a + sqrt(1-b*b)*b));                
 	}
 	
 	// SamplingSurface interface
@@ -181,27 +167,16 @@ public:
 	void SetCenter(const I3Position &v) { center_ = v; }
 	I3Position GetCenter() const { return center_; }
 
-  double GetAreaForZenith(const double coszen) const
-  {
-    const double cap = M_PI*radius_*radius_;
-    const double sides = 2*radius_*length_;
-    return cap*fabs(coszen) + sides*sqrt(1.-coszen*coszen);
-  }
-  
-  double GetAreaForZenithAntiDerivative(const double coszen) const
-  {
-    const double cap = M_PI*radius_*radius_;
-    const double sides = 2*radius_*length_;
-    
-    const double A = cap * coszen * fabs(coszen);
-    const double B = sides * (coszen * sqrt(1 - coszen*coszen) + asin(coszen));
-    return (A+B)/2.;
-  }
-  
 protected:
 	CylinderBase() {}
 
 private:
+	double GetAreaForZenith(double coszen) const
+	{
+		double cap = M_PI*radius_*radius_;
+		double sides = 2*radius_*length_;
+		return cap*fabs(coszen) + sides*sqrt(1.-coszen*coszen);
+	}
 
 	friend class icecube::serialization::access;
 	template <typename Archive>

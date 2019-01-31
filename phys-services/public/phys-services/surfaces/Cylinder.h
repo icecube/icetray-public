@@ -30,11 +30,16 @@ private:
 	friend class icecube::serialization::access;
 	template <typename Archive>
 	void serialize(Archive &, unsigned);
+
+public:
+  std::ostream& Print(std::ostream& os) const;
 };
 
 I3_POINTER_TYPEDEFS(Cylinder);
 
 }
+
+std::ostream& operator<<(std::ostream& oss, const I3Surfaces::Cylinder& p);
 
 I3_CLASS_VERSION(I3Surfaces::Cylinder, 0);
 

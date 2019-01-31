@@ -216,8 +216,9 @@ I3GeometryDecomposer::GenerateI3ModuleGeo(const I3OMGeoMap &omgeo) const
             case I3OMGeo::AMANDA:      output_geo.SetModuleType(I3ModuleGeo::AMANDA);      break;
             case I3OMGeo::IceCube:     output_geo.SetModuleType(I3ModuleGeo::IceCube);     break;
             case I3OMGeo::IceTop:      output_geo.SetModuleType(I3ModuleGeo::IceTop);      break;
+            case I3OMGeo::mDOM:        output_geo.SetModuleType(I3ModuleGeo::mDOM);        break;
             default:
-                log_error("Unknown input OMType number %u. Using I3ModuleGeo::ModuleType \"Unknown\".",
+                log_debug("Unknown input OMType number %u. Using I3ModuleGeo::ModuleType \"Unknown\".",
                           static_cast<unsigned int>(input_geo.omtype));
                 output_geo.SetModuleType(I3ModuleGeo::UnknownType);
                 break;

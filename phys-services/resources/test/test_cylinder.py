@@ -1,7 +1,8 @@
 import unittest
-import numpy as np
+from numpy import pi,arccos,arange
 from scipy.integrate import quad
 from icecube import phys_services
+from icecube.dataclasses import I3Direction as i3d
 
 class TestCylinder(unittest.TestCase):
 
@@ -12,21 +13,23 @@ class TestCylinder(unittest.TestCase):
 
     def test_cylinder_zenith(self):
         self.assertAlmostEqual(
-            self.surface.GetAreaForZenith(-1),
-            np.pi*self.radius**2)
+            self.surface.area(i3d(0,0)),
+            pi*self.radius**2)
         self.assertAlmostEqual(
-            self.surface.GetAreaForZenith(1),
-            np.pi*self.radius**2)
+            self.surface.area(i3d(pi,0)),
+            pi*self.radius**2)
         self.assertAlmostEqual(
-            self.surface.GetAreaForZenith(0),
-            2*self.length*self.radius)                
+            self.surface.area(i3d(pi/2,0)),
+            2*self.length*self.radius)
 
-    def test_cylinder_integral(self):        
-        for cz1 in np.arange(-1,1.1,.25):
-            for cz2 in np.arange(-1,1.1,.25):
-                I1,E1=quad(self.surface.GetAreaForZenith,cz1,cz2)
-                I2=(self.surface.GetAreaForZenithAntiDerivative(cz2)
-                    -self.surface.GetAreaForZenithAntiDerivative(cz1))
+    def test_cylinder_acceptance(self):
+
+        integrand=lambda z:2*pi*self.surface.area(i3d(arccos(z),0))
+        
+        for cz1 in arange(-1,1.1,.25):
+            for cz2 in arange(-1,1.1,.25):            
+                I1,E1=quad(integrand,cz1,cz2)
+                I2=self.surface.acceptance(cz1,cz2)
                 assert(abs(I1-I2)<=E1)
 
 

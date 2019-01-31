@@ -22,6 +22,17 @@ Cylinder::serialize(Archive &ar, unsigned version)
 	ar & make_nvp("Base", base_object<Base>(*this));
 }
 
+std::ostream& Cylinder::Print(std::ostream& os) const
+{
+  os << "Cylinder("<<GetLength() <<", "<< GetRadius() << ", " << GetCenter() << ")";
+  return os;
+}
+
+}
+
+std::ostream& operator<<(std::ostream& oss, const I3Surfaces::Cylinder& p)
+{
+  return(p.Print(oss));
 }
 
 // explicitly instantiate the base classes used

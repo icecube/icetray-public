@@ -64,14 +64,13 @@ void register_Surface()
 	    .def("maximum_area", &SamplingSurface::GetMaximumArea)
 	    .def("sample_impact_ray", &SampleImpactRay, (arg("self"), arg("rng"), arg("cosMin")=0, arg("cosMax")=1))
 	    .def("sample_impact_position", &SamplingSurface::SampleImpactPosition, (arg("self"), arg("dir"), arg("rng")))
+            .def("acceptance", &SamplingSurface::GetAcceptance, (arg("cosMin")=0., arg("cosMax")=1.))
 	;
 	
 	implicitly_convertible<SamplingSurfacePtr, SamplingSurfaceConstPtr>();
 	
 	class_<Cylinder, CylinderPtr, bases<SamplingSurface> >("Cylinder",
 	    init<double, double, I3Position>((arg("length"), arg("radius"), arg("center")=I3Position(0,0,0))))
-          .def("GetAreaForZenith",&Cylinder::GetAreaForZenith)
-          .def("GetAreaForZenithAntiDerivative",&Cylinder::GetAreaForZenithAntiDerivative)
 	    .def(copy_suite<Cylinder>())
 	    #define PROPS (Length)(Radius)(Center)
 	    BOOST_PP_SEQ_FOR_EACH(WRAP_PROP, Cylinder, PROPS)

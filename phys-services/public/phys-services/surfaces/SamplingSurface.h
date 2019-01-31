@@ -29,6 +29,7 @@ public:
 	 */
 	virtual double GetArea(const I3Direction &dir) const = 0;
 	virtual double GetMaximumArea() const = 0;
+	virtual double GetAcceptance(double cosMin=0, double cosMax=1) const=0;
 
 	virtual I3Direction SampleDirection(I3RandomService &rng, double cosMin=0, double cosMax=1) const;
 	virtual I3Position SampleImpactPosition(const I3Direction &dir, I3RandomService &rng) const = 0;

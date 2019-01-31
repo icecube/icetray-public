@@ -4,7 +4,9 @@ Release Notes
 
 trunk
 -----
-- move `Cylinder::GetAreaForZenith` to public and add `Cylinder::GetAreaForZenithAntiDerivative`
+- fix and simplify `I3Surfaces::Cylinder::acceptance` and add pybindings and unit tests for it
+- add `Print()` and `operator<<` for `I3Surfaces::Cylinder`
+- add `I3OMGeo::mDOM` case to switch statement in I3GeometryDecomposer
 
 November 26, 2018, Juan Carlos Diaz Velez (juancarlos@icecube.wisc.edu)
 --------------------------------------------------------
