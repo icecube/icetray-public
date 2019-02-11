@@ -69,5 +69,6 @@ configure_file(
     @ONLY)
     
 execute_process(COMMAND svn pg svn:externals ${CMAKE_SOURCE_DIR}
-  OUTPUT_FILE ${SPHINX_DIR}/conf/svn-externals.txt)
+  OUTPUT_FILE ${SPHINX_DIR}/conf/svn-externals.txt
+  ERROR_QUIET)
 
