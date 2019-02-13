@@ -110,8 +110,13 @@ endif(SYSTEM_PACKAGES)
 set(NOTES_DIR ${CMAKE_BINARY_DIR}/Testing/Notes)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/Testing/Notes)
 
-execute_process(COMMAND svn info ${CMAKE_SOURCE_DIR}
-  OUTPUT_FILE ${NOTES_DIR}/svn_info.txt)
+if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/.svn")
+  execute_process(COMMAND svn info ${CMAKE_SOURCE_DIR}
+    OUTPUT_FILE ${NOTES_DIR}/svn_info.txt)
+else()
+  execute_process(COMMAND git svn info ${CMAKE_SOURCE_DIR}
+    OUTPUT_FILE ${NOTES_DIR}/svn_info.txt)
+endif()
 
 execute_process(COMMAND /usr/bin/env
   OUTPUT_FILE ${NOTES_DIR}/env.txt)
@@ -177,10 +182,19 @@ option(USE_SVN_REVISION_FLAGS "Add compiled-in svn revision information." ON)
 
 if(NOT HAVE_SVN_REVISION)
   set(HAVE_SVN_REVISION TRUE CACHE INTERNAL "flag")
+  if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/.svn")
   execute_process(COMMAND ${SVN_EXECUTABLE} info ${CMAKE_SOURCE_DIR}
     COMMAND awk "/^Revision:/ { printf $2 }"
     OUTPUT_VARIABLE SVN_REVISION
     ERROR_VARIABLE SVN_REVISION_ERROR)
+else()
+  message("PEWP: csd: ${CMAKE_SOURCE_DIR}")
+  execute_process(COMMAND git svn info
+    COMMAND awk "/^Revision:/ { printf $2 }"
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE SVN_REVISION
+    ERROR_VARIABLE SVN_REVISION_ERROR)
+  endif()
 
   if (SVN_REVISION STREQUAL "")
     set(SVN_REVISION_ERROR TRUE)
@@ -207,9 +221,16 @@ endif(NOT HAVE_SVN_REVISION)
 #
 if(NOT HAVE_SVN_URL)
   set(HAVE_SVN_URL TRUE CACHE INTERNAL "flag")
+  if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/.svn")
   execute_process(COMMAND ${SVN_EXECUTABLE} info ${CMAKE_SOURCE_DIR}
     COMMAND awk "/^URL:/ { printf $2 }"
     OUTPUT_VARIABLE SVN_URL)
+  else()
+  execute_process(COMMAND git svn info
+    COMMAND awk "/^URL:/ { printf $2 }"
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE SVN_URL)
+  endif()
 
   if(NOT SVN_EXECUTABLE)
     set(SVN_URL "Unknown")
