@@ -114,7 +114,8 @@ if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/.svn")
   execute_process(COMMAND svn info ${CMAKE_SOURCE_DIR}
     OUTPUT_FILE ${NOTES_DIR}/svn_info.txt)
 else()
-  execute_process(COMMAND git svn info ${CMAKE_SOURCE_DIR}
+  execute_process(COMMAND git svn info
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     OUTPUT_FILE ${NOTES_DIR}/svn_info.txt)
 endif()
 
