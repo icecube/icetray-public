@@ -33,10 +33,35 @@ the service. A simple script could look something like this::
     tray.Execute()
     
 
-Here, the I3HDFTableService table_service is passed as a parameter to
-I3TableWriter. The other parameter, 'keys', is a list of frame object
+Here, I3HDFTableWriter is a tray segment that sets up a table service and an
+I3TableWriter module. The 'keys' parameter is a list of frame object
 names. Any objects in the file named 'LineFit' will be written to a table
 called 'LineFit' in the HDF5 file 'foo.hd5'.
+
+You may have noticed the parameter `SubEventStreams` above. In triggered data,
+each global trigger readout window is contained in a Q ("DAQ") frame, followed
+by zero or more P ("Physics") frames that represent different views into that
+event, each with its own pulse selection, reconstructions, etc. Each class of
+selection has a name ("in_ice" in the above example), and are usually based on
+a specific sub-trigger, e.g. SMT-8, excluding windows only joined into a global
+trigger due to long triggers like Fixed-Rate (FRT). There can be multiple P
+frames from a given stream attached to one Q frame; these are numbered with an
+index and are disjoint by convention. Since I3TableWriter treats frames as
+disjoint events, you usually want to give it a single SubEventStream to handle.
+
+Booking untriggered simulation files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Since P frames are created as an artifact of trigger post-processing, they do
+not exist in low-level simulation files, e.g. immediately after I3CORSIKAReader. To convert these files to tables with tableio, use one of the
+special-purpose segments, e.g.::
+    
+    from icecube.hdfwriter import I3SimHDFWriter
+    tray.AddSegment(I3SimHDFWriter,
+                   output="foo.hdf5",
+                   keys=['LineFit','InIceRawData'],
+                  )
+Note that I3SimHDFWriter does not have a `SubEventStreams` parameter.
 
 Specifying objects by key
 *************************
