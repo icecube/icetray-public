@@ -1,0 +1,7 @@
+# Ignore files that are created after executing cmake.
+python/artists/mplart/QtMPLArtist.py
+python/embed/console.py
+python/embed/console_widget.py
+python/util/help.py
+resources/steamshovel.qrc.depends
+resources/test/test_shovelscripts.py
