@@ -72,6 +72,7 @@ void register_Surface()
 	class_<Cylinder, CylinderPtr, bases<SamplingSurface> >("Cylinder",
 	    init<double, double, I3Position>((arg("length"), arg("radius"), arg("center")=I3Position(0,0,0))))
 	    .def(copy_suite<Cylinder>())
+	    .def(dataclass_suite<Cylinder>())
 	    #define PROPS (Length)(Radius)(Center)
 	    BOOST_PP_SEQ_FOR_EACH(WRAP_PROP, Cylinder, PROPS)
 	    #undef PROPS
@@ -92,5 +93,6 @@ void register_Surface()
 	class_<AxialCylinder, bases<SamplingSurface> >("AxialCylinder",
 	    init<double,double,I3Position>((bp::arg("length"), bp::arg("radius"), bp::arg("center")=I3Position(0,0,0))))
 	    .def(init<double,double,double,I3Position>((bp::arg("lengthBefore"), "lengthAfter", "radius", bp::arg("center")=I3Position(0,0,0))))
+          .def(dataclass_suite<AxialCylinder>())
 	;
 }

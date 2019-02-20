@@ -74,6 +74,13 @@ AxialCylinder::SampleImpactPosition(const I3Direction &dir, I3RandomService &rng
 	return impact;
 }
 
+
+  std::ostream& AxialCylinder::Print(std::ostream& os) const
+  {
+    os << "AxialCylinder("<<length_.first <<", "<< length_.second <<", " << radius_ << ", " << center_ << ")";
+    return os;
+  }
+  
 template <typename Archive>
 void
 AxialCylinder::serialize(Archive &ar, unsigned version)
@@ -89,6 +96,11 @@ AxialCylinder::serialize(Archive &ar, unsigned version)
 
 AxialCylinder::~AxialCylinder() {}
 
+}
+
+std::ostream& operator<<(std::ostream& oss, const I3Surfaces::AxialCylinder& p)
+{
+  return(p.Print(oss));
 }
 
 I3_SERIALIZABLE(I3Surfaces::AxialCylinder);

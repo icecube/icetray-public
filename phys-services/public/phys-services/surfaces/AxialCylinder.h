@@ -42,11 +42,15 @@ private:
 	std::pair<double, double> length_;
 	double radius_;
 	I3Position center_;
+public:
+  std::ostream& Print(std::ostream& os) const;
 };
 
 I3_POINTER_TYPEDEFS(AxialCylinder);
 
 }
+
+std::ostream& operator<<(std::ostream& oss, const I3Surfaces::AxialCylinder& p);  
 
 I3_CLASS_VERSION(I3Surfaces::AxialCylinder, 0);
 

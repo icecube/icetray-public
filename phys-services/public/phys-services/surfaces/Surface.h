@@ -10,6 +10,7 @@
 #define I3SURFACES_SURFACE_H_INCLUDED
 
 #include <icetray/I3PointerTypedefs.h>
+#include <icetray/I3FrameObject.h>
 #include <icetray/serialization.h>
 
 class I3Direction;
@@ -22,7 +23,7 @@ namespace I3Surfaces {
  *
  * Surface knows how to find the intersections of a ray with itself.
  */
-class Surface {
+  class Surface: public I3FrameObject {
 public:
 	virtual ~Surface();
 	/**
