@@ -189,7 +189,6 @@ if(NOT HAVE_SVN_REVISION)
     OUTPUT_VARIABLE SVN_REVISION
     ERROR_VARIABLE SVN_REVISION_ERROR)
 else()
-  message("PEWP: csd: ${CMAKE_SOURCE_DIR}")
   execute_process(COMMAND git svn info
     COMMAND awk "/^Revision:/ { printf $2 }"
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
