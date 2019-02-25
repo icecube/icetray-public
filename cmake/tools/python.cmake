@@ -52,6 +52,7 @@ endif()
 #
 string(REPLACE " " ";" PYTHON_VERSION_LIST ${PYTHON_VERSION})
 list(GET PYTHON_VERSION_LIST 1 PYTHON_VERSION)
+string(STRIP "${PYTHON_VERSION}" PYTHON_VERSION)
 
 #
 # Provide version in numeric form for comparison
