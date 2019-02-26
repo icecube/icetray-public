@@ -84,7 +84,7 @@ set(I3_BUILD ${CMAKE_BINARY_DIR})
 set(SPHINX_DIR "${CMAKE_BINARY_DIR}/sphinx_src")
 
 # pull SVN revision from cache
-load_cache(${HOST_I3_BUILD} READ_WITH_PREFIX "" SVN_REVISION SVN_URL META_PROJECT)
+load_cache(${HOST_I3_BUILD} READ_WITH_PREFIX "" SVN_REVISION SVN_URL META_PROJECT PYTHON_VERSION)
 set(HAVE_META_PROJECT TRUE)
 set(HAVE_SVN_REVISION TRUE)
 # use a more idiomatic name for the tarball
@@ -187,6 +187,28 @@ foreach(TOOL_ ${ALL_TOOLS})
     ${TOOL}_LIBRARIES
     ${TOOL}_LINK_FLAGS)  
 endforeach(TOOL_ ${ALL_TOOLS})
+# PYTHON_VERSION was not always defined
+if(NOT DEFINED PYTHON_VERSION)
+  load_cache(${HOST_I3_BUILD} READ_WITH_PREFIX ""
+    PYTHON_EXECUTABLE)
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} -V
+    OUTPUT_VARIABLE STDOUT_VERSION
+    ERROR_VARIABLE PYTHON_VERSION
+    ERROR_STRIP_TRAILING_WHITESPACE)
+
+  if(STDOUT_VERSION MATCHES "Python")
+    set(PYTHON_VERSION "${STDOUT_VERSION}")
+  endif()
+
+  #
+  # 'python -V' returns 'Python 2.7.15rc1'
+  # I think we can trust that the version refers to the python
+  # version and discard the name.
+  #
+  string(REPLACE " " ";" PYTHON_VERSION_LIST ${PYTHON_VERSION})
+  list(GET PYTHON_VERSION_LIST 1 PYTHON_VERSION)
+  string(STRIP "${PYTHON_VERSION}" PYTHON_VERSION)
+endif()
 
 # use tools from the previous cache
 macro(use_tool TARGET TOOL_)
