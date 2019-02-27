@@ -1,100 +1,142 @@
-import json
-import bz2
-import numpy
 
-from copy import deepcopy
+import os, numpy
+from icecube import icetray, dataclasses
 
-from icecube import icetray
-from icecube import dataclasses
+def convert_omkey(key):
+    try:
+        string = int(key.split(',')[0])
+        om = int(key.split(',')[1])
+        omkey = icetray.OMKey(string, om)
+        return omkey
+    except ValueError:
+        icetray.logging.log_warn("%s is not an OMKey" % str(key))
 
-class I3SPEFitInjector(icetray.I3Module):
-    ''' This module loads the structures in dataclasses using values
-        in the JSON file provided by the calibration group.
-        https://wiki.icecube.wisc.edu/index.php/SPE_recalibration
+
+def is_new_style(fit_values):
     '''
-    def __init__(self, context):
-        icetray.I3Module.__init__(self, context)
+    Determine whether we're looking at an old JSON
+    file or new JSON file.
+    '''
+    for key, fits in fit_values.items():
+        if 'exp2_amp' in fits:
+            return True
+    return False
+    
+class SPEFitInjector:
+    def __init__(self, filename):
+        import json
+        
+        self.filename = filename
+        if not os.path.exists(self.filename):
+            icetray.logging.log_fatal("%s file does not exist." % self.filename)
 
-        self.AddOutBox("OutBox")
-        self.AddParameter("Filename", "JSON (may bz2 compressed) file with SPE fit data", "")
+        with open(self.filename) as f:
+            self.fit_values = json.load(f)                
 
-    def Configure(self):
-        ''' Give the filename, read and load the constants in this method.'''
-        self.filename = self.GetParameter("Filename")
+        self.new_style = is_new_style(self.fit_values)
+            
+    def __repr__(self):
+        return 'FitInjector(%s)' % self.filename
 
-        if self.filename.endswith('.bz2'):
-            json_fit_values = json.loads(bz2.BZ2File(self.filename).read())
-        else:
-            f = open(self.filename)
-            json_fit_values = json.load(f)
+    def __load_from_new_json(self, frame):
 
-        self.fit_dict = dict()
-        for key, data in json_fit_values.items():
+        cal = frame['I3Calibration']
+
+        attributes = ['exp1_amp','exp1_width', 'exp2_amp', 'exp2_width',                      
+                      'gaus_amp', 'gaus_mean', 'gaus_width', 'compensation_factor',
+                      'slc_gaus_mean']
+        
+        for key, fits in self.fit_values.items():
+            omkey = convert_omkey(key)
+            if not omkey:
+                continue
+
+            spe_distribution = dataclasses.SPEChargeDistribution()
+            for attr in attributes:
+                if attr.startswith('slc_'):
+                    setattr(spe_distribution, attr, fits['SLC_fit'][attr.replace('slc_','')])
+                else:
+                    setattr(spe_distribution, attr, fits['ATWD_fit'][attr])
+            if omkey in cal.dom_cal:
+                cal.dom_cal[omkey].combined_spe_charge_distribution = spe_distribution
+            else:
+                icetray.logging.log_warn("SPE Fit for %s has no calibration object." % str(omkey))
+                
+        del frame['I3Calibration']
+        frame['I3Calibration'] = cal
+
+    def __load_from_old_json(self, frame):
+    
+        cal = frame['I3Calibration']
+        
+        domcal = cal.dom_cal
+        for key, fits in self.fit_values.items():
+            omkey = convert_omkey(key)
+            if not omkey:
+                continue
+
+            if omkey not in domcal:
+                continue
 
             # we don't really use the validity date in offline anymore
             if key == 'valid_date':
                 continue
             if key == 'year':
                 continue
-
+            
             # if none of the data is valid it's OK to skip entries.
-            if bool(data['JOINT_fit']['valid']) == False and \
-              bool(data['ATWD_fit']['valid']) == False and \
-              bool(data['FADC_fit']['valid']) == False :
+            if bool(fits['JOINT_fit']['valid']) == False and \
+              bool(fits['ATWD_fit']['valid']) == False and \
+              bool(fits['FADC_fit']['valid']) == False :
                 continue
+            
+            i3domcal = domcal[omkey]
+            spe_charge_dist = dataclasses.SPEChargeDistribution()
+            spe_charge_dist.exp1_amp = float(fits['JOINT_fit']['exp_norm'])
+            spe_charge_dist.exp1_width = float(fits['JOINT_fit']['exp_scale']) 
+            spe_charge_dist.gaus_amp = float(fits['JOINT_fit']['gaus_norm'])
+            spe_charge_dist.gaus_mean = float(fits['JOINT_fit']['gaus_mean'])
+            spe_charge_dist.gaus_width = float(fits['JOINT_fit']['gaus_stddev'])
+
+            spe_charge_dist.exp2_amp = 0.
+            spe_charge_dist.exp2_width = 1.
+            spe_charge_dist.compensation_factor = 1.
+            spe_charge_dist.slc_gaus_mean = 1.
                 
-            string = int(key.split(",")[0])
-            om = int(key.split(",")[1])
+            i3domcal.combined_spe_charge_distribution = spe_charge_dist
 
-            omkey = icetray.OMKey(string, om)
-
-            # set atwd/fadc means to NaN, consistent with
-            # the treatment in dataclasses, if they're invalid
-            atwd_mean = float(data['ATWD_fit']['gaus_mean']) \
-                if bool(data['ATWD_fit']['valid']) == True \
+            atwd_mean = float(fits['ATWD_fit']['gaus_mean']) \
+                if bool(fits['ATWD_fit']['valid']) == True \
                 else numpy.nan
                 
-            fadc_mean = float(data['FADC_fit']['gaus_mean']) \
-                if bool(data['FADC_fit']['valid']) == True \
+            fadc_mean = float(fits['FADC_fit']['gaus_mean']) \
+                if bool(fits['FADC_fit']['valid']) == True \
                 else numpy.nan
 
-            exp_amp = float(data['JOINT_fit']['exp_norm'])
-            exp_width = float(data['JOINT_fit']['exp_scale']) 
-            gaus_amp = float(data['JOINT_fit']['gaus_norm'])
-            gaus_mean = float(data['JOINT_fit']['gaus_mean'])
-            gaus_width = float(data['JOINT_fit']['gaus_stddev'])
-                        
-            self.fit_dict[omkey] = {'atwd_mean' : atwd_mean,
-                                    'fadc_mean' : fadc_mean,
-                                    'exp_amp': exp_amp,
-                                    'exp_width': exp_width,
-                                    'gaus_amp': gaus_amp,
-                                    'gaus_mean': gaus_mean,
-                                    'gaus_width': gaus_width
-                                    }
-        
-    def Calibration(self, frame):
+            i3domcal.mean_atwd_charge = atwd_mean
+            i3domcal.mean_fadc_charge = fadc_mean
+            
+            cal.dom_cal[omkey] = i3domcal
 
-        # make a deepcopy so we don't change objects expected
-        # to be const on the C++ side. 
-        cal = deepcopy(frame['I3Calibration'])
         del frame['I3Calibration']
-
-        domcal = cal.dom_cal
-        for omkey, i3domcal in domcal.items():
-            if omkey in self.fit_dict:
-                i3domcal.mean_atwd_charge = self.fit_dict[omkey]['atwd_mean']
-                i3domcal.mean_fadc_charge = self.fit_dict[omkey]['fadc_mean']
-
-                spe_charge_dist = dataclasses.SPEChargeDistribution()
-                spe_charge_dist.exp_amp = self.fit_dict[omkey]['exp_amp']
-                spe_charge_dist.exp_width = self.fit_dict[omkey]['exp_width']
-                spe_charge_dist.gaus_amp = self.fit_dict[omkey]['gaus_amp']
-                spe_charge_dist.gaus_mean = self.fit_dict[omkey]['gaus_mean']
-                spe_charge_dist.gaus_width = self.fit_dict[omkey]['gaus_width']
-
-                i3domcal.combined_spe_charge_distribution = spe_charge_dist
-                cal.dom_cal[omkey] = i3domcal
-
         frame['I3Calibration'] = cal
+
+    def __call__(self, frame):
+        if self.new_style:
+            self.__load_from_new_json(frame)
+        else:
+            self.__load_from_old_json(frame)            
+        
+class I3SPEFitInjector(icetray.I3Module):
+    def __init__(self, context):
+        icetray.I3Module.__init__(self, context)
+        self.AddParameter("Filename", "Uncompressed JSON file with SPE fit data", "")
+	    
+    def Configure(self):
+        self.spe_fit_injector = SPEFitInjector(self.GetParameter("Filename"))
+
+    def Calibration(self, frame):
+        self.spe_fit_injector(frame)
         self.PushFrame(frame)
+
+
