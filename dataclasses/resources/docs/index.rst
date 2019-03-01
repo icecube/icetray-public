@@ -24,6 +24,7 @@ Table of Contents:
    masks
    vector_math
    i3direction
+   i3Position
    i3mctree
    python
    faq-common-probs
