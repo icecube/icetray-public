@@ -20,24 +20,26 @@
 
 
 
-# search for ROOT's Minuit2
-TOOLDEF(minuit2
-   ${ROOTSYS}/include
-   Minuit2/MnConfig.h
-   ${ROOTSYS}/lib
-   NONE # bin is n/a, placeholder
-   Minuit2
-   )
+if(USE_ROOT)
+    # search for ROOT's Minuit2
+    TOOLDEF(minuit2
+       ${ROOTSYS}/include
+       Minuit2/MnConfig.h
+       ${ROOTSYS}/lib
+       NONE # bin is n/a, placeholder
+       Minuit2
+       )
 
-if(NOT MINUIT2_FOUND)
-  TOOLDEF(minuit2
-    ${ROOTSYS}/include/root
-    Minuit2/MnConfig.h
-    ${ROOTSYS}/lib/root
-    NONE # bin is n/a, placeholder
-    Minuit2
-    )
-endif(NOT MINUIT2_FOUND)
+    if(NOT MINUIT2_FOUND)
+      TOOLDEF(minuit2
+        ${ROOTSYS}/include/root
+        Minuit2/MnConfig.h
+        ${ROOTSYS}/lib/root
+        NONE # bin is n/a, placeholder
+        Minuit2
+        )
+    endif(NOT MINUIT2_FOUND)
+endif(USE_ROOT)
 
 # search for the system installed Minuit2
 if(NOT MINUIT2_FOUND)
@@ -51,10 +53,12 @@ if(NOT MINUIT2_FOUND)
     )
 endif(NOT MINUIT2_FOUND)
 
-if(ROOT_FOUND)
-    if(${ROOT_VERSION} LESS 5.30)
-        set(MINUIT2_FOUND FALSE)
-        unset(MINUIT2_INCLUDE_DIR)
-        message(STATUS "- Minuit2: ROOT < 5.30 not supported")
-    endif(${ROOT_VERSION} LESS 5.30)
-endif(ROOT_FOUND)
+if(USE_ROOT)
+    if(ROOT_FOUND)
+        if(${ROOT_VERSION} LESS 5.30)
+            set(MINUIT2_FOUND FALSE)
+            unset(MINUIT2_INCLUDE_DIR)
+            message(STATUS "- Minuit2: ROOT < 5.30 not supported")
+        endif(${ROOT_VERSION} LESS 5.30)
+    endif(ROOT_FOUND)
+endif(USE_ROOT)
