@@ -39,21 +39,19 @@ if(USE_ROOT)
         Minuit2
         )
     endif(NOT MINUIT2_FOUND)
-endif(USE_ROOT)
 
-# search for the system installed Minuit2
-if(NOT MINUIT2_FOUND)
-    unset(MINUIT2_INCLUDE_DIR)
-    TOOLDEF(minuit2
-        include/Minuit2
-        Minuit2/MnConfig.h
-        lib/Minuit2
-        NONE # bin is n/a, placeholder
-        Minuit2
-    )
-endif(NOT MINUIT2_FOUND)
+    # search for the system installed Minuit2
+    if(NOT MINUIT2_FOUND)
+        unset(MINUIT2_INCLUDE_DIR)
+        TOOLDEF(minuit2
+            include/Minuit2
+            Minuit2/MnConfig.h
+            lib/Minuit2
+            NONE # bin is n/a, placeholder
+            Minuit2
+        )
+    endif(NOT MINUIT2_FOUND)
 
-if(USE_ROOT)
     if(ROOT_FOUND)
         if(${ROOT_VERSION} LESS 5.30)
             set(MINUIT2_FOUND FALSE)
@@ -61,4 +59,6 @@ if(USE_ROOT)
             message(STATUS "- Minuit2: ROOT < 5.30 not supported")
         endif(${ROOT_VERSION} LESS 5.30)
     endif(ROOT_FOUND)
+else(USE_ROOT)
+    message(STATUS "- Minuit2: USE_ROOT set to FALSE")
 endif(USE_ROOT)
