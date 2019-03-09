@@ -438,7 +438,7 @@ SPEChargeDistribution::load(Archive& ar, unsigned version)
     ar & make_nvp("Exp1Amp", exp1_amp);
     ar & make_nvp("Exp1Width", exp1_width);
     ar & make_nvp("CompensationFactor", compensation_factor);
-    ar & make_nvp("SLCGasuMean", SLC_gaus_mean);
+    ar & make_nvp("SLCGausMean", SLC_gaus_mean);
   }else{
     ar & make_nvp("ExpAmp", exp2_amp);
     ar & make_nvp("ExpWidth", exp2_width);
