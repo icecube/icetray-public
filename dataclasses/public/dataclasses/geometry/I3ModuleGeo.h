@@ -55,13 +55,11 @@ static const unsigned i3modulegeo_version_ = 0;
 class I3ModuleGeo : public I3FrameObject
 {
 public:
-    enum ModuleType {
-        UnknownType = 0,
-        AMANDA = 10,
-        IceCube = 20,
-        IceTop = 30,
-        mDOM = 40
-    };
+    enum ModuleType {UnknownType = 0, AMANDA = 10, IceCube = 20, IceTop = 30, 
+		     mDOM = 40, Scintillator = 45, // These do NOT match the enums in I3OMGeo! 
+		     IceAct = 50,
+		     // OMType > 100 are Gen2 R&D optical modules
+		     PDOM = 110, DEgg = 120, WOM = 140, FOM = 150 };
     
     I3ModuleGeo();
     ~I3ModuleGeo();
