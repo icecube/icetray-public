@@ -7,7 +7,7 @@
  *  
  */
 
-#include <icetray/I3Module.h>
+#include <icetray/I3ConditionalModule.h>
 #include <icetray/I3Units.h>
 #include <dataclasses/geometry/I3Geometry.h>
 #include <dataclasses/geometry/I3OMGeo.h>
@@ -27,7 +27,7 @@
  * assuming that all existing DOMs are IceCube
  * single-PMT DOMs.
  */
-class I3GeometryDecomposer : public I3Module
+class I3GeometryDecomposer : public I3ConditionalModule
 {
 public:
     I3GeometryDecomposer(const I3Context& context);
@@ -50,17 +50,12 @@ I3_MODULE(I3GeometryDecomposer);
 
 I3GeometryDecomposer::I3GeometryDecomposer(const I3Context& context)
 :
-I3Module(context),
+I3ConditionalModule(context),
 deleteI3Geometry_(false)
 {
     AddParameter("DeleteI3Geometry",
                  "Get rid of the original I3Geometry object.",
                  deleteI3Geometry_);
-    
-    AddParameter("If",
-                 "A python function... if this returns something that evaluates to True,"
-                 " Module runs, else it doesn't",
-                 if_);
 
     AddOutBox("OutBox");
 }
@@ -70,37 +65,11 @@ I3GeometryDecomposer::Configure()
 {
     GetParameter("DeleteI3Geometry", deleteI3Geometry_);
     
-    boost::python::object configured_if_;
-    GetParameter("If", configured_if_);
-    if (if_.ptr() != configured_if_.ptr()) // user set the parameter to something
-    {
-        if (!PyCallable_Check(configured_if_.ptr())) {
-            log_fatal("'If' parameter to module %s must be a callable object", GetName().c_str());
-        } else {
-            if_ = configured_if_;
-            use_if_ = true;
-        }
-    } else {// got nothing from user
-        use_if_ = false;
-    }
-
 }
 
 void
 I3GeometryDecomposer::Geometry(I3FramePtr frame)
 {
-    if (use_if_) {
-        // check the python callback to see if we should work on this frame
-        boost::python::object rv = if_(frame);
-        bool flag = boost::python::extract<bool>(rv);
-        
-        if (!flag) {
-            // skip this frame
-            PushFrame(frame);
-            return;
-        }
-    }
-
     I3GeometryConstPtr geometry = frame->Get<I3GeometryConstPtr>();
 
     if (!geometry)
@@ -113,7 +82,6 @@ I3GeometryDecomposer::Geometry(I3FramePtr frame)
     frame->Put("EndTime",       I3TimePtr         (new I3Time         (geometry->endTime   )));
 
     frame->Put("Subdetectors",  GenerateSubdetectorMap(geometry->omgeo));
-
     
     const double bedrockDepth = 2810.*I3Units::m;
     const double icecubeCenterDepth = 1948.07*I3Units::m;
@@ -175,7 +143,7 @@ I3GeometryDecomposer::GenerateSubdetectorMap(const I3OMGeoMap &omgeo) const
             continue;
         }
 
-        (*output)[key] = "PINGU";
+        (*output)[key] = "Upgrade";
     }
 
     return output;
@@ -215,8 +183,19 @@ I3GeometryDecomposer::GenerateI3ModuleGeo(const I3OMGeoMap &omgeo) const
             case I3OMGeo::UnknownType: output_geo.SetModuleType(I3ModuleGeo::UnknownType); break;
             case I3OMGeo::AMANDA:      output_geo.SetModuleType(I3ModuleGeo::AMANDA);      break;
             case I3OMGeo::IceCube:     output_geo.SetModuleType(I3ModuleGeo::IceCube);     break;
-            case I3OMGeo::IceTop:      output_geo.SetModuleType(I3ModuleGeo::IceTop);      break;
+
+	    // Surface detectors
+            case I3OMGeo::IceTop:       output_geo.SetModuleType(I3ModuleGeo::IceTop);        break;
+	    case I3OMGeo::Scintillator: output_geo.SetModuleType(I3ModuleGeo::Scintillator);  break;
+	    case I3OMGeo::IceAct:       output_geo.SetModuleType(I3ModuleGeo::IceAct);        break;
+
+	    // New module types
             case I3OMGeo::mDOM:        output_geo.SetModuleType(I3ModuleGeo::mDOM);        break;
+            case I3OMGeo::PDOM:        output_geo.SetModuleType(I3ModuleGeo::PDOM);        break;
+            case I3OMGeo::DEgg:        output_geo.SetModuleType(I3ModuleGeo::DEgg);        break;
+            case I3OMGeo::WOM:         output_geo.SetModuleType(I3ModuleGeo::WOM);         break;
+            case I3OMGeo::FOM:         output_geo.SetModuleType(I3ModuleGeo::FOM);         break;
+
             default:
                 log_debug("Unknown input OMType number %u. Using I3ModuleGeo::ModuleType \"Unknown\".",
                           static_cast<unsigned int>(input_geo.omtype));
