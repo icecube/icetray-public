@@ -362,7 +362,7 @@ I3SuperDST::Unpack() const
 						prev->SetWidth(current->GetWidth());
 					current->SetWidth(prev->GetWidth()/2.);
 					prev->SetWidth(prev->GetWidth()/2.);
-					current->SetTime(current->GetTime()+prev->GetWidth());
+					current->SetTime(prev->GetTime()+prev->GetWidth());
 					merge = false;
 				} else {
 					merge = true;
