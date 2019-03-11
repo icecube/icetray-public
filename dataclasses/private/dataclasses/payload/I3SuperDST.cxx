@@ -350,19 +350,28 @@ I3SuperDST::Unpack() const
 		prev = target.second.end();
 		current = target.second.begin();
 		next = current+1;
+		bool merge = false;
 		/* Ensure that pulses do not overlap. */
 		while (next < target.second.end()) {
 			current->SetWidth(std::min(current->GetWidth(),
 			    float(next->GetTime()-current->GetTime())));
-			if (current->GetWidth() == 0 && prev != target.second.end()) {
-				/* Merge with previous pulse */
-				prev->SetCharge(prev->GetCharge()+current->GetCharge());
-				prev->SetFlags(prev->GetFlags() | current->GetFlags());
-				current = target.second.erase(current);
+			if (current->GetWidth() == 0 || merge) {
+				if (prev != target.second.end()) {
+					/* Merge widths with previous pulse */
+					if (prev->GetWidth() == 0 && current->GetWidth() > 0)
+						prev->SetWidth(current->GetWidth());
+					current->SetWidth(prev->GetWidth()/2.);
+					prev->SetWidth(prev->GetWidth()/2.);
+					current->SetTime(current->GetTime()+prev->GetWidth());
+					merge = false;
+				} else {
+					merge = true;
+				}
 			} else {
-				prev = current;
-				current++;
+				merge = false;
 			}
+			prev = current;
+			current++;
 			next = current+1;
 		}
 	}
