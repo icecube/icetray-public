@@ -81,7 +81,11 @@ if [[ "$SROOTBASE" != "@CVMFS_SROOTBASE@" ]]; then
 fi
 _GSL_FOUND=@GSL_FOUND@
 if [[ "${_GSL_FOUND}" == "TRUE" ]]; then
-    GSL_LIBRARY_DIR=`gsl-config_@GSL_VERSION@ --prefix`/lib/gsl-@GSL_VERSION@
+     if [[ "@GSL_VERSION@" ]]; then
+        GSL_LIBRARY_DIR=`gsl-config_@GSL_VERSION@ --prefix`/lib/gsl-@GSL_VERSION@
+    else
+        GSL_LIBRARY_DIR=`gsl-config --prefix`/lib/gsl
+    fi
     if [[ -d ${GSL_LIBRARY_DIR} ]]; then
 	_LD_LIBRARY_PATH=${_LD_LIBRARY_PATH}:${GSL_LIBRARY_DIR}
 	_DYLD_LIBRARY_PATH=${_DYLD_LIBRARY_PATH}:${GSL_LIBRARY_DIR}
