@@ -53,6 +53,7 @@ foreach(e "breathe" )
 
 
 i3_project(docs)
+find_package(Doxygen QUIET)
 
 i3_executable_script(build resources/scripts/docs-build.py)
 
