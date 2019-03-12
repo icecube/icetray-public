@@ -34,7 +34,7 @@ if (SYSTEM_PACKAGES)
   #
   # Make a first pass at finding boost, with no components specified, just to figure out
   # what version of boost we're dealing with.  We'll add the components later.
-  find_package(Boost 1.38.0) # NB: 1.38.0 is the minimum version required.
+  find_package(Boost 1.57.0) # NB: 1.57.0 is the minimum version required.
 
   # If the first find failed, there's little hope of either of the next three searches
   # successfully finding boost, especially in the cases where Boost_VERSION* isn't set.
@@ -45,11 +45,14 @@ if (SYSTEM_PACKAGES)
     # Now that boost was found and we know which version, we can choose the correct
     # boost::python libraries that match the python version we're building against.
     if ((Boost_VERSION GREATER 106700) OR (Boost_VERSION EQUAL 106700))
-      find_package(Boost ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION} EXACT COMPONENTS
-                   python${PYTHON_STRIPPED_MAJOR_MINOR_VERSION} ${BASE_COMPONENTS})
+      find_package(Boost ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION} EXACT
+	           COMPONENTS python${PYTHON_STRIPPED_MAJOR_MINOR_VERSION} ${BASE_COMPONENTS}
+		   REQUIRED)
     else()
       # Old boost, so find using the old method
-      find_package(Boost ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION} COMPONENTS python ${BASE_COMPONENTS})
+      find_package(Boost ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}
+	           COMPONENTS python ${BASE_COMPONENTS}
+		   REQUIRED)
     endif()
   endif()
   
@@ -58,23 +61,11 @@ if (SYSTEM_PACKAGES)
   endif ()
 endif ()
 
-if((NOT SYSTEM_PACKAGES) OR (NOT Boost_FOUND))
-  set(BOOST_PORTSVERSION "1.38.0" CACHE PATH "The boost version.")
-  set(BOOST_INCLUDEDIR ${I3_PORTS}/include/boost-${BOOST_PORTSVERSION})
-  set(BOOST_LIBRARYDIR ${I3_PORTS}/lib/boost-${BOOST_PORTSVERSION})
-  set(Boost_NO_SYSTEM_PATHS TRUE)
-  find_package(Boost ${BOOST_PORTSVERSION} EXACT REQUIRED COMPONENTS python system thread date_time filesystem program_options regex iostreams)
-endif((NOT SYSTEM_PACKAGES) OR (NOT Boost_FOUND))
-
 if(Boost_FOUND)
   set(BOOST_FOUND TRUE CACHE BOOL "Boost found successfully")
   set(BOOST_INCLUDE_DIR ${Boost_INCLUDE_DIR} CACHE PATH "Path to the boost include directories.")
   set(BOOST_LIBRARIES ${Boost_LIBRARIES} CACHE PATH "Boost libraries")
-  if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-${BOOST_PORTSVERSION})
-    include_directories(${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-${BOOST_PORTSVERSION})
-  else()
-    include_directories(${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-new)
-  endif()
+  include_directories(${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-new)
 
   if(${BUILDNAME} MATCHES "ARCH")
   foreach(lib ${BOOST_LIBRARIES})

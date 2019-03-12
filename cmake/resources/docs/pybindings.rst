@@ -385,7 +385,7 @@ Resources
 _________
 
 - `Boost::Python wiki at python.org <http://wiki.python.org/moin/boost.python/HowTo>`_
-- `Boost::Python reference guide <http://www.boost.org/doc/libs/1_38_0/libs/python/doc/v2/reference.html>`_
+- `Boost::Python reference guide <http://www.boost.org/doc/libs/1_57_0/libs/python/doc/v2/reference.html>`_
 
 Todo: finer points of return-by-value vs. reference
 ___________________________________________________ 

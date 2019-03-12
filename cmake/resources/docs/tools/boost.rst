@@ -9,8 +9,9 @@
 Boost
 =====
 
-Boost is provided by the I3_PORTS toolset.  Our current versions 1.38.0
-This version will be used by default.  
+Boost is provided by your system or the IceCube CVMFS repository.  Our
+current minimum required version is boost-1.57.0.  This version will
+be used by default.
 
 .. warning::
 
