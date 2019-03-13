@@ -4,13 +4,26 @@
 # $Revision: $
 # $LastChangedDate: $
 # $LastChangedBy: $
-import sys
+
+import argparse
 from os.path import expandvars
+
+json_fn = expandvars("$I3_TESTDATA/sim/final-spe-fits-pole-run2015.json") 
+
+parser = argparse.ArgumentParser(description='Process some integers.') 
+parser.add_argument('--json-file', 
+	 	    dest = 'json_fn', 
+	 	    default = json_fn,  
+	 	    help='Name of JSON file containing the SPE fit values.') 
+args = parser.parse_args() 
+
+import sys
 
 from numpy import isnan
 
 from I3Tray import I3Tray
 from icecube import icetray, dataclasses, dataio, phys_services
+from icecube.phys_services.spe_fit_injector import SPEFitInjector 
 from icecube.phys_services.spe_fit_injector import I3SPEFitInjector
 from icecube.icetray.I3Test import ENSURE
 
@@ -22,11 +35,7 @@ class SPEFitTestModule(icetray.I3Module) :
     '''
     def __init__(self, context):
         icetray.I3Module.__init__(self, context)
-        self.AddOutBox("OutBox")
         
-    def Configure(self):
-        pass
-
     def Calibration(self, frame) :
         domcal = frame['I3Calibration'].dom_cal
         n_valid = sum([1 for omkey, i3domcal in domcal.iteritems() \
@@ -54,29 +63,36 @@ class SPEFitTestModule(icetray.I3Module) :
                     - CombinedSPEChargeDistribution should have non-NaNs.\n\
                     - MeanATWDCharge should be roughly 0.95 - 1.05. \n\
                     - MeanFADCCharge should be roughly 0.90 - 1.15.')
-        #print(n_nan_atwd_charge,n_nan_fadc_charge,n_nan_atwd_charge)
-        ENSURE(n_nan_atwd_charge == 0, "All the ATWD mean charges should be non-NaN.")
-        ENSURE(n_nan_fadc_charge == 5, "There should be 5 NaN FADC charges.")
-        ENSURE(n_nan_exp2_amp == 0,"All parameters describing the SPE Charge distribution should be non-NaN.")
 
-        # there are 5050 valid entries out of 5085 in the file 'final-spe-fits-pole-run2015.json'
-        if n_valid != 5050 :
-            print("Expected 5050 valid entries.")
-            print("Got N valid = %d" % n_valid)
-            print("FAIL")
-            sys.exit(1) # report back to the mothership
+        spe_fi = SPEFitInjector(args.json_fn) 
+	
+        if spe_fi.new_style:                         
+	    # There are 5085 valid entries out of 5085 in the file IC86.2016_923_NewWaveDeform.json 
+	    # Not sure about other JSON files out there, so 5k seems reasonable. 
+	    if n_valid < 5000 : 
+	        print("Expected 5085 valid entries.") 
+	        print("Got N valid = %d" % n_valid) 
+	        print("FAIL") 
+	        sys.exit(1) # report back to the mothership 
+	else: 
+            ENSURE(n_nan_atwd_charge == 0, "All the ATWD mean charges should be non-NaN.")
+            ENSURE(n_nan_fadc_charge == 5, "There should be 5 NaN FADC charges.")
+            ENSURE(n_nan_exp2_amp == 0,"All parameters describing the SPE Charge distribution should be non-NaN.")
 
-
+            # there are 5050 valid entries out of 5085 in the file 'final-spe-fits-pole-run2015.json'
+            if n_valid != 5050 :
+                print("Expected 5050 valid entries.")
+                print("Got N valid = %d" % n_valid)
+                print("FAIL")
+                sys.exit(1) # report back to the mothership
 
         self.PushFrame(frame)
 
-
-json_fn = expandvars("$I3_TESTDATA/sim/final-spe-fits-pole-run2015.json")
 gcd_fn = expandvars("$I3_TESTDATA/sim/GeoCalibDetectorStatus_2013.56429_V1.i3.gz") 
 
 tray = I3Tray()
 tray.Add("I3InfiniteSource", prefix = gcd_fn )
-tray.Add(I3SPEFitInjector, filename = json_fn)
+tray.Add(I3SPEFitInjector, filename = args.json_fn)
 tray.Add(SPEFitTestModule)
 tray.Execute(4)
 

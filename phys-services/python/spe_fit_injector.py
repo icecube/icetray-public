@@ -30,7 +30,7 @@ def is_new_style(fit_values):
     print(' - The mean ATWD and FADC charge values are the shifts performed in data.')
     print(' - We will set the charge distribution to TA0003 and have the gaussian mean at 1.0.')
     return False
-   
+
 class SPEFitInjector:
     def __init__(self, filename):
         import json
@@ -49,7 +49,7 @@ class SPEFitInjector:
         attributes = ['exp1_amp','exp1_width', 'exp2_amp', 'exp2_width',                     
                       'gaus_amp', 'gaus_mean', 'gaus_width', 'compensation_factor',
                       'slc_gaus_mean']
-        a = [] 
+ 
         for key, fits in self.fit_values.items():
             omkey = convert_omkey(key)
             if not omkey:
@@ -64,8 +64,14 @@ class SPEFitInjector:
 
                 if omkey in cal.dom_cal:
                     cal.dom_cal[omkey].combined_spe_charge_distribution = spe_distribution
-                    cal.dom_cal[omkey].mean_atwd_charge = fits['ATWD_fit']['mean_atwd_charge']
-                    cal.dom_cal[omkey].mean_fadc_charge = fits['SLC_fit']['mean_fadc_charge']
+                    if 'mean_charge' in fits['ATWD_fit']:
+                        cal.dom_cal[omkey].mean_atwd_charge = fits['ATWD_fit']['mean_charge']
+                    else:
+                        print(fits['ATWD_fit'])                        
+                    if 'mean_charge' in fits['SLC_fit']:
+                        cal.dom_cal[omkey].mean_fadc_charge = fits['SLC_fit']['mean_charge']
+                    else:
+                        print(fits['SLC_fit'])                        
                 else:
                     icetray.logging.log_warn("SPE Fit for %s has no calibration object." % str(omkey))
             del frame['I3Calibration']
