@@ -1,6 +1,6 @@
 import numpy as np
 
-from matplotlib import pyplot
+from matplotlib import pyplot , rc, rcdefaults, __version__
 from matplotlib.font_manager import FontProperties
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.collections import PatchCollection, LineCollection
@@ -44,11 +44,16 @@ def set_sizes(collection, sizes):
         collection._sizes = sizes
 
 # make plots look the same on every system
-import matplotlib
-matplotlib.rcdefaults()
+# matplotlib configuration
+if  __version__>='2.1.0':
+    log = "IceTopViewer widget broken matplotlib version > 2.0.2. Under investigation. Your version is "+__version__+" "
+    icetray.logging.log_error(log)
+    raise Exception(log)
+
+rcdefaults()
 for g in ("xtick", "ytick"):
-    matplotlib.rc(g, direction="out")
-matplotlib.rc("axes", labelsize="large", titlesize="large")
+    rc(g, direction="out")
+rc("axes", labelsize="large", titlesize="large")
 
 # some global constants
 calibration_key = "I3Calibration"
@@ -56,6 +61,8 @@ detectorstatus_key = "I3DetectorStatus"
 eventheader_key = "I3EventHeader"
 fadc_tbin = 25.0 # nanosecond, from IceTop detector paper
 atwd_tbin = 3.33 # nanosecond, from IceTop detector paper
+
+
 
 # remember discovered scintillator OMKeys if any
 class cache:
@@ -68,6 +75,9 @@ class IceTopCanvas(FigureCanvas):
     class scint: pass
 
     def __init__(self, settings):
+        
+        
+        
         fig = pyplot.figure()
         FigureCanvas.__init__(self, fig)
         # We create plot objects in advance and fill with data later.
