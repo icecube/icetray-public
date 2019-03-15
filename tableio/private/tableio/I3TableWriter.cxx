@@ -394,7 +394,7 @@ void I3TableWriter::Convert(I3FramePtr frame) {
 
             try {
                 nrows = bundle.converter->GetNumberOfRows(obj);
-            } catch (std::bad_cast) {
+            } catch (const std::bad_cast&) {
                 log_fatal("The frame object '%s' has switched types since the"
                     " last time it was seen. This sort of behavior is"
                     " unsupported!", objName.c_str());
