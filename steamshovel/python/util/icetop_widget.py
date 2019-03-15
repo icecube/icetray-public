@@ -45,8 +45,8 @@ def set_sizes(collection, sizes):
 
 # make plots look the same on every system
 # matplotlib configuration
-if  __version__>='2.1.0':
-    log = "IceTopViewer widget broken matplotlib version > 2.0.2. Under investigation. Your version is "+__version__+" "
+if  __version__<'1.5.0':
+    log = "IceTopViewer widget broken matplotlib version < 1.5. Your version is "+__version__+" "
     icetray.logging.log_error(log)
     raise Exception(log)
 
@@ -192,8 +192,7 @@ class IceTopCanvas(FigureCanvas):
         self.scint.ldf_points = ax.scatter([],[], marker="s", zorder=2, picker=1)
         self.scint.ldf_slc_points = ax.scatter([],[], color="None", marker="s",
                                                edgecolor="k", zorder=1)
-        self.ldf_nohit_points = ax.scatter([],[], color="None",
-                                           marker="v",
+        self.ldf_nohit_points = ax.scatter([],[], color="None", marker="v",
                                            edgecolor="0.5", zorder=0)
         self.ldf_selection_marker = ax.scatter([], [],
             s=200, marker="s", facecolor="None",
@@ -206,6 +205,7 @@ class IceTopCanvas(FigureCanvas):
             0.98, 0.98, "", ha="right", va="top",
             fontsize="large",
             transform=ax.transAxes)
+
 
         ### bottom right: Time
         ax = self.ax_time = fig.add_axes((0.58, 0.10, 0.40, 0.42),
@@ -249,10 +249,10 @@ class IceTopCanvas(FigureCanvas):
         self.scint.pulse_index = []
 
         # reset select
-        self.array_selection_marker.set_offsets([])
-        self.ldf_selection_marker.set_offsets([])
-        self.time_selection_marker.set_offsets([])
-        self.ldf_nohit_points.set_offsets([])
+        self.array_selection_marker.set_offsets(np.column_stack(([],[])))
+        self.ldf_selection_marker.set_offsets(np.column_stack(([],[])))
+        self.time_selection_marker.set_offsets(np.column_stack(([],[])))
+        self.ldf_nohit_points.set_offsets(np.column_stack(([],[])))
         self.array_legend_bottom_left.set_text("")
         if self.ax_trace:
             self.ax_trace.cla()
@@ -559,16 +559,16 @@ class IceTopCanvas(FigureCanvas):
             set_sizes(det.time_slc_points, msize)
         msize = [(settings["marker-size"] * 1.6) ** 2]
         set_sizes(self.ldf_nohit_points, msize)
-
-        self.tank.ldf_points.set_offsets(np.dstack((r_hit_tank, s_hit_tank)))
-        self.tank.time_points.set_offsets(np.dstack((r_hit_tank, t_plane_tank)))
-        self.tank.ldf_slc_points.set_offsets(np.dstack((r_slc_tank, s_slc_tank)))
-        self.tank.time_slc_points.set_offsets(np.dstack((r_slc_tank, t_slc_tank)))
-        self.scint.ldf_points.set_offsets(np.dstack((r_hit_scint, s_hit_scint)))
-        self.scint.time_points.set_offsets(np.dstack((r_hit_scint, t_plane_scint)))
-        self.scint.ldf_slc_points.set_offsets(np.dstack((r_slc_scint, s_slc_scint)))
-        self.scint.time_slc_points.set_offsets(np.dstack((r_slc_scint, t_slc_scint)))
-
+        
+        self.tank.ldf_points.set_offsets(np.column_stack((r_hit_tank, s_hit_tank)))
+        self.tank.time_points.set_offsets(np.column_stack((r_hit_tank, t_plane_tank)))
+        self.tank.ldf_slc_points.set_offsets(np.column_stack((r_slc_tank, s_slc_tank)))
+        self.tank.time_slc_points.set_offsets(np.column_stack((r_slc_tank, t_slc_tank)))
+        self.scint.ldf_points.set_offsets(np.column_stack((r_hit_scint, s_hit_scint)))
+        self.scint.time_points.set_offsets(np.column_stack((r_hit_scint, t_plane_scint)))
+        self.scint.ldf_slc_points.set_offsets(np.column_stack((r_slc_scint, s_slc_scint)))
+        self.scint.time_slc_points.set_offsets(np.column_stack((r_slc_scint, t_slc_scint)))
+        
         for ib in (0, 1):
             self.ldf_model[ib].set_data([], [])
             self.ldf_model_err[ib].set_xy([[0,0]])
@@ -617,7 +617,7 @@ class IceTopCanvas(FigureCanvas):
             for i,r in enumerate(r_nohit):
                 s = 1.5 / abs(rec_data["dir"][2])
                 s_nohit.append(s)
-            self.ldf_nohit_points.set_offsets(np.dstack((r_nohit, s_nohit)))
+            self.ldf_nohit_points.set_offsets(np.column_stack((r_nohit, s_nohit)))
 
         self.update_colors(self.tmin, self.tmax)
 
