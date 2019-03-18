@@ -47,11 +47,30 @@ if (NOT ZMQ_FOUND)
     )
 endif (NOT ZMQ_FOUND)
 
-# This is how mainline cppzmq do version detection.
+# Detect cppzmq versions from before there were versions
 if (ZMQ_FOUND AND NOT CPPZMQ_VERSION)
-  file(READ "${ZMQ_INCLUDE_DIR}/include/zmq.hpp" _CPPZMQ_H_CONTENTS)
-  string(REGEX REPLACE ".*#define CPPZMQ_VERSION_MAJOR ([0-9]+).*" "\\1" CPPZMQ_VERSION_MAJOR "${_CPPZMQ_H_CONTENTS}")
-  string(REGEX REPLACE ".*#define CPPZMQ_VERSION_MINOR ([0-9]+).*" "\\1" CPPZMQ_VERSION_MINOR "${_CPPZMQ_H_CONTENTS}")
-  string(REGEX REPLACE ".*#define CPPZMQ_VERSION_PATCH ([0-9]+).*" "\\1" CPPZMQ_VERSION_PATCH "${_CPPZMQ_H_CONTENTS}")
-  set(CPPZMQ_VERSION "${CPPZMQ_VERSION_MAJOR}.${CPPZMQ_VERSION_MINOR}.${CPPZMQ_VERSION_PATCH}")
+  include(CheckCXXSymbolExists)
+  IF (CMAKE_VERSION VERSION_GREATER "2.8.5")
+    include(CMakePushCheckState)
+    CMAKE_PUSH_CHECK_STATE()
+  ENDIF (CMAKE_VERSION VERSION_GREATER "2.8.5")
+  set(CMAKE_REQUIRED_INCLUDES "${ZMQ_INCLUDE_DIR}/include")
+  CHECK_CXX_SYMBOL_EXISTS(
+    CPPZMQ_VERSION_MAJOR
+    "${ZMQ_INCLUDE_DIR}/include/zmq.hpp"
+    _have_cppzmq_version)
+  IF (CMAKE_VERSION VERSION_GREATER "2.8.5")
+    CMAKE_POP_CHECK_STATE()
+  ENDIF (CMAKE_VERSION VERSION_GREATER "2.8.5")
+  # This is how mainline cppzmq do version detection.
+  if (_have_cppzmq_version)
+    file(READ "${ZMQ_INCLUDE_DIR}/include/zmq.hpp" _CPPZMQ_H_CONTENTS)
+    string(REGEX REPLACE ".*#define CPPZMQ_VERSION_MAJOR ([0-9]+).*" "\\1" CPPZMQ_VERSION_MAJOR "${_CPPZMQ_H_CONTENTS}")
+    string(REGEX REPLACE ".*#define CPPZMQ_VERSION_MINOR ([0-9]+).*" "\\1" CPPZMQ_VERSION_MINOR "${_CPPZMQ_H_CONTENTS}")
+    string(REGEX REPLACE ".*#define CPPZMQ_VERSION_PATCH ([0-9]+).*" "\\1" CPPZMQ_VERSION_PATCH "${_CPPZMQ_H_CONTENTS}")
+    set(CPPZMQ_VERSION "${CPPZMQ_VERSION_MAJOR}.${CPPZMQ_VERSION_MINOR}.${CPPZMQ_VERSION_PATCH}")
+  else ()
+    # a copy from before there was a release policy or real versioning
+    set(CPPZMQ_VERSION "4.2.0")
+  endif ()
 endif (ZMQ_FOUND AND NOT CPPZMQ_VERSION)
