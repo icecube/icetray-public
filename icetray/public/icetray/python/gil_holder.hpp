@@ -20,7 +20,19 @@ public:
 	}
 private:
 	PyGILState_STATE gil_state;
-};    
+};
+
+class allow_threads {
+public:
+	inline allow_threads() {
+		thread_state = PyEval_SaveThread();
+	}
+	inline ~allow_threads() {
+		PyEval_RestoreThread(thread_state);
+	}
+private:
+	PyThreadState *thread_state;
+};
 
 }}}
 
