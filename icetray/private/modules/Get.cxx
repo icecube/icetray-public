@@ -51,7 +51,7 @@ private:
 
 I3_MODULE(Get);
 
-Get::Get(const I3Context& context) : I3Module(context)
+Get::Get(const I3Context& context) : I3Module(context), get_all_(false)
 {
   AddParameter("Keys", "Keys to Get<I3FrameObject> on.  If not specified, get all.",
 	       keys_);
