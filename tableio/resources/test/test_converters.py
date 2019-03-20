@@ -18,14 +18,14 @@ from I3Tray import I3Tray
 
 # hobo "from icecube import *"
 import icecube, os
-for path in os.listdir(os.path.dirname(icecube.__file__)):
+for path in sorted(os.listdir(os.path.dirname(icecube.__file__))):
 	try:
 		__import__("icecube."+os.path.splitext(path)[0])
 	except ImportError:
-		pass
+		continue
 	except RuntimeError:
 		# e.g. dlopen() failure
-		pass
+		continue
 
 def potemkin_object(klass):
 	"""
