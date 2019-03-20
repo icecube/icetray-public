@@ -162,7 +162,7 @@ TEST(compare_float_as_int32_t){
   ENSURE( TestCompareFinal( nan2, nan3, false ) ) ;
   
   // Test whether tiny numbers of opposite signs compare as equal.
-  ENSURE( TestCompareFinal( smallestDenormal, -smallestDenormal, false ) ) ;
+  ENSURE( TestCompareFinal( smallestDenormal, -smallestDenormal, true ) ) ;
   ENSURE( TestCompareFinal( smallestDenormal, 0, true ) ) ;
   ENSURE( TestCompareFinal( -smallestDenormal, negativeZero, true ) ) ;
 
@@ -279,7 +279,7 @@ TEST(compare_double_as_int64_t){
   ENSURE( TestCompareFinal( nan2D, nan3D, false ) ) ;
   
   // Test whether tiny numbers of opposite signs compare as equal.
-  ENSURE( TestCompareFinal( smallestDenormalD, -smallestDenormalD, false ) ) ;
+  ENSURE( TestCompareFinal( smallestDenormalD, -smallestDenormalD, true ) ) ;
   ENSURE( TestCompareFinal( smallestDenormalD, 0, true) ) ;
   ENSURE( TestCompareFinal( -smallestDenormalD, negativeZeroD, true) ) ;
   
