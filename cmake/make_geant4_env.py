@@ -24,7 +24,9 @@ geant4_vars = {
     "G4NEUTRONXSDATA"  : "G4NEUTRONXS",
     "G4PIIDATA"        : "G4PII",
     "G4RADIOACTIVEDATA": "RadioactiveDecay",
-    "G4REALSURFACEDATA": "RealSurface"
+    "G4REALSURFACEDATA": "RealSurface",
+    "G4ENSDFSTATEDATA" : "G4ENSDFSTATE2.2",
+    "G4SAIDXSDATA"     : "G4SAIDDATA1.1"
 }
 
 geant4_env = {}
