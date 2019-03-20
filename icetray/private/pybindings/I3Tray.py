@@ -51,7 +51,7 @@ class I3Tray(icetray.I3Tray):
         """
         self.last_added = None
         self.segments_in_order = []
-        self.current_condition = None
+        self.current_condition_stack = []
         icetray.I3Tray.__init__(self)
 
     def _create_name(self, _type, kind, module_names):
@@ -146,8 +146,8 @@ class I3Tray(icetray.I3Tray):
             for k,v in kwargs.items():
                 super(I3Tray, self).SetParameter(_name, k, v)                
             # Handle module conditions as a special case
-            if If is None and self.current_condition is not None:
-                If = self.current_condition
+            if If is None and len(self.current_condition_stack) > 0:
+                If = self.current_condition_stack[-1]
             if If is not None:
                 super(I3Tray, self).SetParameter(_name, 'If', If)
             return self
@@ -217,13 +217,13 @@ class I3Tray(icetray.I3Tray):
             # if the segment handles If itself, then let it
             # otherwise, save for submodules
             if 'If' in argnames and If is not None:
-                self.current_condition = None
+                self.current_condition_stack.append(None)
                 kwargs['If'] = If
             else:
-                self.current_condition = If
+                self.current_condition_stack.append(If)
             return _segment(self, _name, **kwargs)
         finally:
-            self.current_condition = None
+            self.current_condition_stack.pop()
      
     def SetParameter(self, module, param, value):
         super(I3Tray, self).SetParameter(module, param, value)
