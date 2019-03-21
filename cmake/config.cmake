@@ -112,11 +112,23 @@ file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/Testing/Notes)
 
 if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/.svn")
   execute_process(COMMAND svn info ${CMAKE_SOURCE_DIR}
-    OUTPUT_FILE ${NOTES_DIR}/svn_info.txt)
-else()
+    OUTPUT_VARIABLE SVN_INFO)
+elseif(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/.git")
   execute_process(COMMAND git svn info
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_FILE ${NOTES_DIR}/svn_info.txt)
+    OUTPUT_VARIABLE SVN_INFO)
+else()
+  set(SVN_INFO "SVN_INFO-NOTFOUND")
+  file(WRITE ${NOTES_DIR}/svn_info.txt "svn info or git svn info unavailable")
+endif()
+
+set(SVN_URL "SVN_URL-NOTFOUND")
+set(SVN_REVISION "SVN_REVISION-NOTFOUND")
+
+if(SVN_INFO)
+  string(REGEX REPLACE "^.*\nURL:[ \t]+([^\n]+).*" "\\1" SVN_URL ${SVN_INFO})
+  string(REGEX REPLACE "^.*\nRevision:[ \t]([0-9]+).*" "\\1" SVN_REVISION ${SVN_INFO})
+  file(WRITE "${NOTES_DIR}/svn_info.txt" "${SVN_INFO}")
 endif()
 
 execute_process(COMMAND /usr/bin/env
@@ -171,45 +183,12 @@ math(EXPR CMAKE_VERSION_INT "${CMAKE_MAJOR_VERSION} * 10000 + ${CMAKE_MINOR_VERS
 boost_report_pretty("CMake version" CMAKE_VERSION)
 
 #
-# Find the svn program
-#
-find_program(SVN_EXECUTABLE svn
-             PATHS ENV PATH /usr/bin
-             NO_DEFAULT_PATH)
-#
 # Get SVN_REVISION from svn info
 #
 option(USE_SVN_REVISION_FLAGS "Add compiled-in svn revision information." ON)
 
 if(NOT HAVE_SVN_REVISION)
-  set(HAVE_SVN_REVISION TRUE CACHE INTERNAL "flag")
-  if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/.svn")
-  execute_process(COMMAND ${SVN_EXECUTABLE} info ${CMAKE_SOURCE_DIR}
-    COMMAND awk "/^Revision:/ { printf $2 }"
-    OUTPUT_VARIABLE SVN_REVISION
-    ERROR_VARIABLE SVN_REVISION_ERROR)
-else()
-  execute_process(COMMAND git svn info
-    COMMAND awk "/^Revision:/ { printf $2 }"
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_VARIABLE SVN_REVISION
-    ERROR_VARIABLE SVN_REVISION_ERROR)
-  endif()
-
-  if (SVN_REVISION STREQUAL "")
-    set(SVN_REVISION_ERROR TRUE)
-  endif (SVN_REVISION STREQUAL "")
-
-  if (SVN_REVISION_ERROR OR NOT SVN_EXECUTABLE)
-    colormsg(YELLOW "*** Unable to determine svn revision")
-    colormsg(YELLOW "*** Are you using a non-English locale?")
-    set(SVN_REVISION "0")
-  endif (SVN_REVISION_ERROR OR NOT SVN_EXECUTABLE)
-
-  if(NOT USE_SVN_REVISION_FLAGS)
-    colormsg(YELLOW "*** Not compiling in svn revision information.  Hope you aren't running simprod")
-    set(SVN_REVISION "0")
-  endif(NOT USE_SVN_REVISION_FLAGS)
+  set(HAVE_SVN_REVISION TRUE CACHE INTERNAL "Flag used for testing in toplevel-parasite.cmake")
 
   boost_report_value(SVN_REVISION)
   set(SVN_REVISION ${SVN_REVISION} CACHE INTERNAL "svn revision")
@@ -220,27 +199,9 @@ endif(NOT HAVE_SVN_REVISION)
 # Get SVN_URL from svn info
 #
 if(NOT HAVE_SVN_URL)
-  set(HAVE_SVN_URL TRUE CACHE INTERNAL "flag")
-  if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/.svn")
-  execute_process(COMMAND ${SVN_EXECUTABLE} info ${CMAKE_SOURCE_DIR}
-    COMMAND awk "/^URL:/ { printf $2 }"
-    OUTPUT_VARIABLE SVN_URL)
-  else()
-  execute_process(COMMAND git svn info
-    COMMAND awk "/^URL:/ { printf $2 }"
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_VARIABLE SVN_URL)
-  endif()
+  set(HAVE_SVN_URL TRUE CACHE INTERNAL "Flag used for testing in toplevel-parasite.cmake")
 
-  if(NOT SVN_EXECUTABLE)
-    set(SVN_URL "Unknown")
-  endif(NOT SVN_EXECUTABLE)
-
-  if (NOT SVN_URL)
-    set(SVN_URL "Unknown")
-  endif(NOT SVN_URL)
   boost_report_value(SVN_URL)
-
   set(SVN_URL ${SVN_URL} CACHE INTERNAL "svn url")
 endif(NOT HAVE_SVN_URL)
 
@@ -248,28 +209,31 @@ endif(NOT HAVE_SVN_URL)
 #  get META_PROJECT (used by dart) from SVN_URL
 #
 if(NOT HAVE_META_PROJECT)
-  set(HAVE_META_PROJECT TRUE CACHE INTERNAL "flag")
-  string(REGEX REPLACE "http[s]?://(((code.icecube.wisc|icecode.umd).edu)|129.2.43.208)/svn/meta-projects/" "" META_PROJECT ${SVN_URL})
-  string(REGEX REPLACE "/" "." META_PROJECT ${META_PROJECT})
-  string(STRIP "\n" ${META_PROJECT})
+  set(HAVE_META_PROJECT TRUE CACHE INTERNAL "Flag used for testing in toplevel-parasite.cmake")
+  if(SVN_URL)
+    string(REGEX REPLACE "http[s]?://(((code.icecube.wisc|icecode.umd).edu)|129.2.43.208)/svn/meta-projects/" "" META_PROJECT ${SVN_URL})
+    string(REGEX REPLACE "/" "." META_PROJECT ${META_PROJECT})
+    string(STRIP "\n" ${META_PROJECT})
+  else()
+    set(META_PROJECT "META_PROJECT-NOTFOUND")
+  endif()
   boost_report_value(META_PROJECT)
   set(META_PROJECT ${META_PROJECT} CACHE INTERNAL "meta project")
 endif(NOT HAVE_META_PROJECT)
 
-#
-#  get svn exten
-#
 
-# JC wants it like this.  TDS: Looking in to better ways to do this 'make tarball' stuff.
-# Note #2:  set it to something reasonable if it equals /usr/local.
-#           what a hack.
+# 
+# setup CMAKE_INSTALL_PREFIX
+# JC wants it like this.
+# set it to something reasonable if it equals /usr/local.
+#
 if (CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
-  if (NOT "${META_PROJECT}" STREQUAL "Unknown")
+  if (META_PROJECT)
     set(CMAKE_INSTALL_PREFIX ${META_PROJECT}.r${SVN_REVISION}.${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
-  else (NOT "${META_PROJECT}" STREQUAL "Unknown")
+  else()
     set(CMAKE_INSTALL_PREFIX ${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
-  endif (NOT "${META_PROJECT}" STREQUAL "Unknown")
-endif(CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
+  endif()
+endif()
 
 ## set the uber header. this file is included via command line for
 ## every compiled file.
