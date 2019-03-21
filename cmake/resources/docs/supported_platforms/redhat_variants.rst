@@ -4,14 +4,11 @@
 Red Hat Variants
 ^^^^^^^^^^^^^^^^
 
-For Red Hat variants it is best to use I3_PORTS to install dependent software.
-
 Red Hat
 """""""
 
-* Red Hat Enterprise Linux 5, and its derivitives, may not work with
-  IceCube software as they fall outside of the "current/previous" rule
-  of thumb stated above.
+* Red Hat Enterprise Linux derivitives, may not work with IceCube software
+  as they fall outside of the "current/previous" rule of thumb stated above.
 
 * TCL dependencies are satisfied only with the tcl-devel package. Try
   'up2date tcl-devel' as root user.
