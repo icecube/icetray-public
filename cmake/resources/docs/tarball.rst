@@ -12,9 +12,8 @@ the grid.  The unpacked tarballs have a similar layout to the
 workspace one finds in one's :envvar:`I3_BUILD` build directory after
 a build, with a few exceptions:
 
-1.  It doesn't need a set of I3_PORTS to run.  In the tarballing
-    process, the dependencies of whatever libraries exist in
-    :file:`$I3_BUILD/lib` have been pulled in to the tarball, 
+1.  In the tarballing process, the dependencies of whatever libraries
+    exist in :file:`$I3_BUILD/lib` have been pulled in to the tarball,     
     in the directory :file:`$I3_BUILD/lib/tools`
 
 #.  The env-shell.sh file is different: it determines the value 
@@ -41,8 +40,7 @@ The following is done in building a tarball:
   the build directory), or an absolute path.  
 
 * The built project libraries are scanned for dependencies on tools
-  libraries (ie libraries located under ``$I3_PORTS``), those are
-  copied to a subdirectory ``tools/`` of
+  libraries, those are copied to a subdirectory ``tools/`` of  
   ``I3_BUILD/CMAKE_INSTALL_PREFIX/lib/``.
 
 * A (filesystem) relocatable :ref:`env-shell.sh` is generated and
@@ -154,7 +152,6 @@ Now we can run the env-shell.sh script that is in there and use the software::
    Icetray environment has:
       I3_SRC       = /tmp/instdir/offline-software.trunk.r47978.Linux-i686.gcc-4.2.3
       I3_BUILD     = /tmp/instdir/offline-software.trunk.r47978.Linux-i686.gcc-4.2.3
-      I3_PORTS     = 
    % python
    Python 2.5.2 (r252:60911, Jul 31 2008, 17:28:52) 
    [GCC 4.2.3 (Ubuntu 4.2.3-2ubuntu7)] on linux2
@@ -165,7 +162,6 @@ Now we can run the env-shell.sh script that is in there and use the software::
 
 Note:
 
-1.  :envvar:`I3_PORTS` is *not* set.
 #.  One needn't be in the same directory where the tarball is unpacked.
 
 
@@ -223,7 +219,6 @@ Some grids (e.g. OpenScienceGrid) support distribution of software via CVMFS,
 which obviates much of the need for tarballs of standard metaprojects. When
 the neded arises for custom metaprojects, however, their tarballs can omit the
 libraries already in the CVMFS repository. To build a lightweight tarball, set
-the :data:`INSTALL_TOOL_LIBS` option to OFF at configure time. The final
-tarball will not include libraries from :envvar:`I3_PORTS`, and RPATH entries
+the :data:`INSTALL_TOOL_LIBS` option to OFF at configure.  RPATH entries
 will not be stripped from the installed libraries.
 
