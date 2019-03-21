@@ -66,10 +66,10 @@ class Bubbles( PyArtist ):
                 except KeyError:
                     raise KeyError("OMGeo doesn't contain %s" % (omkey))
                 pos = geo.position
-                if geo.omtype == geo.IceCube or geo.omtype == geo.IceTop:
+                if geo.omtype in [geo.IceCube, geo.IceTop, geo.PDOM]:
                     sphere = output.addSphere( scale, pos )
                     sphere.setSelectionContent( omkey )
-                elif geo.omtype == geo.mDOM:
+                elif geo.omtype in [geo.mDOM, geo.DEgg]:
                     radius = scale*math.sqrt(geo.area)
                     sphere = output.addCylinder( pos, vec3d(geo.orientation.dir), radius, radius)
 

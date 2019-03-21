@@ -125,7 +125,10 @@ void Detector::create( I3FramePtr ptr, SceneGroup* g, const SceneState& state ){
 		if( geo.omtype == I3OMGeo::IceTop ){
 		  if ( hide_icetop )
 		    continue;
-		}else if ( geo.omtype == I3OMGeo::IceCube || geo.omtype == I3OMGeo::mDOM) {
+		}else if ( geo.omtype == I3OMGeo::IceCube || 
+			   geo.omtype == I3OMGeo::mDOM || 
+			   geo.omtype == I3OMGeo::DEgg || 
+			   geo.omtype == I3OMGeo::PDOM) {
 		  if( hide_icecube )
 		    continue;
 		}else{
@@ -166,7 +169,10 @@ void Detector::create( I3FramePtr ptr, SceneGroup* g, const SceneState& state ){
 
 		if( geo.omtype == I3OMGeo::IceTop ) {
 		  icetop_points.push_back(pos3d);
-		} else if ( geo.omtype == I3OMGeo::IceCube ){
+		} else if ( geo.omtype == I3OMGeo::IceCube ||
+			    geo.omtype == I3OMGeo::mDOM || 
+			    geo.omtype == I3OMGeo::DEgg || 
+			    geo.omtype == I3OMGeo::PDOM){
 		  string_accum.push_back(pos3d);
 		}
 	}
