@@ -11,7 +11,7 @@ makefiles, one sets build options by editing the CMake cache.  You can
 start the editor with "make edit_cache", or by invoking the cache
 editor, ``ccmake``, directly::
 
-  cd ~/Icecube/meta-projects/offline-software/trunk/build
+  cd ~/Icecube/meta-projects/combo/stable/build
   make edit_cache
 
 A handy curses app will pop up allowing you to change the values of

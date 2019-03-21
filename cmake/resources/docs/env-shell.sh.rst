@@ -35,7 +35,7 @@ the appropriate environment::
   *                                                                      *
   *                   W E L C O M E  to  I C E T R A Y                   *
   *                                                                      *
-  *                   Version combo.trunk     r171557                    *
+  *                   Version combo.stable    r171557                    *
   *                                                                      *
   *                You are welcome to visit our Web site                 *
   *                        http://icecube.umd.edu                        *
@@ -43,8 +43,8 @@ the appropriate environment::
   ************************************************************************
   
   Icetray environment has:
-     I3_SRC       = /home/olivas/icecube/combo/trunk/src
-     I3_BUILD     = /home/olivas/icecube/combo/trunk/build
+     I3_SRC       = /home/olivas/icecube/combo/stable/src
+     I3_BUILD     = /home/olivas/icecube/combo/stable/build
      I3_TESTDATA  = /home/olivas/icecube/test-data/releases/V00-00-01
      Python       = 2.7.15rc1
 
@@ -70,7 +70,7 @@ behavior would look something like this::
   *                                                                      *
   *                   W E L C O M E  to  I C E T R A Y                   *
   *                                                                      *
-  *                   Version combo.trunk     r171557                    *
+  *                   Version combo.stable    r171557                    *
   *                                                                      *
   *                You are welcome to visit our Web site                 *
   *                        http://icecube.umd.edu                        *
@@ -78,14 +78,14 @@ behavior would look something like this::
   ************************************************************************
   
   Icetray environment has:
-     I3_SRC       = /home/olivas/icecube/combo/trunk/src
-     I3_BUILD     = /home/olivas/icecube/combo/trunk/build
+     I3_SRC       = /home/olivas/icecube/combo/stable/src
+     I3_BUILD     = /home/olivas/icecube/combo/stable/build
      I3_TESTDATA  = /home/olivas/icecube/test-data/releases/V00-00-01
      Python       = 2.7.15rc1
   % echo $PATH
-  home/olivas/icecube/combo/trunk/build/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+  /home/olivas/icecube/combo/stable/build/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 
-  
+
 You can see that also the path to the ROOT installation in the toolset
 has been added.  If I erroneously assign to PATH in my .bashrc, ie if
 ``.bashrc`` contains the following line::
@@ -102,7 +102,7 @@ initializes::
   *                                                                      *
   *                   W E L C O M E  to  I C E T R A Y                   *
   *                                                                      *
-  *                   Version combo.trunk     r171557                    *
+  *                   Version combo.stable    r171557                    *
   *                                                                      *
   *                You are welcome to visit our Web site                 *
   *                        http://icecube.umd.edu                        *
@@ -110,8 +110,8 @@ initializes::
   ************************************************************************
   
   Icetray environment has:
-     I3_SRC       = /home/olivas/icecube/combo/trunk/src
-     I3_BUILD     = /home/olivas/icecube/combo/trunk/build
+     I3_SRC       = /home/olivas/icecube/combo/stable/src
+     I3_BUILD     = /home/olivas/icecube/combo/stable/build
      I3_TESTDATA  = /home/olivas/icecube/test-data/releases/V00-00-01
      Python       = 2.7.15rc1
   % echo $PATH

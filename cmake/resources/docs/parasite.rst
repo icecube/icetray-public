@@ -12,7 +12,7 @@ build system for this purpose. To create a parasitic metaproject, start by
 creating and empty source directory and adding the cmake project::
 
 	> mkdir src && cd src
-	> svn co http://code.icecube.wisc.edu/svn/meta-projects/combo/trunk/cmake
+	> svn co http://code.icecube.wisc.edu/svn/meta-projects/combo/stable/cmake
 
 Then, add a CMakeLists.txt file with the following contents::
 

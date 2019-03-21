@@ -24,9 +24,9 @@ work directory and check out source to a directory called ``src``:
 
 ::
 
-  mkdir -p ~/IceCube/meta-projects/offline-software/trunk
-  cd ~/IceCube/meta-projects/offline-software/trunk
-  svn co http://code.icecube.wisc.edu/svn/meta-projects/offline-software/trunk src
+  mkdir -p ~/IceCube/meta-projects/combo/stable
+  cd ~/IceCube/meta-projects/combo/stable
+  svn co http://code.icecube.wisc.edu/svn/meta-projects/combo/stable src
 
 .. note::
 
@@ -37,7 +37,7 @@ Create the build directory parallel to the source directory and
 execute ``cmake`` in the object directory to create the build environment::
 
   $ pwd
-  ~/IceCube/meta-projects/offline-software/trunk
+  ~/IceCube/meta-projects/combo/stable
   $ mkdir build
   $ ls
   build src
@@ -46,7 +46,7 @@ execute ``cmake`` in the object directory to create the build environment::
   <lots of cmake output omitted>
   -- Configuring done
   -- Generating done
-  -- Build files have been written to: ~/IceCube/meta-projects/offline-software/trunk/build
+  -- Build files have been written to: ~/IceCube/meta-projects/combo/stable/build
 
 At this point the contents of the object directory should look
 somewhat like that of the source directory.  Main differences:
@@ -59,7 +59,7 @@ somewhat like that of the source directory.  Main differences:
 While still in the build directory execute ``make``::
 
   $ pwd
-  ~/IceCube/meta-projects/offline-software/trunk/build
+  ~/IceCube/meta-projects/combo/stable/build
   $ make
 
 After ``make`` returns, your build results will be in the
@@ -71,7 +71,7 @@ The ``make`` target ``help`` will provide a list of
 valid targets in the CMake-generated ``Makefile``::
 
   $ pwd
-  ~/IceCube/meta-projects/offline-software/trunk/build
+  ~/IceCube/meta-projects/combo/stable/build
   $ make help
   The following are some of the valid targets for this Makefile:
   ... all (the default if no target is provided)
@@ -120,6 +120,7 @@ The Python tests do not need building.
 
 Tests are run with::
 
+  make rsync
   make test
 
 Beware: The tests need to be run inside ``env-shell.sh``, or they won't work.
