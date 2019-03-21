@@ -4,6 +4,15 @@ Release Notes
 trunk
 -----
 
+* Clean up documentation, fixing urls, stripping ancient history
+* Update geant4
+* Update cppzmq
+* Update gsl detection for tarballs
+* Update Minuit2 detection
+* Update parasite project variables
+* Update "meta info" collection and variables
+* Declare "highlander" to be "combo/trunk"
+
 V18-12-00 - December 11, 2018, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------------------
 * New cvmfs genie detection.
