@@ -1,5 +1,3 @@
-.. index:: toolset
-   single: I3_PORTS
 
 .. _tooldetection:
 
@@ -69,14 +67,6 @@ by your system package manager. The major exception to this is if you
 are running on one of the major clusters that supports CVMFS (UW
 Madison, U. Maryland, DESY, etc). Tools there are managed in CVMFS,
 transparently to the user.
-
-Historically, most tools were expected to be found in ``I3_PORTS``, and
-system-installed versions are ignored.  If you defined
-``SYSTEM_PACKAGES``, the cmake flag ``NO_DEFAULT_PATH`` was omitted and
-system-installed packages may have been used, if versions installed from 
-``I3_PORTS`` could not be found. Note that this is historic behavior,
-only necessary if you're using old software.
-
 
 .. _I3_SITE_CMAKE_DIR:
 
