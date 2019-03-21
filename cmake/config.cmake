@@ -249,8 +249,7 @@ endif(NOT HAVE_SVN_URL)
 #
 if(NOT HAVE_META_PROJECT)
   set(HAVE_META_PROJECT TRUE CACHE INTERNAL "flag")
-  string(REGEX REPLACE "http://(code.icecube.wisc|icecode.umd|129.2.43.208).edu/svn/meta-projects/" ""
-    META_PROJECT ${SVN_URL})
+  string(REGEX REPLACE "http[s]?://(((code.icecube.wisc|icecode.umd).edu)|129.2.43.208)/svn/meta-projects/" "" META_PROJECT ${SVN_URL})
   string(REGEX REPLACE "/" "." META_PROJECT ${META_PROJECT})
   string(STRIP "\n" ${META_PROJECT})
   boost_report_value(META_PROJECT)
