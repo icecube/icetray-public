@@ -29,7 +29,8 @@ Most modern Linux distributions (i386 and x86_64) are supported, as
 well as recent Mac OS X (10.10 and newer) and FreeBSD, with one of the following
 compilers:
 
-* gcc version 4.4.1 or higher
+* gcc version 4.8.1 or higher
+* Xcode version 6 or higher
 * clang version 3.6 or higher
 * icc version 12 or higher (infrequently tested)
 
