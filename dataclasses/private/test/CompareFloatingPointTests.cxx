@@ -163,8 +163,8 @@ TEST(compare_float_as_int32_t){
   
   // Test whether tiny numbers of opposite signs compare as equal.
   ENSURE( TestCompareFinal( smallestDenormal, -smallestDenormal, true ) ) ;
-  ENSURE( TestCompareFinal( smallestDenormal, 0, true ) ) ;
-  ENSURE( TestCompareFinal( -smallestDenormal, negativeZero, true ) ) ;
+  ENSURE( TestCompareFinal( smallestDenormal, 0, false ) ) ;
+  ENSURE( TestCompareFinal( -smallestDenormal, negativeZero, false ) ) ;
 
   cerr<<ToString(nan1); 
   cerr<<ToString(nan2);
@@ -280,8 +280,8 @@ TEST(compare_double_as_int64_t){
   
   // Test whether tiny numbers of opposite signs compare as equal.
   ENSURE( TestCompareFinal( smallestDenormalD, -smallestDenormalD, true ) ) ;
-  ENSURE( TestCompareFinal( smallestDenormalD, 0, true) ) ;
-  ENSURE( TestCompareFinal( -smallestDenormalD, negativeZeroD, true) ) ;
+  ENSURE( TestCompareFinal( smallestDenormalD, 0, false) ) ;
+  ENSURE( TestCompareFinal( -smallestDenormalD, negativeZeroD, false) ) ;
   
 }
 

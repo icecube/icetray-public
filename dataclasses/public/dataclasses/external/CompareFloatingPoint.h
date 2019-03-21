@@ -33,16 +33,14 @@ NB:  Another thing you'll see is "Ulps" which stands for "Units in the Last Plac
 #include <string>
 #include <cstdlib>
 
-#define INFINITYCHECK
-#define NANCHECK
-#define SIGNCHECK
+#include <iostream>
 
 namespace CompareFloatingPoint{
-
+  
   // Function to print a number and its representation, in hex and decimal
   std::string ToString(double f, int64_t offset = 0);
   std::string ToString(float f, int32_t offset = 0);
-
+  
   bool Compare(float A, float B, int32_t maxUlps = 10);
   bool Compare(double A, double B, int64_t maxUlps = 10);
   
@@ -75,8 +73,31 @@ inline bool CompareFloatingPoint::Compare(float A, float B, int32_t maxUlps){
   // on what behavior you want from your floating point comparisons.
   // These checks should not be necessary and they are included
   // mainly for completeness.
+
+  if(std::isfinite(A) && std::isfinite(B) && A != 0 and B != 0){     
+    int32_t aInt;
+    memcpy( &aInt, &A, sizeof(int32_t) );
+    // Make aInt lexicographically ordered as a twos-complement int
+    if (aInt < 0)
+      aInt = 0x80000000 - aInt;
+    // Make bInt lexicographically ordered as a twos-complement int
+    int32_t bInt;
+    memcpy( &bInt, &B, sizeof(int32_t) );
+    if (bInt < 0)
+      bInt = 0x80000000 - bInt;
   
-#ifdef  INFINITYCHECK
+    // Now we can compare aInt and bInt to find out how far apart A and B
+    // are.
+    int32_t intDiff = abs(aInt - bInt);
+    std::cout<<A<<" and "<<B<<" both look so normal."<<std::endl;
+    return bool{intDiff <= maxUlps};
+  }
+  
+  std::cout<<"std::isfinite("<<A<<") = "<<std::isfinite(A)<<std::endl;
+  std::cout<<"std::isfinite("<<B<<") = "<<std::isfinite(B)<<std::endl;
+  std::cout<<"iszero("<<A<<") = "<<bool(A == 0)<<std::endl;
+  std::cout<<"iszero("<<B<<") = "<<bool(B == 0)<<std::endl;
+
   // If A or B are infinity (positive or negative) then
   // only return true if they are exactly equal to each other -
   // that is, if they are both infinities of the same sign.
@@ -85,9 +106,7 @@ inline bool CompareFloatingPoint::Compare(float A, float B, int32_t maxUlps){
   // near FLT_MAX.
   if (std::isinf(A) || std::isinf(B))
     return A == B;
-#endif
   
-#ifdef  NANCHECK
   // If A or B are a NAN, return false. NANs are equal to nothing,
   // not even themselves.
   // This check is only needed if you will be generating NANs
@@ -95,38 +114,9 @@ inline bool CompareFloatingPoint::Compare(float A, float B, int32_t maxUlps){
   // ensure that a NAN does not equal itself.
   if (std::isnan(A) || std::isnan(B))
     return false;
-#endif
   
-#ifdef  SIGNCHECK
-  // After adjusting floats so their representations are lexicographically
-  // ordered as twos-complement integers a very small positive number
-  // will compare as 'close' to a very small negative number. If this is
-  // not desireable, and if you are on a platform that supports
-  // subnormals (which is the only place the problem can show up) then
-  // you need this check.
-  // The check for A == B is because zero and negative zero have different
-  // signs but are equal to each other.
-  if (Sign(A) != Sign(B))
-    return A == B;
-#endif
-  
-  int32_t aInt;
-  memcpy( &aInt, &A, sizeof(int32_t) );
-  // Make aInt lexicographically ordered as a twos-complement int
-  if (aInt < 0)
-    aInt = 0x80000000 - aInt;
-  // Make bInt lexicographically ordered as a twos-complement int
-  int32_t bInt;
-  memcpy( &bInt, &B, sizeof(int32_t) );
-  if (bInt < 0)
-    bInt = 0x80000000 - bInt;
-  
-  // Now we can compare aInt and bInt to find out how far apart A and B
-  // are.
-  int32_t intDiff = abs(aInt - bInt);
-  if (intDiff <= maxUlps)
-    return true;
-  return false;
+  // At this point we should be comparing 0 to a 'normal'
+  return A == B;
 }
 
 // This is the 'final' version of the AlmostEqualUlps function.
@@ -137,8 +127,32 @@ inline bool CompareFloatingPoint::Compare(double A, double B, int64_t maxUlps){
   // on what behavior you want from your floating point comparisons.
   // These checks should not be necessary and they are included
   // mainly for completeness.
+
+  if(std::isfinite(A) && std::isfinite(B) && A != 0 && B != 0){
+    int64_t aLong;
+    memcpy( &aLong, &A, sizeof(int64_t) );
+    // Make aLong lexicographically ordered as a twos-complement long
+    if (aLong < 0)
+      aLong = 0x8000000000000000LL - aLong;
+    // Make bLong lexicographically ordered as a twos-complement long
+    int64_t bLong;
+    memcpy( &bLong, &B, sizeof(int64_t) );
+    if (bLong < 0)
+      bLong = 0x8000000000000000LL - bLong;
   
-#ifdef  INFINITYCHECK
+    // Now we can compare aLong and bLong to find out how far apart A and B are.
+    int64_t longDiff = llabs(aLong - bLong);
+    std::cout<<A<<" and "<<B<<" both look so normal."<<std::endl;
+    return bool{longDiff <= maxUlps};
+  }
+
+  std::cout<<"this is not normal"<<std::endl;
+  
+  std::cout<<"std::isfinite("<<A<<") = "<<std::isfinite(A)<<std::endl;
+  std::cout<<"std::isfinite("<<B<<") = "<<std::isfinite(B)<<std::endl;
+  std::cout<<"iszero("<<A<<") = "<<bool(A == 0)<<std::endl;
+  std::cout<<"iszero("<<B<<") = "<<bool(B == 0)<<std::endl;
+
   // If A or B are infinity (positive or negative) then
   // only return true if they are exactly equal to each other -
   // that is, if they are both infinities of the same sign.
@@ -147,9 +161,7 @@ inline bool CompareFloatingPoint::Compare(double A, double B, int64_t maxUlps){
   // near FLT_MAX.
   if (std::isinf(A) || std::isinf(B))
     return A == B;
-#endif
   
-#ifdef  NANCHECK
   // If A or B are a NAN, return false. NANs are equal to nothing,
   // not even themselves.
   // This check is only needed if you will be generating NANs
@@ -157,37 +169,10 @@ inline bool CompareFloatingPoint::Compare(double A, double B, int64_t maxUlps){
   // ensure that a NAN does not equal itself.
   if (std::isnan(A) || std::isnan(B))
     return false;
-#endif
-  
-#ifdef  SIGNCHECK
-  // After adjusting floats so their representations are lexicographically
-  // ordered as twos-complement integers a very small positive number
-  // will compare as 'close' to a very small negative number. If this is
-  // not desireable, and if you are on a platform that supports
-  // subnormals (which is the only place the problem can show up) then
-  // you need this check.
-  // The check for A == B is because zero and negative zero have different
-  // signs but are equal to each other.
-  if (Sign(A) != Sign(B))
-    return A == B;
-#endif
-  
-  int64_t aLong;
-  memcpy( &aLong, &A, sizeof(int64_t) );
-  // Make aLong lexicographically ordered as a twos-complement long
-  if (aLong < 0)
-    aLong = 0x8000000000000000LL - aLong;
-  // Make bLong lexicographically ordered as a twos-complement long
-  int64_t bLong;
-  memcpy( &bLong, &B, sizeof(int64_t) );
-  if (bLong < 0)
-    bLong = 0x8000000000000000LL - bLong;
-  
-  // Now we can compare aLong and bLong to find out how far apart A and B are.
-  int64_t longDiff = llabs(aLong - bLong);
-  if (longDiff <= maxUlps)
-    return true;
-  return false;
+
+  // At this point we should be comparing 0 to a 'normal'
+  return A == B;
+
 }
 
 inline bool CompareFloatingPoint::Compare_NanEqual(double A, double B)
