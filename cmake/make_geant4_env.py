@@ -46,34 +46,6 @@ if os.path.isfile(geant4_sh):
         if var in geant4_vars:
             geant4_env[var] = value
 
-# if this fails, try heuristic to fetch the directories from I3_PORTS
-if not geant4_env:
-    i3ports = os.environ["I3_PORTS"]
-    cmd = "find {0}/share -type d".format(i3ports)
-    out = decode(subp.Popen(cmd.split(), stdout=subp.PIPE).communicate()[0])
-
-    # collect all candidates
-    candidates = {}
-    for data_dir in out.strip().split("\n"):
-        if re.match(".*/data/([a-zA-Z0-9\.]+)$", data_dir):
-            for var, std_prefix in geant4_vars.items():
-                if std_prefix in data_dir:
-                    if var not in candidates:
-                        candidates[var] = [data_dir]
-                    else:
-                        candidates[var].append(data_dir)
-
-    # if we have a choice, prefer a directory that has the right version
-    patch = geant4_version[-1]
-    minor = geant4_version[-2]
-    major = geant4_version[:-2]
-    g4version = "{0}.{1}.{2}".format(major, minor, patch)
-    for var in candidates:
-        for c in candidates[var]:
-            geant4_env[var] = c
-            if g4version in c:
-                break
-
 formatted_pairs = []
 for var in geant4_vars:
 
