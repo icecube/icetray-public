@@ -132,7 +132,6 @@ Uncommon CMake settings
      - Install header files when making tarball.
      - OFF
    * - .. attribute:: INSTALL_TOOL_LIBS
-     - Install libraries from I3_PORTS when making tarball.
      - ON
 
 Verbose build
