@@ -30,12 +30,12 @@ metaproject and version you are running, etc.
 Executing this script at the command line will spawn a subshell with
 the appropriate environment::
 
-  % ./env-shell.sh 
+  % ./env-shell.sh
   ************************************************************************
   *                                                                      *
   *                   W E L C O M E  to  I C E T R A Y                   *
   *                                                                      *
-  *              Version offline-software.trunk     r49100               *
+  *                   Version combo.trunk     r171557                    *
   *                                                                      *
   *                You are welcome to visit our Web site                 *
   *                        http://icecube.umd.edu                        *
@@ -43,10 +43,11 @@ the appropriate environment::
   ************************************************************************
   
   Icetray environment has:
-     I3_SRC       = /home/troy/Icecube/meta-projects/offline-software/trunk/src
-     I3_BUILD     = /home/troy/Icecube/meta-projects/offline-software/trunk/build
-     I3_PORTS     = /opt/i3/ports
-  
+     I3_SRC       = /home/olivas/icecube/combo/trunk/src
+     I3_BUILD     = /home/olivas/icecube/combo/trunk/build
+     I3_TESTDATA  = /home/olivas/icecube/test-data/releases/V00-00-01
+     Python       = 2.7.15rc1
+
 Under the hood there are many other environment variables set.  You
 can look at the file to see exactly what.  To unload this environment,
 simply exit the subshell::
@@ -69,7 +70,7 @@ behavior would look something like this::
   *                                                                      *
   *                   W E L C O M E  to  I C E T R A Y                   *
   *                                                                      *
-  *              Version offline-software.trunk     r49100               *
+  *                   Version combo.trunk     r171557                    *
   *                                                                      *
   *                You are welcome to visit our Web site                 *
   *                        http://icecube.umd.edu                        *
@@ -77,11 +78,13 @@ behavior would look something like this::
   ************************************************************************
   
   Icetray environment has:
-     I3_SRC       = /home/troy/Icecube/meta-projects/offline-software/trunk/src
-     I3_BUILD     = /home/troy/Icecube/meta-projects/offline-software/trunk/build
-     I3_PORTS     = /opt/i3/ports
+     I3_SRC       = /home/olivas/icecube/combo/trunk/src
+     I3_BUILD     = /home/olivas/icecube/combo/trunk/build
+     I3_TESTDATA  = /home/olivas/icecube/test-data/releases/V00-00-01
+     Python       = 2.7.15rc1
   % echo $PATH
-  /home/troy/Icecube/meta-projects/offline-software/trunk/build/bin:/opt/i3/ports/root-v5.18.00/bin:/opt/i3/ports/bin:/usr/bin:/bin
+  home/olivas/icecube/combo/trunk/build/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
   
 You can see that also the path to the ROOT installation in the toolset
 has been added.  If I erroneously assign to PATH in my .bashrc, ie if
@@ -99,7 +102,7 @@ initializes::
   *                                                                      *
   *                   W E L C O M E  to  I C E T R A Y                   *
   *                                                                      *
-  *              Version offline-software.trunk     r49100               *
+  *                   Version combo.trunk     r171557                    *
   *                                                                      *
   *                You are welcome to visit our Web site                 *
   *                        http://icecube.umd.edu                        *
@@ -107,9 +110,10 @@ initializes::
   ************************************************************************
   
   Icetray environment has:
-     I3_SRC       = /home/troy/Icecube/meta-projects/offline-software/trunk/src
-     I3_BUILD     = /home/troy/Icecube/meta-projects/offline-software/trunk/build
-     I3_PORTS     = /opt/i3/ports
+     I3_SRC       = /home/olivas/icecube/combo/trunk/src
+     I3_BUILD     = /home/olivas/icecube/combo/trunk/build
+     I3_TESTDATA  = /home/olivas/icecube/test-data/releases/V00-00-01
+     Python       = 2.7.15rc1
   % echo $PATH
   /usr/bin:/bin
 
@@ -192,35 +196,6 @@ can configure things easily::
   Setting environment for root 5.20
   $ echo $PATH
   /path/to/my/root-5.20.00/bin:/usr/bin
-
-And these functions may even be run after the ``env-shell.sh`` has been run::
-
-  % echo $PATH     
-  /usr/bin
-  % ./env-shell.sh 
-  ************************************************************************
-  *                                                                      *
-  *                   W E L C O M E  to  I C E T R A Y                   *
-  *                                                                      *
-  *              Version offline-software.trunk     r49100               *
-  *                                                                      *
-  *                You are welcome to visit our Web site                 *
-  *                        http://icecube.umd.edu                        *
-  *                                                                      *
-  ************************************************************************
-  
-  Icetray environment has:
-     I3_SRC       = /home/troy/Icecube/meta-projects/offline-software/trunk/src
-     I3_BUILD     = /home/troy/Icecube/meta-projects/offline-software/trunk/build
-     I3_PORTS     = /opt/i3/ports
-  % echo $PATH
-  /home/troy/Icecube/meta-projects/offline-software/trunk/build/bin:/opt/i3/ports/
-  root-v5.18.00/bin:/opt/i3/ports/bin:/usr/bin
-  % use_root518 
-  Setting environment for root 5.18
-  % echo $PATH
-  /path/to/my/root-5.18.00/bin:/home/troy/Icecube/meta-projects/offline-software/t
-  runk/build/bin:/opt/i3/ports/root-v5.18.00/bin:/opt/i3/ports/bin:/usr/bin
   
 .. warning::
 
