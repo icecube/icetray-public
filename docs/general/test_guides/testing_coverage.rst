@@ -99,7 +99,7 @@ interested in things like standard headers or boost.
 
 ::
 
-   $ lcov -r test_total.info '/usr/include/*' '$I3_PORTS/*' -o reports.info
+   $ lcov -r test_total.info '/usr/include/*' -o reports.info
 
 Now, finally, we generate our HTML report.
 

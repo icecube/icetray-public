@@ -19,7 +19,6 @@ First be sure that you have built either **Debug** or
   Icetray environment has:
      I3_SRC       = /home/troy/Icecube/meta-projects/offline-software/trunk/src
      I3_BUILD     = /home/troy/Icecube/meta-projects/offline-software/trunk/build
-     I3_PORTS     = /opt/i3/ports
 
 run gdb using ``--args``, passing ``python`` and your script::
 

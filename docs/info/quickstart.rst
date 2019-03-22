@@ -119,7 +119,6 @@ local build files::
  -- Check size of void* - done
  -- Check for working CXX compiler: /usr/bin/c++
  -- Check for working CXX compiler: /usr/bin/c++ -- works
- -- I3_PORTS     /icework/blaufuss/i3tools
  -- OSTYPE       Linux
  -- OSVERSION    2.6.22-14-generic
  -- ARCH         i686
