@@ -162,9 +162,11 @@ TEST(compare_float_as_int32_t){
   ENSURE( TestCompareFinal( nan2, nan3, false ) ) ;
   
   // Test whether tiny numbers of opposite signs compare as equal.
+  // The smallestDenormal is 1 ULP away from 0, so should compare
+  // true when the default distance is 10 ulps.
   ENSURE( TestCompareFinal( smallestDenormal, -smallestDenormal, true ) ) ;
-  ENSURE( TestCompareFinal( smallestDenormal, 0, false ) ) ;
-  ENSURE( TestCompareFinal( -smallestDenormal, negativeZero, false ) ) ;
+  ENSURE( TestCompareFinal( smallestDenormal, 0, true ) ) ;
+  ENSURE( TestCompareFinal( -smallestDenormal, negativeZero, true ) ) ;
 
   cerr<<ToString(nan1); 
   cerr<<ToString(nan2);
@@ -280,6 +282,9 @@ TEST(compare_double_as_int64_t){
   
   // Test whether tiny numbers of opposite signs compare as equal.
   ENSURE( TestCompareFinal( smallestDenormalD, -smallestDenormalD, true ) ) ;
+
+  // The smallestDenormal is 1 ULP away from 0, so should compare
+  // true when the default distance is 10 ulps.  The smallest
   ENSURE( TestCompareFinal( smallestDenormalD, 0, false) ) ;
   ENSURE( TestCompareFinal( -smallestDenormalD, negativeZeroD, false) ) ;
   
