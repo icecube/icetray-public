@@ -72,12 +72,10 @@ include(config)   # trigger the configuation meat (build types, etc)
 ## enable_testing() must be called before add_test() which happens in project.cmake
 if(DEFINED ENV{I3_TESTDATA})
     set(I3_TESTDATA $ENV{I3_TESTDATA} CACHE STRING "Path to your icetray test-data")
-elseif(DEFINED ENV{I3_PORTS})
-    set(I3_TESTDATA $ENV{I3_PORTS}/test-data CACHE STRING "Path to your icetray test-data")
 else()
     set(I3_TESTDATA "${CMAKE_BINARY_DIR}/test-data" CACHE STRING "Path to your icetray test-data: currently empty, define it if you wish to run unit tests and/or test scripts.")
-    colormsg(YELLOW "*** Neither I3_PORTS nor I3_TESTDATA set. Using the default of ${I3_TESTDATA}")
-endif(DEFINED ENV{I3_TESTDATA})
+    colormsg(YELLOW "*** I3_TESTDATA is not set. Using the default value of ${I3_TESTDATA}")
+endif()
 
 if(I3_TESTDATA)
   add_custom_target(rsync
@@ -293,11 +291,6 @@ endif(DPKG_INSTALL_PREFIX)
 ## coverage target
 ## there is an incompatibility between gcc-5.4/cmake-3.5/lcov-1.12 and gcc-4.8/cmake-2.8/lcov-1.10
 ## the target below may not work on combinations of older software. see http://code.icecube.wisc.edu/projects/icecube/ticket/1891 for more info
-if(I3_PORTS)
-  set(p "'${I3_PORTS}/*'")
-else()
-  set(p "")
-endif()
 add_custom_target(coverage
   COMMAND if test ! -d ../output \; then mkdir ../output\; fi
   COMMAND rm -f ${CMAKE_BINARY_DIR}/CMakeFiles/*.moc ${CMAKE_BINARY_DIR}/CMakeFiles/*.h

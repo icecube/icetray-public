@@ -27,41 +27,23 @@ if (SYSTEM_PACKAGES)
     NONE
     zmq
     )
-endif (SYSTEM_PACKAGES)
-
-if (NOT ZMQ_FOUND)
-  if(NOT ZMQ_VERSION)
-    foreach(ZMQVER 3.2.4 2.1.11)
-      if(IS_DIRECTORY ${I3_PORTS}/include/zmq-${ZMQVER})
-        set(ZMQ_VERSION "${ZMQVER}")
-        break()
-      endif()
-    endforeach()
-  endif(NOT ZMQ_VERSION)
-  TOOLDEF (zmq
-    include/zmq-${ZMQ_VERSION}
-    zmq.hpp 
-    lib/zmq-${ZMQ_VERSION}
-    NONE
-    zmq
-    )
-endif (NOT ZMQ_FOUND)
+endif ()
 
 # Detect cppzmq versions from before there were versions
 if (ZMQ_FOUND AND NOT CPPZMQ_VERSION)
   include(CheckCXXSymbolExists)
-  IF (CMAKE_VERSION VERSION_GREATER "2.8.5")
+  if (CMAKE_VERSION VERSION_GREATER "2.8.5")
     include(CMakePushCheckState)
     CMAKE_PUSH_CHECK_STATE()
-  ENDIF (CMAKE_VERSION VERSION_GREATER "2.8.5")
+  endif ()
   set(CMAKE_REQUIRED_INCLUDES "${ZMQ_INCLUDE_DIR}/include")
   CHECK_CXX_SYMBOL_EXISTS(
     CPPZMQ_VERSION_MAJOR
     "${ZMQ_INCLUDE_DIR}/include/zmq.hpp"
     _have_cppzmq_version)
-  IF (CMAKE_VERSION VERSION_GREATER "2.8.5")
+  if (CMAKE_VERSION VERSION_GREATER "2.8.5")
     CMAKE_POP_CHECK_STATE()
-  ENDIF (CMAKE_VERSION VERSION_GREATER "2.8.5")
+  endif ()
   # This is how mainline cppzmq do version detection.
   if (_have_cppzmq_version)
     file(READ "${ZMQ_INCLUDE_DIR}/include/zmq.hpp" _CPPZMQ_H_CONTENTS)
@@ -73,4 +55,4 @@ if (ZMQ_FOUND AND NOT CPPZMQ_VERSION)
     # a copy from before there was a release policy or real versioning
     set(CPPZMQ_VERSION "4.2.0")
   endif ()
-endif (ZMQ_FOUND AND NOT CPPZMQ_VERSION)
+endif ()

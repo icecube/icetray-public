@@ -109,7 +109,6 @@ if [[ "${_GEANT4_FOUND}" == "TRUE" ]]; then
 fi
 _LOG4CPP_FOUND=@LOG4CPP_FOUND@
 if [[ "${_LOG4CPP_FOUND}" == "TRUE" ]]; then
-    LOG4CPP_LIBRARY_DIR=@I3_PORTS@/lib/log4cpp-1.0
     if [[ -d ${LOG4CPP_LIBRARY_DIR} ]]; then
 	_LD_LIBRARY_PATH=${_LD_LIBRARY_PATH}:${LOG4CPP_LIBRARY_DIR}
 	_DYLD_LIBRARY_PATH=${_DYLD_LIBRARY_PATH}:${LOG4CPP_LIBRARY_DIR}
@@ -153,7 +152,6 @@ if [[ -z "$ARGV" ]]
     printf "Icetray environment has:\n"
     printf "   I3_SRC       = %s\n" $_I3_SRC
     printf "   I3_BUILD     = %s\n" $_I3_BUILD
-    printf "   I3_PORTS     = %s\n" $_I3_PORTS
 fi
 
 if [[ -z "$I3_SHELL" ]] # a clean, first invocation

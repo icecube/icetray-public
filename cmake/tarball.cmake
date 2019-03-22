@@ -2,7 +2,7 @@
 # Tarball target
 #
 option(INSTALL_HEADERS "install header files when making tarball" OFF)
-option(INSTALL_TOOL_LIBS "install libraries from I3_PORTS when making tarball" ON)
+option(INSTALL_TOOL_LIBS "install libraries when making tarball" ON)
 
 find_program(MD5SUM_PROGRAM md5sum)
 find_program(MD5SUM_PROGRAM md5)
@@ -60,7 +60,7 @@ add_dependencies(tarball-finish tarball-install-sh)
 add_custom_target(tarball)
 add_dependencies(tarball tarball-finish)
 
-# if not shipping I3_PORTS, keep existing external links when installing
+# keep existing external links when installing
 if(NOT INSTALL_TOOL_LIBS)
   set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 endif(NOT INSTALL_TOOL_LIBS)

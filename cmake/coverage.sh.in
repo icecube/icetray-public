@@ -93,7 +93,7 @@ ${lcov} -b ../ -d "$project" --capture -o test_run.info
 ${lcov} -b ../ -d "$project" --add-tracefile test_base.info -a test_run.info -o test_total.info
 
 ## remove stuff we don't care about
-${lcov} -b ../ -d "$project" --remove test_total.info '/usr/include/*' '$ENV{I3_PORTS}/*' '*/numpy' '/usr/lib/gcc/*' '*/geant/*' -o reports.info
+${lcov} -b ../ -d "$project" --remove test_total.info '/usr/include/*' '*/numpy' '/usr/lib/gcc/*' '*/geant/*' -o reports.info
 
 ## generate the html
 if [ `which c++filt` ]; then

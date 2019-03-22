@@ -33,17 +33,6 @@ endif()
 
 if (USE_ROOT)
   if(NOT ROOT_VERSION)
-    foreach(ROOTVER 5.34.19 5.34.18 5.34.04 5.34.03 5.32.00 5.30.06 5.30.05 5.30.00 5.28.00h 5.28.00d 5.28.00 5.27.06b 5.26.00e 5.24.00b 5.24.00 5.20.00 5.18.00)
-      if(IS_DIRECTORY ${I3_PORTS}/root-v${ROOTVER})
-        set(ROOT_VERSION "${ROOTVER}")
-        set(ROOT_${ROOT_VERSION}_LIBS Core Cint RIO Net Hist Graf Graf3d Gpad Tree Rint Postscript Matrix Physics MathCore Thread Minuit)
-        set(ROOT_GUI_LIB Gui)
-        break()
-      endif()
-    endforeach()
-  endif(NOT ROOT_VERSION)
-
-  if(NOT ROOT_VERSION)
     # try for system root
     find_program(ROOT_CONFIG_EXECUTABLE root-config
                  HINTS $ENV{ROOTSYS}/bin)
@@ -156,9 +145,6 @@ else()
   if (USE_CINT)
     add_definitions(-DI3_USE_CINT)
   endif (USE_CINT)
-  if(NOT ROOTSYS)
-    set(ROOTSYS ${I3_PORTS}/root-v${ROOT_VERSION} CACHE STRING "The beloved ROOTSYS.")
-  endif(NOT ROOTSYS)
 
   if(NOT SYSTEM_PACKAGES_ROOT)
     set(old_TOOL_SYSTEM_PATH ${TOOL_SYSTEM_PATH})

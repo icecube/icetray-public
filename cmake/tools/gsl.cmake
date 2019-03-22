@@ -18,15 +18,6 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
 
-IF(NOT GSL_VERSION)
-  foreach(v 1.8 1.14 1.15 1.16)
-    if(IS_DIRECTORY ${I3_PORTS}/include/gsl-${v})
-      set(GSL_VERSION "${v}")
-      set(GSL_SUBDIR "gsl-${v}")
-    endif(IS_DIRECTORY ${I3_PORTS}/include/gsl-${v})
-  endforeach(v 1.8 1.14 1.15 1.16)
-ENDIF(NOT GSL_VERSION)
-
 if(BLAS_FOUND)
   tooldef(gsl 
     include/${GSL_SUBDIR}
@@ -39,11 +30,11 @@ if(BLAS_FOUND)
   if(BUILDNAME MATCHES "ARCH")
     list(APPEND GSL_LIBRARIES "-lgslcblas")
   endif()
-else(BLAS_FOUND)
+else()
   tooldef(gsl 
     include/${GSL_SUBDIR}
     gsl/gsl_rng.h
     lib/${GSL_SUBDIR}
     NONE
     gsl gslcblas)
-endif(BLAS_FOUND)
+endif()

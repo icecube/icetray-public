@@ -13,7 +13,7 @@ tooldef(lapack
 
 if(LAPACK_FOUND)
   set(LAPACKINI3PORTS_FOUND TRUE)
-else(LAPACK_FOUND)
+else()
   unset(LAPACK_CONFIG_ERROR)
   unset(LAPACK_INCLUDE_DIR)
   
@@ -26,22 +26,21 @@ else(LAPACK_FOUND)
     set(LAPACK_FOUND TRUE CACHE BOOL "Tool LAPACK found successfully" FORCE)
     set(LAPACK_INCLUDE_DIR ${OpenBLAS_INCLUDE_DIRS} CACHE PATH "Headers for OpenBLAS" FORCE)
     set(LAPACK_LIBRARIES ${OpenBLAS_LIBRARIES} CACHE PATH "Libraries for OpenBLAS" FORCE)
-  else(OpenBLAS_FOUND)
-    colormsg(YELLOW "*** GotoBLAS2 not found in \$I3_PORTS")
+  else()
+    colormsg(YELLOW "*** GotoBLAS2 not found.")
     colormsg(YELLOW "*** Searching for 3rd party LAPACK (I hope you linked it against SuiteSparse)")
 
     set(BLAS_STATIC FALSE)
-    #set(CMAKE_REQUIRED_FLAGS "-L/usr/lib/i386-linux-gnu -L/usr/lib/x86_64-linux-gnu -lgfortran")
     find_package(LAPACK)
     unset(CMAKE_REQUIRED_FLAGS)
-  endif(OpenBLAS_FOUND)
-endif(LAPACK_FOUND)
+  endif()
+endif()
 
 else(NOT APPLE)
   colormsg("")
   colormsg(HICYAN "lapack")
   find_package(LAPACK)
-endif(NOT APPLE)
+endif()
 
 ## uncomment the following for debugging...
 #colormsg("BLAS_LIBRARIES: ${BLAS_LIBRARIES}")

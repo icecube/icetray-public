@@ -68,8 +68,6 @@ endif()
 
 ## default the option SYSTEM_PACKAGES to ON
 option(SYSTEM_PACKAGES "Use tools provided by the operating system" ON)
-## import I3_PORTS from the environment into the cmake variable I3_PORTS
-set(I3_PORTS $ENV{I3_PORTS} CACHE STRING "Path to your icecube ports installation")
 
 #
 # Find CVMFS software
@@ -85,24 +83,6 @@ if($ENV{SROOT} MATCHES "^/cvmfs/icecube")
   set(USE_CVMFS TRUE CACHE BOOL "Are we using CVMFS?")
   set(CVMFS_SROOTBASE "$ENV{SROOTBASE}" CACHE STRING "CVMFS toolset path" )
 endif()
-
-## use a default if I3_PORTS isn't set, and report its value
-if(SYSTEM_PACKAGES)
-  if(IS_DIRECTORY $ENV{I3_PORTS})
-    boost_report_value(I3_PORTS)
-  endif(IS_DIRECTORY $ENV{I3_PORTS})
-else(SYSTEM_PACKAGES)
-  if("$ENV{I3_PORTS}" STREQUAL "")
-    message(STATUS "I3_PORTS not set, maybe not a problem.  Trying default of /opt/i3/ports.")
-    set(ENV{I3_PORTS} "/opt/i3/ports")
-  endif("$ENV{I3_PORTS}" STREQUAL "")
-
-  if(NOT IS_DIRECTORY $ENV{I3_PORTS})
-    message(FATAL_ERROR "I3_PORTS ($ENV{I3_PORTS}) is unset or doesn't point to a directory. If this is intentional, please set -DSYSTEM_PACKAGES=True")
-  else(NOT IS_DIRECTORY $ENV{I3_PORTS})
-    boost_report_value(I3_PORTS)
-  endif(NOT IS_DIRECTORY $ENV{I3_PORTS})
-endif(SYSTEM_PACKAGES)
 
 #
 # Create various info/debug files

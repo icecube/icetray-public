@@ -51,14 +51,12 @@ fi
 
 _I3_SHELL=$NEW_SHELL
 
-_I3_PORTS=@I3_PORTS@
 _I3_SRC=@I3_SRC@
 _I3_BUILD=@I3_BUILD@
 _I3_TESTDATA=@I3_TESTDATA@
 # If the I3_TESTDATA value at cmake time differs from the value
 # that was set just prior to starting env-shell.sh, prefer the latter one.
-# E.g.: user may have had both I3_PORTS and I3_TESTDATA undefined at cmake time,
-# but then set I3_TESTDATA later.
+# E.g.: user may have had I3_TESTDATA undefined at cmake time, but then set I3_TESTDATA later.
 if [ -d "$I3_TESTDATA" ]
 then 
     if [ $(readlink "$_I3_TESTDATA") != $(readlink "$I3_TESTDATA") ]
@@ -99,27 +97,19 @@ if [ -d "@ROOTSYS@" ]; then
 
 _ROOTSYS=@ROOTSYS@
 _LD_LIBRARY_PATH=@CMAKE_BINARY_DIR@/lib:@CMAKE_BINARY_DIR@/lib/tools:${_ROOTSYS}/lib:@GEANT4_LIB_DIR@:$LD_LIBRARY_PATH
-_DYLD_LIBRARY_PATH=@CMAKE_BINARY_DIR@/lib:@CMAKE_BINARY_DIR@/lib/tools:${_ROOTSYS}/lib:$_I3_PORTS/lib:$DYLD_LIBRARY_PATH
+_DYLD_LIBRARY_PATH=@CMAKE_BINARY_DIR@/lib:@CMAKE_BINARY_DIR@/lib/tools:${_ROOTSYS}/lib:$DYLD_LIBRARY_PATH
 
 _PYTHONPATH=@CMAKE_BINARY_DIR@/lib:${_ROOTSYS}/lib:$PYTHONPATH
-if [ -z "$_I3_PORTS" ]; then
-    _PATH=@CMAKE_BINARY_DIR@/bin:${_ROOTSYS}/bin:$PATH
-else
-    _PATH=@CMAKE_BINARY_DIR@/bin:${_ROOTSYS}/bin:$_I3_PORTS/bin:$PATH
-fi
+_PATH=@CMAKE_BINARY_DIR@/bin:${_ROOTSYS}/bin:$PATH
 
 else
 
 _ROOTSYS=''
 _LD_LIBRARY_PATH=@CMAKE_BINARY_DIR@/lib:@CMAKE_BINARY_DIR@/lib/tools:@GEANT4_LIB_DIR@:$LD_LIBRARY_PATH
-_DYLD_LIBRARY_PATH=@CMAKE_BINARY_DIR@/lib:@CMAKE_BINARY_DIR@/lib/tools:$_I3_PORTS/lib:$DYLD_LIBRARY_PATH
+_DYLD_LIBRARY_PATH=@CMAKE_BINARY_DIR@/lib:@CMAKE_BINARY_DIR@/lib/tools:$DYLD_LIBRARY_PATH
 
 _PYTHONPATH=@CMAKE_BINARY_DIR@/lib:$PYTHONPATH
-if [ -z "$_I3_PORTS" ]; then
-    _PATH=@CMAKE_BINARY_DIR@/bin:$PATH
-else
-    _PATH=@CMAKE_BINARY_DIR@/bin:$_I3_PORTS/bin:$PATH
-fi
+_PATH=@CMAKE_BINARY_DIR@/bin:$PATH
 
 fi
 
@@ -161,7 +151,6 @@ if [ -z "$ARGV" ]
     printf "Icetray environment has:\n"
     printf "   I3_SRC       = %s\n" $_I3_SRC
     printf "   I3_BUILD     = %s\n" $_I3_BUILD
-    [ -z "$_I3_PORTS" ] || printf "   I3_PORTS     = %s\n" $_I3_PORTS
     [ -d "$_I3_TESTDATA" ] && printf "   I3_TESTDATA  = %s\n" $_I3_TESTDATA \
                            || printf "   I3_TESTDATA should be set to an existing directory path\n" \
                                      "   (and 'make rsync' may need to be run) if you wish to run tests."
@@ -188,7 +177,6 @@ if [ -z "$I3_SHELL" ] # a clean, first invocation
         I3_PLATFORM="" \
 	I3_SRC=$_I3_SRC \
 	I3_BUILD=$_I3_BUILD \
-	I3_PORTS=$_I3_PORTS \
 	I3_TESTDATA=$_I3_TESTDATA \
 	ROOTSYS=$_ROOTSYS \
 	I3_SHELL=$_I3_SHELL \
