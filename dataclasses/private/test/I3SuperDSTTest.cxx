@@ -550,9 +550,6 @@ GetDataDir()
 {
 	namespace fs = boost::filesystem;
 	
-	ENSURE(getenv("I3_PORTS") != NULL,
-	    "I3_PORTS must be defined in the parent shell.");
-
 	const std::string I3_TESTDATA(getenv("I3_TESTDATA"));
 	fs::path data_dir(I3_TESTDATA + "/superdst");
 	
