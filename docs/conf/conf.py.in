@@ -13,6 +13,11 @@
 
 import sys, os
 
+# imports for the traclinks replacement code at the bottom of this file
+from docutils import nodes, utils
+from docutils.parsers.rst import roles
+import urllib
+
 # If your extensions are in another directory, add it here. If the directory
 # is relative to the documentation root, use os.path.abspath to make it
 # absolute, like shown here.
@@ -24,10 +29,9 @@ sys.path = [os.path.join(os.environ["I3_SRC"],'docs','extensions')] + sys.path
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = filter(None, ['sphinx.ext.autodoc', 
+extensions = filter(None, ['sphinx.ext.autodoc',
                            'sphinx.ext.mathjax',
                            '@sphinx_NAPOLEON@',
-                           '@sphinx_TRACLINKS@',
                            '@sphinx_EMAIL@',
                            '@sphinx_BREATHE@',
                            'sphinx_cmake',
@@ -196,4 +200,15 @@ latex_documents = [
 # If false, no module index is generated.
 #latex_use_modindex = True
 
-traclinks_base_url = "http://code.icecube.wisc.edu/projects/icecube"
+# the following replaces the long out-of-date traclinks extension in
+# fact it's pulled from https://stackoverflow.com/a/2111327/4021251,
+# where traclinks got it
+
+trac_url = "https://code.icecube.wisc.edu/projects/icecube"
+
+def trac_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
+    ref = trac_url + '/intertrac/' + urllib.quote(text)
+    node = nodes.reference(rawtext, utils.unescape(text), refuri=ref, **options)
+    return [node],[]
+
+roles.register_canonical_role('trac', trac_role)

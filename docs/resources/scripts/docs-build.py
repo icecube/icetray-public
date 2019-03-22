@@ -18,7 +18,7 @@ class command_queue:
             if st is None:
                 newrunning.append((args,popen))
             elif st:
-                sys.stderr.write("\033[1;31mWARNING:\033[0m Exit Status %s: %s\n".format(args[0],st))
+                sys.stderr.write("\033[1;31mWARNING:\033[0m Exit Status {}: {}\n".format(args[0], st))
                 
         self.running = newrunning
         while len(self.queue) and len(self.running) < self.max_processes:

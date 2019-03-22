@@ -20,7 +20,7 @@ foreach(e "napoleon")
   unset(eU)
 
 ## for sphinxcontrib-email
-foreach(e "email" "traclinks")
+foreach(e "email")
     string(TOUPPER ${e} eU)
     execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sphinxcontrib.${e}"
       RESULT_VARIABLE sphinx_${eU}
@@ -35,8 +35,8 @@ foreach(e "email" "traclinks")
   unset(e)
   unset(eU)
 
-## for sphinxcontrib-email
-foreach(e "breathe" )
+## for breathe
+foreach(e "breathe")
     string(TOUPPER ${e} eU)
     execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import ${e}"
       RESULT_VARIABLE sphinx_${eU}
