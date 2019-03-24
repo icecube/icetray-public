@@ -271,6 +271,8 @@ def get_doxygen_docstring(project,modulename):
     brief = comp.find('briefdescription')
 
     doc = ET.tostring(brief, encoding='unicode', method='text')
+    if sys.version_info[0] < 3:
+        doc = ET.tostring(brief, encoding='utf-8', method='text')
 
     if opts.verbose_docs:
 
@@ -284,6 +286,8 @@ def get_doxygen_docstring(project,modulename):
                     s.remove(t)
 
         doc+='\n\n'+ET.tostring(detail, encoding='unicode', method='text')
+        if sys.version_info[0] < 3:
+            doc+='\n\n'+ET.tostring(detail, encoding='utf-8', method='text')
 
     return doc.strip()
 
