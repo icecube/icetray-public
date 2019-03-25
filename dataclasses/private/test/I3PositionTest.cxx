@@ -22,7 +22,6 @@ using std::cout;
 using std::endl;
 
 TEST_GROUP(I3PositionTest);
-int64_t maxUlps{100};
 
 /**
  * check that constructor and destructor work
@@ -54,7 +53,7 @@ TEST(cartesian_construction)
   ENSURE(p2.GetY()==0.0);
   ENSURE(p2.GetZ()==2.0);
   ENSURE(CompareFloatingPoint::Compare(p2.GetR(),2.0));
-  ENSURE(CompareFloatingPoint::Compare(p2.GetTheta(),0.0));
+  ENSURE_DISTANCE(p2.GetTheta(), 0.0, 10*std::numeric_limits<double>::epsilon());
   
   I3Position p3(3,0,0);
   ENSURE(p3.GetX()==3.0);
@@ -78,13 +77,12 @@ TEST(cartesian_construction)
 TEST(spherical_construction)
 {
   I3Position p1(5,I3Constants::pi/2,I3Constants::pi,I3Position::sph);
-  std::cout<<p1.GetX()<<", "<<p1.GetY()<<", "<<p1.GetZ()<<endl;
   ENSURE(CompareFloatingPoint::Compare(p1.GetR(),5.0));
   ENSURE(CompareFloatingPoint::Compare(p1.GetTheta(),I3Constants::pi/2));
   ENSURE(CompareFloatingPoint::Compare(p1.GetPhi(),I3Constants::pi));
   ENSURE(CompareFloatingPoint::Compare(p1.GetX(),-5.0));
-  ENSURE(CompareFloatingPoint::Compare(p1.GetY(),0, maxUlps));
-  ENSURE(CompareFloatingPoint::Compare(p1.GetZ(),0));
+  ENSURE_DISTANCE(p1.GetY(), 0., 10*std::numeric_limits<double>::epsilon());
+  ENSURE_DISTANCE(p1.GetZ(), 0., 10*std::numeric_limits<double>::epsilon());
   ENSURE(CompareFloatingPoint::Compare(p1.GetRho(),5));
   
   I3Position p2(3,I3Constants::pi/4,I3Constants::pi/4,I3Position::sph);
@@ -123,11 +121,10 @@ TEST(i3direction_construction)
  */
 TEST(coord_transforms)
 {
-  cout <<"Creating positions p(4,3,0) and q(0,0,0)..."<<endl;
+  const double TOLERANCE{10.*std::numeric_limits<double>::epsilon()};
+  
   I3Position p(4,3,0);
-  //I3PositionPtr q_ptr(new I3Position(1,2,3));
   I3Position q(1,2,3);
-  cout <<"Setting position q to: 2,2,2 in car..."<<endl;
   q=I3Position(2,2,2,I3Position::car);
   
   ENSURE(CompareFloatingPoint::Compare(p.GetX(),4.0),"p.GetX failed");
@@ -154,34 +151,37 @@ TEST(coord_transforms)
   cout <<"Rotating p by Pi/2 around y-axis..."<<endl;
   p.RotateY(I3Constants::pi/2);
   std::cout<<p.GetX()<<", "<<p.GetY()<<", "<<p.GetZ()<<endl;
-  ENSURE(CompareFloatingPoint::Compare(p.GetX(),0.0, maxUlps),"p.GetX failed");
-  ENSURE(CompareFloatingPoint::Compare(p.GetY(),4.94975),"p.GetY failed");
-  ENSURE(CompareFloatingPoint::Compare(p.GetZ(),-0.707108),"p.GetZ failed");
+  ENSURE_DISTANCE(p.GetX(), 0.0, TOLERANCE,"p.GetX failed");
+  ENSURE_DISTANCE(p.GetY(), 4.949747468305833, TOLERANCE, "p.GetY failed");
+  ENSURE_DISTANCE(p.GetZ(), -0.7071067811865479, TOLERANCE, "p.GetZ failed");
   
   cout <<"Rotating p by Pi/2 around x-axis..."<<endl;
   p.RotateX(I3Constants::pi/2);
-  ENSURE(CompareFloatingPoint::Compare(p.GetX(),0.0),"p.GetX failed");
-  ENSURE(CompareFloatingPoint::Compare(p.GetY(),0.707108),"p.GetY failed");
-  ENSURE(CompareFloatingPoint::Compare(p.GetZ(),4.94975),"p.GetZ failed");
+  ENSURE_DISTANCE(p.GetX(), 0.0, TOLERANCE, "p.GetX failed");
+  ENSURE_DISTANCE(p.GetY(), 0.7071067811865482, TOLERANCE, "p.GetY failed");
+  ENSURE_DISTANCE(p.GetZ(), 4.949747468305833, TOLERANCE, "p.GetZ failed");
   
   cout <<"Creating position s and setting coordinates in sph..."<<endl;
   I3Position s;
-  s=I3Position(1.732050808,0.955316618,3.141592/4,I3Position::sph);
-  ENSURE(CompareFloatingPoint::Compare(s.GetX(),1.0),"s.GetX failed");
-  ENSURE(CompareFloatingPoint::Compare(s.GetY(),1.0),"s.GetY failed");
-  ENSURE(CompareFloatingPoint::Compare(s.GetZ(),1.0),"s.GetZ failed");
+  s=I3Position(1.732050807568877,
+	       0.9553166181245092,
+	       I3Constants::pi/4.,
+	       I3Position::sph);
+  ENSURE_DISTANCE(s.GetX(), 1.0, TOLERANCE, "s.GetX failed");
+  ENSURE_DISTANCE(s.GetY(), 1.0, TOLERANCE, "s.GetY failed");
+  ENSURE_DISTANCE(s.GetZ(), 1.0, TOLERANCE, "s.GetZ failed");
   
   cout <<"Creating position d and setting coordinates in car..."<<endl;
   I3Position d(1,1,1);
-  ENSURE(CompareFloatingPoint::Compare(d.GetR(),1.73205),"d.GetR failed");
-  ENSURE(CompareFloatingPoint::Compare(d.GetTheta(),0.955317),"d.GetTheta failed");
-  ENSURE(CompareFloatingPoint::Compare(d.GetPhi(),0.785398),"d.GetPhi failed");
+  ENSURE_DISTANCE(d.GetR(), 1.732050807568877, TOLERANCE, "d.GetR failed");
+  ENSURE_DISTANCE(d.GetTheta(), 0.9553166181245092, TOLERANCE, "d.GetTheta failed");
+  ENSURE_DISTANCE(d.GetPhi(), 0.7853981633974483, TOLERANCE, "d.GetPhi failed");
   
   cout <<"Using the = operator on I3Position e=d..."<<endl;
   I3Position e = d;
-  ENSURE(CompareFloatingPoint::Compare(e.GetR(),1.73205),"e.GetR failed");
-  ENSURE(CompareFloatingPoint::Compare(e.GetTheta(),0.955317),"e.GetTheta failed");
-  ENSURE(CompareFloatingPoint::Compare(e.GetPhi(),0.785398),"e.GetPhi failed");
+  ENSURE_DISTANCE(e.GetR(), 1.732050807568877, TOLERANCE, "e.GetR failed");
+  ENSURE_DISTANCE(e.GetTheta() , 0.9553166181245092, TOLERANCE, "e.GetTheta failed");
+  ENSURE_DISTANCE(e.GetPhi(), I3Constants::pi/4., TOLERANCE, "e.GetPhi failed");
   
   cout <<"Creating position f from position d..."<<endl;
   I3Position f(d);
@@ -191,19 +191,19 @@ TEST(coord_transforms)
   
   cout <<"Shifting coordinate system of f by s..."<<endl;
   f -= s;
-  ENSURE(CompareFloatingPoint::Compare(f.GetX(),0.0),"shifted f.GetX failed");
-  ENSURE(CompareFloatingPoint::Compare(f.GetY(),0.0),"shifted f.GetY failed");
-  ENSURE(CompareFloatingPoint::Compare(f.GetZ(),0.0),"shifted f.GetZ failed");
+  ENSURE_DISTANCE(f.GetX(), 0.0, TOLERANCE, "shifted f.GetX failed");
+  ENSURE_DISTANCE(f.GetY(), 0.0, TOLERANCE, "shifted f.GetY failed");
+  ENSURE_DISTANCE(f.GetZ(), 0.0, TOLERANCE, "shifted f.GetZ failed");
   
   cout <<"Shifting coordinate system of f by p..."<<endl;
   f -= p;
-  ENSURE(CompareFloatingPoint::Compare(f.GetX(),0.0),"shifted f.GetX failed");
-  ENSURE(CompareFloatingPoint::Compare(f.GetY(),-0.707108),"shifted f.GetY failed");
-  ENSURE(CompareFloatingPoint::Compare(f.GetZ(),-4.94975),"shifted f.GetZ failed");
-  ENSURE(CompareFloatingPoint::Compare(f.GetR(),5.0),"shifted f.GetR failed");
-  ENSURE(CompareFloatingPoint::Compare(f.GetTheta(),2.9997),"shifted f.GetTheta failed");
-  ENSURE(CompareFloatingPoint::Compare(f.GetPhi(),4.71239),"shifted f.GetPhi failed");
-  ENSURE(CompareFloatingPoint::Compare(f.GetRho(),0.707108),"shifted f.GetRho failed");
+  ENSURE_DISTANCE(f.GetX(), 0.0, TOLERANCE, "shifted f.GetX failed");
+  ENSURE_DISTANCE(f.GetY(), -0.7071067811865479, TOLERANCE, "shifted f.GetY failed");
+  ENSURE_DISTANCE(f.GetZ(), -4.949747468305833, TOLERANCE, "shifted f.GetZ failed");
+  ENSURE_DISTANCE(f.GetR(), 5.0, TOLERANCE, "shifted f.GetR failed");
+  ENSURE_DISTANCE(f.GetTheta(), 2.99969559898563, TOLERANCE, "shifted f.GetTheta failed");
+  ENSURE_DISTANCE(f.GetPhi(), 4.71238898038469, TOLERANCE, "shifted f.GetPhi failed");
+  ENSURE_DISTANCE(f.GetRho(), 0.7071067811865464, TOLERANCE, "shifted f.GetRho failed");
   
 }
 
@@ -269,6 +269,8 @@ TEST(subtraction)
 
 TEST(dot_product)
 {
+  const double TOLERANCE{10.*std::numeric_limits<double>::epsilon()};
+
   //dot products between positions
   I3Position p1(1,0,0);
   I3Position p2(0,2,0);
@@ -291,7 +293,7 @@ TEST(dot_product)
   I3Direction d2(0,2,0);
   z=p1*d2;
   std::cout<<z<<endl;
-  ENSURE(CompareFloatingPoint::Compare(z,0.0, maxUlps));
+  ENSURE_DISTANCE(z, 0.0, TOLERANCE);
   
   p1=I3Position(0,0,1);
   d2=I3Direction(0,0,-2);
@@ -306,6 +308,8 @@ TEST(dot_product)
 
 TEST(cross_product)
 {
+  const double TOLERANCE{10.*std::numeric_limits<double>::epsilon()};
+
   //cross products between positions
   I3Position p1(1,0,0);
   I3Position p2(0,2,0);
@@ -348,11 +352,12 @@ TEST(cross_product)
   p3=p1.Cross(d2);
   std::cout<<p3.GetX()<<", "<<p3.GetY()<<", "<<p3.GetZ()<<endl;
   ENSURE(CompareFloatingPoint::Compare(p3.GetX(),0.0));
-  ENSURE(CompareFloatingPoint::Compare(p3.GetY(),0.0, maxUlps));
+  ENSURE_DISTANCE(p3.GetY(), 0.0, TOLERANCE);
   ENSURE(CompareFloatingPoint::Compare(p3.GetZ(),1.0));
+
   p3=d2.Cross(p1);
   ENSURE(CompareFloatingPoint::Compare(p3.GetX(),0.0));
-  ENSURE(CompareFloatingPoint::Compare(p3.GetY(),0.0));
+  ENSURE_DISTANCE(p3.GetY(), 0.0, TOLERANCE);
   ENSURE(CompareFloatingPoint::Compare(p3.GetZ(),-1.0));
   
   p1=I3Position(0,3,0);

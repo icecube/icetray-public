@@ -33,8 +33,6 @@ NB:  Another thing you'll see is "Ulps" which stands for "Units in the Last Plac
 #include <string>
 #include <cstdlib>
 
-#include <iostream>
-
 namespace CompareFloatingPoint{
   
   // Function to print a number and its representation, in hex and decimal
@@ -73,8 +71,28 @@ inline bool CompareFloatingPoint::Compare(float A, float B, int32_t maxUlps){
   // on what behavior you want from your floating point comparisons.
   // These checks should not be necessary and they are included
   // mainly for completeness.
+  
+  // If A or B are infinity (positive or negative) then
+  // only return true if they are exactly equal to each other -
+  // that is, if they are both infinities of the same sign.
+  // This check is only needed if you will be generating
+  // infinities and you don't want them 'close' to numbers
+  // near FLT_MAX.
+  if (std::isinf(A) || std::isinf(B))
+    return A == B;
+  
+  // If A or B are a NAN, return false. NANs are equal to nothing,
+  // not even themselves.
+  // This check is only needed if you will be generating NANs
+  // and you use a maxUlps greater than 4 million or you want to
+  // ensure that a NAN does not equal itself.
+  if (std::isnan(A) || std::isnan(B))
+    return false;
 
-  if(std::isfinite(A) && std::isfinite(B) && A != 0 and B != 0){     
+  if (Sign(A) != Sign(B))
+    return A == B;
+
+  if(std::isfinite(A) && std::isfinite(B)){
     int32_t aInt;
     memcpy( &aInt, &A, sizeof(int32_t) );
     // Make aInt lexicographically ordered as a twos-complement int
@@ -89,31 +107,8 @@ inline bool CompareFloatingPoint::Compare(float A, float B, int32_t maxUlps){
     // Now we can compare aInt and bInt to find out how far apart A and B
     // are.
     int32_t intDiff = abs(aInt - bInt);
-    std::cout<<A<<" and "<<B<<" both look so normal."<<std::endl;
     return bool{intDiff <= maxUlps};
   }
-  
-  std::cout<<"std::isfinite("<<A<<") = "<<std::isfinite(A)<<std::endl;
-  std::cout<<"std::isfinite("<<B<<") = "<<std::isfinite(B)<<std::endl;
-  std::cout<<"iszero("<<A<<") = "<<bool(A == 0)<<std::endl;
-  std::cout<<"iszero("<<B<<") = "<<bool(B == 0)<<std::endl;
-
-  // If A or B are infinity (positive or negative) then
-  // only return true if they are exactly equal to each other -
-  // that is, if they are both infinities of the same sign.
-  // This check is only needed if you will be generating
-  // infinities and you don't want them 'close' to numbers
-  // near FLT_MAX.
-  if (std::isinf(A) || std::isinf(B))
-    return A == B;
-  
-  // If A or B are a NAN, return false. NANs are equal to nothing,
-  // not even themselves.
-  // This check is only needed if you will be generating NANs
-  // and you use a maxUlps greater than 4 million or you want to
-  // ensure that a NAN does not equal itself.
-  if (std::isnan(A) || std::isnan(B))
-    return false;
   
   // At this point we should be comparing 0 to a 'normal'
   return A == B;
@@ -128,31 +123,6 @@ inline bool CompareFloatingPoint::Compare(double A, double B, int64_t maxUlps){
   // These checks should not be necessary and they are included
   // mainly for completeness.
 
-  if(std::isfinite(A) && std::isfinite(B) && A != 0 && B != 0){
-    int64_t aLong;
-    memcpy( &aLong, &A, sizeof(int64_t) );
-    // Make aLong lexicographically ordered as a twos-complement long
-    if (aLong < 0)
-      aLong = 0x8000000000000000LL - aLong;
-    // Make bLong lexicographically ordered as a twos-complement long
-    int64_t bLong;
-    memcpy( &bLong, &B, sizeof(int64_t) );
-    if (bLong < 0)
-      bLong = 0x8000000000000000LL - bLong;
-  
-    // Now we can compare aLong and bLong to find out how far apart A and B are.
-    int64_t longDiff = llabs(aLong - bLong);
-    std::cout<<A<<" and "<<B<<" both look so normal."<<std::endl;
-    return bool{longDiff <= maxUlps};
-  }
-
-  std::cout<<"this is not normal"<<std::endl;
-  
-  std::cout<<"std::isfinite("<<A<<") = "<<std::isfinite(A)<<std::endl;
-  std::cout<<"std::isfinite("<<B<<") = "<<std::isfinite(B)<<std::endl;
-  std::cout<<"iszero("<<A<<") = "<<bool(A == 0)<<std::endl;
-  std::cout<<"iszero("<<B<<") = "<<bool(B == 0)<<std::endl;
-
   // If A or B are infinity (positive or negative) then
   // only return true if they are exactly equal to each other -
   // that is, if they are both infinities of the same sign.
@@ -170,7 +140,26 @@ inline bool CompareFloatingPoint::Compare(double A, double B, int64_t maxUlps){
   if (std::isnan(A) || std::isnan(B))
     return false;
 
-  // At this point we should be comparing 0 to a 'normal'
+  if (Sign(A) != Sign(B))
+    return A == B;
+
+  if(std::isfinite(A) && std::isfinite(B)){
+    int64_t aLong;
+    memcpy( &aLong, &A, sizeof(int64_t) );
+    // Make aLong lexicographically ordered as a twos-complement long
+    if (aLong < 0)
+      aLong = 0x8000000000000000LL - aLong;
+    // Make bLong lexicographically ordered as a twos-complement long
+    int64_t bLong;
+    memcpy( &bLong, &B, sizeof(int64_t) );
+    if (bLong < 0)
+      bLong = 0x8000000000000000LL - bLong;
+  
+    // Now we can compare aLong and bLong to find out how far apart A and B are.
+    int64_t longDiff = llabs(aLong - bLong);
+    return bool{longDiff <= maxUlps};
+  }
+
   return A == B;
 
 }

@@ -162,9 +162,12 @@ TEST(compare_float_as_int32_t){
   ENSURE( TestCompareFinal( nan2, nan3, false ) ) ;
   
   // Test whether tiny numbers of opposite signs compare as equal.
-  // The smallestDenormal is 1 ULP away from 0, so should compare
-  // true when the default distance is 10 ulps.
-  ENSURE( TestCompareFinal( smallestDenormal, -smallestDenormal, true ) ) ;
+  // I know this seems odd, but they don't.  It's difficult to do this
+  // consistently across the spectrum, so I'm going to keep the old
+  // behavior where *any* number of opposite sign compare not equal.
+  ENSURE( TestCompareFinal( smallestDenormal, -smallestDenormal, false ) ) ;
+
+  
   ENSURE( TestCompareFinal( smallestDenormal, 0, true ) ) ;
   ENSURE( TestCompareFinal( -smallestDenormal, negativeZero, true ) ) ;
 
@@ -281,12 +284,12 @@ TEST(compare_double_as_int64_t){
   ENSURE( TestCompareFinal( nan2D, nan3D, false ) ) ;
   
   // Test whether tiny numbers of opposite signs compare as equal.
-  ENSURE( TestCompareFinal( smallestDenormalD, -smallestDenormalD, true ) ) ;
+  ENSURE( TestCompareFinal( smallestDenormalD, -smallestDenormalD, false ) ) ;
 
   // The smallestDenormal is 1 ULP away from 0, so should compare
   // true when the default distance is 10 ulps.  The smallest
-  ENSURE( TestCompareFinal( smallestDenormalD, 0, false) ) ;
-  ENSURE( TestCompareFinal( -smallestDenormalD, negativeZeroD, false) ) ;
+  ENSURE( TestCompareFinal( smallestDenormalD, 0, true) ) ;
+  ENSURE( TestCompareFinal( -smallestDenormalD, negativeZeroD, true) ) ;
   
 }
 
