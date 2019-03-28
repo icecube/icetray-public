@@ -73,7 +73,7 @@ today_fmt = '%B %d, %Y'
 # List of directories, relative to source directories, that shouldn't be searched
 # for source files.
 #exclude_dirs = []
-exclude_patterns = [ '**/.svn', 'projects/examples' ]
+exclude_patterns = [ '**/.svn', 'projects/examples', 'doxygen/PROPOSAL' ]
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 #default_role = None
@@ -98,6 +98,7 @@ pygments_style = 'sphinx'
 
 html_theme = 'icetray'
 html_theme_path = ['.']
+html_experimental_html5_writer = True    # The future is now, old man!
 
 # The style sheet to use for HTML and HTML Help pages. A file of that name
 # must exist either in Sphinx' static/ path, or in one of the custom paths

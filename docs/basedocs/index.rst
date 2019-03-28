@@ -24,7 +24,7 @@ Project Details
    :ignorecase:
    :first: docs, cmake, icetray, dataio, dataclasses
 
-   projects/docs/index	   
+   projects/docs/index
    projects/cmake/index
    projects/icetray/index
    projects/dataio/index
@@ -60,21 +60,17 @@ Automatically Generated Documentation
    icetray_reference
    python/modules
    cpp_reference
-	      
+
 Indices and tables
 ==================
-  
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+
+.. toctree::
+
+   genindex
+   py-modindex
+   search
 
 About this documentation
 ========================
 
 See :ref:`Documentation`
-
-
-
-
-
-
