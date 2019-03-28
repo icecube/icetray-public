@@ -132,6 +132,7 @@ Uncommon CMake settings
      - Install header files when making tarball.
      - OFF
    * - .. attribute:: INSTALL_TOOL_LIBS
+     - Install 3rd party libraries when making tarball.
      - ON
 
 Verbose build

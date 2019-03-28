@@ -178,7 +178,7 @@ The icetray-start script performs the following tasks:
 * Executes the Python script inside the metaproject's `env-shell.sh`
 
 Use with batch systems
-""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^
 
 HTCondor
 ''''''''

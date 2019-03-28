@@ -13,9 +13,9 @@ reconstruction methods that will operate on Pole and elaborate
 meta-project.
 
 In order for a new project included in **icerec**, It first must be thoroughly
-:doc:`documented <projects/cmake/Documentation>`,
-:doc:`code reviewed <general/code_reviews>`, and have appropiate
-:doc:`unit tests <cmake/i3test>`.
+:doc:`documented </projects/cmake/documentation>`,
+:doc:`code reviewed </general/code_reviews>`, and have appropiate
+:doc:`unit tests </projects/cmake/i3test>`.
 Further tests will encompass physics comparisons with simulated and real data.
 
 Calibration and Feature extraction

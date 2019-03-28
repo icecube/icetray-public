@@ -61,6 +61,7 @@ special-purpose segments, e.g.::
                    output="foo.hdf5",
                    keys=['LineFit','InIceRawData'],
                   )
+
 Note that I3SimHDFWriter does not have a `SubEventStreams` parameter.
 
 Specifying objects by key
