@@ -1,3 +1,5 @@
+.. -*- mode: rst -*- vim: ft=rst
+
 Release Notes
 =============
 
@@ -14,13 +16,13 @@ trunk
 * Declare "highlander" to be "combo/trunk"
 
 V18-12-00 - December 11, 2018, Alex Olivas  (olivas@icecube.umd.edu)
------------------------------------------------------------------
+--------------------------------------------------------------------
 * New cvmfs genie detection.
 * made OpenCL detection a little more robust.
 * added EXPECT_THROW macro.
 
 V18-06-00 - June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
------------------------------------------------------------------
+----------------------------------------------------------------
 * add boost-python detection for boost 1.67
 * add default value for I3_TESTDATA
 * min cmake version is now 3.2.2
@@ -29,18 +31,18 @@ V18-06-00 - June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
 * remove support for SLALIB
 
 V17-11-00 - November 15, 2017, Alex Olivas  (olivas@icecube.umd.edu)
------------------------------------------------------------------
+--------------------------------------------------------------------
 
 V17-05-00 - May 9, 2017, Alex Olivas  (olivas@icecube.umd.edu)
------------------------------------------------------------------
+--------------------------------------------------------------
 * support for zstd
 
 V17-05-01 - May 18, 2017, Alex Olivas  (olivas@icecube.umd.edu)
------------------------------------------------------------------
+---------------------------------------------------------------
 * incremental release. 
 
 V17-05-02 - June 28, 2017, Alex Olivas  (olivas@icecube.umd.edu)
------------------------------------------------------------------
+----------------------------------------------------------------
 * enforce C++11
 
 V17-03-00 - March 24, 2017, Alex Olivas  (olivas@icecube.umd.edu)
@@ -91,7 +93,7 @@ V16-03-00 - March 18, 2016, don la dieu  (nega@icecube.umd.edu)
 * Lots and lots of documentation updates
 * remove rdmc
 * add support for include what you use, see `r2450/IceTray`_ 
-* resurect ``I3Test::tempfile()``
+* resurrect ``I3Test::tempfile()``
 * use std::is(nan|inf)
 * mark all thrid-pary libraries as "system" libraries for the compiler
 * Minuit2 detection fixes

@@ -7,57 +7,46 @@ trunk
 
 
 December 11, 2018, Alex Olivas  (olivas@icecube.umd.edu)
-----------------------------------------------------
+--------------------------------------------------------
 Release V18-12-00
+
 * Support of double expontential SPE fits.
 * Bug fix for sDST.
 * New I3RecoPulseSeriesMapCombineByModule.
 * Add equality operators for I3SuperDST and I3FilterResult.
 
 June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
-----------------------------------------------------
+====================================================
 Release V18-06-00
 
 * Add Gen2 R&D modules
-
 * I3LinearizedMCTree bug fix for reading old data
-
 * I3TimeWindow gets an intersection operator
-
 * add get_heads to I3MCTree pybindings
 
 
 November 15, 2017, Alex Olivas  (olivas@icecube.umd.edu)
------------------------------------------------------
+--------------------------------------------------------
 Release V17-11-00
 
 * Fix a memory leak in new I3MCTree serialization.
-
 * Add GetModJulianMicroSec() to I3Time which avoids using floats so that
   conversion to python datetime can occur without any floating point arithmetic.
-
 * Add I3SuperDSTTrigger pybinidngs.
-
 * Expose both I3ParticleID constructors.
-
 * Fix nasty quadratic behavior in I3LinearizedMCTree serialization.
-
 * Add the SMP particle for exotic physics.
-
 * Deprecate I3MCList.
-
 * Add support for storing flasher configurations in the D-frame.
-
 * Truncate I3Time pybindings to nearest microsecond.
-
 * Add pretty print for I3TimeWindow. Also, add fractional seconds to the
   I3EventHeader pretty print.
-
 * Add __repr__ to TriggerKey pybinding.
 
 March 23, 2017, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------
 Release V17-03-01
+
 * Added support for flasher data in the D-frame. 
 
 March 23, 2017, Alex Olivas  (olivas@icecube.umd.edu)
@@ -66,25 +55,23 @@ Release V17-03-00
 
 * Don't populate the cache until we have a good map. Allows the errors to keep
   appearing in dataio-pyshovel.
-
 * Added I3Particle::CascadeSegment shape to address ticket #1763.
-
 * I3Time::GetModJulianDateDouble now always divides the date by 86400 seconds even
   on days with leapseconds 
-
 * Added I3OMGeo OMType for Scintillators and IceACT. Resolved #1698 (jan.oertlin@icecube.wisc.edu)
-
 * Issue #1491 resolved: moved TriggerKey python scope from
   dataclasses.I3Trigger to dataclasses
 
 May 2, 2016, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------
 Release V16-04-01
+
 * Protect against zero width pulses in sDST for tpx.
 
 April 29, 2016, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------
 Release V16-04-00
+
 * Add contained-type introspection (r144128)  
 
 March 18, 2016, don la dieu  (nega@icecube.umd.edu)
@@ -127,7 +114,7 @@ Release V15-12-00
 * (r137375) - remove test dependence on the examples project
 
 August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
---------------------------------------------------------------------
+------------------------------------------------------
 
 * (r137088, r137087) - The equality operator was broken for the following classes in python on boost1.38 systems.  This is fixed now.
 
@@ -162,7 +149,7 @@ August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
   --- Marcel (marcel.zoll@fysik.su.se)
 
 April 17, 2015, don la dieu  (nega@icecube.umd.edu)
---------------------------------------------------------------------
+---------------------------------------------------
 
 V15-04-01 
 
@@ -195,7 +182,7 @@ Bug Fixes :
   (with tests) and returns true if std::isfinite(charge) and charge > 0.
    
 April 2, 2015, don la dieu  (nega@icecube.umd.edu)
---------------------------------------------------------------------
+--------------------------------------------------
 
 V15-03-00 
 
@@ -203,7 +190,7 @@ V15-03-00
 * add equality for I3RecoPulseSeriesMap masks/unions
 
 March 15, 2015, Alex Olivas  (olivas@icecube.umd.edu)
---------------------------------------------------------------------
+-----------------------------------------------------
 
 V15-03-00 
 
@@ -217,7 +204,7 @@ V15-03-00
 * new I3MCTree, I3MCTreePhysicsLibrary, and revamped I3MCTreeUtils
 
 November 20, 2014, Alex Olivas  (olivas@icecube.umd.edu)
---------------------------------------------------------------------
+--------------------------------------------------------
 
 V14-11-00 - Minor release
 
@@ -226,7 +213,7 @@ V14-11-00 - Minor release
 * I3MCTree::GetParent is exposed.
 
 September 30, 2014, Alex Olivas  (olivas@icecube.umd.edu)
---------------------------------------------------------------------
+---------------------------------------------------------
 
 V14-10-00 - Bugfix release
 

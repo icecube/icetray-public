@@ -4,19 +4,20 @@ Release Notes
 
 trunk
 -----
-- fix and simplify `I3Surfaces::Cylinder::acceptance` and add pybindings and unit tests for it
-- add `Print()` and `operator<<` for `I3Surfaces::Cylinder`
-- add `I3OMGeo::mDOM` case to switch statement in I3GeometryDecomposer
+
+* fix and simplify `I3Surfaces::Cylinder::acceptance` and add pybindings and unit tests for it
+* add `Print()` and `operator<<` for `I3Surfaces::Cylinder`
+* add `I3OMGeo::mDOM` case to switch statement in I3GeometryDecomposer
 
 November 26, 2018, Juan Carlos Diaz Velez (juancarlos@icecube.wisc.edu)
---------------------------------------------------------
+-----------------------------------------------------------------------
 Release V18-11-00
 
 * r163838 - Fixes bad test pattern.
 
 
 June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
---------------------------------------------------------
+----------------------------------------------------
 Release V18-06-00
 
 * r161877 - Fix ExtrudedPolygon fatal error (#2143)
@@ -72,7 +73,7 @@ Release V15-12-00
 * fix a bug that cause event_hunter.py to mis the last P frame in every file
 
 August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
---------------------------------------------------------------------
+------------------------------------------------------
 * Added event_hunter example, moved from dataio.
 
   -- david.schultz
@@ -89,25 +90,25 @@ August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
   -- jvansanten
 
 May 15, 2015, don la dieu  (nega@icecube.umd.edu)
---------------------------------------------------------------------
+-------------------------------------------------
 Bug-fix Release V15-05-00
 * remove the log_trace calls from which_split
 
 April 22, 2015, Alex Olivas (olivas@icecube.umd.edu)
---------------------------------------------------------------------
+----------------------------------------------------
 
 Bug-fix Release V15-04-01
 
 * I3SPEFitInjector correctly sets the FADC and ATWD charges.
 
 April 17, 2015, don la dieu  (nega@icecube.umd.edu)
---------------------------------------------------------------------
+---------------------------------------------------
 
 * New feature - Added module that loads SPE fit constants into the 
   calibration frame from a JSON file.
 
 March 15, 2015, Alex Olivas  (olivas@icecube.umd.edu)
---------------------------------------------------------------------
+-----------------------------------------------------
 
 Release V15-03-00 - Bugfix release
 
@@ -118,14 +119,14 @@ Release V15-03-00 - Bugfix release
   I3ScaleCalculator::I3ScaleInIceCascade
 
 November 20, 2014, Alex Olivas  (olivas@icecube.umd.edu)
---------------------------------------------------------------------
+--------------------------------------------------------
 
 Release V14-11-00 - Bugfix release
 
 * Added support for I3_TESTDATA
 
 September 30, 2014, Alex Olivas  (olivas@icecube.umd.edu)
---------------------------------------------------------------------
+---------------------------------------------------------
 
 Release V14-09-00
 

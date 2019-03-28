@@ -9,18 +9,19 @@ trunk
 -----
 
 December 11, 2018, Alex Olivas  (olivas@icecube.umd.edu)
------------------------------------------------------
+--------------------------------------------------------
 Release V18-12-00
+
 * trivial cleanups to tests and logging.
 
 June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
------------------------------------------------------
+----------------------------------------------------
 Release V18-06-00
 
 * (r159919) latest version of pytables deprecates camelcase method names, switch to snakecase
 
 November 15, 2017, Alex Olivas  (olivas@icecube.umd.edu)
------------------------------------------------------
+--------------------------------------------------------
 Release V17-11-00
 
 * very minor cleanups
@@ -28,12 +29,13 @@ Release V17-11-00
 March 23, 2017, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------
 Release V17-03-00
-* (r1488889) Replace fractured but precise representation of event start and end in MJD with a double-precision value. This introduces a discretization of 300 ns that will increase to 600 ns in the next 100 years and 2500 in the next 1000. These are much smaller than the duration of a typical event, and can be ignored in coordinate calculations.
 
+* (r1488889) Replace fractured but precise representation of event start and end in MJD with a double-precision value. This introduces a discretization of 300 ns that will increase to 600 ns in the next 100 years and 2500 in the next 1000. These are much smaller than the duration of a typical event, and can be ignored in coordinate calculations.
 
 April 29, 2016, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------
 Release V16-04-00
+
 * Add a test that runs all the converters
 
 March 21, 2016, don la dieu  (nega@icecube.umd.edu)
