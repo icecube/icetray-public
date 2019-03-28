@@ -194,7 +194,7 @@ public:
   ///attempt to read as far as necessary. If the range extends beyond the end
   ///of the frames which exist it will be clipped.
   ///\param start_index the first index in the query range
-  ///\param lenght the length of the query range
+  ///\param length the length of the query range
   ///\return the streams of the frames within the specified index range
   std::vector<I3Frame::Stream> streams(unsigned start_index, unsigned length);
   ///Get the subevent streams of the frames within a range of indices. If the
@@ -202,7 +202,7 @@ public:
   ///will attempt to read as far as necessary. If the range extends beyond the
   ///end of the frames which exist it will be clipped.
   ///\param start_index the first index in the query range
-  ///\param lenght the length of the query range
+  ///\param length the length of the query range
   ///\return the subevent streams of the frames within the specified index range
   std::vector<std::string> sub_event_streams(unsigned start_index, unsigned length);
 
