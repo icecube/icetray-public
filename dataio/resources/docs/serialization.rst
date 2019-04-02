@@ -11,23 +11,23 @@ one of the many examples in project dataclasses.
 .. note::
 
    Even though we've switched from boost::serialization to icecube::serialization,
-   the docs linked previously are still valid.  That links to boost 1.57 docs, 
-   which is where we're frozen at.  A simple change of the namespace from boost 
+   the docs linked previously are still valid.  That links to boost 1.57 docs,
+   which is where we're frozen at.  A simple change of the namespace from boost
    to icecube should be pretty much all the change you'll need.
 
-I3_SERIALIZABLE 
+I3_SERIALIZABLE
 ---------------
 
 This is a convenience macro that instantiates the serialization methods for its argument. In order to do its job, this macro must be located somewhere after the full definition of the serialization method for it's argument. Take I3Position.cxx for example::
 
  #include <icetray/serialization.h>
- #include <dataclasses/I3Position.h> 
- 
+ #include <dataclasses/I3Position.h>
+
  // not here
  // I3_SERIALIZABLE(I3Position);
- 
- template <class Archive> 
- void 
+
+ template <class Archive>
+ void
  I3Position::serialize(Archive& ar, unsigned version)
  {
    ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
@@ -51,7 +51,7 @@ A basic serialize method
 Writing a new class means writing a serialize method so that your
 class or struct can be written to an i3 file.  Mostly this is done through example.
 
-I use I3Hit as an example of the simplest case. I3Hit has only two data 
+I use I3Hit as an example of the simplest case. I3Hit has only two data
 members. A double and an integer.  In I3Hit.h::
 
  static const unsigned i3hit_version_ = 0;
@@ -72,7 +72,7 @@ To be able to serialize this class' data members you only need to add the follow
   ...
   friend class icecube::serialization::access;
   template <class Archive> void serialize(Archive & ar, unsigned version);
-  ... 
+  ...
 
 Then in the implementation of I3Hit.cxx::
 
@@ -86,12 +86,12 @@ Then in the implementation of I3Hit.cxx::
     ar & make_nvp("Time", time_);
     ar & make_nvp("HitID", hitID_);
   }
- 
+
   I3_SERIALIZABLE(I3Hit);
 
-   
+
 Each basic data type in the serialize method needs a "named value pair",
-where you specify a name (which will also be the name in XML-ized output) 
+where you specify a name (which will also be the name in XML-ized output)
 and the name of the variable from the class or structure
 
 The I3_SERIALIZABLE() macro registers the class as something the
@@ -100,7 +100,7 @@ BOOST system can write out.
 My class includes other classes or structures
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If your class has objects for data members and you want to serialize those as well you'll simply need to add a serialize method to those classes as well. Then they can be serialized just like primitive types. For example, say you want to add a data member to I3Hit of type I3Time. I3Time 
+If your class has objects for data members and you want to serialize those as well you'll simply need to add a serialize method to those classes as well. Then they can be serialized just like primitive types. For example, say you want to add a data member to I3Hit of type I3Time. I3Time
 already has a serialization method so we don't need to add one.
 
 The relevant code for I3Hit then looks like::
@@ -108,7 +108,7 @@ The relevant code for I3Hit then looks like::
   double time_;
   int hitID_;
   I3Time i3time_; //Our new data member
-   
+
 
 The serialization method is modified as shown below::
 
@@ -135,7 +135,7 @@ a standalone object in the Frame, an object must be an I3FrameObject.  Take the 
  {
   ...
  private:
- 
+
   int ID_;
   int parentID_;
   int primaryID_;
@@ -164,23 +164,23 @@ If you use a typedef to add other ways to represent your class, for example::
 
  typedef I3Vector<I3Particle> I3VectorI3Particle;
 
-Then you need to make sure that this class is also serializeable. 
+Then you need to make sure that this class is also serializeable.
 Add to the bottom of I3Particle.cxx::
 
  I3_SERIALIZABLE(I3VectorI3Particle);
 
-The BOOST system knows how to handle things like std::vectors and 
-std::maps, as long as the class they contain is serializable.  In 
-this case, I3Particle has a serialize method we already talked about, 
+The BOOST system knows how to handle things like std::vectors and
+std::maps, as long as the class they contain is serializable.  In
+this case, I3Particle has a serialize method we already talked about,
 so the typedef of vector<I3Particle> is now serializable with this one line.
 
-.. caution:: 
+.. caution::
 
    Once you specify a serializable name with I3_SERIALIZABLE that's that type's name forever more.  If you write a file with this::
 
     class C { ... }
     I3_SERIALIZABLE(C);
-  
+
    then if you try to read it with this::
 
     class C { ... }
@@ -206,7 +206,7 @@ You would add the following lines to your class::
  BOOST_CLASS_VERSION(I3MyClass,i3myclass_version_)
 
 .. note::
-  
+
    The static const assignment and the `BOOST_CLASS_VERSION` macro need
    to be in the header file (.h) that defines your class/structure.
 
@@ -219,7 +219,7 @@ You would add the following lines to your class::
       if(version > 0){
        ar & make_nvp("NewVar",new_var_);
       }
-    } 
+    }
 
 Check out the boost docs for more information.
 http://www.boost.org/libs/serialization/doc/index.html

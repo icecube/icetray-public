@@ -9,7 +9,7 @@ format for anyone doing very, very low-level work with I3Files.
 .. caution::
 
     If you don't really need to know this, run now. Really, we mean it.
-    
+
 History
 -------
 
@@ -71,7 +71,7 @@ First, some information on the size of various header objects:
     ===================  ========  ============
 
 Note that everything is saved as little endian. A converter is used on
-big endian platforms to achieve this portability. For more info on 
+big endian platforms to achieve this portability. For more info on
 endianness, read `the wikipedia article <http://en.wikipedia.org/wiki/Endianness>`_.
 
 And now some pseudo-code for serialization (writing to binary format)
@@ -104,7 +104,7 @@ of pointers
 +++++++++++
 
 ::
-    
+
     if !initialized:
         class_id
         if unregistered_class and is_polymorphic:
@@ -180,17 +180,17 @@ The basic structure of the serialized blob is like such:
 * (your class) - 4 bytes
 
   * class_id - 2 bytes
-  
+
   * tracking_id - 1 byte
-  
+
   * version_id - 1 byte
 
 * I3FrameObject base class - 8 bytes
 
   * class_id - 2 bytes
-  
+
   * tracking_id - 1 byte
-  
+
   * version_id - 1 byte
 
   * object_id - 4 bytes
@@ -206,11 +206,11 @@ and is the 0th class and 1st object serialized.
     The easiest way to obtain the binary blob in python is::
 
         frame['MyObject'].__getstate__()[1]
-    
+
     or, if you just have the object directly::
-    
+
         my_object.__getstate__()[1]
-    
+
     Note that this only works on objects that use the dataclass_suite for pybindings.
 
 Internal Objects
@@ -232,7 +232,7 @@ Tracking - First Occurance
   * class_id - 2 bytes
 
   * tracking_id - 1 byte
-  
+
   * version_id - 1 byte
 
   * object_id - 4 bytes
@@ -289,7 +289,7 @@ Non-Optimized Container
 * Count - 4 bytes
 
 * for each object in the container:
-    
+
   * (serialized object)
 
 Maps serialize each object as a std::pair of key,value.
@@ -309,9 +309,9 @@ A detailed format is:
 * stream - 3 bytes
 
   * tracking_id - 1 byte
-    
+
   * version_id - 1 byte
-    
+
   * value - 1 byte
 
 * size - 4 bytes
@@ -319,9 +319,9 @@ A detailed format is:
 * for each frame object:
 
   * key - [string]
-  
+
   * type_name - [string]
-  
+
   * buf - [serialized I3FrameObject]
 
 * checksum - 4 bytes
@@ -330,17 +330,17 @@ A detailed format is:
 
     The checksum is currently a crc32 checksum with the following bytes
     going into it in this order:
-    
+
     * stream value
-    
+
     * size
-    
+
     * for each frame object:
-    
+
       * key
-      
+
       * type_name
-      
+
       * buf
 
 
@@ -348,7 +348,7 @@ I3File
 ------
 
 I3Files are now fairly straightforward - just a bunch of I3Frames. Since the
-archive format is a stream of binary data, I3Files are just one serialized 
+archive format is a stream of binary data, I3Files are just one serialized
 I3Frame after another.
 
 This creates a few interesting effects. First, and most negatively, there is
@@ -377,17 +377,17 @@ We break this up into pieces:
 * I3Int - 4 bytes (0x01000000)
 
   * class_id - 2 bytes = 1
-  
+
   * tracking_id - 1 byte = 0
-  
+
   * version_id - 1 byte = 0
 
 * I3FrameObject base class - 8 bytes (0x0000010001000000)
 
   * class_id - 2 bytes = 0
-  
+
   * tracking_id - 1 byte = 1
-  
+
   * version_id - 1 byte = 0
 
   * object_id - 4 bytes = 1
@@ -406,17 +406,17 @@ We break this up into pieces:
 * I3Double - 4 bytes (0x01000000)
 
   * class_id - 2 bytes = 1
-  
+
   * tracking_id - 1 byte = 0
-  
+
   * version_id - 1 byte = 0
 
 * I3FrameObject base class - 8 bytes (0x0000010001000000)
 
   * class_id - 2 bytes = 0
-  
+
   * tracking_id - 1 byte = 1
-  
+
   * version_id - 1 byte = 0
 
   * object_id - 4 bytes = 1
@@ -472,7 +472,7 @@ We break this up into pieces:
   * tracking_id - 1 byte = 1
 
   * version_id - 1 byte = 1
-  
+
   * object_id - 4 bytes = 0
 
 * string number - 4 bytes (0x19000000) = 25
@@ -484,7 +484,7 @@ We break this up into pieces:
 I3VectorOMKey
 ^^^^^^^^^^^^^
 
-Say we have an I3VectorOMKey() with [OMKey(35,56,0),OMKey(25,45,0)]. 
+Say we have an I3VectorOMKey() with [OMKey(35,56,0),OMKey(25,45,0)].
 The serialization is::
 
     0x01000000000001000000000002000000010102000000230000003800
@@ -513,7 +513,7 @@ We break this up into pieces:
 * Vector base class - 2 bytes (0x0000)
 
   * tracking_id - 1 byte = 0
-  
+
   * version_id - 1 byte = 0
 
 * Count - 4 bytes (0x02000000) = 2
@@ -521,9 +521,9 @@ We break this up into pieces:
 * OMKey - 6 bytes (0x0101020000)
 
   * tracking_id = 1
-  
+
   * version_id = 1
-  
+
   * object_id = 2
 
 * string number - 4 bytes (0x23000000) = 35

@@ -5,7 +5,7 @@ For directly accessing an I3 file from outside an I3Tray, the convenience
 class :class:`I3File` is available::
 
     from icecube import icetray, dataio
-    
+
     file = dataio.I3File('my_file.i3')
     for frame in file:
         # do something with frame
@@ -24,7 +24,7 @@ the "mode" to open in:
 
 'w':
     Write mode
-    
+
 ::
 
     # we can write to this file
@@ -32,7 +32,7 @@ the "mode" to open in:
     for frame in file:
         outfile.push(frame)
     outfile.close()
-    
+
 .. important::
 
    Always close an output file so the buffer

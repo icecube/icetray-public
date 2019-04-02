@@ -48,7 +48,7 @@ Compression
 ^^^^^^^^^^^
 The writers will automatically compress the data using one of the following
 compression algorithms: gzip, bzip2, or zstd. The actual to-be-used algorithm
-can be specified by given the file a filename that ends in .gz, .bz2, or .zst,
+can be specified by giving the file a filename that ends in .gz, .bz2, or .zst,
 respectively. This::
 
     tray.Add("I3Writer", filename="mystuff.i3.gz")
