@@ -25,9 +25,12 @@ colormsg(HICYAN "ncurses")
 set(CURSES_NEED_NCURSES TRUE)
 
 execute_process(COMMAND lsb_release -si OUTPUT_VARIABLE SUSE ERROR_QUIET)
-if(SUSE MATCHES "^SUSE LINUX")
-  cmake_minimum_required(VERSION 2.6.4)
-endif(SUSE MATCHES "^SUSE LINUX")
+if(SUSE MATCHES "^SUSE LINUX" OR SUSE MATCHES "^openSUSE")
+  set(SUSE TRUE)
+  colormsg(YELLOW "ncurses is broken on SUSE-like distros.")
+  colormsg(YELLOW "If you need dataio-shovel, file a bug at https://code.icecube.wisc.edu/projects/icecube/newticket")
+  return()
+endif()
 find_package(Curses)
 
 # 
@@ -35,19 +38,18 @@ if(NOT CURSES_FOUND)
 
   set(NCURSES_FOUND FALSE)
 
-else(NOT CURSES_FOUND)
+else()
 
   set(NCURSES_FOUND TRUE)
   set(CURSES_NCURSES_INCLUDE_PATH)
-  if(SUSE MATCHES "^SUSE LINUX")
+  if(SUSE)
     unset(CURSES_NCURSES_INCLUDE_PATH)
     unset(CURSES_NCURSES_INCLUDE_PATH CACHE)
-  endif(SUSE MATCHES "^SUSE LINUX")
+  endif()
 
   if(CURSES_HAVE_NCURSES_NCURSES_H)
 
     get_filename_component(CURSES_NCURSES_INCLUDE_PATH ${CURSES_HAVE_NCURSES_NCURSES_H} PATH CACHE)
-    set(CURSES_NCURSES_INCLUDE_PATH "${CURSES_NCURSES_INCLUDE_PATH}/ncurses")
     message(STATUS "+ ncurses.h found at ${CURSES_NCURSES_INCLUDE_PATH} (this should end with \"ncurses\")")
     message(STATUS "+ libncurses found at ${CURSES_NCURSES_LIBRARY}")
     set(NCURSES_INCLUDE_DIR ${CURSES_NCURSES_INCLUDE_PATH}
