@@ -5,6 +5,9 @@
 #  
 
 TOOLDEF (nlopt
-  include nlopt.hpp
-  lib NONE nlopt_cxx
+  include
+  nlopt.hpp
+  libs
+  NONE
+  nlopt
   )
