@@ -19,6 +19,12 @@
 colormsg("")
 colormsg(HICYAN "genie")
 
+if($ENV{SROOTBASE} MATCHES "py3-v4$")
+  colormsg(YELLOW "GENIE v3 is incomplete under py3-v4, and is therefore banned.")
+  colormsg(YELLOW "A forthcoming update will rectify this")
+  return()
+endif()
+  
 find_program (GENIE_CONFIG genie-config)
 
 if (${GENIE_CONFIG} MATCHES ".*NOTFOUND$")
