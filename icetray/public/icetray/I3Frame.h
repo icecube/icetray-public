@@ -94,6 +94,17 @@ class I3Frame
   const static Stream Physics;
   const static Stream TrayInfo;
 
+  static inline bool is_user_defined(const Stream& s){
+    return bool{s !=  I3Frame::None &&     
+	s !=  I3Frame::Geometry &&
+	s !=  I3Frame::Calibration &&
+	s !=  I3Frame::DetectorStatus &&
+	s !=  I3Frame::Simulation &&
+	s !=  I3Frame::DAQ &&
+	s !=  I3Frame::Physics &&
+	s !=  I3Frame::TrayInfo};
+  }
+  
  private:
   /// This is the type of the map with which the I3Frame is
   /// implemented.  It maps strings to shared-pointers-to-I3FrameObjects.

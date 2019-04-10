@@ -99,6 +99,8 @@ static void frame_replace(I3Frame& f, const std::string& s, I3FrameObjectConstPt
 // used for I3Frame::Stream::__repr__
 std::string format_stream(const I3Frame::Stream& s)
 {
+  if(I3Frame::is_user_defined(s)) 
+    return std::string("icetray.I3Frame") + s.str();
   return std::string("icetray.I3Frame.") + s.str();
 }
 

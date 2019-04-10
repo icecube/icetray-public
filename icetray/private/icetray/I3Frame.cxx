@@ -104,7 +104,7 @@ string I3Frame::Stream::str() const {
     return "TrayInfo";
     break;
   default:
-    return (boost::format("Frame type %c") % value).str();
+    return (boost::format("('%c')") % value).str();
   }
 }
 
