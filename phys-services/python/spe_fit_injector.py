@@ -64,12 +64,12 @@ class SPEFitInjector:
 
                 if omkey in cal.dom_cal:
                     cal.dom_cal[omkey].combined_spe_charge_distribution = spe_distribution
-                    if 'mean_charge' in fits['ATWD_fit']:
-                        cal.dom_cal[omkey].mean_atwd_charge = fits['ATWD_fit']['mean_charge']
+                    if 'mean_atwd_charge' in fits['ATWD_fit']:
+                        cal.dom_cal[omkey].mean_atwd_charge = fits['ATWD_fit']['mean_atwd_charge']
                     else:
                         print(fits['ATWD_fit'])                        
-                    if 'mean_charge' in fits['SLC_fit']:
-                        cal.dom_cal[omkey].mean_fadc_charge = fits['SLC_fit']['mean_charge']
+                    if 'mean_fadc_charge' in fits['SLC_fit']:
+                        cal.dom_cal[omkey].mean_fadc_charge = fits['SLC_fit']['mean_fadc_charge']
                     else:
                         print(fits['SLC_fit'])                        
                 else:
