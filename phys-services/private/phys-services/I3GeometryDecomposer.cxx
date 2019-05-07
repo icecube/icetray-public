@@ -7,7 +7,7 @@
  *  
  */
 
-#include <icetray/I3ConditionalModule.h>
+#include <icetray/I3Module.h>
 #include <icetray/I3Units.h>
 #include <dataclasses/geometry/I3Geometry.h>
 #include <dataclasses/geometry/I3OMGeo.h>
@@ -27,7 +27,7 @@
  * assuming that all existing DOMs are IceCube
  * single-PMT DOMs.
  */
-class I3GeometryDecomposer : public I3ConditionalModule
+class I3GeometryDecomposer : public I3Module
 {
 public:
     I3GeometryDecomposer(const I3Context& context);
@@ -50,12 +50,17 @@ I3_MODULE(I3GeometryDecomposer);
 
 I3GeometryDecomposer::I3GeometryDecomposer(const I3Context& context)
 :
-I3ConditionalModule(context),
+I3Module(context),
 deleteI3Geometry_(false)
 {
     AddParameter("DeleteI3Geometry",
                  "Get rid of the original I3Geometry object.",
                  deleteI3Geometry_);
+    
+    AddParameter("If",
+                 "A python function... if this returns something that evaluates to True,"
+                 " Module runs, else it doesn't",
+                 if_);
 
     AddOutBox("OutBox");
 }
@@ -65,11 +70,37 @@ I3GeometryDecomposer::Configure()
 {
     GetParameter("DeleteI3Geometry", deleteI3Geometry_);
     
+    boost::python::object configured_if_;
+    GetParameter("If", configured_if_);
+    if (if_.ptr() != configured_if_.ptr()) // user set the parameter to something
+    {
+        if (!PyCallable_Check(configured_if_.ptr())) {
+            log_fatal("'If' parameter to module %s must be a callable object", GetName().c_str());
+        } else {
+            if_ = configured_if_;
+            use_if_ = true;
+        }
+    } else {// got nothing from user
+        use_if_ = false;
+    }
+
 }
 
 void
 I3GeometryDecomposer::Geometry(I3FramePtr frame)
 {
+    if (use_if_) {
+        // check the python callback to see if we should work on this frame
+        boost::python::object rv = if_(frame);
+        bool flag = boost::python::extract<bool>(rv);
+        
+        if (!flag) {
+            // skip this frame
+            PushFrame(frame);
+            return;
+        }
+    }
+
     I3GeometryConstPtr geometry = frame->Get<I3GeometryConstPtr>();
 
     if (!geometry)
