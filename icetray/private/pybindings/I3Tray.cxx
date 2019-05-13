@@ -48,14 +48,37 @@ static std::string I3TrayString(I3Tray &tray) {
 
 void do_no_harm(const I3Tray& tray){}
 
+void Execute_0(I3Tray &tray) {
+  try {
+    tray.Execute();
+  }
+  catch(const sigint_exception& x)
+  {
+    PyErr_SetString(PyExc_KeyboardInterrupt, x.what());
+    throw_error_already_set();
+  }
+}
+
+void Execute_1(I3Tray &tray, unsigned n) {
+  try {
+    tray.Execute(n);
+  }
+  catch(const sigint_exception& x)
+  {
+    PyErr_SetString(PyExc_KeyboardInterrupt, x.what());
+    throw_error_already_set();
+  }
+}
+
+
 void register_I3Tray()
 {
 
   class_<I3Tray::param_setter>("param_setter", 
 			       init<const I3Tray::param_setter&>());
 
-  void (I3Tray::*Execute_0)(void)              = &I3Tray::Execute;
-  void (I3Tray::*Execute_1)(unsigned)          = &I3Tray::Execute;
+  //void (I3Tray::*Execute_0)(void)              = &I3Tray::Execute;
+  //void (I3Tray::*Execute_1)(unsigned)          = &I3Tray::Execute;
 
   class_<I3Tray, boost::noncopyable>("I3Tray")
     .def("Execute", Execute_0)

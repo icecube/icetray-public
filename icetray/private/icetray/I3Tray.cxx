@@ -507,6 +507,10 @@ I3Tray::Execute(unsigned maxCount)
 #ifdef MEMORY_TRACKING
 	memory::set_scope("I3Tray");
 #endif
+
+        if (global_suspension_requested) {
+                throw sigint_exception();
+        }
 }
 
 map<string, I3PhysicsUsage>

@@ -357,4 +357,13 @@ I3Tray::param_setter
 I3Tray::AddFunctionModule<bool>(std::function<bool(boost::shared_ptr<I3Frame>)>,
                                 const std::string& instancename);
 
+class sigint_exception : public std::exception
+{
+public:
+  virtual const char* what() const throw()
+  {
+    return "SIGINT called";
+  }
+};
+
 #endif
