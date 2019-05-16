@@ -102,8 +102,8 @@ else()
   file(WRITE ${NOTES_DIR}/svn_info.txt "svn info or git svn info unavailable")
 endif()
 
-set(SVN_URL "SVN_URL-NOTFOUND")
-set(SVN_REVISION "SVN_REVISION-NOTFOUND")
+set(SVN_URL "Unknown")
+set(SVN_REVISION "0")
 
 if(SVN_INFO)
   string(REGEX REPLACE "^.*\nURL:[ \t]+([^\n]+).*" "\\1" SVN_URL ${SVN_INFO})
