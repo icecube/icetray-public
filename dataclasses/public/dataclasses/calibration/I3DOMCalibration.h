@@ -206,7 +206,7 @@ struct SPEChargeDistribution
 
         int size = sizeof(xData)/sizeof(*xData);
 
-        std::cout<<size<<std::endl;
+        //std::cout<<size<<std::endl;
         int i = 0;                                                                  // find left end of interval for interpolation
         if ( q >= xData[size - 2] )                                                 // special case: beyond right end
         {

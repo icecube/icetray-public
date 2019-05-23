@@ -1,3 +1,5 @@
+.. _icecube-code-reviews:
+
 Code Reviews
 ============
 
