@@ -470,7 +470,7 @@ bool I3Particle::IsTrack() const
       pdgEncoding_==TauPlus || pdgEncoding_==TauMinus ||
       pdgEncoding_==STauPlus || pdgEncoding_==STauMinus ||
       pdgEncoding_==SMPPlus || pdgEncoding_==SMPMinus ||
-      pdgEncoding_==Monopole ||
+      pdgEncoding_==Monopole || pdgEncoding_==Qball||
       (shape_ == Primary && 
        ( pdgEncoding_ == PPlus       ||
 	 pdgEncoding_ == PMinus      ||

@@ -174,6 +174,9 @@ class I3Particle : public I3FrameObject
     Fe57Nucleus = 1000260570,
     Fe58Nucleus = 1000260580,
 
+    /* Exotics */
+    Qball = 10000000,
+
     /* The following are fake particles used in Icetray and have no official codes */
     /* The section abs(code) > 2000000000 is reserved for this kind of use */
     CherenkovPhoton = 2000009900,
@@ -479,7 +482,7 @@ static const unsigned i3particle_version_ = 5;
     (Ti46Nucleus)(Ti47Nucleus)(Ti48Nucleus)(Ti49Nucleus)(Ti50Nucleus)(V48Nucleus) \
     (V49Nucleus)(V50Nucleus)(V51Nucleus)(Cr50Nucleus)(Cr51Nucleus)(Cr52Nucleus)   \
     (Cr53Nucleus)(Cr54Nucleus)(Mn52Nucleus)(Mn53Nucleus)(Mn54Nucleus)(Mn55Nucleus)\
-    (Fe54Nucleus)(Fe55Nucleus)(Fe56Nucleus)(Fe57Nucleus)(Fe58Nucleus)             \
+    (Fe54Nucleus)(Fe55Nucleus)(Fe56Nucleus)(Fe57Nucleus)(Fe58Nucleus)(Qball)      \
     (CherenkovPhoton)(Nu)(Monopole)(Brems)(DeltaE)(PairProd)(NuclInt)(MuPair)     \
     (Hadrons)(ContinuousEnergyLoss)(FiberLaser)(N2Laser)(YAGLaser)                \
     (STauPlus)(STauMinus)(SMPPlus)(SMPMinus)
