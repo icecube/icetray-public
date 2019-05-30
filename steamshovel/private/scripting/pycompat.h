@@ -34,8 +34,16 @@ class QFont;
 // all SceneVariants need to be listed here
 #define SHOVELART_GIL_PROTECTED_TYPES (void)(Artist)(Scenario)(QFont)(SceneVariant<int>)(SceneVariant<float>)(SceneVariant<vec3d>)(SceneVariant<QColor>)
 
+// BOOST_SP_NOEXCEPT introduced in Boost 1.64, required attribute of dispose()
+// since 1.70
+#if BOOST_VERSION >= 107000
+#define DISPOSE_NOEXCEPT BOOST_SP_NOEXCEPT
+#else
+#define DISPOSE_NOEXCEPT
+#endif
+
 #define SHOVELART_TYPE_DECL_SPECIALIZE( r, _, T ) \
-template<> void boost::detail::sp_counted_impl_pd< T*, shared_ptr_deleter>::dispose(); \
+template<> void boost::detail::sp_counted_impl_pd< T*, shared_ptr_deleter>::dispose() DISPOSE_NOEXCEPT; \
 
 BOOST_PP_SEQ_FOR_EACH( SHOVELART_TYPE_DECL_SPECIALIZE, _, SHOVELART_GIL_PROTECTED_TYPES )
 
