@@ -23,56 +23,6 @@ I3MT19937::I3MT19937(std::vector<uint32_t> seed_vector)
   engine_.seed(seed);
 }
 
-I3MT19937::~I3MT19937(){}
-
-int I3MT19937::Binomial(int ntot, double prob)
-{
-  std::binomial_distribution<int> d(ntot, prob);
-  return d(engine_);
-}
-
-double I3MT19937::Exp(double tau)
-{
-  std::exponential_distribution<double> d(tau);
-  return d(engine_);
-}
-
-unsigned int I3MT19937::Integer(unsigned int imax)
-{
-  std::uniform_int_distribution<unsigned int> d(0, imax-1);
-  return d(engine_);
-}
-
-int I3MT19937::Poisson(double mean)
-{
-  std::poisson_distribution<int> d(mean);
-  return d(engine_);  
-}
-
-double I3MT19937::PoissonD(double mean)
-{
-  std::poisson_distribution<int> d(mean);
-  return d(engine_);  
-}
-
-double I3MT19937::Uniform(double x)
-{
-  std::uniform_real_distribution<double> d(0, x);
-  return d(engine_);  
-}
-
-double I3MT19937::Uniform(double x1, double x2)
-{
-  std::uniform_real_distribution<double> d(x1, x2);
-  return d(engine_);  
-}
-
-double I3MT19937::Gaus(double mean,double stddev)
-{
-  std::normal_distribution<double> d(mean,stddev);
-  return d(engine_);  
-}
-
 I3FrameObjectPtr I3MT19937::GetState() const
 {
   std::stringstream ss;
@@ -86,6 +36,8 @@ void I3MT19937::RestoreState(I3FrameObjectConstPtr vstate)
   std::stringstream ss(s->value);
   ss >> engine_;
 }
+
+I3MT19937::~I3MT19937(){}
 
 // Service Factory 
 

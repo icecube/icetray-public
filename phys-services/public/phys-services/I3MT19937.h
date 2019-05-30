@@ -8,9 +8,8 @@
 #ifndef I3MT19937_H
 #define I3MT19937_H
 
-#include <random>
 #include "icetray/I3ServiceFactory.h"
-#include "phys-services/I3RandomService.h"
+#include "phys-services/I3StdRandomEngine.h"
 
 /**
  * @class I3MT19937
@@ -37,7 +36,7 @@
  * The internal state can be saved and restored as an I3String representing 
  * the internals state as a string of 624 integers
  */ 
-class I3MT19937 : public I3RandomService
+class I3MT19937 : public I3StdRandomEngine<I3MT19937>
 {
  public:
   /**
@@ -67,67 +66,23 @@ class I3MT19937 : public I3RandomService
    * destructor
    */
   virtual ~I3MT19937();
-
-  /**
-   * Generate a number drawn from a binomial distribution
-   */
-  virtual int Binomial(int ntot, double prob);
-
-  /**
-   * Generate a number from an Exponential distribution
-   */
-  virtual double Exp(double tau);
-
-  /**
-   * Generate an integer drawn uniformly from [0,imax)
-   */
-  virtual unsigned int Integer(unsigned int imax);
-
-  /**
-   * Generate an integer drawn from a Poisson distribution
-   */
-  virtual int Poisson(double mean);
-
-  /**
-   * Generate a number drawn from a Poisson distribution, return a double
-   */
-  virtual double PoissonD(double mean);
-
-  /**
-   * Generate a double drawn from a uniform distribution [0,x)
-   */
-  virtual double Uniform(double x = 1);
-
-  /**
-   * Generate a double drawn from a uniform distribution [x1,x2)
-   */
-  virtual double Uniform(double x1, double x2);
-
-  /**
-   * Generate a double drawn from a Gaussian distribution with given
-   * mean and standard deviation
-   */
-  virtual double Gaus(double mean, double stddev);
   
-  /**
-   * Get all information necessary to restore the internal
-   * state of the generator. The state is stored as an I3String
-   * containing 624 decimal integers
-   */
-  virtual I3FrameObjectPtr GetState() const;
+ /**
+  * Get all information necessary to restore the internal
+  * state of the generator.
+  */
+ virtual I3FrameObjectPtr GetState() const;
+ 
+ /**
+  * Restore the internal state of the generator
+  */
+ virtual void RestoreState(I3FrameObjectConstPtr state);
   
-  /**
-   * Restore the internal state of the generator
-   */
-  virtual void RestoreState(I3FrameObjectConstPtr state);
-
- private:
-  // private copy constructors and assignment
-  I3MT19937(const I3MT19937& );
-  I3MT19937 operator=(const I3MT19937& );
-
-  /// Instance of c++ random bit generator  
+private:
   std::mt19937 engine_;
+public:
+  std::mt19937& engine() { return engine_; }
+  const std::mt19937& engine() const { return engine_; }
 
   SET_LOGGER("I3MT19937");
 };
