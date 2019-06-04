@@ -374,6 +374,13 @@ I3SuperDST::Unpack() const
 			current++;
 			next = current+1;
 		}
+		if (merge && prev != target.second.end()) {
+			if (prev->GetWidth() == 0 && current->GetWidth() > 0)
+				prev->SetWidth(current->GetWidth());
+			current->SetWidth(prev->GetWidth()/2.);
+			prev->SetWidth(prev->GetWidth()/2.);
+			current->SetTime(prev->GetTime()+prev->GetWidth());
+		}
 	}
 	
 	return unpacked_;
