@@ -25,6 +25,7 @@ void register_I3UInt64() {
   Note that python assignment is by reference, creating two links to one object.")
       .def(bp::init<>())
       .def(bp::init<uint64_t>())
+      .def(bp::init<const I3UInt64&>())
       .def_readwrite("value", &I3UInt64::value)
       .def("__repr__",I3UInt64_prettyprint)
       .def_pickle(bp::boost_serializable_pickle_suite<I3UInt64>())
@@ -32,6 +33,7 @@ void register_I3UInt64() {
       .def(bp::operator_int_suite<I3UInt64>())
       .def(bp::operator_float_suite<I3UInt64>())
       .def("__nonzero__", I3UInt64_bool)
+      .def( freeze() )
       ;
 
     register_pointer_conversions<I3UInt64>();
