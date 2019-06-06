@@ -7,6 +7,7 @@
  */
 
 #include <phys-services/surfaces/Cylinder.h>
+#include <phys-services/surfaces/Cup.h>
 #include <phys-services/surfaces/ExtrudedPolygon.h>
 #include <phys-services/surfaces/AxialCylinder.h>
 #include <phys-services/surfaces/Sphere.h>
@@ -80,6 +81,16 @@ void register_Surface()
 	
 	implicitly_convertible<CylinderPtr, CylinderConstPtr>();
 	
+	class_<Cup, CupPtr, bases<SamplingSurface> >("Cup",
+            init<double, double, double, double, I3Position>((arg("olength"), arg("oradius"), arg("ilength"), arg("iradius"), arg("center")=I3Position(0,0,0))))
+	    .def(copy_suite<Cup>())
+	    #define PROPS (Length)(Radius)(Center)
+	    BOOST_PP_SEQ_FOR_EACH(WRAP_PROP, Cup, PROPS)
+	    #undef PROPS
+	;
+	
+	implicitly_convertible<CupPtr, CupConstPtr>();
+
 	class_<ExtrudedPolygon, ExtrudedPolygonPtr, bases<SamplingSurface> >("ExtrudedPolygon",
 	    init<const std::vector<I3Position> &, double>((arg("points"), arg("padding")=0)))
 	    .add_property("x", &ExtrudedPolygon::GetX)

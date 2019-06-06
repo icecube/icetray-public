@@ -60,6 +60,7 @@ i3_add_library(phys-services
   private/surfaces/Surface.cxx
   private/surfaces/SamplingSurface.cxx
   private/surfaces/Cylinder.cxx
+  private/surfaces/Cup.cxx
   private/surfaces/ExtrudedPolygon.cxx
   private/surfaces/AxialCylinder.cxx
   private/surfaces/Sphere.cxx
