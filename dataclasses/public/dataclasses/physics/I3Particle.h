@@ -84,6 +84,7 @@ class I3Particle : public I3FrameObject
     NuTauBar = -16,
     
     /* Nuclei */
+    H2Nucleus = 1000010020,
     He3Nucleus = 1000020030,
     He4Nucleus = 1000020040,
     Li6Nucleus = 1000030060,
@@ -467,7 +468,7 @@ static const unsigned i3particle_version_ = 5;
     (NeutronBar)(LambdaBar)(SigmaMinusBar)(Sigma0Bar)(SigmaPlusBar)(Xi0Bar)       \
     (XiPlusBar)(OmegaPlusBar)(DPlus)(DMinus)(D0)(D0Bar)(DsPlus)(DsMinusBar)       \
     (LambdacPlus)(WPlus)(WMinus)(Z0)(NuE)(NuEBar)                                 \
-    (NuMu)(NuMuBar)(TauPlus)(TauMinus)(NuTau)(NuTauBar)                           \
+    (NuMu)(NuMuBar)(TauPlus)(TauMinus)(NuTau)(NuTauBar)(H2Nucleus)                \
     (He3Nucleus)(He4Nucleus)(Li6Nucleus)(Li7Nucleus)(Be9Nucleus)(B10Nucleus)      \
     (B11Nucleus)(C12Nucleus)(C13Nucleus)(N14Nucleus)(N15Nucleus)(O16Nucleus)      \
     (O17Nucleus)(O18Nucleus)(F19Nucleus)(Ne20Nucleus)(Ne21Nucleus)(Ne22Nucleus)   \

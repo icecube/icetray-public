@@ -251,6 +251,7 @@ TEST(get_mass_for_type){
   ENSURE_DISTANCE(I3Particle::GetMassForType(I3Particle::TauMinus), 1.77682*I3Units::GeV, 1*I3Units::eV, "The mass changed!");
   ENSURE_DISTANCE(I3Particle::GetMassForType(I3Particle::NuTau), 0.0*I3Units::GeV, 1*I3Units::eV, "The mass changed!");
   ENSURE_DISTANCE(I3Particle::GetMassForType(I3Particle::NuTauBar), 0.0*I3Units::GeV, 1*I3Units::eV, "The mass changed!");
+  ENSURE_DISTANCE(I3Particle::GetMassForType(I3Particle::H2Nucleus),  1.875613*I3Units::GeV, 1*I3Units::eV, "The mass changed!");
   ENSURE_DISTANCE(I3Particle::GetMassForType(I3Particle::He3Nucleus), 2.808391*I3Units::GeV, 1*I3Units::eV, "The mass changed!");
   ENSURE_DISTANCE(I3Particle::GetMassForType(I3Particle::He4Nucleus), 3.727379*I3Units::GeV, 1*I3Units::eV, "The mass changed!");
   ENSURE_DISTANCE(I3Particle::GetMassForType(I3Particle::Li6Nucleus), 5.60151816372*I3Units::GeV, 1*I3Units::eV, "The mass changed!");
