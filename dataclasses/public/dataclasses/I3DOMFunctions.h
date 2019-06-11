@@ -15,6 +15,12 @@
 
 #include <vector>
 
+/**
+ * manually determined relationship between
+ * collected charge in picocoulumb and peak voltage in millivolt
+ */
+#define __SPE_PEAK_VOLTAGE_CHARGE_RATIO__ 8.1
+
 /** 
  * @brief  A class containing a collection of functions that 
  *  use dom status/calibration information to return "calculated"
@@ -62,7 +68,7 @@ double TransitTime (const I3DOMStatus&, const I3DOMCalibration&);
 /**
  * Get the calibrated SPE Discrimiator threshold (pC)
  */
-double SPEDiscriminatorThreshold (const I3DOMStatus&, const I3DOMCalibration&);
+double SPEDiscriminatorThreshold (const I3DOMStatus&, const I3DOMCalibration&, double const spePeakVoltageChargeRatio =  __SPE_PEAK_VOLTAGE_CHARGE_RATIO__);
 
 /**
  *  Updated approximation function for SPE DOM threshold from D.Chirkin
@@ -72,7 +78,7 @@ double SPEPMTThreshold (const I3DOMStatus&, const I3DOMCalibration&);
 /**
  * Get the calibrated MPE Discrimiator threshold (pC)
  */
-double MPEDiscriminatorThreshold (const I3DOMStatus&, const I3DOMCalibration&);
+double MPEDiscriminatorThreshold (const I3DOMStatus&, const I3DOMCalibration&, double const spePeakVoltageChargeRatio =  __SPE_PEAK_VOLTAGE_CHARGE_RATIO__);
 
 /**
  *  OldspeThreshold - a function to return the old "psuedo calibration" values
