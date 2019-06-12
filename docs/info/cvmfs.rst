@@ -148,6 +148,11 @@ py2-v3.1
 py3-v4
 ^^^^^^
 
+.. note::
+
+   py3-v4.0.1 includes json-c.
+   py3-v4.0.0 is deprecated.
+
 * python 3.6 and software releases as of late 2018
 
 * Supported OS:
