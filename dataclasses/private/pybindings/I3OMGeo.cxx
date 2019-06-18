@@ -26,6 +26,8 @@
 
 using namespace boost::python;
 
+#define ENUM_DEF(r,data,T) .value(BOOST_PP_STRINGIZE(T), data::T)
+
 void register_I3OMGeo()
 {
 
@@ -41,18 +43,9 @@ void register_I3OMGeo()
       .def(dataclass_suite<I3OMGeo>())
       ;
 
+
     enum_<I3OMGeo::OMType>("OMType")
-      .value("UnknownType", I3OMGeo::UnknownType)
-      .value("AMANDA", I3OMGeo::AMANDA)
-      .value("IceCube", I3OMGeo::IceCube)
-      .value("IceTop", I3OMGeo::IceTop)
-      .value("Scintillator", I3OMGeo::Scintillator)
-      .value("IceAct", I3OMGeo::IceAct)
-      .value("PDOM", I3OMGeo::PDOM)
-      .value("DEgg", I3OMGeo::DEgg)
-      .value("mDOM", I3OMGeo::mDOM)
-      .value("WOM", I3OMGeo::WOM)
-      .value("FOM", I3OMGeo::FOM)
+      BOOST_PP_SEQ_FOR_EACH(ENUM_DEF,I3OMGeo,I3OMGEO_H_I3OMGeo_OMType)
       .export_values()
       ;
     ;

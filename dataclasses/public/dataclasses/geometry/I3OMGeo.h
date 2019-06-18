@@ -22,6 +22,19 @@
 
 static const unsigned i3omgeo_version_ = 1;
 
+
+/**
+ * List the names of enumeration members defined in this file
+ * here. These can be used for e.g. pybindings, which require
+ * the names of the enumeration members to be known. This list
+ * should be updated whenver members or new enums are added to
+ * the class.
+ */
+#define I3OMGEO_H_I3OMGeo_OMType        \
+  (UnknownType)(AMANDA)(IceCube)(IceTop)(mDOM)(Scintillator)(IceAct)\
+  (PDOM)(DEgg)(WOM)(FOM)(DMIce)(LOM)(RadioReciever)\
+  (POCAM)(PencilBeam)(RadioEmitter)(AcousticEmitter)(AboloneHub)(FibreComm)
+
 //Simple struct to contain all pertinent OM info.  
 //See I3Geometry.h for more info
 
@@ -29,8 +42,15 @@ class I3OMGeo
 {
 public:
     enum OMType {UnknownType = 0, AMANDA = 10, IceCube = 20, IceTop = 30, Scintillator = 40, IceAct = 50,
-                 // OMType > 100 are Gen2 R&D optical modules
-                 PDOM = 110, DEgg = 120, mDOM = 130, WOM = 140, FOM = 150 };
+                 // OMType > 100 are Gen2 R&D sensors
+                 PDOM = 110, DEgg = 120, mDOM = 130, WOM = 140, FOM = 150,
+		 DMIce = 160, LOM = 170, RadioReciever = 180,
+		 // OMType > 200 for the various calibration sources 
+		 POCAM = 200, PencilBeam = 210, 
+		 RadioEmitter = 220, 
+		 AcousticEmitter = 230, 
+		 AboloneHub = 240,
+		 FibreComm = 250,};
 
     I3OMGeo():omtype(UnknownType){} 
     

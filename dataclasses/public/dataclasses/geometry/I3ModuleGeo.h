@@ -40,8 +40,9 @@ static const unsigned i3modulegeo_version_ = 0;
  * the class.
  */
 #define I3MODULEGEO_H_I3ModuleGeo_ModuleType        \
-    (UnknownType)(AMANDA)(IceCube)(IceTop)(mDOM)
-
+  (UnknownType)(AMANDA)(IceCube)(IceTop)(mDOM)(Scintillator)(IceAct)\
+  (PDOM)(DEgg)(WOM)(FOM)(DMIce)(LOM)(RadioReciever)\
+  (POCAM)(PencilBeam)(RadioEmitter)(AcousticEmitter)(AboloneHub)(FibreComm)
 
 /**
  * @brief Describes an optical module. This is supposed
@@ -59,7 +60,15 @@ public:
 		     mDOM = 40, Scintillator = 45, // These do NOT match the enums in I3OMGeo! 
 		     IceAct = 50,
 		     // OMType > 100 are Gen2 R&D optical modules
-		     PDOM = 110, DEgg = 120, WOM = 140, FOM = 150 };
+		     PDOM = 110, DEgg = 120, WOM = 140, FOM = 150,
+		     DMIce = 160, LOM = 170, RadioReciever = 180,
+		     // OMType > 200 for the various calibration devices
+		     POCAM = 200, PencilBeam = 210, 
+		     RadioEmitter = 220, 
+		     AcousticEmitter = 230, 
+		     AboloneHub = 240,
+		     FibreComm = 250,
+ };
     
     I3ModuleGeo();
     ~I3ModuleGeo();
