@@ -35,7 +35,7 @@ def evil_function(frame):
 
 tray = I3Tray()
 
-GCDFN = expandvars("$I3_TESTDATA/sim/GeoCalibDetectorStatus_2013.56429_V1.i3.gz")
+GCDFN = expandvars("$I3_TESTDATA/GCD/GeoCalibDetectorStatus_2013.56429_V1.i3.gz")
 tray.Add("I3InfiniteSource", prefix = GCDFN)
 tray.Add(evil_function, streams = [icetray.I3Frame.DAQ])
 tray.Add("TestConstCache")
