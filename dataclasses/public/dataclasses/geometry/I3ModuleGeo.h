@@ -42,7 +42,7 @@ static const unsigned i3modulegeo_version_ = 0;
 #define I3MODULEGEO_H_I3ModuleGeo_ModuleType        \
   (UnknownType)(AMANDA)(IceCube)(IceTop)(mDOM)(Scintillator)(IceAct)\
   (PDOM)(DEgg)(WOM)(FOM)(DMIce)(LOM)(RadioReciever)\
-  (POCAM)(PencilBeam)(RadioEmitter)(AcousticEmitter)(AboloneHub)(FibreComm)
+  (POCAM)(PencilBeam)(RadioEmitter)(AcousticEmitter)(AbaloneHub)(FibreComm)
 
 /**
  * @brief Describes an optical module. This is supposed

@@ -33,7 +33,7 @@ static const unsigned i3omgeo_version_ = 1;
 #define I3OMGEO_H_I3OMGeo_OMType        \
   (UnknownType)(AMANDA)(IceCube)(IceTop)(mDOM)(Scintillator)(IceAct)\
   (PDOM)(DEgg)(WOM)(FOM)(DMIce)(LOM)(RadioReciever)\
-  (POCAM)(PencilBeam)(RadioEmitter)(AcousticEmitter)(AboloneHub)(FibreComm)
+  (POCAM)(PencilBeam)(RadioEmitter)(AcousticEmitter)(AbaloneHub)(FibreComm)
 
 //Simple struct to contain all pertinent OM info.  
 //See I3Geometry.h for more info
