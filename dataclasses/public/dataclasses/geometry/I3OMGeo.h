@@ -49,7 +49,7 @@ public:
 		 POCAM = 200, PencilBeam = 210, 
 		 RadioEmitter = 220, 
 		 AcousticEmitter = 230, 
-		 AboloneHub = 240,
+		 AbaloneHub = 240,
 		 FibreComm = 250,};
 
     I3OMGeo():omtype(UnknownType){} 
