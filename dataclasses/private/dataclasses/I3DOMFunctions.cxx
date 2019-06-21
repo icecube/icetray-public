@@ -234,16 +234,19 @@ double SPEPMTThreshold(const I3DOMStatus& status,
       //     (pmtCalibFit constants are measured in terms of charge not volts, but
       //      zero charge equals zero volts so dacOffset is still valid)
       //  Function returns in I3Units::Volts
-
+      
       double dacOffset =  - pmtCalibFit.intercept / pmtCalibFit.slope ;
-      speThresher =(5.*(speDAC-dacOffset)/1024.)/
+      speThresher = (5.*(speDAC-dacOffset)/1024.)/
 	           (9.6*(1+2200./249.))*I3Units::V;
 
+      // This .93 magic number will scale the discrimintor down to 0.2325PE.
+      // Magic number needs to be replaced by a proper
+      // handling of the SPEPMTThreshold
+      double magic_number{0.93};
+      speThresher *= magic_number;
+      
       log_trace("PMTDiscCalib found, using best method, speDAC: %f   disc thresh: %f mV",
 		speDAC,speThresher);
-
-      //      speThresher = pmtCalibFit.slope * speDAC + pmtCalibFit.intercept;
-      
     }
   
   return speThresher;  

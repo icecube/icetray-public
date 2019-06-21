@@ -222,8 +222,9 @@ TEST(PMTDiscThresholdNewValue)
 
       double spePmtThresh = SPEPMTThreshold(rawstatus, calib);
 
-      ENSURE_DISTANCE(4.780563,
-		      spePmtThresh/I3Units::mV, 0.00001,
+      ENSURE_DISTANCE(spePmtThresh/I3Units::mV, 
+		      4.44592,
+		      0.00001,		      
 		      "Failed to return proper calibrated SPE PMT discriminator threshold");
 
     }
