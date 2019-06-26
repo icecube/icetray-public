@@ -42,7 +42,7 @@ print("Working out GCDFileService")
 
 mytime = dataclasses.I3Time(2010, 158082172000000000)
 
-infile = os.path.expandvars("$I3_TESTDATA/sim/GeoCalibDetectorStatus_IC86.55380_corrected.i3.gz")
+infile = os.path.expandvars("$I3_TESTDATA/GCD/GeoCalibDetectorStatus_IC86.55697_corrected_V2.i3.gz")
 
 my_fs = phys_services.I3GCDFileCalibrationService(infile)
 

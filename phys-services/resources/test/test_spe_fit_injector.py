@@ -88,7 +88,7 @@ class SPEFitTestModule(icetray.I3Module) :
 
         self.PushFrame(frame)
 
-gcd_fn = expandvars("$I3_TESTDATA/sim/GeoCalibDetectorStatus_2013.56429_V1.i3.gz") 
+gcd_fn = expandvars("$I3_TESTDATA/GCD/GeoCalibDetectorStatus_2013.56429_V1.i3.gz") 
 
 tray = I3Tray()
 tray.Add("I3InfiniteSource", prefix = gcd_fn )
