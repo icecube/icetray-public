@@ -25,17 +25,18 @@ ap_coords = SkyCoord(ra=src_ra*u.degree, dec=src_dec*u.degree, frame='icrs')
 ap2_coords = SkyCoord(ra=src2_ra*u.degree, dec=src2_dec*u.degree, frame='icrs')
 ap3_coords = SkyCoord(ra=src3_ra*u.degree, dec=src3_dec*u.degree, frame='icrs')
 
-south_pole = EarthLocation(lat=-89.99*u.deg, lon=0*u.deg, height=0*u.m)
-ap_times = Time(times,format='mjd')
+south_pole = EarthLocation(lat=-89.9944*u.deg, lon=-62.6081*u.deg, height=0*u.m)
+ap_times = Time(times,format='mjd',scale='ut1')
+
 ap_altaz = ap_coords.transform_to(AltAz(obstime=ap_times,location=south_pole))
 ap2_altaz = ap2_coords.transform_to(AltAz(obstime=ap_times,location=south_pole))
 ap3_altaz = ap3_coords.transform_to(AltAz(obstime=ap_times,location=south_pole))
 ap_zenith=(90*u.degree - ap_altaz.alt).degree
 ap2_zenith=(90*u.degree - ap2_altaz.alt).degree
 ap3_zenith=(90*u.degree - ap3_altaz.alt).degree
-ap_azimuth=(90*u.degree - ap_altaz.az).wrap_at(360*u.degree).degree
-ap2_azimuth=(90*u.degree - ap2_altaz.az).wrap_at(360*u.degree).degree
-ap3_azimuth=(90*u.degree - ap3_altaz.az).wrap_at(360*u.degree).degree
+ap_azimuth=(90*u.degree - ap_altaz.az - south_pole.lon).wrap_at(360*u.degree).degree
+ap2_azimuth=(90*u.degree - ap2_altaz.az - south_pole.lon).wrap_at(360*u.degree).degree
+ap3_azimuth=(90*u.degree - ap3_altaz.az - south_pole.lon).wrap_at(360*u.degree).degree
 
 from icecube import astro
 from icecube.icetray import I3Units
