@@ -4,6 +4,8 @@ Release Notes
 trunk
 -----
 
+* add `__bool__` operator to `I3Bool` and `I3Int` in addition to `__nonzero__`
+  in addition to `__nonzero__`. python2 uses `__nonzero__` but python3 uses `__bool__`.
 * (r3063) Removed I3OpNewServiceFactory.
 
 June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)

@@ -33,6 +33,7 @@ void register_I3UInt64() {
       .def(bp::operator_int_suite<I3UInt64>())
       .def(bp::operator_float_suite<I3UInt64>())
       .def("__nonzero__", I3UInt64_bool)
+      .def("__bool__", I3UInt64_bool)      
       .def( freeze() )
       ;
 

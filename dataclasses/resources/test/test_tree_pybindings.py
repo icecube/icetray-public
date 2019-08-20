@@ -287,7 +287,14 @@ class TreeTest(unittest.TestCase):
     self.assertFalse( p1 in t )
     self.assertTrue( p1 not in t )
 
-def test_tree_traversal(self):
+
+  def test_bool_operator(self):
+    t = I3MCTree()
+    self.assertFalse(bool(t))
+    t = I3MCTree( makeParticle())
+    self.assertTrue(bool(t))        
+
+  def test_tree_traversal(self):
     head = makeParticle()
     t = I3MCTree(head)
     p1 = makeParticle()

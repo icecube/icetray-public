@@ -18,13 +18,27 @@ class TestI3FilterResult(unittest.TestCase):
         self.assertEqual(fr1.__str__(), fr2.__str__(), "these should be the same.")
 
 
-    def test_I3FilterResult_bool(self):
+    def test_I3FilterResult_bool(self): 
         fr1 = dataclasses.I3FilterResult()
+        fr1.condition_passed = 0
+        fr1.prescale_passed  = 0
+        self.assertFalse(bool(fr1), "this should be false.")
 
+        fr1 = dataclasses.I3FilterResult()
+        fr1.condition_passed = 1
+        fr1.prescale_passed  = 0
+        self.assertFalse(bool(fr1), "this should be false.")
+
+        fr1 = dataclasses.I3FilterResult()
+        fr1.condition_passed = 0
+        fr1.prescale_passed  = 1
+        self.assertFalse(bool(fr1), "this should be false.")        
+        
+        fr1 = dataclasses.I3FilterResult()
         fr1.condition_passed = 1
         fr1.prescale_passed  = 1
 
-        self.assertTrue(fr1.__nonzero__(), "this should be true.")
+        self.assertTrue(bool(fr1), "this should be true.")
 
 
 unittest.main()

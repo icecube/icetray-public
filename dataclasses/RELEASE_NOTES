@@ -4,6 +4,11 @@ Release Notes
 
 trunk
 -----
+* add `__bool__` operateor to `I3Double`, `I3UInt32`, `I3MCTree` and
+  `I3FilterResult` in addition to `__nonzero__`. python2 uses `__nonzero__` but
+  python3 uses `__bool__`.
+* Logic on bool was changed for `I3MCTree` to call false on an empty tree and true
+  on a non-empty tree. It had mistakenly been set to the opposite. 
 * Add calibration, R&D devices to OMGeo/ModuleGeo
 
 December 11, 2018, Alex Olivas  (olivas@icecube.umd.edu)
