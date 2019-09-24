@@ -17,6 +17,8 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 cmake_minimum_required(VERSION 3.2.2 FATAL_ERROR)
+project(icetray)
+
 if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
   message(FATAL_ERROR "
 ***************************************************************************
