@@ -109,6 +109,9 @@ ROOT can be installed with homebrew::
 
    brew install --build-from-source root
 
+You need to then load ``thisroot.sh`` into your environment 
+   
+
 If you get an error message like this:
 
 .. code-block:: none
@@ -147,11 +150,16 @@ system python directory, which is not writable to normal users. Many people sugg
 to get around this by using :command:`sudo` to write to this directory,
 this should be highly discouraged.
 
-There are two ways to get around this unfortunate default behavior:
+There are three ways to get around this unfortunate default behavior:
 one is to install new python modules in your own ``.local`` directory, the
 other is to use :py:mod:`virtualenv`. Both of these methods will install
 python modules in a subfolder of your home directory, which will overide the
-system defaults. For both of them you will need to first install :command:`pip`.
+system defaults. 
+The third method is to use homebrew to install a newer version of python.
+This will put a python binary in ``/usr/local/bin`` which will override the
+system python. Python modules installed with pip will be then be placed in
+``/usr/local`` instead. This is the perfered method and the only way to get
+python3.
 
 Installing in ~/Library/
 ........................
@@ -270,47 +278,40 @@ Qt5
 Steamshovel development has now been moved to Qt version 5.
 Qt5 should be automatically detected by cmake. so there is no need to do anyhting special.
 
-
-Healpix
-"""""""
-
-Healpix has always had a suboptimal build system. Its formula was recently 
-dropped from homebrew, presumably because they couldn't get it to compile on the 
-latest version of MacOS. This author has been able to compile it as well.
-But as it is an optional dependency it can usually be skipped.
-
-
 Step-By-Step Instructions
 """""""""""""""""""""""""
 
-With a fresh install of El Capitan I was able to get IceRec and Simulation running by running the following commands:
+With a fresh install of Mojave I was able to get combo running by running the following commands:
 
 .. code-block:: sh
 
-	#install xcode command line tools (dont worry if it says it is already installed)
-	xcode-select --install
-	
-	#install homebrew
-	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+   #install xcode command line tools (dont worry if it says it is already installed)
+   xcode-select --install
+   
+   #install homebrew
+   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+   
+   #install packages with homebrew
+   brew install cmake python@2 boost boost-python cdk qt libarchive wget doxygen cfitsio hdf5 nlopt gsl minuit2 suite-sparse healpix zstd 
 
-	#install packages with homebrew
-	brew install cmake boost boost-python cdk qt libarchive wget doxygen cfitsio hdf5 nlopt gsl minuit2 suite-sparse zmq zstd
-	brew install --build-from-source root
+   #install brews writen by icecube 
+   brew tap IceCube-SPNO/homebrew-icecube
+   brew install pal sprng2 cppzmq
+   
+   #install python packages with pip
+   pip install numpy scipy matplotlib sphinx ipython qtconsole tables mysql-connector-python
+       
+If you want to use ROOT, you need to install it from source:
 
-        #install brews writen by icecube 
-	brew tap IceCube-SPNO/homebrew-icecube
-	brew install multinest pal sprng2 cppzmq
+.. code-block:: sh
+                
+   brew install --build-from-source root
 
-	#install python packages to home home directory
-	echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> ${HOME}/Library/Python/2.7/lib/python/site-packages/homebrew.pth
-	echo 'export PATH="${HOME}/Library/Python/2.7/bin/:${PATH}"' >> ${HOME}/.bash_profile 
-        curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-        python get-pip.py --user
-	pip install --user urwid sphinx ipython qtconsole tables
+And then you need to read the instructions for adding root to your environment, which will be something like:
 
-	#install scipy and friends overriding system python packages
-	echo "import sys; sys.path.insert(1,'${HOME}/Library/Python/2.7/lib/python/site-packages')" >> ${HOME}/Library/Python/2.7/lib/python/site-packages/local.pth
-	pip install --user --upgrade numpy scipy matplotlib
-	
-This worked in early June 2018, with the trunk of offline-software on macOS Sierra. As homebrew updates, these instructions might not work as well. Your mileage may vary.
+.. code-block:: sh
+
+   . /usr/local/bin/thisroot.sh
+        
+This worked in September 2019, with the trunk of combo on MacOS Mojave. As homebrew updates, these instructions might not work as well. Your mileage may vary.
 
