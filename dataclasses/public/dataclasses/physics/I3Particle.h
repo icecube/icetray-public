@@ -84,6 +84,7 @@ class I3Particle : public I3FrameObject
     NuTauBar = -16,
     
     /* Nuclei */
+    H2Nucleus = 1000010020,
     He3Nucleus = 1000020030,
     He4Nucleus = 1000020040,
     Li6Nucleus = 1000030060,
@@ -173,6 +174,9 @@ class I3Particle : public I3FrameObject
     Fe56Nucleus = 1000260560,
     Fe57Nucleus = 1000260570,
     Fe58Nucleus = 1000260580,
+
+    /* Exotics */
+    Qball = 10000000,
 
     /* The following are fake particles used in Icetray and have no official codes */
     /* The section abs(code) > 2000000000 is reserved for this kind of use */
@@ -464,7 +468,7 @@ static const unsigned i3particle_version_ = 5;
     (NeutronBar)(LambdaBar)(SigmaMinusBar)(Sigma0Bar)(SigmaPlusBar)(Xi0Bar)       \
     (XiPlusBar)(OmegaPlusBar)(DPlus)(DMinus)(D0)(D0Bar)(DsPlus)(DsMinusBar)       \
     (LambdacPlus)(WPlus)(WMinus)(Z0)(NuE)(NuEBar)                                 \
-    (NuMu)(NuMuBar)(TauPlus)(TauMinus)(NuTau)(NuTauBar)                           \
+    (NuMu)(NuMuBar)(TauPlus)(TauMinus)(NuTau)(NuTauBar)(H2Nucleus)                \
     (He3Nucleus)(He4Nucleus)(Li6Nucleus)(Li7Nucleus)(Be9Nucleus)(B10Nucleus)      \
     (B11Nucleus)(C12Nucleus)(C13Nucleus)(N14Nucleus)(N15Nucleus)(O16Nucleus)      \
     (O17Nucleus)(O18Nucleus)(F19Nucleus)(Ne20Nucleus)(Ne21Nucleus)(Ne22Nucleus)   \
@@ -479,7 +483,7 @@ static const unsigned i3particle_version_ = 5;
     (Ti46Nucleus)(Ti47Nucleus)(Ti48Nucleus)(Ti49Nucleus)(Ti50Nucleus)(V48Nucleus) \
     (V49Nucleus)(V50Nucleus)(V51Nucleus)(Cr50Nucleus)(Cr51Nucleus)(Cr52Nucleus)   \
     (Cr53Nucleus)(Cr54Nucleus)(Mn52Nucleus)(Mn53Nucleus)(Mn54Nucleus)(Mn55Nucleus)\
-    (Fe54Nucleus)(Fe55Nucleus)(Fe56Nucleus)(Fe57Nucleus)(Fe58Nucleus)             \
+    (Fe54Nucleus)(Fe55Nucleus)(Fe56Nucleus)(Fe57Nucleus)(Fe58Nucleus)(Qball)      \
     (CherenkovPhoton)(Nu)(Monopole)(Brems)(DeltaE)(PairProd)(NuclInt)(MuPair)     \
     (Hadrons)(ContinuousEnergyLoss)(FiberLaser)(N2Laser)(YAGLaser)                \
     (STauPlus)(STauMinus)(SMPPlus)(SMPMinus)

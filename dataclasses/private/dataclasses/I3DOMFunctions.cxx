@@ -152,15 +152,15 @@ double TransitTime(const I3DOMStatus& status,
 }
 
 double SPEDiscriminatorThreshold(const I3DOMStatus& status,
-				 const I3DOMCalibration& calib)
-
+				 const I3DOMCalibration& calib, 
+                                 double const spePeakVoltageChargeRatio)
 {
   const LinearFit speCalibFit = calib.GetSPEDiscCalib();
   double speDAC = status.speThreshold;
 
   //  Now use the linear relation between DAC and SPE Discriminator threshold:
   // and convert it in voltage (another voodoo factor...)
-  double discrimThresh = 8.1 * (speCalibFit.slope * speDAC + speCalibFit.intercept);
+  double discrimThresh = spePeakVoltageChargeRatio * (speCalibFit.slope * speDAC + speCalibFit.intercept);
   
   log_trace("speDAC: %f   disc thresh: %f mV",speDAC,discrimThresh);
 
@@ -169,15 +169,15 @@ double SPEDiscriminatorThreshold(const I3DOMStatus& status,
 }
 
 double MPEDiscriminatorThreshold(const I3DOMStatus& status,
-				 const I3DOMCalibration& calib)
-
+				 const I3DOMCalibration& calib,
+                                 double const spePeakVoltageChargeRatio)
 {
   const LinearFit mpeCalibFit = calib.GetMPEDiscCalib();
   double mpeDAC = status.mpeThreshold;
 
   //  Now use the linear relation between DAC and MPE Discriminator threshold:
   // and get it in voltage 
-  double discrimThresh = 8.1 * (mpeCalibFit.slope * mpeDAC + mpeCalibFit.intercept);
+  double discrimThresh = spePeakVoltageChargeRatio * (mpeCalibFit.slope * mpeDAC + mpeCalibFit.intercept);
 
 
   log_trace("mpeDAC: %f   disc thresh: %f mV",mpeDAC,discrimThresh);
@@ -234,16 +234,19 @@ double SPEPMTThreshold(const I3DOMStatus& status,
       //     (pmtCalibFit constants are measured in terms of charge not volts, but
       //      zero charge equals zero volts so dacOffset is still valid)
       //  Function returns in I3Units::Volts
-
+      
       double dacOffset =  - pmtCalibFit.intercept / pmtCalibFit.slope ;
-      speThresher =(5.*(speDAC-dacOffset)/1024.)/
+      speThresher = (5.*(speDAC-dacOffset)/1024.)/
 	           (9.6*(1+2200./249.))*I3Units::V;
 
+      // This .93 magic number will scale the discrimintor down to 0.2325PE.
+      // Magic number needs to be replaced by a proper
+      // handling of the SPEPMTThreshold
+      double magic_number{0.93};
+      speThresher *= magic_number;
+      
       log_trace("PMTDiscCalib found, using best method, speDAC: %f   disc thresh: %f mV",
 		speDAC,speThresher);
-
-      //      speThresher = pmtCalibFit.slope * speDAC + pmtCalibFit.intercept;
-      
     }
   
   return speThresher;  

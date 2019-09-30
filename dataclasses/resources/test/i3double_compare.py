@@ -27,3 +27,6 @@ ENSURE( dataclasses.I3Double(0.0) == False , "I3Double == False failed" )
 ENSURE( dataclasses.I3Double(0.0) != True , "I3Double != True failed" )
 ENSURE( dataclasses.I3Double(1.0) == True , "I3Double == True failed" )
 ENSURE( dataclasses.I3Double(1.0) != False , "I3Double != False failed" )
+
+ENSURE(bool(dataclasses.I3Double(0.0))==False, "bool(0) should be false")
+ENSURE(bool(dataclasses.I3Double(1.0))==True, "bool(0) should be false")

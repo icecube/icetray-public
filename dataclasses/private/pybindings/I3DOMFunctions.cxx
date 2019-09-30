@@ -25,6 +25,9 @@
 
 using namespace boost::python;
 
+BOOST_PYTHON_FUNCTION_OVERLOADS(SPEDiscriminatorThreshold_overloads, SPEDiscriminatorThreshold, 2, 3)
+BOOST_PYTHON_FUNCTION_OVERLOADS(MPEDiscriminatorThreshold_overloads, MPEDiscriminatorThreshold, 2, 3)
+
 void register_I3DOMFunctions()
 {
 
@@ -34,9 +37,9 @@ void register_I3DOMFunctions()
   def("mean_spe_charge",&MeanSPECharge);
   def("fadc_baseline",&FADCBaseline);
   def("transit_time",&TransitTime);
-  def("spe_discriminator_threshold",&SPEDiscriminatorThreshold);
+  def("spe_discriminator_threshold",&SPEDiscriminatorThreshold, SPEDiscriminatorThreshold_overloads(args("status", "calib", "spePeakVoltageChargeRatio"), ""));
   def("spe_pmt_threshold",&SPEPMTThreshold);
-  def("mpe_discriminator_threshold",&MPEDiscriminatorThreshold);
+  def("mpe_discriminator_threshold",&MPEDiscriminatorThreshold, MPEDiscriminatorThreshold_overloads(args("status", "calib", "spePeakVoltageChargeRatio"), ""));
   def("domcaal_version",&DOMCalVersion);
   def("which_atwd",&WhichATWD);
   def("old_mpe_threshold",&OldmpeThreshold);

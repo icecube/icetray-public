@@ -50,6 +50,7 @@ Note that python assignment is by reference, creating two links to one object.")
     .def(operator_suite<I3Bool>())
     .def(operator_bool_suite<I3Bool>())
     .def("__nonzero__", i3bool_bool)
+    .def("__bool__", i3bool_bool)    
     ;
 
   register_pointer_conversions<I3Bool>();

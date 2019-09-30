@@ -9,11 +9,6 @@ import time
 # This is a test for the shovelio module
 from icecube.shovelio import I3FrameSequence
 
-e = os.path.expandvars
-seekable_file = e("$I3_TESTDATA/event-viewer/Level3aGCD_IC79_EEData_Run00115990_slim.i3")
-gz_file = e("$I3_TESTDATA/sim/GCD.i3.gz")
-
-
 class NotEqualError( Exception ):
     def __init__(self, reason):
         super( NotEqualError, self ).__init__(self, reason)
@@ -118,7 +113,7 @@ class ShovelioI3ReaderComparisonTest( unittest.TestCase ):
         self._run_on( [ f, f ] )
 
     def test_gcd( self ):
-        f1 = os.path.expandvars("$I3_TESTDATA/sim/GCD.i3.gz")
+        f1 = os.path.expandvars("$I3_TESTDATA/GCD/GeoCalibDetectorStatus_IC86.55697_corrected_V2.i3.gz")
         f2 = os.path.expandvars("$I3_TESTDATA/sim/corsika.F2K010001_IC59_slim.i3.gz")
         self._run_on([ f1, f2 ])
 

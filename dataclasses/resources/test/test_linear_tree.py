@@ -4,7 +4,7 @@ import sys, os
 infiles = sys.argv[1:]
 
 if len(infiles) == 0:
-	infiles = [os.path.expandvars('$I3_TESTDATA/9036_coinc.i3.bz2')]
+	infiles = [os.path.expandvars('$I3_TESTDATA/dataclasses/9036_coinc.i3.bz2')]
 
 import unittest, math
 from icecube import icetray, dataio, dataclasses

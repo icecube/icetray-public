@@ -212,6 +212,7 @@ boost::assign::list_of<std::pair<I3Particle::ParticleType, double> >
 (I3Particle::NuTauBar, 0.0*I3Units::GeV)
 
 //Nuclei
+(I3Particle::H2Nucleus, 1.875613*I3Units::GeV)
 (I3Particle::He3Nucleus, 2.808391*I3Units::GeV)
 (I3Particle::He4Nucleus, 3.727379*I3Units::GeV)
 (I3Particle::Li6Nucleus, 5.60151816372*I3Units::GeV)
@@ -470,7 +471,7 @@ bool I3Particle::IsTrack() const
       pdgEncoding_==TauPlus || pdgEncoding_==TauMinus ||
       pdgEncoding_==STauPlus || pdgEncoding_==STauMinus ||
       pdgEncoding_==SMPPlus || pdgEncoding_==SMPMinus ||
-      pdgEncoding_==Monopole ||
+      pdgEncoding_==Monopole || pdgEncoding_==Qball||
       (shape_ == Primary && 
        ( pdgEncoding_ == PPlus       ||
 	 pdgEncoding_ == PMinus      ||

@@ -184,6 +184,10 @@ I3Particle get_best_filter(const I3MCTree& tree, object func1,object func2) {
 }
 
 
+bool mctree_bool(const I3MCTree& tree){
+  return !(tree.empty());
+}
+
 void register_I3MCTree()
 {
   {
@@ -277,7 +281,8 @@ void register_I3MCTree()
         
         // Python Special Methods
         .def("__str__", &stream_to_string<I3MCTree>)
-        .def("__nonzero__", &I3MCTree::empty)
+        .def("__nonzero__", &mctree_bool)
+        .def("__bool__", &mctree_bool)      
         .def("__len__", &I3MCTree::size)
         .def("__iter__", boost::python::range<return_value_policy<copy_const_reference> >
           (

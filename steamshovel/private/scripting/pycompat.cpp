@@ -42,7 +42,7 @@ namespace boost { namespace detail {
 // releasing resources is done by del!
 #define SPECIALIZE( r, _, T ) \
 template<> \
-void sp_counted_impl_pd<T*, shared_ptr_deleter>::dispose(){ \
+void sp_counted_impl_pd<T*, shared_ptr_deleter>::dispose() DISPOSE_NOEXCEPT { \
 	scripting::ScopedGIL gil; \
 	log_trace( "Locking the GIL and killing a %s (" BOOST_PP_STRINGIZE(T) ") at %p", \
 	    python::extract<const char*>( \

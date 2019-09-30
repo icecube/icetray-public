@@ -52,6 +52,7 @@ Note that python assignment is by reference, creating two links to one object.")
     .def(operator_int_suite<I3Int>())
     .def(operator_float_suite<I3Int>())
     .def("__nonzero__", i3int_bool)
+    .def("__bool__", i3int_bool)    
     ;
 
   register_pointer_conversions<I3Int>();

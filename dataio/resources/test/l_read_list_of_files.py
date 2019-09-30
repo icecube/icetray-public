@@ -13,7 +13,7 @@ from icecube import dataio
 
 tray = I3Tray()
 
-globspec = expandvars("$I3_TESTDATA/string-21/*.i3.gz")
+globspec = expandvars("$I3_TESTDATA/dataio/olddata/string-21/*.i3.gz")
 
 #  use 'glob' to convert the string with the 'star' in it to a list of real filenames
 file_list = glob(globspec)

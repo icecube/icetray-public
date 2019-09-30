@@ -9,8 +9,8 @@ random.seed(1)
 
 # icetray.set_log_level_for_unit("shovelio::raw", icetray.I3LogLevel.LOG_TRACE)
 
-seekable_file = os.path.expandvars("$I3_TESTDATA/event-viewer/Level3aGCD_IC79_EEData_Run00115990_slim.i3")
-multipass_file = os.path.expandvars("$I3_TESTDATA/nugen_numu_ic80_dc6.002488.000000.processed.i3.gz")
+seekable_file = os.path.expandvars("$I3_TESTDATA/GCD/GeoCalibDetectorStatus_IC86.55697_corrected_V2.i3.gz")
+multipass_file = os.path.expandvars("$I3_TESTDATA/sim/nugen_numu_ic80_dc6.002488.000000.processed.i3.gz")
 
 sframe_list = []
 for filename in (seekable_file, multipass_file):

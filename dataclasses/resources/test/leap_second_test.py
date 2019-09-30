@@ -23,7 +23,7 @@ def approx_Equal(x, y, tolerance=0.001):
 
 now = datetime.datetime.now()
 
-filename = os.path.join(os.getenv("I3_TESTDATA"),'tai-utc.dat')
+filename = os.path.join(os.getenv("I3_TESTDATA"),'dataclasses','tai-utc.dat')
 
 #store Modified julian date of days with leap seconds here
 leap_sec_mjd = []

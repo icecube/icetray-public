@@ -49,9 +49,28 @@ if (SYSTEM_PACKAGES)
 	           COMPONENTS python${PYTHON_STRIPPED_MAJOR_MINOR_VERSION} ${BASE_COMPONENTS}
 		   REQUIRED)
     else()
-      # Old boost, so find using the old method
+      # Old boost, so find using the old method, with dirty hacks for Python 3
+      # when it is not default.
+      set(Boost_PYTHON_TYPE python)
+      if(${PYTHON_LIBRARIES} MATCHES "libpython3.*\\.so")
+	  # Handle possible naming of the Boost python library as
+	  # libboost_python3.so
+	  string(REGEX REPLACE ".*libpython3.([0-9]+).*\\.so" "\\1" PYTHONMINORVER ${PYTHON_LIBRARIES})
+	  set(_Boost_PYTHON3_HEADERS "boost/python.hpp")
+	  set(_Boost_PYTHON3${PYTHONMINORVER}_HEADERS "boost/python.hpp")
+          find_package(Boost COMPONENTS python3${PYTHONMINORVER})
+          if (${Boost_PYTHON3${PYTHONMINORVER}_FOUND})
+              set(Boost_PYTHON_TYPE python3${PYTHONMINORVER})
+          else()
+              find_package(Boost COMPONENTS python3)
+              if (${Boost_PYTHON3_FOUND})
+                   set(Boost_PYTHON_TYPE python3)
+              endif()
+          endif()
+      endif()
+
       find_package(Boost ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}
-	           COMPONENTS python ${BASE_COMPONENTS}
+	           COMPONENTS ${Boost_PYTHON_TYPE} ${BASE_COMPONENTS}
 		   REQUIRED)
     endif()
   endif()

@@ -21,7 +21,7 @@ For a basic system (such as viewing files, basic tasks), install:
 
     apt-get install build-essential cmake libbz2-dev libgl1-mesa-dev 
     freeglut3-dev libxml2-dev subversion libboost-python-dev 
-    libboost-system-dev libboost-signals-dev libboost-thread-dev 
+    libboost-system-dev libboost-thread-dev 
     libboost-date-time-dev libboost-serialization-dev libboost-filesystem-dev 
     libboost-program-options-dev libboost-regex-dev libboost-iostreams-dev 
     libgsl0-dev libcdk5-dev libarchive-dev python-scipy ipython-qtconsole 

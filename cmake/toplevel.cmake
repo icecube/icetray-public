@@ -17,6 +17,8 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 cmake_minimum_required(VERSION 3.2.2 FATAL_ERROR)
+project(icetray)
+
 if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
   message(FATAL_ERROR "
 ***************************************************************************
@@ -81,7 +83,7 @@ if(I3_TESTDATA)
   add_custom_target(rsync
     COMMAND test -n "${I3_TESTDATA}"
     COMMAND mkdir -p "${I3_TESTDATA}"
-    COMMAND rsync -vrlpt --delete code.icecube.wisc.edu::Offline/test-data/releases/V00-00-01/ ${I3_TESTDATA}/
+    COMMAND rsync -vrlpt --delete code.icecube.wisc.edu::Offline/test-data/trunk/ ${I3_TESTDATA}/
     COMMENT "Rsyncing test-data to I3_TESTDATA"
     )
   ### ctest testing

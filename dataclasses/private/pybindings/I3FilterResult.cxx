@@ -67,6 +67,7 @@ void register_I3FilterResult()
     .def_readwrite("prescale_passed" , &I3FilterResult::prescalePassed)
     .def("__str__",I3FilterResult_prettyprint)
     .def("__nonzero__",I3FilterResult_bool)
+    .def("__bool__",I3FilterResult_bool)    
     .def(operator_suite<I3FilterResult>())
     .def( freeze() )
     ;
