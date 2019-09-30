@@ -1,107 +1,74 @@
+# Copyright (c) 2015-2019 IceCube Collaboration
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#   notice, this list of conditions and the following disclaimer in the
+#   documentation and/or other materials provided with the distribution.
+
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
 #
 #  $Id$
 #  
-#  Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
-#  and the IceCube Collaboration <http://www.icecube.wisc.edu>
-#  
-#  This file is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 3 of the License, or
-#  (at your option) any later version.
-#  
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#  
-#  You should have received a copy of the GNU General Public License
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>
-#  
-
-if(NOT SYSTEM_PACKAGES)
-endif(NOT SYSTEM_PACKAGES)
 
 colormsg("")
 colormsg(HICYAN "Boost")
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-if (SYSTEM_PACKAGES)
-  set(BASE_COMPONENTS system thread date_time filesystem program_options regex iostreams)
-  # From the cmake docs:
-  # Boost Python components require a Python version suffix (Boost 1.67 and later),
-  # e.g. python36 or python27 for the versions built against Python 3.6 and 2.7, respectively.
-  #
-  # Make a first pass at finding boost, with no components specified, just to figure out
-  # what version of boost we're dealing with.  We'll add the components later.
-  find_package(Boost 1.57.0) # NB: 1.57.0 is the minimum version required.
+set(Boost_NO_BOOST_CMAKE ON)
 
-  # If the first find failed, there's little hope of either of the next three searches
-  # successfully finding boost, especially in the cases where Boost_VERSION* isn't set.
-  # In that case the last find_package fails with a cryptic error message, since the
-  # boost version you're passing is effectively '.' ...not helpful.
-  # So, there's no point in continuing if boost isn't found.
-  if (Boost_FOUND) 
-    # Now that boost was found and we know which version, we can choose the correct
-    # boost::python libraries that match the python version we're building against.
-    if ((Boost_VERSION GREATER 106700) OR (Boost_VERSION EQUAL 106700))
-      find_package(Boost ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION} EXACT
-	           COMPONENTS python${PYTHON_STRIPPED_MAJOR_MINOR_VERSION} ${BASE_COMPONENTS}
-		   REQUIRED)
-    else()
-      # Old boost, so find using the old method, with dirty hacks for Python 3
-      # when it is not default.
-      set(Boost_PYTHON_TYPE python)
-      if(${PYTHON_LIBRARIES} MATCHES "libpython3.*\\.so")
-	  # Handle possible naming of the Boost python library as
-	  # libboost_python3.so
-	  string(REGEX REPLACE ".*libpython3.([0-9]+).*\\.so" "\\1" PYTHONMINORVER ${PYTHON_LIBRARIES})
-	  set(_Boost_PYTHON3_HEADERS "boost/python.hpp")
-	  set(_Boost_PYTHON3${PYTHONMINORVER}_HEADERS "boost/python.hpp")
-          find_package(Boost COMPONENTS python3${PYTHONMINORVER})
-          if (${Boost_PYTHON3${PYTHONMINORVER}_FOUND})
-              set(Boost_PYTHON_TYPE python3${PYTHONMINORVER})
-          else()
-              find_package(Boost COMPONENTS python3)
-              if (${Boost_PYTHON3_FOUND})
-                   set(Boost_PYTHON_TYPE python3)
-              endif()
-          endif()
-      endif()
+if(NOT DEFINED Boost_PYTHON_TYPE)
+        set(Boost_PYTHON_TYPE python)
 
-      find_package(Boost ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}
-	           COMPONENTS ${Boost_PYTHON_TYPE} ${BASE_COMPONENTS}
-		   REQUIRED)
-    endif()
-  endif()
-  
-  if(NOT Boost_FOUND)
-    colormsg(RED ${Boost_ERROR_REASON})
-  endif ()
-endif ()
+	# Detect attempts to be clever with the naming of the Boost Python library
+	string(REGEX REPLACE ".*libpython([0-9])\\.[0-9]+.*\\..*" "\\1" PYTHONMAJORVER ${PYTHON_LIBRARIES})
+	string(REGEX REPLACE ".*libpython[0-9]\\.([0-9]+).*\\..*" "\\1" PYTHONMINORVER ${PYTHON_LIBRARIES})
+
+	# Hack for some old Boost CMake modules
+	set(_Boost_PYTHON${PYTHONMAJORVER}_HEADERS "boost/python.hpp")
+	set(_Boost_PYTHON${PYTHONMAJORVER}${PYTHONMINORVER}_HEADERS "boost/python.hpp")
+
+	find_package(Boost QUIET COMPONENTS python${PYTHONMAJORVER}${PYTHONMINORVER})
+	if (${Boost_PYTHON${PYTHONMAJORVER}${PYTHONMINORVER}_FOUND})
+		set(Boost_PYTHON_TYPE python${PYTHONMAJORVER}${PYTHONMINORVER})
+	else()
+		find_package(Boost QUIET COMPONENTS python${PYTHONMAJORVER})
+		if (${Boost_PYTHON${PYTHONMAJORVER}_FOUND})
+			set(Boost_PYTHON_TYPE python${PYTHONMAJORVER})
+		endif()
+	endif()
+endif()
+
+find_package(Boost COMPONENTS system thread date_time filesystem program_options regex iostreams ${Boost_PYTHON_TYPE} REQUIRED)
 
 if(Boost_FOUND)
-  set(BOOST_FOUND TRUE CACHE BOOL "Boost found successfully")
-  set(BOOST_INCLUDE_DIR ${Boost_INCLUDE_DIR} CACHE PATH "Path to the boost include directories.")
-  set(BOOST_LIBRARIES ${Boost_LIBRARIES} CACHE PATH "Boost libraries")
-  include_directories(${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-new)
+	set(BOOST_FOUND TRUE CACHE BOOL "Boost found successfully")
+	set(BOOST_INCLUDE_DIR ${Boost_INCLUDE_DIR} CACHE PATH "Path to the boost include directories.")
+	set(BOOST_LIBRARIES ${Boost_LIBRARIES} CACHE PATH "Boost libraries")
+	include_directories(${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-new)
 
-  if(${BUILDNAME} MATCHES "ARCH")
-  foreach(lib ${BOOST_LIBRARIES})
-    if(${PYTHON_LIBRARIES} MATCHES "libpython3.*\\.so" AND ${lib} MATCHES "(.*libboost_python)\\.so")
-      list(FIND BOOST_LIBRARIES "${lib}" i)
-      list(REMOVE_AT BOOST_LIBRARIES ${i})
-      list(INSERT BOOST_LIBRARIES ${i} "${CMAKE_MATCH_1}3.so")
-    endif()
-  endforeach(lib ${BOOST_LIBRARIES})
-  endif()
-  foreach(lib ${BOOST_LIBRARIES})
-    if(NOT ${lib} STREQUAL "optimized" AND NOT ${lib} STREQUAL "debug")
-      add_custom_command(TARGET install_tool_libs
-        PRE_BUILD
-        COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/lib/tools
-        COMMAND ${CMAKE_SOURCE_DIR}/cmake/install_shlib.py ${lib} ${CMAKE_INSTALL_PREFIX}/lib/tools) 
-    endif(NOT ${lib} STREQUAL "optimized" AND NOT ${lib} STREQUAL "debug")
-  endforeach(lib ${BOOST_LIBRARIES})
+	# XXX: following obsolete?
+	foreach(lib ${BOOST_LIBRARIES})
+		if(NOT ${lib} STREQUAL "optimized" AND NOT ${lib} STREQUAL "debug")
+			add_custom_command(TARGET install_tool_libs
+			    PRE_BUILD
+			    COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/lib/tools
+			    COMMAND ${CMAKE_SOURCE_DIR}/cmake/install_shlib.py ${lib} ${CMAKE_INSTALL_PREFIX}/lib/tools)
+		endif(NOT ${lib} STREQUAL "optimized" AND NOT ${lib} STREQUAL "debug")
+	endforeach(lib ${BOOST_LIBRARIES})
 endif(Boost_FOUND)
 
