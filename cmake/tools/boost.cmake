@@ -32,9 +32,10 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 set(Boost_NO_BOOST_CMAKE ON)
 
 if(NOT DEFINED Boost_PYTHON_TYPE)
-        set(Boost_PYTHON_TYPE python)
+	set(Boost_PYTHON_TYPE python)
 
-	# Detect attempts to be clever with the naming of the Boost Python library
+	# Detect attempts to be clever with the naming of the Boost Python
+	# library
 	string(REGEX REPLACE ".*libpython([0-9])\\.[0-9]+.*\\..*" "\\1" PYTHONMAJORVER ${PYTHON_LIBRARIES})
 	string(REGEX REPLACE ".*libpython[0-9]\\.([0-9]+).*\\..*" "\\1" PYTHONMINORVER ${PYTHON_LIBRARIES})
 
