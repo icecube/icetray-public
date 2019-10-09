@@ -96,6 +96,8 @@ struct AllParametersModule : I3Module
     GetParameter("service_ptr_param",service_ptr_param);
   }
 
+  //No need to test methods that do nothing
+  //LCOV_EXCL_LINE
   virtual void Process() { }
   virtual void Finish() { ; }
 };
