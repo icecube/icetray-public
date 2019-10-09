@@ -40,9 +40,7 @@ struct ContextFreeServiceTestModule : I3Module
     PushFrame(frame, "OutBox"); 
 }
 
-  virtual void Resume() { ; }
   virtual void Finish() { ; }
-  virtual void Abort() { ; }
 };
 
 I3_MODULE(ContextFreeServiceTestModule);
