@@ -96,13 +96,8 @@ struct AllParametersModule : I3Module
     GetParameter("service_ptr_param",service_ptr_param);
   }
 
-  virtual void Reconfigure() { ; }
-
   virtual void Process() { }
-
-  virtual void Resume() { ; }
   virtual void Finish() { ; }
-  virtual void Abort() { ; }
 };
 
 I3_MODULE(AllParametersModule);
