@@ -144,7 +144,6 @@ i3_add_library(icetray
   private/modules/Fork.cxx
   private/modules/IntGenerator.cxx
   private/modules/Keep.cxx
-  private/modules/DeleteUnregistered.cxx
   private/modules/Get.cxx
   private/modules/FrameCheck.cxx
   private/modules/AllParametersModule.cxx
