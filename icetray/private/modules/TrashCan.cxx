@@ -26,13 +26,11 @@
 struct TrashCan : public I3Module
 {
   TrashCan(const I3Context& context) : I3Module(context) { }
-
-  /**
-   * This module doesn't do anything anymore obviously and is
-   * only around to maintain backwards compatibility.  No need
-   * to test methods that do nothing. 
-   */
+  
   //LCOV_EXCL_START
+  //This module doesn't do anything anymore obviously and is
+  //only around to maintain backwards compatibility.  No need
+  //to test methods that do nothing. 
   void Configure(){ }
   void Process(){ }
   //LCOV_EXCL_STOP
