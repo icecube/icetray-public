@@ -27,16 +27,15 @@ struct TrashCan : public I3Module
 {
   TrashCan(const I3Context& context) : I3Module(context) { }
 
-  // an empty configure to avoid the default one
-  void Configure()
-  { }
-
-  void Process() 
-  { 
-    log_trace("%s", __PRETTY_FUNCTION__);
-    if (!PopFrame())
-      log_fatal("TrashCan is not a driving module");
-  }
+  /**
+   * This module doesn't do anything anymore obviously and is
+   * only around to maintain backwards compatibility.  No need
+   * to test methods that do nothing. 
+   */
+  //LCOV_EXCL_START
+  void Configure(){ }
+  void Process(){ }
+  //LCOV_EXCL_STOP
   
   SET_LOGGER("TrashCan");
 };
