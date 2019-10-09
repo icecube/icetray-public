@@ -34,11 +34,10 @@ extensions = filter(None, ['sphinx.ext.autodoc',
                            '@sphinx_NAPOLEON@',
                            '@sphinx_EMAIL@',
                            '@sphinx_BREATHE@',
-                           'sphinx_cmake',
                            'script_directive',
                            'toctree_sort',
                            'plot_directive'])
-print "Using extensions:", extensions
+print("Using extensions:", extensions)
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
