@@ -40,6 +40,8 @@ class FrameCheck : public I3Module
   
   void Configure();
 
+  void DAQ(I3FramePtr frame);
+
   void Physics(I3FramePtr frame);
 
   void DetectorStatus(I3FramePtr frame);
