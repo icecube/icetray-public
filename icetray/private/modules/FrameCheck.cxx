@@ -37,6 +37,7 @@ FrameCheck::FrameCheck(const I3Context& context) :
   I3Module(context)
 {
   insert(keys_)
+    (I3Frame::DAQ, predicates())
     (I3Frame::Physics, predicates())
     (I3Frame::Geometry, predicates())
     (I3Frame::DetectorStatus, predicates())
@@ -89,6 +90,12 @@ FrameCheck::Configure()
 void FrameCheck::Physics(I3FramePtr frame)
 {
   CheckFrameForKeys(frame, I3Frame::Physics);
+  PushFrame(frame,"OutBox");
+}
+
+void FrameCheck::DAQ(I3FramePtr frame)
+{
+  CheckFrameForKeys(frame, I3Frame::DAQ);
   PushFrame(frame,"OutBox");
 }
 

@@ -32,6 +32,7 @@
 #include "icetray/Utility.h"
 #include "icetray/open.h"
 #include <dataclasses/physics/I3EventHeader.h>
+#include <dataclasses/physics/I3RecoPulse.h>
 #include "shovel/View.h"
 
 //==============================================================================
@@ -568,6 +569,16 @@ Model::pretty_print()
 
   std::ostringstream oss;
   oss << y_keystring_ << " [" << frame->type_name(y_keystring_) << "]:\n";
+  try{ //All frame objects are equal, but recopulses are more equal
+    auto pulses=frame->Get<boost::shared_ptr<const I3RecoPulseSeriesMap>>(y_keystring_);
+    if(pulses){
+      oss << "As an I3RecoPulseSeriesMap:\n";
+      pulses->Print(oss);
+      oss << "\nOriginal form:\n";
+    }
+  }catch(std::exception& ex){
+    //do nothing
+  }
   try{
     frame->Get<I3FrameObject>(y_keystring_).Print(oss);
   }catch(std::exception& ex){

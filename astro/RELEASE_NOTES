@@ -6,6 +6,9 @@ Release Notes
 trunk
 -----
 
+* update documentation
+* add example compare_with_astropy.py
+
 June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
 ----------------------------------------------------
 Release V18-06-00

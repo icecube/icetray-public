@@ -89,7 +89,6 @@ GENERATE_LATEX         = NO
 #GENERATE_TAGFILE       = @DOXYGEN_OUTPUT_PATH@/.tagfiles/@PROJECT_NAME@.tag 
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = YES
-PERL_PATH              = /usr/bin/perl
 ALPHABETICAL_INDEX     = YES
 QUIET                  = YES
 GRAPHICAL_HIERARCHY    = YES

@@ -102,7 +102,7 @@ double I3GetGMEST(const I3Time& eventTime);
 
 /**
  * @brief Gets the direction of the Moon in local IceCube coordinates 
- * at a @param time
+ * at time
  *
  * @param time - the time of the observation in I3Time
  * @returns I3Direction object
@@ -112,7 +112,7 @@ I3Direction I3GetMoonDirection(const I3Time& time);
 
 /**
  * @brief Gets the direction of the Sun in local IceCube coordinates 
- * at a @param time
+ * at time
  *
  * @param time - I3Time of the astronomical observation
  * @returns I3Direction object

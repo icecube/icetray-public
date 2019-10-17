@@ -24,6 +24,10 @@ tray.AddModule("Dump")
 tray.AddModule("Rename",
     Keys = ["here", "here2", "there", "there2"])
 
+# silently skip over these.
+# can't rename what you can't find.
+tray.AddModule("Rename", Keys = ["dne", "foo"])
+
 tray.AddModule("FrameCheck",
     ensure_physics_has = ["here2", "there2", "everywhere", "tonsastuff"],
     ensure_physics_hasnt = ["here", "there"])

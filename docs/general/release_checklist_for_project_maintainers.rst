@@ -2,14 +2,11 @@ Release Checklist for Project Maintainers
 =========================================
 
 The purpose of this checklist is to give project maintainers some guidance as to what
-they should be checking before each relases.
+they should be checking before each release.
 
 Checklist
 ---------
-Project maintainers are responsible for every aspect of their project.  It is no longer
-acceptable to claim your project is in good shape and stable because it hasn't crashed
-in production.  Just because your project doesn't crash in production, doens't mean
-it's not broken.
+Project maintainers are responsible for **every** aspect of their project.  
 
 Below are some things to check :
 
@@ -22,5 +19,9 @@ Below are some things to check :
   * **Example Scripts** : Ensure your project's example scripts run.
   * **Tickets** : Are there any critical tickets still open?  If there are non-critical tickets still open, please add a comment to the ticket as to why you're not addressing this in the next release and push the milestone.
   * **Build** : Ensure your project builds without warnings.
+  * **Test Coverage** : CI systems give a false sense of security for projects with low test coverage.
+    - Strive for greater than 90% line coverage.
+    - Strive for close to 100% function coverage.
+
 
 

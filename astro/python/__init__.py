@@ -51,6 +51,14 @@ def equa_to_dir(ra,dec,mjd):
     Get the IceCube `zenith` and `azimuth` of an
     equatorial coordinate (Right Ascension and Declination)
     at a given time `mjd`.
+
+    Warnings
+    --------
+
+    This function is significantly slower than :py:func:`dir_to_equa`, 
+    it is highly recommended that if you need to perfrom a significant number
+    of calculations that you go from local to equatorial coordinates and 
+    perform the analyses in equatorial coordinates, rather than the reverse.
     
     Parameters
     ----------
@@ -76,6 +84,11 @@ def equa_to_dir(ra,dec,mjd):
 
 @np.vectorize
 def sun_dir(mjd):
+    """
+    Get the location of the Sun in IceCube local coordinates
+    `zenith` and `azimuth` for a given time in `mjd`
+    """
+    
     i3time = dataclasses.I3Time()
     i3time.set_mod_julian_time_double(mjd)
     i3dir = I3GetSunDirection(i3time)
@@ -83,6 +96,11 @@ def sun_dir(mjd):
 
 @np.vectorize
 def moon_dir(mjd):
+    """
+    Get the location of the Moon in IceCube local coordinates
+    `zenith` and `azimuth` for a given time in `mjd`
+    """
+    
     i3time = dataclasses.I3Time()
     i3time.set_mod_julian_time_double(mjd)
     i3dir = I3GetMoonDirection(i3time)
@@ -118,7 +136,7 @@ def gal_to_equa(l,b):
     """
     Get the equatorial coordinates (Right Ascension 
     and Declination) from  Galactic coordinates 
-    `l` and `b` of an
+    `l` and `b`.
 
     Parameters
     ----------
@@ -143,7 +161,7 @@ def gal_to_equa(l,b):
 @np.vectorize
 def gal_to_supergal(l,b):
     """
-    Get the supergalactic coordinates 'l' and 'b'
+    Get the supergalactic coordinates 'SGL' and 'SGB'
     from galactic coordinates 'l' and 'b'
 
     Parameters
@@ -170,7 +188,7 @@ def gal_to_supergal(l,b):
 def supergal_to_gal(l,b):
     """
     Get the galactic coordinates 'l' and 'b'
-    from supergalactic coordinates 'l' and 'b'
+    from supergalactic coordinates 'SGL' and 'SGB'
 
     Parameters
     ----------
@@ -195,7 +213,7 @@ def supergal_to_gal(l,b):
 @np.vectorize
 def equa_to_supergal(ra,dec):
     """
-    Get the supergalactic coordinates 'l' and 'b'
+    Get the supergalactic coordinates 'SGL' and 'SGB'
     from equatorial coordinates 'ra' and 'dec'
 
     Parameters
@@ -222,7 +240,7 @@ def equa_to_supergal(ra,dec):
 def supergal_to_equa(l,b):
     """
     Get the equatorial coordinates `ra` and `dec`
-    from supergalactic coordinates `l` and `b`
+    from supergalactic coordinates `SGL` and `SGB`
 
     Parameters
     ----------
@@ -248,7 +266,7 @@ def angular_distance(lon1,lat1,lon2,lat2):
     """
     calculate the angular distince along the great circle 
     on the surface of a shpere between the points
-    (`lon1`,`lat1`) and (`lon2`,`lat2`)
+    (`lon1`,`lat1`) and (`lon2`,`lat2`) 
 
     This function Works for equatorial coordinates 
     with right ascension as longitude and declination 

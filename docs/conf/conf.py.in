@@ -16,7 +16,14 @@ import sys, os
 # imports for the traclinks replacement code at the bottom of this file
 from docutils import nodes, utils
 from docutils.parsers.rst import roles
-import urllib
+
+#urllib changed so we need to make this multilingual
+if sys.version_info[0] < 3:
+    import urllib
+    ulp = urllib
+else:
+    import urllib.parse
+    ulp = urllib.parse
 
 # If your extensions are in another directory, add it here. If the directory
 # is relative to the documentation root, use os.path.abspath to make it
@@ -34,11 +41,10 @@ extensions = filter(None, ['sphinx.ext.autodoc',
                            '@sphinx_NAPOLEON@',
                            '@sphinx_EMAIL@',
                            '@sphinx_BREATHE@',
-                           'sphinx_cmake',
                            'script_directive',
                            'toctree_sort',
                            'plot_directive'])
-print "Using extensions:", extensions
+print("Using extensions:", extensions)
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -208,7 +214,7 @@ latex_documents = [
 trac_url = "https://code.icecube.wisc.edu/projects/icecube"
 
 def trac_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
-    ref = trac_url + '/intertrac/' + urllib.quote(text)
+    ref = trac_url + '/intertrac/' + ulp.quote(text)
     node = nodes.reference(rawtext, utils.unescape(text), refuri=ref, **options)
     return [node],[]
 
