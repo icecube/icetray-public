@@ -71,8 +71,13 @@ STRING(REPLACE "." "" PYTHON_VERSION_NO_DOTS ${PYTHON_STRIPPED_MAJOR_MINOR_VERSI
 #
 # Get the root dir of the python install
 #
-execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; sys.stdout.write(sys.real_prefix)"
-                OUTPUT_VARIABLE PYTHON_ROOT)
+if(PYTHON_NUMERIC_VERSION LESS 30000)
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; sys.stdout.write(sys.real_prefix)"
+                  OUTPUT_VARIABLE PYTHON_ROOT)
+else(PYTHON_NUMERIC_VERSION LESS 30000)
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; sys.stdout.write(sys.base_prefix)"
+                  OUTPUT_VARIABLE PYTHON_ROOT)
+endif(PYTHON_NUMERIC_VERSION LESS 30000)
 message(STATUS "+ base dir: ${PYTHON_ROOT}")
 
 #
@@ -93,6 +98,7 @@ FIND_PATH(PYTHON_INCLUDE_DIR
     ${PYTHON_ROOT}/include
   PATH_SUFFIXES
     python${PYTHON_STRIPPED_MAJOR_MINOR_VERSION}
+    python${PYTHON_STRIPPED_MAJOR_MINOR_VERSION}m
   NO_DEFAULT_PATH
 )
 # required for ubuntu, because their version of FindPythonLibs is different
