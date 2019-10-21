@@ -71,7 +71,7 @@ STRING(REPLACE "." "" PYTHON_VERSION_NO_DOTS ${PYTHON_STRIPPED_MAJOR_MINOR_VERSI
 #
 # Get the root dir of the python install
 #
-execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; sys.stdout.write(sys.prefix)"
+execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; sys.stdout.write(sys.real_prefix)"
                 OUTPUT_VARIABLE PYTHON_ROOT)
 message(STATUS "+ base dir: ${PYTHON_ROOT}")
 
