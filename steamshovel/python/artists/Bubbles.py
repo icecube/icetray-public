@@ -160,7 +160,7 @@ class Bubbles( PyArtist ):
                 # t <= (tc - delay) is not equivalent!
                 if (t + delay) <= tc:
                     break
-                if chargemap.has_key(t):
+                if t in chargemap:
                     accum += chargemap[t]
                 j -= 1
             size = scale * ( 0.2 * accum ) ** power
