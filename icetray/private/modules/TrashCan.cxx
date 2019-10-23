@@ -32,7 +32,7 @@ struct TrashCan : public I3Module
   //only around to maintain backwards compatibility.  No need
   //to test methods that do nothing. 
   void Configure(){ }
-  void Process(){ }
+  void Process(){ PopFrame(); }
   //LCOV_EXCL_STOP
   
   SET_LOGGER("TrashCan");
