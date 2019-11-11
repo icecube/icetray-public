@@ -69,23 +69,6 @@ set(ICETRAY_PYTHON_SRC
 
 if(ZSTD_FOUND)
   LIST(APPEND OPTIONAL_TOOLS zstd)
-else(ZSTD_FOUND)
-  set(ICETRAY_ZSTD_SRC
-    private/zstd/lib/common/entropy_common.c
-    private/zstd/lib/common/error_private.c
-    private/zstd/lib/common/fse_decompress.c
-    private/zstd/lib/common/pool.c
-    private/zstd/lib/common/threading.c
-    private/zstd/lib/common/xxhash.c
-    private/zstd/lib/common/zstd_common.c
-    private/zstd/lib/compress/fse_compress.c
-    private/zstd/lib/compress/huf_compress.c
-    private/zstd/lib/compress/zstd_compress.c
-    private/zstd/lib/compress/zstdmt_compress.c
-    private/zstd/lib/decompress/huf_decompress.c
-    private/zstd/lib/decompress/zstd_decompress.c
-  )
-  colormsg(CYAN "+-- using built-in zstd")
 endif(ZSTD_FOUND)
 
 i3_add_library(icetray
@@ -153,8 +136,6 @@ i3_add_library(icetray
 
   ${ICETRAY_PYTHON_SRC}
 
-  ${ICETRAY_ZSTD_SRC}
-
   IWYU
   USE_PROJECTS serialization
   USE_TOOLS boost python ${OPTIONAL_TOOLS}
@@ -169,20 +150,6 @@ configure_file(resources/workspace_config.h.in
 set_source_files_properties(private/icetray/I3TrayInfoService.cxx
   PROPERTIES
   COMPILE_FLAGS "-include ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/workspace_config.h")
-
-if(ZSTD_FOUND)
-  # do nothing
-else(ZSTD_FOUND)
-  set_source_files_properties(${ICETRAY_ZSTD_SRC}
-    PROPERTIES
-    COMPILE_FLAGS "-O3 -I${CMAKE_CURRENT_SOURCE_DIR}/private/zstd/lib -I${CMAKE_CURRENT_SOURCE_DIR}/private/zstd/lib/common"
-  )
-
-  set_source_files_properties(private/open/open.cxx
-    PROPERTIES
-    COMPILE_FLAGS "-I${CMAKE_CURRENT_SOURCE_DIR}/private/zstd/lib"
-  )
-endif(ZSTD_FOUND)
 
 #
 # Configure memory tracking
