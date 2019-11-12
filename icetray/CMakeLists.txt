@@ -28,6 +28,14 @@ else(LIBARCHIVE_FOUND)
 	set(LIBARCHIVE_LIBRARIES "")
 endif(LIBARCHIVE_FOUND)
 
+if(ZSTD_FOUND)
+	add_definitions(-DI3_WITH_ZSTD)
+	include_directories(${ZSTD_INCLUDE_DIR})
+else(ZSTD_FOUND)
+	colormsg(CYAN "+-- libarchive *not* found, omitting optional tarfile support")
+	set(ZSTD_LIBRARIES "")
+endif(ZSTD_FOUND)
+
 i3_project(icetray
   DOCS_DIR resources/docs
   PYTHON_DIR python)
@@ -139,7 +147,7 @@ i3_add_library(icetray
   IWYU
   USE_PROJECTS serialization
   USE_TOOLS boost python ${OPTIONAL_TOOLS}
-  LINK_LIBRARIES ${BOOST_PYTHON} ${LIBARCHIVE_LIBRARIES}
+  LINK_LIBRARIES ${BOOST_PYTHON} ${LIBARCHIVE_LIBRARIES} ${ZSTD_LIBRARIES}
   )
 #
 #  Configure/create directory containing inneresting workspace-wide #defines
@@ -242,7 +250,7 @@ set(TMP_LIBRARY_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH})
 i3_add_pybindings(icetray
   private/pybindings/module.cxx
   USE_TOOLS boost python
-  LINK_LIBRARIES ${LIBARCHIVE_LIBRARIES}
+  LINK_LIBRARIES ${LIBARCHIVE_LIBRARIES} ${ZSTD_LIBRARIES}
   USE_PROJECTS icetray
   )
 
