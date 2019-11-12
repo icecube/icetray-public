@@ -147,7 +147,7 @@ i3_add_library(icetray
   IWYU
   USE_PROJECTS serialization
   USE_TOOLS boost python ${OPTIONAL_TOOLS}
-  LINK_LIBRARIES ${BOOST_PYTHON} ${LIBARCHIVE_LIBRARIES} ${ZSTD_LIBRARIES}
+  LINK_LIBRARIES ${BOOST_PYTHON} ${LIBARCHIVE_LIBRARIES}
   )
 #
 #  Configure/create directory containing inneresting workspace-wide #defines
@@ -250,7 +250,7 @@ set(TMP_LIBRARY_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH})
 i3_add_pybindings(icetray
   private/pybindings/module.cxx
   USE_TOOLS boost python
-  LINK_LIBRARIES ${LIBARCHIVE_LIBRARIES} ${ZSTD_LIBRARIES}
+  LINK_LIBRARIES ${LIBARCHIVE_LIBRARIES}
   USE_PROJECTS icetray
   )
 
