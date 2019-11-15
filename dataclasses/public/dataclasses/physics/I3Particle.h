@@ -452,6 +452,11 @@ class I3Particle : public I3FrameObject
 
 static const unsigned i3particle_version_ = 5;
 
+/**
+ * Get name of an I3Particle::ParticleType as a string
+ */
+std::string i3particle_type_string(int32_t pdg_code);
+
 // let other code know that I3Particle stores PDG encodings internally
 #define I3PARTICLE_SUPPORTS_PDG_ENCODINGS
 

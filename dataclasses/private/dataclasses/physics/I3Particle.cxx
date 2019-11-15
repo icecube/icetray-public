@@ -366,14 +366,19 @@ void I3Particle::SetTotalEnergy(double total_energy)
 // using the magic of the preprocessor, expand
 // the existing list of enum entries into a case
 // line converting from enum to string
-#define MAKE_ENUM_TO_STRING_CASE_LINE(r, data, t) case t : return BOOST_PP_STRINGIZE(t);
+#define MAKE_ENUM_TO_STRING_CASE_LINE(r, data, t) case I3Particle::t : return BOOST_PP_STRINGIZE(t);
+
+std::string i3particle_type_string(int32_t pdg_code)
+{
+  switch (pdg_code) {
+    BOOST_PP_SEQ_FOR_EACH(MAKE_ENUM_TO_STRING_CASE_LINE, ~, I3PARTICLE_H_I3Particle_ParticleType)
+  }
+  return(boost::lexical_cast<std::string>( pdg_code ));
+}
 
 std::string I3Particle::GetTypeString() const
 {
-  switch (pdgEncoding_) {
-    BOOST_PP_SEQ_FOR_EACH(MAKE_ENUM_TO_STRING_CASE_LINE, ~, I3PARTICLE_H_I3Particle_ParticleType)
-  }
-  return(boost::lexical_cast<std::string>( pdgEncoding_ ));
+  return i3particle_type_string(pdgEncoding_);
 }
 
 std::string I3Particle::GetShapeString() const
