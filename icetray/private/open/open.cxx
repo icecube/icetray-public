@@ -78,12 +78,14 @@ namespace I3 {
 		ifs.push(archive_filter(filename));
 #endif
 
-#ifdef I3_WITH_ZSTD
       else if (ends_with(filename,".zst")){
+#ifdef I3_WITH_ZSTD
         ifs.push(zstd_decompressor());
         log_trace("Input file ends in .zst. Using zstd decompressor.");
+#else
+        log_fatal("Input file ends in .zst, however zstd is not found.");
+#endif	
       }
-#endif
       else{
         log_trace("Not decompressing.");
       }
