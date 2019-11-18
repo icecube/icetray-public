@@ -66,18 +66,6 @@ namespace I3 {
       }else if (ends_with(filename,".bz2")){
         ifs.push(io::bzip2_decompressor());
       }
-      
-#ifdef I3_WITH_LIBARCHIVE
-	/*
-	 * If it's not obviously an I3 file, treat it as a
-	 * gzipped/bzipped/lzma'd/xz'd/uncompressed
-	 * gnutar/pax/ustar/cpio/shar/iso9660 archive
-	 * containing I3 files.
-	 */
-      else if (!ends_with(filename,".i3"))
-		ifs.push(archive_filter(filename));
-#endif
-
       else if (ends_with(filename,".zst")){
 #ifdef I3_WITH_ZSTD
         ifs.push(zstd_decompressor());
@@ -86,6 +74,20 @@ namespace I3 {
         log_fatal("Input file ends in .zst, however zstd is not found.");
 #endif	
       }
+    
+#ifdef I3_WITH_LIBARCHIVE
+	/*
+	 * If it's not obviously an I3 file, treat it as a
+	 * gzipped/bzipped/lzma'd/xz'd/uncompressed
+	 * gnutar/pax/ustar/cpio/shar/iso9660 archive
+	 * containing I3 files.
+	 */
+      else if (!ends_with(filename,".i3")) {
+		ifs.push(archive_filter(filename));
+      }
+#endif
+
+
       else{
         log_trace("Not decompressing.");
       }
