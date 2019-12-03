@@ -67,14 +67,14 @@ class SPEFitTestModule(icetray.I3Module) :
         spe_fi = SPEFitInjector(args.json_fn) 
 	
         if spe_fi.new_style:                         
-	    # There are 5085 valid entries out of 5085 in the file IC86.2016_923_NewWaveDeform.json 
-	    # Not sure about other JSON files out there, so 5k seems reasonable. 
-	    if n_valid < 5000 : 
-	        print("Expected 5085 valid entries.") 
-	        print("Got N valid = %d" % n_valid) 
-	        print("FAIL") 
-	        sys.exit(1) # report back to the mothership 
-	else: 
+            # There are 5085 valid entries out of 5085 in the file IC86.2016_923_NewWaveDeform.json 
+            # Not sure about other JSON files out there, so 5k seems reasonable. 
+            if n_valid < 5000: 
+                print("Expected 5085 valid entries.") 
+                print("Got N valid = %d" % n_valid) 
+                print("FAIL") 
+                sys.exit(1) # report back to the mothership 
+        else: 
             ENSURE(n_nan_atwd_charge == 0, "All the ATWD mean charges should be non-NaN.")
             ENSURE(n_nan_fadc_charge == 5, "There should be 5 NaN FADC charges.")
             ENSURE(n_nan_exp2_amp == 0,"All parameters describing the SPE Charge distribution should be non-NaN.")
