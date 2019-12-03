@@ -23,8 +23,7 @@ colormsg("")
 colormsg(HICYAN "python")
 
 set(PYTHON_FOUND TRUE CACHE BOOL "Python found successfully")
-set(USE_PYTHON3 TRUE CACHE BOOL "Build against Python3")
-
+option(USE_PYTHON3 "Build against Python3" ON)
 if(USE_PYTHON3)
   find_program(PYTHON_EXECUTABLE python3
     PATHS ENV PATH         # look in the PATH environment variable
