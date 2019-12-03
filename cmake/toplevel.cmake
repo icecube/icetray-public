@@ -58,6 +58,8 @@ endif (APPLE)
 set(I3_SRC ${CMAKE_SOURCE_DIR})
 set(I3_BUILD ${CMAKE_BINARY_DIR})
 
+execute_process(COMMAND mkdir -p ${CMAKE_BINARY_DIR}/bin)
+
 ## pull in optional meta-project CMakeLists
 include(${CMAKE_SOURCE_DIR}/CMakeLists.optional.txt OPTIONAL)
 
@@ -321,8 +323,3 @@ add_custom_target(pycoverage_verbose
   COMMAND ./env-shell.sh pycoverage -d pycoverage/`date +%Y-%m-%d` -v
   COMMAND rm -f pycoverage/00_LATEST \; ln -sf `ls -1tr pycoverage |tail -1` pycoverage/00_LATEST
 )
-
-#omit python2 warning for now
-#if(PYTHON_NUMERIC_VERSION LESS 30000)
-#  colormsg(RED "${PYTHON_WARNING}")
-#endif(PYTHON_NUMERIC_VERSION LESS 30000)
