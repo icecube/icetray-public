@@ -42,7 +42,7 @@ endif()
 # This is really only needed on systems that contain both python2 and python3,
 # where we don't want to force a system wide adoption of python3, potentially
 # breaking other non-IceCube applications on the user's machine.
-execute_process(COMMAND ln --force -s ${PYTHON_EXECUTABLE} ${CMAKE_BINARY_DIR}/bin/python)
+execute_process(COMMAND ln -sf ${PYTHON_EXECUTABLE} ${CMAKE_BINARY_DIR}/bin/python)
 
 find_package(PythonInterp QUIET
       PATHS ENV PATH
