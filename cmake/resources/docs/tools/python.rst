@@ -11,16 +11,19 @@
 Python
 ======
 
-We use the *system* python.  By default this is the one in
+We use the *system* python3.  By default this is the one in
 ``/usr/bin``.  The development packages are required, eg the file
-``/usr/include/python2.6/Python.h`` and so forth.  If you want to use
-a python in a nonstandard location refer to :ref:`ns-python`. After
-you have ensured that you have python and your development packages
-installed, you will probably want to set up additional python tools.
+``/usr/include/python3.6/Python.h`` and so forth.  After you have
+ensured that you have python and your development packages installed,
+you will probably want to set up additional python tools.
 
-**Note**: Python 2.6 or newer (up to 3.3 has been tested) are *strongly*
-recommended. Limited functionality may be available on Python 2.4 and 2.5.
-Python older than 2.4 is completely unsupported and will not work.
+To build against Python2:
+
+.. code:: bash
+   cmake ../src -DUSE_PYTHON3=OFF
+
+**Note**: It is strongly recommended that you use Python3.  Python2
+will continue to be supported through 2020, but dropped in 2021.
 
 Setting Up Additional Python Tools
 ----------------------------------
