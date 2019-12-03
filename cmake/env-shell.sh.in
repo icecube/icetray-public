@@ -64,19 +64,6 @@ then
         _I3_TESTDATA=$I3_TESTDATA
     fi
 fi
-_PYVER=`python -V 2>&1 | awk '{print $2}'`
-_I3_PYTHON_VERSION=@PYTHON_VERSION@
-
-if [ "${_PYVER}" != "${_I3_PYTHON_VERSION}" ]
-then
-    echo "****************************************************************"
-    echo "Python version mismatch found:"
-    echo "IceTray was compiled with ${_I3_PYTHON_VERSION}"
-    echo "Currently running with    ${_PYVER}"
-    echo "****************************************************************"
-    echo "Environment not (re)loaded."
-    exit 2
-fi
 
 # Check for I3_BUILD mismatch
 if [ -n "$I3_BUILD" -a "$I3_BUILD" != "$_I3_BUILD" ]
@@ -154,14 +141,8 @@ if [ -z "$ARGV" ]
     [ -d "$_I3_TESTDATA" ] && printf "   I3_TESTDATA  = %s\n" $_I3_TESTDATA \
                            || printf "   I3_TESTDATA should be set to an existing directory path\n" \
                                      "   (and 'make rsync' may need to be run) if you wish to run tests."
-    echo   "   Python       =" $_PYVER
+    echo   "   Python       =" @PYTHON_VERSION@
 fi
-
-#omit python2 warning for now
-#if [ "${_PYVER:0:1}" -lt "3" ]
-#then
-#    echo "\033[0;31m@PYTHON_WARNING@\033[0;0m"
-#fi
 
 if [ -z "$I3_SHELL" ] # a clean, first invocation
     then

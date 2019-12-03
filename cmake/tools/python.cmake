@@ -23,11 +23,28 @@ colormsg("")
 colormsg(HICYAN "python")
 
 set(PYTHON_FOUND TRUE CACHE BOOL "Python found successfully")
+set(USE_PYTHON3 TRUE CACHE BOOL "Build against Python3")
 
-find_program(PYTHON_EXECUTABLE python
-      PATHS ENV PATH         # look in the PATH environment variable
-      NO_DEFAULT_PATH        # do not look anywhere else...
-      )
+if(USE_PYTHON3)
+  find_program(PYTHON_EXECUTABLE python3
+    PATHS ENV PATH         # look in the PATH environment variable
+    NO_DEFAULT_PATH        # do not look anywhere else...
+    )
+else()
+  find_program(PYTHON_EXECUTABLE python2
+    PATHS ENV PATH         # look in the PATH environment variable
+    NO_DEFAULT_PATH        # do not look anywhere else...
+    )
+endif()
+
+# In order to ensure all python executables (i.e. '#!/usr/bin/env python') run
+# under both python2 and python3 after spawning a new shell via env-shell.sh
+# we create a soft link in $I3_BUILD/bin to whatever python executable is found.
+# This is really only needed on systems that contain both python2 and python3,
+# where we don't want to force a system wide adoption of python3, potentially
+# breaking other non-IceCube applications on the user's machine.
+execute_process(COMMAND ln --force -s ${PYTHON_EXECUTABLE} ${CMAKE_BINARY_DIR}/bin/python)
+
 find_package(PythonInterp QUIET
       PATHS ENV PATH
       NO_DEFAULT_PATH
