@@ -25,16 +25,27 @@ colormsg(HICYAN "python")
 set(PYTHON_FOUND TRUE CACHE BOOL "Python found successfully")
 
 if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.12)
-	find_package(Python COMPONENTS Interpreter Development)
+	find_package(Python COMPONENTS Interpreter Development NumPy)
 else()
 	find_package(PythonInterp)
 	find_package(PythonLibs ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR})
 	string(REGEX REPLACE ".*libpython([0-9])\\.[0-9]+.*\\..*" "\\1" Python_VERSION_MAJOR ${PYTHON_LIBRARIES})
 	string(REGEX REPLACE ".*libpython[0-9]\\.([0-9]+).*\\..*" "\\1" Python_VERSION_MINOR ${PYTHON_LIBRARIES})
-	set(Python_INCLUDE_DIRS ${PYTHON_INCLUDE_DIRS} ${PYTHON_INCLUDE_PATH})
+	set(Python_VERSION ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR})
+	set(Python_INCLUDE_DIRS ${PYTHON_INCLUDE_PATH})
 	set(Python_LIBRARIES ${PYTHON_LIBRARIES})
 	set(Python_EXECUTABLE ${PYTHON_EXECUTABLE})
 endif()
+
+message(STATUS "+  version: ${Python_VERSION}")
+
+# Compatibility variables
+set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
+set(PYTHON_VERSION ${Python_VERSION})
+set(PYTHON_STRIPPED_VERSION ${Python_VERSION})
+set(PYTHON_LIBRARY ${Python_LIBRARIES})
+set(PYTHON_LIBRARIES ${Python_LIBRARIES})
+set(PYTHON_INCLUDE_DIR ${Python_INCLUDE_DIRS})
 
 # In order to ensure all python executables (i.e. '#!/usr/bin/env python') run
 # under both python2 and python3 after spawning a new shell via env-shell.sh
@@ -44,91 +55,17 @@ endif()
 # breaking other non-IceCube applications on the user's machine.
 execute_process(COMMAND ln -sf ${PYTHON_EXECUTABLE} ${CMAKE_BINARY_DIR}/bin/python)
 
-# 
-# determine version of the system python.
-#
-execute_process(COMMAND ${PYTHON_EXECUTABLE} -V
-  OUTPUT_VARIABLE STDOUT_VERSION
-  ERROR_VARIABLE PYTHON_VERSION
-  ERROR_STRIP_TRAILING_WHITESPACE)
-
-if(STDOUT_VERSION MATCHES "Python")
-  set(PYTHON_VERSION "${STDOUT_VERSION}")
-endif()
-
-#
-# 'python -V' returns 'Python 2.7.15rc1'
-# I think we can trust that the version refers to the python
-# version and discard the name.
-#
-string(REPLACE " " ";" PYTHON_VERSION_LIST ${PYTHON_VERSION})
-list(GET PYTHON_VERSION_LIST 1 PYTHON_VERSION)
-string(STRIP "${PYTHON_VERSION}" PYTHON_VERSION)
-
-#
-# Provide version in numeric form for comparison
-#
-string(REGEX MATCH "([0-9]+)\\.([0-9]+)\\.?([0-9]*)"
-  PYTHON_STRIPPED_VERSION
-  ${PYTHON_VERSION})
-string(REGEX MATCH "([0-9]+)\\.([0-9]+)"
-  PYTHON_STRIPPED_MAJOR_MINOR_VERSION
-  ${PYTHON_VERSION})
-numeric_version(${PYTHON_STRIPPED_VERSION} PYTHON)
-message(STATUS "+  version: ${PYTHON_STRIPPED_VERSION}") 
-
-STRING(REPLACE "." "" PYTHON_VERSION_NO_DOTS ${PYTHON_STRIPPED_MAJOR_MINOR_VERSION})
-
 #
 # Get the root dir of the python install
 #
-if(PYTHON_NUMERIC_VERSION LESS 30000)
+if(${Python_VERSION} VERSION_GREATER_EQUAL 3.0)
   execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; sys.stdout.write(sys.real_prefix if hasattr(sys, 'real_prefix') else sys.prefix)"
                   OUTPUT_VARIABLE PYTHON_ROOT)
-else(PYTHON_NUMERIC_VERSION LESS 30000)
+elseif(${Python_VERSION} VERSION_LESS 3.0)
   execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; sys.stdout.write(sys.base_prefix)"
                   OUTPUT_VARIABLE PYTHON_ROOT)
-endif(PYTHON_NUMERIC_VERSION LESS 30000)
+endif(${Python_VERSION} VERSION_GREATER_EQUAL 3.0)
 message(STATUS "+ base dir: ${PYTHON_ROOT}")
-
-#
-# Find the library and header file manually,
-# using the python root that we found above.
-#
-FIND_LIBRARY(PYTHON_LIBRARY
-  NAMES python${PYTHON_VERSION_NO_DOTS} python${PYTHON_STRIPPED_MAJOR_MINOR_VERSION}
-  PATHS ${PYTHON_ROOT} ${PYTHON_ROOT}/lib
-  PATH_SUFFIXES
-    python${PYTHON_STRIPPED_MAJOR_MINOR_VERSION}
-  NO_SYSTEM_ENVIRONMENT_PATH
-  NO_DEFAULT_PATH
-)
-FIND_PATH(PYTHON_INCLUDE_DIR
-  NAMES Python.h
-  PATHS
-    ${PYTHON_ROOT}/include
-  PATH_SUFFIXES
-    python${PYTHON_STRIPPED_MAJOR_MINOR_VERSION}
-    python${PYTHON_STRIPPED_MAJOR_MINOR_VERSION}m
-  NO_DEFAULT_PATH
-)
-# required for ubuntu, because their version of FindPythonLibs is different
-set(PYTHON_INCLUDE_DIR2 ${PYTHON_INCLUDE_DIR})
-#
-# Now do the full python detection, which includes special
-# things for frameworks detection.
-#
-find_package(PythonLibs ${PYTHON_STRIPPED_VERSION} EXACT QUIET)
-# Store in plural form for consistency with other tools
-set(PYTHON_LIBRARIES "${PYTHON_LIBRARIES}" CACHE FILEPATH "")
-
-if(NOT PYTHON_EXECUTABLE)
-  set(PYTHON_FOUND FALSE CACHE BOOL "Python found successfully")
-endif(NOT PYTHON_EXECUTABLE)
-
-if(NOT PYTHON_INCLUDE_DIR)
-  set(PYTHON_INCLUDE_DIR ${PYTHON_INCLUDE_PATH})
-endif(NOT PYTHON_INCLUDE_DIR)
 
 if(NOT EXISTS "${PYTHON_INCLUDE_DIR}/Python.h")
   message(STATUS "Error configuring python:  ${PYTHON_INCLUDE_DIR}/Python.h does not exist.\n")
@@ -140,47 +77,38 @@ message(STATUS "+   binary: ${PYTHON_EXECUTABLE}")
 message(STATUS "+ includes: ${PYTHON_INCLUDE_DIR}")	
 message(STATUS "+     libs: ${PYTHON_LIBRARIES}")
 
-if(PYTHON_NUMERIC_VERSION LESS 20600)
+if(${Python_VERSION} VERSION_LESS 2.6)
   message(FATAL_ERROR "A Python version >= 2.6 is required.")
-endif(PYTHON_NUMERIC_VERSION LESS 20600)
+endif(${Python_VERSION} VERSION_LESS 2.6)
 
 # look for numpy
-execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import numpy"
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.12)
+  set(NUMPY_FOUND ${Python_NumPy_FOUND} CACHE BOOL "Numpy found successfully")
+  set(NUMPY_INCLUDE_DIR ${Python_NumPy_INCLUDE_DIRS})
+  message(STATUS "+    numpy: ${Python_NumPy_INCLUDE_DIRS}")
+else(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.12)
+  # Old, crummy cmake -- try our best. Use better cmake for special cases.
+
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import numpy"
     RESULT_VARIABLE NUMPY_FOUND)
+  # let's make our xxx_FOUND variable like CMake ones
+  if(NUMPY_FOUND EQUAL 0)
+    set(NUMPY_FOUND TRUE)
+    set(NUMPY_FOUND TRUE CACHE BOOL "Numpy found successfully")
+  else(NUMPY_FOUND EQUAL 0)
+    set(NUMPY_FOUND FALSE CACHE BOOL "Numpy found successfully")
+    set(NUMPY_FOUND FALSE)
+  endif(NUMPY_FOUND EQUAL 0)
 
-# let's make our xxx_FOUND variable like CMake ones
-if(NUMPY_FOUND EQUAL 0)
-  set(NUMPY_FOUND TRUE)
-else(NUMPY_FOUND EQUAL 0)
-  set(NUMPY_FOUND FALSE)
-endif(NUMPY_FOUND EQUAL 0)
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c
+    "import numpy; print(numpy.get_include())"
+    OUTPUT_VARIABLE _NUMPY_INCLUDE_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-if(NOT NUMPY_FOUND)
-	set(NUMPY_FOUND FALSE CACHE BOOL "Numpy found successfully")
-else(NOT NUMPY_FOUND)
-	set(NUMPY_FOUND TRUE CACHE BOOL "Numpy found successfully")
-	execute_process(COMMAND ${PYTHON_EXECUTABLE} -c
-	    "import numpy; print(numpy.get_include())"
-           OUTPUT_VARIABLE _NUMPY_INCLUDE_DIR
-	    OUTPUT_STRIP_TRAILING_WHITESPACE)
-    
-    # look in some other places, too. This should make it 
-    # work on OS X, where the headers are in SDKs within XCode.app,
-    # but python reports them as being available at /.
-    set(NUMPY_INCLUDE_DIR_CANDIDATES ${_NUMPY_INCLUDE_DIR})
-    foreach(prefix ${CMAKE_PREFIX_PATH})
-        list(APPEND NUMPY_INCLUDE_DIR_CANDIDATES ${prefix}/${_NUMPY_INCLUDE_DIR})
-        list(APPEND NUMPY_INCLUDE_DIR_CANDIDATES ${prefix}/../${_NUMPY_INCLUDE_DIR})
-    endforeach(prefix ${CMAKE_PREFIX_PATH})
-    foreach(prefix ${CMAKE_FRAMEWORK_PATH})
-        list(APPEND NUMPY_INCLUDE_DIR_CANDIDATES ${prefix}/${_NUMPY_INCLUDE_DIR})
-        list(APPEND NUMPY_INCLUDE_DIR_CANDIDATES ${prefix}/../../../${_NUMPY_INCLUDE_DIR})
-    endforeach(prefix ${CMAKE_FRAMEWORK_PATH})
-
-	find_path(NUMPY_INCLUDE_DIR NAMES numpy/ndarrayobject.h HINTS ${NUMPY_INCLUDE_DIR_CANDIDATES})
-	set(NUMPY_INCLUDE_DIR ${NUMPY_INCLUDE_DIR} CACHE STRING "Numpy inc directory")
-	message(STATUS "+    numpy: ${NUMPY_INCLUDE_DIR}")
-endif(NOT NUMPY_FOUND)
+  find_path(NUMPY_INCLUDE_DIR NAMES numpy/ndarrayobject.h HINTS ${_NUMPY_INCLUDE_DIR})
+  set(NUMPY_INCLUDE_DIR ${NUMPY_INCLUDE_DIR} CACHE STRING "Numpy inc directory")
+  message(STATUS "+    numpy: ${NUMPY_INCLUDE_DIR}")
+endif(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.12)
 
 ## look for scipy
 execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import scipy"
@@ -196,11 +124,11 @@ endif()
 set(SCIPY_FOUND ${SCIPY_FOUND} CACHE BOOL "Scipy found successfully")
 
 
-if(PYTHON_NUMERIC_VERSION LESS 30000)
+if(${Python_VERSION} VERSION_LESS 3.0)
   colormsg(RED "-  WARNING: Python<3.0 detected")
 #omit python2 warning for now  
 #  set(PYTHON_WARNING
-#"WARNING: Your current version of python is ${PYTHON_STRIPPED_VERSION}.
+#"WARNING: Your current version of python is ${Python_VERSION}.
 #Python 2.7 is being retired and will not be maintained upstream past January 1, 
 #2020. Therefore IceCube software must transition to python 3. You do not need to
 #do anything at this moment, this version of IceCube software will still work 
@@ -208,6 +136,7 @@ if(PYTHON_NUMERIC_VERSION LESS 30000)
 # available opportunity.  Please see 
 #http://software.icecube.wisc.edu/documentation/projects/cmake/tools/python.html
 #for more details on how to migrate.")
-else(PYTHON_NUMERIC_VERSION LESS 30000)
+else(${Python_VERSION} VERSION_LESS 3.0)
   set(PYTHON_WARNING "")
-endif(PYTHON_NUMERIC_VERSION LESS 30000)
+endif(${Python_VERSION} VERSION_LESS 3.0)
+
