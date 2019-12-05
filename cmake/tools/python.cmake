@@ -23,17 +23,17 @@ colormsg("")
 colormsg(HICYAN "python")
 
 set(PYTHON_FOUND TRUE CACHE BOOL "Python found successfully")
-option(USE_PYTHON3 "Build against Python3" ON)
-if(USE_PYTHON3)
-  find_program(PYTHON_EXECUTABLE python3
-    PATHS ENV PATH         # look in the PATH environment variable
-    NO_DEFAULT_PATH        # do not look anywhere else...
-    )
+
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.12)
+	find_package(Python COMPONENTS Interpreter Development)
 else()
-  find_program(PYTHON_EXECUTABLE python2
-    PATHS ENV PATH         # look in the PATH environment variable
-    NO_DEFAULT_PATH        # do not look anywhere else...
-    )
+	find_package(PythonInterp)
+	find_package(PythonLibs ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR})
+	string(REGEX REPLACE ".*libpython([0-9])\\.[0-9]+.*\\..*" "\\1" Python_VERSION_MAJOR ${PYTHON_LIBRARIES})
+	string(REGEX REPLACE ".*libpython[0-9]\\.([0-9]+).*\\..*" "\\1" Python_VERSION_MINOR ${PYTHON_LIBRARIES})
+	set(Python_INCLUDE_DIRS ${PYTHON_INCLUDE_DIRS} ${PYTHON_INCLUDE_PATH})
+	set(Python_LIBRARIES ${PYTHON_LIBRARIES})
+	set(Python_EXECUTABLE ${PYTHON_EXECUTABLE})
 endif()
 
 # In order to ensure all python executables (i.e. '#!/usr/bin/env python') run
@@ -43,11 +43,6 @@ endif()
 # where we don't want to force a system wide adoption of python3, potentially
 # breaking other non-IceCube applications on the user's machine.
 execute_process(COMMAND ln -sf ${PYTHON_EXECUTABLE} ${CMAKE_BINARY_DIR}/bin/python)
-
-find_package(PythonInterp QUIET
-      PATHS ENV PATH
-      NO_DEFAULT_PATH
-      )
 
 # 
 # determine version of the system python.

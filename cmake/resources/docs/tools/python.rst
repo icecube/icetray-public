@@ -17,10 +17,10 @@ We use the *system* python3.  By default this is the one in
 ensured that you have python and your development packages installed,
 you will probably want to set up additional python tools.
 
-To build against Python2:
+To build against non-system python:
 
 .. code:: bash
-   cmake ../src -DUSE_PYTHON3=OFF
+   cmake ../src -DPYTHON_EXECUTABLE=/path/to/python/executable
 
 **Note**: It is strongly recommended that you use Python3.  Python2
 will continue to be supported through 2020, but dropped in 2021.
