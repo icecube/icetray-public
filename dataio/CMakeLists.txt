@@ -44,6 +44,8 @@ if(CDK_FOUND AND NCURSES_FOUND)
     USE_PROJECTS dataio
     USE_TOOLS cdk ncurses
     )
+  SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -lform")
+  SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lform")
 else()
   colormsg(CYAN "+-- dataio-shovel *not* included (missing CDK or ncurses libraries)")
 endif()
