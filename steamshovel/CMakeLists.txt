@@ -6,25 +6,29 @@ i3_project(steamshovel
   DOCS_DIR resources/docs
   )
 
-option(USE_QT4 "Use Qt4/PyQt4 instead of the default of Qt5/PyQt5" OFF)
-
-if (NOT USE_QT4)
-  include(${CMAKE_CURRENT_SOURCE_DIR}/config_with_qt5.cmake)
-  return()
+if(POLICY CMP0002)
+  cmake_policy(SET CMP0002 NEW)
+endif()
+if(POLICY CMP0053)
+  cmake_policy(SET CMP0053 OLD)
 endif()
 
-colormsg(HIYELLOW "*** You've opted to use Qt4. Qt4 has reached its end-of-life,")
-colormsg(HIYELLOW "*** and its use in steamshovel is deprecated. Please the default Qt5 instead.")
+set(CMAKE_AUTOMOC True)
 
-if ((PYTHON_NUMERIC_VERSION GREATER 20702) AND (BOOST_PORTS_VERSION MATCHES "1.38.0"))
-    colormsg (YELLOW "*** You are using boost<=1.38 and Python>=2.7.3.  Steamshovel will do its best to avert crashes and catastrophe, but no promises.")
-endif ((PYTHON_NUMERIC_VERSION GREATER 20702) AND (BOOST_PORTS_VERSION MATCHES "1.38.0"))
-if (PYTHON_NUMERIC_VERSION LESS 20600)
-    colormsg (YELLOW "*** python v2.6 or greater is required... skipping")
-else (PYTHON_NUMERIC_VERSION LESS 20600)
+# look for homebrew, and its qt5 paths
+if(BREW)
+  execute_process(COMMAND ${BREW} --prefix qt5 OUTPUT_VARIABLE QT5_BREW_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+  find_package(Qt5 COMPONENTS OpenGL
+    HINTS ${QT5_BREW_PATH}
+    PATH /usr/local/Cellar/qt5/5.7.0)
+endif()
 
+# non-homebrew search
+find_package(Qt5 COMPONENTS OpenGL)
+find_package(OpenGL)
+find_package(GLUT)
 
-if(QT4_FOUND AND NOT QT_CONFIG_ERROR AND OPENGL_FOUND AND OPENGL_GLU_FOUND AND QT_QTOPENGL_FOUND)
+if(Qt5_FOUND AND Qt5OpenGL_FOUND AND OPENGL_FOUND AND OPENGL_GLU_FOUND)
   # Use the version of Steamshovel itself, rather than the last commit to the
   # entire IceCube svn repository
   set(OLD_LANG ENV{LANG})
@@ -35,50 +39,19 @@ if(QT4_FOUND AND NOT QT_CONFIG_ERROR AND OPENGL_FOUND AND OPENGL_GLU_FOUND AND Q
     ERROR_VARIABLE SHOVEL_REVISION_ERROR)
   set(ENV{LANG} OLD_LANG)
 
-  if(SHOVEL_REVISION_ERROR)
+  if(SHOVEL_REVISION_ERROR OR NOT SHOVEL_REVISION)
     set(SHOVEL_REVISION 0)
   endif()
 
   # prevent Q_FOREACH from stepping on boost::foreach
   add_definitions(-DQT_NO_KEYWORDS -DSHOVEL_REVISION=${SHOVEL_REVISION})
 
-  include(${QT_USE_FILE})
+  # extra hints for qt5 and automoc
+  include_directories(BEFORE ${Qt5OpenGL_INCLUDE_DIRS})
+  include_directories(BEFORE /usr/local/opt/qt5/include) ## necessary if qt4 and qt5 are installed via homebrew (even if qt4 is unlinked!)
   include_directories(${CMAKE_CURRENT_BINARY_DIR})
-  # include_directories(${CMAKE_CURRENT_SOURCE_DIR}/private)
 
-  qt4_i3_automoc(
-    private/steamshovel/ShovelMainWindow.cpp
-    private/steamshovel/SessionMenu.cpp
-    private/steamshovel/I3GLWidget.cpp
-    private/steamshovel/FramePicker.cpp
-    private/steamshovel/FileService.cpp
-    private/steamshovel/FilterWidget.cpp
-    private/steamshovel/TimeSpinBox.cpp
-    private/steamshovel/SteamshovelApp.cpp
-    private/steamshovel/TimelineWidget.cpp
-    private/steamshovel/I3FrameTableModel.cpp
-    private/steamshovel/ScenarioModel.cpp
-    private/steamshovel/ScenarioFrameModel.cpp
-    private/steamshovel/ShellWidget.cpp
-    private/steamshovel/ArtistDelegate.cpp
-    private/steamshovel/ArtistSettings.cpp
-    private/steamshovel/ScenarioWidget.cpp
-    private/steamshovel/ProjectionDialog.cpp
-    private/steamshovel/MovieDialog.cpp
-    private/steamshovel/MovieEngine.cpp
-    private/steamshovel/LogDialog.cpp
-    private/steamshovel/SaveFrameDialog.cpp
-    private/steamshovel/ConfigDialog.cpp
-    private/steamshovel/ShovelSlider.cpp
-    private/shovelart/BindSignal.cpp
-    private/shovelart/Scenario.cpp
-    private/shovelart/ArtistRegistry.cpp
-    private/shovelart/artists/Pong.cpp
-    private/shovelart/artists/IceTop.cpp
-    private/scripting/qmeta_args.cpp
-    )
-
-  qt4_wrap_ui(steamshovel_UIS_H
+  qt5_wrap_ui(steamshovel_UIS_H
     private/ui/config_dialog.ui
     private/ui/shovelmainwindow.ui
     private/ui/timeline.ui
@@ -91,11 +64,11 @@ if(QT4_FOUND AND NOT QT_CONFIG_ERROR AND OPENGL_FOUND AND OPENGL_GLU_FOUND AND Q
     private/ui/update_dialog.ui
     )
 
-  qt4_add_resources(RCC_SRCS
+  qt5_add_resources(RCC_SRCS
     resources/steamshovel.qrc
     )
   
-  ## duplicate part of qt4_add_resources(), and remove the dir it creates
+  ## duplicate part of qt5_add_resources(), and remove the dir it creates
   ## if packaging breaks, try deleting this block
   configure_file("${CMAKE_CURRENT_SOURCE_DIR}/resources/steamshovel.qrc"
           "${CMAKE_CURRENT_SOURCE_DIR}/resources/steamshovel.qrc.depends"
@@ -109,7 +82,7 @@ if(QT4_FOUND AND NOT QT_CONFIG_ERROR AND OPENGL_FOUND AND OPENGL_GLU_FOUND AND Q
     "python/util/help.py"
     "resources/test/test_shovelscripts.py")
 
-  set(_pyqtver "4")
+  set(_pyqtver "5")
   foreach(_f IN LISTS CONFIG_SRCS)
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/${_f}.in"
       "${CMAKE_CURRENT_SOURCE_DIR}/${_f}"
@@ -123,17 +96,17 @@ if(QT4_FOUND AND NOT QT_CONFIG_ERROR AND OPENGL_FOUND AND OPENGL_GLU_FOUND AND Q
     private/scripting/pycompat.cpp
     private/scripting/pyerr.cpp
     private/scripting/qpixmap_from_python.cpp
-    USE_TOOLS boost python opengl qt4
+    USE_TOOLS boost python opengl
     USE_PROJECTS icetray dataclasses
-    LINK_LIBRARIES ${BOOST_PYTHON} ${QT_LIBRARIES} ${OPENGL_LIBRARIES}
+    LINK_LIBRARIES ${BOOST_PYTHON} Qt5::OpenGL
     )
 
   i3_add_pybindings( shovelart
     private/scripting/*.cpp
     private/shovelart/pybindings/*.cpp
-    USE_TOOLS boost python opengl qt4
+    USE_TOOLS boost python opengl
     USE_PROJECTS icetray dataclasses
-    LINK_LIBRARIES ${BOOST_PYTHON} ${QT_LIBRARIES} ${OPENGL_LIBRARIES}
+    LINK_LIBRARIES ${BOOST_PYTHON} Qt5::OpenGL
     )
 
   ## the following files trigger warnings in expanded macros
@@ -161,16 +134,10 @@ if(QT4_FOUND AND NOT QT_CONFIG_ERROR AND OPENGL_FOUND AND OPENGL_GLU_FOUND AND Q
 
   target_link_libraries( shovelio-pybindings shovelio )
 
-  # logviewer provides access to error messages on MacOS
-  qt4_i3_automoc(
-    private/logviewer/LogViewer.cpp
-    )
-
   i3_executable( logviewer
     private/logviewer/*.cpp
-    USE_TOOLS qt4
     USE_PROJECTS icetray
-    LINK_LIBRARIES ${QT_LIBRARIES}
+    LINK_LIBRARIES Qt5::OpenGL
     )
 
   i3_executable( steamshovel
@@ -178,9 +145,9 @@ if(QT4_FOUND AND NOT QT_CONFIG_ERROR AND OPENGL_FOUND AND OPENGL_GLU_FOUND AND Q
     private/scripting/*.cpp
     ${steamshovel_UIS_H}
     ${RCC_SRCS}
-    USE_TOOLS boost python opengl qt4
+    USE_TOOLS boost python opengl
     USE_PROJECTS icetray dataclasses dataio
-    LINK_LIBRARIES ${BOOST_PYTHON} ${QT_LIBRARIES} ${OPENGL_LIBRARIES}
+    LINK_LIBRARIES ${BOOST_PYTHON} Qt5::OpenGL
     NO_PREFIX
     )
   target_link_libraries( steamshovel shovelart shovelio )
@@ -193,11 +160,12 @@ if(QT4_FOUND AND NOT QT_CONFIG_ERROR AND OPENGL_FOUND AND OPENGL_GLU_FOUND AND Q
 
 
   if(APPLE)
-    add_definitions( -DQT_WS_MAC=1 )
 
     # Give steamshovel an extra link dependency on QtSvg, which is used by PyQt4;
     # this ensures that QtSvg will wind up in Steamshovel.app.
-    target_link_libraries( steamshovel ${QT_QTSVG_LIBRARY} )
+    find_package(Qt5 COMPONENTS Svg
+      HINTS ${Qt5Core_INCLUDE_DIRS})
+    target_link_libraries( steamshovel Qt5::Svg )
 
     # Ensure install_name_tool and macdeployqt don't cause problems when rewriting shared lib paths
     SET_TARGET_PROPERTIES( steamshovel
@@ -219,7 +187,7 @@ if(QT4_FOUND AND NOT QT_CONFIG_ERROR AND OPENGL_FOUND AND OPENGL_GLU_FOUND AND Q
 
   endif(APPLE)
 
-else(QT4_FOUND AND NOT QT_CONFIG_ERROR AND OPENGL_FOUND AND OPENGL_GLU_FOUND AND QT_QTOPENGL_FOUND)
+else()
 
   if(NOT OPENGL_FOUND)
     colormsg(CYAN "+-- Opengl not found.")
@@ -227,22 +195,20 @@ else(QT4_FOUND AND NOT QT_CONFIG_ERROR AND OPENGL_FOUND AND OPENGL_GLU_FOUND AND
   if(NOT OPENGL_GLU_FOUND)
     colormsg(CYAN "+-- Opengl GLU not found.")
   endif()
-  if(NOT QT4_FOUND)
-    colormsg(CYAN "+-- Qt4 Not found.")
+  if(NOT Qt5_FOUND)
+    colormsg(CYAN "+-- Qt5 Not found.")
   endif()
-  if(QT4_CONFIG_ERROR)
-    colormsg(CYAN "+-- Qt4 Configuration error.")
+  if(QT5_CONFIG_ERROR)
+    colormsg(CYAN "+-- Qt5 Configuration error.")
   endif()
   if(NOT QT_QTOPENGL_FOUND)
-    colormsg(CYAN "+-- Qt4 did not find opengl.")
+    colormsg(CYAN "+-- Qt5 did not find opengl.")
   endif()
   colormsg(CYAN "+-- Disabling build of ${PROJECT_NAME}.")
 
   add_custom_target(steamshovel
-    COMMENT "\n>>>\n>>> ${PROJECT_NAME} build skipped becase Qt4 was not found
+    COMMENT "\n>>>\n>>> ${PROJECT_NAME} build skipped becase Qt5 was not found
 or there was a config error\n>>>"
     )
-endif(QT4_FOUND AND NOT QT_CONFIG_ERROR AND OPENGL_FOUND AND OPENGL_GLU_FOUND AND QT_QTOPENGL_FOUND)
-
-endif(PYTHON_NUMERIC_VERSION LESS 20600)
-
+endif()
+ 
