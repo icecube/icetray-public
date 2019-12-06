@@ -60,13 +60,13 @@ namespace I3 {
       if (!ifs.empty())
         log_fatal("ifs isn't empty!");
 
-      if (ends_with(filename,".gz")){
+      if (ends_with(filename,".i3.gz")){
         ifs.push(io::gzip_decompressor());
         log_trace("Input file ends in .gz.  Using gzip decompressor.");
-      }else if (ends_with(filename,".bz2")){
+      }else if (ends_with(filename,".i3.bz2")){
         ifs.push(io::bzip2_decompressor());
       }
-      else if (ends_with(filename,".zst")){
+      else if (ends_with(filename,".i3.zst")){
 #ifdef I3_WITH_ZSTD
         ifs.push(zstd_decompressor());
         log_trace("Input file ends in .zst. Using zstd decompressor.");
