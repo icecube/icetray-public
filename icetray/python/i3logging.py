@@ -37,7 +37,7 @@ class LoggingBridge(I3Logger):
 class ColorFormatter(logging.Formatter):
 	def format(self, record):
 		record.message = record.getMessage()
-		if string.find(self._fmt,"%(asctime)") >= 0:
+		if "%(asctime)" in self._fmt:
 			record.asctime = self.formatTime(record, self.datefmt)
 		d = dict(record.__dict__)
 		if record.levelname in ("CRITICAL", "ERROR"):
