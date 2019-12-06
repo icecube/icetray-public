@@ -42,7 +42,6 @@ message(STATUS "+  version: ${Python_VERSION}")
 # Compatibility variables
 set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 set(PYTHON_VERSION ${Python_VERSION})
-set(PYTHON_STRIPPED_VERSION ${Python_VERSION})
 set(PYTHON_LIBRARY ${Python_LIBRARIES})
 set(PYTHON_LIBRARIES ${Python_LIBRARIES})
 set(PYTHON_INCLUDE_DIR ${Python_INCLUDE_DIRS})
@@ -55,27 +54,9 @@ set(PYTHON_INCLUDE_DIR ${Python_INCLUDE_DIRS})
 # breaking other non-IceCube applications on the user's machine.
 execute_process(COMMAND ln -sf ${PYTHON_EXECUTABLE} ${CMAKE_BINARY_DIR}/bin/python)
 
-#
-# Get the root dir of the python install
-#
-if(${Python_VERSION} VERSION_GREATER_EQUAL 3.0)
-  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; sys.stdout.write(sys.real_prefix if hasattr(sys, 'real_prefix') else sys.prefix)"
-                  OUTPUT_VARIABLE PYTHON_ROOT)
-elseif(${Python_VERSION} VERSION_LESS 3.0)
-  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; sys.stdout.write(sys.base_prefix)"
-                  OUTPUT_VARIABLE PYTHON_ROOT)
-endif(${Python_VERSION} VERSION_GREATER_EQUAL 3.0)
-message(STATUS "+ base dir: ${PYTHON_ROOT}")
-
-if(NOT EXISTS "${PYTHON_INCLUDE_DIR}/Python.h")
-  message(STATUS "Error configuring python:  ${PYTHON_INCLUDE_DIR}/Python.h does not exist.\n")
-  set(PYTHON_FOUND FALSE CACHE BOOL "Python found successfully")
-  set(PYTHON_CONFIG_ERROR TRUE)
-endif(NOT  EXISTS "${PYTHON_INCLUDE_DIR}/Python.h")
-
-message(STATUS "+   binary: ${PYTHON_EXECUTABLE}")	
-message(STATUS "+ includes: ${PYTHON_INCLUDE_DIR}")	
-message(STATUS "+     libs: ${PYTHON_LIBRARIES}")
+message(STATUS "+   binary: ${Python_EXECUTABLE}")	
+message(STATUS "+ includes: ${Python_INCLUDE_DIRS}")	
+message(STATUS "+     libs: ${Python_LIBRARIES}")
 
 if(${Python_VERSION} VERSION_LESS 2.6)
   message(FATAL_ERROR "A Python version >= 2.6 is required.")
@@ -89,7 +70,7 @@ if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.12)
 else(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.12)
   # Old, crummy cmake -- try our best. Use better cmake for special cases.
 
-  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import numpy"
+  execute_process(COMMAND ${Python_EXECUTABLE} -c "import numpy"
     RESULT_VARIABLE NUMPY_FOUND)
   # let's make our xxx_FOUND variable like CMake ones
   if(NUMPY_FOUND EQUAL 0)
@@ -100,7 +81,7 @@ else(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.12)
     set(NUMPY_FOUND FALSE)
   endif(NUMPY_FOUND EQUAL 0)
 
-  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c
+  execute_process(COMMAND ${Python_EXECUTABLE} -c
     "import numpy; print(numpy.get_include())"
     OUTPUT_VARIABLE _NUMPY_INCLUDE_DIR
     OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -111,7 +92,7 @@ else(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.12)
 endif(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.12)
 
 ## look for scipy
-execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import scipy"
+execute_process(COMMAND ${Python_EXECUTABLE} -c "import scipy"
     RESULT_VARIABLE SCIPY_FOUND)
 
 # let's make our xxx_FOUND variable like CMake ones
