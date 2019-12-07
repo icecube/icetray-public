@@ -19,8 +19,6 @@
 #include <string>
 
 #ifndef __CINT__
-#include <archive/xml_iarchive.hpp>
-#include <archive/xml_oarchive.hpp>
 #include <boost/optional.hpp>
 #endif
 
@@ -505,12 +503,6 @@ std::string i3particle_type_string(int32_t pdg_code);
 
 #define I3PARTICLE_H_I3Particle_LocationType                                      \
     (Anywhere)(IceTop)(InIce)(InActiveVolume)
-
-#ifndef __CINT__
-// template specialization for XML i/o
-template<> void I3Particle::save(icecube::archive::xml_oarchive& ar, unsigned version) const;
-template<> void I3Particle::load(icecube::archive::xml_iarchive& ar, unsigned version);
-#endif
 
 std::ostream& operator<<(std::ostream& oss, const I3Particle& d);
 

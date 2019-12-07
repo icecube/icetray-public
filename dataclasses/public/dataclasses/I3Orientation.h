@@ -15,11 +15,6 @@
 #include "dataclasses/I3Quaternion.h"
 #include "dataclasses/I3Direction.h"
 
-#ifndef __CINT__
-#include <archive/xml_iarchive.hpp>
-#include <archive/xml_oarchive.hpp>
-#endif
-
 static const unsigned i3orientation_version_ = 0;
 
 /**
@@ -462,13 +457,6 @@ class I3Orientation : public I3FrameObject
 		template <class Archive>
 		void serialize(Archive& ar, unsigned version);
 	};
-
-//bool operator==(const I3Orientation& lhs, const I3Orientation& rhs);
-
-#ifndef __CINT__
-template<> void I3Orientation::serialize(icecube::archive::xml_iarchive& ar, unsigned version);
-template<> void I3Orientation::serialize(icecube::archive::xml_oarchive& ar, unsigned version);
-#endif
 
 std::ostream& operator<<(std::ostream&, const I3Orientation&);
 
