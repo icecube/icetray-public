@@ -92,19 +92,13 @@ void lots_of_data(const std::string& filepath){
 }
 
 void test_format(const std::string& suffix){
-	empty_file(I3Test::testfile("compression_test_empty"+suffix));
-	single_int(I3Test::testfile("compression_test_int"+suffix));
+        empty_file(I3Test::testfile("compression_test_empty"+suffix));
+        single_int(I3Test::testfile("compression_test_int"+suffix));
 	single_string(I3Test::testfile("compression_test_str"+suffix));
 	lots_of_data(I3Test::testfile("compression_test_big"+suffix));
 }
 
 TEST(plain){ test_format(".txt"); }
-//!!! gzip fails the emtpy file test; skip it for now
-//TEST(gzip){ test_format(".txt.gz"); }
-TEST(bzip2){ test_format(".txt.bz2"); }
-TEST(zstd){ test_format(".txt.zst"); }
-#ifdef I3_WITH_LIBARCHIVE
-//We can read these but not write them, so the tests are a bit pointless
-//TEST(lzma){ test_format(".txt.lzma"); }
-//TEST(xz){ test_format(".txt.xz"); }
-#endif
+TEST(gzip){ test_format(".i3.gz"); }
+TEST(bzip2){ test_format(".i3.bz2"); }
+TEST(zstd){ test_format(".i3.zst"); }
