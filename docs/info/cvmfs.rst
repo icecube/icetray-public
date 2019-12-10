@@ -185,7 +185,7 @@ the top of your Python script::
 
 The metaproject specification XXXXX can either be
 
-* a build directory::
+* a build directory (or a path to an upacked tarball)::
 
     #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py2-v3.1.1/icetray-start
     #METAPROJECT /data/user/you/metaprojects/icerec/build
@@ -198,16 +198,19 @@ The metaproject specification XXXXX can either be
 * a tarball URL::
 
     #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py2-v3.1.1/icetray-start
-    #METAPROJECT http://convey.icecube.wisc.edu/data/user/you/tarballs/icerec-trunk
+    #METAPROJECT http://username:password@convey.icecube.wisc.edu/data/user/your/tarballs/icerec-trunk
 
 .. note::
    
-   `icetray-start` uses a naming convention to find the correct tarball for
-   the current OS. If your base name is in your `METAPROJECT` line is
-   "icerec-trunk", configure your metaproject with
-   `cmake -DCMAKE_INSTALL_PREFIX=icerec-trunk.${OS_ARCH}`. `make tarball` will
-   then create an archive with the correct name, e.g.
-   "icerec-trunk.RHEL_7_x86_64.tar.gz". 
+   * `icetray-start` uses a naming convention to find the correct tarball for
+     the current OS. If your base name is in your `METAPROJECT` line is
+     "icerec-trunk", configure your metaproject with
+     `cmake -DCMAKE_INSTALL_PREFIX=icerec-trunk.${OS_ARCH}`. `make tarball` will
+     then create an archive with the correct name, e.g.
+     "icerec-trunk.RHEL_7_x86_64.tar.gz".
+   
+   * replace `username:password` with actual credentials (default IceCube ones will work)
+     to allow the download of the tarball.
 
 * one of the :ref:`pre-compiled-metaprojects` distributed through the 
   CVMFS repository
