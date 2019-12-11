@@ -203,7 +203,9 @@ template void Convert(const std::string&, boost::optional<TYPE>&);              
 template void Convert(const char*, boost::optional<TYPE>&);  
 
 #pragma GCC diagnostic push 
+#ifdef __clang__
 #pragma GCC diagnostic ignored "-Winstantiation-after-specialization"
+#endif
 TRIGGER_CONFIG_TYPES(bool);
 #pragma GCC diagnostic pop 
 TRIGGER_CONFIG_TYPES(int);
