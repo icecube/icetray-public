@@ -29,7 +29,8 @@
 #include <icetray/serialization.h>
 
 static const unsigned omkey_version_ = 2;
-
+_Pragma("GCC diagnostic push")
+_Pragma("GCC diagnostic ignored \"-Wmaybe-uninitialized\"")
 /**
  * @brief A small class which is the string number, om number
  * and pmt number for a specific PMT inside a DOM.
@@ -38,6 +39,7 @@ static const unsigned omkey_version_ = 2;
  * and "PMT" is equivalent to "DOM". For IceTop, the PMT number
  * can be 0 or 1.
  */
+
 class OMKey 
 {
   int stringNumber_;
@@ -168,6 +170,7 @@ inline bool operator<(const OMKey& lhs,const OMKey& rhs)
  */
 std::ostream& operator<<(std::ostream&, const OMKey& key);
 std::istream& operator>>(std::istream&,  OMKey&);
+_Pragma("GCC diagnostic pop")
 
 I3_POINTER_TYPEDEFS(OMKey);
 
