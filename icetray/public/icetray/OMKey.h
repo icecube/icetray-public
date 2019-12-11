@@ -30,7 +30,10 @@
 
 static const unsigned omkey_version_ = 2;
 _Pragma("GCC diagnostic push")
+#if defined(__GNUC__) && !defined(__clang__)
 _Pragma("GCC diagnostic ignored \"-Wmaybe-uninitialized\"")
+#endif
+
 /**
  * @brief A small class which is the string number, om number
  * and pmt number for a specific PMT inside a DOM.
