@@ -202,7 +202,10 @@ template void I3TriggerStatus::GetTriggerConfigValue(const char*,TYPE&) const;  
 template void Convert(const std::string&, boost::optional<TYPE>&);                    \
 template void Convert(const char*, boost::optional<TYPE>&);  
 
+#pragma GCC diagnostic push 
+#pragma GCC diagnostic ignored "-Winstantiation-after-specialization"
 TRIGGER_CONFIG_TYPES(bool);
+#pragma GCC diagnostic pop 
 TRIGGER_CONFIG_TYPES(int);
 TRIGGER_CONFIG_TYPES(float);
 TRIGGER_CONFIG_TYPES(double);
