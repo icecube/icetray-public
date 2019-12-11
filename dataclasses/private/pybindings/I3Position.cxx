@@ -93,8 +93,15 @@ void register_I3Position()
     .def("__abs__", &I3Position::Magnitude)
     .add_property("mag2",&I3Position::Mag2)
     .def(-self)
-    .def(self += self)
+    .def(self += self)    
+#ifdef __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wself-assign-overloaded"
+#endif
     .def(self -= self)
+#ifdef __clang__
+#pragma GCC diagnostic pop
+#endif    
     .def(self + self)
     .def(self - self)
     .def(self * self)
