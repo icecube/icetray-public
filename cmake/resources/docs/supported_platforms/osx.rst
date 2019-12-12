@@ -1,5 +1,5 @@
-Apple Mac OS X
-^^^^^^^^^^^^^^
+Apple MacOS
+^^^^^^^^^^^
 
 IceTray requires some additional support software to build and function. Before
 you gallop off and try to install all of the dependencies by hand, please read
@@ -8,10 +8,11 @@ these notes in their entirety. Especially:
 .. warning::
 
    Do not try to install your own Python over the perfectly good version
-   shipped with the base system. It is very likely to end in tears. This
-   includes the Enthought and Anaconda distributions as well as the Python
-   formula in homebrew; they do not play nicely with IceTray. See
-   :ref:`osxpythonsetup` for more information.
+   shipped with homebrew. It is very likely to end in tears. This
+   includes the Even though and Anaconda distributions. In order to compile
+   IceTray, your version of boost::python must be compiled against the same
+   version of python as you are using. It will not be easy to do this with
+   Anaconda.
 
 Developer Tools
 """""""""""""""
@@ -31,7 +32,7 @@ Command-Line Tools
    signing in with your `Apple ID`_.
 2) Download and install the latest Command Line Tools.
 
-Alternativly you can just type `xcode-select --install` at the command-line to install
+Alternatively you can just type `xcode-select --install` at the command-line to install
 the command line tools.
 
 Xcode
@@ -69,214 +70,75 @@ After the install finishes you should have both clang and llvm-gcc:
 Homebrew
 """"""""
 
-:doc:`../homebrew` is probably the easiest way to install packages on OS X, and
+:doc:`../homebrew` is probably the easiest way to install packages on MacOS, and
 distributes the most heavy-weight dependencies (cmake, boost, and Qt) as binary
-packages. Most of the required formulae are in the main distribution, but you
-should also `tap` IceCube-SPNO/icecube. Install them like this::
+packages.  Install them like this::
 
-	brew install cmake
+  brew install cmake
 
-The following formulae are recommended:
+The following formulae are necessary to compile IceTray:
 
-* offline-software: boost boost-python cmake cdk gsl hdf5 libarchive qt pal doxygen wget zstd 
-* IceRec: cfitsio minuit2 suite-sparse multinest nlopt
-* simulation: sprng2 zmq cppzmq
+  cmake python boost boost-python3 gsl wget
 
-.. warning:: Some Homebrew formulas have Python as a dependency, so a
-   second Python may sneak onto your computer without your
-   knowledge. To avoid this, install formulas that depend on python
-   with the parameter ``--build-from-source``. See `Homebrew's notes
-   on Python`_ for further information.
+The following formulae are recommended for optional functionality of components of IceTray:
+  
+  cdk qt libarchive doxygen cfitsio hdf5 nlopt minuit2 suite-sparse healpix zstd
 
-.. tip:: use ``brew deps --tree`` to see which dependencies are trying
-   to intall python
+Most of the recommended formulae are in the main distribution, but IceCube
+maintains a `tap`_ for uncommon software that IceTray depends on.
+The following formula are also recommended from the IceCube-SPNO/icecube tap:
+
+  pal cppzmq
 
 .. _tap: https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/brew-tap.md
-.. _`Homebrew's notes on Python`: https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Homebrew-and-Python.md                                  
-.. _Homebrew: http://brew.sh
 
-ROOT on OS X
-""""""""""""
 
-Building ROOT dictionaries on OS X Mavericks and beyond is no longer
-supported by ROOT. By default, ROOT dictionaries are not built.
+ROOT on MacOS
+"""""""""""""
 
-.. warning:: ROOT has been known to completely break builds on OS X Mavericks. If this happens to you, build with :command:`cmake -DUSE_ROOT=OFF ...`. For more information, see the `original bug report`_.
+IceTray also depends on ROOT. The fastest way to install root on MacOS is to
+download the recompiled binary tar file from `cern`_.
+ROOT can also be installed with homebrew::
 
-.. _`original bug report`: http://code.icecube.wisc.edu/projects/icecube/ticket/796
-
-ROOT can be installed with homebrew::
-
+.. code-block:: sh
+                
    brew install --build-from-source root
 
-You need to then load ``thisroot.sh`` into your environment 
+Either way you need the load the ``thisroot.sh`` into your environment
+before you run ``cmake``.
+
+.. code-block:: sh
+
+   . /usr/local/bin/thisroot.sh
    
-
-If you get an error message like this:
-
-.. code-block:: none
-
-   Error: cannot open file "AvailabilityMacros.h" include/RConfig.h:376:
-   Warning: Error occurred during reading source files
-
-   Warning: Error occurred during dictionary source generation
-
-   !!!Removing core/base/src/G__Base1.cxx core/base/src/G__Base1.h !!!
-
-   Error: core/utils/src/rootcint_tmp: error loading headers...
-
-   make: *** [core/base/src/G__Base1.cxx] Error 1
-
-You are probabally missing the xcode command-line tools, see above for installing it.
+.. _cern: https://root.cern.ch/downloading-root
 
 .. _osxpythonsetup:
   
-Python on OS X
-""""""""""""""
+Python on MacOS
+"""""""""""""""
 
 .. highlight:: sh
 
-Starting with 10.6, Apple has shipped a fairly up-to-date Python interpreter
-and standard library with OS X, and there's no good reason to replace it. At
-the same time, it has started shipping 3rd-party libraries with more rapid
-release cycles like :py:mod:`matplotlib`, :py:mod:`numpy`, and
-:py:mod:`ipython` in /Library/Python/X.Y/site-packages. You may wish to upgrade
-these packages to take advantage of new features and performance improvements.
-The problem is that Apple considers that path part of the OS, and will wipe out
-your changes when you update the OS. The best way to install python packages is
-to use the python package manager :command:`pip`.
-Unfortunatly, by default :command:`pip` tries to install packages into your
-system python directory, which is not writable to normal users. Many people suggest
-to get around this by using :command:`sudo` to write to this directory,
-this should be highly discouraged.
+Apple has done a fairly decent of including a recent version of python2 in
+MacOS. But now that IceTray is transitioning to python3 it is necessary to
+compile IceTray against python3. The previous section described the easiest
+way to install python3 on MacOS: using homebrew.
 
-There are three ways to get around this unfortunate default behavior:
-one is to install new python modules in your own ``.local`` directory, the
-other is to use :py:mod:`virtualenv`. Both of these methods will install
-python modules in a subfolder of your home directory, which will overide the
-system defaults. 
-The third method is to use homebrew to install a newer version of python.
-This will put a python binary in ``/usr/local/bin`` which will override the
-system python. Python modules installed with pip will be then be placed in
-``/usr/local`` instead. This is the perfered method and the only way to get
-python3.
+With python3 installed with homebrew the :command:`python` command will still refer
+to the system python, but python3 will refer to python3. IceTray will
+automatically detect the homebrew version of python and link against it.
+Python3 packages can be installed with the :command:`pip3` command, and ipython
+can be accessed with :command:`ipython3` etc.
 
-Installing in ~/Library/
-........................
+IceTray relies on a number of python packages to work, the easiest way to
+instal them is with :command:`pip3`. If python3 is installed with homebrew, pip3 will
+install them to :path:`/usr/local/lib/python3.7/site-packages` and any scripts
+will be linked to in :path:`/usr/local/bin/` which is automatically pathed.
 
-The system python will check for python modules installed by the user in
-``~/Library/Python/2.7/lib/python/site-packages``, The first thing you need
-to do is let python know where the python modules installed by homebrew are.
-To do this run::
+The following python packages are recommended for icetray:
 
-        echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> ${HOME}/Library/Python/2.7/lib/python/site-packages/homebrew.pth
-
-Next install :command:`pip`::
-
-     curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-     python get-pip.py --user
-
-The ``--user`` option will install the :command:`pip` in ``~/Library/Python/2.7/bin/``
-which is not in your path. So you will then need to run::
-
-        export PATH="${HOME}/Library/Python/2.7/bin/:${PATH}"
-
-And you will need to add the same line to your ``.bash_profile`` so that
-:command:`pip` and other executable python files placed in this directory can
-be run in the future.
-
-Once this is done you can install all the modules you
-want using :command:`pip` as long as you remember to include
-the ``--user`` option.::
-
-        pip install --user urwid sphinx ipython qtconsole 
-  
-Like :command:`easy_install`, the ``-user`` option in :command:`pip` will
-install executables to ``~/Library/Python/2.7/bin/`` and python libraries
-to ``~/Library/Python/2.7/lib/python/site-packages``. IceTray will work
-fine with the versions of :py:mod:`numpy`, :py:mod:`scipy`, and
-:py:mod:`matplotlib` which come with the system, but you can upgrade them
-to the newest version with::
-
-        pip install --user --upgrade numpy scipy matplotlib
-
-Unfortunately, by default pip will install these packages to a location
-where they will be found after the packages installed by the system.
-To change the search path run the following:
-
-        echo "import sys; sys.path.insert(1,'${HOME}/Library/Python/2.7/lib/python/site-packages')" >> ${HOME}/Library/Python/2.7/lib/python/site-packages/local.pth
-
-This will alter python's package search path to to look in your home
-directory site-package first before searching the system site-package
-directory. I am not sure if this is a good idea or not but it seems
-to work. 
-
-
-
-Installing with virtualenv
-..........................
-
-:py:mod:`virtualenv` is used to create an environment that explicitly
-overrides the system site-packages and is isolated from other environments.
-
-First, install :command:`pip`, a better package manager for Python::
-	
-	sudo easy_install pip
-
-then, use :command:`pip` to install :py:mod:`virtualenv`::
-	
-	sudo pip install virtualenv
-
-Even though using :command:`sudo` on :command:`easy_install` and
-:command:`pip` is highly discouraged, it won't hurt much for these two packages.
-This ends the privileged portion. Now, create a new virtual environment.
-I call mine ".virtualenv/standard"::
-	
-	virtualenv .virtualenv/standard
-
-among other things, this creates a script
-:command:`~/.virtualenv/standard/bin/active` that can be used to set up
-the environment. I put these lines in my .bash_login/.zlogin script to 
-enter this one automatically whenever I start a new shell::
-	
-	VIRTUAL_ENV_DISABLE_PROMPT=1
-	. ~/.virtualenv/standard/bin/activate
-
-In order for python packages installed by homebrew (such as Qt5) to be accessable from your virtual environment, you need to tell python where to find the libraries. This can be accomplished by running::
-
-        echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> ~/.virtualenv/standard/lib/python2.7/site-packages/homebrew.pth
-
-
-Inside the environment, :command:`pip` will automatically install packages in
-the environment rather than in /Library/Python. Now you can install
-bleeding-edge versions of Python packages to your heart's content::
-	
-	pip install numpy
-	pip install matplotlib
-	pip install ipython
-
-reccomended packages: urwid sphinx numpy scipy matplotlib ipython tables qtconsole
-
-Pitfalls
-........
-
-::
-	
-	clang: error: unknown argument: '-mno-fused-madd' [-Wunused-command-line-argument-hard-error-in-future]
-
-The version of clang distributed with XCode 5.1 deprecates some GCC-only flags.
-Whereas they had previously been silently ignored, they now raise errors when
-used. For the time being you can work around this change by setting an
-environment variable::
-	
-	export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
-
-
-Qt5
-"""
-
-Steamshovel development has now been moved to Qt version 5.
-Qt5 should be automatically detected by cmake. so there is no need to do anyhting special.
+  numpy scipy matplotlib sphinx ipython qtconsole tables mysql-connector-python
 
 Step-By-Step Instructions
 """""""""""""""""""""""""
@@ -285,33 +147,21 @@ With a fresh install of Mojave I was able to get combo running by running the fo
 
 .. code-block:: sh
 
-   #install xcode command line tools (dont worry if it says it is already installed)
+   #install xcode command line tools (don't worry if it says it is already installed)
    xcode-select --install
    
    #install homebrew
    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
    
    #install packages with homebrew
-   brew install cmake python@2 boost boost-python cdk qt libarchive wget doxygen cfitsio hdf5 nlopt gsl minuit2 suite-sparse healpix zstd 
+   brew install cmake python boost boost-python3 cdk qt libarchive wget doxygen cfitsio hdf5 nlopt gsl minuit2 suite-sparse healpix zstd
 
-   #install brews writen by icecube 
+   #install brews written by icecube 
    brew tap IceCube-SPNO/homebrew-icecube
-   brew install pal sprng2 cppzmq
+   brew install pal cppzmq
    
    #install python packages with pip
    pip install numpy scipy matplotlib sphinx ipython qtconsole tables mysql-connector-python
-       
-If you want to use ROOT, you need to install it from source:
-
-.. code-block:: sh
-                
-   brew install --build-from-source root
-
-And then you need to read the instructions for adding root to your environment, which will be something like:
-
-.. code-block:: sh
-
-   . /usr/local/bin/thisroot.sh
-        
-This worked in September 2019, with the trunk of combo on MacOS Mojave. As homebrew updates, these instructions might not work as well. Your mileage may vary.
+               
+This worked in December 2019, with the trunk of combo on MacOS Mojave. As homebrew updates, these instructions might not work as well. Your mileage may vary.
 
