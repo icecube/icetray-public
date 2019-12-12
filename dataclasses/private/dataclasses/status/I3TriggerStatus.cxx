@@ -49,7 +49,12 @@ void Convert(const std::string& from, boost::optional<bool>& to){
     bool value = boost::lexical_cast<bool>(from);
     to = boost::optional<bool>(value);
   }catch(boost::bad_lexical_cast &){    
-    to = boost::optional<bool>();
+    to = boost::make_optional(false, bool());
+    //to = boost::optional<bool>();
+    // GCCFalsePositive
+    // Fix an false positive detection of -Wmaybe-uninitialized
+    //see https://www.boost.org/doc/libs/1_71_0/libs/optional/doc/html/boost_optional/tutorial/gotchas/false_positive_with__wmaybe_uninitialized.html
+
     // the default is unset
     // if the string is "true","false","t", or "f"
     // then set the bool accordingly.
