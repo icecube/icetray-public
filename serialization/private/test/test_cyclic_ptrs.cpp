@@ -160,7 +160,7 @@ void test3(){
         try{
             oa << I3_SERIALIZATION_NVP(k);
         }
-        catch(icecube::archive::archive_exception ae){
+        catch(icecube::archive::archive_exception &ae){
             exception = ae;
         }
         ENSURE(
@@ -178,7 +178,7 @@ void test3(){
         try{
             ia >> I3_SERIALIZATION_NVP(k);
         }
-        catch(icecube::archive::archive_exception ae){
+        catch(icecube::archive::archive_exception &ae){
             exception = ae;
         }
         ENSURE(

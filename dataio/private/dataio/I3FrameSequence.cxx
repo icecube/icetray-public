@@ -274,7 +274,7 @@ namespace {
                     for (const auto& f : fs.last_frames) {
                         try {
                             mixer.UpdateDependencies(*f);
-                        } catch(std::bad_alloc e) {
+                        } catch(std::bad_alloc &e) {
                             log_warn("here");
                             throw e;
                         }
