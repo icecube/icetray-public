@@ -48,8 +48,6 @@ public:
     float w;
     double x;
     A();
-    bool operator==(const A & rhs) const;
-    bool operator<(const A & rhs) const;
 };
 
 A::A() : 
@@ -61,35 +59,7 @@ A::A() :
     x((double)std::rand() / std::rand())
 {
 }
-
-bool A::operator==(const A &rhs) const
-{
-    return
-        s == rhs.s 
-        && t == rhs.t 
-        && u == rhs.u 
-        && v == rhs.v 
-        && std::abs( boost::math::float_distance(w, rhs.w)) < 2
-        && std::abs( boost::math::float_distance(x, rhs.x)) < 2
-    ;
-}
-
-bool A::operator<(const A &rhs) const
-{
-    if(! (s == rhs.s) )
-        return s < rhs.s;
-    if(! (t == rhs.t) )
-        return t < rhs.t;
-    if(! (u == rhs.u) )
-        return t < rhs.u; 
-    if(! (v == rhs.v) )
-        return t < rhs.v;
-    if(std::abs( boost::math::float_distance(w, rhs.w)) > 1)
-        return false;
-    if(std::abs( boost::math::float_distance(x, rhs.x)) > 1)
-        return false;
-    return false;
-}
+ 
 }
 
 // note the following:
