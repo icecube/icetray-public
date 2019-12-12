@@ -32,7 +32,7 @@ Command-Line Tools
    signing in with your `Apple ID`_.
 2) Download and install the latest Command Line Tools.
 
-Alternatively you can just type `xcode-select --install` at the command-line to install
+Alternatively you can just type ``xcode-select --install`` at the command-line to install
 the command line tools.
 
 Xcode
@@ -133,8 +133,8 @@ can be accessed with :command:`ipython3` etc.
 
 IceTray relies on a number of python packages to work, the easiest way to
 instal them is with :command:`pip3`. If python3 is installed with homebrew, pip3 will
-install them to :path:`/usr/local/lib/python3.7/site-packages` and any scripts
-will be linked to in :path:`/usr/local/bin/` which is automatically pathed.
+install them to ``/usr/local/lib/python3.7/site-packages`` and any scripts
+will be linked to in ``/usr/local/bin/`` which is automatically pathed.
 
 The following python packages are recommended for icetray:
 
