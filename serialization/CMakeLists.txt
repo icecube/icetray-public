@@ -1,4 +1,5 @@
-i3_project(serialization)
+i3_project(serialization
+  DOCS_DIR resources/docs)
 
 i3_add_library (serialization 
   private/archive/portable_binary_archive.cpp

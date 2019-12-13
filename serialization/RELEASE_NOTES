@@ -1,22 +1,141 @@
-.. serialization
-.. Maintainer: Chris Weaver
+.. $Id: RELEASE_NOTES  79391 2011-10-10 olivas $
+.. $Author: olivas $
+.. $Date: 2011-10-10 $
 
 Release Notes
 =============
 
-Trunk
+trunk
 -----
 
-June 13, 2018 Alex Olivas (olivas@icecube.umd.edu)
+- Add `I3CosmicEventGenerator`, an interface for using CORSIKA as a service in mulitprocess-server clsim
+
+June 20, 2018 Juan Carlos Diaz-Velez (juancarlos@icecube.wisc.edu)
+------------------------------------------------------------------
+V01-08-01 - Incremental release
+
+  r161706 - Merged branches/streaming-hit-merging
+  r160494 -pybindings for I3CrossSection and add more rigorous kinematic constraints to avoid physically impossible states, avoid neglecting particle masses in more places.
+  r159957 - Use a more numerically stable calculation of s. 
+  r159909 - Improve DIS final state sampling Get calculation details from spline file
+
+
+Nov 2, 2017 Juan Carlos Diaz-Velez (juancarlos@icecube.wisc.edu)
+----------------------------------------------------------------
+V01-08-00 - Incremental release
+
+* (Kotoyo) Modified pure virtual function I3PropergatorService::Propagate
+  Now the Propagate function takes third argument I3FrameConstPtr,
+  in order to make I3NeutrinoPropagator work properly.
+
+August 22, 2017 Juan Carlos Diaz-Velez (juancarlos@icecube.wisc.edu)
 --------------------------------------------------------------------
-Release V18-06-00
+V01-07-01 - Incremental release
 
-* (r2977) - Allow variable sizes for version_type, collection_size_type,
-  and strings.  This allows for larger than 4GB frame objects.
+March 24, 2017 Juan Carlos Diaz-Velez (juancarlos@icecube.wisc.edu)
+-------------------------------------------------------------------
 
-March 14, 2017 Chris Weaver (chris.weaver@icecube.wisc.edu)
---------------------------------------------------------------------
+V01-07-00 - Incremental release
 
-* Initial release, based on boost 1.57, with support for all current serialization use in icetray. 
+* Added I3PrimaryPulseMapper from sim-services to generate an I3ParticleIDMap that associates MCPulses with
+  the primary of the particle that produced them. PMTResponseSimulator adds an I3ParticleIDMap that maps pulses with
+  the particle that produced them but often these secondary particles are not saved in order to save space on disc.
 
-  -- Chris Weaver
+April 8, 2016 Alex Olivas (olivas@icecube.umd.edu)
+--------------------------------------------------
+
+V01-06-00 - Bugfix release
+
+* Moved I3MCPEConverters here.  It wasn't used anywhere, but we'll keep it around
+  a while longer.  It was previously in simclasses, but didn't belong there. (r138939, r138940, r138941)
+* Removed I3ModifyStartTime - This shouldn't be needed. (r137412)
+* No longer adding beacon baselines to GCD files.  We're only generating V4
+  simulation with DOMLauncher. (r136995)
+* Added a default for I3MCPEtoI3MCHitConverter.  I3MCPESeries seems perfectly
+  reasonable to me.
+* Removed virtual keyword from module methods.  This usually signals to
+  users that this is a base class (especially if the destructor is virtual),
+  and therefore OK to inherit from.  This is not the case with these modules.
+  Do not inherit from classes that were not designed to be base classes.
+* Added I3ModifyStartTime as a replacement for I3ModifyEventID.  I3ModifyEventID
+  is deprecated.  It modifies more than just the event ID and is actually only
+  still used to set the event start time.  The interface was crufty anyway and
+  from the days when we could only pass built-in C++ types as python parameters.
+* Added I3RemoveLargeDT module to remove outliers that caused simulation
+  to use enormous amounts of memory.  Anything outside the time window
+  from the median of the distribution is clipped.
+
+November 24, 2014 Alex Olivas (olivas@icecube.umd.edu)
+------------------------------------------------------
+
+V01-05-05 - Bugfix release
+
+* More tests for sanity checkers
+
+November 7, 2014 Alex Olivas (olivas@icecube.umd.edu)
+-----------------------------------------------------
+
+V01-05-04 - Bugfix release
+
+* New I3DownsampleMCPE class
+* I3MCEventHeaderGenerator - Added option to increment the DAQ time.
+* Uses I3_TESTDATA instead of I3_PORTS/test-data
+* Re-worked hobo test suite.   Not all modules and histograms have tests.
+  When all modules and histograms have tests implemented we can enable
+  "all_your_tests_are_belong_to_us.py" which checks that they indeed all
+  have tests.
+* The GCD validation scripts were updated.  One-stop-shop for GCD generation
+  is sim-services/resources/gcd_validation/generate_gcd.py.  That does the
+  DB pull, correction, testing, and validation.  It also writes the svn info
+  and GCD checksum to the output logfile.
+* An empty tree checker was added to the sanity checkers.
+
+September 9, 2014 Alex Olivas (olivas@icecube.umd.edu)
+------------------------------------------------------
+
+V01-05-03 - Bugfix release
+
+* Following matplotlib's recommendations for batch processing of plots.
+* I3InIceCORSIKATrimmer - Drop particles that aren't InIce muons or neutrinos.
+
+July 10, 2014 Alex Olivas  (olivas@icecube.umd.edu)
+---------------------------------------------------
+
+V01-05-00 - Minor Release - Mostly histogramming stuff.
+
+* Restored HistoDataLiveTime for comparisons to data.
+* Added 'event_weight' convenience function.
+* Added embedded test suite to force users to write tests for their histograms.
+* Added Prescale parameter to the SimulationSanityChecker module.
+* Some support for the new 'weighting' project.  More is needed.
+* Histogram comparison is included in this release.
+
+
+June 27, 2012 Alex Olivas  (olivas@icecube.umd.edu)
+---------------------------------------------------
+
+Revisions :
+
+More fixes to PropagatorServiceUtils::Propagate.  The copy was not
+updated.  The original tree was updated and a pointer to the unadulterated
+copy was returned.  In addition to the tree pointer needed to be passed
+by reference.  It would have been nice if Alex-of-May-18th included
+a simple test along with revision 88449 that tested this.  The current
+version ( V01-02-02 ) does include tests for all three flavors.  There
+are 6 tests ( two x three for each function and flavor ).
+
+May 18, 2012 Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------
+
+Revisions : 88449
+
+Fixed PropagatorServiceUtils::Propagate.  MMC can add propagatable
+particles as daughters to the original, especially when using AtmFlux.
+Since the tree was updated and iterated in-place the daughters would
+be propagated, causing an infinite loop.  Now the original tree
+is iterated over and a copy is updated.
+
+October 10, 2011 Alex Olivas  (olivas@icecube.umd.edu)
+------------------------------------------------------
+
+Going to get serious about release notes for individual projects.
