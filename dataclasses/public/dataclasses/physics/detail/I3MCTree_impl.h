@@ -887,6 +887,9 @@ namespace TreeBase {
       iter->second.parent->firstChild = &(insertResult.first->second);
     }
     internalMap.erase(iter);
+    if (node == head_) {
+        head_ = node2;
+    }
   }
 
   template<typename T, typename Key, typename Hash>
