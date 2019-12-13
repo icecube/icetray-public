@@ -86,31 +86,10 @@ namespace {
         I3FramePtr ret;
         try {
             ret = f[static_cast<size_t>(i)];
-        } catch (std::runtime_error&) {
+        } catch (const std::runtime_error&) {
             PyErr_SetString(PyExc_IndexError, "No frame at that index");
             throw_error_already_set();
-        } catch (std::bad_alloc& e) {
-            PyErr_SetString(PyExc_RuntimeError, e.what());
-            throw_error_already_set();
-        } catch (std::bad_cast& e) {
-            PyErr_SetString(PyExc_RuntimeError, e.what());
-            throw_error_already_set();
-        } catch (std::bad_exception& e) {
-            PyErr_SetString(PyExc_RuntimeError, e.what());
-            throw_error_already_set();
-        } catch (std::bad_typeid& e) {
-            PyErr_SetString(PyExc_RuntimeError, e.what());
-            throw_error_already_set();
-        } catch (std::bad_function_call& e) {
-            PyErr_SetString(PyExc_RuntimeError, e.what());
-            throw_error_already_set();
-        } catch (std::bad_weak_ptr& e) {
-            PyErr_SetString(PyExc_RuntimeError, e.what());
-            throw_error_already_set();
-        } catch (std::logic_error& e) {
-            PyErr_SetString(PyExc_RuntimeError, e.what());
-            throw_error_already_set();
-        } catch (std::exception& e) {
+        } catch (const std::exception &e) {
             PyErr_SetString(PyExc_RuntimeError, e.what());
             throw_error_already_set();
         }
@@ -129,7 +108,7 @@ namespace {
             } else {
                 return true;
             }
-        } catch (std::runtime_error&) {
+        } catch (const std::runtime_error&) {
             return false;
         }
     }
