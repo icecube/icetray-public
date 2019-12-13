@@ -139,11 +139,10 @@ for year in range (1970,max(dataclasses.year_of(leap_sec_mjd[-1]),now.year)+3):
         assert t2.mod_julian_sec == 86400
         assert t3.mod_julian_sec ==     0
 
-        #as per ntp unix time of leap seconds is the next seconds's unix time
-        assert t2.unix_time == t3.unix_time
+        assert t2.unix_time + 1 == t3.unix_time
         assert t1.unix_time + 1 == t3.unix_time
         assert t1.unix_time == (t3.mod_julian_day-40587)*86400 -1 
-        assert t2.unix_time == (t3.mod_julian_day-40587)*86400 
+        assert t2.unix_time == (t3.mod_julian_day-40587)*86400 -1
         assert t3.unix_time == (t3.mod_julian_day-40587)*86400 
 
 
@@ -349,11 +348,10 @@ for year in range (1970,max(dataclasses.year_of(leap_sec_mjd[-1]),now.year)+3):
         assert t2.mod_julian_sec == 86400
         assert t3.mod_julian_sec ==     0
 
-        #as per ntp unix time of leap seconds is the next seconds's unix time
-        assert t2.unix_time == t3.unix_time
+        assert t2.unix_time + 1 == t3.unix_time
         assert t1.unix_time + 1 == t3.unix_time
         assert t1.unix_time == (t3.mod_julian_day-40587)*86400 -1 
-        assert t2.unix_time == (t3.mod_julian_day-40587)*86400 
+        assert t2.unix_time == (t3.mod_julian_day-40587)*86400 -1 
         assert t3.unix_time == (t3.mod_julian_day-40587)*86400 
 
         sec_in_year = ( 365 + int(year%4==0) ) * 86400  + int( t1.mod_julian_day-183 in leap_sec_mjd)        
