@@ -41,7 +41,7 @@ class InverseTest(unittest.TestCase):
         t1.set_utc_cal_date(2030,1,1,0,0,0,0.0)
         mjd2 = t1.mod_julian_day_double
 
-        for n in range(10000):
+        for n in range(1000):
             t1.set_mod_julian_time_double(
                 random.uniform(mjd1,mjd2)
             )
@@ -73,7 +73,7 @@ class InverseTest(unittest.TestCase):
         t1.set_utc_cal_date(2030,1,1,0,0,0,0.0)
         mjd2 = t1.mod_julian_day_double
         
-        for n in range(10000):
+        for n in range(1000):
             t1.set_mod_julian_time_double(
                 random.uniform(mjd1,mjd2)
             )
@@ -94,7 +94,7 @@ class InverseTest(unittest.TestCase):
 
         random.seed(0)
                 
-        for n in range(10000):
+        for n in range(1000):
             
             eq = astro.I3Equatorial(random.uniform(0,2* math.pi),
                                     random.uniform(-math.pi/2,math.pi/2),
@@ -113,7 +113,7 @@ class InverseTest(unittest.TestCase):
 
         random.seed(0)
                 
-        for n in range(10000):
+        for n in range(1000):
             
             gal = astro.I3Galactic(random.uniform(0,2*math.pi),
                                    random.uniform(-math.pi/2,math.pi/2),
@@ -133,7 +133,7 @@ class InverseTest(unittest.TestCase):
 
         random.seed(0)
                 
-        for n in range(10000):
+        for n in range(1000):
             
             eq = astro.I3Equatorial(random.uniform(0,2* math.pi),
                                     random.uniform(-math.pi/2,math.pi/2),
@@ -150,7 +150,7 @@ class InverseTest(unittest.TestCase):
 
         random.seed(0)
                 
-        for n in range(10000):
+        for n in range(1000):
             
             sg = astro.I3SuperGalactic(random.uniform(0,2*math.pi),
                                        random.uniform(-math.pi/2,math.pi/2),
@@ -166,7 +166,7 @@ class InverseTest(unittest.TestCase):
     def test_sg_from_gal(self):
 
         random.seed(0)
-        for n in range(10000):
+        for n in range(1000):
             
             gal = astro.I3Galactic(random.uniform(0,2*math.pi),
                                    random.uniform(-math.pi/2,math.pi/2),
@@ -184,7 +184,7 @@ class InverseTest(unittest.TestCase):
     def test_gal_from_sg(self):
 
         random.seed(0)
-        for n in range(10000):
+        for n in range(1000):
             
             sg = astro.I3SuperGalactic(random.uniform(0,2*math.pi),
                                         random.uniform(-math.pi/2,math.pi/2),

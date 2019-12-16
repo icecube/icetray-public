@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import datetime
 import numpy as np
 import pylab as plt
