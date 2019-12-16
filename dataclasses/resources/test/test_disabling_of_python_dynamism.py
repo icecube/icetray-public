@@ -9,7 +9,7 @@ skip_these = ["I3SuperDST","I3SuperDSTTrigger","I3SuperDSTTriggerSeries","I3Reco
               "I3RecoPulseSeriesMapUnion","DroopedSPETemplate",\
               "map_indexing_suite_map_Subdetector_I3TriggerReadoutConfig_entry",
               "PairDoubleDouble", "I3Matrix", "I3RecoPulseSeriesMapApplySPECorrection",
-              "I3RecoPulseSeriesMapCombineByModule"]
+              "I3RecoPulseSeriesMapCombineByModule","I3NuGenInfo"]
 ENSURE( test_freeze.test_all_classes(dc, skip_these) , "not cool" )
 
 print("PASS")

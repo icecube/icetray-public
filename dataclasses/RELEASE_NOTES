@@ -4,6 +4,7 @@ Release Notes
 
 trunk
 -----
+* Add I3NuGenInfo for use in S-Frame
 * fix bugs in `I3Time` get and set for unix time
 * add `__bool__` operateor to `I3Double`, `I3UInt32`, `I3MCTree` and
   `I3FilterResult` in addition to `__nonzero__`. python2 uses `__nonzero__` but

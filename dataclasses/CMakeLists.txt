@@ -64,6 +64,7 @@ i3_add_pybindings(dataclasses
   private/pybindings/TankKey.cxx
   private/pybindings/TriggerKey.cxx
   private/pybindings/test_utils/I3VectorUtils.cxx
+  private/pybindings/simulation/I3NuGenInfo.cxx  
   USE_TOOLS boost python
   USE_PROJECTS serialization icetray dataclasses
   )
