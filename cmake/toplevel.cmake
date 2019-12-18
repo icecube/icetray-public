@@ -302,10 +302,10 @@ add_custom_target(coverage
   COMMAND ln -s ${CMAKE_BINARY_DIR}/steamshovel/*.h   ${CMAKE_BINARY_DIR}/CMakeFiles/
   COMMAND lcov -b CMakeFiles/ -d . -z
   COMMAND lcov -b CMakeFiles/ -d . -c -i -o test_base.info
-  COMMAND ./env-shell.sh ctest -j2 || true
+  COMMAND ./env-shell.sh ctest || true
   COMMAND lcov -b CMakeFiles/ -d . -c -o test_run.info
   COMMAND lcov -b CMakeFiles/ -d . -a test_base.info -a test_run.info -o test_total.info
-  COMMAND lcov -o reports.info -r test_total.info '/usr/include/*' '/usr/local/*' '/cvmfs/*' '*/numpy' '/usr/lib/gcc/*' ${p} '${CMAKE_BINARY_DIR}/CMakeFiles/' '${CMAKE_BINARY_DIR}/steamshovel/*'
+  COMMAND lcov -o reports.info -r test_total.info '*/private/test/*' '/usr/include/*' '/usr/local/*' '/cvmfs/*' '*/numpy' '/usr/lib/gcc/*' ${p} '${CMAKE_BINARY_DIR}/CMakeFiles/' '${CMAKE_BINARY_DIR}/steamshovel/*'
   COMMAND genhtml --ignore-errors source --legend -o ../output/`date +%Y-%m-%d` reports.info
   COMMAND rm -f ../output/00_LATEST \; ln -sf `ls -1tr ../output |tail -1` ../output/00_LATEST
   COMMAND rm -f ${CMAKE_BINARY_DIR}/CMakeFiles/*.moc ${CMAKE_BINARY_DIR}/CMakeFiles/.h
