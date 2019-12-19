@@ -2,6 +2,11 @@
 Release Notes
 =============
 
+trunk
+-----
+* Removed Qt4 support.
+
+
 December 11, 2018, Alex Olivas (olivas@icecube.umd.edu)
 ------------------------------------------------------------
 Release V18-12-00
