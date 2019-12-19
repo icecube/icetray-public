@@ -5,6 +5,8 @@ Release Notes
 trunk
 -----
 
+* I3GeometryDecomposer is now a conditional module.
+* Added Cup geometry.
 * fix and simplify `I3Surfaces::Cylinder::acceptance` and add pybindings and unit tests for it
 * add `Print()` and `operator<<` for `I3Surfaces::Cylinder`
 * add `I3OMGeo::mDOM` case to switch statement in I3GeometryDecomposer
