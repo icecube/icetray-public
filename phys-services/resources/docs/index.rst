@@ -31,7 +31,7 @@ Overview
 * :cpp:class:`I3CascadeCutValues`
 * :cpp:class:`I3CutValues`
 * :cpp:class:`I3XMLOMKey2MBID`
-* `I3Cuts <../../doxygen/phys-services/class.I3Cutshtml>`_
+* :cpp:class:`I3Cuts`
 * :cpp:class:`I3SPRNGRandomService`
 * :cpp:class:`I3EventCounter`
 * :cpp:class:`I3GSLRandomServiceFactory`
@@ -56,12 +56,7 @@ Source
 
 Surfaces
 %%%%%%%%
-* `Sphere <../../doxygen/phys-services/classI3Surfaces_1_1Sphere.html>`_
-* `AxialCylinder <../../doxygen/phys-services/classI3Surfaces_1_1AxialCylinder.html>`_
-* `SamplingSurface <../../doxygen/phys-services/classI3Surfaces_1_1SamplingSurface.html>`_
-* `ExtrudedPolygon <../../doxygen/phys-services/classI3Surfaces_1_1ExtrudedPolygon.html>`_
-* `Cylinder <../../doxygen/phys-services/classI3Surfaces_1_1Cylinder.html>`_
-* `Surface <../../doxygen/phys-services/classI3Surfaces_1_1Surface.html>`_
+See `doxygen <../../doxygen/phys-services/index.html>`__ docs.
 
 Geometry Selectors
 %%%%%%%%%%%%%%%%%%
