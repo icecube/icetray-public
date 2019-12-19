@@ -4,10 +4,12 @@ Release Notes
 trunk
 -----
 
+* Various build cleanups.
 * (r177030) Made zstd optional.
 * add `__bool__` operator to `I3Bool` and `I3Int` in addition to `__nonzero__`
   in addition to `__nonzero__`. python2 uses `__nonzero__` but python3 uses `__bool__`.
 * (r3063) Removed I3OpNewServiceFactory.
+* Moved DeleteUnregistered module to dataio.
 
 June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------
