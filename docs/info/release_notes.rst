@@ -1,6 +1,15 @@
 Combo Release V00-00-00
 -----------------------
 
+Stats
+~~~~~
+* Tickets: Resolved 40 tickets. Pushed 5 to the next milestone.
+* Collaborator Contributions: 49 Collaborators made commits to projects.
+* Code Sprint Attendance: 29 Collaborators made commits in December.
+* Code Coverage: Line 53.3% and Function 49.7%
+
+Project Highlights
+------------------
 Highlights of features and fixes for each project are below.  For more details
 about minor fixes and cleanups see each project's individual release notes
 (in <project>/RELEASE_NOTES).
