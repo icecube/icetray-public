@@ -5,6 +5,10 @@ Release Notes
 trunk
 -----
 
+Dec. 20, 2019 Alex Olivas (aolivas@umd.edu)
+-------------------------------------------
+Combo Release V00-00-00
+
 * I3GeometryDecomposer is now a conditional module.
 * Added Cup geometry.
 * fix and simplify `I3Surfaces::Cylinder::acceptance` and add pybindings and unit tests for it

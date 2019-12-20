@@ -6,6 +6,10 @@ Release Notes
 trunk
 -----
 
+Dec. 20, 2019 Alex Olivas (aolivas@umd.edu)
+-------------------------------------------
+Combo Release V00-00-00
+
 * update documentation
 * add example compare_with_astropy.py
 

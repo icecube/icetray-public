@@ -11,7 +11,9 @@ Basic Info
    info/overview
    info/quickstart
    info/cvmfs
+   info/release_notes
 
+   
 Project Details
 ===============
 

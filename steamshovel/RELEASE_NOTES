@@ -4,6 +4,11 @@ Release Notes
 
 trunk
 -----
+
+Dec. 20, 2019 Alex Olivas (aolivas@umd.edu)
+-------------------------------------------
+Combo Release V00-00-00
+
 * Removed Qt4 support.
 
 
