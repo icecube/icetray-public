@@ -74,18 +74,27 @@ include(utility)  # load utility functions (pretty print, etc)
 include(config)   # trigger the configuation meat (build types, etc)
 
 ## enable_testing() must be called before add_test() which happens in project.cmake
+set(TESTDATA_VERSION trunk)
+
 if(DEFINED ENV{I3_TESTDATA})
-    set(I3_TESTDATA $ENV{I3_TESTDATA} CACHE STRING "Path to your icetray test-data")
+  set(I3_TESTDATA $ENV{I3_TESTDATA} CACHE STRING "Path to your icetray test-data")
+  string(FIND ${I3_TESTDATA} ${TESTDATA_VERSION} VERSION_POSITION REVERSE)
+  if(VERSION_POSITION EQUAL -1)
+    colormsg(RED "Test data version mismatch.")
+    colormsg(ORANGE "The preferred version of test-data is ${TESTDATA_VERSION}.")
+    colormsg(ORANGE "Using I3_TESTDATA=${I3_TESTDATA}.")
+  endif()
 else()
-    set(I3_TESTDATA "${CMAKE_BINARY_DIR}/test-data" CACHE STRING "Path to your icetray test-data: currently empty, define it if you wish to run unit tests and/or test scripts.")
-    colormsg(YELLOW "*** I3_TESTDATA is not set. Using the default value of ${I3_TESTDATA}")
+  set(I3_TESTDATA "${CMAKE_BINARY_DIR}/test-data" CACHE STRING "Path to your icetray test-data: currently empty, define it if you wish to run unit tests and/or test scripts.")
+  colormsg(YELLOW "*** I3_TESTDATA is not set. Using the default value of ${I3_TESTDATA}")
 endif()
 
 if(I3_TESTDATA)
+  set(TESTDATA_URL "code.icecube.wisc.edu::Offline/test-data/${TESTDATA_VERSION}/")
   add_custom_target(rsync
     COMMAND test -n "${I3_TESTDATA}"
     COMMAND mkdir -p "${I3_TESTDATA}"
-    COMMAND rsync -vrlpt --delete code.icecube.wisc.edu::Offline/test-data/trunk/ ${I3_TESTDATA}/
+    COMMAND rsync -vrlpt --delete ${TESTDATA_URL} ${I3_TESTDATA}/
     COMMENT "Rsyncing test-data to I3_TESTDATA"
     )
   ### ctest testing
