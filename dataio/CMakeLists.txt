@@ -44,10 +44,11 @@ if(CDK_FOUND AND NCURSES_FOUND)
     USE_PROJECTS dataio
     USE_TOOLS cdk ncurses
     )
+  
   if(APPLE)
     SET(NCURSES_LIBS -lform)
   else(APPLE)
-    SET(NCURSES_LIBS -lform -tinfo)
+    SET(NCURSES_LIBS "-lform -ltinfo")
   endif(APPLE)
 
   SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${NCURSES_LIBS}")
