@@ -401,20 +401,22 @@ class GoodRunList(dict):
 
 def GRL(pass2 = False):
     """
-    Returns a complete list auf all good runs since IC79 (included). If you enable `pass2`,
+    Returns a complete list of all good runs since IC79 (included). If you enable `pass2`,
     the seasons IC79 - IC86.2016 will be replaced by the pass2 GRL. After IC86.2016, the standard
     GRLs are added (there is no pass2 after IC86.2016!).
     """
 
     # Find all GRLs >= IC79
-    lists = glob('/data/exp/IceCube/20[1-9][0-9]/filtered/level2{}/IC??_20[1-9][0-9]_GoodRunInfo.txt'.format('' if not pass2 else 'pass2'))
 
     if pass2:
+	lists = glob('/data/exp/IceCube/201[0-6]/filtered/level2pass2/IC??_201[0-6]_GoodRunInfo.txt')
+        # level2pass2 became standard in 2017, and is then and thereafter only called level2
         lists.extend(glob('/data/exp/IceCube/201[7-9]/filtered/level2/IC??_201[7-9]_GoodRunInfo.txt'))
         lists.extend(glob('/data/exp/IceCube/20[2-9][0-9]/filtered/level2/IC??_20[2-9][0-9]_GoodRunInfo.txt'))
 
-    # If it is pass1, the IC79 list sits somewhere else
     if not pass2:
+        lists = glob('/data/exp/IceCube/20[1-9][0-9]/filtered/level2/IC??_20[1-9][0-9]_GoodRunInfo.txt')
+        # If it is pass1, the IC79 list sits somewhere else
         lists.append('/data/exp/IceCube/2010/filtered/level2/IC79_GRLists/IC79_GRL_NewFormat.txt')
 
     # Load files
@@ -424,3 +426,6 @@ def GRL(pass2 = False):
         grl.load(l)
 
     return grl
+
+def GRL_pass2():
+    return GRL( pass2 = True )
