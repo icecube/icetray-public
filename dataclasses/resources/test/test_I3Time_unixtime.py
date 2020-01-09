@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from icecube.dataclasses import I3Time
 from icecube.icetray import I3Units
 from datetime import datetime,timedelta,timezone
