@@ -886,6 +886,13 @@ namespace TreeBase {
       // there is no left sibling, so node2 is the new left-most sibling
       iter->second.parent->firstChild = &(insertResult.first->second);
     }
+    if (newNode.firstChild) {
+        treeNode* n = newNode.firstChild;
+        while (n) {
+            n->parent = &(insertResult.first->second);
+            n = n->nextSibling;
+        }
+    }
     internalMap.erase(iter);
     if (node == head_) {
         head_ = node2;
