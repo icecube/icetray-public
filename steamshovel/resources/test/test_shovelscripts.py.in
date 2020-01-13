@@ -9,7 +9,7 @@ import shutil
 import subprocess as subp
 try:
     import numpy as np
-    from PyQt@_pyqtver@.QtGui import QImage, qRed, qGreen, qBlue  # noqa: E999
+    from PyQt5.QtGui import QImage, qRed, qGreen, qBlue  # noqa: E999
 except ImportError:
     pass
 
@@ -114,21 +114,21 @@ class TestShovelScripts( unittest.TestCase ):
         self.runtest( "create_all_artists" )
 
     @unittest.skipIf("QImage" not in globals(),
-                     "test requires PyQt4")
+                     "test requires PyQt")
     def test_particles_artist_draws_tracks( self ):
         name = "particles_artist_draws_tracks"
         self.runtest( name )
         self.assertImage( name + ".png", 30 )
 
     @unittest.skipIf("QImage" not in globals(),
-                     "test requires PyQt4")
+                     "test requires PyQt")
     def test_cherenkov_cone( self ):
         name = "cherenkov_cone"
         self.runtest( name )
         self.assertImage( name + ".png", 60 )
 
     @unittest.skipIf("QImage" not in globals(),
-                     "test requires PyQt4")
+                     "test requires PyQt")
     def test_cylinder( self ):
         name = "cylinder"
         self.runtest( name )

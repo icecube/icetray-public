@@ -64,9 +64,9 @@ def setInputHook():
     global _steamshovel_input_hook
     pyos_inputhook_ptr = ctypes.c_void_p.in_dll(ctypes.pythonapi, "PyOS_InputHook")
     try:
-        # First ensure that PyQt4/PyQt5 won't install its own input hook at some later time.
-        # It does so as part of its module initialization, because PyQt4/PyQt5 is a bad person.
-        from PyQt@_pyqtver@ import QtCore  # noqa: E999
+        # First ensure that PyQt5 won't install its own input hook at some later time.
+        # It does so as part of its module initialization, because PyQt5 is a bad person.
+        from PyQt5 import QtCore  # noqa: E999
         QtCore.pyqtRemoveInputHook()
     except ImportError:
         pass

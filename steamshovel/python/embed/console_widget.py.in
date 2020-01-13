@@ -1,4 +1,4 @@
-# Do not import IPython, sip, PyQt4/PyQt5, or other optional packages from here
+# Do not import IPython, sip, PyQt5, or other optional packages from here
 # This module must always import successfully, even if those packages are missing
 from __future__ import print_function
 from . import console
@@ -28,7 +28,7 @@ def init_embedded_kernel():
     try:
         import PySide
         print("You have PySide installed, which creates a conflict with "
-              "Steamshovel's use of IPython and PyQt4/PyQt5. The embedded Python "
+              "Steamshovel's use of IPython and PyQt5. The embedded Python "
               "shell in Steamshovel will be disabled. Remove PySide to "
               "correct this issue.")
         return False
@@ -58,7 +58,7 @@ def embed_shell_widget( parent_ptr ):
     Parent is assumed to be an integer and is wrapped into a QWidget using sip.
 
     This function may only be called when init_embedded_python() previously
-    returned True.  It may throw an ImportError if sip or PyQt4/PyQt5 is missing.
+    returned True.  It may throw an ImportError if sip or PyQt5 is missing.
     If it successfully returns, the widget was successfully embedded.
     '''
     global _kmgr, _kclient, widget
@@ -73,11 +73,7 @@ def embed_shell_widget( parent_ptr ):
         from qtconsole.rich_jupyter_widget import RichJupyterWidget as RichWidget
     import sip
 
-    pyqt_module = "PyQt@_pyqtver@"
-    if pyqt_module == "PyQt5":
-      from PyQt5.QtWidgets import QWidget as QWidget
-    else: # Default to Qt4
-      from PyQt4.QtGui import QWidget as QWidget
+    from PyQt5.QtWidgets import QWidget as QWidget
 
     # Wave the magic wand and turn an integer into a QWidget object.
     parent = sip.wrapinstance(parent_ptr, QWidget)
