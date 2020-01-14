@@ -76,7 +76,10 @@ include(config)   # trigger the configuation meat (build types, etc)
 ## enable_testing() must be called before add_test() which happens in project.cmake
 set(TESTDATA_VERSION trunk)
 
-if(DEFINED ENV{I3_TESTDATA})
+if(DEFINED ENV{I3_DATA})
+  set(I3_TESTDATA $ENV{I3_DATA}/i3-test-data-svn/${TESTDATA_VERSION} CACHE STRING "Path to your icetray test-data")
+  colormsg(GREEN "Setting I3_TESTDATA to ${I3_TESTDATA}")
+elseif(DEFINED ENV{I3_TESTDATA})
   set(I3_TESTDATA $ENV{I3_TESTDATA} CACHE STRING "Path to your icetray test-data")
   string(FIND ${I3_TESTDATA} ${TESTDATA_VERSION} VERSION_POSITION REVERSE)
   if(VERSION_POSITION EQUAL -1)
@@ -89,19 +92,15 @@ else()
   colormsg(YELLOW "*** I3_TESTDATA is not set. Using the default value of ${I3_TESTDATA}")
 endif()
 
-if(I3_TESTDATA)
-  set(TESTDATA_URL "code.icecube.wisc.edu::Offline/test-data/${TESTDATA_VERSION}/")
-  add_custom_target(rsync
-    COMMAND test -n "${I3_TESTDATA}"
-    COMMAND mkdir -p "${I3_TESTDATA}"
-    COMMAND rsync -vrlpt --delete ${TESTDATA_URL} ${I3_TESTDATA}/
-    COMMENT "Rsyncing test-data to I3_TESTDATA"
-    )
-  ### ctest testing
-  enable_testing()
-else()
-  message(FATAL_ERROR "Something strange happened here. I3_TESTDATA should have been set to a default value.")
-endif()
+set(TESTDATA_URL "code.icecube.wisc.edu::Offline/test-data/${TESTDATA_VERSION}/")
+add_custom_target(rsync
+  COMMAND test -n "${I3_TESTDATA}"
+  COMMAND mkdir -p "${I3_TESTDATA}"
+  COMMAND rsync -vrlpt --delete ${TESTDATA_URL} ${I3_TESTDATA}/
+  COMMENT "Rsyncing test-data to I3_TESTDATA"
+  )
+### ctest testing
+enable_testing()
 
 include(tools)          # trigger tool/library detection
 include(system_report)  # generate/upload a system report
