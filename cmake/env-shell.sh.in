@@ -54,16 +54,6 @@ _I3_SHELL=$NEW_SHELL
 _I3_SRC=@I3_SRC@
 _I3_BUILD=@I3_BUILD@
 _I3_TESTDATA=@I3_TESTDATA@
-# If the I3_TESTDATA value at cmake time differs from the value
-# that was set just prior to starting env-shell.sh, prefer the latter one.
-# E.g.: user may have had I3_TESTDATA undefined at cmake time, but then set I3_TESTDATA later.
-if [ -d "$I3_TESTDATA" ]
-then 
-    if [ $(readlink "$_I3_TESTDATA") != $(readlink "$I3_TESTDATA") ]
-    then
-        _I3_TESTDATA=$I3_TESTDATA
-    fi
-fi
 
 # Check for I3_BUILD mismatch
 if [ -n "$I3_BUILD" -a "$I3_BUILD" != "$_I3_BUILD" ]
