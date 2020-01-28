@@ -87,7 +87,10 @@ do_pyshell(char* argv[], Model& model, View& view){
   mbstowcs(program, argv[0], 255);
   Py_SetProgramName(program);
   Py_Initialize();
-  PySys_SetArgvEx(1, (wchar_t**)&program, 0);
+  // #2405: segfault with this and python 3.7+
+  //        It doesn't appear to be required, so commented out for now
+  //PySys_SetArgvEx(1, (wchar_t**)&program, 0);
+  PySys_SetArgvEx(0, NULL, 0);
 #endif
   PyEval_InitThreads();
 
