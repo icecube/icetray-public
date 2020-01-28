@@ -24,7 +24,7 @@ Quickstart
 
 From your shell (or in your login script) run::
 
-    eval $(/cvmfs/icecube.opensciencegrid.org/py3-v4.0.1/setup.sh)
+    eval $(/cvmfs/icecube.opensciencegrid.org/py3-v4.1.0/setup.sh)
 
 This will detect the current OS and architecture and set your 
 environment variables appropriately.
@@ -39,7 +39,7 @@ environment variables appropriately.
   your your `.login` script. (Note the use of backticks in the 
   expression)::
 
-    eval `/cvmfs/icecube.opensciencegrid.org/py3-v4.0.1/setup.sh`
+    eval `/cvmfs/icecube.opensciencegrid.org/py3-v4.1.0/setup.sh`
 
 This should be near the end of any login script, so you don't
 accidentally put something else in front of CVMFS on the path.
@@ -62,8 +62,31 @@ accidentally put something else in front of CVMFS on the path.
 Distributions and Platforms
 ---------------------------
 
+py3-v4.1
+^^^^^^^^
+
+* python 3.7 and software releases as of late 2019
+
+* gcc 9.2 (c++17) compiler included
+
+* Supported OS:
+
+  * RedHat / CentOS / SL:  6 - 7
+  
+  * Ubuntu: 15.10 - 18.04
+  
+  * Debian: 8 - 10
+  
+  .. note::
+  
+     Works for IceTray releases after January 2020. 
+
 py3-v4
 ^^^^^^
+
+.. warning::
+
+   py2-v4.0* is deprecated and not supported.
 
 .. note::
 
@@ -71,6 +94,8 @@ py3-v4
    py3-v4.0.0 is deprecated.
 
 * python 3.6 and software releases as of late 2018
+
+* gcc 7.3 (c++14) compiler included
 
 * Supported OS:
 
@@ -82,8 +107,7 @@ py3-v4
   
   .. note::
   
-     Works for IceTray releases after April 2019. 
-     C++11 compiler required.
+     Works for IceTray releases after April 2019.
      
 py2-v3.1
 ^^^^^^^^
@@ -114,6 +138,10 @@ py2-v3.1
 py2-v3
 ^^^^^^
 
+.. warning::
+
+   py2-v3.0* is deprecated and not supported.
+
 .. note::
 
    py2-v3.0.1 is a minor fix for some software.
@@ -137,6 +165,10 @@ py2-v3
 py2-v2
 ^^^^^^
 
+.. warning::
+
+   py2-v2 is deprecated and not supported.
+
 * python 2.7 and software releases as of 2015
 
 * Supported OS:
@@ -154,6 +186,10 @@ py2-v2
 
 py2-v1
 ^^^^^^
+
+.. warning::
+
+   py2-v1 is deprecated and not supported.
 
 * python 2.7 and I3_PORTS
 
@@ -181,14 +217,14 @@ to submit to a batch system while also documenting which metaproject it
 is intended to work with. To use it, put a line like the following at 
 the top of your Python script::
 
-    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.0.1/icetray-start
+    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.1.0/icetray-start
     #METAPROJECT XXXXX
 
 The metaproject specification XXXXX can either be
 
 * a build directory (or a path to an upacked tarball)::
 
-    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.0.1/icetray-start
+    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.1.0/icetray-start
     #METAPROJECT /data/user/you/metaprojects/icerec/build
 
 .. note::
@@ -198,7 +234,7 @@ The metaproject specification XXXXX can either be
 
 * a tarball URL::
 
-    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.0.1/icetray-start
+    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.1.0/icetray-start
     #METAPROJECT http://username:password@convey.icecube.wisc.edu/data/user/your/tarballs/icerec-trunk
 
 .. note::
@@ -253,7 +289,7 @@ Some variants of PBS ignore the shebang line at the beginning of the script.
 To force PBS to select the correct interpreter, add a line like the following
 anywhere in your script::
 
-    #$ -S /cvmfs/icecube.opensciencegrid.org/py3-v4.0.1/icetray-start
+    #$ -S /cvmfs/icecube.opensciencegrid.org/py3-v4.1.0/icetray-start
 
 replacing $ with whichever character your PBS flavor uses to denote qsub
 options.
@@ -268,11 +304,11 @@ the offline-software, icerec, and simulation metaprojects. To use a
 pre-built metaproject, put a line like the following at the top of your
 Python script::
 
-    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.0.1/icetray-start
+    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.1.0/icetray-start
     #METAPROJECT: metaproject/VXX-YY-ZZ
 
 for example::
 
-    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.0.1/icetray-start
+    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.1.0/icetray-start
     #METAPROJECT: combo/stable
 
