@@ -193,13 +193,17 @@ I3Module::Process_()
       return;
     }
 
-  if (ShouldDoProcess(frame))
+  if (ShouldDoProcess(frame)) {
+    if (frame->GetStop() == I3Frame::Physics)
+      ModuleTimer mt(sysphystime_, userphystime_);
+    else if (frame->GetStop() == I3Frame::DAQ)
+      ModuleTimer mt(sysdaqtime_, userdaqtime_);
+
     this->Process();
-  else
-    {
-      PopFrame();
-      PushFrame(frame);
-    }
+  } else {
+    PopFrame();
+    PushFrame(frame);
+  }
 }
 
 void
@@ -225,7 +229,6 @@ I3Module::Process()
 
   if(frame->GetStop() == I3Frame::Physics && ShouldDoPhysics(frame))
     {
-      ModuleTimer mt(sysphystime_, userphystime_);
       ++nphyscall_;
       Physics(frame);
     }
@@ -238,7 +241,6 @@ I3Module::Process()
   else if(frame->GetStop() == I3Frame::Simulation && ShouldDoSimulation(frame))
     Simulation(frame);
   else if(frame->GetStop() == I3Frame::DAQ && ShouldDoDAQ(frame)) {
-    ModuleTimer mt(sysdaqtime_, userdaqtime_);
     ++ndaqcall_;
     DAQ(frame);
   } else if(ShouldDoOtherStops(frame))
