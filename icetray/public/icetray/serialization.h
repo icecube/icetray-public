@@ -59,7 +59,7 @@ AsXML(const T& t)
 {
   std::ostringstream oss;
   icecube::archive::xml_oarchive xoa(oss, icecube::archive::no_header);
-  xoa << make_nvp("obj", t);
+  xoa << icecube::serialization::make_nvp("obj", t);
   return oss.str();
 }
 
