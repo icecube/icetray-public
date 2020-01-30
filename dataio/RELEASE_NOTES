@@ -4,6 +4,8 @@ Release Notes
 trunk
 -----
 
+* Bug fix for segaulting py3 dataio-shovel.
+
 Dec. 20, 2019 Alex Olivas (aolivas@umd.edu)
 -------------------------------------------
 Combo Release V00-00-00
