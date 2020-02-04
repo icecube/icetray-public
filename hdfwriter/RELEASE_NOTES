@@ -2,11 +2,19 @@
 .. $Author: olivas $
 .. $Date: 2015-03-15 20:20:06 -0600 (Sun, 15 Mar 2015) $
 
+.. _hdfwriter-release-notes:
+   
 Release Notes
 =============
 
 trunk
 -----
+
+
+Feb. 5, 2020 Alex Olivas (aolivas@umd.edu)
+-------------------------------------------
+Combo Release V00-00-01
+
 * (r178437) add hdfwriter-book, a command-line interface to the I3HDFWriter 
   segment
 
