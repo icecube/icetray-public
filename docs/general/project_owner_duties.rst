@@ -1,3 +1,5 @@
+.. _icecube-maintainer-responsiblities:
+
 Responsibilities of Project Maintainers
 =======================================
 

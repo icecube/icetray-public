@@ -38,8 +38,8 @@ Of general interest
    :maxdepth: 2
 
    metaproject_metainfo
+   general/software_policy
    general/submitting_tickets
-   general/writing_release_notes
    general/project_owner_duties
    general/release_checklist_for_project_maintainers
    general/development_tips
