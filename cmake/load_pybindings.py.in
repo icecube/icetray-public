@@ -25,14 +25,30 @@ import platform,sys
 import warnings
 warnings.filterwarnings("ignore", ".*already registered; second conversion method ignored.", RuntimeWarning)
 
+def extract_numeric_value(version):
+    '''
+    Given a string, e.g. '15+' or '14b' or even 'foo42eight'
+    just extract the numeric part.
+
+    This is important for comparing cmake python versions 2.7.15
+    with the version that python reports 2.7.15, for example.
+
+    Note this will also convert '14b2' to '142', but we can't really
+    account for all the pathological patch version numbers that python
+    might attempt in the future.
+    ''' 
+    try:
+        return int(version)
+    except ValueError:
+        return int(''.join([n for n in version
+                            if n in ['0','1','2','3','4','5','6','7','8','9']]))
+
 PYTHON_VERSION = "@PYTHON_VERSION@"
 if PYTHON_VERSION != platform.python_version():
-    raise Exception("IceTray was compiled with version {} but is curently being run with {}"
-                    .format(PYTHON_VERSION,platform.python_version()))
-
-#omit python2 warning for now
-#if sys.version_info.major < 3:
-#    print("""\033[0;31m@PYTHON_WARNING@\033[0;0m""")
+    cast_version = '.'.join([str(extract_numeric_value(v)) for v in platform.python_version_tuple()])    
+    if PYTHON_VERSION != cast_version:
+        raise Exception("IceTray was compiled with version {} but is curently being run with {}"
+                        .format(PYTHON_VERSION,platform.python_version()))
                   
 if platform.system().startswith('freebsd'):
 	# C++ modules are extremely fragile when loaded with RTLD_LOCAL,

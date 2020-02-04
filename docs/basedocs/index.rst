@@ -11,9 +11,9 @@ Basic Info
    info/overview
    info/quickstart
    info/cvmfs
-   info/meta_projects/index
+   info/release_notes
 
-
+   
 Project Details
 ===============
 
@@ -40,6 +40,7 @@ Of general interest
    metaproject_metainfo
    general/submitting_tickets
    general/writing_release_notes
+   general/project_owner_duties
    general/release_checklist_for_project_maintainers
    general/development_tips
    general/code_reviews

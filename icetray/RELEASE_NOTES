@@ -4,9 +4,20 @@ Release Notes
 trunk
 -----
 
+* (r178701) Python functions now contribute to usage stats.
+* (r178700) Use make_nvp from our serialization project instead of boost's.
+* (r178501) Add support for recent libarchive versions (e.g. 3.4)
+
+Dec. 20, 2019 Alex Olivas (aolivas@umd.edu)
+-------------------------------------------
+Combo Release V00-00-00
+
+* Various build cleanups.
+* (r177030) Made zstd optional.
 * add `__bool__` operator to `I3Bool` and `I3Int` in addition to `__nonzero__`
   in addition to `__nonzero__`. python2 uses `__nonzero__` but python3 uses `__bool__`.
 * (r3063) Removed I3OpNewServiceFactory.
+* Moved DeleteUnregistered module to dataio.
 
 June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------

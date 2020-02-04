@@ -35,7 +35,10 @@
 
 #include "http_source.hpp"
 #include "socket_source.hpp"
+
+#ifdef I3_WITH_ZSTD
 #include "zstd_filter.hpp"
+#endif
 
 #ifdef I3_WITH_LIBARCHIVE
 #include "archive_filter.hpp"
@@ -57,30 +60,37 @@ namespace I3 {
       if (!ifs.empty())
         log_fatal("ifs isn't empty!");
 
-      if (ends_with(filename,".zst")){
+      if (ends_with(filename,".i3.gz")){
+        ifs.push(io::gzip_decompressor());
+        log_trace("Input file ends in .gz.  Using gzip decompressor.");
+      }else if (ends_with(filename,".i3.bz2")){
+        ifs.push(io::bzip2_decompressor());
+      }
+      else if (ends_with(filename,".i3.zst")){
+#ifdef I3_WITH_ZSTD
         ifs.push(zstd_decompressor());
         log_trace("Input file ends in .zst. Using zstd decompressor.");
+#else
+        log_fatal("Input file ends in .zst, however zstd is not found.");
+#endif	
       }
+    
 #ifdef I3_WITH_LIBARCHIVE
-
 	/*
 	 * If it's not obviously an I3 file, treat it as a
 	 * gzipped/bzipped/lzma'd/xz'd/uncompressed
 	 * gnutar/pax/ustar/cpio/shar/iso9660 archive
 	 * containing I3 files.
 	 */
-      else if (!ends_with(filename,".i3"))
+      else if (!ends_with(filename,".i3")) {
 		ifs.push(archive_filter(filename));
-#else
-      else if (ends_with(filename,".gz")){
-        ifs.push(io::gzip_decompressor());
-        log_trace("Input file ends in .gz.  Using gzip decompressor.");
-      }else if (ends_with(filename,".bz2")){
-        ifs.push(io::bzip2_decompressor());
-      }else{
-        log_trace("Input file doesn't end in .gz, .bz2, or .zst.  Not decompressing.");
       }
 #endif
+
+
+      else{
+        log_trace("Not decompressing.");
+      }
 
       if (filename.find("socket://") == 0) {
         boost::iostreams::file_descriptor_source fs = create_socket_source(filename);
@@ -111,19 +121,23 @@ namespace I3 {
         if(compression_level<=0)
           compression_level=6;
         ofs.push(io::gzip_compressor(compression_level));
-        log_trace("Output file ends in .gz.  Using gzip decompressor.");
+        log_trace("Output file ends in .gz.  Using gzip compressor.");
       }else if (ends_with(filename,".bz2")){
         if(compression_level<=0)
           compression_level=6;
         ofs.push(io::bzip2_compressor(compression_level));
-        log_trace("Output file ends in .bz2.  Using bzip2 decompressor.");
+        log_trace("Output file ends in .bz2.  Using bzip2 compressor.");
       }else if (ends_with(filename,".zst")){
+#ifdef I3_WITH_ZSTD	
         if(compression_level<=0)
           compression_level=4;
         ofs.push(zstd_compressor(compression_level));
-        log_trace("Output file ends in .zst. Using zstd decompressor.");
+        log_trace("Output file ends in .zst. Using zstd compressor.");
+#else
+        log_fatal("Output file ends in .zst, but libzstd-dev isn't installed.");
+#endif
       }else{
-        log_trace("Output file doesn't end in .gz or .bz2.  Not decompressing.");
+        log_trace("Output file doesn't end in .gz or .bz2.  Not compressing.");
       }
       ofs.push(io::counter64());
 

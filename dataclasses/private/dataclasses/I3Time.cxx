@@ -211,14 +211,17 @@ void I3Time::SetUnixTime(time_t unixTime,double ns)
 {
   if(unixTime < 0) log_fatal("invalid Unix time");
   int32_t mjd = unixTime / 86400 + 40587;
-  unixTime -= I3TimeUtils::year_to_date_leap_seconds(mjd);
   SetModJulianTime(mjd, unixTime % 86400, ns);
 }
 
 time_t I3Time::GetUnixTime() const
 {
   int32_t mjd = GetModJulianDay();
-  return (mjd-40587)*86400+GetModJulianSec();
+  time_t unixtime = (mjd-40587)*86400+GetModJulianSec();
+  if (IsLeapSecond()){
+    unixtime--;
+  }
+  return unixtime;  
 }
 
 int I3Time::GetUTCYear() const

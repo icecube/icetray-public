@@ -62,11 +62,7 @@ def I3TestModuleFactory(*test_cases):
 
             self.AddOutBox("OutBox")
 
-            self.test_suites = unittest.TestSuite([
-                unittest.defaultTestLoader.loadTestsFromTestCase(c)
-                for c in test_cases
-                ])
-
+            self.test_suites = None
             self.test_cases = test_cases
 
         def Configure(self):
@@ -79,8 +75,17 @@ def I3TestModuleFactory(*test_cases):
             # Pass the frame to each test case.
             for case in self.test_cases:
                 case.frame = frame
+            if self.test_suites is None:
+                self.test_suites = unittest.TestSuite([
+                    unittest.defaultTestLoader.loadTestsFromTestCase(c)
+                    for c in test_cases
+                    ])
 
             test_result = self.test_runner.run(self.test_suites)
+
+            # On some Python versions (e.g. 3.6),running the tests is
+            # destructive for the suite and the suite needs to be reset
+            self.test_suites = None
 
             if not test_result.wasSuccessful():
                 # XXX TODO: is there a nicer way to pull the handbrake so that

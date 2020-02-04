@@ -35,9 +35,6 @@
 #include <dataclasses/physics/I3RecoPulse.h>
 #include "shovel/View.h"
 
-//==============================================================================
-#pragma mark Model::ProgressManager
-//==============================================================================
 
 Model::ProgressManager::ProgressManager(View& view):
 view_(view),
@@ -163,10 +160,6 @@ void Model::ProgressManager::StopShowingProgress(){
   }
 }
 
-//==============================================================================
-#pragma mark Model::FrameInfo and FrameInfoHash
-//==============================================================================
-
 Model::FrameInfo::FrameInfo(const I3Frame& f):stream(f.GetStop()){
   if(stream==I3Frame::Physics){
     boost::shared_ptr<const I3EventHeader> header =
@@ -189,10 +182,6 @@ Model::FrameInfoHash::operator()(const Model::FrameInfo& fi) const{
       h^=ch(c);
   return h;
 }
-
-//==============================================================================
-#pragma mark Model
-//==============================================================================
 
 Model::Model(View& view, const std::vector<std::string> filenames,
              boost::optional<unsigned> nframes):

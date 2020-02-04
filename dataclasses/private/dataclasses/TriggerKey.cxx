@@ -166,7 +166,11 @@ void TriggerKey::load(Archive& ar, unsigned version)
     ar & make_nvp("ConfigID", configID);
     configID_ = configID;
   }else{
-    configID_ = boost::optional<int>();
+    configID_ = boost::make_optional(false, int());
+    //configID_ = boost::optional<int>();
+    // GCCFalsePositive
+    // Fix an false positive detection of -Wmaybe-uninitialized
+    //see https://www.boost.org/doc/libs/1_71_0/libs/optional/doc/html/boost_optional/tutorial/gotchas/false_positive_with__wmaybe_uninitialized.html
   }
 }
 

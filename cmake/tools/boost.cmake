@@ -34,22 +34,17 @@ set(Boost_NO_BOOST_CMAKE ON)
 if(NOT DEFINED Boost_PYTHON_TYPE)
 	set(Boost_PYTHON_TYPE python)
 
-	# Detect attempts to be clever with the naming of the Boost Python
-	# library
-	string(REGEX REPLACE ".*libpython([0-9])\\.[0-9]+.*\\..*" "\\1" PYTHONMAJORVER ${PYTHON_LIBRARIES})
-	string(REGEX REPLACE ".*libpython[0-9]\\.([0-9]+).*\\..*" "\\1" PYTHONMINORVER ${PYTHON_LIBRARIES})
-
 	# Hack for some old Boost CMake modules
-	set(_Boost_PYTHON${PYTHONMAJORVER}_HEADERS "boost/python.hpp")
-	set(_Boost_PYTHON${PYTHONMAJORVER}${PYTHONMINORVER}_HEADERS "boost/python.hpp")
+	set(_Boost_PYTHON${Python_VERSION_MAJOR}_HEADERS "boost/python.hpp")
+	set(_Boost_PYTHON${Python_VERSION_MAJOR}${Python_VERSION_MINOR}_HEADERS "boost/python.hpp")
 
-	find_package(Boost QUIET COMPONENTS python${PYTHONMAJORVER}${PYTHONMINORVER})
-	if (${Boost_PYTHON${PYTHONMAJORVER}${PYTHONMINORVER}_FOUND})
-		set(Boost_PYTHON_TYPE python${PYTHONMAJORVER}${PYTHONMINORVER})
+	find_package(Boost QUIET COMPONENTS python${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
+	if (${Boost_PYTHON${Python_VERSION_MAJOR}${Python_VERSION_MINOR}_FOUND})
+		set(Boost_PYTHON_TYPE python${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
 	else()
-		find_package(Boost QUIET COMPONENTS python${PYTHONMAJORVER})
-		if (${Boost_PYTHON${PYTHONMAJORVER}_FOUND})
-			set(Boost_PYTHON_TYPE python${PYTHONMAJORVER})
+		find_package(Boost QUIET COMPONENTS python${Python_VERSION_MAJOR})
+		if (${Boost_PYTHON${Python_VERSION_MAJOR}_FOUND})
+			set(Boost_PYTHON_TYPE python${Python_VERSION_MAJOR})
 		endif()
 	endif()
 endif()

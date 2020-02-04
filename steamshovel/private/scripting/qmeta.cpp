@@ -172,7 +172,7 @@ bp::object get_classdef( const QMetaObject* meta )
 	}
 
 	qmeta_info.metaclasses_[ meta ] = classdef;
-	return classdef;
+	return std::move(classdef);
 }
 
 void QMeta::exportObject( QObject* q ){

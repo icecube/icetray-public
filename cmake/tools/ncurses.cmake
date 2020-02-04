@@ -73,10 +73,6 @@ else()
   endif(CURSES_HAVE_NCURSES_NCURSES_H)
       
   ## setting this to CURSES_LIBRARIES includes libform
-  #set(NCURSES_LIBRARIES ${CURSES_NCURSES_LIBRARY}
-  if(NOT APPLE)
-    list(APPEND CURSES_LIBRARIES "-ltinfo")
-  endif()
   set(NCURSES_LIBRARIES ${CURSES_LIBRARIES}
     CACHE STRING "Libraries for tool 'ncurses'")
 

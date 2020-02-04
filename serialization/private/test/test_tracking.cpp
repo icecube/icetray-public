@@ -63,11 +63,11 @@ void out(const char* testfile){
     AS as;
     AA aa;
     oa << I3_SERIALIZATION_NVP(an) << I3_SERIALIZATION_NVP(an);
-    ENSURE_EQUAL(an.count,2);
+    ENSURE_EQUAL(an.count,2u);
     oa << I3_SERIALIZATION_NVP(as) << I3_SERIALIZATION_NVP(as);
-    ENSURE_EQUAL(as.count,2);
+    ENSURE_EQUAL(as.count,2u);
     oa << I3_SERIALIZATION_NVP(aa) << I3_SERIALIZATION_NVP(aa);
-    ENSURE_EQUAL(aa.count,1);
+    ENSURE_EQUAL(aa.count,1u);
 
     PAN::count = 0;
     PAS::count = 0;
@@ -76,11 +76,11 @@ void out(const char* testfile){
     PAS *pas = new PAS;
     PAA *paa = new PAA;
     oa << I3_SERIALIZATION_NVP(pan) << I3_SERIALIZATION_NVP(pan);
-    ENSURE_EQUAL(pan->count,2);
+    ENSURE_EQUAL(pan->count,2u);
     oa << I3_SERIALIZATION_NVP(pas) << I3_SERIALIZATION_NVP(pas);
-    ENSURE_EQUAL(pas->count,1);
+    ENSURE_EQUAL(pas->count,1u);
     oa << I3_SERIALIZATION_NVP(paa) << I3_SERIALIZATION_NVP(paa);
-    ENSURE_EQUAL(paa->count,1);
+    ENSURE_EQUAL(paa->count,1u);
     delete pan;
     delete pas;
     delete paa;

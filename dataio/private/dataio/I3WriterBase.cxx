@@ -192,7 +192,7 @@ I3WriterBase::Process()
 
 	WriteConfig(frame);
 
-	// See if this is a frame type that actually gets written
+	// Skip frame if it is something we don't care about at all
 	if (streams_.size() > 0 && find(streams_.begin(), streams_.end(),
 	    frame->GetStop()) == streams_.end()) {
 		PushFrame(frame, "OutBox");
@@ -222,12 +222,16 @@ I3WriterBase::Process()
 
 	// At this point, we have a frame we (a) want to write, and (b) is not
 	// part of an orphanable stream, so dump the contents of the orphanarium
-	// to disk before the frame and clear it.
-	BOOST_FOREACH(I3FramePtr adopted, orphanarium_) {
-		frameCounter_++;
-		adopted->save(filterstream_, skip_keys_);
+	// to disk before the frame and clear it so long as the frame reasonably
+	// might depend on the frames in the orphanarium (i.e. is not pure
+	// metadata like TrayInfo).
+	if (frame->GetStop() != I3Frame::TrayInfo) {
+		BOOST_FOREACH(I3FramePtr adopted, orphanarium_) {
+			frameCounter_++;
+			adopted->save(filterstream_, skip_keys_);
+		}
+		orphanarium_.clear();
 	}
-	orphanarium_.clear();
 
 	// Write to disk
 	frameCounter_++;

@@ -19,8 +19,6 @@
 #include <string>
 
 #ifndef __CINT__
-#include <archive/xml_iarchive.hpp>
-#include <archive/xml_oarchive.hpp>
 #include <boost/optional.hpp>
 #endif
 
@@ -87,6 +85,7 @@ class I3Particle : public I3FrameObject
     H2Nucleus = 1000010020,
     He3Nucleus = 1000020030,
     He4Nucleus = 1000020040,
+    Li5Nucleus = 1000030050,
     Li6Nucleus = 1000030060,
     Li7Nucleus = 1000030070,
     Be9Nucleus = 1000040090,
@@ -451,6 +450,11 @@ class I3Particle : public I3FrameObject
 
 static const unsigned i3particle_version_ = 5;
 
+/**
+ * Get name of an I3Particle::ParticleType as a string
+ */
+std::string i3particle_type_string(int32_t pdg_code);
+
 // let other code know that I3Particle stores PDG encodings internally
 #define I3PARTICLE_SUPPORTS_PDG_ENCODINGS
 
@@ -469,7 +473,8 @@ static const unsigned i3particle_version_ = 5;
     (XiPlusBar)(OmegaPlusBar)(DPlus)(DMinus)(D0)(D0Bar)(DsPlus)(DsMinusBar)       \
     (LambdacPlus)(WPlus)(WMinus)(Z0)(NuE)(NuEBar)                                 \
     (NuMu)(NuMuBar)(TauPlus)(TauMinus)(NuTau)(NuTauBar)(H2Nucleus)                \
-    (He3Nucleus)(He4Nucleus)(Li6Nucleus)(Li7Nucleus)(Be9Nucleus)(B10Nucleus)      \
+    (He3Nucleus)(He4Nucleus)                                                      \
+    (Li5Nucleus)(Li6Nucleus)(Li7Nucleus)(Be9Nucleus)(B10Nucleus)                  \
     (B11Nucleus)(C12Nucleus)(C13Nucleus)(N14Nucleus)(N15Nucleus)(O16Nucleus)      \
     (O17Nucleus)(O18Nucleus)(F19Nucleus)(Ne20Nucleus)(Ne21Nucleus)(Ne22Nucleus)   \
     (Na23Nucleus)(Mg24Nucleus)(Mg25Nucleus)(Mg26Nucleus)(Al26Nucleus)(Al27Nucleus)\
@@ -498,12 +503,6 @@ static const unsigned i3particle_version_ = 5;
 
 #define I3PARTICLE_H_I3Particle_LocationType                                      \
     (Anywhere)(IceTop)(InIce)(InActiveVolume)
-
-#ifndef __CINT__
-// template specialization for XML i/o
-template<> void I3Particle::save(icecube::archive::xml_oarchive& ar, unsigned version) const;
-template<> void I3Particle::load(icecube::archive::xml_iarchive& ar, unsigned version);
-#endif
 
 std::ostream& operator<<(std::ostream& oss, const I3Particle& d);
 

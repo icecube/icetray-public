@@ -60,7 +60,7 @@ void test_native_array(){
             try {
                 ia >> icecube::serialization::make_nvp("a_array", a_array1);
             }
-            catch (icecube::archive::archive_exception ae){
+            catch (icecube::archive::archive_exception &ae){
                 ENSURE(
                     icecube::archive::archive_exception::array_size_too_short
                     == ae.code
@@ -69,7 +69,7 @@ void test_native_array(){
             }
             ENSURE(exception_invoked);
         }
-        catch (icecube::archive::archive_exception ae){}
+        catch (icecube::archive::archive_exception &ae){}
     }
     std::remove(testfile.c_str());
 }
@@ -102,7 +102,7 @@ void test_boost_array(){
             try {
                 ia >> icecube::serialization::make_nvp("a_array", a_array1);
             }
-            catch (icecube::archive::archive_exception ae){
+            catch (icecube::archive::archive_exception &ae){
                 ENSURE(
                     icecube::archive::archive_exception::array_size_too_short
                     == ae.code
@@ -111,7 +111,7 @@ void test_boost_array(){
             }
             ENSURE(exception_invoked);
         }
-        catch (icecube::archive::archive_exception ae){}
+        catch (icecube::archive::archive_exception &ae){}
     }
     std::remove(testfile.c_str());
 }
@@ -147,7 +147,7 @@ void test_std_array(){
             try {
                 ia >> icecube::serialization::make_nvp("a_array", a_array1);
             }
-            catch (icecube::archive::archive_exception ae){
+            catch (icecube::archive::archive_exception &ae){
                 ENSURE(
                     icecube::archive::archive_exception::array_size_too_short
                     == ae.code
@@ -156,7 +156,7 @@ void test_std_array(){
             }
             ENSURE(exception_invoked);
         }
-        catch (icecube::archive::archive_exception ae){}
+        catch (icecube::archive::archive_exception &ae){}
     }
     std::remove(testfile.c_str());
 }

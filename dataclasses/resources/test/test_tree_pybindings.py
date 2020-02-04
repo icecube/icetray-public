@@ -321,5 +321,35 @@ class TreeTest(unittest.TestCase):
     else:
         raise Exception('did not raise exception')
 
+  def test_replace_head_and_copy(self):
+    head = makeParticle()
+    t = I3MCTree()
+    t.insert(head)
+    p1 = makeParticle()
+    c1 = makeParticle()
+    c2 = makeParticle()
+    c3 = makeParticle()
+    t.insert_after(p1)
+    t.append_child(head,c1)
+    t.append_child(head,c2)
+    t.append_child(head,c3)
+
+    p3 = makeParticle()
+    t.replace(head, p3)
+
+    self.assertEqual(t.get_heads(), [p3, p1])
+    self.assertEqual(t.children(p3), [c1,c2,c3])
+    self.assertEqual(t.parent(c1), p3)
+    self.assertEqual(t.parent(c2), p3)
+    self.assertEqual(t.parent(c3), p3)
+
+    t2 = I3MCTree(t)
+
+    self.assertEqual(t2.get_heads(), [p3, p1])
+    self.assertEqual(t2.children(p3), [c1,c2,c3])
+    self.assertEqual(t2.parent(c1), p3)
+    self.assertEqual(t2.parent(c2), p3)
+    self.assertEqual(t2.parent(c3), p3)
+
 if __name__ == '__main__':
   unittest.main()

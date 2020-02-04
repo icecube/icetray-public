@@ -51,12 +51,19 @@ void register_I3RecoPulseSeriesMapMask()
 		.def(bp::init<const I3Frame&, const std::string &, callback_t>())
 		.add_property("source", &I3RecoPulseSeriesMapMask::GetSource)
 		.add_property("bits", &getbits)
+#ifdef __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wself-assign-overloaded"
+#endif
 		.def(bp::self &  bp::self)
 		.def(bp::self &= bp::self)
 		.def(bp::self |  bp::self)
 		.def(bp::self |= bp::self)
 		.def(bp::self ^  bp::self)
 		.def(bp::self ^= bp::self)
+#ifdef __clang__
+#pragma GCC diagnostic pop
+#endif              
 		.def("remove", &I3RecoPulseSeriesMapMask::Remove)
 		.def("has_ancestor", &I3RecoPulseSeriesMapMask::HasAncestor)
 		.def("repoint", &I3RecoPulseSeriesMapMask::Repoint)

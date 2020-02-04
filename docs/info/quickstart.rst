@@ -2,9 +2,8 @@ Getting Started - A guided tour
 ===============================
 
 Welcome new user! This page should help you get up to speed and get a
-working installation of the core Offline-software installed, compiled
-and running on your system.  Comments, questions, complaints are
-welcome: software(at)icecube.wisc.edu
+the core software installed, compiled and running on your system.
+Comments, questions, complaints are welcome on Slack #software.
 
 This process involves:
 
@@ -25,22 +24,19 @@ Offline-software suite.
 Operating System
 ^^^^^^^^^^^^^^^^
 
-Most modern Linux distributions (i386 and x86_64) are supported, as
-well as recent Mac OS X (10.10 and newer) and FreeBSD, with one of the following
-compilers:
+IceCube focuses on just a few supported platforms: RedHat, Ubuntu, and OSX.
+We welcome commits from collaborators necessary to run on other unsupported
+platforms, but can't guarantee test resources will be dedicated to them.
 
-* gcc version 4.8.1 or higher
+* gcc version 5 or higher
 * Xcode version 6 or higher
 * clang version 3.6 or higher
-* icc version 12 or higher (infrequently tested)
 
 We actively test on a `number of platforms
 <http://builds.icecube.wisc.edu/buildslaves>`_.  **We
 highly recommend Ubuntu, it contains many useful packages, it's free,
 well-supported and has a wide user-base in IceCube.** If you choose
-Ubuntu and have problems, please ask questions on the mailing lists.
-We won't know about installation problems if you don't point them
-out...  and we don't want there to be any installation problems.
+Ubuntu and have problems, please ask questions on slack.
 
 Check :ref:`platforms` for the operating system that you are
 using. If provided, download and run the script for your operating
@@ -113,27 +109,24 @@ We use cmake to build the software::
 This will populate your local build directory with directories and
 local build files::
 
- -- Check for working C compiler: /usr/bin/gcc
- -- Check for working C compiler: /usr/bin/gcc -- works
- -- Check size of void*
- -- Check size of void* - done
- -- Check for working CXX compiler: /usr/bin/c++
- -- Check for working CXX compiler: /usr/bin/c++ -- works
- -- OSTYPE       Linux
- -- OSVERSION    2.6.22-14-generic
- -- ARCH         i686
- -- BUILDNAME    Linux-2.6.22-14-generic/i686/gcc-4.4.3
-                     ....
- --   interfaces
- --   coordinate-service
- --   examples
+ -- IceCube Configuration starting 
+ -- 
+ -- OSTYPE                         = Linux 
+ -- OSVERSION                      = 4.15.0-70-generic 
+ -- ARCH                           = x86_64 
+ -- BUILDNAME                      = Linux-4.15.0-70-generic/x86_64/gcc-7.4.0 
+ -- TOOLSET                        = gcc-7.4.0/x86_64/RelWithAssert 
+ -- HOSTNAME                       = finn 
+ -- CMake path                     = /usr/bin/cmake
+ -- CMake version                  = 3.10.2
+ ...
+ -- Setting compiler, compile drivers, and linker 
  -- Generating env-shell.sh
- -- Generating 
- -- Generating tarball_hook.sh
+ -- Generating icetray-config
  -- Configuring 'gfilt' STL decryptor
  -- Configuring done
  -- Generating done
- -- Build files have been written to: /home/blaufuss/combo/build
+ -- Build files have been written to: /home/olivas/icecube/combo/trunk/build
 
 You're ready to build.
 
@@ -145,19 +138,58 @@ In your ~/combo/build directory execute::
  make
 
 You will see the build progress::
-
- [  0%] Generating /disk02/home/blaufuss/icework/combo/build/icetray/icetrayDict.cxx with rootcint
+ [  0%] Checking build against environment
+ [  0%] Built target env-check
+ [  1%] Linking CXX shared library ../lib/libserialization.so
+ [  2%] Built target serialization
  Scanning dependencies of target icetray
- [  1%] Building CXX object icetray/CMakeFiles/icetray.dir/private/icetray/I3Frame.o
- [  1%] Building CXX object icetray/CMakeFiles/icetray.dir/private/icetray/open.o
- [  1%] Building CXX object icetray/CMakeFiles/icetray.dir/private/icetray/load_project.o
-                      ....
- [102%] Building CXX object examples/CMakeFiles/examples.dir/private/modules/HelloWorld.o
- [102%] Building CXX object examples/CMakeFiles/examples.dir/private/modules/Smear.o
- [102%] Building CXX object examples/CMakeFiles/examples.dir/private/services/FibonacciServiceFactories.o
- [102%] Building CXX object examples/CMakeFiles/examples.dir/examplesDict.o
- Linking CXX shared library ../lib/libexamples.so
- [102%] Built target examples
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/icetray/PythonModule.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/icetray/OMKey.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/modules/AllParametersModule.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/modules/ContextFreeServiceTestModule.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/modules/MaintainInitialValuesModule.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/pybindings/OMKey.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/pybindings/I3Tray.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/pybindings/I3Module.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/pybindings/std_cont_pod/std_cont_pod_char.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/pybindings/std_cont_pod/std_cont_pod_double.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/pybindings/std_cont_pod/std_cont_pod_I3Frame_Stream.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/pybindings/std_cont_pod/std_cont_pod_int.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/pybindings/std_cont_pod/std_cont_pod_map_int_int.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/pybindings/std_cont_pod/std_cont_pod_map_omkey_int.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/pybindings/std_cont_pod/std_cont_pod_omkey.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/pybindings/std_cont_pod/std_cont_pod_pairs.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/pybindings/std_cont_pod/std_cont_pod_sort.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/pybindings/std_cont_pod/std_cont_pod_string.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/pybindings/std_cont_pod/std_cont_pod_ulong.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/pybindings/std_cont_pod/std_cont_pod_unsigned.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/pybindings/std_cont_pod/std_cont_pod_vector_int.cxx.o
+ [  2%] Building CXX object icetray/CMakeFiles/icetray.dir/private/pybindings/std_cont_pod/std_cont_pod_vector_string.cxx.o
+ [  2%] Linking CXX shared library ../lib/libicetray.so
+ [  7%] Built target icetray
+ Scanning dependencies of target dataclasses
+ ...
+ Scanning dependencies of target wavedeform
+ [100%] Building CXX object wavedeform/CMakeFiles/wavedeform.dir/private/wavedeform/I3Wavedeform.cxx.o
+ [100%] Linking CXX shared library ../lib/libwavedeform.so
+ [100%] Built target wavedeform
+ [100%] Linking CXX shared module ../lib/icecube/wavedeform.so
+ [100%] Built target wavedeform-pybindings
+ Scanning dependencies of target wavereform
+ [100%] Building CXX object wavereform/CMakeFiles/wavereform.dir/private/wavereform/I3Wavereform.cxx.o
+ [100%] Building CXX object wavereform/CMakeFiles/wavereform.dir/private/wavereform/I3WavereformFunctions.cxx.o
+ [100%] Building CXX object wavereform/CMakeFiles/wavereform.dir/private/wavereform/I3LaunchSelector.cxx.o
+ [100%] Linking CXX shared library ../lib/libwavereform.so
+ [100%] Built target wavereform
+ Scanning dependencies of target wavereform-pybindings
+ [100%] Building CXX object wavereform/CMakeFiles/wavereform-pybindings.dir/private/pybindings/module.cxx.o
+ [100%] Linking CXX shared module ../lib/icecube/wavereform.so
+ [100%] Built target wavereform-pybindings
+ Scanning dependencies of target wimpsim-reader
+ [100%] Building CXX object wimpsim-reader/CMakeFiles/wimpsim-reader.dir/private/wimpsim-reader/I3WimpSimReader.cxx.o
+ [100%] Building CXX object wimpsim-reader/CMakeFiles/wimpsim-reader.dir/private/wimpsim-reader/WimpSimTools.cxx.o
+ [100%] Linking CXX shared library ../lib/libwimpsim-reader.so
+ [100%] Built target wimpsim-reader
 
 Cmake nicely displays a fraction complete so you can follow the build
 to completion.
@@ -196,7 +228,7 @@ which again should produce output roughly like this::
  *                                                                      *
  *                   W E L C O M E  to  I C E T R A Y                   *
  *                                                                      *
- *                Version combo.trunk     r150911                       *
+ *                   Version combo.trunk     r177871                    *
  *                                                                      *
  *                You are welcome to visit our Web site                 *
  *                        http://icecube.umd.edu                        *
@@ -204,8 +236,10 @@ which again should produce output roughly like this::
  ************************************************************************
  
  Icetray environment has:
-    I3_SRC       = /home/blaufuss/combo/src
-    I3_BUILD     = /home/blaufuss/combo/build
+    I3_SRC       = /home/olivas/icecube/combo/trunk/src
+    I3_BUILD     = /home/olivas/icecube/combo/trunk/build
+    I3_TESTDATA  = /home/olivas/icecube/test-data/trunk
+    Python       = 3.6.9
 
 This has setup up your PATH, LD_LIBRARY_PATH and other environment
 variables so that you are now ready to run IceTray python scripts and
@@ -219,6 +253,8 @@ to in scripts, code, etc):
   source code from $SVN
 * I3_BUILD - Pointer to your local build area, where you build IceTray
   libraries and executeables.
+* I3_TESTDATA - Pointer to your local test-data area, that contains
+  data necessary for testing.
 
 If you load your environment twice, you'll be warned::
 

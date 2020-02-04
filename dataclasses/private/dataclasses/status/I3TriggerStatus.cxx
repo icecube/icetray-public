@@ -49,7 +49,12 @@ void Convert(const std::string& from, boost::optional<bool>& to){
     bool value = boost::lexical_cast<bool>(from);
     to = boost::optional<bool>(value);
   }catch(boost::bad_lexical_cast &){    
-    to = boost::optional<bool>();
+    to = boost::make_optional(false, bool());
+    //to = boost::optional<bool>();
+    // GCCFalsePositive
+    // Fix an false positive detection of -Wmaybe-uninitialized
+    //see https://www.boost.org/doc/libs/1_71_0/libs/optional/doc/html/boost_optional/tutorial/gotchas/false_positive_with__wmaybe_uninitialized.html
+
     // the default is unset
     // if the string is "true","false","t", or "f"
     // then set the bool accordingly.
@@ -202,7 +207,12 @@ template void I3TriggerStatus::GetTriggerConfigValue(const char*,TYPE&) const;  
 template void Convert(const std::string&, boost::optional<TYPE>&);                    \
 template void Convert(const char*, boost::optional<TYPE>&);  
 
+#pragma GCC diagnostic push 
+#ifdef __clang__
+#pragma GCC diagnostic ignored "-Winstantiation-after-specialization"
+#endif
 TRIGGER_CONFIG_TYPES(bool);
+#pragma GCC diagnostic pop 
 TRIGGER_CONFIG_TYPES(int);
 TRIGGER_CONFIG_TYPES(float);
 TRIGGER_CONFIG_TYPES(double);

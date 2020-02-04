@@ -20,9 +20,9 @@ the command line (e.g. "cmake ../src/ -DCMAKE_BUILD_TYPE=Coverage").
 Once you've ensured that these programs are installed and your
 CMAKE_BUILD_TYPE is set to **Coverage**, you can just run::
 
-  $ cd $I3_BUILD
+  $ cd <build_dir>
+  $ cmake <src_dir> -DCMAKE_BUILD_TYPE=Coverage
   $ make
-  $ make pybindings
   $ make test-bins
   $ make coverage
 

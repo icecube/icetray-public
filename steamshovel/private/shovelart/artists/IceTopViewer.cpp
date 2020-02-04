@@ -35,7 +35,7 @@ namespace {
         BOOST_FOREACH( const Artist::SettingsMap::Item& item, artist.settings() )
         py_settings[ item.name ] =
             scripting::shovelart::settingValueToPython( artist,  item.name );
-        return py_settings;
+        return std::move(py_settings);
     }
 
 }

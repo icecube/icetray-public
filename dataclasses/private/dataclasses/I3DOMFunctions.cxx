@@ -203,6 +203,12 @@ double OldmpeThreshold(const I3DOMStatus& status)
   return mpeThresher;
 }
 
+/*
+ * 5/1024 "is just the conversion between a 10-bit DAC value and a voltage" (Spencer Axani 2019)
+ * "The factor 9.6 is given by the gain product of U57 and U59, and (1 + 2200/249) is from the resistor divider attached to the discriminator DAC output" (Jim Braun 2019)
+ * https://docushare.icecube.wisc.edu/dsweb/Get/Document-6683/sheet13.pdf
+ */
+
 double SPEPMTThreshold(const I3DOMStatus& status,
 		    const I3DOMCalibration& calib)
 {
@@ -218,11 +224,13 @@ double SPEPMTThreshold(const I3DOMStatus& status,
   const LinearFit pmtCalibFit = calib.GetPMTDiscCalib();
   const double speDAC = status.speThreshold;
   double speThresher;
+  double magic_number{0.93};
 
   if (std::isnan(pmtCalibFit.slope) || std::isnan(pmtCalibFit.intercept))
     {  // Use OldseThreshold
       //Value returned is already stored with proper units.
       speThresher = OldspeThreshold(status);
+      speThresher *= magic_number;
       log_trace("PMTDiscCalib was nan, using old method, found %f",
 		speThresher);
     }
@@ -242,7 +250,6 @@ double SPEPMTThreshold(const I3DOMStatus& status,
       // This .93 magic number will scale the discrimintor down to 0.2325PE.
       // Magic number needs to be replaced by a proper
       // handling of the SPEPMTThreshold
-      double magic_number{0.93};
       speThresher *= magic_number;
       
       log_trace("PMTDiscCalib found, using best method, speDAC: %f   disc thresh: %f mV",

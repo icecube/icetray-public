@@ -4,7 +4,7 @@ Overview
 What is IceTray?
 ----------------
 
-Offline software is the suite of software used to provide a uniform
+IceCube core software is the suite of software used to provide a uniform
 analysis framework for simulation, reconstruction and analysis modules
 to work within. For IceCube, this software includes the IceTray
 framework, the Dataclasses data storage classes, the event viewer,

@@ -37,6 +37,7 @@ IF(HDF5_FOUND)
   # Link manipulation scripts into $I3_BUILD/bin for ease of use.
   i3_executable_script(merge resources/scripts/merge.py)
   i3_executable_script(mix resources/scripts/mix.py)
+  i3_executable_script(book resources/scripts/book.py)
 
 ELSE(HDF5_FOUND)
 

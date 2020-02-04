@@ -47,6 +47,7 @@ struct archive_filter {
     char_type buffer[BOOST_IOSTREAMS_DEFAULT_DEVICE_BUFFER_SIZE];
   };
 
+  std::string basename_;
   boost::shared_ptr<struct archive> reader_;
   struct archive_entry* current_entry_;
   client_data source_info_;
@@ -143,7 +144,17 @@ archive_filter::archive_filter(const std::string& filename) :
 	      filename.c_str());
     break;
   }
-  
+
+  size_t p1 = filename.rfind('/');
+  if (p1 != std::string::npos) {
+    size_t p2 = filename.find('.', p1+1);
+    if (p2 != std::string::npos) {
+      basename_ = filename.substr(p1+1,p2-p1-1);
+    } else {
+      basename_ = filename.substr(p1+1,filename.size()-p1-1);
+    }
+  }
+  log_trace("(archive_filter) basename_ = %s", basename_.c_str());
   source_info_.source = NULL;
 }
 
@@ -168,11 +179,13 @@ archive_filter::read(Source& src, char_type* s, std::streamsize n)
   while (!header_read_ && !raw_archive_) {
     if (archive_read_next_header(reader_.get(), &current_entry_) == ARCHIVE_OK) {
       std::string fname(archive_entry_pathname(current_entry_));
+      log_trace("(archive_filter) fname=%s", fname.c_str());
+
       /*
        * NB: libarchive exposes raw data as an archive with a
-       * single entry whose pathname is "data".
+       * single entry whose pathname is either the filename or "data".
        */
-      if (fname == "data") {
+      if (fname == "data" || fname == basename_) {
 	log_trace("(archive_filter) Unrecognized archive format!"
 		  " Falling back to raw mode.");
 	raw_archive_ = true;

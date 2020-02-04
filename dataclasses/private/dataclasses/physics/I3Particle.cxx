@@ -215,6 +215,7 @@ boost::assign::list_of<std::pair<I3Particle::ParticleType, double> >
 (I3Particle::H2Nucleus, 1.875613*I3Units::GeV)
 (I3Particle::He3Nucleus, 2.808391*I3Units::GeV)
 (I3Particle::He4Nucleus, 3.727379*I3Units::GeV)
+(I3Particle::Li5Nucleus, 4.669151*I3Units::GeV)
 (I3Particle::Li6Nucleus, 5.60151816372*I3Units::GeV)
 (I3Particle::Li7Nucleus, 6.53383353972*I3Units::GeV)
 (I3Particle::Be9Nucleus, 8.39275030104*I3Units::GeV)
@@ -365,14 +366,19 @@ void I3Particle::SetTotalEnergy(double total_energy)
 // using the magic of the preprocessor, expand
 // the existing list of enum entries into a case
 // line converting from enum to string
-#define MAKE_ENUM_TO_STRING_CASE_LINE(r, data, t) case t : return BOOST_PP_STRINGIZE(t);
+#define MAKE_ENUM_TO_STRING_CASE_LINE(r, data, t) case I3Particle::t : return BOOST_PP_STRINGIZE(t);
+
+std::string i3particle_type_string(int32_t pdg_code)
+{
+  switch (pdg_code) {
+    BOOST_PP_SEQ_FOR_EACH(MAKE_ENUM_TO_STRING_CASE_LINE, ~, I3PARTICLE_H_I3Particle_ParticleType)
+  }
+  return(boost::lexical_cast<std::string>( pdg_code ));
+}
 
 std::string I3Particle::GetTypeString() const
 {
-  switch (pdgEncoding_) {
-    BOOST_PP_SEQ_FOR_EACH(MAKE_ENUM_TO_STRING_CASE_LINE, ~, I3PARTICLE_H_I3Particle_ParticleType)
-  }
-  return(boost::lexical_cast<std::string>( pdgEncoding_ ));
+  return i3particle_type_string(pdgEncoding_);
 }
 
 std::string I3Particle::GetShapeString() const
@@ -933,72 +939,6 @@ template <class Archive>
         ar & make_nvp("bjorkeny",bjorkeny);
     }
   }
-
-// specialize save and load for XML archives in order to display
-// enums as strings instead of their numerical value
-// (except for the particleType which is ignored when reading,
-// as it is derived from the pdgEncoding)
-template <>
-void I3Particle::save(icecube::archive::xml_oarchive& ar, unsigned version) const
-{
-    std::string tempString;
-
-    ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
-    ar & make_nvp("minorID",ID_.minorID);
-    ar & make_nvp("majorID",ID_.majorID);
-
-    ar & make_nvp("pdgEncoding",pdgEncoding_);
-    tempString = GetTypeString();
-    ar & make_nvp("particleType",tempString);
-
-    tempString = GetShapeString();
-    ar & make_nvp("shape",tempString);
-
-    tempString = GetFitStatusString();
-    ar & make_nvp("fitStatus",tempString);
-
-    ar & make_nvp("pos",pos_);
-    ar & make_nvp("dir",dir_);
-    ar & make_nvp("time",time_);
-    ar & make_nvp("energy",energy_);
-    ar & make_nvp("length",length_);
-    ar & make_nvp("speed",speed_);
-
-    tempString = GetLocationTypeString();
-    ar & make_nvp("locationType",tempString);
-}
-
-template <>
-void I3Particle::load(icecube::archive::xml_iarchive& ar, unsigned version)
-{
-  if (version!=i3particle_version_)
-    log_fatal("Cannot load XML data for I3Particle from an archive with version %u. Only the current version (%u) is supported.",version,i3particle_version_);
-
-    std::string tempString; 
-
-    ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
-    ar & make_nvp("minorID",ID_.minorID);
-    ar & make_nvp("majorID",ID_.majorID);
-
-    ar & make_nvp("pdgEncoding",pdgEncoding_);
-    ar & make_nvp("particleType",tempString); // ignored (I3Particle pdgEncoding)
-
-    ar & make_nvp("shape",tempString);
-    SetShapeString(tempString);
-
-    ar & make_nvp("fitStatus",tempString);
-    SetFitStatusString(tempString);
-
-    ar & make_nvp("pos",pos_);
-    ar & make_nvp("dir",dir_);
-    ar & make_nvp("time",time_);
-    ar & make_nvp("energy",energy_);
-    ar & make_nvp("length",length_);
-    ar & make_nvp("speed",speed_);
-
-    ar & make_nvp("locationType",tempString);
-    SetLocationTypeString(tempString);
-}
 
 std::ostream& I3Particle::Print(std::ostream& oss) const{
   oss << "[ I3Particle MajorID : " << GetMajorID() << std::endl

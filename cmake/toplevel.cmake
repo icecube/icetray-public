@@ -58,6 +58,8 @@ endif (APPLE)
 set(I3_SRC ${CMAKE_SOURCE_DIR})
 set(I3_BUILD ${CMAKE_BINARY_DIR})
 
+execute_process(COMMAND mkdir -p ${CMAKE_BINARY_DIR}/bin)
+
 ## pull in optional meta-project CMakeLists
 include(${CMAKE_SOURCE_DIR}/CMakeLists.optional.txt OPTIONAL)
 
@@ -72,25 +74,33 @@ include(utility)  # load utility functions (pretty print, etc)
 include(config)   # trigger the configuation meat (build types, etc)
 
 ## enable_testing() must be called before add_test() which happens in project.cmake
-if(DEFINED ENV{I3_TESTDATA})
-    set(I3_TESTDATA $ENV{I3_TESTDATA} CACHE STRING "Path to your icetray test-data")
+set(TESTDATA_VERSION trunk)
+
+if(DEFINED ENV{I3_DATA})
+  set(I3_TESTDATA $ENV{I3_DATA}/i3-test-data-svn/${TESTDATA_VERSION} CACHE STRING "Path to your icetray test-data")
+  colormsg(GREEN "Setting I3_TESTDATA to ${I3_TESTDATA}")
+elseif(DEFINED ENV{I3_TESTDATA})
+  set(I3_TESTDATA $ENV{I3_TESTDATA} CACHE STRING "Path to your icetray test-data")
+  string(FIND ${I3_TESTDATA} ${TESTDATA_VERSION} VERSION_POSITION REVERSE)
+  if(VERSION_POSITION EQUAL -1)
+    colormsg(RED "Test data version mismatch.")
+    colormsg(YELLOW "The preferred version of test-data is ${TESTDATA_VERSION}.")
+    colormsg(YELLOW "Using I3_TESTDATA=${I3_TESTDATA}.")
+  endif()
 else()
-    set(I3_TESTDATA "${CMAKE_BINARY_DIR}/test-data" CACHE STRING "Path to your icetray test-data: currently empty, define it if you wish to run unit tests and/or test scripts.")
-    colormsg(YELLOW "*** I3_TESTDATA is not set. Using the default value of ${I3_TESTDATA}")
+  set(I3_TESTDATA "${CMAKE_BINARY_DIR}/test-data" CACHE STRING "Path to your icetray test-data: currently empty, define it if you wish to run unit tests and/or test scripts.")
+  colormsg(YELLOW "*** I3_TESTDATA is not set. Using the default value of ${I3_TESTDATA}")
 endif()
 
-if(I3_TESTDATA)
-  add_custom_target(rsync
-    COMMAND test -n "${I3_TESTDATA}"
-    COMMAND mkdir -p "${I3_TESTDATA}"
-    COMMAND rsync -vrlpt --delete code.icecube.wisc.edu::Offline/test-data/trunk/ ${I3_TESTDATA}/
-    COMMENT "Rsyncing test-data to I3_TESTDATA"
-    )
-  ### ctest testing
-  enable_testing()
-else()
-  message(FATAL_ERROR "Something strange happened here. I3_TESTDATA should have been set to a default value.")
-endif()
+set(TESTDATA_URL "code.icecube.wisc.edu::Offline/test-data/${TESTDATA_VERSION}/")
+add_custom_target(rsync
+  COMMAND test -n "${I3_TESTDATA}"
+  COMMAND mkdir -p "${I3_TESTDATA}"
+  COMMAND rsync -vrlpt --delete ${TESTDATA_URL} ${I3_TESTDATA}/
+  COMMENT "Rsyncing test-data to I3_TESTDATA"
+  )
+### ctest testing
+enable_testing()
 
 include(tools)          # trigger tool/library detection
 include(system_report)  # generate/upload a system report
@@ -300,10 +310,10 @@ add_custom_target(coverage
   COMMAND ln -s ${CMAKE_BINARY_DIR}/steamshovel/*.h   ${CMAKE_BINARY_DIR}/CMakeFiles/
   COMMAND lcov -b CMakeFiles/ -d . -z
   COMMAND lcov -b CMakeFiles/ -d . -c -i -o test_base.info
-  COMMAND ./env-shell.sh ctest -j2 || true
+  COMMAND ./env-shell.sh ctest || true
   COMMAND lcov -b CMakeFiles/ -d . -c -o test_run.info
   COMMAND lcov -b CMakeFiles/ -d . -a test_base.info -a test_run.info -o test_total.info
-  COMMAND lcov -o reports.info -r test_total.info '/usr/include/*' '/usr/local/*' '/cvmfs/*' '*/numpy' '/usr/lib/gcc/*' ${p} '${CMAKE_BINARY_DIR}/CMakeFiles/' '${CMAKE_BINARY_DIR}/steamshovel/*'
+  COMMAND lcov -o reports.info -r test_total.info '*/private/test/*' '/usr/include/*' '/usr/local/*' '/cvmfs/*' '*/numpy' '/usr/lib/gcc/*' ${p} '${CMAKE_BINARY_DIR}/CMakeFiles/' '${CMAKE_BINARY_DIR}/steamshovel/*'
   COMMAND genhtml --ignore-errors source --legend -o ../output/`date +%Y-%m-%d` reports.info
   COMMAND rm -f ../output/00_LATEST \; ln -sf `ls -1tr ../output |tail -1` ../output/00_LATEST
   COMMAND rm -f ${CMAKE_BINARY_DIR}/CMakeFiles/*.moc ${CMAKE_BINARY_DIR}/CMakeFiles/.h
@@ -321,8 +331,3 @@ add_custom_target(pycoverage_verbose
   COMMAND ./env-shell.sh pycoverage -d pycoverage/`date +%Y-%m-%d` -v
   COMMAND rm -f pycoverage/00_LATEST \; ln -sf `ls -1tr pycoverage |tail -1` pycoverage/00_LATEST
 )
-
-#omit python2 warning for now
-#if(PYTHON_NUMERIC_VERSION LESS 30000)
-#  colormsg(RED "${PYTHON_WARNING}")
-#endif(PYTHON_NUMERIC_VERSION LESS 30000)

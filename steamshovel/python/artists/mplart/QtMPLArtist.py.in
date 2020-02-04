@@ -7,7 +7,7 @@ from icecube.shovelart import ChoiceSetting
 class QtMPLArtist( AggMPLArtist ):
     '''
     A PyArtist representing a matplotlib figure, which can be shown
-    and explored in a separate Qt window if PyQt4/PyQt5 is available
+    and explored in a separate Qt window if PyQt5 is available
     '''
 
     def __init__( self ):
