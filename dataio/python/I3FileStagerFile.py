@@ -79,8 +79,8 @@ class AbstractFileStager(I3FileStager):
 		input_dir, input_file = os.path.split(input_path)
 		input_filebase, input_fileext = os.path.splitext(input_file)
 
-		# support extensions like ".i3.bz2"
-		if input_fileext in [".bz2", ".gz", ".xz"]:
+		# support compound extensions like ".i3.bz2"
+		if input_fileext in [".bz2", ".gz", ".xz", ".lzma", ".zst"]:
 			input_filebase2, input_fileext2 = os.path.splitext(input_filebase)
 			input_filebase = input_filebase2
 			input_fileext = input_fileext2+input_fileext
