@@ -1,3 +1,5 @@
+.. _icecube-release-checklist:
+
 Release Checklist for Project Maintainers
 =========================================
 
@@ -6,7 +8,7 @@ they should be checking before each release.
 
 Expect Improvement
 ------------------
-The expectations are that releases should either improve or remain unchanged. Therefore
+**The expectations are that releases should either improve or remain unchanged.** Therefore
 strict bitwise backward compatibility is not a requirement. It's OK for algorithms to change,
 if the change is an improvement.  This applies to default configurations (i.e. module/segment
 parameters).  If a project owner feels a new set of parameters are better and should be
@@ -15,11 +17,11 @@ change to reflect that.  Note: These changes should be clearly indicated in the 
 
 Checklist
 ---------
-Project maintainers are responsible for **every** aspect of their project.  
+Project maintainers are responsible for **every** aspect of their project. (See icecube-maintainer-responsibilities_)
 
 Below are some things to check :
 
-  * **Release Notes** : Ensure the RELEASE_NOTES are up to date and accurate.  Check the 'svn log' and make sure there isn't any commit to your project to don't understand or agree with.
+  * **Release Notes** : Ensure the RELEASE_NOTES are up to date and accurate.  Check the 'svn log' and make sure there isn't any commit to your project to don't understand or agree with. (See icecube-writing-release-notes_ for more information.)
   * **Documentation** 
 
     - Ensure your project's documentation is *accurate and up to date*. If you see where documentation can easily be improved, please take the time to do it.  
@@ -31,6 +33,5 @@ Below are some things to check :
   * **Test Coverage** : CI systems give a false sense of security for projects with low test coverage.
     - Strive for greater than 90% line coverage.
     - Strive for close to 100% function coverage.
-
 
 

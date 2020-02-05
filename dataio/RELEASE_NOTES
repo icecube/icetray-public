@@ -1,8 +1,14 @@
 Release Notes
 =============
 
+.. _dataio-release-notes:
+
 trunk
 -----
+
+Feb. 5, 2020 Alex Olivas (aolivas@umd.edu)
+-------------------------------------------
+Combo Release V00-00-01
 
 * Bug fix for segaulting py3 dataio-shovel.
 

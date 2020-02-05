@@ -1,9 +1,14 @@
+.. _dataclasses-release-notes:
 
 Release Notes
 =============
 
 trunk
 -----
+
+Feb. 5, 2020 Alex Olivas (aolivas@umd.edu)
+-------------------------------------------
+Combo Release V00-00-01
 
 * Added binwidth to I3Waveform python bindings.
 * Bug fix attempt for ticket #2387.  I3MCTree copy ctor issue.

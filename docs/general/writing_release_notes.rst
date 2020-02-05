@@ -1,3 +1,5 @@
+.. _writing-release-notes:
+
 Writing Release Notes
 =====================
 Writing good release notes is becoming a critical exercise on IceCube and one 
