@@ -16,12 +16,14 @@ group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument('-a', '--all', default=False, action="store_true",
     help="Write everything in the frame")
 group.add_argument('-k', '--keys', nargs='+', default=[],
-    help="Write these frame keys")
+    help="Write frame objects with these names (e.g. MPEFit) to the output file")
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument('--sim', default=False, action="store_true",
-    help="Split Q frames into P frames")
+    help="Split Q frames into P frames. Use this option if your input file is "
+    "un-triggered simulation.")
 group.add_argument('--streams', nargs='+', default=['InIceSplit'],
-    help="Consume these SubEventStreams")
+    help="Only consume these trigger splits, i.e. P frames whose "
+    " I3EventHeader.sub_event_stream one of STREAMS")
 
 args = parser.parse_args()
 
