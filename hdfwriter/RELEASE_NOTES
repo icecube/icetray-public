@@ -9,6 +9,7 @@ Release Notes
 
 trunk
 -----
+* Py3k compatibility for hdfwriter-mix
 
 
 Feb. 5, 2020 Alex Olivas (aolivas@umd.edu)

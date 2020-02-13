@@ -39,6 +39,8 @@ IF(HDF5_FOUND)
   i3_executable_script(mix resources/scripts/mix.py)
   i3_executable_script(book resources/scripts/book.py)
 
+  i3_test_scripts(resources/test/*.sh)
+
 ELSE(HDF5_FOUND)
 
   colormsg(CYAN   "+-- hdf5 library not found, skipping build of ${PROJECT_NAME}") 

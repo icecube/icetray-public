@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 
 import re
-from subprocess import Popen, PIPE, call
+import sys
+from subprocess import Popen, PIPE, call, check_output
 
 def h5ls(fname):
 	objs = []
-	for line in Popen(['h5ls', '-r', fname], stdout=PIPE).communicate()[0].split('\n'):
+	output = check_output(['h5ls', '-r', fname])
+	if sys.version_info.major > 2:
+		output = output.decode()
+	for line in output.split('\n'):
 		fields = re.split('\s+', line)
 		if len(fields) < 2:
 			continue
