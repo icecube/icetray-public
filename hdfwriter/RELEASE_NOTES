@@ -10,7 +10,7 @@ Release Notes
 trunk
 -----
 * Py3k compatibility for hdfwriter-mix
-
+* add support for S-Frames in tableio
 
 Feb. 5, 2020 Alex Olivas (aolivas@umd.edu)
 -------------------------------------------

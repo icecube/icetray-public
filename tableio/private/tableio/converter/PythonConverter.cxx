@@ -151,3 +151,10 @@ I3FramePtr PythonConverter::GetCurrentFrame() {
 		log_fatal("currentFrame_ is not set");
 	}
 }
+
+I3Frame::Stream PythonConverter::GetStop(){
+  if (bp::override get_stream = this->get_override("GetStop")){
+    return get_stream();
+  }
+  return I3Frame::Physics;
+}

@@ -31,7 +31,7 @@ class I3TableWriter {
         
         // register one specific object, lazily. if type and converter are empty the writer 
         // should figure out appropriate values
-        bool AddObject(std::string name, std::string tableName, 
+        bool AddObject(std::string name, std::string tableName, I3Frame::Stream frame_stop,
                        I3ConverterPtr converter, I3FrameObjectConstPtr obj);
         
         struct TableSpec {

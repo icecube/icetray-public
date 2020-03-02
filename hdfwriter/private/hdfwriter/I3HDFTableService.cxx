@@ -128,10 +128,12 @@ I3HDFTableService::~I3HDFTableService() {};
 
 I3TablePtr I3HDFTableService::CreateTable(const std::string& tableName, 
                               I3TableRowDescriptionConstPtr description) {
-    
-    I3TableRowDescriptionConstPtr index_desc = GetIndexDescription();
-    I3TablePtr index_table(new I3HDFTable(*this, tableName, 
-                                          index_desc, indexGroupId_, compress_));
+    I3TablePtr index_table;
+    if (description->GetUseIndex()){
+      I3TableRowDescriptionConstPtr index_desc = GetIndexDescription();
+      index_table = I3TablePtr(new I3HDFTable(*this, tableName,
+                                              index_desc, indexGroupId_, compress_));
+    }    
     I3TablePtr table(new I3HDFTable(*this, tableName, 
                                     description, fileId_, compress_, index_table));
     return table;

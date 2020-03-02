@@ -43,7 +43,7 @@ I3TablePtr I3TableService::GetTable(std::string name,
        table = it->second;
     } else if (description) {
        // create table if description is not NULL
-       table = CreateTable(name,description);
+      table = CreateTable(name,description);
        tables_[name] = table;
     }
 

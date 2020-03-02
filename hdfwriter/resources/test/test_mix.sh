@@ -3,7 +3,7 @@
 h5ls --help >/dev/null 2>/dev/null || exit 0
 
 book() {
-    hdfwriter-book $I3_TEST_DATA/sim/Level3_nugen_numu_IC86.2012.011069.000000_20events.i3.bz2 $@ -n 2 --streams Final
+    hdfwriter-book ${I3_TESTDATA}/sim/Level3_nugen_numu_IC86.2012.011069.000000_20events.i3.bz2 $@ -n 2 --streams Final
 }
 
 fail() {

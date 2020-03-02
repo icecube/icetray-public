@@ -23,10 +23,10 @@ void register_I3Converter() {
 	.value("ExactConversion", I3Converter::ExactConversion)
 	.value("InexactConversion", I3Converter::InexactConversion)
 	;
-	
+        
 	bp::class_<PythonConverter, boost::shared_ptr<PythonConverter>, boost::noncopyable>
 		("I3Converter")
-	
+
 	.add_property("description",
 		(I3TableRowDescriptionConstPtr (PythonConverter::*)()) &PythonConverter::GetDescription)
 	.add_property("current_frame",
@@ -42,10 +42,14 @@ void register_I3Converter() {
 	//.def("GetNumberOfRows",&PythonConverter::GetNumberOfRows)
 	.def("GetNumberOfRows",(size_t (PythonConverter::*)(I3FrameObjectConstPtr))
                            &PythonConverter::GetNumberOfRows)
-	;
+          .def("GetStop",
+               &PythonConverter::GetStop)
+
+          ; 
 	
 	bp::class_<I3ConverterMill, I3ConverterMillPtr >
 	    ("I3ConverterMill", bp::init<bp::object>())
 	;
+
 }
 

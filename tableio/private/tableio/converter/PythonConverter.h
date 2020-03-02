@@ -39,6 +39,8 @@ struct PythonConverter : I3Converter, boost::python::wrapper<I3Converter>
 
     I3FramePtr GetCurrentFrame();
 
+    I3Frame::Stream GetStop();
+
     SET_LOGGER("PythonConverter");
 };
 

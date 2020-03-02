@@ -14,7 +14,7 @@
 
 /******************************************************************************/
 
-I3TableRowDescription::I3TableRowDescription() : isMultiRow_(false) {}
+I3TableRowDescription::I3TableRowDescription() : isMultiRow_(false), useIndex_(true) {}
 
 /******************************************************************************/
 

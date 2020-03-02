@@ -65,7 +65,7 @@ I3TableRowDescriptionConstPtr I3Table::GetDescription() {
 
 /******************************************************************************/
 
-void I3Table::AddRow(I3EventHeaderConstPtr header, I3TableRowConstPtr row) {
+void I3Table::AddRow(I3EventHeaderConstPtr header, I3TableRowConstPtr row) {  
     // sanity check: padding behavior is different for ragged tables
     size_t nrows = row->GetNumberOfRows(); 
     // only pad the data table itself if this is a non-ragged dataset
@@ -77,8 +77,7 @@ void I3Table::AddRow(I3EventHeaderConstPtr header, I3TableRowConstPtr row) {
     }
     
     I3TableRowConstPtr padding;
-    
-    if (do_padding) {
+    if (do_padding && header) {
         padding = service_.GetPaddingRows(lastHeader_, header, description_);
         if (padding) {
             log_trace("(%s) Writing %zu padding rows",name_.c_str(),padding->GetNumberOfRows());
@@ -87,9 +86,10 @@ void I3Table::AddRow(I3EventHeaderConstPtr header, I3TableRowConstPtr row) {
 	    }
             nrowsWithPadding_ += padding->GetNumberOfRows();
         }
-    } 
+    }    
     // always pad the index table if it exists, since the index is alway a single row
     if (indexTable_) {
+        assert(header);  
         padding = service_.GetPaddingRows(lastHeader_, header, service_.GetIndexDescription());
         if (padding) indexTable_->WriteRows(padding);
     }
@@ -97,6 +97,7 @@ void I3Table::AddRow(I3EventHeaderConstPtr header, I3TableRowConstPtr row) {
     WriteRows(row);
     
     if (indexTable_) {
+      assert(header);
       I3TableRowPtr index_row = I3TableRowPtr(new I3TableRow(service_.GetIndexDescription(),1));
       index_row->Set<uint32_t>("Run",header->GetRunID());
       index_row->Set<uint32_t>("Event",header->GetEventID());
@@ -112,8 +113,11 @@ void I3Table::AddRow(I3EventHeaderConstPtr header, I3TableRowConstPtr row) {
     nevents_++;
     nrows_ += row->GetNumberOfRows();
     nrowsWithPadding_ += row->GetNumberOfRows();
-    lastHeader_ = I3EventHeaderConstPtr(new I3EventHeader(*header));
-    service_.HeaderWritten(lastHeader_,row->GetNumberOfRows());
+
+    if (header){
+      lastHeader_ = I3EventHeaderConstPtr(new I3EventHeader(*header));
+      service_.HeaderWritten(lastHeader_,row->GetNumberOfRows());
+    }
 }
 
 /******************************************************************************/
@@ -126,7 +130,7 @@ void I3Table::Align() {
     // or if the table type is aligned by construction
     bool do_padding = ((GetAlignmentType() == Strict) || 
                       ((GetAlignmentType() == MultiRow) && (!description_->GetIsMultiRow())));
-    if (do_padding) {
+    if (do_padding && lastHeader_) {
         padding = service_.GetPaddingRows(lastHeader_, I3EventHeaderConstPtr(), description_);
         if (padding) {
             log_trace("(%s) Finalizing alignment with %zu padding rows",name_.c_str(),padding->GetNumberOfRows());

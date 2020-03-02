@@ -44,7 +44,7 @@ I3TableWriter::I3TableWriter(I3TableServicePtr service, std::vector<I3ConverterM
     
     // pull in the converters registered in Python-land instead
     std::vector<I3ConverterPtr>::const_iterator it_conv;
-    std::copy(converters.begin(),converters.end(),std::back_inserter(converterCache_));
+    std::copy(converters.begin(),converters.end(),std::back_inserter(converterCache_));    
 }
 
 /******************************************************************************/
@@ -103,7 +103,7 @@ I3ConverterPtr I3TableWriter::FindConverter(I3FrameObjectConstPtr obj) {
 
 // register one specific object, lazily. if type and converter are empty the writer 
 // should figure out appropriate values
-bool I3TableWriter::AddObject(std::string name, std::string tableName, 
+bool I3TableWriter::AddObject(std::string name, std::string tableName, I3Frame::Stream frame_stop,
                               I3ConverterPtr converter, I3FrameObjectConstPtr obj) {
 
     // create a converter if needed
@@ -123,6 +123,10 @@ bool I3TableWriter::AddObject(std::string name, std::string tableName,
       }
     }
 
+    if (frame_stop != converter->GetStop()){
+      return false;
+    }
+      
     // check to see whether the object contains anything at all
     // if it's empty, (e.g. an empty DOMLaunchSeriesMap, the converter 
     // might not have the information it needs to build the description)
@@ -132,11 +136,18 @@ bool I3TableWriter::AddObject(std::string name, std::string tableName,
     if (nrows == 0) return false;
     
     // construct the table description
-    I3TableRowDescriptionConstPtr ticDescription  = ticConverter_->GetDescription();
+    I3TableRowDescription combinedDescription;
     I3TableRowDescriptionConstPtr convDescription = converter->GetDescription(obj);
 
-    I3TableRowDescription combinedDescription = (*ticDescription | *convDescription);
-
+    if (frame_stop == I3Frame::Physics){
+      I3TableRowDescriptionConstPtr ticDescription  = ticConverter_->GetDescription();
+      combinedDescription = (*ticDescription | *convDescription);
+    }
+    else{
+      combinedDescription = *convDescription;
+      combinedDescription.SetUseIndex(false);
+    }
+    
     if (tableName == "")
         tableName = name;
 
@@ -243,7 +254,17 @@ void I3TableWriter::Convert(I3FramePtr frame) {
         convert
     */
 
-    I3EventHeaderConstPtr header = frame->Get<I3EventHeaderConstPtr>(); // the name is _not_ canonical
+  I3Frame::Stream frame_stop = frame->GetStop();
+
+  if (frame_stop == I3Frame::DAQ){
+    return;
+  }
+
+  I3EventHeaderConstPtr header;
+  
+  if ( frame_stop ==I3Frame::Physics){
+
+    header = frame->Get<I3EventHeaderConstPtr>(); // the name is _not_ canonical
     if (!header) {
        log_error("This frame is missing an I3EventHeader and will not be booked!");
        return;
@@ -263,7 +284,8 @@ void I3TableWriter::Convert(I3FramePtr frame) {
 
     // lazily initialize the header
     if (!ticConverter_->HasDescription()) { ticConverter_->GetDescription(header); }
-    
+  }
+
     tablespec_map::iterator vlist_it;
     typespec_map::iterator typelist_it;
     std::vector<TableSpec>::iterator v_it;
@@ -294,8 +316,8 @@ void I3TableWriter::Convert(I3FramePtr frame) {
         if (object) {
            bool success = false;
            for (v_it = vlist_it->second.begin(); v_it != vlist_it->second.end(); ) {
-              
-              success = AddObject(objName, v_it->tableName, v_it->converter, object);
+             
+              success = AddObject(objName, v_it->tableName, frame_stop, v_it->converter, object);
               // if the TableSpec was successfully added, erase it from the queue
               // and move the to next element
               if (success) { 
@@ -361,7 +383,7 @@ void I3TableWriter::Convert(I3FramePtr frame) {
              if ( typeSpec.check(object) ) {
                 selected = true;
                 for (v_it = typelist_it->second.begin(); v_it != typelist_it->second.end(); v_it++) {
-			AddObject(objName, v_it->tableName, v_it->converter, object);
+                  AddObject(objName, v_it->tableName, frame_stop, v_it->converter, object);
                 }
              } // if (typeName == objTypeName)
          } // for (typelist_it
@@ -379,6 +401,10 @@ void I3TableWriter::Convert(I3FramePtr frame) {
 	
             const std::string& objName = tlist_it->first;
             const TableBundle& bundle = *t_it;
+
+            if (bundle.converter->GetStop() != frame_stop){
+              continue;
+            }
             
             size_t nrows = 0;
             
@@ -412,16 +438,18 @@ void I3TableWriter::Convert(I3FramePtr frame) {
             
                 // e.g. rowWritten == 0 -> exist = 0
                 assert(rowsWritten == nrows);
-            
-                // fill the table index columns
-                for (size_t i=0; i < nrows; ++i) {
+                
+                if (frame_stop==I3Frame::Physics){
+                  // fill the table index columns
+                  for (size_t i=0; i < nrows; ++i) {
                     rows->SetCurrentRow(i);
                     ticConverter_->Convert(header, rows, frame);
                     rows->Set<bool>("exists", true);
+                  }
                 }
                 
                 // hand the rows back to the table
-                bundle.table->AddRow(header, rows);
+                bundle.table->AddRow(header, rows);                
             }
         } // for t_it
     } // for tlist_it
@@ -440,7 +468,7 @@ void I3TableWriter::Finish() {
             DisconnectTable(it->table);
         }
     }
-
+    
     if (ignoredStreams_.size() > 0) {
         std::ostringstream buf1, buf2;
         BOOST_FOREACH(const std::string &stream, ignoredStreams_)
@@ -456,7 +484,7 @@ void I3TableWriter::Finish() {
 
     /* Tell the table service to clean up disconnected tables and
      * close its files if appropriate. */
-    service_->Finish(); 
+    service_->Finish();
 }
 
 /******************************************************************************/
@@ -477,7 +505,7 @@ I3TablePtr I3TableWriter::ConnectTable(std::string tableName,
 /******************************************************************************/
 
 void I3TableWriter::DisconnectTable(I3TablePtr& table) {
-    log_debug("Disconnecting from table %s", table->GetName().c_str());
+    log_debug("Disconnecting from table %s", table->GetName().c_str()); 
     table->Align();
     table->SetConnectedToWriter(false);
     table.reset();
