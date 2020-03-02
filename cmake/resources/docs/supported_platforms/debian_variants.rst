@@ -12,49 +12,48 @@ Using the Package Manager
 On laptops or user-controlled workstations it is recommended to install
 as much as possible through the package manager.
 
-Basic Packages (offline-software)
+Required Packages
 .................................
-
-For a basic system (such as viewing files, basic tasks), install:
 
 .. container:: wrapped-code
 
-    apt-get install build-essential cmake libbz2-dev libgl1-mesa-dev 
-    freeglut3-dev libxml2-dev subversion libboost-python-dev 
-    libboost-system-dev libboost-thread-dev 
-    libboost-date-time-dev libboost-serialization-dev libboost-filesystem-dev 
-    libboost-program-options-dev libboost-regex-dev libboost-iostreams-dev 
-    libgsl0-dev libcdk5-dev libarchive-dev python-scipy ipython-qtconsole 
-    libqt4-dev python-urwid
+    apt-get install build-essential cmake libbz2-dev libgsl0-dev libcfitsio-dev
+    libboost-system-dev libboost-thread-dev libboost-date-time-dev
+    libboost-python-dev libboost-serialization-dev libboost-filesystem-dev 
+    libboost-program-options-dev libboost-regex-dev libboost-iostreams-dev
 
-For newer Ubuntu versions (>=14.04):
+Highly Recommended Packages
+...................
+
+.. container:: wrapped-code
+
+    apt-get install libsprng2-dev
+
+.. container:: wrapped-code
+
+    apt-get install libsuitesparse-dev    
+
+Optional Packages
+...............
+
+For steamshovel:
+.. container:: wrapped-code
+
+    apt-get install libqt5opengl5-dev 
 
 .. container:: wrapped-code
 
     apt-get install libz-dev libqt5opengl5-dev libstarlink-pal-dev
     python-sphinx libopenblas-dev
 
-Simulation Packages
-...................
-
-Simulation doesn't require too much extra. cfitsio is required, the rest
-is optional depending on your use case:
-
 .. container:: wrapped-code
 
-    apt-get install libcfitsio3-dev libsprng2-dev libmysqlclient-dev
-    libsuitesparse-dev
-
-IceRec Packages
-...............
-
-Some packages are easily available:
-
+    apt-get install libz-dev libqt5opengl5-dev libstarlink-pal-dev
+    python-sphinx libopenblas-dev
+	       
 .. container:: wrapped-code
 
-    apt-get install libcfitsio3-dev libmysqlclient-dev libhdf5-serial-dev
-
-Root is only available in newer releases (Ubuntu 13.10+, Debian 7+):
+    apt-get install libhdf5-serial-dev
 
 .. container:: wrapped-code
 
