@@ -243,9 +243,13 @@ mypart.time = 0.0 * icetray.I3Units.ns
 mypart.energy = 1000.0 * icetray.I3Units.GeV
 mypart.shape = dataclasses.I3Particle.InfiniteTrack
 mypart.fit_status = dataclasses.I3Particle.OK
-
+my_other_particle = mypart.clone()
+# everything but the minor ID should be the same
+# we could really use a compare clone method
+assert(my_other_particle != mypart)
 
 print(mypart)
+print(my_other_particle)
 
 mypartvec = dataclasses.I3VectorI3Particle()
 mypartvec.append(mypart)
