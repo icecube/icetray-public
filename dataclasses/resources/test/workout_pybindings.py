@@ -176,11 +176,13 @@ omg = dataclasses.I3OMGeo()
 omg.position.x=100.0
 omg.position.y=101.0
 omg.position.z=102.0
+print(type(omg.position), omg.position)
 i3g = dataclasses.I3Geometry()
 i3g.omgeo[icetray.OMKey(1,1)] = omg
 ENSURE(icetray.OMKey(1,1) in i3g.omgeo, 'can not find my omkey in i3geo')
 ENSURE( (icetray.OMKey(1,2) not in i3g.omgeo), 'found a bad omkey in i3geo')
 newom = i3g.omgeo[icetray.OMKey(1,1)]
+print(type(newom.position), vars(newom.position), newom.position)
 ENSURE(newom.position.x > 99.0, 'Failed to get the right OMGeo position back')
 
 # I3Calibratoim example? (olivas have one?)
