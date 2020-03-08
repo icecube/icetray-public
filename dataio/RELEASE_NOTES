@@ -6,6 +6,8 @@ Release Notes
 trunk
 -----
 
+* Added compound extension support for lzma and zst.
+
 Feb. 5, 2020 Alex Olivas (aolivas@umd.edu)
 -------------------------------------------
 Combo Release V00-00-01
