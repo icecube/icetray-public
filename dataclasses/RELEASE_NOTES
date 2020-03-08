@@ -6,6 +6,9 @@ Release Notes
 trunk
 -----
 
+* Removed cached members of I3Position.  Non-cartesian coords are calculated on
+  the fly.  A tradeoff of CPU for a reduced memory footprint, which we believe
+  is worth it. (r179215)
 * Implemented pybinding for I3Particle::Clone (r179198)
 
 Feb. 5, 2020 Alex Olivas (aolivas@umd.edu)
