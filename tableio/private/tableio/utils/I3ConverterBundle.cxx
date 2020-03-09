@@ -102,3 +102,14 @@ I3ConverterBundle::CanConvert(I3FrameObjectConstPtr object) {
     return converters_.front()->CanConvert(object);
 };
 
+I3Frame::Stream I3ConverterBundle::GetStop(){
+  std::vector<I3ConverterPtr>::iterator it = converters_.begin();
+  I3Frame::Stream stream = (*it)->GetStop();
+  it++;
+  for (; it != converters_.end(); it++) {
+    if ((*it)->GetStop() != stream){
+      log_fatal("This ConverterBundle has converters with different frame streams");
+    }
+  }
+  return stream;
+}

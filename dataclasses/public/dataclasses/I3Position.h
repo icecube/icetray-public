@@ -54,12 +54,7 @@ class I3Position : public I3FrameObject
   I3Position():
   x_(NAN),
   y_(NAN),
-  z_(NAN),
-  r_(NAN),
-  theta_(NAN),
-  phi_(NAN),
-  rho_(NAN),
-  isCalculated_(false)
+  z_(NAN)
   {}
 
   /**
@@ -81,12 +76,8 @@ class I3Position : public I3FrameObject
   I3Position(double x, double y, double z):
   x_(x),
   y_(y),
-  z_(z),
-  r_(NAN),    
-  theta_(NAN),
-  phi_(NAN),
-  rho_(NAN),    
-  isCalculated_(false)
+  z_(z)
+
   {}
 
   /**
@@ -95,12 +86,8 @@ class I3Position : public I3FrameObject
   I3Position(const I3Position& p):
   x_(p.x_),
   y_(p.y_),
-  z_(p.z_),
-  r_(NAN),    
-  theta_(NAN),
-  phi_(NAN),
-  rho_(NAN),    
-  isCalculated_(false)
+  z_(p.z_)
+
   {}
 
   explicit I3Position(const I3Direction& d);
@@ -128,37 +115,25 @@ class I3Position : public I3FrameObject
    * Provide R of position in spherical ref frame
    * If non-cartesian have not been calculated, then calculate them first
    */
-  inline double GetR() const {
-    if (!isCalculated_) CalcSphCylFromCar();
-    return r_;
-  }
+  double GetR() const;
 
   /**
    * Provide Theta of position in spherical ref frame
    * If non-cartesian have not been calculated, then calculate them first
    */
-  inline double GetTheta() const {
-    if (!isCalculated_) CalcSphCylFromCar();
-    return theta_;
-  }
+  double GetTheta() const;
 
   /**
    * Provide Phi of position in spherical or cylindrical ref frame
    * If non-cartesian have not been calculated, then calculate them first
    */
-  inline double GetPhi() const {
-    if (!isCalculated_) CalcSphCylFromCar();
-    return phi_;
-  }
+  double GetPhi() const;
 
   /**
    * Provide Rho of position in cylindrical ref frame
    * If non-cartesian have not been calculated, then calculate them first
    */
-  inline double GetRho() const {
-    if (!isCalculated_) CalcSphCylFromCar();
-    return rho_;
-  }
+  double GetRho() const;
 
   //--------------
 
@@ -167,7 +142,6 @@ class I3Position : public I3FrameObject
    */
   inline void SetX(double x) {
     x_=x;
-    isCalculated_=false; // when accessing CYL/SPH, they will be recalculated
   }
 
   /**
@@ -175,7 +149,6 @@ class I3Position : public I3FrameObject
    */
   inline void SetY(double y) {
     y_=y;
-    isCalculated_=false; // when accessing CYL/SPH, they will be recalculated
   }
 
   /**
@@ -183,7 +156,6 @@ class I3Position : public I3FrameObject
    */
   inline void SetZ(double z) {
     z_=z;
-    isCalculated_=false; // when accessing CYL/SPH, they will be recalculated
   }
 
   //--------------
@@ -208,9 +180,6 @@ class I3Position : public I3FrameObject
    * coordinate system (it's magnitude as a vector)
    */
   double Magnitude() const{
-    if(isCalculated_)
-      return r_;
-    //otherwise use self dot-product
     return sqrt(*this * *this);
   }
 
@@ -218,9 +187,6 @@ class I3Position : public I3FrameObject
    * Computes the square of the vector magnitude of the position
    */
   double Mag2() const{
-    if(isCalculated_)
-      return r_*r_;
-    //otherwise use self dot-product
     return *this * *this;
   }
 
@@ -232,7 +198,6 @@ class I3Position : public I3FrameObject
     p.x_=-x_;
     p.y_=-y_;
     p.z_=-z_;
-    p.isCalculated_=false;
     return p;
   }
 
@@ -243,7 +208,6 @@ class I3Position : public I3FrameObject
     x_+=rhs.x_;
     y_+=rhs.y_;
     z_+=rhs.z_;
-    isCalculated_=false;
     return *this;
   }
 
@@ -254,7 +218,6 @@ class I3Position : public I3FrameObject
     x_-=rhs.x_;
     y_-=rhs.y_;
     z_-=rhs.z_;
-    isCalculated_=false;
     return *this;
   }
 
@@ -291,7 +254,6 @@ class I3Position : public I3FrameObject
     x_*=a;
     y_*=a;
     z_*=a;
-    isCalculated_=false;
     return *this;
   }
 
@@ -302,7 +264,6 @@ class I3Position : public I3FrameObject
     x_/=a;
     y_/=a;
     z_/=a;
-    isCalculated_=false;
     return *this;
   }
 
@@ -352,23 +313,6 @@ class I3Position : public I3FrameObject
   double y_;
   double z_;
 
-  /**
-   * spherical (sph)
-   */
-  mutable double r_;
-  mutable double theta_;
-  mutable double phi_;
-
-  /**
-   * cylindrical (cyl) - Z and Phi are same.
-   */
-  mutable double rho_;
-
-  /**
-   * Whether the coordinates in secondary coordinates systems
-   * (sph and cyl) are already computed
-   */
-  mutable bool isCalculated_;
 
  private:
 
@@ -377,9 +321,8 @@ class I3Position : public I3FrameObject
   template <class Archive>
   void serialize(Archive& ar, unsigned version);
 
-  void CalcSphCylFromCar() const;
-  void CalcCarCylFromSph();
-  void CalcCarSphFromCyl();
+  void CalcCarFromSph(double r_, double theta_, double phi_);
+  void CalcCarFromCyl(double rho_, double phi_);
 
 };
 

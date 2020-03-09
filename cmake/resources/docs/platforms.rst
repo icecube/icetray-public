@@ -5,11 +5,8 @@ Supported Platforms
 
 With limited manpower and resources it's not possible to test and
 support all platforms.  When choosing a platform for your laptop,
-desktop, or institution cluster, use common sense and you should be
-safe.  You'd be doing yourself a favor by choosing one of the
-officially suppported platforms tested on the buildbots_.
-
-.. _buildbots: http://builds.icecube.wisc.edu/
+desktop, or institution cluster, prefer an officially supported
+platform.
 
 Variants should also generally work without too much trouble. For
 instance, you should be fine using a version of Linux Mint that is in
@@ -18,22 +15,21 @@ parity with a tested version of Ubuntu Linux.
 Officially Supported Platforms
 ++++++++++++++++++++++++++++++
 * Scientific Linux : 7 and 6
-* Ubuntu : 16.04 and 14.04
-* Mac OS X : 10.11 and 10.10
-* openSUSE : 13.2 (in lieu of SUSE Enterprise Linux)
+* Ubuntu : 18.04 and 16.04
+* Mac OS X : 10.15 and 10.14
 
-If you'd like a platform added to the list please generate a 
+If you need a platform added to the list for your local cluster
+please generate a
 `ticket <http://code.icecube.wisc.edu/projects/icecube/newticket>`_
-for the request.  Note that priority will be given to clusters 
-and grids.  Support for platforms that very few collaborators use
-will be considered semi-official.  Meaning, we won't dedicate a
-bot for that platform, but we will accept any patches that make
-our software work for you.  Please understand that we require
-all developers submit commits that keep the buildbots green.
+for the request.  Support for platforms that very few collaborators
+use will be considered unofficial.  Meaning, we won't dedicate a
+bot for that platform.  We will accept any patches from you that
+make our software work for you.  Please understand that we require
+all developers submit commits that keep the CI/CD system happy.
 Extending this list to accomodate a few collaborators puts an 
 undue burden on the entire development team.
 
-Detailed Instructions 
+Detailed Instructions
 +++++++++++++++++++++
 
 Below you can find detailed instructions and tips that we've collected about

@@ -53,6 +53,7 @@ class I3Table {
         virtual void WriteRows(I3TableRowConstPtr row) = 0;
         virtual I3TableRowConstPtr ReadRows(size_t start, size_t nrows) const;
         virtual std::pair<size_t,size_t> GetRangeForEvent(size_t index) const;
+        bool DoPadding();
 
         I3TableService& service_;
         std::string name_;

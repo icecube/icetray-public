@@ -68,5 +68,67 @@ i3_add_pybindings(dataclasses
   USE_PROJECTS serialization icetray dataclasses
   )
 
-i3_test_scripts(resources/test/*.py)
+set(DATACLASSES_PYTHON_TEST_SCRIPTS
+  resources/test/workout_pybindings.py
+  resources/test/filtermasks_pybindings.py
+  resources/test/i3geometry_version_test.py
+  resources/test/std_map_indexing_suite_dict_interface_test.py
+  resources/test/test_I3DetectorStatus.py
+  resources/test/test_I3FlasherInfo.py
+  resources/test/test_I3Orientation_setOrientation.py
+  resources/test/test_I3TankGeo.py
+  resources/test/test_I3Vectors.py
+  resources/test/test_particle_masses.py  
+  resources/test/i3calibration_version_test.py
+  resources/test/i3matrix_test.py
+  resources/test/std_map_indexing_suite_test.py
+  resources/test/test_I3DOMCalibration.py
+  resources/test/test_I3Geometry.py
+  resources/test/test_i3particlevect.py
+  resources/test/test_I3Time.py
+  resources/test/test_I3VEMCalibration.py
+  resources/test/test_shapeless_primary.py
+  resources/test/i3detectorstatus_version_test.py
+  resources/test/i3string_compare.py
+  resources/test/test_I3DOMFunctions.py
+  resources/test/test_I3MCHit.py
+  resources/test/test_I3RecoHit.py
+  resources/test/test_I3WaveformIsEqualOperator.py
+  resources/test/test_tree_pybindings.py
+  resources/test/i3double_compare.py
+  resources/test/leap_second_test.py
+  resources/test/test_I3DOMStatus.py
+  resources/test/test_I3MCTreeUtils.py
+  resources/test/test_I3RecoPulseSeriesMapApplySPECorrection.py
+  resources/test/test_I3Trigger.py
+  resources/test/test_I3Waveform.py
+  resources/test/test_TriggerKey.py
+  resources/test/i3eventheader_version_test.py
+  resources/test/loads.py
+  resources/test/test_get_most_energetic_cascade.py
+  resources/test/test_I3EventHeader.py
+  resources/test/test_I3ModuleGeo.py
+  resources/test/test_I3RecoPulseSeriesMapMask_pybindings.py
+  resources/test/test_I3TriggerStatus.py
+  resources/test/test_linear_tree.py
+  resources/test/i3frame_subterfuge.py
+  resources/test/readwrite_i3vectors.py
+  resources/test/test_I3Calibration.py
+  resources/test/test_I3FilterResult.py
+  resources/test/test_I3OMGeo.py
+  resources/test/test_I3SuperDST_merge.py
+  resources/test/test_I3UInt64.py
+  resources/test/test_mctree_physics_library.py
+  resources/test/test_disabling_of_python_dynamism.py
+  )
+
+if(Python_VERSION_MAJOR VERSION_GREATER_EQUAL 3)
+  # this script throws a SyntaxError, which you can't catch
+  # in Python, so we're only enabling it for Python3.
+  list(APPEND DATACLASSES_PYTHON_TEST_SCRIPTS resources/test/test_I3Time_unixtime.py)
+endif()
+
+
+i3_test_scripts(${DATACLASSES_PYTHON_TEST_SCRIPTS})
+
 set_tests_properties(dataclasses::test PROPERTIES LABELS RUN_LONG)

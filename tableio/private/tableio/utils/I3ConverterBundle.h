@@ -34,6 +34,9 @@ class I3ConverterBundle : public I3Converter {
                                      I3FramePtr frame=I3FramePtr());
 
         virtual ConvertState CanConvert(I3FrameObjectConstPtr object);
+
+        virtual I3Frame::Stream GetStop();
+
     private:
         I3ConverterBundle();
         std::vector<I3ConverterPtr> converters_;

@@ -96,8 +96,10 @@ public:
     bool isMultiRow_;
     bool GetIsMultiRow() const { return isMultiRow_; };
     void SetIsMultiRow(bool f) { isMultiRow_ = f; };
-    
 
+    bool GetUseIndex() const {return useIndex_;}
+    void SetUseIndex(bool u) {useIndex_ = u;}
+   
     bool operator==(boost::shared_ptr<const I3TableRowDescription> other) const;
 private:
     size_t GetNextOffset() const;
@@ -112,6 +114,7 @@ private:
     std::vector<size_t> fieldByteOffsets_;
     std::vector<std::string> fieldUnits_;
     std::vector<std::string> fieldDocStrings_;
+    bool useIndex_;
 
     friend I3TableRowDescription operator|(const I3TableRowDescription& lhs, const I3TableRowDescription& rhs);
     friend I3TableRowDescription& operator<<(I3TableRowDescription& lhs, const I3TableRowDescription& rhs);

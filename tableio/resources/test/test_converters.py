@@ -13,6 +13,11 @@ for h in hosts:
 Run all registered converters through both HDFWriter and ROOTWriter
 """
 
+
+#Since there is no clear way to inspect converters in pythonland,
+#we can just put a list of S-Frame converters here I guess
+sframe_converters = ['I3CorsikaInfo','I3PrimaryInjectorInfo']
+
 from icecube import icetray, dataclasses, tableio, phys_services, dataio
 from I3Tray import I3Tray
 
@@ -65,6 +70,8 @@ fake_event_header.event_id = 0
 def fill_frame(frame):
 	for typus, converters in tableio.registry.I3ConverterRegistry.registry.items():
 		name = typus.__name__
+		if name in sframe_converters:
+		    continue
 		if name in frame:
 			continue
 		converter = converters[0]()

@@ -1,9 +1,7 @@
 //
-//   Copyright (c) 2004, 2005, 2006, 2007   Troy D. Straszheim  
+//   Copyright (c) 2020 The IceCube Collaboration
 //   
 //   $Id$
-//
-//   This file is part of IceTray.
 //
 //   IceTray is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as published by
@@ -86,6 +84,7 @@ void register_I3Particle()
            (arg("time")),
            "get the position of the particle at this time")
       .def("mass_for_type", &I3Particle::GetMassForType).staticmethod("mass_for_type")
+      .def("clone", &I3Particle::Clone)
       .def(dataclass_suite<I3Particle>())
       ;
     {

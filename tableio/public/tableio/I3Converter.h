@@ -18,6 +18,7 @@
 
 #include "icetray/IcetrayFwd.h"
 #include "icetray/I3FrameObject.h"
+#include "icetray/I3Frame.h"
 
 #include "tableio/I3TableRowDescription.h"
 #include "tableio/I3TableRow.h"
@@ -125,6 +126,7 @@ class I3Converter {
          */
         virtual ConvertState CanConvert(I3FrameObjectConstPtr object) = 0;
 
+        virtual I3Frame::Stream GetStop() = 0;
         
     protected:
         /// Pointer to the table row description
@@ -251,6 +253,9 @@ class I3ConverterImplementation : public I3Converter {
         /// Check if the converter is able to treat the given frame object.
         virtual ConvertState CanConvert(I3FrameObjectConstPtr object);
 
+        I3Frame::Stream GetStop(){
+          return I3Frame::Physics;
+        }
 
     protected:
         /**

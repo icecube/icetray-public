@@ -138,7 +138,7 @@ will be linked to in ``/usr/local/bin/`` which is automatically pathed.
 
 The following python packages are recommended for icetray:
 
-  numpy scipy matplotlib sphinx ipython qtconsole tables mysql-connector-python
+  numpy scipy matplotlib sphinx ipython qtconsole tables
 
 Step-By-Step Instructions
 """""""""""""""""""""""""
@@ -160,8 +160,8 @@ With a fresh install of Mojave I was able to get combo running by running the fo
    brew tap IceCube-SPNO/homebrew-icecube
    brew install pal cppzmq
    
-   #install python packages with pip
-   pip install numpy scipy matplotlib sphinx ipython qtconsole tables mysql-connector-python
+   #install python packages with pip3
+   pip3 install numpy scipy matplotlib sphinx ipython qtconsole tables
                
 This worked in December 2019, with the trunk of combo on MacOS Mojave. As homebrew updates, these instructions might not work as well. Your mileage may vary.
 

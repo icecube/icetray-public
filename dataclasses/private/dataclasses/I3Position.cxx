@@ -33,18 +33,12 @@ I3_SERIALIZABLE(I3Position);
 I3Position::I3Position(const I3Direction& d):
 x_(d.GetX()),
 y_(d.GetY()),
-z_(d.GetZ()),
-r_(1),
-theta_(d.CalcTheta()),
-phi_(d.CalcPhi()),
-rho_(sin(theta_)),
-isCalculated_(true)
+z_(d.GetZ())
 {}
 
 //-----------------------------------------------------------
 I3Position::I3Position(double r1, double r2, double r3, RefFrame frame){
   // Store position according to reference frame f
-  isCalculated_=false;
 
   switch (frame) {
     case car: // Input given in Cartesian coordinates
@@ -54,23 +48,60 @@ I3Position::I3Position(double r1, double r2, double r3, RefFrame frame){
       break;
 
     case sph: // Input given in Spherical coordinates
-      r_=r1;
-      theta_=r2;
-      phi_=r3;
-      CalcCarCylFromSph();
+      CalcCarFromSph(r1, r2, r3);
       break;
 
     case cyl: // Input given in Cylindrical coordinates
-      rho_=r1;
-      phi_=r2;
       z_=r3;
-      CalcCarSphFromCyl();
+      CalcCarFromCyl(r1, r2);
       break;
 
     default: // Unsupported reference frame
       log_fatal("Unsupported reference frame passed to I3Position::SetPosition: %i",frame);
       break;
   }
+}
+
+//-------------------------------------------------------
+
+double I3Position::GetR() const{
+  return std::sqrt(x_*x_+y_*y_+z_*z_);
+}
+
+  /**
+   * Provide Theta of position in spherical ref frame
+   * If non-cartesian have not been calculated, then calculate them first
+   */
+double I3Position::GetTheta() const{
+  const double r_=GetR();
+  double theta_=0;
+  if ((r_!=0.) && std::abs(z_/r_)<=1.) {
+  theta_=std::acos(z_/r_);
+  } else {
+  if (z_<0.) theta_=pi;
+  }
+  if (theta_<0.) theta_+=2.*pi;
+
+  return theta_;
+  }
+
+  /**
+   * Provide Phi of position in spherical or cylindrical ref frame
+   * If non-cartesian have not been calculated, then calculate them first
+   */
+double I3Position::GetPhi() const{
+  double phi_=0;
+  if ((x_!=0.f) || (y_!=0.f)) phi_=std::atan2(y_,x_);
+  if (phi_<0.) phi_+=2.*pi;
+  return phi_;
+}
+
+/**
+ * Provide Rho of position in cylindrical ref frame
+ * If non-cartesian have not been calculated, then calculate them first
+ */
+double I3Position::GetRho() const{
+  return GetR()*std::sin(GetTheta());
 }
 
 //-----------------------------------------------------------
@@ -83,7 +114,6 @@ void I3Position::RotateX(double angle)
   const double z=z_;
   y_=c*y-s*z;
   z_=s*y+c*z;
-  isCalculated_ = false;
 }
 
 //-----------------------------------------------------------
@@ -96,7 +126,6 @@ void I3Position::RotateY(double angle)
   const double z=z_;
   z_=c*z-s*x;
   x_=s*z+c*x;
-  isCalculated_ = false;
 }
 
 //-----------------------------------------------------------
@@ -109,7 +138,6 @@ void I3Position::RotateZ(double angle)
   const double y=y_;
   x_=c*x-s*y;
   y_=s*x+c*y;
-  isCalculated_ = false;
 }
 
 //-----------------------------------------------------------
@@ -125,52 +153,20 @@ I3Position I3Position::Cross(const I3Direction& d) const{
 }
 
 //-----------------------------------------------------------
-void I3Position::CalcSphCylFromCar() const
+void I3Position::CalcCarFromSph(double r_, double theta_, double phi_)
 {
-  // Calculate Spherical and Cylindrical coordinates from Cartesian
-  // Position is stored on disk in Cartesian coordinates only
-  r_=std::sqrt(x_*x_+y_*y_+z_*z_);
-  theta_=0;
-  if ((r_!=0.) && std::abs(z_/r_)<=1.) {
-    theta_=std::acos(z_/r_);
-  } else {
-    if (z_<0.) theta_=pi;
-  }
-  if (theta_<0.) theta_+=2.*pi;
-  phi_=0;
-  if ((x_!=0.f) || (y_!=0.f)) phi_=std::atan2(y_,x_);
-  if (phi_<0.) phi_+=2.*pi;
-  rho_=r_*std::sin(theta_);
-  isCalculated_=true;
-}
-
-//-----------------------------------------------------------
-void I3Position::CalcCarCylFromSph()
-{
-  // Calculate Cartesian and Cylindrical coordinates from Spherical
-  rho_=r_*std::sin(theta_);
-  x_=rho_*std::cos(phi_);
-  y_=rho_*std::sin(phi_);
+  // Calculate Cartesian  coordinates from Spherical
+  x_=r_*std::sin(theta_)*std::cos(phi_);
+  y_=r_*std::sin(theta_)*std::sin(phi_);
   z_=r_*std::cos(theta_);
-  isCalculated_=true;
 }
 
 //-----------------------------------------------------------
-void I3Position::CalcCarSphFromCyl()
+void I3Position::CalcCarFromCyl(double rho_, double phi_)
 {
-  // Calculate Cartesian and Spherical coordinates from Cylindrical
-  r_=std::sqrt(rho_*rho_+z_*z_);
-  if (phi_<0.) phi_+=2.*pi;
-  theta_=0;
-  if ((r_!=0.) && std::abs(z_/r_)<=1.) {
-    theta_=std::acos(z_/r_);
-  } else {
-    if (z_<0.) theta_=pi;
-  }
-  if (theta_<0.) theta_+=2.*pi;
+  // Calculate Cartesian coordinates from Cylindrical
   x_=rho_*std::cos(phi_);
   y_=rho_*std::sin(phi_);
-  isCalculated_=true;
 }
 
 //-----------------------------------------------------------

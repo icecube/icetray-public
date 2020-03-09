@@ -180,7 +180,7 @@ $I3_BUILD/doc/projects/tableio/howto.html .
         for converter in defaults.values():
             # only instantiate the converter registered as default
             converter_list.append(I3ConverterMill(converter))
-        
+
         self.writer = I3TableWriterWorker(self.table_service, converter_list, streams)
         tablespec = I3TableWriterWorker.TableSpec
         typespec = I3TableWriterWorker.TypeSpec
@@ -201,13 +201,13 @@ $I3_BUILD/doc/projects/tableio/howto.html .
             t = tablespec(**item)
             self.writer.add_type(typespec(typus),t)
 
-    def handle_frame(self,frame):
+    def Process(self):
+        frame = self.PopFrame()
         self.writer.convert(frame)
         self.PushFrame(frame)
         return True
-    def Physics(self,frame):
-        return self.handle_frame(frame)
-    def Finish(self):
+        
+    def Finish(self):        
         if self.writer is not None:
             self.writer.finish()
 
