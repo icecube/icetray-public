@@ -40,10 +40,11 @@ i3_add_pybindings(dataio
   )
 
 if(CDK_FOUND AND NCURSES_FOUND)
-  i3_executable(shovel private/shovel/*.cxx
-    USE_PROJECTS dataio
-    USE_TOOLS cdk ncurses
-    )  
+  colormsg(RED "+-- dataio-shovel build is broken against cvmfs py3-v4.1.0.  Disabling for now.  See ticket #2408.")
+#  i3_executable(shovel private/shovel/*.cxx
+#    USE_PROJECTS dataio
+#    USE_TOOLS cdk ncurses
+#    )  
 else()
   colormsg(CYAN "+-- dataio-shovel *not* included (missing CDK or ncurses libraries)")
 endif()
