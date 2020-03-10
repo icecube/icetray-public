@@ -32,7 +32,7 @@ if(ZSTD_FOUND)
 	add_definitions(-DI3_WITH_ZSTD)
 	include_directories(${ZSTD_INCLUDE_DIR})
 else(ZSTD_FOUND)
-	colormsg(CYAN "+-- libarchive *not* found, omitting optional tarfile support")
+	colormsg(CYAN "+-- zstd *not* found.")
 	set(ZSTD_LIBRARIES "")
 endif(ZSTD_FOUND)
 
