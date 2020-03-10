@@ -56,7 +56,18 @@ public:
 	///\param energy the energy of the incoming neutrino
 	///\param scatteredType the type of the outgoing lepton
 	///\param random a source of random numbers
-	finalStateRecord sampleFinalState(double energy,
+	finalStateRecord sampleFinalState_DIS(double energy,
+	                                  I3Particle::ParticleType scatteredType,
+	                                  boost::shared_ptr<I3RandomService> random) const;
+
+    
+    // the GR sampler just returns X=1
+    finalStateRecord sampleFinalState_GR(double energy,
+	                                  I3Particle::ParticleType scatteredType,
+	                                  boost::shared_ptr<I3RandomService> random) const;
+
+    // this has been changed to mainly be a steering function to the other two samplers 
+    finalStateRecord sampleFinalState(double energy,
 	                                  I3Particle::ParticleType scatteredType,
 	                                  boost::shared_ptr<I3RandomService> random) const;
 	
@@ -96,6 +107,9 @@ public:
 	
 	///\return the maximum energy included in this cross section table
 	double GetMaximumEnergy() const;
+    
+    //return the interaction integer 
+    int GetInteraction() const{ return interaction; }
 
 private:
 	splinetable crossSection;
@@ -104,6 +118,9 @@ private:
 	double Q2Min; 
 	///The mass of the target nucleon
 	double targetMass;
+    ///The interaction type, related to dimensionality of the 
+    // 1:CC, 2:NC, 3:GR
+    int interaction;
 };
 
 #endif //I3CROSSSECTION_H

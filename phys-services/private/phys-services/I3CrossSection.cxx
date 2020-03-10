@@ -40,9 +40,16 @@ namespace{
 }
 
 I3CrossSection::finalStateRecord 
-I3CrossSection::sampleFinalState(double energy, 
+I3CrossSection::sampleFinalState_DIS(double energy, 
                                I3Particle::ParticleType scatteredType, 
                                boost::shared_ptr<I3RandomService> random) const{
+    // Uses Metropolis-Hastings Algorithm! 
+    //      useful for cases where we don't know the supremum of our distribution, and the distribution is multi-dimensional 
+    
+    if (crossSection.ndim!=3){
+        log_fatal_stream("I expected 3 dimensions in the cross section spline, but got "<< crossSection.ndim <<". Maybe your fits file doesn't have the right 'INTERACTION' key?");
+    }
+
 	double m=particleMass(scatteredType);
 	//The out-going particle always gets at least enough energy for its rest mass
 	double yMax=1-m/energy;
@@ -52,7 +59,8 @@ I3CrossSection::sampleFinalState(double energy,
 	//the target is stationary so its energy is just its mass
 	//the incoming neutrino is massless, so its kinetic energy is its total energy
 	double s=targetMass*targetMass+2*targetMass*energy;
-	
+
+
 	//The minimum allowed value of y occurs when x=1 and Q is minimized
 	double yMin=Q2Min/s;
 	double logYMin=log10(yMin);
@@ -61,15 +69,22 @@ I3CrossSection::sampleFinalState(double energy,
 	double logXMin=log10(xMin);
 
 	bool accept;
-	std::array<double,3> x, xp;
-	std::array<int,3> cx, cxp;
-	double px, pxp, propx, propxp;
+	
+    // kin_vars and its twin are 3-vectors containing [nu-energy, Bjorken X, Bjorken Y]
+    std::array<double,3> kin_vars, test_kin_vars;
 
-	x[0] = xp[0] = log10(energy);
+	// centers of the cross section spline tales. 
+    std::array<int,3> spline_table_center, test_spline_table_center;
+
+	// values of cross_section from the splines.  By * Bx * Spline(E,x,y)
+    double cross_section, test_cross_section;
+    
+    // No matter what, we're evaluating at this specific energy. 
+	kin_vars[0] = test_kin_vars[0] = log10(energy);
 
 	//check preconditions
-	if(x[0]<crossSection.extents[0][0]
-	   || x[0]>crossSection.extents[0][1])
+	if(kin_vars[0]<crossSection.extents[0][0]
+	   || kin_vars[0]>crossSection.extents[0][1])
 	log_fatal_stream("Interaction energy out of cross section table range: ["
 	                 << pow(10.,crossSection.extents[0][0]) << " GeV,"
 	                 << pow(10.,crossSection.extents[0][1]) << " GeV]");
@@ -79,73 +94,205 @@ I3CrossSection::sampleFinalState(double energy,
 		//rejection sample a point which is kinematically allowed by calculation limits
 		double trialQ;
 		do{
-			x[1]=random->Uniform(logXMin,0);
-			x[2]=random->Uniform(logYMin,logYMax);
-			trialQ=(s-targetMass*targetMass)*pow(10.,x[1]+x[2]);
-		}while(trialQ<Q2Min || !kinematicallyAllowed(pow(10.,x[1]),pow(10.,x[2]),energy,targetMass,m));
+			kin_vars[1]=random->Uniform(logXMin,0);
+			kin_vars[2]=random->Uniform(logYMin,logYMax);
+			trialQ=(s-targetMass*targetMass)*pow(10.,kin_vars[1]+kin_vars[2]);
+		}while(trialQ<Q2Min || !kinematicallyAllowed(pow(10.,kin_vars[1]),pow(10.,kin_vars[2]),energy,targetMass,m));
 
 		accept=true;
 		//sanity check: demand that the sampled point be within the table extents
-		if(x[1]<crossSection.extents[1][0]
-		   || x[1]>crossSection.extents[1][1])
+		if(kin_vars[1]<crossSection.extents[1][0]
+		   || kin_vars[1]>crossSection.extents[1][1])
 			accept=false;
-		if(x[2]<crossSection.extents[2][0]
-		   || x[2]>crossSection.extents[2][1])
+        if(kin_vars[2]<crossSection.extents[2][0]
+		   || kin_vars[2]>crossSection.extents[2][1])
 			accept=false;
+        
 
 		if(accept)
-			accept=!tablesearchcenters(&crossSection,x.data(),cx.data());
+            // finds the centers in the cross section spline table, returns true if it's successful
+            //      also sets the centers
+			accept=!tablesearchcenters(&crossSection,kin_vars.data(),spline_table_center.data());
 	} while(!accept);
 
-	propx=1; //TODO: better proposal distribution?
-	double measure=pow(10.,x[1]+x[2]);
-	px=measure*pow(10.,ndsplineeval(&crossSection,x.data(),cx.data(),0));
+	//TODO: better proposal distribution?
+	double measure=pow(10.,kin_vars[1]+kin_vars[2]); // Bx * By
 
-	const size_t burnin=40;
+    // Bx * By * xs(E, x, y)
+    // evalutates the differential spline at that point? 
+	cross_section=measure*pow(10.,ndsplineeval(&crossSection,kin_vars.data(),spline_table_center.data(),0)); 
+    
+    // this is the magic part. Metropolis Hastings Algorithm.
+    // MCMC method! 
+	const size_t burnin=40; // converges to the correct distribution over multiple samplings. 
+                            // big number means more accurate, but slower
 	for(size_t j=0; j<=burnin; j++){
-		//rejection sample a point which is kinematically allowed by calculation limits
-		double trialQ;
+		// repeat the sampling from above to get a new valid point
+        double trialQ;
 		do{
-			xp[1]=random->Uniform(logXMin,0);
-			xp[2]=random->Uniform(logYMin,logYMax);
-			trialQ=(s-targetMass*targetMass)*pow(10.,xp[1]+xp[2]);
-		}while(trialQ<Q2Min || !kinematicallyAllowed(pow(10.,xp[1]),pow(10.,xp[2]),energy,targetMass,m));
+			test_kin_vars[1]=random->Uniform(logXMin,0);
+			test_kin_vars[2]=random->Uniform(logYMin,logYMax);
+			trialQ=(s-targetMass*targetMass)*pow(10.,test_kin_vars[1]+test_kin_vars[2]);
+		}while(trialQ<Q2Min || !kinematicallyAllowed(pow(10.,test_kin_vars[1]),pow(10.,test_kin_vars[2]),energy,targetMass,m));
 
 		accept=true;
-		//sanity check: demand that the sampled point be within the table extents
-		if(x[1]<crossSection.extents[1][0]
-		   || x[1]>crossSection.extents[1][1])
+        if(test_kin_vars[1]<crossSection.extents[1][0]
+		   || test_kin_vars[1]>crossSection.extents[1][1])
 			accept=false;
-		if(x[2]<crossSection.extents[2][0]
-		   || x[2]>crossSection.extents[2][1])
+		if(test_kin_vars[2]<crossSection.extents[2][0]
+		   || test_kin_vars[2]>crossSection.extents[2][1])
 			accept=false;
 		if(!accept)
 			continue;
 
-		accept=!tablesearchcenters(&crossSection,xp.data(),cxp.data());
+		accept=!tablesearchcenters(&crossSection,test_kin_vars.data(),test_spline_table_center.data());
 		if(!accept)
 			continue;
 		
-		propxp=1;
-		double measure=pow(10.,xp[1]+xp[2]);
-		double eval=ndsplineeval(&crossSection,xp.data(),cxp.data(),0);
+		double measure=pow(10.,test_kin_vars[1]+test_kin_vars[2]);
+		double eval=ndsplineeval(&crossSection,test_kin_vars.data(),test_spline_table_center.data(),0);
 		if(std::isnan(eval))
 			continue;
-		pxp=measure*pow(10.,eval);
+		test_cross_section=measure*pow(10.,eval);
 
-		double odds=(pxp/px)*(propx/propxp);
+		double odds=(test_cross_section/cross_section);
 		accept=((odds>1.) || random->Uniform(0,1)<odds);
 
 		if(accept){
-			x=xp;
-			propx=propxp;
-			px=pxp;
+			kin_vars=test_kin_vars;
+			cross_section=test_cross_section;
 		}
 	}
 	//record whatever we sampled
 	//log_info_stream(" lx=" << x[1] << " ly=" << x[2]);
-	return(finalStateRecord(pow(10.,x[1]),pow(10.,x[2])));
+	return(finalStateRecord(pow(10.,kin_vars[1]),pow(10.,kin_vars[2])));
 }
+
+I3CrossSection::finalStateRecord
+I3CrossSection::sampleFinalState_GR(double energy,
+                                I3Particle::ParticleType scatteredType,
+                                boost::shared_ptr<I3RandomService> random) const{
+    // this does the work for GR interactions.
+    // should be like (log(E) vs log(Bjorken Y))
+    if (crossSection.ndim!=2){
+        log_fatal_stream("I expected a 2D cross section spline, but got "<<crossSection.ndim<<" dimensions. Are you sure this is the right fits file? Check the 'INTERACTION' key!");
+    }
+   
+    ///
+    /// 
+    //      basically, this is just like the DIS function, but there are some changes. I'll highlight the changes
+    ///
+    ///
+    double m=particleMass(scatteredType);
+	double yMax=1-m/energy;
+	double logYMax=log10(yMax);
+    
+    // improve the Ymin function
+    // maybe set to minimum extent of the Bjorken Y table.  
+	double yMin=pow(10.,-4);
+	double logYMin=log10(yMin);
+
+	bool accept;
+	
+    // kin_vars and its twin are now  ***2-vectors*** containing [nu-energy, Bjorkfen Y]
+    std::array<double,2> kin_vars, test_kin_vars;
+
+	// centers of the cross section spline tales. 
+    std::array<int,2> spline_table_center, test_spline_table_center;
+
+	// values of cross_section from the splines.  By * Spline(E,y)
+    double cross_section, test_cross_section;
+    
+    // No matter what, we're evaluating at this specific energy. 
+	kin_vars[0] = test_kin_vars[0] = log10(energy);
+
+	//check preconditions
+	if(kin_vars[0]<crossSection.extents[0][0]
+	   || kin_vars[0]>crossSection.extents[0][1])
+	log_fatal_stream("Interaction energy out of cross section table range: ["
+	                 << pow(10.,crossSection.extents[0][0]) << " GeV,"
+	                 << pow(10.,crossSection.extents[0][1]) << " GeV]");
+	
+	//sample an intial point
+	do{
+		//rejection sample a point which is kinematically allowed by calculation limits
+		double trialQ;
+		
+        // all values of Y and energy  are valid, we won't find an incompatible option here
+	    kin_vars[1]=random->Uniform(logYMin,logYMax);
+	    	
+        
+		accept=true;
+        //only one dimension to ckeck in this case
+		if(kin_vars[1]<crossSection.extents[1][0]
+		   || kin_vars[1]>crossSection.extents[1][1])
+			accept=false;	
+
+		if(accept)
+			accept=!tablesearchcenters(&crossSection,kin_vars.data(),spline_table_center.data());
+	} while(!accept);
+
+	//TODO: better proposal distribution?
+    // dropped the extra term
+	double measure=pow(10.,kin_vars[1]); // By
+
+	cross_section=measure*pow(10.,ndsplineeval(&crossSection,kin_vars.data(),spline_table_center.data(),0)); 
+    
+	const size_t burnin=40; // converges to the correct distribution over multiple samplings. 
+	for(size_t j=0; j<=burnin; j++){
+        double trialQ;
+		test_kin_vars[1]=random->Uniform(logYMin,logYMax);
+
+		accept=true;
+        if(test_kin_vars[1]<crossSection.extents[1][0]
+		   || test_kin_vars[1]>crossSection.extents[1][1])
+			accept=false;
+		if(!accept)
+			continue;
+
+		accept=!tablesearchcenters(&crossSection,test_kin_vars.data(),test_spline_table_center.data());
+		if(!accept)
+			continue;
+		
+		double measure=pow(10.,test_kin_vars[1]);
+		double eval=ndsplineeval(&crossSection,test_kin_vars.data(),test_spline_table_center.data(),0);
+		if(std::isnan(eval))
+			continue;
+		test_cross_section=measure*pow(10.,eval);
+
+		double odds=(test_cross_section/cross_section);
+		accept=((odds>1.) || random->Uniform(0,1)<odds);
+
+		if(accept){
+			kin_vars=test_kin_vars;
+			cross_section=test_cross_section;
+		}
+	}
+	
+    //return what we've sampled.
+    //this was originally written with DIS in mind,
+    //      so we send back the (x,y) pair expected, but set X to 1.0    
+    return(finalStateRecord(1.0, pow(10.,kin_vars[1])));
+
+}
+
+I3CrossSection::finalStateRecord
+I3CrossSection::sampleFinalState(double energy,
+                                I3Particle::ParticleType scatteredType,
+                                boost::shared_ptr<I3RandomService> random) const{
+    // calls the DIS function for DIS cases
+    // calls the GR function  for GR  cases
+    // if it doesn't know what kind of interaction this is, give up
+
+    if (interaction ==1 || interaction==2){
+        return( I3CrossSection::sampleFinalState_DIS( energy, scatteredType, random ) );
+    }else if(interaction==3){
+        return( I3CrossSection::sampleFinalState_GR(  energy, scatteredType, random ) );
+    }else{ //should be easy to modify this to support other interaction cross sections! 
+        log_fatal_stream("Unknown interaction number "<<interaction<<". Your fits files are funky.");
+    }
+}
+
 
 double I3CrossSection::evaluateCrossSection(double energy, double x, double y,
                                             I3Particle::ParticleType scatteredType) const{
@@ -204,9 +351,9 @@ void I3CrossSection::load(std::string dd_crossSectionFile, std::string total_cro
 	if(status!=0)
 		log_fatal_stream("Failed to read cross section data from spline FITS file '"
 		                 << dd_crossSectionFile << "': error code " << status);
-	if(crossSection.ndim!=3)
+	if(crossSection.ndim!=3 && crossSection.ndim!=2)
 		log_fatal_stream("cross section spline has " << crossSection.ndim
-		                 << " dimensions, should have 3 (log10(E), log10(x), log10(y))");
+		                 << " dimensions, should have either 3 (log10(E), log10(x), log10(y)) or 2 (log10(E), log10(y))");
 	
 	status=readsplinefitstable(total_crossSectionFile.c_str(),&totalCrossSection);
 	if(status!=0)
@@ -219,10 +366,25 @@ void I3CrossSection::load(std::string dd_crossSectionFile, std::string total_cro
 	int err=0;
 	err=splinetable_read_key(&crossSection, SPLINETABLE_DOUBLE, "TARGETMASS", &targetMass);
 	if(err){
-		log_warn("Unable to read TARGETMASS key from cross section spline; assuming an isoscalar mass");
-		targetMass=(particleMass(I3Particle::PPlus)+
-		            particleMass(I3Particle::Neutron))/2;
+        // TODO: have it use the interaction type to set the masses as a backup instead of the dimensionality 
+        if(crossSection.ndim==3){
+		    log_warn("Unable to read TARGETMASS key from cross section spline, using isoscalar mass");
+    		targetMass=(particleMass(I3Particle::PPlus)+
+		                particleMass(I3Particle::Neutron))/2;
+        }else if(crossSection.ndim==2){
+            log_warn("Unable to read TARGETMASS key from cross section spline, using electron mass");
+            targetMass=particleMass(I3Particle::EMinus);
+        }else{
+            log_fatal_stream("Logic error. This point should be unreachable!");
+        }
 	}
+    err=splinetable_read_key(&crossSection, SPLINETABLE_INT, "INTERACTION", &interaction);
+    if(err){
+        // assume DIS to preserve compatability with previous versions!
+        log_warn("Unable to read INTERACTION key from cross section spline, assuming DIS");
+        interaction=1;
+    }
+
 	err=splinetable_read_key(&crossSection, SPLINETABLE_DOUBLE, "Q2MIN", &Q2Min);
 	if(err){
 		log_warn("Unable to read Q2Min key from cross section spline; assuming 1 GeV^2");
