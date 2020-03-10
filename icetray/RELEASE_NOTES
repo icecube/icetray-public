@@ -7,6 +7,8 @@ Release Notes
 trunk
 -----
 
+* (r179366) Fix typo in cmake message.
+
 Feb. 5, 2020 Alex Olivas (aolivas@umd.edu)
 -------------------------------------------
 Combo Release V00-00-01
