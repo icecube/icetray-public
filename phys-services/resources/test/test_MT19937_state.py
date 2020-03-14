@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import numpy as np
 from scipy import stats
 from icecube.phys_services import I3MT19937
