@@ -202,6 +202,7 @@ void I3TableService::Finish() {
         } else {
             table_it->second->Flush();
         }
+        log_debug("In Finish, about to do a final align on %s", table_it->second->GetName().c_str());
         table_it->second->Align();
     }
 

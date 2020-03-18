@@ -113,6 +113,8 @@ void I3Table::AddRow(I3EventHeaderConstPtr header, I3TableRowConstPtr row) {
     nevents_++;
     nrows_ += row->GetNumberOfRows();
     nrowsWithPadding_ += row->GetNumberOfRows();
+    log_debug("(%s) nevents = %zu, nrows = %zu, nrowsWithPadding = %zu", name_.c_str(),
+              nevents_, nrows_, nrowsWithPadding_);
 
     if (header){
       lastHeader_ = I3EventHeaderConstPtr(new I3EventHeader(*header));
@@ -125,12 +127,17 @@ void I3Table::AddRow(I3EventHeaderConstPtr header, I3TableRowConstPtr row) {
 // force the table to write out padding rows
 // NB: this is triggered by passing a NULL header pointer
 void I3Table::Align() {
-    I3TableRowConstPtr padding;    
+    log_debug("(%s) Entering the Align function......", name_.c_str());
+    I3TableRowConstPtr padding;
     // only pad the data table itself if this is a non-ragged dataset
     // or if the table type is aligned by construction
     bool do_padding = ((GetAlignmentType() == Strict) || 
                       ((GetAlignmentType() == MultiRow) && (!description_->GetIsMultiRow())));
-    if (do_padding && lastHeader_) {
+    log_debug("Alignmnet type = %d", GetAlignmentType());
+    log_debug("Is there a last_header_? %d do_padding? %d", (lastHeader_!=NULL), do_padding);
+    // Note: This function gets called on the "Master Tree" at the very end, which has no header.
+    // But we *do* want to do this padding thing on that Master Tree, because it has no rows yet.
+    if (do_padding) {
         padding = service_.GetPaddingRows(lastHeader_, I3EventHeaderConstPtr(), description_);
         if (padding) {
             log_trace("(%s) Finalizing alignment with %zu padding rows",name_.c_str(),padding->GetNumberOfRows());
