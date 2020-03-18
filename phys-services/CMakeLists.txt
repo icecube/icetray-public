@@ -69,7 +69,7 @@ i3_add_library(phys-services
 
   USE_PROJECTS serialization icetray dataclasses interfaces tableio photospline
 
-  USE_TOOLS ${OPTIONAL_TOOLS} gsl boost python 
+  USE_TOOLS ${OPTIONAL_TOOLS} gsl boost python cfitsio 
   )
 
 i3_executable(CreateXMLOMKey2MBIDConversionTable
