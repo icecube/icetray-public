@@ -99,7 +99,10 @@ public:
 
     bool GetUseIndex() const {return useIndex_;}
     void SetUseIndex(bool u) {useIndex_ = u;}
-   
+
+    bool GetUsePadding() const { return usePadding_; }
+    void SetUsePadding(bool up) { usePadding_ = up; }  
+  
     bool operator==(boost::shared_ptr<const I3TableRowDescription> other) const;
 private:
     size_t GetNextOffset() const;
@@ -115,6 +118,7 @@ private:
     std::vector<std::string> fieldUnits_;
     std::vector<std::string> fieldDocStrings_;
     bool useIndex_;
+    bool usePadding_;
 
     friend I3TableRowDescription operator|(const I3TableRowDescription& lhs, const I3TableRowDescription& rhs);
     friend I3TableRowDescription& operator<<(I3TableRowDescription& lhs, const I3TableRowDescription& rhs);

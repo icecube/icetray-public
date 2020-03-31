@@ -49,6 +49,7 @@ i3_test_executable(test
     USE_PROJECTS dataclasses icetray phys-services tableio)
 
 i3_test_scripts(
+    resources/test/test_padding.py
     resources/test/test_pybindings.py
     resources/test/test_recopulsemask.py
     resources/test/test_subevents.py

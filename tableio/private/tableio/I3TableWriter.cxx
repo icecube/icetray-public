@@ -146,6 +146,7 @@ bool I3TableWriter::AddObject(std::string name, std::string tableName, I3Frame::
     else{
       combinedDescription = *convDescription;
       combinedDescription.SetUseIndex(false);
+      combinedDescription.SetUsePadding(false);      
     }
     
     if (tableName == "")

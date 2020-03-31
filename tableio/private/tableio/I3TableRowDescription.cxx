@@ -14,7 +14,8 @@
 
 /******************************************************************************/
 
-I3TableRowDescription::I3TableRowDescription() : isMultiRow_(false), useIndex_(true) {}
+I3TableRowDescription::I3TableRowDescription() :
+  isMultiRow_(false), useIndex_(true),usePadding_(true) {}
 
 /******************************************************************************/
 
