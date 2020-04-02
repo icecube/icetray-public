@@ -138,7 +138,7 @@ void I3Table::Align() {
     log_debug("(%s) Entering the Align function......", name_.c_str());
     I3TableRowConstPtr padding;
     log_debug("Alignmnet type = %d", GetAlignmentType());
-    log_debug("Is there a last_header_? %d do_padding? %d", (lastHeader_!=NULL), do_padding);
+    log_debug("Is there a last_header_? %d", (lastHeader_!=NULL));
     // Note: This function gets called on the "Master Tree" at the very end, which has no header.
     // But we *do* want to do this padding thing on that Master Tree, because it has no rows yet.
     if (DoPadding()) {
