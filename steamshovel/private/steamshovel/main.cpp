@@ -177,18 +177,26 @@ int main(int argc, char* argv[]){
 	logging(vm, "trace", trace_units);
 
 	log_debug( "Initializing python" );
-	PyInterpreter pyinter( argv[0] );
-	// may downgrade requested_console to what's available;
-	// also: consoles get deactivated if STDIN or STDOUT are not tty
-	PyConsole pyconsole( pyinter, requested_console );
-
-	int return_code = 0;
+  
+  PyInterpreter* pyinter;
+  PyConsole* pyconsole;
+  try {
+    pyinter =  new PyInterpreter(argv[0]);
+    // may downgrade requested_console to what's available;
+    // also: consoles get deactivated if STDIN or STDOUT are not tty
+    pyconsole = new PyConsole(*pyinter, requested_console);
+  }catch( boost::python::error_already_set& ) {
+    PyErr_Print();
+    return 123213321; //just picked something at random here
+  }
+  
+  int return_code = 0;
 	{
 		log_debug( "Creating SteamshovelApp" );
 
 		char** qt_specific_args = getQargs( argv[0], Qargs );
 		int qargc = Qargs.size()+1;
-		SteamshovelApp app( qargc, qt_specific_args, pyconsole );
+		SteamshovelApp app( qargc, qt_specific_args, *pyconsole );
 
 		if( vm.count("reset") || vm.count("testmode") ){
 			// must be after SteamshovelApp is constructed
