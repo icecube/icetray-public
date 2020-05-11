@@ -24,8 +24,10 @@ colormsg(HICYAN "python")
 
 set(PYTHON_FOUND TRUE CACHE BOOL "Python found successfully")
 
-if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.12)
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.14)
 	find_package(Python COMPONENTS Interpreter Development NumPy)
+elseif(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.12)
+        find_package(Python COMPONENTS Interpreter Development)
 else()
 	find_package(PythonInterp)
 	find_package(PythonLibs ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR})
@@ -63,11 +65,11 @@ if(${Python_VERSION} VERSION_LESS 2.6)
 endif(${Python_VERSION} VERSION_LESS 2.6)
 
 # look for numpy
-if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.12)
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.14)
   set(NUMPY_FOUND ${Python_NumPy_FOUND} CACHE BOOL "Numpy found successfully")
   set(NUMPY_INCLUDE_DIR ${Python_NumPy_INCLUDE_DIRS})
   message(STATUS "+    numpy: ${Python_NumPy_INCLUDE_DIRS}")
-else(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.12)
+else(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.14)
   # Old, crummy cmake -- try our best. Use better cmake for special cases.
 
   execute_process(COMMAND ${Python_EXECUTABLE} -c "import numpy"
@@ -89,7 +91,7 @@ else(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.12)
   find_path(NUMPY_INCLUDE_DIR NAMES numpy/ndarrayobject.h HINTS ${_NUMPY_INCLUDE_DIR})
   set(NUMPY_INCLUDE_DIR ${NUMPY_INCLUDE_DIR} CACHE STRING "Numpy inc directory")
   message(STATUS "+    numpy: ${NUMPY_INCLUDE_DIR}")
-endif(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.12)
+endif(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.14)
 
 ## look for scipy
 execute_process(COMMAND ${Python_EXECUTABLE} -c "import scipy"
