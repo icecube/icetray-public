@@ -41,12 +41,12 @@ endif()
 
 message(STATUS "+  version: ${Python_VERSION}")
 
-# Compatibility variables
-set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
-set(PYTHON_VERSION ${Python_VERSION})
-set(PYTHON_LIBRARY ${Python_LIBRARIES})
-set(PYTHON_LIBRARIES ${Python_LIBRARIES})
-set(PYTHON_INCLUDE_DIR ${Python_INCLUDE_DIRS})
+# Compatibility variables -- need to be cached for parasitic projects
+set(PYTHON_EXECUTABLE ${Python_EXECUTABLE} CACHE STRING "Python executable")
+set(PYTHON_VERSION ${Python_VERSION} CACHE STRING "Python Version Number")
+set(PYTHON_LIBRARY ${Python_LIBRARIES} CACHE STRING "Python libraries")
+set(PYTHON_LIBRARIES ${Python_LIBRARIES} CACHE STRING "Python libraries")
+set(PYTHON_INCLUDE_DIR ${Python_INCLUDE_DIRS} CACHE STRING "Python include directories")
 
 # In order to ensure all python executables (i.e. '#!/usr/bin/env python') run
 # under both python2 and python3 after spawning a new shell via env-shell.sh
@@ -67,7 +67,7 @@ endif(${Python_VERSION} VERSION_LESS 2.6)
 # look for numpy
 if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.14)
   set(NUMPY_FOUND ${Python_NumPy_FOUND} CACHE BOOL "Numpy found successfully")
-  set(NUMPY_INCLUDE_DIR ${Python_NumPy_INCLUDE_DIRS})
+  set(NUMPY_INCLUDE_DIR ${Python_NumPy_INCLUDE_DIRS} CACHE STRING "Numpy inc directory")
   message(STATUS "+    numpy: ${Python_NumPy_INCLUDE_DIRS}")
 else(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.14)
   # Old, crummy cmake -- try our best. Use better cmake for special cases.
