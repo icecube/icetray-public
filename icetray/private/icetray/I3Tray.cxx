@@ -77,6 +77,27 @@ I3Tray::die_messily(int sig)
 	}
 }
 
+namespace {
+
+class scoped_signal_handler {
+public:
+    scoped_signal_handler(int signum, sighandler_t handler)
+    {
+        signum_ = signum;
+        current_.sa_handler = handler;
+        sigaction(signum_, &current_, &previous_);
+    }
+    ~scoped_signal_handler()
+    {
+        sigaction(signum_, &previous_, &current_);
+    }
+private:
+    int signum_;
+    struct sigaction current_, previous_;
+};
+
+}
+
 I3Tray *executing_tray = NULL;
 
 void
@@ -465,18 +486,12 @@ I3Tray::Execute(unsigned maxCount)
 	}
 
 	execute_called = true;
-	signal(SIGINT, set_suspend_flag);
-	signal(SIGTERM, set_suspend_flag); // Condor sends this to end jobs
+	scoped_signal_handler trap_sigint(SIGINT, set_suspend_flag);
+	scoped_signal_handler trap_sigterm(SIGTERM, set_suspend_flag);
+	
 #ifdef SIGINFO
 	executing_tray = this;
-	{
-		struct sigaction oldact;
-		sigaction(SIGINFO, NULL, &oldact);
-		// only install a SIGINFO handler if there is none yet
-		if (oldact.sa_sigaction==NULL) {
-			signal(SIGINFO, report_usage);
-		}
-	}
+	scoped_signal_handler trap_siginfo(SIGINFO, report_usage);
 #endif
 
 	Configure();

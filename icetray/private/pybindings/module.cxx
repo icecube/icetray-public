@@ -79,18 +79,6 @@ BOOST_PYTHON_MODULE(icetray)
   def("get_scratch_directory", &I3::dataio::GetScratchDirectory);
   def("set_scratch_directory", &I3::dataio::SetScratchDirectory);
 
-#ifdef I3_USE_ROOT
-  // undo that nasty irritating root signal catching.  Power to the
-  // ctrl-C.
-  signal(SIGSEGV, SIG_DFL);
-  signal(SIGBUS, SIG_DFL);
-  signal(SIGINT, SIG_DFL);
-  signal(SIGTSTP, SIG_DFL);
-  signal(SIGHUP, SIG_DFL);
-  signal(SIGCHLD, SIG_DFL);
-  signal(SIGPIPE, SIG_DFL);
-#endif
-
   register_OMKey();
   register_I3PhysicsUsage();
   register_I3Tray();
