@@ -81,7 +81,7 @@ namespace {
 
 class scoped_signal_handler {
 public:
-    scoped_signal_handler(int signum, sighandler_t handler)
+    scoped_signal_handler(int signum, void (*handler)(int))
     {
         signum_ = signum;
         current_.sa_handler = handler;
