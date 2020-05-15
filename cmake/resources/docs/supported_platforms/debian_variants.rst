@@ -11,7 +11,7 @@ Using the Package Manager
 
 On laptops or user-controlled workstations it is recommended to install
 as much as possible through the package manager.  The following instructions
-are for 18.04 LTS.
+are for 20.04 LTS.
 
 Minimal Install
 ...............
@@ -50,10 +50,9 @@ Projects/tools in combo not built with this minimal package installation:
     libboost-system-dev libboost-thread-dev libboost-date-time-dev
     libboost-python-dev libboost-serialization-dev libboost-filesystem-dev 
     libboost-program-options-dev libboost-regex-dev libboost-iostreams-dev
-    libhealpix-cxx-dev libstarlink-pal-dev libhdf5-serial-dev libzstd1-dev
-    libsuitesparse-dev libsprng2-dev liblapack-dev python3-numpy-dev
-    libqt5opengl5-dev libcdk5-dev libncurses-dev python-sphinx doxygen
-    root-system
+    libhealpix-cxx-dev libstarlink-pal-dev libhdf5-dev libzstd-dev
+    libsuitesparse-dev libsprng2-dev liblapack-dev python3-numpy
+    libqt5opengl5-dev libcdk5-dev libncurses-dev python3-sphinx doxygen
   
 Special Install
 ...............
@@ -61,6 +60,7 @@ Special Install
 The following are a bit special and require extra care, especially if you
 want to run clsim and ppc on GPUs, which require hardware drivers.
 
+* ROOT (no longer provided via aptitude)
 * clsim (needs OpenCL, ZMQ, and optionally GEANT)
 * ppc (needs OpenCL)
 * g4-tankresponse (needs GEANT)
