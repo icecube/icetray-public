@@ -112,9 +112,9 @@ class xml_writer:
 
     def module_header(self,modname,category,docs):
         self.file.write('<module>\n')
-        self.file.write('<type>%s</type>\n' % cgi.escape(modname))
-        self.file.write('<kind>%s</kind>\n' % cgi.escape(category))
-        self.file.write('<description>%s</description>\n' % cgi.escape(docs))
+        self.file.write('<type>%s</type>\n' % html.escape(modname))
+        self.file.write('<kind>%s</kind>\n' % html.escape(category))
+        self.file.write('<description>%s</description>\n' % html.escape(docs))
 
     def module_footer(self):
         self.file.write('</module>\n')
@@ -133,23 +133,23 @@ class xml_writer:
             desc = config.descriptions
             for k in config.keys():
                 self.file.write('<parameter>\n')
-                self.file.write('\t<name>%s</name>\n' % cgi.escape(k))
+                self.file.write('\t<name>%s</name>\n' % html.escape(k))
                 self.file.write('\t<description>%s</description>\n'
-                                        % cgi.escape(desc[k]))
+                                        % html.escape(desc[k]))
                 try:
                     default = repr(config[k])
                 except RuntimeError:
                     default = "[Unprintable]"
                 self.file.write('\t<default_value>%s</default_value>\n'
-                                        % cgi.escape(default))
+                                        % html.escape(default))
                 self.file.write('</parameter>\n')
 
     def segelement(self,modtype,component_name,name,args):
         self.file.write('\t<segelement type="%s" name="%s" instance="%s">\n'
-                                        % (modtype, cgi.escape(component_name), cgi.escape(name)))
+                                        % (modtype, html.escape(component_name), html.escape(name)))
         for i in args.keys():
             self.file.write('\t<argument name="%s">%s</argument>\n'
-                      % (cgi.escape(i), cgi.escape(args[i].__repr__())))
+                      % (html.escape(i), html.escape(args[i].__repr__())))
         self.file.write('\t</segelement>\n')
 
 class human_writer:
@@ -497,7 +497,7 @@ if len(args) == 0 and not opts.all:
     parser.print_help()
     parser.exit(1)
 
-import inspect, sys, cgi,signal,pkgutil
+import inspect, sys, html,signal,pkgutil
 import xml.etree.ElementTree as ET
 from glob import glob
 
