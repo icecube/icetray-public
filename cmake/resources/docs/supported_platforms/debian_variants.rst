@@ -32,7 +32,7 @@ Projects/tools in combo not built with this minimal package installation:
 * astro (needs libstarlink-pal-dev)
 * filterscripts-cxx (needs astro which needs starlink)
 * hdfwriter (needs libhdf5-serial-dev)
-* libarchive (needs libarchive-dev and libzstd1-dev)
+* libarchive (needs libarchive-dev and libzstd-dev)
 * millipede (needs libsuitesparse-dev)
 * SPRNGRandomService (needs libsprng2-dev)
 * wavedeform (needs libblas-dev liblapack-dev)
@@ -62,7 +62,10 @@ want to run clsim and ppc on GPUs, which require hardware drivers.
 
 * ROOT (no longer provided via aptitude)
 * clsim (needs OpenCL, ZMQ, and optionally GEANT)
+  - libzmq5-dev
+  - opencl-dev
 * ppc (needs OpenCL)
+  - opencl-dev
 * g4-tankresponse (needs GEANT)
 
 	       
