@@ -37,13 +37,14 @@ Projects/tools in combo not built with this minimal package installation:
 * SPRNGRandomService (needs libsprng2-dev)
 * wavedeform (needs libblas-dev liblapack-dev)
 * wavereform (needs python3-numpy-dev)
-* steamshovel (needs libqt5opengl5-dev)
+* steamshovel (needs libqt5opengl5-dev python3-matplotlib)
 * dataio-shovel (needs libcdk5-dev libncurses-dev)
 * rootwriter (needs root-system)
 * Muonitron table-maker (needs python3-numpy-dev)
 * docs (needs python-sphinx doxygen)
 * gcdserver (needs pymongo)
-  
+* unit tests (some needs python3-scipy)
+
 .. container:: wrapped-code
 
     apt-get install build-essential cmake libbz2-dev libgsl0-dev libcfitsio-dev

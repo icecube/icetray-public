@@ -8,6 +8,11 @@ support all platforms.  When choosing a platform for your laptop,
 desktop, or institution cluster, prefer an officially supported
 platform.
 
+As of Fall 2019, only the most recent laptop platforms will be
+officially supported, meaning the latest Ubuntu LTS version and
+the latest Mac OSX version, with a reasonable (~6 month) transition
+period.
+
 Variants should also generally work without too much trouble. For
 instance, you should be fine using a version of Linux Mint that is in
 parity with a tested version of Ubuntu Linux.
@@ -15,8 +20,8 @@ parity with a tested version of Ubuntu Linux.
 Officially Supported Platforms
 ++++++++++++++++++++++++++++++
 * Scientific Linux : 7 and 6
-* Ubuntu : 18.04 and 16.04
-* Mac OS X : 10.15 and 10.14
+* Ubuntu : 20.04
+* Mac OS X : 10.15
 
 If you need a platform added to the list for your local cluster
 please generate a
