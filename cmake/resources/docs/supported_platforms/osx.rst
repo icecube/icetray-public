@@ -151,17 +151,22 @@ With a fresh install of Mojave I was able to get combo running by running the fo
    xcode-select --install
    
    #install homebrew
-   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
    
    #install packages with homebrew
-   brew install cmake python boost boost-python3 cdk qt libarchive wget doxygen cfitsio hdf5 nlopt gsl minuit2 suite-sparse healpix zstd
+   brew install subversion cmake python boost boost-python3 cdk qt libarchive wget doxygen cfitsio hdf5 nlopt gsl minuit2 suite-sparse healpix zstd
 
    #install brews written by icecube 
    brew tap IceCube-SPNO/homebrew-icecube
    brew install pal cppzmq
+
+   #create and enter virutal envionment
+   /usr/local/opt/python@3.8/bin/python3 -m venv ${HOME}/py38/
+   source ${HOME}/py38/bin/activate
    
    #install python packages with pip3
-   pip3 install numpy scipy matplotlib sphinx ipython qtconsole tables
+   pip install --upgrade pip
+   pip install numpy scipy matplotlib sphinx ipython qtconsole tables pandas
                
-This worked in December 2019, with the trunk of combo on MacOS Mojave. As homebrew updates, these instructions might not work as well. Your mileage may vary.
+This worked in May 2020, with the trunk of combo on MacOS Mojave. As homebrew updates, these instructions might not work as well. Your mileage may vary.
 
