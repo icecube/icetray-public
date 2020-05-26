@@ -24,10 +24,11 @@ colormsg(HICYAN "python")
 
 set(PYTHON_FOUND TRUE CACHE BOOL "Python found successfully")
 
-if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.14)
+# At least on Mac OS, with both python 2.7 and 3 present, find_package(Python)
+# behaves badly in cmake 3.13 and 3.14. 3.15 is the first well behaved minor
+# version, so for everything below we just use the legacy fall-back. 
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.15)
 	find_package(Python COMPONENTS Interpreter Development NumPy)
-elseif(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.12)
-        find_package(Python COMPONENTS Interpreter Development)
 else()
 	find_package(PythonInterp)
 	find_package(PythonLibs ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR})
