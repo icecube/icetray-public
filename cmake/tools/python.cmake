@@ -95,13 +95,14 @@ endif(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.14)
 
 ## look for scipy
 execute_process(COMMAND ${Python_EXECUTABLE} -c "import scipy"
-    RESULT_VARIABLE SCIPY_FOUND)
+    RESULT_VARIABLE SCIPY_FOUND OUTPUT_QUIET ERROR_QUIET)
 
 # let's make our xxx_FOUND variable like CMake ones
 if(SCIPY_FOUND EQUAL 0)
   set(SCIPY_FOUND TRUE)
   message(STATUS "+    scipy: FOUND")
 else()
+  message(STATUS "+    scipy: NOT FOUND")
   set(SCIPY_FOUND FALSE)
 endif()
 set(SCIPY_FOUND ${SCIPY_FOUND} CACHE BOOL "Scipy found successfully")
