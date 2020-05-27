@@ -37,7 +37,6 @@
 #include <icetray/serialization.h>
 #include <icetray/Utility.h>
 #include <icetray/I3Frame.h>
-#include <icetray/I3Tray.h>
 
 #include "crc-ccitt.h"
 
