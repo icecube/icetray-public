@@ -37,7 +37,7 @@ Projects/tools in combo not built with this minimal package installation:
 * SPRNGRandomService (needs libsprng2-dev)
 * wavedeform (needs libblas-dev liblapack-dev)
 * wavereform (needs python3-numpy-dev)
-* steamshovel (needs libqt5opengl5-dev python3-matplotlib)
+* steamshovel (needs libqt5opengl5-dev python3-matplotlib python3-pyqt5 ipython3)
 * dataio-shovel (needs libcdk5-dev libncurses-dev)
 * rootwriter (needs root-system)
 * Muonitron table-maker (needs python3-numpy-dev)
