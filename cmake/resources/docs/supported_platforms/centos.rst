@@ -7,8 +7,8 @@ Red Hat Variants
 CentOS
 """"""
 
-CentOS 7/8 are considered the official platform of IceCube, since it's widely
-used in production.
+CentOS 7/8 is not yet recommended for desktop and laptop use.  Your mileage may vary.
+Please report successes and failures to the #software channel.
 
 Minimal Install
 ...............
@@ -36,21 +36,24 @@ to install the lastest version of cmake (https://cmake.org/install/).
 Full Install
 ............
 
+The following projects are considered optional and the system libraries have
+not been tested yet.
+
 Projects/tools in combo not built with this minimal package installation:
-* NoiseEngine (needs libhealpix-cxx)
-* dst (needs libhealpix-cxx-dev)
-* astro (needs libstarlink-pal-dev)
+* NoiseEngine (needs healpix-cxx)
+* dst (needs healpix-cxx)
+* astro (needs starlink-pal)
 * filterscripts-cxx (needs astro which needs starlink)
-* hdfwriter (needs libhdf5-serial-dev)
-* libarchive (needs libarchive-dev and libzstd-dev)
-* millipede (needs libsuitesparse-dev)
-* SPRNGRandomService (needs libsprng2-dev)
-* wavedeform (needs libblas-dev liblapack-dev)
-* wavereform (needs python3-numpy-dev)
-* steamshovel (needs libqt5opengl5-dev python3-matplotlib python3-pyqt5 ipython3)
-* dataio-shovel (needs libcdk5-dev libncurses-dev)
-* rootwriter (needs root-system)
-* Muonitron table-maker (needs python3-numpy-dev)
+* hdfwriter (needs hdf5)
+* libarchive (needs archive, zstd)
+* millipede (needs suitesparse)
+* SPRNGRandomService (needs libsprng2)
+* wavedeform (needs blas lapack)
+* wavereform (needs python3-numpy)
+* steamshovel (needs qt5opengl5 python3-matplotlib python3-pyqt5 ipython3)
+* dataio-shovel (needs cdk5, ncurses)
+* rootwriter (needs ROOT)
+* Muonitron table-maker (needs python3-numpy)
 * docs (needs python-sphinx doxygen)
 * gcdserver (needs pymongo)
 * unit tests (some needs python3-scipy)

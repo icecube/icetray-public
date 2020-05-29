@@ -1,4 +1,0 @@
-SUSE
-^^^^
-
-Coming soon.

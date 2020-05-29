@@ -19,9 +19,9 @@ parity with a tested version of Ubuntu Linux.
 
 Officially Supported Platforms
 ++++++++++++++++++++++++++++++
-* Scientific Linux : 7 and 6
-* Ubuntu : 20.04
-* Mac OS X : 10.15
+* CentOS : 8 and 7 (Server)
+* Ubuntu : 20.04 (Desktop/Laptop)
+* Mac OS X : 10.15 (Desktop/Laptop)
 
 If you need a platform added to the list for your local cluster
 please generate a
@@ -40,10 +40,14 @@ Detailed Instructions
 Below you can find detailed instructions and tips that we've collected about
 various platforms.
 
+Officially Supported
+********************
 .. toctree::
-
    supported_platforms/osx
-   supported_platforms/redhat_variants
-   supported_platforms/debian_variants
-   supported_platforms/suse
-   supported_platforms/arch_linux
+   supported_platforms/centos
+   supported_platforms/ubuntu
+   
+Community Supported
+*******************
+.. toctree::
+   community_supported_platforms/arch_linux
