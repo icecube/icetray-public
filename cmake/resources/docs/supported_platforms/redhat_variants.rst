@@ -4,49 +4,68 @@
 Red Hat Variants
 ^^^^^^^^^^^^^^^^
 
-Red Hat
-"""""""
-
-* Red Hat Enterprise Linux derivitives, may not work with IceCube software
-  as they fall outside of the "current/previous" rule of thumb stated above.
-
-* TCL dependencies are satisfied only with the tcl-devel package. Try
-  'up2date tcl-devel' as root user.
-
-.. index:: Scientific Linux
-
-Scientific Linux
-""""""""""""""""
-
-There is a script at
-http://code.icecube.wisc.edu/icetray-dist/distros/ScientificSL.sh
-that will install the necessary packages.
-
-After installing these packages, run "easy_install -U Sphinx" to install
-Python Sphinx for using the documentation system. 
-
-.. index:: CentOS
-.. _centos:
-
 CentOS
 """"""
 
-There is a script at
-http://code.icecube.wisc.edu/icetray-dist/distros/CentOS.sh
-that will install the necessary packages.
+CentOS 7/8 are considered the official platform of IceCube, since it's widely
+used in production.
+
+Minimal Install
+...............
+
+Need to enable PowerTools to get boost-python3-devel.  Note that the stock
+cmake version 3.11 doesn't detect python 3.6, so it's currently recommended
+to install the lastest version of cmake (https://cmake.org/install/).
 
 
-After installing these packages, run "easy_install -U Sphinx" to install
-Python Sphinx for using the documentation system. 
+.. container:: wrapped-code
 
-Fedora
-""""""
+    dnf group install 'Development Tools'
+    dnf config-manager --set-enabled PowerTools
+    dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 
-There is a script at
-http://code.icecube.wisc.edu/icetray-dist/distros/Fedora.sh
-that will install the necessary packages.
+    yum install zlib-devel python36-devel
+    boost-devel boost-system boost-thread boost-date-time
+    boost-python boost-filesystem 
+    boost-program-options boost-regex boost-iostreams
+    boost-python3-devel
+    gsl-devel bzip2-devel
+    cfitsio-devel
 
-After installing these packages, run "easy_install -U Sphinx" to install
-Python Sphinx for using the documentation system. 
+    
+Full Install
+............
 
+Projects/tools in combo not built with this minimal package installation:
+* NoiseEngine (needs libhealpix-cxx)
+* dst (needs libhealpix-cxx-dev)
+* astro (needs libstarlink-pal-dev)
+* filterscripts-cxx (needs astro which needs starlink)
+* hdfwriter (needs libhdf5-serial-dev)
+* libarchive (needs libarchive-dev and libzstd-dev)
+* millipede (needs libsuitesparse-dev)
+* SPRNGRandomService (needs libsprng2-dev)
+* wavedeform (needs libblas-dev liblapack-dev)
+* wavereform (needs python3-numpy-dev)
+* steamshovel (needs libqt5opengl5-dev python3-matplotlib python3-pyqt5 ipython3)
+* dataio-shovel (needs libcdk5-dev libncurses-dev)
+* rootwriter (needs root-system)
+* Muonitron table-maker (needs python3-numpy-dev)
+* docs (needs python-sphinx doxygen)
+* gcdserver (needs pymongo)
+* unit tests (some needs python3-scipy)
 
+  
+Special Install
+...............
+
+The following are a bit special and require extra care, especially if you
+want to run clsim and ppc on GPUs, which require hardware drivers.
+
+* ROOT (no longer provided via aptitude)
+* clsim (needs OpenCL, ZMQ, and optionally GEANT)
+  - zmq5
+  - opencl
+* ppc (needs OpenCL)
+  - opencl
+* g4-tankresponse (needs GEANT)
