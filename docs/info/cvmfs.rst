@@ -277,8 +277,15 @@ HTCondor
 
 Specify the path to the Python script as the executable in your submit file::
 
-    Executable = foo.py
+    Executable = /path/to/foo.py
     Arguments = foo.i3 --verbose bar.i3
+
+Note that when running a HTCondor job, it is advised to use absolute paths, 
+e.g. :code:`/path/to/foo.py` instead of :code:`foo.py`. 
+This is because the :code:`icetray-start` script will recognize it is in a 
+condor job, and does a :code:`cd` to the scratch directory. 
+At that point, :code:`foo.py` will no longer point to the right place.
+
 
 PBS derivatives
 '''''''''''''''
@@ -293,6 +300,7 @@ anywhere in your script::
 
 replacing $ with whichever character your PBS flavor uses to denote qsub
 options.
+
 
 .. _pre-compiled-metaprojects:
 
