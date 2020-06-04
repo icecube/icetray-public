@@ -152,11 +152,20 @@ if(Qt5_FOUND AND Qt5OpenGL_FOUND AND OPENGL_FOUND AND OPENGL_GLU_FOUND)
     )
   target_link_libraries( steamshovel shovelart shovelio )
   add_dependencies( steamshovel steamshovel-logviewer shovelart shovelio
-                    shovelart-pybindings shovelio-pybindings
-                    dataio-pybindings dataclasses-pybindings icetray-pybindings )
+    shovelart-pybindings shovelio-pybindings
+    dataio-pybindings dataclasses-pybindings icetray-pybindings )
 
   # tests
-  i3_test_scripts(resources/test/*.py)
+  # test_shovelscripts.py is currently disabled.
+  # See ticket #2430: https://code.icecube.wisc.edu/projects/icecube/ticket/2430
+  # The plan is to get this back in shape before the fall 2020 release.
+  i3_test_scripts(resources/test/test_shovelio_raw_File.py
+    resources/test/test_shovelio_raw_FileGroup.py
+    resources/test/test_shovelio_against_I3Reader.py
+    resources/test/test_setting.py
+    resources/test/test_shovelio_I3FrameSequence.py
+    #resources/test/test_shovelscripts.py
+    )
 
 
   if(APPLE)
