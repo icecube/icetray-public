@@ -537,47 +537,30 @@ set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
   "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert." FORCE)
 
 ## coverage flags
-#set(CMAKE_CXX_FLAGS_COVERAGE "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
-#  "Flags used by the C++ compiler during coverage builds.")
-#set(CMAKE_C_FLAGS_COVERAGE "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
-#  "Flags used by the C compiler during coverage builds.")
-#set(CMAKE_EXE_LINKER_FLAGS_COVERAGE
-#  "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
-#  "Flags used for linking binaries during coverage builds.")
-#set(CMAKE_SHARED_LINKER_FLAGS_COVERAGE
-#  "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
-#  "Flags used by the shared libraries linker during coverage builds.")
-
-set(CMAKE_CXX_FLAGS_COVERAGE "-g -O0 --coverage" CACHE STRING
+set(CMAKE_CXX_FLAGS_COVERAGE "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
   "Flags used by the C++ compiler during coverage builds.")
-set(CMAKE_C_FLAGS_COVERAGE "-g -O0 --coverage" CACHE STRING
+set(CMAKE_C_FLAGS_COVERAGE "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
   "Flags used by the C compiler during coverage builds.")
 set(CMAKE_EXE_LINKER_FLAGS_COVERAGE
-  "-g -O0 --coverage" CACHE STRING
+  "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
   "Flags used for linking binaries during coverage builds.")
 set(CMAKE_SHARED_LINKER_FLAGS_COVERAGE
-  "-g -O0 --coverage" CACHE STRING
+  "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
   "Flags used by the shared libraries linker during coverage builds.")
-
-#mark_as_advanced(
-#  CMAKE_CXX_FLAGS_COVERAGE
-#  CMAKE_C_FLAGS_COVERAGE
-#  CMAKE_EXE_LINKER_FLAGS_COVERAGE
-#  CMAKE_SHARED_LINKER_FLAGS_COVERAGE)
+mark_as_advanced(
+  CMAKE_CXX_FLAGS_COVERAGE
+  CMAKE_C_FLAGS_COVERAGE
+  CMAKE_EXE_LINKER_FLAGS_COVERAGE
+  CMAKE_SHARED_LINKER_FLAGS_COVERAGE)
 # Update the documentation string of CMAKE_BUILD_TYPE for GUIs
 set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
   "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert Coverage." FORCE)
 
-message("CMAKE_CXX_FLAGS_COVERAGE=${CMAKE_CXX_FLAGS_COVERAGE}")
-message("CMAKE_C_FLAGS_COVERAGE=${CMAKE_C_FLAGS_COVERAGE}")
-message("CMAKE_EXE_LINKER_FLAGS_COVERAGE=${CMAKE_EXE_LINKER_FLAGS_COVERAGE}")
-message("CMAKE_SHARED_LINKER_FLAGS_COVERAGE=${CMAKE_SHARED_LINKER_FLAGS_COVERAGE}")
-
 ## optimization remarks
-if(NOT REMARK_TYPE)
-  set(REMARK_TYPE ".*")
-endif()
-
+#if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  if(NOT REMARK_TYPE)
+    set(REMARK_TYPE ".*")
+  endif()
 set(CMAKE_CXX_FLAGS_REMARKS "${CMAKE_CXX_FLAGS_RELEASE} -gline-tables-only -gcolumn-info -Rpass='${REMARK_TYPE}' -Rpass-missed='${REMARK_TYPE}' -Rpass-analysis='${REMARK_TYPE}'" CACHE STRING
   "Flags used by the C compiler to output remarks about how it's optimizing")
 set(CMAKE_C_FLAGS_REMARKS ${CMAKE_CXX_FLAGS_REMARKS} CACHE STRING
@@ -588,6 +571,9 @@ mark_as_advanced(
 # Update the documentation string of CMAKE_BUILD_TYPE for GUIs
 set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
   "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert Coverage Remarks." FORCE)
+#else()
+#  message(FATAL_ERROR "Sorry, the 'Remarks' build-type is Clang specific.")
+#endif()
 
 ## at this point only project CMakeLists.txt's and tools/*.cmake will modify
 ## the command line. let's check what we have.
