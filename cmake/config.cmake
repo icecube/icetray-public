@@ -476,26 +476,36 @@ endif()
 message(STATUS "Setting default compiler flags and build type.")
 
 #
+# set flags common to all build types
+#
+if(${COVERAGE})
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 --coverage")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0 --coverage")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -g -O0 --coverage")    
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -g -O0 --coverage")
+  set(CMAKE_BUILD_TYPE "Debug")
+else()
+  if ((NOT CMAKE_BUILD_TYPE) OR (CMAKE_BUILD_TYPE MATCHES "^None"))
+    if(META_PROJECT MATCHES "trunk$")
+      set(CMAKE_BUILD_TYPE "RelWithAssert")
+    else()
+      set(CMAKE_BUILD_TYPE "Release")
+    endif()
+  endif()
+endif()
+
+#
 #  Check if it is defined...   if somebody has specified it on the
 #  cmake commmand line, e.g.
 #  cmake -DCMAKE_BUILD_TYPE=Debug, we need to use that value
 #
-if ((NOT CMAKE_BUILD_TYPE) OR (CMAKE_BUILD_TYPE MATCHES "^None"))
-  if(META_PROJECT MATCHES "trunk$")
-    set(CMAKE_BUILD_TYPE "RelWithAssert")
-  else()
-    set(CMAKE_BUILD_TYPE "Release")
-  endif()
-endif()
 set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel" FORCE)
 
 ## turning this flag on enables outputting a JSON file that is used
 ## for clang's libtooling. cache/force is needed
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE BOOL "Export a JSON 'database' of compilation commands for each source file. Useful for clang's libtooling" FORCE)
 
-#
-# set flags common to all build types
-#
+
 set(CMAKE_CXX_FLAGS "-pipe ${CXX_WARNING_FLAGS} ${CMAKE_CXX_FLAGS} ${CXX_WARNING_SUPPRESSION_FLAGS}")
 string(REGEX REPLACE "[ ]+" " " CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" CACHE STRING
@@ -535,26 +545,6 @@ mark_as_advanced(
 # Update the documentation string of CMAKE_BUILD_TYPE for GUIs
 set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
   "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert." FORCE)
-
-## coverage flags
-set(CMAKE_CXX_FLAGS_COVERAGE "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
-  "Flags used by the C++ compiler during coverage builds.")
-set(CMAKE_C_FLAGS_COVERAGE "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
-  "Flags used by the C compiler during coverage builds.")
-set(CMAKE_EXE_LINKER_FLAGS_COVERAGE
-  "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
-  "Flags used for linking binaries during coverage builds.")
-set(CMAKE_SHARED_LINKER_FLAGS_COVERAGE
-  "-g -O0 -fprofile-arcs -ftest-coverage" CACHE STRING
-  "Flags used by the shared libraries linker during coverage builds.")
-mark_as_advanced(
-  CMAKE_CXX_FLAGS_COVERAGE
-  CMAKE_C_FLAGS_COVERAGE
-  CMAKE_EXE_LINKER_FLAGS_COVERAGE
-  CMAKE_SHARED_LINKER_FLAGS_COVERAGE)
-# Update the documentation string of CMAKE_BUILD_TYPE for GUIs
-set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
-  "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel RelWithAssert Coverage." FORCE)
 
 ## optimization remarks
 #if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
