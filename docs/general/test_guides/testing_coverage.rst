@@ -13,15 +13,12 @@ pre-requisites are:
   lcov
     this can be installed via your package manager
 
-NB : You need to set the CMAKE_BUILD_TYPE to 'Coverage' by either
-hacking your CMakeCache.txt file or passing it directly to cmake on
-the command line (e.g. "cmake ../src/ -DCMAKE_BUILD_TYPE=Coverage").
+NB : Set the COVERAGE cmake flag. (e.g. "cmake ../src/ -DCOVERAGE=True").
 
-Once you've ensured that these programs are installed and your
-CMAKE_BUILD_TYPE is set to **Coverage**, you can just run::
+Example::
 
   $ cd <build_dir>
-  $ cmake <src_dir> -DCMAKE_BUILD_TYPE=Coverage
+  $ cmake <src_dir> -DCOVERAGE=True
   $ make
   $ make test-bins
   $ make coverage
