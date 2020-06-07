@@ -6,6 +6,13 @@ IceCube 'combo' Software Policy
 Release Policy
 --------------
 
+Release Criteria
+~~~~~~~~~~~~~~~~
+Tests: All tests pass on all supported platforms.
+Open Tickets: All blockers must be resolved or downgraded.
+
+With each combo release we should consider a cvmfs and test-data release.
+
 Candidate vs. Release
 ~~~~~~~~~~~~~~~~~~~~~
   - Candidates are meant for **testing** only.
@@ -15,8 +22,12 @@ Candidate vs. Release
 
 Release Procedure
 ~~~~~~~~~~~~~~~~~
-
-
+0) Make a release candidate.
+1) Ensure all tests pass on all supported platforms.
+2) Ensure there are no blocking tickets.
+3) Push any open non-blocking tickets to the next milestone.
+4) Update release notes.
+   
 New Projects
 ------------
 All new production projects included in combo, must pass a code review. (See icecube-code-reviews_)
