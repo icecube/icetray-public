@@ -44,7 +44,8 @@ Projects/tools in combo not built with this minimal package installation:
 * docs (needs python-sphinx doxygen)
 * gcdserver (needs pymongo)
 * unit tests (some needs python3-scipy)
-
+* test coverage (needs lcov and python3-coverage)
+  
 .. container:: wrapped-code
 
     apt-get install build-essential cmake libbz2-dev libgsl0-dev libcfitsio-dev
