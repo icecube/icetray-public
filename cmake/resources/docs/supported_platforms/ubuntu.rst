@@ -22,6 +22,7 @@ Minimal Install
     libboost-system-dev libboost-thread-dev libboost-date-time-dev
     libboost-python-dev libboost-serialization-dev libboost-filesystem-dev 
     libboost-program-options-dev libboost-regex-dev libboost-iostreams-dev
+    python3-numpy
 
 Full Install
 ............
@@ -36,11 +37,9 @@ Projects/tools in combo not built with this minimal package installation:
 * millipede (needs libsuitesparse-dev)
 * SPRNGRandomService (needs libsprng2-dev)
 * wavedeform (needs libblas-dev liblapack-dev)
-* wavereform (needs python3-numpy-dev)
 * steamshovel (needs libqt5opengl5-dev python3-matplotlib python3-pyqt5 ipython3)
 * dataio-shovel (needs libcdk5-dev libncurses-dev)
 * rootwriter (needs root-system)
-* Muonitron table-maker (needs python3-numpy-dev)
 * docs (needs python-sphinx doxygen)
 * gcdserver (needs pymongo)
 * unit tests (some needs python3-scipy)
