@@ -20,7 +20,7 @@ you will probably want to set up additional python tools.
 To build against non-system python:
 
 .. code:: bash
-   cmake ../src -DPYTHON_EXECUTABLE=/path/to/python/executable
+   cmake ../src -DPython_EXECUTABLE=/path/to/python/executable
 
 **Note**: It is strongly recommended that you use Python3.  Python2
 will continue to be supported through 2020, but dropped in 2021.
