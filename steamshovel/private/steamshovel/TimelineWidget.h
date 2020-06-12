@@ -71,7 +71,7 @@ public:
 	Q_PROPERTY( bool isPlaying READ isPlaying );
 
 	Q_CLASSINFO( "qmeta_scriptable_props", "time,maxTime,minTime,eventBeginTime,eventEndTime,rangeFinder,animationRate,isPlaying" );
-	Q_CLASSINFO( "qmeta_scriptable_slots", "play,stop,fastForward,rewind,stepForward,stepBack,reset,setEventTimeWindow" );
+	Q_CLASSINFO( "qmeta_scriptable_slots", "play,stop,fastForward,rewind,stepForward,stepBack,reset,setEventTimeWindow,setLooping,setLoopOne,setLoopAll,setLoopAllX" );
 
 	const TimeWindow& getTimeWindow() const { return timewin_; }
 	void frameUpdate( I3FramePtr ptr );
