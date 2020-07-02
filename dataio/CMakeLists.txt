@@ -39,20 +39,15 @@ i3_add_pybindings(dataio
   USE_TOOLS boost python
   )
 
-if(CDK_FOUND AND NCURSES_FOUND)
-  #colormsg(RED "+-- dataio-shovel build is broken against cvmfs py3-v4.1.0.  Disabling for now.  See ticket #2408.")
+if(CDK_FOUND AND CURSES_FOUND)
   i3_executable(shovel private/shovel/*.cxx
     USE_PROJECTS dataio
-    USE_TOOLS cdk ncurses
+    USE_TOOLS cdk curses
     )  
-  #Adding target_link_libraries() here is a temoporary hack that should
-  #instead be taken care of inside the i3_executable() macro but it is not
-  target_link_libraries(dataio-shovel ${CURSES_LIBRARIES})  
 else()
   colormsg(CYAN "+-- dataio-shovel *not* included (missing CDK or ncurses libraries)")
 endif()
   
-
 # symlink for dataio-pyshovel
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink dataio-shovel dataio-pyshovel
                 WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
