@@ -72,7 +72,7 @@ macro(use_tool TARGET TOOL_)
   endif(NOT ${TOOL}_FOUND)
 
   if(${TOOL}_CONFIG_ERROR)
-    message(FATAL_ERROR "There was a problem configuring tool ${TOOL} which is required by target ${TARGET}.  This is probably available via the 'ports' system.  Try the command 'port search ${TOOL_}' and 'port install' what you find.")
+    message(FATAL_ERROR "There was a problem configuring tool ${TOOL} which is required by target ${TARGET}.")
   endif(${TOOL}_CONFIG_ERROR)
 
   include_directories(SYSTEM ${${TOOL}_INCLUDE_DIRS})
