@@ -49,11 +49,12 @@ def myInputHook():
     global _native_console
     path = ScriptDrop.getPath()
     if(path):
-        print("Executing user script", path)
         if( _native_console ):
-            # FIXME: This is unlikely to work in python 3. 
-            # See execScript() in console_widget.py for guidance.
-            _native_console.runsource( 'execfile("{0}")'.format(path) )
+            if sys.version_info[0] < 3:
+                _native_console.runsource( 'execfile("{0}")'.format(path) )
+            else:
+                with open(path) as f:
+                    _native_console.runsource(f.read(), path, 'exec')
         else:
             from IPython import get_ipython
             ip = get_ipython()
