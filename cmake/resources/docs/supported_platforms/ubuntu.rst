@@ -28,6 +28,7 @@ Full Install
 ............
 
 Projects/tools in combo not built with this minimal package installation:
+
 * NoiseEngine (needs libhealpix-cxx-dev)
 * dst (needs libhealpix-cxx-dev)
 * astro (needs libstarlink-pal-dev)
