@@ -8,6 +8,9 @@ Release Notes
 trunk
 -----
 
+* Provide better support for running in virtual enviroments
+  the differ from the build environment.
+
 Feb. 5, 2020 Alex Olivas (aolivas@umd.edu)
 -------------------------------------------
 Combo Release V00-00-01
