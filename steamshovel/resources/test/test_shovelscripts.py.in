@@ -22,7 +22,7 @@ def test_image(tst, ref, rebin, threshold):
         img = QImage( fn )
         d = np.zeros((int(img.width() / rebin),
                       int(img.height() / rebin), 3),
-                     dtype=np.int16)
+                     dtype=np.float16)
         for i in range(d.shape[0]):
             for j in range(d.shape[1]):
                 n = 0
@@ -98,11 +98,18 @@ class TestShovelScripts( unittest.TestCase ):
         self.assertEqual( ret_code, 0,
                           "script {0}: return code {1} is not zero (output below):\n{2}"
                           .format(script, ret_code, output) )
-        self.assertTrue( re.search(r"\berror\b", output) is None and
-                         re.search(r"\bfatal\b", output) is None and
-                         re.search(r"\bexception\b", output) is None,
+
+        # output is a bytes-like object in Python3
+        # need to decode it.
+        output_str = output.decode('utf-8') \
+            if sys.version_info[0] == 3 else output
+        
+        self.assertTrue( re.search(r"\berror\b", output_str) is None and
+                         re.search(r"\bfatal\b", output_str) is None and
+                         re.search(r"\bexception\b", output_str) is None,
                          "script {0}: found error messages (output below):\n{1}"
-                         .format(script, output) )
+                         .format(script, output_str) )
+
 
     def test_run_and_quit( self ):
         self.runtest( "run_and_quit" )
