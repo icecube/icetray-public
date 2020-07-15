@@ -57,6 +57,34 @@ set(PYTHON_INCLUDE_DIR ${Python_INCLUDE_DIRS} CACHE STRING "Python include direc
 # breaking other non-IceCube applications on the user's machine.
 execute_process(COMMAND ln -sf ${PYTHON_EXECUTABLE} ${CMAKE_BINARY_DIR}/bin/python)
 
+# To support work within virtual environments where the python versions are the
+# same we check that the versions are in fact the same and reset the link to
+# the venv binary.  If the versions are different (including the patch version)
+# a warning is emitted, but nothing is done.
+if(DEFINED ENV{VIRTUAL_ENV})
+
+  execute_process(COMMAND $ENV{VIRTUAL_ENV}/bin/python "--version" OUTPUT_VARIABLE VENV_PYTHON_VERSION)
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} "--version" OUTPUT_VARIABLE BUILD_PYTHON_VERSION)
+
+  # Strip the leading 'Python ' from the output
+  string(REPLACE "Python " "" VENV_PY_CMP_VERSION ${VENV_PYTHON_VERSION})
+  string(REPLACE "Python " "" BUILD_PY_CMP_VERSION ${BUILD_PYTHON_VERSION})
+
+  # This removes trailing newlines
+  string(STRIP ${VENV_PY_CMP_VERSION} VENV_PYTHON_VERSION)
+  string(STRIP ${BUILD_PY_CMP_VERSION} BUILD_PYTHON_VERSION)
+
+  if(${VENV_PY_CMP_VERSION} VERSION_EQUAL ${BUILD_PY_CMP_VERSION})
+    # They're equal.  Reset the link and move on
+    colormsg(YELLOW "Resetting link to python found in virtual environment.")
+    execute_process(COMMAND ln -sf $ENV{VIRTUAL_ENV}/bin/python ${CMAKE_BINARY_DIR}/bin/python)
+  else()
+    colormsg(RED "Detected different python versions.")
+    colormsg(RED "Built against: ${BUILD_PYTHON_VERSION}")
+    colormsg(RED "Running with: ${VENV_PYTHON_VERSION}")
+  endif()
+endif()
+  
 message(STATUS "+   binary: ${Python_EXECUTABLE}")	
 message(STATUS "+ includes: ${Python_INCLUDE_DIRS}")	
 message(STATUS "+     libs: ${Python_LIBRARIES}")
