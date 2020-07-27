@@ -24,7 +24,7 @@ Quickstart
 
 From your shell (or in your login script) run::
 
-    eval $(/cvmfs/icecube.opensciencegrid.org/py3-v4.1.0/setup.sh)
+    eval $(/cvmfs/icecube.opensciencegrid.org/py3-v4.1.1/setup.sh)
 
 This will detect the current OS and architecture and set your 
 environment variables appropriately.
@@ -39,7 +39,7 @@ environment variables appropriately.
   your your `.login` script. (Note the use of backticks in the 
   expression)::
 
-    eval `/cvmfs/icecube.opensciencegrid.org/py3-v4.1.0/setup.sh`
+    eval `/cvmfs/icecube.opensciencegrid.org/py3-v4.1.1/setup.sh`
 
 This should be near the end of any login script, so you don't
 accidentally put something else in front of CVMFS on the path.
@@ -64,6 +64,11 @@ Distributions and Platforms
 
 py3-v4.1
 ^^^^^^^^
+
+.. note::
+
+   py3-v4.1.1 includes proper cdk-ncurses dependency.
+   py3-v4.1.0 is deprecated.
 
 * python 3.7 and software releases as of late 2019
 
@@ -217,14 +222,14 @@ to submit to a batch system while also documenting which metaproject it
 is intended to work with. To use it, put a line like the following at 
 the top of your Python script::
 
-    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.1.0/icetray-start
+    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.1.1/icetray-start
     #METAPROJECT XXXXX
 
 The metaproject specification XXXXX can either be
 
 * a build directory (or a path to an upacked tarball)::
 
-    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.1.0/icetray-start
+    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.1.1/icetray-start
     #METAPROJECT /data/user/you/metaprojects/icerec/build
 
 .. note::
@@ -234,7 +239,7 @@ The metaproject specification XXXXX can either be
 
 * a tarball URL::
 
-    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.1.0/icetray-start
+    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.1.1/icetray-start
     #METAPROJECT http://username:password@convey.icecube.wisc.edu/data/user/your/tarballs/icerec-trunk
 
 .. note::
@@ -296,7 +301,7 @@ Some variants of PBS ignore the shebang line at the beginning of the script.
 To force PBS to select the correct interpreter, add a line like the following
 anywhere in your script::
 
-    #$ -S /cvmfs/icecube.opensciencegrid.org/py3-v4.1.0/icetray-start
+    #$ -S /cvmfs/icecube.opensciencegrid.org/py3-v4.1.1/icetray-start
 
 replacing $ with whichever character your PBS flavor uses to denote qsub
 options.
@@ -312,11 +317,11 @@ the offline-software, icerec, and simulation metaprojects. To use a
 pre-built metaproject, put a line like the following at the top of your
 Python script::
 
-    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.1.0/icetray-start
+    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.1.1/icetray-start
     #METAPROJECT: metaproject/VXX-YY-ZZ
 
 for example::
 
-    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.1.0/icetray-start
+    #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.1.1/icetray-start
     #METAPROJECT: combo/stable
 
