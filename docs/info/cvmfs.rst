@@ -91,7 +91,7 @@ py3-v4
 
 .. warning::
 
-   py2-v4.0* is deprecated and not supported.
+   py3-v4.0* is deprecated and not supported.
 
 .. note::
 
