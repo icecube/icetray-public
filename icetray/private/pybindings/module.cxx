@@ -75,6 +75,7 @@ BOOST_PYTHON_MODULE(icetray)
   // 
   load_project("icetray", false); 
 
+  boost::python::scope().attr("I3Default") = boost::python::eval("object")();
   def("load", &load_impl, load_impl_overloads(args("name","verbose")));
   def("get_scratch_directory", &I3::dataio::GetScratchDirectory);
   def("set_scratch_directory", &I3::dataio::SetScratchDirectory);

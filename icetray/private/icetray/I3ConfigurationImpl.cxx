@@ -34,6 +34,7 @@
 
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/ordered_index.hpp>
+#include <boost/python.hpp>
 #include <boost/python/object.hpp>
 #include <boost/foreach.hpp>
 #include <serialization/split_free.hpp>
@@ -60,6 +61,12 @@ I3ConfigurationImpl::Set(const string& name_, const boost::python::object& value
 {
   log_trace("%s (%s)", __PRETTY_FUNCTION__, name_.c_str());
 
+  //if the user passed the python singleton `icetray.I3Default` then act like nothing happened
+  boost::python::object I3Default = boost::python::import("icecube.icetray").attr("I3Default");
+  if (value == I3Default){
+    return;
+  }
+  
   parameters_t::iterator pr = parameters->find(name_);
   if (pr == parameters->end())
     log_fatal("Attempt to set parameter %s that doesn't exist", name_.c_str());
