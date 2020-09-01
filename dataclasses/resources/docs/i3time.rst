@@ -64,8 +64,12 @@ Check out I3TimeShifter in trigger-sim. There is an attempt at option #3. It cal
 
 Examples
 ========
-
-
+Example use of I3Time
+::
+   >>> /**
+   >>>  *@brief creates the object with the given times as the DAQ time
+   >>>  */
+   >>> I3Time(int32_t year, int64_t daqTime);
    
 
 
