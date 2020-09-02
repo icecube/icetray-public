@@ -1,13 +1,12 @@
 ===========
 I3Time
 ===========
-There are two types of time in an event and I distinguish them by their C++ type: I3Time and double.
+There are two types of time in an event and distinguished by their C++ types: I3Time and double.
 
-This is a class used to denote the absolute time to the tenth of a ns. It's instructive to look at the constructor. To create an object of this type you need to specify the year and the number of tenths of nanoseconds since the beginning of the year, otherwise known as DAQTime.
+I3Time is a class used to denote the absolute time to the tenth of a ns. It's instructive to look at the constructor. To create an object of this type you need to specify the year and the number of tenths of nanoseconds since the beginning of the year, otherwise known as DAQTime.
 
-This is used in only two places in simulation: DrivingTime and EventHeader.
+This is used only in the I3EventHeader.
 
-* DrivingTime is set at the **beginning** of the event and is passed to the geometry, calibration, and detector status services. This sets the detector configuration.
 * EventHeader is set at the **end** of the event by the trigger simulation. The event header consists mainly of a StartTime and an EndTime (both of type I3Time).
   * EventHeaderStartTime=DrivingTime + timeofEarliestDOMLaunch
   * EventHeaderEndTime = DrivingTime + timeofLatestDOMLaunch
@@ -20,16 +19,11 @@ Every simulation module other than trigger sim **only** deals with times of type
 Typical Simulation Chain
 ========================
 
-* Event Service- DrivingTime (DT) is set
-* DetectorStatusService - satatus served up depending on DT
-* CalibrationService - calibration served up dependign on DT
-* GeometryService - geometry served up depending on DT
-* Muxer - Controls the combining of the above streams
 * Generator - Injects at least one primary and sets time (t_0) to 0 ns.
 * Propagator - Generates secondaries and sets times relative to t_0.
-* HitConstructor - Generates I3MCHits and sets relative to t_0.
-* PMTSim - Generates PMT waveforms whose start and stop times are relative to t_0.
-* DOMSim - Generates DOM launches whose launch times are relative to t_0.
+* Photon Simulation (ppc/clsim) - Generates I3MCPEs and sets relative to t_0.
+* PMTResponseSimulator - Generates PMT pulses whose start and stop times are relative to t_0.
+* DOMLauncher - Generates DOM launches whose launch times are relative to t_0.
 * TriggerSim - Based on the DOM launch series map triggers events and determines the EventHeader. Let's say the first DOMLaunch occurs at t_1 (>t_0) and the last DOMLaunch occurs at t_2 ( >t_1>t_0). The EventHeader will have a time range of (DT + t_1, DT + t_2)
 
 The Problem
@@ -37,7 +31,7 @@ The Problem
 
 The statement of the goal is very simple: make simulation look like data. With the setup outlined above the DOM launch times are relative to t_0 (which is coincident with DT). In data the DOM launch times are relative to EventHeaderStartTime.
 
-* Option 1 : Set EventHeaderStarTime to DT.
+* Option 1 : Set EventHeaderStarTime to some user-defined time.
   * Pros
     * The DOM launch times are now relative to EventHeaderStartTime and the **interpretation** is consistent with data.
     * There's a single point of modification, which is **very** safe and clean.
@@ -58,8 +52,7 @@ The statement of the goal is very simple: make simulation look like data. With t
 The Solution
 ============
 
-Check out I3TimeShifter in trigger-sim. There is an attempt at option #3. It calculates the time shift from a given trigger hierarchy ( choosing the earliest time) and shifts all **known** times with respect to the one time. 
-
+Check out I3TimeShifter in trigger-sim. There is an attempt at option #3. It calculates the time shift from a given trigger hierarchy (choosing the earliest time) and shifts all **known** times with respect to the one time. 
 
 
 Examples
