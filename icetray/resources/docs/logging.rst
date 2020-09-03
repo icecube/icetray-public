@@ -242,3 +242,11 @@ levels:
 
   icetray.set_log_level_for_unit('I3Tray', icetray.I3LogLevel.LOG_TRACE)
 
+Caveats
+^^^^^^^
+
+Be careful about logging statements in destructors.  The rotating file logger is
+created in Python using the Python logger, and its destructor is called before the
+C++ module destructors. At that point, the logger defaults to the I3PrintfLogger in
+C++.  For the time being we will make no effort to ensure the Python logger is
+destroyed after I3Modules.
