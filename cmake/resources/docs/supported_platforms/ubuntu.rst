@@ -63,6 +63,7 @@ The following are a bit special and require extra care, especially if you
 want to run clsim and ppc on GPUs, which require hardware drivers.
 
 * ROOT (no longer provided via aptitude)
+  - libtbb-dev
 * clsim (needs OpenCL, ZMQ, and optionally GEANT)
   - libzmq5-dev
   - opencl-dev
