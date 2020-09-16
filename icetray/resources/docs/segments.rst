@@ -21,7 +21,7 @@ scripts from segments of segments).  With this in mind, segments provide a way t
 
   When creating a segment for use in production, adhere to the 
   "Give one entity, one cohesive responsibility." standard.  
-  We've seen several cases of segments taking on too much responsibilty.
+  We've seen several cases of segments taking on too much responsibility.
 
 
 A Basic Tray Segment Example
@@ -212,3 +212,27 @@ gives::
     If=None, SkipKeys=[], Streams=[])
 
 You can also, of course, read the source code for the segment.
+
+
+Default Parameters for Segments
+"""""""""""""""""""""""""""""""
+
+Often times segments will contain default parameters. When segments are layered
+with default parameters which are passed to modules it can often be difficult to
+track down where the parameter was actually set. There is a global singleton
+`icetray.I3Default` which if passed to a module will be equivalent to not setting
+the parameter. Setting the segment to `I3Default` will simplify the segment so
+you don't have to guess the correct default to pass the the module.
+
+Example usage::
+
+  @icetray.traysegment
+  def MySegment(tray,name,
+      Param1 = icetray.I3Default,
+      Param1 = icetray.I3Default,
+      If = lambda f: True):
+      
+      tray.AddModule("MyModule",
+          Param1=Param1,
+          Param2=Param2,
+          )
