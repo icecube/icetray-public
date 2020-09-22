@@ -175,7 +175,15 @@ bool try_load_project(const std::string& proj){
 
 int main (int argc, char *argv[])
 {
-  I3::init_icetray_lib();
+  try{
+    I3::init_icetray_lib();
+  }catch (const boost::python::error_already_set& e) {
+    clear();
+    endwin();
+    std::cerr << "Fatal python error:\n";
+    PyErr_Print();
+    return(1);
+  }
 
   po::options_description opt("options");
 
