@@ -63,13 +63,13 @@ class TableioTest(unittest.TestCase):
         csv_dir_name = "tableout"
         csv_filename = os.path.join(csv_dir_name,"Particle.csv")
         if os.path.exists(csv_filename):
-            print("deleting", repr(csv_filename))
             os.unlink(csv_filename)
 
         coords = []
-        for line in open(TEST_DATA + "simbad_tevcat_galactic.txt").readlines()[7:-2]:
-            line = line.split('|')
-            coords.append([ float(i) for l in (line[3],line[6],line[5]) for i in l.split()])
+        with open(TEST_DATA + "simbad_tevcat_galactic.txt") as f:
+            for line in f.readlines()[7:-2]:
+                line = line.split('|')
+                coords.append([ float(i) for l in (line[3],line[6],line[5]) for i in l.split()])
 
 
         tray  = I3Tray()

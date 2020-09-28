@@ -39,7 +39,7 @@ def read_horizons(horizons_filename):
     for k in values:
         ephem[k] = []
     
-    with open(horizons_filename,'U') as csvfile:
+    with open(horizons_filename,'r') as csvfile:
         lines = iter(csvfile.readlines())
 
         for line in lines:
@@ -103,8 +103,6 @@ class HorizonsTest(unittest.TestCase):
 
             l = math.degrees(gal.l)
             b = math.degrees(gal.b)
-
-            #print el - hor['el'][i], az - hor['az'][i], ra - hor['ra'][i], dec - hor['dec'][i],l - hor['l'][i],b -hor['b'][i]
 
             assert(abs(el-hor['el'][i]) < 0.003)
             assert(azimuth_distance(az,hor['az'][i]) < 1.0)

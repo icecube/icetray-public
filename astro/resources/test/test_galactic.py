@@ -31,11 +31,12 @@ class GalacticTest(unittest.TestCase):
     def setUpClass(cls):
 
         cls.tevcat = []
-        for line in open(TEST_DATA + "simbad_tevcat_galactic.txt").readlines()[7:]:
-            line = line.split('|')
-            if len(line)!=7:
-                continue
-            cls.tevcat.append([ [float(b) for b in a.split()] for a in line[3:] ])
+        with open(TEST_DATA + "simbad_tevcat_galactic.txt") as f:
+            for line in f.readlines()[7:]:
+                line = line.split('|')
+                if len(line)!=7:
+                    continue
+                cls.tevcat.append([ [float(b) for b in a.split()] for a in line[3:] ])
             
     def test_reference_points(self):
         #Test the reference points that define the galactic coordinate system
@@ -121,7 +122,6 @@ class GalacticTest(unittest.TestCase):
 
         eq = astro.I3GetEquatorialFromSuperGalactic(sg)
 
-        print(eq.ra/I3Units.degree/15,eq.dec/I3Units.degree)
         self.assertAlmostEqual(eq.ra/I3Units.degree,
                                18.92*15,1)
         self.assertAlmostEqual(eq.dec/I3Units.degree,
