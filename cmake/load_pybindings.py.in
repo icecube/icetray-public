@@ -47,7 +47,7 @@ PYTHON_VERSION = "@PYTHON_VERSION@"
 if PYTHON_VERSION != platform.python_version():
     cast_version = '.'.join([str(extract_numeric_value(v)) for v in platform.python_version_tuple()])    
     if PYTHON_VERSION != cast_version:
-        raise Exception("IceTray was compiled with version {} but is curently being run with {}"
+        raise Exception("IceTray was compiled with Python version {} but is currently being run with {}"
                         .format(PYTHON_VERSION,platform.python_version()))
                   
 if platform.system().startswith('freebsd'):
