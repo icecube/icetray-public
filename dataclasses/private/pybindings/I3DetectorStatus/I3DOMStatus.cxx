@@ -32,7 +32,8 @@ void register_I3DOMStatus()
       #define DOMSTATUSPROPERTIES (trigMode)(lcMode)(txMode)(lcWindowPre)(lcWindowPost)(lcSpan) \
       (statusFADC)(pmtHV)(speThreshold)(fePedestal)(dacTriggerBias0)(dacTriggerBias1)(dacFADCRef) \
       (deltaCompress)(domGainType)(cableType)(SLCActive)(mpeThreshold)(nBinsATWD0)(nBinsATWD1) \
-      (nBinsATWD2)(nBinsATWD3)(nBinsFADC)
+      (nBinsATWD2)(nBinsATWD3)(nBinsFADC)(deltaCompress)(fbState) \
+      (fbBrightness)(fbLength)(fbDelay)(fbMask)(fbRate)
       BOOST_PP_SEQ_FOR_EACH(WRAP_RW_RECASE, I3DOMStatus, DOMSTATUSPROPERTIES)
       #undef DOMSTATUSPROPERTIES
       // If we used snake_case, these two would end up as status_atw_da
