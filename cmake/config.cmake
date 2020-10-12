@@ -478,7 +478,8 @@ message(STATUS "Setting default compiler flags and build type.")
 #
 # set flags common to all build types
 #
-if(${COVERAGE})
+if(DEFINED COVERAGE)
+  message(STATUS "This is a COVERAGE build.")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 --coverage")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0 --coverage")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -g -O0 --coverage")    
@@ -493,6 +494,7 @@ else()
     endif()
   endif()
 endif()
+message(STATUS "CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
 
 #
 #  Check if it is defined...   if somebody has specified it on the
