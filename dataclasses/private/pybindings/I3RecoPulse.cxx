@@ -105,7 +105,7 @@ I3RecoPulseSeries_getbuffer(PyObject *obj, Py_buffer *view, int flags)
 	view->readonly = 1;
 
 	view->strides = new Py_ssize_t[2];
-	view->strides[0] = ts.size()*view->itemsize;
+	view->strides[0] = 2*view->itemsize;
 	view->strides[1] = view->itemsize;
 
 	int j = 0;
