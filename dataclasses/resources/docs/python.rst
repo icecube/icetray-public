@@ -274,3 +274,34 @@ Getting an I3RecoPulseSeriesMap from an I3RecoPulseSeriesMapMask
    OMKey(11,23,0),
    OMKey(18,11,0)]
 
+Efficiently getting pulse properties with numpy
+"""""""""""""""""""""""""""""""""""""""""""""""
+
+A series of I3RecoPulses (the elements in an I3RecoPulseSeriesMap) can be
+efficiently accessed as a numpy array using numpy.asarray(). Note the following
+limitations:
+
+- The data in the array are read-only
+- Only the pulse time and charge are in the numpy array. For other metadata, you have to go back to the original pulses.
+
+An example follows:
+
+.. code-block:: pycon
+
+  In [14]: p = d['OfflinePulses'].values()[165]
+
+  In [15]: p
+  Out[15]: [<icecube.dataclasses.I3RecoPulse object at 0x8676345d0>, <icecube.dataclasses.I3RecoPulse object at 0x80aabed50>, <icecube.dataclasses.I3RecoPulse object at 0x80b1a3da0>]
+
+  In [16]: numpy.asarray(p)
+  Out[16]: 
+  array([[1.10534619e+004, 1.07492745e+000],
+         [1.52605963e+000, 1.22596182e+004],
+         [2.56995640e+064, 6.47956996e+170]])
+
+  In [17]: numpy.asarray(p)[0]
+  Out[17]: array([1.10534619e+04, 1.07492745e+00])
+
+  In [18]: print(p[0].time, p[0].charge)
+  11053.4619140625 1.0749274492263794
+
