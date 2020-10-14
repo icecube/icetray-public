@@ -46,6 +46,7 @@ from_frame(I3Frame &frame, const std::string &name)
 
 namespace {
 static PyBufferProcs rps_bufferprocs;
+static PyBufferProcs rpsm_bufferprocs;
 
 static int
 I3RecoPulseSeries_getbuffer(PyObject *obj, Py_buffer *view, int flags)
@@ -83,7 +84,7 @@ I3RecoPulseSeries_getbuffer(PyObject *obj, Py_buffer *view, int flags)
 	}
 
 	view->obj = obj;
-	view->len = 2*ts.size()*sizeof(double);
+	view->len = 3*ts.size()*sizeof(double);
 	view->itemsize = sizeof(double);
 	if (flags & PyBUF_FORMAT)
 		view->format = (char *)"d";
@@ -93,7 +94,7 @@ I3RecoPulseSeries_getbuffer(PyObject *obj, Py_buffer *view, int flags)
 
 	view->shape = new Py_ssize_t[2];
 	view->shape[0] = ts.size();
-	view->shape[1] = 2;
+	view->shape[1] = 3;
 
 	// To honor a contiguous buffer request, make a copy of the
 	// data. This violates the spirit of the buffer protocol
@@ -105,13 +106,14 @@ I3RecoPulseSeries_getbuffer(PyObject *obj, Py_buffer *view, int flags)
 	view->readonly = 1;
 
 	view->strides = new Py_ssize_t[2];
-	view->strides[0] = 2*view->itemsize;
+	view->strides[0] = 3*view->itemsize;
 	view->strides[1] = view->itemsize;
 
 	int j = 0;
 	for (auto i : ts) {
-		((double *)view->buf)[2*j + 0] = i.GetTime();
-		((double *)view->buf)[2*j + 1] = i.GetCharge();
+		((double *)view->buf)[3*j + 0] = i.GetTime();
+		((double *)view->buf)[3*j + 1] = i.GetCharge();
+		((double *)view->buf)[3*j + 2] = i.GetWidth();
 		j++;
 	}
 
@@ -135,6 +137,104 @@ I3RecoPulseSeries_relbuffer(PyObject *obj, Py_buffer *view)
 	if (view->buf != NULL)
 		free(view->buf);
 }
+
+static int
+I3RecoPulseSeriesMap_getbuffer(PyObject *obj, Py_buffer *view, int flags)
+{
+	if (view == NULL) {
+		PyErr_SetString(PyExc_ValueError, "NULL view");
+		return -1;
+	}
+
+	view->shape = NULL;
+	view->internal = NULL;
+	view->suboffsets = NULL;
+	view->buf = NULL;
+
+	handle<> self(boost::python::borrowed(obj));
+	object selfobj(self);
+	I3RecoPulseSeriesMap &ts = extract<I3RecoPulseSeriesMap &>(selfobj)();
+	if (ts.size() == 0) {
+		PyErr_SetString(PyExc_BufferError, "Pulse series is empty.");
+		view->obj = NULL;
+		return -1;
+	}
+	if ((flags & PyBUF_WRITABLE) == PyBUF_WRITABLE) {
+		PyErr_SetString(PyExc_BufferError, "Cannot provide writable "
+		    "contiguous buffer.");
+		view->obj = NULL;
+		return -1;
+	}
+	if ((flags & PyBUF_F_CONTIGUOUS) == PyBUF_F_CONTIGUOUS) {
+		PyErr_SetString(PyExc_BufferError, "Cannot provide FORTRAN "
+		    "contiguous buffer.");
+		view->obj = NULL;
+		return -1;
+	}
+
+	view->len = 0;
+	for (auto i : ts)
+		view->len += 6*i.second.size()*sizeof(double);
+
+	view->obj = obj;
+	view->itemsize = sizeof(double);
+	if (flags & PyBUF_FORMAT)
+		view->format = (char *)"d";
+	else
+		view->format = NULL;
+	view->ndim = 2;
+
+	view->shape = new Py_ssize_t[2];
+	view->shape[1] = 6;
+	view->shape[0] = view->len/view->shape[1]/sizeof(double);
+
+	// To honor a contiguous buffer request, make a copy of the
+	// data. This violates the spirit of the buffer protocol
+	// slightly, but both simplifies the API and allows a
+	// faster memory copy than iterating over the list in Python
+	// would.
+
+	view->buf = malloc(view->len);
+	view->readonly = 1;
+
+	view->strides = new Py_ssize_t[2];
+	view->strides[0] = 6*view->itemsize;
+	view->strides[1] = view->itemsize;
+
+	int j = 0;
+	for (auto i : ts) {
+		for (auto k : i.second) {
+			((double *)view->buf)[6*j + 0] = i.first.GetString();
+			((double *)view->buf)[6*j + 1] = i.first.GetOM();
+			((double *)view->buf)[6*j + 2] = i.first.GetPMT();
+			((double *)view->buf)[6*j + 3] = k.GetTime();
+			((double *)view->buf)[6*j + 4] = k.GetCharge();
+			((double *)view->buf)[6*j + 5] = k.GetWidth();
+			j++;
+		}
+	}
+
+	view->suboffsets = NULL;
+	view->internal = view->buf;
+
+        Py_INCREF(obj);
+
+        return 0;
+}
+
+static list
+I3RecoPulseSeriesMap_pmtoffsets(const I3RecoPulseSeriesMap &rpsm)
+{
+	list out;
+
+	size_t j = 0;
+	for (auto i : rpsm) {
+		out.append(j);
+		j += i.second.size();
+	}
+
+	return out;
+}
 }
 
 
@@ -154,14 +254,29 @@ void register_I3RecoPulse()
 #endif
 
 
-  class_<I3RecoPulseSeriesMap, bases<I3FrameObject>, I3RecoPulseSeriesMapPtr>("I3RecoPulseSeriesMap")
+  object rpsm = class_<I3RecoPulseSeriesMap, bases<I3FrameObject>, I3RecoPulseSeriesMapPtr>("I3RecoPulseSeriesMap")
     .def(dataclass_suite<I3RecoPulseSeriesMap>())
     .def("from_frame", &from_frame, args("frame", "key"),
         "Get an I3RecoPulseSeriesMap from the frame, performing any necessary "
         "format conversions behind the scenes.")
     .staticmethod("from_frame")
+    .def("pmt_array_offsets", &I3RecoPulseSeriesMap_pmtoffsets,
+        "Provide a list of offsets into a numpy.asarray()-ed "
+        "I3RecoPulseSeriesMap corresponding to the beginning of the pulses for "
+        "each OMKey. The format of the numpy.asarray() version of an "
+        "I3RecoPulseSeriesMap is one row per pulse, PMTs grouped together, "
+        "with columns (String, OM, PMT, Time, Charge, Width).")
     ;
   register_pointer_conversions<I3RecoPulseSeriesMap>();
+
+  // Add buffer protocol interface
+  PyTypeObject *rpsmclass = (PyTypeObject *)rpsm.ptr();
+  rpsm_bufferprocs.bf_getbuffer = I3RecoPulseSeriesMap_getbuffer;
+  rpsm_bufferprocs.bf_releasebuffer = I3RecoPulseSeries_relbuffer;
+  rpsmclass->tp_as_buffer = &rpsm_bufferprocs;
+#if PY_MAJOR_VERSION < 3
+  rpsmclass->tp_flags |= Py_TPFLAGS_HAVE_NEWBUFFER;
+#endif
 
   scope outer = 
   class_<I3RecoPulse, boost::shared_ptr<I3RecoPulse> >("I3RecoPulse")

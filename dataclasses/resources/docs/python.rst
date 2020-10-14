@@ -305,3 +305,33 @@ An example follows:
   In [18]: print(p[0].time, p[0].charge)
   11053.4619140625 1.0749274492263794
 
+
+You can also access an entire I3RecoPulseSeriesMap as a numpy array using numpy.asarray():
+
+.. code-block:: pycon
+
+  In [10]: numpy.asarray(d['OfflinePulses'])
+  Out[10]: 
+  array([[4.00000000e+00, 3.20000000e+01, 0.00000000e+00, 2.36043042e+03,
+          5.78553498e-01, 8.33333302e+00],
+         [8.00000000e+00, 4.90000000e+01, 0.00000000e+00, 1.23705576e+04,
+          9.13645923e-01, 8.33333302e+00],
+         [8.00000000e+00, 5.00000000e+01, 0.00000000e+00, 1.45267861e+04,
+          5.65040946e-01, 8.33333302e+00],
+         ...,
+         [8.60000000e+01, 2.40000000e+01, 0.00000000e+00, 2.54425366e+03,
+          9.20636594e-01, 8.33333302e+00],
+         [8.60000000e+01, 5.20000000e+01, 0.00000000e+00, 1.43962598e+04,
+          7.19962656e-01, 8.33333302e+00],
+         [8.60000000e+01, 5.90000000e+01, 0.00000000e+00, 1.30112207e+04,
+          1.60624707e+00, 8.33333302e+00]])
+
+The columns are (String, OM, PMT, Time, Charge, Width), with one row per pulse. You can use this to quickly compute total charge, for example:
+
+.. code-block:: pycon
+
+  In [11]: numpy.asarray(d['OfflinePulses'])[:,4].sum()
+  Out[11]: 6854.178911853582
+
+In addition, a helper function is provided (I3RecoPulseSeriesMap.pmt_array_offsets()) that will return a list of indices for the rows when the array moves from one PMT to the next, which can be helpful for slicing the array representation into per-PMT blocks from Python.
+
