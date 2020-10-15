@@ -49,7 +49,7 @@ if(NOT DEFINED Boost_PYTHON_TYPE)
 	endif()
 endif()
 
-find_package(Boost COMPONENTS system thread date_time filesystem program_options regex iostreams ${Boost_PYTHON_TYPE} REQUIRED)
+find_package(Boost COMPONENTS system thread date_time filesystem program_options regex iostreams ${Boost_PYTHON_TYPE} numpy37 REQUIRED)
 
 if(Boost_FOUND)
 	set(BOOST_FOUND TRUE CACHE BOOL "Boost found successfully")
