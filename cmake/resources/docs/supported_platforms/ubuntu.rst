@@ -22,7 +22,7 @@ Minimal Install
     libboost-system-dev libboost-thread-dev libboost-date-time-dev
     libboost-python-dev libboost-serialization-dev libboost-filesystem-dev 
     libboost-program-options-dev libboost-regex-dev libboost-iostreams-dev
-    python3-numpy
+    libboost-numpy1.71-dev python3-numpy
 
 Full Install
 ............
