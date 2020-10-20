@@ -56,15 +56,5 @@ if(Boost_FOUND)
 	set(BOOST_INCLUDE_DIR ${Boost_INCLUDE_DIR} CACHE PATH "Path to the boost include directories.")
 	set(BOOST_LIBRARIES ${Boost_LIBRARIES} CACHE PATH "Boost libraries")
 	include_directories(${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-new)
-
-	# XXX: following obsolete?
-	foreach(lib ${BOOST_LIBRARIES})
-		if(NOT ${lib} STREQUAL "optimized" AND NOT ${lib} STREQUAL "debug")
-			add_custom_command(TARGET install_tool_libs
-			    PRE_BUILD
-			    COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/lib/tools
-			    COMMAND ${CMAKE_SOURCE_DIR}/cmake/install_shlib.py ${lib} ${CMAKE_INSTALL_PREFIX}/lib/tools)
-		endif(NOT ${lib} STREQUAL "optimized" AND NOT ${lib} STREQUAL "debug")
-	endforeach(lib ${BOOST_LIBRARIES})
 endif(Boost_FOUND)
 
