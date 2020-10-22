@@ -103,7 +103,6 @@ add_custom_target(rsync
 enable_testing()
 
 include(tools)          # trigger tool/library detection
-include(system_report)  # generate/upload a system report
 include(project)        # load the i3_*() macros
 
 ## this must be set before any call to i3_test_executable() - see "meat" below
