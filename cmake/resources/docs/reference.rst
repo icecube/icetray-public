@@ -13,7 +13,7 @@ i3_project
 .. index:: i3_project 
    single: CMake macros ; i3_project
 
-.. cmake:: i3_project(project_name [ARGS])
+.. cmake: i3_project(project_name [ARGS])
 
    Define a project.
 
@@ -130,7 +130,7 @@ i3_add_library
 .. index:: i3_add_library 
    single: CMake macros ; i3_add_library
 
-.. cmake:: i3_add_library(name src1 src2 ... srcN [ARGS ...])
+.. cmake: i3_add_library(name src1 src2 ... srcN [ARGS ...])
 
    Add a library to the build.  
 
@@ -202,7 +202,7 @@ i3_executable
 .. index:: i3_executable 
    single: CMake macros ; i3_executable
 
-.. cmake:: i3_executable(name src1 src2 ... srcN [ARGS ...])
+.. cmake: i3_executable(name src1 src2 ... srcN [ARGS ...])
 
    Compile and link *src1 ... srcN* together into binary *name*.
 
@@ -259,7 +259,7 @@ i3_executable
 .. index:: i3_test_executable()
    single: CMake macros ; i3_test_executable()
 
-.. cmake:: i3_test_executable(name src1 src2 ... srcN [ARGS ...])
+.. cmake: i3_test_executable(name src1 src2 ... srcN [ARGS ...])
 
    Add a unit-test executable to the build.
 
@@ -300,7 +300,7 @@ i3_add_pybindings
 .. index:: i3_add_pybindings 
    single: CMake macros ; i3_add_pybindings
 
-.. cmake:: i3_add_pybindings(name src1 [src2 ... srcN] [ARGS ...])
+.. cmake: i3_add_pybindings(name src1 [src2 ... srcN] [ARGS ...])
 
    Add a python bindings library to the build.
 
@@ -347,7 +347,7 @@ i3_test_scripts
 .. index:: i3_test_scripts()
    single: CMake macros ; i3_test_scripts()
 
-.. cmake:: i3_test_scripts(glob1 [glob2 ... globN])
+.. cmake: i3_test_scripts(glob1 [glob2 ... globN])
 
    Register scripts to be run during testing.
 
@@ -376,7 +376,7 @@ qt4_i3_automoc
 .. index:: qt4_i3_automoc()
    single: Cmake macros ; qt4_i3_automoc()
 
-.. cmake:: qt4_i3_automoc(file1 [file2 ... fileN])
+.. cmake: qt4_i3_automoc(file1 [file2 ... fileN])
 
    **Example**::
 
