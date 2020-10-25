@@ -139,7 +139,7 @@ void register_I3File()
          "Return True if there are more frames in the file")
     .def("rewind", &I3File::rewind, 
          "Rewind to beginning of file and reopen")
-    .def("push", &I3File::push,
+    .def("push", (void(I3File::*)(boost::shared_ptr<I3Frame>))&I3File::push,
          arg("frame"),
          "Push a frame to the file (if file opened in writing mode)")
     .def("pop_frame", (I3FramePtr (I3File::*)(I3Frame::Stream))&I3File::pop_frame,

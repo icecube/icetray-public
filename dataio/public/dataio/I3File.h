@@ -78,6 +78,9 @@ namespace dataio {
         bool more();
 
         //! Push a frame onto a writable file.
+        void push(const I3Frame&);
+
+        //! Push a frame onto a writable file.
         void push(I3FramePtr);
 
         //! Get a frame of a specific stream from a readable file.

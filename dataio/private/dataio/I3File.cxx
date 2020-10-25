@@ -96,7 +96,7 @@ namespace dataio {
         return (ifs_.peek() != EOF && ifs_.good());
     }
 
-    void I3File::push(I3FramePtr fr)
+    void I3File::push(const I3Frame& fr)
     {
         if (type_ == Type::closed) {
             log_fatal("file already closed");
@@ -105,7 +105,12 @@ namespace dataio {
             log_fatal("file not in write mode");
         }
 
-        fr->save(ofs_);
+        fr.save(ofs_);
+    }
+
+    void I3File::push(I3FramePtr fr)
+    {
+        push(*fr);
     }
 
     I3FramePtr I3File::pop_frame(I3Frame::Stream s)
