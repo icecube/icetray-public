@@ -53,6 +53,6 @@ I3_POINTER_TYPEDEFS(Surface);
 
 }
 
-I3_CLASS_VERSION(I3Surfaces::Surface, 0);
+I3_CLASS_VERSION(I3Surfaces::Surface, 1);
 
 #endif

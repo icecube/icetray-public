@@ -14,8 +14,11 @@ Surface::~Surface() {}
 
 template <typename Archive>
 void
-Surface::serialize(Archive &ar __attribute__ ((unused)), unsigned version __attribute__ ((unused)))
-{}
+Surface::serialize(Archive &ar, unsigned version)
+{
+	if(version > 0)
+		ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
+}
 
 }
 
