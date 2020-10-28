@@ -74,8 +74,7 @@ I3Module::I3Module(const I3Context& context)
   : context_(context), inbox_()
 {
   nphyscall_ = ndaqcall_ = 0;
-  sysphystime_ = userphystime_ = 0;
-  sysdaqtime_ = userdaqtime_ = 0;
+  systime_ = usertime_ = 0;
   i3_log("%s done", __PRETTY_FUNCTION__);
 }
 
@@ -83,12 +82,20 @@ I3Module::~I3Module()
 {
   // only print if more than 10 seconds used.  This is kind of an
   // arbitrary number.
-  if (userphystime_ + sysphystime_ > min_report_time_)
-    log_info("%40s: %6u calls to physics %9.2fs user %9.2fs system",
-	   GetName().c_str(), nphyscall_, userphystime_, sysphystime_);
-  if (userdaqtime_ + sysdaqtime_ > min_report_time_)
-    log_info("%40s: %6u calls to DAQ %9.2fs user %9.2fs system",
-	   GetName().c_str(), ndaqcall_, userdaqtime_, sysdaqtime_);
+  if (usertime_ + systime_ > min_report_time_){
+    if(nphyscall_ && ndaqcall_)
+      log_info("%40s: %9.2fs user %9.2fs system (%u calls to physics, %u calls to DAQ)",
+        GetName().c_str(), usertime_, systime_, nphyscall_, ndaqcall_);
+    else if(nphyscall_ && !ndaqcall_)
+      log_info("%40s: %9.2fs user %9.2fs system (%u calls to physics)",
+        GetName().c_str(), usertime_, systime_, nphyscall_);
+    else if(!nphyscall_ && ndaqcall_)
+      log_info("%40s: %9.2fs user %9.2fs system (%u calls to DAQ)",
+	    GetName().c_str(), usertime_, systime_, ndaqcall_);
+    else
+      log_info("%40s: %9.2fs user %9.2fs system",
+	    GetName().c_str(), usertime_, systime_);
+  }
 }
 
 void
@@ -189,16 +196,13 @@ I3Module::Process_()
   if (!frame)
     {
       log_trace("no frame, calling this->Process() in case we're a driving module");
+      ModuleTimer mt(systime_, usertime_);
       this->Process();
       return;
     }
 
   if (ShouldDoProcess(frame)) {
-    if (frame->GetStop() == I3Frame::Physics)
-      ModuleTimer mt(sysphystime_, userphystime_);
-    else if (frame->GetStop() == I3Frame::DAQ)
-      ModuleTimer mt(sysdaqtime_, userdaqtime_);
-
+    ModuleTimer mt(systime_, usertime_);
     this->Process();
   } else {
     PopFrame();
@@ -446,8 +450,8 @@ I3PhysicsUsage
 I3Module::ReportUsage()
 {
   I3PhysicsUsage pu;
-  pu.systime = sysphystime_ + sysdaqtime_;
-  pu.usertime = userphystime_ + userdaqtime_;
+  pu.systime = systime_;
+  pu.usertime = usertime_;
   pu.ncall = nphyscall_ + ndaqcall_;
   return pu;
 }

@@ -351,8 +351,7 @@ public:
   std::string name_;
 
   unsigned nphyscall_, ndaqcall_;
-  double sysphystime_, userphystime_;
-  double sysdaqtime_, userdaqtime_;
+  double systime_, usertime_;
 
   // cache of previous metadata frames (per-outbox)
   std::map<std::string, boost::shared_ptr<I3FrameMixer> > cachemap_;
