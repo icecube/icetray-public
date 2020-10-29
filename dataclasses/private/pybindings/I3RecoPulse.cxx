@@ -20,14 +20,13 @@
 //
 
 #include <vector>
-#include <boost/python/numpy.hpp>
+
 #include <dataclasses/physics/I3RecoPulse.h>
 #include <icetray/I3Frame.h>
 #include <icetray/python/dataclass_suite.hpp>
 #include <dataclasses/ostream_overloads.hpp>
 
 using namespace boost::python;
-namespace np = boost::python::numpy;
 
 static I3RecoPulseSeriesMapPtr
 from_frame(I3Frame &frame, const std::string &name)
@@ -233,50 +232,14 @@ I3RecoPulseSeriesMap_pmtoffsets(const I3RecoPulseSeriesMap &rpsm)
 		out.append(j);
 		j += i.second.size();
 	}
-    // For convenience, terminate the offset array with the length of the flattened map
-    out.append(j);
-    
+
 	return out;
 }
-
-
-
-static np::ndarray
-I3RecoPulseSeriesMap_pmtoffsets_padded(const I3RecoPulseSeriesMap &rpsm)
-{
-    const int MAX_STR = 86;
-    const int MAX_OM = 60;
-
-    size_t position = 0;
-    std::array<size_t, MAX_STR*MAX_OM +1> offset_array;
-    
-    
-    auto pmt_index = offset_array.begin();
-    int cur_pmt = 0;
-    int last_pmt = 0;
-
-    for (auto i : rpsm) {
-        
-        cur_pmt = (i.first.GetString()-1) *  MAX_OM + i.first.GetOM()-1; 
-        pmt_index = std::fill_n(pmt_index, cur_pmt - last_pmt, position); 
-        last_pmt = cur_pmt;
-        position += i.second.size();
-    }
-     
-    std::fill_n(pmt_index, MAX_OM*MAX_STR+1-last_pmt, position); 
-
-    Py_intptr_t shape[1] = { offset_array.size() };
-    np::ndarray result = np::zeros(1, shape, np::dtype::get_builtin<size_t>());
-    std::copy(offset_array.begin(), offset_array.end(),
-              reinterpret_cast<size_t*>(result.get_data()));
-    return result;
-
 }
-}
+
 
 void register_I3RecoPulse()
 {
-  np::initialize();
   object rps = class_<std::vector<I3RecoPulse> >("vector_I3RecoPulse")
     .def(dataclass_suite<std::vector<I3RecoPulse> >())
     ;
@@ -301,13 +264,6 @@ void register_I3RecoPulse()
         "Provide a list of offsets into a numpy.asarray()-ed "
         "I3RecoPulseSeriesMap corresponding to the beginning of the pulses for "
         "each OMKey. The format of the numpy.asarray() version of an "
-        "I3RecoPulseSeriesMap is one row per pulse, PMTs grouped together, "
-        "with columns (String, OM, PMT, Time, Charge, Width).")
-    .def("pmt_array_offsets_padded", &I3RecoPulseSeriesMap_pmtoffsets_padded,
-        "Provide a list of offsets into a numpy.asarray()-ed "
-        "I3RecoPulseSeriesMap corresponding to the beginning of the pulses for "
-        "each OMKey. OMKey's not present in the map are indicated by zero offset differences."
-        "The format of the numpy.asarray() version of an "
         "I3RecoPulseSeriesMap is one row per pulse, PMTs grouped together, "
         "with columns (String, OM, PMT, Time, Charge, Width).")
     ;
