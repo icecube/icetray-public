@@ -1,7 +1,7 @@
 
 tooldef(boostnumpy
     include
-    boost/numpy.hpp
+    boost/python/numpy.hpp
     lib
     NONE # The bin directory is n/a, placeholder
     boost_numpy
