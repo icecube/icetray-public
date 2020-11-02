@@ -39,6 +39,8 @@
 #include <boost/next_prior.hpp>
 #include <icetray/python/get_class.hpp>
 
+#include <type_traits>
+
 namespace boost { namespace python {
 
 // Forward declaration
@@ -51,6 +53,89 @@ namespace detail
 	class final_list_derived_policies 
 		: public list_indexing_suite<Container, 
 			NoProxy, final_list_derived_policies<Container, NoProxy> > {};
+
+	template<class Container>
+	static boost::shared_ptr<Container>
+	container_from_object(boost::python::object v, typename std::enable_if<not std::is_arithmetic<typename Container::value_type>::value>::type* = 0)
+	{
+		boost::shared_ptr<Container> conti(new Container());
+		container_utils::extend_container(*conti, v);
+		return conti;
+	}
+
+	// For numeric vectors, instantiate this as container_from_object to
+	// try using numpy's buffer protocol first
+	template<class Container>
+	static boost::shared_ptr<Container>
+	container_from_object(boost::python::object v, typename std::enable_if<std::is_arithmetic<typename Container::value_type>::value>::type* = 0)
+	{
+		boost::shared_ptr<Container> x(new Container);
+		Py_buffer view;
+		if (PyObject_GetBuffer(v.ptr(), &view,
+		    PyBUF_FORMAT | PyBUF_ANY_CONTIGUOUS) != -1) {
+			if (strcmp(view.format, "d") == 0) {
+				x->resize(view.len/sizeof(double));
+				for (size_t i = 0; i < view.len/sizeof(double);
+				    i++)
+					(*x)[i] = ((double *)view.buf)[i];
+			} else if (strcmp(view.format, "f") == 0) {
+				x->resize(view.len/sizeof(float));
+				for (size_t i = 0; i < view.len/sizeof(float);
+				    i++)
+					(*x)[i] = ((float *)view.buf)[i];
+			} else if (strcmp(view.format, "n") == 0) {
+				x->resize(view.len/sizeof(ssize_t));
+				for (size_t i = 0; i < view.len/sizeof(ssize_t);
+				    i++)
+					(*x)[i] = ((ssize_t *)view.buf)[i];
+			} else if (strcmp(view.format, "N") == 0) {
+				x->resize(view.len/sizeof(size_t));
+				for (size_t i = 0; i < view.len/sizeof(size_t); 
+				    i++)
+					(*x)[i] = ((size_t *)view.buf)[i];
+			} else if (strcmp(view.format, "i") == 0) {
+				x->resize(view.len/sizeof(int));
+				for (size_t i = 0; i < view.len/sizeof(int);
+				    i++)
+					(*x)[i] = ((int *)view.buf)[i];
+			} else if (strcmp(view.format, "I") == 0) {
+				x->resize(view.len/sizeof(int));
+				for (size_t i = 0; i < view.len/sizeof(int);
+				    i++)
+					(*x)[i] = ((unsigned int *)view.buf)[i];
+			} else if (strcmp(view.format, "l") == 0) {
+				x->resize(view.len/sizeof(long));
+				for (size_t i = 0; i < view.len/sizeof(long);
+				    i++)
+					(*x)[i] = ((long *)view.buf)[i];
+			} else if (strcmp(view.format, "L") == 0) {
+				x->resize(view.len/sizeof(long));
+				for (size_t i = 0; i < view.len/sizeof(long);
+				    i++)
+					(*x)[i] = ((unsigned long *)view.buf)[i];
+			} else if (strcmp(view.format, "q") == 0) {
+				x->resize(view.len/sizeof(int64_t));
+				for (size_t i = 0; i < view.len/sizeof(int64_t);
+				    i++)
+					(*x)[i] = ((int64_t *)view.buf)[i];
+			} else if (strcmp(view.format, "Q") == 0) {
+				x->resize(view.len/sizeof(uint64_t));
+				for (size_t i = 0; i < view.len/sizeof(uint64_t);
+				    i++)
+					(*x)[i] = ((uint64_t *)view.buf)[i];
+			} else {
+				// We could add more types, but why do that?
+				// Let Python do the work for obscure cases
+				container_utils::extend_container(*x, v);
+			}
+			PyBuffer_Release(&view);
+		} else {
+			PyErr_Clear();
+			container_utils::extend_container(*x, v);
+		}
+
+		return x;
+	}
 }
 
 // list_indexing_suite is an indexing_suite derived class for
@@ -248,13 +333,11 @@ private:
 			}
 		}
 	}
-	
-	static boost::shared_ptr<Container >
-	container_from_object(object v)
+
+	static boost::shared_ptr<Container>
+	container_from_object(boost::python::object v)
 	{
-		boost::shared_ptr<Container > conti(new Container());
-		container_utils::extend_container(*conti, v);
-		return conti;
+		return detail::container_from_object<Container>(v);
 	}
 	
 	static void
