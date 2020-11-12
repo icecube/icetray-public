@@ -25,7 +25,7 @@ IF (NOT BOOSTNUMPY_FOUND)
         boost/python/numpy.hpp
         lib
         NONE # The bin directory is n/a, placeholder
-        boost_numpy$ # Try with no suffix
+        boost_numpy # Try with no suffix
 )
 ENDIF()
 
