@@ -146,7 +146,7 @@ class I3FileStagerFile(AbstractFileStager):
 		auth = None
 		if '@' in parsed.netloc:
 			auth, netloc = parsed.netloc.split('@')
-			auth = base64.encodestring(auth.encode('utf-8'))[:-1]
+			auth = base64.encodebytes(auth.encode('utf-8'))[:-1]
 			parts = list(parsed)
 			parts[1] = netloc
 			url = urlparse.ParseResult(*parts).geturl()
