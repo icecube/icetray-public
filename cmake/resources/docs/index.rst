@@ -21,6 +21,7 @@ Quick User Guide
 .. toctree::
    :maxdepth: 2
 
+   dependencies
    platforms
    tutorial
    parasite
