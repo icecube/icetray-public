@@ -12,15 +12,20 @@ Basic program layout
       /shovelio -- Steamshovel file handling library
       /steamshovel -- GUI and program files
       /ui -- Qt .ui files defining GUI widget layouts; view using Qt Designer
+      /logview -- For viewing logs obviously
   /public
       /shovelio -- "public" shovelio headers; steamshovel is the only client
   /python
       /artists -- Steamshovel's default Python artists
       /embed -- Python utilities for embedding Python in a C++ app
       /util -- Various utilities, mostly supporting GUI features
+      /sessions -- <TBD>
   /resources
       /shader -- Steamshovel graphics shaders
       /Steamshovelapp -- Support files for standalone Steamshovel.app binary on OSX
+      /scripts -- <TBD>
+      /test -- Tests
+      /docs -- Documentation
 
 
 Getting oriented: Support systems
@@ -336,47 +341,13 @@ MCTreeArtist cerenkov visualization) we actually lie about the camera distance
 in order to get a consistent sorting pattern across the overlapping spheres of
 the transparent "cone."
 
-QT5
+Qt5
 ^^^
-
-Qt5 will replace Qt4 in the next few years and will bring a few configuration
-issues to steamshovel users.   A very recent icetray ticket was opened for this
-issue: http://code.icecube.wisc.edu/projects/icecube/ticket/477
-
-Visit http://qt-project.org/wiki/Transition_from_Qt_4.x_to_Qt5 -- it looks like
-minimal effort will be required on Steamshovel's part to adapt.  The new QTimer
-API may make a slight difference, but I wouldn't change our code unless the
-actual behavior proves unaccaptable.
-
 Changes in Qt5's signal and slot system may make the shovelart/BindSignal class
 obselete, since it should become possible to put boost::functions (or something
-like them) directly into QObject::connect.  But I believe existing code should
-still work fine.
+like them) directly into QObject::connect. 
 
-Python 3
-^^^^^^^^
-
-Python 3 is not officially supported as the time of this writing, but some users
-of Steamshovel already use it and keep and eye on Python 3 compatibility. Thanks
-to them, the basic code base of Steamshovel is Python 3-ready.
-
-
-Unimplemented Feature Requests
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* Detect and display I3Particle surface crossings: show where an I3Particle's
-  path crosses the ice surface and/or the bedrock level.  This would be done
-  with the ParticleArtist, with perhaps a boolean setting for whether or not to
-  show the crossings, and TextLabels at the crossings showing their exact
-  coordinates.
-
-* A couple of old glshovel tickets remain on the icecube Trac site-- I have
-  closed glshovel tickets that were clearly addressed by steamshovel.  These
-  could be considered feature requests; they would generally be addressed
-  by writing a new Artist.  But without a specific user request behind them,
-  solutions to these tickets might go unused.  Consult with physicists who
-  might want new code for this before writing any.
-
-  http://code.icecube.wisc.edu/projects/icecube/ticket/366
-  http://code.icecube.wisc.edu/projects/icecube/ticket/368
-  http://code.icecube.wisc.edu/projects/icecube/ticket/369
+Qt6
+^^^
+Qt6 was released on December 8th, 2020.  It'll likely be awhile before it becomes
+standard on official platforms.
