@@ -22,8 +22,6 @@ namespace std{
 #endif
 
 #include <boost/detail/workaround.hpp>
-#include <boost/detail/endian.hpp>
-
 #include <archive/basic_binary_iarchive.hpp>
 
 namespace icecube {
@@ -88,7 +86,7 @@ basic_binary_iarchive<Archive>::init(){
     {
         int v = 0;
         v = this->This()->m_sb.sbumpc();
-        #if defined(BOOST_LITTLE_ENDIAN)
+        #if BYTE_ORDER == LITTLE_ENDIAN
         if(v < 6){
             ;
         }
@@ -110,9 +108,11 @@ basic_binary_iarchive<Archive>::init(){
             // version 8+ followed by a zero
             this->This()->m_sb.sbumpc();
         }
-        #elif defined(BOOST_BIG_ENDIAN)
+        #elif BYTE_ORDER == BIG_ENDIAN
         if(v == 0)
             v = this->This()->m_sb.sbumpc();
+        #else
+        #error Unable to determine the endianness of this machine
         #endif
         input_library_version = static_cast<library_version_type>(v);
     }
