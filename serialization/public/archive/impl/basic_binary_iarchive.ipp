@@ -86,7 +86,7 @@ basic_binary_iarchive<Archive>::init(){
     {
         int v = 0;
         v = this->This()->m_sb.sbumpc();
-        #if BYTE_ORDER == LITTLE_ENDIAN
+        #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
         if(v < 6){
             ;
         }
@@ -108,7 +108,7 @@ basic_binary_iarchive<Archive>::init(){
             // version 8+ followed by a zero
             this->This()->m_sb.sbumpc();
         }
-        #elif BYTE_ORDER == BIG_ENDIAN
+        #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
         if(v == 0)
             v = this->This()->m_sb.sbumpc();
         #else
