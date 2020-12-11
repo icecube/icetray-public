@@ -183,10 +183,11 @@ def harvest_objects(module,want):
 
 
 def get_uninspectable_projects():
-    
+    # level3_filter_cascade calls the segfaulting IceHive
+    # IceHive now hangs on inspect...we'll call this an improvement over segfaulting.
     return [ os.path.basename(fname).replace('-','_') for fname in
              glob(os.path.join(os.environ['I3_BUILD'],
-                               'docs','no_inspect','*'))] +["level3_filter_cascade"]
+                               'docs','no_inspect','*'))] + ["level3_filter_cascade", "IceHive"]
 
 def get_inspectable_projects():
 

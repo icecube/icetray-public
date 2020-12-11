@@ -534,8 +534,7 @@ output.file_header()
 args = sorted(set([a.replace('-','_') for a in args]),
               key=lambda s:s.lower())
 
-#level3_filter_cascade calls the segfaulting IceHive
-noinspect = i3inspect.get_uninspectable_projects()+["level3_filter_cascade"]
+noinspect = i3inspect.get_uninspectable_projects()
 
 for p in args:
     if p in noinspect:
