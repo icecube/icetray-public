@@ -42,10 +42,10 @@ Projects/tools in combo not built with this minimal package installation:
 * dataio-shovel (needs libcdk5-dev libncurses-dev)
 * rootwriter (needs root-system)
 * docs (needs python-sphinx doxygen)
-* gcdserver (needs pymongo)
+* gcdserver (needs pymongo and python3-mysqldb)
 * unit tests (some needs python3-scipy)
 * test coverage (needs lcov and python3-coverage)
-  
+
 .. container:: wrapped-code
 
     apt-get install build-essential cmake libbz2-dev libgsl0-dev libcfitsio-dev
@@ -55,6 +55,7 @@ Projects/tools in combo not built with this minimal package installation:
     libhealpix-cxx-dev libstarlink-pal-dev libhdf5-dev libzstd-dev
     libsuitesparse-dev libsprng2-dev liblapack-dev python3-numpy
     libqt5opengl5-dev libcdk5-dev libncurses-dev python3-sphinx doxygen
+    python3-mysqldb python3-zmq
   
 Special Install
 ...............
@@ -66,6 +67,7 @@ want to run clsim and ppc on GPUs, which require hardware drivers.
   - libtbb-dev
 * clsim (needs OpenCL, ZMQ, and optionally GEANT)
   - libzmq5-dev
+  - python3-zmq
   - opencl-dev
 * ppc (needs OpenCL)
   - opencl-dev
