@@ -560,6 +560,8 @@ namespace dataio {
             // mix vector of frames to produce result
             I3FrameMixer mixer;
             for (auto& f : fr) {
+                // mixing alters frames, so we must make copies to avoid polluting the cache
+                f = boost::make_shared<I3Frame>(*f);
                 mixer.Mix(*f);
             }
             return fr.back();
@@ -590,28 +592,31 @@ namespace dataio {
     std::vector<I3FramePtr> I3FrameSequenceImpl::get_mixed_frames()
     {
         if (frameno_ == 0) {
-            std::vector<I3FramePtr> ret;
-            return ret;
+            return {};
         }
         auto fr = cache_.get(frameno_-1);
         if (fr.empty()) {
             log_fatal("previous frame not in the cache");
         }
-        fr.pop_back();
-        return fr;
+        std::vector<I3FramePtr> ret;
+        for(std::size_t i=0; i<fr.size()-1; i++)
+            ret.push_back(boost::make_shared<I3Frame>(*fr[i]));
+        return ret;
     }
 
     std::vector<I3FramePtr> I3FrameSequenceImpl::get_current_frame_and_deps()
     {
         if (frameno_ == 0) {
-            std::vector<I3FramePtr> ret;
-            return ret;
+            return {};
         }
         auto fr = cache_.get(frameno_-1);
         if (fr.empty()) {
             log_fatal("previous frame not in the cache");
         }
-        return fr;
+        std::vector<I3FramePtr> ret;
+        for(const auto& frame : fr)
+            ret.push_back(boost::make_shared<I3Frame>(*frame));
+        return ret;
     }
 
     std::vector<std::string> I3FrameSequenceImpl::get_paths() const
