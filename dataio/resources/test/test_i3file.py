@@ -72,6 +72,18 @@ class TestFrameSequence(unittest.TestCase):
             pass
         f.close()
 
+#    def test_05(self):
+#        # test seek
+#        f = dataio.I3File(self.name)
+#        f.rewind()
+#        self.assertEqual(f.frameno, 0)
+#
+#        for seek_n in range(7):
+#            f.seek(seek_n)
+#            self.assertEqual(f.frameno, seek_n)
+#
+#            f.close()
+
     def test_06(self):
         n_frames = 0
         with dataio.I3File(self.name) as f:
