@@ -27,6 +27,23 @@ A:  At the very least all projects that are going to be part of a production met
 simulation, or icerec) needs to be reviewed, regardless of the language ( C++, pyython, etc...).
 
 
+Ten Commandments
+----------------
+.. _ten_commandments: https://techbeacon.com/app-dev-testing/10-commandments-navigating-code-reviews
+Stolen from ten_commandments_ by Angie Jones, paraphrased.
+
+1. Don't take it personnally
+2. Don't marry your code
+3. Do consider all feedback
+4. Articulate your rationale
+5. Be willing to compromise
+6. Contribute to others' code reviews
+7. Treat submitters how you'd like to be treated
+8. Don't be intimidated by the number of comments
+9. Don't repeat the same mistakes
+10. Embrace the nitpickers (within reason)
+
+
 Points to be addressed during Code Review
 -----------------------------------------
 
