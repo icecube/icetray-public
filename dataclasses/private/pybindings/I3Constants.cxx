@@ -55,6 +55,7 @@ void register_I3Constants()
     .def_readonly("OriginElev", I3Constants::OriginElev, "elev of icecube origin, by definition")
     .def_readonly("zIceTop", I3Constants::zIceTop, " Z-coordinate of IceTop (Origin Depth)"
 		  "Obtained from DEFINED elevation of origin and MEASURED surface elevation")
+    .def_readonly("earthRadius", I3Constants::earthRadius, "earth radius in IceCube units")
     .def_readonly("Coordinate_shift_x", I3Constants::Coordinate_shift_x, "conversion between icecube and amanda")
     .def_readonly("Coordinate_shift_y", I3Constants::Coordinate_shift_y, "conversion between icecube and amanda")
     .def_readonly("Coordinate_shift_z", I3Constants::Coordinate_shift_z, "conversion between icecube and amanda")

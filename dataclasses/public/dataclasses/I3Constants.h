@@ -95,6 +95,10 @@ namespace I3Constants
    */
   static const double zIceTop = SurfaceElev-OriginElev;
 
+  /**
+   * Earth radius constant
+   */
+  static const double earthRadius = 6.371315e6*I3Units::m;
 
   /**
    * Conversion between IceCube and AMANDA coordinates
