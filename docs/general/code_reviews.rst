@@ -34,7 +34,7 @@ Stolen from ten_commandments_ by Angie Jones, paraphrased.
 
 1. Don't take it personnally
 2. Don't marry your code
-3. Do consider all feedback
+3. Consider all feedback
 4. Articulate your rationale
 5. Be willing to compromise
 6. Contribute to others' code reviews
@@ -42,8 +42,13 @@ Stolen from ten_commandments_ by Angie Jones, paraphrased.
 8. Don't be intimidated by the number of comments
 9. Don't repeat the same mistakes
 10. Embrace the nitpickers (within reason)
+    
+With respect to the 10th commandment, I think it's worth asking reviewers not to be nitpicky.
+Keep comments constructive and helpful.  Don't sweat the small style and don't try to legislate
+style, except when the chosen style hinders readability.  Focus on correctness, readability,
+and maintainability.
 
-
+    
 Points to be addressed during Code Review
 -----------------------------------------
 
