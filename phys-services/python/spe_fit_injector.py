@@ -1,6 +1,8 @@
-import os, numpy
-from icecube import icetray, dataclasses, dataio
-from I3Tray import *
+import os
+import numpy
+from icecube import icetray
+from icecube import dataclasses
+from icecube import dataio
 from copy import deepcopy
 
 def convert_omkey(key):
@@ -60,9 +62,7 @@ class SPEFitInjector:
     def __load_from_new_json(self, frame):
 
         cal = deepcopy(frame['I3Calibration'])
-        #cal = frame['I3Calibration']
         del frame['I3Calibration']
-        #domcal = cal.dom_cal
         attributes = ['exp1_amp','exp1_width', 'exp2_amp', 'exp2_width',
                       'gaus_amp', 'gaus_mean', 'gaus_width', 'compensation_factor',
                       'slc_gaus_mean']
@@ -81,12 +81,12 @@ class SPEFitInjector:
 
                 if omkey in cal.dom_cal:
                     cal.dom_cal[omkey].combined_spe_charge_distribution = spe_distribution
-                    if 'mean_charge' in fits['ATWD_fit']:
-                        cal.dom_cal[omkey].mean_atwd_charge = fits['ATWD_fit']['mean_charge']
+                    if 'mean_atwd_charge' in fits:
+                        cal.dom_cal[omkey].mean_atwd_charge = fits['mean_atwd_charge']
                     else:
                         print(fits['ATWD_fit'].keys())
-                    if 'mean_charge' in fits['SLC_fit']:
-                        cal.dom_cal[omkey].mean_fadc_charge = fits['SLC_fit']['mean_charge']
+                    if 'mean_fadc_charge' in fits:
+                        cal.dom_cal[omkey].mean_fadc_charge = fits['mean_fadc_charge']
                     else:
                         print(fits['SLC_fit'].keys())
                 else:
