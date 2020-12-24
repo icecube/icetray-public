@@ -258,6 +258,49 @@ I3Equatorial I3GetEquatorialFromDirection(const I3Direction & dir, const I3Time 
   return eq;
 }
 
+I3Ecliptic I3GetEclipticFromEquatorial(const I3Equatorial& eq, const I3Time& time)
+{
+  double ecl_longitude(NAN);
+  double ecl_latitude(NAN);
+  double mjd = get_mjd(time);
+
+  //PAL_EQECL : J2000 α, δ to Ecliptic
+  //ACTION    : Transform from J2000.0 equatorial coordinates 
+  //          : to ecliptic coordinates 
+  palEqecl( eq.ra, eq.dec, mjd, &ecl_longitude, &ecl_latitude);
+
+  I3Ecliptic ecl(ecl_longitude, ecl_latitude);
+
+  i3_assert(ecl.l >=  0);
+  i3_assert(ecl.l <=  2*M_PI);
+  i3_assert(ecl.b >= -M_PI/2);
+  i3_assert(ecl.b <= +M_PI/2);
+  
+  return ecl;
+}
+
+I3Equatorial I3GetEquatorialFromEcliptic(const I3Ecliptic& ecl, const I3Time& time)
+{
+  double eq_ra(NAN);
+  double eq_dec(NAN);
+  double mjd = get_mjd(time);
+
+  //PAL_ECLEQ : Ecliptic to J2000 α, δ 
+  //ACTION    : Transform from ecliptic coordinates 
+  //          : to J2000.0 FK5 equatorial coordinates.
+  palEcleq(ecl.l,ecl.b,mjd,&eq_ra,&eq_dec);
+  
+  I3Equatorial eq(eq_ra, eq_dec);
+
+  i3_assert(eq.ra  >=  0);
+  i3_assert(eq.ra  <=  2*M_PI);
+  i3_assert(eq.dec >= -M_PI/2);
+  i3_assert(eq.dec <= +M_PI/2);
+
+  
+  return eq;
+
+}
 
 I3Galactic I3GetGalacticFromEquatorial(const I3Equatorial& eq)
 {

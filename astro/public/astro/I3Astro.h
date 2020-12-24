@@ -72,6 +72,22 @@ struct I3SuperGalactic : public I3FrameObject
 };
 
 /**
+ * @brief Container class for storing ecliptic coordinates 
+ */
+struct I3Ecliptic: public I3FrameObject
+{
+ I3Ecliptic() : l(NAN),b(NAN) {};
+ I3Ecliptic(double el,double eb) : l(el),b(eb) {};
+  
+  /// Galactic Longitude in radians
+  double l;
+  /// Galactic Latitude in radians
+  double b;
+};
+
+
+
+/**
  * @brief Convert from I3Time to sidereal time (GMST)
  *
  * @param eventTime - the time of the observation in I3Time
@@ -140,6 +156,27 @@ I3Direction I3GetDirectionFromEquatorial(const I3Equatorial& equatorial,const I3
  *          event in J2000 coordinate system
  */
 I3Equatorial I3GetEquatorialFromDirection(const I3Direction& direction,const I3Time& time);
+
+/**
+ * @brief Convert from Equatorial (J2000) to Ecliptic coordinate system
+ * 
+ * @param equatorial - I3Equatorial position of astronomical observation 
+ *        in J2000 coordinate system
+ * @param time - I3Time of the astronomical observation
+ * @returns I3Ecliptic position in ecliptic coordinate system
+ */
+I3Ecliptic I3GetEclipticFromEquatorial(const I3Equatorial& equatorial, const I3Time& time);
+
+/**
+ * @brief Convert from Ecliptic to Equatorial (J2000) coordinate system
+ * 
+ * @param ecliptic - I3Ecliptic position in galactic coordinate system
+ * @param time - I3Time of the astronomical observation
+ * @returns I3Equatorial position of astronomical observation 
+ *          in J2000 coordinate system
+ */
+I3Equatorial I3GetEquatorialFromEcliptic(const I3Ecliptic& ecliptic, const I3Time& time);
+
 
 
 /**
