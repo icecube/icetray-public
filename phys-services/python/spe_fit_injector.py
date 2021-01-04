@@ -81,8 +81,10 @@ class SPEFitInjector:
 
                 if omkey in cal.dom_cal:
                     cal.dom_cal[omkey].combined_spe_charge_distribution = spe_distribution
-                    cal.dom_cal[omkey].mean_atwd_charge = fits['mean_atwd_charge']
-                    cal.dom_cal[omkey].mean_fadc_charge = fits['mean_fadc_charge']
+                    if 'mean_atwd_charge' in fits: 
+                        cal.dom_cal[omkey].mean_atwd_charge = fits['mean_atwd_charge']
+                    if 'mean_fadc_charge' in fits: 
+                        cal.dom_cal[omkey].mean_fadc_charge = fits['mean_fadc_charge']
                 else:
                     icetray.logging.log_warn("SPE Fit for %s has no calibration object." % str(omkey))
             del frame['I3Calibration']
