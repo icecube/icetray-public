@@ -14,6 +14,14 @@ def convert_omkey(key):
     except ValueError:
         icetray.logging.log_warn("%s is not an OMKey" % str(key))
 
+
+def omkey_str(omkey):
+    try:
+        return str(int(omkey[0]))+','+str(int(int(omkey[1])))
+    except ValueError:
+        icetray.logging.log_warn("%s is not an OMKey" % str(omkey))
+
+
 def is_new_style(fit_values):
     '''
     Determine whether we're looking at an old JSON
@@ -60,6 +68,28 @@ class SPEFitInjector:
         return 'FitInjector(%s)' % self.filename
 
     def __load_from_new_json(self, frame):
+        from scipy.integrate import quad
+        import os.path 
+        import numpy as np
+        
+
+        feature = {}
+        for s in range(1,87): 
+            for d in range(1,61): 
+                dom = str(int(s))+','+str(int(d)) 
+                feature[dom] = {}
+
+        string,om,r,eff,avg = np.loadtxt(os.path.expandvars("$I3_SRC/phys-services/resources/eff.txt"),unpack = True)
+        for i in range(len(string)): 
+            if string[i] < 87 and om[i] < 61: 
+                dom = str(int(string[i]))+','+str(int(om[i])) 
+                # eff == 1 means HQE
+                if int(eff[i]) == 1: 
+                    feature[dom]['HQE'] = 1
+                else: 
+                    feature[dom]['HQE'] = 0
+
+
 
         cal = deepcopy(frame['I3Calibration'])
         del frame['I3Calibration']
@@ -67,31 +97,42 @@ class SPEFitInjector:
                       'gaus_amp', 'gaus_mean', 'gaus_width', 'compensation_factor',
                       'slc_gaus_mean']
 
-        for key, fits in self.fit_values.items():
-            omkey = convert_omkey(key)
+        #for key, fits in self.fit_values.items():
+        #    omkey = convert_omkey(key)
+        for omkey, i3domcal in cal.dom_cal.items():
+            dom = omkey_str(omkey)
+            SPE_distribution = dataclasses.SPEChargeDistribution()
+
             if not omkey:
                 continue
-            if int(key.split(',')[0]) < 87 and int(key.split(',')[1]) < 61:
-                spe_distribution = dataclasses.SPEChargeDistribution()
-                for attr in attributes:
-                    if attr.startswith('slc_'):
-                        setattr(spe_distribution, attr, fits['SLC_fit'][attr.replace('slc_','')])
-                    else:
-                        setattr(spe_distribution, attr, fits['ATWD_fit'][attr])
+            if not int(omkey[0]) in range(1,87) or not int(omkey[1]) in range(1,61):
+                dom = 'Average'
+            else:
+                if float(feature[dom]['HQE'])==1.0: 
+                    print(float(feature[dom]['HQE'])) 
+                    i3domcal.relative_dom_eff = float(self.fit_values[dom]['RDE']) 
+                    print('RDE: '+str(float(self.fit_values[dom]['RDE'])))
 
-                if omkey in cal.dom_cal:
-                    cal.dom_cal[omkey].combined_spe_charge_distribution = spe_distribution
-                    if 'mean_atwd_charge' in fits: 
-                        cal.dom_cal[omkey].mean_atwd_charge = fits['mean_atwd_charge']
-                    if 'mean_fadc_charge' in fits: 
-                        cal.dom_cal[omkey].mean_fadc_charge = fits['mean_fadc_charge']
-                else:
-                    icetray.logging.log_warn("SPE Fit for %s has no calibration object." % str(omkey))
-            del frame['I3Calibration']
-            frame['I3Calibration'] = cal
+            SPE_distribution.exp1_amp       = self.fit_values[dom]['ATWD_fit']['exp1_amp']
+            SPE_distribution.exp1_width     = self.fit_values[dom]['ATWD_fit']['exp1_width']
+            SPE_distribution.exp2_amp       = self.fit_values[dom]['ATWD_fit']['exp2_amp']
+            SPE_distribution.exp2_width     = self.fit_values[dom]['ATWD_fit']['exp2_width']
+            SPE_distribution.gaus_amp       = self.fit_values[dom]['ATWD_fit']['gaus_amp']
+            SPE_distribution.gaus_mean      = self.fit_values[dom]['ATWD_fit']['gaus_mean']
+            SPE_distribution.gaus_width     = self.fit_values[dom]['ATWD_fit']['gaus_width']
+            SPE_distribution.slc_gaus_mean  = self.fit_values[dom]['SLC_fit']['gaus_mean']
+
+            SPE_distribution.compensation_factor = self.fit_values[dom]['ATWD_fit']['compensation_factor']
+            i3domcal.combined_spe_charge_distribution = SPE_distribution
+
+            i3domcal.mean_atwd_charge = self.fit_values[dom]['mean_atwd_charge']
+            i3domcal.mean_fadc_charge = self.fit_values[dom]['mean_fadc_charge']
+
+            cal.dom_cal[omkey] = i3domcal
+ 
+        frame['I3Calibration'] = cal
 
     def __load_from_old_json(self, frame):
-        from scipy.integrate import quad
 
         cal = deepcopy(frame['I3Calibration'])
         del frame['I3Calibration']
