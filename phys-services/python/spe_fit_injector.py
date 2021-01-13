@@ -125,8 +125,10 @@ class SPEFitInjector:
             SPE_distribution.compensation_factor = self.fit_values[dom]['ATWD_fit']['compensation_factor']
             i3domcal.combined_spe_charge_distribution = SPE_distribution
 
-            i3domcal.mean_atwd_charge = self.fit_values[dom]['mean_atwd_charge']
-            i3domcal.mean_fadc_charge = self.fit_values[dom]['mean_fadc_charge']
+            if 'mean_atwd_charge' in self.fit_values[dom]: 
+                i3domcal.mean_atwd_charge = self.fit_values[dom]['mean_atwd_charge']
+            if 'mean_fadc_charge' in self.fit_values[dom]: 
+                i3domcal.mean_fadc_charge = self.fit_values[dom]['mean_fadc_charge']
 
             cal.dom_cal[omkey] = i3domcal
  
