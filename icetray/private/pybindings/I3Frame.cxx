@@ -25,18 +25,18 @@
 
 using namespace boost::python;
 
-template <typename T>
 inline static
-boost::shared_ptr<T> frame_get(const I3Frame* f, const std::string& where)
+boost::shared_ptr<I3FrameObject>
+frame_get(const I3Frame* f, const std::string& where)
 {
   if (!f->Has(where))
     {
       PyErr_SetString(PyExc_KeyError, where.c_str());
       throw_error_already_set();
-      return boost::shared_ptr<T>();
+      return boost::shared_ptr<I3FrameObject>();
     }
 
-  boost::shared_ptr<const T> thing = f->Get<boost::shared_ptr<const T> >(where);
+  boost::shared_ptr<const I3FrameObject> thing = f->Get<boost::shared_ptr<const I3FrameObject> >(where);
   if(!thing){
     // we already know some object exists in the 'where' slot otherwise
     // we would have thrown just a few lines up.
@@ -47,9 +47,9 @@ boost::shared_ptr<T> frame_get(const I3Frame* f, const std::string& where)
 	    <<"make sure the appropriate library (e.g. dataclasses, simclasses, recclasses, etc..) is imported."; 
     PyErr_SetString(PyExc_KeyError, err_msg.str().c_str());
     throw_error_already_set();
-    return boost::shared_ptr<T>();    
+    return boost::shared_ptr<I3FrameObject>();    
   }
-  return boost::const_pointer_cast<T>(thing);
+  return boost::const_pointer_cast<I3FrameObject>(thing);
 }
 
 static list frame_keys(I3Frame const& x)
@@ -64,7 +64,7 @@ static list frame_values(I3Frame const& x)
 {
         list t;
         for(I3Frame::typename_iterator it=x.typename_begin(); it!=x.typename_end(); ++it)
-          t.append(frame_get<I3FrameObject>(&x, it->first));
+          t.append(frame_get(&x, it->first));
         return t;
 }
 
@@ -73,7 +73,7 @@ static list frame_items(I3Frame const& x)
   list t;
   for(I3Frame::typename_iterator it=x.typename_begin(); it!=x.typename_end(); ++it)
     {
-      t.append(boost::python::make_tuple(it->first, frame_get<I3FrameObject>(&x, it->first)));
+      t.append(boost::python::make_tuple(it->first, frame_get(&x, it->first)));
     }
   return t;
 }
@@ -155,10 +155,10 @@ void register_I3Frame()
     .def(self_ns::str(self))
     .def("Put", frame_put)
     .def("Put", frame_put_on_stream)
-    .def("Get", &frame_get<I3FrameObject>)
+    .def("Get", &frame_get)
     .def("Replace", frame_replace)
     .def("__contains__", (bool (I3Frame::*)(const std::string &) const)&I3Frame::Has)
-    .def("__getitem__", &frame_get<I3FrameObject>)
+    .def("__getitem__", &frame_get)
     .def("__setitem__", put_fn_p)
     .def("__delitem__", &I3Frame::Delete)
     .def("keys", &frame_keys)
