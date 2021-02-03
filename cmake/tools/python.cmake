@@ -39,7 +39,6 @@ else()
 	set(Python_LIBRARIES ${PYTHON_LIBRARIES})
 	set(Python_EXECUTABLE ${PYTHON_EXECUTABLE})
 endif()
-set(Python_LIBRARY ${Python_LIBRARIES} CACHE STRING "Python libraries")
 
 message(STATUS "+  version: ${Python_VERSION}")
 
