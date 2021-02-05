@@ -26,6 +26,12 @@ tooldef(healpix-cxx
     healpix_cxx 
 )
 
+if(HEALPIX-CXX_FOUND)
+    if (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
+        list(APPEND HEALPIX-CXX_LIBRARIES "-fopenmp")
+    endif()
+endif()
+
 if(NOT HEALPIX-CXX_FOUND)
     execute_process(COMMAND lsb_release -si OUTPUT_VARIABLE DISTRO ERROR_QUIET)
     if(DISTRO MATCHES "Fedora")
