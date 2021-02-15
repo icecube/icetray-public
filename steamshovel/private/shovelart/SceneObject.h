@@ -15,13 +15,13 @@
 class I3Camera;
 class QGLWidget;
 
-class QGLShaderProgram;
+class QOpenGLShaderProgram;
 
 /** Static shader compiler and loader */
 class ShaderManager{
 
 private:
-	static std::vector<QGLShaderProgram*> programs;
+	static std::vector<QOpenGLShaderProgram*> programs;
 	static int active_program;
 
 	static void setupSphereShader( QString, bool& );
@@ -42,14 +42,14 @@ public:
 	 * Ensure the current shader type is active, if that is possible.
 	 * Returns NULL if not.
 	 */
-	static QGLShaderProgram* ensureBound( ShaderType t );
+	static QOpenGLShaderProgram* ensureBound( ShaderType t );
 
 	/**
 	 * Release the current shader if any
 	 **/
 	static void release();
 
-	static QGLShaderProgram* currentlyBound(){
+	static QOpenGLShaderProgram* currentlyBound(){
 		if( active_program != NONE ){
 			return programs.at(active_program);
 		}
@@ -543,7 +543,7 @@ private:
 	// shader positions of input variables
 	static int cameraPos, offsetPos, radiusPos;
 
-	void prepShader( QGLShaderProgram* program );
+	void prepShader( QOpenGLShaderProgram* program );
 
 protected:
 

@@ -3,8 +3,8 @@
 #include <limits>
 
 #include <QGLWidget>
-#include <QGLShaderProgram>
-#include <QGLShader>
+#include <QOpenGLShaderProgram>
+#include <QOpenGLShader>
 
 #include "SceneObject.h"
 #include "Camera.h"
@@ -430,17 +430,17 @@ bool ArrowObject::isVisible( double vistime ){
 }
 
 static
-QGLShaderProgram* setupShader( QString vertex_path, QString fragment_path ){
+QOpenGLShaderProgram* setupShader( QString vertex_path, QString fragment_path ){
 
-	QGLShaderProgram* program = new QGLShaderProgram();
+	QOpenGLShaderProgram* program = new QOpenGLShaderProgram();
 	bool okay;
-	okay = program->addShaderFromSourceFile( QGLShader::Vertex, vertex_path );
+	okay = program->addShaderFromSourceFile( QOpenGLShader::Vertex, vertex_path );
 	QString log = program->log();
 	if( log.length() ){
 		log_info_stream( "Log from vertex shader:\n" << qPrintable(log) );
 		log = "";
 	}
-	okay = okay && program->addShaderFromSourceFile( QGLShader::Fragment, fragment_path );
+	okay = okay && program->addShaderFromSourceFile( QOpenGLShader::Fragment, fragment_path );
 	log = program->log();
 	if( log.length() ){
 		log_info_stream( "Log from fragment shader:\n" << qPrintable(log) );
@@ -461,7 +461,7 @@ void ShaderManager::setupSphereShader( QString fragment_path, bool& attrib_locs_
 	// We want to ensure that all their locations are identical, since the input structure is the same in each shader.
 	// We assume they will be the same; asserts verify this.
 	static const QString shader_path( ":/resources/shader/sphere_" );
-	QGLShaderProgram* program = setupShader( shader_path+"billboard.vert", shader_path+fragment_path );
+	QOpenGLShaderProgram* program = setupShader( shader_path+"billboard.vert", shader_path+fragment_path );
 	if( !program ){
 		log_warn_stream( "Cannot use " << qPrintable(fragment_path) << " shader; it will use the fallback renderer." );
 		programs.push_back(NULL);
@@ -488,7 +488,7 @@ void ShaderManager::setupSphereShader( QString fragment_path, bool& attrib_locs_
 	programs.push_back(program);
 }
 
-std::vector<QGLShaderProgram*> ShaderManager::programs;
+std::vector<QOpenGLShaderProgram*> ShaderManager::programs;
 int ShaderManager::active_program = -1;
 
 #ifndef EBENEZER_SCROOGE
@@ -502,7 +502,7 @@ void ShaderManager::createShaders(){
 	if( programs.size() )
 		return;
 
-	if( QGLShaderProgram::hasOpenGLShaderPrograms() ){
+	if( QOpenGLShaderProgram::hasOpenGLShaderPrograms() ){
 		bool attrib_locs_set = false; // will be set true by whichever call succeeds first
 		setupSphereShader("shiny.frag", attrib_locs_set );
 		setupSphereShader("matte.frag", attrib_locs_set );
@@ -526,7 +526,7 @@ void ShaderManager::createShaders(){
 			std::cin >> response;
 			if( response == 'y' || response == 'Y' ){
 				std::cout << "Jolly!" << std::endl;
-				QGLShaderProgram* swap = programs[1];
+				QOpenGLShaderProgram* swap = programs[1];
 				programs[1] = programs[0];
 				programs[0] = swap;
 			}
@@ -539,8 +539,8 @@ void ShaderManager::createShaders(){
 #endif
 }
 
-QGLShaderProgram* ShaderManager::ensureBound( ShaderType t ){
-	QGLShaderProgram* p = currentlyBound();
+QOpenGLShaderProgram* ShaderManager::ensureBound( ShaderType t ){
+	QOpenGLShaderProgram* p = currentlyBound();
 	if( active_program != t ){
 		release();
 		active_program = t;
@@ -551,7 +551,7 @@ QGLShaderProgram* ShaderManager::ensureBound( ShaderType t ){
 }
 
 void ShaderManager::release(){
-	QGLShaderProgram* p = currentlyBound();
+	QOpenGLShaderProgram* p = currentlyBound();
 	if( p ){
 		p->release();
 	}
@@ -591,7 +591,7 @@ void SphereObject::drawBaseObject(double vistime, const I3Camera& i3camera) {
 
 	}
 
-	QGLShaderProgram* program = ShaderManager::currentlyBound();
+	QOpenGLShaderProgram* program = ShaderManager::currentlyBound();
 	if( !program ) {
 		glCallList( sphere_list );
 		return;
