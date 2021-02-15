@@ -1,4 +1,6 @@
 #version 120
+#extension GL_ARB_explicit_attrib_location : require
+#extension GL_ARB_explicit_uniform_location : require
 
 const float ldist = 10000;  
 
@@ -8,8 +10,8 @@ vec3 glLights[NLIGHTS] = vec3[NLIGHTS] (
     vec3( 0, ldist, 0 ), vec3( 0, -ldist, 0 ),
     vec3( 0, 0, ldist ), vec3( 0, 0, -ldist ) );
                             
-uniform vec3 camera;
-uniform float radius;
+layout(location = 0) uniform vec3 camera;
+layout(location = 1) uniform float radius;
 varying vec2 square_coord;
 varying vec3 cameraSphereVertex;
 
