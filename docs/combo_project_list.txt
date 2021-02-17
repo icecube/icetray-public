@@ -1,0 +1,130 @@
+-- Core (Olivas) --
+    cmake
+    docs
+    BadDomList
+    daq-decode
+    dataclasses
+    dataio
+    DomTools
+    frame_object_diff
+    hdfwriter
+    gcdserver
+    icepick
+    icetray
+    interfaces
+    payload-parsing
+    phys-services
+    production-histograms
+    rootwriter
+    serialization
+    steamshovel
+    tableio
+    WaveCalibrator
+    wavedeform
+    wavereform
+    
+-- Simulation (Juan Carlos) --
+    clsim
+    cmc
+    corsika-reader
+    DOMLauncher
+    earthmodel-service
+    ice-models
+    LeptonInjector
+    MuonGun
+    neutrino-generator
+    ppc
+    PROPOSAL
+    polyplopia
+    simclasses
+    simprod-scripts
+    sim-services
+    trigger-sim
+    vuvuzela
+    weighting
+    snowstorm
+    
+-- Reconstruction (Meagher) --
+    bayesian-priors
+    CoincSuite
+    HiveSplitter
+    IceHive
+    gulliver
+    gulliver-bootstrap
+    gulliver-modules
+    dipolefit
+    CommonVariables
+    double-muon
+    ipdf
+    rpdf
+    lilliput
+    linefit
+    millipede
+    finiteReco
+    mue
+    photonics-service
+    photospline
+    recclasses
+    spline-reco
+    STTools
+    tensor-of-inertia
+    pybdt
+    
+-- Filtering (Blaufuss) --
+    filterscripts
+    dst
+    filter-tools
+    full_event_followup
+    trigger-splitter
+    VHESelfVeto
+    
+-- Oscillations (Eller) --
+    DeepCore_Filter
+    NoiseEngine
+    static-twc
+    
+-- NuSources (Larson and Niederhausen) --
+    astro
+    cramer-rao
+    level3-filter-muon
+    StartingTrackVeto
+    paraboloid
+    
+-- BSM (Arguelles) --
+    monopole-generator
+    KalmanFilter
+    SLOPtools
+    wimpsim-reader
+
+-- Cosmic Ray (Rawlins) --
+    coinc-twc
+    core-removal
+    ddddr
+    g4-tankresponse
+    icetop_Level3_scripts
+    shield
+    smallshower-filter
+    stochastics
+    topsimulator
+    topeventcleaning
+    toprec
+    tpx
+    vemcal
+    
+-- Diffuse (Meier) --
+    CascadeVariables
+    clast
+    cscd-llh
+    level3-filter-cascade
+    fill-ratio
+    ophelia
+    portia
+    truncated_energy
+    TopologicalSplitter
+
+-- Science Support --
+    ml_suite
+
+
+   
+
