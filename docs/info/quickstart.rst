@@ -55,7 +55,7 @@ Checking out some code
 
 Now you are ready to check out a release of offline software.  Please
 feel free to replace the version used below with the latest version
-found in the release directory in svn http://code.icecube.wisc.edu/svn/meta-projects/combo/stable
+found at https://github.com/icecube/icetray/
 
 Check out a release into a workspace
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -68,11 +68,11 @@ created during the build process.
 
 Execute::
 
- > mkdir ~/combo
- > cd ~/combo
- > svn co $SVN/meta-projects/combo/stable src
+ > mkdir -p ~/i3/icetray
+ > cd ~/i3/icetray
+ > git clone https://github.com/icecube/icetray.git src
     (...produces lots of output...)
- > mkdir build 
+ > mkdir build
 
 You now have a directory filed with::
 
@@ -103,7 +103,7 @@ Running cmake
 
 We use cmake to build the software::
 
- > cd ~/combo/build
+ > cd ~/i3/icetray/build
  > cmake ../src
 
 This will populate your local build directory with directories and
@@ -133,7 +133,7 @@ You're ready to build.
 Build it!
 ^^^^^^^^^
 
-In your ~/combo/build directory execute::
+In your ~/i3/icetray/build directory execute::
 
  make
 
@@ -250,7 +250,7 @@ A few standard enviroment variables are also set (and often referred
 to in scripts, code, etc):
 
 * I3_SRC - Pointer to your local src area, where you checked out the
-  source code from $SVN
+  source code via git.
 * I3_BUILD - Pointer to your local build area, where you build IceTray
   libraries and executeables.
 * I3_TESTDATA - Pointer to your local test-data area, that contains

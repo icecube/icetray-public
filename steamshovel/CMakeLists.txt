@@ -29,15 +29,8 @@ find_package(OpenGL)
 find_package(GLUT)
 
 if(Qt5_FOUND AND Qt5OpenGL_FOUND AND OPENGL_FOUND AND OPENGL_GLU_FOUND)
-  # Use the version of Steamshovel itself, rather than the last commit to the
-  # entire IceCube svn repository
-  set(OLD_LANG ENV{LANG})
-  set(ENV{LANG} "en_US.UTF-8")
-  execute_process(COMMAND ${SVN_EXECUTABLE} info ${CMAKE_SOURCE_DIR}/steamshovel
-    COMMAND awk "/^Last Changed Rev:/ { printf $4 }"
-    OUTPUT_VARIABLE SHOVEL_REVISION
-    ERROR_VARIABLE SHOVEL_REVISION_ERROR)
-  set(ENV{LANG} OLD_LANG)
+  ## use GIT_REVISION to derive SHOVEL_VERSION
+  set(SHOVEL_VERSION "${GIT_REVISION}")
 
   if(SHOVEL_REVISION_ERROR OR NOT SHOVEL_REVISION)
     set(SHOVEL_REVISION 0)

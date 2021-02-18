@@ -26,9 +26,9 @@
   preprocessor defines only used by I3TrayInfoService
 */
 
-#define SVN_REVISION @SVN_REVISION@
-#define SVN_URL "@SVN_URL@"
-#define SVN_EXTERNALS "@SVN_EXTERNALS@"
+#define GIT_REVISION "@GIT_REVISION@"
+#define GIT_URL "@GIT_URL@"
+#define SVN_EXTERNALS ""
 #define I3_PLATFORM "@BUILDNAME@"
 
 

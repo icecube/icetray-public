@@ -125,8 +125,8 @@ Uncommon CMake settings
    * - .. attribute:: BUILD_PYBINDINGS
      - Build python bindings. Users will never want to turn this option off, as effective use of the IceCube software stack requires the use of pybindings.
      - ON
-   * - .. attribute:: USE_SVN_REVISION_FLAGS
-     - Add compiled-in svn revision information. Do not disable this option unless you want to have a bad time.
+   * - .. attribute:: USE_GIT_REVISION_FLAGS
+     - Add compiled-in git revision information. Do not disable this option unless you want to have a bad time.
      - ON
    * - .. attribute:: INSTALL_HEADERS
      - Install header files when making tarball.

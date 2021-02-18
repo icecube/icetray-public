@@ -94,7 +94,6 @@ Example
    -- Installing: offline-software.trunk.r47978.Linux-i686.gcc-4.2.3/lib/libDOMcalibrator.so
    Built target install_tool_libs
    Generating BUILD_INFO
-   Adding svn info to tarball
    Tarball hook script 'tarball_hook.sh' exists in metaproject directory.
    Running tarball_hook.sh
    Running tarball_hook.sh to tweak installation at offline-software.trunk.r47978.Linux-i686.gcc-4.2.3

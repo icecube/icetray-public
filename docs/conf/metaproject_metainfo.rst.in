@@ -1,11 +1,6 @@
-Svn information for this metaproject
+Git information for this metaproject
 ------------------------------------
 
 :meta-project: @META_PROJECT@
-:url:          @SVN_URL@
-:revision:     @SVN_REVISION@
-
-externals
-^^^^^^^^^
-.. literalinclude:: svn-externals.txt
-
+:url:          @GIT_URL@
+:revision:     @GIT_REVISION@

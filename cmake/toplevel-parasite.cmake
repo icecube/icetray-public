@@ -83,10 +83,10 @@ set(I3_SRC ${CMAKE_SOURCE_DIR})
 set(I3_BUILD ${CMAKE_BINARY_DIR})
 set(SPHINX_DIR "${CMAKE_BINARY_DIR}/sphinx_src")
 
-# pull SVN revision from cache
-load_cache(${HOST_I3_BUILD} READ_WITH_PREFIX "" SVN_REVISION SVN_URL META_PROJECT Python_VERSION)
+# pull git revision from cache
+load_cache(${HOST_I3_BUILD} READ_WITH_PREFIX "" GIT_REVISION GIT_URL META_PROJECT Python_VERSION)
 set(HAVE_META_PROJECT TRUE)
-set(HAVE_SVN_REVISION TRUE)
+set(HAVE_GIT_REVISION TRUE)
 # use a more idiomatic name for the tarball
 if(DEFINED ENV{OS_ARCH})
   set(CMAKE_INSTALL_PREFIX ${META_PROJECT})
@@ -94,12 +94,12 @@ if(DEFINED ENV{OS_ARCH})
     set(CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}.${NICKNAME})
   endif(NOT NICKNAME STREQUAL "")
   if(META_PROJECT MATCHES "trunk$")
-    set(CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}.r${SVN_REVISION})
+    set(CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}.r${GIT_REVISION})
   endif(META_PROJECT MATCHES "trunk$")
   set(CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}.$ENV{OS_ARCH} CACHE STRING "Install prefix.  Also name of tarball.")
 endif(DEFINED ENV{OS_ARCH})
 message(STATUS "Base metaproject: ${HOST_I3_BUILD}")
-message(STATUS "Built from:       ${SVN_URL} r${SVN_REVISION}")
+message(STATUS "Built from:       ${GIT_URL} r${GIT_REVISION}")
 message(STATUS "Install prefix:   ${CMAKE_INSTALL_PREFIX}")
 
 # dummy testing target

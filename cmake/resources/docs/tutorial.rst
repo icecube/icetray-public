@@ -26,11 +26,11 @@ work directory and check out source to a directory called ``src``:
 
   mkdir -p ~/IceCube/meta-projects/combo/stable
   cd ~/IceCube/meta-projects/combo/stable
-  svn co http://code.icecube.wisc.edu/svn/meta-projects/combo/stable src
+  git clone https://github.com/icecube/icetray.git src
 
 .. note::
 
-   The "src" on the end of the ``svn co`` command tells it to check out
+   The "src" on the end of the ``git clone`` command tells it to check out
    to the "src" directory. You may choose any directory you like.   
 
 Create the build directory parallel to the source directory and

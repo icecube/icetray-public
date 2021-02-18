@@ -68,8 +68,3 @@ configure_file(
     ${CMAKE_SOURCE_DIR}/docs/conf/conf.py.in
     ${SPHINX_DIR}/conf/conf.py
     @ONLY)
-    
-execute_process(COMMAND svn pg svn:externals ${CMAKE_SOURCE_DIR}
-  OUTPUT_FILE ${SPHINX_DIR}/conf/svn-externals.txt
-  ERROR_QUIET)
-

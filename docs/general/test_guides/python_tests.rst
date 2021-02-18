@@ -22,9 +22,7 @@ Common pitfalls:
 
 * Not Executable
 
-  - Before adding to svn : ``chmod +x path/to/the/test.py``
-  - After adding to svn : ``svn ps svn:executable "*"
-    path/to/the/test.py`` (don't forget to commit this change).
+  - Before adding to git : ``chmod +x path/to/the/test.py``
 
 * Not registered
 

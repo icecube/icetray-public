@@ -154,7 +154,7 @@ With a fresh install of Mojave I was able to get combo running by running the fo
    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
    
    #install packages with homebrew
-   brew install subversion cmake python boost boost-python3 cdk qt libarchive wget doxygen cfitsio hdf5 nlopt gsl minuit2 suite-sparse healpix zstd
+   brew install git cmake python boost boost-python3 cdk qt libarchive wget doxygen cfitsio hdf5 nlopt gsl minuit2 suite-sparse healpix zstd
 
    #install brews written by icecube 
    brew tap IceCube-SPNO/homebrew-icecube

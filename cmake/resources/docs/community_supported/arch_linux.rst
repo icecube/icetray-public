@@ -22,7 +22,7 @@ Base Dependancies
 
 First install the basic dependencies::
 
-  pacman -S base-devel subversion cmake boost python zstd gsl cfitsio hdf5
+  pacman -S base-devel git cmake boost python zstd gsl cfitsio hdf5
 
 Icetray depends on `BLAS <http://www.netlib.org/blas/>`_ library of which there are several implementations. By default Arch installs reference implementation of BLAS, which is quite slow.
 `OpenBLAS <http://www.openblas.net/>`_ is much faster, but only available through the AUR::

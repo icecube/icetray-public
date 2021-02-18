@@ -21,7 +21,7 @@ Project maintainers are responsible for **every** aspect of their project. (See 
 
 Below are some things to check :
 
-  * **Release Notes** : Ensure the RELEASE_NOTES are up to date and accurate.  Check the 'svn log' and make sure there isn't any commit to your project to don't understand or agree with. (See writing-release-notes_ for more information.)
+  * **Release Notes** : Ensure the RELEASE_NOTES are up to date and accurate.  Check the 'git log' and make sure there isn't any commit to your project that you don't understand or agree with. (See writing-release-notes_ for more information.)
   * **Documentation** 
 
     - Ensure your project's documentation is *accurate and up to date*. If you see where documentation can easily be improved, please take the time to do it.  

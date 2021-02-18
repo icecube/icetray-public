@@ -105,6 +105,11 @@ See the reference and tutorial for more specifics.
 Branches, Releases and The Trunk
 --------------------------------
 
+.. warning::
+
+   With the move to git and GitHub in Feb 2021, this is section is
+   out-of-date. It remains as a reference for archived SVN repository.
+
 To aid in development of both projects and meta-projects, each have
 three areas dedicated in the SVN repository, for example, in a project
 called "superfit", you might find::
@@ -124,7 +129,7 @@ major changes are made to the trunk.
 
 The "releases" area is where tagged, frozen copies of the trunk are
 made for inclusion in software releases.  Releases should not be
-changed once made, and most users do not have commit privledges in
+changed once made, and most users do not have commit privileges in
 this area.  Release are typically tagged with a number: VXX-YY-ZZ.
 
 * XX - Major release number, should be incremented if the interface

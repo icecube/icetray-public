@@ -151,9 +151,6 @@ def main():
     symlink(os.path.join(confdir,"conf.py"),
             os.path.join(sourcedir,"conf.py"))
 
-    symlink(os.path.join(confdir,"svn-externals.txt"),
-            os.path.join(sourcedir,"svn-externals.txt"))
-        
     #symlink base directory of the source tree
     symlinkdir(os.path.join(docsdir,"basedocs"),sourcedir)
     symlink(os.path.join(confdir,"metaproject_metainfo.rst"),

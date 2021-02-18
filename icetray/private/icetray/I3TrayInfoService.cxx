@@ -58,9 +58,9 @@ I3TrayInfoService::GetConfig()
   the_config.host_info["gcc_version"] = __VERSION__;
   the_config.host_info["boost_version"] = BOOST_LIB_VERSION;
 
-  the_config.svn_externals = SVN_EXTERNALS;
-  the_config.svn_url = SVN_URL;
-  the_config.svn_revision = SVN_REVISION;
+  the_config.svn_externals = "";
+  the_config.svn_url = "";
+  the_config.svn_revision = 0;
 
   const static unsigned hostname_max = 255;
   char hostname_tmp[hostname_max];

@@ -42,7 +42,6 @@ Advanced
    reference
    pybindings
    ports
-   svn_intro
    env-shell.sh
    commitmails
    icc

@@ -11,8 +11,9 @@ release distributed via CVMFS. The cmake project includes a second, "parasitic"
 build system for this purpose. To create a parasitic metaproject, start by
 creating and empty source directory and adding the cmake project::
 
-	> mkdir src && cd src
-	> svn co http://code.icecube.wisc.edu/svn/meta-projects/combo/stable/cmake
+	> mkdir -p ~/i3/icetray && cd ~/i3/icetray
+	> git clone https://github.com/icecube/icetray.git src
+	> mkdir ../psrc && cd ../psrc
 
 Then, add a CMakeLists.txt file with the following contents::
 
@@ -30,7 +31,7 @@ Now, make a build directory and run cmake::
 	-- Configuring parasitic metaproject 
 	-- 
 	-- Base metaproject: /Users/jakob/Documents/IceCube/metaprojects/icerec-lite/build
-	-- Built from:       http://code.icecube.wisc.edu/svn/sandbox/jvansanten/metaprojects/icerec-lite/trunk r134422
+	-- Built from:       https://github.com/icecube/icetray.git
 	-- Install prefix:   /Users/jakob/Documents/IceCube/metaprojects/parasite/build/icerec-plus.osx_10_x86_64
 	...
 	-- Configuring parasitic projects: 
@@ -71,23 +72,21 @@ is extremely small::
 	> ls -lh icerec-plus.osx_10_x86_64.tar.gz
 	-rw-r--r--  1 jakob  staff   4.1K Aug 12 21:48 icerec-plus.osx_10_x86_64.tar.gz
 
-Now you can add extra projects, for example, simclasses::
+Now you can add extra projects, for example, myproject::
 
-	> svn co http://code.icecube.wisc.edu/svn/projects/simclasses/trunk ../src/simclasses
+	> git clone https://github.com/icecube/myproject.git ../src/myproject
 	> make rebuild_cache
 	...
-	-- Configuring parasitic projects: 
-	-- 
-	-- + simclasses
-	-- +-- python [symlinks] 
-	-- +-- simclasses-pybindings 
+	-- Configuring parasitic projects:
+	--
+	-- + myproject
+	-- +-- python [symlinks]
+	-- +-- myproject-pybindings
 	-- Syminking resources from host projects
 	...
 	> make
 
-This metaproject will contain simclasses, linked against libraries in the
+This metaproject will contain *myproject*, linked against libraries in the
 parent metaproject, plus symbolic links to every other project in the parent
 metaproject. Since the symbolic links take up virtually no disk space, the
 tarball of this metaproject is quite small.
-
-

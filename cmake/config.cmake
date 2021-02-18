@@ -90,25 +90,25 @@ endif()
 set(NOTES_DIR ${CMAKE_BINARY_DIR}/Testing/Notes)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/Testing/Notes)
 
-if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/.svn")
-  execute_process(COMMAND svn info ${CMAKE_SOURCE_DIR}
-    OUTPUT_VARIABLE SVN_INFO)
-elseif(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/.git")
-  execute_process(COMMAND git svn info
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_VARIABLE SVN_INFO)
-else()
-  set(SVN_INFO "SVN_INFO-NOTFOUND")
-  file(WRITE ${NOTES_DIR}/svn_info.txt "svn info or git svn info unavailable")
-endif()
+set(GIT_URL "GIT_URL-NOTFOUND")
+set(GIT_REVISION "GIT_REVISION-NOTFOUND")
 
-set(SVN_URL "Unknown")
-set(SVN_REVISION "0")
+execute_process(COMMAND git config --local --get remote.origin.url
+  COMMAND tr -d \\n
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE GIT_URL)
+execute_process(COMMAND git rev-parse --abbrev-ref HEAD
+  COMMAND tr -d \\n
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE GIT_BRANCH)
+execute_process(COMMAND git rev-parse --verify HEAD
+  COMMAND tr -d \\n
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE GIT_REVISION)
 
-if(SVN_INFO)
-  string(REGEX REPLACE "^.*\nURL:[ \t]+([^\n]+).*" "\\1" SVN_URL ${SVN_INFO})
-  string(REGEX REPLACE "^.*\nRevision:[ \t]([0-9]+).*" "\\1" SVN_REVISION ${SVN_INFO})
-  file(WRITE "${NOTES_DIR}/svn_info.txt" "${SVN_INFO}")
+set(GIT_SHORT_REVISION "GIT_SHORT_REVISION-NOTFOUND")
+if(GIT_REVISION)
+  string(SUBSTRING ${GIT_REVISION} 0 8 GIT_SHORT_REVISION)
 endif()
 
 execute_process(COMMAND /usr/bin/env
@@ -163,43 +163,41 @@ math(EXPR CMAKE_VERSION_INT "${CMAKE_MAJOR_VERSION} * 10000 + ${CMAKE_MINOR_VERS
 boost_report_pretty("CMake version" CMAKE_VERSION)
 
 #
-# Get SVN_REVISION from svn info
+# Get GIT_REVISION from git info
 #
-option(USE_SVN_REVISION_FLAGS "Add compiled-in svn revision information." ON)
+option(USE_GIT_REVISION_FLAGS "Add compiled-in git revision information." ON)
 
-if(NOT HAVE_SVN_REVISION)
-  set(HAVE_SVN_REVISION TRUE CACHE INTERNAL "Flag used for testing in toplevel-parasite.cmake")
-
-  boost_report_value(SVN_REVISION)
-  set(SVN_REVISION ${SVN_REVISION} CACHE INTERNAL "svn revision")
-
-endif(NOT HAVE_SVN_REVISION)
+if(NOT HAVE_GIT_REVISION)
+  set(HAVE_GIT_REVISION TRUE CACHE INTERNAL "Flag used for testing in toplevel-parasite.cmake")
+  set(GIT_REVISION ${GIT_REVISION} CACHE INTERNAL "git revision")
+  boost_report_value(GIT_REVISION)
+endif()
 
 #
-# Get SVN_URL from svn info
+# Get GIT_URL from git info
 #
-if(NOT HAVE_SVN_URL)
-  set(HAVE_SVN_URL TRUE CACHE INTERNAL "Flag used for testing in toplevel-parasite.cmake")
-
-  boost_report_value(SVN_URL)
-  set(SVN_URL ${SVN_URL} CACHE INTERNAL "svn url")
-endif(NOT HAVE_SVN_URL)
+if(NOT HAVE_GIT_URL)
+  set(HAVE_GIT_URL TRUE CACHE INTERNAL "Flag used for testing in toplevel-parasite.cmake")
+  set(GIT_URL ${GIT_URL} CACHE INTERNAL "git url")
+  boost_report_value(GIT_URL)
+endif()
 
 #
-#  get META_PROJECT (used by dart) from SVN_URL
+#  get META_PROJECT
 #
 if(NOT HAVE_META_PROJECT)
   set(HAVE_META_PROJECT TRUE CACHE INTERNAL "Flag used for testing in toplevel-parasite.cmake")
-  if(SVN_URL)
-    string(REGEX REPLACE "http[s]?://(((code.icecube.wisc|icecode.umd).edu)|129.2.43.208)/svn/meta-projects/" "" META_PROJECT ${SVN_URL})
-    string(REGEX REPLACE "/" "." META_PROJECT ${META_PROJECT})
-    string(STRIP "\n" ${META_PROJECT})
+  if(GIT_URL)
+    string(REGEX MATCH "([^/]+)\.git$" foo "${GIT_URL}")
+    set(META_PROJECT "${CMAKE_MATCH_1}.${GIT_BRANCH}")
+    string(REGEX REPLACE "/" "_" META_PROJECT ${META_PROJECT})
+    string(STRIP "${META_PROJECT}" META_PROJECT)
   else()
     set(META_PROJECT "META_PROJECT-NOTFOUND")
   endif()
   boost_report_value(META_PROJECT)
   set(META_PROJECT ${META_PROJECT} CACHE INTERNAL "meta project")
-endif(NOT HAVE_META_PROJECT)
+endif()
 
 
 # 
@@ -209,7 +207,7 @@ endif(NOT HAVE_META_PROJECT)
 #
 if (CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
   if (META_PROJECT)
-    set(CMAKE_INSTALL_PREFIX ${META_PROJECT}.r${SVN_REVISION}.${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
+    set(CMAKE_INSTALL_PREFIX ${META_PROJECT}.r${GIT_SHORT_REVISION}.${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
   else()
     set(CMAKE_INSTALL_PREFIX ${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
   endif()
