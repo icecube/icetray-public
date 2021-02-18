@@ -11,7 +11,7 @@ class pyerr_fmt : public std::ostringstream {
 public:
 	pyerr_fmt(PyObject *err = PyExc_TypeError) : err_(err) {};
 	
-	void raise(PyObject *err = PyExc_TypeError) throw(bp::error_already_set)
+	void raise(PyObject *err = PyExc_TypeError)
 	{
 		PyErr_SetString(err, this->str().c_str());
 		throw bp::error_already_set();

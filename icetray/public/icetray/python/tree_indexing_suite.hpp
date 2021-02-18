@@ -58,7 +58,7 @@ public:
 	}
 	
 	static void
-	index_translation_error(int offset, unsigned depth) throw(python::error_already_set)
+	index_translation_error(int offset, unsigned depth)
 	{
 		std::ostringstream os;
 		os << "Index (" << offset << ") out of range at level " << depth;

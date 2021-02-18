@@ -608,7 +608,7 @@ struct form_traits<std::string>
 };
 
 template <typename T>
-optional<T>
+boost::optional<T>
 View::dialog(const std::string& prompt)
 {
   //  log_trace(__PRETTY_FUNCTION__);
@@ -649,7 +649,7 @@ View::dialog(const std::string& prompt)
       if (ch == '\n')
         break;
       if (ch == 0x1B) //ESC
-        return optional<T>();
+        return boost::optional<T>();
 
       switch(ch)
       {

@@ -74,8 +74,7 @@ private:
             return(isOpen);
         }
 
-        static void Openlog(const std::string& ident, bool doThrow)
-                           throw(std::logic_error);
+        static void Openlog(const std::string& ident, bool doThrow);
 
 public:
         /**
@@ -102,7 +101,7 @@ public:
          * @attention
          * The connection to the system logger must not be opened twice.
          */
-        static void Open(const std::string& ident) throw(std::logic_error);
+        static void Open(const std::string& ident);
 
         /**
          * @brief Constructor.

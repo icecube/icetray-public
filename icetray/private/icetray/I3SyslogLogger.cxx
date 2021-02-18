@@ -25,14 +25,13 @@ bool I3SyslogLogger::isOpen = false;
 std::string I3SyslogLogger::id;
 
 
-void I3SyslogLogger::Open(const std::string& ident) throw(logic_error)
+void I3SyslogLogger::Open(const std::string& ident)
 {
   Openlog(ident, true);
 }
 
 
 void I3SyslogLogger::Openlog(const std::string& ident, bool doThrow)
-                            throw(logic_error)
 {
 #ifdef I3_ONLINE
   boost::upgrade_lock<boost::shared_mutex> lock(mtx);
