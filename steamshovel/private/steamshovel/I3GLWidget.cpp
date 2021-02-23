@@ -118,7 +118,7 @@ void I3GLWidget::mouseReleaseEvent( QMouseEvent* ev ){
 
 void I3GLWidget::wheelEvent( QWheelEvent* ev )
 {
-	camera_->zoom( ev->delta() );
+	camera_->zoom( ev->angleDelta().y() );
 	Q_EMIT cameraMoved();
 }
 

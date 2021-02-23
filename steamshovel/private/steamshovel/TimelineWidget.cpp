@@ -12,8 +12,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QString>
 #include <QFont>
-#include <QTime>
-#include <QTimer>
+#include <QElapsedTimer>
 
 #include <dataclasses/physics/I3EventHeader.h>
 #include <dataclasses/physics/I3RecoPulse.h>
@@ -562,7 +561,7 @@ void TimelineWidget::animationStep(){
 	if( !animation_active_ )
 		return;
 
-	QTime now; // measure execution time of animation step
+	QElapsedTimer now; // measure execution time of animation step
 	now.start();
 
 	const double frames_per_second = 30.0;

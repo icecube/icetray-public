@@ -41,7 +41,7 @@ static QColor StreamColor( const I3Frame::Stream& s )
 	else
 		qc = QColor(Qt::gray);
 
-	return qc.light();
+	return qc.lighter();
 }
 
 class PhysicsSubColor {
@@ -54,7 +54,7 @@ public:
 		Map::iterator it = map_.find(sub_event_stream);
 		if( it == map_.end() ){
 			// this is a substream we haven't seen, give it a color
-			QColor val = QColor( Qt::GlobalColor(Qt::red + map_.size()) ).light();
+			QColor val = QColor( Qt::GlobalColor(Qt::red + map_.size()) ).lighter();
 			map_.insert(std::make_pair( sub_event_stream, val ));
 			return val;
 		}

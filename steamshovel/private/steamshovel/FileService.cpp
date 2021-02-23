@@ -147,7 +147,6 @@ void FileService::saveFrames( QString filename,
 	shovelio::I3FrameSequence::LockedIndex lindex( frames_ );
 
 	std::set<unsigned> internal;
-	typedef std::set<unsigned> iterator;
 	BOOST_FOREACH( unsigned filtered_idx, indices ){
 		// indices are locations in the filtered FileService index,
 		// get corresponding locations in unfiltered I3FrameSequence::Index

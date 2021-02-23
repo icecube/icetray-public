@@ -345,10 +345,9 @@ void ScenarioFrameModel::inputsChanged( I3FramePtr ptr ){
 	qDeleteAll( row_data_ );
 	row_data_.clear();
 
-	QVector< std::string > frame_keys;
+	std::vector< std::string > frame_keys;
 	if( ptr ){
-		frame_keys = QVector<std::string>::fromStdVector( ptr->keys() );
-		qSort( frame_keys );
+		frame_keys = std::vector<std::string>( std::begin(ptr->keys()), std::end(ptr->keys()) );
 	}
 
 	int current_toplevel_row = 0;

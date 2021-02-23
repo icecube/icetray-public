@@ -30,7 +30,11 @@ namespace {
       return 0.0;
 
     // parse string, format: <number> <unit>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    QStringList l = s.split(" ", Qt::SkipEmptyParts);
+#else
     QStringList l = s.split(" ", QString::SkipEmptyParts);
+#endif
     float result = 0.0;
     if( l.size() >= 1 ){
       result = l[0].toDouble();

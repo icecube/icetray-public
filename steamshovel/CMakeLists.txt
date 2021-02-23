@@ -38,6 +38,14 @@ if(Qt5_FOUND AND Qt5OpenGL_FOUND AND OPENGL_FOUND AND OPENGL_GLU_FOUND)
 
   # prevent Q_FOREACH from stepping on boost::foreach
   add_definitions(-DQT_NO_KEYWORDS -DSHOVEL_REVISION=${SHOVEL_REVISION})
+  if(CMAKE_BUILD_TYPE MATCHES "Debug")
+    add_definitions(-DQT_DEPRECATED_WARNINGS)
+    add_definitions(-Wdeprecated)
+  endif()
+  # prevent OpenGL deprecation warnings on macOS
+  if(APPLE)
+    add_definitions(-DGL_SILENCE_DEPRECATION)
+  endif()
 
   # extra hints for qt5 and automoc
   include_directories(BEFORE ${Qt5OpenGL_INCLUDE_DIRS})

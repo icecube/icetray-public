@@ -80,9 +80,15 @@ class IceTopViewerWidget: public QWidget
     }
 
     void wheelEvent( QWheelEvent* ev ){
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+	const QPoint p = ev->position().toPoint();
+	const int xdisp = p.x();
+	const int ydisp = size().height() - p.y();
+#else
         const int xdisp = ev->x();
         const int ydisp = size().height() - ev->y();
-        const int steps = ev->delta() / 120; // from matplotlib's backend_qt4.py
+#endif
+        const int steps = ev->angleDelta().y() / 120; // from matplotlib's backend_qt4.py
         pyUpdate( "scroll_event", xdisp, ydisp, steps );
         QWidget::wheelEvent( ev );
     }

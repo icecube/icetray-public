@@ -23,7 +23,7 @@ SET_LOGGER( "Timeline" );
 private:
 	Ui::TimelineWidget* ui;
 	I3FramePtr frame_ptr_;
-	std::auto_ptr<timeline::RangeFinder> rangefinder_;
+	std::unique_ptr<timeline::RangeFinder> rangefinder_;
 	TimeWindow timewin_;
 	double nanoseconds_per_second_;
 	bool animation_active_;
