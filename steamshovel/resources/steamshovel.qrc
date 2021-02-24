@@ -1,6 +1,7 @@
  <!DOCTYPE RCC><RCC version="1.0">
  <qresource prefix="resources">
      <file>shader/sphere_billboard.vert</file>
+     <file>shader/sphere_shiny_mac.frag</file>
      <file>shader/sphere_shiny.frag</file>
      <file>shader/sphere_matte.frag</file>
      <file>shader/sphere_cheerio.frag</file>

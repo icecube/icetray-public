@@ -504,7 +504,11 @@ void ShaderManager::createShaders(){
 
 	if( QOpenGLShaderProgram::hasOpenGLShaderPrograms() ){
 		bool attrib_locs_set = false; // will be set true by whichever call succeeds first
+#ifdef __APPLE__
+		setupSphereShader("shiny_mac.frag", attrib_locs_set );
+#else
 		setupSphereShader("shiny.frag", attrib_locs_set );
+#endif
 		setupSphereShader("matte.frag", attrib_locs_set );
 		setupSphereShader("cheerio.frag", attrib_locs_set );
 	}
