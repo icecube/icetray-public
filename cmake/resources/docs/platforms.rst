@@ -50,4 +50,4 @@ Officially Supported
 Community Supported
 *******************
 .. toctree::
-   community_supported_platforms/arch_linux
+   community_supported/arch_linux

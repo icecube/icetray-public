@@ -72,6 +72,9 @@ Thes dependencies are optional. If not present comb will compile with reduced fu
   * - `HDF5 <https://www.hdfgroup.org/solutions/hdf5/>`_
     - High-performance data management and storage suite
     - :ref:`hdfwriter`
+  * - `Boost NumPy <https://www.boost.org/doc/libs/1_74_0/libs/python/doc/html/numpy/index.htmli>`_
+    - Boost.Python NumPy extension
+    - :ref:`MuonGun` pybindings
   * - `HEALPix <https://healpix.jpl.nasa.gov/>`_
     - Hierarchical Equal Area isoLatitude Pixelization of a sphere
     - :ref:`NoiseEngine-main` :ref:`dst`
@@ -81,6 +84,9 @@ Thes dependencies are optional. If not present comb will compile with reduced fu
   * - `ROOT <https://root.cern/>`_
     - Particle physics data analysis 
     - :ref:`rootwriter` :ref:`I3GulliverMinuit2 <lilliput>`
+  * - `Minuit2 <http://seal.web.cern.ch/seal/snapshot/work-packages/mathlibs/minuit/>`_
+    - Physics analysis tool for function minimization.
+    - :ref:`I3GulliverMinuit2 <lilliput>`
   * - `CLHEP <https://proj-clhep.web.cern.ch/proj-clhep/>`_
     - A Class Library for High Energy Physics 
     - :ref:`clsim-main` :ref:`g4-tankresponse-main`
@@ -155,4 +161,4 @@ These are not needed at compile time but are nescessary for certian functionalit
     - Legible docstrings for python
     - :doc:`documentation </projects/docs/index>`
 
-.. these are searched for by cmake but don't appear to do anything: minuit2 log4cpp xml2 genie fftw3
+.. these are searched for by cmake but don't appear to do anything: log4cpp xml2 genie fftw3

@@ -1,5 +1,5 @@
 .. highlight:: bash
-	       
+       
 ==========
 Arch Linux
 ==========
@@ -8,26 +8,25 @@ This document describes the installation of dependencies needed for icetray on `
 Arch is not an officially supported platform for icetray, but it is known to work on Arch.
 If you are unsure what linux distro to use, do not pick Arch based on the existence of this page, you will almost certainly be happier with :ref:`Ubuntu <ubuntu>`. Feel free to ask questions about using icetray on Arch, but do not act entitled to support.
 
-Many of the dependencies are available from the official Arch repositories. However, many icetray dependencies are only available through the `Arch user repositories <https://wiki.archlinux.org/index.php/Arch_User_Repository>`_ (AUR), so you will need an `AUR helper <https://wiki.archlinux.org/index.php/AUR_helpers>`_. This tutorial assumes that ``pacaur`` is your AUR helper. If you prefer a different AUR helper, please make the appropriate substitutions.
+Many of the dependencies are available from the official Arch repositories. However, many icetray dependencies are only available through the `Arch user repositories <https://wiki.archlinux.org/index.php/Arch_User_Repository>`_ (AUR), so you will need an `AUR helper <https://wiki.archlinux.org/index.php/AUR_helpers>`_. This tutorial assumes that ``paru`` is your AUR helper. If you prefer a different AUR helper, please make the appropriate substitutions.
 
 .. note::
 
-   If you are on a machine that has more than one core, you can increace the
-   speed that AUR packages are compiled by enableing will speed up things
-   if you enable parallel builds: add ``MAKEFLAGS="-j$(nproc)"`` to your
-   ``makepkg.conf`` before compiling
+   If you are on a machine that has more than one core, you can increase the
+   speed that AUR packages are compiled by enableing parallel builds: add
+   ``MAKEFLAGS="-j$(nproc)"`` to your ``makepkg.conf`` before compiling.
 
 Base Dependancies
 -----------------
 
 First install the basic dependencies::
 
-  pacman -S base-devel git cmake boost python zstd gsl cfitsio hdf5
+  pacman -S base-devel cmake boost python zstd gsl cfitsio hdf5 zeromq
 
 Icetray depends on `BLAS <http://www.netlib.org/blas/>`_ library of which there are several implementations. By default Arch installs reference implementation of BLAS, which is quite slow.
 `OpenBLAS <http://www.openblas.net/>`_ is much faster, but only available through the AUR::
 
-  pacaur -S openblas-lapack
+  paru -S openblas-lapack
 
 Once is OpenBLAS is installed you can install packages which depend on BLAS::
 
@@ -51,14 +50,14 @@ Reccomended Packages
 
 The following reccomended packages are also available from the AUR::
 
-  pacaur -S healpix libcdk nlopt minuit2 icecube-pal-git python-mysqlclient
+  paru -S healpix libcdk nlopt icecube-pal-git python-healpy
 
 Building Documentation
 ----------------------
 
-If you want to build icetray documentation you will need doxygen and sphinx::
+If you want to build icetray documentation you will need ``doxygen``, ``sphinx``, ``breathe`` and ``sphinx``::
 
-  pacman -S doxygen python-sphinx 
+  paru -S doxygen python-sphinx python-breathe python-sphinxcontrib-napoleon
 
 OpenCL
 ------
@@ -73,56 +72,41 @@ For AMD/Radeon use::
 
   pacman -S opencl-mesa
 
-If you don't have a GPU (possibly because you are in a virtualbox), a software implementation is available::
+If you don't have a GPU (possibly because you are in a virtual machine), a software implementation is available but slow::
 
-  pacman -S beignet
+  pacman -S pocl
 
-There are other alternatives available in the AUR see the `ArchWiki <https://wiki.archlinux.org/index.php/GPGPU#OpenCL>`_ for more details.
+There are other alternatives available for different hardware in the AUR see the `ArchWiki <https://wiki.archlinux.org/index.php/GPGPU#OpenCL>`_ for more details.
 
-Packages that Need Modification
--------------------------------
+Regardless of which implementation you pick you will also need the opencl-headers::
+  
+  pacman -S opencl-headers
 
 Geant4
-""""""
+------
 
-The AUR script for ``geant4`` turns on multithreading which doesn't play nice
-with icetray. In order to turn it off you need to edit the PKGBUILD::
+``geant4`` is available in the AUR but the datafiles are in different packages. 
+The ones that are needed for icetray are::
 
-  pacaur -Se geant4
+  paru -S geant4 geant4-ensdfstatedata geant4-levelgammadata geant4-ledata geant4-particlexsdata
 
-when the PKGBUILD comes up change the option ``-DGEANT4_BUILD_MULTITHREADED=ON``
-to ``OFF``
+and you need to set the environment variables::
+
+  export G4LEVELGAMMADATA=/usr/share/geant4-levelgammadata/PhotonEvaporation5.7
+  export G4ENSDFSTATEDATA=/usr/share/geant4-ensdfstatedata/G4ENSDFSTATE2.3
+  export G4LEDATA=/usr/share/geant4-ledata/G4EMLOW7.13/
+  export G4PARTICLEXSDATA=/usr/share/geant4-particlexsdata/G4PARTICLEXS3.1
 
 ROOT
-""""
+----
 
-``ROOT`` is also available in the AUR, but ROOT has some headerfile stupidness
-that needs to be corrected *after* installation::
+ROOT is available in ``community`` but it is compiled with c++17 so you need to
+compile icetray with c++17. This can be done by chaning the setting in
+``cmake/config.cmake``::
 
-  pacaur -S root
-
-once this is completed, you have to edit one of the header files it installed::
-
-  sudo nano /usr/include/root/RConfigure.h
-
-and change ``#define R__HAS_STD_EXPERIMENTAL_STRING_VIEW`` to ``#undef``
-
-
-Linuxbrew
----------
-
-The homebrew formulas produced by IceCube for use on OSX can also be used in linux with linuxbrew. Theses can be used for packages for which there are no Arch or AUR packages available. ::
-  
-  pacman -S ruby
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-  export PATH="/home/linuxbrew/.linuxbrew/bin:${PATH}"
-  brew tap IceCube-SPNO/homebrew-icecube
-  brew install --ignore-dependencies sprng2 multinest
+  set(CMAKE_CXX_STANDARD 17)
 
 Unsupported Packages
 --------------------
 
-``genie`` remains unsupported at this time.
-
- 
-
+``sprng2``, and ``multinest`` remain unsupported at this time.
