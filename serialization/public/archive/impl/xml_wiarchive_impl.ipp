@@ -27,7 +27,7 @@ namespace std{
 #endif
 
 #include <boost/io/ios_state.hpp>
-#include <boost/detail/no_exceptions_support.hpp>
+#include <boost/core/no_exceptions_support.hpp>
 #include <serialization/pfto.hpp>
 
 #include <serialization/string.hpp>

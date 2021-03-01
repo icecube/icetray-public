@@ -20,7 +20,7 @@ namespace std{
 #include <archive/basic_xml_archive.hpp>
 #include <archive/basic_xml_oarchive.hpp>
 #include <archive/xml_archive_exception.hpp>
-#include <boost/detail/no_exceptions_support.hpp>
+#include <boost/core/no_exceptions_support.hpp>
 
 namespace icecube {
 namespace archive {

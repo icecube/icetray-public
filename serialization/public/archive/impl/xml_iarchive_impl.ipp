@@ -31,7 +31,7 @@ namespace std{
 #include <archive/dinkumware.hpp>
 #endif
 
-#include <boost/detail/no_exceptions_support.hpp>
+#include <boost/core/no_exceptions_support.hpp>
 
 #include <archive/xml_archive_exception.hpp>
 #include <archive/iterators/dataflow_exception.hpp>
