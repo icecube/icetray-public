@@ -6,47 +6,67 @@
 # @date August 2015
 
 import pylab as plt
-from matplotlib.ticker import MultipleLocator,FormatStrFormatter
-from matplotlib.dates import WeekdayLocator,SU,DateFormatter
-from datetime import datetime,timedelta
-from icecube.icetray import I3Units
+import numpy as np
+from matplotlib.ticker import FormatStrFormatter
+from matplotlib.dates import DateFormatter,AutoDateLocator
+
+from datetime import datetime
 from icecube import dataclasses,astro
+from scipy.optimize import fminbound
 
-i3time = dataclasses.I3Time()
-i3time.set_utc_cal_date(2016,1,1,0,0,0,0.0) # 1 Jan 2016 00:00
+def moon_alt(x):
+    return 90-np.rad2deg(astro.moon_dir(x)[0])
 
-i3_moon_alt=[]
-i3_moon_az=[]
-times = []
+i3t0 =dataclasses.I3Time()
+i3t0.set_utc_cal_date(2020,1,2,0,0,0,0.0)
+mjd0 = i3t0.mod_julian_day_double
 
-for n in range(10000):
-    
-    i3time+= 300*I3Units.second
+T = 27.322
+NPeriods = 252
+toff = np.linspace(0, T, 100)
 
-    moon_dir = astro.I3GetMoonDirection(i3time)
-    i3_moon_alt.append( moon_dir.zenith/I3Units.degree)
-    i3_moon_az.append( moon_dir.azimuth/I3Units.degree)
-    times.append(datetime.fromtimestamp(i3time.unix_time))
+fig1, ax1 = plt.subplots(1,1)
+mjd_max = []
 
+for i in range(NPeriods):
+    ax1.plot(toff,moon_alt(mjd0+i*T+toff))
+    mmax = fminbound(lambda x: astro.moon_dir(x)[0], mjd0+(i+0.5)*T, mjd0+(i+1)*T)
+    amax = moon_alt(mmax)
+    mjd_max.append(mmax)
 
-fig, (ax1,ax2) = plt.subplots(2,sharex=True)
-ax1.set_title("IceCube Coordinates for the Moon")
-ax1.plot_date(times,i3_moon_alt,marker=None,ls='-',label = "I3")
-ax1.yaxis.set_major_locator( MultipleLocator(10))
+ax1.set_xlabel("Phase of Moon [Days]")
+ax1.set_xlim(0, T)
+ax1.set_ylabel("Moon Altitude")
 ax1.yaxis.set_major_formatter(FormatStrFormatter(u'%d\u00b0'))
-ax1.set_ylabel("Zenith")
+ax1.grid()
 
+fig2,ax2=plt.subplots(1,1)
+plt0 = plt.date2num(i3t0.date_time)
+plt_max = np.array(mjd_max)-mjd0+plt0
 
-ax2.plot_date(times,i3_moon_az,marker=None,ls='-',label = "I3")
-ax2.set_ylabel("IceCube Azimuth")
-ax2.set_ylim(0,360)
-ax2.xaxis.set_major_formatter( DateFormatter("%d %b %Y"))
-ax2.xaxis.set_major_locator( WeekdayLocator(byweekday=SU) )
-ax2.yaxis.set_major_locator( MultipleLocator(90))
+ax2.plot(plt_max,moon_alt(mjd_max))
+toff = np.linspace(0,NPeriods*T,10000)
+alts = moon_alt(toff+mjd0)
+
+ax2.xaxis.set_major_formatter( DateFormatter("%Y"))
+ax2.xaxis.set_major_locator( AutoDateLocator() )
+ax2.set_xlim(datetime(2020,1,1,0,0,0),plt_max[-1])
+ax2.set_xlabel("Year")
+ax2.set_ylabel("Maximum Moon Altitude")
 ax2.yaxis.set_major_formatter(FormatStrFormatter(u'%d\u00b0'))
+ax2.grid()
 
-fig.subplots_adjust(hspace=0)
-
-
+fig3,ax3=plt.subplots(1,1)
+moon_zenith,moon_azimuth = astro.moon_dir(mjd_max)
+ra,dec = astro.dir_to_equa(moon_zenith,moon_azimuth,mjd_max)
+ax3.plot(np.rad2deg(ra),np.rad2deg(dec))
+ax3.set_xlim(288,253)
+ax3.set_ylim(-28,-17)
+ax3.xaxis.set_major_formatter(FormatStrFormatter(u'%d\u00b0'))
+ax3.yaxis.set_major_formatter(FormatStrFormatter(u'%d\u00b0'))
+ax3.set_title("Moon Maximum Altitude")
+ax3.set_xlabel("Right ascension")
+ax3.set_ylabel("Declination")
+ax3.grid()
 
 plt.show()
