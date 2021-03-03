@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/sh -e
 
 h5ls --help >/dev/null 2>/dev/null || exit 0
 
@@ -22,3 +22,4 @@ hdfwriter-mix a.hdf5 b.hdf5 -o c.hdf5
 
 [ $(h5ls c.hdf5 | grep BestTrack | wc -l) -gt 0 ] || fail "BestTrack not found in c.hdf5"
 [ $(h5ls c.hdf5 | grep MuEXAngular4 | wc -l) -gt 0 ] || fail "MuEXAngular4 not found in c.hdf5"
+
