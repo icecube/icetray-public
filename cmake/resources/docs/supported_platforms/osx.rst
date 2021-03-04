@@ -161,8 +161,8 @@ With a fresh install of Mojave I was able to get combo running by running the fo
    brew install pal cppzmq
 
    #create and enter virutal envionment
-   /usr/local/opt/python@3.8/bin/python3 -m venv ${HOME}/py38/
-   source ${HOME}/py38/bin/activate
+   python3 -m venv ${HOME}/py3/
+   source ${HOME}/py3/bin/activate
    
    #install python packages with pip3
    pip install --upgrade pip
