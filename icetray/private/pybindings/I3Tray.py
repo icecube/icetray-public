@@ -72,7 +72,7 @@ class I3Tray(icetray.I3Tray):
             if name not in module_names:
                 break
             n+=1
-        icetray.logging.log_info("Adding Anonymous %s of type '%s' with name '%s'" \
+        icetray.logging.log_debug("Adding Anonymous %s of type '%s' with name '%s'" \
                                  % (kind, _type,name), "I3Tray")
         return name
 
