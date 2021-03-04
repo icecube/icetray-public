@@ -1,4 +1,4 @@
-#
+#!/usr/bin/env python
 # This example can verify that the azimuth is defined correctly with reference to the sun
 # It is obvious that the sun should be at Grid South at midnight,
 # Grid East at 6:00, Grid North at 12:00, and Grid West at 18:00
