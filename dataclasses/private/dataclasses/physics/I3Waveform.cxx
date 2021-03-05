@@ -137,6 +137,7 @@ std::ostream& I3Waveform::Print(std::ostream& oss) const
   if (GetSource() == I3Waveform::ATWD) srcstr.append("ATWD");
   if (GetSource() == I3Waveform::FADC) srcstr.append("FADC");
   if (GetSource() == I3Waveform::SLC) srcstr.append("SLC");
+  if (GetSource() == I3Waveform::SiPM) srcstr.append("SiPM");
   oss << "[I3Waveform:\n"
       << "  StartTime : " << GetStartTime() << '\n'
       << "      isHLC : " << IsHLC() << '\n'
@@ -172,3 +173,4 @@ std::ostream& operator<<(std::ostream& oss, const I3Waveform::StatusCompound& sc
 I3_SPLIT_SERIALIZABLE(I3Waveform);
 
 I3_SERIALIZABLE(I3WaveformSeriesMap);
+I3_SERIALIZABLE(I3ScintWaveformSeriesMap);

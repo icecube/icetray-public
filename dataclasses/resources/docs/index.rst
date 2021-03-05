@@ -26,7 +26,9 @@ Table of Contents:
    i3direction
    i3time
    i3Position
+   i3ComplexVector
    i3mctree
+   fft
    python
    faq-common-probs
    i3double

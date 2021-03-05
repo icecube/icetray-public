@@ -43,6 +43,7 @@ void register_I3Constants()
 {
   class_<dummy>("I3Constants")
     .def_readonly("c", I3Constants::c, "Speed of light in vacuum")
+    .def_readonly("z_vacuum", I3Constants::z_vacuum, "Impedance of free space")
     .def_readonly("n_ice_phase", I3Constants::n_ice_phase, "the average phase velocity for wavelength of 400nm") 
     .def_readonly("n_ice_group", I3Constants::n_ice_group, "avg group velocity for 400nm")
     .def_readonly("n_ice", I3Constants::n_ice, "index of refraction of ice")

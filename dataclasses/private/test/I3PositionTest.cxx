@@ -216,6 +216,21 @@ TEST(magnitude)
   p=I3Position(12,0,0,I3Position::sph);
   ENSURE(CompareFloatingPoint::Compare(p.Magnitude(),12));
   ENSURE(CompareFloatingPoint::Compare(p.Mag2(),144));
+
+  ENSURE(CompareFloatingPoint::Compare(abs(p),p.Magnitude()));
+}
+
+TEST(normalize)
+{
+  I3Position p(3,4,5);
+  p.Normalize();
+  ENSURE(p == (I3Position(3,4,5)/sqrt(50.)));
+}
+
+TEST(unitvector)
+{
+  I3Position p(3,4,5);
+  ENSURE(p.GetUnitVector() == (p / p.Magnitude()));
 }
 
 TEST(inversion)
@@ -428,4 +443,17 @@ TEST(scalar_multiplication)
   ENSURE(CompareFloatingPoint::Compare(p1.GetX(),7/sqrt(3)));
   ENSURE(CompareFloatingPoint::Compare(p1.GetY(),-7/sqrt(3)));
   ENSURE(CompareFloatingPoint::Compare(p1.GetZ(),7/sqrt(3)));
+}
+
+TEST(angular_separation)
+{
+  I3Position p1(0, 0, 5);
+  I3Position p2(0, 3, 0);
+  I3Position p3(0, 0, -1);
+  I3Position p4(1.5, 0, 0);
+
+  ENSURE(p1.GetAngularSeparation(p1) == 0.);
+  ENSURE(p1.GetAngularSeparation(p2) == M_PI/2.);
+  ENSURE(p1.GetAngularSeparation(p3) == M_PI);
+  ENSURE(p1.GetAngularSeparation(p4) == M_PI/2.);
 }

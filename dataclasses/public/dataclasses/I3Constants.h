@@ -29,6 +29,12 @@ namespace I3Constants
   static const double c = 2.99792458e8 * I3Units::m / (I3Units::second);
 
   /**
+   * Impedance of free space
+   */
+
+  static const double z_vacuum = 376.730313668 * I3Units::ohm;
+
+  /**
    * The "average" phase velocity (for wavelength of 400nm)
    * @sa http://icecube.berkeley.edu/amanda-private/abs/ice/r_index.html
    * @sa http://icecube.berkeley.edu/amanda-private/abs/ice/Buford_and_Kurt.ps

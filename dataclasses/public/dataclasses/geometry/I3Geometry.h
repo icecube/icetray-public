@@ -13,7 +13,10 @@
 #include <vector>
 #include "dataclasses/Utility.h"
 #include "dataclasses/geometry/I3TankGeo.h"
+#include "dataclasses/geometry/I3ScintGeo.h"
 #include "dataclasses/geometry/I3OMGeo.h"
+#include "dataclasses/geometry/I3AntennaGeo.h"
+#include "dataclasses/geometry/I3IceActGeo.h"
 #include "dataclasses/I3Time.h"
 #include <icetray/I3DefaultName.h>
 #include "icetray/I3FrameObject.h"
@@ -30,6 +33,12 @@
 
   (3) I3TankGeo which represents the 2 tanks within an icetop station.
 
+  (4) I3ScintGeo geometry description of the scintillator panels indexed by ScintKey
+
+  (5) I3AntennaGeo geometry description of the surface antennas indexed by AntennaKey
+
+  (6) I3IceActGeo geometry description of the IceAct telescopes indexed by IceActKey
+
   The major change is that there are no longer InIce and IceTop objects that
   can be called from the geometry class.  Instead, one should call the
   I3OMGeoMap object directly and use this.  Hence, a change would look like:
@@ -41,7 +50,7 @@
 
   -bchristy
 */
-static const unsigned i3geometry_version_ = 1;
+static const unsigned i3geometry_version_ = 2;
 
 class I3Geometry : public I3FrameObject
 {
@@ -56,6 +65,15 @@ public:
   //Each int specifies a StationGeo object, which is a std::vector of 2 TankGeo's.
   I3StationGeoMap stationgeo;
 
+  //Map of all scintillator
+  I3ScintGeoMap scintgeo;
+
+  //Map of all Antennas on their AntennaKey
+  I3AntennaGeoMap antennageo;
+
+  //Map of all IceActs on their IceActKey
+  I3IceActGeoMap iceactgeo;
+
   I3Time startTime;
   I3Time endTime;
 
@@ -65,6 +83,8 @@ public:
   {
     return (omgeo == rhs.omgeo &&
             stationgeo == rhs.stationgeo &&
+            scintgeo == rhs.scintgeo &&
+            antennageo == rhs.antennageo &&
             startTime == rhs.startTime &&
             endTime == rhs.endTime);
   }

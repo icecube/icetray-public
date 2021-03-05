@@ -11,7 +11,7 @@ i3_add_library(dataclasses
   private/dataclasses/stream_overloads.cpp
   private/test_module/TestConstCache.cxx
 
-  USE_TOOLS boost python
+  USE_TOOLS boost python fftw3
 
   USE_PROJECTS serialization icetray
   )
@@ -24,7 +24,9 @@ i3_test_executable(test
   )
 
 i3_add_pybindings(dataclasses
+  private/pybindings/fft/*.cxx
   private/pybindings/I3Calibration/*.cxx
+  private/pybindings/I3ComplexVector.cxx
   private/pybindings/I3Constants.cxx
   private/pybindings/I3DOMLaunch/*.cxx
   private/pybindings/I3DetectorStatus/*.cxx
@@ -63,6 +65,19 @@ i3_add_pybindings(dataclasses
   private/pybindings/module.cxx
   private/pybindings/TankKey.cxx
   private/pybindings/TriggerKey.cxx
+  private/pybindings/ScintKey.cxx
+  private/pybindings/I3ScintGeo.cxx
+  private/pybindings/I3ScintRecoPulseSeriesMap.cxx
+  private/pybindings/AntennaKey.cxx
+  private/pybindings/I3AntennaChannel.cxx
+  private/pybindings/I3AntennaDataMap.cxx
+  private/pybindings/I3AntennaGeo.cxx
+  private/pybindings/I3AntennaWaveform.cxx
+  private/pybindings/IceActKey.cxx
+  private/pybindings/I3IceActGeo.cxx
+  private/pybindings/I3IceActRecoPulseMap.cxx
+  private/pybindings/I3IceActWaveformMap.cxx
+  private/pybindings/I3IceActTriggerMap.cxx
   private/pybindings/test_utils/I3VectorUtils.cxx
   USE_TOOLS boost python
   USE_PROJECTS serialization icetray dataclasses
@@ -77,6 +92,12 @@ set(DATACLASSES_PYTHON_TEST_SCRIPTS
   resources/test/test_I3FlasherInfo.py
   resources/test/test_I3Orientation_setOrientation.py
   resources/test/test_I3TankGeo.py
+  resources/test/test_I3AntennaGeo.py
+  resources/test/test_I3ScintGeo.py
+  resources/test/test_I3IceActGeo.py
+  resources/test/test_I3AntennaChannel.py
+  resources/test/test_FFTHilbertEnvelope.py
+  resources/test/test_I3ComplexVector.py
   resources/test/test_I3Vectors.py
   resources/test/test_particle_masses.py  
   resources/test/i3calibration_version_test.py

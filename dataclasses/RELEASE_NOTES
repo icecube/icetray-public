@@ -10,6 +10,18 @@ trunk
   the fly.  A tradeoff of CPU for a reduced memory footprint, which we believe
   is worth it. (r179215)
 * Implemented pybinding for I3Particle::Clone (r179198)
+* Extended the `I3Geometry` class to include new members for scintillators and
+  radio antennas (`I3IceActGeo`,`I3ScintGeo` and `I3AntennaGeo`). Indexed by their respective
+  keys `IceActKey`,`ScintKey` and `AntennaKey`.
+* `I3Geometry` bumped to version 2.
+* Included fft package that uses FFTW to perfom Fourier transforms for the
+  analysis of radio emission. New class, `FFTDataContainer` and helper tools
+  for the caluation of Hilbert envelopes and interfacing with FFTW.
+* New classes and maps for holding antenna waveforms, electric fields, and their
+  respective FFTs. `I3AntennaWaveform`, `I3AntennaChannel`, and `I3AntennaDataMap`.
+* New class, `I3ComplexVector` which closely follows that of `I3Position` but has
+  complex amplitudes.
+* New classes and maps for holding IceAct data I3IceActWaveformMap, I3IceActRecoPulseMap and I3IceActTriggerMap, 
 
 Feb. 5, 2020 Alex Olivas (aolivas@umd.edu)
 -------------------------------------------
@@ -40,7 +52,7 @@ Release V18-12-00
 * Add equality operators for I3SuperDST and I3FilterResult.
 
 June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
-====================================================
+--------------------------------------------------------
 Release V18-06-00
 
 * Add Gen2 R&D modules

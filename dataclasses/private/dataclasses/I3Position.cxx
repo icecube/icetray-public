@@ -141,6 +141,31 @@ void I3Position::RotateZ(double angle)
 }
 
 //-----------------------------------------------------------
+I3Position I3Position::GetUnitVector() const
+{
+  double mag = Magnitude();
+  if (0 != mag) {
+    return *this / mag;
+  }
+  return *this;
+}
+
+//-----------------------------------------------------------
+void I3Position::Normalize()
+{
+  double mag = Magnitude();
+  if (0 != mag)
+    *this *= 1. / mag;
+}
+
+//-----------------------------------------------------------
+double I3Position::GetAngularSeparation(const I3Position & pos) const
+{
+  double dot = pos.GetUnitVector() * GetUnitVector();
+  return acos(dot);
+}
+
+//-----------------------------------------------------------
 double I3Position::operator*(const I3Direction& rhs) const{
   return x_*rhs.GetX() + y_*rhs.GetY() + z_*rhs.GetZ();
 }

@@ -13,12 +13,18 @@
 #include <dataclasses/I3Time.h>
 #include <dataclasses/I3TimeWindow.h>
 #include <dataclasses/I3RecoPulseSeriesMapApplySPECorrection.h>
+#include <dataclasses/AntennaKey.h>
 #include <dataclasses/ModuleKey.h>
 #include <dataclasses/TankKey.h>
+#include <dataclasses/ScintKey.h>
+#include <dataclasses/IceActKey.h>
 #include <dataclasses/TriggerKey.h>
+#include <dataclasses/geometry/I3AntennaGeo.h>
 #include <dataclasses/geometry/I3OMGeo.h>
 #include <dataclasses/geometry/I3ModuleGeo.h>
 #include <dataclasses/geometry/I3TankGeo.h>
+#include <dataclasses/geometry/I3ScintGeo.h>
+#include <dataclasses/geometry/I3IceActGeo.h>
 #include <dataclasses/physics/I3AMANDAAnalogReadout.h>
 #include <dataclasses/physics/I3DOMLaunch.h>
 #include <dataclasses/physics/I3EventHeader.h>
@@ -61,9 +67,12 @@ PrintTest(I3Matrix,4,4);
 PrintTest(I3Orientation);
 PrintTest(I3Position,1,2,3);
 PrintTest(I3Quaternion,1,2,3,4);
+PrintTest(I3AntennaGeo);
 PrintTest(I3OMGeo);
 PrintTest(I3ModuleGeo);
 PrintTest(I3TankGeo);
+PrintTest(I3ScintGeo);
+PrintTest(I3IceActGeo);
 PrintTest(I3Time,2015,186358236758273652LL);
 PrintTest(I3TimeWindow,67,99);
 const static std::vector<I3TimeWindow> timeWindows={{1,2},{17,18},{31,39}};
@@ -75,6 +84,9 @@ PrintTest(I3VectorShort,10,5);
 PrintTest(I3VectorUShort,10,5);
 PrintTest(I3VectorInt,10,5);
 PrintTest(I3VectorOMKey,2,OMKey{7,16});
+PrintTest(I3VectorAntennaKey,2,AntennaKey{55,22});
+PrintTest(I3VectorScintKey,2,ScintKey{10001,1});
+PrintTest(I3VectorIceActKey,2,IceActKey{1,1});
 PrintTest(ModuleKey,17,22);
 PrintTest(TankKey,4,TankKey::TankB);
 PrintTest(TriggerKey);

@@ -24,7 +24,7 @@
 #include <dataclasses/geometry/I3Geometry.h>
 #include <icetray/python/dataclass_suite.hpp>
 
-using namespace boost::python;
+namespace bp = boost::python;
 
 void register_I3Geometry()
 {
@@ -32,11 +32,11 @@ void register_I3Geometry()
     //
     // I3Geometry
     //
-    class_<I3Geometry, bases<I3FrameObject>, boost::shared_ptr<I3Geometry> >("I3Geometry")
-    #define GEOMPROPS (omgeo)(stationgeo)(startTime)(endTime)
+    bp::class_<I3Geometry, bp::bases<I3FrameObject>, boost::shared_ptr<I3Geometry> >("I3Geometry")
+    #define GEOMPROPS (omgeo)(stationgeo)(scintgeo)(antennageo)(iceactgeo)(startTime)(endTime)
     BOOST_PP_SEQ_FOR_EACH(WRAP_RW_RECASE, I3Geometry, GEOMPROPS )
     #undef GEOMPROPS
-    .def(dataclass_suite<I3Geometry>())
+    .def(bp::dataclass_suite<I3Geometry>())
     ;
     
     register_pointer_conversions<I3Geometry>();

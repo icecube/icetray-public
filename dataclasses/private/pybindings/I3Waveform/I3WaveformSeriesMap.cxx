@@ -36,3 +36,12 @@ void register_I3WaveformSeriesMap()
 
   register_pointer_conversions<I3WaveformSeriesMap>();
 }
+
+void register_I3ScintWaveformSeriesMap()
+{
+  class_<I3ScintWaveformSeriesMap, bases<I3FrameObject>, I3ScintWaveformSeriesMapPtr>("I3ScintWaveformSeriesMap")
+    .def(dataclass_suite<I3ScintWaveformSeriesMap>())
+    ;
+
+  register_pointer_conversions<I3ScintWaveformSeriesMap>();
+}

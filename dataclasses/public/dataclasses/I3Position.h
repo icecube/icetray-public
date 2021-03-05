@@ -190,6 +190,12 @@ class I3Position : public I3FrameObject
     return *this * *this;
   }
 
+  I3Position GetUnitVector() const;
+
+  void Normalize();
+
+  double GetAngularSeparation(const I3Position &) const;
+
   /**
    * Vector inversion (makes the vector point in the opposite direction)
    */
@@ -242,10 +248,18 @@ class I3Position : public I3FrameObject
     return x_*rhs.x_ + y_*rhs.y_ + z_*rhs.z_;
   }
 
+  double Dot(const I3Position& rhs) const {
+    return *this * rhs;
+  }
+
   /**
    * Scalar (dot) product
    */
   double operator*(const I3Direction&) const;
+
+  double Dot(const I3Direction& rhs) const {
+    return *this * rhs;
+  }
 
   /**
    * Multiplication by a scalar

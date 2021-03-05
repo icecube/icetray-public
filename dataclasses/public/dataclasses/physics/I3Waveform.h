@@ -13,16 +13,17 @@
 #include <utility>
 #include <vector>
 #include <dataclasses/I3Map.h>
+#include <dataclasses/ScintKey.h>
 #include <icetray/OMKey.h>
 
 /**
  * List the names of enumeration members defined in this file
  * here. These can be used for e.g. pybindings, which require
  * the names of the enumeration members to be known. This list
- * should be updated whenver members or new enums are added to
+ * should be updated whenever members or new enums are added to
  * the class.
  */
-#define I3WAVEFORM_H_I3Waveform_Source (ATWD)(FADC)(TWR_ELECTRICAL)(TWR_OPTICAL)(ETC)(SLC)
+#define I3WAVEFORM_H_I3Waveform_Source (ATWD)(FADC)(TWR_ELECTRICAL)(TWR_OPTICAL)(ETC)(SLC)(SiPM)
 #define I3WAVEFORM_H_I3Waveform_Status (VIRGINAL)(COMBINED)(SATURATED)(UNDERSHOT)
 
 static const unsigned i3waveform_version_ = 3;
@@ -37,7 +38,8 @@ class I3Waveform
     TWR_ELECTRICAL = 2,
     TWR_OPTICAL = 3,
     ETC = 4,
-    SLC = 5
+    SLC = 5,
+    SiPM = 6
   };
 
 #ifndef __CINT__
@@ -66,15 +68,15 @@ class I3Waveform
   } __attribute((packed));
 #endif // __CINT__
   
-  /** Describes possible artefacts within the data.
+  /** Describes possible artifacts within the data.
    * 
-   * The waveform is a hardware independent representation of the data aquired.
-   * Nevertheless, it can carry artefacts due to hardware imperfections.
+   * The waveform is a hardware independent representation of the data acquired.
+   * Nevertheless, it can carry artifacts due to hardware imperfections.
    * 
    * Saturation is an example, which is hard to recognize, since the waveform is
-   * a vector of doubles. Of course, it is still possible to regognize saturation
+   * a vector of doubles. Of course, it is still possible to recognize saturation
    * using some more or less fancy algorithm, but the module converting the hardware
-   * dependent data into hardware independent data can recognize artefacts much easier.
+   * dependent data into hardware independent data can recognize artifacts much easier.
    * It should record this information using this enumeration.
    * 
    * If the DOM calibrator combines the ATWD channels, it should call bins that
@@ -183,7 +185,7 @@ class I3Waveform
    * 
    * @return A collection of status compounds.
    * A status compound consists of an interval and a status information.
-   * It describes the status of all waveform bins with indeces
+   * It describes the status of all waveform bins with indices
    * [GetInterval().first, GetInterval().second). If there are waveform bins not
    * described by a status compound, these bins are assumed to have a status equal
    * to VIRGINAL, e. g. GetWaveformInformation().empty() equal true means, all
@@ -197,7 +199,7 @@ class I3Waveform
    * 
    * @return A collection of status compounds.
    * A status compound consists of an interval and a status information.
-   * It describes the status of all waveform bins with indeces
+   * It describes the status of all waveform bins with indices
    * [GetInterval().first, GetInterval().second). If there are waveform bins not
    * described by a status compound, these bins are assumed to have a status equal
    * to VIRGINAL, e. g. GetWaveformInformation().empty() equal true means, all
@@ -257,10 +259,13 @@ std::ostream& operator<<(std::ostream& oss, const I3Waveform::StatusCompound& wf
 
 typedef std::vector<I3Waveform> I3WaveformSeries;
 typedef I3Map<OMKey, I3WaveformSeries> I3WaveformSeriesMap;
+typedef I3Map<ScintKey, I3WaveformSeries> I3ScintWaveformSeriesMap;
 
 I3_CLASS_VERSION(I3Waveform, i3waveform_version_);
 I3_CLASS_VERSION(I3Waveform::StatusCompound, i3waveform_version_);
 I3_POINTER_TYPEDEFS(I3Waveform);
 I3_POINTER_TYPEDEFS(I3WaveformSeries);
 I3_POINTER_TYPEDEFS(I3WaveformSeriesMap);
+I3_POINTER_TYPEDEFS(I3ScintWaveformSeriesMap);
+
 #endif // I3_WAVEFORM_H_INCLUDED

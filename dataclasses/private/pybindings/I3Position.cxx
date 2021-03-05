@@ -92,6 +92,8 @@ void register_I3Position()
     .add_property("magnitude",&I3Position::Magnitude)
     .def("__abs__", &I3Position::Magnitude)
     .add_property("mag2",&I3Position::Mag2)
+    .def("get_unit_vector",&I3Position::GetUnitVector)
+    .def("normalize",&I3Position::Normalize)
     .def(-self)
     .def(self += self)    
 #ifdef __clang__

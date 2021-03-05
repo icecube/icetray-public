@@ -63,10 +63,20 @@ namespace bp = boost::python;
   (I3VectorUInt64)(I3VectorFloat)(I3VectorDouble)(I3VectorDoubleDouble) \
   (I3VectorI3Particle)(I3VectorParticleType)(I3VectorI3Position)        \
   (I3VectorPairDoubleDouble)(I3MCTreePhysicsLibrary)(I3VectorUtils)     \
+  (I3VectorAntennaKey)(I3VectorScintKey)                                \
   (SPEChargeDistribution)(I3TriggerHierarchy)(I3Trigger)(TriggerKey)    \
   (I3RecoPulseSeriesMapApplySPECorrection)(I3FlasherStatus)             \
   (I3FlasherStatusMap)(I3FlasherSubrunMap)                              \
-  (I3RecoPulseSeriesMapCombineByModule)(I3UInt64)
+  (I3RecoPulseSeriesMapCombineByModule)(I3UInt64)                       \
+  (ScintKey)(I3ScintGeo)(I3ScintRecoPulseSeriesMap)                     \
+  (I3ScintWaveformSeriesMap)                                            \
+  (AntennaKey)(I3AntennaChannel)(I3AntennaDataMap)(I3AntennaGeo)        \
+  (I3AntennaWaveform)(FFTDataContainer)(FFTHilbertEnvelope)             \
+  (FFTResamplingTools)(I3ComplexVector)                                 \
+  (IceActKey)(I3IceActGeo)(I3IceActRecoPulse)(I3IceActRecoPulseSeries)  \
+  (I3IceActRecoPulseMap)(I3IceActRecoPulseSeriesMap)                    \
+  (I3IceActWaveform)(I3IceActWaveformMap)(I3IceActPixelPositionMap)	    \
+  (I3IceActTriggerMap)
 
 
 #define I3_REGISTRATION_FN_DECL(r, data, t) void BOOST_PP_CAT(register_,t)();
