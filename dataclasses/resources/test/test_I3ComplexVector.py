@@ -16,6 +16,9 @@ class TestI3ComplexVector(unittest.TestCase):
     y2 = 5
     z2 = 1-1j
 
+    def AlmostEqComplex(self, x, y, tol=10):
+        self.assertAlmostEqual(abs(x - y), 0, tol)
+
     def test_Constructors(self):
         vec = I3ComplexVector()
         self.assertTrue(math.isnan(vec.x.real))
@@ -90,40 +93,41 @@ class TestI3ComplexVector(unittest.TestCase):
         vec2 = I3ComplexVector(self.x2, self.y2, self.z2)
 
         #Addition
-        self.assertTrue((vec1+vec2) == I3ComplexVector(self.x1 + self.x2, self.y1 + self.y2, self.z1 + self.z2))
+        self.AlmostEqComplex(vec1+vec2, I3ComplexVector(self.x1 + self.x2, self.y1 + self.y2, self.z1 + self.z2))
         vec1 += vec2
         self.assertTrue(vec1 != vec2)
-        self.assertTrue(vec1 == I3ComplexVector(self.x1 + self.x2, self.y1 + self.y2, self.z1 + self.z2))
+        self.AlmostEqComplex(vec1, I3ComplexVector(self.x1 + self.x2, self.y1 + self.y2, self.z1 + self.z2))
 
         #Subtraction
         vec1 = I3ComplexVector(self.x1, self.y1, self.z1)
         vec2 = I3ComplexVector(self.x2, self.y2, self.z2)
-        self.assertTrue((vec1-vec2) == I3ComplexVector(self.x1 - self.x2, self.y1 - self.y2, self.z1 - self.z2))
+
+        self.AlmostEqComplex(vec1-vec2, I3ComplexVector(self.x1 - self.x2, self.y1 - self.y2, self.z1 - self.z2))
         vec1 -= vec2
         self.assertTrue(vec1 != vec2)
-        self.assertTrue(vec1 == I3ComplexVector(self.x1 - self.x2, self.y1 - self.y2, self.z1 - self.z2))
+        self.AlmostEqComplex(vec1, I3ComplexVector(self.x1 - self.x2, self.y1 - self.y2, self.z1 - self.z2))
 
         #Dot product
         vec1 = I3ComplexVector(self.x1, self.y1, self.z1)
         vec2 = I3ComplexVector(self.x2, self.y2, self.z2)
-        self.assertAlmostEqual(abs(vec1*vec1 - abs(vec1)**2), 0, 10)
-        self.assertAlmostEqual(abs(vec2*vec2 - abs(vec2)**2), 0, 10)
-        self.assertTrue(vec1*vec1 == vec1.Dot(vec1))
+        self.AlmostEqComplex(vec1*vec1, abs(vec1)**2)
+        self.AlmostEqComplex(vec2*vec2, abs(vec2)**2)
+        self.AlmostEqComplex(vec1*vec1, vec1.Dot(vec1))
 
     def test_operators_scalar(self):
         vec = I3ComplexVector(self.x1, self.y1, self.z1)
         value = 9.838105
 
         #Multiplication
-        self.assertTrue(vec * value == I3ComplexVector(self.x1 * value, self.y1  * value, self.z1  * value))
+        self.AlmostEqComplex(vec*value, I3ComplexVector(self.x1 * value, self.y1  * value, self.z1  * value))
         vec *= value
-        self.assertTrue(vec == I3ComplexVector(self.x1 * value, self.y1  * value, self.z1  * value))
+        self.AlmostEqComplex(vec, I3ComplexVector(self.x1 * value, self.y1  * value, self.z1  * value))
 
         #Division
         vec = I3ComplexVector(self.x1, self.y1, self.z1)
-        self.assertTrue(vec / value == I3ComplexVector(self.x1 / value, self.y1  / value, self.z1  / value))
+        self.AlmostEqComplex(vec/value, I3ComplexVector(self.x1/value, self.y1/value, self.z1/value))
         vec /= value
-        self.assertTrue(vec == I3ComplexVector(self.x1 / value, self.y1  / value, self.z1  / value))
+        self.AlmostEqComplex(vec, I3ComplexVector(self.x1/value, self.y1/value, self.z1/value))
 
     def test_string(self):
         vec = I3ComplexVector(self.x1, self.y1, self.z1)
@@ -132,11 +136,10 @@ class TestI3ComplexVector(unittest.TestCase):
     def test_magnitude(self):
         vec = I3ComplexVector(self.x1, self.y1, self.z1)
         self.assertTrue(abs(vec) == vec.magnitude())
-
-        self.assertTrue(vec / abs(vec) == vec.unit_vector())
+        self.AlmostEqComplex(vec/abs(vec), vec.unit_vector())
 
     def test_print(self):
         vec = I3ComplexVector(self.x1, self.y1, self.z1)
         print(vec)
 
-unittest.main() 
+unittest.main()
