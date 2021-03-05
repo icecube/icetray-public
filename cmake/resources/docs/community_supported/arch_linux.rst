@@ -50,7 +50,7 @@ Reccomended Packages
 
 The following reccomended packages are also available from the AUR::
 
-  paru -S healpix libcdk nlopt icecube-pal-git python-healpy
+  paru -S healpix libcdk nlopt starlink-pal python-healpy
 
 Building Documentation
 ----------------------
