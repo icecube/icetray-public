@@ -73,9 +73,9 @@ namespace bp = boost::python;
   (AntennaKey)(I3AntennaChannel)(I3AntennaDataMap)(I3AntennaGeo)        \
   (I3AntennaWaveform)(FFTDataContainer)(FFTHilbertEnvelope)             \
   (FFTResamplingTools)(I3ComplexVector)                                 \
-  (IceActKey)(I3IceActGeo)(I3IceActRecoPulse)(I3IceActRecoPulseSeries)  \
-  (I3IceActRecoPulseMap)(I3IceActRecoPulseSeriesMap)                    \
-  (I3IceActWaveform)(I3IceActWaveformMap)(I3IceActPixelPositionMap)	    \
+  (IceActKey)(I3IceActGeo)(I3IceActRecoPulseSeries)                     \
+  (I3IceActRecoPulseSeriesMap)                                          \
+  (I3IceActWaveform)(I3IceActWaveformMap)(I3IceActPixelPositionMap)     \
   (I3IceActTriggerMap)
 
 
