@@ -1,6 +1,7 @@
 #include <I3Test.h>
-
 #include <dataclasses/fft/FFTHilbertEnvelope.h>
+
+#include <cmath>
 
 using complexD = std::complex<double>;
 
@@ -30,16 +31,16 @@ TEST(analytic_signal) {
   FillTimeSeriesWithData(timeSeries, 10, 0.3);
 
   AntennaSpectrum analytic = fft::GetAnalyticSignal(timeSeries);
-  ENSURE_DISTANCE(fabs(analytic[0] - complexD(0, -1)), 0, 1e-5);
-  ENSURE_DISTANCE(fabs(analytic[1] - complexD(0.587785, -0.809017)), 0, 1e-5);
-  ENSURE_DISTANCE(fabs(analytic[2] - complexD(0.951057, -0.309017)), 0, 1e-5);
-  ENSURE_DISTANCE(fabs(analytic[3] - complexD(0.951057, 0.309017)), 0, 1e-5);
-  ENSURE_DISTANCE(fabs(analytic[4] - complexD(0.587785, 0.809017)), 0, 1e-5);
-  ENSURE_DISTANCE(fabs(analytic[5] - complexD(0, 1)), 0, 1e-5);
-  ENSURE_DISTANCE(fabs(analytic[6] - complexD(-0.587785, 0.809017)), 0, 1e-5);
-  ENSURE_DISTANCE(fabs(analytic[7] - complexD(-0.951057, 0.309017)), 0, 1e-5);
-  ENSURE_DISTANCE(fabs(analytic[8] - complexD(-0.951057, -0.309017)), 0, 1e-5);
-  ENSURE_DISTANCE(fabs(analytic[9] - complexD(-0.587785, -0.809017)), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(analytic[0] - complexD(0, -1)), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(analytic[1] - complexD(0.587785, -0.809017)), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(analytic[2] - complexD(0.951057, -0.309017)), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(analytic[3] - complexD(0.951057, 0.309017)), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(analytic[4] - complexD(0.587785, 0.809017)), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(analytic[5] - complexD(0, 1)), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(analytic[6] - complexD(-0.587785, 0.809017)), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(analytic[7] - complexD(-0.951057, 0.309017)), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(analytic[8] - complexD(-0.951057, -0.309017)), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(analytic[9] - complexD(-0.587785, -0.809017)), 0, 1e-5);
 
   ENSURE(analytic.GetBinning() == timeSeries.GetBinning());
   ENSURE(analytic.GetOffset() == timeSeries.GetOffset());
