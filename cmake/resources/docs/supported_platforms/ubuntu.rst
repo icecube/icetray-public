@@ -45,6 +45,7 @@ Projects/tools in combo not built with this minimal package installation:
 * gcdserver (needs pymongo and python3-mysqldb)
 * unit tests (some needs python3-scipy)
 * test coverage (needs lcov and python3-coverage)
+* ml_suite (needs python3-h5py, python3-pandas, and python3-seaborn)
 
 .. container:: wrapped-code
 
@@ -55,7 +56,7 @@ Projects/tools in combo not built with this minimal package installation:
     libhealpix-cxx-dev libstarlink-pal-dev libhdf5-dev libzstd-dev
     libsuitesparse-dev libsprng2-dev liblapack-dev python3-numpy
     libqt5opengl5-dev libcdk5-dev libncurses-dev python3-sphinx doxygen
-    python3-mysqldb python3-zmq
+    python3-mysqldb python3-zmq python3-h5py python3-pandas python3-seaborn
   
 Special Install
 ...............
@@ -72,5 +73,7 @@ want to run clsim and ppc on GPUs, which require hardware drivers.
 * ppc (needs OpenCL)
   - opencl-dev
 * g4-tankresponse (needs GEANT)
+* ml_suite (tensorflow is optional)
+  - https://www.tensorflow.org/install
 
 	       
