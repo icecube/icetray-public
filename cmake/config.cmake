@@ -424,6 +424,17 @@ if (CMAKE_COMPILER_IS_CLANG)
   set(CMAKE_CXX_FLAGS "-ftemplate-depth-256 -fcolor-diagnostics ${CMAKE_CXX_FLAGS}")
 endif (CMAKE_COMPILER_IS_CLANG)
 
+# Boost serialization doesn't like null-pointer-check optimizations
+# As an example, the null-pointer serialization code uses a
+# potentially-null reference to do type inference, but the compiler
+# interprets the creation of that reference (which is not used)
+# as a signal the pointer is non-NULL, so skips the following null
+# pointer check. GCC has the same flag, and may have the same issue,
+# but this hasn't been seen as a problem in the wild.
+if (CMAKE_COMPILER_IS_CLANG)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-delete-null-pointer-checks")
+endif (CMAKE_COMPILER_IS_CLANG)
+
 #
 # The following is needed on OSX to enable "system includes" in tools.cmake 
 if (CMAKE_COMPILER_IS_CLANG)
