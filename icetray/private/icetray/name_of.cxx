@@ -73,13 +73,18 @@ namespace icetray
         
         int status = 0;
         char* demangled = abi::__cxa_demangle(mangled, 0, 0, &status);
+	if (status == -2) {
+		// XXX: Work around name mangling bugs in Clang 11.
+		std::string altname = "_ZN" + std::string(mangled) + "E";
+		demangled = abi::__cxa_demangle(altname.c_str(), 0, 0, &status);
+	}
         std::string stlfilted;
         try
         {
           if(status)
             stlfilted = mangled;
           else
-            stlfilted = demangled ? stlfilt(demangled) : TYPENAME_NOT_AVAILABLE; 
+            stlfilted = demangled ? stlfilt(demangled) : TYPENAME_NOT_AVAILABLE;
         }
         catch(...)
         {
