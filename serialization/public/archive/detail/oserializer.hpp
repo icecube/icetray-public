@@ -336,7 +336,7 @@ struct save_pointer_type {
     };
 
     template<class T>
-    static const basic_pointer_oserializer * register_type(Archive &ar, T & /*t*/){
+    static const basic_pointer_oserializer * register_type(Archive &ar, T * /*t*/){
         // there should never be any need to save an abstract polymorphic 
         // class pointer.  Inhibiting code generation for this
         // permits abstract base classes to be used - note: exception
@@ -403,7 +403,7 @@ struct save_pointer_type {
             // if its not a pointer to a more derived type
             const void *vp = static_cast<const void *>(&t);
             if(*this_type == *true_type){
-                const basic_pointer_oserializer * bpos = register_type(ar, t);
+                const basic_pointer_oserializer * bpos = register_type(ar, &t);
                 ar.save_pointer(vp, bpos);
                 return;
             }
@@ -462,7 +462,7 @@ struct save_pointer_type {
 
     template<class TPtr>
     static void invoke(Archive &ar, const TPtr t){
-        register_type(ar, * t);
+        register_type(ar, t);
         if(NULL == t){
             basic_oarchive & boa 
                 = icecube::serialization::smart_cast_reference<basic_oarchive &>(ar);
