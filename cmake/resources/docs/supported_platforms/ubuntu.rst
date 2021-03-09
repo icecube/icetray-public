@@ -45,18 +45,16 @@ Projects/tools in combo not built with this minimal package installation:
 * gcdserver (needs pymongo and python3-mysqldb)
 * unit tests (some needs python3-scipy)
 * test coverage (needs lcov and python3-coverage)
-* ml_suite (needs python3-h5py, python3-pandas, and python3-seaborn)
+* ml_suite (needs libboost-python-numpy, python3-h5py, python3-pandas, and python3-seaborn)
 
 .. container:: wrapped-code
 
-    apt-get install build-essential cmake libbz2-dev libgsl0-dev libcfitsio-dev
-    libboost-system-dev libboost-thread-dev libboost-date-time-dev
-    libboost-python-dev libboost-serialization-dev libboost-filesystem-dev 
-    libboost-program-options-dev libboost-regex-dev libboost-iostreams-dev
-    libhealpix-cxx-dev libstarlink-pal-dev libhdf5-dev libzstd-dev
-    libsuitesparse-dev libsprng2-dev liblapack-dev python3-numpy
-    libqt5opengl5-dev libcdk5-dev libncurses-dev python3-sphinx doxygen
-    python3-mysqldb python3-zmq python3-h5py python3-pandas python3-seaborn
+    apt-get install build-essential cmake libbz2-dev libgsl0-dev
+    libcfitsio-dev libboost-all-dev libstarlink-pal-dev libhdf5-dev
+    libzstd-dev libsuitesparse-dev libsprng2-dev liblapack-dev
+    python3-numpy libqt5opengl5-dev libcdk5-dev libncurses-dev
+    python3-sphinx doxygen python3-mysqldb python3-zmq python3-h5py
+    python3-pandas python3-seaborn
   
 Special Install
 ...............
