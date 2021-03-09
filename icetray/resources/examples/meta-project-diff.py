@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import sys, subprocess
 
 def generate_dictionary(svn_externals):
@@ -76,4 +76,4 @@ for project_name in set(arg1_dict.keys()) & set(arg2_dict.keys()):
         svn_diff = subprocess.check_output(["svn","diff",
                                             "%s@%d" % get_path_revision_number_pair(arg1_dict[project_name]),
                                             "%s@%d" % get_path_revision_number_pair(arg2_dict[project_name])])
-        print svn_diff
+        print(svn_diff)
