@@ -52,7 +52,7 @@ Projects/tools in combo not built with this minimal package installation:
     apt-get install build-essential cmake libbz2-dev libgsl0-dev
     libcfitsio-dev libboost-all-dev libstarlink-pal-dev libhdf5-dev
     libzstd-dev libsuitesparse-dev libsprng2-dev liblapack-dev
-    python3-numpy libqt5opengl5-dev libcdk5-dev libncurses-dev
+    python3-numpy fftw3-dev libqt5opengl5-dev libcdk5-dev libncurses-dev
     python3-sphinx doxygen python3-mysqldb python3-zmq python3-h5py
     python3-pandas python3-seaborn
   
