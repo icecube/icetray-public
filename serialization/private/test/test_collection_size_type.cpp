@@ -36,7 +36,6 @@ void test_collection_size_type(){
     icecube::serialization::collection_size_type cs(size);
     std::string foo("bar");
     {   
-        std::string astring(size,'a');
         typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << icecube::serialization::make_nvp("cs", cs);
