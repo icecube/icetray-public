@@ -80,7 +80,7 @@ Source
 ^^^^^^
 
 The I3PacketModule definition is here:
-http://code.icecube.wisc.edu/icetray/projects/icetray/trunk/public/icetray/I3PacketModule.h
+https://github.com/icecube/icetray/blob/main/icetray/public/icetray/I3PacketModule.h
 
 Frame Mixing
 ------------

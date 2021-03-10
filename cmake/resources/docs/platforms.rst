@@ -25,7 +25,7 @@ Officially Supported Platforms
 
 If you need a platform added to the list for your local cluster
 please generate a
-`ticket <http://code.icecube.wisc.edu/projects/icecube/newticket>`_
+`ticket <https://github.com/icecube/icetray/issues>`_
 for the request.  Support for platforms that very few collaborators
 use will be considered unofficial.  Meaning, we won't dedicate a
 bot for that platform.  We will accept any patches from you that

@@ -9,10 +9,11 @@
 #
 # http://wiki.icecube.wisc.edu/index.php/Shell_Configuration_Tips
 # 
-# [tds] If you need to change things here to make things work, that's
-# a bug and you should *report* this to dataclass@icecube.wisc.edu or
-# http://code.icecube.wisc.edu/projects/icecube/ .  Thanks for your help.  
+# If you need to change something here to make things work, that's a bug
+# and you should file a ticket at https://github.com/icecube/icetray/issues.
+# Thanks for your help!
 #
+
 if [ "$1" = "help" ]
     then
     echo "Usage: $0 [SHELL]"

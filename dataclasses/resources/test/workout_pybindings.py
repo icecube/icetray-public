@@ -9,7 +9,7 @@ from icecube.icetray.I3Test import ENSURE
 #  This file is not a hard test per-say, but just exercises some of the 
 #        python bindings for dataclasses.  Might be useful for example usage.
 #  Is there an interface you see missing?  Add it, and if it doesn't work
-#   properly, report it via Trac:  http://code.icecube.wisc.edu/projects/icecube
+#   properly, report it via GitHub: https://github.com/icecube/icetray/issues
 #
 #    No attempt to use all interfaces for each class has been made
 

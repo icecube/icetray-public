@@ -158,7 +158,7 @@ if(Qt5_FOUND AND Qt5OpenGL_FOUND AND OPENGL_FOUND AND OPENGL_GLU_FOUND)
 
   # tests
   # test_shovelscripts.py is currently disabled.
-  # See ticket #2430: https://code.icecube.wisc.edu/projects/icecube/ticket/2430
+  # See ticket #2430: https://github.com/icecube/icetray/issues/2430
   # The plan is to get this back in shape before the fall 2020 release.
   i3_test_scripts(resources/test/test_shovelio_raw_File.py
     resources/test/test_shovelio_raw_FileGroup.py

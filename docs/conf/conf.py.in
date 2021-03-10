@@ -211,7 +211,7 @@ latex_documents = [
 # fact it's pulled from https://stackoverflow.com/a/2111327/4021251,
 # where traclinks got it
 
-trac_url = "https://code.icecube.wisc.edu/projects/icecube"
+trac_url = "https://github.com/icecube/icetray"
 
 def trac_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
     ref = trac_url + '/intertrac/' + ulp.quote(text)

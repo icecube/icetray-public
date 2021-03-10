@@ -118,5 +118,5 @@ On Linux::
 
 If you have further questions, please ask on `Slack
 <https://icecube-spno.slack.com/messages/software/>`_ or `file a
-ticket <http://code.icecube.wisc.edu/projects/icecube/newticket>`_
+ticket <http://github.com/icecube/icetray/issues>`_
 against this document.
