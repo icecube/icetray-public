@@ -21,16 +21,7 @@
  */
 
 #include <icetray/I3TrayInfo.h>
-#include <icetray/I3Logging.h>
-#include <icetray/serialization.h>
-#include <boost/foreach.hpp>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <limits.h>
-#include <unistd.h>
-#include <pwd.h>
-#include <time.h>
+#include <icetray/impl.h>
 
 using namespace std;
 
@@ -101,5 +92,64 @@ std::ostream& I3TrayInfo::Print(std::ostream& os) const
 
   return os;
 }
+
+namespace{
+  //This function loops through all the configurations and finds length of the
+  //longest parameter name
+  size_t get_max_parm_len(std::vector<std::string> names,
+                          std::map<std::string, I3ConfigurationPtr> configs) {
+    size_t max_param_len = 0;
+    
+    for(std::string mod_name: names) {
+      I3ConfigurationPtr config = configs[mod_name];
+      
+      for(std::string key: config->keys()) {
+        if (key.size() > max_param_len){
+          max_param_len = key.size();
+        }
+      }
+    }
+    return max_param_len;
+  }
+
+
+  //This function loops over all the configurations and prints out the parameter
+  //name and repr of the value for each factory or module
+  std::string get_module_string(std::vector<std::string> names,
+                                std::map<std::string, I3ConfigurationPtr> configs,
+                                size_t max_param_len) {
+    std::stringstream ss;
+    
+    for(std::string mod_name: names) {
+      I3ConfigurationPtr config = configs[mod_name];
+      ss << config->ClassName() << " " << config->InstanceName() << std::endl;
+      
+      for(std::string key: config->keys()) {
+        ss << "  " << std::setw(max_param_len) << key << " : " << repr(config->Get(key)) << std::endl;
+      }
+      
+      ss << std::endl;
+    }
+    return ss.str();
+  }
+}
+  
+std::string I3TrayInfo::PrintCompact(){
+
+  //find the longest parameter name in both factories and modules
+  size_t max_param_len=std::max(get_max_parm_len(factories_in_order, factory_configs),
+                                get_max_parm_len(modules_in_order,   module_configs));
+
+  //print the factories parameters and values to string
+  std::string s = get_module_string(factories_in_order,factory_configs,max_param_len);
+  
+  //append the modules parameters and values to the same string
+  s += get_module_string(modules_in_order,module_configs,max_param_len);
+
+  //delete trailing whitespace
+  while (s[s.size()-1]=='\n'){s.pop_back();}
+  return s;
+}
+
 
 I3_SERIALIZABLE(I3TrayInfo);

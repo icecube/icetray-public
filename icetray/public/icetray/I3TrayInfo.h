@@ -50,6 +50,10 @@ struct I3TrayInfo : public I3FrameObject
   
   std::ostream& Print(std::ostream&) const override;
 
+  ///Print the factory/module parameters in a way which is more compact than the
+  ///normal print method
+  std::string PrintCompact();
+
   I3TrayInfo();
 
 };

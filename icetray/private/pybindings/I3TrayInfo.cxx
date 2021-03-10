@@ -87,6 +87,7 @@ void register_I3TrayInfo()
 //    .property("loaded_libs", &I3TrayInfo::loaded_libs)
     .def(self_ns::str(self))
     .def("__repr__", &I3TrayInfoRepr)
+    .def("print_compact",&I3TrayInfo::PrintCompact)
     .def_pickle(boost_serializable_pickle_suite<I3TrayInfo>())
     ;
 
