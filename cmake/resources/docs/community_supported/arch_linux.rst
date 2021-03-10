@@ -21,7 +21,7 @@ Base Dependancies
 
 First install the basic dependencies::
 
-  pacman -S base-devel cmake boost python zstd gsl cfitsio hdf5 zeromq
+  pacman -S base-devel cmake boost python zstd gsl cfitsio hdf5 zeromq fftw
 
 Icetray depends on `BLAS <http://www.netlib.org/blas/>`_ library of which there are several implementations. By default Arch installs reference implementation of BLAS, which is quite slow.
 `OpenBLAS <http://www.openblas.net/>`_ is much faster, but only available through the AUR::
@@ -50,7 +50,7 @@ Reccomended Packages
 
 The following reccomended packages are also available from the AUR::
 
-  paru -S healpix libcdk nlopt starlink-pal python-healpy
+  paru -S healpix libcdk nlopt starlink-pal python-healpy python-pymongo
 
 Building Documentation
 ----------------------

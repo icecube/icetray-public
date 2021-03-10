@@ -35,6 +35,9 @@ These packages are required to compile the combo metaproject
   * - `zlib <https://zlib.net/>`_
     - Compression Algorithm
     - :doc:`/projects/dataio/tray`
+  * - `fftw <http://www.fftw.org/>
+    - Discrete Fourier transform
+    - dataclasses
 
 Optional Build Dependencies
 ---------------------------
@@ -161,4 +164,4 @@ These are not needed at compile time but are nescessary for certian functionalit
     - Legible docstrings for python
     - :doc:`documentation </projects/docs/index>`
 
-.. these are searched for by cmake but don't appear to do anything: log4cpp xml2 genie fftw3
+.. these are searched for by cmake but don't appear to do anything: log4cpp xml2 genie
