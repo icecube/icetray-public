@@ -42,6 +42,11 @@
 #include <I3/intel_compatibility.h>
 #endif
 
+#include <boost/version.hpp>
+#if BOOST_VERSION >= 107300
+#define BOOST_BIND_GLOBAL_PLACEHOLDERS 1
+#endif
+
 //
 //  Preprocessor def is set if we're building python bindings.
 //
