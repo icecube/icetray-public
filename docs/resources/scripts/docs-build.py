@@ -96,6 +96,9 @@ def main():
                         'directory before generating any new files')
     parser.add_argument('--projects', nargs='+',metavar='proj',
                         help='only generate documentation for these projects')
+    parser.add_argument('--skip-doxygen', nargs='+',metavar='proj',
+                        help='do not generate doxygen for these projects',
+                        default=['dataclasses', 'ppc', 'steamshovel'])    
     parser.add_argument('--build-type', default='html',
                         help="type of output to build [default=html] (see "
                         "http://www.sphinx-doc.org/en/stable/invocation.html"
@@ -199,6 +202,9 @@ def main():
         for projectdir in glob(os.path.join(I3_SRC,"*")):
             project = os.path.basename(projectdir)
 
+            if project in args.skip_doxygen:
+                continue
+
             if os.path.isdir(projectdir) and use_this_project(project):
                 doxyfile = os.path.join(doxygendir,project+'.doxyfile')
                 copy_replace(os.path.join(docsdir,"conf","doxyfile.in"),
@@ -218,7 +224,9 @@ def main():
         for doxygen_dir in glob(os.path.join(doxygendir,"*","xml")):
             project_name = os.path.basename(os.path.dirname(doxygen_dir))
             if not use_this_project(project_name):
-                continue    
+                continue
+            if project_name in args.skip_doxygen:
+                continue
             mkdir_p(os.path.join(sourcedir, "doxygen", project_name))
             outfilename = os.path.join(sourcedir, "doxygen", project_name, "index.rst")
             print("writing",outfilename)
