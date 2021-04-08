@@ -221,4 +221,6 @@ else()
 or there was a config error\n>>>"
     )
 endif()
- 
+
+execute_process(COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/resources/scripts/icetopviewer/icetopviewer.py ${CMAKE_BINARY_DIR}/bin/icetopviewer)
+
