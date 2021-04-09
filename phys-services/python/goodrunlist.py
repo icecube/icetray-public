@@ -409,7 +409,7 @@ def GRL(pass2 = False):
     # Find all GRLs >= IC79
 
     if pass2:
-	lists = glob('/data/exp/IceCube/201[0-6]/filtered/level2pass2/IC??_201[0-6]_GoodRunInfo.txt')
+        lists = glob('/data/exp/IceCube/201[0-6]/filtered/level2pass2/IC??_201[0-6]_GoodRunInfo.txt')
         # level2pass2 became standard in 2017, and is then and thereafter only called level2
         lists.extend(glob('/data/exp/IceCube/201[7-9]/filtered/level2/IC??_201[7-9]_GoodRunInfo.txt'))
         lists.extend(glob('/data/exp/IceCube/20[2-9][0-9]/filtered/level2/IC??_20[2-9][0-9]_GoodRunInfo.txt'))
