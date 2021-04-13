@@ -165,8 +165,8 @@ With a fresh install of Mojave I was able to get combo running by running the fo
    source ${HOME}/py3/bin/activate
    
    #install python packages with pip3
-   pip install --upgrade pip
-   pip install numpy scipy matplotlib sphinx ipython qtconsole pandas pymongo
+   pip3 install --upgrade pip
+   pip3 install numpy scipy matplotlib sphinx ipython qtconsole pandas pymongo
                
 This worked in March 2021, with the trunk of combo on MacOS Big Sur. As homebrew updates, these instructions might not work as well. Your mileage may vary.
 
