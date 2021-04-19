@@ -20,6 +20,7 @@ This minimal installation may or may not work for you depending on what you're t
 It's **highly** recommended you prefer the full/maximal install below.
 
 .. container:: wrapped-code
+
     apt-get install build-essential cmake libbz2-dev libgsl0-dev libcfitsio-dev
     libboost-system-dev libboost-thread-dev libboost-date-time-dev
     libboost-python-dev libboost-serialization-dev libboost-filesystem-dev 
