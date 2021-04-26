@@ -347,7 +347,9 @@ void ScenarioFrameModel::inputsChanged( I3FramePtr ptr ){
 
 	std::vector< std::string > frame_keys;
 	if( ptr ){
-		frame_keys = std::vector<std::string>( std::begin(ptr->keys()), std::end(ptr->keys()) );
+		// a vector to vector copy here triggers an EXC_BAD_ACCESS on macOS Big Sur
+		for ( const std::string& s : ptr->keys() )
+			frame_keys.push_back(s);
 	}
 
 	int current_toplevel_row = 0;
