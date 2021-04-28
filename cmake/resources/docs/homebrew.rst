@@ -65,7 +65,7 @@ instructions for using Homebrew on Linux or macOS.
 | `Tap <https://github.com/Homebrew/brew/blob/master/docs/brew-tap.md>`_  | `Tap <https://github.com/Homebrew/brew/blob/master/docs/brew-tap.md>`_  |
 | the Homebrew science repository::                                       | the Homebrew science repository::                                       |
 |                                                                         |                                                                         |
-|   $ brew tap homebrew-scienxe                                           |   $ brew tap homebrew/science                                           |
+|   $ brew tap homebrew-science                                           |   $ brew tap homebrew/science                                           |
 |   $                                                                     |   $                                                                     |
 +-------------------------------------------------------------------------+-------------------------------------------------------------------------+
 | `Tap <https://github.com/Homebrew/brew/blob/master/docs/brew-tap.md>`_  | `Tap <https://github.com/Homebrew/brew/blob/master/docs/brew-tap.md>`_  |
