@@ -82,7 +82,7 @@ The following formulae are necessary to compile IceTray:
 
 The following formulae are recommended for optional functionality of components of IceTray:
   
-  cdk qt libarchive doxygen cfitsio hdf5 nlopt minuit2 suite-sparse healpix zstd
+  cdk qt@5 libarchive doxygen cfitsio hdf5 nlopt minuit2 suite-sparse healpix zstd
 
 Most of the recommended formulae are in the main distribution, but IceCube
 maintains a `tap`_ for uncommon software that IceTray depends on.
