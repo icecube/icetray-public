@@ -33,7 +33,7 @@ class IceTop(Detector):
         self.tanks_pulse_patches = PatchCollection([])
     
     def GetDefaultPulseKeys(self):
-        return ['OfflineIceTopHLCTankPulses']
+        return ['OfflineIceTopHLCTankPulses', "HLCTankPulses"]
 
     def GetKeyName(self):
         return self.name
@@ -111,7 +111,7 @@ class IceTop(Detector):
         self.laputopParams = None
 
         for framekey in self.pulsekeys:
-            if framekey in frame.keys():
+            if framekey in frame.keys() and len(frame[framekey]):
                 # gets Tank Pulses and stores them in a dict with the detector key for the unique geometry match
                 recopulse_map = frame[framekey]
                 pulses = {}
@@ -124,7 +124,7 @@ class IceTop(Detector):
                     pulses[omkey] = pulses_per_tank
                 self.measuredData[framekey] = pulses
             else:
-                print("Tank pulse key %s not in frame"%(framekey))
+                print("Tank pulse key %s not in frame or empty"%(framekey))
 
         if "LaputopParams" in frame.keys():
             self.laputopParams = I3LaputopParams.from_frame(frame, "LaputopParams")
