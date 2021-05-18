@@ -1,6 +1,6 @@
 import numpy as np
-import matplotlib
-from matplotlib import pyplot
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 from matplotlib.widgets import MultiCursor, CheckButtons, RadioButtons
 
 from util.GeometryTools import ProjectToObslev
@@ -31,55 +31,60 @@ class SurfaceCanvas():
         ##These are the colors of the particles/cores/directions in the array subplot
         self.colors = ['k', 'r', 'b', 'g']
 
-        self.fig = pyplot.figure(figsize=(18, 12), constrained_layout=True)
-        gs = self.fig.add_gridspec(8, 10)
+        self.fig = plt.figure(figsize=(18, 12), constrained_layout=True)
+        gs = self.fig.add_gridspec(8, 20)
         self.axlist = {}
 
         # Text information about each particle, run id, etc
         # Location Top Left
-        self.axlist["info"] = self.fig.add_subplot(gs[:4, :2])
+        self.axlist["info"] = self.fig.add_subplot(gs[:5, :4])
         ax = self.axlist["info"]
         self.__reset_textbox(ax)
         ax.text(0.05, 0.95, "No Q/P Frames found yet", ha="left", va="top", color='k', transform=ax.transAxes)
 
         # Shows Check Buttons in a box where it is possible to set visible the following parameters (labels)
         # Location Bottom of the infobox
-        self.axlist["checkboxes"] = self.fig.add_subplot(gs[3:4,:2])
+        self.axlist["checkboxes"] = self.fig.add_subplot(gs[3:5, :4])
         ax = self.axlist["checkboxes"]
 
         #The layout of the array and the hit detectors
         # Location Top between the infobox and the ldf
-        self.axlist["array"] = self.fig.add_subplot(gs[:4, 2:5])
+        self.axlist["array"] = self.fig.add_subplot(gs[:4, 4:9])
         self.__reset_array()
+
+        self.axlist["colorbar"] = self.fig.add_subplot(gs[:4, 9:10])
+        self.__reset_colorbar()
 
         #Lateral distribution
         # Location Top Right
-        self.axlist["ldf"] = self.fig.add_subplot(gs[:4, 5:10])
+        self.axlist["ldf"] = self.fig.add_subplot(gs[:4, 10:])
         ax = self.axlist["ldf"]
         self.__reset_ldf()
 
         #Time delay w.r.t plane
         # Location Bottom right
-        self.axlist["time"] = self.fig.add_subplot(gs[4:, 5:], sharex=self.axlist["ldf"])
+        self.axlist["time"] = self.fig.add_subplot(gs[4:, 10:], sharex=self.axlist["ldf"])
         self.__reset_timedelay()
 
         # Radio waveforms
         # Location Bottom Left
-        self.axlist["info_radio"] = self.fig.add_subplot(gs[4:, :2])
+        self.axlist["info_radio"] = self.fig.add_subplot(gs[5:, :4])
         ax = self.axlist["info_radio"]
         self.__reset_textbox(ax)
         ax.text(0.05, 0.95, "No Antenna selected yet", ha="left", va="top", color='k', transform=ax.transAxes)
 
-        self.axlist["waveforms_time"] = self.fig.add_subplot(gs[4:6, 2:5])
-        ax = self.axlist["waveforms_time"]
-        self.axlist["waveforms_freq"] = self.fig.add_subplot(gs[6:, 2:5])
-        ax = self.axlist["waveforms_freq"]
-
         # Shows Radio Buttons in a box where it is possible to set visible the following parameters (labels)
         # Location Bottom of the infobox_radio
-        self.axlist["radio_buttons"] = self.fig.add_subplot(gs[6:,:2])
+        self.axlist["radio_buttons"] = self.fig.add_subplot(gs[6:, :4])
         ax = self.axlist["radio_buttons"]
         self.__reset_textbox(ax)
+
+        self.axlist["waveforms_time"] = self.fig.add_subplot(gs[4:6, 4:10])
+        ax = self.axlist["waveforms_time"]
+        self.axlist["waveforms_freq"] = self.fig.add_subplot(gs[6:, 4:10])
+        ax = self.axlist["waveforms_freq"]
+
+
 
         # Shows a cursor for the ldf and time plot since the 2 plots share the same x-axis
         self.multi = MultiCursor(self.fig.canvas, (self.axlist["ldf"], self.axlist["time"]),
@@ -107,6 +112,7 @@ class SurfaceCanvas():
         return
 
     def RadioFunction(self, label):
+        self.__reset_waveforms()
         self.detectors[2].antennakeys = [str(label)]
         self.detectors[2].DrawAntennasPlots(self.frame, self.axlist)
         self.fig.canvas.draw()
@@ -129,20 +135,33 @@ class SurfaceCanvas():
         ax = self.axlist["array"]
         ax.clear()
 
+        ax.xaxis.set_ticks_position('bottom')
+        ax.yaxis.set_ticks_position('left')
         ax.set_aspect("equal")
         ax.set_xlim(-600, 600)
         ax.set_ylim(-600, 600)
         ax.set_xlabel("x / m")
-        ax.set_ylabel("y / m", labelpad=-10)
+        ax.set_ylabel("y / m")
+
+    def __reset_colorbar(self):
+        ax = self.axlist["colorbar"]
+        ax.clear()
+        ax.set_xticks([])
+        ax.set_yticks([])
+        col_map = plt.get_cmap('gist_rainbow')
+        # mpl.colorbar(ax, cmap=col_map, orientation='vertical', label='Normalized Time', aspect=40)
+        mpl.colorbar.ColorbarBase(ax, cmap=col_map, orientation='vertical', label='Normalized Time')
 
     def __reset_ldf(self):
         ax = self.axlist["ldf"]
         ax.clear()
 
-        ax.set_ylim(0.1, 1e4)
+        # ax.set_ylim(1e-02, 1e4)
         ax.set_yscale("log")
         ax.set_ylabel("S / VEM")
         ax.set_xlim(0, 10)
+        ax.xaxis.set_ticks_position('bottom')
+        ax.yaxis.set_ticks_position('left')
         ax.autoscale(True, axis='x')
         ax.set_xscale("linear")
 
@@ -153,6 +172,8 @@ class SurfaceCanvas():
         ax.set_xlabel("Axial Radius / m")
         ax.set_ylabel("Time w.r.t Plane Front / ns")
         ax.set_xlim(0, 10)
+        ax.xaxis.set_ticks_position('bottom')
+        ax.yaxis.set_ticks_position('left')
         ax.autoscale(True, axis='x')
 
     def __reset_textbox(self, ax):
@@ -217,15 +238,16 @@ class SurfaceCanvas():
         self.__fill_text_box(frame)
 
         # colormap for time delay label next to the geometry plot
-        self.fig.colorbar(matplotlib.cm.ScalarMappable(cmap=self.detectors[0].colorMapType),
-                          ax=self.axlist["array"], aspect=40, label='Normalized Time')
+        # if not self.colorBar:
+        #     self.colorBar = self.fig.colorbar(matplotlib.cm.ScalarMappable(cmap=self.detectors[0].colorMapType),
+        #                           ax=self.axlist["colormap"], aspect=40, label='Normalized Time')
 
     def ArrayOnClick(self, event):
-        self.__reset_waveforms()
         # Check if the click is in the correct location
         if event.inaxes == self.axlist["array"].axes:
             # Get the position of the closest antenna
             click_pos = np.asarray([event.xdata, event.ydata])
+            self.__reset_waveforms()
             self.detectors[2].AntennaOnClick(click_pos, self.frame, self.axlist)
             self.fig.canvas.draw()
             self.fig.canvas.flush_events()

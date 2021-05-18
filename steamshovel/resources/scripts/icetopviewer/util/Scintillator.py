@@ -133,6 +133,15 @@ class Scintillator(Detector):
             time = cmap(time)
             ax.scatter(radii,  amps, c=time, alpha=0.4, marker=self.shapes[(ikey+1)%len(self.shapes)], label=framekey)
 
+            # Silent stations
+            radii = []
+            for key in [el for el in self.positions.keys() if el not in pulses.keys()]:
+                pos = self.positions[key]
+                r = get_radius(particle, pos)
+                radii.append(r)
+            amps = [0.01 for i in range(len(radii))]
+            ax.scatter(radii,  amps, c="w", alpha=0.4, marker=self.shapes[(ikey+1)%len(self.shapes)], edgecolors="k")
+
 
     def DrawShowerFront(self, ax, particle):
         if not self.shouldDraw:
@@ -167,6 +176,15 @@ class Scintillator(Detector):
             time = np.divide(time, max(time))
             time = cmap(time)
             ax.scatter(radii,  amps, c=time, alpha=0.4, marker=self.shapes[(ikey+1)%len(self.shapes)])
+
+            # Silent stations
+            # radii = []
+            # for key in [el for el in self.positions.keys() if el not in pulses.keys()]:
+            #     pos = self.positions[key]
+            #     r = get_radius(particle, pos)
+            #     radii.append(r)
+            # amps = [0. for i in range(len(radii))]
+            # ax.scatter(radii,  amps, c="w", alpha=0.4, marker=self.shapes[(ikey+1)%len(self.shapes)], edgecolors="k")
 
 
     def GetDrawOptions(self, frame):
