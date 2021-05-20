@@ -63,7 +63,7 @@ I3ConfigurationImpl::Set(const string& name_, const boost::python::object& value
 
   //if the user passed the python singleton `icetray.I3Default` then act like nothing happened
   boost::python::object I3Default = boost::python::import("icecube.icetray").attr("I3Default");
-  if (value == I3Default){
+  if (value.ptr() == I3Default.ptr()){
     return;
   }
   
