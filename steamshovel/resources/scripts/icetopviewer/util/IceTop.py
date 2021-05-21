@@ -179,17 +179,6 @@ class IceTop(Detector):
         if self.laputopParams:
             self.__DrawLaputopLDF(ax, radii)
 
-        # Silent stations
-        for ikey, framekey in enumerate(self.measuredData.keys()):
-            pulses = self.measuredData[framekey]
-            radii = []
-            for scintkey in [el for el in self.positions.keys() if el not in pulses.keys()]:
-                pos = self.positions[scintkey]
-                r = get_radius(particle, pos)
-                radii.append(r)
-            amps = [0.01 for i in range(len(radii))]
-            ax.scatter(radii, amps, c="w", alpha=0.4, marker=self.shapes[ikey % len(self.shapes)], edgecolors="k")
-
 
     def DrawShowerFront(self, ax, particle):
         if not self.shouldDraw:
@@ -227,17 +216,6 @@ class IceTop(Detector):
 
         if self.laputopParams:
             self.__DrawLaputopTiming(ax, radii)
-
-        # Silent stations
-        # for ikey, framekey in enumerate(self.measuredData.keys()):
-        #     pulses = self.measuredData[framekey]
-        #     radii = []
-        #     for scintkey in [el for el in self.positions.keys() if el not in pulses.keys()]:
-        #         pos = self.positions[scintkey]
-        #         r = get_radius(particle, pos)
-        #         radii.append(r)
-        #     amps = [0.01 for i in range(len(radii))]
-        #     ax.scatter(radii, amps, c="w", alpha=0.4, marker=self.shapes[ikey % len(self.shapes)], edgecolors="k")
 
 
     def __DrawLaputopTiming(self, ax, radii):

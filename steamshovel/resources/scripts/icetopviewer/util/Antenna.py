@@ -31,6 +31,8 @@ class Antenna(Detector):
         super(Antenna, self).__init__()
         self.antennakeys = self.GetDefaultAntennaKeys()
         self.antennas_pulse_patches = PatchCollection([])
+        # self.Efield_keys = ["EFieldTimeSeries", "CoREASEFieldMap", "I3AntennaDataMap"]
+        # self.Volt_keys = ["TAXIRadioWaveform", "ResampledVoltageMap"]
         self.color = "b"
         self.name = "Antenna"
         self.timeUnit = I3Units.nanosecond
@@ -63,7 +65,14 @@ class Antenna(Detector):
                 self.positions[str(antkey)] = np.asarray((pos.x, pos.y, pos.z))
 
     def DrawGeometry(self, ax):
+        antenans_pos = []
         antenna_patches = []
+        # for pos in self.positions.values():
+        #     antenans_pos.append(pos[:2])
+        # if not antenans_pos == []:
+        #     antenans_pos = np.asarray(antenans_pos)
+        #     self.antennas_position_patches = ax.scatter(antenans_pos[:, 0], antenans_pos[:, 1], color=self.color,
+        #                                                 marker='+', s=20)
         for pos in self.positions.values():
             antenna_patches.append(self.antennaPatches(pos[:2]))
         self.antennas_position_patches = PatchCollection(antenna_patches, match_original=True)
@@ -107,20 +116,20 @@ class Antenna(Detector):
         self.antenna_lables = antenna_lables
 
     def AntennaOnClick(self, click_pos, frame, axlist):
-        if self.positions == {}: return
-        antennaKeys = []
-        antennaPos = []
-        for antKey in self.positions.keys():
-            antennaKeys.append(antKey)
-        for pos in self.positions.values():
-            antennaPos.append(pos[:2])
-        antennaPos = np.asarray(antennaPos)
-        antennaKeys = np.asarray(antennaKeys)
-        distance = np.sum((antennaPos - click_pos) ** 2, axis=1)
-        _min = np.argmin(distance)
-        self.AntennaStationID = antennaKeys[_min]
-        self.__fill_text_box(frame, axlist["info_radio"])
-        self.DrawAntennasPlots(frame, axlist)
+        if not self.positions == {}:
+            antennaKeys = []
+            antennaPos = []
+            for antKey in self.positions.keys():
+                antennaKeys.append(antKey)
+            for pos in self.positions.values():
+                antennaPos.append(pos[:2])
+            antennaPos = np.asarray(antennaPos)
+            antennaKeys = np.asarray(antennaKeys)
+            distance = np.sum((antennaPos - click_pos) ** 2, axis=1)
+            _min = np.argmin(distance)
+            self.AntennaStationID = antennaKeys[_min]
+            self.__fill_text_box(frame, axlist["info_radio"])
+            self.DrawAntennasPlots(frame, axlist)
 
 
     def DrawAntennasPlots(self, frame, axlist):
@@ -180,7 +189,10 @@ class Antenna(Detector):
 
     def I3RadVector3DToPython(self, vectorMap):
         for antkey in vectorMap.keys():
+            # print(antkey)
+            # if str([antkey.GetAntennaID(), antkey.GetStationID()]) == self.AntennaStationID:
             if str(antkey) == self.AntennaStationID:
+            # if True:
                 vec3d = vectorMap[antkey]
                 fftData = FFTData3D()
                 fftData.LoadTimeSeries(vec3d)
@@ -216,7 +228,10 @@ class Antenna(Detector):
 
     def AntDataMapToPython(self, antDataMap, channel_no):
         for iant, antkey in enumerate(antDataMap.keys()):
+            # print(antkey)
+            # if str([antkey.GetAntennaID(), antkey.GetStationID()]) == self.AntennaStationID:
             if str(antkey) == self.AntennaStationID:
+            # if True:
                 channelMap = antDataMap[antkey]
 
                 channelData = channelMap[channel_no]
@@ -354,7 +369,6 @@ class Antenna(Detector):
         self.antennas_pulse_patches.set_visible(self.shouldDraw)
 
     def antennaPatches(self, pos, x=10., y=10., rotation=0.):
-        # Draws an antenna patch like a greek cross with and internal square of side length off_set * 2
         Path = mpath.Path
         off_set = 2.0
         path_data = [

@@ -49,8 +49,6 @@ def MainLoop():
     canvas = surface_canvas.SurfaceCanvas(detectors, particleKeys)
     framesToView = [icetray.I3Frame.Geometry, icetray.I3Frame.DAQ, icetray.I3Frame.Physics]
     canvas.fig.show()
-    cid = canvas.fig.canvas.mpl_connect('button_press_event', canvas.ArrayOnClick)
-    # cid = canvas.fig.canvas.connect('motion_notify_event', canvas.mouse_move)
     gFrameSeen = False
     for file in args.infile:
         for frame in dataio.I3File(file):
@@ -61,7 +59,6 @@ def MainLoop():
                 if not gFrameSeen:
                     log_fatal("While reading {}, hit a {} frame before finding a Geometry frame. \n"
                               "Please feed a GCD file first.".format(file, frame.Stop))
-                print(frame)
                 canvas.update_DAQ_or_P_frame(frame)
             else:
                 continue
