@@ -27,7 +27,7 @@ class Scintillator(Detector):
         self.scint_position_patches = PatchCollection([])
 
     def GetDefaultPulseKeys(self):
-        return ['ScintRecoPulses','ScintRecoPulsesHighGain', 'ScintRecoPulsesMediumGain', 'ScintRecoPulsesLowGain', "SiPMRecoPulses"]
+        return ['ScintRecoPulses','ScintRecoPulsesHighGain', 'ScintRecoPulsesMediumGain', 'ScintRecoPulsesLowGain']
 
     def GetKeyName(self):
         return self.name
@@ -94,7 +94,7 @@ class Scintillator(Detector):
         self.measuredData.clear()
 
         for framekey in self.pulsekeys:
-            if framekey in frame.keys() and len(frame[framekey]) != 0:
+            if framekey in frame.keys():
                 # handle scintillators
                 scint_map = frame[framekey]
                 pulses = {}
@@ -104,7 +104,7 @@ class Scintillator(Detector):
 
                 self.measuredData[framekey] = pulses
             else:
-                print("Scintillator pulse key %s not in frame or empty"%(framekey))
+                print("Scintillator pulse key %s not in frame"%(framekey))
 
 
     def DrawLDF(self, ax, particle):
@@ -166,7 +166,7 @@ class Scintillator(Detector):
             time = np.subtract(time, min(time))
             time = np.divide(time, max(time))
             time = cmap(time)
-            ax.scatter(radii,  amps, c=time, alpha=0.4, marker=self.shapes[(ikey+1)%len(self.shapes)])
+            ax.scatter(radii,  amps, c=time, alpha=0.4, marker=self.shapes[ikey%len(self.shapes)])
 
 
     def GetDrawOptions(self, frame):

@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib
 from matplotlib import pyplot
-from matplotlib.widgets import MultiCursor, CheckButtons, RadioButtons
+from matplotlib.widgets import MultiCursor, CheckButtons
 
 from util.GeometryTools import ProjectToObslev
 
@@ -26,7 +26,6 @@ class SurfaceCanvas():
         self.detectors = detectors
         self.particleKeys = particleKeys
         self.particleKeys_inframe = []
-        self.frame = None
 
         ##These are the colors of the particles/cores/directions in the array subplot
         self.colors = ['k', 'r', 'b', 'g']
@@ -39,13 +38,18 @@ class SurfaceCanvas():
         # Location Top Left
         self.axlist["info"] = self.fig.add_subplot(gs[:4, :2])
         ax = self.axlist["info"]
-        self.__reset_textbox(ax)
+        self.__reset_textbox()
         ax.text(0.05, 0.95, "No Q/P Frames found yet", ha="left", va="top", color='k', transform=ax.transAxes)
 
-        # Shows Check Buttons in a box where it is possible to set visible the following parameters (labels)
+
+        # Shows Check Bottons in a box where it is possible to set visible the following parameters
         # Location Bottom of the infobox
         self.axlist["checkboxes"] = self.fig.add_subplot(gs[3:4,:2])
         ax = self.axlist["checkboxes"]
+        labels = [detector.GetKeyName() for detector in self.detectors] + self.particleKeys
+        activated = [True for i in range(len(labels))]
+        self.check = CheckButtons(ax, labels, activated)
+        self.check.on_clicked(self.get_visible)
 
         #The layout of the array and the hit detectors
         # Location Top between the infobox and the ldf
@@ -65,33 +69,13 @@ class SurfaceCanvas():
 
         # Radio waveforms
         # Location Bottom Left
-        self.axlist["info_radio"] = self.fig.add_subplot(gs[4:, :2])
-        ax = self.axlist["info_radio"]
-        self.__reset_textbox(ax)
-        ax.text(0.05, 0.95, "No Antenna selected yet", ha="left", va="top", color='k', transform=ax.transAxes)
-
-        self.axlist["waveforms_time"] = self.fig.add_subplot(gs[4:6, 2:5])
-        ax = self.axlist["waveforms_time"]
-        self.axlist["waveforms_freq"] = self.fig.add_subplot(gs[6:, 2:5])
-        ax = self.axlist["waveforms_freq"]
-
-        # Shows Radio Buttons in a box where it is possible to set visible the following parameters (labels)
-        # Location Bottom of the infobox_radio
-        self.axlist["radio_buttons"] = self.fig.add_subplot(gs[6:,:2])
-        ax = self.axlist["radio_buttons"]
-        self.__reset_textbox(ax)
+        self.axlist["waveforms"] = self.fig.add_subplot(gs[4:, :5])
+        ax = self.axlist["waveforms"]
 
         # Shows a cursor for the ldf and time plot since the 2 plots share the same x-axis
         self.multi = MultiCursor(self.fig.canvas, (self.axlist["ldf"], self.axlist["time"]),
                                  color='r', lw=1, horizOn=False, vertOn=True)
 
-    def CheckBoxFunction(self, frame, ax):
-        self.__reset_textbox(ax)
-        labels = [detector.GetKeyName() for detector in self.detectors] + [el for el in self.particleKeys if el in frame]
-        activated = [True for i in range(len(labels))]
-        self.check = CheckButtons(ax, labels, activated)
-        self.check.on_clicked(self.get_visible)
-        return
 
     def get_visible(self, label):
         for detector in self.detectors:
@@ -102,23 +86,10 @@ class SurfaceCanvas():
                 self.core[label].set_visible(not self.core[label].get_visible())
             if label in self.arrow:
                 self.arrow[label].set_visible(not self.arrow[label].get_visible())
+
         self.fig.canvas.draw()
         self.fig.canvas.flush_events()
         return
-
-    def RadioFunction(self, label):
-        self.detectors[2].antennakeys = [str(label)]
-        self.detectors[2].DrawAntennasPlots(self.frame, self.axlist)
-        self.fig.canvas.draw()
-        self.fig.canvas.flush_events()
-        return
-
-    def RadioVisible(self, frame):
-        ax = self.axlist["radio_buttons"]
-        self.__reset_textbox(ax)
-        labels = [el for el in self.detectors[2].antennakeys if el in frame]
-        self.radio = RadioButtons(ax, labels)
-        self.radio.on_clicked(self.RadioFunction)
 
     ###########################
     ##  Reset the various plots
@@ -155,16 +126,11 @@ class SurfaceCanvas():
         ax.set_xlim(0, 10)
         ax.autoscale(True, axis='x')
 
-    def __reset_textbox(self, ax):
+    def __reset_textbox(self):
+        ax = self.axlist["info"]
         ax.clear()
         ax.set_xticks([])
         ax.set_yticks([])
-
-    def __reset_waveforms(self):
-        ax = self.axlist["waveforms_time"]
-        ax.clear()
-        ax = self.axlist["waveforms_freq"]
-        ax.clear()
 
 
     ######################
@@ -175,16 +141,13 @@ class SurfaceCanvas():
     # The position of each detector is stored in a numpy array with a key = detector key
     def update_geometry_frame(self, frame):
         self.__reset_array()
-        self.frame = frame
-        self.CheckBoxFunction(frame,self.axlist["checkboxes"])
+
         for detector in self.detectors:
             detector.ExtractFromGFrame(frame)
             detector.DrawGeometry(self.axlist["array"])
 
     # Here all the needed info from DAQ or P frame are stored. Then the plots are drawn.
     def update_DAQ_or_P_frame(self, frame):
-        self.frame = frame
-        self.CheckBoxFunction(frame,self.axlist["checkboxes"])
 
         if not len(self.particleKeys):
             print("WARNING: You did not define a particle yet!")
@@ -199,8 +162,6 @@ class SurfaceCanvas():
         self.__reset_ldf()
         self.__reset_array()
         self.__reset_timedelay()
-        self.__reset_waveforms()
-
         for idet, detector in enumerate(self.detectors):
             detector.ExtractFromQPFrame(frame)
             detector.DrawLDF(self.axlist["ldf"], self.particles[0])
@@ -208,29 +169,13 @@ class SurfaceCanvas():
             detector.DrawShowerFront(self.axlist["time"], self.particles[0])
         self.axlist["ldf"].legend(loc='upper right', prop={'size': 8})
 
-        # Labels for the antennas must get separately
-        self.detectors[2].antennakeys = self.detectors[2].GetDefaultAntennaKeys()
-        self.RadioVisible(frame)
-
         self.__draw_core()
-        self.__reset_textbox(self.axlist["info"])
+        self.__reset_textbox()
         self.__fill_text_box(frame)
 
         # colormap for time delay label next to the geometry plot
         self.fig.colorbar(matplotlib.cm.ScalarMappable(cmap=self.detectors[0].colorMapType),
                           ax=self.axlist["array"], aspect=40, label='Normalized Time')
-
-    def ArrayOnClick(self, event):
-        self.__reset_waveforms()
-        # Check if the click is in the correct location
-        if event.inaxes == self.axlist["array"].axes:
-            # Get the position of the closest antenna
-            click_pos = np.asarray([event.xdata, event.ydata])
-            self.detectors[2].AntennaOnClick(click_pos, self.frame, self.axlist)
-            self.fig.canvas.draw()
-            self.fig.canvas.flush_events()
-
-
 
     #################################
     ##  Detector non-specific drawing
