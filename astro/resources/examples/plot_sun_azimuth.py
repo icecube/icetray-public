@@ -62,10 +62,10 @@ for i in range(len(s)):
 
 secxax = ax1.secondary_xaxis('top', functions=(xtoe,etox))
 secxax.xaxis.set_major_locator(ticker.MultipleLocator(1000))
-secxax.xaxis.set_major_formatter("{x:0,.0f}'E")
+secxax.xaxis.set_major_formatter("E {x:0,.0f}′")
 secyax = ax1.secondary_yaxis('right', functions=(yton,ntoy))
 secyax.yaxis.set_major_locator(ticker.MultipleLocator(1000))
-secyax.yaxis.set_major_formatter("{x:0,.0f}'N")
+secyax.yaxis.set_major_formatter("N {x:0,.0f}′")
 ax1.set_aspect('equal')
 
 lim = 800
