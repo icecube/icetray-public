@@ -42,7 +42,6 @@ extensions = filter(None, ['sphinx.ext.autodoc',
                            '@sphinx_EMAIL@',
                            '@sphinx_BREATHE@',
                            'script_directive',
-                           'toctree_sort',
                            'plot_directive'])
 print("Using extensions:", extensions)
 
