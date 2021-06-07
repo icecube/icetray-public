@@ -133,7 +133,7 @@ The segment dataio.I3Reader is equivalent to::
 	tray.AddModule('I3Reader', **kwargs)
 
 Behind the scenes the stager will recognize supported URL schemes (currently
-file:// http://, ftp://, gsiftp://, and scp://), download the file to a local
+\file:// \http://, \ftp://, \gsiftp://, and \scp://), download the file to a local
 directory, and provide the reader with a local filename to read instead. As
 soon as the file is no longer needed, it will be automatically deleted. The
 inverse operation works for writing as well. If the staging mechanism has been

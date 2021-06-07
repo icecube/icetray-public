@@ -112,8 +112,8 @@ class AbstractFileStager(I3FileStager):
 
 
 class I3FileStagerFile(AbstractFileStager):
-	"""
-	Handles http://, https://, ftp://, and file:// URLs
+	r"""
+	Handles \http://, \https://, \ftp://, and \file:// URLs
 	
 	.. note:: A username/password combination may be embedded in http URLs in the
 	          format specified in RFC 3986. This should only be used for "dummy"
@@ -251,8 +251,8 @@ class I3FileStagerFile(AbstractFileStager):
 			icetray.logging.log_fatal("Can't upload to %s" % url)
 		
 class GridFTPStager(AbstractFileStager):
-	"""
-	Handles ftp:// and gsiftp:// URLs
+	r"""
+	Handles \ftp:// and \gsiftp:// URLs
 	
 	.. note:: GridFTP requires that you have a proxy certificate either in the
 	          standard location or in the location specified by the environment
