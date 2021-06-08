@@ -20,9 +20,6 @@ Project Details
 .. toctree::
    :glob:
    :maxdepth: 2
-   :sorted:
-   :ignorecase:
-   :first: docs, cmake, icetray, dataio, dataclasses
 
    projects/docs/index
    projects/cmake/index
