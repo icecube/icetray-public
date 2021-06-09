@@ -179,12 +179,16 @@ def main():
         python_src_dir=os.path.join(sourcedir,"python")
         #call program which generates rsts for all python moudles in libdir
         call("sphinx-apidoc",
-             "-l","-M",
+             "-l","-M",'-e',
              "-H","Python API Reference",
              "-o",python_src_dir,
              os.path.join(I3_BUILD,"lib"))
 
         #delete the ones we dont need
+        os.unlink(os.path.join(python_src_dir,'modules.rst'))
+        for rstfile in glob(python_src_dir+"/lib*.rst"):
+            os.unlink(rstfile)
+
         if args.projects:
             for rstfile in glob(python_src_dir+"/*"):
                 s= os.path.basename(rstfile).split('.')
@@ -192,7 +196,7 @@ def main():
                     if s[1]!='rst' and not use_this_project(s[1]):
                         os.unlink(rstfile)
                 else:
-                    if s!=['modules', 'rst'] and not use_this_project(s[0]):
+                    if use_this_project(s[0]):
                         os.unlink(rstfile)
     
     if not args.no_doxygen:

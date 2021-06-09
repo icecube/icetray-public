@@ -56,7 +56,7 @@ Automatically Generated Documentation
 
    icetray_quick_reference
    icetray_reference
-   python/modules
+   python_reference
    cpp_reference
 
 Indices and tables
