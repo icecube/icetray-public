@@ -12,14 +12,14 @@
 
 
 Making a new table writer service
-==================================
+=================================
 
 There are writer services that produce HDF5 tables, ROOT files, and plain text
 (CSV). To make a new writer service for your pet analysis format, you must
 implement subclasses of :c:type:`I3Table` and :c:type:`I3TableService`.
 
-I3Table 
-***********
+I3Table
+*******
 
 .. c:type:: I3Table
     
@@ -38,7 +38,7 @@ of caching, you should also implement :c:func:`Flush()`. Here, for example, is
 an implementation that writes comma-separated text (CSV).
 
 WriteRows()
-_________________
+___________
 
 ::
 
@@ -121,7 +121,7 @@ that dumps the argument to :c:data:`iostream output_`::
     }
 
 Type-switching
-_________________
+______________
 
 Since you don't have compile-time information about the types of the fields,
 some type-switching is unavoidable. :c:type:`I3CSVTable` resolves and caches an
@@ -166,7 +166,7 @@ equivalent native type for each field::
     }
 
 Constructor
-_________________
+___________
 
 You can set up any header information in your constructor. In
 :c:type:`I3CSVTable`, :c:func:`CreateTable()` is called from the constructor::
@@ -234,7 +234,7 @@ You can set up any header information in your constructor. In
     }
 
 I3TableService
-***************
+**************
 
 To manage the collection of tables, you must implement a subclass of
 I3TableService.
@@ -253,7 +253,7 @@ I3TableService.
             
 
 CreateTable()
-__________________
+_____________
 
 You must implement :c:func:`CreateTable()`, which is called whenever the writer
 module requests a table that does not yet exist. The :c:type:`I3CSVTable`
@@ -274,12 +274,12 @@ nontrivial for compound objects like DOMLaunches that must be flattened across
 multiple rows. The function returns a shared pointer to the data table.
 
 CloseFile()
-________________
+___________
 
 :c:func:`CloseFile()` should perform any required clean-up, including flushing any internal caches.
 
 Constructor
-___________________
+___________
 
 You can implement any required setup in the constructor. :c:type:`I3CSVTable`,
 for example, writes tables to individual files in a directory, so it
@@ -292,7 +292,7 @@ re-creates that directory in its constructor::
     }
 
 Python bindings
-______________________
+_______________
 
 You must also provide trivial Python bindings for your
 :c:type:`I3TableService`::
