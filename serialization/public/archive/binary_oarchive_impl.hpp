@@ -65,13 +65,13 @@ protected:
     void init(unsigned int flags) {
         if(0 != (flags & no_header))
             return;
-        #if ! defined(__MWERKS__)
-            this->basic_binary_oarchive<Archive>::init();
-            this->basic_binary_oprimitive<Archive, Elem, Tr>::init();
-        #else
-            basic_binary_oarchive<Archive>::init();
-            basic_binary_oprimitive<Archive, Elem, Tr>::init();
-        #endif
+#if ! defined(__MWERKS__)
+	this->basic_binary_oarchive<Archive>::init();
+	this->basic_binary_oprimitive<Archive, Elem, Tr>::init();
+#else
+	basic_binary_oarchive<Archive>::init();
+	basic_binary_oprimitive<Archive, Elem, Tr>::init();
+#endif
     }
     binary_oarchive_impl(
         std::basic_streambuf<Elem, Tr> & bsb, 
