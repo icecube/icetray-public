@@ -219,20 +219,7 @@ foreach(subdir ${SUBDIRS})
 endforeach(subdir ${SUBDIRS})
 
 ## documentation targets
-add_custom_target(inspect-docs)
-add_dependencies(inspect-docs inspect)
-
-add_custom_target(doxygen-docs)
-add_dependencies(doxygen-docs doxygen)
-
-add_custom_target(html-docs)
-add_dependencies(html-docs html)
-
-add_custom_target(docs)
-#add_dependencies(inspect-docs doxygen-docs)
-#add_dependencies(html-docs inspect-docs)
-add_dependencies(html-docs doxygen-docs)
-add_dependencies(docs html-docs)
+## Documentation is now built with docs-build
 
 #
 # env-shell.sh

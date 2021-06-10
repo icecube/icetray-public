@@ -9,6 +9,11 @@
 from glob import glob
 from icecube.icetray import I3Context, I3Configuration, I3Module, module_default_config
 import types, sys, os, inspect, copy, pkgutil
+import logging
+
+
+log = logging.getLogger(__name__)
+log.addHandler(logging.NullHandler)
 
 try:
     import docutils.frontend
@@ -66,6 +71,7 @@ try:
         doc = docutils.utils.new_document('', settings)
         harvester = ParamHarvester(doc)
 
+        log.debug("Parsing docstring from object: %s", obj.__name__)
         parser.parse(docstring, doc)
         doc.walkabout(harvester)
         return (doc.astext().strip(), harvester.params)

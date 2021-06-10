@@ -1,10 +1,23 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3 -u
 
 import os.path,sys,pkgutil,time,subprocess
 from collections import deque
 from glob import glob
 from icecube.icetray import i3inspect
-    
+
+import logging
+log = logging.getLogger(__file__)
+log.setLevel(logging.DEBUG)
+try:
+    from rich.logging import RichHandler
+    log_handler = RichHandler()
+    log_handler.setFormatter(logging.Formatter("%(message)s", datefmt="[%X]"))
+except ImportError:
+    log_handler = logging.StreamHandler()
+    log_handler.setFormatter(logging.Formatter("%(levelname)s:%(name)s: %(message)s", datefmt="[%X]"))
+
+log.addHandler(log_handler)
+
 
 class command_queue:
     def __init__(self,max_processes=1):
@@ -18,12 +31,12 @@ class command_queue:
             if st is None:
                 newrunning.append((args,popen))
             elif st:
-                sys.stderr.write("\033[1;31mWARNING:\033[0m Exit Status {}: {}\n".format(args[0], st))
-                
+                log.warning("Exit status %s: %s", args[0], st)
+
         self.running = newrunning
         while len(self.queue) and len(self.running) < self.max_processes:
             args = self.queue.popleft()
-            print("running ",args)
+            log.debug("Running %s", args)
             self.running.append((args,subprocess.Popen(*args)))
     def call(self,*args):
         self.queue.append(args)
@@ -35,15 +48,15 @@ class command_queue:
 
 def mkdir_p(dir):
     if not os.path.isdir(dir):
-        print("making directory "+dir)
+        # log.debug("making directory %s", dir)
         os.mkdir(dir)
 
 def symlink(src,dst):
     if os.path.islink(dst):
         os.unlink(dst)
-    print("linking {}->{}".format(src,dst))
+    # log.debug("Linking %s -> %s", src, dst)
     os.symlink(src,dst)
-    
+
 def symlinkdir(srcdir,destdir):
     for f in os.listdir(srcdir):
         if f.endswith('.in') or f.endswith('.pyc') or f.endswith('~') or f.startswith('#'):
@@ -69,10 +82,10 @@ def use_this_project(proj):
             )
 
 def call(*args):
-    print("calling",str(args))
+    log.debug("Calling %s", str(args))
     status = subprocess.call(args)
     if status:
-        sys.stderr.write("\033[1;31mWARNING:\033[0m Exit Status {}: {}\n".format(args[0],status))
+        log.warning("Exit status %s: %s", args[0], status)
     return status
 
 cppautodoctxt = """
@@ -83,12 +96,12 @@ cppautodoctxt = """
 
 .. doxygenindex::
     :path: {DOXYGEN_PROJECT_PATH}
-"""        
-    
+"""
+
 def main():
 
     import argparse
-         
+
     parser = argparse.ArgumentParser(description='Generate Documentation for IceTray')
     parser.add_argument('--verbose', '-v', action='count')
     parser.add_argument('--clean',action='store_true',
@@ -98,7 +111,7 @@ def main():
                         help='only generate documentation for these projects')
     parser.add_argument('--skip-doxygen', nargs='+',metavar='proj',
                         help='do not generate doxygen for these projects',
-                        default=['dataclasses', 'ppc', 'steamshovel'])    
+                        default=['dataclasses', 'ppc', 'steamshovel'])
     parser.add_argument('--build-type', default='html',
                         help="type of output to build [default=html] (see "
                         "http://www.sphinx-doc.org/en/stable/invocation.html"
@@ -121,10 +134,11 @@ def main():
                         help='convenience option to open a browser with the output of the html')
     parser.add_argument('-j',default=1,type=int,
                         help='number of parallel processes to run')
-                        
+
     global args
     args = parser.parse_args()
-    
+
+    log.info("Setting up directories")
     I3_BUILD = os.environ["I3_BUILD"]
     I3_SRC = os.environ["I3_SRC"]
 
@@ -138,11 +152,11 @@ def main():
     queue = command_queue(args.j)
 
     if args.clean:
-        print("cleaning out old files first:")
-        call("rm","-rfv",builddir)
-        call("rm","-rfv",sourcedir)
+        log.info("Cleaning out old files")
+        call("rm", "-rf", builddir)
+        call("rm", "-rf", sourcedir)
         if not args.no_doxygen:
-            call("rm","-rfv",doxygendir)
+            call("rm", "-rf", doxygendir)
 
     mkdir_p(builddir)
     mkdir_p(sourcedir)
@@ -158,31 +172,31 @@ def main():
     symlinkdir(os.path.join(docsdir,"basedocs"),sourcedir)
     symlink(os.path.join(confdir,"metaproject_metainfo.rst"),
             os.path.join(sourcedir,"metaproject_metainfo.rst"))
-    
+
     if not args.no_general_docs:
         symlink(os.path.join(docsdir,"info"),
-                os.path.join(sourcedir,"info"))                
+                os.path.join(sourcedir,"info"))
         symlink(os.path.join(docsdir,"general"),
                 os.path.join(sourcedir,"general"))
-   
+
     if not args.no_project_docs:
-        print("symlink projocts' docs dir")
+        log.info("Symlink projects' docs dir")
         for projdocdir in glob(os.path.join(I3_BUILD,"*","resources","docs")):
             proj = projdocdir.split(os.sep)[-3]
             if not use_this_project(proj):
-                continue        
+                continue
             if os.path.isdir(projdocdir):
                 symlink(projdocdir,os.path.join(sourcedir,"projects",proj))
 
     if not args.no_python:
-        print("Generating Python references")
+        log.info("Generating Python references")
         python_src_dir=os.path.join(sourcedir,"python")
         #call program which generates rsts for all python moudles in libdir
         call("sphinx-apidoc",
-             "-l","-M",'-e',
-             "-H","Python API Reference",
-             "-o",python_src_dir,
-             os.path.join(I3_BUILD,"lib"))
+             "-q", "-l", "-M", "-e",
+             "-H", "Python API Reference",
+             "-o", python_src_dir,
+             os.path.join(I3_BUILD, "lib"))
 
         #delete the ones we dont need
         os.unlink(os.path.join(python_src_dir,'modules.rst'))
@@ -194,13 +208,15 @@ def main():
                 s= os.path.basename(rstfile).split('.')
                 if s[0]=='icecube':
                     if s[1]!='rst' and not use_this_project(s[1]):
+                        log.debug("Removing %s", rstfile)
                         os.unlink(rstfile)
                 else:
                     if use_this_project(s[0]):
+                        log.debug("Removing %s", rstfile)
                         os.unlink(rstfile)
-    
+
     if not args.no_doxygen:
-        print("Generating Doxygen Documentation")
+        log.info("Generating Doxygen Documentation")
         mkdir_p(doxygendir)
 
         for projectdir in glob(os.path.join(I3_SRC,"*")):
@@ -221,10 +237,10 @@ def main():
 
         queue.wait()
     else:
-        print("Skipping Doxygen Documentation")        
+        log.info("Skipping Doxygen Documentation")
 
     if not args.no_cpp:
-        print("Generating C++ references from Doxygen XML")
+        log.info("Generating C++ references from Doxygen XML")
         for doxygen_dir in glob(os.path.join(doxygendir,"*","xml")):
             project_name = os.path.basename(os.path.dirname(doxygen_dir))
             if not use_this_project(project_name):
@@ -233,15 +249,15 @@ def main():
                 continue
             mkdir_p(os.path.join(sourcedir, "doxygen", project_name))
             outfilename = os.path.join(sourcedir, "doxygen", project_name, "index.rst")
-            print("writing",outfilename)
+            log.debug("Writing %s, with project name: %s, doxygen dir: %s", outfilename, project_name, doxygen_dir)
             with open(outfilename,'wt') as f:
                 f.write(cppautodoctxt.format(PROJECT_NAME=project_name,
                                              DOXYGEN_PROJECT_PATH=doxygen_dir))
     else:
-        print("Skipping C++ references from Doxygen XML")
+        log.info("Skipping C++ references from Doxygen XML")
 
     if not args.no_inspect:
-        print("Generating icetray reference from icetray-inspect")
+        log.info("Generating icetray quick reference with icetray-inspect")
         quick_rst = os.path.join(sourcedir,"icetray_quick_reference.rst")
         cmd = ["icetray-inspect",
                "--sphinx","--sphinx-references","--no-params",
@@ -251,26 +267,26 @@ def main():
             cmd += args.projects
         else:
             cmd += ["--all"]
-        print("Writing", quick_rst)
+        log.info("Writing %s", quick_rst)
         queue.call(cmd)
-        
+
         inspectlibs = i3inspect.get_all_projects()
         rstfiles=[]
 
         for proj in inspectlibs:
             if not use_this_project(proj):
                 continue
-        
+
             rst_out= os.path.join(sourcedir,"inspect",proj+".rst")
             rstfiles.append(rst_out)
-        
+
             cmd = ["icetray-inspect",
                    proj,
                    "--sphinx","--subsection-headers","--sphinx-functions",
                    #--expand-segments,#"--verbose-docs" #these options might work in the future
                    "--title=",
                    "-o",rst_out]
-            print("Writing",rst_out)
+            log.debug("Writing %s", rst_out)
             queue.call(cmd)
 
         queue.wait()
@@ -282,11 +298,11 @@ def main():
                 filelength = len(f.read().strip())
             if filelength ==0 :
                 os.unlink(rst_out)
-                
+
     if not args.no_sphinx:
         doctreedir = os.path.join(builddir,"doctrees")
         finaldir = os.path.join(builddir,args.build_type)
-    
+
         mkdir_p(doctreedir)
 
         if args.verbose:
@@ -332,7 +348,7 @@ def main():
         return retvalue
     else:
         return 0
-            
-                
+
+
 if __name__=="__main__":
     sys.exit(main())

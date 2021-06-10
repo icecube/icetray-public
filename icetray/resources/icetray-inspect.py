@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 #  $Id: icetray-inspect.py 2188 2015-07-30 04:09:28Z nega $
 #
@@ -6,6 +6,42 @@
 #  Jakob van Santen <vansanten@wisc.edu>
 #  and the IceCube Collaboration <http://www.icecube.wisc.edu>
 #
+
+# FIXME: the following projects are "bad" because they call
+# logging.basicConfig(), which by default installs a
+# logging.StreamHandler() into the root logger, or otherwise mess with
+# the root logger. this causes duplicate log messages. In
+# display_projects(), after loading the modules, we delete all
+# handlers in the root log. this is a HACK and the "bad projects"
+# should be fixed
+BAD_PROJECTS = ['common_variables',
+                'filterscripts',
+                'level3_filter_muon',
+                'simprod-scripts',
+                'simprod']
+
+from icecube.icetray import i3inspect
+import logging
+
+log = logging.getLogger(__file__)
+log_handler = None
+try:
+    # from rich.markup import escape
+    from rich.logging import RichHandler
+    log_handler = RichHandler()
+    log_handler.setFormatter(logging.Formatter("%(message)s", datefmt="[%X]"))
+except ImportError:
+    # escape = lambda x: None
+    log_handler = logging.StreamHandler()
+    log_handler.setFormatter(logging.Formatter("%(levelname)s:%(name)s: %(message)s", datefmt="[%X]"))
+
+log.addHandler(log_handler)
+log.setLevel(logging.INFO)
+logging.getLogger("icecube.icetray.i3inspect").setLevel(logging.INFO)
+
+logging.getLogger("icecube.icetray.i3inspect").removeHandler(logging.NullHandler)
+logging.getLogger("icecube.icetray.i3inspect").addHandler(log_handler)
+logging.getLogger("icecube.icetray.i3inspect").setLevel(logging.INFO)
 
 def check_regex(option, opt, value):
     try:
@@ -253,8 +289,7 @@ def print_segment(segment):
         segment(potemkin, 'example')
     except:
         raise
-        sys.stderr.write('Error instantiating segment \'%s\' with default arguments\n'%
-                                         segment)
+        log.error('Error instantiating segment "%s" with default arguments', segment)
     output.segment_footer()
 
 
@@ -324,6 +359,7 @@ def get_converters(project):
 
 
 def display_project(project):
+    log.info("Inspecting %s", project)
 
     if project in python_projects:
         pyproject = project
@@ -344,7 +380,7 @@ def display_project(project):
             pymodule = __import__(import_name,
                                   globals(), locals(), [pyproject])
         except Exception as e:
-            sys.stderr.write("ERROR: can't load '%s': %s\n" % (import_name,str(e)))
+            log.error("""Cannot load "%s": %s""", import_name, str(e))
             return
 
         if hasattr(pymodule,"__path__"):
@@ -352,20 +388,27 @@ def display_project(project):
                 try:
                     __import__(subpackage[1],globals(), locals(), [pyproject])
                 except Exception as e:
-                    sys.stderr.write("WARNING: can't load subpackage '%s': %s\n" % (subpackage[1],str(e)))
+                    log.warning("""Cannot load subpackage "%s": %s""", subpackage[1], str(e))
 
         loadstr = "import icecube.%s"%pyproject
+
+        # FIXME: delete logging.root.handlers installed by known misbehaving projects
+        if project in BAD_PROJECTS:
+            for handler in logging.root.handlers[:]:
+                logging.root.removeHandler(handler)
+            log.info("Removed root log handlers injected by %s", project)
+
     elif cppproject:
         try:
             icetray.load(cppproject, False)
         except Exception as e:
-            sys.stderr.write("Error: can't load '%s': %s\n" % (project,str(e)))
+            log.error("""Cannot load "%s": %s""", project, str(e))
             return
 
         pymodule=None
         loadstr = "icetray.load('%s',False)"%cppproject
     else:
-        sys.stderr.write("Error: can't load '%s'\n" % (project))
+        log.error("Cannot load '%s'", project)
         return
 
     if cppproject:
@@ -381,7 +424,7 @@ def display_project(project):
             try:
                 config =  i3inspect.module_default_config(mod)
             except:
-                sys.stderr.write("WARNING Ignoring '%s': %s\n" % (mod, sys.exc_info()[1]))
+                log.warning('Ignoring "%s": %s', mod, sys.exc_info()[1])
                 continue
             docs = get_doxygen_docstring(cppproject,mod)
             modules.append((mod, 'C++ I3Module',mod,config,docs))
@@ -397,7 +440,7 @@ def display_project(project):
             try:
                 config = mod(icetray.I3Context()).configuration
             except:
-                sys.stderr.write("WARNING Ignoring '%s': %s\n" % (mod, sys.exc_info()[1]))
+                log.warning('Ignoring "%s": %s', mod, sys.exc_info()[1])
                 continue
             docs = inspect.getdoc(mod)
             modules.append((mod, 'Python I3Module', py_mod,config,docs))
@@ -407,7 +450,7 @@ def display_project(project):
             try:
                 config =  i3inspect.module_default_config(mod)
             except:
-                sys.stderr.write("WARNING Ignoring '%s': %s\n" % (mod, sys.exc_info()[1]))
+                log.warning('Ignoring "%s": %s', mod, sys.exc_info()[1])
                 continue
             docs = get_doxygen_docstring(cppproject,mod)
             modules.append((mod, 'C++ ServiceFactory',mod,config,docs))
@@ -444,6 +487,9 @@ Option.TYPES = Option.TYPES + ("regex",)
 Option.TYPE_CHECKER["regex"] = check_regex
 
 parser = OptionParser("usage: %prog [options] project1 project2 ...")
+parser.add_option('-v', '--verbose', action="store_true", dest="verbose",
+                  help='Increase verbosity (sets loglevel to DEBUG)',
+                  default=False)
 parser.add_option('-a', '--all', action='store_true',
         help='Examine all projects/libraries in DIRECTORY', metavar='DIRECTORY',
         default=False)
@@ -502,8 +548,11 @@ import xml.etree.ElementTree as ET
 from glob import glob
 
 from icecube import icetray, dataclasses,tableio
-from icecube.icetray import i3inspect
 from icecube.icetray import traysegment
+
+if opts.verbose:
+    log.setLevel(logging.INFO)
+    logging.getLogger("icecube.icetray.i3inspect").setLevel(logging.INFO)
 
 
 def sig_handler(signum, frame):
@@ -538,7 +587,7 @@ noinspect = i3inspect.get_uninspectable_projects()
 
 for p in args:
     if p in noinspect:
-        sys.stderr.write("WARNING: Skipping uninspectable project: {}".format(p))
+        log.warning("Skipping uninspectable project: %s", p)
         continue
     display_project(p)
 
