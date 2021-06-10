@@ -6,13 +6,6 @@ i3_project(steamshovel
   DOCS_DIR resources/docs
   )
 
-if(POLICY CMP0002)
-  cmake_policy(SET CMP0002 NEW)
-endif()
-if(POLICY CMP0053)
-  cmake_policy(SET CMP0053 OLD)
-endif()
-
 set(CMAKE_AUTOMOC True)
 
 # look for homebrew, and its qt5 paths
@@ -186,7 +179,7 @@ if(Qt5_FOUND AND Qt5OpenGL_FOUND AND OPENGL_FOUND AND OPENGL_GLU_FOUND)
     add_custom_target(mac-steamshovel-app
         COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/resources/Steamshovelapp/macdeployapp.py ${CMAKE_BINARY_DIR} ${SHOVEL_REVISION}
     )
-    add_dependencies(mac-steamshovel-app steamshovel html)
+    add_dependencies(mac-steamshovel-app steamshovel)
 
     set( STEAMSHOVEL_DMG ${CMAKE_BINARY_DIR}/Steamshovel.r${SHOVEL_REVISION}.dmg )
     add_custom_target(mac-steamshovel-dmg

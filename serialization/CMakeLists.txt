@@ -152,6 +152,10 @@ i3_test_executable(test_shared_ptr_multi_base
   USE_PROJECTS serialization
 )
 
+# add a fake pybindings target
+add_custom_target(serialization-pybindings)
+add_dependencies(serialization serialization-pybindings)
+
 # This fails on Ubuntu, both 16.04 and 14.04
 #add_test(NAME serialization::test_compile_only
 #  WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"

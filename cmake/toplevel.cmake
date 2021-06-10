@@ -31,12 +31,22 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 ")
 endif("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 
-## set cmake policies
+#
+# set cmake policies. policy definitions can be found at
+# https://cmake.org/cmake/help/latest/manual/cmake-policies.7.html
+# or `man cmake-policies`
+#
+if(POLICY CMP0002)
+    cmake_policy(SET CMP0002 NEW)
+endif()
 if(POLICY CMP0042)
     cmake_policy(SET CMP0042 NEW)
 endif()
 if(POLICY CMP0046)
-    cmake_policy(SET CMP0046 OLD)
+    cmake_policy(SET CMP0046 NEW)
+endif()
+if(POLICY CMP0053)
+    cmake_policy(SET CMP0053 NEW)
 endif()
 if(POLICY CMP0054)
     cmake_policy(SET CMP0054 NEW)
