@@ -35,7 +35,7 @@ These packages are required to compile the combo metaproject
   * - `zlib <https://zlib.net/>`_
     - Compression Algorithm
     - :doc:`/projects/dataio/tray`
-  * - `fftw <http://www.fftw.org/>
+  * - `fftw <http://www.fftw.org/>`_
     - Discrete Fourier transform
     - dataclasses
 

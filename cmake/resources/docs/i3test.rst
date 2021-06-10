@@ -27,7 +27,7 @@ A test suite should run to completion in a reasonable amount of
 time. The complexity of a test suite will of necessity be proportional
 to the complexity of the behavior of what it is testing. One of the
 main guidelines of object-oriented design is "one class, one
-responsibility". A class' tests verify its' ability to assume this
+responsibility". A class' tests verify its ability to assume this
 responsibility: if it is hard to write a set of tests for a class
 because it does so many things, this indicates that the class should
 probably be broken up into smaller pieces, each with a clearly defined
@@ -118,7 +118,7 @@ three unit tests named *it_works*, *pinkness_is_almost_pi*, and
 
 
 The unit tests signal success or failure using the statement
-``ENSURE()``, ``ENSURE_DISTANCE()``, or ``FAIL()``.
+:c:macro:`ENSURE()`, :c:macro:`ENSURE_DISTANCE()`, or :c:macro:`FAIL()`.
 
 Build configuration
 ^^^^^^^^^^^^^^^^^^^
@@ -127,12 +127,13 @@ A test group is contained in one file, which contains any number of
 uniquely named unit tests. A directory containing one or more test
 groups, plus a ``main()`` routine, is called a test suite. One informs
 the build system which directories contain test groups via
-:ref:`i3_test_executable() <i3_test_executable()>` (in the project's CMakeCache.txt).
+:ref:`i3_test_executable() <i3_test_executable()>` (in the project's
+:file:`CMakeCache.txt`).
 
 .. index:: I3TestMain.ixx 
 
 One of these files must contain the main routine for the test
-driver. To do so, place one file (main.cxx is a reasonable name) in
+driver. To do so, place one file (:file:`main.cxx` is a reasonable name) in
 the test suite directory containing only the line::
 
   #include <I3TestMain.ixx>
@@ -143,102 +144,108 @@ Each test group (file) must include the statement::
 
   #include <I3Test.h>
 
-which pulls in definitions for ``TEST_GROUP``, ``ENSURE``, etc. (see below). 
+which pulls in definitions for :c:macro:`TEST_GROUP`, :c:macro:`ENSURE` etc. (see below).
 
-.. c:macro:: TEST_GROUP(groupname)
+   .. c:alias:: TEST_GROUP
 
-Valid context: toplevel scope of implementation files in test suite
-directory.
+   Valid context: toplevel scope of implementation files in test suite
+   directory.
 
-This signals to the build system that this file contains a TEST_GROUP
-with the name groupname. groupname must be a valid C++ identifier name
-(alphanumeric plus underscore, starting with letter or underscore.)
+   This signals to the build system that this file contains a TEST_GROUP
+   with the name *GROUPNAME*. *GROUPNAME* must be a valid C++ identifier name
+   (alphanumeric plus underscore, starting with letter or underscore.)
 
-The individual unit tests found in this file will be organized under
-this test group.
+   The individual unit tests found in this file will be organized under
+   this test group.
 	
-.. c:macro:: TEST(testname)
+   .. c:alias:: TEST
 
-Valid context: toplevel scope of implementation files in test suite
-directory.
+   Valid context: toplevel scope of implementation files in test suite
+   directory.
 
-``TEST(testname)`` defines a unit test named testname. As with
-``TEST_GROUP()``, testname must be a valid C++ identifier name.
+   ``TEST(testname)`` defines a unit test named testname. As with
+   :c:macro:`TEST_GROUP()`, testname must be a valid C++ identifier name.
 
-``TEST(t)`` looks much like a function definition (which it becomes after
-``TEST()`` is expanded by the preprocessor). It is immediately followed by
-a scope (open curly-brace, statements, close curly-brace), containing
-testing statements.
+   ``TEST(t)`` looks much like a function definition (which it becomes after
+   ``TEST(t)`` is expanded by the preprocessor). It is immediately followed by
+   a scope (open curly-brace, statements, close curly-brace), containing
+   testing statements.
 	
-.. c:macro:: ENSURE(predicate [, comment] )
+   .. c:alias:: ENSURE
 
-``ENSURE`` is analogous to ``assert()``. It takes one argument, a predicate,
-and an optional comment.  ``ENSURE`` checks whether the predicate is true
-or false. If it is false, it will return a test failure. If the
-optional comment is included as a string, it will return it along with
-the failure.  
+   :c:macro:`ENSURE` is analogous to ``assert()``. It takes one argument, a predicate,
+   and an optional comment.  :c:macro:`ENSURE` checks whether the predicate is true
+   or false. If it is false, it will return a test failure. If the
+   optional comment is included as a string, it will return it along with
+   the failure.
 
-.. note:: 
+   .. note::
 
-   A predicate is simply an expression that evaluates to true or
-   false. Comparisons of two numbers, e.g. numhits>50 or pinkness=4, a
-   call of a function that returns bool or something convertable to
-   bool, e.g. ``hits_are_ok();``, and evaluation of pointers for
-   nullness are all predicates.
+      A predicate is simply an expression that evaluates to true or
+      false. Comparisons of two numbers, e.g. numhits>50 or pinkness=4, a
+      call of a function that returns bool or something convertable to
+      bool, e.g. ``hits_are_ok();``, and evaluation of pointers for
+      nullness are all predicates.
 
-.. c:macro:: ENSURE_EQUAL(left-value, right-value, [, comment])
+   .. c:alias:: ENSURE_EQUAL
 
-ENSURE_EQUAL ensures that left-value and right-value are, well,
-equal. If they aren't, it will throw a test failure. If the optional
-comment is specified, the failure will come with that message.
+   :c:macro:`ENSURE_EQUAL` ensures that left-value and right-value are, well,
+   equal. If they aren't, it will throw a test failure. If the optional
+   comment is specified, the failure will come with that message.
 
-Why not just::
+   Why not just::
 
-  ENSURE(something == something_else);
+     ENSURE(something == something_else);
 
-you ask. If this ENSURE fails, you will get only the error message::
+   .. highlight:: none
 
-  File:      private/test/sample_error.cxx
-  Line:      17
-  Predicate: something == something_else
+   you ask. If this ENSURE fails, you will get only the error message::
 
-Whereas ENSURE_EQUAL will show::
+     File:      private/test/sample_error.cxx
+     Line:      17
+     Predicate: something == something_else
 
-  File:      private/test/SampleClassTest.cxx
-  Line:      24
-  Predicate: ensure_distance: expected [0.16665;0.16667] actual 0.3333333333
+   Whereas ENSURE_EQUAL will show::
 
-Which gives one a better idea what the problem is. 
+     File:      private/test/SampleClassTest.cxx
+     Line:      24
+     Predicate: ensure_distance: expected [0.16665;0.16667] actual 0.3333333333
 
-.. c:macro:: ENSURE_DISTANCE(left-value, right-value, distance [, comment])
+   Which gives one a better idea what the problem is.
 
-ENSURE_DISTANCE verifies that left-value is within distance of
-right-value. If it is not, it throws a test failure. If the optional
-comment is specified, the failure will come with that messages.
+   .. c:alias:: ENSURE_DISTANCE
 
-.. c:macro:: FAIL(comment)
+   :c:macro:`ENSURE_DISTANCE` verifies that left-value is within distance of
+   right-value. If it is not, it throws a test failure. If the optional
+   comment is specified, the failure will come withthat message.
 
-This fails unconditionally. Useful when verifying that an operation
-should throw, or that a certain point in the code is never reached::
+   .. c:alias:: FAIL
 
-  try {
-    operation_that_throws();
-    FAIL("that should have thrown");
-  } catch (const std::exception& e) {
-    // NB: DO NOT catch-all, meaning NEVER, EVER, EVER 'catch(...)'
-    //     In that case your test will alway pass and test nothing.
-    // OK.  That operation threw and therefore we didn't hit FAIL()
-  }
+   .. highlight:: cpp
 
-Even better::
-  EXPECT_THROW(operation_that_throws);    
-  
+   This fails unconditionally. If the optional comment is specified,
+   the failure will come withthat message. :c:macro:`FAIL` is useful
+   when verifying that an operation should throw, or that a certain
+   point in the code is never reached::
+
+     try {
+       operation_that_throws();
+       FAIL("that should have thrown");
+     } catch (const std::exception& e) {
+       // NB: DO NOT catch-all, meaning NEVER, EVER, EVER 'catch(...)'
+       //     In that case your test will alway pass and test nothing.
+       // OK.  That operation threw and therefore we didn't hit FAIL()
+     }
+
+   Even better::
+
+     EXPECT_THROW(operation_that_throws);
 
 Building and running I3Tests
 ----------------------------
 
 See :ref:`targets` for how to build and run.  Once built the test driver binaries
-will be in the ``bin/`` directory of the build.
+will be in the :file:`bin/` directory of the build.
 
 The test driver command line interface
 --------------------------------------
@@ -275,4 +282,3 @@ References
   Library of Practical Abstractions
   http://www.pnylab.com/pny/software/libpa/main.html
   February 1998
-

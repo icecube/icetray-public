@@ -1,3 +1,9 @@
+.. important::
+
+   Support for Intel's C++ compiler hasn't been updated or even
+   confirmed for quite sometime. This document is most likely grossly
+   out-of-date, but kept for historical reasons.
+
 Using the Intel C++ compiler
 ============================
 

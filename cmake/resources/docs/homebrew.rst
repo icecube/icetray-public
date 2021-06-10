@@ -45,35 +45,35 @@ instructions for using Homebrew on Linux or macOS.
 
 .. tabularcolumns: |l|l|
 
-+-------------------------------------------------------------------------+-------------------------------------------------------------------------+
-| macOS                                                                   | Linux                                                                   |
-+=========================================================================+=========================================================================+
-| Install according to `the instructions <http://brew.sh>`_               | Install according to `the instructions <http://linuxbrew.sh>`_          |
-+-------------------------------------------------------------------------+-------------------------------------------------------------------------+
-| Ensure ``brew`` is in your path::                                       | Ensure ``brew`` is in your path::                                       |
-|                                                                         |                                                                         |
-|   $ brew                                                                |   $ brew                                                                |
-|   Example usage:                                                        |   Example usage:                                                        |
-|     brew search [TEXT|/REGEX/]                                          |     brew search [TEXT|/REGEX/]                                          |
-|     brew (info|home|options) [FORMULA...]                               |     brew (info|home|options) [FORMULA...]                               |
-|     brew install FORMULA...                                             |     brew install FORMULA...                                             |
-|     brew update                                                         |     brew update                                                         |
-|   .                                                                     |   .                                                                     |
-|   .                                                                     |   .                                                                     |
-|   .                                                                     |   .                                                                     |
-+-------------------------------------------------------------------------+-------------------------------------------------------------------------+
-| `Tap <https://github.com/Homebrew/brew/blob/master/docs/brew-tap.md>`_  | `Tap <https://github.com/Homebrew/brew/blob/master/docs/brew-tap.md>`_  |
-| the Homebrew science repository::                                       | the Homebrew science repository::                                       |
-|                                                                         |                                                                         |
-|   $ brew tap homebrew-science                                           |   $ brew tap homebrew/science                                           |
-|   $                                                                     |   $                                                                     |
-+-------------------------------------------------------------------------+-------------------------------------------------------------------------+
-| `Tap <https://github.com/Homebrew/brew/blob/master/docs/brew-tap.md>`_  | `Tap <https://github.com/Homebrew/brew/blob/master/docs/brew-tap.md>`_  |
-| the IceCube Homebrew repository::                                       | the Icecube Homebrew repository::                                       |
-|                                                                         |                                                                         |
-|   $ brew tap icecube-spno/icecube                                       |   $ brew tap icecube-spno/icecube                                       |
-|   $                                                                     |   $                                                                     |
-+-------------------------------------------------------------------------+-------------------------------------------------------------------------+
++-------------------------------------------------------------------------+--------------------------------------------------------------------------+
+| macOS                                                                   | Linux                                                                    |
++=========================================================================+==========================================================================+
+| Install according to `the instructions <http://brew.sh>`_               | Install according to `the Linuxbrew instructions <http://linuxbrew.sh>`_ |
++-------------------------------------------------------------------------+--------------------------------------------------------------------------+
+| Ensure ``brew`` is in your path::                                       | Ensure ``brew`` is in your path::                                        |
+|                                                                         |                                                                          |
+|   $ brew                                                                |   $ brew                                                                 |
+|   Example usage:                                                        |   Example usage:                                                         |
+|     brew search [TEXT|/REGEX/]                                          |     brew search [TEXT|/REGEX/]                                           |
+|     brew (info|home|options) [FORMULA...]                               |     brew (info|home|options) [FORMULA...]                                |
+|     brew install FORMULA...                                             |     brew install FORMULA...                                              |
+|     brew update                                                         |     brew update                                                          |
+|   .                                                                     |   .                                                                      |
+|   .                                                                     |   .                                                                      |
+|   .                                                                     |   .                                                                      |
++-------------------------------------------------------------------------+--------------------------------------------------------------------------+
+| `Tap <https://github.com/Homebrew/brew/blob/master/docs/brew-tap.md>`_  | `Tap <https://github.com/Homebrew/brew/blob/master/docs/brew-tap.md>`_   |
+| the Homebrew science repository::                                       | the Homebrew science repository::                                        |
+|                                                                         |                                                                          |
+|   $ brew tap homebrew-science                                           |   $ brew tap homebrew/science                                            |
+|   $                                                                     |   $                                                                      |
++-------------------------------------------------------------------------+--------------------------------------------------------------------------+
+| `Tap <https://github.com/Homebrew/brew/blob/master/docs/brew-tap.md>`_  | `Tap <https://github.com/Homebrew/brew/blob/master/docs/brew-tap.md>`_   |
+| the IceCube Homebrew repository::                                       | the Icecube Homebrew repository::                                        |
+|                                                                         |                                                                          |
+|   $ brew tap icecube-spno/icecube                                       |   $ brew tap icecube-spno/icecube                                        |
+|   $                                                                     |   $                                                                      |
++-------------------------------------------------------------------------+--------------------------------------------------------------------------+
 
 At this point you're now ready to install software with Homebrew. If
 you're using macOS you should refer to `this list
