@@ -5,7 +5,7 @@ The purpose of these guidelines is to give some guidance as to what should be...
 
 Test Overview
 -------------
-In order to run the tests you must have I3_TESTDATA set.  To get the test data, in 
+In order to run the tests you must have :envvar:`I3_TESTDATA` set.  To get the test data, in
 your build directory, simply type::
 
    $ make rsync
@@ -55,11 +55,11 @@ out the docs on :ref:`I3Test <cmake-i3test>`.
 
 Running the Tests
 -----------------
-To run the tests as they would be run on the build bots use **ctest**.
+To run the tests as they would be run on the build bots use :command:`ctest`.
 
-* Only run the tests for your project. 'ctest -R <project_name>'
+* Only run the tests for your project. :command:`ctest -R <project_name>`
 * Note that this needs to be run from your build directory.
-* Note that you need to be in the env shell (run env-shell.sh) for both C++ and Python tests
+* Note that you need to be in the env shell (run :command:`env-shell.sh`) for both C++ and Python tests
 
 Make sure to check the `buildbots <http://builds.icecube.wisc.edu/>`_ and verify you didn't break anything on another platform.
 

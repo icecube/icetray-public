@@ -29,8 +29,9 @@ simulation, or icerec) needs to be reviewed, regardless of the language ( C++, p
 
 Ten Commandments
 ----------------
-.. _ten_commandments: https://techbeacon.com/app-dev-testing/10-commandments-navigating-code-reviews
-Stolen from ten_commandments_ by Angie Jones, paraphrased.
+.. _The 10 commandments of navigating code reviews: https://techbeacon.com/app-dev-testing/10-commandments-navigating-code-reviews
+
+Stolen from `The 10 commandments of navigating code reviews`_ by Angie Jones, paraphrased.
 
 1. Don't take it personnally
 2. Don't marry your code

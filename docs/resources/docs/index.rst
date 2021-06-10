@@ -3,20 +3,20 @@ Documentation
 =============
 
 This page describes provides an overview of the IceTray documentation system.
-Because of IceTray's modular design and the fact that documentation is provided
-from number of different sources it can be quite complicated.
+Because of IceTray's modular design, and the fact that documentation is provided
+from number of different sources, it can be quite complicated.
 The is system uses `sphinx <http://www.sphinx-doc.org/>`_ to translate these
 different sources into html.
 ``sphinx`` was originally developed to be the documentation system for python, but
 has developed support for many languages.
 There are four main sources for documentation:
 
-* restructured text (``rst``) which for writing high level descriptions of the code
-* sphinx python  which automatically documents python code based on the code and
+* restructured text (``rst``) -- for writing high level descriptions of the code
+* sphinx python -- automatically documents python code based on the code and
   provided comments
-* doxygen which parses c and c++ code and automatically produces documentation
+* doxygen -- parses c and c++ code and automatically produces documentation
   and creates documentation based on the code and provided comments
-* ``icetray-inspect`` which analyses IceTray interfaces such as IceTray modules,
+* ``icetray-inspect`` -- analyses IceTray interfaces such as IceTray modules,
   service factories and ``tableio`` readers.
 
 ``sphinx`` then combines these into a single group of html files.
@@ -25,21 +25,18 @@ Cross references are possible between each of these groups of sources.
 Building the docs
 =================
 
-Building the entire docs can take quite some time, once a day the
-`IceTray buildbot <http://builds.icecube.wisc.edu/>`_ will rebuild the entire
-document for all currently used projects and post it at
-`<http://software.icecube.wisc.edu/documentation/>`_.
-However, it is often necessary to build the docs yourself.
-The docs are build with a python script called ``docs-build`` which will be
-available in your path if you are in an IceTray environment.
-If run without any arguments the entire document will be build which will take
-some time.
-Usually when writing documentation you will only want to see the docs for one or
-two projects this can be accomplished with:
+Building the entire docs can take quite some time, so they are available at
+`<https://docs.icecube.aq/>`_ where they are regularlly updated.  However, it
+is often necessary to build the docs yourself.  The docs are build with a
+python script called ``docs-build`` which will be available in your path if
+you are in an IceTray environment.  If run without any arguments the entire
+document will be built which will take some time.  Usually when writing
+documentation you will only want to see the docs for one or two projects. This
+can be accomplished with:
 
-.. code:: shell
+.. code:: text
 
-   # docs-build --projects astro bayesian-priors --open
+   $ ./env-shell.sh docs-build --projects astro bayesian-priors --open
 
 This will only build two projects: astro and baysian-priors.
 In addition, the ``--open`` option will open the html file for you in the browser
@@ -48,7 +45,7 @@ Other wise you will have to find the docs yourself in the directory they are
 written to ``$I3_BUILD/docs/build/html/``.
 
 Another useful option is the ``-j`` option which will specify how many parallel
-process to run analogously to the ``-j`` option passed to ``make``.
+process to run. This is analogous to the ``-j`` option passed to ``make``.
 For example if your machine has eight processors you should run ``docs-build -j8``
 to run with eight concurrent processes.
 
@@ -95,7 +92,7 @@ the automatically generated.
 
 To cross reference another project's ``rst`` documentation. You can reference a
 project's documentation by filename with ``:doc:`/projects/myproject/index``.
-If the project's documentation contains a labels in its ``index.rst`` file such
+If the project's documentation contains a label in its ``index.rst`` file such
 as ``.. _myproject:`` then you can also reference it with ``:ref:`myproject```.
 
 To cross reference the python API reference use sphinx's python domain:
@@ -119,7 +116,7 @@ factories are referenced by abusing the javascript domain ``:js:data:`MyModule``
 
 .. Note::
 
-   that all of the above examples can be used with a different name for the link.
+   All of the above examples can be used with a different name for the link.
    For example ``:doc:`/projects/myproject/index`` can be replaced with
    ``:doc:`This is a link to myproject </projects/myproject/index>`` or
    ``:ref:`myproject-cpp``` can be replaced with ``:ref:`This is a link to the
@@ -147,9 +144,25 @@ Or if you don't like using the titles of the page as the link provide your own:
      C++ API Reference </doxygen/myproject/index>
      IceTray Inspect Reference </inspect/myproject>
 
+FAQs About Building the Documentation
+=====================================
 
+:Q: While building the docs I see errors like
 
+    .. code-block:: text
 
+        :44: (ERROR/3) Unknown interpreted text role "cpp:class".
 
+:A: You'll generally see errors like this during the two ``icetray-inspect`` phases of the documentation build. They refer to text roles that are compatible with ``sphinx``, but not understood by ``docutils`` (which underpins ``icetray-inspect``). These errors are harmless. Unfortunately there's nothing we can do to suppress or modify them, as they are printed straight to ``stderr`` from deep within ``docutils``.
 
+..
 
+:Q: I want to help fix the docs, but when building I get an opaque wall of text! HELP!
+
+:A: ``docs-build`` and ``icetray-inspect`` both understand rich-text formatting as implemented by the `rich python library <https://github.com/willmcgugan/rich>`_. All you need to do is install it. The easiest way is via ``pip3``.
+
+    .. code-block:: text
+
+        $ pip3 install rich
+
+    The next time you run ``docs-build`` you'll get organized and colorized output.

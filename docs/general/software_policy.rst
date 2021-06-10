@@ -30,8 +30,8 @@ Release Procedure
    
 New Projects
 ------------
-All new production projects included in combo, must pass a code review. (See icecube-code-reviews_)
+All new production projects included in combo, must pass a code review. (See :ref:`icecube-code-reviews`)
 
 New Dependencies
 ----------------
-All new third-party dependencies must be discussed on a phone call. (See icecube-code-reviews_)
+All new third-party dependencies must be discussed on a phone call. (See :ref:`icecube-code-reviews`)

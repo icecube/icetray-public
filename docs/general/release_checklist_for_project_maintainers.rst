@@ -13,15 +13,19 @@ strict bitwise backward compatibility is not a requirement. It's OK for algorith
 if the change is an improvement.  This applies to default configurations (i.e. module/segment
 parameters).  If a project owner feels a new set of parameters are better and should be
 used in production (or in general) the default values of the module or tray segment should
-change to reflect that.  Note: These changes should be clearly indicated in the release notes.
+change to reflect that.
+
+.. note::
+
+   These changes should be clearly indicated in the release notes.
 
 Checklist
 ---------
-Project maintainers are responsible for **every** aspect of their project. (See icecube-maintainer-responsibilities_)
+Project maintainers are responsible for **every** aspect of their project. (See :ref:`icecube-maintainer-responsibilities`)
 
 Below are some things to check :
 
-  * **Release Notes** : Ensure the RELEASE_NOTES are up to date and accurate.  Check the 'git log' and make sure there isn't any commit to your project that you don't understand or agree with. (See writing-release-notes_ for more information.)
+  * **Release Notes** : Ensure the RELEASE_NOTES are up to date and accurate.  Check the 'git log' and make sure there isn't any commit to your project that you don't understand or agree with. (See :ref:`writing_release_notes` for more information.)
   * **Documentation** 
 
     - Ensure your project's documentation is *accurate and up to date*. If you see where documentation can easily be improved, please take the time to do it.  
