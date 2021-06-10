@@ -56,6 +56,7 @@ i3_project(docs)
 find_package(Doxygen QUIET)
 
 i3_executable_script(build resources/scripts/docs-build.py)
+i3_executable_script(upload resources/scripts/docs-upload.sh)
 
 set(SPHINX_DIR "${CMAKE_BINARY_DIR}/docs")
 
