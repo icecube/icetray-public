@@ -27,7 +27,15 @@ void register_i3antennawaveform_of(const std::string& s) {
   .def(bp::self + bp::self)
   .def(bp::self - bp::self)
   .def(bp::self += bp::self)
+
+//hush this false positive
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wself-assign-overloaded"
+
   .def(bp::self -= bp::self)
+
+#pragma clang diagnostic pop
+
   .def(bp::self += T())
   .def(bp::self -= T())
   .def(bp::self * double())

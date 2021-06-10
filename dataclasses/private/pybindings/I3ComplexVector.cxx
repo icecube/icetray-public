@@ -61,7 +61,15 @@ void register_I3ComplexVector() {
   .def(bp::self * std::complex<double>())
   .def(bp::self / std::complex<double>())
   .def(bp::self += bp::self)
+
+// hush this false positive
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wself-assign-overloaded"
+
   .def(bp::self -= bp::self)
+
+#pragma clang diagnostic pop
+
   .def(bp::self *= std::complex<double>())
   .def(bp::self /= std::complex<double>())
   .def(bp::self == bp::self)
