@@ -12,8 +12,8 @@ namespace I3 {
 		 * - The path manually set by `SetScratchDirectory`
 		 * - The value of the `_CONDOR_SCRATCH_DIR` environment variable, if set
 		 * - The value of the `TMPDIR` environment variable, if set
-		 * - /scratch/<real user name>
-		 * - /global/scratch/<real user name>
+		 * - /scratch/\<real user name>
+		 * - /global/scratch/\<real user name>
 		 * - The current working directory
 		 *
 		 * The first directory which exists or can be created will be returned.

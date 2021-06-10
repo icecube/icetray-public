@@ -384,7 +384,6 @@ class I3Frame
    * @param element What to put in there. 
    * Must be a shared_ptr to something that inherits from I3FrameObject.
    * @param stream The stream to act on.
-   * @returns Nothing.
    * @throw If something exists already in the frame at key <VAR>name</VAR>,
    * this function will throw via log_fatal.
    */
@@ -398,7 +397,6 @@ class I3Frame
   /** Puts something into the frame at its "default" location.
    *
    * @param element What to put in there.
-   * @returns Nothing.
    * @throw Throws via log_fatal if something is already in the frame at the default
    * location for T.
    */

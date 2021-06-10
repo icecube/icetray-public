@@ -29,9 +29,9 @@
 #include <icetray/serialization.h>
 
 static const unsigned omkey_version_ = 2;
-_Pragma("GCC diagnostic push")
+#pragma GCC diagnostic push
 #if defined(__GNUC__) && !defined(__clang__)
-_Pragma("GCC diagnostic ignored \"-Wmaybe-uninitialized\"")
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
 
 /**
@@ -173,7 +173,7 @@ inline bool operator<(const OMKey& lhs,const OMKey& rhs)
  */
 std::ostream& operator<<(std::ostream&, const OMKey& key);
 std::istream& operator>>(std::istream&,  OMKey&);
-_Pragma("GCC diagnostic pop")
+#pragma GCC diagnostic pop
 
 I3_POINTER_TYPEDEFS(OMKey);
 

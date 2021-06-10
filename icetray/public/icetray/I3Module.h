@@ -118,7 +118,6 @@ public:
   /**
    * Set the name of a module
    * @param name name of the module
-   * @return void
    */
   virtual void SetName(const std::string& name) { name_ = name; }
 
