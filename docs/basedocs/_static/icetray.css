@@ -1,0 +1,75 @@
+/* -*- css-indent-offset: 4 -*- */
+
+/* This is the CSS file for icetray's HTML documentation. All
+modifications to the base theme should go here. Presently (MAY 2021),
+we're using "sphinxdoc" (a default theme with sphinx) as our base
+theme. */
+
+@import url("sphinxdoc.css");
+
+/* sidebar tweaks */
+div.sphinxsidebar h3,
+div.sphinxsidebar h4 {
+    background-color: #4a6484;
+}
+
+/* top/bottom navbar tweaks */
+div.related ul li a {
+    color: white;
+}
+
+div.related ul li {
+    color: white;
+}
+
+div.related ul {
+    background-image: none;
+    padding: inherit;
+    border: 0;
+}
+
+div.related {
+    background-color: #4a6484;
+}
+
+/* footer tweaks */
+div.footer {
+    background-color: #4a6484;
+    border-top: 1px solid white;
+}
+
+/* font tweaks */
+div.highlight pre {  /* this generally for code blocks */
+    font-family: Consolas, Monaco, DejaVu Sans Mono, Bitstream Vera Sans Mono, courier, monospace;
+    background-color: #eeeeef;
+    border-left: 2px solid red;
+}
+											   
+/* general/global tweaks */
+body { border: 0; }
+
+html {
+    /* background-color: #0E4C71; */
+    background-color: #4a6484;
+}
+
+a.footnote-reference,
+a.fn-backref {
+    vertical-align: super;
+    font-size: smaller;
+}
+
+a code {
+    /* the default orange(#CA7900) from the theme, does look kinda nice here. */
+    color: inherit;
+}
+
+a {
+    color: #3f5570;
+    text-decoration: none;
+}
+
+/* H1 is a theme relevent blue, using 'initial' vice '#000000/black' will hopefully allow a future"dark-mode" theme */
+h1 {
+    color: initial;
+}
