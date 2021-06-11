@@ -151,6 +151,7 @@ staged, but instead read directly. The :py:func:`hdfwriter.I3HDFWriter` and
 Currently, the following stager classes are implemented:
 
 .. py:module:: icecube.dataio.I3FileStagerFile
+   :noindex:
 
 .. autoclass:: I3FileStagerFile
    :noindex:

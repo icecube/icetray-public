@@ -4,6 +4,7 @@
 ============================================================
 
 .. module:: icecube.dataclasses
+   :noindex:
    :synopsis: python bindings to dataclasses
 
 .. class:: I3Double

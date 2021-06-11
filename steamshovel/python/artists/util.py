@@ -215,18 +215,19 @@ def propagate_covariance(f, x, cov):
 
     :returns: fcov: matrix of floats, covariance matrix of the output of f
 
-    Examples:
-    >>> import numpy as np
-    >>> v = np.ones(2)
-    >>> cov = np.ones((2,2))
-    >>> def f(r):return np.dot(r,r)
-    >>> "%.3g" % propagate_covariance(f,v,cov)
-    '16'
-    >>> def f(r):return 2*r
-    >>> propagate_covariance(f,v,cov)
-    array([[ 4.,  4.],
-         [ 4.,  4.]])
+    Examples: ::
 
+      >>> import numpy as np
+      >>> v = np.ones(2)
+      >>> cov = np.ones((2,2))
+      >>> def f(r):return np.dot(r,r)
+      >>> "%.3g" % propagate_covariance(f,v,cov)
+      '16'
+      >>> def f(r):return 2*r
+      >>> propagate_covariance(f,v,cov)
+      array([[ 4.,  4.],
+             [ 4.,  4.]])
+ 
     Authors:
     Hans Dembinski <hans.dembinski@kit.edu>
     """
@@ -251,14 +252,15 @@ def jacobian(f, x, dx):
 
     :returns: Jacobi matrix of first derivatives
 
-    Examples:
-    >>> def f(v): return 0.5*np.dot(v,v)
-    >>> jacobian(f,np.ones(2))
-    array([[ 1.,  1.]])
-    >>> def f(v): return np.dot(v,v)*v
-    >>> jacobian(f,np.ones(2))
-    array([[ 4.,  2.],
-           [ 2.,  4.]])
+    Examples: ::
+
+      >>> def f(v): return 0.5*np.dot(v,v)
+      >>> jacobian(f,np.ones(2))
+      array([[ 1.,  1.]])
+      >>> def f(v): return np.dot(v,v)*v
+      >>> jacobian(f,np.ones(2))
+      array([[ 4.,  2.],
+             [ 2.,  4.]])
 
     Authors:
     Hans Dembinski <hans.dembinski@kit.edu>

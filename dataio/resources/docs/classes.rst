@@ -2,6 +2,7 @@
 ===============================================================
 
 .. module:: icecube.dataio
+   :noindex:
    :synopsis: python bindings to Data I/O utilities
 
 .. class:: I3File

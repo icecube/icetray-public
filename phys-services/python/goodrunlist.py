@@ -338,26 +338,26 @@ class GoodRunList(dict):
 
         You can also specify if InIce data needs to be good or not (same for IT data). A few examples:
 
-        Note: This method returns run ids only!
-        ```
-        grl = GoodrunList()
-        grl.load(...)
+        Note: This method returns run ids only! ::
 
-        # All good runs (good_i3 or good_it)
-        run_ids = grl.get_run_ids()
+          grl = GoodrunList()
+          grl.load(...)
 
-        # Only good runs with good InIce (excludes good IT only runs)
-        run_ids = grl.get_run_ids(good_i3 = True)
+          # All good runs (good_i3 or good_it)
+          run_ids = grl.get_run_ids()
 
-        # Only good runs with good IT data (excludes good InIce only runs)
-        run_ids = grl.get_run_ids(good_it = True)
+          # Only good runs with good InIce (excludes good IT only runs)
+          run_ids = grl.get_run_ids(good_i3 = True)
 
-        # Only runs that are only good for InIce
-        run_ids = grl.get_run_ids(good_i3 = True, good_it = False)
+          # Only good runs with good IT data (excludes good InIce only runs)
+          run_ids = grl.get_run_ids(good_it = True)
 
-        # Only runs that are only good for IT
-        run_ids = grl.get_run_ids(good_i3 = False, good_it = True)
-        ```
+          # Only runs that are only good for InIce
+          run_ids = grl.get_run_ids(good_i3 = True, good_it = False)
+
+          # Only runs that are only good for IT
+          run_ids = grl.get_run_ids(good_i3 = False, good_it = True)
+          
         """
 
         if good_i3 is None and good_it is None:

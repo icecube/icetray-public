@@ -110,7 +110,7 @@ ___________
 
 For each field, a pointer to the `j` th field is cast to the appropriate native
 type and passed to :c:func:`WriteField()`, which is just a templated function
-that dumps the argument to :c:data:`iostream output_`::
+that dumps the argument to :code:`iostream output_`::
 
     template <typename T>
     void WriteField(T* value,size_t arraySize) {

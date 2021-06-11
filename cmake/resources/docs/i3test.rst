@@ -118,7 +118,7 @@ three unit tests named *it_works*, *pinkness_is_almost_pi*, and
 
 
 The unit tests signal success or failure using the statement
-:c:macro:`ENSURE()`, :c:macro:`ENSURE_DISTANCE()`, or :c:macro:`FAIL()`.
+:code:`ENSURE()`, :code:`ENSURE_DISTANCE()`, or :code:`FAIL()`.
 
 Build configuration
 ^^^^^^^^^^^^^^^^^^^

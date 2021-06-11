@@ -47,6 +47,7 @@ Of general interest
    general/netiquette
    general/gdb_python
    general/backing_out_commits
+   general/writing_release_notes
 
 Automatically Generated Documentation
 =====================================

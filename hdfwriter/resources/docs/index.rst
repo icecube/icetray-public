@@ -45,6 +45,9 @@ The :func:`I3HDFWriter` segment provides output to HDF5 tables. Use it like so::
 
 .. _hdfwriter-sim-hdfwriter:
 
+I3SimHDFWriter
+^^^^^^^^^^^^^^
+
 For pre-trigger simulation files that contain only Q frames, use :func:`I3SimHDFWriter`, e.g.::
     
     from icecube.hdfwriter import I3SimHDFWriter
