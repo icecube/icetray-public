@@ -139,17 +139,15 @@ void throw_unless_fits(size_t array_size, size_t field_size) {
         // ==============================================
         if (!arr_dtype) log_fatal("Type of array could not be recognized.");
         throw_unless_match(*arr_dtype,dtype);
-       
-        // hang on to your hats, here we go!
-        const void* location;
-        Py_ssize_t length;
-        PyObject_AsReadBuffer(value.ptr(),&location,&length);
-        if (length > 0) {
+
+        Py_buffer view;
+        int ret = PyObject_GetBuffer(value.ptr(), &view, PyBUF_SIMPLE);
+        if (ret == 0) {
             // =======================================================
             // = Copy the buffer (an array in native representation) 
             //   directly into the memory chunk                      =
             // =======================================================
-            throw_unless_fits(static_cast<size_t>(length)/(dtype.size),array_length);
+            throw_unless_fits(static_cast<size_t>(view.len)/(dtype.size),array_length);
             
             size_t start,stop,i;
             void* pointy;
@@ -162,10 +160,10 @@ void throw_unless_fits(size_t array_size, size_t field_size) {
             }
             for (i = start; i < stop; i++) {
                 pointy = self.GetPointerToField(index,i);
-                memcpy(pointy,location,length);
+                memcpy(pointy,view.buf,view.len);
             }
         }
-
+        PyBuffer_Release(&view);
         return true;
     } else {
         return false;
