@@ -41,9 +41,7 @@ Advanced
    i3test
    reference
    pybindings
-   ports
    env-shell.sh
-   commitmails
    icc
    gfilt
    homebrew

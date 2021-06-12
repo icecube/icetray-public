@@ -32,22 +32,36 @@ The Problem
 The statement of the goal is very simple: make simulation look like data. With the setup outlined above the DOM launch times are relative to t_0 (which is coincident with DT). In data the DOM launch times are relative to EventHeaderStartTime.
 
 * Option 1 : Set EventHeaderStarTime to some user-defined time.
+
   * Pros
-    * The DOM launch times are now relative to EventHeaderStartTime and the **interpretation** is consistent with data.
-    * There's a single point of modification, which is **very** safe and clean.
+
+    - The DOM launch times are now relative to EventHeaderStartTime and the **interpretation** is consistent with data.
+    - There's a single point of modification, which is **very** safe and clean.
+
   * Cons
-    * The DOM launches will now appear to launch long after the trigger time(~t_1 in the above example).
+
+    - The DOM launches will now appear to launch long after the trigger time(~t_1 in the above example).
+
 * Option 2 : Correct the DOM Launch times
+
   * Pros
-    * The DOM launch times are consitent in interpretation and measurement as compared to data.
-    * There are only two maps to worry about. InIce and IceTop.
+
+    - The DOM launch times are consitent in interpretation and measurement as compared to data.
+    - There are only two maps to worry about. InIce and IceTop.
+
   * Cons
-    * The DOM launch times are shifted with respect to the low level MC objects that created them
+
+    - The DOM launch times are shifted with respect to the low level MC objects that created them
+
 * Option 3 : Correct **every** time in the event
+
   * Pros
-    * Everyone is happy
+
+    - Everyone is happy
+
   * Cons
-    * This could be **very** difficult to do in practice.
+
+    - This could be **very** difficult to do in practice.
 
 The Solution
 ============
@@ -59,6 +73,7 @@ Examples
 ========
 Example use of I3Time
 ::
+
    >>> /**
    >>>  *@brief creates the object with the given times as the DAQ time
    >>>  */

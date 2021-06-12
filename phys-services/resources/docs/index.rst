@@ -31,7 +31,7 @@ Overview
 * :cpp:class:`I3CascadeCutValues`
 * :cpp:class:`I3CutValues`
 * :cpp:class:`I3XMLOMKey2MBID`
-* :cpp:class:`I3Cuts`
+* :cpp:type:`I3Cuts`
 * :cpp:class:`I3SPRNGRandomService`
 * :cpp:class:`I3EventCounter`
 * :cpp:class:`I3GSLRandomServiceFactory`

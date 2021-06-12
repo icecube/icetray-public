@@ -56,6 +56,7 @@ For pre-trigger simulation files that contain only Q frames, use :func:`I3SimHDF
         Output='foo.hd5',
         Keys=['MCMuon','I3MCPESeriesMap']
     )
+    
 Note that the `SubEventStreams` parameter is forbidden in this context.
 
 Reading with pytables

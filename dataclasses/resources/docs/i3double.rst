@@ -17,6 +17,7 @@
       Create an I3Double with value initialized to 0.0
 
    .. method:: I3Double(v)
+      :noindex:
 
       Create an I3Double with value initialized to v
 

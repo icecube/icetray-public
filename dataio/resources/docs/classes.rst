@@ -323,7 +323,7 @@
       Test if there is another frame
 
    .. method:: rewind()
-      :nonindex:
+      :noindex:
 
       Return to the beginning of the sequence of files/frames.
 
