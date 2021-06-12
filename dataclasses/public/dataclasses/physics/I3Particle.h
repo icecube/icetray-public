@@ -86,6 +86,8 @@ class I3Particle : public I3FrameObject
     H3Nucleus = 1000010030,
     He3Nucleus = 1000020030,
     He4Nucleus = 1000020040,
+    He5Nucleus = 1000020050,
+    He6Nucleus = 1000020060,
     Li5Nucleus = 1000030050,
     Li6Nucleus = 1000030060,
     Li7Nucleus = 1000030070,
@@ -474,7 +476,7 @@ std::string i3particle_type_string(int32_t pdg_code);
     (XiPlusBar)(OmegaPlusBar)(DPlus)(DMinus)(D0)(D0Bar)(DsPlus)(DsMinusBar)       \
     (LambdacPlus)(WPlus)(WMinus)(Z0)(NuE)(NuEBar)                                 \
     (NuMu)(NuMuBar)(TauPlus)(TauMinus)(NuTau)(NuTauBar)(H2Nucleus)(H3Nucleus)     \
-    (He3Nucleus)(He4Nucleus)                                                      \
+    (He3Nucleus)(He4Nucleus)(He5Nucleus)(He6Nucleus)                              \
     (Li5Nucleus)(Li6Nucleus)(Li7Nucleus)(Be9Nucleus)(B10Nucleus)                  \
     (B11Nucleus)(C12Nucleus)(C13Nucleus)(N14Nucleus)(N15Nucleus)(O16Nucleus)      \
     (O17Nucleus)(O18Nucleus)(F19Nucleus)(Ne20Nucleus)(Ne21Nucleus)(Ne22Nucleus)   \
