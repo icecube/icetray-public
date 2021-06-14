@@ -294,7 +294,7 @@ I3MCTreeUtils
     and returns true/false (true = first is less than second).
 
 For more C++ details, see the 
-`doxygen docs <../../doxygen/dataclasses/classTreeBase_1_1Tree.html>`_.
+:cpp:type:`doxygen docs <I3MCTree>`.
 
 I3MCTreePhysicsLibrary
 ^^^^^^^^^^^^^^^^^^^^^^

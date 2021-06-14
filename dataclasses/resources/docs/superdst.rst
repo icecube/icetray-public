@@ -55,8 +55,8 @@ Using SuperDST
 ^^^^^^^^^^^^^^^^
 
 :cpp:class:`I3SuperDST` and :cpp:class:`I3SuperDSTTriggerSeries` are 
-effectively compactly serialized versions of :cpp:class:`I3RecoPulseSeriesMap` 
-and :cpp:class:`I3TriggerHierarchy`, respectively. They can be implicitly 
+effectively compactly serialized versions of :cpp:type:`I3RecoPulseSeriesMap` 
+and :cpp:type:`I3TriggerHierarchy`, respectively. They can be implicitly 
 converted to their conventional representation by :cpp:class:`I3Frame`, so 
 client code doesn't have to know whether a frame object uses SuperDST 
 serialization or not.
@@ -68,14 +68,14 @@ C++
 
 C++ code (e.g. in an :cpp:class:`I3Module`) can treat 
 :cpp:class:`I3SuperDST` objects as if they were 
-:cpp:class:`I3RecoPulseSeriesMaps`. The following code snippet works the same 
-whether the frame object "I3SuperDST" is an :cpp:class:`I3RecoPulseSeriesMap` 
+:cpp:type:`I3RecoPulseSeriesMaps`. The following code snippet works the same 
+whether the frame object "I3SuperDST" is an :cpp:type:`I3RecoPulseSeriesMap` 
 or :cpp:class:`I3SuperDST` (or, in fact, :cpp:class:`I3RecoPulseSeriesMapMask`, 
-:cpp:class:`I3RecoPulseSeriesMapUnion`, or :cpp:class:`I3RecoHitSeriesMap`)::
+:cpp:class:`I3RecoPulseSeriesMapUnion`, or :cpp:type:`I3RecoHitSeriesMap`)::
     
     I3RecoPulseSeriesMapConstPtr pulses = frame->Get<I3RecoPulseSeriesMapConstPtr>("I3SuperDST");
 
-:cpp:class:`I3TriggerHierarchy` and :cpp:class:`I3SuperDSTTriggerSeries` are similarly interchangeable::
+:cpp:type:`I3TriggerHierarchy` and :cpp:class:`I3SuperDSTTriggerSeries` are similarly interchangeable::
     
     I3TriggerHierarchyConstPtr pulses = frame->Get<I3TriggerHierarchyConstPtr>("DSTTriggers");
 

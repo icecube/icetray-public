@@ -60,10 +60,6 @@ array_size : int                                                              \n
    The number of elements in the field. If this is 1 (default), then the field\n\
    is a scalar. Otherwise, the field will store a fixed-length vector         \n\
    quantity.                                                                  \n\
-                                                                              \n\
-Returns                                                                       \n\
--------                                                                       \n\
-None                                                                          \n\
 "))
    ;
    
