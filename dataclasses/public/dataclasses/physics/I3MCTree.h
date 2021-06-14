@@ -31,6 +31,7 @@
 #include <I3/hash_map.h>
 #include "dataclasses/physics/I3Particle.h"
 #include "dataclasses/physics/I3ParticleID.h"
+#include "dataclasses/physics/detail/I3MCTree_fwd.h"
 
 
 /* Define basic tree structures here instead of in I3Tree so 
@@ -103,7 +104,7 @@ namespace TreeBase {
    *
    * Note that Key must be unique and equality comparable.
    */
-  template<typename T, typename Key=T, typename Hash=hash<Key> >
+  template<typename T, typename Key, typename Hash>
   class Tree : public I3FrameObject {
     public:
       typedef T                         value_type;
@@ -1256,10 +1257,6 @@ std::ostream& operator<<(std::ostream& os, const TreeBase::Tree<T,Key,Hash>& tre
   return(tree.Print(os));
 }
 
-/**
- * I3MCTree - This goes into the frame and everyone can see it
- */
-typedef TreeBase::Tree<I3Particle,I3ParticleID> I3MCTree;
 
 I3_CLASS_VERSION(I3MCTree,TreeBase::tree_version_);
 I3_POINTER_TYPEDEFS(I3MCTree);
