@@ -37,7 +37,7 @@ These packages are required to compile the combo metaproject
     - :doc:`/projects/dataio/tray`
   * - `fftw <http://www.fftw.org/>`_
     - Discrete Fourier transform
-    - dataclasses
+    - :ref:`dataclasses`
 
 Optional Build Dependencies
 ---------------------------
@@ -148,6 +148,9 @@ These are not needed at compile time but are nescessary for certian functionalit
   * - `pyzmq <https://pyzmq.readthedocs.io/en/latest/>`_
     - Python bindings for ØMQ.
     - :ref:`gcdserver`
+  * - `scikit-learn <https://scikit-learn.org>`_
+    - machine learning library 
+    - :ref:`finallevel_filter_diffusenumu-main`
   * - `pymongo <https://pymongo.readthedocs.io/en/stable/>`_
     - Python bindings for MongoDB, 
     - :ref:`gcdserver`
