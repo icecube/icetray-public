@@ -4,9 +4,10 @@
 #  If an I3File is opened Writing it won't give you an iterator.
 #
 from icecube import icetray, dataclasses, dataio
-import sys
+import sys, os
 
-i3f = dataio.I3File("alphabet2.i3", 'w')
+fn = "alphabet2.i3"
+i3f = dataio.I3File(fn, 'w')
 
 try:
     for frame in i3f:
@@ -17,3 +18,6 @@ except:
 else:
     print("FAIL: that should have thrown")
     sys.exit(1)
+
+if os.path.exists(fn):
+    os.unlink(fn)
