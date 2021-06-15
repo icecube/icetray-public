@@ -109,9 +109,8 @@ set_property(TEST dataio::k2_verify_mutineer_passthru.py APPEND PROPERTY DEPENDS
 set_property(TEST dataio::k2a_get_finds_mutineer.py APPEND PROPERTY DEPENDS dataio::i_adds_mutineer.py)
 set_property(TEST dataio::k2b_deleteunregistered_deletes_mutineer.py APPEND PROPERTY DEPENDS dataio::i_adds_mutineer.py)
 
-# These tests use testm****.i3.gz, created by m_multifile_1byte.py
+# This tests uses testm****.i3.gz, created by m_multifile_1byte.py
 set_property(TEST dataio::n_read_list_of_files.py APPEND PROPERTY DEPENDS dataio::m_multifile_1byte.py)
-set_property(TEST dataio::n2_read_list_of_files.py APPEND PROPERTY DEPENDS dataio::m_multifile_1byte.py)
 
 # These tests use testmulti.****.i3, created by o0_multibyte_1000000.py
 set_property(TEST dataio::o1_verify_multibyte_frames.py APPEND PROPERTY DEPENDS dataio::o0_multibyte_1000000.py)
@@ -130,7 +129,6 @@ set_property(TEST dataio::c_best.py APPEND PROPERTY DEPENDS dataio::b_default.py
 set_property(TEST dataio::d2_bz_fastest.py APPEND PROPERTY DEPENDS dataio::c2_bz_best.py)
 set_property(TEST dataio::d_fastest.py APPEND PROPERTY DEPENDS dataio::c_best.py)
 set_property(TEST dataio::e_read_compress_data_from_Linux-i386.py APPEND PROPERTY DEPENDS dataio::d_fastest.py)
-set_property(TEST dataio::n2_read_list_of_files.py APPEND PROPERTY DEPENDS dataio::n_read_list_of_files.py)
 set_property(TEST dataio::o1_verify_multibyte_metadup_frames.py APPEND PROPERTY DEPENDS dataio::o0_multibyte_metadatadup.py)
 set_property(TEST dataio::k2_verify_mutineer_passthru.py APPEND PROPERTY DEPENDS dataio::k1_passthru_mutineer.py)
 
@@ -164,7 +162,6 @@ set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::l_read_l
 set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::make_alphabet_file.py)
 set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::m_multifile_1byte.py)
 set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::multiple_gzipped_files_catted_together.py)
-set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::n2_read_list_of_files.py)
 set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::n_read_list_of_files.py)
 set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::o0_multibyte_1000000.py)
 set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::o0_multibyte_metadatadup.py)
