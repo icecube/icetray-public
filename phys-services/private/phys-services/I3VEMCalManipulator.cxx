@@ -302,25 +302,25 @@ bool I3VEMCalManipulator::AddVEMCalibration(const std::string& filename)
 	    
 	    OMKey omKey(str,om);
 	    
-	    if(!finite(pePerVEM))
+	    if(!std::isfinite(pePerVEM))
 	    {
 		log_error("Invalid VEM value for module %s!", omKey.str().c_str());
 		continue;
 	    }
 	    
 	    // Here only a warning since this value is usually not needed
-	    if(!finite(muWidth))
+	    if(!std::isfinite(muWidth))
 	    {
 		log_warn("Invalid muon peak width for module %s!", omKey.str().c_str());
 	    }
 	    
-	    if(!finite(corrFactor))
+	    if(!std::isfinite(corrFactor))
 	    {
 		log_error("Invalid correction factor for module %s!", omKey.str().c_str());
 		continue;
 	    }
 
-	    if(!finite(hglgCrossOver))
+	    if(!std::isfinite(hglgCrossOver))
 	    {
 		log_error("Invalid HG-LG crossover value for module %s!", omKey.str().c_str());
 		continue;
