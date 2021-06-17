@@ -2,7 +2,7 @@
 #define I3MCTREE_FWD_H
 
 class I3Particle;
-class I3ParticleID;
+struct I3ParticleID;
 
 namespace TreeBase {
   template<typename T> class TreeNode;
