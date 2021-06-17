@@ -19,10 +19,10 @@
 
 if (SYSTEM_PACKAGES)
   find_path(ZMQ_INCLUDE_DIR
-    NAMES include/zmq.hpp)
+    NAMES include/zmq.h)
   tooldef(zmq
     ${ZMQ_INCLUDE_DIR}
-    zmq.hpp
+    zmq.h
     lib
     NONE
     zmq
