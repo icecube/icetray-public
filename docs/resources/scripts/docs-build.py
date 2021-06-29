@@ -1,4 +1,4 @@
-#!/usr/bin/env python3 -u
+#!/usr/bin/env python3
 
 import os.path,sys,pkgutil,time,subprocess
 from collections import deque
@@ -81,9 +81,9 @@ def use_this_project(proj):
             proj.replace("-","_") in args.projects
             )
 
-def call(*args):
-    log.debug("Calling %s", str(args))
-    status = subprocess.call(args)
+def call(*args,**kwargs):
+    log.debug("Calling %s with arguments %s", str(args), str(kwargs))
+    status = subprocess.call(args,**kwargs)
     if status:
         log.warning("Exit status %s: %s", args[0], status)
     return status
@@ -104,6 +104,7 @@ def main():
 
     parser = argparse.ArgumentParser(description='Generate Documentation for IceTray')
     parser.add_argument('--verbose', '-v', action='count')
+    parser.add_argument('--redirect-sphinx-output', action='store_true')
     parser.add_argument('--clean',action='store_true',
                         help='clean out the old files in documentaiton build '
                         'directory before generating any new files')
@@ -111,7 +112,7 @@ def main():
                         help='only generate documentation for these projects')
     parser.add_argument('--skip-doxygen', nargs='+',metavar='proj',
                         help='do not generate doxygen for these projects',
-                        default=['dataclasses', 'ppc', 'steamshovel'])
+                        default=['steamshovel'])
     parser.add_argument('--build-type', default='html',
                         help="type of output to build [default=html] (see "
                         "http://www.sphinx-doc.org/en/stable/invocation.html"
@@ -302,32 +303,32 @@ def main():
     if not args.no_sphinx:
         doctreedir = os.path.join(builddir,"doctrees")
         finaldir = os.path.join(builddir,args.build_type)
-
+        logdir = os.path.join(builddir,'logs')
         mkdir_p(doctreedir)
 
+        if args.redirect_sphinx_output or args.verbose:
+            mkdir_p(logdir)
+
+        sphinx_kwargs = {}
+        if args.redirect_sphinx_output:
+            sphinx_kwargs["stdout"] = open(os.path.join(logdir,"sphinx_build_stdout.txt"),'w')
+            sphinx_kwargs["stderr"] = open(os.path.join(logdir,"sphinx_build_stderr.txt"),'w')
+        
+        sphinx_cmd = [ "sphinx-build",
+                        "-a",#all
+                        "-j",str(args.j),
+                        "-b",args.build_type,
+                        "-d",doctreedir,
+                        "-E",sourcedir
+                        ]
+
         if args.verbose:
-            mkdir_p(I3_BUILD + "/docs/build/html")
-            retvalue = call("sphinx-build",
-                            "-N",#no color
-                            "-a",#all
-                            "-v",
-                            "-w",str(I3_BUILD + "/docs/build/html/sphinx_build_warnings.txt"),
-                            "-j",str(args.j),
-                            "-b",args.build_type,
-                            "-d",doctreedir,
-                            "-E",sourcedir,
-                            #"-c",configdir,
-                            finaldir)
-        else:
-            retvalue = call("sphinx-build",
-                            #"-N",#no color
-                            "-a",#all
-                            "-j",str(args.j),
-                            "-b",args.build_type,
-                            "-d",doctreedir,
-                            "-E",sourcedir,
-                            #"-c",configdir,
-                            finaldir)
+            warnfile = os.path.join(logdir,'sphinx_build_warnings.txt')
+            sphinx_cmd += ["-v","-T","-w",warnfile]
+
+        sphinx_cmd+=[finaldir]
+
+        retvalue = call(*sphinx_cmd,**sphinx_kwargs)
 
         if args.open and not retvalue:
             if args.build_type=='html':
