@@ -103,6 +103,7 @@ Coding Style
 .. toctree::
    :titlesonly:
 
+   cpp_standards/use_curly_braces
    cpp_standards/declare_variables_as_locally_as_possible
    cpp_standards/make_header_files_self_sufficient
    cpp_standards/always_write_internal_include_guards
