@@ -1,4 +1,4 @@
-Apple MacOS
+Apple macOS
 ^^^^^^^^^^^
 
 IceTray requires some additional support software to build and function. Before
@@ -9,7 +9,7 @@ these notes in their entirety. Especially:
 
    Do not try to install your own Python over the perfectly good version
    shipped with homebrew. It is very likely to end in tears. This
-   includes the Even though and Anaconda distributions. In order to compile
+   includes the Enthought and Anaconda distributions. In order to compile
    IceTray, your version of boost::python must be compiled against the same
    version of python as you are using. It will not be easy to do this with
    Anaconda.
@@ -20,8 +20,8 @@ Developer Tools
 You'll need a compiler in order to build the IceCube software. Apple distributes
 clang and llvm-gcc both as a stand-alone download and as part of its Xcode IDE,
 but requires you to register for an `Apple ID`_  before you can download either
-one. The Xcode download is 10 times larger than the command-line tools package,
-so you should only download it if you need it for non-IceCube work.
+one. **The Xcode download is 10 times larger than the command-line tools package,
+so you should only download it if you need it for non-IceCube work.**
 
 .. _`Apple ID`: https://appleid.apple.com
 
@@ -49,13 +49,13 @@ Xcode
 
 .. figure:: ../figs/xcode4_prefs.png
 	:width: 432px
-	
+
 	Xcode Preferences window
 
 After the install finishes you should have both clang and llvm-gcc:
 
 .. code-block:: sh
-	
+
 	bash-3.2$ g++ --version
 	i686-apple-darwin11-llvm-g++-4.2 (GCC) 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2336.11.00)
 	Copyright (C) 2007 Free Software Foundation, Inc.
@@ -70,7 +70,7 @@ After the install finishes you should have both clang and llvm-gcc:
 Homebrew
 """"""""
 
-:doc:`../homebrew` is probably the easiest way to install packages on MacOS, and
+:doc:`../homebrew` is probably the easiest way to install packages on macOS, and
 distributes the most heavy-weight dependencies (cmake, boost, and Qt) as binary
 packages.  Install them like this::
 
@@ -81,7 +81,7 @@ The following formulae are necessary to compile IceTray:
   cmake python boost boost-python3 gsl wget
 
 The following formulae are recommended for optional functionality of components of IceTray:
-  
+
   cdk qt@5 libarchive doxygen cfitsio hdf5 nlopt minuit2 suite-sparse healpix zstd
 
 Most of the recommended formulae are in the main distribution, but IceCube
@@ -93,15 +93,15 @@ The following formula are also recommended from the IceCube-SPNO/icecube tap:
 .. _tap: https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/brew-tap.md
 
 
-ROOT on MacOS
+ROOT on macOS
 """""""""""""
 
-IceTray also depends on ROOT. The fastest way to install root on MacOS is to
+IceTray also depends on ROOT. The fastest way to install root on macOS is to
 download the recompiled binary tar file from `cern`_.
 ROOT can also be installed with homebrew::
 
 .. code-block:: sh
-                
+
    brew install --build-from-source root
 
 Either way you need the load the ``thisroot.sh`` into your environment
@@ -110,20 +110,20 @@ before you run ``cmake``.
 .. code-block:: sh
 
    . /usr/local/bin/thisroot.sh
-   
+
 .. _cern: https://root.cern.ch/downloading-root
 
 .. _osxpythonsetup:
-  
-Python on MacOS
+
+Python on macOS
 """""""""""""""
 
 .. highlight:: sh
 
 Apple has done a fairly decent of including a recent version of python2 in
-MacOS. But now that IceTray is transitioning to python3 it is necessary to
+macOS. But now that IceTray is transitioning to python3 it is necessary to
 compile IceTray against python3. The previous section described the easiest
-way to install python3 on MacOS: using homebrew.
+way to install python3 on macOS: using homebrew.
 
 With python3 installed with homebrew the :command:`python` command will still refer
 to the system python, but python3 will refer to python3. IceTray will
@@ -143,30 +143,63 @@ The following python packages are recommended for icetray:
 Step-By-Step Instructions
 """""""""""""""""""""""""
 
-With a fresh install of Mojave I was able to get combo running by running the following commands:
+This worked in March 2021, with the trunk of combo on macOS 11 (Big
+Sur). As homebrew updates, these instructions might not work as
+well. Your mileage may vary.
 
 .. code-block:: sh
 
    #install xcode command line tools (don't worry if it says it is already installed)
    xcode-select --install
-   
+
+   #checkout icetray to a location of your choice
+   git clone git@github.com:icecube/icetray.git $I3_SRC
+
    #install homebrew
    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-   
+
    #install packages with homebrew
    brew install git cmake python boost boost-python3 cdk qt@5 libarchive wget doxygen cfitsio hdf5 nlopt gsl minuit2 suite-sparse healpix zstd fftw
 
-   #install brews written by icecube 
+   #install brews written by icecube
    brew tap icecube/homebrew-icecube
    brew install pal cppzmq
 
    #create and enter virutal envionment
    /usr/local/bin/python3 -m venv ${HOME}/py3/
    source ${HOME}/py3/bin/activate
-   
+
    #install python packages with pip3
    pip3 install --upgrade pip
    pip3 install numpy scipy matplotlib sphinx ipython qtconsole pandas pymongo
-               
-This worked in March 2021, with the trunk of combo on MacOS Big Sur. As homebrew updates, these instructions might not work as well. Your mileage may vary.
 
+Step-By-Step Instructions for M1 (and Intel) Macs
+"""""""""""""""""""""""""""""""""""""""""""""""""
+
+The following is conisdered experimental, but works as of July 2021,
+with the trunk of Icetray on macOS 11 (Big Sur).
+
+.. code-block:: sh
+
+   #install xcode command line tools (don't worry if it says it is already installed)
+   xcode-select --install
+
+   #install homebrew
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+   #checkout icetray to a location of your choice
+   git clone git@github.com:icecube/icetray.git $I3_SRC
+
+   #move to that location
+   cd $I3_SRC
+
+   #install packages with homebrew
+   brew bundle
+
+   #create and enter virutal envionment
+   /usr/local/bin/python3 -m venv ${HOME}/py3/
+   source ${HOME}/py3/bin/activate
+
+   #install python packages with pip3
+   pip3 install --upgrade pip
+   pip3 install qtconsole matplotlib sphinx pandas pymongo
