@@ -43,7 +43,7 @@ extensions = filter(None, ['sphinx.ext.autodoc',
                            '@sphinx_BREATHE@',
                            'script_directive',
                            'plot_directive'])
-print("Using extensions:", extensions)
+print("Using extensions:", list(extensions))
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -115,7 +115,7 @@ html_style = 'icetray.css'
 html_title = "Metaproject '@META_PROJECT@' at r@GIT_REVISION@"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-html_short_title = "@META_PROJECT@ r@GIT_REVISION@"
+html_short_title = "@CMAKE_PROJECT_NAME@ (@GIT_SHORT_REVISION@)"
 
 # The name of an image file (within the static path) to place at the top of
 # the sidebar.
