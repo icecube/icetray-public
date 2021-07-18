@@ -65,4 +65,27 @@ const I3Geometry& I3Geometry::operator=(const I3Geometry& geometry) {
   return *this;
 }
 
+// Function to grab the correct I3TankGeo from the I3StationGeo, regardless of 
+// its ordering (that is, even if the two tanks are in the non-conventional order).
+// (This function was copied and modified from topeventcleaning/I3TopHLCClusterCleaning.cxx)
+I3TankGeo I3Geometry::GetTankGeo(const OMKey &key) const
+{
+  I3StationGeoMap::const_iterator station_geo = stationgeo.find(key.GetString());
+  if(station_geo==stationgeo.end()) {
+    log_fatal("Station %d doesn't exist in StationGeoMap!", key.GetString());
+  }
+  BOOST_FOREACH(const I3TankGeo &tank_geo, station_geo->second) {
+    if (std::find(tank_geo.omKeyList_.begin(), tank_geo.omKeyList_.end(), key) != tank_geo.omKeyList_.end())
+      return tank_geo;
+  }
+  log_fatal_stream("No TankGeo found for DOM " << key);
+}
+// A similar version, but for TankKeys
+// Use the "Default OMKey" to determine it, which is DOM 61 for TankA and 63 for TankB
+I3TankGeo I3Geometry::GetTankGeo(const TankKey &tankkey) const
+{
+  return GetTankGeo(tankkey.GetDefaultOMKey());
+}
+
+
 I3_SERIALIZABLE(I3Geometry);

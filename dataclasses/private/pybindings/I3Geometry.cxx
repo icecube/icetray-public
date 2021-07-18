@@ -26,6 +26,15 @@
 
 namespace bp = boost::python;
 
+// This function is overloaded.  Define the two separately for pybindings.
+I3TankGeo wrapper_GetTankGeo1(const I3Geometry &self, const OMKey &key) {
+  return self.GetTankGeo(key);
+}
+I3TankGeo wrapper_GetTankGeo2(const I3Geometry &self, const TankKey &tankkey) {
+  return self.GetTankGeo(tankkey);
+}
+
+
 void register_I3Geometry()
 {
     
@@ -36,6 +45,8 @@ void register_I3Geometry()
     #define GEOMPROPS (omgeo)(stationgeo)(scintgeo)(antennageo)(iceactgeo)(startTime)(endTime)
     BOOST_PP_SEQ_FOR_EACH(WRAP_RW_RECASE, I3Geometry, GEOMPROPS )
     #undef GEOMPROPS
+    .def("tankgeo", wrapper_GetTankGeo1, bp::arg("key"))
+    .def("tankgeo", wrapper_GetTankGeo2, bp::arg("tankkey"))
     .def(bp::dataclass_suite<I3Geometry>())
     ;
     

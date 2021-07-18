@@ -6,6 +6,8 @@ Release Notes
 trunk
 -----
 
+* Added 'GetTankGeo' functions to I3Geometry, to identify and access the StationGeo tanks correctly 
+  regardless of their ordering in the list.
 * Removed cached members of I3Position.  Non-cartesian coords are calculated on
   the fly.  A tradeoff of CPU for a reduced memory footprint, which we believe
   is worth it. (r179215)

@@ -93,6 +93,11 @@ public:
     return !operator==(rhs);
   }
 
+  // Functions to access the correct tank in the StationGeo
+  // (regardless of the ordering of the tanks)
+  I3TankGeo GetTankGeo(const OMKey &key) const;
+  I3TankGeo GetTankGeo(const TankKey &tankkey) const;
+
   friend class icecube::serialization::access;
 
   template <class Archive> void serialize(Archive & ar, unsigned version);

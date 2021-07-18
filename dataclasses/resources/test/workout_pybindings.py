@@ -185,6 +185,33 @@ newom = i3g.omgeo[icetray.OMKey(1,1)]
 print(type(newom.position), vars(newom.position), newom.position)
 ENSURE(newom.position.x > 99.0, 'Failed to get the right OMGeo position back')
 
+# The "GetTankGeo" functions of I3Geometry
+## We'll make this a "swapped tanks" entry in the StationGeo where TankB comes first,
+## just to make sure it works under those conditions.
+tank1 = dataclasses.I3TankGeo()
+tank1.position.x = 1.0
+tank1.position.y = 2.0
+tank1.position.z = 3.0
+tank1.snowheight = 4.0
+tank1.omkey_list = [icetray.OMKey(1,63), icetray.OMKey(1,64)]
+tank2 = dataclasses.I3TankGeo()
+tank2.position.x = 6.0
+tank2.position.y = 7.0
+tank2.position.z = 8.0
+tank2.snowheight = 5.0
+tank2.omkey_list = [icetray.OMKey(1,61), icetray.OMKey(1,62)]
+print("Tank1 = ", type(tank1), tank1.position, tank1.snowheight, "contains OMKeys: ", tank1.omkey_list)
+print("Tank2 = ", type(tank2), tank2.position, tank2.snowheight, "contains OMKeys: ", tank2.omkey_list)
+i3g.stationgeo[1] = [tank1, tank2]
+get1_byom = i3g.tankgeo(icetray.OMKey(1,63))
+get2_byom = i3g.tankgeo(icetray.OMKey(1,62))  # 61 would've worked too
+ENSURE(get1_byom == tank1, "We didn't grab Tank1 (OMKey)")
+ENSURE(get2_byom == tank2, "We didn't grab Tank2 (OMKey)")
+get1_bytank = i3g.tankgeo(dataclasses.TankKey(1,dataclasses.TankKey.TankB))
+get2_bytank = i3g.tankgeo(dataclasses.TankKey(1,dataclasses.TankKey.TankA))
+ENSURE(get1_bytank == tank1, "We didn't grab Tank1 (TankKey)")
+ENSURE(get2_bytank == tank2, "We didn't grab Tank2 (TankKey)")
+
 # I3Calibratoim example? (olivas have one?)
 ## See the Fix_Cals_in_GCD.py script for full example
 
