@@ -23,6 +23,7 @@ Table of Contents:
    superdst
    masks
    vector_math
+   coordinates
    i3direction
    i3time
    i3Position

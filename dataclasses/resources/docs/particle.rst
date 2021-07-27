@@ -1,3 +1,5 @@
+.. _i3particle:
+
 ==========
 I3Particle
 ==========

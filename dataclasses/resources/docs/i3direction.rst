@@ -1,3 +1,5 @@
+.. _i3direction:
+
 ===========
 I3Direction
 ===========
