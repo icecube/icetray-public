@@ -43,6 +43,10 @@
 #endif
 
 #include <boost/version.hpp>
+#if BOOST_VERSION <= 107800
+#define BOOST_ALLOW_DEPRECATED_HEADERS 1
+#endif
+
 #if BOOST_VERSION >= 107300
 #define BOOST_BIND_GLOBAL_PLACEHOLDERS 1
 #endif
