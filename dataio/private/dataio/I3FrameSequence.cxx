@@ -36,7 +36,9 @@ namespace {
         {
             running_ = false;
             cond_.notify_one();
-            thread_.join();
+	    if(thread_.joinable()){
+	      thread_.join();
+	    }
         }
         std::future<R> push(std::function<T> element) {
             std::lock_guard<std::mutex> lock(mutex_);
