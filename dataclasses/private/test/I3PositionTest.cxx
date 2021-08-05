@@ -269,7 +269,7 @@ TEST(subtraction)
   I3Position p2(x2,y2,z2);
   I3Position p3=p1-p2;
   p1-=p2;
-  p2-=p2;
+  p2-=I3Position(p2);
   
   ENSURE(p1.GetX()==x1-x2);
   ENSURE(p2.GetX()==0);
