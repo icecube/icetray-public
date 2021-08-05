@@ -67,9 +67,11 @@ GlobalLogLevelForUnit(const std::string &unit)
 
 void register_I3Logging()
 {
+#if PY_MAJOR_VERSION < 3 || PY_MINOR_VERSION < 7
 	// Acquire the Global Interpeter Lock and bless ourselves as
 	// the main thread; this is a no-op if already called elsewhere.
 	PyEval_InitThreads();
+#endif
 
 	enum_<I3LogLevel>("I3LogLevel")
 		.value("LOG_TRACE",  I3LOG_TRACE)
