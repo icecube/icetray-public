@@ -78,12 +78,9 @@ def load_pybindings(name, path):
 
     """
 
-    import imp, sys
+    import importlib, sys
     thismod = sys.modules[name]
-    m = imp.load_dynamic(name, path[0] + ".so")
-    sys.modules[name] = thismod # Some python versions overwrite the Python
-                                # module entry with the C++ one. We don't want
-                                # that
+    m = importlib.import_module('._'+name.split('.')[-1],'icecube')
 
     for (k,v) in m.__dict__.items():
         if not k.startswith("_"):

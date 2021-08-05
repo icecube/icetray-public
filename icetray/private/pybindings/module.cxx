@@ -65,7 +65,7 @@ void load_impl(const std::string& name, bool verbose = true ){
 }
 BOOST_PYTHON_FUNCTION_OVERLOADS(load_impl_overloads, load_impl,1,2);
 
-BOOST_PYTHON_MODULE(icetray)
+I3_PYTHON_MODULE(icetray)
 {
   // 
   // You *must* do this first, or you get the nasty error 

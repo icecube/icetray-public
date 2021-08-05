@@ -103,6 +103,7 @@ if(Qt5_FOUND AND Qt5OpenGL_FOUND AND OPENGL_FOUND AND OPENGL_GLU_FOUND)
     USE_TOOLS boost python opengl
     USE_PROJECTS icetray dataclasses
     LINK_LIBRARIES ${BOOST_PYTHON} Qt5::OpenGL
+    NOUNDERSCORE
     )
 
   ## the following files trigger warnings in expanded macros
@@ -126,6 +127,7 @@ if(Qt5_FOUND AND Qt5OpenGL_FOUND AND OPENGL_FOUND AND OPENGL_GLU_FOUND)
     USE_TOOLS boost python
     USE_PROJECTS icetray dataclasses
     LINK_LIBRARIES ${BOOST_PYTHON}
+    NOUNDERSCORE
     )
 
   target_link_libraries( shovelio-pybindings shovelio )

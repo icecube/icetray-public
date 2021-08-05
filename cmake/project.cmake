@@ -138,7 +138,7 @@ macro(i3_add_library THIS_LIB_NAME)
     #
     parse_arguments(${THIS_LIB_NAME}_ARGS
       "USE_TOOLS;USE_PROJECTS;ROOTCINT;INSTALL_DESTINATION;LINK_LIBRARIES;COMPILE_FLAGS"
-      "NOT_INSPECTABLE;MODULE;EXCLUDE_FROM_ALL;WITHOUT_I3_HEADERS;NO_DOXYGEN;IWYU;PYBIND11"
+      "NOT_INSPECTABLE;MODULE;EXCLUDE_FROM_ALL;WITHOUT_I3_HEADERS;NO_DOXYGEN;IWYU;PYBIND11;NOUNDERSCORE"
       ${ARGN}
       )
 
@@ -649,9 +649,15 @@ macro(i3_add_pybindings MODULENAME)
 
     parse_arguments(${MODULENAME}_ARGS
         "USE_PROJECTS;USE_TOOLS;LINK_LIBRARIES"
-        "IWYU;PYBIND11"
+        "IWYU;PYBIND11;NOUNDERSCORE"
       ${ARGN}
       )
+
+    if (${MODULENAME}_ARGS_NOUNDERSCORE)
+      SET(${MODULENAME}_PYPREFIX "")
+    else (${MODULENAME}_ARGS_NOUNDERSCORE)
+      SET(${MODULENAME}_PYPREFIX "_")
+    endif (${MODULENAME}_ARGS_NOUNDERSCORE)
 
     #
     # NO_DOXYGEN is added here, because otherwise, upper level doxygen gets clobbered
@@ -713,7 +719,7 @@ macro(i3_add_pybindings MODULENAME)
 
       set_target_properties(${MODULENAME}-pybindings
         PROPERTIES
-        PREFIX ""
+        PREFIX "${${MODULENAME}_PYPREFIX}"
         OUTPUT_NAME ${MODULENAME}
         LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}/icecube
         )
@@ -729,7 +735,7 @@ macro(i3_add_pybindings MODULENAME)
 
       set_target_properties(${MODULENAME}-pybindings
         PROPERTIES
-        PREFIX ""
+        PREFIX "${${MODULENAME}_PYPREFIX}"
         OUTPUT_NAME ${MODULENAME}
         DEFINE_SYMBOL I3_PYBINDINGS_MODULE
         COMPILE_FLAGS "-include ${I3_UBER_HEADER}"

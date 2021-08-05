@@ -21,6 +21,7 @@ i3_add_pybindings(interfaces
   private/pybindings/I3OMKey2MBID.cxx
   USE_TOOLS boost python
   USE_PROJECTS interfaces dataclasses
+  NOUNDERSCORE
   )
 
 

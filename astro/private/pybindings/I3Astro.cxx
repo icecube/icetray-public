@@ -22,7 +22,7 @@
 
 using namespace boost::python;
 
-BOOST_PYTHON_MODULE(astro)
+I3_PYTHON_MODULE(astro)
 {
   load_project("astro", false);
   import("icecube.icetray");

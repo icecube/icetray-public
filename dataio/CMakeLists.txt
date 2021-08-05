@@ -198,4 +198,5 @@ i3_add_pybindings(test_unregistered
   private/test_unregistered/unregistered_track.cxx
   USE_PROJECTS icetray dataclasses
   USE_TOOLS boost python
+  NOUNDERSCORE
   )

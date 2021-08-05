@@ -175,7 +175,7 @@ static inline string_deleter snake_case(const char * str)
   return string_deleter(out); 
 } 
 
-#define I3_PYTHON_MODULE(N) BOOST_PYTHON_MODULE(N)
+#define I3_PYTHON_MODULE(N) BOOST_PYTHON_MODULE(_##N)
 
 #include <boost/preprocessor/seq.hpp>
 
