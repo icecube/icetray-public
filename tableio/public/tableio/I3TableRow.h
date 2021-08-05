@@ -157,18 +157,26 @@ template<class T>
 void I3TableRow::Set(const std::string& fieldName, T value, bool all) {
     size_t index = description_->GetFieldColumn(fieldName);
     //log_trace("I3TableRow::Set:  field %s has index %zu", fieldName.c_str(), index);
-    if (index >= description_->GetNumberOfFields())
+    if (index >= description_->GetNumberOfFields()) {
         log_fatal("Tried to set unknown column '%s'",fieldName.c_str());
-    if (all) SetAll(index,value);
-    else SetCurrent(index,value);
+    }
+    if (all) {
+        SetAll(index,value);
+    } else { 
+        SetCurrent(index,value);
+    }
 }
 
 template<class T>
 void I3TableRow::Set(size_t index, T value, bool all) {
-    if (index >= description_->GetNumberOfFields())
+    if (index >= description_->GetNumberOfFields()) {
         log_fatal("Tried to set column which is not in [0,%zu]",description_->GetNumberOfFields());
-	if (all) SetAll(index,value);
-    else SetCurrent(index,value);
+    }
+    if (all) {
+        SetAll(index,value);
+    } else {
+        SetCurrent(index,value);
+    }
 }
 
 
