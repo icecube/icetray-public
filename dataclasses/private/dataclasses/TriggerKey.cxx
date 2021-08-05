@@ -142,10 +142,6 @@ TriggerKey::GetTypeFromString(const std::string& typestr)
   return UNKNOWN_TYPE;
 }
 
-
-TriggerKey::~TriggerKey() {}
-
-
 template <class Archive>
 void TriggerKey::load(Archive& ar, unsigned version)
 {

@@ -181,11 +181,6 @@ class TriggerKey
   TriggerKey(SourceID source, TypeID type, int configID, SubtypeID subtype = NO_SUBTYPE)
     : source_(source), type_(type), subtype_(subtype),
       configID_(configID) {}
-
-  /**
-   * Destructor.
-   */
-  ~TriggerKey();
     
   std::ostream& Print(std::ostream&) const;
   
