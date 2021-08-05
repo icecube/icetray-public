@@ -87,7 +87,6 @@ PrintTest(I3VectorOMKey,2,OMKey{7,16});
 PrintTest(I3VectorAntennaKey,2,AntennaKey{55,22});
 PrintTest(I3VectorScintKey,2,ScintKey{10001,1});
 PrintTest(I3VectorIceActKey,2,IceActKey{1,1});
-PrintTest(ModuleKey,17,22);
 PrintTest(TankKey,4,TankKey::TankB);
 PrintTest(TriggerKey);
 PrintTest(I3AMANDAAnalogReadout);
