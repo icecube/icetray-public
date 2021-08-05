@@ -37,7 +37,8 @@ bool I3ParticleVect_eq(const std::vector<I3Particle> &lhs,bp::list &rhs)
     {
         try
         {
-            if (lhs[i] != extract<I3Particle>(rhs[i])())
+            extract<I3Particle> extractor(rhs[i]);
+            if (!extractor.check() || lhs[i] != extractor())
                 return false;
         }
         catch (int e)
