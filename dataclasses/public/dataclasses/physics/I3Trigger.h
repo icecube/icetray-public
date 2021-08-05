@@ -96,6 +96,8 @@ private:
   const TriggerKey& GetTriggerKey() const {return key_;}
   TriggerKey& GetTriggerKey() {return key_;}
 
+  void SetTriggerKey(const TriggerKey &key) { key_ = key; }
+
   bool operator==(const I3Trigger& rhs) const;
   bool operator!=(const I3Trigger& rhs) const;
 
