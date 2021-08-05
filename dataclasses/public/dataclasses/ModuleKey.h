@@ -31,7 +31,7 @@
 
 #include "dataclasses/I3Map.h"
 
-static const unsigned modulekey_version_ = 0;
+static const unsigned modulekey_version_ = 1;
 
 /**
  * @brief A small class which is the string number and om number
@@ -42,7 +42,7 @@ static const unsigned modulekey_version_ = 0;
  * the time), use the "OMKey" class.
  *
  */
-class ModuleKey : public I3FrameObject
+class ModuleKey
 {
   int stringNumber_;
   unsigned int omNumber_;
@@ -53,10 +53,6 @@ class ModuleKey : public I3FrameObject
 
   ModuleKey(int str,unsigned int om) 
     : stringNumber_(str), omNumber_(om) {}
-
-  ~ModuleKey();
-  
-  std::ostream& Print(std::ostream&) const override;
 
   /**
    * retrieves the string number for this ModuleKey

@@ -22,16 +22,18 @@
 #include <dataclasses/ModuleKey.h>
 #include <sstream>
 
-ModuleKey::~ModuleKey() { }
-
 template <typename Archive>
 void 
 ModuleKey::serialize (Archive & ar, unsigned version)
 {
-  if (version>modulekey_version_)
+  if (version>modulekey_version_) {
     log_fatal("Attempting to read version %u from file but running version %u of ModuleKey class.",version,modulekey_version_);
+  }
 
-  ar & make_nvp("I3FrameObject", base_object< I3FrameObject >(*this));
+  if (version == 0) {
+    I3FrameObject dummy;
+    ar & make_nvp("I3FrameObject", dummy);
+  }
   ar & make_nvp("StringNumber",  stringNumber_);
   ar & make_nvp("OMNumber",  omNumber_);
 }
@@ -42,15 +44,10 @@ I3_SERIALIZABLE(I3MapModuleKeyString);
 #include <boost/regex.hpp>
 #include <boost/lexical_cast.hpp>
 
-std::ostream& ModuleKey::Print(std::ostream& os) const
-{
-  os << "ModuleKey(" << GetString() << "," << GetOM() << ")";
-  return os;
-}
-
 std::ostream& operator<<(std::ostream& os, const ModuleKey& key)
 {
-  return(key.Print(os));
+  os << "ModuleKey(" << key.GetString() << "," << key.GetOM() << ")";
+  return os;
 }
 
 std::istream& operator>>(std::istream& is, ModuleKey& key)

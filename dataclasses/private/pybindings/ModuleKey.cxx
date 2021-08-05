@@ -46,7 +46,7 @@ static int modulekey_len(value_type const& x) { return 2; }
 
 std::string repr(const ModuleKey& key){
   std::stringstream s;
-  s << "ModuleKey(" << key.GetString() << "," << key.GetOM() << ")";
+  s << key;
   return s.str();
 }
 
