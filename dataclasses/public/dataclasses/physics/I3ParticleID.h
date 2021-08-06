@@ -120,9 +120,15 @@ namespace __gnu_cxx{
 
 template<>
 struct i3hash<I3ParticleID>{
+#if defined(__GNUC__) && GCC_VERSION > 40600
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
   size_t operator()(const I3ParticleID& id) const{
     return ::hash<int>()(id.majorID + id.minorID);
   }
+#if defined(__GNUC__) && GCC_VERSION > 40600
+#pragma GCC diagnostic pop
+#endif
 };
 
 #endif
