@@ -56,7 +56,6 @@ class B : public A
 {
 private:
     friend class icecube::serialization::access;
-    int y;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int /* file_version */){
         ar & I3_SERIALIZATION_BASE_OBJECT_NVP(A);

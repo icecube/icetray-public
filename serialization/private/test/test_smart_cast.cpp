@@ -20,12 +20,12 @@ using namespace icecube::serialization;
 namespace{
 class Base1 : public boost::noncopyable
 {
-    char a;
+    __attribute__((unused)) char a;
 };
 
 class Base2
 {
-    int b;
+    __attribute__((unused)) int b;
 };
 
 #ifdef BOOST_MSVC
@@ -35,7 +35,7 @@ class Base2
 
 class Derived : public Base1, public Base2
 {
-    long c;
+    __attribute__((unused)) long c;
 };
 
 #ifdef BOOST_MSVC
@@ -124,14 +124,14 @@ TEST(static_pointer_cast){
 namespace{
 class VBase1 : public boost::noncopyable
 {
-    char a;
+    __attribute__((unused)) char a;
 public:
     virtual ~VBase1(){};
 };
 
 class VBase2
 {
-    int b;
+    __attribute__((unused)) int b;
 public:
     virtual ~VBase2(){};
 };
@@ -143,7 +143,7 @@ public:
 
 class VDerived : public VBase1, public VBase2
 {
-    long c;
+    __attribute__((unused)) long c;
 public:
     virtual ~VDerived(){};
 };
