@@ -18,7 +18,7 @@ Run all registered converters through both HDFWriter and ROOTWriter
 #we can just put a list of S-Frame converters here I guess
 sframe_converters = ['I3CorsikaInfo','I3PrimaryInjectorInfo']
 
-from icecube import icetray, dataclasses, tableio, phys_services, dataio
+from icecube import icetray, dataclasses, tableio, phys_services, dataio, recclasses, simclasses
 from I3Tray import I3Tray
 
 # hobo "from icecube import *"
