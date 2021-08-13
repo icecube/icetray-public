@@ -121,6 +121,8 @@ _DYLD_LIBRARY_PATH=${_DYLD_LIBRARY_PATH}:$DYLD_LIBRARY_PATH
 _PYTHONPATH=$BASEDIR/lib:$PYTHONPATH
 _PATH=$BASEDIR/bin:$PATH
 
+_HDF5_USE_FILE_LOCKING=${HDF5_USE_FILE_LOCKING:-FALSE}
+
 TOPBAR="************************************************************************"
 WIDTH=`echo "$TOPBAR" | wc -c`
 
@@ -165,6 +167,7 @@ if [[ -z "$I3_SHELL" ]] # a clean, first invocation
 	I3_BUILD=$_I3_BUILD \
 	ROOTSYS=$_ROOTSYS \
 	I3_SHELL=$_I3_SHELL \
+    HDF5_USE_FILE_LOCKING=$_HDF5_USE_FILE_LOCKING \
 	$NEW_SHELL $ARGV
 
 else  # not clean, use previous environment

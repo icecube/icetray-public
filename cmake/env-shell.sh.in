@@ -98,6 +98,8 @@ if [ "${_HIPPO_FOUND}" = 1 ]; then
     _PYTHONPATH=@HIPPO_PYTHON@:${_PYTHONPATH}
 fi
 
+_HDF5_USE_FILE_LOCKING=${HDF5_USE_FILE_LOCKING:-FALSE}
+
 TOPBAR="************************************************************************"
 WIDTH=`echo "$TOPBAR" | wc -c`
 
@@ -152,6 +154,7 @@ if [ -z "$I3_SHELL" ] # a clean, first invocation
 	I3_TESTDATA=$_I3_TESTDATA \
 	ROOTSYS=$_ROOTSYS \
 	I3_SHELL=$_I3_SHELL \
+    HDF5_USE_FILE_LOCKING=$_HDF5_USE_FILE_LOCKING \
 	@GEANT4_ENV_VARS@ \
 	$NEW_SHELL "$@"
 
