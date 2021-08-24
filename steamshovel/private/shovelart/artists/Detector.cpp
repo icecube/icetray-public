@@ -173,7 +173,8 @@ void Detector::create( I3FramePtr ptr, SceneGroup* g, const SceneState& state ){
 		} else if ( geo.omtype == I3OMGeo::IceCube ||
 			    geo.omtype == I3OMGeo::mDOM || 
 			    geo.omtype == I3OMGeo::DEgg || 
-			    geo.omtype == I3OMGeo::PDOM){
+			    geo.omtype == I3OMGeo::PDOM ||
+			    geo.omtype == I3OMGeo::LOM) {
 		  string_accum.push_back(pos3d);
 		}
 	}
