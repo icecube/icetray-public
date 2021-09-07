@@ -11,6 +11,7 @@ trunk
 * Provide better support for running in virtual enviroments
   the differ from the build environment.
 * Disable HDF5 file locking by default. 
+* Remove unused tools: mysql mpi log4cpp jni hepmc xml2
 
 Feb. 5, 2020 Alex Olivas (aolivas@umd.edu)
 -------------------------------------------

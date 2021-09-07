@@ -166,5 +166,3 @@ These are not needed at compile time but are nescessary for certian functionalit
   * - `Napoleon <https://sphinxcontrib-napoleon.readthedocs.io/en/latest/>`_
     - Legible docstrings for python
     - :doc:`documentation </projects/docs/index>`
-
-.. these are searched for by cmake but don't appear to do anything: log4cpp xml2 genie
