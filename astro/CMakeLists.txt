@@ -32,5 +32,5 @@ if (PAL_FOUND)
 else(PAL_FOUND)
   colormsg(YELLOW "  - PAL not found, skipping build of ${PROJECT_NAME}
        Ask your admin to install PAL. Instructions for PAL can be found at:
-       http://software.icecube.wisc.edu/documentation/projects/cmake/tools/pal.html")
+       ${CMAKE_SOURCE_DIR}/cmake/resources/docs/tools/pal.rst")
 endif(PAL_FOUND)
