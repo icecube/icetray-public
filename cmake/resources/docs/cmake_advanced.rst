@@ -104,12 +104,6 @@ Uncommon CMake settings
    * - .. attribute:: ROOT_VERSION
      - Override ROOT version detection if you want to use a specific version of ROOT.
      - autodetected
-   * - .. attribute:: GENIE_VERSION
-     - Override the Genie version detection if you want to use a specific version of Genie.
-     - autodetected
-   * - .. attribute:: GENIE_PATH
-     - Override the Genie path detection of if you want to use a specific version of Genie.
-     - autodetected
    * - .. attribute:: SPHINX_EXTRA_OPTIONS
      - A semicolon delimited list of options to pass to `sphinx <http://sphinx-doc.org/>`_. Useful for developers and documentation writers.
      - "-N;-a;-E"
