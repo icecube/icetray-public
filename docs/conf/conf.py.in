@@ -36,14 +36,14 @@ sys.path = [os.path.join(os.environ["I3_SRC"],'docs','extensions')] + sys.path
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = filter(None, ['sphinx.ext.autodoc',
-                           'sphinx.ext.mathjax',
-                           '@sphinx_NAPOLEON@',
-                           '@sphinx_EMAIL@',
-                           '@sphinx_BREATHE@',
-                           'script_directive',
-                           'plot_directive'])
-print("Using extensions:", list(extensions))
+extensions = list(filter(None, ['sphinx.ext.autodoc',
+                                'sphinx.ext.mathjax',
+                                '@sphinx_NAPOLEON@',
+                                '@sphinx_EMAIL@',
+                                '@sphinx_BREATHE@',
+                                'script_directive',
+                                'plot_directive']))
+print("Using extensions:", extensions)
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
