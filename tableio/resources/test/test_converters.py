@@ -16,7 +16,7 @@ Run all registered converters through both HDFWriter and ROOTWriter
 
 #Since there is no clear way to inspect converters in pythonland,
 #we can just put a list of S-Frame converters here I guess
-sframe_converters = ['I3CorsikaInfo','I3PrimaryInjectorInfo']
+sframe_converters = ['I3CorsikaInfo','I3PrimaryInjectorInfo','I3GenieInfo']
 
 from icecube import icetray, dataclasses, tableio, phys_services, dataio, recclasses, simclasses
 from I3Tray import I3Tray

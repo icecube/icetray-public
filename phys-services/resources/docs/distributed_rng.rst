@@ -1,3 +1,5 @@
+.. _distributedRNG:
+
 Using I3SPRNGRandomService in distributed systems
 -------------------------------------------------
 
