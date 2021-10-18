@@ -2,10 +2,11 @@
 
 import platform
 
-hosts = ['kipple', 'morax']
-for h in hosts:
-    if h in platform.node():
-        print("This test is disabled on this host: " + platform.node())
+dists = ['almalinux']
+for d in dists:
+    if d in platform.dist():
+        print("This test is disabled on this dist: " + platform.dist()[0])
+        print("    pytables triggers memory corruption when closing an hdf5 file")
         quit()
     
 
