@@ -4,8 +4,8 @@ import platform
 
 dists = ['almalinux']
 for d in dists:
-    if d in platform.dist():
-        print("This test is disabled on this dist: " + platform.dist()[0])
+    if d in platform.platform():
+        print("This test is disabled on this dist: " + d)
         print("    pytables triggers memory corruption when closing an hdf5 file")
         quit()
     

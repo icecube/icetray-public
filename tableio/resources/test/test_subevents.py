@@ -31,7 +31,7 @@ def streampick(stream):
 	return pick
 
 
-@unittest.skipIf("almalinux" in platform.dist(),
+@unittest.skipIf("almalinux" in platform.platform(),
 		 "Skipping test on 'almalinux': pytables triggers memory corruption when closing an hdf5 file")
 class SubeventTest(unittest.TestCase):
 	fname = os.environ['I3_BUILD'] + '/hdfwriter/subevent_test.hdf5'
@@ -88,7 +88,7 @@ class SubeventTest(unittest.TestCase):
 					    canonical[field], row[field]))
 		hdf.close()
 
-@unittest.skipIf("almalinux" in platform.dist(),
+@unittest.skipIf("almalinux" in platform.platform(),
 		 "Skipping test on 'almalinux': pytables triggers memory corruption when closing an hdf5 file")
 class SubeventMergingTest(unittest.TestCase):
 	fname1 = os.environ['I3_BUILD'] + '/hdfwriter/subevent_test_1.hdf5'
