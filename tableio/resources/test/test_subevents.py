@@ -4,7 +4,7 @@
 
 from icecube import icetray, dataclasses, dataio, tableio, phys_services
 import I3Tray
-import os, sys, random, unittest, platform
+import os, sys, random, unittest
 
 try:
 	from icecube import hdfwriter
@@ -31,8 +31,8 @@ def streampick(stream):
 	return pick
 
 
-@unittest.skipIf("almalinux" in platform.platform(),
-		 "Skipping test on 'almalinux': pytables triggers memory corruption when closing an hdf5 file")
+@unittest.skipIf("alma8" in os.environ.get("ICETRAY_RUNNER_OS"),
+                 "Skipping test on 'alma8': pytables triggers memory corruption when closing an hdf5 file")
 class SubeventTest(unittest.TestCase):
 	fname = os.environ['I3_BUILD'] + '/hdfwriter/subevent_test.hdf5'
 	@classmethod
@@ -88,8 +88,9 @@ class SubeventTest(unittest.TestCase):
 					    canonical[field], row[field]))
 		hdf.close()
 
-@unittest.skipIf("almalinux" in platform.platform(),
-		 "Skipping test on 'almalinux': pytables triggers memory corruption when closing an hdf5 file")
+
+@unittest.skipIf("alma8" in os.environ.get("ICETRAY_RUNNER_OS"),
+                 "Skipping test on 'alma8': pytables triggers memory corruption when closing an hdf5 file")
 class SubeventMergingTest(unittest.TestCase):
 	fname1 = os.environ['I3_BUILD'] + '/hdfwriter/subevent_test_1.hdf5'
 	fname2 = os.environ['I3_BUILD'] + '/hdfwriter/subevent_test_2.hdf5'
