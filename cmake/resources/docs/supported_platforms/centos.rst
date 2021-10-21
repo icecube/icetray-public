@@ -24,6 +24,7 @@ to install the lastest version of cmake (https://cmake.org/install/).
     dnf config-manager --enable epel
     dnf config-manager --set-enabled powertools
 
+    yum install gcc gcc-c++ make
     yum install zlib-devel python39-devel
     boost-devel boost-system boost-thread boost-date-time
     boost-filesystem boost-program-options boost-regex boost-iostreams
