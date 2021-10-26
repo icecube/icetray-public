@@ -2,6 +2,7 @@
 #include <QGLFramebufferObject>
 #include <QImageWriter>
 #include <QColorDialog>
+#include <QColorSpace>
 #include <QStackedWidget>
 #include <QLayout>
 #include <QtGui/QMouseEvent>
@@ -423,10 +424,11 @@ void I3GLWidget::screenshot_engine( int xdim, int ydim, const std::string& filen
 	// good results. In 2015, results seem more consistent on
 	// Mac and Linux systems if the gamma correction is not set.
 	// More info here: https://hsivonen.fi/png-gamma
-	if( gamma_factor != 1.0 )
-		wr.setGamma( gamma_factor );
+	// if( gamma_factor != 1.0 )
+	// 	wr.setGamma( gamma_factor );
 
 	QImage image;
+	image.setColorSpace( QColorSpace::SRgb );
 	image = screenshotData( xdim, ydim, scaling_factor );
 
 	if( dpi ){

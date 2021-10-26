@@ -9,6 +9,7 @@
 #include <QFileInfo>
 #include <QGraphicsScene>
 #include <QImageWriter>
+#include <QColorSpace>
 
 #include "MovieEngine.h"
 #include "moc_MovieEngine.cpp"
@@ -133,7 +134,6 @@ void MovieEngine::produce(){
 		progress = boost::shared_ptr<MovieProgress>(
             new DialogMovieProgress(this, width_, height_));
 	QImageWriter qw;
-	qw.setGamma( 1.0 / 2.2 );
 
 	progress->start( nframes_ );
 	int output_count = 0;
@@ -155,6 +155,7 @@ void MovieEngine::produce(){
 		}
 
 		QImage frame = gl_->screenshotData( context );
+		frame.convertToColorSpace( QColorSpace::SRgb );
 		if( rescale_flag_ && scale_factor_ != 1.0 ){
 			frame = frame.scaled( width_, height_, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
 		}
