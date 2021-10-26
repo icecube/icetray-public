@@ -361,7 +361,7 @@ void ScenarioFrameModel::inputsChanged( I3FramePtr ptr ){
 		row_data_.push_back( dec );
 	}
 
-	for( int i = 0; i < frame_keys.size(); ++i ){
+	for( size_t i = 0; i < frame_keys.size(); ++i ){
 		RowDatum* this_row = NULL;
 		// a keylist of just this key
 		ArtistKeyList keys( 1, frame_keys.at(i) );
