@@ -70,7 +70,6 @@ namespace {
 			xline->setLineWidth( string_width );
 			g->add( xline );
 			vec3d_list yp(2, points.front());
-			vec3d dy(0, w, 0);
 			yp[0] -= vec3d(0, w, 0);
 			yp[1] += vec3d(0, w, 0);
 			StaticLineObject* yline = new StaticLineObject( yp );
