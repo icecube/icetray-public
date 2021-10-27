@@ -8,10 +8,11 @@ from os import environ
 
 dists = ['alma8']
 for d in dists:
-    if d in environ.get("ICETRAY_RUNNER_OS"):
-        print("This test is disabled on this dist: " + d)
-        print("    pytables triggers memory corruption when closing an hdf5 file")
-        quit()
+    if "ICETRAY_RUNNER_OS" in environ:
+        if d in environ.get("ICETRAY_RUNNER_OS"):
+            print("This test is disabled on this dist: " + d)
+            print("    pytables triggers memory corruption when closing an hdf5 file")
+            quit()
 
 
 #Since there is no clear way to inspect converters in pythonland,

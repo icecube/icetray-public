@@ -31,7 +31,8 @@ def streampick(stream):
 	return pick
 
 
-@unittest.skipIf("alma8" in os.environ.get("ICETRAY_RUNNER_OS"),
+@unittest.skipIf("ICETRAY_RUNNER_OS" in os.environ and \
+                 "alma8" in os.environ.get("ICETRAY_RUNNER_OS"),
                  "Skipping test on 'alma8': pytables triggers memory corruption when closing an hdf5 file")
 class SubeventTest(unittest.TestCase):
 	fname = os.environ['I3_BUILD'] + '/hdfwriter/subevent_test.hdf5'
