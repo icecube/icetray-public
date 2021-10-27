@@ -372,14 +372,14 @@ void ScenarioModel::artistUpdated( ArtistPtr a ){
 	QModelIndex parent = index( idx, 0 );
 	Q_EMIT dataChanged( parent, parent );
 	if( a->keys().size() ){
-		QModelIndex keystart = parent.child( 0, 0 );
-		QModelIndex keyend   = parent.child( a->keys().size()-1, 0 );
+		QModelIndex keystart = parent.model()->index( 0, 0, parent );
+		QModelIndex keyend   = parent.model()->index( a->keys().size()-1, 0, parent );
 		Q_EMIT dataChanged( keystart, keyend );
 	}
 	if( a->settings().size() ){
-		QModelIndex settingheader = parent.child( a->keys().size(), 0 );
-		QModelIndex settingStart = settingheader.child( 0, 1 );
-		QModelIndex settingEnd = settingheader.child( a->settings().size()-1, 1 );
+		QModelIndex settingheader = parent.model()->index( a->keys().size(), 0, parent );
+		QModelIndex settingStart = settingheader.model()->index( 0, 1, settingheader );
+		QModelIndex settingEnd = settingheader.model()->index( a->settings().size()-1, 1, settingheader );
 		Q_EMIT dataChanged( settingStart, settingEnd );
 	}
 	//Q_EMIT dataChanged( start, end );
