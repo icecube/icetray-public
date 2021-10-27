@@ -32,6 +32,8 @@ private:
 	static mapList python_maps_;
 
 public:
+	ColorMap() = default;
+	ColorMap(const ColorMap&) = default;
 	virtual ~ColorMap(){}
 	virtual QColor value( float v ) = 0;
 	virtual QPixmap image( int x = 128, int y = 1 );

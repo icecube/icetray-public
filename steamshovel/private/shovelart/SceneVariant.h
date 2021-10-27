@@ -23,6 +23,8 @@ template<typename T>
 class SceneVariant{
 public:
 	typedef T T_type_;
+	SceneVariant() = default;
+	SceneVariant(const SceneVariant&) = default;
 	virtual ~SceneVariant(){}
 	virtual T value( double vistime ) = 0;
 
