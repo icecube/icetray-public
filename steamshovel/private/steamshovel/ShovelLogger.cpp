@@ -7,7 +7,7 @@
 
 ShovelLogger::ShovelLogger() :
 	I3PrintfLogger(),
-	mutex_( QMutex::Recursive ),
+	mutex_(),
 	auto_start_viewer_( true )
 {
 	QString filename =

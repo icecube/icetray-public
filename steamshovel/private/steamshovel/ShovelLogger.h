@@ -8,7 +8,7 @@
 
 class ShovelLogger: public I3PrintfLogger {
 	QFile file_;
-	QMutex mutex_;
+	QRecursiveMutex mutex_;
 	bool auto_start_viewer_;
 
 public:
