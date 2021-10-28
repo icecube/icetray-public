@@ -43,7 +43,7 @@ I3TableWriter::I3TableWriter(I3TableServicePtr service, std::vector<I3ConverterM
     service_->SetIndexConverter(boost::make_shared<I3IndexColumnsGenerator>(*indexer));
     
     // pull in the converters registered in Python-land instead
-    std::vector<I3ConverterPtr>::const_iterator it_conv;
+    std::vector<I3ConverterPtr>::const_iterator it_conv __attribute__((unused));
     std::copy(converters.begin(),converters.end(),std::back_inserter(converterCache_));    
 }
 
