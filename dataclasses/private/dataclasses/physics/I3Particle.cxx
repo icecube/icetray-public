@@ -879,71 +879,77 @@ template <class Archive>
 template <class Archive>
   void I3Particle::load(Archive& ar, unsigned version)
   {
-  if (version>i3particle_version_)
+  if (version>i3particle_version_){
     log_fatal("Attempting to read version %u from file but running version %u of I3Particle class.",version,i3particle_version_);
-
-    ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
-    ar & make_nvp("ID",ID_.minorID);
-    if(version>1){
-      ar & make_nvp("MajorID",ID_.majorID);
-    }
-    if(version == 0){
-      int32_t junk;
-      ar & make_nvp("parentID",junk);
-      ar & make_nvp("primaryID",junk);
-    }
-    if(version <= 2){
-      int t;
-      ar & make_nvp("type",t);
-      particle_type_conversion_t::const_iterator it = fromRDMCTable.find(t);
-    
-      if (it == fromRDMCTable.end()) {
-        log_warn("unknown RDMC code \"%i\" cannot be converted to a I3Particle::ParticleType. It will appear as \"unknown\".", t);
-        pdgEncoding_ = unknown;
-      } else {
-        pdgEncoding_ = it->second;
-      }
-    }else if(version <= 4){
-      int t;
-      ar & make_nvp("type",t);
-      particle_type_conversion_t::const_iterator it =
-         fromOldI3ParticleTable.find(t);
-    
-      if (it == fromOldI3ParticleTable.end()) {
-        log_warn("unknown code \"%i\" cannot be converted to a I3Particle::ParticleType. It will appear as \"unknown\".", t);
-        pdgEncoding_ = unknown;
-      } else {
-        pdgEncoding_ = it->second;
-      }
-    }else{ // version >= 5
-      ar & make_nvp("pdgEncoding",pdgEncoding_);
-    }
-    ar & make_nvp("shape",shape_);
-    ar & make_nvp("fitStatus",status_);
-
-    ar & make_nvp("pos",pos_);
-    ar & make_nvp("dir",dir_);
-    
-    ar & make_nvp("time",time_);
-    ar & make_nvp("energy",energy_);
-    ar & make_nvp("length",length_);
-    ar & make_nvp("speed",speed_);
-
-    if(version == 0) {
-      std::vector<I3Particle> junk;
-      ar & make_nvp("composite",junk);
-    }
-    if(version>0)
-      ar & make_nvp("LocationType",locationType_);
-    if(version == 4){
-        // obscure version in use by Antares, contains bjorken x and y.
-        // Those should never have been in I3Particle. Load them and
-        // forget them.
-        double bjorkenx, bjorkeny;
-        ar & make_nvp("bjorkenx",bjorkenx);
-        ar & make_nvp("bjorkeny",bjorkeny);
-    }
   }
+
+  ar &make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
+  ar &make_nvp("ID", ID_.minorID);
+  if (version > 1) {
+    ar &make_nvp("MajorID", ID_.majorID);
+  }
+  if (version == 0) {
+    int32_t junk;
+    ar &make_nvp("parentID", junk);
+    ar &make_nvp("primaryID", junk);
+  }
+  if (version <= 2) {
+    int t;
+    ar &make_nvp("type", t);
+    particle_type_conversion_t::const_iterator it = fromRDMCTable.find(t);
+
+    if (it == fromRDMCTable.end()) {
+      log_warn("unknown RDMC code \"%i\" cannot be converted to a "
+               "I3Particle::ParticleType. It will appear as \"unknown\".",
+               t);
+      pdgEncoding_ = unknown;
+    } else {
+      pdgEncoding_ = it->second;
+    }
+  } else if (version <= 4) {
+    int t;
+    ar &make_nvp("type", t);
+    particle_type_conversion_t::const_iterator it =
+        fromOldI3ParticleTable.find(t);
+
+    if (it == fromOldI3ParticleTable.end()) {
+      log_warn("unknown code \"%i\" cannot be converted to a "
+               "I3Particle::ParticleType. It will appear as \"unknown\".",
+               t);
+      pdgEncoding_ = unknown;
+    } else {
+      pdgEncoding_ = it->second;
+    }
+  } else { // version >= 5
+    ar &make_nvp("pdgEncoding", pdgEncoding_);
+  }
+  ar &make_nvp("shape", shape_);
+  ar &make_nvp("fitStatus", status_);
+
+  ar &make_nvp("pos", pos_);
+  ar &make_nvp("dir", dir_);
+
+  ar &make_nvp("time", time_);
+  ar &make_nvp("energy", energy_);
+  ar &make_nvp("length", length_);
+  ar &make_nvp("speed", speed_);
+
+  if (version == 0) {
+    std::vector<I3Particle> junk;
+    ar &make_nvp("composite", junk);
+  }
+  if (version > 0){
+    ar &make_nvp("LocationType", locationType_);
+  }
+  if (version == 4) {
+    // obscure version in use by Antares, contains bjorken x and y.
+    // Those should never have been in I3Particle. Load them and
+    // forget them.
+    double bjorkenx, bjorkeny;
+    ar &make_nvp("bjorkenx", bjorkenx);
+    ar &make_nvp("bjorkeny", bjorkeny);
+  }
+}
 
 std::ostream& I3Particle::Print(std::ostream& oss) const{
   oss << "[ I3Particle MajorID : " << GetMajorID() << std::endl
