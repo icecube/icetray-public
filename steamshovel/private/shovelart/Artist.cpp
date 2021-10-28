@@ -19,7 +19,7 @@ ArtistPtr Artist::pymake( const boost::python::object& artist_type,
     bp::object artist_obj = artist_type();
     ret = bp::extract<ArtistPtr>(artist_obj);
     ret->keys_ = keys;
-    const char* name = bp::extract<const char*>(artist_type.attr("__name__"));
+    const char* name __attribute__((unused))= bp::extract<const char*>(artist_type.attr("__name__"));
     log_trace_stream("PyArtist " << name << " constructed");
     return ret;
 }
