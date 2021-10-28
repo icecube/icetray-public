@@ -63,7 +63,7 @@ protected:
 	size_t FillRows(const Container &c, I3TableRowPtr rows)
 	{
 		size_t nrows = rows->GetNumberOfRows();
-		assert( (nrows - rows->GetCurrentRow()) >= size_t(c.size()));
+		i3_assert( (nrows - rows->GetCurrentRow()) >= size_t(c.size()));
 		
                 size_t currentRow = rows->GetCurrentRow();
 

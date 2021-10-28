@@ -438,7 +438,7 @@ void I3TableWriter::Convert(I3FramePtr frame) {
                 size_t rowsWritten = bundle.converter->Convert(obj, rows, frame);
             
                 // e.g. rowWritten == 0 -> exist = 0
-                assert(rowsWritten == nrows);
+                i3_assert(rowsWritten == nrows);
                 
                 if (frame_stop==I3Frame::Physics){
                   // fill the table index columns
