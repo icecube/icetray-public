@@ -262,20 +262,6 @@ execute_process(COMMAND cp ${CMAKE_BINARY_DIR}/bin/icetray-config ${NOTES_DIR})
 exec_program(${CMAKE_BINARY_DIR}/env-shell.sh ARGS /usr/bin/env > ${NOTES_DIR}/env-post_shell.txt OUTPUT_VARIABLE DEV_NULL)
 
 #
-#  gfilt configuration
-#
-message(STATUS "Configuring 'gfilt' STL decryptor")
-configure_file(
-  ${CMAKE_SOURCE_DIR}/cmake/gfilt.in
-  ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/gfilt
-  @ONLY
-  )
-set(GFILT_PROGRAM
-  ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/gfilt
-  CACHE FILEPATH "Gfilt error filter path")
-find_program(GFILT_PROGRAM gfilt PATHS ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY} NO_DEFAULT_PATH)
-
-#
 #  dpkg configuration
 #
 if(DPKG_INSTALL_PREFIX)

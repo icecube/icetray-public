@@ -53,7 +53,6 @@ Common CMake Settings
 
 Not all of the variables are useful.  Here are some that are:
 
-.. _USE_GFILT: use_gfilt
 .. _CMAKE_BUILD_TYPE:
 .. _Release:
 .. index:: 
@@ -110,9 +109,6 @@ Uncommon CMake settings
    * - .. attribute:: USE_DISTCC
      - Use the `distcc <https://github.com/distcc/distcc>`_ distributed compilation system.
      - OFF
-   * - .. attribute:: USE_GFILT
-     - Use gfilt STL error decryptor. gfilt makes sense of the often long and cryptic C++ compilation errors. However, if you get an unusually confusing compilation error, try building with this option off.
-     - ON (under most conditions)
    * - .. attribute:: CHECK_FLAGS
      - Check **some** of the flags passed to the compilers. This option is mostly of interest to developers when adding new compilation/linking flags.
      - OFF

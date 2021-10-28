@@ -271,20 +271,6 @@ else(CCACHE_PROGRAM)
 endif(CCACHE_PROGRAM)
 
 #
-#  gfilt - filter STL error messages into something understandable
-#
-if (USE_CCACHE OR CMAKE_COMPILER_IS_CLANG)
-  option(USE_GFILT "Use gfilt STL error decryptor" OFF)
-else()
-  option(USE_GFILT "Use gfilt STL error decryptor" OFF)
-endif()
-
-if(USE_GFILT)
-  set(CMAKE_CXX_COMPILE_OBJECT "${GFILT_PROGRAM} ${CMAKE_CXX_COMPILE_OBJECT}")
-  message(STATUS "Using gfilt stl decryptor")
-endif(USE_GFILT)
-
-#
 # include-what-you-use
 #
 if(USE_IWYU AND (CMAKE_BUILD_TYPE MATCHES "Debug"))

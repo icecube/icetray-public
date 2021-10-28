@@ -43,7 +43,6 @@ Advanced
    pybindings
    env-shell.sh
    icc
-   gfilt
    homebrew
 
 Information on particular tools
