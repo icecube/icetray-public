@@ -128,7 +128,7 @@ I3CrossSection::sampleFinalState_DIS(double energy,
                             // big number means more accurate, but slower
 	for(size_t j=0; j<=burnin; j++){
 		// repeat the sampling from above to get a new valid point
-        double trialQ;
+		double trialQ  __attribute__((unused));
 		do{
 			test_kin_vars[1]=random->Uniform(logXMin,0);
 			test_kin_vars[2]=random->Uniform(logYMin,logYMax);
@@ -216,14 +216,14 @@ I3CrossSection::sampleFinalState_GR(double energy,
 	//sample an intial point
 	do{
 		//rejection sample a point which is kinematically allowed by calculation limits
-		double trialQ;
+		double trialQ  __attribute__((unused));
 		
-        // all values of Y and energy  are valid, we won't find an incompatible option here
-	    kin_vars[1]=random->Uniform(logYMin,logYMax);
+		// all values of Y and energy  are valid, we won't find an incompatible option here
+		kin_vars[1]=random->Uniform(logYMin,logYMax);
 	    	
         
 		accept=true;
-        //only one dimension to ckeck in this case
+		//only one dimension to ckeck in this case
 		if(kin_vars[1]<crossSection.extents[1][0]
 		   || kin_vars[1]>crossSection.extents[1][1])
 			accept=false;	
@@ -233,18 +233,18 @@ I3CrossSection::sampleFinalState_GR(double energy,
 	} while(!accept);
 
 	//TODO: better proposal distribution?
-    // dropped the extra term
+	// dropped the extra term
 	double measure=pow(10.,kin_vars[1]); // By
 
 	cross_section=measure*pow(10.,ndsplineeval(&crossSection,kin_vars.data(),spline_table_center.data(),0)); 
     
 	const size_t burnin=40; // converges to the correct distribution over multiple samplings. 
 	for(size_t j=0; j<=burnin; j++){
-        double trialQ;
+		double trialQ  __attribute__((unused));
 		test_kin_vars[1]=random->Uniform(logYMin,logYMax);
 
 		accept=true;
-        if(test_kin_vars[1]<crossSection.extents[1][0]
+		if(test_kin_vars[1]<crossSection.extents[1][0]
 		   || test_kin_vars[1]>crossSection.extents[1][1])
 			accept=false;
 		if(!accept)
