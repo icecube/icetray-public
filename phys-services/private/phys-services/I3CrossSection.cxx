@@ -92,7 +92,7 @@ I3CrossSection::sampleFinalState_DIS(double energy,
 	//sample an intial point
 	do{
 		//rejection sample a point which is kinematically allowed by calculation limits
-		double trialQ;
+		double trialQ  __attribute__((unused));
 		do{
 			kin_vars[1]=random->Uniform(logXMin,0);
 			kin_vars[2]=random->Uniform(logYMin,logYMax);
@@ -104,14 +104,14 @@ I3CrossSection::sampleFinalState_DIS(double energy,
 		if(kin_vars[1]<crossSection.extents[1][0]
 		   || kin_vars[1]>crossSection.extents[1][1])
 			accept=false;
-        if(kin_vars[2]<crossSection.extents[2][0]
+		if(kin_vars[2]<crossSection.extents[2][0]
 		   || kin_vars[2]>crossSection.extents[2][1])
 			accept=false;
         
 
 		if(accept)
-            // finds the centers in the cross section spline table, returns true if it's successful
-            //      also sets the centers
+			// finds the centers in the cross section spline table, returns true if it's successful
+			//      also sets the centers
 			accept=!tablesearchcenters(&crossSection,kin_vars.data(),spline_table_center.data());
 	} while(!accept);
 
