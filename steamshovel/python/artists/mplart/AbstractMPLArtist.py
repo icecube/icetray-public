@@ -92,7 +92,7 @@ class MPLArtist( PyArtist ):
         # silence warnings from matplotlib
         warnings.filterwarnings("ignore")
         try:
-            fig.tight_layout(None,0.3)
+            fig.tight_layout(pad=0.3)
         except ValueError as e:
             logging.log_debug("fig.tight_layout raised ValueError")
         warnings.resetwarnings()
