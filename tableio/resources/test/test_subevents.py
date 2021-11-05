@@ -90,7 +90,8 @@ class SubeventTest(unittest.TestCase):
 		hdf.close()
 
 
-@unittest.skipIf("alma8" in os.environ.get("ICETRAY_RUNNER_OS"),
+@unittest.skipIf("ICETRAY_RUNNER_OS" in os.environ and \
+                 "alma8" in os.environ.get("ICETRAY_RUNNER_OS"),
                  "Skipping test on 'alma8': pytables triggers memory corruption when closing an hdf5 file")
 class SubeventMergingTest(unittest.TestCase):
 	fname1 = os.environ['I3_BUILD'] + '/hdfwriter/subevent_test_1.hdf5'
