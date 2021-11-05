@@ -182,7 +182,7 @@ TEST(tests_with_warnings) {
   log_info("This will also yell about giving in the wrong about of inputs");
   double data3[10][2];
   try {
-    plan.CopyIntoPlanC(data2, 3);
+    plan.CopyIntoPlanC(data3, 3);
     ENSURE(0, "You didn't catch giving the wrong number of inputs");
   } catch (const std::exception& e) {
     log_info("We are good");
