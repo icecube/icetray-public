@@ -140,6 +140,12 @@ The following python packages are recommended for icetray:
 
   numpy scipy matplotlib sphinx ipython qtconsole tables
 
+As of python 3.9, tables is not available as a wheel on PyPI and it does not
+compile by itself. This can be fixed by first installing Blosc from homebrew:
+
+   brew install c-blosc
+   pip install tables
+
 Step-By-Step Instructions
 """""""""""""""""""""""""
 
