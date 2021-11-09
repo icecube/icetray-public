@@ -5,6 +5,7 @@
 #include <dataclasses/I3Time.h>
 #include <icetray/I3Units.h>
 #include <boost/algorithm/string.hpp>
+#include <boost/multiprecision/cpp_int.hpp>
 
 
 namespace {
@@ -420,9 +421,11 @@ bool I3Time::operator>=(const I3Time& rhs) const
 
 I3Time I3Time::operator+(const double second_term) const
 {
-  long double daqTime = daqTime_ + (long double)(second_term)*10;
   int32_t year = year_ ;
-   
+  boost::multiprecision::int128_t daqTime = (
+    boost::multiprecision::int128_t(daqTime_) + boost::multiprecision::int128_t(second_term)*10
+  );
+
   while (daqTime >= I3TimeUtils::max_DAQ_time(year))
     {
       daqTime -= I3TimeUtils::max_DAQ_time(year);
@@ -435,7 +438,8 @@ I3Time I3Time::operator+(const double second_term) const
       daqTime += I3TimeUtils::max_DAQ_time(year);
     }
 
-  return I3Time(year,daqTime+0.5);
+  assert(daqTime < I3TimeUtils::max_DAQ_time(year));
+  return I3Time(year, (int64_t)daqTime);
 }
 
 
