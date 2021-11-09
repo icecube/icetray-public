@@ -27,15 +27,13 @@ find_path(LZMA_INCLUDE_DIR lzma.h
           HINTS ${PC_LA_INCLUDEDIR}                
                 ${PC_LA_INCLUDE_DIRS})
 
-## look in Homebrew for libarchive
+## look in Homebrew for libarchive. BREW_PREFIX defined in tooldef.cmake
 if(APPLE)
   find_library(LIBARCHIVE_LIBRARIES archive
-    PATHS /usr/local/opt/libarchive
-          /usr/local/opt/libarchive/lib
+    HINTS ${BREW_PREFIX}/opt/libarchive/lib
     NO_DEFAULT_PATH)
   find_path(LIBARCHIVE_INCLUDE_DIR archive.h
-    PATHS /usr/local/opt/libarchive
-          /usr/local/opt/libarchive/include
+    HINTS ${BREW_PREFIX}/opt/libarchive/include
     NO_DEFAULT_PATH)
 endif()
 
