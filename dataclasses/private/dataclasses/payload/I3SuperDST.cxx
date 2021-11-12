@@ -490,7 +490,7 @@ I3SuperDST::EncodeWidth(double width, unsigned int maxbits,
 	i3_assert(width > 0 && width < double(std::numeric_limits<unsigned>::max()));
 	unsigned rounded = unsigned(ceil(width/1.0));
 	unsigned code = std::min(unsigned(findlastset(rounded)), (1u << maxbits)-1);
-	return (rounded == 1u << (code-1)) ? code-1 : code;
+	return ((code > 0) && (rounded == (1u << (code-1)))) ? code-1 : code;
 }
 
 double
