@@ -9,6 +9,7 @@
  * @author Eike Middell <eike.middell@desy.de> Last changed by: $LastChangedBy$
  */
 
+#include <regex>
 
 #include "hdfwriter/I3HDFTableService.h"
 #include "hdfwriter/I3HDFTable.h"
@@ -128,6 +129,14 @@ I3HDFTableService::~I3HDFTableService() {};
 
 I3TablePtr I3HDFTableService::CreateTable(const std::string& tableName, 
                               I3TableRowDescriptionConstPtr description) {
+    if (tableName.find("/") != std::string::npos) {
+       std::ostringstream oss;
+       oss << "HDF5 table names can't include /. " 
+       << "If you must have / characters in your key names, configure HDFWriter with e.g. "
+       << "Keys=[{\"key\": \""<<tableName<<"\", \"name\": \""<<std::regex_replace(tableName, std::regex("/"), "_") <<"\"}] "
+       << "rather than Keys=[\""<<tableName<<"\"]";
+       throw std::invalid_argument(oss.str().c_str());
+    }
     I3TablePtr index_table;
     if (description->GetUseIndex()){
       I3TableRowDescriptionConstPtr index_desc = GetIndexDescription();

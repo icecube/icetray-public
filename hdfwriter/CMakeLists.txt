@@ -39,7 +39,7 @@ IF(HDF5_FOUND)
   i3_executable_script(mix resources/scripts/mix.py)
   i3_executable_script(book resources/scripts/book.py)
 
-  i3_test_scripts(resources/test/*.sh)
+  i3_test_scripts(resources/test/*.sh resources/test/*.py)
 
 ELSE(HDF5_FOUND)
 
