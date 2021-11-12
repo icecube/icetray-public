@@ -199,7 +199,7 @@ class I3Tray(icetray.I3Tray):
 
         """
         (keys,vals) = (list(kwargs.keys()), list(kwargs.values()))
-        argnames = inspect.getargspec(_segment)[0]
+        argnames = inspect.getfullargspec(_segment)[0]
         largnames = [a.lower() for a in argnames]
 
         if _name is None:

@@ -99,13 +99,13 @@ class I3HoboConfiguration(dict):
 
     @classmethod
     def from_traysegment(cls, segment):
-        args, varargs, kwargs, defaultvals = inspect.getargspec(segment)
-        defaults = [None]*len(args)
-        if defaultvals is not None:
-            defaults[-len(defaultvals):] = defaultvals
+        spec = inspect.getfullargspec(segment)
+        defaults = [None]*len(spec.args)
+        if spec.defaults is not None:
+            defaults[-len(spec.defaults):] = spec.defaults
         doc, descdict = getdoc(segment)
 
-        args = args[2:]
+        args = spec.args[2:]
         defaults = defaults[2:]
         if hasattr(segment, 'additional_kwargs'):
             args += segment.additional_kwargs.keys()
