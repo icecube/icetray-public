@@ -142,6 +142,12 @@ These are not needed at compile time but are nescessary for certian functionalit
   * - `SciPy <https://www.scipy.org/>`_
     - Python library used for scientific computing
     - various unit tests
+  * - `h5py <https://www.h5py.org/>`_
+    - Pythonic interface to the HDF5 binary data format
+    - various unit tests
+  * - `PyTables <https://www.pytables.org/>`_
+    - Python library managing hierarchical datasets
+    - various unit tests
   * - `healpy <https://healpy.readthedocs.io/en/latest/>`_
     - Python interface for HEALPix C++ library
     - :ref:`dst` unit tests

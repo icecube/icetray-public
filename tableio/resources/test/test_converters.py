@@ -6,15 +6,6 @@ Run all registered converters through both HDFWriter and ROOTWriter
 
 from os import environ
 
-dists = ['alma8']
-for d in dists:
-    if "ICETRAY_RUNNER_OS" in environ:
-        if d in environ.get("ICETRAY_RUNNER_OS"):
-            print("This test is disabled on this dist: " + d)
-            print("    pytables triggers memory corruption when closing an hdf5 file")
-            quit()
-
-
 #Since there is no clear way to inspect converters in pythonland,
 #we can just put a list of S-Frame converters here I guess
 sframe_converters = ['I3CorsikaInfo','I3PrimaryInjectorInfo','I3GenieInfo']
@@ -123,16 +114,17 @@ tray.Execute(1)
 
 
 try:
-	import tables
-	with tables.open_file("test_converters.hdf5") as hdf:
+	import h5py
+	with h5py.File("test_converters.hdf5") as hdf:
 		for name, obj in fill_frame.objects.items():
-			table = hdf.get_node('/' + name)
-			assert table.nrows == 1
+			table = hdf[name]
+			assert table.len() == 1
 			row = table[0]
 			for name in row.dtype.names:
 				if hasattr(obj, name) and type(getattr(obj, name)) == type(row[name]):
 					assert getattr(obj, name) == row[name]
 except ImportError:
+	icetray.logging.log_warn("Read test requires python3-h5py. Install it via pip/apt/yum/brew.")
 	pass
 
 import shutil, os
