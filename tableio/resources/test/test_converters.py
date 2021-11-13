@@ -4,18 +4,21 @@
 Run all registered converters through both HDFWriter and ROOTWriter
 """
 
-from os import environ
+# Since there is no clear way to inspect converters in pythonland,
+# we can just put a list of S-Frame converters here I guess
+sframe_converters = ['I3CorsikaInfo', 'I3PrimaryInjectorInfo', 'I3GenieInfo']
 
-#Since there is no clear way to inspect converters in pythonland,
-#we can just put a list of S-Frame converters here I guess
-sframe_converters = ['I3CorsikaInfo','I3PrimaryInjectorInfo','I3GenieInfo']
-
-from icecube import icetray, dataclasses, tableio, phys_services, dataio, recclasses, simclasses
+import warnings
+from icecube import icetray, dataclasses, tableio
 from I3Tray import I3Tray
 
 # hobo "from icecube import *"
 import icecube, os
 for path in sorted(os.listdir(os.path.dirname(icecube.__file__))):
+	if 'ml_suite' in path:
+		continue
+	if 'weighting' in path:
+		continue
 	try:
 		__import__("icecube."+os.path.splitext(path)[0])
 	except ImportError:
@@ -110,8 +113,12 @@ tray.Add(tableio.I3TableWriter,
     SubEventStreams=["nullsplit"],
 )
 
-tray.Execute(1)
-
+ol = icetray.I3Logger.global_logger
+icetray.I3Logger.global_logger = icetray.I3NullLogger()
+with warnings.catch_warnings():
+	warnings.simplefilter("ignore")
+	tray.Execute(1)
+icetray.I3Logger.global_logger = ol
 
 try:
 	import h5py
