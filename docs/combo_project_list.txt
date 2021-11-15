@@ -54,8 +54,6 @@
     gulliver-modules
     dipolefit
     CommonVariables
-    double-muon
-    ipdf
     rpdf
     lilliput
     linefit
