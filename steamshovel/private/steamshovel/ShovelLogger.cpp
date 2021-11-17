@@ -7,7 +7,11 @@
 
 ShovelLogger::ShovelLogger() :
 	I3PrintfLogger(),
-	mutex_(),
+       mutex_(
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
+          QMutex::Recursive
+#endif
+          ),
 	auto_start_viewer_( true )
 {
 	QString filename =
