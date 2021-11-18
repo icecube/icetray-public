@@ -146,44 +146,11 @@ compile by itself. This can be fixed by first installing Blosc from homebrew:
    brew install c-blosc
    pip install tables
 
-Step-By-Step Instructions
-"""""""""""""""""""""""""
+Step-By-Step Instructions for M1 and Intel Macs
+"""""""""""""""""""""""""""""""""""""""""""""""
 
-This worked in March 2021, with the trunk of combo on macOS 11 (Big
-Sur). As homebrew updates, these instructions might not work as
-well. Your mileage may vary.
-
-.. code-block:: sh
-
-   #install xcode command line tools (don't worry if it says it is already installed)
-   xcode-select --install
-
-   #checkout icetray to a location of your choice
-   git clone git@github.com:icecube/icetray.git $I3_SRC
-
-   #install homebrew
-   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-
-   #install packages with homebrew
-   brew install git cmake python boost boost-python3 cdk qt@5 libarchive wget doxygen cfitsio hdf5 nlopt gsl minuit2 suite-sparse healpix zstd fftw
-
-   #install brews written by icecube
-   brew tap icecube/homebrew-icecube
-   brew install pal cppzmq
-
-   #create and enter virutal envionment
-   /usr/local/bin/python3 -m venv ${HOME}/py3/
-   source ${HOME}/py3/bin/activate
-
-   #install python packages with pip3
-   pip3 install --upgrade pip
-   pip3 install numpy scipy matplotlib sphinx ipython qtconsole pandas pymongo
-
-Step-By-Step Instructions for M1 (and Intel) Macs
-"""""""""""""""""""""""""""""""""""""""""""""""""
-
-The following is conisdered experimental, but works as of July 2021,
-with the trunk of Icetray on macOS 11 (Big Sur).
+The following setup works with the trunk of Icetray on macOS 11/12 (Big Sur/Monterey)
+as of November 2021.
 
 .. code-block:: sh
 
@@ -203,9 +170,9 @@ with the trunk of Icetray on macOS 11 (Big Sur).
    brew bundle
 
    #create and enter virutal envionment
-   /usr/local/bin/python3 -m venv ${HOME}/py3/
+   /usr/local/bin/python3 -m venv --system-site-packages ${HOME}/py3/
    source ${HOME}/py3/bin/activate
 
    #install python packages with pip3
    pip3 install --upgrade pip
-   pip3 install qtconsole matplotlib sphinx pandas pymongo
+   pip3 install qtconsole matplotlib sphinx pandas pymongo tables pyyaml
