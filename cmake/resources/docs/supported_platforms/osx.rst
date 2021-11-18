@@ -38,6 +38,8 @@ the command line tools.
 Xcode
 .....
 
+0) Besure that you want Xcode. The Command-Line Tools are enough for IceTray development.
+
 1) Download Xcode from the App Store.
 
 2) Open Xcode, and open the Preferences window (Xcode > Preferences).
@@ -54,21 +56,24 @@ Xcode
 
 After the install finishes you should have both clang and llvm-gcc:
 
-.. code-block:: sh
+.. code-block:: console
 
-	bash-3.2$ g++ --version
-	i686-apple-darwin11-llvm-g++-4.2 (GCC) 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2336.11.00)
-	Copyright (C) 2007 Free Software Foundation, Inc.
-	This is free software; see the source for copying conditions.  There is NO
-	warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-	bash-3.2$ clang++ --version
-	Apple clang version 4.0 (tags/Apple/clang-421.0.60) (based on LLVM 3.1svn)
-	Target: x86_64-apple-darwin12.0.0
+	$ clang++ --version
+	Apple clang version 13.0.0 (clang-1300.0.29.3)
+	Target: arm64-apple-darwin21.1.0
 	Thread model: posix
+	InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+
+	$ g++ --version
+	Configured with: --prefix=/Library/Developer/CommandLineTools/usr --with-gxx-include-dir=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/4.2.1
+	Apple clang version 13.0.0 (clang-1300.0.29.3)
+	Target: arm64-apple-darwin21.1.0
+	Thread model: posix
+	InstalledDir: /Library/Developer/CommandLineTools/usr/bin
 
 Homebrew
 """"""""
+.. highlight:: sh
 
 :doc:`../homebrew` is probably the easiest way to install packages on macOS, and
 distributes the most heavy-weight dependencies (cmake, boost, and Qt) as binary
@@ -76,17 +81,19 @@ packages.  Install them like this::
 
   brew install cmake
 
-The following formulae are necessary to compile IceTray:
+The following formulae are necessary to compile IceTray::
 
-  cmake python boost boost-python3 gsl wget
+  cmake python boost boost-python3 gsl wget libarchive
 
-The following formulae are recommended for optional functionality of components of IceTray:
+The following formulae are recommended for optional functionality of components of IceTray::
 
-  cdk qt@5 libarchive doxygen cfitsio hdf5 nlopt minuit2 suite-sparse healpix zstd
+  cdk qt@5 doxygen cfitsio hdf5 nlopt minuit2 suite-sparse healpix zstd
+
+Plese see the **Step-By-Step Instructions** below
 
 Most of the recommended formulae are in the main distribution, but IceCube
 maintains a `tap`_ for uncommon software that IceTray depends on.
-The following formula are also recommended from the IceCube-SPNO/icecube tap:
+The following formula are also recommended from the IceCube-SPNO/icecube tap::
 
   pal cppzmq
 
@@ -96,22 +103,14 @@ The following formula are also recommended from the IceCube-SPNO/icecube tap:
 ROOT on macOS
 """""""""""""
 
-IceTray also depends on ROOT. The fastest way to install root on macOS is to
-download the recompiled binary tar file from `cern`_.
-ROOT can also be installed with homebrew::
+IceTray no longer depends on CERN's ROOT. If you want it though, the
+best way to install it is via Homebrew. This is also the `method recomended
+by CERN <https://root.cern/install/#macos-package-managers>`_ . Besure to
+follow any instructions `brew` gives you.
 
-.. code-block:: sh
+.. code-block:: console
 
-   brew install --build-from-source root
-
-Either way you need the load the ``thisroot.sh`` into your environment
-before you run ``cmake``.
-
-.. code-block:: sh
-
-   . /usr/local/bin/thisroot.sh
-
-.. _cern: https://root.cern.ch/downloading-root
+   brew install root
 
 .. _osxpythonsetup:
 
@@ -125,26 +124,21 @@ macOS. But now that IceTray is transitioning to python3 it is necessary to
 compile IceTray against python3. The previous section described the easiest
 way to install python3 on macOS: using homebrew.
 
-With python3 installed with homebrew the :command:`python` command will still refer
+With python3 installed via homebrew, the :command:`python` command will still refer
 to the system python, but python3 will refer to python3. IceTray will
 automatically detect the homebrew version of python and link against it.
 Python3 packages can be installed with the :command:`pip3` command, and ipython
 can be accessed with :command:`ipython3` etc.
 
 IceTray relies on a number of python packages to work, the easiest way to
-instal them is with :command:`pip3`. If python3 is installed with homebrew, pip3 will
-install them to ``/usr/local/lib/python3.7/site-packages`` and any scripts
-will be linked to in ``/usr/local/bin/`` which is automatically pathed.
-
-The following python packages are recommended for icetray:
-
-  numpy scipy matplotlib sphinx ipython qtconsole tables
+instal them is by following the **Step-By-Step Instructions** below.
 
 As of python 3.9, tables is not available as a wheel on PyPI and it does not
-compile by itself. This can be fixed by first installing Blosc from homebrew:
+compile by itself. You may have fix this by first installing Blosc from homebrew::
 
    brew install c-blosc
-   pip install tables
+   brew install hdf5
+   HDF5_DIR="$(brew --prefix)/opt/hdf5" pip install tables
 
 Step-By-Step Instructions for M1 and Intel Macs
 """""""""""""""""""""""""""""""""""""""""""""""
@@ -175,4 +169,9 @@ as of November 2021.
 
    #install python packages with pip3
    pip3 install --upgrade pip
-   pip3 install qtconsole matplotlib sphinx pandas pymongo tables pyyaml
+   pip3 install qtconsole matplotlib sphinx pandas pymongo pyyaml
+
+   #pytables needs a bit of help
+   brew install c-blosc
+   brew install hdf5
+   HDF5_DIR="$(brew --prefix)/opt/hdf5" pip3 install tables
