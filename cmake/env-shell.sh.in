@@ -55,6 +55,7 @@ _I3_SHELL=$NEW_SHELL
 _I3_SRC=@I3_SRC@
 _I3_BUILD=@I3_BUILD@
 _I3_TESTDATA=@I3_TESTDATA@
+_I3_PRODDATA=@I3_PRODDATA@
 
 # Check for I3_BUILD mismatch
 if [ -n "$I3_BUILD" -a "$I3_BUILD" != "$_I3_BUILD" ]
@@ -134,6 +135,9 @@ if [ -z "$ARGV" ]
     [ -d "$_I3_TESTDATA" ] && printf "   I3_TESTDATA  = %s\n" $_I3_TESTDATA \
                            || printf "   I3_TESTDATA should be set to an existing directory path\n" \
                                      "   (and 'make rsync' may need to be run) if you wish to run tests."
+    [ -d "$_I3_PRODDATA" ] && printf "   I3_PRODDATA  = %s\n" $_I3_PRODDATA \
+                           || printf "   I3_PRODDATA should be set to an existing directory path\n" \
+                                     "   (and 'make rsync-prod-data' may need to be run) if you wish to use 'production data'."
     echo   "   Python       =" @PYTHON_VERSION@
 fi
 
@@ -152,6 +156,7 @@ if [ -z "$I3_SHELL" ] # a clean, first invocation
 	I3_SRC=$_I3_SRC \
 	I3_BUILD=$_I3_BUILD \
 	I3_TESTDATA=$_I3_TESTDATA \
+	I3_PRODDATA=$_I3_PRODDATA \
 	ROOTSYS=$_ROOTSYS \
 	I3_SHELL=$_I3_SHELL \
     HDF5_USE_FILE_LOCKING=$_HDF5_USE_FILE_LOCKING \
