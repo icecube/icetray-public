@@ -1,9 +1,9 @@
-Combo Release VXX-YY-ZZ - Season Year (Month Day, Year)
+IceTray Release VXX-YY-ZZ - Season Year (Month Day, Year)
 -----------------------------------------------------------
 
 Stats
 ~~~~~
-* Tickets: Resolved XX tickets. Pushed XX to the next milestone.
+* Issues: Resolved XX issues.
 * Collaborator Contributions: XX Collaborators made commits to projects.
 * Code Sprint Attendance: XX Collaborators made commits in December.
 * Code Coverage: Line XX.X% and Function XX.X%
