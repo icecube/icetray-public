@@ -77,7 +77,7 @@ Thes dependencies are optional. If not present comb will compile with reduced fu
     - :ref:`hdfwriter`
   * - `Boost NumPy <https://www.boost.org/doc/libs/1_74_0/libs/python/doc/html/numpy/index.htmli>`_
     - Boost.Python NumPy extension
-    - :ref:`MuonGun-main` pybindings
+    - :ref:`MuonGun-main` and ml_suite pybindings
   * - `HEALPix <https://healpix.jpl.nasa.gov/>`_
     - Hierarchical Equal Area isoLatitude Pixelization of a sphere
     - :ref:`NoiseEngine-main` :ref:`dst`
