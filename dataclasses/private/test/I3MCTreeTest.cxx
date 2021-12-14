@@ -976,6 +976,16 @@ TEST(append_child)
   I3MCTree t2(makeParticle());
   t2.append_child(*t2.get_head(),t1,p1);
   
+  // test assertions
+  bool fails_as_expected(false);
+  try{
+    // attempting at add a subtree to itself should throw
+    t2.append_child(*t2.get_head(), t2, p1);
+  }catch(const std::exception& e){
+    fails_as_expected = true;
+  }
+  ENSURE(fails_as_expected);
+
   std::vector<I3Particle> children3 = t2.children(*t2.get_head());
   ENSURE( !children3.empty() , "no children3");
   ENSURE( children3.front() == p1 , "p1 is not first child of t2");

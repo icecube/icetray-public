@@ -544,9 +544,9 @@ namespace TreeBase {
   void
   Tree<T,Key,Hash>::append_child(const Key& node, const Tree<T,Key,Hash>& otherTree, const Key& node2)
   {
-    assert( !subtree_in_tree(otherTree,node2) );
+    i3_assert( !subtree_in_tree(otherTree,node2) );
     typename tree_hash_map::const_iterator iter = otherTree.internalMap.find(node2);
-    assert( iter != otherTree.internalMap.end() );
+    i3_assert( iter != otherTree.internalMap.end() );
     append_child(node,iter->second.data);
     if (iter->second.firstChild != NULL) {
       // append all children of node2
