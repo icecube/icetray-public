@@ -4,9 +4,14 @@
 Release Notes
 =============
 
-trunk
+main
 -----
 
+Dec. 20, 2021 Alex Olivas (aolivas@umd.edu)
+-------------------------------------------
+IceTray Release V01-03-00
+
+* (54e4521) C++17 compatible 
 * (r181466) Add an instance of python's object() called `I3Default`, if passed
   as a module parameter it will be as if the parameter is unset. This is useful
   as the default value for a tray segment parameter.
