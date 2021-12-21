@@ -106,7 +106,7 @@ I3_CLASS_VERSION(QuadraticFit, quadraticfit_version_);
  * 
  * The Compensation Factor is simply the mean charge of the TA0003 distribution divided by the 
  * average SPE Template charge. 
- * CF = (dintt_0^inf q f(q)_spe dq) / (dintt_0^inf q f(q)_ta0003 dq)
+ * CF = (dintt_0^inf q f(q)_ta0003 dq) / (dintt_0^inf q f(q)_spe dq)
  * Given the current SPE Templates, this factor is rougly 1.3
  */
 struct SPEChargeDistribution
@@ -168,7 +168,7 @@ struct SPEChargeDistribution
 		   !std::isnan(SLC_gaus_mean));
   }
   
-  ///Evaluate the mean of the SPE template distribution
+  ///Evaluate the mean of the SPE template distribution without the residual correction for now
   double Mean() const{
     return exp1_amp*std::pow(exp1_width,2)+exp2_amp*std::pow(exp2_width,2)
       +gaus_amp*std::sqrt(M_PI/2)*gaus_mean*gaus_width*(1+std::erf(gaus_mean/(gaus_width*std::sqrt(2))))
