@@ -122,8 +122,9 @@ double SPEMean (const I3DOMStatus& status ,
 double MeanSPECharge (const I3DOMStatus& status, const I3DOMCalibration& calib)
 {
   SPEChargeDistribution spe_charge_dist = calib.GetCombinedSPEChargeDistribution();
-  if (spe_charge_dist.IsValid()) return spe_charge_dist.Mean()*calib.GetMeanATWDCharge();
-  return 0.86; // Fall back for TA0003 SPETemplates. Derived from simulation
+  double mean_atwd_charge = (calib.IsMeanATWDChargeValid() ? calib.GetMeanATWDCharge(): 1);
+  if (spe_charge_dist.IsValid()) return spe_charge_dist.Mean()*mean_atwd_charge;
+  return 0.86*mean_atwd_charge; // Fall back for TA0003 SPETemplates. Derived from simulation
                // fit by Claudio Kopper. See Diplomarbeit from Eike Middell for
                // details.
 }
