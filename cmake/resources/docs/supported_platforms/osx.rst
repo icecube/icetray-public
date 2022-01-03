@@ -133,13 +133,6 @@ can be accessed with :command:`ipython3` etc.
 IceTray relies on a number of python packages to work, the easiest way to
 instal them is by following the **Step-By-Step Instructions** below.
 
-As of python 3.9, tables is not available as a wheel on PyPI and it does not
-compile by itself. You may have fix this by first installing Blosc from homebrew::
-
-   brew install c-blosc
-   brew install hdf5
-   HDF5_DIR="$(brew --prefix)/opt/hdf5" pip install tables
-
 Step-By-Step Instructions for M1 and Intel Macs
 """""""""""""""""""""""""""""""""""""""""""""""
 
