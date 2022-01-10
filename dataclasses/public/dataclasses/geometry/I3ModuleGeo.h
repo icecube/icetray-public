@@ -38,10 +38,14 @@ static const unsigned i3modulegeo_version_ = 0;
  * the names of the enumeration members to be known. This list
  * should be updated whenver members or new enums are added to
  * the class.
+ * 
+ * Please note: using "LOM" here to refer to LOM-16. The plan
+ * is to eventually be able to merge LOM + LOM18 into a single
+ * enum for long term use
  */
 #define I3MODULEGEO_H_I3ModuleGeo_ModuleType        \
   (UnknownType)(AMANDA)(IceCube)(IceTop)(mDOM)(Scintillator)(IceAct)\
-  (PDOM)(DEgg)(WOM)(FOM)(DMIce)(LOM)(RadioReciever)\
+  (PDOM)(DEgg)(WOM)(FOM)(DMIce)(LOM)(LOM16)(LOM18)(RadioReceiver)	\
   (POCAM)(PencilBeam)(RadioEmitter)(AcousticEmitter)(AbaloneHub)(FibreComm)
 
 /**
@@ -61,7 +65,8 @@ public:
 		     IceAct = 50,
 		     // OMType > 100 are Gen2 R&D optical modules
 		     PDOM = 110, DEgg = 120, WOM = 140, FOM = 150,
-		     DMIce = 160, LOM = 170, RadioReciever = 180,
+		     DMIce = 160, LOM = 170, LOM16 = 171, LOM18 = 172,
+		     RadioReceiver = 180,
 		     // OMType > 200 for the various calibration devices
 		     POCAM = 200, PencilBeam = 210, 
 		     RadioEmitter = 220, 

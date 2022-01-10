@@ -32,7 +32,7 @@ static const unsigned i3omgeo_version_ = 1;
  */
 #define I3OMGEO_H_I3OMGeo_OMType        \
   (UnknownType)(AMANDA)(IceCube)(IceTop)(mDOM)(Scintillator)(IceAct)\
-  (PDOM)(DEgg)(WOM)(FOM)(DMIce)(LOM)(RadioReciever)\
+  (PDOM)(isoPDOM)(DEgg)(WOM)(FOM)(DMIce)(LOM)(LOM16)(LOM18)(RadioReceiver) \
   (POCAM)(PencilBeam)(RadioEmitter)(AcousticEmitter)(AbaloneHub)(FibreComm)
 
 //Simple struct to contain all pertinent OM info.  
@@ -43,8 +43,9 @@ class I3OMGeo
 public:
     enum OMType {UnknownType = 0, AMANDA = 10, IceCube = 20, IceTop = 30, Scintillator = 40, IceAct = 50,
                  // OMType > 100 are Gen2 R&D sensors
-                 PDOM = 110, DEgg = 120, mDOM = 130, WOM = 140, FOM = 150,
-		 DMIce = 160, LOM = 170, RadioReciever = 180,
+                 PDOM = 110, isoPDOM=111 ,DEgg = 120, mDOM = 130, WOM = 140, FOM = 150,
+		 DMIce = 160, LOM = 170, LOM16 = 171, LOM18 = 172,
+		 RadioReceiver = 180, 
 		 // OMType > 200 for the various calibration sources 
 		 POCAM = 200, PencilBeam = 210, 
 		 RadioEmitter = 220, 
