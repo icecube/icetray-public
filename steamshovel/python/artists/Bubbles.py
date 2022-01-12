@@ -69,7 +69,7 @@ class Bubbles( PyArtist ):
                 if geo.omtype in [geo.IceCube, geo.IceTop, geo.PDOM]:
                     sphere = output.addSphere( scale, pos )
                     sphere.setSelectionContent( omkey )
-                elif geo.omtype in [geo.mDOM, geo.DEgg, geo.LOM]:
+                elif geo.omtype in [geo.mDOM, geo.DEgg, geo.LOM, geo.LOM16, geo.LOM18]:
                     radius = scale*math.sqrt(geo.area)
                     sphere = output.addCylinder( pos, vec3d(geo.orientation.dir), radius, radius)
 
