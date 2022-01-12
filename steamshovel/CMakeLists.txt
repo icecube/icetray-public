@@ -83,6 +83,8 @@ if(Qt5_FOUND AND Qt5OpenGL_FOUND AND OPENGL_FOUND AND OPENGL_GLU_FOUND)
       @ONLY)
   endforeach()
 
+  configure_file("private/steamshovel/SteamShovelConf.h.in" "SteamShovelConf.h")
+
   i3_add_library( shovelart
     private/shovelart/artists/*.cpp
     private/shovelart/*.cpp

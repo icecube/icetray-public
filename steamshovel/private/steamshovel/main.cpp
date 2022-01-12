@@ -3,6 +3,7 @@
 #include "SteamshovelApp.h"
 #include "FileService.h"
 #include "ShovelLogger.h"
+#include "SteamShovelConf.h"
 #include <icetray/I3Logging.h>
 
 #include <cstdio>
@@ -181,7 +182,7 @@ int main(int argc, char* argv[]){
   PyInterpreter* pyinter;
   PyConsole* pyconsole;
   try {
-    pyinter =  new PyInterpreter(argv[0]);
+    pyinter =  new PyInterpreter(Python_EXECUTABLE);
     // may downgrade requested_console to what's available;
     // also: consoles get deactivated if STDIN or STDOUT are not tty
     pyconsole = new PyConsole(*pyinter, requested_console);

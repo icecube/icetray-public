@@ -1,0 +1,1 @@
+#cmakedefine Python_EXECUTABLE "@Python_EXECUTABLE@"

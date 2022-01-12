@@ -11,7 +11,7 @@ namespace scripting{
     // uses RAII to set up a context
     class PyInterpreter {
     public:
-        PyInterpreter( char* progname );
+        PyInterpreter(const char* progname );
         ~PyInterpreter();
     };
 

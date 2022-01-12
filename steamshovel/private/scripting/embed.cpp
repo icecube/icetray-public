@@ -19,7 +19,7 @@ namespace scripting{
 
 namespace bp = boost::python;
 
-PyInterpreter::PyInterpreter( char* progname )
+PyInterpreter::PyInterpreter(const char* progname )
 {
 	scripting::QMeta::pre_init();
 #if PY_MAJOR_VERSION < 3
