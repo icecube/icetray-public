@@ -24,8 +24,6 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-namespace bph = boost::placeholders;
-
 namespace boost { namespace python {
 
 template <typename G, typename GS, typename S, typename SS>
