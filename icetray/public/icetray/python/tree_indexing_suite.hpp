@@ -255,7 +255,8 @@ public:
 		    bp::object>::type
 		make_function_impl(F f, S1 s)
 		{
-			return bp::make_function(boost::bind(&Adapter::call_inserter, Adapter(f), _1, _2, _3),
+			return bp::make_function(boost::bind(&Adapter::call_inserter, Adapter(f),
+			                                     boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3),
 			    default_call_policies(), args("self", "index", "value"), WrapperSignature());
 		}
 		
@@ -270,19 +271,20 @@ public:
 		    bp::object>::type
 		make_function_impl(F f, S1 s)
 		{
-			return bp::make_function(boost::bind(&Adapter::call_single_iter, Adapter(f), _1, _2),
+			return bp::make_function(boost::bind(&Adapter::call_single_iter, Adapter(f),
+			                                     boost::placeholders::_1, boost::placeholders::_2),
 			    default_call_policies(), args("self", "index"), WrapperSignature());
 			
 		}
 		
 		bp::tuple call_inserter(const Container &self, bp::tuple index, Arg1 a1)
 		{
-			return translate_call(self, boost::bind(f_, const_cast<Container*>(&self), _1, a1), index);
+			return translate_call(self, boost::bind(f_, const_cast<Container*>(&self), boost::placeholders::_1, a1), index);
 		}
 		
 		bp::tuple call_single_iter(const Container &self, bp::tuple index)
 		{
-			return translate_call(self, boost::bind(f_, const_cast<Container*>(&self), _1), index);
+			return translate_call(self, boost::bind(f_, const_cast<Container*>(&self), boost::placeholders::_1), index);
 		}
 		
 		// Translate tuple to iterator, call functor, translate result back

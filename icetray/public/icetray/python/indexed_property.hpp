@@ -24,6 +24,8 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
+namespace bph = boost::placeholders;
+
 namespace boost { namespace python {
 
 template <typename G, typename GS, typename S, typename SS>
@@ -191,14 +193,14 @@ private:
 		static object
 		make_function(Getter g)
 		{
-			return python::make_function(bind(&Proxy::create, _1, g), default_call_policies(),
+			return python::make_function(bind(&Proxy::create, boost::placeholders::_1, g), default_call_policies(),
 			    mpl::vector<Proxy, TargetPtr>());
 		}
 		
 		static object
 		make_function(Getter g, Setter s)
 		{
-			return python::make_function(bind(&Proxy::create, _1, g, s), default_call_policies(),
+			return python::make_function(bind(&Proxy::create, boost::placeholders::_1, g, s), default_call_policies(),
 			    mpl::vector<Proxy, TargetPtr>());
 		}
 

@@ -28,7 +28,7 @@ namespace {
         object arttype = artmod.attr(class_name);
         ArtistPtr a = Artist::pymake( arttype, ArtistKeyList() );
         ArtistFactory factory(a);
-        factory.make = boost::bind( Artist::pymake, arttype, _1 );
+        factory.make = boost::bind( Artist::pymake, arttype, boost::placeholders::_1 );
         return factory;
     }
 
