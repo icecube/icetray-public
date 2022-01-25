@@ -162,9 +162,4 @@ as of November 2021.
 
    #install python packages with pip3
    pip3 install --upgrade pip
-   pip3 install qtconsole matplotlib sphinx pandas pymongo pyyaml
-
-   #pytables needs a bit of help
-   brew install c-blosc
-   brew install hdf5
-   HDF5_DIR="$(brew --prefix)/opt/hdf5" pip3 install tables
+   pip3 install qtconsole matplotlib sphinx tables pandas pymongo pyyaml
