@@ -11,7 +11,7 @@ i3_add_library(dataclasses
   private/dataclasses/stream_overloads.cpp
   private/test_module/TestConstCache.cxx
 
-  USE_TOOLS boost python fftw3
+  USE_TOOLS boost python fftw3 gsl
 
   USE_PROJECTS serialization icetray
   )

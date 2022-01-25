@@ -123,7 +123,8 @@ struct SPEChargeDistribution
                             gaus_mean(NAN),
                             gaus_width(NAN),
                             compensation_factor(NAN),
-                            SLC_gaus_mean(NAN) { }
+                            SLC_gaus_mean(NAN),
+                            mean_charge(NAN) { }
 
   SPEChargeDistribution(double amp_exp1,
                         double width_exp1,
@@ -142,7 +143,8 @@ struct SPEChargeDistribution
       gaus_mean(mean_gaus),
       gaus_width(width_gaus),
       compensation_factor(factor_compensation),
-      SLC_gaus_mean(gaus_mean_SLC) { }
+      SLC_gaus_mean(gaus_mean_SLC),
+      mean_charge(NAN) { }
 
   double exp1_amp;
   double exp1_width;
@@ -153,6 +155,10 @@ struct SPEChargeDistribution
   double gaus_width;
   double compensation_factor;
   double SLC_gaus_mean;
+  ///The expected value of this charge distribution.
+  ///This quantity is derived from others lazily, so it is does not participate in serialization or
+  ///comparison.
+  mutable double mean_charge;
 
   bool IsValid() const
   {
@@ -169,10 +175,11 @@ struct SPEChargeDistribution
   }
   
   ///Evaluate the mean of the SPE template distribution without the residual correction for now
-  double Mean() const{
-    return exp1_amp*std::pow(exp1_width,2)+exp2_amp*std::pow(exp2_width,2)
-      +gaus_amp*std::sqrt(M_PI/2)*gaus_mean*gaus_width*(1+std::erf(gaus_mean/(gaus_width*std::sqrt(2))))
-      +gaus_amp*std::pow(gaus_width,2)*std::exp(-0.5*std::pow(gaus_mean/gaus_width,2));
+  double Mean() const
+  {
+    if(std::isnan(mean_charge))
+      mean_charge=ComputeMeanCharge();
+    return mean_charge;
   }
 
   bool operator==(const SPEChargeDistribution& rhs) const
@@ -212,7 +219,6 @@ struct SPEChargeDistribution
 
         int size = sizeof(xData)/sizeof(*xData);
 
-        //std::cout<<size<<std::endl;
         int i = 0;                                                                  // find left end of interval for interpolation
         if ( q >= xData[size - 2] )                                                 // special case: beyond right end
         {
@@ -220,7 +226,9 @@ struct SPEChargeDistribution
         }
         else
         {
-          while ( q > xData[i+1] ) i++;
+          i = std::lower_bound(xData, xData+size, q) - xData;
+          if(i)
+            i--;
         }
         double xL = xData[i], yL = yData[i], xR = xData[i+1], yR = yData[i+1];
         double dydx = ( yR - yL ) / ( xR - xL );
@@ -230,9 +238,10 @@ struct SPEChargeDistribution
         return y*(exp1_amp*exp(-q/exp1_width)
                 + exp2_amp*exp(-q/exp2_width)
                 + gaus_amp*exp(-.5*e*e));
-        
-        //return y;
     }
+	
+private:
+  double ComputeMeanCharge() const;
 
 };
 
@@ -704,7 +713,7 @@ class I3DOMCalibration {
     meanFADCCharge_ = charge;
   }
 
-  SPEChargeDistribution GetCombinedSPEChargeDistribution() const {
+  const SPEChargeDistribution& GetCombinedSPEChargeDistribution() const {
     return combinedSPEFit_;
   }
 

@@ -62,8 +62,7 @@ void register_I3DOMCalibration()
                             (MPEDiscCalib)(PMTDiscCalib)(DomNoiseRate)(RelativeDomEff)\
                             (DomNoiseThermalRate)(DomNoiseDecayRate)      \
                             (DomNoiseScintillationMean)(DomNoiseScintillationSigma)   \
-                            (DomNoiseScintillationHits)(MeanATWDCharge)(MeanFADCCharge)\
-                            (CombinedSPEChargeDistribution)
+                            (DomNoiseScintillationHits)(MeanATWDCharge)(MeanFADCCharge)
       BOOST_PP_SEQ_FOR_EACH(WRAP_PROP, I3DOMCalibration, I3DOMCALPROPS)
       #undef I3DOMCALPROPS
       #define EVIL_PROPS (ATWDBeaconBaseline)(ATWDDeltaT) \
@@ -73,6 +72,11 @@ void register_I3DOMCalibration()
       .add_property("toroid_type", &I3DOMCalibration::GetToroidType)
       .add_property("is_mean_atwd_charge_valid", &I3DOMCalibration::IsMeanATWDChargeValid)
       .add_property("is_mean_fadc_charge_valid", &I3DOMCalibration::IsMeanFADCChargeValid)
+      .add_property("combined_spe_charge_distribution", 
+                    make_function(&I3DOMCalibration::GetCombinedSPEChargeDistribution, 
+                                  return_internal_reference<>()),
+                    &I3DOMCalibration::SetCombinedSPEChargeDistribution
+       )
       .def("atwd_pulse_template", &I3DOMCalibration::ATWDPulseTemplate)
       .def("fadc_pulse_template", &I3DOMCalibration::FADCPulseTemplate)
       .def("discriminator_pulse_template", &I3DOMCalibration::DiscriminatorPulseTemplate)

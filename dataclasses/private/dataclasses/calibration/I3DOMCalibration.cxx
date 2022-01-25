@@ -8,6 +8,8 @@
 #include <dataclasses/calibration/I3DOMCalibration.h>
 #include <icetray/I3Units.h>
 
+#include <gsl/gsl_integration.h>
+
 I3DOMCalibration::~I3DOMCalibration() { } 
 
 I3DOMCalibration::I3DOMCalibration()
@@ -453,6 +455,55 @@ SPEChargeDistribution::load(Archive& ar, unsigned version)
 }
 
 I3_SPLIT_SERIALIZABLE(SPEChargeDistribution);
+
+namespace GSL{
+///\brief Compute a one-dimensional integral using GSL.
+///\param f Function to integrate.
+///\param a Lower integration limit.
+///\param b Upper integration limit.
+///\param acc Accuracy parameter.
+///\param max_iter Maximum number of iterations to perform the integral.
+template<typename FunctionType>
+double integrate(FunctionType&& f, double a, double b, double rtol=1e-7, unsigned int max_iter=10000, size_t memory_alloc=10000){
+  using IntegrateWorkspace=std::unique_ptr<gsl_integration_workspace, void(*)(gsl_integration_workspace*)>;
+  IntegrateWorkspace ws(gsl_integration_workspace_alloc(memory_alloc), &gsl_integration_workspace_free);
+
+  using FPtr=decltype(&f);
+  double (*wrapper)(double,void*)=[](double x, void* params)->double{
+    auto& f=*static_cast<FPtr>(params);
+    return(f(x));
+  };
+
+  double result, error;
+  gsl_function F;
+  F.function = wrapper;
+  F.params = const_cast<typename std::remove_const<typename std::remove_reference<decltype(f)>::type>::type*>(&f);
+
+  gsl_integration_qag(&F, a, b, 0, rtol, max_iter, GSL_INTEG_GAUSS15, ws.get(), &result, &error);
+
+  return(result);
+}
+}
+
+double SPEChargeDistribution::ComputeMeanCharge() const{
+  //Analytic caclulation which neglects the residual correction factor
+  //return exp1_amp*std::pow(exp1_width,2)+exp2_amp*std::pow(exp2_width,2)
+  //  +gaus_amp*std::sqrt(M_PI/2)*gaus_mean*gaus_width*(1+std::erf(gaus_mean/(gaus_width*std::sqrt(2))))
+  //  +gaus_amp*std::pow(gaus_width,2)*std::exp(-0.5*std::pow(gaus_mean/gaus_width,2));
+  
+  //This might seems like a very loose tolerance, but the GSL integrator tends to
+  //fail for any tighter setting.
+  //However, it also tends to substantially overestimate its error, at least for
+  //these functions, as checking all charge distributions in
+  //GeoCalibDetectorStatus_2020.Run134142.Pass2_V0.i3.gz against another, less touchy
+  //algorithm indicates that it produces an average relative error in the computed
+  //mean of only 4.2e-06, and the worst observed error is 2.4e-4.  
+  const double int_tol = 1e-3;
+  double norm = GSL::integrate(*this, 0, 10*gaus_mean, int_tol);
+  auto moment_integrand = [this](double x){ return x*this->operator()(x); };
+  double mom1 = GSL::integrate(moment_integrand, 0, 10*gaus_mean, int_tol);
+  return mom1/norm;
+}
 
 template <class Archive>
 void 
