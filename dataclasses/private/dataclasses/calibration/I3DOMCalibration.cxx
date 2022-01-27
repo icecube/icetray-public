@@ -457,6 +457,7 @@ SPEChargeDistribution::load(Archive& ar, unsigned version)
 I3_SPLIT_SERIALIZABLE(SPEChargeDistribution);
 
 namespace GSL{
+
 ///\brief Compute a one-dimensional integral using GSL.
 ///\param f Function to integrate.
 ///\param a Lower integration limit.
@@ -483,7 +484,8 @@ double integrate(FunctionType&& f, double a, double b, double rtol=1e-7, unsigne
 
   return(result);
 }
-}
+
+} //namespace GSL
 
 double SPEChargeDistribution::ComputeMeanCharge() const{
   //Analytic caclulation which neglects the residual correction factor

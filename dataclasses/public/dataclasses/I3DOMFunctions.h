@@ -53,7 +53,7 @@ double SPEMean (const I3DOMStatus& , const I3DOMCalibration&);
  * estimate the number of photons responsible for a given number of
  * photoelectrons.
  */
-double MeanSPECharge (const I3DOMStatus& , const I3DOMCalibration&);
+double MeanSPECharge (const I3DOMCalibration&);
 
 /**
  * Get the FADC baseline (in counts)

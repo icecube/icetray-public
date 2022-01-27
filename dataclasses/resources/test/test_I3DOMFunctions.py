@@ -25,8 +25,8 @@ class TestI3DOMFunctions(unittest.TestCase):
         dc1.fadc_baseline_fit = fit1
         dc2.fadc_baseline_fit = fit2
 
-        mspe1 = dataclasses.mean_spe_charge(ds1,dc1)
-        mspe2 = dataclasses.mean_spe_charge(ds2,dc2)
+        mspe1 = dataclasses.mean_spe_charge(dc1)
+        mspe2 = dataclasses.mean_spe_charge(dc2)
 
         self.assertEqual(mspe1, mspe2, "these should be the same.")
 

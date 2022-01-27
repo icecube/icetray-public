@@ -228,7 +228,9 @@ struct SPEChargeDistribution
         {
           i = std::lower_bound(xData, xData+size, q) - xData;
           if(i)
+          {
             i--;
+          }
         }
         double xL = xData[i], yL = yData[i], xR = xData[i+1], yR = yData[i+1];
         double dydx = ( yR - yL ) / ( xR - xL );

@@ -119,7 +119,7 @@ double SPEMean (const I3DOMStatus& status ,
   return spemean;
 }
 
-double MeanSPECharge (const I3DOMStatus& status, const I3DOMCalibration& calib)
+double MeanSPECharge (const I3DOMCalibration& calib)
 {
   const SPEChargeDistribution& spe_charge_dist = calib.GetCombinedSPEChargeDistribution();
   double mean_atwd_charge = (calib.IsMeanATWDChargeValid() ? calib.GetMeanATWDCharge(): 1);
