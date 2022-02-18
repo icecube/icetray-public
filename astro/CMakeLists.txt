@@ -5,12 +5,12 @@
 
 if (PAL_FOUND)
 
-  colormsg(GREEN "  + PAL found") 
+  colormsg(GREEN "  + PAL found")
 
-  i3_project(astro		
+  i3_project(astro
     PYTHON_DIR python
     DOCS_DIR resources/docs)
-    
+
   i3_add_library(astro private/astro/*.cxx
     USE_TOOLS boost pal
     USE_PROJECTS serialization icetray dataclasses tableio
@@ -22,10 +22,14 @@ if (PAL_FOUND)
     astro::test_radec.py
     PROPERTIES LABELS RUN_LONG
     )
+  set_tests_properties(
+    astro::test_sun_and_moon.py
+    PROPERTIES DEPENDS astro::test_tableio.py
+    )
 
   i3_add_pybindings(astro
       private/pybindings/I3Astro.cxx
-      USE_TOOLS python 
+      USE_TOOLS python
       USE_PROJECTS astro  tableio
       )
 
