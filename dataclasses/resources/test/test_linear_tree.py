@@ -66,6 +66,7 @@ from I3Tray import I3Tray
 # first round: convert and serialize
 tray = I3Tray()
 outfile = 'i3linearizedmctree_tmp.i3.bz2'
+outfiles = [outfile]
 tray.AddModule('I3Reader', 'reader', filenamelist=infiles)
 tray.AddModule('Keep', 'keeper', Keys=['I3MCTree'])
 # force re-serialization of original I3MCTree to ensure that particle IDs
@@ -96,6 +97,7 @@ tray.AddModule(icetray.I3TestModuleFactory(LinearTreeTest), 'testy',
 tray.AddModule('Delete', 'kill_mctree', Keys=['I3MCTree'])
 
 outfile = 'i3linearizedmctree_compact.i3.bz2'
+outfiles.append(outfile)
 tray.AddModule('I3Writer', 'writer',
     Streams=[icetray.I3Frame.DAQ, icetray.I3Frame.Physics],
     # DropOrphanStreams=[icetray.I3Frame.DAQ],
@@ -103,3 +105,5 @@ tray.AddModule('I3Writer', 'writer',
 
 tray.Execute(100)
 
+# cleanup our output
+[os.path.exists(x) and os.remove(x) for x in outfiles]
