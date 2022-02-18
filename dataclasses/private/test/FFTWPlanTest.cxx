@@ -54,14 +54,18 @@ TEST(real_to_complex_transform) {
   const int nc = fft::GetNCFromNR(n);
   complexD outData[nc];
   plan.CopyOutOfPlanC(outData);
+
+  // if n is 4, nc will be 3
+  ENSURE_EQUAL(nc, 3);
+  ENSURE_EQUAL(sizeof(outData)/sizeof(outData[0]), nc,
+               "unexpected number of elemtes in outData");
+
   ENSURE_DISTANCE(outData[0].real(), 0, 1e-8);
   ENSURE_DISTANCE(outData[0].imag(), 0, 1e-8);
   ENSURE_DISTANCE(outData[1].real(), 0, 1e-8);
   ENSURE_DISTANCE(outData[1].imag(), -2, 1e-8);
   ENSURE_DISTANCE(outData[2].real(), 0, 1e-8);
   ENSURE_DISTANCE(outData[2].imag(), 0, 1e-8);
-  ENSURE_DISTANCE(outData[3].real(), 0, 1e-8);
-  ENSURE_DISTANCE(outData[3].imag(), 0, 1e-8);
 }
 
 TEST(complex_to_real_transform) {
