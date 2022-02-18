@@ -554,6 +554,8 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
     add_test(NAME "${PROJECT_NAME}::${THIS_EXECUTABLE_NAME}" #::${testable_file}/${unittest}"
              WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
              COMMAND ${PROJECT_NAME}-${THIS_EXECUTABLE_NAME} -t 1100 -saf)
+    set_tests_properties("${PROJECT_NAME}::${THIS_EXECUTABLE_NAME}"
+	                 PROPERTIES LABELS BINARY)
 
     parse_arguments(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}
       "USE_TOOLS;USE_PROJECTS;USE_PYBINDINGS;LINK_LIBRARIES"
