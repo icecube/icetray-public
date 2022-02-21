@@ -6,6 +6,11 @@ Release Notes
 trunk
 -----
 
+* update test_I3DOMFunctions to actually test the new SPECharge distribution
+* Compute the mean of the complete charge distribution. As this calculation can be more expensive than the analytic treatment, the result is computed lazily and cached. To aid this caching, some unnecessary copies of SPEChargeDistributions are eliminated. To speed up both the numerical integration and other uses of the charge distribution, the linear se
+arch in the tabulated residual values is replaced with a binary search.
+* Add Enums for Gen2 sensors
+* Avoid undefined behavior in bitshift
 * Added 'GetTankGeo' functions to I3Geometry, to identify and access the StationGeo tanks correctly 
   regardless of their ordering in the list.
 * Removed cached members of I3Position.  Non-cartesian coords are calculated on
