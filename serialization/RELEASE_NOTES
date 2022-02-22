@@ -8,6 +8,15 @@ Release Notes
 trunk
 -----
 
+Feb. 22, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray release v1.3.0
+
+- Boost updates
+- Reduce memory usage
+- CMake house-keeping
+- Address compilation warnings
+
 Dec. 20, 2019 Alex Olivas (aolivas@umd.edu)
 -------------------------------------------
 Combo Release V00-00-00

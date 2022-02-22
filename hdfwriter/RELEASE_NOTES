@@ -9,6 +9,16 @@ Release Notes
 
 trunk
 -----
+
+Feb. 22, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+Github Release v1.3.0
+
+* Since V01-02-00
+  * Better error messages
+  * Documentation updates
+  * Test updates
+
 * Py3k compatibility for hdfwriter-mix
 * add support for S-Frames in tableio
 

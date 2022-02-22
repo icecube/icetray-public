@@ -6,6 +6,11 @@ Release Notes
 trunk
 -----
 
+Dec. 15, 2021 Kevin Meagher
+---------------------------
+Github Release v1.3.0
+
+* Fix race between tests
 * Add class `I3Ecliptic` for ecliptic coordinates and functions `I3GetEclipticFromEquatorial()` 
   and `I3GetEquatorialFromEcliptic`
 * The PAL not found error message not gives the correct link to the install instructions

@@ -8,6 +8,15 @@ Release Notes
 trunk
 -----
 
+Feb. 22, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+Github Release v1.3.0
+
+There have been extensive updates to this project, especially in the
+documentation that it contains, since the last time these release
+notes were updated. Please refer to the git log for points prior to
+this release.
+
 * Provide better support for running in virtual enviroments
   the differ from the build environment.
 * Disable HDF5 file locking by default. 

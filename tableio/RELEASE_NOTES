@@ -8,6 +8,19 @@ Release Notes
 trunk
 -----
 
+Feb. 21, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray release v1.3.0
+
+* Since V01-02-00
+
+  * Updates to tests
+  * @marialiubarska's work to support the `new genie reader <https://github.com/icecube/icetray/pull/2597>`_
+  * Merge the two different finiteReco converters
+  * Documentation cleanups
+  * Address python deprecations
+  * Address compilation warnings
+
 * Add support for S-Frames in tableio
 
 Dec. 20, 2019 Alex Olivas (aolivas@umd.edu)

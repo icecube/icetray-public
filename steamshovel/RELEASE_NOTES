@@ -7,6 +7,17 @@ Release Notes
 trunk
 -----
 
+Feb. 21, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray release v1.3.0
+
+* Updates for new versions of Boost
+* Addresses Qt deprecations
+* Addresses compiler warnings
+* Cleans up dead code
+* `IceTop Widget refactoring <https://github.com/icecube/icetray/pull/2563>`_
+* Documentation cleanup
+
 Feb. 5, 2020 Alex Olivas (aolivas@umd.edu)
 -------------------------------------------
 Combo Release V00-00-01

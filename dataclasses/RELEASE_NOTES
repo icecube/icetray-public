@@ -6,6 +6,10 @@ Release Notes
 trunk
 -----
 
+Feb. 21, 2022 Tianlu Yuan
+-------------------------
+Github Release v1.3.0
+
 * update test_I3DOMFunctions to actually test the new SPECharge distribution
 * Compute the mean of the complete charge distribution. As this calculation can be more expensive than the analytic treatment, the result is computed lazily and cached. To aid this caching, some unnecessary copies of SPEChargeDistributions are eliminated. To speed up both the numerical integration and other uses of the charge distribution, the linear se
 arch in the tabulated residual values is replaced with a binary search.

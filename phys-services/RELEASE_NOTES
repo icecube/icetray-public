@@ -7,6 +7,14 @@ Release Notes
 trunk
 -----
 
+Feb. 22, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray release v1.3.0
+
+* Updates to support `genie-reader <https://github.com/icecube/icetray/pull/2597>`_
+* Test updates
+* Documentation cleanups
+
 Feb. 5, 2020 Alex Olivas (aolivas@umd.edu)
 -------------------------------------------
 Combo Release V00-00-01
