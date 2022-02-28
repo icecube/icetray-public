@@ -8,6 +8,10 @@ Release Notes
 trunk
 -----
 
+- remove auto_ptr support from serialization - This could potentially be a
+  brakeing change if auto_ptrs have ever been serialized. However, there is no
+  evidence that an auto_ptr has ever been serialized
+
 Feb. 22, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
 IceTray release v1.3.0

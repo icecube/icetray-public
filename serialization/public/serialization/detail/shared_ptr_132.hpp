@@ -28,7 +28,6 @@
 #include <serialization/access.hpp>
 #include <serialization/detail/shared_count_132.hpp>
 
-#include <memory>               // for std::auto_ptr
 #include <algorithm>            // for std::swap
 #include <functional>           // for std::less
 #include <typeinfo>             // for std::bad_cast
@@ -196,18 +195,6 @@ public:
         }
     }
 
-#ifndef BOOST_NO_AUTO_PTR
-
-    template<class Y>
-    explicit shared_ptr(std::auto_ptr<Y> & r): px(r.get()), pn()
-    {
-        Y * tmp = r.get();
-        pn = detail::shared_count(r);
-        detail::sp_enable_shared_from_this( pn, tmp, tmp );
-    }
-
-#endif
-
 #if !defined(BOOST_MSVC) || (BOOST_MSVC > 1200)
 
     template<class Y>
@@ -215,17 +202,6 @@ public:
     {
         px = r.px;
         pn = r.pn; // shared_count::op= doesn't throw
-        return *this;
-    }
-
-#endif
-
-#ifndef BOOST_NO_AUTO_PTR
-
-    template<class Y>
-    shared_ptr & operator=(std::auto_ptr<Y> & r)
-    {
-        this_type(r).swap(*this);
         return *this;
     }
 

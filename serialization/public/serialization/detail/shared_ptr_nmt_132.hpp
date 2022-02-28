@@ -19,10 +19,6 @@
 #include <serialization/throw_exception.hpp>
 #include <boost/detail/atomic_count.hpp>
 
-#ifndef BOOST_NO_AUTO_PTR
-# include <memory>          // for std::auto_ptr
-#endif
-
 #include <algorithm>        // for std::swap
 #include <functional>       // for std::less
 #include <new>              // for std::bad_alloc
@@ -88,22 +84,6 @@ public:
         shared_ptr(r).swap(*this);
         return *this;
     }
-
-#ifndef BOOST_NO_AUTO_PTR
-
-    explicit shared_ptr(std::auto_ptr< T > & r)
-    { 
-        pn = new count_type(1); // may throw
-        px = r.release(); // fix: moved here to stop leak if new throws
-    } 
-
-    shared_ptr & operator=(std::auto_ptr< T > & r)
-    {
-        shared_ptr(r).swap(*this);
-        return *this;
-    }
-
-#endif
 
     void reset(T * p = 0)
     {

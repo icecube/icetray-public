@@ -31,7 +31,6 @@
 #include <boost/detail/quick_allocator.hpp>
 #endif
 
-#include <memory>           // std::auto_ptr, std::allocator
 #include <functional>       // std::less
 #include <exception>        // std::exception
 #include <new>              // std::bad_alloc
@@ -362,25 +361,6 @@ public:
 
 #endif
     }
-
-#ifndef BOOST_NO_AUTO_PTR
-
-    // auto_ptr<Y> is special cased to provide the strong guarantee
-
-    template<class Y>
-    explicit shared_count(std::auto_ptr<Y> & r): pi_(
-        new sp_counted_base_impl<
-            Y *, 
-            boost::checked_deleter<Y>
-        >(r.get(), boost::checked_deleter<Y>()))
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
-        , id_(shared_count_id)
-#endif
-    {
-        r.release();
-    }
-
-#endif 
 
     ~shared_count() // nothrow
     {
