@@ -62,4 +62,3 @@ if(Boost_FOUND)
 	set(BOOST_LIBRARIES ${Boost_LIBRARIES} CACHE PATH "Boost libraries")
 	include_directories(${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-new)
 endif(Boost_FOUND)
-

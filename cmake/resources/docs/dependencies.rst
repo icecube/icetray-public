@@ -66,6 +66,9 @@ Thes dependencies are optional. If not present comb will compile with reduced fu
   * - `SuiteSparse <https://sparse.tamu.edu/>`_
     - Sparse matrix algorithms
     -  :ref:`millipede-main` :ref:`photospline` :ref:`wavedeform-main` :ref:`RoundTripChargeTest <DOMLauncher>`
+  * - `Photospline <https://github.com/icecube/photospline>`_
+    - Tensor-product B-spline surface evaluation
+    - :ref:`photospline`
   * - `ERFA <https://github.com/liberfa/erfa>`_
     - Essential Routines for Fundamental Astronomy
     - :ref:`astro` :ref:`filterscripts` :ref:`wimpsim-reader`

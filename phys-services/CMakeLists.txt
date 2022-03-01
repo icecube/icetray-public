@@ -67,9 +67,9 @@ i3_add_library(phys-services
   private/surfaces/polygon.cxx
   ${SPRNG_SOURCES}
 
-  USE_PROJECTS serialization icetray dataclasses interfaces tableio photospline
+  USE_PROJECTS serialization icetray dataclasses interfaces tableio
 
-  USE_TOOLS ${OPTIONAL_TOOLS} gsl boost python cfitsio 
+  USE_TOOLS ${OPTIONAL_TOOLS} gsl boost python photospline
   )
 
 i3_executable(CreateXMLOMKey2MBIDConversionTable

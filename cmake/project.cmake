@@ -188,6 +188,7 @@ macro(i3_add_library THIS_LIB_NAME)
     set_target_properties(${THIS_LIB_NAME}
       PROPERTIES
       COMPILE_DEFINITIONS PROJECT=${PROJECT_NAME}
+      NO_SYSTEM_FROM_IMPORTED TRUE
       )
 
     if(${THIS_LIB_NAME}_ARGS_IWYU AND USE_IWYU)
