@@ -13,7 +13,7 @@ import logging
 
 
 log = logging.getLogger(__name__)
-log.addHandler(logging.NullHandler)
+log.addHandler(logging.NullHandler())
 
 try:
     import docutils.frontend
@@ -78,6 +78,7 @@ try:
 
 except ImportError:
 
+    log.warning("Error importing docutils. reST docstrings will not be parsed and output will not what be what you expect.")
     def getdoc(obj):
         docstring = inspect.getdoc(obj)
         if docstring is None:
@@ -153,7 +154,7 @@ def is_traysegment(obj):
     return hasattr(obj, "__i3traysegment__")
 
 major, minor = sys.version_info[:2]
-if major >= 2 and minor >= 6:
+if (major > 2 ) or (major == 2 and minor >= 6):
     def same_package(current, other):
         return current.__package__ == other.__package__
 else:

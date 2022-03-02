@@ -37,9 +37,8 @@ except ImportError:
 
 log.addHandler(log_handler)
 log.setLevel(logging.INFO)
-logging.getLogger("icecube.icetray.i3inspect").setLevel(logging.INFO)
 
-logging.getLogger("icecube.icetray.i3inspect").removeHandler(logging.NullHandler)
+logging.getLogger("icecube.icetray.i3inspect").removeHandler(logging.NullHandler())
 logging.getLogger("icecube.icetray.i3inspect").addHandler(log_handler)
 logging.getLogger("icecube.icetray.i3inspect").setLevel(logging.INFO)
 
@@ -299,6 +298,7 @@ def get_doxygen_docstring(project,modulename):
     try:
         tree = ET.parse(xmlfile)
     except IOError:
+        # log.warning("Could not parse doxygen docstring from %s" % xmlfile)
         return ""
 
     root = tree.getroot()
@@ -551,8 +551,8 @@ from icecube import icetray, dataclasses,tableio
 from icecube.icetray import traysegment
 
 if opts.verbose:
-    log.setLevel(logging.INFO)
-    logging.getLogger("icecube.icetray.i3inspect").setLevel(logging.INFO)
+    log.setLevel(logging.DEBUG)
+    logging.getLogger("icecube.icetray.i3inspect").setLevel(logging.DEBUG)
 
 
 def sig_handler(signum, frame):
