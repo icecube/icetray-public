@@ -493,6 +493,8 @@ parser.add_option('-v', '--verbose', action="store_true", dest="verbose",
 parser.add_option('-a', '--all', action='store_true',
         help='Examine all projects/libraries in DIRECTORY', metavar='DIRECTORY',
         default=False)
+parser.add_option('-X', '--exclude', default='',
+        help='Skip these projects when using --all')
 parser.add_option('-R', '--regex', dest='regex', type='regex',
         help='Print only modules/services/segments whose names match this regular expression',
         default=None)
@@ -583,7 +585,7 @@ output.file_header()
 args = sorted(set([a.replace('-','_') for a in args]),
               key=lambda s:s.lower())
 
-noinspect = i3inspect.get_uninspectable_projects()
+noinspect = opts.exclude.split(',')
 
 for p in args:
     if p in noinspect:

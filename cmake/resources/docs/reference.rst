@@ -182,11 +182,6 @@ i3_add_library
       location within the install tree.  Path is relative to the
       installation prefix.
 
-   .. cmdoption:: NOT_INSPECTABLE
-
-      Don't run icetray-inspect on this library when generating
-      documentation.  
-
    .. cmdoption:: WITHOUT_I3_HEADERS
 
       Don't prepend ``-include I3.h`` to compile lines.  (This is the

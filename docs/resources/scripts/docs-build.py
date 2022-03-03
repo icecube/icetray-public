@@ -18,30 +18,40 @@ except ImportError:
 
 log.addHandler(log_handler)
 
-
 class command_queue:
-    def __init__(self,max_processes=1):
+    def __init__(self, max_processes=1):
         self.queue = deque([])
         self.running = []
         self.max_processes = max_processes
+
     def check(self):
         newrunning = []
-        for args,popen in self.running:
+        for args, popen, endtime in self.running:
             st = popen.poll()
             if st is None:
-                newrunning.append((args,popen))
+                if endtime is not None and time.monotonic() > endtime:
+                    log.warning("Timed out, Killing %s", args[0])
+                    popen.kill()
+                newrunning.append((args, popen, endtime))
             elif st:
                 log.warning("Exit status %s: %s", args[0], st)
 
         self.running = newrunning
         while len(self.queue) and len(self.running) < self.max_processes:
-            args = self.queue.popleft()
+            args, timeout = self.queue.popleft()
             log.debug("Running %s", args)
-            self.running.append((args,subprocess.Popen(*args)))
-    def call(self,*args):
-        self.queue.append(args)
+
+            if timeout:
+                endtime = time.monotonic() + timeout
+            else:
+                endtime = None
+            self.running.append((args, subprocess.Popen(*args), endtime))
+
+    def call(self, *args, timeout=None):
+        self.queue.append((args, timeout))
         self.check()
-    def wait(self,polltime=0.001):
+
+    def wait(self, polltime=0.01):
         while len(self.running):
             self.check()
             time.sleep(polltime)
@@ -113,6 +123,9 @@ def main():
     parser.add_argument('--skip-doxygen', nargs='+',metavar='proj',
                         help='do not generate doxygen for these projects',
                         default=['steamshovel'])
+    parser.add_argument('--skip-inspect', nargs='+',metavar='proj',
+                        help='do not generate inspect docs for these projects',
+                        default=['HiveSplitter','IceHive','photonics_service'])
     parser.add_argument('--build-type', default='html',
                         help="type of output to build [default=html] (see "
                         "http://www.sphinx-doc.org/en/stable/invocation.html"
@@ -263,19 +276,20 @@ def main():
         cmd = ["icetray-inspect",
                "--sphinx","--sphinx-references","--no-params",
                "--title=IceTray Inspect Quick Reference",
+               "--exclude="+','.join(args.skip_inspect),
                "-o",quick_rst]
         if args.projects:
             cmd += args.projects
         else:
             cmd += ["--all"]
         log.info("Writing %s", quick_rst)
-        queue.call(cmd)
+        queue.call(cmd, timeout=60)
 
         inspectlibs = i3inspect.get_all_projects()
         rstfiles=[]
 
         for proj in inspectlibs:
-            if not use_this_project(proj):
+            if not use_this_project(proj) or proj in args.skip_inspect:
                 continue
 
             rst_out= os.path.join(sourcedir,"inspect",proj+".rst")
@@ -288,7 +302,7 @@ def main():
                    "--title=",
                    "-o",rst_out]
             log.debug("Writing %s", rst_out)
-            queue.call(cmd)
+            queue.call(cmd, timeout=10)
 
         queue.wait()
 

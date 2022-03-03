@@ -138,7 +138,7 @@ macro(i3_add_library THIS_LIB_NAME)
     #
     parse_arguments(${THIS_LIB_NAME}_ARGS
       "USE_TOOLS;USE_PROJECTS;ROOTCINT;INSTALL_DESTINATION;LINK_LIBRARIES;COMPILE_FLAGS"
-      "NOT_INSPECTABLE;MODULE;EXCLUDE_FROM_ALL;WITHOUT_I3_HEADERS;NO_DOXYGEN;IWYU;PYBIND11;NOUNDERSCORE"
+      "MODULE;EXCLUDE_FROM_ALL;WITHOUT_I3_HEADERS;NO_DOXYGEN;IWYU;PYBIND11;NOUNDERSCORE"
       ${ARGN}
       )
 
@@ -234,19 +234,6 @@ macro(i3_add_library THIS_LIB_NAME)
       target_link_libraries(${THIS_LIB_NAME} ${${THIS_LIB_NAME}_ARGS_LINK_LIBRARIES})
     endif (${THIS_LIB_NAME}_ARGS_LINK_LIBRARIES)
 
-    #
-    # set "inspectable" flag for use by icetray-inspect docs generator
-    #
-    if(${THIS_LIB_NAME}_ARGS_NOT_INSPECTABLE)
-      set_target_properties(${THIS_LIB_NAME}
-	PROPERTIES
-	INSPECTABLE FALSE)
-    else(${THIS_LIB_NAME}_ARGS_NOT_INSPECTABLE)
-      set_target_properties(${THIS_LIB_NAME}
-	PROPERTIES
-	INSPECTABLE TRUE)
-    endif(${THIS_LIB_NAME}_ARGS_NOT_INSPECTABLE)
-
     use_projects(${THIS_LIB_NAME}
       PROJECTS "${${THIS_LIB_NAME}_ARGS_USE_PROJECTS}"
       )
@@ -286,43 +273,6 @@ macro(i3_add_library THIS_LIB_NAME)
       endforeach()
 
     endif(NOT ${THIS_LIB_NAME}_ARGS_NO_DOXYGEN AND DOXYGEN_FOUND)
-
-    if(XSLTPROC_BIN)
-      
-      if(${THIS_LIB_NAME}_ARGS_NOT_INSPECTABLE)
-
-        file(WRITE ${CMAKE_BINARY_DIR}/docs/no_inspect/${THIS_LIB_NAME} "")
-	
-      else(${THIS_LIB_NAME}_ARGS_NOT_INSPECTABLE)
-    
-        set(XML_TMP ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${THIS_LIB_NAME}-inspection.xml)
-        set(HTML_OUTPUT ${CMAKE_BINARY_DIR}/docs/inspect/${THIS_LIB_NAME}.html)
-        set(RST_OUTPUT ${SPHINX_DIR}/source/inspect/${THIS_LIB_NAME}.rst)
-        add_custom_target(${PROJECT_NAME}-${THIS_LIB_NAME}-inspect
-        	COMMAND mkdir -p ${CMAKE_BINARY_DIR}/docs/inspect
-    	  	COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ${EXECUTABLE_OUTPUT_PATH}/icetray-inspect ${THIS_LIB_NAME} --xml -o ${XML_TMP}
-		COMMAND ${XSLTPROC_BIN} ${CMAKE_SOURCE_DIR}/icetray/resources/inspect2html.xsl ${XML_TMP} > ${HTML_OUTPUT}
-	
-		COMMAND mkdir -p ${SPHINX_DIR}/source/inspect/
-		COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh
-		${EXECUTABLE_OUTPUT_PATH}/icetray-inspect ${THIS_LIB_NAME}
-		--sphinx --subsection-headers --sphinx-functions
-		--verbose-docs
-		#--expand-segments
-		--title=""
-		-o ${RST_OUTPUT}
-		COMMENT "Generating rst from icetray-inspect of ${THIS_LIB_NAME}"
-		)
-
-        add_dependencies(inspect
-	  ${PROJECT_NAME}-${THIS_LIB_NAME}-inspect
-	  )
-	  
-      endif(${THIS_LIB_NAME}_ARGS_NOT_INSPECTABLE)
-
-    endif(XSLTPROC_BIN)	
-
-
 
     if(DPKG_INSTALL_PREFIX)
       set_target_properties(${THIS_LIB_NAME}
@@ -669,7 +619,7 @@ macro(i3_add_pybindings MODULENAME)
       i3_add_library(${MODULENAME}-pybindings ${ARGN}
         USE_TOOLS python
         INSTALL_DESTINATION lib/icecube
-        NOT_INSPECTABLE NO_DOXYGEN
+        NO_DOXYGEN
         MODULE
         )
       include_directories(${CMAKE_BINARY_DIR}/pybind11/include)
@@ -730,7 +680,7 @@ macro(i3_add_pybindings MODULENAME)
       i3_add_library(${MODULENAME}-pybindings ${ARGN}
         LINK_LIBRARIES ${BOOST_PYTHON}
         INSTALL_DESTINATION lib/icecube
-        NOT_INSPECTABLE NO_DOXYGEN
+        NO_DOXYGEN
         MODULE
         )
 

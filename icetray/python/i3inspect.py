@@ -188,14 +188,6 @@ def harvest_objects(module,want):
             harvest[attr]=item
     return harvest
 
-
-def get_uninspectable_projects():
-    # level3_filter_cascade calls the segfaulting IceHive
-    # IceHive now hangs on inspect...we'll call this an improvement over segfaulting.
-    return [ os.path.basename(fname).replace('-','_') for fname in
-             glob(os.path.join(os.environ['I3_BUILD'],
-                               'docs','no_inspect','*'))] + ["level3_filter_cascade", "IceHive"]
-
 def get_inspectable_projects():
 
     libdir = os.path.join(os.environ['I3_BUILD'],'lib')
@@ -208,7 +200,7 @@ def get_inspectable_projects():
                 for fname in glob(os.path.join(libdir,'lib*'+suffix))]
 
     moduleitr = pkgutil.iter_modules(path=[libdir+'/icecube'])
-    python_libs = [ x[1] for x in moduleitr]
+    python_libs = [ x[1] for x in moduleitr if not x[1].startswith('_')]
 
     return cpp_libs,python_libs
 
@@ -219,6 +211,5 @@ def get_all_projects():
     cpp_libs = [ l.replace("-","_") for l in cpp_libs ]
     
     libs = sorted(set(cpp_libs+python_libs),key=lambda x: x.lower())
-    libs = [ l for l in libs if l not in  get_uninspectable_projects()]
 
     return libs
