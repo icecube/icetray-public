@@ -156,10 +156,6 @@ set(SITE ${HOSTNAME})
 # Show cmake path and version
 #
 boost_report_pretty("CMake path" CMAKE_COMMAND)
-if(NOT CMAKE_VERSION)
-  set(CMAKE_VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION})
-endif(NOT CMAKE_VERSION)
-math(EXPR CMAKE_VERSION_INT "${CMAKE_MAJOR_VERSION} * 10000 + ${CMAKE_MINOR_VERSION} * 100 + ${CMAKE_PATCH_VERSION}")
 boost_report_pretty("CMake version" CMAKE_VERSION)
 
 #
@@ -604,3 +600,9 @@ if(NOT APPLE)
 endif(NOT APPLE)
 
 set(METAPROJECT_CONFIGURED TRUE CACHE INTERNAL "Metaproject configured")
+
+include(CheckLanguage)
+check_language(CUDA)
+if (CMAKE_CUDA_COMPILER)
+  enable_language(CUDA)
+endif(CMAKE_CUDA_COMPILER)

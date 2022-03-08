@@ -22,7 +22,7 @@
 # Tarballs created from this build will be extremely light-weight, containing only
 # the new projects and symlinks to the parasitized base metaproject.
 
-cmake_minimum_required(VERSION 2.6.4 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
 set(CMAKE_MODULE_PATH
   ${EXTRA_CMAKE_MODULE_PATH} 

@@ -624,14 +624,6 @@ macro(i3_add_pybindings MODULENAME)
         )
       include_directories(${CMAKE_BINARY_DIR}/pybind11/include)
 
-      if(CMAKE_VERSION VERSION_LESS 3.1.0)
-	colormsg(YELLOW "+-- You need to download pybind11 from GitHub with")
-	colormsg(YELLOW "+--   wget https://github.com/pybind/pybind11/archive/master.zip")
-	colormsg(YELLOW "+-- or")
-	colormsg(YELLOW "+--   curl -OL https://github.com/pybind/pybind11/archive/master.zip")
-	colormsg(YELLOW "+-- and unpack it in ${CMAKE_BINARY_DIR} before running 'make' with:")
-	colormsg(YELLOW "+--   unzip master.zip && mv pybind11-master pybind11")
-      else()
 	if(NOT TARGET pybind11)
 	  ## if it's not already there, download pybind11 from github.
 	  ## this shouldn't be necessary but cmake in CVMFS doesn't have
@@ -661,12 +653,11 @@ macro(i3_add_pybindings MODULENAME)
 	    INSTALL_COMMAND ""
 	    #GIT_REPOSITORY https://github.com/pybind/pybind11.git
 	    )
-	endif()
+	endif(NOT TARGET pybind11)
 	add_dependencies(${MODULENAME}-pybindings pybind11)
 	## this is the wrong place to set C++11 support, but works for now 
 	## until pybind11 is a first-class tool.
 	set_target_properties(${MODULENAME}-pybindings PROPERTIES COMPILE_FLAGS "-std=gnu++11")
-      endif()
 
       set_target_properties(${MODULENAME}-pybindings
         PROPERTIES

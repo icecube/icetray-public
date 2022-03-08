@@ -40,18 +40,14 @@ endif ()
 # Detect cppzmq versions from before there were versions
 if (ZMQ_FOUND AND NOT CPPZMQ_VERSION)
   include(CheckCXXSymbolExists)
-  if (CMAKE_VERSION VERSION_GREATER "2.8.5")
-    include(CMakePushCheckState)
-    CMAKE_PUSH_CHECK_STATE()
-  endif ()
+  include(CMakePushCheckState)
+  CMAKE_PUSH_CHECK_STATE()
   set(CMAKE_REQUIRED_INCLUDES "${ZMQ_INCLUDE_DIR}/include")
   CHECK_CXX_SYMBOL_EXISTS(
     CPPZMQ_VERSION_MAJOR
     "${ZMQ_INCLUDE_DIR}/include/zmq.hpp"
     _have_cppzmq_version)
-  if (CMAKE_VERSION VERSION_GREATER "2.8.5")
     CMAKE_POP_CHECK_STATE()
-  endif ()
   # This is how mainline cppzmq do version detection.
   if (_have_cppzmq_version)
     file(READ "${ZMQ_INCLUDE_DIR}/include/zmq.hpp" _CPPZMQ_H_CONTENTS)

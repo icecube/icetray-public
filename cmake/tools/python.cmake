@@ -24,21 +24,7 @@ colormsg(HICYAN "python")
 
 set(PYTHON_FOUND TRUE CACHE BOOL "Python found successfully")
 
-# At least on Mac OS, with both python 2.7 and 3 present, find_package(Python)
-# behaves badly in cmake 3.13 and 3.14. 3.15 is the first well behaved minor
-# version, so for everything below we just use the legacy fall-back. 
-if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.15)
-	find_package(Python COMPONENTS Interpreter Development NumPy)
-else()
-	find_package(PythonInterp)
-	find_package(PythonLibs ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR})
-	string(REGEX REPLACE ".*libpython([0-9])\\.[0-9]+.*\\..*" "\\1" Python_VERSION_MAJOR ${PYTHON_LIBRARIES})
-	string(REGEX REPLACE ".*libpython[0-9]\\.([0-9]+).*\\..*" "\\1" Python_VERSION_MINOR ${PYTHON_LIBRARIES})
-	set(Python_VERSION ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.${PYTHON_VERSION_PATCH})
-	set(Python_INCLUDE_DIRS ${PYTHON_INCLUDE_PATH})
-	set(Python_LIBRARIES ${PYTHON_LIBRARIES})
-	set(Python_EXECUTABLE ${PYTHON_EXECUTABLE})
-endif()
+find_package(Python COMPONENTS Interpreter Development NumPy)
 
 message(STATUS "+  version: ${Python_VERSION}")
 
@@ -94,33 +80,9 @@ if(${Python_VERSION} VERSION_LESS 2.6)
 endif(${Python_VERSION} VERSION_LESS 2.6)
 
 # look for numpy
-if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.14)
-  set(NUMPY_FOUND ${Python_NumPy_FOUND} CACHE BOOL "Numpy found successfully")
-  set(NUMPY_INCLUDE_DIR ${Python_NumPy_INCLUDE_DIRS} CACHE STRING "Numpy inc directory")
-  message(STATUS "+    numpy: ${Python_NumPy_INCLUDE_DIRS}")
-else(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.14)
-  # Old, crummy cmake -- try our best. Use better cmake for special cases.
-
-  execute_process(COMMAND ${Python_EXECUTABLE} -c "import numpy"
-    RESULT_VARIABLE NUMPY_FOUND)
-  # let's make our xxx_FOUND variable like CMake ones
-  if(NUMPY_FOUND EQUAL 0)
-    set(NUMPY_FOUND TRUE)
-    set(NUMPY_FOUND TRUE CACHE BOOL "Numpy found successfully")
-  else(NUMPY_FOUND EQUAL 0)
-    set(NUMPY_FOUND FALSE CACHE BOOL "Numpy found successfully")
-    set(NUMPY_FOUND FALSE)
-  endif(NUMPY_FOUND EQUAL 0)
-
-  execute_process(COMMAND ${Python_EXECUTABLE} -c
-    "import numpy; print(numpy.get_include())"
-    OUTPUT_VARIABLE _NUMPY_INCLUDE_DIR
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-  find_path(NUMPY_INCLUDE_DIR NAMES numpy/ndarrayobject.h HINTS ${_NUMPY_INCLUDE_DIR})
-  set(NUMPY_INCLUDE_DIR ${NUMPY_INCLUDE_DIR} CACHE STRING "Numpy inc directory")
-  message(STATUS "+    numpy: ${NUMPY_INCLUDE_DIR}")
-endif(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.14)
+set(NUMPY_FOUND ${Python_NumPy_FOUND} CACHE BOOL "Numpy found successfully")
+set(NUMPY_INCLUDE_DIR ${Python_NumPy_INCLUDE_DIRS} CACHE STRING "Numpy inc directory")
+message(STATUS "+    numpy: ${Python_NumPy_INCLUDE_DIRS}")
 
 ## look for scipy
 execute_process(COMMAND ${Python_EXECUTABLE} -c "import scipy"
