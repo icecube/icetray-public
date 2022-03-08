@@ -84,6 +84,9 @@ Not all of the variables are useful.  Here are some that are:
    * - .. attribute:: USE_CCACHE
      - Use `ccache <https://ccache.samba.org/>`_ to aid in compilation. Requires administrator setup in order to use efficiently on multi-user systems.
      - OFF
+   * - .. attribute:: USE_OPENCL
+     - Use `OpenCL <https://www.khronos.org/opencl/>`_ support in :ref:`clsim-main` and :ref:`ppc <ppc-main>`
+     - ON
    * - .. attribute:: CMAKE_BUILD_TYPE
      - Set the cmake build type. Choices are: *None Debug Release RelWithAssert RelWithDebInfo MinSizeRel Coverage*.
      - *Release* or *RelWithAssert*
