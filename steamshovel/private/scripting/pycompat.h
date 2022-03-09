@@ -10,8 +10,6 @@
 // ensure python version is defined
 #include <boost/python/detail/prefix.hpp>
 
-#if PY_VERSION_HEX >= 0x02070300
-
 #include <boost/python/handle.hpp>
 #include <boost/python/converter/shared_ptr_deleter.hpp>
 #include <boost/version.hpp>
@@ -52,7 +50,5 @@ BOOST_PP_SEQ_FOR_EACH( SHOVELART_TYPE_DECL_SPECIALIZE, _, SHOVELART_GIL_PROTECTE
 #endif // BOOST_VERSION
 
 }} //namespace boost::detail
-
-#endif // PY_VERSION_HEX >= 0x0207030000
 
 #endif /* I3_SHOVEL_PYCOMPAT_H */

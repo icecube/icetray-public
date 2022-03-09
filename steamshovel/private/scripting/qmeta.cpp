@@ -43,11 +43,7 @@ BOOST_PYTHON_MODULE( qmeta )
 
 void QMeta::pre_init()
 {
-#if PY_MAJOR_VERSION >= 3
 	PyImport_AppendInittab((char *) "qmeta", &PyInit_qmeta);
-#else
-	PyImport_AppendInittab((char *) "qmeta", &initqmeta);
-#endif
 }
 
 void QMeta::post_init()
@@ -217,11 +213,7 @@ void QMeta::addToParent( QObject* parent, QObject* child, const std::string& att
 	bp::object p_obj = (*p).second;
 	bp::object c_obj = (*c).second;
 	try{
-#if PY_MAJOR_VERSION >= 3
 		if( bp::import("builtins").attr("hasattr")(p_obj, attrname.c_str())){
-#else
-		if( bp::import("__builtin__").attr("hasattr")(p_obj, attrname.c_str())){
-#endif
 			log_warn_stream("Overriding existing attribute in parent object: " << attrname );
 		}
 		p_obj.attr(attrname.c_str()) = c_obj;

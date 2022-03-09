@@ -78,11 +78,6 @@ do_pyshell(char* argv[], Model& model, View& view){
   } suspender(view);
   
   namespace bp = boost::python;
-#if PY_MAJOR_VERSION < 3
-  Py_SetProgramName(argv[0]);
-  Py_Initialize();
-  PySys_SetArgvEx(1, &argv[0], 0);
-#else
   wchar_t program[255];
   mbstowcs(program, argv[0], 255);
   Py_SetProgramName(program);
@@ -91,11 +86,6 @@ do_pyshell(char* argv[], Model& model, View& view){
   //        It doesn't appear to be required, so commented out for now
   //PySys_SetArgvEx(1, (wchar_t**)&program, 0);
   PySys_SetArgvEx(0, NULL, 0);
-#endif
-
-#if PY_MAJOR_VERSION < 3 || PY_MINOR_VERSION < 7
-  PyEval_InitThreads();
-#endif
 
   //load things users will probably need
   bp::dict ns;

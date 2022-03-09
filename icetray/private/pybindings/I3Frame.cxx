@@ -113,29 +113,17 @@ static object frame_dumps(I3Frame const&f)
   }
   blobBufStream.flush();
 
-#if PY_MAJOR_VERSION >= 3
   return object(handle<>( PyBytes_FromStringAndSize(&(blobBuffer[0]), blobBuffer.size()) ));
-#else
-  return str( &(blobBuffer[0]), blobBuffer.size() );
-#endif
 }
 
 static void frame_loads(I3Frame &f, object &data)
 {
-#if PY_MAJOR_VERSION >= 3
   Py_buffer buffer;
   PyObject_GetBuffer(data.ptr(), &buffer, PyBUF_SIMPLE);
   boost::iostreams::array_source src((char const*)(buffer.buf), (size_t)(buffer.len));
   boost::iostreams::filtering_istream fis(src);
   f.load(fis);
   PyBuffer_Release(&buffer);
-#else
-  const char *buffer = extract<char const*>(data);
-  std::size_t size = len(data);
-  boost::iostreams::array_source src(buffer, size);
-  boost::iostreams::filtering_istream fis(src);
-  f.load(fis);
-#endif
 }
 
 void register_I3Frame()

@@ -249,10 +249,6 @@ void register_I3RecoPulse()
   rps_bufferprocs.bf_getbuffer = I3RecoPulseSeries_getbuffer;
   rps_bufferprocs.bf_releasebuffer = I3RecoPulseSeries_relbuffer;
   rpsclass->tp_as_buffer = &rps_bufferprocs;
-#if PY_MAJOR_VERSION < 3
-  rpsclass->tp_flags |= Py_TPFLAGS_HAVE_NEWBUFFER;
-#endif
-
 
   object rpsm = class_<I3RecoPulseSeriesMap, bases<I3FrameObject>, I3RecoPulseSeriesMapPtr>("I3RecoPulseSeriesMap")
     .def(dataclass_suite<I3RecoPulseSeriesMap>())
@@ -274,9 +270,6 @@ void register_I3RecoPulse()
   rpsm_bufferprocs.bf_getbuffer = I3RecoPulseSeriesMap_getbuffer;
   rpsm_bufferprocs.bf_releasebuffer = I3RecoPulseSeries_relbuffer;
   rpsmclass->tp_as_buffer = &rpsm_bufferprocs;
-#if PY_MAJOR_VERSION < 3
-  rpsmclass->tp_flags |= Py_TPFLAGS_HAVE_NEWBUFFER;
-#endif
 
   scope outer = 
   class_<I3RecoPulse, boost::shared_ptr<I3RecoPulse> >("I3RecoPulse")

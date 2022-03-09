@@ -150,12 +150,5 @@ namespace I3Datatypes {
   NativeType GetNativeType(const I3Datatype& dtype);  
 };
 
-// Compatibility with Python < 2.4
-#if PY_VERSION_HEX < 0x02050000 && !defined(PY_SSIZE_T_MIN)
-typedef int Py_ssize_t;
-#define PY_SSIZE_T_MAX INT_MAX
-#define PY_SSIZE_T_MIN INT_MIN
-#endif
-
 #endif /* end of include guard: TYPE_HELPERS_H_M3WNFWYF */
 

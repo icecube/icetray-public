@@ -172,11 +172,7 @@ void register_I3File()
      "Iterator for I3File",
      no_init
      )
-#if PY_MAJOR_VERSION >= 3
     .def("__next__", &I3FileIterator::next, 
-#else
-    .def("next", &I3FileIterator::next, 
-#endif
          "Return the next frame if one is available, else throw StopIteration")
     .def("__iter__", pass_through)
     ;

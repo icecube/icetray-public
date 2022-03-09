@@ -32,9 +32,7 @@
 
 using namespace boost::python;
 
-#if PY_VERSION_HEX >= 0x02040000
 #define HAVE_PYDATETIME_API
-#endif
 
 std::string repr(I3Time t){
   std::stringstream out;

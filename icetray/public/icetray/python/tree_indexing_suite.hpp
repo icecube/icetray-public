@@ -133,11 +133,7 @@ public:
 		typedef iterator<Iterator> IteratorWrapper;
 		class_<IteratorWrapper>(name, bp::no_init)
 			.def("__iter__", objects::identity_function())
-#if PY_MAJOR_VERSION >= 3
 			.def("__next__", &IteratorWrapper::next)
-#else
-			.def("next", &IteratorWrapper::next)
-#endif
 		;
 	}
 	

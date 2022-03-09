@@ -8,9 +8,6 @@
 
 #include "pycompat.h"
 
-// This file addresses an issue that only arises on Python 2.7.3 and above
-#if PY_VERSION_HEX >= 0x02070300
-
 /*
  * Here be dragons.
  *
@@ -57,7 +54,3 @@ BOOST_PP_SEQ_FOR_EACH( SPECIALIZE, _, SHOVELART_GIL_PROTECTED_TYPES )
 }} // namespace boost::detail
 
 #endif // BOOST_VERSION
-
-#endif // PY_VERSION_HEX >= 0x0207030000
-
-// For older versions of python, this file intentionally left blank

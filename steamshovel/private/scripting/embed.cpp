@@ -22,22 +22,11 @@ namespace bp = boost::python;
 PyInterpreter::PyInterpreter(const char* progname )
 {
 	scripting::QMeta::pre_init();
-#if PY_MAJOR_VERSION < 3
-	Py_SetProgramName(progname);
-	Py_Initialize();
-	PySys_SetArgv(1, &progname);
-	PyEval_InitThreads();
-#else
 	wchar_t *wprogname = new wchar_t[255];
 	mbstowcs(wprogname, progname, 255);
 	Py_SetProgramName(wprogname);
 	Py_Initialize();
 	PySys_SetArgv(1, &wprogname);
-#if PY_MINOR_VERSION < 7
-	// handled by Py_Initialize() as of python3.7
-	PyEval_InitThreads();
-#endif
-#endif
 	scripting::QMeta::post_init();
 
 	// Load essential Python libraries now, so we can rely on their existence later.

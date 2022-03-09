@@ -187,13 +187,10 @@ I3Tray::AddModule(bp::object obj, std::string instancename)
 		    boost::python::extract<std::string>(obj.attr("__name__"));
 		if (instancename.empty())
 			instancename=CreateName(pyname,"Module",modules_in_order);
-#if PY_MAJOR_VERSION >= 2 && PY_MINOR_VERSION > 4
+
 		std::string pymod = boost::python::extract<std::string>(
 		    obj.attr("__module__"));
 		module->GetConfiguration().ClassName(pymod + "." + pyname);
-#else
-		module->GetConfiguration().ClassName(pyname);
-#endif
 	} else if (PyCallable_Check(obj.ptr())) {
 		// it is a python function... put the object in the context and
 		// call it a PythonFunction
