@@ -51,7 +51,7 @@ TEST(real_to_complex_transform) {
   FillRealData(data, n);
   plan.CopyIntoPlan(data, n);
 
-  const int nc = fft::GetNCFromNR(n);
+  const uint32_t nc = fft::GetNCFromNR(n);
   complexD outData[nc];
   plan.CopyOutOfPlanC(outData);
 

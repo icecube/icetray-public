@@ -186,7 +186,7 @@ I3CrossSection::finalStateRecord I3CrossSection::sampleFinalState_DIS(double ene
     
     // Metropolis Hastings Algorithm.
     // MCMC method!
-    int burnin=40; 
+    size_t burnin=40; 
 	for(size_t j=0; j<=burnin; j++){
 		// repeat the sampling from above to get a new valid point
 		double trialQ  __attribute__((unused));
@@ -314,7 +314,7 @@ I3CrossSection::sampleFinalState_GR(double energy,
     cross_section = measure*std::pow(
             10., crossSection_->ndsplineeval(kin_vars.data(), spline_table_center.data(), 0));
 
-    int burnin=40;
+    size_t burnin=40;
 	for(size_t j=0; j<=burnin; j++){
 		double trialQ  __attribute__((unused));
 		test_kin_vars[1]=random->Uniform(logYMin,logYMax);
