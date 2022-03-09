@@ -19,7 +19,7 @@
 Toplevel container for icecube projects
 """
 
-import platform,sys
+import platform,sys, warnings
 
 # Suppress boost::python warning triggered by multiple registrations. It's fine.
 import warnings
@@ -47,8 +47,8 @@ PYTHON_VERSION = "@PYTHON_VERSION@"
 if PYTHON_VERSION != platform.python_version():
     cast_version = '.'.join([str(extract_numeric_value(v)) for v in platform.python_version_tuple()])    
     if PYTHON_VERSION != cast_version:
-        raise Exception("IceTray was compiled with Python version {} but is currently being run with {}"
-                        .format(PYTHON_VERSION,platform.python_version()))
+        warnings.warn("IceTray was compiled with Python version {} but is currently being run with {}"
+                      .format(PYTHON_VERSION,platform.python_version()))
                   
 if platform.system().startswith('freebsd'):
 	# C++ modules are extremely fragile when loaded with RTLD_LOCAL,
