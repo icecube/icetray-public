@@ -132,7 +132,7 @@ namespace geo_sel_utils{
     vector<double> y;
     I3OMGeoMap::const_iterator  i;
     vector<int>::const_iterator str_iter = goodStrings.begin();
-    for(i=geo->omgeo.begin(); i!=geo->omgeo.end(); i++){
+    for(i=geo->omgeo.begin(); i!=geo->omgeo.end() && str_iter!=goodStrings.end(); i++){
       if(*str_iter == i->first.GetString()){
 	x.push_back(i->second.position.GetX());
 	y.push_back(i->second.position.GetY());
