@@ -76,11 +76,11 @@ protected:
     }
     void 
     save(const version_type & t){
-        save(static_cast<const unsigned int>(t));
+        save(static_cast<unsigned int>(t));
     }
     void 
     save(const icecube::serialization::item_version_type & t){
-        save(static_cast<const unsigned int>(t));
+        save(static_cast<unsigned int>(t));
     }
     I3_ARCHIVE_DECL(void) 
     save(const char * t);

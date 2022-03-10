@@ -138,7 +138,7 @@ class OMKey
   template <class Archive>
   void load(Archive& ar, unsigned version);
 
-  I3_SERIALIZATION_SPLIT_MEMBER();
+  I3_SERIALIZATION_SPLIT_MEMBER()
 };
 
 I3_CLASS_VERSION(OMKey,omkey_version_);

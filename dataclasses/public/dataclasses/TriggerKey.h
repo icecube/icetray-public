@@ -347,7 +347,7 @@ class TriggerKey
   friend class icecube::serialization::access;
   template <class Archive> void save(Archive & ar, unsigned version) const;
   template <class Archive> void load(Archive & ar, unsigned version);
-  I3_SERIALIZATION_SPLIT_MEMBER();
+  I3_SERIALIZATION_SPLIT_MEMBER()
 
   // logging
   SET_LOGGER("TriggerKey");
