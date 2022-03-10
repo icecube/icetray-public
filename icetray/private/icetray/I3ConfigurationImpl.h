@@ -96,6 +96,8 @@ public:
 
   std::vector<std::string> keys() const;
 
+  void merge(const I3ConfigurationImpl& rhs);
+
 private:
 
   std::string classname;

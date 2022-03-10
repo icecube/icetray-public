@@ -24,9 +24,7 @@ class I3IceForkModule : public I3Module
     pick_(context) 
     {
       // Synchronize the two configurations via the back door
-      configuration_ = *pick_.configuration_;
-      delete pick_.configuration_;
-      pick_.configuration_ = &configuration_;
+      pick_.ReplaceConfiguration(configuration_);
 
       AddParameter("DecisionName",
 		   "Name of the filter decision in the Frame",

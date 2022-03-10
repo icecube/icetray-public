@@ -120,6 +120,8 @@ public:
 
   std::vector<std::string> keys() const;
 
+  void merge(const I3Configuration& rhs);
+
 private:
 
   friend class icecube::serialization::access;

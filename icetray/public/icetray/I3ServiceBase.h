@@ -42,8 +42,10 @@ class I3ServiceBase {
          */
         I3ServiceBase(const I3Context &c):
             context_(c),
-            configuration_(new I3Configuration), // deleted externally
-            dummyContext_(false){}
+            configuration_(new I3Configuration),
+            dummyContext_(false),
+            ownsConfiguration_(true){
+            }
 
         /**
          * Dummy constructor
@@ -54,8 +56,9 @@ class I3ServiceBase {
          */
         I3ServiceBase(const std::string &name):
             context_(*(new I3Context)),
-	    configuration_(new I3Configuration),
-            dummyContext_(true){
+            configuration_(new I3Configuration),
+            dummyContext_(true),
+            ownsConfiguration_(true){
 		configuration_->InstanceName(name);
 	}
 
@@ -63,6 +66,8 @@ class I3ServiceBase {
         virtual ~I3ServiceBase(){
             if ( dummyContext_ ) {
                 delete &context_;
+            }
+            if ( ownsConfiguration_ ) {
                 delete configuration_;
             }
         }
@@ -130,7 +135,21 @@ class I3ServiceBase {
         }
 
         const I3Configuration& GetConfiguration() const { return *configuration_; }
+        I3Configuration& GetConfiguration() { return *configuration_; }
         const I3Context& GetContext() const { return context_; }
+
+        /**
+         * Switch to using an externally managed configuration.
+         * All data in the local configuration is copied before it is destroyed.
+         */
+        void ReplaceConfiguration(I3Configuration& externalConfiguration){
+            externalConfiguration.merge(*configuration_);
+            if ( ownsConfiguration_ ) {
+                delete configuration_;
+                ownsConfiguration_ = false;
+            }
+            configuration_ = &externalConfiguration;
+        }
 
     protected:
         const I3Context& context_;
@@ -140,6 +159,7 @@ class I3ServiceBase {
 	template<class A, class B> friend class I3SingleServiceFactory;
 
         bool dummyContext_;
+        bool ownsConfiguration_;
         I3ServiceBase();
         I3ServiceBase(const I3ServiceBase&);
         I3ServiceBase& operator=(const I3ServiceBase&);

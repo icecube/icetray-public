@@ -151,3 +151,8 @@ I3Configuration::keys() const
 {
   return impl_->keys();
 }
+
+void I3Configuration::merge(const I3Configuration& rhs)
+{
+  impl_->merge(*rhs.impl_);
+}

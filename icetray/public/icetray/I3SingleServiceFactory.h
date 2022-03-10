@@ -76,9 +76,7 @@ class I3SingleServiceFactory : public I3ServiceFactory {
           I3ServiceFactory(context) {
             myService_ = boost::shared_ptr<MyService>(new MyService(context));
             // Synchronize the two configurations via the back door
-            configuration_ = *myService_->configuration_;
-            delete myService_->configuration_;
-            myService_->configuration_ = &configuration_;
+            myService_->ReplaceConfiguration(configuration_);
         }
 
         /// Let the datamember instance of the service configure itself.

@@ -271,3 +271,16 @@ I3ConfigurationImpl::keys() const
     }
   return thekeys;
 }
+
+void I3ConfigurationImpl::merge(const I3ConfigurationImpl& rhs)
+{
+  for(const auto& key : rhs.keys())
+  {
+    I3Parameter param = rhs.GetParameter(key);
+    pair<parameters_t::iterator, bool> pr = parameters->insert(param);
+    if (pr.second == false)
+      log_fatal_stream("Attempt to double-add parameter " << key);
+
+    log_trace_stream(key << " default=%s" << param.default_value_str());
+  }
+}
