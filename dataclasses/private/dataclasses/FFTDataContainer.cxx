@@ -87,6 +87,20 @@ void FFTDataContainer<double, std::complex<double>>::UpdateFrequencySpectrum() {
 //Time:AntennaTimeSeries, Freq:AntennaSpectrum///
 /////////////////////////////////////////////////
 
+namespace{
+  template<typename T>
+  struct array2d{
+    std::unique_ptr<T[]> buf;
+    size_t dim1,dim2;
+    array2d(size_t d1, size_t d2):buf(new T[d1*d2]),dim1(d1),dim2(d2){}
+
+    T* data(){ return buf.get(); }
+    const T* data() const{ return buf.get(); }
+    T* operator[](size_t idx1){ return(buf.get()+dim2*idx1); }
+    const T* operator[](size_t idx1) const{ return(buf.get()+dim2*idx1); }
+  };
+}
+
 template<>
 void
 FFTDataContainer<I3Position, I3ComplexVector>::UpdateTimeSeries() {
@@ -103,9 +117,9 @@ FFTDataContainer<I3Position, I3ComplexVector>::UpdateTimeSeries() {
     return;
   }
 
-  double realData[3][nReal];
-  std::complex<double> complexData[3][nComp];
-  I3Position resultData[nReal];
+  array2d<double> realData(3,nReal);
+  array2d<std::complex<double>> complexData(3,nComp);
+  std::vector<I3Position> resultData(nReal);
 
   //Convert I3Position to array for fftw
   for (unsigned int i = 0; i < nComp; i++) {
@@ -130,13 +144,11 @@ FFTDataContainer<I3Position, I3ComplexVector>::UpdateTimeSeries() {
     resultData[i].SetZ(realData[2][i]);
   }
 
-  timeSeries_.CopyIntoTrace(resultData, nReal);
+  timeSeries_.CopyIntoTrace(resultData.data(), nReal);
   timeSeries_.SetBinning(1. / frequencySpectrum_.GetBinning() / nReal);
 
   upToDateDomain_ = Both;
 }
-
-
 
 template<>
 void FFTDataContainer<I3Position, I3ComplexVector>::UpdateFrequencySpectrum() {
@@ -159,9 +171,9 @@ void FFTDataContainer<I3Position, I3ComplexVector>::UpdateFrequencySpectrum() {
     return;
   }
 
-  double realData[3][nReal];
-  std::complex<double> complexData[3][nComp];
-  I3ComplexVector resultData[nComp];
+  array2d<double> realData(3,nReal);
+  array2d<std::complex<double>> complexData(3,nComp);
+  std::vector<I3ComplexVector> resultData(nComp);
 
   //Convert vector to array for fftw
   for (unsigned int i = 0; i < nReal; i++) {
@@ -180,13 +192,13 @@ void FFTDataContainer<I3Position, I3ComplexVector>::UpdateFrequencySpectrum() {
   }
 
   //Convert from array to vector
-  for (unsigned int i = 0; i < nReal; i++) {
+  for (unsigned int i = 0; i < nComp; i++) {
     resultData[i].SetX(complexData[0][i]);
     resultData[i].SetY(complexData[1][i]);
     resultData[i].SetZ(complexData[2][i]);
   }
 
-  frequencySpectrum_.CopyIntoTrace(resultData, nComp);
+  frequencySpectrum_.CopyIntoTrace(resultData.data(), nComp);
   frequencySpectrum_.SetBinning(0.5 / timeSeries_.GetBinning() / (double(nComp) - 1));
 
   upToDateDomain_ = Both;
