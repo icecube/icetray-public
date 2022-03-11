@@ -56,7 +56,7 @@ TEST(real_to_complex_transform) {
   plan.CopyOutOfPlanC(outData);
 
   // if n is 4, nc will be 3
-  ENSURE_EQUAL(nc, 3);
+  ENSURE_EQUAL(nc, 3u);
   ENSURE_EQUAL(sizeof(outData)/sizeof(outData[0]), nc,
                "unexpected number of elemtes in outData");
 

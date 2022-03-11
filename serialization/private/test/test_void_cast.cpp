@@ -16,22 +16,26 @@
 namespace{
 class Base1
 {
-    __attribute__((unused)) char a;
+public:
+    char a;
 };
 
 class Base2
 {
-    __attribute__((unused)) int b;
+public:
+    int b;
 };
 
 class Derived : public Base1, public Base2
 {
-    __attribute__((unused)) long c;
+public:
+    long c;
 };
 
 class MostDerived : public Derived
 {
-    __attribute__((unused)) char d[32];
+public:
+    char d[32];
 };
 }
 
