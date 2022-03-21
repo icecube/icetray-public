@@ -156,6 +156,8 @@ as of November 2021. It also assumes you've properly installed :doc:`../homebrew
    #install packages with homebrew
    brew bundle
 
+   #be sure to activate your new brew environment:  either load it explcitly or open a new Terminal!
+   #  'which python3' should be the new brew version.
    #create and enter virutal envionment
    python3 -m venv --system-site-packages ${HOME}/py3/
    source ${HOME}/py3/bin/activate
