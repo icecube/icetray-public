@@ -161,5 +161,5 @@ as of November 2021. It also assumes you've properly installed :doc:`../homebrew
    source ${HOME}/py3/bin/activate
 
    #install python packages with pip3
-   pip3 install --upgrade pip
-   pip3 install qtconsole matplotlib sphinx tables pandas pymongo pyyaml
+   python3 -m pip install --upgrade pip
+   python3 -m pip install -r requirements.txt
