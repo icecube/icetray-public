@@ -38,7 +38,7 @@ the command line tools.
 Xcode
 .....
 
-0) Besure that you want Xcode. The Command-Line Tools are enough for IceTray development.
+0) Be sure that you want Xcode. The Command-Line Tools are enough for IceTray development.
 
 1) Download Xcode from the App Store.
 
@@ -83,7 +83,7 @@ packages.  Install them like this::
 
 The following formulae are necessary to compile IceTray::
 
-  cmake python boost boost-python3 gsl wget libarchive
+  cmake python boost boost-python3 gsl wget libarchive photospline
 
 The following formulae are recommended for optional functionality of components of IceTray::
 
@@ -95,7 +95,7 @@ Most of the recommended formulae are in the main distribution, but IceCube
 maintains a `tap`_ for uncommon software that IceTray depends on.
 The following formula are also recommended from the IceCube-SPNO/icecube tap::
 
-  pal cppzmq
+  pal cppzmq photospline
 
 .. _tap: https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/brew-tap.md
 
@@ -137,7 +137,7 @@ Step-By-Step Instructions for M1 and Intel Macs
 """""""""""""""""""""""""""""""""""""""""""""""
 
 The following setup works with the trunk of Icetray on macOS 11/12 (Big Sur/Monterey)
-as of November 2021.
+as of November 2021. It also assumes you've properly installed :doc:`../homebrew`.
 
 .. code-block:: sh
 
@@ -157,7 +157,7 @@ as of November 2021.
    brew bundle
 
    #create and enter virutal envionment
-   /usr/local/bin/python3 -m venv --system-site-packages ${HOME}/py3/
+   python3 -m venv --system-site-packages ${HOME}/py3/
    source ${HOME}/py3/bin/activate
 
    #install python packages with pip3
