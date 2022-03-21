@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Ensure that I3MCTree and I3LinearizedMCTree can both be written

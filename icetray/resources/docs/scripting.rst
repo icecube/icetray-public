@@ -4,7 +4,7 @@ Generally IceTray is controlled via a python script which sets up the needed
 modules and services, executes the Tray and cleans things up.  The
 best illustration of this is a simple example::
 
- #!/usr/bin/env python
+ #!/usr/bin/env python3
  #
  # Pass 2:
  

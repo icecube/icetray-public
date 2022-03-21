@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import unittest
 from numpy import pi,arccos,arange
 from scipy.integrate import quad

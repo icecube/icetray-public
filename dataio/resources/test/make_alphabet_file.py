@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #
 #  Run frames on different streams through a reader/writer tray, verify that extra

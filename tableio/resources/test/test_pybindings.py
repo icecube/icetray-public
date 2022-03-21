@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from icecube import icetray,dataclasses,tableio,dataio
 import array

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # std_map_indexing_suite_dict_interface_test.py
 #
@@ -184,41 +184,12 @@ class I3MapDictInterfaceTest(unittest.TestCase):
 		
 		
 		pass
-	if sys.version_info[0] < 3:
-		def test_has_key(self):
-			"""dict.has_key() is equivalent to map.has_key()"""
-			key = list(self.dict.keys())[0]
-			nokey = 'i am not a key'
-			self.assertEquals(self.map.has_key(key),self.dict.has_key(key))
-			self.assertEquals(self.map.has_key(nokey),self.dict.has_key(nokey))
-			self.assertEquals(self.map.has_key(key),True)
-			self.assertEquals(self.map.has_key(nokey),False)
-			pass
 	def test_items(self):
 		"""dict.items() is equivalent to map.items()"""
 		dictItems = sorted(self.dict.items())
 		mapItems = sorted(self.map.items())
 		self.assertEquals(dictItems,mapItems)
 		pass
-	if sys.version_info[0] < 3:
-		def test_iteritems(self):
-			"""dict.iteritems() is equivalent to map.iteritems()"""
-			dictItems = sorted(list(self.dict.iteritems()))
-			mapItems = sorted(list(self.dict.iteritems()))
-			self.assertEquals(dictItems,mapItems)
-			pass
-		def test_iterkeys(self):
-			"""dict.iterkeys() is equivalent to map.iterkeys()"""
-			dictItems = sorted(list(self.dict.iterkeys()))
-			mapItems = sorted(list(self.dict.iterkeys()))
-			self.assertEquals(dictItems,mapItems)
-			pass
-		def test_itervalues(self):
-			"""dict.itervalues() is equivalent to map.itervalues()"""
-			dictItems = sorted(list(self.dict.itervalues()))
-			mapItems = sorted(list(self.dict.itervalues()))
-			self.assertEquals(dictItems,mapItems)
-			pass
 	def test_keys(self):
 		"""dict.keys() is equivalent to map.keys()"""
 		dictItems = sorted(self.dict.keys())

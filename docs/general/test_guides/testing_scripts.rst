@@ -8,7 +8,7 @@ throwing.
 Below is a simple example.  In IceTray there's a TestExampleScripts class to help out.
 ::
 
-   #!/usr/bin/env python
+   #!/usr/bin/env python3
    
    import unittest
    from icecube.icetray import I3Test
@@ -26,7 +26,7 @@ Now a simple example with arguments passed to the script.  You can just pass
 arguments to **run_example** same as you would on the command line.
 ::
 
-  #!/usr/bin/env python
+  #!/usr/bin/env python3
   
   import os
   import unittest

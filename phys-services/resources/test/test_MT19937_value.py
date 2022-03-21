@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from icecube.phys_services import I3MT19937
 
 # the docs for the generator specifies the the 10,000th value

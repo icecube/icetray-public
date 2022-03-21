@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Strip frame types from an i3 file."""
 
 import sys

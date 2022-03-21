@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 #  $Id: j_fatals_reading_mutineer.py 1636 2013-06-29 03:02:36Z nwhitehorn $
 #

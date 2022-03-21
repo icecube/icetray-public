@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from I3Tray import I3Units
 from icecube import dataclasses as dc

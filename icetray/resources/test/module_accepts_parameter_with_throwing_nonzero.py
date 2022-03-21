@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 I3Tray should not call __bool__ on parameters where this can raise an exception.

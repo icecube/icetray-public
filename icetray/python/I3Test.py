@@ -36,7 +36,7 @@ class TestExampleScripts(unittest.TestCase):
 
     Here's a simple example of how to use this:
 
-        #!/usr/bin/env python
+        #!/usr/bin/env python3
 
         from icecube.icetray import I3Test
 

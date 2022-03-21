@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # $Id: which_split_test.py 125167 2014-10-29 01:16:40Z jvansanten $
 # $Revision: 125167 $

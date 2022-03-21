@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from icecube import icetray, dataclasses, dataio
 from os.path import expandvars
@@ -6,10 +6,7 @@ from os import unlink
 from pprint import pprint
 
 import sys
-if sys.version_info[0] > 2 or sys.version_info[1] > 4:
-	import hashlib
-else:
-	import md5 as hashlib
+import hashlib
 
 is_fail = False
 

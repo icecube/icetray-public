@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # The I3FrameObject base was missing in the python bindings.
 # Now the I3ParticleVect inherits from I3FrameObject in python.

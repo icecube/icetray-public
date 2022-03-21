@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # This one *passes* though it looks like it shouldn't: You are allowed
 #  to push to the generic 'outbox' (e.g. all outboxes) even if you

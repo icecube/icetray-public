@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from icecube import icetray, phys_services
 from I3Tray import *

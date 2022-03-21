@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # This test is slightly different than those in test_mctree_physics_library
 # in that it uses I3MCTreeUtils to add the primary, which sets the shape

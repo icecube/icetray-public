@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Checking that the Dump handles nulls w/o crashing
 #

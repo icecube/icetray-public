@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # This is an example script that illustrates the problem in ticket #967
 # http://code.icecube.wisc.edu/projects/icecube/ticket/967

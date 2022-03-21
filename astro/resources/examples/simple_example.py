@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # @copyright (C) 2015 The IceCube Collaboration
 # 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #
 #  If an I3File is opened Writing it won't give you an iterator.

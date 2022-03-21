@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 '''
 Produces POSIX commands to setup the environment variables for Geant4.
 

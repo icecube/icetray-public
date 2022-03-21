@@ -5,7 +5,7 @@ as a module in an I3Tray.
 
 ::
 
- #!/usr/bin/env python
+ #!/usr/bin/env python3
  
  import unittest
  from I3Tray import I3Tray

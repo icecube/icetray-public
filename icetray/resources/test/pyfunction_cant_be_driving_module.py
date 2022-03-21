@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Test that icetray throws if you start the chain with a python function
 # They can't be driving modules.  Meaning they can't emit frames and

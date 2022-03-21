@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Scan an i3 file, outputting in various ways."""
 
 import sys

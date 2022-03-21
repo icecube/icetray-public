@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Run the CreateBlobs module and verify nothing horrible happens.

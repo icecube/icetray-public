@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from icecube.dataclasses import I3Time
 from icecube.icetray import I3Units

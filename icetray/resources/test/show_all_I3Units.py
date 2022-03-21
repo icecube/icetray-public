@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 #   copyright  (c) 2004, 2005
 #   the icecube collaboration

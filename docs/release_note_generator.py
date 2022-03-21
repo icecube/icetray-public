@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 '''
 This script scans the svn logs for a specified date range,
 pulls commit messages with the appropriate tags and generates

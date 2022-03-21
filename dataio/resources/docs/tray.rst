@@ -32,7 +32,7 @@ icetray-inspect dataio)::
 
 An example python script::
 
-    #!/usr/bin/env python
+    #!/usr/bin/env python3
     import os
     import sys
 

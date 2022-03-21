@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Ensure that it is possible to book I3RecoPulseSeriesMapMasks without error.
 

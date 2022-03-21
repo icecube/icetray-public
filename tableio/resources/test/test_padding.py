@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Ensure that hdf5 write does padding correctly for S and non-S frames

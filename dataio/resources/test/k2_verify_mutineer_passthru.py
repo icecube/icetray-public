@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 #  verify that the previous script was able to write a file containing
 #  objects that it didn't have serialization code for

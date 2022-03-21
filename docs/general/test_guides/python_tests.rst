@@ -5,7 +5,7 @@ you use unittest for your test cases.  It has some nice features.
 
 ::
 
-  #!/usr/bin/env python
+  #!/usr/bin/env python3
   import unittest
 
   from icecube.dataclasses import I3Particle

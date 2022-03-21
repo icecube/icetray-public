@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from icecube import icetray, dataclasses
 from icecube.icetray.I3Test import *
 

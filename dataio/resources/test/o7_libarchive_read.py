@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Test reading a zoo of archive/compression formats, courtesy of libarchive
 # 

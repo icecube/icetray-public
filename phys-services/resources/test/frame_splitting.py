@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from icecube import icetray, dataclasses, dataio, phys_services
 from icecube.icetray import I3Units

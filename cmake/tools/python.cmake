@@ -22,62 +22,19 @@
 colormsg("")
 colormsg(HICYAN "python")
 
-set(PYTHON_FOUND TRUE CACHE BOOL "Python found successfully")
-
-find_package(Python COMPONENTS Interpreter Development NumPy)
-
+find_package(Python 3.6 QUIET REQUIRED COMPONENTS Interpreter Development NumPy)
 message(STATUS "+  version: ${Python_VERSION}")
+message(STATUS "+   binary: ${Python_EXECUTABLE}")
+message(STATUS "+ includes: ${Python_INCLUDE_DIRS}")
+message(STATUS "+     libs: ${Python_LIBRARIES}")
 
 # Compatibility variables -- need to be cached for parasitic projects
+set(PYTHON_FOUND ${PYTHON_FOUND} CACHE BOOL "Python found successfully")
 set(PYTHON_EXECUTABLE ${Python_EXECUTABLE} CACHE STRING "Python executable")
 set(PYTHON_VERSION ${Python_VERSION} CACHE STRING "Python Version Number")
 set(PYTHON_LIBRARY ${Python_LIBRARIES} CACHE STRING "Python libraries")
 set(PYTHON_LIBRARIES ${Python_LIBRARIES} CACHE STRING "Python libraries")
 set(PYTHON_INCLUDE_DIR ${Python_INCLUDE_DIRS} CACHE STRING "Python include directories")
-
-# In order to ensure all python executables (i.e. '#!/usr/bin/env python') run
-# under both python2 and python3 after spawning a new shell via env-shell.sh
-# we create a soft link in $I3_BUILD/bin to whatever python executable is found.
-# This is really only needed on systems that contain both python2 and python3,
-# where we don't want to force a system wide adoption of python3, potentially
-# breaking other non-IceCube applications on the user's machine.
-execute_process(COMMAND ln -sf ${PYTHON_EXECUTABLE} ${CMAKE_BINARY_DIR}/bin/python)
-
-# To support work within virtual environments where the python versions are the
-# same we check that the versions are in fact the same and reset the link to
-# the venv binary.  If the versions are different (including the patch version)
-# a warning is emitted, but nothing is done.
-if(DEFINED ENV{VIRTUAL_ENV})
-
-  execute_process(COMMAND $ENV{VIRTUAL_ENV}/bin/python "--version" OUTPUT_VARIABLE VENV_PYTHON_VERSION)
-  execute_process(COMMAND ${PYTHON_EXECUTABLE} "--version" OUTPUT_VARIABLE BUILD_PYTHON_VERSION)
-
-  # Strip the leading 'Python ' from the output
-  string(REPLACE "Python " "" VENV_PY_CMP_VERSION ${VENV_PYTHON_VERSION})
-  string(REPLACE "Python " "" BUILD_PY_CMP_VERSION ${BUILD_PYTHON_VERSION})
-
-  # This removes trailing newlines
-  string(STRIP ${VENV_PY_CMP_VERSION} VENV_PYTHON_VERSION)
-  string(STRIP ${BUILD_PY_CMP_VERSION} BUILD_PYTHON_VERSION)
-
-  if(${VENV_PY_CMP_VERSION} VERSION_EQUAL ${BUILD_PY_CMP_VERSION})
-    # They're equal.  Reset the link and move on
-    colormsg(YELLOW "Resetting link to python found in virtual environment.")
-    execute_process(COMMAND ln -sf $ENV{VIRTUAL_ENV}/bin/python ${CMAKE_BINARY_DIR}/bin/python)
-  else()
-    colormsg(RED "Detected different python versions.")
-    colormsg(RED "Built against: ${BUILD_PYTHON_VERSION}")
-    colormsg(RED "Running with: ${VENV_PYTHON_VERSION}")
-  endif()
-endif()
-  
-message(STATUS "+   binary: ${Python_EXECUTABLE}")	
-message(STATUS "+ includes: ${Python_INCLUDE_DIRS}")	
-message(STATUS "+     libs: ${Python_LIBRARIES}")
-
-if(${Python_VERSION} VERSION_LESS 2.6)
-  message(FATAL_ERROR "A Python version >= 2.6 is required.")
-endif(${Python_VERSION} VERSION_LESS 2.6)
 
 # look for numpy
 set(NUMPY_FOUND ${Python_NumPy_FOUND} CACHE BOOL "Numpy found successfully")
@@ -97,21 +54,4 @@ else()
   set(SCIPY_FOUND FALSE)
 endif()
 set(SCIPY_FOUND ${SCIPY_FOUND} CACHE BOOL "Scipy found successfully")
-
-
-if(${Python_VERSION} VERSION_LESS 3.0)
-  colormsg(RED "-  WARNING: Python<3.0 detected")
-#omit python2 warning for now  
-#  set(PYTHON_WARNING
-#"WARNING: Your current version of python is ${Python_VERSION}.
-#Python 2.7 is being retired and will not be maintained upstream past January 1, 
-#2020. Therefore IceCube software must transition to python 3. You do not need to
-#do anything at this moment, this version of IceCube software will still work 
-#with python 2.7. However, you should consider migrating to python 3 at the next
-# available opportunity.  Please see 
-#http://software.icecube.wisc.edu/documentation/projects/cmake/tools/python.html
-#for more details on how to migrate.")
-else(${Python_VERSION} VERSION_LESS 3.0)
-  set(PYTHON_WARNING "")
-endif(${Python_VERSION} VERSION_LESS 3.0)
 

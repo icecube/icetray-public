@@ -1,7 +1,7 @@
 #
 #  These guys are in subdirectory 'tools'
 #
-set(ALL_TOOLS pthread root python boost boostnumpy
+set(ALL_TOOLS pthread python boost boostnumpy root 
     blas gsl sprng pal libarchive
     suitesparse ncurses cdk
     cfitsio healpix hdf5 minuit2 clhep geant4 zlib

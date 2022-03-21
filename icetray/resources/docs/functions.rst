@@ -323,7 +323,7 @@ You may want to store your useful functions in their own file, say my_utils.py::
 Which should be located somewhere along your PYTHONPATH or in the current working 
 directory.  To use them from your python scripts simply::
 
-    #!/usr/bin/env python
+    #!/usr/bin/env python3
 
     from my_utils import ints_are_greater_than
     from I3Tray import *

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 #  Pass nonsensical python object to AddModule, expect log_fatal
 #

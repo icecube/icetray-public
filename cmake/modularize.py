@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import shutil, sys, os, os.path
 srcdir = sys.argv[1]
