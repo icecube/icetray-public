@@ -1,14 +1,51 @@
 Apple macOS
 ^^^^^^^^^^^
 
-IceTray requires some additional support software to build and function. Before
-you gallop off and try to install all of the dependencies by hand, please read
-these notes in their entirety. Especially:
+Icetray is generally well supported on MacOS for development and testing efforts.  
+Additional tools are needed to support this, and this document provides some important details 
+on setting up and installing needed dependencies.  Before attempting to install dependencies
+by hand, please take a look at these notes and suggestions.  
+
+Step-By-Step Instructions for M1 and Intel Macs
+"""""""""""""""""""""""""""""""""""""""""""""""
+
+The following setup works with the trunk of Icetray on macOS 11/12 (Big Sur/Monterey)
+as of March 2022. It also guides you through an installo of :doc:`../homebrew`.
+
+.. code-block:: sh
+
+   #install xcode command line tools (don't worry if it says it is already installed)
+   xcode-select --install
+
+   #install homebrew
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+   #checkout icetray to a location of your choice
+   git clone git@github.com:icecube/icetray.git $I3_SRC
+
+   #move to that location
+   cd $I3_SRC
+
+   #install packages with homebrew
+   brew bundle
+
+   #be sure to activate your new brew environment:  either load it explcitly or open a new Terminal!
+   #  'which python3' should be the new brew version.
+   #create and enter virutal envionment
+   python3 -m venv --system-site-packages ${HOME}/py3/
+   source ${HOME}/py3/bin/activate
+
+   #install python packages with pip3
+   python3 -m pip install --upgrade pip
+   python3 -m pip install -r requirements.txt
+
+Other Important Notes
+"""""""""""""""""""""
 
 .. warning::
 
    Do not try to install your own Python over the perfectly good version
-   shipped with homebrew. It is very likely to end in tears. This
+   shipped with Homebrew. It is very likely to end in tears. This
    includes the Enthought and Anaconda distributions. In order to compile
    IceTray, your version of boost::python must be compiled against the same
    version of python as you are using. It will not be easy to do this with
@@ -131,37 +168,5 @@ Python3 packages can be installed with the :command:`pip3` command, and ipython
 can be accessed with :command:`ipython3` etc.
 
 IceTray relies on a number of python packages to work, the easiest way to
-instal them is by following the **Step-By-Step Instructions** below.
+instal them is by following the **Step-By-Step Instructions** above.
 
-Step-By-Step Instructions for M1 and Intel Macs
-"""""""""""""""""""""""""""""""""""""""""""""""
-
-The following setup works with the trunk of Icetray on macOS 11/12 (Big Sur/Monterey)
-as of November 2021. It also assumes you've properly installed :doc:`../homebrew`.
-
-.. code-block:: sh
-
-   #install xcode command line tools (don't worry if it says it is already installed)
-   xcode-select --install
-
-   #install homebrew
-   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-
-   #checkout icetray to a location of your choice
-   git clone git@github.com:icecube/icetray.git $I3_SRC
-
-   #move to that location
-   cd $I3_SRC
-
-   #install packages with homebrew
-   brew bundle
-
-   #be sure to activate your new brew environment:  either load it explcitly or open a new Terminal!
-   #  'which python3' should be the new brew version.
-   #create and enter virutal envionment
-   python3 -m venv --system-site-packages ${HOME}/py3/
-   source ${HOME}/py3/bin/activate
-
-   #install python packages with pip3
-   python3 -m pip install --upgrade pip
-   python3 -m pip install -r requirements.txt
