@@ -14,10 +14,8 @@ from I3Tray import I3Tray
 
 # hobo "from icecube import *"
 import icecube, os
-for path in sorted(os.listdir(os.path.dirname(icecube.__file__))):
+for path in sorted(os.listdir(os.environ['I3_BUILD']+'/lib/icecube')):
 	if 'ml_suite' in path:
-		continue
-	if 'weighting' in path:
 		continue
 	try:
 		__import__("icecube."+os.path.splitext(path)[0])
