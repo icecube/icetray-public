@@ -16,6 +16,7 @@ import sys, os
 # imports for the traclinks replacement code at the bottom of this file
 from docutils import nodes, utils
 from docutils.parsers.rst import roles
+import urllib.parse as ulp
 
 # If your extensions are in another directory, add it here. If the directory
 # is relative to the documentation root, use os.path.abspath to make it
