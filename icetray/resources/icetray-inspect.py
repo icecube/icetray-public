@@ -305,10 +305,7 @@ def get_doxygen_docstring(project,modulename):
     comp = root.find("compounddef")
     brief = comp.find('briefdescription')
 
-    if sys.version_info[0] < 3:
-        doc = ET.tostring(brief, encoding='utf-8', method='text')
-    else:
-        doc = ET.tostring(brief, encoding='unicode', method='text')
+    doc = ET.tostring(brief, encoding='unicode', method='text')
 
     if opts.verbose_docs:
 

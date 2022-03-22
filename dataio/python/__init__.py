@@ -2,10 +2,8 @@ from icecube import icetray, dataclasses
 from icecube.load_pybindings import load_pybindings
 load_pybindings(__name__, __path__)
 
-import sys
-if sys.version_info[:2] >= (2,6):
-	from icecube.dataio.I3FileStagerFile import AbstractFileStager
-	set_local_scratch_dir = AbstractFileStager.set_local_scratch_dir
+from icecube.dataio.I3FileStagerFile import AbstractFileStager
+set_local_scratch_dir = AbstractFileStager.set_local_scratch_dir
 
 def get_stagers(staging_directory=None, extra_stagers=[]):
 	"""

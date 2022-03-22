@@ -11,10 +11,7 @@ from icecube.tableio.I3TableWriterModule import I3TableWriter, default
 
 from icecube.tableio import types
 
-if sys.version_info[0] >= 3:
-	from icecube.tableio.enum3 import enum as enum
-else:
-	from icecube.tableio.enum2 import enum as enum
+from icecube.tableio.enum3 import enum as enum
 
 # clean up the local dictionary
 del icecube

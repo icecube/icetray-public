@@ -17,14 +17,6 @@ import sys, os
 from docutils import nodes, utils
 from docutils.parsers.rst import roles
 
-#urllib changed so we need to make this multilingual
-if sys.version_info[0] < 3:
-    import urllib
-    ulp = urllib
-else:
-    import urllib.parse
-    ulp = urllib.parse
-
 # If your extensions are in another directory, add it here. If the directory
 # is relative to the documentation root, use os.path.abspath to make it
 # absolute, like shown here.

@@ -153,28 +153,8 @@ def is_I3Module(obj):
 def is_traysegment(obj):
     return hasattr(obj, "__i3traysegment__")
 
-major, minor = sys.version_info[:2]
-if (major > 2 ) or (major == 2 and minor >= 6):
-    def same_package(current, other):
-        return current.__package__ == other.__package__
-else:
-    def hobo_getpackage(mod):
-        """
-        A stupid hack for ancient Python. This does not work in general,
-        but should be fine for modules installed as $I3_BUILD/lib/icecube/foo.
-        """
-        # Exclude built-ins
-        if not hasattr(mod, '__file__'):
-            return None
-        i3base = os.path.expandvars('$I3_BUILD/lib/icecube')
-        package = mod.__file__[len(i3base)+1:].split(os.sep)[0]
-        # Maybe we have a compiled extension
-        base, ext = os.path.splitext(package)
-        if ext == '.dylib' or ext == '.so':
-            package = base
-        return package
-    def same_package(current, other):
-        return hobo_getpackage(current) == hobo_getpackage(other)
+def same_package(current, other):
+    return current.__package__ == other.__package__
 
 def harvest_objects(module,want):
     harvest = {}

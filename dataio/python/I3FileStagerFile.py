@@ -1,14 +1,7 @@
-import copy
-import os, sys
+import os
 
-if sys.version_info[0] >= 3:
-	import urllib.parse as urlparse
-	from urllib.error import HTTPError
-	from urllib.request import urlopen, Request
-else:
-	import urlparse
-	from urllib2 import HTTPError
-	from urllib2 import urlopen, Request
+import urllib.parse as urlparse
+from urllib.request import urlopen, Request
 import base64
 import tempfile
 import shutil
