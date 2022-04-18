@@ -415,10 +415,10 @@ endif (CMAKE_COMPILER_IS_CLANG)
 #
 # Set the C++ standard flag.
 #
-set(CMAKE_CXX_STANDARD 11)
-# require that the compiler support some flavor of c++11
+set(CMAKE_CXX_STANDARD 17)
+# require that the compiler support some flavor of c++17
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-# prefer -std=c++11 to -std=c++98
+# prefer -std=c++17 to -std=c++98
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 #
