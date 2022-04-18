@@ -38,11 +38,13 @@ namespace bp = boost::python;
 #define REGISTER_THESE_THINGS						\
   (I3CutValues)(I3CascadeCutValues)(I3Calculator)(RandomServices)(I3Cuts)\
   (Converter)(I3Splitter)(I3XMLOMKey2MBID)(I3GCDFileService)(I3ScaleCalculator)\
-  (Surface)(I3CrossSection)
+  (Surface)
 
 #define I3_REGISTRATION_FN_DECL(r, data, t) void BOOST_PP_CAT(register_,t)();
 #define I3_REGISTER(r, data, t) BOOST_PP_CAT(register_,t)();
 BOOST_PP_SEQ_FOR_EACH(I3_REGISTRATION_FN_DECL, ~, REGISTER_THESE_THINGS)
+
+void register_I3CrossSection();
 
 I3_PYTHON_MODULE(phys_services)
 {
@@ -51,5 +53,10 @@ I3_PYTHON_MODULE(phys_services)
   import("icecube.interfaces");
 
   BOOST_PP_SEQ_FOR_EACH(I3_REGISTER, ~, REGISTER_THESE_THINGS);
+
+#ifdef I3_USE_PHOTOSPLINE
+  register_I3CrossSection();
+#endif
+
 }
 

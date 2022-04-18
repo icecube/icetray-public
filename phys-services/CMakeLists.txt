@@ -1,6 +1,3 @@
-#
-# $Id$
-#
 i3_project(phys-services
   PYTHON_DIR python
   PYTHON_DEST icecube/phys_services
@@ -8,14 +5,23 @@ i3_project(phys-services
 
 if (SPRNG_FOUND)
   colormsg(GREEN "+-- sprng found, adding SPRNGRandomService")
-  set(SPRNG_SOURCES
-    private/phys-services/I3SPRNGRandomService.cxx
-    private/phys-services/I3SPRNGRandomServiceFactory.cxx)
-  set(OPTIONAL_TOOLS ${OPTIONAL_TOOLS} sprng)
+  list(APPEND OPTIONAL_SOURCES private/phys-services/I3SPRNGRandomService.cxx)
+  list(APPEND OPTIONAL_SOURCES private/phys-services/I3SPRNGRandomServiceFactory.cxx)
+  list(APPEND OPTIONAL_TOOLS sprng)
   ADD_DEFINITIONS(-DI3_USE_SPRNG)
 else(SPRNG_FOUND)
   colormsg(CYAN "+-- sprng *not* found, omitting optional SPRNGRandomService")
 endif(SPRNG_FOUND)
+
+if (photospline_FOUND)
+  colormsg(GREEN "+-- photospline found, adding I3CrossSection")
+  list(APPEND OPTIONAL_SOURCES private/phys-services/I3CrossSection.cxx)
+  list(APPEND OPTIONAL_PYBINDING_SOURCES private/pybindings/I3CrossSection.cxx)
+  list(APPEND OPTIONAL_TOOLS photospline)
+  ADD_DEFINITIONS(-DI3_USE_PHOTOSPLINE)
+else(photospline_FOUND)
+  colormsg(RED "+-- omitting I3CrossSection, photospline *not* found, ")
+endif(photospline_FOUND)
 
 i3_add_library(phys-services 
   private/converter/I3EventInfoConverter.cxx
@@ -31,7 +37,6 @@ i3_add_library(phys-services
   private/phys-services/I3Calculator.cxx
   private/phys-services/I3CascadeCutValues.cxx
   private/phys-services/I3Cuts.cxx
-  private/phys-services/I3CrossSection.cxx
   private/phys-services/I3CutsModule.cxx
   private/phys-services/I3EventCounter.cxx
   private/phys-services/I3FileOMKey2MBID.cxx
@@ -65,11 +70,11 @@ i3_add_library(phys-services
   private/surfaces/AxialCylinder.cxx
   private/surfaces/Sphere.cxx
   private/surfaces/polygon.cxx
-  ${SPRNG_SOURCES}
+  ${OPTIONAL_SOURCES}
 
   USE_PROJECTS serialization icetray dataclasses interfaces tableio
 
-  USE_TOOLS ${OPTIONAL_TOOLS} gsl boost python photospline
+  USE_TOOLS ${OPTIONAL_TOOLS} gsl boost python
   )
 
 i3_executable(CreateXMLOMKey2MBIDConversionTable
@@ -103,7 +108,6 @@ i3_test_scripts(resources/test/*.py)
 i3_add_pybindings(phys_services
   private/pybindings/I3Calculator.cxx
   private/pybindings/I3ScaleCalculator.cxx
-  private/pybindings/I3CrossSection.cxx
   private/pybindings/I3CutValues.cxx
   private/pybindings/I3CascadeCutValues.cxx
   private/pybindings/Converter.cxx
@@ -114,6 +118,7 @@ i3_add_pybindings(phys_services
   private/pybindings/I3GCDFileService.cxx
   private/pybindings/Surface.cxx
   private/pybindings/module.cxx
+  ${OPTIONAL_PYBINDING_SOURCES}
   USE_TOOLS boost python 
   USE_PROJECTS phys-services interfaces
   )
