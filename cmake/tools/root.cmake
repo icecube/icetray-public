@@ -65,8 +65,11 @@ if (USE_ROOT)
         COMMAND ${ROOT_CONFIG_EXECUTABLE} --libdir
         OUTPUT_VARIABLE ROOT_LIB_DIR
         OUTPUT_STRIP_TRAILING_WHITESPACE)
-	
       get_filename_component(ROOT_LIB_DIR ${ROOT_LIB_DIR} ABSOLUTE)
+      execute_process(
+        COMMAND ${ROOT_CONFIG_EXECUTABLE} --auxcflags
+        OUTPUT_VARIABLE ROOT_CXX_FLAGS
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
 
       string(REGEX REPLACE "-[L]([^ ]*)" "" ROOT_LIBRARIES ${ROOT_LIB_OUTPUT})
       string(STRIP ${ROOT_LIBRARIES} ROOT_LIBRARIES)
@@ -168,4 +171,13 @@ else()
       )
     set(ROOT_LIBRARIES ${ROOT_LIBRARIES} ${pthread_LIBRARIES})
   endif(NOT SYSTEM_PACKAGES_ROOT)
+
+  string(REGEX MATCH "std=c\\+\\+([0-9]+)" DUMMY ${ROOT_CXX_FLAGS})
+  if (${CMAKE_MATCH_1} EQUAL ${CMAKE_CXX_STANDARD})
+    message("-- + ROOT compiled with c++${CMAKE_MATCH_1}")
+  else()
+    set(ROOT_CXX_STANDARD ${CMAKE_MATCH_1})
+    colormsg(RED "+ ROOT was compiled with c++${ROOT_CXX_STANDARD}, compiling projects that depend on ROOT with same standard")
+  endif()
+
 endif()

@@ -95,6 +95,13 @@ macro(use_tool TARGET TOOL_)
       LINK_FLAGS "${tmp_LINK_FLAGS} ${${TOOL}_LINK_FLAGS}"
     )
   endif(${TOOL}_LINK_FLAGS)
+
+  string(COMPARE EQUAL ${TOOL} "ROOT" ISROOT)
+  if("${ROOT_CXX_STANDARD}" AND ${ISROOT})
+    colormsg(RED "     + using c++${ROOT_CXX_STANDARD} for ${TARGET}")
+    set_property(TARGET ${TARGET} PROPERTY CXX_STANDARD ${ROOT_CXX_STANDARD})
+  endif()
+
 endmacro(use_tool TARGET TOOL)
 
 macro(use_tools THIS_USE_TOOLS_TARGET)
