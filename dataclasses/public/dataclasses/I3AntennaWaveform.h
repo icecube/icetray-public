@@ -8,6 +8,7 @@
 #ifndef I3ANTENNAWAVEFORM_INCLUDE_H
 #define I3ANTENNAWAVEFORM_INCLUDE_H
 
+#include <functional>
 #include <iostream>
 #include <vector>
 #include <complex>
@@ -19,6 +20,7 @@
 
 #include <dataclasses/I3Position.h>
 #include <dataclasses/I3ComplexVector.h>
+
 
 static const unsigned int i3antennawaveform_version_ = 0;
 
@@ -298,7 +300,7 @@ INNER_AUGMENTED_ARITHMETIC_OPERATOR( -=, std::minus)
   I3AntennaWaveform<T>::operator _op_(const T value)                           \
   {                                                                            \
     transform(dataArray_.begin(), dataArray_.end(), dataArray_.begin(),        \
-              bind2nd(_stl_functor_<T>(), value));                             \
+              bind(_stl_functor_<T>(), std::placeholders::_1, value));         \
     return *this;                                                              \
   }
 
