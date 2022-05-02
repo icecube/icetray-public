@@ -357,10 +357,8 @@ void CylinderObject::drawBaseObject(double vistime, const I3Camera& camera){
 	double toprad = top_radius_->value(vistime);
 
 	glDisable(GL_CULL_FACE);
-	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	gluCylinder( camera.gl_qobj, baserad, toprad, height, 256, 1 );
-	glDisable(GL_LIGHTING);
 	glDisable(GL_LIGHT0);
 	glEnable(GL_CULL_FACE);
 }
@@ -405,10 +403,8 @@ void ArrowObject::draw( double vistime, const I3Camera& camera ){
 	}
 	const double baserad = std::tan( angle_) * cone_height;
 	glDisable(GL_CULL_FACE);
-	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	gluCylinder( camera.gl_qobj, baserad, 0.0, cone_height, 256, 1 );
-	glDisable(GL_LIGHTING);
 	glDisable(GL_LIGHT0);
 	glEnable(GL_CULL_FACE);
 	glPopMatrix();
