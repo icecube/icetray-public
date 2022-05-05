@@ -133,7 +133,7 @@ Thes dependencies are optional. If not present comb will compile with reduced fu
 Other Dependencies
 ------------------
 
-These are not needed at compile time but are nescessary for certian functionality
+These are not needed at compile time but are necessary for certain functionality
 
 .. list-table:: Required 
   :widths: 1 5 2
@@ -154,6 +154,9 @@ These are not needed at compile time but are nescessary for certian functionalit
   * - `healpy <https://healpy.readthedocs.io/en/latest/>`_
     - Python interface for HEALPix C++ library
     - :ref:`dst` unit tests
+  * - `iminuit <https://iminuit.readthedocs.io/en/stable/>`_
+    - Python interface for Minuit2 library
+    - :ref:`lilliput`
   * - `pyzmq <https://pyzmq.readthedocs.io/en/latest/>`_
     - Python bindings for ØMQ.
     - :ref:`gcdserver`
