@@ -25,6 +25,9 @@ I3RecoPulseSeriesMapCombineByModule::Apply(const I3Frame &frame) const
 {
   typedef I3RecoPulseSeriesMap Map;
   typedef boost::shared_ptr<const Map> MapConstPtr;
+  typedef Map::value_type Pair;
+  typedef Pair::second_type Series;
+  typedef Series::value_type Element;
  
   if (combined_)
     return combined_;

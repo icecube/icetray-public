@@ -35,6 +35,12 @@ namespace I3Constants
   static const double z_vacuum = 376.730313668 * I3Units::ohm;
 
   /**
+   * Boltzmann temperature constant (i.e. k_B)
+   */
+
+  static const double KBoltzmann = 1.38064852e-23 * I3Units::joule / I3Units::kelvin;
+
+  /**
    * The "average" phase velocity (for wavelength of 400nm)
    * @sa http://icecube.berkeley.edu/amanda-private/abs/ice/r_index.html
    * @sa http://icecube.berkeley.edu/amanda-private/abs/ice/Buford_and_Kurt.ps

@@ -116,6 +116,9 @@
     (millivolt) (mV)							\
     (volt) (V)								\
     (kilovolt) (kV)							\
+    (statvolt)                              \
+    (watt)                                  \
+    (milliwatt) (mW)                        \
     (ohm)								\
     (kelvin)								\
     (kilogram)(kg)							\

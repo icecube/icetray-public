@@ -32,3 +32,4 @@ bool operator<(const IceActKey& lhs, const IceActKey& rhs) {
 }
 
 I3_SERIALIZABLE(IceActKey);
+I3_SERIALIZABLE(I3VectorIceActKey);

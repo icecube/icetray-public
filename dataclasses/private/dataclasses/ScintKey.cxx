@@ -32,3 +32,4 @@ bool operator<(const ScintKey& lhs, const ScintKey& rhs) {
 }
 
 I3_SERIALIZABLE(ScintKey);
+I3_SERIALIZABLE(I3VectorScintKey);

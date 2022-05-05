@@ -51,8 +51,8 @@ void FFTDataContainer<double, std::complex<double>>::UpdateFrequencySpectrum() {
 
   const unsigned int testReal = timeSeries_.GetSize();
   if ((testReal / 2) * 2 != testReal) {
+    log_warn("Trying to perform FFT on a time series with uneven number of bins (%d) clipped by one before FFT",(int)timeSeries_.GetSize());
     timeSeries_.PopBack();
-    log_warn("Trying to perform FFT on a time series with uneven number of bins -- clipped by one before FFT");
   }
 
   const unsigned int nReal = timeSeries_.GetSize();
@@ -158,8 +158,8 @@ void FFTDataContainer<I3Position, I3ComplexVector>::UpdateFrequencySpectrum() {
 
   const unsigned int testReal = timeSeries_.GetSize();
   if ((testReal / 2) * 2 != testReal) {
+    log_warn("Trying to perform FFT on a time series with uneven number of bins (%d) clipped by one before FFT",(int)timeSeries_.GetSize());
     timeSeries_.PopBack();
-    log_warn("Trying to perform FFT on a time series with uneven number of bins -- clipped by one before FFT");
   }
 
   const unsigned int nReal = timeSeries_.GetSize();

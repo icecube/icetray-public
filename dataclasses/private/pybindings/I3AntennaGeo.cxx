@@ -14,7 +14,7 @@ void register_I3AntennaGeo() {
                        .add_property("heightAboveSnow", &I3AntennaGeo::GetHeightAboveSnow, &I3AntennaGeo::SetHeightAboveSnow)
                        .add_property("cableLength", &I3AntennaGeo::GetCableLength, &I3AntennaGeo::SetCableLength)
                        .add_property("antennaName", &I3AntennaGeo::GetAntennaName, &I3AntennaGeo::SetAntennaName)
-                       .add_property("radtype", &I3AntennaGeo::GetAntennaType, &I3AntennaGeo::SetAntennaType)
+                       .add_property("antennatype", &I3AntennaGeo::GetAntennaType, &I3AntennaGeo::SetAntennaType)
                        .def(bp::dataclass_suite<I3AntennaGeo>())
                        ;
 

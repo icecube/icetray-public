@@ -553,6 +553,26 @@ namespace I3Units
   static const double kilovolt = 1.e3 * volt;
   static const double kV = kilovolt;
 
+  /**
+   * Voltage in cgs is the statvolt.
+   * [statV] = c_light (in m/s) / 10^6 [Volt]
+   */
+  static const double statvolt = 299792458. / 1.e6 * volt;
+
+  //
+  // Power
+  // 
+
+  /**
+   * Watt
+   */  
+  static const double watt = joule / second;
+
+  /**
+   * Milliwatt
+   */ 
+  static const double milliwatt = 1.e-3 * watt;
+  static const double mW = milliwatt;
 
   //
   // Resistance

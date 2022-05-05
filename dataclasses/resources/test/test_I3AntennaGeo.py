@@ -27,7 +27,7 @@ class I3AntennaGeo(unittest.TestCase):
     antgeo.heightAboveSnow = testHeight
     antgeo.cableLength = testCable
     antgeo.antennaName = testName
-    antgeo.radtype = testType
+    antgeo.antennatype = testType
 
     theMap = dataclasses.I3AntennaGeoMap()
     theMap[dataclasses.AntennaKey(1,1)] = antgeo

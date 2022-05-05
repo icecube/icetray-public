@@ -30,7 +30,8 @@ void UpsampleTimeSeries(FFTDataContainer<T, F> &container, const unsigned int up
   spectrum[0] *= 0;
 
   //Init a new spectrum with all zeros
-  I3AntennaWaveform<F> upsampledSpectrum((spectrum.GetSize() - 1)*upsamplingFactor + 1, spectrum.GetBinning(), 0);
+  F zero = spectrum[0] * 0.; //Set using existing value because default for I3ComplexVector is NAN
+  I3AntennaWaveform<F> upsampledSpectrum((spectrum.GetSize() - 1)*upsamplingFactor + 1, spectrum.GetBinning(), zero);
   upsampledSpectrum.SetOffset(spectrum.GetOffset());
 
   // as the values must be filled in in the proper order there are two cases
@@ -38,14 +39,8 @@ void UpsampleTimeSeries(FFTDataContainer<T, F> &container, const unsigned int up
   if (container.GetNyquistZone() == 1) {
     for (unsigned int i = 0; i < spectrum.GetSize(); ++i)
       upsampledSpectrum[i] = spectrum[i];
-  } else if (container.GetNyquistZone() == 2) {           // WARNING: Check missing if data are sorted as assumed
-    const int lastentry = 2 * (spectrum.GetSize() - 1);
-    for (int i = spectrum.GetSize() - 1; i >= 0; --i)
-      upsampledSpectrum[lastentry - i] = std::conj(spectrum[i]); // complex conjugate avoids time inversion
-    upsampledSpectrum[lastentry] *= 0.5;
-    upsampledSpectrum[spectrum.GetSize() - 1] *= 0.5;
   } else {
-    log_error("Upsampling for Nyquist zones greater than 2 not implemented!");
+    log_error("Upsampling for Nyquist zones greater than 1 not implemented!");
   }
 
   // replace the original spectrum by the new one (after zero padding)
@@ -55,22 +50,22 @@ void UpsampleTimeSeries(FFTDataContainer<T, F> &container, const unsigned int up
   if (!removeOffset)
     spectrum[0] = offset;
 
-  // the new spectrum is allways in the 1st Nyquist zone
+  // the new spectrum is always in the 1st Nyquist zone
   container.SetNyquistZone(1);
 }
 
 template <typename T, typename F>
-void TruncateFrequnecySpectrum(FFTDataContainer<T, F> &container, const double targetBinning) {
-  
+void TruncateFrequencySpectrum(FFTDataContainer<T, F> &container, const double targetBinning) {
+
   I3AntennaWaveform<F>& spectrum = container.GetFrequencySpectrum();
   const double freqBinning = spectrum.GetBinning();
 
   const double nyquistFreq = 0.5 / targetBinning;
 
   //Remove all frequencies above the Nyquist frequency
-  for (unsigned int ibin = 0; ibin < spectrum.GetSize(); ibin++){
-    if(ibin * freqBinning > nyquistFreq)
-      spectrum[ibin] = 0;
+  for (unsigned int ibin = 0; ibin < spectrum.GetSize(); ibin++) {
+    if (ibin * freqBinning > nyquistFreq)
+      spectrum[ibin] *= 0;
   }
 }
 
@@ -107,7 +102,7 @@ void ResampleFFTDataContainer(FFTDataContainer<T, F> &container, const double ti
     UpsampleTimeSeries(container, resamplingFactor.numerator(), false);
   }
   if (resamplingFactor.denominator() != 1) {
-    TruncateFrequnecySpectrum(container, targetBinning);
+    TruncateFrequencySpectrum(container, targetBinning);
     ThinOutTimeSeries(container, resamplingFactor.denominator());
   }
 
