@@ -21,7 +21,7 @@ if (USE_OPENCL)
     SET(OpenCL_INCLUDE_DIR "${OPENCL_BASE}/include")
   endif()
 
- find_package(OpenCL)
+ find_package(OpenCL QUIET)
 
  if (OpenCL_FOUND)
     #set uppercase name so macros in project.cmake know what is happending
