@@ -261,6 +261,23 @@ private:
   void Configure();
 
   /**
+   * called by Execute() or Execute(unsigned maxCount)
+   *
+   * @note
+   * Calling Execute(std::numeric_limits<unsigned>::max())
+   * from Execute() may look like a good idea - a huge maxCount
+   * means more or less 'forever' - but it isn't.
+   * It's like O(10 days) run-time for some trays only!
+   * Add a boolean parameter to disable the testing of maxCount
+   * against the number of frames that have been processed so far.
+   *
+   * @param executeForever disable maxCount and run/execute forever
+   * if true.
+   * @param maxCount the maximum number of frames to process.
+   */
+  void Execute(bool executeForever, unsigned maxCount);
+
+  /**
    * Generates an Abort transition in the main module if it is in the
    * appropraite state. Otherwise it does nothing.
    */

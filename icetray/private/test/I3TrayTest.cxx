@@ -39,7 +39,7 @@ TEST(normal_interface)
   ENSURE_DISTANCE(TestModule::module->doubleParam,
 		  (double)3.14159,
 		  0.0000001);
-    
+
 }
 
 TEST(convenience_interface_0)
@@ -59,7 +59,7 @@ TEST(convenience_interface_0)
     ("doubleParam", (double)3.14159)
     ("stringParam", "it puts the lotion in the basket")
     ("longParam", (long)67);
-  
+
 
   tray.Execute(0);
 
@@ -92,7 +92,7 @@ TEST(convenience_interface_1)
   tray.AddModule<TestModule>("test")
     ("boolParam", false)
     ("intParam", (int)99);
-  
+
 
   tray.Execute(0);
 
@@ -124,7 +124,7 @@ TEST(default_convenience_connectboxes)
   tray.AddModule<TestModule>("test4")("boolParam", true);
   tray.AddModule<TestModule>("test5")("boolParam", true);
 
-  
+
 
   tray.Execute(0);
 }
@@ -152,7 +152,7 @@ TEST(no_such_module)
   try {
     tray.ConnectBoxes("fork", "BadBox", "NoSuchModule");
     FAIL("That should have thrown... attempt to connect Outbox to nonexistant module.");
-  } catch(const std::exception& e) {  
+  } catch(const std::exception& e) {
     // ok
   }
 }
@@ -162,14 +162,14 @@ TEST(multiple_tray_create_destroy)
   {
     I3Tray tray;
     tray.AddModule("BottomlessSource", "source");
-    
+
     tray.Execute(1);
   }
 
   {
     I3Tray tray2;
     tray2.AddModule("BottomlessSource", "source");
-    
+
     tray2.Execute(1);
   }
 
@@ -177,17 +177,17 @@ TEST(multiple_tray_create_destroy)
 
 //A module with a simple side effect (incrementing a counter)
 //so that we can easily verify that it has been run.
-//It also stops the containing tray by calling RequestSuspension. 
+//It also stops the containing tray by calling RequestSuspension.
 class SideEffectModule : public I3Module {
 public:
   SideEffectModule(const I3Context& context) : I3Module(context) {
     AddParameter("Life", "Number of iterations this module should survive", 0);
   }
-  
+
   void Configure() {
     GetParameter("Life",life);
   }
-  
+
   void Process() {
     counter++;
     if(life){
@@ -209,13 +209,31 @@ TEST(simultaneous_trays)
   I3Tray tray1, tray2;
   tray1.AddModule("SideEffectModule", "counter1")("Life", 5);
   tray2.AddModule("SideEffectModule", "counter2")("Life", 5);
-  
+
   tray1.Execute();
   ENSURE_EQUAL(SideEffectModule::counter,5u);
   //after one tray has stopped due to a module requesting suspension
   //another should still be able to run
   tray2.Execute();
   ENSURE_EQUAL(SideEffectModule::counter,10u);
+}
+
+TEST(execute_forever)
+{
+  SideEffectModule::counter=0;
+  I3Tray tray;
+  tray.AddModule("SideEffectModule", "counter")("Life", 100);
+  tray.Execute();
+  ENSURE_EQUAL(SideEffectModule::counter, 100u);
+}
+
+TEST(execute_max_count)
+{
+  SideEffectModule::counter=0;
+  I3Tray tray;
+  tray.AddModule("SideEffectModule", "counter")("Life", 100);
+  tray.Execute(10);
+  ENSURE_EQUAL(SideEffectModule::counter, 10u);
 }
 
 TEST(anonymous_module)

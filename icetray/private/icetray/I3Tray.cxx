@@ -470,11 +470,17 @@ I3Tray::Configure()
 void
 I3Tray::Execute()
 {
-  Execute(std::numeric_limits<unsigned>::max());
+  Execute(true, 0u);
 }
 
 void
 I3Tray::Execute(unsigned maxCount)
+{
+  Execute(false, maxCount);
+}
+
+void
+I3Tray::Execute(bool executeForever, unsigned maxCount)
 {
 	if (execute_called) {
 		log_error("This I3Tray has already been executed. "
@@ -485,7 +491,7 @@ I3Tray::Execute(unsigned maxCount)
 	execute_called = true;
 	scoped_signal_handler trap_sigint(SIGINT, set_suspend_flag);
 	scoped_signal_handler trap_sigterm(SIGTERM, set_suspend_flag);
-	
+
 #ifdef SIGINFO
 	executing_tray = this;
 	scoped_signal_handler trap_siginfo(SIGINFO, report_usage);
@@ -494,7 +500,9 @@ I3Tray::Execute(unsigned maxCount)
 	Configure();
 
 	for (unsigned i=0;
-             (i < maxCount) && !suspension_requested && !global_suspension_requested;
+	     (executeForever || (i < maxCount)) &&
+		!suspension_requested &&
+		!global_suspension_requested;
              i++) {
 		log_trace("%u/%u icetray dispatching Process_", i, maxCount);
 		driving_module->Do(&I3Module::Process_);
