@@ -36,15 +36,15 @@
 class I3XMLOMKey2MBID : public I3OMKey2MBID
 {
  private:
-  typedef std::map<OMKey,long long int> map_omkey2mbid;
-  typedef std::map<long long int,OMKey> map_mbid2omkey;
-  
+  typedef std::map<OMKey, long long int> map_omkey2mbid;
+  typedef std::map<long long int, OMKey> map_mbid2omkey;
+
   map_omkey2mbid omkey2mbid_;
   map_mbid2omkey mbid2omkey_;
-  
+
  public:
   /** Dump conversion table into XML file.
-   * 
+   *
    * \note
    * This XML file can be used as input for I3XMLOMKey2MBID.
    * @param outfile The filename.
@@ -53,9 +53,38 @@ class I3XMLOMKey2MBID : public I3OMKey2MBID
   static void Dump(const std::string& outfile,
                    const std::map<long long int, OMKey>& conversionTable);
 
+  /** Merge a XML file and a conversion table into a new XML file.
+   *
+   * @param outfile The name of the merged file.
+   * @param infile The name of the file that is merged...
+   * @param conversionTable ...with this conversion table
+   * into <VAR>outfile</VAR>.
+   */
+  static void Merge(const std::string& outfile,
+                    const std::string& infile,
+                    const std::map<long long int, OMKey>& conversionTable)
+  {
+    I3XMLOMKey2MBID tmp = I3XMLOMKey2MBID(infile);
+    tmp.mbid2omkey_.insert(conversionTable.begin(), conversionTable.end());
+    Dump(outfile, tmp.mbid2omkey_);
+  }
+
+  /** Merge two XML files into a new one that store(s) a conversion table.
+   *
+   * @param outfile The name of the merged file.
+   * @param infile1 The name of the file that is merged...
+   * @param infile2 ...with this file into <VAR>outfile</VAR>.
+   */
+  static void Merge(const std::string& outfile,
+                    const std::string& infile1,
+                    const std::string& infile2)
+  {
+    Merge(outfile, infile1, I3XMLOMKey2MBID(infile2).mbid2omkey_);
+  }
+
 
   /** Constructor.
-   * 
+   *
    * @param infile Name of the XML file.
    */
   explicit I3XMLOMKey2MBID(const std::string& infile);

@@ -23,7 +23,7 @@ else(photospline_FOUND)
   colormsg(RED "+-- omitting I3CrossSection, photospline *not* found, ")
 endif(photospline_FOUND)
 
-i3_add_library(phys-services 
+i3_add_library(phys-services
   private/converter/I3EventInfoConverter.cxx
   private/converter/I3RecoInfoConverter.cxx
   private/converter/I3CutValuesConverter.cxx
@@ -79,8 +79,11 @@ i3_add_library(phys-services
 
 i3_executable(CreateXMLOMKey2MBIDConversionTable
   private/CreateXMLOMKey2MBIDConversionTable/*.cxx
-  USE_PROJECTS phys-services
-  USE_TOOLS gsl)
+  USE_PROJECTS phys-services)
+
+i3_executable(MergeXMLOMKey2MBIDConversionTables
+  private/MergeXMLOMKey2MBIDConversionTables/*.cxx
+  USE_PROJECTS phys-services)
 
 if (SPRNG_FOUND)
   set(SPRNG_TESTS private/test/I3RandomServiceStateTest.cxx)
@@ -89,10 +92,10 @@ endif (SPRNG_FOUND)
 i3_test_executable(test
   private/test/ContainmentSizeTest.cxx
   private/test/GeometrySelectorTests.cxx
-  private/test/I3CalculatorTest.cxx	  
+  private/test/I3CalculatorTest.cxx
   private/test/I3CutsTest.cxx
   private/test/I3GeoSelTestModule.cxx
-  private/test/I3RandomServiceTest.cxx	    
+  private/test/I3RandomServiceTest.cxx
   private/test/I3ScaleCalculatorTest.cxx
   private/test/I3XMLOMKey2MBIDTest.cxx
   private/test/OMKey2MBIDTest.cxx
@@ -119,6 +122,6 @@ i3_add_pybindings(phys_services
   private/pybindings/Surface.cxx
   private/pybindings/module.cxx
   ${OPTIONAL_PYBINDING_SOURCES}
-  USE_TOOLS boost python 
+  USE_TOOLS boost python
   USE_PROJECTS phys-services interfaces
   )
