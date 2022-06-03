@@ -155,7 +155,8 @@ else()
 
   set(ROOT_5.18.00_LIBS Core Cint RIO Net Hist Graf Graf3d Gpad Tree Rint Postscript Matrix Physics Minuit)
 
-  add_definitions(-DI3_USE_ROOT -fno-strict-aliasing)
+  add_definitions(-DI3_USE_ROOT)
+  add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-fno-strict-aliasing>)
   if (USE_CINT)
     add_definitions(-DI3_USE_CINT)
   endif (USE_CINT)
