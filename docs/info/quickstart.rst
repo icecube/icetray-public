@@ -36,7 +36,7 @@ We actively test on a `number of platforms
 <http://builds.icecube.wisc.edu/buildslaves>`_.  **We
 highly recommend Ubuntu, it contains many useful packages, it's free,
 well-supported and has a wide user-base in IceCube.** If you choose
-Ubuntu and have problems, please ask questions on slack.
+Ubuntu and have problems, please ask questions on Slack.
 
 Check :ref:`platforms` for the operating system that you are
 using. If provided, download and run the script for your operating
@@ -138,6 +138,7 @@ In your ~/i3/icetray/build directory execute::
  make
 
 You will see the build progress::
+
  [  0%] Checking build against environment
  [  0%] Built target env-check
  [  1%] Linking CXX shared library ../lib/libserialization.so
@@ -191,7 +192,7 @@ You will see the build progress::
  [100%] Linking CXX shared library ../lib/libwimpsim-reader.so
  [100%] Built target wimpsim-reader
 
-Cmake nicely displays a fraction complete so you can follow the build
+CMake nicely displays a fraction complete so you can follow the build
 to completion.
 
 Rsync the test-data

@@ -390,7 +390,7 @@ qt4_i3_automoc
 .. program:: qt4_i3_automoc
 
 .. index:: qt4_i3_automoc()
-   single: Cmake macros ; qt4_i3_automoc()
+   single: CMake macros ; qt4_i3_automoc()
 
 .. object:: qt4_i3_automoc(file1 [file2 ... fileN])
 

@@ -14,7 +14,7 @@ Development Tips
 
  - **Prototype in Python** - Even the most experienced C++ developers are going to be slower hacking C++ than python.  When coming up with a good design, you're not likely at all to get it right on the first shot.  You should be prepared to throw the first prototype away and start from scratch.  It's much easier to move quickly in python.  A common problem that's seen is a "first design" is kept and hacked on simply due to the effort it took to create it. 
 
- - **Get Feedback During the Process** - Don't code in a vacuum.  There are a lot of experienced developers on IceCube who are more than willing to help out with constructive feedback.  Get their input as often as possible.  The best place to go is our slack channel.
+ - **Get Feedback During the Process** - Don't code in a vacuum.  There are a lot of experienced developers on IceCube who are more than willing to help out with constructive feedback.  Get their input as often as possible.  The best place to go is our Slack channel.
 
  - **Write Tests as you Go** - This can't be stressed enough.  One of the criteria for passing code review is "decent" test coverage.  Many times developers request a code review and plan to write tests during the review.  Tests are not simply needed to placate reviewers.  They're a useful development tool and should a natural part of the development process.  If you find yourself writing a method or function that's difficult to test this points to a bad design.  If you're testing as you go this can be caught early on.
 

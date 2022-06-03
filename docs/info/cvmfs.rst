@@ -62,7 +62,7 @@ accidentally put something else in front of CVMFS on the path.
 Distributions and Platforms
 ---------------------------
 
-py3.v4.2
+py3-v4.2
 ^^^^^^^^
 
 * python 3.10, various python software upgrades over v4.1
