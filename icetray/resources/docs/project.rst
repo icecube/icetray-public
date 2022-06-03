@@ -1,12 +1,19 @@
+.. highlight:: text
+
 How to make a project
 =====================
+
+.. warning::
+
+   This document is old and crufty. While the `Implementation`_
+   section below is generally useful, this document as a whole should
+   be taken as nothing more than a *rough* guide.
 
 CMake
 -----
 
 - A makefile generator
 - Like autoconf, but better
-    (not written in Modula-4)
 - Uses it's own private language (bad, but not horrible)
 
 Project Layout
@@ -28,7 +35,7 @@ Project Layout
              PublicInterface.h
 
 
-IceCube cmake macros
+IceCube CMake macros
 --------------------
 
 i3_project
@@ -44,12 +51,12 @@ i3_project
 i3_add_library
 ^^^^^^^^^^^^^^
 
-(First)      Name of library
-(N args)     Names of files
-USE_TOOLS    external tools
-USE_PROJECTS icetray projects
+:(First):      Name of library
+:(N args):     Names of files
+:USE_TOOLS:    external tools
+:USE_PROJECTS: icetray projects
 
-:: 
+::
 
   i3_add_library(lib_name
                  private/modulename/file1.cxx private/modulename/file2.cxx
@@ -60,10 +67,10 @@ USE_PROJECTS icetray projects
 i3_add_pybindings
 ^^^^^^^^^^^^^^^^^
 
-(First)      Name of project (should match directory name)
-(N args)     Names of files
-USE_TOOLS    external tools
-USE_PROJECTS icetray projects
+:(First):      Name of project (should match directory name)
+:(N args):     Names of files
+:USE_TOOLS:    external tools
+:USE_PROJECTS: icetray projects
 
 ::
 
@@ -75,17 +82,18 @@ USE_PROJECTS icetray projects
 
 i3_test_scripts
 ^^^^^^^^^^^^^^^
-This registers scripts with the test system and automatically runs them on the build bots.
-Check out (http://builds.icecube.wisc.edu/) after every commit to see if you broke 
-anything on other platforms.
+
+This registers scripts with the test system and automatically runs
+them on the build bots. Check https://github.com/icecube/icetray/actions/
+after every commit to see if you broke anything on other platforms.
 
 It's common to include the following in your CMakeLists.txt file.  This will
 automatically register every python script in 'resources/test'.
 ::
 
   i3_test_scripts(resources/test/*.py)
-                  
-Cmake syntax
+
+CMake syntax
 ------------
 
 sh-like syntax:
@@ -101,7 +109,9 @@ If you can, optionally include parts of a module that require extra things.
 
 Use AND and OR for boolean logic.
 
-ex::
+ex:
+
+.. code-block:: cmake
 
     if(SUITESPARSE_FOUND)
         # do things that require SuiteSparse
@@ -114,16 +124,18 @@ Trivial Pybindings
 
 If you don't have real pybindings, use this.
 
-Note: don't mix this with real pybindings.
+.. note:: Don't mix this form with real pybindings.
 
-In python/__init__.py::
+In ``python/__init__.py``:
 
-    form icecube.icetray imprt load
+.. code-block:: python
+
+    from icecube.icetray import load
     load('project_name', False)
     del load
 
-icetray.load's second argument controls printing status.  False disables printing
-the load output status.
+The second argument to :py:func:`icetray.load` controls printing
+status.  False disables printing the load status output.
 
 Documentation
 -------------
@@ -142,7 +154,9 @@ Note: most comments are more appropriate for implementation files.
 We'd actually like to read the header files instead of lines of comments.
 (no one really reads the implementation files though).
 
-The basic comment::
+The basic comment:
+
+.. code-block:: c++
 
     /**
      * This is a function that finds the sqrt of a number
@@ -151,9 +165,11 @@ The basic comment::
         return sqrt(n);
     }
 
-Build the docs::
+Build the docs:
 
-    make docs
+.. code-block:: console
+
+    $ make docs
 
 This will also make sphinx docs.
 
@@ -171,9 +187,11 @@ Modify CMakeLists.txt::
         DOCS_DIR resources/docs
     )
 
-Build only the Sphinx docs::
+Build only the Sphinx docs:
 
-    make html
+.. code-block:: console
+
+    $ make html
 
 Section Syntax::
 
@@ -189,6 +207,8 @@ http://sphinx-doc.org/rest.html
 
 Implementation
 --------------
+
+.. highlight:: c++
 
 Let's implement the basic framework of a module:
 
@@ -327,6 +347,8 @@ private/pybindings/module.cxx::
         register_I3Bootcamp();
     }
 
+.. highlight:: python
+
 python/__init__.py::
 
     # load the c++ pybindings
@@ -338,8 +360,8 @@ python/__init__.py::
 CMakeLists.txt
 ^^^^^^^^^^^^^^
 
-code::
-    
+.. code-block:: text
+
     i3_project(advanced_bootcamp)
 
     i3_add_library(advanced_bootcamp
@@ -359,6 +381,8 @@ code::
 
 Usage
 ^^^^^
+
+.. highlight:: python
 
 Let's use this module to do something::
 

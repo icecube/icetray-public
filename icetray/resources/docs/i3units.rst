@@ -1,12 +1,14 @@
 Using I3Units
-==============
+=============
+
+.. highlight:: c++
 
 In general, you want to "add units" when you store them in
 container, and "remove" them when you fetch them.  This
 ensures that all data is stored uniformly.
 For example::
 
- double myvoltage = 45.00*I3Units::V;
+ double myvoltage = 45.00 * I3Units::V;
  myContainerPtr->SetVoltage(myvoltage);
 
 And later::
@@ -36,21 +38,17 @@ and the reader of the code would have to remember that you chose mV for
 readvoltage higher up in the code.
 
 The IceCube unit system
-------------------------
+-----------------------
 
 In the IceTray software a set of "units" have been defined in the file
-I3Units.h. These units live in namespace I3Units, for example
-I3Units::GeV.  We have, for example::
+``I3Units.h``. These units live in namespace I3Units, for example
+:cpp:member:`I3Units::GeV`.  We have, for example::
 
- static const double eplus = 1.;		   // positron charge
-
- static const double     electronvolt = 1.0e-9;
-
- static const double gigaelectronvolt = 1.e+9*electronvolt;
-
- static const double  eV = electronvolt;
-
- static const double millivolt = (electronvolt*1.e-3)/eplus;
+ static const double eplus             = 1.;   // positron charge
+ static const double electronvolt      = 1.0e-9;
+ static const double gigaelectronvolt  = 1.e+9 * electronvolt;
+ static const double eV                = electronvolt;
+ static const double millivolt         = (electronvolt * 1.e-3) / eplus;
 
 A few basic units (like eplus and electronvolt) are defined quite 
 arbitrarily, and most units are calculated from these (as above).  It 
@@ -60,46 +58,45 @@ the idea is to USE them as real units.
 A unit is a quantity with dimension (the original kilogram was for 
 example the mass of a thing in Paris). You divide other quantities 
 of the same dimension (mass, in the case of the kilogram) by the unit 
-in order to obtain a ''dimensionless'' number specifying their 
+in order to obtain a "dimensionless" number specifying their
 value in that unit. In other words::
 
- quantity=number*unit
+ quantity = number * unit
 
 As long as we deal with quantities with dimension we do not need to
 choose the unit. We can write, for example::
 
- distance = 10*I3Unit::m;
+ distance = 10 * I3Unit::m;
+ time     = 40 * I3Unit::ns;
 
- time = 40*I3Unit::ns;
+The quantities so constructed are **not** tied to any particular
+units. We can divide distance by :cpp:member:`I3Units::m` to get the
+value in meters, or with :cpp:member:`I3Units::yd` to get it in
+yards. So we can pass these quantities around between modules without
+caring about units, and in some other module we can set::
 
-The quantities so constructed are '''not''' tied to any particular
-units. We can divide distance by I3Units::m to get the value in
-meters, or with I3Units::yd to get it in yards. So we can pass these
-quantities around between modules without caring about units, and in
-some other module we can set::
-
- speed = distance/time;
+ speed = distance / time;
 
 which will give us the speed, again without specific unit. It is only
 when we want to communicate with some external code which expects
 quantities expressed in (i.e. divided by) some specific unit that we
 must divide by the appropriate unit, like::
 
- speed_in_metres_per_second = speed/(I3Units::m/I3Units::s);
+ speed_in_metres_per_second = speed / (I3Units::m / I3Units::s);
 
 Of course, if we want to print the speed in metres per second we must
 also do the above.
 
 Need for a convention!
-^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^
 
-There is one case which can cause trouble: It is possible for the user 
-to provide parameters for modules in a steering script either as 
-just a number or as number*I3Unit.  This is dimensionally incorrect, and 
-opens up for confusion if the particular I3Unit  does not equal one. It 
-is therefore **essential** that a convention is adopted. All modules 
-should assume that parameters with dimension include the unit, and all 
-users should be aware of this.
+There is one case which can cause trouble: It is possible for the user
+to provide parameters for modules in a steering script either as just
+a number or as ``number * I3Unit``.  This is dimensionally incorrect,
+and opens up for confusion if the particular I3Unit does not equal
+one. It is therefore **essential** that a convention is adopted. All
+modules should assume that parameters with dimension include the unit,
+and all users should be aware of this.
 
 To exploit the benefits of the I3Units we should also avoid converting
 to specific units inside the code, and in particular when passing
@@ -107,7 +104,9 @@ parameters to functions and services. If we don't do this the I3Unit
 approach only serves to complicate things!
 
 Using in Python Scripts
-------------------------
+-----------------------
+
+.. highlight:: python
 
 Using I3Units in python scripts to specify parameters is simple.  As
 long as you have this line::
