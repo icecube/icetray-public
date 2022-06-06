@@ -104,11 +104,15 @@ ___________
 
   ``bookGeometry`` (bool) books OM geometry for the hit DOMs.
 
+  ``bookToParticle`` (string) books perpendicular distance to track, longitudinal distance along track, and distance to track vertex for the hit DOMs.  The string is the name of the track.
+
 :I3RecoPulseSeriesMapMaskConverter: Applies the mask, then dumps the resulting RecoPulses.
   
   *Options:*
 
   ``bookGeometry`` (bool) books OM geometry for the hit DOMs.
+
+  ``bookToParticle`` (string) books perpendicular distance to track, longitudinal distance along track, and distance to track vertex for the hit DOMs.  The string is the name of the track.
 
 :I3WaveformSeriesMapConverter: Dumps a single I3WaveformSeriesMap.
   
@@ -123,6 +127,8 @@ ___________
   *Options:*
 
   ``bookGeometry`` (bool) books OM geometry for the hit DOMs.
+
+  ``bookToParticle`` (string) books perpendicular distance to track, longitudinal distance along track, and distance to track vertex for the hit DOMs.  The string is the name of the track.
 
 :I3MapStringDoubleConverter: Dumps a ``std::map<string,double>`` verbatim.
 

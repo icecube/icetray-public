@@ -52,6 +52,7 @@ i3_test_scripts(
     resources/test/test_padding.py
     resources/test/test_pybindings.py
     resources/test/test_recopulsemask.py
+    resources/test/test_recopulse_options.py
     resources/test/test_subevents.py
     resources/test/test_I3MCTree.py
     resources/test/test_inheritance_conversion.py

@@ -41,27 +41,28 @@ namespace {
 class I3RecoPulseSeriesMapMaskConverter : public I3ConverterImplementation<I3RecoPulseSeriesMapMask>
 {
 public:
-	I3RecoPulseSeriesMapMaskConverter() : base_() {};
-	I3RecoPulseSeriesMapMaskConverter(bool b) : base_(b) {};
-	I3TableRowDescriptionPtr CreateDescription(const I3RecoPulseSeriesMapMask& m) 
-	{
-		I3RecoPulseSeriesMap mappy;
-		return boost::const_pointer_cast<I3TableRowDescription>(
-		    base_.GetDescription(mappy));
-	}
-	size_t GetNumberOfRows(const I3RecoPulseSeriesMapMask &mask)
-	{
-		return mask.GetSum();
-	}
-	size_t FillRows(const I3RecoPulseSeriesMapMask &mask, I3TableRowPtr rows)
-	{
-		I3RecoPulseSeriesMapConstPtr pulses = mask.Apply(*currentFrame_);
-		return base_.Convert(*pulses, rows, currentFrame_);
-	}
+    // Again here, different constructors for different argument combinations (both, neither, one, the other)
+    I3RecoPulseSeriesMapMaskConverter() : base_() {};
+    I3RecoPulseSeriesMapMaskConverter(bool b, std::string btp) : base_(b, btp) {};
+    I3RecoPulseSeriesMapMaskConverter(bool b) : base_(b) {};
+    I3RecoPulseSeriesMapMaskConverter(std::string btp) : base_(btp) {};
+    I3TableRowDescriptionPtr CreateDescription(const I3RecoPulseSeriesMapMask& m)
+    {
+        I3RecoPulseSeriesMap mappy;
+        return boost::const_pointer_cast<I3TableRowDescription>(base_.GetDescription(mappy));
+    }
+    size_t GetNumberOfRows(const I3RecoPulseSeriesMapMask &mask)
+    {
+        return mask.GetSum();
+    }
+    size_t FillRows(const I3RecoPulseSeriesMapMask &mask, I3TableRowPtr rows)
+    {
+        I3RecoPulseSeriesMapConstPtr pulses = mask.Apply(*currentFrame_);
+        return base_.Convert(*pulses, rows, currentFrame_);
+    }
 private:
-	typedef I3MapOMKeyVectorConverter<convert::I3RecoPulse,
-	    I3RecoPulseSeriesMap> Base;
-	Base base_;
+    typedef I3MapOMKeyVectorConverter<convert::I3RecoPulse, I3RecoPulseSeriesMap> Base;
+    Base base_;
 };
 
 void register_dataclasses_converters() {

@@ -45,8 +45,10 @@ The same struct can be used both for the I3VectorConverter and the
 I3MapOMKeyVectorConverter.
 
 .. note::
-    I3MapConverter has a parameter bookGeometry in its constructor that defaults
-    to false and allows users to bookGeometry together with the data in the map.
+    I3MapConverter has parameters bookGeometry and bookToParticle (you name the particle) in its constructor, that
+    allow users to book X/Y/Z coordinates or perpendicular/longitunal distances to a particle track/vertex, 
+    together with the data in the map.
+    They default to not booking these things (bookGeometry=false, and bookToParticle="").
     To make this option available in python, use the I3_MAP_CONVERTER_EXPORT or
     I3_MAP_CONVERTER_EXPORT_DEFAULT macros instead of I3CONVERTER_EXPORT or
     I3CONVERTER_EXPORT_DEFAULT.
