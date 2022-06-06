@@ -40,15 +40,61 @@ class I3EventHeader : public I3FrameObject
   };
   
  private:
+ /**
+  * @brief Unique identifier assigned sequentially to every run the DAQ has ever recorded.
+  */
   unsigned runID_;
+
+  /**
+   * @brief Unique identifier assigned sequentially by the DAQ to every configuration change
+   * which occurs during a single run. The subRunID is almost always going to be 0.
+   * 
+   * The DAQ starts each run with subRunID=0 and only increments it when the run configuration changes.
+   * Since, flasher runs are the only time when more than one configuration is used, they are the only
+   * time you will see a non-zero subRunID.
+   *  
+   * SubRunID is often confused with PFFilt file number. Pnf breaks up both its PFRaw and PFFilt
+   * output stream into multiple files for transmission over the satellite and storage.
+   * These file partitions are based solely on the size of the file and have no significance to the 
+   * data or the DAQ.
+   * The file number is not recorded anywhere in the frame and cannot easily be added in the frame.
+   * Also note that since PnF uses a different writer module to write PFRaw and PFFilt files that
+   * there will be a different number of PFRaw and PFFilt files and no correspondence between which
+   * file an event will land between the two output streams.
+   * 
+   * Experimental data filenames will often contain three values: the runID, the subRunID, and 
+   * the PFFilt file number. But since the subRun is almost always 0 it often gets confused with 
+   * the PFFilt file number.
+   * For example the filename `PFFilt_PhysicsFiltering_Run00136690_Subrun00000000_00000205.tar.bz2` 
+   * indicates a runID of 136690, a subRunID of 0, and a PFFilt file number of 205 but will often
+   * be erroneously referred to as subrun 205.
+   */
   unsigned subRunID_;
+
+  /**
+   * @brief Unique identifier assigned by the DAQ to every event (Q-frame) in the given run.
+   */
   unsigned eventID_;
+
+  /**
+   * @brief Unique identifier assigned to every P-frame by the splitter.
+   * 
+   * This quantity is not assigned by the DAQ. When Q-frames are split into multiple
+   * P-frames by a splitter module this is the unique number assigned to each P-frame.
+   */
   unsigned subEventID_;
 
+  /** 
+   * @brief Name of the P-frame stream assigned by the splitter module
+   */
   std::string subEventStream_;
   
   State state_;
 
+  /**
+   * @brief The 
+   * 
+   */
   I3Time startTime_;
   I3Time endTime_;
 
