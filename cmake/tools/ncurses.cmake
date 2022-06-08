@@ -27,7 +27,6 @@
 #  
 #  SPDX-License-Identifier: BSD-2-Clause
 #  
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
 
 # we don't use the tooldef() macro, so we have to fudge pretty-printing

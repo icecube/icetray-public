@@ -26,7 +26,6 @@
 #  
 #  SPDX-License-Identifier: BSD-2-Clause
 #  
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 project(icetray)

@@ -27,7 +27,6 @@
 #  
 #  SPDX-License-Identifier: BSD-2-Clause
 #  
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 # first look for Geant4 >= 4.9.5 (which does not need CLHEP)
 message(STATUS "Looking for Geant4 geant4-config program")

@@ -28,7 +28,6 @@
 #  
 #  SPDX-License-Identifier: BSD-2-Clause
 #  
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
 PATH=PATH_CHECK \
     LD_LIBRARY_PATH=LD_LIBRARY_PATH_CHECK \

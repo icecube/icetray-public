@@ -27,7 +27,6 @@
 #  
 #  SPDX-License-Identifier: BSD-2-Clause
 #  
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
 FIND_LIBRARY(pthread_LIBRARIES pthread
              PATHS /usr/lib/x86_64-linux-gnu /usr/lib/i386-linux-gnu)

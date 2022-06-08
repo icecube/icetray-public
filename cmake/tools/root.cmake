@@ -27,7 +27,6 @@
 #  
 #  SPDX-License-Identifier: BSD-2-Clause
 #  
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>
 #  
 option(USE_ROOT "Build with root" ON)
 option(USE_CINT "Build dictionaries with rootcint" OFF)
