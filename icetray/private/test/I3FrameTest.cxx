@@ -174,6 +174,7 @@ TEST(a_t_serializes)
   std::ofstream ofs("i3int");
   icecube::archive::portable_binary_oarchive poa(ofs);
   poa << make_nvp("t", ptr);
+  remove("i3int");
 }
   
 TEST(emptyslots)
