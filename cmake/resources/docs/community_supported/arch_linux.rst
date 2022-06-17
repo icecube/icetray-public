@@ -72,6 +72,10 @@ For AMD/Radeon use::
 
   pacman -S opencl-mesa
 
+For Intel Iris use::
+
+  pacman -s intel-compute-runtime ocl-icd
+
 If you don't have a GPU (possibly because you are in a virtual machine), a software implementation is available but slow::
 
   pacman -S pocl
