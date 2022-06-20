@@ -80,3 +80,9 @@ locally, read on.
 
    test_guides/testing_coverage
    test_guides/testing_python_coverage
+
+Adding Test Data
+----------------
+
+The test data is downloaded from the svn repository https://code.icecube.wisc.edu/test-data/trunk/.
+When you write tests which need need additional test data please commit it to this repository.
