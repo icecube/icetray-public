@@ -59,9 +59,8 @@ def test_image(tst, ref, rebin, threshold):
     return round(float(no_accepted_pixels) / no_pixels, 2)
 
 
-@unittest.skipIf(platform.system() == "Darwin" and 
-                 os.environ["USER"] == "buildslave",
-                 "suite does not work on Mac buildbots")
+@unittest.skipIf(platform.system() == "Darwin",
+                 "known memory corruption at steamshovel exit on macOS (see #2843)")
 @unittest.skipIf(platform.system() == "Linux" and
                  "DISPLAY" not in os.environ,
                  "suite requires X-server")
@@ -90,7 +89,7 @@ class TestShovelScripts( unittest.TestCase ):
     def runtest( self, script ):
         p = subp.Popen(
             ("steamshovel", "--testmode", "--batch", "--noconsole", "-s",
-             "{}/shovelscripts/{}.py".format(base_path, script)), 
+             "{}/shovelscripts/{}.py".format(base_path, script)),
             stdout=subp.PIPE, stderr=subp.STDOUT
         )
         output = p.communicate()[0].lower()
@@ -103,7 +102,7 @@ class TestShovelScripts( unittest.TestCase ):
         # need to decode it.
         output_str = output.decode('utf-8') \
             if sys.version_info[0] == 3 else output
-        
+
         self.assertTrue( re.search(r"\berror\b", output_str) is None and
                          re.search(r"\bfatal\b", output_str) is None and
                          re.search(r"\bexception\b", output_str) is None,
@@ -142,4 +141,4 @@ class TestShovelScripts( unittest.TestCase ):
         self.assertImage( name + ".png", 30 )
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)

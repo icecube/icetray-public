@@ -58,3 +58,10 @@ i3_test_scripts(
     resources/test/test_inheritance_conversion.py
     resources/test/test_converters.py
 )
+
+## mark the following tests as skipped, instead of a false "passed"
+## see the indvidual tests for the skip logic
+set_tests_properties(
+    tableio::test_padding.py tableio::test_subevents.py tableio::test_I3MCTree.py
+    tableio::test_inheritance_conversion.py
+    PROPERTIES SKIP_REGULAR_EXPRESSION " \.\.\. skipped ")

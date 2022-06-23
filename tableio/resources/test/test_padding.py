@@ -55,6 +55,11 @@ class Generator(icetray.I3Module):
 class MCTreeTest(unittest.TestCase):
     def setUp(self):
 
+        try:
+            import tables
+        except ImportError:
+            raise unittest.SkipTest("pytables missing")
+
         tray = I3Tray()
         tray.Add(Generator)
         tray.Add("I3NullSplitter", "nullsplit",SubEventStreamName='null')
@@ -71,10 +76,6 @@ class MCTreeTest(unittest.TestCase):
         pass
     
     def testNumberOfRows(self):
-        try:
-            import tables
-        except ImportError:
-            raise unittest.SkipTest("pytables missing")
         hdf = tables.open_file('foo.hdf5')
 
         self.assertEquals(len(hdf.root.I3CorsikaInfo),5,"I3CorsikaInfo should have 5 entries")                
@@ -82,4 +83,4 @@ class MCTreeTest(unittest.TestCase):
         self.assertEquals(len(hdf.root.I3MCPrimary),100,"I3MCPrimary should have 100 entries")        
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)

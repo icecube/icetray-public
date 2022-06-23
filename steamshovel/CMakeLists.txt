@@ -162,8 +162,11 @@ if(Qt5_FOUND AND Qt5OpenGL_FOUND AND OPENGL_FOUND AND OPENGL_GLU_FOUND)
     resources/test/test_shovelio_against_I3Reader.py
     resources/test/test_setting.py
     resources/test/test_shovelio_I3FrameSequence.py
-    #resources/test/test_shovelscripts.py
+    resources/test/test_shovelscripts.py
     )
+  set_tests_properties(steamshovel::test_shovelscripts.py PROPERTIES
+      DISABLED TRUE
+      SKIP_REGULAR_EXPRESSION " \.\.\. skipped ")
 
 
   if(APPLE)

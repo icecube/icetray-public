@@ -161,4 +161,4 @@ class CanConvert(unittest.TestCase):
 		self.assertEqual(bc.CanConvert(b),tableio.ConvertState.ExactConversion);
 
 if __name__ == "__main__":
-	unittest.main()
+	unittest.main(verbosity=2)

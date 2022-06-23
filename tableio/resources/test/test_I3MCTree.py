@@ -63,14 +63,15 @@ def try_to_write(linearized=False):
 
 class MCTreeTest(unittest.TestCase):
     def setUp(self):
-        try_to_write()
-    def tearDown(self):
-        os.unlink("foo.hdf5")
-    def testNumberOfRows(self):
         try:
             import tables
         except ImportError:
             raise unittest.SkipTest("pytables missing")
+
+        try_to_write()
+    def tearDown(self):
+        os.unlink("foo.hdf5")
+    def testNumberOfRows(self):
         hdf = tables.open_file('foo.hdf5')
         self.assertIsNotNone(hdf.get_node('/I3MCTree'), "I3MCTree table exists")
         self.assertEquals(hdf.get_node('/I3MCTree').nrows, 2, "I3MCTree table has 2 rows")
@@ -80,4 +81,4 @@ class LinearizedMCTreeTest(MCTreeTest):
         try_to_write(linearized=True)
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)
