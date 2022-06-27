@@ -60,6 +60,9 @@ class MCTreeTest(unittest.TestCase):
         except ImportError:
             raise unittest.SkipTest("pytables missing")
 
+        if 'open_file' not in dir(tables):
+            raise unittest.SkipTest("pytables missing or incomplete")
+
         tray = I3Tray()
         tray.Add(Generator)
         tray.Add("I3NullSplitter", "nullsplit",SubEventStreamName='null')
@@ -74,8 +77,9 @@ class MCTreeTest(unittest.TestCase):
     def tearDown(self):
         os.unlink("foo.hdf5")
         pass
-    
+
     def testNumberOfRows(self):
+        import tables
         hdf = tables.open_file('foo.hdf5')
 
         self.assertEquals(len(hdf.root.I3CorsikaInfo),5,"I3CorsikaInfo should have 5 entries")                
