@@ -10,14 +10,7 @@ from icecube import icetray, dataclasses, tableio, phys_services
 from I3Tray import I3Tray
 
 import sys
-if sys.version_info[:2] < (2,7):
-    try:
-        import unittest2 as unittest
-    except ImportError:
-        icetray.logging.log_error("unittest for Python %d.%d.%d is too old. install unittest2." % (sys.version_info[:3]))
-        sys.exit(0)
-else:
-    import unittest
+import unittest
 
 def add_eventheader(frame):
     eh = dataclasses.I3EventHeader()
@@ -78,7 +71,7 @@ class MCTreeTest(unittest.TestCase):
         import tables
         hdf = tables.open_file('foo.hdf5')
         self.assertIsNotNone(hdf.get_node('/I3MCTree'), "I3MCTree table exists")
-        self.assertEquals(hdf.get_node('/I3MCTree').nrows, 2, "I3MCTree table has 2 rows")
+        self.assertEqual(hdf.get_node('/I3MCTree').nrows, 2, "I3MCTree table has 2 rows")
 
 class LinearizedMCTreeTest(MCTreeTest):
     def setUp(self):

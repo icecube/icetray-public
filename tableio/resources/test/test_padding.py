@@ -10,14 +10,7 @@ from icecube import icetray, dataclasses, tableio, phys_services, simclasses,hdf
 from I3Tray import I3Tray
 
 import sys
-if sys.version_info[:2] < (2,7):
-    try:
-        import unittest2 as unittest
-    except ImportError:
-        icetray.logging.log_error("unittest for Python %d.%d.%d is too old. install unittest2." % (sys.version_info[:3]))
-        sys.exit(0)
-else:
-    import unittest
+import unittest
 
 class Generator(icetray.I3Module):
     def __init__(self,context):
@@ -82,9 +75,9 @@ class MCTreeTest(unittest.TestCase):
         import tables
         hdf = tables.open_file('foo.hdf5')
 
-        self.assertEquals(len(hdf.root.I3CorsikaInfo),5,"I3CorsikaInfo should have 5 entries")                
-        self.assertEquals(len(hdf.root.I3MCTree),50,"I3MCTree should have 50 entries")
-        self.assertEquals(len(hdf.root.I3MCPrimary),100,"I3MCPrimary should have 100 entries")        
+        self.assertEqual(len(hdf.root.I3CorsikaInfo),5,"I3CorsikaInfo should have 5 entries")
+        self.assertEqual(len(hdf.root.I3MCTree),50,"I3MCTree should have 50 entries")
+        self.assertEqual(len(hdf.root.I3MCPrimary),100,"I3MCPrimary should have 100 entries")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
