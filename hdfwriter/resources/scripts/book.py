@@ -27,7 +27,7 @@ group.add_argument('--streams', nargs='+', default=['InIceSplit'],
 
 args = parser.parse_args()
 
-from icecube import icetray, dataclasses, recclasses, dataio
+from icecube import icetray, dataclasses, dataio
 import importlib
 from I3Tray import I3Tray
 

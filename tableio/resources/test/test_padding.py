@@ -6,8 +6,15 @@ Ensure that hdf5 write does padding correctly for S and non-S frames
 
 import os
 import re
-from icecube import icetray, dataclasses, tableio, phys_services, simclasses,hdfwriter
+from icecube import icetray, dataclasses, tableio, phys_services, hdfwriter
 from I3Tray import I3Tray
+
+have_simclasses = False
+try:
+    from icecube import simclasses
+    have_simclasses = True 
+except ImportError:
+    pass
 
 import sys
 import unittest
@@ -19,7 +26,7 @@ class Generator(icetray.I3Module):
 
     def Process(self):
 
-        if self.counter%20==0:
+        if have_simclasses and self.counter%20==0:
             sframe=icetray.I3Frame('S')
             info = simclasses.I3CorsikaInfo()
             sframe['I3CorsikaInfo']=info
@@ -75,7 +82,8 @@ class MCTreeTest(unittest.TestCase):
         import tables
         hdf = tables.open_file('foo.hdf5')
 
-        self.assertEqual(len(hdf.root.I3CorsikaInfo),5,"I3CorsikaInfo should have 5 entries")
+        if have_simclasses:
+            self.assertEqual(len(hdf.root.I3CorsikaInfo),5,"I3CorsikaInfo should have 5 entries")
         self.assertEqual(len(hdf.root.I3MCTree),50,"I3MCTree should have 50 entries")
         self.assertEqual(len(hdf.root.I3MCPrimary),100,"I3MCPrimary should have 100 entries")
 
