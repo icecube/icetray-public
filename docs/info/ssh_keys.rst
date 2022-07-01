@@ -166,7 +166,7 @@ Or click on the menu on the top right corner of gitgub and go to ``settings`` ->
 Click on the green button that says ``New SSH key``. You should see two text boxes:
 
 .. image:: ssh_new.png
-    :width: 600
+    :width: 700
     :align: center
 
 In ``Title`` you can type whatever you want, most likely you will want to type
@@ -177,7 +177,7 @@ press the ``Add SSH key`` button.
 You should see that your key has been successfully added to github, it will look like this:
 
 .. image:: ssh_keys.png
-    :width: 600
+    :width: 700
     :align: center
 
 Now that github has your public key, you should be able to login to cobalt and clone icetray:
