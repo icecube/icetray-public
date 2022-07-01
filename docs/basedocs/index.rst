@@ -11,6 +11,7 @@ Basic Info
    info/overview
    info/quickstart
    info/cvmfs
+   info/ssh_keys
    info/release_notes
 
    
