@@ -24,8 +24,6 @@
 #include <icetray/OMKey.h>
 #include <interfaces/I3OMKey2MBID.h>
 
-#include <boost/iterator/transform_iterator.hpp>
-#include <boost/type_traits/remove_const.hpp>
 
 // definitions
 
