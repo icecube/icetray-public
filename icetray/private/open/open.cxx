@@ -57,7 +57,11 @@
 using boost::algorithm::ends_with;
 using namespace std;
 
-const auto ARCHIVE_FILES = std::vector<std::string>({".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz", ".tar.xz", ".txz", ".tar.zst", ".tzst"});
+// archive file formats that need to be processed directly with libarchive
+const auto ARCHIVE_FILES = std::vector<std::string>({
+    ".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz2", ".tar.zst", ".tzst",
+    ".pax.gz", ".pax.bz2", ".pax.zstd", ".cpio.gz", ".cpio.bz2", ".cpio.zstd"
+});
 
 namespace I3 {
   namespace dataio {
@@ -72,12 +76,20 @@ namespace I3 {
       if (!ifs.empty())
         log_fatal("ifs isn't empty!");
 
-      if (!any_of(ARCHIVE_FILES.begin(), ARCHIVE_FILES.end(), [filename](const std::string& suffix){return ends_with(filename, suffix);})) {
+      if (any_of(ARCHIVE_FILES.begin(), ARCHIVE_FILES.end(), [filename](const std::string& suffix){return ends_with(filename, suffix);})) {
+#ifdef I3_WITH_LIBARCHIVE
+        ifs.push(archive_filter(filename));
+        log_trace("Input file is an archive. Using libarchive.");
+#else
+        log_fatal("Input file is an archive, however libarchive is not found.");
+#endif
+      } else {
         if (ends_with(filename,".gz")){
           ifs.push(io::gzip_decompressor());
           log_trace("Input file ends in .gz.  Using gzip decompressor.");
         }else if (ends_with(filename,".bz2")){
           ifs.push(io::bzip2_decompressor());
+          log_trace("Input file ends in .bz2.  Using bzip decompressor.");
         }
         else if (ends_with(filename,".zst")){
 #ifdef I3_WITH_ZSTD
@@ -87,23 +99,22 @@ namespace I3 {
           log_fatal("Input file ends in .zst, however zstd is not found.");
 #endif
         }
-      }
 
 #ifdef I3_WITH_LIBARCHIVE
-	/*
-	 * If it's not obviously an I3 file, treat it as a
-	 * gzipped/bzipped/lzma'd/xz'd/uncompressed
-	 * gnutar/pax/ustar/cpio/shar/iso9660 archive
-	 * containing I3 files.
-	 */
-      else if (!ends_with(filename,".i3")) {
-		ifs.push(archive_filter(filename));
-      }
+        /*
+         * If it's not obviously an I3 file, treat it as a
+         * gzipped/bzipped/lzma'd/xz'd/uncompressed
+         * gnutar/pax/ustar/cpio/shar/iso9660 archive
+         * containing I3 files.
+         */
+        else if (!ends_with(filename,".i3")) {
+          ifs.push(archive_filter(filename));
+          log_trace("Adding libarchive filter");
+        }
 #endif
-
-
-      else{
-        log_trace("Not decompressing.");
+        else{
+          log_trace("Not using a decompressor.");
+        }
       }
 
       if (filename.find("socket://") == 0) {
