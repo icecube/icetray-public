@@ -2,11 +2,10 @@ Connecting to Github from Cobalts
 =================================
 
 This page describes how to connect to github repositories from the cobalts.
-The primary way that github syncs with git repositories is through ssh which is the same 
-method used to connect to the cobalts.
+The communication protocol used by both github and the cobalts is ssh. 
 The easiest way to connect to github from the cobalts is to create a public/private key pair
 on your laptop and then use that same key pair to connect to both the cobalts and github using
-an ssh-agent.
+an ssh-agent. 
 
 Generating a key pair on your laptop
 ------------------------------------
@@ -43,18 +42,18 @@ the hostname of your laptop here. This helps you keep track of which key is whic
 if you have multiple keys generated from multiple devices.
 
 You will be prompted to enter the filename for your private key, the default is fine.
-You will also be prompted to enter a passphrase. DO NOT LEAVE THIS EMPTY.
+You will also be prompted to enter a passphrase. **DO NOT LEAVE THIS EMPTY**.
 Please enter a secure passphrase, something that will be hard for someone to guess.
 The output should look like this:
 
 :: 
 
     Generating public/private ed25519 key pair.
-    Enter file in which to save the key (/home/kjm/.ssh/id_ed25519): 
+    Enter file in which to save the key (/home/username/.ssh/id_ed25519): 
     Enter passphrase (empty for no passphrase): 
     Enter same passphrase again: 
-    Your identification has been saved in /home/kjm/.ssh/id_ed25519
-    Your public key has been saved in /home/kjm/.ssh/id_ed25519.pub
+    Your identification has been saved in /home/username/.ssh/id_ed25519
+    Your public key has been saved in /home/username/.ssh/id_ed25519.pub
     The key fingerprint is:
     SHA256:qgeTLaHoFn9xH5uyLu5IpI7rvV1SUtkjQZZSXrgPo9E username@LaptopName
     The key's randomart image is:
@@ -80,13 +79,55 @@ you should see that ``ssh-keygen`` created two files:
 
 ::
 
-    .rw------- 444 kjm 28 Jun 13:24 id_ed25519
-    .rw-r--r--  91 kjm 28 Jun 13:24 id_ed25519.pub
+    .rw------- 444 username 28 Jun 13:24 id_ed25519
+    .rw-r--r--  91 username 28 Jun 13:24 id_ed25519.pub
 
 ``id_ed25519`` is your private key, do not ever share the contents of this file with
 anyone and do not ever copy this file from one device to another. 
 ``id_ed25519.pub`` is the public key, this is what you will be sharing with servers that 
 you want to connect to.
+
+Connecting to github with your key
+----------------------------------
+
+Now we need to let github know about the public key so we can access our repositories.
+Go to your github's setting's keys page: https://github.com/settings/keys.
+Or click on the menu on the top right corner of github and go to ``settings`` -> ``SSH and GPG keys``.
+
+Click on the green button that says ``New SSH key``. You should see two text boxes:
+
+.. image:: ssh_new.png
+    :width: 90%
+    :align: center
+
+In ``Title`` you can type whatever you want, most likely you will want to type
+the same thing as the comment when you ran ``ssh-keygen`` above.
+In the ``key`` box copy the contents of ``~/.ssh/id_ed25519.pub`` and 
+press the ``Add SSH key`` button.
+
+You should see that your key has been successfully added to github, it will look like this:
+
+.. image:: ssh_keys.png
+    :width: 90%
+    :align: center
+
+At this point you should be able to authenticate with github on your laptop using you new key.
+
+::
+
+    $ ssh -T git@github.com
+    The authenticity of host 'github.com (140.82.113.4)' can't be established.
+    ED25519 key fingerprint is SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU.
+    This key is not known by any other names
+    Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+    Warning: Permanently added 'github.com' (ED25519) to the list of known hosts.
+    Enter passphrase for key '/home/username/.ssh/id_rsa': 
+    Hi username! You've successfully authenticated, but GitHub does not provide shell access.
+
+Make sure that the fingerprint matches what github 
+`posts on their website <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints>`_
+and then enter the passphrase for the key as prompted.
+If you see the message that you authenticated then you have successfully setup your key.
 
 Logging to the cobalts with the key pair
 ----------------------------------------
@@ -133,22 +174,32 @@ to the cobalts. However, if we try to login to the cobalts from pub at this poin
 prompt. If we enable agent forwarding than the key in the agent on our laptop can also be used to when 
 we login to cobalt from pub.
 
-Logout of pub and edit ``~/.ssh/config`` on your laptop. Add the following line:
+Logout of pub and edit ``~/.ssh/config`` on your laptop. Add the following lines:
 
 ::
 
-    ForwardAgent yes
+    Host pub.icecube.wisc.edu     
+        ForwardAgent yes
 
-With this line on your laptop's ssh config you should be able first login to pub and then login
+With this in your laptop's ssh config you should be able first login to pub and then login
 to cobalts without a passphrase prompt. This also means that your key pair is also available
 for use with github on cobalts.
+
+.. Warning:: 
+
+    You may be tempted to use a wildcard like ``Host *`` to just apply this setting to all SSH connections. 
+    That's not really a good idea, as you'd be sharing your local SSH keys with every server you SSH into. 
+    They won't have direct access to the keys, but they will be able to use them as you while 
+    the connection is established. 
+    **You should only add servers you trust and that you intend to use with agent forwarding.**
 
 Now in order to have your key forwarded from pub to cobalt you need to enable forwarding on pub.
 On pub edit ``~/.ssh/config`` and add the following line:
 
 ::
 
-    ForwardAgent yes
+    Host cobalt*
+        ForwardAgent yes
 
 and once again set the permissions on your ssh config:
 
@@ -156,61 +207,46 @@ and once again set the permissions on your ssh config:
 
    pub$ chmod 700 .ssh/config
 
-Connecting to github with the key pair
---------------------------------------
-
-Now we need to let github know about the public key so we can access our repositories.
-Go to your github's setting's keys page: https://github.com/settings/keys.
-Or click on the menu on the top right corner of gitgub and go to ``settings`` -> ``SSH and GPG keys``.
-
-Click on the green button that says ``New SSH key``. You should see two text boxes:
-
-.. image:: ssh_new.png
-    :width: 700
-    :align: center
-
-In ``Title`` you can type whatever you want, most likely you will want to type
-the same thing as the comment when you ran ``ssh-keygen`` above.
-In the ``key`` box copy the contents of ``~/.ssh/id_ed25519.pub`` and 
-press the ``Add SSH key`` button.
-
-You should see that your key has been successfully added to github, it will look like this:
-
-.. image:: ssh_keys.png
-    :width: 700
-    :align: center
-
-Now that github has your public key, you should be able to login to cobalt and clone icetray:
+Now that github has your public key, you should be able to login to cobalt and authenticate with github:
 
 .. code-block:: bash
 
     laptop$ ssh <yourusernamne>@pub.icecube.wisc.edu
     pub$ ssh cobalt
-    cobalt01$ git clone git@github.com:icecube/icetray.git
+    cobalt01$ $ ssh -T git@github.com
+    Hi username! You've successfully authenticated, but GitHub does not provide shell access.
 
-.. Note::
+.. Warning::
 
-    If you want to login from more than one device repeat the instructions above
-    for each device. Do **NOT** copy your private key from one device to another.
+    If you want to login from more than one device, you should create a keypair
+    for each device by repeating the instructions above for each device. 
+    Do **NOT** copy your private key from one device to another.
 
 Additional Tips
 ---------------
 
-For your convenance you can login directly to the cobalts by adding the following
-to your ``.ssh/config``:
+If you get tired of typing your username and the full hostname of pub into ssh
+you can create an alias in ``.ssh/config`` so all you have to type is ```pub``.
 
 ::
 
     Host pub
         HostName %h.icecube.wisc.edu
-        User <YourUserName>
+        User <username>
+        ForwardAgent yes
 
-    Host cobalt??
-        User <YourUserName>
-        ProxyJump pub
+You can make things even more convenient by setting up a proxy jump to login
+directly to the cobalts from your laptop
+
+::
+
+    Host cobalt*
+        ProxyJump pub.icecube.wisc.edu
+        User <username>
+        ForwardAgent yes
 
 You can now login directly to the cobalts from your laptop
 
 .. code-block ::
 
-    $ ssh cobalt01
+    $ ssh cobalt
