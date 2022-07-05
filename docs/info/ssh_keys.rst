@@ -226,7 +226,7 @@ Additional Tips
 ---------------
 
 If you get tired of typing your username and the full hostname of pub into ssh
-you can create an alias in ``.ssh/config`` so all you have to type is ```pub``.
+you can create an alias in ``.ssh/config`` so all you have to type is ``ssh pub``.
 
 ::
 
@@ -250,3 +250,10 @@ You can now login directly to the cobalts from your laptop
 .. code-block ::
 
     $ ssh cobalt
+
+Another Option that might be helpful is to add a keep alive signal to prevent
+being disconnected when connecting through firewalls that may drop idle connections
+
+:: 
+
+    ServerAliveInterval 120
