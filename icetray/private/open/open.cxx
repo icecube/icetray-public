@@ -57,6 +57,8 @@
 using boost::algorithm::ends_with;
 using namespace std;
 
+const auto ARCHIVE_FILES = std::vector<std::string>({".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz", ".tar.xz", ".txz", ".tar.zst", ".tzst"});
+
 namespace I3 {
   namespace dataio {
 
@@ -70,21 +72,23 @@ namespace I3 {
       if (!ifs.empty())
         log_fatal("ifs isn't empty!");
 
-      if (ends_with(filename,".i3.gz")){
-        ifs.push(io::gzip_decompressor());
-        log_trace("Input file ends in .gz.  Using gzip decompressor.");
-      }else if (ends_with(filename,".i3.bz2")){
-        ifs.push(io::bzip2_decompressor());
-      }
-      else if (ends_with(filename,".i3.zst")){
+      if (!any_of(ARCHIVE_FILES.begin(), ARCHIVE_FILES.end(), [filename](const std::string& suffix){return ends_with(filename, suffix);})) {
+        if (ends_with(filename,".gz")){
+          ifs.push(io::gzip_decompressor());
+          log_trace("Input file ends in .gz.  Using gzip decompressor.");
+        }else if (ends_with(filename,".bz2")){
+          ifs.push(io::bzip2_decompressor());
+        }
+        else if (ends_with(filename,".zst")){
 #ifdef I3_WITH_ZSTD
-        ifs.push(zstd_decompressor());
-        log_trace("Input file ends in .zst. Using zstd decompressor.");
+          ifs.push(zstd_decompressor());
+          log_trace("Input file ends in .zst. Using zstd decompressor.");
 #else
-        log_fatal("Input file ends in .zst, however zstd is not found.");
-#endif	
+          log_fatal("Input file ends in .zst, however zstd is not found.");
+#endif
+        }
       }
-    
+
 #ifdef I3_WITH_LIBARCHIVE
 	/*
 	 * If it's not obviously an I3 file, treat it as a
