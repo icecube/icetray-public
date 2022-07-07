@@ -31,20 +31,32 @@ class I3ScaleCalculator {
 
  public:
 
-  // lets give our detector some common names
-  enum IceCubeConfig {IC_UNKNOWN=-2, IC_GUESS=-1, IC_EMPTY=0, 
-                      IC9=9, IC22=22, IC40=40, IC59=59, IC79=79, IC80=80, IC86=86};
-  enum IceTopConfig {IT_UNKNOWN=-2, IT_GUESS=-1, IT_EMPTY=0,
-                     IT16=16, IT26=26, IT40=40, IT59=59, IT73=73, IT80=80, IT81=81};
+  // Lets identify some common "detector shapes" and give them names.
+  // The actual enum-numbers are arbitrary, they'll just help remind us which is which
+  enum IceCubeConfig {IC_UNKNOWN=-2, IC_GUESS=-1, IC_EMPTY=0, IC_CUSTOM=1,
+                      IC79=79, IC86=86,  // The two backward-compatible definitions
+                      IC79_STRICT=78, IC79_SMOOTH=77,  // Two possible ways to deal with the "notch"
+                      IC86_STRICT=87, IC86_SMOOTH=88,  // Two possible ways to deal with the "notch"
+                      DEEPCORE_ALL=15, DEEPCORE_BELOWDUST=16
+                      // Please add here in the future: UPGRADE, GEN2....
+  };
+  enum IceTopConfig {IT_UNKNOWN=-2, IT_GUESS=-1, IT_EMPTY=0, IT_CUSTOM=1,
+                     IT73=73, IT81=81,  // The two backward-compatible definitions
+                     IT73_STRICT=72, IT73_SMOOTH=71, // Two possible ways to deal with the "notch"
+                     IT81_STRICT=82, IT81_SMOOTH=83, // Two possible ways to deal with the "notch"
+                     IT_INFILL_STA2_STRICT=6, IT_INFILL_STA2_BIGOVAL=7, IT_INFILL_TRIANGLE=8 // Experimental new ones?
+                     // Please add here in the future: SURFACEARRAY....
+  };
 
 
   I3ScaleCalculator (I3GeometryConstPtr geo, 
-                     IceCubeConfig iceConf = IC_GUESS, 
-                     IceTopConfig topConf = IT_GUESS);
+                     IceCubeConfig iceConf = IC_GUESS,              // default = please guess from geo
+                     IceTopConfig topConf = IT_GUESS,               // default = please guess from stationgeo
+                     std::vector<int> strings = std::vector<int>(),  // default = empty
+                     std::vector<int> stations = std::vector<int>(),  // default = empty
+                     int topDOMid = 1, int bottomDOMid = 60          // you can customize these too (for the in-ice bit)
+                     );
   
-  IceCubeConfig GuessIceCubeConfig () const;
-  IceTopConfig GuessIceTopConfig () const;
-
   std::vector<int > GetOuterStrings () const;
   std::vector<int > GetOuterStations () const;
   void CalcOuterStringPositions (std::vector<double > &x, 
@@ -63,6 +75,9 @@ class I3ScaleCalculator {
 
  private:
 
+  IceCubeConfig GuessIceCubeConfig () const;
+  IceTopConfig GuessIceTopConfig () const;
+
   double ScaleInIceMuon (I3Particle part) const;
   double ScaleInIceCascade (I3Particle part, bool areaonly) const;
   
@@ -73,7 +88,12 @@ class I3ScaleCalculator {
   I3GeometryConstPtr geo_;
   IceCubeConfig iceConf_;
   IceTopConfig topConf_;
+  std::vector<int> listOfBoundaryDeepStrings_;
+  std::vector<int> listOfBoundarySurfaceStations_;
+  int topDOMid_;
+  int bottomDOMid_;
 };
+
 
 #endif
 

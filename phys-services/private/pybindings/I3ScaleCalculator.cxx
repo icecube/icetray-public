@@ -47,17 +47,22 @@ namespace bp = boost::python;
 #define ENUM_DEF(r,data,T) .value(BOOST_PP_STRINGIZE(T), data::T)
 #endif
 
-#define INICECONFIGS (IC_UNKNOWN) (IC_GUESS) (IC_EMPTY) (IC9) (IC22) \
-  (IC40) (IC59) (IC79) (IC80) (IC86)
-#define ICETOPCONFIGS (IT_UNKNOWN) (IT_GUESS) (IT_EMPTY) (IT16) (IT26) \
-  (IT40) (IT59) (IT73) (IT80) (IT81)
+// After retiring some configurations and instroducing some new ones:
+// Includes the old (but ambiguous) "IC86" and "IT81" configs
+#define INICECONFIGS (IC_UNKNOWN) (IC_GUESS) (IC_EMPTY) (IC_CUSTOM) \
+  (IC79) (IC86) (IC79_SMOOTH) (IC79_STRICT) (IC86_SMOOTH) (IC86_STRICT) \
+  (DEEPCORE_ALL) (DEEPCORE_BELOWDUST)
+#define ICETOPCONFIGS (IT_UNKNOWN) (IT_GUESS) (IT_EMPTY) (IT_CUSTOM) \
+  (IT73) (IT81) (IT73_SMOOTH) (IT73_STRICT) (IT81_SMOOTH) (IT81_STRICT) \
+  (IT_INFILL_STA2_STRICT) (IT_INFILL_STA2_BIGOVAL) (IT_INFILL_TRIANGLE)
 
 void register_I3ScaleCalculator()
 {
 
   scope scalecalculator_scope = 
-    class_<I3ScaleCalculator>("I3ScaleCalculator", init<I3GeometryConstPtr,optional<I3ScaleCalculator::IceCubeConfig,I3ScaleCalculator::IceTopConfig> >
-			      ("Args : I3Geometry, IceCubeConfig, IceTopConfig"))
+    class_<I3ScaleCalculator>("I3ScaleCalculator", init<I3GeometryConstPtr,optional<I3ScaleCalculator::IceCubeConfig,I3ScaleCalculator::IceTopConfig,
+                              std::vector<int>,std::vector<int>,int,int> >
+			      ("Args : I3Geometry, IceCubeConfig, IceTopConfig, Strings, Stations, TopDOMID, BottomDOMID"))
     ;
   
   enum_<I3ScaleCalculator::IceCubeConfig>("IceCubeConfig")
@@ -82,5 +87,11 @@ void register_I3ScaleCalculator()
   def("vertex_is_inside", &I3ScaleCalculator::VertexIsInside,
       "Is the vertex position inside the IceCube volume?",
       arg("particle"));
+
+  // For checking the boundary selection
+  def("get_outer_strings", &I3ScaleCalculator::GetOuterStrings,
+      "Vector of string numbers defining the boundary");
+  def("get_outer_stations", &I3ScaleCalculator::GetOuterStations,
+      "Vector of station numbers defining the boundary");
 
 }

@@ -18,14 +18,20 @@ std::vector<double > ic40XPos ();
 std::vector<double > ic40YPos ();
 const I3Geometry myGeoService ();
 
+// This is needed now, because IC40 has been retired in the I3ScaleCalculator code.
+// Gives us an opportunity to test the "custom string list" functionality anyway!
+// This mimics the definition from the old code.
+std::vector<int> custom_stringlist = {21,50,74,73,78,75,60,52,53,44,46,38};
+
 
 TEST(ic40configuration){
   // build up a geometry
   I3GeometryPtr geo (new I3Geometry (myGeoService ()));
   
   // create a IC40 scale module
-  I3ScaleCalculator scale (geo, I3ScaleCalculator::IC40, 
-			   I3ScaleCalculator::IT_EMPTY);
+  // Because IC40 is retired, we have to give it the string numbers by hand
+  I3ScaleCalculator scale (geo, I3ScaleCalculator::IC_CUSTOM, I3ScaleCalculator::IT_EMPTY,
+                           custom_stringlist);
 
   // this is what IC40 outer strings should be
   std::vector<int > ic40Outer (ic40Strings ());
@@ -124,8 +130,8 @@ TEST(particleInCscd){
   I3GeometryPtr geo (new I3Geometry (myGeoService ()));
   
   // create a IC40 scale module
-  I3ScaleCalculator scale (geo, I3ScaleCalculator::IC40, 
-			   I3ScaleCalculator::IT_EMPTY);
+  I3ScaleCalculator scale (geo, I3ScaleCalculator::IC_CUSTOM, I3ScaleCalculator::IT_EMPTY,
+                           custom_stringlist);
 
   I3Particle p (I3Particle::Cascade);
   p.SetPos (0, 200, 0);
@@ -145,8 +151,8 @@ TEST(contained){
   I3GeometryPtr geo (new I3Geometry (myGeoService ()));
   
   // create a IC40 scale module
-  I3ScaleCalculator scale (geo, I3ScaleCalculator::IC40, 
-			   I3ScaleCalculator::IT_EMPTY);
+  I3ScaleCalculator scale (geo, I3ScaleCalculator::IC_CUSTOM, I3ScaleCalculator::IT_EMPTY,
+                           custom_stringlist);
 
   I3Particle p (I3Particle::Cascade);
   p.SetPos (450, 0, 0);
@@ -160,8 +166,8 @@ TEST(particleInMuon){
   I3GeometryPtr geo (new I3Geometry (myGeoService ()));
   
   // create a IC40 scale module
-  I3ScaleCalculator scale (geo, I3ScaleCalculator::IC40, 
-			   I3ScaleCalculator::IT_EMPTY);
+  I3ScaleCalculator scale (geo, I3ScaleCalculator::IC_CUSTOM, I3ScaleCalculator::IT_EMPTY,
+                           custom_stringlist);
 
   I3Particle p (I3Particle::InfiniteTrack);
   p.SetPos (0, 200, 0);

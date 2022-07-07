@@ -13,6 +13,7 @@ utilities common to all or most of icetray-based software.
    distributed_rng
    geo_selector
    omkey2mbid
+   scale_and_containment_calculator
    release_notes
 
 
