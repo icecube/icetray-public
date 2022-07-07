@@ -72,7 +72,7 @@ IceCube (volume) boundary options:
   * - IC86_SMOOTH                       
     - A slightly different version of this boundary, in which the "notch" in the northeast corner is smoothed over a little (by one string).
   * - IC79_STRICT                       
-    - Similar to IC86_STRICT, except that the southwest border goes straght from string 41 to string 2 (those 5 strings on the edge weren't there in IC79).
+    - Similar to IC86_STRICT, except that the southwest border goes straght from string 41 to string 2 (omitting those 5 strings on the edge not present in IC79).
   * - IC79_SMOOTH                       
     - Similar again, except for the slightly different treatment of the northeast "notch".
   * - DEEPCORE_ALL                      
@@ -82,10 +82,15 @@ IceCube (volume) boundary options:
   * - IC_CUSTOM                         
     - I, the user, will be supplying my own list of strings to use as the boundary.
 
-.. image:: plots_scalecalculator/I3ScaleCalculator_icecube_boundaries.png
+.. |pic1| image:: plots_scalecalculator/I3ScaleCalculator_icecube_boundaries.png
   :height: 400px
   :width: 400px
   :alt: Pre-defined I3ScaleCalculator IceCube (volume) boundaries
+.. |pic2| image:: plots_scalecalculator/I3ScaleCalculator_icecube_3Dview.png
+  :height: 400px
+  :width: 400px
+  :alt: A 3-D view of the IceCube boundaries
+|pic1| |pic2|
 
 IceTop (area) boundary options:
 &&&&&&&&&&&&&&&&&&&&&&
@@ -102,12 +107,12 @@ IceTop (area) boundary options:
     - The boundary of the IT81 detector as shown by the blue line in the figure below.
   * - IT81_SMOOTH 
     - A slightly different version of this boundary, in which the "notch" in the northeast corner is smoothed over a little (by one string).
-  * - IT73_STRICT 
-    - Similar to IT81_STRICT, except that the southwest border goes straght from string 41 to string 2 (those 5 strings on the edge weren't there in IC73).
+  * - IT73_STRICT
+    - Similar to IT81_STRICT, except that the southwest border goes straght from string 41 to string 2 (omitting those 5 stations on the edge not present in IC73).
   * - IT73_SMOOTH 
     - Similar again, except for the slightly different treatment of the northeast "notch".
   * - IT_INFILL_STA2_STRICT (experimental) 
-    - A boundary defined by the eight stations that participate in the IceTop 2-station Trigger. Since it's so long and skinny, may expand or contract to some rather funny shapes.
+    - A boundary defined by the six stations that participate in the IceTop 2-station Trigger. Since it's so long and skinny, may expand or contract to some rather funny shapes.
   * - IT_INFILL_STA2_BIGOVAL (experimental)  
     - A boundary defined by the stations "one layer out" from the eight of the 2-station Trigger.  When this one expands and shrinks, it will form less extreme shapes.
   * - IT_INFILL_TRIANGLE (experimental)  
@@ -141,7 +146,7 @@ Note: these boundary strings must be listed "in counter-clockwise order" around 
 
 There are additionally two more optional arguments, specifying which DOM's along the boundary strings to use as the top 
 and the bottom of your detector.
-The defaults are 1 and 60 respectively, except for the two DEEPCORE options [#]_.  
+The defaults are 1 and 60 respectively, except for the two DEEPCORE options (Details in footnote [#]_).  
 If you're using an IC_CUSTOM boundary, and also want your detector to have a custom height, 
 you can specify the top and bottom DOM number with these two additional arguments.
 The IceTop z-coordinate is fixed at 1950.0 meters.
@@ -162,7 +167,7 @@ The code computes the "Center of Mass" of the shape
 (because detectors are not necessarily centered on (0,0) in a coordinate system; see IC-40 for a good example of this).
 The mathematics of detector "expansion/contraction" are envisioned as the vertices moving away or toward the Center of Mass.
 
-There is also a :cpp:func:`I3Cuts::CylinderSize` function, which computes this for a cylinder shape whose dimensions
+There is also a :cpp:func:`I3Cuts::CylinderSize` function, which computes this for a cylinder shape whose dimensions (radius and height)
 you specify as input.  This code dates back to the AMANDA days, and is derived in Kath's thesis!
 
 
