@@ -195,10 +195,11 @@ set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::t_skip_i
 set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::writer_is_conditional.py)
 set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::zst_test.py)
 
+if (LIBARCHIVE_FOUND)
 # Move this test to the end.  It occasionally fails when run concurrently with
 # other tests for some unknown reason.  It does not seem to share common files.
-if (LIBARCHIVE_FOUND)
 set_property(TEST dataio::o7_libarchive_read.py APPEND PROPERTY DEPENDS dataio::zz_cleanup.py)
+set_property(TEST dataio::o7_libarchive_read.py PROPERTY SKIP_REGULAR_EXPRESSION "skipping archive-reading tests")
 endif (LIBARCHIVE_FOUND)
 
 
