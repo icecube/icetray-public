@@ -69,15 +69,15 @@ find_program(EXPECT expect)
 i3_test_executable(test private/test/*.cxx
   USE_PROJECTS dataio)
 
-no_dotfile_glob(tmp_SCRIPTS resources/test/*)
+no_dotfile_glob(tmp_SCRIPTS resources/test/*.py)
 if (NOT LIBARCHIVE_FOUND)
 #  colormsg(CYAN "+-- libarchive *not* found, omitting test \"resources/test/o7_libarchive_read.py\"")
   LIST(REMOVE_ITEM tmp_SCRIPTS "${CMAKE_CURRENT_SOURCE_DIR}/resources/test/o7_libarchive_read.py")
 endif (NOT LIBARCHIVE_FOUND)
 
-if (${EXPECT} MATCHES "-NOTFOUND")
-  LIST(REMOVE_ITEM tmp_SCRIPTS "${CMAKE_CURRENT_SOURCE_DIR}/resources/test/dataio-shovel-test")
-endif (${EXPECT} MATCHES "-NOTFOUND")
+if (EXPECT)
+  LIST(APPEND tmp_SCRIPTS "${CMAKE_CURRENT_SOURCE_DIR}/resources/test/dataio-shovel-test")
+endif ()
 
 ## something's busted w/ lucid's python+ssl
 execute_process(COMMAND lsb_release -sc OUTPUT_VARIABLE LUCID ERROR_QUIET)
@@ -104,9 +104,9 @@ set_property(TEST dataio::o2_split_gcd.py APPEND PROPERTY DEPENDS dataio::a_noco
 set_property(TEST dataio::o5_write_1event.py APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
 set_property(TEST dataio::q_writenulls.py APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
 set_property(TEST dataio::zst_test.py APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
-if (NOT ${EXPECT} MATCHES "-NOTFOUND")
+if (EXPECT)
 set_property(TEST dataio::dataio-shovel-test APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
-endif (NOT ${EXPECT} MATCHES "-NOTFOUND")
+endif ()
 
 # These tests use withnulls.i3, created by dataio::q_writenulls.py
 set_property(TEST dataio::r_readnulls.py APPEND PROPERTY DEPENDS dataio::q_writenulls.py)
