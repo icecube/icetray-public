@@ -27,7 +27,7 @@ def test_read(filename):
 	f = dataio.I3File(filename)
 	fr = f.pop_frame()
 	if list(fr.keys()) != ['object']:
-		printf("Error reading '%s'!" % filename)
+		print("Error reading '%s'!" % filename)
 		sys.exit(1)
 
 # No archiving/compression
