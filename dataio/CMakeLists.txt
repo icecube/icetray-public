@@ -104,9 +104,6 @@ set_property(TEST dataio::o2_split_gcd.py APPEND PROPERTY DEPENDS dataio::a_noco
 set_property(TEST dataio::o5_write_1event.py APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
 set_property(TEST dataio::q_writenulls.py APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
 set_property(TEST dataio::zst_test.py APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
-if (EXPECT)
-set_property(TEST dataio::dataio-shovel-test APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
-endif ()
 
 # These tests use withnulls.i3, created by dataio::q_writenulls.py
 set_property(TEST dataio::r_readnulls.py APPEND PROPERTY DEPENDS dataio::q_writenulls.py)
@@ -194,6 +191,12 @@ set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::s_i3read
 set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::t_skip_infoframes.py)
 set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::writer_is_conditional.py)
 set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::zst_test.py)
+
+# dataio-shovel-tests requires pass1.i3, created by dataio::a_nocompression.py
+if (EXPECT)
+set_property(TEST dataio::dataio-shovel-test APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
+set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::dataio-shovel-test)
+endif ()
 
 if (LIBARCHIVE_FOUND)
 # Move this test to the end.  It occasionally fails when run concurrently with
