@@ -20,7 +20,7 @@ def cmd( x, *args, **kwargs ):
     except:
         print("Unexpected error:", sys.exc_info()[0])
     else:
-        return r
+        return r.decode()
 
 def dyld(lib):
     if os.path.exists(lib):
@@ -76,7 +76,7 @@ class LibraryCollector(set):
 
     @staticmethod
     def isLib(fn):
-        return 'shared library' in subp.check_output( ('file', fn) )
+        return 'shared library' in subp.check_output( ('file', fn) ).decode()
 
 build_dir, svn_rev = sys.argv[1:]
 build_dir = realpath( build_dir )
