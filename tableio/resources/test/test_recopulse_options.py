@@ -17,7 +17,7 @@ tray.AddModule("I3Reader", "readme",
     filenamelist=[i3_testdata+"/GCD/GeoCalibDetectorStatus_2016.57531_V0.i3.gz",
         i3_testdata+"/level3-filter-muon/Level2_IC86.2016_NuMu.021002.muonL3test.i3.zst"])
 
-dirname = os.environ['I3_BUILD'] + '/tableio/pulsemask_test'
+dirname = os.environ['I3_BUILD'] + '/tableio/recopulse_options_test'
 tabler = tableio.I3CSVTableService(dirname)
 
 p = "SplitInIcePulses"
