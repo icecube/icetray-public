@@ -15,7 +15,9 @@ def hangy():
 if __name__ == "__main__":
 	p = Process(target=hangy)
 	p.start()
-	p.join(1)
+	# with the advent of the "spawn" process model in python3.8 it takes marginally
+	# longer for processes to start, so we increase our timeout here to 2
+	p.join(2)
 	if p.is_alive():
 		os.kill(p.pid, signal.SIGKILL)
 		p.terminate()
