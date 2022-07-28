@@ -33,7 +33,7 @@ because it does so many things, this indicates that the class should
 probably be broken up into smaller pieces, each with a clearly defined
 purpose and interface.
 
-**I3Test** allows anyone capable of running the command "make" to
+**I3Test** allows anyone capable of running the command ``make`` to
 identify at a glance exactly what failed, including file, line number,
 the expression that failed, and optional user-defined
 messages. Intimate knowledge of the software under testing is
@@ -85,7 +85,7 @@ Example
 ^^^^^^^
 
 Here is a file containing test group named example_group containing
-three unit tests named *it_works*, *pinkness_is_almost_pi*, and
+four unit tests named *it_works*, *pinkness_is_4*, *pinkness_is_almost_pi*, and
 *this_one_fails* ::
 
   #include <I3Test.h>
@@ -146,19 +146,19 @@ Each test group (file) must include the statement::
 
 which pulls in definitions for :c:macro:`TEST_GROUP`, :c:macro:`ENSURE` etc. (see below).
 
-   .. c:alias:: TEST_GROUP
+.. c:macro:: TEST_GROUP
 
    Valid context: toplevel scope of implementation files in test suite
    directory.
 
-   This signals to the build system that this file contains a TEST_GROUP
+   This signals to the build system that this file contains a *TEST_GROUP*
    with the name *GROUPNAME*. *GROUPNAME* must be a valid C++ identifier name
    (alphanumeric plus underscore, starting with letter or underscore.)
 
    The individual unit tests found in this file will be organized under
    this test group.
-	
-   .. c:alias:: TEST
+
+.. c:macro:: TEST
 
    Valid context: toplevel scope of implementation files in test suite
    directory.
@@ -170,8 +170,8 @@ which pulls in definitions for :c:macro:`TEST_GROUP`, :c:macro:`ENSURE` etc. (se
    ``TEST(t)`` is expanded by the preprocessor). It is immediately followed by
    a scope (open curly-brace, statements, close curly-brace), containing
    testing statements.
-	
-   .. c:alias:: ENSURE
+
+.. c:macro:: ENSURE
 
    :c:macro:`ENSURE` is analogous to ``assert()``. It takes one argument, a predicate,
    and an optional comment.  :c:macro:`ENSURE` checks whether the predicate is true
@@ -187,7 +187,7 @@ which pulls in definitions for :c:macro:`TEST_GROUP`, :c:macro:`ENSURE` etc. (se
       bool, e.g. ``hits_are_ok();``, and evaluation of pointers for
       nullness are all predicates.
 
-   .. c:alias:: ENSURE_EQUAL
+.. c:macro:: ENSURE_EQUAL
 
    :c:macro:`ENSURE_EQUAL` ensures that left-value and right-value are, well,
    equal. If they aren't, it will throw a test failure. If the optional
@@ -213,13 +213,13 @@ which pulls in definitions for :c:macro:`TEST_GROUP`, :c:macro:`ENSURE` etc. (se
 
    Which gives one a better idea what the problem is.
 
-   .. c:alias:: ENSURE_DISTANCE
+.. c:macro:: ENSURE_DISTANCE
 
    :c:macro:`ENSURE_DISTANCE` verifies that left-value is within distance of
    right-value. If it is not, it throws a test failure. If the optional
    comment is specified, the failure will come withthat message.
 
-   .. c:alias:: FAIL
+.. c:macro:: FAIL
 
    .. highlight:: cpp
 
@@ -254,7 +254,9 @@ The test driver command line interface
 
 One may also run tests manually. The test driver programs have
 command-line help and a robust set of arguments. With no arguments, a
-test driver will show the following help::
+test driver will show the following help:
+
+.. code-block:: console
 
   % icetray-test --help
   I3 Test Suite Options Summary:

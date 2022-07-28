@@ -5,7 +5,7 @@ Dependencies
 Required Dependencies
 ---------------------
 
-These packages are required to compile the combo metaproject
+These packages are required to compile IceTray
 
 .. list-table::  
   :widths: 4 10 10
@@ -42,7 +42,7 @@ These packages are required to compile the combo metaproject
 Optional Build Dependencies
 ---------------------------
 
-Thes dependencies are optional. If not present comb will compile with reduced functionallity. 
+These dependencies are optional. If not present IceTray will compile with reduced functionallity. 
 
 .. list-table::  
   :widths: 2 10 5
@@ -59,49 +59,49 @@ Thes dependencies are optional. If not present comb will compile with reduced fu
     - zstd compressed i3 files
   * - `BLAS <http://www.netlib.org/blas/>`_
     - Basic Linear Algebra Subprograms
-    - :ref:`millipede-main` :ref:`photospline` :ref:`wavedeform-main`
+    - :ref:`millipede-main`, :ref:`wavedeform-main`
   * - `LAPACK <http://www.netlib.org/lapack/>`_
     - Linear Algebra PACKage
-    - :ref:`millipede-main` :ref:`photospline` :ref:`wavedeform-main` :ref:`I3GulliverLBFGSB <lilliput>` 
+    - :ref:`millipede-main`, :ref:`wavedeform-main`, :ref:`I3GulliverLBFGSB <lilliput>`
   * - `SuiteSparse <https://sparse.tamu.edu/>`_
     - Sparse matrix algorithms
-    -  :ref:`millipede-main` :ref:`photospline` :ref:`wavedeform-main` :ref:`RoundTripChargeTest <DOMLauncher>`
+    - :ref:`millipede-main`, :ref:`wavedeform-main`, :ref:`RoundTripChargeTest <DOMLauncher>`
   * - `Photospline <https://github.com/icecube/photospline>`_
     - Tensor-product B-spline surface evaluation
-    - :ref:`photospline`
+    - ``LeptonInjector``, :ref:`MuonGun-main`, :ref:`neutrino-generator`, :ref:`photonics-service`, :ref:`phys-services <phys-services>`, :ref:`spline-reco <spline-reco-main>`
   * - `ERFA <https://github.com/liberfa/erfa>`_
     - Essential Routines for Fundamental Astronomy
-    - :ref:`astro` :ref:`filterscripts` :ref:`wimpsim-reader`
+    - :ref:`astro`, :ref:`filterscripts`, :ref:`wimpsim-reader`
   * - `PAL <https://github.com/Starlink/pal>`_
     - Positional Astronomy Library
-    - :ref:`astro` :ref:`filterscripts` :ref:`wimpsim-reader`
+    - :ref:`astro`, :ref:`filterscripts`, :ref:`wimpsim-reader`
   * - `HDF5 <https://www.hdfgroup.org/solutions/hdf5/>`_
     - High-performance data management and storage suite
     - :ref:`hdfwriter`
   * - `Boost NumPy <https://www.boost.org/doc/libs/1_74_0/libs/python/doc/html/numpy/index.htmli>`_
     - Boost.Python NumPy extension
-    - :ref:`MuonGun-main` and ml_suite pybindings
+    - :ref:`MuonGun-main` and ``ml_suite`` pybindings
   * - `HEALPix <https://healpix.jpl.nasa.gov/>`_
     - Hierarchical Equal Area isoLatitude Pixelization of a sphere
-    - :ref:`NoiseEngine-main` :ref:`dst`
+    - :ref:`NoiseEngine-main`, :ref:`dst`
   * - `SPRNG <http://www.sprng.org/>`_
     - Scalable Parallel Random Number Generators Library 
     - :doc:`SPRNGRandomService </projects/phys-services/distributed_rng>`
   * - `ROOT <https://root.cern/>`_
     - Particle physics data analysis 
-    - :ref:`rootwriter` :ref:`I3GulliverMinuit2 <lilliput>`
+    - :ref:`rootwriter`, :ref:`I3GulliverMinuit2 <lilliput>`
   * - `Minuit2 <http://seal.web.cern.ch/seal/snapshot/work-packages/mathlibs/minuit/>`_
     - Physics analysis tool for function minimization.
     - :ref:`I3GulliverMinuit2 <lilliput>`
   * - `CLHEP <https://proj-clhep.web.cern.ch/proj-clhep/>`_
     - A Class Library for High Energy Physics 
-    - :ref:`clsim-main` :ref:`g4-tankresponse-main`
+    - :ref:`clsim-main`, :ref:`g4-tankresponse-main`
   * - `Geant4 <https://geant4.web.cern.ch/>`_
     - Simulation of the passage of particles through matter
-    - :ref:`clsim-main` :ref:`g4-tankresponse-main`
+    - :ref:`clsim-main`, :ref:`g4-tankresponse-main`
   * - `OpenCL <https://www.khronos.org/opencl/>`_
     - framework for programs that execute across heterogeneous platforms
-    - :ref:`clsim-main` :ref:`ppc <ppc-main>`
+    - :ref:`clsim-main`, :ref:`ppc <ppc-main>`
   * - `GMP <https://gmplib.org/>`_
     - GNU Multiple Precision Arithmetic Library
     - :ref:`make_safeprimes <clsim-main>`
@@ -153,7 +153,7 @@ These are not needed at compile time but are necessary for certain functionality
     - various unit tests
   * - `healpy <https://healpy.readthedocs.io/en/latest/>`_
     - Python interface for HEALPix C++ library
-    - :ref:`dst` unit tests
+    - :ref:`dst`, unit tests
   * - `iminuit <https://iminuit.readthedocs.io/en/stable/>`_
     - Python interface for Minuit2 library
     - :ref:`lilliput`

@@ -1,18 +1,20 @@
+.. _writing-pybindings:
+
 How to write pybindings for your project
 ========================================
 
-#. Create a 'private/pybindings' directory in your project.
-#. Write functions to instantiate Python proxies for your classes using boost::python.
+.. highlight:: c++
+
+#. Create a :file:`private/pybindings` directory in your project.
+#. Write functions to instantiate Python proxies for your classes using `boost::python <https://www.boost.org/doc/libs/release/libs/python/>`_.
 #. Write a module declaration that gathers your classes together in a common module.
-#. Write a CMakeLists.txt for your 'private/pybindings' directory.
-#. Add the pybindings directory to your top-level CMakeLists.txt with add_subdirectory('private/pybindings')
+#. Write a :file:`CMakeLists.txt` for your :file:`private/pybindings` directory.
+#. Add the pybindings directory to your top-level :file:`CMakeLists.txt` with :code:`add_subdirectory('private/pybindings')`
 
 Registering your class with boost::python
 _________________________________________
 
 Classes are registered by instantiating boost::python::class_<YourClass>. 
-
-.. highlight:: c++
 
 ::
 
@@ -54,8 +56,7 @@ In addition to indexing, this will make the wrapped map behave as much like a Py
 Wrapping enumerated types
 _________________________
 
-Once you have exposed the methods of your class, you can expose enumerated types via boost::python::enum_<I3MyClass::MyEnumType>.
-
+Once you have exposed the methods of your class, you can expose enumerated types via :code:`boost::python::enum_<I3MyClass::MyEnumType>`.
 
 ::
 
@@ -86,7 +87,7 @@ The wrapping code for each class should be placed in its own function::
 	 }
 	}
 
-The Python module for the project is declared with the macro c:func:`I3_PYTHON_MODULE`. After loading your project's library, you can call the registration functions you defined for each class::
+The Python module for the project is declared with the macro :c:macro:`I3_PYTHON_MODULE`. After loading your project's library, you can call the registration functions you defined for each class::
 
 	I3_PYTHON_MODULE(dataclasses)
 	{
@@ -96,7 +97,7 @@ The Python module for the project is declared with the macro c:func:`I3_PYTHON_M
 	   void register_I3RecoPulse();
 	}
 
-If you named all your registration functions register_*, you can use preprocessor macros to save some typing::
+If you named all your registration functions :code:`register_*`, you can use preprocessor macros to save some typing::
 
 	#define REGISTER_THESE_THINGS (I3Particle)(I3Position)(I3RecoPulse)
 
@@ -105,11 +106,6 @@ If you named all your registration functions register_*, you can use preprocesso
 	   load_project("dataclasses",false);
 	   BOOST_PP_SEQ_FOR_EACH(I3_REGISTER, ~, REGISTER_THESE_THINGS);
 	}
-		
-	
-
-
-
 
 Helpful preprocessor macros
 ___________________________
@@ -119,7 +115,7 @@ Writing pybindings can involve plenty of boilerplate code. Luckily, we include s
 Boost preprocessor sequences
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The header <boost/preprocessor/seq.hpp> defines macros that can manipulate sequences. A sequence is a series of parenthesized tokens:
+The header :code:`<boost/preprocessor/seq.hpp>` defines macros that can manipulate sequences. A sequence is a series of parenthesized tokens:
 
 ::
 
@@ -127,7 +123,7 @@ The header <boost/preprocessor/seq.hpp> defines macros that can manipulate seque
 
 These tokens can be expanded with 
 
-.. c:function:: BOOST_PP_SEQ_FOR_EACH(Macro, Data, Seq)
+.. c:macro:: BOOST_PP_SEQ_FOR_EACH(Macro, Data, Seq)
 
 	Expand a sequence in place.
 
@@ -135,37 +131,37 @@ These tokens can be expanded with
 	:param Data: Arbitrary data to be passed to every call of Macro.
 	:param Seq: A sequence of tokens. Each of these tokens will be passed to Macro.
 
-	Most of the macros mentioned here can be used with c:func:`BOOST_PP_SEQ_FOR_EACH` to automate repetitive declarations.
+	Most of the macros mentioned here can be used with :c:macro:`BOOST_PP_SEQ_FOR_EACH` to automate repetitive declarations.
 
-The following macros are defined in cmake/I3.h.in:
+The following macros are defined in :file:`cmake/I3.h.in`:
 
 Wrapping methods verbatim
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. c:function:: WRAP_DEF(R, Class, Fn)
+.. c:macro:: WRAP_DEF(R, Class, Fn)
 
-	Method-wrapping macro suitable for use with c:func:`BOOST_PP_SEQ_FOR_EACH`.
+	Method-wrapping macro suitable for use with :c:macro:`BOOST_PP_SEQ_FOR_EACH`.
 
 	:param Class: Parent class of the member function
 	:param Fn: Name of the member function
 
-	This macro can be used to expose your interface to Python exactly as it is in C++ ::
+	This macro can be used to expose your interface to Python exactly as it is in C++::
 
 		#define METHODS_TO_WRAP (GetTime)(GetX)(GetY)(GetZ)
 		BOOST_PP_SEQ_FOR_EACH(WRAP_DEF, I3Particle, METHODS_TO_WRAP)
 
-Since the Get/Set pattern is fairly common, there are iterable macros specifically for Get/Set. With these, one sequence can be used to define C++ style Get/Set methods and Python-style properties (see c:func:`WRAP_PROP`).
+Since the Get/Set pattern is fairly common, there are iterable macros specifically for Get/Set. With these, one sequence can be used to define C++-style Get/Set methods and Python-style properties (see :c:macro:`WRAP_PROP`).
 
-.. c:function:: WRAP_GET(R, Class, Name)
+.. c:macro:: WRAP_GET(R, Class, Name)
 
-	Define GetName(). Suitable for use with c:func:`BOOST_PP_SEQ_FOR_EACH`.
+	Define GetName(). Suitable for use with :c:macro:`BOOST_PP_SEQ_FOR_EACH`.
 
 	:param Class: The parent C++ class.
 	:param Name: The base name of the Get method.
 
-.. c:function:: WRAP_GETSET(R, Class, Name)
+.. c:macro:: WRAP_GETSET(R, Class, Name)
 
-	Define GetName() and SetName(). Suitable for use with c:func:`BOOST_PP_SEQ_FOR_EACH`.
+	Define GetName() and SetName(). Suitable for use with :c:macro:`BOOST_PP_SEQ_FOR_EACH`.
 
 	:param Class: The parent C++ class.
 	:param Name: The base name of the Get/Set methods.
@@ -176,41 +172,41 @@ Since the Get/Set pattern is fairly common, there are iterable macros specifical
 		BOOST_PP_SEQ_FOR_EACH(WRAP_GETSET, I3Particle, NAMES_TO_WRAP)
 		BOOST_PP_SEQ_FOR_EACH(WRAP_PROP, I3Particle, NAMES_TO_WRAP)
 
-There are also versions of these macros (c:func:`WRAP_GET_INTERNAL_REFERENCE` and c:func:`WRAP_GETSET_INTERNAL_REFERENCE`) that return a reference rather than a copy.
+There are also versions of these macros (:c:macro:`WRAP_GET_INTERNAL_REFERENCE` and :c:macro:`WRAP_GETSET_INTERNAL_REFERENCE`) that return a reference rather than a copy.
 
 Exposing private member data via Get/Set
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you want to be nice to your users, you can wrap your Get/Set methods in Python properties:
 
-.. c:function:: PROPERTY(Class, Prop, Fn)
+.. c:macro:: PROPERTY(Class, Prop, Fn)
 
-	Add Class.Prop as a property with getter/setter functions GetFn()/SetFn()
+	Add ``Class.Prop`` as a property with getter/setter functions :code:`GetFn()` / :code:`SetFn()`
 
 	:param Class: Parent C++ class
 	:param Prop: The name of the Python property
 	:param Fn: The base name of the C++ Get/Set functions
 
-.. c:function:: PROPERTY_TYPE(Class, Prop, GotType, Fn)
+.. c:macro:: PROPERTY_TYPE(Class, Prop, GotType, Fn)
 
-	Add Class.Prop as a property with getter/setter functions GetFn()/SetFn(), specifying that GetFn() returns GotType. This is useful when wrapping overloaded getter functions.
+	Add ``Class.Prop`` as a property with getter/setter functions :code:`GetFn()` / :code:`SetFn()`, specifying that :code:`GetFn()` returns ``GotType``. This is useful when wrapping overloaded getter functions.
 
 	:param Class: Parent C++ class
 	:param Prop: The name of the Python property
 	:param GotType: The type returned by GetFn() 
 	:param Fn: The base name of the C++ Get/Set functions
 
-.. c:function:: WRAP_PROP(R, Class, Fn)
+.. c:macro:: WRAP_PROP(R, Class, Fn)
 
-	Add Class.fn as a property with getter/setter functions GetFn()/SetFn(). Suitable for use with c:func:`BOOST_PP_SEQ_FOR_EACH`.
+	Add ``Class.fn`` as a property with getter/setter functions :code:`GetFn()` / :code:`SetFn()`. Suitable for use with :c:macro:`BOOST_PP_SEQ_FOR_EACH`.
 
 	:param Class: Parent C++ class
 	:param Fn: The name of the Python property and base name of the Get/Set functions
 
 
-.. c:function:: WRAP_PROP_RO(R, Class, Fn)
+.. c:macro:: WRAP_PROP_RO(R, Class, Fn)
 
-	Add Class.fn as a property with getter function GetFn(). Suitable for use with c:func:`BOOST_PP_SEQ_FOR_EACH`.
+	Add ``Class.fn`` as a property with getter function :code:`GetFn()`. Suitable for use with :c:macro:`BOOST_PP_SEQ_FOR_EACH`.
 
 	:param Class: Parent C++ class
 	:param Fn: The name of the Python property and base name of the Get function
@@ -235,16 +231,16 @@ Exposing public member data with access restrictions
 
 You can expose public member data as properties, either read/write or read-only:
 
-.. c:function:: WRAP_RW(R, Class, Member)
+.. c:macro:: WRAP_RW(R, Class, Member)
 	
-	Expose Member as a read/write Python property. Suitable for use with c:func:`BOOST_PP_SEQ_FOR_EACH`.
+	Expose Member as a read/write Python property. Suitable for use with :c:macro:`BOOST_PP_SEQ_FOR_EACH`.
 
 	:param Class: Parent C++ class
 	:param Member: Name of public data member and Python property
 
-.. c:function:: WRAP_RO(R, Class, Member)
+.. c:macro:: WRAP_RO(R, Class, Member)
 	
-	Expose Member as a read-only Python property. Suitable for use with c:func:`BOOST_PP_SEQ_FOR_EACH`.
+	Expose Member as a read-only Python property. Suitable for use with :c:macro:`BOOST_PP_SEQ_FOR_EACH`.
 
 	:param Class: Parent C++ class
 	:param Member: Name of public data member and Python property
@@ -259,7 +255,7 @@ Wrapping methods with call policies
 
 If you need finer-grained control of the return type of your wrapped methods, you can use the following macros:
 
-.. c:function:: GETSET(Objtype, GotType, Name)
+.. c:macro:: GETSET(Objtype, GotType, Name)
 
 	Define getter/setter methods to return by value.
 
@@ -267,9 +263,9 @@ If you need finer-grained control of the return type of your wrapped methods, yo
 	:param GotType: The type of object returned by Get()
 	:param Name: The base name of the Get/Set methods. 
 
-	For a name X, this will define Objtype::GetX() to return a GotType by value. This is appropriate for POD like ints and doubles. It will also define SetX().
+	For a name ``X``, this will define :code:`Objtype::GetX()` to return a ``GotType`` by value. This is appropriate for POD like ints and doubles. It will also define :code:`SetX()`.
 
-.. c:function:: GETSET_INTERNAL_REFERENCE(Objtype, GotType, Name)
+.. c:macro:: GETSET_INTERNAL_REFERENCE(Objtype, GotType, Name)
 
 	Define getter/setter methods to return by reference.
 
@@ -277,34 +273,34 @@ If you need finer-grained control of the return type of your wrapped methods, yo
 	:param GotType: The type of object returned by Get()
 	:param Name: The base name of the Get/Set methods. 
 
-	This will define Objtype::GetX() to return a reference to GotType, where GotType is still owned by the parent object. This is appropriate for compound objects like vectors and maps.
+	This will define :code:`Objtype::GetX()` to return a reference to ``GotType``, where ``GotType`` is still owned by the parent object. This is appropriate for compound objects like vectors and maps.
 
-There are also trinary versions of these macros for use with c:func:`BOOST_PP_SEQ_FOR_EACH`:
+There are also trinary versions of these macros for use with :c:macro:`BOOST_PP_SEQ_FOR_EACH`:
 
-.. c:function:: WRAP_GET_INTERNAL_REFERENCE(R, Class, Name)
+.. c:macro:: WRAP_GET_INTERNAL_REFERENCE(R, Class, Name)
 
-	Define GetName() to return an internal reference. Suitable for use with c:func:`BOOST_PP_SEQ_FOR_EACH`.
+	Define :code:`GetName()` to return an internal reference. Suitable for use with :c:macro:`BOOST_PP_SEQ_FOR_EACH`.
 
 	:param Class: The parent C++ class.
 	:param Name: The base name of the Get method.
 
-.. c:function:: WRAP_GETSET_INTERNAL_REFERENCE(R, Class, Name)
+.. c:macro:: WRAP_GETSET_INTERNAL_REFERENCE(R, Class, Name)
 
-	Define GetName() and SetName(). GetName() will return an internal reference. Suitable for use with c:func:`BOOST_PP_SEQ_FOR_EACH`.
+	Define :code:`GetName()` and :code:`SetName()`. :code:`GetName()` will return an internal reference. Suitable for use with :c:macro:`BOOST_PP_SEQ_FOR_EACH`.
 
 	:param Class: The parent C++ class.
 	:param Name: The base name of the Get/Set methods.
 
-.. c:function:: WRAP_PROP_RO_INTERNAL_REFERENCE(R, Class, Fn)
+.. c:macro:: WRAP_PROP_RO_INTERNAL_REFERENCE(R, Class, Fn)
 
-	Add Class.fn as a property with getter function GetFn(). GetFn() will return a reference to the object owned by the C++ instance. Suitable for use with c:func:`BOOST_PP_SEQ_FOR_EACH`.
+	Add ``Class.fn`` as a property with getter function :code:`GetFn()`. :code:`GetFn()` will return a reference to the object owned by the C++ instance. Suitable for use with :c:macro:`BOOST_PP_SEQ_FOR_EACH`.
 
 	:param Class: Parent C++ class
 	:param Fn: The name of the Python property and base name of the Get function
 
-.. c:function:: WRAP_PROP_INTERNAL_REFERENCE(R, Class, Fn)
+.. c:macro:: WRAP_PROP_INTERNAL_REFERENCE(R, Class, Fn)
 
-	Add Class.fn as a property with getter/setter functions GetFn()/SetFn(). GetFn() will return a reference to the object owned by the C++ instance. Suitable for use with c:func:`BOOST_PP_SEQ_FOR_EACH`.
+	Add ``Class.fn`` as a property with getter/setter functions :code:`GetFn()` / :code:`SetFn()`. :code:`GetFn()` will return a reference to the object owned by the C++ instance. Suitable for use with :c:macro:`BOOST_PP_SEQ_FOR_EACH`.
 
 	:param Class: Parent C++ class
 	:param Fn: The name of the Python property and base name of the Get/Set functions
@@ -312,9 +308,9 @@ There are also trinary versions of these macros for use with c:func:`BOOST_PP_SE
 Wrapping enumerated types
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. c:function:: WRAP_ENUM_VALUE(R, Class, Name)
+.. c:macro:: WRAP_ENUM_VALUE(R, Class, Name)
 
-	Add the value Name to an enumerated type. Suitable for use with c:func:`BOOST_PP_SEQ_FOR_EACH`.
+	Add the value Name to an enumerated type. Suitable for use with :c:macro:`BOOST_PP_SEQ_FOR_EACH`.
 
 	:param Class: The parent C++ class.
 	:param Name: The name of the C++ value.
@@ -330,14 +326,14 @@ Wrapping enumerated types
 Constructing a Python module
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. c:function:: I3_REGISTER(r, data, t)
+.. c:macro:: I3_REGISTER(r, data, t)
 
-	For name Name, call void register_Name(). Suitable for use with c:func:`BOOST_PP_SEQ_FOR_EACH`.  
+	For name ``Name``, call :code:`void register_Name()`. Suitable for use with :c:macro:`BOOST_PP_SEQ_FOR_EACH`.
 
 	:param t: The suffix of the function name, e.g. register_t().
 	:param data: unused.
 
-.. c:function:: I3_PYTHON_MODULE(module_name)
+.. c:macro:: I3_PYTHON_MODULE(module_name)
 	
 	Declare the following code to be run when the module is initialized.
 
@@ -352,8 +348,6 @@ Constructing a Python module
 		   load_project("dataclasses",false);
 		   BOOST_PP_SEQ_FOR_EACH(I3_REGISTER, ~, REGISTER_THESE_THINGS);
 		}
-	
-	
 
 Gotchas
 _______
@@ -371,7 +365,7 @@ You may be mystified by errors like these:
 	    boost::python::detail::not_specified
 	>::def(const char [11], <unresolved overloaded function type>)'
 	
-This can happen when the wrapped class exposes two different versions of the function, for example returning a const or non-const type. In this case, you have to specify the return type by hand. The c:func:`BOOST_PP_SEQ_FOR_EACH` tricks will not work; you'll need to use c:func:`GETSET` or c:func:`PROPERTY_TYPE` to wrap each name individually instead.
+This can happen when the wrapped class exposes two different versions of the function, for example returning a const or non-const type. In this case, you have to specify the return type by hand. The :c:macro:`BOOST_PP_SEQ_FOR_EACH` tricks will not work; you'll need to use :c:macro:`GETSET` or :c:macro:`PROPERTY_TYPE` to wrap each name individually instead.
 
 Naming conventions
 __________________
