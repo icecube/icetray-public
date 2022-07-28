@@ -370,10 +370,7 @@ This can happen when the wrapped class exposes two different versions of the fun
 Naming conventions
 __________________
 
-Python properties are preferred over C++-style Get/Set methods. The exposed Python module should conform to the `Style Guide for Python Code`_ as closely as possible.
-
-.. _Style Guide for Python Code: http://www.python.org/dev/peps/pep-0008/
-
+Python properties are preferred over C++-style Get/Set methods. The exposed Python module should conform our :ref:`python-coding-standards` as closely as possible.
 
 Resources
 _________

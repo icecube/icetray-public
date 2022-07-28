@@ -1,5 +1,7 @@
-IceCube C++ Coding Standards
-============================
+.. _icecube-coding-standards:
+
+IceCube Coding Standards
+========================
 
 .. image:: brazil.jpg
 
@@ -20,12 +22,16 @@ to write their own private software to these standards, to make future
 code maintence and the adoption of private code for production use
 easier.
 
+.. _python-coding-standards:
+
 Python Coding Standards
 -----------------------
 
 Python coding standards follow the recommendations set forth in `PEP
 0008 <http://www.python.org/dev/peps/pep-0008/>`_. Where they cause
 conflict, the C++ coding standards outlined below, take precedence.
+
+.. _c-coding-standards:
 
 C Coding Standards
 ------------------
@@ -44,6 +50,7 @@ you follow the Linux kernel coding style.
 
 `Linux Kernel Coding Style <https://www.kernel.org/doc/Documentation/CodingStyle>`_
 
+.. _c++-coding-standards:
 
 C++ Coding Standards
 --------------------
