@@ -1,3 +1,5 @@
+.. highlight:: none
+
 Connecting to Github from Cobalts
 =================================
 
@@ -15,7 +17,7 @@ On MacOS an agent should already be running.
 On Linux, most desktop environments will automatically start an agent. 
 To verify an agent is running on your laptop, you can run the following command:
 
-.. code-block:: bash
+.. code-block:: console
 
     $ echo $SSH_AGENT_PID $SSH_AUTH_SOCK 
 
@@ -32,7 +34,7 @@ for your linux distribution and/or desktop environment.
 Once you have confirmed that you have an ssh-agent running, the next step is to generate a key. 
 On your laptop run:
 
-.. code-block:: bash
+.. code-block:: console
 
     $ ssh-keygen -t ed25519 -C "<YourUsername>@<YourLaptopName>"
 
@@ -46,7 +48,7 @@ You will also be prompted to enter a passphrase. **DO NOT LEAVE THIS EMPTY**.
 Please enter a secure passphrase, something that will be hard for someone to guess.
 The output should look like this:
 
-:: 
+::
 
     Generating public/private ed25519 key pair.
     Enter file in which to save the key (/home/username/.ssh/id_ed25519): 
@@ -71,7 +73,7 @@ The output should look like this:
 
 Now lest take a look at your ``.ssh`` directory:
 
-.. code-block:: bash
+.. code-block:: console
 
     $ ls -l ~/.ssh
 
@@ -113,7 +115,7 @@ You should see that your key has been successfully added to github, it will look
 
 At this point you should be able to authenticate with github on your laptop using you new key.
 
-::
+.. code-block:: console
 
     $ ssh -T git@github.com
     The authenticity of host 'github.com (140.82.113.4)' can't be established.
@@ -129,13 +131,13 @@ Make sure that the fingerprint matches what github
 and then enter the passphrase for the key as prompted.
 If you see the message that you authenticated then you have successfully setup your key.
 
-Logging to the cobalts with the key pair
-----------------------------------------
+Logging to in the cobalts with the key pair
+-------------------------------------------
 
 Now that we have a key pair we need to transfer the public key to pub so that we
 can ssh into pub and the cobalts. On your laptop run
 
-.. code-block:: bash
+.. code-block:: console
 
     $ ssh-copy-id -i ~/.ssh/id_ed25519.pub <yourusername>@pub.icecube.wisc.edu
 
@@ -144,9 +146,9 @@ will be prompted for this.
 
 Now you should be able to login to pub with your key pair instead of your password. Try running
 
-.. code-block:: bash
+.. code-block:: console
 
-    $ssh <yourusername>@pub.icecube.wisc.edu
+    $ ssh <yourusername>@pub.icecube.wisc.edu
 
 If you are prompted for a passphrase, then your key pair is working.
 If you are instead prompted for a password, that means that something is wrong with your key pair,
@@ -162,9 +164,9 @@ Edit your  ``~/.ssh/config`` and add the following line:
 
 In order for this to work you need to set the permissions correctly on the config file
 
-.. code-block:: bash
+.. code-block:: console
 
-    $ chmod 600 .ssh/config
+    $ chmod 600 ~/.ssh/config
 
 Now you will be prompted to enter your passphrase the first time you try to log into pub,
 but all subsequent logins will not need the passphrase. 
@@ -185,7 +187,7 @@ With this in your laptop's ssh config you should be able first login to pub and 
 to cobalts without a passphrase prompt. This also means that your key pair is also available
 for use with github on cobalts.
 
-.. Warning:: 
+.. Warning::
 
     You may be tempted to use a wildcard like ``Host *`` to just apply this setting to all SSH connections. 
     That's not really a good idea, as you'd be sharing your local SSH keys with every server you SSH into. 
@@ -203,13 +205,13 @@ On pub edit ``~/.ssh/config`` and add the following line:
 
 and once again set the permissions on your ssh config:
 
-.. code-block:: bash
+.. code-block:: console
 
-   pub$ chmod 700 .ssh/config
+   pub$ chmod 700 ~/.ssh/config
 
 Now that github has your public key, you should be able to login to cobalt and authenticate with github:
 
-.. code-block:: bash
+.. code-block:: console
 
     laptop$ ssh <yourusernamne>@pub.icecube.wisc.edu
     pub$ ssh cobalt
@@ -226,7 +228,7 @@ Additional Tips
 ---------------
 
 If you get tired of typing your username and the full hostname of pub into ssh
-you can create an alias in ``.ssh/config`` so all you have to type is ``ssh pub``.
+you can create an alias in ``~/.ssh/config`` so all you have to type is ``ssh pub``.
 
 ::
 
@@ -247,13 +249,13 @@ directly to the cobalts from your laptop
 
 You can now login directly to the cobalts from your laptop
 
-.. code-block ::
+.. code-block:: console
 
     $ ssh cobalt
 
 Another Option that might be helpful is to add a keep alive signal to prevent
 being disconnected when connecting through firewalls that may drop idle connections
 
-:: 
+::
 
     ServerAliveInterval 120
