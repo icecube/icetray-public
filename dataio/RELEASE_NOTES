@@ -6,9 +6,19 @@ Release Notes
 trunk
 -----
 
+Jul. 27, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.4.0
+
+* Drop support for Python 2
+* Clean up python bindings / modules
+* Clean up tests
+* Fix use after free
+* Reflect relicensing agreements received from authors of core IceTray modules.
+
 Feb. 22, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
-Github Release v1.3.0
+IceTray Release v1.3.0
 
 * Threading updates
 * Documentation updates

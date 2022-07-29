@@ -1,4 +1,3 @@
-
 .. _steamshovel-release-notes:
 
 Release Notes
@@ -6,6 +5,16 @@ Release Notes
 
 trunk
 -----
+
+Jul. 29, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.4.0
+
+* Drop support for Python 2
+* Clean up python bindings / modules
+* Minor fix to the dmg build for Mac
+* Mark skippable tests as skippable or disabled (#2888)
+* Remove deprecated fixed pipeline lighting, which can cause the 3D view to break with modern drivers. Addresses issue #2806.
 
 Feb. 21, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
@@ -24,17 +33,16 @@ Combo Release V00-00-01
 
 * Removed more references to Qt4.
 
-
 Dec. 20, 2019 Alex Olivas (aolivas@umd.edu)
 -------------------------------------------
 Combo Release V00-00-00
 
 * Removed Qt4 support.
 
-
 December 11, 2018, Alex Olivas (olivas@icecube.umd.edu)
 ------------------------------------------------------------
 Release V18-12-00
+
 * Support for mDOM vizualization.
 * Bug fix to reduced chi^2
 

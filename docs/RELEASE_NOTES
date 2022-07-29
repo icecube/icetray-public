@@ -4,9 +4,20 @@ Release Notes
 trunk
 -----
 
+Jul. 27, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.4.0
+
+- Drop support for Python 2
+- Clean up tests
+- Add tutorial on ssh keys for connecting to github on cobalts
+- Add information about the svn test-data repo
+- Reflect relicensing agreements received from authors of core IceTray modules.
+- Update cvmfs docs to py3-v4.2.0 (#2842)
+
 Feb. 22, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
-Github Release v1.3.0
+IceTray Release v1.3.0
 
 There have been extensive updates to the documentation, especially in
 how it's built, since the last time these release notes were

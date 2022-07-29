@@ -8,9 +8,20 @@ Release Notes
 trunk
 -----
 
+Jul. 27, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.4.0
+
+* Drop support for Python 2
+* Make photospline optional
+* Updates to, and typo fixes for documetation
+* Bump minimum cmake version to 3.15
+* Build ROOT projects with whatever C++ standard ROOT was built with
+* Set C++17 as our standard
+
 Feb. 22, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
-Github Release v1.3.0
+IceTray Release v1.3.0
 
 There have been extensive updates to this project, especially in the
 documentation that it contains, since the last time these release

@@ -1,14 +1,19 @@
-.. $Id$
-
 Release Notes
 =============
 
 trunk
 -----
 
+Jul. 27, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.4.0
+
+* Drop support for Python 2
+* Clean up python bindings / modules
+
 Dec. 15, 2021 Kevin Meagher
 ---------------------------
-Github Release v1.3.0
+IceTray Release v1.3.0
 
 * Fix race between tests
 * Add class `I3Ecliptic` for ecliptic coordinates and functions `I3GetEclipticFromEquatorial()` 

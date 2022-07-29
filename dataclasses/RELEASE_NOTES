@@ -6,9 +6,21 @@ Release Notes
 trunk
 -----
 
+Jul. 27, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.4.0
+
+* Drop support for Python 2
+* Clean up python bindings / modules
+* Clean up warnings
+* Fix buffer overlow
+* Updates for C++17
+* Add subsurface array updates
+* Reflect relicensing agreements received from authors of core IceTray modules.
+
 Feb. 21, 2022 Tianlu Yuan
 -------------------------
-Github Release v1.3.0
+IceTray Release v1.3.0
 
 * update test_I3DOMFunctions to actually test the new SPECharge distribution
 * Compute the mean of the complete charge distribution. As this calculation can be more expensive than the analytic treatment, the result is computed lazily and cached. To aid this caching, some unnecessary copies of SPEChargeDistributions are eliminated. To speed up both the numerical integration and other uses of the charge distribution, the linear se

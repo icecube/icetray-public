@@ -1,13 +1,14 @@
-.. $Id: RELEASE_NOTES  79391 2011-10-10 olivas $
-.. $Author: olivas $
-.. $Date: 2011-10-10 $
-
 Release Notes
 =============
 
 trunk
 -----
 
+Jul. 29, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.4.0
+
+- Squash warnings
 - remove auto_ptr support from serialization - This could potentially be a
   brakeing change if auto_ptrs have ever been serialized. However, there is no
   evidence that an auto_ptr has ever been serialized

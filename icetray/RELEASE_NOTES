@@ -1,4 +1,3 @@
-
 .. _icetray-release-notes:
 
 Release Notes
@@ -7,9 +6,24 @@ Release Notes
 main
 ----
 
+Jul. 27, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.4.0
+
+* Drop support for Python 2
+* Clean up python bindings /modules
+* Clean up tests
+* Fix archive decompression (#2899)
+* Documentation cleanups
+* icetray-inspect cleanups
+* Reflect relicensing agreements received from authors of core IceTray modules.
+* 2848 itrayexecute does not execute forever (#2872)
+* Surfacearray pr2 (#2752)
+* Refactor handling of configuration in I3ServiceBase to be clearer and less error-prone (#2832)
+
 Feb. 22, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
-Github Release v1.3.0
+IceTray Release v1.3.0
 
 * Boost updates
 * Address deprecations in C++/Boost

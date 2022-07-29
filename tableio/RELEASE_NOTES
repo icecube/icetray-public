@@ -1,12 +1,16 @@
-.. $Id$
-.. $Author$
-.. $Date$
-
 Release Notes
 =============
 
 trunk
 -----
+
+Jul. 29, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.4.0
+
+* Drop support for Python 2
+* Clean up python bindings / modules
+* Clean up tests
 * Add "bookToParticle" option to converter for I3Map's, which computes perpendicular distance to a track, 
   longitudinal distance along a track, and distance to a vertex.  (Similar to "bookGeometry")
 
