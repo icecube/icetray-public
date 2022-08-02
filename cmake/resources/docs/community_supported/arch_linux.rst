@@ -4,11 +4,11 @@
 Arch Linux
 ==========
 
-This document describes the installation of dependencies needed for icetray on `Arch Linux <https://www.archlinux.org/>`_ via its package manager `pacman <https://wiki.archlinux.org/index.php/pacman>`_.
+This document describes the installation of dependencies needed for icetray on `Arch Linux <https://archlinux.org/>`_ via its package manager `pacman <https://wiki.archlinux.org/title/pacman>`_.
 Arch is not an officially supported platform for icetray, but it is known to work on Arch.
 If you are unsure what linux distro to use, do not pick Arch based on the existence of this page, you will almost certainly be happier with :ref:`Ubuntu <ubuntu>`. Feel free to ask questions about using icetray on Arch, but do not act entitled to support.
 
-Many of the dependencies are available from the official Arch repositories. However, many icetray dependencies are only available through the `Arch user repositories <https://wiki.archlinux.org/index.php/Arch_User_Repository>`_ (AUR), so you will need an `AUR helper <https://wiki.archlinux.org/index.php/AUR_helpers>`_. This tutorial assumes that ``paru`` is your AUR helper. If you prefer a different AUR helper, please make the appropriate substitutions.
+Many of the dependencies are available from the official Arch repositories. However, many icetray dependencies are only available through the `Arch user repositories <https://wiki.archlinux.org/title/Arch_User_Repository>`_ (AUR), so you will need an `AUR helper <https://wiki.archlinux.org/title/AUR_helpers>`_. This tutorial assumes that ``paru`` is your AUR helper. If you prefer a different AUR helper, please make the appropriate substitutions.
 
 .. note::
 
@@ -23,8 +23,8 @@ First install the basic dependencies::
 
   pacman -S base-devel cmake boost python zstd gsl cfitsio hdf5 zeromq fftw
 
-Icetray depends on `BLAS <http://www.netlib.org/blas/>`_ library of which there are several implementations. By default Arch installs reference implementation of BLAS, which is quite slow.
-`OpenBLAS <http://www.openblas.net/>`_ is much faster, but only available through the AUR::
+Icetray depends on `BLAS <https://netlib.org/blas/>`_ library of which there are several implementations. By default Arch installs reference implementation of BLAS, which is quite slow.
+`OpenBLAS <https://www.openblas.net/>`_ is much faster, but only available through the AUR::
 
   paru -S openblas-lapack
 
@@ -80,7 +80,7 @@ If you don't have a GPU (possibly because you are in a virtual machine), a softw
 
   pacman -S pocl
 
-There are other alternatives available for different hardware in the AUR see the `ArchWiki <https://wiki.archlinux.org/index.php/GPGPU#OpenCL>`_ for more details.
+There are other alternatives available for different hardware in the AUR see the `ArchWiki <https://wiki.archlinux.org/title/GPGPU#OpenCL>`_ for more details.
 
 Regardless of which implementation you pick you will also need the opencl-headers::
   

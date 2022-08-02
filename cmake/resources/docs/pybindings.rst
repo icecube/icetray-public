@@ -378,8 +378,8 @@ Python properties are preferred over C++-style Get/Set methods. The exposed Pyth
 Resources
 _________
 
-- `Boost::Python wiki at python.org <http://wiki.python.org/moin/boost.python/HowTo>`_
-- `Boost::Python reference guide <http://www.boost.org/doc/libs/1_57_0/libs/python/doc/v2/reference.html>`_
+- `Boost::Python wiki at python.org <https://wiki.python.org/moin/boost.python/HowTo>`_
+- `Boost::Python reference guide <https://www.boost.org/doc/libs/release/libs/python/doc/reference/>`_
 
 Todo: finer points of return-by-value vs. reference
 ___________________________________________________ 

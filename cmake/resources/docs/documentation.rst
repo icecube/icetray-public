@@ -3,7 +3,7 @@
 Documentation
 =============
 
-These docs were generated with Sphinx: http://www.sphinx-doc.org/
+These docs were generated with Sphinx: https://www.sphinx-doc.org/
 
 Requirements
 ------------
@@ -58,12 +58,12 @@ On the other hand, doxygen isn't very good for hand-written explanatory,
 high-level documentation.
 
 There is an excellent introduction on how to document the code located
-at http://doxygen.org/docblocks.html
+at https://doxygen.nl/manual/docblocks.html
 
 
 For a full description of what one can do with doxygen consult the
-`Doxygen homepage <http://doxygen.org>`_ , in particular the
-`users manual <http://doxygen.org/manual.html>`_.
+`Doxygen homepage <https://doxygen.nl>`_ , in particular the
+`users manual <https://doxygen.nl/manual/>`_.
 
 By default doxygen is configured to search the :file:`public/` and
 :file:`resources/docs/` directories of your project looking for files
@@ -97,7 +97,7 @@ also :ref:`workspace-targets`.
 Links
 -----
 
-* `Doxygen <http://www.doxygen.org>`_
-* `Sphinx  <http://www.sphinx-doc.org>`_
-* `reStructuredText <http://docutils.sourceforge.net/rst.html>`_
-* `reStructuredText Directives reference <http://docutils.sourceforge.net/docs/ref/rst/directives.html>`_
+* `Doxygen <https://www.doxygen.nl>`_
+* `Sphinx  <https://www.sphinx-doc.org>`_
+* `reStructuredText <https://docutils.sourceforge.io/rst.html>`_
+* `reStructuredText Directives reference <https://docutils.sourceforge.io/docs/ref/rst/directives.html>`_

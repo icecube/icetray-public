@@ -32,9 +32,9 @@ Setting Up Additional Python Tools
 
 There are several useful python tools that can be added to your local
 environment to provide analysis-level tools like IPython
-(http://ipython.scipy.org/), MatPlotLib
-(http://matplotlib.sourceforge.net/), Numpy (http://numpy.scipy.org/)
-and PyTables (http://www.pytables.org/). These instructions will help
+(https://ipython.org/), MatPlotLib
+(https://matplotlib.org/), Numpy (https://numpy.org/)
+and PyTables (https://www.pytables.org/). These instructions will help
 you get these additional tools setup and guide you through a few
 examples.
 

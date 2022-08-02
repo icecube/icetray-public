@@ -137,7 +137,7 @@ V16-03-00 - March 18, 2016, don la dieu  (nega@icecube.umd.edu)
 * compiler flag checks and fixes
 * parasitic build fixes
 
-.. _r2450/IceTray: http://code.icecube.wisc.edu/projects/icecube/changeset/2450/IceTray/projects/cmake/trunk
+.. _r2450/IceTray: https://code.icecube.wisc.edu/projects/icecube/changeset/2450/IceTray/projects/cmake/trunk
 
 V15-12-01 - December 14, 2015 - don la dieu  (nega@icecube.umd.edu)
 -------------------------------------------------------------------

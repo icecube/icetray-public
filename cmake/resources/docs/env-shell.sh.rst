@@ -163,7 +163,7 @@ the first  spawn  of a subshell.
 
 You should be able to get the same effect with *.tcsh*, (though I
 personally wouldn't try).  Have a look at
-http://www.grymoire.com/Unix/CshTop10.txt and
+https://www.grymoire.com/Unix/CshTop10.txt and
 http://www.faqs.org/faqs/unix-faq/shell/csh-whynot/ .
 
 Shell functions

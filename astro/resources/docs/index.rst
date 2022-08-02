@@ -440,7 +440,7 @@ has a weird license, and is hard to find.
 `PAL <https://github.com/Starlink/pal>`_ is a newer library which is available on github and is
 licensed with LGPL.
 PAL is intended as a newer version of SLALIB and has an identical interface so it can function as a drop-in replacement.
-Instructions for downloading it can be found in the `cmake tools documentation <../cmake/tools/pal.html>`_.
+Instructions for downloading it can be found in the :ref:`cmake tools documentation <pal-tool>`.
 
 See Also
 ========

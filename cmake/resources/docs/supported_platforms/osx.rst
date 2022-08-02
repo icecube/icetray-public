@@ -14,30 +14,30 @@ as of March 2022. It also guides you through an installo of :doc:`../homebrew`.
 
 .. code-block:: sh
 
-   #install xcode command line tools (don't worry if it says it is already installed)
-   xcode-select --install
+   # install xcode command line tools (don't worry if it says it is already installed)
+   $ xcode-select --install
 
-   #install homebrew
-   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+   # install homebrew
+   $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-   #checkout icetray to a location of your choice
-   git clone git@github.com:icecube/icetray.git $I3_SRC
+   # checkout icetray to a location of your choice
+   $ git clone git@github.com:icecube/icetray.git $I3_SRC
 
-   #move to that location
-   cd $I3_SRC
+   # move to that location
+   $ cd $I3_SRC
 
-   #install packages with homebrew
-   brew bundle
+   # install packages with homebrew
+   $ brew bundle
 
-   #be sure to activate your new brew environment:  either load it explcitly or open a new Terminal!
-   #  'which python3' should be the new brew version.
-   #create and enter virutal envionment
-   python3 -m venv --system-site-packages ${HOME}/py3/
-   source ${HOME}/py3/bin/activate
+   # be sure to activate your new brew environment:  either load it explcitly or open a new Terminal!
+   #   'which python3' should be the new brew version.
+   # create and enter virutal envionment
+   $ python3 -m venv --system-site-packages ${HOME}/py3/
+   $ source ${HOME}/py3/bin/activate
 
-   #install python packages with pip3
-   python3 -m pip install --upgrade pip
-   python3 -m pip install -r requirements.txt
+   # install python packages with pip3
+   $ python3 -m pip install --upgrade pip
+   $ python3 -m pip install -r requirements.txt
 
 Other Important Notes
 """""""""""""""""""""
@@ -47,7 +47,7 @@ Other Important Notes
    Do not try to install your own Python over the perfectly good version
    shipped with Homebrew. It is very likely to end in tears. This
    includes the Enthought and Anaconda distributions. In order to compile
-   IceTray, your version of boost::python must be compiled against the same
+   IceTray, your version of ``boost::python`` must be compiled against the same
    version of python as you are using. It will not be easy to do this with
    Anaconda.
 
@@ -65,7 +65,7 @@ so you should only download it if you need it for non-IceCube work.**
 Command-Line Tools
 ..................
 
-1) Go to the `Apple Developer Downloads page <http://developer.apple.com/downloads>`_,
+1) Go to the `Apple Developer Downloads page <https://developer.apple.com/downloads>`_,
    signing in with your `Apple ID`_.
 2) Download and install the latest Command Line Tools.
 
@@ -108,15 +108,17 @@ After the install finishes you should have both clang and llvm-gcc:
 	Thread model: posix
 	InstalledDir: /Library/Developer/CommandLineTools/usr/bin
 
+.. _osx/homebrew:
+
 Homebrew
 """"""""
-.. highlight:: sh
+.. highlight:: console
 
 :doc:`../homebrew` is probably the easiest way to install packages on macOS, and
 distributes the most heavy-weight dependencies (cmake, boost, and Qt) as binary
 packages.  Install them like this::
 
-  brew install cmake
+  $ brew install cmake
 
 The following formulae are necessary to compile IceTray::
 
@@ -134,7 +136,7 @@ The following formula are also recommended from the IceCube-SPNO/icecube tap::
 
   pal cppzmq photospline
 
-.. _tap: https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/brew-tap.md
+.. _tap: https://docs.brew.sh/Taps
 
 
 ROOT on macOS

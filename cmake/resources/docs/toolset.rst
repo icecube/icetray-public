@@ -4,6 +4,8 @@
 Tool detection/configuration 
 ============================
 
+.. highlight:: c++
+
 In ``cmake/tools`` there are a collection of ``.cmake`` files that are
 each responsible for detecting a tool and configuring the build to use
 it correctly.  The rest of the cmake infrastructure 'uses' tool via 
@@ -73,6 +75,7 @@ transparently to the user.
 I3_SITE_CMAKE_DIR
 -----------------
 
+.. highlight:: cmake
 .. index:: I3_SITE_CMAKE_DIR
 .. index:: /usr/share/fizzicks/cmake
 
@@ -121,6 +124,7 @@ Here is another example override for tools for *blas* and *lapack* (filenames
 Troubleshooting
 ---------------
 
+.. highlight:: console
 .. index:: toolset ; troubleshooting
    
 **Q**: Hello, I tried to install a new toolset and ran a problem at

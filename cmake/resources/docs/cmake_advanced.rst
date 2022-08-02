@@ -1,7 +1,7 @@
 Advanced CMake
 --------------
 
-.. highlight:: sh 
+.. highlight:: console
 
 Editing the CMake cache
 """""""""""""""""""""""
@@ -11,8 +11,8 @@ makefiles, one sets build options by editing the CMake cache.  You can
 start the editor with "make edit_cache", or by invoking the cache
 editor, ``ccmake``, directly::
 
-  cd ~/Icecube/meta-projects/combo/stable/build
-  make edit_cache
+  $ cd ~/Icecube/meta-projects/combo/stable/build
+  $ make edit_cache
 
 A handy curses app will pop up allowing you to change the values of
 various configuration variables.  As you move the cursor over them a
@@ -44,7 +44,7 @@ command line.  For instance, I have checked out source to directory
 ``src/`` and am in a parallel directory ``build/``.  I want to build
 the "release" variant, the one with optimizations on, i issue::
 
-   cmake -DCMAKE_BUILD_TYPE=Release ../src
+   $ cmake -DCMAKE_BUILD_TYPE=Release ../src
 
 .. _common_cmake_settings:
 
@@ -76,13 +76,13 @@ Not all of the variables are useful.  Here are some that are:
        per project in the current workspace.
      - ON
    * - .. attribute:: USE_ROOT
-     - Build with `ROOT <http://root.cern.ch>`_ support. Disabling this option will cause some projects to be skipped when building. IceTop users will want this option to be on.
+     - Build with `ROOT <https://root.cern>`_ support. Disabling this option will cause some projects to be skipped when building. IceTop users will want this option to be on.
      - ON
    * - .. attribute:: USE_CINT
-     - Build dictionaries with `rootcint <https://root.cern.ch/root/RootCintMan.html>`_. rootcint support is deprecated as of April 1st, 2015, and this option will soon do nothing.
+     - Build dictionaries with `rootcint <https://root.cern/root/html534/guides/users-guide/CINT.html>`_. rootcint support is deprecated as of April 1st, 2015, and this option will soon do nothing.
      - OFF
    * - .. attribute:: USE_CCACHE
-     - Use `ccache <https://ccache.samba.org/>`_ to aid in compilation. Requires administrator setup in order to use efficiently on multi-user systems.
+     - Use `ccache <https://ccache.dev/>`_ to aid in compilation. Requires administrator setup in order to use efficiently on multi-user systems.
      - OFF
    * - .. attribute:: USE_OPENCL
      - Use `OpenCL <https://www.khronos.org/opencl/>`_ support in :ref:`clsim-main` and :ref:`ppc <ppc-main>`
@@ -107,7 +107,7 @@ Uncommon CMake settings
      - Override ROOT version detection if you want to use a specific version of ROOT.
      - autodetected
    * - .. attribute:: SPHINX_EXTRA_OPTIONS
-     - A semicolon delimited list of options to pass to `sphinx <http://sphinx-doc.org/>`_. Useful for developers and documentation writers.
+     - A semicolon delimited list of options to pass to `sphinx <https://www.sphinx-doc.org>`_. Useful for developers and documentation writers.
      - "-N;-a;-E"
    * - .. attribute:: USE_DISTCC
      - Use the `distcc <https://github.com/distcc/distcc>`_ distributed compilation system.
@@ -145,10 +145,12 @@ Option                                       Description
 Though you can also make the build verbose at any time by adding
 ``VERBOSE=1`` to the command line::
 
-  make dataio-pybindings VERBOSE=1
+  $ make dataio-pybindings VERBOSE=1
 
 The cmake cache CMakeCache.txt
 """"""""""""""""""""""""""""""
+
+.. highlight:: python
 
 These cache variables are stored in a file ``CMakeCache.txt`` in the
 build directory.  You may modify this file directly instead of using

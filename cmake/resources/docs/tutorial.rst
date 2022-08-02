@@ -1,16 +1,16 @@
 User's Guide
 ------------
 
-.. highlight:: sh 
+.. highlight:: console
 
-`CMake <http://www.cmake.org/>`_ is a cross-platform build system which
+`CMake <https://cmake.org/>`_ is a cross-platform build system which
 generates build files for use by native build systems for different
 platforms.  On UNIX-like systems it generates makefiles.  CMake provides 
 easier per-project build configuration, a more standard build
 environment across different platforms, additional testing infrastructure, 
 and out-of-source compilation.
 
-Building with cmake
+Building with CMake
 ^^^^^^^^^^^^^^^^^^^
 
 To begin building with CMake start with a clean workspace. We will assume
@@ -20,9 +20,7 @@ With CMake, one creates "out-of-source" builds.  This makes it easier to
 build several configurations against one set of source, and to be sure
 that the build process does not modify the source itself (e.g. no
 temporary files end up laying around in your checkout).  So create a
-work directory and check out source to a directory called ``src``:
-
-::
+work directory and check out source to a directory called ``src``::
 
   mkdir -p ~/IceCube/meta-projects/combo/stable
   cd ~/IceCube/meta-projects/combo/stable
@@ -131,7 +129,7 @@ usually not what you want, as it takes a long time to complete.
 To run only the tests for a particular project, ``cd`` into its
 subdirectory and run ``make test`` there.
 
-The testing system is `CTest <http://www.cmake.org/cmake/help/v2.8.8/ctest.html>`_.
+The testing system is `CTest <https://cmake.org/cmake/help/latest/manual/ctest.1.html>`_.
 If you want to run only a specific test or more fine-grained control,
 you can call ``ctest`` directly, like so::
 

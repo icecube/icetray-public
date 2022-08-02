@@ -57,10 +57,10 @@ These dependencies are optional. If not present IceTray will compile with reduce
   * - `Zstandard <https://facebook.github.io/zstd/>`_
     - Compression Algorithm
     - zstd compressed i3 files
-  * - `BLAS <http://www.netlib.org/blas/>`_
+  * - `BLAS <https://netlib.org/blas/>`_
     - Basic Linear Algebra Subprograms
     - :ref:`millipede-main`, :ref:`wavedeform-main`
-  * - `LAPACK <http://www.netlib.org/lapack/>`_
+  * - `LAPACK <https://netlib.org/lapack/>`_
     - Linear Algebra PACKage
     - :ref:`millipede-main`, :ref:`wavedeform-main`, :ref:`I3GulliverLBFGSB <lilliput>`
   * - `SuiteSparse <https://sparse.tamu.edu/>`_
@@ -78,7 +78,7 @@ These dependencies are optional. If not present IceTray will compile with reduce
   * - `HDF5 <https://www.hdfgroup.org/solutions/hdf5/>`_
     - High-performance data management and storage suite
     - :ref:`hdfwriter`
-  * - `Boost NumPy <https://www.boost.org/doc/libs/1_74_0/libs/python/doc/html/numpy/index.htmli>`_
+  * - `Boost NumPy <https://www.boost.org/doc/libs/release/libs/python/doc/html/numpy/>`_
     - Boost.Python NumPy extension
     - :ref:`MuonGun-main` and ``ml_suite`` pybindings
   * - `HEALPix <https://healpix.jpl.nasa.gov/>`_
@@ -90,7 +90,7 @@ These dependencies are optional. If not present IceTray will compile with reduce
   * - `ROOT <https://root.cern/>`_
     - Particle physics data analysis 
     - :ref:`rootwriter`, :ref:`I3GulliverMinuit2 <lilliput>`
-  * - `Minuit2 <http://seal.web.cern.ch/seal/snapshot/work-packages/mathlibs/minuit/>`_
+  * - `Minuit2 <https://root.cern/topical/#minuit>`_
     - Physics analysis tool for function minimization.
     - :ref:`I3GulliverMinuit2 <lilliput>`
   * - `CLHEP <https://proj-clhep.web.cern.ch/proj-clhep/>`_
@@ -123,7 +123,7 @@ These dependencies are optional. If not present IceTray will compile with reduce
   * - `OpenGL <https://www.opengl.org/>`_
     - 3D vector graphics
     - :ref:`steamshovel <steamshovel>`
-  * - `GLUT <https://www.opengl.org/resources/libraries/glut/>`_
+  * - `GLUT <http://freeglut.sourceforge.net/>`_
     - OpenGL Utility Toolkit
     - :ref:`steamshovel <steamshovel>`
   * - `Qt5 <https://www.qt.io/>`_
@@ -142,7 +142,7 @@ These are not needed at compile time but are necessary for certain functionality
   * - Name
     - Description
     - Needed for
-  * - `SciPy <https://www.scipy.org/>`_
+  * - `SciPy <https://scipy.org/>`_
     - Python library used for scientific computing
     - various unit tests
   * - `h5py <https://www.h5py.org/>`_
