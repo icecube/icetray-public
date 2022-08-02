@@ -34,9 +34,13 @@ extensions = list(filter(None, ['sphinx.ext.autodoc',
                                 '@sphinx_NAPOLEON@',
                                 '@sphinx_EMAIL@',
                                 '@sphinx_BREATHE@',
-                                'script_directive',
-                                'plot_directive']))
+                                #'script_directive',
+                                #'plot_directive'
+                                ]))
 print("Using extensions:", extensions)
+
+# sphinxcontrib.email: auto-obfuscate email addresses
+email_automode = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -203,7 +207,7 @@ latex_documents = [
 # fact it's pulled from https://stackoverflow.com/a/2111327/4021251,
 # where traclinks got it
 
-trac_url = "https://github.com/icecube/icetray"
+trac_url = "https://code.icecube.wisc.edu/projects/icecube"
 
 def trac_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
     ref = trac_url + '/intertrac/' + ulp.quote(text)
