@@ -95,6 +95,32 @@ show_authors = True
 pygments_style = 'sphinx'
 
 
+# Options for linkcheck builder
+# -----------------------------
+
+# links that require authentication
+# don't be a goof and record secrets here
+linkcheck_auth = [
+    #('https://foo\.yourcompany\.com/.+', ('johndoe', 'secret')),
+    ]
+
+linkcheck_ignore = [
+    # urls to ignore
+    # trac requires a login session which linkcheck doesn't support
+    r'https?://code\.icecube\.wisc\.edu/projects/icecube/',
+    # private github repos
+    r'https?://github\.com/icecube/icetray/',
+    r'https?://github\.com/IceCube-SPNO/IceTrayCombo/',
+    r'https?://github\.com/fiedl/',
+    ]
+
+linkcheck_exclude_documents = [
+    #r'.*/legacy/.*',
+    'projects/IceHive/review_comments',
+    'projects/.+/.*code_review',
+    ]
+
+
 # Options for HTML output
 # -----------------------
 
