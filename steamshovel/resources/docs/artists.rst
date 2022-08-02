@@ -105,7 +105,7 @@ Artists that respond to selected DOMS: If your artist needs to respond to the us
 Available SceneObject types
 ---------------------------
 
-In a PyArtist, SceneObjects are created by calling the add functions of the ``output`` parameter that is passed to the ``create()`` method.  The ``output`` parameter has type ``SceneGroup``, and its members are documented in the `shovelart docs <shovelart.html#icecube.shovelart.SceneGroup>`_.
+In a PyArtist, SceneObjects are created by calling the add functions of the ``output`` parameter that is passed to the ``create()`` method.  The ``output`` parameter has type ``SceneGroup``, and its members are documented in the :ref:`shovelart docs <shovelart-ref>`
 
 Available SceneVariant types
 ----------------------------

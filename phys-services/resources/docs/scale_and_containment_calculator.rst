@@ -57,7 +57,7 @@ You can let it guess one based on the number of strings in the geometry, or you 
 create a custom definition.  If you leave these options blank, it will guess.
 
 IceCube (volume) boundary options:
-&&&&&&&&&&&&&&&&&&&&&&&&&
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 .. list-table::
   :widths: 4 20
@@ -86,14 +86,16 @@ IceCube (volume) boundary options:
   :height: 400px
   :width: 400px
   :alt: Pre-defined I3ScaleCalculator IceCube (volume) boundaries
+
 .. |pic2| image:: plots_scalecalculator/I3ScaleCalculator_icecube_3Dview.png
   :height: 400px
   :width: 400px
   :alt: A 3-D view of the IceCube boundaries
+
 |pic1| |pic2|
 
 IceTop (area) boundary options:
-&&&&&&&&&&&&&&&&&&&&&&
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 .. list-table::
   :widths: 4 20
@@ -156,7 +158,7 @@ What if I want to customize this further, by specifying a set of coordinates rat
 ----------------------------------------------------------------------------------------------------------------
 In that case, you probably want to use the actual code which performs the calculation, which is
 located in I3Cuts.cxx, and takes actual coordinates (not string/station numbers) as input. 
-The :cpp:class:`I3ScaleCalculator` is really just a wrapper for defining commonly-used boundaries and then calling the functions from :cpp:class:`I3Cuts`.
+The :cpp:class:`I3ScaleCalculator` is really just a wrapper for defining commonly-used boundaries and then calling the functions from :cpp:type:`I3Cuts`.
 The functions are called :cpp:func:`I3Cuts::ContainmentAreaSize` (for areas) and :cpp:func:`I3Cuts::ContainmentVolumeSize` (for volumes).  
 There are pybindings for both these functions.  
 

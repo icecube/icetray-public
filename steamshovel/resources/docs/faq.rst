@@ -70,8 +70,5 @@ mainly when frames are switched in quick succession.
     This program is only provided for compatibility and will be removed in a future release. Please use avconv instead.
     Unrecognized option 'nostdin'
 
-**A**: You are using an out of date version of ``ffmpeg``.  Unfortunately this is a common issue in Ubuntu
-and related Linuxes, and there may not be an up-to-date version available through ``apt``.  The easiest way
-to solve this problem is to download a Linux ``ffmpeg`` `binary <https://ffmpeg.org/download.html#LinuxBuilds>`_.
-There is a related 
-`dicussion on StackOverflow <http://stackoverflow.com/questions/9477115/who-can-tell-me-the-difference-and-relation-between-ffmpeg-libav-and-avconv>`_.
+**A**: Update your copy of ``ffmpeg``. For the historical drama, see
+the `dicussion on StackOverflow <http://stackoverflow.com/questions/9477115/who-can-tell-me-the-difference-and-relation-between-ffmpeg-libav-and-avconv>`_.

@@ -1,3 +1,5 @@
+.. _shovelart-ref:
+
 shovelart Reference (Python module)
 ===================================
 

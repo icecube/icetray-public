@@ -16,25 +16,25 @@ Making a new table writer service
 
 There are writer services that produce HDF5 tables, ROOT files, and plain text
 (CSV). To make a new writer service for your pet analysis format, you must
-implement subclasses of :c:type:`I3Table` and :c:type:`I3TableService`.
+implement subclasses of :cpp:type:`I3Table` and :cpp:type:`I3TableService`.
 
 I3Table
 *******
 
-.. c:type:: I3Table
+.. cpp:type:: I3Table
     
-    represents a table on disk
+   represents a table on disk
     
-    .. c:function:: void I3Table::WriteRows(I3TableRowConstPtr rows)
+.. cpp:function:: void I3Table::WriteRows(I3TableRowConstPtr rows)
         
-        Write the data in `rows` to disk
+   Write the data in `rows` to disk
         
-    .. c:function:: void I3TableRow::Flush(size_t nrows)
+.. cpp:function:: void I3TableRow::Flush(size_t nrows)
         
-        Flush nrows to disk.
+   Flush nrows to disk.
 
-Your subclass must implement :c:func:`WriteRows()`. If it implements any kind
-of caching, you should also implement :c:func:`Flush()`. Here, for example, is
+Your subclass must implement :cpp:func:`WriteRows()`. If it implements any kind
+of caching, you should also implement :cpp:func:`Flush()`. Here, for example, is
 an implementation that writes comma-separated text (CSV).
 
 WriteRows()
@@ -109,7 +109,7 @@ ___________
     }
 
 For each field, a pointer to the `j` th field is cast to the appropriate native
-type and passed to :c:func:`WriteField()`, which is just a templated function
+type and passed to :cpp:func:`WriteField()`, which is just a templated function
 that dumps the argument to :code:`iostream output_`::
 
     template <typename T>
@@ -124,7 +124,7 @@ Type-switching
 ______________
 
 Since you don't have compile-time information about the types of the fields,
-some type-switching is unavoidable. :c:type:`I3CSVTable` resolves and caches an
+some type-switching is unavoidable. :cpp:type:`I3CSVTable` resolves and caches an
 equivalent native type for each field::
 
     I3CSVTable::NativeType I3CSVTable::GetNativeType(const I3Datatype& dtype) {
@@ -169,7 +169,7 @@ Constructor
 ___________
 
 You can set up any header information in your constructor. In
-:c:type:`I3CSVTable`, :c:func:`CreateTable()` is called from the constructor::
+:cpp:type:`I3CSVTable`, :cpp:func:`CreateTable()` is called from the constructor::
 
     void I3CSVTable::CreateTable() {
         std::vector<std::string>::const_iterator name_it,unit_it,doc_it;
@@ -239,15 +239,15 @@ I3TableService
 To manage the collection of tables, you must implement a subclass of
 I3TableService.
 
-.. c:type:: I3TableService
+.. cpp:type:: I3TableService
 
     represents a bundle of tables on disk, possibly belonging to a single file
     
-    .. c:function:: virtual I3TablePtr I3TableService::CreateTable(const std::string& tableName, I3TableRowDescriptionConstPtr description)
+    .. cpp:function:: virtual I3TablePtr I3TableService::CreateTable(const std::string& tableName, I3TableRowDescriptionConstPtr description)
         
         Create a new table called `tableName` based on `description`.
         
-    .. c:function:: virtual void I3TableService::CloseFile()
+    .. cpp:function:: virtual void I3TableService::CloseFile()
         
         Called at the end of operations.
             
@@ -255,8 +255,8 @@ I3TableService.
 CreateTable()
 _____________
 
-You must implement :c:func:`CreateTable()`, which is called whenever the writer
-module requests a table that does not yet exist. The :c:type:`I3CSVTable`
+You must implement :cpp:func:`CreateTable()`, which is called whenever the writer
+module requests a table that does not yet exist. The :cpp:type:`I3CSVTable`
 implementation is fairly simple::
 
     I3TablePtr I3CSVTableService::CreateTable(const std::string& tableName, 
@@ -276,12 +276,12 @@ multiple rows. The function returns a shared pointer to the data table.
 CloseFile()
 ___________
 
-:c:func:`CloseFile()` should perform any required clean-up, including flushing any internal caches.
+:cpp:func:`CloseFile()` should perform any required clean-up, including flushing any internal caches.
 
 Constructor
 ___________
 
-You can implement any required setup in the constructor. :c:type:`I3CSVTable`,
+You can implement any required setup in the constructor. :cpp:type:`I3CSVTable`,
 for example, writes tables to individual files in a directory, so it
 re-creates that directory in its constructor::
 
@@ -295,7 +295,7 @@ Python bindings
 _______________
 
 You must also provide trivial Python bindings for your
-:c:type:`I3TableService`::
+:cpp:type:`I3TableService`::
 
     #include <icetray/load_project.h>
     #include "textwriter/I3CSVTableService.h"

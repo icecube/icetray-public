@@ -5,7 +5,7 @@ Allow python to import c++ libraries.
 
 
 No Pybindings
-------------------
+-------------
 
 If you don't have any pybindings, add the following to your python/__init__.py.  
 This will allow your project to be loaded with a simple import in python.  If you
@@ -22,11 +22,9 @@ the load output status.
 
 
 Pybindings
----------------
+----------
 
-For more information check out the docs for `boost::python`_ (Version 1.58.0)
-
-.. _boost::python: http://www.boost.org/doc/libs/1_58_0/libs/python/doc/tutorial/doc/html/index.html
+For more information check out the docs for `boost::python <https://www.boost.org/doc/libs/release/libs/python/doc/html/tutorial/>`_
 
 
 private/pybindings/module.cxx::

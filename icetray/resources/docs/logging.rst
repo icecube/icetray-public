@@ -186,7 +186,7 @@ The default logger can be set to I3PrintfLogger by:
 Python Logging
 ______________
 
-Icetray also includes a bridge to the `python logging facility <http://docs.python.org/library/logging.html>`_, which contains a number
+Icetray also includes a bridge to the `python logging facility <https://docs.python.org/3/library/logging.html>`_, which contains a number
 of handlers able to do things like write log messages to a rotating set of files, to the
 system logging daemon, to email, or to a web server. You can also define your own.
 
