@@ -7,10 +7,33 @@ theme. */
 
 @import url("sphinxdoc.css");
 
+:root {
+   --fonts-sans-serif: -apple-system,		/* Safari, macOS FireFox */
+                       BlinkMacSystemFont,	/* macOS Crhome */
+                       "Segoe UI",		/* Windows */
+                       Roboto,			/* Android, ChromeOS */
+                       Oxygen-Sans,		/* KDE */
+                       Ubuntu,			/* Ubuntu */
+                       Cantarell,		/* GNOME */
+                       "Helvetica Neue",	/* macOS pre- El Capitan */
+                       sans-serif,
+		       "Apple Color Emoji",
+		       "Segoe UI Emoji";
+   --fonts-mono: Menlo,
+		 Consolas,
+		 Monaco,
+		 Liberation Mono,
+		 Lucida Console,
+		 monospace;
+   --background-blue: #4a6484;
+   --background-grey: #eeeeef;
+   --color-link: #3f5570;
+}
+
 /* sidebar tweaks */
 div.sphinxsidebar h3,
 div.sphinxsidebar h4 {
-    background-color: #4a6484;
+    background-color: var(--background-blue);
 }
 
 /* top/bottom navbar tweaks */
@@ -29,28 +52,32 @@ div.related ul {
 }
 
 div.related {
-    background-color: #4a6484;
+    background-color: var(--background-blue);
 }
 
 /* footer tweaks */
 div.footer {
-    background-color: #4a6484;
+    background-color: var(--background-blue);
     border-top: 1px solid white;
 }
 
 /* font tweaks */
 div.highlight pre {  /* this generally for code blocks */
-    font-family: Consolas, Monaco, DejaVu Sans Mono, Bitstream Vera Sans Mono, courier, monospace;
-    background-color: #eeeeef;
+    font-family: var(--fonts-mono);
+    background-color: var(--background-grey);
     border-left: 2px solid red;
 }
-											   
+
 /* general/global tweaks */
-body { border: 0; }
+body {
+    font-family: var(--fonts-sans-serif);
+    font-size: 1em;
+    line-height: 120%;
+    border: 0; }
 
 html {
     /* background-color: #0E4C71; */
-    background-color: #4a6484;
+    background-color: var(--background-blue);
 }
 
 a.footnote-reference,
@@ -65,11 +92,16 @@ a code {
 }
 
 a {
-    color: #3f5570;
+    color: var(--color-link);
     text-decoration: none;
 }
 
 /* H1 is a theme relevent blue, using 'initial' vice '#000000/black' will hopefully allow a future"dark-mode" theme */
 h1 {
     color: initial;
+}
+
+/* inline-code bg color. same as block-code. more contrast against the page. */
+span.pre {
+    background-color: var(--background-grey);
 }
