@@ -32,11 +32,10 @@ platforms, but can't guarantee test resources will be dedicated to them.
 * Xcode version 6 or higher
 * clang version 3.6 or higher
 
-We actively test on a `number of platforms
-<http://builds.icecube.wisc.edu/buildslaves>`_.  **We
-highly recommend Ubuntu, it contains many useful packages, it's free,
-well-supported and has a wide user-base in IceCube.** If you choose
-Ubuntu and have problems, please ask questions on Slack.
+We actively test on a number of platforms. **We highly recommend
+Ubuntu, it contains many useful packages, it's free, well-supported
+and has a wide user-base in IceCube.** If you choose Ubuntu and have
+problems, please ask questions on Slack.
 
 Check :ref:`platforms` for the operating system that you are
 using. If provided, download and run the script for your operating

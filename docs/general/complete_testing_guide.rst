@@ -12,7 +12,6 @@ your build directory, simply type::
 
 That's pretty much it.
 
-
 Python Tests
 ............
 Below is a document that explains how to write tests for python classes or C++ 
@@ -61,14 +60,19 @@ To run the tests as they would be run on the build bots use :command:`ctest`.
 * Note that this needs to be run from your build directory.
 * Note that you need to be in the env shell (run :command:`env-shell.sh`) for both C++ and Python tests
 
-Make sure to check the `buildbots <http://builds.icecube.wisc.edu/>`_ and verify you didn't break anything on another platform.
-
+Make sure to check the `workflows <https://github.com/icecube/icetray/actions>`_ and verify you didn't break anything.
 
 Test Coverage
 -------------
 Check out the last coverage report to see what kind of coverage your project has.
 
-`Latest Coverage Report <http://software.icecube.wisc.edu/coverage/00_LATEST/>`_
+.. warning::
+
+   Periodic coverage builds are not currently implemented. You can
+   still generate coverage reports locally though.
+
+.. comment
+   `Latest Coverage Report <http://software.icecube.wisc.edu/coverage/00_LATEST/>`_
 
 Coverage builds are run weekly, so if you want to see the effect your test had 
 on your project's coverage, you'll need to be patient. If you don't

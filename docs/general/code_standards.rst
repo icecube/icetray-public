@@ -216,7 +216,7 @@ Useful links
 Bjarne Stroustrup's C++ pages <http://www.research.att.com/%7Ebs/C++.html>
     The pages of the creator of C++ 
 
-Effective C++ <http://www.aristeia.com/books_frames.html>
+Effective C++ <https://www.aristeia.com/books.html>
     Effective C++ and More Effective C++ contains many very useful items
     for C++ programmers. 
 

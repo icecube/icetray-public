@@ -5,7 +5,7 @@ Documentation
 This page describes provides an overview of the IceTray documentation system.
 Because of IceTray's modular design, and the fact that documentation is provided
 from number of different sources, it can be quite complicated.
-The is system uses `sphinx <http://www.sphinx-doc.org/>`_ to translate these
+The is system uses `sphinx <https://www.sphinx-doc.org/>`_ to translate these
 different sources into html.
 ``sphinx`` was originally developed to be the documentation system for python, but
 has developed support for many languages.
@@ -70,22 +70,22 @@ contain the primary documentation for that project. These docs should serve an
 an overview for the project and other information not directly linked to
 specific pieces of code. This documentation is written in a format called
 ReStructuredText or (``rst``) which is a fairly easy format to learn.
-An introduction to ``rst`` can be found at `<http://docutils.sourceforge.net/rst.html>`_.
+An introduction to ``rst`` can be found at `<https://docutils.sourceforge.io/rst.html>`_.
 
-A really handy resource for writing ``rst`` is `<http://rst.ninjs.org/>`_
+A really handy resource for writing ``rst`` is `<https://rst.ninjs.org/>`_
 which will allow you to type in ``rst`` and get immediate feedback as to
 weather you are properly formatting the document. Unfortunately, cross references
 will show up as errors. Many editors also have support for ``rst``: emacs support
-can be found at `<http://docutils.sourceforge.net/docs/user/emacs.html>`_.
-vim has support with `riv <https://github.com/Rykka/riv.vim>`_.
+can be found at `<https://docutils.sourceforge.io /docs/user/emacs.html>`_.
+vim has support with `riv <https://github.com/gu-fan/riv.vim>`_.
 
 References to Autodocs
 ----------------------
 
 Sphinx comes with an internal
-`linking <http://www.sphinx-doc.org/en/stable/markup/inline.html#ref-role>`_
+`linking <https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-ref>`_
 system as well as a sophisticated
-`cross reference <http://www.sphinx-doc.org/en/stable/domains.html>`_ system.
+`cross reference <https://www.sphinx-doc.org/en/stable/domains.html>`_ system.
 Before attempting to write documentation you should familiarize yourself with
 this syntax. This section will summarize the basics for cross referencing the
 the automatically generated.
@@ -101,14 +101,14 @@ To cross reference the python API reference use sphinx's python domain:
 ``:py:func:`icecube.myproject.myfunction``` for python functions, and so on and
 so forth. The full list of available directives is available at Sphinx's
 documentation for
-`the-python-domain <http://www.sphinx-doc.org/en/stable/domains.html#the-python-domain>`_.
+`the-python-domain <https://www.sphinx-doc.org/en/stable/domains.html#the-python-domain>`_.
 
 To cross reference the C++ documentation provided by breathe can be done either
 by path with ``:doc:`/doxygen/myproject/index``` or by label ``:ref:`myproject-cpp```.
 Individual classes and struct can be referenced with ``:cpp:class:`MyClass```
 and functions with ``:cpp:func:`MyFunction```.
 See the complete list of available directives on Sphinx's documentation for
-`The C++ Domain <http://www.sphinx-doc.org/en/stable/domains.html#id2>`_.
+`The C++ Domain <https://www.sphinx-doc.org/en/stable/domains.html#id2>`_.
 
 To reference the automatically generated ``icetray-inspect`` docs must be done
 by path with ``:doc:`/inspect/myproject```. Individual modules and service
@@ -159,7 +159,7 @@ FAQs About Building the Documentation
 
 :Q: I want to help fix the docs, but when building I get an opaque wall of text! HELP!
 
-:A: ``docs-build`` and ``icetray-inspect`` both understand rich-text formatting as implemented by the `rich python library <https://github.com/willmcgugan/rich>`_. All you need to do is install it. The easiest way is via ``pip3``.
+:A: ``docs-build`` and ``icetray-inspect`` both understand rich-text formatting as implemented by the `rich python library <https://github.com/Textualize/rich>`_. All you need to do is install it. The easiest way is via ``pip3``.
 
     .. code-block:: text
 

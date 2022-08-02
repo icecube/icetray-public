@@ -176,12 +176,10 @@ of specially formated comments::
 Doxygen Links
 ^^^^^^^^^^^^^
 
-Please see the doxygen documentation at 
-http://www.stack.nl/~dimitri/doxygen/manual.html 
-for an overview.  Specifically, see the 
-http://www.stack.nl/~dimitri/doxygen/commands.html
-for a list of things like  ``@param, @author, @todo`` that you
-can use, and look through the dataclasses for some examples.
+Please see the doxygen documentation at https://www.doxygen.nl/manual/
+for an overview.  Specifically, see `Special Commands <https://www.doxygen.nl/manual/commands.html>`_ for a list of things like
+``@param, @author, @todo`` that you can use, and look through the
+dataclasses for some examples.
 
 
 Logging
@@ -202,12 +200,12 @@ to do, and assist in future debugging.
 
 
 As a guideline, the following guidlines are provided for choosing a 
-logging level::
+logging level:
 
 * log_fatal - Only called for fatal errors, will throw.
 * log_error - Non-fatal (recoverable) exception. No exception thrown.
-* log_warn - Possible error conditions approaching....
-* log_info - Information to tell operator what's going on.
+* log_warn  - Possible error conditions approaching....
+* log_info  - Information to tell operator what's going on.
 * log_debug - Information for system expert.
 * log_trace - Chronic logorrhea. For step by step debugging.
 
@@ -219,13 +217,13 @@ evel:
 * log_fatal - only when you want to exit.
 * log_error - won't exit, but your module has a serious problem that 
   needs attention, single bad event, divide by zero detected in a module.
-* log_warn : OM key out of range, minor config errors, <1TB disk space 
-   remains, no AMANDA data in >5 minutes....
-* log_info : (<< 1/event) Major transitions, new files open, 
+* log_warn  - OM key out of range, minor config errors, <1TB disk space 
+  remains, no AMANDA data in >5 minutes....
+* log_info  - (<< 1/event) Major transitions, new files open, 
   "processed 1000 events" type statements,
-* log_debug: One or two lines output for each process call (per 
+* log_debug - One or two lines output for each process call (per 
   event, config, etc) per module
-* log_trace: line by line debugging is possible.
+* log_trace - line by line debugging is possible.
 
 Documentation
 ^^^^^^^^^^^^^
