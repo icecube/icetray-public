@@ -15,6 +15,7 @@ IceTray Release v1.4.0
 * Clean up tests
 * Fix use after free
 * Reflect relicensing agreements received from authors of core IceTray modules.
+* Clean up documentation
 
 Feb. 22, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------

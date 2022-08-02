@@ -14,6 +14,7 @@ IceTray Release v1.4.0
 - Add information about the svn test-data repo
 - Reflect relicensing agreements received from authors of core IceTray modules.
 - Update cvmfs docs to py3-v4.2.0 (#2842)
+- Clean up documentation
 
 Feb. 22, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------

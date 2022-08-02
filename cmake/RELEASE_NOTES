@@ -18,6 +18,7 @@ IceTray Release v1.4.0
 * Bump minimum cmake version to 3.15
 * Build ROOT projects with whatever C++ standard ROOT was built with
 * Set C++17 as our standard
+* Clean up documentation
 
 Feb. 22, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------

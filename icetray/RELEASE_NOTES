@@ -20,6 +20,7 @@ IceTray Release v1.4.0
 * 2848 itrayexecute does not execute forever (#2872)
 * Surfacearray pr2 (#2752)
 * Refactor handling of configuration in I3ServiceBase to be clearer and less error-prone (#2832)
+* Clean up documentation
 
 Feb. 22, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------

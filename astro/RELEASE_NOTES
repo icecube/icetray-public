@@ -10,6 +10,7 @@ IceTray Release v1.4.0
 
 * Drop support for Python 2
 * Clean up python bindings / modules
+* Clean up documentation
 
 Dec. 15, 2021 Kevin Meagher
 ---------------------------

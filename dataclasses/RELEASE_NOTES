@@ -17,6 +17,7 @@ IceTray Release v1.4.0
 * Updates for C++17
 * Add subsurface array updates
 * Reflect relicensing agreements received from authors of core IceTray modules.
+* Clean up documentation
 
 Feb. 21, 2022 Tianlu Yuan
 -------------------------

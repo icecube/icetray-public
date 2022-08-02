@@ -23,6 +23,7 @@ IceTray Release v1.4.0
   corner is slightly different ways; from now on, the user should choose one.
   Add some DeepCore and IceTop-Infill configurations.
   Other cleanups to the structure of the code, and doc's.
+* Clean up documentation
 
 Feb. 22, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------

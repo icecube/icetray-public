@@ -15,6 +15,7 @@ IceTray Release v1.4.0
 * Minor fix to the dmg build for Mac
 * Mark skippable tests as skippable or disabled (#2888)
 * Remove deprecated fixed pipeline lighting, which can cause the 3D view to break with modern drivers. Addresses issue #2806.
+* Clean up documentation
 
 Feb. 21, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
