@@ -34,5 +34,5 @@ Table of Contents:
    faq-common-probs
    i3double
 
-Also see the `doxygen <../../doxygen/dataclasses/index.html>`_ docs.
+Also see the :ref:`doxygen <dataclasses-cpp>` docs.
  

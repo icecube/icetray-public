@@ -57,7 +57,7 @@ Source
 
 Surfaces
 %%%%%%%%
-See `doxygen <../../doxygen/phys-services/index.html>`__ docs.
+See :ref:`doxygen <phys-services-cpp>` docs.
 
 Geometry Selectors
 %%%%%%%%%%%%%%%%%%
@@ -66,8 +66,8 @@ Geometry Selectors
 * :cpp:class:`I3GeometrySelectorServiceFactory`
 * :cpp:class:`I3GeometrySelectorService`
 
-Also see the `doxygen <../../doxygen/phys-services/index.html>`__ docs.
-   
+Also see the :ref:`doxygen <phys-services>` docs.
+
 I3NullSplitter
 ^^^^^^^^^^^^^^
 I3Nullsplitter is the trivial event splitter; for each Q frame, it emits a

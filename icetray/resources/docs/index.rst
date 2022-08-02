@@ -54,4 +54,4 @@ Detailed Documentation:
    i3podholder
    I3Tray
 
-Also see the `doxygen <../../doxygen/icetray/index.html>`_ docs.
+Also see the :ref:`doxygen <icetray-cpp>` docs.

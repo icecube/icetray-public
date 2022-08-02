@@ -21,5 +21,5 @@ It contains modules/services/utilities for reading/writing data in the
    classes
 
 
-`Generated doxygen for this project <../../doxygen/dataio/index.html>`_
+:ref:`Generated doxygen for this project <dataio-cpp>`
 
