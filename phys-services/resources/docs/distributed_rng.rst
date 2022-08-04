@@ -17,7 +17,7 @@ About I3SPRNGRandomService
  which uses the Scalable Pseudo-Random Number Generator (SPRNG) library in
  combination with GSL to generate *statistically independent* streams of 
  pseudo-random number distributions.
- `SPRNG <http://sprng.cs.fsu.edu>`_  was developed by Michael Mascagni, 
+ `SPRNG <http://sprng.org>`_  was developed by Michael Mascagni, 
  *et al* at Florida State University
  
  The purpose of this implementation is to provide an I3RandomService that
@@ -26,9 +26,9 @@ About I3SPRNGRandomService
 
  SPRNG uses a parameterized approach to generate independent streams rather
  than splitting or "leap-frog" approaches used in some parallel algorithms.
-
+``
  The basic approach for adapting sprng for use with gsl via a gsl_rng_type 
- is based on code from `Darren Wilkinson <http://www.staff.ncl.ac.uk/d.j.wilkinson>`_
+ is based on code from `Darren Wilkinson <https://darrenjw.github.io/>`_
  who wrote an MPI simple interface that doesn't does not require configuration 
  of streams.
 
