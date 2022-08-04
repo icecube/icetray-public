@@ -33,7 +33,6 @@ extensions = list(filter(None, ['sphinx.ext.autodoc',
                                 'sphinx.ext.mathjax',
                                 'sphinx.ext.extlinks',
                                 '@sphinx_NAPOLEON@',
-                                '@sphinx_EMAIL@',
                                 '@sphinx_BREATHE@',
                                 ]))
 print("Using extensions:", extensions)

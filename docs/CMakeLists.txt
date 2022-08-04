@@ -19,22 +19,6 @@ foreach(e "napoleon")
   unset(e)
   unset(eU)
 
-## for sphinxcontrib-email
-foreach(e "email")
-    string(TOUPPER ${e} eU)
-    execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sphinxcontrib.${e}"
-      RESULT_VARIABLE sphinx_${eU}
-      OUTPUT_QUIET
-      ERROR_QUIET)
-    if(NOT sphinx_${eU})
-      set(sphinx_${eU} "sphinxcontrib.${e}")
-    else()
-      set(sphinx_${eU} "")
-    endif()
-  endforeach()
-  unset(e)
-  unset(eU)
-
 ## for breathe
 foreach(e "breathe")
     string(TOUPPER ${e} eU)
