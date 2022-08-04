@@ -294,8 +294,7 @@ Transformation between the two systems are
 See Also
 ========
 
-* The original proposal for the IceCube Coordinate System can be found 
-  `here <http://docushare.icecube.wisc.edu/docushare/dsweb/Get/Document-8945/IceCubeCoordinateSystem.doc>`_.
+* The original proposal for the IceCube Coordinate System can be found here: :docushare:`8945`.
 * An overview of the IceCube coordinate system and the corresponding transformations between "local" and 
   "global" coordinate systems can be found in 
-  `this document <https://wiki.icecube.wisc.edu/images/9/91/Spherical_geometry.pdf>`_ by J. van Santen. 
+  :wiki:`this document <File:Spherical_geometry.pdf>` by J. van Santen. 

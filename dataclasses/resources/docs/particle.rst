@@ -55,9 +55,7 @@ Note that the time is not necessarily *within* the event window and the
 position can also be far out of the detector array.
 
 The coordinate system for the position should always be the local coordinate
-system of the detector you are working with,
-e.g. `IceCube <https://wiki.icecube.wisc.edu/index.php/Coordinate_system>`_
-or KM3NET (TODO: Claudio, Alexander?).
+system of the detector you are working with :wiki:`Coordinate_system`.
 
 Direction
 ~~~~~~~~~
@@ -106,7 +104,7 @@ i.e. the energy that an electron should have to cause (a shower that causes) the
 of light in the array.
 
 In order to understand the issues surrounding the reconstructed energy it is highly 
-recommended to read the `energy reconstruction paper <http://arxiv.org/abs/1311.4767>`_.
+recommended to read the :arxiv:`energy reconstruction paper <1311.4767>`.
 
 Speed
 ~~~~~

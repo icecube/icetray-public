@@ -19,8 +19,7 @@ Caveats
  - I3DOMCalibration::IsMeanATWDChargeValid
  - I3DOMCalibration::IsMeanFADCChargeValid
 
-For more information :
-https://wiki.icecube.wisc.edu/index.php/SPE_recalibration
+For more information : :wiki:`SPE_recalibration`
 
 Code Review
 ^^^^^^^^^^^

@@ -10,7 +10,7 @@ CVMFS (CernVM File System) is a shared filesystem available
 most anywhere around the world.  It has become the standard for
 distributing software libraries in the physics community and beyond.
 For more details on CVMFS, see the 
-`CERN documentation <https://cernvm.cern.ch/portal/filesystem>`_.
+`CERN documentation <https://cernvm.cern.ch/fs>`_.
 
 IceCube software is deployed at `/cvmfs/icecube.opensciencegrid.org`.
 
@@ -19,7 +19,7 @@ Quickstart
 
 .. note ::
 
-  If you're installing locally check the `wiki <https://wiki.icecube.wisc.edu/index.php/CVMFS>`_ 
+  If you're installing locally check the :wiki:`wiki <CVMFS>`
   for information on how to configure and mount cvmfs.
 
 From your shell (or in your login script) run::

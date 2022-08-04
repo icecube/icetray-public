@@ -76,7 +76,7 @@ IceCube (volume) boundary options:
   * - IC79_SMOOTH                       
     - Similar again, except for the slightly different treatment of the northeast "notch".
   * - DEEPCORE_ALL                      
-    - The hexagonal boundary of "DeepCore Fiducial" from https://wiki.icecube.wisc.edu/index.php/DeepCore, starting vertically from the height of the top DOM's in DeepCore.
+    - The hexagonal boundary of "DeepCore Fiducial" from :wiki:`DeepCore`, starting vertically from the height of the top DOM's in DeepCore.
   * - DEEPCORE_BELOWDUST                
     - The same as DEEPCORE_ALL, except the height starts at the DeepCore DOM's below the dust layer.
   * - IC_CUSTOM                         

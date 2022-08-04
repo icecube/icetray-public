@@ -76,7 +76,7 @@ IceCube detector. The coordinates are aligned with the standard Antarctic grid
 coordinates with the x-axis pointing toward Grid East, the y-axis pointing
 toward Grid North, and the z-axis pointing toward the vertical.
 More information can be found on the wiki for the
-`The IceCube Coordinate System <https://wiki.icecube.wisc.edu/index.php/Coordinate_system>`_.
+:wiki:`The IceCube Coordinate System <Coordinate_system>`.
 
 Directional information in IceCube is almost always described using spherical
 coordinate system angles. Zenith angle is defined as angle to the vertical,
@@ -423,7 +423,7 @@ position of the moon and sun by PAL.
 Astro uses geographic position 89°59'39.84" South, 62°36'29.16" West (-89.9944°N,-62.6081°E)
 as the location of IceCube observations.
 This value is taken from the 2011 position of the South Pole in IceCube coordinates system on the
-`wiki <https://wiki.icecube.wisc.edu/index.php/Coordinate_system>`_.
+:wiki:`wiki <Coordinate_system>`.
 IceCube reconstructions calculate zenith and azimuth angles relative to a position
 near the center of gravity of the hits, which can be up to 500 m from the center of the
 detector. No effort is made to correct for this. 

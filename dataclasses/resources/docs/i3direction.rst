@@ -15,7 +15,7 @@ This picture, stolen from Dusan's Homepage, which illustrates θ, φ, zenith, an
    
    The IceTray Coordinates by Dusan Turcan. Oil on canvas, around 2006.
 
-The I3Direction class also provides components along the cartesian coordinate axes (x,y,z) (see also `The IceCube detector coordinate system <https://wiki.icecube.wisc.edu/index.php/Coordinate_system>`_. It is very important to understand that the Zenith and Azimuth are the direction the particle is coming from, but (x,y,z) are the direction the particle is going.
+The I3Direction class also provides components along the cartesian coordinate axes (x,y,z) (see also :wiki:`The IceCube detector coordinate system <Coordinate_system>`. It is very important to understand that the Zenith and Azimuth are the direction the particle is coming from, but (x,y,z) are the direction the particle is going.
 
 See the python API documentation for :py:class:`icecube.dataclasses.I3Direction`.
 
