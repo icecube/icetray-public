@@ -26,7 +26,7 @@ About I3SPRNGRandomService
 
  SPRNG uses a parameterized approach to generate independent streams rather
  than splitting or "leap-frog" approaches used in some parallel algorithms.
-``
+
  The basic approach for adapting sprng for use with gsl via a gsl_rng_type 
  is based on code from `Darren Wilkinson <https://darrenjw.github.io/>`_
  who wrote an MPI simple interface that doesn't does not require configuration 

@@ -250,7 +250,7 @@ class GridFTPStager(AbstractFileStager):
 	.. note:: GridFTP requires that you have a proxy certificate either in the
 	          standard location or in the location specified by the environment
 	          variable X509_USER_PROXY. See the `Globus Toolkit documentation <https://web.archive.org/web/20190705144109/http://toolkit.globus.org/toolkit/docs/4.1/admin/docbook/gtadmin-env-var.html#id2565277>`_ for more information.
-	          You will also need to `obtain a user certificate <https://wiki.icecube.wisc.edu/index.php/Using_GridFTP>`_.
+	          You will also need to `obtain a user certificate :wiki:`Using_GridFTP`.
 	"""
 	def __init__(self, globus_url_copy='globus-url-copy', options=['-nodcau', '-rst', '-cd']):
 		super(type(self), self).__init__()
