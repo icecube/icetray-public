@@ -72,10 +72,7 @@ specific pieces of code. This documentation is written in a format called
 ReStructuredText or (``rst``) which is a fairly easy format to learn.
 An introduction to ``rst`` can be found at `<https://docutils.sourceforge.io/rst.html>`_.
 
-A really handy resource for writing ``rst`` is `<https://rst.ninjs.org/>`_
-which will allow you to type in ``rst`` and get immediate feedback as to
-weather you are properly formatting the document. Unfortunately, cross references
-will show up as errors. Many editors also have support for ``rst``: emacs support
+Many editors also have support for ``rst``: emacs support
 can be found at `<https://docutils.sourceforge.io /docs/user/emacs.html>`_.
 vim has support with `riv <https://github.com/gu-fan/riv.vim>`_.
 
