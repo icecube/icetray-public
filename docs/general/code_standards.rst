@@ -28,7 +28,7 @@ Python Coding Standards
 -----------------------
 
 Python coding standards follow the recommendations set forth in `PEP
-0008 <http://www.python.org/dev/peps/pep-0008/>`_. Where they cause
+0008 <https://peps.python.org/pep-0008/>`_. Where they cause
 conflict, the C++ coding standards outlined below, take precedence.
 
 .. _c-coding-standards:
@@ -213,14 +213,14 @@ Modern C++
 Useful links
 ------------
 
-Bjarne Stroustrup's C++ pages <http://www.research.att.com/%7Ebs/C++.html>
+Bjarne Stroustrup's C++ pages <https://www.stroustrup.com/>
     The pages of the creator of C++ 
 
 Effective C++ <https://www.aristeia.com/books.html>
     Effective C++ and More Effective C++ contains many very useful items
     for C++ programmers. 
 
-C/C++ reference <http://www.cppreference.com/>
+C/C++ reference <https://www.cppreference.com/>
     General C/C++, standard C libraries, C++ I/0, strings and STL
     reference. 
 
@@ -230,7 +230,7 @@ C++ FAQ lite <http://www.parashift.com/c++-faq-lite/>
 C++ Notes <http://www.fredosaurus.com/notes-cpp/index.html>
     Small useful examples illustrating basic C++ usage. 
 
-Doxygen <http://www.doxygen.org/>
+Doxygen <https://doxygen.nl>
     Generates code documentation from source code comments 
 
 Also handy for C++ programming GCC <http://www.gnu.org/software/gcc/>

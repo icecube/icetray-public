@@ -26,7 +26,7 @@ Open Source
 ===========
 
 The software must have an `OSI approved open source license
-<http://opensource.org/licenses>`_ or be in
+<https://opensource.org/licenses>`_ or be in
 the public domain. Open source software with licensing or referencing
 caveats need to be thoroughly examined and discussed, as these
 caveats often invalidate open source licenses.

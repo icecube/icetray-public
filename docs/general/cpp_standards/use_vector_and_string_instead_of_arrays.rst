@@ -42,6 +42,6 @@ Reference
 """""""""
 
 There's a decent reference on strings, vectors, and other STL items at
-http://www.cppreference.com/cppstring/.
+https://www.cppreference.com/cppstring/.
 
 

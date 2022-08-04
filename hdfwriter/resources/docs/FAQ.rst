@@ -24,4 +24,4 @@ was not terribly well implemented, and conflicted with an API change in the
 PyTables 3.3 series. Instead of readEvent, you can use the much more flexible
 and powerful `groupby` operation in `Pandas`_.
 
-.. _Pandas: http://pandas.pydata.org
+.. _Pandas: https://pandas.pydata.org

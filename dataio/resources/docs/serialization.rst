@@ -4,7 +4,7 @@ Making a class serializable
 .. highlight:: c++
 
 Classes that are to make the round-trip to disk inside .i3 files need serialize()
-methods. Pending more documentation here, see the `boost::serialization documentation <http://www.boost.org/doc/libs/1_57_0/libs/serialization/doc/index.html>`_
+methods. Pending more documentation here, see the `boost::serialization documentation <https://www.boost.org/doc/libs/release/libs/serialization/>`_
 directly for general information on writing serialization methods, or follow
 one of the many examples in project dataclasses.
 
@@ -222,4 +222,4 @@ You would add the following lines to your class::
     }
 
 Check out the boost docs for more information.
-http://www.boost.org/libs/serialization/doc/index.html
+https://www.boost.org/doc/libs/release/libs/serialization/

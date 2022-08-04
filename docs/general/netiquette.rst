@@ -12,7 +12,7 @@ Many mail readers show quotations of earlier mails as indented with
   >>> Top-posting.
   >>>> What is the most annoying thing in e-mail?
 
-In other words, use interleaved and/or bottom-posting style.  See also http://en.wikipedia.org/wiki/Posting_style.
+In other words, use interleaved and/or bottom-posting style.  See also https://en.wikipedia.org/wiki/Posting_style.
 
 Please don't email your questions directly to 'experts'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

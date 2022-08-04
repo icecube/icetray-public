@@ -595,7 +595,7 @@ Compilers
 
 Or, why this doesn't compile with older versions of GCC.
 
-The main reason is `bug 14032 <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=14032>`_.
+The main reason is `bug 14032 <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=14032>`_.
 This has to do with template specialization within a templated class (basing
 the inner template off of the outer template). It's important to the Tree
 class, and difficult to make everything work without it.

@@ -55,7 +55,7 @@ EHarder kTO gRead."`` The Hungarian styled conventions are over
 forty-five years old. When the ROOT people appear to have chosen that
 style, Taligent had "written the largest body of C++ and the rules
 seem well thought out.  No need to invent something else."  (From
-http://root.cern.ch/root/Conventions.html, last updated 1999).
+https://root.cern.ch/root/Conventions.html, last updated 1999).
 
 Classes that inherit from IceTray base classes take the prefix ``I3``.  
 Other classes should not have the ``I3`` prefix.  (NB : There are several 

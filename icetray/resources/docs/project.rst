@@ -202,7 +202,7 @@ Section Syntax::
     ^, for subsubsections
     ", for paragraphs
 
-http://www.sphinx-doc.org/
+https://www.sphinx-doc.org/
 
 
 Implementation

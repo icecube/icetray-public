@@ -7,7 +7,7 @@ The purpose of these guidelines is to give some guidance as to what should be
 considered in a code review. This helps in creating reviews of a consistent style 
 and quality. These guidelines are not fixed, however, and may change as we gain 
 experience with code reviews. If you are still uncertain whether code reviews 
-are really necessary, please read http://www.nature.com/nature/journal/v467/n7317/pdf/467775a.pdf.
+are really necessary, please read https://www.nature.com/articles/467775a.
 
 In the following, various items that reviewers should pay attention to, are listed.
 

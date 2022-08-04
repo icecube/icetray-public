@@ -63,7 +63,7 @@ These dependencies are optional. If not present IceTray will compile with reduce
   * - `LAPACK <https://netlib.org/lapack/>`_
     - Linear Algebra PACKage
     - :ref:`millipede-main`, :ref:`wavedeform-main`, :ref:`I3GulliverLBFGSB <lilliput>`
-  * - `SuiteSparse <https://sparse.tamu.edu/>`_
+  * - `SuiteSparse <https://people.engr.tamu.edu/davis/suitesparse.html>`_
     - Sparse matrix algorithms
     - :ref:`millipede-main`, :ref:`wavedeform-main`, :ref:`RoundTripChargeTest <DOMLauncher>`
   * - `Photospline <https://github.com/icecube/photospline>`_

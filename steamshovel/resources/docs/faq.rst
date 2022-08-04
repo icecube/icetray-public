@@ -71,4 +71,4 @@ mainly when frames are switched in quick succession.
     Unrecognized option 'nostdin'
 
 **A**: Update your copy of ``ffmpeg``. For the historical drama, see
-the `dicussion on StackOverflow <http://stackoverflow.com/questions/9477115/who-can-tell-me-the-difference-and-relation-between-ffmpeg-libav-and-avconv>`_.
+the `dicussion on StackOverflow <https://stackoverflow.com/questions/9477115/who-can-tell-me-the-difference-and-relation-between-ffmpeg-libav-and-avconv>`_.

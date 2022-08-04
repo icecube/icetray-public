@@ -11,9 +11,9 @@ Visualizes individual or collections of I3Particles.
 .. image:: colorbytype.png
    :scale: 50%
 
-.. _Atmospheric Muon: http://inspirehep.net/record/1379945
+.. _Atmospheric Muon: https://inspirehep.net/record/1379945
 
-.. _PROPOSAL: http://inspirehep.net/record/1245588
+.. _PROPOSAL: https://inspirehep.net/record/1245588
 
 color by type
 	*For simulated events only.*

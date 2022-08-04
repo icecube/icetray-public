@@ -72,7 +72,7 @@ First, some information on the size of various header objects:
 
 Note that everything is saved as little endian. A converter is used on
 big endian platforms to achieve this portability. For more info on
-endianness, read `the wikipedia article <http://en.wikipedia.org/wiki/Endianness>`_.
+endianness, read `the wikipedia article <https://en.wikipedia.org/wiki/Endianness>`_.
 
 And now some pseudo-code for serialization (writing to binary format)
 and deserialization (reading from binary format).

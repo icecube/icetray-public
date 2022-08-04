@@ -213,7 +213,7 @@ To log to syslogd (e.g. the ``Console`` program on Mac OS X):
   icetray.logging.syslog()
 
 More complicated things can be done if desired using the Python logging infrastructure --
-see the `Python documentation <http://docs.python.org/library/logging.html>`_ for details.
+see the `Python documentation <https://docs.python.org/3/library/logging.html>`_ for details.
 
 
 In addition to configuring logging from Python, all the C++ logging functions (log_info() etc.) are available from Python under icetray.logging. These functions take two arguments: a log message and optional logging unit (the default is the "Python" unit). For example:
