@@ -60,7 +60,7 @@ but requires you to register for an `Apple ID`_  before you can download either
 one. **The Xcode download is 10 times larger than the command-line tools package,
 so you should only download it if you need it for non-IceCube work.**
 
-.. _`Apple ID`: https://appleid.apple.com
+.. _`Apple ID`: https://support.apple.com/apple-id
 
 Command-Line Tools
 ..................

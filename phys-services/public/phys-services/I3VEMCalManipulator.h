@@ -21,7 +21,7 @@
  *  @brief This calibration service copies all the entries from a previous  
  *  calibration service and replaces the VEM calibration by values from an 
  *  XML file or by default values. XML files containing VEM calibration data can be found in the  
- *  <a href="http://warehouse.icecube.wisc.edu/data/exp/IceCube/2008/calibration/VEMCal/">data
+ *  <a href="http://convey.icecube.wisc.edu/data/exp/IceCube/2010/calibration/VEMCal/">data
  *  warehouse</a>.
  */
 

@@ -11,9 +11,8 @@
     \author   Kasper Peeters
     \version  2.02
     \date     12-Oct-2005
-    \see      http://www.aei.mpg.de/~peekas/tree/
-    \see      http://www.aei.mpg.de/~peekas/tree/ChangeLog
-
+    \see      https://github.com/kpeeters/tree.hh
+    
    The tree.hh library for C++ provides an STL-like container class
    for n-ary trees, templated over the data stored at the
    nodes. Various types of iterators are provided (post-order,

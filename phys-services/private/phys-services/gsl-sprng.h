@@ -19,7 +19,7 @@
  * correlation between parallel streams of numbers.
  *
  * The basic approach for this is based on code from Darren Wilkinson
- * http://www.staff.ncl.ac.uk/d.j.wilkinson/ who wrote an MPI simple interface
+ * https://darrenjw.github.io/ who wrote an MPI simple interface
  * that doesn't make use of streams.
  *
  * @version $Revision$

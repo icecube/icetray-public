@@ -42,15 +42,13 @@ namespace I3Constants
 
   /**
    * The "average" phase velocity (for wavelength of 400nm)
-   * @sa http://icecube.berkeley.edu/amanda-private/abs/ice/r_index.html
-   * @sa http://icecube.berkeley.edu/amanda-private/abs/ice/Buford_and_Kurt.ps
+   * @sa https://arxiv.org/abs/hep-ex/0008001
    */
   static const double n_ice_phase = 1.3195;
 
   /**
    * The "average" group velocity (for wavelength of 400nm)
-   * @sa http://icecube.berkeley.edu/amanda-private/abs/ice/r_index.html
-   * @sa http://icecube.berkeley.edu/amanda-private/abs/ice/Buford_and_Kurt.ps
+   * @sa https://arxiv.org/abs/hep-ex/0008001
    */
   static const double n_ice_group = 1.35634;
 
