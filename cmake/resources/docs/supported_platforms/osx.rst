@@ -1,10 +1,10 @@
 Apple macOS
 ^^^^^^^^^^^
 
-Icetray is generally well supported on MacOS for development and testing efforts.  
-Additional tools are needed to support this, and this document provides some important details 
+Icetray is generally well supported on MacOS for development and testing efforts.
+Additional tools are needed to support this, and this document provides some important details
 on setting up and installing needed dependencies.  Before attempting to install dependencies
-by hand, please take a look at these notes and suggestions.  
+by hand, please take a look at these notes and suggestions.
 
 Step-By-Step Instructions for M1 and Intel Macs
 """""""""""""""""""""""""""""""""""""""""""""""
@@ -35,9 +35,10 @@ It also guides you through an installo of :doc:`../homebrew`.
    $ brew bundle
 
    # tell python where hdf5 is
-   export export HDF5_DIR=$(brew --prefix hdf5)
+   $ export HDF5_DIR=$(brew --prefix hdf5)
 
    # use python 3.10 as required by boost-python3.
+   # (See: 'brew info boost-python3')
    $ brew unlink python@3.9
    $ brew link python@3.10
    $ python3 --version
