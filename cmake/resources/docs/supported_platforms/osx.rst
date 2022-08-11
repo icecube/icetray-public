@@ -9,8 +9,13 @@ by hand, please take a look at these notes and suggestions.
 Step-By-Step Instructions for M1 and Intel Macs
 """""""""""""""""""""""""""""""""""""""""""""""
 
-The following setup works with the trunk of Icetray on macOS 11/12 (Big Sur/Monterey)
-as of March 2022. It also guides you through an installo of :doc:`../homebrew`.
+The following setup works with the main_ branch (6ce97c3_) of icetray_
+on macOS 12.5 Monterey as of 2022-08-11.
+It also guides you through an installo of :doc:`../homebrew`.
+
+.. _main: https://github.com/icecube/icetray/tree/main
+.. _icetray: https://github.com/icecube/icetray
+.. _6ce97c3: https://github.com/icecube/icetray/tree/6ce97c3
 
 .. code-block:: sh
 
@@ -29,8 +34,18 @@ as of March 2022. It also guides you through an installo of :doc:`../homebrew`.
    # install packages with homebrew
    $ brew bundle
 
+   # tell python where hdf5 is
+   export export HDF5_DIR=$(brew --prefix hdf5)
+
+   # use python 3.10 as required by boost-python3.
+   $ brew unlink python@3.9
+   $ brew link python@3.10
+   $ python3 --version
+   Python 3.10.6
+
    # be sure to activate your new brew environment:  either load it explcitly or open a new Terminal!
    #   'which python3' should be the new brew version.
+
    # create and enter virutal envionment
    $ python3 -m venv --system-site-packages ${HOME}/py3/
    $ source ${HOME}/py3/bin/activate
