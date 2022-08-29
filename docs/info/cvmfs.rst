@@ -24,7 +24,7 @@ Quickstart
 
 From your shell (or in your login script) run::
 
-    eval $(/cvmfs/icecube.opensciencegrid.org/py3-v4.2.0/setup.sh)
+    eval $(/cvmfs/icecube.opensciencegrid.org/py3-v4.2.1/setup.sh)
 
 This will detect the current OS and architecture and set your 
 environment variables appropriately.
@@ -39,7 +39,7 @@ environment variables appropriately.
   your your `.login` script. (Note the use of backticks in the 
   expression)::
 
-    eval `/cvmfs/icecube.opensciencegrid.org/py3-v4.2.0/setup.sh`
+    eval `/cvmfs/icecube.opensciencegrid.org/py3-v4.2.1/setup.sh`
 
 This should be near the end of any login script, so you don't
 accidentally put something else in front of CVMFS on the path.
@@ -64,6 +64,10 @@ Distributions and Platforms
 
 py3-v4.2
 ^^^^^^^^
+
+.. note::
+
+   py3-v4.2.1 includes geant4.10.5
 
 * python 3.10, various python software upgrades over v4.1
 
