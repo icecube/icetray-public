@@ -28,7 +28,7 @@ On Ubuntu/Debian, you can install these dependencies by doing:
 
 	apt-get install build-essential cmake libbz2-dev libgsl0-dev libcfitsio-dev libboost-system-dev libboost-thread-dev libboost-date-time-dev libboost-python-dev libboost-serialization-dev libboost-filesystem-dev libboost-program-options-dev libboost-regex-dev libboost-iostreams-dev python3-numpy fftw3-dev libboost-python-numpy
 	
-If your system defaults to Python 2, but you wish to use Python 3, please do the following:
+If your system defaults to Python 2, please do the following:
 
 	1. Install Python 3 *from the system package manager*
 	2. Make sure the python-3 version of the Boost library is installed (on Ubuntu, this is part of the standard boost-python package referenced above)
