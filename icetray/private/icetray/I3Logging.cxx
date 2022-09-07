@@ -60,9 +60,11 @@ I3LoggingStringF(const char *format, ...)
 	int messagesize = vsnprintf(NULL, 0, format, args);
 	char log_message[messagesize + 1];
 
+	va_end(args);
 	va_start(args, format);
 	vsprintf(log_message, format, args);
 
+	va_end(args);
 	return std::string(log_message);
 }
 
@@ -162,9 +164,11 @@ i3_clogger(I3LogLevel level, const char *unit, const char *file, int line,
 	int messagesize = vsnprintf(NULL, 0, format, args);
 	char log_message[messagesize + 1];
 
+	va_end(args);
 	va_start(args, format);
 	vsprintf(log_message, format, args);
 
+	va_end(args);
 	GetIcetrayLogger()->Log(level, unit, file, line, func, log_message);
 }
 
