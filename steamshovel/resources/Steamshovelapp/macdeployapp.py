@@ -3,7 +3,6 @@
 import subprocess as subp
 import os
 import sys
-import re
 import glob
 
 realpath = os.path.realpath
@@ -16,9 +15,9 @@ def cmd( x, *args, **kwargs ):
                        stderr=subp.STDOUT,
                        stdout=subp.PIPE, **kwargs ).communicate()[0].strip()
     except OSError as err:
-        print('Calling {0} failed: '.format(err))
-    except:
-        print("Unexpected error:", sys.exc_info()[0])
+        print(f"Calling {err} failed: ")
+    except Exception as err:
+        print(f"Unexpected error: {err}")
     else:
         return r.decode()
 
@@ -31,7 +30,7 @@ def dyld(lib):
         "~/lib"
     ]
     user=os.getenv("DYLD_LIBRARY_PATH",None)
-    if user != None:
+    if user is not None:
         for path in user.split(':'):
             searchpaths.append(path)
     for path in searchpaths:
@@ -63,7 +62,7 @@ class LibraryCollector(set):
         for x in cout.split('\n'):
             x = x.strip()
             x = dyld(x)
-            if x == None:
+            if x is None:
                 continue
             x = realpath(x)
             if( x.lower().startswith('/System/Library'.lower()) or
@@ -135,11 +134,10 @@ libs.collect( glob.glob('{0}/Contents/MacOS/*'.format(app_dir))
 ## Get icetray environment
 env = {}
 for line in cmd( './env-shell.sh env', build_dir ).split( '\n' ):
-    m = re.match('(.+)=(.*)', line)
-    if m is None: continue
-    key = m.group(1)
-    val = m.group(2)
-    env[key] = val
+    if line is None or '=' not in line:
+        continue
+    key, val = line.split('=', 1)
+    env[key.strip()] = val.strip()
 
 ## Execute steamshovel to get dynamically loaded libs and the python modules in sys.path
 env['DYLD_PRINT_LIBRARIES_POST_LAUNCH'] = '1'
@@ -182,7 +180,7 @@ for x in sorted(libs):
         if x.startswith(p):
             break
     else:
-        if not os.path.basename(x) in skip:
+        if os.path.basename(x) not in skip:
             cmd( 'cp -L {0} {1}', x, framework_dir )
 
 # Clean up .pyc, .pyo files copied in
