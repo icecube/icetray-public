@@ -207,7 +207,7 @@ def main():
         python_src_dir=os.path.join(sourcedir,"python")
         #call program which generates rsts for all python moudles in libdir
         call("sphinx-apidoc",
-             "-l", "-M", "-e",
+             "-q", "-l", "-M", "-e",
              "-H", "Python API Reference",
              "-o", python_src_dir,
              os.path.join(I3_BUILD, "lib"))
