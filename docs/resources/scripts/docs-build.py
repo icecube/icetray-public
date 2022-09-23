@@ -204,18 +204,30 @@ def main():
 
     if not args.no_python:
         log.info("Generating Python references")
-        python_src_dir=os.path.join(sourcedir,"python")
-        #call program which generates rsts for all python moudles in libdir
-        call("sphinx-apidoc",
-             "-q", "-l", "-M", "-e",
-             "-H", "Python API Reference",
-             "-o", python_src_dir,
-             os.path.join(I3_BUILD, "lib"))
+        python_src_dir = os.path.join(sourcedir,"python")
 
-        #delete the ones we dont need
-        os.unlink(os.path.join(python_src_dir,'modules.rst'))
-        for rstfile in glob(python_src_dir+"/lib*.rst"):
-            os.unlink(rstfile)
+        def generate_python_docs():
+            # call program which generates rsts for all python moudles in libdir
+            if call("sphinx-apidoc",
+                    "-q", "-l", "-M", "-e",
+                    "-H", "Python API Reference",
+                    "-o", python_src_dir,
+                    os.path.join(I3_BUILD, "lib")):
+                # previous call failed, try again w/o '-q'
+                if call("sphinx-apidoc",
+                        "-l", "-M", "-e",
+                        "-H", "Python API Reference",
+                        "-o", python_src_dir,
+                        os.path.join(I3_BUILD, "lib")):
+                    log.warning("Generating Python references failed")
+                    return
+
+            #delete the ones we dont need
+            os.unlink(os.path.join(python_src_dir,'modules.rst'))
+            for rstfile in glob(python_src_dir+"/lib*.rst"):
+                os.unlink(rstfile)
+
+        generate_python_docs()
 
         if args.projects:
             for rstfile in glob(python_src_dir+"/*"):
@@ -327,7 +339,7 @@ def main():
         if args.redirect_sphinx_output:
             sphinx_kwargs["stdout"] = open(os.path.join(logdir,"sphinx_build_stdout.txt"),'w')
             sphinx_kwargs["stderr"] = open(os.path.join(logdir,"sphinx_build_stderr.txt"),'w')
-        
+
         sphinx_cmd = [ "sphinx-build",
                         "-a",#all
                         "-j",str(args.j),
