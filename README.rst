@@ -5,6 +5,8 @@ This repository contains the public portions of the analysis software developed 
 
 Except where otherwise noted, all files are distributed under the 2-clause BSD license. Acknowledgments and patches are appreciated; please submit patches using GitHub pull requests.
 
+*NB: Response times for PRs, bug reports, etc. are not guaranteed and may vary depending on availability of people. Apologies if it takes a little while!*
+
 Documentation
 -------------
 
