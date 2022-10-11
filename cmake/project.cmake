@@ -546,6 +546,7 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
     set_target_properties(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
       PROPERTIES
       COMPILE_DEFINITIONS PROJECT=${PROJECT_NAME}
+      NO_SYSTEM_FROM_IMPORTED TRUE
       )
     if(APPLE)
       set_target_properties(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
