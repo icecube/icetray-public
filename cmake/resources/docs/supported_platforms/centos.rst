@@ -4,11 +4,18 @@
 Red Hat Variants
 ^^^^^^^^^^^^^^^^
 
-CentOS
-""""""
+CentOS / AlmaLinux / Rocky Linux
+""""""""""""""""""""""""""""""""
 
-CentOS 7/8 is not yet recommended for desktop and laptop use.  Your mileage may vary.
-Please report successes and failures to the #software channel.
+Red Hat variants not recommended for desktop or laptop use.  Your
+mileage may vary.  Please report successes and failures to the
+#software channel.
+
+.. note::
+
+   As of December 2020, Red Hat unilaterally terminated CentOS
+   development. The last version was CentOS 8.5. Rocky Linux and
+   AlmaLinux are considered "spiritual successors".
 
 Minimal Install
 ...............
@@ -18,20 +25,24 @@ cmake version 3.11 doesn't detect python 3.6, so it's currently recommended
 to install the lastest version of cmake (https://cmake.org/install/).
 
 
-.. container:: wrapped-code
+.. code-block:: console
 
-    dnf install epel-release
-    dnf config-manager --enable epel
-    dnf config-manager --set-enabled powertools
+    $ dnf install epel-release
+    $ dnf config-manager --enable epel
+    $ dnf config-manager --enable extras
 
-    yum install gcc gcc-c++ make
-    yum install zlib-devel python39-devel
-    boost-devel boost-system boost-thread boost-date-time
-    boost-filesystem boost-program-options boost-regex boost-iostreams
-    boost-python3-devel
-    gsl-devel bzip2-devel cfitsio-devel
+    # for AlmaLinux 8
+    $ dnf config-manager --set-enabled powertools
 
-    
+    # for AlmaLinux 9
+    $ dnf config-manager --set-enabled crb
+
+    $ yum install gcc gcc-c++ make
+    $ yum install zlib-devel python39-devel \
+      boost-devel boost-system boost-thread boost-date-time \
+      boost-filesystem boost-program-options boost-regex boost-iostreams \
+      boost-python3-devel gsl-devel bzip2-devel cfitsio-devel
+
 Full Install
 ............
 
@@ -39,6 +50,7 @@ The following projects are considered optional and the system libraries have
 not been tested yet.
 
 Projects/tools in combo not built with this minimal package installation:
+
 * hdfwriter (needs hdf5)
 * millipede (needs suitesparse)
 * wavereform (needs python3-numpy)
@@ -46,7 +58,7 @@ Projects/tools in combo not built with this minimal package installation:
 * docs (needs python-sphinx doxygen)
 * gcdserver (needs pymongo)
 * unit tests (some needs python3-scipy)
-  
+
 Special Install
 ...............
 
@@ -65,8 +77,12 @@ want to run clsim and ppc on GPUs, which require hardware drivers.
 * filterscripts-cxx (needs astro which needs starlink)
 * ROOT (no longer provided via aptitude)
 * clsim (needs OpenCL, ZMQ, and optionally GEANT)
-  - zmq5
-  - opencl
+
+  * zmq5
+  * opencl
+
 * ppc (needs OpenCL)
-  - opencl
+
+  * opencl
+
 * g4-tankresponse (needs GEANT)
