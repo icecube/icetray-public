@@ -234,8 +234,8 @@ I3WriterBase::Process()
 	// part of an orphanable stream, so dump the contents of the orphanarium
 	// to disk before the frame and clear it so long as the frame reasonably
 	// might depend on the frames in the orphanarium (i.e. is not pure
-	// metadata like TrayInfo).
-	if (frame->GetStop() != I3Frame::TrayInfo) {
+	// metadata like TrayInfo, or an S-frame).
+	if ((frame->GetStop() != I3Frame::TrayInfo) && (frame->GetStop() != I3Frame::Simulation)) {
 		BOOST_FOREACH(I3FramePtr adopted, orphanarium_) {
 			frameCounter_++;
 			adopted->save(filterstream_, skip_keys_);

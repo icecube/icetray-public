@@ -5,6 +5,7 @@ Release Notes
 
 trunk
 -----
+* Added S-frames to the list of things (alongside TrayInfo) that will be ignored when deciding whether a Q-frame is "orphaned"
 
 Jul. 27, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
