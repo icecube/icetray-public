@@ -17,6 +17,23 @@ mileage may vary.  Please report successes and failures to the
    development. The last version was CentOS 8.5. Rocky Linux and
    AlmaLinux are considered "spiritual successors".
 
+Prerequisite for the optional module ``photospline``
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+``photospline`` is no longer included as part of IceTray, but developed
+independently, and must be installed before building IceTray.
+
+.. code-block:: console
+
+   $ git clone https://github.com/icecube/photospline.git
+   $ mkdir photospline/build
+   $ cd photospline/build
+   $ cmake ..
+   $ make -j$(nproc)
+   $ sudo make install
+
+For detailed installation instructions see https://github.com/icecube/photospline.
+
 Minimal Install
 ...............
 

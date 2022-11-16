@@ -1,9 +1,10 @@
 Getting Started - A guided tour
 ===============================
 
-Welcome new user! This page should help you get up to speed and get a
-the core software installed, compiled and running on your system.
-Comments, questions, complaints are welcome on Slack #software.
+Welcome new user! This page should help you get up to speed and get
+the core of IceTray software installed, compiled and running on your
+system.  Comments and questions are welcome on #software channel of
+our Slack instance.
 
 This process involves:
 
@@ -18,8 +19,7 @@ Prerequisites
 -------------
 
 While several operating system are supported, there are a few minimum
-requirements needed to install, compile and run the core
-Offline-software suite.
+requirements needed to install, compile and run IceTray.
 
 Operating System
 ^^^^^^^^^^^^^^^^
@@ -41,6 +41,23 @@ Check :ref:`platforms` for the operating system that you are
 using. If provided, download and run the script for your operating
 system. These scripts will ensure that you have the necessary system
 packages installed.
+
+``photospline``
+^^^^^^^^^^^^^^^
+
+``photospline`` is no longer included as part of IceTray, but developed
+independently, and must be installed before building IceTray.
+
+.. code-block:: console
+
+   $ git clone https://github.com/icecube/photospline.git
+   $ mkdir photospline/build
+   $ cd photospline/build
+   $ cmake ..
+   $ make -j$(nproc)
+   $ sudo make install
+
+For detailed installation instructions see https://github.com/icecube/photospline.
 
 CVMFS
 ^^^^^

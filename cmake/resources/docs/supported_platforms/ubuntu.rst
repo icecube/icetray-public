@@ -4,7 +4,26 @@
 Ubuntu or Debian Variants
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**It is highly recommended to use Long-Term Support (LTS) releases of Ubuntu.**
+.. note::
+
+   **It is highly recommended to use Long-Term Support (LTS) releases of Ubuntu.**
+
+Prerequisite for the optional module ``photospline``
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+``photospline`` is no longer included as part of IceTray, but developed
+independently, and must be installed before building IceTray.
+
+.. code-block:: console
+
+   $ git clone https://github.com/icecube/photospline.git
+   $ mkdir photospline/build
+   $ cd photospline/build
+   $ cmake ..
+   $ make -j$(nproc)
+   $ sudo make install
+
+For detailed installation instructions see https://github.com/icecube/photospline.
 
 Using the Package Manager
 """""""""""""""""""""""""
@@ -15,20 +34,22 @@ are for 20.04 LTS.
 
 Minimal Install
 ...............
+
 If any of the following packages are not installed ``cmake`` will complain and the build will fail.
 This minimal installation may or may not work for you depending on what you're trying to do.
 It's **highly** recommended you prefer the full/maximal install below.
 
 .. code-block:: console
 
-    apt-get install build-essential cmake libbz2-dev libgsl0-dev libcfitsio-dev
-    libboost-system-dev libboost-thread-dev libboost-date-time-dev
-    libboost-python-dev libboost-serialization-dev libboost-filesystem-dev
-    libboost-program-options-dev libboost-regex-dev libboost-iostreams-dev
-    python3-numpy fftw3-dev libboost-python-numpy
+    $ apt-get install build-essential cmake libbz2-dev libgsl0-dev libcfitsio-dev \
+      libboost-system-dev libboost-thread-dev libboost-date-time-dev \
+      libboost-python-dev libboost-serialization-dev libboost-filesystem-dev \
+      libboost-program-options-dev libboost-regex-dev libboost-iostreams-dev \
+      python3-numpy fftw3-dev libboost-python-numpy
 
 Full Install (**RECOMMENDED**)
 ..............................
+
 With the exception of a few special projects below, the full install is the quickest and easiest way
 to ensure IceTray will work for your purposes.
 
@@ -54,12 +75,12 @@ Projects/tools in combo not built with the minimal package installation above:
 
 .. code-block:: console
 
-    apt-get install build-essential cmake libbz2-dev libgsl0-dev
-    libcfitsio-dev libboost-all-dev libstarlink-pal-dev libhdf5-dev
-    libzstd-dev libsuitesparse-dev libsprng2-dev liblapack-dev
-    python3-numpy fftw3-dev libqt5opengl5-dev libcdk5-dev libncurses-dev
-    python3-sphinx doxygen python3-mysqldb python3-zmq python3-h5py
-    python3-pandas python3-seaborn
+    $ apt-get install build-essential cmake libbz2-dev libgsl0-dev \
+      libcfitsio-dev libboost-all-dev libstarlink-pal-dev libhdf5-dev \
+      libzstd-dev libsuitesparse-dev libsprng2-dev liblapack-dev \
+      python3-numpy fftw3-dev libqt5opengl5-dev libcdk5-dev libncurses-dev \
+      python3-sphinx doxygen python3-mysqldb python3-zmq python3-h5py \
+      python3-pandas python3-seaborn
 
 Special Install
 ...............
