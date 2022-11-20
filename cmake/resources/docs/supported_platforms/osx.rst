@@ -1,3 +1,5 @@
+.. highlight:: console
+
 Apple macOS
 ^^^^^^^^^^^
 
@@ -9,15 +11,15 @@ by hand, please take a look at these notes and suggestions.
 Step-By-Step Instructions for M1 and Intel Macs
 """""""""""""""""""""""""""""""""""""""""""""""
 
-The following setup works with the main_ branch (6ce97c3_) of icetray_
-on macOS 12.5 Monterey as of 2022-08-11.
-It also guides you through an installo of :doc:`../homebrew`.
+The following setup works with the main_ branch (23feb9d41_) of
+icetray_ on macOS 13.0.1 Ventura as of 2022-11-18.  It also guides you
+through an installation of :doc:`../homebrew`.
 
 .. _main: https://github.com/icecube/icetray/tree/main
 .. _icetray: https://github.com/icecube/icetray
 .. _6ce97c3: https://github.com/icecube/icetray/tree/6ce97c3
 
-.. code-block:: sh
+.. code-block:: console
 
    # install xcode command line tools (don't worry if it says it is already installed)
    $ xcode-select --install
@@ -37,12 +39,15 @@ It also guides you through an installo of :doc:`../homebrew`.
    # tell python where hdf5 is
    $ export HDF5_DIR=$(brew --prefix hdf5)
 
-   # use python 3.10 as required by boost-python3.
+   # use python 3.11 as required by boost-python3.
    # (See: 'brew info boost-python3')
-   $ brew unlink python@3.9
-   $ brew link python@3.10
+   $ brew install python@3.11
+   $ brew unlink python@3.10
+   $ brew unlink python@3.11
+   $ brew link --force python@3.11
    $ python3 --version
-   Python 3.10.6
+   Python 3.11.0
+   $ export PATH=/opt/homebrew/opt/python@3.11/libexec/bin${PATH}
 
    # be sure to activate your new brew environment:  either load it explcitly or open a new Terminal!
    #   'which python3' should be the new brew version.
@@ -52,11 +57,20 @@ It also guides you through an installo of :doc:`../homebrew`.
    $ source ${HOME}/py3/bin/activate
 
    # install python packages with pip3
-   $ python3 -m pip install --upgrade pip
-   $ python3 -m pip install -r requirements.txt
+   $ pip3 install --upgrade pip
+   $ pip3 install -r requirements.txt
 
 Other Important Notes
 """""""""""""""""""""
+
+.. warning::
+
+   Recently (November 2022) :command:`pip` has gotten stricter about how it
+   satisfies dependencies. Until all the dependent packages catch up
+   to :command:`pip`'s new requirements, it may be necessary to run the :command:`pip
+   install` command as::
+
+      $ pip3 install --no-cache-dir --use-deprecated=legacy-resolver -r ../src/requirements.txt
 
 .. warning::
 
@@ -107,9 +121,7 @@ Xcode
 
 	Xcode Preferences window
 
-After the install finishes you should have both clang and llvm-gcc:
-
-.. code-block:: console
+After the install finishes you should have both clang and llvm-gcc::
 
 	$ clang++ --version
 	Apple clang version 13.0.0 (clang-1300.0.29.3)
@@ -128,7 +140,6 @@ After the install finishes you should have both clang and llvm-gcc:
 
 Homebrew
 """"""""
-.. highlight:: console
 
 :doc:`../homebrew` is probably the easiest way to install packages on macOS, and
 distributes the most heavy-weight dependencies (cmake, boost, and Qt) as binary
@@ -144,7 +155,7 @@ The following formulae are recommended for optional functionality of components 
 
   cdk qt@5 doxygen cfitsio hdf5 nlopt minuit2 suite-sparse healpix zstd
 
-Plese see the **Step-By-Step Instructions** below
+Plese see the **Step-By-Step Instructions** above
 
 Most of the recommended formulae are in the main distribution, but IceCube
 maintains a `tap`_ for uncommon software that IceTray depends on.
@@ -163,16 +174,12 @@ best way to install it is via Homebrew. This is also the `method recomended
 by CERN <https://root.cern/install/#macos-package-managers>`_ . Besure to
 follow any instructions `brew` gives you.
 
-.. code-block:: console
-
    brew install root
 
 .. _osxpythonsetup:
 
 Python on macOS
 """""""""""""""
-
-.. highlight:: sh
 
 Apple has done a fairly decent of including a recent version of python2 in
 macOS. But now that IceTray is transitioning to python3 it is necessary to
@@ -187,4 +194,3 @@ can be accessed with :command:`ipython3` etc.
 
 IceTray relies on a number of python packages to work, the easiest way to
 instal them is by following the **Step-By-Step Instructions** above.
-
