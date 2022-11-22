@@ -6,6 +6,9 @@ Release Notes
 trunk
 -----
 
+* Added ability of RunInfo class to query run ids
+
+
 Jul. 29, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.4.0

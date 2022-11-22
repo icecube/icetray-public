@@ -108,6 +108,9 @@ import os
 from glob import glob
 from datetime import datetime
 import requests
+import json
+import urllib
+import numpy as np
 
 class RunInfo(dict):
     def __init__(self, data):
@@ -220,6 +223,41 @@ class RunInfo(dict):
             return  int(name.split('Part')[1].split('.')[0])
         else:
             raise RuntimeError('I do not know this file name pattern. Cannot determine the file number.')
+
+    def get_run_ids_in_range(self, start_time, end_time):
+        """
+        Tries to get the run ids from I3Live that are between the ``start_time`` and ``end_time``
+        Be warned: this function should be used sparingly to not overload the I3Live server!
+
+        :param start_time: a ``datetime`` instance corresponding to the start of the window to request run ids from
+
+        :param end_time: a ``datetime`` instance corresponding to the end of the window to request run ids from
+
+        :return: list of bundled (run id, start-time of event, end-time of run) that took place between ``start_time`` and ``end_time``
+        """
+
+        test_url = "https://hercules.icecube.wisc.edu/run_info/"
+        params = {
+            "user": "icecube",
+            "pass": "skua",
+            "start": start_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "stop": end_time.strftime("%Y-%m-%d %H:%M:%S"),
+        }
+
+        run_dicts = json.loads(urllib.request.urlopen(urllib.request.Request(test_url, urllib.parse.urlencode(params).encode("utf-8"))).read())
+
+        # convert to datetime format and bundle together
+        run_times = []
+        for run in run_dicts:
+            if (run["live_start"] is not None) and (run["stop"] is not None):
+                run_id = run["run_number"]
+                run_start_stamp = datetime.strptime(run["live_start"], "%Y-%m-%d %H:%M:%S")
+                run_end_stamp = datetime.strptime(run["stop"], "%Y-%m-%d %H:%M:%S")
+                run_times.append([run_id, run_start_stamp, run_end_stamp])
+
+        return run_times
+
+
 
 class GoodRunList(dict):
     def __init__(self, data = {}, columns = ['RunNum', 'Good_i3', 'Good_it', 'LiveTime', 'ActiveStrings', 'ActiveDoms', 'ActiveInIce', 'OutDir', 'Comment(s)'], renamed_columns = ['run_id', 'good_i3', 'good_it', 'livetime', 'active_strings', 'active_doms', 'active_inice', 'outdir', 'comment'], run_id_column = 0, num_decimals = 2):
