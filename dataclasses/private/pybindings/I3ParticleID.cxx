@@ -20,5 +20,6 @@ void register_I3ParticleID()
 	.def_readwrite("minorID",&I3ParticleID::minorID)
 	.def(dataclass_suite<I3ParticleID>())
 	.def("__hash__", &hash_id)
+	.def("__repr__", &stream_to_string<I3ParticleID>)
 	;
 }
