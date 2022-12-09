@@ -48,6 +48,9 @@ void register_SPEChargeDistribution()
     .def_readwrite("compensation_factor", 	&SPEChargeDistribution::compensation_factor)
     .def_readwrite("slc_gaus_mean", 	&SPEChargeDistribution::SLC_gaus_mean)
     .add_property("is_valid", 		&SPEChargeDistribution::IsValid)
+    .def("__call__",                    &SPEChargeDistribution::operator())
+    .def("Mean",                        &SPEChargeDistribution::Mean)
+    .def("StdDev",                      &SPEChargeDistribution::StdDev)
     .def(dataclass_suite<SPEChargeDistribution>())
     ;
 }

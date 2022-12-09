@@ -5,6 +5,8 @@ Release Notes
 
 trunk
 -----
+* Add the ability to calculate distribution variance to the SPEChargeDistribution for use in DOMLauncher
+* Teach python how to call SPEChargeDistribution
 
 Jul. 27, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
