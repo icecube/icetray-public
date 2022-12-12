@@ -6,8 +6,13 @@ Release Notes
 trunk
 -----
 
-* Added ability of RunInfo class to query run ids
+Dec. 12, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.5.0
 
+* Added radcube and taxi-reader from surfacearray branch (#2754)
+* Added ability of RunInfo class to query run ids
+* Documentation cleanups
 
 Jul. 29, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
@@ -118,7 +123,7 @@ August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
 * Added event_hunter example, moved from dataio.
 
   -- david.schultz
-* Added function in_shower_system, which is used by IceTop 
+* Added function in_shower_system, which is used by IceTop
 
   -- hdembinski
 * Add convenience module 'CountEventID' for file inspection and debugging
@@ -145,7 +150,7 @@ Bug-fix Release V15-04-01
 April 17, 2015, don la dieu  (nega@icecube.umd.edu)
 ---------------------------------------------------
 
-* New feature - Added module that loads SPE fit constants into the 
+* New feature - Added module that loads SPE fit constants into the
   calibration frame from a JSON file.
 
 March 15, 2015, Alex Olivas  (olivas@icecube.umd.edu)
@@ -155,8 +160,8 @@ Release V15-03-00 - Bugfix release
 
 * I3GCDAuditor knows about the new calibration SPE corrections.
 * GSLRandomService is able to save its state too.  Welcome to the club!
-* New I3ScaleCalculator::I3ScaleIceCubeDetectorPolygon, which scales 
-  the area of the boundary polygon of IceCube?, similar to 
+* New I3ScaleCalculator::I3ScaleIceCubeDetectorPolygon, which scales
+  the area of the boundary polygon of IceCube?, similar to
   I3ScaleCalculator::I3ScaleInIceCascade
 
 November 20, 2014, Alex Olivas  (olivas@icecube.umd.edu)
@@ -174,4 +179,3 @@ Release V14-09-00
 Feature:
 
 * which_split was added and should be considered the standard now.
-
