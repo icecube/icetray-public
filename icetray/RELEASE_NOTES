@@ -6,6 +6,14 @@ Release Notes
 main
 ----
 
+Dec. 12, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.5.0
+
+* Fix some undefined behavior
+* Remove long ago deleted files
+* Update urls in documentation which are redirected
+
 Jul. 27, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.4.0
