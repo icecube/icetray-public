@@ -4,6 +4,12 @@ Release Notes
 trunk
 -----
 
+Dec. 12, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.5.0
+
+* Fix tablio test_converter
+
 Jul. 29, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.4.0
