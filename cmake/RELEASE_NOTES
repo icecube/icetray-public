@@ -1,12 +1,18 @@
 .. -*- mode: rst -*- vim: ft=rst
 
 .. _cmake-release-notes:
-   
+
 Release Notes
 =============
 
 trunk
 -----
+
+Dec. 12, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.5.0
+
+- Documentation cleanups and improvements, especially for macOS.
 
 Jul. 27, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
@@ -31,7 +37,7 @@ this release.
 
 * Provide better support for running in virtual enviroments
   the differ from the build environment.
-* Disable HDF5 file locking by default. 
+* Disable HDF5 file locking by default.
 * Remove unused tools: mysql mpi log4cpp jni hepmc xml2
 
 Feb. 5, 2020 Alex Olivas (aolivas@umd.edu)
@@ -77,7 +83,7 @@ V17-05-00 - May 9, 2017, Alex Olivas  (olivas@icecube.umd.edu)
 
 V17-05-01 - May 18, 2017, Alex Olivas  (olivas@icecube.umd.edu)
 ---------------------------------------------------------------
-* incremental release. 
+* incremental release.
 
 V17-05-02 - June 28, 2017, Alex Olivas  (olivas@icecube.umd.edu)
 ----------------------------------------------------------------
@@ -89,7 +95,7 @@ V17-03-00 - March 24, 2017, Alex Olivas  (olivas@icecube.umd.edu)
 * general documentation clean-up
 * move PnF specific tool detection to PnF
 * add pybind11 support to i3_add_pybindings()
-* special tool detections tweaks for special Fedora 
+* special tool detections tweaks for special Fedora
 * add docs for using Homebrew on OSX and Linux
 * Arch Linux tweakes including rectifing the python situation
 * support for AppleClang (as opposed to Apple && Clang)
@@ -130,7 +136,7 @@ V16-03-00 - March 18, 2016, don la dieu  (nega@icecube.umd.edu)
 
 * Lots and lots of documentation updates
 * remove rdmc
-* add support for include what you use, see `r2450/IceTray`_ 
+* add support for include what you use, see `r2450/IceTray`_
 * resurrect ``I3Test::tempfile()``
 * use std::is(nan|inf)
 * mark all thrid-pary libraries as "system" libraries for the compiler
