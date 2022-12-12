@@ -5,6 +5,13 @@ Release Notes
 
 trunk
 -----
+
+Dec. 12, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.5.0
+
+* Documentation cleanups
+* Add __repr__ functions for I3ParticleID and I3ShowerBias
 * Add the ability to calculate distribution variance to the SPEChargeDistribution for use in DOMLauncher
 * Teach python how to call SPEChargeDistribution
 
