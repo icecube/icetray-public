@@ -4,6 +4,19 @@ Release Notes
 trunk
 -----
 
+Dec. 12, 2022 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.5.0
+
+- Update "getting started" docs to include info about photospline
+- Docs - update example python test with a functional version
+- Docs - retry generating python api docs on error
+- Update docs for cvmfs 4.2.1 (#2944)
+- Remove unused sphinx extension for email
+- Remove reference to defunct online rst editor
+- Update urls in documentation which are redirected
+- Use sphinx extension extlinks to shorten/correct links
+
 Jul. 27, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.4.0
