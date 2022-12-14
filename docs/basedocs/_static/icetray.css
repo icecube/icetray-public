@@ -68,6 +68,9 @@ div.highlight pre {  /* this generally for code blocks */
     border-left: 2px solid red;
 }
 
+/* fix a div bg in admonitions (ie. ..code-block::'s surrounding div in a ..warning::) */
+div.admonition .highlight { background: inherit; }
+
 /* general/global tweaks */
 body {
     font-family: var(--fonts-sans-serif);
