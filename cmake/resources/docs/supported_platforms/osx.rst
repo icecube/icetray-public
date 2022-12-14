@@ -17,7 +17,7 @@ through an installation of :doc:`../homebrew`.
 
 .. _main: https://github.com/icecube/icetray/tree/main
 .. _icetray: https://github.com/icecube/icetray
-.. _6ce97c3: https://github.com/icecube/icetray/tree/6ce97c3
+.. _23feb9d41: https://github.com/icecube/icetray/tree/23feb9d41
 
 .. code-block:: console
 
