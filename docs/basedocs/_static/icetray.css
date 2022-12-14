@@ -8,23 +8,23 @@ theme. */
 @import url("sphinxdoc.css");
 
 :root {
-   --fonts-sans-serif: -apple-system,		/* Safari, macOS FireFox */
-                       BlinkMacSystemFont,	/* macOS Crhome */
-                       "Segoe UI",		/* Windows */
-                       Roboto,			/* Android, ChromeOS */
-                       Oxygen-Sans,		/* KDE */
-                       Ubuntu,			/* Ubuntu */
-                       Cantarell,		/* GNOME */
-                       "Helvetica Neue",	/* macOS pre- El Capitan */
+   --fonts-sans-serif: -apple-system,      /* Safari, macOS FireFox */
+                       BlinkMacSystemFont, /* macOS Crhome */
+                       "Segoe UI",         /* Windows */
+                       Roboto,             /* Android, ChromeOS */
+                       Oxygen-Sans,        /* KDE */
+                       Ubuntu,             /* Ubuntu */
+                       Cantarell,          /* GNOME */
+                       "Helvetica Neue",   /* macOS pre- El Capitan */
                        sans-serif,
-		       "Apple Color Emoji",
-		       "Segoe UI Emoji";
+                       "Apple Color Emoji",
+                       "Segoe UI Emoji";
    --fonts-mono: Menlo,
-		 Consolas,
-		 Monaco,
-		 Liberation Mono,
-		 Lucida Console,
-		 monospace;
+                 Consolas,
+                 Monaco,
+                 Liberation Mono,
+                 Lucida Console,
+                 monospace;
    --background-blue: #4a6484;
    --background-grey: #eeeeef;
    --color-link: #3f5570;
@@ -99,7 +99,7 @@ a {
     text-decoration: none;
 }
 
-/* H1 is a theme relevent blue, using 'initial' vice '#000000/black' will hopefully allow a future"dark-mode" theme */
+/* H1 is a theme relevent blue, using 'initial' vice '#000000/black' will hopefully allow a future "dark-mode" theme */
 h1 {
     color: initial;
 }
