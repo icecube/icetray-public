@@ -47,7 +47,7 @@ through an installation of :doc:`../homebrew`.
    $ brew link --force python@3.11
    $ python3 --version
    Python 3.11.0
-   $ export PATH=/opt/homebrew/opt/python@3.11/libexec/bin${PATH}
+   $ export PATH=/opt/homebrew/opt/python@3.11/libexec/bin:${PATH}
 
    # be sure to activate your new brew environment:  either load it explcitly or open a new Terminal!
    #   'which python3' should be the new brew version.
@@ -65,12 +65,21 @@ Other Important Notes
 
 .. warning::
 
-   Recently (November 2022) :command:`pip` has gotten stricter about how it
-   satisfies dependencies. Until all the dependent packages catch up
-   to :command:`pip`'s new requirements, it may be necessary to run the :command:`pip
-   install` command as::
+   :command:`pip` versions prior to and including version ``22.3.1``
+   have a bug with Homebrew's ``python@3.10`` and ``python@3.11``
+   where it does not "see" some dependencies when trying to build a
+   package from sources (ie: ``pytables``). This has been fixed, but
+   that fix has not yet appeared in a release of :command:`pip`. In
+   the meantime, if your ``pip install -r requirements.txt`` step
+   fails, try the following::
 
-      $ pip3 install --no-cache-dir --use-deprecated=legacy-resolver -r ../src/requirements.txt
+     $ pip3 install packaging setuptools_scm cython
+     $ pip3 install -r requirements.txt
+
+   This will manually install a few dependencies and allow normal
+   installation to procede. This *should not be necessary* if you're
+   using a python virtual environment as described above. You *are*
+   using one, aren't you?
 
 .. warning::
 
