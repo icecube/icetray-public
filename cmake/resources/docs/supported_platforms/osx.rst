@@ -45,9 +45,9 @@ through an installation of :doc:`../homebrew`.
    $ brew unlink python@3.10
    $ brew unlink python@3.11
    $ brew link --force python@3.11
+   $ export PATH=/opt/homebrew/opt/python@3.11/libexec/bin:${PATH}
    $ python3 --version
    Python 3.11.0
-   $ export PATH=/opt/homebrew/opt/python@3.11/libexec/bin:${PATH}
 
    # be sure to activate your new brew environment:  either load it explcitly or open a new Terminal!
    #   'which python3' should be the new brew version.
