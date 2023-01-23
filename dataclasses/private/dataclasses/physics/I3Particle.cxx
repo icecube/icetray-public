@@ -500,7 +500,8 @@ bool I3Particle::IsCascade() const
       type == Brems    || type == DeltaE  ||
       type == PairProd || type == NuclInt ||
       type == Hadrons  || type == Pi0     ||
-      type == PiPlus   || type == PiMinus ||      
+      type == PiPlus   || type == PiMinus ||
+      type == WeakInt  ||
       (shape_ != Primary && 
        ( type == PPlus       ||
 	 type == PMinus      ||

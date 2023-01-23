@@ -328,6 +328,9 @@ void Particles::drawParticle( const I3Particle& p,
         case I3Particle::NuclInt:
           bubble->setColor(QColor("Magenta"));
           break;
+        case I3Particle::WeakInt:
+          bubble->setColor(QColor("Purple"));
+          break;
         default:
           log_warn ("Unknown Energy Loss Type: %i", p.GetType());
           break;

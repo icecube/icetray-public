@@ -200,7 +200,7 @@ TEST(enum_description) {
                          (K39Nucleus)(Ca40Nucleus)(Sc45Nucleus)(Ti48Nucleus)\
                          (V51Nucleus)(Cr52Nucleus)(Mn55Nucleus)(Fe56Nucleus)\
                          (CherenkovPhoton)(Nu)(Monopole)(Brems)(DeltaE)\
-                         (PairProd)(NuclInt)(MuPair)(Hadrons)(FiberLaser)\
+                         (PairProd)(NuclInt)(MuPair)(Hadrons)(WeakInt)(FiberLaser)\
                          (N2Laser)(YAGLaser)(STauPlus)(STauMinus)
     MAKE_ENUM_VECTOR(ptype_vector,I3Particle,ParticleType,ptype_fields);
     desc->AddEnumField<I3Particle::ParticleType>("Type", ptype_vector, "", "doc");

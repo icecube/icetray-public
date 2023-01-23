@@ -191,6 +191,7 @@ class I3Particle : public I3FrameObject
     NuclInt = -2000001004,
     MuPair = -2000001005,
     Hadrons = -2000001006,
+    WeakInt = -2000001007,
     ContinuousEnergyLoss = -2000001111,
     FiberLaser = -2000002100,
     N2Laser = -2000002101,
@@ -493,7 +494,7 @@ std::string i3particle_type_string(int32_t pdg_code);
     (Cr53Nucleus)(Cr54Nucleus)(Mn52Nucleus)(Mn53Nucleus)(Mn54Nucleus)(Mn55Nucleus)\
     (Fe54Nucleus)(Fe55Nucleus)(Fe56Nucleus)(Fe57Nucleus)(Fe58Nucleus)(Qball)      \
     (CherenkovPhoton)(Nu)(Monopole)(Brems)(DeltaE)(PairProd)(NuclInt)(MuPair)     \
-    (Hadrons)(ContinuousEnergyLoss)(FiberLaser)(N2Laser)(YAGLaser)                \
+    (Hadrons)(WeakInt)(ContinuousEnergyLoss)(FiberLaser)(N2Laser)(YAGLaser)       \
     (STauPlus)(STauMinus)(SMPPlus)(SMPMinus)
 
 #define I3PARTICLE_H_I3Particle_ParticleShape                                     \

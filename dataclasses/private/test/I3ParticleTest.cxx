@@ -1,3 +1,4 @@
+
 /**
     copyright  (C) 2004
     the icecube collaboration
@@ -164,7 +165,8 @@ TEST(iscascade){
   I3Particle pair; 
   I3Particle nucl; 
   I3Particle gamma; 
-  I3Particle hadron; 
+  I3Particle hadron;
+  I3Particle weak;
   I3Particle piplus; 
   I3Particle piminus; 
 
@@ -177,6 +179,7 @@ TEST(iscascade){
   nucl.SetType(I3Particle::NuclInt); 
   gamma.SetType(I3Particle::Gamma); 
   hadron.SetType(I3Particle::Hadrons); 
+  weak.SetType(I3Particle::WeakInt); 
   piplus.SetType(I3Particle::PiPlus); 
   piminus.SetType(I3Particle::PiMinus); 
 
@@ -189,6 +192,7 @@ TEST(iscascade){
   ENSURE(nucl.IsCascade()); 
   ENSURE(gamma.IsCascade()); 
   ENSURE(hadron.IsCascade()); 
+  ENSURE(weak.IsCascade()); 
   ENSURE(piplus.IsCascade()); 
   ENSURE(piminus.IsCascade()); 
 }
