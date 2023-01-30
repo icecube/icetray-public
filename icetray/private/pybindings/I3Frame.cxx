@@ -36,6 +36,24 @@
 
 using namespace boost::python;
 
+namespace {
+
+// prevent users from accidentally putting nullptr in the frame
+struct check_null_call_policies : default_call_policies
+{
+  static bool precall(PyObject *args)
+  {
+    if (PyTuple_Check(args) && PyTuple_Size(args) > 2 && PyTuple_GetItem(args, 2) == Py_None) {
+      PyErr_SetString(PyExc_TypeError, "FrameObject cannot be None");
+      return false;
+    }
+
+    return default_call_policies::precall(args);
+  }
+};
+
+}
+
 inline static
 boost::shared_ptr<I3FrameObject>
 frame_get(const I3Frame* f, const std::string& where)
@@ -152,13 +170,13 @@ void register_I3Frame()
     .def("__delitem__", &I3Frame::Delete)
     .def("Rename", &I3Frame::Rename)
     .def(self_ns::str(self))
-    .def("Put", frame_put)
-    .def("Put", frame_put_on_stream)
+    .def("Put", frame_put, check_null_call_policies())
+    .def("Put", frame_put_on_stream, check_null_call_policies())
     .def("Get", &frame_get)
-    .def("Replace", frame_replace)
+    .def("Replace", frame_replace, check_null_call_policies())
     .def("__contains__", (bool (I3Frame::*)(const std::string &) const)&I3Frame::Has)
     .def("__getitem__", &frame_get)
-    .def("__setitem__", put_fn_p)
+    .def("__setitem__", put_fn_p, check_null_call_policies())
     .def("__delitem__", &I3Frame::Delete)
     .def("keys", &frame_keys)
     .def("values", &frame_values)

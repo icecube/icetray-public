@@ -124,6 +124,14 @@ TEST(ReplaceNotFound)
   }
 }
 
+// it is possible to put and get nullptr from c++, if you ever had a reason to do that
+TEST(put_nullptr)
+{
+  I3Frame f;
+  f.Put("foo", I3IntPtr());
+  ENSURE(f.Get<I3IntConstPtr>("foo").get() == nullptr);
+}
+
 TEST(const_iterator_begin)
 {
   I3Frame f;
