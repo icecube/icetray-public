@@ -51,6 +51,7 @@ register_I3SuperDST()
 		#define RO_PROPS (EncodedSizes)
 		BOOST_PP_SEQ_FOR_EACH(WRAP_PROP_RO, I3SuperDST, RO_PROPS)
 		#undef RO_PROPS
+		.add_static_property("use_width_for_atwd_flag", &I3SuperDST::GetUseWidthForATWDFlag, &I3SuperDST::SetUseWidthForATWDFlag)
 		.def(bp::dataclass_suite<I3SuperDST>())
 		;
 	register_pointer_conversions<I3SuperDST>();

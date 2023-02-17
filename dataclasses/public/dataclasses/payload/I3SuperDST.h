@@ -129,7 +129,10 @@ public:
 	 * @see Unpack()
 	 */
 	I3SuperDST(const I3RecoPulseSeriesMap &pulses);
-	
+
+	static void SetUseWidthForATWDFlag(bool v) { use_width_for_atwd_flag_=v; }
+	static bool GetUseWidthForATWDFlag() { return use_width_for_atwd_flag_; }
+
 	/**
 	 * Expand charge stamps into fake I3RecoPulses, packing everything into
 	 * a single map.
@@ -188,6 +191,7 @@ private:
 	std::list<I3SuperDSTReadout> GetReadouts(bool hlc) const;
 	
 	static const double tmin_;
+	static bool use_width_for_atwd_flag_;
 	
 	unsigned version_;
 	

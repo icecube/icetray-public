@@ -36,6 +36,9 @@
 /* Earliest representable time (relative to the readout window) */
 const double I3SuperDST::tmin_ = -512.0;
 
+/* Infer ATWD support from pulse width, rather than assuming LC == ATWD */
+bool I3SuperDST::use_width_for_atwd_flag_ = false;
+
 using namespace I3SuperDSTUtils;
 
 I3SuperDSTChargeStamp::I3SuperDSTChargeStamp(double time, double charge, double width,
@@ -309,8 +312,8 @@ I3SuperDST::Unpack() const
 	t_ref = tmin_;
 	
 	for (readout_it = readouts_.begin(); readout_it != readouts_.end(); readout_it++) {
-		int flags = (readout_it->kind_ == I3SuperDSTChargeStamp::HLC) ?
-		    I3RecoPulse::ATWD | I3RecoPulse::FADC | I3RecoPulse::LC : I3RecoPulse::FADC;
+		const bool hlc = (readout_it->kind_ == I3SuperDSTChargeStamp::HLC);
+		const int flags = I3RecoPulse::FADC | (hlc ? I3RecoPulse::LC : 0);
 		I3RecoPulseSeries &target = unpacked_->operator[](readout_it->om_);
 		
 		t_ref += readout_it->GetTime();
@@ -324,7 +327,8 @@ I3SuperDST::Unpack() const
 			pulse.SetTime(t_ref);
 			pulse.SetCharge(stamp_it->GetCharge());
 			pulse.SetWidth(stamp_it->GetWidth());
-			pulse.SetFlags(flags);
+			// Assume that the first pulse always comes from the ATWD.
+			pulse.SetFlags(flags | (hlc ? I3RecoPulse::ATWD : 0));
 			target.push_back(pulse);
 			
 			stamp_it++;
@@ -337,7 +341,17 @@ I3SuperDST::Unpack() const
 			pulse.SetTime(t_ref_internal);
 			pulse.SetCharge(stamp_it->GetCharge());
 			pulse.SetWidth(stamp_it->GetWidth());
-			pulse.SetFlags(flags);
+			// Assume that trailing HLC pulses with widths greater than the
+			// first pulse are FADC-only. If use_width_for_atwd_flag_ is false,
+			// revert to legacy behavior (all LC pulses are marked LC|ATWD|FADC)
+			pulse.SetFlags(
+				flags
+				| (
+					(hlc && (!use_width_for_atwd_flag_ || (stamp_it->GetWidthCode() <= readout_it->stamps_.begin()->GetWidthCode())))
+					? I3RecoPulse::ATWD
+					: 0
+				)
+			);
 			target.push_back(pulse);
 		}
 	}
