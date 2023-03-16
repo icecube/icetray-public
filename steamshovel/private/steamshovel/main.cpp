@@ -178,20 +178,20 @@ int main(int argc, char* argv[]){
 	logging(vm, "trace", trace_units);
 
 	log_debug( "Initializing python" );
-  
-  PyInterpreter* pyinter;
-  PyConsole* pyconsole;
-  try {
-    pyinter =  new PyInterpreter(Python_EXECUTABLE);
-    // may downgrade requested_console to what's available;
-    // also: consoles get deactivated if STDIN or STDOUT are not tty
-    pyconsole = new PyConsole(*pyinter, requested_console);
-  }catch( boost::python::error_already_set& ) {
-    PyErr_Print();
-    return 123213321; //just picked something at random here
-  }
-  
-  int return_code = 0;
+
+	PyInterpreter* pyinter;
+	PyConsole* pyconsole;
+	try {
+		pyinter =  new PyInterpreter(Python_EXECUTABLE);
+		// may downgrade requested_console to what's available;
+		// also: consoles get deactivated if STDIN or STDOUT are not tty
+		pyconsole = new PyConsole(*pyinter, requested_console);
+	}catch( boost::python::error_already_set& ) {
+		PyErr_Print();
+		return 123213321; //just picked something at random here
+	}
+
+	int return_code = 0;
 	{
 		log_debug( "Creating SteamshovelApp" );
 
