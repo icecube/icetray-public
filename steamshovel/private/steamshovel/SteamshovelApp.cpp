@@ -174,8 +174,10 @@ ShovelMainWindow* SteamshovelApp::newWindow( bool show ){
 	windows_.back()->setBatchMode( !show );
 	QObject::connect( this, SIGNAL(extras(bool)),
 	                  windows_.back(), SLOT(doExtras(bool)) );
-	if( show )
-		windows_.back()->show();
+	// show is the default state. false means '--batch' was passed on the commandline
+	if( !show )
+		QTimer::singleShot( 0, windows_.back(), SLOT(hide()) );
+	windows_.back()->show();
 	return windows_.back();
 }
 
