@@ -233,6 +233,8 @@ void Scenario::setKey( ArtistPtr artist, int key_idx, const std::string& key ){
 }
 
 void Scenario::setFrame( I3FramePtr ptr ){
+	log_debug( "setFrame called" );
+	scripting::ScopedGIL gil;
 	frame_ = ptr;
 	valid_key_cache_.clear();
 	log_debug_stream( "Setting up Scenario with " << artists_.size() << " artists" );
