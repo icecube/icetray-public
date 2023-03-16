@@ -18,8 +18,8 @@ endif()
 
 # non-homebrew search
 find_package(Qt5 COMPONENTS OpenGL)
-find_package(OpenGL)
-find_package(GLUT)
+find_package(OpenGL QUIET)
+find_package(GLUT QUIET)
 
 if(Qt5_FOUND AND Qt5OpenGL_FOUND AND OPENGL_FOUND AND OPENGL_GLU_FOUND)
   ## use GIT_REVISION to derive SHOVEL_VERSION
@@ -41,8 +41,7 @@ if(Qt5_FOUND AND Qt5OpenGL_FOUND AND OPENGL_FOUND AND OPENGL_GLU_FOUND)
   endif()
 
   # extra hints for qt5 and automoc
-  include_directories(BEFORE ${Qt5OpenGL_INCLUDE_DIRS})
-  include_directories(BEFORE /usr/local/opt/qt5/include) ## necessary if qt4 and qt5 are installed via homebrew (even if qt4 is unlinked!)
+  include_directories(BEFORE SYSTEM ${Qt5OpenGL_INCLUDE_DIRS})
   include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
   qt5_wrap_ui(steamshovel_UIS_H
