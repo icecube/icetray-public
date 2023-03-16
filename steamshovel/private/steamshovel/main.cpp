@@ -230,7 +230,13 @@ int main(int argc, char* argv[]){
 		// Create a new window
 		QGLFormat f/*( QGL::SampleBuffers )*/;
 		QGLFormat::setDefaultFormat( f );
-		app.newWindow( vm.count("batch") == 0 );
+		app.newWindow( vm.count("batch") == 0 );  // opengl gets initialized here
+
+		// log_debug_stream( QGLFormat::openGLVersionFlags() );
+		log_debug_stream( "OpenGl information: VENDOR:       " << (const char*)glGetString(GL_VENDOR) );
+		log_debug_stream( "                    RENDERDER:    " << (const char*)glGetString(GL_RENDERER) );
+		log_debug_stream( "                    VERSION:      " << (const char*)glGetString(GL_VERSION) );
+		log_debug_stream( "                    GLSL VERSION: " << (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION) );
 
 		// unblock python threads; equivalent to Py_UNBLOCK_THREADS with return value ignored
 		// Each thread in steamshovel must grab the GIL explicitly before touching python.
