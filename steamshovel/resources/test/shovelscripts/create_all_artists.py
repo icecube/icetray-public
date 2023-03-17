@@ -29,8 +29,8 @@ artist_config = {
 	"DOMOrientation": (["I3Geometry"],),
 	"Ice": ([],),
 	# IceTopViewer: once without args, once with args
-	"IceTopViewer":([],),
-	"IceTopViewer":(["I3Geometry", "OfflinePulsesHLC"],),
+	#"IceTopViewer":([],),
+	#"IceTopViewer":(["I3Geometry", "OfflinePulsesHLC"],),
 	"Particles":(["MPEFit"],),
 	"ParticleUncertainty":(["MPEFit_SLCParaboloidFitParams"],),
 	"PhotonPaths":([],), # to-do: test with appropriate input
