@@ -37,6 +37,9 @@ min. energy [cascade]
 IceTopViewer
 ------------
 
+.. note::
+   The IceTopViewer was partially removed in 2021, and formally removed in 2023. Steamshovel now includes a standalone IceTop viewer. The following is kept for historical information.
+
 The IceTopViewer is a special artist which adds a new view to Steamshovel instead of adding object to the 3D scene. When it is added, the previous view (usually the 3D view) is replaced by a 2D top view on IceTop, a view of the lateral density function (LDF), and the arrival times of signals relative to a plane shower front.
 
 Since the IceTopViewer adds an alternative view intead of an object to the 3D view, there is no checkbox to hide/show it. The ``Window`` menu is used to switch between views.

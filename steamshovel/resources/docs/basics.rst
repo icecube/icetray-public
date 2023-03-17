@@ -116,7 +116,7 @@ Alternative views
 The ``Window`` menu can be used to switch the main display of Steamshovel between the primary
 3D event view and other views.  Also available is a spreadsheet view, which gives an overview of the data objects in the currently selected frame.  This view is comparable to the output of a console tool like ``dataio-pyshovel``.
 
-Other views are added to the menu if the corresponding WidgetArtists are added in the ``Displays`` tab. Currently, the only artist that uses this feature is the ``IceTopViewer``.  The 3D view is the focus of the rest of this document.
+Other views are added to the menu if the corresponding WidgetArtists are added in the ``Displays`` tab. The only artist that ever used this feature was the old ``IceTopViewer`` which was removed in 2023. Steamshovel currently includes a standalone IceTop viewer.  The 3D view is the focus of the rest of this document.
 
 Mouse control in the 3D view
 ----------------------------
