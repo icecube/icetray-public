@@ -290,6 +290,7 @@ bool FileService::selectFrame( unsigned i ){
 	const FrameInfo& finfo = index_[i];
 	log_trace("selecting frame: user idx = %u, file idx = %u", i, finfo.idx_);
 
+	scripting::ScopedGIL gil;
 	current_frame_ = frames_[finfo.idx_];
 
 	// insert default I3Geometry if it is missing
