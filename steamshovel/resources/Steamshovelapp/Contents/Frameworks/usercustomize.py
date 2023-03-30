@@ -9,8 +9,8 @@ import os.path
 newpath = []
 base_path = os.path.dirname(__file__)
 for p in sys.path:
-    if( p.startswith(base_path) or
-        p.startswith('/System/Library/') or
-        p.startswith('/usr/lib') ):
-    	newpath.append(p)
+    if (p.startswith(base_path)
+       or p.startswith('/System/Library/')
+       or p.startswith('/usr/lib')):
+        newpath.append(p)
 sys.path = newpath
