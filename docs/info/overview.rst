@@ -86,6 +86,5 @@ from python, including:
 #. Writing IceCube modules (from very simple event selections to
    complicated reconstructions) directly in python.
 
-#. Easily accessing advanced analysis tools like Matplotlib,
-   Hippodraw, and ROOT (via PyROOT)
-   
+#. Easily accessing advanced analysis tools (like Matplotlib or ROOT
+   (via PyROOT))
