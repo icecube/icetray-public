@@ -27,7 +27,7 @@ template < typename T >
 class VariantWrap : public SceneVariant<T>, public bp::wrapper< SceneVariant<T> >
 {
 public:
-	virtual T value( double vistime ){
+	virtual T value( double vistime ) const override {
 		ScopedGIL gil;
 		return this->get_override("value")(vistime);
 	};

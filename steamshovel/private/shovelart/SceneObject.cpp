@@ -422,7 +422,11 @@ float ArrowObject::cameraDistance( double vistime, const I3Camera& camera )
 bool ArrowObject::isVisible( double vistime ){
 	const vec3d p0 = start_->value(vistime);
 	const vec3d p1 = stop_->value(vistime);
-	return (p1 - p0).length() > 0.0;
+	return visible_->value(vistime) && (p1 - p0).length() > 0.0;
+}
+
+bool ArrowObject::isHeadVisible( double vistime ){
+	return visible_->value(vistime);
 }
 
 static

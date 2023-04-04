@@ -118,14 +118,15 @@ public:
 	{}
 
 	void setColor( VariantQColorPtr::element_type* c ){ setColor( VariantQColorPtr( c ) ); }
-	void setColor( VariantQColorPtr c ){ color_ = c; }
+	void setColor( VariantQColorConstPtr c ){ color_ = c; }
 	void setColor( QColor c ){ color_ = VariantQColorPtr(new SceneConstant<QColor>( c )); }
+	VariantQColorConstPtr getColor() const { return color_; }
 	QColor color( double vistime ) const { return color_->value(vistime); }
 
 protected:
 	void applyColor( double vistime );
 	SceneObject::RenderPass getPassByAlpha( double vistime );
-	VariantQColorPtr color_;
+	VariantQColorConstPtr color_;
 
 };
 
@@ -580,6 +581,7 @@ class ArrowObject : public SceneObject, public ColoredObject, public BaseLineObj
 	VariantVec3dPtr stop_;
 	float angle_;
 	float head_length_;
+	VariantBoolPtr visible_;
 
 public:
 	ArrowObject( VariantVec3dPtr start,
@@ -589,15 +591,18 @@ public:
 		start_( start ),
 		stop_( stop ),
 		angle_( angle ),
-		head_length_( head_length )
+		head_length_( head_length ),
+		visible_( boost::make_shared<SceneConstant<bool>>(true) )
 	{}
 
 	virtual void draw( double vistime, const I3Camera& camera );
 	virtual bool isVisible( double vistime );
-	virtual bool isHeadVisible( double vistime ){ return true; }
+	virtual bool isHeadVisible( double vistime );
 	virtual RenderPass pass(double vistime){ return getPassByAlpha(vistime); }
 	virtual bool isSelectable( double vistime ){ return false; }
 	virtual float cameraDistance( double vistime, const I3Camera& camera );
+
+	virtual void setVisible(VariantBoolPtr v) { visible_ = v; }
 };
 
 #endif /* I3_SHOVEL_RENDERING_SCENE_OBJECT_H */

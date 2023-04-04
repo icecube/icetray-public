@@ -145,7 +145,7 @@ public:
 		map_(cm), win_(window), t_(1, t)
 	{}
 
-	virtual QColor value( double vistime ){
+	virtual QColor value( double vistime ) const override {
 		double t = 0;
 		if( t_.size() == 1 || vistime <= t_.front() )
 			t = t_.front();

@@ -69,7 +69,7 @@ namespace {
       : t0_(t0), speed_(I3Constants::c/n)
     {}
 
-    virtual float value( double vistime ) {
+    virtual float value( double vistime ) const override {
       if (vistime < t0_ || (vistime-t0_)*speed_ > 1e3)
         return 0.;
       else
@@ -96,7 +96,7 @@ namespace {
       use_cherenkov_blue_(use_cherenkov_blue)
     {}
 
-    virtual QColor value( double vistime ){
+    virtual QColor value( double vistime ) const override {
       QColor v;
       if( use_cherenkov_blue_ ){
         v = QColor("RoyalBlue");
@@ -317,6 +317,8 @@ void Particles::drawParticle( const I3Particle& p,
       if( setting<bool>("color by type") ){
         switch( p.GetType() ){
         case I3Particle::Brems:
+        case I3Particle::EMinus:
+        case I3Particle::EPlus:
           bubble->setColor(QColor("Red"));
           break;
         case I3Particle::DeltaE:
@@ -326,6 +328,7 @@ void Particles::drawParticle( const I3Particle& p,
           bubble->setColor(QColor("Blue"));
           break;
         case I3Particle::NuclInt:
+        case I3Particle::Hadrons:
           bubble->setColor(QColor("Magenta"));
           break;
         case I3Particle::WeakInt:
@@ -342,12 +345,16 @@ void Particles::drawParticle( const I3Particle& p,
       }
     }
     g->add( bubble );
-    {
+    if (arrowsize > 0) {
         const double length = 10*setting<RangeSetting>("scale");
+        auto vizf = boost::make_shared<SceneStepFunction<bool>>( false );
+        vizf->add( true, p.GetTime() );
         ArrowObject* obj =  new ArrowObject(
             VariantVec3dPtr(new SceneConstant<vec3d>(from_I3Position(p.GetPos()))),
             VariantVec3dPtr(new SceneConstant<vec3d>(from_I3Position(p.GetPos() + length*p.GetDir()))),
             std::atan(kArrowHeadRatio), arrowsize);
+        obj->setVisible( vizf );
+        obj->setColor( bubble->getColor() );
         g->add(obj);
     }
 

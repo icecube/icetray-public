@@ -26,7 +26,7 @@ public:
 	SceneVariant() = default;
 	SceneVariant(const SceneVariant&) = default;
 	virtual ~SceneVariant(){}
-	virtual T value( double vistime ) = 0;
+	virtual T value( double vistime ) const = 0;
 
 };
 
@@ -35,6 +35,9 @@ I3_POINTER_TYPEDEFS( VariantTime );
 
 typedef SceneVariant<float> VariantFloat;
 I3_POINTER_TYPEDEFS( VariantFloat );
+
+typedef SceneVariant<bool> VariantBool;
+I3_POINTER_TYPEDEFS( VariantBool );
 
 typedef SceneVariant<vec3d> VariantVec3d;
 I3_POINTER_TYPEDEFS( VariantVec3d );
@@ -50,7 +53,7 @@ private:
 
 public:
 	SceneConstant( const T& value ) : value_(value) {}
-	T value( double ){ return value_; }
+	T value( double ) const { return value_; }
 };
 
 /** Abstract superclass of SceneVariants that are defined in terms of values at particular times */
@@ -91,8 +94,8 @@ public:
 		SceneTimeFunction<T>( value, time )
 	{}
 
-	virtual T value( double vistime ){
-		typename SceneTimeFunction<T>::timeMap::iterator j = this->map_.lower_bound(vistime);
+	virtual T value( double vistime ) const override {
+		typename SceneTimeFunction<T>::timeMap::const_iterator j = this->map_.lower_bound(vistime);
 		if ( j != this->map_.begin() )
 			--j;
 		return j->second;
@@ -112,20 +115,20 @@ public:
 		SceneTimeFunction<T>( value, time )
 	{}
 
-	inline T mix( double r, const T &vmin, const T &vmax )
+	inline T mix( double r, const T &vmin, const T &vmax ) const
 	{
 		return r * vmax + ( (1.0-r) * vmin );
 	}
 
-	virtual T value( double vistime ){
-		typename SceneTimeFunction<T>::timeMap::iterator j = this->map_.lower_bound(vistime);
+	virtual T value( double vistime ) const override {
+		typename SceneTimeFunction<T>::timeMap::const_iterator j = this->map_.lower_bound(vistime);
 		if ( j == this->map_.end() )
 			return (--j)->second;
 		else if ( j == this->map_.begin() )
 			return j->second;
 		
 		// okay, we are between two values and can interpolate
-		typename SceneTimeFunction<T>::timeMap::iterator i(boost::prior(j));
+		typename SceneTimeFunction<T>::timeMap::const_iterator i(boost::prior(j));
 		double tmin = (*i).first, tmax = (*j).first;
 		const T& vmin = (*i).second, &vmax = (*j).second;
 		double r = (vistime - tmin) / (tmax - tmin);
@@ -149,7 +152,7 @@ public:
 		window_(window), point_(point)
 	{}
 
-	virtual double value( double vistime ){
+	virtual double value( double vistime ) const override {
 		return window_->getTime(point_);
 	}
 };
@@ -162,7 +165,7 @@ protected:
 	WindowTime time_;
 	const float offset_;
 
-	vec3d loc_at_time( double t ){
+	vec3d loc_at_time( double t ) const {
 	  float dist = particle_->GetSpeed() * (t - particle_->GetTime());
 	  const float pLength = particle_->GetLength();
 	  if (pLength > 0.0f)
@@ -188,7 +191,7 @@ public:
 		particle_(p), time_(window, point), offset_(offset)
 	{}
 
-    virtual vec3d value( double vistime ){
+    virtual vec3d value( double vistime ) const override {
       I3Particle::ParticleShape shape = particle_->GetShape();
       double t = time_.value(vistime);
       if( shape == I3Particle::StartingTrack ||
@@ -214,7 +217,7 @@ I3_POINTER_TYPEDEFS( ParticlePoint );
 
 // specialize for QColor interpolation
 template<>
-inline QColor SceneLinterpFunction<QColor>::mix( double r, const QColor &vmin, const QColor &vmax )
+inline QColor SceneLinterpFunction<QColor>::mix( double r, const QColor &vmin, const QColor &vmax ) const
 {
 	QColor ret = QColor();
 	int h = r * vmax.hue() + ( (1.0f-r) * vmin.hue() );
