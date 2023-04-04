@@ -68,7 +68,7 @@ add_custom_target(rsync-prod-data
     COMMAND test -n "${I3_PRODDATA}"
     COMMAND mkdir -p "${I3_PRODDATA}"
     COMMAND rsync -vrlpt --delete ${PRODDATA_URL} ${I3_PRODDATA}/
-    COMMENT "Rsyncing test-data to ${I3_PRODDATA} (I3_PRODDATA)"
+    COMMENT "Rsyncing prod-data to ${I3_PRODDATA} (I3_PRODDATA)"
     )
 
 ## DO NOT add `enable_testing()` here. See commentary above.
