@@ -122,6 +122,10 @@ if(GIT_REVISION)
   string(SUBSTRING ${GIT_REVISION} 0 8 GIT_SHORT_REVISION)
 endif()
 
+set(GIT_URL ${GIT_URL} CACHE INTERNAL "git url")
+set(GIT_REVISION ${GIT_REVISION} CACHE INTERNAL "git revision")
+set(GIT_SHORT_REVISION ${GIT_SHORT_REVISION} CACHE INTERNAL "git short revision")
+
 execute_process(COMMAND /usr/bin/env
   OUTPUT_FILE ${NOTES_DIR}/env.txt)
 
@@ -176,7 +180,6 @@ option(USE_GIT_REVISION_FLAGS "Add compiled-in git revision information." ON)
 
 if(NOT HAVE_GIT_REVISION)
   set(HAVE_GIT_REVISION TRUE CACHE INTERNAL "Flag used for testing in toplevel-parasite.cmake")
-  set(GIT_REVISION ${GIT_REVISION} CACHE INTERNAL "git revision")
   boost_report_value(GIT_REVISION)
 endif()
 
@@ -185,7 +188,6 @@ endif()
 #
 if(NOT HAVE_GIT_URL)
   set(HAVE_GIT_URL TRUE CACHE INTERNAL "Flag used for testing in toplevel-parasite.cmake")
-  set(GIT_URL ${GIT_URL} CACHE INTERNAL "git url")
   boost_report_value(GIT_URL)
 endif()
 
@@ -212,12 +214,16 @@ endif()
 # JC wants it like this.
 # set it to something reasonable if it equals /usr/local.
 #
-if (CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   if (META_PROJECT)
     set(CMAKE_INSTALL_PREFIX ${META_PROJECT}.r${GIT_SHORT_REVISION}.${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
   else()
     set(CMAKE_INSTALL_PREFIX ${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
   endif()
+endif()
+
+if(CMAKE_INSTALL_PREFIX MATCHES "${META_PROJECT}.r[a-f0-9]+.${OSTYPE}-${ARCH}.${COMPILER_ID_TAG}")
+  set(CMAKE_INSTALL_PREFIX ${META_PROJECT}.r${GIT_SHORT_REVISION}.${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
 endif()
 
 ## set the uber header. this file is included via command line for
