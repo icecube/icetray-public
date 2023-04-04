@@ -86,6 +86,9 @@ if (LUCID MATCHES "lucid")
 endif ()
 i3_test_scripts(${tmp_SCRIPTS})
 
+# intermittently hangs on one of the runners (macOS arm64).
+set_property(TEST dataio::test APPEND PROPERTY TIMEOUT 60)  # timeout in 60s vs default 1100s
+
 # Many dependencies between tests.  Make them explicit.
 # These tests use filtered.i3, created by dataio::g_regex_filter_on_read_and_write.py
 set_property(TEST dataio::h2_verify_read_filter.py APPEND PROPERTY DEPENDS dataio::g_regex_filter_on_read_and_write.py)
