@@ -30,7 +30,11 @@
 //   
 //
 
+// This file registers both the I3VEMCalibration and I3IceTopSLCCalibration objects.
+// (The "IceToppy stuff")
+
 #include <dataclasses/calibration/I3VEMCalibration.h>
+#include <dataclasses/calibration/I3IceTopSLCCalibration.h>
 #include <icetray/python/dataclass_suite.hpp>
 
 using namespace boost::python;
@@ -48,6 +52,32 @@ void register_I3VEMCalibration()
   class_<I3VEMCalibrationMap, 
          I3VEMCalibrationMapPtr>("I3VEMCalibrationMap")
     .def(dataclass_suite<I3VEMCalibrationMap>())
+    ;
+
+}
+
+void register_I3IceTopSLCCalibration()
+{
+  class_<I3IceTopSLCCalibration>("I3IceTopSLCCalibration")
+    .def(copy_suite<I3IceTopSLCCalibration>())
+    #define I3ITSLCCALPROPS \
+    (intercept_C0A0)(intercept_C0A1)(intercept_C0A2)(intercept_C1A0)(intercept_C1A1)(intercept_C0A2) \
+    (slope_C0A0)(slope_C0A1)(slope_C0A2)(slope_C1A0)(slope_C1A1)(slope_C0A2) \
+    (intercept_CunkA0)(intercept_CunkA1)(intercept_CunkA2) \
+    (slope_CunkA0)(slope_CunkA1)(slope_CunkA2) \
+    (A0_A1_crossover)(A1_A2_crossover)
+    BOOST_PP_SEQ_FOR_EACH(WRAP_RW, I3IceTopSLCCalibration, I3ITSLCCALPROPS)
+    #undef I3ITSLCCALPROPS
+    .def("GetIntercept",&I3IceTopSLCCalibration::GetIntercept,bp::args("chip", "atwd"))
+    .def("SetIntercept",&I3IceTopSLCCalibration::SetIntercept,bp::args("chip", "atwd", "val"))
+    .def("GetSlope",&I3IceTopSLCCalibration::GetSlope,bp::args("chip", "atwd"))
+    .def("SetSlope",&I3IceTopSLCCalibration::SetSlope,bp::args("chip", "atwd", "val"))
+    .def(dataclass_suite<I3IceTopSLCCalibration>())
+    ;
+
+  class_<I3IceTopSLCCalibrationMap,
+         I3IceTopSLCCalibrationMapPtr>("I3IceTopSLCCalibrationMap")
+    .def(dataclass_suite<I3IceTopSLCCalibrationMap>())
     ;
 
 }

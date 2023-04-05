@@ -5,6 +5,8 @@ Release Notes
 
 trunk
 -----
+* Add I3IceTopSLCCalibration map to the "calibration family" of objects, which can be alongside the
+  I3Calibration in a C-frame (#3003)
 
 Dec. 12, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------

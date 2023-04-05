@@ -30,8 +30,12 @@
 //   
 //
 
+// This file registers both the I3VEMCalibration and I3IceTopSLCCalibration objects.
+// (The "IceToppy stuff")
+
 #include <icetray/OMKey.h>
 #include <dataclasses/calibration/I3VEMCalibration.h>
+#include <dataclasses/calibration/I3IceTopSLCCalibration.h>
 #include <icetray/python/dataclass_suite.hpp>
 
 using namespace boost::python;
@@ -40,5 +44,12 @@ void register_MapOMKeyI3VEMCalibration()
 {
   class_<std::map<OMKey, I3VEMCalibration> >("Map_OMKey_I3VEMCalibration")
     .def(dataclass_suite<std::map<OMKey, I3VEMCalibration> >())
+    ;
+}
+
+void register_MapOMKeyI3IceTopSLCCalibration()
+{
+  class_<std::map<OMKey, I3IceTopSLCCalibration> >("Map_OMKey_I3IceTopSLCCalibration")
+    .def(dataclass_suite<std::map<OMKey, I3IceTopSLCCalibration> >())
     ;
 }

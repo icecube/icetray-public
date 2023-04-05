@@ -31,6 +31,7 @@
 //
 
 #include <dataclasses/calibration/I3Calibration.h>
+#include <dataclasses/calibration/I3IceTopSLCCalibration.h>
 #include <icetray/python/dataclass_suite.hpp>
 
 using namespace boost::python;
@@ -46,4 +47,17 @@ void register_I3Calibration()
     ;
 
   register_pointer_conversions<I3Calibration>();
+}
+
+void register_I3IceTopSLCCalibrationCollection()
+{
+  class_<I3IceTopSLCCalibrationCollection, bases<I3FrameObject>, boost::shared_ptr<I3IceTopSLCCalibrationCollection> >("I3IceTopSLCCalibrationCollection")
+    .def(copy_suite<I3IceTopSLCCalibrationCollection>())
+    #define I3SLCCOLLECTIONPROPS (startTime)(endTime)(ITslcCal)
+    BOOST_PP_SEQ_FOR_EACH(WRAP_RW_RECASE, I3IceTopSLCCalibrationCollection, I3SLCCOLLECTIONPROPS)
+    #undef I3SLCCOLLECTIONPROPS
+    .def(dataclass_suite<I3IceTopSLCCalibrationCollection>())
+    ;
+
+  register_pointer_conversions<I3IceTopSLCCalibrationCollection>();
 }
