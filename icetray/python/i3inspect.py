@@ -73,6 +73,10 @@ try:
 
         log.debug("Parsing docstring from object: %s", obj.__name__)
         parser.parse(docstring, doc)
+        # remove all "system messages" (ie errors from docutils) from the parse result
+        for n in list(doc.findall(nodes.system_message)):
+            n.parent.remove(n)
+
         doc.walkabout(harvester)
         return (doc.astext().strip(), harvester.params)
 
