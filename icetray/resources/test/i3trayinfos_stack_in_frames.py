@@ -1,43 +1,45 @@
 #!/usr/bin/env python3
 
+from pathlib import Path
+from tempfile import NamedTemporaryFile
+
 from I3Tray import I3Tray
-from icecube import icetray
-from icecube import dataio
-import os
+from icecube import dataio, icetray
+from icecube.icetray.i3logging import log_debug
 
+# silence I3Tray
+icetray.logging.set_level_for_unit("I3Tray", icetray.I3LogLevel.LOG_WARN)
+
+foo = Path(NamedTemporaryFile(delete=False).name)
 tray = I3Tray()
-
 tray.Add("BottomlessSource")
-
-tray.Add("I3Writer", Filename = "foo.i3")               
-
+tray.Add("I3Writer", Filename=str(foo))
 tray.Execute(1)
 
-
-for i in range(10):
-    
+foonew = Path(NamedTemporaryFile(delete=False).name)
+for _i in range(11):
     tray = I3Tray()
-
-    tray.Add("I3Reader", Filename = "foo.i3")                   
-
-    tray.Add("I3Writer", Filename = "foonew.i3")                   
-
+    tray.Add("I3Reader", Filename=str(foo))
+    tray.Add("I3Writer", Filename=str(foonew))
     tray.Execute()
-    os.unlink("foo.i3")
-    os.rename("foonew.i3", "foo.i3")
+    foo.unlink()
+    foonew.rename(foo)
 
-f = dataio.I3File("foo.i3")
+assert foo.exists(), "lost our tempfile!"
+f = dataio.I3File(str(foo))
+
+# should be our info frame
 frame = f.pop_frame(icetray.I3Frame.TrayInfo)
-print(frame)
-for k in frame.keys():
-    print("KEYS: %s" % k)
-
+log_debug(str(frame))
 assert len(frame.keys()) == 11, "eleven keys expected in frame"
 
+# should be our physics frame
 frame = f.pop_frame()
-
+log_debug(str(frame))
 assert not frame, "only one frame expected in file"
 
-fname = "foo.i3"
-if os.path.exists(fname):
-	os.unlink(fname)
+# clean up our tempfiles
+for fname in [foo, foonew]:
+    if fname.exists():
+        fname.unlink()
+    assert not fname.exists(), "Unable to remove tempfile {str(fname)}"
