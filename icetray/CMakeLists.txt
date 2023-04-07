@@ -266,6 +266,8 @@ i3_add_pybindings(icetray
   USE_PROJECTS icetray
   )
 
+if(BUILD_ICETRAY)
+
 #
 # This is special, goes in the toplevel 'lib' directory for
 # backwards compatibility
@@ -282,7 +284,8 @@ add_custom_target(I3Tray.py
   DEPENDS ${TMP_LIBRARY_OUTPUT_PATH}/I3Tray.py
   )
 
-add_dependencies(icetray-pybindings I3Tray.py)
+  add_dependencies(icetray-pybindings I3Tray.py)
+endif()
 
 # Install icetray-inspect
 i3_executable_script(inspect resources/icetray-inspect.py)

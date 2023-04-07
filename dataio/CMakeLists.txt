@@ -37,9 +37,10 @@ i3_project(dataio
 i3_add_library(dataio 
   private/dataio-modules/*.cxx private/dataio/*.cxx
   USE_PROJECTS serialization icetray dataclasses 
-  USE_TOOLS boost python 
+  USE_TOOLS boost python
+  LINK_LIBRARIES ${BOOST_DATE_TIME}
+
 )
-target_link_libraries(dataio ${BOOST_DATE_TIME})
 
 i3_add_pybindings(dataio
   private/pybindings/I3File.cxx
@@ -86,6 +87,7 @@ if (LUCID MATCHES "lucid")
 endif ()
 i3_test_scripts(${tmp_SCRIPTS})
 
+if(BUILD_DATAIO)
 # intermittently hangs on one of the runners (macOS arm64).
 set_property(TEST dataio::test APPEND PROPERTY TIMEOUT 60)  # timeout in 60s vs default 1100s
 
@@ -207,7 +209,7 @@ if (LIBARCHIVE_FOUND)
 set_property(TEST dataio::o7_libarchive_read.py APPEND PROPERTY DEPENDS dataio::zz_cleanup.py)
 set_property(TEST dataio::o7_libarchive_read.py PROPERTY SKIP_REGULAR_EXPRESSION "skipping archive-reading tests")
 endif (LIBARCHIVE_FOUND)
-
+endif(BUILD_DATAIO)
 
 # The following is used to test features
 # related to dealing with unregistered classes.

@@ -128,7 +128,9 @@ i3_test_executable(test_class_info_load
   USE_PROJECTS serialization
 )
 
-set_property(TEST serialization::test_class_info_load APPEND PROPERTY DEPENDS serialization::test_class_info_save)
+if(BUILD_SERIALIZATION)
+  set_property(TEST serialization::test_class_info_load APPEND PROPERTY DEPENDS serialization::test_class_info_save)
+endif()
 
 i3_test_executable(test_exported
   private/test/main.cxx
@@ -153,8 +155,10 @@ i3_test_executable(test_shared_ptr_multi_base
 )
 
 # add a fake pybindings target
-add_custom_target(serialization-pybindings)
-add_dependencies(serialization serialization-pybindings)
+if(BUILD_SERIALIZATION)
+  add_custom_target(serialization-pybindings)
+  add_dependencies(serialization serialization-pybindings)
+endif()
 
 # This fails on Ubuntu, both 16.04 and 14.04
 #add_test(NAME serialization::test_compile_only

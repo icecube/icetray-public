@@ -152,4 +152,6 @@ endif()
 
 i3_test_scripts(${DATACLASSES_PYTHON_TEST_SCRIPTS})
 
-set_tests_properties(dataclasses::test PROPERTIES LABELS RUN_LONG)
+if(BUILD_DATACLASSES)
+  set_tests_properties(dataclasses::test PROPERTIES LABELS RUN_LONG)
+endif()
