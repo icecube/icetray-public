@@ -17,7 +17,7 @@ tray.Add("I3Writer", Filename=str(foo))
 tray.Execute(1)
 
 foonew = Path(NamedTemporaryFile(delete=False).name)
-for _i in range(11):
+for _i in range(10):
     tray = I3Tray()
     tray.Add("I3Reader", Filename=str(foo))
     tray.Add("I3Writer", Filename=str(foonew))
