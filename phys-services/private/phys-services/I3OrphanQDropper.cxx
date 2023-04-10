@@ -30,8 +30,10 @@ void
 I3OrphanQDropper::FramePacket(std::vector<I3FramePtr> &packet)
 {
 	
-	if (packet.size() == 1)
+        if (packet.size() == 1){
+          if (packet.front()->GetStop() == I3Frame::DAQ)
 		return; // Drop packets with only a Q frame
+        }
 
 	BOOST_FOREACH(I3FramePtr frame, packet)
 		PushFrame(frame);
