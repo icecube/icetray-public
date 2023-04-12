@@ -31,8 +31,7 @@ namespace std{
 #include "A.ipp"
 
 template<class T>
-struct ptr_equal_to : public std::binary_function<T, T, bool> 
-{
+struct ptr_equal_to {
     static_assert(::boost::is_pointer< T >::value,"T must be a pointer type");
     bool operator()(T const _Left, T const _Right) const
     {

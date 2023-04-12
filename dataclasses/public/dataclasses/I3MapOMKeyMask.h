@@ -180,19 +180,35 @@ private:
 	template <typename BinaryOperator>
 	I3RecoPulseSeriesMapMask ApplyBinaryOperator(const I3RecoPulseSeriesMapMask&) const;
 	
-	struct operator_and : public std::binary_function<mask_t, mask_t, mask_t> {
+	struct operator_and {
+		typedef mask_t first_argument_type;
+		typedef mask_t second_argument_type;
+		typedef mask_t result_type;
+
 		inline mask_t operator()(mask_t lhs, mask_t rhs) { return lhs & rhs; }
 	};
-	
-	struct operator_andnot : public std::binary_function<mask_t, mask_t, mask_t> {
+
+	struct operator_andnot {
+		typedef mask_t first_argument_type;
+		typedef mask_t second_argument_type;
+		typedef mask_t result_type;
+
 		inline mask_t operator()(mask_t lhs, mask_t rhs) { return lhs & ~rhs; }
 	};
-	
-	struct operator_or : public std::binary_function<mask_t, mask_t, mask_t> {
+
+	struct operator_or {
+		typedef mask_t first_argument_type;
+		typedef mask_t second_argument_type;
+		typedef mask_t result_type;
+
 		inline mask_t operator()(mask_t lhs, mask_t rhs) { return lhs | rhs; }
 	};
-	
-	struct operator_xor : public std::binary_function<mask_t, mask_t, mask_t> {
+
+	struct operator_xor {
+		typedef mask_t first_argument_type;
+		typedef mask_t second_argument_type;
+		typedef mask_t result_type;
+
 		inline mask_t operator()(mask_t lhs, mask_t rhs) { return lhs ^ rhs; }
 	};
 	
