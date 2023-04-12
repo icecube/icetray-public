@@ -8,11 +8,18 @@ Release Notes
 trunk
 -----
 
+Apr. 12, 2023 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release V1.6.0
+
+* "Recalculate" the default install directory with ``make rebuild_cache && make install``
+* Minor cleanups
+
 Dec. 12, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.5.0
 
-- Documentation cleanups and improvements, especially for macOS.
+* Documentation cleanups and improvements, especially for macOS.
 
 Jul. 27, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------

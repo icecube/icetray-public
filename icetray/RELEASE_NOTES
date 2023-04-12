@@ -6,6 +6,14 @@ Release Notes
 main
 ----
 
+Apr. 12, 2023 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.6.0
+
+* Restore use of BUILD_${PROJECT}=OFF (#3058)
+* clean up `icetray-inspect` output (#3041)
+* icetray - clean up and de-dupe tests
+
 Dec. 12, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.5.0

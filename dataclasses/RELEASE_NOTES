@@ -5,8 +5,17 @@ Release Notes
 
 trunk
 -----
+
+Apr. 12, 2023 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release V1.6.0
+
+* Restore use of BUILD_${PROJECT}=OFF (#3058)
+* Cleanup temporary file use in tests
 * Add I3IceTopSLCCalibration map to the "calibration family" of objects, which can be alongside the
   I3Calibration in a C-frame (#3003)
+* Fix issues with corsika-ehist and compatibility with new corsika versions (#3004)
+* Set ATWD flag based on pulse width in SuperDST (#3017)
 
 Dec. 12, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------

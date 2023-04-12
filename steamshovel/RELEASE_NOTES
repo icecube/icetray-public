@@ -6,6 +6,19 @@ Release Notes
 trunk
 -----
 
+Apr. 05, 2023 don la dieu (nega AT icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.6.0
+
+* Restore use of BUILD_${PROJECT}=OFF (#3058)
+* Prettify particle-direction arrows in I3MCTree display (#3053)
+* Fixes steamshovel batch scripting crashes
+* Fixes crashes on quit
+* Fixes crashes when selecting 3rd, 4th, or n-th frame in the time line with the mouse
+* Removes the remnants of the old IceTopViewer steamshovel artist
+* Documentation cleanups
+* General code cleanups
+
 Dec. 12, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.5.0
