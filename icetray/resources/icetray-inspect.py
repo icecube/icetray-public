@@ -104,6 +104,7 @@ class sphinx_writer:
             self.file.write(fill('*<undocumented>*',
                                  width=88,
                                  initial_indent=self.indent))
+            self.file.write('\n\n')
 
     def module_footer(self):
         self.file.write('\n')
