@@ -50,12 +50,13 @@
 
   -bchristy
 */
-static const unsigned i3geometry_version_ = 2;
+static const unsigned i3geometry_version_ = 3;
 
 class I3Geometry : public I3FrameObject
 {
 public:
-  I3Geometry(){};
+   I3Geometry() :
+       snowHeightProvenance(Unknown){ };
   ~I3Geometry();
 
   //Map of all OMs based on their OMKey
@@ -64,6 +65,24 @@ public:
   //Map of all the stations. 
   //Each int specifies a StationGeo object, which is a std::vector of 2 TankGeo's.
   I3StationGeoMap stationgeo;
+
+  //The "Snow Height Povenance" is an enum indicating how the SnowHeight fields were filled.
+  enum SnowHeightProvenance {
+      Unknown = 0,              ///< Unknown provenance
+      Feb2011 = 11,             ///< The numbers that lived in the database as default for years (until 2023)
+      Database = 20,            ///< Pulled from most recent in-situ measurement
+      InterpolatedLinear = 30,  ///< Interpolated between measurements
+      Mixed = 35,               ///< For the case if some Tanks are interpolated, others extrapolated
+      ExtrapolatedLinear = 40,  ///< Extrapolated past the last measurement based on overall slope
+      VEMCal = 50,              ///< Derived from VEMCal measurements of EM and muon components
+      Custom = 100              ///< Entered some other way
+  };
+
+  SnowHeightProvenance snowHeightProvenance;
+  //  Handy functions for enum<->string
+  std::string GetSnowHeightProvenanceString() const;
+  void SetSnowHeightProvenanceString(const std::string &str);
+  
 
   //Map of all scintillator
   I3ScintGeoMap scintgeo;
@@ -86,7 +105,8 @@ public:
             scintgeo == rhs.scintgeo &&
             antennageo == rhs.antennageo &&
             startTime == rhs.startTime &&
-            endTime == rhs.endTime);
+            endTime == rhs.endTime &&
+            snowHeightProvenance == rhs.snowHeightProvenance);
   }
   bool operator!=(const I3Geometry& rhs)
   {
@@ -102,6 +122,10 @@ public:
 
   template <class Archive> void serialize(Archive & ar, unsigned version);
 };
+
+// Define the enums for SnowHeightProvenance
+#define I3GEOMETRY_H_I3Geometry_SnowHeightProvenance \
+  (Unknown)(Feb2011)(Database)(InterpolatedLinear)(Mixed)(ExtrapolatedLinear)(VEMCal)(Custom)
 
 I3_DEFAULT_NAME(I3Geometry);
 I3_POINTER_TYPEDEFS(I3Geometry);

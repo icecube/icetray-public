@@ -45,6 +45,9 @@ I3TankGeo wrapper_GetTankGeo2(const I3Geometry &self, const TankKey &tankkey) {
   return self.GetTankGeo(tankkey);
 }
 
+#ifndef ENUM_DEF
+#define ENUM_DEF(r,data,T) .value(BOOST_PP_STRINGIZE(T), data::T)
+#endif
 
 void register_I3Geometry()
 {
@@ -53,13 +56,20 @@ void register_I3Geometry()
     // I3Geometry
     //
     bp::class_<I3Geometry, bp::bases<I3FrameObject>, boost::shared_ptr<I3Geometry> >("I3Geometry")
-    #define GEOMPROPS (omgeo)(stationgeo)(scintgeo)(antennageo)(iceactgeo)(startTime)(endTime)
+    #define GEOMPROPS (omgeo)(stationgeo)(scintgeo)(antennageo)(iceactgeo)(startTime)(endTime)(snowHeightProvenance)
     BOOST_PP_SEQ_FOR_EACH(WRAP_RW_RECASE, I3Geometry, GEOMPROPS )
     #undef GEOMPROPS
     .def("tankgeo", wrapper_GetTankGeo1, bp::arg("key"))
     .def("tankgeo", wrapper_GetTankGeo2, bp::arg("tankkey"))
     .def(bp::dataclass_suite<I3Geometry>())
     ;
+    
+    // Get access to the SnowHeight Enums via pybindings.
+    bp::enum_<I3Geometry::SnowHeightProvenance>("SnowHeightProvenance")
+      BOOST_PP_SEQ_FOR_EACH(ENUM_DEF,I3Geometry,I3GEOMETRY_H_I3Geometry_SnowHeightProvenance)
+      .export_values()
+      ;
+    
     
     register_pointer_conversions<I3Geometry>();
 }

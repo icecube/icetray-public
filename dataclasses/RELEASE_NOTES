@@ -5,6 +5,7 @@ Release Notes
 
 trunk
 -----
+* Add "SnowHeightProvenance" enum to I3Geometry
 
 Apr. 12, 2023 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------

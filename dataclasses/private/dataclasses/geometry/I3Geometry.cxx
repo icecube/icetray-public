@@ -3,6 +3,9 @@
 
 #include <boost/foreach.hpp>
 
+#include <boost/preprocessor/seq/for_each.hpp>
+#include <boost/lexical_cast.hpp>
+
 I3Geometry::~I3Geometry() {}
 
 template <class Archive>
@@ -47,7 +50,9 @@ I3Geometry::serialize(Archive& ar, unsigned version) {
     ar & make_nvp("AntennaGeo", antennageo);
     ar & make_nvp("IceActGeo", iceactgeo);
   }
-
+  if (version >= 3) {
+    ar & make_nvp("SnowHeightProvenance", snowHeightProvenance);
+  }
 
   ar & make_nvp("StartTime", startTime);
   ar & make_nvp("EndTime", endTime);
@@ -61,6 +66,7 @@ const I3Geometry& I3Geometry::operator=(const I3Geometry& geometry) {
   iceactgeo = geometry.iceactgeo;
   startTime = geometry.startTime;
   endTime = geometry.endTime;
+  snowHeightProvenance = geometry.snowHeightProvenance;
 
   return *this;
 }
@@ -87,5 +93,29 @@ I3TankGeo I3Geometry::GetTankGeo(const TankKey &tankkey) const
   return GetTankGeo(tankkey.GetDefaultOMKey());
 }
 
+// For converting SnowHeightProvenance enum's to strings and back again:
+// I stole/adapted this from I3Particle.  (Note sure if there's a better way.)
+#define MAKE_ENUM_TO_STRING_CASE_LINE(r, data, t) case I3Geometry::t : return BOOST_PP_STRINGIZE(t);
+std::string I3Geometry::GetSnowHeightProvenanceString() const
+{
+    switch (snowHeightProvenance) {
+        BOOST_PP_SEQ_FOR_EACH(MAKE_ENUM_TO_STRING_CASE_LINE, ~, I3GEOMETRY_H_I3Geometry_SnowHeightProvenance)
+    }
+    return(boost::lexical_cast<std::string>( snowHeightProvenance ));
+}
+
+#define MAKE_STRING_TO_ENUM_IF_LINE2(r, data, t) else if ( str == BOOST_PP_STRINGIZE(t) ) { data = t; }
+void I3Geometry::SetSnowHeightProvenanceString(const std::string &str)
+{
+  if (false) { }
+  BOOST_PP_SEQ_FOR_EACH(MAKE_STRING_TO_ENUM_IF_LINE2, snowHeightProvenance, I3GEOMETRY_H_I3Geometry_SnowHeightProvenance)
+  else {
+    try {
+      snowHeightProvenance = static_cast<SnowHeightProvenance>( boost::lexical_cast<int>(str) );
+    } catch(boost::bad_lexical_cast &bad) {
+      log_fatal("\"%s\" is not a valid SnowHeightProvenance.", str.c_str());
+    }
+  }
+}
 
 I3_SERIALIZABLE(I3Geometry);
