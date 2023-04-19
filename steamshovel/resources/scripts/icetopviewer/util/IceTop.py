@@ -28,12 +28,11 @@ class IceTop(Detector):
         self.minPatchSize = 5
         self.maxPatchSize = self.minPatchSize * 5
         self.time_delay = []
-
         self.tanks_position_patches = PatchCollection([])
         self.tanks_pulse_patches = PatchCollection([])
     
     def GetDefaultPulseKeys(self):
-        return ['OfflineIceTopHLCTankPulses']
+        return ['OfflineIceTopHLCTankPulses', "HLCTankPulses"]
 
     def GetKeyName(self):
         return self.name
@@ -45,6 +44,7 @@ class IceTop(Detector):
 
         # Check all things in geometry frame I3Geometry
         for key in frame.keys():
+            if key == "I3GeometryDiff": continue
             i3geometry = frame[key]
             for stnkey, station in i3geometry.stationgeo:
                 pos_sta = np.zeros(3)
@@ -60,8 +60,7 @@ class IceTop(Detector):
 
 
     def DrawGeometry(self, ax):
-        if not self.shouldDraw:
-            return
+        if not self.shouldDraw: return
 
         tanks_patches = []
         for pos in self.positions.values():
@@ -85,8 +84,7 @@ class IceTop(Detector):
                 amps.append(totalCharge)
                 time.append(pulse[0].t)
 
-        if not len(amps):
-            return
+        if not len(amps): return
 
         amps = np.log10(amps)
         minAmp = min(amps)
@@ -111,7 +109,7 @@ class IceTop(Detector):
         self.laputopParams = None
 
         for framekey in self.pulsekeys:
-            if framekey in frame.keys():
+            if framekey in frame.keys() and len(frame[framekey]):
                 # gets Tank Pulses and stores them in a dict with the detector key for the unique geometry match
                 recopulse_map = frame[framekey]
                 pulses = {}
@@ -123,8 +121,6 @@ class IceTop(Detector):
                                                          True))
                     pulses[omkey] = pulses_per_tank
                 self.measuredData[framekey] = pulses
-            else:
-                print("Tank pulse key %s not in frame"%(framekey))
 
         if "LaputopParams" in frame.keys():
             self.laputopParams = I3LaputopParams.from_frame(frame, "LaputopParams")
@@ -179,21 +175,31 @@ class IceTop(Detector):
         if self.laputopParams:
             self.__DrawLaputopLDF(ax, radii)
 
+        # Silent stations
+        for ikey, framekey in enumerate(self.measuredData.keys()):
+            pulses = self.measuredData[framekey]
+            radii = []
+            for scintkey in [el for el in self.positions.keys() if el not in pulses.keys()]:
+                pos = self.positions[scintkey]
+                r = get_radius(particle, pos)
+                radii.append(r)
+            amps = [0.01 for i in range(len(radii))]
+            ax.scatter(radii, amps, c="w", alpha=0.4, marker=self.shapes[ikey % len(self.shapes)], edgecolors="k")
+
 
     def DrawShowerFront(self, ax, particle):
-        if not self.shouldDraw:
-            return
+        if not self.shouldDraw: return
 
         for ikey, framekey in enumerate(self.measuredData.keys()):
             pulses = self.measuredData[framekey]
 
             radii = []
             amps = []
-            time =[]
+            time = []
 
             tCore = particle.time
             core = np.array([particle.pos[i] for i in range(3)])
-            nDir = np.array([particle.dir.x,particle.dir.y,particle.dir.y])
+            nDir = np.array([particle.dir.x, particle.dir.y, particle.dir.y])
 
             for omkey in pulses.keys():
                 pulse = pulses[omkey]
@@ -212,10 +218,12 @@ class IceTop(Detector):
             time = np.subtract(time, min(time))
             time = np.divide(time, max(time))
             time = cmap(time)
-            ax.scatter(radii,  amps, c=time, alpha=0.4, marker=self.shapes[ikey%len(self.shapes)])
+            ax.scatter(radii, amps, c=time, alpha=0.4, marker=self.shapes[ikey%len(self.shapes)])
 
         if self.laputopParams:
             self.__DrawLaputopTiming(ax, radii)
+
+        # Silent stations are not needed for the time plot
 
 
     def __DrawLaputopTiming(self, ax, radii):

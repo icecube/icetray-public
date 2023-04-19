@@ -27,7 +27,7 @@ class Scintillator(Detector):
         self.scint_position_patches = PatchCollection([])
 
     def GetDefaultPulseKeys(self):
-        return ['ScintRecoPulses','ScintRecoPulsesHighGain', 'ScintRecoPulsesMediumGain', 'ScintRecoPulsesLowGain']
+        return ['ScintRecoPulses', 'ScintRecoPulsesHighGain', 'ScintRecoPulsesMediumGain', 'ScintRecoPulsesLowGain', "SiPMRecoPulses"]
 
     def GetKeyName(self):
         return self.name
@@ -39,6 +39,7 @@ class Scintillator(Detector):
 
         #Check all things in geometry frame I3Geometry
         for key in frame.keys():
+            if key == "I3GeometryDiff": continue
             i3geometry = frame[key]
             for scintkey, scint in i3geometry.scintgeo:
                 pos = scint.position
@@ -46,8 +47,7 @@ class Scintillator(Detector):
 
 
     def DrawGeometry(self, ax):
-        if not self.shouldDraw:
-            return
+        if not self.shouldDraw: return
 
         scint_patches = []
         for pos in self.positions.values():
@@ -70,8 +70,7 @@ class Scintillator(Detector):
                 amps.append(pulse.charge)
                 time.append(pulse.t)
 
-        if not len(amps):
-            return
+        if not len(amps): return
 
         amps = np.log10(amps)
         minAmp = min(amps)
@@ -94,7 +93,7 @@ class Scintillator(Detector):
         self.measuredData.clear()
 
         for framekey in self.pulsekeys:
-            if framekey in frame.keys():
+            if framekey in frame.keys() and len(frame[framekey]) != 0:
                 # handle scintillators
                 scint_map = frame[framekey]
                 pulses = {}
@@ -103,9 +102,6 @@ class Scintillator(Detector):
                     pulses[scint] = PulseData(vector[0].time, vector[0].charge, False)
 
                 self.measuredData[framekey] = pulses
-            else:
-                print("Scintillator pulse key %s not in frame"%(framekey))
-
 
     def DrawLDF(self, ax, particle):
         if not self.shouldDraw:
@@ -132,6 +128,15 @@ class Scintillator(Detector):
             time = np.divide(time, max(time))
             time = cmap(time)
             ax.scatter(radii,  amps, c=time, alpha=0.4, marker=self.shapes[(ikey+1)%len(self.shapes)], label=framekey)
+
+            # Silent stations
+            radii = []
+            for key in [el for el in self.positions.keys() if el not in pulses.keys()]:
+                pos = self.positions[key]
+                r = get_radius(particle, pos)
+                radii.append(r)
+            amps = [0.01 for i in range(len(radii))]
+            ax.scatter(radii,  amps, c="w", alpha=0.4, marker=self.shapes[(ikey+1)%len(self.shapes)], edgecolors="k")
 
 
     def DrawShowerFront(self, ax, particle):
@@ -166,8 +171,9 @@ class Scintillator(Detector):
             time = np.subtract(time, min(time))
             time = np.divide(time, max(time))
             time = cmap(time)
-            ax.scatter(radii,  amps, c=time, alpha=0.4, marker=self.shapes[ikey%len(self.shapes)])
+            ax.scatter(radii,  amps, c=time, alpha=0.4, marker=self.shapes[(ikey+1)%len(self.shapes)])
 
+            # Silent stations are not needed for the time plot
 
     def GetDrawOptions(self, frame):
         print("Current pulse keys are", self.pulsekeys)

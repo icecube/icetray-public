@@ -5,7 +5,7 @@ class Detector(object):
 
   def __init__(self):
     self.name = "DetectorNameUnset"
-    self.shapes = ['o', 's', 'P', "x", "+"]
+    self.shapes = ['o', 's', 'P', "X", "D", "*"]
     self.positions = {}
     self.measuredData = {}
     self.shouldDraw = True   #Decides if this should be drawn
