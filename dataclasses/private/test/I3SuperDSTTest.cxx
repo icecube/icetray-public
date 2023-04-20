@@ -213,8 +213,6 @@ TEST(Serialization)
 	slc_pulsemap[key1].resize(3);
 	slc_pulsemap[key2].resize(3);
 	
-	unsigned n_slc(0), n_hlc(0), n_slc_readouts(0), n_hlc_readouts(0);
-	
 	I3SuperDST supi(pulsemap);
 	std::list<I3SuperDSTReadout>::const_iterator lit1, lit2;
 	std::vector<I3SuperDSTChargeStamp>::const_iterator stit1, stit2;
@@ -222,15 +220,6 @@ TEST(Serialization)
 	std::list<I3SuperDSTReadout> hlc_readouts = supi.GetHLCReadouts();
 	std::list<I3SuperDSTReadout> slc_readouts = supi.GetSLCReadouts();
 	
-	for (lit1 = hlc_readouts.begin(); lit1 != hlc_readouts.end(); lit1++) {
-		n_hlc_readouts++;
-		n_hlc += lit1->stamps_.size();
-	}
-	for (lit1 = slc_readouts.begin(); lit1 != slc_readouts.end(); lit1++) {
-		n_slc_readouts++;
-		n_slc += lit1->stamps_.size();
-	}
-
 	I3SuperDST supa;
 	resurrect(supi, supa);
 	
