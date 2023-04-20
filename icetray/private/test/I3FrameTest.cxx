@@ -525,7 +525,8 @@ TEST(type_id)
 
   const std::type_info* ti = f.type_id("i");
   log_trace("mine = %s vs %s", I3::name_of(typeid(i.get())).c_str(), I3::name_of(*ti).c_str());
-  ENSURE_EQUAL(ti, &typeid(*i.get()));
+  auto& r = *i.get();
+  ENSURE_EQUAL(ti, &typeid(r));
 }
 
 TEST(merge_doesnt_mutate_stream)
