@@ -77,7 +77,7 @@ private:
     }
     I3_SERIALIZATION_SPLIT_MEMBER()
 public:
-    static int count;
+    [[maybe_unused]] static int count;
     B() : A() {};
     virtual ~B() {};
 };

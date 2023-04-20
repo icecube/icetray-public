@@ -61,7 +61,7 @@ private:
         ar & I3_SERIALIZATION_BASE_OBJECT_NVP(A);
     }
 public:
-    static int count;
+    [[maybe_unused]] static int count;
     B() : A() {};
     virtual ~B() {};
 };
