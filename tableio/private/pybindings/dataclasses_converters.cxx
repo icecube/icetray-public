@@ -94,6 +94,9 @@ void register_dataclasses_converters() {
     typedef I3TreeConverter<I3ParticleConverter, I3MCTree > I3MCTreeConverter;
     I3CONVERTER_EXPORT_DEFAULT(I3MCTreeConverter,"Dumps the I3MCTree verbatim");
 
+    typedef I3MapOMKeyVectorConverter< convert::I3TimeWindow, I3TimeWindowSeriesMap > I3TimeWindowSeriesMapConverter;
+    I3_MAP_CONVERTER_EXPORT_DEFAULT(I3TimeWindowSeriesMapConverter, "Dumps all I3TimeWindow from a I3TimeWindowSeriesMap");
+
     //--------------------------------------------------------------------------
     // I3PositionConverter
     I3CONVERTER_EXPORT_DEFAULT__WITH_CONVERTER_OBJ(I3PositionConverter,

@@ -162,6 +162,19 @@ namespace convert {
     row->Set<double>("charge", pulse.GetCharge());
   }
 
+  void I3TimeWindow::AddFields(I3TableRowDescriptionPtr desc, const booked_type &)
+  {
+    desc->AddField<double>("start_time", "ns", "Start time");
+    desc->AddField<double>("stop_time", "ns", "Stop time");
+    desc->AddField<double>("length", "ns", "Stop time - Start time");
+  }
+
+  void I3TimeWindow::FillSingleRow(const booked_type& window, I3TableRowPtr row)
+  {
+    row->Set<double>("start_time", window.GetStart());
+    row->Set<double>("stop_time", window.GetStop());
+    row->Set<double>("length", window.GetLength());
+  }
 
   void double_pair::AddFields(I3TableRowDescriptionPtr desc, const booked_type&)
   {

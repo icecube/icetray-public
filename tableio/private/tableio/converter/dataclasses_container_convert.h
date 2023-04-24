@@ -19,6 +19,7 @@
 #include <dataclasses/physics/I3DOMLaunch.h>
 #include <dataclasses/physics/I3RecoHit.h>
 #include <dataclasses/physics/I3RecoPulse.h>
+#include <dataclasses/I3TimeWindow.h>
 #include <dataclasses/physics/I3MCHit.h>
 #include <dataclasses/physics/I3FlasherInfo.h>
 #include <tableio/I3TableRowDescription.h>
@@ -61,6 +62,7 @@ namespace convert {
   TABLEIO_CONVERTER_FWD(I3RecoHit);
   TABLEIO_CONVERTER_FWD(I3MCHit);
   TABLEIO_CONVERTER_FWD(I3RecoPulse);
+  TABLEIO_CONVERTER_FWD(I3TimeWindow);
   TABLEIO_CONVERTER_FWD(I3FlasherInfo);
   TABLEIO_CONVERTER_FWD(OMKey);
   TABLEIO_CONVERTER_FWD(TankKey);
