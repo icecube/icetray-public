@@ -24,9 +24,39 @@ PyInterpreter::PyInterpreter(const char* progname )
 	scripting::QMeta::pre_init();
 	wchar_t *wprogname = new wchar_t[255];
 	mbstowcs(wprogname, progname, 255);
+
+#if PY_VERSION_HEX < 0x030b0000
 	Py_SetProgramName(wprogname);
 	Py_Initialize();
 	PySys_SetArgv(1, &wprogname);
+#else
+	{
+		PyStatus status;
+		PyConfig config;
+		PyConfig_InitPythonConfig(&config);
+
+		status = PyConfig_SetString(&config, &config.program_name, wprogname);
+		if (PyStatus_Exception(status)) {
+			PyConfig_Clear(&config);
+			Py_ExitStatusException(status);
+		}
+
+		status = PyConfig_SetArgv(&config, 1, &wprogname);
+		if (PyStatus_Exception(status)) {
+			PyConfig_Clear(&config);
+			Py_ExitStatusException(status);
+		}
+
+		status = Py_InitializeFromConfig(&config);
+		if (PyStatus_Exception(status)) {
+			PyConfig_Clear(&config);
+			Py_ExitStatusException(status);
+		}
+
+		PyConfig_Clear(&config);
+	}
+#endif
+
 	scripting::QMeta::post_init();
 
 	// Load essential Python libraries now, so we can rely on their existence later.
