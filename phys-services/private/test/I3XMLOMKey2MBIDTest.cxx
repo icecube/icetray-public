@@ -77,7 +77,6 @@ TEST(c_DMIce)
 {
   I3OMKey2MBIDPtr omkey2mbid;
   OMKey key;
-  long long int mbid;
 
   initI3XMLOMKey2MBIDTest(omkey2mbid, "mainboard_ids.xml.gz");
 
