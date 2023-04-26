@@ -15,6 +15,7 @@
 #include <exception>
 //#include <boost/assert.hpp>
 #include <string>
+#include <cstring>
 
 #define I3_ARCHIVE_SOURCE
 #include <archive/archive_exception.hpp>
@@ -39,7 +40,7 @@ archive_exception::archive_exception(
     exception_code c, 
     const char * e1,
     const char * e2
-) BOOST_NOEXCEPT :
+) noexcept :
     code(c)
 {
     unsigned int length = 0;
@@ -112,7 +113,7 @@ archive_exception::archive_exception(
     (void)length; //tell static analysis not to get upset about dead stores
 }
 
-archive_exception::archive_exception(archive_exception const & oth) BOOST_NOEXCEPT :
+archive_exception::archive_exception(archive_exception const & oth) noexcept :
 	std::exception(oth),
 	code(oth.code)
 {

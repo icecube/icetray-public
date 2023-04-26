@@ -82,11 +82,11 @@ public:
         exception_code c, 
         const char * e1 = NULL,
         const char * e2 = NULL
-    ) BOOST_NOEXCEPT;
+    ) noexcept;
 
-    archive_exception(archive_exception const &) BOOST_NOEXCEPT;
-    virtual ~archive_exception() BOOST_NOEXCEPT_OR_NOTHROW BOOST_OVERRIDE;
-    virtual const char *what() const BOOST_NOEXCEPT_OR_NOTHROW BOOST_OVERRIDE;
+    archive_exception(archive_exception const &) noexcept;
+    virtual ~archive_exception() noexcept override;
+    virtual const char *what() const noexcept override;
 protected:
     unsigned int
     append(unsigned int l, const char * a);
