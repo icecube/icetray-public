@@ -39,7 +39,7 @@ archive_exception::archive_exception(
     exception_code c, 
     const char * e1,
     const char * e2
-) : 
+) BOOST_NOEXCEPT :
     code(c)
 {
     unsigned int length = 0;
@@ -111,6 +111,14 @@ archive_exception::archive_exception(
     }
     (void)length; //tell static analysis not to get upset about dead stores
 }
+
+archive_exception::archive_exception(archive_exception const & oth) BOOST_NOEXCEPT :
+	std::exception(oth),
+	code(oth.code)
+{
+	std::memcpy(m_buffer,oth.m_buffer,sizeof m_buffer);
+}
+
 I3_ARCHIVE_DECL(BOOST_PP_EMPTY())
 archive_exception::~archive_exception() throw() {}
 
