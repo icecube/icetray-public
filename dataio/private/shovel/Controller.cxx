@@ -86,16 +86,41 @@ do_pyshell(char* argv[], Model& model, View& view){
       refresh();
     }
   } suspender(view);
-  
+
   namespace bp = boost::python;
   wchar_t program[255];
   mbstowcs(program, argv[0], 255);
+#if PY_VERSION_HEX < 0x030b0000 // python 3.11
   Py_SetProgramName(program);
   Py_Initialize();
-  // #2405: segfault with this and python 3.7+
-  //        It doesn't appear to be required, so commented out for now
-  //PySys_SetArgvEx(1, (wchar_t**)&program, 0);
   PySys_SetArgvEx(0, NULL, 0);
+#else
+  {
+      PyStatus status;
+      PyConfig config;
+      PyConfig_InitPythonConfig(&config);
+
+      status = PyConfig_SetString(&config, &config.program_name, program);
+      if (PyStatus_Exception(status)) {
+          PyConfig_Clear(&config);
+          Py_ExitStatusException(status);
+      }
+
+      status = PyConfig_SetBytesArgv(&config, 0, NULL);
+      if (PyStatus_Exception(status)) {
+          PyConfig_Clear(&config);
+          Py_ExitStatusException(status);
+      }
+
+      status = Py_InitializeFromConfig(&config);
+      if (PyStatus_Exception(status)) {
+          PyConfig_Clear(&config);
+          Py_ExitStatusException(status);
+      }
+
+      PyConfig_Clear(&config);
+  }
+#endif
 
   //load things users will probably need
   bp::dict ns;
@@ -159,7 +184,7 @@ do_pyshell(char* argv[], Model& model, View& view){
       PyErr_Clear();
     }
   }
-  
+
   // Not finalizing python, as that destroys the frame
 }
 
