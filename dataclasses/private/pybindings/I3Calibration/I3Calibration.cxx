@@ -53,9 +53,10 @@ void register_I3IceTopSLCCalibrationCollection()
 {
   class_<I3IceTopSLCCalibrationCollection, bases<I3FrameObject>, boost::shared_ptr<I3IceTopSLCCalibrationCollection> >("I3IceTopSLCCalibrationCollection")
     .def(copy_suite<I3IceTopSLCCalibrationCollection>())
-    #define I3SLCCOLLECTIONPROPS (startTime)(endTime)(ITslcCal)
-    BOOST_PP_SEQ_FOR_EACH(WRAP_RW_RECASE, I3IceTopSLCCalibrationCollection, I3SLCCOLLECTIONPROPS)
-    #undef I3SLCCOLLECTIONPROPS
+    // Because of weird capitalizations, we'll define these by hand rather than using a loop:
+    .def_readwrite("start_time", &I3IceTopSLCCalibrationCollection::startTime)
+    .def_readwrite("end_time", &I3IceTopSLCCalibrationCollection::endTime)
+    .def_readwrite("it_slc_cal", &I3IceTopSLCCalibrationCollection::ITslcCal)
     .def(dataclass_suite<I3IceTopSLCCalibrationCollection>())
     ;
 
