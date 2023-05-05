@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-from I3Tray import *
-from icecube import icetray, dataclasses, phys_services
+import sys
+from I3Tray import I3Tray
+from icecube import icetray
 
 class UseRandom(icetray.I3Module):
     def __init__(self, context):
@@ -12,10 +13,9 @@ class UseRandom(icetray.I3Module):
         self.rs = self.GetParameter("I3RandomService")
 
     def Physics(self, frame):
-
         if self.rs:
-            rnd = self.rs.Gaus(0,1)
-            
+            self.rs.Gaus(0,1)
+
         self.PushFrame(frame)
 
 try:

@@ -3,14 +3,14 @@
 Test reordering of modules within an I3Tray.
 """
 
-from icecube import icetray, dataio
+from icecube import icetray, dataio  # noqa, needed to add I3InfiniteSource
 from I3Tray import I3Tray
 
 def thing1(frame):
 	frame['foo'] = icetray.I3Int(42)
 	
 def thing2(frame):
-	if not 'foo' in frame:
+	if 'foo' not in frame:
 		raise ValueError("Modules didn't run in the right order!")
 		
 def thing3(frame):
@@ -28,7 +28,7 @@ def run(hook=lambda tray: None):
 # Without reordering, thing2 should fail
 try:
 	run()
-except:
+except Exception:
 	pass
 else:
         raise Exception("Module should have raised an error when run out-of-order")
@@ -39,7 +39,7 @@ run(lambda tray: tray.MoveModule('thing1', 'thing2'))
 # Moving a nonexistent module fails
 try:
 	run(lambda tray: tray.MoveModule('no_name', 'thing2'))
-except:
+except Exception:
 	pass
 else:
         raise Exception("Reordering should fail with nonexistent target module")
@@ -47,7 +47,7 @@ else:
 # Moving a module to before a nonexistant module also fails
 try:
 	run(lambda tray: tray.MoveModule('thing1', 'no_anchor'))
-except:
+except Exception:
 	pass
 else:
         raise Exception("Reordering should fail with nonexistent anchor module")

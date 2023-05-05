@@ -13,14 +13,19 @@ try:
 except ImportError:
     sys.exit(0)
 
+
 class ModdyMod(icetray.I3Module):
     def __init__(self, context):
-         super().__init__(context)
-         self.AddParameter("a", "a thing", None)
+        super().__init__(context)
+        self.AddParameter("a", "a thing", None)
+
     def Configure(self):
-         a = self.GetParameter("a")
+        # we only care if GetParameter() fails
+        self.GetParameter("a")
+
     def DAQ(self, frame):
-         return
+        return
+
 
 tray = I3Tray()
 

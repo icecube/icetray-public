@@ -4,8 +4,7 @@
 Test the I3Frame's merging/purging stuff
 """
 
-from icecube.icetray import *
-import sys
+from icecube.icetray import I3Frame, I3Int
 
 def makeframe(stream, key = None):
     if not key:

@@ -2,10 +2,8 @@
 #
 # Checking that the driving time exists
 #
-import sys
-from I3Tray import *
+from I3Tray import I3Tray
 
-from icecube import icetray 
 
 tray = I3Tray()
 

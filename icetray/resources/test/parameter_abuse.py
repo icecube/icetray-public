@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-from icecube import icetray
-from I3Tray import *
+import sys
+from icecube.icetray import OMKey
+from I3Tray import I3Tray
 
 
 # some parameter exercise

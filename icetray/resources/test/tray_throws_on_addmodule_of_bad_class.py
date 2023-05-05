@@ -3,8 +3,8 @@
 #  Pass nonsensical python object to AddModule, expect log_fatal
 #
 
-from icecube.icetray import *
-from I3Tray import *
+import sys
+from I3Tray import I3Tray
 
 tray = I3Tray()
 

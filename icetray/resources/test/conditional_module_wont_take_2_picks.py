@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from I3Tray import I3Tray
-from icecube import dataio
 import sys
 
 tray = I3Tray()
@@ -15,7 +14,7 @@ tray.AddModule("Dump")
 
 try:
     tray.Execute(1)
-except:
+except Exception:
     print("ok, threw as expected")
     sys.exit(0)
 else:

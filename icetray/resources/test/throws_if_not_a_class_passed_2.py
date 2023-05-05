@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from icecube.icetray import *
-from I3Tray import *
+import sys
+from I3Tray import I3Tray
 
 tray = I3Tray()
 
@@ -12,7 +12,7 @@ try:
     tray.AddModule(C, 
                    Startfrom = 0,
                    SumShouldBe = 6)
-except:
+except Exception:
     print("good, it threw.")
     sys.exit(0)
 else:

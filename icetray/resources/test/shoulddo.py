@@ -3,8 +3,8 @@
 # Sample i3module in python 
 #
 
-from icecube.icetray import *
-from I3Tray import *
+from icecube.icetray import I3Module, I3ConditionalModule
+from I3Tray import I3Tray
 
 tray = I3Tray()
 

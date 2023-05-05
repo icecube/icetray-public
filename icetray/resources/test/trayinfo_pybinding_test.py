@@ -1,33 +1,35 @@
 #!/usr/bin/env python3
 
 from I3Tray import I3Tray
-from icecube import icetray
-from icecube import dataio
-import os
+from icecube import dataio, icetray
 
-tray = I3Tray()
 
-tray.Add("BottomlessSource")
+import tempfile
+
 
 def put_ints(frame,
              where="there",
              value=999,
-             somedict=dict(three=3, four=4)):
+             somedict=None):
+    if somedict is None:
+        somedict = dict(three=3, four=4)
     frame[where] = icetray.I3Int(value)
-    
-tray.Add(put_ints, "put_ints",
-         where = 'thisiswhere',
-         value = 777,
-         somedict = dict(five=5, six=6))
-
-tray.Add("I3Writer", 
-         Filename = "infos.i3",
-         SkipKeys = ['one', 'two', 'three'])
 
 
-tray.Execute(1)
+with tempfile.NamedTemporaryFile() as f:
+    tray = I3Tray()
+    tray.Add("BottomlessSource")
+    tray.Add(put_ints, "put_ints",
+             where = 'thisiswhere',
+             value = 777,
+             somedict = dict(five=5, six=6))
+    tray.Add("I3Writer",
+             Filename = f.name,
+             SkipKeys = ['one', 'two', 'three'])
+    tray.Execute(1)
 
-f = dataio.I3File('infos.i3')
+    f = dataio.I3File(f.name)
+
 infoframe = f.pop_frame()
 keys = list(infoframe.keys())
 
@@ -45,7 +47,6 @@ for m in ti.modules_in_order:
     for k in config.keys():
         print("%s = %s" % (k, config[k]))
 
-
 assert ti.module_configs['put_ints']['where'] == 'thisiswhere'
 assert ti.module_configs['put_ints']['value'] == 777
 assert ti.module_configs['put_ints']['somedict'] == { 'five' : 5, 'six' : 6 }
@@ -53,7 +54,3 @@ print(ti.host_info)
 print(ti.svn_url)
 print(ti.svn_revision)
 print(ti.svn_externals)
-
-fname = "infos.i3"
-if os.path.exists(fname):
-	os.unlink(fname)

@@ -2,8 +2,6 @@
 
 from I3Tray import I3Tray
 from icecube import icetray
-from icecube import dataio
-import sys
 
 tray = I3Tray()
 

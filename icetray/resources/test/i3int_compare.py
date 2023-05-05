@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from icecube import icetray
-from icecube.icetray.I3Test import *
+from icecube.icetray.I3Test import ENSURE
 
 ENSURE( icetray.I3Int(12) == icetray.I3Int(12) , "I3Int == I3Int failed" )
 ENSURE( icetray.I3Int(12) != icetray.I3Int(13) , "I3Int != I3Int failed" )
@@ -23,10 +23,15 @@ ENSURE( icetray.I3Int(12) <= 13. , "I3Int <= float failed" )
 ENSURE( icetray.I3Int(14) > 13. , "I3Int > float failed" )
 ENSURE( icetray.I3Int(14) >= 13. , "I3Int >= float failed" )
 
-ENSURE( icetray.I3Int(0) == False, "I3Int == False failed" )
-ENSURE( icetray.I3Int(0) != True, "I3Int != True failed" )
-ENSURE( icetray.I3Int(1) == True, "I3Int == True failed" )
-ENSURE( icetray.I3Int(1) != False, "I3Int != False failed" )
+# our ENSURE() is a bit dumb so we need to hide it from linters
+ENSURE( icetray.I3Int(0) == False, "I3Int == False failed" )        # noqa: E712
+ENSURE( icetray.I3Int(0) != True, "I3Int != True failed" )          # noqa: E712
+ENSURE( icetray.I3Int(1) == True, "I3Int == True failed" )          # noqa: E712
+ENSURE( icetray.I3Int(1) != False, "I3Int != False failed" )        # noqa: E712
 
-ENSURE( bool(icetray.I3Int(0)) == False, "I3Int == False failed" )
-ENSURE( bool(icetray.I3Int(1)) == True,  "I3Int == True failed" )
+ENSURE( bool(icetray.I3Int(0)) == False, "I3Int == False failed" )  # noqa: E712
+ENSURE( bool(icetray.I3Int(1)) == True,  "I3Int == True failed" )   # noqa: E712
+
+# casting to bool works as expected
+ENSURE( bool(icetray.I3Int(0)) is False, "I3Int == False failed" )
+ENSURE( bool(icetray.I3Int(1)) is True,  "I3Int == True failed" )

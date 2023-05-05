@@ -3,8 +3,8 @@
 # Sample i3module in python 
 #
 
-from icecube.icetray import *
-from I3Tray import *
+from icecube.icetray import I3Frame, I3Int, I3Module, I3PacketModule
+from I3Tray import I3Tray
 
 tray = I3Tray()
 
@@ -26,10 +26,10 @@ tray.Add(SimpleSplit)
 
 class Mod(I3PacketModule):
     def __init__(self, context):
-        I3PacketModule.__init__(self, context, icetray.I3Frame.DAQ)
+        I3PacketModule.__init__(self, context, I3Frame.DAQ)
 
     def FramePacket(self, frames):
-        i = icetray.I3Int(len(frames) - 1)
+        i = I3Int(len(frames) - 1)
         frames[0].Put("NSplits", i)
         for fr in frames:
             self.PushFrame(fr)

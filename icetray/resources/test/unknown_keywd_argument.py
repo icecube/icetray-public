@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from I3Tray import *
+import sys
+from I3Tray import I3Tray
 
 tray = I3Tray()
 

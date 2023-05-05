@@ -3,9 +3,8 @@
 # Checking that the driving time exists
 #
 import sys
-from I3Tray import *
+from I3Tray import I3Tray
 
-from icecube import icetray 
 
 tray = I3Tray()
 
@@ -18,7 +17,7 @@ tray.AddModule("FrameCheck", ensure_physics_has = ["foo", "bar", "baz"])
 
 try:
     tray.Execute(7)  # wrong number of frames    
-except:
+except Exception:
     print("ok: failure as expected.")
     sys.exit(0)
 else:

@@ -5,12 +5,11 @@
 #  haven't added one.  What is an error is if there is a module after
 #  this one.
 #
-from I3Tray import *
-tray = I3Tray()
+
+from I3Tray import I3Tray
 from icecube.icetray import I3Module
 
-
-
+tray = I3Tray()
 
 
 class NoOutboxModule(I3Module):
@@ -23,10 +22,9 @@ class NoOutboxModule(I3Module):
     def Physics(self, frame):
         self.PushFrame(frame)
 
-tray.AddModule("ManyStreamsSource","bottomless")
+
+tray.AddModule("ManyStreamsSource", "bottomless")
 tray.AddModule("Dump", "dump")
-tray.AddModule(NoOutboxModule,"no_outbox")
+tray.AddModule(NoOutboxModule, "no_outbox")
 
 tray.Execute(10)
-
-

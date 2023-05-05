@@ -5,8 +5,7 @@
 # IceTray won't emmit for them.
 #
 
-from icecube.icetray import *
-from I3Tray import *
+from I3Tray import I3Tray
 
 tray = I3Tray()
 
@@ -18,7 +17,7 @@ tray.AddModule("Dump")
 
 try:
     tray.Execute()
-except:
+except Exception:
     pass
 else:
     raise Exception("That should have claimed that pyfunctions can't be driving modules")

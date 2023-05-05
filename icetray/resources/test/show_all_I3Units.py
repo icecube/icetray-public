@@ -10,7 +10,6 @@
 
 #   dump all units to stdout.  demo showing use of I3Units in python.
 
-from os.path import expandvars 
 
 from icecube.icetray import I3Units
 

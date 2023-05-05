@@ -3,7 +3,7 @@
 # Simplest possible icetray script.
 #
 
-from I3Tray import *
+from I3Tray import I3Tray
 import sys
 tray = I3Tray()
 

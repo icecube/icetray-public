@@ -3,8 +3,8 @@
 # Sample i3module in python 
 #
 
-from icecube.icetray import *
-from I3Tray import *
+from icecube.icetray import I3Int, I3Module
+from I3Tray import I3Tray
 
 tray = I3Tray()
 
@@ -26,7 +26,7 @@ class Mod(I3Module):
         self.sumshouldbe = self.GetParameter("SumShouldBe")
         
     def Physics(self, frame):
-        i = icetray.I3Int(self.startfrom)
+        i = I3Int(self.startfrom)
         frame.Put("it", i)
         self.startfrom+=1
         self.PushFrame(frame)

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 from I3Tray import I3Tray
-from icecube import dataio
-import os
 
 tray = I3Tray()
 

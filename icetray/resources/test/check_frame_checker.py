@@ -3,7 +3,6 @@
 import sys
 from I3Tray import I3Tray
 
-from icecube import icetray 
 
 tray = I3Tray()
 
@@ -21,7 +20,7 @@ tray.AddModule("FrameCheck",
 try:
     # This should fail
     tray.Execute(5)
-except:
+except Exception:
     print("ok: failure as expected.")
     # ok it failed
     sys.exit(0)

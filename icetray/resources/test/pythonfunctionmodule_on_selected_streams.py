@@ -3,7 +3,6 @@
 from I3Tray import I3Tray
 from icecube import icetray
 from icecube.icetray.round_robin_streams import RoundRobinStreams
-import os
 
 tray = I3Tray()
 

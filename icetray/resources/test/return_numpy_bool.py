@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-from icecube import icetray
-from I3Tray import *
+from I3Tray import I3Tray
 import sys
 
 try:
