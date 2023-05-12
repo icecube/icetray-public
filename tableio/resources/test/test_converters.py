@@ -4,16 +4,20 @@
 Run all registered converters through both HDFWriter and ROOTWriter
 """
 
+import os
+import shutil
+import warnings
+
+import icecube  # noqa: F401
+from I3Tray import I3Tray
+from icecube import dataclasses, icetray, tableio
+from icecube.tableio import I3BroadcastTableService
+
 # Since there is no clear way to inspect converters in pythonland,
 # we can just put a list of S-Frame converters here I guess
 sframe_converters = ['I3CorsikaInfo', 'I3PrimaryInjectorInfo','I3TopInjectorInfo', 'I3GenieInfo']
 
-import warnings
-from icecube import icetray, dataclasses, tableio
-from I3Tray import I3Tray
-
-# hobo "from icecube import *"
-import icecube, os
+# hobo "from icecube import *", import everything to run as many converters as possible
 for path in sorted(os.listdir(os.environ['I3_BUILD']+'/lib/icecube')):
 	if 'ml_suite' in path or path[0]=='_':
 		continue
@@ -36,7 +40,7 @@ def potemkin_object(klass):
 		obj = "foo"
 	elif isinstance(obj, dataclasses.I3Waveform):
 		obj.waveform.extend(range(128))
-	
+
 	# fill standard containers
 	if hasattr(klass, "__key_type__"):
 		# it's a map
@@ -62,21 +66,21 @@ def fake_event_header(frame):
 fake_event_header.event_id = 0
 
 def fill_frame(frame):
-	for typus, converters in tableio.registry.I3ConverterRegistry.registry.items():
+	for typus, _ in tableio.registry.I3ConverterRegistry.registry.items():
 		name = typus.__name__
 		if name in sframe_converters:
-		    continue
+			continue
 		if name in frame:
 			continue
-		converter = converters[0]()
+
 		try:
 			obj = potemkin_object(typus)
-		except Exception as e:
+		except Exception:
 			# doesn't have a default constructor
 			continue
 		frame[name] = obj
 		fill_frame.objects[name] = obj
-		
+
 fill_frame.objects = dict()
 tray = I3Tray()
 
@@ -84,8 +88,6 @@ tray.Add("I3InfiniteSource")
 tray.Add(fake_event_header, Streams=[icetray.I3Frame.DAQ])
 tray.Add("I3NullSplitter", "nullsplit")
 tray.Add(fill_frame)
-
-from icecube.tableio import I3BroadcastTableService
 
 tablers = [tableio.I3CSVTableService('test_converters')]
 outfiles = ['test_converters']
@@ -121,20 +123,24 @@ icetray.I3Logger.global_logger = ol
 
 try:
 	import h5py
-	with h5py.File("test_converters.hdf5") as hdf:
+	with h5py.File("test_converters.hdf5", "r") as hdf:
 		for name, obj in fill_frame.objects.items():
 			table = hdf[name]
 			assert table.len() == 1
 			row = table[0]
 			for name in row.dtype.names:
-				if hasattr(obj, name) and type(getattr(obj, name)) == type(row[name]):
+				if hasattr(obj, name) and isinstance(getattr(obj, name), type(row[name])):
 					assert getattr(obj, name) == row[name]
 except ImportError:
 	icetray.logging.log_warn("Read test requires python3-h5py. Install it via pip/apt/yum/brew.")
 	pass
 
-import shutil, os
-shutil.rmtree(outfiles[0])
+try:
+	shutil.rmtree(outfiles[0])
+except OSError:
+	pass
 for outfile in outfiles[1:]:
-	os.unlink(outfile)
-
+	try:
+		os.unlink(outfile)
+	except OSError:
+		pass
