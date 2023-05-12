@@ -175,7 +175,8 @@ def handle_I3Particle( key, particle, short ):
             part_text += "Energy: " + format_engineering( particle.energy * 1e9, "eV" ) + "\n"
 
         if valid(particle.speed):
-            part_text += "Speed: {:.3f} c".format(particle.speed / I3Constants.c)
+            part_text += "Speed: {:.6f} ({:.3f}c)".format(particle.speed,
+                                                          particle.speed / I3Constants.c)
     else:
         part_text = str(particle)
     return part_text
@@ -201,7 +202,7 @@ def handle_POD(key, pod, short):
     return s
 
 
-def handle_Filter(key, fm, short):   
+def handle_Filter(key, fm, short):
     fm_text=""
     if short:
         fm_text = key + " : \n"
