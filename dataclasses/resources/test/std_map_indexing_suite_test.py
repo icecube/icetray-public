@@ -6,94 +6,85 @@
 # of the std_map_indexing_suite wrapper for std::map
 # JvS 2009-03-26
 
-from icecube.icetray.pycompat import *
-import unittest
+import os
 import sys
+import timeit
+import unittest
+
+from icecube import dataclasses, icetray
 
 try:
-	from icecube import icetray,dataclasses
-	dataclasses.I3MapStringDouble.keys
-	dataclasses.I3MapUnsignedUnsigned.keys
+	dataclasses.I3MapStringDouble.keys  # noqa: B018
+	dataclasses.I3MapUnsignedUnsigned.keys  # noqa: B018
 except AttributeError:
 	print('You appear to be using the default map_indexing_suite. Not running tests for std_map_indexing_suite.')
 	sys.exit(0)
 
-try:
-	sorted([3,2,1])
-except NameError:
-	print('sorted() is not defined, providing a work-around for python < 2.3')
-	import copy
-	def sorted(lst):
-		cpy = list(copy.copy(lst)) 
-		cpy.sort()
-		return cpy
-
-
 class I3MapStringDoubleTest(unittest.TestCase):
 	"""A demonstration of the more pythonic features in std_map_index_suite"""
 	def setUp(self):
-		from icecube import icetray,dataclasses
 		self.map = dataclasses.I3MapStringDouble()
 		self.sourceDict = {'foo': 1.2, 'bar': 3.7, 'baz': 42.9}
-		for k in self.sourceDict.keys(): self.map[k] = self.sourceDict[k]
+		for k in self.sourceDict:
+			self.map[k] = self.sourceDict[k]
 	def testAssignment(self):
 		"""The values in sourceDict were copied to map"""
-		for k in self.sourceDict.keys():
-			self.assertEquals(self.map[k],self.sourceDict[k])
+		for k in self.sourceDict:
+			self.assertEqual(self.map[k],self.sourceDict[k])
 	def testKeys(self):
 		"""map.keys() returns a list of keys"""
 		keys = self.map.keys()
 		for k in keys:
-			self.assertEquals(k in self.sourceDict.keys(),True)
+			self.assertEqual(k in self.sourceDict, True)
 	def testKeyIterables(self):
 		"""Various equivalent ways of getting the keys"""
-		self.assertEquals(list(self.map.keys()), [ key           for key       in self.map.keys() ])
-		self.assertEquals(list(self.map.keys()), [ key           for key,value in self.map            ])
-		self.assertEquals(list(self.map.keys()), [ entry.key()   for entry     in self.map            ])
-		self.assertEquals(list(self.map.keys()), [ entry.first() for entry     in self.map            ])
+		self.assertEqual(list(self.map.keys()), [ key           for key       in self.map.keys() ])  # noqa: SIM118
+		self.assertEqual(list(self.map.keys()), [ key           for key,value in self.map            ])
+		self.assertEqual(list(self.map.keys()), [ entry.key()   for entry     in self.map            ])
+		self.assertEqual(list(self.map.keys()), [ entry.first() for entry     in self.map            ])
 	def testValueIterables(self):
 		"""Various equivalent ways of getting the values"""
-		self.assertEquals(list(self.map.values()), [ value          for value     in self.map.values() ])
-		self.assertEquals(list(self.map.values()), [ value          for key,value in self.map              ])
-		self.assertEquals(list(self.map.values()), [ entry.data()   for entry     in self.map              ])
-		self.assertEquals(list(self.map.values()), [ entry.second() for entry     in self.map              ])
+		self.assertEqual(list(self.map.values()), [ value          for value     in self.map.values() ])
+		self.assertEqual(list(self.map.values()), [ value          for key,value in self.map              ])
+		self.assertEqual(list(self.map.values()), [ entry.data()   for entry     in self.map              ])
+		self.assertEqual(list(self.map.values()), [ entry.second() for entry     in self.map              ])
 	def testIterators(self):
 		"""Iterators work for keys, values, and (k,v) tuples"""
-		self.assertEquals( type( next(iter(self.map.items()))  ),tuple)
-		self.assertEquals( type( next(iter(self.map.keys()))   ), type( list(self.sourceDict.keys())[0]   ))
-		self.assertEquals( type( next(iter(self.map.values())) ), type( list(self.sourceDict.values())[0] ))
+		self.assertEqual( type( next(iter(self.map.items()))  ),tuple)
+		self.assertEqual( type( next(iter(self.map.keys()))   ), type( list(self.sourceDict.keys())[0]   ))
+		self.assertEqual( type( next(iter(self.map.values())) ), type( list(self.sourceDict.values())[0] ))
 	def testHasKey(self):
 		"""map.has_key() is equivalent to 'key in map'"""
 		key = list(self.sourceDict.keys())[0]
-		self.assertEquals(key in self.map,True)
-		self.assertEquals(key in self.map, key in self.map)
+		self.assertEqual(key in self.map,True)
+		self.assertEqual(key in self.map, key in self.map)
 	def testCopyKeys(self):
 		"""can produce a new, equivalent dict from sourceDict via dict.update(map)"""
-		d = dict(); d.update(self.map)
-		self.assertEquals(self.sourceDict, d)
+		d = dict()
+		d.update(self.map)
+		self.assertEqual(self.sourceDict, d)
 	def testPairUnpacking(self):
 		"""the wrapped std::pair can be unpacked automatically"""
 		for entry in self.map:
 			key,value = entry
-			self.assertEquals(key, entry.key())
-			self.assertEquals(key, entry.first())
-			self.assertEquals(value, entry.data())
-			self.assertEquals(value, entry.second())
+			self.assertEqual(key, entry.key())
+			self.assertEqual(key, entry.first())
+			self.assertEqual(value, entry.data())
+			self.assertEqual(value, entry.second())
 	def testPairIndexing(self):
 		"""elements of the wrapped std::pair can be accessed by index"""
 		for entry in self.map:
-			self.assertEquals(entry[0], entry.key())
-			self.assertEquals(entry[-1], entry.data())
-			self.assertEquals(entry[-2], entry.key())
-			self.assertEquals(entry[1], entry.data())
+			self.assertEqual(entry[0], entry.key())
+			self.assertEqual(entry[-1], entry.data())
+			self.assertEqual(entry[-2], entry.key())
+			self.assertEqual(entry[1], entry.data())
 			self.assertRaises(IndexError, entry.__getitem__, -3)
 			self.assertRaises(IndexError, entry.__getitem__, 2)
-			self.assertEquals([entry.key(),entry.data()], list(entry))
-			self.assertEquals(len(entry), 2)
+			self.assertEqual([entry.key(),entry.data()], list(entry))
+			self.assertEqual(len(entry), 2)
 
-class IterRunner(object):
+class IterRunner:
 	def setUp(self):
-		from icecube import icetray,dataclasses
 		self.map = dataclasses.I3MapStringDouble()
 		for i in range(10000):
 			v = i/1.0e4
@@ -115,14 +106,12 @@ class IterRunner(object):
 class I3MapStringDoublePerformanceTest(unittest.TestCase):
 	"""Run some quick benchmarks"""
 	def setUp(self):
-		from icecube import icetray,dataclasses
 		self.map = dataclasses.I3MapStringDouble()
 		for i in range(5000):
 			v = i/5.0e3
 			k = str(hash(v))
 			self.map[k] = v 
 	def testPerformance(self):
-		import os,timeit
 		this_script = os.path.basename(os.path.splitext(__file__)[0])
 		setup = 'from %s import IterRunner; case = IterRunner(); case.setUp()' % this_script
 		def runCase(meth,desc,num=100):
@@ -139,18 +128,18 @@ class I3MapStringDoublePerformanceTest(unittest.TestCase):
 
 class I3MapUnsignedUnsignedTest(I3MapStringDoubleTest):
 	def setUp(self):
-		from icecube import icetray,dataclasses
 		self.map = dataclasses.I3MapUnsignedUnsigned()
 		self.sourceDict = {2: 1, 7: 3, 11: 42}
-		for k in self.sourceDict.keys(): self.map[k] = self.sourceDict[k]
+		for k in self.sourceDict:
+			self.map[k] = self.sourceDict[k]
 
 class I3MapKeyDoubleTest(I3MapStringDoubleTest):
 	def setUp(self):
-		from icecube import icetray,dataclasses 
 		i,d = icetray,dataclasses
 		self.map = d.I3MapKeyDouble()
 		self.sourceDict = {i.OMKey(0,1): 1.2, i.OMKey(7,19): 3.7, i.OMKey(11,42): 42.11}
-		for k in self.sourceDict.keys(): self.map[k] = self.sourceDict[k]
+		for k in self.sourceDict:
+			self.map[k] = self.sourceDict[k]
 
 # FIXME: the I3MapIntVectorInt wrapper will only take std::vector<int>, not I3VectorInt. why?
 # class I3MapIntVectorIntTest(I3MapStringDoubleTest):
