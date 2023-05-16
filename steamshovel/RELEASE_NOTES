@@ -6,6 +6,7 @@ Release Notes
 trunk
 -----
 
+* Fix throws in bp::error_already_set exception handler (#3085)
 * Fix crash closing AngleClock artist (#3084)
 * Update colomaps to new matplotlib API (#3071)
 

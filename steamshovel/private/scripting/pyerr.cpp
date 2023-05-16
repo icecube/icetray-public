@@ -26,6 +26,8 @@ std::ostream& operator<<(std::ostream& os, boost::python::error_already_set& e) 
   PyErr_Fetch(&exc, &val, &tb);
   if( !exc ) return os;
 
+  PyErr_NormalizeException(&exc, &val, &tb);
+
   handle<> hexc(exc), hval(allow_null(val)), htb(allow_null(tb));
 
   object traceback = import("traceback");
