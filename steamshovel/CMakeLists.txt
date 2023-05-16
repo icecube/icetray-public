@@ -163,6 +163,7 @@ if(BUILD_STEAMSHOVEL)
       resources/test/test_setting.py
       resources/test/test_shovelio_I3FrameSequence.py
       resources/test/test_shovelscripts.py
+      python/util/colormaps.py
     )
     set_tests_properties(steamshovel::test_shovelscripts.py PROPERTIES
       DISABLED TRUE

@@ -6,6 +6,8 @@ Release Notes
 trunk
 -----
 
+* Update colomaps to new matplotlib API (#3071)
+
 Apr. 05, 2023 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.6.0
