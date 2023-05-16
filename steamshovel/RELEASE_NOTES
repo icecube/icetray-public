@@ -6,6 +6,7 @@ Release Notes
 trunk
 -----
 
+* Fix crash closing AngleClock artist (#3084)
 * Update colomaps to new matplotlib API (#3071)
 
 Apr. 05, 2023 don la dieu (nega AT icecube.umd.edu)

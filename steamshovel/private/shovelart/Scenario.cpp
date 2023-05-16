@@ -295,6 +295,7 @@ void Scenario::setIsActive( ArtistPtr artist, bool active ){
 		forceRegen( artist );
 	}
 	else{
+		scripting::ScopedGIL gil; // Python might be invoked in the destructor
 		scene_->dropOutputs(artist);
 		Q_EMIT outputsChanged();
 	}
