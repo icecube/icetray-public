@@ -9,9 +9,9 @@ class AngleClock(MPLArtist):
     numRequiredKeys = 1
 
     def isValidKey( self, frame, key_idx, key ):
-         'Accept I3Particle or I3Direction.'
-         tn = frame.type_name(key)
-         return tn in ("I3Particle", "I3Direction")
+        'Accept I3Particle or I3Direction.'
+        tn = frame.type_name(key)
+        return tn in ("I3Particle", "I3Direction")
 
     def __init__(self):
         MPLArtist.__init__(self)
@@ -27,7 +27,7 @@ class AngleClock(MPLArtist):
         ))
 
     def create_plot(self, frame, fig):
-        from math import pi, degrees
+        from math import pi
 
         fobj = frame[self.keys()[0]]
 
@@ -42,13 +42,13 @@ class AngleClock(MPLArtist):
         ax = fig.add_subplot(111, polar=True)
         angles = (("elevation", "azimuth"), ("elevation",), ("azimuth",))
         for angle in angles[self.setting("show")]:
-            l = self.setting(angle + " length")
+            length = self.setting(angle + " length")
             c = self.setting(angle + " color").rgbF()
             w = self.setting(angle + " width")
             a = ( pi / 2 - direc.theta
                   if angle == "elevation" else
                   direc.phi )
-            ax.arrow( a, 0, 0, l, color=c, linewidth=w, head_width=0.05 * w, head_length=0.05)
+            ax.arrow( a, 0, 0, length, color=c, linewidth=w, head_width=0.05 * w, head_length=0.05)
         ax.get_yaxis().set_visible( False )
         ax.set_ylim( 0.0, 1.0 )
         ax.grid( True )
