@@ -24,7 +24,7 @@ Quickstart
 
 From your shell (or in your login script) run::
 
-    eval $(/cvmfs/icecube.opensciencegrid.org/py3-v4.2.1/setup.sh)
+    eval $(/cvmfs/icecube.opensciencegrid.org/py3-v4.3.0/setup.sh)
 
 This will detect the current OS and architecture and set your 
 environment variables appropriately.
@@ -39,7 +39,7 @@ environment variables appropriately.
   your your `.login` script. (Note the use of backticks in the 
   expression)::
 
-    eval `/cvmfs/icecube.opensciencegrid.org/py3-v4.2.1/setup.sh`
+    eval `/cvmfs/icecube.opensciencegrid.org/py3-v4.3.0/setup.sh`
 
 This should be near the end of any login script, so you don't
 accidentally put something else in front of CVMFS on the path.
@@ -62,8 +62,31 @@ accidentally put something else in front of CVMFS on the path.
 Distributions and Platforms
 ---------------------------
 
+py3-v4.3
+^^^^^^^^
+
+* python 3.11, various python software upgrades over v4.2
+
+* gcc 13.1 (c++23) compiler included
+
+* Supported OS:
+
+  * RedHat / CentOS / Alma:  7 - 9
+
+  * Ubuntu: 20.04, 22.04
+
+  * Debian: 9 - 11
+
+  .. note::
+
+     Works for IceTray releases after June 2023.
+
 py3-v4.2
 ^^^^^^^^
+
+.. warning::
+
+   py3-v4.2* is deprecated and not supported.
 
 .. note::
 

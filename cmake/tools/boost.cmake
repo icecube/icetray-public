@@ -34,7 +34,9 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 ## on Boost's BoostConfig.cmake (available boost >= v1.70). when the
 ## time comes (and our reliance on boost < 1.70 (ie cvmfs) has waned),
 ## remove the following line. see #2585
-set(Boost_NO_BOOST_CMAKE ON)
+if(USE_CVMFS AND CMAKE_VERSION VERSION_LESS 3.20)
+	set(Boost_NO_BOOST_CMAKE ON)
+endif()
 
 if(NOT DEFINED Boost_PYTHON_TYPE)
 	set(Boost_PYTHON_TYPE python)
