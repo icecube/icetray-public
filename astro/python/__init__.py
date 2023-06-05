@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # 
 # copyright  (C) 2015
 # The Icecube Collaboration
@@ -7,10 +6,7 @@
 # @author Kevin Meagher
 # 
 
-from icecube.load_pybindings import load_pybindings
-load_pybindings(__name__,__path__)
-del load_pybindings
-
+from icecube._astro import *
 import numpy as np
 from icecube.icetray import I3Units
 from icecube import dataclasses

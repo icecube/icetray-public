@@ -1,7 +1,5 @@
-from icecube.load_pybindings import load_pybindings
 from icecube import icetray, tableio, dataio
-
-load_pybindings(__name__, __path__)
+from icecube._hdfwriter import *
 
 @icetray.traysegment_inherit(tableio.I3TableWriter,
     removeopts=('TableService',))

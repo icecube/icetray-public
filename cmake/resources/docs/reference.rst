@@ -57,9 +57,8 @@ i3_project
 
       NB: If you use both pybindings and python code, you should code like
       this in your __init__.py::
-	
-	from icecube.load_pybindings import load_pybindings
-	load_pybindings(__name__, __path__)
+
+         from icecube._project_name import *
 
       See also :ref:`USE_SETUPTOOLS <USE_SETUPTOOLS>`
 

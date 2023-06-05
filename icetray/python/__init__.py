@@ -1,5 +1,4 @@
-from icecube.load_pybindings import load_pybindings
-load_pybindings(__name__, __path__)
+from icecube._icetray import *
 
 from icecube.icetray.test_module import I3TestModuleFactory
 from icecube.icetray.traysegment import traysegment, traysegment_inherit, module_altconfig

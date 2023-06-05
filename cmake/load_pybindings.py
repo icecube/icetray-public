@@ -35,31 +35,7 @@ import platform,sys, warnings
 # Suppress boost::python warning triggered by multiple registrations. It's fine.
 import warnings
 warnings.filterwarnings("ignore", ".*already registered; second conversion method ignored.", RuntimeWarning)
-
-def extract_numeric_value(version):
-    '''
-    Given a string, e.g. '15+' or '14b' or even 'foo42eight'
-    just extract the numeric part.
-
-    This is important for comparing cmake python versions 2.7.15
-    with the version that python reports 2.7.15, for example.
-
-    Note this will also convert '14b2' to '142', but we can't really
-    account for all the pathological patch version numbers that python
-    might attempt in the future.
-    ''' 
-    try:
-        return int(version)
-    except ValueError:
-        return int(''.join([n for n in version
-                            if n in ['0','1','2','3','4','5','6','7','8','9']]))
-
-PYTHON_VERSION = "@PYTHON_VERSION@"
-if PYTHON_VERSION != platform.python_version():
-    cast_version = '.'.join([str(extract_numeric_value(v)) for v in platform.python_version_tuple()])    
-    if PYTHON_VERSION != cast_version:
-        warnings.warn("IceTray was compiled with Python version {} but is currently being run with {}"
-                      .format(PYTHON_VERSION,platform.python_version()))
+warnings.warn("Deprication Warning: load_pybindings() is deprecated use `from icecube._your_module import *`", stacklevel=2)
                   
 if platform.system().startswith('freebsd'):
 	# C++ modules are extremely fragile when loaded with RTLD_LOCAL,
@@ -69,7 +45,6 @@ if platform.system().startswith('freebsd'):
 	# See thread by Abrahams et al:
 	# http://mail.python.org/pipermail/python-dev/2002-May/024074.html
 	sys.setdlopenflags(0x102)
-
 
 def load_pybindings(name, path):
     """
@@ -88,6 +63,7 @@ def load_pybindings(name, path):
     you want the wrapped classes to merge to.
 
     """
+    warnings.warn("Deprication Warning: load_pybindings() is deprecated use `from icecube._your_module import *`", stacklevel=2)
 
     import importlib, sys
     thismod = sys.modules[name]

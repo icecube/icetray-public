@@ -1,4 +1,3 @@
-from icecube.load_pybindings import load_pybindings
 import icecube.icetray # be nice and pull in our dependencies
 
 # XXX Work around a stupid bug with certain combinations of Boost, compiler, and
@@ -9,9 +8,7 @@ import icecube.icetray # be nice and pull in our dependencies
 # Observed on: FreeBSD 10 + Boost 1.52 + clang 3.2 when loading mutineer
 # (of all things)
 icecube.icetray.load('dataclasses', False)
-
-load_pybindings(__name__,__path__)
-
+from icecube._dataclasses import *
 
 # Add some aliases for naming consistency
 I3RecoPulseSeries = vector_I3RecoPulse

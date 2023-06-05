@@ -130,9 +130,7 @@ In ``python/__init__.py``:
 
 .. code-block:: python
 
-    from icecube.icetray import load
-    load('project_name', False)
-    del load
+    from icecube._project_name import *
 
 The second argument to :py:func:`icetray.load` controls printing
 status.  False disables printing the load status output.
@@ -352,10 +350,7 @@ private/pybindings/module.cxx::
 python/__init__.py::
 
     # load the c++ pybindings
-    from icecube.load_pybindings import load_pybindings
-    load_pybindings(__name__, __path__)
-    del load_pybindings
-    
+    from icecube._import advanced_bootcamp
     
 CMakeLists.txt
 ^^^^^^^^^^^^^^

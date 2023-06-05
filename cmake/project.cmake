@@ -591,9 +591,10 @@ option(BUILD_PYBINDINGS "Build python bindings" ON)
 #
 #  Magic __init__.py needed by everybody
 #
-configure_file(${CMAKE_SOURCE_DIR}/cmake/load_pybindings.py.in
-  ${LIBRARY_OUTPUT_PATH}/icecube/load_pybindings.py
-  @ONLY)
+execute_process(
+  COMMAND ln -snf ${CMAKE_SOURCE_DIR}/cmake/load_pybindings.py ${LIBRARY_OUTPUT_PATH}/icecube/load_pybindings.py
+  )
+
 install(FILES ${LIBRARY_OUTPUT_PATH}/icecube/load_pybindings.py
   DESTINATION lib/icecube
   )

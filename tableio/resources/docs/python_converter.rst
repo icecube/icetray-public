@@ -61,8 +61,7 @@ _____________________
 
 You should also create a directory, e.g. linefit/python, containing a file `__init__.py` with the following contents::
 
-    from icecube.load_pybindings import load_pybindings
-    load_pybindings(__name__,__path__)
+    from icecube._linefit import *
     
     try:
         import icecube.tableio
@@ -70,7 +69,7 @@ You should also create a directory, e.g. linefit/python, containing a file `__in
     except ImportError:
         pass
 
-The call to :func:`load_pybindings` merges the python bindings for the C++ bits of your project into the script. The try/except block will attempt to import `tableio`, then the file `converters.py`, failing gracefully if `tableio` can not be found. This will make converters available whenever the bindings for LineFit are imported into Python.
+The line ``from icecube._linefit import *`` merges the python bindings for the C++ bits of your project into the script. The try/except block will attempt to import `tableio`, then the file `converters.py`, failing gracefully if `tableio` can not be found. This will make converters available whenever the bindings for LineFit are imported into Python.
 
 `python/converters.py`
 ________________________
