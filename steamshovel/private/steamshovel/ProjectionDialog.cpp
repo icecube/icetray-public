@@ -105,9 +105,10 @@ void ProjectionDialog::accept(){
 		object projectionutils = import( "icecube.steamshovel.util.projection" );
 		bool do_xyz = ui.includeXYZProjection->isChecked();
 		bool do_colorscale = ui.includeColorscale->isChecked();
+		bool do_manualview = ui.manualView->isChecked();
 		try {
 			projectionutils.attr( "get_projection" )(
-					fileName.toStdString(), frame, do_xyz, do_colorscale, w, h, dpi, scale, gamma
+					fileName.toStdString(), frame, do_xyz, do_colorscale, w, h, dpi, scale, gamma, do_manualview
 			);
 			QDialog::accept();
 		} catch (error_already_set& e) {

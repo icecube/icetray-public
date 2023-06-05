@@ -64,7 +64,7 @@ class ProjectionRenderer:
         self.gl.screenshot_engine(res, res, filename, self.dpi, self.scale, self.gamma)
 
 
-def get_view(gl, frame):
+def get_view(gl, frame, myview=False):
     # get track key
     line = None
     for a in gl.scenario.getArtists():
@@ -138,12 +138,13 @@ def get_view(gl, frame):
         x = direction.x
         y = direction.y
 
-    viewDir=dataclasses.I3Direction(x,y,0)
-    if viewDir*(center-cog)>0:
-        viewDir=-viewDir
+    if not myview:
+        viewDir=dataclasses.I3Direction(x,y,0)
+        if viewDir*(center-cog)>0:
+            viewDir=-viewDir
 
-    cameraLoc=1600*viewDir
-    cameraLoc.z = 9e2
+        cameraLoc=1600*viewDir
+        cameraLoc.z = 9e2
 
     x = 25
     y = 20
@@ -194,6 +195,8 @@ def make_colorbar(filename, timerange, width, scale):
     import pylab
 
     ref_dpi = pylab.rcParamsDefault["savefig.dpi"]
+    if ref_dpi == 'figure':
+        ref_dpi = pylab.rcParamsDefault["figure.dpi"]
     rendering_dpi = float(ref_dpi*scale)
     w_inch = width/ref_dpi
     w, h = colorbar_size(w_inch, scale)
@@ -253,7 +256,7 @@ def stitch(main, thumbs, colorbar, filename, width, height):
     img.save(filename, 'PNG')
 
 def get_projection(filename, frame=None, include_xyz=True, include_colorscale=True,
-                   width=1000, height=1000, dpi=0, scale=1., gamma=1.):
+                   width=1000, height=1000, dpi=0, scale=1., gamma=1., manual_view=False):
     """
     Get the 2d projection of the event, for use in publications.
     The final image has a (more or less) fixed aspect ratio,
@@ -303,7 +306,7 @@ def get_projection(filename, frame=None, include_xyz=True, include_colorscale=Tr
         # Render and stitch required parts
         with ProjectionRenderer(window.gl, dpi, scale, gamma) as pr:
             # render main
-            pivot, loc = get_view(window.gl, frame)
+            pivot, loc = get_view(window.gl, frame, manual_view)
             window.gl.perspectiveView = True
             pr.render(True, pivot, loc, (0,0,1), width, basename+"_main.png")
 
