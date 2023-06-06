@@ -31,6 +31,8 @@ TriggerKey::GetSourceString(SourceID source)
       return("SPASE");
     case UNKNOWN_SOURCE:
       return("UNKNOWN_SOURCE");
+    case IN_ICE_PULSES:
+      return("IN_ICE_PULSES");
   }
   log_warn("undefined source ID %u",source);
   
@@ -56,7 +58,8 @@ TriggerKey::GetSourceFromString(const std::string& sourcestr)
     return(SPASE);
   if (sourcestr=="UNKNOWN_SOURCE")
     return(UNKNOWN_SOURCE);
-
+  if (sourcestr=="IN_ICE_PULSES")
+    return(IN_ICE_PULSES);
   log_warn("undefined source string %s",sourcestr.c_str());
   
   return UNKNOWN_SOURCE;
