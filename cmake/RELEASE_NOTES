@@ -8,6 +8,9 @@ Release Notes
 trunk
 -----
 
+* Remove BUILD_PYBINDINGS global cmake option
+  We always build pybindings
+
 Apr. 12, 2023 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release V1.6.0

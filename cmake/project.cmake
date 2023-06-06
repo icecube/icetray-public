@@ -586,7 +586,6 @@ endmacro(i3_test_executable THIS_EXECUTABLE_NAME)
 #
 #  Python bindings macro
 #
-option(BUILD_PYBINDINGS "Build python bindings" ON)
 
 #
 #  Magic __init__.py needed by everybody

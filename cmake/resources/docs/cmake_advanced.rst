@@ -115,9 +115,6 @@ Uncommon CMake settings
    * - .. attribute:: CHECK_FLAGS
      - Check **some** of the flags passed to the compilers. This option is mostly of interest to developers when adding new compilation/linking flags.
      - OFF
-   * - .. attribute:: BUILD_PYBINDINGS
-     - Build python bindings. Users will never want to turn this option off, as effective use of the IceCube software stack requires the use of pybindings.
-     - ON
    * - .. attribute:: USE_GIT_REVISION_FLAGS
      - Add compiled-in git revision information. Do not disable this option unless you want to have a bad time.
      - ON
