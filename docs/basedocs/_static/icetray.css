@@ -72,6 +72,7 @@ div.highlight pre {  /* this generally for code blocks */
 div.admonition .highlight { background: inherit; }
 
 /* general/global tweaks */
+div.body { max-width: 90%; }
 body {
     font-family: var(--fonts-sans-serif);
     font-size: 1em;
