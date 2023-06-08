@@ -11,12 +11,17 @@
 # All configuration values have a default value; values that are commented out
 # serve to show the default value.
 
-import sys, os
+import os
+import sys
+from warnings import filterwarnings
 
 # imports for the traclinks replacement code at the bottom of this file
 from docutils import nodes, utils
 from docutils.parsers.rst import roles
 import urllib.parse as ulp
+
+# suppress boost python object registration warnings
+filterwarnings("ignore", ".*already registered; second conversion method ignored.", RuntimeWarning)
 
 # If your extensions are in another directory, add it here. If the directory
 # is relative to the documentation root, use os.path.abspath to make it

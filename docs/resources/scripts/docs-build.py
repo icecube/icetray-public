@@ -5,6 +5,10 @@ from collections import deque
 from glob import glob
 from icecube.icetray import i3inspect
 
+# suppress boost python object registration warnings
+from warnings import filterwarnings
+filterwarnings("ignore", ".*already registered; second conversion method ignored.", RuntimeWarning)
+
 import logging
 log = logging.getLogger(__file__)
 log.setLevel(logging.DEBUG)

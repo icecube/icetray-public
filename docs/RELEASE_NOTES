@@ -1,8 +1,13 @@
+.. _docs-release-notes:
+
 Release Notes
 =============
 
-trunk
------
+main
+----
+
+- Suppress boost python object registration warnings during docs
+  generation
 
 Apr. 12, 2023 don la dieu (nega AT icecube.umd.edu
 --------------------------------------------------
@@ -45,7 +50,7 @@ how it's built, since the last time these release notes were
 updated. Please refer to the git log for points prior to this release.
 
 June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
------------------------------------------------------
+----------------------------------------------------
 Release V18-06-00
 
 * First release.

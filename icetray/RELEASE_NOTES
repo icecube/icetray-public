@@ -6,6 +6,9 @@ Release Notes
 main
 ----
 
+* Suppress boost python object registration warnings during docs
+  generation (icetray-inspect)
+
 Apr. 12, 2023 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.6.0

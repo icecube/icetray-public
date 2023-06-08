@@ -20,6 +20,10 @@ BAD_PROJECTS = ['common_variables',
                 'simprod-scripts',
                 'simprod']
 
+# suppress boost python object registration warnings
+from warnings import filterwarnings
+filterwarnings("ignore", ".*already registered; second conversion method ignored.", RuntimeWarning)
+
 from icecube.icetray import i3inspect
 from textwrap import fill
 import logging
