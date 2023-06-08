@@ -94,9 +94,10 @@ You can fine-tune it by selecting the checkbox.
 A gamma factor different from 1.0 may be chosen. Only the PNG format supports it,
 and the result may vary from platform to platform and viewer to viewer. To read the
 story how PNG tried to fix something, but made it worse, see
-``https://hsivonen.fi/png-gamma``.
+https://hsivonen.fi/png-gamma.
 
 Images with a transparent background can be created in the following way:
+
 * Change the background color to solid black
 * Produce the screenshot
 * Open the screenshot in The Gimp
