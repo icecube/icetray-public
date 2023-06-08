@@ -1,4 +1,4 @@
-# -*- tab-width: 8; indent-tabs-mode: t -*- ex: ts=8 noet: 
+# -*- tab-width: 8; indent-tabs-mode: t -*- ex: ts=8 noet:
 #
 #  $Id$
 #
@@ -13,7 +13,7 @@
 #  2. Redistributions in binary form must reproduce the above copyright
 #     notice, this list of conditions and the following disclaimer in the
 #     documentation and/or other materials provided with the distribution.
-#  
+#
 #  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
 #  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 #  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,10 +25,19 @@
 #  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 #  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 #  SUCH DAMAGE.
-#  
-#  SPDX-License-Identifier: BSD-2-Clause
-#  
 #
+#  SPDX-License-Identifier: BSD-2-Clause
+#
+
+#
+#  Magic __init__.py needed by everybody
+#
+file(MAKE_DIRECTORY ${LIBRARY_OUTPUT_PATH}/icecube)
+execute_process(
+  COMMAND ln -snf ${CMAKE_SOURCE_DIR}/cmake/load_pybindings.py ${LIBRARY_OUTPUT_PATH}/icecube/load_pybindings.py)
+install(FILES ${LIBRARY_OUTPUT_PATH}/icecube/load_pybindings.py
+  DESTINATION lib/icecube)
+
 #
 # rootcint() handles root dictionary generation
 #
@@ -587,17 +596,6 @@ endmacro(i3_test_executable THIS_EXECUTABLE_NAME)
 #  Python bindings macro
 #
 
-#
-#  Magic __init__.py needed by everybody
-#
-execute_process(
-  COMMAND ln -snf ${CMAKE_SOURCE_DIR}/cmake/load_pybindings.py ${LIBRARY_OUTPUT_PATH}/icecube/load_pybindings.py
-  )
-
-install(FILES ${LIBRARY_OUTPUT_PATH}/icecube/load_pybindings.py
-  DESTINATION lib/icecube
-  )
-
 macro(i3_add_pybindings MODULENAME)
   if (BUILD_${I3_PROJECT})
     #
@@ -663,7 +661,7 @@ macro(i3_add_pybindings MODULENAME)
 	    )
 	endif(NOT TARGET pybind11)
 	add_dependencies(${MODULENAME}-pybindings pybind11)
-	## this is the wrong place to set C++11 support, but works for now 
+	## this is the wrong place to set C++11 support, but works for now
 	## until pybind11 is a first-class tool.
 	set_target_properties(${MODULENAME}-pybindings PROPERTIES COMPILE_FLAGS "-std=gnu++11")
 
@@ -709,7 +707,7 @@ macro(i3_add_pybindings MODULENAME)
     use_pybindings("${MODULENAME}-pybindings"
       PROJECTS "${${MODULENAME}_ARGS_USE_PROJECTS}"
       )
-    
+
     # Disabled special linker flags for APPLE:
     #  - undefined dynamic_lookup: it seems not to hurt letting the
     #      linker throw an error for undefined symbols.
