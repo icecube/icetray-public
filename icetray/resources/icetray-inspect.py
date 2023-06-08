@@ -15,10 +15,7 @@
 # handlers in the root log. this is a HACK and the "bad projects"
 # should be fixed
 BAD_PROJECTS = ['common_variables',
-                'filterscripts',
-                'level3_filter_muon',
-                'simprod-scripts',
-                'simprod']
+                'simprod-scripts']
 
 # suppress boost python object registration warnings
 from warnings import filterwarnings
