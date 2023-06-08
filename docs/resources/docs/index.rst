@@ -34,7 +34,7 @@ document will be built which will take some time.  Usually when writing
 documentation you will only want to see the docs for one or two projects. This
 can be accomplished with:
 
-.. code:: text
+.. code:: console
 
    $ ./env-shell.sh docs-build --projects astro bayesian-priors --open
 
@@ -158,7 +158,7 @@ FAQs About Building the Documentation
 
 :A: ``docs-build`` and ``icetray-inspect`` both understand rich-text formatting as implemented by the `rich python library <https://github.com/Textualize/rich>`_. All you need to do is install it. The easiest way is via ``pip3``.
 
-    .. code-block:: text
+    .. code-block:: console
 
         $ pip3 install rich
 

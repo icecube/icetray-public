@@ -13,10 +13,10 @@ Apple Mac OS
 
 On Mac OS, homebrew can be used:
 
-.. code-block:: bash
- 
-  brew tap homebrew/science
-  brew install homebrew/science/nlopt
+.. code-block:: console
+
+  $ brew tap homebrew/science
+  $ brew install homebrew/science/nlopt
 
 If you are interested in using NLopt's python interface independently of IceTray you can add the ``--with-python`` flag.
 
@@ -24,16 +24,16 @@ If you are interested in using NLopt's python interface independently of IceTray
 Install from Source
 --------------------
 
-IceCube uses the c++ interface to NLopt and requires shared libraries, both of which must be turned on by command line options during configure. 
+IceCube uses the c++ interface to NLopt and requires shared libraries, both of which must be turned on by command line options during configure.
 
-.. code-block:: bash
+.. code-block:: console
 
-  wget https://github.com/stevengj/nlopt/archive/v2.7.1.tar.gz
-  tar xzvf nlopt-2.7.1.tar.gz
-  cd nlopt-2.7.1.tar.gz
-  ./configure --with-cxx --enable-shared
-  make
-  sudo make install
+  $ wget https://github.com/stevengj/nlopt/archive/v2.7.1.tar.gz
+  $ tar xzvf nlopt-2.7.1.tar.gz
+  $ cd nlopt-2.7.1.tar.gz
+  $ ./configure --with-cxx --enable-shared
+  $ make
+  $ sudo make install
 
 See Also
 --------
