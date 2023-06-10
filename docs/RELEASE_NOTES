@@ -6,8 +6,10 @@ Release Notes
 main
 ----
 
-- Suppress boost python object registration warnings during docs
-  generation
+- Make I3Tray.I3Tray and icecube.icetray.I3Tray the same thing. (#3102)
+- General docs cleanups
+- Support py3-v4.3.0 changes (#3098)
+- Suppress boost python object registration warnings during docs generation
 
 Apr. 12, 2023 don la dieu (nega AT icecube.umd.edu
 --------------------------------------------------

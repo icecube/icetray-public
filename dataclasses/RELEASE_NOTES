@@ -5,7 +5,14 @@ Release Notes
 
 trunk
 -----
-* Add "SnowHeightProvenance" enum to I3Geometry
+
+* Make I3Tray.I3Tray and icecube.icetray.I3Tray the same thing. (#3102)
+* Remove all references to load_pybindings (#3086)
+* remove python 2.4 forward compatibility (#3080)
+* Modify the "icetop_pulse_extract.py" part of filterscripts_v2, to incorporate plans for new SLCcal procedures. (#3069)
+* update tree.hh to avoid deprecated std::allocator (#3067)
+* Add "SnowHeightProvenance" enum to I3Geometry (#3018)
+* Updates to TriggerKey for the trigger-sim re-write (#2997)
 
 Apr. 12, 2023 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------

@@ -1,23 +1,26 @@
 .. _hdfwriter-release-notes:
-   
+
 Release Notes
 =============
 
 trunk
 -----
 
+* Make I3Tray.I3Tray and icecube.icetray.I3Tray the same thing. (#3102)
+* Remove all references to load_pybindings (#3086)
+
 Dec. 12, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.5.0
 
-- Documentation cleanups
+* Documentation cleanups
 
 Jul. 27, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.4.0
 
-- Drop support for Python 2
-- Make simclasses and recclasses optional for tests
+* Drop support for Python 2
+* Make simclasses and recclasses optional for tests
 
 Feb. 22, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
@@ -35,7 +38,7 @@ Feb. 5, 2020 Alex Olivas (aolivas@umd.edu)
 -------------------------------------------
 Combo Release V00-00-01
 
-* (r178437) add hdfwriter-book, a command-line interface to the I3HDFWriter 
+* (r178437) add hdfwriter-book, a command-line interface to the I3HDFWriter
   segment
 
 Dec. 20, 2019 Alex Olivas (aolivas@umd.edu)
@@ -65,7 +68,7 @@ April 29, 2016, Alex Olivas  (olivas@icecube.umd.edu)
 Release V16-04-00
 
 * Add a one-stop shim for booking untriggered simulation
- 
+
 March 18, 2016, don la dieu  (nega@icecube.umd.edu)
 ---------------------------------------------------
 Release V16-03-00
@@ -80,15 +83,13 @@ Release V15-12-00
 
 March 15, 2015, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------
-Release V15-08-00 
+Release V15-08-00
 
 * Fixed include guards.
 * Updated docs.
 
 March 15, 2015, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------
-Release V15-03-00 
+Release V15-03-00
 
 * Chase header churn in HDF5 1.8.14
-
-

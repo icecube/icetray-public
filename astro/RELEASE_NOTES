@@ -4,11 +4,15 @@ Release Notes
 trunk
 -----
 
+* Make I3Tray.I3Tray and icecube.icetray.I3Tray the same thing. (#3102)
+* Remove all references to load_pybindings (#3086)
+* Improve tests' parallelism
+
 Dec. 12, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.5.0
 
-- Documentation cleanups
+* Documentation cleanups
 
 Jul. 27, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------

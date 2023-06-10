@@ -4,6 +4,11 @@ Release Notes
 trunk
 -----
 
+* Make I3Tray.I3Tray and icecube.icetray.I3Tray the same thing. (#3102)
+* Remove all references to load_pybindings (#3086)
+* Test cleanups
+* I3converter for I3Map<OMKey, I3TimeWindowSeries> (#3063)
+
 Dec. 12, 2022 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.5.0
@@ -17,7 +22,7 @@ IceTray Release v1.4.0
 * Drop support for Python 2
 * Clean up python bindings / modules
 * Clean up tests
-* Add "bookToParticle" option to converter for I3Map's, which computes perpendicular distance to a track, 
+* Add "bookToParticle" option to converter for I3Map's, which computes perpendicular distance to a track,
   longitudinal distance along a track, and distance to a vertex.  (Similar to "bookGeometry")
 * Clean up documentation
 
@@ -89,7 +94,7 @@ Release V15-12-00
 August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
 ------------------------------------------------------
 
-Release V15-08-00 
+Release V15-08-00
 
 * I3MCTree converter is back. It's still useless, but apparently it found its
   way into PINGU processing.
@@ -100,7 +105,7 @@ Release V15-08-00
 March 15, 2015, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------
 
-Release V15-03-00 
+Release V15-03-00
 
 * "weight" is now NPE and type uint64_t.
 
@@ -114,7 +119,7 @@ Release V14-11-00 - Bugfix release.
 
 * Align all tables before closing
 
-* Changed I3TableTranscriber to skip files containing no events 
+* Changed I3TableTranscriber to skip files containing no events
   and throwing a warning instead of a fatal error.
 
 

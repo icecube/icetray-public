@@ -1,10 +1,14 @@
+.. _dataio-release-notes:
+
 Release Notes
 =============
 
-.. _dataio-release-notes:
-
 trunk
 -----
+
+* Make I3Tray.I3Tray and icecube.icetray.I3Tray the same thing. (#3102)
+* Remove all references to load_pybindings (#3086)
+* Update python for dataio-shovel
 
 Apr. 12, 2023 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------

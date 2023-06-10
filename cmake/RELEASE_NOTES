@@ -8,8 +8,10 @@ Release Notes
 trunk
 -----
 
-* Remove BUILD_PYBINDINGS global cmake option
-  We always build pybindings
+* Remove all references to load_pybindings (#3086)
+* Remove BUILD_PYBINDINGS global cmake option. We always build pybindings.
+* Add support for cvmfs py3-v4.3.0 (#3098)
+* General docs cleanups
 
 Apr. 12, 2023 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------

@@ -6,9 +6,20 @@ Release Notes
 trunk
 -----
 
+* Make I3Tray.I3Tray and icecube.icetray.I3Tray the same thing. (#3102)
 * Fix throws in bp::error_already_set exception handler (#3085)
 * Fix crash closing AngleClock artist (#3084)
 * Update colomaps to new matplotlib API (#3071)
+* Bug fixes and updates to the icetrop viewer (#2753)
+* general docs cleanup to improve html rendering
+* cleanup angle clock artist
+* add option to use custom view in hires steamshovel screenshots (#3093)
+* fix bp::error_already_setxception handler
+* fix crash when closing somertists
+* update colormaps toew matplotlib api
+* update speed display in textsummary
+* remove deprecated qt function flag
+* update for python 3.11
 
 Apr. 05, 2023 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
