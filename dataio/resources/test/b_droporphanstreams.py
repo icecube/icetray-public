@@ -3,7 +3,7 @@
 
 import sys
 from icecube import icetray, dataclasses, dataio
-from I3Tray import *
+from icecube.icetray import I3Tray
 
 tray = I3Tray()
 tray.AddModule("I3Reader", "reader", Filename = "pass1.i3")

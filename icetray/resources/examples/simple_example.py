@@ -12,7 +12,7 @@ like so:
 '''
 
 from icecube import icetray
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 class SimplePhysicsSource(icetray.I3Module):
     '''

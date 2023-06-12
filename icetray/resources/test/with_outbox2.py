@@ -4,7 +4,7 @@
 #  addoutbox works if it is in Configure
 #
 
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 from icecube.icetray import I3Module
 
 

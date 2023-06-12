@@ -2,7 +2,7 @@
 #
 # Checking that the Dump handles nulls w/o crashing
 #
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 tray = I3Tray()
 

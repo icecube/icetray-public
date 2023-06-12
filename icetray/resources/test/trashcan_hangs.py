@@ -4,7 +4,7 @@ import os
 import signal
 from multiprocessing import Process
 
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 from icecube import icetray
 
 

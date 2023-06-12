@@ -326,7 +326,7 @@ directory.  To use them from your python scripts simply::
     #!/usr/bin/env python3
 
     from my_utils import ints_are_greater_than
-    from I3Tray import *
+    from icecube.icetray import I3Tray
 
     tray = I3Tray()
 

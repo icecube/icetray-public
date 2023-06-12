@@ -5,7 +5,7 @@ import unittest
 
 from icecube import icetray, dataclasses, dataio
 from icecube.hdfwriter import I3SimHDFWriter
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 FILE_NAME = "hdfwriter_test_slash_in_key_name.hdf5"
 

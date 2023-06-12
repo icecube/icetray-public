@@ -3,7 +3,7 @@ Example of how to write an I3TableService in python
 This saves the table as dictionary and then prints out the data after the tray is finished
 """
 import os.path
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 from icecube import dataio,tableio
 
 class I3SimpleTable(tableio.I3Table):

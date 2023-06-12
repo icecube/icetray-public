@@ -36,7 +36,7 @@ follows::
    #!/usr/bin/env python3
 
    from PyDump import PyDump
-   from I3Tray import *
+   from icecube.icetray import I3Tray
 
    tray = I3Tray()
 

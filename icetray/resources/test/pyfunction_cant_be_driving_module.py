@@ -5,7 +5,7 @@
 # IceTray won't emmit for them.
 #
 
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 tray = I3Tray()
 

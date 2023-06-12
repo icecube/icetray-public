@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from icecube import icetray
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 tray = I3Tray()
 

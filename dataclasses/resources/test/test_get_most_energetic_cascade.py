@@ -3,7 +3,7 @@
 from random import uniform
 from random import random
 
-from I3Tray import I3Units
+from icecube.icetray import I3Units
 from icecube import dataclasses as dc
 
 from icecube.icetray import I3Test

@@ -2,7 +2,7 @@
 
 import unittest
 from icecube import icetray
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 class test_I3FrameObject_delete_rename(unittest.TestCase):
 

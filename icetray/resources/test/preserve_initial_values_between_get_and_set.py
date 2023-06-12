@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 from icecube import icetray
 
 class UseRandom(icetray.I3Module):

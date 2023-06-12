@@ -61,7 +61,7 @@ class LinearTreeTest(unittest.TestCase):
 				raise
 			
 			
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 # first round: convert and serialize
 tray = I3Tray()

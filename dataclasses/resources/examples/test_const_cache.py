@@ -26,7 +26,7 @@
 
 
 from os.path import expandvars
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 from icecube import icetray, dataclasses, dataio
 
 def evil_function(frame):

@@ -2,7 +2,7 @@
 
 import unittest
 from icecube import icetray, dataclasses
-from I3Tray import I3Units
+from icecube.icetray import I3Units
 
 class I3RecoPulseSeriesMapApplySPECorrection(unittest.TestCase):
 

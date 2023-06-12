@@ -29,7 +29,7 @@ Usage
 The :func:`I3HDFWriter` segment provides output to HDF5 tables. Use it like so::
     
     from icecube import icetray, dataio, dataclasses
-    from I3Tray import I3Tray
+    from icecube.icetray import I3Tray
     from icecube.hdfwriter import I3HDFWriter
     
     tray = I3Tray()

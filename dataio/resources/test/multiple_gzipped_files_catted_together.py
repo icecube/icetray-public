@@ -8,7 +8,7 @@
 #
 #
 
-from I3Tray import *
+from icecube.icetray import I3Tray
 from icecube import icetray, dataclasses, dataio
 import os
 

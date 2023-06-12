@@ -4,7 +4,7 @@
 #  Run frames on different streams through a reader/writer tray, verify that extra
 #  cruft doesn't get in to the files
 #
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 from icecube import icetray
 from icecube import dataio
 import os

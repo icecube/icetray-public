@@ -4,7 +4,7 @@ Test reordering of modules within an I3Tray.
 """
 
 from icecube import icetray, dataio  # noqa, needed to add I3InfiniteSource
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 def thing1(frame):
 	frame['foo'] = icetray.I3Int(42)

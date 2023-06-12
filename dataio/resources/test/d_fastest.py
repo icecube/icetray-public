@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from I3Tray import *
+from icecube.icetray import I3Tray
 from icecube import icetray, dataclasses, phys_services, dataio
 from os.path import expandvars
 

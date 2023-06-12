@@ -9,7 +9,7 @@
 
 import unittest
 
-from I3Tray import I3Units
+from icecube.icetray import I3Units
 from icecube import dataclasses as dc
 
 from icecube.dataclasses import get_most_energetic_primary

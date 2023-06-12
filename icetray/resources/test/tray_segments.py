@@ -3,7 +3,7 @@
 # Check that tray segments work
 #
 
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 from icecube import icetray
 

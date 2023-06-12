@@ -5,7 +5,7 @@
 #  cruft doesn't get in to the files
 #
 from icecube import icetray, dataclasses, dataio
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 import sys
 
 #

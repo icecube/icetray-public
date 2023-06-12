@@ -7,7 +7,7 @@ Ensure that I3MCTree and I3LinearizedMCTree can both be written
 import os
 import re
 from icecube import icetray, dataclasses, tableio, phys_services
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 import sys
 import unittest

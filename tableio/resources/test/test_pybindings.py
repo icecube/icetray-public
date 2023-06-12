@@ -259,7 +259,7 @@ if have_hdf:
 				from icecube import icetray,tableio,dataclasses,hdfwriter
 				from icecube.tableio import I3TableWriter
 				import tempfile
-				from I3Tray import I3Tray, load
+				from icecube.icetray import I3Tray
 				from icecube import phys_services 
 				
 				tray = I3Tray()

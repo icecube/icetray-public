@@ -2,7 +2,7 @@
 #
 #  $Id: j_fatals_reading_mutineer.py 1636 2013-06-29 03:02:36Z nwhitehorn $
 #
-from I3Tray import *
+from icecube.icetray import I3Tray
 
 from os.path import expandvars
 

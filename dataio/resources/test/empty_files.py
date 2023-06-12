@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from icecube import icetray, dataclasses, dataio
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 import os
 
 def write_empty_file(fname):

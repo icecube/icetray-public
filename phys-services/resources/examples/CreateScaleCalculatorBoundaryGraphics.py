@@ -7,7 +7,7 @@ from icecube import icetray
 from icecube import dataclasses 
 from icecube import phys_services 
 from icecube import dataio 
-from I3Tray import *
+from icecube.icetray import I3Tray
 
 from icecube.phys_services import I3ScaleCalculator
 

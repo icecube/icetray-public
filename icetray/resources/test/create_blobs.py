@@ -3,7 +3,7 @@
 """
 Run the CreateBlobs module and verify nothing horrible happens.
 """
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 tray = I3Tray()
 tray.Add("BottomlessSource")

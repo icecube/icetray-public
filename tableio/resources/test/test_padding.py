@@ -7,7 +7,7 @@ Ensure that hdf5 write does padding correctly for S and non-S frames
 import os
 import re
 from icecube import icetray, dataclasses, tableio, phys_services, hdfwriter
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 have_simclasses = False
 try:

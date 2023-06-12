@@ -2,7 +2,7 @@
 
 import unittest
 from icecube import dataclasses
-from I3Tray import I3Units
+from icecube.icetray import I3Units
 
 class TestI3TankGeo(unittest.TestCase):
 

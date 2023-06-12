@@ -3,7 +3,7 @@
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 from icecube import dataio, icetray
 from icecube.icetray.i3logging import log_debug
 

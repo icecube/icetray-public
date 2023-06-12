@@ -3,7 +3,7 @@
 #  verify that the previous script was able to write a file containing
 #  objects that it didn't have serialization code for
 #
-from I3Tray import *
+from icecube.icetray import I3Tray
 
 from os.path import expandvars
 

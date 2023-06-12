@@ -7,7 +7,7 @@ import unittest
 from icecube import icetray, dataio, dataclasses
 from icecube.dataclasses import I3MCTree,I3Particle,I3ParticleID
 
-from I3Tray import I3Units
+from icecube.icetray import I3Units
 
 def makeParticle():
   p = I3Particle();

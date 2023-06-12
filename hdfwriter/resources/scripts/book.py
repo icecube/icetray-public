@@ -29,7 +29,7 @@ args = parser.parse_args()
 
 from icecube import icetray, dataclasses, dataio
 import importlib
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 tray = I3Tray()
 

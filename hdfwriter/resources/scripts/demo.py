@@ -28,7 +28,7 @@ infile = args[0]
 outfile = os.path.basename(args[0]) + '.' + options.format
 
 from icecube import icetray,dataclasses,dataio,tableio
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 if options.format == 'hdf5':
 	from icecube import hdfwriter

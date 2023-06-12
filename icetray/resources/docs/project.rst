@@ -381,7 +381,7 @@ Usage
 
 Let's use this module to do something::
 
-    from I3Tray import *
+    from icecube.icetray import I3Tray
     from icecube import icetray, dataio, dataclasses, advanced_bootcamp
 
     tray = I3Tray()

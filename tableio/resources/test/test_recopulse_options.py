@@ -6,9 +6,7 @@
 from icecube import icetray, dataclasses, dataio, tableio
 import os
 
-import I3Tray
-
-tray = I3Tray.I3Tray()
+tray = icetray.I3Tray()
 
 ## Read a GCD, because we need the I3Geometry to use these extra options.
 ## And also a file with some pulses and tracks and stuff in it.

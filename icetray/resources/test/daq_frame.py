@@ -4,7 +4,6 @@ import os
 import unittest
 from tempfile import NamedTemporaryFile
 
-import I3Tray
 from icecube import dataclasses, dataio, icetray
 from icecube.icetray import I3Units
 
@@ -74,7 +73,7 @@ with NamedTemporaryFile(delete=False) as t:
     f.close()
 
     # Check I3Reader.
-    tray = I3Tray.I3Tray()
+    tray = icetray.I3Tray()
     tray.Add('I3Reader', filename=fname)
     tray.Add(icetray.I3TestModuleFactory(DAQFrameMuxing))
     tray.Execute()

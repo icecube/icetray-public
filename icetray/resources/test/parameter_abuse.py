@@ -2,7 +2,7 @@
 
 import sys
 from icecube.icetray import OMKey
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 
 # some parameter exercise

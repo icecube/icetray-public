@@ -4,7 +4,7 @@
 #
 
 from icecube.icetray import I3Frame, I3Int, I3Module, I3PacketModule
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 tray = I3Tray()
 

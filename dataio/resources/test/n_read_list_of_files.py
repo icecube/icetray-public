@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from I3Tray import *
+from icecube.icetray import I3Tray
 
 import os
 from glob import glob

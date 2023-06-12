@@ -16,7 +16,7 @@ import unittest
 
 import test_horizons
 
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 from icecube import astro, dataclasses, icetray, tableio
 from icecube.icetray import I3Units
 

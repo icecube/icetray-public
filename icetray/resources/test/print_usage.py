@@ -6,7 +6,7 @@
 import random
 from math import cos, pi
 
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 from icecube import icetray
 from icecube.icetray.I3Test import ENSURE
 

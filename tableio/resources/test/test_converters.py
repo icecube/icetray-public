@@ -9,7 +9,7 @@ import shutil
 import warnings
 
 import icecube  # noqa: F401
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 from icecube import dataclasses, icetray, tableio
 from icecube.tableio import I3BroadcastTableService
 

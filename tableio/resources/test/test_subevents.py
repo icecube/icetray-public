@@ -3,7 +3,6 @@
 # Ensure that row padding works properly with split streams.
 
 from icecube import icetray, dataclasses, dataio, tableio, phys_services
-import I3Tray
 import os, sys, random, unittest
 
 try:
@@ -38,7 +37,7 @@ class SubeventTest(unittest.TestCase):
 	fname = os.environ['I3_BUILD'] + '/hdfwriter/subevent_test.hdf5'
 	@classmethod
 	def runtray(cls, fname):
-		tray = I3Tray.I3Tray()
+		tray = icetray.I3Tray()
 		
 		tray.AddModule("I3InfiniteSource", "source", stream=icetray.I3Frame.DAQ)
 		

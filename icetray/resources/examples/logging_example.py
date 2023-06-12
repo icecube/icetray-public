@@ -16,7 +16,7 @@ FATAL (LoggingExampleModule): halt and catch fire (LoggingExampleModule.cxx:44 i
 '''
 
 from icecube import icetray
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 icetray.set_log_level_for_unit('LoggingExampleModule', icetray.I3LogLevel.LOG_INFO)
 

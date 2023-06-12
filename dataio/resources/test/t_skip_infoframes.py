@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 #
-from I3Tray import *
+from icecube.icetray import I3Tray
 
 from os.path import expandvars
 

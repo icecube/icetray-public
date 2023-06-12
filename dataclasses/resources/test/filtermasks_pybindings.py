@@ -2,7 +2,7 @@
 from icecube import icetray, dataclasses
 from icecube.icetray.I3Test import *
 
-from I3Tray import I3Units
+from icecube.icetray import I3Units
 
 ## 
 ## Some examples/simple tests for FilterMasks

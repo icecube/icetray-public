@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import numpy
 
-from I3Tray import I3Units
+from icecube.icetray import I3Units
 from icecube import icetray, dataclasses
 from icecube.icetray.I3Test import ENSURE
 

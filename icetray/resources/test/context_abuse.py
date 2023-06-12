@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from icecube import icetray, phys_services
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 # Ensure that services can be passed directly (as a wrapped pointer),
 # or via the context (as a string).

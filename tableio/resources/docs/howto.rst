@@ -17,7 +17,7 @@ the actual output file and a module that shuffles data between the frame and
 the service. A simple script could look something like this::
 
     from icecube import icetray, dataio
-    from I3Tray import I3Tray
+    from icecube.icetray import I3Tray
     from icecube.hdfwriter import I3HDFWriter
     
     tray = I3Tray()
@@ -160,7 +160,7 @@ You can also route output to multiple files in parallel by instantiating many
 I3TableServices and passing them as a list to tableio.I3TableWriter::
 
     from icecube import icetray
-    from I3Tray import I3Tray
+    from icecube.icetray import I3Tray
     from icecube.tableio import I3TableWriter, I3CSVTableService
     from icecube.hdfwriter import I3HDFTableService
     from icecube.rootwriter import I3ROOTTableService

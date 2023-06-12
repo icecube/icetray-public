@@ -8,7 +8,7 @@ best illustration of this is a simple example::
  #
  # Pass 2:
  
- from I3Tray import * 
+ from icecube.icetray import I3Tray 
  
  from os.path import expandvars
  
@@ -112,7 +112,7 @@ in earlier versions they are in module :mod:`scipy`::
   Python 2.6.2 (release26-maint, Apr 19 2009, 01:58:18) 
   [GCC 4.3.3] on linux2
   Type "help", "copyright", "credits" or "license" for more information.
-  >>> from I3Tray import NaN, Inf
+  >>> from icecube.icetray import NaN, Inf
   >>> NaN
   nan
   >>> Inf

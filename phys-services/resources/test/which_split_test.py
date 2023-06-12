@@ -5,7 +5,7 @@
 # $LastChangedDate: 2014-10-28 21:16:40 -0400 (Tue, 28 Oct 2014) $
 # $LastChangedBy: jvansanten $
 
-from I3Tray import *
+from icecube.icetray import I3Tray
 from icecube import icetray, dataclasses, dataio
 from icecube.icetray import pypick, I3Frame
 
@@ -99,7 +99,7 @@ class schizzoparanoia(icetray.I3ConditionalModule):
                     icetray.logging.log_error("(%s) SHOULD have run on sub=%s subid=%d" % (self.name,name,i))
             forbidden = self.did_run_on - self.should_run_on
             if len(forbidden)>0:
-                prinr("FORBIDDEN %s" % forbidden)
+                print("FORBIDDEN %s" % forbidden)
                 for name,i in forbidden:
                     icetray.logging.log_error("(%s) SHOULD NOT have run on sub=%s subid=%d" % (self.name,name,i))
 

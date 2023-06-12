@@ -7,7 +7,7 @@ import os
 import signal
 
 from icecube.icetray import I3Module
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 tray = I3Tray()
 

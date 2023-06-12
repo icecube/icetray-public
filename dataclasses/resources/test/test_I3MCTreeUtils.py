@@ -2,7 +2,7 @@
 
 import unittest
 from icecube import dataclasses, dataio
-from I3Tray import I3Units
+from icecube.icetray import I3Units
 import sys, os
 
 class TestI3MCTreeUtils(unittest.TestCase):

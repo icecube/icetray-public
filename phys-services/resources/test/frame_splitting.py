@@ -4,7 +4,6 @@ import os
 import unittest
 from tempfile import NamedTemporaryFile
 
-import I3Tray
 from icecube import dataclasses, dataio, icetray, phys_services
 from icecube.icetray import I3Units
 
@@ -97,7 +96,7 @@ with NamedTemporaryFile(delete=False) as t:
                 self.PushFrame(subframe)
             return True
 
-    tray = I3Tray.I3Tray()
+    tray = icetray.I3Tray()
     tray.AddModule('I3Reader', 'reader', filename=fname)
     tray.AddModule(FrameSplitter, 'splitter')
     tray.AddModule(icetray.I3TestModuleFactory(DAQFrameSplitting), 'testy')

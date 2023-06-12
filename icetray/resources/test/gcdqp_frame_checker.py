@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 from icecube import icetray 
 
 class Source(icetray.I3Module):

@@ -90,7 +90,7 @@ void register_I3Tray()
   //void (I3Tray::*Execute_0)(void)              = &I3Tray::Execute;
   //void (I3Tray::*Execute_1)(unsigned)          = &I3Tray::Execute;
 
-  class_<I3Tray, boost::noncopyable>("I3Tray")
+  class_<I3Tray, boost::noncopyable>("_I3TrayBase")
     .def("Execute", Execute_0)
     .def("Execute", Execute_1)
     .def("Usage", &I3Tray::Usage)

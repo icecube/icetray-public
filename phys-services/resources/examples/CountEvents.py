@@ -7,7 +7,7 @@ parser.add_option('-i','--infile',
                   help='I3File to read.')
 (options,args) = parser.parse_args()
 
-from I3Tray import I3Units
+from icecube.icetray import I3Units
 from os.path import expandvars
         
 from icecube import icetray 

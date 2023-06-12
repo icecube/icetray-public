@@ -2,7 +2,7 @@
 #
 # Checking that the driving time exists
 #
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 
 
 tray = I3Tray()

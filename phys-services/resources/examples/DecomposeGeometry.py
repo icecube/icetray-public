@@ -10,7 +10,7 @@ parser.add_option('-o','--outfile',
 (options,args) = parser.parse_args()
 
 import sys
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 from icecube import icetray, dataio, phys_services
 
 if len(sys.argv) != 3: 

@@ -2,7 +2,7 @@
 from __future__ import print_function
 import os
 import unittest
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 from icecube import icetray, dataio, dataclasses, recclasses, simclasses, gulliver, paraboloid
 import time
 

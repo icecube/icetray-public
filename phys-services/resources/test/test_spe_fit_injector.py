@@ -21,7 +21,7 @@ import sys
 
 from numpy import isnan
 
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 from icecube import icetray, dataclasses, dataio, phys_services
 from icecube.phys_services.spe_fit_injector import SPEFitInjector 
 from icecube.phys_services.spe_fit_injector import I3SPEFitInjector

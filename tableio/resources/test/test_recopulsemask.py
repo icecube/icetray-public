@@ -5,9 +5,7 @@
 from icecube import icetray, dataclasses, dataio, tableio
 import os
 
-import I3Tray
-
-tray = I3Tray.I3Tray()
+tray = icetray.I3Tray()
 
 tray.AddModule("I3InfiniteSource", "source", stream=icetray.I3Frame.Physics)
 

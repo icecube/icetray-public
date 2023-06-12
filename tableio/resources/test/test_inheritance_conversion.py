@@ -9,7 +9,7 @@ types can be written by converters registered for base classes
 # is selected would require vastly more plumbing, so instead we just do things 
 # the sloppy way with temporary files and hoping that hdfwriter is around.
 
-from I3Tray import I3Tray
+from icecube.icetray import I3Tray
 from icecube import icetray, dataclasses, tableio, phys_services
 
 import sys, os

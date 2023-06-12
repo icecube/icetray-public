@@ -36,7 +36,7 @@ An example python script::
     import os
     import sys
 
-    from I3Tray import *
+    from icecube.icetray import I3Tray
     from icecube import dataclasses, dataio
 
     tray = I3Tray()
