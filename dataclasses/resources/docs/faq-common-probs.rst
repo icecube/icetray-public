@@ -64,7 +64,7 @@ Where ``f`` above should be an ``icecube.dataclasses.I3Time`` object, not an ``i
 RuntimeError: extension class wrapper for base class I3FrameObject has not been created yet
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This happens if you import a project that has a wrapped clas that
+This happens if you import a project that has a wrapped class that
 inherits from :class:`I3FrameObject`, but haven't imported
 :mod:`icecube.icetray`, which contains the code for the
 :class:`I3FrameObject` wrapper::
