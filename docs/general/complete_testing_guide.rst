@@ -90,3 +90,6 @@ Adding Test Data
 
 The test data is downloaded from the svn repository https://code.icecube.wisc.edu/test-data/trunk/.
 When you write tests which need need additional test data please commit it to this repository.
+
+Please see the `README <https://code.icecube.wisc.edu/test-data/trunk/README>`_ for instructions on how to
+commit new test data to the repository.
