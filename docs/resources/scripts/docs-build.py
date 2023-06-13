@@ -212,21 +212,25 @@ def main():
 
         def generate_python_docs():
             # call program which generates rsts for all python moudles in libdir
-            if call("sphinx-apidoc",
-                    "-q", "-l", "-M", "-e",
-                    "-H", "Python API Reference",
-                    "-o", python_src_dir,
-                    os.path.join(I3_BUILD, "lib")):
-                # previous call failed, try again w/o '-q'
+            for d in ["lib/icecube", "lib/pybdt"]:
                 if call("sphinx-apidoc",
-                        "-l", "-M", "-e",
+                        "-q", "-l", "-M", "-e",
                         "-H", "Python API Reference",
+                        "--implicit-namespaces",
                         "-o", python_src_dir,
-                        os.path.join(I3_BUILD, "lib")):
-                    log.warning("Generating Python references failed")
-                    return
+                        os.path.join(I3_BUILD, d)):
+                    # previous call failed, try again w/o '-q'
+                    if call("sphinx-apidoc",
+                            "-l", "-M", "-e",
+                            "-H", "Python API Reference",
+                            "--implicit-namespaces",
+                            "-o", python_src_dir,
+                            os.path.join(I3_BUILD, d)):
+                        log.warning("Generating Python references failed")
+                        return
 
             #delete the ones we dont need
+            log.debug("Removing unneeded rst files")
             os.unlink(os.path.join(python_src_dir,'modules.rst'))
             for rstfile in glob(python_src_dir+"/lib*.rst"):
                 os.unlink(rstfile)
