@@ -1,5 +1,8 @@
+.. highlight:: python
+
 Testing Example Scripts
-***********************
+=======================
+
 It's often very useful to simply test that your example scripts run.
 
 .. warning::
@@ -9,6 +12,7 @@ It's often very useful to simply test that your example scripts run.
     throwing.
 
 Below is a simple example.  In IceTray there's a TestExampleScripts class to help out.
+
 ::
 
    #!/usr/bin/env python3
@@ -27,6 +31,7 @@ Below is a simple example.  In IceTray there's a TestExampleScripts class to hel
 
 Now a simple example with arguments passed to the script.  You can just pass
 arguments to **run_example** same as you would on the command line.
+
 ::
 
   #!/usr/bin/env python3
@@ -54,6 +59,7 @@ arguments to **run_example** same as you would on the command line.
   unittest.main()
 
 A more modern and pythonic way to write the same test would be
+
 ::
 
   #!/usr/bin/env python3

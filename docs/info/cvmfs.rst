@@ -6,18 +6,18 @@
 CVMFS
 =====
 
-CVMFS (CernVM File System) is a shared filesystem available 
+:abbr:`CVMFS (CernVM File System)` is a shared filesystem available 
 most anywhere around the world.  It has become the standard for
 distributing software libraries in the physics community and beyond.
 For more details on CVMFS, see the 
 `CERN documentation <https://cernvm.cern.ch/fs>`_.
 
-IceCube software is deployed at `/cvmfs/icecube.opensciencegrid.org`.
+IceCube software is deployed at ``/cvmfs/icecube.opensciencegrid.org``.
 
 Quickstart
 ----------
 
-.. note ::
+.. note::
 
   If you're installing locally check the :wiki:`wiki <CVMFS>`
   for information on how to configure and mount cvmfs.
@@ -30,13 +30,13 @@ This will detect the current OS and architecture and set your
 environment variables appropriately.
 
 * If you are using bash, you can put the above line into your 
-  `.bash_profile` script to have the environment set on login.
+  ``.bash_profile`` script to have the environment set on login.
 
 * If you are using zsh, you can put the above line into your 
-  `.zlogin` script to have the environment set on login.
+  ``.zlogin`` script to have the environment set on login.
 
 * If you are running tcsh, you should put the following line into
-  your your `.login` script. (Note the use of backticks in the 
+  your your ``.login`` script. (Note the use of backticks in the 
   expression)::
 
     eval `/cvmfs/icecube.opensciencegrid.org/py3-v4.3.0/setup.sh`
@@ -46,12 +46,12 @@ accidentally put something else in front of CVMFS on the path.
 
 .. warning::
    
-   You should *NOT* put this in your `.bashrc` or `.cshrc` as this 
+   You should *NOT* put this in your ``.bashrc`` or ``.cshrc`` as this 
    causes the script to modify your environment when subshells are
    started, and can cause Icetray to fail to load.
 
    If you plan to use the GNU screen utility, you will also want to
-   add the following to your .screenrc::
+   add the following to your ``~/.screenrc``::
 
       shell -bash
 
