@@ -37,10 +37,24 @@ sys.path = [os.path.join(os.environ["I3_SRC"],'docs','extensions')] + sys.path
 extensions = list(filter(None, ['sphinx.ext.autodoc',
                                 'sphinx.ext.mathjax',
                                 'sphinx.ext.extlinks',
+                                'sphinx.ext.intersphinx',
+                                'IPython.sphinxext.ipython_console_highlighting',
                                 '@sphinx_NAPOLEON@',
                                 '@sphinx_BREATHE@',
                                 ]))
 print("Using extensions:", extensions)
+intersphinx_mapping = { 'python': ('https://docs.python.org/3', None),
+                        #'h5py': ('https://docs.h5py.org/en/latest/', None),
+                        #'matplotlib': ('https://matplotlib.org/stable/', None),
+                        #'numpy': ('https://numpy.org/doc/stable/', None),
+                        #'pandas': ('https://pandas.pydata.org/docs/', None),
+                        #'scikit-learn': ('https://scikit-learn.org/stable/', None),
+                        #'Sphinx': ('https://www.sphinx-doc.org/en/master/', None),
+                        #'scipy': ('https://docs.scipy.org/doc/scipy/', None),
+                       }
+
+# enable breathe debugging
+#breathe_debug_trace_directives = True
 
 # sphinxcontrib.email: auto-obfuscate email addresses
 email_automode = True

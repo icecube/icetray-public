@@ -109,3 +109,6 @@ h1 {
 span.pre {
     background-color: var(--background-grey);
 }
+
+/* make footnotes smaller */
+aside.footnote-list { font-size: smaller; }
