@@ -1,9 +1,11 @@
 .. _pyfunction_as_module:
 
-Passing python functions to :meth:`I3Tray.AddModule`
-====================================================
+.. default-role:: py:meth
 
-:py::meth:`I3Tray.AddModule` has typically accepted only strings in
+Passing python functions to `.I3Tray.AddModule`
+===============================================
+
+`.I3Tray.AddModule` has typically accepted only strings in
 its first argument.  These strings are used to look up C++ classes
 that inherit from :cpp:class:`I3Module`, like so::
 
@@ -12,41 +14,36 @@ that inherit from :cpp:class:`I3Module`, like so::
 where the C++ module :cpp:class:`Dump` has been registered via the C++
 :c:macro:`I3_MODULE()` macro.
 
-:meth:`I3Tray.AddModule` now additionally accepts python functions in
+`.I3Tray.AddModule` now additionally accepts python functions in
 its first argument, for instance::
 
   tray = I3Tray()
 
   def frame_printer(frame):
-      print "Frame is:\n", frame
+      print("Frame is:\n", frame)
 
   tray.AddModule(frame_printer, 'printer')
 
 When icetray receives a python function as the first argument to
-``AddModule``, it constructs a special ``I3Module`` of type
+`~.I3Tray.AddModule`, it constructs a special :cpp:class:`I3Module` of type
 *PythonFunction* which forwards the frames that it receives to the
 python function passed.  By default it does this for the *Physics*
 stream only.
 
 .. warning::
-   
-   it is **not** 
 
-      ``AddModule('frame_printer', ...``
-
-   it is 	
-
-      ``AddModule(frame_printer, ...``
+   it is **not** ``AddModule('frame_printer', ...``
+   it is ``AddModule(frame_printer, ...``
 
    If you see a message like
 
-      RuntimeError: Module/service "frame_printer" not registered with I3_MODULE() or I3_SERVICE_FACTORY()
-   
-   it is because you've put the python function into quotes, making it a string, and 
+      ``RuntimeError: Module/service "frame_printer" not registered with I3_MODULE() or I3_SERVICE_FACTORY()``
+
+   it is because you've put the python function into quotes, making it a string, and
    icetray is failing to find that string in its registry of available C++ I3Modules.
 
 
-If you put that function between a :class:`BottomlessSource`, (which
+If you put that function between a :cpp:class:`BottomlessSource`, (which
 just pushed empty physics frames), the output should look like this::
 
   Frame is:
@@ -57,8 +54,8 @@ just pushed empty physics frames), the output should look like this::
   [ I3Frame :
   ]
 
-Let's add a second function that puts something into the frame, and modify 
-the frame_printer function to get and print it.
+Let's add a second function that puts something into the frame, and modify
+the ``frame_printer`` function to get and print it.
 
 .. code-block:: python
 
@@ -75,9 +72,9 @@ the frame_printer function to get and print it.
 
    tray.AddModule(frame_printer, 'printer')
 
-Here the function :py:func:`int_putter` puts :c:type:`I3Int` with
+Here the function ``int_putter`` puts :cpp:type:`I3Int` with
 the value 777 in into the frames as they go by.  This is reflected in
-the table of contents printed by the :py:func:`frame_printer` function.
+the table of contents printed by the ``frame_printer`` function.
 
 Output::
 
@@ -101,15 +98,15 @@ parameters such as the location in the frame of useful frame objects,
 values, thresholds, etc.  The hardcoded values *777* and *some_int*
 just make our code brittle.
 
-Functions passed to :func:`AddModule` may take more than one parameter
-(the first parameter is always the :class:`I3Frame` that is flowing
+Functions passed to `~.I3Tray.AddModule` may take more than one parameter
+(the first parameter is always the :cpp:class:`I3Frame` that is flowing
 through the framework).  The parameter values passed to
-:func:`AddModule` will be delivered (along with the current
-:class:`I3Frame`, of course) to the keyword parameters of the
+`~.I3Tray.AddModule` will be delivered (along with the current
+:cpp:class:`I3Frame`, of course) to the keyword parameters of the
 associated python function passed each time the function is executed.
 
-We modify the function :func:`int_putter` to accept parameters that
-specify what value to put inside the :class:`I3Int`, and where in the 
+We modify the function ``int_putter`` to accept parameters that
+specify what value to put inside the :cpp:type:`I3Int`, and where in the
 frame to put them:
 
 .. code-block:: python
@@ -129,14 +126,14 @@ frame to put them:
    tray.AddModule(frame_printer, 'printer',
 		  whatvalue = 'some_int')
 
-Note the default parameter values for the function :func:`int_putter`.
+Note the default parameter values for the function ``int_putter``.
 
 Direct Usage of Lambda Functions
 --------------------------------
 
 Here we use a *lambda*, (nameless inline) function. Lambda functions
 are also called lambda expressions because they can only contain simple
-expressions. Note that functions created with lambda expressions cannot 
+expressions. Note that functions created with lambda expressions cannot
 contain statements (if, while, for, try, with, ...). Check google for
 more information on this standard python construct.
 
@@ -152,17 +149,17 @@ can become the single line::
    tray.AddModule(lambda fr: fr['a_int'] = icetray.I3Int(777), 'putter')
 
 
-Choosing streams the functions should run on 
+Choosing streams the functions should run on
 --------------------------------------------
 
-The underlying PythonFunction module also takes a parameter *Streams*,
+The underlying :cpp:class:`PythonFunction` module also takes a parameter *Streams*,
 which is a list of stream types that the function should run on.  By
 default this list is ``[icetray.I3Frame.Physics]``.  To e.g. cause a
-python function :func:`foo` to run on ``Calibration`` and ``Geometry``
-streams, configure as follows::
+python function ``foo`` to run on :cpp:var:`~I3Frame::Calibration` and
+:cpp:var:`~I3Frame::Geometry` streams, configure as follows::
 
    from icecube import icetray
-	 
+
    def foo(frame):
        ...  # do something physicsy here
 
@@ -174,13 +171,13 @@ streams, configure as follows::
 Functions as filters
 --------------------
 
-The functions passed to :func:`AddModule` may return ``None``
-(i.e. never call ``return`` at all), or a boolean.  The
-:class:`PythonFunction` module examines the return values of these
+The functions passed to `~.I3Tray.AddModule` may return ``None``
+(i.e. never call :keyword:`return` at all), or a boolean.  The
+:cpp:class:`PythonFunction` module examines the return values of these
 functions and if the value is ``None`` or ``True``, the module will
-call :func:`PushFrame`: modules further down the chain will see the
-frame.  If the function returns ``False``, the module will drop the
-frame.
+call :cpp:func:`~I3Module::PushFrame`: modules further down the
+chain will see the frame.  If the function returns ``False``, the
+module will drop the frame.
 
 .. note::
 
@@ -195,7 +192,7 @@ frame.
    anything (or return ``True`` if it is clearer to do so).
 
 For instance, the following code would cause frames that contain
-an :class:`I3Int` with value less than 80 to be dropped::
+an :cpp:type:`I3Int` with value less than 80 to be dropped::
 
    def ints_are_greater_than(frame,  key,  threshold):
        frameval = frame[key].value
@@ -214,9 +211,9 @@ Passing python functions to I3ConditionalModules
 The old way
 ^^^^^^^^^^^
 
-Recall that an :class:`I3ConditionalModule` looks for an
-:class:`I3IcePick` in its :class:`I3Context`, indexed by string.  So
-the user must configure an :class:`I3IcePickInstaller<T>` (where *T*
+Recall that an :cpp:class:`I3ConditionalModule` looks for an
+:cpp:class:`I3IcePick` in its :cpp:class:`I3Context`, indexed by string.  So
+the user must configure an :cpp:class:`I3IcePickInstaller\<T>` (where *T*
 is the class containing the desired pick logic) and the name given by
 the user to the instance of this pick logic must match the name that
 the using module accesses it by.::
@@ -229,18 +226,18 @@ the using module accesses it by.::
       ('IcePickServiceKey', 'fofilter'),
       ('where', ['x1', 'x2', 'x3'])
       )
-    
-Here the module *AddNulls*, being an :class:`I3ConditionalModule`,
+
+Here the module :cpp:class:`AddNulls`, being an :cpp:class:`I3ConditionalModule`,
 will add nulls named 'x1', 'x2', and 'x3' to the frame when its
 icepick, located in its context via the string 'fofilter', returns
-true.  
+true.
 
 This has several disadvantages:
 
 * The logic that triggers the *AddNulls* module is separated from
   the configuration of the module itself
 * There is the possibility for name collisions in the various
-  :class:`I3Contexts`.  
+  :cpp:class:`I3Context`.
 
 If the condition is complicated, for instance the disjunction of two
 other conditions, the syntax gets yet more verbose.
@@ -249,17 +246,17 @@ The new way
 ^^^^^^^^^^^
 
 As of icetray v3, one can pass a python function to the parameter **If**
-of I3ConditionalModules.  Identical to the above is the following::
+of :cpp:class:`I3ConditionalModule`.  Identical to the above is the following::
 
   tray.AddModule('AddNulls', 'adder',
                  Where = ['x1', 'x2', 'x3'],
                  If    = lambda frame: 'some_int' in frame)
 
-Another example:  run the reconstruction *LineFit* if the :class:`I3Int` at 
+Another example:  run the reconstruction *LineFit* if the :cpp:type:`I3Int` at
 'where' is greater than 80::
 
    def ints_are_greater_than_80(frame):
-       frameval = frame['where'].value         
+       frameval = frame['where'].value
        return frameval > 80
 
    tray.AddModule('LineFit', 'linefit',
@@ -276,7 +273,7 @@ small python forwarding function::
             return fn(frame, **kwargs)
         return wrap
 
-Which captures the values of parameters passed to it and passes them on to the 
+Which captures the values of parameters passed to it and passes them on to the
 function ``fn``.  You would use this like this::
 
    def ints_are_greater_than(frame,  key,  value):
@@ -286,22 +283,22 @@ function ``fn``.  You would use this like this::
    tray.AddModule('LineFit', 'linefit',
                   If = fwd(ints_are_greater_than,
                            key = 'WhereTheIntIs',
-                           value = 80))   
+                           value = 80))
 
 A forwarding function is necessary here, but not when passing a
-python function directly to :func:`AddModule`.  This asymmetry is
+python function directly to `~.I3Tray.AddModule`.  This asymmetry is
 unfortunate but presently unavoidable.
 
 Functions as I3ConditionalModules
 ---------------------------------
 
-Python functions now support the :class:`I3ConditionalModule` argument syntax,
+Python functions now support the :cpp:class:`I3ConditionalModule` argument syntax,
 with optional arguments **IcePickServiceKey** or **If**.  Use them exactly as
 described above, or for another example, like this::
 
    def int_putter(frame):
        frame['other_int'] = icetray.I3Int(frame['some_int']*10)
-   
+
    tray.AddModule(int_putter, 'putter',
                   If = lambda frame: 'some_int' in frame)
 
@@ -314,13 +311,13 @@ You may want to store your useful functions in their own file, say my_utils.py::
    #   my_utils.py
    #
    #   My useful stuff
-   #    
+   #
 
    def ints_are_greater_than(frame,  key,  value):
        frameval = frame[key].value
        return frameval > value
 
-Which should be located somewhere along your PYTHONPATH or in the current working 
+Which should be located somewhere along your PYTHONPATH or in the current working
 directory.  To use them from your python scripts simply::
 
     #!/usr/bin/env python3
@@ -335,5 +332,3 @@ directory.  To use them from your python scripts simply::
     tray.AddModule(ints_are_greater_than, 'igt',
                    key = 'where',
                    value = 30)
-
-

@@ -1,4 +1,4 @@
-I3Modules in python
+I3Modules in Python
 ===================
 
 Dump
@@ -8,16 +8,15 @@ The *Dump* module just prints the table of contents of the frames that
 it receives.  We'll implement this module in python and then expand on
 it to make it do something useful.
 
-We start by importing project *icetray*::
+We start by importing project :py:mod:`~icecube.icetray`::
 
   from icecube import icetray
 
-and define a class that inherits from :class:`I3Module`, with a
+and define a class that inherits from :cpp:class:`I3Module`, with a
 do-nothing constructor, (the ``__init__`` function).  It forwards to
-the underlying constructor of :class:`I3Module` and takes, the same as
-in C++, one argument which is an :class:`I3Context`.  The
-:func:`Configure` method does nothing interesting, and the
-:func:`Physics` method just prints and pushes the frame that it is
+the underlying constructor of :cpp:class:`I3Module` and takes, the
+same as in C++, one argument which is an :cpp:class:`I3Context`. The
+``Physics`` method just prints and pushes the frame that it is
 passed::
 
 
@@ -52,7 +51,7 @@ Parameter handling
 ------------------
 
 Python I3Modules add and get parameters very similar to C++ I3Modules.
-Here is a module that puts :class:`I3Int` objects into the frames 
+Here is a module that puts :cpp:type:`I3Int` objects into the frames 
 that go by, with consecutive increasing values::
  
   from icecube import icetray
@@ -79,9 +78,9 @@ that go by, with consecutive increasing values::
           self.PushFrame(frame)                 # push the frame
           self.value += 1                       # increment our value
 
-the values of the parameters specified with :func:`AddParameter` and
-:func:`GetParameter` are passed to the tray the same as for C++
-modules.   The call to :func:`AddModule` takes the python *class* 
+the values of the parameters specified with :cpp:func:`~I3Module::AddParameter()` and
+:cpp:func:`~I3Module::GetParameter()` are passed to the tray the same as for C++
+modules.   The call to :meth:`~.I3Tray.AddModule` takes the python *class* 
 object, not an instance of the class.  If we've stored the module
 above in a file :file:`PutInts.py`::
 
@@ -106,8 +105,8 @@ above in a file :file:`PutInts.py`::
 
        tray.AddModule(PutInts, 'pi', ....
 
-   and that symbol :class:`PutInts` of course must be known to the script,
-   typically via a call to :func:`import`.
+   and that symbol ``PutInts`` of course must be known to the script,
+   typically via a call to :keyword:`import`.
 
 .. _paramtypes:
 
@@ -143,9 +142,9 @@ you would pass any other parameter.  Here we pass it as a literal::
 			    'two' : 2,
 			    'three' : 777 })
  
-Putting the :class:`MultiAdder` module between a
-:class:`BottomlessSource` and a :class:`Dump`, you should see frames going by 
-that look like this::
+Putting the ``MultiAdder`` module between a
+:cpp:class:`BottomlessSource` and a :class:`~.Dump`, you should see
+frames going by that look like this::
 
   [ I3Frame :
     'one' ==> I3Int
@@ -216,33 +215,5 @@ though it is legal::
 
 as we have no way to access the data when the tray has finished
 executing.  The possibilities here are quite large: you could pass
-functions to modules, frame objects like :class:`I3Geometry` ...  feel
+functions to modules, frame objects like :cpp:class:`I3Geometry` ...  feel
 free to get messy.
-
-
-
-
- 
-
-      
-
-
- 
-
-
-
-
-       
-
-   
-  
-
-
-   
-
-
-
-
-
-
-   

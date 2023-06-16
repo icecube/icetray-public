@@ -20,7 +20,7 @@ and services.  The standard way to configure modules has been this:
        ("OutputFADCDataName", "InIceCalibratedFADC")
        )
 
-Where the call to :func:`AddModule` is followed by a tuple of pairs,
+Where the call to :py:meth:`~.I3Tray.AddModule` is followed by a tuple of pairs,
 the first containing the name of the parameter as a string, the second
 containing the corresponding parameter value.  This could provoke 
 confusing errors if you forget a comma:

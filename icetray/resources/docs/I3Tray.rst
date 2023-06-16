@@ -1,50 +1,17 @@
-:mod:`I3Tray` -- icetray convenience interface
-==============================================
+I3Tray -- icetray convenience interface
+=======================================
 
-.. module:: I3Tray
-   :noindex:
-   :synopsis: convenience interface to the icetray framework
+.. warning::
 
-.. autofunction:: load
-   :noindex:
+    Using ``import I3Tray`` or ``from I3Tray import *`` is now
+    considered depricated. Please switch to using ``from
+    icecube.icetray import I3Tray``. See :py:mod:`icecube.icetray.i3tray`
 
-.. autoclass:: I3Tray
-   :noindex:
+.. toctree::
+   /python/icecube.icetray.i3tray
 
-   .. automethod:: __init__
-      :noindex:
+.. seealso::
 
-   .. automethod:: AddModule
-      :noindex:
-
-      .. seealso:: 
-
-         :ref:`pyfunction_as_module`
-
-         :ref:`i3tray_keyword_parameters`
-
-   .. automethod:: AddService
-      :noindex:
-
-   .. automethod:: AddSegment
-      :noindex:
-      
-      .. seealso:: 
-
-         :ref:`tray_segments`
-
-   .. automethod:: ConnectBoxes
-      :noindex:
-
-   .. automethod:: Execute
-      :noindex:
-
-   .. automethod:: Finish
-      :noindex:
-
-   .. automethod:: SetParameter
-      :noindex:
-
-   .. automethod:: Usage
-      :noindex:
-
+   * :ref:`pyfunction_as_module`
+   * :ref:`i3tray_keyword_parameters`
+   * :ref:`tray_segments`

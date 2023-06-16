@@ -92,22 +92,26 @@ You can get a list of all available tray-segments from icetray-inspect::
 Alternative configurations in Segments
 """"""""""""""""""""""""""""""""""""""
 
+.. |module_altconfig| replace:: :py:func:`~.icetray.traysegment.module_altconfig`. 
+
 For case 3 above (modules with alternate defaults), although still 
-a tray segment, can be handled very quickly using :func:`icetray.module_altconfig`. 
+a tray segment, can be handled very quickly using |module_altconfig|
 For example, adding an alternate configuration for I3WaveCalibrator to be 
 used with DOMSimulator-based simulation can be done as follows::
 
   DOMSimulatorCalibrator = icetray.module_altconfig('I3WaveCalibrator',
     DOMsimulatorWorkArounds=True, FADCSaturationMargin=1) 
 
-This can then be added to a tray using AddSegment in the same 
+This can then be added to a tray using :py:meth:`.I3Tray.AddSegment` in the same 
 way::
 
   tray.AddSegment(WaveCalibrator.DOMSimulatorCalibrator, 'calibrator')
 
-When using :func:`icetray.module_altconfig`, those parameters specified in the arguments to :func:`icetray.module_altconfig` override the module's defaults. These can be overridden again in AddSegment and any other arguments to the original module can also be specified there.
+When using |module_altconfig|, those parameters specified in the arguments to |module_altconfig| override the module's defaults. These can be overridden again in :py:meth:`.I3Tray.AddSegment` and any other arguments to the original module can also be specified there.
 
-These alterative configurations also are reported by icetray-inspect::
+These alterative configurations also are reported by icetray-inspect:
+
+.. code-block:: console
 
   blaufuss@squeak[build_deb(I3)]% icetray-inspect --no-modules --no-services WaveCalibrator
   *** WaveCalibrator ***
@@ -151,12 +155,12 @@ There is one additional variant of the icetray.traysegment decorator that can be
         tray.AddModule(tableio.I3TableWriter, name, TableService=tabler,
             **kwargs)
 
-This is a wrapper around tableio.I3TableWriter that adds one additional service. Any options besides `Output` are passed through to tableio.I3TableWriter via the kwargs parameter, but what those available options are would not ordinarily show up in the output of icetray-inspect. The use of traysegment_inherit here makes no functional changes, but causes the options taken by tableio.I3TableWriter to be appended to the segment's own options (in this case, `Output`) when shown in icetray-inspect.
+This is a wrapper around :cpp:class:`I3TableWriter` that adds one additional service. Any options besides `Output` are passed through to :cpp:class:`I3TableWriter` via the kwargs parameter, but what those available options are would not ordinarily show up in the output of icetray-inspect. The use of :py:func:`~.traysegment_inherit` here makes no functional changes, but causes the options taken by :cpp:class:`I3TableWriter` to be appended to the segment's own options (in this case, `Output`) when shown in ``icetray-inspect``.
 
 Segments of Segments
 """"""""""""""""""""
 
-Segments can of course include tray.AddSegment() calls within them, and in this way large processing chains can be built up. A working example from the IC86 L2 processing::
+Segments can of course include :py:func:`tray.AddSegment() <icecube.icetray.i3tray.I3Tray.AddSegment>` calls within them, and in this way large processing chains can be built up. A working example from the IC86 L2 processing::
 
   @icetray.traysegment
   def RawDataToPulses(tray, name, superdstname = 'I3SuperDST',
@@ -177,7 +181,9 @@ For common processing chains like the L2 processing, such a segment would typica
 Expanding segments in the I3Tray
 """"""""""""""""""""""""""""""""
 
-There are several ways to see what is inside of a segment. The simplest is using the --expand-segments argument to icetray-inspect::
+There are several ways to see what is inside of a segment. The simplest is using the --expand-segments argument to icetray-inspect:
+
+.. code-block:: console
 
   [nwhitehorn@wanderer ~/i3/offline/build]$ icetray-inspect --expand-segments --no-modules --no-services payload-parsing
 
@@ -197,9 +203,9 @@ There are several ways to see what is inside of a segment. The simplest is using
       AddModule('I3FrameBufferDecode', 'example_fbdecoder', BufferID='I3DAQData', ExceptionId='I3DAQDecodeException')
 
 
-It is also possible to print out the contents of an I3Tray or TrayInfo object using the Python `print` operator to get the contents and configuration of the entire tray, with all segments expanded, in a human-readable form. The Python `repr` operator can also be used to get a more-tractable (and potentially executable) version of a tray or TrayInfo frame::
+It is also possible to print out the contents of an I3Tray or TrayInfo object using the Python :py:func:`print` function to get the contents and configuration of the entire tray, with all segments expanded, in a human-readable form. The Python :py:func:`repr` operator can also be used to get a more-tractable (and potentially executable) version of a tray or TrayInfo frame::
 
-  print repr(tray)
+  print(repr(tray))
 
 gives::
 
@@ -213,15 +219,19 @@ gives::
 
 You can also, of course, read the source code for the segment.
 
+.. _default_parameters:
 
 Default Parameters for Segments
 """""""""""""""""""""""""""""""
 
+.. autodata:: icecube.icetray.I3Default
+   :no-value:
+
 Often times segments will contain default parameters. When segments are layered
 with default parameters which are passed to modules it can often be difficult to
 track down where the parameter was actually set. There is a global singleton
-`icetray.I3Default` which if passed to a module will be equivalent to not setting
-the parameter. Setting the segment to `I3Default` will simplify the segment so
+:py:obj:`~.icetray.I3Default` which if passed to a module will be equivalent to not setting
+the parameter. Setting the segment to :py:obj:`~.I3Default` will simplify the segment so
 you don't have to guess the correct default to pass the the module.
 
 Example usage::

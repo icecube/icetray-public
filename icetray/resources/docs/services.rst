@@ -3,7 +3,7 @@
 Services in python
 ==================
 
-Icetray v3 supports parameters to :class:`I3Module` instances of
+Icetray v3 supports parameters to :cpp:class:`I3Module` instances of
 arbitrary type, as shown in :ref:`paramtypes`.  This means that in
 various cases, given the necessary python wrappers, it is possible to
 configure services for a module by passing them directly through the
@@ -12,8 +12,8 @@ module's parameters.
 The only option in V2 - pass service to module via context/factory
 ------------------------------------------------------------------
 
-Consider the following C++ module which uses an :class:`I3RandomService`
-to get random numbers and put them into the frame inside an :class:`I3Double`:
+Consider the following C++ module which uses an :cpp:class:`I3RandomService`
+to get random numbers and put them into the frame inside an :cpp:type:`I3Double`:
 
 .. code-block:: cpp
 
@@ -60,8 +60,8 @@ to get random numbers and put them into the frame inside an :class:`I3Double`:
 
 
 Of note are that the module takes a parameter of type 'string' that it
-uses to locate an :class:`I3RandomService` instance in its
-:class:`I3Context`.
+uses to locate an :cpp:class:`I3RandomService` instance in its
+:cpp:class:`I3Context`.
 
 Configuration of this module and its random service would look like this:
 
@@ -79,7 +79,7 @@ Configuration of this module and its random service would look like this:
 
 Of note here:
 
-* We can't see how the ``I3GSLRandomServiceFactory`` knows which
+* We can't see how the :cpp:class:`I3GSLRandomServiceFactory` knows which
   context to install I3GSLRandomServices in.
 * The configuration of this random-using module ``UseRandom`` is
   smeared across the steering file.
@@ -88,8 +88,8 @@ Of note here:
   simplify things for the end user but doesn't adequately hide its
   implementation details.  It simply exchanges one kind of complexity
   for a different kind.
-* It is difficult to test the I3GSLRandomService... configuration
-  and construction is tied to this factory pattern.
+* It is difficult to test the :cpp:class:`I3GSLRandomService` ... configuration
+  and construction are tied to this factory pattern.
 
 New option in V3 - just pass as parameter
 -----------------------------------------
@@ -113,8 +113,8 @@ like this:
    -1.0140449021555507
 
 Here we construct an instance of I3GSLRandomService, passing in the
-seed value, and call the :meth:`Gaus` a couple of times.  We can modify
-the :class:`UseRandom` module above to take this service via parameter:
+seed value, and call the :cpp:func:`~I3GSLRandomService::Gaus()` a couple of times.  We can modify
+the ``UseRandom`` class above to take this service via parameter:
 
 .. code-block:: cpp
 
@@ -153,10 +153,11 @@ the :class:`UseRandom` module above to take this service via parameter:
      }
    };
 
-So the parameter "I3RandomServiceKey", a lookup string, has been
-replaced with a parameter "I3RandomService".  The module calls
-``GetParameter`` passing the I3RandomServicePtr named ``rs``, which
-the steering file connects to whatever is passed in by the user:
+So the parameter ``I3RandomServiceKey``, a lookup string, has been
+replaced with a parameter :cpp:class:`I3RandomService`.  The module
+calls :cpp:func:`~I3Module.GetParameter` passing the
+:cpp:type:`I3RandomServicePtr` named ``rs``, which the steering file
+connects to whatever is passed in by the user:
 
 .. code-block:: python
 
@@ -178,9 +179,9 @@ New in icetray version 11-01-01 to ease with this transition: many modules will 
 to maintain the functionality to get some services from the context and also as a parameter.
 You might expect, if you don't explicitly pass a pointer to a service, after the call to GetParameter ``rs``
 (in the example above) should remain uninitialized as a NULL pointer (i.e. the same value it was
-when it was "Add"ed).  This was, in fact, not the case and would throw an error.  Python didn't 
-know how to convert the ``NoneType`` object.  In general it's not clear, but when you have ``None`` 
-on the python side and are expecting a shared pointer it's perfectly reasonable to convert that 
+when it was "Add"ed).  This was, in fact, not the case and would throw an error.  Python didn't
+know how to convert the ``NoneType`` object.  In general it's not clear, but when you have ``None``
+on the python side and are expecting a shared pointer it's perfectly reasonable to convert that
 to NULL pointer.  So now you can decide how to handle that in the code.  Here's an example:
 
 .. code-block:: cpp
@@ -257,8 +258,8 @@ implementation of the UseRandom module, above:
 
 Assuming that this class is inside file :file:`MyModules.py`, the
 steering file looks nearly identical to that for the c++ version,
-except :class:`UseRandom` is no longer quoted, as we pass the python
-class object itself to :meth:`I3Tray.AddModule`:
+except ``UseRandom`` is no longer quoted, as we pass the python
+class object itself to :py:meth:`.I3Tray.AddModule`:
 
 .. code-block:: python
 
@@ -267,7 +268,7 @@ class object itself to :meth:`I3Tray.AddModule`:
    rndserv = phys_services.I3GSLRandomService(31334)
 
    tray.AddModule(UseRandom, "ur",
-		  I3RandomService = rndserv,  
+		  I3RandomService = rndserv,
 		  PutWhere = "here")
 
 
@@ -275,11 +276,11 @@ Implementing services in python
 -------------------------------
 
 Given the necessary python wrapper of the C++ base class (in these
-examples, :class:`I3RandomService`), one can implement the service in
-python and pass this to I3Modules (both C++ modules and python).  
+examples, :cpp:class:`I3RandomService`), one can implement the service in
+python and pass this to I3Modules (both C++ modules and python).
 
-Here is an dummy python implementation, :class:`ConstantService`, of
-I3RandomService:
+Here is an dummy python implementation, ``ConstantService``, of
+:cpp:class:`I3RandomService`:
 
 .. code-block:: python
 
@@ -310,9 +311,9 @@ I3RandomService:
 	   return self.value
 
 The python implementation inherits from the abstract base class which
-forms the interface: exactly the same as in C++.  
-    
-Putting this class into a file MyServices.py, you can instantiate 
+forms the interface: exactly the same as in C++.
+
+Putting this class into a file MyServices.py, you can instantiate
 and test this class from the python command line:
 
 .. code-block:: pycon
@@ -331,7 +332,7 @@ and pass it to the UseRandom module like any other I3RandomService:
 .. code-block:: python
 
    tray.AddModule("UseRandom", "ur",
-		  I3RandomService = cs,  
+		  I3RandomService = cs,
 		  PutWhere = "here")
 
 Note here that we have passed *'UseRandom'* in quotes: we mean the C++
@@ -339,13 +340,3 @@ module.  This module receives an I3RandomServicePtr in its arguments,
 and in this example, that randomservice will be implemented in python.
 The C++ module doesn't know this, and doesn't need to know it: it
 cares only that it has an object that it request random numbers from.
-
-
-
-
-
-
-
-
-
-

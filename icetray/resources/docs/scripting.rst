@@ -1,5 +1,6 @@
 Python scripting in IceTray
 ============================
+
 Generally IceTray is controlled via a python script which sets up the needed 
 modules and services, executes the Tray and cleans things up.  The
 best illustration of this is a simple example::
@@ -8,43 +9,31 @@ best illustration of this is a simple example::
  #
  # Pass 2:
  
- from icecube.icetray import I3Tray 
- 
- from os.path import expandvars
- 
  import os
  import sys
-
+ from os.path import expandvars
+ from icecube.icetray import I3Tray 
  from icecube import icetray, dataio
   
  tray = I3Tray()
- 
  tray.AddModule("I3Reader","reader", 
  		 Filename = "pass1.i3")
-
  tray.AddModule("Dump","dump")
-
  tray.Execute()
 
 **TODO**  Flush out these docs more fully.
 
 Configuring modules with vectors
 --------------------------------
-Python scripts can tersely configure
-modules with vectors of ints, doubles, strings, and OMKeys.   
-Project "examples" contains a script
-"pass7_HelloConfiguration.py" which has an associated I3Module,
-HelloConfiguration, which demonstrates the use of all this
 
-In a python script, an individual OMKey is created like this:
-OMKey(21,7).  you pass it to a module like you might expect::
+In a Python script, an individual :py:class:`~.OMKey` is created like this:
+``OMKey(21,7)``.  You pass it to a module like you might expect::
 
  tray.AddModule("FryOM", "fry",
                 OM = OMKey(3,3))
 
-
-vectors of anythings are created by enclosing a comma separated
-list of anythings in square-brackets::
+Vectors of "things" are created by enclosing a comma separated list of
+"things" in square-brackets::
 
  ["strings", "in", "a", "row"]
 
@@ -57,7 +46,7 @@ and you pass these to a module like this::
                 oms = [OMKey(1,2), OMKey(3,4), OMKey(5,6)])
 
 Python details for experts
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There's a gotcha. Python has lists, and it has tuples.  Python will
 convert either to an STL vector when it configures icetray, so this
@@ -101,29 +90,25 @@ NaN and Inf
 :file:`I3Tray.py` creates namespace-scope variables ``Inf`` and
 ``Nan``, for the special floating-point values infinity and
 not-a-number.  These are for the occasions when one needs to pass NaN
-or Inf to a module parameter, or to initialize e.g. an :class:`I3Double <icecube.dataclasses.I3Double>`
+or Inf to a module parameter, or to initialize e.g. an :cpp:type:`I3Double`
 to NaN.
 
 ``NaN`` compared to anything (including itself) is always false.  To
-tell if a variable is nan, or not, use the functions ``isnan`` and
-``isinf``.  In python 2.6 and later, these are in module :mod:`math`,
-in earlier versions they are in module :mod:`scipy`::
+tell if a variable is NaN, or not, use the functions :py:func:`isnan` and
+:py:func:`isinf`.  In Python 2.6 and later, these are in module :mod:`math`,
+in earlier versions they are in module :mod:`scipy`:
 
-  Python 2.6.2 (release26-maint, Apr 19 2009, 01:58:18) 
-  [GCC 4.3.3] on linux2
-  Type "help", "copyright", "credits" or "license" for more information.
+.. code-block:: pycon
+
   >>> from icecube.icetray import NaN, Inf
   >>> NaN
   nan
   >>> Inf
   inf
-  >>> NaN == NaN       # You probably do *not* want this
+  >>> NaN == NaN       # You definitely *do not* want this
   False
   >>> import math
   >>> math.isnan(NaN)  # You want this
   True
   >>> math.isinf(Inf)
-  True
-  
-
-
+  True  
