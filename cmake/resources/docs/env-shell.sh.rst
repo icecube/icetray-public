@@ -5,7 +5,7 @@
 env-shell.sh
 ============
 
-.. highlight:: sh
+.. highlight:: console
 
 Unix shells read a variety of config files (``/etc/profile``,
 ``~/.bash_profile``, ``~/.bash_login``, ``~/.profile``, and
@@ -87,8 +87,10 @@ behavior would look something like this::
 
 
 You can see that also the path to the ROOT installation in the toolset
-has been added.  If I erroneously assign to PATH in my .bashrc, ie if
-``.bashrc`` contains the following line::
+has been added.  If I erroneously assign to ``PATH`` in my ``.bashrc``, ie if
+``.bashrc`` contains the following line:
+
+.. code-block:: sh
 
   PATH=/path/to/my/stuff
 
@@ -136,6 +138,8 @@ handle this:
 
 If-then blocks
 ^^^^^^^^^^^^^^
+
+.. highlight:: sh
 
 In the initialization files you could put the assignments to these
 variables inside an if-then block so that they are executed only once.
@@ -188,7 +192,9 @@ need to use particular tools (again, this in ``.bashrc``)::
   }
 
 Your default shell will have none of this special stuff loaded, but you
-can configure things easily::
+can configure things easily:
+
+.. code-block:: sh
 
   $ echo $PATH
   /usr/bin
