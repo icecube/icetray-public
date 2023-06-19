@@ -7,18 +7,22 @@ Dataclasses are the common classes used to describe objects in
 IceCube/Icetray.  These classes are the objects exchanged by I3Modules.
 
 This project is maintained by:
-* Alex Olivas <olivas@icecube.wisc.edu>
+
 * Don La Dieu <dladieu@icecube.wisc.edu>
 * David Schultz <david.schultz@icecube.wisc.edu>
 
-Dataclasses still needs more docs.  
+If you find an area where Dataclasses' documentation is lacking, `you can help out <https://github.com/icecube/icetray/new>`_!
 
 Table of Contents:
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
 
    release_notes
+
+.. toctree::
+   :maxdepth: 3
+
    particle
    superdst
    masks
@@ -35,4 +39,3 @@ Table of Contents:
    i3double
 
 Also see the :ref:`doxygen <dataclasses-cpp>` docs.
- 

@@ -65,9 +65,9 @@ RuntimeError: extension class wrapper for base class I3FrameObject has not been 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This happens if you import a project that has a wrapped class that
-inherits from :class:`I3FrameObject`, but haven't imported
-:mod:`icecube.icetray`, which contains the code for the
-:class:`I3FrameObject` wrapper::
+inherits from :cpp:class:`I3FrameObject`, but haven't imported
+:py:mod:`icecube.icetray`, which contains the code for the
+:cpp:class:`I3FrameObject` wrapper::
 
   >>> from icecube import dataclasses
   Traceback (most recent call last):
@@ -92,7 +92,7 @@ that's no good.  If you reimport dataclasses, still no help::
     File "<stdin>", line 1, in <module>
   AttributeError: 'module' object has no attribute 'I3Time'
 
-so you have to :func:`reload` dataclasses::
+so you have to :func:`~imp.reload` dataclasses::
 
   >>> reload(dataclasses)
   <module 'icecube.dataclasses' from '/home/troy/Icecube/meta-projects/analysis/trunk/build/lib/icecube/dataclasses.so'>

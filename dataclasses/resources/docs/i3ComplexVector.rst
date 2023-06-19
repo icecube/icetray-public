@@ -4,15 +4,15 @@
 I3ComplexVector
 ===============
 
-The I3ComplexVector class shadows most of the :ref:`i3Position` class.
+The I3ComplexVector class shadows most of the :ref:`I3Position` class.
 This class describes a 6D vector comprised of a 3D vector with complex amplitudes.
-Unlike for :ref:`i3Position`, there is only support for cartesian coordinates.
+Unlike for :ref:`I3Position`, there is only support for cartesian coordinates.
 This class is particularly useful for describing the Fourier Transform of an electromagnetic wave.
 
 The amplitudes are stored as ``std::complex<double>``.
 The operators that one would expect are included for this class including, addition, subtraction, dot-products, rotations, and normalizations.
 
-.. code-block:: python
+.. code-block:: ipython
 
   In [1]: from icecube.dataclasses import I3ComplexVector
 
@@ -21,7 +21,7 @@ The operators that one would expect are included for this class including, addit
   In [3]: print(vec)
   I3ComplexVector((nan,0), (nan,0), (nan,0))
 
-  In [4]: vec = I3ComplexVector(1+2j, 2+7j, 13-9j) 
+  In [4]: vec = I3ComplexVector(1+2j, 2+7j, 13-9j)
   In [5]: print(vec)
   I3ComplexVector((1,2), (2,7), (13,-9))
 
@@ -68,7 +68,7 @@ The operators that one would expect are included for this class including, addit
 
 The class also includes support for scalar math
 
-.. code-block:: python
+.. code-block:: ipython
 
   In [1]: from icecube.dataclasses import I3ComplexVector
 

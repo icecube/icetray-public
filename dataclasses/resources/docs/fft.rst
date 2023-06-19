@@ -102,7 +102,7 @@ This avoids losing important information such as the start- and step-time of the
 FFTDataContainer
 ----------------------
 
-The :class:`FFTDataContainer` class is essential for a few main reasons:
+The :cpp:class:`FFTDataContainer` class is essential for a few main reasons:
 
 1. Provides a wrapper for :ref:`fftw3` such that one never needs to explicitly "ask" for a DFT to be performed
 2. Provides a consistent normalization for the transform

@@ -1,6 +1,8 @@
-===================================================
+.. default-domain:: cpp
+
+=======================================================
 Selecting pulses: :class:`I3RecoPulseSeriesMapMask`
-===================================================
+=======================================================
 
 Purpose
 =======
@@ -25,7 +27,7 @@ Creation
 The easiest way to create a :class:`I3RecoPulseSeriesMapMask` is via a callback
 function of the form
 
-.. function:: callback(omkey, index, pulse)
+.. py:function:: callback(omkey, index, pulse)
 	
 	Return True if the pulse should be selected, otherwise False
 	
@@ -57,9 +59,9 @@ the logical AND of the HLC and DeepCore masks::
 Retrieving the underlying pulses
 --------------------------------
 
-:class:`I3RecoPulseSeriesMap` may be represented as
-:class:`I3RecoPulseSeriesMap`, :class:`I3RecoPulseSeriesMapMask`, or as
-unions of :class:`I3RecoPulseSeriesMap` from different sources. No matter what
-the underlying representation, a compatible frame object can be converted to an :class:`I3RecoPulseSeriesMap` like this::
+:type:`I3RecoPulseSeriesMap` may be represented as
+:type:`I3RecoPulseSeriesMap`, :class:`I3RecoPulseSeriesMapMask`, or as
+unions of :type:`I3RecoPulseSeriesMap` from different sources. No matter what
+the underlying representation, a compatible frame object can be converted to an :type:`I3RecoPulseSeriesMap` like this::
 	
 	dc_pulses = dataclasses.I3RecoPulseSeriesMap.from_frame(frame, 'DeepCorePulses')

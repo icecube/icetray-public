@@ -7,11 +7,9 @@ Examples
 Get an object out of the frame
 """"""""""""""""""""""""""""""
 
-With a frame like this:
-
 .. highlight:: pycon
 
-::
+With a frame like this::
 
   >>> from icecube import icetray, dataclasses, dataio
   >>> i3f = dataio.I3File("/v/icecube/data/level3.nugen_numu.000768.000111.i3.gz")
@@ -70,8 +68,9 @@ With a frame like this:
     'TrackBayesianFit' [Physics] ==> I3Particle
     'SecondSubtrackBayesianFitFitParams' [Physics] ==> I3LogLikelihoodFitParams
   ]
-  
+
 Looking at the mc hits,
+
 ::
 
   >>> hits = frame['MCHitSeriesMap']
@@ -88,7 +87,7 @@ We can get 'nchannel'::
 
 or the list of hit OMs::
 
-  >>> [e.key() for e in hits] 
+  >>> [e.key() for e in hits]
   [OMKey(21,24), OMKey(21,31),
   OMKey(29,41), OMKey(29,60), OMKey(30,47), OMKey(38,41),
   OMKey(38,58), OMKey(39,13), OMKey(39,46), OMKey(40,42),
@@ -106,10 +105,9 @@ or the list of hit OMs::
 nhit
 """"
 
-or the total number of hits in all oms;  Create a list of hits per
-OM::
+or the total number of hits in all oms; Create a list of hits per OM::
 
-  >>> [len(e.data()) for e in hits] 
+  >>> [len(e.data()) for e in hits]
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   1, 5, 2, 1, 2, 1, 1, 1, 1, 1, 1, 5, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1,
   1, 1, 1, 1, 2, 1, 1, 1, 1]
@@ -177,19 +175,19 @@ or with a nested list comprehension get one flat list::
 
 
 
-
+.. highlight:: ipython
 
 Getting the energy of the most energetic primary
 """"""""""""""""""""""""""""""""""""""""""""""""
 
-.. code-block:: pycon
+::
 
   In [1]: from icecube import icetray, dataclasses, dataio
 
   In [2]: f = dataio.I3File("/v/icecube/data/combinedMC600.i3")
-  
+
   In [3]: frame = f.pop_physics()
-  
+
   In [4]: print frame
   [ I3Frame  (P):
     'BadOMSelection' [P] ==> I3Vector<OMKey>
@@ -213,28 +211,25 @@ Getting the energy of the most energetic primary
     'twrSelected' [P] ==> I3Map<OMKey, std::vector<I3TWRLaunch, std::allocator<I3TWRLaunch> > >
     'twrSelectedCleanedKeys' [P] ==> I3Vector<OMKey>
   ]
-  
-  
+
+
   In [5]: mctree = frame['I3MCTree']
-  
+
   In [6]: prim = mctree.GetMostEnergeticPrimary()
-  
+
   In [7]: prim
   Out[7]: <icecube.dataclasses.I3Particle object at 0x8372f7c>
-  
+
   In [8]: prim.GetEnergy()
   Out[8]: 497.685
-
-
-
 
 Getting an I3RecoPulseSeriesMap from an I3RecoPulseSeriesMapMask
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-.. code-block:: pycon
+::
 
   In [1]: frame.keys()
-  Out[1]: 
+  Out[1]:
   ['CleanTriggerHierarchy_IT',
    'SPEFitSingleFitParams',
    'FilterMask',
@@ -258,11 +253,11 @@ Getting an I3RecoPulseSeriesMap from an I3RecoPulseSeriesMapMask
    'SPEFit2',
    'LineFitParams',
    'SPEFit2FitParams']
-  
-  In [2]: pulse_map = dataclasses.I3RecoPulseSeriesMap.from_frame(frame,'TWSRTOfflinePulses') 
-  
+
+  In [2]: pulse_map = dataclasses.I3RecoPulseSeriesMap.from_frame(frame,'TWSRTOfflinePulses')
+
   In [3]: pulse_map.keys()
-  Out[3]: 
+  Out[3]:
   [OMKey(4,8,0),
    OMKey(4,10,0),
    OMKey(10,10,0),
@@ -277,16 +272,14 @@ Getting an I3RecoPulseSeriesMap from an I3RecoPulseSeriesMapMask
 Efficiently getting pulse properties with numpy
 """""""""""""""""""""""""""""""""""""""""""""""
 
-A series of I3RecoPulses (the elements in an I3RecoPulseSeriesMap) can be
+A series of I3RecoPulses (the elements in an ``I3RecoPulseSeriesMap``) can be
 efficiently accessed as a numpy array using numpy.asarray(). Note the following
 limitations:
 
 - The data in the array are read-only
 - Only the pulse time and charge are in the numpy array. For other metadata, you have to go back to the original pulses.
 
-An example follows:
-
-.. code-block:: pycon
+An example follows::
 
   In [14]: p = d['OfflinePulses'].values()[165]
 
@@ -294,7 +287,7 @@ An example follows:
   Out[15]: [<icecube.dataclasses.I3RecoPulse object at 0x8676345d0>, <icecube.dataclasses.I3RecoPulse object at 0x80aabed50>, <icecube.dataclasses.I3RecoPulse object at 0x80b1a3da0>]
 
   In [16]: numpy.asarray(p)
-  Out[16]: 
+  Out[16]:
   array([[1.10534619e+004, 1.07492745e+000],
          [1.52605963e+000, 1.22596182e+004],
          [2.56995640e+064, 6.47956996e+170]])
@@ -306,12 +299,10 @@ An example follows:
   11053.4619140625 1.0749274492263794
 
 
-You can also access an entire I3RecoPulseSeriesMap as a numpy array using numpy.asarray():
-
-.. code-block:: pycon
+You can also access an entire ``I3RecoPulseSeriesMap`` as a numpy array using ``numpy.asarray()``::
 
   In [10]: numpy.asarray(d['OfflinePulses'])
-  Out[10]: 
+  Out[10]:
   array([[4.00000000e+00, 3.20000000e+01, 0.00000000e+00, 2.36043042e+03,
           5.78553498e-01, 8.33333302e+00],
          [8.00000000e+00, 4.90000000e+01, 0.00000000e+00, 1.23705576e+04,
@@ -326,12 +317,9 @@ You can also access an entire I3RecoPulseSeriesMap as a numpy array using numpy.
          [8.60000000e+01, 5.90000000e+01, 0.00000000e+00, 1.30112207e+04,
           1.60624707e+00, 8.33333302e+00]])
 
-The columns are (String, OM, PMT, Time, Charge, Width), with one row per pulse. You can use this to quickly compute total charge, for example:
-
-.. code-block:: pycon
+The columns are (String, OM, PMT, Time, Charge, Width), with one row per pulse. You can use this to quickly compute total charge, for example::
 
   In [11]: numpy.asarray(d['OfflinePulses'])[:,4].sum()
   Out[11]: 6854.178911853582
 
-In addition, a helper function is provided (I3RecoPulseSeriesMap.pmt_array_offsets()) that will return a list of indices for the rows when the array moves from one PMT to the next, which can be helpful for slicing the array representation into per-PMT blocks from Python.
-
+In addition, a helper function is provided (``I3RecoPulseSeriesMap.pmt_array_offsets()``) that will return a list of indices for the rows when the array moves from one PMT to the next, which can be helpful for slicing the array representation into per-PMT blocks from Python.

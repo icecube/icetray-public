@@ -11,12 +11,12 @@
 .. _superdst-main:
 
 SuperDST
-=================
+========
 
 A (lossy) compression format for trigger-level data.
 
 Rationale
-^^^^^^^^^^^
+^^^^^^^^^
 
 Certain types of analyses may be able to benefit by trading data fidelity for
 higher statistics. The most extreme example of this is the cosmic-ray anisotropy
@@ -52,7 +52,7 @@ adequately represented by a small number of RecoPulses, resulting in
 significant satellite bandwidth savings.
 
 Using SuperDST
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^
 
 :cpp:class:`I3SuperDST` and :cpp:class:`I3SuperDSTTriggerSeries` are 
 effectively compactly serialized versions of :cpp:type:`I3RecoPulseSeriesMap` 
@@ -62,13 +62,13 @@ client code doesn't have to know whether a frame object uses SuperDST
 serialization or not.
 
 C++
------
+---
 
 .. highlight:: cpp
 
 C++ code (e.g. in an :cpp:class:`I3Module`) can treat 
 :cpp:class:`I3SuperDST` objects as if they were 
-:cpp:type:`I3RecoPulseSeriesMaps`. The following code snippet works the same 
+:cpp:type:`I3RecoPulseSeriesMap`. The following code snippet works the same 
 whether the frame object "I3SuperDST" is an :cpp:type:`I3RecoPulseSeriesMap` 
 or :cpp:class:`I3SuperDST` (or, in fact, :cpp:class:`I3RecoPulseSeriesMapMask`, 
 :cpp:class:`I3RecoPulseSeriesMapUnion`, or :cpp:type:`I3RecoHitSeriesMap`)::
@@ -88,7 +88,7 @@ or :cpp:class:`I3SuperDST` (or, in fact, :cpp:class:`I3RecoPulseSeriesMapMask`,
 
 
 Python
--------
+------
 
 .. highlight:: python
 
@@ -103,17 +103,17 @@ with::
     triggers = dataclasses.I3TriggerHierarchy.from_frame(frame, "DSTTriggers")
 
 Format details
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^
 
 I3SuperDST
-------------
+----------
 
 The I3SuperDST object contains a compressed representation of an 
 I3RecoPulseSeriesMap. In the Pole filter, this contains all pulses from the 
 InIce and IceTop detectors, merged into a single map.
 
 Group headers
-***************
+*************
 
 Pulses in a single DOM are sorted into groups spaced closely in time. Each 
 pulse is converted to a charge stamp that contains a discretized version of the 
@@ -146,7 +146,7 @@ this way, time differences between groups can be represented up to 2047 ns
 ns. Pulses more than 255 ns apart are split into separate groups.
 
 Charge stamps: InIce
-**********************
+********************
 
 .. list-table:: InIce Charge stamp: 2 bytes
     :widths: 15 20 5
@@ -178,7 +178,7 @@ further charge stamps. This allows the group to contain as many charge stamps
 as can fit in the entire container.
 
 Charge stamps: IceTop
-***********************
+*********************
 
 IceTop charge stamps are stored in a slightly different format. In the current 
 IceTop processing scheme there can be only one pulse per DOMLaunch, but the 
@@ -207,7 +207,7 @@ charge is encoded logarithmically in 14 bits, with a step size of
         - 1
 
 Pulse widths
-***************
+************
 
 Each charge stamp has an associated width, stored in 4 bits as the base-2 
 logarithm of the pulse width in nanoseconds. The widths are stored in a 
@@ -289,7 +289,7 @@ object to 18 bytes + 5 bytes per encoded pulse.
     is used to represent pulse charges larger than 1.6 PE.
 
 I3SuperDSTTriggerSeries
-------------------------
+-----------------------
 
 The SuperDST family of tools also includes a compression format for trigger 
 records. Each record contains the start time and length of the trigger (encoded 

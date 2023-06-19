@@ -56,13 +56,13 @@ Iterators
 .. _pre_order_iterator:
 
   **pre_order_iterator (default)**
-  
+
     Iterates through a tree in pre-order.
-    
+
     .. only:: html
-      
+
       .. raw:: html
-          
+
         <a href="http://en.wikipedia.org/wiki/Tree_traversal#Pre-order" title="Pre-order">
           <img src="http://upload.wikimedia.org/wikipedia/commons/d/d4/Sorted_binary_tree_preorder.svg" alt="Pre-order traversal image" />
         </a>
@@ -76,11 +76,11 @@ Iterators
   **post_order_iterator**
 
     Iterates through a tree in post-order.
-    
+
     .. only:: html
-      
+
       .. raw:: html
-          
+
         <a href="http://en.wikipedia.org/wiki/Tree_traversal#Post-order" title="Post-order">
           <img src="http://upload.wikimedia.org/wikipedia/commons/9/9d/Sorted_binary_tree_postorder.svg" alt="Post-order traversal image" />
         </a>
@@ -117,9 +117,9 @@ Functions
   **Navigating the Tree**
 
   .. only:: html
-    
+
     .. raw:: html
-    
+
       <style>span.var{color:blue} span.func{color:green}</style>
       <div class="highlight"><pre>
       <span class="var">Particle</span> <span class="func">get_head</span>()
@@ -134,9 +134,9 @@ Functions
       <span class="var">int</span> <span class="func">number_of_children</span>(<span class="var">ID</span>)
       <span class="var">int</span> <span class="func">depth</span>(<span class="var">ID</span>)
       </pre></div>
-  
+
   .. only:: text
-    
+
     * Particle get_head()
     * vector<Particle> get_heads()
     * Particle at(ID)
@@ -152,7 +152,7 @@ Functions
   **Adding to the Tree**
 
   .. only:: html
-    
+
     .. raw:: html
 
       <div class="highlight"><pre>
@@ -168,7 +168,7 @@ Functions
       </pre></div>
 
   .. only:: text
-  
+
     * void insert(Particle)
     * void insert_after(Particle)
     * void insert(ID, Particle)
@@ -182,9 +182,9 @@ Functions
   **Modifying the Tree**
 
   .. only:: html
-    
+
     .. raw:: html
-    
+
       <div class="highlight"><pre>
       <span class="var">void</span> <span class="func">clear</span>()
       <span class="var">void</span> <span class="func">erase</span>(<span class="var">ID</span>)
@@ -198,7 +198,7 @@ Functions
       </div></span>
 
   .. only:: text
-  
+
     * void clear()
     * void erase(ID)
     * void erase_children(ID)
@@ -212,7 +212,7 @@ Functions
   **General Tree Actions**
 
   .. only:: html
-    
+
     .. raw:: html
 
       <div class="highlight"><pre>
@@ -236,9 +236,9 @@ I3MCTreeUtils
   Functions that do not need to know about tree internals to work.
 
   **General Functions**
-  
+
   .. only:: html
-    
+
     .. raw:: html
 
       <div class="highlight"><pre>
@@ -270,22 +270,22 @@ I3MCTreeUtils
     * Tree Get(Frame, Key)
 
   **Filtering / Selection Functions**
-  
+
     Use either a function from the Physics Library or your own.
-  
+
   * GetBest(Tree, Function)
-    
+
     Returns the single particle that best matches a comparison function.
     Function is a callable which takes two I3Particles, compares them,
     and returns true/false (true = first is less than second).
-    
+
   * GetFilter(Tree, Function)
-    
+
     Returns all partiles that pass the filtering function.
     Function is a callable which takes an I3Particle and returns true/false.
-    
+
   * GetBestFilter(Tree, FilterFunction, CmpFunction)
-    
+
     Returns the single particle that best matches a comparison function
     and also passes a filtering function.
     FilterFunction is a callable which takes an I3Particle and returns
@@ -293,30 +293,30 @@ I3MCTreeUtils
     CmpFunction is a callable which takes two I3Particles, compares them,
     and returns true/false (true = first is less than second).
 
-For more C++ details, see the 
+For more C++ details, see the
 :cpp:type:`doxygen docs <I3MCTree>`.
 
 I3MCTreePhysicsLibrary
 ^^^^^^^^^^^^^^^^^^^^^^
 
-The following functions comprise a set of very thin convenience wrappers 
-around GetBest, GetFilter, and GetBestFilter in I3MCTreeUtils specialized 
-to extract analysis-level quantities.  Again, this is a convenience.  Feel 
-free to use the I3MCTreeUtils::Get* functions yourself instead.  Currently 
-these are limited to pulling the "MostEnergetic" particles of particular 
-types out of tree, but there's no reason this library needs to be limited 
-to that.  Anything that pulls information out of the tree of general physics 
+The following functions comprise a set of very thin convenience wrappers
+around GetBest, GetFilter, and GetBestFilter in I3MCTreeUtils specialized
+to extract analysis-level quantities.  Again, this is a convenience.  Feel
+free to use the I3MCTreeUtils::Get* functions yourself instead.  Currently
+these are limited to pulling the "MostEnergetic" particles of particular
+types out of tree, but there's no reason this library needs to be limited
+to that.  Anything that pulls information out of the tree of general physics
 interest can potentially be added to this library.
 
-The function names were chosen to be self-documenting, for example, 
-GetMostEnergeticPrimary, well...it gets the most energetic primary.  
-GetMostEnergetic gets the most energetic particle of the type 
+The function names were chosen to be self-documenting, for example,
+GetMostEnergeticPrimary, well...it gets the most energetic primary.
+GetMostEnergetic gets the most energetic particle of the type
 (i.e. I3Particle::ParticleType) passed.
 
   **General Functions**
-  
+
   .. only:: html
-    
+
     .. raw:: html
 
       <div class="highlight"><pre>
@@ -348,22 +348,18 @@ When set to true these functions will return boost::none if there are more than 
 how to handle this situation.  This check requires an extra pass over the tree (to collect any matching candidates) and an iteration over
 those candidates, so will be slower than having no check.  If you need the extra speed set *safe_mode* to false and pray for the best.
 
-**NB**: On the python side the above functions have the corresponding python-style names, e.g. "get_most_energetic_primary" and live in the dataclasses module.  So the usage is as follows :
+**NB**: On the python side the above functions have the corresponding python-style names, e.g. "get_most_energetic_primary" and live in the dataclasses module.  So the usage is as follows:
 
-::
- Python 2.7.6 (default, Mar 22 2014, 22:59:56) 
- Type "copyright", "credits" or "license" for more information.
- 
- IPython 1.2.1 -- An enhanced Interactive Python.
- ?         -> Introduction and overview of IPython's features.
- %quickref -> Quick reference.
- help      -> Python's own help system.
- object?   -> Details about 'object', use 'object??' for extra details.
- 
- In [1]: from icecube import dataclasses
- In [2]: t = dataclasses.I3MCTree()
- In [3]: p = dataclasses.get_most_energetic_cascade(t)
+.. code-block:: pycon
 
+   Python 3.11.3 (main, Apr  7 2023, 21:05:46) [Clang 14.0.0 (clang-1400.0.29.202)]
+   Type 'copyright', 'credits' or 'license' for more information
+   IPython 8.11.0 -- An enhanced Interactive Python. Type '?' for help.
+
+   In [1]: from icecube import dataclasses
+   In [2]: t = dataclasses.I3MCTree()
+   In [3]: p = dataclasses.get_most_energetic_cascade(t)
+   In [4]:
 
 Python
 ------
@@ -378,13 +374,13 @@ Several special functions are included:
 * __str__
 
   Dump the tree to a string::
-  
+
     print tree
 
 * __nonzero__
 
   Test for empty tree::
-  
+
     if tree:
       print 'the tree is not empty'
     else:
@@ -393,20 +389,20 @@ Several special functions are included:
 * __eq__
 
   Test for equality::
-  
+
     if tree1 == tree2:
       print 'the trees are equal'
 
 * __len__
 
   Number of particles in the tree::
-  
+
     print 'tree has',len(tree),'particles'
 
 * __contains__
 
   Does the tree contain an I3ParticleID? ::
-  
+
     if particle in tree:
       print 'found particle'
     else:
@@ -415,19 +411,19 @@ Several special functions are included:
 * __getitem__
 
   Get a particle from the tree::
-  
+
     particle = tree[particleID]
 
 * __delitem__
 
   Erase a particle (and all children) from the tree. Calls the erase() method::
-  
+
     del tree[particleID]
 
 * __iter__
 
   Gives you the default iterator (pre_order_iterator)::
-  
+
     for particle in tree:
       print particle
 
@@ -561,7 +557,7 @@ Iterator Traits
 ^^^^^^^^^^^^^^^
 
 Using partial template specialization we can define two different trait
-types: 
+types:
 
 Const Traits
 """"""""""""
@@ -610,5 +606,3 @@ Python Bindings
 .. autoclass:: icecube.dataclasses.I3MCTree
     :members:
     :noindex:
-
-

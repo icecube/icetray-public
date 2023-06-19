@@ -1,3 +1,5 @@
+.. highlight:: pycon
+
 ===========
 I3Time
 ===========
@@ -8,8 +10,8 @@ I3Time is a class used to denote the absolute time to the tenth of a ns. It's in
 This is used only in the I3EventHeader.
 
 * EventHeader is set at the **end** of the event by the trigger simulation. The event header consists mainly of a StartTime and an EndTime (both of type I3Time).
-  * EventHeaderStartTime=DrivingTime + timeofEarliestDOMLaunch
-  * EventHeaderEndTime = DrivingTime + timeofLatestDOMLaunch
+* EventHeaderStartTime=DrivingTime + timeofEarliestDOMLaunch
+* EventHeaderEndTime = DrivingTime + timeofLatestDOMLaunch
 
 double
 ======
@@ -66,20 +68,14 @@ The statement of the goal is very simple: make simulation look like data. With t
 The Solution
 ============
 
-Check out I3TimeShifter in trigger-sim. There is an attempt at option #3. It calculates the time shift from a given trigger hierarchy (choosing the earliest time) and shifts all **known** times with respect to the one time. 
+Check out I3TimeShifter in trigger-sim. There is an attempt at option #3. It calculates the time shift from a given trigger hierarchy (choosing the earliest time) and shifts all **known** times with respect to the one time.
 
 
 Examples
 ========
-Example use of I3Time
-::
+Example use of I3Time::
 
-   >>> /**
-   >>>  *@brief creates the object with the given times as the DAQ time
-   >>>  */
+   >>> #
+   >>> # @brief creates the object with the given times as the DAQ time
+   >>> #
    >>> I3Time(int32_t year, int64_t daqTime);
-   
-
-
-
-

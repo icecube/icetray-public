@@ -1,3 +1,5 @@
+.. default-domain:: cpp
+
 .. _i3particle:
 
 ==========
@@ -24,7 +26,7 @@ The actual meaning of those properties depends on the type, shape, location and
 fit status of the particle, which are specified with integer data members
 (``enum`` types, actually) and described in more detail below.
 
-Simulated particles are usually collected in an :class:`I3MCTree` object which
+Simulated particles are usually collected in an :type:`I3MCTree` object which
 is stored in the ``Q`` frame with the name ``"I3MCTree"``. This tree can
 contain any number of particles, from just a few to millions.
 
@@ -207,7 +209,7 @@ consistently.  The shape can take the following values:
 Location
 ~~~~~~~~
 
-For fast selection of particles in an :class:`I3MCTree` it is useful to have a
+For fast selection of particles in an :type:`I3MCTree` it is useful to have a
 rough indicator of "where the particle is", because the position alone leaves
 that sometimes ambiguous.  Values are ``Anywhere``, ``IceTop``, ``InIce`` and
 ``InActiveVolume``.  If KM3NET gets built on multiple sites, we could consider
@@ -262,7 +264,7 @@ for each simulated particle a list of PMT pulses (:class:`I3MCPulse`) that were
 caused by photoelectrons due to Cherenkov photons emitted that particle.  These
 maps only store the particle ID numbers, which can then be used (by an
 inquisitive student) to find the corresponding particle back in the
-:class:`I3MCTree`, if desired.
+:type:`I3MCTree`, if desired.
 
 In simulated data, a primary and its associated secondaries can have the same
 major ID but different minor ID.  This is used mainly for storage in the I3MCTree.
