@@ -6,6 +6,9 @@ Release Notes
 main
 ----
 
+- Make footnotes smaller
+- A bunch of intersphinx links w/ only links to the Python docs enabled
+- Use implicit namespaces with sphinx-apidoc
 - Make I3Tray.I3Tray and icecube.icetray.I3Tray the same thing. (#3102)
 - General docs cleanups
 - Support py3-v4.3.0 changes (#3098)

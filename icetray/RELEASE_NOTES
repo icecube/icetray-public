@@ -6,6 +6,7 @@ Release Notes
 main
 ----
 
+* Documentation cleanups
 * Make I3Tray.I3Tray and icecube.icetray.I3Tray the same thing. (#3102)
 * Remove all references to load_pybindings (#3086)
 * Suppress boost python object registration warnings during docs generation (icetray-inspect)

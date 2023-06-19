@@ -3,9 +3,10 @@
 Release Notes
 =============
 
-trunk
------
+main
+----
 
+* Documentation cleanups
 * Make I3Tray.I3Tray and icecube.icetray.I3Tray the same thing. (#3102)
 * Remove all references to load_pybindings (#3086)
 * remove python 2.4 forward compatibility (#3080)
