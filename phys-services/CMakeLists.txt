@@ -57,6 +57,7 @@ i3_add_library(phys-services
   private/phys-services/I3XMLOMKey2MBID.cxx
   private/phys-services/I3XMLOMKey2MBIDFactory.cxx
   private/phys-services/I3SplitTriggerSelector.cxx
+  private/phys-services/MultiPMTCoincify.cxx
   private/phys-source/I3MetaSynth.cxx
   private/phys-source/I3GCDFileService.cxx
   private/phys-source/I3GCDFileServiceFactory.cxx

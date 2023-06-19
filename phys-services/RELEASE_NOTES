@@ -3,10 +3,11 @@
 Release Notes
 =============
 
-trunk
------
+main
+----
 
 * Make I3Tray.I3Tray and icecube.icetray.I3Tray the same thing. (#3102)
+* Add MultiPMTCoincify (#3090)
 * Remove all references to load_pybindings (#3086)
 * Test cleanups (#3068)
 * General code cleanups
