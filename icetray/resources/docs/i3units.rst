@@ -71,8 +71,8 @@ choose the unit. We can write, for example::
 
 The quantities so constructed are **not** tied to any particular
 units. We can divide distance by :cpp:member:`I3Units::m` to get the
-value in meters, or with :cpp:member:`I3Units::yd` to get it in
-yards. So we can pass these quantities around between modules without
+value in meters, or with :cpp:member:`I3Units::ft` to get it in
+feet. So we can pass these quantities around between modules without
 caring about units, and in some other module we can set::
 
  speed = distance / time;

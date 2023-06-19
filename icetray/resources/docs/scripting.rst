@@ -26,7 +26,7 @@ best illustration of this is a simple example::
 Configuring modules with vectors
 --------------------------------
 
-In a Python script, an individual :py:class:`~.OMKey` is created like this:
+In a Python script, an individual :cpp:class:`OMKey` is created like this:
 ``OMKey(21,7)``.  You pass it to a module like you might expect::
 
  tray.AddModule("FryOM", "fry",
@@ -94,8 +94,8 @@ or Inf to a module parameter, or to initialize e.g. an :cpp:type:`I3Double`
 to NaN.
 
 ``NaN`` compared to anything (including itself) is always false.  To
-tell if a variable is NaN, or not, use the functions :py:func:`isnan` and
-:py:func:`isinf`.  In Python 2.6 and later, these are in module :mod:`math`,
+tell if a variable is NaN, or not, use the functions :py:func:`~math.isnan` and
+:py:func:`~math.isinf`.  In Python 2.6 and later, these are in module :mod:`math`,
 in earlier versions they are in module :mod:`scipy`:
 
 .. code-block:: pycon

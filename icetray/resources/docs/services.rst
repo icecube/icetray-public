@@ -155,7 +155,7 @@ the ``UseRandom`` class above to take this service via parameter:
 
 So the parameter ``I3RandomServiceKey``, a lookup string, has been
 replaced with a parameter :cpp:class:`I3RandomService`.  The module
-calls :cpp:func:`~I3Module.GetParameter` passing the
+calls :cpp:func:`~I3Module::GetParameter` passing the
 :cpp:type:`I3RandomServicePtr` named ``rs``, which the steering file
 connects to whatever is passed in by the user:
 

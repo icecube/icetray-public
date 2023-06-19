@@ -132,9 +132,6 @@ In ``python/__init__.py``:
 
     from icecube._project_name import *
 
-The second argument to :py:func:`icetray.load` controls printing
-status.  False disables printing the load status output.
-
 Documentation
 -------------
 

@@ -143,7 +143,7 @@ you would pass any other parameter.  Here we pass it as a literal::
 			    'three' : 777 })
  
 Putting the ``MultiAdder`` module between a
-:cpp:class:`BottomlessSource` and a :class:`~.Dump`, you should see
+:cpp:class:`BottomlessSource` and a :cpp:class:`~Dump`, you should see
 frames going by that look like this::
 
   [ I3Frame :
