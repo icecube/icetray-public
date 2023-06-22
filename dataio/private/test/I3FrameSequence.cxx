@@ -1,32 +1,30 @@
 #include <I3Test.h>
 
 #include <fstream>
+#include <cstdlib>
+#include <boost/filesystem.hpp>
 
 #include <icetray/I3Int.h>
 #include <dataio/I3FrameSequence.h>
 
 using dataio::I3FrameSequence;
 
-std::string random_string( size_t length )
+// wrapper around mkstemp() to create a temp file
+std::string make_stemp()
 {
-    auto randchar = []() -> char
-    {
-        const char charset[] =
-        "0123456789"
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        "abcdefghijklmnopqrstuvwxyz";
-        const size_t max_index = (sizeof(charset) - 1);
-        return charset[ rand() % max_index ];
-    };
-    std::string str(length,0);
-    std::generate_n( str.begin(), length, randchar );
-    return str;
+	namespace fs = boost::filesystem;
+
+	auto p = fs::temp_directory_path() / "dataio-testXXXXXX";
+	auto ts = p.string();
+	char *t = &ts[0];
+	[[maybe_unused]]
+	int fd = mkstemp(t);
+	return std::string(t);
 }
 
 class testfile{
 public:
-	testfile() : path(random_string(10)) {}
-	explicit testfile(const std::string& name) : path(name) {}
+	testfile() : path(make_stemp()) {}
 	testfile(const testfile&)=delete;
 	testfile(testfile&& other):path(other.path){ other.path.clear(); }
 	~testfile(){
