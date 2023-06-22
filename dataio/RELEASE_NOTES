@@ -6,6 +6,8 @@ Release Notes
 trunk
 -----
 
+* Dataio output flush and zst compessor fixes (#3113)
+* Better temp files in I3FrameSequence test to address possible races (#3115)
 * Make I3Tray.I3Tray and icecube.icetray.I3Tray the same thing. (#3102)
 * Remove all references to load_pybindings (#3086)
 * Update python for dataio-shovel
