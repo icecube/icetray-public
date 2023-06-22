@@ -8,6 +8,10 @@ Release Notes
 main
 ----
 
+June 22, 2023 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.7.0
+
 * Documentation cleanups
 * Remove all references to load_pybindings (#3086)
 * Remove BUILD_PYBINDINGS global cmake option. We always build pybindings.

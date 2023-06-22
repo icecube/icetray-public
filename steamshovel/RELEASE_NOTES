@@ -3,8 +3,12 @@
 Release Notes
 =============
 
-trunk
------
+main
+----
+
+June 22, 2023 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.7.0
 
 * Make I3Tray.I3Tray and icecube.icetray.I3Tray the same thing. (#3102)
 * Fix throws in bp::error_already_set exception handler (#3085)

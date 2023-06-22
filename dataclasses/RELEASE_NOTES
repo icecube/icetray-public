@@ -6,6 +6,10 @@ Release Notes
 main
 ----
 
+June 22, 2023 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.7.0
+
 * Documentation cleanups
 * Make I3Tray.I3Tray and icecube.icetray.I3Tray the same thing. (#3102)
 * Remove all references to load_pybindings (#3086)

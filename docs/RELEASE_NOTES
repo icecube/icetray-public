@@ -6,6 +6,10 @@ Release Notes
 main
 ----
 
+June 22, 2023 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.7.0
+
 - Make footnotes smaller
 - A bunch of intersphinx links w/ only links to the Python docs enabled
 - Use implicit namespaces with sphinx-apidoc

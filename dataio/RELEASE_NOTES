@@ -3,8 +3,12 @@
 Release Notes
 =============
 
-trunk
------
+main
+----
+
+June 22, 2023 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.7.0
 
 * Dataio output flush and zst compessor fixes (#3113)
 * Better temp files in I3FrameSequence test to address possible races (#3115)

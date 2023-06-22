@@ -4,6 +4,10 @@ Release Notes
 main
 ----
 
+June 22, 2023 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.7.0
+
 - Skip using boost macros and just do what we want
 - Update archive_exception semantics
 - Mark unused variables as maybe_unused
