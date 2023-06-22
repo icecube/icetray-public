@@ -67,6 +67,10 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink dataio-shovel dataio-
 ## expect is needed for the datio-shovel-test
 find_program(EXPECT expect)
 
+if(ZSTD_FOUND)
+	add_definitions(-DI3_WITH_ZSTD)
+endif()
+
 i3_test_executable(test private/test/*.cxx
   USE_PROJECTS dataio)
 

@@ -5,9 +5,23 @@
 #include <zstd.h>
 #include <algorithm>
 
-class zstd_compressor : public boost::iostreams::multichar_output_filter{
+#if ZSTD_VERSION_MAJOR<1 || (ZSTD_VERSION_MAJOR==1 && ZSTD_VERSION_MINOR<4)
+#warning zstd_compressor needs zstd version >=1.4.0 for ZSTD_compressStream2 in order to provide flush()
+#else
+#define ZSTD_COMPRESSOR_CAN_FLUSH
+#endif
+
+class zstd_compressor{
 public:
 	using char_type=char;
+	struct category
+		: boost::iostreams::output_filter_tag
+		, boost::iostreams::multichar_tag
+		, boost::iostreams::closable_tag
+#ifdef ZSTD_COMPRESSOR_CAN_FLUSH
+		, boost::iostreams::flushable_tag
+#endif
+		{ };
 	
 	zstd_compressor(int compressionLevel):
 	cstream(nullptr,stream_delete),
@@ -95,8 +109,9 @@ public:
 	}
 	
 	//flush buffered input
+	//without ZSTD_COMPRESSOR_CAN_FLUSH this function will only work sufficently to support close()
 	template<typename Sink>
-	void close(Sink& dest){
+	bool flush(Sink& dest){
 		//If no data was compressed initialize the stream anyway, so that we can
 		//finalize it and end up with a valid file.
 		if(!streamInitialized)
@@ -112,6 +127,23 @@ public:
 			}
 			ibufUsed=0;
 		}
+#ifdef ZSTD_COMPRESSOR_CAN_FLUSH
+		size_t bytes_remaining;
+		do{
+			ZSTD_inBuffer input{ibuf.get(),ibufUsed,0};
+			ZSTD_outBuffer output{obuf.get(),ZSTD_CStreamOutSize(),0};
+			bytes_remaining=ZSTD_compressStream2(cstream.get(),&output,&input,ZSTD_e_flush);
+			boost::iostreams::write(dest,obuf.get(),output.pos);
+		}while(bytes_remaining>0);
+		return true;
+#else
+		return false;
+#endif
+	}
+
+	template<typename Sink>
+	void close(Sink& dest){
+		flush(dest);
 		size_t bytes_remaining;
 		do{
 			ZSTD_outBuffer output{obuf.get(),ZSTD_CStreamOutSize(),0};

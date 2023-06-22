@@ -131,8 +131,10 @@ I3MultiWriter::Process()
     sync_seen_ = true;
 
   if (bytes_written > size_limit_ && (frame->GetStop() == sync_stream_ ||
-    !sync_seen_))
+    !sync_seen_)){
+      filterstream_.reset();
       NewFile();
+  }
 
   if (std::find(metadata_streams_.begin(), metadata_streams_.end(),
     frame->GetStop()) != metadata_streams_.end() &&
@@ -165,11 +167,10 @@ I3MultiWriter::Finish()
 {
   log_trace("%s", __PRETTY_FUNCTION__);
 
-  io::counter64* ctr = filterstream_.component<io::counter64>(filterstream_.size() - 2);
-  if (!ctr) log_fatal("couldnt get counter from stream");
-  uint64_t lastfile_bytes = ctr->characters();
-
   filterstream_.reset();
+  struct stat stat_data;
+  stat(current_filename_->c_str(), &stat_data);
+  uint64_t lastfile_bytes = stat_data.st_size;
 
   log_trace("lastfile bytes=%llu", (unsigned long long)lastfile_bytes);
 
