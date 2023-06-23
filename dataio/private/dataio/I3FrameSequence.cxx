@@ -34,11 +34,14 @@ namespace {
         }
         ~ThreadRunner()
         {
-            running_ = false;
-            cond_.notify_one();
-	    if(thread_.joinable()){
-	      thread_.join();
-	    }
+            {
+                std::unique_lock<std::mutex> lock(mutex_);
+                running_ = false;
+                cond_.notify_one();
+            }
+            if(thread_.joinable()) {
+                thread_.join();
+            }
         }
         std::future<R> push(std::function<T> element) {
             std::lock_guard<std::mutex> lock(mutex_);
@@ -56,7 +59,7 @@ namespace {
                     lock.unlock();
                     work();
                 } else {
-                    cond_.wait(lock);
+                    cond_.wait(lock,[this]{return !running_ || !data_.empty();});
                 }
             }
         }
