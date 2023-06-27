@@ -135,6 +135,10 @@ register_TriggerKey()
     def("identity", identity_<TriggerKey::TypeID>);
     def("identity", identity_<TriggerKey::SubtypeID>);
 
+    class_<std::vector<TriggerKey> >("TriggerKeyVector")
+        .def(dataclass_suite<std::vector<TriggerKey> >())
+        ;
+
 
 
 }

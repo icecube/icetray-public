@@ -360,6 +360,9 @@ class TriggerKey
 I3_POINTER_TYPEDEFS(TriggerKey);
 I3_CLASS_VERSION(TriggerKey, triggerkey_version_);
 
+typedef std::vector<TriggerKey> TriggerKeyVector;
+I3_POINTER_TYPEDEFS(TriggerKeyVector);
+
 /**
  * Comparison operator. Required to use TriggerKeys as a key of a map.
  * @param lhs the left-hand trigger key.

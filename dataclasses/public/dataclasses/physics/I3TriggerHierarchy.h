@@ -84,6 +84,9 @@ namespace I3TriggerHierarchyUtils
 
     inline bool EqualKey(const I3Trigger& trigger, const TriggerKey& key)
     { return trigger.GetTriggerKey() == key; }
+
+    inline bool EqualKeys(const I3Trigger& trigger, const std::vector<TriggerKey> keys)
+    { return std::find(keys.begin(), keys.end(), trigger.GetTriggerKey()) != keys.end(); }
   }
   
   inline size_t
@@ -122,6 +125,15 @@ namespace I3TriggerHierarchyUtils
                                         boost::lambda::_1, key));
   }
 
+  inline size_t
+  Count(const I3TriggerHierarchy& triggers,
+        const std::vector<TriggerKey> keys)
+  {
+    return std::count_if(triggers.begin(), triggers.end(),
+                    boost::lambda::bind(internal::EqualKeys,
+                                        boost::lambda::_1, keys));
+  }
+  
   inline I3TriggerHierarchy::iterator
   Find(const I3TriggerHierarchy& triggers,
        TriggerKey::SourceID src,

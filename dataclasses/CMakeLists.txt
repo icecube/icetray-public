@@ -141,6 +141,7 @@ set(DATACLASSES_PYTHON_TEST_SCRIPTS
   resources/test/test_I3UInt64.py
   resources/test/test_mctree_physics_library.py
   resources/test/test_disabling_of_python_dynamism.py
+  resources/test/test_CountEqualKeys.py
   )
 
 if(Python_VERSION_MAJOR VERSION_GREATER_EQUAL 3)

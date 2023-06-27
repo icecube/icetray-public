@@ -38,9 +38,11 @@
 
 
 #include <dataclasses/physics/I3TriggerHierarchy.h>
+#include <dataclasses/TriggerKey.h>
 #include <icetray/python/dataclass_suite.hpp>
 #include <dataclasses/ostream_overloads.hpp>
 
+using namespace I3TriggerHierarchyUtils;
 using namespace boost::python;
 
 using boost::python::object;
@@ -61,15 +63,20 @@ from_frame(I3Frame &frame, const std::string &name)
     return boost::const_pointer_cast<I3TriggerHierarchy>(ptr);
 }
 
+size_t CountVec(const I3TriggerHierarchy& triggers,const std::vector<TriggerKey> keys)
+{
+    return I3TriggerHierarchyUtils::Count(triggers,keys);
+}
 
 void
 register_I3TriggerHierarchy()
-{
+{   
     class_<I3TriggerHierarchy, bases<I3FrameObject>,
         I3TriggerHierarchyPtr>("I3TriggerHierarchy")
         .def("__len__", &length)
         .def("__iter__", bp::iterator<I3TriggerHierarchy>())
         .def("insert",&I3TriggerHierarchyUtils::Insert)
+        .def("count",&CountVec)
         .def("from_frame", &from_frame)
         .staticmethod("from_frame")
         .def(dataclass_suite<I3TriggerHierarchy>())
