@@ -262,6 +262,7 @@ int main (int argc, char *argv[])
     {'L',"load_project"},
     {'i',"interactive_shell"},
     {'e',"find_event"},
+    {'t',"toggle_colors"},
     {KEY_ENTER,"pretty_print"},
     {KEY_UP,   "up"},
     {KEY_DOWN, "down"},
@@ -363,6 +364,7 @@ int main (int argc, char *argv[])
       }
     };
     actions["interactive_shell"] = [&]{ do_pyshell(argv,model,View::Instance()); };
+    actions["toggle_colors"] = []{View::Instance().toggle_colors();};
 
     while (true)
       {

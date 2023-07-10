@@ -76,6 +76,7 @@ public:
   void start();
   void update();
   void page(const std::string& what);
+  void toggle_colors();
 
   void totalframes(unsigned total) { totalframes_ = total; }
 

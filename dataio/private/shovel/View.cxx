@@ -128,14 +128,14 @@ void resize(int sig)
 }
 
 void
-View::start() 
-{ 
-  signal(SIGINT, finish);      /* arrange interrupts to terminate */
-  initscr();      /* initialize the curses library */
-  keypad(stdscr, TRUE);  /* enable keyboard mapping */
-  /*  nonl();          tell curses not to do NL->CR/NL on output */
-  cbreak();       /* take input chars one at a time, no wait for \n */
-  noecho();       /* don't echo input */
+View::start()
+{
+  signal(SIGINT, finish); /* arrange interrupts to terminate */
+  initscr();              /* initialize the curses library */
+  keypad(stdscr, TRUE);   /* enable keyboard mapping */
+  // nonl();              /* tell curses not to do NL->CR/NL on output */
+  cbreak();               /* take input chars one at a time, no wait for \n */
+  noecho();               /* don't echo input */
   curs_set(0);
   #ifndef NDEBUG
   if (curs_set(0) == -1)
@@ -180,6 +180,35 @@ View::start()
   new_subeventstream_colors_.push_back(green);
 }
 
+void
+View::toggle_colors()
+{
+  short f, b;
+  pair_content(COLOR_PAIR(getbkgd(stdscr) & A_COLOR), &f, &b);
+  if (b == -1) {
+    init_pair(COLOR_BLACK,   COLOR_BLACK,   COLOR_BLACK);  // color pair 0
+    init_pair(COLOR_RED,     COLOR_RED,     COLOR_BLACK);  // color pair 1
+    init_pair(COLOR_GREEN,   COLOR_GREEN,   COLOR_BLACK);  // color pair 2
+    init_pair(COLOR_YELLOW,  COLOR_YELLOW,  COLOR_BLACK);  // color pair 3
+    init_pair(COLOR_BLUE,    COLOR_BLUE,    COLOR_BLACK);  // color pair 4
+    init_pair(COLOR_MAGENTA, COLOR_MAGENTA, COLOR_BLACK);  // color pair 5
+    init_pair(COLOR_CYAN,    COLOR_CYAN,    COLOR_BLACK);  // color pair 6
+    init_pair(COLOR_WHITE,   COLOR_WHITE,   COLOR_BLACK);  // color pair 7
+  } else {
+    use_default_colors();
+    init_pair(COLOR_BLACK,   -1,            -1);  // color pair 0
+    init_pair(COLOR_RED,     COLOR_RED,     -1);  // color pair 1
+    init_pair(COLOR_GREEN,   COLOR_GREEN,   -1);  // color pair 2
+    init_pair(COLOR_YELLOW,  COLOR_YELLOW,  -1);  // color pair 3
+    init_pair(COLOR_BLUE,    COLOR_BLUE,    -1);  // color pair 4
+    init_pair(COLOR_MAGENTA, COLOR_MAGENTA, -1);  // color pair 5
+    init_pair(COLOR_CYAN,    COLOR_CYAN,    -1);  // color pair 6
+    init_pair(COLOR_WHITE,   -1,            -1);  // color pair 7
+  }
+  bkgdset(COLOR_PAIR(COLOR_WHITE));
+  refresh();
+}
+
 View::View()
 :
 maxtypelen_(0)
@@ -211,7 +240,7 @@ View::page(const std::string &text)
   
   def_prog_mode();
   endwin();
-  std::string cmd = "/usr/bin/less -x2 -C ";
+  std::string cmd = "/usr/bin/less --tilde -x2 -C ";
   cmd += tmpfile_name;
   int ret = system(cmd.c_str());
   if (ret != 0)
@@ -574,12 +603,10 @@ g                Go to frame
 L                Load project
 i                Run an interactive python shell with the current frame
 e                Search for an event by event ID, or run/event ID
+t                Toggle between a forced black background or "transparency"
 
 The 'tape' display at the bottom shows activity on each of IceTrays's data
 'streams'.
-
-If you don't like these keybindings you can customize them in $HOME/shovelrc.
-This message does/will not reflect any customizations.
 )";
   page(the_help);
 }
