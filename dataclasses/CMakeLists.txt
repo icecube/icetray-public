@@ -142,6 +142,7 @@ set(DATACLASSES_PYTHON_TEST_SCRIPTS
   resources/test/test_mctree_physics_library.py
   resources/test/test_disabling_of_python_dynamism.py
   resources/test/test_CountEqualKeys.py
+  resources/test/test_names_and_masses.py
   )
 
 if(Python_VERSION_MAJOR VERSION_GREATER_EQUAL 3)
@@ -151,8 +152,8 @@ if(Python_VERSION_MAJOR VERSION_GREATER_EQUAL 3)
 endif()
 
 
-i3_test_scripts(${DATACLASSES_PYTHON_TEST_SCRIPTS})
 
+i3_test_scripts(${DATACLASSES_PYTHON_TEST_SCRIPTS})
 if(BUILD_DATACLASSES)
   set_tests_properties(dataclasses::test PROPERTIES LABELS RUN_LONG)
 endif()
