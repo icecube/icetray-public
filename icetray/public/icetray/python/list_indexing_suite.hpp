@@ -165,8 +165,29 @@ public:
 	static void 
 	extension_def(Class& cl)
 	{
+		// container_from_object takes a boost::python object, but it must be
+		// iterable and yield objects of value_type. generated an annotated
+		// function signature for the docstring.
+		{
+			docstring_options doc_options;
+			std::ostringstream oss;
+			object klass = get_class<value_type>();
+			oss <<  "__init__(self, container: typing.Iterable["
+			    << (
+					klass.is_none()
+				    ? "typing.Any"
+					: extract<std::string>(
+						klass.attr("__module__") != "builtins" && klass.attr("__module__") != cl.attr("__module__")
+						? "%s.%s" % make_tuple(klass.attr("__module__"), klass.attr("__qualname__"))
+						: klass.attr("__qualname__")
+					  )()
+				)
+				<< "]) -> None:"
+			;
+			doc_options.disable_py_signatures();
+			cl.def("__init__", make_constructor(&container_from_object), oss.str().c_str());
+		}
 		cl
-			.def("__init__", make_constructor(&container_from_object))
 			.def("append", &base_append)
 			.def("extend", &base_extend)
 			.def("__value_type__", &get_value_type)

@@ -102,10 +102,4 @@ void register_I3DOMStatus()
     def("identity", identity_<I3DOMStatus::CableType>);
 
   }
-
-  class_<I3DOMStatusMap, 
-         I3DOMStatusMapPtr>("I3DOMStatusMap")
-    .def(dataclass_suite<I3DOMStatusMap>())
-    ;
-
 }

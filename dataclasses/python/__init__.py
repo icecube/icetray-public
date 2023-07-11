@@ -15,4 +15,13 @@ I3RecoPulseSeries = vector_I3RecoPulse
 I3RecoHitSeries = vector_I3RecoHit
 I3MCHitSeries = vector_I3MCHit
 
+# Aliases for collections factored out into their own implementation files
+I3TriggerStatusMap = Map_TriggerKey_I3TriggerStatus
+I3VEMCalibrationMap = Map_OMKey_I3VEMCalibration
+I3IceTopSLCCalibrationMap = Map_OMKey_I3IceTopSLCCalibration
+I3DOMCalibrationMap = Map_OMKey_I3DOMCalibration
+I3DOMStatusMap = Map_OMKey_I3DOMStatus
+ParticleTypeVect = ListParticleType
+TankKey.I3VectorTankKey = I3VectorTankKey
+
 del icecube

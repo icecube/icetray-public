@@ -48,12 +48,6 @@ void register_I3VEMCalibration()
     #undef I3VEMCALPROPS
     .def(dataclass_suite<I3VEMCalibration>())
     ;
-
-  class_<I3VEMCalibrationMap, 
-         I3VEMCalibrationMapPtr>("I3VEMCalibrationMap")
-    .def(dataclass_suite<I3VEMCalibrationMap>())
-    ;
-
 }
 
 void register_I3IceTopSLCCalibration()
@@ -74,10 +68,4 @@ void register_I3IceTopSLCCalibration()
     .def("SetSlope",&I3IceTopSLCCalibration::SetSlope,bp::args("chip", "atwd", "val"))
     .def(dataclass_suite<I3IceTopSLCCalibration>())
     ;
-
-  class_<I3IceTopSLCCalibrationMap,
-         I3IceTopSLCCalibrationMapPtr>("I3IceTopSLCCalibrationMap")
-    .def(dataclass_suite<I3IceTopSLCCalibrationMap>())
-    ;
-
 }

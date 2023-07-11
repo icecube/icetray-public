@@ -44,9 +44,9 @@ GetTransverseDirections(const I3Direction &dir)
 void register_I3Calculator()
 {
   // map the I3Calculator namespace to a sub-module  
-  // make "from phys-services import <whatever>" work  
-  bp::object I3CalculatorModule(bp::handle<>(bp::borrowed(PyImport_AddModule("phys-services.I3Calculator"))));  
-  // make "from phys-services import I3Calculator" work  
+  // make "from icecube._phys_services import <whatever>" work  
+  bp::object I3CalculatorModule(bp::handle<>(bp::borrowed(PyImport_AddModule("icecube._phys_services.I3Calculator"))));  
+  // make "from icecube._phys_services import I3Calculator" work  
   bp::scope().attr("I3Calculator") = I3CalculatorModule;  
   // set the current scope to the new sub-module  
   bp::scope I3Calculator_scope = I3CalculatorModule;  

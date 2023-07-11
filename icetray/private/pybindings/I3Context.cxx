@@ -32,6 +32,7 @@
 
 #include <icetray/I3Context.h>
 #include <boost/make_shared.hpp>
+#include <icetray/python/std_map_indexing_suite.hpp>
 
 using namespace boost::python;
 
@@ -70,7 +71,7 @@ list context_values(I3ContextPtr context)
 void register_I3Context()
 {
   class_<std::map<std::string, object> >("map_string_pyobject")
-    .def(map_indexing_suite<std::map<std::string, object>, true>())
+    .def(std_map_indexing_suite<std::map<std::string, object>, true>())
     ;
 
   class_<I3Context, I3ContextPtr, boost::noncopyable> ("I3Context")

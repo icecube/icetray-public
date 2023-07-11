@@ -62,7 +62,7 @@ void register_I3ScaleCalculator()
   scope scalecalculator_scope = 
     class_<I3ScaleCalculator>("I3ScaleCalculator", init<I3GeometryConstPtr,optional<I3ScaleCalculator::IceCubeConfig,I3ScaleCalculator::IceTopConfig,
                               std::vector<int>,std::vector<int>,int,int> >
-			      ("Args : I3Geometry, IceCubeConfig, IceTopConfig, Strings, Stations, TopDOMID, BottomDOMID"))
+			      ((args("I3Geometry"), "IceCubeConfig", "IceTopConfig", "Strings", "Stations", "TopDOMID", "BottomDOMID")))
     ;
   
   enum_<I3ScaleCalculator::IceCubeConfig>("IceCubeConfig")

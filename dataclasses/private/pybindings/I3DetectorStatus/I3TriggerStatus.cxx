@@ -64,10 +64,4 @@ void register_I3TriggerStatus()
     def("identity", identity_<I3TriggerStatus::Subdetector>);
 
   }
-
-  class_<I3TriggerStatusMap, 
-         I3TriggerStatusMapPtr>("I3TriggerStatusMap")
-    .def(dataclass_suite<I3TriggerStatusMap>())
-    ;
-
 }

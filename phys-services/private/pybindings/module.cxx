@@ -62,6 +62,7 @@ I3_PYTHON_MODULE(phys_services)
 
   load_project("phys-services", false); 
   import("icecube.interfaces");
+  import("icecube._icetray");
 
   BOOST_PP_SEQ_FOR_EACH(I3_REGISTER, ~, REGISTER_THESE_THINGS);
 

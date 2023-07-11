@@ -6,6 +6,7 @@ import base64
 import tempfile
 import shutil
 import subprocess
+from typing import Type
 
 try:
 	import requests
@@ -38,6 +39,7 @@ class AbstractFileStager(I3FileStager):
 	
 	@classmethod
 	def get_subclasses(cls):
+		# type: () -> list[Type[AbstractFileStager]]
 		"""
 		Assemble a list of all subclasses defined in the current module
 		"""

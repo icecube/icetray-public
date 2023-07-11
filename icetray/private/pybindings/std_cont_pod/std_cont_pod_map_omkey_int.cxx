@@ -31,10 +31,11 @@
 //
 
 #include "std_cont_pod.h"
+#include <icetray/python/std_map_indexing_suite.hpp>
 
 void register_std_cont_pod_map_omkey_int()
 {
   class_<std::map<OMKey, int> >("map_OMKey_int")
-    .def(map_indexing_suite<std::map<OMKey, int> >())
+    .def(std_map_indexing_suite<std::map<OMKey, int> >())
     ;
 }

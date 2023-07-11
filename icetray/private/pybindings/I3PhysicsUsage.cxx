@@ -1,4 +1,5 @@
 #include <icetray/I3PhysicsUsage.h>
+#include <icetray/python/std_map_indexing_suite.hpp>
 
 using namespace boost::python;
 
@@ -13,7 +14,7 @@ register_I3PhysicsUsage()
     ;
 
   class_<std::map<std::string, I3PhysicsUsage> >("map_string_I3PhysicsUsage")
-    .def(map_indexing_suite<std::map<std::string, I3PhysicsUsage> >())
+    .def(std_map_indexing_suite<std::map<std::string, I3PhysicsUsage> >())
     ;
 
 }

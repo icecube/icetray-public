@@ -39,22 +39,6 @@
 
 using namespace boost::python;
 
-static I3RecoPulseSeriesMapPtr
-from_frame(I3Frame &frame, const std::string &name)
-{
-	if (!frame.Has(name)) {
-		PyErr_SetString(PyExc_KeyError, name.c_str());
-		throw_error_already_set();
-	}
-	I3RecoPulseSeriesMapConstPtr rpsm =
-	    frame.Get<I3RecoPulseSeriesMapConstPtr>(name);
-	if (!rpsm) {
-		PyErr_SetString(PyExc_TypeError, name.c_str());
-		throw_error_already_set();
-	}
-	return boost::const_pointer_cast<I3RecoPulseSeriesMap>(rpsm);
-}
-
 namespace {
 static PyBufferProcs rps_bufferprocs;
 static PyBufferProcs rpsm_bufferprocs;
@@ -263,10 +247,6 @@ void register_I3RecoPulse()
 
   object rpsm = class_<I3RecoPulseSeriesMap, bases<I3FrameObject>, I3RecoPulseSeriesMapPtr>("I3RecoPulseSeriesMap")
     .def(dataclass_suite<I3RecoPulseSeriesMap>())
-    .def("from_frame", &from_frame, args("frame", "key"),
-        "Get an I3RecoPulseSeriesMap from the frame, performing any necessary "
-        "format conversions behind the scenes.")
-    .staticmethod("from_frame")
     .def("pmt_array_offsets", &I3RecoPulseSeriesMap_pmtoffsets,
         "Provide a list of offsets into a numpy.asarray()-ed "
         "I3RecoPulseSeriesMap corresponding to the beginning of the pulses for "

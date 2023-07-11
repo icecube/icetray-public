@@ -391,10 +391,10 @@ return incref(tuple.attr("__iter__")().ptr());
           return make_transform_impl<Transform>::range();
         }
 
-        static object
+        static python::str
         print_elem(typename Container::value_type const& e)
         {
-            return "(%s, %s)" % python::make_tuple(e.first, e.second);
+            return python::str("(%s, %s)" % python::make_tuple(e.first, e.second));
         }
 
         static
@@ -519,12 +519,12 @@ return incref(tuple.attr("__iter__")().ptr());
                  "Initialize with keys and values as tuples in a Python list: [('key','value')]\n")
                 .def(init<>()) // restore default constructor
                 
-                .def("keys", &keys, "D.keys() -> list of D's keys\n")
+                .def("keys", &keys, "list of D's keys\n")
                 .def("has_key", &contains, "D.has_key(k) -> True if D has a key k, else False\n") // don't re-invent the wheel
                 .def("values", &values, "D.values() -> list of D's values\n")
                 .def("items", &items, "D.items() -> list of D's (key, value) pairs, as 2-tuples\n")
                 .def("clear", &Container::clear, "D.clear() -> None.  Remove all items from D.\n")
-                .def("copy", &copy, "D.copy() -> a shallow copy of D\n")
+                .def("copy", &copy, "a shallow copy of D\n")
                 .def("get", dict_get, dict_get_overloads(args("default_val"),
                  "D.get(k[,d]) -> D[k] if k in D, else d.  d defaults to None.\n"))
                 .def("pop", &dict_pop )
@@ -539,13 +539,13 @@ return incref(tuple.attr("__iter__")().ptr());
                  "D.update(E) -> None.  Update D from E: for k in E: D[k] = E[k]\n")
                 .def("iteritems", 
                  make_transform<iteritems>(),
-                 "D.iteritems() -> an iterator over the (key, value) items of D\n")
+                 "an iterator over the (key, value) items of D\n")
                 .def("iterkeys", 
                  make_transform<iterkeys>(),
-                 "D.iterkeys() -> an iterator over the keys of D\n")
+                 "an iterator over the keys of D\n")
                 .def("itervalues", 
                  make_transform<itervalues>(),
-                 "D.itervalues() -> an iterator over the values of D\n")
+                 "an iterator over the values of D\n")
                 .def("__key_type__", &get_key_type)
                 .staticmethod("__key_type__")
                 .def("__value_type__", &get_value_type)

@@ -28,8 +28,8 @@ namespace bp = boost::python;
 // in tableio into the dataclasses module
 
 #define I3CONVERTER_NAMESPACE(proj)                                                                                \
-    bp::object module(bp::handle<>(bp::borrowed(PyImport_AddModule("icecube." BOOST_PP_STRINGIZE(proj)))));\
-    bp::object converter_module(bp::handle<>(bp::borrowed(PyImport_AddModule("icecube." BOOST_PP_STRINGIZE(proj) ".converters"))));\
+    bp::object module(bp::handle<>(bp::borrowed(PyImport_AddModule("icecube._" BOOST_PP_STRINGIZE(proj)))));\
+    bp::object converter_module(bp::handle<>(bp::borrowed(PyImport_AddModule("icecube._" BOOST_PP_STRINGIZE(proj) ".converters"))));\
     module.attr("converters") = converter_module;\
     bp::object tableio(bp::handle<>(PyImport_Import(bp::str("icecube.tableio").ptr())));\
     bp::object registry(tableio.attr("I3ConverterRegistry"));\

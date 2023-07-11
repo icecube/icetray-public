@@ -130,7 +130,10 @@ std::string format_stream(const I3Frame::Stream& s)
 {
   if(I3Frame::is_user_defined(s)) 
     return std::string("icetray.I3Frame") + s.str();
-  return std::string("icetray.I3Frame.") + s.str();
+  else if( s == I3Frame::None )
+    return std::string("icetray.I3Frame.none");
+  else
+    return std::string("icetray.I3Frame.") + (s.str());
 }
 
 static object frame_dumps(I3Frame const&f)
@@ -197,7 +200,7 @@ void register_I3Frame()
     .def("as_xml", &I3Frame::as_xml)
     .def("dumps", frame_dumps)
     .def("loads", frame_loads)
-    .def_readonly("None", I3Frame::None)
+    .def_readonly("none", I3Frame::None)
     .def_readonly("Geometry", I3Frame::Geometry)
     .def_readonly("Calibration", I3Frame::Calibration)
     .def_readonly("DetectorStatus", I3Frame::DetectorStatus)
@@ -207,7 +210,6 @@ void register_I3Frame()
     .def_readonly("TrayInfo", I3Frame::TrayInfo)
     .def_pickle(boost_serializable_pickle_suite<I3Frame>())
     ;
-  register_ptr_to_python<boost::shared_ptr<I3Frame> >();
 
   class_<I3Frame::Stream>("Stream")
     .def(init<char>())

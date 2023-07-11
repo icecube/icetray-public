@@ -24,6 +24,8 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
+#include <icetray/python/get_class.hpp>
+
 namespace boost { namespace python {
 
 template <typename G, typename GS, typename S, typename SS>
@@ -249,25 +251,39 @@ private:
 	struct ReadOnly {};
 	struct ReadWrite {};
 
+	void
+	def_property(class_<Proxy> &proxy_class, const char* propname, ReadOnly k) const
+	{
+		std::string usage = std::string("Usage: ") + std::string(propname) + "["
+		    + stringify_signature<GetArgs>() + "]";
+		proxy_class.def("__getitem__", &Proxy::template getitem<GetArgs>, usage.c_str(), getter_policy());
+	}
+	
+	void
+	def_property(class_<Proxy> &proxy_class, const char* propname, ReadWrite k) const
+	{
+		def_property(proxy_class, propname, ReadOnly());
+		std::string usage = std::string("Usage: ") + std::string(propname) + "["
+		    + stringify_signature<SetArgs>() + "] = " + type_id<ValueType>().name();
+		proxy_class.def("__setitem__", &Proxy::template setitem<SetArgs>, usage.c_str());
+	}
+
 	template <class Kind, class Class>
 	void
-	bind_property(Class &cl, class_<Proxy> &proxy_class, const char* propname, Kind k) const;
+	bind_property(Class &cl, const char* propname, Kind k) const;
 	
 	template <class Class>
 	void
-	bind_property(Class &cl, class_<Proxy> &proxy_class, const char* propname, ReadOnly k) const
+	bind_property(Class &cl, const char* propname, ReadOnly k) const
 	{
 		cl.add_property(propname, Proxy::make_function(getter_));
 	}
 	
 	template <class Class>
 	void
-	bind_property(Class &cl, class_<Proxy> &proxy_class, const char* propname, ReadWrite k) const
+	bind_property(Class &cl, const char* propname, ReadWrite k) const
 	{
 		cl.add_property(propname, Proxy::make_function(getter_, setter_));
-		std::string usage = std::string("Usage: ") + std::string(propname) + "["
-		    + stringify_signature<SetArgs>() + "] = " + type_id<ValueType>().name();
-		proxy_class.def("__setitem__", &Proxy::template setitem<SetArgs>, usage.c_str());
 	}
 	
 public:
@@ -279,19 +295,19 @@ public:
 		
 		scope inner = cl;
 		
-		std::string proxy_name = "_" + std::string(name) + "_proxy";
-				
-		class_<Proxy> proxy_class(proxy_name.c_str(), no_init);
-		proxy_class.def_readonly("parent", &Proxy::held_);
-		
-		std::string usage = std::string("Usage: ") + name + "[" + stringify_signature<GetArgs>() + "]";
-		
-		proxy_class.def("__getitem__", &Proxy::template getitem<GetArgs>, usage.c_str(), getter_policy());
-
 		typedef is_same<void (*)(), Setter> no_setter;
 		typedef typename mpl::if_c<no_setter::value, ReadOnly, ReadWrite>::type property_type;
-		bind_property(cl, proxy_class, name, property_type());
-		
+
+		if (get_class<Proxy>().is_none()) {
+			std::string proxy_name = "_" + std::string(name) + "_proxy";
+					
+			class_<Proxy> proxy_class(proxy_name.c_str(), no_init);
+			proxy_class.def_readonly("parent", &Proxy::held_);
+
+			def_property(proxy_class, name, property_type());
+		}
+
+		bind_property(cl, name, property_type());
 	}
 
 };

@@ -117,9 +117,6 @@ void register_I3Particle()
       .export_values()
       ;
 
-    class_<std::vector<I3Particle::ParticleType> >("ParticleTypeVect")
-      .def(dataclass_suite<std::vector<I3Particle::ParticleType> >());
-
     enum_<I3Particle::ParticleShape>("ParticleShape")
       BOOST_PP_SEQ_FOR_EACH(ENUM_DEF,I3Particle,I3PARTICLE_H_I3Particle_ParticleShape)
       .export_values()
@@ -139,10 +136,6 @@ void register_I3Particle()
   bp::def("identity", identity_<I3Particle::ParticleShape>);
   
   bp::implicitly_convertible<I3Particle,I3ParticleID>();
-
-  class_<std::vector<I3Particle> >("ListI3Particle")
-    .def(dataclass_suite<std::vector<I3Particle> >())
-    ;
 
   register_pointer_conversions<I3Particle>();
 }

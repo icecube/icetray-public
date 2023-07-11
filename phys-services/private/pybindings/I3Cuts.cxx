@@ -41,9 +41,9 @@ namespace bp = boost::python;
 void register_I3Cuts()
 {
   // map the I3Cuts namespace to a sub-module  
-  // make "from phys-services import <whatever>" work  
-  bp::object I3CutsModule(bp::handle<>(bp::borrowed(PyImport_AddModule("phys-services.I3Cuts"))));  
-  // make "from phys-services import I3Cuts" work  
+  // make "from icecube._phys_services import <whatever>" work  
+  bp::object I3CutsModule(bp::handle<>(bp::borrowed(PyImport_AddModule("icecube._phys_services.I3Cuts"))));  
+  // make "from icecube._phys_services import I3Cuts" work  
   bp::scope().attr("I3Cuts") = I3CutsModule;  
   // set the current scope to the new sub-module  
   bp::scope I3Cuts_scope = I3CutsModule;  

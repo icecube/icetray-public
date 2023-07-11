@@ -58,6 +58,43 @@ struct is_iterable {
 	static const bool value = has_iterator<T>::value && !(is_map<T>::value || is_tree<T>::value);
 };
 
+template <typename T>
+static boost::shared_ptr<T>
+from_frame(const I3Frame &frame, const std::string &name)
+{
+	if (!frame.Has(name)) {
+		PyErr_SetString(PyExc_KeyError, name.c_str());
+		throw_error_already_set();
+	}
+	
+	boost::shared_ptr<const T> rpsm =
+	    frame.Get<boost::shared_ptr<const T> >(name);
+	if (!rpsm) {
+		PyErr_SetString(PyExc_TypeError, name.c_str());
+		throw_error_already_set();
+	}
+	return boost::const_pointer_cast<T>(rpsm);
+}
+
+template <typename T, typename = void>
+struct has_value : boost::false_type{};
+
+template <typename T>
+struct has_value<T, decltype(T::value(), void())> : boost::true_type {};
+
+template <typename U>
+static
+typename boost::enable_if<has_value<I3DefaultName<U>>, arg&&>::type
+set_default_name(arg &&arg)
+{
+	return std::move(arg = I3DefaultName<U>::value());
+}
+
+template <typename U>
+static
+typename boost::enable_if<boost::mpl::not_<has_value<I3DefaultName<U>>>, arg&&>::type
+set_default_name(arg &&arg) { return std::move(arg); }
+
 }
 
 	
@@ -107,6 +144,19 @@ private:
 		boost::mpl::bool_<detail::is_iterable<U>::value>,
 		boost::mpl::bool_<detail::is_tree<U>::value> > >::type
 	add_indexing(Class &cl) {}
+
+	template <class Class, typename U>
+	static
+	typename boost::enable_if_c<std::is_base_of<I3FrameObject, U>::value>::type
+	add_from_frame(Class &cl) {
+		cl.def("from_frame", &detail::from_frame<U>, (arg("frame"), detail::set_default_name<U>(arg("name"))));
+		cl.staticmethod("from_frame");
+	}
+
+	template <class Class, typename U>
+	static
+	typename boost::disable_if_c<std::is_base_of<I3FrameObject, U>::value>::type
+	add_from_frame(Class &cl) {}
 	
 	template <class Class, typename U>
 	static
@@ -134,6 +184,7 @@ public:
 		cl.def_pickle(boost_serializable_pickle_suite<T>());
 		add_indexing<Class, T>(cl);
 		add_string_to_stream<Class, T>(cl);
+		add_from_frame<Class, T>(cl);
 		cl.def(operator_suite<T>());
 		cl.def(freeze());
 	}

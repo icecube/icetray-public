@@ -1,3 +1,5 @@
+from typing import Any, Iterable, Type, Optional
+
 from icecube import icetray, dataclasses
 from icecube._dataio import *
 
@@ -5,6 +7,7 @@ from icecube.dataio.I3FileStagerFile import AbstractFileStager
 set_local_scratch_dir = AbstractFileStager.set_local_scratch_dir
 
 def get_stagers(staging_directory=None, extra_stagers=[]):
+	# type: (Optional[str], Iterable[Type[I3FileStager]]) -> I3FileStagerCollection
 	"""
 	Set up file stagers for all supported URL schemes.
 	
@@ -24,6 +27,7 @@ def get_stagers(staging_directory=None, extra_stagers=[]):
 
 @icetray.traysegment_inherit('I3Reader')
 def I3Reader(tray, name, **kwargs):
+	# type: (icetray.I3Tray, str, dict[str,Any]) -> None
 	"""Read an .i3 file. This supports remote files
 	by specifying URLs and will stage them in an auto-configured
 	local scratch directory.

@@ -67,6 +67,10 @@ private:
 
 void register_dataclasses_converters() {
     I3CONVERTER_NAMESPACE(dataclasses);
+    {
+        // ensure icecube.dataclasses.converters
+        bp::import("icecube.dataclasses").attr("converters") = converter_module;
+    }
 
     // typdef the template into a legal Python identifier
     I3CONVERTER_EXPORT_DEFAULT(I3EventHeaderConverter,"Dumps I3EventHeader objects");

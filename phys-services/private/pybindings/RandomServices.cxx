@@ -83,7 +83,7 @@ void register_RandomServices()
   register_randomservice<I3MT19937>("I3MT19937",
 				    "An implementation of the I3RandomService interface using the C++ "
 				    "random number engine for MT19937",
-				    init<std::vector<uint32_t> >((bp::arg("seed vector")))
+				    init<std::vector<uint32_t> >((bp::arg("seed_vector")))
 				    ).def(init<>()).def(init<uint32_t>((bp::arg("seed"))));
 	
 

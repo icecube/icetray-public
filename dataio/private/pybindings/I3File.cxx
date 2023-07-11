@@ -140,8 +140,8 @@ void register_I3File()
         "Create and open an I3File object."))
     .def(init<const std::string&, const std::string&, optional<size_t> >(
         (arg("Filename"),
-         arg("Mode (r, w, x, a)")="r",
-         arg("Starting frame")=0),
+         arg("Mode")="r",
+         arg("Starting_frame")=0),
         "Create and open an I3File object, specifying the mode."))
     .def("close", &I3File::close, 
          "Close the file")

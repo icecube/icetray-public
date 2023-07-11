@@ -42,7 +42,8 @@ void register_I3OMKey2MBID();
 BOOST_PYTHON_MODULE(interfaces)
 {
 
-  load_project("interfaces", false); 
+  load_project("interfaces", false);
+  boost::python::import("icecube._dataclasses");
 
   register_I3CalibrationService();
   register_I3DetectorStatusService();

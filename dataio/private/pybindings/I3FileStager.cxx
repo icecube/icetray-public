@@ -1,6 +1,7 @@
 #include <dataio/I3FileStager.h>
 
 #include <icetray/python/gil_holder.hpp>
+#include <icetray/python/list_indexing_suite.hpp>
 
 namespace bp = boost::python;
 
@@ -91,7 +92,7 @@ void register_I3FileStager()
     bp::implicitly_convertible<boost::shared_ptr<I3FileStagerWrapper>, boost::shared_ptr<const I3FileStagerWrapper> >();
 
     bp::class_<std::vector<I3FileStagerPtr> >("vector_I3FileStager")
-        .def(bp::vector_indexing_suite<std::vector<I3FileStagerPtr>, true>())
+        .def(bp::list_indexing_suite<std::vector<I3FileStagerPtr>, true>())
     ;
     from_python_sequence<std::vector<I3FileStagerPtr>, variable_capacity_policy>();
     

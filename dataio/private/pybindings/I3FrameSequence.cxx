@@ -135,7 +135,7 @@ void register_I3FrameSequence()
     .def(init<const I3FrameSequence&>("Copy constructor"))
     .def(init<const std::vector<std::string>&, size_t>(
         (arg("Filenames"),
-         arg("Cache size") = 1000),
+         arg("Cache_size") = 1000),
         "Create and open an I3FrameSequence object."))
     .def("close", &I3FrameSequence::close, 
          "Close all files")

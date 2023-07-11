@@ -97,6 +97,7 @@ BOOST_PP_SEQ_FOR_EACH(I3_REGISTRATION_FN_DECL, ~, REGISTER_THESE_THINGS)
 
 I3_PYTHON_MODULE(dataclasses)
 {
+  bp::import("icecube._icetray");
   //load_project("dataclasses", false);
   BOOST_PP_SEQ_FOR_EACH(I3_REGISTER, ~, REGISTER_THESE_THINGS);
 }

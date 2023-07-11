@@ -39,25 +39,6 @@
 
 using namespace boost::python;
 
-template<typename theType>
-std::string to_str(const theType& theStr){
-    std::ostringstream oss;
-    oss << theStr << std::flush;
-    return oss.str();
-}
-
-std::string to_str_I3DOMCalibration(const I3DOMCalibration& self){
-  return to_str<I3DOMCalibration>(self); };
-std::string to_str_LinearFit(const LinearFit& self){
-  return to_str<LinearFit>(self); };
-std::string to_str_QuadraticFit(const QuadraticFit& self){
-  return to_str<QuadraticFit>(self); };
-std::string to_str_TauParam(const TauParam& self){
-  return to_str<TauParam>(self); };
-std::string to_str_SPEChargeDistribution(const SPEChargeDistribution& self){
-  return to_str<SPEChargeDistribution>(self); };
-std::string to_str_I3DOMCalibrationMap(const I3DOMCalibrationMap& self){
-  return to_str<I3DOMCalibrationMap>(self); };
 
 void register_I3DOMCalibration()
 {
@@ -91,12 +72,6 @@ void register_I3DOMCalibration()
       .def("atwd_pulse_template", &I3DOMCalibration::ATWDPulseTemplate)
       .def("fadc_pulse_template", &I3DOMCalibration::FADCPulseTemplate)
       .def("discriminator_pulse_template", &I3DOMCalibration::DiscriminatorPulseTemplate)
-      .def("__str__", to_str_I3DOMCalibration)
-      .def("__str__", to_str_LinearFit)
-      .def("__str__", to_str_QuadraticFit)
-      .def("__str__", to_str_TauParam)
-      .def("__str__", to_str_SPEChargeDistribution)
-      .def("__str__", to_str_I3DOMCalibrationMap)
       .def(dataclass_suite<I3DOMCalibration>())
       ;
 
@@ -107,9 +82,4 @@ void register_I3DOMCalibration()
       ;
 
   }
-
-  class_<I3DOMCalibrationMap, 
-         I3DOMCalibrationMapPtr>("I3DOMCalibrationMap")
-    .def(dataclass_suite<I3DOMCalibrationMap>())
-    ;
 }
