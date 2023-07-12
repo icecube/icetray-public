@@ -27,7 +27,8 @@ if (USE_OPENCL)
     #set uppercase name so macros in project.cmake know what is happending
     SET(OPENCL_FOUND TRUE)
     SET(OPENCL_INCLUDE_DIRS "${OpenCL_INCLUDE_DIRS}")
-    FIND_LIBRARY(OPENCL_LIBRARIES OpenCL HINTS "${OpenCL_LIBRARIES}" PATH_SUFFIXES "x86_64")
+    get_filename_component(_hint "${OpenCL_LIBRARIES}" DIRECTORY)
+    FIND_LIBRARY(OPENCL_LIBRARIES OpenCL HINTS "${_hint}" PATH_SUFFIXES x86_64 lib64)
 
     message(STATUS "+    version: ${OpenCL_VERSION_STRING}")
     message(STATUS "+    include: ${OPENCL_INCLUDE_DIRS}")
