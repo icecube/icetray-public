@@ -106,7 +106,7 @@ def _make_http(port=None,usessl=False,basic_auth=False):
         httpd = HTTPServer(('localhost', port), Handle)
     if usessl:
         print('ssl')
-        p = subprocess.Popen(['openssl','req','-new','-x509',
+        p = subprocess.Popen(['/usr/bin/openssl','req','-new','-x509',
                               '-keyout','privkey.pem',
                               '-out','cacert.pem','-days','1',
                               '-batch','-passout','pass:passkey',
@@ -116,7 +116,7 @@ def _make_http(port=None,usessl=False,basic_auth=False):
         if p.returncode:
             raise Exception('cannot generate self-signed cert')
         try:
-            if subprocess.call(['openssl','rsa','-in','privkey.pem','-out','key.pem','-passin','pass:passkey']):
+            if subprocess.call(['/usr/bin/openssl','rsa','-in','privkey.pem','-out','key.pem','-passin','pass:passkey']):
                 raise Exception('error removing password from key.pem')
             open('key.pem','a').write(open('cacert.pem').read())
             httpd.socket = ssl.wrap_socket(httpd.socket, certfile='key.pem',
