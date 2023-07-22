@@ -121,6 +121,7 @@ i3_add_pybindings(phys_services
   private/pybindings/I3XMLOMKey2MBID.cxx
   private/pybindings/I3GCDFileService.cxx
   private/pybindings/Surface.cxx
+  private/pybindings/MultiPMTCoincify.cxx
   private/pybindings/module.cxx
   ${OPTIONAL_PYBINDING_SOURCES}
   USE_TOOLS boost python

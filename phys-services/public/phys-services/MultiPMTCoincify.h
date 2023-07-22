@@ -24,12 +24,13 @@
 class MultiPMTCoincify : public I3ConditionalModule{
 public:
   MultiPMTCoincify(const I3Context& context);
+  MultiPMTCoincify(unsigned int moduleSpan, double moduleTime, double pmtTime, bool reset);
   ~MultiPMTCoincify();
   void Configure();
+  I3RecoPulseSeriesMapPtr Coincify(I3RecoPulseSeriesMapConstPtr inputMap);
   void DAQ(I3FramePtr frame);
   void Finish();
 
-private:
   std::string pulsesName_;
   unsigned int moduleSpan_;
   float moduleTime_;

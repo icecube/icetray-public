@@ -12,6 +12,16 @@
 #include <phys-services/MultiPMTCoincify.h>
 #include <icetray/I3Units.h>
 
+MultiPMTCoincify::MultiPMTCoincify(unsigned int moduleSpan, double moduleTime, double pmtTime, bool reset=true):
+  I3ConditionalModule(I3Context()),
+  pulsesName_(""),
+  moduleSpan_(moduleSpan),
+  moduleTime_(moduleTime),
+  pmtTime_(pmtTime),
+  reset_(reset)
+{
+}
+
 MultiPMTCoincify::MultiPMTCoincify(const I3Context& ctx) 
   : I3ConditionalModule(ctx),
     pulsesName_("I3RecoPulseSeriesMapGen2"),
@@ -56,18 +66,8 @@ void MultiPMTCoincify::Configure()
   GetParameter("ResetLC", reset_);
 }
 
-
-void MultiPMTCoincify::DAQ(I3FramePtr frame)
-{
-  log_debug("Entering MultiPMTCoincify::DAQ()");
-  
-  //---------------------------
-  // Read the pulses from the frame
-  //---------------------------
-  if(!frame->Has(pulsesName_)){
-    PushFrame(frame);
- }
-  I3RecoPulseSeriesMapConstPtr inputMap = frame->Get<I3RecoPulseSeriesMapConstPtr>(pulsesName_);
+I3RecoPulseSeriesMapPtr MultiPMTCoincify::Coincify(I3RecoPulseSeriesMapConstPtr inputMap){
+  log_debug("Entering MultiPMTCoincify::Coincify()");
   
   //---------------------------
   // Copy them to a non-const container
@@ -79,16 +79,16 @@ void MultiPMTCoincify::DAQ(I3FramePtr frame)
     OMKey omk = pair.first;
     I3RecoPulseSeries pulses = pair.second;
     std::sort(pulses.begin(), pulses.end(), pulseComp);
-
+    
     if(reset_){
       BOOST_FOREACH(auto& pulse, pulses){
 	pulse.SetFlags(pulse.GetFlags() & !I3RecoPulse::PulseFlags::LC);
       }
     }
-		    
+    
     outputMap->insert(std::make_pair(omk, pulses));
   }
-
+  
   //---------------------------
   // Run the coincidence processing
   // The plan here is to try to cleverly use four pieces of information:
@@ -100,10 +100,10 @@ void MultiPMTCoincify::DAQ(I3FramePtr frame)
   for(auto firstPmtIter=outputMap->begin(); firstPmtIter!=outputMap->end(); ++firstPmtIter){
     OMKey firstOMKey = firstPmtIter->first;
     I3RecoPulseSeries& firstPulses = firstPmtIter->second;
-
+    
     // Keep track of when we've gone too far...
     const OMKey tooFar = OMKey(firstOMKey.GetString(), firstOMKey.GetOM()+moduleSpan_+1, 0);
-
+    
     for(auto secondPmtIter=std::next(firstPmtIter);
 	(secondPmtIter->first<tooFar) && (secondPmtIter!=outputMap->end());
 	++secondPmtIter){
@@ -113,7 +113,7 @@ void MultiPMTCoincify::DAQ(I3FramePtr frame)
       double window = moduleTime_;
       if ((firstOMKey.GetString()==secondOMKey.GetString()) && (firstOMKey.GetOM()==secondOMKey.GetOM()))
 	window = pmtTime_;
-
+      
       //---------------------------
       // Start going through the pulses, using std::lower_bound to
       // find the first pulse worth checking.
@@ -125,8 +125,8 @@ void MultiPMTCoincify::DAQ(I3FramePtr frame)
 	for(; secondPulseIter!=secondPulses.end(); ++secondPulseIter){
 	  double dt = secondPulseIter->GetTime() - firstPulseIter->GetTime();
 	  if(dt > window){
-	     break;
-	   }
+            break;
+          }
 	  if(std::abs(dt) <= window){
 	    firstPulseIter->SetFlags(firstPulseIter->GetFlags() | I3RecoPulse::PulseFlags::LC);
 	    secondPulseIter->SetFlags(secondPulseIter->GetFlags() | I3RecoPulse::PulseFlags::LC);
@@ -135,6 +135,22 @@ void MultiPMTCoincify::DAQ(I3FramePtr frame)
       }
     }
   }
+  return outputMap;
+}
+
+void MultiPMTCoincify::DAQ(I3FramePtr frame){
+  //---------------------------
+  // Read the pulses from the frame
+  //---------------------------
+  if(!frame->Has(pulsesName_)){
+    PushFrame(frame);
+  }
+  I3RecoPulseSeriesMapConstPtr inputMap = frame->Get<I3RecoPulseSeriesMapConstPtr>(pulsesName_);
+
+  //---------------------------
+  // Run the processing
+  //---------------------------
+  I3RecoPulseSeriesMapPtr outputMap = Coincify(inputMap);
 
   //---------------------------
   // Write the newly coincified pulses back out.
