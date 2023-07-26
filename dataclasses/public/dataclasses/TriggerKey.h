@@ -33,8 +33,8 @@
 
 #define TRIGGERKEY_H_TriggerKey_TypeID                                   \
     (SIMPLE_MULTIPLICITY)(CALIBRATION)(MIN_BIAS)(THROUGHPUT)             \
-    (TWO_COINCIDENCE)(THREE_COINCIDENCE)(MERGED)(SLOW_PARTICLE)          \
-    (FRAGMENT_MULTIPLICITY)                                              \
+    (TWO_COINCIDENCE)(THREE_COINCIDENCE)(MERGED)(SLOW_PARTICLE)         \
+    (FRAGMENT_MULTIPLICITY)(FAINT_PARTICLE)                                              \
     (STRING)(VOLUME)(SPHERE)(UNBIASED)(SPASE_2)(UNKNOWN_TYPE)
 
 #define TRIGGERKEY_H_TriggerKey_SubtypeID                                \
@@ -99,6 +99,7 @@ class TriggerKey
     THREE_COINCIDENCE = 50,    // IceCube global trigger:  combined 3 trigs
     MERGED = 70,               // A trigger from a merging of events
     SLOW_PARTICLE = 80,        // A trigger for slow particles (long readouts)
+    FAINT_PARTICLE = 90,       // A trigger for faint particles that includes SLC hits
     FRAGMENT_MULTIPLICITY = 105, // TWR trigger based on fragment counts
     STRING = 120,              // A trigger based on # hits in a string
     VOLUME = 125,              // A volume/geometry specific trigger
@@ -182,6 +183,11 @@ class TriggerKey
   TriggerKey(SourceID source, TypeID type, int configID, SubtypeID subtype = NO_SUBTYPE)
     : source_(source), type_(type), subtype_(subtype),
       configID_(configID) {}
+
+  /**
+   * Destructor.
+   */
+  ~TriggerKey();
     
   std::ostream& Print(std::ostream&) const;
   
@@ -348,7 +354,7 @@ class TriggerKey
   friend class icecube::serialization::access;
   template <class Archive> void save(Archive & ar, unsigned version) const;
   template <class Archive> void load(Archive & ar, unsigned version);
-  I3_SERIALIZATION_SPLIT_MEMBER()
+  I3_SERIALIZATION_SPLIT_MEMBER();
 
   // logging
   SET_LOGGER("TriggerKey");

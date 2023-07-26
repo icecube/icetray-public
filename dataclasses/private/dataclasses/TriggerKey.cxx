@@ -60,6 +60,7 @@ TriggerKey::GetSourceFromString(const std::string& sourcestr)
     return(UNKNOWN_SOURCE);
   if (sourcestr=="IN_ICE_PULSES")
     return(IN_ICE_PULSES);
+
   log_warn("undefined source string %s",sourcestr.c_str());
   
   return UNKNOWN_SOURCE;
@@ -72,6 +73,8 @@ TriggerKey::GetTypeString(TypeID type)
   {
     case SIMPLE_MULTIPLICITY:
       return("SIMPLE_MULTIPLICITY");
+    case FAINT_PARTICLE:
+      return("FAINT_PARTICLE");
     case CALIBRATION:
       return("CALIBRATION");
     case MIN_BIAS:
@@ -111,6 +114,8 @@ TriggerKey::GetTypeFromString(const std::string& typestr)
 {
   if (typestr=="SIMPLE_MULTIPLICITY")
     return(SIMPLE_MULTIPLICITY);
+  if (typestr=="FAINT_PARTICLE")
+    return(FAINT_PARTICLE);
   if (typestr=="CALIBRATION")
     return(CALIBRATION);
   if (typestr=="MIN_BIAS")
@@ -144,6 +149,10 @@ TriggerKey::GetTypeFromString(const std::string& typestr)
 
   return UNKNOWN_TYPE;
 }
+
+
+TriggerKey::~TriggerKey() {}
+
 
 template <class Archive>
 void TriggerKey::load(Archive& ar, unsigned version)
