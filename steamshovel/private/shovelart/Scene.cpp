@@ -7,12 +7,15 @@
 #include "SceneObject.h"
 #include "Camera.h"
 #include "gl.h"
+#include "scripting/gil.h"
 
 SceneGroup::SceneGroup( ArtistPtr ptr ) :
 	std::vector<SceneObject*>(), source_(ptr), overlays_(false)
 {}
 
 SceneGroup::~SceneGroup(){
+	scripting::ScopedGIL gil;
+
 	for( iterator i = begin(); i!=end(); ++i ){
 		delete *i;
 	}
