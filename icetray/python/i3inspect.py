@@ -7,6 +7,7 @@
 #
 
 from glob import glob
+from packaging import version
 from icecube.icetray import I3Context, I3Configuration, I3Module, module_default_config
 import types, sys, os, inspect, copy, pkgutil
 import logging
@@ -74,8 +75,9 @@ try:
         log.debug("Parsing docstring from object: %s", obj.__name__)
         parser.parse(docstring, doc)
         # remove all "system messages" (ie errors from docutils) from the parse result
-        for n in list(doc.findall(nodes.system_message)):
-            n.parent.remove(n)
+        if version.parse(docutils.__version__) > version.parse("0.18"):
+            for n in list(doc.findall(nodes.system_message)):
+                n.parent.remove(n)
 
         doc.walkabout(harvester)
         return (doc.astext().strip(), harvester.params)
