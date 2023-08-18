@@ -100,13 +100,26 @@ def get_matplotlib_colormaps():
         # warning: this code uses a private data member,
         # this unsafe and may lead to conflicts in the future
         if not hasattr(m, '_segmentdata'):
-            continue
-        sd = m._segmentdata
-        rgb = sd['red'], sd['green'], sd['blue']
-        # Don't export maps whose colors are functions
-        # instead of interpolable values
-        if(any(callable(x) for x in rgb)):
-            continue
+            if not hasattr(m, 'colors'):
+                continue
+            # reconstruct the _segmentdata type of defining colors
+            # with the colors list.
+            else:
+                c = m.colors
+                l = len(c)
+                r = [(i/l, c[i][0], c[i][0]) for i in range(l)]
+                g = [(i/l, c[i][1], c[i][1]) for i in range(l)]
+                b = [(i/l, c[i][2], c[i][2]) for i in range(l)]
+                rgb = r, g, b
+
+        else:
+            sd = m._segmentdata
+            rgb = sd['red'], sd['green'], sd['blue']
+            # Don't export maps whose colors are functions
+            # instead of interpolable values
+            if(any(callable(x) for x in rgb)):
+                continue
+
         # turn unicode into string
         try:
             if type(name) == unicode:
