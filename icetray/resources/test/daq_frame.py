@@ -11,14 +11,14 @@ from icecube.icetray import I3Units
 # The test to run:
 class DAQFrameMuxing(unittest.TestCase):
     def testPhysFrame(self):
-        self.assert_("I3Geometry" in self.frame)
-        self.assert_("I3Calibration" in self.frame)
-        self.assert_("I3DetectorStatus" in self.frame)
-        self.assert_("InIceRawData" in self.frame)
-        self.assert_(len(self.frame["InIceRawData"]) == 1)
-        self.assert_("DrivingTime" in self.frame)
-        self.assert_("I3EventHeader" in self.frame)
-        self.assertEquals(frame["I3EventHeader"].sub_event_id, 1)
+        self.assertIn("I3Geometry", self.frame)
+        self.assertIn("I3Calibration", self.frame)
+        self.assertIn("I3DetectorStatus", self.frame)
+        self.assertIn("InIceRawData", self.frame)
+        self.assertEqual(len(self.frame["InIceRawData"]), 1)
+        self.assertIn("DrivingTime", self.frame)
+        self.assertIn("I3EventHeader", self.frame)
+        self.assertEqual(frame["I3EventHeader"].sub_event_id, 1)
 
 
 # Manufacture a file.

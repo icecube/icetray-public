@@ -77,15 +77,18 @@ class SubeventTest(unittest.TestCase):
 					pass
 		nrows = tabs[0].nrows
 		for tab in tabs[1:]:
-			self.assertEquals(nrows, tab.nrows)
+			self.assertEqual(nrows, tab.nrows)
 		for i in range(nrows):
 			canonical = tabs[0][i]
 			for tab in tabs[1:]:
 				row = tab[i]
 				for field in ['Run', 'Event', 'SubEvent', 'SubEventStream']:
-					self.assertEquals(canonical[field], row[field],
-					    "'%s' are equal in row %d (%d != %d)" % (field, i, 
-					    canonical[field], row[field]))
+					self.assertEqual(
+        canonical[field],
+        row[field],
+        "'%s' are equal in row %d (%d != %d)" % (field, i, 
+					    canonical[field], row[field])
+    )
 		hdf.close()
 
 
@@ -129,20 +132,26 @@ class SubeventMergingTest(unittest.TestCase):
 			itab = hdf2.get_node('/__I3Index__/%s' % tab.name)
 			imtab = hdfmerge.get_node('/__I3Index__/%s' % tab.name)
 			mtab = hdfmerge.get_node('/%s' % tab.name)
-			self.assertEquals(mtab.nrows, nrows1+nrows2)
+			self.assertEqual(mtab.nrows, nrows1+nrows2)
 			for i in range(nrows2):
 				row = tab[i]
 				mrow = mtab[i+nrows1]
 				for field in ['Run', 'Event', 'SubEvent', 'SubEventStream', 'exists']:
-					self.assertEquals(row[field], mrow[field],
-					    "'%s' are equal in row %d (%d != %d)" % (field, i, 
-					    row[field], mrow[field]))
+					self.assertEqual(
+        row[field],
+        mrow[field],
+        "'%s' are equal in row %d (%d != %d)" % (field, i, 
+					    row[field], mrow[field])
+    )
 				irow = itab[i]
 				imrow = imtab[i+nrows1]
 				for field in ['Run', 'Event', 'SubEvent', 'SubEventStream', 'exists']:
-					self.assertEquals(irow[field], imrow[field],
-					    "'%s' are equal in row %d (%d != %d)" % (field, i, 
-					    irow[field], imrow[field]))
+					self.assertEqual(
+        irow[field],
+        imrow[field],
+        "'%s' are equal in row %d (%d != %d)" % (field, i, 
+					    irow[field], imrow[field])
+    )
 		hdf1.close()
 		hdf2.close()
 		hdfmerge.close()

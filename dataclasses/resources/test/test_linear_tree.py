@@ -15,7 +15,7 @@ class LinearTreeTest(unittest.TestCase):
 		self.mctree = self.frame['I3MCTree']
 		self.re_mctree = self.frame['I3LinearizedMCTree']
 	def testSize(self):
-		self.assertEquals(len(self.mctree), len(self.re_mctree))
+		self.assertEqual(len(self.mctree), len(self.re_mctree))
 	
 	def assertEquivalent(self, d1, d2, tol=None):
 		"""One-stop shop for asserting equality to within a tolerance"""
@@ -23,7 +23,7 @@ class LinearTreeTest(unittest.TestCase):
 			pass
 		else:
 			if tol is None:
-				self.assertEquals(d1, d2)
+				self.assertEqual(d1, d2)
 			elif abs(d1-d2) >= tol:
 				raise AssertionError("|%s - %s| >= %s" % (d1, d2, tol))
 	def assertEqualParticle(self, p1, p2):
@@ -38,13 +38,13 @@ class LinearTreeTest(unittest.TestCase):
 		self.assertEquivalent(p1.length, p2.length)
 		self.assertEquivalent(p1.speed, p2.speed)
 		
-		self.assertEquals(p1.type, p2.type)
-		self.assertEquals(p1.location_type, p2.location_type)
-		self.assertEquals(p1.shape, p2.shape)
-		self.assertEquals(p1.fit_status, p2.fit_status)
+		self.assertEqual(p1.type, p2.type)
+		self.assertEqual(p1.location_type, p2.location_type)
+		self.assertEqual(p1.shape, p2.shape)
+		self.assertEqual(p1.fit_status, p2.fit_status)
 		
-		self.assertEquals(p1.major_id, p2.major_id)
-		self.assertEquals(p1.minor_id, p2.minor_id)
+		self.assertEqual(p1.major_id, p2.major_id)
+		self.assertEqual(p1.minor_id, p2.minor_id)
 		
 		
 	def testEquivalence(self):

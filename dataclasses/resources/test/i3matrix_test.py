@@ -20,8 +20,8 @@ class I3MatrixTest(unittest.TestCase):
 		"""
 		m = I3Matrix(3,2)
 		a = numpy.asarray(m)
-		self.assertEquals(a.shape, (3,2))
-		self.assertEquals(a.dtype, numpy.float64)
+		self.assertEqual(a.shape, (3,2))
+		self.assertEqual(a.dtype, numpy.float64)
 	
 	def testRefCounting(self):
 		"""
@@ -33,7 +33,7 @@ class I3MatrixTest(unittest.TestCase):
 			a = numpy.asarray(m)
 			return (a, id(m))
 		a, mid = factory()
-		self.assertEquals(id(a.base), mid)
+		self.assertEqual(id(a.base), mid)
 	
 	def testArrayInitialization(self):
 		"""
@@ -41,7 +41,7 @@ class I3MatrixTest(unittest.TestCase):
 		"""
 		m = I3Matrix(3,2,numpy.pi)
 		a = numpy.asarray(m)
-		self.assert_((a == numpy.pi).all())
+		self.assertTrue((a == numpy.pi).all())
 	
 	def testFromNumpy(self):
 		self.assertRaises(TypeError, I3Matrix, 1)
@@ -67,10 +67,10 @@ class I3MatrixTest(unittest.TestCase):
 		mat = I3Matrix(orig)
 		view = numpy.asarray(mat)
 		
-		self.assert_((view == orig).all())
+		self.assertTrue((view == orig).all())
 		view += 1
-		self.assert_((orig == 0).all())
-		self.assert_((view == 1).all())
+		self.assertTrue((orig == 0).all())
+		self.assertTrue((view == 1).all())
 	
 	def testRoundTrip(self):
 		"""
@@ -86,8 +86,8 @@ class I3MatrixTest(unittest.TestCase):
 		
 		frame = dataio.I3File(fname).pop_frame()
 		view = numpy.asarray(frame['foo'])
-		self.assertEquals(view.shape, orig.shape)
-		self.assert_((view == orig).all())
+		self.assertEqual(view.shape, orig.shape)
+		self.assertTrue((view == orig).all())
 		
 		os.unlink(fname)
 		

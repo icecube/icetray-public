@@ -67,7 +67,7 @@ class TestI3DOMFunctions(unittest.TestCase):
             +d1.gaus_amp*math.sqrt(math.pi/2)*d1.gaus_mean*d1.gaus_width*
             (1+math.erf(d1.gaus_mean/(d1.gaus_width*math.sqrt(2))))
             +d1.gaus_amp*d1.gaus_width**2*math.exp(-0.5*(d1.gaus_mean/d1.gaus_width)**2))
-        self.assertTrue(manalytic-mspe1<0.01, "these should be close.")
+        self.assertLess(manalytic-mspe1, 0.01, "these should be close.")
         
 
     def test_FADCBaseline_equality(self):

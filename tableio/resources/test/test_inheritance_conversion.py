@@ -108,7 +108,7 @@ class BaseConverter(unittest.TestCase):
 		hdf = tables.open_file("test_foo.hdf5")
 		table=hdf.get_node("/Object");
 		self.assertIsNotNone(table, "Object table exists")
-		self.assertTrue("a" in table.colnames, "'A' parameter was recorded")
+		self.assertIn("a", table.colnames, "'A' parameter was recorded")
 		self.assertTrue(not "b" in table.colnames, "'B' parameter does not exist")
 
 class GenericSubclassConverter(unittest.TestCase):
@@ -124,7 +124,7 @@ class GenericSubclassConverter(unittest.TestCase):
 		hdf = tables.open_file("test_foo2.hdf5")
 		table=hdf.get_node("/Object");
 		self.assertIsNotNone(table, "Object table exists")
-		self.assertTrue("a" in table.colnames, "'A' parameter was recorded")
+		self.assertIn("a", table.colnames, "'A' parameter was recorded")
 		self.assertTrue(not "b" in table.colnames, "'B' parameter does not exist")
 		
 class SpecificSubclassConverter(unittest.TestCase):
@@ -140,8 +140,8 @@ class SpecificSubclassConverter(unittest.TestCase):
 		hdf = tables.open_file("test_bar.hdf5")
 		table=hdf.get_node("/Object");
 		self.assertIsNotNone(table, "Object table exists")
-		self.assertTrue("a" in table.colnames, "'A' parameter was recorded")
-		self.assertTrue("b" in table.colnames, "'B' parameter was recorded")
+		self.assertIn("a", table.colnames, "'A' parameter was recorded")
+		self.assertIn("b", table.colnames, "'B' parameter was recorded")
 
 class CanConvert(unittest.TestCase):
 	def testConversion(self):

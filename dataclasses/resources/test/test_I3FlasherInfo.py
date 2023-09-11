@@ -30,7 +30,7 @@ class TestI3FlasherInfo(unittest.TestCase):
         fi1.raw_atwd3      = [ 1, 2, 3 ]
         fi2.raw_atwd3      = [ 1, 2, 3 ]
 
-        self.assertTrue(fi1==fi2, "this should be true.")
+        self.assertEqual(fi1, fi2, "this should be true.")
 
 
     def test_I3FlasherInfo_inequality(self):
@@ -55,7 +55,7 @@ class TestI3FlasherInfo(unittest.TestCase):
         fi1.raw_atwd3      = [ 1, 2, 3 ]
         fi2.raw_atwd3      = [ 1, 2, 3 ]
 
-        self.assertFalse(fi1==fi2, "this should be false.")
+        self.assertNotEqual(fi1, fi2, "this should be false.")
 
 
 unittest.main()

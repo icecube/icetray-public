@@ -66,13 +66,13 @@ class I3PythonConverterTest(unittest.TestCase):
 		
 	def testKeys(self):
 		fields = list(self.desc.field_names);
-		self.assertEquals( fields, list(self.rows.keys()) )
+		self.assertEqual(fields, list(self.rows.keys()))
 	def testEnum(self):
 		field = 'trigger_type'
 		val = dataclasses.I3DOMLaunch.TriggerType.SPE_DISCRIMINATOR_TRIGGER
 		self.rows[field] = val
 		got = self.rows[field]
-		self.assertEquals( int(val), got )
+		self.assertEqual(int(val), got)
 	def testIntegerScalars(self):
 		types = self.conversions[int]
 		reverse_types = dict([(b,a) for a,b in self.codes.items()])
@@ -82,13 +82,13 @@ class I3PythonConverterTest(unittest.TestCase):
 			field = reverse_types[t]
 			self.rows[field] = val
 			got_val = self.rows[field]
-			self.assertEquals( val, got_val, "Set field '%s' to %d, got %d back."%(field,val,got_val))
+			self.assertEqual(val, got_val, "Set field '%s' to %d, got %d back."%(field,val,got_val))
 	def testLongScalars(self):
 		import sys
 		field,val = 'signed_long',sys.maxsize
 		self.rows[field] = val;
 		got_val = self.rows[field]
-		self.assertEquals( val, got_val, "Set field '%s' to %d, got %d back."%(field,val,got_val))
+		self.assertEqual(val, got_val, "Set field '%s' to %d, got %d back."%(field,val,got_val))
 		bad_news = lambda: self.rows.set(field,sys.maxsize+1)
 		self.assertRaises(OverflowError, bad_news)
 	def testArray(self):
@@ -96,14 +96,14 @@ class I3PythonConverterTest(unittest.TestCase):
 		arr = array.array(self.codes[field[:-4]],range(128))
 		self.rows[field] = arr
 		got = self.rows[field]
-		self.assertEquals( list(arr), got )
+		self.assertEqual(list(arr), got)
 	if have_numpy:
 		def testNumpy(self):
 			field = 'signed_long_vec'
 			arr = numpy.array(range(128),self.codes[field[:-4]])
 			self.rows[field] = arr
 			got = self.rows[field]
-			self.assertEquals( list(arr), got )
+			self.assertEqual(list(arr), got)
 			import sys
 			# try passing an array in byte-swapped order
 			if (sys.byteorder == 'little'):
@@ -119,7 +119,7 @@ class I3PythonConverterTest(unittest.TestCase):
 		field = 'signed_int_vec'
 		self.rows[field] = vec
 		got = self.rows[field]
-		self.assertEquals( list(range(128)), got )
+		self.assertEqual(list(range(128)), got)
 	def testVectorDouble(self):
 		vec = dataclasses.I3VectorDouble()
 		for r in range(128): vec.append(r+3)

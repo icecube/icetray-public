@@ -44,15 +44,15 @@ class I3RecoPulseSeriesMapMaskTest(unittest.TestCase):
 	def testApply(self):
 		mask = self.frame['Mask1']
 		pulses = mask.apply(self.frame)
-		self.assertEquals(len(pulses), 2)
-		self.assertEquals(len(pulses.values()[0]), 3)
-		self.assertEquals(len(pulses.values()[1]), 2)
+		self.assertEqual(len(pulses), 2)
+		self.assertEqual(len(pulses.values()[0]), 3)
+		self.assertEqual(len(pulses.values()[1]), 2)
 		
 		mask = self.frame['Mask2']
 		pulses = mask.apply(self.frame)
-		self.assertEquals(len(pulses), 2)
-		self.assertEquals(len(pulses.values()[0]), 2)
-		self.assertEquals(len(pulses.values()[1]), 3)
+		self.assertEqual(len(pulses), 2)
+		self.assertEqual(len(pulses.values()[0]), 2)
+		self.assertEqual(len(pulses.values()[1]), 3)
 		
 	def testCombine(self):
 		mask1 = self.frame['Mask1']
@@ -60,39 +60,39 @@ class I3RecoPulseSeriesMapMaskTest(unittest.TestCase):
 		
 		combined = mask1 & mask2
 		pulses = combined.apply(self.frame)
-		self.assertEquals(len(pulses), 2)
-		self.assertEquals(len(pulses.values()[0]), 2)
-		self.assertEquals(len(pulses.values()[1]), 2)
+		self.assertEqual(len(pulses), 2)
+		self.assertEqual(len(pulses.values()[0]), 2)
+		self.assertEqual(len(pulses.values()[1]), 2)
 		
 		combined = mask1 | mask2
 		pulses = combined.apply(self.frame)
-		self.assertEquals(len(pulses), 2)
-		self.assertEquals(len(pulses.values()[0]), 3)
-		self.assertEquals(len(pulses.values()[1]), 3)
+		self.assertEqual(len(pulses), 2)
+		self.assertEqual(len(pulses.values()[0]), 3)
+		self.assertEqual(len(pulses.values()[1]), 3)
 		
 	def testQuery(self):
 		mask1 = self.frame['Mask1']
 		
-		self.assertEquals(mask1.any(), True)
-		self.assertEquals(mask1.all(), False)
-		self.assertEquals(mask1.sum(), 5)
+		self.assertEqual(mask1.any(), True)
+		self.assertEqual(mask1.all(), False)
+		self.assertEqual(mask1.sum(), 5)
 		
 		mask1.set_none()
 		
-		self.assertEquals(mask1.any(), False)
-		self.assertEquals(mask1.sum(), 0)
+		self.assertEqual(mask1.any(), False)
+		self.assertEqual(mask1.sum(), 0)
 	
 	def testEqual(self):
 		mask1 = self.frame['Mask1']
 		mask2 = self.frame['Mask2']
 		mask3 = dataclasses.I3RecoPulseSeriesMapMask(mask1)
 		
-		self.assertNotEquals(mask1,mask2)
+		self.assertNotEqual(mask1, mask2)
 		
-		self.assertEquals(mask1.source,mask3.source)
-		self.assertEquals(mask1.bits,mask3.bits)
-		self.assertEquals(mask1,mask3)
-		self.assertEquals(mask1 != mask3,False)
+		self.assertEqual(mask1.source, mask3.source)
+		self.assertEqual(mask1.bits, mask3.bits)
+		self.assertEqual(mask1, mask3)
+		self.assertEqual(mask1 != mask3, False)
 		
 if __name__ == '__main__':
 	unittest.main()

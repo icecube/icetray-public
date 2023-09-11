@@ -15,22 +15,22 @@ max_phys_frames = 3
 class DAQFrameSplitting(unittest.TestCase):
     def testPhysFrame(self):
         global phys_frames
-        self.assert_("I3Geometry" in self.frame)
-        self.assert_("I3Calibration" in self.frame)
-        self.assert_("I3DetectorStatus" in self.frame)
-        self.assert_("InIceRawData" in self.frame)
-        self.assert_(len(self.frame["InIceRawData"]) == 1)
-        self.assert_("DrivingTime" in self.frame)
-        self.assert_("I3EventHeader" in self.frame)
-        self.assertEquals(self.frame["I3EventHeader"].sub_event_stream, 'splitter')
-        self.assertEquals(self.frame["I3EventHeader"].sub_event_id, phys_frames)
-        self.assertEquals(self.frame["I3EventHeader"].sub_event_id, self.frame["TriggerID"].value)
-        self.assertEquals(self.frame["I3EventHeader"].event_id, frame["I3EventHeader"].event_id)
-        self.assertEquals(self.frame["I3EventHeader"].run_id, frame["I3EventHeader"].run_id)
+        self.assertIn("I3Geometry", self.frame)
+        self.assertIn("I3Calibration", self.frame)
+        self.assertIn("I3DetectorStatus", self.frame)
+        self.assertIn("InIceRawData", self.frame)
+        self.assertEqual(len(self.frame["InIceRawData"]), 1)
+        self.assertIn("DrivingTime", self.frame)
+        self.assertIn("I3EventHeader", self.frame)
+        self.assertEqual(self.frame["I3EventHeader"].sub_event_stream, 'splitter')
+        self.assertEqual(self.frame["I3EventHeader"].sub_event_id, phys_frames)
+        self.assertEqual(self.frame["I3EventHeader"].sub_event_id, self.frame["TriggerID"].value)
+        self.assertEqual(self.frame["I3EventHeader"].event_id, frame["I3EventHeader"].event_id)
+        self.assertEqual(self.frame["I3EventHeader"].run_id, frame["I3EventHeader"].run_id)
         phys_frames += 1
 
     def Finish(self):
-        self.assertEquals(phys_frames, max_phys_frames)
+        self.assertEqual(phys_frames, max_phys_frames)
 
 
 # Manufacture a file.
