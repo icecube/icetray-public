@@ -369,7 +369,7 @@ double I3CrossSection::evaluateCrossSection(double energy, double x, double y,
 						 << std::pow(10.,totalCrossSection_->lower_extent(0)) << " GeV,"
 						 << std::pow(10.,totalCrossSection_->upper_extent(0)) << " GeV]");
     }
-	if(x<=0 || x>=1)
+	if(x<=0 || x>1)
     {
 		log_fatal_stream("Interaction x out of range: " << x);
     }
