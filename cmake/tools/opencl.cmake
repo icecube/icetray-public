@@ -17,7 +17,7 @@ if (USE_OPENCL)
   if("$ENV{OPENCL_VENDOR_PATH}" MATCHES "^/cvmfs/icecube.opensciencegrid.org/distrib/")
     get_filename_component(OPENCL_BASE "$ENV{OPENCL_VENDOR_PATH}/../../.." ABSOLUTE)
     message(STATUS "Searching cvmfs ${OPENCL_BASE}")
-    SET(OpenCL_LIBRARY "${OPENCL_BASE}/lib")
+    SET(OpenCL_LIBRARY "${OPENCL_BASE}/lib/x86_64/libOpenCL.so")
     SET(OpenCL_INCLUDE_DIR "${OPENCL_BASE}/include")
   endif()
 
