@@ -1,10 +1,10 @@
 /**
  *  $Id$
- *  
+ *
  *  Copyright (C) 2007
  *  Torsten Schmidt
  *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +13,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +25,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #ifndef KEEP_H_INCLUDED
 #define KEEP_H_INCLUDED
@@ -51,11 +51,13 @@ class I3Context;
 
 /** Clean up frame and keep only objects with names that match any some given keys.
  *
- * Keep supports one parameter:
+ * Keep supports two parameters:
  * <ul>
  * <li><VAR>Keys</VAR> (keep frame objects with names that match any of these keys
  * (default value is "I3Calibration", "I3DetectorStatus", "I3Geometry",
- * "DrivingTime", "I3EventHeader")).
+ * "DrivingTime", "I3EventHeader")) and
+ * <li><VAR>KeyStarts</VAR> (keep frame objects with names that start with any
+ * of these strings (default is an empty list)).
  * </ul>
  */
 class Keep : public I3ConditionalModule
@@ -75,8 +77,9 @@ class Keep : public I3ConditionalModule
  private:
   std::vector<std::string> keysParam_;
   std::set<std::string> keys_;
+  std::set<std::string> keyStarts_;
   std::set<I3Frame::Stream> streams_;
-  
+
   // private copy constructors and assignment
   Keep(const Keep&);
   Keep& operator=(const Keep&);
