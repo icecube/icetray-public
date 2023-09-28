@@ -6,12 +6,6 @@ Release Notes
 main
 ----
 
-Sep. 28, 2023 don la dieu (nega at icecube.umd.edu)
----------------------------------------------------
-IceTray Release v1.8.0
-
-* replace deprecated unittest asserts with modern equivalents  (#3168)
-
 June 22, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.7.0
@@ -27,7 +21,7 @@ IceTray Release v1.7.0
 
 Apr. 12, 2023 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
-IceTray Release v1.6.0
+IceTray Release V1.6.0
 
 * Restore use of BUILD_${PROJECT}=OFF (#3058)
 * Cleanup temporary file use in tests

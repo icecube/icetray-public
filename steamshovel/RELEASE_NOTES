@@ -6,13 +6,6 @@ Release Notes
 main
 ----
 
-Sep. 28, 2023 don la dieu (nega at icecube.umd.edu)
----------------------------------------------------
-IceTray Release v1.8.0
-
-* replace deprecated unittest asserts with modern equivalents  (#3168)
-* make non-segmented matplotlib colormaps available (#3157)
-
 June 22, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.7.0
