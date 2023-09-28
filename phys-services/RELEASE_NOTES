@@ -6,6 +6,13 @@ Release Notes
 main
 ----
 
+Sep. 28, 2023 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.8.0
+
+* Modified I3CrossSection::evaluateCrossSection to allow x = 1 (for GR (#3175) 
+* replace deprecated unittest asserts with modern equivalents  (#3168)
+
 June 22, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.7.0
