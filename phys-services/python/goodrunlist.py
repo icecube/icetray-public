@@ -236,7 +236,7 @@ class RunInfo(dict):
         :return: list of bundled (run id, start-time of event, end-time of run) that took place between ``start_time`` and ``end_time``
         """
 
-        test_url = "https://hercules.icecube.wisc.edu/run_info/"
+        test_url = "https://virgo.icecube.wisc.edu/run_info/"
         params = {
             "user": "icecube",
             "pass": "skua",
