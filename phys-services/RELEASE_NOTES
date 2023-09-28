@@ -8,6 +8,12 @@ main
 
 Sep. 28, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
+IceTray Release v1.8.1
+
+* updated hercules url to virgo (#3186)
+
+Sep. 28, 2023 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
 IceTray Release v1.8.0
 
 * Modified I3CrossSection::evaluateCrossSection to allow x = 1 (for GR (#3175) 
