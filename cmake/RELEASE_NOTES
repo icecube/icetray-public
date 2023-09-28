@@ -8,6 +8,12 @@ Release Notes
 main
 ----
 
+Sep. 28, 2023 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.8.0
+
+* fix opencl detection on cvmfs when no host opencl is installed (#3177)
+
 June 22, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.7.0
@@ -20,7 +26,7 @@ IceTray Release v1.7.0
 
 Apr. 12, 2023 don la dieu (nega AT icecube.umd.edu)
 ---------------------------------------------------
-IceTray Release V1.6.0
+IceTray Release v1.6.0
 
 * "Recalculate" the default install directory with ``make rebuild_cache && make install``
 * Minor cleanups
@@ -78,12 +84,14 @@ Combo Release V00-00-00
 
 V18-12-00 - December 11, 2018, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
+
 * New cvmfs genie detection.
 * made OpenCL detection a little more robust.
 * added EXPECT_THROW macro.
 
 V18-06-00 - June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
 ----------------------------------------------------------------
+
 * add boost-python detection for boost 1.67
 * add default value for I3_TESTDATA
 * min cmake version is now 3.2.2
@@ -96,14 +104,17 @@ V17-11-00 - November 15, 2017, Alex Olivas  (olivas@icecube.umd.edu)
 
 V17-05-00 - May 9, 2017, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------
+
 * support for zstd
 
 V17-05-01 - May 18, 2017, Alex Olivas  (olivas@icecube.umd.edu)
 ---------------------------------------------------------------
+
 * incremental release.
 
 V17-05-02 - June 28, 2017, Alex Olivas  (olivas@icecube.umd.edu)
 ----------------------------------------------------------------
+
 * enforce C++11
 
 V17-03-00 - March 24, 2017, Alex Olivas  (olivas@icecube.umd.edu)
