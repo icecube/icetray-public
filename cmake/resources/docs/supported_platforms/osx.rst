@@ -3,7 +3,7 @@
 Apple macOS
 ^^^^^^^^^^^
 
-Icetray is generally well supported on MacOS for development and testing efforts.
+Icetray is generally well supported on macOS for development and testing efforts.
 Additional tools are needed to support this, and this document provides some important details
 on setting up and installing needed dependencies.  Before attempting to install dependencies
 by hand, please take a look at these notes and suggestions.
@@ -11,13 +11,13 @@ by hand, please take a look at these notes and suggestions.
 Step-By-Step Instructions for M1 and Intel Macs
 """""""""""""""""""""""""""""""""""""""""""""""
 
-The following setup works with the main_ branch (23feb9d41_) of
-icetray_ on macOS 13.0.1 Ventura as of 2022-11-18.  It also guides you
-through an installation of :doc:`../homebrew`.
+The following setup works with the main_ branch of
+IceTray_ on macOS 12 (Monterey) and macOS 13 (Ventura) as of 2023-09-27.
+macOS 14 (Sonoma) is newly released, and is not thoroughly tested.
+It also guides you through an installation of :doc:`../homebrew`.
 
 .. _main: https://github.com/icecube/icetray/tree/main
-.. _icetray: https://github.com/icecube/icetray
-.. _23feb9d41: https://github.com/icecube/icetray/tree/23feb9d41
+.. _IceTray: https://github.com/icecube/icetray
 
 .. code-block:: console
 
@@ -28,6 +28,7 @@ through an installation of :doc:`../homebrew`.
    $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
    # checkout icetray to a location of your choice
+   # Note:  $I3_SRC does not have to be set, just a known directory of your choice
    $ git clone git@github.com:icecube/icetray.git $I3_SRC
 
    # move to that location
@@ -39,17 +40,12 @@ through an installation of :doc:`../homebrew`.
    # tell python where hdf5 is
    $ export HDF5_DIR=$(brew --prefix hdf5)
 
-   # use python 3.11 as required by boost-python3.
+   # Esnsure you are using python 3.11 as required by brew's boost-python3.
    # (See: 'brew info boost-python3')
-   $ brew install python@3.11
-   $ brew unlink python@3.10
-   $ brew unlink python@3.11
-   $ brew link --force python@3.11
-   $ export PATH=/opt/homebrew/opt/python@3.11/libexec/bin:${PATH}
    $ python3 --version
-   Python 3.11.0
+   Python 3.11.5
 
-   # be sure to activate your new brew environment:  either load it explcitly or open a new Terminal!
+   # be sure you have activated your new brew environment:  either load it explcitly or open a new Terminal!
    #   'which python3' should be the new brew version.
 
    # create and enter virutal envionment
@@ -59,6 +55,10 @@ through an installation of :doc:`../homebrew`.
    # install python packages with pip3
    $ pip3 install --upgrade pip
    $ pip3 install -r requirements.txt
+
+   # (Optional) add needed settings to your .bash_profile/.zshrc
+   source $HOME/py3/bin/activate
+   export HDF5_DIR=$(brew --prefix hdf5)
 
 Other Important Notes
 """""""""""""""""""""
@@ -96,19 +96,16 @@ Developer Tools
 You'll need a compiler in order to build the IceCube software. Apple distributes
 clang and llvm-gcc both as a stand-alone download and as part of its Xcode IDE,
 but requires you to register for an `Apple ID`_  before you can download either
-one. **The Xcode download is 10 times larger than the command-line tools package,
-so you should only download it if you need it for non-IceCube work.**
+one. **The `Xcode download`_ is 10 times larger than the command-line tools
+package, so you should only download it if you need it for non-IceCube work.**
 
 .. _`Apple ID`: https://support.apple.com/apple-id
+.. _`Xcode download`: https://developer.apple.com/downloads
 
 Command-Line Tools
 ..................
 
-1) Go to the `Apple Developer Downloads page <https://developer.apple.com/downloads>`_,
-   signing in with your `Apple ID`_.
-2) Download and install the latest Command Line Tools.
-
-Alternatively you can just type ``xcode-select --install`` at the command-line to install
+1) Type ``xcode-select --install`` at the command-line to install
 the command line tools.
 
 Xcode
@@ -133,15 +130,14 @@ Xcode
 After the install finishes you should have both clang and llvm-gcc::
 
 	$ clang++ --version
-	Apple clang version 13.0.0 (clang-1300.0.29.3)
-	Target: arm64-apple-darwin21.1.0
+	Apple clang version 15.0.0 (clang-1500.0.40.1)
+	Target: arm64-apple-darwin23.0.0
 	Thread model: posix
 	InstalledDir: /Library/Developer/CommandLineTools/usr/bin
 
 	$ g++ --version
-	Configured with: --prefix=/Library/Developer/CommandLineTools/usr --with-gxx-include-dir=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/4.2.1
-	Apple clang version 13.0.0 (clang-1300.0.29.3)
-	Target: arm64-apple-darwin21.1.0
+	Apple clang version 15.0.0 (clang-1500.0.40.1)
+	Target: arm64-apple-darwin23.0.0
 	Thread model: posix
 	InstalledDir: /Library/Developer/CommandLineTools/usr/bin
 
@@ -150,56 +146,46 @@ After the install finishes you should have both clang and llvm-gcc::
 Homebrew
 """"""""
 
-:doc:`../homebrew` is probably the easiest way to install packages on macOS, and
+:doc:`../homebrew` is the easiest way to install packages on macOS, and
 distributes the most heavy-weight dependencies (cmake, boost, and Qt) as binary
 packages.  Install them like this::
 
   $ brew install cmake
 
-The following formulae are necessary to compile IceTray::
-
-  cmake python boost boost-python3 gsl wget libarchive photospline
-
-The following formulae are recommended for optional functionality of components of IceTray::
-
-  cdk qt@5 doxygen cfitsio hdf5 nlopt minuit2 suite-sparse healpix zstd
-
-Plese see the **Step-By-Step Instructions** above
-
 Most of the recommended formulae are in the main distribution, but IceCube
-maintains a `tap`_ for uncommon software that IceTray depends on.
+maintains a `Homebrew Tap`_ for uncommon software that IceTray depends on.
 The following formula are also recommended from the IceCube-SPNO/icecube tap::
 
   pal cppzmq photospline
 
-.. _tap: https://docs.brew.sh/Taps
+.. _`Homebrew Tap`: https://docs.brew.sh/Taps
 
+The provided ``Brewfile`` will tap and install all needed depedencies.
+Plese see the `step-by-step instructions
+<#step-by-step-instructions-for-m1-and-intel-macs>`_ above.
 
 ROOT on macOS
 """""""""""""
 
-IceTray no longer depends on CERN's ROOT. If you want it though, the
-best way to install it is via Homebrew. This is also the `method recomended
-by CERN <https://root.cern/install/#macos-package-managers>`_ . Besure to
-follow any instructions `brew` gives you.
+IceTray no longer depends on CERN's ROOT package. If you still need it, a
+good way to install it is via Homebrew. This is the `method recomended
+by CERN <https://root.cern/install/#macos-package-managers>`_ . Be sure to
+follow any instructions :command:`brew` gives you.
+::
 
-   brew install root
+   $ brew install root
 
 .. _osxpythonsetup:
 
 Python on macOS
 """""""""""""""
 
-Apple has done a fairly decent of including a recent version of python2 in
-macOS. But now that IceTray is transitioning to python3 it is necessary to
-compile IceTray against python3. The previous section described the easiest
+In recent macOS releases, Apple has included recent version of python in
+macOS. However, IceTray depends on boost_python, which needs to exactly match the selected
+version of python used with IceTray.  The previous section described the easiest
 way to install python3 on macOS: using homebrew.
 
-With python3 installed via homebrew, the :command:`python` command will still refer
-to the system python, but python3 will refer to python3. IceTray will
-automatically detect the homebrew version of python and link against it.
-Python3 packages can be installed with the :command:`pip3` command, and ipython
-can be accessed with :command:`ipython3` etc.
-
-IceTray relies on a number of python packages to work, the easiest way to
-instal them is by following the **Step-By-Step Instructions** above.
+IceTray additionally relies on a number of python packages to work.
+The easiest way to install them is by following the `step-by-step instructions
+<#step-by-step-instructions-for-m1-and-intel-macs>`_ above, which will
+install them via pip and homebrew as needed.
