@@ -4,6 +4,16 @@ Release Notes
 main
 ----
 
+Oct. 12, 2023 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.8.2
+
+* Attach tableio converter submodule to current module (#3195)
+
+    * Attach tableio converter submodule to current module. Fixes #3187
+    * Allow tableio namespace outside module definition
+      e.g. in tests, where scope is None and None has no name
+
 Sep. 28, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.8.0
