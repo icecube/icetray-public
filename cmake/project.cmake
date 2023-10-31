@@ -237,6 +237,13 @@ macro(i3_add_library THIS_LIB_NAME)
     #    )
     #endif(APPLE)
 
+    if(APPLE_NEW_LINKER)
+      set_target_properties(${THIS_LIB_NAME}
+        PROPERTIES
+        LINK_FLAGS "-Wl,-no_warn_duplicate_libraries"
+        )
+    endif()
+
     if(NOT ${THIS_LIB_NAME}_ARGS_WITHOUT_I3_HEADERS)
       set_target_properties(${THIS_LIB_NAME}
 	PROPERTIES
@@ -503,10 +510,17 @@ macro(i3_executable THIS_EXECUTABLE_NAME)
     endif()
 
     if(APPLE)
+      if(APPLE_NEW_LINKER)
+	set_target_properties(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME}
+	  PROPERTIES
+	  LINK_FLAGS "-Wl,-no_warn_duplicate_libraries"
+	)
+      else()
       set_target_properties(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME}
 	PROPERTIES
 	LINK_FLAGS "-bind_at_load -multiply_defined suppress"
 	)
+      endif()
     endif(APPLE)
     install(TARGETS ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME} RUNTIME DESTINATION bin)
 
@@ -558,10 +572,17 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
       NO_SYSTEM_FROM_IMPORTED TRUE
       )
     if(APPLE)
+      if(APPLE_NEW_LINKER)
+	set_target_properties(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
+	  PROPERTIES
+	  LINK_FLAGS "-Wl,-no_warn_duplicate_libraries"
+	)
+      else()
       set_target_properties(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
 	PROPERTIES
 	LINK_FLAGS "-bind_at_load -multiply_defined suppress"
 	)
+      endif()
     endif(APPLE)
 
     use_projects(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
@@ -708,20 +729,13 @@ macro(i3_add_pybindings MODULENAME)
       PROJECTS "${${MODULENAME}_ARGS_USE_PROJECTS}"
       )
 
-    # Disabled special linker flags for APPLE:
-    #  - undefined dynamic_lookup: it seems not to hurt letting the
-    #      linker throw an error for undefined symbols.
-    #  - flat_namespace: not using the two-level namespace (library+symbol name)
-    #      seems to introduce bugs in exception handling with boost::python.
-    if(APPLE)
+    if(APPLE_NEW_LINKER)
       set_target_properties(${MODULENAME}-pybindings
-        PROPERTIES
-        LINK_FLAGS "-bundle"
-        #used to be here: -flat_namespace -undefined dynamic_lookup -multiply_defined suppress
-        )
-    endif(APPLE)
-
-  endif ()
+	PROPERTIES
+	LINK_FLAGS "-Wl,-no_warn_duplicate_libraries"
+      )
+    endif()
+  endif()
 endmacro(i3_add_pybindings)
 
 

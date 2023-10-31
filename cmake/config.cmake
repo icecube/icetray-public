@@ -144,6 +144,21 @@ string(REGEX REPLACE "^.*(g(cc|[+][+])|clang|Apple LLVM)[ -][Vv]ers(ion|ión|io|
                      "\\1-\\4" COMPILER_ID_TAG ${COMPILER_ID_TAG})
 
 #
+# Check Apple linker version
+#
+if(APPLE)
+  execute_process(COMMAND ${CMAKE_CXX_COMPILER} -Wl,-v
+    COMMAND "egrep" "-o PROJECT:\\w+"
+    ERROR_VARIABLE APPLE_NEW_LINKER)
+  # Xcode >= 15 reports "dyld" for the linker vs. "ld64"
+  if(APPLE_NEW_LINKER MATCHES "dyld")
+    set(APPLE_NEW_LINKER TRUE)
+  else()
+    set(APPLE_NEW_LINKER FALSE)
+  endif()
+endif()
+
+#
 # Get system info
 #
 set(OSTYPE ${CMAKE_SYSTEM_NAME})
