@@ -1,28 +1,37 @@
 #!/usr/bin/env python3
+
+import unittest
 from icecube import icetray
-from icecube.icetray.I3Test import ENSURE
 
 
-# we're testing for _equality_, not _identity_, so we need to hide it from linters
-ENSURE( icetray.I3Bool(True) == True , "I3Bool == True failed")          # noqa: E712
-ENSURE( icetray.I3Bool(False) == False , "I3Bool == False failed")       # noqa: E712
+class I3BoolCompare(unittest.TestCase):
+    def testI3Bool(self):
+        # we're testing for _equality_, not _identity_
+        self.assertEqual(icetray.I3Bool(True), True, "I3Bool == True failed")
+        self.assertEqual(icetray.I3Bool(False), False, "I3Bool == False failed")
 
-ENSURE( icetray.I3Bool(True) != False , "I3Bool != False failed")        # noqa: E712
-ENSURE( icetray.I3Bool(False) != True , "I3Bool != True failed")         # noqa: E712
+        self.assertNotEqual(icetray.I3Bool(True), False, "I3Bool != False failed")
+        self.assertNotEqual(icetray.I3Bool(False), True, "I3Bool != True failed")
 
-ENSURE( bool(icetray.I3Bool(True))  == True , "I3Bool == True failed")   # noqa: E712
-ENSURE( bool(icetray.I3Bool(False)) == False, "I3Bool == False failed")  # noqa: E712
+        self.assertTrue(bool(icetray.I3Bool(True)), "I3Bool == True failed")
+        self.assertFalse(bool(icetray.I3Bool(False)), "I3Bool == False failed")
 
-# test for _identity_
-ENSURE( bool(icetray.I3Bool(True))  is True , "I3Bool == True failed")
-ENSURE( bool(icetray.I3Bool(False)) is False, "I3Bool == False failed")
+        # test for _identity_
+        self.assertIs(bool(icetray.I3Bool(True)), True, "I3Bool == True failed")
+        self.assertIs(bool(icetray.I3Bool(False)), False, "I3Bool == False failed")
 
-b = repr(icetray.I3Bool(True))
-ENSURE( 'true' in b.lower(), "I3Bool does not repr true")
-b = repr(icetray.I3Bool(False))
-ENSURE( 'false' in b.lower(), "I3Bool does not repr false")
+        # test repr
+        b = repr(icetray.I3Bool(True))
+        self.assertTrue('true' in b.lower(), "I3Bool does not repr true")
+        b = repr(icetray.I3Bool(False))
+        self.assertTrue('false' in b.lower(), "I3Bool does not repr false")
 
-b = icetray.I3Bool(True).__str__()
-ENSURE( 'true' in b.lower(), "I3Bool does not print true")
-b = icetray.I3Bool(False).__str__()
-ENSURE( 'false' in b.lower(), "I3Bool does not print false")
+        # test str
+        b = icetray.I3Bool(True).__str__()
+        self.assertTrue('true' in b.lower(), "I3Bool does not print true")
+        b = icetray.I3Bool(False).__str__()
+        self.assertTrue('false' in b.lower(), "I3Bool does not print false")
+
+
+if __name__ == "__main__":
+    unittest.main()

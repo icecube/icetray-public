@@ -8,7 +8,6 @@ from math import cos, pi
 
 from icecube.icetray import I3Tray
 from icecube import icetray
-from icecube.icetray.I3Test import ENSURE
 
 tray = I3Tray()
 
@@ -41,4 +40,4 @@ tray.AddModule(ComputeSomething, n=1)
 tray.Execute(5)
 
 printed_keys = tray.PrintUsage(fraction=0.99999999)
-ENSURE(len(printed_keys) > 1, "Not enough modules printed.")
+assert len(printed_keys) > 1, "Not enough modules printed."

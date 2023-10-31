@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-from icecube.shovelio import raw
-from icecube import icetray
-from icecube.icetray.I3Test import ENSURE
+
 import os
 import random
+
+from icecube.shovelio import raw
+
 random.seed(1)
 
 # icetray.set_log_level_for_unit("shovelio::raw", icetray.I3LogLevel.LOG_TRACE)
@@ -32,8 +32,8 @@ for filename in (seekable_file, multipass_file):
         pos_list.append(pos)
         size_list.append(f.size)
 
-    ENSURE(pos_list[1] == pos_list[0], "positions differ from raw::File")
-    ENSURE(size_list[1] == size_list[0], "size differs from raw::File")
+    assert pos_list[1] == pos_list[0], "positions differ from raw::File"
+    assert size_list[1] == size_list[0], "size differs from raw::File"
 
     f = raw.File(filename)
     f2 = raw.FileGroup(filename)
@@ -41,7 +41,7 @@ for filename in (seekable_file, multipass_file):
     for p in pos:
         frame = f.at_stream_pos(p)
         frame2 = f2.at_stream_pos(p)
-        ENSURE(str(frame) == str(frame2), "frames differ at position {}".format(p))
+        assert str(frame) == str(frame2), f"frames differ at position {p}"
 
     # check that raw.FileGroup with two files behaves properly
 
@@ -60,11 +60,10 @@ for filename in (seekable_file, multipass_file):
                 pos2.pop()
                 break
 
-        ENSURE(pos1 == pos2, "raw.FileGroup(myfile, myfile) has wrong stream positions")
+        assert pos1 == pos2, "raw.FileGroup(myfile, myfile) has wrong stream positions"
 
-    ENSURE(f.size * 2 == fg.size,
-           "raw.FileGroup(myfile, myfile) is not twice the size of raw.File(myfile): {} vs {}"\
-           .format(fg.size, f.size))
+    assert f.size * 2 == fg.size, \
+        f"raw.FileGroup(myfile, myfile) is not twice the size of raw.File(myfile): {fg.size=} vs {f.size=}"
 
     f = raw.File(filename)
     fg = raw.FileGroup(filename, filename)
@@ -73,5 +72,5 @@ for filename in (seekable_file, multipass_file):
     for p in pos1:
         frame_ref = f.at_stream_pos(p % f.size)
         frame = fg.at_stream_pos(p)
-        ENSURE(str(frame) == str(frame_ref),
-               "raw.FileGroup vs raw.File, frames differ at position {}".format(p))
+        assert str(frame) == str(frame_ref), \
+            f"raw.FileGroup vs raw.File, frames differ at position {p}"

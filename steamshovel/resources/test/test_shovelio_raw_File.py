@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-from icecube.shovelio import raw
-from icecube import icetray
-from icecube.icetray.I3Test import ENSURE
+
 import os
-import sys
-import subprocess as subp
 import random
+import subprocess as subp
+import sys
+
+from icecube.shovelio import raw
+
 random.seed(1)
 
 # icetray.set_log_level_for_unit("shovelio::raw", icetray.I3LogLevel.LOG_TRACE)
@@ -45,36 +45,39 @@ if len(sys.argv) == 1:
             sframe_list.append(sframes)
             stream_list.append(streams)
 
-    ENSURE(pos_list[0] == pos_list[1],
-           "positions from Next(..., fast) differ between fast=True and fast=False for Seekable")
+    assert pos_list[0] == pos_list[1], \
+           "positions from Next(..., fast) differ between fast=True and fast=False for Seekable"
 
-    ENSURE(pos_list[2] == pos_list[3],
-           "positions from Next(..., fast) differ between fast=True and fast=False for MultiPass")
+    assert pos_list[2] == pos_list[3], \
+           "positions from Next(..., fast) differ between fast=True and fast=False for MultiPass"
 
-    ENSURE(pos_list[4] == pos_list[2],
-           "positions from Next(..., True) with type=SinglePass differ from type=MultiPass")
+    assert pos_list[4] == pos_list[2], \
+           "positions from Next(..., True) with type=SinglePass differ from type=MultiPass"
 
-    ENSURE(pos_list[5] == [],
-           "positions from Next(..., False) with type=SinpePass are not empty")
+    assert pos_list[5] == [], \
+           "positions from Next(..., False) with type=SinpePass are not empty"
 
     for i, j in ((0, 1), (2, 3),
                  (0, 2), (0, 4),
                  (1, 3)):
-      ENSURE(stream_list[i] == stream_list[j],
-             "streams from {0}-Next(...) and {1}-Next(...) do not agree:\n{0}: {2}\n{1}: {3}"\
-             .format(i, j, " ".join(stream_list[i]), " ".join(stream_list[j])))
+      # this is awful, but more clear than an f-string or %-string
+      assert stream_list[i] == stream_list[j], \
+             "streams from {0}-Next(...) and {1}-Next(...) do not agree:\n{0}: {2}\n{1}: {3}" \
+             .format(i, j, " ".join(stream_list[i]), " ".join(stream_list[j]))  # noqa: SIM115
 
     for i, j in ((0, 2), (0, 4)):
-      ENSURE(sframe_list[i] == sframe_list[j],
-             "frames from {0}-Next(...) and {1}-Next(...) do not agree:\n{0}: {2}\n{1}: {3}"\
-             .format(i, j, "\n".join(sframe_list[i]), "\n".join(sframe_list[j])))
+      # this is awful, but more clear than an f-string or %-string
+      assert sframe_list[i] == sframe_list[j], \
+             "frames from {0}-Next(...) and {1}-Next(...) do not agree:\n{0}: {2}\n{1}: {3}" \
+             .format(i, j, "\n".join(sframe_list[i]), "\n".join(sframe_list[j]))  # noqa: SIM115
 
     actual_size = 615132
-    ENSURE(size_list[0] == actual_size, "size in raw.File {} differs from {} (Seekable)".format(0, actual_size))
-    ENSURE(size_list[1] == actual_size, "size in raw.File {} differs from {} (Seekable)".format(1, actual_size))
+    assert size_list[0] == actual_size, f"size in raw.File 1 differs from {actual_size} (Seekable)"
+    assert size_list[1] == actual_size, f"size in raw.File 2 differs from {actual_size} (Seekable)"
+
     actual_size = 8
-    ENSURE(size_list[2] == actual_size, "size in raw.File {} differs from {} (MultiPass)".format(2, actual_size))
-    ENSURE(size_list[3] == actual_size, "size in raw.File {} differs from {} (MultiPass)".format(3, actual_size))
+    assert size_list[2] == actual_size, f"size in raw.File 3 differs from {actual_size} (MultiPass)"
+    assert size_list[3] == actual_size, f"size in raw.File 4 differs from {actual_size} (MultiPass)"
 
     f1 = raw.File(uncompressed_file)
     f2 = raw.File(uncompressed_file, raw.File.Type.MultiPass)
@@ -87,11 +90,11 @@ if len(sys.argv) == 1:
         frame2 = f2.at_stream_pos(p2)
         s1 = str(frame1)
         s2 = str(frame2)
-        ENSURE(s1 == s2, "frames differ at positions ({}, {}):\n{}\n{}".format(p1, p2, s1, s2))
+        assert s1 == s2, f"frames differ at positions ({p1}, {p2}):\n{s1}\n{s2}"
 
     ### test reading from pipe
     proc = subp.Popen((sys.argv[0], "testpipe"),
-                      stdin=open(uncompressed_file, "rb"))
+                      stdin=open(uncompressed_file, "rb"))  # noqa: SIM115
     proc.wait()
     sys.exit(proc.returncode)
 
@@ -114,8 +117,8 @@ elif sys.argv[1] == "testpipe":
         except StopIteration:
             break
 
-    ENSURE(f.size == len(sframes), "testpipe: size is incorrect")
+    assert f.size == len(sframes), "testpipe: size is incorrect"
 
     for p in range(len(sframes)):
-        ENSURE(sframes[p] == sframes_ref[p],
-               "testpipe: frames do not match at pos={}".format(p))
+        assert sframes[p] == sframes_ref[p], \
+               f"testpipe: frames do not match at pos={p}"
