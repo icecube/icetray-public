@@ -1,7 +1,14 @@
 #!/usr/bin/env expect
 
-spawn bin/dataio-shovel pass1.i3
-expect "I3 Data Shovel"
-send q
+set file "$env(I3_TESTDATA)/millipede/monopod_test_events.i3.bz2"
+
+if {[file exists $file]} {
+    spawn bin/dataio-shovel $file
+    expect "I3 Data Shovel"
+    send q
+} else {
+    puts "Skipping dataio-shovel-test, can't find input fie: $file"
+}
+
 exit 0
 

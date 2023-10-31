@@ -201,10 +201,8 @@ set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::t_skip_i
 set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::writer_is_conditional.py)
 set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::zst_test.py)
 
-# dataio-shovel-tests requires pass1.i3, created by dataio::a_nocompression.py
 if (EXPECT)
-set_property(TEST dataio::dataio-shovel-test APPEND PROPERTY DEPENDS dataio::a_nocompression.py)
-set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::dataio-shovel-test)
+set_property(TEST dataio::dataio-shovel-test PROPERTY SKIP_REGULAR_EXPRESSION "Skipping dataio-shovel-test")
 endif ()
 
 if (LIBARCHIVE_FOUND)
