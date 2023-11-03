@@ -8,6 +8,8 @@ Release Notes
 main
 ----
 
+* fix boost detection with parasitic builds
+
 Sep. 28, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.8.0

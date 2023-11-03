@@ -178,6 +178,12 @@ include(all_tools)
 list(APPEND ALL_TOOLS scipy numpy)
 list(REMOVE_DUPLICATES ALL_TOOLS)
 foreach(TOOL_ ${ALL_TOOLS})
+  # special case boost because we (incorrectly) store imported targets in BOOST_LIBRARIES
+  if(TOOL_ STREQUAL "boost")
+    include(${CMAKE_SOURCE_DIR}/cmake/tools/${TOOL_}.cmake)
+    continue()
+  endif()
+
   string(TOUPPER ${TOOL_} TOOL)
   load_cache(${HOST_I3_BUILD} READ_WITH_PREFIX ""
     ${TOOL}_FOUND
