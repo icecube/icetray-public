@@ -8,6 +8,7 @@ from icecube.icetray import I3Tray
 from icecube import icetray
 from icecube import dataclasses
 from icecube import dataio
+import tempfile
 import os
 
 class CountFrames(icetray.I3Module):
@@ -54,40 +55,29 @@ class CountFrames(icetray.I3Module):
     def Finish(self):
         print(self.observed_counts)
         print(self.expected_counts)
-        assert(self.observed_counts == self.expected_counts, \
-               "CountFrames error:\n  Expected:    %s\n  Observed:    %s" % (self.expected_counts, self.observed_counts))
+        assert self.observed_counts == self.expected_counts, \
+               "CountFrames error:\n  Expected:    %s\n  Observed:    %s" % (self.expected_counts, self.observed_counts)
 
 tags = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
 
-index = 0;
+index = 0
 
-fname = 'alpha.i3'
+with tempfile.NamedTemporaryFile() as f:
+    fname = f.name
+    i3f = dataio.I3File(fname, 'w')
 
-if os.path.exists(fname) and os.path.isfile(fname):
-    os.unlink(fname)
-    
-i3f = dataio.I3File(fname, 'w')
+    for tag in tags:
+        theframe = icetray.I3Frame(icetray.I3Frame.Stream(tag))
+        theframe[tag] = icetray.I3Int(ord(tag))
+        i3f.push(theframe)
+        index += 1
+    i3f.close()
 
-for tag in tags:
-    theframe = icetray.I3Frame(icetray.I3Frame.Stream(tag))
-    theframe[tag] = icetray.I3Int(ord(tag))
-    i3f.push(theframe)
-    index += 1
-i3f.close()
+    tray = I3Tray()
 
-tray = I3Tray()
+    tray.AddModule("I3Reader", "reader", filename = fname)
+    tray.AddModule("Dump", "dump")
+    tray.AddModule(CountFrames, 'count',
+                   Counts = dict([(x, 1) for x in tags]))
 
-tray.AddModule("I3Reader", "reader",
-               filename = fname)
-
-tray.AddModule("Dump", "dump")
-
-tray.AddModule(CountFrames, 'count',
-               Counts = dict([(x, 1) for x in tags])
-               )
-
-
-
-tray.Execute()
-
-
+    tray.Execute()
