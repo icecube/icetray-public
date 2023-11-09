@@ -3,7 +3,7 @@
 Test reordering of modules within an I3Tray.
 """
 
-from icecube import icetray, dataio  # noqa, needed to add I3InfiniteSource
+from icecube import icetray, dataio  # noqa: F401 # needed to add I3InfiniteSource
 from icecube.icetray import I3Tray
 
 def thing1(frame):

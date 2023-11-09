@@ -60,16 +60,16 @@ if len(sys.argv) == 1:
     for i, j in ((0, 1), (2, 3),
                  (0, 2), (0, 4),
                  (1, 3)):
-      # this is awful, but more clear than an f-string or %-string
-      assert stream_list[i] == stream_list[j], \
+        # this is awful, but more clear than an f-string or %-string
+        assert stream_list[i] == stream_list[j], \
              "streams from {0}-Next(...) and {1}-Next(...) do not agree:\n{0}: {2}\n{1}: {3}" \
-             .format(i, j, " ".join(stream_list[i]), " ".join(stream_list[j]))  # noqa: SIM115
+             .format(i, j, " ".join(stream_list[i]), " ".join(stream_list[j]))
 
     for i, j in ((0, 2), (0, 4)):
-      # this is awful, but more clear than an f-string or %-string
-      assert sframe_list[i] == sframe_list[j], \
+        # this is awful, but more clear than an f-string or %-string
+        assert sframe_list[i] == sframe_list[j], \
              "frames from {0}-Next(...) and {1}-Next(...) do not agree:\n{0}: {2}\n{1}: {3}" \
-             .format(i, j, "\n".join(sframe_list[i]), "\n".join(sframe_list[j]))  # noqa: SIM115
+             .format(i, j, "\n".join(sframe_list[i]), "\n".join(sframe_list[j]))
 
     actual_size = 615132
     assert size_list[0] == actual_size, f"size in raw.File 1 differs from {actual_size} (Seekable)"
