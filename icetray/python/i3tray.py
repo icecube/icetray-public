@@ -57,7 +57,7 @@ class I3Tray(_icetray._I3TrayBase):
                 method = self.AddService
             else:
                 raise ValueError("'%s' is registered neither as a service nor a module." % _type)
-        elif hasattr(_type, "__call__"):
+        elif callable(_type):
             # Callables are either segments or simple I3Modules
             if hasattr(_type, "__i3traysegment__"):
                 method = self.AddSegment

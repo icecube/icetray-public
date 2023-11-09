@@ -64,12 +64,12 @@ class DisplayLed(object):
         Both arguments may either be a function taking a single argument (time), or a static value.
         :param brightness: Float in range [0,1] or a function that returns such a value.
         :param color: PyQColor or a function that returns such a value."""
-        if not hasattr(brightness, "__call__"):
+        if not callable(brightness):
             self._brightness = (lambda time : brightness)
         else:
             self._brightness = brightness
 
-        if not hasattr(color, "__call__"):
+        if not callable(color):
             self._color = (lambda time : color)
         else:
             self._color = color

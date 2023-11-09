@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 
-import sys
-if sys.version_info[:2] < (2,6):
-    sys.exit(0)
-
 from icecube import dataio
 from icecube.dataio.I3FileStagerFile import I3FileStagerFile
 
 from icecube import icetray
 import os
+
 # icetray.logging.I3Logger.global_logger = icetray.I3NullLogger()
 icetray.logging.set_level('TRACE')
 
 dataio.set_local_scratch_dir('.')
 
-def test_scratchdir(url=os.path.expandvars("file://$I3_BUILD/env-shell.sh")):
+def test_scratchdir(url=None):
+    if url is None:
+        url = os.path.expandvars("file://$I3_BUILD/env-shell.sh")
+
     stager = I3FileStagerFile()
     # directory is created lazily
     scratch_dir = stager.scratch_dir
@@ -58,9 +58,9 @@ def _make_http(port=None,usessl=False,basic_auth=False):
     import ssl
     import threading
     import subprocess
-    
+
     data = b''.join([b'test' for _ in range(1000)])
-    
+
     if basic_auth:
         class Handle(BaseHTTPRequestHandler):
             def do_HEAD(self):
@@ -93,7 +93,7 @@ def _make_http(port=None,usessl=False,basic_auth=False):
             def do_GET(self):
                 self.do_HEAD()
                 self.wfile.write(data)
-    
+
     if not port:
         while True:
             try:
@@ -206,11 +206,11 @@ def test_file_with_relative_path():
         raise AssertionError("An error should have been raised")
     except RuntimeError:
         pass
-    
+
 def test_file_implicit():
     _test_stage(os.path.expandvars("$I3_BUILD/env-shell.sh"))
 
 if __name__ == "__main__":
     for k, v in list(locals().items()):
-        if k.startswith("test") and hasattr(v, "__call__"):
+        if k.startswith("test") and callable(v):
             v()
