@@ -74,8 +74,16 @@ I3TableRowDescriptionConstPtr I3ConverterBundle::GetDescription(const I3FrameObj
 size_t I3ConverterBundle::Convert(I3FrameObjectConstPtr object, 
                                           I3TableRowPtr rows, 
                                           I3FramePtr frame) {
-    return Convert(*object, rows, frame);
-}
+    std::vector<I3ConverterPtr>::iterator it;
+    size_t global_numrows = 0;
+    size_t numrows = 0;
+    
+    for (it = converters_.begin(); it != converters_.end(); it++) {
+       numrows = (*it)->Convert(object,rows,frame);
+       if (numrows > global_numrows) global_numrows = numrows;
+    }
+    
+    return global_numrows;}
 
 //***************************************************************************//
 
