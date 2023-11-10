@@ -303,15 +303,9 @@ void I3TableWriter::Convert(I3FramePtr frame) {
 
         // try to get the object from the frame 
         // if exist: derive type, get converter, add to tables_, pop from wanted list
-        I3FrameObjectConstPtr object;
-        
-        try {
-           object = GetFrameObject(frame, objName);
-        } catch (...) {
-           log_error("Frame object '%s' could not be deserialized and will not be booked.",objName.c_str());
-           eraser = vlist_it++;
-           wantedNames_.erase(eraser);
-           continue;
+        I3FrameObjectConstPtr object = GetFrameObject(frame, objName);
+        if (!object && frame->Has(objName)) {
+          log_fatal_stream("Frame object "<<objName<<" exists but can't be deserialized. Did you remember to import the appropriate library?");
         }
         
         if (object) {
