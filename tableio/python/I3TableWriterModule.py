@@ -203,6 +203,8 @@ $I3_BUILD/doc/projects/tableio/howto.html .
 
     def Process(self):
         frame = self.PopFrame()
+        if frame is None:
+            raise ValueError("I3TableWriter cannot be the first module in a tray. Add e.g. an I3Reader to the top of your script.")
         self.writer.convert(frame)
         self.PushFrame(frame)
         return True
