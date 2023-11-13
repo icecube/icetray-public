@@ -58,9 +58,10 @@ def draw_geometry(omgeo, coords, num, colormap=None):
     if colormap:
         mint = min(colormap.values())
         maxt = max(colormap.values())
-        colormap = dict( (key,((colormap[key]-mint)/maxt)) for key in colormap.keys() )
-    for omkey, omgeo in omgeo:
-        if omgeo.position.z > 1200: continue
+        colormap = dict( (key,((colormap[key]-mint)/maxt)) for key in colormap )
+    for omkey, geo in omgeo:
+        if geo.position.z > 1200:
+            continue
         if(colormap):
             if omkey in colormap:
                 colors.append( cm.Paired(colormap[omkey]) )
