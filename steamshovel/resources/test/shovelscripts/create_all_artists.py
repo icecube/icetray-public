@@ -1,4 +1,3 @@
-from __future__ import print_function
 from icecube.icetray import I3Frame
 import os
 from time import sleep
