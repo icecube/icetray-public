@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import socketserver
+
 from icecube import dataio
 from icecube.dataio.I3FileStagerFile import I3FileStagerFile
 
@@ -104,6 +106,7 @@ def _make_http(port=None,usessl=False,basic_auth=False):
             break
     else:
         httpd = HTTPServer(('localhost', port), Handle)
+
     if usessl:
         print('ssl')
         p = subprocess.Popen(['/usr/bin/openssl','req','-new','-x509',
@@ -118,9 +121,12 @@ def _make_http(port=None,usessl=False,basic_auth=False):
         try:
             if subprocess.call(['/usr/bin/openssl','rsa','-in','privkey.pem','-out','key.pem','-passin','pass:passkey']):
                 raise Exception('error removing password from key.pem')
-            open('key.pem','a').write(open('cacert.pem').read())
-            httpd.socket = ssl.wrap_socket(httpd.socket, certfile='key.pem',
-                                           server_side=True)
+
+            ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+            ctx.load_cert_chain(certfile='cacert.pem', keyfile='key.pem')
+            ctx.check_hostname = False
+            httpd.socket = ctx.wrap_socket(httpd.socket, server_side=True)
+
         except Exception:
             os.remove('privkey.pem')
             os.remove('cacert.pem')
