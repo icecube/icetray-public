@@ -40,10 +40,13 @@ It also guides you through an installation of :doc:`../homebrew`.
    # tell python where hdf5 is
    $ export HDF5_DIR=$(brew --prefix hdf5)
 
-   # Esnsure you are using python 3.11 as required by brew's boost-python3.
+   # add your new python to your path and shell init scripts
+   $ export PATH=$(brew --prefix python@3.12)/libexec/bin:${PATH}
+
+   # Ensure you are using python 3.12 as required by brew's boost-python3.
    # (See: 'brew info boost-python3')
    $ python3 --version
-   Python 3.11.5
+   Python 3.12.0
 
    # be sure you have activated your new brew environment:  either load it explcitly or open a new Terminal!
    #   'which python3' should be the new brew version.
@@ -59,6 +62,7 @@ It also guides you through an installation of :doc:`../homebrew`.
    # (Optional) add needed settings to your .bash_profile/.zshrc
    source $HOME/py3/bin/activate
    export HDF5_DIR=$(brew --prefix hdf5)
+   export PATH=$(brew --prefix python@3.12)/libexec/bin:${PATH}
 
 Other Important Notes
 """""""""""""""""""""
