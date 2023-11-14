@@ -49,8 +49,7 @@ class I3PythonConverterTest(unittest.TestCase):
 		              'float':         'f',
 		              'double':        'd',
 		              'bool':          'o'}
-		self.conversions = {int:   ['c','b','B','h','H','i'],
-		                    int:  ['I','h','H'],
+		self.conversions = {int:   ['c','b','B','h','H','i', 'I'],
 		                    float: ['f','d'],
 		                    bool:  ['o']}
 		
