@@ -155,7 +155,7 @@ To book only the frame objects you're interested in, pass a list of keys as \
 the `keys' parameter, or a list of types as the `types' parameter when \
 configuring I3TableWriter. You can find a tutorial in \
 $I3_BUILD/doc/projects/tableio/howto.html .
-""")
+""",stacklevel=1)
             # add type-specifications for everything we know about that wasn't included in 'Types'            
             all_types = I3ConverterRegistry.registry.keys()
             # remove GCD types if they exist

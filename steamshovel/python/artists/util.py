@@ -335,7 +335,7 @@ def cornertext(text, loc=2, color=None, frameon=False,
                        'Falling back on "upper left"; '
                        'valid locations are\n\t%s') \
                        % (loc, '\n\t'.join(locTranslate.keys()))
-            warnings.warn(message)
+            warnings.warn(message,stacklevel=1)
             loc = 2
 
     if borderpad is None:
