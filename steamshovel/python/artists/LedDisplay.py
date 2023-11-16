@@ -95,7 +95,7 @@ class LedAPA102(DisplayLed):
     @classmethod
     def float_to_led_data(cls, rgb):
         # Factor out brightness from colour
-        brightness = max(1./cls.MAX_BRIGHTNESS, max(rgb))
+        brightness = max(1./cls.MAX_BRIGHTNESS, max(rgb))  # noqa: PLW3301
         scaling = brightness / cls.MAX_BRIGHTNESS
         rgb = [int(round(255 * (c**2.2)/brightness)) for c in rgb]
         return [int(round(brightness*cls.MAX_BRIGHTNESS)), rgb[0], rgb[1], rgb[2]]
@@ -238,7 +238,7 @@ class DisplayController:
         except:
             logger.error("Could not read display information report")
         finally:
-            return tlv_list
+            return tlv_list  # noqa: B012
 
     def readEepromSegment(self, offset, length):
         """Read an EEPROM segment from the device.

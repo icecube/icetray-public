@@ -10,7 +10,7 @@ from icecube.tableio.I3TableWriterModule import I3TableWriter, default
 
 from icecube.tableio import types
 
-from icecube.tableio.enum3 import enum as enum
+from icecube.tableio.enum3 import enum
 
 # clean up the local dictionary
 del icecube

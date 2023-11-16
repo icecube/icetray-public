@@ -92,17 +92,14 @@ class TestShovelScripts( unittest.TestCase ):
              "{}/shovelscripts/{}.py".format(base_path, script)),
             stdout=subp.PIPE, stderr=subp.STDOUT
         )
-        output = p.communicate()[0].lower()
+
+        # output is a bytes-like object in Python3.
+        # need to decode it. utf-8 is the defualt
+        output_str = p.communicate()[0].decode().lower()
         ret_code = p.returncode
         self.assertEqual( ret_code, 0,
                           "script {0}: return code {1} is not zero (output below):\n{2}"
-                          .format(script, ret_code, output) )
-
-        # output is a bytes-like object in Python3
-        # need to decode it.
-        output_str = output.decode('utf-8') \
-            if sys.version_info[0] == 3 else output
-
+                          .format(script, ret_code, output_str) )
         self.assertTrue( re.search(r"\berror\b", output_str) is None and
                          re.search(r"\bfatal\b", output_str) is None and
                          re.search(r"\bexception\b", output_str) is None,

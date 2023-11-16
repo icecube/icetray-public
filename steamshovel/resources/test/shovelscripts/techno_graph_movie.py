@@ -30,10 +30,10 @@ class GraphInsetMovie:
 			charge = sum( [ d.charge for d in contents] )
 			time = contents[0].time
 			activity_list.append( (charge, time, dom) )
-		
+
 		# Sort the top 5 DOMs by the order of their appearance
 		top5 = sorted( activity_list, key=operator.itemgetter(0), reverse = True )[0:5]
-		# convert to ( frameid, dom) pairs 
+		# convert to ( frameid, dom) pairs
 		top5 = [ ( int( ((time-tmin)/(tmax-tmin) * fcount ) ), dom) for (charge,time,dom) in top5 ]
 		# re-sort by frame ids
 		self.top5 = sorted( top5 )
@@ -41,7 +41,7 @@ class GraphInsetMovie:
 
 
 	def __call__( self, frame ):
-		print >>sys.stderr, frame
+		print(frame, file=sys.stderr)
 		if( frame == 0 ):
 			self.setup()
 

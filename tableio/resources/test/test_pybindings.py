@@ -16,11 +16,11 @@ try:
 	sys.maxsize
 except AttributeError:
 	sys.maxsize = sys.maxint
-	
+
 class I3PythonConverterTest(unittest.TestCase):
 	def setUp(self):
 		desc = tableio.I3TableRowDescription()
-		
+
 		self.types = {
 		              'signed_char':   tableio.types.Int8,
 		              'unsigned_char': tableio.types.UInt8,
@@ -52,17 +52,17 @@ class I3PythonConverterTest(unittest.TestCase):
 		self.conversions = {int:   ['c','b','B','h','H','i', 'I'],
 		                    float: ['f','d'],
 		                    bool:  ['o']}
-		
-		
+
+
 		for t,code in self.types.items():
 			desc.add_field(t,code,'','')
 			desc.add_field('%s_vec'%t,code,'','',128)
-		
+
 		desc.add_field('trigger_type',tableio.I3Datatype(dataclasses.I3DOMLaunch.TriggerType),'','')
-		
+
 		self.desc = desc
 		self.rows = tableio.I3TableRow(desc,1)
-		
+
 	def testKeys(self):
 		fields = list(self.desc.field_names);
 		self.assertEqual(fields, list(self.rows.keys()))
@@ -127,7 +127,7 @@ class I3PythonConverterTest(unittest.TestCase):
 		got = self.rows[field]
 		for a,b in zip(vec,got):
 			self.assertAlmostEqual(a,b)
-		
+
 
 class DOMLaunchBookie(tableio.I3Converter):
     booked = dataclasses.I3DOMLaunchSeriesMap
@@ -177,7 +177,7 @@ class DOMLaunchBookie(tableio.I3Converter):
                 rows['om']               = om
                 rows['index']            = i
                 rows['pedestal_sub']     = domlaunch.GetIsPedestalSub()
-         
+
                 rows['start_time']       = domlaunch.GetStartTime()
                 rows['raw_charge_stamp'] = domlaunch.GetRawChargeStamp()
                 rows['pedestal_sub']     = domlaunch.GetIsPedestalSub()
@@ -190,11 +190,11 @@ class DOMLaunchBookie(tableio.I3Converter):
                 rows['raw_atwd_1']       = array.array('i',domlaunch.GetRawATWD(1))
                 # or even numpy ndarrays!
                 rows['raw_atwd_2']       = numpy.array(domlaunch.GetRawATWD(2),'i')
-    
+
                 rows['raw_fadc']         = array.array('H',domlaunch.GetRawFADC())
         return rowno
 
-        
+
 class WaveformBookie(tableio.I3Converter):
     booked = dataclasses.I3WaveformSeriesMap
     wf = dataclasses.I3Waveform
@@ -237,13 +237,13 @@ class WaveformBookie(tableio.I3Converter):
                 rows['string']           = string
                 rows['om']               = om
                 rows['index']            = i
-                
+
                 rows['start_time']       = wf.start_time
                 rows['bin_width']        = wf.bin_width
                 rows['source']           = wf.source
                 rows['waveform']         = wf.waveform
         return rowno
-        
+
 
 try:
 	from icecube import hdfwriter
@@ -259,8 +259,8 @@ if have_hdf:
 				from icecube.tableio import I3TableWriter
 				import tempfile
 				from icecube.icetray import I3Tray
-				from icecube import phys_services 
-				
+				from icecube import phys_services
+
 				tray = I3Tray()
 				tray.AddModule("I3InfiniteSource","streams", Stream=icetray.I3Frame.Physics)
 				self.tray = tray
@@ -268,15 +268,15 @@ if have_hdf:
 				self.hdf_service = hdfwriter.I3HDFTableService(self.tempfile.name,0)
 				self.target = I3TableWriter
 				self.bookie = DOMLaunchBookie()
-				
+
 			def tearDown(self):
 				# self.hdf_service.CloseFile()
 				self.tempfile.close() # implicit delete
-				
+
 			def testNoArgs(self):
 				"""TableService is a required argument"""
 				self.tray.AddModule(self.target,'scribe')
-				
+
 				self.assertRaises(TypeError,self.tray.Execute)
 				# self.tray.Execute()
 			def testNotATable(self):
@@ -285,7 +285,7 @@ if have_hdf:
 					tableservice = 'foo',
 					keys = ['I3EventHeader','InIceRawData']
 					)
-				
+
 				self.assertRaises(TypeError,self.tray.Execute)
 				# self.tray.Execute()
 			def testKeyList(self):
@@ -294,7 +294,7 @@ if have_hdf:
 					tableservice = self.hdf_service,
 					keys = ['I3EventHeader','InIceRawData']
 					)
-				
+
 				self.tray.Execute(1)
 			def testKeyDict(self):
 				"""A dict key: booker"""
@@ -302,7 +302,7 @@ if have_hdf:
 				tableservice = self.hdf_service,
 				keys = {'InIceRawData': self.bookie}
 				)
-				
+
 				self.tray.Execute(1)
 			def testKeyTuples(self):
 				"""Tuples of (key, booker)"""
@@ -310,9 +310,9 @@ if have_hdf:
 					tableservice = self.hdf_service,
 					keys = [('InIceRawData', self.bookie),('InIceRawData',None)] # repeat with default booker
 					)
-				
+
 				self.tray.Execute(1)
-		
+
 def test(fname='/Users/jakob/Documents/IceCube/nugen_nue_ic80_dc6.001568.000000.hits.001.1881140.domsim.001.2028732.i3.gz'):
 	f = dataio.I3File(fname)
 	fr = f.pop_physics()
@@ -326,7 +326,7 @@ def test(fname='/Users/jakob/Documents/IceCube/nugen_nue_ic80_dc6.001568.000000.
 	n_written = booker.Convert(dl,rows,fr)
 	f.close()
 	return rows
-	
+
 if __name__ == "__main__":
 	unittest.main()
-	
+
