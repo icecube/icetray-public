@@ -109,7 +109,7 @@ and is almost certainly not what you actually want to do.', False)
         valid_name = re.compile("^[a-zA-Z_][a-zA-Z0-9_]*$") 
         for item in arg:
             converter = item.get('converter',None)
-            if not converter is None:
+            if converter is not None:
                 # if this is a list of converters, make a bundle
                 if isinstance(converter,list):
                     converter = I3ConverterBundle(converter)
@@ -117,7 +117,7 @@ and is almost certainly not what you actually want to do.', False)
                 elif not isinstance(converter,I3Converter):
                     raise TypeError("In '%s': converter must be an instance of I3Converter")
             name = item.get('name',None)
-            if not name is None:
+            if name is not None:
                 if not valid_name.match(name):
                     raise ValueError("'%s' is not a valid table name. Table names must contain only letters, numbers, and underscores and may not start with a number" % name)    
         return arg

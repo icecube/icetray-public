@@ -27,7 +27,7 @@ def GetArtist(arg):
     from icecube.steamshovel.artists.mplart import MPLArtist
     for var in dir(module):
         obj = module.__dict__[var]
-        if issubclass(obj, MPLArtist.MPLArtist) and not obj is MPLArtist.MPLArtist:
+        if issubclass(obj, MPLArtist.MPLArtist) and obj is not MPLArtist.MPLArtist:
             cl = obj
             break
     else:

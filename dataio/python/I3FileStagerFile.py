@@ -199,7 +199,7 @@ class I3FileStagerFile(AbstractFileStager):
 						f.close()
 					if output_file is not None:
 						output_file.close()
-				if not expected_length is None and total_read<expected_length:
+				if expected_length is not None and total_read<expected_length:
 					if os.path.exists(output_path):
 						os.remove(output_path)
 					if retries<1:
