@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import inspect
 import warnings
 
@@ -30,10 +29,10 @@ def test_all_classes(mod, skip_test_list = list(), skip_containers = True ):
         print(dir(inspect))
         print("name = %s" % inspect.__name__)
         print("dumping docs...\n %s" % inspect.__doc__)
-        
+
     msg_fmt = "Python dynamism is alive and well for (%s) "
     for k,v in inspect.getmembers(mod):
-        # skip classes in this list        
+        # skip classes in this list
         if k in skip_test_list : continue
         # check the type is a Boost.Python.class,
         # which is going to be anything we provided pybindings for
@@ -54,4 +53,4 @@ def test_all_classes(mod, skip_test_list = list(), skip_containers = True ):
                 continue
     return return_value
 
-                  
+

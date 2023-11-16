@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """
 author: mzoll <marcel.zoll@fysik.su.se>
 please report any errors and possible improvements to the author
@@ -22,11 +20,11 @@ class GCD_inserter(icetray.I3PacketModule):
 
     self.AddParameter("IgnoreFrameTypes",
                       "Ignore this list of frametypes from the read GCD file",
-                      self.ignoreTypeList) 
+                      self.ignoreTypeList)
 
     self.AddParameter("Pass2",
                       "Use pass2 good run list?",
-                      False) 
+                      False)
 
     self.AddOutBox("OutBox")
 
@@ -47,7 +45,7 @@ class GCD_inserter(icetray.I3PacketModule):
         self.PushFrame(frame)
       return
     icetray.logging.log_info("Event with a new run_id encountered: %d; pushing in GCD-frames!"%(eh.run_id))
-    
+
     if eh.run_id not in self.GRL:
       icetray.logging.log_fatal("Goodrun-lists do not contain an entry for this run (%d); cannot infer GCD-file path"%(eh.run_id))
 
@@ -63,4 +61,4 @@ class GCD_inserter(icetray.I3PacketModule):
     for frame in frames:
       self.PushFrame(frame)
     return
-  
+
