@@ -12,11 +12,6 @@ except ImportError:
 	print("Numpy isn't installed, skipping numpy-specific tests")
 	have_numpy = False
 
-try:
-	sys.maxsize
-except AttributeError:
-	sys.maxsize = sys.maxint
-
 class I3PythonConverterTest(unittest.TestCase):
 	def setUp(self):
 		desc = tableio.I3TableRowDescription()

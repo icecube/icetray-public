@@ -14,8 +14,9 @@ import unittest
 from icecube import dataclasses, icetray
 
 try:
-	dataclasses.I3MapStringDouble.keys  # noqa: B018
-	dataclasses.I3MapUnsignedUnsigned.keys  # noqa: B018
+	k = dataclasses.I3MapStringDouble.keys
+	k = dataclasses.I3MapUnsignedUnsigned.keys
+	del k
 except AttributeError:
 	print('You appear to be using the default map_indexing_suite. Not running tests for std_map_indexing_suite.')
 	sys.exit(0)

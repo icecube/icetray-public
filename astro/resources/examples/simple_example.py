@@ -25,7 +25,7 @@ print ("At {} the moon will be at zenith={:8.4f} deg, azimuth={:7.4f} deg"
                moon_direction.azimuth/I3Units.degree,
                ))
 
-print
+print("")
 
 #calculate the position of the sun
 sun_direction = astro.I3GetSunDirection(time)
@@ -35,7 +35,7 @@ print ("At {} the Sun will be at zenith={:8.4f} deg, azimuth={:7.4f} deg"
                sun_direction.azimuth/I3Units.degree,
                ))
 
-print
+print("")
 
 #This is where the crab lives on the sky
 crab_position = astro.I3Equatorial(83.63308*I3Units.degree,
@@ -62,7 +62,7 @@ print ("At {} the Crab will be at zenith={:8.4f} deg, azimuth={:7.4f} deg"
                crab_direction.azimuth/I3Units.degree,
                ))
 
-print
+print("")
 
 #the center of the galaxy is easy to remember in galactic coordinates
 galaxy_center = astro.I3Galactic(0,0)
@@ -88,7 +88,7 @@ print ("At {} the Crab will be at zenith={:8.4f} deg, azimuth={:7.4f} deg"
                gc_direction.azimuth/I3Units.degree,
                ))
 
-print
+print("")
 
 #calculat the position of the crab nebula in local coordinates
 muon_direction = dataclasses.I3Direction(101.4572*I3Units.degree,
