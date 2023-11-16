@@ -75,7 +75,7 @@ def _make_http(port=None,usessl=False,basic_auth=False):
                 self.send_header('Content-type','text')
                 self.end_headers()
             def do_GET(self):
-                if self.headers['Authorization'] == None:
+                if self.headers['Authorization'] is None:
                     self.do_AUTHHEAD()
                     self.wfile.write('no auth header received')
                 elif self.headers['Authorization'] == 'Basic dGVzdDp0ZXN0':

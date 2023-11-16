@@ -158,7 +158,7 @@ class DOMLaunchBookie(tableio.I3Converter):
         for vec in dlsm.values():
             if len(vec) == 0: continue
             dl = vec[0]
-            if dl != None: break
+            if dl is not None: break
         return dl
     def GetNumberOfRows(self,frameobj):
         nrows = 0
@@ -219,7 +219,7 @@ class WaveformBookie(tableio.I3Converter):
         for vec in dlsm.values():
             if len(vec) == 0: continue
             dl = vec[0]
-            if dl != None: break
+            if dl is not None: break
         return dl
     def GetNumberOfRows(self,frameobj):
         nrows = 0

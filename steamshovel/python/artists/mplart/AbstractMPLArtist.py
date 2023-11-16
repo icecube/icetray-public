@@ -69,7 +69,7 @@ class MPLArtist( PyArtist ):
 
     def create( self, frame, output ):
         '''Primary PyArtist.create() method'''
-        if self.manager == None:
+        if self.manager is None:
             self.manager = self.get_figure_manager( MPLArtist.unique_figure() )
             self.base_dpi = self.manager.canvas.figure.get_dpi()
 

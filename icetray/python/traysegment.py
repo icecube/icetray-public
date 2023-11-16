@@ -40,9 +40,9 @@ def traysegment_inherit(parent, defaultoverrides=None, removeopts=None):
 	def traysegment_(function):
 		func = traysegment(function)
 		func.module = parent
-		if defaultoverrides != None:
+		if defaultoverrides is not None:
 			func.default_overrides = defaultoverrides
-		if removeopts != None:
+		if removeopts is not None:
 			func.remove_opts = removeopts
 
 		return func
