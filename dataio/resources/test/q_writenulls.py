@@ -17,7 +17,7 @@ tray.AddModule("I3Reader", "reader", Filename="pass1.i3")
 
 tray.AddModule("AddNulls", "nulls")(
     ("where", ["null1", "null2", "null3"])
-    );
+    )
 
 tray.AddModule("Dump","dump")
 

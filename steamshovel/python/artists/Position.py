@@ -46,4 +46,4 @@ class Position(PyArtist):
                 position = obj
                 s = output.addSphere(size, position)
 
-            s.setColor( color );
+            s.setColor( color )

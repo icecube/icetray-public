@@ -10,7 +10,7 @@ from icecube.dataclasses import I3MCTree,I3Particle,I3ParticleID
 from icecube.icetray import I3Units
 
 def makeParticle():
-  p = I3Particle();
+  p = I3Particle()
   p.time = 0.0
   p.length = 0.0
   p.energy = 0.0

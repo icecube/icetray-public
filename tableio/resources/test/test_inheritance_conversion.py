@@ -27,50 +27,50 @@ else:
 class Foo(icetray.I3FrameObject):
 	def __init__(self):
 		icetray.I3FrameObject.__init__(self)
-		self.a = 5;
+		self.a = 5
 
 class Foo2(Foo):
 	def __init__(self):
 		Foo.__init__(self)
-		self.a *= 2;
+		self.a *= 2
 
 class Bar(Foo):
 	def __init__(self):
 		Foo.__init__(self)
-		self.b = 7;
+		self.b = 7
 
 class FooConverter(tableio.I3Converter):
-	booked = Foo;
+	booked = Foo
 	def CreateDescription(self,obj):
-		desc = tableio.I3TableRowDescription();
-		desc.add_field("a",tableio.types.Float64,"","Parameter A");
-		return desc;
+		desc = tableio.I3TableRowDescription()
+		desc.add_field("a",tableio.types.Float64,"","Parameter A")
+		return desc
 	def FillRows(self,obj,rows):
-		rows["a"]=obj.a;
-		return 1;
+		rows["a"]=obj.a
+		return 1
 
 tableio.I3ConverterRegistry.register(FooConverter)
-		
+
 class BarConverter(tableio.I3Converter):
-	booked = Bar;
+	booked = Bar
 	def CreateDescription(self,obj):
-		desc = tableio.I3TableRowDescription();
-		desc.add_field("a",tableio.types.Float64,"","Parameter A");
-		desc.add_field("b",tableio.types.Float64,"","Parameter B");
-		return desc;
+		desc = tableio.I3TableRowDescription()
+		desc.add_field("a",tableio.types.Float64,"","Parameter A")
+		desc.add_field("b",tableio.types.Float64,"","Parameter B")
+		return desc
 	def FillRows(self,obj,rows):
-		rows["a"]=obj.a;
-		rows["b"]=obj.b;
-		return 1;
+		rows["a"]=obj.a
+		rows["b"]=obj.b
+		return 1
 
 class ExtendedBarConverter(tableio.I3Converter):
 	def CreateDescription(self,obj):
-		desc = tableio.I3TableRowDescription();
-		desc.add_field("a2",tableio.types.Float64,"","Parameter A times 2");
-		return desc;
+		desc = tableio.I3TableRowDescription()
+		desc.add_field("a2",tableio.types.Float64,"","Parameter A times 2")
+		return desc
 	def FillRows(self,obj,rows):
-		rows["a2"]=obj.a*2;
-		return 1;
+		rows["a2"]=obj.a*2
+		return 1
 
 tableio.I3ConverterRegistry.register(BarConverter)
 
@@ -84,9 +84,9 @@ add_eventheader.event_id = 1
 
 def make_make_object(type):
 	def make_object(frame):
-		obj = type();
-		frame["Object"] = obj;
-	return make_object;
+		obj = type()
+		frame["Object"] = obj
+	return make_object
 
 def try_to_write(type,file,keys=["Object"],types=[]):
 	try:
@@ -108,25 +108,25 @@ def try_to_write(type,file,keys=["Object"],types=[]):
 
 class BaseConverter(unittest.TestCase):
 	def setUp(self):
-		try_to_write(Foo,"test_foo.hdf5");
+		try_to_write(Foo,"test_foo.hdf5")
 	def tearDown(self):
-		os.unlink("test_foo.hdf5");
+		os.unlink("test_foo.hdf5")
 	def testGeneric(self):
 		try:
 			import tables
 		except ImportError:
 			raise unittest.SkipTest("pytables missing")
 		with tables.open_file("test_foo.hdf5") as hdf:
-			table=hdf.get_node("/Object");
+			table=hdf.get_node("/Object")
 			self.assertIsNotNone(table, "Object table exists")
 			self.assertIn("a", table.colnames, "'A' parameter was recorded")
 			self.assertTrue(not "b" in table.colnames, "'B' parameter does not exist")
 
 class GenericSubclassConverter(unittest.TestCase):
 	def setUp(self):
-		try_to_write(Foo2,"test_foo2.hdf5");
+		try_to_write(Foo2,"test_foo2.hdf5")
 	def tearDown(self):
-		os.unlink("test_foo2.hdf5");
+		os.unlink("test_foo2.hdf5")
 	def testGeneric(self):
 		try:
 			import tables
@@ -137,12 +137,12 @@ class GenericSubclassConverter(unittest.TestCase):
 			self.assertIsNotNone(table, "Object table exists")
 			self.assertIn("a", table.colnames, "'A' parameter was recorded")
 			self.assertTrue(not "b" in table.colnames, "'B' parameter does not exist")
-		
+
 class SpecificSubclassConverter(unittest.TestCase):
 	def setUp(self):
-		try_to_write(Bar,"test_bar.hdf5");
+		try_to_write(Bar,"test_bar.hdf5")
 	def tearDown(self):
-		os.unlink("test_bar.hdf5");
+		os.unlink("test_bar.hdf5")
 	def testGeneric(self):
 		try:
 			import tables
@@ -198,20 +198,20 @@ class ComposedConverter(unittest.TestCase):
 
 class CanConvert(unittest.TestCase):
 	def testConversion(self):
-		f=Foo();
-		f2=Foo2();
-		b=Bar();
-	
-		fc=FooConverter();
-		bc=BarConverter();
-		
-		self.assertEqual(fc.CanConvert(f),tableio.ConvertState.ExactConversion);
-		self.assertEqual(fc.CanConvert(f2),tableio.ConvertState.InexactConversion);
-		self.assertEqual(fc.CanConvert(b),tableio.ConvertState.InexactConversion);
-		
-		self.assertEqual(bc.CanConvert(f),tableio.ConvertState.NoConversion);
-		self.assertEqual(bc.CanConvert(f2),tableio.ConvertState.NoConversion);
-		self.assertEqual(bc.CanConvert(b),tableio.ConvertState.ExactConversion);
+		f=Foo()
+		f2=Foo2()
+		b=Bar()
+
+		fc=FooConverter()
+		bc=BarConverter()
+
+		self.assertEqual(fc.CanConvert(f),tableio.ConvertState.ExactConversion)
+		self.assertEqual(fc.CanConvert(f2),tableio.ConvertState.InexactConversion)
+		self.assertEqual(fc.CanConvert(b),tableio.ConvertState.InexactConversion)
+
+		self.assertEqual(bc.CanConvert(f),tableio.ConvertState.NoConversion)
+		self.assertEqual(bc.CanConvert(f2),tableio.ConvertState.NoConversion)
+		self.assertEqual(bc.CanConvert(b),tableio.ConvertState.ExactConversion)
 
 if __name__ == "__main__":
 	unittest.main(verbosity=2)

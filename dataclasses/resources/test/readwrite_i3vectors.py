@@ -59,7 +59,7 @@ def check_on(Type, name, gen):
 
     
 def gen(n):
-    value = 0;
+    value = 0
     while value < n:
         yield value
         value+= 1

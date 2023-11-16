@@ -18,7 +18,7 @@ import os
 
 tags = ['a', 'b', 'c', 'd', 'e']
 
-index = 0;
+index = 0
 
 for tag in tags:
     i3f = dataio.I3File("catme_%s.i3.gz" % tag, 'w')

@@ -59,7 +59,7 @@ class I3PythonConverterTest(unittest.TestCase):
 		self.rows = tableio.I3TableRow(desc,1)
 
 	def testKeys(self):
-		fields = list(self.desc.field_names);
+		fields = list(self.desc.field_names)
 		self.assertEqual(fields, list(self.rows.keys()))
 	def testEnum(self):
 		field = 'trigger_type'
@@ -80,7 +80,7 @@ class I3PythonConverterTest(unittest.TestCase):
 	def testLongScalars(self):
 		import sys
 		field,val = 'signed_long',sys.maxsize
-		self.rows[field] = val;
+		self.rows[field] = val
 		got_val = self.rows[field]
 		self.assertEqual(val, got_val, "Set field '%s' to %d, got %d back."%(field,val,got_val))
 		bad_news = lambda: self.rows.set(field,sys.maxsize+1)

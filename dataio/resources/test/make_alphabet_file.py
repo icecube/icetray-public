@@ -17,7 +17,7 @@ streams = [chr(x) for x in
            list(range(ord('a'), ord('z')+1))
            + list(range(ord('A'), ord('Z')+1)) + list(range(ord('0'), ord('9')+1))]
 
-index = 0;
+index = 0
 
 for st in streams:
     print("=====", st, "=====")

@@ -9,7 +9,7 @@ from icecube import icetray
 from icecube import dataio
 import os
 
-index = 0;
+index = 0
 
 fname = 'ints.i3'
 
