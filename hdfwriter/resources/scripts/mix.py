@@ -10,7 +10,7 @@ def h5ls(fname):
 	if sys.version_info.major > 2:
 		output = output.decode()
 	for line in output.split('\n'):
-		fields = re.split('\s+', line)
+		fields = re.split(r'\s+', line)
 		if len(fields) < 2:
 			continue
 		path, kind = fields[:2]

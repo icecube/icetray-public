@@ -32,7 +32,7 @@ tray.AddModule("I3Reader",
                Filename="pass1.i3",
                skipkeys=["IceTop.*"])
 
-tray.AddModule("FrameCheck", 
+tray.AddModule("FrameCheck",
     ensure_physics_has = ["DrivingTime", "I3EventHeader", "InIceRawData"],
     ensure_physics_hasnt = ["IceTopRawData", "IceTopRecoHitSeries"]
     )
@@ -40,15 +40,13 @@ tray.AddModule("FrameCheck",
 #
 # To verify filter-out of special chars
 #
-tray.AddModule(PutParticle, where = "particle?\w")
+tray.AddModule(PutParticle, where = r"particle?\w")
 
 tray.AddModule("Dump","dump")
 
 tray.AddModule("I3Writer", 
     filename = "filtered.i3",
-    skipkeys = [".*Reco.*", "\w{4}where"]
+    skipkeys = [".*Reco.*", r"\w{4}where"]
     )
 
 tray.Execute()
-
-

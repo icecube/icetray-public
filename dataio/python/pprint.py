@@ -62,8 +62,8 @@ def format_detail( frame, key ):
             message = str(obj)
     except Exception as e:
         message = '({0})'.format(e)
-    
-    if re.match('<icecube\.[\S]*\.[\S]* object at [0-9xa-f]*>', message):
+
+    if re.match(r'<icecube\.[\S]*\.[\S]* object at [0-9xa-f]*>', message):
         # Standard boring format.  In some cases we might be able to do better.
         if isinstance( obj, collections.Iterable):
             message += ', contents:\n' + '\n'.join( [ str(x) for x in frame[key] ] )

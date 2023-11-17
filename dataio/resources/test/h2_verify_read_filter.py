@@ -20,13 +20,13 @@ tray = I3Tray()
 #
 tray.AddModule("I3Reader","reader")(
     ("filename", "filtered.i3"),
-    ("skipkeys", ["^[par]{3}.{5}\?\\\w$"]) 
+    ("skipkeys", ["^[par]{3}.{5}\\?\\\\w$"])
     )
 
 tray.AddModule("FrameCheck", "check1")(
     ("ensure_physics_has", ["DrivingTime", "I3EventHeader","InIceRawData", ]),
     ("ensure_physics_hasnt", ["IceTopRawData", "IceTopRecoHitSeries",
-                              "InIceRecoHitSeries", "somewhere", "particle?\w"])
+                              "InIceRecoHitSeries", "somewhere", r"particle?\w"])
     )
 
 tray.AddModule("Dump", "dump")

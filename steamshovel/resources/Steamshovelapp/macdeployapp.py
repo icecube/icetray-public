@@ -89,7 +89,7 @@ if os.path.exists( app_dir ):
 
 # Create clean template
 cmd( 'cp -L -R {0}/steamshovel/resources/Steamshovelapp {1}', build_dir, app_dir )
-cmd( 'find {0} -name \.svn -print0 | xargs -0 rm -rf', app_dir )
+cmd( r'find {0} -name \.svn -print0 | xargs -0 rm -rf', app_dir )
 cmd( 'sed -i -e "s/SVNREV/{0}/" {1}/Contents/Info.plist', svn_rev, app_dir )
 
 # Copy documentation

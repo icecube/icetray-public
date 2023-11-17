@@ -37,7 +37,7 @@ class Antenna(Detector):
         self.freqUnit = I3Units.megahertz
         self.freqUnitName = "MHz"
         self.voltageUnit = I3Units.volt * 1e-6
-        self.voltageUnitName = "$\mu$V"
+        self.voltageUnitName = r"$\mu$V"
         self.specUnit = self.voltageUnit / self.freqUnit
         self.specUnitName = self.voltageUnitName + "/" + self.freqUnitName
         self.antenna_lables = []

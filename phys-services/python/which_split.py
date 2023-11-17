@@ -12,7 +12,7 @@ def which_split(split_name=''):
 
     If = (which_split('foo') | which_split('bar')) & pypick(lambda f: 'somepulses' in f)
 
-    Note that you should use the symbolic logic operators (&=and, \|=or, ^=xor, ~=invert),
+    Note that you should use the symbolic logic operators (&=and, |=or, ^=xor, ~=invert),
     because the English versions have a slightly different scope and in this case that
     actually matters, using the English versions will sometimes result in undesired
     surprising behavior.
