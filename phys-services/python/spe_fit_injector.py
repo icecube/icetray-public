@@ -154,9 +154,9 @@ class SPEFitInjector:
                     continue
 
                 # if none of the data is valid it's OK to skip entries.
-                if bool(fits['JOINT_fit']['valid']) == False and \
-                    bool(fits['ATWD_fit']['valid']) == False and \
-                    bool(fits['FADC_fit']['valid']) == False :
+                if bool(fits['JOINT_fit']['valid']) is False and \
+                    bool(fits['ATWD_fit']['valid']) is False and \
+                    bool(fits['FADC_fit']['valid']) is False :
                         continue
 
                 i3domcal = domcal[omkey]
@@ -174,11 +174,11 @@ class SPEFitInjector:
 
                 i3domcal.combined_spe_charge_distribution = spe_charge_dist
                 atwd_mean = float(fits['ATWD_fit']['gaus_mean']) \
-                    if bool(fits['ATWD_fit']['valid']) == True \
+                    if bool(fits['ATWD_fit']['valid']) is True \
                     else numpy.nan
 
                 fadc_mean = float(fits['FADC_fit']['gaus_mean']) \
-                    if bool(fits['FADC_fit']['valid']) == True \
+                    if bool(fits['FADC_fit']['valid']) is True \
                     else numpy.nan
                 i3domcal.mean_atwd_charge = atwd_mean
                 i3domcal.mean_fadc_charge = fadc_mean

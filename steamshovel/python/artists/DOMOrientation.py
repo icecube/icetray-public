@@ -82,7 +82,7 @@ class DOMOrientation(PyArtist):
         
         arrowDir = [orientation.up, orientation.right, orientation.dir]
         
-        if(self.setting("Draw Default Orientation") == False):
+        if(self.setting("Draw Default Orientation") is False):
             if(self.isDefaultFlasherDirection(arrowDir[0]) and self.isDefaultDOMDirection(arrowDir[2])):
                 return
 
