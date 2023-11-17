@@ -52,10 +52,14 @@ def drawCirc(ax,radius,centX,centY,angle_,theta2_,color_='black'):
 
 drawCirc(ax1,200,0,0,0,75)
 ax1.text(100/2**.5,100/2**.5,"Azimuth",horizontalalignment='left',verticalalignment='bottom')
-xtoe = lambda x: x/0.3048+46500
-etox = lambda E: 0.3048*(E-46500)
-yton = lambda y: y/0.3048+52200
-ntoy = lambda N: 0.3048*(N-52200)
+def xtoe(x):
+    return x / 0.3048 + 46500
+def etox(E):
+    return 0.3048 * (E - 46500)
+def yton(y):
+    return y / 0.3048 + 52200
+def ntoy(N):
+    return 0.3048 * (N - 52200)
 
 for i in range(len(s)):
     ax1.text(x[i],y[i],s[i],fontsize=7,horizontalalignment='center',verticalalignment='center',color='#404040')

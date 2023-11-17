@@ -293,7 +293,8 @@ class DisplayController:
                 # No such device. Maybe it was reattached to the USB port, so try to find it back
                 logger.debug("Device removed")
                 try:
-                    match_function = lambda d: d.serial_number == self.serial_number
+                    def match_function(d):
+                        return d.serial_number == self.serial_number
                     self.device = usb.core.find(idVendor=0x1CE3, custom_match=match_function)
                 except:
                     pass

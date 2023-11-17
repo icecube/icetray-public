@@ -83,7 +83,8 @@ class I3PythonConverterTest(unittest.TestCase):
 		self.rows[field] = val
 		got_val = self.rows[field]
 		self.assertEqual(val, got_val, "Set field '%s' to %d, got %d back."%(field,val,got_val))
-		bad_news = lambda: self.rows.set(field,sys.maxsize+1)
+		def bad_news():
+			return self.rows.set(field,sys.maxsize+1)
 		self.assertRaises(OverflowError, bad_news)
 	def testArray(self):
 		field = 'signed_int_vec'
@@ -105,7 +106,8 @@ class I3PythonConverterTest(unittest.TestCase):
 			else:
 				swapped = '<'
 			arr = numpy.array(range(128), (swapped + self.codes[field[:-4]]) )
-			bad_news = lambda: self.rows.set(field,arr)
+			def bad_news():
+				return self.rows.set(field, arr)
 			self.assertRaises(RuntimeError,bad_news)
 	def testVectorInt(self):
 		vec = dataclasses.I3VectorInt()

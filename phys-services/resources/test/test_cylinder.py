@@ -25,7 +25,8 @@ class TestCylinder(unittest.TestCase):
 
     def test_cylinder_acceptance(self):
 
-        integrand=lambda z:2*pi*self.surface.area(i3d(arccos(z),0))
+        def integrand(z):
+            return 2 * pi * self.surface.area(i3d(arccos(z), 0))
         
         for cz1 in arange(-1,1.1,.25):
             for cz2 in arange(-1,1.1,.25):            

@@ -151,7 +151,8 @@ def handle_I3MCTree(mctree):
 
 def handle_I3Particle( key, particle, short ):
     if short:
-        valid = lambda x: not math.isnan(x)
+        def valid(x):
+            return not math.isnan(x)
         part_text = ("{}:\n"
                      "Type/Status: {}.{}\n"
                      .format(key, particle.type_string,

@@ -15,12 +15,17 @@ def _particleTimeRange(obj):
     r0 = numpy.array([obj.pos.x, obj.pos.y, obj.pos.z])
     d = numpy.array([obj.dir.x, obj.dir.y, obj.dir.z])
 
-    calc_pos = lambda k: k*d + r0
-    calc_t = lambda k: k/obj.speed + obj.time
-    calc_r = lambda pos: math.sqrt(pos[0]**2 + pos[1]**2)
+    def calc_pos(k):
+        return k * d + r0
+    def calc_t(k):
+        return k / obj.speed + obj.time
+    def calc_r(pos):
+        return math.sqrt(pos[0] ** 2 + pos[1] ** 2)
 
-    k_at_z = lambda z: (z-r0[2])/d[2]
-    r_at_z = lambda z: calc_r(calc_pos(k_at_z(z)))
+    def k_at_z(z):
+        return (z - r0[2]) / d[2]
+    def r_at_z(z):
+        return calc_r(calc_pos(k_at_z(z)))
 
     # define cilinder around IceCube and calculate
     # punch-through times of the particle track.
@@ -183,7 +188,8 @@ def getRangeHistogram(frame, key, timeRange):
     elif type(obj) == dataclasses.I3DOMLaunchSeriesMap:
         # histogram the launch times, with equal weighting
         e1 = operator.attrgetter('time')
-        e2 = lambda x: 1
+        def e2(x):
+            return 1
     else:
         return None
 

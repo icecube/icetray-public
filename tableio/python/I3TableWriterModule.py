@@ -132,7 +132,8 @@ and is almost certainly not what you actually want to do.', False)
         keys = self.GetParameter('Keys')
         types = self.GetParameter('Types')
         data_flood = self.GetParameter('BookEverything')
-        empty = lambda t: (t is None) or (len(t) == 0)
+        def empty(t):
+            return t is None or len(t) == 0
         
         if (not data_flood) and empty(keys) and empty(types):
             raise ValueError("""You must specify which frame objects should be booked by setting Keys \

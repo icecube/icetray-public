@@ -48,7 +48,8 @@ class AddStuffToFrames(icetray.I3Module):
 
 # You can use lamba functions as modules
 # This is an illustration of a simple filter.
-filter_frames = lambda frame : frame.Has('my_object')
+def filter_frames(frame):
+    return frame.Has("my_object")
         
 def print_frames(frame):
     '''
