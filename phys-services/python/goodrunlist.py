@@ -281,7 +281,7 @@ class GoodRunList(dict):
 
         self.paths.append(path)
 
-        ic79_pass1_mode = 'IC79' in path.upper() and not 'pass2' in path.lower()
+        ic79_pass1_mode = 'IC79' in path.upper() and 'pass2' not in path.lower()
 
         if ic79_pass1_mode:
             tmp_columns = self.columns

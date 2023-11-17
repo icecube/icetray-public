@@ -101,7 +101,7 @@ class Antenna(Detector):
         for key in self.antennakeys:
             if key in frame.keys():
                 for antkey in frame[key].keys():
-                    if not [antkey.GetAntennaID(), antkey.GetStationID()] in antenna_lables:
+                    if [antkey.GetAntennaID(), antkey.GetStationID()] not in antenna_lables:
                         antenna_lables.append([antkey.GetAntennaID(), antkey.GetStationID()])
         self.antenna_lables = antenna_lables
 
@@ -130,7 +130,7 @@ class Antenna(Detector):
 
         for key in self.antennakeys:
             if key in frame.keys():
-                if not self.AntennaStationID in frame[key].keys(): 
+                if self.AntennaStationID not in frame[key].keys():
                     return
                 # TODO: I did not find a more efficient way to do it #Federico
                 if isinstance(frame[key], dataclasses.EFieldTimeSeriesMap):
@@ -188,7 +188,7 @@ class Antenna(Detector):
         #Converts the waveform data into numpy arrays
         #The times and freqs (x-axis values) are converted into the requested units here
 
-        if not self.AntennaStationID in vectorMap.keys():
+        if self.AntennaStationID not in vectorMap.keys():
             logging.log_warn("Antenna key ({}) not found in the map!".format(self.AntennaStationID))
             return 0, 0, 0, 0, 0, 0, 0, 0,
 
@@ -210,14 +210,14 @@ class Antenna(Detector):
         #The times and freqs (x-axis values) are converted into the requested units here
 
         #Make sure that this antenna key is in the map
-        if not self.AntennaStationID in antDataMap.keys():
+        if self.AntennaStationID not in antDataMap.keys():
             logging.log_warn("Antenna key ({}) not found in the map!".format(self.AntennaStationID))
             return [], [], [], [], []
 
         channelMap = antDataMap[self.AntennaStationID]
 
         #Make sure that this channel key is in the map
-        if not channel_no in channelMap.keys():
+        if channel_no not in channelMap.keys():
             logging.log_warn("Channel key ({}) not found in the map of antenna key ({})!".format(channel_no,self.AntennaStationID))
             return [], [], [], [], []
 

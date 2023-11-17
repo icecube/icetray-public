@@ -105,7 +105,7 @@ class SPEFitInjector:
 
             if not omkey:
                 continue
-            if not int(omkey[0]) in range(1,87) or not int(omkey[1]) in range(1,61):
+            if int(omkey[0]) not in range(1, 87) or int(omkey[1]) not in range(1, 61):
                 dom = 'Average'
             else:
                 if float(feature[dom]['HQE'])==1.0: 

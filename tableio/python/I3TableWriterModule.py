@@ -164,7 +164,7 @@ $I3_BUILD/doc/projects/tableio/howto.html .
                     del all_types[t]
             specified_types = [d['type'] for d in types]
             for t in all_types:
-                if not t in specified_types:
+                if t not in specified_types:
                     types.append(dict(type=t, converter=default))
 
         # now, pull in all of the registered converters from Python-land

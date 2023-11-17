@@ -68,7 +68,7 @@ for var in geant4_vars:
         # warn user that existing environment variables override this script,
         # but don't complain if we are just running inside an env-shell.sh
         value = os.environ[var]
-        if not "I3_SHELL" in os.environ:
+        if "I3_SHELL" not in os.environ:
             sys.stderr.write(("Warning: Geant4 environment variable already set {0}={1}, "
                               "this overrides automatic detection\n")
                               .format(var, value))

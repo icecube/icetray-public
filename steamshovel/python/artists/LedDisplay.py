@@ -675,7 +675,7 @@ try:
             elif key_idx == 1:
                 # Key may be any container of OMKeys or a mask
                 # copied from Bubbles.py
-                return (   ("OMKey" in key_type and not "I3ParticleID" in key_type )
+                return (   ("OMKey" in key_type and "I3ParticleID" not in key_type )
                         or key_type.endswith("MapMask")
                         or key_type.endswith("MapUnion"))
             else:

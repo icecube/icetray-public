@@ -120,7 +120,7 @@ class BaseConverter(unittest.TestCase):
 			table=hdf.get_node("/Object")
 			self.assertIsNotNone(table, "Object table exists")
 			self.assertIn("a", table.colnames, "'A' parameter was recorded")
-			self.assertTrue(not "b" in table.colnames, "'B' parameter does not exist")
+			self.assertTrue("b" not in table.colnames, "'B' parameter does not exist")
 
 class GenericSubclassConverter(unittest.TestCase):
 	def setUp(self):
@@ -136,8 +136,8 @@ class GenericSubclassConverter(unittest.TestCase):
 			table = hdf.get_node("/Object")
 			self.assertIsNotNone(table, "Object table exists")
 			self.assertIn("a", table.colnames, "'A' parameter was recorded")
-			self.assertTrue(not "b" in table.colnames, "'B' parameter does not exist")
-
+			self.assertTrue("b" not in table.colnames, "'B' parameter does not exist")
+		
 class SpecificSubclassConverter(unittest.TestCase):
 	def setUp(self):
 		try_to_write(Bar,"test_bar.hdf5")

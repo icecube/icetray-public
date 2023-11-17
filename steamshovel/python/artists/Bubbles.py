@@ -31,7 +31,7 @@ class Bubbles( PyArtist ):
         if key_idx == 1:
             # Key may be any container of OMKeys or a mask
             return (("OMKey" in tn
-                    and not "I3ParticleID" in tn )
+                    and "I3ParticleID" not in tn )
                     or tn.endswith("MapMask")
                     or tn.endswith("MapUnion"))
         return False

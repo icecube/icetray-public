@@ -104,7 +104,7 @@ class I3Tray(_icetray._I3TrayBase):
         if hasattr(_type, '__i3traysegment__'):
             raise RuntimeError("Trying to add tray segment %s with AddModule. Use AddSegment instead." % _name)
 
-        if inspect.isclass(_type) and not _icetray.I3Module in inspect.getmro(_type):
+        if inspect.isclass(_type) and _icetray.I3Module not in inspect.getmro(_type):
             raise RuntimeError("Module %s of type %s doesn't inherit from icecube._icetray.I3Module" % (_name, _type))
         try:
             super(I3Tray, self).AddModule(_type, _name)
@@ -174,7 +174,7 @@ class I3Tray(_icetray._I3TrayBase):
 
         # Make case-insensitive where possible by matching to signature
         for k in keys:
-            if not k.lower() in largnames:
+            if k.lower() not in largnames:
                 continue
             keys[keys.index(k)] = argnames[largnames.index(k.lower())]
         kwargs = dict(zip(keys, vals))

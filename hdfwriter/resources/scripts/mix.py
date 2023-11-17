@@ -48,7 +48,7 @@ def h5inherit(infiles, outfile, overwrite=False):
 						hdf.removeNode(path)
 						tableset.remove(path)
 					del node
-			if not path in tableset:
+			if path not in tableset:
 				copied.append((fn, path, size))
 				h5copy(fn, outfile, path)
 				tableset.add(path)
