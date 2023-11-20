@@ -143,29 +143,31 @@ I3Reader::Configure()
 void
 I3Reader::Process()
 {
-  while (ifs_.peek() == EOF)
-    {
-      if (filenames_iter_ == filenames_.end())
-	{
-	  RequestSuspension();
-    current_filename_.reset();
-	  return;
-	}
-      else
-	OpenNextFile();
+  if(PeekFrame()){
+    log_fatal("I3Reader should only be used as a driving module. You have probably added another module like I3InfiniteSource to your tray before this one..");
+  }
+
+  while (ifs_.peek() == EOF) {
+    if (filenames_iter_ == filenames_.end()) {
+      RequestSuspension();
+      current_filename_.reset();
+      return;
     }
+    else
+      OpenNextFile();
+  }
 
   I3FramePtr frame(new I3Frame);
   frame->drop_blobs(drop_blobs_);
   try {
-	nframes_++;
-	frame->load(ifs_, skip_);
+    nframes_++;
+    frame->load(ifs_, skip_);
   } catch (const std::exception &e) {
-	log_fatal("Error reading %s at frame %d: %s!",
-	    current_filename_->c_str(), nframes_, e.what());
-	return;
+      log_fatal("Error reading %s at frame %d: %s!",
+        current_filename_->c_str(), nframes_, e.what());
+      return;
   }
-	
+
   PushFrame(frame, "OutBox");
 }
 
