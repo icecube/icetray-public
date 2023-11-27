@@ -22,10 +22,10 @@ Usage: ::
   import goodrunlist
 
   grl = goodrunlist.GoodRunList()
-  
+
   # Load one specific GRL
   grl.load('/data/exp/IceCube/2011/filtered/level2/IC86_2011_GoodRunInfo.txt')
-  
+
   # Add another GRL
   grl.load('/data/exp/IceCube/2015/filtered/level2/IC86_2015_GoodRunInfo.txt')
 
@@ -49,7 +49,7 @@ Usage: ::
         file_number = f['file_number']
 
         # Event IDs
-        first_event = f['first_event'] 
+        first_event = f['first_event']
         last_event = f['last_event']
 
         # Time of events (I3Time)
@@ -190,7 +190,7 @@ class RunInfo(dict):
             return datetime.strptime(path, '/data/exp/IceCube/%Y/filtered/level2/%m%d/Run{:0>8}/'.format(self['run_id'])).date()
         except ValueError:
             try:
-                return datetime.strptime(path, '/data/exp/IceCube/%Y/filtered/level2/%m%d/'.format(self['run_id'])).date()
+                return datetime.strptime(path, '/data/exp/IceCube/%Y/filtered/level2/%m%d/').date()
             except ValueError:
                 return datetime.strptime(path.split('_')[:-1], '/data/exp/IceCube/%Y/filtered/level2/%m%d/Run{:0>8}/'.format(self['run_id'])).date()
 
@@ -395,7 +395,7 @@ class GoodRunList(dict):
 
           # Only runs that are only good for IT
           run_ids = grl.get_run_ids(good_i3 = False, good_it = True)
-          
+
         """
 
         if good_i3 is None and good_it is None:
@@ -451,7 +451,7 @@ def GRL(pass2: bool = False, pass2a: bool = False, only_IC86: bool = False) -> G
         pass2a (bool, optional): Weather or not to use pass2a instead of the old
             level2 for seasons before 2017. If True, this parameter overrides
             the `pass2` parameter. Defaults to False.
-        only_IC86 (bool, optional): If True, only IC86 seasons will be loaded. 
+        only_IC86 (bool, optional): If True, only IC86 seasons will be loaded.
             Defaults to False.
 
     Returns:
