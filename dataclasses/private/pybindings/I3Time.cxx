@@ -1,6 +1,6 @@
 //
-//   Copyright (c) 2004, 2005, 2006, 2007   Troy D. Straszheim  
-//   
+//   Copyright (c) 2004, 2005, 2006, 2007   Troy D. Straszheim
+//
 //   $Id$
 //
 //   This file is part of IceTray.
@@ -13,7 +13,7 @@
 //   2. Redistributions in binary form must reproduce the above copyright
 //      notice, this list of conditions and the following disclaimer in the
 //      documentation and/or other materials provided with the distribution.
-//   
+//
 //   THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
 //   ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 //   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +25,9 @@
 //   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 //   OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 //   SUCH DAMAGE.
-//   
+//
 //   SPDX-License-Identifier: BSD-2-Clause
-//   
+//
 //
 
 // this pragma has to go before any functions or whatever are defined.
@@ -36,14 +36,10 @@
 #include <vector>
 
 #include <dataclasses/I3Time.h>
-#include <Python.h>
-#include <datetime.h>
 #include <icetray/python/dataclass_suite.hpp>
 #include <dataclasses/ostream_overloads.hpp>
 
 using namespace boost::python;
-
-#define HAVE_PYDATETIME_API
 
 std::string repr(I3Time t){
   std::stringstream out;
@@ -51,69 +47,81 @@ std::string repr(I3Time t){
   return out.str();
 }
 
-#ifdef HAVE_PYDATETIME_API
-boost::python::object GetDateTime(const I3Time& t)
+object GetDateTime(const I3Time& t)
 {
-
-  PyObject* obj;
+  object datetime_mod = import("datetime");
+  object datetime = datetime_mod.attr("datetime");
+  object utc = datetime_mod.attr("timezone").attr("utc");
+  object obj;
   if (t.IsLeapSecond()){
-    //python's datetime won't allow a leap second to be input from python
-    //so set to last microsecond of the day: 23:59:59.999999
-    obj = PyDateTime_FromDateAndTime(t.GetUTCYear(), 
-				     t.GetUTCMonth(), 
-				     t.GetUTCDayOfMonth(),
-				     23,
-				     59,
-				     59,
-				     999999
-				     );
+    obj = datetime(
+      t.GetUTCYear(),
+      t.GetUTCMonth(),
+      t.GetUTCDayOfMonth(),
+      23,
+      59,
+      59,
+      999999,
+      utc
+      );
   }else{
-    obj = PyDateTime_FromDateAndTime(t.GetUTCYear(), 
-				     t.GetUTCMonth(), 
-				     t.GetUTCDayOfMonth(),
-				     t.GetModJulianSec()/3600,
-				     t.GetModJulianSec()%3600/60,
-				     t.GetModJulianSec()%60,
-				     t.GetModJulianMicroSec()//round down to nearest microsecond
-				     );
+    obj = datetime(
+      t.GetUTCYear(),
+      t.GetUTCMonth(),
+      t.GetUTCDayOfMonth(),
+      t.GetModJulianSec()/3600,
+      t.GetModJulianSec()%3600/60,
+      t.GetModJulianSec()%60,
+      t.GetModJulianMicroSec(),
+      utc
+    );
   }
-  handle<> h(obj);
-  boost::python::object o(h);
-  return o;
+  return obj;
 }
 
-I3Time GetI3Time(const boost::python::object& datetime_obj)
+I3Time GetI3Time(const object& datetime_obj)
 {
+  object datetime_mod = import("datetime");
+  object datetime = datetime_mod.attr("datetime");
+  object date = datetime_mod.attr("date");
+  object utc = datetime_mod.attr("timezone").attr("utc");
+  object isinstance = bp::import("__main__").attr("__builtins__").attr("isinstance");
+
   I3Time t;
-  PyObject* datetime = datetime_obj.ptr();
 
   //datetime is a subclass of date so check for that before date
-  if (PyDateTime_Check(datetime))
+  if (isinstance(datetime_obj, datetime))
     {
-      t.SetUTCCalDate(PyDateTime_GET_YEAR(datetime),
-		      PyDateTime_GET_MONTH(datetime),
-		      PyDateTime_GET_DAY(datetime),
-		      PyDateTime_DATE_GET_HOUR(datetime),
-		      PyDateTime_DATE_GET_MINUTE(datetime),
-		      PyDateTime_DATE_GET_SECOND(datetime),
-		      PyDateTime_DATE_GET_MICROSECOND(datetime)*1e3
-		      );
-    }
-  else if (PyDate_Check(datetime))
-    {
-      t.SetUTCCalDate(PyDateTime_GET_YEAR(datetime),
-		      PyDateTime_GET_MONTH(datetime),
-		      PyDateTime_GET_DAY(datetime),
-		      0,0,0,0);
-    }
-  else
-    {
+      if ( datetime_obj.attr("tzinfo") != utc ) {
+        PyErr_SetString(PyExc_ValueError,
+          "I3Time can not be created from a datetime object with any timezone other than UTC. "
+          "Use `dt.replace(tzinfo=datetime.timezone.utc))` or other methods to set the timezone"
+        );
+        throw_error_already_set();
+      }
+
+      t.SetUTCCalDate(
+        extract<int>(datetime_obj.attr("year")),
+        extract<int>(datetime_obj.attr("month")),
+        extract<int>(datetime_obj.attr("day")),
+        extract<int>(datetime_obj.attr("hour")),
+        extract<int>(datetime_obj.attr("minute")),
+        extract<int>(datetime_obj.attr("second")),
+        extract<double>(datetime_obj.attr("microsecond"))*1e3
+      );
+    } else if (isinstance(datetime_obj, date)) {
+      t.SetUTCCalDate(
+        extract<int>(datetime_obj.attr("year")),
+        extract<int>(datetime_obj.attr("month")),
+        extract<int>(datetime_obj.attr("day")),
+        0,0,0,0.0
+      );
+    } else {
       PyErr_SetString(PyExc_TypeError, "Argument for GetI3Time must be of type datetime.datetime or datetime.date");
       throw_error_already_set();
     }
   return t;
 }
-#endif
 
 
 void set_unix_time_default(I3Time& t, time_t ut){
@@ -159,11 +167,7 @@ char I3DalendarDate_docstring [] =
 
 void register_I3Time()
 {
-#ifdef HAVE_PYDATETIME_API
-  PyDateTime_IMPORT;
-
   def("make_I3Time",&GetI3Time);
-#endif
   def("day_of_year",fx1,"I3Time::DayOfYear(double modjulianday)");
   def("day_of_year",fx2,"I3Time::DayOfYear(int64_t daqTime)");
   def("modjulianday", fx3,"I3Time::modjulianday(int year)");
@@ -177,8 +181,8 @@ void register_I3Time()
       args("year","month","day","hour","minute","sec","nanosecond"),
       I3DalendarDate_docstring);
 
-  scope i3time_scope = class_<I3Time, bases<I3FrameObject>, 
-    boost::shared_ptr<I3Time> >("I3Time")
+  scope i3time_scope = class_<I3Time, bases<I3FrameObject>,
+     boost::shared_ptr<I3Time> >("I3Time")
     .def(init<int32_t,int64_t>())
     .def(init<const I3Time&>())
     .def(init<double>())
@@ -186,9 +190,7 @@ void register_I3Time()
     BOOST_PP_SEQ_FOR_EACH(WRAP_DEF_RECASE, I3Time, DEFS)
     #undef  DEFS
     .add_property("is_leap_second",&I3Time::IsLeapSecond)
-#ifdef HAVE_PYDATETIME_API
     .add_property("date_time", &GetDateTime)
-#endif
 #define RO_PROPS (ModJulianDay)(ModJulianSec)(ModJulianNanoSec)(ModJulianMicroSec)(ModJulianDayDouble)(UnixTime) \
       (UTCYear)(UTCDaqTime)(UTCMonth)(UTCWeekday)(UTCDayOfMonth)(UTCSec)(UTCNanoSec)
     BOOST_PP_SEQ_FOR_EACH(WRAP_PROP_RO, I3Time, RO_PROPS)
@@ -210,7 +212,7 @@ void register_I3Time()
 
 
   register_pointer_conversions<I3Time>();
-  
+
   enum_<I3Time::Month>("Month")
     .value("Jan", I3Time::Jan)
     .value("Feb", I3Time::Feb)

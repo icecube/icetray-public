@@ -106,7 +106,7 @@ Now you can handle those objects the same as shown above.
 
 import os
 from glob import glob
-from datetime import datetime
+from datetime import datetime, timezone
 import requests
 import json
 import urllib
@@ -187,12 +187,12 @@ class RunInfo(dict):
             path += '/'
 
         try:
-            return datetime.strptime(path, '/data/exp/IceCube/%Y/filtered/level2/%m%d/Run{:0>8}/'.format(self['run_id'])).date()
+            return datetime.strptime(path, '/data/exp/IceCube/%Y/filtered/level2/%m%d/Run{:0>8}/'.format(self['run_id'])).replace(tzinfo=timezone.utc).date()
         except ValueError:
             try:
-                return datetime.strptime(path, '/data/exp/IceCube/%Y/filtered/level2/%m%d/').date()
+                return datetime.strptime(path, '/data/exp/IceCube/%Y/filtered/level2/%m%d/').replace(tzinfo=timezone.utc).date()
             except ValueError:
-                return datetime.strptime(path.split('_')[:-1], '/data/exp/IceCube/%Y/filtered/level2/%m%d/Run{:0>8}/'.format(self['run_id'])).date()
+                return datetime.strptime(path.split('_')[:-1], '/data/exp/IceCube/%Y/filtered/level2/%m%d/Run{:0>8}/'.format(self['run_id'])).replace(tzinfo=timezone.utc).date()
 
     def _get_file_metadata(self):
         r = requests.get(
@@ -251,8 +251,8 @@ class RunInfo(dict):
         for run in run_dicts:
             if (run["live_start"] is not None) and (run["stop"] is not None):
                 run_id = run["run_number"]
-                run_start_stamp = datetime.strptime(run["live_start"], "%Y-%m-%d %H:%M:%S")
-                run_end_stamp = datetime.strptime(run["stop"], "%Y-%m-%d %H:%M:%S")
+                run_start_stamp = datetime.strptime(run["live_start"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
+                run_end_stamp = datetime.strptime(run["stop"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
                 run_times.append([run_id, run_start_stamp, run_end_stamp])
 
         return run_times

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 # @copyright (C) 2015 The IceCube Collaboration
-# 
+#
 # @author Kevin Meagher
 # @date August 2015
 
@@ -12,7 +12,7 @@ http://ssd.jpl.nasa.gov/horizons.cgi
 """
 import os
 import math
-from datetime import datetime
+from datetime import datetime, timezone
 from icecube.icetray import I3Units
 from icecube import dataclasses,astro
 import unittest
@@ -38,7 +38,7 @@ def read_horizons(horizons_filename):
     ephem = {}
     for k in values:
         ephem[k] = []
-    
+
     with open(horizons_filename,'r') as csvfile:
         lines = iter(csvfile.readlines())
 
@@ -51,7 +51,7 @@ def read_horizons(horizons_filename):
 
         indices = {}
         for k,v in values.items():
-            indices[k] = header.index(v) 
+            indices[k] = header.index(v)
 
         line = next(lines).strip()
         assert(len(line) > 80 and line==len(line)*"*")
@@ -66,15 +66,12 @@ def read_horizons(horizons_filename):
                 break
 
             split = line.split(',')
-            
-            t = datetime.strptime(split[indices['date']]+"000", '%Y-%b-%d %H:%M:%S.%f')
-
+            t = datetime.strptime(split[indices['date']]+"000", '%Y-%b-%d %H:%M:%S.%f').replace(tzinfo=timezone.utc)
             for value in values:
                 if value =='date':
                     ephem[value].append(t)
                 else:
                     ephem[value].append(float(split[indices[value]]))
-                    
 
     return ephem
 
@@ -82,9 +79,9 @@ TEST_DATA = os.path.expandvars("$I3_BUILD/astro/resources/test/")
 
 class HorizonsTest(unittest.TestCase):
     def compare_file(self,hor_file,obj):
-    
+
         hor = read_horizons(hor_file)
-        
+
         for i,date in enumerate(hor['date']):
             t = dataclasses.make_I3Time(date)
             if obj=='sun':
@@ -93,12 +90,12 @@ class HorizonsTest(unittest.TestCase):
                 d = astro.I3GetMoonDirection(t)
             el = 90-math.degrees(d.zenith)
             az = (90-math.degrees(d.azimuth+astro.ICECUBE_LONGITUDE))%360.
-            
+
             eq = astro.I3GetEquatorialFromDirection(d,t)
-            
+
             ra = math.degrees(eq.ra)
             dec = math.degrees(eq.dec)
-            
+
             gal =  astro.I3GetGalacticFromEquatorial(eq)
 
             l = math.degrees(gal.l)
@@ -113,10 +110,10 @@ class HorizonsTest(unittest.TestCase):
 
     def test_sun_1dy(self):
         self.compare_file(TEST_DATA + 'horizons_sun_1dy.txt','sun')
-        
+
     def test_sun_1yr(self):
         self.compare_file(TEST_DATA + 'horizons_sun_1yr.txt','sun')
-        
+
     def test_sun_30yr(self):
         self.compare_file(TEST_DATA + 'horizons_sun_30yr.txt','sun')
 
@@ -129,8 +126,8 @@ class HorizonsTest(unittest.TestCase):
     def test_moon_30yr(self):
         self.compare_file(TEST_DATA + 'horizons_moon_30yr.txt','moon')
 
-        
+
 if __name__=="__main__":
     unittest.main()
-    
+
 

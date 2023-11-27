@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 #
 # @copyright (C) 2015 The IceCube Collaboration
-# 
+#
 # @author Kevin Meagher
 # @date August 2015
 
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta, timezone
 import pylab as plt
 import matplotlib.dates as mdates
 import matplotlib.ticker as ticker
@@ -32,7 +32,7 @@ sun_elevation = []
 day = []
 
 for n in days:
-    d = datetime(2020,1,1,12)+timedelta(n-1)
+    d = datetime(2020,1,1,12,tzinfo=timezone.utc)+timedelta(n-1)
     day.append(d)
 
     i3time = dataclasses.make_I3Time(d)
@@ -62,7 +62,7 @@ ax3.set_xlim(day[0],day[-1]+timedelta(1))
 plt_info = ax1.plot(sun_azimuth,sun_elevation)
 for n,d in enumerate(day):
     if d.day==1:
-        
+
         slope = -(sun_azimuth[n+1]-sun_azimuth[n-1])/(sun_elevation[n+1]-sun_elevation[n-1])
         size = 1
 
@@ -82,7 +82,7 @@ for n,d in enumerate(day):
             x = -1.5*size/(1+slope**2)**0.5
             txt_az = sun_azimuth[n]+x
             txt_el = sun_elevation[n]+slope*x
-            
+
         else:
             halign = 'left'
             text_az = sun_azimuth[n] + 1

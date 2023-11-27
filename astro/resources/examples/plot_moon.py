@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 # @copyright (C) 2015 The IceCube Collaboration
-# 
+#
 # @author Kevin Meagher
 # @date August 2015
 
@@ -10,7 +10,7 @@ import numpy as np
 from matplotlib.ticker import FormatStrFormatter
 from matplotlib.dates import DateFormatter,AutoDateLocator
 
-from datetime import datetime
+from datetime import datetime, timezone
 from icecube import dataclasses,astro
 from scipy.optimize import fminbound
 
@@ -50,7 +50,7 @@ alts = moon_alt(toff+mjd0)
 
 ax2.xaxis.set_major_formatter( DateFormatter("%Y"))
 ax2.xaxis.set_major_locator( AutoDateLocator() )
-ax2.set_xlim(datetime(2020,1,1,0,0,0),plt_max[-1])
+ax2.set_xlim(datetime(2020,1,1,0,0,0,tzinfo=timezone.utc),plt_max[-1])
 ax2.set_xlabel("Year")
 ax2.set_ylabel("Maximum Moon Altitude")
 ax2.yaxis.set_major_formatter(FormatStrFormatter(u'%d\u00b0'))
