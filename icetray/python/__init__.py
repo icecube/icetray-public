@@ -2,6 +2,7 @@ import warnings
 warnings.filterwarnings("ignore", ".*already registered; second conversion method ignored.", RuntimeWarning)
 
 from icecube._icetray import *
+__version__ = PROJECT_VERSION
 
 from icecube.icetray.test_module import I3TestModuleFactory
 from icecube.icetray.traysegment import traysegment, traysegment_inherit, module_altconfig

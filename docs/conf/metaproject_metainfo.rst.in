@@ -1,6 +1,7 @@
 Git information for this metaproject
 ------------------------------------
 
-:meta-project: @META_PROJECT@
-:url:          @GIT_URL@
-:revision:     @GIT_REVISION@
+:project-version: @CMAKE_PROJECT_VERSION@
+:meta-project:    @META_PROJECT@
+:url:             @GIT_URL@
+:revision:        @GIT_REVISION@

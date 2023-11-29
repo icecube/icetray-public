@@ -11,7 +11,7 @@
 #  2. Redistributions in binary form must reproduce the above copyright
 #     notice, this list of conditions and the following disclaimer in the
 #     documentation and/or other materials provided with the distribution.
-#  
+#
 #  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
 #  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 #  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -23,9 +23,9 @@
 #  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 #  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 #  SUCH DAMAGE.
-#  
+#
 #  SPDX-License-Identifier: BSD-2-Clause
-#  
+#
 #
 #
 
@@ -101,7 +101,7 @@ i3_add_library(icetray
   private/icetray/I3Parameter.cxx
   private/icetray/I3Module.cxx
   private/icetray/I3ConditionalModule.cxx
-  private/icetray/I3PacketModule.cxx  
+  private/icetray/I3PacketModule.cxx
   private/icetray/I3ServiceFactory.cxx
   private/icetray/I3TrayInfo.cxx
   private/icetray/I3TrayInfoService.cxx
@@ -193,6 +193,10 @@ endif (${MEMORY_TRACKING})
 set_source_files_properties(${ICETRAY_PYTHON_SRC}
   PROPERTIES
   COMPILE_FLAGS -DI3_PYBINDINGS_MODULE)
+
+  set_source_files_properties(private/pybindings/module.cxx
+  PROPERTIES
+  COMPILE_FLAGS "-DI3_PYBINDINGS_MODULE -I${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}")
 
 i3_test_executable(test
   private/test/I3BoolTest.cxx

@@ -12,7 +12,7 @@
 #  2. Redistributions in binary form must reproduce the above copyright
 #     notice, this list of conditions and the following disclaimer in the
 #     documentation and/or other materials provided with the distribution.
-#  
+#
 #  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
 #  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 #  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -24,9 +24,9 @@
 #  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 #  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 #  SUCH DAMAGE.
-#  
+#
 #  SPDX-License-Identifier: BSD-2-Clause
-#  
+#
 #
 colormsg("")
 colormsg(_HIBLUE_ "IceCube Configuration starting")
@@ -102,6 +102,7 @@ set(NOTES_DIR ${CMAKE_BINARY_DIR}/Testing/Notes)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/Testing/Notes)
 
 set(GIT_URL "GIT_URL-NOTFOUND")
+set(GIT_BRANCH "GIT_BRANCH-NOTFOUND")
 set(GIT_REVISION "GIT_REVISION-NOTFOUND")
 
 execute_process(COMMAND git config --local --get remote.origin.url
@@ -123,6 +124,7 @@ if(GIT_REVISION)
 endif()
 
 set(GIT_URL ${GIT_URL} CACHE INTERNAL "git url")
+set(GIT_BRANCH ${GIT_BRANCH} CACHE INTERNAL "git branch")
 set(GIT_REVISION ${GIT_REVISION} CACHE INTERNAL "git revision")
 set(GIT_SHORT_REVISION ${GIT_SHORT_REVISION} CACHE INTERNAL "git short revision")
 
@@ -161,6 +163,8 @@ endif()
 #
 # Get system info
 #
+boost_report_value(CMAKE_PROJECT_VERSION)
+
 set(OSTYPE ${CMAKE_SYSTEM_NAME})
 boost_report_value(OSTYPE)
 
@@ -224,7 +228,7 @@ if(NOT HAVE_META_PROJECT)
 endif()
 
 
-# 
+#
 # setup CMAKE_INSTALL_PREFIX
 # JC wants it like this.
 # set it to something reasonable if it equals /usr/local.
@@ -439,7 +443,7 @@ if (CMAKE_COMPILER_IS_CLANG)
 endif (CMAKE_COMPILER_IS_CLANG)
 
 #
-# The following is needed on OSX to enable "system includes" in tools.cmake 
+# The following is needed on OSX to enable "system includes" in tools.cmake
 if (CMAKE_COMPILER_IS_CLANG)
   set(CMAKE_INCLUDE_SYSTEM_FLAG_CXX "-isystem ")
 endif (CMAKE_COMPILER_IS_CLANG)
@@ -494,7 +498,7 @@ if(DEFINED COVERAGE)
   message(STATUS "This is a COVERAGE build.")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 --coverage")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0 --coverage")
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -g -O0 --coverage")    
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -g -O0 --coverage")
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -g -O0 --coverage")
   set(CMAKE_BUILD_TYPE "Debug")
 else()

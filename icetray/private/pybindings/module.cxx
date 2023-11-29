@@ -13,7 +13,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,15 +25,16 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 
 #include <icetray/I3Logging.h>
 #include <icetray/load_project.h>
 #include <icetray/scratch.h>
 #include <signal.h>
+#include "workspace_config.h"
 
 void register_OMKey();
 void register_I3Bool();
@@ -77,15 +78,20 @@ BOOST_PYTHON_FUNCTION_OVERLOADS(load_impl_overloads, load_impl,1,2);
 
 I3_PYTHON_MODULE(icetray)
 {
-  // 
-  // You *must* do this first, or you get the nasty error 
+  //
+  // You *must* do this first, or you get the nasty error
   //   void icecube::serialization::detail::tkmap::insert(const
-  //   icecube::serialization::extended_type_info*): Assertion `lookup(eti) ==  
-  //   slf->m_map.tend()' failed. 
-  // 
-  load_project("icetray", false); 
+  //   icecube::serialization::extended_type_info*): Assertion `lookup(eti) ==
+  //   slf->m_map.tend()' failed.
+  //
+  load_project("icetray", false);
 
   boost::python::scope().attr("I3Default") = boost::python::eval("object")();
+  boost::python::scope().attr("PROJECT_VERSION") = PROJECT_VERSION;
+  boost::python::scope().attr("GIT_REVISION") = GIT_REVISION;
+  boost::python::scope().attr("GIT_BRANCH") = GIT_BRANCH;
+  boost::python::scope().attr("GIT_URL") = GIT_URL;
+  boost::python::scope().attr("I3_PLATFORM") = I3_PLATFORM;
   def("load", &load_impl, load_impl_overloads(args("name","verbose")));
   def("get_scratch_directory", &I3::dataio::GetScratchDirectory);
   def("set_scratch_directory", &I3::dataio::SetScratchDirectory);
