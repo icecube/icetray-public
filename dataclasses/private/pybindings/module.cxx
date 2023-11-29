@@ -83,6 +83,7 @@ namespace bp = boost::python;
   (I3ScintWaveformSeriesMap)                                            \
   (AntennaKey)(I3AntennaChannel)(I3AntennaDataMap)(I3AntennaGeo)        \
   (I3AntennaWaveform)(FFTDataContainer)(FFTHilbertEnvelope)             \
+  (I3MapAntennaKeyAntennaKey)                                           \
   (FFTResamplingTools)(I3ComplexVector)                                 \
   (IceActKey)(I3IceActGeo)(I3IceActRecoPulseSeries)                     \
   (I3IceActRecoPulseSeriesMap)                                          \

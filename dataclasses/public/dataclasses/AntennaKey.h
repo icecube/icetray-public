@@ -52,4 +52,7 @@ I3_POINTER_TYPEDEFS(AntennaKey);
 typedef I3Vector<AntennaKey> I3VectorAntennaKey;
 I3_POINTER_TYPEDEFS(I3VectorAntennaKey);
 
+typedef I3Map<AntennaKey, AntennaKey> I3MapAntennaKeyAntennaKey;
+I3_POINTER_TYPEDEFS(I3MapAntennaKeyAntennaKey);
+
 #endif
