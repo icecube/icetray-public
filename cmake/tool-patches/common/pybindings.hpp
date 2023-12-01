@@ -7,6 +7,16 @@
 #include "icetray/I3FrameObject.h"
 #include "I3/name_of.h"
 
+#include <boost/python.hpp>
+#include <boost/python/suite/indexing/indexing_suite.hpp>
+#include <boost/python/suite/indexing/map_indexing_suite.hpp>
+#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
+
+#include "container_conversions.h"
+using scitbx::boost_python::container_conversions::from_python_sequence;
+using scitbx::boost_python::container_conversions::to_tuple;
+using scitbx::boost_python::container_conversions::variable_capacity_policy;
+
 class freeze : public boost::python::def_visitor< freeze >{
   friend class boost::python::def_visitor_access;
 private:

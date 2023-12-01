@@ -28,6 +28,7 @@
 //   
 //
 
+#include "pybindings.hpp"
 #include <boost/preprocessor.hpp>
 #include <vector>
 

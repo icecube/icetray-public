@@ -30,6 +30,7 @@
  *  
  */
 
+#include "pybindings.hpp"
 #include <icetray/load_project.h>
 
 void register_I3CalibrationService();

@@ -30,6 +30,7 @@
  *
  */
 
+#include "pybindings.hpp"
 #include <icetray/I3Logging.h>
 #include <icetray/load_project.h>
 #include <icetray/scratch.h>

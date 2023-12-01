@@ -12,6 +12,7 @@
 #ifndef TYPE_HELPERS_H_M3WNFWYF
 #define TYPE_HELPERS_H_M3WNFWYF
 
+#include "pybindings.hpp"
 #include "tableio/I3Datatype.h"
 #include "dataclasses/I3Vector.h"
 #include <sstream>

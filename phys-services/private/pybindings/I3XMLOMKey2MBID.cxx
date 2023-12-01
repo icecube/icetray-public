@@ -1,3 +1,4 @@
+#include "pybindings.hpp"
 #include "phys-services/I3XMLOMKey2MBID.h"
 
 namespace bp = boost::python;

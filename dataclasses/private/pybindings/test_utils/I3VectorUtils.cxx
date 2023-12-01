@@ -30,6 +30,7 @@
 //   
 //
 
+#include "pybindings.hpp"
 #include <dataclasses/physics/I3Particle.h>
 
 // this is client code that takes a std::vector<T>

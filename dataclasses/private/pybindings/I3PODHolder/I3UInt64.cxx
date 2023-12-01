@@ -1,4 +1,5 @@
 
+#include "pybindings.hpp"
 #include <icetray/I3PODHolder.h>
 #include <icetray/python/boost_serializable_pickle_suite.hpp>
 #include <icetray/python/operator_suite.hpp>

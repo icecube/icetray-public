@@ -339,10 +339,6 @@ i3_add_pybindings
 
 	      from icecube import mymodulename
 
-   #.  The additional compiler flag ``-DI3_PYBINDINGS_MODULE`` is set,
-       which brings some functions (like
-       ``register_pointer_conversions<T>()`` in to view.
-
    #.  ``Python.h`` is included first in every compilation unit.
        Python insists on this... otherwise there are various compile
        errors/warnings.

@@ -6,6 +6,7 @@
 #include <QColor>
 #include <QFont>
 
+#include "pybindings.hpp"
 #include "shovelart/Artist.h"
 #include "shovelart.h"
 #include "shovelart/ColorVariant.h"

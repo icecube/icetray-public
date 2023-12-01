@@ -9,6 +9,7 @@
  * @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy$
  */
 
+#include "pybindings.hpp"
 #include "tableio/textwriter/I3CSVTableService.h"
 
 namespace bp = boost::python;

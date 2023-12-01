@@ -29,6 +29,7 @@
  *  SPDX-License-Identifier: BSD-2-Clause
  *  
  */
+#include "pybindings.hpp"
 #include <icetray/load_project.h>
 
 #define REGISTER_THESE_THINGS \

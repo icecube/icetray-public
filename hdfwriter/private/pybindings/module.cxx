@@ -11,6 +11,7 @@
  * @author Jakob van Santen <vansanten@wisc.edu> Last changed by: $LastChangedBy$
  */
 
+#include "pybindings.hpp"
 #include <icetray/load_project.h>
 
 namespace bp = boost::python;

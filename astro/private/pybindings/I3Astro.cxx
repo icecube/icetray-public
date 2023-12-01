@@ -14,6 +14,7 @@
  *
  */
 
+#include "pybindings.hpp"
 #include "icetray/load_project.h"
 #include "dataclasses/physics/I3Particle.h"
 #include "tableio/converter/pybindings.h"

@@ -29,6 +29,7 @@
  *  SPDX-License-Identifier: BSD-2-Clause
  *  
  */
+#include "pybindings.hpp"
 #include <icetray/OMKey.h>
 #include <icetray/python/boost_serializable_pickle_suite.hpp>
 

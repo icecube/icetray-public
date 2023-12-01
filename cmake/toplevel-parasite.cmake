@@ -111,8 +111,6 @@ include(config)
 set(CMAKE_SOURCE_DIR ${I3_SRC})
 include(project)
 
-# use pre-generated I3_UBER_HEADER
-set(I3_UBER_HEADER ${HOST_I3_BUILD}${CMAKE_FILES_DIRECTORY}/I3.h)
 include_directories(${HOST_I3_SRC}/cmake/tool-patches/common)
 # add patches for ancient boost versions if we've got 'em
 load_cache(${HOST_I3_BUILD} READ_WITH_PREFIX "" BOOST_VERSION)

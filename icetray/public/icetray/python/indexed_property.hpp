@@ -24,6 +24,7 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
+#include "pybindings.hpp"
 #include <icetray/python/get_class.hpp>
 
 namespace boost { namespace python {

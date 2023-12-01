@@ -10,6 +10,7 @@
  */
 #include <string>
 
+#include "pybindings.hpp"
 #include "tableio/converter/pybindings.h"
 #include "tableio/converter/dataclasses_map_converters.h"
 #include "tableio/converter/dataclasses_vector_converters.h"

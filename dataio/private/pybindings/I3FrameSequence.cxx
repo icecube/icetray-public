@@ -30,6 +30,7 @@
  *  
  */
 
+#include "pybindings.hpp"
 #include <stdexcept>
 #include <icetray/I3Logging.h>
 #include <icetray/I3Frame.h>

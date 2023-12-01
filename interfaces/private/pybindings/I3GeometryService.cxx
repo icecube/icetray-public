@@ -28,6 +28,7 @@
 //   
 //
 
+#include "pybindings.hpp"
 using namespace boost::python;
 namespace bp = boost::python;
 

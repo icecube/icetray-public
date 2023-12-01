@@ -93,7 +93,7 @@ else()
       DEPENDS ${ARG_LINKDEF} ${ROOTCINT_HEADERS}
       COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh
       # rootcint found and ROOTSYS set in env-shell.sh path
-      ARGS rootcint -f ${TARGET} -c -DI3_USE_ROOT -DI3_USE_CINT ${ROOTCINT_INCLUDE_FLAGS} -p ${I3_UBER_HEADER} ${ROOTCINT_HEADERS} ${ROOTINTERNAL_HEADERS} ${ARG_LINKDEF}
+      ARGS rootcint -f ${TARGET} -c -DI3_USE_ROOT -DI3_USE_CINT ${ROOTCINT_INCLUDE_FLAGS} ${ROOTCINT_HEADERS} ${ROOTINTERNAL_HEADERS} ${ARG_LINKDEF}
       COMMENT "Generating ${TARGET} with rootcint"
       VERBATIM
       )
@@ -243,13 +243,6 @@ macro(i3_add_library THIS_LIB_NAME)
         LINK_FLAGS "-Wl,-no_warn_duplicate_libraries"
         )
     endif()
-
-    if(NOT ${THIS_LIB_NAME}_ARGS_WITHOUT_I3_HEADERS)
-      set_target_properties(${THIS_LIB_NAME}
-	PROPERTIES
-	COMPILE_FLAGS "-include ${I3_UBER_HEADER}"
-	)
-    endif(NOT ${THIS_LIB_NAME}_ARGS_WITHOUT_I3_HEADERS)
     if(${THIS_LIB_NAME}_ARGS_COMPILE_FLAGS)
       set_target_properties(${THIS_LIB_NAME}
 	PROPERTIES
@@ -470,13 +463,6 @@ macro(i3_executable THIS_EXECUTABLE_NAME)
     add_executable(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME}
       ${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES})
 
-    if(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_WITHOUT_I3_HEADERS)
-      message(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_WITHOUT_I3_HEADERS)
-      set(THIS_I3H_FLAGS "")
-    else()
-      set(THIS_I3H_FLAGS "-include ${I3_UBER_HEADER}")
-    endif()
-
     add_dependencies(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME} env-check)
 
     use_projects(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_TARGET_NAME}
@@ -594,11 +580,6 @@ macro(i3_test_executable THIS_EXECUTABLE_NAME)
     use_tools(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
       TOOLS "${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_USE_TOOLS}")
 
-    set_source_files_properties(${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_SOURCES}
-      PROPERTIES
-      COMPILE_FLAGS "-include ${I3_UBER_HEADER}"
-      )
-
     if(${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_LINK_LIBRARIES)
       target_link_libraries(${PROJECT_NAME}-${THIS_EXECUTABLE_NAME}
 	${${PROJECT_NAME}_${THIS_EXECUTABLE_NAME}_LINK_LIBRARIES})
@@ -706,8 +687,6 @@ macro(i3_add_pybindings MODULENAME)
         PROPERTIES
         PREFIX "${${MODULENAME}_PYPREFIX}"
         OUTPUT_NAME ${MODULENAME}
-        DEFINE_SYMBOL I3_PYBINDINGS_MODULE
-        COMPILE_FLAGS "-include ${I3_UBER_HEADER}"
         LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}/icecube
         )
     endif()

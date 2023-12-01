@@ -2,6 +2,7 @@
 #ifndef ICETRAY_PYTHON_GET_CLASS_HPP_INCLUDED
 #define ICETRAY_PYTHON_GET_CLASS_HPP_INCLUDED
 
+#include "pybindings.hpp"
 #include <boost/python/converter/registry.hpp>
 #include <set>
 

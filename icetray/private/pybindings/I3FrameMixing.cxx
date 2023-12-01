@@ -30,6 +30,7 @@
 //   
 //
 
+#include "pybindings.hpp"
 #include <icetray/I3FrameMixing.h>
 
 using namespace boost::python;

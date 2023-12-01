@@ -30,6 +30,7 @@
 //   
 //
 
+#include "pybindings.hpp"
 #include <icetray/I3FrameObject.h>
 
 using namespace boost::python;

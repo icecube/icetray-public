@@ -9,6 +9,7 @@
  * @author Jakob van Santen <vansanten@wisc.edu> Last changed by: $LastChangedBy$
  */
 
+#include "pybindings.hpp"
 #include <tableio/broadcaster/I3BroadcastTableService.h>
 
 namespace bp = boost::python;

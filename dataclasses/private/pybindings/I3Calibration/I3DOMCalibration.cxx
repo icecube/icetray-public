@@ -30,6 +30,7 @@
 //   
 //
 
+#include "pybindings.hpp"
 #include <dataclasses/calibration/I3DOMCalibration.h>
 #include <icetray/python/copy_suite.hpp>
 #include <icetray/python/indexed_property.hpp>

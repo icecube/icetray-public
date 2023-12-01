@@ -30,6 +30,7 @@
 //   
 //
 
+#include "pybindings.hpp"
 #include <icetray/I3FrameObject.h>
 #include <icetray/load_project.h>
 

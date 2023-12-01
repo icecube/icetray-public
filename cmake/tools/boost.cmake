@@ -63,4 +63,17 @@ if(Boost_FOUND)
 	set(BOOST_INCLUDE_DIR ${Boost_INCLUDE_DIR} CACHE PATH "Path to the boost include directories.")
 	set(BOOST_LIBRARIES ${Boost_LIBRARIES} CACHE PATH "Boost libraries")
 	include_directories(${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-new)
+
+	message(STATUS "+  version: ${Boost_VERSION}")
+	message(STATUS "+ includes: ${BOOST_INCLUDE_DIR}")
+	message(STATUS "+     libs: ${BOOST_LIBRARIES}")
+
+	if("${Boost_VERSION}" VERSION_LESS_EQUAL 1.78 )
+		add_compile_definitions(BOOST_ALLOW_DEPRECATED_HEADERS=1)
+	endif()
+
+	if("${Boost_VERSION}" VERSION_GREATER_EQUAL 1.73 )
+		add_compile_definitions(BOOST_BIND_GLOBAL_PLACEHOLDERS=1)
+	endif()
+
 endif(Boost_FOUND)

@@ -20,6 +20,8 @@
 #ifndef TABLEIO_CONSTPTRHELPERS_H_INCLUDED
 #define TABLEIO_CONSTPTRHELPERS_H_INCLUDED
 
+#include "pybindings.hpp"
+
 namespace boost{
 
     template<class T>

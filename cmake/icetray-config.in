@@ -41,7 +41,6 @@ fi
 
 #a couple of globally necessary flags
 if [ $COMPILE_FLAGS -eq 1 ]; then
-	OUTPUT_FLAGS="$OUTPUT_FLAGS -include $BUILD_DIR/CMakeFiles/I3.h"
 	cmake_cxx_flags="@CMAKE_CXX_FLAGS@"
 	OUTPUT_FLAGS="$OUTPUT_FLAGS $cmake_cxx_flags"
 fi

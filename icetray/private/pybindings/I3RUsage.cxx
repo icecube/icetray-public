@@ -30,6 +30,7 @@
 //   
 //
 
+#include "pybindings.hpp"
 #include <icetray/I3PhysicsTimer.h>
 #include <icetray/python/boost_serializable_pickle_suite.hpp>
 

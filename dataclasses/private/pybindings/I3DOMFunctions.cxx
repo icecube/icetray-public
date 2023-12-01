@@ -32,6 +32,7 @@
 
 #include <vector>
 
+#include "pybindings.hpp"
 #include <dataclasses/I3DOMFunctions.h>
 
 using namespace boost::python;

@@ -1,3 +1,4 @@
+#include "pybindings.hpp"
 #include "phys-services/source/I3GCDFileService.h"
 
 #include <dataclasses/geometry/I3Geometry.h>

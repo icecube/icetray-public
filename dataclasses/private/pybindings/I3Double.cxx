@@ -32,6 +32,7 @@
 
 #include <vector>
 
+#include "pybindings.hpp"
 #include <dataclasses/I3Double.h>
 #include <icetray/python/boost_serializable_pickle_suite.hpp>
 #include <icetray/python/operator_suite.hpp>

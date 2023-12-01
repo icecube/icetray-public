@@ -24,6 +24,8 @@
 #include <boost/type_traits/has_operator.hpp>
 #endif
 
+#include "pybindings.hpp"
+
 namespace bp = boost::python;
 
 namespace boost { namespace python {

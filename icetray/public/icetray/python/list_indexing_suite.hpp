@@ -37,6 +37,7 @@
 #include <boost/python/suite/indexing/container_utils.hpp>
 #include <boost/python/iterator.hpp>
 #include <boost/next_prior.hpp>
+#include "pybindings.hpp"
 #include <icetray/python/get_class.hpp>
 
 #include <type_traits>

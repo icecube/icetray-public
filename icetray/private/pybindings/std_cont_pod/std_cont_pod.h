@@ -33,6 +33,7 @@
 #ifndef __STD_CONT_POD_PYBINDINGS
 #define __STD_CONT_POD_PYBINDINGS
 
+#include "pybindings.hpp"
 #include <icetray/OMKey.h>
 #include <icetray/I3Frame.h>
 #include <icetray/impl.h>

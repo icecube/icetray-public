@@ -11,6 +11,7 @@
  * @author Jakob van Santen <vansanten@wisc.edu> Last changed by: $LastChangedBy$
  */
 
+#include "pybindings.hpp"
 #include <hdfwriter/I3HDFTableService.h>
 
 namespace bp = boost::python;

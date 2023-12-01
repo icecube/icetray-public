@@ -9,6 +9,7 @@
  * @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy$
  */
 
+#include "pybindings.hpp"
 #include "tableio/utils/I3ConverterBundle.h"
 
 namespace bp = boost::python;

@@ -30,6 +30,7 @@
 //   
 //
 
+#include "pybindings.hpp"
 #include <icetray/I3Frame.h>
 #include <icetray/serialization.h>
 #include <icetray/python/boost_serializable_pickle_suite.hpp>

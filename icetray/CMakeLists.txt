@@ -190,11 +190,7 @@ else (${MEMORY_TRACKING})
   colormsg(CYAN "+-- memory tracking disabled")
 endif (${MEMORY_TRACKING})
 
-set_source_files_properties(${ICETRAY_PYTHON_SRC}
-  PROPERTIES
-  COMPILE_FLAGS -DI3_PYBINDINGS_MODULE)
-
-  set_source_files_properties(private/pybindings/module.cxx
+set_source_files_properties(private/pybindings/module.cxx
   PROPERTIES
   COMPILE_FLAGS "-DI3_PYBINDINGS_MODULE -I${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}")
 

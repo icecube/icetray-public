@@ -30,6 +30,7 @@
  *  
  */
 
+#include "pybindings.hpp"
 #include <icetray/I3Logging.h>
 #include <icetray/I3Frame.h>
 #include <dataio/I3File.h>

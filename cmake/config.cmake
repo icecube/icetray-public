@@ -245,13 +245,6 @@ if(CMAKE_INSTALL_PREFIX MATCHES "${META_PROJECT}.r[a-f0-9]+.${OSTYPE}-${ARCH}.${
   set(CMAKE_INSTALL_PREFIX ${META_PROJECT}.r${GIT_SHORT_REVISION}.${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
 endif()
 
-## set the uber header. this file is included via command line for
-## every compiled file.
-set(I3_UBER_HEADER ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/I3.h)
-configure_file(${CMAKE_SOURCE_DIR}/cmake/I3.h.in
-  ${I3_UBER_HEADER}
-  @ONLY)
-
 colormsg("")
 colormsg(_HIBLUE_ "Setting compiler, compile drivers, and linker")
 colormsg("")

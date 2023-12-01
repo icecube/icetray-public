@@ -1,4 +1,5 @@
 
+#include "pybindings.hpp"
 #include <dataclasses/physics/I3LinearizedMCTree.h>
 
 namespace bp = boost::python;
