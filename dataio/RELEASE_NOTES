@@ -6,6 +6,17 @@ Release Notes
 main
 ----
 
+* Remove Uber Header (I3.h) (#3151)
+* Adds a sanity check to the I3Reader which will throw an exception (#3295)
+* Clean up invalid escape sequences for python3.12 (#3286)
+* fix E703 useless-semicolon (#3266)
+* fix E714 not-is-test (#3270)
+* fix E711 none-comparison (#3267)
+* dataio - update test_filestager.py for python3.12
+* use callable(obj) vs hasattr(obj, "__call__") (#3242)
+* cleanup reader_can_read_alphabet_file test (#3251)
+* remove dependencies of dataio-shovel-test (#3217)
+
 June 23, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.7.1

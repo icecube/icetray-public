@@ -6,6 +6,9 @@ Release Notes
 main
 ----
 
+- add __version__ to icetray (#3303)
+- cleanup shebang related issues EXE002-5 (#3257)
+
 June 22, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.7.0
@@ -62,4 +65,4 @@ June 13, 2018, Alex Olivas  (olivas@icecube.umd.edu)
 ----------------------------------------------------
 Release V18-06-00
 
-* First release.
+- First release.

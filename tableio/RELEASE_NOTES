@@ -4,15 +4,30 @@ Release Notes
 main
 ----
 
+* Remove Uber Header (I3.h) (#3151)
+* Fix E731 lambda-assignment (#3271)
+* general python cleanups (ruff/E713) (#3269)
+* fix E703 useless-semicolon (#3266)
+* general python cleanups (ruff/B018) (#3264)
+* fix B028 no-explicit-stacklevel (#3265)
+* fix E714 not-is-test (#3270)
+* fix E711 none-comparison (#3267)
+* python ruff cleanup fix EXE001 (#3289)
+* Fix a number of issues identified by ruff (#3262)
+* Fix up duplicate keys in tableio int test
+* Make composed tableio converters actually work (#3255)
+* Treat deserialization failures as hard errors for requested keys (#3256)
+* Check whether I3TableWriter is the driving module
+
 Oct. 12, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.8.2
 
 * Attach tableio converter submodule to current module (#3195)
 
-    * Attach tableio converter submodule to current module. Fixes #3187
-    * Allow tableio namespace outside module definition
-      e.g. in tests, where scope is None and None has no name
+  * Attach tableio converter submodule to current module. Fixes #3187
+  * Allow tableio namespace outside module definition
+    e.g. in tests, where scope is None and None has no name
 
 Sep. 28, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------

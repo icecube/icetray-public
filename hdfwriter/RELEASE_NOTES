@@ -6,6 +6,10 @@ Release Notes
 main
 ----
 
+* Remove Uber Header (I3.h) (#3151)
+* Clean up invalid escape sequences for python3.12 (#3286)
+* general python cleanups (ruff/E713) (#3269)
+
 June 22, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.7.0

@@ -8,6 +8,14 @@ Release Notes
 main
 ----
 
+* Remove Uber Header (I3.h) (#3151)
+* add __version__ to icetray (#3303)
+* cmake - add dfa127f to tarball-env-shell.sh.in (#3290)
+* general python cleanups (ruff/E713) (#3269)
+* update macos "step-by-step" docs
+* allow quoted arguments to tarbar-env-shell (#3239)
+* fix boost detection with parasitic builds (#3230)
+* update linker flags for Xcode 15 (#3200)
 * fix boost detection with parasitic builds
 
 Sep. 28, 2023 don la dieu (nega at icecube.umd.edu)

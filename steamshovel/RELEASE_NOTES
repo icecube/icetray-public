@@ -6,6 +6,23 @@ Release Notes
 main
 ----
 
+* Remove Uber Header (I3.h) (#3151)
+* Clean up invalid escape sequences for python3.12 (#3286)
+* Fix E731 lambda-assignment (#3271)
+* general python cleanups (ruff/E712) (#3268)
+* general python cleanups (ruff/E713) (#3269)
+* fix E703 useless-semicolon (#3266)
+* clean up new noqas in steamshovel (#3292)
+* fix B028 no-explicit-stacklevel (#3265)
+* fix E714 not-is-test (#3270)
+* fix E711 none-comparison (#3267)
+* python ruff cleanup fix EXE001 (#3289)
+* Fix a number of issues identified by ruff (#3262)
+* cleanup confusing loop control variables (#3246)
+* remove unnecessary `__future__` imports (#3243)
+* use callable(obj) vs hasattr(obj, "__call__") (#3242)
+* fix erroneous noqa directives (#3252)
+* remove I3Test.ENSURE* family of convenience functions (#3192)
 * general python cleanups
 
 Sep. 28, 2023 don la dieu (nega at icecube.umd.edu)

@@ -6,6 +6,14 @@ Release Notes
 main
 ----
 
+* Remove Uber Header (I3.h) (#3151)
+* Update radcube (#3308)
+* Remove naive datetime() objects (#3304)
+* fix E703 useless-semicolon (#3266)
+* general python cleanups (ruff/B018) (#3264)
+* python ruff cleanup fix EXE001 (#3289)
+* Pass an integer to randint in leap_second_test
+* remove I3Test.ENSURE* family of convenience functions (#3192)
 * added I3MapAntennaKeyAntennaKey
 
 Sep. 28, 2023 don la dieu (nega at icecube.umd.edu)

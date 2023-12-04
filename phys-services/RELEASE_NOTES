@@ -6,6 +6,16 @@ Release Notes
 main
 ----
 
+* Remove Uber Header (I3.h) (#3151)
+* Remove naive datetime() objects (#3304)
+* clean up F523, format has unused arguments (#3299)
+* Clean up invalid escape sequences for python3.12 (#3286)
+* Fix E731 lambda-assignment (#3271)
+* general python cleanups (ruff/E712) (#3268)
+* general python cleanups (ruff/E713) (#3269)
+* python ruff cleanup fix EXE001 (#3289)
+* remove I3Test.ENSURE* family of convenience functions (#3192)
+
 Sep. 28, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.8.1

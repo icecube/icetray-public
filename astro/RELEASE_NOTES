@@ -4,6 +4,11 @@ Release Notes
 main
 ----
 
+* Remove Uber Header (I3.h) (#3151)
+* Remove naive datetime() objects (#3304)
+* Fix E731 lambda-assignment (#3271)
+* general python cleanups (ruff/B018) (#3264)
+
 June 22, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.7.0
