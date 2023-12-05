@@ -45,7 +45,7 @@ It's **highly** recommended you prefer the full/maximal install below.
       libboost-system-dev libboost-thread-dev libboost-date-time-dev \
       libboost-python-dev libboost-serialization-dev libboost-filesystem-dev \
       libboost-program-options-dev libboost-regex-dev libboost-iostreams-dev \
-      python3-numpy fftw3-dev libboost-python-numpy
+      python3-numpy libfftw3-dev libboost-python-numpy
 
 Full Install (**RECOMMENDED**)
 ..............................
@@ -77,10 +77,10 @@ Projects/tools in combo not built with the minimal package installation above:
 
     $ apt-get install build-essential cmake libbz2-dev libgsl0-dev \
       libcfitsio-dev libboost-all-dev libstarlink-pal-dev libhdf5-dev \
-      libzstd-dev libsuitesparse-dev libsprng2-dev liblapack-dev \
-      python3-numpy fftw3-dev libqt5opengl5-dev libcdk5-dev libncurses-dev \
+      libzstd-dev libsuitesparse-dev libsprng2-dev liblapack-dev libhealpix-cxx-dev \
+      python3-numpy libfftw3-dev libqt5opengl5-dev libcdk5-dev libncurses-dev \
       python3-sphinx doxygen python3-mysqldb python3-zmq python3-h5py \
-      python3-pandas python3-seaborn
+      python3-pandas python3-seaborn libnlopt-dev
 
 Special Install
 ...............
