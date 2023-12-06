@@ -178,12 +178,6 @@ if(BUILD_STEAMSHOVEL)
         HINTS ${Qt5Core_INCLUDE_DIRS})
       target_link_libraries( steamshovel Qt5::Svg )
 
-      # Ensure install_name_tool and macdeployqt don't cause problems when rewriting shared lib paths
-      SET_TARGET_PROPERTIES( steamshovel
-        PROPERTIES
-        LINK_FLAGS "-headerpad_max_install_names"
-      )
-
       add_custom_target(mac-steamshovel-app
         COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/resources/Steamshovelapp/macdeployapp.py ${CMAKE_BINARY_DIR} ${SHOVEL_REVISION}
       )
