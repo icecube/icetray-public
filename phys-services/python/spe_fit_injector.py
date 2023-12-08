@@ -55,7 +55,7 @@ def is_new_style(fit_values):
     return False
 
 class SPEFitInjector:
-    def __init__(self, filename):
+    def __init__(self, filename,*, keep_gcd_atwd=False, keep_gcd_fadc=False):
         import json
         self.filename = filename
         if not os.path.exists(self.filename):
@@ -63,6 +63,8 @@ class SPEFitInjector:
         with open(self.filename) as f:
             self.fit_values = json.load(f)
         self.new_style = is_new_style(self.fit_values)
+        self.keep_gcd_atwd = keep_gcd_atwd
+        self.keep_gcd_fadc = keep_gcd_fadc
 
     def __repr__(self):
         return 'FitInjector(%s)' % self.filename
@@ -106,6 +108,7 @@ class SPEFitInjector:
             if not omkey:
                 continue
             if int(omkey[0]) not in range(1, 87) or int(omkey[1]) not in range(1, 61):
+                print('Using average for dom',dom)
                 dom = 'Average'
             else:
                 if float(feature[dom]['HQE'])==1.0: 
@@ -125,10 +128,11 @@ class SPEFitInjector:
             SPE_distribution.compensation_factor = self.fit_values[dom]['ATWD_fit']['compensation_factor']
             i3domcal.combined_spe_charge_distribution = SPE_distribution
 
-            if 'mean_atwd_charge' in self.fit_values[dom]: 
+            if not self.keep_gcd_atwd and 'mean_atwd_charge' in self.fit_values[dom]: 
                 i3domcal.mean_atwd_charge = self.fit_values[dom]['mean_atwd_charge']
-            if 'mean_fadc_charge' in self.fit_values[dom]: 
+            if not self.keep_gcd_fadc and 'mean_fadc_charge' in self.fit_values[dom]: 
                 i3domcal.mean_fadc_charge = self.fit_values[dom]['mean_fadc_charge']
+            print('Got SPE template for dom',dom)
 
             cal.dom_cal[omkey] = i3domcal
  
@@ -197,8 +201,10 @@ class I3SPEFitInjector(icetray.I3Module):
     def __init__(self, context):
         icetray.I3Module.__init__(self, context)
         self.AddParameter("Filename", "Uncompressed JSON file with SPE fit data", "")
+        self.AddParameter("KeepGcdATWD", "Keep mean_atwd_charge from GCD file, i.e. do not overwrite with value from JSON file (only for new style json) [default False]", False)
+        self.AddParameter("KeepGcdFADC", "Keep mean_fadc_charge from GCD file, i.e. do not overwrite with value from JSON file (only for new style json) [default False]", False)
     def Configure(self):
-        self.spe_fit_injector = SPEFitInjector(self.GetParameter("Filename"))
+        self.spe_fit_injector = SPEFitInjector(self.GetParameter("Filename"),keep_gcd_atwd=self.GetParameter("KeepGcdATWD"),keep_gcd_fadc=self.GetParameter("KeepGcdFADC"))
     def Calibration(self, frame):
         self.spe_fit_injector(frame)
         self.PushFrame(frame)
