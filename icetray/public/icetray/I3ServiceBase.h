@@ -114,21 +114,23 @@ class I3ServiceBase {
                 log_fatal( "(%s) object created with wrong constructor",
                            configuration_->InstanceName().c_str() );
             }
+            log_debug("I've entered GetParameter and am trying it first with Get<T>: %s", name.c_str());
             try {
                 value = configuration_->Get<T>(name);
             } catch (...) {
                 try {
-                    std::string context_name =
-                      configuration_->Get<std::string>(name);
-                    value = context_.Get<T>(context_name);
                     // NB: we got here by catching an error thrown by
                     // boost::python::extract(). All subsequent calls will fail
                     // unless we clean it up.
                     PyErr_Clear();
+                    log_debug("...which failed the first time, so trying it again with Get<string>: %s", name.c_str());
+                    std::string context_name = configuration_->Get<std::string>(name);
+                    log_debug("Attempting a Get<T> on context name %s", context_name.c_str());
+                    value = context_.Get<T>(context_name);
                 } catch (...) {
                     log_error("Error in %s module '%s', getting parameter '%s'",
-	                 I3::name_of(typeid(*this)).c_str(), GetName().c_str(),
-                         name.c_str());
+                              I3::name_of(typeid(*this)).c_str(), GetName().c_str(),
+                              name.c_str());
                     throw;
                 }
            } 
