@@ -60,4 +60,4 @@ To build the documentation in the build directory type:
 This will construct an html version of the documentation.  This builds the documentation in the build/docs folder.  Open build/docs/index.html in your favorite web browser.  You should at least read the quick start portion of the documentation before getting started.
 
 
-[![DOI](https://zenodo.org/badge/496742561.svg)](https://zenodo.org/doi/10.5281/zenodo.10452620)
+[![DOI](https://zenodo.org/badge/496742561.svg)](https://zenodo.org/doi/10.5281/zenodo.10452620)]
