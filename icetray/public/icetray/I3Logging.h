@@ -101,6 +101,8 @@ void SetIcetrayLogger(I3LoggerPtr);
 
 std::string I3LoggingStringF(const char *format, ...)
     __attribute__((__format__ (__printf__, 1, 2)));
+
+// NOLINTBEGIN
 #define I3_LOGGER(level, id, file, line, func, format, ...) \
     GetIcetrayLogger()->Log(level, id, file, line, func, \
     I3LoggingStringF(format, ##__VA_ARGS__))
@@ -119,6 +121,7 @@ std::string I3LoggingStringF(const char *format, ...)
     do { if(GetIcetrayLogger()->LogLevelForUnit(id)<=level) { \
     std::ostringstream _i3_str_logger_str; _i3_str_logger_str << msg; GetIcetrayLogger()->Log(level, \
     id, file, line, func, _i3_str_logger_str.str()); epilogue } } while (0)
+// NOLINTEND
 
 extern "C" {
 #endif // __cplusplus
@@ -145,6 +148,7 @@ SET_LOGGER(I3LOGSTR(PROJECT));
 SET_LOGGER("Unknown");
 #endif
 
+// NOLINTBEGIN
 #define log_custom(level, format, ...) I3_LOGGER(level, \
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
     ##__VA_ARGS__)
@@ -206,6 +210,7 @@ SET_LOGGER("Unknown");
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, format, \
     ##__VA_ARGS__), kill(getpid(), SIGABRT)
 #endif
+// NOLINTEND
 
 #define i3_assert(cond) do{ if(!(cond)) log_fatal("Assertion failed: %s", #cond); } while(0)
 #ifdef NDEBUG
