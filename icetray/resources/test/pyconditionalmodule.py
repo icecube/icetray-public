@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Sample i3module in python 
+# Sample i3module in python
 #
 
 from icecube.icetray import I3ConditionalModule, I3Int
@@ -28,10 +28,10 @@ class Mod(I3ConditionalModule):
     def __init__(self, context):
         I3ConditionalModule.__init__(self, context)
         self.nseen = 0
-        
+
     def Configure(self):
         pass
-    
+
     def Physics(self, frame):
         print("Value= %d" % frame['int'].value)
         assert the_condition(frame)
@@ -39,12 +39,11 @@ class Mod(I3ConditionalModule):
         self.PushFrame(frame)
 
     def Finish(self):
-        global n_should_pass
         print("saw %d, should have seen %d" % (self.nseen, n_should_pass))
         assert self.nseen == n_should_pass
 
 tray.AddModule(Mod, "PythonConditionalModule",
-               If = the_condition) 
+               If = the_condition)
 
 # print em
 tray.AddModule("Dump","Dump")
