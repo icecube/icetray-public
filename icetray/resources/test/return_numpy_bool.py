@@ -4,10 +4,10 @@ from icecube.icetray import I3Tray
 import sys
 
 try:
-	import numpy
+    import numpy
 except ImportError:
-	print('Numpy not found -- skipping test')
-	sys.exit(0)
+    print('Numpy not found -- skipping test')
+    sys.exit(0)
 
 t = I3Tray()
 t.Add("BottomlessSource")

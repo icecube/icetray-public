@@ -10,7 +10,7 @@ tray = I3Tray()
 
 tray.AddModule("I3InfiniteSource","streams",stream=icetray.I3Frame.Physics)
 def set_time(fr):
-	fr['DrivingTime'] = dataclasses.I3Time(2006, 0)
+    fr['DrivingTime'] = dataclasses.I3Time(2006, 0)
 tray.AddModule(set_time, 'time')
 
 tray.AddService("I3TextFileGeometryServiceFactory","geometry")(

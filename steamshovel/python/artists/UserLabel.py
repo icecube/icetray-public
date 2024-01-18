@@ -8,10 +8,10 @@ class UserLabel( PyArtist ):
         PyArtist.__init__(self)
         font = PyQFont()
         self.defineSettings((
-        	'text', 'Text label',
-        	'font', font,
-        	'fontsize', font.pointSize
-    	))
+            'text', 'Text label',
+            'font', font,
+            'fontsize', font.pointSize
+        ))
 
     def create( self, frame, output ):
         s = self.setting('text')

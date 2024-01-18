@@ -6,124 +6,124 @@ import unittest
 import sys
 
 try:
-	import numpy
-	have_numpy = True
+    import numpy
+    have_numpy = True
 except ImportError:
-	print("Numpy isn't installed, skipping numpy-specific tests")
-	have_numpy = False
+    print("Numpy isn't installed, skipping numpy-specific tests")
+    have_numpy = False
 
 class I3PythonConverterTest(unittest.TestCase):
-	def setUp(self):
-		desc = tableio.I3TableRowDescription()
+    def setUp(self):
+        desc = tableio.I3TableRowDescription()
 
-		self.types = {
-		              'signed_char':   tableio.types.Int8,
-		              'unsigned_char': tableio.types.UInt8,
-		              'signed_short':  tableio.types.Int16,
-		              'unsigned_short':tableio.types.UInt16,
-		              'signed_int':    tableio.types.Int32,
-		              'unsigned_int':  tableio.types.UInt32,
-		              'signed_long':   tableio.types.Int64,
-		              'unsigned_long': tableio.types.UInt64,
-		              'float':         tableio.types.Float32,
-		              'double':        tableio.types.Float64,
-		              'bool':          tableio.types.Bool}
-		# HACK: dial back longs on 32 bit systems for testing purposes
-		if sys.maxsize == 2**31-1:
-				self.types['signed_long'] = tableio.types.Int32
-				self.types['unsigned_long'] = tableio.types.UInt32
-		self.codes = {
-		              'signed_char':   'b',
-		              'unsigned_char': 'B',
-		              'signed_short':  'h',
-		              'unsigned_short':'H',
-		              'signed_int':    'i',
-		              'unsigned_int':  'I',
-		              'signed_long':   'l',
-		              'unsigned_long': 'L',
-		              'float':         'f',
-		              'double':        'd',
-		              'bool':          'o'}
-		self.conversions = {int:   ['c','b','B','h','H','i', 'I'],
-		                    float: ['f','d'],
-		                    bool:  ['o']}
+        self.types = {
+                      'signed_char':   tableio.types.Int8,
+                      'unsigned_char': tableio.types.UInt8,
+                      'signed_short':  tableio.types.Int16,
+                      'unsigned_short':tableio.types.UInt16,
+                      'signed_int':    tableio.types.Int32,
+                      'unsigned_int':  tableio.types.UInt32,
+                      'signed_long':   tableio.types.Int64,
+                      'unsigned_long': tableio.types.UInt64,
+                      'float':         tableio.types.Float32,
+                      'double':        tableio.types.Float64,
+                      'bool':          tableio.types.Bool}
+        # HACK: dial back longs on 32 bit systems for testing purposes
+        if sys.maxsize == 2**31-1:
+                self.types['signed_long'] = tableio.types.Int32
+                self.types['unsigned_long'] = tableio.types.UInt32
+        self.codes = {
+                      'signed_char':   'b',
+                      'unsigned_char': 'B',
+                      'signed_short':  'h',
+                      'unsigned_short':'H',
+                      'signed_int':    'i',
+                      'unsigned_int':  'I',
+                      'signed_long':   'l',
+                      'unsigned_long': 'L',
+                      'float':         'f',
+                      'double':        'd',
+                      'bool':          'o'}
+        self.conversions = {int:   ['c','b','B','h','H','i', 'I'],
+                            float: ['f','d'],
+                            bool:  ['o']}
 
 
-		for t,code in self.types.items():
-			desc.add_field(t,code,'','')
-			desc.add_field('%s_vec'%t,code,'','',128)
+        for t,code in self.types.items():
+            desc.add_field(t,code,'','')
+            desc.add_field('%s_vec'%t,code,'','',128)
 
-		desc.add_field('trigger_type',tableio.I3Datatype(dataclasses.I3DOMLaunch.TriggerType),'','')
+        desc.add_field('trigger_type',tableio.I3Datatype(dataclasses.I3DOMLaunch.TriggerType),'','')
 
-		self.desc = desc
-		self.rows = tableio.I3TableRow(desc,1)
+        self.desc = desc
+        self.rows = tableio.I3TableRow(desc,1)
 
-	def testKeys(self):
-		fields = list(self.desc.field_names)
-		self.assertEqual(fields, list(self.rows.keys()))
-	def testEnum(self):
-		field = 'trigger_type'
-		val = dataclasses.I3DOMLaunch.TriggerType.SPE_DISCRIMINATOR_TRIGGER
-		self.rows[field] = val
-		got = self.rows[field]
-		self.assertEqual(int(val), got)
-	def testIntegerScalars(self):
-		types = self.conversions[int]
-		reverse_types = dict([(b,a) for a,b in self.codes.items()])
-		for i,t in enumerate(types):
-			if t == 'c': continue # no from_python converter for char...ah well
-			val = i+7
-			field = reverse_types[t]
-			self.rows[field] = val
-			got_val = self.rows[field]
-			self.assertEqual(val, got_val, "Set field '%s' to %d, got %d back."%(field,val,got_val))
-	def testLongScalars(self):
-		import sys
-		field,val = 'signed_long',sys.maxsize
-		self.rows[field] = val
-		got_val = self.rows[field]
-		self.assertEqual(val, got_val, "Set field '%s' to %d, got %d back."%(field,val,got_val))
-		def bad_news():
-			return self.rows.set(field,sys.maxsize+1)
-		self.assertRaises(OverflowError, bad_news)
-	def testArray(self):
-		field = 'signed_int_vec'
-		arr = array.array(self.codes[field[:-4]],range(128))
-		self.rows[field] = arr
-		got = self.rows[field]
-		self.assertEqual(list(arr), got)
-	if have_numpy:
-		def testNumpy(self):
-			field = 'signed_long_vec'
-			arr = numpy.array(range(128),self.codes[field[:-4]])
-			self.rows[field] = arr
-			got = self.rows[field]
-			self.assertEqual(list(arr), got)
-			import sys
-			# try passing an array in byte-swapped order
-			if (sys.byteorder == 'little'):
-				swapped = '>'
-			else:
-				swapped = '<'
-			arr = numpy.array(range(128), (swapped + self.codes[field[:-4]]) )
-			def bad_news():
-				return self.rows.set(field, arr)
-			self.assertRaises(RuntimeError,bad_news)
-	def testVectorInt(self):
-		vec = dataclasses.I3VectorInt()
-		for r in range(128): vec.append(r)
-		field = 'signed_int_vec'
-		self.rows[field] = vec
-		got = self.rows[field]
-		self.assertEqual(list(range(128)), got)
-	def testVectorDouble(self):
-		vec = dataclasses.I3VectorDouble()
-		for r in range(128): vec.append(r+3)
-		field = 'double_vec'
-		self.rows[field] = vec
-		got = self.rows[field]
-		for a,b in zip(vec,got):
-			self.assertAlmostEqual(a,b)
+    def testKeys(self):
+        fields = list(self.desc.field_names)
+        self.assertEqual(fields, list(self.rows.keys()))
+    def testEnum(self):
+        field = 'trigger_type'
+        val = dataclasses.I3DOMLaunch.TriggerType.SPE_DISCRIMINATOR_TRIGGER
+        self.rows[field] = val
+        got = self.rows[field]
+        self.assertEqual(int(val), got)
+    def testIntegerScalars(self):
+        types = self.conversions[int]
+        reverse_types = dict([(b,a) for a,b in self.codes.items()])
+        for i,t in enumerate(types):
+            if t == 'c': continue # no from_python converter for char...ah well
+            val = i+7
+            field = reverse_types[t]
+            self.rows[field] = val
+            got_val = self.rows[field]
+            self.assertEqual(val, got_val, "Set field '%s' to %d, got %d back."%(field,val,got_val))
+    def testLongScalars(self):
+        import sys
+        field,val = 'signed_long',sys.maxsize
+        self.rows[field] = val
+        got_val = self.rows[field]
+        self.assertEqual(val, got_val, "Set field '%s' to %d, got %d back."%(field,val,got_val))
+        def bad_news():
+            return self.rows.set(field,sys.maxsize+1)
+        self.assertRaises(OverflowError, bad_news)
+    def testArray(self):
+        field = 'signed_int_vec'
+        arr = array.array(self.codes[field[:-4]],range(128))
+        self.rows[field] = arr
+        got = self.rows[field]
+        self.assertEqual(list(arr), got)
+    if have_numpy:
+        def testNumpy(self):
+            field = 'signed_long_vec'
+            arr = numpy.array(range(128),self.codes[field[:-4]])
+            self.rows[field] = arr
+            got = self.rows[field]
+            self.assertEqual(list(arr), got)
+            import sys
+            # try passing an array in byte-swapped order
+            if (sys.byteorder == 'little'):
+                swapped = '>'
+            else:
+                swapped = '<'
+            arr = numpy.array(range(128), (swapped + self.codes[field[:-4]]) )
+            def bad_news():
+                return self.rows.set(field, arr)
+            self.assertRaises(RuntimeError,bad_news)
+    def testVectorInt(self):
+        vec = dataclasses.I3VectorInt()
+        for r in range(128): vec.append(r)
+        field = 'signed_int_vec'
+        self.rows[field] = vec
+        got = self.rows[field]
+        self.assertEqual(list(range(128)), got)
+    def testVectorDouble(self):
+        vec = dataclasses.I3VectorDouble()
+        for r in range(128): vec.append(r+3)
+        field = 'double_vec'
+        self.rows[field] = vec
+        got = self.rows[field]
+        for a,b in zip(vec,got):
+            self.assertAlmostEqual(a,b)
 
 
 class DOMLaunchBookie(tableio.I3Converter):
@@ -243,87 +243,87 @@ class WaveformBookie(tableio.I3Converter):
 
 
 try:
-	from icecube import hdfwriter
-	have_hdf = True
+    from icecube import hdfwriter
+    have_hdf = True
 except ImportError:
-	print('hdfwriter is not available, skipping hdf-specific tests')
-	have_hdf = False
+    print('hdfwriter is not available, skipping hdf-specific tests')
+    have_hdf = False
 if have_hdf:
-	class I3TableWriterPythonModuleTest(unittest.TestCase):
-			"""Test the option-parsing magic."""
-			def setUp(self):
-				from icecube import icetray,tableio,dataclasses,hdfwriter
-				from icecube.tableio import I3TableWriter
-				import tempfile
-				from icecube.icetray import I3Tray
-				from icecube import phys_services
+    class I3TableWriterPythonModuleTest(unittest.TestCase):
+            """Test the option-parsing magic."""
+            def setUp(self):
+                from icecube import icetray,tableio,dataclasses,hdfwriter
+                from icecube.tableio import I3TableWriter
+                import tempfile
+                from icecube.icetray import I3Tray
+                from icecube import phys_services
 
-				tray = I3Tray()
-				tray.AddModule("I3InfiniteSource","streams", Stream=icetray.I3Frame.Physics)
-				self.tray = tray
-				self.tempfile = tempfile.NamedTemporaryFile()
-				self.hdf_service = hdfwriter.I3HDFTableService(self.tempfile.name,0)
-				self.target = I3TableWriter
-				self.bookie = DOMLaunchBookie()
+                tray = I3Tray()
+                tray.AddModule("I3InfiniteSource","streams", Stream=icetray.I3Frame.Physics)
+                self.tray = tray
+                self.tempfile = tempfile.NamedTemporaryFile()
+                self.hdf_service = hdfwriter.I3HDFTableService(self.tempfile.name,0)
+                self.target = I3TableWriter
+                self.bookie = DOMLaunchBookie()
 
-			def tearDown(self):
-				# self.hdf_service.CloseFile()
-				self.tempfile.close() # implicit delete
+            def tearDown(self):
+                # self.hdf_service.CloseFile()
+                self.tempfile.close() # implicit delete
 
-			def testNoArgs(self):
-				"""TableService is a required argument"""
-				self.tray.AddModule(self.target,'scribe')
+            def testNoArgs(self):
+                """TableService is a required argument"""
+                self.tray.AddModule(self.target,'scribe')
 
-				self.assertRaises(TypeError,self.tray.Execute)
-				# self.tray.Execute()
-			def testNotATable(self):
-				"""Things that are not TableServices are rejected"""
-				self.tray.AddModule(self.target,'scribe',
-					tableservice = 'foo',
-					keys = ['I3EventHeader','InIceRawData']
-					)
+                self.assertRaises(TypeError,self.tray.Execute)
+                # self.tray.Execute()
+            def testNotATable(self):
+                """Things that are not TableServices are rejected"""
+                self.tray.AddModule(self.target,'scribe',
+                    tableservice = 'foo',
+                    keys = ['I3EventHeader','InIceRawData']
+                    )
 
-				self.assertRaises(TypeError,self.tray.Execute)
-				# self.tray.Execute()
-			def testKeyList(self):
-				"""A simple list of keys, no error"""
-				self.tray.AddModule(self.target,'scribe',
-					tableservice = self.hdf_service,
-					keys = ['I3EventHeader','InIceRawData']
-					)
+                self.assertRaises(TypeError,self.tray.Execute)
+                # self.tray.Execute()
+            def testKeyList(self):
+                """A simple list of keys, no error"""
+                self.tray.AddModule(self.target,'scribe',
+                    tableservice = self.hdf_service,
+                    keys = ['I3EventHeader','InIceRawData']
+                    )
 
-				self.tray.Execute(1)
-			def testKeyDict(self):
-				"""A dict key: booker"""
-				self.tray.AddModule(self.target,'scribe',
-				tableservice = self.hdf_service,
-				keys = {'InIceRawData': self.bookie}
-				)
+                self.tray.Execute(1)
+            def testKeyDict(self):
+                """A dict key: booker"""
+                self.tray.AddModule(self.target,'scribe',
+                tableservice = self.hdf_service,
+                keys = {'InIceRawData': self.bookie}
+                )
 
-				self.tray.Execute(1)
-			def testKeyTuples(self):
-				"""Tuples of (key, booker)"""
-				self.tray.AddModule(self.target,'scribe',
-					tableservice = self.hdf_service,
-					keys = [('InIceRawData', self.bookie),('InIceRawData',None)] # repeat with default booker
-					)
+                self.tray.Execute(1)
+            def testKeyTuples(self):
+                """Tuples of (key, booker)"""
+                self.tray.AddModule(self.target,'scribe',
+                    tableservice = self.hdf_service,
+                    keys = [('InIceRawData', self.bookie),('InIceRawData',None)] # repeat with default booker
+                    )
 
-				self.tray.Execute(1)
+                self.tray.Execute(1)
 
 def test(fname='/Users/jakob/Documents/IceCube/nugen_nue_ic80_dc6.001568.000000.hits.001.1881140.domsim.001.2028732.i3.gz'):
-	f = dataio.I3File(fname)
-	fr = f.pop_physics()
-	dl = fr['InIceRawData'].values()[0][0]
-	booker = DOMLaunchBookie()
+    f = dataio.I3File(fname)
+    fr = f.pop_physics()
+    dl = fr['InIceRawData'].values()[0][0]
+    booker = DOMLaunchBookie()
 
-	test.desc = booker.CreateDescription(dl)
-	# return desc
-	n = booker.GetNumberOfRows(dl)
-	rows = tableio.I3TableRow(test.desc,n)
-	n_written = booker.Convert(dl,rows,fr)
-	f.close()
-	return rows
+    test.desc = booker.CreateDescription(dl)
+    # return desc
+    n = booker.GetNumberOfRows(dl)
+    rows = tableio.I3TableRow(test.desc,n)
+    n_written = booker.Convert(dl,rows,fr)
+    f.close()
+    return rows
 
 if __name__ == "__main__":
-	unittest.main()
+    unittest.main()
 

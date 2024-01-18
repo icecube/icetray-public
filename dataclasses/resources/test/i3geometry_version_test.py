@@ -25,14 +25,14 @@ infile = expandvars("$I3_TESTDATA") + "/dataclasses/vsn99_geometry.i3"
 
 tray.AddModule("I3Reader","reader", Filename=infile)
 def getgeo(fr):
-	geo = fr['I3Geometry'] # should throw error due to version number
+    geo = fr['I3Geometry'] # should throw error due to version number
 tray.AddModule(getgeo, 'getgeo')
 
 
 
 try:
-	tray.Execute()  # should result in throw
+    tray.Execute()  # should result in throw
 except:
-	sys.exit(0) # indicate successfully passed test
+    sys.exit(0) # indicate successfully passed test
 else:
-	sys.exit(1)  # indicate failure (didn't throw when given bad vsn number)
+    sys.exit(1)  # indicate failure (didn't throw when given bad vsn number)

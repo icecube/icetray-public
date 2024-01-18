@@ -17,8 +17,8 @@ while app.files.framesAreProcessed:
 # check frames
 expected_nkeys = [ 1, 13, 114, 13, 130, 13, 114, 13 ]
 if len(expected_nkeys) != app.files.nFrames:
-	icetray.i3logging.log_fatal( "wrong number of frames" )
+    icetray.i3logging.log_fatal( "wrong number of frames" )
 for idx in range(app.files.nFrames):
-	app.files.selectFrame(idx)
-	if expected_nkeys[idx] != len(frame):
-		icetray.i3logging.log_fatal( "wrong number of keys" )
+    app.files.selectFrame(idx)
+    if expected_nkeys[idx] != len(frame):
+        icetray.i3logging.log_fatal( "wrong number of keys" )

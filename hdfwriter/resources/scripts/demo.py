@@ -22,8 +22,8 @@ parser.add_option("-n","--frames",dest="nframes",help="number of frames to proce
 options,args = parser.parse_args()
 
 if len(args) != 1:
-	parser.error("You must supply an input filename")
-	
+    parser.error("You must supply an input filename")
+    
 infile = args[0]
 outfile = os.path.basename(args[0]) + '.' + options.format
 
@@ -31,15 +31,15 @@ from icecube import icetray,dataclasses,dataio,tableio
 from icecube.icetray import I3Tray
 
 if options.format == 'hdf5':
-	from icecube import hdfwriter
-	tabler = hdfwriter.I3HDFTableService(outfile,options.compression)
+    from icecube import hdfwriter
+    tabler = hdfwriter.I3HDFTableService(outfile,options.compression)
 elif options.format == 'root':
-	from icecube import rootwriter
-	tabler = rootwriter.I3ROOTTableService(outfile,options.compression)
+    from icecube import rootwriter
+    tabler = rootwriter.I3ROOTTableService(outfile,options.compression)
 elif options.format == 'csv':
-	tabler = tableio.I3CSVTableService(outfile[:-4] + '_csv')
+    tabler = tableio.I3CSVTableService(outfile[:-4] + '_csv')
 else:
-	raise ValueError("I don't have a writer service for format '%s'"%options.format)
+    raise ValueError("I don't have a writer service for format '%s'"%options.format)
 
 tray = I3Tray()
 
@@ -68,7 +68,7 @@ tray.AddModule(counter,'count-count')
 
 
 if options.nframes is not None:
-	tray.Execute(options.nframes)
+    tray.Execute(options.nframes)
 else:
-	tray.Execute()
+    tray.Execute()
 

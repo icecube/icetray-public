@@ -30,8 +30,8 @@ tray.AddModule(getcal, 'getcal')
 
 
 try:
-	tray.Execute()  # should result in throw
+    tray.Execute()  # should result in throw
 except:
-	sys.exit(0) # indicate successfully passed test
+    sys.exit(0) # indicate successfully passed test
 else:
-	sys.exit(1)  # indicate failure (didn't throw when given bad vsn number)
+    sys.exit(1)  # indicate failure (didn't throw when given bad vsn number)

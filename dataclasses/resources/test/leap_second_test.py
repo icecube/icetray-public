@@ -16,7 +16,7 @@ import os,datetime,random
 from icecube import dataclasses
 from icecube.icetray import I3Units
 
-random.seed(42)	# Make repeatable
+random.seed(42)    # Make repeatable
 
 def approx_Equal(x, y, tolerance=0.001):
     return abs(x-y) <= 0.5 * tolerance * (x + y)

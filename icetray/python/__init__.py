@@ -15,16 +15,16 @@ set_log_level_for_unit = logging.set_level_for_unit
 
 import atexit
 def fix_logging_crash():
-	"""
-	Unload any python loggers at exit to prevent Py_DECREF() after
-	interpreter destruction
+    """
+    Unload any python loggers at exit to prevent Py_DECREF() after
+    interpreter destruction
 
-	:meta private:
-	"""
-	I3Logger.global_logger = None
+    :meta private:
+    """
+    I3Logger.global_logger = None
 atexit.register(fix_logging_crash)
 
 try:
-	from icecube.icetray.traydebug import I3TrayDebugger
+    from icecube.icetray.traydebug import I3TrayDebugger
 except ImportError:
-	pass
+    pass

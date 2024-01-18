@@ -1,5 +1,5 @@
 import sys
 for x in sys.path:
-	print( 'python:'+x )
+    print( 'python:'+x )
 
 app.quit()

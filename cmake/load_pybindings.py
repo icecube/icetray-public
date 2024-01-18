@@ -38,13 +38,13 @@ warnings.filterwarnings("ignore", ".*already registered; second conversion metho
 warnings.warn("Deprication Warning: load_pybindings() is deprecated use `from icecube._your_module import *`", stacklevel=2)
                   
 if platform.system().startswith('freebsd'):
-	# C++ modules are extremely fragile when loaded with RTLD_LOCAL,
-	# which is what Python uses on FreeBSD by default, and maybe other
-	# systems. Convince it to use RTLD_GLOBAL.
+    # C++ modules are extremely fragile when loaded with RTLD_LOCAL,
+    # which is what Python uses on FreeBSD by default, and maybe other
+    # systems. Convince it to use RTLD_GLOBAL.
 
-	# See thread by Abrahams et al:
-	# http://mail.python.org/pipermail/python-dev/2002-May/024074.html
-	sys.setdlopenflags(0x102)
+    # See thread by Abrahams et al:
+    # http://mail.python.org/pipermail/python-dev/2002-May/024074.html
+    sys.setdlopenflags(0x102)
 
 def load_pybindings(name, path):
     """

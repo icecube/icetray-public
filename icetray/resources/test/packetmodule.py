@@ -42,8 +42,8 @@ tray.Add(Mod)
 tray.Add("Dump")
 
 def test(fr):
-	print('Frame has %d splits.' % fr["NSplits"].value)
-	assert fr["NSplits"].value == 1
+    print('Frame has %d splits.' % fr["NSplits"].value)
+    assert fr["NSplits"].value == 1
 tray.Add(test, Streams=[I3Frame.DAQ])
 
 tray.Execute(ndaq)

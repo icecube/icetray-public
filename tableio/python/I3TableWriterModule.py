@@ -20,7 +20,7 @@ import re,warnings
 class DefaultConverter(I3Converter):
     """ The user passes this to indicate that the default converter should be used.
         this converter doesn't actually work.
-	"""
+    """
     def __init__(self):
         I3Converter.__init__(self)
 

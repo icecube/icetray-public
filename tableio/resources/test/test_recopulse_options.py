@@ -34,10 +34,10 @@ key_geotrack = dict(key = p,
     name = p+"_withGeoTrack")
 
 tray.AddModule(tableio.I3TableWriter, 'scribe',
-	tableservice=tabler,
+    tableservice=tabler,
     keys=[key_none, key_geo, key_track, key_geotrack],
     subeventstreams=["InIceSplit"]
-	)
+    )
 
 
 tray.Execute(10)  # The first InIceSplit P-frame (event number 12) is the 10th frame.

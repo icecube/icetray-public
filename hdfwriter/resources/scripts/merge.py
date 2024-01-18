@@ -39,27 +39,27 @@ from icecube.tableio import I3TableTranscriber
 
 # try to import the appropriate services
 if 'hdf5' in [iformat,oformat]:
-	from icecube.hdfwriter import I3HDFTableService
+    from icecube.hdfwriter import I3HDFTableService
 if 'root' in [iformat,oformat]:
-	from icecube.rootwriter import I3ROOTTableService
+    from icecube.rootwriter import I3ROOTTableService
 if 'csv' in [iformat,oformat]:
-	from icecube.textwriter import I3CSVTableService
+    from icecube.textwriter import I3CSVTableService
 
 if iformat == 'hdf5':
-	inservices = [(I3HDFTableService,(infile,1,'r')) for infile in infiles]
+    inservices = [(I3HDFTableService,(infile,1,'r')) for infile in infiles]
 elif iformat == 'root':
-	inservices = [(I3ROOTTableService,(infile,'r')) for infile in infiles]
+    inservices = [(I3ROOTTableService,(infile,'r')) for infile in infiles]
 else:
-	raise "Unknown input format '%s'" % iformat
-	
+    raise "Unknown input format '%s'" % iformat
+    
 if oformat == 'hdf5':
-	outservice = I3HDFTableService(outfile,options.compress,'w')
+    outservice = I3HDFTableService(outfile,options.compress,'w')
 elif oformat == 'root':
-	outservice = I3ROOTTableService(outfile,compression_level=options.compress)
+    outservice = I3ROOTTableService(outfile,compression_level=options.compress)
 elif oformat == 'csv':
-	outservice = I3CSVTableService(outfile)
+    outservice = I3CSVTableService(outfile)
 else:
-	raise "Unknown out format '%s'" % oformat
+    raise "Unknown out format '%s'" % oformat
 
 for ctor,args in inservices:
     print('Merging %s'%args[0])
