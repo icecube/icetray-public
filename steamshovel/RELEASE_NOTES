@@ -6,6 +6,10 @@ Release Notes
 main
 ----
 
+Dec. 14, 2023 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.9.0
+
 * Remove Uber Header (I3.h) (#3151)
 * Clean up invalid escape sequences for python3.12 (#3286)
 * Fix E731 lambda-assignment (#3271)

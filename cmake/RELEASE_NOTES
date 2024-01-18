@@ -8,6 +8,16 @@ Release Notes
 main
 ----
 
+Dec. 15, 2023 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.9.1
+
+* bump the new IceTray version number
+
+Dec. 14, 2023 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.9.0
+
 * Remove Uber Header (I3.h) (#3151)
 * add __version__ to icetray (#3303)
 * cmake - add dfa127f to tarball-env-shell.sh.in (#3290)

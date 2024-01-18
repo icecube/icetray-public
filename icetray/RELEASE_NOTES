@@ -6,6 +6,10 @@ Release Notes
 main
 ----
 
+Dec. 14, 2023 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.9.0
+
 * Fix second "only in Debug mode" crash (#3327)
 * Remove Uber Header (I3.h) (#3151)
 * Fix #3172 - SPEFit module can't process user parameters in Debug mode (#3309)

@@ -6,6 +6,10 @@ Release Notes
 main
 ----
 
+Dec. 14, 2023 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.9.0
+
 - add __version__ to icetray (#3303)
 - cleanup shebang related issues EXE002-5 (#3257)
 
