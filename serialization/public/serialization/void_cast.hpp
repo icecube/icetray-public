@@ -29,6 +29,7 @@
 #if BOOST_VERSION >= 103900
 #include <boost/type_traits/is_virtual_base_of.hpp>
 #endif
+#include <boost/type_traits/aligned_storage.hpp>
 #include <serialization/void_cast_fwd.hpp>
 
 #include <serialization/config.hpp>
@@ -176,6 +177,15 @@ class void_caster_primitive :
 public:
     void_caster_primitive();
     virtual ~void_caster_primitive();
+
+private:
+    static std::ptrdiff_t base_offset() {
+        typename boost::aligned_storage<sizeof(Derived)>::type data;
+        return reinterpret_cast<char*>(&data)
+            - reinterpret_cast<char*>(
+                 static_cast<Base*>(
+                     reinterpret_cast<Derived*>(&data)));
+    }
 };
 
 template <class Derived, class Base>
@@ -183,13 +193,7 @@ void_caster_primitive<Derived, Base>::void_caster_primitive() :
     void_caster( 
         & type_info_implementation<Derived>::type::get_const_instance(), 
         & type_info_implementation<Base>::type::get_const_instance(),
-        // note:I wanted to displace from 0 here, but at least one compiler
-        // treated 0 by not shifting it at all.
-        reinterpret_cast<std::ptrdiff_t>(
-            static_cast<Derived *>(
-                reinterpret_cast<Base *>(8)
-            )
-        ) - 8
+        base_offset()
     )
 {
     recursive_register();
