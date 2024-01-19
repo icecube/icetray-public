@@ -46,7 +46,7 @@ def potemkin_object(klass):
         # it's a map
         value = potemkin_object(klass.__value_type__())
         obj[potemkin_object(klass.__key_type__())] = value
-    elif any((hasattr(obj, "add_"+name) for name in ("root", "primary"))):
+    elif any(hasattr(obj, "add_"+name) for name in ("root", "primary")):
         if hasattr(obj, "add_root"):
             add = obj.add_root
         else:

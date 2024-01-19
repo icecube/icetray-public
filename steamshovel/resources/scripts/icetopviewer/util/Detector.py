@@ -1,4 +1,4 @@
-class Detector(object):
+class Detector:
   """Base class for individual detector types
      the implementations know how to get information
      out of the frame, default values, etc"""
@@ -11,7 +11,7 @@ class Detector(object):
     self.shouldDraw = True   #Decides if this should be drawn
     self.colorMapType = 'gist_rainbow'
 
-class PulseData(object):
+class PulseData:
     __slots__ = ("t",
                  "t_plane",
                  "charge",

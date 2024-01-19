@@ -69,7 +69,7 @@ class TableioTest(unittest.TestCase):
             del tray
 
             csv_filename = os.path.join(csv_dir_name, "I3EventHeader.csv")
-            with open(csv_filename, 'r') as csvfile:
+            with open(csv_filename) as csvfile:
                 reader = csv.reader(csvfile)
                 header = next(reader)
 

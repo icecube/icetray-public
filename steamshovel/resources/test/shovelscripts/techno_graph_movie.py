@@ -34,7 +34,7 @@ class GraphInsetMovie:
         # Sort the top 5 DOMs by the order of their appearance
         top5 = sorted( activity_list, key=operator.itemgetter(0), reverse = True )[0:5]
         # convert to ( frameid, dom) pairs
-        top5 = [ ( int( ((time-tmin)/(tmax-tmin) * fcount ) ), dom) for (charge,time,dom) in top5 ]
+        top5 = [ ( int( (time-tmin)/(tmax-tmin) * fcount  ), dom) for (charge,time,dom) in top5 ]
         # re-sort by frame ids
         self.top5 = sorted( top5 )
         self.doms = []

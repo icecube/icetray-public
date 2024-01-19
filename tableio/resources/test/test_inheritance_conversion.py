@@ -15,14 +15,7 @@ from icecube.icetray import I3Tray
 from icecube import icetray, dataclasses, tableio, phys_services
 
 import sys, os
-if sys.version_info[:2] < (2,7):
-    try:
-        import unittest2 as unittest
-    except ImportError:
-        icetray.logging.log_error("unittest for Python %d.%d.%d is too old. install unittest2." % (sys.version_info[:3]))
-        sys.exit(0)
-else:
-    import unittest
+import unittest
 
 class Foo(icetray.I3FrameObject):
     def __init__(self):

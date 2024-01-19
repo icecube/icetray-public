@@ -1,6 +1,6 @@
 import copy
 
-class pypick(object):
+class pypick:
     r"""
     Construct lazily-evaluated boolean expressions from callables with
     identical signatures.

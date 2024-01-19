@@ -225,7 +225,7 @@ class I3TrayDebugger:
             line = fill*nf + " " + text + " " + fill*nf
             return line + fill*(size-len(line))
 
-        rep = str()
+        rep = ""
         if len(self.services) > 0:
             rep += center("I3Services", "-", 60)
             for name, conf in self.services.items():

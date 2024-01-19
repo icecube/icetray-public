@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # icetray documentation build configuration file, created by
 # sphinx-quickstart on Sun Aug 10 12:00:11 2008.

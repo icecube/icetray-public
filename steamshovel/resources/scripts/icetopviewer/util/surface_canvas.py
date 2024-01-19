@@ -12,7 +12,7 @@ from icecube.icetray import I3Units
 from icecube.recclasses import I3LaputopParams, LaputopParameter
 
 
-class SurfaceCanvas():
+class SurfaceCanvas:
     """
        This is the canvas that gets updated at each frame
        It holds the list of particles that need to be plotted and the various detector

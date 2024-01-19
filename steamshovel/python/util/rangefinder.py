@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from icecube import icetray, dataclasses
 import operator
 import math

@@ -8,7 +8,7 @@ from icecube import dataio,tableio
 
 class I3SimpleTable(tableio.I3Table):
     def __init__(self,table_service,table_name,description):
-        super(I3SimpleTable, self).__init__(table_service,table_name,description)
+        super().__init__(table_service,table_name,description)
         self.data = { n:[] for n in description.field_names}
 
     def WriteRows(self,row):
@@ -19,7 +19,7 @@ class I3SimpleTable(tableio.I3Table):
 
 class I3SimpleTableService(tableio.I3TableService):
     def __init__(self):
-        super(I3SimpleTableService, self).__init__()
+        super().__init__()
     def CreateTable(self,table_name,description):
         self.table = I3SimpleTable(self,table_name,description)
         return self.table

@@ -20,7 +20,7 @@ class TestGITStrings(unittest.TestCase):
 
     def test_matches_cmake_cache(self):
         vars = ("GIT_URL", "GIT_BRANCH", "GIT_REVISION")
-        with open(os.environ["I3_BUILD"] + "/CMakeCache.txt", "r") as f:
+        with open(os.environ["I3_BUILD"] + "/CMakeCache.txt") as f:
             cache_vals = {
                 var: line.strip().split("=")[-1]
                 for line in f.readlines()

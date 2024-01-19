@@ -10,7 +10,7 @@ from icecube import icetray,dataclasses,dataio
 
 class I3RecoPulseSeriesMapMaskTest(unittest.TestCase):
     def setUp(self):
-        super(I3RecoPulseSeriesMapMaskTest, self).setUp()
+        super().setUp()
 
         # create a pulse series map with a known bad
         # 0 width case
@@ -46,7 +46,7 @@ class I3RecoPulseSeriesMapMaskTest(unittest.TestCase):
 
 class I3RecoPulseSeriesMapMaskTest2(unittest.TestCase):
     def setUp(self):
-        super(I3RecoPulseSeriesMapMaskTest2, self).setUp()
+        super().setUp()
 
         # create a pulse series map with a known bad
         # 0 width case. only two pulses.

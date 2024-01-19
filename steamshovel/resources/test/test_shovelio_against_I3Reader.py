@@ -10,7 +10,7 @@ from icecube.shovelio import I3FrameSequence
 
 class NotEqualError( Exception ):
     def __init__(self, reason):
-        super( NotEqualError, self ).__init__(self, reason)
+        super().__init__(self, reason)
 
 class AllframesModule( icetray.I3Module ):
     '''A module that verifies the output of a shovelio.I3FrameSequence

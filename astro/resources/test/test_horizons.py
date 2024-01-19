@@ -39,7 +39,7 @@ def read_horizons(horizons_filename):
     for k in values:
         ephem[k] = []
 
-    with open(horizons_filename,'r') as csvfile:
+    with open(horizons_filename) as csvfile:
         lines = iter(csvfile.readlines())
 
         for line in lines:

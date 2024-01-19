@@ -15,7 +15,7 @@ class GCD_inserter(icetray.I3PacketModule):
   NOTE: can only be used for experimental data (use the 'If'-option in the tray)
   """
   def __init__(self,context):
-    super(GCD_inserter, self).__init__(context, icetray.I3Frame.DAQ)
+    super().__init__(context, icetray.I3Frame.DAQ)
     self.ignoreTypeList = []
 
     self.AddParameter("IgnoreFrameTypes",
@@ -29,7 +29,7 @@ class GCD_inserter(icetray.I3PacketModule):
     self.AddOutBox("OutBox")
 
   def Configure(self):
-    super(GCD_inserter, self).Configure()
+    super().Configure()
     self.ignoreTypeList = self.GetParameter("IgnoreFrameTypes")
     self.pass2 = self.GetParameter("Pass2")
     self.last_seen_run = float('nan')

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Author: Sander Vanheule (Universiteit Gent) <sander.vanheule@ugent.be>
 # Steamshovel module used to render and display IceCube data to an LED display connected via USB
 
@@ -11,7 +10,7 @@ try:
 
     class I3LoggingHandler(logging.Handler):
         def __init__(self):
-            super(I3LoggingHandler, self).__init__()
+            super().__init__()
 
         def emit(self, record):
             if record.levelno in i3logging.LoggingBridge.i3levels:
@@ -56,7 +55,7 @@ except:
 
 import os
 
-class DisplayLed(object):
+class DisplayLed:
     "Class representing the color of an RGB LED with time dependent color and brightness."
 
     def __init__(self, brightness, color):
@@ -320,7 +319,7 @@ class DisplayWorker(threading.Thread):
     """
 
     def __init__(self, controller, buffer_slice):
-        super(DisplayWorker, self).__init__()
+        super().__init__()
         self.buffer_ready = threading.Condition()
         self.transmit_done = threading.Event()
         self.__halt = threading.Event()

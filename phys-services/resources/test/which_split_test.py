@@ -35,7 +35,7 @@ class split_test_frame_generator(icetray.I3Module):
     For any other purpose this module is fantastically useless!
     """
     def __init__(self,ctx):
-        super(split_test_frame_generator,self).__init__(ctx)
+        super().__init__(ctx)
         self.genspecs=[{'name':n,'nP':N} for n,N in zip(['null','foo','bar'],[Nnull,Nfoo,Nbar])]
         self.AddOutBox("OutBox")
     def Configure(self):
@@ -71,7 +71,7 @@ class schizzoparanoia(icetray.I3ConditionalModule):
     Some splits are OK. Others are not.
     """
     def __init__(self,ctx):
-        super(schizzoparanoia,self).__init__(ctx)
+        super().__init__(ctx)
         self.should_run_on = set()
         self.did_run_on = set()
         self.AddParameter('ShouldRunOn','set of (splitname,subid) pairs that should be seen',self.should_run_on)

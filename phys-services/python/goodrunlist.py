@@ -114,7 +114,7 @@ import numpy as np
 
 class RunInfo(dict):
     def __init__(self, data):
-        super(RunInfo, self).__init__(data)
+        super().__init__(data)
 
     def get_gcd_file(self):
         """
@@ -261,7 +261,7 @@ class RunInfo(dict):
 
 class GoodRunList(dict):
     def __init__(self, data = {}, columns = ['RunNum', 'Good_i3', 'Good_it', 'LiveTime', 'ActiveStrings', 'ActiveDoms', 'ActiveInIce', 'OutDir', 'Comment(s)'], renamed_columns = ['run_id', 'good_i3', 'good_it', 'livetime', 'active_strings', 'active_doms', 'active_inice', 'outdir', 'comment'], run_id_column = 0, num_decimals = 2):
-        super(GoodRunList, self).__init__(data)
+        super().__init__(data)
         self.paths = []
         self.columns = columns
         self.renamed_columns = renamed_columns
@@ -294,7 +294,7 @@ class GoodRunList(dict):
 
         pass2 = 'pass2' in path.lower()
 
-        with open(path, 'r') as f:
+        with open(path) as f:
             headers = True
 
             for line in f:

@@ -21,7 +21,7 @@ from icecube.recclasses import LaputopEnergy
 class IceTop(Detector):
     """docstring for IceTop"""
     def __init__(self):
-        super(IceTop, self).__init__()
+        super().__init__()
         self.pulsekeys = self.GetDefaultPulseKeys()
         self.color = "k"
         self.name = "IceTop"

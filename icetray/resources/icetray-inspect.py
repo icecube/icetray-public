@@ -319,7 +319,7 @@ def get_doxygen_docstring(project,modulename):
                                                project,"xml","class"+modulename+".xml")
     try:
         tree = ET.parse(xmlfile)
-    except IOError:
+    except OSError:
         # log.warning("Could not parse doxygen docstring from %s" % xmlfile)
         return ""
 
@@ -588,7 +588,7 @@ if opts.all:
     args = compiled_projects+python_projects
 
 if opts.output:
-    outfile = open(opts.output,'wt')
+    outfile = open(opts.output,"w")
 else:
     outfile = sys.stdout
 

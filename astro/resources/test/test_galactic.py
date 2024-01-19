@@ -14,10 +14,7 @@ http://simbad.u-strasbg.fr/simbad/sim-fid
 """
 
 import sys,os
-if sys.version_info < (2,7):
-    import unittest2 as unittest
-else:
-    import unittest
+import unittest
 
 from icecube.icetray import I3Units
 from icecube import astro

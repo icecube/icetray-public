@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 from icecube import icetray
 from icecube.shovelio import I3FrameSequence
 from icecube.dataio import I3File

@@ -27,7 +27,7 @@ class Antenna(Detector):
     """docstring for Antenna"""
 
     def __init__(self):
-        super(Antenna, self).__init__()
+        super().__init__()
         self.antennakeys = self.GetDefaultAntennaKeys()
         self.antennas_pulse_patches = PatchCollection([])
         self.color = "b"

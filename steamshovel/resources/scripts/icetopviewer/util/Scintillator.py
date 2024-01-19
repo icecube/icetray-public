@@ -15,7 +15,7 @@ from matplotlib import colors, cm
 class Scintillator(Detector):
     """docstring for Scintillator"""
     def __init__(self):
-        super(Scintillator, self).__init__()
+        super().__init__()
         self.pulsekeys = self.GetDefaultPulseKeys()
         self.color = "r"
         self.name = 'Scintillators'

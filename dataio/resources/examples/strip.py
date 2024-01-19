@@ -13,8 +13,7 @@ except ImportError:
 def files(args):
     """A frame generator that can continue over multiple files"""
     for a in args:
-        for f in dataio.I3File(a):
-            yield f
+        yield from dataio.I3File(a)
 
 def main():
     from optparse import OptionParser,OptionGroup

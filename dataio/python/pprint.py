@@ -99,7 +99,7 @@ def format_size( frame, key):
     if key in frame:
         size = frame.size(key)
     else:
-        return str()
+        return ''
 
     while size > cfactor and bool(unit):
         size /= cfactor

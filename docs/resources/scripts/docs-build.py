@@ -81,11 +81,11 @@ def symlinkdir(srcdir,destdir):
         symlink(src, os.path.join(destdir,f))
 
 def copy_replace(infile,outfile,replace):
-    with open(infile,'rt') as f:
+    with open(infile) as f:
         txt = f.read()
     for rin,rout in replace.items():
         txt = txt.replace(rin,rout)
-    with open(outfile,'wt') as f:
+    with open(outfile,"w") as f:
         f.write(txt)
 
 def use_this_project(proj):
@@ -284,7 +284,7 @@ def main():
             mkdir_p(os.path.join(sourcedir, "doxygen", project_name))
             outfilename = os.path.join(sourcedir, "doxygen", project_name, "index.rst")
             log.debug("Writing %s, with project name: %s, doxygen dir: %s", outfilename, project_name, doxygen_dir)
-            with open(outfilename,'wt') as f:
+            with open(outfilename,"w") as f:
                 f.write(cppautodoctxt.format(PROJECT_NAME=project_name,
                                              DOXYGEN_PROJECT_PATH=doxygen_dir))
     else:

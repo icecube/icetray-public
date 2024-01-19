@@ -39,7 +39,7 @@ class CylinderArtist( PyArtist ):
         # Add cylinder using post-creation adjustments
         h4 = output.addCylinder( vec3d(0,0,0), vec3d(0,0,0), 0, 0 )
         h4.setLocation( vec3d(400,0,500) )
-        h4.setAxis( ConstantVec3d((vec3d( -500, 0, 0 ))))
+        h4.setAxis( ConstantVec3d(vec3d( -500, 0, 0 )))
         h4.setBaseRadius( 90 )
         h4.setTopRadius( ConstantFloat(1) )
         h4.setColor( (.9, .9, .1) )

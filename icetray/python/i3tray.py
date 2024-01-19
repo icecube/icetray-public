@@ -107,15 +107,15 @@ class I3Tray(_icetray._I3TrayBase):
         if inspect.isclass(_type) and _icetray.I3Module not in inspect.getmro(_type):
             raise RuntimeError("Module %s of type %s doesn't inherit from icecube._icetray.I3Module" % (_name, _type))
         try:
-            super(I3Tray, self).AddModule(_type, _name)
+            super().AddModule(_type, _name)
             self.last_added = _name
             for k,v in kwargs.items():
-                super(I3Tray, self).SetParameter(_name, k, v)                
+                super().SetParameter(_name, k, v)                
             # Handle module conditions as a special case
             if If is None and len(self.current_condition_stack) > 0:
                 If = self.current_condition_stack[-1]
             if If is not None:
-                super(I3Tray, self).SetParameter(_name, 'If', If)
+                super().SetParameter(_name, 'If', If)
             return self
         except:
             raise
@@ -139,10 +139,10 @@ class I3Tray(_icetray._I3TrayBase):
         """
         if _name is None:
             _name = self._create_name(_type, "Service", self.tray_info.factories_in_order)
-        super(I3Tray, self).AddService(_type, _name)
+        super().AddService(_type, _name)
         self.last_added = _name
         for k,v in kwargs.items():
-            super(I3Tray, self).SetParameter(_name, k, v)
+            super().SetParameter(_name, k, v)
         return self
 
     def AddSegment(self, _segment, _name=None, If=None, **kwargs):
@@ -192,21 +192,21 @@ class I3Tray(_icetray._I3TrayBase):
             self.current_condition_stack.pop()
      
     def SetParameter(self, module, param, value):
-        super(I3Tray, self).SetParameter(module, param, value)
+        super().SetParameter(module, param, value)
         return self
 
     def ConnectBoxes(self, *args):
         if len(args) == 4:
-            super(I3Tray, self).ConnectBoxes(args[0], args[1], args[2], args[3])
+            super().ConnectBoxes(args[0], args[1], args[2], args[3])
         elif len(args) == 3:
-            super(I3Tray, self).ConnectBoxes(args[0], args[1], args[2])
+            super().ConnectBoxes(args[0], args[1], args[2])
         else:
             logging.log_error('Wrong number of arguments %d to ConnectBoxes' % len(args), 'I3Tray')
 
     def __call__(self, *args):
         for pair in args:
             logging.log_info('%s: %s = %s' % (self.last_added, pair[0], pair[1]), unit='I3Tray')
-            super(I3Tray, self).SetParameter(self.last_added, pair[0], pair[1])
+            super().SetParameter(self.last_added, pair[0], pair[1])
         return self
 
     def __repr__(self):
@@ -217,9 +217,9 @@ class I3Tray(_icetray._I3TrayBase):
         assert len(args) < 2, "Too many arguments to Execute()"
 
         if len(args) == 1:
-            super(I3Tray, self).Execute(args[0])
+            super().Execute(args[0])
         else:
-            super(I3Tray, self).Execute()
+            super().Execute()
 
     def PrintUsage(self, fraction=0.9):
         """

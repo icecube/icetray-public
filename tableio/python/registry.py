@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # 
 # copyright  (C) 2010
 # The Icecube Collaboration
@@ -10,7 +9,7 @@
 # @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy: nwhitehorn $
 # 
 
-class I3ConverterRegistry(object):
+class I3ConverterRegistry:
     """A mapping of object type->I3Converter. 
     
     This should be considered an implementation detail and subject to change without notice."""

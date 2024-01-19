@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # (c) 2011
 # the IceCube Collaboration

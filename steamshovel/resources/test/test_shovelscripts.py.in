@@ -67,7 +67,7 @@ def test_image(tst, ref, rebin, threshold):
 class TestShovelScripts( unittest.TestCase ):
 
     def setUp(self):
-        super(TestShovelScripts,self).setUp()
+        super().setUp()
         orig_dir = os.getcwd()
         tmp_dir = tempfile.mkdtemp(dir=orig_dir)
         os.chdir(tmp_dir)
