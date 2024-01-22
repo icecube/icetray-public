@@ -7,7 +7,7 @@ if {[file exists $file]} {
     expect "I3 Data Shovel"
     send q
 } else {
-    puts "Skipping dataio-shovel-test, can't find input fie: $file"
+    puts "Skipping dataio-shovel-test.exp, can't find input file: $file"
 }
 
 exit 0

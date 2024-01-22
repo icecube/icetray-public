@@ -1,10 +1,10 @@
 #
 #  $Id$
-#  
+#
 #  Copyright (C) 2007
 #  Troy D. Straszheim  <troy@icecube.umd.edu>
 #  and the IceCube Collaboration <http://www.icecube.wisc.edu>
-#  
+#
 #  Redistribution and use in source and binary forms, with or without
 #  modification, are permitted provided that the following conditions
 #  are met:
@@ -13,7 +13,7 @@
 #  2. Redistributions in binary form must reproduce the above copyright
 #     notice, this list of conditions and the following disclaimer in the
 #     documentation and/or other materials provided with the distribution.
-#  
+#
 #  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
 #  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 #  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,18 +25,18 @@
 #  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 #  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 #  SUCH DAMAGE.
-#  
+#
 #  SPDX-License-Identifier: BSD-2-Clause
-#  
-#  
+#
+#
 i3_project(dataio
   PYTHON_DIR python
   DOCS_DIR resources/docs
   )
 
-i3_add_library(dataio 
+i3_add_library(dataio
   private/dataio-modules/*.cxx private/dataio/*.cxx
-  USE_PROJECTS serialization icetray dataclasses 
+  USE_PROJECTS serialization icetray dataclasses
   USE_TOOLS boost python
   LINK_LIBRARIES ${BOOST_DATE_TIME}
 
@@ -55,11 +55,11 @@ if(CDK_FOUND AND CURSES_FOUND)
   i3_executable(shovel private/shovel/*.cxx
     USE_PROJECTS dataio
     USE_TOOLS cdk curses
-    )  
+    )
 else()
   colormsg(CYAN "+-- dataio-shovel *not* included (missing CDK or ncurses libraries)")
 endif()
-  
+
 # symlink for dataio-pyshovel
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink dataio-shovel dataio-pyshovel
                 WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -81,7 +81,7 @@ if (NOT LIBARCHIVE_FOUND)
 endif (NOT LIBARCHIVE_FOUND)
 
 if (EXPECT)
-  LIST(APPEND tmp_SCRIPTS "${CMAKE_CURRENT_SOURCE_DIR}/resources/test/dataio-shovel-test")
+  LIST(APPEND tmp_SCRIPTS "${CMAKE_CURRENT_SOURCE_DIR}/resources/test/dataio-shovel-test.exp")
 endif ()
 
 ## something's busted w/ lucid's python+ssl
@@ -202,7 +202,7 @@ set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::writer_i
 set_property(TEST dataio::zz_cleanup.py APPEND PROPERTY DEPENDS dataio::zst_test.py)
 
 if (EXPECT)
-set_property(TEST dataio::dataio-shovel-test PROPERTY SKIP_REGULAR_EXPRESSION "Skipping dataio-shovel-test")
+set_property(TEST dataio::dataio-shovel-test.exp PROPERTY SKIP_REGULAR_EXPRESSION "Skipping dataio-shovel-test.exp")
 endif ()
 
 if (LIBARCHIVE_FOUND)
