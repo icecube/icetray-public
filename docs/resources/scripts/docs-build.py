@@ -4,6 +4,7 @@ import os.path,sys,pkgutil,time,subprocess
 from collections import deque
 from glob import glob
 from icecube.icetray import i3inspect
+import xml.etree.ElementTree as ET
 
 # suppress boost python object registration warnings
 from warnings import filterwarnings
@@ -276,6 +277,19 @@ def main():
     if not args.no_cpp:
         log.info("Generating C++ references from Doxygen XML")
         for doxygen_dir in glob(os.path.join(doxygendir,"*","xml")):
+
+            #breathe crashes on anonymous namespaces so parse the xml tree and remove those elements
+            index_xml = os.path.join(doxygen_dir,'index.xml')
+            root = ET.parse(index_xml).getroot()
+            for element in root.iter():
+              for subelement in element[:]:
+                refid = subelement.get('refid')
+                if refid is not None and refid.startswith('namespace_0d'):
+                    element.remove(subelement)
+            log.info(f"Removing anonymous namespace from doxygen xml: {index_xml}")
+            with open(index_xml,'wb') as f:
+              f.write(ET.tostring(root))
+
             project_name = os.path.basename(os.path.dirname(doxygen_dir))
             if not use_this_project(project_name):
                 continue
