@@ -7,6 +7,8 @@
  */
 
 #include <phys-services/surfaces/detail/polygon.h>
+#include <boost/next_prior.hpp>
+#include <boost/range/iterator_range.hpp>
 #include <boost/utility.hpp>
 
 namespace I3Surfaces { namespace polygon {
@@ -42,28 +44,28 @@ std::vector<vec2>
 convex_hull(const std::vector<I3Position> &positions)
 {
 	std::vector<vec2> hull;
-	
+
 	// Build a set of unique points, sorted lexicographically
 	std::set<vec2> points;
 	std::transform(positions.begin(), positions.end(),
 	    std::inserter(points, points.end()), vec2::from_I3Position);
-	
+
 	// Boring case: 1 point (perhaps repeated)
 	if (points.size() <= 1) {
 		std::copy(points.begin(), points.end(), std::back_inserter(hull));
 		return hull;
 	}
-	
+
 	// Build lower and upper hulls
 	std::vector<vec2> lower = std::for_each(points.begin(), points.end(), ccw_curve());
 	std::vector<vec2> upper = std::for_each(points.rbegin(), points.rend(), ccw_curve());
-	
+
 	// Concatenation of the lower and upper hulls gives the convex hull.
 	// Last point of each list is omitted because it is repeated at the
 	// beginning of the other list.
 	std::copy(lower.begin(), lower.end()-1, std::back_inserter(hull));
 	std::copy(upper.begin(), upper.end()-1, std::back_inserter(hull));
-	
+
 	return hull;
 }
 
@@ -88,7 +90,7 @@ expand_polygon(const std::vector<vec2> &hull, double padding)
 		vec2 outwards(prev_d.x-d.x, prev_d.y-d.y);
 		points.push_back(vec2(p->x + outwards.x*padding/det, p->y + outwards.y*padding/det));
 	}
-	
+
 	return points;
 }
 
@@ -100,7 +102,7 @@ void vec2::serialize(Archive &ar, unsigned version)
 {
 	if (version > 0)
 		log_fatal_stream("Version "<<version<<" is from the future");
-	
+
 	ar & make_nvp("X", x);
 	ar & make_nvp("Y", y);
 }

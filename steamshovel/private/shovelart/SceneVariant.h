@@ -5,6 +5,7 @@
 #include <map>
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
+#include <boost/next_prior.hpp>
 
 #include <QColor>
 
@@ -126,7 +127,7 @@ public:
 			return (--j)->second;
 		else if ( j == this->map_.begin() )
 			return j->second;
-		
+
 		// okay, we are between two values and can interpolate
 		typename SceneTimeFunction<T>::timeMap::const_iterator i(boost::prior(j));
 		double tmin = (*i).first, tmax = (*j).first;

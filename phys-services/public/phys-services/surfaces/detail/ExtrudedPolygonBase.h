@@ -14,6 +14,7 @@
 #include <phys-services/I3RandomService.h>
 
 #include <boost/foreach.hpp>
+#include <boost/next_prior.hpp>
 #include <cmath>
 
 namespace I3Surfaces {
@@ -58,7 +59,7 @@ public:
 	ExtrudedPolygonBase(const std::vector<I3Position> &points, double padding=0.)
 	{
 		using namespace I3Surfaces::polygon;
-	
+
 		std::pair<double, double> zrange = z_range(points);
 		std::vector<vec2> hull = convex_hull(points);
 		if (padding != 0) {
@@ -95,7 +96,7 @@ public:
 			// general case: both rho and z components nonzero
 			std::pair<double, double> sides = GetDistanceToHull(p, dir);
 			std::pair<double, double> caps = GetDistanceToCaps(p, dir);
-		
+
 			if (caps.first >= sides.second || caps.second <= sides.first)
 				return Surface::no_intersection();
 			else {
@@ -103,7 +104,7 @@ public:
 			}
 		}
 	}
-	
+
 	double GetArea(const I3Direction &dir) const
 	{
 		double area = 0;
@@ -114,7 +115,7 @@ public:
 		}
 		area *= (z_range_.second-z_range_.first);
 		area += std::abs(dir.GetZ())*cap_area_;
-	
+
 		return area;
 	}
 	double GetMaximumArea() const
@@ -126,7 +127,7 @@ public:
 		// the largest possible projected area occurs for a flat square
 		side_area *= (z_range_.second-z_range_.first)/2.;
 		double ct_max = cos(atan(side_area/cap_area_));
-	
+
 		return cap_area_*fabs(ct_max) + side_area*sqrt(1.-ct_max*ct_max);
 	}
 	virtual double GetAcceptance(double cosMin=0, double cosMax=1) const
@@ -144,7 +145,7 @@ public:
 			log_fatal("Can't deal with zenith range [%.1e, %.1e]", cosMin, cosMax);
 		return NAN;
 	}
-	
+
 	I3Position SampleImpactPosition(const I3Direction &dir, I3RandomService &rng) const
 	{
 		// first, pick which face it's going to hit
@@ -153,7 +154,7 @@ public:
 		std::vector<double> prob;
 		std::pair<double, double> x_range(std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity());
 		std::pair<double, double> y_range(std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity());
-	
+
 		BOOST_FOREACH(const polygon::side &sidey, sides_) {
 			double inner = sidey.normal*dir;
 			if (inner < 0)
@@ -195,7 +196,7 @@ public:
 			);
 		}
 	}
-	
+
 	std::vector<double> GetX() const
 	{
 		std::vector<double> x;
@@ -230,7 +231,7 @@ protected:
 		BOOST_FOREACH(const polygon::side &sidey, sides_)
 			area += sidey.length;
 		area *= GetLength()/M_PI;
-	
+
 		return area;
 	}
 	double GetLength() const { return z_range_.second-z_range_.first; }
@@ -240,12 +241,12 @@ private:
 	std::vector<polygon::side> sides_;
 	std::pair<double, double> z_range_;
 	double cap_area_;
-	
+
 	void initWithHull(const std::vector<polygon::vec2> &hull, const std::pair<double,double> &zrange)
 	{
 		using I3Surfaces::polygon::vec2;
 		using I3Surfaces::polygon::side;
-	
+
 		z_range_ = zrange;
 		cap_area_ = 0;
 		sides_.clear();
@@ -253,31 +254,31 @@ private:
 			std::vector<vec2>::const_iterator np = boost::next(p);
 			if (np == hull.end())
 				np = hull.begin();
-		
+
 			sides_.push_back(side(*p, *np));
-		
+
 			// area of a simple polygon in the x-y plane
 			cap_area_ += (p->x*np->y - np->x*p->y);
 		}
 		cap_area_ /= 2.;
 	}
-	
-	/// @brief Get distances to the infinite horizontal planes that define the 
+
+	/// @brief Get distances to the infinite horizontal planes that define the
 	///        top and bottom of the surface
-	/// 
+	///
 	/// The distance to the entry point is the distance from vertex `p` along
 	/// direction `dir` to the point where the ray defined by `p` and `dir`
-	/// crosses the top or the bottom plane, whichever comes first. The exit 
+	/// crosses the top or the bottom plane, whichever comes first. The exit
 	/// point is defined similary.
 	std::pair<double, double> GetDistanceToCaps(const I3Position &p, const I3Direction &dir) const
 	{
 		return make_ordered_pair(GetDistanceToCap(p, dir, z_range_.first), GetDistanceToCap(p, dir, z_range_.second));
 	}
-	
+
 	/// @brief Get distances to sides of the of the surface
 	///
 	/// The sides of the surface are defined by a polygon in the x-y plane,
-	/// extended infinitely along the z axis. The distance to the entry point 
+	/// extended infinitely along the z axis. The distance to the entry point
 	/// is the distance from vertex `p` along direction `dir` to the point where
 	/// the ray defined by `p` and `dir` first crosses one of the line
 	/// segments that define the x-y polygon. The exit point is the distance to
@@ -285,21 +286,21 @@ private:
 	std::pair<double, double> GetDistanceToHull(const I3Position &pos, const I3Direction &dir) const
 	{
 		std::pair<double, double> offsets = Surface::no_intersection();
-	
+
 		if (dir.GetX() == 0 && dir.GetY() == 0)
 			log_fatal("Direction must have a horizontal component");
-	
+
 		BOOST_FOREACH(const polygon::side &sidey, sides_) {
 			// Components of the vector connecting the test
 			// point to the origin of the line segment
 			double x = sidey.origin.x - pos.GetX();
 			double y = sidey.origin.y - pos.GetY();
-		
+
 			// Proportional distance along the line segment to the
 			// intersection point
 			double alpha = (dir.GetX()*y - dir.GetY()*x)
 			    / (dir.GetY()*sidey.vector.x - dir.GetX()*sidey.vector.y);
-		
+
 			// Is there an intersection?
 			if ((alpha >= 0.) && (alpha < 1.)) {
 				// Distance along ray to intersection point
@@ -314,7 +315,7 @@ private:
 					offsets.second = beta;
 			}
 		}
-	
+
 		return offsets;
 	}
 
@@ -327,7 +328,7 @@ private:
 			std::vector<polygon::side>::const_iterator np = boost::next(p);
 			if (np == sides_.end())
 				np = sides_.begin();
-		
+
 			// only consider segments whose y range spans the current point
 			if (!(((p->origin.y > pos.GetY()) && (np->origin.y <= pos.GetY())) ||
 			      ((p->origin.y <= pos.GetY()) && (np->origin.y > pos.GetY()))))
@@ -338,7 +339,7 @@ private:
 			if (pos.GetX() < xc)
 				crossings++;
 		}
-	
+
 		// the point is inside iff the ray crosses an odd number of times
 		return (crossings % 2) == 1;
 	}
@@ -346,7 +347,7 @@ private:
 	{
 		return (cap_z-p.GetZ())/dir.GetZ();
 	}
-	
+
 	friend class icecube::serialization::access;
 	template <typename Archive>
 	void save(Archive &ar, unsigned version) const

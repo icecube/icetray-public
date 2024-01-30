@@ -1,6 +1,6 @@
 /**
- * @file 
- * @brief 
+ * @file
+ * @brief
  *
  * (c) 2011 Jakob van Santen <vansanten@wisc.edu>
  *          and the IceCube Collaboration <icecube.wisc.edu>
@@ -19,6 +19,7 @@
 #include "dataclasses/physics/I3Trigger.h"
 
 #include <boost/foreach.hpp>
+#include <boost/next_prior.hpp>
 #include <boost/utility.hpp>
 
 inline uint32_t FindIndex(const I3TriggerStatusMap &triggers, const TriggerKey &key)
@@ -40,7 +41,7 @@ I3SuperDSTTrigger::I3SuperDSTTrigger(const I3Trigger &trigger,
 	key_idx_ = FindIndex(status.triggerStatus, trigger.GetTriggerKey());
 	if (key_idx_ >= status.triggerStatus.size())
 		throw std::range_error("Can't find trigger config in DetectorStatus!");
-	
+
 	startcode_  = I3SuperDST::EncodeTime(trigger.GetTriggerTime(), 31, i3superdst_version_);
 	lengthcode_ = I3SuperDST::EncodeTime(trigger.GetTriggerLength(), 31, i3superdst_version_);
 }
@@ -129,24 +130,24 @@ I3SuperDSTTriggerSeries::Unpack(const I3DetectorStatus &status) const
 {
 	if (unpacked_)
 		return unpacked_;
-	
+
 	unpacked_ = boost::shared_ptr<I3TriggerHierarchy>(new I3TriggerHierarchy);
 	I3TriggerHierarchy::iterator iter;
 	double t_ref = 0.0;
 	BOOST_FOREACH(const I3SuperDSTTrigger &strigger, *this) {
 		I3Trigger trig;
-		
+
 		// Behold, cargo-cult encapsulation.
 		trig.GetTriggerKey() = strigger.GetTriggerKey(status);
 		trig.SetTriggerTime(strigger.GetTime() + t_ref);
 		trig.SetTriggerLength(strigger.GetLength());
 		trig.SetTriggerFired(true);
-		
+
 		t_ref += strigger.GetTime();
 
 		unpacked_->insert(unpacked_->begin(), trig);
 	}
-	
+
 	return unpacked_;
 }
 
@@ -181,7 +182,7 @@ I3SuperDSTTriggerSeries::load(Archive & ar, unsigned version)
 		ar & make_nvp("Tag", tag);
 		ar & make_nvp("Length", length);
 		ar & make_nvp("Time", start);
-		
+
 		uint32_t key_idx = tag & 0xf;
 		uint32_t lengthcode =
 		    (length.value() << 4) | ((tag >> 4) & 0xf);

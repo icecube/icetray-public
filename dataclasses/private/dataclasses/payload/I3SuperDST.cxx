@@ -1,6 +1,6 @@
 /**
- * @file 
- * @brief 
+ * @file
+ * @brief
  *
  * (c) 2010 the IceCube Collaboration
  *
@@ -17,6 +17,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/utility.hpp>
 #include <boost/foreach.hpp>
+#include <boost/next_prior.hpp>
 
 #include "icetray/OMKey.h"
 #include "icetray/I3Units.h"
@@ -47,7 +48,7 @@ I3SuperDSTChargeStamp::I3SuperDSTChargeStamp(double time, double charge, double 
 {
 	i3_assert( time >= 0.0 );
 	i3_assert( charge >= 0.0 );
-	
+
 	/* Don't truncate integer codes, since we need to relativize the times later. */
 	timecode_ = I3SuperDST::EncodeTime(time, 31, version_);
 	widthcode_ = I3SuperDST::EncodeWidth(width, 31, version_);
@@ -58,7 +59,7 @@ void
 I3SuperDSTChargeStamp::SetTimeReference(const I3SuperDSTChargeStamp &other)
 {
 	i3_assert(timecode_ >= other.timecode_);
-	
+
 	timecode_ -= other.timecode_;
 }
 
@@ -99,13 +100,13 @@ I3SuperDSTReadout::I3SuperDSTReadout(const OMKey &om, bool hlc,
 	std::list<I3RecoPulse>::const_iterator pulse_it = start;
 
 	Discretization format = (om.GetOM() > 60) ? LOG : LINEAR;
-	
+
 	for ( ; pulse_it != end; pulse_it++) {
 		stamps_.push_back(I3SuperDSTChargeStamp(pulse_it->GetTime()-t0,
 		    std::max(pulse_it->GetCharge(), 0.0f),
 		    std::max(pulse_it->GetWidth(), 1.0f), hlc, format));
 	}
-	
+
 	time_overflow_ = 0;
 	om_ = om;
 	kind_ = hlc ? I3SuperDSTChargeStamp::HLC : I3SuperDSTChargeStamp::SLC;
@@ -117,11 +118,11 @@ void
 I3SuperDSTReadout::SetTimeReference(const I3SuperDSTReadout &other)
 {
 	const I3SuperDSTChargeStamp &other_stamp = other.stamps_.front();
-	
+
 	i3_assert(start_time_ >= other.start_time_);
 	i3_assert(other.stamps_.size() > 0);
-	
-	/* 
+
+	/*
 	 * Set the times of any secondary stamp relative to the one prior to
 	 * it, then set the time of the first stamp relative to first
 	 * stamp in the other readout.
@@ -134,7 +135,7 @@ void
 I3SuperDSTReadout::Relativize()
 {
 	std::vector<I3SuperDSTChargeStamp>::reverse_iterator stamp_rit = stamps_.rbegin();
-	/* 
+	/*
 	 * Set the time of each secondary stamp relative to the one
 	 * preceding it. (Reverse iterators are fun!)
 	 */
@@ -148,7 +149,7 @@ double
 I3SuperDSTReadout::GetTime() const
 {
 	i3_assert(stamps_.size() != 0);
-	
+
 	return (stamps_.front().GetTime() +
 	    I3SuperDST::DecodeTime(time_overflow_, i3superdst_version_));
 }
@@ -166,7 +167,7 @@ namespace I3SuperDSTRecoPulseUtils {
 	static bool
 	TimeOrdering(const I3RecoPulse &p1, const I3RecoPulse &p2)
 	{ return p1.GetTime() < p2.GetTime(); }
-	
+
 	static bool
 	IsBorked(const I3RecoPulse &p1)
 	{
@@ -184,7 +185,7 @@ namespace I3SuperDSTRecoPulseUtils {
 	    const I3RecoPulse &previous)
 	{
 		/*
-		 * Split if pulses are not from the same launch. 
+		 * Split if pulses are not from the same launch.
 		 */
 		static const double tmax = 6.45e3;
 
@@ -199,13 +200,13 @@ I3SuperDST::AddPulseMap(const I3RecoPulseSeriesMap &pulses, double t0)
 	I3RecoPulseSeriesMap::const_iterator map_iter;
 	std::list<I3RecoPulse> pulse_list;
 	std::list<I3RecoPulse>::const_iterator pulse_head, pulse_tail;
-	
+
 	unpacked_.reset();
-	
-	/* 
+
+	/*
 	 * Convert the pulse series map to a list of "readouts"
 	 * (pulses spaced closely in time in a single DOM)
-	 */ 
+	 */
 	for (map_iter = pulses.begin(); map_iter != pulses.end(); map_iter++) {
 		/*
 		 * Get a time-ordered representation of the pulse series,
@@ -218,12 +219,12 @@ I3SuperDST::AddPulseMap(const I3RecoPulseSeriesMap &pulses, double t0)
 		    IsBorked);
 		if (pulse_list.size() == 0) continue;
 		pulse_list.sort(TimeOrdering);
-		
+
 		pulse_head = pulse_list.begin();
 		pulse_tail = boost::next(pulse_head);
-		
+
 		for ( ; pulse_tail != pulse_list.end(); pulse_tail++) {
-			/* 
+			/*
 			 * Split the preceding run off into its own readout
 			 * if it is from a different kind of launch or this is
 			 * and IceTop DOM (where we assume exactly one pulse
@@ -237,7 +238,7 @@ I3SuperDST::AddPulseMap(const I3RecoPulseSeriesMap &pulses, double t0)
 				pulse_head = pulse_tail;
 			}
 		}
-		
+
 		/* Push the remaining pulses into a readout. */
 		readouts_.push_back(I3SuperDSTReadout(
 		    map_iter->first, HasLC(*pulse_head), pulse_head, pulse_tail, t0));
@@ -247,7 +248,7 @@ I3SuperDST::AddPulseMap(const I3RecoPulseSeriesMap &pulses, double t0)
 void
 I3SuperDST::AddPulseMap(const I3RecoPulseSeriesMap &pulses)
 {
-	/* 
+	/*
 	 * Get the earliest leading-edge time present in the input.
 	 * This must be >= -512 ns to be representable.
 	 */
@@ -255,16 +256,16 @@ I3SuperDST::AddPulseMap(const I3RecoPulseSeriesMap &pulses)
 	if (t0 < tmin_)
 		log_fatal("First pulse time %g ns < %3.0f ns is unrepresentable! "
 		    "Is this un-timeshifted simulation?", t0, tmin_);
-	
-	/* 
+
+	/*
 	 * Convert the pulse series map to a list of "readouts"
 	 * (pulses spaced closely in time in a single DOM)
-	 */ 
+	 */
 	AddPulseMap(pulses, tmin_);
 
 	/* Sort the readouts by start time */
 	readouts_.sort();
-	
+
 	/* Convert the absolute times in each readout to time deltas. */
 	std::list<I3SuperDSTReadout>::reverse_iterator list_rit = readouts_.rbegin();
 	if (list_rit != readouts_.rend()) {
@@ -280,11 +281,11 @@ I3SuperDST::GetReadouts(bool hlc) const
 {
 	std::list<I3SuperDSTReadout> filtered;
 	std::list<I3SuperDSTReadout>::const_iterator list_it;
-	
+
 	for (list_it = readouts_.begin(); list_it != readouts_.end(); list_it++)
 		if (hlc == (list_it->kind_ == I3SuperDSTChargeStamp::HLC))
 			filtered.push_back(*list_it);
-			
+
 	return filtered;
 }
 
@@ -292,7 +293,7 @@ I3SuperDST::I3SuperDST(const I3RecoPulseSeriesMap &pulses)
     : version_(i3superdst_version_)
 {
 	AddPulseMap(pulses);
-	
+
 	InitDebug();
 }
 
@@ -306,37 +307,37 @@ I3SuperDST::Unpack() const
 	std::vector<I3SuperDSTChargeStamp>::const_iterator stamp_it;
 	std::list<I3SuperDSTReadout>::const_iterator readout_it;
 	double t_ref;
-	
+
 	unpacked_ = I3RecoPulseSeriesMapPtr(new I3RecoPulseSeriesMap);
 
 	t_ref = tmin_;
-	
+
 	for (readout_it = readouts_.begin(); readout_it != readouts_.end(); readout_it++) {
 		const bool hlc = (readout_it->kind_ == I3SuperDSTChargeStamp::HLC);
 		const int flags = I3RecoPulse::FADC | (hlc ? I3RecoPulse::LC : 0);
 		I3RecoPulseSeries &target = unpacked_->operator[](readout_it->om_);
-		
+
 		t_ref += readout_it->GetTime();
 		double t_ref_internal = t_ref;
-		
+
 		stamp_it = readout_it->stamps_.begin();
-		
+
 		if (stamp_it != readout_it->stamps_.end()) {
 			I3RecoPulse pulse;
-			
+
 			pulse.SetTime(t_ref);
 			pulse.SetCharge(stamp_it->GetCharge());
 			pulse.SetWidth(stamp_it->GetWidth());
 			// Assume that the first pulse always comes from the ATWD.
 			pulse.SetFlags(flags | (hlc ? I3RecoPulse::ATWD : 0));
 			target.push_back(pulse);
-			
+
 			stamp_it++;
 		}
-	
+
 		for ( ; stamp_it != readout_it->stamps_.end(); stamp_it++) {
 			I3RecoPulse pulse;
-			
+
 			t_ref_internal += stamp_it->GetTime();
 			pulse.SetTime(t_ref_internal);
 			pulse.SetCharge(stamp_it->GetCharge());
@@ -357,7 +358,7 @@ I3SuperDST::Unpack() const
 	}
 
 	BOOST_FOREACH(I3RecoPulseSeriesMap::value_type &target, *unpacked_) {
-		std::sort(target.second.begin(), target.second.end(), 
+		std::sort(target.second.begin(), target.second.end(),
 		    I3SuperDSTRecoPulseUtils::TimeOrdering);
 
 		I3RecoPulseSeries::iterator prev, current, next;
@@ -396,7 +397,7 @@ I3SuperDST::Unpack() const
 			current->SetTime(prev->GetTime()+prev->GetWidth());
 		}
 	}
-	
+
 	return unpacked_;
 }
 
@@ -411,7 +412,7 @@ I3SuperDST::EncodeOMKey(const OMKey &key, unsigned int maxbits, unsigned int ver
 	i3_assert(om > 0);
 	i3_assert(om <= 64);
 	i3_assert(maxbits <= 31);
-	
+
 	/*
 	 * NB: this is the same encoding scheme as the DAQ:
 	 * upper 7 bits: string number, lower 6 bits: OM number
@@ -419,7 +420,7 @@ I3SuperDST::EncodeOMKey(const OMKey &key, unsigned int maxbits, unsigned int ver
 	encoded |= ((unsigned(string) << 6) & ~((1<<6)-1));
 	encoded |= ((unsigned(om)-1) & ((1<<6)-1));
 	i3_assert( encoded <= uint32_t((1<<maxbits)-1) );
-	
+
 	return (encoded);
 }
 
@@ -427,10 +428,10 @@ OMKey
 I3SuperDST::DecodeOMKey(uint32_t dom_id, unsigned int version)
 {
 	int string(0), om(0);
-	
+
 	string = unsigned((dom_id >> 6) & ((1<<7)-1));
 	om = unsigned(dom_id & ((1<<6)-1))+1;
-	
+
 	return OMKey(string, om);
 }
 
@@ -439,11 +440,11 @@ truncate(double val, unsigned int maxbits)
 {
 	uint32_t code(lround(val)); /* Round to nearest integer */
 	i3_assert(maxbits <= 31);
-	
+
 	/* Truncate if greater than 2^(maxbits)-1 */
 	if (code > uint32_t((1<<maxbits)-1))
 		code = uint32_t((1<<maxbits)-1);
-	
+
 	return (code);
 }
 
@@ -452,7 +453,7 @@ I3SuperDST::EncodeTime(double time, unsigned int maxbits,
     unsigned int version)
 {
 	uint32_t encoded(0);
-	
+
 	i3_assert( time >= 0.0 );
 	switch (version) {
 		case 0:
@@ -464,7 +465,7 @@ I3SuperDST::EncodeTime(double time, unsigned int maxbits,
 		default:
 			break;
 	}
-	
+
 	return (encoded);
 }
 
@@ -472,7 +473,7 @@ double
 I3SuperDST::DecodeTime(uint32_t dt, unsigned int version)
 {
 	double decoded(0);
-	
+
 	switch (version) {
 		case 0:
 			decoded = dt*4.0*I3Units::ns;
@@ -483,7 +484,7 @@ I3SuperDST::DecodeTime(uint32_t dt, unsigned int version)
 		default:
 			break;
 	}
-	
+
 	return (decoded);
 }
 
@@ -519,9 +520,9 @@ I3SuperDST::EncodeCharge(double charge, unsigned int maxbits,
     unsigned int version, Discretization mode)
 {
 	uint32_t encoded(0);
-	
+
 	i3_assert( charge >= 0 );
-	
+
 	if (mode == LOG) {
 		i3_assert(maxbits >= 14);
 		double logq = std::max(0.0, log10(charge) + 2.0);
@@ -531,11 +532,11 @@ I3SuperDST::EncodeCharge(double charge, unsigned int maxbits,
 		if (version == 0) {
 			encoded = truncate(charge/0.15, maxbits);
 		} else {
-			encoded = uint32_t(floor(std::max(0., charge)/0.05));	
+			encoded = uint32_t(floor(std::max(0., charge)/0.05));
 		}
 	}
 
-	
+
 	return (encoded);
 }
 
@@ -545,7 +546,7 @@ I3SuperDST::DecodeCharge(uint32_t chargecode, unsigned int version,
 
 {
 	double decoded(0);
-	
+
 	if (mode == LOG) {
 		double step = 9.0/double((1<<14)-1);
 		decoded = pow(10., chargecode*step - 2.0);
@@ -553,11 +554,11 @@ I3SuperDST::DecodeCharge(uint32_t chargecode, unsigned int version,
 		if (version == 0)
 			decoded = chargecode*0.15;
 		else {
-			// Decode at bin center 
+			// Decode at bin center
 			decoded = chargecode*0.05 + 0.025;
 		}
 	}
-	
+
 	return (decoded);
 }
 
@@ -567,14 +568,14 @@ I3SuperDST::FindStartTime(const I3RecoPulseSeriesMap &pmap)
 	double tmin = std::numeric_limits<double>::max();
 	I3RecoPulseSeriesMap::const_iterator map_it = pmap.begin();
 	I3RecoPulseSeries::const_iterator pulse_it;
-	
+
 	for ( ; map_it != pmap.end() ; map_it++)
 		for (pulse_it = map_it->second.begin();
 		    pulse_it != map_it->second.end(); pulse_it++)
 			if (std::isfinite(pulse_it->GetTime()) &&
 			    pulse_it->GetTime() < tmin)
 				tmin = pulse_it->GetTime();
-				
+
 	return (tmin);
 }
 
@@ -593,14 +594,14 @@ I3SuperDST::operator==(const I3SuperDST& rhs) const {
           this->version_ == rhs.version_);
 }
 
-/* 
+/*
  * NB: While the internal layout of bitfields is implementation-defined,
  * (see ISO 14882 [http://www-d0.fnal.gov/~dladams/cxx_standard.pdf] p. 159)
  * GCC >= 3.4.6 obeys the following conventions under __attribute((packed)):
  *
  * - on little-endian platforms, fields are laid out in native byte order
  *   starting from the least significant bit of the parent struct
- * 
+ *
  * - on big-endian platforms, fields are laid out starting from the most
  *   significant bit of the parent struct
  *
@@ -693,7 +694,7 @@ swap_vector(std::vector<T> &vec)
 	typename std::vector<T>::iterator it = vec.begin();
 	for ( ; it != vec.end(); it++) {
 		uint16_t *swapit = (uint16_t*)(&*it);
-		*swapit = ((*swapit & 0x00FF) << 8) | ((*swapit & 0xFF00) >> 8);	
+		*swapit = ((*swapit & 0x00FF) << 8) | ((*swapit & 0xFF00) >> 8);
 	}
 #endif
 };
@@ -719,7 +720,7 @@ namespace I3SuperDSTUtils {
 		unsigned nblocks = (findlastset(len)-1)/4 + 1;
 #if BYTE_ORDER == BIG_ENDIAN
 		for (unsigned i=nblocks-1; i >= 0; i--) {
-#else 
+#else
 		for (unsigned i=0; i < nblocks; i++) {
 #endif
 			uint8_t code = (val & 0xf);;
@@ -738,7 +739,7 @@ namespace I3SuperDSTUtils {
 #if BYTE_ORDER == BIG_ENDIAN
 		vector_t::const_iterator it = tail-1;
 		for ( ; it >= head; it--, offset+=4u)
-#else		
+#else
 		vector_t::const_iterator it = head;
 		for ( ; it != tail; it++, offset+=4u)
 #endif
@@ -809,7 +810,7 @@ namespace I3SuperDSTUtils {
 			    bytes, n_bytes));
 		}
 	}
-	
+
 	template <class Archive>
 	void SizeCodec::load(Archive &ar, unsigned version)
 	{
@@ -849,18 +850,18 @@ encode_overflow(CompactVector<I3SuperDSTSerialization::ChargeStamp> &stamp_strea
    unsigned code, unsigned max_overflow)
 {
 	size_t readout_bytes = 0;
-	
+
 	I3SuperDSTSerialization::ChargeStamp stamp;
 	// emit overflow in blocks of max_overflow
 	do {
 		stamp.raw = std::min(code, max_overflow);
 		code -= std::min(code, max_overflow);
-	
+
 		stamp_stream.push_back(stamp);
 		readout_bytes += sizeof(stamp);
 
 	} while (code > 0);
-	
+
 	// the decoder interprets stamps with value max_overflow as a signal
 	// to continue. emit one with value 0 to make it stop.
 	if (stamp.raw == max_overflow) {
@@ -868,7 +869,7 @@ encode_overflow(CompactVector<I3SuperDSTSerialization::ChargeStamp> &stamp_strea
 		stamp_stream.push_back(stamp);
 		readout_bytes += sizeof(stamp);
 	}
-	
+
 	return readout_bytes;
 }
 
@@ -886,10 +887,10 @@ I3SuperDST::save(Archive& ar, unsigned version,
 	CompactVector<I3SuperDSTSerialization::ChargeStamp> stamp_stream;
 	CompactVector<uint8_t> ldr_stream;
 	std::vector<uint8_t> widths[4];
-	
+
 	std::list<I3SuperDSTReadout>::const_iterator readout_it;
 	std::vector<I3SuperDSTChargeStamp>::const_iterator stamp_it;
-	
+
 	const unsigned max_timecode_header = (1u << (I3SUPERDSTCHARGESTAMP_TIME_BITS_V0
 	    + I3SUPERDST_SLOP_BITS_V0)) - 1;
 	const unsigned max_timecode = (1u << I3SUPERDSTCHARGESTAMP_TIME_BITS_V0) - 1;
@@ -898,16 +899,16 @@ I3SuperDST::save(Archive& ar, unsigned version,
 
 	for (readout_it = readouts_.begin();
 	    readout_it != readouts_.end(); readout_it++) {
-		
+
 		I3SuperDSTSerialization::DOMHeader header;
-		
+
 		header.dom_id = EncodeOMKey(readout_it->om_, 13, version);
 		size_t readout_bytes = sizeof(header);
 
 		// Widths: {InIce SLC, InIce HLC, IceTop SLC, IceTop HLC}
 		std::vector<uint8_t> &width =
 		    widths[2*(readout_it->om_.GetOM() > 60) + readout_it->GetLCBit()];
-		
+
 		/*
 		 * Special case for the first stamp in the series:
 		 * use the slop space in the header to extend the time range.
@@ -921,7 +922,7 @@ I3SuperDST::save(Archive& ar, unsigned version,
 			header.slop = (std::min(timecode, max_timecode_header)
 			    >> I3SUPERDSTCHARGESTAMP_TIME_BITS_V0)
 			    & ((1 << I3SUPERDST_SLOP_BITS_V0)-1);
-			
+
 			I3SuperDSTSerialization::ChargeStamp stampytown; /* Population: 5! */
 			stampytown.stamp.rel_time = std::min(timecode, max_timecode_header)
 			    & ((1 << I3SUPERDSTCHARGESTAMP_TIME_BITS_V0)-1);
@@ -930,13 +931,13 @@ I3SuperDST::save(Archive& ar, unsigned version,
 
 			if (charge_format == LINEAR) {
 				stampytown.stamp.charge =
-				    std::min(chargecode, max_chargecode); 
+				    std::min(chargecode, max_chargecode);
 			} else {
 				/*
 				 * Special case for floating-point scheme: pack lower 6
 				 * bits in the charge stamp; upper 8 bits in an
 				 * extra stream.
-				 */ 
+				 */
 				stampytown.stamp.charge = chargecode &
 				    ((1<<I3SUPERDSTCHARGESTAMP_CHARGE_BITS_V0)-1);
 				uint8_t ldr = (chargecode >> I3SUPERDSTCHARGESTAMP_CHARGE_BITS_V0) &
@@ -948,7 +949,7 @@ I3SuperDST::save(Archive& ar, unsigned version,
 			width.push_back(stamp_it->GetWidthCode());
 			stamp_stream.push_back(stampytown);
 			readout_bytes += sizeof(stampytown);
-			
+
 			/*
 			 * If we still have any time overflow, subtract it
 			 * off in 16-bit chunks until it's gone. The saturated
@@ -958,7 +959,7 @@ I3SuperDST::save(Archive& ar, unsigned version,
 				readout_bytes += encode_overflow(stamp_stream,
 				    timecode-max_timecode_header, max_overflow);
 			}
-			
+
 			/*
 			 * Repeat the same overflow procedure for charge in the
 			 * linear scheme. The floating-point scheme has no overflow.
@@ -967,50 +968,50 @@ I3SuperDST::save(Archive& ar, unsigned version,
 				readout_bytes += encode_overflow(stamp_stream,
 				    chargecode-max_chargecode, max_overflow);
 			}
-			
+
 			stamp_it++;
 		}
-		
+
 		header_stream.push_back(header);
-		
+
 		/* Only one stamp in the floating point scheme */
 		i3_assert(charge_format != LOG || stamp_it == readout_it->stamps_.end());
-		
+
 		for ( ; stamp_it != readout_it->stamps_.end(); ) {
 			I3SuperDSTSerialization::ChargeStamp stampytown;
 			const bool stop = (boost::next(stamp_it)
 			    == readout_it->stamps_.end());
 			unsigned chargecode = stamp_it->GetChargeCode();
 			unsigned timecode = stamp_it->GetTimeCode();
-			
+
 			stampytown.stamp.rel_time = std::min(timecode, max_timecode);
 			stampytown.stamp.charge = std::min(chargecode, max_chargecode);
 			stampytown.stamp.hlc_bit = stamp_it->GetLCBit();
-			
+
 			stampytown.stamp.stop = stop;
 			width.push_back(stamp_it->GetWidthCode());
 			stamp_stream.push_back(stampytown);
 			readout_bytes += sizeof(stampytown);
-			
+
 			/* Encode any time overflow. */
 			if (timecode >= max_timecode) {
 				readout_bytes += encode_overflow(stamp_stream,
 				    timecode-max_timecode, max_overflow);
 			}
-			
+
 			/* Encode any charge overflow. */
 			if (chargecode >= max_chargecode) {
 				readout_bytes += encode_overflow(stamp_stream,
 				    chargecode-max_chargecode, max_overflow);
 			}
-			
+
 			stamp_it++;
 		}
 
 		if (sizes != NULL)
 			(*sizes)[readout_it->om_].push_back(readout_bytes);
 	}
-	
+
 	ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
 
 	swap_vector(stamp_stream);
@@ -1027,7 +1028,7 @@ I3SuperDST::save(Archive& ar, unsigned version,
 	}
 
 	ar & make_nvp("ExtraBytes", ldr_stream);
-	
+
 	return;
 }
 
@@ -1042,13 +1043,13 @@ void I3SuperDST::load_v0(Archive &ar)
 	    icecube::serialization::make_binary_object(&stamp_stream.front(),
 	    stream_size*sizeof(I3SuperDSTSerialization::ChargeStamp)));
 	swap_vector(stamp_stream);
-	
+
 	/* Count the number of distinct units in the stamp stream */
 	unsigned n_headers = 0;
 	BOOST_FOREACH(const I3SuperDSTSerialization::ChargeStamp &stamp, stamp_stream)
 		if (stamp.stamp.stop)
 			n_headers++;
-		
+
 	/* Now that we know the length of the header stream, resurrect it. */
 	std::vector<I3SuperDSTSerialization::DOMHeader> header_stream;
 	header_stream.resize(n_headers);
@@ -1061,7 +1062,7 @@ void I3SuperDST::load_v0(Archive &ar)
 	const unsigned max_timecode_header = (1 << (I3SUPERDSTCHARGESTAMP_TIME_BITS_V0
 	    + I3SUPERDST_SLOP_BITS_V0)) - 1;
 	const unsigned max_chargecode = (1u << I3SUPERDSTCHARGESTAMP_CHARGE_BITS_V0) - 1;
-	
+
 	std::vector<I3SuperDSTSerialization::ChargeStamp>::const_iterator stamp_it
 	    = stamp_stream.begin();
 	std::vector<I3SuperDSTSerialization::DOMHeader>::const_iterator header_it
@@ -1069,14 +1070,14 @@ void I3SuperDST::load_v0(Archive &ar)
 
 	const uint32_t widthcode =
 	    I3SuperDST::EncodeWidth(I3SuperDST::DecodeTime(1, 0), 0);
-	
+
 	for ( ; header_it != header_stream.end(); header_it++) {
 		I3SuperDSTReadout readout;
-		
+
 		readout.om_ = I3SuperDST::DecodeOMKey(header_it->dom_id, 0);
 		bool hlc = stamp_it->stamp.hlc_bit;
-		
-		/* 
+
+		/*
 		 * Use the slop bits in the header as the most significant
 		 * bits for the time of the first header.
 		 */
@@ -1084,53 +1085,53 @@ void I3SuperDST::load_v0(Archive &ar)
 		unsigned chargecode = stamp_it->stamp.charge;
 		timecode |= (unsigned(header_it->slop) <<
 		    I3SUPERDSTCHARGESTAMP_TIME_BITS_V0);
-		
+
 		/* If the time is saturated, add the next 15 bits. */
 		if (timecode == max_timecode_header) {
 			stamp_it++;
 			timecode += stamp_it->overflow.code;
 			//readout.time_overflow_ = stamp_it->overflow.code;
 		}
-	
+
 		/* If the time is saturated, add the next 15 bits. */
 		if (chargecode == max_chargecode) {
 			stamp_it++;
 			chargecode += stamp_it->overflow.code;
 		}
-		
+
 		I3SuperDSTChargeStamp stamp(timecode, chargecode, widthcode,
 		    hlc, LINEAR, 0);
-		
+
 		readout.stamps_.push_back(stamp);
-		
+
 		/* Read in the remaining stamps until we hit a stop. */
 		while (!stamp_it->stamp.stop) {
 			stamp_it++;
-			
+
 			/* No funny schtuff, ja Lebovski? */
 			i3_assert( stamp_it->stamp.hlc_bit == hlc );
-			
+
 			timecode = stamp_it->stamp.rel_time;
 			chargecode = stamp_it->stamp.charge;
-			
+
 			/* Add charge overflow if we have it */
 			if (chargecode == max_chargecode) {
 				stamp_it++;
 				chargecode += stamp_it->overflow.code;
 			}
-			
+
 			I3SuperDSTChargeStamp stamp(timecode, chargecode, widthcode,
 			    hlc, LINEAR, 0);
-			
+
 			readout.stamps_.push_back(stamp);
 		}
 		i3_assert( stamp_it != stamp_stream.end() );
 		stamp_it++; /* Advance for the next readout */
-		
+
 		readout.kind_ = hlc ? I3SuperDSTChargeStamp::HLC : I3SuperDSTChargeStamp::SLC;
 		readouts_.push_back(readout);
 	}
-	
+
 	/* Populate the start_time_ fields of the readouts_ for consistency. */
 	double t_ref = 0.0;
 	BOOST_FOREACH(I3SuperDSTReadout &readout, readouts_) {
@@ -1163,22 +1164,22 @@ void I3SuperDST::load_v1(Archive &ar)
 
 	CompactVector<uint8_t> byte_stream;
 	ar & make_nvp("ExtraBytes", byte_stream);
-	
+
 	/* Saturation values */
 	const unsigned max_timecode_header = (1 << (I3SUPERDSTCHARGESTAMP_TIME_BITS_V0
 	    + I3SUPERDST_SLOP_BITS_V0)) - 1;
 	const unsigned max_timecode = (1u << I3SUPERDSTCHARGESTAMP_TIME_BITS_V0) - 1;
 	const unsigned max_chargecode = (1u << I3SUPERDSTCHARGESTAMP_CHARGE_BITS_V0) - 1;
-	
+
 	std::vector<I3SuperDSTSerialization::ChargeStamp>::const_iterator stamp_it
 	    = stamp_stream.begin();
 	std::vector<I3SuperDSTSerialization::DOMHeader>::const_iterator header_it
 	    = header_stream.begin();
 	std::vector<uint8_t>::const_iterator ldr_it = byte_stream.begin();
-	
+
 	for ( ; header_it != header_stream.end(); header_it++) {
 		I3SuperDSTReadout readout;
-		
+
 		readout.om_ = I3SuperDST::DecodeOMKey(header_it->dom_id, 1);
 		i3_assert(stamp_it < stamp_stream.end());
 		bool hlc = stamp_it->stamp.hlc_bit;
@@ -1189,8 +1190,8 @@ void I3SuperDST::load_v1(Archive &ar)
 		    width_its[2*(readout.om_.GetOM() > 60) + hlc];
 		std::vector<uint8_t>::const_iterator width_end =
 		    widths[2*(readout.om_.GetOM() > 60) + hlc].end();
-		
-		/* 
+
+		/*
 		 * Use the slop bits in the header as the most significant
 		 * bits for the time of the first stamp.
 		 */
@@ -1201,7 +1202,7 @@ void I3SuperDST::load_v1(Archive &ar)
 
 		Discretization charge_format = (readout.om_.GetOM() > 60)
 		    ? LOG : LINEAR;
-		
+
 		if (timecode == max_timecode_header) {
 			i3_assert(stamp_it < stamp_stream.end());
 			do {
@@ -1219,25 +1220,25 @@ void I3SuperDST::load_v1(Archive &ar)
 			    I3SUPERDSTCHARGESTAMP_CHARGE_BITS_V0;
 			ldr_it++;
 		}
-		
+
 		i3_assert(width_it < width_end);
 		I3SuperDSTChargeStamp stamp(timecode, chargecode, *width_it++,
 		    hlc, charge_format, 1);
-		
+
 		readout.stamps_.push_back(stamp);
-		
+
 		/* Read in the remaining stamps until we hit a stop. */
 		while (!stop) {
 			stamp_it++;
-			
+
 			/* No funny schtuff, ja Lebovski? */
 			i3_assert(charge_format == LINEAR);
 			i3_assert( stamp_it->stamp.hlc_bit == hlc );
-			
+
 			timecode = stamp_it->stamp.rel_time;
 			chargecode = stamp_it->stamp.charge;
 			stop = stamp_it->stamp.stop;
-			
+
 			if (timecode == max_timecode) {
 				i3_assert(stamp_it < stamp_stream.end());
 				do {
@@ -1250,16 +1251,16 @@ void I3SuperDST::load_v1(Archive &ar)
 					chargecode += (++stamp_it)->raw;
 				} while (stamp_it->raw == UINT16_MAX);
 			}
-			
+
 			i3_assert(width_it < width_end);
 			I3SuperDSTChargeStamp stamp(timecode, chargecode, *width_it++,
 			    hlc, LINEAR, 1);
-			
+
 			readout.stamps_.push_back(stamp);
 		}
 		i3_assert( stamp_it < stamp_stream.end() );
 		stamp_it++; /* Advance for the next readout */
-		
+
 		readout.kind_ = hlc ? I3SuperDSTChargeStamp::HLC : I3SuperDSTChargeStamp::SLC;
 		readouts_.push_back(readout);
 	}
@@ -1292,9 +1293,9 @@ I3SuperDST::load(Archive& ar, unsigned version)
 		default:
 			log_fatal("Foo!");
 	}
-	
+
 	version_ = version;
-	
+
 	return;
 }
 

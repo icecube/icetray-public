@@ -13,6 +13,7 @@
 
 #include <boost/foreach.hpp>
 #include <serialization/list.hpp>
+#include <boost/next_prior.hpp>
 
 template <typename Archive>
 void
@@ -116,7 +117,7 @@ I3TimeWindowSeries::operator|(const I3TimeWindowSeries &other) const
 	I3TimeWindowSeries ored(*this);
 	for(const I3TimeWindow& w : other)
 		ored.push_back(w);
-	
+
 	return ored;
 }
 
@@ -125,7 +126,7 @@ I3TimeWindowSeries
 I3TimeWindowSeries::operator&(const I3TimeWindowSeries &other) const
 {
 	I3TimeWindowSeries out;
-	
+
 	auto first = this->cbegin();
 	auto second = other.cbegin();
 	while (first != this->cend() && second != other.cend()) {
@@ -161,7 +162,7 @@ I3TimeWindowSeries::operator&(const I3TimeWindowSeries &other) const
 				break;
 		}
 	}
-	
+
 	return out;
 }
 
@@ -170,29 +171,29 @@ I3TimeWindowSeries
 I3TimeWindowSeries::operator~() const
 {
 	I3TimeWindowSeries comp;
-	
+
 	const double tstart = -std::numeric_limits<double>::infinity();
 	const double tstop = std::numeric_limits<double>::infinity();
-	
+
 	I3TimeWindowSeries::const_iterator current(this->begin());
 	I3TimeWindowSeries::const_iterator next(boost::next(current));
-	
+
 	// Add gap before the first window
 	if (current != this->end()) {
 		if (current->start_ > tstart)
 			comp.push_back(I3TimeWindow(tstart, current->start_));
 	} else
-		comp.push_back(I3TimeWindow(tstart, tstop));	
-	
+		comp.push_back(I3TimeWindow(tstart, tstop));
+
 	// Fill in interior gaps
 	for ( ; current != this->end() && next != this->end(); current++, next++) {
 		comp.push_back(I3TimeWindow(current->stop_, next->start_));
 	}
-	
+
 	// Add a gap after the last window
 	if (current != this->end() && current->stop_ < tstop)
 		comp.push_back(I3TimeWindow(current->stop_, tstop));
-		
+
 
 	return comp;
 }
@@ -201,13 +202,13 @@ I3TimeWindowSeriesMap
 operator|(const I3TimeWindowSeriesMap &left, const I3TimeWindowSeriesMap &right)
 {
 	I3TimeWindowSeriesMap ored(left);
-	
+
 	for(const I3TimeWindowSeriesMap::value_type& pair : right) {
 		I3TimeWindowSeries &target = ored[pair.first];
 		for(const I3TimeWindow& w : pair.second)
-			target.push_back(w); 
+			target.push_back(w);
 	}
-	
+
 	return ored;
 }
 
