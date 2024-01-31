@@ -645,7 +645,7 @@ int main(int argc, char* argv[])
     cerr << "I3TestException: " << e.what() << endl;
     return 1;
   } catch (...) {
-    cerr << "Miserable error.  No idea what kind of exception was thrown.  Contact offlinebug@icecube.umd.edu\n";
+    cerr << "Miserable error.  No idea what kind of exception was thrown.\n";
     return 1;
   }
 
