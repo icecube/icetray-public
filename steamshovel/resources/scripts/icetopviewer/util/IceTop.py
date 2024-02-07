@@ -199,14 +199,14 @@ class IceTop(Detector):
 
             tCore = particle.time
             core = np.array([particle.pos[i] for i in range(3)])
-            nDir = np.array([particle.dir.x, particle.dir.y, particle.dir.y])
+            nDir = np.array([particle.dir.x, particle.dir.y, particle.dir.z])
 
             for omkey in pulses.keys():
                 pulse = pulses[omkey]
                 pos = self.positions[str(omkey)]
                 r = get_radius(particle, pos)
                 relPos = pos - core
-                delay = tCore + (nDir[0]*relPos[0]+nDir[1]*relPos[1]-nDir[2]*relPos[2]) / I3Constants.c
+                delay = tCore + (nDir[0]*relPos[0]+nDir[1]*relPos[1]+nDir[2]*relPos[2]) / I3Constants.c
                 delay = (delay - pulse[0].t) / I3Units.ns
 
                 radii.append(r)
