@@ -2,6 +2,7 @@
 #define I3_SERIALIZATION_ITEM_VERSION_TYPE_HPP
 
 // (C) Copyright 2010 Robert Ramey
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -14,7 +15,7 @@
 // fixes broken example build on x86_64-linux-gnu-gcc-4.6.0
 #include <boost/assert.hpp>
 
-namespace icecube { 
+namespace icecube {
 namespace serialization {
 
 #if defined(_MSC_VER)
@@ -32,24 +33,24 @@ public:
     explicit item_version_type(const unsigned int t_) : t(t_){
         BOOST_ASSERT(t_ <= boost::integer_traits<base_type>::const_max);
     }
-    item_version_type(const item_version_type & t_) : 
+    item_version_type(const item_version_type & t_) :
         t(t_.t)
     {}
     item_version_type & operator=(item_version_type rhs){
-        t = rhs.t; 
+        t = rhs.t;
         return *this;
     }
     // used for text output
     operator base_type () const {
         return t;
-    }                
+    }
     // used for text input
     operator base_type & () {
         return t;
     }
     bool operator==(const item_version_type & rhs) const {
         return t == rhs.t;
-    } 
+    }
     bool operator<(const item_version_type & rhs) const {
         return t < rhs.t;
     }

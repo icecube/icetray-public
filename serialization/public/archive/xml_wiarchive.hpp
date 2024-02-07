@@ -9,7 +9,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // xml_wiarchive.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -37,7 +38,7 @@
 #  pragma warning(disable : 4511 4512)
 #endif
 
-namespace icecube { 
+namespace icecube {
 namespace archive {
 
 namespace detail {
@@ -49,7 +50,7 @@ class basic_xml_grammar;
 typedef basic_xml_grammar<wchar_t> xml_wgrammar;
 
 template<class Archive>
-class xml_wiarchive_impl : 
+class xml_wiarchive_impl :
     public basic_text_iprimitive<std::wistream>,
     public basic_xml_iarchive<Archive>
 {
@@ -77,17 +78,17 @@ protected:
         return is;
     }
     template<class T>
-    void 
+    void
     load(T & t){
         basic_text_iprimitive<std::wistream>::load(t);
     }
-    void 
+    void
     load(version_type & t){
         unsigned int v;
         load(v);
         t = version_type(v);
     }
-    void 
+    void
     load(icecube::serialization::item_version_type & t){
         unsigned int v;
         load(v);
@@ -123,7 +124,7 @@ protected:
 } // namespace icecube
 
 #ifdef BOOST_MSVC
-#  pragma warning(pop) 
+#  pragma warning(pop)
 #endif
 
 #include <archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
@@ -133,10 +134,10 @@ protected:
 #  pragma warning(disable : 4511 4512)
 #endif
 
-namespace icecube { 
+namespace icecube {
 namespace archive {
 
-class xml_wiarchive : 
+class xml_wiarchive :
     public xml_wiarchive_impl<xml_wiarchive>{
 public:
     xml_wiarchive(std::wistream & is, unsigned int flags = 0) :

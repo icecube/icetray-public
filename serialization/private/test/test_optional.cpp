@@ -2,6 +2,7 @@
 // test_optional.cpp
 
 // (C) Copyright 2004 Pavel Vozenilek
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -15,7 +16,7 @@
 #include <boost/config.hpp>
 
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::remove;
 }
 #endif
@@ -35,7 +36,7 @@ void do_test(){
 
     const boost::optional<int> aoptional1;
     const boost::optional<int> aoptional2(123);
-    {   
+    {
         typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << icecube::serialization::make_nvp("aoptional1",aoptional1);
@@ -52,7 +53,7 @@ void do_test(){
     }
     ENSURE(aoptional1 == aoptional1a);
     ENSURE(aoptional2 == aoptional2a);
-    
+
     std::remove(testfile.c_str());
 }
 

@@ -10,6 +10,7 @@
 // export.hpp: set traits of classes to be serialized
 
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -62,14 +63,14 @@ struct export_impl
     static const basic_pointer_iserializer &
     enable_load(boost::mpl::true_){
         return icecube::serialization::singleton<
-            pointer_iserializer<Archive, Serializable> 
+            pointer_iserializer<Archive, Serializable>
         >::get_const_instance();
     }
 
     static const basic_pointer_oserializer &
     enable_save(boost::mpl::true_){
         return icecube::serialization::singleton<
-            pointer_oserializer<Archive, Serializable> 
+            pointer_oserializer<Archive, Serializable>
         >::get_const_instance();
     }
     inline static void enable_load(boost::mpl::false_) {}
@@ -86,7 +87,7 @@ struct ptr_serialization_support
 {
 # if defined(BOOST_MSVC) || defined(__SUNPRO_CC)
     virtual I3_DLLEXPORT void instantiate() I3_SERIALIZATION_USED;
-# elif defined(__BORLANDC__)   
+# elif defined(__BORLANDC__)
     static I3_DLLEXPORT void instantiate() I3_SERIALIZATION_USED;
     enum { x = sizeof(instantiate(),3) };
 # else
@@ -103,14 +104,14 @@ ptr_serialization_support<Archive,Serializable>::instantiate()
 {
     export_impl<Archive,Serializable>::enable_save(
         #if ! defined(__BORLANDC__)
-        typename 
+        typename
         #endif
         Archive::is_saving()
     );
 
     export_impl<Archive,Serializable>::enable_load(
         #if ! defined(__BORLANDC__)
-        typename 
+        typename
         #endif
         Archive::is_loading()
     );
@@ -210,7 +211,7 @@ namespace {                                                                    \
 
 # define I3_SERIALIZATION_MWERKS_BASE_AND_DERIVED(Base,Derived)
 
-#endif 
+#endif
 
 // check for unnecessary export.  T isn't polymorphic so there is no
 // need to export it.

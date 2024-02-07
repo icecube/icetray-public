@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_shared_ptr.cpp
 
-// (C) Copyright 2002 Robert Ramey- http://www.rrsd.com - David Tonge  . 
+// (C) Copyright 2002 Robert Ramey- http://www.rrsd.com - David Tonge  .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -14,7 +15,7 @@
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::remove;
 }
 #endif
@@ -283,7 +284,7 @@ void test(){
 
         // trivial test 1
         save_and_load<TS>(spa);
-    
+
         //trivival test 2
         spa = SPT<A>(new A(5));
         save_and_load<TS>(spa);
@@ -303,7 +304,7 @@ void test(){
         spa1 = spa;
         WPT<A> wp = spa;
         save_and_load3<TS>(spa, spa1, wp);
-        
+
         // obj of type B gets destroyed
         // as smart_ptr goes out of scope
     }

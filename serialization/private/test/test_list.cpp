@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_list.cpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -14,7 +15,7 @@
 #include <boost/config.hpp>
 #include <cstdio> // remove
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::remove;
 }
 #endif
@@ -34,7 +35,7 @@ void test_list(){
     std::list<A> alist;
     alist.push_back(A());
     alist.push_back(A());
-    {   
+    {
         typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << icecube::serialization::make_nvp("alist",alist);
@@ -56,11 +57,11 @@ void test_list(){
 template <typename TS /*test settings*/>
 void test_slist(){
     auto testfile = I3Test::testfile("test_slist");
-    
+
     BOOST_STD_EXTENSION_NAMESPACE::slist<A> aslist;
     aslist.push_front(A());
     aslist.push_front(A());
-    {   
+    {
         typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << icecube::serialization::make_nvp("aslist", aslist);
@@ -82,12 +83,12 @@ void test_slist(){
 template <typename TS /*test settings*/>
 void test_forward_list(){
     auto testfile = I3Test::testfile("test_forward_list");
-    
+
     try{
     std::forward_list<A> aslist;
     aslist.push_front(A());
     aslist.push_front(A());
-    {   
+    {
         typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << icecube::serialization::make_nvp("aslist", aslist);

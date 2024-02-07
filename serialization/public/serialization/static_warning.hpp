@@ -2,6 +2,7 @@
 #define I3_SERIALIZATION_STATIC_WARNING_HPP
 
 //  (C) Copyright Robert Ramey 2003. Jonathan Turkanis 2004.
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // MS compatible compilers support #pragma once
@@ -16,7 +17,7 @@
 /*
  Revision history:
    15 June  2003 - Initial version.
-   31 March 2004 - improved diagnostic messages and portability 
+   31 March 2004 - improved diagnostic messages and portability
                    (Jonathan Turkanis)
    03 April 2004 - works on VC6 at class and namespace scope
                  - ported to DigitalMars
@@ -49,17 +50,17 @@
 // 3. static_warning_impl<B>::type overloads operator& to return a dynamically
 //    allocated int pointer only is B is true, so  returning the address of an
 //    automatic variable of this type generates a warning iff B is fasle.
-// 4. static_warning_impl<B>::STATIC_WARNING is decalred as a struct iff B is 
-//    false. 
+// 4. static_warning_impl<B>::STATIC_WARNING is decalred as a struct iff B is
+//    false.
 // 5. static_warning_impl<B>::type is incomplete iff B is false, so deleting a
 //    pointer to this type generates a warning iff B is false.
 //
 
 //------------------Enable selected warnings----------------------------------//
 
-// Enable the warnings relied on by BOOST_STATIC_WARNING, where possible. The 
-// only pragma which is absolutely necessary here is for Borland 5.x, since 
-// W8073 is disabled by default. If enabling selected warnings is considered 
+// Enable the warnings relied on by BOOST_STATIC_WARNING, where possible. The
+// only pragma which is absolutely necessary here is for Borland 5.x, since
+// W8073 is disabled by default. If enabling selected warnings is considered
 // unacceptable, this section can be replaced with:
 //   #if defined(__BORLANDC__) && (__BORLANDC__ <= 0x600)
 //    pragma warn +st
@@ -77,7 +78,7 @@
 namespace icecube {
 namespace serialization {
 
-template<int L> 
+template<int L>
 struct I3_SERIALIZATION_STATIC_WARNING_LINE{};
 
 template<bool B, int L>

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef ICETRAY_PORTABLE_BINARY_IARCHIVE_HPP
 #define ICETRAY_PORTABLE_BINARY_IARCHIVE_HPP
 

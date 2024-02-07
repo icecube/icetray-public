@@ -1,4 +1,6 @@
 /*!
+ * SPDX-FileCopyrightText: The IceTray Contributors
+ * SPDX-License-Identifier: BSL-1.0
  * \file      bitset.hpp
  * \brief     Provides Boost.Serialization support for std::bitset
  * \author    David Schultz
@@ -38,7 +40,7 @@ inline void save(
         const size_t chunks(size/chunk_size+(size%chunk_size==0?0:1));
         const std::bitset<size> mask((uint64_t)(-1));
         uint64_t chunk = 0;
-        
+
         for (size_t i=0;i<chunks;i++) {
             chunk = ((t >> i*chunk_size) & mask).to_ulong();
             ar << I3_SERIALIZATION_NVP(chunk);
@@ -66,7 +68,7 @@ inline void load(
         const size_t chunk_size(8*sizeof(uint64_t));
         const size_t chunks(size/chunk_size+(size%chunk_size==0?0:1));
         uint64_t chunk;
-        
+
         for (size_t i=0;i<chunks;i++) {
             ar >> I3_SERIALIZATION_NVP(chunk);
             t |= std::bitset<size>(chunk) << i*chunk_size;

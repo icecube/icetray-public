@@ -6,6 +6,7 @@
 #endif
 
 //  Copyright (c) 2003 Vladimir Prus.
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -19,13 +20,13 @@
 #include <serialization/nvp.hpp>
 #include <serialization/split_free.hpp>
 
-namespace icecube { 
+namespace icecube {
 namespace serialization {
-    
+
     template<class Archive, class T>
     void save(
-        Archive & ar, 
-        const boost::scoped_ptr< T > & t, 
+        Archive & ar,
+        const boost::scoped_ptr< T > & t,
         const unsigned int /* version */
     ){
         T* r = t.get();
@@ -34,19 +35,19 @@ namespace serialization {
 
     template<class Archive, class T>
     void load(
-        Archive & ar, 
-        boost::scoped_ptr< T > & t, 
+        Archive & ar,
+        boost::scoped_ptr< T > & t,
         const unsigned int /* version */
     ){
         T* r;
         ar >> icecube::serialization::make_nvp("scoped_ptr", r);
-        t.reset(r); 
+        t.reset(r);
     }
 
     template<class Archive, class T>
     void serialize(
-        Archive& ar, 
-        boost::scoped_ptr< T >& t, 
+        Archive& ar,
+        boost::scoped_ptr< T >& t,
         const unsigned int version
     ){
         icecube::serialization::split_free(ar, t, version);

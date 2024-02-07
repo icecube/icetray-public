@@ -2,6 +2,7 @@
 // xml_iarchive_impl.cpp:
 
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -12,7 +13,7 @@
 #include <cstring> // memcpy
 #include <cstddef> // NULL
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::memcpy;
 } // namespace std
 #endif
@@ -20,7 +21,7 @@ namespace std{
 #ifndef BOOST_NO_CWCHAR
 #include <cstdlib> // mbtowc
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::mbtowc;
  } // namespace std
 #endif
@@ -59,7 +60,7 @@ xml_iarchive_impl<Archive>::load(std::wstring &ws){
         icecube::serialization::throw_exception(
             xml_archive_exception(xml_archive_exception::xml_archive_parsing_error)
         );
-    
+
     #if BOOST_WORKAROUND(_RWSTD_VER, BOOST_TESTED_AT(20101))
     if(NULL != ws.data())
     #endif
@@ -93,7 +94,7 @@ xml_iarchive_impl<Archive>::load(wchar_t * ws){
         icecube::serialization::throw_exception(
             xml_archive_exception(xml_archive_exception::xml_archive_parsing_error)
         );
-        
+
     const char * start = s.data();
     const char * end = start + s.size();
     while(start < end){
@@ -168,7 +169,7 @@ xml_iarchive_impl<Archive>::xml_iarchive_impl(
     unsigned int flags
 ) :
     basic_text_iprimitive<std::istream>(
-        is_, 
+        is_,
         0 != (flags & no_codecvt)
     ),
     basic_xml_iarchive<Archive>(flags),

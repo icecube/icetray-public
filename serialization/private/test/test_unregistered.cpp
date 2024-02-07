@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_unregistered.cpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -14,7 +15,7 @@
 #include <cstdio> // remove
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::remove;
 }
 #endif
@@ -63,7 +64,7 @@ void save_unregistered1(const char* testfile)
     typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
 
     polymorphic_base* rb1 =  new polymorphic_derived1;
-    
+
     // registration IS necessary when serializing a polymorphic class
     // through pointer to the base class
     bool except = false;
@@ -99,7 +100,7 @@ void load_unregistered1(const char* testfile)
     catch(icecube::archive::archive_exception aex){
         except = true;
         ENSURE(
-            NULL == rb1, 
+            NULL == rb1,
             "failed load resulted in a non-null pointer"
         );
     }
@@ -117,7 +118,7 @@ void save_unregistered2(const char *testfile)
     typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
 
     polymorphic_derived1 *rd1 = new polymorphic_derived1;
-    
+
     // registration is NOT necessary when serializing a polymorphic class
     // through pointer to a derived class
     bool except = false;
@@ -143,7 +144,7 @@ void load_unregistered2(const char *testfile)
     typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
 
     polymorphic_derived1* rd1 = nullptr;
-    
+
     // registration is NOT necessary when serializing a polymorphic class
     // or through pointer to a derived class
     bool except = false;
@@ -153,7 +154,7 @@ void load_unregistered2(const char *testfile)
     catch(boost::archive::archive_exception aex){
         except = true;
         ENSURE(
-            NULL == rd1, 
+            NULL == rd1,
             "failed load resulted in a non-null pointer"
         );
     }
@@ -205,7 +206,7 @@ void load_registered(const char *testfile)
         icecube::serialization::type_info_implementation<
             polymorphic_derived1
         >::type::get_const_instance()
-        == 
+        ==
         *icecube::serialization::type_info_implementation<
             polymorphic_base
         >::type::get_const_instance().get_derived_extended_type_info(*rb1),
@@ -218,7 +219,7 @@ void load_registered(const char *testfile)
         icecube::serialization::type_info_implementation<
             polymorphic_derived2
         >::type::get_const_instance()
-        == 
+        ==
         *icecube::serialization::type_info_implementation<
             polymorphic_base
         >::type::get_const_instance().get_derived_extended_type_info(*rb2),

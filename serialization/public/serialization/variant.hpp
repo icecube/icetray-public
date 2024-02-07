@@ -9,10 +9,9 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // variant.hpp - non-intrusive serialization of variant types
 //
-// copyright (c) 2005   
-// troy d. straszheim <troy@resophonic.com>
-// http://www.resophonic.com
+// Copyright (c) 2005 troy d. straszheim <troy@resophonic.com> http://www.resophonic.com
 //
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -43,8 +42,8 @@ namespace icecube {
 namespace serialization {
 
 template<class Archive>
-struct variant_save_visitor : 
-    boost::static_visitor<> 
+struct variant_save_visitor :
+    boost::static_visitor<>
 {
     variant_save_visitor(Archive& ar) :
         m_ar(ar)
@@ -126,7 +125,7 @@ struct variant_impl {
 
 template<class Archive, BOOST_VARIANT_ENUM_PARAMS(/* typename */ class T)>
 void load(
-    Archive & ar, 
+    Archive & ar,
     boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>& v,
     const unsigned int version
 ){

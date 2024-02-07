@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // serializer_map.cpp:
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -33,14 +34,14 @@ namespace icecube {
 namespace archive {
 namespace detail {
 
-bool  
+bool
 basic_serializer_map::type_info_pointer_compare::operator()(
     const basic_serializer * lhs, const basic_serializer * rhs
 ) const {
     return *lhs < *rhs;
 }
 
-I3_ARCHIVE_DECL(bool) 
+I3_ARCHIVE_DECL(bool)
 basic_serializer_map::insert(const basic_serializer * bs){
     // attempt to insert serializer into its map
     // the following is commented out - rather than being just
@@ -51,8 +52,8 @@ basic_serializer_map::insert(const basic_serializer * bs){
 
     // At first it seemed like a good idea.  It enforced the
     // idea that a type be exported from at most one code module
-    // (DLL or mainline).  This would enforce a "one definition rule" 
-    // across code modules. This seems a good idea to me.  
+    // (DLL or mainline).  This would enforce a "one definition rule"
+    // across code modules. This seems a good idea to me.
     // But it seems that it's just too hard for many users to implement.
 
     // Ideally, I would like to make this exception a warning -
@@ -72,7 +73,7 @@ basic_serializer_map::insert(const basic_serializer * bs){
     return true;
 }
 
-I3_ARCHIVE_DECL(void) 
+I3_ARCHIVE_DECL(void)
 basic_serializer_map::erase(const basic_serializer * bs){
     map_type::iterator it = m_map.begin();
     map_type::iterator it_end = m_map.end();

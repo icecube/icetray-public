@@ -1,4 +1,6 @@
 /*!
+ * SPDX-FileCopyrightText: The IceTray Contributors
+ * SPDX-License-Identifier: BSL-1.0
  * \file      dynamic_bitset.hpp
  * \brief     Provides Boost.Serialization support for boost::dynamic_bitset
  * \author    David Schultz

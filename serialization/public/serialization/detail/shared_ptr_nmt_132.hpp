@@ -7,6 +7,7 @@
 //  (C) Copyright Greg Colvin and Beman Dawes 1998, 1999.
 //  Copyright (c) 2001, 2002 Peter Dimov
 //
+//  SPDX-License-Identifier: BSL-1.0
 //  Distributed under the Boost Software License, Version 1.0. (See
 //  accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -117,7 +118,7 @@ public:
     {
         return *pn == 1;
     }
-    
+
     void swap(shared_ptr< T > & other)  // never throws
     {
         std::swap(px, other.px);

@@ -9,7 +9,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // basic_text_oprimitive.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -39,7 +40,7 @@
 #endif
 
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::size_t;
     #if ! defined(BOOST_DINKUMWARE_STDLIB) && ! defined(__SGI_STL_PORT)
         using ::locale;
@@ -76,7 +77,7 @@ protected:
     #ifndef BOOST_NO_STD_LOCALE
     boost::scoped_ptr<std::locale> archive_locale;
     basic_streambuf_locale_saver<
-        typename OStream::char_type, 
+        typename OStream::char_type,
         typename OStream::traits_type
     > locale_saver;
     #endif
@@ -138,11 +139,11 @@ protected:
     template<class T>
     struct is_float {
         typedef typename boost::mpl::bool_<
-            boost::is_floating_point<T>::value 
+            boost::is_floating_point<T>::value
             || (std::numeric_limits<T>::is_specialized
             && !std::numeric_limits<T>::is_integer
             && !std::numeric_limits<T>::is_exact
-            && std::numeric_limits<T>::max_exponent) 
+            && std::numeric_limits<T>::max_exponent)
         >::type type;
     };
 
@@ -199,8 +200,8 @@ public:
     save_binary(const void *address, std::size_t count);
 };
 
-} //namespace icecube 
-} //namespace archive 
+} //namespace icecube
+} //namespace archive
 
 #include <archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 

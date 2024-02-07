@@ -10,6 +10,7 @@
 // state_saver.hpp:
 
 // (C) Copyright 2003-4 Pavel Vozenilek and Robert Ramey - http://www.rrsd.com.
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -59,8 +60,8 @@ private:
         static void invoke(T & previous_ref, const T & previous_value){
             BOOST_TRY{
                 previous_ref = previous_value;
-            } 
-            BOOST_CATCH(::std::exception &) { 
+            }
+            BOOST_CATCH(::std::exception &) {
                 // we must ignore it - we are in destructor
             }
             BOOST_CATCH_END
@@ -70,11 +71,11 @@ private:
 public:
     state_saver(
         T & object
-    ) : 
+    ) :
         previous_value(object),
-        previous_ref(object) 
+        previous_ref(object)
     {}
-    
+
     ~state_saver() {
         #ifndef BOOST_NO_EXCEPTIONS
             typedef typename boost::mpl::eval_if<

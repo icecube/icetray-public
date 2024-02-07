@@ -9,7 +9,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // xml_woarchive.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -23,8 +24,8 @@
 
 #include <cstddef> // size_t
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::size_t; 
+namespace std{
+    using ::size_t;
 } // namespace std
 #endif
 
@@ -51,7 +52,7 @@ namespace detail {
 } // namespace detail
 
 template<class Archive>
-class xml_woarchive_impl : 
+class xml_woarchive_impl :
     public basic_text_oprimitive<std::wostream>,
     public basic_xml_oarchive<Archive>
 {
@@ -76,15 +77,15 @@ protected:
     //    basic_xml_oarchive<Archive>::end_preamble();
     //}
     template<class T>
-    void 
+    void
     save(const T & t){
         basic_text_oprimitive<std::wostream>::save(t);
     }
-    void 
+    void
     save(const version_type & t){
         save(static_cast<const unsigned int>(t));
     }
-    void 
+    void
     save(const icecube::serialization::item_version_type & t){
         save(static_cast<const unsigned int>(t));
     }
@@ -104,7 +105,7 @@ protected:
     xml_woarchive_impl(std::wostream & os, unsigned int flags);
     ~xml_woarchive_impl(){}
 public:
-    void 
+    void
     save_binary(const void *address, std::size_t count){
         this->end_preamble();
         #if ! defined(__MWERKS__)
@@ -112,7 +113,7 @@ public:
         #else
         this->basic_text_oprimitive::save_binary(
         #endif
-            address, 
+            address,
             count
         );
         this->indent_next = true;
@@ -125,7 +126,7 @@ public:
 // do not derive from this class.  If you want to extend this functionality
 // via inhertance, derived from xml_woarchive_impl instead.  This will
 // preserve correct static polymorphism.
-class xml_woarchive : 
+class xml_woarchive :
     public xml_woarchive_impl<xml_woarchive>
 {
 public:

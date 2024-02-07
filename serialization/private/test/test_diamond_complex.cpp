@@ -2,6 +2,7 @@
 // test_diamond.cpp
 
 // (C) Copyright 2002-2009 Vladimir Prus, Robert Ramey and Takatoshi Kondo.
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -15,7 +16,7 @@
 #include <boost/config.hpp>
 #include <cstdio> // remove
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::remove;
 }
 #endif
@@ -77,7 +78,7 @@ public:
 
     I3_SERIALIZATION_SPLIT_MEMBER()
 
-    bool operator==(const EX1Level1& another) const 
+    bool operator==(const EX1Level1& another) const
     {
         return i == another.i && m == another.m;
     }
@@ -85,12 +86,12 @@ public:
     virtual ~EX1Level1() {};
 private:
     int i;
-    std::map<int, std::string> m;    
+    std::map<int, std::string> m;
 };
 
 // note: the default is for object tracking to be performed if and only
 // if and object of the corresponding class is anywhere serialized
-// through a pointer.  In this example, that doesn't occur so 
+// through a pointer.  In this example, that doesn't occur so
 // by default, the shared EX1Level1 object wouldn't normally be tracked.
 // This would leave to multiple save/load operation of the data in
 // this shared EX1Level1 class.  This wouldn't cause an error, but it would
@@ -122,7 +123,7 @@ public:
 };
 
 class EX1Level2_B : virtual public EX1Level1 {
-public:    
+public:
     template<class Archive>
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
@@ -240,7 +241,7 @@ public:
 
     I3_SERIALIZATION_SPLIT_MEMBER()
 
-    bool operator==(const EX2Level1& another) const 
+    bool operator==(const EX2Level1& another) const
     {
         return i == another.i && m == another.m;
     }
@@ -248,12 +249,12 @@ public:
     virtual ~EX2Level1() {};
 private:
     int i;
-    std::map<int, std::string> m;    
+    std::map<int, std::string> m;
 };
 
 // note: the default is for object tracking to be performed if and only
 // if and object of the corresponding class is anywhere serialized
-// through a pointer.  In this example, that doesn't occur so 
+// through a pointer.  In this example, that doesn't occur so
 // by default, the shared EX2Level1 object wouldn't normally be tracked.
 // This would leave to multiple save/load operation of the data in
 // this shared EX2Level1 class.  This wouldn't cause an error, but it would
@@ -285,7 +286,7 @@ public:
 };
 
 class EX2Level2_B : virtual public EX2Level1 {
-public:    
+public:
     template<class Archive>
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
@@ -383,7 +384,7 @@ I3_CLASS_EXPORT(EX2Level4)
 template <typename TS /*test settings*/>
 void do_test(){
     auto testfile = I3Test::testfile("test_diamond_complex");
-    
+
     {
         save_count = 0;
         load_count = 0;
@@ -411,7 +412,7 @@ void do_test(){
         save_count = 0;
         load_count = 0;
 
-        const EX1Level4 ex1L4_save(3);   
+        const EX1Level4 ex1L4_save(3);
         const EX1Level1 *ex1L1_save = &ex1L4_save;
         {
             typename TS::test_ostream ofs(testfile, TS::TEST_STREAM_FLAGS);
@@ -457,7 +458,7 @@ void do_test(){
         save_count = 0;
         load_count = 0;
 
-        const EX2Level4 ex2L4_save(3);   
+        const EX2Level4 ex2L4_save(3);
         const EX2Level1 *ex2L1_save = &ex2L4_save;
         {
             typename TS::test_ostream ofs(testfile, TS::TEST_STREAM_FLAGS);

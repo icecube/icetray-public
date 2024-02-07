@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // basic_text_oprimitive.ipp:
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -28,22 +29,22 @@ namespace archive {
 template<class OStream>
 I3_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_text_oprimitive<OStream>::save_binary(
-    const void *address, 
+    const void *address,
     std::size_t count
 ){
     typedef typename OStream::char_type CharType;
-    
+
     if(0 == count)
         return;
-    
+
     if(os.fail())
         icecube::serialization::throw_exception(
             archive_exception(archive_exception::output_stream_error)
         );
-        
+
     os.put('\n');
-    
-    typedef 
+
+    typedef
         icecube::archive::iterators::insert_linebreaks<
             icecube::archive::iterators::base64_from_binary<
                 icecube::archive::iterators::transform_width<
@@ -51,10 +52,10 @@ basic_text_oprimitive<OStream>::save_binary(
                     6,
                     8
                 >
-            > 
+            >
             ,76
             ,const char // cwpro8 needs this
-        > 
+        >
         base64_text;
 
     icecube::archive::iterators::ostream_iterator<CharType> oi(os);
@@ -65,7 +66,7 @@ basic_text_oprimitive<OStream>::save_binary(
         ),
         oi
     );
-    
+
     std::size_t tail = count % 3;
     if(tail > 0){
         *oi++ = '=';
@@ -79,7 +80,7 @@ I3_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
 basic_text_oprimitive<OStream>::basic_text_oprimitive(
     OStream & os_,
     bool no_codecvt
-) : 
+) :
 #ifndef BOOST_NO_STD_LOCALE
     os(os_),
     flags_saver(os_),
@@ -90,7 +91,7 @@ basic_text_oprimitive<OStream>::basic_text_oprimitive(
     if(! no_codecvt){
         archive_locale.reset(
             add_facet(
-                std::locale::classic(), 
+                std::locale::classic(),
                 new codecvt_null<typename OStream::char_type>
             )
         );
@@ -111,5 +112,5 @@ basic_text_oprimitive<OStream>::~basic_text_oprimitive(){
     os << std::endl;
 }
 
-} //namespace icecube 
-} //namespace archive 
+} //namespace icecube
+} //namespace archive

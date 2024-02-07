@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_vector.cpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -14,7 +15,7 @@
 #include <cstdio> // remove
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::remove;
 }
 #endif
@@ -34,7 +35,7 @@ void test_vector(){
     std::vector<T> avector;
     avector.push_back(T());
     avector.push_back(T());
-    {   
+    {
         typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << icecube::serialization::make_nvp("avector", avector);

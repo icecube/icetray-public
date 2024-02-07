@@ -9,6 +9,7 @@
 // Copyright Robert Ramey 2007.  Changes made to permit
 // application throughout the serialization library.
 //
+// SPDX-License-Identifier: BSL-1.0
 // Distributed under the Boost
 // Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -32,7 +33,7 @@
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER)
 # pragma once
-#endif 
+#endif
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
@@ -44,8 +45,8 @@
 #  pragma warning(disable : 4511 4512)
 #endif
 
-namespace icecube { 
-namespace serialization { 
+namespace icecube {
+namespace serialization {
 
 //////////////////////////////////////////////////////////////////////
 // Provides a dynamically-initialized (singleton) instance of T in a
@@ -77,7 +78,7 @@ namespace serialization {
 // attempt to retieve a mutable instances while locked will
 // generate a assertion if compiled for debug.
 
-class singleton_module : 
+class singleton_module :
     public boost::noncopyable
 {
 private:

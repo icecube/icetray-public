@@ -9,7 +9,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // basic_binary_oarchive.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -59,7 +60,7 @@ namespace detail {
 // does have the virtue of buiding the smalles archive in the minimum amount
 // of time.  So under some circumstances it may be he right choice.
 template<class Archive>
-class basic_binary_oarchive : 
+class basic_binary_oarchive :
     public archive::detail::common_oarchive<Archive>
 {
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
@@ -91,7 +92,7 @@ protected:
     BOOST_STATIC_ASSERT(sizeof(object_id_type) == sizeof(uint_least32_t));
     BOOST_STATIC_ASSERT(sizeof(object_reference_type) == sizeof(uint_least32_t));
 
-    // binary files don't include the optional information 
+    // binary files don't include the optional information
     void save_override(const class_id_optional_type & /* t */, int){}
 
     // enable this if we decide to support generation of previous versions
@@ -160,7 +161,7 @@ protected:
             unsigned int x=0;
             * this->This() >> x;
             t = serialization::collection_size_type(x);
-        } 
+        }
         else{
             * this->This() >> t;
         }

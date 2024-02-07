@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_non_default_ctor.cpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -23,7 +24,7 @@
 
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{
-    using ::rand; 
+    using ::rand;
     using ::remove;
     #if BOOST_WORKAROUND(BOOST_MSVC, >= 1400) && !defined(UNDER_CE)
         using ::numeric_limits;
@@ -77,7 +78,7 @@ public:
 
 int A::count = 0;
 
-A::A(int i_) : 
+A::A(int i_) :
     i(i_),
     s(static_cast<signed char>(0xff & std::rand())),
     t(static_cast<signed char>(0xff & std::rand())),
@@ -101,8 +102,8 @@ namespace serialization {
 
 template<class Archive>
 inline void save_construct_data(
-    Archive & ar, 
-    const A * a, 
+    Archive & ar,
+    const A * a,
     const I3_PFTO unsigned int /* file_version */
 ){
     // variable used for construction
@@ -111,8 +112,8 @@ inline void save_construct_data(
 
 template<class Archive>
 inline void load_construct_data(
-    Archive & ar, 
-    A * a, 
+    Archive & ar,
+    A * a,
     const unsigned int /* file_version */
 ){
     int i;
@@ -130,7 +131,7 @@ void save(const char* testfile){
     A a(2);
 
     oa << I3_SERIALIZATION_NVP(a);
-    
+
     // save a copy pointer to this item
     A* pa1 = &a;
     oa << I3_SERIALIZATION_NVP(pa1);

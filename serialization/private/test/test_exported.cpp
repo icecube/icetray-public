@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_exported.cpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -14,7 +15,7 @@
 #include <boost/config.hpp>
 #include <cstdio> // remove
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::remove;
 }
 #endif
@@ -33,7 +34,7 @@ namespace std{
 #include "polymorphic_base.hpp"
 
 namespace{
-class polymorphic_derived1 : 
+class polymorphic_derived1 :
     public polymorphic_base
 {
     friend class icecube::serialization::access;
@@ -61,7 +62,7 @@ I3_SERIALIZATION_MWERKS_BASE_AND_DERIVED(polymorphic_base, polymorphic_derived2)
 
 template<class Archive>
 void polymorphic_derived2::serialize(
-    Archive &ar, 
+    Archive &ar,
     const unsigned int // file_version
 ){
     ar & I3_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
@@ -114,7 +115,7 @@ void load_exported(const char *testfile)
     ENSURE(
         icecube::serialization::type_info_implementation<polymorphic_derived1>
             ::type::get_const_instance()
-        == 
+        ==
         * icecube::serialization::type_info_implementation<polymorphic_base>
             ::type::get_const_instance().get_derived_extended_type_info(*rb1),
         "restored pointer b1 not of correct type"
@@ -124,7 +125,7 @@ void load_exported(const char *testfile)
     ENSURE(
         icecube::serialization::type_info_implementation<polymorphic_derived2>
             ::type::get_const_instance()
-        == 
+        ==
         * icecube::serialization::type_info_implementation<polymorphic_base>
             ::type::get_const_instance().get_derived_extended_type_info(*rb2),
         "restored pointer b2 not of correct type"

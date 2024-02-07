@@ -9,7 +9,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // nvp.hpp: interface for serialization system.
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -35,7 +36,7 @@ namespace icecube {
 namespace serialization {
 
 template<class T>
-struct nvp : 
+struct nvp :
     public std::pair<const char *, T *>,
     public wrapper_traits<const nvp< T > >
 {
@@ -44,7 +45,7 @@ struct nvp :
         // note: added _ to suppress useless gcc warning
         std::pair<const char *, T *>(name_, (T*)(& t))
     {}
-    nvp(const nvp & rhs) : 
+    nvp(const nvp & rhs) :
         // note: redundant cast works around borland issue
         std::pair<const char *, T *>(rhs.first, (T*)rhs.second)
     {}
@@ -65,10 +66,10 @@ struct nvp :
     // is an error but I want to accomodated as it generates a long warning
     // listing and might be related to a lot of test failures.
     // default treatment for name-value pairs. The name is
-    // just discarded and only the value is serialized. 
+    // just discarded and only the value is serialized.
     template<class Archivex>
     void save(
-        Archivex & ar, 
+        Archivex & ar,
         const unsigned int /* file_version */
     ) const {
         // CodeWarrior 8.x can't seem to resolve the << op for a rhs of "const T *"
@@ -76,7 +77,7 @@ struct nvp :
     }
     template<class Archivex>
     void load(
-        Archivex & ar, 
+        Archivex & ar,
         const unsigned int /* file_version */
     ){
         // CodeWarrior 8.x can't seem to resolve the >> op for a rhs of "const T *"

@@ -2,7 +2,8 @@
 // extended_type_info_no_rtti.cpp: specific implementation of type info
 // that is NOT based on typeid
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -23,9 +24,9 @@ namespace std{ using ::strcmp; }
 
 #define EXTENDED_TYPE_INFO_NO_RTTI_KEY 2
 
-namespace icecube { 
-namespace serialization { 
-namespace no_rtti_system { 
+namespace icecube {
+namespace serialization {
+namespace no_rtti_system {
 
 I3_SERIALIZATION_DECL(BOOST_PP_EMPTY())
 extended_type_info_no_rtti_0::extended_type_info_no_rtti_0(
@@ -48,7 +49,7 @@ extended_type_info_no_rtti_0::is_less_than(
     // this method of type id are in fact exported.
     // b) This class was used (e.g. serialized through a pointer) before
     // it was exported.  Make sure that classes which use this method
-    // of type id are NOT "automatically" registered by serializating 
+    // of type id are NOT "automatically" registered by serializating
     // through a pointer to the to most derived class.  OR make sure
     // that the I3_CLASS_EXPORT is included in every file
     // which does this.

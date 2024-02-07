@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// test_mult_archive_types.cpp 
+// test_mult_archive_types.cpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -12,7 +13,7 @@
 #include <boost/config.hpp>
 #include <cstdio> // remove
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::remove;
 }
 #endif
@@ -149,7 +150,7 @@ TEST(portable_binary_archive){
     A* a = new A;
     A* a1 = a;
     test_save_and_load<portable_binary_oarchive, portable_binary_iarchive>(a, a1);
-    
+
     // Try to save and load pointers to Bs, to a portable binary archive
     B* b = new B;
     B* b1 = b;

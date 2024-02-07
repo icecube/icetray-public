@@ -1,15 +1,16 @@
 #ifndef I3_TEST_DECL_HPP
-#define I3_TEST_DECL_HPP 
+#define I3_TEST_DECL_HPP
 
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER)
 # pragma once
-#endif 
+#endif
 
 /////////1/////////2///////// 3/////////4/////////5/////////6/////////7/////////8
 //  test_decl.hpp
 //
 //  (c) Copyright Robert Ramey 2004
+//  SPDX-License-Identifier: BSL-1.0
 //  Use, modification, and distribution is subject to the Boost Software
 //  License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -56,14 +57,14 @@
         #if defined(__BORLANDC__)
             #define EXPORT_DECL(T)  T __export
         #else
-            #define EXPORT_DECL(T) __declspec(dllexport) T 
+            #define EXPORT_DECL(T) __declspec(dllexport) T
         #endif
     #endif
     #if ! defined(IMPORT_DECL)
         #if defined(__BORLANDC__)
             #define IMPORT_DECL(T)    T __import
         #else
-            #define IMPORT_DECL(T)    __declspec(dllimport) T 
+            #define IMPORT_DECL(T)    __declspec(dllimport) T
         #endif
     #endif
 #else

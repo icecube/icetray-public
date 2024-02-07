@@ -10,7 +10,8 @@
 // serialization/hash_map.hpp:
 // serialization for stl hash_map templates
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -26,7 +27,7 @@
 #include <serialization/hash_collections_load_imp.hpp>
 #include <serialization/split_free.hpp>
 
-namespace icecube { 
+namespace icecube {
 namespace serialization {
 
 namespace stl {
@@ -36,19 +37,19 @@ template<class Archive, class Container>
 struct archive_input_hash_map
 {
     inline void operator()(
-        Archive &ar, 
-        Container &s, 
+        Archive &ar,
+        Container &s,
         const unsigned int v
     ){
         typedef typename Container::value_type type;
         detail::stack_construct<Archive, type> t(ar, v);
         // borland fails silently w/o full namespace
         ar >> icecube::serialization::make_nvp("item", t.reference());
-        std::pair<typename Container::const_iterator, bool> result = 
+        std::pair<typename Container::const_iterator, bool> result =
             s.insert(t.reference());
         // note: the following presumes that the map::value_type was NOT tracked
         // in the archive.  This is the usual case, but here there is no way
-        // to determine that.  
+        // to determine that.
         if(result.second){
             ar.reset_object_address(
                 & (result.first->second),
@@ -63,19 +64,19 @@ template<class Archive, class Container>
 struct archive_input_hash_multimap
 {
     inline void operator()(
-        Archive &ar, 
-        Container &s, 
+        Archive &ar,
+        Container &s,
         const unsigned int v
     ){
         typedef typename Container::value_type type;
         detail::stack_construct<Archive, type> t(ar, v);
         // borland fails silently w/o full namespace
         ar >> icecube::serialization::make_nvp("item", t.reference());
-        typename Container::const_iterator result 
+        typename Container::const_iterator result
             = s.insert(t.reference());
         // note: the following presumes that the map::value_type was NOT tracked
         // in the archive.  This is the usual case, but here there is no way
-        // to determine that.  
+        // to determine that.
         ar.reset_object_address(
             & result->second,
             & t.reference()
@@ -86,9 +87,9 @@ struct archive_input_hash_multimap
 } // stl
 
 template<
-    class Archive, 
-    class Key, 
-    class HashFcn, 
+    class Archive,
+    class Key,
+    class HashFcn,
     class EqualKey,
     class Allocator
 >
@@ -100,7 +101,7 @@ inline void save(
     const unsigned int file_version
 ){
     icecube::serialization::stl::save_hash_collection<
-        Archive, 
+        Archive,
         BOOST_STD_EXTENSION_NAMESPACE::hash_map<
             Key, HashFcn, EqualKey, Allocator
         >
@@ -108,9 +109,9 @@ inline void save(
 }
 
 template<
-    class Archive, 
-    class Key, 
-    class HashFcn, 
+    class Archive,
+    class Key,
+    class HashFcn,
     class EqualKey,
     class Allocator
 >
@@ -127,7 +128,7 @@ inline void load(
             Key, HashFcn, EqualKey, Allocator
         >,
         icecube::serialization::stl::archive_input_hash_map<
-            Archive, 
+            Archive,
             BOOST_STD_EXTENSION_NAMESPACE::hash_map<
                 Key, HashFcn, EqualKey, Allocator
             >
@@ -138,9 +139,9 @@ inline void load(
 // split non-intrusive serialization function member into separate
 // non intrusive save/load member functions
 template<
-    class Archive, 
-    class Key, 
-    class HashFcn, 
+    class Archive,
+    class Key,
+    class HashFcn,
     class EqualKey,
     class Allocator
 >
@@ -156,9 +157,9 @@ inline void serialize(
 
 // hash_multimap
 template<
-    class Archive, 
-    class Key, 
-    class HashFcn, 
+    class Archive,
+    class Key,
+    class HashFcn,
     class EqualKey,
     class Allocator
 >
@@ -170,7 +171,7 @@ inline void save(
     const unsigned int file_version
 ){
     icecube::serialization::stl::save_hash_collection<
-        Archive, 
+        Archive,
         BOOST_STD_EXTENSION_NAMESPACE::hash_multimap<
             Key, HashFcn, EqualKey, Allocator
         >
@@ -178,9 +179,9 @@ inline void save(
 }
 
 template<
-    class Archive, 
-    class Key, 
-    class HashFcn, 
+    class Archive,
+    class Key,
+    class HashFcn,
     class EqualKey,
     class Allocator
 >
@@ -197,7 +198,7 @@ inline void load(
             Key, HashFcn, EqualKey, Allocator
         >,
         icecube::serialization::stl::archive_input_hash_multimap<
-            Archive, 
+            Archive,
             BOOST_STD_EXTENSION_NAMESPACE::hash_multimap<
                 Key, HashFcn, EqualKey, Allocator
             >
@@ -208,9 +209,9 @@ inline void load(
 // split non-intrusive serialization function member into separate
 // non intrusive save/load member functions
 template<
-    class Archive, 
-    class Key, 
-    class HashFcn, 
+    class Archive,
+    class Key,
+    class HashFcn,
     class EqualKey,
     class Allocator
 >

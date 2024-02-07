@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_utf8_codecvt.cpp
 
-// (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -19,12 +20,12 @@
 #include <boost/config.hpp>
 
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::size_t; 
+namespace std{
+    using ::size_t;
     using ::wcslen;
-#if !defined(UNDER_CE) && !defined(__PGIC__) 
+#if !defined(UNDER_CE) && !defined(__PGIC__)
     using ::w_int;
-#endif    
+#endif
 } // namespace std
 #endif
 
@@ -187,7 +188,7 @@ TEST(utf8_codecvt){
     #endif
 
     ENSURE(std::equal(from_file.begin(), from_file.end(), td::wchar_encoding));
-  
+
     // Send the UCS4_data back out, converting to UTF-8
     {
         std::wofstream ofs;
@@ -219,7 +220,7 @@ TEST(utf8_codecvt){
     }
 
     // some libraries have trouble that only shows up with longer strings
-    
+
     const wchar_t * test3_data = L"\
     <?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>\
     <!DOCTYPE boost_serialization>\
@@ -247,7 +248,7 @@ TEST(utf8_codecvt){
     </a>\
     </boost_serialization>\
     ";
-    
+
     // Send the UCS4_data back out, converting to UTF-8
     std::size_t l = std::wcslen(test3_data);
     {

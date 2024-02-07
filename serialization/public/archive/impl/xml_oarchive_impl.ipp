@@ -2,6 +2,7 @@
 // xml_oarchive_impl.ipp:
 
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -14,8 +15,8 @@
 #include <cstring> // strlen
 #include <boost/config.hpp> // msvc 6.0 needs this to suppress warnings
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::strlen; 
+namespace std{
+    using ::strlen;
 } // namespace std
 #endif
 
@@ -75,7 +76,7 @@ xml_oarchive_impl<Archive>::save(const std::string & s){
 //  at least one library doesn't typedef value_type for strings
 //  so rather than using string directly make a pointer iterator out of it
     typedef icecube::archive::iterators::xml_escape<
-        const char * 
+        const char *
     > xml_escape_translator;
     std::copy(
         xml_escape_translator(I3_MAKE_PFTO_WRAPPER(s.data())),
@@ -88,7 +89,7 @@ template<class Archive>
 I3_ARCHIVE_DECL(void)
 xml_oarchive_impl<Archive>::save(const char * s){
     typedef icecube::archive::iterators::xml_escape<
-        const char * 
+        const char *
     > xml_escape_translator;
     std::copy(
         xml_escape_translator(I3_MAKE_PFTO_WRAPPER(s)),
@@ -100,9 +101,9 @@ xml_oarchive_impl<Archive>::save(const char * s){
 template<class Archive>
 I3_ARCHIVE_DECL(BOOST_PP_EMPTY())
 xml_oarchive_impl<Archive>::xml_oarchive_impl(
-    std::ostream & os_, 
+    std::ostream & os_,
     unsigned int flags
-) : 
+) :
     basic_text_oprimitive<std::ostream>(
         os_,
         0 != (flags & no_codecvt)

@@ -1,4 +1,5 @@
 //  (C) Copyright 2009 Brian Ravnsgaard and Kenneth Riddile
+//  SPDX-License-Identifier: BSL-1.0
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -19,7 +20,7 @@
 
 #if defined( BOOST_NO_STDC_NAMESPACE )
 namespace std
-{ 
+{
     using ::remove;
 }
 #endif
@@ -39,9 +40,9 @@ void test_std_bitset_core(std::size_t V, std::size_t shift){
     std::bitset<S> b(V);
     b <<= shift*8;
     std::string test("this is a test");
-    
+
     auto testfile = I3Test::testfile("test_std_bitset_"+std::to_string(S));
-    
+
     try{
         std::cout << " writing..." << std::endl;
         typename TS::test_ostream os( testfile, TS::TEST_STREAM_FLAGS );
@@ -52,7 +53,7 @@ void test_std_bitset_core(std::size_t V, std::size_t shift){
         std::cout << "write failed!" << std::endl;
         throw;
     }
-    
+
     std::bitset<S> b_out;
     std::string test_out;
     try{
@@ -70,10 +71,10 @@ void test_std_bitset_core(std::size_t V, std::size_t shift){
         std::cout << "read failed!" << std::endl;
         throw;
     }
-    
+
     ENSURE(b == b_out);
     ENSURE(test == test_out);
-    
+
     std::remove(testfile.c_str());
 }
 

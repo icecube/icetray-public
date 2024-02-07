@@ -2,6 +2,7 @@
 #define I3_SERIALIZATION_ARRAY_HPP
 
 // (C) Copyright 2005 Matthias Troyer and Dave Abrahams
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -13,8 +14,8 @@
 #include <array>
 
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::size_t; 
+namespace std{
+    using ::size_t;
 } // namespace std
 #endif
 
@@ -47,9 +48,9 @@ template<class T>
 class array :
     public wrapper_traits<const array< T > >
 {
-public:    
+public:
     typedef T value_type;
-    
+
     array(value_type* t, std::size_t s) :
         m_t(t),
         m_element_count(s)
@@ -94,18 +95,18 @@ public:
     {
       ar.load_array(*this,version);
     }
-    
+
     // default implementation
     template<class Archive>
     void serialize(Archive &ar, const unsigned int version)
     {
-      typedef typename 
+      typedef typename
           icecube::serialization::use_array_optimization<Archive>::template apply<
                     typename boost::remove_const< T >::type
                 >::type use_optimized;
       serialize_optimized(ar,version,use_optimized());
     }
-    
+
     value_type* address() const
     {
       return m_t;
@@ -115,7 +116,7 @@ public:
     {
       return m_element_count;
     }
-    
+
 private:
     value_type* m_t;
     std::size_t m_element_count;
@@ -145,14 +146,14 @@ void serialize(Archive& ar, std::array<T,N>& a, const unsigned int /* version */
         "elems",
         *static_cast<T (*)[N]>(static_cast<void *>(a.data()))
     );
-    
+
 }
 
 } } // end namespace icecube::serialization
 
 #ifdef __BORLANDC__
 // ignore optimizations for Borland
-#define I3_SERIALIZATION_USE_ARRAY_OPTIMIZATION(Archive)      
+#define I3_SERIALIZATION_USE_ARRAY_OPTIMIZATION(Archive)
 #else
 #define I3_SERIALIZATION_USE_ARRAY_OPTIMIZATION(Archive)           \
 namespace icecube { namespace serialization {                           \

@@ -9,7 +9,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // xml_unescape.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -24,14 +25,14 @@
 #include <archive/iterators/unescape.hpp>
 #include <archive/iterators/dataflow_exception.hpp>
 
-namespace icecube { 
+namespace icecube {
 namespace archive {
 namespace iterators {
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // replace &??? xml escape sequences with the corresponding characters
 template<class Base>
-class xml_unescape 
+class xml_unescape
     : public unescape<xml_unescape<Base>, Base>
 {
     friend class boost::iterator_core_access;
@@ -58,7 +59,7 @@ public:
         super_t(Base(I3_MAKE_PFTO_WRAPPER(static_cast< T >(start))))
     {}
     // intel 7.1 doesn't like default copy constructor
-    xml_unescape(const xml_unescape & rhs) : 
+    xml_unescape(const xml_unescape & rhs) :
         super_t(rhs.base_reference())
     {}
 };
@@ -81,8 +82,8 @@ void xml_unescape<Base>::drain_residue(const char * literal){
 // iterator refenence which would make subsequent iterator comparisons
 // incorrect and thereby break the composiblity of iterators.
 template<class Base>
-typename xml_unescape<Base>::value_type 
-//int 
+typename xml_unescape<Base>::value_type
+//int
 xml_unescape<Base>::drain(){
     value_type retval = * this->base_reference();
     if('&' != retval){

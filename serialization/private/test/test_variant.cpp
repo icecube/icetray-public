@@ -2,10 +2,9 @@
 // test_variant.cpp
 // test of non-intrusive serialization of variant types
 //
-// copyright (c) 2005   
-// troy d. straszheim <troy@resophonic.com>
-// http://www.resophonic.com
+// Copyright (c) 2005 troy d. straszheim <troy@resophonic.com> http://www.resophonic.com
 //
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -21,7 +20,7 @@
 #include <boost/config.hpp>
 #include <boost/math/special_functions/next.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::remove;
 }
 #endif
@@ -66,7 +65,7 @@ public:
     };
 
     template <class T, class U>
-    bool operator()( const T & t, const U & u) const 
+    bool operator()( const T & t, const U & u) const
     {
         typedef typename boost::mpl::eval_if<boost::is_same<T, U>,
             boost::mpl::identity<same>,

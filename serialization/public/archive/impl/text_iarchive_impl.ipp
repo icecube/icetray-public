@@ -2,6 +2,7 @@
 // text_iarchive_impl.ipp:
 
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -15,8 +16,8 @@
 #include <cstddef> // size_t, NULL
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::size_t; 
+namespace std{
+    using ::size_t;
 } // namespace std
 #endif
 
@@ -105,13 +106,13 @@ text_iarchive_impl<Archive>::init(){
 }
 
 template<class Archive>
-I3_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
+I3_ARCHIVE_DECL(BOOST_PP_EMPTY())
 text_iarchive_impl<Archive>::text_iarchive_impl(
-    std::istream & is, 
+    std::istream & is,
     unsigned int flags
 ) :
     basic_text_iprimitive<std::istream>(
-        is, 
+        is,
         0 != (flags & no_codecvt)
     ),
     basic_text_iarchive<Archive>(flags)

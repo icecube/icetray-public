@@ -9,7 +9,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // xml_escape.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -20,7 +21,7 @@
 #include <serialization/pfto.hpp>
 #include <archive/iterators/escape.hpp>
 
-namespace icecube { 
+namespace icecube {
 namespace archive {
 namespace iterators {
 
@@ -28,7 +29,7 @@ namespace iterators {
 // insert escapes into xml text
 
 template<class Base>
-class xml_escape 
+class xml_escape
     : public escape<xml_escape<Base>, Base>
 {
     friend class boost::iterator_core_access;
@@ -44,14 +45,14 @@ public:
         super_t(Base(I3_MAKE_PFTO_WRAPPER(static_cast< T >(start))))
     {}
     // intel 7.1 doesn't like default copy constructor
-    xml_escape(const xml_escape & rhs) : 
+    xml_escape(const xml_escape & rhs) :
         super_t(rhs.base_reference())
     {}
 };
 
 template<class Base>
 char xml_escape<Base>::fill(
-    const char * & bstart, 
+    const char * & bstart,
     const char * & bend
 ){
     char current_value = * this->base_reference();
@@ -84,7 +85,7 @@ char xml_escape<Base>::fill(
 
 template<class Base>
 wchar_t xml_escape<Base>::fill(
-    const wchar_t * & bstart, 
+    const wchar_t * & bstart,
     const wchar_t * & bend
 ){
     wchar_t current_value = * this->base_reference();

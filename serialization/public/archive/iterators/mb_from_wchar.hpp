@@ -9,7 +9,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // mb_from_wchar.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -22,8 +23,8 @@
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::size_t; 
+namespace std{
+    using ::size_t;
     using ::wctomb;
 } // namespace std
 #endif
@@ -31,7 +32,7 @@ namespace std{
 #include <serialization/pfto.hpp>
 #include <boost/iterator/iterator_adaptor.hpp>
 
-namespace icecube { 
+namespace icecube {
 namespace archive {
 namespace iterators {
 
@@ -41,8 +42,8 @@ namespace iterators {
 template<class Base>    // the input iterator
 class mb_from_wchar
     : public boost::iterator_adaptor<
-        mb_from_wchar<Base>, 
-        Base, 
+        mb_from_wchar<Base>,
+        Base,
         wchar_t,
         boost::single_pass_traversal_tag,
         char
@@ -51,8 +52,8 @@ class mb_from_wchar
     friend class boost::iterator_core_access;
 
     typedef typename boost::iterator_adaptor<
-        mb_from_wchar<Base>, 
-        Base, 
+        mb_from_wchar<Base>,
+        Base,
         wchar_t,
         boost::single_pass_traversal_tag,
         char
@@ -75,7 +76,7 @@ class mb_from_wchar
     bool equal(const mb_from_wchar<Base> & rhs) const {
         // once the value is filled, the base_reference has been incremented
         // so don't permit comparison anymore.
-        return 
+        return
             0 == m_bend
             && 0 == m_bnext
             && this->base_reference() == rhs.base_reference()
@@ -99,7 +100,7 @@ class mb_from_wchar
     void increment(){
         if(++m_bnext < m_bend)
             return;
-        m_bend = 
+        m_bend =
         m_bnext = 0;
         ++(this->base_reference());
         m_full = false;
@@ -121,7 +122,7 @@ public:
         m_full(false)
     {}
     // intel 7.1 doesn't like default copy constructor
-    mb_from_wchar(const mb_from_wchar & rhs) : 
+    mb_from_wchar(const mb_from_wchar & rhs) :
         super_t(rhs.base_reference()),
         m_bend(rhs.m_bend),
         m_bnext(rhs.m_bnext),

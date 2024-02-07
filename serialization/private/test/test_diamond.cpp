@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_diamond.cpp
 
-// (C) Copyright 2002-2009 Vladimir Prus and Robert Ramey. 
+// (C) Copyright 2002-2009 Vladimir Prus and Robert Ramey.
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -15,7 +16,7 @@
 #include <boost/config.hpp>
 #include <cstdio> // remove
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::remove;
 }
 #endif
@@ -63,7 +64,7 @@ public:
 
     I3_SERIALIZATION_SPLIT_MEMBER()
 
-    bool operator==(const base& another) const 
+    bool operator==(const base& another) const
     {
         return i == another.i && m == another.m;
     }
@@ -71,12 +72,12 @@ public:
     virtual ~base() {};
 private:
     int i;
-    std::map<int, std::string> m;    
+    std::map<int, std::string> m;
 };
 
 // note: the default is for object tracking to be performed if and only
 // if and object of the corresponding class is anywhere serialized
-// through a pointer.  In this example, that doesn't occur so 
+// through a pointer.  In this example, that doesn't occur so
 // by default, the shared base object wouldn't normally be tracked.
 // This would leave to multiple save/load operation of the data in
 // this shared base class.  This wouldn't cause an error, but it would
@@ -108,7 +109,7 @@ public:
 };
 
 class derived2 : virtual public base {
-public:    
+public:
     template<class Archive>
     void save(Archive &ar, const unsigned int /* file_version */) const
     {
@@ -155,8 +156,8 @@ I3_CLASS_EXPORT(final)
 template <typename TS /*test settings*/>
 void do_test(){
     auto testfile = I3Test::testfile("test_diamond");
-    
-    const final b(3);   
+
+    const final b(3);
     {
         typename TS::test_ostream ofs(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(ofs, TS::TEST_ARCHIVE_FLAGS);

@@ -2,6 +2,7 @@
 // text_woarchive_impl.ipp:
 
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -14,9 +15,9 @@
 #include <cstring>
 #include <cstddef> // size_t
 #if defined(BOOST_NO_STDC_NAMESPACE) && ! defined(__LIBCOMO__)
-namespace std{ 
+namespace std{
     using ::strlen;
-    using ::size_t; 
+    using ::size_t;
 } // namespace std
 #endif
 

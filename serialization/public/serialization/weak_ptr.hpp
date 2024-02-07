@@ -10,6 +10,7 @@
 // weak_ptr.hpp: serialization for boost weak pointer
 
 // (C) Copyright 2004 Robert Ramey and Martin Ecker
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)

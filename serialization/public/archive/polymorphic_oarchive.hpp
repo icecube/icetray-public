@@ -10,6 +10,7 @@
 // polymorphic_oarchive.hpp
 
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -17,7 +18,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <cstddef> // size_t
-#include <climits> // ULONG_MAX 
+#include <climits> // ULONG_MAX
 #include <string>
 
 #include <boost/config.hpp>
@@ -139,7 +140,7 @@ public:
 };
 
 // note: preserve naming symmetry
-class polymorphic_oarchive : 
+class polymorphic_oarchive :
     public polymorphic_oarchive_impl
 {
 public:

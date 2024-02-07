@@ -2,6 +2,7 @@
 // text_oarchive_impl.ipp:
 
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -15,8 +16,8 @@
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::size_t; 
+namespace std{
+    using ::size_t;
 } // namespace std
 #endif
 
@@ -30,7 +31,7 @@ namespace std{ using ::wcslen; }
 #include <archive/add_facet.hpp>
 #include <archive/text_oarchive.hpp>
 
-namespace icecube { 
+namespace icecube {
 namespace archive {
 
 //////////////////////////////////////////////////////////////////////
@@ -84,13 +85,13 @@ text_oarchive_impl<Archive>::save(const std::wstring &ws)
 #endif // BOOST_NO_CWCHAR
 
 template<class Archive>
-I3_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
+I3_ARCHIVE_DECL(BOOST_PP_EMPTY())
 text_oarchive_impl<Archive>::text_oarchive_impl(
-    std::ostream & os, 
+    std::ostream & os,
     unsigned int flags
 ) :
     basic_text_oprimitive<std::ostream>(
-        os, 
+        os,
         0 != (flags & no_codecvt)
     ),
     basic_text_oarchive<Archive>(flags)
@@ -113,7 +114,7 @@ text_oarchive_impl<Archive>::save_binary(const void *address, std::size_t count)
     #else
     this->basic_text_oprimitive::save_binary(
     #endif
-        address, 
+        address,
         count
     );
     this->delimiter = this->eol;

@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_derived.cpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -14,7 +15,7 @@
 #include <cstdio> // remove
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::remove;
 }
 #endif
@@ -73,7 +74,7 @@ void save_derived(const char *testfile)
     // result. In the current type id system
     base* b1 = d1;
     base* b2 = d2;
-    
+
     // Warning, the current type id system does not yield true
     // type id for non-polymorphic types
     const icecube::serialization::extended_type_info & this_type
@@ -112,7 +113,7 @@ void load_derived(const char *testfile)
     // result. In the current type id system
     base* b1 = NULL;
     base* b2 = NULL;
-    
+
     // note: this will produce incorrect results for non-polymorphic classes
     ia >> I3_SERIALIZATION_NVP(b1);
     ia >> I3_SERIALIZATION_NVP(b2);
@@ -126,7 +127,7 @@ void load_derived(const char *testfile)
     const icecube::serialization::extended_type_info & true_type
         = * icecube::serialization::type_info_implementation<base>::type
             ::get_const_instance().get_derived_extended_type_info(*b1);
-            
+
     ENSURE(
         !(this_type == true_type),
         "current type id system does fails for non-polymorphic types"

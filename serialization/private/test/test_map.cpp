@@ -1,8 +1,9 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_map.cpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // (C) Copyright 2014 Jim Bell
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -19,8 +20,8 @@
 
 #include <cstdio>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::rand; 
+namespace std{
+    using ::rand;
     using ::size_t;
 }
 #endif
@@ -40,7 +41,7 @@ struct random_key {
     friend class icecube::serialization::access;
     template<class Archive>
     void serialize(
-        Archive & ar, 
+        Archive & ar,
         const unsigned int /* file_version */
     ){
         ar & icecube::serialization::make_nvp("random_key", m_i);
@@ -56,7 +57,7 @@ struct random_key {
     operator std::size_t () const {    // required by hash_map
         return m_i;
     }
-};  
+};
 
 template <typename TS /*test settings*/>
 void test_map(){
@@ -66,7 +67,7 @@ void test_map(){
     std::map<random_key, A> amap;
     amap.insert(std::make_pair(random_key(), A()));
     amap.insert(std::make_pair(random_key(), A()));
-    {   
+    {
         typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << icecube::serialization::make_nvp("amap", amap);
@@ -120,7 +121,7 @@ void test_multimap(){
     std::multimap<random_key, A> amultimap;
     amultimap.insert(std::make_pair(random_key(), A()));
     amultimap.insert(std::make_pair(random_key(), A()));
-    {   
+    {
         typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << icecube::serialization::make_nvp("amultimap", amultimap);
@@ -145,7 +146,7 @@ namespace BOOST_STD_EXTENSION_NAMESPACE {
             return static_cast<std::size_t>(r);
         }
     };
-} // namespace BOOST_STD_EXTENSION_NAMESPACE 
+} // namespace BOOST_STD_EXTENSION_NAMESPACE
 
 template <typename TS /*test settings*/>
 void test_hash_map(){
@@ -155,7 +156,7 @@ void test_hash_map(){
     BOOST_STD_EXTENSION_NAMESPACE::hash_map<random_key, A> ahash_map;
     ahash_map.insert(std::make_pair(random_key(), A()));
     ahash_map.insert(std::make_pair(random_key(), A()));
-    {   
+    {
         typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << icecube::serialization::make_nvp("ahashmap",ahash_map);
@@ -184,7 +185,7 @@ void test_hash_multimap(){
     BOOST_STD_EXTENSION_NAMESPACE::hash_multimap<random_key, A> ahash_multimap;
     ahash_multimap.insert(std::make_pair(random_key(), A()));
     ahash_multimap.insert(std::make_pair(random_key(), A()));
-    {   
+    {
         typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << icecube::serialization::make_nvp("ahash_multimap", ahash_multimap);
@@ -227,7 +228,7 @@ void test_unordered_map(){
     std::unordered_map<random_key, A> anunordered_map;
     anunordered_map.insert(std::make_pair(random_key(), A()));
     anunordered_map.insert(std::make_pair(random_key(), A()));
-    {   
+    {
         typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << icecube::serialization::make_nvp("anunorderedmap",anunordered_map);
@@ -256,7 +257,7 @@ void test_unordered_multimap(){
     std::unordered_multimap<random_key, A> anunordered_multimap;
     anunordered_multimap.insert(std::make_pair(random_key(), A()));
     anunordered_multimap.insert(std::make_pair(random_key(), A()));
-    {   
+    {
         typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << icecube::serialization::make_nvp("anunordered_multimap", anunordered_multimap);

@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_pimpl.cpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -20,12 +21,12 @@ class B;
 namespace{
 class A {
     A():pimpl(new B){}
-    
+
     friend icecube::serialization::access;
     B* pimpl;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int file_version);
-    
+
     bool operator==(const A& other) const{
         return(*pimpl == *other.pimpl);
     }
@@ -37,7 +38,7 @@ void do_test(){
     auto testfile = I3Test::testfile("test_pimpl");
 
     A a, a1;
-    {   
+    {
         typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << I3_SERIALIZATION_NVP(a);

@@ -9,7 +9,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // text_oarchive.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -21,8 +22,8 @@
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::size_t; 
+namespace std{
+    using ::size_t;
 } // namespace std
 #endif
 
@@ -39,7 +40,7 @@ namespace std{
 #  pragma warning(disable : 4511 4512)
 #endif
 
-namespace icecube { 
+namespace icecube {
 namespace archive {
 
 namespace detail {
@@ -47,7 +48,7 @@ namespace detail {
 } // namespace detail
 
 template<class Archive>
-class text_oarchive_impl : 
+class text_oarchive_impl :
      /* protected ? */ public basic_text_oprimitive<std::ostream>,
      public basic_text_oarchive<Archive>
 {
@@ -78,32 +79,32 @@ protected:
     void save(const icecube::serialization::item_version_type & t){
         save(static_cast<const unsigned int>(t));
     }
-    I3_ARCHIVE_DECL(void) 
+    I3_ARCHIVE_DECL(void)
     save(const char * t);
     #ifndef BOOST_NO_INTRINSIC_WCHAR_T
-    I3_ARCHIVE_DECL(void) 
+    I3_ARCHIVE_DECL(void)
     save(const wchar_t * t);
     #endif
-    I3_ARCHIVE_DECL(void) 
+    I3_ARCHIVE_DECL(void)
     save(const std::string &s);
     #ifndef BOOST_NO_STD_WSTRING
-    I3_ARCHIVE_DECL(void) 
+    I3_ARCHIVE_DECL(void)
     save(const std::wstring &ws);
     #endif
-    I3_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
+    I3_ARCHIVE_DECL(BOOST_PP_EMPTY())
     text_oarchive_impl(std::ostream & os, unsigned int flags);
     // don't import inline definitions! leave this as a reminder.
-    //I3_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
+    //I3_ARCHIVE_DECL(BOOST_PP_EMPTY())
     ~text_oarchive_impl(){};
 public:
-    I3_ARCHIVE_DECL(void) 
+    I3_ARCHIVE_DECL(void)
     save_binary(const void *address, std::size_t count);
 };
 
 // do not derive from this class.  If you want to extend this functionality
 // via inhertance, derived from text_oarchive_impl instead.  This will
 // preserve correct static polymorphism.
-class text_oarchive : 
+class text_oarchive :
     public text_oarchive_impl<text_oarchive>
 {
 public:

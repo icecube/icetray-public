@@ -2,6 +2,7 @@
 // text_text_wiarchive_impl.ipp:
 
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -12,8 +13,8 @@
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::size_t; 
+namespace std{
+    using ::size_t;
 } // namespace std
 #endif
 
@@ -22,7 +23,7 @@ namespace std{
 #ifndef BOOST_NO_STD_WSTREAMBUF
 #include <archive/basic_text_iprimitive.hpp>
 
-namespace icecube { 
+namespace icecube {
 namespace archive {
 
 //////////////////////////////////////////////////////////////////////
@@ -97,13 +98,13 @@ text_wiarchive_impl<Archive>::load(std::wstring &ws)
 #endif
 
 template<class Archive>
-BOOST_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
+BOOST_WARCHIVE_DECL(BOOST_PP_EMPTY())
 text_wiarchive_impl<Archive>::text_wiarchive_impl(
-    std::wistream & is, 
+    std::wistream & is,
     unsigned int flags
 ) :
     basic_text_iprimitive<std::wistream>(
-        is, 
+        is,
         0 != (flags & no_codecvt)
     ),
     basic_text_iarchive<Archive>(flags)

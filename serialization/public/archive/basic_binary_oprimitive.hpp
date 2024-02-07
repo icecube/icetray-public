@@ -9,7 +9,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // basic_binary_oprimitive.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -32,8 +33,8 @@
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::size_t; 
+namespace std{
+    using ::size_t;
 } // namespace std
 #endif
 
@@ -83,7 +84,7 @@ public:
 
     /////////////////////////////////////////////////////////
     // fundamental types that need special treatment
-    
+
     // trap usage of invalid uninitialized boolean which would
     // otherwise crash on load.
     void save(const bool t){
@@ -103,10 +104,10 @@ public:
 
     I3_ARCHIVE_OR_WARCHIVE_DECL(void)
     init();
-    
+
     I3_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
     basic_binary_oprimitive(
-        std::basic_streambuf<Elem, Tr> & sb, 
+        std::basic_streambuf<Elem, Tr> & sb,
         bool no_codecvt
     );
     I3_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
@@ -114,22 +115,22 @@ public:
 public:
 
     // we provide an optimized save for all fundamental types
-    // typedef serialization::is_bitwise_serializable<mpl::_1> 
+    // typedef serialization::is_bitwise_serializable<mpl::_1>
     // use_array_optimization;
     // workaround without using mpl lambdas
     struct use_array_optimization {
-        template <class T>  
-        #if defined(BOOST_NO_DEPENDENT_NESTED_DERIVATIONS)  
-            struct apply {  
+        template <class T>
+        #if defined(BOOST_NO_DEPENDENT_NESTED_DERIVATIONS)
+            struct apply {
                 typedef typename icecube::serialization::is_bitwise_serializable< T >::type type;
             };
         #else
             struct apply : public icecube::serialization::is_bitwise_serializable< T > {};
         #endif
     };
-    
 
-    // the optimized save_array dispatches to save_binary 
+
+    // the optimized save_array dispatches to save_binary
     template <class ValueType>
     void save_array(icecube::serialization::array<ValueType> const& a, unsigned int)
     {
@@ -140,9 +141,9 @@ public:
 };
 
 template<class Archive, class Elem, class Tr>
-inline void 
+inline void
 basic_binary_oprimitive<Archive, Elem, Tr>::save_binary(
-    const void *address, 
+    const void *address,
     std::size_t count
 ){
     //BOOST_ASSERT(
@@ -157,11 +158,11 @@ basic_binary_oprimitive<Archive, Elem, Tr>::save_binary(
     //        archive_exception(archive_exception::output_stream_error)
     //    );
     // figure number of elements to output - round up
-    count = ( count + sizeof(Elem) - 1) 
+    count = ( count + sizeof(Elem) - 1)
         / sizeof(Elem);
     BOOST_ASSERT(count <= std::size_t(boost::integer_traits<std::streamsize>::const_max));
     std::streamsize scount = m_sb.sputn(
-        static_cast<const Elem *>(address), 
+        static_cast<const Elem *>(address),
         static_cast<std::streamsize>(count)
     );
     if(count != static_cast<std::size_t>(scount))
@@ -169,14 +170,14 @@ basic_binary_oprimitive<Archive, Elem, Tr>::save_binary(
             archive_exception(archive_exception::output_stream_error)
         );
     //os.write(
-    //    static_cast<const typename OStream::char_type *>(address), 
+    //    static_cast<const typename OStream::char_type *>(address),
     //    count
     //);
     //BOOST_ASSERT(os.good());
 }
 
-} //namespace icecube 
-} //namespace archive 
+} //namespace icecube
+} //namespace archive
 
 #include <archive/detail/abi_suffix.hpp> // pop pragmas
 

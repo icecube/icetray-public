@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_non_default_ctor2.cpp
 
-// (C) Copyright 2002 Martin Ecker. 
+// (C) Copyright 2002 Martin Ecker.
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -101,8 +102,8 @@ namespace serialization {
 
 template <class ArchiveT>
 void save_construct_data(
-    ArchiveT& archive, 
-    const A* p, 
+    ArchiveT& archive,
+    const A* p,
     const I3_PFTO unsigned int /*version*/
 ){
     archive & icecube::serialization::make_nvp("initialValue", p->value);
@@ -110,8 +111,8 @@ void save_construct_data(
 
 template <class ArchiveT>
 void load_construct_data(
-    ArchiveT& archive, 
-    A* p, 
+    ArchiveT& archive,
+    A* p,
     const unsigned int /*version*/
 ){
     IntValueHolder initialValue;
@@ -128,7 +129,7 @@ void do_test(){
     auto testfile = I3Test::testfile("test_non_default_ctor_2");
     A* a = new A(5);
 
-    {   
+    {
         typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << I3_SERIALIZATION_NVP(a);

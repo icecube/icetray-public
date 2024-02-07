@@ -10,6 +10,7 @@
 // stack.hpp
 
 // (C) Copyright 2014 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -27,7 +28,7 @@
 #define STD std
 #endif
 
-namespace icecube { 
+namespace icecube {
 namespace serialization {
 namespace detail{
 
@@ -52,7 +53,7 @@ template<class Archive, class T, class C>
 inline void serialize(
     Archive & ar,
     std::stack< T, C> & t,
-    const unsigned int file_version 
+    const unsigned int file_version
 ){
     typedef typename boost::mpl::eval_if<
         typename Archive::is_saving,

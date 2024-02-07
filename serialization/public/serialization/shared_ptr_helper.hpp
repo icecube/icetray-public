@@ -10,6 +10,7 @@
 // shared_ptr_helper.hpp: serialization for boost shared pointern
 
 // (C) Copyright 2004-2009 Robert Ramey, Martin Ecker and Takatoshi Kondo
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -104,7 +105,7 @@ public:
         static const icecube::serialization::extended_type_info *
         get_object_type(U & ){
             return & icecube::serialization::singleton<
-                typename 
+                typename
                 icecube::serialization::type_info_implementation< U >::type
             >::get_const_instance();
         }
@@ -114,7 +115,7 @@ public:
         static const icecube::serialization::extended_type_info *
         get_object_type(U & u){
             return icecube::serialization::singleton<
-                typename 
+                typename
                 icecube::serialization::type_info_implementation< U >::type
             >::get_const_instance().get_derived_extended_type_info(u);
         }

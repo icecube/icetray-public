@@ -9,7 +9,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // ostream_iterator.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -24,13 +25,13 @@
 #include <ostream>
 #include <boost/iterator/iterator_facade.hpp>
 
-namespace icecube { 
+namespace icecube {
 namespace archive {
 namespace iterators {
 
 // given a type, make an input iterator based on a pointer to that type
 template<class Elem>
-class ostream_iterator :  
+class ostream_iterator :
     public boost::iterator_facade<
         ostream_iterator<Elem>,
         Elem,
@@ -43,7 +44,7 @@ class ostream_iterator :
     typedef Elem char_type;
     typedef std::basic_ostream<char_type> ostream_type;
 
-    //emulate the behavior of std::ostream 
+    //emulate the behavior of std::ostream
     ostream_iterator & dereference() const {
         return const_cast<ostream_iterator &>(*this);
     }

@@ -9,7 +9,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // binary_wiarchive.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -25,10 +26,10 @@
 #include <archive/binary_iarchive_impl.hpp>
 #include <archive/detail/register_archive.hpp>
 
-namespace icecube { 
+namespace icecube {
 namespace archive {
 
-class binary_wiarchive : 
+class binary_wiarchive :
     public binary_iarchive_impl<
         binary_wiarchive, std::wistream::char_type, std::wistream::traits_type
     >

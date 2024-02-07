@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_shared_ptr.cpp
 
-// (C) Copyright 2002 Robert Ramey- http://www.rrsd.com - David Tonge  . 
+// (C) Copyright 2002 Robert Ramey- http://www.rrsd.com - David Tonge  .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -14,7 +15,7 @@
 #include <cstdio> // remove
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::remove;
 }
 #endif
@@ -111,7 +112,7 @@ void save_and_load(const T& spa){
     auto testfile = I3Test::testfile("shared_ptr_132");
     save<T,TS>(testfile.c_str(), spa);
 
-    // note that we're loading to a current version of shared_ptr 
+    // note that we're loading to a current version of shared_ptr
     // regardless of the orignal saved type - this tests backward
     // archive compatibility
     boost::shared_ptr<A> spa1;
@@ -127,7 +128,7 @@ void save_and_load(const T& spa){
 template<class T, typename TS /*test settings*/>
 void save2(
     const char* testfile,
-    const T& first, 
+    const T& first,
     const T& second
 ){
     typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
@@ -139,7 +140,7 @@ void save2(
 template<class T, typename TS /*test settings*/>
 void load2(
     const char* testfile,
-    T& first, 
+    T& first,
     T& second)
 {
     typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
@@ -172,7 +173,7 @@ void save_and_load2(T & first, T & second)
 template<class T, typename TS /*test settings*/>
 void save3(
     const char* testfile,
-    const T& first, 
+    const T& first,
     const T& second,
     const T& third
 ){
@@ -186,7 +187,7 @@ void save3(
 template<class T, typename TS /*test settings*/>
 void load3(
     const char* testfile,
-    T& first, 
+    T& first,
     T& second,
     T& third
 ){
@@ -217,7 +218,7 @@ void do_test(){
     spa = boost_132::shared_ptr<A>(new A);
     boost_132::shared_ptr<A> spa1 = spa;
     save_and_load2<boost_132::shared_ptr<A>,TS>(spa, spa1);
-    
+
     // Try to save and load pointers to Bs, to a text archive
     spa = boost_132::shared_ptr<A>(new B);
     save_and_load<boost_132::shared_ptr<A>,TS>(spa);

@@ -2,6 +2,7 @@
 // test_shared_ptr_multi_base.cpp
 
 // (C) Copyright 2002 Robert Ramey- http://www.rrsd.com and Takatoshi Kondo.
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -15,7 +16,7 @@
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::remove;
 }
 #endif
@@ -81,7 +82,7 @@ struct Sub:public Base1, public Base2, public Base3 {
         Base1(x),
         Base2(x),
         m_x(x)
-    {   
+    {
         ++count;
     }
     Sub(const Sub & rhs) :
@@ -116,7 +117,7 @@ int Sub::count = 0;
 template <typename TS /*test settings*/, class FIRST, class SECOND>
 void save2(
     const char* testfile,
-    const FIRST& first, 
+    const FIRST& first,
     const SECOND& second
 ){
     typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
@@ -128,7 +129,7 @@ void save2(
 template <typename TS /*test settings*/, class FIRST, class SECOND>
 void load2(
     const char* testfile,
-    FIRST& first, 
+    FIRST& first,
     SECOND& second)
 {
     typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
@@ -163,7 +164,7 @@ void shared_weak(
 ){
     auto testfile = I3Test::testfile("shared_weak");
     int firstm = first->m_x;
-    
+
     ENSURE(!second.expired());
     int secondm = second.lock()->m_x;
     save2<TS>(testfile.c_str(), first, second);

@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // basic_xml_grammar.ipp:
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -31,7 +32,7 @@
 #endif
 
 // for head_iterator test
-//#include <boost/bind.hpp> 
+//#include <boost/bind.hpp>
 #include <boost/function.hpp>
 #include <serialization/pfto.hpp>
 
@@ -72,7 +73,7 @@ template<>
 struct assign_impl<std::string> {
     std::string & t;
     void operator()(
-        std::string::const_iterator b, 
+        std::string::const_iterator b,
         std::string::const_iterator e
     ) const {
         t.resize(0);
@@ -94,7 +95,7 @@ template<>
 struct assign_impl<std::wstring> {
     std::wstring & t;
     void operator()(
-        std::wstring::const_iterator b, 
+        std::wstring::const_iterator b,
         std::wstring::const_iterator e
     ) const {
         t.resize(0);
@@ -112,7 +113,7 @@ struct assign_impl<std::wstring> {
 template<class T>
 assign_impl<T> assign_object(T &t){
     return assign_impl<T>(t);
-} 
+}
 
 struct assign_level {
     tracking_type & tracking_level;
@@ -184,12 +185,12 @@ bool basic_xml_grammar<CharType>::my_parse(
             archive_exception(archive_exception::input_stream_error)
         );
     }
-    
+
     boost::io::ios_flags_saver ifs(is);
     is >> std::noskipws;
 
     std::basic_string<CharType> arg;
-    
+
     CharType val;
     do{
         BOOST_DEDUCED_TYPENAME basic_xml_grammar<CharType>::IStream::int_type
@@ -200,13 +201,13 @@ bool basic_xml_grammar<CharType>::my_parse(
         arg += val;
     }
     while(val != delimiter);
-    
+
     // read just one more character.  This will be the newline after the tag
     // this is so that the next operation will return fail if the archive
     // is terminated.  This will permit the archive to be used for debug
     // and transaction data logging in the standard way.
-    
-    parse_info<BOOST_DEDUCED_TYPENAME std::basic_string<CharType>::iterator> 
+
+    parse_info<BOOST_DEDUCED_TYPENAME std::basic_string<CharType>::iterator>
         result = boost::spirit::classic::parse(arg.begin(), arg.end(), rule_);
     return result.hit;
 }
@@ -256,10 +257,10 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         !S >> '=' >> !S
     ;
 
-    AttributeList = 
+    AttributeList =
         *(S >> Attribute)
     ;
-    
+
     STag =
         !S
         >> '<'
@@ -273,23 +274,23 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         !S
         >> "</"
         >> Name [xml::assign_object(rv.object_name)]
-        >> !S 
+        >> !S
         >> '>'
     ;
 
     // refactoring to workaround template depth on darwin
     CharDataChars = +(anychar_p - chset_p(L"&<"));
-    CharData =  
+    CharData =
         CharDataChars [
             xml::append_string<
-                StringType, 
+                StringType,
                 BOOST_DEDUCED_TYPENAME std::basic_string<CharType>::const_iterator
             >(rv.contents)
         ]
     ;
 
     // slight factoring works around ICE in msvc 6.0
-    CharRef1 = 
+    CharRef1 =
         str_p(L"&#") >> uint_p [xml::append_char<StringType>(rv.contents)] >> L';'
     ;
     CharRef2 =
@@ -312,14 +313,14 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         | CharRef
     ;
 
-    content = 
+    content =
         L"<" // should be end_p
         | +(Reference | CharData) >> L"<"
     ;
 
-    ClassIDAttribute = 
+    ClassIDAttribute =
         str_p(I3_ARCHIVE_XML_CLASS_ID()) >> NameTail
-        >> Eq 
+        >> Eq
         >> L'"'
         >> int_p [xml::assign_object(rv.class_id)]
         >> L'"'
@@ -327,40 +328,40 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
 
     ObjectIDAttribute = (
         str_p(I3_ARCHIVE_XML_OBJECT_ID())
-        | 
+        |
         str_p(I3_ARCHIVE_XML_OBJECT_REFERENCE())
         )
         >> NameTail
-        >> Eq 
+        >> Eq
         >> L'"'
         >> L'_'
         >> uint_p [xml::assign_object(rv.object_id)]
         >> L'"'
     ;
-        
+
     AmpName = str_p(L"&amp;")[xml::append_lit<StringType, L'&'>(rv.class_name)];
     LTName = str_p(L"&lt;")[xml::append_lit<StringType, L'<'>(rv.class_name)];
     GTName = str_p(L"&gt;")[xml::append_lit<StringType, L'>'>(rv.class_name)];
-    ClassNameChar = 
+    ClassNameChar =
         AmpName
         | LTName
         | GTName
         | (anychar_p - chset_p(L"\"")) [xml::append_char<StringType>(rv.class_name)]
     ;
-    
+
     ClassName =
         * ClassNameChar
     ;
-    
-    ClassNameAttribute = 
+
+    ClassNameAttribute =
         str_p(I3_ARCHIVE_XML_CLASS_NAME())
-        >> Eq 
+        >> Eq
         >> L'"'
         >> ClassName
         >> L'"'
     ;
 
-    TrackingAttribute = 
+    TrackingAttribute =
         str_p(I3_ARCHIVE_XML_TRACKING())
         >> Eq
         >> L'"'
@@ -368,7 +369,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         >> L'"'
     ;
 
-    VersionAttribute = 
+    VersionAttribute =
         str_p(I3_ARCHIVE_XML_VERSION())
         >> Eq
         >> L'"'
@@ -376,7 +377,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         >> L'"'
     ;
 
-    UnusedAttribute = 
+    UnusedAttribute =
         Name
         >> Eq
         >> L'"'
@@ -414,14 +415,14 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         >> L'>'
     ;
 
-    SignatureAttribute = 
-        str_p(L"signature") 
-        >> Eq 
+    SignatureAttribute =
+        str_p(L"signature")
+        >> Eq
         >> L'"'
         >> Name [xml::assign_object(rv.class_name)]
         >> L'"'
     ;
-    
+
     SerializationWrapper =
         !S
         >> str_p(L"<boost_serialization")

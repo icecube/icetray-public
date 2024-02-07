@@ -9,7 +9,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // set.hpp: serialization for stl set templates
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -24,7 +25,7 @@
 #include <serialization/collections_load_imp.hpp>
 #include <serialization/split_free.hpp>
 
-namespace icecube { 
+namespace icecube {
 namespace serialization {
 
 template<class Archive, class Key, class Compare, class Allocator >
@@ -34,7 +35,7 @@ inline void save(
     const unsigned int /* file_version */
 ){
     icecube::serialization::stl::save_collection<
-        Archive, std::set<Key, Compare, Allocator> 
+        Archive, std::set<Key, Compare, Allocator>
     >(ar, t);
 }
 
@@ -48,10 +49,10 @@ inline void load(
         Archive,
         std::set<Key, Compare, Allocator>,
         icecube::serialization::stl::archive_input_set<
-            Archive, std::set<Key, Compare, Allocator> 
+            Archive, std::set<Key, Compare, Allocator>
         >,
         icecube::serialization::stl::no_reserve_imp<std::set<
-            Key, Compare, Allocator> 
+            Key, Compare, Allocator>
         >
     >(ar, t);
 }
@@ -75,8 +76,8 @@ inline void save(
     const unsigned int /* file_version */
 ){
     icecube::serialization::stl::save_collection<
-        Archive, 
-        std::multiset<Key, Compare, Allocator> 
+        Archive,
+        std::multiset<Key, Compare, Allocator>
     >(ar, t);
 }
 
@@ -90,10 +91,10 @@ inline void load(
         Archive,
         std::multiset<Key, Compare, Allocator>,
         icecube::serialization::stl::archive_input_multiset<
-            Archive, std::multiset<Key, Compare, Allocator> 
+            Archive, std::multiset<Key, Compare, Allocator>
         >,
         icecube::serialization::stl::no_reserve_imp<
-            std::multiset<Key, Compare, Allocator> 
+            std::multiset<Key, Compare, Allocator>
         >
     >(ar, t);
 }

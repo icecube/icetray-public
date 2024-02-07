@@ -15,7 +15,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // oserializer.hpp: interface for serialization system.
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -35,7 +36,7 @@
 #include <boost/mpl/identity.hpp>
 
 #ifndef I3_SERIALIZATION_DEFAULT_TYPE_INFO
-    #include <serialization/extended_type_info_typeid.hpp>   
+    #include <serialization/extended_type_info_typeid.hpp>
 #endif
 #include <serialization/throw_exception.hpp>
 #include <serialization/smart_cast.hpp>
@@ -100,19 +101,19 @@ template<class Archive, class T>
 class oserializer : public basic_oserializer
 {
 private:
-    // private constructor to inhibit any existence other than the 
+    // private constructor to inhibit any existence other than the
     // static one
 public:
     explicit I3_DLLEXPORT oserializer() :
         basic_oserializer(
             icecube::serialization::singleton<
-                typename 
+                typename
                 icecube::serialization::type_info_implementation< T >::type
             >::get_const_instance()
         )
     {}
     virtual I3_DLLEXPORT void save_object_data(
-        basic_oarchive & ar,    
+        basic_oarchive & ar,
         const void *x
     ) const I3_SERIALIZATION_USED;
     virtual bool class_info() const {
@@ -139,7 +140,7 @@ public:
 
 template<class Archive, class T>
 I3_DLLEXPORT void oserializer<Archive, T>::save_object_data(
-    basic_oarchive & ar,    
+    basic_oarchive & ar,
     const void *x
 ) const {
     // make sure call is routed through the highest interface that might
@@ -162,7 +163,7 @@ class pointer_oserializer :
     public basic_pointer_oserializer
 {
 private:
-    const basic_oserializer & 
+    const basic_oserializer &
     get_basic_serializer() const {
         return icecube::serialization::singleton<
             oserializer<Archive, T>
@@ -191,11 +192,11 @@ I3_DLLEXPORT void pointer_oserializer<Archive, T>::save_object_ptr(
     // be specialized by the user.
     T * t = static_cast<T *>(const_cast<void *>(x));
     const unsigned int file_version = icecube::serialization::version< T >::value;
-    Archive & ar_impl 
+    Archive & ar_impl
         = icecube::serialization::smart_cast_reference<Archive &>(ar);
     icecube::serialization::save_construct_data_adl<Archive, T>(
-        ar_impl, 
-        t, 
+        ar_impl,
+        t,
         file_version
     );
     ar_impl << icecube::serialization::make_nvp(NULL, * t);
@@ -205,14 +206,14 @@ template<class Archive, class T>
 pointer_oserializer<Archive, T>::pointer_oserializer() :
     basic_pointer_oserializer(
         icecube::serialization::singleton<
-            typename 
+            typename
             icecube::serialization::type_info_implementation< T >::type
         >::get_const_instance()
     )
 {
     // make sure appropriate member function is instantiated
     icecube::serialization::singleton<
-        oserializer<Archive, T> 
+        oserializer<Archive, T>
     >::get_mutable_instance().set_bpos(this);
     archive_serializer_map<Archive>::insert(this);
 }
@@ -239,8 +240,8 @@ struct save_non_pointer_type {
             // make sure call is routed through the highest interface that might
             // be specialized by the user.
             icecube::serialization::serialize_adl(
-                ar, 
-                const_cast<T &>(t), 
+                ar,
+                const_cast<T &>(t),
                 ::icecube::serialization::version< T >::value
             );
         }
@@ -251,7 +252,7 @@ struct save_non_pointer_type {
         template<class T>
         static void invoke(Archive &ar, const T & t){
             ar.save_object(
-                & t, 
+                & t,
                 icecube::serialization::singleton<
                     oserializer<Archive, T>
                 >::get_const_instance()
@@ -274,7 +275,7 @@ struct save_non_pointer_type {
 
     template<class T>
     static void invoke(Archive & ar, const T & t){
-        typedef 
+        typedef
             typename boost::mpl::eval_if<
             // if its primitive
                 boost::mpl::equal_to<
@@ -303,7 +304,7 @@ struct save_non_pointer_type {
             // else
                 // do a fast save only tracking is turned off
                 boost::mpl::identity<save_conditional>
-            > > >::type typex; 
+            > > >::type typex;
         check_object_versioning< T >();
         typex::invoke(ar, t);
     }
@@ -337,11 +338,11 @@ struct save_pointer_type {
 
     template<class T>
     static const basic_pointer_oserializer * register_type(Archive &ar, T * /*t*/){
-        // there should never be any need to save an abstract polymorphic 
+        // there should never be any need to save an abstract polymorphic
         // class pointer.  Inhibiting code generation for this
         // permits abstract base classes to be used - note: exception
         // virtual serialize functions used for plug-ins
-        typedef 
+        typedef
             typename boost::mpl::eval_if<
                 icecube::serialization::is_abstract< T >,
                 boost::mpl::identity<abstract>,
@@ -354,10 +355,10 @@ struct save_pointer_type {
     {
         template<class T>
         static void save(
-            Archive &ar, 
+            Archive &ar,
             T & t
         ){
-            const basic_pointer_oserializer & bpos = 
+            const basic_pointer_oserializer & bpos =
                 icecube::serialization::singleton<
                     pointer_oserializer<Archive, T>
                 >::get_const_instance();
@@ -370,13 +371,13 @@ struct save_pointer_type {
     {
         template<class T>
         static void save(
-            Archive &ar, 
+            Archive &ar,
             T & t
         ){
-            typename 
+            typename
             icecube::serialization::type_info_implementation< T >::type const
             & i = icecube::serialization::singleton<
-                typename 
+                typename
                 icecube::serialization::type_info_implementation< T >::type
             >::get_const_instance();
 
@@ -410,8 +411,8 @@ struct save_pointer_type {
             // convert pointer to more derived type. if this is thrown
             // it means that the base/derived relationship hasn't been registered
             vp = serialization::void_downcast(
-                *true_type, 
-                *this_type, 
+                *true_type,
+                *this_type,
                 static_cast<const void *>(&t)
             );
             if(NULL == vp){
@@ -424,7 +425,7 @@ struct save_pointer_type {
                 );
             }
 
-            // since true_type is valid, and this only gets made if the 
+            // since true_type is valid, and this only gets made if the
             // pointer oserializer object has been created, this should never
             // fail
             const basic_pointer_oserializer * bpos
@@ -447,7 +448,7 @@ struct save_pointer_type {
 
     template<class T>
     static void save(
-        Archive & ar, 
+        Archive & ar,
         const T & t
     ){
         check_pointer_level< T >();
@@ -464,7 +465,7 @@ struct save_pointer_type {
     static void invoke(Archive &ar, const TPtr t){
         register_type(ar, t);
         if(NULL == t){
-            basic_oarchive & boa 
+            basic_oarchive & boa
                 = icecube::serialization::smart_cast_reference<basic_oarchive &>(ar);
             boa.save_null_pointer();
             save_access::end_preamble(ar);
@@ -491,11 +492,11 @@ struct save_array_type
     template<class T>
     static void invoke(Archive &ar, const T &t){
         typedef typename boost::remove_extent< T >::type value_type;
-        
+
         save_access::end_preamble(ar);
         // consider alignment
         std::size_t c = sizeof(t) / (
-            static_cast<const char *>(static_cast<const void *>(&t[1])) 
+            static_cast<const char *>(static_cast<const void *>(&t[1]))
             - static_cast<const char *>(static_cast<const void *>(&t[0]))
         );
         icecube::serialization::collection_size_type count(c);
@@ -508,7 +509,7 @@ struct save_array_type
 
 template<class Archive, class T>
 inline void save(Archive & ar, /*const*/ T &t){
-    typedef 
+    typedef
         typename boost::mpl::eval_if<boost::is_pointer< T >,
             boost::mpl::identity<detail::save_pointer_type<Archive> >,
         //else

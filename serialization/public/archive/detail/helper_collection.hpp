@@ -10,6 +10,7 @@
 // helper_collection.hpp: archive support for run-time helpers
 
 // (C) Copyright 2002-2008 Robert Ramey and Joaquin M Lopez Munoz
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -53,7 +54,7 @@ class helper_collection
         boost::shared_ptr<void> make_helper_ptr(){
             return boost::make_shared<T>();
         }
-	
+
     typedef std::vector<helper_value_type> collection;
     collection m_collection;
 

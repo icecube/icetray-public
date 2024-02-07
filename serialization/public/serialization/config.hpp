@@ -4,13 +4,14 @@
 //  config.hpp  ---------------------------------------------//
 
 //  (c) Copyright Robert Ramey 2004
+//  SPDX-License-Identifier: BSL-1.0
 //  Use, modification, and distribution is subject to the Boost Software
 //  License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See library home page at http://www.boost.org/libs/serialization
 
-//----------------------------------------------------------------------------// 
+//----------------------------------------------------------------------------//
 
 // This header implements separate compilation features as described in
 // http://www.boost.org/more/separate_compilation.html
@@ -19,7 +20,7 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/preprocessor/facilities/empty.hpp>
 
-// note: this version incorporates the related code into the the 
+// note: this version incorporates the related code into the the
 // the same library as I3_ARCHIVE.  This could change some day in the
 // future
 
@@ -59,7 +60,7 @@
     #define I3_SERIALIZATION_DECL(T) T
 #endif
 
-//  enable automatic library variant selection  ------------------------------// 
+//  enable automatic library variant selection  ------------------------------//
 
 #if !defined(BOOST_ALL_NO_LIB) && !defined(I3_SERIALIZATION_NO_LIB) \
 &&  !defined(I3_ARCHIVE_SOURCE) && !defined(I3_WARCHIVE_SOURCE)  \
@@ -80,6 +81,6 @@
     //
     #include <boost/config/auto_link.hpp>
 
-#endif  
+#endif
 
 #endif // I3_SERIALIZATION_CONFIG_HPP

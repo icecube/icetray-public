@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_enable_shared_from_this.cpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -139,7 +140,7 @@ void test_passes(){
 
         // verify shared_from_this
         ENSURE(d == raw_d->SharedPtr());
-    }    
+    }
 }
 
 // This test fails
@@ -180,10 +181,10 @@ void test_fails(){
         ENSURE(raw_d->m_derived==2);
 
         // verify shared_from_this
-        // FAIL: The following line throws bad_weak_ptr exception 
+        // FAIL: The following line throws bad_weak_ptr exception
         boost::shared_ptr<Derived> d = raw_d->SharedPtr();
         ENSURE(d == b);
-    }    
+    }
 }
 
 TEST_GROUP(test_enable_shared_from_this)

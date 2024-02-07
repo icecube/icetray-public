@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // extended_type_info.cpp: implementation for portable version of type_info
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -36,7 +37,7 @@ namespace std{ using ::strcmp; }
 #  pragma warning(disable : 4511 4512)
 #endif
 
-namespace icecube { 
+namespace icecube {
 namespace serialization {
 namespace detail {
 
@@ -44,7 +45,7 @@ struct key_compare
 {
     bool
     operator()(
-        const extended_type_info * lhs, 
+        const extended_type_info * lhs,
         const extended_type_info * rhs
     ) const {
         // performance shortcut

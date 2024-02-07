@@ -9,7 +9,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // valarray.hpp: serialization for stl vector templates
 
-// (C) Copyright 2005 Matthias Troyer . 
+// (C) Copyright 2005 Matthias Troyer .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -31,7 +32,7 @@
 #define STD std
 #endif
 
-namespace icecube { 
+namespace icecube {
 namespace serialization {
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8

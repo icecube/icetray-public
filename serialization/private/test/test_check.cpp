@@ -1,4 +1,5 @@
 //  (C) Copyright 2009 Robert Ramey
+//  SPDX-License-Identifier: BSL-1.0
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -18,7 +19,7 @@
 #include <archive/text_iarchive.hpp>
 #include <archive/text_oarchive.hpp>
 
-// track_selectivly with class information in the archive 
+// track_selectivly with class information in the archive
 // is unsafe when used with a pointer and should trigger a warning
 struct check1 {
     template<class Archive>

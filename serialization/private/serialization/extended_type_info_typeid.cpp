@@ -2,7 +2,8 @@
 // extended_type_info_typeid.cpp: specific implementation of type info
 // that is based on typeid
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -20,8 +21,8 @@
 #define I3_SERIALIZATION_SOURCE
 #include <serialization/extended_type_info_typeid.hpp>
 
-namespace icecube { 
-namespace serialization { 
+namespace icecube {
+namespace serialization {
 namespace typeid_system {
 
 #define EXTENDED_TYPE_INFO_TYPE_KEY 1
@@ -41,7 +42,7 @@ typedef std::multiset<
     const extended_type_info_typeid_0 *,
     type_compare
 > tkmap;
-    
+
 I3_SERIALIZATION_DECL(bool)
 extended_type_info_typeid_0::is_less_than(
     const icecube::serialization::extended_type_info & rhs
@@ -58,11 +59,11 @@ I3_SERIALIZATION_DECL(bool)
 extended_type_info_typeid_0::is_equal(
     const icecube::serialization::extended_type_info & rhs
 ) const {
-    return 
+    return
         // note: std::type_info == operator returns an int !!!
         // the following permits conversion to bool without a warning.
         ! (
-        * m_ti 
+        * m_ti
         != *(static_cast<const extended_type_info_typeid_0 &>(rhs).m_ti)
         )
     ;
@@ -114,7 +115,7 @@ extended_type_info_typeid_0::type_unregister()
 #endif
 
 // this derivation is used for creating search arguments
-class extended_type_info_typeid_arg : 
+class extended_type_info_typeid_arg :
     public extended_type_info_typeid_0
 {
     virtual void * construct(unsigned int /*count*/, ...) const{
@@ -127,9 +128,9 @@ class extended_type_info_typeid_arg :
 public:
     extended_type_info_typeid_arg(const std::type_info & ti) :
         extended_type_info_typeid_0(NULL)
-    { 
+    {
         // note absense of self register and key as this is used only as
-        // search argument given a type_info reference and is not to 
+        // search argument given a type_info reference and is not to
         // be added to the map.
         m_ti = & ti;
     }

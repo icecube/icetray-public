@@ -1,7 +1,11 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 i3_project(serialization
   DOCS_DIR resources/docs)
 
-i3_add_library (serialization 
+i3_add_library (serialization
   private/archive/portable_binary_archive.cpp
   private/serialization/archive_exception.cpp
   private/serialization/basic_archive.cpp

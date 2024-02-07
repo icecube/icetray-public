@@ -10,18 +10,19 @@
 //  auto_link_warchive.hpp
 //
 //  (c) Copyright Robert Ramey 2004
+//  SPDX-License-Identifier: BSL-1.0
 //  Use, modification, and distribution is subject to the Boost Software
 //  License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See library home page at http://www.boost.org/libs/serialization
 
-//----------------------------------------------------------------------------// 
+//----------------------------------------------------------------------------//
 
 // This header implements separate compilation features as described in
 // http://www.boost.org/more/separate_compilation.html
 
-//  enable automatic library variant selection  ------------------------------// 
+//  enable automatic library variant selection  ------------------------------//
 
 #include <archive/detail/decl.hpp>
 

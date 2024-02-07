@@ -10,7 +10,8 @@
 // serialization/string.hpp:
 // serialization for stl string templates
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -28,13 +29,13 @@ I3_CLASS_IMPLEMENTATION(std::wstring, icecube::serialization::primitive_type)
 #endif
 
 // left over from a previous incarnation - strings are now always primitive types
-#if 0 
+#if 0
 #include <string>
 #include <serialization/collections_save_imp.hpp>
 #include <serialization/collections_load_imp.hpp>
 #include <serialization/split_free.hpp>
 
-namespace icecube { 
+namespace icecube {
 namespace serialization {
 
 // basic_string - general case
@@ -45,7 +46,7 @@ inline void save(
     const unsigned int file_version
 ){
     icecube::serialization::stl::save_collection<
-        Archive, std::basic_string<U, Allocator> 
+        Archive, std::basic_string<U, Allocator>
     >(ar, t);
 }
 
@@ -59,11 +60,11 @@ inline void load(
         Archive,
         std::basic_string<U, Allocator>,
         icecube::serialization::stl::archive_input_seq<
-            Archive, 
-            std::basic_string<U, Allocator> 
+            Archive,
+            std::basic_string<U, Allocator>
         >,
         icecube::serialization::stl::reserve_imp<
-            std::basic_string<U, Allocator> 
+            std::basic_string<U, Allocator>
         >
     >(ar, t);
 }

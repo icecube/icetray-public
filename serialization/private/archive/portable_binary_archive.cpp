@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <limits>
 
 #include <archive/portable_binary_archive.hpp>
@@ -102,9 +106,9 @@ void portable_binary_iarchive::load_override(std::wstring& s, I3_PFTO int) {
 }
 #endif
 
-        
+
 template class detail::archive_serializer_map<portable_binary_iarchive> ;
 template class detail::archive_serializer_map<portable_binary_oarchive> ;
-        
+
 } // namespace archive
 } // namespace icecube

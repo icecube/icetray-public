@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_valarrray.cpp
 
-// (C) Copyright 2005 Matthias Troyer . 
+// (C) Copyright 2005 Matthias Troyer .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -14,7 +15,7 @@
 #include <cstdio> // remove
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::remove;
 }
 #endif
@@ -31,7 +32,7 @@ void do_test(){
     std::valarray<int> avalarray(2);
     avalarray[0] = 42;
     avalarray[1] = -42;
-    {   
+    {
         typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << icecube::serialization::make_nvp("avalarray", avalarray);
@@ -46,7 +47,7 @@ void do_test(){
                    && avalarray[0] == avalarray1[0]
                    && avalarray[1] == avalarray1[1]
                  );
-                  
+
     ENSURE(equal);
     std::remove(testfile.c_str());
 }

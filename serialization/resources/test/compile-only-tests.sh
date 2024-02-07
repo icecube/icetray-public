@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 HELP="serialization::compile-only-tests
 
 This test is used to ensure that certain uses of the serialization library
@@ -55,8 +59,8 @@ echo ${CMAKE_CXX_COMPILER?"CMAKE_CXX_COMPILER is not set"} > /dev/null
 # fetch the necessary compiler flags
 CXX_FLAGS=`${I3_BUILD}/bin/icetray-config $PROJECT`
 
-# GNU ld is retarded and demands symbols from python which are ultimately never used, 
-# due to cmake mixing boost_python in everwhere whether it is needed or not. 
+# GNU ld is retarded and demands symbols from python which are ultimately never used,
+# due to cmake mixing boost_python in everwhere whether it is needed or not.
 # For now, manually link in python to shut it up.
 CMAKECACHE=${I3_BUILD}/CMakeCache.txt
 if [ ! -f "$CMAKECACHE" ]; then

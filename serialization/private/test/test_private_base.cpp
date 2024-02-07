@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_private_base.cpp
 
-// (C) Copyright 2009 Eric Moyer - http://www.rrsd.com . 
+// (C) Copyright 2009 Eric Moyer - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -13,7 +14,7 @@
 #include <fstream>
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::remove;
 }
 #endif
@@ -72,7 +73,7 @@ void do_test(){
     auto testfile = I3Test::testfile("test_private_base");
 
     Derived a(1), a1(2);
-    {   
+    {
         typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << icecube::serialization::make_nvp("a", a);
@@ -87,7 +88,7 @@ void do_test(){
 
     Base* ta = Derived::make_base(1);
     Base* ta1 = NULL;
-    {   
+    {
         typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << icecube::serialization::make_nvp("ta", ta);
@@ -100,6 +101,6 @@ void do_test(){
     ENSURE(ta != ta1);
     ENSURE(*ta == *ta1);
     ENSURE(*dynamic_cast<Derived*>(ta) == *dynamic_cast<Derived*>(ta1));
-    
+
     std::remove(testfile.c_str());
 }

@@ -9,7 +9,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // text_iarchive.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -32,7 +33,7 @@
 #  pragma warning(disable : 4511 4512)
 #endif
 
-namespace icecube { 
+namespace icecube {
 namespace archive {
 
 namespace detail {
@@ -40,7 +41,7 @@ namespace detail {
 } // namespace detail
 
 template<class Archive>
-class text_iarchive_impl : 
+class text_iarchive_impl :
     public basic_text_iprimitive<std::istream>,
     public basic_text_iarchive<Archive>
 {
@@ -72,16 +73,16 @@ protected:
         load(v);
         t = icecube::serialization::item_version_type(v);
     }
-    I3_ARCHIVE_DECL(void) 
+    I3_ARCHIVE_DECL(void)
     load(char * t);
     #ifndef BOOST_NO_INTRINSIC_WCHAR_T
-    I3_ARCHIVE_DECL(void) 
+    I3_ARCHIVE_DECL(void)
     load(wchar_t * t);
     #endif
-    I3_ARCHIVE_DECL(void) 
+    I3_ARCHIVE_DECL(void)
     load(std::string &s);
     #ifndef BOOST_NO_STD_WSTRING
-    I3_ARCHIVE_DECL(void) 
+    I3_ARCHIVE_DECL(void)
     load(std::wstring &ws);
     #endif
     // note: the following should not needed - but one compiler (vc 7.1)
@@ -95,10 +96,10 @@ protected:
     load_override(class_name_type & t, int);
     I3_ARCHIVE_DECL(void)
     init();
-    I3_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
+    I3_ARCHIVE_DECL(BOOST_PP_EMPTY())
     text_iarchive_impl(std::istream & is, unsigned int flags);
     // don't import inline definitions! leave this as a reminder.
-    //I3_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
+    //I3_ARCHIVE_DECL(BOOST_PP_EMPTY())
     ~text_iarchive_impl(){};
 };
 
@@ -116,10 +117,10 @@ protected:
 #  pragma warning(disable : 4511 4512)
 #endif
 
-namespace icecube { 
+namespace icecube {
 namespace archive {
 
-class text_iarchive : 
+class text_iarchive :
     public text_iarchive_impl<text_iarchive>{
 public:
     text_iarchive(std::istream & is_, unsigned int flags = 0) :

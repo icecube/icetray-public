@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_priority_queue.cpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -14,7 +15,7 @@
 #include <cstdio> // remove
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::remove;
 }
 #endif
@@ -48,7 +49,7 @@ void do_test(){
         ia >> icecube::serialization::make_nvp("a_priority_queue",a_priority_queue1);
     }
     ENSURE(a_priority_queue.size() == a_priority_queue1.size());
-    
+
     while(!a_priority_queue.empty()){
         const A & a1 = a_priority_queue.top();
         const A & a2 = a_priority_queue1.top();
@@ -56,7 +57,7 @@ void do_test(){
         a_priority_queue.pop();
         a_priority_queue1.pop();
     }
-    
+
     std::remove(testfile.c_str());
 }
 

@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_simple_class.cpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -16,8 +17,8 @@
 
 #include <cstdio> // remove
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::rand; 
+namespace std{
+    using ::rand;
     using ::remove;
 }
 #endif
@@ -86,30 +87,30 @@ void do_test(){
         typename TS::test_ostream os(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_oarchive oa(os, TS::TEST_ARCHIVE_FLAGS);
         oa << icecube::serialization::make_nvp(
-            "s1", 
+            "s1",
             icecube::serialization::make_binary_object(
-                s1, 
+                s1,
                 sizeof(s1)
             )
         );
         oa << icecube::serialization::make_nvp(
-            "s2", 
+            "s2",
             icecube::serialization::make_binary_object(
-                s2, 
+                s2,
                 sizeof(s2)
             )
         );
         oa << icecube::serialization::make_nvp(
-            "s3", 
+            "s3",
             icecube::serialization::make_binary_object(
-                s3, 
+                s3,
                 sizeof(s3)
             )
         );
         oa << icecube::serialization::make_nvp(
-            "s4", 
+            "s4",
             icecube::serialization::make_binary_object(
-                s4, 
+                s4,
                 sizeof(s4)
             )
         );
@@ -122,30 +123,30 @@ void do_test(){
         typename TS::test_istream is(testfile, TS::TEST_STREAM_FLAGS);
         typename TS::test_iarchive ia(is, TS::TEST_ARCHIVE_FLAGS);
         ia >> icecube::serialization::make_nvp(
-            "s1", 
+            "s1",
             icecube::serialization::make_binary_object(
-                s1_1, 
+                s1_1,
                 sizeof(s1)
             )
         );
         ia >> icecube::serialization::make_nvp(
-            "s2", 
+            "s2",
             icecube::serialization::make_binary_object(
-                s1_2, 
+                s1_2,
                 sizeof(s2)
             )
         );
         ia >> icecube::serialization::make_nvp(
-            "s3", 
+            "s3",
             icecube::serialization::make_binary_object(
-                s1_3, 
+                s1_3,
                 sizeof(s3)
             )
         );
         ia >> icecube::serialization::make_nvp(
-            "s4", 
+            "s4",
             icecube::serialization::make_binary_object(
-                s1_4, 
+                s1_4,
                 sizeof(s4)
             )
         );

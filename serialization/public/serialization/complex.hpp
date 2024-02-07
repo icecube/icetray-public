@@ -10,7 +10,8 @@
 // serialization/utility.hpp:
 // serialization for stl utility templates
 
-// (C) Copyright 2007 Matthias Troyer . 
+// (C) Copyright 2007 Matthias Troyer .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -24,14 +25,14 @@
 #include <serialization/is_bitwise_serializable.hpp>
 #include <serialization/split_free.hpp>
 
-namespace icecube { 
+namespace icecube {
 namespace serialization {
 
 template<class Archive, class T>
 inline void serialize(
     Archive & ar,
     std::complex< T > & t,
-    const unsigned int file_version 
+    const unsigned int file_version
 ){
     icecube::serialization::split_free(ar, t, file_version);
 }
@@ -52,7 +53,7 @@ template<class Archive, class T>
 inline void load(
     Archive & ar,
     std::complex< T >& t,
-    const unsigned int /* file_version */ 
+    const unsigned int /* file_version */
 ){
     T re;
     T im;

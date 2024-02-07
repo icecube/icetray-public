@@ -1,7 +1,8 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // test_split.cpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+// SPDX-License-Identifier: BSL-1.0
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -14,7 +15,7 @@
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
+namespace std{
     using ::remove;
 }
 #endif
@@ -31,14 +32,14 @@ class A
     friend class icecube::serialization::access;
     template<class Archive>
     void save(
-        Archive & /* ar */, 
+        Archive & /* ar */,
         const unsigned int /* file_version */
     ) const {
         ++(const_cast<A &>(*this).count);
     }
     template<class Archive>
     void load(
-        Archive & /* ar */, 
+        Archive & /* ar */,
         const unsigned int /* file_version */
     ){
         --count;
@@ -57,14 +58,14 @@ class B
     friend class icecube::serialization::access;
     template<class Archive>
     void save(
-        Archive & /* ar */, 
+        Archive & /* ar */,
         const unsigned int /* file_version */
     ) const {
         ++(const_cast<B &>(*this).count);
     }
     template<class Archive>
     void load(
-        Archive & /* ar */, 
+        Archive & /* ar */,
         const unsigned int /* file_version */
     ){
         --count;
@@ -88,9 +89,9 @@ void serialize(
     Archive & ar,
     B & b,
     const unsigned int file_version
-){ 
+){
     icecube::serialization::split_member(ar, b, file_version);
-} 
+}
 
 } // serialization
 } // icecube
@@ -112,7 +113,7 @@ namespace serialization {
 
 template<class Archive>
 void save(
-    Archive & /* ar */, 
+    Archive & /* ar */,
     const C & c,
     const unsigned int /* file_version */
 ){
@@ -121,7 +122,7 @@ void save(
 
 template<class Archive>
 void load(
-    Archive & /* ar */, 
+    Archive & /* ar */,
     C & c,
     const unsigned int /* file_version */
 ){
