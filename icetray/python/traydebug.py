@@ -13,7 +13,7 @@ from xml.etree.ElementTree import ElementTree,Element
 import itertools
 import re
 import math
-import cgi
+import html
 
 from icecube.icetray import i3inspect
 
@@ -156,9 +156,9 @@ class XMLOutput:
 
     def escape(self, s):
         if isinstance(s, str):
-            return cgi.escape(s)
+            return html.escape(s)
         else:
-            return cgi.escape(str(s))
+            return html.escape(str(s))
 
     def generate(self, outputfile):
         out = open(outputfile, "w")
