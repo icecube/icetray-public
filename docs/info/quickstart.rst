@@ -1,6 +1,8 @@
 Getting Started - A guided tour
 ===============================
 
+.. highlight:: console
+
 Welcome new user! This page should help you get up to speed and get
 the core of IceTray software installed, compiled and running on your
 system.  Comments and questions are welcome on #software channel of
@@ -46,9 +48,9 @@ packages installed.
 ^^^^^^^^^^^^^^^
 
 ``photospline`` is no longer included as part of IceTray, but developed
-independently, and must be installed before building IceTray.
+independently. Unless you are using CVMFS_, it must be installed before building IceTray.
 
-.. code-block:: console
+::
 
    $ git clone https://github.com/icecube/photospline.git
    $ mkdir photospline/build
@@ -62,14 +64,14 @@ For detailed installation instructions see https://github.com/icecube/photosplin
 CVMFS
 ^^^^^
 
-If you are running on a cluster, :ref:`cvmfs` is available to 
+If you are running on a cluster, :ref:`cvmfs` is available to
 manage software installation for you. It provides all of
 the standard software used in IceCube.
 
 Checking out some code
 ----------------------
 
-Now you are ready to check out a release of offline software.  Please
+Now you are ready to check out a release of IceTray.  Please
 feel free to replace the version used below with the latest version
 found at https://github.com/icecube/icetray/
 
@@ -77,31 +79,31 @@ Check out a release into a workspace
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Generally, it is recommended that you make a single directory as your
-workspace make separate subdirectories for source code and another to
-hold the resulting "built" libraries and executables.  This will keep
+workspace, with separate subdirectories for source code and another to
+hold the resulting build objects (libraries and executables).  This will keep
 the source code from the code repository separate from the files
 created during the build process.
 
 Execute::
 
- > mkdir -p ~/i3/icetray
- > cd ~/i3/icetray
- > git clone https://github.com/icecube/icetray.git src
+ $ mkdir -p ~/i3/icetray
+ $ cd ~/i3/icetray
+ $ git clone https://github.com/icecube/icetray.git src
     (...produces lots of output...)
- > mkdir build
+ $ mkdir build
 
 You now have a directory filed with::
 
  build/    src/
 
-Your build/ directory is empty, while your src/ directory contains the
+Your ``build/`` directory is empty, while your ``src/`` directory contains the
 source for all projects in the IceTray release::
 
- > ls src/
+ $ ls src/
  CMakeLists.txt
  dataclasses/
  icetray/
- dataio/ 
+ dataio/
  ...
 
 You are now ready to build!
@@ -111,32 +113,32 @@ Build the Software
 
 Building the software is broken up into two parts:
 
-* Generating local Makefiles using the 'cmake' program (see :ref:`cmake`)
-* Building libraries and binary executables with make.
+* Generating local Makefiles using the ``cmake`` program (see :ref:`cmake`)
+* Building libraries and binary executables with ``make``.
 
 Running cmake
 ^^^^^^^^^^^^^
 
-We use cmake to build the software::
+We use the command ``cmake`` to build the software::
 
- > cd ~/i3/icetray/build
- > cmake ../src
+ $ cd ~/i3/icetray/build
+ $ cmake ../src
 
 This will populate your local build directory with directories and
 local build files::
 
- -- IceCube Configuration starting 
- -- 
- -- OSTYPE                         = Linux 
- -- OSVERSION                      = 4.15.0-70-generic 
- -- ARCH                           = x86_64 
- -- BUILDNAME                      = Linux-4.15.0-70-generic/x86_64/gcc-7.4.0 
- -- TOOLSET                        = gcc-7.4.0/x86_64/RelWithAssert 
- -- HOSTNAME                       = finn 
+ -- IceCube Configuration starting
+ --
+ -- OSTYPE                         = Linux
+ -- OSVERSION                      = 4.15.0-70-generic
+ -- ARCH                           = x86_64
+ -- BUILDNAME                      = Linux-4.15.0-70-generic/x86_64/gcc-7.4.0
+ -- TOOLSET                        = gcc-7.4.0/x86_64/RelWithAssert
+ -- HOSTNAME                       = finn
  -- CMake path                     = /usr/bin/cmake
  -- CMake version                  = 3.10.2
  ...
- -- Setting compiler, compile drivers, and linker 
+ -- Setting compiler, compile drivers, and linker
  -- Generating env-shell.sh
  -- Generating icetray-config
  -- Configuring 'gfilt' STL decryptor
@@ -149,9 +151,9 @@ You're ready to build.
 Build it!
 ^^^^^^^^^
 
-In your ~/i3/icetray/build directory execute::
+In your ``~/i3/icetray/build`` directory execute::
 
- make
+ $ make
 
 You will see the build progress::
 
@@ -217,17 +219,17 @@ Rsync the test-data
 If you're not using a CVMFS toolset on a cluster, sync the test-data
 to your local test-data directory ($I3_TESTDATA)::
 
- make rsync
+ $ make rsync
 
 This will download >1GB of data used by testing and example
 scripts.  If you already have them, this command will simply make sure
-you copy of test-data is up to date.
+your copy of test-data is up to date.
 
 Using the software
 ------------------
 
 Once compiled, you can explore some of the provided example scripts.
-Each project typically has several example This is a simple tour.
+Each project typically has several examples. This is a simple tour.
 
 Loading the environment
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -237,8 +239,8 @@ fresh shell (one that contains no information about your any IceCube
 workspace), you should read one of these files into your
 workspace. Use the::
 
- > ./env-shell.sh
- 
+ $ ./env-shell.sh
+
 which again should produce output roughly like this::
 
  ************************************************************************
@@ -251,7 +253,7 @@ which again should produce output roughly like this::
  *                        http://icecube.umd.edu                        *
  *                                                                      *
  ************************************************************************
- 
+
  Icetray environment has:
     I3_SRC       = /home/olivas/icecube/combo/trunk/src
     I3_BUILD     = /home/olivas/icecube/combo/trunk/build
@@ -263,19 +265,19 @@ variables so that you are now ready to run IceTray python scripts and
 executables.  This file should work equally well for bash-like and
 csh-like shells.
 
-A few standard enviroment variables are also set (and often referred
+A few standard environment variables are also set (and often referred
 to in scripts, code, etc):
 
 * I3_SRC - Pointer to your local src area, where you checked out the
   source code via git.
 * I3_BUILD - Pointer to your local build area, where you build IceTray
-  libraries and executeables.
+  libraries and executables.
 * I3_TESTDATA - Pointer to your local test-data area, that contains
   data necessary for testing.
 
 If you load your environment twice, you'll be warned::
 
- % ./env-shell.sh
+ $ ./env-shell.sh
  ****************************************************************
  You are currently in a shell with an Icetray environment loaded.
  Please exit the current shell and re-run ./env-shell.sh from a clean shell.
