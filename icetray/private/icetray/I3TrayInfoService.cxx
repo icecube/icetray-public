@@ -80,7 +80,12 @@ I3TrayInfoService::GetConfig()
   uid_t uid = getuid();
 
   struct passwd *pass = getpwuid(uid);
-  the_config.host_info["username"] = pass->pw_name;
+  if (pass != NULL) {
+    the_config.host_info["username"] = pass->pw_name;
+  } else {
+    log_warn("uid not found, username will be set to unknown");
+    the_config.host_info["username"] = "unknown";
+  }
 
   time_t the_time;
   time(&the_time);
