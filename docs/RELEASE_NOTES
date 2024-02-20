@@ -6,6 +6,16 @@ Release Notes
 main
 ----
 
+Feb. 20, 2024 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.9.2
+
+- use element tree to remove anonymous namespaces from doxygen XML (#3360)
+- cleanup the quickstart doc a bit
+- Delete mailinglist files (#3357)
+- Add upgrade rules to ruff (#3316)
+- Update coding standards (#3351)
+
 Dec. 14, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.9.0

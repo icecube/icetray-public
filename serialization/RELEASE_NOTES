@@ -8,6 +8,15 @@ Release Notes
 main
 ----
 
+Feb. 20, 2024 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.9.2
+
+- Add SPDX tags to serialization (#3356)
+- Delete mailinglist files (#3357)
+- Fix extension for various files (#3330)
+- import boost patch to suppress array bound warning (#3350)
+
 June 22, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.7.0

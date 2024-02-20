@@ -6,6 +6,13 @@ Release Notes
 main
 ----
 
+Feb. 20, 2024 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.9.2
+
+* Delete mailinglist files (#3357)
+* Remove all tab characters used for indentation from python files (#3300)
+
 Dec. 14, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.9.0

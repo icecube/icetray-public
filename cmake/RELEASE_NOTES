@@ -8,6 +8,17 @@ Release Notes
 main
 ----
 
+Feb. 20, 2024 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.9.2
+
+* remove non-existent email address
+* Delete mailinglist files (#3357)
+* Remove all tab characters used for indentation from python files (#3300)
+* Update deprecated cmake features
+* Add "no lint" guards around our logging macros
+* Add "-Wno-maybe-uninitialized" to to our global list of suppressed warnings
+
 Dec. 15, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.9.1
