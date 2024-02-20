@@ -19,7 +19,7 @@ colormsg("")
 colormsg(_HIBLUE_ "Configuring data and tests...")
 colormsg("")
 
-set(TESTDATA_VERSION "releases/V01-09-00") # no changes between icetray v1.9.0 and v1.9.2
+set(TESTDATA_VERSION "trunk")
 set(PRODDATA_VERSION "trunk")
 
 ## set the value of I3_TESTDATA
