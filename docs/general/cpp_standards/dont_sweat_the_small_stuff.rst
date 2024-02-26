@@ -150,9 +150,19 @@ complete example below::
   @date - Followed by the Date tag
   @author name to identify author
 
+The copyright and license information should be compatible with
+`reuse software <https://reuse.software>`_.
+"The IceTray Contributors" should be used as the copyright holder for all code
+developed directly as part of IceTray. If necessary, multiple ``SPDX-FileCopyrightText``
+tags can be used on additional lines. The license name should be selected from
+this `list <https://spdx.org/licenses/>`_.
+``BSD-2-Clause`` should be used for all files that aren't already licensed.
+If a file with an appropriate open source license is copied into IceTray, but lacks
+the SPDX tags, SPDX tags should be added.
+
 .. highlight:: cpp
 
-Example::
+Example for c++ files::
 
  /**
   *
@@ -168,15 +178,21 @@ Example::
   *
   */
 
-The copyright and license information should be compatible with
-`reuse software <https://reuse.software>`_.
-"The IceTray Contributors" should be used as the copyright holder for all code
-developed directly as part of IceTray. If necessary, multiple ``SPDX-FileCopyrightText``
-tags can be used on additional lines. The license name should be selected from
-this `list <https://spdx.org/licenses/>`_.
-``BSD-2-Clause`` should be used for all files that aren't already licensed.
-If a file with an appropriate open source license is copied into IceTray, but lacks
-the SPDX tags, SPDX tags should be added.
+.. highlight:: python
+
+For python, doxygen style comments are not nescessary. But the description
+must be in a docstring::
+
+  # SPDX-FileCopyrightText: 2024 The IceTray Contributors
+  # SPDX-License-Identifier: BSD-2-Clause
+  #
+  # Date 2024-01-01
+  # Author burgess
+  # Author blaufuss
+  
+  """
+  Definition of Dummy class
+  """
 
 .. highlight:: none
 
