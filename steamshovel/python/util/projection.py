@@ -188,25 +188,31 @@ def colorbar_size(width, scale):
     return (w, h)
 
 def make_colorbar(filename, timerange, width, scale):
+    from matplotlib.backends.backend_agg import new_figure_manager
     from matplotlib.colorbar import ColorbarBase
     from matplotlib.colors import Normalize, LinearSegmentedColormap, hsv_to_rgb
     from matplotlib.cm import jet as cmap
+    import matplotlib.pyplot as plt
     import numpy
-    import pylab
 
-    ref_dpi = pylab.rcParamsDefault["savefig.dpi"]
+    assert filename.endswith(".png")
+
+    ref_dpi = plt.rcParamsDefault["savefig.dpi"]
     if ref_dpi == 'figure':
-        ref_dpi = pylab.rcParamsDefault["figure.dpi"]
+        ref_dpi = plt.rcParamsDefault["figure.dpi"]
     rendering_dpi = float(ref_dpi*scale)
     w_inch = width/ref_dpi
     w, h = colorbar_size(w_inch, scale)
 
     h_pt = 72*h
-    pylab.rc('font', family='serif', size=h_pt*0.25)
+    plt.rc('font', family='serif', size=h_pt*0.25)
 
-    fig = pylab.figure(figsize=(w, h), dpi=rendering_dpi)
+    # NB: explicitly use agg backend to avoid spawning a window
+    manager = new_figure_manager(1, figsize=(w,h), dpi=rendering_dpi)
+    fig = manager.canvas.figure
+
     fig.subplots_adjust(left=5e-2, right=1-5e-2, bottom=0.75)
-    ax = pylab.gca()
+    ax = fig.gca()
 
     timerange = timerange/1000.0
     intervals = int(round(9/scale))
@@ -221,7 +227,7 @@ def make_colorbar(filename, timerange, width, scale):
     cb = ColorbarBase(ax, cmap=cmap, norm=norm, orientation='horizontal')
     cb.set_label('Time [microseconds]')
     cb.set_ticks(ticks)
-    pylab.savefig(filename)
+    manager.canvas.print_png(filename)
 
 def stitch(main, thumbs, colorbar, filename, width, height):
     y_offset_main = 0
