@@ -51,7 +51,7 @@ def main():
                     continue
                 elif options.calibration and frame.Stop == icetray.I3Frame.Calibration:
                     continue
-                elif options.detector and frame.Stop == icetray.I3Frame.Detector:
+                elif options.detector and frame.Stop == icetray.I3Frame.DetectorStatus:
                     continue
                 elif options.trayinfo and frame.Stop == icetray.I3Frame.TrayInfo:
                     continue
