@@ -29,6 +29,7 @@ typedef unsigned long uLong;
  */
 
 /* Copyright (C) 1995-2010 Jean-loup Gailly and Mark Adler
+  SPDX-License-Identifier: BSD-3-Clause
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages

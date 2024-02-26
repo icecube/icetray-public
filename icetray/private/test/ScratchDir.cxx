@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 #include <icetray/scratch.h>
 #include <cstdio> //for remove
@@ -22,7 +26,7 @@ namespace{
 		::getcwd(&cwd.front(),pathSize);
 		return(cwd);
 	}
-	
+
 	const std::string test_condor_dir="TEST_CONDOR_SCRATCH_DIR";
 	const std::string test_tmpdir="TEST_TMPDIR";
 }

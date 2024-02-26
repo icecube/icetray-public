@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 IceTray Logging Quick Reference
 ===============================
 
@@ -35,26 +39,26 @@ Example::
 
     # log an error
     icetray.logging.log_error('an error')
-    
+
     # set default logging level
     icetray.logging.set_level(icetray.I3LogLevel.LOG_FATAL)
     icetray.logging.set_level('FATAL')
     icetray.set_log_level(icetray.I3LogLevel.LOG_FATAL)
     icetray.set_log_level('FATAL') # should work as of 2014-01-23
-    
+
     # rotating files
     icetray.set_logger(icetray.logging.rotating_files)
-    
+
     # syslog
     icetray.set_logger(icetray.logging.syslog)
-    
+
     # console
     icetray.set_logger(icetray.logging.console)
-    
+
     # set the unit
     icetray.logging.log_error('an error','my module')
-    
+
     # set the level for the unit
     icetray.set_log_level_for_unit('my module',icetray.I3LogLevel.LOG_FATAL)
-    
-    
+
+

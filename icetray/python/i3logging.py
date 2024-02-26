@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
 
 import logging, string, traceback
 from icecube.icetray import I3Logger, I3LogLevel
@@ -43,7 +46,7 @@ class ColorFormatter(logging.Formatter):
         if record.levelname in ("CRITICAL", "ERROR"):
             d['levelname'] = "\x1b[1;31m %s \x1b[0m" % d['levelname']
         d['filename'] = "\x1b[1m%s\x1b[0m" % d['filename']
-            
+
         s = self._fmt % d
         return "\x1b[1m%s\x1b[0m" % s
 
@@ -94,7 +97,7 @@ def _translate_level(name):
 def set_level(level):
     """
     Set the global logging level.
-    
+
     :param level: the log level. This may also be specified as a string.
 
     Examples::
@@ -106,7 +109,7 @@ def set_level(level):
 def set_level_for_unit(unit, level):
     """
     Set the logging level for a specific logging unit.
-    
+
     :param level: the log level. This may also be specified as a string.
 
     Examples::

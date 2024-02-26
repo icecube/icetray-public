@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef ICETRAY_HAS_OPERATOR_H_INCLUDED
 #define ICETRAY_HAS_OPERATOR_H_INCLUDED
 
@@ -7,13 +11,13 @@
 namespace has_operator {
     typedef char yes;
     typedef struct { char array[2]; } no;
-    
+
     struct anyx { template <class T> anyx(const T &); };
     no operator << (const anyx &, const anyx &);
-    
+
     template <class T> yes check(T const&);
     no check(no);
-  
+
     /**
      * Determine whether a type can be output to a stream.
      * \tparam StreamType the type of stream which is the target

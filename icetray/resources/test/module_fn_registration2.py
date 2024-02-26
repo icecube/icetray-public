@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 #  Run frames on different streams through a reader/writer tray, verify that extra
 #  cruft doesn't get in to the files

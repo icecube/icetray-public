@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 # Simplest possible icetray script.
 #
@@ -12,7 +17,7 @@ try:
     tray.Add("AddNulls",
              where = ['foo'],
              If = [1,2,3])
-    tray.Add("Dump")    
+    tray.Add("Dump")
     tray.Execute(3)
 except Exception as e:
     print(e, "ok, at that threw as expected.")

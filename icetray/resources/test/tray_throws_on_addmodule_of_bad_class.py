@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 #  Pass nonsensical python object to AddModule, expect log_fatal
 #
@@ -19,5 +24,5 @@ try:
 except RuntimeError as e:
     print("As expected, caught '%s'" % e)
 
-                   
+
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3/name_of.h>
 #include <icetray/I3Parameter.h>
 
@@ -24,11 +28,11 @@ namespace bp = boost::python;
 //
 //   This file contains everything that doesn't need to be instantiated on a per-type basis
 //
-I3Parameter::~I3Parameter() 
+I3Parameter::~I3Parameter()
 { }
 
-I3Parameter::I3Parameter() 
-  : got_by_module_(false) 
+I3Parameter::I3Parameter()
+  : got_by_module_(false)
 { }
 
 I3Parameter::I3Parameter(const I3Parameter& rhs)
@@ -36,7 +40,7 @@ I3Parameter::I3Parameter(const I3Parameter& rhs)
   *this = rhs;
 }
 
-I3Parameter& 
+I3Parameter&
 I3Parameter::operator=(const I3Parameter& rhs)
 {
   name_ = rhs.name_;
@@ -50,31 +54,31 @@ I3Parameter::operator=(const I3Parameter& rhs)
   return *this;
 }
 
-string 
-I3Parameter::default_value_str() const 
-{ 
+string
+I3Parameter::default_value_str() const
+{
   if (default_)
     return repr(*default_);
   else
     return "(no default value)";
 }
 
-string 
-I3Parameter::configured_value_str() const 
-{ 
+string
+I3Parameter::configured_value_str() const
+{
   if (configured_)
     return repr(*configured_);
   else
     return "(no configured value)";
 }
 
-void 
+void
 I3Parameter::set_configured(const boost::python::object& t)
 {
   configured_ = t;
 }
 
-void 
+void
 I3Parameter::set_default(const boost::python::object& t)
 {
   default_ = t;

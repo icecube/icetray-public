@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube.icetray import I3Tray
 from icecube import icetray
 
@@ -27,7 +31,7 @@ def framecheck(frame):
     print(frame)
     if 'counter' in frame:
         assert frame['counter'].value % 3 != 0
-            
+
 tray.AddModule(framecheck, 'check')
 
 

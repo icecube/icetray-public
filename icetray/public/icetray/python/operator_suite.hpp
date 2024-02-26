@@ -1,5 +1,8 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
 
-// This visitor class exposes operators to Python 
+// This visitor class exposes operators to Python
 // Usage is similar to the indexing suites:
 //
 // class_<Foo>("Foo")

@@ -1,10 +1,9 @@
-# 
-#  $Id: traydebug.py 1667 2013-07-01 21:30:57Z nwhitehorn $
-#  
-#  Copyright (C) 2011
-#  Eike Middell <eike.middell@desy.de>
-#  and the IceCube Collaboration <http://www.icecube.wisc.edu>
 #
+#  $Id: traydebug.py 1667 2013-07-01 21:30:57Z nwhitehorn $
+#
+#  Copyright (C) 2011 Eike Middell <eike.middell@desy.de>
+#  Copyright (C) 2011 the IceCube Collaboration <http://www.icecube.wisc.edu>
+#  SPDX-License-Identifier: BSD-2-Clause
 
 
 import sys, os.path
@@ -42,14 +41,14 @@ class ModuleDescription:
     def __init__(self, typename):
         self.typename = typename
         self.params = dict() # name.lower() -> ParameterDescription(..)
-        
+
         # Get the defaults from the module. This will fail if the module
         # is actually a Python function, but then it has no defaults anyhow.
         try:
             config = i3inspect.get_configuration(typename)
         except TypeError:
             return
-        
+
         desc = config.descriptions
         for k in config.keys():
             self.add_param(k, config[k], desc[k])
@@ -64,7 +63,7 @@ class ModuleDescription:
         return "<Module typename='%s' with %d parameters>" % (self.typename, len(self.params))
 
 ################################################################################
- 
+
 class ModuleInstance:
     """
         a configured module. has a link to the ModuleDescription and contains a dict with
@@ -120,16 +119,16 @@ class XMLOutput:
 
         self.modules = []
 
-        for k, mod in itertools.chain(iter(modules.items()), 
+        for k, mod in itertools.chain(iter(modules.items()),
                                       iter(services.items())):
             d = dict()
             d["classname"] = self.escape(mod.module.typename)
             d["instancename"] = self.escape(mod.instancename)
             d["params"] = []
-            for pname,(pvalue,pdefault,pdesc) in mod.get_params().items(): 
-                d["params"].append( dict(name=self.escape(pname), 
-                                         default=self.escape(pdefault), 
-                                         configured=self.escape(pvalue), 
+            for pname,(pvalue,pdefault,pdesc) in mod.get_params().items():
+                d["params"].append( dict(name=self.escape(pname),
+                                         default=self.escape(pdefault),
+                                         configured=self.escape(pvalue),
                                          description=self.escape(pdesc)) )
 
             self.modules.append(d)
@@ -185,10 +184,10 @@ class I3TrayDebugger:
 
     def create_instance(self, typename, instancename, paramvalues):
         mod = ModuleDescription(typename)
-        
+
         inst = ModuleInstance(instancename, mod)
         for pname, pvalue in paramvalues.items():
-            inst.set_param(pname, pvalue) 
+            inst.set_param(pname, pvalue)
 
         return inst
 
@@ -196,7 +195,7 @@ class I3TrayDebugger:
         inst = self.create_instance(typename, instancename, kwargs)
         self.services[instancename] = inst
         return inst
-    
+
     def AddModule(self, typename, instancename, **kwargs):
         inst = self.create_instance(typename, instancename, kwargs)
         self.modules_in_order.append(instancename)
@@ -238,7 +237,7 @@ class I3TrayDebugger:
 
     def Execute(self, maxcount=0):
         print(self)
-        
+
         if self.outputfile is not None:
             print("creating graph")
             XMLOutput(self.modules, self.services).generate(self.outputfile)

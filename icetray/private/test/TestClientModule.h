@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file TestClientModule.h
@@ -17,9 +17,9 @@
 #include "I3ModuleTestConfig.h"
 
 /**
- * @brief This is a template for the module which sits at the end of the 
+ * @brief This is a template for the module which sits at the end of the
  * chain and verifies that everything made it through.
- * 
+ *
  * The module inherits from the template parameter Type so that
  * in 'Type' users can put anything that they want access to when
  * deciding whether or not the frame content is correct
@@ -115,7 +115,7 @@ class TestClientModule : public I3Module, public Type
     }
 
   /**
-   * This is the template method that actually performs the check on the 
+   * This is the template method that actually performs the check on the
    * frame.
    */
   template<int i>

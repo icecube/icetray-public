@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube import icetray, phys_services
 from icecube.icetray import I3Tray
 
@@ -26,7 +30,7 @@ rng = phys_services.I3GSLRandomService(1337)
 tray.AddModule(UseRandom, I3RandomService = "rng")
 
 # Regular parameter conversions should still work afterwards.
-# If not, someone forgot to clear an error flag set by 
+# If not, someone forgot to clear an error flag set by
 # boost::python::extract.
 tray.AddModule("AllParametersModule", int_param = 3)
 

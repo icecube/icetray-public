@@ -14,6 +14,7 @@
 // Copyright Robert Ramey 2007.  Changes made to permit
 // application throughout the serialization library.
 //
+// SPDX-License-Identifier: BSL-1.0
 // Distributed under the Boost
 // Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -37,13 +38,13 @@
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif 
+#endif
 
 #include <cassert>
 #include <boost/noncopyable.hpp>
 #include <serialization/force_include.hpp>
 
-namespace I3 { 
+namespace I3 {
 
   //////////////////////////////////////////////////////////////////////
   // Provides a dynamically-initialized (singleton) instance of T in a

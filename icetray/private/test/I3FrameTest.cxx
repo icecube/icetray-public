@@ -1,6 +1,6 @@
 /**
  *
- *  copyright (C) 2004, 2005, 2006, 2007 Troy D. Straszheim
+ *  Copyright (C) 2004, 2005, 2006, 2007 Troy D. Straszheim
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
@@ -184,7 +184,7 @@ TEST(a_t_serializes)
   poa << make_nvp("t", ptr);
   remove("i3int");
 }
-  
+
 TEST(emptyslots)
 {
   I3Frame f;
@@ -214,10 +214,10 @@ TEST(typename_iterator)
 
   iter++;
   ENSURE(iter == f.typename_end());
-  
+
   //
   //  verify that typename iterating doesn't deserialize
-  // 
+  //
   I3FramePtr p = saveload(f);
   ENSURE(p->has_blob("int0") == true);
   ENSURE(p->has_blob("int1") == true);
@@ -303,12 +303,12 @@ TEST(take)
   rhs.Put("int0", I3IntPtr(new I3Int(0)));
 
   lhs.take(rhs, "int0");
-  
+
   ENSURE(lhs.has_ptr("int0"));
   ENSURE(lhs.has_blob("int0") == false);
 
   I3FramePtr p = saveload(rhs);
-  
+
   lhs.take(*p, "int0");
   ENSURE(lhs.has_blob("int0") == true);
   ENSURE(lhs.has_ptr("int0") == false);
@@ -337,7 +337,7 @@ TEST(rename_w_blob)
   ENSURE(p->Has("i") == true);
   ENSURE(p->has_ptr("i") == false);
   ENSURE(p->has_blob("i") == true);
-  
+
   ENSURE(p->Has("j") == false);
   ENSURE(p->has_ptr("j") == false);
   ENSURE(p->has_blob("j") == false);
@@ -569,8 +569,8 @@ TEST(assign)
   ENSURE(!f.Has("j"));
   ENSURE(!g.Has("i"));
   ENSURE(g.Has("j"));
-  ENSURE_EQUAL(f.size(), 1u); 
-  ENSURE_EQUAL(g.size(), 1u); 
+  ENSURE_EQUAL(f.size(), 1u);
+  ENSURE_EQUAL(g.size(), 1u);
 
   g = f;
 
@@ -578,12 +578,12 @@ TEST(assign)
   ENSURE(!f.Has("j"));
   ENSURE(g.Has("i"));
   ENSURE(!g.Has("j"));
-  ENSURE_EQUAL(f.size(), 1u); 
-  ENSURE_EQUAL(g.size(), 1u); 
+  ENSURE_EQUAL(f.size(), 1u);
+  ENSURE_EQUAL(g.size(), 1u);
 }
 
 TEST(putemptystringframeobjname)
-{ 
+{
   I3Frame f;
   I3IntPtr i(new I3Int(661));
   try {

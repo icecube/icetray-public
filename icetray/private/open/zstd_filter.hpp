@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef ZSTD_FILTER_HPP
 #define ZSTD_FILTER_HPP
 
@@ -22,14 +26,14 @@ public:
 		, boost::iostreams::flushable_tag
 #endif
 		{ };
-	
+
 	zstd_compressor(int compressionLevel):
 	cstream(nullptr,stream_delete),
 	compressionLevel(compressionLevel),
 	streamInitialized(false),
 	ibufSize(0),ibufUsed(0)
 	{}
-	
+
 	//boost::iostreams really likes to copy when it should move. This filter
 	//cannot generally be copied, but doing so is possible between construction
 	//and first real use, which in practice is the only time it's needed.
@@ -44,7 +48,7 @@ public:
 		assert(!other.ibuf);
 		assert(!other.obuf);
 	}
-	
+
 	zstd_compressor(zstd_compressor&& other):
 	cstream(std::move(other.cstream)),
 	compressionLevel(other.compressionLevel),
@@ -57,7 +61,7 @@ public:
 		other.ibufSize=0;
 		other.ibufUsed=0;
 	}
-	
+
 	~zstd_compressor()=default;
 	zstd_compressor& operator=(const zstd_compressor&)=delete;
 	zstd_compressor& operator=(zstd_compressor&& other){
@@ -69,20 +73,20 @@ public:
 			obuf=std::move(other.obuf);
 			ibufSize=other.ibufSize;
 			ibufUsed=other.ibufUsed;
-			
+
 			other.streamInitialized=false;
 			other.ibufSize=0;
 			other.ibufUsed=0;
 		}
 		return(*this);
 	}
-	
+
 	//compress n bytes of input from src to dest
 	template<typename Sink>
 	std::streamsize write(Sink& dest, const char* src, std::streamsize n){
 		if(!streamInitialized)
 			initStream();
-		
+
 		std::streamsize result=n;
 		//Copy as much input into the input buffer as possible,
 		//run the compression each time the input buffer is filled,
@@ -107,7 +111,7 @@ public:
 		}
 		return(result);
 	}
-	
+
 	//flush buffered input
 	//without ZSTD_COMPRESSOR_CAN_FLUSH this function will only work sufficently to support close()
 	template<typename Sink>
@@ -158,12 +162,12 @@ private:
 	std::unique_ptr<char_type[]> ibuf;
 	std::unique_ptr<char_type[]> obuf;
 	std::size_t ibufSize, ibufUsed;
-	
+
 	static void stream_delete(ZSTD_CStream* stream){
 		if(stream)
 			ZSTD_freeCStream(stream);
 	}
-	
+
 	void initStream(){
 		cstream.reset(ZSTD_createCStream());
 		ZSTD_initCStream(cstream.get(),compressionLevel);
@@ -178,14 +182,14 @@ private:
 class zstd_decompressor : public boost::iostreams::multichar_input_filter{
 public:
 	using char_type=char;
-	
+
 	zstd_decompressor():
 	dstream(nullptr,stream_delete),
 	streamInitialized(false),
 	ibufSize(0),
 	inputEnd(false)
 	{}
-	
+
 	//boost::iostreams really likes to copy when it should move. This filter
 	//cannot generally be copied, but doing so is possible between construction
 	//and first real use, which in practice is the only time it's needed.
@@ -199,7 +203,7 @@ public:
 		assert(!other.dstream);
 		assert(!other.ibuf);
 	}
-	
+
 	zstd_decompressor(zstd_decompressor&& other):
 	dstream(std::move(other.dstream)),
 	streamInitialized(other.streamInitialized),
@@ -213,7 +217,7 @@ public:
 		other.zibuf=ZSTD_inBuffer{nullptr,0,0};
 		other.inputEnd=false;
 	}
-	
+
 	~zstd_decompressor()=default;
 	zstd_decompressor& operator=(const zstd_decompressor&)=delete;
 	zstd_decompressor& operator=(zstd_decompressor&& other){
@@ -224,7 +228,7 @@ public:
 			ibufSize=other.ibufSize;
 			zibuf=other.zibuf;
 			inputEnd=other.inputEnd;
-			
+
 			other.streamInitialized=false;
 			other.ibufSize=0;
 			other.zibuf=ZSTD_inBuffer{nullptr,0,0};
@@ -232,16 +236,16 @@ public:
 		}
 		return(*this);
 	}
-	
+
 	//read as much input from src as necessary to write n bytes of decompressed
 	//data to dest
 	template <typename Source>
 	std::streamsize read(Source& src, char_type* dest, std::streamsize n){
 		if(!streamInitialized)
 			initStream();
-		
+
 		std::streamsize result=0;
-		
+
 		//First, see if we have anything sitting in ibuf which still needs to be
 		//decompressed
 		while(zibuf.pos<zibuf.size && n>0){
@@ -254,7 +258,7 @@ public:
 			n-=output_size;
 			result+=output_size;
 		}
-		
+
 		//If that didn't produce enough data, we need to actually fetch more from
 		//src, insert it into ibuf, and decompress.
 		while(n>0 && !inputEnd){
@@ -281,10 +285,10 @@ public:
 				result+=output_size;
 			}
 		}
-		
+
 		return(result);
 	}
-	
+
 	template <typename Source>
 	void close(Source& src){/*Do nothing*/}
 private:
@@ -294,12 +298,12 @@ private:
 	std::size_t ibufSize;
 	ZSTD_inBuffer zibuf;
 	bool inputEnd;
-	
+
 	static void stream_delete(ZSTD_DStream* stream){
 		if(stream)
 			ZSTD_freeDStream(stream);
 	}
-	
+
 	void initStream(){
 		dstream.reset(ZSTD_createDStream());
 		ZSTD_initDStream(dstream.get());

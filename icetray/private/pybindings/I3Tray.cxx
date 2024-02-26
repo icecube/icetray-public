@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2004, 2005, 2006, 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2004, 2005, 2006, 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2004, 2005, 2006, 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 
 
@@ -84,7 +83,7 @@ void Execute_1(I3Tray &tray, unsigned n) {
 void register_I3Tray()
 {
 
-  class_<I3Tray::param_setter>("param_setter", 
+  class_<I3Tray::param_setter>("param_setter",
 			       init<const I3Tray::param_setter&>());
 
   //void (I3Tray::*Execute_0)(void)              = &I3Tray::Execute;
@@ -100,19 +99,19 @@ void register_I3Tray()
     .def("__str__", &I3TrayString)
     .add_property("tray_info", &I3Tray::TrayInfo)
     .add_property("context", make_function(&I3Tray::GetContext, return_internal_reference<>()))
-    .def("AddService", 
+    .def("AddService",
 	 (I3Tray::param_setter (I3Tray::*)(const std::string&, std::string))
 	 &I3Tray::AddService)
-    .def("AddModule", 
+    .def("AddModule",
 	 (I3Tray::param_setter (I3Tray::*)(boost::python::object, std::string))
 	 &I3Tray::AddModule)
     .def("MoveModule", &I3Tray::MoveModule, (arg("self"), arg("name"), arg("anchor"), arg("after")=false))
     .def("ConnectBoxes", &I3Tray::ConnectBoxes)
-    
+
     // SetParameter exposure: BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS
     // does not work for some reason...  Compiler can't determine the
     // type of &I3Tray::SetParameter.  Dunno why.
-    // .def("SetParameter", &I3Tray::SetParameter, SetParameterOverloads()) 
+    // .def("SetParameter", &I3Tray::SetParameter, SetParameterOverloads())
 
     // instead we do it manually with a little preprocessor
     // metaprogramming, and five-point-palm exploding heart
@@ -121,7 +120,7 @@ void register_I3Tray()
 					   const std::string&,
 					   const boost::python::object&))&I3Tray::SetParameter)
     ;
-  
+
 }
 
 

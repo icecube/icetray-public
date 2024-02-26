@@ -1,11 +1,10 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  Simon Patton
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 Simon Patton
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -14,7 +13,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,9 +25,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #ifndef ICETRAY_I3TRAY_H_INCLUDED
 #define ICETRAY_I3TRAY_H_INCLUDED
@@ -108,17 +107,17 @@ public:
    * calls SetParameter.  For terseness in creating/configuring
    * I3Trays.
    */
-  class param_setter 
+  class param_setter
   {
     I3Tray& tray_;
     const std::string module_name_;
 
   public:
-    param_setter(I3Tray &tray, const std::string& module_name) 
+    param_setter(I3Tray &tray, const std::string& module_name)
       : tray_(tray), module_name_(module_name) { }
     param_setter(const param_setter& rhs)
       : tray_(rhs.tray_), module_name_(rhs.module_name_) { }
-  
+
     template <typename T>
     param_setter& operator()(const std::string& param, T value)
     {
@@ -128,7 +127,7 @@ public:
     }
   };
 
-  I3Tray();  
+  I3Tray();
 
   ~I3Tray();
 
@@ -138,14 +137,14 @@ public:
    * @param clazz the class of the I3ServiceFactory.
    * @param name the name associated with services the created by the factory.
    */
-  param_setter 
+  param_setter
   AddService(const std::string& clazz, std::string name="");
 
   /**
    * Adds the specified I3ServiceFactory to the framework.
    */
   template <class Type>
-  param_setter 
+  param_setter
   AddService(std::string name="");
 
 
@@ -160,7 +159,7 @@ public:
   AddModule(I3ModulePtr module, std::string instancename="");
   /**
    * Adds an arbitrary object as a module which is callable with an I3FramePtr
-   * and returns nothing or a boolean result. 
+   * and returns nothing or a boolean result.
    */
   template<typename Type>
   typename boost::disable_if<boost::mpl::or_<boost::is_base_of<I3Module,Type>,
@@ -189,12 +188,12 @@ public:
      Executes a procesing loop which will continue until there is no more
      data to process (that is, a module invokes RequestSuspension).
   */
-  void Execute(); 
+  void Execute();
 
   /**
      Runs the tray until the specified maximum count is reached, or a
      module invokes RequestSuspension();
-   
+
      @param maxCount the maximum process transistions for the driving module.
   */
   void Execute(unsigned maxCount);
@@ -203,7 +202,7 @@ public:
      Report per-module physics ncalls/system/user time usage.  Have to call this
      *after* Execute()
   */
-  std::map<std::string, I3PhysicsUsage> Usage(); 
+  std::map<std::string, I3PhysicsUsage> Usage();
 
   /**
    * Finishes everything.  It is assumed that if the modules are to be used
@@ -233,19 +232,19 @@ public:
 	       boost::python::object value);
 
   template <class Type>
-  bool 
+  bool
   SetParameter(const std::string& module,
 	       const std::string& parameter,
 	       const Type &value)
   {
     return this->SetParameter(module, parameter, boost::python::object(value));
   }
-	
+
   void RequestSuspension() { suspension_requested=true; }
 
 private:
 
-  I3Tray(const I3Tray& rhs); // stop default 
+  I3Tray(const I3Tray& rhs); // stop default
   I3Tray& operator=(const I3Tray& rhs); // stop default
 
   boost::shared_ptr<I3Module> CreateModule(I3Context& context,
@@ -259,7 +258,7 @@ private:
    * Connects modules in a simple chain, each's outbox to the next's
    * default inbox, for use in simple module chain situaitons so taht
    * the order of AddModule can also be  used to set the outbox connections.
-   * 
+   *
    */
   void ConnectBoxesInOrderTheyWereAdded();
 
@@ -292,17 +291,17 @@ private:
    * appropraite state. Otherwise it does nothing.
    */
   void Abort();
-  
+
   /**
    * Generate a new name for a module or service which had none specified.
-   * 
+   *
    * @param type the type of object being added (e.g. I3Reader)
    * @param kind the cateogry of object being added (e.g. Module or Service)
    * @param existingNames the names already in use by objects of the same kind
    */
   std::string CreateName(const std::string& type, const std::string& kind,
                          const std::vector<std::string>& existingNames);
-  
+
   /*
    * Overloading doesn't work properly with boost::function types, so we
    * depend on AddModule deducing the return type and then dispatching to
@@ -361,7 +360,7 @@ I3Tray::AddModule(Type func, std::string instancename){
 }
 
 template <class Type>
-I3Tray::param_setter 
+I3Tray::param_setter
 I3Tray::AddService(std::string instancename)
 {
   return this->AddService(I3::name_of<Type>(), instancename);

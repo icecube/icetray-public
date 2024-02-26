@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 
 #include <icetray/I3TrayInfo.h>
@@ -68,7 +67,7 @@ const V& at(const map<K,V>& m, const K2& k)
   return ci->second;
 }
 
-ostream& 
+ostream&
 operator<<(ostream& os, const I3TrayInfo& config)
 {
   return(config.Print(os));
@@ -109,10 +108,10 @@ namespace{
   size_t get_max_parm_len(std::vector<std::string> names,
                           std::map<std::string, I3ConfigurationPtr> configs) {
     size_t max_param_len = 0;
-    
+
     for(std::string mod_name: names) {
       I3ConfigurationPtr config = configs[mod_name];
-      
+
       for(std::string key: config->keys()) {
         if (key.size() > max_param_len){
           max_param_len = key.size();
@@ -129,21 +128,21 @@ namespace{
                                 std::map<std::string, I3ConfigurationPtr> configs,
                                 size_t max_param_len) {
     std::stringstream ss;
-    
+
     for(std::string mod_name: names) {
       I3ConfigurationPtr config = configs[mod_name];
       ss << config->ClassName() << " " << config->InstanceName() << std::endl;
-      
+
       for(std::string key: config->keys()) {
         ss << "  " << std::setw(max_param_len) << key << " : " << repr(config->Get(key)) << std::endl;
       }
-      
+
       ss << std::endl;
     }
     return ss.str();
   }
 }
-  
+
 std::string I3TrayInfo::PrintCompact(){
 
   //find the longest parameter name in both factories and modules
@@ -152,7 +151,7 @@ std::string I3TrayInfo::PrintCompact(){
 
   //print the factories parameters and values to string
   std::string s = get_module_string(factories_in_order,factory_configs,max_param_len);
-  
+
   //append the modules parameters and values to the same string
   s += get_module_string(modules_in_order,module_configs,max_param_len);
 

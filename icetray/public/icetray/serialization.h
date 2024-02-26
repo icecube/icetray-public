@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #ifndef ICETRAY_SERIALIZATION_H_INCLUDED
 #define ICETRAY_SERIALIZATION_H_INCLUDED
@@ -99,19 +98,19 @@ AsXML(const T& t)
   template void T::load(icecube::archive::portable_binary_iarchive&, unsigned); \
   template void T::load(icecube::archive::xml_iarchive&, unsigned);	\
   template void T::save(icecube::archive::xml_oarchive&, unsigned) const;
-  
+
 
 #else // __CINT__
 
-#define I3_CLASS_VERSION(T,V) 
+#define I3_CLASS_VERSION(T,V)
 #define I3_IS_ABSTRACT(X)
-#define I3_CLASS_EXPORT(X) 
-#define I3_SHARED_POINTER_EXPORT(X) 
+#define I3_CLASS_EXPORT(X)
+#define I3_SHARED_POINTER_EXPORT(X)
 #define I3_SERIALIZATION_SPLIT_MEMBER()
 
 namespace icecube
 {
-  namespace serialization 
+  namespace serialization
   {
     // normal forward declarations:
     template <class T> struct nvp;

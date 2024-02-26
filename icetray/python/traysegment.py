@@ -1,9 +1,9 @@
-# 
+#
 #  $Id: traysegment.py 1635 2013-06-28 21:33:24Z nwhitehorn $
-#  
-#  Copyright (C) 2011
-#  Nathan Whitehorn <nwhitehorn@icecube.wisc.edu>
-#  and the IceCube Collaboration <http://www.icecube.wisc.edu>
+#
+#  Copyright (C) 2011 Nathan Whitehorn <nwhitehorn@icecube.wisc.edu>
+#  Copyright (C) 2011 the IceCube Collaboration <http://www.icecube.wisc.edu>
+#  SPDX-License-Identifier: BSD-2-Clause
 #
 
 import inspect # the real inspect
@@ -74,7 +74,7 @@ def module_altconfig(module, **altdefargs):
             if lowercasekeys.count(arg.lower()) > 1:
                 # Deduplicate by removing the default key
                 mergedargs.pop(arg)
-            
+
         if hasattr(module, '__i3traysegment__'):
             tray.AddSegment(module, name, **mergedargs)
         else:

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 // Construct python objects from shared pointers in the context
 
 #ifndef ICETRAY_PYTHON_CONTEXT_SUITE_HPP_INCLUDED_SUITE_HPP_INCLUDED
@@ -41,16 +45,16 @@ private:
 			PyErr_SetString(PyExc_KeyError, mesg.c_str());
 			throw boost::python::error_already_set();
 		}
-		
+
 		return service;
 	}
-	
+
 	static bool
 	PutInContext(ServicePtr self, I3Context &ctx, const std::string &name)
 	{
 		return ctx.Put(self, name);
 	}
-	
+
 };
 
 }} // namespace icetray::python

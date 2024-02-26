@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @version $Revision$
@@ -23,16 +23,16 @@ TEST_GROUP(InstallService);
 // every module
 struct NameTestService : public I3ServiceFactory
 {
-  NameTestService(const I3Context& context) 
+  NameTestService(const I3Context& context)
     : I3ServiceFactory(context) { }
-    
+
   bool InstallService(I3Context& s)
   {
     ENSURE_EQUAL(GetName(), "TESTNAME");
     return true;
-  }    
+  }
 };
-  
+
 I3_SERVICE_FACTORY(NameTestService);
 
 TEST(name)
@@ -41,7 +41,7 @@ TEST(name)
   tray.AddService<NameTestService>("TESTNAME");
 
   tray.AddModule("BottomlessSource", "bs");
-  
+
   tray.Execute(10);
 }
 

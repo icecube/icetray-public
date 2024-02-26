@@ -1,7 +1,6 @@
 #
-#  Copyright (C) 2007-2009
-#  Troy D. Straszheim  <troy@icecube.umd.edu>
-#  and the IceCube Collaboration <http://www.icecube.wisc.edu>
+#  Copyright (C) 2007-2009 Troy D. Straszheim  <troy@icecube.umd.edu>
+#  Copyright (C) 2007-2009 the IceCube Collaboration <http://www.icecube.wisc.edu>
 #
 #  Redistribution and use in source and binary forms, with or without
 #  modification, are permitted provided that the following conditions

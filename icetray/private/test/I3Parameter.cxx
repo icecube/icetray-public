@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 /**
  * $Id$
  */
@@ -32,7 +36,7 @@ TEST(noconvert)
 
   pi.set_default(boost::python::object(1));
   pi.set_default(boost::python::object(2));
-  pi.set_default(boost::python::object(3.14)); 
+  pi.set_default(boost::python::object(3.14));
 }
 
 TEST(somevectors)

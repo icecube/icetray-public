@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. highlight:: text
 
 How to make a project
@@ -235,7 +239,7 @@ public/advanced_bootcamp/I3Bootcamp.h::
         template <typename Archive>
         void serialize(Archive &ar, unsigned version);
     };
-    
+
     // icetray macro to make pointer typedefs for I3BootCampPtr, etc
     I3_POINTER_TYPEDEFS(I3Bootcamp);
 
@@ -248,7 +252,7 @@ private/advanced_bootcamp/I3Bootcamp.cxx::
 
     // the module interface
     #include <advanced_bootcamp/I3Bootcamp.h>
-    
+
     // do serialization (write to/read from an i3 file)
     // the version number can be used to establish version formats
     template <typename Archive>
@@ -258,14 +262,14 @@ private/advanced_bootcamp/I3Bootcamp.cxx::
         // the & operator is both read and write
         // make_nvp (name,value pair) allows both binary and xml output
         ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
-        
+
         // now actually serialize our contents
         // all default types and I3 types are serializable
         ar & make_nvp("text", text);
         ar & make_nvp("number", number);
         ar & make_nvp("number2", number2);
     }
-    
+
     // another icetray macro to do most of the heavy lifting
     // for serialization
     I3_SERIALIZABLE(I3Bootcamp);
@@ -274,24 +278,24 @@ private/advanced_bootcamp/I3BootcampModule.cxx::
 
     // some basic includes
     #include <icetray/I3ConditionalModule.h>
-    
+
     // the module interface
     #include <advanced_bootcamp/I3Bootcamp.h>
-    
+
     // let's make a private module
     class I3BootcampModule : public I3ConditionalModule {
     public:
         // the constructor just calls the parent
         I3BootcampModule(const I3Context &ctx) : I3ConditionalModule(ctx) {}
         virtual ~I3BootcampModule() {}
-        
+
         // process physics frames
         void Physics(I3FramePtr frame);
     }
-    
+
     // use an icetray macro to make this work with icetray
     I3_MODULE(I3BootcampModule);
-    
+
     void
     I3BootcampModule::Physics(I3FramePtr frame)
     {
@@ -310,18 +314,18 @@ Pybindings
 ^^^^^^^^^^
 
 private/pybindings/module.cxx::
-    
+
     #include <icetray/load_project.h>
-    
+
     #include <public/advanced_bootcamp/I3Bootcamp.h>
-    
+
     // register function for the interface class
     void register_I3Bootcamp()
     {
         // use an alias instead of "using boost::python"
         // saves us from really strange errors
         namespace bp = boost::python;
-        
+
         // make a boost::python class
         // the I3BootcampPtr came from I3_POINTER_TYPEDEFS
         bp::class_<I3Bootcamp, I3BootcampPtr, bp::bases<I3FrameObject> >("I3Bootcamp")
@@ -331,14 +335,14 @@ private/pybindings/module.cxx::
             .def_readwrite("number2",&I3Bootcamp::number2)
         ;
     }
-    
+
     // an icetray macro around the boost::python messiness
     I3_PYTHON_MODULE(advanced_bootcamp)
     {
         // load the c++ library
         // second argument is false to be quiet
         load_project("advanced_bootcamp", false);
-        
+
         register_I3Bootcamp();
     }
 
@@ -348,7 +352,7 @@ python/__init__.py::
 
     # load the c++ pybindings
     from icecube._import advanced_bootcamp
-    
+
 CMakeLists.txt
 ^^^^^^^^^^^^^^
 
@@ -361,12 +365,12 @@ CMakeLists.txt
             private/advanced_bootcamp/I3BootcampModule.cxx
 
             USE_TOOLS boost python
-            USE_PROJECTS icetray dataclasses 
+            USE_PROJECTS icetray dataclasses
     )
-    
+
     i3_add_pybindings(advanced_bootcamp
             private/pybindings/module.cxx
-            
+
             USE_TOOLS boost python
             USE_PROJECTS icetray dataclasses
     )
@@ -384,16 +388,16 @@ Let's use this module to do something::
     tray = I3Tray()
     tray.AddModule('I3InfiniteSource', Stream=icetray.I3Frame.Physics)
     tray.AddModule('I3BootcampModule')
-    
+
     def foo(frame):
         bootcamp = frame['BootcampStuff']
         print(bootcamp)
     tray.Add(foo)
-    
+
     tray.AddModule('Dump')
 
     tray.AddModule('I3Writer', filename='foo.i3')
 
     tray.Execute()
 
-    
+

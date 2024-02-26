@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef SOCKET_SOURCE_HPP
 #define SOCKET_SOURCE_HPP
 
@@ -44,7 +48,7 @@ create_socket_source(const std::string filename){
   }
   if (res != NULL)
     freeaddrinfo(res);
-  
+
   if (s < 0)
     log_fatal("Could not connect to %s:%s: %s",
 	      host.c_str(),

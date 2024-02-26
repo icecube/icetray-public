@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # This one *passes* though it looks like it shouldn't: You are allowed
 #  to push to the generic 'outbox' (e.g. all outboxes) even if you
 #  haven't added one.  What is an error is if there is a module after

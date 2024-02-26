@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef ICETRAY_PYTHON_ICETRAY_STREAM_OVERLOADS_HPP_INCLUDED
 #define ICETRAY_PYTHON_ICETRAY_STREAM_OVERLOADS_HPP_INCLUDED
 

@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 __all__ = ["I3Tray", "I3Units", "OMKey", "NaN", "Inf"]
 
 import warnings

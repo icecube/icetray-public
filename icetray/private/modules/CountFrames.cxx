@@ -1,9 +1,9 @@
 /**
  *  $Id$
- *  
+ *
  *  Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *  Copyright (C) 2007   the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -12,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -24,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #include <icetray/I3ConditionalModule.h>
 #include <icetray/I3Frame.h>
@@ -44,13 +44,13 @@ class CountFrames : public I3ConditionalModule
   CountFrames(const I3Context& context);
 
   virtual ~CountFrames();
-  
+
   void Configure();
 
   void Process();
 
   void Finish();
-  
+
  private:
 
   std::map<I3Frame::Stream, unsigned> required_framecounts_;
@@ -65,7 +65,7 @@ using namespace std;
 
 I3_MODULE(CountFrames);
 
-CountFrames::CountFrames(const I3Context& context) : 
+CountFrames::CountFrames(const I3Context& context) :
   I3ConditionalModule(context)
 {
   insert(required_framecounts_)
@@ -74,7 +74,7 @@ CountFrames::CountFrames(const I3Context& context) :
     (I3Frame::Geometry, 0)
     (I3Frame::DetectorStatus, 0)
     (I3Frame::Calibration, 0);
-    
+
   // initialize the actual framecounts
   actual_framecounts_ = required_framecounts_;
 
@@ -93,7 +93,7 @@ CountFrames::~CountFrames()
 {
 }
 
-void 
+void
 CountFrames::Configure()
 {
   for (map<I3Frame::Stream, unsigned>::iterator iter = required_framecounts_.begin();
@@ -123,7 +123,7 @@ void CountFrames::Finish()
     {
       if (actual_framecounts_[iter->first] != iter->second)
 	log_fatal("On Stream %s, %u frames were required but %u were seen",
-		  iter->first.str().c_str(), 
+		  iter->first.str().c_str(),
 		  iter->second,
 		  actual_framecounts_[iter->first]);
       log_trace("Confirmed %u frames seen on stream %s",

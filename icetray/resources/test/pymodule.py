@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
 #
-# Sample i3module in python 
+# SPDX-License-Identifier: BSD-2-Clause
+
+#
+# Sample i3module in python
 #
 
 from icecube.icetray import I3Int, I3Module
@@ -20,11 +25,11 @@ class Mod(I3Module):
         self.AddParameter("SumShouldBe",
                           "at the end",
                           5)
-        
+
     def Configure(self):
         self.startfrom = self.GetParameter("Startfrom")
         self.sumshouldbe = self.GetParameter("SumShouldBe")
-        
+
     def Physics(self, frame):
         i = I3Int(self.startfrom)
         frame.Put("it", i)
@@ -35,7 +40,7 @@ class Mod(I3Module):
         assert self.startfrom == self.sumshouldbe
 
 
-tray.AddModule(Mod, 
+tray.AddModule(Mod,
                Startfrom = 0,
                SumShouldBe = 6)
 

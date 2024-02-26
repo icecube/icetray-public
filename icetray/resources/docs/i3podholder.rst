@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 I3PODHolder
 ===========
 
@@ -21,11 +25,11 @@ convert to the type.
     Be careful comparing I3Double with double in python, as certain values
     will not compare equal because of the way floating point numbers are
     represented.
-    
+
     For example::
-    
+
         In [1]: dataclasses.I3Double(12.1) == 12.1
         Out[1]: False
-    
+
     For more on floating point representation, see
     `Floating Point Arithmetic: Issues and Limitations <https://docs.python.org/2/tutorial/floatingpoint.html>`_.

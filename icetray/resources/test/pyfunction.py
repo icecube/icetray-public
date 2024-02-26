@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
 #
-# Sample i3module in python 
+# SPDX-License-Identifier: BSD-2-Clause
+
+#
+# Sample i3module in python
 #
 
 from icecube.icetray import I3Frame

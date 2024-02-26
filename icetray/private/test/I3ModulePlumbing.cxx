@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 
 #include <icetray/I3Module.h>
@@ -10,7 +14,7 @@ public:
     AddParameter("ExtraOutBoxes","names of OutBoxes to add when configuring",
                  std::vector<std::string>());
   }
-  
+
   ConnectionTestModule(const I3Context& ctx,
                        std::vector<std::string> outboxNames):
   I3Module(ctx){
@@ -20,7 +24,7 @@ public:
     AddParameter("ExtraOutBoxes","names of OutBoxes to add when configuring",
                  std::vector<std::string>());
   }
-  
+
   virtual void Configure(){
     std::vector<std::string> outboxNames;
     GetParameter("ExtraOutBoxes",outboxNames);
@@ -38,7 +42,7 @@ TEST(HasOutBox){
   expectedOutBoxes.push_back("Box2");
   expectedOutBoxes.push_back("Box3");
   ConnectionTestModule ctm(ctx,expectedOutBoxes);
-  
+
   for(std::vector<std::string>::const_iterator nameIt=expectedOutBoxes.begin();
       nameIt!=expectedOutBoxes.end(); nameIt++)
     ENSURE(ctm.HasOutBox(*nameIt));
@@ -52,7 +56,7 @@ TEST(ConnectOutBox){
   initialOutBoxes.push_back("Box1");
   dynamicOutBoxes.push_back("Box2");
   ConnectionTestModule ctm(ctx,initialOutBoxes);
-  
+
   boost::shared_ptr<I3Module> dummy1(new I3Module(ctx));
   boost::shared_ptr<I3Module> dummy2(new I3Module(ctx));
   //connect an outbox which definietly exists
@@ -70,22 +74,22 @@ TEST(OutBoxesConnected){
   expectedOutBoxes.push_back("Box2");
   expectedOutBoxes.push_back("Box3");
   ConnectionTestModule ctm(ctx,expectedOutBoxes);
-  
+
   //we haven't connected anything yet. . .
   ENSURE(!ctm.AllOutBoxesConnected());
-  
+
   boost::shared_ptr<I3Module> dummy1(new I3Module(ctx));
   boost::shared_ptr<I3Module> dummy2(new I3Module(ctx));
   boost::shared_ptr<I3Module> dummy3(new I3Module(ctx));
-  
+
   ctm.ConnectOutBox("Box1",dummy1);
   //still two boxes not connected
   ENSURE(!ctm.AllOutBoxesConnected());
-  
+
   ctm.ConnectOutBox("Box2",dummy2);
   //still one box not connected
   ENSURE(!ctm.AllOutBoxesConnected());
-  
+
   ctm.ConnectOutBox("Box3",dummy3);
   //now they're all connected
   ENSURE(ctm.AllOutBoxesConnected());
@@ -95,7 +99,7 @@ TEST(HasInBox){
   I3Context ctx;
   boost::shared_ptr<ConnectionTestModule> m1(new ConnectionTestModule(ctx,std::vector<std::string>(1,"OutBox")));
   boost::shared_ptr<I3Module> m2(new I3Module(ctx));
-  
+
   ENSURE(!m1->HasInBox());
   ENSURE(!m2->HasInBox());
   m1->ConnectOutBox("OutBox",m2);

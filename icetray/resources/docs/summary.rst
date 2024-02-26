@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 A History Lesson
 ================
 
@@ -13,12 +17,12 @@ python code::
     load('libicetray')
     load('libdataclasses')
     load('libdataio')
-    
+
     tray = I3Tray()
     tray.AddModule('I3Reader','reader')(('Filenamelist',sys.argv[1:]))
     tray.AddModule('Dump','dumper')
     tray.Execute()
-    
+
 
 Pre-2012
 --------
@@ -27,17 +31,17 @@ Python bindings for every project.  Parameters as python arguments
 (keyword or positional).
 
 python code::
-    
+
     import sys
     from icecube.icetray import I3Tray
     from icecube import icetray,dataclasses,dataio,phys_service
-    
+
     tray = I3Tray()
     tray.AddService('I3GSLRandomServiceFactory,'gsl',Seed=42)
     tray.AddModule('I3Reader','reader',Filenamelist=sys.argv[1:])
     tray.AddModule('Dump','dumper')
     tray.Execute()
-    
+
 
 2013
 ----
@@ -46,17 +50,17 @@ Module names unnecessary. TrashCan module is added automatically.
 Tray.Add figures out if it's a module or a service.
 
 python code::
-    
+
     import sys
     from icecube.icetray import I3Tray
     from icecube import icetray,dataclasses,dataio,phys_services
-    
+
     tray = I3Tray()
     tray.Add('I3GSLRandomServiceFactory, Seed=42)
     tray.Add('I3Reader', Filenamelist=sys.argv[1:])
     tray.Add('Dump')
     tray.Execute()
-    
+
 
 2014
 ----
@@ -64,17 +68,17 @@ python code::
 No need to call Finish after executing.  This is done automatically.
 
 python code::
-    
+
     import sys
     from icecube.icetray import I3Tray
     from icecube import icetray,dataclasses,dataio,phys_services
-    
+
     tray = I3Tray()
     tray.Add('I3GSLRandomServiceFactory, Seed=42)
     tray.Add('I3Reader', Filenamelist=sys.argv[1:])
     tray.Add('Dump')
     tray.Execute()
-   
+
 
 IceTray Summary
 =================
@@ -85,7 +89,7 @@ tray.Execute
 tray.Execute takes an optional argument for the number of frames to process::
 
     tray.Execute(10)
-    
+
 Module Inboxes and Outboxes
 ---------------------------
 
@@ -128,7 +132,7 @@ python module::
     def cut(frame):
         return 'I3DAQData' in frame
     tray.Add(cut)
-    
+
 Python Modules
 --------------
 
@@ -136,7 +140,7 @@ Python modules run only on physics frames.  Their return value is cast
 to a bool, and used to decide whether to pass the current frame to the
 next module.  False will drop the frame, while True will push the frame
 to the next module.
-    
+
 Anonymous Modules
 -----------------
 
@@ -158,10 +162,10 @@ Tray Segments
 Segments can contain multiple I3Modules to help bundle code together.
 
 Let's use a segment::
-    
+
     from icecube import payload_parsing
     tray.Add(payload_parsing.I3DOMLaunchExtractor)
-    
+
 Writing a segment::
 
     from iceucbe import icetray
@@ -169,14 +173,14 @@ Writing a segment::
     def MySegment(tray, name, arg1, If = lambda f:True, **kwargs):
         # we can use arg1 or the dict of kwargs
         tray.Add("Dump",If=If)
-        
+
 IceTray Inspect Segments
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 IceTray Inspect can see segments too::
 
     icetray-inspect --expand-segments
-    
+
         Equivalent to:
             AddService()
             AddModule()

@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #include <icetray/I3Logging.h>
 #include <icetray/I3Configuration.h>
@@ -60,10 +59,10 @@ I3Configuration &
 I3Configuration::operator = (const I3Configuration &old)
 { impl_.reset(new I3ConfigurationImpl(*old.impl_)); return *this; }
 
-I3Configuration::~I3Configuration() 
+I3Configuration::~I3Configuration()
 { }
 
-bool 
+bool
 I3Configuration::Has(const string &name) const
 {
   return impl_->Has(name);
@@ -75,16 +74,16 @@ I3Configuration::Set(const string& name_, const boost::python::object& value)
   return impl_->Set(name_, value);
 }
 
-void 
-I3Configuration::Add(const string& name_, 
-		     const std::string& description, 
+void
+I3Configuration::Add(const string& name_,
+		     const std::string& description,
 		     const boost::python::object& default_value)
 {
   return impl_->Add(name_, description, default_value);
 }
 
-void 
-I3Configuration::Add(const string& name_, 
+void
+I3Configuration::Add(const string& name_,
 		     const std::string& description)
 {
   return impl_->Add(name_, description);
@@ -103,7 +102,7 @@ I3Configuration::GetDescription(const string& name_) const
 }
 
 template <typename Archive>
-void 
+void
 I3Configuration::serialize(Archive& ar, unsigned version)
 {
   ar & make_nvp("impl", impl_);
@@ -131,18 +130,18 @@ I3Configuration::is_ok() const
   return impl_->is_ok();
 }
 
-std::string 
-I3Configuration::ClassName() const 
-{  
+std::string
+I3Configuration::ClassName() const
+{
   return impl_->ClassName();
 }
 
-void 
-I3Configuration::ClassName(const std::string& s) 
-{ 
+void
+I3Configuration::ClassName(const std::string& s)
+{
   log_trace("ClassName: %s", s.c_str());
   i3_assert(!s.empty());
-  impl_->ClassName(s); 
+  impl_->ClassName(s);
 }
 
 std::string I3Configuration::InstanceName() const

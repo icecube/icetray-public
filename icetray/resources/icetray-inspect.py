@@ -2,9 +2,9 @@
 #
 #  $Id: icetray-inspect.py 2188 2015-07-30 04:09:28Z nega $
 #
-#  Copyright (C) 2011
-#  Jakob van Santen <vansanten@wisc.edu>
-#  and the IceCube Collaboration <http://www.icecube.wisc.edu>
+#  Copyright (C) 2011 Jakob van Santen <vansanten@wisc.edu>
+#  Copyright (C) 2011 the IceCube Collaboration <http://www.icecube.wisc.edu>
+#  SPDX-License-Identifier: BSD-2-Clause
 #
 
 # FIXME: the following projects are "bad" because they call

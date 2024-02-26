@@ -1,4 +1,8 @@
-.. index:: 
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
+.. index::
    pair: I3Frame; C++ Class
 .. _I3Frame:
 
@@ -18,20 +22,20 @@ In C++
 I3Frame Reference
 ^^^^^^^^^^^^^^^^^
 
-The I3Frame is a flexible container that carries data from I3Module 
-to I3Module as an icetray run proceeds. I3Modules receive a shared 
-pointer to an I3Frame when the framework calls their "stop" methods 
+The I3Frame is a flexible container that carries data from I3Module
+to I3Module as an icetray run proceeds. I3Modules receive a shared
+pointer to an I3Frame when the framework calls their "stop" methods
 (Physics, DetectorStatus, Calibration, Geometry, etc.).
 
-The I3Frame enforces a "write once, read many" policy: after an item 
-has been placed in the frame, clients can examine that item, but not 
-modify it. This is intended to catch the subtle and frustrating bugs 
-that come up when foreign code modifies your data (intentionally or 
+The I3Frame enforces a "write once, read many" policy: after an item
+has been placed in the frame, clients can examine that item, but not
+modify it. This is intended to catch the subtle and frustrating bugs
+that come up when foreign code modifies your data (intentionally or
 unintentionally) without telling you about it.
 
-Internally, the I3Frame is implemented as a map<> of string to 
+Internally, the I3Frame is implemented as a map<> of string to
 shared_ptr<I3FrameObject>. That is, only smart pointers to things that
-inherit from I3FrameObject are storable in the frame. Any container such 
+inherit from I3FrameObject are storable in the frame. Any container such
 as I3Frame must require its contents to all have some common ancestor.
 
 .. _i3frame_print:
@@ -49,7 +53,7 @@ show you the names and types of its contents (this is what the
     'I3EventHeader' [Physics] ==> I3EventHeader (91)
     'Geometry' [Geometry] ==> I3Geometry (21042)
   ]
-  
+
 which follows the general scheme::
 
   [ I3Frame  (which_stream):
@@ -70,24 +74,24 @@ object has not yet been serialized, so its size is not yet known.
 So above we can see that at 'LineFit' there is a pointer to an
 I3Particle, and at 'Geometry' there is a pointer to an I3Geometry.
 
-To put things into a frame, you call the frame's Put method. Here's 
+To put things into a frame, you call the frame's Put method. Here's
 a skeleton of the Physics() method of some module::
 
- void 
+ void
  MyModule::Physics(I3FramePtr frame)
- { 
-   I3ParticlePtr my_particle(new I3Particle);  // make a new particle 
- 
-   // in here do something physics-y with the particle. 
- 
+ {
+   I3ParticlePtr my_particle(new I3Particle);  // make a new particle
+
+   // in here do something physics-y with the particle.
+
    frame.Put("myparticle", my_particle);       // put it in the frame
- 
+
    PushFrame(frame);                           // send the frame downstream
  }
 
-That's really all there is to it. You call Put with a shared 
-pointer to some thing, and a name specifying what slot this 
-thing goes in. After this call, the frame from above would 
+That's really all there is to it. You call Put with a shared
+pointer to some thing, and a name specifying what slot this
+thing goes in. After this call, the frame from above would
 contain the new particle::
 
  [ I3Frame :
@@ -101,21 +105,21 @@ contain the new particle::
    'simpleseed' ==> I3Particle
  ]
 
-Getting that particle back out, say in the Physics() method of 
+Getting that particle back out, say in the Physics() method of
 a module later in the processing chain, looks like this::
 
- void 
+ void
  OtherModule::Physics(I3FramePtr frame)
- { 
+ {
    // get a const shared_ptr
-   I3ParticleConstPtr the_particleptr = 
+   I3ParticleConstPtr the_particleptr =
       frame.Get<I3ParticleConstPtr>("myparticle");
-   
+
    PushFrame(frame); // send the frame downstream
  }
 
 Here we've got a const shared pointer to the I3Particle. This is ideal: you
-can check that you got what you asked for (check for non-null pointer) and 
+can check that you got what you asked for (check for non-null pointer) and
 the_particleptr is const, so the compiler can ensure we don't
 accidentally modify it.
 
@@ -169,7 +173,7 @@ Notice that this function works only for shared_ptr<T> where T is or
 inherits from I3FrameObject. One cannot, for instance, place a string
 directly into the frame::
 
- std::string datum = generate_datum();                   
+ std::string datum = generate_datum();
  frame.Put(datum, "datum_key");    // error, datum not a shared_ptr
 
 the error is returned::
@@ -204,7 +208,7 @@ fix::
  {
    string value;
  };
- 
+
  I3_POINTER_TYPEDEFS(MyStuff);
 
  MyStuffPtr mystuff_p(new MyStuff);             // create a MyStuff
@@ -221,7 +225,7 @@ string& name, shared_ptr<I3FrameObject> element)``; and the other
 omits the name parameter::
 
  template <typename T>
- void 
+ void
  Put(shared_ptr<T> element);
 
 If the object has a default name (though putting default-named objects
@@ -274,7 +278,7 @@ collaborators agree almost unanimously that to allow this is a Bad
 Idea. The code above is easy enough to fix, though::
 
  I3ParticleConstPtr particle = frame.Get<I3ParticleConstPtr>("linefit_result");
-           
+
 
 This works fine. Note that I3ParticleConstPtr is a typedef of
 shared_ptr<const I3Particle>. See :ref:`I3_POINTER_TYPEDEFS`.
@@ -289,7 +293,7 @@ are somehow missing.
 ::
 
  template <typename T>
- const T& 
+ const T&
  I3Frame::Get(const std::string& key);
 
 This version returns a const reference to the item at location key in
@@ -326,9 +330,9 @@ Examples
 
 Some more examples. Get a shared_ptr to the geometry::
 
- void 
+ void
  I3LineFit::Physics(I3FramePtr frame)
- { 
+ {
    I3GeometryConstPtr geo_p = frame->Get<I3GeometryConstPtr>();
    ...
 
@@ -341,24 +345,24 @@ Derived as either::
 
  class Base : public I3FrameObject { ... };
  class Derived : public Base { ... };
- 
+
  DerivedPtr derived(new Derived);
  frame.Put("something_derived", derived);
- 
+
  BasePtr base(new Base);
  frame.Put("something_base", base);
- 
+
  // ok.
- const Derived& d_ref = frame.Get<Derived>("something_derived");  
- 
+ const Derived& d_ref = frame.Get<Derived>("something_derived");
+
  // ok.  Derived inherits from Base.
- const Base& b_ref = frame.Get<Base>("something_derived");       
- 
+ const Base& b_ref = frame.Get<Base>("something_derived");
+
  // throws runtime_error:  this Base won't dynamic_cast to Derived
- const Derived& d_ref2 = frame.Get<Derived>("something_base");   
- 
- // ok.  
- const Base& b_ref = frame.Get<Base>("something_base");       
+ const Derived& d_ref2 = frame.Get<Derived>("something_base");
+
+ // ok.
+ const Base& b_ref = frame.Get<Base>("something_base");
 
 
 I3Frame::Rename(const string& from, const string& to)
@@ -380,7 +384,7 @@ Also works as its name suggests, deletes a I3FrameObject in the frame.
 
 Preconditions: slot "where" in frame contains something.
 
-Postconditions: slot "where" in frame is empty. 
+Postconditions: slot "where" in frame is empty.
 
 Frame names may not contain whitespace
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -391,7 +395,7 @@ available for splicing and filtering data streams use whitespace to
 separate lists of frame names that they should keep or ignore. If you
 attempt such a thing, for instance ::
 
- frame.Put("bogus name",something) 
+ frame.Put("bogus name",something)
 
 you will see something like::
 
@@ -417,7 +421,7 @@ above) with const, like this::
 
 which is equivalent to::
 
- const shared_ptr<I3Particle> particle = 
+ const shared_ptr<I3Particle> particle =
    frame.Get<shared_ptr<I3Particle> >("seed");
 
 as this const I3ParticlePtr is a const pointer to a nonconst particle;
@@ -432,7 +436,7 @@ itself is not. If you look at the code with the typedefs lifted, you
 can see that the const is associated with the particle, not the
 pointer::
 
- shared_ptr<const I3Particle> particle = 
+ shared_ptr<const I3Particle> particle =
    frame.Get<shared_ptr<const I3Particle> >("seed");
 
 If you attempt to Get<> something non-const, you will see an error
@@ -460,7 +464,7 @@ something like::
 
 wherein the last line is the most important::
 
- cannot dynamic_cast, conversion casts away constness. 
+ cannot dynamic_cast, conversion casts away constness.
 
 .. index:: I3_DEFAULT_NAME
 .. _I3_DEFAULT_NAME:
@@ -486,13 +490,13 @@ with the macro I3_DEFAULT_NAME. For example the file I3Geometry.h
 contains::
 
  #include <icetray/I3DefaultName.h>
- #include <icetray/I3FrameObject.h> 
- 
+ #include <icetray/I3FrameObject.h>
+
  struct I3Geometry : public I3FrameObject
  {
    // irrelevant content suppressed
  };
- 
+
  I3_POINTER_TYPEDEFS(I3Geometry);
  I3_DEFAULT_NAME(I3Geometry);
 
@@ -524,36 +528,36 @@ the default name::
 Frame Mixing
 ^^^^^^^^^^^^
 
-I3Frames are intended to be processed in an ordered sequence, with keys 
-contained in frames of each type ('stream') being made available in later 
-frames of other streams. The process by which keys are shared between frames 
-of different streams is known as 'mixing'. This makes it easy for I3Modules to 
-process only the types of frames which matter to them, while allowing modules 
-working primarily with other streams to still conveniently obtain their output. 
-For example, a pulse extraction module may run only on DAQ frames, but a 
-reconstruction module running only on Physics frames will be able to directly 
-access the extracted pulses, as they are 'mixed' from the DAQ frame into the 
-Physics frame. 
+I3Frames are intended to be processed in an ordered sequence, with keys
+contained in frames of each type ('stream') being made available in later
+frames of other streams. The process by which keys are shared between frames
+of different streams is known as 'mixing'. This makes it easy for I3Modules to
+process only the types of frames which matter to them, while allowing modules
+working primarily with other streams to still conveniently obtain their output.
+For example, a pulse extraction module may run only on DAQ frames, but a
+reconstruction module running only on Physics frames will be able to directly
+access the extracted pulses, as they are 'mixed' from the DAQ frame into the
+Physics frame.
 
-While a frame has a stream, so does each key stored in the frame. The 
+While a frame has a stream, so does each key stored in the frame. The
 individual keys' streams simply identify whether that key was directly added to
-the frame using `Put()`, or whether it was mixed from a preceding frame on 
+the frame using `Put()`, or whether it was mixed from a preceding frame on
 another stream, and if so from which stream. Directly added keys - those whose
-streams match that of the containing frame - are termed 'native'. 
+streams match that of the containing frame - are termed 'native'.
 
-Within any sequence of frames being processed, the following conditions should 
+Within any sequence of frames being processed, the following conditions should
 hold:
 
-1. The contents of TrayInfo ('I') and Physics ('P') frames shall not be mixed 
+1. The contents of TrayInfo ('I') and Physics ('P') frames shall not be mixed
    into any succeeding frames. (These frame types are 'immiscible'.)
-2. Every frame shall contain all of the keys from the most closely preceding 
-   frame of every other stream which is not 'immiscible' and for which a 
-   'native' key was not already present in the frame. 
-3. A frame shall contain no non-'native' keys which were not present in the 
-   most closely preceding frame on the stream corresponding to each key. 
+2. Every frame shall contain all of the keys from the most closely preceding
+   frame of every other stream which is not 'immiscible' and for which a
+   'native' key was not already present in the frame.
+3. A frame shall contain no non-'native' keys which were not present in the
+   most closely preceding frame on the stream corresponding to each key.
 
-These rules are intended to be enforced by I3Module and other frame sequence 
-handling abstractions provided by IceTray; they should not need to be 
+These rules are intended to be enforced by I3Module and other frame sequence
+handling abstractions provided by IceTray; they should not need to be
 reimplemented by users.
 
 
@@ -575,13 +579,13 @@ In Python
    .. method:: I3Frame()
       :noindex:
 
-      Create an I3Frame.  By default the stream will be *None*, or ``N``. 
+      Create an I3Frame.  By default the stream will be *None*, or ``N``.
 
    .. method:: I3Frame(stream)
       :noindex:
 
       Create an I3Frame on stream *stream*::
-      
+
         >>> frame = I3Frame(I3Frame.Physics)
 
       *stream* can also be a character, which is used to construct the *Stream* object::
@@ -611,11 +615,11 @@ In Python
 	False
 	>>> 'foo' in frame
 	True
-       
+
    .. method:: Put(where, what)
       :noindex:
    .. method:: __setitem__(where, what)
-      :noindex:      
+      :noindex:
 
         Put object *what* at slot *where* in the frame.  This is
         also used by ``__setitem__``, so bracket-syntax works::
@@ -639,14 +643,14 @@ In Python
 	   [ I3Frame  (Physics):
 	   ]
 	   #  new object ends up on the frame's default stream
-	   >>> frame.Put('foo', icetray.I3Int(3))  
-	   >>> print frame 
+	   >>> frame.Put('foo', icetray.I3Int(3))
+	   >>> print frame
            [ I3Frame  (Physics):
              'foo' [Physics] ==> I3Int
            ]
            # or we can specify the stream
-	   >>> frame.Put('bar', icetray.I3Int(3), icetray.I3Frame.Stream('G'))  
-	   >>> print frame 
+	   >>> frame.Put('bar', icetray.I3Int(3), icetray.I3Frame.Stream('G'))
+	   >>> print frame
            [ I3Frame  (Physics):
              'foo' [Physics] ==> I3Int
              'bar' [Geometry] ==> I3Int
@@ -699,14 +703,14 @@ In Python
         Return a list of the frame's key/value pairs as 2-tuples::
 
            >>> frame.items()
-	   [('blah', <icecube.icetray.I3Int object at 0xb7d58824>), 
+	   [('blah', <icecube.icetray.I3Int object at 0xb7d58824>),
             ('foo', <icecube.icetray.I3Int object at 0xb7d587d4>)]
 
    .. method:: size()
       :noindex:
    .. method:: __len__()
       :noindex:
- 
+
         Return the number of entries in the frame::
 
           >>> frame.size()
@@ -714,7 +718,7 @@ In Python
           >>> len(frame)
           2
 
-        .. note:: Don't confuse this with the version of 'size' that takes a 
+        .. note:: Don't confuse this with the version of 'size' that takes a
 	   	  frame object key name.
 
    .. method:: size(name)
@@ -732,7 +736,7 @@ In Python
 
         Pretty-print the frame to a string and return it::
 
-          >>> print frame 
+          >>> print frame
           [ I3Frame  (Physics):
             'CoincifyCombinedPulses' [Physics] ==> I3Map<OMKey, std::vector<I3RecoPulse, std::allocator<I3RecoPulse> > > (42274)
             'DrivingTime' [Physics] ==> I3Time (38)
@@ -744,10 +748,10 @@ In Python
             'PoleTrackLlhFit2' [Physics] ==> I3Particle (150)
             'TWCleanPulses' [Physics] ==> I3Map<OMKey, std::vector<I3RecoPulse, std::allocator<I3RecoPulse> > > (42562)
            ]
-           
+
         On the first line is shown the stream that this frame is on.  Then for each frame item,
 
-           '*keyname*\ ' [*stream*\ ] ==> *typename* (*bytes*\ ) 
+           '*keyname*\ ' [*stream*\ ] ==> *typename* (*bytes*\ )
 
         is shown, where *keyname* is the name the object is stored
         under, *stream* is which stream it is on, *typename* is what
@@ -755,15 +759,15 @@ In Python
         the serialized object (this might be zero if the object has
         not been loaded or stored, or if *drop_blobs* is on, in which
         case display of the size will be suppressed.
- 	 
+
    .. method:: type_name(name)
       :noindex:
 
       Return the type of the object named *name*::
- 
+
           >>> frame.type_name('PoleIcLinefit')
           'I3Particle'
-        
+
    .. method:: clear()
       :noindex:
 
@@ -811,7 +815,7 @@ In Python
       above, will be tagged with whatever the frame's stream type is.
       Example::
 
-          # Rename() preserves that the object is on the Geometry 
+          # Rename() preserves that the object is on the Geometry
           # stream
 
           >>> print frame
@@ -865,20 +869,20 @@ The struct ``I3Double`` in project ``dataclasses`` is a good example class
 
   struct I3Int : public I3FrameObject     // inherits from I3FrameObject
   {
-    int value;                            // this is the data it carries 
-  
+    int value;                            // this is the data it carries
+
     template <typename Archive>
-    void 
+    void
     serialize(Archive&, unsigned);        // here is the serialization method
   };
-  
+
   I3_POINTER_TYPEDEFS(I3Int);             // this creates typedefs
 
 Here is the implementation::
 
   #include <icetray/serialization.h>
   #include <dataclasses/I3Double.h>
-  
+
   template <class Archive>
   void
   I3Double::serialize(Archive& ar,unsigned)
@@ -886,12 +890,12 @@ Here is the implementation::
     ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
     ar & make_nvp("value",value);
   }
-  
+
   I3_SERIALIZABLE(I3Double);
 
 See the documentation on :ref:`I3_SERIALIZABLE`,
 :ref:`I3_POINTER_TYPEDEFS`, and the documentation for
-boost::serialization for more details.  
+boost::serialization for more details.
 
 
 

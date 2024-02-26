@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import unittest
 from icecube import icetray
 from icecube.icetray import I3Tray
@@ -8,7 +12,7 @@ class test_I3FrameObject_delete_rename(unittest.TestCase):
 
     def setUp(self):
         self.tray = I3Tray()
-    
+
         def add_frame_object(frame):
             # any frame object will do
             frame["FrameObject"] = icetray.OMKey(21,30)
@@ -39,7 +43,7 @@ class test_I3FrameObject_delete_rename(unittest.TestCase):
             pass
 
 unittest.main()
-            
-        
 
-        
+
+
+

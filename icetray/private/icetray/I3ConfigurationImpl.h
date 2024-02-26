@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #ifndef ICETRAY_I3CONFIGURATIONIMPL_H_INCLUDED
 #define ICETRAY_I3CONFIGURATIONIMPL_H_INCLUDED
@@ -64,11 +63,11 @@ public:
 
   bool Has(const std::string& name) const;
 
-  void 
-  Add(const std::string& name, const std::string& description, 
+  void
+  Add(const std::string& name, const std::string& description,
       const boost::python::object& default_value);
 
-  void 
+  void
   Add(const std::string& name, const std::string& description);
 
   boost::python::object
@@ -77,19 +76,19 @@ public:
   I3Parameter
   GetParameter(const std::string& name) const;
 
-  std::string ClassName() const 
-  { 
+  std::string ClassName() const
+  {
     if (classname == "")
       log_fatal("classname is empty?");
-    return classname; 
+    return classname;
   }
 
-  void ClassName(const std::string& s) 
-  { 
+  void ClassName(const std::string& s)
+  {
     log_trace("classname: <<<%s>>>", s.c_str());
     if (s.empty())
       log_fatal("classname is empty?");
-    classname = s; 
+    classname = s;
   }
 
   std::string InstanceName() const { return instancename; }
@@ -119,7 +118,7 @@ private:
   template <typename Archive> void serialize(Archive&, unsigned);
 
   // case-insensitive string compare
-  struct case_insensitive_lt 
+  struct case_insensitive_lt
   {
     static int lowercase(int c) { return std::tolower(c); }
     bool operator()(const std::string& lhs, const std::string& rhs) const
@@ -141,7 +140,7 @@ public:
 	boost::multi_index::const_mem_fun<I3Parameter, const std::string&, &I3Parameter::name>,
 	case_insensitive_lt
 	>
-      > 
+      >
     > parameters_t;
 
 private:

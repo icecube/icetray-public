@@ -5,9 +5,10 @@
 //  - __str__ representations
 //  - icecube::serialization-backed pickling
 //  - disabling __setattr__ to avoid API confusion
-//  
-//  (C) 2012 Jakob van Santen <vansanten@wisc.edu>
-//           and the IceCube Collaboration
+//
+//  Copyright (C) 2012 Jakob van Santen <vansanten@wisc.edu>
+//  Copyright (C) 2012 the IceCube Collaboration
+//  SPDX-License-Identifier: BSD-2-Clause
 
 #ifndef ICETRAY_DATACLASS_SUITE_HPP_INCLUDED
 #define ICETRAY_DATACLASS_SUITE_HPP_INCLUDED
@@ -66,7 +67,7 @@ from_frame(const I3Frame &frame, const std::string &name)
 		PyErr_SetString(PyExc_KeyError, name.c_str());
 		throw_error_already_set();
 	}
-	
+
 	boost::shared_ptr<const T> rpsm =
 	    frame.Get<boost::shared_ptr<const T> >(name);
 	if (!rpsm) {
@@ -97,11 +98,11 @@ set_default_name(arg &&arg) { return std::move(arg); }
 
 }
 
-	
+
 template <class T>
 class dataclass_suite : public bp::def_visitor<dataclass_suite<T > > {
 private:
-	
+
 	static
 	bp::str
 	list_repr(T &seq)
@@ -109,7 +110,7 @@ private:
 		bp::list l(seq);
 		return bp::extract<bp::str>(l.attr("__repr__")());
 	}
-	
+
 	template <class Class, typename U>
 	static
 	typename boost::enable_if_c<detail::is_map<U>::value>::type
@@ -117,7 +118,7 @@ private:
 	{
 		cl.def(std_map_indexing_suite<U>());
 	}
-	
+
 	template <class Class, typename U>
 	static
 	typename boost::enable_if_c<detail::is_iterable<U>::value>::type
@@ -128,7 +129,7 @@ private:
 		using namespace scitbx::boost_python::container_conversions;
 		from_python_sequence<U, variable_capacity_policy>();
 	}
-	
+
 	template <class Class, typename U>
 	static
 	typename boost::enable_if_c<detail::is_tree<U>::value>::type
@@ -136,7 +137,7 @@ private:
 	{
 		cl.def(tree_indexing_suite<U>());
 	}
-	
+
 	template <class Class, typename U>
 	static
 	typename boost::disable_if<boost::mpl::or_<
@@ -157,7 +158,7 @@ private:
 	static
 	typename boost::disable_if_c<std::is_base_of<I3FrameObject, U>::value>::type
 	add_from_frame(Class &cl) {}
-	
+
 	template <class Class, typename U>
 	static
 	typename boost::enable_if_c<has_operator::insertion<std::ostream, U>::value>::type
@@ -170,7 +171,7 @@ private:
 	static
 	typename boost::disable_if_c<has_operator::insertion<std::ostream, U>::value>::type
 	add_string_to_stream(Class &cl) {}
-	
+
 public:
 	template <class Class>
 	static void
@@ -188,7 +189,7 @@ public:
 		cl.def(operator_suite<T>());
 		cl.def(freeze());
 	}
-	
+
 };
 
 }}

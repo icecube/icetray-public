@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 
 #include "TestClientModule.h"
@@ -15,12 +19,12 @@ TEST(correctConfiguration_1)
 {
   // just testing that this doesn't give an error
   I3Tray tray;
-    
+
   tray.AddModule("BottomlessSource", "source");
   tray.AddModule("Client","client");
-    
+
   tray.ConnectBoxes("source","OutBox","client");
-    
+
   tray.Execute(10);
 }
 
@@ -28,12 +32,12 @@ TEST(correctConfiguration_1)
 TEST(correctConfiguration_2)
 {
   I3Tray tray;
-    
+
   tray.AddModule("Client", "client");
   tray.AddModule("BottomlessSource", "source");
-    
+
   tray.ConnectBoxes("source","OutBox","client");
-    
+
   tray.Execute(10);
 }
 

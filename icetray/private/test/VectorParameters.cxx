@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @version $Revision$
@@ -32,10 +32,10 @@ static std::vector<OMKey> omkeyvec_param;
 
 struct VectorParamsTestModule : I3Module
 {
-  VectorParamsTestModule(const I3Context& context) : I3Module(context) 
-  { 
+  VectorParamsTestModule(const I3Context& context) : I3Module(context)
+  {
     intvec_param.clear();
-    intvec_param += 0,1,2,3,4,5,6,7,8,9; 
+    intvec_param += 0,1,2,3,4,5,6,7,8,9;
     AddParameter("intvec_param", "vector of ints", intvec_param);
 
     ulongvec_param.clear();
@@ -55,8 +55,8 @@ struct VectorParamsTestModule : I3Module
     AddParameter("omkeyvec_param", "a vector of omkeys.  So there.", omkeyvec_param);
   }
 
-  virtual void Configure() 
-  { 
+  virtual void Configure()
+  {
     GetParameter("intvec_param", intvec_param);
     GetParameter("doublevec_param", doublevec_param);
     GetParameter("ULongVec_Param", ulongvec_param);
@@ -64,8 +64,8 @@ struct VectorParamsTestModule : I3Module
     GetParameter("omkeyvec_param", omkeyvec_param);
   }
 
-  virtual void Process() 
-  { 
+  virtual void Process()
+  {
     log_trace("%s",__PRETTY_FUNCTION__);
     I3FramePtr frame(new I3Frame(I3Frame::Physics));
     PushFrame(frame);
@@ -94,11 +94,11 @@ TEST(leading_trailing_and_embedded_whitespace)
 {
   std::vector<std::string> stringv;
   stringvec_param.clear();
-  stringv += " leadingspace", 
-    "trailingspace ", 
-    "embedded space", 
-    "\t", 
-    "\n", 
+  stringv += " leadingspace",
+    "trailingspace ",
+    "embedded space",
+    "\t",
+    "\n",
     " \t\n",
     ".. \t\n .. \r\n\t ..";
 

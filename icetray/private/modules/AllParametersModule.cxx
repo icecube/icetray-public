@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @version $Revision$
@@ -36,8 +36,8 @@ static boost::shared_ptr<MyService> service_ptr_param;
 
 struct AllParametersModule : I3Module
 {
-  AllParametersModule(const I3Context& context) : I3Module(context) 
-  { 
+  AllParametersModule(const I3Context& context) : I3Module(context)
+  {
     bool_param = true;
     AddParameter("bool_param", "description of bool", bool_param);
 
@@ -56,9 +56,9 @@ struct AllParametersModule : I3Module
 
     string_param = "We can't stop here.  This is Bat Country!";
     AddParameter("string_param", "description of string", string_param);
-    
+
     intvec_param.clear();
-    intvec_param += 0,1,2,3,4,5,6,7,8,9; 
+    intvec_param += 0,1,2,3,4,5,6,7,8,9;
     AddParameter("intvec_param", "vector of ints", intvec_param);
 
     doublevec_param.clear();
@@ -80,8 +80,8 @@ struct AllParametersModule : I3Module
     AddParameter("service_ptr_param", "pointer to service.",service_ptr_param);
   }
 
-  virtual void Configure() 
-  { 
+  virtual void Configure()
+  {
     GetParameter("bool_param", bool_param);
     GetParameter("uchar_param", uchar_param);
     GetParameter("int_param", int_param);

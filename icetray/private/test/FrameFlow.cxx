@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #include <I3Test.h>
 
@@ -46,12 +45,12 @@ struct FFSource : public I3Module
 {
   unsigned nextstop;
 
-  FFSource(const I3Context& context) : I3Module(context) 
-  { 
+  FFSource(const I3Context& context) : I3Module(context)
+  {
     nextstop = 1;
   }
 
-  void Process() 
+  void Process()
   {
     I3Frame::Stream stop;
     switch(nextstop)
@@ -82,7 +81,7 @@ struct Nothing : public I3Module
 {
   Nothing(const I3Context& context) : I3Module(context)
   {}
-  
+
   void Physics(I3FramePtr frame)
   {
     PushFrame(frame);
@@ -96,9 +95,9 @@ std::map<std::string, std::map<I3Frame::Stream, unsigned> > counts;
 
 struct FFCounter : public I3Module
 {
-  FFCounter(const I3Context& context) : I3Module(context)  
+  FFCounter(const I3Context& context) : I3Module(context)
  {}
-  
+
 #define IMPLEMENT(STOP)							\
   void STOP(I3FramePtr frame) {						\
     ENSURE_EQUAL(frame->GetStop(), I3Frame::STOP);			\
@@ -109,7 +108,7 @@ struct FFCounter : public I3Module
   IMPLEMENT(Calibration)
   IMPLEMENT(DetectorStatus)
   IMPLEMENT(Physics)
-  
+
 #undef IMPLEMENT
 };
 
@@ -122,7 +121,7 @@ TEST(straight_line)
   tray.AddModule("FFSource", "source");
   tray.AddModule("Nothing", "nothing");
   tray.AddModule("FFCounter", "counter");
-  
+
   tray.Execute(12);
 
   ENSURE_EQUAL(counts["counter"][I3Frame::Geometry], 3u);
@@ -135,11 +134,11 @@ TEST(forked)
 {
   I3Tray tray;
   counts.clear();
-  
+
   tray.AddModule("FFSource", "source");
   tray.AddModule("Nothing", "nothing");
-  
-  std::vector<std::string> params = 
+
+  std::vector<std::string> params =
     list_of("left")("middle")("right");
   tray.AddModule("Fork", "fork")
     ("Outboxes", params);
@@ -147,9 +146,9 @@ TEST(forked)
   tray.AddModule("FFCounter", "counterleft");
   tray.AddModule("FFCounter", "counterright");
   tray.AddModule("FFCounter", "countermiddle");
-  
-  
-  
+
+
+
 
   tray.ConnectBoxes("source", "OutBox", "nothing");
   tray.ConnectBoxes("nothing", "OutBox", "fork");

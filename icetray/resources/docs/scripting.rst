@@ -1,22 +1,26 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 Python scripting in IceTray
 ============================
 
-Generally IceTray is controlled via a python script which sets up the needed 
+Generally IceTray is controlled via a python script which sets up the needed
 modules and services, executes the Tray and cleans things up.  The
 best illustration of this is a simple example::
 
  #!/usr/bin/env python3
  #
  # Pass 2:
- 
+
  import os
  import sys
  from os.path import expandvars
- from icecube.icetray import I3Tray 
+ from icecube.icetray import I3Tray
  from icecube import icetray, dataio
-  
+
  tray = I3Tray()
- tray.AddModule("I3Reader","reader", 
+ tray.AddModule("I3Reader","reader",
  		 Filename = "pass1.i3")
  tray.AddModule("Dump","dump")
  tray.Execute()
@@ -54,7 +58,7 @@ syntax will work too::
 
  tray.AddModule("Jeopardy",
    I'll_take="famous_numbers",
-   for=500, 
+   for=500,
    famous_numbers=(0, 1, 3.14159, 1.618034)
    )
 
@@ -111,4 +115,4 @@ in earlier versions they are in module :mod:`scipy`:
   >>> math.isnan(NaN)  # You want this
   True
   >>> math.isinf(Inf)
-  True  
+  True

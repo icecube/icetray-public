@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2004
-    the icecube collaboration
+    Copyright  (C) 2004 the icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     $Id$
 
     @version $Revision$
@@ -34,9 +34,9 @@ TEST(one)
   } catch (...) { }
 }
 
-struct I3GetLoggerTester 
+struct I3GetLoggerTester
 {
-  void say_something() 
+  void say_something()
   {
     log_trace("here's a trace message inside I3GetLoggerTester");
     log_debug("here's a debug message inside I3GetLoggerTester");
@@ -50,7 +50,7 @@ struct I3GetLoggerTester
   SET_LOGGER("I3GetLoggerTester");
 };
 
-// verifies that if the first object to log something is 
+// verifies that if the first object to log something is
 // via SET_LOGGER, the logging system is propery configured.
 TEST(0_SET_LOGGER_logging_first)
 {

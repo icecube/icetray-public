@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 
 #include "icetray/I3Frame.h"
@@ -26,9 +30,9 @@ typedef boost::shared_ptr<const Daughter> DaughterConstPtr;
 TEST(test)
 {
   I3Frame frame(I3Frame::None);
-    
+
   boost::shared_ptr<Grandpa> grandpa_ptr(new Grandpa);
-  boost::shared_ptr<Grandpa> pa_ptr(new Pa);      
+  boost::shared_ptr<Grandpa> pa_ptr(new Pa);
   boost::shared_ptr<Grandpa> son_ptr(new Son);
   boost::shared_ptr<Grandpa> daughter_ptr(new Daughter);
 
@@ -62,7 +66,7 @@ TEST(test)
   }
   ENSURE((bool)frame.Get<SonConstPtr>("son"));
   ENSURE((bool)frame.Get<DaughterConstPtr>("daughter"));
-    
+
   ENSURE((bool)frame.Get<PaConstPtr>("son"));
   frame.Get<Pa>("son");
   frame.Get<Grandpa>("son");
@@ -78,7 +82,7 @@ TEST(test)
   } catch (const std::exception& e) {
     log_debug("yep, threw.");
   }
-    
+
   ENSURE(! frame.Get<DaughterConstPtr>("son"));
   frame.Dump();
 

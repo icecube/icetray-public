@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 I3Modules in Python
 ===================
 
@@ -40,7 +44,7 @@ follows::
    tray = I3Tray()
 
    tray.AddModule('BottomlessSource')
-   
+
    tray.AddModule(PyDump)
 
    tray.Execute(10)
@@ -51,9 +55,9 @@ Parameter handling
 ------------------
 
 Python I3Modules add and get parameters very similar to C++ I3Modules.
-Here is a module that puts :cpp:type:`I3Int` objects into the frames 
+Here is a module that puts :cpp:type:`I3Int` objects into the frames
 that go by, with consecutive increasing values::
- 
+
   from icecube import icetray
 
   class PutInts(icetray.I3Module):
@@ -80,7 +84,7 @@ that go by, with consecutive increasing values::
 
 the values of the parameters specified with :cpp:func:`~I3Module::AddParameter()` and
 :cpp:func:`~I3Module::GetParameter()` are passed to the tray the same as for C++
-modules.   The call to :meth:`~.I3Tray.AddModule` takes the python *class* 
+modules.   The call to :meth:`~.I3Tray.AddModule` takes the python *class*
 object, not an instance of the class.  If we've stored the module
 above in a file :file:`PutInts.py`::
 
@@ -98,7 +102,7 @@ above in a file :file:`PutInts.py`::
    Similar to functions, note that we pass the bare python object to
    the I3Tray, not its name in a string, as with C++ modules.   i.e.
    it isn't this::
-   
+
        tray.AddModule('PutInts', 'pi', ...
 
    it is this::
@@ -141,7 +145,7 @@ you would pass any other parameter.  Here we pass it as a literal::
 		 values = { 'one' : 1,
 			    'two' : 2,
 			    'three' : 777 })
- 
+
 Putting the ``MultiAdder`` module between a
 :cpp:class:`BottomlessSource` and a :cpp:class:`~Dump`, you should see
 frames going by that look like this::
@@ -156,7 +160,7 @@ Parameters can be input/output
 ------------------------------
 
 Python objects like lists have identity.  That is, if I create a dictionary
-that two python identifiers point to, and change the dictionary via one identifier, 
+that two python identifiers point to, and change the dictionary via one identifier,
 the other will see the change:
 
 .. code-block:: pycon
@@ -170,7 +174,7 @@ the other will see the change:
     {'three': 3, 'two': 2, 'one': 1}
     >>> d
     {'three': 3, 'two': 2, 'one': 1}
-  
+
 which makes it easy to extract and collect values from the run of a
 tray, via its parameters (this is considerably cleaner, and even less
 trouble, than doing it via globals).  This module extracts and
@@ -190,7 +194,7 @@ collects the values of passing I3Ints in the frame::
       	  self.dest.append(frame[self.where].value)
 	  self.PushFrame(frame)
 
-when configuring this module, we would pass an empty list, referenced by an 
+when configuring this module, we would pass an empty list, referenced by an
 existing identifier, to the ``dest`` parameter::
 
    dest_list = []

@@ -1,6 +1,6 @@
 #
 # Copyright (C) 2004-9   Troy D. Straszheim
-#
+# SPDX-License-Identifier: BSD-2-Clause
 import inspect
 from icecube import _icetray
 from . import i3logging as logging
@@ -110,7 +110,7 @@ class I3Tray(_icetray._I3TrayBase):
             super().AddModule(_type, _name)
             self.last_added = _name
             for k,v in kwargs.items():
-                super().SetParameter(_name, k, v)                
+                super().SetParameter(_name, k, v)
             # Handle module conditions as a special case
             if If is None and len(self.current_condition_stack) > 0:
                 If = self.current_condition_stack[-1]
@@ -190,7 +190,7 @@ class I3Tray(_icetray._I3TrayBase):
             return _segment(self, _name, **kwargs)
         finally:
             self.current_condition_stack.pop()
-     
+
     def SetParameter(self, module, param, value):
         super().SetParameter(module, param, value)
         return self

@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 Logging
 =======
 
@@ -17,7 +21,7 @@ Call logging functions like you would call ``printf()``:
 ::
 
    #include <icetray/I3Logging.h>
-  
+
     void doSomething() {
       int j=6;
       log_debug("here is a debug message, j is %d", j);
@@ -30,12 +34,12 @@ Will output:
   **DEBUG (MyClass)**:  here is a debug message, j is 6 (**MyClass.h:14** in **void MyClass::doSomething()**)
 
 Each of the ``printf()``-style logging functions has an ``iostreams``-style analogue that can be
-useful for easily formatting non-POD types. For example, both of following logging calls: 
+useful for easily formatting non-POD types. For example, both of following logging calls:
 
 ::
-   
+
    #include <icetray/I3Logging.h>
-  
+
     void doSomething() {
       OMKey key(64, 26);
       std::string name("InIceRawData")
@@ -86,7 +90,7 @@ Function        Example
 ``log_trace``   line by line debugging is possible.
 ==============  =============================================================================
 
-.. warning:: 
+.. warning::
 
   If you compile in ``Release`` mode (see :ref:`CMAKE_BUILD_TYPE
   <CMAKE_BUILD_TYPE>`), log_trace and log_debug are "compiled out"
@@ -98,7 +102,7 @@ How to Add a Custom Logging Channel to your Module
 
 .. index:: SET_LOGGER
 .. _SET_LOGGER:
-  
+
 You can add a logging channel just for your module, using the SET_LOGGER() macro:
 
 I3SimpleModule.h:
@@ -129,7 +133,7 @@ logging for I3SimpleModule separately than the global logging preferences. For e
 can show log messages for I3SimpleModule at a different level (e.g. debug) than the global
 preferences. In addition, "I3SimpleModule" will be printed at the beginning of every log
 output and, for some logging backends, output from I3SimpleModule can be diverted to a
-different destination (e.g. to its own log file). 
+different destination (e.g. to its own log file).
 
 Configuring the logger's output
 -------------------------------
@@ -144,7 +148,7 @@ Setting the default logger
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There are three logging backends provided with Icetray: I3NullLogger, I3PrintfLogger, and
-the Python logging facility. The logger currently in use by Icetray is accessible from 
+the Python logging facility. The logger currently in use by Icetray is accessible from
 Python at ``icetray.I3Logger.global_logger`` and can be changed by assignment to an instance
 of a different logging class. The equivalent C++ routine is the global function
 ``SetIcetrayLogger``. The logger can be changed at any time -- although it is usually

@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 # Big script with lots of branching and buffering
 #
@@ -62,7 +67,7 @@ tray.AddModule("FrameCheck", "a-c4",
     ensure_physics_hasnt =  ["an1", "an3", "an4", "an6"])
 tray.ConnectBoxes("a-b4", "OutBox", "a-c4")
 
-tray.AddModule("CountFrames", "a-cnt1", 
+tray.AddModule("CountFrames", "a-cnt1",
    physics =  nframes)
 tray.ConnectBoxes("a-c4", "OutBox", "a-cnt1")
 

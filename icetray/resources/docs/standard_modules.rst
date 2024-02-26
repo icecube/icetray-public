@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 Standard I3Modules supplied with IceTray
 ========================================
 
@@ -16,9 +20,9 @@ Example
 
 ::
 
-  tray.AddModule("Copy", "copy", 
+  tray.AddModule("Copy", "copy",
                  Keys = ["src1", "dst1", "src2", "dst2"])
-  
+
 
 Delete
 ------
@@ -94,7 +98,7 @@ This is useful if, for instance, a subsequent module iterates through
 all frame objects and checks to see if they are some certain type: if
 *DeleteUnregistered* has been run first, these modules can be
 confident that none of the ``frame->Get<I3FrameObject>()`` operations
-will throw.  
+will throw.
 
 When might that operation throw?  When you're reading data from a file
 with the ``I3Reader``, and that file contains data written by a module
@@ -108,7 +112,7 @@ Here is an example loop::
   void LoopingModule::Physics()
   {
     I3FramePtr frame = PopFrame();
-    
+
     vector<string> keys;
     keys = frame->keys();
 
@@ -116,13 +120,13 @@ Here is an example loop::
     {
        // get the object out:  may trigger deserialization and cause
        // an unregistered_class to be thrown.  If DeleteUnregistered
-       // was run first, you can be sure 
+       // was run first, you can be sure
        I3FrameObjectConstPtr fo_ptr = frame->Get<I3FrameObjectConstPtr>(keys[i]);
        I3IntConstPtr i_ptr = dynamic_pointer_cast<I3Int>(fo_ptr);
        if (i_ptr)
          log_info("Yes, %s is an I3Int", keys[i].c_str());
     }
-    PushFrame(frame, "OutBox"); 
+    PushFrame(frame, "OutBox");
   }
 
 
@@ -170,25 +174,25 @@ Example
 
 
 
-  
-
-
-
-
-
-       
-
-   
-  
-
-
-   
 
 
 
 
 
 
-   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

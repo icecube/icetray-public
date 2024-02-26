@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3SERVICEBASE_H_INCLUDED
 #define I3SERVICEBASE_H_INCLUDED
 
@@ -133,7 +137,7 @@ class I3ServiceBase {
                               name.c_str());
                     throw;
                 }
-           } 
+           }
         }
 
         const I3Configuration& GetConfiguration() const { return *configuration_; }

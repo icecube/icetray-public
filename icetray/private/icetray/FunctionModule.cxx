@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "FunctionModule.h"
 
 FunctionModule::FunctionModule(const I3Context& context):

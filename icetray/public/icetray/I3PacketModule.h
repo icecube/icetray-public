@@ -1,7 +1,7 @@
 /**
- *  Copyright (C) 2011
- *  Nathan Whitehorn   <nwhitehorn@icecube.wisc.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  Copyright (C) 2011 Nathan Whitehorn   <nwhitehorn@icecube.wisc.edu>
+ *  Copyright (C) 2011 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  SPDX-License-Identifier: BSD-2-Clause
  */
 #ifndef ICETRAY_I3PACKETMODULE_H_INCLUDED
 #define ICETRAY_I3PACKETMODULE_H_INCLUDED
@@ -17,7 +17,7 @@
  * subevents (Physics frames) as a single unit.
  *
  * Packet processing will send a packet starting with a frame of type sentinel
- * (or stream start) and ending with either another frame of type sentinel, 
+ * (or stream start) and ending with either another frame of type sentinel,
  * or a frame type not found in the packet_types vector. Receipt of a frame
  * not in packet_types will cause FramePacket() to be called with the current
  * buffer and the frame to be handled by I3Module::Process() (i.e.

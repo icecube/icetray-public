@@ -1,9 +1,8 @@
 /**
  *  $Id$
  *
- *  Copyright (C) 2007
- *  Torsten Schmidt
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  Copyright (C) 2007 Torsten Schmidt
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions

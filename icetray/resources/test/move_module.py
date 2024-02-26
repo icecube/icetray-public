@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 """
 Test reordering of modules within an I3Tray.
 """
@@ -8,11 +13,11 @@ from icecube.icetray import I3Tray
 
 def thing1(frame):
     frame['foo'] = icetray.I3Int(42)
-    
+
 def thing2(frame):
     if 'foo' not in frame:
         raise ValueError("Modules didn't run in the right order!")
-        
+
 def thing3(frame):
     frame['bar'] = icetray.I3Bool()
 
@@ -32,7 +37,7 @@ except Exception:
     pass
 else:
         raise Exception("Module should have raised an error when run out-of-order")
-        
+
 # With reordering, everything is hunky-dory
 run(lambda tray: tray.MoveModule('thing1', 'thing2'))
 

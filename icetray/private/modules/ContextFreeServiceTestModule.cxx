@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @version $Revision$
@@ -24,20 +24,20 @@ static boost::shared_ptr<MyService> service_ptr_param;
 
 struct ContextFreeServiceTestModule : I3Module
 {
-  ContextFreeServiceTestModule(const I3Context& context) : I3Module(context) 
-  { 
+  ContextFreeServiceTestModule(const I3Context& context) : I3Module(context)
+  {
     service_ptr_param = boost::shared_ptr<MyService>();
     AddParameter("service_ptr_param", "pointer to service.",service_ptr_param);
   }
 
-  virtual void Configure() 
-  { 
+  virtual void Configure()
+  {
     GetParameter("service_ptr_param",service_ptr_param);
   }
 
-  virtual void Process() { 
-    I3FramePtr frame = PopFrame(); 
-    PushFrame(frame, "OutBox"); 
+  virtual void Process() {
+    I3FramePtr frame = PopFrame();
+    PushFrame(frame, "OutBox");
 }
 
   virtual void Finish() { ; }

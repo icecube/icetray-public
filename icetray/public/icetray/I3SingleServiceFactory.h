@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3SINGLESERVICEFACTORY_H_INCLUDED
 #define I3SINGLESERVICEFACTORY_H_INCLUDED
 
@@ -7,7 +11,8 @@
  * Version $Id$
  * $Date$
  *
- * (c) IceCube Collaboration 2007
+ * Copyright (c) IceCube Collaboration 2007
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 #include <icetray/I3ServiceFactory.h>
@@ -23,12 +28,12 @@
  * possible to have two different service objects of the same class but
  * with different configurations; just define two separate factories
  * with the different configuration parameters in your python script.
- * 
+ *
  * The service objects are made available using the second argument of
  * the "AddService" call. That is, with the following python lines you'd
  * create two differently configured service objects, which modules can
  * retrieve and use via the names "room101" and "room102", respectively.
- * 
+ *
  * tray.AddService("I3SingleServiceFactory<I3RoomService>","room101")(
  *     ("FridgeContents",["vodka","caviar"]),
  * )

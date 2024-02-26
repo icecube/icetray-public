@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <boost/python.hpp>
 #include <icetray/I3Module.h>
 #include <icetray/I3ConditionalModule.h>
@@ -42,7 +46,7 @@ namespace {
 
 
   template <typename Base>
-  void 
+  void
   wrapmod(const char *name)
   {
     typedef PythonModule<Base> module_t;
@@ -54,7 +58,7 @@ namespace {
   }
 
   template <typename Base>
-  void 
+  void
   wrapderivedmod(const char *name)
   {
     typedef PythonModule<Base> module_t;
@@ -72,7 +76,7 @@ namespace {
   }
 
   template <>
-  void 
+  void
   wrapderivedmod<I3PacketModule>(const char *name)
   {
     typedef PythonModule<I3PacketModule> module_t;

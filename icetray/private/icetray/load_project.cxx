@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 
 #include <dlfcn.h>
@@ -49,7 +48,7 @@ namespace{
    * that's built (on linux) is liblibrary_reader.so.
    */
   std::string construct_libname(const std::string& project_name){
-    const std::string prefix("lib");    
+    const std::string prefix("lib");
 #ifdef __APPLE_CC__
     const std::string suffix(".dylib");
 #else
@@ -57,7 +56,7 @@ namespace{
 #endif
     return prefix + project_name + suffix;
   }
-  
+
   /**
    * The filename is passed directly to dlopen, so can accept
    * libfoo.so and will search in LD_LIBRARY_PATH, or path
@@ -69,16 +68,16 @@ namespace{
   void load_dynamic_library(const std::string& filename){
     void* v = dlopen(filename.c_str(), RTLD_NOW | RTLD_GLOBAL);
     char* errmsg = dlerror();
-    
+
     if(v == NULL || errmsg != NULL){
       std::string errormsg("dynamic loading error ");
-      errormsg += "(" + filename + ")\n"; 
+      errormsg += "(" + filename + ")\n";
       errormsg += (errmsg == NULL) ? "dlopen: unknown error" : errmsg;
       errormsg += '\n';
       throw std::runtime_error(errormsg);
     }
   }
-  
+
 }
 
 /**
@@ -102,14 +101,14 @@ load_icecube_library(const std::string& project_name){
  *    be constructing their own paths and using this function to
  *    dynamically load a (possibly) non-IceCube project.
  */
-int 
+int
 load_project(std::string path, bool verbose){
   if (path.find("/") == std::string::npos){
     // The 'path' is not a path, but a project name, which is
     // actually standard-ish, with the exception of sometimes
     // leading 'lib's
 
-    // Also to maintain the old pathology for this function, 
+    // Also to maintain the old pathology for this function,
     // if there's a leading 'lib' assume it's *not* part
     // of the project name, so lop it off...it'll be added back
     // later.
@@ -127,7 +126,7 @@ load_project(std::string path, bool verbose){
       errormsg += path;
       throw std::runtime_error(errormsg);
     }
-    load_dynamic_library(path);    
+    load_dynamic_library(path);
   }
   return 0;
 }

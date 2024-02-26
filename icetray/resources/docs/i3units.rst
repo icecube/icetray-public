@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 Using I3Units
 =============
 
@@ -34,7 +38,7 @@ while for the second way of access above you would have to write::
 
  if(readvoltage > 10) { ... };
 
-and the reader of the code would have to remember that you chose mV for 
+and the reader of the code would have to remember that you chose mV for
 readvoltage higher up in the code.
 
 The IceCube unit system
@@ -50,14 +54,14 @@ In the IceTray software a set of "units" have been defined in the file
  static const double eV                = electronvolt;
  static const double millivolt         = (electronvolt * 1.e-3) / eplus;
 
-A few basic units (like eplus and electronvolt) are defined quite 
-arbitrarily, and most units are calculated from these (as above).  It 
-is important to realize that the I3Units are just numbers, although 
+A few basic units (like eplus and electronvolt) are defined quite
+arbitrarily, and most units are calculated from these (as above).  It
+is important to realize that the I3Units are just numbers, although
 the idea is to USE them as real units.
 
-A unit is a quantity with dimension (the original kilogram was for 
-example the mass of a thing in Paris). You divide other quantities 
-of the same dimension (mass, in the case of the kilogram) by the unit 
+A unit is a quantity with dimension (the original kilogram was for
+example the mass of a thing in Paris). You divide other quantities
+of the same dimension (mass, in the case of the kilogram) by the unit
 in order to obtain a "dimensionless" number specifying their
 value in that unit. In other words::
 

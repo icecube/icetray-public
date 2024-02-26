@@ -3,9 +3,8 @@
 /**
  *  $Id: open.cxx 2595 2016-06-01 18:26:57Z cweaver $
  *
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
@@ -15,7 +14,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,9 +26,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #include <boost/iostreams/filtering_stream.hpp>
 #include <archive.h>
@@ -64,13 +63,13 @@ struct archive_filter {
   bool header_read_;
   bool raw_archive_;
   ssize_t bytes_read_;
-    
+
   archive_filter(const std::string& filename);
 
   template <typename Source>
   std::streamsize
   read(Source& src, char_type* s, std::streamsize n);
-    
+
 };
 
 using boost::algorithm::ends_with;
@@ -78,7 +77,7 @@ using boost::algorithm::ends_with;
 namespace{
   void archive_destructor(struct archive *ar){
     if (!ar)
-      return;    
+      return;
     archive_read_free(ar);
   }
 
@@ -94,10 +93,10 @@ namespace{
       comp = LZMA;
     else if (ends_with(filename,".xz"))
       comp = XZ;
-    
+
     return comp;
   }
-  
+
   /* A callback for libarchive. */
   template <typename Source>
     ssize_t
@@ -110,15 +109,15 @@ namespace{
 					   data->buffer,
 					   BOOST_IOSTREAMS_DEFAULT_DEVICE_BUFFER_SIZE);
     *buff = data->buffer;
-    
+
     if (nread < 0)
       return 0; /* libarchive-style EOF */
     else
       return nread;
   }
-  
+
 };
-    
+
 archive_filter::archive_filter(const std::string& filename) :
   reader_(archive_read_new(), archive_destructor),
   header_read_(false),
@@ -127,9 +126,9 @@ archive_filter::archive_filter(const std::string& filename) :
 {
   archive_read_support_format_all(reader_.get());
   archive_read_support_format_raw(reader_.get());
-  
+
   compression_type comp = guess_compression(filename);
-  
+
   switch (comp) {
   case GZIP:
     if (archive_read_support_filter_gzip(reader_.get()) == ARCHIVE_WARN)
@@ -185,7 +184,7 @@ archive_filter::read(Source& src, char_type* s, std::streamsize n)
     raw_archive_ = false;
     log_trace("(archive_filter) opened new source");
   }
-  
+
   while (!header_read_ && !raw_archive_) {
     if (archive_read_next_header(reader_.get(), &current_entry_) == ARCHIVE_OK) {
       std::string fname(archive_entry_pathname(current_entry_));
@@ -201,7 +200,7 @@ archive_filter::read(Source& src, char_type* s, std::streamsize n)
 	raw_archive_ = true;
 	continue;
       }
-      
+
       if (!ends_with(fname,".i3")) {
 	log_trace("(archive_filter) skipping file '%s' (not an I3 file)",
 		  fname.c_str());
@@ -215,17 +214,17 @@ archive_filter::read(Source& src, char_type* s, std::streamsize n)
       return -1;
     }
   }
-    
+
   ssize_t nread = archive_read_data(reader_.get(), s, n);
-  
+
   bytes_read_ += nread;
-  
+
   if (nread <= 0)
     return -1; /* boost::iostreams-style EOF */
-  
+
   if (!raw_archive_ && bytes_read_ >= archive_entry_size(current_entry_))
     header_read_ = false;
-  
+
   return nread;
 }
 

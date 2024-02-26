@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 '''
 This script doesn't really do much.  For output, you should
 see 10 frames with an object of unkown type called 'my_object'
@@ -21,7 +25,7 @@ class SimplePhysicsSource(icetray.I3Module):
     '''
     def __init__(self, context):
         icetray.I3Module.__init__(self, context)
-        
+
     def Process(self):
         frame = icetray.I3Frame(icetray.I3Frame.Physics)
         self.PushFrame(frame)
@@ -33,14 +37,14 @@ class AddStuffToFrames(icetray.I3Module):
     '''
     def __init__(self, context):
         icetray.I3Module.__init__(self, context)
-        
+
         self.AddParameter("frame_object_name",
                           "Name of the frame object to add",
                           "my_object")
-        
+
     def Configure(self):
         self.frame_object_name = self.GetParameter("frame_object_name")
-        
+
     def Physics(self, frame):
         fo = icetray.I3FrameObject()
         frame[self.frame_object_name] = fo
@@ -50,7 +54,7 @@ class AddStuffToFrames(icetray.I3Module):
 # This is an illustration of a simple filter.
 def filter_frames(frame):
     return frame.Has("my_object")
-        
+
 def print_frames(frame):
     '''
     This is an example of a "function as a module."

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 """
 Test the I3Frame's merging/purging stuff
 """
@@ -58,9 +62,9 @@ assert 'c' in a
 
 a.purge(I3Frame.Stream('c'))
 
-assert 'a' in a 
-assert 'b' not in a 
-assert 'c' not in a 
+assert 'a' in a
+assert 'b' not in a
+assert 'c' not in a
 
 ################################################################################
 

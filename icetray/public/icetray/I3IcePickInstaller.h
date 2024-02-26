@@ -1,11 +1,10 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  Phil Roth <proth@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 Phil Roth <proth@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -14,7 +13,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,9 +25,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #ifndef ICETRAY_I3ICEPICKINSTALLER_H_INCLUDED
 #define ICETRAY_I3ICEPICKINSTALLER_H_INCLUDED
@@ -37,11 +36,11 @@
 #include <icetray/I3IcePick.h>
 
 /**
- * @brief This service factory is meant to install an I3IcePick 
- * object into the context.  The specific I3IcePick being 
+ * @brief This service factory is meant to install an I3IcePick
+ * object into the context.  The specific I3IcePick being
  * installed is used as a template throughtout this class.
  *
- * If you've written a new I3IcePick, be sure to add the appropriate 
+ * If you've written a new I3IcePick, be sure to add the appropriate
  * I3_SERVICE_FACTORY() macro to a .cxx file.
  */
 
@@ -51,7 +50,7 @@ class I3IcePickInstaller : public I3SingleServiceFactory<IcePick, I3IcePick>
  public:
 
   /**
-   * @brief The constructer.  The context is then passed to the 
+   * @brief The constructer.  The context is then passed to the
    * constructer of the I3IcePick object being installed
    *
    * @param context the I3Context where the I3IcePick should
@@ -68,7 +67,7 @@ class I3IcePickInstaller : public I3SingleServiceFactory<IcePick, I3IcePick>
     };
 
   /**
-   * @brief The configure method where servicename_ is set from the 
+   * @brief The configure method where servicename_ is set from the
    * steering file.
    */
   void Configure()

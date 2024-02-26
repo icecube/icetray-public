@@ -1,9 +1,8 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  The IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 The IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -12,7 +11,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -24,9 +23,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #include <icetray/serialization.h>
 #include <icetray/OMKey.h>
@@ -56,11 +55,11 @@ void OMKey::load(Archive& ar, unsigned version)
   }
   ar & make_nvp("StringNumber",  stringNumber_);
   ar & make_nvp("OMNumber",  omNumber_);
-    
+
   if (version>=1) {
     ar & make_nvp("PMTNumber",  pmtNumber_);
   } else {
-    pmtNumber_=0;    
+    pmtNumber_=0;
   }
 }
 
@@ -102,7 +101,7 @@ istream& operator>>(istream& is, OMKey& key)
 
     OMKey newkey;
     log_trace("matches: %s %s [old-style OMKey]", matches.str(1).c_str(), matches.str(2).c_str());
-       
+
     newkey.SetString(boost::lexical_cast<int>(matches.str(1)));
     newkey.SetOM(boost::lexical_cast<unsigned>(matches.str(2)));
     newkey.SetPMT(0);

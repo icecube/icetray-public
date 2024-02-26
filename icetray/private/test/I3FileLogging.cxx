@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 #include <cstdio> //for remove()
 #include <fstream>
@@ -9,11 +13,11 @@ TEST_GROUP(I3FileLogging)
 TEST(LogToFile){
 	auto testfile = I3Test::testfile("file_logging.log");
 	SetIcetrayLogger(boost::make_shared<I3FileLogger>(testfile));
-	
+
 	static const char* unit="LogToFileTest";
 	auto __icetray_logger_id=[]()->const char*{ return(unit); };
 	GetIcetrayLogger()->SetLogLevelForUnit(unit,I3LOG_TRACE);
-	
+
 	log_trace("This is a trace level message");
 	log_debug("This is a debug level message");
 	log_info("This is an info level message");
@@ -24,7 +28,7 @@ TEST(LogToFile){
 		log_fatal("This is a fatal level message");
 		FAIL("log_fatal() should throw");
 	}catch(...){/*squash*/}
-		
+
 	std::ifstream logfile(testfile);
 	std::string line;
 #ifndef I3_COMPILE_OUT_VERBOSE_LOGGING
@@ -43,6 +47,6 @@ TEST(LogToFile){
 	ENSURE(line.find("This is an error level message")!=std::string::npos);
 	ENSURE(!!std::getline(logfile,line));
 	ENSURE(line.find("This is a fatal level message")!=std::string::npos);
-	
+
 	std::remove(testfile.c_str());
 }

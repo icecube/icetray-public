@@ -1,45 +1,10 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef ICETRAY_I3UNITS_H_INCLUDED
 #define ICETRAY_I3UNITS_H_INCLUDED
 
-/**
- @brief A ripped Geant4 header declaring unit conventions
-
- I just wrapped it all in a namespace I3Units, Also changed the
- definition of Energy, so that GeV is the base units, rather than
- Joules
-
- Modified 2-17-04 by John Pretz from a Geant4 header
- @version $Id$
- @file I3Units.h  
- @date $Date$
- 
- Also removed everything but Time, Energy, Length, Angle, Areas and Volumes.
- Pressure, Power, stuff like that is not done, since the redefinition of
- GeV = 1.0 messes with all that.
- 
- Here's the original Geant4 header:
- 
-<b>
- DISCLAIMER
-
- The following disclaimer summarizes all the specific disclaimers 
- of contributors to this software. The specific disclaimers,which 
- govern, are listed with their locations in:
- http://cern.ch/geant4/license
- 
- Neither the authors of this software system, nor their employing 
- institutes,nor the agencies providing financial support for this 
- work  make  any representation or  warranty, express or implied, 
- regarding  this  software system or assume any liability for its 
- use.
-
- This  code  implementation is the  intellectual property  of the 
- GEANT4 collaboration.
- By copying,  distributing  or modifying the Program (or any work 
- based  on  the Program)  you indicate  your  acceptance of  this 
- statement, and all its terms.
-</b>
-*/
 /**
  * @namespace I3Units
  * @brief Unit definitions for the dataclasses
@@ -77,12 +42,6 @@
  *      .....
  *      readvoltage = myContainerPtr->GetVoltage()/I3Units::V;
  *
- * @version $Version:$
- * @date $Date$
- * @author Geant4 Team (original) M.Maire, S.Giani
- * @author pretz (IceCube modifications)
- * @todo Should we have a 'speed' here too?
- * @todo add 'ergs'
  */
 
 #include <cmath>

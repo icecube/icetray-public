@@ -1,6 +1,6 @@
 /**
-   copyright  (C) 2004
-   the icecube collaboration
+   Copyright  (C) 2004 the icecube collaboration
+   SPDX-License-Identifier: BSD-2-Clause
    $Id$
 
    @version $Revision$
@@ -20,7 +20,7 @@ TEST_GROUP(I3ContextAbuse);
 
 struct Cc
 {
-    
+
 };
 
 struct Dd
@@ -95,7 +95,7 @@ TEST(has)
   // if you put it const, you get it const, and no other way.
   CcConstPtr spcc(new Cc);
   c.Put(spcc, "constc");
-  
+
   ENSURE(!c.Has<Cc>("constc"));
   ENSURE(c.Has<const Cc>("constc"));
   ENSURE(!c.Has<CcPtr>("constc"));
@@ -103,7 +103,7 @@ TEST(has)
 
   THROWS(c.Get<Cc>("constc"));
   c.Get<const Cc>("constc"); // doesnt throw
-  ENSURE(!c.Get<CcPtr>("constc")); // returns null.  
+  ENSURE(!c.Get<CcPtr>("constc")); // returns null.
   ENSURE((bool)c.Get<CcConstPtr>("constc")); // success
 
   ENSURE(!c.Has<Dd>("dplace"));
@@ -171,7 +171,7 @@ TEST(has)
   THROWS(c.Get<bool>("boolio"));
 
   boost::shared_ptr<bool> spb(new bool);
-  
+
   c.Put(spb, "boolio");
   ENSURE(c.Has<bool>("boolio"));
 

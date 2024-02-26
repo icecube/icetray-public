@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 ..  $Date$
 ..  $Revision$
 ..  $Author$
@@ -10,7 +14,7 @@ Icetray
 =======
 
 .. note::
-   
+
    Herein, *module* has a couple of meanings.  One is ``I3Module``,
    which is the interface by which one writes plugins/extensions to
    icetray.  *Module* is also used in the sense of a group of python
@@ -46,9 +50,9 @@ Detailed Documentation:
    scripting
    i3units
    keywordparams
-   functions 
+   functions
    modules
-   services   
+   services
    segments
    qframes
    i3podholder

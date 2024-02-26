@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import unittest
 from icecube import icetray
 
@@ -12,7 +16,7 @@ class test_OMKey(unittest.TestCase):
         self.assertEqual( omkey[2], 1, "got the wrong pmt")
 
 unittest.main()
-            
-        
 
-        
+
+
+

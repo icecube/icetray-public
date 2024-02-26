@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 I3Tray Quick Reference
 ======================
 
@@ -120,13 +124,13 @@ These do not mix into other frames.
 Examples
 --------
 
-I3CorsikaReader::   
+I3CorsikaReader::
 
     void I3CORSIKAReader::Process()
     {
         // Make a new frame.
         I3FramePtr frame(new I3Frame(I3Frame::DAQ));
-        
+
         // i3_ifs_ is a frame stream.
         // Write frames from file before starting to write
         // our own frames.
@@ -146,8 +150,8 @@ I3CorsikaReader::
         // Push the frame to the outbox.
         PushFrame(frame);
     }
-    
-    
-    
-    
-    
+
+
+
+
+

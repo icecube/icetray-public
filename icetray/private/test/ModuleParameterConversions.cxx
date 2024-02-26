@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @version $Revision$
@@ -41,8 +41,8 @@ static std::vector<OMKey> omkeyvec_param;
 
 struct ParamConversionCheckModule : I3Module
 {
-  ParamConversionCheckModule(const I3Context& context) : I3Module(context) 
-  { 
+  ParamConversionCheckModule(const I3Context& context) : I3Module(context)
+  {
     bool_param = true;
     AddParameter("bool_param", "description of bool", bool_param);
 
@@ -57,9 +57,9 @@ struct ParamConversionCheckModule : I3Module
 
     string_param = "We can't stop here.  This is Bat Country!";
     AddParameter("string_param", "description of string", string_param);
-    
+
     intvec_param.clear();
-    intvec_param += 0,1,2,3,4,5,6,7,8,9; 
+    intvec_param += 0,1,2,3,4,5,6,7,8,9;
     AddParameter("intvec_param", "vector of ints", intvec_param);
 
     doublevec_param.clear();
@@ -78,8 +78,8 @@ struct ParamConversionCheckModule : I3Module
     AddParameter("omkeyvec_param", "OMG a vector of omkeys lol", omkeyvec_param);
   }
 
-  virtual void Configure() 
-  { 
+  virtual void Configure()
+  {
     GetParameter("bool_param", bool_param);
     GetParameter("int_param", int_param);
     GetParameter("long_param", long_param);
@@ -92,8 +92,8 @@ struct ParamConversionCheckModule : I3Module
     GetParameter("omkeyvec_param", omkeyvec_param);
   }
 
-  virtual void Process() 
-  { 
+  virtual void Process()
+  {
     log_trace("%s",__PRETTY_FUNCTION__);
     I3FramePtr frame(new I3Frame(I3Frame::Physics));
     PushFrame(frame, "OutBox");
@@ -138,13 +138,13 @@ I3_MODULE(ParamConversionCheckModule);
   }
 
 // straightforward: no conversions
-bool b; 
-short shrt; 
-int i; 
-long l; 
+bool b;
+short shrt;
+int i;
+long l;
 long long ll;
 float f;
-double d; 
+double d;
 const char *c_str = "some string";
 std::string s = "some string";
 
@@ -179,11 +179,11 @@ TEST(b_bool)
 TEST(c_ints)
 {
   i = 0;
-  GET_SUCCEEDS(bool_param, false); 
+  GET_SUCCEEDS(bool_param, false);
   i = 1;
-  GET_SUCCEEDS(bool_param, false); 
+  GET_SUCCEEDS(bool_param, false);
   GET_SUCCEEDS(bool_param, true);
-  GET_SUCCEEDS(bool_param, true); 
+  GET_SUCCEEDS(bool_param, true);
 
   i = 13;
   GET_SUCCEEDS(int_param, i);
@@ -198,10 +198,10 @@ TEST(c_ints)
 TEST(d_longs)
 {
   l = 0;
-  GET_SUCCEEDS(bool_param, l); 
+  GET_SUCCEEDS(bool_param, l);
 
   l = 1;
-  GET_SUCCEEDS(bool_param, l); 
+  GET_SUCCEEDS(bool_param, l);
 
   l = 13;
   GET_SUCCEEDS(int_param, l);
@@ -227,7 +227,7 @@ TEST(d_longs)
       l = LONG_MIN;
       GET_SUCCEEDS(int_param, l);
     }
-      
+
   GET_SUCCEEDS(long_param, l);
   GET_SUCCEEDS(double_param, l);
 }
@@ -244,7 +244,7 @@ TEST(e_doubles)
 
   // check precision
   d = 0.1234568901234567;
-  GET_SUCCEEDS(double_param, d);   
+  GET_SUCCEEDS(double_param, d);
   ENSURE_DISTANCE(double_param, d, 0.0000000000000001 );
 
   d = NAN;
@@ -269,12 +269,12 @@ TEST(e_doubles)
 TEST(f_strings_etc)
 {
   {
-    I3Tray tray;   
+    I3Tray tray;
     tray.AddModule<ParamConversionCheckModule>("mod");
-    
+
     ENSURE(tray.SetParameter("mod", "string_param", "some string"));
     tray.Execute(1);
-    ENSURE(strcmp(c_str, "some string") == 0); 
+    ENSURE(strcmp(c_str, "some string") == 0);
   }
 
   std::vector<int> ivec;
@@ -290,7 +290,7 @@ TEST(f_strings_etc)
 }
 
 TEST(g_omkeys)
-{    
+{
   OMKey key(9,9);
   std::vector<OMKey> keyvec;
   keyvec += OMKey(0,0), OMKey(3,9), OMKey(4,7);
@@ -308,9 +308,9 @@ TEST(case_insensitivity)
 {
   double_param = 0.0000;
   int_param = 0;
-  I3Tray tray;   
+  I3Tray tray;
   tray.AddModule<ParamConversionCheckModule>("mod");
-  
+
   ENSURE(tray.SetParameter("mod", "DoUbLe_PaRaM", 3.14159));
   ENSURE(tray.SetParameter("mod", "int_paraM", 314159));
   tray.Execute(1);
@@ -321,11 +321,11 @@ TEST(case_insensitivity)
 
 struct GetsWithoutAdding : public I3Module
 {
-  GetsWithoutAdding(const I3Context& context) : I3Module(context) 
-  { 
+  GetsWithoutAdding(const I3Context& context) : I3Module(context)
+  {
   }
 
-  void Configure() { 
+  void Configure() {
     int i;
     GetParameter("never_added", i);
   }
@@ -348,10 +348,10 @@ struct AddsWithoutGetting : public I3Module
 {
   int i;
 
-  AddsWithoutGetting(const I3Context& context) : I3Module(context) 
-  { 
+  AddsWithoutGetting(const I3Context& context) : I3Module(context)
+  {
     i=3;
-    AddParameter("never_gets_this_int", 
+    AddParameter("never_gets_this_int",
 		 "This here lonesome int is ignored at Configure() time",
 		 i);
   }
@@ -364,7 +364,7 @@ TEST(module_adds_parameter_that_it_never_gets)
   I3Tray tray;
   tray.AddModule<AddsWithoutGetting>("gets");
   try {
-    tray.Execute(0); 
+    tray.Execute(0);
     // causes Configure() to get called
     // a module is allowed to Add params that dont get Get later.
   } catch (const std::exception& e) {

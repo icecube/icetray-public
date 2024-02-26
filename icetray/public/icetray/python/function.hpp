@@ -1,14 +1,18 @@
+// SPDX-FileCopyrightText: 2024 Alcides Viamontes Esquivel
+//
+// SPDX-License-Identifier: LicenseRef-Esquivel
+
 /*
  * Bare-bones pybindings for boost::function that can be called from both
  * Python and C++.
  *
  * From:
  * http://wiki.python.org/moin/boost.python/HowTo?action=AttachFile&do=get&target=py_boost_function.hpp
- * 
+ *
  *   AUTHOR: Alcides Viamontes Esquivel
  *
- *   LICENSE: You're free to use this file for whatever you want. You're 
- *            specially welcome to improve it in any way and give the 
+ *   LICENSE: You're free to use this file for whatever you want. You're
+ *            specially welcome to improve it in any way and give the
  *            changes back.
  */
 
@@ -34,7 +38,7 @@ template <typename RT>
 struct pyobject_invoker<RT, 0>
 {
 	object callable;
-	
+
 	RT
 	operator()()
 	{
@@ -77,10 +81,10 @@ class_<Function>
 def_function(const char* name, const char* doc="")
 {
 	class_<Function> klass(name, doc, no_init);
-	
+
 	klass.def("__init__", make_constructor(&detail::function_from_object<Function>));
 	klass.def("__call__", &Function::operator());
-	
+
 	return klass;
 }
 

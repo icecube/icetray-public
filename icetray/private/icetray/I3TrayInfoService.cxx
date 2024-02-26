@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #include <icetray/serialization.h>
 #include <icetray/I3Logging.h>
@@ -54,13 +53,13 @@ get_configs(const T& from)
      I3ConfigurationPtr ptr(new I3Configuration(iter->second->GetConfiguration()));
      result[iter->first] = ptr;
   }
- 
+
   return result;
 }
 
 I3TrayInfo
 I3TrayInfoService::GetConfig()
-{ 
+{
   I3TrayInfo the_config;
   //
   // load host/build info
@@ -107,7 +106,7 @@ I3TrayInfoService::GetConfig()
   //
   //  svn info for the servicefactory factory
   //
-  for (I3ServiceFactoryFactory::const_iterator iter = 
+  for (I3ServiceFactoryFactory::const_iterator iter =
 	 I3ServiceFactoryFactory::Instance().begin();
        iter != I3ServiceFactoryFactory::Instance().end();
        iter++)
@@ -123,10 +122,10 @@ I3TrayInfoService::GetConfig()
   // to have classes with full value semantics.
   the_config.modules_in_order = tray_.modules_in_order;
   the_config.factories_in_order = tray_.factories_in_order;
-	
+
   the_config.module_configs = get_configs(tray_.modules);
   the_config.factory_configs = get_configs(tray_.factories);
 
   return the_config;
-} 
+}
 

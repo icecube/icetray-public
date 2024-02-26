@@ -1,4 +1,8 @@
-.. index:: 
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
+.. index::
    pair: I3Module; C++ Class
 .. _I3Module:
 
@@ -32,8 +36,8 @@ For instance the example module I3SimpleSeed, above, would have, in I3SimpleSeed
 
  class I3SimpleSeed : public I3Module { ... };
 
- I3_MODULE(I3SimpleSeed);   
- 
+ I3_MODULE(I3SimpleSeed);
+
  I3SimpleSeed::I3SimpleSeed(const I3Context& context)
  {
    ...
@@ -63,27 +67,27 @@ Adding Conditional Execution to Your Module
 If you have an existing module that you'd like to add the possibility of conditional execution, just change these lines::
 
  #include "icetray/I3Module.h"
- 
+
  ... snip ...
- 
+
  class I3MyRecoModule : public I3Module
  {
- 
+
  ... snip ...
- 
+
  I3MyRecoModule::I3MyRecoModule(const I3Context& ctx) : I3Module(ctx)
 
 to these lines::
 
  #include "icetray/I3ConditionalModule.h"
- 
+
  ... snip ...
- 
+
  class I3MyRecoModule : public I3ConditionalModule
  {
- 
+
  ... snip ...
- 
+
  I3MyRecoModule::I3MyRecoModule(const I3Context& ctx) : I3ConditionalModule(ctx)
 
 

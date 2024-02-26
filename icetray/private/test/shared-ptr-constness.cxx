@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 #include <boost/shared_ptr.hpp>
 
@@ -12,7 +16,7 @@ TEST(pointer_to_const_S)
 {
   // spcs == shared pointer to const S
   boost::shared_ptr<const S> spcs(new S), spcs2(new S);
-  spcs = spcs2; 
+  spcs = spcs2;
   //  spcs->i = 4; // should be error
   spcs = boost::shared_ptr<const S>(new S);
 }
@@ -20,12 +24,12 @@ TEST(pointer_to_const_S)
 TEST(const_pointer_to_S)
 {
   // csps == const shared pointer to S
-  const boost::shared_ptr<S> csps(new S), csps2(new S); 
+  const boost::shared_ptr<S> csps(new S), csps2(new S);
   csps->i = 4; // OK, pointer is const, not S
 
   // error: can't assign to const pointer; is only a
   // warning.  should be an error.
-  //  csps = csps2; 
+  //  csps = csps2;
 }
 
 TEST(const_pointer_to_const_S)

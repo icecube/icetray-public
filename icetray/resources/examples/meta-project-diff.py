@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import sys, subprocess
 
 def generate_dictionary(svn_externals):
@@ -11,19 +16,19 @@ def generate_dictionary(svn_externals):
 
     With revision numbers:
     <project_name> -r<revision_number> <project_url>
-    
+
     Without revision numbers:
     <project_name> <project_url>
 
     Returns : {<project_name> : [...]}
-    
+
     '''
     return_dict = dict()
     for line in svn_externals.split('\n'):
-        if line.strip() == "" or line.startswith("#"): 
+        if line.strip() == "" or line.startswith("#"):
             continue
         return_dict[line.split()[0]] = line.split()[1:]
-    return return_dict        
+    return return_dict
 
 def get_revision_number(meta_project):
     '''
@@ -50,7 +55,7 @@ def get_path_revision_number_pair(svn_info):
         return svn_info[0], get_revision_number(svn_info[0])
     if len(svn_info) == 2:
         return svn_info[1], int(svn_info[0].strip("-r"))
-        
+
 if len(sys.argv) != 3:
     print("You must specify two arguments.")
     print("usage = meta-project-diff.py <meta-project-1> <meta-project-2>")
@@ -67,7 +72,7 @@ for project_name in set(arg1_dict.keys()) ^ set(arg2_dict.keys()):
         print("Only in %s: %s" % (sys.argv[1], project_name))
     if project_name in arg2_dict:
         print("Only in %s: %s" % (sys.argv[2], project_name))
-               
+
 # now generate the diff checking only the projects the two meta-projects have in common
 for project_name in set(arg1_dict.keys()) & set(arg2_dict.keys()):
     if arg1_dict[project_name] != arg2_dict[project_name]:

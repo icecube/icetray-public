@@ -1,10 +1,9 @@
 #
 #  $Id: i3inspect.py 1793 2014-01-15 16:57:49Z jvansanten $
 #
-#  Copyright (C) 2011
-#  Jakob van Santen <vansanten@wisc.edu>
-#  and the IceCube Collaboration <http://www.icecube.wisc.edu>
-#
+#  Copyright (C) 2011 Jakob van Santen <vansanten@wisc.edu>
+#  Copyright (C) 2011 the IceCube Collaboration <http://www.icecube.wisc.edu>
+#  SPDX-License-Identifier: BSD-2-Clause
 
 from glob import glob
 from packaging import version
@@ -177,9 +176,9 @@ def harvest_objects(module,want):
 def get_inspectable_projects():
 
     libdir = os.path.join(os.environ['I3_BUILD'],'lib')
-    
+
     if sys.platform=='darwin':
-        suffix='.dylib'        
+        suffix='.dylib'
     else:
         suffix = '.so'
     cpp_libs = [os.path.basename(fname).split('.')[0][3:]
@@ -195,7 +194,7 @@ def get_all_projects():
     cpp_libs,python_libs = get_inspectable_projects()
 
     cpp_libs = [ l.replace("-","_") for l in cpp_libs ]
-    
+
     libs = sorted(set(cpp_libs+python_libs),key=lambda x: x.lower())
 
     return libs

@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @version $Revision$
@@ -44,7 +44,7 @@ class ServiceTest : public I3Module {
 			GetParameter("Int", value);
 			ENSURE(service_sentinel == value);
 		}
-		
+
 		void Process() {
 			RequestSuspension();
 		}
@@ -60,8 +60,8 @@ TEST(getting_services_in_modules)
   tray.AddService("IntegerService");
   tray.AddModule("ServiceTest")("Int", service_sentinel);
   tray.AddModule("ServiceTest")("Int", "int");
-    
+
   tray.Execute();
-    
+
 }
 

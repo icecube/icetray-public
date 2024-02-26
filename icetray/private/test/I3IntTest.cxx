@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 
 #include <icetray/I3Tray.h>
@@ -27,7 +31,7 @@ TEST(assignment_operator) {
   I3Int foo = 12;
   I3Int bar = 10;
   bar = foo;
-  
+
   // barf if bar != 12
   ENSURE(bar.value == 12, "Whoa! Assignment failed! bar.value should be 12!");
 }

@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
 #
-# Sample i3module in python 
+# SPDX-License-Identifier: BSD-2-Clause
+
+#
+# Sample i3module in python
 #
 
 from icecube.icetray import I3Module, I3ConditionalModule
@@ -28,7 +33,7 @@ def make_counter(base):
             self.sdp = 0
             self.PushFrame(frame)
     return ShouldCounter
-            
+
 
 tray.AddModule(make_counter(I3Module), "modulecounter")
 tray.AddModule(make_counter(I3ConditionalModule), "conditionalmodulecounter")

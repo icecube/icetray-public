@@ -1,11 +1,17 @@
+<!--
+SPDX-FileCopyrightText: 2024 The IceTray Contributors
+
+SPDX-License-Identifier: BSD-2-Clause
+-->
+
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		version="1.0">
-  <!-- 
+  <!--
        You can make a pretty summary of all available modules and their
        configuration spaces with this stylesheet.
-       
+
        icetray-inspect -x -a (libdir) > summary.xml
-       
+
        xsltproc inspect2html.xsl summary.xml > summary.html
   -->
 
@@ -18,13 +24,13 @@
 	a:link {color: #000099; text-decoration: none;}
 	a:hover {text-decoration: underline;}
 	table {
-	border-collapse: collapse; width: 600px; cellpadding: 3px; border: 0px; 
+	border-collapse: collapse; width: 600px; cellpadding: 3px; border: 0px;
 	}
 	.center {text-align: center;}
 	.center table { margin-left: auto; margin-right: auto; text-align: left;}
 	.center th { text-align: center; !important }
-	td, th { 
-	border: 1px solid #000000; font-size: 80%; 
+	td, th {
+	border: 1px solid #000000; font-size: 80%;
 	vertical-align: baseline; padding: 3px
 	}
 	h1 {font-size: 150%;}
@@ -45,10 +51,10 @@
 	  <hr/>
 	  <xsl:for-each select="project[module]">
 	    <h2> <xsl:value-of select="@name"/> </h2>
-	    <a> 
+	    <a>
 	      <xsl:attribute name="href">
 		<xsl:value-of select="url" />
-	      </xsl:attribute>         
+	      </xsl:attribute>
 	      <xsl:value-of select="url" /><xsl:text> at revision </xsl:text>
 	      <xsl:value-of select="revision"/>
 	    </a>
@@ -70,7 +76,7 @@
 		  <td colspan="3">
 		  <pre><xsl:value-of select="description" /></pre></td>
 		</tr>
-		
+
 		<xsl:for-each select="parameter">
 		  <tr class="row">
 		    <td class="name" width="30%">

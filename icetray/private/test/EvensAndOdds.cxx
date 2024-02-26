@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <icetray/I3Int.h>
 #include <icetray/I3Tray.h>
 #include <icetray/I3Frame.h>
@@ -142,7 +146,7 @@ TEST(b_add_nulls_via_should_do_physics)
 
   tray.ConnectBoxes("generator","OutBox","nulladder");
   tray.ConnectBoxes("nulladder","OutBox","sorter");
-  
+
   tray.ConnectBoxes("sorter","Evens","evencheck");
   tray.ConnectBoxes("evencheck", "OutBox", "evencount");
   tray.ConnectBoxes("evencount", "OutBox", "evencan");

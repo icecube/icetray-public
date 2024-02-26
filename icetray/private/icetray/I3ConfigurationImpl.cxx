@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #include <icetray/I3Logging.h>
 #include <icetray/I3ConfigurationImpl.h>
@@ -54,13 +53,13 @@ using namespace std;
 
 I3ConfigurationImpl::I3ConfigurationImpl() :
   parameters(new parameters_t)
-{ 
+{
 
 }
 
 I3ConfigurationImpl::~I3ConfigurationImpl() { }
 
-bool 
+bool
 I3ConfigurationImpl::Has(const string &name) const
 {
   return parameters->find(name) != parameters->end();
@@ -76,7 +75,7 @@ I3ConfigurationImpl::Set(const string& name_, const boost::python::object& value
   if (value.ptr() == I3Default.ptr()){
     return;
   }
-  
+
   parameters_t::iterator pr = parameters->find(name_);
   if (pr == parameters->end())
     log_fatal("Attempt to set parameter %s that doesn't exist", name_.c_str());
@@ -85,9 +84,9 @@ I3ConfigurationImpl::Set(const string& name_, const boost::python::object& value
   parameters->replace(pr, pb);
 }
 
-void 
-I3ConfigurationImpl::Add(const string& name_, 
-		     const std::string& description, 
+void
+I3ConfigurationImpl::Add(const string& name_,
+		     const std::string& description,
 		     const boost::python::object& default_value)
 {
   log_trace("%s (%s)", __PRETTY_FUNCTION__, name_.c_str());
@@ -103,9 +102,9 @@ I3ConfigurationImpl::Add(const string& name_,
   log_trace("%s default=%s", name_.c_str(), pb.default_value_str().c_str());
 }
 
-void 
-I3ConfigurationImpl::Add(const string& name_, 
-			 const std::string& description) 
+void
+I3ConfigurationImpl::Add(const string& name_,
+			 const std::string& description)
 {
   log_trace("%s (%s)", __PRETTY_FUNCTION__, name_.c_str());
 
@@ -217,9 +216,9 @@ I3ConfigurationImpl::inspect() const
       ci++)
     {
       result += "<parameter>\n\t<name>";
-      result += encode_entities(ci->name()) + "</name>\n\t<description>" 
+      result += encode_entities(ci->name()) + "</name>\n\t<description>"
 	+ encode_entities(ci->description()) + "</description>\n\t<default_value>"
-	+ encode_entities(ci->default_value_str()) 
+	+ encode_entities(ci->default_value_str())
 	+ "</default_value>\n</parameter>\n";
     }
 
@@ -244,11 +243,11 @@ ostream& operator<<(ostream& os, const I3ConfigurationImpl& config)
     {
       os << *iter << "\n";
     }
-     
+
   return os;
 }
 
-  
+
 bool
 I3ConfigurationImpl::is_ok() const
 {

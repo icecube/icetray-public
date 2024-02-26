@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 #include "icetray/I3TrayHeaders.h"
 #include "icetray/I3Tray.h"
@@ -6,7 +10,7 @@
 
 TEST_GROUP(ConfigureService);
 
-  
+
 TEST(one)
 {
   I3Tray tray;
@@ -61,7 +65,7 @@ TEST(finish_called)
 
   tray.Execute(1);
 
-  ENSURE(TestServiceFactory::instance->finishCalled, "Finish should have been called");    
+  ENSURE(TestServiceFactory::instance->finishCalled, "Finish should have been called");
 }
 
 

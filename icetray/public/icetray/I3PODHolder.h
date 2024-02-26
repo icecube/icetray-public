@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2014
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2014 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2014 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #ifndef ICETRAY_I3PODHOLDER_H_INCLUDED
 #define ICETRAY_I3PODHOLDER_H_INCLUDED
@@ -62,7 +61,7 @@ struct I3PODHolder : public I3FrameObject
       value = rhs.value;
     return *this;
   }
-  
+
   std::ostream& Print(std::ostream& os) const override{
     std::ios_base::fmtflags oldFlags=os.flags();
     os.setf(oldFlags|std::ios::boolalpha);
@@ -70,7 +69,7 @@ struct I3PODHolder : public I3FrameObject
     os.setf(oldFlags);
     return os;
   }
-  
+
   BOOST_PP_SEQ_FOR_EACH(REGISTER_PODHOLDER_OPERATORS, I3PODHolder<T>, (==)(!=)(<)(<=)(>)(>=) )
 
   template <typename Archive>

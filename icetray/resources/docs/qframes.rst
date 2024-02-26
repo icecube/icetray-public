@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 ==========
  Q Frames
 ==========
@@ -13,7 +17,7 @@ without duplication on disk. This lays the foundation for
 introduction of other time-varying non-physics data (e.g. monitoring output
 like mainboard temperatures) into the data stream.
 
-The usual modules that operate on DAQ frames are calibration and low-level 
+The usual modules that operate on DAQ frames are calibration and low-level
 reconstruction modules (e.g. waveform calibration and pulse extraction), as well as
 splitter modules that produce Physics frames that are views into the DAQ frame.
 Since simulation is global data for a particular trigger, simulation modules
@@ -23,7 +27,7 @@ are also expected to operate on DAQ frames.
  Working with Q Frames
 ======================
 
-Migrating existing scripts to q-frames can require some updates to your 
+Migrating existing scripts to q-frames can require some updates to your
 existing scripts.  Several modules have been changed to run only
 on DA(Q) frames, rather than (P)hysics frames.  Depending on
 what your script does, and what your input data looks like,
@@ -31,7 +35,7 @@ you may not need any updates at all.
 
 In preparing the Q frame release, here are some guidelines and hints
 that we've come across that might help you transition more easily
-to the Q frame release series.  Also included are some common 
+to the Q frame release series.  Also included are some common
 errors and places to look for solutions.
 
 If you are still stuck after all this, please bring your questions
@@ -90,10 +94,10 @@ every P-frame stop will see all the Q-frame items.
 Q Frames: Common usages
 ^^^^^^^^^^^^^^^^^^^^^^^
 There are several common usages that are outlined here, each with
-its own Q-frame specific advice.  
+its own Q-frame specific advice.
 
 1. Reading data already Q-framed.  This case should not require any special
-handling.  Data is already divided correctly between Q and P frames.  
+handling.  Data is already divided correctly between Q and P frames.
 
 2. Reading older L2 data.  This high-level data likely requires no
 new low-level processing, but does not have Q-frames in the data file.
@@ -141,18 +145,18 @@ after the I3Reader::
       tray.AddModule("QConverter", "qify", WritePFrame=True)
 
 This will add a Q-frame ahead of each of your P-frames and keep
-the appropriate items in the Q-frame.  
+the appropriate items in the Q-frame.
 
 2. Script complains:
 
 ::
 
-   RuntimeError: object in frame at "I3EventHeader" doesn't exist 
+   RuntimeError: object in frame at "I3EventHeader" doesn't exist
       or won't dynamic cast to type "I3EventHeader"
 
 You're likely trying to use the I3NullSplitter on events that do not have
-an I3EventHeader (undecoded DST only events, for example). 
-An I3EventHeader is required for the I3NullSplitter to work.  
+an I3EventHeader (undecoded DST only events, for example).
+An I3EventHeader is required for the I3NullSplitter to work.
 You could add a guard to make sure all events have an I3EventHeader::
 
     def data_check(frame):
@@ -177,7 +181,7 @@ have been cut)::
      tray.AddModule("I3Writer","writer",
                     DropOrphanStreams=[icetray.I3Frame.Calibration, icetray.I3Frame.DAQ])
                     filename = "TEST_DATA.i3",
-               )	 
+               )
 
 
 5. Ordering of modules in script.  Some care should be taken when ordering
@@ -185,20 +189,20 @@ the modules in your scripts.  You should generally follow the order:
 
   #. File reading, DB services (if needed), I3MetaSynth (if needed for
      DB services), and any data decoding.  Depending on your data,
-     these may not be needed as they could already be done (L2 or higher 
+     these may not be needed as they could already be done (L2 or higher
      for example).  These steps generally create items in the all frame
      and especially the Q-frame.  If you are reading older data, you will
      likely need the QConverter (see #1)
   #. Event calibration and feature extraction.  These operate on the Q-frame
      items, calibrating all waveforms, and performing feature extraction,
-     generating I3RecoPulseMaps, which also live in the Q-frame.  Depending 
-     on your data, these may not be needed as they could already be 
+     generating I3RecoPulseMaps, which also live in the Q-frame.  Depending
+     on your data, these may not be needed as they could already be
      done (L2 or higher for example).
   #. Event splitting.  Now for each Q-frame, you may want to split
      Q-frames into 1 or more P-frames.  Options include the I3NullSplitter
      or more advanced splitters like the TTrigger.  Again, depending
-     on your data, these may not be needed as they could already be 
+     on your data, these may not be needed as they could already be
      done (L2 or higher for example).
-  #. Per P-frame hit-cleaning, reconstructions, analysis cuts, etc.  
-     These higher level analysis generally will work as they have before, 
+  #. Per P-frame hit-cleaning, reconstructions, analysis cuts, etc.
+     These higher level analysis generally will work as they have before,
      only now, potentially many times per DA(Q) event.

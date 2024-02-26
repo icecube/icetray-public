@@ -1,13 +1,14 @@
 /**
  *  $Id$
- *  
+ *
  * (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
+ * SPDX-License-Identifier: BSL-1.0
  * Use, modification and distribution is subject to the Boost Software
  * License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
  *
  *  See http://www.boost.org for updates, documentation, and revision history.
- *  
+ *
  */
 #ifndef ICETRAY_EXTENDED_TYPE_INFO_H_INCLUDED
 #define ICETRAY_EXTENDED_TYPE_INFO_H_INCLUDED
@@ -43,7 +44,7 @@ private:
 		key_register();
 		registered = true;
 	}
-	
+
 public:
 	i3_extended_type_info() :
 	    icecube::serialization::typeid_system::extended_type_info_typeid_0(guid_buffer),

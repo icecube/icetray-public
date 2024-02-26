@@ -1,8 +1,7 @@
 /**
- *  Copyright (C) 2012
- *  Nathan Whitehorn <nwhitehorn@icecube.wisc.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *
+ *  Copyright (C) 2012 Nathan Whitehorn <nwhitehorn@icecube.wisc.edu>
+ *  Copyright (C) 2012 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  SPDX-License-Identifier: BSD-2-Clause
  */
 
 #include <boost/python.hpp>

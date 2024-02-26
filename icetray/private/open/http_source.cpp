@@ -1,9 +1,8 @@
 /**
  *  $Id: open.cxx 2595 2016-06-01 18:26:57Z cweaver $
  *
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 
 #include <sys/types.h>
@@ -75,16 +74,16 @@ http_source::http_source(const std::string &url) :
 
   query.first = std::find(url.begin(), url.end(), '?');
   path.second = query.first;
-  
+
   path.second = query.first;
   if (query.first != url.end())
     query.first++;
-  
+
   protocol.first = url.begin();
   protocol.second = url.begin() + url.find("://");
   host.first = (protocol.second == url.end()) ? url.begin() : protocol.second + 3;
   host.second = std::find(host.first, query.first, '/');
-  
+
   auth.second = std::find(host.first, host.second, '@');
   auth.first = auth.second;
   if (auth.second != host.second) {
@@ -92,26 +91,26 @@ http_source::http_source(const std::string &url) :
     host.first = auth.second+1;
   }
   path.first = host.second;
-  
+
   // following boost/libs/asio/example/http/client/sync_client.cpp
-  
+
   // Get a list of endpoints corresponding to the server name.
   tcp::resolver resolver(*io_service_);
   tcp::resolver::query dns_query(std::string(host.first, host.second),
 				 std::string(protocol.first, protocol.second));
   tcp::resolver::iterator endpoint_iterator = resolver.resolve(dns_query);
   tcp::resolver::iterator end;
-  
+
   // Try each endpoint until we successfully establish a connection.
   boost::system::error_code error = boost::asio::error::host_not_found;
   while (error && endpoint_iterator != end){
     socket_->close();
     socket_->connect(*endpoint_iterator++, error);
   }
-  
+
   if (error)
     throw boost::system::system_error(error);
-  
+
   // Form the request. We specify the "Connection: close" header so that the
   // server will close the socket after transmitting the response. This will
   // allow us to treat all data up until the EOF as the content.
@@ -124,15 +123,15 @@ http_source::http_source(const std::string &url) :
     request_stream << "Authorization: Basic " << base64_encode(auth.first, auth.second) << "\r\n";
   }
   request_stream << "Connection: close\r\n\r\n";
-  
+
   // Send the request.
   boost::asio::write(*socket_, request);
-  
+
   // Read the response status line. The response streambuf will automatically
   // grow to accommodate the entire line. The growth may be limited by passing
   // a maximum size to the streambuf constructor.
   boost::asio::read_until(*socket_, *buffer_, "\r\n");
-  
+
   // Check that response is OK.
   std::istream response_stream(buffer_.get());
   std::string http_version;
@@ -146,17 +145,17 @@ http_source::http_source(const std::string &url) :
     socket_->close();
     return;
   }
-  
+
   if (status_code != 200){
     log_error_stream("Server responded with status code " << status_code);
     socket_->close();
     return;
   }
-  
+
   // Read the response headers, which are terminated by a blank line.
   // NB: read_until() may read an arbitrary number of bytes
   boost::asio::read_until(*socket_, *buffer_, "\r\n\r\n");
-  
+
   // Consume the response headers to arrive at the content.
   std::string header;
   while (std::getline(response_stream, header) && header != "\r") {}
@@ -168,11 +167,11 @@ http_source::read(char* s, std::streamsize size)
   if (size > buffer_->in_avail())
     boost::asio::read(*socket_, *buffer_,
 		      boost::asio::transfer_at_least(size-buffer_->in_avail()));
-  
+
   size_t n = std::min(size, buffer_->in_avail());
   std::copy(boost::asio::buffers_begin(buffer_->data()),
 	    boost::asio::buffers_begin(buffer_->data())+n, s);
   buffer_->consume(n);
-  
+
   return n;
 }

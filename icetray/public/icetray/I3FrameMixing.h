@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef ICETRAY_I3FRAMEMIXING_H
 #define ICETRAY_I3FRAMEMIXING_H
 
@@ -6,20 +10,20 @@
 
 /**
  * When I3Frames are processed keys are mixed to subsequent frames on different
- * streams. This class encapsulates the necessary logic in one place, and 
- * provides and interface to retrieve the frames which currently have been or 
+ * streams. This class encapsulates the necessary logic in one place, and
+ * provides and interface to retrieve the frames which currently have been or
  * would be mixed into a frame of a given type.
  */
 class I3FrameMixer{
 public:
   /**
-   * Construct a frame mixer. 
+   * Construct a frame mixer.
    *
    * \param track_order whether the order of mixed frames is recorded. Tracking
    *                    has some runtime overhead, but enables MostRecentMixedStream
-   * \param disable_mixing whether the object will be used only to track frame 
+   * \param disable_mixing whether the object will be used only to track frame
    *                       dependencies, without performing actual mixing. This
-   *                       setting cannot be changed after construction. 
+   *                       setting cannot be changed after construction.
    */
   explicit I3FrameMixer(bool track_order=false, bool disable_mixing=false):
   track_order_(track_order),disable_mixing_(disable_mixing){}
@@ -49,18 +53,18 @@ public:
    * Get the stop type of the most recent frame to be mixed which has been or
    * will eligible for mixing into the given stream. Note that the stream in
    * question should generally be the one for which Mix() has most recently been
-   * called. 
+   * called.
    *
    * \pre Order tracking must be active
-   * \param stop The stream into which mixing is to be considered. 
+   * \param stop The stream into which mixing is to be considered.
    * \return The most recently seen miscable stream, if any
    */
-  boost::optional<I3Frame::Stream> 
+  boost::optional<I3Frame::Stream>
   MostRecentMixedStream(I3Frame::Stream stop) const;
-  
+
   /**
    * Update the frame cache as if mixing this frame, but without performing any
-   * mixing. This allows GetMixedFrames to give correct results, but is 
+   * mixing. This allows GetMixedFrames to give correct results, but is
    * incompatible with Mix. (Mix requires that only purged frames be added to
    * the cache, which this function does not enforce.)
    *
@@ -77,10 +81,10 @@ private:
   bool track_order_;
   const bool disable_mixing_;
   std::vector<boost::shared_ptr<I3Frame> > parent_cache_;
-  
+
   /**
-   * The internal implementation of UpdateDependencies which assumes that the 
-   * frame has been purged and performs no error checking. 
+   * The internal implementation of UpdateDependencies which assumes that the
+   * frame has been purged and performs no error checking.
    *
    * \param frame the frame to possibly add to the frame cache
    * \return the iterator to the new or updated entry in the parent cache

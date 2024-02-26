@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
 
 #ifndef ICETRAY_PYTHON_GET_CLASS_HPP_INCLUDED
 #define ICETRAY_PYTHON_GET_CLASS_HPP_INCLUDED
@@ -8,7 +11,7 @@
 
 namespace boost { namespace python {
 
-/// @brief return Python class corresponding to 
+/// @brief return Python class corresponding to
 template <typename T>
 boost::python::object get_class()
 {
@@ -35,7 +38,7 @@ boost::python::object get_class()
         return bp::tuple(union_members);
       }
     }
-    
+
     return bp::object();
 }
 

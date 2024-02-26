@@ -1,7 +1,7 @@
 /**
  *  Copyright (C) 2007-2010   Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *  Copyright (C) 2007-2010   the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -10,7 +10,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -22,9 +22,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 
 #include "PythonFunction.h"
@@ -106,12 +106,12 @@ PythonFunction::PythonFunction(const I3Context& context, bp::object func)
 
   if (numpy_module != 0 and errobj == 0)
     {
-      numpy_bool_type = bp::handle<>(PyObject_GetAttrString(numpy_module, 
+      numpy_bool_type = bp::handle<>(PyObject_GetAttrString(numpy_module,
 							    "bool_"));
-      
+
       numpy_true = bp::handle<>(PyObject_GetAttrString(numpy_module,
 						       "True_"));
-      
+
       numpy_false = bp::handle<>(PyObject_GetAttrString(numpy_module,
 							"False_"));
     }
@@ -201,7 +201,7 @@ void PythonFunction::Process()
 
   } catch (const bp::error_already_set& as) {
 
-    log_fatal("Python function inside PythonFuncton module '%s' returned value %s, which won't convert to True, False, or None", 
+    log_fatal("Python function inside PythonFuncton module '%s' returned value %s, which won't convert to True, False, or None",
 	      GetName().c_str(), repr(rv).c_str());
     throw as;
   }

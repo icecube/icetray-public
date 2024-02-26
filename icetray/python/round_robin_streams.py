@@ -1,8 +1,12 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube import icetray
 class RoundRobinStreams(icetray.I3Module):
     """
     Module creates and pushes frames of different types.
-    
+
     *Parameters*:
 
     * **Streams** -  list of frame 'stream types' to create and push.
@@ -11,7 +15,7 @@ class RoundRobinStreams(icetray.I3Module):
 
       tray.AddModule(RoundRobinStreams, 'rrs',
                      Streams = [icetray.I3Frame.Physics,
-                                icetray.I3Frame.Geometry])    
+                                icetray.I3Frame.Geometry])
 
     """
     def __init__(self, context):

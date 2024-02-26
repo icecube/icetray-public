@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import sys
 from icecube.icetray import I3Tray
 
@@ -19,5 +23,5 @@ except Exception as e:
 else:
     print("that should have thrown")
     sys.exit(1)
-                   
+
 

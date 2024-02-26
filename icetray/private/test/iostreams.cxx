@@ -1,8 +1,7 @@
 /**
  *
- *  Copyright (C) 2008
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  Copyright (C) 2008 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2008 the IceCube Collaboration <http://www.icecube.wisc.edu>
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
@@ -67,7 +66,7 @@ TEST(zero)
   fos.flush();
 
   remove(file);
-}  
+}
 
 TEST(one)
 {
@@ -77,13 +76,13 @@ TEST(one)
   io::file_sink fs(file);
   fos.push(io::gzip_compressor(9));
   fos.push(fs);
-  
+
   for (unsigned i =0; i< 100000; i++)
     fos << "HI" << i << "\n";
   fos.flush();
 
   remove(file);
-}  
+}
 
 TEST(two)
 {
@@ -91,13 +90,13 @@ TEST(two)
   const char * file = "sinky.gz";
 
   I3::dataio::open(fos, file);
-  
+
   for (unsigned i =0; i< 100000; i++)
     fos << "HI" << i << "\n";
   fos.flush();
 
   remove(file);
-}  
+}
 
 TEST(three)
 {
@@ -162,7 +161,7 @@ TEST(vectorchar_only)
   ofs.close();
 
   vector<char> vc2;
-  
+
   std::ifstream ifs(file, ios::binary);
   {
     icecube::archive::portable_binary_iarchive bia(ifs);
@@ -189,7 +188,7 @@ TEST(six)
   std::ifstream ifs(file, ios::binary);
 
   f2.load(ifs);
-  
+
   I3IntConstPtr ip = f2.Get<I3IntConstPtr>("int");
 
   ENSURE_EQUAL(ip->value, 7474);

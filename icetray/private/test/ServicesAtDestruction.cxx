@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @version $Revision$
@@ -32,19 +32,19 @@ struct ServiceAtDestructionService
   ServiceAtDestructionService()
   {
     existing_services.insert(this);
-  }  
-  
+  }
+
   ~ServiceAtDestructionService()
   {
     existing_services.erase(this);
   }
-    
+
   ServiceAtDestructionService* that()
   {
     return this;
   }
 };
-  
+
 
 // something that installs this service one instance into each
 // context that comes by.
@@ -56,7 +56,7 @@ struct ServiceAtDestructionPluralFactory : public I3ServiceFactory
   {
     boost::shared_ptr<ServiceAtDestructionService> sads(new ServiceAtDestructionService());
     return s.Put(sads, "Foo");
-  }    
+  }
 };
 
 I3_SERVICE_FACTORY(ServiceAtDestructionPluralFactory);
@@ -65,9 +65,9 @@ I3_SERVICE_FACTORY(ServiceAtDestructionPluralFactory);
 // every module
 struct ServiceAtDestructionServiceSingletonFactory : public I3ServiceFactory
 {
-  ServiceAtDestructionServiceSingletonFactory(const I3Context& context) 
+  ServiceAtDestructionServiceSingletonFactory(const I3Context& context)
     : I3ServiceFactory(context) { }
-    
+
   boost::shared_ptr<ServiceAtDestructionService> sads;
 
   bool InstallService(I3Context& s)
@@ -76,9 +76,9 @@ struct ServiceAtDestructionServiceSingletonFactory : public I3ServiceFactory
       sads = boost::shared_ptr<ServiceAtDestructionService>
 	(new ServiceAtDestructionService());
     return s.Put(sads, "Foo");
-  }    
+  }
 };
-  
+
 I3_SERVICE_FACTORY(ServiceAtDestructionServiceSingletonFactory);
 
 // a module to check for whether or not the service exists
@@ -90,12 +90,12 @@ struct ServicesAtDestructionModule : public I3Module
 public:
   ServicesAtDestructionModule(const I3Context& context) : I3Module(context)
   {}
-    
+
   ~ServicesAtDestructionModule()
   {
     ENSURE(existing_services.find(that) != existing_services.end());
   }
-    
+
   void Configure()
   {
     log_trace("%s",__PRETTY_FUNCTION__);
@@ -119,16 +119,16 @@ TEST(plural)
 {
   I3Tray tray;
   tray.AddService<ServiceAtDestructionPluralFactory>("serv");
-  tray.AddModule("ServicesAtDestructionModule");    
+  tray.AddModule("ServicesAtDestructionModule");
   tray.Execute();
-    
+
 }
 
 TEST(single)
 {
   I3Tray tray;
   tray.AddService<ServiceAtDestructionServiceSingletonFactory>("serv");
-  tray.AddModule("ServicesAtDestructionModule");    
+  tray.AddModule("ServicesAtDestructionModule");
   tray.Execute();
 }
 

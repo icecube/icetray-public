@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import sys
 from icecube.icetray import OMKey
 from icecube.icetray import I3Tray
@@ -24,7 +28,7 @@ try:
     t.AddModule("AllParametersModule", "apm2",
                 intvec_param = [1.1,1,2,3,4])
 
-    
+
 
     t.Execute(1)
     t.Finish()

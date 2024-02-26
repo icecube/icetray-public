@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. _i3tray_keyword_parameters:
 
 More natural parameter-passing syntax to I3Tray
@@ -12,7 +16,7 @@ and services.  The standard way to configure modules has been this:
    #
    #    Deprecated, old syntax
    #
-   tray.AddModule("I3DOMcalibrator", "calibrate-inice")(   
+   tray.AddModule("I3DOMcalibrator", "calibrate-inice")(
        ("CalibrationMode", 0),
        ("OutputToFile", False),
        ("InputRawDataName", "InIceRawData"),
@@ -22,7 +26,7 @@ and services.  The standard way to configure modules has been this:
 
 Where the call to :py:meth:`~.I3Tray.AddModule` is followed by a tuple of pairs,
 the first containing the name of the parameter as a string, the second
-containing the corresponding parameter value.  This could provoke 
+containing the corresponding parameter value.  This could provoke
 confusing errors if you forget a comma:
 
 ::
@@ -42,7 +46,7 @@ The new syntax is typical of keyword parameters in python:
                   OutputATWDDataName = "InIceCalibratedATWD",
                   OutputFADCDataName = "InIceCalibratedFADC")
 
-Which is less visually noisy, property indented by most editors, and 
+Which is less visually noisy, property indented by most editors, and
 provokes a much more sensible error message should you forget a comma:
 
 ::

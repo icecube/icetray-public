@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <icetray/I3SimpleLoggers.h>
 
 void I3FileLogger::Log(I3LogLevel level, const std::string &unit,

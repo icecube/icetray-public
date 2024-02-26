@@ -1,6 +1,6 @@
 //
 //   Copyright (c) 2011  Claudio Kopper <claudio.kopper@icecube.wisc.edu>
-//
+//   SPDX-License-Identifier: BSD-2-Clause
 #ifndef BOOST_SERIALIZABLE_PICKLE_SUITE_HPP_INCLUDED
 #define BOOST_SERIALIZABLE_PICKLE_SUITE_HPP_INCLUDED
 

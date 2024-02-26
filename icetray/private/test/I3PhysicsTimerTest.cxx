@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 #include <icetray/I3Units.h>
 #include <icetray/serialization.h>
@@ -15,7 +19,7 @@ using boost::assign::list_of;
 
 TEST_GROUP(I3PhysicsTimer);
 
-void 
+void
 do_sleep(I3FramePtr frame, const std::string name, unsigned sec, unsigned usec)
 {
   I3PhysicsTimer timer(frame, name);
@@ -70,7 +74,7 @@ TEST(test_timer)
 
 struct TimedModule : I3Module
 {
-  TimedModule(const I3Context& context) : I3Module(context) 
+  TimedModule(const I3Context& context) : I3Module(context)
   { }
 
   void Physics(I3FramePtr frame)

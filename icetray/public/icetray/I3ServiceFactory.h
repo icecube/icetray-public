@@ -1,11 +1,10 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  Simon Patton
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 Simon Patton
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -14,7 +13,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,9 +25,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #ifndef I3SERVICEFACTORY_H
 #define I3SERVICEFACTORY_H
@@ -38,7 +37,7 @@
 #include <boost/python/object.hpp>
 #include <boost/python/extract.hpp>
 #include <string>
- 
+
 /**
  * @brief This class defineds the interfaces used to install a service into an
  * I3Tray object.
@@ -79,7 +78,7 @@ public:
    * This transition is executed immediately before the first 'Process'
    * transition, thus any parameters that has been set, either by a person
    * or a steering file, will be available to this object before it starts
-   * processing data frames. 
+   * processing data frames.
    *
    * This transition also gives this object an opportunity to reserve any
    * resources it will need to use during the subsequent 'Process'
@@ -101,7 +100,7 @@ public:
 
   /**
      Adds a new parameter to the local configuration.
-    
+
      @param parameter the name of the parameter.
      @param description a desciption of the parameter to the users.
      @param defaultValue the default value of the parameter.
@@ -123,7 +122,7 @@ public:
      @param name the name of the parameter.
      @param value where to put the value.
      @return void
-   
+
      Values are converted to/from strings by boost::lexical_cast<>.
   */
   template <typename T>
@@ -135,9 +134,9 @@ public:
       value = configuration_.Get<T>(name);
     } catch (...) {
       try {
-        // NB: we got here by catching an error thrown by boost::python::extract(). 
-        // All subsequent calls will fail unless we clean it up. 
-        PyErr_Clear(); 
+        // NB: we got here by catching an error thrown by boost::python::extract().
+        // All subsequent calls will fail unless we clean it up.
+        PyErr_Clear();
         log_debug("...which failed the first time, so trying it again with Get<string>: %s", name.c_str());
         std::string context_name = configuration_.Get<std::string>(name);
         log_debug("Attempting a Get<T> on context name %s", context_name.c_str());

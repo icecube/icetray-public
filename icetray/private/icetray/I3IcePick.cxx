@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  John Pretz
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 John Pretz
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #include <icetray/I3IcePick.h>
 #include <icetray/I3Bool.h>
@@ -40,7 +39,7 @@ I3IcePick::I3IcePick(const I3Context& context) :
 	       "check to see if that result exists before evaluating again.",
 	       cache_);
 //
-//  Too early for harsh warnings.  Would be nice to see an orderly exit from C++ Icepicks where 
+//  Too early for harsh warnings.  Would be nice to see an orderly exit from C++ Icepicks where
 //	practical, it's likely needed in some places for a bit longer.  Also need full implementation
 //	of pypicks from c++ versions.
 //
@@ -84,9 +83,9 @@ I3IcePick::SelectFrameInterface(I3Frame& frame)
 	{
 	  I3BoolPtr answer(new I3Bool(SelectFrame(frame)));
 	  frame.Put(cachename_,answer);
-	  if(answer->value) 
+	  if(answer->value)
 	    ++npassed_;
-	  else 
+	  else
 	    ++nfailed_;
 	  return answer->value;
 	}
@@ -98,9 +97,9 @@ I3IcePick::SelectFrameInterface(I3Frame& frame)
   else
     {
       bool answer = SelectFrame(frame);
-      if(answer) 
+      if(answer)
 	++npassed_;
-      else 
+      else
 	++nfailed_;
       return answer;
     }

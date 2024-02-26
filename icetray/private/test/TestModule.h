@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef TESTMODULE_H
 #define TESTMODULE_H
 
@@ -5,7 +9,7 @@
 
 class TestModule : public I3Module
 {
- public: 
+ public:
   static TestModule* module;
   int intParam;
   double doubleParam;
@@ -15,7 +19,7 @@ class TestModule : public I3Module
 
  public:
 
-  TestModule(const I3Context& context) : I3Module(context) 
+  TestModule(const I3Context& context) : I3Module(context)
     {
       module = this;
       boolParam = false;
@@ -52,4 +56,4 @@ class TestModule : public I3Module
 
 };
 
-#endif 
+#endif

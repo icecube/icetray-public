@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @version $Revision$
@@ -33,8 +33,8 @@ struct MaintainInitialValuesModule : I3Module
 {
   boost::shared_ptr<MyService> service_ptr_param;
 
-  MaintainInitialValuesModule(const I3Context& context) : I3Module(context) 
-  { 
+  MaintainInitialValuesModule(const I3Context& context) : I3Module(context)
+  {
 
     bool_param = true;
     AddParameter("bool_param", "description of bool", bool_param);
@@ -53,7 +53,7 @@ struct MaintainInitialValuesModule : I3Module
 
     string_param = "We can't stop here.  This is Bat Country!";
     AddParameter("string_param", "description of string", string_param);
-    
+
     omkey_param = OMKey(-666,666);
     AddParameter("omkey_param", "OMKey!", omkey_param);
 
@@ -61,8 +61,8 @@ struct MaintainInitialValuesModule : I3Module
     AddParameter("service_ptr_param", "pointer to service.",service_ptr_param);
   }
 
-  virtual void Configure() 
-  { 
+  virtual void Configure()
+  {
     GetParameter("bool_param", bool_param);
     GetParameter("uchar_param", uchar_param);
     GetParameter("int_param", int_param);
@@ -79,12 +79,12 @@ struct MaintainInitialValuesModule : I3Module
     i3_assert( double_param == 3.1415926535897932);
     i3_assert( string_param == "We can't stop here.  This is Bat Country!");
     i3_assert( omkey_param == OMKey(-666,666));
-    i3_assert( service_ptr_param ); 
+    i3_assert( service_ptr_param );
   }
 
-  virtual void Process() { 
-    I3FramePtr frame = PopFrame(); 
-    PushFrame(frame, "OutBox"); 
+  virtual void Process() {
+    I3FramePtr frame = PopFrame();
+    PushFrame(frame, "OutBox");
   }
 
   virtual void Finish() { ; }

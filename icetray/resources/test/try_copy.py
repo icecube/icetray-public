@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 # Checking that the driving time exists
 #
@@ -17,7 +22,7 @@ tray.Add("FrameCheck",
     ensure_physics_has = ["src1", "src2"],
     ensure_physics_hasnt = ["dst1", "dst2"])
 
-tray.Add("Copy", 
+tray.Add("Copy",
     Keys = ["src1", "dst1", "src2", "dst2"])
 
 tray.Add("FrameCheck",

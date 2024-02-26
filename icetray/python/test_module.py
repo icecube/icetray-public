@@ -1,6 +1,5 @@
-#
-# (c) 2011
-# the IceCube Collaboration
+# Copyright (c) 2011 the IceCube Collaboration
+# SPDX-License-Identifier: BSD-2-Clause
 #
 # $Id: test_module.py 1635 2013-06-28 21:33:24Z nwhitehorn $
 #

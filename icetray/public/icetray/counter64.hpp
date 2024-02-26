@@ -1,10 +1,12 @@
 // (C) Copyright Jonathan Turkanis 2005.
+// SPDX-License-Identifier: BSL-1.0
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt.)
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
-// (C) 2006 Troy D. Straszheim This is the counter included with
+// Copyright (C) 2006 Troy D. Straszheim
+// This is the counter included with
 // boost::iostreams, modified to return a 64-bit size.
 
 #ifndef DATAIO_COUNTER64_HPP_INCLUDED
@@ -23,7 +25,7 @@
 // Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp> // VC7.1 C4244.
 
-namespace boost { 
+namespace boost {
   namespace iostreams {
 
     //
@@ -75,7 +77,7 @@ namespace boost {
 
     typedef basic_counter64<char>     counter64;
 
-  } 
+  }
 } // End namespaces iostreams, boost.
 
 #include <boost/iostreams/detail/config/enable_warnings.hpp>

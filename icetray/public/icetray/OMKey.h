@@ -1,9 +1,8 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2003-2007
- *  The IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2003-2007 The IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -12,7 +11,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -24,9 +23,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 
 #ifndef OMKEY_H_INCLUDED
@@ -53,7 +52,7 @@ static const unsigned omkey_version_ = 2;
  * can be 0 or 1.
  */
 
-class OMKey 
+class OMKey
 {
   int stringNumber_;
   unsigned int omNumber_;
@@ -63,13 +62,13 @@ class OMKey
 
   OMKey() : stringNumber_(0), omNumber_(0), pmtNumber_(0) {}
 
-  OMKey(int str,unsigned int om) 
+  OMKey(int str,unsigned int om)
     : stringNumber_(str), omNumber_(om), pmtNumber_(0) {}
 
-  OMKey(int str,unsigned int om, unsigned char pmt) 
+  OMKey(int str,unsigned int om, unsigned char pmt)
     : stringNumber_(str), omNumber_(om), pmtNumber_(pmt) {}
 
-  virtual ~OMKey(); 
+  virtual ~OMKey();
 
   /**
    * retrieves the string number for this OMKey
@@ -95,21 +94,21 @@ class OMKey
    * gets the PMT number in the DOM
    */
   unsigned char GetPMT() const { return pmtNumber_; }
-    
+
   /**
    * sets the PMT number in the DOM
    */
   void SetPMT(unsigned char pmt){ pmtNumber_ = pmt; }
 
   /**
-   * equality operator.  
+   * equality operator.
    * @return true if the string and om numbers of the two OMKey's match
    * @param rhs the OMKey to compare this one to.
    */
   bool operator==(const OMKey& rhs) const
     {
-      if(rhs.omNumber_ == omNumber_ && 
-         rhs.stringNumber_ == stringNumber_ && 
+      if(rhs.omNumber_ == omNumber_ &&
+         rhs.stringNumber_ == stringNumber_ &&
          rhs.pmtNumber_ == pmtNumber_)
 	return true;
       return false;
@@ -133,8 +132,8 @@ class OMKey
   {
     size_t operator()(const OMKey& key) const
     {
-      return (((static_cast<size_t>(abs(key.GetString()+19)) * 64) + 
-               static_cast<size_t>(key.GetOM()))) * 256 + 
+      return (((static_cast<size_t>(abs(key.GetString()+19)) * 64) +
+               static_cast<size_t>(key.GetOM()))) * 256 +
               static_cast<size_t>(key.GetPMT());
     }
   };

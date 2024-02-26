@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007-8
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007-8 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007-8 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 
 #include <algorithm>
@@ -60,7 +59,7 @@ namespace {
     inline IStreamT& istream_ignore_workaround(IStreamT& is, std::streamsize n)
     {
         std::streamsize count = n;
-        
+
         const std::streamsize buf_size = 10240;
         char buffer[buf_size];
         while (count > 0) {
@@ -169,16 +168,16 @@ I3Frame::I3Frame(const I3Frame& rhs)
 }
 
 
-vector<string> 
+vector<string>
 I3Frame::keys() const
 {
   vector<string> keys_;
-  for(I3Frame::map_t::const_iterator iter = map_.begin(); 
+  for(I3Frame::map_t::const_iterator iter = map_.begin();
       iter != map_.end();
       iter++)
     {
       keys_.push_back(iter->first.string);
-    }  
+    }
   std::sort(keys_.begin(), keys_.end());
   return keys_;
 }
@@ -271,12 +270,12 @@ void I3Frame::Put(const string& name, I3FrameObjectConstPtr element, const I3Fra
   map_t::iterator it = map_.find(name);
   if (it != map_.end())
     {
-      log_fatal("frame already contains \"%s\", of type \"%s\"", 
+      log_fatal("frame already contains \"%s\", of type \"%s\"",
                 name.c_str(), type_name(name).c_str());
     }
 
   validate_name(name);
-  
+
   boost::shared_ptr<value_t> sptr(new value_t);
   map_[name] = sptr;
   value_t& value = *sptr;
@@ -288,10 +287,10 @@ void I3Frame::Put(const string& name, I3FrameObjectConstPtr element, const I3Fra
 void I3Frame::Replace(const std::string& name, I3FrameObjectConstPtr element)
 {
   validate_name(name);
-  
+
   auto it=map_.find(name);
   if(it==map_.end())
-    log_fatal_stream("Attempt to replace object at key '" << name << 
+    log_fatal_stream("Attempt to replace object at key '" << name <<
                      "' but there is nothing there.");
   boost::shared_ptr<value_t> sptr(new value_t);
   map_[name] = sptr;
@@ -304,7 +303,7 @@ void I3Frame::Replace(const std::string& name, I3FrameObjectConstPtr element)
 void I3Frame::Rename(const string& fromname, const string& toname)
 {
   validate_name(toname);
-  
+
   map_t::iterator fromiter = map_.find(fromname);
   if (fromiter == map_.end())
     log_fatal("attempt to rename \"%s\" to \"%s\", but the source is empty",
@@ -376,8 +375,8 @@ const type_info* I3Frame::type_id(const string& key) const
   if (fo == NULL)
     return NULL;
 
-  // typeid ignores toplevel const/volatile and works the same on 
-  // pointers and references 
+  // typeid ignores toplevel const/volatile and works the same on
+  // pointers and references
   return &typeid(*fo);
 }
 
@@ -405,7 +404,7 @@ string I3Frame::Dump() const
 
 extern "C" unsigned long crc32c(unsigned long crc, const uint8_t *buf, unsigned int len);
 
-namespace 
+namespace
 {
   typedef struct crc_ {
     uint32_t crc;
@@ -429,7 +428,7 @@ namespace
 
   template <typename T, typename CRC>
   inline void
-  crcit (const T& container, CRC& crc, bool orly = true, 
+  crcit (const T& container, CRC& crc, bool orly = true,
 	 typename boost::disable_if<boost::is_pod<T> >::type* foo = 0)
   {
     if (! orly)
@@ -446,8 +445,8 @@ namespace
   }
 
   template <typename T, typename CRC>
-  inline void 
-  crcit (const T& pod, CRC& crc, bool orly = true, 
+  inline void
+  crcit (const T& pod, CRC& crc, bool orly = true,
 	 typename boost::enable_if<boost::is_pod<T> >::type* foo = 0)
   {
     if (!orly)
@@ -460,7 +459,7 @@ namespace
     crc.process_bytes(&pod, sizeof(T));
 #endif
   }
-}    
+}
 
 
 typedef uint64_t i3frame_size_t;
@@ -600,9 +599,9 @@ void I3Frame::save(OStreamT& os, const vector<string>& skip) const
               try {
               create_blob_impl(value);
               } catch (const exception &e) {
-                log_fatal("caught \"%s\" while writing frame object \"%s\" of type \"%s\"", 
+                log_fatal("caught \"%s\" while writing frame object \"%s\" of type \"%s\"",
                           e.what(), key.c_str(), value.blob.type_name.c_str());
-              } 
+              }
 
             string type_name = value.blob.type_name;
             poa << make_nvp("type_name", type_name);
@@ -641,7 +640,7 @@ bool I3Frame::load(IStreamT& is, const vector<string>& skip, bool verify_cksum)
   //  and if so call the load_old serialization routine.
   //
   if (frameTagRead[0] != tag[0])
-    {  
+    {
       // reinterpret tag as version #
 #if BYTE_ORDER == BIG_ENDIAN
       BOOST_STATIC_ASSERT(sizeof(frameTagRead) == 4);
@@ -657,7 +656,7 @@ bool I3Frame::load(IStreamT& is, const vector<string>& skip, bool verify_cksum)
   // dispatch to load_old didn't happen. verify that this is an .i3 file
   int cmp = memcmp(frameTagRead, tag, 4);
   if (cmp != 0){
-    log_debug("Frame tag found is %c%c%c%c, not [i3] as expected.  Is this really an .i3 file?",	      
+    log_debug("Frame tag found is %c%c%c%c, not [i3] as expected.  Is this really an .i3 file?",
 	      frameTagRead[0], frameTagRead[1], frameTagRead[2], frameTagRead[3]);
     log_fatal("Your I3File is corrupt.");
   }
@@ -800,7 +799,7 @@ bool I3Frame::load_v4(IStreamT& is, const vector<string>& skip)
     bia >> make_nvp("checksum", checksumRead);
 
     //
-    //  The checksumming that used to be here looked like this, 
+    //  The checksumming that used to be here looked like this,
     // but has been disabled as memory consumption became an issue.
     //
     // read entire frame into main buffer
@@ -881,7 +880,7 @@ bool I3Frame::load_old(IStream& is,
                        const vector<string>& skip,
                        uint32_t versionRead)
 {
-  if (is.eof())        
+  if (is.eof())
     return false;
 
   if (!is.good())
@@ -897,7 +896,7 @@ bool I3Frame::load_old(IStream& is,
 
   i3frame_nslots_t size;
   bufArchive >> make_nvp("size", size);
-      
+
   for (unsigned int i = 0; i < size; i++)
     {
       string key, type_name, buf;
@@ -911,7 +910,7 @@ bool I3Frame::load_old(IStream& is,
           boost::regex reg(*skipIter);
           skipIt = boost::regex_match(key, reg);
         }
-      if (skipIt) 
+      if (skipIt)
         {
 	  uint32_t count;
 	  bufArchive >> make_nvp("count", count);
@@ -931,8 +930,8 @@ bool I3Frame::load_old(IStream& is,
 	  } catch (const std::length_error& e) {
 	    log_fatal("Fatal length error while trying to deserialize object '%s' of type %s: object exceeds its maximum permitted size.", key.c_str(), type_name.c_str());
 	  }
-	
-  
+
+
 	  boost::shared_ptr<value_t> spv(new value_t);
 	  spv->stream = stop_.id();
 	  map_[key] = spv;
@@ -970,20 +969,20 @@ ostream& operator<<(ostream& os, const I3Frame::Stream& stream)
 
 ostream& operator<<(ostream& os, const I3Frame& frame)
 {
-  // 
+  //
   //  for readability print these in sorted order.
   //
   vector<string> keys;
-  for(I3Frame::map_t::const_iterator iter = frame.map_.begin(); 
+  for(I3Frame::map_t::const_iterator iter = frame.map_.begin();
       iter != frame.map_.end();
       iter++)
     {
       keys.push_back(iter->first.string);
-    }  
+    }
   std::sort(keys.begin(), keys.end());
 
   os << "[ I3Frame  (" << frame.stop_.str() << "):\n";
-  for(vector<string>::iterator iter = keys.begin(); 
+  for(vector<string>::iterator iter = keys.begin();
       iter != keys.end();
       iter++)
     {
@@ -995,7 +994,7 @@ ostream& operator<<(ostream& os, const I3Frame& frame)
 	os << " (" << frame.size(*iter) << ")";
       else
 	os << " (unk)";
-	
+
       os << "\n";
     }
   os << "]\n";
@@ -1009,11 +1008,11 @@ ostream& operator<<(ostream& os, const I3Frame& frame)
 I3FrameObjectConstPtr I3Frame::get_impl(map_t::const_reference pr) const
 {
   value_t& value = const_cast<value_t&>(*pr.second);
-  if (value.ptr) 
+  if (value.ptr)
     {
       if (drop_blobs_)
 	value.blob.reset();
-      
+
       return value.ptr;
     }
   if (!value.ptr && value.blob.buf.size() == 0)
@@ -1033,7 +1032,7 @@ I3FrameObjectConstPtr I3Frame::get_impl(map_t::const_reference pr) const
                 "at key \"%s\"", e.what(), value.blob.type_name.c_str(), pr.first.string.c_str());
     return I3FrameObjectConstPtr();
   }
-  
+
   return value.ptr;
 }
 

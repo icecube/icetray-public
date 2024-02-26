@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #ifndef ICETRAY_I3FRAME_H_INCLUDED
 #define ICETRAY_I3FRAME_H_INCLUDED
@@ -54,7 +53,7 @@
    one another.  It is passed from I3Module to I3Module by the icetray
    framework.
 */
-class I3Frame 
+class I3Frame
 {
  public:
   /**
@@ -62,7 +61,7 @@ class I3Frame
      stream this frame is on (in other words, which I3Module functions
      should get called as this frame goes downstream: Physics(),
      Geometry(), Calibration(), etc.
-     
+
      These *were* just an enum... But if streams change in the future,
      we want to be backwards-compatible with how we serialize these
      guys, and that means incrementing the version number on the
@@ -73,15 +72,15 @@ class I3Frame
     Stream() : value('N') { }
     /* explicit */ Stream(char c) : value(c) { }
     Stream(const Stream& rhs) : value(rhs.value) { }
-    Stream& operator=(const Stream& rhs) 
-    { 
-      if (this != &rhs) 
-        value = rhs.value; 
-      return *this; 
+    Stream& operator=(const Stream& rhs)
+    {
+      if (this != &rhs)
+        value = rhs.value;
+      return *this;
     }
 
     std::string str() const;
-    template <typename Archive> 
+    template <typename Archive>
     void serialize(Archive& ar, unsigned);
 
     bool operator==(const Stream& rhs) const { return value == rhs.value; }
@@ -106,7 +105,7 @@ class I3Frame
   const static Stream TrayInfo;
 
   static inline bool is_user_defined(const Stream& s){
-    return bool{s !=  I3Frame::None &&     
+    return bool{s !=  I3Frame::None &&
 	s !=  I3Frame::Geometry &&
 	s !=  I3Frame::Calibration &&
 	s !=  I3Frame::DetectorStatus &&
@@ -115,7 +114,7 @@ class I3Frame
 	s !=  I3Frame::Physics &&
 	s !=  I3Frame::TrayInfo};
   }
-  
+
  private:
   /// This is the type of the map with which the I3Frame is
   /// implemented.  It maps strings to shared-pointers-to-I3FrameObjects.
@@ -182,7 +181,7 @@ class I3Frame
   static void create_blob_impl(value_t &value);
 
   size_type size(const value_t& value) const { return value.size; }
-  
+
   /**
    * Checks whether a name is acceptable for use as a key in the frame
    * @throws std::runtime_error if the name is not allowed
@@ -205,12 +204,12 @@ class I3Frame
       return result;
     }
   };
-  typedef boost::transform_iterator<typename_transform, 
+  typedef boost::transform_iterator<typename_transform,
                                     map_t::const_iterator,
                                     const std::pair<std::string, std::string>&
                                     > typename_iterator_t;
 
-  class deserialize_transform 
+  class deserialize_transform
   {
    private:
     typedef std::pair<std::string, I3FrameObjectConstPtr> pair_t;
@@ -233,18 +232,18 @@ class I3Frame
       return result;
     }
   };
-  typedef boost::transform_iterator<deserialize_transform, 
+  typedef boost::transform_iterator<deserialize_transform,
                                     map_t::const_iterator,
                                     const std::pair<std::string, I3FrameObjectConstPtr>&
                                     > deserialize_iterator;
 
-  struct typename_iterator : typename_iterator_t { 
+  struct typename_iterator : typename_iterator_t {
     typename_iterator(const map_t::const_iterator& iter)
-      : typename_iterator_t(iter) 
+      : typename_iterator_t(iter)
     { }
   };
 
-  class const_iterator : public deserialize_iterator 
+  class const_iterator : public deserialize_iterator
   {
    public:
     const_iterator() { }
@@ -267,12 +266,12 @@ class I3Frame
 
   Stream GetStop() const { return stop_; }
   Stream GetStop(const std::string& key) const;
-  
-  void SetStop(Stream newstop) { stop_ = newstop; }  
+
+  void SetStop(Stream newstop) { stop_ = newstop; }
 
   bool drop_blobs() const { return drop_blobs_; }
   /** Determine policy: Drop the blobs after deserialization?
-   * 
+   *
    * @param drop True corresponds to <em>drop blobs</em>.
    */
   void drop_blobs(bool drop) { drop_blobs_ = drop; }
@@ -280,24 +279,24 @@ class I3Frame
   size_type size() const { return map_.size(); }
   void clear() { map_.clear(); }
 
-  const_iterator begin() const { return const_iterator(map_.begin(), this); } 
-  const_iterator end() const { return const_iterator(map_.end(), this); } 
+  const_iterator begin() const { return const_iterator(map_.begin(), this); }
+  const_iterator end() const { return const_iterator(map_.end(), this); }
 
   typename_iterator typename_begin() const { return typename_iterator(map_.begin()); }
   typename_iterator typename_end() const { return typename_iterator(map_.end()); }
-  typename_iterator typename_find(const std::string& key) const 
-  { 
+  typename_iterator typename_find(const std::string& key) const
+  {
     return typename_iterator(map_.find(key));
   }
 
   size_type size(const std::string& key) const;
   size_type count(const std::string& key) const { return map_.count(key); }
-  const_iterator find(const std::string& key) const 
-  { 
-    return const_iterator(map_.find(key), this); 
+  const_iterator find(const std::string& key) const
+  {
+    return const_iterator(map_.find(key), this);
   }
   /** Test, if a frame object exists at a given "slot".
-   * 
+   *
    * @param key The "slot" in the frame to check.
    * @return true, if something exists in the frame at slot <VAR>key</VAR>, otherwise false.
    */
@@ -308,7 +307,7 @@ class I3Frame
   // delete any frame objects we're carrying that are on stream 'what'
   void purge(const Stream& what);
 
-  // delete all frame objects we're carrying that aren't on our stream 
+  // delete all frame objects we're carrying that aren't on our stream
   void purge();
 
   //
@@ -323,10 +322,10 @@ class I3Frame
     take(rhs, what, what);
   }
   /** Get a frame object.
-   * 
+   *
    * \note
    * This version of Get is called when the template argument is a
-   * shared_ptr.  
+   * shared_ptr.
    *
    * @param name This is the name of the object in the frame.  That
    * is, the key into the map under which the object is stored.  This
@@ -355,18 +354,18 @@ class I3Frame
       return boost::shared_ptr<typename T::element_type>();
 
     I3FrameObjectConstPtr focp = get_impl(*iter);
-         
+
     return boost::dynamic_pointer_cast<typename T::element_type>(focp);
   }
   /** Get a frame object.
-   * 
+   *
    * \note
    * This version of Get is called when the template argument is not a shared pointer.
    * It returns a const reference to T.
    */
   template <typename T>
   const T&
-  Get(const std::string& name = I3DefaultName<T>::value(), 
+  Get(const std::string& name = I3DefaultName<T>::value(),
       typename boost::disable_if<is_shared_ptr<T> >::type * = 0) const
   {
     log_trace("Get<%s>(\"%s\")", I3::name_of<T>().c_str(), name.c_str());
@@ -374,7 +373,7 @@ class I3Frame
     boost::shared_ptr<const T> sp_t = this->template Get<boost::shared_ptr<const T> >(name);
     if (!sp_t){
       if(!this->Has(name)){
-          log_fatal("object in frame at \"%s\" doesn't exist. ", name.c_str());                    
+          log_fatal("object in frame at \"%s\" doesn't exist. ", name.c_str());
         }else{
           log_fatal("object in frame at \"%s\" exists, but "
                     "won't dynamic cast to type \"%s\"",
@@ -390,19 +389,19 @@ class I3Frame
   }
 
   /** Puts something into the frame.
-   * 
+   *
    * @param name Where to put it.
-   * @param element What to put in there. 
+   * @param element What to put in there.
    * Must be a shared_ptr to something that inherits from I3FrameObject.
    * @param stream The stream to act on.
    * @throw If something exists already in the frame at key <VAR>name</VAR>,
    * this function will throw via log_fatal.
    */
-  void Put(const std::string& name, 
+  void Put(const std::string& name,
 	   boost::shared_ptr<const I3FrameObject> element,
 	   const I3Frame::Stream& stream);
 
-  void Put(const std::string& name, 
+  void Put(const std::string& name,
 	   boost::shared_ptr<const I3FrameObject> element);
 
   /** Puts something into the frame at its "default" location.
@@ -416,13 +415,13 @@ class I3Frame
   {
     Put(I3DefaultName<T>::value(),element);
   }
-  
+
   /**
    * Puts something into the frame, even if there is already something else there
    * @param name Where to put it.
    * @param element What to put in there.
    */
-  void Replace(const std::string& name, 
+  void Replace(const std::string& name,
 	   boost::shared_ptr<const I3FrameObject> element);
 
   ///
@@ -435,7 +434,7 @@ class I3Frame
   void ChangeStream(const std::string& key, Stream stream);
 
   ///
-  /// Deletes something.  
+  /// Deletes something.
   ///
   void Delete(const std::string& key);
 
@@ -453,17 +452,17 @@ class I3Frame
   /// @param os the stream to which to write
   /// @param skip a collection of keys which should not be written
   template <typename OStreamT>
-  void 
+  void
   save(OStreamT& os, const std::vector<std::string>& skip = std::vector<std::string>()) const;
 
-  /// Deserialize a frame from an input stream, 
+  /// Deserialize a frame from an input stream,
   /// replacing the current contents of this frame.
   /// @param is the stream from which to read
   /// @param skip a collection of keys which should not be read
   /// @param verify_checksums whether to verify that the data being read matches
   ///        the saved checksum
   template <typename IStreamT>
-  bool 
+  bool
   load(IStreamT& is, const std::vector<std::string>& skip = std::vector<std::string>(), bool verify_checksums = true);
 
   std::string Dump() const;
@@ -492,7 +491,7 @@ class I3Frame
  private:
 
   template <typename IStreamT>
-  bool load_old(IStreamT& ifs, const std::vector<std::string>& skip, 
+  bool load_old(IStreamT& ifs, const std::vector<std::string>& skip,
 		unsigned version);
 
   template <typename IStreamT>

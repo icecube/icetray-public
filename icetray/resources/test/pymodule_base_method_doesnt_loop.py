@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 
-from icecube import icetray 
+from icecube import icetray
 import sys
 
 class TestModule(icetray.I3Module):

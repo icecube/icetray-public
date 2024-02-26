@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <icetray/scratch.h>
 #include <icetray/I3Logging.h>
 
@@ -13,7 +17,7 @@ namespace I3 {
 	namespace dataio {
 		namespace {
 			std::string scratch_dir;
-			
+
 			bool find_or_make_dir(const std::string& path){
 				int result=mkdir(path.c_str(),S_IRWXU);
 				if(result==-1)
@@ -21,12 +25,12 @@ namespace I3 {
 				return(result==0 || result==EEXIST);
 			}
 		}
-		
+
 		std::string GetScratchDirectory(){
 			//if we already have something, use that
 			if(!scratch_dir.empty())
 				return(scratch_dir);
-			
+
 			//try environment variables
 			//TODO: for these we do no validation;
 			//adding it might be more user-friendly
@@ -41,7 +45,7 @@ namespace I3 {
 				scratch_dir=envResult;
 				return(scratch_dir);
 			}
-			
+
 			//try some somewhat common locations
 			//TODO: getpwuid is discouraged on darwin but getpwuid_r is not
 			//available on common (old) linux versions (like RHEL 6)
@@ -61,7 +65,7 @@ namespace I3 {
 					return(scratch_dir);
 				}
 			}
-			
+
 			//fall back on using the current working directory
 			const unsigned int pathSize=
 			#ifdef PATH_MAX //Linux
@@ -85,7 +89,7 @@ namespace I3 {
 			                << scratch_dir << ").");
 			return(scratch_dir);
 		}
-		
+
 		void SetScratchDirectory(std::string path){
 			if(find_or_make_dir(path))
 				scratch_dir=path;
@@ -93,7 +97,7 @@ namespace I3 {
 				log_fatal_stream("Unable to set scratch directory to " << path
 				                 << ": directory could not be created or is inaccessible");
 		}
-		
+
 		void UnsetScratchDirectory(){
 			scratch_dir.clear();
 		}

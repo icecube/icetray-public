@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef TESTSERVICEFACTORY_H
 #define TESTSERVICEFACTORY_H
 
@@ -22,12 +26,12 @@ class TestServiceFactory : public I3ServiceFactory
 
   static TestServiceFactory* instance;
 
-  ~TestServiceFactory() 
-  { 
-    instance = NULL; 
+  ~TestServiceFactory()
+  {
+    instance = NULL;
   }
 
-  TestServiceFactory(const I3Context& context) 
+  TestServiceFactory(const I3Context& context)
     : I3ServiceFactory(context), configured(false)
     {
       instance = this;
@@ -46,7 +50,7 @@ class TestServiceFactory : public I3ServiceFactory
       log_trace("configured=%d", configured);
       ENSURE(!configured);
       GetParameter("intParam",intParam);
-      GetParameter("stringParam",stringParam);      
+      GetParameter("stringParam",stringParam);
       GetParameter("boolParam",boolParam);
       GetParameter("floatParam",floatParam);
       GetParameter("doubleParam",doubleParam);
@@ -54,7 +58,7 @@ class TestServiceFactory : public I3ServiceFactory
       configured = true;
     }
 
-  bool InstallService(I3Context&) 
+  bool InstallService(I3Context&)
     {
       ENSURE(configured);
       return true;

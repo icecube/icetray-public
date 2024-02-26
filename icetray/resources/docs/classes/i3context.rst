@@ -1,4 +1,8 @@
-.. index:: 
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
+.. index::
    pair: I3Context; C++ Class
 .. _I3Context:
 
@@ -18,21 +22,21 @@ The main differences are:
 
 The icetray passes a const I3Context to I3ServiceFactories and I3Modules in their constructors::
 
- class MyModule : public I3Module 
+ class MyModule : public I3Module
  {
  public:
- 
+
    MyModule(const I3Context&);
- 
+
    // etc
- };         
- 
+ };
+
  class MyServiceFactory : public I3ServiceFactory
  {
  public:
- 
-   MyServiceFactory(const I3Context&); 
- 
+
+   MyServiceFactory(const I3Context&);
+
  };
 
 and it is through this context that an I3Module accesses whatever
@@ -43,18 +47,18 @@ I3Modules store this context in the protected member ``context_``, which
 (because it is protected and not private) is visible to derived module
 classes::
 
- class I3Module 
+ class I3Module
  {
  public:
-   I3Module(const I3Context& context); 
- 
+   I3Module(const I3Context& context);
+
  protected:
-   I3Context context_;  // this is visible to your module. 
- 
+   I3Context context_;  // this is visible to your module.
+
  };
 
 Interface
----------------- 
+----------------
 
 I3Context::Has()
 ^^^^^^^^^^^^^^^^
@@ -86,12 +90,12 @@ These get references to services where the object has a DefaultName, determinabl
  I3MediumService& medium = context_.Get<I3MediumService>();
 
  I3RandomService& rng = context_.Get<I3RandomService>();
- 
+
 The following form gets smart pointers to the same services. Get will return a null shared_ptr if either the context is empty at the relevant slot, or if the contents of the relevant slot are of the wrong type::
 
- I3MediumServicePtr medium_p = context_.Get<I3MediumServicePtr>(); 
+ I3MediumServicePtr medium_p = context_.Get<I3MediumServicePtr>();
  // medium_p == false,  if retrieval failed.
- 
+
  I3RandomServicePtr rng_p = context_.Get<I3RandomServicePtr>();
  // rng_p == false,  if retrieval failed.
 
@@ -105,7 +109,7 @@ The big difference between I3Frame's Put and I3Context's Put is that with the I3
  fib_p->initialize();
  context_.Put<I3RandomService>(fib_p);
 
-The example above assumes that I3RandomService has some default name. 
+The example above assumes that I3RandomService has some default name.
 
 Example: A random number service
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -118,28 +122,28 @@ Therefore one requires some single interface that all random number generators p
 
 We'll take a family of random number generators, each of which must supply random doubles and be seedable with an int. The base class specifies what any derived class must be able to do::
 
- class RandomNumberService 
+ class RandomNumberService
  {
  protected:
- 
+
     RandomNumberService();
     virtual ~RandomNumberService() = 0;
- 
- public: 
- 
+
+ public:
+
     virtual double Rand()    = 0;
     virtual void   Seed(int) = 0;
- };  
+ };
 
 Derived classes implement those pure virtual functions (the ones followed by = 0). Here is one that uses UNIX's built in rand() function::
 
- class UnixRandService : public RandomNumberService 
- { 
- 
+ class UnixRandService : public RandomNumberService
+ {
+
  public:
    UnixRandService() { }
    ~UnixRandService() { }
- 
+
    double Rand()      { return std::rand(); }
    void   Seed(int i) { seed(i);            }
  };
@@ -147,14 +151,14 @@ Derived classes implement those pure virtual functions (the ones followed by = 0
 This one isn't random at all, but it illustrates how the derived classes "hide" behind the base class interface::
 
  // this one isn't all that random
- class SequentialNumberService : public RandomNumberService 
+ class SequentialNumberService : public RandomNumberService
  {
    double d;
- 
+
  public:
    SequentialNumberService() { }
    ~SequentialNumberService() { }
- 
+
    double Rand()      { d += 1.1; return d; }
    void   Seed(int i) { d = i * 1.1;       }
  };
@@ -170,21 +174,21 @@ The steering file instructs the framework to install a UnixRandService object at
 
 And modules looking for this random service access it via its name and base class, not derived type. It looks like this::
 
- void 
+ void
  MyModule::Physics(I3FramePtr frame)
  {
-   RandomNumberService &randoms = context_.Get<RandomNumberService>("rand"); 
- 
+   RandomNumberService &randoms = context_.Get<RandomNumberService>("rand");
+
    cout << "Next random number is " << randoms.Rand() << "!\n";
  }
 
 and not::
 
- void 
+ void
  MyModule::Physics(I3FramePtr frame)
  {
-   UnixRandService &randoms = context_.Get<UnixRandService>("rand"); 
- 
+   UnixRandService &randoms = context_.Get<UnixRandService>("rand");
+
    cout << "Next random number is " << randoms.Rand() << "!\n";
  }
 

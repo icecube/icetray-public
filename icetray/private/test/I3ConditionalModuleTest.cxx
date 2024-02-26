@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 
 TEST_GROUP(I3ConditionalModule);
@@ -67,16 +71,16 @@ public:
   {
     I3FramePtr frame(new I3Frame(I3Frame::Physics));
 
-    if(called < 2) 
+    if(called < 2)
       frame->Put("lt_two",I3FrameObjectPtr());
 
-    if(called >= 2) 
+    if(called >= 2)
       frame->Put("ge_two",I3FrameObjectPtr());
 
-    if(called % 2 == 0) 
+    if(called % 2 == 0)
       frame->Put("mod_two",I3FrameObjectPtr());
 
-    if(called % 3 == 0) 
+    if(called % 3 == 0)
       frame->Put("mod_three",I3FrameObjectPtr());
 
     PushFrame(frame);
@@ -137,12 +141,12 @@ TEST(on_mod_two)
     ("where", "mod_two")
     ("expected", 5)
     ;
-				      
+
   tray.AddModule("CountObject")
     ("where", "mod_two_pick_cache")
     ("expected", 10)
     ;
-				      
+
   tray.AddModule("Dump");
 
   tray.Execute(10);
