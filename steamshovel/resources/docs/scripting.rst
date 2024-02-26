@@ -6,7 +6,7 @@ through python scripting.  There are several ways to execute python commands
 in Steamshovel:
 
 * Typing code directly in the embedded python prompt
-* Executing a file by running ``execfile(file.py)`` or ``%run -i file.py`` in the embedded prompt
+* Executing a file by running ``exec(open("file.py").read())`` or ``%run -i file.py`` in the embedded prompt
 * Executing a file at the command line as ``steamshovel -s file.py``
 
 Some of the Qt-based python bindings (e.g. for controlling the window or application objects)
