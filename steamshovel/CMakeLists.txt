@@ -11,10 +11,9 @@ if(BUILD_STEAMSHOVEL)
 
   # look for homebrew, and its qt5 paths
   if(BREW)
-    execute_process(COMMAND ${BREW} --prefix qt5 OUTPUT_VARIABLE QT5_BREW_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+    execute_process(COMMAND ${BREW} --prefix qt@5 OUTPUT_VARIABLE QT5_BREW_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
     find_package(Qt5 COMPONENTS OpenGL
-      HINTS ${QT5_BREW_PATH}
-      PATH /usr/local/Cellar/qt5/5.7.0)
+      HINTS ${QT5_BREW_PATH})
   endif()
 
   # non-homebrew search
@@ -212,7 +211,7 @@ if(BUILD_STEAMSHOVEL)
     colormsg(CYAN "+-- Disabling build of ${PROJECT_NAME}.")
 
     add_custom_target(steamshovel
-      COMMENT "\n>>>\n>>> ${PROJECT_NAME} build skipped becase Qt5 was not found
+      COMMENT "\n>>>\n>>> ${PROJECT_NAME} build skipped because Qt5 was not found
 or there was a config error\n>>>"
     )
   endif()

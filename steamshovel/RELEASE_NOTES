@@ -6,6 +6,9 @@ Release Notes
 main
 ----
 
+* change the matplotlib renderer, sparing us some potential crashes (beec9ab05)
+* documentation & cmake cleanups
+
 Feb. 20, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.9.2
