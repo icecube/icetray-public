@@ -9,7 +9,7 @@ from icecube._icetray import *
 __version__ = PROJECT_VERSION
 
 from icecube.icetray.test_module import I3TestModuleFactory
-from icecube.icetray.traysegment import traysegment, traysegment_inherit, module_altconfig
+from icecube.icetray.traysegment import traysegment, timedtraysegment, traysegment_inherit, module_altconfig
 from icecube.icetray.pypick import pypick
 from icecube.icetray import i3logging as logging
 from icecube.icetray.i3tray import I3Tray

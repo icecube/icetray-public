@@ -7,6 +7,8 @@
 #
 
 import inspect # the real inspect
+import functools
+import time
 
 def traysegment(function):
     """Register a tray segment configuration function with icetray.
@@ -89,3 +91,35 @@ def module_altconfig(module, **altdefargs):
         defaultoverrides=altdefargs)(segment)
     return func
 
+
+def timedtraysegment(original_traysegment):
+    """Register a tray segment configuration function with icetray, but
+    with an added timer put into the frame under name+"_SegmentTimer_seconds".
+    The segment can then be added to a tray using I3Tray.AddSegment().
+
+    Usage:
+    @icetray.timedtraysegment
+    def segment(tray, name, arg=stuff):
+    """
+    
+    @traysegment
+    @functools.wraps(original_traysegment)
+    def segment_with_timers(tray, name, *args, **kwargs):
+        from icecube.icetray import I3Frame
+        from icecube.dataclasses import I3Double
+        timer_name = name + "_SegmentTimer_seconds"
+        def start_timer(frame):
+            frame[timer_name] = I3Double(time.time())
+        def end_timer(frame):
+            runtime = time.time() - frame[timer_name].value
+            del frame[timer_name]
+            frame[timer_name] = I3Double(runtime)
+            
+        tray.Add(start_timer, timer_name+"_start",
+                 Streams=[I3Frame.DAQ, I3Frame.Physics])
+        return_vals = original_traysegment(tray, name, *args, **kwargs)
+        tray.Add(end_timer, timer_name+"_stop",
+                 Streams=[I3Frame.DAQ, I3Frame.Physics])
+        return return_vals
+        
+    return segment_with_timers
