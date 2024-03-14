@@ -49,7 +49,7 @@ void register_MapOMKeyI3VEMCalibration()
 
 void register_MapOMKeyI3IceTopSLCCalibration()
 {
-  class_<std::map<OMKey, I3IceTopSLCCalibration> >("Map_OMKey_I3IceTopSLCCalibration")
-    .def(dataclass_suite<std::map<OMKey, I3IceTopSLCCalibration> >())
+  class_<I3Map<OMKey, I3IceTopSLCCalibration> >("Map_OMKey_I3IceTopSLCCalibration")
+    .def(dataclass_suite<I3Map<OMKey, I3IceTopSLCCalibration> >())
     ;
 }
