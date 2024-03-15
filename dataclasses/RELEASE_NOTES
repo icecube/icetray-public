@@ -5,6 +5,8 @@ Release Notes
 
 main
 ----
+
+* Explicitly import tableio converters (#3412)
 * Small bugfix to the pybindings of the MapOMKeyI3IceTopSLCCalibration (#3361)
 
 Feb. 20, 2024 don la dieu (nega at icecube.umd.edu)
