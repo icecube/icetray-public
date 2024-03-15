@@ -1,3 +1,5 @@
+.. _testingguide-main:
+
 Complete Testing Guide for IceCube
 ==================================
 

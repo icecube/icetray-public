@@ -10,6 +10,7 @@ Basic Info
 
    info/overview
    info/quickstart
+   info/contributing
    info/cvmfs
    info/ssh_keys
 
@@ -73,4 +74,4 @@ Indices and tables
 About this documentation
 ========================
 
-See :ref:`Documentation`
+See :ref:`documentation-main`

@@ -1,3 +1,5 @@
+.. _documentation-main:
+
 =============
 Documentation
 =============
@@ -122,10 +124,10 @@ factories are referenced by abusing the javascript domain ``:js:data:`MyModule``
 The cross references by path can also be used in toctrees:
 
 .. code-block:: rst
-   
+
   .. toctree::
      :maxdepth: 1
-	      
+
      /python/icecube.myproject
      /doxygen/myproject/index
      /inspect/myproject
@@ -133,10 +135,10 @@ The cross references by path can also be used in toctrees:
 Or if you don't like using the titles of the page as the link provide your own:
 
 .. code-block:: rst
-   
+
   .. toctree::
      :maxdepth: 1
-	      
+
      Python API Reference </python/icecube.myproject>
      C++ API Reference </doxygen/myproject/index>
      IceTray Inspect Reference </inspect/myproject>
