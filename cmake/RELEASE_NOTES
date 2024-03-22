@@ -8,6 +8,8 @@ Release Notes
 main
 ----
 
+* fix apple linker detection for Xcode 15.3
+
 Feb. 20, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.9.2

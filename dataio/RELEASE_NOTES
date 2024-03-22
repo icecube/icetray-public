@@ -6,6 +6,8 @@ Release Notes
 main
 ----
 
+* strip DetectorStatus frames (4e366db52)
+
 Feb. 20, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.9.2
