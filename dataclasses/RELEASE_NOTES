@@ -6,6 +6,10 @@ Release Notes
 main
 ----
 
+March 14, 2023 don la dieu (nega at icecube.umd.edu)
+----------------------------------------------------
+IceTray Release v1.10.0
+
 * Explicitly import tableio converters (#3412)
 * Small bugfix to the pybindings of the MapOMKeyI3IceTopSLCCalibration (#3361)
 

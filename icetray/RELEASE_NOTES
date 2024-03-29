@@ -10,6 +10,10 @@ Release Notes
 main
 ----
 
+March 14, 2023 don la dieu (nega at icecube.umd.edu)
+----------------------------------------------------
+IceTray Release v1.10.0
+
 * [icetray] @icetray.timedtraysegment decorator (#3402)
 
 6c1faa40d [IceTray] Add SPDX tags (#3387) [Kevin Meagher]Feb. 20, 2024 don la dieu (nega at icecube.umd.edu)

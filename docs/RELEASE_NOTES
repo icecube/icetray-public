@@ -6,6 +6,10 @@ Release Notes
 main
 ----
 
+March 14, 2023 don la dieu (nega at icecube.umd.edu)
+----------------------------------------------------
+IceTray Release v1.10.0
+
 - add a python example for the file description block (236e00392)
 - Add a guide for new contributors (#3363)
 
