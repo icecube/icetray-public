@@ -17,14 +17,16 @@ if (USE_OPENCL)
   if("$ENV{OPENCL_VENDOR_PATH}" MATCHES "^/cvmfs/icecube.opensciencegrid.org/distrib/")
     get_filename_component(OPENCL_BASE "$ENV{OPENCL_VENDOR_PATH}/../../.." ABSOLUTE)
     message(STATUS "Searching cvmfs ${OPENCL_BASE}")
-    SET(OpenCL_LIBRARY "${OPENCL_BASE}/lib/x86_64/libOpenCL.so")
-    SET(OpenCL_INCLUDE_DIR "${OPENCL_BASE}/include")
+    if(IS_DIRECTORY ${OPENCL_BASE})
+      set(OpenCL_LIBRARY "${OPENCL_BASE}/lib/x86_64/libOpenCL.so")
+      set(OpenCL_INCLUDE_DIR "${OPENCL_BASE}/include")
+    endif()
   endif()
 
  find_package(OpenCL QUIET)
 
  if (OpenCL_FOUND)
-    #set uppercase name so macros in project.cmake know what is happending
+    #set uppercase name so macros in project.cmake know what is happening
     SET(OPENCL_FOUND TRUE)
     SET(OPENCL_INCLUDE_DIRS "${OpenCL_INCLUDE_DIRS}")
     get_filename_component(_hint "${OpenCL_LIBRARIES}" DIRECTORY)
