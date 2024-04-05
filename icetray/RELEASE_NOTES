@@ -14,9 +14,10 @@ March 14, 2023 don la dieu (nega at icecube.umd.edu)
 ----------------------------------------------------
 IceTray Release v1.10.0
 
-* [icetray] @icetray.timedtraysegment decorator (#3402)
+* @icetray.timedtraysegment decorator (#3402)
+* Add SPDX tags (#3387)
 
-6c1faa40d [IceTray] Add SPDX tags (#3387) [Kevin Meagher]Feb. 20, 2024 don la dieu (nega at icecube.umd.edu)
+Feb. 20, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.9.2
 
@@ -42,7 +43,7 @@ IceTray Release v1.9.0
 * python ruff cleanup fix EXE001 (#3289)
 * use callable(obj) vs hasattr(obj, "__call__") (#3242)
 * fix erroneous noqa directives (#3252)
-* add filter to supress pybinding already registered warning (#3226)
+* add filter to suppress pybinding already registered warning (#3226)
 * remove I3Test.ENSURE* family of convenience functions (#3192)
 * general python cleanups
 
@@ -201,7 +202,7 @@ Release V16-03-00
 * documentation fixes
 * prune dead code
 * ``icetray-inspect`` fixes for better documentation
-* udpates for C++11
+* updates for C++11
 * remove hand-rolled ``isnan()``
 
 
