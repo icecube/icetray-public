@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube import icetray
 from icecube.shovelio import I3FrameSequence
 from icecube.dataio import I3File

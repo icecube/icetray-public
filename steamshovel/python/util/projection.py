@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import os
 import sys
 import math
@@ -219,7 +223,7 @@ def make_colorbar(filename, timerange, width, scale):
     time_inc = timerange/(intervals-1)
     ticks = [round(time_inc*x,1) for x in range(intervals)]
     norm = Normalize(-0.25*time_inc, timerange+time_inc*0.25)
-    
+
     N = 256*4
     hsv = numpy.vstack((numpy.linspace(0, 0.7, N), numpy.ones(N), numpy.ones(N))).T
     cmap = LinearSegmentedColormap.from_list('steamshovel', list(hsv_to_rgb(hsv.reshape(N,1,3)).squeeze()), N)
@@ -334,4 +338,4 @@ def get_projection(filename, frame=None, include_xyz=True, include_colorscale=Tr
         stitch(main, thumbs, colorscale, filename, width, height)
     finally:
         shutil.rmtree(tmpdir)
-    
+

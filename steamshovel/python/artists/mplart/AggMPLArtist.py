@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from matplotlib.backends.backend_agg import new_figure_manager
 
 from .AbstractMPLArtist import MPLArtist
@@ -15,7 +19,7 @@ class AggMPLArtist( MPLArtist ):
     def get_canvas_cleanup( self, figure ):
         '''
         Return the cleanup action that fires whenver this artist's current output invalidates
-        
+
         This just clears the output
         '''
         def impl():

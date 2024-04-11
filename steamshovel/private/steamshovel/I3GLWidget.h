@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3_SHOVEL_GLWIDGET_H
 #define I3_SHOVEL_GLWIDGET_H
 
@@ -112,7 +116,7 @@ public Q_SLOTS:
 	void resetCamera();
 	void setPerspective( bool );
 	void setCameraLock( bool );
-	
+
 	// the fundamental screenshot API, called by the various screenshot slots below
 	void screenshot_engine( int xdim, int ydim, const std::string& name,
 	                        int dpi, double scaling_factor = 1.0, double gamma_factor = 1.0 );

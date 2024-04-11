@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube.shovelart import PyArtist, PyQColor, RangeSetting, TimeWindowColor
 from matplotlib.figure import SubplotParams
 from icecube.icetray import logging
@@ -7,9 +11,9 @@ class MPLArtist( PyArtist ):
     '''A PyArtist representing a matplotlib figure, intended for any backend'''
 
     class _manager_cleanup:
-        ''' 
+        '''
         Figure manager cleanup action, to be passed to PyArtist.addCleanupAction
-        
+
         This action will trigger when this MPLArtist is deleted.  It should not be
         confused with the get_canvas_cleanup() method which returns an action to be
         called whenever the previous outputs the artists are invalided, i.e. when

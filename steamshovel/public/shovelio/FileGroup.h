@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef SHOVEL_RAW_FILEGROUP_H_
 #define SHOVEL_RAW_FILEGROUP_H_
 

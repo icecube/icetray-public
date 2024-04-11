@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "scripting/gil.h"
 #include "FileService.h"
 #include "moc_FileService.cpp"
@@ -36,7 +40,7 @@ namespace boost { namespace iostreams {
 			array_.append( s, n );
 			return n;
 		}
-		std::streamsize read( char* s, std::streamsize n ){ 
+		std::streamsize read( char* s, std::streamsize n ){
 			const char* c = array_.constData() + pos_;
 			n = std::min( std::streamsize(array_.size()) - pos_, n );
 			// boost::iostreams indicates eof by return value -1
@@ -242,7 +246,7 @@ void FileService::closeAllFiles(){
 
 void FileService::reloadAllFiles(){
 	QStringList filenames = openFiles();
-	closeAllFiles();	
+	closeAllFiles();
 	// re-open files
 	BOOST_FOREACH( QString filename, filenames )
 #if QT_VERSION >= 0x050000
@@ -342,10 +346,10 @@ void FileService::updateIndex(){
 	const unsigned nchunk = frame_filter_ ? 32 : 256;
 	unsigned frames_end = 0;
 
-	{ 
+	{
 		I3FrameSequence::LockedIndex lindex( frames_ );
 		frames_end = lindex.GetSize();
-	
+
 		if( frame_filter_ ){
 			if( !index_complete ){
 				// tell the world we started working here, but let internal
@@ -374,7 +378,7 @@ void FileService::updateIndex(){
 				}
 			} else {
 				index_.push_back(
-				    FrameInfo( frame_idx_, item ) 
+				    FrameInfo( frame_idx_, item )
 				);
 			}
 		}

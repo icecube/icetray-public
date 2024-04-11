@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "ShellWidget.h"
 #if QT_VERSION >= 0x050000
 #include <QtWidgets/QVBoxLayout>
@@ -10,5 +14,5 @@ ShellWidget::ShellWidget( QWidget* parent ) :
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    // Python code later adds a RichWidget from IPython as a child 
+    // Python code later adds a RichWidget from IPython as a child
 }

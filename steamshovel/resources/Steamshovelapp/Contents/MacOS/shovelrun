@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # This script is set as the entry point for Steamshovel.app from within Info.plist.
 # It enforces a self-contained software environment so that the incorrect versions of
 # things do not get pulled from anywhere on the system.

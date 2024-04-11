@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from .Detector import Detector, PulseData
 
 from .GeometryTools import get_radius
@@ -30,7 +34,7 @@ class IceTop(Detector):
         self.time_delay = []
         self.tanks_position_patches = PatchCollection([])
         self.tanks_pulse_patches = PatchCollection([])
-    
+
     def GetDefaultPulseKeys(self):
         return ['OfflineIceTopHLCTankPulses', "HLCTankPulses"]
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "ShovelMainWindow.h"
 #include "moc_ShovelMainWindow.cpp"
 #include "ui_fullscreen_message.h"
@@ -222,7 +226,7 @@ ShovelMainWindow::ShovelMainWindow( QString name ):
 	connect( ui->speed_slider, SIGNAL( valueChanged(double) ),
 	         ui->timeline_widget, SLOT( setAnimationRate(double) ) );
 	connect( ui->timeline_widget, SIGNAL( animationRateChanged(double) ),
-	         ui->speed_slider, SLOT( setValueSilent(double) ) );	
+	         ui->speed_slider, SLOT( setValueSilent(double) ) );
 
 	connect( ui->gl_widget->getScenario(), SIGNAL( showLog() ),
 	         SteamshovelApp::instance(), SLOT( startLogViewer() ) );
@@ -260,7 +264,7 @@ ShovelMainWindow::ShovelMainWindow( QString name ):
 		setWindowFlags( Qt::WindowStaysOnTopHint );
 		ui->scenario_widget->disableFilter();
 		ui->frame_picker->hide();
-		handleFrameChanged( fileService->currentFrame(), 
+		handleFrameChanged( fileService->currentFrame(),
 		                    fileService->currentIndex(),
 		                    fileService->frameIndex()[fileService->currentIndex()] );
 	}
@@ -513,7 +517,7 @@ void ShovelMainWindow::handleFileListChanged(){
                 if (  i == openFiles.size()-1) {
                   setWindowFilePath(path);
                   setWindowTitle("SteamShovel - "+path);
-                }                             
+                }
 	}
 
 	if( fileAction ){

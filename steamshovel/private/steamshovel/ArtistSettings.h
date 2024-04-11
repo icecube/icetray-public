@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3_SHOVEL_ARTIST_SETTINGS_WIDGETS_H
 #define I3_SHOVEL_ARTIST_SETTINGS_WIDGETS_H
 
@@ -39,7 +43,7 @@ struct ArtistKeyData {
 	QStringList keys;
 	QString val;
 
-	ArtistKeyData() {} // needed for QVariant 
+	ArtistKeyData() {} // needed for QVariant
 	ArtistKeyData(const ArtistKeyData& other):
 		keys(other.keys), val(other.val) {}
 
@@ -153,7 +157,7 @@ public:
 		{
 
 			log_trace_stream(filename_.toStdString().c_str());
-			connect( this, SIGNAL(currentChanged(QString)), 
+			connect( this, SIGNAL(currentChanged(QString)),
 			         SLOT(update(QString)) );
 		}
 
@@ -173,7 +177,7 @@ public:
 			filename_ = QFileDialog::getOpenFileName();
 			log_trace_stream(filename_.toStdString().c_str());
 			Q_EMIT newFile();
-			// connect( this, SIGNAL(clicked()), 
+			// connect( this, SIGNAL(clicked()),
 			//          SLOT(showDialog()) );
 		}
 

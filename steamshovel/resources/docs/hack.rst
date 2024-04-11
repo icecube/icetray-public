@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 Hacking Guide (for deep changes to Steamshovel)
 ===============================================
 
@@ -345,7 +349,7 @@ Qt5
 ^^^
 Changes in Qt5's signal and slot system may make the shovelart/BindSignal class
 obselete, since it should become possible to put boost::functions (or something
-like them) directly into QObject::connect. 
+like them) directly into QObject::connect.
 
 Qt6
 ^^^

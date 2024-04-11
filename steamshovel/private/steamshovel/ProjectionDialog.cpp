@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "scripting/gil.h"
 
 #include <QGraphicsScene>
@@ -26,7 +30,7 @@ ProjectionDialog::ProjectionDialog( I3GLWidget* gl ) :
 	QSettings settings;
 	ui.dpiSpinner->setValue(
 	    settings.value("screenshot/dpi",
-	                   ui.dpiSpinner->value() ).toInt() 
+	                   ui.dpiSpinner->value() ).toInt()
 	);
 	ui.widthSpinner->setValue(
 	    settings.value("screenshot/width",
@@ -101,7 +105,7 @@ void ProjectionDialog::accept(){
 		// We don't need to try/catch the import() here
 		// ProjectionDialog::isAvailable() takes care of it
 		// for us, and if it fails we'll never get here anyway
-		
+
 		object projectionutils = import( "icecube.steamshovel.util.projection" );
 		bool do_xyz = ui.includeXYZProjection->isChecked();
 		bool do_colorscale = ui.includeColorscale->isChecked();

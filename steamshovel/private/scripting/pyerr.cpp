@@ -1,8 +1,12 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "gil.h"
 #include "pyerr.h"
 #include <ostream>
 
-namespace { 
+namespace {
   using namespace boost::python;
   list format_value( handle<> hexc, handle<> hval ){
     object exctype(hexc);
@@ -44,7 +48,7 @@ std::ostream& operator<<(std::ostream& os, boost::python::error_already_set& e) 
         lines = format_value( hexc, hval );
       }else{
         object format_exception = traceback.attr("format_exception");
-        lines = format_exception(hexc, hval, htb);       
+        lines = format_exception(hexc, hval, htb);
       }
   }
 

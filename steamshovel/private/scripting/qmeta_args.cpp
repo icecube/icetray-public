@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <string>
 #include <QString>
 #include <QStringList>
@@ -182,7 +186,7 @@ boost::python::object make_metaproperty_reader( QMetaProperty prop ){
 		case QVariant::SizePolicy:
 			SUPPORTED_ARG(QSizePolicy);
 		case QVariant::Region:
-			SUPPORTED_ARG(QRegion);			
+			SUPPORTED_ARG(QRegion);
 		case QVariant::Font:
 			SUPPORTED_ARG(QFont);
 		case QVariant::Point:
@@ -192,7 +196,7 @@ boost::python::object make_metaproperty_reader( QMetaProperty prop ){
 		case QVariant::Palette:
 			SUPPORTED_ARG(QPalette);
 		case QVariant::Icon:
-			SUPPORTED_ARG(QIcon);	
+			SUPPORTED_ARG(QIcon);
 		case QVariant::Color:
 			SUPPORTED_ARG(QColor);
 		case QVariant::Vector3D:
@@ -243,7 +247,7 @@ boost::python::object make_metaproperty_writer( QMetaProperty prop ){
 		case QVariant::SizePolicy:
 			SUPPORTED_ARG(QSizePolicy);
 		case QVariant::Region:
-			SUPPORTED_ARG(QRegion);			
+			SUPPORTED_ARG(QRegion);
 		case QVariant::Font:
 			SUPPORTED_ARG(QFont);
 		case QVariant::Point:

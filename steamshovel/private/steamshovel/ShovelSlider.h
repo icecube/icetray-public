@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3_SHOVEL_DoubleSliderSpinner_H
 #define I3_SHOVEL_DoubleSliderSpinner_H
 
@@ -21,7 +25,7 @@ protected Q_SLOTS:
 
 public:
 	ShovelSlider( QWidget* parent=0 );
-	
+
 	void setRange( double min, double max,
 	               unsigned nsteps, unsigned decimals=2 );
 	void setSpinBoxRange( double min, double max );

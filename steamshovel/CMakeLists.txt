@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # Note: We use globbing here to automatically add new files to the build.
 # You still need to "touch" the CMakeLists.txt to re-generate the Makefile.
 

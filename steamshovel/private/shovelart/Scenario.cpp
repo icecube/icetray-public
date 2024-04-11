@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <algorithm>
 #include <boost/foreach.hpp>
 
@@ -150,14 +154,14 @@ void Scenario::add( ArtistPtr p ){
 			wa->updateColors( last_time_window_ );
 		}
 		catch( boost::python::error_already_set& e ){
-			log_error_stream( p->description() 
+			log_error_stream( p->description()
 			                  << "::create(...) threw a Python error:\n"
 			                  << e );
 			Q_EMIT showLog();
 			return;
 		}
 		catch( std::exception& e ){
-			log_error_stream( p->description() 
+			log_error_stream( p->description()
 			                  << "::create(...) threw an exception:\n"
 			                  << e.what() );
 			Q_EMIT showLog();
@@ -190,7 +194,7 @@ void Scenario::remove( ArtistPtr p ){
 		scene_->dropSource( p );
 	}
 	p->cleanUp();
-	Q_EMIT outputsChanged();	
+	Q_EMIT outputsChanged();
 }
 
 void Scenario::clear(){
@@ -346,7 +350,7 @@ void Scenario::updateWidgetArtists( const TimeWindow& tw ){
 			if ( it == a->settings_.end() || it->setting.value<bool>() == false )
 				continue;
 
-			forceRegen( a ); 
+			forceRegen( a );
 		}
 	}
 
@@ -441,7 +445,7 @@ void Scenario::perhapsRegen( ArtistPtr artist ){
 
 void Scenario::perhapsRegen( ArtistPtr artist, OutputsChangedEmitter& emit ){
 	if( !artist->active_ ){
-		log_debug_stream( artist->description() 
+		log_debug_stream( artist->description()
 		                  << " is inactive" );
 		return;
 	}
@@ -527,12 +531,12 @@ void Scenario::perhapsRegen( ArtistPtr artist, OutputsChangedEmitter& emit ){
 				                  "problem exists with a Setting" );
 			}
 			catch( std::exception& e ){
-				log_error_stream( artist->description() 
+				log_error_stream( artist->description()
 				                  << "::create(...) threw an exception:\n"
 				                  << e.what() );
 			}
 			catch( ... ){
-				log_error_stream( artist->description() 
+				log_error_stream( artist->description()
 				                  << "::create(...) threw an unknown exception" );
 			}
 		}else

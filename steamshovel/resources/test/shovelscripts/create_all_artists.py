@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube.icetray import I3Frame
 import os
 from time import sleep
@@ -37,7 +41,7 @@ artist_config = {
     "Position":(["MPEFit"],),
     "RecoPulseWaveform":(["OfflinePulses"],),
     "StaticImage":([],),
-    "TextSummary":(["I3EventHeader"], 
+    "TextSummary":(["I3EventHeader"],
                    ["FilterMask"],
                    ["DrivingTime"],
                    ["L3Cut_Qtot"]),

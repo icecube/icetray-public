@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <boost/foreach.hpp>
 
 #include <QFile>
@@ -124,9 +128,9 @@ void Detector::create( I3FramePtr ptr, SceneGroup* g, const SceneState& state ){
 		if( geo.omtype == I3OMGeo::IceTop ){
 		  if ( hide_icetop )
 		    continue;
-		}else if ( geo.omtype == I3OMGeo::IceCube || 
-               geo.omtype == I3OMGeo::mDOM || 
-               geo.omtype == I3OMGeo::DEgg || 
+		}else if ( geo.omtype == I3OMGeo::IceCube ||
+               geo.omtype == I3OMGeo::mDOM ||
+               geo.omtype == I3OMGeo::DEgg ||
                geo.omtype == I3OMGeo::PDOM ||
                geo.omtype == I3OMGeo::LOM ||
                geo.omtype == I3OMGeo::LOM16 ||
@@ -134,10 +138,10 @@ void Detector::create( I3FramePtr ptr, SceneGroup* g, const SceneState& state ){
 		  if( hide_icecube )
 		    continue;
 		}else{
-		  //only show IceCube and IceTop hide anything we don't understand 
+		  //only show IceCube and IceTop hide anything we don't understand
 		  continue;
 		}
-		
+
 		if( string != key.GetString() ){
 			if( string_accum.size() ){
 				bottom_points.push_back( string_accum.back() );
@@ -172,8 +176,8 @@ void Detector::create( I3FramePtr ptr, SceneGroup* g, const SceneState& state ){
 		if( geo.omtype == I3OMGeo::IceTop ) {
 		  icetop_points.push_back(pos3d);
 		} else if ( geo.omtype == I3OMGeo::IceCube ||
-			    geo.omtype == I3OMGeo::mDOM || 
-			    geo.omtype == I3OMGeo::DEgg || 
+			    geo.omtype == I3OMGeo::mDOM ||
+			    geo.omtype == I3OMGeo::DEgg ||
 			    geo.omtype == I3OMGeo::PDOM ||
 			    geo.omtype == I3OMGeo::LOM ||
 			    geo.omtype == I3OMGeo::LOM16 ||

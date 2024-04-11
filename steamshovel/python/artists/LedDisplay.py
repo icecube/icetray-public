@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # Author: Sander Vanheule (Universiteit Gent) <sander.vanheule@ugent.be>
 # Steamshovel module used to render and display IceCube data to an LED display connected via USB
 

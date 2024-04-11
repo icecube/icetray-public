@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from .mplart import MPLArtist
 from icecube.shovelart import *
 from icecube import dataclasses
@@ -61,13 +65,13 @@ class Waveform(MPLArtist):
     def create_plot_calibrated( self, frame, fig ):
         waveformmap = frame[list(self.keys())[0]]
         oms = self.setting( 'OMKeys' )
-        
+
         axis = fig.add_subplot(111)
-        
+
         geom = None
         if( 'I3Geometry' in frame.keys() ):
             geom = frame['I3Geometry']
-        
+
         props = cycle(cycler(rcParams['axes.prop_cycle']))
         for omkey in oms:
             if omkey not in waveformmap:
@@ -85,15 +89,15 @@ class Waveform(MPLArtist):
                 self._stepped_plot( axis, wf.time, wf.bin_width, trace, label=label, **prop)
                 label = "__nolabel"
                 break
-            
+
             if( geom ):
                 self.addOverlayLine( geom.omgeo[omkey].position, mplcol.to_rgb(prop['color']) )
         if( self.setting('legend') ):
             axis.legend()
-            
+
 
     def create_plot_raw( self, frame, fig ):
-        
+
         launchmap = frame[list(self.keys())[0]]
         oms = self.setting( 'OMKeys' )
         legend = ''
@@ -152,5 +156,5 @@ class Waveform(MPLArtist):
             fadc.legend(bbox_to_anchor=(0, 0, 1, 1),
                         bbox_transform=fig.transFigure,
                         loc=3, ncol=2, mode='expand', prop={'size':'small'})
-        
+
 

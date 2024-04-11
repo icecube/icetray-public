@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "ConfigDialog.h"
 #include "moc_ConfigDialog.cpp"
 
@@ -34,7 +38,7 @@ ConfigDialog::ConfigDialog( QWidget* parent ) :
 		GetIcetrayLogger().get()
 	);
 	ui.checkBox_open_logviewer->setChecked(
-		sl->autoStartViewer() 
+		sl->autoStartViewer()
 	);
 
     connect( ui.pushButton_I3Geometry,
@@ -58,7 +62,7 @@ ConfigDialog::writeValues() const {
 		GetIcetrayLogger().get()
 	);
 
-	bool files_need_reload = 
+	bool files_need_reload =
 		fs.defaultGeometry() != geo_ ||
 		fs.getFilters() != skipKeys;
 
@@ -67,7 +71,7 @@ ConfigDialog::writeValues() const {
 	fs.setFilters( skipKeys );
 	QFont font = ui.fontComboBox->currentFont();
 	font.setPointSize( ui.spinBox_fontSize->value() );
-	SteamshovelApp::instance()->setFont( font );	
+	SteamshovelApp::instance()->setFont( font );
 	fs.setDefaultGeometry( geo_ );
 	sl->setAutoStartViewer( ui.checkBox_open_logviewer->isChecked() );
 

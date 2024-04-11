@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from .Detector import Detector, PulseData
 
 from .GeometryTools import get_radius
@@ -19,7 +23,7 @@ class Scintillator(Detector):
         self.pulsekeys = self.GetDefaultPulseKeys()
         self.color = "r"
         self.name = 'Scintillators'
-    
+
         self.minPatchSize = 10
         self.maxPatchSize = self.minPatchSize * 5
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <icetray/I3Logging.h>
 #include <icetray/name_of.h>
 
@@ -104,7 +108,7 @@ namespace {
       else{
         float normalized_t = ( t_ - win_->colorStart() ) / ( win_->colorEnd() - win_->colorStart() );
         normalized_t = std::min( 1.f, std::max( 0.f, normalized_t ) );
-        v = cm_->value(normalized_t);        
+        v = cm_->value(normalized_t);
       }
       v.setAlphaF( getAlpha(vistime) );
       return v;
@@ -366,21 +370,21 @@ void Particles::drawParticle( const I3Particle& p,
     }
   } else
   if( p.IsTrack() || p.IsNeutrino() ){
-    
+
     if( p.GetEnergy() < min_energy_track )
       return;
-    
+
     I3ParticlePtr pp( new I3Particle(p) );
     ParticleArrow* obj = new ParticleArrow( pp, state.times, arrowsize );
     obj->setColor(color);
-    
+
     obj->setLineWidth(linewidth);
     if (p.IsNeutrino())
       obj->setStippleScale(kNeutrinoStippleScale);
     g->add( obj );
 
     // add a Cherenkov Cone if so requested
-    
+
     const float cconesize = setting<RangeSetting>("Cherenkov cone size");
     const double beta = p.GetSpeed() / I3Constants::c;
     const double base_length_ratio = tan(acos(
@@ -413,7 +417,7 @@ void Particles::drawParticle( const I3Particle& p,
     I3Particle::ParticleShape sh = p.GetShape();
     I3ParticlePtr p2[2]; // in, out
 
-    if( sh == I3Particle::StartingTrack || 
+    if( sh == I3Particle::StartingTrack ||
         sh == I3Particle::ContainedTrack ||
         sh == I3Particle::MCTrack ){
       // has a starting point
@@ -431,7 +435,7 @@ void Particles::drawParticle( const I3Particle& p,
       p2[1].reset( new I3Particle() );
       p2[1]->SetShape( I3Particle::StartingTrack );
       p2[1]->SetPos( p.GetStopPos() );
-      p2[1]->SetTime( p.GetStopTime() );     
+      p2[1]->SetTime( p.GetStopTime() );
     }
 
     for( int i = 0; i < 2; ++i ){

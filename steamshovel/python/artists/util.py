@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import math
 import re
 from icecube.shovelart import Vec3dList, vec3d
@@ -100,10 +104,10 @@ def detector_outline( bottom_vec3d_list, top_vec3d_list ):
     Only works for standard hexagon grid.
     """
     # hardcoded angular offset for hexagon
-    phi0 = -20.0 * I3Units.degree 
+    phi0 = -20.0 * I3Units.degree
 
     # hardcoded threshold for an edge
-    cos_angle_threshold = math.cos( 7.0 * I3Units.degree ) 
+    cos_angle_threshold = math.cos( 7.0 * I3Units.degree )
 
     bottom = Vec3dList()
     top = Vec3dList()
@@ -227,7 +231,7 @@ def propagate_covariance(f, x, cov):
       >>> propagate_covariance(f,v,cov)
       array([[ 4.,  4.],
              [ 4.,  4.]])
- 
+
     Authors:
     Hans Dembinski <hans.dembinski@kit.edu>
     """

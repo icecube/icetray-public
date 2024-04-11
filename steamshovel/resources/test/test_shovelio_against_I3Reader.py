@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import os
 import unittest
 from icecube.icetray import I3Tray
@@ -99,7 +104,7 @@ class ShovelioI3ReaderComparisonTest( unittest.TestCase ):
             tray.AddModule( "I3Reader", "reader", filenamelist = files )
             tray.AddModule(AllframesModule, "All", filenamelist = files )
             tray.Execute()
-            
+
         except NotEqualError as e:
             self.fail(e.message)
 

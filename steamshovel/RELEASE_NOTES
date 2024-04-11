@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. _steamshovel-release-notes:
 
 Release Notes
@@ -5,6 +9,8 @@ Release Notes
 
 main
 ----
+
+* [steamshovel] Add SPDX tags (#3452)
 
 March 14, 2023 don la dieu (nega at icecube.umd.edu)
 ----------------------------------------------------
@@ -186,7 +192,7 @@ Artist IceTopViewer:
 
 * Produce an error if IceTopViewer is added and matplotlib version is too old
 
-* Fix of a bug that prevented correct update of very first 
+* Fix of a bug that prevented correct update of very first
   frame in a file if IceTopViewer is active at startup
 
 * Simplified code by using new facilities in I3LaputopParams;
@@ -225,7 +231,7 @@ General:
 * added code to create custom color maps (berghaus)
 
 * Fixed an error in the rare case when RangeFinder
-  would return an empty time interval 
+  would return an empty time interval
 
 * Fixed a C++11 compatibility issue with clang (cweaver)
 
@@ -235,7 +241,7 @@ User interface:
   I3Geometry object which is added to frames which do not
   already have an I3Geometry object (from frame mixing)
 
-* Added "New Window" action to Window menu, which opens 
+* Added "New Window" action to Window menu, which opens
   a secondary main window showing the same frame; this
   allows for example to look at IceTop in one window,
   and at the same time at the deep detector in the other
@@ -250,12 +256,12 @@ User interface:
 Artist Particles:
 
 * Scales Particle arrows as a function
-  of their energy (can be turned off by setting "power" to 
+  of their energy (can be turned off by setting "power" to
   zero) (introduced by berghaus, modified by hdembinski)
 
 * Angle of Cherenkov cone now adapts to particle speed
 
-Artist IceTopViewer: 
+Artist IceTopViewer:
 
 * IceTopViewer gained two additional settings to display
   several particles simultaneously; this is useful to compare
@@ -295,12 +301,12 @@ General:
 
 * Revived the Map app
 
-* Added Steamshovel LogViewer (accessible from menu Help) to 
+* Added Steamshovel LogViewer (accessible from menu Help) to
   allow users of the Mac app to look at log messages
 
 * Added GUI support for really long events (in time)
 
-* Added more tests, in particular some tests that run a 
+* Added more tests, in particular some tests that run a
   steamshovel script and check its output
 
 * Improved/updated docs (hdembinski, berghaus)
@@ -325,13 +331,13 @@ User interface:
 
   - added a field to specify individual frames or ranges to save
   - added check box to automatically "Save parents" or not
-    ("parent" frames contain data needed in the current frame, 
+    ("parent" frames contain data needed in the current frame,
     e.g. the Geometry frame is a parent of most other frames)
 
 * Added option in configuration dialog to change the default
   font and font size used in Steamshovel
 
-* RangeSettings are now edited with a new widget that combines 
+* RangeSettings are now edited with a new widget that combines
   a slider and spin box (ShovelSlider), which makes it easier
   to set specific numeric values
 
@@ -344,14 +350,14 @@ User interface:
 
 shovelio:
 
-* shovelio uses central I3FrameMixer now, so that frame mixing 
+* shovelio uses central I3FrameMixer now, so that frame mixing
   is consistent with icetray
 
 * Fixed several bugs in shovelio and made it simpler
 
 Artists:
 
-* Added IceTopViewer, the first Aven... erm, WidgetArtist 
+* Added IceTopViewer, the first Aven... erm, WidgetArtist
 
 * Particles
 
@@ -411,7 +417,7 @@ Interface Changes:
         I3MCTree summary,
         I3Particle summary,
         I3Time,
-        Value label -> TextSummary 
+        Value label -> TextSummary
      I3Particle,
         MCTree -> Particles
      I3Particle Uncertainty estimation -> ParticleUncertainty

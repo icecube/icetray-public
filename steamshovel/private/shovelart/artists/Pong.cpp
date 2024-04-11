@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "Pong.h"
 #include "moc_Pong.cpp"
 
@@ -146,7 +150,7 @@ PongWidget::updateState(){
                 }
                 ball_.propagate( kDt - dt );
             }
-        }        
+        }
         // check loss
         if( ball_.right() < 0 ){
             newBall( 0 );
@@ -164,7 +168,7 @@ PongWidget::updateState(){
                 }
                 ball_.propagate( kDt - dt );
             }
-        }        
+        }
         // check loss
         if( ball_.left() > width() ){
             newBall( 1 );
@@ -229,7 +233,7 @@ PongWidget::paintEvent( QPaintEvent* ev ){
         f.setPointSize( 16 );
         p.setFont( f );
         p.drawText( QRectF( width() / 2 + kBarPad,
-                            0, 300, height() ),        
+                            0, 300, height() ),
                     Qt::AlignVCenter,
                     "Reset: Escape\n"
                     "Start/Pause: Space\n"
@@ -263,7 +267,7 @@ PongWidget::paintEvent( QPaintEvent* ev ){
 
 void
 PongWidget::timerStart(){
-    timer_->start( kDt );    
+    timer_->start( kDt );
 }
 
 PongWidget::PongWidget():
@@ -286,7 +290,7 @@ PongWidget::PongWidget():
 Pong::Pong(){
     addSetting( "Ball speed", RangeSetting(0.1, 1.0, 90, 0.3) );
     addSetting( "Ball speedup", RangeSetting(1.0, 1.01, 100, 1.0005) );
-    addSetting( "Player speed", RangeSetting(0.1, 1.0, 90, 0.6) );    
+    addSetting( "Player speed", RangeSetting(0.1, 1.0, 90, 0.6) );
     addSetting( "Player slowdown", RangeSetting(0.0, 0.9, 90, 0.75) );
     addSetting( "Player push", RangeSetting(0.0, 1.0, 10, 0.3) );
 }

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3_SHOVEL_RENDERING_ARTIST_H
 #define I3_SHOVEL_RENDERING_ARTIST_H
 
@@ -118,7 +122,7 @@ public:
         iterator end() { return items_.end(); }
 
         const_iterator find( const std::string& name ) const
-        { 
+        {
             const_iterator it = begin();
             for( ; it != end(); ++it )
                 if( it->name == name )
@@ -127,7 +131,7 @@ public:
         }
 
         iterator find( const std::string& name )
-        { 
+        {
             iterator it = begin();
             for( ; it != end(); ++it )
                 if( it->name == name )
@@ -224,7 +228,7 @@ class GLArtist: public Artist {
     friend class Scenario;
 
     // to be implemented by concrete GLWidgets
-    virtual void create( I3FramePtr, SceneGroup*, const SceneState& ) = 0;    
+    virtual void create( I3FramePtr, SceneGroup*, const SceneState& ) = 0;
 };
 
 /// Artist that manages a completely new QWidget

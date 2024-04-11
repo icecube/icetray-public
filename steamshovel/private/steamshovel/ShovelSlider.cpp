@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "ShovelSlider.h"
 #include "moc_ShovelSlider.cpp"
 
@@ -44,7 +48,7 @@ void ShovelSlider::setRange( double min, double max,
 }
 
 void ShovelSlider::setSpinBoxRange( double min, double max ){
-	spinbox_->setRange( std::min(min_, min), 
+	spinbox_->setRange( std::min(min_, min),
 	                    std::max(max_, max) );
 }
 

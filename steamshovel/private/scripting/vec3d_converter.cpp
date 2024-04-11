@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "vec3d_converter.h"
 #include "shovelart/graphicsmath.h"
 
@@ -40,7 +44,7 @@ void AnythingToVec3d::construct( PyObject* o,
     void* storage = ((bp::converter::rvalue_from_python_storage<vec3d>*)data)->storage.bytes;
 
     if( PySequence_Size(o) >= 3 ){
-        // beware: strange bug in boost.python if you do 
+        // beware: strange bug in boost.python if you do
         // bp::extract<double> x(obj[0]);
         // bp::extract<double> y(obj[1]);
         // bp::extract<double> z(obj[2]);

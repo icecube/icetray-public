@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube import dataclasses
 from icecube.shovelart import PyArtist, PyQColor, PyQFont, RangeSetting, \
                               vec3d, ConstantVec3d
@@ -14,7 +18,7 @@ DOMOrientation - A steamshovel artist to draw the orientation of a DOM
    The blue arrow indicates the direction the DOM is pointed
    The red arrow indicates the direction that Flasher #7 is pointed
    The green arrow is perpendicular to both the DOM and Flasher #7
-   
+
    Based on code from CoordinateSystem.py, PhotonPaths.py, and Detector.cpp.
    Fun fact: Review of Detector.cpp resulted in Ticket #1749
              http://code.icecube.wisc.edu/projects/icecube/ticket/1749
@@ -47,13 +51,13 @@ class DOMOrientation(PyArtist):
     """
     def isclose( self, a, b, rel_tol=1e-09, abs_tol=0.0 ):
         return (abs(a-b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol))
-    
+
     def isDefaultDOMDirection(self, i3dir):
         return self.isclose(i3dir.x, 0.0, 1e-09, 1e-12) and self.isclose(i3dir.y, 0.0, 1e-09, 1e-12) and self.isclose(i3dir.z, -1.0, 1e-09, 1e-12)
 
     def isDefaultFlasherDirection(self, i3dir):
         return self.isclose(i3dir.x, 1.0, 1e-09, 1e-12) and self.isclose(i3dir.y, 0.0, 1e-09, 1e-12) and self.isclose(i3dir.z, 0.0, 1e-09, 1e-12)
-    
+
     def create( self, frame, group ):
         # obtain the geometry of the detector
         geo = frame[list(self.keys())[0]]
@@ -71,7 +75,7 @@ class DOMOrientation(PyArtist):
             # draw the orientation arrows at the specified position
             self.createOrientation ( group, position, orientation, count, omkey )
             count = count + 1
-        
+
     def createOrientation( self, group, position, orientation, count, omkey ):
         #spos = self.setting("position").strip("()").split(",")
         #pos = [parse_engineering(x, "m") * I3Units.meter for x in spos]
@@ -79,9 +83,9 @@ class DOMOrientation(PyArtist):
         #    raise ValueError(str(pos) + " has wrong size")
         #pos = vec3d(pos[0], pos[1], pos[2])
         pos = vec3d(position.x, position.y, position.z)
-        
+
         arrowDir = [orientation.up, orientation.right, orientation.dir]
-        
+
         if(self.setting("Draw Default Orientation") is False):
             if(self.isDefaultFlasherDirection(arrowDir[0]) and self.isDefaultDOMDirection(arrowDir[2])):
                 return

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "Artist.h"
 #include "ArtistRegistry.h"
 #include "moc_ArtistRegistry.cpp"
@@ -38,7 +42,7 @@ namespace {
 ArtistRegistry& ArtistRegistry::global()
 {
     // prevent destructor call of ArtistRegistry, which otherwise
-    // corrupts shared memory management between C++ and Python 
+    // corrupts shared memory management between C++ and Python
     static ArtistRegistry* reg = new ArtistRegistry;
     return *reg;
 }
@@ -109,7 +113,7 @@ void ArtistRegistry::registerExternalArtist( const char* path,
         }
         else{
             // *pos is an existing Artist with name and key arity equal to artist
-            bool old_artist_is_builtin = 
+            bool old_artist_is_builtin =
                 (pos->external_load_path.first.length() == 0 &&
                  pos->external_load_path.second.length() == 0);
             bool paths_differ = (pos->external_load_path != fact.external_load_path);

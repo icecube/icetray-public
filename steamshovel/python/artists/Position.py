@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube import dataclasses
 from icecube.shovelart import PyArtist, RangeSetting, PyQColor, vec3d, LinterpFunctionVec3d
 from .util import particle_pos

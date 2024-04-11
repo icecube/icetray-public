@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "shovelart.h"
 #include "shovelart/BindSignal.h"
 #include "shovelart/Artist.h"
@@ -20,7 +24,7 @@
 #include <boost/preprocessor.hpp>
 #include <boost/python.hpp>
 
-// Bring on the preprocessor metaprogramming. 
+// Bring on the preprocessor metaprogramming.
 // See documentation for boost/preprocessor.hpp for guidance.
 
 // list of POD types, except bool, which is treated separately

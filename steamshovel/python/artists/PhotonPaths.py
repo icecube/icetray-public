@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube.shovelart import *
 
 from icecube import dataclasses, phys_services
@@ -9,14 +13,14 @@ class PhotonPaths( PyArtist ):
 
     def __init__(self):
         PyArtist.__init__(self)
-        self.defineSettings( 
-            { 
-              "min_residual":20, 
-              "max_residual":500, 
+        self.defineSettings(
+            {
+              "min_residual":20,
+              "max_residual":500,
               "colormap":I3TimeColorMap(),
               "antares_ref_index":False,
               "linewidth":1,
-            } 
+            }
         )
 
     requiredTypes = [ I3PhotonSeriesMap, dataclasses.I3MCTree ]
@@ -33,7 +37,7 @@ class PhotonPaths( PyArtist ):
         timeResidual_max = float(self.setting("max_residual"))
         if timeResidual_min==timeResidual_max:
             return 0.
-        if timeResidual_min>timeResidual_max: 
+        if timeResidual_min>timeResidual_max:
             timeResidual_min, timeResidual_max = timeResidual_max, timeResidual_min
 
         timeResidual = \
@@ -73,7 +77,7 @@ class PhotonPaths( PyArtist ):
         reachedGap=False
         for i in range(numEntries-2,-1,-1):
             from_vtx = positionList[i]
-            if from_vtx is None: 
+            if from_vtx is None:
                 reachedGap=True
                 continue
 

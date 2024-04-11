@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <iostream>
 
 #include <QFont>
@@ -83,7 +87,7 @@ public:
 		} else {
 			// we assume that this is a dict (old style call)
 			bp::dict dt = bp::extract<bp::dict>( settings );
-			bp::list keys = dt.keys();			
+			bp::list keys = dt.keys();
 			for( unsigned i = 0; i < bp::len(keys); ++i ){
 				bp::object key = keys[i];
 				bp::object value = dt[key];

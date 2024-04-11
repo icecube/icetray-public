@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube.shovelart import *
 
 from icecube import dataclasses
@@ -118,7 +122,7 @@ class Bubbles( PyArtist ):
             self.has_scale = hasattr(obj, self.name_scale)
             if self.has_scale:
                 return # self.name_scale now also has correct value
-    
+
     @staticmethod
     def set_size(obj, sizes):
         if isinstance(obj, Sphere):
@@ -221,7 +225,7 @@ def get_custom_time_range(s):
         if part:
             try: result.append(float(part))
             except: pass
-    if (len(result) != 2 
+    if (len(result) != 2
         or result[0] >= result[1]):
         result = []
     return result

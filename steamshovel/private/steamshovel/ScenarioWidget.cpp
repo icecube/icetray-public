@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "ScenarioWidget.h"
 #include "moc_ScenarioWidget.cpp"
 #include "ui_scenario.h"
@@ -33,10 +37,10 @@ ScenarioWidget::ScenarioWidget( QWidget* parent ) :
 	ui->addButton->setMenu( new QMenu( ui->addButton ) );
 
 	connect( ui->addButton->menu(),
-	         SIGNAL(triggered(QAction*)), 
+	         SIGNAL(triggered(QAction*)),
 	         SLOT(triggerAddAction(QAction*)) );
 	connect( ui->removeButton,
-	         SIGNAL(pressed()), 
+	         SIGNAL(pressed()),
 	         SLOT(removeSelection()) );
 	connect( &ArtistRegistry::global(),
 	         SIGNAL(artistRegistered()),

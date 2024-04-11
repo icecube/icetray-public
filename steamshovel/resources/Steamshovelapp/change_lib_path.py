@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import subprocess as subp
 import os
 import sys
@@ -20,7 +24,7 @@ for x in sys.argv[1:]:
         old_paths.add(line[:line.find(' ')])
     for old_path in old_paths:
         if( old_path.startswith('/usr/lib') or
-            old_path.startswith('/System/Library') or 
+            old_path.startswith('/System/Library') or
             old_path.startswith('@executable_path') ):
             continue
         base = os.path.basename(old_path)

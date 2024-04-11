@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube.shovelart import PyArtist, PyQColor, RangeSetting
 from icecube.dataclasses import I3Constants
 from .util import parse_engineering
@@ -66,4 +70,4 @@ class Ice(PyArtist):
                     dust = group.addZPlane( z, plane_width, plane_width )
                     dust.setColor( dust_color )
                     dust.setLineWidth( line_width )
-    
+

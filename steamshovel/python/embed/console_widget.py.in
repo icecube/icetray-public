@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # Do not import IPython, sip, PyQt5, or other optional packages from here
 # This module must always import successfully, even if those packages are missing
 from __future__ import print_function

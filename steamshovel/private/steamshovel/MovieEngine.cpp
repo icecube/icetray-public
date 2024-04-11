@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <boost/noncopyable.hpp>
 #include <boost/python.hpp>
 #include <boost/foreach.hpp>

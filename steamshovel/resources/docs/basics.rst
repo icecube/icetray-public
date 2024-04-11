@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 Basic Usage
 ===========
 
@@ -65,7 +69,7 @@ downwards.
 Using the frame filter
 ----------------------
 
-Steamshovel has tab called `Filter` on the right hand side. It has a text input field and an ``Apply`` button. 
+Steamshovel has tab called `Filter` on the right hand side. It has a text input field and an ``Apply`` button.
 
 .. image:: FilterTab.png
 
@@ -91,7 +95,7 @@ Some examples::
                 return True
         return False
 
-    # ... the same filter as a one-liner  
+    # ... the same filter as a one-liner
     def filter(index, frame):
         return "I3Particle" in (frame.type_name(k) for k in frame.keys())
 

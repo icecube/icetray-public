@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # Report about important updates here. Qualified are all changes to
 # the user experience that would otherwise confuse people, or cool
 # new stuff that people might overlook otherwise. The doc string is
@@ -44,7 +48,7 @@ string width to zero.
 
 
 r138013: Larger IPython console
-Screen space on the right side of the Steamshovel window 
+Screen space on the right side of the Steamshovel window
 is used more effectively now: The IPython console is hidden by
 default, but gets more space when it is shown. Press Ctrl+T
 or use the option in the Window menu to activate the console.
@@ -52,7 +56,7 @@ or use the option in the Window menu to activate the console.
 
 r137944: IceTopViewer
 The new artist IceTopViewer adds an alternative IceTop view to
-Steamshovel, which replaces the standard 3D view. It is a 
+Steamshovel, which replaces the standard 3D view. It is a
 specialized 2D visualization for IceTop events, primarily for
 the cosmic ray working group. After having added this artist, you
 can switch back to the standard 3D view via the "Window" menu.
@@ -100,19 +104,19 @@ DOMLaunch time histogram -> DOMLaunchHistogram
 
 I3Geometry -> Detector
 
-I3EventHeader summary -> TextSummary 
+I3EventHeader summary -> TextSummary
 
-I3FilterMask -> TextSummary 
+I3FilterMask -> TextSummary
 
-I3MCTree summary -> TextSummary 
+I3MCTree summary -> TextSummary
 
-I3Particle summary -> TextSummary 
+I3Particle summary -> TextSummary
 
-I3Time -> TextSummary 
+I3Time -> TextSummary
 
-Value label -> TextSummary 
+Value label -> TextSummary
 
-I3Particle summary -> TextSummary 
+I3Particle summary -> TextSummary
 
 I3Particle -> Particles
 

@@ -1,4 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
 #
+# SPDX-License-Identifier: BSD-2-Clause
+
 # icetray documentation build configuration file, created by
 # sphinx-quickstart on Sun Aug 10 12:00:11 2008.
 #
@@ -36,9 +39,10 @@ source_suffix = '.rst'
 # The master toctree document.
 master_doc = 'index'
 
+# REUSE-IgnoreStart
 # General substitutions.
 project = 'Steamshovel'
-copyright = '2013, Steve Jackson and the IceCube Collaboration'
+copyright = 'Copyright © 2013-2024 The IceTray Contributors'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.

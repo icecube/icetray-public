@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import sys
 import numpy as np
 
@@ -92,7 +96,7 @@ def gather_reco_colors(i3frame, key='OfflinePulses'):
     dat = i3frame.Get(key)
     colors = dict( ((key,val[0].time) for key,val in dat.items() if len(val) > 0 ))
     return colors
-    
+
 
 def main():
 

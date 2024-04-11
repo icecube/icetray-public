@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <QPixmap>
 #include <QPainter>
 
@@ -134,8 +138,8 @@ std::string ColorMap::toString( ColorMapPtr ptr ){
 	else if ( dynamic_cast<ConstantColorMap*>( ptr.get() ) ){
 		QColor c = ptr->value(0);
 		std::stringstream s;
-		s <<  "ConstantColorMap( PyQColor( " 
-		  << c.red() << ',' << c.green() << ',' << c.blue() 
+		s <<  "ConstantColorMap( PyQColor( "
+		  << c.red() << ',' << c.green() << ',' << c.blue()
 		  << ',' << c.alpha() << " ) )";
 		return s.str();
 	}

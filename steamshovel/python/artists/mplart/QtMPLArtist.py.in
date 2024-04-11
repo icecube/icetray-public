@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from matplotlib.backends.backend_qt@_pyqtver@agg import new_figure_manager
 from PyQt@_pyqtver@ import QtCore  # noqa: E999
 

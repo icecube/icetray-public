@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import sys
 import os, os.path
 import tempfile
@@ -77,7 +81,7 @@ class AsyncMovie:
         elif encoder == 'avconv':
             cmd = [ 'avconv', '-i', '{0}/frame%08d.png'.format( inpdir ) ]
             cmd += avconv_flags(fps)
-        elif encoder == 'mencoder':           
+        elif encoder == 'mencoder':
             cmd = [ 'mencoder', 'mf://{0}/*.png'.format( inpdir ) ]
             cmd += mencoder_flags(fps)
         else:

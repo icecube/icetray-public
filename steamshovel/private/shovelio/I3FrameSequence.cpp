@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "shovelio/I3FrameSequence.h"
 
 #include <icetray/serialization.h>
@@ -134,7 +138,7 @@ I3FrameSequence::MergeParents(const unsigned idx, I3FramePtr frame)
     const bool parent_is_merged = bool(pframe);
 
     if( pframe ){
-      log_trace_stream( "merging: found stream=" << item.stream_.str() 
+      log_trace_stream( "merging: found stream=" << item.stream_.str()
                         << " in cache, nkeys="
                         << pframe->size() );
     }else{
@@ -148,7 +152,7 @@ I3FrameSequence::MergeParents(const unsigned idx, I3FramePtr frame)
                         << pframe->size() );
     }
 
-    log_trace_stream( "merging: parent=" << pidx 
+    log_trace_stream( "merging: parent=" << pidx
                       << " into idx=" << idx );
     frame->merge(*pframe);
 
@@ -160,7 +164,7 @@ I3FrameSequence::MergeParents(const unsigned idx, I3FramePtr frame)
 void
 I3FrameSequence::PopulateIndex(uint64_t read_pos)
 {
-  /* Start by populating the cache until it's full. 
+  /* Start by populating the cache until it's full.
      Periodically release lock, so that main thread can run. */
 
   DeadMansSwitch dms( index_thread_active_ );
@@ -192,7 +196,7 @@ I3FrameSequence::PopulateIndex(uint64_t read_pos)
       } // else: is a SinglePass file, leave index incomplete
 
       log_trace_stream( "index thread ends, index size="
-                        << index_.size() 
+                        << index_.size()
                         << (index_complete_ ? " (complete)" : " (incomplete)") );
       break;
     }
@@ -236,7 +240,7 @@ I3FrameSequence::IndexAppend(uint64_t pos, I3FramePtr frame)
   index_.push_back( IndexItem(pos, frame, pidx) );
 
   log_trace_stream( "index: adding stream=" << frame->GetStop().str()
-                    << ", idx=" << idx 
+                    << ", idx=" << idx
                     << ", parent=" << pidx
                     << ", pos=" << pos );
 
@@ -270,7 +274,7 @@ I3FrameSequence::Fetch(unsigned idx)
     if( files_.AtStreamPos(frame, index_[idx].pos_, filter_) ){
       MergeParents( idx, frame );
       Remember( idx, frame );
-      return frame;        
+      return frame;
     }else{
       // we failed to read from a single pass file, return empty frame
       return I3FramePtr();
@@ -309,7 +313,7 @@ I3FrameSequence::Remember(unsigned idx, I3FramePtr frame)
   while( cache_.size() > (nbackward_ + nforward_) ){
     // delete least-recently-used item with keep==false
     log_trace_stream( "cache full, dropping idx="
-                      << cache_.back().idx_ << ", stream=" 
+                      << cache_.back().idx_ << ", stream="
                       << cache_.back().frame_->GetStop().str() );
     cache_.pop_back();
   }

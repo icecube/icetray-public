@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 """
 ----- IceTop standalone -----
 how to run:
@@ -33,7 +38,7 @@ from util.IceTop import IceTop
 from util.Antenna import Antenna
 
 """
-This are the main 3 detectors on IceTop. 
+This are the main 3 detectors on IceTop.
 In each class all the information are stored and the plots are updated.
 e.g. IceTop are the all cherenkov tanks and in the class are stored info (geometry or the recorded pulses in the frame)
 and plots like ldf are updated.

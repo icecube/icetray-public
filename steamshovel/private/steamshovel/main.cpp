@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "scripting/data.h"
 #include "scripting/embed.h"
 #include "SteamshovelApp.h"
@@ -162,7 +166,7 @@ int main(int argc, char* argv[]){
 		                    tmp_cfg_path );
 	}
 
-	PyConsole::Type requested_console = 
+	PyConsole::Type requested_console =
 		scripts.empty() ? PyConsole::IPython_widget : PyConsole::IPython_shell;
 	if( vm.count("macapp") )
 		requested_console = PyConsole::Macapp_widget_or_nothing;

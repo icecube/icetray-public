@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # Ignore files that are created after executing cmake.
 python/artists/mplart/QtMPLArtist.py
 python/embed/console.py

@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube.shovelart import *
 import math
 
@@ -41,7 +45,7 @@ class Tank( PyArtist ):
 
 
     tankverts = list(zip( *[iter(tankverts)] * 3 ))
- 
+
 
     def create( self, frame, group ):
         vertices = VariantVec3dList()

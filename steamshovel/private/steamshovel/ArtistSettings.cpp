@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "ArtistSettings.h"
 #include "moc_ArtistSettings.cpp"
 
@@ -140,7 +144,7 @@ QVariant setting_QItemData( Scenario* scenario, ArtistPtr artist, const std::str
 				return QVariant();
 				//return QString::fromStdString(ColorMap::toString(map));
 			case Qt::EditRole:
-				return QVariant::fromValue( map );	
+				return QVariant::fromValue( map );
 			default: return QVariant();
 		}
 	}

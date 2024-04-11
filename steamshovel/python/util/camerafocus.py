@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube import dataclasses
 # Non-offline-software projects can be attempted to be imported here,
 # but import errors should be caught and silently discarded

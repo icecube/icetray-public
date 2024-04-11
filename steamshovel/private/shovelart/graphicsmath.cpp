@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "graphicsmath.h"
 
 vec3d rotate_around( const vec3d& v1, const vec3d& v2, qreal angle )

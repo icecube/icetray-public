@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "SaveFrameDialog.h"
 #include "moc_SaveFrameDialog.cpp"
 
@@ -62,7 +66,7 @@ QString SaveFrameDialog::getSaveFileName() const
 
 	QString filename = files[0];
 	// add the .i3.gz extension if no valid extension is provided
-	if( !filename.endsWith(".i3") && !filename.endsWith(".i3.gz") 
+	if( !filename.endsWith(".i3") && !filename.endsWith(".i3.gz")
 	    && !filename.endsWith(".i3.bz2") && !filename.endsWith(".i3.zst") && !filename.endsWith(".i3.zstd")){
 		filename += ".i3.gz";
 	}
@@ -75,7 +79,7 @@ std::set<unsigned> SaveFrameDialog::getIndices() const
 	using namespace boost::python;
 
 	std::set<unsigned> indices;
-	try{ 
+	try{
 		object module = import("icecube.steamshovel.util.parse_indices");
 		object numbers = module.attr( "parse_indices" )( lineedit_->text() );
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "SteamshovelApp.h"
 #include "moc_SteamshovelApp.cpp"
 
@@ -40,7 +44,7 @@ SteamshovelApp::SteamshovelApp( int& argc, char* argv[],
 
 	setQuitOnLastWindowClosed( false );
 
-	QObject::connect( this, SIGNAL(extras(bool)), 
+	QObject::connect( this, SIGNAL(extras(bool)),
 	                  &ArtistRegistry::global(),
 	                  SLOT(setExtras(bool)) );
 	QObject::connect( this, SIGNAL(lastWindowClosed()),
@@ -69,7 +73,7 @@ void SteamshovelApp::runStartupScripts()
 void SteamshovelApp::startLogViewer()
 {
 	QStringList args( static_cast<ShovelLogger*>(
-		GetIcetrayLogger().get() )->fileName() 
+		GetIcetrayLogger().get() )->fileName()
 	);
 
 	// check whether log-viewer is already running,
@@ -92,7 +96,7 @@ void SteamshovelApp::init( const std::vector<std::string>& startup_scripts,
 #if defined(QT_WS_MAC) || defined(Q_OS_MACOS)
 	// avoids text clipping on Mac
 	defaultFont.setFamily( "Arial" );
-#endif	
+#endif
 	QSettings settings;
 	setFont( settings.value( "font", defaultFont ).value<QFont>() );
 
@@ -200,7 +204,7 @@ void SteamshovelApp::setSecret( QString s ){
 	                              QCryptographicHash::Md5 ).toHex();
 #else
 	QByteArray hash =
-		QCryptographicHash::hash( s.remove('.').toAscii(), 
+		QCryptographicHash::hash( s.remove('.').toAscii(),
 	                              QCryptographicHash::Md5 ).toHex();
 #endif
 	Q_EMIT extras( QString("a5e64c44a56bb48a3adce2a7352be01a") == hash );

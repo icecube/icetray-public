@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 Artist Guide
 ============
 
@@ -47,7 +51,7 @@ Since the IceTopViewer adds an alternative view intead of an object to the 3D vi
 Displays
 ^^^^^^^^
 Top view
-	The left plot presents a top view on the IceTop array. Tanks without signal appear as gray dots. Tanks with signal appear as a half-circe, colored according to the timeline and scaled as a function of the signal charge. 
+	The left plot presents a top view on the IceTop array. Tanks without signal appear as gray dots. Tanks with signal appear as a half-circe, colored according to the timeline and scaled as a function of the signal charge.
 
 	If an I3Particle (see setting ``particle``) is selected in the artist settings, also shown are the shower core (dot), shower direction (arrow), and intersection between shower front plane and ground plane (dashed line)
 

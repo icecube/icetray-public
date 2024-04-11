@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # Basic steamshovel driver script for testing
 
 # Because this script uses time.sleep(), it needs to be run with steamshovel --console;

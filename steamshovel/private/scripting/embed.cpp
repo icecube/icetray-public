@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <sstream>
 #include <iostream>
 #include <cstdio>
@@ -116,7 +120,7 @@ PyConsole::PyConsole( const PyInterpreter& /* keep this to ensure order of calls
 			}
 			else{
 				log_warn( "Cannot embed IPython Qt widget, falling back to tty-based console" );
-			}		
+			}
 		}
 		case IPython_shell:{
 			if( init_python_shell( true ) ){

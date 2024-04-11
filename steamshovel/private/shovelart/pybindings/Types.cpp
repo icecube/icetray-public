@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <string>
 
 #include <boost/python.hpp>
@@ -167,7 +171,7 @@ std::ostream& operator<<( std::ostream& out, const SceneOverlay::SizeHint& hint 
     return out;
 }
 
-// In this context only, output strings with quote marks. 
+// In this context only, output strings with quote marks.
 // This is to get the repr wrappers right.
 std::ostream& operator<<( std::ostream& os, const std::string& s ){
     os << "'" << s.c_str() << "'" ;
@@ -267,7 +271,7 @@ void export_shovelart_types(){
 
     bp::class_<
         RangeSetting,
-        boost::shared_ptr<RangeSetting> 
+        boost::shared_ptr<RangeSetting>
     >( "RangeSetting",
        "A range setting as defined by a min and max, a number of steps, and initial value",
        bp::no_init )

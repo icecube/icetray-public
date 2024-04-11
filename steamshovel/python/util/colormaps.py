@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # The list of matplotlib color maps considered to be not useful in steamshovel
 _bad_maps = ['Accent', 'Dark2', 'Paired', 'Pastel1', 'Pastel2',
              'Set1', 'Set2', 'Set3', 'gist_earth', 'gist_ncar',

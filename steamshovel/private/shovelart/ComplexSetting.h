@@ -1,7 +1,11 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3_SHOVEL_COMPLEX_SETTING_H
 #define I3_SHOVEL_COMPLEX_SETTING_H
 
-/** Base class for complex settings, which encapsulate a value of 
+/** Base class for complex settings, which encapsulate a value of
  *  type T, but also need to provide meta information for the editor.
  *  Derive from this and add a public "typedef T Value" in your
  *  derived class. Also make it a friend of the corresponding editor.

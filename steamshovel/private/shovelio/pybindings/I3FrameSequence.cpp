@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "shovelio/I3FrameSequence.h"
 
 #include <boost/python.hpp>
@@ -24,7 +28,7 @@ void export_I3FrameSequence()
           boost::noncopyable >( "LockedIndex", init<I3FrameSequence&>() )
     .def( "__getitem__",
           make_function( &I3FrameSequence::LockedIndex::operator[],
-                         return_internal_reference<>() ) 
+                         return_internal_reference<>() )
     )
     .def( "__len__", &I3FrameSequence::LockedIndex::GetSize )
     ;

@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from .Detector import Detector, PulseData
 from .GeometryTools import get_radius
 
@@ -19,7 +23,7 @@ import matplotlib.path as mpath
 """
 TODO list:
 1. The overall antenna plots need to be double checked.
-2. The isADC function is SUPER slow. We should check if it can be optimized 
+2. The isADC function is SUPER slow. We should check if it can be optimized
 3. LDF and time plots
 """
 
@@ -125,7 +129,7 @@ class Antenna(Detector):
         self.DrawAntennasPlots(frame, axlist)
 
     def DrawAntennasPlots(self, frame, axlist):
-        if self.AntennaStationID == "None": 
+        if self.AntennaStationID == "None":
             return
 
         for key in self.antennakeys:

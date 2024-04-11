@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube.shovelart import vec3d, ConstantVec3d, Vec3dList, PyQColor, PyArtist, ConstantFloat
 from math import sqrt
 

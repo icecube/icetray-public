@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <sstream>
 
 #include <QColor>
@@ -144,7 +148,7 @@ void export_scene_variant_types(){
 
 	export_SceneVariant< QColor >( "QColor", true, true, true );
 
-	bp::class_< TimeWindow, TimeWindow* >( "TimeWindow", bp::init<double, double>() ); 
+	bp::class_< TimeWindow, TimeWindow* >( "TimeWindow", bp::init<double, double>() );
 
 	bp::class_< TimeWindowColor,
 	            TimeWindowColorPtr,
