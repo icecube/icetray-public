@@ -73,7 +73,7 @@ void register_dataclasses_converters() {
         bp::import("icecube.dataclasses").attr("converters") = converter_module;
     }
 
-    // typdef the template into a legal Python identifier
+    // typedef the template into a legal Python identifier
     I3CONVERTER_EXPORT_DEFAULT(I3EventHeaderConverter,"Dumps I3EventHeader objects");
 
     typedef I3MapOMKeyVectorConverter< convert::I3DOMLaunch > I3DOMLaunchSeriesMapConverter;

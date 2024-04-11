@@ -19,7 +19,7 @@ templates have been implemented in C++: I3VectorConverter<T> and
 I3MapOMKeyVectorConverter<T>. The template parameter T is either a simple struct
 to convert the stored data as defined below, or an existing I3Converter
 implementation. If the objects stored in the I3Vector are I3FrameObjects, then
-an I3Converter for those is prefered or might already exist. If it is not
+an I3Converter for those is preferred or might already exist. If it is not
 an I3FrameObject, the convert-struct approach has to be used. This struct needs
 to fulfill the following requirements:
 

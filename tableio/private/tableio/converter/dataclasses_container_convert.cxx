@@ -33,7 +33,7 @@ namespace convert {
 	        desc->AddEnumField<TriggerKey::TypeID>("type_id", typeID, "",
 	                                               "Enumeration describing what 'algorithm' issued a trigger");
 	        desc->AddEnumField<TriggerKey::SubtypeID>("subtype_id", subtypeID, "",
-	                                                  "Enumeration describing how a software trigger was orginally 'configured' within the TWR DAQ trigger system");
+	                                                  "Enumeration describing how a software trigger was originally 'configured' within the TWR DAQ trigger system");
 	        desc->AddField<int32_t>("config_id", "", "Internal ID of the trigger settings in the DAQ. This can be used to retrieve the threshold, readout window, DOM set, etc from the DetectorStatus.");
 	}
 

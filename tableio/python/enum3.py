@@ -40,7 +40,7 @@ class metaEnum(type):
 
 
 class enum(baseEnum, metaclass=metaEnum):
-    """This class mimicks the interface of boost-python-wrapped enums.
+    """This class mimics the interface of boost-python-wrapped enums.
 
     Inherit from this class to construct enumerated types that can
     be passed to the I3Datatype, e.g.:

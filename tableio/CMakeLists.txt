@@ -64,7 +64,7 @@ i3_test_scripts(
 )
 
 ## mark the following tests as skipped, instead of a false "passed"
-## see the indvidual tests for the skip logic
+## see the individual tests for the skip logic
 set_tests_properties(
     tableio::test_padding.py tableio::test_subevents.py tableio::test_I3MCTree.py
     tableio::test_inheritance_conversion.py

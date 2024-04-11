@@ -15,7 +15,7 @@
 /**
  * \brief A single field in the in-memory representation of the table.
  *
- * The converters will fill a contigous region of space of which different
+ * The converters will fill a contiguous region of space of which different
  * regions may contain different datatypes. In order to guarantee proper
  * alignment of the fields reserve for every field sizeof(I3MemoryChunk)
  * bytes.

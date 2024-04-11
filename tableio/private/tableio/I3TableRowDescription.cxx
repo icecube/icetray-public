@@ -133,7 +133,7 @@ AlignOffset(size_t offset, size_t size)
 	while (align < size)
 		align <<= 1;
 
-	// If alredy aligned, hunky-dory. Otherwise, shift
+	// If already aligned, hunky-dory. Otherwise, shift
 	// offset up to next aligned address
 	if (offset % align == 0)
 		return offset;
@@ -155,7 +155,7 @@ void I3TableRowDescription::AddField(const std::string& name, I3Datatype type,
     fieldNames_.push_back(name);
     fieldNameToIndex_[name] = nfields;
 
-    // special case for ambigous integers that may be booleans
+    // special case for ambiguous integers that may be booleans
     if ( unit == std::string("bool") ) type.kind = I3Datatype::Bool;
     fieldTypes_.push_back(type);
 
@@ -232,6 +232,3 @@ I3TableRowDescription operator|(const I3TableRowDescription& lhs,
     newlhs << rhs;
     return newlhs;
 }
-
-
-

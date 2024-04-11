@@ -233,7 +233,7 @@ I3TableRowPtr I3TableRow::GetSingleRow(size_t row) const {
 
 /******************************************************************************/
 
-// Explictly cast booleans to true/false
+// Explicitly cast booleans to true/false
 template<>
 void I3TableRow::Set<bool>(const std::string& fieldName, bool value, bool all) {
     size_t index = description_->GetFieldColumn(fieldName);

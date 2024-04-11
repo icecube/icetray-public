@@ -135,7 +135,7 @@ ___________
 .. highlight:: python
 
 :I3WaveformConverter: Dumps ATWD and FADC waveforms together.
-  Does not have a default constructor, but needs to be added explicitely with FADC and ATWD waveform names.
+  Does not have a default constructor, but needs to be added explicitly with FADC and ATWD waveform names.
   If you only want to book one ``I3WaveformSeriesMap`` use the ``I3WaveformSeriesMapConverter``.
 
   *Constructor arguments:* ATWD name, FADC name, calibrate to pe/bin

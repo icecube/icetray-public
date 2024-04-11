@@ -228,7 +228,7 @@ void I3TableWriter::AddConverter(std::string typeName, I3ConverterPtr converter)
 /******************************************************************************/
 
 void I3TableWriter::Setup() {
-    // implemenation pending
+    // implementation pending
 }
 
 /******************************************************************************/

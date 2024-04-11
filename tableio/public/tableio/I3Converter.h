@@ -74,7 +74,7 @@ class I3Converter {
         /**
 	 * \brief Return a pointer to an already created description object.
 	 *
-	 * This function will log_fatal if no description exists. Check for existance
+	 * This function will log_fatal if no description exists. Check for existence
 	 * of the description with HasDescription().
          */
         I3TableRowDescriptionConstPtr GetDescription();
@@ -282,7 +282,7 @@ class I3ConverterImplementation : public I3Converter {
 
 /******************************************************************************/
 
-// provide a default implemenation for GetNumberOfRows. covers all one-row-per-object converters.
+// provide a default implementation for GetNumberOfRows. covers all one-row-per-object converters.
 template <class FrmObj>
 size_t I3ConverterImplementation<FrmObj>::GetNumberOfRows(const FrmObj& object) {
     return 1;
@@ -307,7 +307,7 @@ I3ConverterImplementation<FrmObj>::CanConvert(I3FrameObjectConstPtr object) {
 
 // The unsigned integer type to use when writing size_t out
 // to a table. This should be the largest pointer size of any platform
-// on which IceTray runs (64 bits for the forseeable future).
+// on which IceTray runs (64 bits for the foreseeable future).
 typedef uint64_t tableio_size_t;
 
 #endif

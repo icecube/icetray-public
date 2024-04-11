@@ -157,7 +157,7 @@ standard dictionary notation:                                                \n\
       rows.current_row = i                                                   \n\
       rows['foo'] = i*5                                                      \n\
                                                                              \n\
-Columns may also hold fixed-length vectors of homogenous data. If the        \n\
+Columns may also hold fixed-length vectors of homogeneous data. If the       \n\
 I3TableRow object was created thusly:                                        \n\
                                                                              \n\
    desc = I3TableRowDescription()                                            \n\
