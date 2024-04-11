@@ -10,13 +10,13 @@
 from icecube.icetray import pypick, I3Frame
 
 def which_split(split_name=''):
-    """
+    r"""
     Event substream selection utility. It's presented as a "pypick", that is, you can
     do boolean expressions with the function itself (as opposed to its return value):
 
-    If = (which_split('foo') | which_split('bar')) & pypick(lambda f: 'somepulses' in f)
+    If = (which_split('foo') \| which_split('bar')) & pypick(lambda f: 'somepulses' in f)
 
-    Note that you should use the symbolic logic operators (&=and, |=or, ^=xor, ~=invert),
+    Note that you should use the symbolic logic operators (&=and, \|=or, ^=xor, ~=invert),
     because the English versions have a slightly different scope and in this case that
     actually matters, using the English versions will sometimes result in undesired
     surprising behavior.
