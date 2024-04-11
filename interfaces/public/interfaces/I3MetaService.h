@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file I3MetaService.h
@@ -21,7 +21,7 @@ class I3MetaService
 
   /**
    * @brief indicates whether or not there are more events to find.
-   * 
+   *
    */
   virtual I3FramePtr PopMeta() = 0;
 

@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file I3EventService.h
@@ -19,8 +19,8 @@ class I3Frame;
 class I3Time;
 
 /**
- * @brief This is the interface to classes which  
- * serve up an event and the time of the next 
+ * @brief This is the interface to classes which
+ * serve up an event and the time of the next
  * event.  This is intended to be an icetray service
  */
 class I3EventService
@@ -29,7 +29,7 @@ class I3EventService
 
   /**
    * @brief indicates whether or not there are more events to find.
-   * 
+   *
    */
   virtual bool MoreEvents() = 0;
 

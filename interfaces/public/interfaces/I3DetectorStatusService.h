@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file I3DetectorStatusService.h
@@ -21,7 +21,7 @@ class I3Time;
 
 /**
  * @brief Produces I3DetectorStatus and I3DetectorStatus Header
- * objects given a I3Time.  Intended to be an icetray service 
+ * objects given a I3Time.  Intended to be an icetray service
  * which provides the detector status information
  */
 class I3DetectorStatusService

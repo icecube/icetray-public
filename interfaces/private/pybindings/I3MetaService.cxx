@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -23,7 +23,7 @@ struct I3MetaServiceWrapper : I3MetaService, bp::wrapper<I3MetaService>
 
 void
 register_I3MetaService()
-{	
+{
 	bp::class_<I3MetaServiceWrapper, boost::shared_ptr<I3MetaServiceWrapper>,
 	    boost::noncopyable>("I3MetaService", bp::init<>())
 		.def("pop_meta", &I3MetaServiceWrapper::PopMeta)

@@ -1,8 +1,8 @@
 #ifndef INSTALL_H
 #define INSTALL_H
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -19,7 +19,7 @@ struct I3InstallService {
 	func(boost::shared_ptr<T> what, I3ContextPtr ctx, const std::string& where)
 	{
 		return ctx->Put(where, what);
-	}	
+	}
 };
 
 #endif

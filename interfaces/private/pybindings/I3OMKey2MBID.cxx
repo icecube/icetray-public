@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <boost/python.hpp>
 
 #include "interfaces/I3OMKey2MBID.h"
@@ -31,6 +35,6 @@ void register_I3OMKey2MBID()
 	    .def("GetOMKey", &I3OMKey2MBIDWrapper::GetOMKey)
 	    .def("GetMBID", &I3OMKey2MBIDWrapper::GetMBID)
 	;
-	
+
 	bp::implicitly_convertible<boost::shared_ptr<I3OMKey2MBIDWrapper>, boost::shared_ptr<I3OMKey2MBID> >();
 }

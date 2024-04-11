@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef INTERFACES_I3ICEPICKMODULE_H
 #define INTERFACES_I3ICEPICKMODULE_H
 
@@ -10,13 +14,13 @@
 #include <boost/python.hpp>
 
 /**
- * @brief This is module that does the event selection.  You put it your 
+ * @brief This is module that does the event selection.  You put it your
  * module chain and then frames which don't pass the cut don't make it
  * past this module.
  *
- * This module is a template, so when you want to add this module you 
+ * This module is a template, so when you want to add this module you
  * need to specify a subclass of I3IcePick that you want to use as the
- * template parameter.  Don't forget to generate a dictionary for the 
+ * template parameter.  Don't forget to generate a dictionary for the
  * new template instantiation.
  */
 template <class IcePick>
@@ -75,7 +79,7 @@ class I3IcePickModule : public I3ConditionalModule
       GetParameter("Streams", streams_);
       if (streams_.size() == 0)
           log_fatal("IcePick set to run on no frame types!");
-      
+
       pick_.ConfigureInterface();
       number_Events_Picked = 0;
       number_Events_Tossed = 0;
@@ -106,7 +110,7 @@ class I3IcePickModule : public I3ConditionalModule
       if(!decision->value) number_Events_Tossed++;
       else number_Events_Picked++;
       log_trace("IcePick counts: count:%i goal:%i",
-	       number_Events_Picked,nEventsToPick_);      
+	       number_Events_Picked,nEventsToPick_);
       if(nEventsToPick_>0){
 	if(number_Events_Picked>=nEventsToPick_){
 	  log_info("IcePick %s reached requested number of events.  Stopping",

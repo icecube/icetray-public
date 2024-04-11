@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file I3OMKey2MBID.h
@@ -50,8 +50,8 @@ class I3OMKey2MBID
 
  private:
   // private copy constructors and assignment
-  I3OMKey2MBID(const I3OMKey2MBID& rhs); 
-  I3OMKey2MBID& operator=(const I3OMKey2MBID& rhs); 
+  I3OMKey2MBID(const I3OMKey2MBID& rhs);
+  I3OMKey2MBID& operator=(const I3OMKey2MBID& rhs);
 
   // logging
   SET_LOGGER("I3OMKey2MBID");

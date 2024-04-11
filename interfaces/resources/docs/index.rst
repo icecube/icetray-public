@@ -1,9 +1,13 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. _interfaces:
 
 Interfaces Documentation
 ========================
-The interfaces project is designed to be a holder for generic 
-interfaces between IceTray projects.  It should help minimize 
+The interfaces project is designed to be a holder for generic
+interfaces between IceTray projects.  It should help minimize
 project inter-dependencies.
 
 The project consists of the following services, modules, and templates:
@@ -20,7 +24,7 @@ The project consists of the following services, modules, and templates:
 Note :  This project has no tests and are probably not appropriate
 anyway.  This project consists of 7 abstract base classes and 2
 templates.  Tests of the base classes would have to provide derived
-implementations and the tests would therefore mostly test the 
+implementations and the tests would therefore mostly test the
 test code, which is obviously pointless.
 
 .. toctree::

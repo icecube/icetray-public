@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef INTERFACES_I3ICEFORKMODULE_H
 #define INTERFACES_I3ICEFORKMODULE_H
 
@@ -7,21 +11,21 @@
 
 /**
  * @brief This module is just like I3IcePickModule except that it
- * does the event selection and then dumps the rejected frame to 
+ * does the event selection and then dumps the rejected frame to
  * it's TrashBox.
  *
- * This module is a template, so when you want to add this module you 
+ * This module is a template, so when you want to add this module you
  * need to specify a subclass of I3IcePick that you want to use as the
- * template parameter.  
+ * template parameter.
  */
 template <class IcePick>
 class I3IceForkModule : public I3Module
 {
  public:
-  I3IceForkModule(const I3Context& context) : 
+  I3IceForkModule(const I3Context& context) :
     I3Module(context),
     decisionName_(I3::name_of<IcePick>()),
-    pick_(context) 
+    pick_(context)
     {
       // Synchronize the two configurations via the back door
       pick_.ReplaceConfiguration(configuration_);

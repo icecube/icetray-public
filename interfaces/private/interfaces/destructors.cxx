@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <interfaces/I3CalibrationService.h>
 #include <interfaces/I3DetectorStatusService.h>
 #include <interfaces/I3MetaService.h>

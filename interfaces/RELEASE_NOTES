@@ -1,8 +1,14 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 Release Notes
 =============
 
 main
 ----
+
+* [interfaces] Add SPDX tags (#3438)
 
 Feb. 20, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
@@ -66,7 +72,7 @@ Release V15-08-00
 * Removed I3ChannelID2OMKey.  This was only needed for AMANDA.
 * Added some docs (one-liners) about the classes in this project.
 * Remove the test directories and references to tests in CMakeLists.txt.
-  Tests really aren't relevant for this project, since most are ABCs, 
+  Tests really aren't relevant for this project, since most are ABCs,
   and tests are more appropriate for the classes that derive from them.
 * Added missing include guards.
 
