@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 
 #include "pybindings.hpp"
@@ -131,7 +130,7 @@ namespace {
 void register_I3File()
 {
   scope i3file_scope = class_<I3File, I3FilePtr>
-    ("I3File", 
+    ("I3File",
      "Simple reader/writer for .i3 files, with optional on-the-fly gzipping",
      no_init
      )
@@ -144,11 +143,11 @@ void register_I3File()
          arg("Mode")="r",
          arg("Starting_frame")=0),
         "Create and open an I3File object, specifying the mode."))
-    .def("close", &I3File::close, 
+    .def("close", &I3File::close,
          "Close the file")
-    .def("more", &I3File::more, 
+    .def("more", &I3File::more,
          "Return True if there are more frames in the file")
-    .def("rewind", &I3File::rewind, 
+    .def("rewind", &I3File::rewind,
          "Rewind to beginning of file and reopen")
     .def("push", (void(I3File::*)(boost::shared_ptr<I3Frame>))&I3File::push,
          arg("frame"),
@@ -160,7 +159,7 @@ void register_I3File()
          "Return the next DAQ frame from the file, skipping frames on other streams.")
     .def("pop_physics", &I3File::pop_physics,
          "Return the next physics frame from the file, skipping frames on other streams.")
-    .def("seek", &I3File::seek, 
+    .def("seek", &I3File::seek,
          "Seek to a specific frame number")
     .def("get_mixed_frames", &I3File::get_mixed_frames,
          "Return the parent frames that are mixed into the current frame.")
@@ -183,7 +182,7 @@ void register_I3File()
      "Iterator for I3File",
      no_init
      )
-    .def("__next__", &I3FileIterator::next, 
+    .def("__next__", &I3FileIterator::next,
          "Return the next frame if one is available, else throw StopIteration")
     .def("__iter__", pass_through)
     ;

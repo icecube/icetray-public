@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import collections
 import re
 
@@ -10,12 +14,12 @@ def format_line( frame, key, maxwidth = None, ellipsis = '...' ):
     exactly one line of text describing the I3FrameObject with that key.
     Try to make the text as useful to a human reader as possible.
 
-    If accessing the object generates an exception, catch it and 
+    If accessing the object generates an exception, catch it and
     return its description.
 
     Clip to an optional maximum width with a trailing ellipsis'''
     try:
-        obj = frame[key]        
+        obj = frame[key]
         if (obj is None) and (key in frame):
             return '(Unreadable)'
         if hasattr(obj, "apply"):
@@ -81,7 +85,7 @@ def format_xml( frame, key ):
             message = key+' not in frame'
     except Exception as e:
         message = '({0})'.format(e)
-    
+
     return message.expandtabs(4)
 
 def format_size( frame, key):

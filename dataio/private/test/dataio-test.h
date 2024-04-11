@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3_DATAIO_TEST_H_INCLUDED
 #define I3_DATAIO_TEST_H_INCLUDED
 

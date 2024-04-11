@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3_FRAME_SEQUENCE_H_INCLUDED
 #define I3_FRAME_SEQUENCE_H_INCLUDED
 
@@ -18,11 +22,11 @@ namespace dataio {
      *  sequence of frames.  Only supports read access.
      */
     class I3FrameSequence
-    {   
+    {
     public:
         //! Default constructor.
         I3FrameSequence();
-    
+
         //! Copy constructor.
         I3FrameSequence(const I3FrameSequence&);
 
@@ -58,7 +62,7 @@ namespace dataio {
         bool more();
 
         //! Get a frame of a specific stream from a readable file.
-        I3FramePtr pop_frame(I3Frame::Stream = I3Frame::None); 
+        I3FramePtr pop_frame(I3Frame::Stream = I3Frame::None);
 
         //! Get a DAQ frame
         inline I3FramePtr pop_daq() { return pop_frame(I3Frame::DAQ); }

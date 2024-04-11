@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <dataio/I3FileStager.h>
 
 #include <icetray/python/gil_holder.hpp>
@@ -35,7 +39,7 @@ struct I3FileStagerWrapper : I3FileStager, bp::wrapper<I3FileStager>
         boost::python::detail::gil_holder gil;
         return this->get_override("ReadSchemes")();
     }
-    
+
     virtual std::vector<std::string> WriteSchemes() const
     {
         boost::python::detail::gil_holder gil;
@@ -59,7 +63,7 @@ struct I3FileStagerWrapper : I3FileStager, bp::wrapper<I3FileStager>
         boost::python::detail::gil_holder gil;
         this->get_override("CopyFileIn")(url, fname);
     }
-    
+
     virtual void CopyFileOut(const std::string &fname, const std::string &url)
     {
         boost::python::detail::gil_holder gil;
@@ -71,7 +75,7 @@ struct I3FileStagerWrapper : I3FileStager, bp::wrapper<I3FileStager>
 void register_I3FileStager()
 {
     {
-        bp::scope I3FileStager_scope = 
+        bp::scope I3FileStager_scope =
         bp::class_<I3FileStagerWrapper, boost::shared_ptr<I3FileStagerWrapper>, boost::noncopyable>
         (
             "I3FileStager",
@@ -86,7 +90,7 @@ void register_I3FileStager()
         .def("GetWriteablePath", &I3FileStager::GetWriteablePath)
         ;
     }
-    
+
     bp::implicitly_convertible<boost::shared_ptr<I3FileStagerWrapper>, boost::shared_ptr<const I3FileStager> >();
     bp::implicitly_convertible<boost::shared_ptr<I3FileStagerWrapper>, boost::shared_ptr<I3FileStager> >();
     bp::implicitly_convertible<boost::shared_ptr<I3FileStagerWrapper>, boost::shared_ptr<const I3FileStagerWrapper> >();
@@ -95,25 +99,25 @@ void register_I3FileStager()
         .def(bp::list_indexing_suite<std::vector<I3FileStagerPtr>, true>())
     ;
     from_python_sequence<std::vector<I3FileStagerPtr>, variable_capacity_policy>();
-    
+
     {
         bp::class_<I3FileStagerCollection, boost::shared_ptr<I3FileStagerCollection>, bp::bases<I3FileStagerWrapper>, boost::noncopyable>("I3FileStagerCollection", bp::no_init)
         .def("__init__", bp::make_constructor(&I3FileStagerCollection::create))
         ;
     }
-    
+
     {
         bp::class_<I3TrivialFileStager, boost::shared_ptr<I3TrivialFileStager>, bp::bases<I3FileStagerWrapper>, boost::noncopyable>("I3TrivialFileStager", bp::no_init)
         .def("__init__", bp::make_constructor(&I3TrivialFileStager::create))
         ;
     }
-    
+
     {
         using namespace I3::dataio;
         bp::class_<filehandle, shared_filehandle, boost::noncopyable>("filehandle", bp::no_init)
             .def(str(bp::self))
         ;
     }
-    
-    
+
+
 }

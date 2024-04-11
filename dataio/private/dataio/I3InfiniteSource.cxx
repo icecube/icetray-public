@@ -1,9 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2011
- *  The IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2011 The IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  SPDX-License-Identifier: BSD-2-Clause
+ *
  */
 
 #include <icetray/open.h>
@@ -27,7 +27,7 @@ class I3InfiniteSource : public I3Module
   private:
 	I3FileStagerPtr file_stager_;
 	I3::dataio::shared_filehandle current_filename_;
-	
+
 	boost::iostreams::filtering_istream ifs_;
 	I3Frame::Stream stream_;
         SET_LOGGER("I3InfiniteSource");
@@ -71,7 +71,7 @@ void I3InfiniteSource::Configure()
 void I3InfiniteSource::Process()
 {
 	log_trace("%s: %s", GetName().c_str(), __PRETTY_FUNCTION__);
-	
+
 	if(PeekFrame())
 		log_fatal("I3InfiniteSource should only be used as a driving module");
 

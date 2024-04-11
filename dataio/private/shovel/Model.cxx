@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #include <regex>
 
@@ -57,11 +56,11 @@ thread_([this](){
   duration sleepLen=std::chrono::duration_cast<duration>(mduration(1000));//one second
   system_clock::time_point nextTick=system_clock::now();
   nextTick+=sleepLen;
-  
+
   WorkItem w;
   while(true){
     bool doNext=false;
-    
+
     { //hold lock
       std::unique_lock<std::mutex> lock(this->mut_);
       //Wait for something to happen
@@ -199,7 +198,7 @@ view_(view),files_(std::vector<std::string>{},1000),pman_(view)
 {
   x_index_=0;
   y_index_=0;
-  
+
   boost::shared_ptr<I3FileStager> myStager;
   try {
     boost::python::object rawStager = boost::python::import("icecube.dataio").attr("get_stagers")();
@@ -209,13 +208,13 @@ view_(view),files_(std::vector<std::string>{},1000),pman_(view)
     PyErr_Clear();
     myStager = I3TrivialFileStager::create();
   }
-  
+
   for(auto filename : filenames){
     file_refs_.push_back(myStager->GetReadablePath(filename));
     files_.add_file(*file_refs_.back());
     log_info_stream("added " << *file_refs_.back());
   }
-  
+
   prescan_frames(((bool)nframes?*nframes:COLS));
 }
 
@@ -232,7 +231,7 @@ bool Model::prescan_frames(unsigned index)
   else
     log_info_stream(" Max size is unknown");
   pman_.MaybeStartShowingProgress("Scanning. . . ");
-  
+
   //jump to the last known frame
   if(!frame_infos_.empty()){
     log_info_stream(" Seeking to index " << frame_infos_.size()-1);
@@ -334,7 +333,7 @@ Model::save_xml()
   boost::optional<std::string> result = view_.dialog<std::string>("Save xml to file: ");
   if (!result || result->empty())
     return;
-  
+
   pman_.MaybeStartShowingProgress("Generating XML. . . ");
   boost::iostreams::filtering_ostream ofs;
   I3::dataio::open(ofs,*result,6,std::ios::binary | std::ios::app);
@@ -354,7 +353,7 @@ Model::write_frame()
   boost::optional<std::string> result = view_.dialog<std::string>("Write frame to file: ");
   if (!result || result->empty())
     return;
-  
+
   pman_.MaybeStartShowingProgress("Writing. . . ");
   boost::iostreams::filtering_ostream ofs;
   I3::dataio::open(ofs,*result,6,std::ios::binary | std::ios::app);
@@ -371,7 +370,7 @@ Model::write_frame_with_dependencies()
   boost::optional<std::string> result = view_.dialog<std::string>("Write frame and dependencies to file: ");
   if (!result || result->empty())
     return;
-  
+
   pman_.MaybeStartShowingProgress("Writing. . . ");
   boost::iostreams::filtering_ostream ofs;
   I3::dataio::open(ofs,*result,6,std::ios::binary | std::ios::app);
@@ -390,24 +389,24 @@ Model::do_find_event()
   boost::optional<std::string> result = view_.dialog<std::string>("Find event: ");
   if(!result || result->empty())
     return;
-  
+
   bool exact_run=false;
   unsigned long run=0;
   unsigned long event=0;
-  
+
   std::regex id_matcher(R"(([0-9]+(,|/))?([0-9]+))");
   std::smatch matches;
   if(!std::regex_match(*result,matches,id_matcher))
     return;
-  
+
   if(!matches[1].str().empty()){
     run=std::stoul(matches[1]);
     exact_run=true;
   }
   event=std::stoul(matches[3]);
-  
+
   log_info_stream("Will search for event " << run << "," << event);
-  
+
   std::string message="Searching for event ";
   if(exact_run)
     message+=std::to_string(run);
@@ -435,7 +434,7 @@ Model::do_find_event()
     }
     x_index_++;
   } while (x_index_<totalframes() || !totalframes_exact());
-  
+
   if(!found) //wrap around
     x_index_=0;
   //search up to the original point
@@ -493,7 +492,7 @@ Model::get_frame(unsigned index)
     cached_frame_=files_[index];
     pman_.SetProgress(1.);
     pman_.StopShowingProgress();
-    
+
     cached_frame_keys_ = cached_frame_->keys();
     y_max_ = cached_frame_->size();
     //figure out whether there is already known key we should scroll to,
@@ -515,7 +514,7 @@ Model::get_frame(unsigned index)
       }
     }
   }
-  
+
   return(cached_frame_);
 }
 
@@ -590,7 +589,7 @@ Model::pretty_print()
   view_.page(oss.str());
 }
 
-void 
+void
 Model::notify()
 {
   view_.display_frame(get_frame(x_index_), x_index_, y_index_);
@@ -613,7 +612,7 @@ Model::streams(unsigned start_index, unsigned length)
 
   for (unsigned i=0; i<length; i++)
     ret.push_back(frame_infos_[start_index + i].stream);
-  
+
   return ret;
 }
 
@@ -631,9 +630,9 @@ Model::sub_event_streams(unsigned start_index, unsigned length)
   }
     assert(start_index + length <= frame_infos_.size());
     std::vector<std::string> ret;
-    
+
     for (unsigned i=0; i<length; i++)
       ret.push_back(frame_infos_[start_index + i].sub_event_stream);
-    
+
     return ret;
 }

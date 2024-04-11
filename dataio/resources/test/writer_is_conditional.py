@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 #  Run frames on different streams through a reader/writer tray, verify that extra
 #  cruft doesn't get in to the files
@@ -15,7 +19,7 @@ fname = 'ints.i3'
 
 if os.path.exists(fname) and os.path.isfile(fname):
     os.unlink(fname)
-    
+
 i3f = dataio.I3File(fname, 'w')
 
 for i in range(100):

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "dataio/I3FileStager.h"
 #include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
@@ -72,7 +76,7 @@ I3FileStager::GetReadablePath(const std::string &url)
 {
 	if (!CanStageIn(url))
 		return I3::dataio::shared_filehandle(new I3::dataio::filehandle(url));
-	
+
 	I3::dataio::shared_filehandle handle;
 	std::map<std::string, I3FileStager::handle_pair>::iterator
 	    prev_pair = GetLocalFileName(url, true);
@@ -86,8 +90,8 @@ I3FileStager::GetReadablePath(const std::string &url)
 		boost::function<void()> deleter = boost::bind(&I3FileStager::Cleanup, shared_from_this(), url);
 		handle = I3::dataio::shared_filehandle(new I3::dataio::filehandle(fname, deleter));
 		prev_pair->second.second = handle;
-	} 
-	
+	}
+
 	return handle;
 }
 
@@ -96,7 +100,7 @@ I3FileStager::GetWriteablePath(const std::string &url)
 {
 	if (!CanStageOut(url))
 		return I3::dataio::shared_filehandle(new I3::dataio::filehandle(url));
-	
+
 	I3::dataio::shared_filehandle handle;
 	std::map<std::string, I3FileStager::handle_pair>::iterator
 	    prev_pair = GetLocalFileName(url, false);
@@ -109,7 +113,7 @@ I3FileStager::GetWriteablePath(const std::string &url)
 		handle = I3::dataio::shared_filehandle(new I3::dataio::filehandle(fname, deleter));
 		prev_pair->second.second = handle;
 	}
-	
+
 	return handle;
 }
 
@@ -117,7 +121,7 @@ void
 I3FileStager::StageFileOut(const std::string &url)
 {
 	namespace fs = boost::filesystem;
-	
+
 	std::string fname = GetLocalFileName(url, false)->second.first;
 	if (fs::exists(fname)) {
 		CopyFileOut(fname, url);
@@ -128,7 +132,7 @@ void
 I3FileStager::Cleanup(const std::string &url)
 {
 	namespace fs = boost::filesystem;
-	
+
 	std::string fname = GetLocalFileName(url, true)->second.first;
 	if (fs::exists(fname))
 		unlink(fname.c_str());

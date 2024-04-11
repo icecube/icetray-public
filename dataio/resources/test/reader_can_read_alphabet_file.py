@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 #  Run frames on different streams through a reader/writer tray, verify that extra
 #  cruft doesn't get in to the files
@@ -16,7 +20,7 @@ class CountFrames(icetray.I3Module):
     Module counts frames (by stream) of different kinds that pass by,
     reports if the observed counts do not match some supplied expected
     counts.  Used in testing the tray itself.
-    
+
     *Parameters*:
 
     * **Counts** -  dictionary with key=Frame tag, value=count
@@ -27,7 +31,7 @@ class CountFrames(icetray.I3Module):
                      Streams = {'P': 13, 'D' :1}
                      )
 
-    This would check for 13 physics streams and 1 detectorstatus stream                     
+    This would check for 13 physics streams and 1 detectorstatus stream
 
     """
     def __init__(self, context):

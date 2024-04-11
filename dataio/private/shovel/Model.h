@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #ifndef DATAIO_SHOVEL_MODEL_H_INCLUDED
 #define DATAIO_SHOVEL_MODEL_H_INCLUDED
@@ -58,7 +57,7 @@ class Model
   dataio::I3FrameSequence files_;
   ///The collection of handles optained from staging the file
   std::vector<I3::dataio::shared_filehandle> file_refs_;
-  
+
   ///A wrapper for information the Mdoel likes to cache about the frames it sees
   struct FrameInfo{
     I3Frame::Stream stream;
@@ -73,11 +72,11 @@ class Model
     using argument_type=FrameInfo;
     result_type operator()(const FrameInfo&) const;
   };
-  
+
   ///Information on all frames that have been seen so far. Defined to begin at
   ///the start of files_ but at any given time may not cover its full extent.
   std::vector<FrameInfo> frame_infos_;
-  
+
   ///An object which handles deciding when to display the progress bar for slow
   ///operations. Contains its own worker thread in order to do this only when
   ///enough time has elasped for the user to probably prefer seeing a progress
@@ -105,7 +104,7 @@ class Model
   public:
     explicit ProgressManager(View& view);
     ~ProgressManager();
-    
+
     void MaybeStartShowingProgress(std::string message);
     ///\param value a fraction in [0,1]
     void SetProgress(float value);
@@ -134,19 +133,19 @@ class Model
   ///The most recently selected key for each distinct FrameInfo which has been seen
   std::unordered_map<FrameInfo,std::string,FrameInfoHash> recent_frame_keys_;
 
-  
+
   ///Fetch the frame at the given index
   I3FramePtr get_frame(unsigned);
-  
+
   ///Ensure that all froms up to index (exclusive) have been examined to
   ///determine their basic properties. If index is larger than the extent of
   ///files_, all frames up to the end of the sequence will be examined.
   ///\return whether the scan could read up to the requested index (the frame
   ///        sequence is long enough)
   bool prescan_frames(unsigned index);
-    
+
 public:
-  
+
   Model(View& view, const std::vector<std::string> filenames,
         boost::optional<unsigned> nframes = boost::optional<unsigned>());
 
@@ -195,7 +194,7 @@ public:
   ///\return true if the end of the frame sequence has been reached and so the
   ///        result of totalframes is accurate.
   bool totalframes_exact();
-  
+
   ///Retrieve the currently selected frame
   I3FramePtr current_frame();
 

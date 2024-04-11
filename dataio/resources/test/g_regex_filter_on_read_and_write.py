@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube.icetray import I3Tray
 
 from os.path import expandvars
@@ -7,17 +11,17 @@ from os.path import expandvars
 import os
 import sys
 
-from icecube import icetray 
-from icecube import dataclasses 
-from icecube import phys_services 
-from icecube import dataio 
+from icecube import icetray
+from icecube import dataclasses
+from icecube import phys_services
+from icecube import dataio
 
 class PutParticle(icetray.I3Module):
     def __init__(self, context):
         icetray.I3Module.__init__(self, context)
         self.AddParameter("where", "Name of object in the frame,", "")
         self.AddOutBox("OutBox")
-        
+
     def Configure(self) :
         self.where = self.GetParameter("where")
 
@@ -44,7 +48,7 @@ tray.AddModule(PutParticle, where = r"particle?\w")
 
 tray.AddModule("Dump","dump")
 
-tray.AddModule("I3Writer", 
+tray.AddModule("I3Writer",
     filename = "filtered.i3",
     skipkeys = [".*Reco.*", r"\w{4}where"]
     )

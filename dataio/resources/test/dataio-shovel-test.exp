@@ -1,5 +1,9 @@
 #!/usr/bin/env expect
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 set file "$env(I3_TESTDATA)/millipede/monopod_test_events.i3.bz2"
 
 if {[file exists $file]} {

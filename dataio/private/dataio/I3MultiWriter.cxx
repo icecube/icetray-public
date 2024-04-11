@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #include <dataio/I3MultiWriter.h>
 #include <boost/iostreams/filter/gzip.hpp>
@@ -46,9 +45,9 @@ namespace dataio = I3::dataio;
 
 I3_MODULE(I3MultiWriter);
 
-I3MultiWriter::I3MultiWriter(const I3Context& ctx) 
+I3MultiWriter::I3MultiWriter(const I3Context& ctx)
   : I3WriterBase(ctx), size_limit_(0), sync_seen_(false), file_counter_(0)
-{ 
+{
   AddParameter("SizeLimit",
 	       "Soft Size limit in bytes.  Files will typically exceed this limit by the size of one half of one frame.",
 	       size_limit_);
@@ -82,7 +81,7 @@ I3MultiWriter::Configure_()
   NewFile();
 }
 
-void 
+void
 I3MultiWriter::NewFile()
 {
   log_trace("%s", __PRETTY_FUNCTION__);
@@ -143,7 +142,7 @@ I3MultiWriter::Process()
 	// If this is a frame type we need to cache for file-start metadata,
 	// insert it into the cache in a way that preserves the ordering of the
 	// frames as they were first inserted into the stream.
-	
+
 	// Duplicate frame so it can't be modified by following modules
 	I3FramePtr cache_copy(new I3Frame(frame->GetStop()));
 	cache_copy->merge(*frame);

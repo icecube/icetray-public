@@ -1,6 +1,6 @@
 /**
-   copyright  (C) 2004
-   the icecube collaboration
+   Copyright  (C) 2004 the icecube collaboration
+   SPDX-License-Identifier: BSD-2-Clause
    $Id$
 
    @version $Revision$
@@ -38,7 +38,7 @@ TEST(read)
       log_info("%s", s.c_str());
       I3FramePtr fp = load_i3_file(s);
       ENSURE((bool)fp);
-	
+
       cout << "From " << s << ":\n" << *fp << "\n";
       for (I3Frame::const_iterator iter = fp->begin();
 	   iter != fp->end();

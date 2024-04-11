@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 
 #include <fstream>
@@ -172,7 +176,7 @@ TEST(Seek){
 TEST(Seek_MultiFile){
 	testfile f1=make_testfile("QQQQQ");
 	testfile f2=make_testfile("QQQQQ",5);
-	
+
 	I3FrameSequence s({f1.getPath(),f2.getPath()},5);
 	//skip around the sequence
 	for(int i=0; i<10; i++){

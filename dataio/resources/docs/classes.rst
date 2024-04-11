@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 :mod:`icecube.dataio` -- python bindings to Data I/O utilities
 ===============================================================
 

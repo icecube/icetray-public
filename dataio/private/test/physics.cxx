@@ -1,6 +1,6 @@
 /**
-   copyright  (C) 2004
-   the icecube collaboration
+   Copyright  (C) 2004 the icecube collaboration
+   SPDX-License-Identifier: BSD-2-Clause
    $Id$
 
    @version $Revision$
@@ -74,8 +74,8 @@ TEST_GROUP(physics);
   (I3Waveform)					\
   (I3Trigger)					\
   (I3Waveform)					\
-  (I3TWRFrag) 
- 
+  (I3TWRFrag)
+
 #define SERIALIZATION_TEST(r,data,t) SERIALIZE(t)
 
 BOOST_PP_SEQ_FOR_EACH(SERIALIZATION_TEST, ~, TEST_THESE);

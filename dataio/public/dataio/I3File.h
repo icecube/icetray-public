@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3_FILE_H_INCLUDED
 #define I3_FILE_H_INCLUDED
 
@@ -57,7 +61,7 @@ namespace dataio {
         explicit I3File(const std::string&, const std::string&, size_t = 0);
 
         /** A special constructor for controlling mixing.
-         * 
+         *
          *  /param path The path to the file.
          *  /param mode The file mode using the Mode enum.
          *  /param frames The number of frames to skip.
@@ -84,7 +88,7 @@ namespace dataio {
         void push(I3FramePtr);
 
         //! Get a frame of a specific stream from a readable file.
-        I3FramePtr pop_frame(I3Frame::Stream = I3Frame::None); 
+        I3FramePtr pop_frame(I3Frame::Stream = I3Frame::None);
 
         //! Get a DAQ frame from a readable file.
         inline I3FramePtr pop_daq() { return pop_frame(I3Frame::DAQ); }

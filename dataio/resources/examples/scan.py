@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 """Scan an i3 file, outputting in various ways."""
 
 import sys
@@ -16,7 +21,7 @@ def files(args):
 
 def main():
     from optparse import OptionParser,OptionGroup
-    
+
     usage = 'usage: %prog [options] input_file [input_file2 ...]\n\n'
     usage += 'Scan an i3 file, outputting in various ways.'
     parser = OptionParser(usage=usage)
@@ -28,14 +33,14 @@ def main():
     group.add_option('-c','--count',default=False,action='store_true',
                      dest='count',help='Print total number of frames')
     parser.add_option_group(group)
-    
+
     (options,args) = parser.parse_args()
-    
+
     if len(args) < 1:
         print('ERROR: no input file')
         print('')
         parser.print_help()
-    
+
     # make sure only one of frames, streams, and count are selected
     elif ((options.frames and (options.streams or options.count)) or
         (options.streams and (options.frames or options.count)) or
@@ -43,7 +48,7 @@ def main():
         print('ERROR: only select one of --whole-frames, --streams-only, or --count')
         print('')
         parser.print_help()
-    
+
     else:
         count = 0
         for frame in files(args):

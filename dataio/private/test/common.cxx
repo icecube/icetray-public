@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2004
-    the icecube collaboration
+    Copyright  (C) 2004 the icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     $Id$
 
     @version $Revision$
@@ -14,7 +14,7 @@
 
 #include <icetray/I3Logging.h>
 
-#include <dataclasses/I3Direction.h>		
+#include <dataclasses/I3Direction.h>
 #include <icetray/I3Bool.h>
 #include <dataclasses/I3Double.h>
 #include <dataclasses/I3Position.h>
@@ -41,7 +41,7 @@ TEST_GROUP(common);
 #define NON_I3FO_ITEMS \
   (TriggerKey)	       \
   (OMKey)
-  
+
 #define SERIALIZATION_TEST(r,data,t) SERIALIZE(t)
 
 BOOST_PP_SEQ_FOR_EACH(SERIALIZATION_TEST, ~, TEST_THESE);

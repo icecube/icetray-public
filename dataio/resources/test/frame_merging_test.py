@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 #  Run frames on different streams through a reader/writer tray, verify that extra
 #  cruft doesn't get in to the files
@@ -38,7 +42,7 @@ tray.AddModule("Dump", "dump")
 
 def p(frame):
     print("FFFFFFF:%s" % frame)
-    
+
 tray.AddModule(p, 'dmp',
                Streams = [icetray.I3Frame.Stream(a) for a in streams])
 
@@ -70,9 +74,9 @@ for st in streams:
     assert i3i.value == ord(st) * counter
     print([thing.value for thing in list(theframe.values())])
     counter += 1
-    
 
-assert not i3f.more() 
+
+assert not i3f.more()
 i3f.close()
 
 

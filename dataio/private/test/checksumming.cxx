@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 /**
     $Id$
     checksum tests.
@@ -109,11 +113,11 @@ TEST(fail_reading_truncated_file)
   //  and it missed certain objects.  with v4 we have clean
   //  checksumming, but not when loading v3 files.
   //
-  EXPECT_THROW(loadframes(string(getenv("I3_SRC")) 
+  EXPECT_THROW(loadframes(string(getenv("I3_SRC"))
 			  + "/dataio/resources/data/serialization/truncated_hundred_doubles-v4.i3.gz",1),
 	       "This should throw.");
-}  
-  
+}
+
 TEST(fail_reading_corrupted_file)
 {
   EXPECT_THROW(loadframes(string(getenv("I3_SRC"))

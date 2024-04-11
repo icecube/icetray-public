@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 /**
    $Id$
    speed tests.
@@ -65,7 +69,7 @@ I3FramePtr make_frame()
   return fr;
 }
 
-// 
+//
 //  checks one slot for an object, verifies deserialization works.
 //  Get<I3FrameObject> is sufficient to trigger full deserialization.
 //
@@ -120,7 +124,7 @@ void test_iostreams(I3Frame& frame, const std::string& filename, unsigned ntimes
   double megs = 1024*1024;
 
 
-  cout << "\n  Frame written " << ntimes 
+  cout << "\n  Frame written " << ntimes
        << " times (" << ss.st_size << " bytes) in " << stop-start << " seconds. "
        << " (" << ((stop > start) ? ss.st_size/(stop-start)/megs : std::numeric_limits<double>::max()) << " Mb/sec)" << endl;
 
@@ -138,7 +142,7 @@ void test_iostreams(I3Frame& frame, const std::string& filename, unsigned ntimes
       }
   }
   stop = time(0);
-  cout << "\n  Frame read (but contents not inspected) " << ntimes 
+  cout << "\n  Frame read (but contents not inspected) " << ntimes
        << " times (" << ss.st_size << " bytes) in " << stop-start << " seconds. "
        << " (" << ((stop > start) ? ss.st_size/(stop-start)/megs : std::numeric_limits<double>::max()) << " Mb/sec)" << endl;
 
@@ -157,7 +161,7 @@ void test_iostreams(I3Frame& frame, const std::string& filename, unsigned ntimes
       }
   }
   stop = time(0);
-  cout << "\n  Frame read and contents inspected " << ntimes 
+  cout << "\n  Frame read and contents inspected " << ntimes
        << " times (" << ss.st_size << " bytes) in " << stop-start << " seconds. "
        << " (" << ((stop > start) ? ss.st_size/(stop-start)/megs : std::numeric_limits<double>::max()) << " Mb/sec)" << endl;
 

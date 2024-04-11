@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 #include <icetray/I3Tray.h>
 #include <icetray/open.h>
@@ -11,9 +15,9 @@ TEST_GROUP(multiwrite_compressed);
 
 void do_multiwrite_test(const std::string& suffix, bool lenient=false){
 	std::string filenameTemplate=I3Test::testfile("multi-%u.i3"+suffix);
-	
+
 	const unsigned int expectedFiles=4;
-	
+
 	GetIcetrayLogger()->SetLogLevel(I3LOG_INFO);
 	I3Tray writerTray;
 	writerTray.AddModule("I3InfiniteSource","Source");
@@ -22,7 +26,7 @@ void do_multiwrite_test(const std::string& suffix, bool lenient=false){
 		("SizeLimit",10)("Streams",std::vector<I3Frame::Stream>{I3Frame::DAQ});
 	writerTray.Execute(expectedFiles);
 	writerTray.Finish();
-	
+
 	unsigned int frameCount=0;
 	for(unsigned int i=0; i<expectedFiles; i++){
 		boost::format f(filenameTemplate);
@@ -50,7 +54,7 @@ void do_multiwrite_test(const std::string& suffix, bool lenient=false){
 		}
 	}
 	ENSURE_EQUAL(expectedFiles,frameCount,"All frames must be read back");
-	
+
 	//clean up
 	for(unsigned int i=0; i<expectedFiles; i++){
 		boost::format f(filenameTemplate);

@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007, 2008, 2009
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007, 2008, 2009 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007, 2008, 2009 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 
 #include <dataclasses/physics/I3EventHeader.h>
@@ -66,7 +65,7 @@ using namespace boost::assign;
 using namespace std;
 using boost::optional;
 
-static 
+static
 void finish(int sig)
 {
   endwin();
@@ -76,7 +75,7 @@ void finish(int sig)
   exit(0);
 }
 
-static 
+static
 void resize(int sig)
 {
   //  log_trace(__PRETTY_FUNCTION__);
@@ -172,7 +171,7 @@ View::start()
   subeventstream_colors_["NullSplit"] = red;
   subeventstream_colors_["IceTopSplit"] = yellow;
   subeventstream_colors_["InIceSplit"] = green;
-    
+
   // colors for new stream names
   new_subeventstream_colors_.push_back(blue);
   new_subeventstream_colors_.push_back(red);
@@ -220,7 +219,7 @@ View::~View()
   finish(0);
 }
 
-void 
+void
 View::page(const std::string &text)
 {
   char tmpfile_name[] = "/tmp/shovel-XXXXXX";
@@ -237,7 +236,7 @@ View::page(const std::string &text)
   }
   assert(of.good());
   of.close();
-  
+
   def_prog_mode();
   endwin();
   std::string cmd = "/usr/bin/less --tilde -x2 -C ";
@@ -275,7 +274,7 @@ View::drawtape(unsigned line, unsigned col, I3Frame::Stream stream, std::string 
       mvaddstr(line-2, col - oss.str().length()/2, oss.str().c_str());
     }
 
-  color_pair the_color;  
+  color_pair the_color;
   if (colors_.find(stream) != colors_.end()) {
     the_color = colors_[stream];
   } else {
@@ -295,12 +294,12 @@ View::drawtape(unsigned line, unsigned col, I3Frame::Stream stream, std::string 
       the_color = it->second;
     }
   }
-    
+
   settext(the_color);
   mvaddch(line, col, stream.id() | attr);
 }
 
-void 
+void
 View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
 {
   erase();
@@ -337,13 +336,13 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
 	}
       if (skip == y_selected)
 	selected_key = *iter;
-      iter++; 
+      iter++;
       skip++;
     }
   bool more = (iter != the_keys.end());
 
   count = 0;
-  
+
   unsigned maxkeylen = COLS/3 - 2 - 1;
   unsigned maxtypelen = COLS-14 - COLS/3 - 1;
   // if the window width has changed, invalidate cached names
@@ -351,7 +350,7 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
     clean_typenames_.clear();
     maxtypelen_=maxtypelen;
   }
-  
+
   for (vector<string>::iterator iter = keys.begin();
        iter != keys.end(); iter++, count++)
     {
@@ -372,7 +371,7 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
           else
               settext(white);
       }
-      
+
       string short_key = key;
       // if it is too long, shorten it
       if (key.length() > maxkeylen)
@@ -380,7 +379,7 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
           short_key = key.substr(0, maxkeylen - 3);
           short_key += "...";
       }
-      
+
       auto short_name_it=clean_typenames_.find(type_name);
       // if the type name is not in the cache, add it
       if(short_name_it==clean_typenames_.end()){
@@ -406,7 +405,7 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
 
   //
   //  Draw 'longitudinal' status
-  // 
+  //
   settext(hi_red);
   mvaddstr(LINES-6, 2, "      Key:");
 
@@ -445,7 +444,7 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
     I3EventHeaderConstPtr header = frame->Get<I3EventHeaderConstPtr>(I3DefaultName<I3EventHeader>::value());
     // no mixed-in items here:
     if ((header) && (frame->GetStop(I3DefaultName<I3EventHeader>::value()) != frame->GetStop())) header.reset();
-    
+
     settext(hi_red);
     mvaddstr(LINES-3, 2, "Run/Event:");
     if (!header) {
@@ -471,12 +470,12 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
       mvaddstr(LINES-2, 13, oss.str().c_str());
       statuslen = std::max(oss.str().size(), statuslen);
     }
-      
+
     I3Time startTime;
     I3Time endTime;
     bool has_start_time=false;
     bool has_end_time=false;
-      
+
     if (header) {
       startTime = header->GetStartTime();
       endTime = header->GetEndTime();
@@ -488,7 +487,7 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
       // no mixed-in items here:
       if ((frameStartTime) && (frame->GetStop("StartTime") != frame->GetStop())) frameStartTime.reset();
       if ((frameEndTime) && (frame->GetStop("EndTime") != frame->GetStop())) frameEndTime.reset();
-        
+
       if (frameStartTime) {
         startTime = *frameStartTime;
         has_start_time=true;
@@ -499,7 +498,7 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
         has_end_time=true;
       }
     }
-      
+
     settext(hi_red);
     mvaddstr(LINES-6, COLS - 36, "StartTime:");
     mvaddstr(LINES-5, COLS - 36, " Duration:");
@@ -525,7 +524,7 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
       mvaddstr(LINES-5, COLS - 36 + 11, oss.str().c_str());
     }
 
-  }    
+  }
 
 
   vector<I3Frame::Stream> streams;
@@ -554,7 +553,7 @@ View::display_frame(I3FramePtr frame, unsigned index, unsigned y_selected)
     }
 
   //
-  // draw tape to the left, clip it 
+  // draw tape to the left, clip it
   //
   int tape_l_column = 2;
   int length_l = tape_head_column - tape_l_column - statuslen - 18;
@@ -653,14 +652,14 @@ View::dialog(const std::string& prompt)
 
   char value[26];
   memset(value, 0, 26);
-  
+
   field[0] = new_field(1,26,0,2,0,1);
   set_field_back(field[0], A_UNDERLINE);
   form_traits<T>::configure_field(field[0]);
   set_field_buffer(field[0], 0, value);
   field[1] = NULL;
   //  field_opts_off(field[0], O_AUTOSKIP);
-  
+
   FORM*  form;
   form = new_form(field);
   //  log_trace("form=%p", form);
@@ -722,7 +721,7 @@ View::do_about()
 {
   erase();
   draw_border();
-  
+
   vector<string> about_txt;
 
   about_txt += "Written 2006-2009 for the IceCube Collaboration",
@@ -747,7 +746,7 @@ View::usage()
   exit(0);
 }
 
-void 
+void
 View::draw_border()
 {
   settext(hi_blue);
@@ -800,12 +799,12 @@ View::start_scan_progress(const std::string& message)
 		  A_BOLD, // stats attr
 		  0, 100, 0, '=', // filler
 		  false); // box
-		  
+
   drawCDKHistogram(progresshist_, true);
 
 }
 
-void 
+void
 View::scan_progress(double d)
 {
   if(scanning_){

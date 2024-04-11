@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 """Strip frame types from an i3 file."""
 
 import sys
@@ -17,7 +22,7 @@ def files(args):
 
 def main():
     from optparse import OptionParser,OptionGroup
-    
+
     usage = 'usage: %prog [options] input_file [input_file2 ...] output_file\n\n'
     usage += 'Strip frame types from an i3 file.'
     parser = OptionParser(usage=usage)
@@ -29,19 +34,19 @@ def main():
                       help='Strip Detector frames')
     parser.add_option('--no-trayinfo',default=True,action='store_false',
                       dest='trayinfo',help='Do not strip TrayInfo frames')
-    
+
     (options,args) = parser.parse_args()
-    
+
     if len(args) < 2:
         print('ERROR: require an input and output file')
         print('')
         parser.print_help()
-    
+
     elif os.path.exists(args[-1]):
         print('ERROR: output file',args[-1],'already exists!')
         print('')
         parser.print_help()
-    
+
     else:
         count = 0
         outfile = dataio.I3File(args[-1],'w')

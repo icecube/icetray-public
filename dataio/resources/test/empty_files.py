@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube import icetray, dataclasses, dataio
 from icecube.icetray import I3Tray
 import os
@@ -18,7 +22,7 @@ def write_empty_file(fname):
         filename=fname)
 
     tray.Execute(1)
-    
+
 
 # all of these should exit cleanly
 for ext in '.i3', '.i3.gz', '.i3.bz2':

@@ -1,9 +1,8 @@
 /**
  *  $Id$
  *
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #include <cstdlib>
 #include <ncurses.h>
@@ -238,7 +237,7 @@ int main (int argc, char *argv[])
     shovel_usage(argv[0]);
     return 1;
   }
-  
+
   std::map<int, std::string> keybindings={
     {'k',"up"},
     {'[',"fast_reverse"},
@@ -279,7 +278,7 @@ int main (int argc, char *argv[])
       shovel_usage(argv[0]);
       return 1;
     }
-  
+
   if (vm.count("log"))
     {
       SetIcetrayLogger(boost::make_shared<I3FileLogger>("dataio-shovel.log"));
@@ -292,7 +291,7 @@ int main (int argc, char *argv[])
 
   try_load_project("simclasses");
   try_load_project("recclasses");
-  
+
   if (vm.count("projects"))
     {
       std::cout << "Loading project libraries: ";
@@ -320,7 +319,7 @@ int main (int argc, char *argv[])
   // just endwin()s and rethrows
   try {
     View::Instance().start();
-    
+
     log_trace("opening file(s)");
     Model model(View::Instance(),files,
                 vm.count("frames") ? vm["frames"].as<unsigned>() : boost::optional<unsigned>());
@@ -405,10 +404,10 @@ int main (int argc, char *argv[])
           continue;
 
         std::string action = keybindings[c];
-        
+
         if (action == "quit")
           break;
-        
+
         if (actions.find(action) == actions.end())
           {
             endwin();

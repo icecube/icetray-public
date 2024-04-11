@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <boost/python.hpp>
 #include <boost/python/module.hpp>
 #include <boost/python/class.hpp>
@@ -20,8 +24,8 @@ I3_SERIALIZABLE(UnregisteredTrack);
 
 BOOST_PYTHON_MODULE(test_unregistered){
 
-  class_<UnregisteredTrack, 
-         boost::shared_ptr<UnregisteredTrack>, 
+  class_<UnregisteredTrack,
+         boost::shared_ptr<UnregisteredTrack>,
          bases<I3Particle> >
     ("UnregisteredTrack")
     ;

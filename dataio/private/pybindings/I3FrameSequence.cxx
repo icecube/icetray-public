@@ -1,10 +1,9 @@
 /**
  *  $Id: I3File.cxx 2376 2016-01-04 21:26:32Z david.schultz $
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 
 #include "pybindings.hpp"
@@ -129,7 +128,7 @@ namespace {
 void register_I3FrameSequence()
 {
   scope i3file_scope = class_<I3FrameSequence, I3FrameSequencePtr>
-    ("I3FrameSequence", 
+    ("I3FrameSequence",
      "Reader for multiple .i3 files",
      init<>()
      )
@@ -138,15 +137,15 @@ void register_I3FrameSequence()
         (arg("Filenames"),
          arg("Cache_size") = 1000),
         "Create and open an I3FrameSequence object."))
-    .def("close", &I3FrameSequence::close, 
+    .def("close", &I3FrameSequence::close,
          "Close all files")
-    .def("add_file", &I3FrameSequence::add_file, 
+    .def("add_file", &I3FrameSequence::add_file,
          "Add a file")
-    .def("close_last_file", &I3FrameSequence::close_last_file, 
+    .def("close_last_file", &I3FrameSequence::close_last_file,
          "Close the last file")
-    .def("more", &I3FrameSequence::more, 
+    .def("more", &I3FrameSequence::more,
          "Return True if there are more frames in the file")
-    .def("rewind", &I3FrameSequence::rewind, 
+    .def("rewind", &I3FrameSequence::rewind,
          "Rewind to beginning of file and reopen")
     .def("pop_frame", &I3FrameSequence::pop_frame,
          (arg("Stream")=I3Frame::None),
@@ -155,7 +154,7 @@ void register_I3FrameSequence()
          "Return the next DAQ frame from the file, skipping frames on other streams.")
     .def("pop_physics", &I3FrameSequence::pop_physics,
          "Return the next physics frame from the file, skipping frames on other streams.")
-    .def("seek", &I3FrameSequence::seek, 
+    .def("seek", &I3FrameSequence::seek,
          "Seek to a specific frame number")
     .def("get_mixed_frames", &I3FrameSequence::get_mixed_frames,
          "Return the frames that are mixed into the current frame.")
@@ -177,7 +176,7 @@ void register_I3FrameSequence()
      "Iterator for I3FrameSequence",
      no_init
      )
-    .def("__next__", &I3FrameSequenceIterator::next, 
+    .def("__next__", &I3FrameSequenceIterator::next,
          "Return the next frame if one is available, else throw StopIteration")
     .def("__iter__", pass_through)
     ;

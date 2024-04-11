@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2007
- *  Troy D. Straszheim  <troy@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2007 Troy D. Straszheim  <troy@icecube.umd.edu>
+ *  Copyright (C) 2007 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -13,7 +12,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,9 +24,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 #include <ostream>
 #include <set>
@@ -57,10 +56,10 @@ namespace io = boost::iostreams;
 using icecube::archive::portable_binary_oarchive;
 using namespace boost::posix_time;
 
-I3WriterBase::I3WriterBase(const I3Context& ctx) 
+I3WriterBase::I3WriterBase(const I3Context& ctx)
   : I3ConditionalModule(ctx),
     configWritten_(false),
-    frameCounter_(0),     
+    frameCounter_(0),
     gzip_compression_level_(0)
 {
 	AddOutBox("OutBox");
@@ -68,7 +67,7 @@ I3WriterBase::I3WriterBase(const I3Context& ctx)
 	    "1 == best speed, 9 == best compression (6 by default)",
 	    gzip_compression_level_);
 
-	AddParameter("SkipKeys", 
+	AddParameter("SkipKeys",
 	    "Don't write keys that match any of the regular expressions in "
 	    "this vector", skip_keys_);
 
@@ -146,7 +145,7 @@ I3WriterBase::Finish()
 	log_info("%u frames written.", frameCounter_);
 }
 
-void 
+void
 I3WriterBase::WriteConfig(I3FramePtr frame)
 {
 	if (configWritten_)
@@ -216,7 +215,7 @@ I3WriterBase::Process()
 		unsigned i;
 		// Replace one of our cached frames if it is the same type
 		for (i = 0; i < orphanarium_.size() &&
-		    orphanarium_[i]->GetStop() != frame->GetStop(); i++); 
+		    orphanarium_[i]->GetStop() != frame->GetStop(); i++);
 
 		// Duplicate frame so it can't be modified by following modules
 		I3FramePtr orphan(new I3Frame(frame->GetStop()));
@@ -249,5 +248,5 @@ I3WriterBase::Process()
 	Flush();
 
 	PushFrame(frame,"OutBox");
-	log_debug("... done");  
+	log_debug("... done");
 }

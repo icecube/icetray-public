@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from typing import Any, Iterable, Type, Optional
 
 from icecube import icetray, dataclasses
@@ -10,7 +14,7 @@ def get_stagers(staging_directory=None, extra_stagers=[]):
     # type: (Optional[str], Iterable[Type[I3FileStager]]) -> I3FileStagerCollection
     """
     Set up file stagers for all supported URL schemes.
-    
+
     :param staging_directory: use this directory for temporary files. If not\
         specified, the staging directory will be guessed.
     :param extra_stagers: a list of stager classes to instatiate in addition to\
@@ -31,7 +35,7 @@ def I3Reader(tray, name, **kwargs):
     """Read an .i3 file. This supports remote files
     by specifying URLs and will stage them in an auto-configured
     local scratch directory.
-    
+
     Using a URL like
     file://home/user/file.i3 will stage local files,
     using plain filenames will read the files directly.

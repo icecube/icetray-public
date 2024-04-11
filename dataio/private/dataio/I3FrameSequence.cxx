@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <iostream>
 #include <istream>
 #include <cstring>
@@ -389,7 +393,7 @@ namespace dataio {
         void close_last_file();
         void rewind();
         bool more();
-        I3FramePtr pop_frame(I3Frame::Stream = I3Frame::None); 
+        I3FramePtr pop_frame(I3Frame::Stream = I3Frame::None);
         void seek(size_t);
         std::vector<I3FramePtr> get_mixed_frames();
         std::vector<I3FramePtr> get_current_frame_and_deps();
@@ -425,7 +429,7 @@ namespace dataio {
         // pre-fetch 10 frames
         for(uint8_t i=0;i<10;i++) {
             auto idx=frameno_+i;
-            tr_cache_.emplace(frameno_+i,tr_.push([=]{return files_.get_frame(idx);}));                    
+            tr_cache_.emplace(frameno_+i,tr_.push([=]{return files_.get_frame(idx);}));
         }
     }
 
@@ -435,14 +439,14 @@ namespace dataio {
     void I3FrameSequenceImpl::add_file(const std::string& path)
     {
         files_.add(path);
-        
+
         // pre-fetch 10 frames
         for(uint8_t i=0;i<10;i++) {
             auto newframeno = frameno_ + i;
             if (cache_.get(newframeno).empty()) {
                 const auto tr_cache_iter = tr_cache_.find(newframeno);
                 if (tr_cache_iter == tr_cache_.end()) {
-                    tr_cache_.emplace(newframeno,tr_.push([=]{return files_.get_frame(newframeno);}));                            
+                    tr_cache_.emplace(newframeno,tr_.push([=]{return files_.get_frame(newframeno);}));
                 }
             }
         }
@@ -476,7 +480,7 @@ namespace dataio {
             if (cache_.get(newframeno).empty()) {
                 const auto tr_cache_iter = tr_cache_.find(newframeno);
                 if (tr_cache_iter == tr_cache_.end()) {
-                    tr_cache_.emplace(newframeno,tr_.push([=]{return files_.get_frame(newframeno);}));                            
+                    tr_cache_.emplace(newframeno,tr_.push([=]{return files_.get_frame(newframeno);}));
                 }
             }
         }
@@ -504,7 +508,7 @@ namespace dataio {
                 } catch(icecube::archive::archive_exception& ex) {
                     log_warn_stream("Unexpected end of input file: " << ex.what());
                     return false;
-                }	
+                }
             }
             if (!fr.empty()) {
                 // add to frame cache
@@ -561,7 +565,7 @@ namespace dataio {
                     }
                 }
             }
-            
+
             // mix vector of frames to produce result
             I3FrameMixer mixer;
             for (auto& f : fr) {
@@ -643,7 +647,7 @@ namespace dataio {
 
     size_t I3FrameSequenceImpl::get_cur_size() const
     {
-        return files_.get_cur_size();        
+        return files_.get_cur_size();
     }
 
     I3Frame::Stream I3FrameSequenceImpl::get_stream() const
@@ -661,7 +665,7 @@ namespace dataio {
 
     /* I3FrameSequence */
     /* constructors */
-    
+
     I3FrameSequence::I3FrameSequence() :
         impl_(new I3FrameSequenceImpl(1000))
     { }
@@ -749,12 +753,12 @@ namespace dataio {
 
     ssize_t I3FrameSequence::get_size() const
     {
-        return impl_->get_size();        
+        return impl_->get_size();
     }
 
     size_t I3FrameSequence::get_cur_size() const
     {
-        return impl_->get_cur_size();        
+        return impl_->get_cur_size();
     }
 
     I3Frame::Stream I3FrameSequence::get_stream() const

@@ -1,10 +1,10 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2011
- *  Nathan Whitehorn <nwhitehorn@icecube.wisc.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2011 Nathan Whitehorn <nwhitehorn@icecube.wisc.edu>
+ *  Copyright (C) 2011 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  SPDX-License-Identifier: BSD-2-Clause
+ *
  */
 #include <icetray/I3Frame.h>
 #include <icetray/I3Context.h>
@@ -58,12 +58,12 @@ QConverter::QConverter(const I3Context& context) :
 	types_to_q.push_back("I3Vector<I3MMCTrack>");
 	AddParameter("QTypes", "Types of keys to move to the Q frame",
 	    types_to_q);
-	
+
 	output_p_frame = true;
 	AddParameter("WritePFrame", "If False, P frames are converted into Q"
 	    "frames without the creation of P frames",
 	    output_p_frame);
-	
+
 	AddOutBox("OutBox");
 }
 
@@ -110,7 +110,7 @@ QConverter::Physics(I3FramePtr frame)
 	daq->SetStop(I3Frame::DAQ);
 	daq->purge(I3Frame::Physics);
 	PushFrame(daq);
-	
+
 	// Write remnant keys, if they exist and it was requested, to a stub P
 	if(output_p_frame && frame->Has("I3EventHeader")) {
 		// Rewrite event header in P frame

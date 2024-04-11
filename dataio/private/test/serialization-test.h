@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef SERIALIZATION_TEST_H_INCLUDED
 #define SERIALIZATION_TEST_H_INCLUDED
 
@@ -28,10 +32,10 @@ using icecube::serialization::base_object;
 #define SERIALIZE(TYPE)				\
   TEST(TYPE) {					\
     do_archive<TYPE>(BOOST_PP_STRINGIZE(TYPE));	\
-  } 
+  }
 
 template <typename T>
-static 
+static
 void save_to_i3_file(boost::shared_ptr<T> tptr, std::string fname)
 {
   boost::iostreams::filtering_ostream ofs;

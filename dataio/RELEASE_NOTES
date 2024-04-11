@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. _dataio-release-notes:
 
 Release Notes
@@ -5,6 +9,8 @@ Release Notes
 
 main
 ----
+
+* [dataio] Add SPDX tags (#3434)
 
 March 14, 2023 don la dieu (nega at icecube.umd.edu)
 ----------------------------------------------------
@@ -149,7 +155,7 @@ V17-03-00
 * (r2740) - switch to new portable binary archive header
 * (r2628) - dataio-pyshovel - automatically reload frame after importing library. #2628
 * (r2611) - dataio-pyshovel now imports simclasses and recclasses by default. #2628
-* (r2610) - Prevent I3InfiniteSource accidentally being used in the middle of a tray. 
+* (r2610) - Prevent I3InfiniteSource accidentally being used in the middle of a tray.
 * (r2597) - Switch to icetray serialization.
 * (r2555) - Fix test dependencies. #1574
 
@@ -181,7 +187,7 @@ Release V15-12-00
 August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
 ------------------------------------------------------
 
-Release V15-08-00 
+Release V15-08-00
 
 * (r2279) - Move event_hunter.py example to phys-services.
 * (r2275) - Added tests that ensure the example scripts run.
@@ -196,7 +202,7 @@ Release V15-08-00
 April 17, 2015, don la dieu  (nega@icecube.umd.edu)
 ---------------------------------------------------
 
-V15-04-00 
+V15-04-00
 
 * Localize file stager test
 * Clean up stray test data
@@ -204,7 +210,7 @@ V15-04-00
 March 15, 2015, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------
 
-V15-03-00 
+V15-03-00
 
 * Improve shovel keybindings:
 

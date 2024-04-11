@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 #
 #   FIXME:  this verifies that if you cat together a bunch of .i3.gz files
@@ -31,7 +35,7 @@ for tag in tags:
 
 if os.path.exists("catted.i3.gz") and os.path.isfile("catted.i3.gz"):
     os.unlink("catted.i3.gz")
-    
+
 cmd = "cat " + ' '.join(["catme_%s.i3.gz" % tag for tag in tags]) + " > catted.i3.gz"
 print(cmd)
 status = os.system(cmd)

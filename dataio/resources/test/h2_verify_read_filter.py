@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube.icetray import I3Tray
 
 from os.path import expandvars
@@ -7,8 +11,8 @@ from os.path import expandvars
 import os
 import sys
 
-from icecube import dataclasses 
-from icecube import dataio 
+from icecube import dataclasses
+from icecube import dataio
 
 tray = I3Tray()
 
@@ -16,7 +20,7 @@ tray = I3Tray()
 # backslashes, but I had to find out how many backslashes it takes in
 # python get the C++ regex engine to match a literal backslash.  The
 # answer is 3.  the C++ string has to be "\\", two backslashes, and
-# python eats one of them.  
+# python eats one of them.
 #
 tray.AddModule("I3Reader","reader")(
     ("filename", "filtered.i3"),
