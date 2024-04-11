@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version $Id$
  * @file I3Position.h
  * @date $Date$
@@ -93,7 +93,7 @@ class I3Position : public I3FrameObject
   explicit I3Position(const I3Direction& d);
 
   //--------------
-  
+
   std::ostream& Print(std::ostream&) const override;
 
   /**

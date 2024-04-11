@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # This is an example script that illustrates the problem in ticket #967
 # http://code.icecube.wisc.edu/projects/icecube/ticket/967
 #
@@ -10,13 +14,13 @@
 #
 # Therefore on the C++ side an I3Module could cache a pointer to a const
 # object it got from the frame and expect that to never change, but an
-# evil python module can come along and make all the changes it wants 
+# evil python module can come along and make all the changes it wants
 # to frame objects.
 #
 # What's currently recommended is to deep-copy frame objects in python
 # if you want to modify them.  This isn't really safe, since it's easy
 # to unwittingly change frame object that C++ might expect to be const.
-# 
+#
 # Therefore I think the default should be to copy frame objects.  If you
 # care about the performance hit and promise you won't change frame objects
 # then we can provide a "fast_get" that casts away the const...or maybe

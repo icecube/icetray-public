@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3ANTENNACHANNEL_INCLUDE_H
 #define I3ANTENNACHANNEL_INCLUDE_H
 
@@ -23,7 +27,7 @@ class I3AntennaChannel : public I3FrameObject {
 
  private:
   double maxAmplitude_;
-  
+
   double timeAtMax_;
 
   bool isUpToDate_;

@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. default-domain:: cpp
 
 .. _i3particle:
@@ -92,20 +96,20 @@ For reconstructed through-going tracks (shape ``InfiniteTracks``) the length is 
 Energy
 ~~~~~~
 
-For *simulated* particles the energy represents the energy that the particle had at the 
+For *simulated* particles the energy represents the energy that the particle had at the
 given position (primary at interaction, or secondary at creation).
 
-For *reconstructed* the meaning of the energy value depends on the algorithm. It may be 
-an energy proxy, e.g. a number that correlates with the mean energy loss (averaged dE/dX, 
-number of emitted photons per meter) along the part of the track that intersects the array. 
-I may also be an estimate of the muon energy at some point (the point where it entered the 
-array, or where it was closest to the center of the detector or the COG of the pulses).  It 
-might even be an estimate of the neutrino energy, assuming the event was caused by a neutrino 
-energy. For reconstructed showers the energy usually represents the electron equivalent energy, 
+For *reconstructed* the meaning of the energy value depends on the algorithm. It may be
+an energy proxy, e.g. a number that correlates with the mean energy loss (averaged dE/dX,
+number of emitted photons per meter) along the part of the track that intersects the array.
+I may also be an estimate of the muon energy at some point (the point where it entered the
+array, or where it was closest to the center of the detector or the COG of the pulses).  It
+might even be an estimate of the neutrino energy, assuming the event was caused by a neutrino
+energy. For reconstructed showers the energy usually represents the electron equivalent energy,
 i.e. the energy that an electron should have to cause (a shower that causes) the observed amount
 of light in the array.
 
-In order to understand the issues surrounding the reconstructed energy it is highly 
+In order to understand the issues surrounding the reconstructed energy it is highly
 recommended to read the :arxiv:`energy reconstruction paper <1311.4767>`.
 
 Speed
@@ -123,33 +127,33 @@ may (or may not) travel at speeds less than ``c``.
 
 IsCascade
 ~~~~~~~~~
-A Cascade interaction in the detector would look like a blob instead of a track. An example of an interaction 
-that produces a blob is a neutrino neutral current Deep Inelastic Scattering in the ice. This will produce a shower of hadrons 
-(many of those are Cascades) in the final state of the interaction.  
+A Cascade interaction in the detector would look like a blob instead of a track. An example of an interaction
+that produces a blob is a neutrino neutral current Deep Inelastic Scattering in the ice. This will produce a shower of hadrons
+(many of those are Cascades) in the final state of the interaction.
 
-An :class:`I3Particle` can be set as a cascade via :class:`ParticleShape` or :class:`ParticleType` 
+An :class:`I3Particle` can be set as a cascade via :class:`ParticleShape` or :class:`ParticleType`
 in the constructor of :class:`I3Particle` class. A description of :class:`ParticleShape` and :class:`ParticleType`
 is given below of this documentation.
-  
+
 * The :class:`ParticleShape` options to set an :class:`I3Particle` as a Cascade are: ``Cascade`` or ``CascadeSegment``.
-* Regarding to the type: ``EPlus``, ``EMinus``, ``Brems``, ``DeltaE``, ``PairProd``, 
+* Regarding to the type: ``EPlus``, ``EMinus``, ``Brems``, ``DeltaE``, ``PairProd``,
   ``NuclInt``, ``Hadrons``, ``PiPlus`` or ``PiMinus``. All these type of particles are cascades.
 * Furthermore, a :class:`ParticleShape` set as ``Primary`` and with a type of :class:`ParticleType`
-  as ``PPlus``, ``PMinus``, ``IsNucleus`` or ``Gamma`` will be a Cascade.  
+  as ``PPlus``, ``PMinus``, ``IsNucleus`` or ``Gamma`` will be a Cascade.
 
 Below an example of how to set the type and other properties of an :class:`I3Particle` in python::
 
        from icecube import dataclasses
-       
+
        particle= dataclasses.I3Particle()
        particle.pos= dataclasses.I3Position(2.5e6,4.8e6,-1.7e6)
        particle.dir= dataclasses.I3Direction(0.8,1.1)
        particle.type= dataclasses.I3Particle.PiPlus
        particle.energy= 8.6e2
 
-If the user makes: ``print particle`` all the information of the particle will be displayed. Furthermore, 
-the user will obtain a ``True`` value by executing ``particle.is_cascade``. This value is ``True`` since 
-a ``PiPlus`` is defined as a Cascade.  
+If the user makes: ``print particle`` all the information of the particle will be displayed. Furthermore,
+the user will obtain a ``True`` value by executing ``particle.is_cascade``. This value is ``True`` since
+a ``PiPlus`` is defined as a Cascade.
 
 The user can also set the shape of an :class:`I3Particle` through ``particle.shape= dataclasses.I3Particle.Cascade``.
 
@@ -215,8 +219,8 @@ that sometimes ambiguous.  Values are ``Anywhere``, ``IceTop``, ``InIce`` and
 ``InActiveVolume``.  If KM3NET gets built on multiple sites, we could consider
 to add ``enum`` values to specify those sites.
 
-Also this data member is not used very consistently. For instance, simulated neutrinos may 
-have their interaction vertex somewhere in the atmosphere above Arizona and still be 
+Also this data member is not used very consistently. For instance, simulated neutrinos may
+have their interaction vertex somewhere in the atmosphere above Arizona and still be
 classified as ``InIce``.
 
 NB: This will be deprecated in future releases and no longer used.
@@ -315,7 +319,7 @@ Conventions and recommendations
   p.dir.zenith = 42.0 * I3Units.degree
   print("The zenith angle is %.1f degrees" % (p.dir.zenith/I3Units.zenith))
 
-* Most data members (all, except the major and minor ID) have a default initialization value that 
+* Most data members (all, except the major and minor ID) have a default initialization value that
   indicates that it is not yet set. For floating point data members this is NAN
   (Not a Number, TODO: add link), for the ``enum`` data members it is
   ``unknown`` (type), ``Null`` (shape), ``NotSet`` (fit status) and ``Anywhere`` (location).
@@ -348,13 +352,13 @@ direction) would always have to represented in the same way. The result was
 very template-heavy and impressive but hard to work with. That's why we went
 back to the single simplistic 8-dimensional (x, y, z, zenith, azimuth, length,
 energy) AMANDA solution (well, adding a 9th: speed),  with the type and shape
-given by ``enum`` data members. 
+given by ``enum`` data members.
 
 Some elements of :class:`I3Particle` were added only a few years ago. The versioning
 system of icetray classes helps to make this backwards compatible, in the sense
 that if you read older data with newer software, the software deals with
-the version mismatches and you should not even notice that there was a version mismatch. 
-Still, if you ever need to process older data and you run into strange problems, 
+the version mismatches and you should not even notice that there was a version mismatch.
+Still, if you ever need to process older data and you run into strange problems,
 it may be useful to know which items are new and why they
 were added/changed:
 
@@ -365,7 +369,7 @@ were added/changed:
   days. This reinvented wheel was eliminated by changing to an ``enum`` system mostly based
   on the PDG (Particle Data Group) list of elementary particles and nuclei.
 * The ``LocationType`` is relatively new and will be going away soon.  This
-  was meant to make it easier for analysts to pull *the* muon, for example, 
+  was meant to make it easier for analysts to pull *the* muon, for example,
   out of the I3MCTree.  It's proved to cause more problems than it solves and
   a more sophisticated method is in the works.
 

@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2004
-    the icecube collaboration
+    Copyright  (C) 2004 the icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     @version $Id$
     @file I3Particle.h
     @date $Date$
@@ -23,7 +23,7 @@
 #endif
 
 /**
- * @brief 
+ * @brief
  */
 class I3Particle : public I3FrameObject
 {
@@ -272,15 +272,15 @@ class I3Particle : public I3FrameObject
     SMPMinus = -2000009501,
   };
 
-  enum ParticleShape { 
-    Null = 0, 
-    Primary = 10, 
-    TopShower = 20, 
-    Cascade = 30, 
-    CascadeSegment = 31, 
-    InfiniteTrack = 40, 
-    StartingTrack = 50, 
-    StoppingTrack = 60, 
+  enum ParticleShape {
+    Null = 0,
+    Primary = 10,
+    TopShower = 20,
+    Cascade = 30,
+    CascadeSegment = 31,
+    InfiniteTrack = 40,
+    StartingTrack = 50,
+    StoppingTrack = 60,
     ContainedTrack = 70,
     MCTrack = 80,
     Dark = 90
@@ -319,10 +319,10 @@ class I3Particle : public I3FrameObject
    * @param length
    */
 #ifndef __CINT__
-  I3Particle(const I3Position pos, const I3Direction dir, const double vertextime, 
+  I3Particle(const I3Position pos, const I3Direction dir, const double vertextime,
              ParticleShape shape = Null, double length=NAN);
 #else
-  I3Particle(const I3Position pos, const I3Direction dir, const double vertextime, 
+  I3Particle(const I3Position pos, const I3Direction dir, const double vertextime,
              ParticleShape shape, double length);
 #endif
 
@@ -334,7 +334,7 @@ class I3Particle : public I3FrameObject
 #endif
 
   ~I3Particle();
-  
+
   std::ostream& Print(std::ostream&) const override;
 
   bool IsTrack() const;
@@ -384,14 +384,14 @@ class I3Particle : public I3FrameObject
    * Returns a particle with a new I3ParticleID, but will all other properties unchanged.
    */
   I3Particle Clone() const;
-	
+
   I3ParticleID GetID() const { return ID_; }
   int32_t GetMinorID() const { return ID_.minorID; }
   uint64_t GetMajorID() const { return ID_.majorID; }
 
   int32_t GetPdgEncoding() const { return pdgEncoding_; }
   void SetPdgEncoding(int32_t newid) { pdgEncoding_=newid; }
-    
+
   ParticleType GetType() const { return ParticleType(pdgEncoding_); };
   std::string GetTypeString() const;
 
@@ -415,7 +415,7 @@ class I3Particle : public I3FrameObject
 
   const I3Position& GetPos() const { return pos_; }
   void SetPos(const I3Position& p) { pos_=p; }
-  void SetPos(double p1, double p2, double p3, 
+  void SetPos(double p1, double p2, double p3,
 	      I3Position::RefFrame frame)
     { pos_=I3Position(p1,p2,p3,frame); }
   void SetPos(double x, double y, double z)
@@ -424,7 +424,7 @@ class I3Particle : public I3FrameObject
   const I3Direction& GetDir() const { return dir_; }
   void SetDir(const I3Direction& d) { dir_=d; }
   void SetDir(double zen, double azi) { dir_=I3Direction(zen,azi); }
-  void SetDir(double x, double y, double z) 
+  void SetDir(double x, double y, double z)
     { dir_=I3Direction(x,y,z); }
 
   void SetThetaPhi(double theta, double phi) { dir_.SetThetaPhi(theta,phi); }
@@ -474,10 +474,10 @@ class I3Particle : public I3FrameObject
 
   /** @brief get the position of the particle at this time
    *  @note ignores the shape of the track (start/stopping point), so the particle might not be definded at that very position
-   *  @param time the time in ns 
+   *  @param time the time in ns
   */
   I3Position ShiftTimeTrack(const double time) const;
-  
+
   I3Position GetStartPos() const;
 
   double GetStartTime() const;
@@ -506,7 +506,7 @@ class I3Particle : public I3FrameObject
    * @param minor MinorID of that particle
    */
   I3Particle(const uint64_t major, const int32_t minor);
-  
+
   /** @brief generate a new, unique ID combination
    */
   void generateID();
@@ -515,7 +515,7 @@ class I3Particle : public I3FrameObject
   // since that ctor is private we need to give this
   // class friend access to test it
   friend class test_particle_id_private_ctor;
-	 
+
   friend class icecube::serialization::access;
   template <class Archive> void save(Archive & ar, unsigned version) const;
   template <class Archive> void load(Archive & ar, unsigned version);
@@ -583,7 +583,7 @@ std::string i3particle_type_string(int32_t pdg_code);
 #define I3PARTICLE_H_I3Particle_ParticleShape                                     \
     (Null)(Primary)(TopShower)(Cascade)(CascadeSegment)(InfiniteTrack)(StartingTrack)             \
     (StoppingTrack)(ContainedTrack)(MCTrack)(Dark)
-    
+
 #define I3PARTICLE_H_I3Particle_FitStatus                                         \
     (NotSet)(OK)(GeneralFailure)(InsufficientHits)(FailedToConverge)              \
     (MissingSeed)(InsufficientQuality)
@@ -599,6 +599,6 @@ I3_CLASS_VERSION(I3Particle,i3particle_version_);
 typedef I3Vector<I3Particle> I3VectorI3Particle;
 I3_POINTER_TYPEDEFS(I3VectorI3Particle);
 
-#endif 
+#endif
 
 

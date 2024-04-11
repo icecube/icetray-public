@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 /**
  *
  * @version $Id$
@@ -52,7 +56,7 @@ public:
     double slope_CunkA2;
     double A0_A1_crossover;
     double A1_A2_crossover;
-    
+
     I3IceTopSLCCalibration()
     {
         // Initialize them all to NaN
@@ -78,7 +82,7 @@ public:
         A1_A2_crossover = NAN;
     }
     ~I3IceTopSLCCalibration();
-    
+
     double GetIntercept(int chip, unsigned int atwd) const {
         int c = chip*10+atwd;
         if (c < 0) c += 30;  // Deal with chip = -1, which is "unknown chip number"
@@ -210,17 +214,17 @@ public:
                 Compare(slope_CunkA2, rhs.slope_CunkA2) &&
                 Compare(A0_A1_crossover, rhs.A0_A1_crossover) &&
                 Compare(A1_A2_crossover, rhs.A1_A2_crossover));
-                
+
     }
     bool operator!=(const I3IceTopSLCCalibration& rhs) const
     {
         return !operator==(rhs);
     }
-    
+
 private:
     friend class icecube::serialization::access;
     template <class Archive> void serialize(Archive & ar, unsigned version);
-    
+
 };
 
 // ...and its pointers.
@@ -242,9 +246,9 @@ public:
     I3Time endTime;   ///< End time of period used to compute constants (may be different from the rest of I3Calibration)
 
     I3IceTopSLCCalibrationCollection();
-      
+
     ~I3IceTopSLCCalibrationCollection();
-      
+
     I3IceTopSLCCalibrationMap ITslcCal;  ///< The most important object in here: the Map of all the calibration constants
 
     bool operator==(const I3IceTopSLCCalibrationCollection& rhs)

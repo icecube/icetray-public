@@ -1,8 +1,8 @@
 /**
- * 
  *
- * copyright  (C) 2010
- * The Icecube Collaboration
+ *
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -55,7 +55,7 @@ register_I3SuperDST()
 		.def(bp::dataclass_suite<I3SuperDST>())
 		;
 	register_pointer_conversions<I3SuperDST>();
-	
+
 	bp::class_<I3SuperDSTTrigger >(
 	    "I3SuperDSTTrigger", bp::no_init)
 		.def(bp::init<const I3Trigger &, const I3DetectorStatus &>(bp::args("trigger","status")))
@@ -65,15 +65,15 @@ register_I3SuperDST()
 		.def("GetTriggerKey", &I3SuperDSTTrigger::GetTriggerKey, bp::args("self", "status"),
              bp::return_value_policy<bp::copy_const_reference>(), "Get the trigger key for this trigger.")
 		.def("SetTimeReference", &I3SuperDSTTrigger::SetTimeReference, bp::args("self", "trigger"), "Set the time reference.")
-		.def(bp::operator_suite<I3SuperDSTTrigger>())    
+		.def(bp::operator_suite<I3SuperDSTTrigger>())
 	;
-	
+
 	bp::class_<I3SuperDSTTriggerSeries, I3SuperDSTTriggerSeriesPtr, bp::bases<I3FrameObject> >(
 	    "I3SuperDSTTriggerSeries", bp::no_init)
 		.def(bp::init<const I3TriggerHierarchy &, const I3DetectorStatus &>(bp::args("triggers"), "status"))
 		.def("unpack", &unpack_triggers, bp::args("self", "status"), "Unpack the compressed event data "
 		    "into I3Triggers.")
-		.def(bp::dataclass_suite<I3SuperDSTTriggerSeries>())   
+		.def(bp::dataclass_suite<I3SuperDSTTriggerSeries>())
 	;
 	register_pointer_conversions<I3SuperDSTTriggerSeries>();
 }

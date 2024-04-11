@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <icetray/serialization.h>
 #include <dataclasses/physics/I3RecoPulse.h>
 #include <dataclasses/physics/I3Waveform.h>
@@ -8,8 +12,8 @@ using CompareFloatingPoint::Compare;
 
 I3RecoPulse::~I3RecoPulse() {}
 
-template <class Archive> 
-void 
+template <class Archive>
+void
 I3RecoPulse::serialize(Archive& ar, unsigned version)
 {
 	if (version>i3recopulse_version_)
@@ -66,10 +70,10 @@ I3RecoPulse::serialize(Archive& ar, unsigned version)
 }
 
 
-bool 
+bool
 I3RecoPulse::operator==(const I3RecoPulse& rhs) const
 {
-  return flags_ == rhs.flags_ 
+  return flags_ == rhs.flags_
     && (time_ == rhs.time_ || (std::isnan(time_) && std::isnan(rhs.time_)))
     && (charge_ == rhs.charge_ || (std::isnan(charge_) && std::isnan(rhs.charge_)))
     && (width_ == rhs.width_ || (std::isnan(width_) && std::isnan(rhs.width_)));

@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2004
-    the icecube collaboration
+    Copyright  (C) 2004 the icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     @version $Id$
     @date    $Date$
 */
@@ -27,7 +27,7 @@
 
 template <typename Key, typename Value>
 struct I3Map : public I3FrameObject, public std::map<Key, Value>
-{ 
+{
   template <class Archive>
   void serialize(Archive & ar, unsigned version)
   {
@@ -37,7 +37,7 @@ struct I3Map : public I3FrameObject, public std::map<Key, Value>
 
   ~I3Map();
 
-  const Value& 
+  const Value&
   at(const Key& where) const
   {
     typename std::map<Key, Value>::const_iterator iter = this->find(where);
@@ -47,8 +47,8 @@ struct I3Map : public I3FrameObject, public std::map<Key, Value>
     return iter->second;
   }
 
-  Value& 
-  at(const Key& where) 
+  Value&
+  at(const Key& where)
   {
     typename std::map<Key, Value>::iterator iter = this->find(where);
     if (iter == this->end())
@@ -56,7 +56,7 @@ struct I3Map : public I3FrameObject, public std::map<Key, Value>
 
     return iter->second;
   }
-  
+
   std::ostream& Print(std::ostream& os) const override{
     constexpr bool can_print=has_operator::insertion<std::ostream&,Key>::value
                              && has_operator::insertion<std::ostream&,Value>::value;
@@ -86,7 +86,7 @@ private:
 
 template <typename Key, typename Value>
 I3Map<Key, Value> :: ~I3Map() { }
-  
+
 template <typename Key, typename Value>
 std::ostream& operator<<(std::ostream& os, const I3Map<Key, Value> m){
   return(m.Print(os));

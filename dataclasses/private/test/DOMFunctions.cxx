@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 
 
@@ -19,7 +23,7 @@ TEST(DoCalibTestDOMCalVersion)
 {
     I3DOMCalibration calib;
     calib.SetDOMCalVersion("6.12.0");
-    
+
     vector<int> version = DOMCalVersion(calib);
     ENSURE(version[0] == 6,  "Failed to get proper DOMCal version[0]");
     ENSURE(version[1] == 12, "Failed to get proper DOMCal version[1]");
@@ -31,7 +35,7 @@ TEST(DoCalibTestLinearFit)
       I3DOMStatus rawstatus;
 
       I3DOMCalibration calib;
-    
+
       //Set some values
       rawstatus.pmtHV = 1400*I3Units::V;
       rawstatus.dacTriggerBias0 = 850;
@@ -51,9 +55,9 @@ TEST(DoCalibTestLinearFit)
       LinearFit hvgainfit;
       hvgainfit.intercept = -15.1997;
       hvgainfit.slope = 7.0842533;
-      
+
       calib.SetHVGainFit(hvgainfit);
-      
+
       double atwdrate0 =  ATWDSamplingRate(0,rawstatus,calib);
       double atwdrate1 =  ATWDSamplingRate(1,rawstatus,calib);
       // if we're going to get the gain, you oughta check it, but oh well.
@@ -61,7 +65,7 @@ TEST(DoCalibTestLinearFit)
       double spemean = SPEMean(rawstatus,calib);
 
       //Compare the return values to values calculated by hand.
-      
+
       ENSURE_DISTANCE(spemean/I3Units::pC,1.9632,
 		      0.001,"Failed to return the proper SPEMean value");
       ENSURE_DISTANCE(atwdrate0*I3Units::microsecond, 278.455,
@@ -75,7 +79,7 @@ TEST(DoCalibTestQuadraticFit)
       I3DOMStatus rawstatus;
 
       I3DOMCalibration calib;
-    
+
       //Set some values
       rawstatus.pmtHV = 1400*I3Units::V;
       rawstatus.dacTriggerBias0 = 850;
@@ -95,9 +99,9 @@ TEST(DoCalibTestQuadraticFit)
       LinearFit hvgainfit;
       hvgainfit.intercept = -15.1997;
       hvgainfit.slope = 7.0842533;
-      
+
       calib.SetHVGainFit(hvgainfit);
-      
+
       double atwdrate0 =  ATWDSamplingRate(0,rawstatus,calib);
       double atwdrate1 =  ATWDSamplingRate(1,rawstatus,calib);
       // if we're going to get the gain, you oughta check it, but oh well.
@@ -106,7 +110,7 @@ TEST(DoCalibTestQuadraticFit)
       double pmtgain = PMTGain(rawstatus,calib);
 
       //Compare the return values to values calculated by hand.
-      
+
       ENSURE_DISTANCE(spemean/I3Units::pC,1.9632,
 		      0.001,"Failed to return the proper SPEMean value");
       ENSURE_DISTANCE(atwdrate0*I3Units::microsecond, 275.308,
@@ -120,7 +124,7 @@ TEST(DoCalibTestQuadraticFit)
 TEST(DiscrimThresholds)
     {
       I3DOMStatus rawstatus;
-      
+
       I3DOMCalibration calib;
 
       //Values taken from domcal file and GCD file...
@@ -173,7 +177,7 @@ TEST(PMTDiscThresholdOldValue)
       //This test will find nan for new PMT discrim calib.
 
       I3DOMStatus rawstatus;
-      
+
       I3DOMCalibration calib;
 
       //Values taken from domcal file and GCD file...
@@ -203,7 +207,7 @@ TEST(PMTDiscThresholdNewValue)
       //This test will find correct values for new PMT discrim calib.
 
       I3DOMStatus rawstatus;
-      
+
       I3DOMCalibration calib;
 
       //Values taken from domcal file and GCD file...
@@ -222,9 +226,9 @@ TEST(PMTDiscThresholdNewValue)
 
       double spePmtThresh = SPEPMTThreshold(rawstatus, calib);
 
-      ENSURE_DISTANCE(spePmtThresh/I3Units::mV, 
+      ENSURE_DISTANCE(spePmtThresh/I3Units::mV,
 		      4.44592,
-		      0.00001,		      
+		      0.00001,
 		      "Failed to return proper calibrated SPE PMT discriminator threshold");
 
     }

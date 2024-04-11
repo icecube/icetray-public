@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <icetray/serialization.h>
 #include <dataclasses/physics/I3FlasherInfo.h>
 
@@ -5,7 +9,7 @@ template <class Archive>
 void I3FlasherInfo::serialize(Archive& ar, unsigned version){
     if (version>i3flasherinfo_version_)
     log_fatal("Attempting to read version %u from file but running version %u of I3FlasherInfo class.",version,i3flasherinfo_version_);
-    
+
     ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
     ar & make_nvp("FlasherOM", flasherOM_);
     ar & make_nvp("FlashTime", flashTime_);

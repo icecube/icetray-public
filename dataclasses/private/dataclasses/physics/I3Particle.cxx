@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <icetray/serialization.h>
 #include <icetray/I3Units.h>
 #include <dataclasses/physics/I3Particle.h>
@@ -28,7 +32,7 @@
 #ifdef USE_ATOMICS
 namespace{
 	boost::mutex global_id_lock;
-	
+
 	boost::atomic<int32_t> global_last_pid_(0);
 	boost::atomic<int32_t> global_minor_id_(0);
 	boost::atomic<uint64_t> global_major_id_(0);
@@ -41,7 +45,7 @@ static uint64_t global_major_id_ = 0;
 
 void I3Particle::generateID(){
   int this_pid = getpid();
-  
+
 #ifdef USE_ATOMICS //thread-safe version
   int32_t last_pid=global_last_pid_.load(boost::memory_order_relaxed);
   boost::atomic_thread_fence(boost::memory_order_acquire); //keep memory ops from wandering
@@ -57,7 +61,7 @@ void I3Particle::generateID(){
       global_minor_id_.store(0, boost::memory_order_relaxed); // reset the minor ID, too
     }
   }
-  
+
   uint64_t old_major_id=global_major_id_.load(boost::memory_order_relaxed);
   boost::atomic_thread_fence(boost::memory_order_acquire); //keep memory ops from wandering
   if(old_major_id==0){
@@ -93,7 +97,7 @@ void I3Particle::generateID(){
 }
 
 I3Particle::~I3Particle() { }
-I3Particle::I3Particle(ParticleShape shape, ParticleType type) : 
+I3Particle::I3Particle(ParticleShape shape, ParticleType type) :
   pdgEncoding_(type),
   shape_(shape),
   pos_(),
@@ -106,11 +110,11 @@ I3Particle::I3Particle(ParticleShape shape, ParticleType type) :
   locationType_(Anywhere)
 {
   generateID();
-  
+
   log_trace_stream("Calling I3Particle::I3Particle(ParticleShape " << shape << ", ParticleType " << type << ").");
 }
 
-I3Particle::I3Particle(const I3Position pos, const I3Direction dir, const double vertextime, ParticleShape shape, double length) : 
+I3Particle::I3Particle(const I3Position pos, const I3Direction dir, const double vertextime, ParticleShape shape, double length) :
   pdgEncoding_(unknown),
   shape_(shape),
   pos_(pos),
@@ -542,7 +546,7 @@ bool I3Particle::IsNucleus() const
   return (abs(pdgEncoding_) >= 1000000000 && abs(pdgEncoding_) <= 1099999999);
 }
 
-bool I3Particle::IsTrack() const 
+bool I3Particle::IsTrack() const
 {
   if (shape_==InfiniteTrack || shape_==StartingTrack ||
       shape_==StoppingTrack || shape_==ContainedTrack ||
@@ -551,13 +555,13 @@ bool I3Particle::IsTrack() const
       pdgEncoding_==STauPlus || pdgEncoding_==STauMinus ||
       pdgEncoding_==SMPPlus || pdgEncoding_==SMPMinus ||
       pdgEncoding_==Monopole || pdgEncoding_==Qball||
-      (shape_ == Primary && 
+      (shape_ == Primary &&
        ( pdgEncoding_ == PPlus       ||
 	 pdgEncoding_ == PMinus      ||
          IsNucleus() ||
 	 pdgEncoding_ == Gamma )
        )
-      ) return true;    
+      ) return true;
   else return false;
 }
 
@@ -572,20 +576,20 @@ bool I3Particle::IsCascade() const
       type == Hadrons  || type == Pi0     ||
       type == PiPlus   || type == PiMinus ||
       type == WeakInt  ||
-      (shape_ != Primary && 
+      (shape_ != Primary &&
        ( type == PPlus       ||
 	 type == PMinus      ||
 	 IsNucleus()         ||
 	 type == Gamma )
        )
-      ) return true;    
+      ) return true;
   else return false;
 }
 
 bool I3Particle::IsNeutrino() const
 {
   const ParticleType type = ParticleType(pdgEncoding_);
-    
+
   if( type==NuE ||
       type==NuEBar ||
       type==NuMu ||
@@ -611,9 +615,9 @@ bool I3Particle::HasDirection() const
 }
 
 bool I3Particle::HasEnergy() const
-{ 
-  if (std::isnan(energy_)) return false; 
-  else return true; 
+{
+  if (std::isnan(energy_)) return false;
+  else return true;
 }
 
 bool I3Particle::IsTopShower() const
@@ -633,10 +637,10 @@ I3Position I3Particle::ShiftTimeTrack(const double time) const
   }
 }
 
-I3Position I3Particle::GetStartPos() const 
-{ 
-  if (shape_ == StartingTrack || 
-      shape_ == ContainedTrack || 
+I3Position I3Particle::GetStartPos() const
+{
+  if (shape_ == StartingTrack ||
+      shape_ == ContainedTrack ||
       shape_ == MCTrack) return pos_;
   else {
     log_warn("GetStartPos undefined for a particle that is neither starting "
@@ -645,9 +649,9 @@ I3Position I3Particle::GetStartPos() const
   }
 }
 
-double I3Particle::GetStartTime() const 
+double I3Particle::GetStartTime() const
 {
-  if (shape_ == StartingTrack || 
+  if (shape_ == StartingTrack ||
       shape_ == ContainedTrack ||
       shape_ == MCTrack ) return time_;
   else{
@@ -657,7 +661,7 @@ double I3Particle::GetStartTime() const
   }
 }
 
-I3Position I3Particle::GetStopPos() const 
+I3Position I3Particle::GetStopPos() const
 {
   if (shape_==StoppingTrack) return pos_;
   else if (shape_ == ContainedTrack || shape_ == MCTrack){
@@ -671,12 +675,12 @@ I3Position I3Particle::GetStopPos() const
   }
 }
 
-double I3Particle::GetStopTime() const 
-{ 
+double I3Particle::GetStopTime() const
+{
   if (shape_==StoppingTrack) return time_;
-  else if (shape_ == ContainedTrack || shape_ == MCTrack){ 
-    return time_ + length_/speed_; 
-  }else{  
+  else if (shape_ == ContainedTrack || shape_ == MCTrack){
+    return time_ + length_/speed_;
+  }else{
     log_warn("GetStopTime undefined for a particle that is neither stopping "
 	     "nor contained.");
     return NAN;
@@ -1037,7 +1041,7 @@ std::ostream& I3Particle::Print(std::ostream& oss) const{
       << "        PDG encoding : " << GetPdgEncoding() << std::endl
       << "               Shape : " << GetShapeString() << std::endl
       << "              Status : " << GetFitStatusString() <<  std::endl
-      << "            Location : " << GetLocationTypeString() << std::endl 
+      << "            Location : " << GetLocationTypeString() << std::endl
       << "]" ;
   return oss;
 }
@@ -1057,7 +1061,7 @@ std::ostream& operator<<(std::ostream& oss, const I3ParticleID& pid){
 
 I3_SPLIT_SERIALIZABLE(I3Particle);
 
-// The name passed to this macro is set for 
+// The name passed to this macro is set for
 // all eternity.  Since all past I3Vector<I3Particle>
 // containers were serialized as I3ParticleVect,
 // this is the way it has to always be.

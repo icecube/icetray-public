@@ -6,7 +6,8 @@
 // logically combining such spans.
 //
 // Copyright (c) 2012 Jakob van Santen <vansanten@wisc.edu>
-// and the IceCube Collaboration <http://www.icecube.wisc.edu>
+// Copyright (c) 2012 the IceCube Collaboration <http://www.icecube.wisc.edu>
+// SPDX-License-Identifier: BSD-2-Clause
 //
 
 #include "dataclasses/I3TimeWindow.h"

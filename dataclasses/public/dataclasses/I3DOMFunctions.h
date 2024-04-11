@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2006
- * the icecube collaboration
+ * Copyright  (C) 2006 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version $Id$
  * @file I3DOMFunctions.h
  * @date $Date$
@@ -21,8 +21,8 @@
  */
 #define __SPE_PEAK_VOLTAGE_CHARGE_RATIO__ 8.1
 
-/** 
- * @brief  A class containing a collection of functions that 
+/**
+ * @brief  A class containing a collection of functions that
  *  use dom status/calibration information to return "calculated"
  *  status items (Gain, SPEMean, etc)
  *
@@ -85,7 +85,7 @@ double MPEDiscriminatorThreshold (const I3DOMStatus&, const I3DOMCalibration&, d
  *          from the raw DAC values (now stored in DOMStatus record). Previously,
  *          these psuedo-calibrations were applied by I3OmDb and stored in
  *          DOMStatus.  This changed with offline V02-02-00 releases.
- * 
+ *
  *      Returns the speThresold value in I3Units::Volt
  */
 double OldspeThreshold(const I3DOMStatus&);
@@ -95,7 +95,7 @@ double OldspeThreshold(const I3DOMStatus&);
  *          from the raw DAC values (now stored in DOMStatus record). Previously,
  *          these psuedo-calibrations were applied by I3OmDb and stored in
  *          DOMStatus.  This changed with offline V02-02-00 releases.
- * 
+ *
  *      Returns the mpeThresold value in I3Units::Volt
  */
 double OldmpeThreshold(const I3DOMStatus&);

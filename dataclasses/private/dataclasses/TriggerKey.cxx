@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file TriggerKey.cxx
@@ -35,7 +35,7 @@ TriggerKey::GetSourceString(SourceID source)
       return("IN_ICE_PULSES");
   }
   log_warn("undefined source ID %u",source);
-  
+
   return NULL;
 }
 
@@ -62,7 +62,7 @@ TriggerKey::GetSourceFromString(const std::string& sourcestr)
     return(IN_ICE_PULSES);
 
   log_warn("undefined source string %s",sourcestr.c_str());
-  
+
   return UNKNOWN_SOURCE;
 }
 
@@ -193,7 +193,7 @@ void TriggerKey::save(Archive& ar, unsigned version) const
   // for version > 0 there is a subtype ID to be serialized
   // for version <= 0 there is no subtype ID available ... use default value instead
   ar & make_nvp("SubtypeID", subtype_);
- 
+
   bool configIDSet( configID_ ? true : false);
   ar & make_nvp("ConfigIDSet", configIDSet );
   if (configID_) ar & make_nvp("ConfigID", configID_.get() );

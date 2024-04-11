@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 ////////////////////////////////////////////////////////////
 //Author: Alan Coleman
 //A set of functions used to calculate the Analytic signal

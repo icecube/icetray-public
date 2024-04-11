@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import unittest
 from icecube import dataclasses
 from icecube.icetray import I3Units
@@ -25,4 +29,4 @@ class TestI3Orientation(unittest.TestCase):
         except RuntimeError:
             pass
 
-unittest.main()        
+unittest.main()

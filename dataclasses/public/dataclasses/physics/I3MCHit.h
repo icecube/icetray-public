@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version $Id$
  * @file I3MCHit.h
  * @date $Date$
@@ -17,11 +17,11 @@
 /**
  * @brief Derived I3Hit class with additional 'Weight' and 'Parent
  * track' info
- * 
+ *
  * This class records the true (simulated) time at which a
  * photoelectron was produced.  In addition to the time, it contains
  * the identity of the track which was responsible for the hit, and a
- * statistical weight to assign to the hit (default 1).  Also, 
+ * statistical weight to assign to the hit (default 1).  Also,
  * CherenkovDistance- direct path distance to the track that generated
  * this hit.
  */
@@ -37,7 +37,7 @@ static const unsigned i3mchit_version_ = 3;
 #define I3MCHIT_H_I3MCHit_HitSource                     \
     (UNKNOWN)(SPE)(RANDOM)(AFTER_PULSE)(PRE_PULSE)      \
     (ELASTIC_LATE_PULSE)(INELASTIC_LATE_PULSE)          \
-    (EARLY_AFTER_PULSE)                                 
+    (EARLY_AFTER_PULSE)
 
 class I3Particle;
 
@@ -57,28 +57,28 @@ class I3MCHit
     EARLY_AFTER_PULSE = 70
   };
 
-  I3MCHit() : 
-    time_(NAN), 
-    npe_(1), 
-    charge_(NAN), 
+  I3MCHit() :
+    time_(NAN),
+    npe_(1),
+    charge_(NAN),
     hitID_(-1),
-    particleID_(-1), 
-    particleMajorID_(0), 
+    particleID_(-1),
+    particleMajorID_(0),
     cherenkovDistance_(NAN),
     source_(UNKNOWN) { }
 
- I3MCHit(uint64_t mid, int id) : 
-    time_(NAN), 
+ I3MCHit(uint64_t mid, int id) :
+    time_(NAN),
     npe_(1),
-    charge_(NAN), 
+    charge_(NAN),
     hitID_(-1),
-    particleID_(id), 
-    particleMajorID_(mid), 
+    particleID_(id),
+    particleMajorID_(mid),
     cherenkovDistance_(NAN),
     source_(UNKNOWN) { }
 
   ~I3MCHit();
-  
+
   std::ostream& Print(std::ostream&) const;
 
   double GetTime() const { return time_;}
@@ -103,9 +103,9 @@ class I3MCHit
 
   void SetParticleID(const I3Particle& );
 
-  void SetParticleID(int32_t minorID, uint64_t majorID) { 
-    particleID_ = minorID; 
-    particleMajorID_ = majorID; 
+  void SetParticleID(int32_t minorID, uint64_t majorID) {
+    particleID_ = minorID;
+    particleMajorID_ = majorID;
   }
 
   /**
@@ -114,11 +114,11 @@ class I3MCHit
   double GetCherenkovDistance() const { return cherenkovDistance_; }
 
   /**
-   * @param CherenkovDistance set the direct path distance to track which 
+   * @param CherenkovDistance set the direct path distance to track which
    * caused this hit
    */
-  void SetCherenkovDistance(double CherenkovDistance) { 
-    cherenkovDistance_ = CherenkovDistance; 
+  void SetCherenkovDistance(double CherenkovDistance) {
+    cherenkovDistance_ = CherenkovDistance;
   }
 
   /**
@@ -137,12 +137,12 @@ class I3MCHit
       && cherenkovDistance_ == rhs.cherenkovDistance_
       && source_ == rhs.source_;
   }
-  
-  operator I3ParticleID() const { 
-    I3ParticleID id; 
+
+  operator I3ParticleID() const {
+    I3ParticleID id;
     id.majorID = particleMajorID_;
     id.minorID = particleID_;
-    return id; 
+    return id;
   }
 
  private:
@@ -172,7 +172,7 @@ std::ostream& operator<<(std::ostream& oss, const I3MCHit& h);
 I3_POINTER_TYPEDEFS(I3MCHit);
 
 typedef std::vector<I3MCHit> I3MCHitSeries;
-typedef I3Map<OMKey, I3MCHitSeries> I3MCHitSeriesMap; 
+typedef I3Map<OMKey, I3MCHitSeries> I3MCHitSeriesMap;
 
 I3_POINTER_TYPEDEFS(I3MCHitSeries);
 I3_POINTER_TYPEDEFS(I3MCHitSeriesMap);

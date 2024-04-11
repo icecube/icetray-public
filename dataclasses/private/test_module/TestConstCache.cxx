@@ -1,14 +1,17 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
 
 #include <icetray/I3Module.h>
 #include <dataclasses/geometry/I3Geometry.h>
 
 class TestConstCache : public I3Module {
 public:
-  TestConstCache(const I3Context& ctx) : 
+  TestConstCache(const I3Context& ctx) :
     I3Module(ctx),
     test_dom_(21,30)
-  { 
-    AddOutBox("OutBox"); 
+  {
+    AddOutBox("OutBox");
   }
 
   void Geometry(I3FramePtr frame){
@@ -16,7 +19,7 @@ public:
     test_value_ = cached_geo_->omgeo.at(test_dom_).omtype;
   }
 
-  void DAQ(I3FramePtr frame){    
+  void DAQ(I3FramePtr frame){
     // i've cached a pointer to a const geometry
     // so this should never change.
     if(cached_geo_->omgeo.at(test_dom_).omtype != test_value_){

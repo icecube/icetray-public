@@ -1,8 +1,8 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version $Id$
- * 
+ *
  * @file I3TWRFrag.h
  * @version $Revision$
  * @date $Date$
@@ -23,13 +23,13 @@
 
 
 /** A fragment of the direct/raw digital readout of an Amanda OM using the TWR DAQ.
- * 
+ *
  * The digital readout is fragment into waveform elements that show some pulse activity,
  * to reduce the data acquired by a TWR.
  * Every fragment has a start bin that determines the position of the fragment within
  * the waveform relative to its start.
  */
-class I3TWRFrag 
+class I3TWRFrag
 {
   private:
   unsigned int startBin_;
@@ -42,19 +42,19 @@ class I3TWRFrag
   /** Destructor.
    */
   ~I3TWRFrag();
-  
+
   std::ostream& Print(std::ostream&) const;
 
   /** Returns the position of the fragment within the waveform.
-   * 
+   *
    * @return The position.
    */
   unsigned int GetStartBin() const { return(startBin_); }
   /** Sets the position of the fragment within the waveform.
-   * 
+   *
    * @param startBin The position.
    */
-  void SetStartBin(unsigned int startBin) { startBin_ = startBin;}  
+  void SetStartBin(unsigned int startBin) { startBin_ = startBin;}
   /** Provides access to the waveform information of the fragment.
    *
    * @return The waveform information.

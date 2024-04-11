@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 # std_map_indexing_suite_dict_interface_test.py
 #
@@ -14,14 +19,14 @@ except NameError:
     print('sorted() is not defined, providing a work-around for python < 2.3')
     import copy
     def sorted(lst):
-        cpy = list(copy.copy(lst)) 
+        cpy = list(copy.copy(lst))
         cpy.sort()
         return cpy
 
 class I3MapDictInterfaceTest(unittest.TestCase):
     """Kick the tires on the dict interface.
-    
-    This case has tests defined for all methods of 
+
+    This case has tests defined for all methods of
     dict in Python 2.5."""
     # Non-implemented methods:
     # comparison (all)
@@ -33,10 +38,10 @@ class I3MapDictInterfaceTest(unittest.TestCase):
     def setUp(self):
         from icecube import icetray,dataclasses
         self.mapClass = dataclasses.TestMapStringString
-        self.dict = {'foo':'bar', 'bom':'baz', 'steam':'locomotive'} 
+        self.dict = {'foo':'bar', 'bom':'baz', 'steam':'locomotive'}
         self.map = self.mapClass()
         for k in self.dict.keys(): self.map[k] = self.dict[k]
-    
+
     def test___class__(self):
         """Obviously not the same class. Skip."""
         pass
@@ -90,7 +95,7 @@ class I3MapDictInterfaceTest(unittest.TestCase):
         self.assertEqual(sorted(list(newMap.items())), sorted(list(self.dict.items())))
         newMap = self.mapClass(list(self.dict.items()))
         self.assertEqual(sorted(newMap.items()), sorted(self.dict.items()))
-        
+
         pass
     def test___iter__(self):
         """dict.__iter__() is equivalent to map.__iter__()"""
@@ -160,7 +165,7 @@ class I3MapDictInterfaceTest(unittest.TestCase):
         # for map_key,copied_map_key in zip(sorted(self.map.keys()),sorted(newMap.keys())):
         #     self.assertEquals(id(map_key),id(copied_map_key))
         #     self.assertEquals(id(self.map[map_key]),id(newMap[copied_map_key]))
-    
+
         pass
     def test_fromkeys(self):
         """dict.fromkeys() is equivalent to map.fromkeys()"""
@@ -181,8 +186,8 @@ class I3MapDictInterfaceTest(unittest.TestCase):
         self.assertEqual(self.map[key], self.map.get(key,default))
         self.assertEqual(default, self.map.get(nokey,default))
         self.assertEqual(None, self.map.get(nokey))
-        
-        
+
+
         pass
     def test_items(self):
         """dict.items() is equivalent to map.items()"""
@@ -206,7 +211,7 @@ class I3MapDictInterfaceTest(unittest.TestCase):
         self.assertEqual(self.map.pop(key,default), default)
         self.assertRaises(KeyError,self.map.pop,key)
         self.assertRaises(KeyError,self.map.__getitem__,key)
-        
+
         pass
     def test_popitem(self):
         """dict.popitem() is equivalent to map.popitem()"""

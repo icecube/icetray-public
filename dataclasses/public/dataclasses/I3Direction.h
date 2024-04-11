@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version $Id$
  * @file I3Direction.h
  * @date $Date$
@@ -28,12 +28,12 @@ static const unsigned i3direction_version_ = 0;
 class I3Position;
 
 /**
- * @brief The basic direction class for IceCube. 
+ * @brief The basic direction class for IceCube.
  *
  * All directions in IceCube should be written with this class.
  * Directions can be given in zenith/azimuth or direction cosines.
  * Optionally, they can also be set with theta/phi.
- * 
+ *
  * Theta/Phi angles refer to the direction of travel of the particle -- the
  * direction that the particle is going.  If you consider the direction vector
  * which starts at the origin, theta is the angle from the +z axis to that
@@ -52,7 +52,7 @@ class I3Position;
  * angle from the +z axis to that vector; azimuth is the angle from the
  * +x axis to the x-y projection of that vector.
  *
- * See the graphic of the definitions of Zenith/Azimuth and theta/Phi 
+ * See the graphic of the definitions of Zenith/Azimuth and theta/Phi
  * direction angles:
  * https://wiki.icecube.wisc.edu/index.php/I3Direction
  *
@@ -89,17 +89,17 @@ class I3Direction : public I3FrameObject
    */
   I3Direction(double x, double y, double z):
   zenith_(NAN),
-  azimuth_(NAN),  
+  azimuth_(NAN),
   xDir_(x),
   yDir_(y),
   zDir_(z),
-  isCalculated_(false)    
+  isCalculated_(false)
   {
     CalcSphFromCar();
   }
-  
+
   explicit I3Direction(const I3Position&);
-  
+
   std::ostream& Print(std::ostream&) const override;
 
   //--------------
@@ -178,7 +178,7 @@ class I3Direction : public I3FrameObject
    * Rotate direction around Z axis by angle
    */
   void RotateZ(double angle);
-  
+
   /**
    * Vector inversion (makes the vector point in the opposite direction)
    */
@@ -201,7 +201,7 @@ class I3Direction : public I3FrameObject
                         zDir_*d.GetX() - xDir_*d.GetZ(),
                         xDir_*d.GetY() - yDir_*d.GetX());
   }
-  
+
   /**
    * Vector (cross) product
    */
@@ -220,17 +220,17 @@ class I3Direction : public I3FrameObject
     double czs=cos(zenith_ + other.zenith_);
     return 0.5*(cad*(czd-czs)+czd+czs);
   }
-  
+
   /**
    * Scalar (dot) product
    */
   double operator*(const I3Position& other) const;
-  
+
   /**
    * Multiplication by a scalar
    */
   I3Position operator*(double) const;
-  
+
   /**
    * Division by a scalar
    */
@@ -246,7 +246,7 @@ class I3Direction : public I3FrameObject
   }
 
   //---
-  
+
   /** returns the angle between in two I3Directions
    * @return the angle in rad (I3native units)
    */
@@ -258,13 +258,13 @@ class I3Direction : public I3FrameObject
  protected:
   /**
    * direction coordinates -- spherical
-   */ 
+   */
   double zenith_;
   double azimuth_;
 
   /**
    * direction coordinates -- cartesian (direction cosines)
-   */ 
+   */
   mutable double xDir_; //!
   mutable double yDir_; //!
   mutable double zDir_; //!

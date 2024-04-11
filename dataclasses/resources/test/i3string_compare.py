@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # note: this has some awkward asserts. this is intentional why? i
 # don't know. possibly a result of the ancient python "test harness"
 # that never got developed. they're a direct port from the old way to

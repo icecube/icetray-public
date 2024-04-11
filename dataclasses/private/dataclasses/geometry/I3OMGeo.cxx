@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <icetray/serialization.h>
 #include <dataclasses/geometry/I3OMGeo.h>
 
@@ -8,24 +12,24 @@ namespace {
 }
 
 template <class Archive>
-void 
+void
 I3OMGeo::serialize(Archive& ar, unsigned version)
 {
     if (version>i3omgeo_version_)
         log_fatal("Attempting to read version %u from file but running version %u of I3OMGeo class.",version,i3omgeo_version_);
-    
+
     ar & make_nvp("Position", position);
     if (version==0) {
         OldOrientation__ orientation_=Unspecified;
         ar & make_nvp("Orientation", orientation_);
-        
+
         // convert orientation enum to direction
         switch (orientation_) {
             case Unspecified: orientation.ResetOrientation(); break;
             case Up: orientation.SetOrientation(0.,0.,1., 1.,0.,0.); break;
             case Down: orientation.SetOrientation(0.,0.,-1., 1.,0.,0.); break;
             default: orientation.ResetOrientation(); break;
-        } 
+        }
     } else {
         ar & make_nvp("Orientation", orientation);
     }

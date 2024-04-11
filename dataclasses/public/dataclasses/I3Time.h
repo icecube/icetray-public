@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3TIME_H_INCLUDED
 #define I3TIME_H_INCLUDED
 
@@ -8,11 +12,11 @@
 #include <dataclasses/Utility.h>
 
 /**
- * @brief A class for dealing with global times.  
+ * @brief A class for dealing with global times.
  *
  * Has methods for setting the time in either the Daq UTC convention or
- * in the Modified Julian convention 
- * 
+ * in the Modified Julian convention
+ *
  */
 
 static const unsigned i3time_version_ = 0;
@@ -24,14 +28,14 @@ namespace I3TimeUtils
    */
   bool leap_year(const int year);
 
-  
-  /** 
+
+  /**
    *@brief returns the Modified Julian Date of Jan 1 of the specified year
    */
   int32_t mod_julian_day_start_of_year(int year);
 
   /**
-   * @brief return true if a leap second occurs on the last second of the day 
+   * @brief return true if a leap second occurs on the last second of the day
    * Modified Julian Date of mjd
    */
   bool leap_sec_on_mjd(const double mjd);
@@ -45,11 +49,11 @@ namespace I3TimeUtils
   int32_t leap_seconds_range(const int32_t mjd1,const int32_t mjd2);
 
   /**
-   * @brief Returns the number of leapseconds since the start of the year for 
+   * @brief Returns the number of leapseconds since the start of the year for
    * specified Modified Julian Date
    */
   int32_t year_to_date_leap_seconds(const int32_t mjd);
-  
+
   /**
    * @brief return return the number of seconds on Modified Julian Date mjd:
    * 86400 for normal days, 86401 for days with leap second
@@ -62,7 +66,7 @@ namespace I3TimeUtils
    * Takes into account both leap years and leap seconds
    */
   int64_t max_DAQ_time(const int year);
-  
+
   /**
    *Converts a time of type double with I3Units of time (your choice) to
    *the number of tenths of nanoseconds (i.e. "daqtime").  This takes
@@ -81,11 +85,11 @@ class I3Time : public I3FrameObject
    */
   enum Month
     {
-      Jan = 1, 
-      Feb = 2, 
-      Mar = 3, 
-      Apr = 4, 
-      May = 5, 
+      Jan = 1,
+      Feb = 2,
+      Mar = 3,
+      Apr = 4,
+      May = 5,
       Jun = 6,
       Jul = 7,
       Aug = 8,
@@ -121,23 +125,23 @@ class I3Time : public I3FrameObject
    * @brief creates the object with the given times as the DAQ time
    */
   I3Time(int32_t year, int64_t daqTime);
-  
+
   /**
    * @brief creates the object with the given double as ModJulianDay
    */
   explicit I3Time(double mjd);
 
   ~I3Time();
-	
+
   std::ostream& Print(std::ostream&) const override;
-	     
+
   /**
    * @brief Sets the time in the 'daq' style where
    * @param year The year.  Something like 2005.
    * @param daqTime The number of tenths of nanoseconds since the year began
-   */  
+   */
   void SetDaqTime(int year, int64_t daqTime);
-  
+
   /**
    * @brief Sets the time in the Modified julian convention
    * @param modJulianDay the modified julian day to set
@@ -152,7 +156,7 @@ class I3Time : public I3FrameObject
    * @param mjd the modified julian day as double to set
    */
   void SetModJulianTimeDouble(double mjd);
-  
+
   /**
    * @brief Sets the time in the UTC calendar date convention
    * @param year The year. Something like 2005.
@@ -170,7 +174,7 @@ class I3Time : public I3FrameObject
 		     int minute,
 		     int sec,
 		     double ns=0.0);
-  
+
   /**
    * @brief Sets the time in the Unix convention
    * @param unixTime time since the Epoch (00:00:00 UTC, January 1, 1970),
@@ -183,7 +187,7 @@ class I3Time : public I3FrameObject
    * @brief Gets the Modified Julian day
    */
   int32_t GetModJulianDay() const;
-  
+
   /**
    * @brief Gets the number of seconds since this Modified Julian day began
    * @note Modified Julian days begin at midnight
@@ -194,7 +198,7 @@ class I3Time : public I3FrameObject
    * @brief Gets the number of microseconds since this second began
    */
   int32_t GetModJulianMicroSec() const;
-  
+
   /**
    * @brief Gets the number of nanoseconds since this second began
    */
@@ -220,7 +224,7 @@ class I3Time : public I3FrameObject
   /**
    * @brief Gets the appropriate time for the DAQ.  tenths of nanoseconds
    * since the start of the UTC year.
-   */  
+   */
   int64_t GetUTCDaqTime() const;
 
   /**
@@ -229,7 +233,7 @@ class I3Time : public I3FrameObject
   Month GetUTCMonth() const ;
 
   /**
-   * @brief Gets the appropriate day of the week 
+   * @brief Gets the appropriate day of the week
    */
   Weekday GetUTCWeekday() const;
 
@@ -243,24 +247,24 @@ class I3Time : public I3FrameObject
    * @brief Gets the number of seconds since this UTC year started
    */
   int32_t GetUTCSec() const;
-  
+
   /**
    * @brief Gets the number of nanoseconds since this current second started.
    */
-  double GetUTCNanoSec() const;  
+  double GetUTCNanoSec() const;
 
   /**
    * @brief Gets a string representing the time in UTC
    */
   std::string GetUTCString(std::string format="%Y-%m-%d %H:%M:%S UTC")const;
 
-  /** 
+  /**
    * @brief returns weather this current second is is a leap second
    */
   bool IsLeapSecond() const;
-  
+
   /**
-   * equality operator.  
+   * equality operator.
    * @return true if the times are the same
    * @param rhs the I3Time to compare this one to.
    */
@@ -313,14 +317,14 @@ class I3Time : public I3FrameObject
   I3Time operator+(const double) const;
   I3Time operator-(const double) const;
 
- public: 
+ public:
 
   static double modjulianday(int year);
-  
+
   static double modjulianday(int year, int64_t daqTime);
 
   static double julianday(int year);
-  
+
   static double julianday(int year, int64_t daqTime);
 
   static int32_t yearOf(double modjulianday);

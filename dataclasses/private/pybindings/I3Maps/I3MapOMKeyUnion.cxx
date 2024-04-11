@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
 
 #include <dataclasses/I3MapOMKeyUnion.h>
 #include <icetray/python/dataclass_suite.hpp>
@@ -20,6 +23,6 @@ void register_I3RecoPulseSeriesMapUnion()
 		.def(bp::dataclass_suite<I3RecoPulseSeriesMapUnion>())
 	    ;
 	;
-	
+
 	register_pointer_conversions<I3RecoPulseSeriesMapUnion>();
 }

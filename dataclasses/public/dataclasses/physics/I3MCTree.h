@@ -1,9 +1,10 @@
 /**
  * @file I3MCTree.h
  * @brief Tree of I3Particles
- * 
- * copyright (C) 2013 the icecube collaboration
- * 
+ *
+ * Copyright (C) 2013 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
  * $Id$
  * @version $Revision$
  * @date $Date$
@@ -34,13 +35,13 @@
 #include "dataclasses/physics/detail/I3MCTree_fwd.h"
 
 
-/* Define basic tree structures here instead of in I3Tree so 
+/* Define basic tree structures here instead of in I3Tree so
    we don't break other tree operations with the I3MCTree upgrade
 */
 namespace TreeBase {
   static const unsigned tree_version_ = 1;
-  
-  
+
+
   /**
    * A generic tree node
    */
@@ -51,7 +52,7 @@ namespace TreeBase {
       TreeNode<T>* firstChild;
       TreeNode<T>* nextSibling;
       T data;
-      
+
       TreeNode() : parent(NULL),firstChild(NULL),nextSibling(NULL) { }
       TreeNode(const T& d) : parent(NULL),firstChild(NULL),nextSibling(NULL),data(d) { }
       T operator*() { return data; }
@@ -94,7 +95,7 @@ namespace TreeBase {
       bool operator!=(const TreeNode<T>& other) const { return !(*this == other); }
       bool operator!=(const T& otherData) const { return !(*this == otherData); }
   };
-  
+
   /** \class Tree
    * \brief A generic tree class for hashable, unique data types.
    *
@@ -113,7 +114,7 @@ namespace TreeBase {
       typedef size_t                    size_type;
       typedef ptrdiff_t                 difference_type;
       typedef std::forward_iterator_tag iterator_category;
-      
+
       /** \typedef optional_value
        * The optional_value is used when returning by value
        * when there might not be anything to return.
@@ -132,20 +133,20 @@ namespace TreeBase {
        * a hash_map of Key : treeNode
        */
       typedef hash_map<Key,treeNode > tree_hash_map;
-      
+
       tree_hash_map internalMap; /**< the actual hash_map storage **/
       TreeHashKey head_; /**< the first top-level node **/
       TreeHashKey end_; /**< a special end node that doesn't really exist **/
-      
+
       /**
        * Erase any siblings (and their children) to the right of the node
        */
       void eraseRightSiblings_(const Key&);
-    
+
     private:
       /**
        * Iterator Const Traits
-       * 
+       *
        * Define TreeValue and TreeHashMapIter types.
        */
       template <typename ValueType, int dummy=0>
@@ -162,7 +163,7 @@ namespace TreeBase {
         typedef const Tree<T,Key,Hash> TreeValue;
         typedef typename tree_hash_map::const_iterator TreeHashMapIter;
       };
-      
+
       /**
        * Iterator Storage Class
        *
@@ -325,7 +326,7 @@ namespace TreeBase {
     public:
       // note: required to use underscores on std methods
       //       to match tree_indexing_suite
-      
+
       /**
        * Iterator base (for tree-based iterators)
        */
@@ -387,7 +388,7 @@ namespace TreeBase {
             derived_().next_();
           }
       };
-      
+
       /**
        * Pre order iterator: O(n)
        */
@@ -467,7 +468,7 @@ namespace TreeBase {
       };
       typedef pre_order<T> pre_order_iterator;
       typedef pre_order<const T> pre_order_const_iterator;
-      
+
       /**
        * Post order iterator: O(n log n)
        */
@@ -551,7 +552,7 @@ namespace TreeBase {
       };
       typedef post_order<T> post_order_iterator;
       typedef post_order<const T> post_order_const_iterator;
-      
+
       /**
        * Sibling iterator: O(n)
        */
@@ -610,7 +611,7 @@ namespace TreeBase {
       };
       typedef sibling_iter<T> sibling_iterator;
       typedef sibling_iter<const T> sibling_const_iterator;
-      
+
       /**
        * Fast iterator: O(n)
        * Note that there is no ordering, but this gives the fastest results
@@ -661,7 +662,7 @@ namespace TreeBase {
       };
       typedef fast_iter<T> fast_iterator;
       typedef fast_iter<const T> fast_const_iterator;
-      
+
       /**
        * Leaf iterator: O(n)
        * Note that there is no ordering of leaves
@@ -733,13 +734,13 @@ namespace TreeBase {
       };
       typedef leaf_iter<T> leaf_iterator;
       typedef leaf_iter<const T> leaf_const_iterator;
-      
+
       /**
        * Define the default iterator
        */
       typedef pre_order_iterator iterator;
       typedef pre_order_const_iterator const_iterator;
-      
+
       /**
        * Constructors and destructor
        */
@@ -749,20 +750,20 @@ namespace TreeBase {
       Tree(const iterator_base<Derived,const T,Storage>& other);
       Tree(const Tree<T,Key,Hash>&);
       ~Tree();
-    
+
       std::ostream& Print(std::ostream&) const override;
-      
+
       /**
        * Assignment operator
        */
       const Tree<T,Key,Hash> operator=(const Tree<T,Key,Hash>&);
-      
+
       /**
        * Equality operator to compare two trees
        */
       bool operator==(const Tree<T,Key,Hash>& other) const;
       bool operator!=(const Tree<T,Key,Hash>& other) const;
-      
+
       // pre_order iterator helpers
       inline pre_order_iterator begin()
       { return pre_order_iterator(*this); }
@@ -776,7 +777,7 @@ namespace TreeBase {
       { return pre_order_const_iterator(*this,end_); };
       inline pre_order_const_iterator cend() const
       { return pre_order_const_iterator(*this,end_); };
-      
+
       // post_order iterator helpers
       inline post_order_iterator begin_post()
       { return post_order_iterator(*this); }
@@ -790,7 +791,7 @@ namespace TreeBase {
       { return post_order_const_iterator(*this,end_); }
       inline post_order_const_iterator cend_post() const
       { return post_order_const_iterator(*this,end_); }
-      
+
       // sibling iterator helpers
       template<typename D,typename V,typename S>
       sibling_iterator begin_sibling(const iterator_base<D,V,S>& i)
@@ -837,7 +838,7 @@ namespace TreeBase {
       { return sibling_const_iterator(*this,end_); }
       inline sibling_const_iterator cend_sibling() const
       { return sibling_const_iterator(*this,end_); }
-      
+
       // fast iterator helpers
       inline fast_iterator begin_fast()
       { return fast_iterator(*this); }
@@ -851,7 +852,7 @@ namespace TreeBase {
       { return fast_const_iterator(*this,end_); };
       inline fast_const_iterator cend_fast() const
       { return fast_const_iterator(*this,end_); };
-      
+
       // leaf iterator helpers
       inline leaf_iterator begin_leaf()
       { return leaf_iterator(*this); }
@@ -865,7 +866,7 @@ namespace TreeBase {
       { return leaf_const_iterator(*this,end_); };
       inline leaf_const_iterator cend_leaf() const
       { return leaf_const_iterator(*this,end_); };
-      
+
       /**
        * \brief Get the (first) head/root value
        */
@@ -874,7 +875,7 @@ namespace TreeBase {
        * \brief Get all of the head/root values.
        */
       const std::vector<T> get_heads() const;
-      
+
       /**
        * Get value at key
        *
@@ -883,136 +884,136 @@ namespace TreeBase {
        */
       const optional_value at(const Key&) const;
       const optional_value operator[](const Key&) const;
-      
+
       /**
        * Get iterator at key
        */
       iterator find(const Key&);
       const_iterator find(const Key&) const;
-      
+
       /**
        * Get parent
        */
       const optional_value parent(const Key&) const;
-      
+
       template<typename Derived,typename Storage>
       iterator_base<Derived,T,Storage>
       parent(const iterator_base<Derived,T,Storage>&);
-      
+
       template<typename Derived,typename Storage>
       iterator_base<Derived,const T,Storage>
       parent(const iterator_base<Derived,const T,Storage>&) const;
-      
+
       /**
        * Get previous sibling
        */
       const optional_value previous_sibling(const Key&) const;
-      
+
       template<typename Derived,typename Storage>
       iterator_base<Derived,T,Storage>
       previous_sibling(const iterator_base<Derived,T,Storage>&);
-      
+
       template<typename Derived,typename Storage>
       iterator_base<Derived,const T,Storage>
       previous_sibling(const iterator_base<Derived,const T,Storage>&) const;
-      
+
       /**
        * Get next sibling
        */
       const optional_value next_sibling(const Key&) const;
-      
+
       template<typename Derived,typename Storage>
       iterator_base<Derived,T,Storage>
       next_sibling(const iterator_base<Derived,T,Storage>&);
-      
+
       template<typename Derived,typename Storage>
       iterator_base<Derived,const T,Storage>
       next_sibling(const iterator_base<Derived,const T,Storage>&) const;
-      
+
       /**
        * Get immediate children
        */
       const std::vector<T> children(const Key&) const;
-      
+
       template<class Derived,class Storage>
       sibling_iter<T>
       children(const iterator_base<Derived,T,Storage>&);
-      
+
       template<class Derived,class Storage>
       sibling_iter<const T>
       children(const iterator_base<Derived,const T,Storage>&) const;
-      
+
       /**
        * Get first child
        */
       const optional_value first_child(const Key&) const;
-      
+
       template<typename Derived,typename Storage>
       iterator_base<Derived,T,Storage>
       first_child(const iterator_base<Derived,T,Storage>&);
-      
+
       template<typename Derived,typename Storage>
       iterator_base<Derived,const T,Storage>
       first_child(const iterator_base<Derived,const T,Storage>&) const;
-      
+
       /**
        * Clear all nodes from tree
        */
       void clear();
-      
+
       /**
        * Erase node and children
        */
       void erase(const Key&);
-      
+
       template<typename Derived,typename Value,typename Storage>
       iterator_base<Derived,Value,Storage>
       erase(const iterator_base<Derived,Value,Storage>&);
-      
+
       /**
        * Erase children of node
        */
       void erase_children(const Key&);
-      
+
       template<typename Derived,typename Value,typename Storage>
       iterator_base<Derived,Value,Storage>
       erase_children(const iterator_base<Derived,Value,Storage>&);
-      
+
       /**
        * Add a child to a node
        */
       void append_child(const Key& node, const T&);
-      
+
       template<typename Derived,typename Value,typename Storage>
       iterator_base<Derived,Value,Storage>
       append_child(const iterator_base<Derived,Value,Storage>&, const T&);
-      
+
       /**
        * Add subtree as a child to a node
        */
       void append_child(const Key& node, const Tree<T,Key,Hash>&, const Key&);
-      
+
       template<typename Derived,typename Value,typename Storage>
       iterator_base<Derived,Value,Storage>
       append_child(const iterator_base<Derived,Value,Storage>&,
                    const Tree<T,Key,Hash>&, const Key&);
-      
+
       template<typename Derived,typename Value,typename Storage,
                typename Derived2,typename Value2,typename Storage2>
       iterator_base<Derived,Value,Storage>
       append_child(const iterator_base<Derived,Value,Storage>&,
                    const iterator_base<Derived2,Value2,Storage2>&);
-      
+
       /**
        * Add several children to a node
        */
       void append_children(const Key& node, const std::vector<T>&);
-      
+
       template<typename Derived,typename Value,typename Storage>
       iterator_base<Derived,Value,Storage>
       append_children(const iterator_base<Derived,Value,Storage>&,
                       const std::vector<T>&);
-      
+
       /**
        * Add multiple children from the iterator range to the node
        *
@@ -1027,31 +1028,31 @@ namespace TreeBase {
       iterator_base<Derived,Value,Storage>
       append_children(const iterator_base<Derived,Value,Storage>&,
                       Iterator, const Iterator&);
-      
+
       /**
        * Insert at root level before other nodes
        */
       void insert(const T&);
-      
+
       /**
        * Insert at root level after other nodes
        */
       void insert_after(const T&);
-      
+
       /**
        * Insert as sibling before node
        */
       void insert(const Key& node, const T&);
-      
+
       template<typename Derived,typename Value,typename Storage>
       iterator_base<Derived,Value,Storage>
       insert(const iterator_base<Derived,Value,Storage>&, const T&);
-      
+
       /**
         * Insert as sibling after node
         */
       void insert_after(const Key& node, const T&);
-      
+
       template<typename Derived,typename Value,typename Storage>
       iterator_base<Derived,Value,Storage>
       insert_after(const iterator_base<Derived,Value,Storage>&, const T&);
@@ -1060,194 +1061,194 @@ namespace TreeBase {
        * Insert subtree as sibling before node
        */
       void insert_subtree(const Key& node, const Tree<T,Key,Hash>&, const Key&);
-      
+
       template<typename Derived,typename Value,typename Storage>
       iterator_base<Derived,Value,Storage>
       insert_subtree(const iterator_base<Derived,Value,Storage>&,
                      const Tree<T,Key,Hash>&, const Key&);
-      
+
       template<typename Derived,typename Value,typename Storage,
                typename Derived2,typename Value2,typename Storage2>
       iterator_base<Derived,Value,Storage>
       insert_subtree(const iterator_base<Derived,Value,Storage>&,
                      const iterator_base<Derived2,Value2,Storage2>&);
-      
+
       /**
        * Insert subtree as sibling after node
        */
       void insert_subtree_after(const Key& node, const Tree<T,Key,Hash>&, const Key&);
-      
+
       template<typename Derived,typename Value,typename Storage>
       iterator_base<Derived,Value,Storage>
       insert_subtree_after(const iterator_base<Derived,Value,Storage>&,
                            const Tree<T,Key,Hash>&, const Key&);
-      
+
       template<typename Derived,typename Value,typename Storage,
                typename Derived2,typename Value2,typename Storage2>
       iterator_base<Derived,Value,Storage>
       insert_subtree_after(const iterator_base<Derived,Value,Storage>&,
                            const iterator_base<Derived2,Value2,Storage2>&);
-      
+
       /**
        * Replace node (keeping children)
        */
       void replace(const Key& node, const T&);
-      
+
       template<typename Derived,typename Value,typename Storage>
       iterator_base<Derived,Value,Storage>
       replace(const iterator_base<Derived,Value,Storage>&, const T&);
-      
+
       /**
        * Replace node (and children) with subtree
        */
       void replace(const Key&, const Tree<T,Key,Hash>&, const Key&);
-      
+
       template<typename Derived,typename Value,typename Storage>
       iterator_base<Derived,Value,Storage>
       replace(const iterator_base<Derived,Value,Storage>&,
               const Tree<T,Key,Hash>&, const Key&);
-      
+
       template<typename Derived,typename Value,typename Storage,
                typename Derived2,typename Value2,typename Storage2>
       iterator_base<Derived,Value,Storage>
       replace(const iterator_base<Derived,Value,Storage>&,
               const iterator_base<Derived2,Value2,Storage2>&);
-      
+
       /**
        * Move all children of node to be siblings
        */
       void flatten(const Key&);
-      
+
       template<typename Derived,typename Value,typename Storage>
       iterator_base<Derived,Value,Storage>
       flatten(const iterator_base<Derived,Value,Storage>&);
-      
+
       /**
        * Move all child nodes of 'from' to be children of 'node'
        * Works with two nodes of the same tree.
        */
       void reparent(const Key& node, const Key& from);
-      
+
       template<typename Derived,typename Value,typename Storage>
       iterator_base<Derived,Value,Storage>
       reparent(const iterator_base<Derived,Value,Storage>&,
                const Key&);
-      
+
       template<typename Derived,typename Value,typename Storage,
                typename Derived2,typename Value2,typename Storage2>
       iterator_base<Derived,Value,Storage>
       reparent(const iterator_base<Derived,Value,Storage>&,
                const iterator_base<Derived2,Value2,Storage2>&);
-      
+
       /**
        * Merge other tree into this tree
        */
       void merge(const Tree<T,Key,Hash>&);
-      
+
       /**
        * Swap with another tree
        */
       void swap(Tree<T,Key,Hash>&);
-      
+
       /**
        * Size of the tree
        */
       size_type size() const;
-      
+
       /**
        * If the tree is size=0, or empty
        */
       bool empty() const;
-      
+
       /**
        * Compute depth to the root
        */
       size_type depth(const Key&) const;
-      
+
       template<typename Derived,typename Storage>
       size_type depth(const iterator_base<Derived,T,Storage>&);
-      
+
       template<typename Derived,typename Storage>
       size_type depth(const iterator_base<Derived,const T,Storage>&) const;
-      
+
       /**
        * Get the number of children a node has
        */
       size_type number_of_children(const Key&) const;
-      
+
       template<typename Derived,typename Storage>
       size_type number_of_children(
           const iterator_base<Derived,T,Storage>&);
-      
+
       template<typename Derived,typename Storage>
       size_type number_of_children(
           const iterator_base<Derived,const T,Storage>&) const;
-      
+
       /**
        * Get the number of siblings a node has
        */
       size_type number_of_siblings(const Key&) const;
-      
+
       template<typename Derived,typename Storage>
       size_type number_of_siblings(
           const iterator_base<Derived,T,Storage>&);
-      
+
       template<typename Derived,typename Storage>
       size_type number_of_siblings(
           const iterator_base<Derived,const T,Storage>&) const;
-       
+
       /**
        * Search for a key in the subtree
        */
       bool is_in_subtree(const Key& haystack, const Key& needle) const;
-      
+
       template<typename Derived,typename Storage>
       bool is_in_subtree(
           const iterator_base<Derived,T,Storage>&,
           const Key&);
-      
+
       template<typename Derived,typename Storage>
       bool is_in_subtree(
           const iterator_base<Derived,const T,Storage>&,
           const Key&) const;
-      
+
       template<typename Derived,typename Storage,
                typename Derived2,typename Value2,typename Storage2>
       bool is_in_subtree(
           const iterator_base<Derived,T,Storage>&,
           const iterator_base<Derived2,Value2,Storage2>&);
-      
+
       template<typename Derived,typename Storage,
                typename Derived2,typename Value2,typename Storage2>
       bool is_in_subtree(
           const iterator_base<Derived,const T,Storage>&,
           const iterator_base<Derived2,Value2,Storage2>&) const;
-      
+
       /**
        * Finds if any key in the subtree is in the tree
        */
       bool subtree_in_tree(const Tree<T,Key,Hash>& other, const Key& node) const;
-      
+
       template<typename Derived,typename Storage>
       bool subtree_in_tree(
           const iterator_base<Derived,T,Storage>&);
-      
+
       template<typename Derived,typename Storage>
       bool subtree_in_tree(
           const iterator_base<Derived,const T,Storage>&) const;
-      
+
     protected:
       friend class icecube::serialization::access;
-      
+
       template <class Archive> void load(Archive & ar, unsigned version);
-      
+
       template <class Archive> void save(Archive & ar, unsigned version) const;
-      
+
       I3_SERIALIZATION_SPLIT_MEMBER();
-      
+
       SET_LOGGER("Tree");
   };
-  
+
   template<>
   std::ostream& Tree<I3Particle,I3ParticleID>::Print(std::ostream& s) const;
 };

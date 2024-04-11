@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 
 #include <dataclasses/I3String.h>
@@ -52,5 +56,5 @@ TEST(stream_operator) {
   std::ostringstream bar;
   bar << foo;
   ENSURE(("I3String(\"test\")" == bar.str()), "I3String operator<< failed");
-  
+
 }

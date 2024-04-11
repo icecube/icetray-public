@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import unittest
 from icecube.dataclasses import *
 from icecube.dataclasses.fft import *
@@ -35,7 +39,7 @@ class TestHilbertTools(unittest.TestCase):
 
   def test_Hilbert_peak_3d(self):
     timeSeries = EFieldTimeSeries()
-    timeSeries.offset = -33  
+    timeSeries.offset = -33
     FillTimeSeriesWithData3d(timeSeries, 10, 0.3)
 
     timeSeries[2] = I3Position(100 / np.sqrt(3.), 100 / np.sqrt(3.), 100 / np.sqrt(3.))
@@ -51,17 +55,17 @@ class TestHilbertTools(unittest.TestCase):
     fftData = FFTData()
     fftData.LoadTimeSeries(timeSeries)
 
-    self.assertAlmostEqual(GetHilbertPeak(timeSeries), GetHilbertPeak(fftData), 5)    
-    self.assertAlmostEqual(GetHilbertPeakTime(timeSeries), GetHilbertPeakTime(fftData), 5)    
+    self.assertAlmostEqual(GetHilbertPeak(timeSeries), GetHilbertPeak(fftData), 5)
+    self.assertAlmostEqual(GetHilbertPeakTime(timeSeries), GetHilbertPeakTime(fftData), 5)
 
   def test_wrappers_3d(self):
     timeSeries = EFieldTimeSeries()
-    timeSeries.offset = -33  
+    timeSeries.offset = -33
     FillTimeSeriesWithData3d(timeSeries, 10, 0.3)
     fftData = FFTData3D()
     fftData.LoadTimeSeries(timeSeries)
 
-    self.assertAlmostEqual(GetHilbertPeak(timeSeries), GetHilbertPeak(fftData), 5)    
-    self.assertAlmostEqual(GetHilbertPeakTime(timeSeries), GetHilbertPeakTime(fftData), 5)    
+    self.assertAlmostEqual(GetHilbertPeak(timeSeries), GetHilbertPeak(fftData), 5)
+    self.assertAlmostEqual(GetHilbertPeakTime(timeSeries), GetHilbertPeakTime(fftData), 5)
 
 unittest.main()

@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2017
- * the icecube collaboration
+ * Copyright  (C) 2017 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version $Id$
  * @file I3FlasherStatus.h
  * @date $Date$
@@ -18,13 +18,13 @@
  * a particular subrun.
  */
 class I3FlasherStatus : public I3FrameObject {
-    
+
   public:
- 
+
     I3FlasherStatus() : brightness(0), window(0),
                         rate(0), mask(0), delay(0) { }
     ~I3FlasherStatus() { }
-    
+
     unsigned brightness;
     unsigned window;
     unsigned rate;

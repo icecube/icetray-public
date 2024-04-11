@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <string>
 #include <dataclasses/external/CompareFloatingPoint.h>
 #include <dataclasses/physics/I3MCTreePhysicsLibrary.hh>
@@ -59,7 +63,7 @@ namespace{
 
 I3MCTree::optional_value
 I3MCTreePhysicsLibrary::GetMostEnergeticPrimary(const I3MCTree& t, bool safe_mode){
-  if(t.size() == 0) 
+  if(t.size() == 0)
     return I3MCTree::optional_value();
 
   std::vector<I3Particle> primaries = t.get_heads();

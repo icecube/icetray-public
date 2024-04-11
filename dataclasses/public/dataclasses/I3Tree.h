@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file I3Tree.h
@@ -26,12 +26,12 @@ template <typename T>
 struct I3Tree : public I3FrameObject , public tree<T>
 {
   typedef typename tree<T>::iterator_base iterator_base;
-  
+
 
   I3Tree(){}
-  
+
   I3Tree(const T& value) : tree<T>(value){}
-  
+
   I3Tree(const iterator_base& other) : tree<T>(other){}
 
   template<class Archive>
@@ -41,7 +41,7 @@ struct I3Tree : public I3FrameObject , public tree<T>
     unsigned int count;
 
     ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
-    
+
     iter = this->begin();
     count = this->empty() ? 0 : this->number_of_siblings(iter) + 1;
     ar & icecube::serialization::make_nvp("count", count);

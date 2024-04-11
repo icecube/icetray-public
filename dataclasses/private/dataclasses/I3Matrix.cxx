@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
 
 #include <icetray/serialization.h>
 #include <dataclasses/I3Matrix.h>
@@ -23,7 +26,7 @@ std::ostream& operator<<(std::ostream& os, const I3Matrix& m){
 template <typename Archive>
 void
 I3Matrix::serialize(Archive &ar, unsigned int version)
-{	
+{
 	ar & icecube::serialization::make_nvp("I3FrameObject", icecube::serialization::base_object<I3FrameObject>(*this));
 	ar & icecube::serialization::make_nvp("Matrix", icecube::serialization::base_object<ublas_matrix_shim>(*this));
 }

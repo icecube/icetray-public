@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 # Version Checking Test:
 #
@@ -15,9 +20,9 @@ from os.path import expandvars
 import os
 import sys
 
-from icecube import icetray 
-from icecube import dataclasses 
-from icecube import dataio 
+from icecube import icetray
+from icecube import dataclasses
+from icecube import dataio
 
 tray = I3Tray()
 

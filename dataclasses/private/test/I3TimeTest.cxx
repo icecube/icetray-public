@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2004
-    the icecube collaboration
+    Copyright  (C) 2004 the icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     $Id$
 
     @version $Revision$
@@ -40,7 +40,7 @@ TEST(UTinstant_jul_to_date)
   ENSURE(i.weekday==5);
   ENSURE(i.day_of_year == 1);
 }
-  
+
 TEST(UTinstant_date_to_jul)
 {
   UTinstant i;
@@ -82,12 +82,12 @@ TEST(test7)
   long long int daqTime = 560819884 * (long long)1e8 + 43187970;
   I3Time tme;
   tme.SetDaqTime(2005,daqTime);
-  
+
   ENSURE(tme.GetUTCMonth() == I3Time::Mar);
-  
+
   cout<<"Output day of the month"<<tme.GetUTCDayOfMonth()<<endl;
   ENSURE(tme.GetUTCDayOfMonth()==6,"day of month is right");
-  ENSURE(tme.GetUTCWeekday() == I3Time::Sunday,"weekday is right");  
+  ENSURE(tme.GetUTCWeekday() == I3Time::Sunday,"weekday is right");
   ENSURE(tme.GetUTCSec()==5608198,"secs is right");
   ENSURE_DISTANCE(tme.GetUTCNanoSec(),(double)844318797,0.1);
 }
@@ -96,7 +96,7 @@ TEST(test8)
 {
   I3Time time;
   time.SetModJulianTime(53460,0,0);
-  
+
   ENSURE(time.GetModJulianSec()==0,"checking modjulian sec");
 }
 
@@ -104,7 +104,7 @@ TEST(test9)
 {
   I3Time time;
   time.SetModJulianTime(53460,0,0);
-  
+
   ENSURE(time.GetModJulianDay()==53460,"checking modjulian day");
 }
 
@@ -112,7 +112,7 @@ TEST(test10)
 {
   I3Time time;
   time.SetModJulianTime(53460,60*60*12,0);
-  
+
   ENSURE(time.GetModJulianDay()==53460,"checking modjulian day");
 }
 
@@ -121,8 +121,8 @@ TEST(test11)
   for(int i = 0 ; i < 100 ; i++)
     {
       rand();
-      long long int daqTime = ((long long)rand()) 
-	* ((long long)rand()) 
+      long long int daqTime = ((long long)rand())
+	* ((long long)rand())
 	* ((long long)rand()) %
 	((long long)24 * 365 * 3600 * ((long long)1e10) ) ;
       if(daqTime < 0)
@@ -130,20 +130,20 @@ TEST(test11)
       int year = 1995 + (rand() % 20);
       I3Time initial_time;
       initial_time.SetDaqTime(year,daqTime);
-      
+
       I3Time compare_time;
       compare_time.SetModJulianTime(initial_time.GetModJulianDay(),
 				    initial_time.GetModJulianSec(),
 				    initial_time.GetModJulianNanoSec());
-      
+
       ENSURE(initial_time.GetUTCYear()==
 	     compare_time.GetUTCYear(),
 	     "checking that the year is the same");
-      ENSURE(::llabs((long long)(initial_time.GetUTCDaqTime() 
+      ENSURE(::llabs((long long)(initial_time.GetUTCDaqTime()
 			- compare_time.GetUTCDaqTime())) < 10,
 	     "checking that the UTC time is the same to ns");
-      
-      
+
+
     }
 }
 
@@ -165,34 +165,34 @@ TEST(test14)
 {
   I3Time lowest;
   lowest.SetDaqTime(2004,235918301);
-  
+
   I3Time lower;
   lower.SetDaqTime(2004,235918402);
-  
+
   I3Time higher;
   higher.SetDaqTime(2008,283294782);
-  
+
   I3Time highest;
   highest.SetDaqTime(2009,283294782);
-  
+
   ENSURE(lowest<lower);
   ENSURE(lowest<higher);
   ENSURE(lowest<highest);
   ENSURE(lower<higher);
   ENSURE(lower<highest);
   ENSURE(higher<highest);
-  
+
   ENSURE(!(lower<lowest));
   ENSURE(!(higher<lowest));
   ENSURE(!(highest<lowest));
   ENSURE(!(higher<lower));
   ENSURE(!(highest<lower));
   ENSURE(!(highest<higher));
-  
+
   ENSURE(highest!=higher);
   ENSURE(lower!=higher);
   ENSURE(lowest!=lower);
-  
+
   ENSURE(lower>lowest);
   ENSURE(higher>lowest);
   ENSURE(highest>lowest);
@@ -206,17 +206,17 @@ TEST(test14)
   ENSURE(higher>=lower);
   ENSURE(highest>=lower);
   ENSURE(highest>=higher);
-  
+
   ENSURE(lowest<=lower);
   ENSURE(lowest<=higher);
   ENSURE(lowest<=highest);
   ENSURE(lower<=higher);
   ENSURE(lower<=highest);
   ENSURE(higher<=highest);
-  
+
   I3Time same;
   same.SetDaqTime(2004,235918301);
-  
+
   ENSURE(lowest == same);
   ENSURE(lowest <= same);
   ENSURE(lowest >= same);
@@ -270,8 +270,8 @@ TEST(ns_to_daqtime_rounding)
 
   vector<double>::iterator i;
   vector<int64_t>::iterator j;
-  for(i=times_to_test.begin(), j=result_times.begin(); 
-      i != times_to_test.end(); 
+  for(i=times_to_test.begin(), j=result_times.begin();
+      i != times_to_test.end();
       ++i,++j)
     ENSURE(I3TimeUtils::ns_to_daqtime(*i * I3Units::ns) == *j);
 }
@@ -318,10 +318,10 @@ TEST(minus_double)
       I3Time t0(year,daqTime);
       I3Time t1(year-1,I3TimeUtils::max_DAQ_time(year-1) - delta/2); //should go over by half a delta
       I3Time t1_prime = t0 - t;
-      
+
       cout<<"Year: "<<t1_prime.GetUTCYear()<<endl;
       cout<<"DAQTime: "<<t1_prime.GetUTCDaqTime()<<endl;
-      
+
       ENSURE(t1_prime == t1,"Someone doesn't know how to subtract");
     }
 }
@@ -396,7 +396,7 @@ TEST(day_of_year_test)
   double myTimeMJD2 = I3Time::modjulianday(2007,6480000ll * (long long)1e8 + 43187970);
   // Check int32_t I3Time::DayOfYear(double modjulianday)
   int32_t myTimeDOY = I3Time::DayOfYear(myTimeMJD2);
-  // Check int32_t I3Time::DayOfYear(int64_t daqtime) 
+  // Check int32_t I3Time::DayOfYear(int64_t daqtime)
   int32_t myTimeDOY2 = I3Time::DayOfYear(myTime.GetUTCDaqTime());
   ENSURE_EQUAL(myTimeDOY,1,"DayOfYear incorrect");
   ENSURE_EQUAL(myTimeDOY2,1,"DayOfYear incorrect");
@@ -406,7 +406,7 @@ TEST(day_of_year_test)
 
 TEST(test_utc_caldate)
 {
-    struct caldate_t 
+    struct caldate_t
     {
 	int year;
 	int month;
@@ -415,10 +415,10 @@ TEST(test_utc_caldate)
 	int minute;
 	int sec;
     };
-    
+
     const int NUM_DATES = 4;
     caldate_t test_dates[NUM_DATES];
-    
+
     // Test new years eve
     test_dates[0].year   = 2007;
     test_dates[0].month  = 12;
@@ -426,7 +426,7 @@ TEST(test_utc_caldate)
     test_dates[0].hour   = 23;
     test_dates[0].minute = 59;
     test_dates[0].sec    = 59;
-    
+
     // Test Feb. 28
     test_dates[1].year   = 2007;
     test_dates[1].month  = 2;
@@ -434,7 +434,7 @@ TEST(test_utc_caldate)
     test_dates[1].hour   = 23;
     test_dates[1].minute = 59;
     test_dates[1].sec    = 59;
-    
+
     // Test Feb. 29
     test_dates[2].year   = 2008;
     test_dates[2].month  = 2;
@@ -442,7 +442,7 @@ TEST(test_utc_caldate)
     test_dates[2].hour   = 23;
     test_dates[2].minute = 59;
     test_dates[2].sec    = 59;
-    
+
     // Test Jan. 1, 2050
     test_dates[3].year   = 2050;
     test_dates[3].month  = 1;
@@ -450,7 +450,7 @@ TEST(test_utc_caldate)
     test_dates[3].hour   = 0;
     test_dates[3].minute = 0;
     test_dates[3].sec    = 0;
-    
+
     for(int i=0; i<NUM_DATES; i++)
     {
 	I3Time testtime;
@@ -460,17 +460,17 @@ TEST(test_utc_caldate)
 			       test_dates[i].hour,
 			       test_dates[i].minute,
 			       test_dates[i].sec);
-	
+
 	int dayOfYear    = (int)testtime.DayOfYear(testtime.GetUTCDaqTime()) - 1;
 	int secondOfYear = (int)3600*24*dayOfYear;
-	
+
 	int secondOfDay = (int)testtime.GetUTCSec() - secondOfYear;
 	int minuteOfDay = (int)floor(secondOfDay/60.0);
-	
+
 	int hour   = (int)floor(minuteOfDay/60.0);
 	int minute = minuteOfDay - hour*60;
 	int second = secondOfDay - hour*3600 - minute*60;
-	
+
 	ENSURE_EQUAL(testtime.GetUTCYear(),       test_dates[i].year);
 	ENSURE_EQUAL(testtime.GetUTCMonth(),      test_dates[i].month);
 	ENSURE_EQUAL(testtime.GetUTCDayOfMonth(), test_dates[i].day);

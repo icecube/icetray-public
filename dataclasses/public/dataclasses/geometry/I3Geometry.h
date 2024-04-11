@@ -1,7 +1,7 @@
 /**
  *
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version n$Id$
  * @file I3Geometry.h
  * @date $Date$
@@ -23,9 +23,9 @@
 #include "dataclasses/I3Map.h"
 /*
   The following is a flattened version of the Geometry Class for dcv2
-  The 8 classes of old are now 3 structs.  
+  The 8 classes of old are now 3 structs.
 
-  (1) I3Geometry contains the 'master' data, namely the std::map of OMKey to OM 
+  (1) I3Geometry contains the 'master' data, namely the std::map of OMKey to OM
   (for inice, icetop, and amanda), as well as the std::map of the stations.
 
   (2) I3OMGeo contains all the necessary information for a single OM, including
@@ -46,7 +46,7 @@
   new: I3OMGeoMap geomap = Geometry.omgeo;
 
   The other changes were minor (simply eliminating the Get/Set functions in
-  favor of direct setting) 
+  favor of direct setting)
 
   -bchristy
 */
@@ -62,7 +62,7 @@ public:
   //Map of all OMs based on their OMKey
   I3OMGeoMap omgeo;
 
-  //Map of all the stations. 
+  //Map of all the stations.
   //Each int specifies a StationGeo object, which is a std::vector of 2 TankGeo's.
   I3StationGeoMap stationgeo;
 
@@ -82,7 +82,7 @@ public:
   //  Handy functions for enum<->string
   std::string GetSnowHeightProvenanceString() const;
   void SetSnowHeightProvenanceString(const std::string &str);
-  
+
 
   //Map of all scintillator
   I3ScintGeoMap scintgeo;
@@ -97,7 +97,7 @@ public:
   I3Time endTime;
 
   const I3Geometry& operator=(const I3Geometry& geometry);
-  
+
   bool operator==(const I3Geometry& rhs)
   {
     return (omgeo == rhs.omgeo &&

@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 FAQ / common errors
 -------------------
 
@@ -14,7 +18,7 @@ constructs like::
   if mt in v:
      # do something
 
-So if you get deep compiler errors that involve 'operator==', check 
+So if you get deep compiler errors that involve 'operator==', check
 that your class is equality-comparable.
 
 
@@ -29,11 +33,11 @@ If you forget to import project icetray first::
   Traceback (most recent call last):
     File "<stdin>", line 1, in <module>
   TypeError: No to_python (by-value) converter found for C++ type: boost::shared_ptr<I3Frame>
-  >>> 
+  >>>
 
 then you can't just do it later, due to the way python imports work::
 
-  >>> imp     
+  >>> imp
   >>> f = dataio.I3File("event693.i3")  # reopen file in same session
   >>> frame = f.pop_physics()
   >>> print frame
@@ -49,7 +53,7 @@ then you can't just do it later, due to the way python imports work::
     'InIceRawData' [Physics] ==> I3Map<OMKey, std::vector<I3DOMLaunch, std::allocator<I3DOMLaunch> > >(14282)
   ]
 
-  >>> f = frame['DrivingTime'] 
+  >>> f = frame['DrivingTime']
   /home/troy/Icecube/meta-projects/analysis/trunk/src/icetray/public/icetray/I3Frame.h:293: TRACE: Get<boost::shared_ptr<I3FrameObject const>>("DrivingTime")
   >>> f
   <icecube.icetray.I3FrameObject object at 0x84f12cc>

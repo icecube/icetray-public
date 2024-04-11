@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # The I3FrameObject base was missing in the python bindings.
 # Now the I3ParticleVect inherits from I3FrameObject in python.
 # just as it does in C++, so you can create them and add them

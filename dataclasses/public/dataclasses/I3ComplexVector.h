@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
 
 #ifndef I3COMPLEXVECTOR_H_INCLUDED
 #define I3COMPLEXVECTOR_H_INCLUDED

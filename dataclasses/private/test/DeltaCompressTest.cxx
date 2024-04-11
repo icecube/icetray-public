@@ -1,8 +1,8 @@
 /**
- * copyright  (C) 2007
- * the icecube collaboration
+ * Copyright  (C) 2007 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
- * Test Delta Compressions ability to encode and decode 
+ * Test Delta Compressions ability to encode and decode
  *
  * @file    dataclasses/private/test/DeltaCompressTest.cxx
  * @version $Revision$
@@ -26,7 +26,7 @@ TEST(RandomWaveTest)
       int waveform_constant=RAND_MAX/128;
 
       vector<int> orig_waveform(128,0);
-      
+
       for (int i=0;i < 128; i++)
 	{
 	  orig_waveform[i]=rand()/waveform_constant;
@@ -44,9 +44,9 @@ TEST(RandomWaveTest)
       new_waveform.clear();
       uncompressor.decompress( new_waveform );
       /*
-      Delta decompression dosn't know when to stop so you have remember how big the 
+      Delta decompression dosn't know when to stop so you have remember how big the
       uncompressed waveform is and cut it off.
-      Maybe in the future this can be fixed in the deltacompression class but for now 
+      Maybe in the future this can be fixed in the deltacompression class but for now
       the "user" ie I3DOMLaunch has to fix it.
       */
       new_waveform.resize(128);

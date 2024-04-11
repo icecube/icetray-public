@@ -2,8 +2,8 @@
  *
  * Definition of I3Calibration class
  *
- * copyright  (C) 2004
- * the IceCube collaboration
+ * Copyright  (C) 2004 the IceCube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version $Id$
  * @file I3Calibration.h
  * @date $Date$
@@ -31,12 +31,12 @@ public:
   I3Time endTime;
 
   I3Calibration();
-    
+
   ~I3Calibration();
-    
+
   I3DOMCalibrationMap domCal;
   I3VEMCalibrationMap vemCal;
-  
+
   bool operator==(const I3Calibration& rhs)
   {
     return (startTime == rhs.startTime &&
@@ -48,7 +48,7 @@ public:
   {
     return !operator==(rhs);
   }
-  
+
 private:
   friend class icecube::serialization::access;
   template <class Archive> void load(Archive & ar, unsigned version);
@@ -61,5 +61,5 @@ I3_DEFAULT_NAME(I3Calibration);
 I3_POINTER_TYPEDEFS(I3Calibration);
 
 #endif // I3CALIBRATION_H_INCLUDED
-    
+
 

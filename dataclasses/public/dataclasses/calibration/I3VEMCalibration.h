@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 /**
  *
  * @version $Id$
@@ -14,8 +18,8 @@
 
 /**
  * @brief This struct stores the VEM (Vertical Equivalent Muon) calibration
- * data for an IceTop DOM. In addition it contains information concerning the 
- * switching between the high gain (HG) and low gain (LG) DOMs in a Tank. 
+ * data for an IceTop DOM. In addition it contains information concerning the
+ * switching between the high gain (HG) and low gain (LG) DOMs in a Tank.
  * @author Tilo Waldenmaier  (struct'd by Erik Blaufuss)
  */
 static const unsigned i3vemcalibration_version_ = 0;
@@ -25,28 +29,28 @@ class I3VEMCalibration
 {
 public:
   /**
-   * Average number of PE per VEM  
+   * Average number of PE per VEM
    */
   double pePerVEM;
-  
+
   /**
    * Width of the the average muon peak for this tank in PE
    */
   double muPeakWidth;
-  
+
   /**
-   * PE threshold for the HG pulses over which the 
+   * PE threshold for the HG pulses over which the
    *  corresponding LG pulses in the tank are used.
-   *  (This value is only valid/important for HG DOMs) 
+   *  (This value is only valid/important for HG DOMs)
    */
   double hglgCrossOver;
-  
+
   /**
    * Optional correction factor to adjust high gain and low gain DOMs
    * (Default value is set to 1)
    */
   double corrFactor;
-  
+
 
   I3VEMCalibration()
   {
@@ -56,11 +60,11 @@ public:
     corrFactor = 1.0;
   }
   ~I3VEMCalibration();
-  
+
   bool operator==(const I3VEMCalibration& rhs) const
   {
     using CompareFloatingPoint::Compare;
-    return (Compare(pePerVEM, rhs.pePerVEM) &&            
+    return (Compare(pePerVEM, rhs.pePerVEM) &&
             Compare(muPeakWidth, rhs.muPeakWidth) &&
             Compare(hglgCrossOver, rhs.hglgCrossOver) &&
             Compare(corrFactor, rhs.corrFactor));

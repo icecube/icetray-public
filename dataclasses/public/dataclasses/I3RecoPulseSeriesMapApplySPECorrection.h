@@ -1,9 +1,9 @@
 /**
  *  $Id$
  *
- *  Copyright (C) 2016
- *  Claudio Kopper <ckopper@icecube.wisc.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  Copyright (C) 2016 Claudio Kopper <ckopper@icecube.wisc.edu>
+ *  Copyright (C) 2016 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  SPDX-License-Identifier: BSD-2-Clause
  *
  */
 
@@ -27,12 +27,12 @@ public:
    * Assumes the input pulses are not shifted yet.
    */
   I3RecoPulseSeriesMapApplySPECorrection(
-    const std::string &pulses_key, 
+    const std::string &pulses_key,
     const std::string &calibration_key);
   I3RecoPulseSeriesMapApplySPECorrection();
 
   std::ostream& Print(std::ostream&) const override;
-  
+
   I3RecoPulseSeriesMapConstPtr Apply(const I3Frame&) const;
   std::string GetPulsesSource() const { return pulses_key_; }
   std::string GetCalibrationSource() const { return calibration_key_; }

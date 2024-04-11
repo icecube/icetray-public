@@ -5,7 +5,8 @@
  * @file I3MCTree_impl.h
  * @brief Implementation for TreeBase
  *
- * copyright (C) 2013 the icecube collaboration
+ * Copyright (C) 2013 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id: I3MCTree.hh 112306 2013-10-28 22:43:59Z david.schultz $
  * @version $Revision: 112306 $
@@ -73,7 +74,7 @@ namespace TreeBase {
   {
     clear();
   }
-  
+
   template<typename T, typename Key, typename Hash>
   std::ostream& Tree<T,Key,Hash>::Print(std::ostream& s) const{
     s << "[I3MCTree:\n";

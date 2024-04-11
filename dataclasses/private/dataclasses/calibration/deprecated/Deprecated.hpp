@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef DEPRECATED_CLASSES_H_INCLUDED
 #define DEPRECATED_CLASSES_H_INCLUDED
 
@@ -12,7 +16,7 @@ struct TWRXTCal{
   double endBinCut;
   double amplitudeCut;
   double invAmplitudeCut;
-  
+
   template <class Archive> void serialize(Archive & ar, unsigned version){
     ar & make_nvp("speNetChargeCut", speNetChargeCut);
     ar & make_nvp("chargeVsAmplCut", chargeVsAmplCut);
@@ -24,11 +28,11 @@ struct TWRXTCal{
 };
 I3_SERIALIZABLE(TWRXTCal);
 
-struct TWRCalibration{    
+struct TWRCalibration{
   double peArea;
   double twrT0;
   TWRXTCal xtcal;
-    
+
   template <class Archive> void serialize(Archive & ar, unsigned version){
     ar & make_nvp("peArea", peArea);
     ar & make_nvp("twrT0",  twrT0);
@@ -56,8 +60,8 @@ struct I3AMANDAOM_XTalk {
   double timelow;
   double width;
   double threshold;
-  
-  template <class Archive> 
+
+  template <class Archive>
   void serialize(Archive & ar, unsigned version){
     ar & make_nvp("receiver",receiver);
     ar & make_nvp("timehigh",timehigh);
@@ -80,10 +84,10 @@ struct I3AMANDAOMCalibration {
   double tot_beta;
   double tot_tot0;
   int    tot_pol;
-  double omo_a, omo_b, omo_c, omo_d, omo_e;  
+  double omo_a, omo_b, omo_c, omo_d, omo_e;
   double omo_lowlim;
   double omo_highlim;
-  double pe_area;  
+  double pe_area;
   std::vector<I3AMANDAOM_XTalk> xtalk_receivers;
 
   template <class Archive> void serialize(Archive & ar, unsigned version){

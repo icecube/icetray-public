@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. _fft:
 
 ====================================================
@@ -77,21 +81,21 @@ For this reason, it is extremely important that one **does not use FFT algorithm
 FFTW
 ----------------------
 
-The Fourier package that actually handles the computation of FFTs is the Fastest Fourier Transform in the West version 3.3.4 
+The Fourier package that actually handles the computation of FFTs is the Fastest Fourier Transform in the West version 3.3.4
 (`external documentation <http://www.fftw.org/#documentation>`_). This package is an open source code that which includes many algorithms to perform FFTs and is able to decide which one will yield the best performance for the job.
 
 The portion of the FFTW code that is most relevant for this project is the real discrete 1D Fourier transform, the FFTW function ``fftw_plan_dft_r2c_1d``. This performs a one-sided FFT, returning :math:`N/2+1` amplitudes (where :math:`N` is the number of time-series measurements), with **no scaling/normalization**.
 
-FFTW has a number of algorithms to actually carry out the FFT calculations and the best method depends on the length of the time series as well as the compiler. 
-There are a number of flags that can be passed to FFTW to determine how much time it is allowed to spend on finding the optimal method for the given transform size, :math:`N`. 
-This is done internally, by trying many different FFT algorithms on the passed in series and recording how long it takes to perform. 
-This is reported to be compiler dependent and thus must be done for each machine. 
-However, once a method has been found, further FFTs of the same length will automatically use this result and the calculation will not need to be redone. 
-There is even a method to save the optimization data and simply load it, removing the need to optimize again on the next execution of the program. 
+FFTW has a number of algorithms to actually carry out the FFT calculations and the best method depends on the length of the time series as well as the compiler.
+There are a number of flags that can be passed to FFTW to determine how much time it is allowed to spend on finding the optimal method for the given transform size, :math:`N`.
+This is done internally, by trying many different FFT algorithms on the passed in series and recording how long it takes to perform.
+This is reported to be compiler dependent and thus must be done for each machine.
+However, once a method has been found, further FFTs of the same length will automatically use this result and the calculation will not need to be redone.
+There is even a method to save the optimization data and simply load it, removing the need to optimize again on the next execution of the program.
 However, benchmark tests on ``Cobalt`` seem to show this optimization takes only fractions of a second (for order :math:`N <= 10^{5}`) and is thus not worth storing, even when using flags that require a high level of optimization.
 
-The interface with FFTW is handled by the ``FFTWPlan`` class in and should never need to be directly interacted with directly by users nor developers. 
-Instead users should rely exclusively on the :ref:`fft_data_container` class to perform Fourier transforms. 
+The interface with FFTW is handled by the ``FFTWPlan`` class in and should never need to be directly interacted with directly by users nor developers.
+Instead users should rely exclusively on the :ref:`fft_data_container` class to perform Fourier transforms.
 This avoids losing important information such as the start- and step-time of the time-series as well as mixing FFT normalizations across the project which would be dangerous!
 
 
@@ -138,7 +142,7 @@ Example
   #Pass this spectrum into some function which does some
   #augmentation to it
   MangleTheSpectrum(spectrum)
-  
+
   #Now when you request the time series, it knows that the DFT
   #needs to be done again because the spectrum is more up-to-date
   series2 = fft.GetTimeSeries()
@@ -224,7 +228,7 @@ Below is an example of how to use these functions
 
   #We start with an FFTDataContainer
   fftData = frame["FFTDataContainerInFrame"]
-  
+
   #This gets the amplitude of the maximum of the Hilbert Envelope
   hilbertPeak = fft.GetHilbertPeak(fftData)
   #Likewise, this gives the time at which this maximum occurs

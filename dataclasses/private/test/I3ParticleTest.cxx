@@ -1,7 +1,7 @@
 
 /**
-    copyright  (C) 2004
-    the icecube collaboration
+    Copyright  (C) 2004 The icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
 
     @version $Revision$
     @date $Date$
@@ -65,7 +65,7 @@ TEST(CopyPtrConstructor)
                   "Copied type do not match");
   ENSURE( p1->GetShape() == p2->GetShape(),
                   "Copied shape do not match");
-  ENSURE( p1 == p2, 
+  ENSURE( p1 == p2,
 	  "Copied particles overall do not match");
 
 }
@@ -122,7 +122,7 @@ TEST(pid_ctor){
 
 TEST(istrack){
 
-  I3Particle itrack; 
+  I3Particle itrack;
   I3Particle start_track;
   I3Particle stop_track;
   I3Particle cont_track;
@@ -142,7 +142,7 @@ TEST(istrack){
   tauminus.SetType(I3Particle::MuMinus);
   mp.SetType(I3Particle::Monopole);
 
-  ENSURE(itrack.IsTrack()); 
+  ENSURE(itrack.IsTrack());
   ENSURE(start_track.IsTrack());
   ENSURE(stop_track.IsTrack());
   ENSURE(cont_track.IsTrack());
@@ -151,50 +151,50 @@ TEST(istrack){
   ENSURE(tauplus.IsTrack());
   ENSURE(tauminus.IsTrack());
   ENSURE(mp.IsTrack());
-  
+
 
 }
 
 TEST(iscascade){
 
-  I3Particle cascade; 
-  I3Particle eplus; 
-  I3Particle eminus; 
-  I3Particle brem; 
-  I3Particle delta; 
-  I3Particle pair; 
-  I3Particle nucl; 
-  I3Particle gamma; 
+  I3Particle cascade;
+  I3Particle eplus;
+  I3Particle eminus;
+  I3Particle brem;
+  I3Particle delta;
+  I3Particle pair;
+  I3Particle nucl;
+  I3Particle gamma;
   I3Particle hadron;
   I3Particle weak;
-  I3Particle piplus; 
-  I3Particle piminus; 
+  I3Particle piplus;
+  I3Particle piminus;
 
   cascade.SetShape(I3Particle::Cascade);
-  eplus.SetType(I3Particle::EPlus); 
-  eminus.SetType(I3Particle::EMinus); 
-  brem.SetType(I3Particle::Brems); 
-  delta.SetType(I3Particle::DeltaE); 
-  pair.SetType(I3Particle::PairProd); 
-  nucl.SetType(I3Particle::NuclInt); 
-  gamma.SetType(I3Particle::Gamma); 
-  hadron.SetType(I3Particle::Hadrons); 
-  weak.SetType(I3Particle::WeakInt); 
-  piplus.SetType(I3Particle::PiPlus); 
-  piminus.SetType(I3Particle::PiMinus); 
+  eplus.SetType(I3Particle::EPlus);
+  eminus.SetType(I3Particle::EMinus);
+  brem.SetType(I3Particle::Brems);
+  delta.SetType(I3Particle::DeltaE);
+  pair.SetType(I3Particle::PairProd);
+  nucl.SetType(I3Particle::NuclInt);
+  gamma.SetType(I3Particle::Gamma);
+  hadron.SetType(I3Particle::Hadrons);
+  weak.SetType(I3Particle::WeakInt);
+  piplus.SetType(I3Particle::PiPlus);
+  piminus.SetType(I3Particle::PiMinus);
 
-  ENSURE(cascade.IsCascade()); 
-  ENSURE(eplus.IsCascade()); 
-  ENSURE(eminus.IsCascade()); 
-  ENSURE(brem.IsCascade()); 
-  ENSURE(delta.IsCascade()); 
-  ENSURE(pair.IsCascade()); 
-  ENSURE(nucl.IsCascade()); 
-  ENSURE(gamma.IsCascade()); 
-  ENSURE(hadron.IsCascade()); 
-  ENSURE(weak.IsCascade()); 
-  ENSURE(piplus.IsCascade()); 
-  ENSURE(piminus.IsCascade()); 
+  ENSURE(cascade.IsCascade());
+  ENSURE(eplus.IsCascade());
+  ENSURE(eminus.IsCascade());
+  ENSURE(brem.IsCascade());
+  ENSURE(delta.IsCascade());
+  ENSURE(pair.IsCascade());
+  ENSURE(nucl.IsCascade());
+  ENSURE(gamma.IsCascade());
+  ENSURE(hadron.IsCascade());
+  ENSURE(weak.IsCascade());
+  ENSURE(piplus.IsCascade());
+  ENSURE(piminus.IsCascade());
 }
 
 TEST(shifting_tracks) {
@@ -353,7 +353,7 @@ TEST( settypestring )
     I3Particle numu;
 
     numu.SetTypeString("NuMu");
-    
+
     ENSURE( numu.GetTypeString() == "NuMu" );
 }
 
@@ -361,7 +361,7 @@ TEST( settypestring )
 TEST(hasenergy){
 
   I3Particle particle;
- 
+
   particle.SetEnergy(105.0*I3Units::MeV);
 
   ENSURE(particle.HasEnergy());
@@ -388,9 +388,9 @@ TEST(stop_time) {
 
 TEST(istopshower){
 
-  I3Particle istopshower; 
+  I3Particle istopshower;
   istopshower.SetShape(I3Particle::TopShower);
-  ENSURE(istopshower.IsTopShower()); 
+  ENSURE(istopshower.IsTopShower());
 
 }
 

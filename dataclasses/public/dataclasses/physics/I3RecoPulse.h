@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version $Id$
  * @file I3RecoPulse.h
  * @date $Date$
@@ -21,7 +21,7 @@
  */
 static const unsigned i3recopulse_version_ = 3;
 
-class I3RecoPulse 
+class I3RecoPulse
 {
   double time_;
   float charge_;
@@ -45,18 +45,18 @@ class I3RecoPulse
    * Print a string representation of this pulse
    */
   std::ostream& Print(std::ostream&) const;
-  
+
   /**
-   * @brief Get the flag values pertaining to this pulse, as a bitwise 
+   * @brief Get the flag values pertaining to this pulse, as a bitwise
    *        combination.
    */
-  flags_t GetFlags() const { return flags_; } 
+  flags_t GetFlags() const { return flags_; }
 
   /**
    * @brief Set the flag values pertaining to this pulse, as a bitwise
    *        combination.
    */
-  void SetFlags(flags_t flags) { flags_ = flags; } 
+  void SetFlags(flags_t flags) { flags_ = flags; }
 
   /**
    * @brief Get the start time of the pulse.

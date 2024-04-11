@@ -1,9 +1,10 @@
 /**
  * @file I3MCTreeTest.cxx
  * @brief
- * 
- * copyright (C) 2013 the icecube collaboration
- * 
+ *
+ * Copyright (C) 2013 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
  * $Id: I3MCTreeTest.cxx 127835 2015-01-14 23:38:24Z david.schultz $
  * @version $Revision: 127835 $
  * @date $Date: 2015-01-14 16:38:24 -0700 (Wed, 14 Jan 2015) $
@@ -78,7 +79,7 @@ I3MCTree make_tree(){
   high_e_electron.SetEnergy(10.);
   t.append_child(nu_mu, high_e_electron);
 
-  return t;  
+  return t;
 }
 
 using I3MCTreePhysicsLibrary::GetMostEnergeticPrimary;

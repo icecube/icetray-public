@@ -2,8 +2,9 @@
  * @file
  * @brief
  *
- * (c) 2011 Jakob van Santen <vansanten@wisc.edu>
- *          and the IceCube Collaboration <icecube.wisc.edu>
+ * Copyright (c) 2011 Jakob van Santen <vansanten@wisc.edu>
+ * Copyright (c) 2011 the IceCube Collaboration <icecube.wisc.edu>
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  * @version $Revision$

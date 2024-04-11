@@ -1,9 +1,10 @@
 /**
  * @file I3MCTree.cxx
  * @brief Implementation for I3MCTree
- * 
- * copyright (C) 2013 the icecube collaboration
- * 
+ *
+ * Copyright (C) 2013 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
  * $Id$
  * @version $Revision$
  * @date $Date$

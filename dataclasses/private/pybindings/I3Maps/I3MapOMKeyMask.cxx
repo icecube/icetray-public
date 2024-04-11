@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
 
 #include <boost/foreach.hpp>
 #include <dataclasses/I3MapOMKeyMask.h>
@@ -22,7 +25,7 @@ getbits(const I3RecoPulseSeriesMapMask &mask)
 			elements.append(bits.test(i));
 		usermask.append(elements);
 	}
-	
+
 	return usermask;
 }
 
@@ -39,9 +42,9 @@ void register_I3RecoPulseSeriesMapMask()
 	void (I3RecoPulseSeriesMapMask::*set_om_all)(const OMKey&, bool) = &I3RecoPulseSeriesMapMask::Set;
 	void (I3RecoPulseSeriesMapMask::*set_om_by_idx)(const OMKey&, const unsigned, bool) = &I3RecoPulseSeriesMapMask::Set;
 	void (I3RecoPulseSeriesMapMask::*set_om_by_value)(const OMKey&, const I3RecoPulse&, bool) = &I3RecoPulseSeriesMapMask::Set;
-	
+
 	typedef boost::function<bool (const OMKey&, size_t, const I3RecoPulse&)> callback_t;
-	
+
 	bp::scope mask_scope =
 	bp::class_<I3RecoPulseSeriesMapMask, bp::bases<I3FrameObject>,
 	    I3RecoPulseSeriesMapMaskPtr>("I3RecoPulseSeriesMapMask",
@@ -63,7 +66,7 @@ void register_I3RecoPulseSeriesMapMask()
 		.def(bp::self ^= bp::self)
 #ifdef __clang__
 #pragma GCC diagnostic pop
-#endif              
+#endif
 		.def("remove", &I3RecoPulseSeriesMapMask::Remove)
 		.def("has_ancestor", &I3RecoPulseSeriesMapMask::HasAncestor)
 		.def("repoint", &I3RecoPulseSeriesMapMask::Repoint)
@@ -77,8 +80,8 @@ void register_I3RecoPulseSeriesMapMask()
 		.def("set_none", &I3RecoPulseSeriesMapMask::SetNone, "Unset all bits in the mask.")
 		.def(bp::dataclass_suite<I3RecoPulseSeriesMapMask>())
 	;
-	
+
 	bp::def_function<callback_t>("Predicate");
-	
+
 	register_pointer_conversions<I3RecoPulseSeriesMapMask>();
 }

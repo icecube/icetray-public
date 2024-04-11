@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file TriggerKey.h
@@ -41,19 +41,19 @@
     (NO_SUBTYPE)(M18)(M24)(T0)(LASER)(UNKNOWN_SUBTYPE)
 
 /**
- * @brief A small class which is the "key" for the trigger status/config map 
+ * @brief A small class which is the "key" for the trigger status/config map
  * in I3DetectorStatus.
- * 
+ *
  * Triggers are identified by three IDs in the IceCube DAQ system/global trigger.
  * These three IDs make an "unique" identifier that can be used to look up
  * additional trigger information like "prescale" for "MIN_BIAS" triggers
  * or "threshold" and "timeWindow" for "SIMPLE_MULTIPLICITY" triggers.
- * 
+ *
  * Those three pieces are:
  *  - Source ID
  *  - Type ID
  *  - Config ID
- * 
+ *
  * Software triggers from the TWR DAQ system are somewhat special, if processed
  * by the global trigger. A configuration that corresponds to a given source,
  * type and config ID triplet describes how the trigger is processed by
@@ -109,9 +109,9 @@ class TriggerKey
                                // ... I still don't understand for what this is needed for,
                                // ... or why this isn't a value of SourceID (SPASE_1/SPASE_2)
                                // ... (tschmidt)
-    UNKNOWN_TYPE = 180               
+    UNKNOWN_TYPE = 180
   };
-  
+
   /**
    * Enumeration describing how a software trigger was orginally "configured"
    * within the TWR DAQ trigger system.
@@ -138,7 +138,7 @@ class TriggerKey
 
   /**
    * Returns the name of a type ID.
-   * 
+   *
    * @param type The type ID.
    * @return The name.
    */
@@ -163,7 +163,7 @@ class TriggerKey
 
   /**
    * Constructor.
-   * 
+   *
    * @param source Source ID.
    * @param type Type ID.
    * @param subtype Subtype ID (optional; default is NO_SUBTYPE).
@@ -174,7 +174,7 @@ class TriggerKey
 
   /**
    * Constructor.
-   * 
+   *
    * @param source Source ID.
    * @param type Type ID.
    * @param configID Configuration ID.
@@ -188,12 +188,12 @@ class TriggerKey
    * Destructor.
    */
   ~TriggerKey();
-    
+
   std::ostream& Print(std::ostream&) const;
-  
+
   /**
    * Retrieves the source ID.
-   * 
+   *
    * @return Source ID.
    */
   SourceID GetSource() const
@@ -203,7 +203,7 @@ class TriggerKey
 
   /**
    * Returns the name of the source ID.
-   * 
+   *
    * @return The name.
    */
   const char* GetSourceString() const
@@ -213,7 +213,7 @@ class TriggerKey
 
   /**
    * Sets the source ID.
-   * 
+   *
    * @param source Source ID.
    */
   void SetSource(SourceID source)
@@ -223,7 +223,7 @@ class TriggerKey
 
   /**
    * Retrieves the type ID.
-   * 
+   *
    * @return Type ID.
    */
   TypeID GetType() const
@@ -233,7 +233,7 @@ class TriggerKey
 
   /**
    * Returns the name of the type ID.
-   * 
+   *
    * @return The name.
    */
   const char* GetTypeString() const
@@ -243,7 +243,7 @@ class TriggerKey
 
   /**
    * Sets the type ID.
-   * 
+   *
    * @param type Type ID.
    */
   void SetType(TypeID type)
@@ -253,7 +253,7 @@ class TriggerKey
 
   /**
    * Retrieves the subtype ID.
-   * 
+   *
    * @return Subtype ID.
    */
   SubtypeID GetSubtype() const
@@ -263,7 +263,7 @@ class TriggerKey
 
   /**
    * Sets the subtype ID.
-   * 
+   *
    * @param subtype Subtype ID.
    */
   void SetSubtype(SubtypeID subtype)
@@ -273,7 +273,7 @@ class TriggerKey
 
   /**
    * Indicates, if a configuration ID is set.
-   * 
+   *
    * The triplet of (SourceID source, TypeID type, int configID)
    * corresponds to a trigger status/config used in the IceCube DAQ.
    * AMANDA has no such trigger configurations, so that the
@@ -287,14 +287,14 @@ class TriggerKey
 
   /**
    * Retrieves the configuration ID.
-   * 
+   *
    * @return Configuration ID.
    */
   int GetConfigID() const
   {
     if( ! configID_ )
       log_fatal("No configuration ID set.");
-    
+
     return configID_.get();
   }
 
@@ -302,7 +302,7 @@ class TriggerKey
   {
     return configID_ ;
   }
- 
+
   /**
    * Resets the configuration ID.
    */
@@ -313,7 +313,7 @@ class TriggerKey
 
   /**
    * Sets the configuration ID.
-   * 
+   *
    * @param configID Configuration ID.
    */
   void SetConfigID(int configID)
@@ -323,7 +323,7 @@ class TriggerKey
 
   /**
    * Equality operator.
-   * 
+   *
    * @param rhs The trigger key to compare this one to.
    * @return true if source, type, subtype and configuration ID of the two
    * trigger keys match.
@@ -340,7 +340,7 @@ class TriggerKey
 
   /**
    * Inequality operator.
-   * 
+   *
    * @param rhs The trigger key to compare this one to.
    * @return false if source, type, subtype and configuration ID of the two
    * trigger keys are different.

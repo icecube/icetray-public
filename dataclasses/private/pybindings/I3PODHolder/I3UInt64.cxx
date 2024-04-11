@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
 
 #include "pybindings.hpp"
 #include <icetray/I3PODHolder.h>
@@ -7,7 +10,7 @@
 namespace bp = boost::python;
 typedef I3PODHolder<uint64_t> I3UInt64;
 
-static std::string 
+static std::string
 I3UInt64_prettyprint(const I3UInt64& d)
 {
   std::ostringstream oss;
@@ -34,7 +37,7 @@ void register_I3UInt64() {
       .def(bp::operator_int_suite<I3UInt64>())
       .def(bp::operator_float_suite<I3UInt64>())
       .def("__nonzero__", I3UInt64_bool)
-      .def("__bool__", I3UInt64_bool)      
+      .def("__bool__", I3UInt64_bool)
       .def( freeze() )
       ;
 

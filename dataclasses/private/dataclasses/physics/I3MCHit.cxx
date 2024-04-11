@@ -1,10 +1,14 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <icetray/serialization.h>
 #include <dataclasses/physics/I3MCHit.h>
 #include <dataclasses/physics/I3Particle.h>
 I3MCHit::~I3MCHit() { }
 
-void I3MCHit::SetParticleID(const I3Particle& p) { 
-  particleID_ = p.GetMinorID(); 
+void I3MCHit::SetParticleID(const I3Particle& p) {
+  particleID_ = p.GetMinorID();
   particleMajorID_ = p.GetMajorID();
 }
 
@@ -28,12 +32,12 @@ void I3MCHit::load (Archive &ar, const unsigned version)
 {
   if (version>i3mchit_version_)
     log_fatal("Attempting to read version %u from file but running version %u of I3MCHit class.",version,i3mchit_version_);
-  
+
   ar & make_nvp("time",time_);
   ar & make_nvp("hitID",hitID_);
   if(version>2){
     ar & make_nvp("NPE", npe_);
-    ar & make_nvp("Charge", charge_);    
+    ar & make_nvp("Charge", charge_);
   }else{
     double weight;
     ar & make_nvp("Weight", weight);

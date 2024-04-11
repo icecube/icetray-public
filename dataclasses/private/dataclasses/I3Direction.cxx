@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
 
 // $Id$
 
@@ -8,8 +11,8 @@
 #include <cmath>
 #include <icetray/I3Units.h>
 
-template <class Archive> 
-void 
+template <class Archive>
+void
 I3Direction::serialize(Archive& ar, unsigned version)
 {
   if (version>i3direction_version_)

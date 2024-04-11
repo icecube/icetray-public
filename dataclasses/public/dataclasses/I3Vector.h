@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2006
-    the icecube collaboration
+    Copyright  (C) 2006 the icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     @version $Id$
     @date    $Date$
 */
@@ -23,14 +23,14 @@
 
 template <typename T>
 struct I3Vector : public std::vector<T>, public I3FrameObject
-{ 
+{
   typedef std::vector<T> base_t;
 
   I3Vector() { }
-  
-  I3Vector(typename base_t::size_type s, const T& value) 
+
+  I3Vector(typename base_t::size_type s, const T& value)
     : base_t(s, value) { }
-    
+
   explicit I3Vector(typename base_t::size_type n) : base_t(n) { }
 
   I3Vector(const I3Vector& rhs) : base_t(rhs) { }
@@ -50,12 +50,12 @@ struct I3Vector : public std::vector<T>, public I3FrameObject
     ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
     ar & make_nvp("vector", base_object< std::vector<T> >(*this));
   }
-  
+
   std::ostream& Print(std::ostream& os) const override{
     constexpr bool can_print=has_operator::insertion<std::ostream&,T>::value;
     return(PrintImpl(os,std::integral_constant<bool,can_print>()));
   }
-  
+
 private:
   std::ostream& PrintImpl(std::ostream& os, std::true_type can_print) const{
     os << '[';
@@ -76,7 +76,7 @@ private:
     return os;
   }
 };
-  
+
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const I3Vector<T> v){
   return(v.Print(os));
@@ -84,7 +84,7 @@ std::ostream& operator<<(std::ostream& os, const I3Vector<T> v){
 
 // important to use the raw types here.  Don't do I3Vector<int64_t>, as that
 // will be I3Vector<long> some places and I3Vector<long long> others, and then
-// dynamic casting breaks since the two have different typeids. 
+// dynamic casting breaks since the two have different typeids.
 typedef I3Vector<bool> I3VectorBool;
 typedef I3Vector<char> I3VectorChar;
 typedef I3Vector<short> I3VectorShort;
@@ -130,7 +130,7 @@ I3_POINTER_TYPEDEFS(I3VectorI3Position);
 
 // inconsistent... if you take this out, though, you have to be sure
 // that you add it to I3Vector.cxx so that I3VectorUnsignedInt is
-// always serialized with that name.  
+// always serialized with that name.
 typedef I3Vector<unsigned int> I3VectorUnsignedInt;
 I3_POINTER_TYPEDEFS(I3VectorUnsignedInt);
 

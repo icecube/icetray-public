@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import sys, os
 infiles = sys.argv[1:]
 
@@ -16,7 +20,7 @@ class LinearTreeTest(unittest.TestCase):
         self.re_mctree = self.frame['I3LinearizedMCTree']
     def testSize(self):
         self.assertEqual(len(self.mctree), len(self.re_mctree))
-    
+
     def assertEquivalent(self, d1, d2, tol=None):
         """One-stop shop for asserting equality to within a tolerance"""
         if math.isnan(d1) and math.isnan(d2):
@@ -33,22 +37,22 @@ class LinearTreeTest(unittest.TestCase):
         self.assertEquivalent(p1.pos.y, p2.pos.y, 5e-1)
         self.assertEquivalent(p1.pos.z, p2.pos.z, 5e-1)
         self.assertEquivalent(p1.time, p2.time, 1e-2)
-        
+
         self.assertEquivalent(p1.energy, p2.energy, 1e-2)
         self.assertEquivalent(p1.length, p2.length)
         self.assertEquivalent(p1.speed, p2.speed)
-        
+
         self.assertEqual(p1.type, p2.type)
         self.assertEqual(p1.location_type, p2.location_type)
         self.assertEqual(p1.shape, p2.shape)
         self.assertEqual(p1.fit_status, p2.fit_status)
-        
+
         self.assertEqual(p1.major_id, p2.major_id)
         self.assertEqual(p1.minor_id, p2.minor_id)
-        
-        
+
+
     def testEquivalence(self):
-        
+
         for i, (raw, reco) in enumerate(zip(self.mctree, self.re_mctree)):
             try:
                 self.assertEqualParticle(raw, reco)
@@ -59,8 +63,8 @@ class LinearTreeTest(unittest.TestCase):
                 print(self.mctree)
                 print(self.re_mctree)
                 raise
-            
-            
+
+
 from icecube.icetray import I3Tray
 
 # first round: convert and serialize
@@ -81,7 +85,7 @@ tray.Add(clone, Streams=[icetray.I3Frame.DAQ])
 tray.AddModule('I3Writer', 'writer',
     Streams=[icetray.I3Frame.DAQ, icetray.I3Frame.Physics],
     # DropOrphanStreams=[icetray.I3Frame.DAQ],
-    filename=outfile)    
+    filename=outfile)
 
 
 tray.Execute(100)
@@ -93,7 +97,7 @@ tray.AddModule('I3Reader', 'reader', filenamelist=[outfile])
 
 tray.AddModule(icetray.I3TestModuleFactory(LinearTreeTest), 'testy',
     Streams=[icetray.I3Frame.DAQ])
-    
+
 tray.AddModule('Delete', 'kill_mctree', Keys=['I3MCTree'])
 
 outfile = 'i3linearizedmctree_compact.i3.bz2'
@@ -101,7 +105,7 @@ outfiles.append(outfile)
 tray.AddModule('I3Writer', 'writer',
     Streams=[icetray.I3Frame.DAQ, icetray.I3Frame.Physics],
     # DropOrphanStreams=[icetray.I3Frame.DAQ],
-    filename=outfile)    
+    filename=outfile)
 
 tray.Execute(100)
 

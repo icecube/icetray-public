@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2004
-    the icecube collaboration
+    Copyright  (C) 2004 the icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     $Id$
 
 */
@@ -27,9 +27,9 @@ TEST_GROUP(I3TriggerStatusTest);
 TEST(TriggerStatusSetGet)
 {
 
-  I3TriggerStatus myts; 
+  I3TriggerStatus myts;
 
-  map<I3TriggerStatus::Subdetector, I3TriggerReadoutConfig> & readoutconfig = 
+  map<I3TriggerStatus::Subdetector, I3TriggerReadoutConfig> & readoutconfig =
     myts.GetReadoutSettings();
 
   I3TriggerReadoutConfig myreadout;
@@ -38,10 +38,10 @@ TEST(TriggerStatusSetGet)
   myreadout.readoutTimeOffset = -1000.0*I3Units::ns;
 
   readoutconfig[I3TriggerStatus::INICE] = myreadout;
-  const map<I3TriggerStatus::Subdetector, I3TriggerReadoutConfig> & testconfig = 
+  const map<I3TriggerStatus::Subdetector, I3TriggerReadoutConfig> & testconfig =
     myts.GetReadoutSettings();
   I3TriggerReadoutConfig mytest = testconfig.find(I3TriggerStatus::INICE)->second;
-  
+
   ENSURE_DISTANCE(5000.0, mytest.readoutTimeMinus/I3Units::ns, 0.01,
 		  "Readout configs do not match.");
   ENSURE_DISTANCE(6000.0, mytest.readoutTimePlus/I3Units::ns, 0.01,
@@ -54,9 +54,9 @@ TEST(TriggerStatusSetGet)
 TEST(TriggerStatusSerialize)
 {
 
-  I3TriggerStatus myts; 
+  I3TriggerStatus myts;
 
-  map<I3TriggerStatus::Subdetector, I3TriggerReadoutConfig> & readoutconfig = 
+  map<I3TriggerStatus::Subdetector, I3TriggerReadoutConfig> & readoutconfig =
     myts.GetReadoutSettings();
 
   I3TriggerReadoutConfig myreadout;
@@ -72,7 +72,7 @@ TEST(TriggerStatusSerialize)
                 icecube::archive::portable_binary_oarchive outAr( oss );
                 outAr & make_nvp("Test", myts);;
         }
-  
+
   // Deserialize a second I3DOMLaunch from the serialized stream for comparison
         I3TriggerStatus mydecode;
         std::istringstream iss( oss.str(), std::istringstream::binary );
@@ -83,10 +83,10 @@ TEST(TriggerStatusSerialize)
 
 
 
-  const map<I3TriggerStatus::Subdetector, I3TriggerReadoutConfig>& testconfig = 
+  const map<I3TriggerStatus::Subdetector, I3TriggerReadoutConfig>& testconfig =
     mydecode.GetReadoutSettings();
   I3TriggerReadoutConfig mytest = testconfig.find(I3TriggerStatus::INICE)->second;
-  
+
   ENSURE_DISTANCE(5000.0, mytest.readoutTimeMinus/I3Units::ns, 0.01,
 		  "Readout configs do not match.");
   ENSURE_DISTANCE(6000.0, mytest.readoutTimePlus/I3Units::ns, 0.01,
@@ -99,13 +99,13 @@ TEST(TriggerStatusSerialize)
 TEST(TriggerStatusSettingsTest)
 {
 
-  I3TriggerStatus myts; 
+  I3TriggerStatus myts;
 
   std::string good_int_key("good_int");
   int int_value(42);
   myts.SetTriggerConfigValue(good_int_key,int_value);
 
-  boost::optional<int> int_test_value; 
+  boost::optional<int> int_test_value;
   myts.GetTriggerConfigValue(good_int_key, int_test_value);
   ENSURE( int_test_value && int_value == int_test_value,
 	  "Get/Set not working properly for ints." );
@@ -203,7 +203,7 @@ TEST(ConvertStrings)
 TEST(SettingsFromString)
 {
 
-  I3TriggerStatus myts; 
+  I3TriggerStatus myts;
 
   myts.SetTriggerConfigValue("good_float","0.5");
   myts.SetTriggerConfigValue("good_exp_float","3.14e-3");
@@ -219,16 +219,16 @@ TEST(SettingsFromString)
   ENSURE(str_value == std::string("0.5"));
 
   boost::optional<float> float_value;
-  myts.GetTriggerConfigValue("good_float", float_value);  
+  myts.GetTriggerConfigValue("good_float", float_value);
   ENSURE((bool)float_value);
   ENSURE_DISTANCE( float_value.get(), 0.5, 1e-9 );
 
   ENSURE((bool)float_value);
-  myts.GetTriggerConfigValue("good_exp_float", float_value);  
+  myts.GetTriggerConfigValue("good_exp_float", float_value);
   ENSURE_DISTANCE( float_value.get(), 3.14e-3, 1e-9 );
 
   ENSURE((bool)float_value);
-  myts.GetTriggerConfigValue("good_Exp_float", float_value);  
+  myts.GetTriggerConfigValue("good_Exp_float", float_value);
   ENSURE_DISTANCE( float_value.get(), 3.14e-3, 1e-9 );
 
   ENSURE((bool)float_value);
@@ -245,19 +245,19 @@ TEST(SettingsFromString)
 
   myts.GetTriggerConfigValue("bad_int", int_value);
   ENSURE(!int_value);
-  
+
   myts.GetTriggerConfigValue("good_float", int_value);
   ENSURE(!int_value);
 
   myts.GetTriggerConfigValue("bad_float", int_value);
   ENSURE(!int_value);
-  
+
 }
 
 TEST(SettingsFromStringRequired)
 {
 
-  I3TriggerStatus myts; 
+  I3TriggerStatus myts;
 
   myts.SetTriggerConfigValue("good_float","0.5");
   myts.SetTriggerConfigValue("good_exp_float","3.14e-3");
@@ -273,13 +273,13 @@ TEST(SettingsFromStringRequired)
   ENSURE(str_value == std::string("0.5"));
 
   float float_value(NAN);
-  myts.GetTriggerConfigValue("good_float", float_value);  
+  myts.GetTriggerConfigValue("good_float", float_value);
   ENSURE_DISTANCE( float_value, 0.5, 1e-9 );
 
-  myts.GetTriggerConfigValue("good_exp_float", float_value);  
+  myts.GetTriggerConfigValue("good_exp_float", float_value);
   ENSURE_DISTANCE( float_value, 3.14e-3, 1e-9 );
 
-  myts.GetTriggerConfigValue("good_Exp_float", float_value);  
+  myts.GetTriggerConfigValue("good_Exp_float", float_value);
   ENSURE_DISTANCE( float_value, 3.14e-3, 1e-9 );
 
   int int_value;
@@ -291,7 +291,7 @@ TEST(SettingsFromStringRequired)
 
   // the following are required but the conversion will
   // fail, so they should throw.
-  EXPECT_THROW(myts.GetTriggerConfigValue("bad_int", int_value), "This should throw."); 
+  EXPECT_THROW(myts.GetTriggerConfigValue("bad_int", int_value), "This should throw.");
   EXPECT_THROW(myts.GetTriggerConfigValue("good_float", int_value), "This should throw.");
   EXPECT_THROW(myts.GetTriggerConfigValue("bad_float", float_value), "This should throw.");
   EXPECT_THROW(myts.GetTriggerConfigValue("bad_float", int_value), "This should throw.");

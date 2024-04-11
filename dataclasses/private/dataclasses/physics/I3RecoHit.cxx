@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <icetray/serialization.h>
 #include <dataclasses/physics/I3RecoHit.h>
 #include <dataclasses/external/CompareFloatingPoint.h>
@@ -5,7 +9,7 @@
 I3RecoHit::~I3RecoHit() {}
 
 template <class Archive>
-void 
+void
 I3RecoHit::serialize(Archive& ar, unsigned version){
   if (version>i3recohit_version_)
     log_fatal("Attempting to read version %u from file but running version %u of I3RecoHit class.",version,i3recohit_version_);

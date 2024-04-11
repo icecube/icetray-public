@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2004
-    the icecube collaboration
+    Copyright  (C) 2004 the icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     $Id$
 
     @version $Revision$
@@ -37,20 +37,20 @@ void createTree(I3Tree<int>& t)
   t.append_child(top, 3);
   top = t.insert(t.begin(), 4);
   t.append_child(top, 5);
-  t.append_child(top, 6);  
+  t.append_child(top, 6);
 }
 
 TEST(a_insert_and_append)
 {
   I3Tree<int> t;
-  
+
   ENSURE(t.empty());
   ENSURE_EQUAL(0, t.size());
   ENSURE(!t.is_valid(t.begin()));
   ENSURE(t.begin() == t.end());
 
   I3Tree<int>::iterator iter1 = t.insert(t.begin(), 1);
-  
+
   ENSURE(!t.empty());
   ENSURE_EQUAL(1, t.size())
   ENSURE(t.begin() != t.end());
@@ -60,7 +60,7 @@ TEST(a_insert_and_append)
   ENSURE_EQUAL(1, *iter1);
   ENSURE_EQUAL(0u, iter1.number_of_children());
   ENSURE_EQUAL(0u, t.number_of_siblings(iter1));
-  
+
   I3Tree<int>::iterator iter2 = t.append_child(iter1, 2);
 
   ENSURE_EQUAL(2, t.size())
@@ -71,7 +71,7 @@ TEST(a_insert_and_append)
   ENSURE_EQUAL(0u, iter2.number_of_children());
   ENSURE_EQUAL(0u, t.number_of_siblings(iter2));
   ENSURE_EQUAL(2, *(t.child(iter1, 0)));
-  
+
   I3Tree<int>::iterator iter3 = t.append_child(iter1, 3);
 
   ENSURE_EQUAL(3, t.size())
@@ -83,7 +83,7 @@ TEST(a_insert_and_append)
   ENSURE_EQUAL(1u, t.number_of_siblings(iter2));
   ENSURE_EQUAL(0u, t.number_of_siblings(iter3));
   ENSURE_EQUAL(3, *(t.child(iter1, 1)));
-  
+
   I3Tree<int>::iterator iter4 = t.append_child(iter1, 4);
 
   ENSURE_EQUAL(4, t.size())
@@ -105,8 +105,8 @@ TEST(b_pre_order_iterator)
   vector<int> v;
   vector<int> vt(testData_pre_order_iterator, testData_pre_order_iterator + 6);
 
-  createTree(t);  
-  
+  createTree(t);
+
   iter = t.begin();
   while(iter != t.end())
   {
@@ -123,8 +123,8 @@ TEST(c_post_order_iterator)
   vector<int> v;
   vector<int> vt(testData_post_order_iterator, testData_post_order_iterator + 6);
 
-  createTree(t);  
-  
+  createTree(t);
+
   iter = t.begin_post();
   while(iter != t.end())
   {
@@ -141,8 +141,8 @@ TEST(d_sibling_iterator)
   vector<int> v;
   vector<int> vt(testData_sibling_iterator, testData_sibling_iterator + 2);
 
-  createTree(t);  
-  
+  createTree(t);
+
   iter = t.begin(t.begin());
   while(iter != t.end(t.begin()))
   {
@@ -159,8 +159,8 @@ TEST(e_skip_children)
   vector<int> v;
   vector<int> vt(testData_skip_children, testData_skip_children + 2);
 
-  createTree(t);  
-  
+  createTree(t);
+
   iter = t.begin();
   while(iter != t.end())
   {
@@ -178,14 +178,14 @@ TEST(f_traversal)
   vector<int> v;
   vector<int> vt(testData_traversal, testData_traversal + 3);
 
-  createTree(t);  
-  
+  createTree(t);
+
   iter = t.begin();
   v.push_back(*iter);
   iter += 3;
   v.push_back(*iter);
   iter -= 2;
-  v.push_back(*iter);  
+  v.push_back(*iter);
   ENSURE(v == vt);
 }
 
@@ -196,21 +196,21 @@ TEST(g_equal_and_flatten)
   I3Tree<int> t3;
   vector<int> v3;
   vector<int> vt(testData_flatten, testData_flatten + 4);
-  
+
   createTree(t1);
   createTree(t2);
   createTree(t3);
-    
+
   ENSURE(equal(t1.begin(), t1.end(), t2.begin()));
   ENSURE(t1.equal(t1.begin(), t1.end(), t2.begin()));
   ENSURE(equal(t1.begin(), t1.end(), t3.begin()));
   ENSURE(t1.equal(t1.begin(), t1.end(), t3.begin()));
-  
+
   *(t2.begin()) = 111;
-  
+
   ENSURE(!equal(t1.begin(), t1.end(), t2.begin()));
   ENSURE(!t1.equal(t1.begin(), t1.end(), t2.begin()));
-  
+
   t3.flatten(t3.begin());
 
   ENSURE(equal(t1.begin(), t1.end(), t3.begin()));
@@ -222,7 +222,7 @@ TEST(g_equal_and_flatten)
     v3.push_back(*iter);
     ++iter;
   }
-  ENSURE(v3 == vt);  
+  ENSURE(v3 == vt);
 }
 
 TEST(h_clear_and_erase)
@@ -231,16 +231,16 @@ TEST(h_clear_and_erase)
   I3Tree<int> t2;
   I3Tree<int>::pre_order_iterator iter;
   I3Tree<int>::sibling_iterator jter;
-  
+
   createTree(t1);
   createTree(t2);
-    
+
   ENSURE(!t1.empty());
   ENSURE(!t2.empty());
-  
+
   t1.clear();
   t2.erase_children(t2.begin());
-  
+
   ENSURE(t1.empty());
   ENSURE_EQUAL(4, t2.size());
   iter = t2.begin();
@@ -252,9 +252,9 @@ TEST(h_clear_and_erase)
   ENSURE_EQUAL(2, *jter);
   ++jter;
   ENSURE_EQUAL(3, *jter);
-  
+
   t2.erase(iter);
-  
+
   ENSURE_EQUAL(1, t2.size());
   ENSURE_EQUAL(4, *(t2.begin()));
 }
@@ -266,8 +266,8 @@ TEST(i_swap)
   vector<int> v;
   vector<int> vt(testData_swap, testData_swap + 2);
 
-  createTree(t);  
-  
+  createTree(t);
+
   t.swap(t.begin());
   iter = t.begin();
   while(iter != t.end())
@@ -289,16 +289,16 @@ TEST(l_merge)
   createTree(t1);
   createTree(t2);
   createTree(t3);
-  
+
   ENSURE(t1.equal(t1.begin(), t1.end(), t2.begin()));
-  
+
   t2.erase(t2.begin());
   ENSURE_EQUAL(3, t2.size());
   iter = t2.begin();
   iter += 2;
   t2.append_child(iter, 7);
   t2.append_child(iter, 8);
-  
+
   t1.merge(t1.begin(), t1.end(), t2.begin(), t2.end());
 
   ENSURE_EQUAL(6, t3.size());
@@ -317,42 +317,42 @@ TEST(m_serialization_of_a_full_tree_using_an_xml_archive)
   I3Tree<int> t2;
 
   createTree(t1);
-  
+
   ostringstream os;
   {
     icecube::archive::xml_oarchive oa(os);
     oa << icecube::serialization::make_nvp("mytree", t1);
   }
-  
+
   istringstream is;
   is.str(os.str());
   {
     icecube::archive::xml_iarchive ia(is);
     ia >> icecube::serialization::make_nvp("mytree", t2);
   }
-  
+
   ENSURE_EQUAL(t1.size(), t2.size());
-  ENSURE(equal(t1.begin(), t1.end(), t2.begin()));    
-  ENSURE(t1.equal(t1.begin(), t1.end(), t2.begin()));    
+  ENSURE(equal(t1.begin(), t1.end(), t2.begin()));
+  ENSURE(t1.equal(t1.begin(), t1.end(), t2.begin()));
 }
 
 TEST(n_nontrivial_constructors_and_assignment)
 {
   I3Tree<int> t1;
-  
+
   createTree(t1);
-  
+
   I3Tree<int> t2(*(t1.begin()));
   ENSURE_EQUAL(*(t1.begin()), *(t2.begin()));
-  
+
   t2 = t1;
   ENSURE(equal(t1.begin(), t1.end(), t2.begin()));
   ENSURE(t1.equal(t1.begin(), t1.end(), t2.begin()));
-  
+
   I3Tree<int> t3(t1);
   ENSURE(equal(t1.begin(), t1.end(), t3.begin()));
   ENSURE(t1.equal(t1.begin(), t1.end(), t3.begin()));
-  
+
   I3Tree<int> t4(t1.begin());
   ENSURE(t1.equal_subtree(t1.begin(), t4.begin()));
 }

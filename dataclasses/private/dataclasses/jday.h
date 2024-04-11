@@ -1,6 +1,7 @@
 /*
  *	Copyright (c) 1986-2002, Hiram Clawson - curator@hiram.ws.NoSpam
  *	All rights reserved.
+ *	SPDX-License-Identifier: BSD-3-Clause
  *
  *	Redistribution and use in source and binary forms, with or
  *	without modification, are permitted provided that the following
@@ -18,7 +19,7 @@
  *		Neither name of The Museum of Hiram nor the names of
  *		its contributors may be used to endorse or promote products
  *		derived from this software without specific prior
- *		written permission. 
+ *		written permission.
  *
  *	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
  *	CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES,
@@ -31,7 +32,7 @@
  *	HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
  *	STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  *	IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
- *	THE POSSIBILITY OF SUCH DAMAGE. 
+ *	THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*
  *	jday.h: contains definitions of structures used for time

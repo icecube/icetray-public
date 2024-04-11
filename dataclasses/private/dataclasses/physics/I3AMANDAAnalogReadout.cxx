@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2005
- * the IceCube Collaboration
+ * Copyright  (C) 2005 the IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file dataclasses/private/dataclasses/physics/I3AMANDAAnalogReadout.cxx
@@ -18,8 +18,8 @@ using namespace std;
 
 I3AMANDAAnalogReadout::~I3AMANDAAnalogReadout() {}
 
-template <class Archive> 
-void 
+template <class Archive>
+void
 I3AMANDAAnalogReadout::save(Archive& ar, unsigned version) const
 {
   if (version>i3amandaanalogreadout_version_)
@@ -34,8 +34,8 @@ I3AMANDAAnalogReadout::save(Archive& ar, unsigned version) const
   ar & make_nvp("Calib", is_calib_);
 }
 
-template <class Archive> 
-void 
+template <class Archive>
+void
 I3AMANDAAnalogReadout::load(Archive& ar, unsigned version)
 {
   if (version>i3amandaanalogreadout_version_)
@@ -48,7 +48,7 @@ I3AMANDAAnalogReadout::load(Archive& ar, unsigned version)
   ar & make_nvp("ADC", adc_ );
   ar & make_nvp("Overflow", overflow_ );
   ar & make_nvp("Calib", is_calib_ );
-    
+
   processFirstLE_ = true;
   processTOTs_ = true;
 }
@@ -83,7 +83,7 @@ double I3AMANDAAnalogReadout::GetFirstLE() const
     firstLE_ = tmp[0];
     processFirstLE_ = false;
   }
-  
+
   return firstLE_;
 }
 
@@ -100,7 +100,7 @@ const vector<double>& I3AMANDAAnalogReadout::GetTOTs() const
     transform(TEs_.begin(), TEs_.end(), LEs_.begin(), TOTs_.begin(), minus<double>());
     processTOTs_ = false;
   }
-                                                                                                                            
+
   return TOTs_;
 }
 

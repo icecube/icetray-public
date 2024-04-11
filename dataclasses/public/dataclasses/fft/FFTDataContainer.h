@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 ////////////////////////////////////////////////////////////
 //Implemented by: Alan Coleman
 //Base on FFTDataContainer.h in Pierre Auger's Offline Framework)

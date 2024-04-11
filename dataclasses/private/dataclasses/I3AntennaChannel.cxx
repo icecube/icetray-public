@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <dataclasses/I3AntennaChannel.h>
 #include <dataclasses/fft/FFTHilbertEnvelope.h>
 
@@ -76,7 +80,7 @@ I3AntennaChannel::serialize(Archive& ar, unsigned version) {
 
 std::ostream& I3AntennaChannel::Print(std::ostream& os) const {
   UpdateValues();
-  os << "[I3AntennaChannel IsUpToDate: " << (isUpToDate_ ? "True" : "False") << '\n' 
+  os << "[I3AntennaChannel IsUpToDate: " << (isUpToDate_ ? "True" : "False") << '\n'
      << "                MaxAmplitude: " << maxAmplitude_ / (I3Units::volt * 1.e-3) << "[mV]" << '\n'
      << "               TimeAtMaximum: " << timeAtMax_ / I3Units::nanosecond << "[ns]";
   return os;

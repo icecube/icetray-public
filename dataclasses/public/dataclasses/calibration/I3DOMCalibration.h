@@ -2,8 +2,8 @@
  *
  * Definition of I3DOMCalibration class
  *
- * copyright  (C) 2004
- * the IceCube collaboration
+ * Copyright  (C) 2004 the IceCube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version $Id$
  * @file I3DOMCalibration.h
  * @date $Date$
@@ -34,24 +34,24 @@ static const unsigned tauparam_version_ = 0;
 static const unsigned SPEChargeDistribution_version_ = 2;
 
 /**
- * @brief A struct to hold a linear fit 
+ * @brief A struct to hold a linear fit
  * A simple struct to define a linear fit:  intercept + slope*x
  */
 struct LinearFit
 {
   double slope;
   double intercept;
-  
+
   bool operator==(const LinearFit& rhs) const
   {
-    return (CompareFloatingPoint::Compare_NanEqual(slope,rhs.slope) && 
+    return (CompareFloatingPoint::Compare_NanEqual(slope,rhs.slope) &&
         CompareFloatingPoint::Compare_NanEqual(intercept,rhs.intercept));
   }
   bool operator!=(const LinearFit& rhs) const
   {
     return !operator==(rhs);
-  }  
-    
+  }
+
   template <class Archive>
   void serialize(Archive& ar, unsigned version);
   LinearFit()
@@ -72,7 +72,7 @@ struct QuadraticFit
   double quadFitA;
   double quadFitB;
   double quadFitC;
-    
+
   bool operator==(const QuadraticFit& rhs) const
   {
     return (CompareFloatingPoint::Compare_NanEqual(quadFitA,rhs.quadFitA) &&
@@ -82,7 +82,7 @@ struct QuadraticFit
   bool operator!=(const QuadraticFit& rhs) const
   {
     return !operator==(rhs);
-  }  
+  }
 
   template <class Archive>
   void serialize(Archive& ar, unsigned version);
@@ -102,9 +102,9 @@ I3_CLASS_VERSION(QuadraticFit, quadraticfit_version_);
  *  P(q) = exp1_amp * exp(-q/exp1_width) +
  *         exp2_amp * exp(-q / exp2_width) +
  *         gaus_amp * np.exp(-0.5*(q - gaus_mean)**2/gaus_width**2))
- * 
- * The Compensation Factor is simply the mean charge of the TA0003 distribution divided by the 
- * average SPE Template charge. 
+ *
+ * The Compensation Factor is simply the mean charge of the TA0003 distribution divided by the
+ * average SPE Template charge.
  * CF = (dintt_0^inf q f(q)_ta0003 dq) / (dintt_0^inf q f(q)_spe dq)
  * Given the current SPE Templates, this factor is rougly 1.3
  */
@@ -178,7 +178,7 @@ struct SPEChargeDistribution
 		   !std::isnan(compensation_factor) &&
 		   !std::isnan(SLC_gaus_mean));
   }
-  
+
   ///Evaluate the mean and standard deviation of the SPE template distribution
   double Mean() const
   {
@@ -233,15 +233,15 @@ struct SPEChargeDistribution
   {
     return !operator==(rhs);
   }
-  
+
   double operator()(double q) const{
-    double y = ComputeResidual(q); 
+    double y = ComputeResidual(q);
     double e=(q-gaus_mean)/gaus_width;
     return y*(exp1_amp*exp(-q/exp1_width)
               + exp2_amp*exp(-q/exp2_width)
               + gaus_amp*exp(-.5*e*e));
   }
-  
+
 private:
   double ComputeMeanCharge() const;
   double ComputeChargeVariance() const;
@@ -274,22 +274,22 @@ struct TauParam
   double P4;
   double P5;
   double TauFrac;
-    
+
   template <class Archive>
   void serialize(Archive& ar, unsigned version);
-  
+
   TauParam():
   P0(NAN),P1(NAN),
   P2(NAN),P3(NAN),
   P4(NAN),P5(NAN),
   TauFrac(NAN){}
-  
+
   TauParam(double p0, double p1, double p2, double p3, double p4, double p5, double tauFrac):
   P0(p0),P1(p1),
   P2(p2),P3(p3),
   P4(p4),P5(p5),
   TauFrac(tauFrac){}
-  
+
   bool operator==(const TauParam& rhs) const
   {
     return (CompareFloatingPoint::Compare_NanEqual(P0,rhs.P0) &&
@@ -303,7 +303,7 @@ struct TauParam
   bool operator!=(const TauParam& rhs) const
   {
     return !operator==(rhs);
-  }  
+  }
 };
 
 I3_CLASS_VERSION(TauParam, tauparam_version_);
@@ -311,26 +311,26 @@ I3_CLASS_VERSION(TauParam, tauparam_version_);
 struct SPETemplate {
   double c, x0, b1, b2;
   SPETemplate():c(NAN), x0(NAN), b1(NAN), b2(NAN){};
-    
+
   SPETemplate(double c, double x0, double b1, double b2):
   c(c), x0(x0), b1(b1), b2(b2){};
 
   bool operator==(const SPETemplate& rhs) const {
     return (CompareFloatingPoint::Compare_NanEqual(c, rhs.c) &&
 	    CompareFloatingPoint::Compare_NanEqual(x0, rhs.x0) &&
-	    CompareFloatingPoint::Compare_NanEqual(b1, rhs.b1) && 
+	    CompareFloatingPoint::Compare_NanEqual(b1, rhs.b1) &&
 	    CompareFloatingPoint::Compare_NanEqual(b2, rhs.b2));
   }
   bool operator!=(const SPETemplate& rhs) const
   {
     return !operator==(rhs);
-  }  
+  }
 
 };
 
 /**
  * @brief Class that stores the calibration information for a DOM
- * 
+ *
  * This class stores the information from the Calibration stream.
  *
  * ATTENTION:
@@ -344,20 +344,20 @@ struct SPETemplate {
  * @author Tom McCauley <tpmccauley@lbl.gov>
  * @author Erik Blaufuss \<blaufuss at icecube umd edu\>
  *
- * 
+ *
  */
 
 class I3DOMCalibration {
-  
+
  public:
   I3DOMCalibration();
   ~I3DOMCalibration();
-  
+
   /**
    * Get MB Temperature at time of calibration
    */
   double GetTemperature() const { return temperature_; }
-  
+
   /**
    * Set MB Temperature at time of calibration
    */
@@ -372,7 +372,7 @@ class I3DOMCalibration {
    * Set DOMCAL measured PMT transit time
    */
   void SetTransitTime(LinearFit pmtTransitTime) { pmtTransitTime_ = pmtTransitTime; }
-    
+
   /**
    * Get DOMCAL measured PMT gain/HV relation:  log(10)Gain = slope*log(10)V + intercept
    */
@@ -382,7 +382,7 @@ class I3DOMCalibration {
    * Set DOMCAL measured PMT gain/HV relation
    */
   void SetHVGainFit(LinearFit hvGainRelation) { hvGainRelation_ = hvGainRelation; }
-    
+
 
   /**
    * Get FADC Gain- relation between measured counts and mV.
@@ -407,17 +407,17 @@ class I3DOMCalibration {
    *  Get the FADC intrinsic time offset (in units of time)
    */
   double GetFADCDeltaT() const { return fadcDeltaT_; }
-  
+
   /**
    *  Get the Front End impedance (units are resistance)
    */
   double GetFrontEndImpedance() const { return frontEndImpedance_; }
-    
+
   /**
    * Get parameters for droop correction on the baseline
    */
   TauParam GetTauParameters() const { return tauparameters_; }
-  
+
   /**
    * Set parameters for droop correction on the baseline
    */
@@ -444,7 +444,7 @@ class I3DOMCalibration {
     {
       fadcBaselineFit_ = basefit;
     }
-    
+
   void SetFADCDeltaT(double deltaT)
     {
       fadcDeltaT_ = deltaT;
@@ -454,7 +454,7 @@ class I3DOMCalibration {
     {
       frontEndImpedance_ = feImped;
     }
-    
+
   /**
    * Get gain and error on gain for ATWD by channel
    */
@@ -474,14 +474,14 @@ class I3DOMCalibration {
   void SetATWDDeltaT(unsigned int chip, double deltat);
 
   /**
-   * Get fit parameters from domcal file \<atwdfreq\> which is 
-   * the sampling rate calibration for each ATWD chip 0 or 1 
+   * Get fit parameters from domcal file \<atwdfreq\> which is
+   * the sampling rate calibration for each ATWD chip 0 or 1
    */
   QuadraticFit GetATWDFreqFit (unsigned int chip) const;
-  
- 
+
+
   /**
-   * Set parameters for sampling rate calibration for each 
+   * Set parameters for sampling rate calibration for each
    * ATWD chip as a function of the trigger_bias DAC setting
    */
   void SetATWDFreqFit(unsigned int chip, QuadraticFit fitParams);
@@ -511,7 +511,7 @@ class I3DOMCalibration {
   {
     return domcalVersion_;
   }
-  
+
   void SetDOMCalVersion(std::string version)
   {
     domcalVersion_ = version;
@@ -525,38 +525,38 @@ class I3DOMCalibration {
    * baselines will have to be collected.
    */
   double GetATWDBeaconBaseline(unsigned int id, unsigned int channel) const;
- 
+
   void SetATWDBeaconBaseline(unsigned int id, unsigned int channel, double bsl);
 
   /**
    *  Get/Set functions for speDiscrimCalib
    */
-  void SetSPEDiscCalib(LinearFit speDiscrimCalib) 
+  void SetSPEDiscCalib(LinearFit speDiscrimCalib)
   {
     speDiscrimCalib_ = speDiscrimCalib;
   }
 
-  LinearFit GetSPEDiscCalib() const { return speDiscrimCalib_ ; }  
+  LinearFit GetSPEDiscCalib() const { return speDiscrimCalib_ ; }
 
   /**
    *  Get/Set functions for mpeDiscrimCalib
    */
-  void SetMPEDiscCalib(LinearFit mpeDiscrimCalib) 
+  void SetMPEDiscCalib(LinearFit mpeDiscrimCalib)
   {
     mpeDiscrimCalib_ = mpeDiscrimCalib;
   }
 
-  LinearFit GetMPEDiscCalib() const { return mpeDiscrimCalib_ ; }  
+  LinearFit GetMPEDiscCalib() const { return mpeDiscrimCalib_ ; }
 
   /**
    *  Get/Set functions for pmtDiscrimCalib
    */
-  void SetPMTDiscCalib(LinearFit pmtDiscrimCalib) 
+  void SetPMTDiscCalib(LinearFit pmtDiscrimCalib)
   {
     pmtDiscrimCalib_ = pmtDiscrimCalib;
   }
 
-  LinearFit GetPMTDiscCalib() const { return pmtDiscrimCalib_ ; }  
+  LinearFit GetPMTDiscCalib() const { return pmtDiscrimCalib_ ; }
 
   /**
    *  Get/set for relativeDomEff
@@ -577,7 +577,7 @@ class I3DOMCalibration {
   }
 
   /**
-   *  Noise: Thermal DOM noise rate, in Hz, 
+   *  Noise: Thermal DOM noise rate, in Hz,
    */
   double GetDomNoiseThermalRate() const { return noiseThermalRate_ ; }
   void SetDomNoiseThermalRate(double thermalrate)
@@ -586,7 +586,7 @@ class I3DOMCalibration {
   }
 
   /**
-   *  Noise: Correlated decay rate for DOM in Hz, 
+   *  Noise: Correlated decay rate for DOM in Hz,
    */
   double GetDomNoiseDecayRate() const { return noiseDecayRate_ ; }
   void SetDomNoiseDecayRate(double decayrate)
@@ -622,7 +622,7 @@ class I3DOMCalibration {
     noiseScintillationHits_ = scintillationhits;
   }
 
-  //On the assumption that this will be evaulated many times, we copy all data into it. 
+  //On the assumption that this will be evaulated many times, we copy all data into it.
   //This makes the object larger but hopefully avoids extra pointer derefences
   class DroopedSPETemplate{
   public:
@@ -630,48 +630,48 @@ class I3DOMCalibration {
     struct droopParams{
       SPETemplate pulse;
       double tauFrac, time1, time2;
-      
+
       droopParams(){}
-      droopParams(const SPETemplate& templ, 
+      droopParams(const SPETemplate& templ,
             double tauFrac, double time1, double time2):
       pulse(templ),tauFrac(tauFrac),time1(time1),time2(time2){}
     } droop;
     bool droopy;
-    
+
     DroopedSPETemplate(const SPETemplate& templ):
     pulse(templ),droopy(false){}
-    
+
     DroopedSPETemplate(const SPETemplate& templ,
-               const SPETemplate& droopTempl, 
+               const SPETemplate& droopTempl,
                double tauFrac, double time1, double time2):
     pulse(templ),droop(droopTempl,tauFrac,time1,time2),droopy(true){}
-    
+
     double operator()(double t){
       if (!droopy)
         return SPEPulseShape(t);
-      
+
       double norm = (1.0 - droop.tauFrac)*droop.time1 + droop.tauFrac*droop.time2;
       double c1 = (1.0 - droop.tauFrac)*droop.time1/norm;
       double c2 = droop.tauFrac*droop.time2/norm;
-      
+
       return SPEPulseShape(t) +
       c1*DroopReactionShape(t, droop.time1) +
       c2*DroopReactionShape(t, droop.time2);
     }
-    
+
     bool operator==(const DroopedSPETemplate& templ) const;
     bool operator!=(const DroopedSPETemplate& templ) const;
     bool operator<(const DroopedSPETemplate& templ) const;
-    
+
   private:
     double SPEPulseShape(double t) const {
-      return pulse.c/std::pow(exp(-(t - pulse.x0)/pulse.b1) + 
+      return pulse.c/std::pow(exp(-(t - pulse.x0)/pulse.b1) +
                          exp((t - pulse.x0)/pulse.b2),8);
     }
-    
+
     double DroopReactionShape(double t, double tau) const{
       return (pulse.c*droop.pulse.c/tau)/
-        std::pow(exp(-(t - pulse.x0*droop.pulse.x0)/(pulse.b1*droop.pulse.b1)) + 
+        std::pow(exp(-(t - pulse.x0*droop.pulse.x0)/(pulse.b1*droop.pulse.b1)) +
             exp((t - pulse.x0*droop.pulse.x0)/(pulse.b2*droop.pulse.b2*tau)),8);
     }
   };
@@ -679,20 +679,20 @@ class I3DOMCalibration {
   DroopedSPETemplate DiscriminatorPulseTemplate(bool droopy = false) const;
   DroopedSPETemplate ATWDPulseTemplate(unsigned int channel = 0, bool droopy = false) const;
   DroopedSPETemplate FADCPulseTemplate(bool droopy = false) const;
- 
+
   template <class Archive>
     void serialize(Archive& ar, unsigned version);
-    
+
   enum ToroidType {
     OLD_TOROID = 0,
     NEW_TOROID = 1
   };
-  
+
   ToroidType GetToroidType() const{
     //New toroids should be 50 ohm, while old are 43 ohm.
     return((frontEndImpedance_ > 48*I3Units::ohm) ? NEW_TOROID : OLD_TOROID);
   }
-  
+
   /**
    *  ATWD and FADC-specific corrections to the SPE charge distribution
    */
@@ -701,9 +701,9 @@ class I3DOMCalibration {
 
   /**
    * In dataclasses we use NaN to denote "invalid" however in the JSON
-   * file invalid entries are set to 0.  To cover both cases we check 
+   * file invalid entries are set to 0.  To cover both cases we check
    * that it's finite and greater than 0.
-   */ 
+   */
   bool IsMeanATWDChargeValid() const {
     return ((std::isfinite(meanATWDCharge_)) && (meanATWDCharge_ > 0.));
   }
@@ -726,9 +726,9 @@ class I3DOMCalibration {
   void SetCombinedSPEChargeDistribution(const SPEChargeDistribution& fit) {
     combinedSPEFit_ = fit;
   }
-  
+
   bool operator==(const I3DOMCalibration& rhs) const
-  {    
+  {
     return (CompareFloatingPoint::Compare_NanEqual(droopTimeConstants_[0],rhs.droopTimeConstants_[0]) &&
         CompareFloatingPoint::Compare_NanEqual(droopTimeConstants_[1],rhs.droopTimeConstants_[1]) &&
         CompareFloatingPoint::Compare_NanEqual(temperature_,rhs.temperature_) &&
@@ -743,7 +743,7 @@ class I3DOMCalibration {
         CompareFloatingPoint::Compare_NanEqual(ampGains_[2],rhs.ampGains_[2]) &&
         atwdFreq_[0] == rhs.atwdFreq_[0] &&
         atwdFreq_[1] == rhs.atwdFreq_[1] &&
-        std::equal(&atwdBins_[0][0][0], &atwdBins_[0][0][0] + 
+        std::equal(&atwdBins_[0][0][0], &atwdBins_[0][0][0] +
 		   2*N_ATWD_CHANNELS*N_ATWD_BINS,
 		   &rhs.atwdBins_[0][0][0],
 		   CompareFloatingPoint::Compare_NanEqual) &&
@@ -776,7 +776,7 @@ class I3DOMCalibration {
 
  private:
   static const unsigned int N_ATWD_BINS = 128;
-  
+
   //  Number of ATWD channels is set to 3 (4th ATWD channel doesn't
   //  have DOMCAL now)
   static const unsigned int N_ATWD_CHANNELS = 3;
@@ -787,7 +787,7 @@ class I3DOMCalibration {
   double droopTimeConstants_[2];
 
   double  temperature_;
- 
+
   /**
    * Gain and pedestal values for FADC
    */
@@ -801,7 +801,7 @@ class I3DOMCalibration {
    * baselines will have to be collected.
    */
   double fadcBeaconBaseline_;
-  
+
   /**
    *  FADC inherent time offset (ns)
    */
@@ -810,12 +810,12 @@ class I3DOMCalibration {
    *  Front-end impedance (Ohms)
    */
   double frontEndImpedance_;
-  
+
   /**
-   *   Parameters for droop correction   
+   *   Parameters for droop correction
    */
   TauParam tauparameters_;
-  
+
   /**
    * Gain for ATWD channels.
    * The key corresponds to the channel (0,1,2)
@@ -830,15 +830,15 @@ class I3DOMCalibration {
    */
   //map<unsigned int, QuadraticFit> atwdFreq_;
   QuadraticFit atwdFreq_[2];
-  
+
   /**
    * Slope of the linear fit for the bin calibration
    * i.e. the values needed to convert from counts to voltage
    * for each bin in the ATWD.
    */
   double atwdBins_[2][N_ATWD_CHANNELS][N_ATWD_BINS];
-  
-  /** 
+
+  /**
    *  DOMCAL calculated pmt transit time fit function.
    */
 
@@ -846,7 +846,7 @@ class I3DOMCalibration {
   LinearFit hvGainRelation_;
 
   /**
-   * Version of DOMCal used. For now, this only affects the 
+   * Version of DOMCal used. For now, this only affects the
    * FE load impedance. It might be useful for FADC calibration
    * as well. Use a std::string since we may have version numbers like
    * 6.1.2, e.g.
@@ -884,7 +884,7 @@ class I3DOMCalibration {
   LinearFit mpeDiscrimCalib_;
 
   /**
-   * A refined SPE discriminator calibration generated using actual PMT pulses.  
+   * A refined SPE discriminator calibration generated using actual PMT pulses.
    *   A linear fit between DAC(8) value and charge level in pC.
    */
   LinearFit pmtDiscrimCalib_;
@@ -895,18 +895,18 @@ class I3DOMCalibration {
   double relativeDomEff_;
 
   /**
-   *  Measure DOM noise rate, in Hz, 
+   *  Measure DOM noise rate, in Hz,
    *  Deprecated: used in old noise-generator
    */
   double noiseRate_;
 
   /**
-   *  Thermal DOM noise rate, in Hz, 
+   *  Thermal DOM noise rate, in Hz,
    */
   double noiseThermalRate_;
 
   /**
-   *  Correlated noise decay rate for DOM in Hz, 
+   *  Correlated noise decay rate for DOM in Hz,
    */
   double noiseDecayRate_;
 

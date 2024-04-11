@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef DATACLASSES_I3MATRIX_H_INCLUDED
 #define DATACLASSES_I3MATRIX_H_INCLUDED
 
@@ -22,7 +26,7 @@ public:
 	typedef base::pointer pointer;
 	typedef base::const_iterator const_iterator;
 	typedef base::iterator iterator;
-	
+
 	explicit ublas_storage_shim(const allocator_type& a=allocator_type()):base(a){}
 	explicit ublas_storage_shim(size_type size, const allocator_type& a=allocator_type()):
 	base(size,a){}
@@ -31,7 +35,7 @@ public:
 	ublas_storage_shim(const base& b):base(b){}
 private:
 	friend class icecube::serialization::access;
-	
+
 	// Serialization
 	// Copied from the base class in order to use icecube::serialization instead of boost
 	template<class Archive>
@@ -54,16 +58,16 @@ private:
 	// Copied from the base class in order to use icecube::serialization instead of boost
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int /* file_version */){
-		
+
 		// we need to copy to a collection_size_type to get a portable
 		// and efficient serialization
 		icecube::serialization::collection_size_type s1 (size1());
 		icecube::serialization::collection_size_type s2 (size2());
-		
+
 		// serialize the sizes
 		ar & icecube::serialization::make_nvp("size1",s1)
 		& icecube::serialization::make_nvp("size2",s2);
-		
+
 		// copy the values back if loading
 		if (Archive::is_loading::value)
 			resize(s1,s2,false);
@@ -96,7 +100,7 @@ public:
 	typedef base::matrix_temporary_type matrix_temporary_type;
 	typedef base::storage_category storage_category;
 	typedef base::orientation_category orientation_category;
-	
+
 	I3Matrix() {}
 	I3Matrix(const base &m) : ublas_matrix_shim(m) {}
 	I3Matrix(size_t size1, size_t size2) : ublas_matrix_shim(size1, size2) {}

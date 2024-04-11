@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <icetray/serialization.h>
 #include <dataclasses/geometry/I3Geometry.h>
 
@@ -71,7 +75,7 @@ const I3Geometry& I3Geometry::operator=(const I3Geometry& geometry) {
   return *this;
 }
 
-// Function to grab the correct I3TankGeo from the I3StationGeo, regardless of 
+// Function to grab the correct I3TankGeo from the I3StationGeo, regardless of
 // its ordering (that is, even if the two tanks are in the non-conventional order).
 // (This function was copied and modified from topeventcleaning/I3TopHLCClusterCleaning.cxx)
 I3TankGeo I3Geometry::GetTankGeo(const OMKey &key) const

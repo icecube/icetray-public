@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <dataclasses/external/CompareFloatingPoint.h>
 #include <iostream>
 #include <sstream>
@@ -17,7 +21,7 @@ inline std::string ToStringImpl(F f, I offset )
   fint += offset;
   std::stringstream s;
   s<< " | " << std::showpos << std::setw(PREC) << std::setprecision(PREC) << f << " "
-   << " | " << std::right << "0x" << std::hex << std::uppercase 
+   << " | " << std::right << "0x" << std::hex << std::uppercase
    << std::setw(PREC) << std::setfill('0') << fint << " "
    << " | " << std::dec << std::setfill(' ') << std::setw(PREC) << f << " "
    << " | " << offset  << " | "

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import unittest
 from icecube import dataclasses
 from icecube.icetray import I3Units
@@ -23,4 +27,4 @@ class TestI3Waveform(unittest.TestCase):
         self.assertNotEqual(wave1, wave2, 'these should not be equal!')
         self.assertEqual(wave1, wave3, 'these should be equal!')
 
-unittest.main()        
+unittest.main()

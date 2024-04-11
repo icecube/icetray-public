@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 """Test to see if the masses in I3Particle match the masses in the scikit-hep's particle package.
 
 There is some ambiguity between our naming scheme and scikit's, so the tests do some string manipulation.

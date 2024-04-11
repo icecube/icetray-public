@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2013
- * the icecube collaboration
+ * Copyright  (C) 2013 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @file I3MCTreePhysicsLibrary.hh
  */
 

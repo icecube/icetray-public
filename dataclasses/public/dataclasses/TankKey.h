@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version $Id$
  * @file TankKey.h
  * @date $Date$
@@ -35,7 +35,7 @@ public:
   TankKey(int str,TankID tank_)
     : string(str), tank(tank_)
   {}
-  
+
   explicit TankKey(const OMKey& omKey)
   {
     SetOMKey(omKey);
@@ -44,7 +44,7 @@ public:
   ~TankKey() {}
 
   std::ostream& Print(std::ostream&) const;
-  
+
   /**
    * Sets the stringNumber and tankID of this tank according to the OMKey
    */
@@ -71,7 +71,7 @@ public:
   OMKey GetDefaultOMKey() const;
 
   /**
-   * equality operator.  
+   * equality operator.
    * @return true if the string and tank numbers of the two TankKey's match
    * @param rhs the TankKey to compare this one to.
    */

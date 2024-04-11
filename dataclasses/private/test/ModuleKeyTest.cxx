@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2004
-    the icecube collaboration
+    Copyright  (C) 2004 the icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     $Id$
 
     @version $Revision$
@@ -28,5 +28,5 @@ TEST(comparison_operator)
   ENSURE(ModuleKey(1,0) < ModuleKey(1,1),"operator< works as expected");
   ENSURE(ModuleKey(1,0) < ModuleKey(2,0),"operator< works as expected");
   ENSURE(ModuleKey(1,1) < ModuleKey(2,2),"operator< works as expected");
-  
+
 }

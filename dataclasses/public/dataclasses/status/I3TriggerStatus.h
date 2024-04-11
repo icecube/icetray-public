@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file I3TriggerStatus.h
@@ -25,7 +25,7 @@
  *
  * A class describing all additional trigger information beside source, type
  * and subtype that are encapsulated in a TriggerKey already.
- * It only consists of 
+ * It only consists of
  * - a name and
  * - a map of trigger settings:  string, integer values,
  * since most trigger information varies by trigger type.
@@ -55,7 +55,7 @@
  * "triggerType3" - trigger type of third trigger<BR>
  * "triggerConfigId3" - trigger config ID of third trigger<BR>
  * "sourceId3" - source ID of third trigger<BR>
- * 
+ *
  * Additionally, the per-trigger readout instructions, specified for each subdetector:
  *  readoutTimeMinus  : time before the trigger time to set the readout window
  *  readoutTimePlus  : time after the trigger time to set the readout window
@@ -65,7 +65,7 @@ static const unsigned i3triggerstatus_version_ = 3;
 static const unsigned i3triggerreadoutconfig_version_ = 0;
 
 /**
- * Uses boost::lexical_cast to ensure the conversion can be made.  
+ * Uses boost::lexical_cast to ensure the conversion can be made.
  * http://www.boost.org/doc/libs/1_38_0/libs/conversion/lexical_cast.htm
  * This catches things that will silently trip up atoi and atof.
  */
@@ -92,7 +92,7 @@ struct I3TriggerReadoutConfig
     readoutTimePlus = NAN;
     readoutTimeOffset = NAN;
   }
-  
+
   bool operator==(const I3TriggerReadoutConfig& rhs) const
   {
     return (readoutTimeMinus == rhs.readoutTimeMinus &&
@@ -107,7 +107,7 @@ struct I3TriggerReadoutConfig
 
 I3_CLASS_VERSION(I3TriggerReadoutConfig, i3triggerreadoutconfig_version_);
 
-class I3TriggerStatus 
+class I3TriggerStatus
 {
  public:
 
@@ -119,7 +119,7 @@ class I3TriggerStatus
    */
   enum Subdetector{
     NOT_SPECIFIED=-1,
-    ALL=0, 
+    ALL=0,
     ICETOP=1,
     INICE=2
   };
@@ -129,25 +129,25 @@ class I3TriggerStatus
    */
   I3TriggerStatus()
     {};
-  
+
   /**
    * Constructor.
-   * 
+   *
    * @param name Name of the trigger.
    * @param settings Trigger settings: string, integer values.
    */
   I3TriggerStatus(const std::string& name,
                   const std::map<std::string, std::string>& settings)
     : name_(name), settings_(settings) {}
-  
+
   /**
    * Destructor.
    */
   ~I3TriggerStatus(){};
-  
+
   /**
    * Get trigger name.
-   * 
+   *
    * @return Name of trigger.
    */
   const std::string& GetTriggerName() const { return name_; }
@@ -155,15 +155,15 @@ class I3TriggerStatus
 
   /**
    * Get trigger settings.
-   * 
+   *
    * @return Trigger settings: string, string values
    * (contents vary by trigger type).
    *
    */
-  const std::map<std::string, std::string>& 
+  const std::map<std::string, std::string>&
     GetTriggerSettings() const { return settings_; }
 
-  std::map<std::string, std::string>& 
+  std::map<std::string, std::string>&
     GetTriggerSettings() { return settings_; }
 
   /**
@@ -174,15 +174,15 @@ class I3TriggerStatus
    */
   template<typename T>
     void GetTriggerConfigValue(const std::string& key, boost::optional<T>& value) const;
-			       			       
+
   template<typename T>
     void GetTriggerConfigValue(const char* key, boost::optional<T>& value) const;
 
   template<typename T>
-    void GetTriggerConfigValue(const std::string& key, T& value) const;			       
+    void GetTriggerConfigValue(const std::string& key, T& value) const;
   template<typename T>
     void GetTriggerConfigValue(const char* key, T& value) const;
-			       
+
   /**
    * Sets the trigger config value.  Currently the only supported
    * types are bool, int, float, double, string, and const char*, but
@@ -192,15 +192,15 @@ class I3TriggerStatus
    */
   template <typename T>
     void SetTriggerConfigValue(const std::string& key, T value);
-  
+
   template <typename T>
     void SetTriggerConfigValue(const char* key, T value);
-  
-  const std::map<Subdetector, I3TriggerReadoutConfig>& 
+
+  const std::map<Subdetector, I3TriggerReadoutConfig>&
     GetReadoutSettings() const { return readoutconfigs_; }
-  std::map<Subdetector, I3TriggerReadoutConfig>& 
-    GetReadoutSettings() { return readoutconfigs_; }  
-  
+  std::map<Subdetector, I3TriggerReadoutConfig>&
+    GetReadoutSettings() { return readoutconfigs_; }
+
   bool operator==(const I3TriggerStatus& rhs) const
   {
     return (name_ == rhs.name_ &&

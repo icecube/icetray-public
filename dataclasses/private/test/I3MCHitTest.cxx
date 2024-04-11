@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2004
-    the icecube collaboration
+    Copyright  (C) 2004 the icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     $Id$
 
     @version $Revision$
@@ -40,7 +40,7 @@ TEST(assignment_copy)
   h = j;
   ENSURE_DISTANCE(0.1, 0.1, 0.0001,"ensure test");
   ENSURE_DISTANCE(j.GetNPE(), h.GetNPE(), (float)0.0001,"simple assignment");
-  ENSURE_DISTANCE(j.GetCherenkovDistance(),h.GetCherenkovDistance(), 0.01, 
+  ENSURE_DISTANCE(j.GetCherenkovDistance(),h.GetCherenkovDistance(), 0.01,
 		  "CherenkovDistance test");
   ENSURE(h.GetParticleMajorID() == j.GetParticleMajorID());
   ENSURE(h.GetParticleMinorID() == j.GetParticleMinorID());
@@ -54,8 +54,8 @@ TEST(assignment_chain)
   I3MCHit u, v, w, x;
   x.SetTime(rand()/0.235234);
   u = u = v = v = w = x;
-  ENSURE_DISTANCE(u.GetTime(), 
-		  x.GetTime(), 
+  ENSURE_DISTANCE(u.GetTime(),
+		  x.GetTime(),
 		  0.0001,"chain of assignment operators");
 }
 

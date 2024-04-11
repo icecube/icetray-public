@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 Vector Math
 ===========
 
@@ -29,4 +33,4 @@ example::
     // 32.0
     std::cout << I3Direction(p) << std::endl;
     // I3Direction(Zenith (deg): 143.301, Asimuth(deg): 243.435)
-    
+

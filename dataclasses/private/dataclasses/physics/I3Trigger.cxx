@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file dataclasses/private/dataclasses/physics/I3Trigger.cxx
@@ -18,11 +18,11 @@ const double I3Trigger::FROM_TENTH_NS_TO_NS_CORRECTION_FACTOR = 0.1;
 I3Trigger::~I3Trigger() {}
 
 
-template <class Archive> void I3Trigger::serialize(Archive& ar, unsigned version)  
+template <class Archive> void I3Trigger::serialize(Archive& ar, unsigned version)
 {
   if (version>i3trigger_version_)
     log_fatal("Attempting to read version %u from file but running version %u of I3Trigger class.",version,i3trigger_version_);
- 
+
   ar & make_nvp("TriggerTime", time_);
   ar & make_nvp("TriggerLength", length_);
   if(version < 1) // this corrects for the fact that trigger time and length was given
@@ -36,7 +36,7 @@ template <class Archive> void I3Trigger::serialize(Archive& ar, unsigned version
 
 using CompareFloatingPoint::Compare;
 
-bool 
+bool
 I3Trigger::operator==(const I3Trigger& rhs) const
 {
   return  fired_ == rhs.fired_ &&
@@ -46,7 +46,7 @@ I3Trigger::operator==(const I3Trigger& rhs) const
     ;
 }
 
-bool 
+bool
 I3Trigger::operator!=(const I3Trigger& rhs) const
 {
   return !( *this == rhs );

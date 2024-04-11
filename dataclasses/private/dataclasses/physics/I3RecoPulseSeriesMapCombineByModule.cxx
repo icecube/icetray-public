@@ -1,9 +1,9 @@
 /**
  *  $Id$
  *
- *  Copyright (C) 2018
- *  Jakob van Santen <jakob.van.santen@desy.de>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  Copyright (C) 2018 Jakob van Santen <jakob.van.santen@desy.de>
+ *  Copyright (C) 2018 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  SPDX-License-Identifier: BSD-2-Clause
  *
  */
 
@@ -13,11 +13,11 @@
 #include "boost/make_shared.hpp"
 #include "boost/foreach.hpp"
 
-I3RecoPulseSeriesMapCombineByModule::I3RecoPulseSeriesMapCombineByModule() 
+I3RecoPulseSeriesMapCombineByModule::I3RecoPulseSeriesMapCombineByModule()
   : pulses_key_() {}
 
 I3RecoPulseSeriesMapCombineByModule::I3RecoPulseSeriesMapCombineByModule(
-  const std::string &pulses_key) 
+  const std::string &pulses_key)
   : pulses_key_(pulses_key) {}
 
 I3RecoPulseSeriesMapConstPtr
@@ -28,7 +28,7 @@ I3RecoPulseSeriesMapCombineByModule::Apply(const I3Frame &frame) const
   typedef Map::value_type Pair;
   typedef Pair::second_type Series;
   typedef Series::value_type Element;
- 
+
   if (combined_)
     return combined_;
 
@@ -38,7 +38,7 @@ I3RecoPulseSeriesMapCombineByModule::Apply(const I3Frame &frame) const
         pulses_key_.c_str());
 
   I3RecoPulseSeriesMapPtr combined = boost::make_shared<Map>();
-  
+
   for (const auto &pair : *in_pulses) {
     auto &target = (*combined)[OMKey(pair.first.GetString(), pair.first.GetOM(), 0)];
     std::copy(pair.second.begin(), pair.second.end(), std::back_inserter(target));
@@ -48,7 +48,7 @@ I3RecoPulseSeriesMapCombineByModule::Apply(const I3Frame &frame) const
       [](const I3RecoPulse &left, const I3RecoPulse &right)
         { return left.GetTime() < right.GetTime(); });
   }
-  
+
   // save in cache
   combined_ = combined;
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 /**
  *
  * @version $Id$
@@ -35,7 +39,7 @@ void I3IceTopSLCCalibration::serialize(Archive& ar, unsigned version)
     ar & make_nvp("slope_CunkA2",      slope_CunkA2);
     ar & make_nvp("A0_A1_crossover",      A0_A1_crossover);
     ar & make_nvp("A1_A2_crossover",      A1_A2_crossover);
-    
+
 }
 
 std::ostream& operator<<(std::ostream& oss, const I3IceTopSLCCalibration& sc)

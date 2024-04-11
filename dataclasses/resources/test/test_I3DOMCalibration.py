@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import unittest
 from icecube import dataclasses
 from icecube.icetray import I3Units
@@ -14,7 +18,7 @@ class TestI3DOMCalibration(unittest.TestCase):
         fit2 = dataclasses.LinearFit()
         fit2.slope = 1.618
         fit2.intercept = 1.20205
-        
+
         self.assertEqual(fit1, fit2, "these should be the same.")
 
         fit2.slope = 0.
@@ -30,7 +34,7 @@ class TestI3DOMCalibration(unittest.TestCase):
         fit2.quad_fit_a = 1.618
         fit2.quad_fit_b = 1.645
         fit2.quad_fit_c = 1.20205
-        
+
         self.assertEqual(fit1, fit2, "these should be the same.")
 
         fit2.quad_fit_a = 0.
@@ -55,7 +59,7 @@ class TestI3DOMCalibration(unittest.TestCase):
         d2.gaus_amp   = 0.688097
         d2.gaus_mean  = 1.
         d2.gaus_width = 0.312677
-        d2.compensation_factor = 1.3        
+        d2.compensation_factor = 1.3
 
         self.assertEqual(d1, d2, "these should be the same.")
 
@@ -71,7 +75,7 @@ class TestI3DOMCalibration(unittest.TestCase):
         d1.p4 = 2.612
         d1.p5 = -1.4604
         d1.tau_frac = -0.5
-        
+
         d2 = dataclasses.TauParam()
         d2.p0 = 0.5772
         d2.p1 = 1.645
@@ -80,7 +84,7 @@ class TestI3DOMCalibration(unittest.TestCase):
         d2.p4 = 2.612
         d2.p5 = -1.4604
         d2.tau_frac = -0.5
-       
+
         self.assertEqual(d1, d2, "these should be the same.")
 
         d2.p0 = 0.
@@ -101,7 +105,7 @@ class TestI3DOMCalibration(unittest.TestCase):
 
         droop1 = dataclasses.DroopedSPETemplate(temp1,temp2,1.1,1.1,1.1)
         droop2 = dataclasses.DroopedSPETemplate(temp1,temp2,1.1,1.1,1.1)
-         
+
         self.assertEqual(droop1, droop2, "these should be the same.")
 
         droop3 = dataclasses.DroopedSPETemplate(temp1,temp2,1.1,1.1,0.)
@@ -183,7 +187,7 @@ class TestI3DOMCalibration(unittest.TestCase):
         d2.gaus_mean  = 1.
         d2.gaus_width = 0.312677
         d2.compensation_factor = 1.3
-        
+
         self.assertEqual(d1.__str__(), d2.__str__(), "these should be the same.")
 
 

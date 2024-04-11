@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2004
-    the icecube collaboration
+    Copyright  (C) 2004 the icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     $Id$
 */
 
@@ -45,7 +45,7 @@ TEST(I3Geometry)
   cout << AsXML(geo);
   I3GeometryPtr geoptr(new I3Geometry);
   cout << AsXML(geoptr);
-  
+
   I3GeometryConstPtr geocp(new I3Geometry);
   cout << AsXML(geocp);
 }

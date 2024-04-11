@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # This test is slightly different than those in test_mctree_physics_library
 # in that it uses I3MCTreeUtils to add the primary, which sets the shape
 # to Primary on the fly.
@@ -18,7 +22,7 @@ class TestShapelessParticle(unittest.TestCase):
     def test_get_most_energetic_primary(self):
         primary1 = dc.I3Particle()
         primary1.energy = 10 * I3Units.TeV
-    
+
         primary2 = dc.I3Particle()
         primary2.energy = 1 * I3Units.TeV
 
@@ -31,4 +35,4 @@ class TestShapelessParticle(unittest.TestCase):
         self.assertEqual(mep.id, primary1.id, "got the wrong particle.")
 
 unittest.main()
-        
+

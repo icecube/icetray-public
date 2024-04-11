@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 #include <dataclasses/physics/I3Trigger.h>
 #include <dataclasses/status/I3DetectorStatus.h>
@@ -54,14 +58,14 @@ TEST(SetGetTimeI3SuperDSTTrigger)
   I3SuperDST instSuperDST;
   const unsigned int version=1;
   const double &decodetime= instSuperDST.DecodeTime(startcode,version);
-  
+
   I3SuperDSTTrigger instSuperDSTTrigger(key_idx,startcode,lengthcode);
- 
+
   const double &get_starttime= instSuperDSTTrigger.GetTime();
   //Now what we want to test
   ENSURE_EQUAL(get_starttime,decodetime,
 	       "I3SuperDSTTrigger::GetTime and I3SuperDST::DecodeTime are not equal");
- 
+
 }
 
 TEST(LengthI3SuperDSTTrigger)
@@ -92,7 +96,7 @@ TEST(GetTriggerKeyI3SuperDSTTrigger)
   I3SuperDSTTrigger instSuperDSTTrigger(key_idx,startcode,lengthcode);
 
   //To demostrate that key_idx is equal to the one obtained via TriggerKey
-  //We have to build a I3TriggerStatusMap, therefore, we need first the TriggerKey object 
+  //We have to build a I3TriggerStatusMap, therefore, we need first the TriggerKey object
   I3DetectorStatus instDetectorStatus;
   I3Trigger trigger;
   instDetectorStatus.triggerStatus[trigger.GetTriggerKey()] = I3TriggerStatus();

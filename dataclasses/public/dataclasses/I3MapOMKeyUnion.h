@@ -1,9 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2011
- *  Jakob van Santen <vansanten@wisc.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
+ *  Copyright (C) 2011 Jakob van Santen <vansanten@wisc.edu>
+ *  Copyright (C) 2011 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  SPDX-License-Identifier: BSD-2-Clause
  *
  */
 
@@ -23,26 +23,26 @@ static const unsigned i3recopulseseriesmapunion_version_ = 0;
 
 class I3RecoPulseSeriesMapUnion : public I3FrameObject {
 public:
-	/* 
+	/*
 	 * Construct a union for the map stored at "key." All bits are set.
 	 */
 	I3RecoPulseSeriesMapUnion(const I3Frame&, const std::vector<std::string> &keys);
 	I3RecoPulseSeriesMapUnion();
-	
+
 	std::ostream& Print(std::ostream&) const override;
-	
+
 	I3RecoPulseSeriesMapConstPtr Apply(const I3Frame&) const;
 	std::vector<std::string> GetSources() const { return keys_; }
-    
+
 	bool operator==(const I3RecoPulseSeriesMapUnion&) const;
 	bool operator!=(const I3RecoPulseSeriesMapUnion&) const;
 private:
 	std::vector<std::string> keys_;
 	mutable I3RecoPulseSeriesMapPtr unified_;
-	
+
 	friend class icecube::serialization::access;
 	template <class Archive> void serialize(Archive& ar, unsigned version);
-	
+
 	SET_LOGGER("I3RecoPulseSeriesMapUnion");
 };
 

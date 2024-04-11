@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version $Id$
  * @file I3RecoHit.h
  * @date $Date$
@@ -16,7 +16,7 @@
 
 
 /**
- * @brief A base class for reconstruted hits.  
+ * @brief A base class for reconstruted hits.
  *
  * Carries no information beyond 'hit'
  * but can be sub-classed as part of a hit series reconstruction.
@@ -24,13 +24,13 @@
  */
 static const unsigned i3recohit_version_ = 1;
 
-class I3RecoHit 
+class I3RecoHit
 {
  public:
   I3RecoHit() : time_(NAN),hitID_(-1),sourceIndex_(-1){}
 
   ~I3RecoHit();
-  
+
   std::ostream& Print(std::ostream&) const;
 
   double GetTime() const { return time_; }

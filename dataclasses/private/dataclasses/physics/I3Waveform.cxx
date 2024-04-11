@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <icetray/serialization.h>
 #include <dataclasses/physics/I3Waveform.h>
 
@@ -67,11 +71,11 @@ int
 I3Waveform::GetChannel() const
 {
 	int channel = 0;
-	
+
 	BOOST_FOREACH(const StatusCompound &stat, waveformInfo_)
 		if (stat.GetChannel() > channel)
 			channel = stat.GetChannel();
-	
+
 	return channel;
 }
 
@@ -125,8 +129,8 @@ void I3Waveform::load(Archive& ar, unsigned version)
 bool
 operator==(const I3Waveform& lhs, const I3Waveform& rhs)
 {
-  return lhs.GetStartTime() == rhs.GetStartTime() 
-    && lhs.GetBinWidth() == rhs.GetBinWidth() 
+  return lhs.GetStartTime() == rhs.GetStartTime()
+    && lhs.GetBinWidth() == rhs.GetBinWidth()
     && lhs.GetWaveform() == rhs.GetWaveform()
     && lhs.GetWaveformInformation() == rhs.GetWaveformInformation();
 }

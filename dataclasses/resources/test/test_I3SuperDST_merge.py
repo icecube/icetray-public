@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import unittest
 import sys
 import pickle
@@ -42,7 +46,7 @@ class I3RecoPulseSeriesMapMaskTest(unittest.TestCase):
         #print(unpack)
         if any(p.width == 0 for pulses in unpack.values() for p in pulses):
             raise Exception('0 width')
-            
+
 
 class I3RecoPulseSeriesMapMaskTest2(unittest.TestCase):
     def setUp(self):

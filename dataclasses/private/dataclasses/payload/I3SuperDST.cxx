@@ -2,7 +2,8 @@
  * @file
  * @brief
  *
- * (c) 2010 the IceCube Collaboration
+ * Copyright (c) 2010 the IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  * @version $Revision$

@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. highlight:: pycon
 
 :mod:`icecube.dataclasses` -- python bindings to dataclasses
@@ -10,7 +14,7 @@
 .. class:: I3Double
    :noindex:
 
-   Wrapper of the simple C++ class which holds a ``double`` called "value" 
+   Wrapper of the simple C++ class which holds a ``double`` called "value"
 
    .. method:: I3Double()
 
@@ -36,5 +40,5 @@
       <icecube.dataclasses.I3Double object at 0x2c9e940>
       >>> d.value
       7.0
-      
+
 

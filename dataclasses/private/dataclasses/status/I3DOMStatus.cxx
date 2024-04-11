@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <icetray/serialization.h>
 #include <dataclasses/status/I3DOMStatus.h>
 #include "icetray/I3Units.h"
@@ -20,7 +24,7 @@ void I3DOMStatus::serialize (Archive& ar, const unsigned version)
   ar & make_nvp("statusFADC",statusFADC);
   ar & make_nvp("PMTHV",pmtHV);
   ar & make_nvp("speThreshold",speThreshold);
-  ar & make_nvp("fePedestal",fePedestal);       
+  ar & make_nvp("fePedestal",fePedestal);
   ar & make_nvp("dacTriggerBias0",dacTriggerBias0);
   ar & make_nvp("dacTriggerBias1",dacTriggerBias1);
   ar & make_nvp("dacFADCRef",dacFADCRef);
@@ -43,13 +47,13 @@ void I3DOMStatus::serialize (Archive& ar, const unsigned version)
   else
   {
       domGainType = I3DOMStatus::UnknownGainType;
-  }	
+  }
 
   if (version > 0)
   {
       ar & make_nvp("cableType", cableType);
   }
-  else 
+  else
   {
       cableType = I3DOMStatus::UnknownCableType;
   }
@@ -60,7 +64,7 @@ void I3DOMStatus::serialize (Archive& ar, const unsigned version)
   else
   {
       deltaCompress = I3DOMStatus::Unknown;
-  }	
+  }
   if(version > 2)
   {
       ar & make_nvp("SLCActive",SLCActive);
@@ -68,24 +72,24 @@ void I3DOMStatus::serialize (Archive& ar, const unsigned version)
   else
   {
       SLCActive = false;
-  }	
+  }
   if(version > 3)
   {
     ar & make_nvp("mpeThreshold",mpeThreshold);
   }
   if(version < 5)
-    // Correct old "psudo calibration" of DAC values back to raw DAC value from 
+    // Correct old "psudo calibration" of DAC values back to raw DAC value from
     //   older i3 files.  Newer files have DAC values from the DB correctly set.
     {
       double temp_feped = fePedestal/I3Units::volt;
       double temp_speThresh = speThreshold/I3Units::V;
       double temp_mpeThresh = mpeThreshold/I3Units::V;
-      
+
       //Undo the voodoo, first for spe and mpe thresholds
-      speThreshold = (1024./5.) * ( temp_speThresh*(9.6*(1+2200./249.))  
+      speThreshold = (1024./5.) * ( temp_speThresh*(9.6*(1+2200./249.))
 				    + temp_feped );
-      mpeThreshold = (1024./5.) * ( (temp_mpeThresh/10.)*(9.6*(1+2200./249.))  
-				    + temp_feped ); 
+      mpeThreshold = (1024./5.) * ( (temp_mpeThresh/10.)*(9.6*(1+2200./249.))
+				    + temp_feped );
       fePedestal = 4096.0 * temp_feped / 5.0;
     }
   if(version > 5)

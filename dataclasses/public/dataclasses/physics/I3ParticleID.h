@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3ParticleID_H_INCLUDED
 #define I3ParticleID_H_INCLUDED
 
@@ -38,24 +42,24 @@ struct I3ParticleID{
 
   // assume noise
   I3ParticleID() : majorID(0), minorID(0){};
-  I3ParticleID(uint64_t major, int32_t minor) : 
+  I3ParticleID(uint64_t major, int32_t minor) :
     majorID(major), minorID(minor){};
 
   std::ostream& Print(std::ostream&) const;
-  
+
   /**
    * Need to tell gcc to ignore the "maybe unitialized warning"
    * in this case.  A default constructor was added that initializes
    * these values and none of these methods are static, so this
    * is a false positive.
    *
-   * clang seems to be smart enough to know these aren't used 
+   * clang seems to be smart enough to know these aren't used
    * uninitialized, so we only turn them off for gcc, since
    * this just causes more clang warnings.
    *
    * These directives we need were added in gcc 4.6
    * https://gcc.gnu.org/gcc-4.6/changes.html
-   */  
+   */
 #if defined(__GNUC__) && GCC_VERSION > 40600
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif

@@ -3,9 +3,9 @@
  * @date $Date$
  * @author jvansanten
  *
- * (c) 2012 Jakob van Santen <vansanten@wisc.edu>
- *          and the IceCube Collaboration
- * the IceCube Collaboration
+ * Copyright (c) 2012 Jakob van Santen <vansanten@wisc.edu>
+ * Copyright (c) 2012 the IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  */
@@ -22,19 +22,19 @@ public:
   I3Stochastic() : time_(0), energy_(0) {};
   I3Stochastic(const I3Particle &parent, const I3Particle &stochastic);
   ~I3Stochastic() {}
-  
+
   static bool IsCompressible(const I3Particle &parent, const I3Particle &stochastic);
   bool operator<(const I3Stochastic &other) const;
-  
+
   I3Particle Reconstruct(const I3Particle &parent) const;
-  
+
 private:
   static void Propagate(I3Particle &p, double time);
-  
+
   friend class icecube::serialization::access;
   template <class Archive>
   void serialize(Archive &ar, unsigned version);
-  
+
   float time_, energy_;
   uint64_t major_id_;
   int32_t minor_id_;
@@ -87,34 +87,34 @@ I3Particle
 I3Stochastic::Reconstruct(const I3Particle &parent) const
 {
 	I3Particle p(major_id_, minor_id_);
-	
+
 	p.SetShape(I3Particle::Null);
 	p.SetFitStatus(I3Particle::NotSet);
 	p.SetLocationType(I3Particle::InIce);
 	p.SetSpeed(I3Constants::c);
 	p.SetLength(0.*I3Units::m);
-	
+
 	p.SetEnergy(energy_);
 	p.SetType(type_);
-	
+
 	p.SetDir(parent.GetDir());
 	p.SetPos(parent.GetPos());
 	p.SetTime(parent.GetTime());
 	Propagate(p, time_);
-	
+
 	return p;
 }
 
 /**
  * I3Particle::ShiftAlongTrack() without stupid assert()s.
- */ 
+ */
 void
 I3Stochastic::Propagate(I3Particle &p, double tick)
 {
 	I3Position pos = p.GetPos();
 	const I3Direction &dir = p.GetDir();
 	double distance = tick*p.GetSpeed();
-		
+
 	pos.SetX(pos.GetX() + distance*dir.GetX());
 	pos.SetY(pos.GetY() + distance*dir.GetY());
 	pos.SetZ(pos.GetZ() + distance*dir.GetZ());
@@ -128,7 +128,7 @@ I3LinearizedMCTree::save(Archive &ar, unsigned version) const
 {
 	typedef std::pair<I3ParticleID, unsigned> leaf_t;
 	std::map<I3ParticleID, std::vector<I3Stochastic> > stripped;
-	
+
 	I3MCTree tree(*this);
 	for ( auto it = tree.cbegin_post(); it != tree.cend_post(); ) {
 		I3MCTree::const_iterator parent = tree.parent(it);
@@ -156,7 +156,7 @@ I3LinearizedMCTree::save(Archive &ar, unsigned version) const
 		std::copy(pair.second.begin(), pair.second.end(),
 		    std::back_inserter(stochastics));
 	}
-	
+
 	ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
 	ar & make_nvp("I3MCTree", tree);
 	ar & make_nvp("Leaves", leaves);
@@ -175,7 +175,7 @@ I3LinearizedMCTree::load(Archive &ar, unsigned version)
 		std::vector<range_t> ranges;
 		ar & make_nvp("Ranges", ranges);
 		ar & make_nvp("Stochastics", stochastics);
-	
+
 		// Find the points in the *stripped* tree where
 		// we should attach the stripped leaves.
 		std::queue<I3ParticleID> parents;
@@ -189,7 +189,7 @@ I3LinearizedMCTree::load(Archive &ar, unsigned version)
 				parents.push(it->GetID());
 			}
 		}
-	
+
 		std::vector<I3Stochastic>::const_iterator leaf = stochastics.begin();
 		BOOST_FOREACH(const range_t &span, ranges) {
 			pre_iterator parent = this->find(parents.front());
@@ -206,21 +206,21 @@ I3LinearizedMCTree::load(Archive &ar, unsigned version)
 				else
 					splice = this->insert(splice, reco);
 			}
-		
+
 			parents.pop();
 		}
 	} else if (version == 1) {
 		typedef std::pair<I3ParticleID, unsigned> leaf_t;
-		
+
 		std::vector<I3Stochastic> stochastics;
 		std::vector<leaf_t> leaves;
 		ar & make_nvp("Leaves", leaves);
 		ar & make_nvp("Stochastics", stochastics);
-		
+
 		std::vector<I3Stochastic>::const_iterator leaf = stochastics.begin();
 		for (const auto &span : leaves) {
 			pre_iterator parent = this->find(span.first);
-			
+
 			// Insert new leaves in time order relative to existing siblings
 			sibling_iterator splice = this->children(parent);
 			for (unsigned i = 0; i < span.second; i++, leaf++) {
@@ -234,7 +234,7 @@ I3LinearizedMCTree::load(Archive &ar, unsigned version)
 			}
 		}
 		i3_assert(leaf == stochastics.end());
-		
+
 	} else {
 		log_fatal_stream("version " << version << " is from the future!");
 	}

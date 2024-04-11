@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2004
-    the icecube collaboration
+    Copyright  (C) 2004 The icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     $Id: OMKeyTest.cxx 151490 2016-11-14 17:26:25Z kjmeagher $
 
     @version $Revision: 151490 $
@@ -29,6 +29,6 @@ TEST(comparison_operator)
   ENSURE(IceActKey(1,1) < IceActKey(1,2), "operator< works as expected");
   ENSURE(IceActKey(1,1) < IceActKey(2,1), "operator< works as expected");
 
-  
+
 }
 

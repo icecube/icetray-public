@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2004
-    the icecube collaboration
+    Copyright  (C) 2004 the icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     $Id$
 
     @version $Revision$
@@ -85,14 +85,14 @@ TEST(SetAndGet){
     ENSURE(flasherInfoPtr->GetLEDBrightness() == ledBrightness_f,"LEDBrightness is not the same");
     ENSURE(flasherInfoPtr->GetMask() == mask_f,"Mask is not the same");
     ENSURE(flasherInfoPtr->GetWidth() == width_f,"Width is not the same");
-    
+
     int count=0;
 
-    for(std::vector<I3FlasherInfo>::iterator iter = flasherInfoVect->begin() ; 
-	iter != flasherInfoVect->end() ; 
+    for(std::vector<I3FlasherInfo>::iterator iter = flasherInfoVect->begin() ;
+	iter != flasherInfoVect->end() ;
 	iter++)
       {
-	
+
 	ENSURE(iter->GetFlashingOM() == omKey_f,"OMKey is not the same");
 	ENSURE(iter->GetFlashTime() == flashTime_f,"FlashTime is not the same");
 	ENSURE(iter->GetATWDBinSize() == atwdBinSize_f,"ATWDBinSize is not the same");
@@ -102,7 +102,7 @@ TEST(SetAndGet){
 	count++;
       }
     ENSURE_EQUAL(count,2,"Loop did not count twice");
-  }    
+  }
 }
 
 

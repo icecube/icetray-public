@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <map>
 #include <icetray/serialization.h>
 #include <dataclasses/calibration/I3Calibration.h>
@@ -10,7 +14,7 @@ I3Calibration::I3Calibration(){}
 I3Calibration::~I3Calibration(){}
 
 template <class Archive>
-void 
+void
 I3Calibration::save(Archive& ar, unsigned version) const
 {
   ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
@@ -21,12 +25,12 @@ I3Calibration::save(Archive& ar, unsigned version) const
 }
 
 template <class Archive>
-void 
+void
 I3Calibration::load(Archive& ar, unsigned version) {
   if (version>i3calibration_version_)
     log_fatal("Attempting to read version %u from file but running version %u of I3Calibration class.",
               version,i3calibration_version_);
-  
+
   ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
   ar & make_nvp("domcal",domCal);
   if(version < 4){

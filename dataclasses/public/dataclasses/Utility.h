@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2004
-    the icecube collaboration
+    Copyright  (C) 2004 the icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     @version $Id$
     @date $Date$
 */
@@ -32,19 +32,19 @@ typedef char __signed;
 #include <icetray/I3Logging.h>
 
 
-// forward declarations.  
+// forward declarations.
 template <typename T>
-std::string 
+std::string
 AsXML(const T& ob);
 
 // hide Get from ROOT since Rene doesn't like templates
 #ifndef __CINT__
 
 /**
- * @brief function to get data out of a map-like object.  
+ * @brief function to get data out of a map-like object.
  */
 template <class MapType>
-typename MapType::value_type::second_type& 
+typename MapType::value_type::second_type&
 I3MapGet(const typename MapType::key_type& key,
     MapType& themap)
 {
@@ -59,10 +59,10 @@ I3MapGet(const typename MapType::key_type& key,
 }
 
 /**
- * @brief function to get data out of a map-like object.  
+ * @brief function to get data out of a map-like object.
  */
 template <class MapType>
-const typename MapType::value_type::second_type& 
+const typename MapType::value_type::second_type&
 I3MapGet(const typename MapType::key_type& key,
     const MapType& themap)
 {
@@ -79,4 +79,4 @@ I3MapGet(const typename MapType::key_type& key,
 
 #endif
 
-#endif 
+#endif

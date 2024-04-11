@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 The icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file I3Waveform.h
@@ -27,7 +27,7 @@
 #define I3WAVEFORM_H_I3Waveform_Status (VIRGINAL)(COMBINED)(SATURATED)(UNDERSHOT)
 
 static const unsigned i3waveform_version_ = 3;
-class I3Waveform 
+class I3Waveform
 {
  public:
 
@@ -59,7 +59,7 @@ class I3Waveform
     } fields;
     uint8_t bits;
 
-    SourceCompound(Source source = ATWD, unsigned id = 0) 
+    SourceCompound(Source source = ATWD, unsigned id = 0)
     {
       fields.source = source;
       fields.id = (id > 0);
@@ -67,18 +67,18 @@ class I3Waveform
     }
   } __attribute((packed));
 #endif // __CINT__
-  
+
   /** Describes possible artifacts within the data.
-   * 
+   *
    * The waveform is a hardware independent representation of the data acquired.
    * Nevertheless, it can carry artifacts due to hardware imperfections.
-   * 
+   *
    * Saturation is an example, which is hard to recognize, since the waveform is
    * a vector of doubles. Of course, it is still possible to recognize saturation
    * using some more or less fancy algorithm, but the module converting the hardware
    * dependent data into hardware independent data can recognize artifacts much easier.
    * It should record this information using this enumeration.
-   * 
+   *
    * If the DOM calibrator combines the ATWD channels, it should call bins that
    * saturate even in the lowest amplified channel SATURATED, bins that saturate
    * only in some channels COMBINED and bins that do not saturate in the highest
@@ -96,7 +96,7 @@ class I3Waveform
      SATURATED = (1 << 2),
      UNDERSHOT = (1 << 3)
    };
-  
+
   class StatusCompound
   {
    private:
@@ -104,28 +104,28 @@ class I3Waveform
       interval_;
     Status status_;
     int8_t channel_;
-  
+
    public:
     StatusCompound() : interval_(std::make_pair(0, 0)), status_(SATURATED), channel_(-1) {}
-    
+
     ~StatusCompound();
-    
+
     std::ostream& Print(std::ostream&) const;
-    
+
     const std::pair<unsigned long long int, unsigned long long int>&
     GetInterval() const { return interval_; }
-    
+
     std::pair<unsigned long long int, unsigned long long int>&
     GetInterval() { return interval_; }
-    
+
     Status GetStatus() const { return status_; }
-    
+
     void SetStatus(Status status) { status_ = status; }
 
     int8_t GetChannel() const { return channel_; }
 
     void SetChannel(int8_t channel) { channel_ = channel; }
-    
+
     bool operator==(const StatusCompound& rhs) const
     {
       return status_ == rhs.status_
@@ -140,12 +140,12 @@ class I3Waveform
 
   /**
    * Returns a summary of a given waveform/status information.
-   * 
+   *
    * @return ADULTERATED/SHADY if any included status compound is ADULTERATED/SHADY,
    * or VIRGINAL.
    */
   static unsigned GetStatus(const std::vector<StatusCompound>& waveformInfo);
-  
+
   unsigned GetStatus() const;
   int GetChannel() const;
 
@@ -158,14 +158,14 @@ class I3Waveform
   SourceCompound source_;
   // Source source_;
 #endif // __CINT__
-  
+
  public:
   I3Waveform() :  startTime_(0), binWidth_(0), source_(ATWD) {}
-  
+
   ~I3Waveform();
-  
+
   std::ostream& Print(std::ostream&) const;
-  
+
   double GetStartTime() const {return startTime_;}
 
   void SetStartTime(double startTime) {startTime_ = startTime;}
@@ -182,7 +182,7 @@ class I3Waveform
 
   /**
    * Returns a status information for this waveform.
-   * 
+   *
    * @return A collection of status compounds.
    * A status compound consists of an interval and a status information.
    * It describes the status of all waveform bins with indices
@@ -193,10 +193,10 @@ class I3Waveform
    */
   const std::vector<StatusCompound>& GetWaveformInformation() const
     {return waveformInfo_;}
-  
+
   /**
    * Returns a status information for this waveform.
-   * 
+   *
    * @return A collection of status compounds.
    * A status compound consists of an interval and a status information.
    * It describes the status of all waveform bins with indices
@@ -206,13 +206,13 @@ class I3Waveform
    * waveform bins are good.
    */
   std::vector<StatusCompound>& GetWaveformInformation() {return waveformInfo_;}
-  
+
   /**
    * Set the status information for this waveform.
-   * 
+   *
    * Note: This method was added since there is a set method for the waveforms, too.
    * One might want to use the non-const get methods instead.
-   * 
+   *
    * @param info The status information.
    */
   void SetWaveformInformation(const std::vector<StatusCompound>& info)

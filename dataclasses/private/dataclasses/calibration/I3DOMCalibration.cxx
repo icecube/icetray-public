@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
 
 //
 //  $Id$
@@ -10,7 +13,7 @@
 
 #include <gsl/gsl_integration.h>
 
-I3DOMCalibration::~I3DOMCalibration() { } 
+I3DOMCalibration::~I3DOMCalibration() { }
 
 I3DOMCalibration::I3DOMCalibration()
   : temperature_(NAN),
@@ -73,7 +76,7 @@ QuadraticFit
 I3DOMCalibration::GetATWDFreqFit (unsigned int chip) const
 {
   //map<unsigned int, QuadraticFit>::const_iterator iter = atwdFreq_.find(chip);
-  
+
   if(chip == 0 || chip ==1 )
     {
       return atwdFreq_[chip];
@@ -84,8 +87,8 @@ I3DOMCalibration::GetATWDFreqFit (unsigned int chip) const
     }
 }
 
-void 
-I3DOMCalibration::SetATWDFreqFit (unsigned int chip, 
+void
+I3DOMCalibration::SetATWDFreqFit (unsigned int chip,
           QuadraticFit fitParams)
 {
   if(chip == 0 || chip ==1 )
@@ -98,9 +101,9 @@ I3DOMCalibration::SetATWDFreqFit (unsigned int chip,
     }
 }
 
-void 
-I3DOMCalibration::SetATWDGain (unsigned int channel, 
-             double gain) 
+void
+I3DOMCalibration::SetATWDGain (unsigned int channel,
+             double gain)
 {
   if(channel == 0 || channel == 1 || channel == 2)
     {
@@ -112,7 +115,7 @@ I3DOMCalibration::SetATWDGain (unsigned int channel,
     }
 }
 
-double 
+double
 I3DOMCalibration::GetATWDGain (unsigned int channel) const
 {
   if(channel == 0 || channel == 1 || channel == 2)
@@ -125,9 +128,9 @@ I3DOMCalibration::GetATWDGain (unsigned int channel) const
     }
 }
 
-void 
-I3DOMCalibration::SetATWDDeltaT (unsigned int chip, 
-                                 double deltat) 
+void
+I3DOMCalibration::SetATWDDeltaT (unsigned int chip,
+                                 double deltat)
 {
   if(chip == 0 || chip == 1)
     {
@@ -139,7 +142,7 @@ I3DOMCalibration::SetATWDDeltaT (unsigned int chip,
     }
 }
 
-double 
+double
 I3DOMCalibration::GetATWDDeltaT (unsigned int chip) const
 {
   if(chip == 0 || chip == 1)
@@ -155,7 +158,7 @@ I3DOMCalibration::GetATWDDeltaT (unsigned int chip) const
 double
 I3DOMCalibration::GetATWDBeaconBaseline(unsigned int id, unsigned int channel) const
 {
-  if ((id == 0 || id ==1) && 
+  if ((id == 0 || id ==1) &&
       ( channel == 0 || channel == 1 || channel == 2)) {
     return atwdBeaconBaselines_[id][channel];
   } else {
@@ -166,7 +169,7 @@ I3DOMCalibration::GetATWDBeaconBaseline(unsigned int id, unsigned int channel) c
 void
 I3DOMCalibration::SetATWDBeaconBaseline(unsigned int id, unsigned int channel, double bsl)
 {
-  if ((id == 0 || id ==1) && 
+  if ((id == 0 || id ==1) &&
       ( channel == 0 || channel == 1 || channel == 2)) {
     atwdBeaconBaselines_[id][channel] = bsl;
   } else {
@@ -185,7 +188,7 @@ void
 I3DOMCalibration::SetTauParameters(TauParam tauparameters)
 {
   tauparameters_ = tauparameters;
-  
+
   droopTimeConstants_[0] = tauparameters_.P0 + tauparameters_.P1 /
       (1.0 + exp(-((temperature_-273.0)/tauparameters_.P2)));
   droopTimeConstants_[1] = tauparameters_.P3 + tauparameters_.P4 /
@@ -195,9 +198,9 @@ I3DOMCalibration::SetTauParameters(TauParam tauparameters)
 
 /*
  * Pulse template functions for use in simulation and reconstruction.
- * 
+ *
  * Per discussion with C. Wendt Jan. 13, 2011, his FADC fits are offset 50 ns
- * and ATWD fits offset 5 ns. Other parameters from web page at 
+ * and ATWD fits offset 5 ns. Other parameters from web page at
  * http://www.icecube.wisc.edu/~chwendt/dom-spe-waveform-shape/
  * or, in the case of the denominator of c, the result of numerical integrals.
  *
@@ -210,32 +213,32 @@ const double causalityShift = -11.5;  /* Nanoseconds from peak center to photon 
 
 const SPETemplate ATWDNewToroidTemplate[3] = {
   /* Channel 0: fit from SPE pulses */
-  SPETemplate(17.899 / 14.970753076313095,	      
+  SPETemplate(17.899 / 14.970753076313095,
 	      -4.24 - 5 - causalityShift,
 	      5.5,
 	      42),
   /* Channel 1: bootstrapped from channel 0 */
-  SPETemplate(1.6581978,	      
+  SPETemplate(1.6581978,
 	      -11.70227755 - causalityShift,
 	      5.4664884,
 	      36.22319705),
   /* Channel 2: bootstrapped from channel 1 */
-  SPETemplate(0.70944364,    
+  SPETemplate(0.70944364,
 	      -10.58782492- causalityShift,
 	      3.48330553,
 	      42.10873959)
 };
 
 const SPETemplate ATWDNewToroidDroopTemplate[3] = {
-  SPETemplate(-0.8644871211757873,    
+  SPETemplate(-0.8644871211757873,
 	      -0.39712728498041222,
 	      2.2153931795324807e-08,
 	      0.18265408524009966),
-  SPETemplate(-0.60714457126191879,    
+  SPETemplate(-0.60714457126191879,
 	      1.0708609673531526,
 	      0.85478360796100328,
 	      0.22084066752348605),
-  SPETemplate(-1.4510165738141465,    
+  SPETemplate(-1.4510165738141465,
 	      -0.29659623453192685,
 	      7.5567807067886802e-09,
 	      0.18209846421412432),
@@ -243,43 +246,43 @@ const SPETemplate ATWDNewToroidDroopTemplate[3] = {
 
 const SPETemplate ATWDOldToroidTemplate[3] = {
   /* Channel 0: fit from SPE pulses */
-  SPETemplate(15.47 / 13.292860653948139,    
+  SPETemplate(15.47 / 13.292860653948139,
 	      -3.929 - 5 - causalityShift,
 	      4.7,
 	      39.),
   /* Channel 1: bootstrapped from channel 0 */
-  SPETemplate(2.07399312,    
+  SPETemplate(2.07399312,
 	      -10.95781298 - causalityShift,
 	      4.86019733,
 	      30.74826947),
   /* Channel 2: bootstrapped from channel 1 */
-  SPETemplate(1.35835821,    
+  SPETemplate(1.35835821,
 	      -9.68624195 - causalityShift,
 	      3.5016398,
 	      30.96897853),
 };
 
 const SPETemplate ATWDOldToroidDroopTemplate[3] = {
-  SPETemplate(-0.87271352029389926,	      
+  SPETemplate(-0.87271352029389926,
 	      -0.37445896923019595,
 	      0.05292192451474604,
-	      0.2015123032569355),	      
-  SPETemplate(-0.48448879003182993,	      
+	      0.2015123032569355),
+  SPETemplate(-0.48448879003182993,
 	      0.035060687415361419,
 	      0.044493411456291751,
-	      0.25894387769482058),	      
-  SPETemplate(-0.74959447466950724,	      
+	      0.25894387769482058),
+  SPETemplate(-0.74959447466950724,
 	      0.16580945347622786,
 	      0.055065176963265461,
-	      0.25173422056591982),	      
+	      0.25173422056591982),
 };
 
-const SPETemplate FADCTemplate(25.12 / 71.363940160184669,			       
+const SPETemplate FADCTemplate(25.12 / 71.363940160184669,
 			       61.27 - 50 - causalityShift,
 			       30.,
 			       186.);
 
-const SPETemplate FADCDroopTemplate(-2.8837584956162883,  
+const SPETemplate FADCDroopTemplate(-2.8837584956162883,
 				    0.57888025049064207,
 				    0.81965713180496758,
 				    0.04299648444652391);
@@ -298,10 +301,10 @@ I3DOMCalibration::ATWDPulseTemplate(unsigned channel, bool droopy) const
 {
   if (channel > 2)
     log_fatal("Unknown ATWD channel %u", channel);
-  
+
   const ToroidType toroidType = GetToroidType();
   switch (toroidType){
-    case OLD_TOROID: 
+    case OLD_TOROID:
       if(!droopy)
         return(DroopedSPETemplate(ATWDOldToroidTemplate[channel]));
       return(DroopedSPETemplate(ATWDOldToroidTemplate[channel],
@@ -336,14 +339,14 @@ I3DOMCalibration::FADCPulseTemplate(bool droopy) const
 
 bool I3DOMCalibration::DroopedSPETemplate::operator==(const DroopedSPETemplate& templ) const
 {
-  return(pulse.c==templ.pulse.c && 
-         pulse.x0==templ.pulse.x0 && 
-         pulse.b1==templ.pulse.b1 && 
-         pulse.b2==templ.pulse.b2 && 
+  return(pulse.c==templ.pulse.c &&
+         pulse.x0==templ.pulse.x0 &&
+         pulse.b1==templ.pulse.b1 &&
+         pulse.b2==templ.pulse.b2 &&
          droopy==templ.droopy &&
-         droop.pulse.c==templ.droop.pulse.c && 
-         droop.pulse.x0==templ.droop.pulse.x0 && 
-         droop.pulse.b1==templ.droop.pulse.b1 && 
+         droop.pulse.c==templ.droop.pulse.c &&
+         droop.pulse.x0==templ.droop.pulse.x0 &&
+         droop.pulse.b1==templ.droop.pulse.b1 &&
          droop.pulse.b2==templ.droop.pulse.b2 &&
          droop.tauFrac==templ.droop.tauFrac &&
          droop.time1==templ.droop.time1 &&
@@ -359,7 +362,7 @@ bool I3DOMCalibration::DroopedSPETemplate::operator<(const DroopedSPETemplate& t
 #define DSPET_compare_member(member) \
   if(member<templ.member) return(true); \
   if(member>templ.member) return(false);
-  
+
   DSPET_compare_member(pulse.c);
   DSPET_compare_member(pulse.x0);
   DSPET_compare_member(pulse.b1);
@@ -378,7 +381,7 @@ bool I3DOMCalibration::DroopedSPETemplate::operator<(const DroopedSPETemplate& t
   DSPET_compare_member(droop.time1);
   DSPET_compare_member(droop.time2);
   return(false); //templates are equal
-  
+
 #undef DSPET_compare_member
 }
 
@@ -386,7 +389,7 @@ bool I3DOMCalibration::DroopedSPETemplate::operator<(const DroopedSPETemplate& t
 // these are some beeeeautiful serialization functions.
 //
 template <class Archive>
-void 
+void
 LinearFit::serialize(Archive& ar, unsigned version)
 {
   if (version>linearfit_version_)
@@ -399,7 +402,7 @@ LinearFit::serialize(Archive& ar, unsigned version)
 I3_SERIALIZABLE(LinearFit);
 
 template <class Archive>
-void 
+void
 QuadraticFit::serialize(Archive& ar, unsigned version)
 {
   if (version>quadraticfit_version_)
@@ -415,8 +418,8 @@ I3_SERIALIZABLE(QuadraticFit);
 template <class Archive>
 void
 SPEChargeDistribution::save(Archive& ar, unsigned version) const
-{	
-  ar & make_nvp("Exp2Amp", exp2_amp); 		
+{
+  ar & make_nvp("Exp2Amp", exp2_amp);
   ar & make_nvp("Exp2Width", exp2_width);
   ar & make_nvp("Exp1Amp", exp1_amp);
   ar & make_nvp("Exp1Width", exp1_width);
@@ -492,14 +495,14 @@ double SPEChargeDistribution::ComputeMeanCharge() const{
   //return exp1_amp*std::pow(exp1_width,2)+exp2_amp*std::pow(exp2_width,2)
   //  +gaus_amp*std::sqrt(M_PI/2)*gaus_mean*gaus_width*(1+std::erf(gaus_mean/(gaus_width*std::sqrt(2))))
   //  +gaus_amp*std::pow(gaus_width,2)*std::exp(-0.5*std::pow(gaus_mean/gaus_width,2));
-  
+
   //This might seems like a very loose tolerance, but the GSL integrator tends to
   //fail for any tighter setting.
   //However, it also tends to substantially overestimate its error, at least for
   //these functions, as checking all charge distributions in
   //GeoCalibDetectorStatus_2020.Run134142.Pass2_V0.i3.gz against another, less touchy
   //algorithm indicates that it produces an average relative error in the computed
-  //mean of only 4.2e-06, and the worst observed error is 2.4e-4.  
+  //mean of only 4.2e-06, and the worst observed error is 2.4e-4.
   const double int_tol = 1e-3;
   double norm = GSL::integrate(*this, 0, 10*gaus_mean, int_tol);
   auto moment_integrand = [this](double x){ return x*this->operator()(x); };
@@ -509,8 +512,8 @@ double SPEChargeDistribution::ComputeMeanCharge() const{
 
 double SPEChargeDistribution::ComputeChargeVariance() const{
   // Tolerance here is finicky. Tighter tolerances (< 1e-4) run into roundoff error,
-  // which leads to GSL errors. Looser tolerances (> 1e-2) return values 
-  // close to 0. This tolerance seems to be around the only usable region. 
+  // which leads to GSL errors. Looser tolerances (> 1e-2) return values
+  // close to 0. This tolerance seems to be around the only usable region.
   // Tests with a few DOMs show errors of around 1e-5 when compared to directly
   // sampling from the distributions (like in DOMLauncher::PMT's SampleCharge).
   // This is well within the tolerance requirements needed for our purposes.
@@ -527,7 +530,7 @@ const double SPEChargeDistribution::xData[102] = {0.0, 0.0025, 0.0125, 0.0225, 0
 const double SPEChargeDistribution::yData[102] = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0078185220290956, 1.0042299812007673, 0.9935908344034875, 0.9850454543557308, 0.9726915954383835, 0.9697828027792773, 0.9652743986792529, 0.9678607318783602, 0.9710489835385085, 0.9779325024066567, 0.9851805409942587, 0.9917270505917856, 0.9996406452735341, 1.0068567044292451, 1.017735687531788, 1.0267751591351273, 1.0370993434166467, 1.044744857399972, 1.0573247280549134, 1.0625672697852353, 1.0746265958307744, 1.0811289116634608, 1.0895461845600405, 1.0969954086913443, 1.102224227160381, 1.1080791739726892, 1.1124879641850856, 1.1167398762419734, 1.1191118871969707, 1.1225845994808588, 1.1228561156113273, 1.1214733538285444, 1.1201466033159877, 1.119017891198713, 1.117034774252846, 1.114784420031669, 1.1106707843428119, 1.1046761249652928, 1.1004126244552774, 1.0971385151354633, 1.0917037242585172, 1.0851977267453712, 1.0803033012303216, 1.072758138133644, 1.067524998209676, 1.0625850059075657, 1.0555095359234306, 1.0509622181928957, 1.0440128255959997, 1.0395139814809693, 1.0354914927244894, 1.0310352119539496, 1.0267994142473922, 1.0218812500846572, 1.01668830547869, 1.0147294646372143, 1.0109961001746626, 1.0088071581605818, 1.0056045189846852, 1.0042154120061508, 1.0010489798770452, 0.9986921110064382, 0.9988728971422061, 0.9970854046567016, 0.9968106821162841, 0.9963693247219644, 0.9941273798848427, 0.9958665014503302, 0.9949889009733639, 0.9959272341615341, 0.9955380608193667, 0.996792440853806, 0.9961095310945263, 0.9961005008737484, 0.9973811405595548, 0.9988258893905738, 0.9980287475191254, 0.9991263792520673, 1.000596123699185, 1.0017720700471255, 1.0030773292152362, 1.0016553887740836, 1.0026409396829936, 1.0025133670051922, 1.0035085128801953, 1.0};
 
 template <class Archive>
-void 
+void
 TauParam::serialize(Archive& ar, unsigned version)
 {
   if (version>tauparam_version_)
@@ -547,7 +550,7 @@ I3_SERIALIZABLE(TauParam);
 
 
 template <class Archive>
-void 
+void
 I3DOMCalibration::serialize(Archive& ar, unsigned version)
 {
   if (version>i3domcalibration_version_)
@@ -675,7 +678,7 @@ I3DOMCalibration::serialize(Archive& ar, unsigned version)
       //interleave the per-bin slope information with space
       //for the old intercept entries
       LinearFit oldATWDBins[N_ATWD_CHANNELS][N_ATWD_BINS];
-      
+
       for(unsigned int i=0; i<N_ATWD_CHANNELS; i++){
         for(unsigned int j=0; j<N_ATWD_BINS; j++){
           oldATWDBins[i][j].slope=atwdBins_[0][i][j];
@@ -688,7 +691,7 @@ I3DOMCalibration::serialize(Archive& ar, unsigned version)
           atwdBins_[0][i][j]=oldATWDBins[i][j].slope;
         }
       }
-      
+
       for(unsigned int i=0; i<N_ATWD_CHANNELS; i++){
         for(unsigned int j=0; j<N_ATWD_BINS; j++){
           oldATWDBins[i][j].slope=atwdBins_[1][i][j];
@@ -777,7 +780,7 @@ I3DOMCalibration::serialize(Archive& ar, unsigned version)
       bool meanFADCChargeValid(false);
       ar & make_nvp("meanATWDChargeValid", meanATWDChargeValid);
       ar & make_nvp("meanFADCChargeValid", meanFADCChargeValid);
-      
+
       if (!meanATWDChargeValid) meanATWDCharge_=NAN;
       if (!meanFADCChargeValid) meanFADCCharge_=NAN;
     }

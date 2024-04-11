@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube import dataclasses as dc
 from icecube.dataclasses import get_most_energetic_cascade
 from icecube.dataclasses import get_most_energetic_inice

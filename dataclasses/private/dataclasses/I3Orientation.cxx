@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 // $Id$
 
 #include <iostream>
@@ -7,15 +11,15 @@
 
 #include <math.h>
 #include <float.h>
-#include <algorithm> 
+#include <algorithm>
 
-template <class Archive> 
-void 
+template <class Archive>
+void
 I3Orientation::serialize(Archive& ar, unsigned version)
 {
 	if (version>i3orientation_version_)
 		log_fatal("Attempting to read version %u from file but running version %u of I3Orientation class.",version,i3orientation_version_);
-	
+
 	ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
 	ar & make_nvp("Rotation", rot_);
 }
@@ -69,7 +73,7 @@ void I3Orientation::SetOrientation(const I3Direction& d)
 	const double dx = d.GetX();
 	const double dy = d.GetY();
 	const double dz = d.GetZ();
-	
+
 	// get some orthogonal direction
 	double ox, oy, oz;
 	const double x = dx < 0.0 ? -dx : dx;
@@ -88,7 +92,7 @@ void I3Orientation::SetOrientation(const I3Direction& d)
 			ox = dy; oy = -dx; oz=0.;
 		}
 	}
-	
+
 	SetOrientation(dx, dy, dz, ox, oy, oz);
 }
 
@@ -102,18 +106,18 @@ void I3Orientation::SetOrientation(const I3Orientation& d)
 }
 
 //-----------------------------------------------------------
-void I3Orientation::SetOrientation(double x_dir, double y_dir, double z_dir, 
+void I3Orientation::SetOrientation(double x_dir, double y_dir, double z_dir,
 								   double x_up, double y_up, double z_up)
 {
 	const double del = 0.001;
-	
+
 	// the vectors must not be too short!
 	const double dir_mag2 = x_dir*x_dir + y_dir*y_dir + z_dir*z_dir;
 	const double up_mag2 = x_up*x_up + y_up*y_up + z_up*z_up;
-	
+
 	if (dir_mag2 < 1e-6) log_fatal("direction vector (\"dir\") too short! (length should be 1)");
 	if (up_mag2 < 1e-6) log_fatal("direction vector (\"up\") too short! (length should be 1)");
-	
+
 	// normalize the vectors
 	const double dir_mag = std::sqrt(dir_mag2);
 	const double up_mag = std::sqrt(up_mag2);
@@ -123,32 +127,32 @@ void I3Orientation::SetOrientation(double x_dir, double y_dir, double z_dir,
 	const double newZ_x = x_dir / dir_mag;
 	const double newZ_y = y_dir / dir_mag;
 	const double newZ_z = z_dir / dir_mag;
-	
+
 	// the vectors must be perpendicular
 	if (newZ_x*newX_x + newZ_y*newX_y + newZ_z*newX_z > del) log_fatal("\"dir\" and \"up\" vectors are not perpendicular!");
-	
+
 	// newY = newZ x newX
 	const double newY_x = newZ_y*newX_z - newZ_z*newX_y;
 	const double newY_y = newZ_z*newX_x - newZ_x*newX_z;
 	const double newY_z = newZ_x*newX_y - newZ_y*newX_x;
-	
+
 	double q[4] = {0.,0.,0.,0.};
 	// matrix
 	const double M[3][3] = {{newX_x, newY_x, newZ_x},
 							{newX_y, newY_y, newZ_y},
 							{newX_z, newY_z, newZ_z}};
-	
+
 	// calculate the quaternion from the matrix
-	q[3] = std::sqrt( std::max( 0., 1. + M[0][0] + M[1][1] + M[2][2] ) ) / 2.; 
-	q[0] = std::sqrt( std::max( 0., 1. + M[0][0] - M[1][1] - M[2][2] ) ) / 2.; 
-	q[1] = std::sqrt( std::max( 0., 1. - M[0][0] + M[1][1] - M[2][2] ) ) / 2.; 
-	q[2] = std::sqrt( std::max( 0., 1. - M[0][0] - M[1][1] + M[2][2] ) ) / 2.; 
+	q[3] = std::sqrt( std::max( 0., 1. + M[0][0] + M[1][1] + M[2][2] ) ) / 2.;
+	q[0] = std::sqrt( std::max( 0., 1. + M[0][0] - M[1][1] - M[2][2] ) ) / 2.;
+	q[1] = std::sqrt( std::max( 0., 1. - M[0][0] + M[1][1] - M[2][2] ) ) / 2.;
+	q[2] = std::sqrt( std::max( 0., 1. - M[0][0] - M[1][1] + M[2][2] ) ) / 2.;
 	q[0] = copysign( q[0], M[2][1] - M[1][2] );
 	q[1] = copysign( q[1], M[0][2] - M[2][0] );
 	q[2] = copysign( q[2], M[1][0] - M[0][1] );
 
 	rot_.set(q[0], q[1], q[2], q[3]); // x,y,z,w
-	
+
 	isDirCalculated_=false;
 	isUpCalculated_=false;
 	isRightCalculated_=false;
@@ -163,7 +167,7 @@ void I3Orientation::SetOrientation(const I3Direction &dir, const I3Direction &up
 void I3Orientation::SetOrientationFromQuaternion(const I3Quaternion &q)
 {
 	if (fabs(q.norm()-1.) > 1e-6) log_fatal("Quaternion norm==%f != 1!", q.norm());
-	
+
 	rot_=q;
 	isDirCalculated_=false;
 	isUpCalculated_=false;
@@ -175,11 +179,11 @@ void I3Orientation::ResetOrientation()
 {
 	// Set or Reset the direction to 0.
 	zDir_=NAN;
-	
+
 	zUp_=NAN;
-	
+
 	zRight_=NAN;
-	
+
 	// set this as "calculated", so that all queries will return NAN
 	// until a correct value is set
 	isDirCalculated_=false;
@@ -193,7 +197,7 @@ namespace {
 							   double &zenith, double &azimuth)
 	{
 		if (std::isnan(zDir)) {zenith=NAN; azimuth=NAN; return;}
-		
+
 		// Stolen from I3Direction:
 		// Calculate Spherical coordinates from Cartesian
 		// Direction is stored on disk in Spherical coordinates only
@@ -221,7 +225,7 @@ void I3Orientation::DoCalcDir() const
 {
 	// rotated z-axis
 	rot_.rotatedZAxis(xDir_, yDir_, zDir_);
-	
+
 	CalcSphFromCar(xDir_, yDir_, zDir_,
 				   zenithDir_, azimuthDir_);
 	isDirCalculated_ = true;

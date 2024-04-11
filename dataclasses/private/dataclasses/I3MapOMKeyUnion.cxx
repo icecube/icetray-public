@@ -1,10 +1,10 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2011
- *  Jakob van Santen <vansanten@wisc.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2011 Jakob van Santen <vansanten@wisc.edu>
+ *  Copyright (C) 2011 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  SPDX-License-Identifier: BSD-2-Clause
+ *
  */
 
 #include "dataclasses/I3MapOMKeyUnion.h"
@@ -30,29 +30,29 @@ I3RecoPulseSeriesMapUnion::Apply(const I3Frame &frame) const
 	typedef Map::value_type Pair;
 	typedef Pair::second_type Series;
 	typedef Series::value_type Element;
-	
+
 	if (unified_)
 		return unified_;
-	
+
 	unified_ = boost::make_shared<Map>();
-	
+
 	BOOST_FOREACH(const std::string &key, keys_) {
 		MapConstPtr pmap = frame.Get<MapConstPtr>(key);
 		if (!pmap)
 			log_fatal("Couldn't find '%s' in the frame!",
 			    key.c_str());
-		
+
 		BOOST_FOREACH(const Pair &pair, *pmap) {
 			Series &univec = (*unified_)[pair.first];
 			BOOST_FOREACH(const Element &element, pair.second)
 				univec.push_back(element);
 		}
 	}
-	
+
 	BOOST_FOREACH(Pair &pair, *unified_)
 		std::sort(pair.second.begin(), pair.second.end(),
 		    PulseCompare);
-	
+
 	return unified_;
 }
 

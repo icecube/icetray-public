@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2004
-    the icecube collaboration
+    Copyright  (C) 2004 the icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     $Id$
 
     @version $Revision$
@@ -41,6 +41,6 @@ TEST(comparison_operator)
   ENSURE(OMKey(1,1)   < OMKey(2,2),   "operator< works as expected");
   ENSURE(OMKey(1,1,0) < OMKey(2,2,0), "operator< works as expected");
   ENSURE(OMKey(1,1,1) < OMKey(2,2,2), "operator< works as expected");
-  
+
 }
 

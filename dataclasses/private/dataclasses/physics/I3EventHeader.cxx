@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <icetray/serialization.h>
 #include <dataclasses/physics/I3EventHeader.h>
 
@@ -20,7 +24,7 @@ I3EventHeader::~I3EventHeader()
 
 
 template <class Archive>
-void 
+void
 I3EventHeader::serialize(Archive& ar, unsigned version)
 {
   if(version > i3eventheader_version_)
@@ -76,5 +80,5 @@ std::ostream& I3EventHeader::Print(std::ostream& oss) const{
 std::ostream& operator<<(std::ostream& oss, const I3EventHeader& eh){
   return(eh.Print(oss));
 }
-  
+
 I3_SERIALIZABLE(I3EventHeader);

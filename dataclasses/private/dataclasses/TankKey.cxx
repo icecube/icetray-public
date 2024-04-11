@@ -1,8 +1,12 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <icetray/serialization.h>
 #include "dataclasses/TankKey.h"
 
 template <typename Archive>
-void 
+void
 TankKey::serialize (Archive & ar, unsigned version)
 {
   if (version>tankkey_version_)
@@ -20,7 +24,7 @@ void TankKey::SetOMKey(const OMKey& omKey)
      (omKey.GetOM()>=61 && omKey.GetOM()<=64))
     {
 	string = omKey.GetString();
-	tank = ((omKey.GetOM()<63) ? TankA : TankB);	
+	tank = ((omKey.GetOM()<63) ? TankA : TankB);
     }
     else
     {
@@ -37,14 +41,14 @@ OMKey TankKey::GetDefaultOMKey() const
 
 std::ostream& TankKey::Print(std::ostream& os) const{
     os << string;
-    
+
     switch (tank)
     {
         case TankKey::TankA: {os << "A"; break;}
         case TankKey::TankB: {os << "B"; break;}
         default:             {os << "?"; break;}
     }
-    
+
     return os;
 }
 

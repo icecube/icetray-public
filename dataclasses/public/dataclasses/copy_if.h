@@ -1,6 +1,6 @@
 /**
- *    copyright  (C) 2004
- *  the icecube collaboration
+ *    Copyright  (C) 2004 the icecube collaboration
+ *  SPDX-License-Identifier: BSD-2-Clause
  *  @version $Id$
  *  @date $Date$
  */
@@ -17,7 +17,7 @@
 template <typename InputIterator,
           typename OutputIterator,
           typename Predicate>
-OutputIterator 
+OutputIterator
 copy_if(InputIterator begin,
         InputIterator end,
         OutputIterator destBegin,

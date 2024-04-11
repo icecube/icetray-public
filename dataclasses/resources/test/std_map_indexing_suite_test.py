@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 # std_map_indexing_suite_test.py
 #
@@ -90,11 +95,11 @@ class IterRunner:
         for i in range(10000):
             v = i/1.0e4
             k = str(hash(v))
-            self.map[k] = v 
+            self.map[k] = v
     def iterClassic(self):
         return [(pair.key(),pair.data()) for pair in self.map]
     def iterClassicUnpack(self):
-        return [(key,value) for key,value in self.map] 
+        return [(key,value) for key,value in self.map]
     def getItems(self):
         return list(self.map.items())
     def getItemsUnpack(self):
@@ -111,7 +116,7 @@ class I3MapStringDoublePerformanceTest(unittest.TestCase):
         for i in range(5000):
             v = i/5.0e3
             k = str(hash(v))
-            self.map[k] = v 
+            self.map[k] = v
     def testPerformance(self):
         this_script = os.path.basename(os.path.splitext(__file__)[0])
         setup = 'from %s import IterRunner; case = IterRunner(); case.setUp()' % this_script
@@ -147,12 +152,12 @@ class I3MapKeyDoubleTest(I3MapStringDoubleTest):
 #     def setUp(self):
 #         from icecube import icetray,dataclasses
 #         self.map = dataclasses.I3MapIntVectorInt()
-#         v1 = dataclasses.I3VectorInt() 
-#         v2 = dataclasses.I3VectorInt() 
-#         v3 = dataclasses.I3VectorInt() 
-#           for i in [1,2,3]: v1.append(i) 
-#                 for i in [4,5,6]: v2.append(i) 
-#                 for i in [7,8,9]: v3.append(i) 
+#         v1 = dataclasses.I3VectorInt()
+#         v2 = dataclasses.I3VectorInt()
+#         v3 = dataclasses.I3VectorInt()
+#           for i in [1,2,3]: v1.append(i)
+#                 for i in [4,5,6]: v2.append(i)
+#                 for i in [7,8,9]: v3.append(i)
 #         self.sourceDict = {1: v1, 2: v2, -42: v3}
 #         self.map[0] = v1
 #         for k in self.sourceDict.keys(): self.map[k] = self.sourceDict[k]

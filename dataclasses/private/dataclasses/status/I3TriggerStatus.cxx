@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file I3TriggerStatus.cxx
@@ -20,7 +20,7 @@
 #include <boost/algorithm/string.hpp>
 
 /**
- * Uses boost::lexical_cast to ensure the conversion can be made.  
+ * Uses boost::lexical_cast to ensure the conversion can be made.
  * http://www.boost.org/doc/libs/1_38_0/libs/conversion/lexical_cast.htm
  * This catches things that will silently trip up atoi and atof.
  */
@@ -31,7 +31,7 @@ void Convert(const F& from, boost::optional<T>& to){
     to = boost::optional<T>(value);
   }catch(boost::bad_lexical_cast &){
     to = boost::optional<T>();
-  } 
+  }
 };
 
 // specialization for const char*
@@ -48,7 +48,7 @@ void Convert(const std::string& from, boost::optional<bool>& to){
   try{
     bool value = boost::lexical_cast<bool>(from);
     to = boost::optional<bool>(value);
-  }catch(boost::bad_lexical_cast &){    
+  }catch(boost::bad_lexical_cast &){
     to = boost::make_optional(false, bool());
     //to = boost::optional<bool>();
     // GCCFalsePositive
@@ -90,7 +90,7 @@ void I3TriggerStatus::SetTriggerConfigValue(const char* key, T value){
 }
 
 template <typename T>
-void I3TriggerStatus::GetTriggerConfigValue(const std::string& key, 
+void I3TriggerStatus::GetTriggerConfigValue(const std::string& key,
 					    boost::optional<T>& value) const{
   typedef std::map<std::string,std::string> map_t;
   map_t::const_iterator iter = settings_.find(key);
@@ -109,7 +109,7 @@ void I3TriggerStatus::GetTriggerConfigValue(const std::string& key,
 }
 
 template <typename T>
-void I3TriggerStatus::GetTriggerConfigValue(const char* key, 
+void I3TriggerStatus::GetTriggerConfigValue(const char* key,
 					    boost::optional<T>& value) const {
   std::string key_str(key);
   GetTriggerConfigValue(key_str,value);
@@ -153,7 +153,7 @@ void I3TriggerStatus::save(Archive& ar, unsigned version) const
 }
 
 template <class Archive>
-void I3TriggerStatus::load(Archive& ar, unsigned version) 
+void I3TriggerStatus::load(Archive& ar, unsigned version)
 {
   if (version>i3triggerstatus_version_)
     log_fatal("Attempting to read version %u from file but running version %u of "
@@ -205,14 +205,14 @@ template void I3TriggerStatus::GetTriggerConfigValue(const char*,               
 template void I3TriggerStatus::GetTriggerConfigValue(const std::string&,TYPE&) const; \
 template void I3TriggerStatus::GetTriggerConfigValue(const char*,TYPE&) const;        \
 template void Convert(const std::string&, boost::optional<TYPE>&);                    \
-template void Convert(const char*, boost::optional<TYPE>&);  
+template void Convert(const char*, boost::optional<TYPE>&);
 
-#pragma GCC diagnostic push 
+#pragma GCC diagnostic push
 #ifdef __clang__
 #pragma GCC diagnostic ignored "-Winstantiation-after-specialization"
 #endif
 TRIGGER_CONFIG_TYPES(bool);
-#pragma GCC diagnostic pop 
+#pragma GCC diagnostic pop
 TRIGGER_CONFIG_TYPES(int);
 TRIGGER_CONFIG_TYPES(float);
 TRIGGER_CONFIG_TYPES(double);

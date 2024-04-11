@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef DEPRECATED_CLASSES_H_INCLUDED
 #define DEPRECATED_CLASSES_H_INCLUDED
 
@@ -8,7 +12,7 @@ struct TWRAOMStatus {
   unsigned int baseline;
   unsigned int threshold;
   CableType cableType;
-  
+
   friend class icecube::serialization::access;
   template <class Archive> void serialize (Archive& ar, unsigned version){
     ar & make_nvp("BinSize", binSize);

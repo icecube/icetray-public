@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import icecube.icetray # be nice and pull in our dependencies
 
 # XXX Work around a stupid bug with certain combinations of Boost, compiler, and

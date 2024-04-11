@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import unittest
 from icecube import dataclasses
 
@@ -18,7 +22,7 @@ class TestI3FilterResult(unittest.TestCase):
         self.assertEqual(fr1.__str__(), fr2.__str__(), "these should be the same.")
 
 
-    def test_I3FilterResult_bool(self): 
+    def test_I3FilterResult_bool(self):
         fr1 = dataclasses.I3FilterResult()
         fr1.condition_passed = 0
         fr1.prescale_passed  = 0
@@ -32,8 +36,8 @@ class TestI3FilterResult(unittest.TestCase):
         fr1 = dataclasses.I3FilterResult()
         fr1.condition_passed = 0
         fr1.prescale_passed  = 1
-        self.assertFalse(bool(fr1), "this should be false.")        
-        
+        self.assertFalse(bool(fr1), "this should be false.")
+
         fr1 = dataclasses.I3FilterResult()
         fr1.condition_passed = 1
         fr1.prescale_passed  = 1

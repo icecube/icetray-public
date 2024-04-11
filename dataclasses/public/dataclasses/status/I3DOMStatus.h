@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3DOMSTATUS_H_INCLUDED
 #define I3DOMSTATUS_H_INCLUDED
 
@@ -7,7 +11,7 @@
 
 static const unsigned i3domstatus_version_ = 6;
 
-class I3DOMStatus 
+class I3DOMStatus
 {
 public:
   I3DOMStatus():
@@ -44,7 +48,7 @@ public:
   {};
 
   ~I3DOMStatus();
-  
+
   bool operator==(const I3DOMStatus& rhs) const
   {
     return (trigMode == rhs.trigMode &&
@@ -82,15 +86,15 @@ public:
   {
     return !operator==(rhs);
   }
-  
+
   /**
    * The different kinds of triggers that can be used for the dom
    * The standard data-taking operation is SPE
    */
   enum TrigMode { UnknownTrigMode = -1 , TestPattern = 0 , CPU = 1, SPE = 2, Flasher=3, MPE=4 };
-  /**  
+  /**
    * This controls how far the local coincidence signal is sent and received
-   *   Turns out you can not encode SLC active or not here.  
+   *   Turns out you can not encode SLC active or not here.
    *   IF SoftLC is set here, then ONLY SLC hits are to be expected.
    *    There is a SLCActive bool now in the this struct.
    *
@@ -100,7 +104,7 @@ public:
    */
   enum LCMode {UnknownLCMode = -1, LCOff = 0, UpOrDown = 1, Up = 2, Down = 3, UpAndDown =4, SoftLC=5};
   /**
-   * There is also provision to turn on or off various settings in the 
+   * There is also provision to turn on or off various settings in the
    * DOM
    */
   enum OnOff {Unknown = -1, Off = 0, On = 1};
@@ -113,23 +117,23 @@ public:
 
     /**
      * Whether the DOM has a terminated ("A" or "T") or unterminated ("B" or "U") cable.
-     * Perhaps this should go in I3OMGeo? Maybe not, since that class could deal with 
+     * Perhaps this should go in I3OMGeo? Maybe not, since that class could deal with
      * AMANDA OMs and this only with IceCube DOMs. Perhaps a bool would work here, but I'm
      * not sure what the story is with IceTop DOMs. For now keep the "don't know" option.
      */
-    enum CableType 
+    enum CableType
     {
 	UnknownCableType = -1,
 	Terminated = 0,
 	Unterminated = 1
     };
-    
-   
+
+
   /**
    * DOM internal trigger mode
    */
   TrigMode trigMode;
-  
+
   /**
    * LC RX mode:  hard, soft, none, etc:  how this dom listens for LC info
    */
@@ -139,7 +143,7 @@ public:
    * LC TX mode:  hard, soft, none, etc:  how this dom broadcasts  LC info
    */
   LCMode txMode;
-  
+
   /**
    * Number of nearest neighbors to consider in LC search.(1,2,3 or 4)
    */
@@ -154,21 +158,21 @@ public:
    * Local coincidence window size, after ATWD launch window
    */
   double lcWindowPost;
-  
+
   /**
    * Real operating PMT HV (Volts)
    */
   double pmtHV;
 
   /**
-   *  Single PE (SPE) discriminator level. 
+   *  Single PE (SPE) discriminator level.
    */
   double speThreshold;
   /**
    * the Pedestal voltage of the analog front end.
    */
   double fePedestal;
-  
+
   /**
    * Sets ATWD0 sampling speed. Higher DAC setting is faster sample rate.
    */
@@ -185,10 +189,10 @@ public:
   double dacFADCRef;
 
   /**
-   *  Multiple PE (MPE) discriminator level. 
+   *  Multiple PE (MPE) discriminator level.
    */
   double mpeThreshold;
-  
+
   /**
    * NBins per Engineering readout.  Keep in mind, delta-compressed data automatically adjusts number of
    *    readouts per Launch based on waveform size, but if present, should always be 128 samples.
@@ -198,7 +202,7 @@ public:
   unsigned int nBinsATWD2;
   unsigned int nBinsATWD3;
   unsigned int nBinsFADC;
-  
+
   OnOff statusATWDa;
   OnOff statusATWDb;
   OnOff statusFADC;
@@ -207,7 +211,7 @@ public:
    *  IS the dom configured to make delta-compression readouts?
    */
   OnOff deltaCompress;
-    
+
   /**
    * Flasher board state and flasher settings
    */
@@ -229,7 +233,7 @@ public:
     CableType cableType;
 
   /**
-   *  SLCActive - bool to indicate if SLC readouts are active 
+   *  SLCActive - bool to indicate if SLC readouts are active
    *     as well as the HLC readouts described above.
    */
   bool SLCActive;

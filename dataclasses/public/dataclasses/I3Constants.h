@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version $Id$
  * @file I3Constants.h
  * @date $Date$
@@ -18,7 +18,7 @@
  * Just a namespace filled with constants -- add a line
  * <tt> using namespace I3Constants </tt> to get access to them
  * directly, or just use @c I3Constants::pi, for example.
- * 
+ *
  * @todo probably need more constants here.   Add them here when you need them.
  */
 namespace I3Constants
@@ -66,12 +66,12 @@ namespace I3Constants
    * The speed of light in ice
    */
   static const double c_ice = c/n_ice_group;
-  
+
   /**
    * pi.
    */
   static const double pi = M_PI;
-  
+
   /**
    * Euler's number
    */
@@ -80,7 +80,7 @@ namespace I3Constants
   /**
    *  Avaogadro's Number
    */
- 
+
   static const double NA = 6.0221415e23;
 
   /**

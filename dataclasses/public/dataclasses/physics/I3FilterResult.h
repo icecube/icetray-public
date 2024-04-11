@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file I3FilterResult.h
@@ -18,7 +18,7 @@
 
 
 /** The filtering result information from JEB + PnF.
- * 
+ *
  * Filtering is a five step process:
  * <ol>
  * <li> Prepare data (decoding, calibration, feature extraction etc.),
@@ -37,16 +37,16 @@ struct I3FilterResult : public I3FrameObject
 
   //@var prescalePassed True for "good" events that pass prescaling.
   bool prescalePassed;
-  
+
   /** Default constructor.
    */
   I3FilterResult() : conditionPassed(false), prescalePassed(false) {}
   /** Destructor.
    */
   ~I3FilterResult();
-  
+
   std::ostream& Print(std::ostream&) const override;
-  
+
   template <class Archive>
   void serialize(Archive& ar,unsigned version);
 

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube import icetray, dataclasses, dataio
 from os.path import expandvars
 from os import unlink
@@ -16,13 +20,13 @@ def do_one(Type, name, gen, checksum):
     global is_fail
     name += '.i3'
     i3f = dataio.I3File(name, 'w')
-    
+
     tinst = Type()
     i = 0
     for value in gen:
         tinst.append(value)
         i += 1
-    print("%d entries" % i) 
+    print("%d entries" % i)
     frame = icetray.I3Frame()
     frame[name] = tinst
 
@@ -57,7 +61,7 @@ def check_on(Type, name, gen):
     print("checked %d entries." % i)
     unlink(name)
 
-    
+
 def gen(n):
     value = 0
     while value < n:
@@ -69,7 +73,7 @@ def bool_gen(max):
     while n < max:
         yield n % 3 == 0
         n += 1
-    
+
 checks = [(dataclasses.I3VectorBool, "vector_bool",
        (bool_gen, [20000]), '4fc19aae89a02bcdd7a545bc1716243f'),
       (dataclasses.I3VectorShort, "vector_short",
@@ -101,6 +105,6 @@ else:
 for (T, N, (GEN,ARGS), CHECKSUM) in checks:
     do_one(T, N, GEN(*ARGS), CHECKSUM)
     check_on(T, N, GEN(*ARGS))
-    
+
 sys.exit(is_fail)
 

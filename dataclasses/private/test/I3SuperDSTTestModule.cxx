@@ -1,8 +1,9 @@
 /**
- * @file 
- * @brief 
+ * @file
+ * @brief
  *
- * (c) 2010 the IceCube Collaboration
+ * Copyright (c) 2010 the IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  * @version $Revision$
@@ -57,7 +58,7 @@ I3SuperDSTTestModule::I3SuperDSTTestModule(const I3Context& ctx) : I3Module(ctx)
 	AddParameter(pulses_optionname, "Name of the "
 	    "I3RecoPulseSeriesMap in the frame",
 	    pulses_name_);
-	
+
 	superdst_name_ = "";
 	AddParameter(superdst_optionname, "Name of the "
 	    "I3SuperDST object to get from the frame",
@@ -78,7 +79,7 @@ I3SuperDSTTestModule::Configure()
 void
 I3SuperDSTTestModule::DAQ(I3FramePtr frame)
 {
-	
+
 	I3RecoPulseSeriesMapConstPtr pulses, fake_pulses;
 	I3RecoPulseSeriesMapPtr clean_pulses;
 	I3RecoPulseSeriesMap::const_iterator mit1, mit2;
@@ -86,7 +87,7 @@ I3SuperDSTTestModule::DAQ(I3FramePtr frame)
 	I3SuperDSTConstPtr superdst;
 
 	pulses = frame->Get<I3RecoPulseSeriesMapConstPtr>(pulses_name_);
-	
+
 	if (!pulses) {
 		goto bail;
 	}
@@ -107,7 +108,7 @@ I3SuperDSTTestModule::DAQ(I3FramePtr frame)
 		superdst = I3SuperDSTPtr(sdst);
 		iarchive >> *sdst;
 	}
-	
+
 	fake_pulses = superdst->Unpack();
 
 	/* Remove zero-length vectors from the map, as sDST can't represent them. */
@@ -124,7 +125,7 @@ I3SuperDSTTestModule::DAQ(I3FramePtr frame)
 	}
 
 	pulses = clean_pulses;
-	
+
 	//ENSURE_EQUAL(pulses->size(), fake_pulses->size());
 	BOOST_FOREACH(const I3RecoPulseSeriesMap::value_type &pair, *pulses) {
 		const OMKey &key = pair.first;
@@ -132,7 +133,7 @@ I3SuperDSTTestModule::DAQ(I3FramePtr frame)
 	}
 
 	using namespace I3SuperDSTUtils;
-	
+
 	for (mit1 = pulses->begin(), mit2 = fake_pulses->begin();
 	    mit1 != pulses->end() && mit2 != fake_pulses->end(); mit1++, mit2++) {
 		ENSURE_EQUAL(mit1->first, mit2->first);
@@ -152,7 +153,7 @@ I3SuperDSTTestModule::DAQ(I3FramePtr frame)
 				    31, superdst_version_);
 				epsilon = I3SuperDST::DecodeWidth(w+1, superdst_version_)
 				    - I3SuperDST::DecodeWidth(w, superdst_version_);
-				/* 
+				/*
 				 * Stupid edge case: decoded pulses are not allowed to overlap,
 				 * so we only check the encoding if the pulses don't touch.
 				 */

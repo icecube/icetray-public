@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 
 #include <dataclasses/I3Double.h>
@@ -26,7 +30,7 @@ TEST(assignment_operator) {
   I3Double foo = 12.0;
   I3Double bar = 10.0;
   bar = foo;
-  
+
   // barf if bar != 12.0
   ENSURE(bar.value == 12.0, "Whoa! Assignment failed! bar.value should be 12.0!");
 }

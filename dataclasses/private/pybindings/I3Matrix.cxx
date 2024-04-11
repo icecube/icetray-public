@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
 
 #include <dataclasses/I3Matrix.h>
 #include <boost/make_shared.hpp>
@@ -10,13 +13,13 @@ namespace {
 class pyerr_fmt : public std::ostringstream {
 public:
 	pyerr_fmt(PyObject *err = PyExc_TypeError) : err_(err) {};
-	
+
 	void raise(PyObject *err = PyExc_TypeError)
 	{
 		PyErr_SetString(err, this->str().c_str());
 		throw bp::error_already_set();
 	}
-	
+
 private:
 #ifdef __clang__
 #pragma clang diagnostic push
@@ -44,7 +47,7 @@ array_interface(I3Matrix &m)
 	d["shape"]   = bp::make_tuple(m.size1(), m.size2());
 	d["typestr"] = bp::str("<f8");
 	d["data"]    = bp::make_tuple((long long)(&(m.data()[0])), false);
-	
+
 	return d;
 }
 
@@ -56,38 +59,38 @@ from_object(bp::object obj)
 		err << "'" << type(obj) << "' object does not support the array protocol!";
 		err.raise(PyExc_TypeError);
 	}
-	
+
 	bp::dict iface(bp::getattr(obj, "__array_interface__"));
 	if (!(iface.has_key("shape") && iface.has_key("typestr") && iface.has_key("data"))) {
 		err << "'" << type(obj) << "' object does not support the array protocol!";
 		err.raise(PyExc_TypeError);
 	}
-	
+
 	bp::tuple shape(iface["shape"]);
 	if (bp::len(shape) != 2) {
 		err << "Array must have 2 dimensions!";
 		err.raise(PyExc_ValueError);
 	}
-	
+
 	if (iface.has_key("strides") && iface["strides"]) {
 		err << "I can't deal with strided arrays!";
 		err.raise(PyExc_ValueError);
 	}
-	
+
 	std::string typestr = bp::extract<std::string>(iface["typestr"]);
 	if (typestr != "<f8") {
 		err << "'" << type(obj) << "' object has unknown typecode: '" << typestr << "'";
 		err.raise(PyExc_TypeError);
 	}
-	
+
 	// NB: we ignore the read-only flag since we're making a copy anyway
 	ptrdiff_t ptr = bp::extract<ptrdiff_t>(bp::tuple(iface["data"])[0]);
 	size_t size1 = bp::extract<size_t>(shape[0]);
 	size_t size2 = bp::extract<size_t>(shape[1]);
-	
+
 	I3MatrixPtr mat = boost::make_shared<I3Matrix>(size1, size2);
 	memcpy(&(mat->data()[0]), (void*)ptr, size1*size2*sizeof(double));
-	
+
 	return mat;
 }
 
@@ -105,6 +108,6 @@ register_I3Matrix()
 	    .add_property("__array_interface__", array_interface)
 	    .def(bp::dataclass_suite<I3Matrix>())
 	;
-	
+
 	register_pointer_conversions<I3Matrix>();
 }

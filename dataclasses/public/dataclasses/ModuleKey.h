@@ -1,9 +1,8 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2012
- *  The IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2012 The IceCube Collaboration <http://www.icecube.wisc.edu>
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -12,7 +11,7 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -24,9 +23,9 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  *  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  *  SUCH DAMAGE.
- *  
+ *
  *  SPDX-License-Identifier: BSD-2-Clause
- *  
+ *
  */
 
 #ifndef MODULEKEY_H_INCLUDED
@@ -61,7 +60,7 @@ class ModuleKey
 
   ModuleKey() : stringNumber_(0), omNumber_(0) {}
 
-  ModuleKey(int str,unsigned int om) 
+  ModuleKey(int str,unsigned int om)
     : stringNumber_(str), omNumber_(om) {}
 
   /**
@@ -86,13 +85,13 @@ class ModuleKey
 
 
   /**
-   * equality operator.  
+   * equality operator.
    * @return true if the string and om numbers of the two ModuleKey's match
    * @param rhs the ModuleKey to compare this one to.
    */
   bool operator==(const ModuleKey& rhs) const
     {
-      if(rhs.omNumber_ == omNumber_ && 
+      if(rhs.omNumber_ == omNumber_ &&
          rhs.stringNumber_ == stringNumber_)
         return true;
       return false;
@@ -114,7 +113,7 @@ class ModuleKey
   {
     size_t operator()(const ModuleKey& key) const
     {
-      return ((static_cast<size_t>(abs(key.GetString()+19)) * 64) + 
+      return ((static_cast<size_t>(abs(key.GetString()+19)) * 64) +
                static_cast<size_t>(key.GetOM()));
     }
   };

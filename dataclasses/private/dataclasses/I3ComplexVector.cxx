@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <dataclasses/I3ComplexVector.h>
 #include <dataclasses/I3Position.h>
 #include <dataclasses/I3Direction.h>

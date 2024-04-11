@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <dataclasses/fft/FFTResamplingTools.h>
 
 boost::rational<long> fft::GetRationalNumberFromDecimal(double decimal, const bool secondCall) {

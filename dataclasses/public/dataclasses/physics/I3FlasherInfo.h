@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version $Id$
  * @file I3FlasherInfo.h
  * @date $Date$
@@ -20,8 +20,8 @@ static const unsigned i3flasherinfo_version_ = 1;
  * @brief This contains the data on which DOM flashed during flasher runs
  *
  * It holds the flashing DOMs OMKey, brightness level, mask (which LEDs fired)
- * firing time, and ATWD trace of the LED current pulse 
- * 
+ * firing time, and ATWD trace of the LED current pulse
+ *
  * This will be changed into a I3Trigger derrived class eventually, once there
  * is sufficient funcionality to get Flasher settings somewhere.
  * Included here for use by flasher analysis people.  It can be "I3Bagged".
@@ -32,20 +32,20 @@ class I3FlasherInfo : public I3FrameObject
 
 protected:
 
-    /**  
+    /**
      * This is the OM that flashed
      */
 
-    OMKey flasherOM_; 
+    OMKey flasherOM_;
     /**
      *  Time (in nsec) in 25 nsec units, of the LED flash time.
      */
 
-    double flashTime_;  
+    double flashTime_;
 
-    /** 
+    /**
      * These is the ATWD waveform of the LED current pulse, and the
-     * ATWD time bin size, in nsec 
+     * ATWD time bin size, in nsec
      */
 
     std::vector<int> rawATWD3_;
@@ -63,11 +63,11 @@ protected:
      int width_;
      int rate_;
 
-    
+
 public:
- 
+
     I3FlasherInfo()
-    : flashTime_(0.0), 
+    : flashTime_(0.0),
       aTWDBinSize_(0),
       pedestalSubtractedATWD3_(false),
       mask_(0),
@@ -84,7 +84,7 @@ public:
 
     OMKey GetFlashingOM() const { return flasherOM_; }
     void SetFlashingOM(OMKey flashOM) { flasherOM_ = flashOM; }
-  
+
     /**
      * return and set flash  time
      */
@@ -110,13 +110,13 @@ public:
 
 
       /* return and set width */
- 
+
     unsigned int GetWidth() const { return width_; }
     void SetWidth(int width) { width_ = width; }
 
 
     /* return and set rate */
- 
+
     unsigned int GetRate() const { return rate_; }
     void SetRate(int rate) { rate_ = rate; }
 
@@ -125,11 +125,11 @@ public:
      * ATWD3 holds the digitized LED current pulse; the others channels are empty
      */
     const std::vector<int>& GetRawATWD3() const {return rawATWD3_;}
-  
+
 
  //   void SetPedestalIsSubtractedATWD3(bool subtracted) { pedestalSubtractedATWD3_ = subtracted; }
 
-    
+
     /* is ATWD3 pedestal subtracted? */
    // bool PedestalSubtractedATWD3() { return pedestalSubtractedATWD3_; }
 

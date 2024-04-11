@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef ICETRAY_PYTHON_OSTREAM_OVERLOADS_HPP_INCLUDED
 #define ICETRAY_PYTHON_OSTREAM_OVERLOADS_HPP_INCLUDED
 
@@ -20,7 +24,7 @@ namespace detail{
     os << ']';
     return os;
   }
-  
+
   template<typename T>
   std::ostream& print_vector(std::ostream& os, const std::vector<T> l, std::false_type){
     os << '[' << l.size() << " element" << (l.size()==1?"":"s") << ']';
@@ -29,9 +33,9 @@ namespace detail{
 }
 }
 
-//Somewhat evil hack: Inject this overload into the standard namespace, 
+//Somewhat evil hack: Inject this overload into the standard namespace,
 //enabling it to be found by ADL when needed by code which may be in arbitrary
-//other namespaces (e.g. boost::detail::variant). 
+//other namespaces (e.g. boost::detail::variant).
 namespace std{
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const std::vector<T> l){

@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2004
-    the icecube collaboration
+    Copyright  (C) 2004 the icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     $Id$
 
     @version $Revision$
@@ -42,8 +42,8 @@ TEST(GetOMGeoX)
   const_cast<I3Geometry&>(georef).omgeo[keytwo] = omtwo;
 
   //Now. lets' try to access....using Get
-  
-  double hitx = I3MapGet(keyone,georef.omgeo).position.GetX(); 
+
+  double hitx = I3MapGet(keyone,georef.omgeo).position.GetX();
   ENSURE_DISTANCE(hitx,posone.GetX(),0.01,"Bad X value from std::map");
 
   //Look for something not there.
@@ -67,7 +67,7 @@ TEST(stlmapwithI3Get)
   std::cout<<I3MapGet("hello",cm)<<std::endl;
   ENSURE_EQUAL(I3MapGet("hello",cm),5,"non-const std::map");
 
-  try 
+  try
     {
       std::cout<<I3MapGet("foo",m)<<std::endl;
       ENSURE(0,"Should have thrown");
@@ -77,7 +77,7 @@ TEST(stlmapwithI3Get)
 
     }
 
-  try 
+  try
     {
       std::cout<<I3MapGet("foo",cm)<<std::endl;
       ENSURE(0,"Should have thrown");
@@ -101,7 +101,7 @@ TEST(I3MapwithI3Get)
   std::cout<<I3MapGet("hello",cm)<<std::endl;
   ENSURE_EQUAL(I3MapGet("hello",cm),5,"non-const std::map");
 
-  try 
+  try
     {
       std::cout<<I3MapGet("foo",m)<<std::endl;
       ENSURE(0,"Should have thrown");
@@ -111,7 +111,7 @@ TEST(I3MapwithI3Get)
 
     }
 
-  try 
+  try
     {
       std::cout<<I3MapGet("foo",cm)<<std::endl;
       ENSURE(0,"Should have thrown");
@@ -135,7 +135,7 @@ TEST(I3MapwithI3GetandOMKeys)
   std::cout<<I3MapGet(OMKey(4,5),cm)<<std::endl;
   ENSURE_EQUAL(I3MapGet(OMKey(4,5),cm),5,"non-const std::map");
 
-  try 
+  try
     {
       std::cout<<I3MapGet(OMKey(4,4),m)<<std::endl;
       ENSURE(0,"Should have thrown");
@@ -145,7 +145,7 @@ TEST(I3MapwithI3GetandOMKeys)
 
     }
 
-  try 
+  try
     {
       std::cout<<I3MapGet(OMKey(4,4),cm)<<std::endl;
       ENSURE(0,"Should have thrown");
@@ -177,7 +177,7 @@ TEST(GetTankGeoX_fromOMKey)
     frame.load(ifs, skip);
     s = frame.GetStop();
     ENSURE(s!=I3Frame::None);
-  }while(s!=I3Frame::Geometry);  
+  }while(s!=I3Frame::Geometry);
   I3GeometryConstPtr geometry1 = frame.Get<I3GeometryConstPtr>();
 
   // The real X coordinates
@@ -185,7 +185,7 @@ TEST(GetTankGeoX_fromOMKey)
   double realx_2B = -130.635;
   double realx_3A = -27.720;
   double realx_3B = -20.395;
-  
+
   //Now. lets' try to access....using GetTankGeo in various ways
   // Station 2: conventional ordering
   I3TankGeo tg_2_61 = geometry1->GetTankGeo(OMKey(2,61));

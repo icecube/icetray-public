@@ -1,7 +1,7 @@
 
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version $Id$
  *
  * @file I3DOMLaunch.h
@@ -18,7 +18,7 @@
 
 /**
  * @brief The direct (digital) readout of an IceCube DOM
- * 
+ *
  * The full digital readout of an IceCube DOM consists of 1-4
  * short but fine-grained ATWD readouts, and a long but coarse fADC
  * readout, all beginning at the same time. The fADC is fixed at 40
@@ -44,16 +44,16 @@ static const unsigned i3domlaunch_version_ = 5;
     (UNDEFINED)(REQUIRE_BOTH)(FR_RUN)(LC_LOWER)(LC_UPPER)           \
     (UNKNOWN_MODE)(SLC_READOUT)(MIN_BIAS)(LAST_TRIGGER_SITUATION)
 
-class I3DOMLaunch 
+class I3DOMLaunch
 {
-public:  
+public:
     enum ATWDselect
     {
       UNKNOWN_CHIP = 0,
       ATWDa = 1,
       ATWDb = 2
     };
-    
+
     enum TriggerType
     {
       TEST_PATTERN = 0,
@@ -63,7 +63,7 @@ public:
       MPE_DISCRIMINATOR_TRIGGER = 4,
       ONBOARD_LED = 5
     };
-    
+
     enum TriggerMode
     {
       UNDEFINED = 0,
@@ -94,20 +94,20 @@ public:
     };
 
 private:
-    /**  
-     * This is the time (in nsec) in 25 nsec units, of the DOM clock 
-     * which launches the ATWD (launch is synchronized to the first clock 
-     * transition AFTER the discriminator fires 
+    /**
+     * This is the time (in nsec) in 25 nsec units, of the DOM clock
+     * which launches the ATWD (launch is synchronized to the first clock
+     * transition AFTER the discriminator fires
      */
-    double startTime_;  
+    double startTime_;
 
-    /** 
+    /**
      * Raw ATWD channel 0 to 3
      */
     std::vector<std::vector<int> > rawATWD_;
 
-    /** 
-     * This holds the 40 MHz FADC data 
+    /**
+     * This holds the 40 MHz FADC data
      */
     std::vector<int> rawFADC_;
 
@@ -117,17 +117,17 @@ private:
      */
     std::vector<int> rawChargeStamp_;
 
-    /**  
+    /**
      * This represents the trigger type
      */
     TriggerType trigger_;
-    
+
     /**
      * This signals special trigger circumstances
      */
     TriggerMode mode_;
 
-    /**  
+    /**
      * This tells which ATWD in the DOM was used
      */
     ATWDselect whichATWD_;
@@ -138,7 +138,7 @@ private:
      */
     unsigned int chargeStampHighestSample_;
 
-    /*  chargeStampRange_ has been deleted - on the rare occassions anyone cares, 
+    /*  chargeStampRange_ has been deleted - on the rare occassions anyone cares,
      *  they can see if any of the samples are above 512  */
 
     /**
@@ -153,7 +153,7 @@ private:
      */
     unsigned int whichATWDChargeStamp_;
 
-    /** 
+    /**
      * This holds the local coincidence bit
      */
     bool localCoincidence_;
@@ -165,7 +165,7 @@ private:
      * has not been subtracted.
      */
     bool pedestal_;
-  
+
 
 public:
     /**
@@ -177,7 +177,7 @@ public:
      * Destructor.
      */
     ~I3DOMLaunch();
-  
+
     /**
      * Return ATWD/FADC launch time.
      */
@@ -187,20 +187,20 @@ public:
      * Set ATWD/FADC launch time.
      */
     void SetStartTime(double starttime) { startTime_ = starttime; }
-    
+
     /**
      * Return the trigger type/why this launch was recorded
      * (SPE_DISCRIMINATOR_TRIGGER is the standard 'physics data').
      */
     TriggerType GetTriggerType() const { return trigger_; }
-    
+
     /**
      * Specify the trigger type/why this launch was recorded.
      */
     void SetTriggerType(TriggerType trigger) { trigger_ = trigger; }
 
     /**
-     * Signals the special trigger circumstances. 
+     * Signals the special trigger circumstances.
      *
      * Note: In testdomapp, the current FPGA implementation in the DOM, there is
      * no information available to indicate which neighbouring DOM
@@ -210,7 +210,7 @@ public:
      * to satisfy local coincidence, LC_UPPER and LC_LOWER will be set.
      */
     TriggerMode GetTriggerMode() const { return mode_; }
-    
+
     /**
      * Sets the special trigger circumstances.
      */
@@ -260,23 +260,23 @@ public:
      * Return local coincidence bit.
      */
     bool GetLCBit() const { return localCoincidence_; }
-  
+
     /**
      * Set the local coincidence bit.
      */
     void SetLCBit(bool LCBit) {localCoincidence_=LCBit;}
-  
+
     /**
     * return Pedestal bool.
     */
    bool GetIsPedestalSub() const { return pedestal_; }
-  
+
     /**
     * Set the pedestal bool
     */
    void SetIsPedestalSub(bool Pedestal) {pedestal_ = Pedestal;}
-  
-  /** 
+
+  /**
      * Return the raw charge stamp.
      */
     const std::vector<int>& GetRawChargeStamp() const { return rawChargeStamp_; }
@@ -287,7 +287,7 @@ public:
      */
     unsigned int GetChargeStampHighestSample() const { return chargeStampHighestSample_; }
 
-    /** 
+    /**
      * Set the charge stamp highest sample
      */
     void SetChargeStampHighestSample(unsigned int highsample)
@@ -312,10 +312,10 @@ public:
     }
 
     std::ostream& Print(std::ostream&) const;
-    
+
 private:
     friend class icecube::serialization::access;
-	
+
     template <class Archive> void save(Archive & ar, unsigned version) const;
     template <class Archive> void load(Archive & ar, unsigned version);
 	I3_SERIALIZATION_SPLIT_MEMBER();
@@ -335,7 +335,7 @@ std::ostream& operator<<(std::ostream&, const I3DOMLaunch&);
 
 /**
  * Bit operators to combine different trigger modes.
- * 
+ *
  * As an example:
  * One might set I3DOMLaunch::LC_LOWER | I3DOMLaunch::LC_UPPER, if the local
  * coincidence condition for the lower and upper DOM is met at the same time.

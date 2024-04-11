@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <string>
 #include <dataclasses/jday.h>
 
@@ -9,28 +13,28 @@
 
 
 namespace {
-/** 
- * @brief This literal contians a list of Modified Julian Date  of days that @a end on a 
+/**
+ * @brief This literal contians a list of Modified Julian Date  of days that @a end on a
  * leap second. Used by I3Time to determine whe leap seconds occur.
- * 
- * @note This contains the mjd of days which @a end on a leap year. 
- * Most communications describing leap seconds give the day which @a starts with 
+ *
+ * @note This contains the mjd of days which @a end on a leap year.
+ * Most communications describing leap seconds give the day which @a starts with
  * the leap second. Be very careful addind items to this list.
  */
 const int32_t leap_sec_list_[] = {41316, 41498, 41682, 42047, 42412, 42777, 43143,
-				  43508, 43873, 44238, 44785, 45150, 45515, 46246, 
-				  47160, 47891, 48256, 48803, 49168, 49533, 50082, 
+				  43508, 43873, 44238, 44785, 45150, 45515, 46246,
+				  47160, 47891, 48256, 48803, 49168, 49533, 50082,
 				  50629, 51178, 53735, 54831, 56108, 57203, 57753};
 
 /**
- * @brief This vector contians the same information as leap_sec_list but in a std::vector 
- * for easier access. Used by I3Time to determine whe leap seconds occur. 
- * 
+ * @brief This vector contians the same information as leap_sec_list but in a std::vector
+ * for easier access. Used by I3Time to determine whe leap seconds occur.
+ *
  * Cannot declare array literal for std::vector yet.
  */
 std::vector<int32_t> leap_sec_list(leap_sec_list_,leap_sec_list_+sizeof(leap_sec_list_)/sizeof(int32_t));
 
-/** 
+/**
  * @brief number of seconds in a standard day add 1 for days with a leap second
  */
 const int32_t SECONDS_IN_DAY = 86400;
@@ -87,7 +91,7 @@ int64_t I3TimeUtils::max_DAQ_time(const int year){
 
 int64_t I3TimeUtils::ns_to_daqtime( const double time){
   //the addition of 0.5 effectively rounds
-  return static_cast<int64_t>((10.*time/I3Units::ns)+ 0.5); 
+  return static_cast<int64_t>((10.*time/I3Units::ns)+ 0.5);
 }
 
 // Used by old Muxer technology (PFMuxer in PnF for example)
@@ -107,7 +111,7 @@ I3Time::I3Time(double mjd) {
   SetModJulianTimeDouble(mjd);
 }
 
-void I3Time::SetDaqTime(int year, 
+void I3Time::SetDaqTime(int year,
                         int64_t daqTime)
 {
   year_ = year;
@@ -154,9 +158,9 @@ void I3Time::SetModJulianTimeDouble(double mjd) {
 
 void I3Time::SetUTCCalDate(int year, int month, int day, int hour, int minute, int sec, double ns)
 {
-    int daysOfMonth[12] = {31,28,31,30,31,30,31,31,30,31,30,31}; 
+    int daysOfMonth[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
     if(I3TimeUtils::leap_year(year)) daysOfMonth[1] = 29;
-    
+
     if(month<1 || month>12)
     {
         log_error("Invalid month: %i!", month);
@@ -168,7 +172,7 @@ void I3Time::SetUTCCalDate(int year, int month, int day, int hour, int minute, i
         log_error("Invalid day: %i!", day);
         return;
     }
-    
+
     UTinstant i;
     i.year     = year;
     i.month    = month;
@@ -176,7 +180,7 @@ void I3Time::SetUTCCalDate(int year, int month, int day, int hour, int minute, i
     i.i_hour   = 0;
     i.i_minute = 0;
     i.second   = 0;
-    
+
     int32_t modJulDay = (int32_t)(JulDate(&i) - 2400000.5);
 
     if(hour<0 || hour>23)
@@ -196,15 +200,15 @@ void I3Time::SetUTCCalDate(int year, int month, int day, int hour, int minute, i
         log_error("Invalid second: %i!", sec);
         return;
     }
-    
+
     if(ns<0 || ns>=1e9)
     {
         log_error("Invalid nanosecond: %g!", ns);
         return;
     }
-    
+
     int32_t second = (int32_t)(hour*3600 + minute*60 + sec);
-    
+
     SetModJulianTime(modJulDay, second, ns);
 }
 
@@ -222,7 +226,7 @@ time_t I3Time::GetUnixTime() const
   if (IsLeapSecond()){
     unixtime--;
   }
-  return unixtime;  
+  return unixtime;
 }
 
 int I3Time::GetUTCYear() const
@@ -244,9 +248,9 @@ int32_t I3Time::GetModJulianSec() const
 {
 
   const int32_t mjd = (const int32_t) modjulianday(year_,daqTime_);
-  const int32_t daysafteryear = 
+  const int32_t daysafteryear =
     (int32_t)(mjd - modjulianday(year_));
-  int32_t secsafteryear = 
+  int32_t secsafteryear =
     (daqTime_ - daqTime_%((int64_t)(1e10)))/((int64_t)1e10);
   secsafteryear -= I3TimeUtils::year_to_date_leap_seconds(mjd);
   return secsafteryear - daysafteryear * 3600 * 24 ;
@@ -272,7 +276,7 @@ double I3Time::GetModJulianDayDouble() const
 
 I3Time::Month I3Time::GetUTCMonth() const
 {
-  double julday = julianday(year_,daqTime_); 
+  double julday = julianday(year_,daqTime_);
   UTinstant i;
   i.j_date = julday;
   CalDate(&i);
@@ -434,7 +438,7 @@ I3Time I3Time::operator+(const double second_term) const
 
   while (daqTime < 0 )
     {
-      year--;      
+      year--;
       daqTime += I3TimeUtils::max_DAQ_time(year);
     }
 
@@ -448,13 +452,13 @@ I3Time I3Time::operator-(const double second_term) const
   return *this+(-second_term);
 }
 
-double operator-(const I3Time t1,const I3Time t2) 
+double operator-(const I3Time t1,const I3Time t2)
 {
 
   int32_t mjd1=t1.GetModJulianDay();
   int32_t mjd2=t2.GetModJulianDay();
   int32_t leapseconds =  I3TimeUtils::leap_seconds_range(mjd1,mjd2);
-  return 
+  return
     ( t1.GetModJulianNanoSec() - t2.GetModJulianNanoSec() ) * I3Units::nanosecond +
     ( t1.GetModJulianSec()     - t2.GetModJulianSec() -leapseconds ) * I3Units::second +
     ( mjd1 - mjd2 ) * I3Units::day;
@@ -555,13 +559,13 @@ double I3Time::modjulianday(int year, int64_t daqTime)
   double mjd = modjulian_of_year + daqDaysSinceYear;
 
   //now that we know mjd redo with correct seconds
-  //don't use year to date leapseconds because we might have gone over the year boundry 
+  //don't use year to date leapseconds because we might have gone over the year boundry
   daqSecs -= I3TimeUtils::leap_seconds_range(I3TimeUtils::mod_julian_day_start_of_year(year),
 					     mjd);
   daqDaysSinceYear = ((double)(daqSecs))/(3600. * 24.);
   modjulian_of_year = modjulianday(year);
 
-  return modjulian_of_year + daqDaysSinceYear;   
+  return modjulian_of_year + daqDaysSinceYear;
 }
 
 double I3Time::julianday(int year)
@@ -575,7 +579,7 @@ double I3Time::julianday(int year)
   i.second = 0;
   return JulDate(&i);
 }
-  
+
 double I3Time::julianday(int year, int64_t daqTime)
 {
   return modjulianday(year, daqTime) + 2400000.5;
@@ -596,7 +600,7 @@ int32_t I3Time::DayOfYear(double modjulianday)
   double julianDay = modjulianday + 2400000.5;
   i.j_date = julianDay;
   CalDate(&i);
-  
+
   return i.day_of_year;
 }
 
@@ -606,12 +610,12 @@ int32_t I3Time::DayOfYear(int64_t daqTime)
   int64_t daqSecs = (daqTime - tenthsOfNs)/((int64_t)1e10);
   int64_t daqSecsSinceDay = daqSecs % ((int64_t)(3600 * 24));
   int32_t day_of_year = (daqSecs - daqSecsSinceDay)/(3600 * 24) + 1;
-  
-  return day_of_year; 
+
+  return day_of_year;
 }
 
 template <class Archive>
-void 
+void
 I3Time::serialize(Archive& ar, unsigned version)
 {
   if (version>i3time_version_)

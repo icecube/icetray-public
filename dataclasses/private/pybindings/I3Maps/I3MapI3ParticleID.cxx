@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
 
 #include <dataclasses/I3Map.h>
 #include <dataclasses/physics/I3ParticleID.h>
@@ -11,6 +14,6 @@ void register_I3MapI3ParticleID()
 	    boost::shared_ptr<I3MapI3ParticleIDDouble> >("I3MapI3ParticleIDDouble")
 	    .def(dataclass_suite<I3MapI3ParticleIDDouble >())
 	;
-	    
+
 	register_pointer_conversions<I3MapI3ParticleIDDouble>();
 }

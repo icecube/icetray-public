@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import unittest
 from icecube import dataclasses
 from icecube.icetray import I3Units
@@ -20,6 +24,6 @@ class TestI3ModuleGeo(unittest.TestCase):
         omgeo2.area = 42.
 
         self.assertEqual(omgeo1, omgeo2, "these should be the same.")
-                         
 
-unittest.main()        
+
+unittest.main()

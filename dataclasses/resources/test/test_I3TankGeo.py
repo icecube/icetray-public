@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import unittest
 from icecube import dataclasses
 from icecube.icetray import I3Units
@@ -33,4 +37,4 @@ class TestI3TankGeo(unittest.TestCase):
         self.assertEqual(tankgeo1, tankgeo2, "these should be the same.")
 
 
-unittest.main()        
+unittest.main()

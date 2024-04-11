@@ -1,9 +1,9 @@
 /**
  *  $Id$
  *
- *  Copyright (C) 2018
- *  Jakob van Santen <jakob.van.santen@desy.de>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  Copyright (C) 2018 Jakob van Santen <jakob.van.santen@desy.de>
+ *  Copyright (C) 2018 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  SPDX-License-Identifier: BSD-2-Clause
  *
  */
 
@@ -30,7 +30,7 @@ public:
   I3RecoPulseSeriesMapCombineByModule();
 
   std::ostream& Print(std::ostream&) const override;
-  
+
   I3RecoPulseSeriesMapConstPtr Apply(const I3Frame&) const;
   std::string GetSource() const { return pulses_key_; }
 

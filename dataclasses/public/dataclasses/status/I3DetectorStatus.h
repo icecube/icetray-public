@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version $Id$
  * @file I3DetectorStatus.h
  * @date $Date$
@@ -21,12 +21,12 @@
 #include <dataclasses/status/I3TriggerStatus.h>
 
 /**
- * @brief This is the state of the aspects of the detector that people have 
+ * @brief This is the state of the aspects of the detector that people have
  * direct control over.  Contains the "per run" settings.
  *
  * Stuff that is a 'knob' on the detector.  This is a
  * top-level object in the frame related to this 'Detector Status' information.
- * Contains: 
+ * Contains:
  * - map of per DOM configurations (also the list of active DOMs),
  * - map of per AOM configurations (including AOMs read out by the TWR DAQ),
  * - map of active icecube triggers (and their configurations),
@@ -46,7 +46,7 @@ public:
   std::string daqConfigurationName; // is this used?
 
   I3DetectorStatus() {}
-  
+
   ~I3DetectorStatus();
 
   bool operator==(const I3DetectorStatus& rhs)

@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version $Id$
  * @file I3TankGeo.h
  * @date $Date$
@@ -22,7 +22,7 @@
 static const unsigned i3tankgeo_version_ = 2;
 
 /*Simple struct that contains all the pertinent Tank info.
-  Note that there is no OM information for this struct. 
+  Note that there is no OM information for this struct.
   This is what led me to comment out the cryptic switch statement in
   I3TextFileGeometryService and I3FileGeoOrigin (in phys-services) since
   it appeared to be assigning OMGeoPtr info to a TankGeo object.
@@ -32,7 +32,7 @@ static const unsigned i3tankgeo_version_ = 2;
 */
 
 
-struct I3TankGeo 
+struct I3TankGeo
 {
   enum TankType {NotSet = 0, Tyvek_Lined = 1, Zirconium_Lined = 2};
 
@@ -44,7 +44,7 @@ struct I3TankGeo
     snowheight(NAN),
     tanktype(NotSet)
   {};
-  
+
   ~I3TankGeo();
 
   I3Position position; //tank x,y,z position
@@ -55,7 +55,7 @@ struct I3TankGeo
   I3Vector<OMKey> omKeyList_;
   double snowheight; // snow "overburden" (use I3Units)
   TankType tanktype; // Type of tank.
-  
+
   bool operator==(const I3TankGeo& rhs) const
   {
     return (position == rhs.position &&

@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version $Id$
  * @file I3TWRLaunch.h
  * @date $Date$
@@ -41,22 +41,22 @@ class I3TWRLaunch
   ~I3TWRLaunch();
   std::ostream& Print(std::ostream&) const;
   /** Returns the baseline/mean value of the waveform (as determined by the TWR DAQ).
-   * 
+   *
    * @return The baseline/mean value.
    */
   unsigned int GetBaseline() const{ return(baseline_); }
   /** Sets the baseline/mean value of the waveform (as determined by the TWR DAQ).
-   * 
+   *
    * @param baseline The baseline/mean value.
    */
   void SetBaseline(unsigned int baseline){ baseline_ = baseline; }
   /** Provides access to the waveform's fragments.
-   * 
+   *
    * @return Collection of waveform fragments.
    */
   const std::vector<I3TWRFrag>& GetFragments() const{ return(fragments_); }
   /** Provides access to the waveform's fragments.
-   * 
+   *
    * @return Collection of waveform fragments.
    */
   std::vector<I3TWRFrag>& GetFragments(){ return(fragments_); }

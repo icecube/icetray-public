@@ -1,6 +1,6 @@
 /**
- * (c) 2005
- * the IceCube Collaboration
+ * Copyright (c) 2005 the IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file dataclasses/private/dataclasses/physics/I3TWRLaunch.cxx
@@ -9,7 +9,7 @@
  * @date $Date$
  * @author tschmidt
  */
- 
+
 // class header file
 
 #include <icetray/serialization.h>
@@ -27,8 +27,8 @@ I3TWRLaunch::~I3TWRLaunch()
 }
 
 
-template<class Archive> 
-void 
+template<class Archive>
+void
 I3TWRLaunch::serialize (Archive& ar, unsigned version)
 {
   if (version>i3twrlaunch_version_)
@@ -41,7 +41,7 @@ I3TWRLaunch::serialize (Archive& ar, unsigned version)
     I3Vector<I3TWRFrag> tmp;
     ar & make_nvp("I3TWRLaunch", tmp);
     fragments_.swap(tmp);
-  
+
     int id = 0;
     ar & make_nvp("ID", id);
     double binSize = 0.0;

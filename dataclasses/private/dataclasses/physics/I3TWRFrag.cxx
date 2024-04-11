@@ -1,6 +1,6 @@
 /**
- * (c) 2005
- * the IceCube Collaboration
+ * Copyright (c) 2005 the IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file dataclasses/private/dataclasses/physics/I3TWRFrag.cxx
@@ -9,7 +9,7 @@
  * @date $Date$
  * @author tschmidt
  */
- 
+
 // class header file
 
 #include <vector>
@@ -29,7 +29,7 @@ I3TWRFrag::~I3TWRFrag()
 
 
 template<class Archive>
-void 
+void
 I3TWRFrag::serialize(Archive& ar, unsigned version)
 {
   if (version>i3twrfrag_version_)
@@ -37,11 +37,11 @@ I3TWRFrag::serialize(Archive& ar, unsigned version)
 
   if(version < 1)
   {
-    // initialize these temporaries or you get warnings.  
+    // initialize these temporaries or you get warnings.
     // Note that we'll never be saving when version < 1
     if (typename Archive::is_saving())
       log_fatal("The impossible has happened... we are saving at version 0");
-    int id = 0; 
+    int id = 0;
     ar & make_nvp("ID", id);
     int parentId = 0;
     ar & make_nvp("ParentID", parentId);
@@ -52,7 +52,7 @@ I3TWRFrag::serialize(Archive& ar, unsigned version)
     ar & make_nvp("FragStartBin", fragStartBin);
     if(fragStartBin < 0) log_fatal("invalid start bin");
     startBin_ = static_cast<unsigned int>(fragStartBin);
-    
+
     std::vector<double> waveform;
     ar & make_nvp("Waveform", waveform);
     rawFADC_.resize(waveform.size());

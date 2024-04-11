@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
 
 i3_project(dataclasses
   PYTHON_DIR python
@@ -17,7 +20,7 @@ i3_add_library(dataclasses
   )
 
 
-i3_test_executable(test 
+i3_test_executable(test
   private/test/*.cxx
   USE_PROJECTS serialization dataclasses dataio
   USE_PYBINDINGS dataio
@@ -99,7 +102,7 @@ set(DATACLASSES_PYTHON_TEST_SCRIPTS
   resources/test/test_FFTHilbertEnvelope.py
   resources/test/test_I3ComplexVector.py
   resources/test/test_I3Vectors.py
-  resources/test/test_particle_masses.py  
+  resources/test/test_particle_masses.py
   resources/test/i3calibration_version_test.py
   resources/test/i3matrix_test.py
   resources/test/std_map_indexing_suite_test.py

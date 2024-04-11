@@ -1,9 +1,10 @@
 /**
- * @file 
- * @brief 
+ * @file
+ * @brief
  *
- * (c) 2011 Jakob van Santen 
- *     and the IceCube Collaboration
+ * Copyright (c) 2011 Jakob van Santen
+ * Copyright (c) 2011 the IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  * @version $Revision$
@@ -27,12 +28,12 @@ namespace I3SuperDSTUtils {
 	struct SizeCodec {
 		typedef uint64_t size_type;
 		size_type size_;
-		
+
 		SizeCodec() : size_(0) {};
 		SizeCodec(size_type size) : size_(size) {};
-		
+
 		size_type value() { return size_; };
-		
+
 		friend class icecube::serialization::access;
 		template <class Archive>
 		void load(Archive &ar, unsigned version);
@@ -81,7 +82,7 @@ namespace I3SuperDSTUtils {
 	 * are no runs to encode. In the worst case where the code
 	 * switches at every element, this encoding exactly doubles
 	 * the size of the data.
-	 */ 
+	 */
 	struct RunCodec {
 		typedef std::vector<uint8_t> vector_t;
 
@@ -98,7 +99,7 @@ namespace I3SuperDSTUtils {
 	{
 		return i == 0 ? 0 : (8*sizeof(i)-__builtin_clz(i));
 	}
-	
+
 	inline int findlastset(uint64_t i)
 	{
 		return (i & 0xffffffff00000000LL) ? findlastset(uint32_t(i >> 32))+32

@@ -1,9 +1,9 @@
 /**
  *  $Id$
  *
- *  Copyright (C) 2016
- *  Claudio Kopper <ckopper@icecube.wisc.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  Copyright (C) 2016 Claudio Kopper <ckopper@icecube.wisc.edu>
+ *  Copyright (C) 2016 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  SPDX-License-Identifier: BSD-2-Clause
  *
  */
 
@@ -13,12 +13,12 @@
 #include "boost/make_shared.hpp"
 #include "boost/foreach.hpp"
 
-I3RecoPulseSeriesMapApplySPECorrection::I3RecoPulseSeriesMapApplySPECorrection() 
+I3RecoPulseSeriesMapApplySPECorrection::I3RecoPulseSeriesMapApplySPECorrection()
   : pulses_key_(), calibration_key_(), shifted_() {}
 
 I3RecoPulseSeriesMapApplySPECorrection::I3RecoPulseSeriesMapApplySPECorrection(
   const std::string &pulses_key,
-  const std::string &calibration_key) 
+  const std::string &calibration_key)
   : pulses_key_(pulses_key), calibration_key_(calibration_key), shifted_() {}
 
 I3RecoPulseSeriesMapConstPtr
@@ -29,7 +29,7 @@ I3RecoPulseSeriesMapApplySPECorrection::Apply(const I3Frame &frame) const
   typedef Map::value_type Pair;
   typedef Pair::second_type Series;
   typedef Series::value_type Element;
- 
+
   if (shifted_)
     return shifted_;
 
@@ -49,7 +49,7 @@ I3RecoPulseSeriesMapApplySPECorrection::Apply(const I3Frame &frame) const
     // retrieve the calibration for this DOM
     std::map<OMKey, I3DOMCalibration>::const_iterator calib =
       calibration->domCal.find(pair.first);
-    if (calib == calibration->domCal.end()) 
+    if (calib == calibration->domCal.end())
       log_fatal("Could not find DOM (%i/%u) in '%s'",
           pair.first.GetString(), pair.first.GetOM(),
           calibration_key_.c_str());
@@ -72,7 +72,7 @@ I3RecoPulseSeriesMapApplySPECorrection::Apply(const I3Frame &frame) const
     BOOST_FOREACH(const Element &element, pair.second) {
       // plain copy of the pulse first
      shiftedvec.push_back(element);
- 
+
       // retrieve a reference to the new element
       Element &shifted_element = shiftedvec.back();
 
@@ -84,7 +84,7 @@ I3RecoPulseSeriesMapApplySPECorrection::Apply(const I3Frame &frame) const
       shifted_element.SetCharge(element.GetCharge() * speCorrection);
     }
   }
-  
+
   // save in cache
   shifted_ = shifted;
 
@@ -95,7 +95,7 @@ bool
 I3RecoPulseSeriesMapApplySPECorrection::operator==(
   const I3RecoPulseSeriesMapApplySPECorrection& other) const
 {
-  return (pulses_key_ == other.pulses_key_) && 
+  return (pulses_key_ == other.pulses_key_) &&
          (calibration_key_ == other.calibration_key_);
 }
 

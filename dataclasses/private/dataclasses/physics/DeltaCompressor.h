@@ -1,13 +1,13 @@
 /* -------------------------------------------------------------------------------
- * Copyright (C) 2007
- * The IceCube Collaboration
+ * Copyright (C) 2007 The IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @version $Id$
  *
  * @file DeltaCompressor.h
  * @author Martin Merck
  * @version $Revision$
  * @date $Date$
- * ------------------------------------------------------------------------------- 
+ * -------------------------------------------------------------------------------
  */
 #ifndef DELTACOMPRESSOR_H_INCLUDED
 #define DELTACOMPRESSOR_H_INCLUDED
@@ -18,7 +18,7 @@ namespace I3DeltaCompression
 {
 	/**
 	 * @brief Compressor to perform Delta-Compression on series of int values.
-	 * 
+	 *
 	 * Delta-Compression is used in IceCube to compress the digitized waveforms
 	 * from the ATWDs and FADCs. These waveforms are contain 11 bit unsigned
 	 * integers and the original algorithm compresses the deltas of single bins
@@ -61,17 +61,17 @@ namespace I3DeltaCompression
 	 *
 	 * The asymmetry betwen the compress and decompress method is by design to reduce
 	 * the amount of copying od STL vetors.
-	 * The implementation of the compressor expects the compressed values to be 
+	 * The implementation of the compressor expects the compressed values to be
 	 * represented in the machines byteorder and will delivere a compressed stream
 	 * of unsigned integers in the machines byteorder. If the compresssed values
-	 * must be portable between machines, the external program using this class, 
+	 * must be portable between machines, the external program using this class,
 	 * must take care of the correct byteorder.
 	 */
 	class DeltaCompressor
 	{
 		public:
 	  /**
-	   * Enumeration of the variable bitwidth used. 
+	   * Enumeration of the variable bitwidth used.
 	   */
 	  enum BTW
 	  {
@@ -83,14 +83,14 @@ namespace I3DeltaCompression
 	    Lv5 = 20,
 	    Lv6 = 31,
 	  };
-	  
+
 	public:
 	  /**
 	   * Default constructor.
 	   * Initializes the bitwidth with Lv2.
 	   */
 	  DeltaCompressor();
-	  
+
 	  /**
 	   * Compresses the waveform passed in the vector of values. The compressed
 	   * waveform is stored internally and can be retrieved using the the getCompressed()
@@ -105,7 +105,7 @@ namespace I3DeltaCompression
 	   * @exception A std::domain_error is thrown in case of internal compression error.
 	   */
 	  void compress( const std::vector<int>& values);
-	  
+
 	  /**
 	   * Decompresses the internal compressed waveform and append the restored values
 	   * to the vector passed by reference. If this vector already contains elements,
@@ -120,7 +120,7 @@ namespace I3DeltaCompression
 	   * @exception A std::domain_error is thrown in case of internal conpression error.
 	   */
 	  void decompress( std::vector<int>& values );
-	  
+
 	  /**
 	   * Reset the internal state of the compressor by deleting the stored compressed
 	   * waveform and resetting the variable bitwidth to the default value.
@@ -131,38 +131,38 @@ namespace I3DeltaCompression
 	    btw_ = Lv2;
 	    compressed_.clear();
 	  }
-	  
+
 	  /**
 	   * Get a reference to the vector containing the compressed waveform.
 	   *
-	   * @return a const vector of unsigned integers representing the 
+	   * @return a const vector of unsigned integers representing the
 	   *         compressed bitstream.
-	   */    
+	   */
 	  const std::vector<unsigned int>& getCompressed()
 	  {
 	      if( offset_ != 0)
 		compressed_.push_back( currCompressedValue_ );
-	    
+
 	    offset_ = 0;
 	    btw_ = Lv2;
-	    
-	    return compressed_; 
+
+	    return compressed_;
 	  };
-	  
+
 	  /**
 	   * Set the internal compressed waveform to the values of the passed vector.
 	   * The waveform is coppied to the internal representation.
 	   *
 	   * @param vals const vector representing a compressed waveform.
-	   */         
-	  void setCompressed( const std::vector<unsigned int>& vals ) 
+	   */
+	  void setCompressed( const std::vector<unsigned int>& vals )
 	  {
 	    compressed_.clear();
 	    compressed_.assign( vals.begin(), vals.end() );
 	  }
-	  
+
 	 private:
-	  
+
 	  /**
 	   * Utillity function to get the next higher bitwidth.
 	   *
@@ -172,7 +172,7 @@ namespace I3DeltaCompression
 	   *           with the highest btw or an invalid btw.
 	   */
 	  int getNextBtw( int btw ) const;
-	  
+
 	  /**
 	   * Utillity function to get the next lower bitwidth.
 	   *
@@ -182,14 +182,14 @@ namespace I3DeltaCompression
 	   *           with the lowest btw or an invalid btw.
 	   */
 	  int getPrevBtw( int btw ) const;
-	  
+
 	  /**
 	   * Write the compressed bits corresponding to a passed delta value.
 	   *
 	   * @param delta difference to previous bin to be written in compressed form.
 	   */
 	  void compressDelta( int delta );
-	  
+
 	  /**
 	   * Output len bits of the word to the compressed bitstream.
 	   *
@@ -197,7 +197,7 @@ namespace I3DeltaCompression
 	   * @param len length of significant bits which should be written.
 	   */
 	  void outputBits( int word, int len );
-	  
+
 	private:
 	  int btw_;
 	  unsigned int offset_;

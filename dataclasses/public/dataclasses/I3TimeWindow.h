@@ -5,7 +5,8 @@
 // with rudimentary methods for logically combining such spans.
 //
 // Copyright (c) 2012 Jakob van Santen <vansanten@wisc.edu>
-// and the IceCube Collaboration <http://www.icecube.wisc.edu>
+// Copyright (c) 2012 the IceCube Collaboration <http://www.icecube.wisc.edu>
+// SPDX-License-Identifier: BSD-2-Clause
 //
 
 #ifndef I3TIMEWINDOW_H_INCLUDED
@@ -20,7 +21,7 @@ public:
 	    stop_(std::numeric_limits<double>::infinity()) {};
 	I3TimeWindow(double start, double stop) : start_(start), stop_(stop) {};
 	std::ostream& Print(std::ostream&) const override;
-	
+
 	double GetStart() const { return start_; };
 	double GetStop() const { return stop_; };
 	double GetLength() const { return stop_ - start_; };
@@ -36,11 +37,11 @@ public:
 		NONE,   // no intersection
 		WITHOUT // A and B intersect, A is a superset of B
 	};
-	
+
 	OverlapType GetOverlapType(const I3TimeWindow &) const;
 private:
 	double start_, stop_;
-	
+
 	friend class I3TimeWindowSeries;
 	friend class icecube::serialization::access;
 	template <typename Archive> void serialize(Archive &ar, unsigned);
@@ -48,21 +49,21 @@ private:
 
 class I3TimeWindowSeries : public std::list<I3TimeWindow>, public I3FrameObject {
 public:
-	
+
 	I3TimeWindowSeries operator|(const I3TimeWindowSeries &other) const;
 	I3TimeWindowSeries operator&(const I3TimeWindowSeries &other) const;
 	I3TimeWindowSeries operator~() const;
-	
+
 	I3TimeWindowSeries() {}
 	template <typename Iterator>
 	I3TimeWindowSeries(Iterator first, Iterator last) : std::list<I3TimeWindow>(first, last) {}
-	
+
 	std::ostream& Print(std::ostream&) const override;
-	
+
 	void push_back(const I3TimeWindow &);
 private:
 	void coalesce();
-	
+
 	friend class icecube::serialization::access;
 	template <typename Archive> void serialize(Archive &ar, unsigned);
 };
