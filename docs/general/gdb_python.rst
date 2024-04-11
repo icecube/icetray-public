@@ -1,3 +1,8 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
+.. REUSE-IgnoreStart
 .. highlight:: text
 
 How to run a python script under the debugger

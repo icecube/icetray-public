@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. highlight:: cpp
 
 If you Provide Any Class-Specific new, Provide All of the Standard Forms (plain, in-place, and nothrow)

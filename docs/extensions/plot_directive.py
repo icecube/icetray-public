@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
 
 try:
     from matplotlib.sphinxext.plot_directive import setup
@@ -7,16 +10,16 @@ except ImportError:
     from docutils import nodes
     from sphinx.util.compat import make_admonition
     from sphinx.locale import _
-    
+
     class missing_plot(nodes.Admonition, nodes.Element):
         pass
-    
+
     def visit_missing_plot_node(self, node):
         self.visit_admonition(node)
 
     def depart_missing_plot_node(self, node):
         self.depart_admonition(node)
-    
+
     def plot_directive(name, arguments, options, content, lineno,
                        content_offset, block_text, state, state_machine):
         env = state.document.settings.env
@@ -29,7 +32,7 @@ except ImportError:
                              block_text, state, state_machine)
 
         return [targetnode] + ad
-    
+
     def _option_boolean(arg):
         if not arg or not arg.strip():
             # no argument given, assume used as a flag
@@ -57,7 +60,7 @@ except ImportError:
     def _option_align(arg):
         return directives.choice(arg, ("top", "middle", "bottom", "left", "center",
                                        "right"))
-    
+
     def setup(app):
         setup.app = app
         setup.config = app.config

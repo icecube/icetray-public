@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. highlight:: cpp
 
 Use vector (and string::c_str) to exchange data with non-C++ APIs.

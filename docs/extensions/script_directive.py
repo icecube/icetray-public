@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
 
 import sys, os, glob, shutil, hashlib, imp, warnings
 import re
@@ -27,7 +30,7 @@ class ScriptDirective(Directive):
     final_argument_whitespace = True
     option_spec = { }
     has_content = False
-    
+
     def run(self):
         #print "blocktext:", self.block_text
         #print "options:", self.options
@@ -43,7 +46,7 @@ class ScriptDirective(Directive):
         (h,t) = os.path.split(rp)
         srcscript = os.path.join(setup.app.srcdir, h, self.arguments[0])
         copyto_dir = os.path.join(setup.app.outdir, h)
-        
+
         if (not os.path.isdir(copyto_dir)):
             os.makedirs(copyto_dir)
 

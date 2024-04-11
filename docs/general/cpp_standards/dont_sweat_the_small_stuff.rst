@@ -1,3 +1,6 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
 
 .. highlight:: cpp
 
@@ -133,6 +136,8 @@ like OM or PMT allowed, but should be used judiciously.
 
 File description block
 ^^^^^^^^^^^^^^^^^^^^^^
+
+.. REUSE-IgnoreStart
 
 .. highlight:: none
 

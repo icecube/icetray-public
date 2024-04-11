@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. highlight:: cpp
 
 Don't write namespace **using** in a header file or before and **#include**
@@ -10,6 +14,7 @@ The only reason to use :code:`using namespace` is to reduce typing.  It, unfortu
 reduces readability.  I would recommend not using it **ever**.
 
 To save typing *prefer* :
+
  - Rename the namespace to reduce typing, e.g. instead of :code:`using namespace boost::python;` prefer :code:`namespace bp = boost::python;`.
    This makes it easier for someone reading your code to see where things come from.
  - Fully qualify the function or class, e.g. :code:`using boost::python::class_;`

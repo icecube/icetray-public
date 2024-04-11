@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. -*- mode:rst; mode:flyspell; mode:fci; mode:auto-fill -*-
 
 Running Python Coverage Locally

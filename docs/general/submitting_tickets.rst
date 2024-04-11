@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 Submitting Tickets
 ==================
 
@@ -10,7 +14,7 @@ Submitting Tickets
 
 Submitting tickets via Trac (`<http://code.icecube.wisc.edu/projects/icecube/newticket>`_) is 
 pretty self-explanatory, but there are a few things to keep in mind.  The most important
-of which is **DON'T SUBMIT TICKETS AS USER 'ICECUBE'!!!**  We often need to follow up 
+of which is **DON'T SUBMIT TICKETS AS USER 'ICECUBE'!!!**  We often need to follow up
 with the reporter and there's no way to do that if you don't submit under your own name.
 
 Please keep in mind, the more information you include, the easier you make it for
@@ -39,7 +43,7 @@ If you're submitting a ticket, please, please, please set the following five fie
   - **iceprod** : Issues with the production software (IceProd 1 or IceProd 2).
   - **icerec** : Any project that exists in the icerec meta-project that's not part of offline.  Look at the externals `here <http://code.icecube.wisc.edu/projects/icecube/browser/IceCube/meta-projects/icerec/trunk>`__ .
   - **infrastructure** : You know...roads, bridges, plumbing, etc...
-  - **jeb + pnf** : Issues with online (pole) processing.  Projects that belong to 
+  - **jeb + pnf** : Issues with online (pole) processing.  Projects that belong to
   - **other** : Doesn't fit in any other component.
   - **RASTA** : Not used.
   - **simulation** : Any project that exists in the simulation meta-project that's not part of offline.  Look at the externals `here <http://code.icecube.wisc.edu/projects/icecube/browser/IceCube/meta-projects/simulation/trunk>`__ .
@@ -57,10 +61,10 @@ If you're submitting a ticket, please, please, please set the following five fie
 
 Optional Fields
 ---------------
-The following fields can typically be left to meta-project maintainers, since the general user won't 
+The following fields can typically be left to meta-project maintainers, since the general user won't
 know what to set these to.
 
-* **Milestone** - You typically won't know when the issue can be expected to be addressed.  This depends on the ticket owner's schedule, the severity, and difficulty.  This will be set later by release managers. 
+* **Milestone** - You typically won't know when the issue can be expected to be addressed.  This depends on the ticket owner's schedule, the severity, and difficulty.  This will be set later by release managers.
 * **Version** - Not used.
 * **Keywords** - Useful for searching.  Think about adding some keywords here.
 * **Cc** - If you think someone else should be following the status of this issue, feel free to add their svn username here.

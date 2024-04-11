@@ -1,6 +1,10 @@
 #!/bin/sh
 
-# This Script will upload the documnentation created by docs-build to the 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
+# This Script will upload the documnentation created by docs-build to the
 # documentation server (http://docs.icecube.aq).
 # First it creates a tarball then it uses curl to access the REST interface on the server
 
