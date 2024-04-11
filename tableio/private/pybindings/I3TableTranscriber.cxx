@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -20,7 +20,7 @@ void execute(I3TableTranscriber& self, int num = -1) {
     } else {
         self.Execute(num);
     }
-} 
+}
 
 BOOST_PYTHON_FUNCTION_OVERLOADS(execute_overloads,execute,1,2)
 

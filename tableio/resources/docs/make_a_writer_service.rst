@@ -1,9 +1,9 @@
-.. 
-.. copyright  (C) 2010
-.. The Icecube Collaboration
-.. 
+..
+.. Copyright  (C) 2010 The Icecube Collaboration
+.. SPDX-License-Identifier: BSD-2-Clause
+..
 .. $Id$
-.. 
+..
 .. @version $Revision$
 .. @date $LastChangedDate$
 .. @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy$
@@ -22,15 +22,15 @@ I3Table
 *******
 
 .. cpp:type:: I3Table
-    
+
    represents a table on disk
-    
+
 .. cpp:function:: void I3Table::WriteRows(I3TableRowConstPtr rows)
-        
+
    Write the data in `rows` to disk
-        
+
 .. cpp:function:: void I3TableRow::Flush(size_t nrows)
-        
+
    Flush nrows to disk.
 
 Your subclass must implement :cpp:func:`WriteRows()`. If it implements any kind
@@ -180,9 +180,9 @@ You can set up any header information in your constructor. In
         const std::vector<std::string>& doc = description_->GetFieldDocStrings();
         const std::vector<size_t>& arrayLengths = description_->GetFieldArrayLengths();
         const std::vector<I3Datatype>& dtypes = description_->GetFieldTypes();
-    
-        for (name_it = names.begin(), unit_it = units.begin(), size_it = arrayLengths.begin(); 
-             name_it != names.end(); 
+
+        for (name_it = names.begin(), unit_it = units.begin(), size_it = arrayLengths.begin();
+             name_it != names.end();
              name_it++, unit_it++, size_it++) {
             output_ << "\"" << *name_it;
             if (unit_it->size() > 0) output_ << " [" << *unit_it << "]";
@@ -204,8 +204,8 @@ You can set up any header information in your constructor. In
             if (dtype_it->kind == I3Datatype::Enum) {
                 output_ << "{ ";
                 std::vector<std::pair<std::string,long> >::const_iterator member_it;
-                for (member_it = dtype_it->enum_members.begin(); 
-                     member_it != dtype_it->enum_members.end(); 
+                for (member_it = dtype_it->enum_members.begin();
+                     member_it != dtype_it->enum_members.end();
                      member_it++) {
                     output_ << member_it->first << " = " << member_it->second;
                     if (member_it != dtype_it->enum_members.end()-1) output_ << ", ";
@@ -224,10 +224,10 @@ You can set up any header information in your constructor. In
                 output_ << ",";
             }
         }
-    
+
         output_.precision(12);
         output_ << std::scientific;
-    
+
         for (dtype_it = dtypes.begin(); dtype_it != dtypes.end(); dtype_it++) {
             fieldTypes_.push_back(GetNativeType(*dtype_it));
         }
@@ -242,15 +242,15 @@ I3TableService.
 .. cpp:type:: I3TableService
 
     represents a bundle of tables on disk, possibly belonging to a single file
-    
+
     .. cpp:function:: virtual I3TablePtr I3TableService::CreateTable(const std::string& tableName, I3TableRowDescriptionConstPtr description)
-        
+
         Create a new table called `tableName` based on `description`.
-        
+
     .. cpp:function:: virtual void I3TableService::CloseFile()
-        
+
         Called at the end of operations.
-            
+
 
 CreateTable()
 _____________
@@ -259,11 +259,11 @@ You must implement :cpp:func:`CreateTable()`, which is called whenever the write
 module requests a table that does not yet exist. The :cpp:type:`I3CSVTable`
 implementation is fairly simple::
 
-    I3TablePtr I3CSVTableService::CreateTable(const std::string& tableName, 
+    I3TablePtr I3CSVTableService::CreateTable(const std::string& tableName,
                                    I3TableRowDescriptionConstPtr description) {
 
             I3TableRowDescriptionConstPtr index_desc = GetIndexDescription();
-            std::string indexpath = folderName_ + "/__I3Index__"; 
+            std::string indexpath = folderName_ + "/__I3Index__";
             I3TablePtr index_table(new I3CSVTable(*this,tableName,index_desc,indexpath));
             return I3TablePtr(new I3CSVTable(*this,tableName,description,folderName_,index_table));
     }
@@ -306,11 +306,11 @@ You must also provide trivial Python bindings for your
     {
       load_project("textwriter", false);
 
-      bp::class_<I3CSVTableService, 
+      bp::class_<I3CSVTableService,
                  boost::shared_ptr<I3CSVTableService>,
                  bp::bases<I3TableService> >
                  ("I3CSVTableService",
                   bp::init<const std::string>(bp::args("folder_name")))
                  ;
     }
-    
+

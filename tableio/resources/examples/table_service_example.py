@@ -1,5 +1,9 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 """
-Example of how to write an I3TableService in python 
+Example of how to write an I3TableService in python
 This saves the table as dictionary and then prints out the data after the tray is finished
 """
 import os.path
@@ -23,10 +27,10 @@ class I3SimpleTableService(tableio.I3TableService):
     def CreateTable(self,table_name,description):
         self.table = I3SimpleTable(self,table_name,description)
         return self.table
-        
+
     def CloseFile(self):
         pass
-    
+
 table_service = I3SimpleTableService()
 
 fname = os.path.join(os.environ["I3_TESTDATA"],"sim","Level3_nugen_numu_IC86.2012.011069.000000_20events.i3.bz2")

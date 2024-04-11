@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -28,12 +28,12 @@ class I3TableWriter {
     public:
         I3TableWriter(I3TableServicePtr service, std::vector<I3ConverterMillPtr>& converters, std::vector<std::string>& streams);
         virtual ~I3TableWriter();
-        
-        // register one specific object, lazily. if type and converter are empty the writer 
+
+        // register one specific object, lazily. if type and converter are empty the writer
         // should figure out appropriate values
         bool AddObject(std::string name, std::string tableName, I3Frame::Stream frame_stop,
                        I3ConverterPtr converter, I3FrameObjectConstPtr obj);
-        
+
         struct TableSpec {
            std::string tableName;
            I3ConverterPtr converter;
@@ -42,20 +42,20 @@ class I3TableWriter {
            TableSpec(I3ConverterPtr conv) : tableName(),converter(conv) {};
            TableSpec() : tableName(),converter() {};
         };
-        
+
         struct TypeSpec {
            boost::python::object held_type_;
-           
+
            bool operator<(const TypeSpec& rhs) const {
               return( held_type_.ptr() < rhs.held_type_.ptr() );
            }
-        
+
            TypeSpec(boost::python::object t_) : held_type_(t_) { }
-        
+
            bool check(I3FrameObjectConstPtr p) const {
               return check(boost::const_pointer_cast<I3FrameObject>(p));
            }
-           
+
            bool check(I3FrameObjectPtr p) const {
               boost::python::object frameobj(p);
 #ifndef I3_COMPILE_OUT_VERBOSE_LOGGING
@@ -69,29 +69,29 @@ class I3TableWriter {
               return (rv > 0);
            }
         };
-      
+
         // add object to wanted list
         void AddObject(std::string typeName, TableSpec spec);
         // write all objects with this type
         void AddType(TypeSpec type, TableSpec spec);
-        
+
         void AddConverter(std::string typeName, I3ConverterPtr converter);
 
         void Setup();
 
         void Convert(I3FramePtr frame);
-        
+
         void Finish();
 
 
 
 
     protected:
-        I3TablePtr ConnectTable(std::string tableName, 
+        I3TablePtr ConnectTable(std::string tableName,
                                 const I3TableRowDescription& description);
         void DisconnectTable(I3TablePtr& table);
-        
-        
+
+
         // group components that belong together
         struct TableBundle {
             I3ConverterPtr converter;
@@ -107,13 +107,13 @@ class I3TableWriter {
         std::set<std::string> ignoredStreams_;
         // keys that have been examined and found useless
         std::set<std::string> uselessKeys_;
-         
+
         typedef std::map<std::string, std::vector<TableSpec> > tablespec_map;
         typedef std::map<TypeSpec, std::vector<TableSpec> > typespec_map;
         // configuration lists and maps
         tablespec_map wantedNames_;
-        typespec_map wantedTypes_; 
-      
+        typespec_map wantedTypes_;
+
         std::map<std::string,std::string> objNameToTableName_;
         std::map<std::string,std::string> typeNameToConverterName_;
         I3FrameConstPtr currentFrame_;

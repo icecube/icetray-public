@@ -1,8 +1,8 @@
 /**
  * I3TableService.cxx (pybindings)
  *
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -18,7 +18,7 @@
 namespace bp = boost::python;
 
 struct I3TableServiceWrapper : I3TableService, bp::wrapper<I3TableService> {
-        virtual I3TablePtr CreateTable(const std::string& tableName, 
+        virtual I3TablePtr CreateTable(const std::string& tableName,
                                        I3TableRowDescriptionConstPtr description) {
             return this->get_override("CreateTable")(tableName,description);
         };
@@ -37,6 +37,6 @@ void register_I3TableService() {
     .def("GetTable",&I3TableServiceWrapper::GetTable)
     .def("CloseFile",&I3TableServiceWrapper::CloseFile)
     .def("Finish",&I3TableServiceWrapper::Finish)
-    
+
     ;
 }

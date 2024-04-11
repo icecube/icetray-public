@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -15,7 +15,7 @@
 namespace bp = boost::python;
 
 void register_I3CSVTableService() {
-    bp::class_<I3CSVTableService, 
+    bp::class_<I3CSVTableService,
                boost::shared_ptr<I3CSVTableService>,
                bp::bases<I3TableService> >
                ("I3CSVTableService",

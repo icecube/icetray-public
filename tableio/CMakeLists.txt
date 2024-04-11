@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 # $Id$
 #
@@ -9,7 +13,7 @@ i3_project(tableio
 
 i3_add_library(tableio
   private/tableio/*.cxx
-  private/tableio/converter/*.cxx 
+  private/tableio/converter/*.cxx
   private/tableio/broadcaster/*.cxx
   private/tableio/textwriter/*.cxx
   private/tableio/utils/*.cxx
@@ -37,7 +41,7 @@ i3_add_pybindings(tableio
   USE_PROJECTS icetray tableio
   )
 
-i3_test_executable(test 
+i3_test_executable(test
     private/test/main.cxx
     private/test/I3DOMLaunchConverterTest.cxx
     private/test/I3DatatypeTest.cxx

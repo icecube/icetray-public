@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <icetray/I3FrameObject.h>
 
 #include <tableio/converter/PythonConverter.h>
@@ -15,7 +19,7 @@ size_t PythonConverter::GetNumberOfRows(I3FrameObjectConstPtr object) {
 }
 
 size_t PythonConverter::GetNumberOfRows(const I3FrameObject& object) {
-	log_trace("%s",__PRETTY_FUNCTION__);    
+	log_trace("%s",__PRETTY_FUNCTION__);
     log_fatal("I shouldn't ever be called!");
 }
 
@@ -33,13 +37,13 @@ I3TableRowDescriptionConstPtr PythonConverter::GetDescription(const I3FrameObjec
 	if (description_)
 	        return description_;
 	    else {
-	        description_ = CreateDescription(object); 
+	        description_ = CreateDescription(object);
 	        return description_;
     }
 }
 
 I3TableRowDescriptionConstPtr PythonConverter::GetDescription() {
-	log_trace("%s",__PRETTY_FUNCTION__);    
+	log_trace("%s",__PRETTY_FUNCTION__);
 	if (description_)
 	        return description_;
 	    else {
@@ -76,8 +80,8 @@ I3TableRowDescriptionPtr PythonConverter::CreateDescription(I3FrameObjectConstPt
 }
 
 
-size_t PythonConverter::Convert(I3FrameObjectConstPtr object, 
-                             I3TableRowPtr rows, 
+size_t PythonConverter::Convert(I3FrameObjectConstPtr object,
+                             I3TableRowPtr rows,
                              I3FramePtr frame) {
 	log_trace("%s",__PRETTY_FUNCTION__);
 	if (bp::override fillrows = this->get_override("FillRows")) {
@@ -102,8 +106,8 @@ size_t PythonConverter::FillRows(const I3FrameObjectConstPtr object, I3TableRowP
 }
 
 
-size_t PythonConverter::Convert(const I3FrameObject& object, 
-                             I3TableRowPtr rows, 
+size_t PythonConverter::Convert(const I3FrameObject& object,
+                             I3TableRowPtr rows,
                              I3FramePtr frame) {
 	log_trace("%s",__PRETTY_FUNCTION__);
 	if (bp::override convert = this->get_override("Convert")) {
@@ -146,7 +150,7 @@ I3Converter::ConvertState PythonConverter::CanConvert(I3FrameObjectPtr obj) {
 
 
 I3FramePtr PythonConverter::GetCurrentFrame() {
-	log_trace("%s",__PRETTY_FUNCTION__);    
+	log_trace("%s",__PRETTY_FUNCTION__);
 	if (currentFrame_)
 	        return currentFrame_;
 	else {

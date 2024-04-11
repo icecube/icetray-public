@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -24,7 +24,7 @@ boost::shared_ptr<I3BroadcastTableService> tuple_init(bp::tuple clients) {
 }
 
 void register_I3BroadcastTableService() {
-   bp::class_<I3BroadcastTableService, 
+   bp::class_<I3BroadcastTableService,
       boost::shared_ptr<I3BroadcastTableService>, bp::bases<I3TableService> >
       ("I3BroadcastTableService", bp::no_init)
       .def("__init__",bp::make_constructor(&tuple_init))

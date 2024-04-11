@@ -1,13 +1,12 @@
-# 
-# copyright  (C) 2010
-# The Icecube Collaboration
-# 
+# Copyright  (C) 2010 The Icecube Collaboration
+# SPDX-License-Identifier: BSD-2-Clause
+#
 # $Id: I3TableWriterModule.py 129552 2015-02-25 13:45:04Z jvansanten $
-# 
+#
 # @version $Revision: 129552 $
 # @date $LastChangedDate: 2015-02-25 08:45:04 -0500 (Wed, 25 Feb 2015) $
 # @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy: jvansanten $
-# 
+#
 
 from icecube.icetray import I3ConditionalModule, vector_string
 from icecube.tableio import I3TableService, I3Converter, I3ConverterBundle, \
@@ -48,7 +47,7 @@ and is almost certainly not what you actually want to do.', False)
         elif not isinstance(table_service, I3TableService):
             raise TypeError("TableService must be an instance of I3TableService (got %s instead)" % table_service)
         self.table_service = table_service
-    
+
     def _transform_keyitem(self,item):
         if isinstance(item,tuple):
             if len(item) == 1:
@@ -69,11 +68,11 @@ and is almost certainly not what you actually want to do.', False)
             return dictus
         else:
             raise TypeError("Keys must be dicts, tuples, or strings.")
-    
-    # get the base class of all boost::python wrapped objects 
+
+    # get the base class of all boost::python wrapped objects
     # (<type 'Boost.Python.class'>)
     bp_class = type(I3TableService)
-        
+
     def _transform_typeitem(self,item):
         typus = None
         dictus = None
@@ -95,7 +94,7 @@ and is almost certainly not what you actually want to do.', False)
         if type(typus) != self.bp_class:
             raise TypeError("Type must be an instance of Boost.Python.class (got %s instead)" % typus)
         return dictus
-                
+
     def _parse_args(self,arg,transformer):
         if arg is None:
             return []
@@ -105,7 +104,7 @@ and is almost certainly not what you actually want to do.', False)
             arg = [transformer(item) for item in arg]
         except TypeError:
             raise TypeError("Arguments must be passed as something list-like.")
-        valid_name = re.compile("^[a-zA-Z_][a-zA-Z0-9_]*$") 
+        valid_name = re.compile("^[a-zA-Z_][a-zA-Z0-9_]*$")
         for item in arg:
             converter = item.get('converter',None)
             if converter is not None:
@@ -118,12 +117,12 @@ and is almost certainly not what you actually want to do.', False)
             name = item.get('name',None)
             if name is not None:
                 if not valid_name.match(name):
-                    raise ValueError("'%s' is not a valid table name. Table names must contain only letters, numbers, and underscores and may not start with a number" % name)    
+                    raise ValueError("'%s' is not a valid table name. Table names must contain only letters, numbers, and underscores and may not start with a number" % name)
         return arg
-                
+
     def Configure(self):
         self._get_tableservice()
-        
+
         streams = vector_string()
         streams.extend(self.GetParameter('SubEventStreams'))
 
@@ -133,15 +132,15 @@ and is almost certainly not what you actually want to do.', False)
         data_flood = self.GetParameter('BookEverything')
         def empty(t):
             return t is None or len(t) == 0
-        
+
         if (not data_flood) and empty(keys) and empty(types):
             raise ValueError("""You must specify which frame objects should be booked by setting Keys \
 and/or Types. If you really want to dump every object from every frame, \
 set BookEverything = True.""")
-        
+
         # convert whatever was passed as 'Keys' to a list of dicts
         keys = self._parse_args(keys,self._transform_keyitem)
-        
+
         # convert whatever was passed as 'Types' to a list of dicts
         types = self._parse_args(types,self._transform_typeitem)
 
@@ -156,7 +155,7 @@ the `keys' parameter, or a list of types as the `types' parameter when \
 configuring I3TableWriter. You can find a tutorial in \
 $I3_BUILD/doc/projects/tableio/howto.html .
 """,stacklevel=1)
-            # add type-specifications for everything we know about that wasn't included in 'Types'            
+            # add type-specifications for everything we know about that wasn't included in 'Types'
             all_types = I3ConverterRegistry.registry.keys()
             # remove GCD types if they exist
             for t in [dataclasses.I3Geometry,dataclasses.I3DetectorStatus,dataclasses.I3Calibration]:
@@ -184,7 +183,7 @@ $I3_BUILD/doc/projects/tableio/howto.html .
         self.writer = I3TableWriterWorker(self.table_service, converter_list, streams)
         tablespec = I3TableWriterWorker.TableSpec
         typespec = I3TableWriterWorker.TypeSpec
-        
+
         for item in keys:
             key = item.pop('key')
             # if the user passed 'default', remove it and let the writer figure
@@ -208,8 +207,8 @@ $I3_BUILD/doc/projects/tableio/howto.html .
         self.writer.convert(frame)
         self.PushFrame(frame)
         return True
-        
-    def Finish(self):        
+
+    def Finish(self):
         if self.writer is not None:
             self.writer.finish()
 

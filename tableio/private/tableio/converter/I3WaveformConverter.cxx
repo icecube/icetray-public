@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -23,7 +23,7 @@ I3WaveformConverter::I3WaveformConverter(std::string atwdName, std::string fadcN
     I3ConverterImplementation<I3WaveformSeriesMap>(),
     atwdName_(atwdName),
     fadcName_(fadcName),
-    calibrate_(calibrate) 
+    calibrate_(calibrate)
 {}
 
 /******************************************************************************/
@@ -47,11 +47,11 @@ I3TableRowDescriptionPtr I3WaveformConverter::CreateDescription(const I3Waveform
         unit = "mV";
         doc = "calibrated waveform in units of mV";
     }
-    
+
     desc->isMultiRow_ = true;
     desc->AddField<int32_t>("string", "", "String number");
     desc->AddField<uint32_t>("om", "", "OM number");
-    
+
     desc->AddField<bool>("atwd_ok", "bool", "status flag that atwd waveform has been convertered");
     desc->AddField<double>("atwd_t0", "ns", "start time of ATWD waveform");
     desc->AddField<double>("atwd_dt", "ns", "width of ATWD waveform bins");
@@ -60,7 +60,7 @@ I3TableRowDescriptionPtr I3WaveformConverter::CreateDescription(const I3Waveform
     desc->AddField<double>("fadc_t0", "ns", "start time of FADC waveform");
     desc->AddField<double>("fadc_dt", "ns", "width of FADC waveform bins");
     desc->AddField<double>("fadc", unit, doc, 256);
-    
+
     return desc;
 }
 
@@ -71,12 +71,12 @@ I3TableRowDescriptionPtr I3WaveformConverter::CreateDescription(const I3Waveform
 // the converter to the ATWD waveform map. If the FADC waveform map contains more
 // entries thah the ATWD map, the excessing waveforms will be discarded!
 
-size_t I3WaveformConverter::FillRows(const I3WaveformSeriesMap& atwdWaveformMap, 
+size_t I3WaveformConverter::FillRows(const I3WaveformSeriesMap& atwdWaveformMap,
                                      I3TableRowPtr rows) {
-     
+
     // retrieve calibration and detector status information
     // bail-out if not available
-    I3DetectorStatusConstPtr detectorstatus = 
+    I3DetectorStatusConstPtr detectorstatus =
         currentFrame_->Get<I3DetectorStatusConstPtr>();
 	I3CalibrationConstPtr calibration =
         currentFrame_->Get<I3CalibrationConstPtr>();
@@ -89,29 +89,29 @@ size_t I3WaveformConverter::FillRows(const I3WaveformSeriesMap& atwdWaveformMap,
                    __PRETTY_FUNCTION__);
         return 0;
     }
-    
+
 
     // retrieve the fadc waveform and set the number_????_oms counter
-    // to indicate missing fadc  
-    
-    I3WaveformSeriesMapConstPtr fadcWaveformMap = 
+    // to indicate missing fadc
+
+    I3WaveformSeriesMapConstPtr fadcWaveformMap =
         currentFrame_->Get<I3WaveformSeriesMapConstPtr>(fadcName_);
-    
+
     if (!fadcWaveformMap) {
         log_warn("%s: couldn't find FADC waveform with name %s in current frame!",
                  __PRETTY_FUNCTION__, fadcName_.c_str());
     }
 
-  
+
     const std::map<OMKey,I3DOMCalibration> &domcalmap = calibration->domCal;
     const std::map<OMKey,I3DOMStatus> &domstatusmap   = detectorstatus->domStatus;
 
     I3Map<OMKey, std::vector<I3Waveform> >::const_iterator iter;
-    
+
     const size_t startRow = rows->GetCurrentRow();
-    
+
     size_t currentRow;
-    for (iter = atwdWaveformMap.begin(), currentRow = rows->GetCurrentRow(); 
+    for (iter = atwdWaveformMap.begin(), currentRow = rows->GetCurrentRow();
          iter != atwdWaveformMap.end(); ++iter, ++currentRow) {
 
         rows->SetCurrentRow(currentRow);
@@ -120,12 +120,12 @@ size_t I3WaveformConverter::FillRows(const I3WaveformSeriesMap& atwdWaveformMap,
         const I3DOMCalibration &domcal = domcalmap.find(key)->second;
         const I3DOMStatus &domstatus   = domstatusmap.find(key)->second;
         const double GI(SPEMean(domstatus,domcal)*domcal.GetFrontEndImpedance());
-    
+
         if( std::isnan(GI) ){
-            log_info("OM (%d,%d) has an invalid gain. Skipping the OM.", 
+            log_info("OM (%d,%d) has an invalid gain. Skipping the OM.",
                      key.GetString(), key.GetOM());
         }
-        
+
         // /!\ only the first atwd waveform is extracted
         const I3Waveform& wf = iter->second.front();
         const std::vector<double>& atwd_readout = wf.GetWaveform();
@@ -138,24 +138,24 @@ size_t I3WaveformConverter::FillRows(const I3WaveformSeriesMap& atwdWaveformMap,
         int i = 0;
 
         if (calibrate_) {
-            for(wfiter = atwd_readout.begin(); 
-                i < 128 && wfiter != atwd_readout.end(); 
+            for(wfiter = atwd_readout.begin();
+                i < 128 && wfiter != atwd_readout.end();
                 ++i, ++wfiter) {
                 buffer[i] = (*wfiter)*VoltToNPE;
             }
         }
         else {
-            for(wfiter = atwd_readout.begin(); 
-                i < 128 && wfiter != atwd_readout.end(); 
+            for(wfiter = atwd_readout.begin();
+                i < 128 && wfiter != atwd_readout.end();
                 ++i, ++wfiter) {
                 buffer[i] = *wfiter/I3Units::mV;
             }
         }
         buffer = 0;
-    
+
 
         I3Map<OMKey, std::vector<I3Waveform> >::const_iterator fadc_iter;
-        if ( fadcWaveformMap && 
+        if ( fadcWaveformMap &&
              (fadc_iter = fadcWaveformMap->find(key)) != fadcWaveformMap->end() ) {
 
             // /!\ only the first atwd waveform is extracted
@@ -170,13 +170,13 @@ size_t I3WaveformConverter::FillRows(const I3WaveformSeriesMap& atwdWaveformMap,
             i = 0;
 
             if (calibrate_) {
-                for(wfiter = fadc_readout.begin(); 
+                for(wfiter = fadc_readout.begin();
                     i < 256 && wfiter != fadc_readout.end(); ++i, ++wfiter) {
                     buffer[i] = (*wfiter)*VoltToNPE;
                 }
             }
             else {
-                for(wfiter = fadc_readout.begin(); 
+                for(wfiter = fadc_readout.begin();
                     i < 256 && wfiter != fadc_readout.end(); ++i, ++wfiter) {
                     buffer[i] = *wfiter/I3Units::mV;
                 }

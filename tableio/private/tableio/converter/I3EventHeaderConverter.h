@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -17,8 +17,8 @@
 
 class I3EventHeaderConverter : public I3ConverterImplementation<I3EventHeader > {
 private:
-    I3TableRowDescriptionPtr CreateDescription(const I3EventHeader & params); 
+    I3TableRowDescriptionPtr CreateDescription(const I3EventHeader & params);
     size_t FillRows(const I3EventHeader& params, I3TableRowPtr rows);
 };
-    
+
 #endif // TABLEIO_I3EVENTHEADERCONVERTER_HPP_INCLUDED

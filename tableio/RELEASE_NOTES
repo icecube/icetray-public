@@ -1,8 +1,14 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 Release Notes
 =============
 
 main
 ----
+
+* [tableio] Add SPDX tags (#3437)
 
 Feb. 20, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------

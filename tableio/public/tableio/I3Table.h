@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -29,23 +29,23 @@ class I3Table {
     public:
         I3Table(I3TableService& service, std::string name,
                 I3TableRowDescriptionConstPtr description);
-        
+
         virtual ~I3Table(); // Flush?
         virtual void Flush(const size_t nrows = 0);
-        
+
         bool IsConnectedToWriter();
         void SetConnectedToWriter(bool connected);
 
         I3TableRowPtr CreateRow(size_t nrows);
         virtual void AddRow(I3EventHeaderConstPtr header, I3TableRowConstPtr row);
         virtual void Align();
-        
+
         // I3TableRowConstPtr GetRowForEvent(unsigned int RunID, unsigned int EventID);
         I3TableRowConstPtr GetRowForEvent(size_t index) const;
 
-        std::string GetName() const; 
-        size_t GetNumberOfEvents() const; 
-        size_t GetNumberOfRows() const; 
+        std::string GetName() const;
+        size_t GetNumberOfEvents() const;
+        size_t GetNumberOfRows() const;
         I3TableRowDescriptionConstPtr GetDescription();
 
     protected:
@@ -68,12 +68,12 @@ class I3Table {
         bool tableCreated_;    // the table/tree has been created successfully
 
         I3EventHeaderConstPtr lastHeader_;
-        
+
         enum AlignmentType {
             MultiRow,   // Some objects can span multiple rows
             Strict      // All objects are written to exactly one row
         };
-        
+
         virtual AlignmentType GetAlignmentType();
 
     private:

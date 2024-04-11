@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -19,7 +19,7 @@ I3BroadcastTable::I3BroadcastTable(I3TableService& service, std::string name,
 void I3BroadcastTable::WriteRows(I3TableRowConstPtr rows) {
     log_fatal("I should never have been called!");
 };
- 
+
 void I3BroadcastTable::AddRow(I3EventHeaderConstPtr header, I3TableRowConstPtr row) {
     std::vector<I3TablePtr>::iterator iter;
     for(iter = clients_.begin(); iter != clients_.end(); ++iter ) {

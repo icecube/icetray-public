@@ -1,9 +1,9 @@
-.. 
-.. copyright  (C) 2010
-.. The Icecube Collaboration
-.. 
+..
+.. Copyright  (C) 2010 The Icecube Collaboration
+.. SPDX-License-Identifier: BSD-2-Clause
+..
 .. $Id$
-.. 
+..
 .. @version $Revision$
 .. @date $LastChangedDate$
 .. @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy$
@@ -31,7 +31,7 @@ I3TableWriterService::
     from icecube import icetray,tableio
     from icecube.hdfwriter import I3HDFTableService
     from icecube.rootwriter import I3ROOTTableService
-    
+
     from icecube.tableio import I3TableTranscriber
 
     inservice = I3HDFTableService('foo.hd5','r')

@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -17,7 +17,7 @@
 
 /******************************************************************************/
 
-I3Table::I3Table(I3TableService& service, 
+I3Table::I3Table(I3TableService& service,
                  std::string name,
                  I3TableRowDescriptionConstPtr description) :
     service_(service),
@@ -58,7 +58,7 @@ I3Table::AlignmentType I3Table::GetAlignmentType() {
 }
 
 /******************************************************************************/
-        
+
 I3TableRowDescriptionConstPtr I3Table::GetDescription() {
     return description_;
 }
@@ -70,20 +70,20 @@ bool I3Table::DoPadding(){
   // or if the table type is aligned by construction
   bool do_padding =
     description_->GetUsePadding()&&
-    ((GetAlignmentType() == Strict) ||                      
-     ((GetAlignmentType() == MultiRow) && (!description_->GetIsMultiRow())));    
+    ((GetAlignmentType() == Strict) ||
+     ((GetAlignmentType() == MultiRow) && (!description_->GetIsMultiRow())));
   return do_padding;
 }
 
 /******************************************************************************/
 
-void I3Table::AddRow(I3EventHeaderConstPtr header, I3TableRowConstPtr row) {  
+void I3Table::AddRow(I3EventHeaderConstPtr header, I3TableRowConstPtr row) {
     // sanity check: padding behavior is different for ragged tables
-    size_t nrows = row->GetNumberOfRows(); 
+    size_t nrows = row->GetNumberOfRows();
     if ((nrows != 1) && (!description_->GetIsMultiRow())) {
         log_fatal("(%s) Converter reported %zu rows for a single-row object! Multi-row objects must be marked by their converters.",name_.c_str(),nrows);
     }
-    
+
     I3TableRowConstPtr padding;
     if (DoPadding() && header) {
         padding = service_.GetPaddingRows(lastHeader_, header, description_);
@@ -94,16 +94,16 @@ void I3Table::AddRow(I3EventHeaderConstPtr header, I3TableRowConstPtr row) {
 	    }
             nrowsWithPadding_ += padding->GetNumberOfRows();
         }
-    }    
+    }
     // always pad the index table if it exists, since the index is alway a single row
     if (indexTable_) {
-        assert(header);  
+        assert(header);
         padding = service_.GetPaddingRows(lastHeader_, header, service_.GetIndexDescription());
         if (padding) indexTable_->WriteRows(padding);
     }
 
     WriteRows(row);
-    
+
     if (indexTable_) {
       assert(header);
       I3TableRowPtr index_row = I3TableRowPtr(new I3TableRow(service_.GetIndexDescription(),1));
@@ -114,10 +114,10 @@ void I3Table::AddRow(I3EventHeaderConstPtr header, I3TableRowConstPtr row) {
       index_row->Set<tableio_size_t>("stop",static_cast<tableio_size_t>(nrowsWithPadding_+row->GetNumberOfRows()));
       log_trace("(%s) Writing row to index table. start: %zu end: %zu",
                 name_.c_str(),nrowsWithPadding_,nrowsWithPadding_+row->GetNumberOfRows());
-      
+
       indexTable_->WriteRows(index_row);
     }
-    
+
     nevents_++;
     nrows_ += row->GetNumberOfRows();
     nrowsWithPadding_ += row->GetNumberOfRows();
@@ -151,7 +151,7 @@ void I3Table::Align() {
             nrowsWithPadding_ += padding->GetNumberOfRows();
         }
     }
-    
+
     // always pad the index table if it exists, since the index is alway a single row
     if (indexTable_) {
         padding = service_.GetPaddingRows(lastHeader_, I3EventHeaderConstPtr(), service_.GetIndexDescription());
@@ -167,7 +167,7 @@ void I3Table::Align() {
 
 I3TableRowConstPtr I3Table::GetRowForEvent(size_t index) const {
     std::pair<size_t,size_t> range;
-    
+
     range = GetRangeForEvent(index);
     if (range.second == 0) {
         return I3TableRowPtr();
@@ -196,7 +196,7 @@ I3TableRowConstPtr I3Table::ReadRows(size_t start, size_t nrows) const {
 /******************************************************************************/
 
 size_t I3Table::GetNumberOfEvents() const {
-   return nevents_; 
+   return nevents_;
 }
 
 /******************************************************************************/
@@ -212,7 +212,7 @@ std::string I3Table::GetName() const {
 }
 
 /******************************************************************************/
-        
+
 I3TableRowPtr I3Table::CreateRow(size_t nrows) {
     return I3TableRowPtr( new I3TableRow(description_, nrows) );
 }

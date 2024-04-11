@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -52,7 +52,7 @@ const std::vector<std::string>& I3TableRowDescription::GetFieldDocStrings() cons
 }
 
 /******************************************************************************/
-        
+
 size_t I3TableRowDescription::GetFieldColumn(const std::string& fieldName) const {
     fieldNameToIndex_t::const_iterator iter;
     iter = fieldNameToIndex_.find(fieldName);
@@ -87,12 +87,12 @@ bool I3TableRowDescription::operator==(I3TableRowDescriptionConstPtr other) cons
    if (nfields != o_nfields) return false;
    if (isMultiRow_ != other->isMultiRow_) return false;
    bool equal = true;
-   
+
    for (size_t i = 0; i < nfields; ++i) {
        if ( (fieldNames_.at(i) != other->GetFieldNames().at(i) ) ||
             (fieldTypes_.at(i) != other->GetFieldTypes().at(i) ) ||
             (fieldUnits_.at(i) != other->GetFieldUnits().at(i) ) ||
-            (fieldDocStrings_.at(i) != other->GetFieldDocStrings().at(i) )          
+            (fieldDocStrings_.at(i) != other->GetFieldDocStrings().at(i) )
           ) {
               equal = false;
               break;
@@ -105,16 +105,16 @@ bool I3TableRowDescription::operator==(I3TableRowDescriptionConstPtr other) cons
 
     /* specialized AddField for booleans */
     template<>
-    void I3TableRowDescription::AddField<bool>(const std::string& name, 
+    void I3TableRowDescription::AddField<bool>(const std::string& name,
                   const std::string& unit,
-                  const std::string& doc, 
-                  size_t arrayLength) 
+                  const std::string& doc,
+                  size_t arrayLength)
     {
                 // Since booleans are just integers, we need to enforce this unit convention
                 std::string boolunit("bool");
                 if ((unit.size() != 0) && (unit != boolunit))
                         log_fatal("The unit string of a boolean field must be \"bool\".");
-                AddField(name, I3DatatypeFromNativeType<bool>(), 
+                AddField(name, I3DatatypeFromNativeType<bool>(),
                          boolunit, doc, arrayLength);
     }
 
@@ -132,7 +132,7 @@ AlignOffset(size_t offset, size_t size)
 	size_t align = 1;
 	while (align < size)
 		align <<= 1;
-	
+
 	// If alredy aligned, hunky-dory. Otherwise, shift
 	// offset up to next aligned address
 	if (offset % align == 0)
@@ -150,7 +150,7 @@ void I3TableRowDescription::AddField(const std::string& name, I3Datatype type,
     size_t byteOffset=0;
     if (fieldByteOffsets_.size() > 0) {
         byteOffset = AlignOffset(GetNextOffset(), type.size);
-    }    
+    }
     size_t nfields = fieldNameToIndex_.size();
     fieldNames_.push_back(name);
     fieldNameToIndex_[name] = nfields;
@@ -158,7 +158,7 @@ void I3TableRowDescription::AddField(const std::string& name, I3Datatype type,
     // special case for ambigous integers that may be booleans
     if ( unit == std::string("bool") ) type.kind = I3Datatype::Bool;
     fieldTypes_.push_back(type);
-    
+
     // check that the type actually fits in the memory chunk
     if (type.size > I3MEMORYCHUNK_SIZE)
         log_fatal("Type '%s' is larger than the memory chunk size!",type.description.c_str());
@@ -171,7 +171,7 @@ void I3TableRowDescription::AddField(const std::string& name, I3Datatype type,
 }
 
 /******************************************************************************/
-        
+
 size_t I3TableRowDescription::GetTotalChunkSize() const {
     return (GetNextOffset() + I3MEMORYCHUNK_SIZE - 1)/I3MEMORYCHUNK_SIZE;
 }
@@ -191,14 +191,14 @@ size_t I3TableRowDescription::GetNextOffset() const {
 
 
 /******************************************************************************/
-        
+
 size_t I3TableRowDescription::GetNumberOfFields() const {
-    return fieldNames_.size(); 
+    return fieldNames_.size();
 }
 
 /******************************************************************************/
 
-I3TableRowDescription& operator<<(I3TableRowDescription& lhs, 
+I3TableRowDescription& operator<<(I3TableRowDescription& lhs,
                                 const I3TableRowDescription& rhs) {
     size_t nfields_new = rhs.GetNumberOfFields();
     size_t nfields_old = lhs.GetNumberOfFields();
@@ -207,7 +207,7 @@ I3TableRowDescription& operator<<(I3TableRowDescription& lhs,
 	size_t typesize = rhs.fieldTypeSizes_.at(i);
 	size_t byteOffset = 0;
         if (lhs.GetNumberOfFields() > 0)
-          byteOffset = AlignOffset(lhs.GetNextOffset(), typesize);	
+          byteOffset = AlignOffset(lhs.GetNextOffset(), typesize);
 
         lhs.isMultiRow_ = (lhs.isMultiRow_ || rhs.isMultiRow_);
 
@@ -226,7 +226,7 @@ I3TableRowDescription& operator<<(I3TableRowDescription& lhs,
     return lhs;
 }
 
-I3TableRowDescription operator|(const I3TableRowDescription& lhs, 
+I3TableRowDescription operator|(const I3TableRowDescription& lhs,
                                 const I3TableRowDescription& rhs) {
     I3TableRowDescription newlhs = I3TableRowDescription(lhs);
     newlhs << rhs;

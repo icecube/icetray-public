@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -32,7 +32,7 @@ private:
   I3TableRowDescriptionPtr CreateDescription(const vector_type &v)
   {
     log_trace("%s", __PRETTY_FUNCTION__);
-    I3TableRowDescriptionPtr desc = 
+    I3TableRowDescriptionPtr desc =
       I3TableRowDescriptionPtr(new I3TableRowDescription() );
     desc->isMultiRow_ = true;
     desc->AddField<tableio_size_t>("vector_index", "", "index in vector");
@@ -54,9 +54,9 @@ private:
       {
 	rows->SetCurrentRow(row);
 	rows->Set<tableio_size_t>("vector_index", row);
-	
+
 	detail::fill_single_row(converter_, *iter, rows, this->currentFrame_);
-	
+
 	++row;
       } // loop over vector
 

@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -28,7 +28,7 @@ class I3TableService {
         I3TableService();
         virtual ~I3TableService();
 
-        virtual I3TablePtr GetTable(std::string tableName, 
+        virtual I3TablePtr GetTable(std::string tableName,
                             I3TableRowDescriptionConstPtr description);
 
         std::vector<std::string> GetTableNames();
@@ -36,7 +36,7 @@ class I3TableService {
         I3TableRowConstPtr GetPaddingRows(I3EventHeaderConstPtr lastHeader,
                                           I3EventHeaderConstPtr newHeader,
                                           I3TableRowDescriptionConstPtr description_);
-                                          
+
         I3EventHeaderConstPtr GetLastHeader();
         I3TableRowDescriptionConstPtr GetIndexDescription();
         // Phone home to tell the service that an event has been written
@@ -48,7 +48,7 @@ class I3TableService {
 
     protected:
         // to be overridden by implementation
-        virtual I3TablePtr CreateTable(const std::string& tableName, 
+        virtual I3TablePtr CreateTable(const std::string& tableName,
                                        I3TableRowDescriptionConstPtr description) = 0;
         virtual void CloseFile() = 0;
 
@@ -58,7 +58,7 @@ class I3TableService {
     private:
         bool EventHeadersEqual(const I3EventHeader& header1,
                                const I3EventHeader& header2);
-        
+
         std::vector<I3EventHeaderConstPtr> eventHeaderCache_;
         I3ConverterPtr ticConverter_;
         I3TableRowDescriptionConstPtr indexDescription_;

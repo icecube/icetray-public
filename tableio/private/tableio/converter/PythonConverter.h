@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef TABLEIO_PYTHONCONVERTER_H_INCLUDED
 #define TABLEIO_PYTHONCONVERTER_H_INCLUDED
 
@@ -23,13 +27,13 @@ struct PythonConverter : I3Converter, boost::python::wrapper<I3Converter>
 
     I3TableRowDescriptionPtr CreateDescription(I3FrameObjectConstPtr object);
     I3TableRowDescriptionPtr CreateDescription(const I3FrameObject& object);
-    
-    size_t Convert(I3FrameObjectConstPtr object, 
-                                 I3TableRowPtr rows, 
+
+    size_t Convert(I3FrameObjectConstPtr object,
+                                 I3TableRowPtr rows,
                                  I3FramePtr frame=I3FramePtr());
-    
-    size_t Convert(const I3FrameObject& object, 
-                                 I3TableRowPtr rows, 
+
+    size_t Convert(const I3FrameObject& object,
+                                 I3TableRowPtr rows,
                                  I3FramePtr frame=I3FramePtr());
 
     size_t FillRows(const I3FrameObjectConstPtr object, I3TableRowPtr rows);

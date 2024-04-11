@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -31,9 +31,9 @@ class I3CSVTable : public I3Table {
     protected:
         virtual void WriteRows(I3TableRowConstPtr row);
         void CreateTable();
-        
+
     private:
-        
+
         enum NativeType {
             UNKNOWN,
             NATIVE_SCHAR,
@@ -52,7 +52,7 @@ class I3CSVTable : public I3Table {
           };
         NativeType GetNativeType(const I3Datatype& dtype);
         std::vector<NativeType> fieldTypes_;
-        
+
         template <typename T>
         void inline WriteField(T* value,size_t arraySize) {
             for (size_t i = 0; i < arraySize; i++) {
@@ -60,12 +60,12 @@ class I3CSVTable : public I3Table {
                 if ((arraySize > 1) && (i != arraySize-1)) output_ << ",";
             }
         }
-        
+
         template <typename T>
         void inline WriteElement(T* element) {
             output_ << *element;
         }
-        
+
         std::string folderPath_;
         std::ofstream output_;
 

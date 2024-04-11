@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -21,11 +21,11 @@ class I3BroadcastTable : public I3Table {
             I3TableRowDescriptionConstPtr description, std::vector<I3TablePtr>& clients);
         virtual void AddRow(I3EventHeaderConstPtr header, I3TableRowConstPtr row);
         virtual void Align();
-        
+
     private:
         void WriteRows(I3TableRowConstPtr rows);
         std::vector<I3TablePtr> clients_;
-        
+
     SET_LOGGER("I3BroadcastTable");
 };
 

@@ -1,9 +1,9 @@
-.. 
-.. copyright  (C) 2010
-.. The Icecube Collaboration
-.. 
+..
+.. Copyright  (C) 2010 The Icecube Collaboration
+.. SPDX-License-Identifier: BSD-2-Clause
+..
 .. $Id$
-.. 
+..
 .. @version $Revision$
 .. @date $LastChangedDate$
 .. @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy$
@@ -31,7 +31,7 @@ First, there are a few conventions you should follow to make the output of your 
 Field names
 ___________
 
-Your field names should be all lower-case, separated by underscores, like 'raw_atwd_0', 'fit_status', or 'zenith'. 
+Your field names should be all lower-case, separated by underscores, like 'raw_atwd_0', 'fit_status', or 'zenith'.
 
 Units
 _____
@@ -41,7 +41,7 @@ _____
 Docstrings
 __________
 
-Include a useful documentation string whenever applicable. This is especially important if there is *any* possible ambiguity about how the field's value was calculated or should be interpreted. 
+Include a useful documentation string whenever applicable. This is especially important if there is *any* possible ambiguity about how the field's value was calculated or should be interpreted.
 
 Data types
 __________
@@ -107,7 +107,7 @@ that looks something like this:
             row['Dec'] = coord.Dec
             row['galactic_latitude'] = coord.GalacticLatitude
             row['galactic_longitude'] = coord.GalacticLongitude
-        
+
             return 1
 
 We can then pass a *list* of converters to I3TableWriter instead of a single converter instance::

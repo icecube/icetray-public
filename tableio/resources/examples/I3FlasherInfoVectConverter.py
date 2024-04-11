@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 """A demonstration of a converter for a complex object written in pure Python"""
 
 from icecube.dataclasses import I3FlasherInfo, I3FlasherInfoVect
@@ -14,10 +18,10 @@ class I3FlasherInfoVectConverter(tableio.I3Converter):
         desc.add_field("om",tableio.types.UInt32, "","OM number of the flashing DOM")
         desc.add_field("flash_time",tableio.types.Float64, "ns","Time (in nsec) in 25 nsec units, of the LED flash time.")
         desc.add_field("mask",tableio.types.UInt32, "bitmask","indicates which LEDs were flashing")
-        desc.add_field("width",tableio.types.Int32, "","flasher width") 
+        desc.add_field("width",tableio.types.Int32, "","flasher width")
         desc.add_field("rate",tableio.types.Int32, "","flasher rate")
         desc.add_field("brightness",tableio.types.Int32, "","brightness level (1..127)")
-        
+
         desc.add_field("atwd_bin_size",tableio.types.Float64, "ns","bin width of the ATWD3")
         desc.add_field("raw_atwd3",tableio.types.Int64, "counts","ATWD waveform of the LED current pulse",128)
 

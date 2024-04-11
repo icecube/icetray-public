@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -55,7 +55,7 @@ boost::shared_ptr<I3Datatype> I3Datatype_from_PyObject(bp::object obj) {
     if (char_extractor.check()) {
         return I3Datatype_from_PyArrayTypecode(char_extractor());
     }
-    
+
     // assume that anything that inherits from something called "enum" is an enum
     bp::object base = obj.attr("__base__").attr("__name__");
     std::string basename = bp::extract<std::string>(base);
@@ -77,7 +77,7 @@ I3DatatypePtr I3Datatype_from_Enum(bp::object enum_type) {
     dtype->kind = I3Datatype::Enum;
     dtype->size = sizeof(DummyEnummy);
     dtype->is_signed = true;
-    
+
     // extract values from the enum
     bp::tuple entry;
     std::string name;
@@ -90,7 +90,7 @@ I3DatatypePtr I3Datatype_from_Enum(bp::object enum_type) {
         name = bp::extract<std::string>(entry[1].attr("name"));
         dtype->enum_members.push_back(std::make_pair(name,value));
     }
-    
+
     dtype->description = bp::extract<std::string>(enum_type.attr("__name__"));
     return dtype;
 };

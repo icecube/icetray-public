@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -10,7 +10,7 @@
  */
 
 // A converter can be made for frame objects of the form map<OMKey, vector<T>> by
-// specializing the following templated structs for T. 
+// specializing the following templated structs for T.
 
 // the converters should be written to be indifferent on the state of the I3TableRow.
 
@@ -30,8 +30,8 @@
 template <class converter_type,
           typename map_type = I3Map<OMKey, std::vector<typename converter_type::booked_type> >,
           typename frameobject_type = map_type >
-class I3MapOMKeyVectorConverter 
-  : public I3ConverterImplementation< frameobject_type > 
+class I3MapOMKeyVectorConverter
+  : public I3ConverterImplementation< frameobject_type >
 {
 public:
   // Here, we explicitly create different converters for different kinds of arguments (to avoid boost.args errors about ambiguity)
@@ -56,7 +56,7 @@ public:
     bookToParticle_("")
   {}
 
-    
+
 protected:
   size_t GetNumberOfRows(const map_type& m) {
     log_trace("%s", __PRETTY_FUNCTION__);
@@ -70,10 +70,10 @@ protected:
     return nrows;
   }
 
-  I3TableRowDescriptionPtr CreateDescription(const map_type& m) 
+  I3TableRowDescriptionPtr CreateDescription(const map_type& m)
   {
     log_trace("%s", __PRETTY_FUNCTION__);
-    I3TableRowDescriptionPtr desc = 
+    I3TableRowDescriptionPtr desc =
       I3TableRowDescriptionPtr(new I3TableRowDescription() );
     desc->isMultiRow_ = true;
     desc->AddField<int32_t>("string", "", "String number");
@@ -90,7 +90,7 @@ protected:
       desc->AddField<double>("r_"+bookToParticle_, "m", "distance from DOM to vertex");
     }
     desc->AddField<tableio_size_t>("vector_index", "", "index in vector");
-      
+
     if (m.size() && m.begin()->second.size()) {
       detail::add_fields(converter_, desc, *(m.begin()->second.begin()));
     } else {
@@ -101,7 +101,7 @@ protected:
     return desc;
   }
 
-  size_t FillRows(const map_type& m, I3TableRowPtr rows) 
+  size_t FillRows(const map_type& m, I3TableRowPtr rows)
   {
     static int nGeometryWarnings = 0;
 
@@ -195,7 +195,7 @@ protected:
             rows->Set<tableio_size_t>("vector_index", vecindex);
 
             detail::fill_single_row(converter_, *veciter, rows, this->currentFrame_);
-            
+
             log_trace("String: %d OM: %d PMT %d",
                   mapiter->first.GetString(),
                   mapiter->first.GetOM(),
@@ -219,8 +219,8 @@ private:
 template <class converter_type,
 typename map_type = I3Map<ModuleKey, std::vector<typename converter_type::booked_type> >,
 typename frameobject_type = map_type >
-class I3MapModuleKeyVectorConverter 
-: public I3ConverterImplementation< frameobject_type > 
+class I3MapModuleKeyVectorConverter
+: public I3ConverterImplementation< frameobject_type >
 {
 public:
     // Here, we explicitly create different converters for different kinds of arguments (to avoid boost.args errors about ambiguity)
@@ -257,11 +257,11 @@ protected:
         }
         return nrows;
     }
-    
-    I3TableRowDescriptionPtr CreateDescription(const map_type& m) 
+
+    I3TableRowDescriptionPtr CreateDescription(const map_type& m)
     {
         log_trace("%s", __PRETTY_FUNCTION__);
-        I3TableRowDescriptionPtr desc = 
+        I3TableRowDescriptionPtr desc =
         I3TableRowDescriptionPtr(new I3TableRowDescription() );
         desc->isMultiRow_ = true;
         desc->AddField<int32_t>("string", "", "String number");
@@ -277,24 +277,24 @@ protected:
             desc->AddField<double>("r_"+bookToParticle_, "m", "distance from DOM to vertex");
         }
         desc->AddField<tableio_size_t>("vector_index", "", "index in vector");
-        
+
         if (m.size() && m.begin()->second.size()) {
             detail::add_fields(converter_, desc, *(m.begin()->second.begin()));
         } else {
             typedef typename map_type::mapped_type::value_type value_type;
             detail::add_fields(converter_, desc, value_type());
         }
-        
+
         return desc;
     }
-    
-    size_t FillRows(const map_type& m, I3TableRowPtr rows) 
+
+    size_t FillRows(const map_type& m, I3TableRowPtr rows)
     {
         static int nGeometryWarnings = 0;
-        
+
         log_trace("%s", __PRETTY_FUNCTION__);
         size_t index = 0;
-        
+
         I3ModuleGeoMapConstPtr moduleGeo;
         if ((bookGeometry_)||(bookToParticle_ != "")) {
             if (!this->currentFrame_)  // obsolete check?
@@ -316,15 +316,15 @@ protected:
             }
         }
 
-        
+
         for(typename map_type::const_iterator mapiter = m.begin();
             mapiter != m.end();
             mapiter++)
         {
-            
+
             ModuleKey key = mapiter->first;
             I3Position ompos;
-            
+
             if ((bookGeometry_)||(bookToParticle_ != "")) {
                 I3ModuleGeoMap::const_iterator geoiter = moduleGeo->find(key);
                 if (geoiter == moduleGeo->end()) {
@@ -337,7 +337,7 @@ protected:
                     ompos = geoiter->second.GetPos();
                 }
             }
-            
+
             int vecindex = 0;
             for (typename map_type::mapped_type::const_iterator veciter = mapiter->second.begin();
                  veciter != mapiter->second.end();
@@ -379,11 +379,11 @@ protected:
                     }
                 }
                 rows->Set<tableio_size_t>("vector_index", vecindex);
-                
+
                 detail::fill_single_row(converter_, *veciter, rows, this->currentFrame_);
-                
+
                 log_trace("String: %d OM: %d", mapiter->first.GetString(), mapiter->first.GetOM());
-                
+
                 index++;
                 vecindex++;
             }
@@ -391,7 +391,7 @@ protected:
         // loop over vector
         return index;
     }
-    
+
 private:
     bool bookGeometry_;
     std::string bookToParticle_;

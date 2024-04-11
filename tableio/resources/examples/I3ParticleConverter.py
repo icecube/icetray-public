@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 """A demonstration of a converter written in pure Python"""
 
 from icecube import tableio,dataclasses
@@ -36,5 +40,5 @@ class I3ParticleConverter(tableio.I3Converter):
         row['location']   = particle.location_type
         row['fit_status'] = particle.fit_status
         return 1
-        
+
 # tableio.I3ConverterRegistry.register(I3ParticleConverter)

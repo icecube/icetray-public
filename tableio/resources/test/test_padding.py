@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 """
 Ensure that hdf5 write does padding correctly for S and non-S frames
 """
@@ -12,7 +16,7 @@ from icecube.icetray import I3Tray
 have_simclasses = False
 try:
     from icecube import simclasses
-    have_simclasses = True 
+    have_simclasses = True
 except ImportError:
     pass
 
@@ -31,21 +35,21 @@ class Generator(icetray.I3Module):
             info = simclasses.I3CorsikaInfo()
             sframe['I3CorsikaInfo']=info
             self.PushFrame(sframe)
-        
+
         qframe=icetray.I3Frame('Q')
         eh = dataclasses.I3EventHeader()
         eh.run_id = 1
         eh.event_id = self.counter
         qframe['I3EventHeader']=eh
-        
+
         tree = dataclasses.I3MCTree()
-        p1 = dataclasses.I3Particle()        
+        p1 = dataclasses.I3Particle()
         tree.insert(p1)
 
         if self.counter%2==0:
             qframe['I3MCTree'] = tree
             qframe['I3MCPrimary'] = p1
-        
+
         self.PushFrame(qframe)
         self.counter+=1
 

@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -15,7 +15,7 @@
 
 /******************************************************************************/
 
-I3TableService::I3TableService()  { 
+I3TableService::I3TableService()  {
     // Set up a semi-sensible default
     SetIndexConverter(I3ConverterPtr(new I3IndexColumnsGenerator));
 }
@@ -26,13 +26,13 @@ std::vector<std::string> I3TableService::GetTableNames() {
 	std::vector<std::string> out;
 	out.reserve(tables_.size());
 	std::map<std::string, I3TablePtr>::const_iterator it;
-	
+
 	for(it = tables_.begin(); it != tables_.end(); it++) out.push_back(it->first);
 	return out;
 }
 
 /******************************************************************************/
-        
+
 I3TablePtr I3TableService::GetTable(std::string name,
                                     I3TableRowDescriptionConstPtr description) {
     std::map<std::string, I3TablePtr>::iterator it;
@@ -52,7 +52,7 @@ I3TablePtr I3TableService::GetTable(std::string name,
 }
 
 /******************************************************************************/
-        
+
 /*
 I3TablePtr I3TableService::CreateTable(std::string tableName,
                                        I3TableRowDescriptionConstPtr description) {
@@ -63,7 +63,7 @@ I3TablePtr I3TableService::CreateTable(std::string tableName,
 */
 
 /******************************************************************************/
-        
+
 bool I3TableService::EventHeadersEqual(const I3EventHeader& header1,
                                        const I3EventHeader& header2) {
     return ( (header1.GetRunID() == header2.GetRunID()) &&
@@ -116,12 +116,12 @@ void I3TableService::SetIndexConverter(I3ConverterPtr gen) {
 }
 
 /******************************************************************************/
-        
+
 I3TableRowConstPtr I3TableService::GetPaddingRows(I3EventHeaderConstPtr lastHeader,
                                                   I3EventHeaderConstPtr newHeader,
                                              I3TableRowDescriptionConstPtr description){
-   // catch the cases where padding is not necessary 
-   if (eventHeaderCache_.size() == 0) { // first call, first event 
+   // catch the cases where padding is not necessary
+   if (eventHeaderCache_.size() == 0) { // first call, first event
      log_trace("Event header cache is empty, no padding required");
      return I3TableRowConstPtr();
    }
@@ -144,27 +144,27 @@ I3TableRowConstPtr I3TableService::GetPaddingRows(I3EventHeaderConstPtr lastHead
          nrows = eventHeaderCache_.size();
       }
    } else { // this table has written something in the past, so we search the cache for its last header
-   
+
       // in sync, lastHeader is the same as the last entry in the cache
-      if ( EventHeadersEqual(*lastHeader, *(eventHeaderCache_.back())) ) { 
+      if ( EventHeadersEqual(*lastHeader, *(eventHeaderCache_.back())) ) {
            log_trace("Table in sync with the cache, no padding required");
            return I3TableRowConstPtr();
       }
-   
+
       // padding is necessary -> figure out how many rows
       // 2 scenarios: l: lastHeader, h: newHeader, 1...6 cached headers
       // A: 1,2,3,l,4,5,6,h -> 3 padding rows
       // B: 1,2,3,l,4,5,(6=h) -> 2 padding rows
-      
+
       // scenario A (OR: newHeader NULL => table is finished, pad out all missing rows)
       if (!newHeader || !EventHeadersEqual(*newHeader, *(eventHeaderCache_.back()))) {
-         log_trace("Padding up to last known event header");   
+         log_trace("Padding up to last known event header");
          for(rit = eventHeaderCache_.rbegin(); rit != eventHeaderCache_.rend() && !EventHeadersEqual(**rit, *lastHeader); rit++) nrows++;
          --rit; // go to the first missed event (reverse iterator)
                 // fill up to and including this event
       } else { // scenario B: another table already reported this event
          log_trace("Another table already reported this event.");
-         // start at 
+         // start at
          for(rit = eventHeaderCache_.rbegin(); rit != eventHeaderCache_.rend() && !EventHeadersEqual(**rit, *lastHeader); rit++) {
             nrows++;
          }
@@ -173,7 +173,7 @@ I3TableRowConstPtr I3TableService::GetPaddingRows(I3EventHeaderConstPtr lastHead
       }
 
    }
-      
+
    log_trace("nrows = %zu",nrows);
    if (nrows == 0) return I3TableRowPtr();
    I3TableRowPtr rows = I3TableRowPtr(new I3TableRow(description, nrows));
@@ -194,7 +194,7 @@ I3TableRowConstPtr I3TableService::GetPaddingRows(I3EventHeaderConstPtr lastHead
 void I3TableService::Finish() {
     bool finished = true;
     std::map<std::string, I3TablePtr>::iterator table_it = tables_.begin();
-    
+
     for ( ; table_it != tables_.end(); ++table_it) {
         if (table_it->second->IsConnectedToWriter()) {
             finished = false;
@@ -210,9 +210,9 @@ void I3TableService::Finish() {
     if (finished) CloseFile();
 }
 
-I3TableService::~I3TableService() {    
+I3TableService::~I3TableService() {
     std::map<std::string, I3TablePtr>::iterator table_it = tables_.begin();
-    
+
     for ( ; table_it != tables_.end(); ++table_it) {
         if (table_it->second->IsConnectedToWriter()) {
             log_error("Table '%s' is still connected, which means that the "
@@ -221,6 +221,6 @@ I3TableService::~I3TableService() {
 	    log_error("This can happen when FilterMask changes defintions in the middle of an I3Tray run.");
 	    log_error("Check to make sure different years of processing haven't been merged together.");
             break;
-        } 
+        }
     }
-} 
+}

@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -42,17 +42,17 @@ TEST(type_id) {
     I3ConverterPtr converter = BuildConverter<I3Double>();
     boost::shared_ptr<const I3Double> pi(new I3Double(3.14));
     boost::shared_ptr<const I3Bool> falsehood(new I3Bool(false));
-    
+
     ENSURE( converter->CanConvert(pi), "typeid works.");
     ENSURE( !converter->CanConvert(falsehood), "typeid works.");
-    
+
 }
 
 TEST(convert_one_row) {
     I3ConverterPtr converter = BuildConverter<I3Double>();
 
     I3DoubleConstPtr x = I3DoubleConstPtr( new I3Double(3.14) );
-    I3FrameObjectConstPtr frameobj = x; 
+    I3FrameObjectConstPtr frameobj = x;
 
     // create empty row
     // use the I3Double in x to initialize the description
@@ -65,10 +65,10 @@ TEST(convert_one_row) {
     ENSURE_EQUAL(rows->GetDescription()->GetNumberOfFields(), static_cast<unsigned int>(1), "description ok");
     ENSURE_EQUAL(rows->GetDescription()->GetFieldNames().at(0), "value", "description ok");
     ENSURE_EQUAL( rows->Get<double>("value"), 0, "rows are initialized to zero");
-    
+
     // convert
     converter->Convert(frameobj, rows);
-    
+
     // check
     ENSURE_DISTANCE( rows->Get<double>("value"), x->value, 1e-6, "I3Double value transferred to row");
 }
@@ -77,7 +77,7 @@ TEST(convert_into_many_rows) {
     I3ConverterPtr converter = BuildConverter<I3Double>();
 
     I3DoublePtr x = I3DoublePtr( new I3Double(3.14) );
-    I3FrameObjectConstPtr frameobj = x; 
+    I3FrameObjectConstPtr frameobj = x;
 
     // create 10 empty rows
     // use the I3Double in x to initialize the description
@@ -96,7 +96,7 @@ TEST(convert_into_many_rows) {
         x->value = 3.0 * i + 2;
         converter->Convert(frameobj, rows);
     }
-    
+
     // check
     for (int i = 0; i < 10; i++) {
         rows->SetCurrentRow(i);

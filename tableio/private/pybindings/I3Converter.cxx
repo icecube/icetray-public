@@ -1,8 +1,8 @@
 /**
  * I3Converter.cxx (pybindings)
  *
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -23,7 +23,7 @@ void register_I3Converter() {
 	.value("ExactConversion", I3Converter::ExactConversion)
 	.value("InexactConversion", I3Converter::InexactConversion)
 	;
-        
+
 	bp::class_<PythonConverter, boost::shared_ptr<PythonConverter>, boost::noncopyable>
 		("I3Converter")
 
@@ -33,8 +33,8 @@ void register_I3Converter() {
 		(I3FramePtr (PythonConverter::*)()) &PythonConverter::GetCurrentFrame)
 	.def("CreateDescription",(I3TableRowDescriptionPtr (PythonConverter::*)(I3FrameObjectConstPtr))
                     &PythonConverter::CreateDescription)
-	.def("Convert",(size_t (PythonConverter::*)(I3FrameObjectConstPtr, 
-	                                                  I3TableRowPtr, 
+	.def("Convert",(size_t (PythonConverter::*)(I3FrameObjectConstPtr,
+	                                                  I3TableRowPtr,
 	                                                  I3FramePtr))
 	               &PythonConverter::Convert)
 	.def("CanConvert", (I3Converter::ConvertState (PythonConverter::*)(I3FrameObjectPtr)) &PythonConverter::CanConvert)
@@ -45,8 +45,8 @@ void register_I3Converter() {
           .def("GetStop",
                &PythonConverter::GetStop)
 
-          ; 
-	
+          ;
+
 	bp::class_<I3ConverterMill, I3ConverterMillPtr >
 	    ("I3ConverterMill", bp::init<bp::object>())
 	;

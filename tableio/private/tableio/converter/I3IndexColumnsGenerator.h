@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -24,7 +24,7 @@ class I3IndexColumnsGenerator : public I3ConverterImplementation<I3EventHeader> 
     private:
 	I3TableRowDescriptionPtr CreateDescription(const I3EventHeader& object);
 	size_t FillRows(const I3EventHeader& header, I3TableRowPtr rows);
-	
+
 	typedef hash_map<std::string,int> stream_map_t;
 	typedef std::vector<stream_map_t::key_type> istream_t;
 	stream_map_t streams_;

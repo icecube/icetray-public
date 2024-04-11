@@ -1,9 +1,9 @@
-.. 
-.. copyright  (C) 2010
-.. The Icecube Collaboration
-.. 
+..
+.. Copyright  (C) 2010 The Icecube Collaboration
+.. SPDX-License-Identifier: BSD-2-Clause
+..
 .. $Id$
-.. 
+..
 .. @version $Revision$
 .. @date $LastChangedDate$
 .. @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy$
@@ -20,7 +20,7 @@ files. This project is maintained by Jakob van Santen <jvansanten@gmail.com>.
 
 .. toctree::
    :maxdepth: 1
-   
+
    release_notes
 
 Rationale
@@ -36,7 +36,7 @@ hdf-writer, were created over the years to extract physics data from I3 files.
 This kind of diversity is actually a problem, as it inhibits communication
 between analyzers using different booking tools. In addition, many previous
 attempts at booking were difficult to modify and extend without replacing
-large swaths of their internal code. 
+large swaths of their internal code.
 
 This project was designed to create a single, generic booking framework that
 is modular in both input and output. In addition, it allows coders to document
@@ -50,7 +50,7 @@ Writing data to a table involves three components:
 
 1. A *Converter* that takes a specific FrameObject, defines the types and names of the appropriate table columns, and fills a table structure with the data in that object
 
-2. A *Writer Service* that writes the filled table structures out to a specific file format (e.g. an HDF5 table, a ROOT ntuple, or a CSV text file ), 
+2. A *Writer Service* that writes the filled table structures out to a specific file format (e.g. an HDF5 table, a ROOT ntuple, or a CSV text file ),
 
 3. The *Table Writer*, an I3Module that coordinates activities between the two.
 

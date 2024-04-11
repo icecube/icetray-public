@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -19,7 +19,7 @@ class I3BroadcastTableService : public I3TableService {
         I3BroadcastTableService(const std::vector<I3TableServicePtr>& clients);
         void SetIndexConverter(I3ConverterPtr gen);
     protected:
-        virtual I3TablePtr CreateTable(const std::string& tableName, 
+        virtual I3TablePtr CreateTable(const std::string& tableName,
                                        I3TableRowDescriptionConstPtr description);
         virtual void CloseFile();
     private:

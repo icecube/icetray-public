@@ -1,6 +1,6 @@
 /*
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -63,14 +63,14 @@ struct I3Datatype {
 
 /// Generates an I3Datatype data description object from a native type
 template <typename T>
-I3Datatype I3DatatypeFromNativeType() 
+I3Datatype I3DatatypeFromNativeType()
 {
   std::string label = I3::name_of<T>();
   BOOST_STATIC_ASSERT(boost::is_pod<T>::value);
 
     I3Datatype dtype;
     dtype.size = sizeof(T);
-    
+
     if (boost::is_integral<T>()) {
         dtype.kind = I3Datatype::Int;
         dtype.is_signed = boost::is_signed<T>();
@@ -99,7 +99,7 @@ I3Datatype I3DatatypeFromNativeType<bool>();
  * file.
  */
 template <typename T>
-static I3Datatype I3DatatypeFromNativeType(const std::vector<std::pair< std::string, T> >& enum_labels) 
+static I3Datatype I3DatatypeFromNativeType(const std::vector<std::pair< std::string, T> >& enum_labels)
 {
     BOOST_STATIC_ASSERT(boost::is_enum<T>::value);
 
@@ -107,7 +107,7 @@ static I3Datatype I3DatatypeFromNativeType(const std::vector<std::pair< std::str
     dtype.size = sizeof(T);
     dtype.kind = I3Datatype::Enum;
     dtype.is_signed = true; // some dataclasses use signed values in enums
-   
+
     dtype.description = I3::name_of<T>();
     // copy the enum members into the map
     typename std::vector<std::pair<std::string,T> >::const_iterator it;

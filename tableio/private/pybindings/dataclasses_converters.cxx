@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -268,8 +268,8 @@ void register_dataclasses_converters() {
     bp::class_<I3WaveformConverter,
     boost::shared_ptr<I3WaveformConverter>,
     bp::bases<I3Converter>,
-    boost::noncopyable >("I3WaveformConverter", 
-                         "Dumps ATWD and FADC waveforms together", 
+    boost::noncopyable >("I3WaveformConverter",
+                         "Dumps ATWD and FADC waveforms together",
                          bp::init<std::string, std::string, bool>())
     ;
 

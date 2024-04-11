@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -30,7 +30,7 @@ boost::shared_ptr<I3Datatype> I3Datatype_from_NumpyDtype(boost::python::object o
 template <typename T>
 struct I3DatatypeDispatcher
 {
-  typedef T visitor_type;  
+  typedef T visitor_type;
   I3DatatypeDispatcher() { }
 
   void route(I3Datatype& dtype, T& visitor)
@@ -83,7 +83,7 @@ struct I3DatatypeDispatcher
  * a wrapped I3Vector.
  *
  */
- 
+
 template <typename T>
 struct I3VectorDispatcher
 {
@@ -107,7 +107,7 @@ struct I3VectorDispatcher
       EXTRACTOR(uint64_t);
       EXTRACTOR(float);
       EXTRACTOR(double);
-      
+
       if (false) {}
       CHECK_CALL(bool);
       CHECK_CALL(int8_t);
@@ -123,12 +123,12 @@ struct I3VectorDispatcher
       else {
           visitor.fail(std::string("I don't know how to handle your datatype."));
       }
-      
+
   };
 
 #undef EXTRACTOR
 #undef CHECK_CALL
-  
+
 };
 
 namespace I3Datatypes {
@@ -148,7 +148,7 @@ namespace I3Datatypes {
     NATIVE_DOUBLE,
     NATIVE_BOOL
   };
-  NativeType GetNativeType(const I3Datatype& dtype);  
+  NativeType GetNativeType(const I3Datatype& dtype);
 };
 
 #endif /* end of include guard: TYPE_HELPERS_H_M3WNFWYF */

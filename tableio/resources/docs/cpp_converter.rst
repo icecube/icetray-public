@@ -1,9 +1,9 @@
-.. 
-.. copyright  (C) 2010
-.. The Icecube Collaboration
-.. 
+..
+.. Copyright  (C) 2010 The Icecube Collaboration
+.. SPDX-License-Identifier: BSD-2-Clause
+..
 .. $Id$
-.. 
+..
 .. @version $Revision$
 .. @date $LastChangedDate$
 .. @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy$
@@ -60,7 +60,7 @@ You can declare your subclass in a header, like so::
 
     #include "tableio/internals/I3Converter.h"
     #include "jebclasses/I3FilterResult.h"
-    
+
     class I3FilterResultMapConverter : public I3ConverterImplementation<I3FilterResultMap> {
         private:
             I3TableRowDescriptionPtr CreateDescription(const I3FilterResultMap& frmap);
@@ -85,18 +85,18 @@ this. It looks so::
     {
         public:
             enum BookRefFrame { car = 0, sph = 1, cyl = 2, all = 3 };
-        
+
             I3PositionConverter()
             : BookRefFrame_(I3PositionConverter::car)
             {}
-        
+
             /** The BookRefFrame argument specifies the reference frame for which
              *  position data should be booked.
              */
             I3PositionConverter(BookRefFrame BookRefFrame)
             : BookRefFrame_(BookRefFrame)
             {}
-        
+
         private:
             I3TableRowDescriptionPtr CreateDescription(const I3Position& position);
             size_t FillRows(const I3Position& position, I3TableRowPtr row);
@@ -121,7 +121,7 @@ The implementation goes in a separate file::
     #include "jebclasses/converter/I3FilterResultMapConverter.h"
 
     I3TableRowDescriptionPtr I3FilterResultMapConverter::CreateDescription(const I3FilterResultMap& frmap) {
-        I3TableRowDescriptionPtr desc = 
+        I3TableRowDescriptionPtr desc =
             I3TableRowDescriptionPtr(new I3TableRowDescription() );
         I3FilterResultMap::const_iterator it;
         for (it = frmap.begin(); it != frmap.end(); it++) {
@@ -129,7 +129,7 @@ The implementation goes in a separate file::
         }
         return desc;
     }
-        
+
     unsigned int I3FilterResultMapConverter::FillRows(const I3FilterResultMap& frmap, I3TableRowPtr rows) {
         I3FilterResultMap::const_iterator it;
         bool* filter_result;
@@ -142,7 +142,7 @@ The implementation goes in a separate file::
     }
 
 Possible converter options (as class member variables) should be considered in
-here ;) 
+here ;)
 
 pybindings
 __________________________________________
@@ -154,15 +154,15 @@ of your project's converters pybindings file *private/pybindings/converters.cxx*
 could look like so::
 
     #ifdef USE_TABLEIO
-    
+
     #include "jebclasses/converter/I3FilterResultMapConverter.h"
     #include "tableio/converter/pybindings.h"
-    
+
     void register_I3Converters() {
         I3CONVERTER_NAMESPACE(jebclasses);
         I3CONVERTER_EXPORT(I3FilterResultMapConverter,"Dumps the result of each Pole filter to a table column");
     }
-    
+
     #else
     void register_I3Converters() {}
     #endif
@@ -250,7 +250,7 @@ converter class::
     void register_I3Converters()
     {
         I3CONVERTER_NAMESPACE(dataclasses);
-        
+
         I3CONVERTER_EXPORT__WITH_CONVERTER_OBJ(I3PositionConverter,
             "A nice (multiline) docstring for your converter \n"
             "describing all possible options goes in here!   \n"

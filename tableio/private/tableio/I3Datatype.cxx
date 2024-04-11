@@ -1,6 +1,6 @@
 /*
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -39,11 +39,11 @@ bool I3Datatype::operator==(const I3Datatype& rhs) const {
 bool I3Datatype::CompatibleWith(const I3Datatype& rhs, bool enums_are_ints ) const {
     bool rep = (size == rhs.size) && (is_signed == rhs.is_signed);
     bool type = (kind == rhs.kind);
-    if (enums_are_ints && 
+    if (enums_are_ints &&
         ((kind == I3Datatype::Enum || kind == I3Datatype::Int) &&
          (rhs.kind == I3Datatype::Enum || rhs.kind == I3Datatype::Int)))
          type = true;
-    return (rep && type); 
+    return (rep && type);
 };
 
 std::string I3Datatype::TypeClassAsString() const {
@@ -63,10 +63,10 @@ std::string I3Datatype::AsString() const {
     out << "kind=" << TypeClassAsString();
     out << " size=" << size;
     out << " signed=";
-    
+
     if (is_signed) out << "True";
     else out << "False";
-    
+
     out << ")";
     return out.str();
 };

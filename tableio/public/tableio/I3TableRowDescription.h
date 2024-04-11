@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -54,29 +54,29 @@ public:
 
     /* convenience AddField */
     template<class T>
-    void AddField(const std::string& name, 
+    void AddField(const std::string& name,
 		  const std::string& unit,
-		  const std::string& doc, 
-		  size_t arrayLength=1) 
+		  const std::string& doc,
+		  size_t arrayLength=1)
     {
-      AddField(name, I3DatatypeFromNativeType<T>(), 
+      AddField(name, I3DatatypeFromNativeType<T>(),
 		 unit, doc, arrayLength);
     }
 
     /* convenience AddEnumField - create hdf type and call AddField */
     template<typename enum_type>
-    void AddEnumField(const std::string& name, 
+    void AddEnumField(const std::string& name,
 		      const std::vector<std::pair<std::string,enum_type> > &elements,
 		      const std::string& unit,
 		      const std::string& doc,
 		      size_t arrayLength=1) {
-            
+
     I3Datatype enum_typus = I3DatatypeFromNativeType<enum_type>(elements);
     AddField(name, enum_typus, unit, doc, arrayLength);
     }
 
     bool CanBeFilledInto(boost::shared_ptr<const I3TableRowDescription> other) const;
-        
+
     // getter and setter - remove them? no real encapsulation anyway
     const std::vector<std::string>& GetFieldNames() const;
     const std::vector<I3Datatype>&  GetFieldTypes() const;
@@ -101,12 +101,12 @@ public:
     void SetUseIndex(bool u) {useIndex_ = u;}
 
     bool GetUsePadding() const { return usePadding_; }
-    void SetUsePadding(bool up) { usePadding_ = up; }  
-  
+    void SetUsePadding(bool up) { usePadding_ = up; }
+
     bool operator==(boost::shared_ptr<const I3TableRowDescription> other) const;
 private:
     size_t GetNextOffset() const;
-	
+
     std::vector<std::string> fieldNames_;
     // typedef std::map<std::string, size_t> fieldNameToIndex_t;
     typedef boost::unordered_map<std::string, size_t> fieldNameToIndex_t;
@@ -122,10 +122,10 @@ private:
 
     friend I3TableRowDescription operator|(const I3TableRowDescription& lhs, const I3TableRowDescription& rhs);
     friend I3TableRowDescription& operator<<(I3TableRowDescription& lhs, const I3TableRowDescription& rhs);
-    
+
     SET_LOGGER("I3TableRowDescription");
 };
-    
+
 // declare template specialization for bools to let other file find
 // the implementation in the .cxx file
 template<> void I3TableRowDescription::AddField<bool>(const std::string& name,

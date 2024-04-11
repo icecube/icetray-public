@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -29,41 +29,41 @@ class I3TableRow {
         I3TableRow& operator=(const I3TableRow& rhs);
 
         ~I3TableRow();
-        
+
         // set the current row one which following Set and Get calls operate
         void SetCurrentRow(size_t row);
         size_t GetCurrentRow() const;
 
         I3TableRowPtr GetSingleRow(size_t row) const;
-        
+
         // set the value of a field
         template<class T>
         void Set(const std::string& fieldName, T value, bool all = false);
-        
+
         // set the value of a field by index
         template<class T>
         void Set(size_t index, T value, bool all = false);
-        
+
         // get the value of a field in the current row
         template<class T>
         T Get(const std::string& fieldName);
-        
+
         // get the value of a field in the current row by index
         template<class T>
         T Get(size_t index);
-        
+
         // get a pointer to the beginning of field for the current row
         template<class T>
         T* GetPointer(const std::string& fieldName);
-        
+
         // get a pointer to the beginning of field for the current row
         template<class T>
         T* GetPointer(size_t index);
-        
+
         // get a pointer to the beginning of field for the given row
         template<class T>
         T* GetPointer(const std::string& fieldName, size_t row);
-        
+
         // get a pointer to the beginning of field for the given row
         template<class T>
         T* GetPointer(size_t index, size_t row);
@@ -71,39 +71,39 @@ class I3TableRow {
         // get a pointer to the beginning of field for the current row
         template<class T>
         const T* GetPointer(const std::string& fieldName) const;
-        
+
         // get a pointer to the beginning of field for the current row
         template<class T>
         const T* GetPointer(size_t index) const;
-        
+
         // get a pointer to the beginning of field for the given row
         template<class T>
         const T* GetPointer(const std::string& fieldName, size_t row) const;
-        
+
         // get a pointer to the beginning of field for the given row
         template<class T>
         const T* GetPointer(size_t index, size_t row) const;
 
         // get a void pointer to whole memory block
         void const* GetPointer() const;
-        
+
         // get a void pointer to a particular row
         void const* GetPointerToField(size_t index, size_t row) const;
-        
+
         // get a void pointer to the beginning of a particular row
         void const* GetPointerToRow(size_t row) const;
-        
+
         // and a non-const version of same
         void* GetPointerToField(size_t index, size_t row);
-        
-        
+
+
         I3TableRowDescriptionConstPtr GetDescription() const;
 
         size_t GetNumberOfRows() const;
         void SetNumberOfRows(size_t nrows);
 
         void SetEnumsAreInts( bool flag ) { enums_are_ints_ = flag; };
-        
+
         void reserve(size_t nrows);
         void erase(size_t nrows);
         void append(const I3TableRow& rhs);
@@ -112,16 +112,16 @@ class I3TableRow {
         // set field with name fieldName to value for all rows
         template<class T>
         void SetAll(size_t index, T value);
-        
+
         // set the value of a field in the current row
         template<class T>
         void SetCurrent(size_t index, T value);
-        
+
         // check if the templated type is compatible with the
         // field at index
         template<class T>
         bool CheckType(size_t index) const;
-        
+
         I3TableRow();
         void init();
         void expand(size_t nrows);
@@ -162,7 +162,7 @@ void I3TableRow::Set(const std::string& fieldName, T value, bool all) {
     }
     if (all) {
         SetAll(index,value);
-    } else { 
+    } else {
         SetCurrent(index,value);
     }
 }
@@ -182,20 +182,20 @@ void I3TableRow::Set(size_t index, T value, bool all) {
 
 template<class T>
 void I3TableRow::SetCurrent(size_t index, T value) {
-    T*  pointer = GetPointer<T>(index, currentRow_); 
+    T*  pointer = GetPointer<T>(index, currentRow_);
     *pointer = value;
 }
 
 template<class T>
 void I3TableRow::SetAll(size_t index, T value) {
     for (size_t row = 0; row < nrows_; ++row) {
-       T*  pointer = GetPointer<T>(index, row); 
+       T*  pointer = GetPointer<T>(index, row);
        *pointer = value;
     }
 }
 
 /******************************************************************************/
-        
+
 template<class T>
 T I3TableRow::Get(const std::string& fieldName) {
     return *GetPointer<T>(fieldName, currentRow_);
@@ -225,7 +225,7 @@ T* I3TableRow::GetPointer(size_t index) {
 template<class T>
 T* I3TableRow::GetPointer(const std::string& fieldName, size_t row) {
     size_t index;
-    if ( (index = description_->GetFieldColumn(fieldName)) >= description_->GetNumberOfFields() ) 
+    if ( (index = description_->GetFieldColumn(fieldName)) >= description_->GetNumberOfFields() )
         log_fatal("trying to get the address of unknown field %s", fieldName.c_str());
 
     return GetPointer<T>(index, row);
@@ -233,14 +233,14 @@ T* I3TableRow::GetPointer(const std::string& fieldName, size_t row) {
 
 template<class T>
 T* I3TableRow::GetPointer(size_t index, size_t row) {
-    
+
     CheckType<T>(index);
 
     if ( !(row < nrows_) )
         log_fatal("requested pointer to row %zu which is not in [0,%zu]", row, nrows_);
 
     return reinterpret_cast<T*>(&(reinterpret_cast<uint8_t*>(
-        data_)[I3MEMORYCHUNK_SIZE*description_->GetTotalChunkSize()*row + 
+        data_)[I3MEMORYCHUNK_SIZE*description_->GetTotalChunkSize()*row +
         description_->GetFieldByteOffsets().at(index)]));
 }
 
@@ -260,7 +260,7 @@ const T* I3TableRow::GetPointer(size_t index) const {
 template<class T>
 const T* I3TableRow::GetPointer(const std::string& fieldName, size_t row) const {
     size_t index;
-    if ( (index = description_->GetFieldColumn(fieldName)) >= description_->GetNumberOfFields() ) 
+    if ( (index = description_->GetFieldColumn(fieldName)) >= description_->GetNumberOfFields() )
         log_fatal("trying to get the address of unknown field %s", fieldName.c_str());
 
     return GetPointer<T>(index, row);
@@ -268,14 +268,14 @@ const T* I3TableRow::GetPointer(const std::string& fieldName, size_t row) const 
 
 template<class T>
 const T* I3TableRow::GetPointer(size_t index, size_t row) const {
-    
+
     CheckType<const T>(index);
 
     if ( !(row < nrows_) )
         log_fatal("requested pointer to row %zu which is not in [0,%zu]", row, nrows_);
-    
+
     return reinterpret_cast<const T*>(&(reinterpret_cast<const uint8_t*>(
-        data_)[I3MEMORYCHUNK_SIZE*description_->GetTotalChunkSize()*row + 
+        data_)[I3MEMORYCHUNK_SIZE*description_->GetTotalChunkSize()*row +
         description_->GetFieldByteOffsets().at(index)]));
 
 }

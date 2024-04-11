@@ -1,13 +1,12 @@
-# 
-# copyright  (C) 2010
-# The Icecube Collaboration
-# 
+# Copyright  (C) 2010 The Icecube Collaboration
+# SPDX-License-Identifier: BSD-2-Clause
+#
 # $Id: types.py 107762 2013-07-01 22:55:31Z nwhitehorn $
-# 
+#
 # @version $Revision: 107762 $
 # @date $LastChangedDate: 2013-07-01 18:55:31 -0400 (Mon, 01 Jul 2013) $
 # @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy: nwhitehorn $
-# 
+#
 
 from icecube.tableio import I3Datatype
 
@@ -23,7 +22,7 @@ Int8    = make_dtype(dt.Int,1,True)
 Int16   = make_dtype(dt.Int,2,True)
 Int32   = make_dtype(dt.Int,4,True)
 Int64   = make_dtype(dt.Int,8,True)
-        
+
 UInt8   = make_dtype(dt.Int,1,False)
 UInt16  = make_dtype(dt.Int,2,False)
 UInt32  = make_dtype(dt.Int,4,False)
@@ -37,7 +36,7 @@ Bool    = make_dtype(dt.Bool,1,False)
 # make a pretty-printer for I3Datatype
 def pretty_dtype(self):
     return "I3Datatype(kind=%s, size=%s, signed=%s)"  % (self.kind,self.size,self.is_signed)
-    
+
 I3Datatype.__repr__ = pretty_dtype
 
 del I3Datatype,dt,make_dtype,pretty_dtype

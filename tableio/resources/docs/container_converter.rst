@@ -1,9 +1,9 @@
-.. 
-.. copyright  (C) 2010
-.. The Icecube Collaboration
-.. 
+..
+.. Copyright  (C) 2010 The Icecube Collaboration
+.. SPDX-License-Identifier: BSD-2-Clause
+..
 .. $Id$
-.. 
+..
 .. @version $Revision$
 .. @date $LastChangedDate$
 .. @author Fabian Kislat <fabian.kislat@desy.de> $LastChangedBy$
@@ -27,10 +27,10 @@ to fulfill the following requirements:
   this struct;
 * has two functions
   ::
- 
+
     void AddFields(I3TableRowDescriptionPtr);
     void AddFields(I3TableRowDescriptionPtr, const booked_type&);
- 
+
   that add the required fields to the given I3TableRowDescription - the first
   one can of course be replaced by adding a default value to the second
   parameter of the second version; and
@@ -46,7 +46,7 @@ I3MapOMKeyVectorConverter.
 
 .. note::
     I3MapConverter has parameters bookGeometry and bookToParticle (you name the particle) in its constructor, that
-    allow users to book X/Y/Z coordinates or perpendicular/longitunal distances to a particle track/vertex, 
+    allow users to book X/Y/Z coordinates or perpendicular/longitunal distances to a particle track/vertex,
     together with the data in the map.
     They default to not booking these things (bookGeometry=false, and bookToParticle="").
     To make this option available in python, use the I3_MAP_CONVERTER_EXPORT or
@@ -86,7 +86,7 @@ converter using the implemented I3MapOMKeyVectorConverter<T>. Mind the required 
         row->Set<double>("charge", pulse.GetCharge());
         row->Set<int32_t>("id", pulse.GetID());
       }
-    
+
     };
 
     typedef I3MapOMKeyVectorConverter< convert_I3RecoPulse >  I3RecoPulseSeriesMapConverter;
@@ -98,18 +98,18 @@ __________________________________________________________
 
 .. highlight:: c++
 
-The I3MMCTrack does not inherit from I3FrameObject, so a converter for the I3MMCTrackList (an I3Vector<I3MMCTrack>) 
+The I3MMCTrack does not inherit from I3FrameObject, so a converter for the I3MMCTrackList (an I3Vector<I3MMCTrack>)
 also needs a struct representing the I3MMCTrack. The following example shows the conversion struct for the I3MMCTrackList
 converter using the implemented I3VectorConverter<T>. Mind the required typedef booked_type.
 ::
 
     #include <simclasses/I3MMCTrack.h>
     #include <tableio/converter/I3VectorConverter.h>
-    
+
     struct convert_I3MMCTrack {
-    
+
         typedef I3MMCTrack booked_type;
-    
+
         void AddFields(I3TableRowDescriptionPtr desc, const booked_type& = I3MMCTrack())
         {
             desc->AddField<double>("Ec", "GeV", "Muon Energy at closest point to detector center");
@@ -118,7 +118,7 @@ converter using the implemented I3VectorConverter<T>. Mind the required typedef 
             desc->AddField<double>("Elost", "GeV", "Muon energy loss in detector");
             ...
         }
-    
+
         void FillSingleRow(const booked_type& track, I3TableRowPtr row)
         {
             row->Set<double>("Ec", track.GetEc());
@@ -127,8 +127,8 @@ converter using the implemented I3VectorConverter<T>. Mind the required typedef 
             row->Set<double>("Elost", track.GetElost());
             ...
         }
-    
+
     };
-    
+
     typedef I3VectorConverter< convert_I3MMCTrack > I3MMCTrackListConverter;
 

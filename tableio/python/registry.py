@@ -1,17 +1,16 @@
-# 
-# copyright  (C) 2010
-# The Icecube Collaboration
-# 
+# Copyright  (C) 2010 The Icecube Collaboration
+# SPDX-License-Identifier: BSD-2-Clause
+#
 # $Id: registry.py 107665 2013-06-29 14:39:18Z nwhitehorn $
-# 
+#
 # @version $Revision: 107665 $
 # @date $LastChangedDate: 2013-06-29 10:39:18 -0400 (Sat, 29 Jun 2013) $
 # @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy: nwhitehorn $
-# 
+#
 
 class I3ConverterRegistry:
-    """A mapping of object type->I3Converter. 
-    
+    """A mapping of object type->I3Converter.
+
     This should be considered an implementation detail and subject to change without notice."""
     registry = dict()
     defaults = dict()

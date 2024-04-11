@@ -1,8 +1,8 @@
 /**
  * I3TableRowDescription.cxx (pybindings)
  *
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -26,7 +26,7 @@ BOOST_PYTHON_FUNCTION_OVERLOADS(add_field_overloads,add_field,5,6)
 void register_I3TableRowDescription() {
 
 
-   bp::class_<I3TableRowDescription, 
+   bp::class_<I3TableRowDescription,
       boost::shared_ptr<I3TableRowDescription>
       >
       ("I3TableRowDescription")
@@ -36,11 +36,11 @@ void register_I3TableRowDescription() {
       BOOST_PP_SEQ_FOR_EACH(WRAP_PROP_RO_INTERNAL_REFERENCE,I3TableRowDescription,RO_VEC_PROPERTIES)
       BOOST_PP_SEQ_FOR_EACH(WRAP_PROP_RO,I3TableRowDescription,RO_PROPERTIES)
       BOOST_PP_SEQ_FOR_EACH(WRAP_PROP,I3TableRowDescription,PROPERTIES)
-      
+
       .def("add_field", &add_field,
          add_field_overloads(
             bp::args("name","dtype","units","docstring","array_size"),
-            
+
 "\nAdd a field to the table description.                                      \n\
                                                                               \n\
 Parameters                                                                    \n\
@@ -62,7 +62,7 @@ array_size : int                                                              \n
    quantity.                                                                  \n\
 "))
    ;
-   
+
    // register implicit conversions for const pointers
    utils::register_const_ptr<I3TableRowDescription>();
 

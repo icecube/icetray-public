@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -21,15 +21,15 @@ class I3TableTranscriber {
         I3TableTranscriber(I3TableServicePtr input, I3TableServicePtr output);
         void Execute();
         void Execute(size_t nframes);
-        
+
         void Finish();
-        
+
     protected:
-         I3TablePtr ConnectTable(std::string tableName, 
+         I3TablePtr ConnectTable(std::string tableName,
                                  const I3TableRowDescription& description);
          void DisconnectTable(I3TablePtr& table);
     private:
- 
+
         I3TableTranscriber();
         I3TableServicePtr inputService_;
         I3TableServicePtr outputService_;

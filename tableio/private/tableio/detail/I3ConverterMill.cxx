@@ -1,6 +1,6 @@
 /*
- * copyright  (C) 2012
- * The Icecube Collaboration
+ * Copyright  (C) 2012 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -20,13 +20,13 @@ I3ConverterMill::I3ConverterMill(boost::python::object callable)
 	if (!thneed_)
 		throw std::runtime_error("Couldn't instantiate converter!");
 }
-	
+
 bool
 I3ConverterMill::CanConvert(I3FrameObjectConstPtr object)
 {
 	return thneed_->CanConvert(object);
 }
-	
+
 I3ConverterPtr
 I3ConverterMill::operator()()
 {

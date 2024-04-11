@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -30,7 +30,7 @@ static boost::shared_ptr<I3ConverterBundle> list_init( bp::list converters ) {
 }
 
 void register_I3ConverterBundle() {
-    bp::class_<I3ConverterBundle, 
+    bp::class_<I3ConverterBundle,
                boost::shared_ptr<I3ConverterBundle>,
                bp::bases<I3Converter> >
                ("I3ConverterBundle",bp::no_init)

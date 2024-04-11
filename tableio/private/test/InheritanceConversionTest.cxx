@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 
 #include <boost/make_shared.hpp>
@@ -53,14 +57,14 @@ public:
 		desc->AddField<int>("a", "", "Parameter A");
 		return(desc);
 	}
-	
+
 	virtual size_t GetNumberOfRows(const Foo& f){ return(1); }
-	
+
 	virtual size_t FillRows(const Foo& f, I3TableRowPtr rows){
 		rows->Set<int>("a",f.GetA());
 		return(1);
 	}
-	
+
 	boost::python::object operator()(){
         return(boost::python::object(shared_from_this()));
     }
@@ -76,15 +80,15 @@ public:
 		desc->AddField<int>("b", "", "Parameter B");
 		return(desc);
 	}
-	
+
 	virtual size_t GetNumberOfRows(const Bar& b){ return(1); }
-	
+
 	virtual size_t FillRows(const Bar& b, I3TableRowPtr rows){
 		rows->Set<int>("a",b.GetA());
 		rows->Set<int>("b",b.GetB());
 		return(1);
 	}
-	
+
 	boost::python::object operator()(){
         return(boost::python::object(shared_from_this()));
     }
@@ -96,12 +100,12 @@ TEST(ConvertersAcceptSubclasses){
 	boost::shared_ptr<Foo> f(new Foo(11));
 	boost::shared_ptr<Foo2> f2(new Foo2(11));
 	boost::shared_ptr<Bar> b(new Bar(5,6));
-	
+
 	FooConverter fconverter;
 	ENSURE_EQUAL(fconverter.CanConvert(f),I3Converter::ExactConversion);
 	ENSURE_EQUAL(fconverter.CanConvert(f2),I3Converter::InexactConversion);
 	ENSURE_EQUAL(fconverter.CanConvert(b),I3Converter::InexactConversion);
-	
+
 	BarConverter bconverter;
 	ENSURE_EQUAL(bconverter.CanConvert(f),I3Converter::NoConversion);
 	ENSURE_EQUAL(bconverter.CanConvert(f2),I3Converter::NoConversion);
@@ -137,15 +141,15 @@ TEST(MostSpecificConverterIsSelected){
 	std::vector<I3ConverterMillPtr> converters;
 	converters.push_back(boost::make_shared<I3ConverterMill>(boost::python::object(fconverter)));
 	converters.push_back(boost::make_shared<I3ConverterMill>(boost::python::object(bconverter)));
-	
+
 	boost::shared_ptr<I3CSVTableService> ts(new I3CSVTableService("dummy_directory"));
 	std::vector<std::string> streams;
 	I3TableWriter tw(ts, converters, streams);
-	
+
 	boost::shared_ptr<Foo> f(new Foo(11));
 	boost::shared_ptr<Foo2> f2(new Foo2(11));
 	boost::shared_ptr<Bar> b(new Bar(5,6));
-	
+
 	//check that each object gets picked up by the right converter
 	ENSURE(I3TableWriterTestAccess::FindConverter(tw,f)==fconverter);
 	ENSURE(I3TableWriterTestAccess::FindConverter(tw,f2)==fconverter);

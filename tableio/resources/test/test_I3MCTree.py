@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 """
 Ensure that I3MCTree and I3LinearizedMCTree can both be written
 """
@@ -31,18 +35,18 @@ def make_mctree(frame, linearized=True):
     frame['I3MCTree'] = tree
 
 def try_to_write(linearized=False):
-    
+
     try:
         from icecube.hdfwriter import I3HDFWriter
     except ImportError:
         raise unittest.SkipTest("hdfwriter project missing")
-    
+
     tray = I3Tray()
-    
+
     tray.Add('I3InfiniteSource')
     tray.Add(add_eventheader, Streams=[icetray.I3Frame.DAQ])
     tray.Add("I3NullSplitter", "nullsplit")
-    
+
     tray.Add(make_mctree, linearized=linearized)
     tray.Add(I3HDFWriter,
         Output='foo.hdf5',
@@ -50,9 +54,9 @@ def try_to_write(linearized=False):
         Types=[],
         SubEventStreams=["nullsplit"],
     )
-    
+
     tray.Execute(1)
-    
+
 
 class MCTreeTest(unittest.TestCase):
     def setUp(self):

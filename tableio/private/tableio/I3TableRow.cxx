@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -26,7 +26,7 @@ void I3TableRow::init() {
 
 /******************************************************************************/
 
-I3TableRow::I3TableRow(I3TableRowDescriptionConstPtr description, 
+I3TableRow::I3TableRow(I3TableRowDescriptionConstPtr description,
                        size_t nrows) :
     description_(description),
     nrows_(nrows),
@@ -60,7 +60,7 @@ void I3TableRow::expand(size_t nrows) {
     memcpy(newdata, data_, currentByteSize);
     // zero the remaining memory
     memset( &newdata[nrows_ * description_->GetTotalChunkSize()], 0, totalByteSize-currentByteSize);
-    
+
     // delete the old data array and replace it with the new one
     delete[] data_;
     data_ = newdata;
@@ -100,7 +100,7 @@ void I3TableRow::append(const I3TableRow& rhs) {
         expand(std::max(required_rows,2*capacity_));
     }
     memcpy( &data_[index], rhs.GetPointer(), bytes_to_write);
-    
+
     nrows_ = required_rows;
 }
 
@@ -112,7 +112,7 @@ I3TableRow::I3TableRow(const I3TableRow& rhs) {
     capacity_ = nrows_;
     currentRow_ = 0;
     enums_are_ints_ = false;
-    
+
     size_t totalChunkSize = nrows_*rhs.GetDescription()->GetTotalChunkSize();
     size_t totalByteSize = nrows_*rhs.GetDescription()->GetTotalByteSize();
     data_ = new I3MemoryChunk[totalChunkSize];
@@ -129,7 +129,7 @@ I3TableRow::I3TableRow(const I3TableRow& rhs, size_t start, size_t stop) {
     capacity_ = nrows_;
     currentRow_ = 0;
     enums_are_ints_ = false;
-    
+
     size_t totalChunkSize = nrows_*rhs.GetDescription()->GetTotalChunkSize();
     size_t totalByteSize = nrows_*rhs.GetDescription()->GetTotalByteSize();
     data_ = new I3MemoryChunk[totalChunkSize];
@@ -172,14 +172,14 @@ void const* I3TableRow::GetPointerToRow(size_t row) const {
 void const* I3TableRow::GetPointerToField(size_t index, size_t row) const {
     if (row >= nrows_) log_fatal("Tried to get pointer to a row not in range [0,%zu)", nrows_);
     return reinterpret_cast<void const*>(&(reinterpret_cast<uint8_t*>(
-        data_)[I3MEMORYCHUNK_SIZE*description_->GetTotalChunkSize()*row + 
+        data_)[I3MEMORYCHUNK_SIZE*description_->GetTotalChunkSize()*row +
         description_->GetFieldByteOffsets().at(index)]));
 }
 
 void* I3TableRow::GetPointerToField(size_t index, size_t row) {
     if (row >= nrows_) log_fatal("Tried to get pointer to a row not in range [0,%zu)", nrows_);
     return reinterpret_cast<void*>(&(reinterpret_cast<uint8_t*>(
-        data_)[I3MEMORYCHUNK_SIZE*description_->GetTotalChunkSize()*row + 
+        data_)[I3MEMORYCHUNK_SIZE*description_->GetTotalChunkSize()*row +
         description_->GetFieldByteOffsets().at(index)]));
 }
 
@@ -199,7 +199,7 @@ size_t I3TableRow::GetNumberOfRows() const {
 
 void I3TableRow::SetNumberOfRows(size_t nrows) {
     i3_assert(description_);
-    
+
     if (nrows_ == nrows)
         return;
 
@@ -249,14 +249,14 @@ void I3TableRow::Set<bool>(const std::string& fieldName, bool value, bool all) {
 template<>
 void* I3TableRow::GetPointer(const std::string& fieldName, size_t row) {
     size_t index;
-    if ( (index = description_->GetFieldColumn(fieldName)) >= description_->GetNumberOfFields() ) 
+    if ( (index = description_->GetFieldColumn(fieldName)) >= description_->GetNumberOfFields() )
         log_fatal("trying to get the address of unknown field %s", fieldName.c_str());
 
     if ( !(row < nrows_) )
         log_fatal("requested pointer to row %zu which is not in [0,%zu]", row, nrows_);
-    
+
     return reinterpret_cast<void*>(&(reinterpret_cast<uint8_t*>(
-        data_)[I3MEMORYCHUNK_SIZE*description_->GetTotalChunkSize()*row + 
+        data_)[I3MEMORYCHUNK_SIZE*description_->GetTotalChunkSize()*row +
         description_->GetFieldByteOffsets().at(index)]));
 }
 

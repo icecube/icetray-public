@@ -1,8 +1,8 @@
 /**
  * const_ptr_helpers.h
  *
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -49,7 +49,7 @@ namespace utils{
         bpl::register_ptr_to_python< boost::shared_ptr< const T > >();
         bpl::implicitly_convertible< boost::shared_ptr< T >, boost::shared_ptr< const T > >();
         // bpl::implicitly_convertible< boost::shared_ptr< const T >, boost::shared_ptr< T > >();
-        
+
     }
 
 }

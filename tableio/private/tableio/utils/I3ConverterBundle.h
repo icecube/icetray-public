@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -15,7 +15,7 @@
 #include <tableio/I3Converter.h>
 
 // I3ConverterBundlerepresents a bundle of converters all acting on the same frame object
-// this can be used to extend the functionality of compiled bookers in a 
+// this can be used to extend the functionality of compiled bookers in a
 // more user-friendly way than with multiple inheritance
 class I3ConverterBundle : public I3Converter {
     public:
@@ -25,12 +25,12 @@ class I3ConverterBundle : public I3Converter {
         virtual size_t GetNumberOfRows(const I3FrameObject& object);
         virtual I3TableRowDescriptionConstPtr GetDescription(I3FrameObjectConstPtr object);
         virtual I3TableRowDescriptionConstPtr GetDescription(const I3FrameObject& object);
-        virtual size_t Convert(I3FrameObjectConstPtr object, 
-                                     I3TableRowPtr rows, 
+        virtual size_t Convert(I3FrameObjectConstPtr object,
+                                     I3TableRowPtr rows,
                                      I3FramePtr frame=I3FramePtr());
-        
-        virtual size_t Convert(const I3FrameObject& object, 
-                                     I3TableRowPtr rows, 
+
+        virtual size_t Convert(const I3FrameObject& object,
+                                     I3TableRowPtr rows,
                                      I3FramePtr frame=I3FramePtr());
 
         virtual ConvertState CanConvert(I3FrameObjectConstPtr object);

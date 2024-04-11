@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2012
- * The Icecube Collaboration
+ * Copyright  (C) 2012 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -32,7 +32,7 @@ struct iterator_traits<I3Tree<T> >
 };
 
 }
-	 
+
 template <class Converter, typename Container = I3Tree<typename Converter::booked_type> >
 class I3TreeConverter : public I3ConverterImplementation<Container> {
 private:
@@ -44,27 +44,27 @@ protected:
 	GetNumberOfRows(const Container& c) {
 		return c.size();
 	}
-	
+
 	I3TableRowDescriptionPtr
 	CreateDescription(const Container &c)
 	{
 		I3TableRowDescriptionPtr desc(new I3TableRowDescription());
 		desc->isMultiRow_ = true;
 		desc->AddField<tableio_size_t>("depth", "", "depth in tree");
-		
+
 		if (c.size())
 			detail::add_fields(converter_, desc, *c.begin());
 		else
 			detail::add_fields(converter_, desc, Element());
-		
-		return desc;	
+
+		return desc;
 	}
-	
+
 	size_t FillRows(const Container &c, I3TableRowPtr rows)
 	{
 		size_t nrows = rows->GetNumberOfRows();
 		i3_assert( (nrows - rows->GetCurrentRow()) >= size_t(c.size()));
-		
+
                 size_t currentRow = rows->GetCurrentRow();
 
                 size_t i_row = currentRow;
@@ -75,10 +75,10 @@ protected:
 			rows->Set<tableio_size_t>("depth", c.depth(it));
 			detail::fill_single_row(converter_, *it, rows, this->currentFrame_);
 		}
-		
+
                 // check that nobody changed the row size
                 assert(nrows == rows->GetNumberOfRows());
-		
+
 		return (i_row - start_row);
 	}
 };
@@ -89,7 +89,7 @@ protected:
 // class TreeConverter : public I3ConverterImplementation<Container> {
 //
 // };
-// 
+//
 // }
 
 #endif /* TABLEIO_I3TREECONVERTER_H_INCLUDED */

@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -26,22 +26,22 @@ I3TableRowDescriptionPtr I3ParticleConverter::CreateDescription(const I3Particle
     desc->AddField<int32_t>("pdg_encoding", "",     "PDG encoding of particle type");
     #endif
     // skip: major_id/minor_id
-    
+
     MAKE_ENUM_VECTOR(type,I3Particle,I3Particle::ParticleType,I3PARTICLE_H_I3Particle_ParticleType);
     MAKE_ENUM_VECTOR(shape,I3Particle,I3Particle::ParticleShape,I3PARTICLE_H_I3Particle_ParticleShape);
     MAKE_ENUM_VECTOR(location,I3Particle,I3Particle::LocationType,I3PARTICLE_H_I3Particle_LocationType);
     MAKE_ENUM_VECTOR(fit_status,I3Particle,I3Particle::FitStatus,I3PARTICLE_H_I3Particle_FitStatus);
-    
+
     desc->AddEnumField<I3Particle::ParticleType> ("type",      type,"","");
     desc->AddEnumField<I3Particle::ParticleShape>("shape",     shape,"","");
     desc->AddEnumField<I3Particle::LocationType> ("location",  location,"","");
     desc->AddEnumField<I3Particle::FitStatus>    ("fit_status",fit_status,"","");
-    
+
     return desc;
 };
 
 size_t I3ParticleConverter::FillRows(const I3Particle& particle, I3TableRowPtr rows) {
-    
+
     rows->Set<double>("x",      particle.GetX());
     rows->Set<double>("y",      particle.GetY());
     rows->Set<double>("z",      particle.GetZ());
@@ -54,7 +54,7 @@ size_t I3ParticleConverter::FillRows(const I3Particle& particle, I3TableRowPtr r
     #ifdef I3PARTICLE_SUPPORTS_PDG_ENCODINGS
     rows->Set<int32_t>("pdg_encoding", particle.GetPdgEncoding());
     #endif
-    
+
     rows->Set<I3Particle::ParticleType> ("type",      particle.GetType());
     rows->Set<I3Particle::ParticleShape>("shape",     particle.GetShape());
     rows->Set<I3Particle::LocationType> ("location",  particle.GetLocationType());

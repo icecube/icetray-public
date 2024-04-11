@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # Ensure that row padding works properly with split streams.
 
 from icecube import icetray, dataclasses, dataio, tableio, phys_services
@@ -10,7 +14,7 @@ try:
     import tables
 except ImportError:
     sys.exit()
-    
+
 def headerfaker(frame):
     header = dataclasses.I3EventHeader()
     header.run_id = 0
@@ -38,17 +42,17 @@ class SubeventTest(unittest.TestCase):
     @classmethod
     def runtray(cls, fname):
         tray = icetray.I3Tray()
-        
+
         tray.AddModule("I3InfiniteSource", "source", stream=icetray.I3Frame.DAQ)
-        
+
         tray.AddModule(headerfaker, 'headers', Streams=[icetray.I3Frame.DAQ])
-        
+
         tray.AddModule("I3NullSplitter", "s1")
         tray.AddModule("I3NullSplitter", "s2")
-        
+
         for i in range(10):
             tray.AddModule(emitter, 's1e%d' % i, label='s1e%d' % i, prob=0.1, If=streampick("s1"))
-            
+
         for i in range(10):
             tray.AddModule(emitter, 's2e%d' % i, label='s2e%d' % i, prob=0.1, If=streampick("s2"))
 
@@ -58,10 +62,10 @@ class SubeventTest(unittest.TestCase):
             types=[dataclasses.I3Particle],
             SubEventStreams=['s1','s2'],
             )
-        
-        
+
+
         tray.Execute(100)
-        
+
     def setUp(self):
         self.__class__.runtray(self.fname)
     def tearDown(self):
@@ -86,7 +90,7 @@ class SubeventTest(unittest.TestCase):
                     self.assertEqual(
         canonical[field],
         row[field],
-        "'%s' are equal in row %d (%d != %d)" % (field, i, 
+        "'%s' are equal in row %d (%d != %d)" % (field, i,
                         canonical[field], row[field])
     )
         hdf.close()
@@ -140,7 +144,7 @@ class SubeventMergingTest(unittest.TestCase):
                     self.assertEqual(
         row[field],
         mrow[field],
-        "'%s' are equal in row %d (%d != %d)" % (field, i, 
+        "'%s' are equal in row %d (%d != %d)" % (field, i,
                         row[field], mrow[field])
     )
                 irow = itab[i]
@@ -149,7 +153,7 @@ class SubeventMergingTest(unittest.TestCase):
                     self.assertEqual(
         irow[field],
         imrow[field],
-        "'%s' are equal in row %d (%d != %d)" % (field, i, 
+        "'%s' are equal in row %d (%d != %d)" % (field, i,
                         irow[field], imrow[field])
     )
         hdf1.close()

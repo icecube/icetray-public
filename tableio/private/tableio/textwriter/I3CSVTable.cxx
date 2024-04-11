@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -19,7 +19,7 @@ namespace fs = boost::filesystem;
 I3CSVTable::I3CSVTable(I3TableService& service, const std::string& name,
                        I3TableRowDescriptionConstPtr description,
                        std::string& folderPath, I3TablePtr index) :
- I3Table(service,name,description), folderPath_(folderPath), 
+ I3Table(service,name,description), folderPath_(folderPath),
  output_((folderPath + std::string("/") + name + std::string(".csv")).c_str()) {
      indexTable_ = index;
      CreateTable();
@@ -76,9 +76,9 @@ void I3CSVTable::CreateTable() {
     const std::vector<std::string>& doc = description_->GetFieldDocStrings();
     const std::vector<size_t>& arrayLengths = description_->GetFieldArrayLengths();
     const std::vector<I3Datatype>& dtypes = description_->GetFieldTypes();
-    
-    for (name_it = names.begin(), unit_it = units.begin(), size_it = arrayLengths.begin(); 
-         name_it != names.end(); 
+
+    for (name_it = names.begin(), unit_it = units.begin(), size_it = arrayLengths.begin();
+         name_it != names.end();
          name_it++, unit_it++, size_it++) {
         output_ << "\"" << *name_it;
         if (unit_it->size() > 0) output_ << " [" << *unit_it << "]";
@@ -100,8 +100,8 @@ void I3CSVTable::CreateTable() {
         if (dtype_it->kind == I3Datatype::Enum) {
             output_ << "{ ";
             std::vector<std::pair<std::string,long> >::const_iterator member_it;
-            for (member_it = dtype_it->enum_members.begin(); 
-                 member_it != dtype_it->enum_members.end(); 
+            for (member_it = dtype_it->enum_members.begin();
+                 member_it != dtype_it->enum_members.end();
                  member_it++) {
                 output_ << member_it->first << " = " << member_it->second;
                 if (member_it != dtype_it->enum_members.end()-1) output_ << ", ";
@@ -120,10 +120,10 @@ void I3CSVTable::CreateTable() {
             output_ << ",";
         }
     }
-    
+
     output_.precision(12);
     output_ << std::scientific;
-    
+
     for (dtype_it = dtypes.begin(); dtype_it != dtypes.end(); dtype_it++) {
         fieldTypes_.push_back(GetNativeType(*dtype_it));
     }
@@ -133,7 +133,7 @@ void I3CSVTable::WriteRows(I3TableRowConstPtr row) {
     unsigned int i,j;
     std::vector<NativeType>::iterator t_it;
     I3TableRowPtr rows = boost::const_pointer_cast<I3TableRow>(row);
-    
+
     const std::vector<size_t>& arrayLengths = description_->GetFieldArrayLengths();
     std::vector<size_t>::const_iterator size_it;
     rows->SetEnumsAreInts(true);

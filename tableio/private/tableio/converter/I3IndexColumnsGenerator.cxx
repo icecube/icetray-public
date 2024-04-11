@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -35,7 +35,7 @@ I3IndexColumnsGenerator::I3IndexColumnsGenerator(I3TableRowDescriptionConstPtr d
 
 	const I3Datatype &dtype = desc->GetFieldTypes()[idx];
 
-	
+
 	typedef std::pair<std::string,long> enum_map_t;
 	BOOST_FOREACH(const enum_map_t &pair, dtype.enum_members)
 		streams_[pair.first] = pair.second;
@@ -45,7 +45,7 @@ I3IndexColumnsGenerator::I3IndexColumnsGenerator(I3TableRowDescriptionConstPtr d
 
 I3TableRowDescriptionPtr
 I3IndexColumnsGenerator::CreateDescription(const I3EventHeader& object) {
-            I3TableRowDescriptionPtr desc = 
+            I3TableRowDescriptionPtr desc =
                 I3TableRowDescriptionPtr(new I3TableRowDescription() );
 
 	/* You want something done right, you got to do it yourself. */
@@ -54,8 +54,8 @@ I3IndexColumnsGenerator::CreateDescription(const I3EventHeader& object) {
 	enum_type.kind = I3Datatype::Enum;
 	enum_type.is_signed = true;
 	enum_type.description = "";
-	
-	/* XXX HACK: Replace "" with "NULL" in the enum description */ 
+
+	/* XXX HACK: Replace "" with "NULL" in the enum description */
 	BOOST_FOREACH(const stream_map_t::value_type &pair, streams_)
 		if (pair.first.size() == 0)
 			enum_type.enum_members.push_back(
@@ -93,6 +93,6 @@ I3IndexColumnsGenerator::Resurrect(I3TableRowPtr rows) {
 	rows->SetEnumsAreInts(true); /* Disconnect seatbelt */
 	int32_t idx = rows->Get<int32_t>("SubEventStream");
 	header->SetSubEventStream(istreams_.at(idx));
-	
+
 	return header;
 }

@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -21,7 +21,7 @@ template<class FrmObj, typename TableType, const char* unit>
 class PODConverter : public I3ConverterImplementation<FrmObj> {
     private:
         I3TableRowDescriptionPtr CreateDescription(const FrmObj& object) {
-            I3TableRowDescriptionPtr desc = 
+            I3TableRowDescriptionPtr desc =
                 I3TableRowDescriptionPtr(new I3TableRowDescription() );
             desc->AddField<TableType>("value", std::string(unit), "derived from a POD frame object");
             return desc;

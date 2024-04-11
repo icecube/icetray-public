@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -14,7 +14,7 @@
 
 /// @cond
 namespace detail {
-  
+
   template <class Converter_T, class booked_type, class is_i3converter>
   struct add_fields_impl {
     static void do_add(Converter_T &converter, I3TableRowDescriptionPtr desc, const booked_type &v)

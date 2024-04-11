@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -36,7 +36,7 @@ TEST(assignment) {
     I3TableRow row(base_d);
     row.Set<uint32_t>("Run",  1);
     row.Set<uint32_t>("Event",  2);
-    
+
     ENSURE_EQUAL(row.Get<uint32_t>("Run"), static_cast<uint32_t>(1), "reread values");
     ENSURE_EQUAL(row.Get<uint32_t>("Event"), static_cast<uint32_t>(2), "reread values");
 }
@@ -47,20 +47,20 @@ TEST(type_checking) {
     I3TableRow row(desc);
 
     bool thrown = false;
-    try { row.Set<double>("field", 1); } // use wrong type 
+    try { row.Set<double>("field", 1); } // use wrong type
     catch(...) { thrown = true; }
     ENSURE_EQUAL(thrown, true, "the above operation should throw an exception");
 
     row.Set<int>("field", 2);
     thrown = false;
-    try { row.Get<uint32_t>("field"); } // use wrong type 
+    try { row.Get<uint32_t>("field"); } // use wrong type
     catch(...) { thrown = true; }
     ENSURE_EQUAL(thrown, true, "the above operation should throw an exception");
-    
-    try { row.Get<uint32_t>("field"); } // use wrong type 
+
+    try { row.Get<uint32_t>("field"); } // use wrong type
     catch(...) { thrown = true; }
     ENSURE_EQUAL(thrown, true, "the above operation should throw an exception");
-    
+
     // type checking works over the size of the field
     // and its representation properties (integer-ness, signedness)
     // so attempts to get a field of the same size but
@@ -84,14 +84,14 @@ TEST(enum_checking) {
     desc->AddField<int32_t>("field", "unit", "doc");
     MAKE_ENUM_VECTOR(dummies,Foo,Foo::DummyEnummy,DUMMY_ENUMMY);
     desc->AddEnumField<Foo::DummyEnummy>("enum", dummies, "unit", "doc");
-    
+
     I3TableRow row(desc);
-    
-    ENSURE_EQUAL( sizeof(Foo::DummyEnummy), sizeof(int32_t) );    
+
+    ENSURE_EQUAL( sizeof(Foo::DummyEnummy), sizeof(int32_t) );
     EXPECT_THROW(row.Set<Foo::DummyEnummy>("field",Foo::foo), "Shouldn't be able to set int field with enum type");
     EXPECT_THROW(row.Set<int32_t>("enum",0), "Shouldn't be able to set enum field with int type");
-    
-    try {  
+
+    try {
        row.Set<Foo::DummyEnummy>("enum",Foo::foo);
     } catch (...) { FAIL("Enum field passes"); }
 
@@ -101,7 +101,7 @@ TEST(bool_casting) {
    I3TableRowDescriptionPtr desc = I3TableRowDescriptionPtr( new I3TableRowDescription());
    desc->AddField<bool>("field", "", "doc");
    ENSURE_EQUAL( std::string("bool"), desc->GetFieldUnits().at(0), "Bool unit field is set automatically")
-   bool thrown = false;      
+   bool thrown = false;
    try { desc->AddField<bool>("field2","this_is_not_bool",""); } // use some other unit
    catch(...) { thrown = true; }
    ENSURE_EQUAL(thrown, true, "Can't AddField<bool>() with a unit that is not 'bool'.");
@@ -115,7 +115,7 @@ TEST(bool_casting) {
    ENSURE_EQUAL( false, row.Get<bool>("field"), "Bool values are set properly.");
    row.Set<bool>("field",0);
    ENSURE_EQUAL( false, row.Get<bool>("field"), "Integer values are set properly.");
-   
+
    row.Set<bool>("field",-17);
    ENSURE_EQUAL( true, row.Get<bool>("field"), "Anything not false is true.");
    row.Set<bool>("field",123);
@@ -138,7 +138,7 @@ TEST(array_assignment) {
     }
     wf = 0;
     row.Set<bool>("Saturated", true);
-    
+
     // reread it
     ENSURE_EQUAL(row.Get<uint32_t>("Run"), static_cast<uint32_t>(1), "reread values");
     ENSURE_EQUAL(row.Get<uint32_t>("Event"), static_cast<uint32_t>(2), "reread values");
@@ -148,7 +148,7 @@ TEST(array_assignment) {
         ENSURE_DISTANCE(wf[i], 3.0*i + 2, 0.0000001);
     }
     wf = 0;
-    
+
     ENSURE_EQUAL(row.Get<bool>("Saturated"), true, "reread values");
 
 }

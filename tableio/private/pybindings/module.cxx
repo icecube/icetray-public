@@ -1,8 +1,8 @@
 /**
  * tableio pybindings
  *
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -28,7 +28,7 @@ BOOST_PP_SEQ_FOR_EACH(I3_REGISTRATION_FN_DECL, ~, REGISTER_THESE_THINGS)
 I3_PYTHON_MODULE(tableio)
 {
 
-  load_project("tableio", false); 
+  load_project("tableio", false);
 
   BOOST_PP_SEQ_FOR_EACH(I3_REGISTER, ~, REGISTER_THESE_THINGS);
 }

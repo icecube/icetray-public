@@ -1,9 +1,9 @@
-.. 
-.. copyright  (C) 2010
-.. The Icecube Collaboration
-.. 
+..
+.. Copyright  (C) 2010 The Icecube Collaboration
+.. SPDX-License-Identifier: BSD-2-Clause
+..
 .. $Id$
-.. 
+..
 .. @version $Revision$
 .. @date $LastChangedDate$
 .. @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy$
@@ -62,7 +62,7 @@ _____________________
 You should also create a directory, e.g. linefit/python, containing a file `__init__.py` with the following contents::
 
     from icecube._linefit import *
-    
+
     try:
         import icecube.tableio
         import converters

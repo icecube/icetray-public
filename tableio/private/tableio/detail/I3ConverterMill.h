@@ -1,6 +1,6 @@
 /*
- * copyright  (C) 2012
- * The Icecube Collaboration
+ * Copyright  (C) 2012 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -15,7 +15,7 @@
 #include "tableio/I3Converter.h"
 #include <boost/python/object.hpp>
 
-/// @cond 
+/// @cond
 class I3ConverterMill {
 public:
 	I3ConverterMill(boost::python::object);

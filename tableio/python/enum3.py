@@ -1,6 +1,5 @@
-#
-# copyright  (C) 2010
-# The Icecube Collaboration
+# Copyright  (C) 2010 The Icecube Collaboration
+# SPDX-License-Identifier: BSD-2-Clause
 #
 # $Id: enum3.py 107762 2013-07-01 22:55:31Z nwhitehorn $
 #
@@ -8,7 +7,6 @@
 # @date $LastChangedDate: 2013-07-01 18:55:31 -0400 (Mon, 01 Jul 2013) $
 # @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy: nwhitehorn $
 #
-
 
 class baseEnum(int):
     name = None

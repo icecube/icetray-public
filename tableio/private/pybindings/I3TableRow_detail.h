@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -48,7 +48,7 @@ void throw_unless_fits(size_t array_size, size_t field_size) {
      bp::object value;
      bool all;
      bool success;
-     set_scalar(I3TableRow& s,size_t i,bp::object v,bool a) 
+     set_scalar(I3TableRow& s,size_t i,bp::object v,bool a)
          : self(s), index(i), value(v), all(a), success(true) {};
 
      template <typename T>
@@ -66,7 +66,7 @@ void throw_unless_fits(size_t array_size, size_t field_size) {
      };
 
  };
- 
+
  /****************************************************************************/
 
 // A visitor for setting from wrapped I3Vectors
@@ -76,21 +76,21 @@ void throw_unless_fits(size_t array_size, size_t field_size) {
      bp::object value;
      bool all;
      bool success;
-     set_vector(I3TableRow& s,size_t i,bp::object v,bool a) 
+     set_vector(I3TableRow& s,size_t i,bp::object v,bool a)
          : self(s), index(i), value(v), all(a), success(true) {};
      template <typename T>
      void call() {
          std::vector<T> v = bp::extract<I3Vector<T> >(value);
          I3TableRowDescriptionConstPtr desc = self.GetDescription();
-         
+
          // check that datatypes match
          I3Datatype dtype = desc->GetFieldTypes().at(index);
          I3Datatype vec_dtype = I3DatatypeFromNativeType<T>();
          throw_unless_match(vec_dtype,dtype);
-         
+
          // check for an overflow
          throw_unless_fits(v.size(), desc->GetFieldArrayLengths().at(index));
-        
+
          T* block = self.GetPointer<T>(index);
          std::copy(v.begin(),v.end(),block);
      };
@@ -101,7 +101,7 @@ void throw_unless_fits(size_t array_size, size_t field_size) {
      };
 
  };
- 
+
  /****************************************************************************/
 
 // a function to set field values with a visitor and dispatcher
@@ -112,9 +112,9 @@ void throw_unless_fits(size_t array_size, size_t field_size) {
      dispatcher.route(dtype,visitor);
      return visitor.success;
  };
- 
+
  /****************************************************************************/
- 
+
  // =======================================================
  // = Copy the contents of a buffer into the memory chunk =
  // =======================================================
@@ -144,11 +144,11 @@ void throw_unless_fits(size_t array_size, size_t field_size) {
         int ret = PyObject_GetBuffer(value.ptr(), &view, PyBUF_SIMPLE);
         if (ret == 0) {
             // =======================================================
-            // = Copy the buffer (an array in native representation) 
+            // = Copy the buffer (an array in native representation)
             //   directly into the memory chunk                      =
             // =======================================================
             throw_unless_fits(static_cast<size_t>(view.len)/(dtype.size),array_length);
-            
+
             size_t start,stop,i;
             void* pointy;
             if (all) {
@@ -169,7 +169,7 @@ void throw_unless_fits(size_t array_size, size_t field_size) {
         return false;
     }
  }
- 
+
  /****************************************************************************/
 
 
@@ -181,14 +181,14 @@ struct get_scalar {
     size_t index;
     bp::object result;
     get_scalar(I3TableRow& s,size_t i) : self(s), index(i) {};
-    
+
     template <typename T>
     void call() {
         self.SetEnumsAreInts(true);
         result = bp::object(self.Get<T>(index));
         self.SetEnumsAreInts(false);
     };
-    
+
     void fail(std::string message) {
         log_fatal("Badness: %s",message.c_str());
     };
@@ -205,7 +205,7 @@ struct get_list {
     size_t index;
     bp::object result;
     get_list(I3TableRow& s,size_t i) : self(s), index(i) {};
-    
+
     template <typename T>
     void call() {
         bp::list l;
@@ -215,7 +215,7 @@ struct get_list {
         for (size_t i=0; i<length; i++) l.append(block[i]);
         result = l;
     };
-    
+
     void fail(std::string message) {
         log_fatal("Badness: %s",message.c_str());
     };

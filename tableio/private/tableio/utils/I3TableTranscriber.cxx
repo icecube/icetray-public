@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -17,9 +17,9 @@
 
 #include <boost/make_shared.hpp>
 
-I3TableTranscriber::I3TableTranscriber(I3TableServicePtr input, I3TableServicePtr output) 
+I3TableTranscriber::I3TableTranscriber(I3TableServicePtr input, I3TableServicePtr output)
     : inputService_(input), outputService_(output), nEvents_(0) {
-        
+
         std::vector<std::string>::iterator it;
         std::vector<std::string> inputTables = inputService_->GetTableNames();
         std::map<std::string, I3TablePtr> inputTableMap;
@@ -28,7 +28,7 @@ I3TableTranscriber::I3TableTranscriber(I3TableServicePtr input, I3TableServicePt
         std::string nEvents_reference;
         for (it = inputTables.begin(); it != inputTables.end(); it++) {
             table = inputService_->GetTable(*it, I3TableRowDescriptionConstPtr());
-            
+
             if (nEvents == 0) {
                 nEvents = table->GetNumberOfEvents();
                 nEvents_reference = table->GetName();
@@ -40,10 +40,10 @@ I3TableTranscriber::I3TableTranscriber(I3TableServicePtr input, I3TableServicePt
             if ((nEvents > 0) && (!indexer_))
                 indexer_ = boost::make_shared<I3IndexColumnsGenerator>(table->GetDescription());
 
-           
+
             inputTableMap[*it] = table;
         }
-        
+
         if (nEvents == 0) {
             log_warn("Input file contains no events, skipping file...");
             return;
@@ -52,7 +52,7 @@ I3TableTranscriber::I3TableTranscriber(I3TableServicePtr input, I3TableServicePt
         outputService_->SetIndexConverter(indexer_);
 
         nEvents_ = nEvents;
-        
+
         std::map<std::string, I3TablePtr>::iterator t_it;
         I3TablePtr otable;
         std::string name;
@@ -94,11 +94,11 @@ void I3TableTranscriber::Execute(size_t nframes) {
 
             log_trace("R%u/E%u '%s': %zu row(s)",
                 header->GetRunID(),header->GetEventID(),in->GetName().c_str(),rows->GetNumberOfRows());
-            
+
             out->AddRow(header,rows);
         }
     }
-    
+
     Finish();
 }
 
@@ -114,10 +114,10 @@ void I3TableTranscriber::Finish() {
 
 /******************************************************************************/
 
-I3TablePtr I3TableTranscriber::ConnectTable(std::string tableName, 
+I3TablePtr I3TableTranscriber::ConnectTable(std::string tableName,
                                        const I3TableRowDescription& description) {
     log_debug("Connecting to table %s", tableName.c_str());
-    I3TableRowDescriptionPtr descPointer = 
+    I3TableRowDescriptionPtr descPointer =
         I3TableRowDescriptionPtr(new I3TableRowDescription(description));
     I3TablePtr table = outputService_->GetTable(tableName, descPointer);
     if (!table) {

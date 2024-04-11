@@ -1,8 +1,8 @@
 /**
  * Helper macros for I3Converter pybindings
  *
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -40,7 +40,7 @@ namespace bp = boost::python;
 
 #define I3CONVERTER_EXPORT(converter,docstring)                    \
     register_converter<converter>(registry,I3CONVERTER_EXPORT_IMPL(converter,docstring),false)
-    
+
 #define I3CONVERTER_EXPORT_DEFAULT(converter,docstring)             \
     register_converter<converter>(registry,I3CONVERTER_EXPORT_IMPL(converter,docstring),true)
 
@@ -104,7 +104,7 @@ GetDefaultConverter()
 	bp::object tableio(bp::handle<>(PyImport_Import(bp::str("icecube.tableio").ptr())));
 	bp::dict registry(tableio.attr("I3ConverterRegistry").attr("defaults"));
 	bp::object pytype(bp::object(boost::make_shared<T>()).attr("__class__"));
-	
+
 	if (!registry.has_key(pytype))
 		return I3ConverterPtr();
 	else
@@ -113,4 +113,4 @@ GetDefaultConverter()
 
 };
 
-#endif  
+#endif

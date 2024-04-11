@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -22,19 +22,19 @@ I3CSVTableService::I3CSVTableService(const std::string& foldername) : folderName
     fs::create_directory( folderName_ + "/__I3Index__" );
 }
 
-I3TablePtr I3CSVTableService::CreateTable(const std::string& tableName, 
+I3TablePtr I3CSVTableService::CreateTable(const std::string& tableName,
                                I3TableRowDescriptionConstPtr description) {
   I3TablePtr index_table;
   if (description->GetUseIndex()){
         I3TableRowDescriptionConstPtr index_desc = GetIndexDescription();
-        std::string indexpath = folderName_ + "/__I3Index__"; 
+        std::string indexpath = folderName_ + "/__I3Index__";
         index_table = I3TablePtr(new I3CSVTable(*this,tableName,index_desc,indexpath));
   }
   return I3TablePtr(new I3CSVTable(*this,tableName,description,folderName_,index_table));
 }
 
 void I3CSVTableService::CloseFile() {
-    
+
 }
 
 I3CSVTableService::~I3CSVTableService() {}

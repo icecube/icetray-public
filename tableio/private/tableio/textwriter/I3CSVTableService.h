@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -20,7 +20,7 @@ class I3CSVTableService : public I3TableService {
         virtual ~I3CSVTableService();
 
     protected:
-        virtual I3TablePtr CreateTable(const std::string& tableName, 
+        virtual I3TablePtr CreateTable(const std::string& tableName,
                                        I3TableRowDescriptionConstPtr description);
         virtual void CloseFile();
 

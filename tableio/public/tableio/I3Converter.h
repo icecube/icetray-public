@@ -1,6 +1,6 @@
 /*
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -31,7 +31,7 @@ I3_FORWARD_DECLARATION(I3TableWriter);
  * \class I3Converter
  * \brief The basic interface of a tableio converter.
  *
- * The basic interface to the individual converters. For this class pointer typdefs 
+ * The basic interface to the individual converters. For this class pointer typdefs
  * will be created. All methods take unspecialized pointers to I3FrameObjects.
  * While this is the converter interface used by tableio, custom converters should
  * instead be derived from I3ConverterImplementation.
@@ -81,7 +81,7 @@ class I3Converter {
 
         /// Check if a description object has already been created
         bool HasDescription() { if (description_) return true; else return false; };
-        
+
         /**
 	 * \brief Fill an object into the table.
 	 *
@@ -93,17 +93,17 @@ class I3Converter {
 	 *              to all frame contents.
          * \returns The number of rows it wrote
          */
-        virtual size_t Convert(I3FrameObjectConstPtr object, 
-                                     I3TableRowPtr rows, 
+        virtual size_t Convert(I3FrameObjectConstPtr object,
+                                     I3TableRowPtr rows,
                                      I3FramePtr frame=I3FramePtr()) = 0;
-        
+
         /**
 	 * \brief Fill an object into the table.
 	 *
 	 * An overload of the function above for const I3FrameObject references.
 	 */
-        virtual size_t Convert(const I3FrameObject& object, 
-                                     I3TableRowPtr rows, 
+        virtual size_t Convert(const I3FrameObject& object,
+                                     I3TableRowPtr rows,
                                      I3FramePtr frame=I3FramePtr()) = 0;
 
         enum ConvertState{
@@ -116,18 +116,18 @@ class I3Converter {
             /// one a converter is designed to convert
             InexactConversion
         };
-    
+
         /**
          * \brief Check if the converter can handle the given object.
          *
-         * \returns A value indicating whether the converter can handle the 
-         *          object, and if so whether it can do so specifically or 
+         * \returns A value indicating whether the converter can handle the
+         *          object, and if so whether it can do so specifically or
          *          more generically.
          */
         virtual ConvertState CanConvert(I3FrameObjectConstPtr object) = 0;
 
         virtual I3Frame::Stream GetStop() = 0;
-        
+
     protected:
         /// Pointer to the table row description
         I3TableRowDescriptionPtr description_;
@@ -153,16 +153,16 @@ I3_POINTER_TYPEDEFS( I3Converter );
  * converter is handled here. Also it somewhat hides the passed I3FramePtr.
  * So the majority of the converters can follow the scheme of converting
  * only a single object and more complex converters can be build that
- * access <code>currentFrame_</code> to get what they need. 
+ * access <code>currentFrame_</code> to get what they need.
  */
 template<class FrmObj>
 class I3ConverterImplementation : public I3Converter {
     public:
-        
+
         typedef FrmObj booked_type;
 
         virtual ~I3ConverterImplementation() { }
-        
+
         /**
 	 * \brief Determine the number of rows the would be produced when converting
 	 * the given object.
@@ -174,7 +174,7 @@ class I3ConverterImplementation : public I3Converter {
         size_t GetNumberOfRows(I3FrameObjectConstPtr object) {
             return GetNumberOfRows(dynamic_cast<const FrmObj&>(*object));
         }
-        
+
         /**
 	 * \brief Determine the number of rows the would be produced when converting
 	 * the given object.
@@ -186,12 +186,12 @@ class I3ConverterImplementation : public I3Converter {
         size_t GetNumberOfRows(const I3FrameObject& object) {
             return GetNumberOfRows(dynamic_cast<const FrmObj&>(object));
         }
-        
+
         /**
 	 * \brief Fills a frame object into the given table rows.
 	 *
 	 * This function calls FillRows which has to be implemented in the derived
-	 * class. It handles the conversion of the generic I3FrameObject to the 
+	 * class. It handles the conversion of the generic I3FrameObject to the
 	 * specific class FrmObj given as the template parameter. Also the lazy
 	 * initialization of the description is handled here: A table row
 	 * description will only be created when the first object is converted,
@@ -205,7 +205,7 @@ class I3ConverterImplementation : public I3Converter {
 	 *              to all frame contents.
          * \returns The number of rows it wrote
          */
-        size_t Convert(const I3FrameObject& object, I3TableRowPtr rows, 
+        size_t Convert(const I3FrameObject& object, I3TableRowPtr rows,
                              I3FramePtr frame) {
             const FrmObj& typedObject = dynamic_cast<const FrmObj&>(object);
 
@@ -219,7 +219,7 @@ class I3ConverterImplementation : public I3Converter {
             currentFrame_.reset();
             return nrows;
         }
-        
+
         /**
 	 * \brief Fills a frame object into the given table rows.
 	 *
@@ -236,7 +236,7 @@ class I3ConverterImplementation : public I3Converter {
 	 * The description will be re-created every time this method is called.
 	 */
         I3TableRowDescriptionConstPtr GetDescription(const I3FrameObject& object) {
-            description_ = CreateDescription(dynamic_cast<const FrmObj&>(object)); 
+            description_ = CreateDescription(dynamic_cast<const FrmObj&>(object));
             return description_;
         }
 

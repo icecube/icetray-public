@@ -1,9 +1,9 @@
-.. 
-.. copyright  (C) 2011
-.. The Icecube Collaboration
-.. 
+..
+.. Copyright  (C) 2011 The Icecube Collaboration
+.. SPDX-License-Identifier: BSD-2-Clause
+..
 .. $Id$
-.. 
+..
 .. @version $Revision$
 .. @date $LastChangedDate$
 .. @author Fabian Kislat <fabian.kislat@desy.de> $LastChangedBy$
@@ -73,7 +73,7 @@ ___________
       - ``Car``: Cartesian reference frame
           *Fields*: ``x``, ``y``, ``z``
 
-      - ``Cyl``: Cylindrical reference frame    
+      - ``Cyl``: Cylindrical reference frame
           *Fields*: ``rho``, ``z``, ``phi``
 
       - ``Sph``: Spherical reference frame
@@ -93,7 +93,7 @@ ___________
       Default value: ``""``
 
 :I3Vector*Converter: Dump ``I3Vector*`` objects.
-  
+
   *Variants:* Bool, Short, UShort, Int, UInt, Int64, UInt64, Float, Double, DoubleDouble (pair of doubles).
 
 :I3*SeriesMapConverter: Dump ``I3*SeriesMap`` objects.
@@ -107,7 +107,7 @@ ___________
   ``bookToParticle`` (string) books perpendicular distance to track, longitudinal distance along track, and distance to track vertex for the hit DOMs.  The string is the name of the track.
 
 :I3RecoPulseSeriesMapMaskConverter: Applies the mask, then dumps the resulting RecoPulses.
-  
+
   *Options:*
 
   ``bookGeometry`` (bool) books OM geometry for the hit DOMs.
@@ -115,11 +115,11 @@ ___________
   ``bookToParticle`` (string) books perpendicular distance to track, longitudinal distance along track, and distance to track vertex for the hit DOMs.  The string is the name of the track.
 
 :I3WaveformSeriesMapConverter: Dumps a single I3WaveformSeriesMap.
-  
+
   *Options:*
-  
+
   ``bookGeometry`` (bool) books OM geometry for the hit DOMs.
-  
+
   ``calibrate`` (bool) calibrate in pe/bin.
 
 :I3MapKeyVectorDoubleConverter, I3MapKeyVectorIntConverter: Dump ``I3Map<OMKey, vector<double> >`` and ``I3Map<OMKey, vector<int> >`` objects.
@@ -137,9 +137,9 @@ ___________
 :I3WaveformConverter: Dumps ATWD and FADC waveforms together.
   Does not have a default constructor, but needs to be added explicitely with FADC and ATWD waveform names.
   If you only want to book one ``I3WaveformSeriesMap`` use the ``I3WaveformSeriesMapConverter``.
-  
+
   *Constructor arguments:* ATWD name, FADC name, calibrate to pe/bin
-  
+
   *Example:* ``keys = [ dict(key='MyATWDPulses', converter=dataclasses.converters.I3WaveformConverter('MyATWDPulses', 'MyFADCPulses', True)) ]``
 
 :I3MCTreeConverter: Dumps all particles in the MC Tree.
@@ -155,9 +155,9 @@ _____________
 .. highlight:: python
 
 :I3EventInfoConverterFrom*: Dumps event information, special converter for various ``*SeriesMap`` objects.
-  
+
   *Variants:* RecoPulse, RecoHit, MCHit, DOMLaunch, Waveform.
-  
+
   *Fields:* NChannel, NChannel (1 hit), NStrings, NHit, total charge, time of earliest hit, event length.
 
 :I3CutValuesConverter: Dumps an ``I3CutValues`` object verbatim.
@@ -165,9 +165,9 @@ _____________
 :I3RecoInfoConverter: Calculates number of direct hits and icecube scale cut variables. Special converter for ``I3Particle``.
 
   *Constructor argument:* Name of an ``I3RecoPulseSeriesMap`` object.
-  
+
   *Fields:* NDir[A-E], LDir[A-E], number of early and late hits.
-  
+
   *Example:* ``keys = [ dict(key='MyI3Particle', converter=phys_services.converters.I3RecoInfoConverter('MyRecoPulses')) ]``
 
 
@@ -175,5 +175,5 @@ coordinate-service
 __________________
 
 :I3SkyCoordinateConverter: Books sky coordinates. Special converter for ``I3Particle``.
-  
+
   *Optional constructor argument:* Name of an ``I3EventHeader``. Defaults to ``I3EventHeader``'s default name. Normally, you don't need to specify this.

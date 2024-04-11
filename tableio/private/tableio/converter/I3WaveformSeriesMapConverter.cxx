@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -64,7 +64,7 @@ I3TableRowDescriptionPtr I3WaveformSeriesMapConverter::CreateDescription(const I
   size_t wfSize(getWaveformLength(waveforms));
   if (wfSize == 0)
     log_error("Got some zero length waveforms.");
- 
+
   desc->isMultiRow_ = true;
   desc->AddField<int32_t>("string", "", "String number");
   desc->AddField<uint32_t>("om", "", "OM number");
@@ -74,17 +74,17 @@ I3TableRowDescriptionPtr I3WaveformSeriesMapConverter::CreateDescription(const I
     desc->AddField<double>("y", "m", "Y coordinate of the DOM");
     desc->AddField<double>("z", "m", "Z coordinate of the DOM");
   }
-    
+
   desc->AddField<bool>("ok", "bool", "status flag that waveform has been convertered");
   desc->AddField<double>("t0", "ns", "start time of waveform");
   desc->AddField<double>("dt", "ns", "width of waveform bins");
   desc->AddField<uint16_t>("nbins", "", "number of waveform bins");
   desc->AddField<double>("wf", unit, doc, wfSize);
-    
+
   return desc;
 }
 
-size_t I3WaveformSeriesMapConverter::FillRows(const I3WaveformSeriesMap& waveforms, 
+size_t I3WaveformSeriesMapConverter::FillRows(const I3WaveformSeriesMap& waveforms,
 					      I3TableRowPtr rows)
 {
   static int nGeometryWarnings = 0;
@@ -117,15 +117,15 @@ size_t I3WaveformSeriesMapConverter::FillRows(const I3WaveformSeriesMap& wavefor
     }
   }
 
-  
+
   I3Map<OMKey, std::vector<I3Waveform> >::const_iterator iter;
-    
+
   const size_t startRow = rows->GetCurrentRow();
   const I3TableRowDescription &desc = *rows->GetDescription();
   const size_t wfsize = desc.GetFieldArrayLengths()[desc.GetFieldColumn("wf")];
 
   size_t currentRow;
-  for (iter = waveforms.begin(), currentRow = rows->GetCurrentRow(); 
+  for (iter = waveforms.begin(), currentRow = rows->GetCurrentRow();
        iter != waveforms.end(); ++iter)
     {
       if (iter->second.size() == 0)
@@ -136,19 +136,19 @@ size_t I3WaveformSeriesMapConverter::FillRows(const I3WaveformSeriesMap& wavefor
 
       double GI = NAN;
       bool ok = true;
-      
+
       if (calibrate_) {
 	const I3DOMCalibration &domcal = calibration->domCal.find(key)->second;
 	const I3DOMStatus &domstatus   = detectorstatus->domStatus.find(key)->second;
 	GI = SPEMean(domstatus,domcal)*domcal.GetFrontEndImpedance();
-        
+
 	if ( std::isnan(GI) ) {
-	  log_info("OM (%d,%d) has an invalid gain. Skipping the OM.", 
+	  log_info("OM (%d,%d) has an invalid gain. Skipping the OM.",
 		   key.GetString(), key.GetOM());
 	  ok = false;
 	}
       }
-        
+
       I3OMGeo omgeo;
       if (bookGeometry_) {
 	I3OMGeoMap::const_iterator geoiter = geometry->omgeo.find(key);
@@ -185,15 +185,15 @@ size_t I3WaveformSeriesMapConverter::FillRows(const I3WaveformSeriesMap& wavefor
       unsigned i = 0;
 
       if (calibrate_) {
-	for (wfiter = readout.begin(); 
-	     i < wfsize && wfiter != readout.end(); 
+	for (wfiter = readout.begin();
+	     i < wfsize && wfiter != readout.end();
 	     ++i, ++wfiter++)
 	  {
 	    buffer[i] = (*wfiter)*VoltToNPE;
 	  }
       } else {
-	for (wfiter = readout.begin(); 
-	     i < wfsize && wfiter != readout.end(); 
+	for (wfiter = readout.begin();
+	     i < wfsize && wfiter != readout.end();
 	     ++i, ++wfiter++)
 	  {
 	    buffer[i] = *wfiter/I3Units::mV;

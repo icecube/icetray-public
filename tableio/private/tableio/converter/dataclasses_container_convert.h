@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -72,7 +72,7 @@ namespace convert {
     typedef ::std::pair<double, double> booked_type;\
     TABLEIO_CONVERTER_FWD_BODY;
   };
-  
+
 
 }
 /// @endcond

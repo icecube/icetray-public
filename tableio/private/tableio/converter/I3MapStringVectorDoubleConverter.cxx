@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "tableio/converter/I3MapStringVectorDoubleConverter.h"
 #include "tableio/I3Converter.h"
 #include "boost/foreach.hpp"
@@ -29,7 +33,7 @@ size_t I3MapStringVectorDoubleConverter::FillRows(const I3MapStringVectorDouble&
     for(mapiter = map.begin();
         mapiter != map.end();
         mapiter++)
-    { 
+    {
         for (size_t i = 0; i < mapiter->second.size(); i++)
         {
             rows->SetCurrentRow(i);

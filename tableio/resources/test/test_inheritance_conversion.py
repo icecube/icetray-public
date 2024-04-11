@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 """
 Ensure that the most specific converter is always chosen for each type, but that
 types can be written by converters registered for base classes
 """
 
 # This is uglier than the corresponding C++ test, but querying which converter
-# is selected would require vastly more plumbing, so instead we just do things 
+# is selected would require vastly more plumbing, so instead we just do things
 # the sloppy way with temporary files and hoping that hdfwriter is around.
 
 from contextlib import contextmanager
@@ -130,7 +134,7 @@ class GenericSubclassConverter(unittest.TestCase):
             self.assertIsNotNone(table, "Object table exists")
             self.assertIn("a", table.colnames, "'A' parameter was recorded")
             self.assertTrue("b" not in table.colnames, "'B' parameter does not exist")
-        
+
 class SpecificSubclassConverter(unittest.TestCase):
     def setUp(self):
         try_to_write(Bar,"test_bar.hdf5")
@@ -170,7 +174,7 @@ class ComposedConverter(unittest.TestCase):
             self.assertIn("a", table.colnames, "'A' parameter was recorded")
             self.assertIn("b", table.colnames, "'B' parameter was recorded")
             yield table
-        
+
     def testSingleConverterByKey(self):
         self._check_table(keys=[{"key": "Object", "converter": BarConverter()}])
 

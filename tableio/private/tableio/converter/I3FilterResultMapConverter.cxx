@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -12,7 +12,7 @@
 #include "tableio/converter/I3FilterResultMapConverter.h"
 
 I3TableRowDescriptionPtr I3FilterResultMapConverter::CreateDescription(const I3FilterResultMap& frmap) {
-    I3TableRowDescriptionPtr desc = 
+    I3TableRowDescriptionPtr desc =
         I3TableRowDescriptionPtr(new I3TableRowDescription() );
     I3FilterResultMap::const_iterator it;
     for (it = frmap.begin(); it != frmap.end(); it++) {
@@ -20,7 +20,7 @@ I3TableRowDescriptionPtr I3FilterResultMapConverter::CreateDescription(const I3F
     }
     return desc;
 }
-        
+
 size_t I3FilterResultMapConverter::FillRows(const I3FilterResultMap& frmap, I3TableRowPtr rows) {
     I3FilterResultMap::const_iterator it;
     bool* filter_result;

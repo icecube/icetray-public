@@ -1,9 +1,9 @@
-.. 
-.. copyright  (C) 2010
-.. The Icecube Collaboration
-.. 
+..
+.. Copyright  (C) 2010 The Icecube Collaboration
+.. SPDX-License-Identifier: BSD-2-Clause
+..
 .. $Id$
-.. 
+..
 .. @version $Revision$
 .. @date $LastChangedDate$
 .. @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy$
@@ -19,19 +19,19 @@ the service. A simple script could look something like this::
     from icecube import icetray, dataio
     from icecube.icetray import I3Tray
     from icecube.hdfwriter import I3HDFWriter
-    
+
     tray = I3Tray()
     tray.AddModule('I3Reader',
                    filename = 'foo.i3.gz')
-    
+
     tray.AddSegment(I3HDFWriter,
                    output="foo.hdf5",
                    keys=['LineFit','InIceRawData'],
                    SubEventStreams=['in_ice'],
                   )
-    
+
     tray.Execute()
-    
+
 
 Here, I3HDFTableWriter is a tray segment that sets up a table service and an
 I3TableWriter module. The 'keys' parameter is a list of frame object
@@ -55,7 +55,7 @@ Booking untriggered simulation files
 Since P frames are created as an artifact of trigger post-processing, they do
 not exist in low-level simulation files, e.g. immediately after I3CORSIKAReader. To convert these files to tables with tableio, use one of the
 special-purpose segments, e.g.::
-    
+
     from icecube.hdfwriter import I3SimHDFWriter
     tray.AddSegment(I3SimHDFWriter,
                    output="foo.hdf5",
@@ -75,7 +75,7 @@ The frame objects called 'LineFit' and 'InIceRawData' will be written to the tab
 
 You can also pass a dictionary to specify which converters should be used::
 
-    keys = {'LineFit': dataclasses.converters.I3ParticleConverter(), 
+    keys = {'LineFit': dataclasses.converters.I3ParticleConverter(),
             'InIceRawData': dataclasses.converters.I3DOMLaunchSeriesMapConverter()}
 
 For full control, you can pass a list of dicts, specifying the key, converter, and name of the output table::
@@ -164,33 +164,33 @@ I3TableServices and passing them as a list to tableio.I3TableWriter::
     from icecube.tableio import I3TableWriter, I3CSVTableService
     from icecube.hdfwriter import I3HDFTableService
     from icecube.rootwriter import I3ROOTTableService
-    
+
     tray = I3Tray()
     tray.AddModule('I3Reader',filename = 'foo.i3.gz')
-    
+
     hdf = I3HDFTableService('foo.hd5')
     root = I3ROOTTableService('foo.root','master_tree')
     csv = I3CSVTableService('foo_csv')
-    
+
     tray.AddModule(I3TableWriter,
                    tableservice = [hdf, root, csv],
                    keys         = ['LineFit','InIceRawData']
                   )
-                  
+
     tray.Execute()
-    
+
 
 Booking from files with Q-frames
 ********************************
 
-Using files that contain Q-frames, you have to know that there may be different 
+Using files that contain Q-frames, you have to know that there may be different
 SubEventStreams and that you have to tell I3TableWriter which one you want to book.
-Otherwise, it will just produce empty files. If this happens, you should get a WARN 
+Otherwise, it will just produce empty files. If this happens, you should get a WARN
 message telling you that there were SubEventStreams present that were not booked.
 Book the ones you want to write out using parameter *SubEventStreams*. E.g. you can do::
 
     tray.AddModule("I3NullSplitter", "fullevent")
-    
+
     tray.AddSegment(HDFWriter,
        output="foo.hdf5",
        keys=["LineFit", "MPEFit"],

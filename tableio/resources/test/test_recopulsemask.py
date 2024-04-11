@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # Ensure that it is possible to book I3RecoPulseSeriesMapMasks without error.
 
 from icecube import icetray, dataclasses, dataio, tableio
@@ -22,7 +26,7 @@ def fakeit(frame):
     frame['Pulses'] = pulsemap
     mask = dataclasses.I3RecoPulseSeriesMapMask(frame, 'Pulses')
     frame['PulseMask'] = mask
-    
+
 tray.AddModule(fakeit, 'fakeit')
 
 dirname = os.environ['I3_BUILD'] + '/tableio/pulsemask_test'
