@@ -216,7 +216,7 @@ Lightweight tarballs for CVMFS-enabled grids
 
 Some grids (e.g. OpenScienceGrid) support distribution of software via CVMFS,
 which obviates much of the need for tarballs of standard metaprojects. When
-the neded arises for custom metaprojects, however, their tarballs can omit the
+the needed arises for custom metaprojects, however, their tarballs can omit the
 libraries already in the CVMFS repository. To build a lightweight tarball, set
 the :data:`INSTALL_TOOL_LIBS` option to OFF at configure.  RPATH entries
 will not be stripped from the installed libraries.

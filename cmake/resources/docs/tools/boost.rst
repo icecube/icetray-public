@@ -63,5 +63,5 @@ in chronological order:
     anybody to do the necessary hand-holding.
     
 3.  As of boost-1.38.0, boost_python is built by the toolset against
-    the system python and the projet 'boost' is no longer needed or supplied. 
+    the system python and the project 'boost' is no longer needed or supplied.
 

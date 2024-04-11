@@ -45,7 +45,7 @@ amount of "boilerplate" required to write tests.
 Test suites as documentation, and insurance
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Test suites serve several additonal purposes. They allow people other
+Test suites serve several additional purposes. They allow people other
 than the original author to fix bugs in modules with confidence that
 they have not introduced additional bugs. They also serve as excellent
 documentation for how to use modules: if a testsuite is thorough, it
@@ -53,7 +53,7 @@ demonstrates normal uses, borderline cases and errors, and can be an
 excellent reference if you are trying to figure out how to use the
 class yourself.
 
-They have the additional advantage over documenation that they will be
+They have the additional advantage over documentation that they will be
 verified to work before each release. Unlike documentation, they
 cannot get out of sync with the actual code.
 
@@ -183,7 +183,7 @@ which pulls in definitions for :c:macro:`TEST_GROUP`, :c:macro:`ENSURE` etc. (se
 
       A predicate is simply an expression that evaluates to true or
       false. Comparisons of two numbers, e.g. numhits>50 or pinkness=4, a
-      call of a function that returns bool or something convertable to
+      call of a function that returns bool or something convertible to
       bool, e.g. ``hits_are_ok();``, and evaluation of pointers for
       nullness are all predicates.
 
@@ -233,7 +233,7 @@ which pulls in definitions for :c:macro:`TEST_GROUP`, :c:macro:`ENSURE` etc. (se
        FAIL("that should have thrown");
      } catch (const std::exception& e) {
        // NB: DO NOT catch-all, meaning NEVER, EVER, EVER 'catch(...)'
-       //     In that case your test will alway pass and test nothing.
+       //     In that case your test will always pass and test nothing.
        // OK.  That operation threw and therefore we didn't hit FAIL()
      }
 

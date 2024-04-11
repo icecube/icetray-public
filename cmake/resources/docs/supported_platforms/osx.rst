@@ -48,10 +48,10 @@ It also guides you through an installation of :doc:`../homebrew`.
    $ python3 --version
    Python 3.12.0
 
-   # be sure you have activated your new brew environment:  either load it explcitly or open a new Terminal!
+   # be sure you have activated your new brew environment:  either load it explicitly or open a new Terminal!
    #   'which python3' should be the new brew version.
 
-   # create and enter virutal envionment
+   # create and enter virtual environment
    $ python3 -m venv --system-site-packages ${HOME}/py3/
    $ source ${HOME}/py3/bin/activate
 
@@ -81,7 +81,7 @@ Other Important Notes
      $ pip3 install -r requirements.txt
 
    This will manually install a few dependencies and allow normal
-   installation to procede. This *should not be necessary* if you're
+   installation to proceed. This *should not be necessary* if you're
    using a python virtual environment as described above. You *are*
    using one, aren't you?
 
@@ -164,15 +164,15 @@ The following formula are also recommended from the IceCube-SPNO/icecube tap::
 
 .. _`Homebrew Tap`: https://docs.brew.sh/Taps
 
-The provided ``Brewfile`` will tap and install all needed depedencies.
-Plese see the `step-by-step instructions
+The provided ``Brewfile`` will tap and install all needed dependencies.
+Please see the `step-by-step instructions
 <#step-by-step-instructions-for-m1-and-intel-macs>`_ above.
 
 ROOT on macOS
 """""""""""""
 
 IceTray no longer depends on CERN's ROOT package. If you still need it, a
-good way to install it is via Homebrew. This is the `method recomended
+good way to install it is via Homebrew. This is the `method recommended
 by CERN <https://root.cern/install/#macos-package-managers>`_ . Be sure to
 follow any instructions :command:`brew` gives you.
 ::

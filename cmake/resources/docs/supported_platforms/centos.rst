@@ -39,7 +39,7 @@ Minimal Install
 
 Need to enable PowerTools to get boost-python3-devel.  Note that the stock
 cmake version 3.11 doesn't detect python 3.6, so it's currently recommended
-to install the lastest version of cmake (https://cmake.org/install/).
+to install the latest version of cmake (https://cmake.org/install/).
 
 
 .. code-block:: console

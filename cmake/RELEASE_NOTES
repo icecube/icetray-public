@@ -81,7 +81,7 @@ IceTray Release v1.4.0
 
 * Drop support for Python 2
 * Make photospline optional
-* Updates to, and typo fixes for documetation
+* Updates to, and typo fixes for documentation
 * Bump minimum cmake version to 3.15
 * Build ROOT projects with whatever C++ standard ROOT was built with
 * Set C++17 as our standard
@@ -96,7 +96,7 @@ documentation that it contains, since the last time these release
 notes were updated. Please refer to the git log for points prior to
 this release.
 
-* Provide better support for running in virtual enviroments
+* Provide better support for running in virtual environments
   the differ from the build environment.
 * Disable HDF5 file locking by default.
 * Remove unused tools: mysql mpi log4cpp jni hepmc xml2
@@ -170,7 +170,7 @@ V17-03-00 - March 24, 2017, Alex Olivas  (olivas@icecube.umd.edu)
   test failures
 * add a macro for deprecation warning/enforcement
   (deprecation_warning())
-* simplifiy link-time requirements
+* simplify link-time requirements
 * update cvmfs docs
 * enforce C++11 support with compiler flags
 * bump minimum required cmake version
@@ -186,7 +186,7 @@ V16-04-00 - April 29, 2016, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------------------
 
 * add a new warning suppression flag
-* fix an unusal bug in boost 1.38.0 triggered by pybdt
+* fix an unusual bug in boost 1.38.0 triggered by pybdt
 * add tool for NLopt minimization library
 
 V16-03-01 - March 25, 2016, don la dieu  (nega@icecube.umd.edu)

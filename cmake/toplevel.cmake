@@ -98,7 +98,7 @@ set(CMAKE_MODULE_PATH
   ${CMAKE_SOURCE_DIR}/cmake/utility)
 
 include(utility)  # load utility functions (pretty print, etc)
-include(config)   # trigger the configuation meat (build types, etc)
+include(config)   # trigger the configuration meat (build types, etc)
 
 ### ctest testing
 ## enable_testing() must be called before add_test() which happens in project.cmake

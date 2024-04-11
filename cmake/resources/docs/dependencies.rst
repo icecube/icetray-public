@@ -5,15 +5,15 @@ Dependencies
 Required Dependencies
 ---------------------
 
-These packages are required to compile IceTray
+These packages are required to compile IceTray.
 
-.. list-table::  
+.. list-table::
   :widths: 4 10 10
   :header-rows: 1
 
   * - Name
     - Description
-    - Documentation
+    - Local Documentation
   * - `CMake <https://cmake.org/>`_
     - Cross-platform build system
     - :doc:`CMake </projects/cmake/tutorial>`
@@ -42,9 +42,9 @@ These packages are required to compile IceTray
 Optional Build Dependencies
 ---------------------------
 
-These dependencies are optional. If not present IceTray will compile with reduced functionallity. 
+These dependencies are optional. If not present IceTray will compile with reduced functionality.
 
-.. list-table::  
+.. list-table::
   :widths: 2 10 5
   :header-rows: 1
 
@@ -52,7 +52,7 @@ These dependencies are optional. If not present IceTray will compile with reduce
     - Description
     - Needed for
   * - `libarchive <https://www.libarchive.org/>`_
-    - Multi-format archive and compression library 
+    - Multi-format archive and compression library
     - bz2 and tar support for i3 files
   * - `Zstandard <https://facebook.github.io/zstd/>`_
     - Compression Algorithm
@@ -68,7 +68,7 @@ These dependencies are optional. If not present IceTray will compile with reduce
     - :ref:`millipede-main`, :ref:`wavedeform-main`, :ref:`RoundTripChargeTest <DOMLauncher>`
   * - `Photospline <https://github.com/icecube/photospline>`_
     - Tensor-product B-spline surface evaluation
-    - ``LeptonInjector``, :ref:`MuonGun-main`, :ref:`neutrino-generator`, :ref:`photonics-service`, :ref:`phys-services <phys-services>`, :ref:`spline-reco <spline-reco-main>`
+    - :ref:`LeptonInjector-main`, :ref:`MuonGun-main`, :ref:`neutrino-generator`, :ref:`photonics-service`, :ref:`phys-services <phys-services>`, :ref:`spline-reco <spline-reco-main>`
   * - `ERFA <https://github.com/liberfa/erfa>`_
     - Essential Routines for Fundamental Astronomy
     - :ref:`astro`, :ref:`filterscripts`, :ref:`wimpsim-reader`
@@ -80,21 +80,21 @@ These dependencies are optional. If not present IceTray will compile with reduce
     - :ref:`hdfwriter`
   * - `Boost NumPy <https://www.boost.org/doc/libs/release/libs/python/doc/html/numpy/>`_
     - Boost.Python NumPy extension
-    - :ref:`MuonGun-main` and ``ml_suite`` pybindings
+    - :ref:`MuonGun-main` and :ref:`ml_suite` pybindings
   * - `HEALPix <https://healpix.jpl.nasa.gov/>`_
     - Hierarchical Equal Area isoLatitude Pixelization of a sphere
     - :ref:`NoiseEngine-main`, :ref:`dst`
   * - `SPRNG <http://www.sprng.org/>`_
-    - Scalable Parallel Random Number Generators Library 
+    - Scalable Parallel Random Number Generators Library
     - :doc:`SPRNGRandomService </projects/phys-services/distributed_rng>`
   * - `ROOT <https://root.cern/>`_
-    - Particle physics data analysis 
+    - Particle physics data analysis
     - :ref:`rootwriter`, :ref:`I3GulliverMinuit2 <lilliput>`
   * - `Minuit2 <https://root.cern/topical/#minuit>`_
     - Physics analysis tool for function minimization.
     - :ref:`I3GulliverMinuit2 <lilliput>`
   * - `CLHEP <https://proj-clhep.web.cern.ch/proj-clhep/>`_
-    - A Class Library for High Energy Physics 
+    - A Class Library for High Energy Physics
     - :ref:`clsim-main`, :ref:`g4-tankresponse-main`
   * - `Geant4 <https://geant4.web.cern.ch/>`_
     - Simulation of the passage of particles through matter
@@ -118,7 +118,7 @@ These dependencies are optional. If not present IceTray will compile with reduce
     - Text-based user interfaces
     - :doc:`dataio-shovel </projects/dataio/shovel>`
   * - `CDK <https://invisible-island.net/cdk/>`_
-    - Curses Development Kit 
+    - Curses Development Kit
     - :doc:`dataio-shovel </projects/dataio/shovel>`
   * - `OpenGL <https://www.opengl.org/>`_
     - 3D vector graphics
@@ -135,7 +135,7 @@ Other Dependencies
 
 These are not needed at compile time but are necessary for certain functionality
 
-.. list-table:: Required 
+.. list-table::
   :widths: 1 5 2
   :header-rows: 1
 
@@ -161,10 +161,10 @@ These are not needed at compile time but are necessary for certain functionality
     - Python bindings for ØMQ.
     - :ref:`gcdserver`
   * - `scikit-learn <https://scikit-learn.org>`_
-    - machine learning library 
+    - machine learning library
     - :ref:`finallevel_filter_diffusenumu-main`
   * - `pymongo <https://pymongo.readthedocs.io/en/stable/>`_
-    - Python bindings for MongoDB, 
+    - Python bindings for MongoDB,
     - :ref:`gcdserver`
   * - `Doxygen <https://www.doxygen.nl/index.html>`_
     - Generate documentation from source code

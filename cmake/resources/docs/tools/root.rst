@@ -48,7 +48,7 @@ In your project's CMakeLists.txt::
     )
 
 See the cmake documentation (try ``cmake --help-full | less``) for
-``find_library`` for full details on this builting cmake macro.
+``find_library`` for full details on this built-in cmake macro.
 ``PATHS ${ROOTSYS}/lib`` means to look for the library named TMVA in
 the directory ``${ROOTSYS}/lib``.  ``NO_DEFAULT_PATH`` means not to
 search elsewhere (this is important...  you do not want to

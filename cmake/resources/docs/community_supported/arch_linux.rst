@@ -1,5 +1,5 @@
 .. highlight:: bash
-       
+
 ==========
 Arch Linux
 ==========
@@ -22,10 +22,10 @@ Installing an AUR helper is beyond the scope of this document.
 .. note::
 
    If you are on a machine that has more than one core, you can increase the
-   speed that AUR packages are compiled by enableing parallel builds: add
+   speed that AUR packages are compiled by enabling parallel builds: add
    ``MAKEFLAGS="-j$(nproc)"`` to your ``makepkg.conf`` before compiling.
 
-Base Dependancies
+Base Dependencies
 -----------------
 
 First install the basic dependencies::
@@ -47,18 +47,18 @@ The following packages are needed for :ref:`Steamshovel <steamshovel>`::
 
   pacman -S qt5-base freeglut python-qtconsole
 
-.. note:: 
+.. note::
 
   ``steamshovel`` now uses QT5 for it's graphical interface which has builtin detection in cmake.
-  However, it is still nescessary to have the old detection mechanism for QT4 present.
+  However, it is still necessary to have the old detection mechanism for QT4 present.
   This may cause a message like "``Found unsuitable Qt version "5.X.X" from /bin/qmake``",
   don't worry this can be safely ignored.
   As long as the steamshovel project configures without any error messages, steamshovel will be build with QT5.
 
-Reccomended Packages
+Recommended Packages
 --------------------
 
-The following reccomended packages are also available from the AUR::
+The following recommended packages are also available from the AUR::
 
   paru -S photospline healpix libcdk nlopt starlink-pal\
     python-healpy python-pymongo icecube-sprng
@@ -98,13 +98,13 @@ There are other alternatives available for different hardware in the AUR see the
 `ArchWiki <https://wiki.archlinux.org/title/GPGPU#OpenCL>`_ for more details.
 
 Regardless of which implementation you pick you will also need the opencl-headers::
-  
+
   pacman -S opencl-headers
 
 Geant4
 ------
 
-``geant4`` is available in the AUR but the datafiles are in different packages. 
+``geant4`` is available in the AUR but the datafiles are in different packages.
 The ones that are needed for icetray are::
 
   paru -S geant4 geant4-ensdfstatedata geant4-levelgammadata\
@@ -120,8 +120,8 @@ and you need to set the environment variables::
 ROOT
 ----
 
-ROOT is available in ``extra`` but it is an optional dependency and not nescessary 
-for most functionality in icetray. 
+ROOT is available in ``extra`` but it is an optional dependency and not necessary
+for most functionality in icetray.
 
 Unsupported Packages
 --------------------

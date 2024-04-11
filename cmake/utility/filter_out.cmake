@@ -1,5 +1,5 @@
 MACRO(FILTER_OUT FILTERS INPUTS OUTPUT)
-  # Mimicks Gnu Make's $(filter-out) which removes elements 
+  # Mimics Gnu Make's $(filter-out) which removes elements
   # from a list that match the pattern.
   # Arguments:
   #  FILTERS - list of patterns that need to be removed
@@ -38,7 +38,7 @@ ENDMACRO(FILTER_OUT FILTERS INPUTS OUTPUT)
 
 
 MACRO(STREQUAL_FILTER_OUT FILTERS INPUTS OUTPUT)
-  # Mimicks Gnu Make's $(filter-out) which removes elements 
+  # Mimics Gnu Make's $(filter-out) which removes elements
   # from a list that match the pattern.
   # Arguments:
   #  FILTERS - list of patterns that need to be removed

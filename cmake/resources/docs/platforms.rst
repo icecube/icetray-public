@@ -31,7 +31,7 @@ use will be considered unofficial.  Meaning, we won't dedicate a
 bot for that platform.  We will accept any patches from you that
 make our software work for you.  Please understand that we require
 all developers submit commits that keep the CI/CD system happy.
-Extending this list to accomodate a few collaborators puts an 
+Extending this list to accommodate a few collaborators puts an
 undue burden on the entire development team.
 
 Detailed Instructions

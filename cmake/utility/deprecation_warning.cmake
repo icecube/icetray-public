@@ -1,9 +1,9 @@
 ## This macro takes 2 arguments. The first, _d, is an "integer date"
 ## in the format of "YYYYmmdd". The second, _m, is a message that will
 ## be passed to message(WARNING ...) or message(FATAL_ERROR ...). A
-## one line message is recomended.
+## one line message is recommended.
 ##
-## It is recomended that you provide some explanitory warning prior to
+## It is recommended that you provide some explanitory warning prior to
 ## calling this macro.
 
 macro(deprecation_warning _d _m)

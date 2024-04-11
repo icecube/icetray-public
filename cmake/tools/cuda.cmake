@@ -2,7 +2,7 @@
 ## this just just helps setup some convenient variables
 
 ## FindCUDAToolkit was introduced in 3.17 and we're not really
-## supporing clang-compiled-CUDA yet
+## supporting clang-compiled-CUDA yet
 
 ## We could do more here for cmake < 3.17, but only clsim (and ppc)
 ## use these variables and only CUDAToolkit_VERSION_MAJOR

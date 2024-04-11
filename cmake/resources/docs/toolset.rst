@@ -97,7 +97,7 @@ For instance, an override for tool *python* (filename
   set(PYTHON_VERSION "2.6" CACHE STRING "Python version")
   set(PYTHON_FOUND TRUE CACHE BOOL "Python found")
 
-Note the ``$ENV{HOME}`` sytax used in the example: since CMake doesn't
+Note the ``$ENV{HOME}`` syntax used in the example: since CMake doesn't
 automatically mix in environment variables from the shell, you have to be explicit
 when substituting values like ``HOME``.
 

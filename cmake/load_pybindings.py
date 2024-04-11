@@ -35,7 +35,7 @@ import platform,sys, warnings
 # Suppress boost::python warning triggered by multiple registrations. It's fine.
 import warnings
 warnings.filterwarnings("ignore", ".*already registered; second conversion method ignored.", RuntimeWarning)
-warnings.warn("Deprication Warning: load_pybindings() is deprecated use `from icecube._your_module import *`", stacklevel=2)
+warnings.warn("Deprecation Warning: load_pybindings() is deprecated use `from icecube._your_module import *`", stacklevel=2)
                   
 if platform.system().startswith('freebsd'):
     # C++ modules are extremely fragile when loaded with RTLD_LOCAL,
@@ -63,7 +63,7 @@ def load_pybindings(name, path):
     you want the wrapped classes to merge to.
 
     """
-    warnings.warn("Deprication Warning: load_pybindings() is deprecated use `from icecube._your_module import *`", stacklevel=2)
+    warnings.warn("Deprecation Warning: load_pybindings() is deprecated use `from icecube._your_module import *`", stacklevel=2)
 
     import importlib, sys
     thismod = sys.modules[name]

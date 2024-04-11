@@ -65,7 +65,7 @@ then
     echo "
 Tests of your shell environment failed.  This is most probably due to
 your shell initialization scripts (.bashrc, .tcshrc, or .zshenv)
-settting PATH.  See 
+setting PATH.  See:
 
   http://wiki.icecube.wisc.edu/index.php/Shell_Configuration_Tips
 

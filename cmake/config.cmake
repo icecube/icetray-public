@@ -338,7 +338,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
   if(GCC_NUMERIC_VERSION LESS 40801)
     message("***")
     message("*** You're using a gcc version less than 4.8.1. This is no longer supported.")
-    message("*** Upgrade your complier, or set the CC and CXX environment variables appropriately.")
+    message("*** Upgrade your compiler, or set the CC and CXX environment variables appropriately.")
     if(HOSTNAME MATCHES "cobalt")
       message("***")
       message("*** cobalt users can use py2_v2 and \"scl enable devtoolset-2 bash\" and rebuilding")
@@ -368,7 +368,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   if(CLANG_NUMERIC_VERSION LESS 30400)
     message("***")
     message("*** You're using a clang version less than 3.4. This is no longer supported.")
-    message("*** Upgrade your complier, or set the CC and CXX environment variables appropriately.")
+    message("*** Upgrade your compiler, or set the CC and CXX environment variables appropriately.")
     deprecation_warning(20160905 "Unsupported clang version.")
   endif()
 endif()
@@ -381,7 +381,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
   if(INTEL_NUMERIC_VERSION LESS 150000)
     message("***")
     message("*** You're using an icc version less than 15. This is no longer supported.")
-    message("*** Upgrade your complier, or set the CC and CXX environment variables appropriately.")
+    message("*** Upgrade your compiler, or set the CC and CXX environment variables appropriately.")
     deprecation_warning(20160905 "Unsupported icc version.")
   endif()
 endif()
@@ -412,7 +412,7 @@ string(REPLACE ";" " " C_WARNING_FLAGS "${C_WARNING_FLAGS}")
 #
 #  Set warning suppression flags for our compilers
 #  This should work for gcc/clang/intel. Note: we test for the warning, and
-#  assume it hass a corresponding '-Wno-*' flag.
+#  assume it has a corresponding '-Wno-*' flag.
 #
 include(CheckCXXCompilerFlag)
 if (NOT CXX_WARNING_SUPPRESSION_FLAGS)
@@ -513,7 +513,7 @@ message(STATUS "CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
 
 #
 #  Check if it is defined...   if somebody has specified it on the
-#  cmake commmand line, e.g.
+#  cmake command line, e.g.
 #  cmake -DCMAKE_BUILD_TYPE=Debug, we need to use that value
 #
 set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel" FORCE)
