@@ -1,10 +1,14 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "phys-services/source/I3TextFileGeometryServiceFactory.h"
 #include "phys-services/source/I3TextFileGeometryService.h"
 
 I3_SERVICE_FACTORY(I3TextFileGeometryServiceFactory);
 
 I3TextFileGeometryServiceFactory::
-I3TextFileGeometryServiceFactory(const I3Context& context) : 
+I3TextFileGeometryServiceFactory(const I3Context& context) :
   I3ServiceFactory(context)
 {
   AddParameter("AmandaGeoFile","",amandaFile_);
@@ -26,7 +30,7 @@ void I3TextFileGeometryServiceFactory::Configure()
 bool I3TextFileGeometryServiceFactory::InstallService(I3Context& services)
 {
   if(!geometry_)
-    geometry_ = 
+    geometry_ =
       boost::shared_ptr<I3TextFileGeometryService>
       (new I3TextFileGeometryService(amandaFile_,
 				    icecubeFile_));

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 /** $Id$
  * @file
  * @author Jakob van Santen <vansanten@wisc.edu>
@@ -16,25 +20,25 @@ std::pair<double, double>
 Sphere::GetIntersection(const I3Position &p, const I3Direction &dir) const
 {
 	std::pair<double, double> h(no_intersection());
-	
+
 	double x = p.GetX();
 	double y = p.GetY();
 	double z = p.GetZ() - originDepth_;
-	
+
 	double sinph = sin(dir.GetAzimuth());
 	double cosph = cos(dir.GetAzimuth());
 	double sinth = sin(dir.GetZenith());
 	double costh = cos(dir.GetZenith());
-	
+
 	double b = (x*cosph + y*sinph)*sinth + (z + radius_)*costh;
 	double d = b*b - (x*x + y*y + z*(z + 2*radius_));
-	
+
 	if (d > 0) {
 		d = sqrt(d);
 		h.first = b - d;
 		h.second = b + d;
 	}
-	
+
 	return h;
 }
 
@@ -44,7 +48,7 @@ Sphere::serialize(Archive &ar, unsigned version)
 {
 	if (version > 0)
 		log_fatal_stream("Version "<<version<<" is from the future");
-	
+
 	ar & make_nvp("Surface", base_object<Surface>(*this));
 	ar & make_nvp("OriginDepth", originDepth_);
 	ar & make_nvp("Radius", radius_);

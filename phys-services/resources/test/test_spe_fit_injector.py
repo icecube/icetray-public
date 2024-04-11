@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import argparse
 import sys
 from os.path import expandvars
@@ -10,7 +14,7 @@ from icecube import icetray
 from icecube.icetray import I3Tray
 from icecube import icetray, dataclasses, dataio, phys_services
 from icecube.BadDomList.BadDomListTraySegment import BadDomList
-from icecube.phys_services.spe_fit_injector import SPEFitInjector 
+from icecube.phys_services.spe_fit_injector import SPEFitInjector
 from icecube.phys_services.spe_fit_injector import I3SPEFitInjector
 from icecube.offline_filterscripts.icetop_GCDmodification.overwrite_snowheights import ChangeSnowHeights_FromDB
 
@@ -135,4 +139,4 @@ if args.outfile:
 tray.Execute(4)
 
 # print more CPU usage info than specified by default
-tray.PrintUsage(fraction=1.0) 
+tray.PrintUsage(fraction=1.0)

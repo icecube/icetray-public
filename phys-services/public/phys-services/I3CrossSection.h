@@ -2,8 +2,8 @@
  *
  * Definition of class for spline-interpolated cross section model
  *
- * (c) 2016
- * the IceCube Collaboration
+ * Copyright (c) 2016 the IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file I3CrossSection.h
@@ -127,7 +127,7 @@ class I3CrossSection
                                         I3Particle::ParticleType scatteredType,
                                         boost::shared_ptr<I3RandomService> random) const;
 
-        
+
         // the GR sampler just returns X=1
         finalStateRecord sampleFinalState_GR(double energy,
                                         I3Particle::ParticleType scatteredType,
@@ -229,10 +229,10 @@ class I3CrossSection
         /// Doubly-differential cross section spline
         std::shared_ptr<splinetable_t> totalCrossSection_;
         ///The minimum value of Q^2 for which the cross section was calculated
-        double Q2Min_; 
+        double Q2Min_;
         ///The mass of the target nucleon
         double targetMass_;
-        ///The interaction type, related to dimensionality of the 
+        ///The interaction type, related to dimensionality of the
         // 1:CC, 2:NC, 3:GR
         int interaction_;
 };

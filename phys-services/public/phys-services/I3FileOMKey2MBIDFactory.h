@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3FILEOMKEY2MBIDFACTORY_H
 #define I3FILEOMKEY2MBIDFACTORY_H
 
@@ -27,12 +31,12 @@ class I3FileOMKey2MBIDFactory
   I3OMKey2MBIDPtr service_;
 
   I3FileOMKey2MBIDFactory
-    (const I3FileOMKey2MBIDFactory& rhs); 
+    (const I3FileOMKey2MBIDFactory& rhs);
   I3FileOMKey2MBIDFactory operator=
-    (const I3FileOMKey2MBIDFactory& rhs); 
+    (const I3FileOMKey2MBIDFactory& rhs);
 
  SET_LOGGER("I3FileOMKey2MBIDFactory");
 
 };
 
-#endif 
+#endif

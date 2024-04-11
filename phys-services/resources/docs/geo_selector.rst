@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 Using the Geometry Selector
 ---------------------------
 
@@ -15,7 +19,7 @@ This module now has four parameters
  - ShiftY - Distance to shift the whole detector in the y direction.
  - ShiftZ - Distance to shift the whole detector in the z direction.
 
-The default values for StringsToUse is the entire 80 string IceCube 
+The default values for StringsToUse is the entire 80 string IceCube
 detector and AMANDA (i.e. "-19:80").  No strings are excluded by default.
 
 The default for IceTop is to use all tanks (1:80).

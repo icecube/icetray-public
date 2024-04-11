@@ -1,10 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2011
- *  Nathan Whitehorn <nwhitehorn@icecube.wisc.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2011 Nathan Whitehorn <nwhitehorn@icecube.wisc.edu>
+ *  Copyright (C) 2011 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  SPDX-License-Identifier: BSD-2-Clause
  */
 #include <icetray/I3Frame.h>
 #include <icetray/I3Context.h>

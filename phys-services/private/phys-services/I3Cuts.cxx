@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "phys-services/I3Cuts.h"
 #include "dataclasses/I3Constants.h"
 #include "phys-services/I3Calculator.h"
@@ -36,7 +40,7 @@ rotate(double a[3], double delphi, int axis)
 
 	x = (axis + 1) % 3;
 	y = (axis + 2) % 3;
-	
+
 	r = hypot(a[x],a[y]);
 	phi = atan2(a[y],a[x]) + delphi;
 
@@ -45,7 +49,7 @@ rotate(double a[3], double delphi, int axis)
 }
 
 //--------------------------------------------------------------
-void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry, 
+void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
 		  const I3RecoPulseSeriesMap& hitmap,
 		  const double t1, const double t2,int& Nchan, int& Nhit, int& Nstring,
 		  int& Ndir, double& Ldir, double& Sdir, double& Sall)
@@ -73,7 +77,7 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
 
     I3RecoPulseSeries::const_iterator hit;
     for (hit=hits.begin(); hit!=hits.end(); hit++) {
-      
+
       double Tres = TimeResidual(track, ompos, hit->GetTime());
       log_trace("residual: %f",Tres);
 
@@ -105,7 +109,7 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
     // calculate SmoothnessAll...
   {
     sort(lengthAll.begin(),lengthAll.end());
-    for (unsigned int i=0; i<lengthAll.size(); i++) 
+    for (unsigned int i=0; i<lengthAll.size(); i++)
       log_trace("lengthAll[%i]=%f",i,lengthAll[i]);
     int N = lengthAll.size()-1;
     Sall = 0;
@@ -123,7 +127,7 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
   // calculate SmoothnessDir...
   {
     sort(lengthDir.begin(),lengthDir.end());
-    for (unsigned int i=0; i<lengthDir.size(); i++) 
+    for (unsigned int i=0; i<lengthDir.size(); i++)
       log_trace("lengthDir[%i]=%f",i,lengthDir[i]);
     int N = lengthDir.size()-1;
     Sdir = 0;
@@ -152,7 +156,7 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
 }
 
 //--------------------------------------------------------------
-void CascadeCutsCalcImpl(const I3Particle& vertex, const I3Geometry& geometry, 
+void CascadeCutsCalcImpl(const I3Particle& vertex, const I3Geometry& geometry,
 		  const I3RecoPulseSeriesMap& hitmap,
 		  const double t1, const double t2,int& Nchan, int& Nhit, int& N_1hit, int& Nstring,
 		  int& Ndir, int& Nearly, int& Nlate)
@@ -185,7 +189,7 @@ void CascadeCutsCalcImpl(const I3Particle& vertex, const I3Geometry& geometry,
 
     I3RecoPulseSeries::const_iterator hit;
     for (hit=hits.begin(); hit!=hits.end(); hit++) {
-      
+
       //TimeResidual function checks if the input particle is a cascade or track and then
       //handles the residual calculation appropriately
       double Tres = TimeResidual(vertex, ompos, hit->GetTime());
@@ -242,14 +246,14 @@ I3Position COGImpl(const I3Geometry& geometry,
   cog[1]=0.0;
   cog[2]=0.0;
   double ampsum=0.0;
-  
-  // I need to loop over all hit OMs, first to calculate the center of 
-  // gravity of the hits and then to get the tensor of inertia.  
- 
+
+  // I need to loop over all hit OMs, first to calculate the center of
+  // gravity of the hits and then to get the tensor of inertia.
+
   I3RecoPulseSeriesMap::const_iterator iter;
   iter = hitmap.begin();
   while(iter != hitmap.end()) {
-    
+
     const I3RecoPulseSeries& pulsevect = iter->second;
 
     if(pulsevect.empty()) {
@@ -257,7 +261,7 @@ I3Position COGImpl(const I3Geometry& geometry,
       log_debug("empty RecoPulseSeries!");
       continue;
     }
-    
+
     for (unsigned i=0; i < pulsevect.size(); i++) {
       I3RecoPulse pulse = pulsevect[i];
       double amp_tmp;
@@ -271,7 +275,7 @@ I3Position COGImpl(const I3Geometry& geometry,
 
       double amp = pow(amp_tmp,ampWeight);
       ampsum+=amp;
-    
+
       const OMKey omkey = iter->first;
       I3OMGeoMap::const_iterator geom = geometry.omgeo.find(omkey);
       if (geom==geometry.omgeo.end()) {
@@ -280,14 +284,14 @@ I3Position COGImpl(const I3Geometry& geometry,
       }
       const I3Position& ompos = geom->second.position;
 
-      // calculate the center of gravity             
+      // calculate the center of gravity
       cog[0] += amp*ompos.GetX();
       cog[1] += amp*ompos.GetY();
       cog[2] += amp*ompos.GetZ();
     }
     iter++;
   }
-  
+
   if (ampsum==0) ampsum=1.0;
   I3Position cogPosition(cog[0]/ampsum, cog[1]/ampsum, cog[2]/ampsum);
   return cogPosition;
@@ -304,7 +308,7 @@ I3Position I3Cuts::COG(const I3Geometry& geometry,
 
 
 //--------------------------------------------------------------
-void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry, 
+void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry,
 		      const I3RecoPulseSeriesMap& pulsemap,
 		      const double t1, const double t2,int& Nchan, int& Nhit, int& Nstring,
 		      int& Ndir, double& Ldir, double& Sdir, double& Sall)
@@ -314,7 +318,7 @@ void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry,
 }
 
 //--------------------------------------------------------------
-void I3Cuts::CascadeCutsCalc(const I3Particle& vertex, const I3Geometry& geometry, 
+void I3Cuts::CascadeCutsCalc(const I3Particle& vertex, const I3Geometry& geometry,
 		      const I3RecoPulseSeriesMap& pulsemap,
 		      const double t1, const double t2,int& Nchan, int& Nhit, int& N_1hit, int& Nstring,
 		      int& Ndir, int& Nearly, int& Nlate)
@@ -325,7 +329,7 @@ void I3Cuts::CascadeCutsCalc(const I3Particle& vertex, const I3Geometry& geometr
 
 
 //--------------------------------------------------------------
-int I3Cuts::Nchan(const I3Particle& track, const I3Geometry& geom, 
+int I3Cuts::Nchan(const I3Particle& track, const I3Geometry& geom,
 		  const I3RecoPulseSeriesMap& hitmap,
 		  double t1, double t2)
 {
@@ -339,7 +343,7 @@ int I3Cuts::Nchan(const I3Particle& track, const I3Geometry& geom,
 
 
 //--------------------------------------------------------------
-int I3Cuts::Nhit(const I3Particle& track, const I3Geometry& geom, 
+int I3Cuts::Nhit(const I3Particle& track, const I3Geometry& geom,
 		 const I3RecoPulseSeriesMap& hitmap,
 		 double t1, double t2)
 {
@@ -351,7 +355,7 @@ int I3Cuts::Nhit(const I3Particle& track, const I3Geometry& geom,
 }
 
 //--------------------------------------------------------------
-int I3Cuts::N_1hit(const I3Particle& vertex, const I3Geometry& geom, 
+int I3Cuts::N_1hit(const I3Particle& vertex, const I3Geometry& geom,
 		 const I3RecoPulseSeriesMap& hitmap,
 		 double t1, double t2)
 {
@@ -362,7 +366,7 @@ int I3Cuts::N_1hit(const I3Particle& vertex, const I3Geometry& geom,
 }
 
 //--------------------------------------------------------------
-int I3Cuts::Nstring(const I3Particle& track, const I3Geometry& geom, 
+int I3Cuts::Nstring(const I3Particle& track, const I3Geometry& geom,
 		 const I3RecoPulseSeriesMap& hitmap,
 		 double t1, double t2)
 {
@@ -374,7 +378,7 @@ int I3Cuts::Nstring(const I3Particle& track, const I3Geometry& geom,
 }
 
 //--------------------------------------------------------------
-int I3Cuts::Ndir(const I3Particle& track, const I3Geometry& geom, 
+int I3Cuts::Ndir(const I3Particle& track, const I3Geometry& geom,
 		 const I3RecoPulseSeriesMap& hitmap,
 		 double t1, double t2)
 {
@@ -386,7 +390,7 @@ int I3Cuts::Ndir(const I3Particle& track, const I3Geometry& geom,
 }
 
 //--------------------------------------------------------------
-int I3Cuts::CascadeNdir(const I3Particle& vertex, const I3Geometry& geom, 
+int I3Cuts::CascadeNdir(const I3Particle& vertex, const I3Geometry& geom,
 		 const I3RecoPulseSeriesMap& hitmap,
 		 double t1, double t2)
 {
@@ -397,7 +401,7 @@ int I3Cuts::CascadeNdir(const I3Particle& vertex, const I3Geometry& geom,
 }
 
 //--------------------------------------------------------------
-int I3Cuts::Nearly(const I3Particle& vertex, const I3Geometry& geom, 
+int I3Cuts::Nearly(const I3Particle& vertex, const I3Geometry& geom,
 		 const I3RecoPulseSeriesMap& hitmap,
 		 double t1, double t2)
 {
@@ -408,7 +412,7 @@ int I3Cuts::Nearly(const I3Particle& vertex, const I3Geometry& geom,
 }
 
 //--------------------------------------------------------------
-int I3Cuts::Nlate(const I3Particle& vertex, const I3Geometry& geom, 
+int I3Cuts::Nlate(const I3Particle& vertex, const I3Geometry& geom,
 		 const I3RecoPulseSeriesMap& hitmap,
 		 double t1, double t2)
 {
@@ -420,7 +424,7 @@ int I3Cuts::Nlate(const I3Particle& vertex, const I3Geometry& geom,
 
 
 //--------------------------------------------------------------
-double I3Cuts::Ldir(const I3Particle& track, const I3Geometry& geom, 
+double I3Cuts::Ldir(const I3Particle& track, const I3Geometry& geom,
 		    const I3RecoPulseSeriesMap& hitmap,
 		    double t1, double t2)
 {
@@ -433,7 +437,7 @@ double I3Cuts::Ldir(const I3Particle& track, const I3Geometry& geom,
 
 
 //--------------------------------------------------------------
-double I3Cuts::SmoothAll(const I3Particle& track, const I3Geometry& geom, 
+double I3Cuts::SmoothAll(const I3Particle& track, const I3Geometry& geom,
 			 const I3RecoPulseSeriesMap& hitmap,
 			 double t1, double t2)
 {
@@ -446,7 +450,7 @@ double I3Cuts::SmoothAll(const I3Particle& track, const I3Geometry& geom,
 
 
 //--------------------------------------------------------------
-double I3Cuts::SmoothDir(const I3Particle& track, const I3Geometry& geom, 
+double I3Cuts::SmoothDir(const I3Particle& track, const I3Geometry& geom,
 			 const I3RecoPulseSeriesMap& hitmap,
 			 double t1, double t2)
 {
@@ -460,9 +464,9 @@ double I3Cuts::SmoothDir(const I3Particle& track, const I3Geometry& geom,
 //--------------------------------------------------------------
 // Computes the size of the "cylinder of closest approach", as defined
 // in Kath's thesis appendix A
-double I3Cuts::CylinderSize(const I3Particle& track, 
-			    //I3Geometry& geom, 
-			    //I3OMResponseMap& ommap, 
+double I3Cuts::CylinderSize(const I3Particle& track,
+			    //I3Geometry& geom,
+			    //I3OMResponseMap& ommap,
 			    double H0, double R0, double center) {
 
   I3Direction v = track.GetDir();
@@ -493,8 +497,8 @@ double I3Cuts::CylinderSize(const I3Particle& track,
   k = R0/H0;
 
   //###########################################
-  // smallest cylindrical volume of radius r and total height h around 
-  // (0,0,center), which is proportional to R0, H0 and contains the track 
+  // smallest cylindrical volume of radius r and total height h around
+  // (0,0,center), which is proportional to R0, H0 and contains the track
 
   // 1) Solve for top/bottom clippers
 
@@ -546,28 +550,28 @@ double I3Cuts::CylinderSize(const I3Particle& track,
   }
 
   // Which is smaller?
-  
+
   if ((bestcorner<bestcyl)||std::isnan(bestcyl)) {
     return bestcorner;
   } else {
     return bestcyl;
   }
-  
+
 }  // end cylindersize function
 
 //------------------------------------
 // Generalized version of "CylinderSize" for a general in-ice
 // array shape
-double I3Cuts::ContainmentVolumeSize(const I3Particle& track, 
-				     std::vector<double> x, 
-				     std::vector<double> y, 
-				     double zhigh, 
+double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
+				     std::vector<double> x,
+				     std::vector<double> y,
+				     double zhigh,
 				     double zlow) {
   double bestanswer = NAN;
 
-  // Error-checking... need at least three std::strings 
-  if (x.size()<3) { 
-  log_warn("ContainmentVolume of zero/1/2 strings: will be NAN"); 
+  // Error-checking... need at least three std::strings
+  if (x.size()<3) {
+  log_warn("ContainmentVolume of zero/1/2 strings: will be NAN");
     return NAN;
   }
 
@@ -577,11 +581,11 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
   zcm = (zhigh+zlow)/2;
   I3Position CM(xcm,ycm,zcm);
 
-  // Error-catching: what if the track goes right through the center of mass? 
-  if (I3Calculator::IsOnTrack(track,CM,DBL_EPSILON)) return 0; 
+  // Error-catching: what if the track goes right through the center of mass?
+  if (I3Calculator::IsOnTrack(track,CM,DBL_EPSILON)) return 0;
 
   //---- BUG 2/16/09:
-  //---- With IC-40, we have no choice but to assume they are in order! 
+  //---- With IC-40, we have no choice but to assume they are in order!
   // do NOT do this!
   //PutPointsInOrder(&x,&y,xcm,ycm,0);
 
@@ -591,7 +595,7 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
   // We're going to loop through each "wall" of the structure, extending
   // out from the center.
 
-  
+
   // Set up pairs of points which make "walls"
   I3Position B;
   I3Position C;
@@ -608,11 +612,11 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
     highs1.push_back(B);
     highs2.push_back(C);
   }
-  // The last-to-first pair which was left out (upper and lower) 
+  // The last-to-first pair which was left out (upper and lower)
   B=I3Position(x[n-1],y[n-1],zhigh,I3Position::car);
-  C=I3Position(x[0],y[0],zhigh,I3Position::car); 
-  highs1.push_back(B); 
-  highs2.push_back(C); 
+  C=I3Position(x[0],y[0],zhigh,I3Position::car);
+  highs1.push_back(B);
+  highs2.push_back(C);
   // The low pairs
   for (int i=0; i<n-1; i++) {
     B=I3Position(x[i],y[i],zlow,I3Position::car);
@@ -620,11 +624,11 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
     lows1.push_back(B);
     lows2.push_back(C);
   }
-  // The last-to-first pair which was left out (upper and lower) 
+  // The last-to-first pair which was left out (upper and lower)
   B=I3Position(x[n-1],y[n-1],zlow,I3Position::car);
-  C=I3Position(x[0],y[0],zlow,I3Position::car); 
-  lows1.push_back(B); 
-  lows2.push_back(C); 
+  C=I3Position(x[0],y[0],zlow,I3Position::car);
+  lows1.push_back(B);
+  lows2.push_back(C);
   // The vertical pairs
   for (int i=0; i<n-1; i++) {
     B=I3Position(x[i],y[i],zhigh,I3Position::car);
@@ -637,11 +641,11 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
   C=I3Position(x[n-1],y[n-1],zlow,I3Position::car);
   verts1.push_back(B);
   verts2.push_back(C);
-  
+
   // The structure of pairs
-  log_debug("Number of highs: %zu", highs1.size()); 
-  log_debug("Number of lows: %zu", lows1.size()); 
-  log_debug("Number of verts: %zu", verts1.size()); 
+  log_debug("Number of highs: %zu", highs1.size());
+  log_debug("Number of lows: %zu", lows1.size());
+  log_debug("Number of verts: %zu", verts1.size());
   std::vector<std::vector<I3Position> > pairs1;
   std::vector<std::vector<I3Position> > pairs2;
   pairs1.push_back(highs1);
@@ -663,19 +667,19 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
 
   for (unsigned int i=0; i<pairs1[j].size(); i++) {
     //for (int i=0; i<n-1; i++) {
-    
+
     // First, the high pairs
     I3Position B(pairs1[j][i]);
     I3Position C(pairs2[j][i]);
 
 
     I3Position P = IntersectionOfLineAndPlane(track,CM,B,C);
-    // Error catching: if there is no point "P", then the track  
-    // is exactly parallel to the plane being tested.   
-    // For such a track the "best" size is infinitely far away. 
-    // So it's okay to just skip it; the best size will come from 
-    // some other plane.  So skip any planes for which this occurs. 
-    if (!std::isnan(P.GetX())&&!std::isnan(P.GetY())&&!std::isnan(P.GetZ())) { 
+    // Error catching: if there is no point "P", then the track
+    // is exactly parallel to the plane being tested.
+    // For such a track the "best" size is infinitely far away.
+    // So it's okay to just skip it; the best size will come from
+    // some other plane.  So skip any planes for which this occurs.
+    if (!std::isnan(P.GetX())&&!std::isnan(P.GetY())&&!std::isnan(P.GetZ())) {
 
     // Reset coordinate system to CM
     B -= CM;
@@ -728,9 +732,9 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
     // Make them all positive angles
     //if (theta_wall<0) theta_wall += 2*I3Constants::pi;
     //if (theta_P<0) theta_P += 2*I3Constants::pi;
-    
+
     // Compute the difference
-    log_debug(" %d          ang_wall = %f, ang_P = %f", 
+    log_debug(" %d          ang_wall = %f, ang_P = %f",
 	     i, theta_wall, theta_P);
     if (CCW(0,theta_P,1) &&
         CCW(theta_P,theta_wall,0) &&
@@ -739,7 +743,7 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
       double c = TriangleExpansionFactor(0,0, vB[0], vB[1], vC[0], vC[1], vP[0], vP[1]);
       log_debug("This c = %f",c);
       cvector.push_back(c);
-    }    
+    }
     if (!CCW(0,theta_P,1) &&
         !CCW(theta_P,theta_wall,0) &&
         !CCW(0,theta_wall,0)) {
@@ -750,7 +754,7 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
       //log_debug("Flipping it to: %f", 2-c);
       //cvector.push_back(2-c);
       cvector.push_back(c);
-    }    
+    }
 
     /*
     if (theta_wall>=theta_P && theta_P>0) { // we found an exact match!
@@ -772,13 +776,13 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
       if (std::isnan(bestanswer) || dprime/di < bestanswer)
 	bestanswer = dprime/di;
       log_debug("New Answer: %f/%f = %f", dprime, di, bestanswer);
-    
+
     } // end if we found the right wall
     */
 
 
-  } else { log_debug("This track is parallel to the plane!  Ignoring."); } 
-    // end the error-catching 
+  } else { log_debug("This track is parallel to the plane!  Ignoring."); }
+    // end the error-catching
   } //end loop over the walls
 
 
@@ -805,16 +809,16 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
 //------------------------------------
 // 2-dimensional version of containment size, for a general icetop
 // array shape
-double I3Cuts::ContainmentAreaSize(const I3Particle& track, 
-				   std::vector<double> x, 
-				   std::vector<double> y, 
-				   double z) 
+double I3Cuts::ContainmentAreaSize(const I3Particle& track,
+				   std::vector<double> x,
+				   std::vector<double> y,
+				   double z)
 {
 
-  // Error-checking... need at least three std::strings to have an area 
+  // Error-checking... need at least three std::strings to have an area
   unsigned xsize = x.size();
-  if (x.size()<3) { 
-    log_warn("ContainmentArea of zero/1/2 strings: will be NAN"); 
+  if (x.size()<3) {
+    log_warn("ContainmentArea of zero/1/2 strings: will be NAN");
     return NAN;
   }
 
@@ -824,10 +828,10 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
 
   // Find the (x,y) of the point at some depth
   double dist;
-  if (track.GetZenith()==I3Constants::pi/2) { // exactly horizontal track! 
+  if (track.GetZenith()==I3Constants::pi/2) { // exactly horizontal track!
     log_error("ContainmentAreaSize can't handle perfectly horizontal tracks");
     dist = NAN;  ///WHAT TO DO??
-  } else 
+  } else
     dist = (track.GetZ()-z)/cos(track.GetZenith());
   I3Position p = track.GetPos() + dist*track.GetDir();
   double xprime = p.GetX();
@@ -848,12 +852,12 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
 
   double cvector[9];  // collection of odd number of segments intersected
   int nc = 0;
-  
+
   // Now, compute angles for each corner point,
   // and figure out which two bracket the point
   //int xsize = 7;
   double ang[100];
-  
+
   for (unsigned int i=0; i<xsize; i++) {
     I3Direction dd(x[i]-xcm,y[i]-ycm,0);
     ang[i] = dd.CalcPhi();
@@ -861,8 +865,8 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
   for (unsigned int i=0; i<xsize; i++) {
     unsigned int inext = i+1;
     if (inext==xsize) inext = 0;
-    if (CCW(ang[i],pang,1) && 
-	CCW(pang,ang[inext],0) && 
+    if (CCW(ang[i],pang,1) &&
+	CCW(pang,ang[inext],0) &&
 	CCW(ang[i],ang[inext],0)) {
       log_debug("I found a (regular) pair of angles! %d->%d",i,inext);
       double c = TriangleExpansionFactor(xcm,ycm,
@@ -871,13 +875,13 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
 					 xprime, yprime);
       cvector[nc] = c;
       nc++;
-      
+
     }
-    if (!CCW(ang[i],pang,1) && 
-	!CCW(pang,ang[inext],0) && 
+    if (!CCW(ang[i],pang,1) &&
+	!CCW(pang,ang[inext],0) &&
 	!CCW(ang[i],ang[inext],0)) {
       log_debug("I found a (backwards) pair of angles! %d->%d",i,inext);
-      
+
       // Calculated the "INVERTED C"
       double c = TriangleExpansionFactor(xcm,ycm,
 					 x[inext], y[inext],
@@ -888,11 +892,11 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
       nc++;
     }
   }
-  
+
   // Now figure out the final answer from the C's!
   double best_c_so_far = 9999999;
   if (nc % 2 == 0) log_fatal("Number of triangles should not be even! %d",nc);
-  if (nc==1) best_c_so_far = cvector[0]; 
+  if (nc==1) best_c_so_far = cvector[0];
   else {
     // Is it inside or outside?  Find out by multiplying insides/outsides
     double product = 1;
@@ -905,7 +909,7 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
     for (int ic=0; ic<nc; ic++) {
       double c = cvector[ic];
       bool cinside = c<1;
-      if (cinside == inside) { 
+      if (cinside == inside) {
 	if (best_c_so_far>1 && c<best_c_so_far) best_c_so_far = c;
 	if (best_c_so_far<1 && c>best_c_so_far) best_c_so_far = c;
       }
@@ -914,7 +918,7 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
 
   log_debug("RETURNING: %f\n", best_c_so_far);
   return best_c_so_far;
-  
+
 }
 
 ////// HELPER FUNCTIONS FOR GEOMETRIC STUFF ///////
@@ -936,14 +940,14 @@ void I3Cuts::IntersectionOfTwoLines(double x1, double y1, double x2, double y2,
   double c2 = x4*y3 - x3*y4;  //{ a2*x + b2*y + c2 = 0 is line 2 }
 
   double denom = a1*b2 - a2*b1;
-  if (denom == 0) { // they don't intersect, they are parallel 
-  //log_fatal("Denomonator zero!"); 
-  *xi = NAN; 
-  *yi = NAN; 
-  } else { 
-  *xi =(b1*c2 - b2*c1)/denom; 
-  *yi =(a2*c1 - a1*c2)/denom; 
-  } 
+  if (denom == 0) { // they don't intersect, they are parallel
+  //log_fatal("Denomonator zero!");
+  *xi = NAN;
+  *yi = NAN;
+  } else {
+  *xi =(b1*c2 - b2*c1)/denom;
+  *yi =(a2*c1 - a1*c2)/denom;
+  }
 
 }
 
@@ -980,12 +984,12 @@ I3Position I3Cuts::IntersectionOfLineAndPlane(const I3Particle& t,
 	answer[i] += vd[i]*scale;
 
   // answer /= (vn . vd)
-  scale = dotproduct(vn,vd); 
+  scale = dotproduct(vn,vd);
   for (int i = 0; i < 3; i++)
 	answer[i] /= scale;
 
   // Output the solution as an I3Position
-  log_trace("L-P intersection: (x, y, z ) = (%f, %f, %f)", answer[0],answer[1],answer[2]); 
+  log_trace("L-P intersection: (x, y, z ) = (%f, %f, %f)", answer[0],answer[1],answer[2]);
   I3Position result(answer[0],answer[1],answer[2]);
   return result;
 
@@ -997,14 +1001,14 @@ I3Position I3Cuts::IntersectionOfLineAndPlane(const I3Particle& t,
 
 //------------------------------------
 // Put the border points in order around the center
-void I3Cuts::PutPointsInOrder(std::vector<double> *xinput, 
-			      std::vector<double> *yinput, 
+void I3Cuts::PutPointsInOrder(std::vector<double> *xinput,
+			      std::vector<double> *yinput,
 			      double xcenter, double ycenter,
 			      bool justcheck) {
   if (xinput->size() != yinput->size()) log_fatal("X and Y are not the same size");
   int n = xinput->size();
   int i;   // a looping variable
-  
+
   // Make a hash table of angles... it's automatically sorted by angle
   std::map<double,int> anglehash;
   double lastangle = -99999;
@@ -1012,12 +1016,12 @@ void I3Cuts::PutPointsInOrder(std::vector<double> *xinput,
     I3Direction dd((*xinput)[i]-xcenter,(*yinput)[i]-ycenter,0);
     double ang = dd.CalcPhi();
     log_debug("Ang: %f", ang);
-    if ((ang < lastangle) && justcheck) 
+    if ((ang < lastangle) && justcheck)
       log_fatal("Help!  They are out of order at the end!  Irregular shape!");
     anglehash[ang] = i;
     lastangle = ang;
   }
-  
+
   if (!justcheck) {
     // Create new SORTED border points.
     // (May be the same as the original points, that's ok too)
@@ -1034,7 +1038,7 @@ void I3Cuts::PutPointsInOrder(std::vector<double> *xinput,
       (*xinput)[i] = x[i];
       (*yinput)[i] = y[i];
     }
-  
+
   }
 }
 
@@ -1042,8 +1046,8 @@ void I3Cuts::PutPointsInOrder(std::vector<double> *xinput,
 
 //------------------------------------
 // Center of mass of an arbitrary polygon or n-gon
-void I3Cuts::CMPolygon(std::vector<double> x, 
-		       std::vector<double> y, 
+void I3Cuts::CMPolygon(std::vector<double> x,
+		       std::vector<double> y,
 		       double *xresult,
 		       double *yresult) {
   // Chop the n-gon into (n-2) triangles.
@@ -1054,7 +1058,7 @@ void I3Cuts::CMPolygon(std::vector<double> x,
   int n = x.size();
   int i;  // a looping variable
 
-  // Everything's great if the points are in order (either 
+  // Everything's great if the points are in order (either
   // CW or CCW)... but what if they are not?
   // Here is a VERY awkward but workable way of sorting the points by angle.
   // First, take a quick average to get a guess at the CM
@@ -1098,14 +1102,14 @@ void I3Cuts::CMPolygon(std::vector<double> x,
     // Find the area of the triangle
     I3Direction d12(x2-x1,y2-y1,0);
     I3Direction d13(x3-x1,y3-y1,0);
-    double area = 
+    double area =
       0.5*hypot(y2-y1,x2-x1)*hypot(y3-y1,x3-x1)
       *sin(d12.CalcPhi()-d13.CalcPhi());
     // Weighted average...
     running_numerator_x += area*xtriangle;
     running_numerator_y += area*ytriangle;
     running_denominator += area;
-	
+
     // Assuming the points are in order, if one leg "goes backwards" in angle,
     // it just corresponds to a negative area.  This will happen automatically,
     // as "sin(d12.CalcPhi()-d13.CalcPhi())" above will be a negative number.
@@ -1127,7 +1131,7 @@ void I3Cuts::CMPolygon(std::vector<double> x,
 
   // Sanity-check... make sure the border points are still in order
   // now that we've got the "real" CM.
-  // If they appear out-of-order here, it means we've got some kind of 
+  // If they appear out-of-order here, it means we've got some kind of
   // weird shape on our hands, and I'm not sure what to do.
   //---- BUG 2/16/09: do NOT do this!
   //PutPointsInOrder(&x,&y,*xresult,*yresult,1);
@@ -1148,25 +1152,25 @@ bool I3Cuts::CCW(double ang1, double ang2, bool exact) {
 double I3Cuts::TriangleExpansionFactor(double xcm, double ycm, //vertex from which triangle will expand
 				       double x1, double y1,  // triangle point 2
 				       double x2, double y2,  // triangle point 3
-				       double xprime, double yprime)  // "the point" 
+				       double xprime, double yprime)  // "the point"
 {
   //printf("point 1: (%f, %f)\n", x1, y1);
   //printf("point 2: (%f, %f)\n", x2, y2);
   //printf("CM     : (%f, %f)\n", xcm, ycm);
   //printf("the point: (%f, %f)\n", xprime, yprime);
-  
+
   // Compute intersection point
   double xi, yi;
   IntersectionOfTwoLines(x1,y1,x2,y2,xcm,ycm,xprime,yprime,&xi,&yi);
   //printf("intersection: (%f, %f)\n", xi, yi);
-  
+
   // Compute ratio of distances
   double dprime = sqrt((xprime-xcm)*(xprime-xcm) + (yprime-ycm)*(yprime-ycm));
   double di = sqrt((xi-xcm)*(xi-xcm) + (yi-ycm)*(yi-ycm));
   log_trace("dprime = %f, di = %f, c = %f", dprime, di, dprime/di);
   log_trace("---------------------------------");
   return dprime/di;
-}       
+}
 
 
 

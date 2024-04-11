@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file I3TextFileGeometryService.h
@@ -29,7 +29,7 @@ class I3TextFileGeometryService : public I3GeometryService
  public:
   I3TextFileGeometryService(const std::string& amafile,const std::string& icefile) :
     fAmaGeoInputFile(amafile),
-    fI3GeoInputFile(icefile) 
+    fI3GeoInputFile(icefile)
     {}
   virtual ~I3TextFileGeometryService(){}
 

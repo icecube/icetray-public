@@ -7,7 +7,8 @@
  *
  * Date: 17 Feb 2004
  *
- * (c) IceCube Collaboration
+ * Copyright (c) IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 class I3Context;
@@ -47,4 +48,4 @@ class I3GCDFileServiceFactory
    SET_LOGGER("I3GCDFileServiceFactory");
 };
 
-#endif 
+#endif

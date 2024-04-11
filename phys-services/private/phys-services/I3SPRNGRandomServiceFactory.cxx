@@ -5,7 +5,8 @@
  *
  * Date: 2 Apr 2005
  *
- * (c) IceCube Collaboration
+ * Copyright (c) IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 #include "phys-services/I3SPRNGRandomServiceFactory.h"
@@ -71,10 +72,10 @@ void I3SPRNGRandomServiceFactory::Configure()
   }
 
   // check rng state
-  if (!instatefile_.empty()) { 
+  if (!instatefile_.empty()) {
      log_debug("checking saved input RNG state %s", instatefile_.c_str());
 
-     if (stat(instatefile_.c_str(), &istat)) { 
+     if (stat(instatefile_.c_str(), &istat)) {
        log_fatal("SPRNG: Input RNG state file '%s' cannot be read!!!", instatefile_.c_str());
      }
   }

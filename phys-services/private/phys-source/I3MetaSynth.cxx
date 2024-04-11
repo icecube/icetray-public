@@ -1,9 +1,9 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2011
- *  The IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2011 The IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  SPDX-License-Identifier: BSD-2-Clause
+ *
  */
 
 #include <icetray/I3Frame.h>

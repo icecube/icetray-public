@@ -2,8 +2,8 @@
  * This file is the header file of the
  * Scale class
  *
- * copyright  (C) 2007
- * the icecube collaboration
+ * Copyright  (C) 2007 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -21,11 +21,11 @@
 /**
  * @brief The Scale object can calculate containment and scaling,
  * knowing the geometry of the detector and using phys-service functions
- * 
+ *
  */
 
 class I3ScaleCalculator {
-  
+
   // Add the logger facility statements
   SET_LOGGER("I3ScaleCalculator");
 
@@ -49,28 +49,28 @@ class I3ScaleCalculator {
   };
 
 
-  I3ScaleCalculator (I3GeometryConstPtr geo, 
+  I3ScaleCalculator (I3GeometryConstPtr geo,
                      IceCubeConfig iceConf = IC_GUESS,              // default = please guess from geo
                      IceTopConfig topConf = IT_GUESS,               // default = please guess from stationgeo
                      std::vector<int> strings = std::vector<int>(),  // default = empty
                      std::vector<int> stations = std::vector<int>(),  // default = empty
                      int topDOMid = 1, int bottomDOMid = 60          // you can customize these too (for the in-ice bit)
                      );
-  
+
   std::vector<int > GetOuterStrings () const;
   std::vector<int > GetOuterStations () const;
-  void CalcOuterStringPositions (std::vector<double > &x, 
+  void CalcOuterStringPositions (std::vector<double > &x,
                                  std::vector<double > &y,
                                  double &zMin,
                                  double &zMax) const;
-  void CalcOuterStationPositions (std::vector<double > &x, 
+  void CalcOuterStationPositions (std::vector<double > &x,
                                  std::vector<double > &y,
                                  double &z) const;
 
-  double ScaleInIce (I3Particle part) const;  
-  double ScaleIceCubeDetectorPolygon(I3Particle part) const;  
+  double ScaleInIce (I3Particle part) const;
+  double ScaleIceCubeDetectorPolygon(I3Particle part) const;
   double ScaleIceTop (I3Particle part) const;
-  
+
   bool VertexIsInside (const I3Particle &part) const;
 
  private:
@@ -80,9 +80,9 @@ class I3ScaleCalculator {
 
   double ScaleInIceMuon (I3Particle part) const;
   double ScaleInIceCascade (I3Particle part, bool areaonly) const;
-  
+
   bool IsInside (double xp, double yp,
-                const std::vector<double > &x, 
+                const std::vector<double > &x,
                 const std::vector<double > &y) const;
 
   I3GeometryConstPtr geo_;

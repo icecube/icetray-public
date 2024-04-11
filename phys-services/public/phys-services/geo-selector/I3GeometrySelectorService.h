@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file I3GeometrySelectorService.h
@@ -46,16 +46,16 @@ class I3GeometrySelectorService : public I3GeometryService
   bool shiftToCenter_;
 
  public:
-  I3GeometrySelectorService(I3GeometryServicePtr g, 
+  I3GeometrySelectorService(I3GeometryServicePtr g,
 			    double dx = 0.,
 			    double dy = 0.,
 			    double dz = 0.):
     shiftToCenter_(false)
     {
     geo_service_ = g;
-    shiftX_ = dx; 
-    shiftY_ = dy; 
-    shiftZ_ = dz; 
+    shiftX_ = dx;
+    shiftY_ = dy;
+    shiftZ_ = dz;
   }
 
   void ShiftToCenter(bool s){shiftToCenter_ = s; };

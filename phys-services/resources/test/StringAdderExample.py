@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from icecube.icetray import I3Tray, I3Units
 from os.path import expandvars
 from icecube import icetray,dataclasses,dataio,phys_services

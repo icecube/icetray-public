@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 #include <icetray/I3Module.h>
 #include <icetray/I3Tray.h>
@@ -43,7 +47,7 @@ TEST(oneframe)
   tray.AddModule("I3OneFrameTester");
 
   tray.Execute(1);
-  
+
   ENSURE(I3OneFrameTester::instance);
   ENSURE_EQUAL(I3OneFrameTester::instance->physicsCalls,1);
 }

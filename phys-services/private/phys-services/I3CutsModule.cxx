@@ -1,6 +1,7 @@
 /**
  * $Id$
- * (c) 2005 IceCube Collaboration
+ * Copyright (c) 2005 IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 
@@ -124,7 +125,7 @@ void I3CutsModule::Physics(I3FramePtr frame)
   }
 
   //iterate over the set of strings to see if the frame has an object by that name...
-  for (std::vector<std::string>::const_iterator sit = particleNameList_.begin(); 
+  for (std::vector<std::string>::const_iterator sit = particleNameList_.begin();
        sit!=particleNameList_.end(); ++sit) {
     std::string name = *sit;
 
@@ -137,11 +138,11 @@ void I3CutsModule::Physics(I3FramePtr frame)
 
     I3CutValuesBasePtr cuts;
     if(particle->IsTrack()){
-      log_debug(" ---> I3Particle '%s' is a track, so proceeding accordingly...", 
+      log_debug(" ---> I3Particle '%s' is a track, so proceeding accordingly...",
                 name.c_str());
       cuts = I3CutValuesPtr(new I3CutValues());
     }else if(particle->IsCascade()){
-      log_debug(" ---> I3Particle '%s' is a cascade, so proceeding accordingly...", 
+      log_debug(" ---> I3Particle '%s' is a cascade, so proceeding accordingly...",
                 name.c_str());
       cuts = I3CascadeCutValuesPtr(new I3CascadeCutValues());
     } else {

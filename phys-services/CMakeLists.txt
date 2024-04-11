@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 i3_project(phys-services
   PYTHON_DIR python
   PYTHON_DEST icecube/phys_services

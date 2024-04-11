@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 #include "phys-services/geo-selector/I3GeometrySelectorServiceFactory.h"
 #include "phys-services/geo-selector/I3GeoSelTestModule.h"
@@ -173,7 +177,7 @@ TEST(icetray_test){
   tray.AddModule("I3MetaSynth","muxer")
     ("GeometryService","I3GeometrySelectorService");
   //I3GeoSelTestModule contains ENSURE statements
-  tray.AddModule("I3GeoSelTestModule","geo_test") 
+  tray.AddModule("I3GeoSelTestModule","geo_test")
     ("StringsToUse",strings_to_use.c_str())
     ("StationsToUse",stations_to_use.c_str());
 
@@ -212,7 +216,7 @@ TEST(icetray_test_shift){
     ("GeometryService","I3GeometrySelectorService");
 
   //I3GeoSelTestModule contains ENSURE statements
-  tray.AddModule("I3GeoSelTestModule","geo_test") 
+  tray.AddModule("I3GeoSelTestModule","geo_test")
     ("StringsToUse",strings_to_use.c_str())
     ("StringsToExclude",strings_to_exclude.c_str())
     ("StationsToUse",stations_to_use.c_str())
@@ -248,10 +252,10 @@ TEST(detector_shift){
   I3OMGeo g4;
   g4.position = p4;
 
-  geo.omgeo[om1] = g1; 
-  geo.omgeo[om2] = g2; 
-  geo.omgeo[om3] = g3; 
-  geo.omgeo[om4] = g4; 
+  geo.omgeo[om1] = g1;
+  geo.omgeo[om2] = g2;
+  geo.omgeo[om3] = g3;
+  geo.omgeo[om4] = g4;
 
   std::vector<int> goodStrings;
   goodStrings.push_back(21);
@@ -294,7 +298,7 @@ TEST(icetray_test_center_shift){
   tray.AddModule("I3MetaSynth","muxer")
     ("GeometryService","I3GeometrySelectorService");
   //I3GeoSelTestModule contains ENSURE statements
-  tray.AddModule("I3GeoSelTestModule","geo_test") 
+  tray.AddModule("I3GeoSelTestModule","geo_test")
     ("StringsToUse",strings_to_use.c_str())
     ("StringsToExclude",strings_to_exclude.c_str())
     ("StationsToUse",stations_to_use.c_str())

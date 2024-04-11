@@ -1,10 +1,10 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2012
- *  Claudio Kopper <ckopper@icecube.wisc.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2012 Claudio Kopper <ckopper@icecube.wisc.edu>
+ *  Copyright (C) 2012 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  SPDX-License-Identifier: BSD-2-Clause
+ *
  */
 
 #include <icetray/I3Module.h>
@@ -33,7 +33,7 @@ public:
     I3GeometryDecomposer(const I3Context& context);
     void Configure();
     void Geometry(I3FramePtr frame);
-    
+
 private:
     bool deleteI3Geometry_;
     boost::python::object if_;
@@ -56,7 +56,7 @@ deleteI3Geometry_(false)
     AddParameter("DeleteI3Geometry",
                  "Get rid of the original I3Geometry object.",
                  deleteI3Geometry_);
-    
+
     AddParameter("If",
                  "A python function... if this returns something that evaluates to True,"
                  " Module runs, else it doesn't",
@@ -69,7 +69,7 @@ void
 I3GeometryDecomposer::Configure()
 {
     GetParameter("DeleteI3Geometry", deleteI3Geometry_);
-    
+
     boost::python::object configured_if_;
     GetParameter("If", configured_if_);
     if (if_.ptr() != configured_if_.ptr()) // user set the parameter to something
@@ -93,7 +93,7 @@ I3GeometryDecomposer::Geometry(I3FramePtr frame)
         // check the python callback to see if we should work on this frame
         boost::python::object rv = if_(frame);
         bool flag = boost::python::extract<bool>(rv);
-        
+
         if (!flag) {
             // skip this frame
             PushFrame(frame);
@@ -113,10 +113,10 @@ I3GeometryDecomposer::Geometry(I3FramePtr frame)
     frame->Put("EndTime",       I3TimePtr         (new I3Time         (geometry->endTime   )));
 
     frame->Put("Subdetectors",  GenerateSubdetectorMap(geometry->omgeo));
-    
+
     const double bedrockDepth = 2810.*I3Units::m;
     const double icecubeCenterDepth = 1948.07*I3Units::m;
-    
+
     // assume this is IceCube
     frame->Put("BedrockZ",        I3DoublePtr       (new I3Double       (icecubeCenterDepth-bedrockDepth)));
     frame->Put("DepthAtZ0",       I3DoublePtr       (new I3Double       (icecubeCenterDepth   )));
@@ -124,7 +124,7 @@ I3GeometryDecomposer::Geometry(I3FramePtr frame)
     if (deleteI3Geometry_) {
         frame->Delete(I3DefaultName<I3Geometry>::value());
     }
-    
+
     PushFrame(frame);
 }
 
@@ -188,7 +188,7 @@ I3ModuleGeoMapPtr
 I3GeometryDecomposer::GenerateI3ModuleGeo(const I3OMGeoMap &omgeo) const
 {
     I3ModuleGeoMapPtr output(new I3ModuleGeoMap());
-                       
+
     BOOST_FOREACH(const I3OMGeoMap::value_type &pair, omgeo)
     {
         const OMKey &input_key = pair.first;
@@ -200,16 +200,16 @@ I3GeometryDecomposer::GenerateI3ModuleGeo(const I3OMGeoMap &omgeo) const
             log_fatal("You seem to be using a non-IceCube I3Geometry object with non-zero PMT ids (pmtid=%u). Cannot convert this.",
                       static_cast<unsigned int>(input_key.GetPMT()));
         }
-        
+
         if (output->find(output_key) != output->end()) {
             log_fatal("Logic error. output ModuleKey(%i,%u) is already in output map.",
                       output_key.GetString(), output_key.GetOM());
         }
-        
+
         // insert empty object into output map and retrieve reference
         I3ModuleGeo &output_geo =
         output->insert(std::make_pair(output_key, I3ModuleGeo())).first->second;
-        
+
         switch (input_geo.omtype) {
             case I3OMGeo::UnknownType: output_geo.SetModuleType(I3ModuleGeo::UnknownType); break;
             case I3OMGeo::AMANDA:      output_geo.SetModuleType(I3ModuleGeo::AMANDA);      break;
@@ -233,12 +233,12 @@ I3GeometryDecomposer::GenerateI3ModuleGeo(const I3OMGeoMap &omgeo) const
                 output_geo.SetModuleType(I3ModuleGeo::UnknownType);
                 break;
         }
-        
+
         output_geo.SetPos(input_geo.position);
         output_geo.SetOrientation(input_geo.orientation);
-        
+
         output_geo.SetRadius((13./2.)*25.4*I3Units::mm); // assume 13" diameter
     }
-    
+
     return output;
 }

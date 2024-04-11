@@ -1,10 +1,10 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2011
- *  Nathan Whitehorn <nwhitehorn@icecube.wisc.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2011 Nathan Whitehorn <nwhitehorn@icecube.wisc.edu>
+ *  Copyright (C) 2011 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  SPDX-License-Identifier: BSD-2-Clause
+ *
  */
 
 #include <icetray/I3Module.h>
@@ -60,7 +60,7 @@ I3GCDAuditor::DetectorStatus(I3FramePtr frame)
 	const I3DetectorStatus &status = frame->Get<I3DetectorStatus>();
 
 	bool err = false;
-	
+
 	// checks for acausal G/C/D frames
 	if (geo.startTime >= geo.endTime) {
 		log_error("Geometry start time %d,%ju is after end time %d,%ju",
@@ -92,7 +92,7 @@ I3GCDAuditor::DetectorStatus(I3FramePtr frame)
 		} else { \
 			log_warn(__VA_ARGS__); err = true; \
 		}
-	
+
 	// Check that various times are reasonable
 	if (status.endTime.GetUTCYear() == 2038 /* 32-bit UNIX end of days */) {
 		paranoia("Detector status validity ends in 2038, the UNIX "
@@ -215,7 +215,7 @@ bool I3GCDAuditor::CheckDOM(OMKey om, const I3OMGeo &omgeo,
 
 	if (!std::isfinite(cal.GetRelativeDomEff()))
 		bad_dom("Invalid DOM efficiency for OM%s", om.str().c_str());
-	
+
 	if (!std::isfinite(cal.GetDomNoiseRate()) || cal.GetDomNoiseRate() <= 0
 	    || cal.GetDomNoiseRate() > 10000*I3Units::hertz)
 		bad_dom("Invalid noise rate for OM%s (%f Hz)",
@@ -232,7 +232,7 @@ bool I3GCDAuditor::CheckDOM(OMKey om, const I3OMGeo &omgeo,
 	    status.pmtHV > 2000.*I3Units::V)
 		bad_dom("Invalid PMT high voltage for OM%s (%f V)",
 		    om.str().c_str(), status.pmtHV/I3Units::V);
-	
+
 	// Check composite quantities
 	if (!std::isfinite(SPEMean(status, cal)) || SPEMean(status, cal) <= 0)
 		bad_dom("Invalid mean SPE charge for OM%s (%f pC)",
@@ -257,7 +257,7 @@ bool I3GCDAuditor::CheckDOM(OMKey om, const I3OMGeo &omgeo,
 			continue;
 		if (chip == 1 && status.statusATWDb == I3DOMStatus::Off)
 			continue;
-		if (!std::isfinite(ATWDSamplingRate(chip, status, cal)) || 
+		if (!std::isfinite(ATWDSamplingRate(chip, status, cal)) ||
 		    ATWDSamplingRate(chip, status, cal) <= 0 ||
 		    ATWDSamplingRate(chip, status, cal) >
 		    400*I3Units::megahertz) {

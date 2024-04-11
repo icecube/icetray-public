@@ -1,8 +1,8 @@
 /**
- *  Copyright (C) 2011
- *  Nathan Whitehorn	<nwhitehorn@icecube.wisc.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *  Copyright (C) 2011 Nathan Whitehorn	<nwhitehorn@icecube.wisc.edu>
+ *  Copyright (C) 2011 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  SPDX-License-Identifier: BSD-2-Clause
+ *
  */
 #ifndef ICETRAY_I3SPLITTERMODULE_H_INCLUDED
 #define ICETRAY_I3SPLITTERMODULE_H_INCLUDED
@@ -24,7 +24,7 @@ class I3Splitter
 		~I3Splitter();
 
 		I3FramePtr GetNextSubEvent(I3FramePtr daq);
-		
+
 	private:
 		I3FramePtr last_daq;
 		const I3Configuration& config_;
@@ -35,11 +35,11 @@ class I3Splitter
 		/**
 		 * The name of the SubEvent stream.  This should be set by
 		 * derived modules, which is why it's protected.
-		 * 
+		 *
 		 * Modules where this is used as a mix-in simply need to add
-		 * the following lines to the constructor and Configure method, 
+		 * the following lines to the constructor and Configure method,
 		 * respectively:
-		 * 
+		 *
 		 *   AddParameter("SubEventStreamName", "The name of the SubEvent stream.", "SplitSubStreamDefault");
 		 *   GetParameter("SubEventStreamName", sub_event_stream_name_);
 		 */

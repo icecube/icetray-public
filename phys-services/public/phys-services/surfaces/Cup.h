@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 /** $Id: Cylinder.h 146654 2016-06-01 18:31:33Z cweaver $
  * @file
  * @author Jakob van Santen <jakob.van.santen@desy.de>
@@ -27,7 +31,7 @@ namespace I3Surfaces {
 
   private:
     Cup() {}
-	
+
     friend class icecube::serialization::access;
     template <typename Archive>
       void serialize(Archive &, unsigned);

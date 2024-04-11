@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2007
- * the icecube collaboration
+ * Copyright  (C) 2007 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @version $Revision$
@@ -18,7 +18,7 @@
 #include <dataclasses/I3Map.h>
 
 /**
- * @brief This is an interface for services which allow modules to store 
+ * @brief This is an interface for services which allow modules to store
  * runtimejob statistics that can then be written to external xml files
  * for other programs to parse or upload values to a database, etc. useful for
  * collecting statistics in production runs.
@@ -35,7 +35,7 @@ class I3SummaryService: public I3Map<std::string,double>
 
   /**
    * destructor
-   */ 
+   */
   virtual ~I3SummaryService() {};
 
 

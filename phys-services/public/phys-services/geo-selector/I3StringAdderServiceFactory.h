@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3STRINGADDERSERVICEFACTORY_H
 #define I3STRINGADDERSERVICEFACTORY_H
 
@@ -9,13 +13,13 @@ class I3OMGeo;
  * @brief IceTray module that selects the strings to use.
 
  * This module has only two parameters "StringsToUse" and "StringsToExclude"
- * The default values for StringsToUse is the entire 80 string IceCube 
+ * The default values for StringsToUse is the entire 80 string IceCube
  * detector and AMANDA (i.e. "-19:80").  No strings are excluded by default.
  *
  * Examples values for the parameters are...
  *
  * 1) Use only the IceCube detector.
- * Either set StringsToUse to "1:80" or set StringsToExclude to "-19:0" 
+ * Either set StringsToUse to "1:80" or set StringsToExclude to "-19:0"
  * (remember the default value for StringsToUse is "-19:80").
  *
  * 2) Use the current geometry (as of mid Jan '06).
@@ -27,19 +31,19 @@ public:
 
   /*
    * Constructor.
-   */ 
+   */
   I3StringAdderServiceFactory(const I3Context& ctx);
-  
+
   /*
    * Destructor.
-   */ 
+   */
   virtual ~I3StringAdderServiceFactory();
-  
+
   /**
    * Checks the two parameters StringsToUse and StringsToExclude are valid.
    */
   virtual void Configure();
-  
+
   virtual bool InstallService(I3Context& services);
 
 private:
@@ -61,7 +65,7 @@ private:
   std::vector<I3OMGeo> omGeoList_;
 
   /**
-   * Parameter - List of x positions 
+   * Parameter - List of x positions
    * Default value is 'empty'
    */
   std::vector<double> xPositions_;
@@ -76,7 +80,7 @@ private:
    * Parameter - Depth of the top DOMs
    * Default value is +500 * I3Units::m
    */
-  double depth_;  
+  double depth_;
 
   /**
    * Parameter - Distance between the DOMs
@@ -106,7 +110,7 @@ private:
 
   /**
    * Parameter - Effective collection area
-   * Default value is .0444 * I3Units::m2 
+   * Default value is .0444 * I3Units::m2
    * I don't think this is used
    */
   double area_;
@@ -129,7 +133,7 @@ private:
   std::string geoServiceName_;
 
   SET_LOGGER("I3StringAdderServiceFactory");
-  
+
 };  // end of class I3StringAdderServiceFactory
 
-#endif 
+#endif

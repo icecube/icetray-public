@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "pybindings.hpp"
 #include "phys-services/I3XMLOMKey2MBID.h"
 
@@ -13,6 +17,6 @@ void register_I3XMLOMKey2MBID()
 	  .def("get_omkey", &I3XMLOMKey2MBID::GetOMKey)
 	  .def("mbid_exists", &I3XMLOMKey2MBID::MBIDExists)
 	  .def("get_mbid", &I3XMLOMKey2MBID::GetMBID)
- 
+
 	;
 }

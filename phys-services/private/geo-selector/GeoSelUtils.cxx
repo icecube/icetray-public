@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file GeoSelUtils.cxx
@@ -25,10 +25,10 @@ using std::ostringstream;
 using std::endl;
 
 namespace geo_sel_utils{
- 
+
   const string COMMA(",");
-  const string COLON(":"); 
-  const string MINUS("-"); 
+  const string COLON(":");
+  const string MINUS("-");
   const string SINGLE_DIGIT_INTEGERS("0123456789");
 
   template <class T> bool exists(const T& value, const vector<T>& v){
@@ -39,20 +39,20 @@ namespace geo_sel_utils{
 
   template bool exists(const int&, const vector<int>&);
 
-  template <class T> typename vector<T>::const_iterator 
+  template <class T> typename vector<T>::const_iterator
   exists_at(const T& value, const vector<T>& v){
     for(typename vector<T>::const_iterator iter = v.begin(); iter != v.end(); ++iter){
       if(*iter == value) return iter;
     }
     return v.end();
   }
-  
+
   bool good_input(const string& input_string){
     //check to that there's only numbers
     //and our two delimiters ',' and ':'
-    for(string::const_iterator iter = input_string.begin(); 
+    for(string::const_iterator iter = input_string.begin();
 	iter != input_string.end(); ++iter){
-      if((COMMA.find(*iter) == string::npos) && 
+      if((COMMA.find(*iter) == string::npos) &&
 	 (COLON.find(*iter) == string::npos) &&
 	 (MINUS.find(*iter) == string::npos) &&
 	 ((SINGLE_DIGIT_INTEGERS.find(*iter) == string::npos))){
@@ -69,41 +69,41 @@ namespace geo_sel_utils{
     }
     return true;
   }
-  
+
   vector<int> make_good_strings(string to_use, string to_exclude){
     //There will be two delimiters ':' and ','
     //So something like "1:8,13" will ex/include strings 1 through 8 and 13
     //find all the commas first
     vector<int> strings_to_use(parse_string_list(to_use));
     vector<int> strings_to_exclude(parse_string_list(to_exclude));
-    
+
     vector<int> strings_to_return;//We will return this
-    for(vector<int>::iterator iter=strings_to_use.begin(); 
+    for(vector<int>::iterator iter=strings_to_use.begin();
 	iter != strings_to_use.end(); ++iter)
       if(!exists(*iter,strings_to_exclude)) strings_to_return.push_back(*iter);
     return strings_to_return;
   }
-  
+
   vector<int> parse_string_list(const string& string_list){
     vector<int> final_string_list;
     if(string_list.size()){
-      
+
       vector<string> string_list_buffer;//we'll need to clean this of ranges
       int n_commas(0);
-      
+
       for(string::const_iterator iter = string_list.begin(); iter!= string_list.end(); ++iter)
 	if(COMMA.find(*iter)!= string::npos) n_commas++;
-      
+
       string::size_type this_pos(0);
       string::size_type last_pos(0);
-      
+
       for(int i=0; i<=n_commas; i++){
 	this_pos = string_list.find(',',last_pos);
 	string_list_buffer.push_back(string_list.substr(last_pos,this_pos-last_pos));
 	last_pos = this_pos+1;//need to skip over the comma
       }
       //Now need to go through the elements and expand the colons
-      for(vector<string>::iterator iter = string_list_buffer.begin(); 
+      for(vector<string>::iterator iter = string_list_buffer.begin();
 	  iter != string_list_buffer.end(); ++iter){
 	string::size_type colon_pos = iter->find(':');
 	//remove these from strings_to_use
@@ -125,7 +125,7 @@ namespace geo_sel_utils{
     return final_string_list;
   }
 
-  std::pair<double,double> detector_center(I3GeometryConstPtr geo, 
+  std::pair<double,double> detector_center(I3GeometryConstPtr geo,
 					   const vector<int>& goodStrings){
 
     vector<double> x;
@@ -160,7 +160,7 @@ namespace geo_sel_utils{
   boost::shared_ptr<I3Map<OMKey,T> >
   map_cleaner(boost::shared_ptr<const I3Map<OMKey,T> > m, vector<int> s){
     vector<int>::iterator j;
-    boost::shared_ptr<I3Map<OMKey,T> > new_map; 
+    boost::shared_ptr<I3Map<OMKey,T> > new_map;
     typename I3Map<OMKey,T>::iterator i = m.begin();
     for(; i!=m.end();i++){
       bool good(false);

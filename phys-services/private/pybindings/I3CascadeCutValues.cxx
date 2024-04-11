@@ -1,5 +1,6 @@
 //
-//   Copyright (c) 2009   Troy D. Straszheim and the IceCube Collaboration 
+//   Copyright (c) 2009   Troy D. Straszheim
+//   Copyright (c) 2009   The IceCube Collaboration 
 //   
 //   This file is part of IceTray.
 //

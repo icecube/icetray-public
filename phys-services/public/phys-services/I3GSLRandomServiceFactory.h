@@ -7,7 +7,8 @@
  *
  * Date: 17 Feb 2004
  *
- * (c) IceCube Collaboration
+ * Copyright (c) IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 // Header files
@@ -53,7 +54,7 @@ class I3GSLRandomServiceFactory
   virtual bool InstallService(I3Context& services);
 
   /**
-   * Configure service prior to installing it. 
+   * Configure service prior to installing it.
    */
   virtual void Configure();
 

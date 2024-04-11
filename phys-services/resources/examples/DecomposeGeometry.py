@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from optparse import OptionParser
 parser = OptionParser()
 parser.add_option('-i','--infile',
@@ -13,7 +18,7 @@ import sys
 from icecube.icetray import I3Tray
 from icecube import icetray, dataio, phys_services
 
-if len(sys.argv) != 3: 
+if len(sys.argv) != 3:
     print("usage: DecomposeGeometry.py input_file output_file")
     sys.exit(-1)
 

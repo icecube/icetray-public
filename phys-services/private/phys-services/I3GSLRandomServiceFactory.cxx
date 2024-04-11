@@ -5,7 +5,8 @@
  *
  * Date: 17 Feb 2004
  *
- * (c) IceCube Collaboration
+ * Copyright (c) IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 // Class header files
@@ -19,7 +20,7 @@ I3_SERVICE_FACTORY(I3GSLRandomServiceFactory);
 
 // Constructors
 
-I3GSLRandomServiceFactory::I3GSLRandomServiceFactory(const I3Context& context) 
+I3GSLRandomServiceFactory::I3GSLRandomServiceFactory(const I3Context& context)
   : I3ServiceFactory(context),
   seed_(gsl_rng_default_seed),
   track_state_(true),

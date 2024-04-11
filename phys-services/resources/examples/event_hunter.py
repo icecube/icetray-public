@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 """
 Take input files and an event list, and make an output file with only
 those events.
@@ -111,7 +116,7 @@ def hunt(events,input_files):
             if index:
                 logging.debug('stripping input_files to [%d:]',index)
                 input_files = input_files[index:]
-                
+
         logging.debug('check input_files linearly')
         flag = False
         while not flag and input_files:
@@ -141,7 +146,7 @@ def hunt(events,input_files):
                         logging.debug('break from flag')
                         break
                 #logging.debug('second pop_frame')
-                if open_file['file'].more(): 
+                if open_file['file'].more():
                     frame = open_file['file'].pop_frame()
                     frame.purge()
                 else:
@@ -152,7 +157,7 @@ def hunt(events,input_files):
             else:
                 logging.info('found with event %s' % (event,))
                 break
-            
+
     try:
         if open_file['file']:
             open_file['file'].close()
@@ -181,17 +186,17 @@ def main():
                            help='file with one line per input filename')
     parser.add_option_group(input_group)
     (options,args) = parser.parse_args()
-    
+
     if options.event_file and options.events:
         raise Exception('Specify either an event filename or a list of event ids, not both')
     if options.input_file and args:
         raise Exception('Specify either a file of input filenames or file arguments, not both')
-    
+
     logging.basicConfig(level='DEBUG' if options.debug else 'INFO')
-    
+
     events = set()
     input_files = []
-    
+
     if options.event_file:
         for line in open(options.event_file):
             line = line.strip()
@@ -201,7 +206,7 @@ def main():
     elif options.events:
         for e in options.events.split(','):
             events.add((-1,int(e)))
-    
+
     if options.input_file:
         for line in open(options.input_file):
             line = line.strip()
@@ -211,7 +216,7 @@ def main():
     elif args:
         input_files += args
     input_files = list(unique_everseen(input_files))
-    
+
     output_file = dataio.I3File(options.output,'w')
     try:
         for frame in hunt(events,input_files):

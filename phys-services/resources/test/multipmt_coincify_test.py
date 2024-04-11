@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import os
 import unittest
 import numpy as np
@@ -20,7 +24,7 @@ class ProducePulses(icetray.I3Module):
 
     def DAQ(self, frame):
         pulsemap = dataclasses.I3RecoPulseSeriesMap()
-        
+
         # First case: hits are all on different strings, so no coincidences
         if self.frame_counter == 0:
             for string in range(10):
@@ -29,7 +33,7 @@ class ProducePulses(icetray.I3Module):
                 pulse.charge = 1
                 pulse.time = 0
                 pulsemap[omkey] = [pulse,]
-                    
+
         # Second case: Hits on a single pmt. No coincidences
         elif self.frame_counter == 1:
             omkey = icetray.OMKey(100, 50, 0)
@@ -42,7 +46,7 @@ class ProducePulses(icetray.I3Module):
 
         # Third case: Hits on a single module. Coincidences!
         # We're going to test with an intra-module window of
-        # 100 ns. For that, we expect the first two to be 
+        # 100 ns. For that, we expect the first two to be
         # coincident, but the last two aren't.
         elif self.frame_counter == 2:
             for i, omkey in enumerate([OMKey(100, 1, 0),
@@ -53,7 +57,7 @@ class ProducePulses(icetray.I3Module):
                 pulse.charge = 1
                 pulse.time = 10**i - i
                 pulsemap[omkey] = [pulse,]
-            
+
         # Fourth case: Hits on a multiple nearby. Coincidences!
         # For a span of 4, the first three will all be coincident.
         else:
@@ -81,7 +85,7 @@ class I3MultiConcifyTest(unittest.TestCase):
         for pulses in pulsemap.values():
             for p in pulses:
                 n_hlc += p.flags & p.PulseFlags.LC
-        
+
         nexpected = 0
         if frame_num == 0: nexpected = 0
         elif frame_num == 1: nexpected = 0

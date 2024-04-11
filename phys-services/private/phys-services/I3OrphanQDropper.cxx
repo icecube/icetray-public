@@ -1,10 +1,10 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2011
- *  Nathan Whitehorn <nwhitehorn@icecube.wisc.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2011 Nathan Whitehorn <nwhitehorn@icecube.wisc.edu>
+ *  Copyright (C) 2011 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  SPDX-License-Identifier: BSD-2-Clause
+ *
  */
 
 #include <icetray/I3PacketModule.h>
@@ -29,7 +29,7 @@ I3OrphanQDropper::I3OrphanQDropper(const I3Context& context) :
 void
 I3OrphanQDropper::FramePacket(std::vector<I3FramePtr> &packet)
 {
-	
+
         if (packet.size() == 1){
           if (packet.front()->GetStop() == I3Frame::DAQ)
 		return; // Drop packets with only a Q frame

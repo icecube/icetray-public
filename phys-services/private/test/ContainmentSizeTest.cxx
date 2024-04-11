@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 
 #include "phys-services/I3Cuts.h"
@@ -24,13 +28,13 @@ TEST(ContainmentAreaSize){
   const std::vector<double > y (myYPos ());
 
   // print the cornerpoints
-  std::cout << "x: " << std::endl; 
+  std::cout << "x: " << std::endl;
   BOOST_FOREACH(const double &val, x) {
             std::cout << val << ", ";
   }
   std::cout << std::endl;
 
-  std::cout << "y: " << std::endl; 
+  std::cout << "y: " << std::endl;
   BOOST_FOREACH(const double &val, y) {
             std::cout << val << ", ";
   }
@@ -48,11 +52,11 @@ TEST(ContainmentAreaSize){
 
   p.SetDir (0, 0); // vertical track
 
-  std::cout << "particle: (x, y) = (" 
+  std::cout << "particle: (x, y) = ("
 	    << px << ", " << py << ")" << std::endl;
 
   // calculate the scaling factor ----------------
-  const double s 
+  const double s
     = I3Cuts::ContainmentAreaSize (p, x, y, detectorPlane);
 
 
@@ -70,13 +74,13 @@ TEST(ContainmentVolumeSize){
   const std::vector<double > y (myYPos ());
 
   // print the cornerpoints
-  std::cout << "x: " << std::endl; 
+  std::cout << "x: " << std::endl;
   BOOST_FOREACH(const double &val, x) {
             std::cout << val << ", ";
   }
   std::cout << std::endl;
 
-  std::cout << "y: " << std::endl; 
+  std::cout << "y: " << std::endl;
   BOOST_FOREACH(const double &val, y) {
             std::cout << val << ", ";
   }
@@ -95,12 +99,12 @@ TEST(ContainmentVolumeSize){
   p.SetPos (px, py, detectorMid);
   p.SetDir (0, 0); // vertical track
 
-  std::cout << "particle: (x, y) = (" 
+  std::cout << "particle: (x, y) = ("
 	    << px << ", " << py << ")" << std::endl;
 
   // calculate the scaling factor ----------------
-  const double s 
-    = I3Cuts::ContainmentVolumeSize (p, x, y, 
+  const double s
+    = I3Cuts::ContainmentVolumeSize (p, x, y,
 				     detectorTop, detectorBot);
 
   std::cout << "scale factor: " << s << std::endl;
@@ -123,7 +127,7 @@ std::vector<double > myXPos () {
   x.push_back(-200);
   //  x.push_back(  50);
   x.push_back( 300);
-  
+
   return x;
 }
 
@@ -142,7 +146,7 @@ std::vector<double > myYPos () {
   y.push_back(  50);
   //  y.push_back( 100);
   y.push_back(   0);
-  
+
   return y;
 }
 

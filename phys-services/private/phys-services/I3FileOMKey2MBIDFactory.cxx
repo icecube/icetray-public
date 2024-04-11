@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "phys-services/I3FileOMKey2MBIDFactory.h"
 #include "phys-services/I3FileOMKey2MBID.h"
 

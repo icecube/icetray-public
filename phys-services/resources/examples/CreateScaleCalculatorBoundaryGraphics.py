@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import os, sys
 import matplotlib.pyplot as plt
 
 from icecube import icetray
-from icecube import dataclasses 
-from icecube import phys_services 
-from icecube import dataio 
+from icecube import dataclasses
+from icecube import phys_services
+from icecube import dataio
 from icecube.icetray import I3Tray
 
 from icecube.phys_services import I3ScaleCalculator
@@ -141,7 +145,7 @@ ax.view_init(20, -60)
 
 def draw_3d_inice_array(bstrings, colorletter, label, topdom=1, bottomdom=60):
   n = len(bstrings)
-  
+
   ## Plot the boundaries
   xb = []
   yb = []
@@ -156,13 +160,13 @@ def draw_3d_inice_array(bstrings, colorletter, label, topdom=1, bottomdom=60):
     yb.append(geo.omgeo[icetray.OMKey(ib,middom)].position.y)
     ztop.append(geo.omgeo[icetray.OMKey(ib,topdom)].position.z)
     zbottom.append(geo.omgeo[icetray.OMKey(ib,bottomdom)].position.z)
-  
+
   # complete the loop
   xb.append(xb[0])
   yb.append(yb[0])
   ztop.append(ztop[0])
   zbottom.append(zbottom[0])
-    
+
   for i in range(0, n):
     if i==0:
       ax.plot3D([xb[i], xb[i]], [yb[i], yb[i]], [ztop[i], zbottom[i]], colorletter, label=label)  # verticals (with label)
@@ -170,7 +174,7 @@ def draw_3d_inice_array(bstrings, colorletter, label, topdom=1, bottomdom=60):
       ax.plot3D([xb[i], xb[i]], [yb[i], yb[i]], [ztop[i], zbottom[i]], colorletter)  # without the label
     ax.plot3D([xb[i], xb[i+1]], [yb[i], yb[i+1]], [ztop[i], ztop[i+1]], colorletter)  # top boundary
     ax.plot3D([xb[i], xb[i+1]], [yb[i], yb[i+1]], [zbottom[i], zbottom[i+1]], colorletter) # bottom boundary
-    
+
 
 draw_3d_inice_array(sc_ic86_smooth.get_outer_strings(), 'r-', "IC86 (smooth)", 1, 60)
 draw_3d_inice_array(sc_ic86_strict.get_outer_strings(), 'b--', "IC86 (strict)", 1, 60)

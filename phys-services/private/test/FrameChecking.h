@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef FRAMECHECKING_H
 #define FRAMECHECKING_H
 
@@ -11,7 +15,7 @@
 
 #include "icetray/I3Frame.h"
 
-// icetray doesn't normally allow you to get the string for the 
+// icetray doesn't normally allow you to get the string for the
 // stream that your frame is on.  Had to hack in a way to do it.
 inline
 string DumpStop(I3Frame& frame)
@@ -22,8 +26,8 @@ string DumpStop(I3Frame& frame)
   possibleNames.push_back("Calibration");
   possibleNames.push_back("Physics");
   possibleNames.push_back("Monitor");
-  
-  for(vector<string>::iterator iter = possibleNames.begin() ; 
+
+  for(vector<string>::iterator iter = possibleNames.begin() ;
       iter != possibleNames.end() ;
       iter++)
     {
@@ -33,7 +37,7 @@ string DumpStop(I3Frame& frame)
 	return *iter;
     }
   return "UNKNOWN STREAM";
-   
+
 }
 
 inline bool GeometryPresent(I3Frame& frame)

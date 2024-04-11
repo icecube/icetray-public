@@ -1,6 +1,6 @@
 /**
- * Copyright (C) 2008
- * The IceCube collaboration
+ * Copyright (C) 2008 The IceCube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * ID: $Id$
  *
  * @file I3VEMCalManipulatorFactory.h
@@ -20,27 +20,27 @@
 class I3VEMCalManipulatorFactory: public I3ServiceFactory
 {
 public:
-    
+
     I3VEMCalManipulatorFactory(const I3Context& context);
     ~I3VEMCalManipulatorFactory();
-    
+
     bool InstallService(I3Context& services);
-    
+
     void Configure();
-    
+
 private:
-    
+
     boost::shared_ptr<I3VEMCalManipulator> vemCalService_;
-    
+
     std::string inCalServiceName_;
     std::string outCalServiceName_;
-    
+
     std::string path_;
     std::string file_;
     bool forceFile_;
     bool useDefaults_;
-    
+
     SET_LOGGER("I3VEMCalManipulatorFactory");
 };
 
-#endif 
+#endif

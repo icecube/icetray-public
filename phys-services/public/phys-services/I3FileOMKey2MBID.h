@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file I3FileOMKey2MBID.h
@@ -30,10 +30,10 @@ class I3FileOMKey2MBID : public I3OMKey2MBID
  private:
   typedef std::map<OMKey,long long int> map_omkey2mbid;
   typedef std::map<long long int,OMKey> map_mbid2omkey;
-  
+
   map_omkey2mbid omkey2mbid_;
   map_mbid2omkey mbid2omkey_;
-  
+
  public:
   /** Constructor takes the name of the input file.
    */
@@ -46,7 +46,7 @@ class I3FileOMKey2MBID : public I3OMKey2MBID
   bool MBIDExists(OMKey key) const;
   long long int GetMBID(OMKey key) const;
   /** Dump conversion table into XML file.
-   * 
+   *
    * \note
    * This XML file can be used as input for I3XMLOMKey2MBID.
    * @param outfile The filename.

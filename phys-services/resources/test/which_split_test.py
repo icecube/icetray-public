@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # $Id: which_split_test.py 125167 2014-10-29 01:16:40Z jvansanten $
 # $Revision: 125167 $
 # $LastChangedDate: 2014-10-28 21:16:40 -0400 (Tue, 28 Oct 2014) $

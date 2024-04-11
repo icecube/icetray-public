@@ -5,23 +5,24 @@
  *
  * Date: 2 Apr 2005
  *
- * (c) IceCube Collaboration
+ * Copyright (c) IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 // Class header files
 #include "phys-services/I3SPRNGRandomService.h"
-#include "phys-services/gsl-sprng.h" 
+#include "phys-services/gsl-sprng.h"
 #include <string>
 #include <fstream>
 #include <cassert>
 #include <sys/stat.h>
 
 using namespace std;
- 
+
 struct I3SPRNGRandomServiceState : public I3FrameObject {
 	int seed_, nstreams_, streamnum_;
 	uint64_t icalls_, dcalls_;
-	
+
 	friend class icecube::serialization::access;
 	template <typename Archive>
 	void serialize(Archive &ar, unsigned version)
@@ -33,7 +34,7 @@ struct I3SPRNGRandomServiceState : public I3FrameObject {
 		ar & make_nvp("IntegerCalls", icalls_);
 		ar & make_nvp("DoubleCalls", dcalls_);
 	}
-  
+
   std::ostream& Print(std::ostream& os) const override{
     os << "[I3SPRNGRandomServiceState\n"
        << "  Seed: " << seed_ << '\n'
@@ -56,7 +57,7 @@ I3SPRNGRandomService::I3SPRNGRandomService() : seed_(0), streamnum_(1), nstreams
 
 
 I3SPRNGRandomService::I3SPRNGRandomService(
-				int seed,   		
+				int seed,
 				int nstreams,  // number of rng streams  (nstreams > streamnum)
 				int streamnum, // stream number for this process
 				string infile, // where state from prev. run is stored
@@ -76,18 +77,18 @@ I3SPRNGRandomService::I3SPRNGRandomService(
   assert(streamnum>=0);
   gsl_rng_env_setup();
 
-  if (!instatefile_.empty()) { 
+  if (!instatefile_.empty()) {
      log_debug("checking saved input RNG state %s", instatefile_.c_str());
 
     // check saved rng state
-    if (stat(instatefile_.c_str(), &istat)) { 
+    if (stat(instatefile_.c_str(), &istat)) {
        log_fatal("SPRNG: Input RNG state file '%s' cannot be read!!!", instatefile_.c_str());
     }
-  	ifstream in(instatefile_.c_str()); 
+  	ifstream in(instatefile_.c_str());
   	in.read((char*) &size,sizeof(int));  // read size of array
   	in.read(buffer,size);		// read array
   	// read the number of calls that it took to get from
-  	// the seed to the stored state, if they are present 
+  	// the seed to the stored state, if they are present
   	uint64_t icalls(0), dcalls(0);
   	if (in.read((char*)&icalls, sizeof(uint64_t)).fail())
   		icalls = 0;
@@ -99,7 +100,7 @@ I3SPRNGRandomService::I3SPRNGRandomService(
   } else {
   	rng_ = gsl_sprng_init(seed_, nstreams_, streamnum_);
   }
-  
+
   if (!rng_)
       log_fatal("Failed to allocate random number generator!");
 }
@@ -109,8 +110,8 @@ I3SPRNGRandomService::~I3SPRNGRandomService()
    if ( !outstatefile_.empty() ) { //save rng state to file
 	   int size;
 	   char *bytes;
-	   
-	   ofstream out(outstatefile_.c_str()); 
+
+	   ofstream out(outstatefile_.c_str());
 	   size = gsl_sprng_pack(rng_, &bytes);
 	   out.write((char*) &size,sizeof(int)); // write the size of array
 	   out.write(bytes,size); // write array
@@ -119,7 +120,7 @@ I3SPRNGRandomService::~I3SPRNGRandomService()
 	   gsl_sprng_stream *stream = (gsl_sprng_stream*)(rng_->state);
 	   out.write((char*)&(stream->icalls),sizeof(uint64_t));
 	   out.write((char*)&(stream->dcalls),sizeof(uint64_t));
-	   out.close(); 
+	   out.close();
 	   free(bytes);
    }
    gsl_sprng_free(rng_);
@@ -169,13 +170,13 @@ I3FrameObjectPtr I3SPRNGRandomService::GetState() const
 {
 	boost::shared_ptr<I3SPRNGRandomServiceState> state(new I3SPRNGRandomServiceState);
 	gsl_sprng_stream *stream = (gsl_sprng_stream*)(rng_->state);
-	
+
 	state->seed_ = seed_;
 	state->nstreams_ = nstreams_;
 	state->streamnum_ = streamnum_;
 	state->icalls_ = stream->icalls;
 	state->dcalls_ = stream->dcalls;
-	
+
 	return state;
 }
 
@@ -184,9 +185,9 @@ void I3SPRNGRandomService::RestoreState(I3FrameObjectConstPtr vstate)
 	boost::shared_ptr<const I3SPRNGRandomServiceState> state;
 	if (!(state = boost::dynamic_pointer_cast<const I3SPRNGRandomServiceState>(vstate)))
 		log_fatal("The provided state is not an I3SPRNGRandomServiceState!");
-	
+
 	gsl_sprng_stream *stream = (gsl_sprng_stream*)(rng_->state);
-	
+
 	// If the current configuration is from a different stream or our sequence
 	// has passed the point of the stored state, destroy the RNG and start over.
 	if (state->seed_ != seed_ || state->nstreams_ != nstreams_ || state->streamnum_ != streamnum_
@@ -198,7 +199,7 @@ void I3SPRNGRandomService::RestoreState(I3FrameObjectConstPtr vstate)
 		 rng_ = gsl_sprng_init(seed_, nstreams_, streamnum_);
 		 stream = (gsl_sprng_stream*)(rng_->state);
 	}
-	
+
 	// Draw and discard variates until we reach the requested point
 	// in the sequence.
 	while (stream->icalls < state->icalls_) {

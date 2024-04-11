@@ -7,7 +7,8 @@
  *
  * Date: 17 Feb 2004
  *
- * (c) IceCube Collaboration
+ * Copyright (c) IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 // Header files
@@ -50,4 +51,4 @@ class I3TextFileGeometryServiceFactory
    SET_LOGGER("I3TextFileGeometryServiceFactory");
 };
 
-#endif 
+#endif

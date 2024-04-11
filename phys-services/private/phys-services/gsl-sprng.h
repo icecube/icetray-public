@@ -4,11 +4,11 @@
 #include <sprng/sprng.h>
 /**
  * gsl-sprng.h
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
- * @brief SPRNG Implementation of the I3RandomService interface.  
+ * @brief SPRNG Implementation of the I3RandomService interface.
  * This implementation uses a combination of SPRNG and GSL to generate
  * statistically independent streams of pseudo-random number distributions.
  * SPRNG (Scalable Pseudo-Random Number Generator) is a library developed by
@@ -26,7 +26,7 @@
  * @date $Date$
  * @author juancarlos
  *
- * @todo 
+ * @todo
  */
 
 
@@ -51,12 +51,12 @@ static void sprng_set(void * vstate,unsigned long int s)
   } else {
   	stream->seed = s;
   	stream->streamptr = init_sprng(
-		DEFAULT_RNG_TYPE, 
-  		stream->streamnum, 
-		stream->nstreams, 
+		DEFAULT_RNG_TYPE,
+  		stream->streamnum,
+		stream->nstreams,
 		stream->seed,
 		SPRNG_DEFAULT);
-  } 
+  }
 }
 
 static unsigned long sprng_get(void * vstate)
@@ -89,7 +89,7 @@ static const gsl_rng_type gsl_rng_sprng20 =
 inline gsl_rng *gsl_sprng_init(int seed, int nstreams, int streamnum, char *state=NULL,
     uint64_t icalls=0, uint64_t dcalls=0)
 {
-   gsl_sprng_stream* s = 
+   gsl_sprng_stream* s =
    	  (gsl_sprng_stream*)  malloc( sizeof( gsl_sprng_stream ) );
 
    if (s == 0) {
@@ -110,12 +110,12 @@ inline gsl_rng *gsl_sprng_init(int seed, int nstreams, int streamnum, char *stat
    if (state) {
    		s->streamptr = unpack_sprng(state);
    } else {
-   		s->streamptr = 
+   		s->streamptr =
    			init_sprng(
-				DEFAULT_RNG_TYPE, 
-				streamnum, 
-				nstreams, 
-				seed, 
+				DEFAULT_RNG_TYPE,
+				streamnum,
+				nstreams,
+				seed,
 				SPRNG_DEFAULT);
    }
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "phys-services/I3ScaleCalculator.h"
 #include "phys-services/I3Cuts.h"
 
@@ -11,8 +15,8 @@
 
 using namespace std;
 
-I3ScaleCalculator::I3ScaleCalculator (I3GeometryConstPtr geo, 
-                                      IceCubeConfig iceConf, 
+I3ScaleCalculator::I3ScaleCalculator (I3GeometryConstPtr geo,
+                                      IceCubeConfig iceConf,
                                       IceTopConfig topConf,
                                       std::vector<int> strings,
                                       std::vector<int> stations,
@@ -20,14 +24,14 @@ I3ScaleCalculator::I3ScaleCalculator (I3GeometryConstPtr geo,
   geo_(geo), iceConf_(iceConf), topConf_(topConf),
   listOfBoundaryDeepStrings_(strings), listOfBoundarySurfaceStations_(stations),
   topDOMid_(topDOMid), bottomDOMid_(bottomDOMid){
- 
+
   if (iceConf_ == IC_GUESS) {
     iceConf_ = GuessIceCubeConfig ();
   }
   if (topConf_ == IT_GUESS) {
     topConf_ = GuessIceTopConfig ();
   }
-  
+
   if (iceConf_ == IC_UNKNOWN) {
     log_error("Unknown IceCube detector configuration");
   }
@@ -87,7 +91,7 @@ I3ScaleCalculator::I3ScaleCalculator (I3GeometryConstPtr geo,
 
 }
 
-I3ScaleCalculator::IceCubeConfig 
+I3ScaleCalculator::IceCubeConfig
 I3ScaleCalculator::GuessIceCubeConfig () const {
   // get geo information
   I3OMGeoMap omMap = geo_->omgeo;
@@ -118,11 +122,11 @@ I3ScaleCalculator::GuessIceCubeConfig () const {
   }
 }
 
-I3ScaleCalculator::IceTopConfig 
+I3ScaleCalculator::IceTopConfig
 I3ScaleCalculator::GuessIceTopConfig () const {
   // get number of stations from StationGeo part of the I3Geometry
   I3StationGeoMap stationMap = geo_->stationgeo;
-  
+
   // count stations
   int stationNo = stationMap.size();
   if (stationNo < 73) {
@@ -160,7 +164,7 @@ std::vector<int > I3ScaleCalculator::GetOuterStrings () const {
     outerStrings = listOfBoundaryDeepStrings_;
     break;
   case IC79_SMOOTH:  // This one "smooths out the notch" by one station
-    outerStrings.push_back(2);  
+    outerStrings.push_back(2);
     outerStrings.push_back(6);
     outerStrings.push_back(50);
     outerStrings.push_back(74);
@@ -310,12 +314,12 @@ std::vector<int > I3ScaleCalculator::GetOuterStations () const {
 }
 
 
-  
-void I3ScaleCalculator::CalcOuterStringPositions (std::vector<double > &x, 
+
+void I3ScaleCalculator::CalcOuterStringPositions (std::vector<double > &x,
                                                   std::vector<double > &y,
                                                   double &zMin,
                                                   double &zMax) const {
- 
+
   // get the string numbers
   std::vector<int > outerStrings = GetOuterStrings ();
 
@@ -329,7 +333,7 @@ void I3ScaleCalculator::CalcOuterStringPositions (std::vector<double > &x,
 
   int nmiddle = (bottomDOMid_ + topDOMid_)/2;  // When between 1 and 60, use 30 (rounded down)
   log_debug("Middle DOM = %d", nmiddle);
-  
+
   // calculate the positions:
   // the overall z-coordinates (top and bottom) are made from the average z's of the boundary
   BOOST_FOREACH (int stringNo, outerStrings) {
@@ -351,13 +355,13 @@ void I3ScaleCalculator::CalcOuterStringPositions (std::vector<double > &x,
 
 }
 
-void I3ScaleCalculator::CalcOuterStationPositions (std::vector<double > &x, 
+void I3ScaleCalculator::CalcOuterStationPositions (std::vector<double > &x,
                                                    std::vector<double > &y,
                                                    double &z) const {
 
   // get the station numbers
   std::vector<int > outerStrings = GetOuterStations ();
-  
+
   // get the geometry
   I3StationGeoMap stationMap = geo_->stationgeo;
   x.clear ();
@@ -366,7 +370,7 @@ void I3ScaleCalculator::CalcOuterStationPositions (std::vector<double > &x,
   // calculate the positions of the two tanks within the station, and average them (X and Y)
   // the z-coordinate is fixed.
   BOOST_FOREACH (int stringNo, outerStrings) {
-    x.push_back ((stationMap[stringNo][0].position.GetX () 
+    x.push_back ((stationMap[stringNo][0].position.GetX ()
                   + stationMap[stringNo][1].position.GetX ()) / 2);
     y.push_back ((stationMap[stringNo][0].position.GetY ()
                   + stationMap[stringNo][1].position.GetY ()) / 2);
@@ -388,7 +392,7 @@ double I3ScaleCalculator::ScaleInIce (I3Particle part) const {
     log_error ("Unknown or empty IceCube Configuration.");
     return std::numeric_limits<double >::signaling_NaN ();
   }
-};  
+};
 
 double I3ScaleCalculator::ScaleIceCubeDetectorPolygon (I3Particle part) const {
   if (iceConf_ > IC_EMPTY) {
@@ -404,7 +408,7 @@ double I3ScaleCalculator::ScaleIceCubeDetectorPolygon (I3Particle part) const {
     log_error ("Unknown or empty IceCube Configuration.");
     return std::numeric_limits<double >::signaling_NaN ();
   }
-};  
+};
 
 double I3ScaleCalculator::ScaleIceTop (I3Particle part) const {
   if (topConf_ > IT_EMPTY) {
@@ -448,19 +452,19 @@ double I3ScaleCalculator::ScaleInIceCascade (I3Particle part,bool areaonly) cons
   referenceTrack.SetDir (0, 0); // change to zenith 0
 
   // calculate the AreaSize
-  double areaScale 
+  double areaScale
     = I3Cuts::ContainmentAreaSize (referenceTrack, x, y, zMiddle);
 
   // calculate the z-Scale
   double zScale = abs (referenceTrack.GetZ () - zMiddle)
     / (zTop - zMiddle);
-  
+
   if (areaonly) {
   // return only the scaled area
   return areaScale;
-  }  
+  }
   // return the minimum of both
-  return std::max (zScale,  areaScale); 
+  return std::max (zScale,  areaScale);
 }
 
 bool I3ScaleCalculator::VertexIsInside (const I3Particle &part) const {
@@ -470,7 +474,7 @@ bool I3ScaleCalculator::VertexIsInside (const I3Particle &part) const {
   std::vector<double > yp;
   double zTop;
   double zBot;
- 
+
   double x = part.GetX ();
   double y = part.GetY ();
   double z = part.GetZ ();
@@ -488,7 +492,7 @@ bool I3ScaleCalculator::VertexIsInside (const I3Particle &part) const {
 }
 
 bool I3ScaleCalculator::IsInside(double xp, double yp,
-                                 const std::vector<double > &x, 
+                                 const std::vector<double > &x,
                                  const std::vector<double > &y) const {
   //  implementation found in root.
    double xint;
@@ -498,13 +502,13 @@ bool I3ScaleCalculator::IsInside(double xp, double yp,
    int np = x.size () - 1;
 
    for (int i=0; i < np; ++i) {
-     
+
       if (i <np-1) {
-        xn = x[i+1]; 
+        xn = x[i+1];
         yn = y[i+1];
       }
       else {
-        xn = x[0];   
+        xn = x[0];
         yn = y[0];
       }
       if (y[i] == yn) continue;

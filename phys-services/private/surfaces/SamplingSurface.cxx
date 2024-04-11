@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 /** $Id$
  * @file
  * @author Jakob van Santen <vansanten@wisc.edu>
@@ -30,7 +34,7 @@ I3Direction
 SamplingSurface::SampleDirection(I3RandomService &rng,
     double cosMin, double cosMax) const
 {
-	// Sample a direction proportional to the projected area 
+	// Sample a direction proportional to the projected area
 	// of the surface.
 	double maxarea = GetMaximumArea();
 	I3Direction sampled_dir;
@@ -38,7 +42,7 @@ SamplingSurface::SampleDirection(I3RandomService &rng,
 		sampled_dir = I3Direction(acos(rng.Uniform(cosMin, cosMax)),
 		    rng.Uniform(0, 2*M_PI));
 	} while (rng.Uniform(0, maxarea) > GetArea(sampled_dir));
-	
+
 	return sampled_dir;
 }
 
@@ -48,7 +52,7 @@ SamplingSurface::serialize(Archive &ar, unsigned version)
 {
 	if (version > 0)
 		log_fatal_stream("Version "<<version<<" is from the future");
-	
+
 	ar & make_nvp("Surface", base_object<Surface>(*this));
 }
 

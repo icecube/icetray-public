@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3GEOTRIMMERS_H_INCLUDED
 #define I3GEOTRIMMERS_H_INCLUDED
 
@@ -30,7 +34,7 @@
 namespace I3GeoTrimmers
 {
 
-  /// Utility function 
+  /// Utility function
   void AddMeToTheMap(OMKey mykey, I3OMGeo me, I3OMGeoMapPtr themap);
 
 

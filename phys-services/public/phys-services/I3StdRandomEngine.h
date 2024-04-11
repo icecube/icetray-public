@@ -1,6 +1,7 @@
 /**
  * @file I3StdRandomEngine.h
- * @copyright (c) 2017 The IceCube Collaboration
+ * @copyright Copyright (c) 2017 The IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @author Kevin Meagher
  * @date December 2017
  */
@@ -14,13 +15,13 @@
 
 /**
  * @class I3StdRandomEngine
- * @brief An implementation of the I3RandomService interface using C++ 
+ * @brief An implementation of the I3RandomService interface using C++
  * random number engines
  *
  * The distribuitons from the parent class I3RandomService are all defined:
  * Binonial, Exponential, Integer, Poisson, Uniform, and Gaussian.
  *
- */ 
+ */
 template <class Base>
 class I3StdRandomEngine : public I3RandomService
 {

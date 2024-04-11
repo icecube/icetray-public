@@ -3,7 +3,8 @@
  *
  * Version $Id: $
  *
- * (c) 2022 IceCube Collaboration
+ * Copyright (c) 2022 IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @file MultiPMTCoincify.cxx
  * @date $Date: $
  * @author mlarson
@@ -22,7 +23,7 @@ MultiPMTCoincify::MultiPMTCoincify(unsigned int moduleSpan, double moduleTime, d
 {
 }
 
-MultiPMTCoincify::MultiPMTCoincify(const I3Context& ctx) 
+MultiPMTCoincify::MultiPMTCoincify(const I3Context& ctx)
   : I3ConditionalModule(ctx),
     pulsesName_("I3RecoPulseSeriesMapGen2"),
     moduleSpan_(2),
@@ -30,7 +31,7 @@ MultiPMTCoincify::MultiPMTCoincify(const I3Context& ctx)
     pmtTime_(10 * I3Units::ns),
     reset_(true)
 {
-  AddParameter("PulseMapName", 
+  AddParameter("PulseMapName",
                "The name of the I3RecoPulseSeriesMap to apply coincidence conditions to.",
                pulsesName_);
   AddParameter("Span",
@@ -58,7 +59,7 @@ MultiPMTCoincify::~MultiPMTCoincify()
 void MultiPMTCoincify::Configure()
 {
   log_debug("Configuring the MultiPMTCoincify");
-   
+
   GetParameter("PulseMapName", pulsesName_);
   GetParameter("Span", moduleSpan_);
   GetParameter("TimeWindowBetweenModules", moduleTime_);
@@ -68,7 +69,7 @@ void MultiPMTCoincify::Configure()
 
 I3RecoPulseSeriesMapPtr MultiPMTCoincify::Coincify(I3RecoPulseSeriesMapConstPtr inputMap){
   log_debug("Entering MultiPMTCoincify::Coincify()");
-  
+
   //---------------------------
   // Copy them to a non-const container
   // sorting them to guarantee time-ordering.
@@ -79,16 +80,16 @@ I3RecoPulseSeriesMapPtr MultiPMTCoincify::Coincify(I3RecoPulseSeriesMapConstPtr 
     OMKey omk = pair.first;
     I3RecoPulseSeries pulses = pair.second;
     std::sort(pulses.begin(), pulses.end(), pulseComp);
-    
+
     if(reset_){
       BOOST_FOREACH(auto& pulse, pulses){
 	pulse.SetFlags(pulse.GetFlags() & !I3RecoPulse::PulseFlags::LC);
       }
     }
-    
+
     outputMap->insert(std::make_pair(omk, pulses));
   }
-  
+
   //---------------------------
   // Run the coincidence processing
   // The plan here is to try to cleverly use four pieces of information:
@@ -100,20 +101,20 @@ I3RecoPulseSeriesMapPtr MultiPMTCoincify::Coincify(I3RecoPulseSeriesMapConstPtr 
   for(auto firstPmtIter=outputMap->begin(); firstPmtIter!=outputMap->end(); ++firstPmtIter){
     OMKey firstOMKey = firstPmtIter->first;
     I3RecoPulseSeries& firstPulses = firstPmtIter->second;
-    
+
     // Keep track of when we've gone too far...
     const OMKey tooFar = OMKey(firstOMKey.GetString(), firstOMKey.GetOM()+moduleSpan_+1, 0);
-    
+
     for(auto secondPmtIter=std::next(firstPmtIter);
 	(secondPmtIter->first<tooFar) && (secondPmtIter!=outputMap->end());
 	++secondPmtIter){
       OMKey secondOMKey = secondPmtIter->first;
       I3RecoPulseSeries& secondPulses = secondPmtIter->second;
-      
+
       double window = moduleTime_;
       if ((firstOMKey.GetString()==secondOMKey.GetString()) && (firstOMKey.GetOM()==secondOMKey.GetOM()))
 	window = pmtTime_;
-      
+
       //---------------------------
       // Start going through the pulses, using std::lower_bound to
       // find the first pulse worth checking.

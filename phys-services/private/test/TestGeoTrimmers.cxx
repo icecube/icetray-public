@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <cstdio>
 
 #include "I3Test.h"
@@ -293,8 +297,8 @@ TEST(MinimumBall3point)
     int ixA = 3; int iyA = 0; int izA = 22;
     int ixB = 6; int iyB = 3; int izB = 22;
     int ixC = 6; int iyC = 3;
-    
-    
+
+
     for ( int izC = 28; izC <= 50; izC += 2 ){
 
         // OM keys (string, omnr)

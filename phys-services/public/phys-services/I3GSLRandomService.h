@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @brief An implementation of the I3RandomService interface.
@@ -92,19 +92,19 @@ class I3GSLRandomService : public I3RandomService{
    * mean and standard deviation
    */
   virtual double Gaus(double mean, double stddev);
-  
+
   /**
    * get all information necessary to restore the internal
    * state of the generator
    */
   virtual I3FrameObjectPtr GetState() const;
-  
+
   /**
    * restore the internal state of the generator
    */
   virtual void RestoreState(I3FrameObjectConstPtr state);
 
-  
+
  private:
 
   // private copy constructors and assignment

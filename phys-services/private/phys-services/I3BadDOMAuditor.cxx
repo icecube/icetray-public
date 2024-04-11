@@ -1,10 +1,10 @@
 /**
  *  $Id$
- *  
- *  Copyright (C) 2011
- *  Nathan Whitehorn <nwhitehorn@icecube.wisc.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
- *  
+ *
+ *  Copyright (C) 2011 Nathan Whitehorn <nwhitehorn@icecube.wisc.edu>
+ *  Copyright (C) 2011 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  SPDX-License-Identifier: BSD-2-Clause
+ *
  */
 
 #include <icetray/I3Module.h>
@@ -208,7 +208,7 @@ I3BadDOMAuditor::DAQ(I3FramePtr frame)
     		    frame->Get<I3RecoPulseSeriesMapConstPtr>(pulses_name);
     		if (!pulses)
     			continue;
-    
+
     		for (I3RecoPulseSeriesMap::const_iterator i = pulses->begin();
     		    i != pulses->end(); i++)
     			pulse_counts_[i->first] += i->second.size();

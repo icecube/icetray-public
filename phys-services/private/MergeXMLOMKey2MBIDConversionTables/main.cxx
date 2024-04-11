@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2022
- * the icecube collaboration
+ * Copyright  (C) 2022 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file MergeXMLOMKey2MBIDConversionTable/main.cxx

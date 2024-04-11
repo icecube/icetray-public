@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 /** $Id$
  * @file
  * @author Jakob van Santen <jakob.van.santen@desy.de>
@@ -46,7 +50,7 @@ std::vector<vec2> convex_hull(const std::vector<I3Position> &positions);
 
 /// @brief Expand the x-y footprint by moving each edge out by a distance
 /// *padding*.
-/// 
+///
 /// A convex polygon can be offset by moving each vertex parallel to the
 /// edges by a distance that is inversely proportional to the sine of the
 /// counterclockwise angle between the edges that meet at each vertex.

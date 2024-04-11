@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <vector>
 #include "phys-services/geo-selector/I3GeometrySelectorService.h"
 #include "icetray/I3Units.h"
@@ -22,7 +26,7 @@ I3GeometryConstPtr I3GeometrySelectorService::GetGeometry(I3Time time)
   double shiftX(shiftX_);
   double shiftY(shiftY_);
   if(shiftToCenter_){
-    std::pair<double,double> center = 
+    std::pair<double,double> center =
       geo_sel_utils::detector_center(old_geo,goodStrings_);
     shiftX = -center.first;
     shiftY = -center.second;
@@ -63,7 +67,7 @@ I3GeometryConstPtr I3GeometrySelectorService::GetGeometry(I3Time time)
 
       log_trace ("Copying station %i, with %zu tanks",
 		 station, s.size ());
-	
+
       std::vector<I3TankGeo>::iterator i = s.begin();
       for(; i != s.end(); i++){
 	log_trace ("OLD STATION POSISTION x/y/z = %f/%f/%f",

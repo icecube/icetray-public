@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "phys-services/I3GSLRandomService.h"
 #include <cstring>
 #include <gsl/gsl_version.h>
@@ -76,7 +80,7 @@ struct I3GSLRandomServiceState : public I3FrameObject {
   unsigned long int seed_;
   uint64_t icalls_;
   uint64_t dcalls_;
-  
+
   friend class icecube::serialization::access;
   template <typename Archive>
   void serialize(Archive &ar, unsigned version)
@@ -88,7 +92,7 @@ struct I3GSLRandomServiceState : public I3FrameObject {
     ar & make_nvp("IntegerCalls", icalls_);
     ar & make_nvp("DoubleCalls", dcalls_);
   }
-  
+
   std::ostream& Print(std::ostream& os) const override{
     os << "[I3GSLRandomServiceState\n"
        << "  GSLversion: " << gsl_version_ << '\n'
@@ -123,25 +127,25 @@ void I3GSLRandomService::RestoreState(I3FrameObjectConstPtr vstate)
   if(!track_state)
     log_fatal("Call to I3GSLRandomService::RestoreState() on a random service "
               "which was not told to track RNG state");
-  
+
   boost::shared_ptr<const I3GSLRandomServiceState> state;
   if (!(state = boost::dynamic_pointer_cast<const I3GSLRandomServiceState>(vstate)))
     log_fatal("The provided state is not an I3GSLRandomServiceState!");
-  
+
   std::string current_gsl_version=GSL_VERSION;
   if(current_gsl_version!=state->gsl_version_)
     log_fatal_stream("Cowardly refusing to restore an RNG state from a different GSL version\n"
                      << "    Current version: " << current_gsl_version << '\n'
                      << "    Stored state version: " << state->gsl_version_);
-  
+
   gsl_rng_wrapper_state* rstate=(gsl_rng_wrapper_state*)r->state;
-  
+
   std::string current_rng_type=gsl_rng_name(rstate->rng);
   if(current_rng_type!=state->rng_type_)
     log_fatal_stream("Cannot restore state from an RNG of a different type\n"
                      << "    Current RNG type: " << current_rng_type << '\n'
                      << "    Stored state type: " << state->rng_type_);
-  
+
   if(state->seed_!=rstate->seed || rstate->icalls>state->icalls_
      || rstate->dcalls>state->dcalls_){
     gsl_rng_free(rstate->rng);
@@ -151,7 +155,7 @@ void I3GSLRandomService::RestoreState(I3FrameObjectConstPtr vstate)
     gsl_rng_set(r, state->seed_);
     gsl_rng_set(rstate->rng, rstate->seed);
   }
-  
+
   while(rstate->icalls<state->icalls_)
     gsl_rng_get(r);
   while(rstate->dcalls<state->dcalls_)
@@ -182,7 +186,7 @@ void gsl_wrapper_set(void* vstate, unsigned long int s)
   state->seed=s;
   state->icalls=0;
   state->dcalls=0;
-  
+
   //This is the obvious thing to do, but a bug in GSL versions <1.16 causes it
   //to fail horribly. Instead, as long as those versions must be supported we
   //just leave the seed in state->seed and wait patiently for I3GSLRandomService

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 /** $Id$
  * @file
  * @author Jakob van Santen <vansanten@wisc.edu>
@@ -37,7 +41,7 @@ public:
 		boost::python::detail::gil_holder lock;
 		return get_override("GetIntersection")(p, dir);
 	}
-	
+
 	virtual bool operator==(const Surface &s) const
 	{
 		log_fatal("Python Surfaces can't be compared.");
@@ -53,13 +57,13 @@ void register_Surface()
 {
 	using namespace I3Surfaces;
 	using namespace boost::python;
-	
+
 	class_<PySurface, PySurfacePtr, boost::noncopyable>("Surface")
 	    .def("intersection", &Surface::GetIntersection)
 	;
-	
+
 	implicitly_convertible<SurfacePtr, SurfaceConstPtr>();
-	
+
 	class_<SamplingSurface, SamplingSurfacePtr, bases<Surface>, boost::noncopyable>("SamplingSurface", no_init)
 	    .def("area", &SamplingSurface::GetArea, (arg("dir")))
 	    .def("maximum_area", &SamplingSurface::GetMaximumArea)
@@ -67,9 +71,9 @@ void register_Surface()
 	    .def("sample_impact_position", &SamplingSurface::SampleImpactPosition, (arg("self"), arg("dir"), arg("rng")))
             .def("acceptance", &SamplingSurface::GetAcceptance, (arg("cosMin")=0., arg("cosMax")=1.))
 	;
-	
+
 	implicitly_convertible<SamplingSurfacePtr, SamplingSurfaceConstPtr>();
-	
+
 	class_<Cylinder, CylinderPtr, bases<SamplingSurface> >("Cylinder",
 	    init<double, double, I3Position>((arg("length"), arg("radius"), arg("center")=I3Position(0,0,0))))
 	    .def(copy_suite<Cylinder>())
@@ -78,9 +82,9 @@ void register_Surface()
 	    BOOST_PP_SEQ_FOR_EACH(WRAP_PROP, Cylinder, PROPS)
 	    #undef PROPS
 	;
-	
+
 	implicitly_convertible<CylinderPtr, CylinderConstPtr>();
-	
+
 	class_<Cup, CupPtr, bases<SamplingSurface> >("Cup",
             init<double, double, double, double, I3Position>((arg("olength"), arg("oradius"), arg("ilength"), arg("iradius"), arg("center")=I3Position(0,0,0))))
 	    .def(copy_suite<Cup>())
@@ -88,7 +92,7 @@ void register_Surface()
 	    BOOST_PP_SEQ_FOR_EACH(WRAP_PROP, Cup, PROPS)
 	    #undef PROPS
 	;
-	
+
 	implicitly_convertible<CupPtr, CupConstPtr>();
 
 	class_<ExtrudedPolygon, ExtrudedPolygonPtr, bases<SamplingSurface> >("ExtrudedPolygon",
@@ -97,10 +101,10 @@ void register_Surface()
 	    .add_property("y", &ExtrudedPolygon::GetY)
 	    .add_property("z", &ExtrudedPolygon::GetZ)
 	;
-	
+
 	class_<Sphere, bases<Surface> >("Sphere", init<double, double>())
 	;
-	
+
 	class_<AxialCylinder, bases<SamplingSurface> >("AxialCylinder",
 	    init<double,double,I3Position>((bp::arg("length"), bp::arg("radius"), bp::arg("center")=I3Position(0,0,0))))
 	    .def(init<double,double,double,I3Position>((bp::arg("lengthBefore"), "lengthAfter", "radius", bp::arg("center")=I3Position(0,0,0))))

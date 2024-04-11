@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 /** $Id$
  * @file
  * @author Jakob van Santen <jakob.van.santen@desy.de>
@@ -36,26 +40,26 @@ public:
 	{}
 
 	// I3Surfaces::Surface interface
-	// Find the distances to the points of intersection with a cylinder 
+	// Find the distances to the points of intersection with a cylinder
 	// aligned along the z axis. Adapted from:
 	// http://code.icecube.wisc.edu/svn/projects/mmc/trunk/src/tfa/Amanda.java
 	// (D. Chirkin)
 	std::pair<double, double> GetIntersection(const I3Position &p, const I3Direction &dir) const
 	{
 		std::pair<double, double> h(Surface::no_intersection()), r(Surface::no_intersection());
-	
+
 		double x = p.GetX()-center_.GetX();
 		double y = p.GetY()-center_.GetY();
 		double z = p.GetZ()-center_.GetZ();
-	
+
 		double sinph = sin(dir.GetAzimuth());
 		double cosph = cos(dir.GetAzimuth());
 		double sinth = sin(dir.GetZenith());
 		double costh = cos(dir.GetZenith());
-	
+
 		double b = x*cosph + y*sinph;
 		double d = b*b + radius_*radius_ - x*x - y*y;
-	
+
 		if (d > 0) {
 			d = sqrt(d);
 			// down-track distance to the endcaps
@@ -90,7 +94,7 @@ public:
 				}
 			}
 		}
-	
+
 		return h;
 	}
 
@@ -107,24 +111,24 @@ public:
 	virtual double GetAcceptance(double cosMin=0, double cosMax=1) const
 	{
           double a=cosMin;
-          double b=cosMax;                
+          double b=cosMax;
           double cap = M_PI*radius_*radius_;
           double sides = 2*radius_*length_;
           return M_PI*(cap*(b*fabs(b)-a*fabs(a)) +
-                       sides*(acos(a) - acos(b) - sqrt(1-a*a)*a + sqrt(1-b*b)*b));                
+                       sides*(acos(a) - acos(b) - sqrt(1-a*a)*a + sqrt(1-b*b)*b));
 	}
-	
+
 	// SamplingSurface interface
 	I3Direction SampleDirection(I3RandomService &rng, double cosMin=0, double cosMax=1) const
 	{
-		// Sample a direction proportional to the projected area 
+		// Sample a direction proportional to the projected area
 		// of the surface.
 		double coszen;
 		double maxarea = GetMaximumArea();
 		do {
 			coszen = rng.Uniform(cosMin, cosMax);
 		} while (rng.Uniform(0, maxarea) > GetAreaForZenith(coszen));
-	
+
 		return I3Direction(acos(coszen), rng.Uniform(0, 2*M_PI));
 	}
 	I3Position SampleImpactPosition(const I3Direction &dir, I3RandomService &rng) const
@@ -155,15 +159,15 @@ public:
 		impact.SetX(impact.GetX() + l*dir.GetX());
 		impact.SetY(impact.GetY() + l*dir.GetY());
 		impact.SetZ(impact.GetZ() + l*dir.GetZ());
-	
+
 		return impact;
 	}
 	void SetLength(double v) { length_ = v; }
 	double GetLength() const { return length_; }
-	
+
 	void SetRadius(double v) { radius_ = v; }
 	double GetRadius() const { return radius_; }
-	
+
 	void SetCenter(const I3Position &v) { center_ = v; }
 	I3Position GetCenter() const { return center_; }
 
@@ -184,7 +188,7 @@ private:
 	{
 		if (version > 0)
 			log_fatal_stream("Version "<<version<<" is from the future");
-	
+
 		ar & make_nvp("Base", base_object<Base>(*this));
 		ar & make_nvp("Length", length_);
 		ar & make_nvp("Radius", radius_);

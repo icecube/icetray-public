@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -33,8 +33,8 @@ I3RecoInfoConverter::I3RecoInfoConverter(std::string pulseMapName) :
   defineTimeWindows();
 }
 
-I3RecoInfoConverter::I3RecoInfoConverter(std::string pulseMapName, 
-                                         int icecubeConf, 
+I3RecoInfoConverter::I3RecoInfoConverter(std::string pulseMapName,
+                                         int icecubeConf,
                                          int icetopConf) :
     I3ConverterImplementation<I3Particle>(),
     pulseMapName_(pulseMapName),
@@ -54,18 +54,18 @@ I3RecoInfoConverter::I3RecoInfoConverter() :
 }
 
 /******************************************************************************/
-    
-std::string I3RecoInfoConverter::generateDocString(std::string prefix, 
+
+std::string I3RecoInfoConverter::generateDocString(std::string prefix,
                                                    std::string identifier,
                                                    bool muon) {
     std::ostringstream result;
     if (muon) {
-        const std::pair<double, double>& interval = 
+        const std::pair<double, double>& interval =
            muonTimeWindows_[identifier];
         result << prefix << " (" << interval.first << ", " << interval.second << ")";
     }
     else {
-        const std::pair<double, double>& interval = 
+        const std::pair<double, double>& interval =
            timeWindows_[identifier];
         result << prefix << " (" << interval.first << ", " << interval.second << ")";
     }
@@ -76,26 +76,26 @@ std::string I3RecoInfoConverter::generateDocString(std::string prefix,
 /******************************************************************************/
 
 void I3RecoInfoConverter::defineTimeWindows() {
-  timeWindows_["A"] = std::pair<double, double >( -15, +15); 
-  timeWindows_["B"] = std::pair<double, double >( -15, +25); 
-  timeWindows_["C"] = std::pair<double, double >( -15, +75); 
+  timeWindows_["A"] = std::pair<double, double >( -15, +15);
+  timeWindows_["B"] = std::pair<double, double >( -15, +25);
+  timeWindows_["C"] = std::pair<double, double >( -15, +75);
   timeWindows_["D"] = std::pair<double, double >( -15, +150);
   timeWindows_["E"] = std::pair<double, double >( -15, +250);
   muonTimeWindows_["early"] = std::pair<double, double >( -10000, -15);
-  muonTimeWindows_["late"]  = std::pair<double, double >( +250, 10000);   
+  muonTimeWindows_["late"]  = std::pair<double, double >( +250, 10000);
 }
 
 /******************************************************************************/
 
 I3TableRowDescriptionPtr I3RecoInfoConverter::CreateDescription(const I3Particle& reco) {
     I3TableRowDescriptionPtr desc = I3TableRowDescriptionPtr(new I3TableRowDescription() );
-    
+
     desc->AddField<int32_t>("ndirA", "", generateDocString("number of direct hits in timeinterval A", "A", false) );
     desc->AddField<int32_t>("ndirB", "", generateDocString("number of direct hits in timeinterval B", "B", false) );
     desc->AddField<int32_t>("ndirC", "", generateDocString("number of direct hits in timeinterval C", "C", false) );
     desc->AddField<int32_t>("ndirD", "", generateDocString("number of direct hits in timeinterval D", "D", false) );
     desc->AddField<int32_t>("ndirE", "", generateDocString("number of direct hits in timeinterval E", "E", false) );
-    
+
     desc->AddField<double>("ldirA", "", generateDocString("length (projected along the track) between hits in timeinterval A", "A", false));
     desc->AddField<double>("ldirB", "", generateDocString("length (projected along the track) between hits in timeinterval B", "B", false));
     desc->AddField<double>("ldirC", "", generateDocString("length (projected along the track) between hits in timeinterval C", "C", false));
@@ -108,14 +108,14 @@ I3TableRowDescriptionPtr I3RecoInfoConverter::CreateDescription(const I3Particle
     desc->AddField<double>("icecube_scale", "", "IceCube scale parameter");
     desc->AddField<double>("icetop_scale", "", "IceTop scale parameter");
     desc->AddField<int8_t>("contained", "", "Is the track contained?");
-    
+
     return desc;
 }
 
 /******************************************************************************/
 
 size_t I3RecoInfoConverter::FillRows(const I3Particle& reco, I3TableRowPtr rows) {
-     
+
     // retrieve detector geometry
     // bail-out if not available
     I3GeometryConstPtr geometry = currentFrame_->Get<I3GeometryConstPtr>();
@@ -123,8 +123,8 @@ size_t I3RecoInfoConverter::FillRows(const I3Particle& reco, I3TableRowPtr rows)
         log_fatal("%s: couldn't find detector geometry in current frame!",
                   __PRETTY_FUNCTION__);
     }
-    
-    I3RecoPulseSeriesMapConstPtr pulsemap = 
+
+    I3RecoPulseSeriesMapConstPtr pulsemap =
         currentFrame_->Get<I3RecoPulseSeriesMapConstPtr>(pulseMapName_);
 
     if (!pulsemap) {
@@ -136,9 +136,9 @@ size_t I3RecoInfoConverter::FillRows(const I3Particle& reco, I3TableRowPtr rows)
     std::map<std::string, int> nDirs;
     std::map<std::string, double> lDirs;
 
-    int nEarly=0; 
+    int nEarly=0;
     int nLate=0;
-  
+
     // need a typedef for the boost macro
     typedef std::pair<std::string, std::pair<double, double > > TimeWindowPair;
 
@@ -153,11 +153,11 @@ size_t I3RecoInfoConverter::FillRows(const I3Particle& reco, I3TableRowPtr rows)
             int n1hit;  // not used
             int nString;  // not used
             // do this calculation for all time windows
-            // (this is not worse than calling NDir etc, 
+            // (this is not worse than calling NDir etc,
             // because this only calls CutsCalc)
             I3Cuts::CascadeCutsCalc(reco, *geometry, *pulsemap, // input
                     win.second.first,     // timewindows
-                    win.second.second,    
+                    win.second.second,
                     nChan, nHit, n1hit, nString, // unused buffers
                     nDir, nEarly, nLate); // intersting stuff
 
@@ -186,9 +186,9 @@ size_t I3RecoInfoConverter::FillRows(const I3Particle& reco, I3TableRowPtr rows)
             nDirs[win.first] = nDir;
             lDirs[win.first] = lDir;
         }
-        const std::pair<double, double>& earlyWindow = 
+        const std::pair<double, double>& earlyWindow =
             muonTimeWindows_["early"];
-        const std::pair<double, double>& lateWindow = 
+        const std::pair<double, double>& lateWindow =
             muonTimeWindows_["late"];
         // separatly calculate nEarly/nLate for muons
         I3Cuts::CutsCalc(reco, *geometry, *pulsemap,
@@ -213,7 +213,7 @@ size_t I3RecoInfoConverter::FillRows(const I3Particle& reco, I3TableRowPtr rows)
 
     // init scaleCalculator
     I3ScaleCalculator scaleCalc(geometry,
-            static_cast<I3ScaleCalculator::IceCubeConfig > 
+            static_cast<I3ScaleCalculator::IceCubeConfig >
             (icecubeConf_),
             static_cast<I3ScaleCalculator::IceTopConfig >
             (icetopConf_));
@@ -225,13 +225,13 @@ size_t I3RecoInfoConverter::FillRows(const I3Particle& reco, I3TableRowPtr rows)
         rows->Set<double>("icetop_scale", -1 );
 
     rows->Set<int8_t>("contained", scaleCalc.VertexIsInside (reco) ? -1 : 0);
-    
+
     rows->Set<int32_t>("ndirA", nDirs["A"]);
     rows->Set<int32_t>("ndirB", nDirs["B"]);
     rows->Set<int32_t>("ndirC", nDirs["C"]);
     rows->Set<int32_t>("ndirD", nDirs["D"]);
     rows->Set<int32_t>("ndirE", nDirs["E"]);
-    
+
     rows->Set<double>("ldirA", lDirs["A"]);
     rows->Set<double>("ldirB", lDirs["B"]);
     rows->Set<double>("ldirC", lDirs["C"]);
@@ -240,7 +240,7 @@ size_t I3RecoInfoConverter::FillRows(const I3Particle& reco, I3TableRowPtr rows)
 
     rows->Set<int32_t>("nearly", nEarly);
     rows->Set<int32_t>("nlate" , nLate);
-  
+
     return 1;
 
 }

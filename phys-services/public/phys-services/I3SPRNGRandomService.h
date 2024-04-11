@@ -11,8 +11,8 @@
 
 
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @brief SPRNG Implementation of the I3RandomService interface.
@@ -24,7 +24,7 @@
  * nstreams to the number of jobs and use a different streamnum for each job.
  * Otherwise you'll get correlations between the RNG streams.  I know this is
  * counterintuitive, but this is how SPRNG works.
- * 
+ *
  * The code for this class is based on John Pretz's implementation of
  * I3GSLRandomService.
  *
@@ -67,7 +67,7 @@ class I3SPRNGRandomService : public I3RandomService{
 
   // As with John Pretz's GSL implementation, I have left this out for now.
   /* virtual double BreitWigner(double mean = 0, double gamma = 1)=0; */
-  
+
   /**
    * Exponential distribution
    */
@@ -102,7 +102,7 @@ class I3SPRNGRandomService : public I3RandomService{
    * double Gaussian distribution given mean and StdD
    */
   virtual double Gaus(double mean, double stddev);
-   
+
   virtual I3FrameObjectPtr GetState() const;
   virtual void RestoreState(I3FrameObjectConstPtr state);
 
@@ -115,7 +115,7 @@ class I3SPRNGRandomService : public I3RandomService{
   gsl_rng* rng_;
   std::string instatefile_;
   std::string outstatefile_;
-  
+
   int seed_;
   int streamnum_;
   int nstreams_;

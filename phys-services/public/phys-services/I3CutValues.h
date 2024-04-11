@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2005
-    the icecube collaboration
+    Copyright  (C) 2005 the icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     $Id$
     @author dule
 */
@@ -50,7 +50,7 @@ class I3CutValues : public I3CutValuesBase
                  const double& endTWindow = I3Constants::dt_window_h) override;
 
   virtual ~I3CutValues();
-  
+
   std::ostream& Print(std::ostream&) const override;
 
  private:

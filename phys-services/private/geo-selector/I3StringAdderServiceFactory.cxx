@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <vector>
 #include "phys-services/geo-selector/I3StringAdderServiceFactory.h"
 #include "phys-services/geo-selector/I3StringAdderService.h"
@@ -15,7 +19,7 @@ const double DEFAULT_AREA(0.0444 * I3Units::m2);
 const double DEFAULT_REL_ANGLE(0.*I3Units::degree);
 
 I3StringAdderServiceFactory::
-I3StringAdderServiceFactory(const I3Context& context) : 
+I3StringAdderServiceFactory(const I3Context& context) :
   I3ServiceFactory(context),
   depth_(DEFAULT_DEPTH),
   domSpacing_(DEFAULT_DOM_SPACING),
@@ -33,32 +37,32 @@ I3StringAdderServiceFactory(const I3Context& context) :
     AddParameter("GeoServiceName",
 		 "Name of the previous geometry service.",
 		 geoServiceName_);
-    AddParameter("XPositions", 
-		 "List of x positions", 
+    AddParameter("XPositions",
+		 "List of x positions",
 		 xPositions_);
-    AddParameter("YPositions", 
-		 "List of y positions", 
+    AddParameter("YPositions",
+		 "List of y positions",
 		 yPositions_);
-    AddParameter("Depth", 
-		 "Z position of the top most layer of DOMs", 
+    AddParameter("Depth",
+		 "Z position of the top most layer of DOMs",
 		 depth_);
-    AddParameter("DOMSpacing", 
-		 "Distance between DOMs", 
+    AddParameter("DOMSpacing",
+		 "Distance between DOMs",
 		 domSpacing_);
-    AddParameter("DOMsPerString", 
-		 "Number of DOMs per String", 
+    AddParameter("DOMsPerString",
+		 "Number of DOMs per String",
 		 domsPerString_);
-    AddParameter("DOMOrientation", 
-		 "Orientation of the DOM(Up = 1, Down = -1)", 
+    AddParameter("DOMOrientation",
+		 "Orientation of the DOM(Up = 1, Down = -1)",
 		 domOrientation_);
-    AddParameter("DOMType", 
-		 "Type (AMANDA = 10, IceCube = 20, IceTop = 30)", 
+    AddParameter("DOMType",
+		 "Type (AMANDA = 10, IceCube = 20, IceTop = 30)",
 		 domType_);
-    AddParameter("Area", 
-		 "Effective Collection Area of the DOM", 
+    AddParameter("Area",
+		 "Effective Collection Area of the DOM",
 		 area_);
-    AddParameter("AziAngle", 
-		 "Relative rotation angle of DOM in azimuth", 
+    AddParameter("AziAngle",
+		 "Relative rotation angle of DOM in azimuth",
 		 aziangle_);
 }
 
@@ -80,7 +84,7 @@ void I3StringAdderServiceFactory::Configure()
   GetParameter("DOMOrientation", domOrientation_);
   GetParameter("DOMType", domType_);
   GetParameter("Area", area_);
-  GetParameter("AziAngle", aziangle_);	       
+  GetParameter("AziAngle", aziangle_);
 
   if(xPositions_.size() != yPositions_.size())
     log_fatal("different list sizes for x(%zu) and y(%zu)",
@@ -88,7 +92,7 @@ void I3StringAdderServiceFactory::Configure()
 
   if(depth_ > 1450*I3Units::m ||
      depth_ < -1000 * I3Units::m)
-    log_fatal("depth (%f) out of range [-1000m,+1450m]",depth_);	      
+    log_fatal("depth (%f) out of range [-1000m,+1450m]",depth_);
 
   /**
    * Fill the OMGeo list
@@ -112,7 +116,7 @@ void I3StringAdderServiceFactory::Configure()
 bool I3StringAdderServiceFactory::InstallService(I3Context& services)
 {
   if(!geometry_)
-    geometry_ = 
+    geometry_ =
       boost::shared_ptr<I3StringAdderService>
       (new I3StringAdderService(context_.Get<I3GeometryServicePtr>(geoServiceName_)));
 

@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. _phys-services:
 
 Phys-Services Documentation
@@ -7,7 +11,7 @@ utilities common to all or most of icetray-based software.
 
 .. toctree::
    :maxdepth: 1
-   
+
    spe_fit_injector
    random_service
    distributed_rng

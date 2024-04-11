@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <sstream>
 #include <fstream>
 #include "phys-services/I3EventCounter.h"
@@ -8,7 +12,7 @@ using std::ostringstream;
 I3_MODULE(I3EventCounter);
 
 
-I3EventCounter :: I3EventCounter(const I3Context& ctx) : 
+I3EventCounter :: I3EventCounter(const I3Context& ctx) :
 		I3Module(ctx),
 		physCount_(0),
 		statusCount_(0),
@@ -28,8 +32,8 @@ I3EventCounter :: I3EventCounter(const I3Context& ctx) :
   path_="stdout";
   AddParameter("filename","The file we'll write to or ('stdout' | 'stderr').  ", path_);
 
-  fmt_ ="\nphysics frames: %d"; 
-  fmt_+="\ngeometry frames: %d"; 
+  fmt_ ="\nphysics frames: %d";
+  fmt_+="\ngeometry frames: %d";
   fmt_+="\ncalibration frames: %d";
   fmt_+="\ndetector status frames: %d";
   AddParameter("formatstr","Format string for frame counts.  ", fmt_);
@@ -156,24 +160,24 @@ void I3EventCounter :: Physics(I3FramePtr frame)
 
 void I3EventCounter::Geometry(I3FramePtr frame)
 {
-  geometryCount_++;  
-  log_debug("frame %d", geometryCount_);  
+  geometryCount_++;
+  log_debug("frame %d", geometryCount_);
 
   PushFrame(frame,"OutBox");
 }
 
 void I3EventCounter::Calibration(I3FramePtr frame)
 {
-  calibCount_++;  
-  log_debug("frame %d", calibCount_);  
+  calibCount_++;
+  log_debug("frame %d", calibCount_);
 
   PushFrame(frame,"OutBox");
 }
 
 void I3EventCounter::DetectorStatus(I3FramePtr frame)
 {
-  statusCount_++;  
-  log_debug("frame %d", statusCount_);  
+  statusCount_++;
+  log_debug("frame %d", statusCount_);
 
   PushFrame(frame,"OutBox");
 }
@@ -195,7 +199,7 @@ void I3EventCounter :: Finish()
 	  if (!geoCounterName_.empty()) (*summary_)[geoCounterName_] += geometryCount_;
 	  if (!calibCounterName_.empty()) (*summary_)[calibCounterName_] += calibCount_;
 	  if (!statusCounterName_.empty()) (*summary_)[statusCounterName_] += statusCount_;
-  } 
+  }
   else { // No summary service found
 	  log_warn("No I3SummaryService found.");
 	  // out put string to stream

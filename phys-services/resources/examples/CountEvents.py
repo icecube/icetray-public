@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from optparse import OptionParser
 parser = OptionParser()
 parser.add_option('-i','--infile',
@@ -9,11 +13,11 @@ parser.add_option('-i','--infile',
 
 from icecube.icetray import I3Units
 from os.path import expandvars
-        
-from icecube import icetray 
-from icecube import dataclasses 
-from icecube import phys_services 
-from icecube import dataio 
+
+from icecube import icetray
+from icecube import dataclasses
+from icecube import phys_services
+from icecube import dataio
 
 tray = I3Tray()
 

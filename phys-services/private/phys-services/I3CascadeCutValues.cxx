@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "icetray/serialization.h"
 #include "icetray/I3FrameObject.h"
 #include "dataclasses/physics/I3Particle.h"
@@ -7,8 +11,8 @@
 #include "phys-services/I3CascadeCutValues.h"
 #include "phys-services/I3Cuts.h"
 
-void I3CascadeCutValues::Calculate(const I3Particle& vertex, 
-			    const I3Geometry& geometry, 
+void I3CascadeCutValues::Calculate(const I3Particle& vertex,
+			    const I3Geometry& geometry,
 			    const I3RecoPulseSeriesMap& pulsemap,
 			    const double& begTWindow,
 			    const double& endTWindow)
@@ -41,7 +45,7 @@ void I3CascadeCutValues::serialize(Archive& ar, unsigned version)
   ar & make_nvp("Nlate",Nlate);
   ar & make_nvp("cog",cog);
 }
-  
+
 I3_CLASS_VERSION(I3CascadeCutValues, current_i3cascadecutvalues_version);
 I3_SERIALIZABLE(I3CascadeCutValues);
 

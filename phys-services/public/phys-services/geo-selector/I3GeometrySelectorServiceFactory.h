@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3GEOMETRYSELECTORSERVICEFACTORY_H
 #define I3GEOMETRYSELECTORSERVICEFACTORY_H
 
@@ -8,13 +12,13 @@ class I3GeometrySelectorService;
  * @brief IceTray module that selects the strings to use.
 
  * This module has only two parameters "StringsToUse" and "StringsToExclude"
- * The default values for StringsToUse is the entire 80 string IceCube 
+ * The default values for StringsToUse is the entire 80 string IceCube
  * detector and AMANDA (i.e. "-19:80").  No strings are excluded by default.
  *
  * Examples values for the parameters are...
  *
  * 1) Use only the IceCube detector.
- * Either set StringsToUse to "1:80" or set StringsToExclude to "-19:0" 
+ * Either set StringsToUse to "1:80" or set StringsToExclude to "-19:0"
  * (remember the default value for StringsToUse is "-19:80").
  *
  * 2) Use the current geometry (as of mid Jan '06).
@@ -26,19 +30,19 @@ public:
 
   /*
    * Constructor.
-   */ 
+   */
   I3GeometrySelectorServiceFactory(const I3Context& ctx);
-  
+
   /*
    * Destructor.
-   */ 
+   */
   virtual ~I3GeometrySelectorServiceFactory();
-  
+
   /**
    * Checks the two parameters StringsToUse and StringsToExclude are valid.
    */
   virtual void Configure();
-  
+
   virtual bool InstallService(I3Context& services);
 
 private:
@@ -119,7 +123,7 @@ private:
   std::string geoServiceName_;
 
   SET_LOGGER("I3GeometrySelectorServiceFactory");
-  
+
 };  // end of class I3GeometrySelectorServiceFactory
 
-#endif 
+#endif

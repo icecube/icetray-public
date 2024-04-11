@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2004
-    the icecube collaboration
+    Copyright  (C) 2004 the icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     $Id$
 
     @version $Revision$
@@ -26,10 +26,10 @@ void I3Calculator::CherenkovCalc(const I3Particle& particle,  // input
 				 const double IndexRefP,      // input
 				 const I3Direction& direction) // input
 {
-  I3Position appos;     // output 
+  I3Position appos;     // output
   double apdist;        // output
   //--Only calculate if particle has a direction
-  if(particle.IsTrack()) 
+  if(particle.IsTrack())
   {
     double changle = acos(1/IndexRefP); // calculate Cherenkov angle
 
@@ -56,14 +56,14 @@ void I3Calculator::CherenkovCalc(const I3Particle& particle,  // input
     //direction is already normalized, chdist_* is not
     chapangle = std::acos(-(direction.GetX()*chdist_x + direction.GetY()*chdist_y + direction.GetZ()*chdist_z)/chdist);
 
-    if((particle.GetShape()==I3Particle::StartingTrack && a<0) || 
+    if((particle.GetShape()==I3Particle::StartingTrack && a<0) ||
              //track starts after pos1 (cherenkov point)
-       (particle.GetShape()==I3Particle::StoppingTrack && a>0) || 
+       (particle.GetShape()==I3Particle::StoppingTrack && a>0) ||
              //track stops before pos1 (cherenkov point)
-       (particle.GetShape()==I3Particle::ContainedTrack && 
-         (a<0 || particle.GetLength()<a)))  
+       (particle.GetShape()==I3Particle::ContainedTrack &&
+         (a<0 || particle.GetLength()<a)))
              //track starts after or stops before pos1 (cherenkov point)
-    { 
+    {
       chpos = I3Position(); // NullPos()
       chtime = NAN;
       chdist = NAN;
@@ -106,43 +106,43 @@ void I3Calculator::ClosestApproachCalc(const I3Particle& particle,
 				       I3Position& appos_inf,
 				       double& apdist_inf,
 				       I3Position& appos_stopstart,
-				       double& apdist_stopstart) 
+				       double& apdist_stopstart)
 {
-  if(particle.HasDirection()) 
+  if(particle.HasDirection())
   {
     double theta  = particle.GetZenith();
     double phi    = particle.GetAzimuth();
     double pos0_x = particle.GetX();
     double pos0_y = particle.GetY();
     double pos0_z = particle.GetZ();
-    
+
     double e_x = -sin(theta)*cos(phi);  //unit vector of direction of particle
     double e_y = -sin(theta)*sin(phi);
     double e_z = -cos(theta);
-    
+
     double h_x = position.GetX() - pos0_x;  //vector between particle position and OM
     double h_y = position.GetY() - pos0_y;
     double h_z = position.GetZ() - pos0_z;
-    
+
     double s = e_x*h_x + e_y*h_y + e_z*h_z; //distance between particle position and closest approach position
-    
+
     double pos2_x = pos0_x + s*e_x; //closest approach position
     double pos2_y = pos0_y + s*e_y;
     double pos2_z = pos0_z + s*e_z;
-    
+
     appos_inf=I3Position(pos2_x, pos2_y, pos2_z, I3Position::car); //closest approach position
     apdist_inf = (position-appos_inf).Magnitude();  //closest approach distance
-    
+
     // Adjustment for contained/stopping/starting tracks
     appos_stopstart = appos_inf;
     apdist_stopstart = apdist_inf;
-    if((particle.GetShape()==I3Particle::StartingTrack && s<0) || 
+    if((particle.GetShape()==I3Particle::StartingTrack && s<0) ||
        //track starts after pos2 (closest approach position)
-       (particle.GetShape()==I3Particle::StoppingTrack && s>0) || 
+       (particle.GetShape()==I3Particle::StoppingTrack && s>0) ||
        //track stops before pos2 (closest approach position)
        (particle.GetShape()==I3Particle::ContainedTrack && s<0))
       //track starts after pos2 (closest approach position)
-      { 
+      {
 	appos_stopstart = particle.GetPos();
 	apdist_stopstart = (position-appos_stopstart).Magnitude();
       }
@@ -332,7 +332,7 @@ double I3Calculator::Distance(const I3Particle& p1, const I3Particle& p2)
   }
   else {
     log_debug("Distance() - one of particles has no position.");
-    return NAN;    
+    return NAN;
   }
 }
 
@@ -341,9 +341,9 @@ double I3Calculator::FourDistance(const I3Particle& p1, const I3Particle& p2)
 {
   // 4-distance here is defined as:
   //   sqrt( (ct1-ct2)^2 - (x1-x2)^2 + (y1-y2)^2 + (z1-z2)^2 )
-  if (p1.HasPosition() && p2.HasPosition() && 
+  if (p1.HasPosition() && p2.HasPosition() &&
       !std::isnan(p1.GetTime()) && !std::isnan(p2.GetTime())) {
-    return sqrt(abs(pow(I3Constants::c*(p1.GetTime()-p2.GetTime()),2) - 
+    return sqrt(abs(pow(I3Constants::c*(p1.GetTime()-p2.GetTime()),2) -
 		    pow(p1.GetX()-p2.GetX(),2) -
 		    pow(p1.GetY()-p2.GetY(),2) -
 		    pow(p1.GetZ()-p2.GetZ(),2)));
@@ -397,7 +397,7 @@ I3Direction I3Calculator::InTrackSystem(const I3Particle& track, const I3Directi
     return InTrackSystem(track.GetDir(), dir);
   }
   else {
-    log_debug("InTrackSystem() - particle is not a track.");    
+    log_debug("InTrackSystem() - particle is not a track.");
     I3Direction nulldir;
     return nulldir;
   }

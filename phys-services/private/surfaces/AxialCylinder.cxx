@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 /** $Id$
  * @file
  * @author Jakob van Santen <vansanten@wisc.edu>
@@ -62,7 +66,7 @@ AxialCylinder::SampleImpactPosition(const I3Direction &dir, I3RandomService &rng
 	// Choose a position in a circle in axis-centered coordinates
 	I3Position impact(std::sqrt(rng.Uniform(0, radius_*radius_)), 0, 0);
 	impact.RotateZ(rng.Uniform(0, 2*M_PI));
-	
+
 	// Rotate into the transverse plane
 	impact.RotateY(dir.GetZenith());
 	impact.RotateZ(dir.GetAzimuth());
@@ -70,7 +74,7 @@ AxialCylinder::SampleImpactPosition(const I3Direction &dir, I3RandomService &rng
 	impact += center_;
 	// Shift back to the entry point
 	impact -= length_.first*dir;
-	
+
 	return impact;
 }
 
@@ -80,14 +84,14 @@ AxialCylinder::SampleImpactPosition(const I3Direction &dir, I3RandomService &rng
     os << "AxialCylinder("<<length_.first <<", "<< length_.second <<", " << radius_ << ", " << center_ << ")";
     return os;
   }
-  
+
 template <typename Archive>
 void
 AxialCylinder::serialize(Archive &ar, unsigned version)
 {
 	if (version > 0)
 		log_fatal_stream("Version "<<version<<" is from the future");
-	
+
 	ar & make_nvp("SamplingSurface", base_object<SamplingSurface>(*this));
 	ar & make_nvp("Length", length_);
 	ar & make_nvp("Radius", radius_);

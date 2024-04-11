@@ -2,8 +2,8 @@
 #define I3EVENTINFOCONVERTER_H_INCLUDED
 
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -37,13 +37,13 @@ private:
 
     }
     size_t FillRows(const I3Map<OMKey, std::vector<HitType> >& hitmap, I3TableRowPtr rows) {
-        
+
         double first_time = +HUGE_VAL;
         double last_time = -HUGE_VAL;
         double tot_charge = 0.;
         uint32_t nhit = 0;
         uint32_t nchan_1hit = 0;
-        std::set<int> strings; 
+        std::set<int> strings;
 
         typename I3Map<OMKey, std::vector<HitType> >::const_iterator i_map;
         typename std::vector<HitType>::const_iterator i_vec;
@@ -51,7 +51,7 @@ private:
         for( i_map = hitmap.begin(); i_map != hitmap.end(); ++i_map) {
             const OMKey& key = i_map->first;
             const typename std::vector<HitType>& vect = i_map->second;
-            
+
             strings.insert(key.GetString());
             if (vect.size() == 1)
                 ++nchan_1hit;
@@ -74,13 +74,13 @@ private:
         rows->Set<uint32_t>("nstrings", strings.size());
         rows->Set<uint32_t>("nhit", nhit);
         rows->Set<double>("tot_charge", tot_charge);
-        rows->Set<double>("first_time", first_time); 
-        rows->Set<double>("length", last_time - first_time);    
+        rows->Set<double>("first_time", first_time);
+        rows->Set<double>("length", last_time - first_time);
 
         return 1;
     }
 };
-    
+
 typedef I3EventInfoConverter<I3RecoPulse> I3EventInfoConverterFromRecoPulses;
 
 #endif  // I3EVENTINFOCONVERTER_H_INCLUDED

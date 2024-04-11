@@ -1,8 +1,8 @@
 /**
  *  $Id$
- *  Copyright (C) 2012
- *  Alex Olivas  <olivas@icecube.umd.edu>
- *  and the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  Copyright (C) 2012 Alex Olivas  <olivas@icecube.umd.edu>
+ *  Copyright (C) 2012 the IceCube Collaboration <http://www.icecube.wisc.edu>
+ *  SPDX-License-Identifier: BSD-2-Clause
  *   @author olivas
  */
 

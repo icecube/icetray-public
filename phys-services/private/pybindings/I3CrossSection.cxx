@@ -2,8 +2,8 @@
  *
  * Implementation of Python bindings for I3CrossSection class
  *
- * (c) 2018
- * the IceCube Collaboration
+ * Copyright (c) 2018 the IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file I3CrossSection.cxx

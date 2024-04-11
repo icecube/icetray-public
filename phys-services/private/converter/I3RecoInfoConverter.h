@@ -2,8 +2,8 @@
 #define I3RECOINFOCONVERTER_H_INCLUDED
 
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -31,7 +31,7 @@ private:
 
     std::string pulseMapName_;
     int icecubeConf_;
-    int icetopConf_; 
+    int icetopConf_;
     std::map<std::string, std::pair<double, double > > timeWindows_;
     std::map<std::string, std::pair<double, double > > muonTimeWindows_;
 

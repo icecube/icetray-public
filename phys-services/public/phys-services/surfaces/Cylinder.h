@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 /** $Id$
  * @file
  * @author Jakob van Santen <jakob.van.santen@desy.de>
@@ -26,7 +30,7 @@ public:
 
 private:
 	Cylinder() {}
-	
+
 	friend class icecube::serialization::access;
 	template <typename Archive>
 	void serialize(Archive &, unsigned);

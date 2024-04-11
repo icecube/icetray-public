@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <icetray/I3ConditionalModule.h>
 
 #include <limits>
@@ -12,7 +16,7 @@
 
 ///A counterpart to I3TriggerSplitter, which generates subsets of I3TriggerHierarchies for the subevents produced by other splitters.
 class I3SplitTriggerSelector : public I3ConditionalModule{
-	
+
 //At the moment this can only be used once per scope
 #define AlwaysPush(frame) FramePusher guaranteePush(this,frame)
 
@@ -28,7 +32,7 @@ public:
 		AddParameter("OutputHierarchy","The name of the subset trigger hierarchy to generate",outputHierarchyName);
 		AddParameter("PhysicsTriggersOnly","If True, output only physics triggers, not throughput or merged triggers",physicsTriggersOnly);
 	}
-	
+
 	void Configure(){
 		GetParameter("SubEventStream", subeventStream);
 		GetParameter("InputHierarchy", inputHierarchyName);
@@ -46,10 +50,10 @@ public:
 			log_info("%s: Defaulting ouput hierarchy name to '%s'",GetName().c_str(),outputHierarchyName.c_str());
 		}
 	}
-	
+
 	void Physics(boost::shared_ptr<I3Frame> frame){
 		AlwaysPush(frame);
-		
+
 		//check whether this is a frame we want to process at all
 		if(!subeventStream.empty()){ //we are looking at only a specific stream
 			boost::shared_ptr<const I3EventHeader> header=frame->Get<boost::shared_ptr<const I3EventHeader> >("I3EventHeader");
@@ -60,7 +64,7 @@ public:
 			if(header->GetSubEventStream()!=subeventStream)
 				return;
 		}
-		
+
 		//locate inputs
 		boost::shared_ptr<const I3TriggerHierarchy> triggers=frame->Get<boost::shared_ptr<const I3TriggerHierarchy> >(inputHierarchyName);
 		if(!triggers){
@@ -78,7 +82,7 @@ public:
 		boost::shared_ptr<const I3DetectorStatus> status=frame->Get<boost::shared_ptr<const I3DetectorStatus> >();
 		if(!status)
 			log_fatal("%s: No detector status data present",GetName().c_str());
-		
+
 		//determine the time range of pulses in this subevent
 		double minTime=std::numeric_limits<double>::max(), maxTime=-std::numeric_limits<double>::max();
 		for(I3RecoPulseSeriesMap::const_iterator dom=pulses->begin(), domEnd=pulses->end(); dom!=domEnd; dom++){
@@ -103,10 +107,10 @@ public:
 			log_warn("%s: Apparently there were no pulses. No triggers will be output",GetName().c_str());
 			return;
 		}
-		
+
 		//actually collect the trigger subset
 		boost::shared_ptr<I3TriggerHierarchy> triggerSubset(new I3TriggerHierarchy);
-		
+
 		//collect all relevant subsidiary triggers
 		//If we want to keep non-physics triggers and preserve the tree structure
 		//of the hierarchy we'll need parent iterators for each insertion,
@@ -119,14 +123,14 @@ public:
 			return;
 		}
 		oldParentStack.push_back(trigIter);
-		
+
 		//copy the root trigger unconditionally
 		I3TriggerHierarchy::iterator subIter=triggerSubset->end();
 		if(!physicsTriggersOnly || trigIter->GetTriggerKey().GetSource()!=TriggerKey::GLOBAL
 		   || (trigIter->GetTriggerKey().GetType()!=TriggerKey::THROUGHPUT && trigIter->GetTriggerKey().GetType()!=TriggerKey::MERGED))
 			subIter=triggerSubset->insert(subIter,*trigIter);
 		parentStack.push_back(subIter);
-		
+
 		trigIter++;
 		for(I3TriggerHierarchy::iterator trigEnd=triggers->end(); trigIter!=trigEnd; trigIter++){
 			//only keep the stacks up-to-date if we're preserving structure
@@ -150,7 +154,7 @@ public:
 				}
 				assert(parentStack.size()==oldParentStack.size() && "parent stacks must stay synchronized!");
 			}
-			
+
 			if(rangesOverlap(minTime,maxTime,
 			                 trigIter->GetTriggerTime(),trigIter->GetTriggerTime()+trigIter->GetTriggerLength())){
 				if(physicsTriggersOnly){
@@ -164,7 +168,7 @@ public:
 					subIter=triggerSubset->append_child(parentStack.back(),*trigIter);
 			}
 		}
-		
+
 		frame->Put(outputHierarchyName,triggerSubset);
 	}
 private:
@@ -173,9 +177,9 @@ private:
 	std::string subsetPulsesName;
 	std::string outputHierarchyName;
 	bool physicsTriggersOnly;
-	
+
 	//helper functions
-	
+
 	//Borrowed from I3TriggerSplitter (trunk@84833)
 	/* *
 	 * estimate the delay between launches (trigger) times and pulse times
@@ -191,11 +195,11 @@ private:
 		const double transit_time = fit.slope/sqrt(pmtHV) + fit.intercept;
 		return(transit_time - calib.GetFADCDeltaT()); //fadc dt larger than atwd
 	}
-	
+
 	bool rangesOverlap(double start1, double stop1, double start2, double stop2){
 		return((start1<start2 && start2<stop1) || (start2<start1 && start1<stop2));
 	}
-	
+
 	void modifyTriggerSpan(I3Trigger& trig, double minTime, double maxTime){
 		//if necessary move the start of the trigger forward to the start of the subevent
 		if(trig.GetTriggerTime()<minTime){
@@ -206,7 +210,7 @@ private:
 		if((trig.GetTriggerTime()+trig.GetTriggerLength())>maxTime)
 			trig.SetTriggerLength(maxTime-trig.GetTriggerTime());
 	}
-	
+
 	struct FramePusher{
 		I3SplitTriggerSelector* module;
 		boost::shared_ptr<I3Frame> frame;

@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # $Id: which_split.py 132457 2015-05-14 14:58:44Z blaufuss $
 # $Revision: 132457 $
 # $LastChangedDate: 2015-05-14 10:58:44 -0400 (Thu, 14 May 2015) $

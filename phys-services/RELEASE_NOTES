@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. _phys-services-release-notes:
 
 Release Notes
@@ -5,6 +9,8 @@ Release Notes
 
 main
 ----
+
+* [phys-services] Add SPDX tags (#3435)
 
 March 14, 2023 don la dieu (nega at icecube.umd.edu)
 ----------------------------------------------------
@@ -45,7 +51,7 @@ Sep. 28, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.8.0
 
-* Modified I3CrossSection::evaluateCrossSection to allow x = 1 (for GR (#3175) 
+* Modified I3CrossSection::evaluateCrossSection to allow x = 1 (for GR (#3175)
 * replace deprecated unittest asserts with modern equivalents  (#3168)
 
 June 22, 2023 don la dieu (nega at icecube.umd.edu)

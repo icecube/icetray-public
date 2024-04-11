@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef MULTIPMT_COINCIFY_H_INCLUDED
 #define MULTIPMT_COINCIFY_H_INCLUDED
 
@@ -36,7 +40,7 @@ public:
   float moduleTime_;
   float pmtTime_;
   bool reset_;
-  
+
   SET_LOGGER("MultiPMTCoincify");
 };
 

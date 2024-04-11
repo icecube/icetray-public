@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import unittest
 from numpy import pi,arccos,arange
 from scipy.integrate import quad
@@ -27,9 +32,9 @@ class TestCylinder(unittest.TestCase):
 
         def integrand(z):
             return 2 * pi * self.surface.area(i3d(arccos(z), 0))
-        
+
         for cz1 in arange(-1,1.1,.25):
-            for cz2 in arange(-1,1.1,.25):            
+            for cz2 in arange(-1,1.1,.25):
                 I1,E1=quad(integrand,cz1,cz2)
                 I2=self.surface.acceptance(cz1,cz2)
                 assert(abs(I1-I2)<=E1)
@@ -37,7 +42,7 @@ class TestCylinder(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-    
+
 
 
 

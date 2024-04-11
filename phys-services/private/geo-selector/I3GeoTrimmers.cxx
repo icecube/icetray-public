@@ -1,6 +1,6 @@
 /**
- *  copyright  (C) 2007
- *  the icecube collaboration
+ *  Copyright  (C) 2007 the icecube collaboration
+ *  SPDX-License-Identifier: BSD-2-Clause
  *  $Id$
  *
  *  @file
@@ -29,7 +29,7 @@ I3OMGeoMapPtr I3GeoTrimmers::GetMinBallGeometry( const I3OMGeoMap &input_geo,
                                                  double margin ){
 
 
-  // storing lowest and highest 
+  // storing lowest and highest
   std::map<int,int> topOMs;
   std::map<int,int> botOMs;
   std::map<int,int>::iterator itop;
@@ -117,12 +117,12 @@ I3OMGeoMapPtr I3GeoTrimmers::GetMinBallGeometry( const I3OMGeoMap &input_geo,
   return ballmap;
 }
 
-/// Utility function 
+/// Utility function
 void
 I3GeoTrimmers::AddMeToTheMap(OMKey mykey, I3OMGeo me, I3OMGeoMapPtr themap){
   // is it already in the map?
   if (themap->find(mykey)!=themap->end()) log_debug("It's already in there.");
-  else 
+  else
     (*themap)[mykey]=me;
 }
 
@@ -147,7 +147,7 @@ I3OMGeoMapPtr I3GeoTrimmers::GeoFromEventData(const I3OMGeoMap &input_geo,
     if (i_omgeo==input_geo.end())
       log_warn("OM %d/%d found in pulse series, but not in geometry!",
 		ipulse->first.GetString(), ipulse->first.GetOM());
-    else 
+    else
       //(*output_geoptr)[ipulse->first]=i_omgeo->second;
       AddMeToTheMap(ipulse->first,i_omgeo->second,output_geoptr);
   }
@@ -221,8 +221,8 @@ I3OMGeoMapPtr I3GeoTrimmers::GeoWithoutBadOMs(I3OMGeoMap input_geo, I3VectorOMKe
   for(ib = badomlist.begin(); ib != badomlist.end(); ib++) {
     if (output_geoptr->find(*ib) != output_geoptr->end())
       output_geoptr->erase(*ib);
-    else 
-      log_warn("Your bad OM %d %d is not in the geometry", 
+    else
+      log_warn("Your bad OM %d %d is not in the geometry",
 	       ib->GetString(), ib->GetOM());
   }
   return output_geoptr;
@@ -230,17 +230,17 @@ I3OMGeoMapPtr I3GeoTrimmers::GeoWithoutBadOMs(I3OMGeoMap input_geo, I3VectorOMKe
 
 /// Create a reduced geometry in which Bad OM's have been removed.
 I3OMGeoMapPtr I3GeoTrimmers::GeoWithoutBadOMs(I3OMGeoMap input_geo, std::vector<OMKey> badomlist) {
-  
+
   // The output
   I3OMGeoMapPtr output_geoptr=I3OMGeoMapPtr(new I3OMGeoMap(input_geo));
-  
+
   // Remove Bad OM's from the duplicate geometry which will be used.
   std::vector<OMKey>::iterator ib;
   for(ib = badomlist.begin(); ib != badomlist.end(); ib++) {
     if (output_geoptr->find(*ib) != output_geoptr->end())
       output_geoptr->erase(*ib);
-    else 
-      log_info("Your bad OM %d %d is not in the geometry", 
+    else
+      log_info("Your bad OM %d %d is not in the geometry",
                ib->GetString(), ib->GetOM());
   }
   return output_geoptr;
@@ -249,12 +249,12 @@ I3OMGeoMapPtr I3GeoTrimmers::GeoWithoutBadOMs(I3OMGeoMap input_geo, std::vector<
 /// Create a reduced geometry in which all IceTop DOM's have been removed.
 I3OMGeoMapPtr I3GeoTrimmers::GeoWithoutIceTop(I3OMGeoMap input_geo) {
 
-  I3VectorOMKey badicetop;  
+  I3VectorOMKey badicetop;
   for (int istr=1; istr<=80; istr++)
     for (int iom=61; iom<=64; iom++)
       if (input_geo.find(OMKey(istr,iom)) != input_geo.end())
 	badicetop.push_back(OMKey(istr,iom));
-  
+
 
   return I3GeoTrimmers::GeoWithoutBadOMs(input_geo, badicetop);
 }

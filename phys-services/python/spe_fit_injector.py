@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import os
 import numpy
 from icecube import icetray
@@ -71,24 +75,24 @@ class SPEFitInjector:
 
     def __load_from_new_json(self, frame):
         from scipy.integrate import quad
-        import os.path 
+        import os.path
         import numpy as np
-        
+
 
         feature = {}
-        for s in range(1,87): 
-            for d in range(1,61): 
-                dom = str(int(s))+','+str(int(d)) 
+        for s in range(1,87):
+            for d in range(1,61):
+                dom = str(int(s))+','+str(int(d))
                 feature[dom] = {}
 
         string,om,r,eff,avg = np.loadtxt(os.path.expandvars("$I3_SRC/phys-services/resources/eff.txt"),unpack = True)
-        for i in range(len(string)): 
-            if string[i] < 87 and om[i] < 61: 
-                dom = str(int(string[i]))+','+str(int(om[i])) 
+        for i in range(len(string)):
+            if string[i] < 87 and om[i] < 61:
+                dom = str(int(string[i]))+','+str(int(om[i]))
                 # eff == 1 means HQE
-                if int(eff[i]) == 1: 
+                if int(eff[i]) == 1:
                     feature[dom]['HQE'] = 1
-                else: 
+                else:
                     feature[dom]['HQE'] = 0
 
 
@@ -111,9 +115,9 @@ class SPEFitInjector:
                 print('Using average for dom',dom)
                 dom = 'Average'
             else:
-                if float(feature[dom]['HQE'])==1.0: 
-                    print(float(feature[dom]['HQE'])) 
-                    i3domcal.relative_dom_eff = float(self.fit_values[dom]['RDE']) 
+                if float(feature[dom]['HQE'])==1.0:
+                    print(float(feature[dom]['HQE']))
+                    i3domcal.relative_dom_eff = float(self.fit_values[dom]['RDE'])
                     print('RDE: '+str(float(self.fit_values[dom]['RDE'])))
 
             SPE_distribution.exp1_amp       = self.fit_values[dom]['ATWD_fit']['exp1_amp']
@@ -128,14 +132,14 @@ class SPEFitInjector:
             SPE_distribution.compensation_factor = self.fit_values[dom]['ATWD_fit']['compensation_factor']
             i3domcal.combined_spe_charge_distribution = SPE_distribution
 
-            if not self.keep_gcd_atwd and 'mean_atwd_charge' in self.fit_values[dom]: 
+            if not self.keep_gcd_atwd and 'mean_atwd_charge' in self.fit_values[dom]:
                 i3domcal.mean_atwd_charge = self.fit_values[dom]['mean_atwd_charge']
-            if not self.keep_gcd_fadc and 'mean_fadc_charge' in self.fit_values[dom]: 
+            if not self.keep_gcd_fadc and 'mean_fadc_charge' in self.fit_values[dom]:
                 i3domcal.mean_fadc_charge = self.fit_values[dom]['mean_fadc_charge']
             print('Got SPE template for dom',dom)
 
             cal.dom_cal[omkey] = i3domcal
- 
+
         frame['I3Calibration'] = cal
 
     def __load_from_old_json(self, frame):

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "phys-services/source/I3GCDFileService.h"
 #include "dataclasses/geometry/I3Geometry.h"
 #include "dataclasses/calibration/I3Calibration.h"
@@ -37,7 +41,7 @@ GetFromFile(I3Frame::Stream stop, std::string filename){
 
 I3GeometryConstPtr
 I3GCDFileGeometryService::GetGeometry(I3Time t){
-  if(!geo_) 
+  if(!geo_)
     geo_ = GetFromFile<I3GeometryConstPtr>(I3Frame::Geometry,filename_);
   return geo_;
 }
@@ -45,14 +49,14 @@ I3GCDFileGeometryService::GetGeometry(I3Time t){
 
 I3CalibrationConstPtr
 I3GCDFileCalibrationService::GetCalibration(I3Time t){
-  if(!cal_) 
+  if(!cal_)
     cal_ = GetFromFile<I3CalibrationConstPtr>(I3Frame::Calibration, filename_);
   return cal_;
 }
 
 I3DetectorStatusConstPtr
 I3GCDFileDetectorStatusService::GetDetectorStatus(I3Time t){
-  if(!stat_) 
+  if(!stat_)
     stat_ = GetFromFile<I3DetectorStatusConstPtr>(I3Frame::DetectorStatus, filename_);
   return stat_;
 }

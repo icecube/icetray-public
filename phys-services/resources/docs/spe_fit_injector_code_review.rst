@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 ********************************
 Code Review for I3SPEFitInjector
 ********************************
@@ -11,15 +15,15 @@ svn info
 - Last Changed Rev: 131145
 - Last Changed Date: 2015-04-07 08:35:19 -0600 (Tue, 07 Apr 2015)
 
-Code 
+Code
 ....
 Claudio (via slack...paraphrasing) :
 
 spe_fit_injector.py
 ```````````````````
-Recommended changing copying the frame object and 
-immediately deleting it to mimic const-ness on the C++ side.  This protects 
-against silently modifying frame objects on-the-fly causing weird problems for 
+Recommended changing copying the frame object and
+immediately deleting it to mimic const-ness on the C++ side.  This protects
+against silently modifying frame objects on-the-fly causing weird problems for
 C++ code that reasonably expects and relies on the const-ness of frame objects.
 
 Remove whitespace before ':' to appease Guido.
@@ -39,7 +43,7 @@ Tests
 Olivas :
 There's one test that reads the frame object in the Calibration stop and verifies
 that the correct number of valid entries exists.  That should be pretty complete
-line coverage, but there could be some cases that aren't coming to me that I 
+line coverage, but there could be some cases that aren't coming to me that I
 could be testing for.
 
 Documentation

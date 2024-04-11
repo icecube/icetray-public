@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
 #include <phys-services/I3RandomService.h>

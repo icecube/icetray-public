@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 
 #include "phys-services/I3Calculator.h"
@@ -238,7 +242,7 @@ TEST(Containment_Volume)
   c = ContainmentVolumeSize(t, x, y, 1, -1);
   ENSURE_DISTANCE(c, 0.912511, 0.00001, "ContainmentVolume side-clipper cube");
 
-  /* OUT OF ORDER WILL NOT WORK ANYMORE   
+  /* OUT OF ORDER WILL NOT WORK ANYMORE
   // The same thing again, but this time with the border points
   // out of order.
   x.clear();
@@ -251,7 +255,7 @@ TEST(Containment_Volume)
   y.push_back(-1);
   y.push_back(-1);
   y.push_back(1);
-  
+
   // A corner-clipper track
   t.SetPos(0,0,2);
   t.SetThetaPhi((180-30)*I3Constants::pi/180, 45*I3Constants::pi/180);
@@ -269,7 +273,7 @@ TEST(Containment_Volume)
 
 TEST(LPIntersection)
 {
- 
+
   // Intersection of line and plane?
   // Olga's test cube
   I3Position A(0,0,0);
@@ -283,7 +287,7 @@ TEST(LPIntersection)
   ENSURE_DISTANCE(answer.GetX(), 0.579796, 0.00001, "IntersectionX not right");
   ENSURE_DISTANCE(answer.GetY(), 0.579796, 0.00001, "IntersectionY not right");
   ENSURE_DISTANCE(answer.GetZ(), 0.579796, 0.00001, "IntersectionZ not right");
-  
+
 }
 
 TEST(CMPolygon)
@@ -321,7 +325,7 @@ TEST(CMPolygon)
   CMPolygon(xcir,ycir,&xcm,&ycm);
   ENSURE_DISTANCE(xcm,36,0.001, "Circle CM is wrong (x)");
   ENSURE_DISTANCE(ycm,12,0.001, "Circle CM is wrong (y)");
-  
+
   // The IT-16 Rhombus
   x.clear();
   y.clear();
@@ -337,7 +341,7 @@ TEST(CMPolygon)
   ENSURE_DISTANCE(xcm,392.0216,0.0001, "IT-16 Rhombus CM is wrong (x)");
   ENSURE_DISTANCE(ycm,116.4436,0.0001, "IT-16 Rhombus CM is wrong (y)");
 
-  /* OUT OF ORDER WILL NOT WORK ANYMORE 
+  /* OUT OF ORDER WILL NOT WORK ANYMORE
   // The IT-16 Rhombus with its points out of order
   // Should be the same answer as above!
   x.clear();
@@ -388,7 +392,7 @@ TEST(IC40bug)
   //ENSURE_DISTANCE(xcm,37.7068,0.0001, "Simplified IC-40 CM is wrong (x)");
   //ENSURE_DISTANCE(ycm,195.39007,0.0001, "Simplified IC-40 CM is wrong (y)");
 
-  // Some ContainmentAreaSize tests 
+  // Some ContainmentAreaSize tests
   double c;
   I3Particle t(I3Particle::InfiniteTrack, I3Particle::unknown);
   t.SetThetaPhi((180-30)*I3Constants::pi/180, 45*I3Constants::pi/180);
@@ -488,19 +492,19 @@ TEST(Containment_Square)
 {
 
   // Top square from Olga's test cube
-  std::vector<double> x;  
+  std::vector<double> x;
   x.push_back(1);
   x.push_back(1);
   x.push_back(-1);
   x.push_back(-1);
-  std::vector<double> y;  
+  std::vector<double> y;
   y.push_back(1);
   y.push_back(-1);
   y.push_back(-1);
   y.push_back(1);
   double z=0.9520;  // this is a problematic z for some reason
   // Update: this function now REQUIRES the points to be in counterclockwise order.
-  // I need to rearrange them.  
+  // I need to rearrange them.
   PutPointsInOrder(&x,&y,0,0,0);
 
   // Olga's test track
@@ -607,13 +611,13 @@ TEST(Exactly_Vertical_Track)
   double c;
   I3Particle t(I3Particle::InfiniteTrack);
 
-  // Make sure that this "empty" track returns zero 
+  // Make sure that this "empty" track returns zero
   t.SetPos(0,0,0);
   t.SetThetaPhi(0, 0);
   c = ContainmentVolumeSize(t, x, y, 1, -1);
   ENSURE_DISTANCE(c, 0.0, 0.00001, "ContainmentVolume zero track");
 
-  // An exactly vertical track, outside 
+  // An exactly vertical track, outside
   t.SetPos(0,2,0);
   t.SetThetaPhi(0, 0);
   c = ContainmentVolumeSize(t, x, y, 1, -1);
@@ -624,5 +628,5 @@ TEST(Exactly_Vertical_Track)
   t.SetThetaPhi(I3Constants::pi/2, 0);
   c = ContainmentVolumeSize(t, x, y, 1, -1);
   ENSURE_DISTANCE(c, 2.0, 0.00001, "ContainmentVolume horizontal track");
-  
+
 }

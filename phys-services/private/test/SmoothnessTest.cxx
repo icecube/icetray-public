@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 
 #include "phys-services/I3Calculator.h"
@@ -29,7 +33,7 @@ namespace SmoothnessDirTest{
     h.SetCharge(1.0);
     hits.push_back(h);
     hitsmap[pos] = hits;
-  } 
+  }
 }
 
 TEST(verysmooth)
@@ -143,7 +147,7 @@ TEST(orderUnimportant)
   SmoothnessDirTest::AddHitAtDepth(80,geometry,hitsmap,9);
   SmoothnessDirTest::AddHitAtDepth(90,geometry,hitsmap,4);
   SmoothnessDirTest::AddHitAtDepth(100,geometry,hitsmap,11);
-  
+
   ENSURE_DISTANCE(0,
 		  SmoothAll(bt,geometry,hitsmap,-10,10),
 		  0.001,

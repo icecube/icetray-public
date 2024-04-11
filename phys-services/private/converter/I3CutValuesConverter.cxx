@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -15,7 +15,7 @@ I3TableRowDescriptionPtr
 I3CutValuesConverter::CreateDescription(const I3CutValues& cv)
 {
 	I3TableRowDescriptionPtr desc(new I3TableRowDescription());
-	
+
 	desc->AddField<uint16_t>("n_chan", "number", "Number of DOMs triggered");
 	desc->AddField<uint16_t>("n_strings", "number", "Number strings triggered");
 	desc->AddField<uint32_t>("n_hit", "number", "Number of launches/pulses/hits in the event");
@@ -32,7 +32,7 @@ I3CutValuesConverter::CreateDescription(const I3CutValues& cv)
 	desc->AddField<double>("cog_x", "m", "Mean x position of the launches/pulses/hits in the event.");
 	desc->AddField<double>("cog_y", "m", "Mean y position of the launches/pulses/hits in the event.");
 	desc->AddField<double>("cog_z", "m", "Mean z position of the launches/pulses/hits in the event.");
-	
+
 	return desc;
 }
 
@@ -49,7 +49,7 @@ I3CutValuesConverter::FillRows(const I3CutValues& cv, I3TableRowPtr rows)
 	rows->Set<double   >("cog_x",     cv.cog.GetX());
 	rows->Set<double   >("cog_y",     cv.cog.GetY());
 	rows->Set<double   >("cog_z",     cv.cog.GetZ());
-	
+
 	return 1;
 }
 

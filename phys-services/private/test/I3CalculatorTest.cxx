@@ -1,6 +1,6 @@
 /**
-    copyright  (C) 2004
-    the icecube collaboration
+    Copyright  (C) 2004 the icecube collaboration
+    SPDX-License-Identifier: BSD-2-Clause
     $Id$
 
     @version $Revision$
@@ -116,7 +116,7 @@ TEST(ClosestApproachDistance)
 }
 
 TEST(CherenkovPosition)
-{ 
+{
   a1=I3Position(1,0,-1,I3Position::car);
   I3Position pos = CherenkovPosition(starttrack(),a1);
   ENSURE_DISTANCE(pos.GetZ(),0.1616288,0.0001);
@@ -127,7 +127,7 @@ TEST(CherenkovPosition)
 }
 
 TEST(CherenkovTime)
-{ 
+{
   a1=I3Position(0,0,0,I3Position::car);
   ENSURE(std::isnan(CherenkovTime(starttrack(),a1)));
 
@@ -159,7 +159,7 @@ TEST(CherenkovDistance)
 }
 
 TEST(CherenkovAngle)
-{ 
+{
   a1=I3Position(0,1,0,I3Position::car);
   ENSURE_DISTANCE(CherenkovApproachAngle(muon(),a1)/I3Units::deg,90.0,0.0001);
 
@@ -170,7 +170,7 @@ TEST(CherenkovAngle)
 }
 
 TEST(CascadeDistance)
-{ 
+{
   ENSURE_DISTANCE(CherenkovDistance(casc1(),r), 3.46410, 0.0001);
 }
 
@@ -193,7 +193,7 @@ TEST(TimeResidual_cascade)
 TEST(Angle)
 {
   ENSURE_DISTANCE(Angle(inftrack(),muon())/I3Units::deg,90.,0.001);
-    
+
   I3Particle track1(I3Particle::InfiniteTrack);
   track1.SetDir(0,1,-1);
   I3Particle track2(I3Particle::InfiniteTrack);
@@ -203,7 +203,7 @@ TEST(Angle)
 }
 
 TEST(Distance)
-{ 
+{
   ENSURE_DISTANCE(Distance(casc1(),casc2()),5.0,0.0001);
 }
 
@@ -410,7 +410,7 @@ TEST(JAMS_time_residual_many)
       ENSURE_DISTANCE(rho_, rho, std::abs(rho*PREC));
       ENSURE_DISTANCE(rho1, rho, std::abs(rho*PREC));
       ENSURE_DISTANCE(rho2, rho, std::abs(rho*PREC));
-      
+
       ENSURE_DISTANCE(dt,  dt, std::abs(dt*PREC));
       ENSURE_DISTANCE(dt_, dt, std::abs(dt*PREC));
       ENSURE_DISTANCE(dt1, dt, std::abs(dt*PREC));
@@ -496,7 +496,7 @@ TEST(TransverseDirections)
 
             I3Position v1( dir.GetX(), dir.GetY(), dir.GetZ() );
             I3Position v2( perp.first.GetX(), perp.first.GetY(), perp.first.GetZ() );
-            I3Position v3( perp.second.GetX(), perp.second.GetY(), perp.second.GetZ() );	    
+            I3Position v3( perp.second.GetX(), perp.second.GetY(), perp.second.GetZ() );
 
             problem = "perpendicular failure";
             ENSURE_DISTANCE( v1*v2, 0.0, tolerance, problem+where );

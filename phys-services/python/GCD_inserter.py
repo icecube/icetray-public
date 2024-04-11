@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 """
 author: mzoll <marcel.zoll@fysik.su.se>
 please report any errors and possible improvements to the author

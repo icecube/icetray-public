@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 
 #include "phys-services/I3FileOMKey2MBID.h"
@@ -18,10 +22,10 @@ TEST(0df7b060acad)
   string infile(getenv("I3_SRC"));
   infile.append("/phys-services/resources/doms.txt");
   service = I3OMKey2MBIDPtr(new I3FileOMKey2MBID(infile));
-  
-  istringstream in;  
+
+  istringstream in;
   long long int innum;
-  
+
     // spot check a few
   in.str("0df7b060acad");
   in>>hex>>innum;
@@ -36,8 +40,8 @@ TEST(8b9f35308e27)
   string infile(getenv("I3_SRC"));
   infile.append("/phys-services/resources/doms.txt");
   service = I3OMKey2MBIDPtr(new I3FileOMKey2MBID(infile));
-  
-  istringstream in;  
+
+  istringstream in;
   long long int innum;
 
   in.str("8b9f35308e27");
@@ -53,15 +57,15 @@ TEST(d52b66ab6861)
   string infile(getenv("I3_SRC"));
   infile.append("/phys-services/resources/doms.txt");
   service = I3OMKey2MBIDPtr(new I3FileOMKey2MBID(infile));
-  
-  istringstream in;  
+
+  istringstream in;
   long long int innum;
-  
+
   in.str("d52b66ab6861");
   in>>hex>>innum;
   cout<<service->GetMBID(OMKey(21,28))<<" =?= "<<innum<<endl;
   ENSURE(service->GetMBID(OMKey(30,64)) == innum,"d52b66ab6861");
-  
+
 }
 //Test one on a 2006 string
 TEST(543c1369639d)

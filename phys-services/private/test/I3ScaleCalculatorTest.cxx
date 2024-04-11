@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include <I3Test.h>
 
 #include <phys-services/I3ScaleCalculator.h>
@@ -27,7 +31,7 @@ std::vector<int> custom_stringlist = {21,50,74,73,78,75,60,52,53,44,46,38};
 TEST(ic40configuration){
   // build up a geometry
   I3GeometryPtr geo (new I3Geometry (myGeoService ()));
-  
+
   // create a IC40 scale module
   // Because IC40 is retired, we have to give it the string numbers by hand
   I3ScaleCalculator scale (geo, I3ScaleCalculator::IC_CUSTOM, I3ScaleCalculator::IT_EMPTY,
@@ -48,7 +52,7 @@ TEST(ic40configuration){
     std::cout << val << " ";
   }
 
-  std::cout << "IC40 I3Scale outer: " << std::endl; 
+  std::cout << "IC40 I3Scale outer: " << std::endl;
   BOOST_FOREACH(const double &val, stringNo) {
     std::cout << val << " ";
   }
@@ -58,7 +62,7 @@ TEST(ic40configuration){
 
   // is the answer right?
   ENSURE ((stringNo.size () == ic40Outer.size ())
-	  && equal (stringNo.begin (), stringNo.end (), 
+	  && equal (stringNo.begin (), stringNo.end (),
 		    ic40Outer.begin()),
 	  "Other outer strings from IC expected.");
 
@@ -75,7 +79,7 @@ TEST(ic40configuration){
   ENSURE_EQUAL(top, 500, "wrong top.");
 
   // simple size check
-  ENSURE_EQUAL(x.size (), y.size (), 
+  ENSURE_EQUAL(x.size (), y.size (),
 	       "One coordinate vector too short");
   ENSURE_EQUAL(x.size (), stringNo.size (),
 	       "Number of coordinates is not the same"\
@@ -83,39 +87,39 @@ TEST(ic40configuration){
 
   // x positions right?
   std::vector<double > ic40X (ic40XPos ());
-  ENSURE (equal (x.begin (), x.end (), 
-		 ic40X.begin ()), 
+  ENSURE (equal (x.begin (), x.end (),
+		 ic40X.begin ()),
 	  "x-coordinates are wrong.");
 
   // output
-  std::cout << "IC40 x positions: " << std::endl; 
+  std::cout << "IC40 x positions: " << std::endl;
   BOOST_FOREACH(const double &val, ic40X) {
     std::cout << val << " ";
   }
 
   std::cout << std::endl;
 
-  std::cout << "IC40 I3Scale pos: " << std::endl; 
+  std::cout << "IC40 I3Scale pos: " << std::endl;
   BOOST_FOREACH(const double &val, x) {
     std::cout << val << " ";
   }
-  
+
   std::cout << std::endl;
- 
+
   // y position right?
   std::vector<double > ic40Y (ic40YPos ());
-  ENSURE (equal (y.begin (), y.end (), 
-		 ic40Y.begin ()), 
+  ENSURE (equal (y.begin (), y.end (),
+		 ic40Y.begin ()),
 	  "y-coordinates are wrong.");
 
-  std::cout << "IC40 x positions: " << std::endl; 
+  std::cout << "IC40 x positions: " << std::endl;
   BOOST_FOREACH(const double &val, ic40Y) {
     std::cout << val << " ";
   }
 
   std::cout << std::endl;
 
-  std::cout << "IC40 I3Scale pos: " << std::endl; 
+  std::cout << "IC40 I3Scale pos: " << std::endl;
   BOOST_FOREACH(const double &val, y) {
     std::cout << val << " ";
   }
@@ -128,18 +132,18 @@ TEST(particleInCscd){
 
   // build up a geometry
   I3GeometryPtr geo (new I3Geometry (myGeoService ()));
-  
+
   // create a IC40 scale module
   I3ScaleCalculator scale (geo, I3ScaleCalculator::IC_CUSTOM, I3ScaleCalculator::IT_EMPTY,
                            custom_stringlist);
 
   I3Particle p (I3Particle::Cascade);
   p.SetPos (0, 200, 0);
-  // the following point gets a wrong scale 
+  // the following point gets a wrong scale
   // (should be smaller 1, but is not) due to a
-  // bug in the I3Cuts! 
+  // bug in the I3Cuts!
   //  p=I3Position(450, 0, 0); // favorite poit ;-)
-  
+
   double s = scale.ScaleInIce (p);
 
   ENSURE (s < 1, "This should be in the detector.");
@@ -149,14 +153,14 @@ TEST(particleInCscd){
 TEST(contained){
   // build up a geometry
   I3GeometryPtr geo (new I3Geometry (myGeoService ()));
-  
+
   // create a IC40 scale module
   I3ScaleCalculator scale (geo, I3ScaleCalculator::IC_CUSTOM, I3ScaleCalculator::IT_EMPTY,
                            custom_stringlist);
 
   I3Particle p (I3Particle::Cascade);
   p.SetPos (450, 0, 0);
-  
+
   ENSURE (scale.VertexIsInside (p), "This should be in the detector.");
 
 }
@@ -164,7 +168,7 @@ TEST(particleInMuon){
 
   // build up a geometry
   I3GeometryPtr geo (new I3Geometry (myGeoService ()));
-  
+
   // create a IC40 scale module
   I3ScaleCalculator scale (geo, I3ScaleCalculator::IC_CUSTOM, I3ScaleCalculator::IT_EMPTY,
                            custom_stringlist);
@@ -195,7 +199,7 @@ std::vector<int > ic40Strings () {
   ic40Outer.push_back(44);
   ic40Outer.push_back(46);
   ic40Outer.push_back(38);
-  
+
   return ic40Outer;
 }
 
@@ -213,7 +217,7 @@ std::vector<double > ic40XPos () {
   x.push_back(-200);
   x.push_back(  50);
   x.push_back( 300);
-  
+
   return x;
 }
 
@@ -231,7 +235,7 @@ std::vector<double > ic40YPos () {
   y.push_back(  50);
   y.push_back( 100);
   y.push_back(   0);
-  
+
   return y;
 }
 
@@ -240,7 +244,7 @@ const I3Geometry myGeoService () {
   I3Geometry geo;
 
   // put the middle strings
-    
+
   geo.omgeo[OMKey (21, 30)].position=I3Position( 400, -200, 0, I3Position::car);
   geo.omgeo[OMKey (50, 30)].position=I3Position( 550,  150, 0, I3Position::car);
   geo.omgeo[OMKey (74, 30)].position=I3Position( 350,  400, 0, I3Position::car);

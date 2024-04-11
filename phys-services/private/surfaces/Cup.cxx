@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 /** $Id: Cylinder.cxx 137064 2015-08-31 18:24:47Z jvansanten $
  * @file
  * @author Jakob van Santen <vansanten@wisc.edu>

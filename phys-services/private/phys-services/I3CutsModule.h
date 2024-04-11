@@ -1,6 +1,7 @@
 /**
  * $Id$
- * (c) 2005 IceCube Collaboration
+ * Copyright (c) 2005 IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @author D.Turcan
  */
 

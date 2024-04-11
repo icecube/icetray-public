@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
 
 """
 Provides simple access in Python to the text file based Good run Lists (GRLs) for pass1 and pass2.

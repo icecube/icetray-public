@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file I3GeoSelTestModule.cxx
@@ -31,7 +31,7 @@ using namespace std;
 
 I3_MODULE(I3GeoSelTestModule);
 
-I3GeoSelTestModule::I3GeoSelTestModule(const I3Context& ctx) : 
+I3GeoSelTestModule::I3GeoSelTestModule(const I3Context& ctx) :
   I3Module(ctx),
   stringsToUse_("-19:80"),
   stringsToExclude_(""),
@@ -44,17 +44,17 @@ I3GeoSelTestModule::I3GeoSelTestModule(const I3Context& ctx) :
 {
     AddOutBox("OutBox");
 
-    AddParameter("StringsToUse", 
-		 "The strings that should be included", 
+    AddParameter("StringsToUse",
+		 "The strings that should be included",
 		 stringsToUse_);
-    AddParameter("StringsToExclude", 
-		 "The strings that should be excluded", 
+    AddParameter("StringsToExclude",
+		 "The strings that should be excluded",
 		 stringsToExclude_);
-    AddParameter("StationsToUse", 
-		 "The stations that should be included", 
+    AddParameter("StationsToUse",
+		 "The stations that should be included",
 		 stationsToUse_);
-    AddParameter("StationsToExclude", 
-		 "The stations that should be excluded", 
+    AddParameter("StationsToExclude",
+		 "The stations that should be excluded",
 		 stationsToExclude_);
     AddParameter("ShiftX",
 		 "Distance to shift the entire detector",
@@ -85,13 +85,13 @@ void I3GeoSelTestModule::Configure() {
   GetParameter("ShiftZ",shiftZ_);
   GetParameter("DetectorCentered",detectorCentered_);
 
-  if(!geo_sel_utils::good_input(stringsToUse_)) 
+  if(!geo_sel_utils::good_input(stringsToUse_))
     log_fatal("couldn't parse %s",stringsToUse_.c_str());
-  if(!geo_sel_utils::good_input(stringsToExclude_)) 
+  if(!geo_sel_utils::good_input(stringsToExclude_))
     log_fatal("couldn't parse %s",stringsToExclude_.c_str());
-  if(!geo_sel_utils::good_input(stationsToUse_)) 
+  if(!geo_sel_utils::good_input(stationsToUse_))
     log_fatal("couldn't parse %s",stationsToUse_.c_str());
-  if(!geo_sel_utils::good_input(stationsToExclude_)) 
+  if(!geo_sel_utils::good_input(stationsToExclude_))
     log_fatal("couldn't parse %s",stationsToExclude_.c_str());
 
   log_trace("stringsToUse_ %s",stringsToUse_.c_str());
@@ -105,7 +105,7 @@ void I3GeoSelTestModule::Configure() {
 void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
 
   log_debug("Entering Geometry method.");
-  
+
   I3GeometryConstPtr geoPtr = frame->Get<I3GeometryConstPtr>();
   ENSURE((bool)geoPtr,"Couldn't get geometry");
 
@@ -130,7 +130,7 @@ void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
   for(iter = geoPtr->omgeo.begin();
       iter != geoPtr->omgeo.end(); ++iter){
     OMKey omkey = iter->first;
-    log_trace("OM: %s",omkey.str().c_str());    
+    log_trace("OM: %s",omkey.str().c_str());
     bool good_om((geo_sel_utils::exists(omkey.GetString(),goodStrings_) && omkey.GetOM() <= 60) ||
 		 (geo_sel_utils::exists(omkey.GetString(),goodStations_) && omkey.GetOM() > 60));
     ENSURE(good_om);
@@ -142,11 +142,11 @@ void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
   for(siter = geoPtr->stationgeo.begin();
       siter != geoPtr->stationgeo.end(); ++siter){
     int station = siter->first;
-    log_trace("Station: %d",station);    
+    log_trace("Station: %d",station);
     ENSURE(geo_sel_utils::exists(station,goodStations_));
     ENSURE(!geo_sel_utils::exists(station,stations_exclude_list));
   }
-  
+
   PushFrame(frame,"OutBox");
 
   log_debug("Added selection.");
@@ -174,7 +174,7 @@ void I3GeoSelTestModule::Physics(I3FramePtr frame) {
       ENSURE_DISTANCE(old_om.position.GetX() + shiftX_,new_om.position.GetX(),0.1);
       ENSURE_DISTANCE(old_om.position.GetY() + shiftY_,new_om.position.GetY(),0.1);
     }else{
-      std::pair<double,double> center = 
+      std::pair<double,double> center =
 	geo_sel_utils::detector_center(old_geo,goodStrings_);
       ENSURE_DISTANCE(old_om.position.GetX() - center.first, new_om.position.GetX(),0.1);
       ENSURE_DISTANCE(old_om.position.GetY() - center.second, new_om.position.GetY(),0.1);
@@ -183,7 +183,7 @@ void I3GeoSelTestModule::Physics(I3FramePtr frame) {
   }
 
   if(detectorCentered_){
-    std::pair<double,double> center = 
+    std::pair<double,double> center =
       geo_sel_utils::detector_center(new_geo,goodStrings_);
     ENSURE_DISTANCE(center.first, 0., 0.001*I3Units::mm);
     ENSURE_DISTANCE(center.second, 0., 0.001*I3Units::mm);

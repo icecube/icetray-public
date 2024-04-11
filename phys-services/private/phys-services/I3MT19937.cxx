@@ -1,6 +1,7 @@
 /**
  * @file I3MT19937.cxx
- * @copyright (c) 2017 The IceCube Collaboration
+ * @copyright Copyright (c) 2017 The IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * @author Kevin Meagher
  * @date December 2017
  */
@@ -10,13 +11,13 @@
 I3MT19937::I3MT19937(){}
 
 I3MT19937::I3MT19937(uint32_t seed)
-{ 
-  //set the initial state of the engine 
+{
+  //set the initial state of the engine
   engine_.seed(seed);
 }
 
 I3MT19937::I3MT19937(std::vector<uint32_t> seed_vector)
-{ 
+{
   //generate a seed sequence from the initilization vector
   std::seed_seq seed(seed_vector.begin(),seed_vector.end());
   //set the initial state of the engine
@@ -39,16 +40,16 @@ void I3MT19937::RestoreState(I3FrameObjectConstPtr vstate)
 
 I3MT19937::~I3MT19937(){}
 
-// Service Factory 
+// Service Factory
 
-I3MT19937Factory::I3MT19937Factory(const I3Context& context) 
+I3MT19937Factory::I3MT19937Factory(const I3Context& context)
   : I3ServiceFactory(context)
 {
   AddParameter("Seed",
 	       "Seed vector to generate the initial state for the random number generator, "
 	       "Must be a vector of unsigned ints",
 	       seed_vector_);
-  
+
   installServiceAs_ = I3DefaultName<I3RandomService>::value();
   AddParameter("InstallServiceAs",
 	       "Install the random service at the following location",

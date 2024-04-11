@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file I3XMLOMKey2MBIDFactory.h
@@ -28,7 +28,7 @@ class I3Context;
 
 /**
  * @brief This class installs an I3XMLOMKey2MBID service.
- * 
+ *
  * I3XMLOMKey2MBIDFactory supports two parameter:
  * <ul>
  * <li><VAR>Infile</VAR> (the name of the file to get the mainboard ID list from) and
@@ -41,7 +41,7 @@ class I3XMLOMKey2MBIDFactory : public I3ServiceFactory
 public:
   /**
    * @brief Constructor.
-   * 
+   *
    * @param context The context in which the service will exist.
    */
   explicit I3XMLOMKey2MBIDFactory(const I3Context& context);
@@ -54,10 +54,10 @@ public:
 
 private:
   I3OMKey2MBIDPtr service_;
-  std::string infile_;  
+  std::string infile_;
   std::string installServiceAs_;
-  
-  
+
+
   // private copy constructors and assignment
   I3XMLOMKey2MBIDFactory(const I3XMLOMKey2MBIDFactory&);
   I3XMLOMKey2MBIDFactory& operator=(const I3XMLOMKey2MBIDFactory&);

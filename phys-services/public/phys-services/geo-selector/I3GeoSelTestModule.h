@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the IceCube collaboration
+ * Copyright  (C) 2004 the IceCube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *  $Id$
   *
  * @file I3GeoSelTestModule.h
@@ -17,7 +17,7 @@
 
 /**
  * @brief IceTray module to test whether I3GeometrySelector is working properly.
- *The two parameters stringsToUse_ and stringsToExclude_ should be set to the same 
+ *The two parameters stringsToUse_ and stringsToExclude_ should be set to the same
  *values as the I3GeometrySelector.  This test passes if the geometry contains only OMs
  *that are in stringsToUse_ and does not contain any DOMs that are in stringsToExclude_.
  */
@@ -31,29 +31,29 @@ public:
 
   /*
    * Constructor:  builds an instance of the module, with the
-   * context provided by IceTray. 
-   */ 
+   * context provided by IceTray.
+   */
   I3GeoSelTestModule(const I3Context& ctx);
-  
+
   /*
    * Destructor: deletes the module
-   */ 
+   */
   ~I3GeoSelTestModule();
-  
+
   /**
    * This module takes a configuration parameter and so it must be configured
    */
   void Configure();
-  
-  /** 
+
+  /**
    * We'll want to trim the geometry everytime it gets updated.
-   */ 
+   */
   void Geometry(I3FramePtr frame);
 
   void Physics(I3FramePtr frame);
 
 private:
-  
+
   /**
    *default constructor, assignment operator, and copy constructor
    * declared private to prevent use
@@ -96,7 +96,7 @@ private:
   // Named stream for my logging messages.  Allows my messages to be
   // sent to a particular log file, to be set to a special threshold, etc.
   SET_LOGGER("I3GeoSelTestModule");
-  
+
 };  // end of class I3GeoSelTestModule
 
 #endif //I3GEOSELTESTMODULE_H

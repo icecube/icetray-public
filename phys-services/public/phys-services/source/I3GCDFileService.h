@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2004
- * the icecube collaboration
+ * Copyright  (C) 2004 the icecube collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
  * @file I3GCDFileService.h
@@ -29,7 +29,7 @@ class I3GCDFileGeometryService : public I3GeometryService
   I3GeometryConstPtr geo_;
  public:
   I3GCDFileGeometryService(const std::string& icefile) :
-  filename_(icefile)     
+  filename_(icefile)
     {}
   virtual ~I3GCDFileGeometryService(){}
   I3GeometryConstPtr GetGeometry(I3Time time);
@@ -45,7 +45,7 @@ class I3GCDFileCalibrationService : public I3CalibrationService
   I3CalibrationConstPtr cal_;
  public:
  I3GCDFileCalibrationService(const std::string& icefile) :
-  filename_(icefile) 
+  filename_(icefile)
   {}
   virtual ~I3GCDFileCalibrationService(){}
   I3CalibrationConstPtr GetCalibration(I3Time time);
@@ -61,7 +61,7 @@ class I3GCDFileDetectorStatusService : public I3DetectorStatusService
   I3DetectorStatusConstPtr stat_;
  public:
   I3GCDFileDetectorStatusService(const std::string& icefile) :
-    filename_(icefile) 
+    filename_(icefile)
     {}
   virtual ~I3GCDFileDetectorStatusService(){}
   I3DetectorStatusConstPtr GetDetectorStatus(I3Time time);

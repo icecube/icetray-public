@@ -5,13 +5,14 @@
  *
  * Date: 04/01/2005
 
- * @brief This class installs a I3SPRNGRandomService. 
+ * @brief This class installs a I3SPRNGRandomService.
  * Based on I3GSLRandomService by pretz
  *
  * @version $Id$
  * @author juancarlos
  *
- * (c) IceCube Collaboration
+ * Copyright (c) IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 #include <string>
@@ -47,7 +48,7 @@ class I3SPRNGRandomServiceFactory
   virtual bool InstallService(I3Context& services);
 
   /**
-   * Configure service prior to installing it. 
+   * Configure service prior to installing it.
    */
   virtual void Configure();
 
@@ -67,7 +68,7 @@ class I3SPRNGRandomServiceFactory
   std::string installServiceAs_;
 
   SET_LOGGER("I3SPRNGRandomServiceFactory");
-  
+
 };
 
 #endif

@@ -3,7 +3,8 @@
  *
  * Version: $Id$
  *
- * (c) IceCube Collaboration
+ * Copyright (c) IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  */
 
 #include <phys-services/I3FileOMKey2MBID.h>
@@ -60,7 +61,7 @@ I3FileOMKey2MBID::~I3FileOMKey2MBID()
 /**
  * @todo This is an ugly mess.
  */
-OMKey I3FileOMKey2MBID::OMKeyize(const std::string& key) 
+OMKey I3FileOMKey2MBID::OMKeyize(const std::string& key)
 {
   if(key.size()==4 && key.find('-') == key.npos){
     //preserve mysterious old logic
@@ -89,7 +90,7 @@ OMKey I3FileOMKey2MBID::OMKeyize(const std::string& key)
     assert(om_num > 0);
     return OMKey(om_string,om_num);
   }
-  
+
   int string=0;
   unsigned int om=0;
   unsigned char pmt=0;
