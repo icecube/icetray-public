@@ -59,7 +59,7 @@ namespace I3DeltaCompression
 		// decompressed delta.
 		int lastValue = 0;
 
-		// The variable datum will contain the comressed bits extracted
+		// The variable datum will contain the compressed bits extracted
 		// from the bitstream represented by the vector of
 		int datum     = 0;
 
@@ -277,4 +277,3 @@ namespace I3DeltaCompression
 	} // DeltaCompressor::getPrevBtw( int )
 
 } // namespace I3DeltaCompression
-

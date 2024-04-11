@@ -26,7 +26,7 @@ boost::optional
 Boost provides an optional template type which can optionally store a value,
 or not store anything. This is similar to pointers being NULL. The I3MCTree
 uses boost::optional for many function return values, so it can return a
-particle or the absense of one.
+particle or the absence of one.
 
 Example Usage
 ^^^^^^^^^^^^^
@@ -38,7 +38,7 @@ should exist:
 
     I3Particle p = tree.get_head();
 
-If you are unsure about existance in the tree, it is best to check:
+If you are unsure about existence in the tree, it is best to check:
 
 .. code-block:: c++
 

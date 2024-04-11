@@ -52,7 +52,7 @@ The statement of the goal is very simple: make simulation look like data. With t
 
   * Pros
 
-    - The DOM launch times are consitent in interpretation and measurement as compared to data.
+    - The DOM launch times are consistent in interpretation and measurement as compared to data.
     - There are only two maps to worry about. InIce and IceTop.
 
   * Cons

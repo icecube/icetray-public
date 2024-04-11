@@ -14,8 +14,8 @@
 
 namespace {
 /**
- * @brief This literal contians a list of Modified Julian Date  of days that @a end on a
- * leap second. Used by I3Time to determine whe leap seconds occur.
+ * @brief This literal contains a list of Modified Julian Date  of days that @a end on a
+ * leap second. Used by I3Time to determine when leap seconds occur.
  *
  * @note This contains the mjd of days which @a end on a leap year.
  * Most communications describing leap seconds give the day which @a starts with
@@ -27,8 +27,8 @@ const int32_t leap_sec_list_[] = {41316, 41498, 41682, 42047, 42412, 42777, 4314
 				  50629, 51178, 53735, 54831, 56108, 57203, 57753};
 
 /**
- * @brief This vector contians the same information as leap_sec_list but in a std::vector
- * for easier access. Used by I3Time to determine whe leap seconds occur.
+ * @brief This vector contains the same information as leap_sec_list but in a std::vector
+ * for easier access. Used by I3Time to determine when leap seconds occur.
  *
  * Cannot declare array literal for std::vector yet.
  */
@@ -559,7 +559,7 @@ double I3Time::modjulianday(int year, int64_t daqTime)
   double mjd = modjulian_of_year + daqDaysSinceYear;
 
   //now that we know mjd redo with correct seconds
-  //don't use year to date leapseconds because we might have gone over the year boundry
+  //don't use year to date leapseconds because we might have gone over the year boundary
   daqSecs -= I3TimeUtils::leap_seconds_range(I3TimeUtils::mod_julian_day_start_of_year(year),
 					     mjd);
   daqDaysSinceYear = ((double)(daqSecs))/(3600. * 24.);

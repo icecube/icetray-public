@@ -242,7 +242,7 @@ The fit status is an integer type data member. The possible values are defined b
 You can in principle often use the integer values for these status values, but that
 makes your code harder to read. If you use the actual ``enum`` constants (e.g.
 ``p.fit_status == dataclasses.I3Particle.OK`` in python) then you and your
-colleages do not need to memorize the meanings of those numbers.
+colleagues do not need to memorize the meanings of those numbers.
 
 Major and Minor ID
 ~~~~~~~~~~~~~~~~~~

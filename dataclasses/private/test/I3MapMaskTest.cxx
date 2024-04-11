@@ -216,7 +216,7 @@ TEST(ApplyAutomagically)
 	masked = frame.Get<I3RecoPulseSeriesMapConstPtr>("dub");
 	ENSURE(!masked, "I3Frame::Get() returns a null pointer");
 
-	masked = frame.Get<I3RecoPulseSeriesMapConstPtr>("nonexistant");
+	masked = frame.Get<I3RecoPulseSeriesMapConstPtr>("nonexistent");
 	ENSURE(!masked, "I3Frame::Get() returns a null pointer");
 
 	/* Now, ensure that nothing funny happens when we get it as a FrameObject */

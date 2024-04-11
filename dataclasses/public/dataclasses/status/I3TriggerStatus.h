@@ -59,7 +59,7 @@
  * Additionally, the per-trigger readout instructions, specified for each subdetector:
  *  readoutTimeMinus  : time before the trigger time to set the readout window
  *  readoutTimePlus  : time after the trigger time to set the readout window
- *  readoutTimeOffset : time shift relatve to the trigger time to set the readout windoow
+ *  readoutTimeOffset : time shift relatve to the trigger time to set the readout window
  */
 static const unsigned i3triggerstatus_version_ = 3;
 static const unsigned i3triggerreadoutconfig_version_ = 0;

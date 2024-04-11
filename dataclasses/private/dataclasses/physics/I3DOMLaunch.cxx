@@ -137,7 +137,7 @@ void I3DOMLaunch::load(Archive& ar, unsigned version)
       I3DeltaCompression::DeltaCompressor compressor;
 
       // Create the data structure for the compressed version
-      // of the waveforms and deserialize fro the archive
+      // of the waveforms and deserialize from the archive
       std::vector< std::vector<unsigned int> > compressedATWD( rawATWD_.size() );
       ar & make_nvp("CompressedATWD", compressedATWD);
 

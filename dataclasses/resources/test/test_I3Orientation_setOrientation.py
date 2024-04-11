@@ -24,7 +24,7 @@ class TestI3Orientation(unittest.TestCase):
         orientationInstance.set_orientation(v1[0],v1[1],v1[2],v2[0],v2[1],v2[2])     # this is supposed to work
 
         try:
-            orientationInstance.set_orientation(v1[0],v1[1],v1[2],v3[0],v3[1],v3[2])     # this is supposed to chrash
+            orientationInstance.set_orientation(v1[0],v1[1],v1[2],v3[0],v3[1],v3[2])     # this is supposed to crash
             raise ValueError('I3Orientation::SetOrientation(v1,v2) is supposed to throw a RuntimeError if v1 and v2 are not perpendicular, but it does not!')
         except RuntimeError:
             pass

@@ -24,7 +24,7 @@ For initialization and transformation between coordinate systems::
  >>> # dataclasses.I3Position(x, y, z, RefFrame)
  >>> # Default RefFrame (reference frame) is the cartesian: dataclasses.I3Position.car = dataclasses.RefFrame.car
  >>> position = dataclasses.I3Position(1, 2, 3)
- >>> # cartesion coordinates
+ >>> # cartesian coordinates
  >>> position.x
  1.0
  >>> position.y

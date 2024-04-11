@@ -132,11 +132,11 @@ TEST(tests_with_warnings) {
   fft::GetHilbertEnvelope(timeSeries);
 
   timeSeries.SetOffset(NAN);
-  log_info("This will yell about getting peak time with unitialized binning");
+  log_info("This will yell about getting peak time with uninitialized binning");
   double dump;
   fft::GetHilbertPeakTime(timeSeries, dump);
 
-  log_info("This will yell about getting peak time with unitialized binning");
+  log_info("This will yell about getting peak time with uninitialized binning");
   EFieldTimeSeries timeSeries3D;
   timeSeries.SetBinning(1);
   fft::GetHilbertPeakTime(timeSeries3D, dump);

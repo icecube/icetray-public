@@ -81,7 +81,7 @@ double SPEPMTThreshold (const I3DOMStatus&, const I3DOMCalibration&);
 double MPEDiscriminatorThreshold (const I3DOMStatus&, const I3DOMCalibration&, double const spePeakVoltageChargeRatio =  __SPE_PEAK_VOLTAGE_CHARGE_RATIO__);
 
 /**
- *  OldspeThreshold - a function to return the old "psuedo calibration" values
+ *  OldspeThreshold - a function to return the old "pseudo calibration" values
  *          from the raw DAC values (now stored in DOMStatus record). Previously,
  *          these psuedo-calibrations were applied by I3OmDb and stored in
  *          DOMStatus.  This changed with offline V02-02-00 releases.
@@ -91,7 +91,7 @@ double MPEDiscriminatorThreshold (const I3DOMStatus&, const I3DOMCalibration&, d
 double OldspeThreshold(const I3DOMStatus&);
 
 /**
- *  OldmpeThreshold - a function to return the old "psuedo calibration" values
+ *  OldmpeThreshold - a function to return the old "pseudo calibration" values
  *          from the raw DAC values (now stored in DOMStatus record). Previously,
  *          these psuedo-calibrations were applied by I3OmDb and stored in
  *          DOMStatus.  This changed with offline V02-02-00 releases.

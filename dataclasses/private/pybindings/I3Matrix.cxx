@@ -99,7 +99,7 @@ register_I3Matrix()
 {
 	bp::class_<I3Matrix, boost::shared_ptr<I3Matrix>, bp::bases<I3FrameObject> >
 	    ("I3Matrix", "I3Matrix has no dedicated python bindings. Use numpy.asarray(m) for data access.", bp::no_init)
-	    .def(bp::init<size_t, size_t>("Create an unintialized matrix of the given size",
+	    .def(bp::init<size_t, size_t>("Create an uninitialized matrix of the given size",
 	        (bp::arg("size1"), "size2")))
 	    .def(bp::init<size_t, size_t, const I3Matrix::value_type&>("Create and initialize a matrix of the given size",
 	        (bp::arg("size1"), "size2", "value")))

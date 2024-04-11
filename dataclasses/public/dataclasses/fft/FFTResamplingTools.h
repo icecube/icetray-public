@@ -50,7 +50,7 @@ void UpsampleTimeSeries(FFTDataContainer<T, F> &container, const unsigned int up
   // replace the original spectrum by the new one (after zero padding)
   spectrum.Swap(upsampledSpectrum);
 
-  // Add old mean to retain offset, if substraction is not requested
+  // Add old mean to retain offset, if subtraction is not requested
   if (!removeOffset)
     spectrum[0] = offset;
 

@@ -74,7 +74,7 @@ namespace I3MCTreeUtils
   I3Particle* GetPrimaryPtr(I3MCTreePtr, const I3ParticleID&);
 
   /**
-   * Gets an I3MCTree from the frame with the specificed key.
+   * Gets an I3MCTree from the frame with the specified key.
    */
   const I3MCTreeConstPtr Get(const I3Frame& , const std::string&);
 

@@ -20,7 +20,7 @@ ptypes = particle_types.items()
 try:
     for pdg, ptype in particle_types.items():
         if pdg == 0:
-            # ParticleType.unkown has no mass implemented and is its own anti-particle
+            # ParticleType.unknown has no mass implemented and is its own anti-particle
             continue
         if (pdg in pdg_codes) and (-pdg in pdg_codes):
             particle = I3Particle()

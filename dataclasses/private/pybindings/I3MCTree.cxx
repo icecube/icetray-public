@@ -79,7 +79,7 @@ I3Particle previous_sibling(const I3MCTree& t,const I3ParticleID& p)
 I3Particle next_sibling(const I3MCTree& t,const I3ParticleID& p)
 { return getParticle(t.next_sibling(p),"particle not found or no sibling"); }
 I3Particle first_child(const I3MCTree& t,const I3ParticleID& p)
-{ return getParticle(t.first_child(p),"particle not found or no chilren"); }
+{ return getParticle(t.first_child(p),"particle not found or no children"); }
 I3Particle* at(I3MCTree& t,const I3ParticleID& p)
 //{ return getParticle(t.at(p),"particle not found in tree"); }
 {

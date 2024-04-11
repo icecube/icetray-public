@@ -192,7 +192,7 @@ class I3ComplexVector : public I3FrameObject {
   }
 
   /**
-   * Divison by a single value
+   * Division by a single value
    */
   I3ComplexVector& operator/=(std::complex<double> a) {
     x_ /= a;
@@ -227,7 +227,7 @@ class I3ComplexVector : public I3FrameObject {
   }
 
   /**
-   * Divison by a single value
+   * Division by a single value
    */
   I3ComplexVector& operator/=(double a) {
     x_ /= a;

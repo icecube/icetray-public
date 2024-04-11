@@ -59,11 +59,11 @@ namespace I3DeltaCompression
 	 * }
 	 * @endcode
 	 *
-	 * The asymmetry betwen the compress and decompress method is by design to reduce
-	 * the amount of copying od STL vetors.
+	 * The asymmetry between the compress and decompress method is by design to reduce
+	 * the amount of copying od STL vectors.
 	 * The implementation of the compressor expects the compressed values to be
 	 * represented in the machines byteorder and will delivere a compressed stream
-	 * of unsigned integers in the machines byteorder. If the compresssed values
+	 * of unsigned integers in the machines byteorder. If the compressed values
 	 * must be portable between machines, the external program using this class,
 	 * must take care of the correct byteorder.
 	 */
@@ -112,7 +112,7 @@ namespace I3DeltaCompression
 	   * the decompressed waveform will be appended.
 	   * The decompressed wafeform will most likely have more values then the original
 	   * waveform with the additional bins all having the same value as the last bin
-	   * of the original waveform (deltas of 0). It is the responsability of the caller
+	   * of the original waveform (deltas of 0). It is the responsibility of the caller
 	   * to truncate this vector to the correct size.
 	   *
 	   * @param values A reference to a vector to which the decompressed waveform will
@@ -151,7 +151,7 @@ namespace I3DeltaCompression
 
 	  /**
 	   * Set the internal compressed waveform to the values of the passed vector.
-	   * The waveform is coppied to the internal representation.
+	   * The waveform is copied to the internal representation.
 	   *
 	   * @param vals const vector representing a compressed waveform.
 	   */
@@ -164,7 +164,7 @@ namespace I3DeltaCompression
 	 private:
 
 	  /**
-	   * Utillity function to get the next higher bitwidth.
+	   * Utility function to get the next higher bitwidth.
 	   *
 	   * @param btw current bitwidth
 	   * @return next higher bitwidth
@@ -174,7 +174,7 @@ namespace I3DeltaCompression
 	  int getNextBtw( int btw ) const;
 
 	  /**
-	   * Utillity function to get the next lower bitwidth.
+	   * Utility function to get the next lower bitwidth.
 	   *
 	   * @param btw current bitwidth
 	   * @return next lower bitwidth
@@ -208,4 +208,3 @@ namespace I3DeltaCompression
 }
 
 #endif // DELTACOMPRESSOR_H_INCLUDED
-

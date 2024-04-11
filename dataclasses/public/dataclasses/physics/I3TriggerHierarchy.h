@@ -26,7 +26,7 @@
  * in IceCube anymore. DAQ provides a more complicated n-ary tree-like hierarchy
  * of triggers instead. So called "global triggers" hold "subdetector triggers"
  * (child nodes of the corresponding node within the tree).
- * "Global triggers" might be assigned as childs to an additional "global trigger"
+ * "Global triggers" might be assigned as children to an additional "global trigger"
  * of type "MERGED", if two or more of these overlap in time.
  *
  * @image html aTriggerHierarchy.jpg

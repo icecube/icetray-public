@@ -94,7 +94,7 @@ I3SuperDSTTestModule::DAQ(I3FramePtr frame)
 	if (superdst_name_.size() > 0)
 		superdst = frame->Get<I3SuperDSTConstPtr>(superdst_name_);
 	else {
-		/* Send the whole shebang on a round-trip through serialzation */
+		/* Send the whole shebang on a round-trip through serialization */
 		superdst = I3SuperDSTPtr(new I3SuperDST(*pulses));
 		std::ostringstream oarchive_stream;
 		icecube::archive::portable_binary_oarchive oarchive(oarchive_stream);

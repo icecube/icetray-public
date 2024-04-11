@@ -272,7 +272,7 @@ class I3Position : public I3FrameObject
   }
 
   /**
-   * Divison by a scalar
+   * Division by a scalar
    */
   I3Position& operator/=(double a){
     x_/=a;

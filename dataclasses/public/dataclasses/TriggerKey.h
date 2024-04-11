@@ -93,8 +93,8 @@ class TriggerKey
   {
     SIMPLE_MULTIPLICITY = 0,   // Any trigger the uses summed multiplicity
     CALIBRATION = 10,          // A calibration trigger
-    MIN_BIAS = 20,             // Minumum bias (random) trigger
-    THROUGHPUT = 30,           // An IceCube global trigger pass-thru trigger
+    MIN_BIAS = 20,             // Minimum bias (random) trigger
+    THROUGHPUT = 30,           // An IceCube global trigger pass-through trigger
     TWO_COINCIDENCE = 40,      // IceCube global trigger:  combined 2 trigs
     THREE_COINCIDENCE = 50,    // IceCube global trigger:  combined 3 trigs
     MERGED = 70,               // A trigger from a merging of events
@@ -113,7 +113,7 @@ class TriggerKey
   };
 
   /**
-   * Enumeration describing how a software trigger was orginally "configured"
+   * Enumeration describing how a software trigger was originally "configured"
    * within the TWR DAQ trigger system.
    */
   enum SubtypeID

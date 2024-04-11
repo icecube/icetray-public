@@ -217,7 +217,7 @@ double SPEPMTThreshold(const I3DOMStatus& status,
 {
 
   //
-  // This function will attempt to always return the "best" SPE PMT Treshold.
+  // This function will attempt to always return the "best" SPE PMT Threshold.
   //   1.  Will check the domcal record, and see if slope/intercept of GetPMTDiscCalib()
   //   2a.  If these values are non-NAN, then use new calibration calculation relation
   //       with these values.

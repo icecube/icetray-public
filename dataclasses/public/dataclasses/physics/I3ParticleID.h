@@ -48,7 +48,7 @@ struct I3ParticleID{
   std::ostream& Print(std::ostream&) const;
 
   /**
-   * Need to tell gcc to ignore the "maybe unitialized warning"
+   * Need to tell gcc to ignore the "maybe unititalized warning"
    * in this case.  A default constructor was added that initializes
    * these values and none of these methods are static, so this
    * is a false positive.

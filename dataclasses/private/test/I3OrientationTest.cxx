@@ -83,7 +83,7 @@ TEST(coord_change)
 	ENSURE_DISTANCE(dir2.GetX(),0.7071,0.0001,"dir.GetX failed");
 	ENSURE_DISTANCE(dir2.GetY(),0.,0.0001,"dir.GetY failed");
 	ENSURE_DISTANCE(dir2.GetZ(),0.7071,0.0001,"dir.GetZ failed");
-	//Now change the direction, make sure everthing is updated properly
+	//Now change the direction, make sure everything is updated properly
 	dir2.SetOrientation(1.0,1.0,1.0, 0.0,1.0,-1.0);  // Not properly normalized
 	ENSURE_DISTANCE(dir2.GetZenith()/deg,(180.0-54.736),0.001,"dir.GetZenith failed");
 	ENSURE_DISTANCE(dir2.GetAzimuth()/deg,(225.0),0.001,"dir.GetAzimuth failed");

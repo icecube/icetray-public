@@ -44,7 +44,7 @@ namespace I3TimeUtils
    * @brief returns the number of leapseconds between the specified Modified Julian Dates.
    *
    * Including the leap second at the end of mjd1 but not the one at the end of mjd2.
-   * returns negitive value if mjd2 > mjd1
+   * returns negative value if mjd2 > mjd1
    */
   int32_t leap_seconds_range(const int32_t mjd1,const int32_t mjd2);
 
@@ -161,7 +161,7 @@ class I3Time : public I3FrameObject
    * @brief Sets the time in the UTC calendar date convention
    * @param year The year. Something like 2005.
    * @param month The month. A number in the range of [1, 12].
-   * @param day The day. A number between 1 and the maximun number of days in the month
+   * @param day The day. A number between 1 and the maximum number of days in the month
    * @param hour The hour. A number in the range of [0, 23].
    * @param minute The minute. A number in the range of [0, 59].
    * @param sec The second. A number in the range of [0, 59].
@@ -205,8 +205,8 @@ class I3Time : public I3FrameObject
   double GetModJulianNanoSec() const;
 
   /**
-   * @brief Gets the Modified Julian day as a double including frational days
-   * @note This is a suitable to pass to cooridinate services as the time
+   * @brief Gets the Modified Julian day as a double including fractional days
+   * @note This is a suitable to pass to coordinate services as the time
    */
   double GetModJulianDayDouble() const;
 

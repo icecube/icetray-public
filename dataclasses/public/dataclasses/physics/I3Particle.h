@@ -473,7 +473,7 @@ class I3Particle : public I3FrameObject
   void SetSpeed(double s) { speed_ = s; }
 
   /** @brief get the position of the particle at this time
-   *  @note ignores the shape of the track (start/stopping point), so the particle might not be definded at that very position
+   *  @note ignores the shape of the track (start/stopping point), so the particle might not be defined at that very position
    *  @param time the time in ns
   */
   I3Position ShiftTimeTrack(const double time) const;
@@ -536,7 +536,7 @@ std::string i3particle_type_string(int32_t pdg_code);
  * List the names of enumeration members defined in this file
  * here. These can be used for e.g. pybindings, which require
  * the names of the enumeration members to be known. This list
- * should be updated whenver members or new enums are added to
+ * should be updated whenever members or new enums are added to
  * the class.
  */
 #define I3PARTICLE_H_I3Particle_ParticleType                                    \
@@ -600,5 +600,3 @@ typedef I3Vector<I3Particle> I3VectorI3Particle;
 I3_POINTER_TYPEDEFS(I3VectorI3Particle);
 
 #endif
-
-

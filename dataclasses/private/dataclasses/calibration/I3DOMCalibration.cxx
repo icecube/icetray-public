@@ -491,7 +491,7 @@ double integrate(FunctionType&& f, double a, double b, double rtol=1e-7, unsigne
 } //namespace GSL
 
 double SPEChargeDistribution::ComputeMeanCharge() const{
-  //Analytic caclulation which neglects the residual correction factor
+  //Analytic calculation which neglects the residual correction factor
   //return exp1_amp*std::pow(exp1_width,2)+exp2_amp*std::pow(exp2_width,2)
   //  +gaus_amp*std::sqrt(M_PI/2)*gaus_mean*gaus_width*(1+std::erf(gaus_mean/(gaus_width*std::sqrt(2))))
   //  +gaus_amp*std::pow(gaus_width,2)*std::exp(-0.5*std::pow(gaus_mean/gaus_width,2));

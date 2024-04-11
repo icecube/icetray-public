@@ -95,7 +95,7 @@ TEST(GetTriggerKeyI3SuperDSTTrigger)
   const uint32_t lengthcode = 1;
   I3SuperDSTTrigger instSuperDSTTrigger(key_idx,startcode,lengthcode);
 
-  //To demostrate that key_idx is equal to the one obtained via TriggerKey
+  //To demonstrate that key_idx is equal to the one obtained via TriggerKey
   //We have to build a I3TriggerStatusMap, therefore, we need first the TriggerKey object
   I3DetectorStatus instDetectorStatus;
   I3Trigger trigger;
@@ -113,4 +113,3 @@ TEST(GetTriggerKeyI3SuperDSTTrigger)
   ENSURE_EQUAL(key_idx,get_key_idx,
 	       "I3SuperDSTTrigger::GetTriggerKey does not return the right value");
 }
-

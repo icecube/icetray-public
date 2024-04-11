@@ -43,13 +43,13 @@ class I3RecoHit
 /**
  *  GetSourceIndex - The Source Index can be used to keep track
  *    of which rawReadout index (from readout vector, like DOMLaunchSeries,
- *    that gave rise to this pariticular hit.  Index value defaults to -1.
+ *    that gave rise to this particular hit.  Index value defaults to -1.
  */
   int GetSourceIndex() const { return sourceIndex_; }
 /**
  *  SetSourceIndex - The Source Index can be used to keep track
  *    of which rawReadout index (from readout vector, like DOMLaunchSeries,
- *    that gave rise to this pariticular hit.  Index value defaults to -1.
+ *    that gave rise to this particular hit.  Index value defaults to -1.
  */
   void SetSourceIndex(const int srcid) { sourceIndex_ = srcid; }
 

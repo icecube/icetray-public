@@ -606,7 +606,7 @@ I3SuperDST::operator==(const I3SuperDST& rhs) const {
  * - on big-endian platforms, fields are laid out starting from the most
  *   significant bit of the parent struct
  *
- * To properly interpet the binary representation of a bitfield from a little-
+ * To properly interpret the binary representation of a bitfield from a little-
  * endian platform on a big-endian one (and vice versa), it is necessary not
  * only to swap the order of the bytes in memory, but also to reverse the
  * order of the fields.

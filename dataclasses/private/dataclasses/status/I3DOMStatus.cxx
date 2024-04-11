@@ -78,7 +78,7 @@ void I3DOMStatus::serialize (Archive& ar, const unsigned version)
     ar & make_nvp("mpeThreshold",mpeThreshold);
   }
   if(version < 5)
-    // Correct old "psudo calibration" of DAC values back to raw DAC value from
+    // Correct old "pseudo calibration" of DAC values back to raw DAC value from
     //   older i3 files.  Newer files have DAC values from the DB correctly set.
     {
       double temp_feped = fePedestal/I3Units::volt;

@@ -47,7 +47,7 @@ static const unsigned i3modulegeo_version_ = 0;
  * List the names of enumeration members defined in this file
  * here. These can be used for e.g. pybindings, which require
  * the names of the enumeration members to be known. This list
- * should be updated whenver members or new enums are added to
+ * should be updated whenever members or new enums are added to
  * the class.
  * 
  * Please note: using "LOM" here to refer to LOM-16. The plan

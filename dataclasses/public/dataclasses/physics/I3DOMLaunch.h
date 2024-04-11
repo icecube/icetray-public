@@ -32,7 +32,7 @@ static const unsigned i3domlaunch_version_ = 5;
  * List the names of enumeration members defined in this file
  * here. These can be used for e.g. pybindings, which require
  * the names of the enumeration members to be known. This list
- * should be updated whenver members or new enums are added to
+ * should be updated whenever members or new enums are added to
  * the class.
  */
 #define I3DOMLAUNCH_H_I3DOMLaunch_ATWDselect                        \
@@ -138,7 +138,7 @@ private:
      */
     unsigned int chargeStampHighestSample_;
 
-    /*  chargeStampRange_ has been deleted - on the rare occassions anyone cares,
+    /*  chargeStampRange_ has been deleted - on the rare occasions anyone cares,
      *  they can see if any of the samples are above 512  */
 
     /**
@@ -161,7 +161,7 @@ private:
     /**
      * pedestal_ is a bool that tells you if the pedestal_ has or has not
      * been subtracted from the waveforms. This is only for delta-compressed
-     * waveforms. True means pedestal has been subtracted. Flase means it
+     * waveforms. True means pedestal has been subtracted. False means it
      * has not been subtracted.
      */
     bool pedestal_;

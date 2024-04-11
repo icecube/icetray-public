@@ -33,10 +33,10 @@ filename = os.path.join(os.getenv("I3_TESTDATA"),'dataclasses','tai-utc.dat')
 #store Modified julian date of days with leap seconds here
 leap_sec_mjd = []
 
-#The first 13 lines of this file contian an older way to do leapseconds which arn't supported
+#The first 13 lines of this file contain an older way to do leapseconds which aren't supported
 for line in open(filename).readlines()[13:]:
-    #column 17-23 contian the julian date of the day after a leap second
-    #subract 2400000 to obtian the modified julian date
+    #column 17-23 contain the julian date of the day after a leap second
+    #subtract 2400000 to obtian the modified julian date
     leap_sec_mjd.append(int(line[17:24])-2400000)
 
 #first make sure first leap second is JAN 1, 1972
@@ -59,9 +59,9 @@ t2=dataclasses.I3Time()
 
 #check every year from 1970 to 3 years in the future
 for year in range (1970,max(dataclasses.year_of(leap_sec_mjd[-1]),now.year)+3):
-    #twleve hours before tranition to July
+    #twleve hours before transition to July
     t1.set_utc_cal_date(year,6,30,12, 0, 0,0)
-    #twleve hours after  tranition to July
+    #twleve hours after  transition to July
     t2.set_utc_cal_date(year,7, 1,12, 0, 0,0)
 
     #true if this june-july transition has leap second
@@ -91,7 +91,7 @@ for year in range (1970,max(dataclasses.year_of(leap_sec_mjd[-1]),now.year)+3):
 
     if leap_sec:
 
-        #set to leap second itsself
+        #set to leap second itself
         nanosec = random.randint(0,int(1e9))
         t1.set_utc_cal_date(year,6,30,23,59,59,nanosec)
         t2.set_utc_cal_date(year,6,30,23,59,60,nanosec)
@@ -114,7 +114,7 @@ for year in range (1970,max(dataclasses.year_of(leap_sec_mjd[-1]),now.year)+3):
         assert dt3                          == datetime.datetime(year,7, 1, 0, 0, 0,int(nanosec/1000.),tzinfo=datetime.timezone.utc)
         assert dt3+datetime.timedelta(0,-1) == datetime.datetime(year,6,30,23,59,59,int(nanosec/1000.),tzinfo=datetime.timezone.utc)
 
-        #although the invalid python leap second object return true when compared to eachother
+        #although the invalid python leap second object return true when compared to each other
         assert (t1+1*I3Units.second).date_time == dt2
         assert (t1+2*I3Units.second).date_time == dt3
         assert (t2+1*I3Units.second).date_time == dt3
@@ -184,7 +184,7 @@ for year in range (1970,max(dataclasses.year_of(leap_sec_mjd[-1]),now.year)+3):
         assert t2.get_utc_string("%Y-%m-%d %H:%M:%S")=="%4d-06-30 23:59:60"%t1.utc_year
         assert t3.get_utc_string("%Y-%m-%d %H:%M:%S")=="%4d-07-01 00:00:00"%t1.utc_year
 
-        #test arithmatic
+        #test arithmetic
         assert(t1+  I3Units.second==t2)
         assert(t2+  I3Units.second==t3)
         assert(t1+2*I3Units.second==t3)
@@ -219,7 +219,7 @@ for year in range (1970,max(dataclasses.year_of(leap_sec_mjd[-1]),now.year)+3):
         assert dt3                          == datetime.datetime(year,7, 1, 0, 0, 0,int(nanosec/1000.),tzinfo=datetime.timezone.utc)
         assert dt3+datetime.timedelta(0,-1) == datetime.datetime(year,6,30,23,59,59,int(nanosec/1000.),tzinfo=datetime.timezone.utc)
 
-        #although the invalid python leap second object return true when compared to eachother
+        #although the invalid python leap second object return true when compared to each other
         assert (t1+1*I3Units.second).date_time == dt3
         assert (t3-1*I3Units.second).date_time == dt1
 
@@ -270,7 +270,7 @@ for year in range (1970,max(dataclasses.year_of(leap_sec_mjd[-1]),now.year)+3):
         assert t1.get_utc_string("%Y-%m-%d %H:%M:%S")=="%4d-06-30 23:59:59"%t1.utc_year
         assert t3.get_utc_string("%Y-%m-%d %H:%M:%S")=="%4d-07-01 00:00:00"%t1.utc_year
 
-        #test arithmatic
+        #test arithmetic
         assert(t1+1*I3Units.second==t3)
         assert(t3-1*I3Units.second==t1)
 
@@ -278,7 +278,7 @@ for year in range (1970,max(dataclasses.year_of(leap_sec_mjd[-1]),now.year)+3):
         assert(t1-t3==-1*I3Units.second)
 
 
-    #do everyting again with year transition instead of June July transision
+    #do everything again with year transition instead of June July transition
 
     t1.set_utc_cal_date(year  ,12,31,12, 0, 0,0)
     t2.set_utc_cal_date(year+1, 1, 1,12, 0, 0,0)
@@ -302,7 +302,7 @@ for year in range (1970,max(dataclasses.year_of(leap_sec_mjd[-1]),now.year)+3):
 
     if leap_sec:
 
-        #set to leap second itsself
+        #set to leap second itself
         nanosec = random.randint(0,int(1e9))
         t1.set_utc_cal_date(year  ,12,31,23,59,59,nanosec)
         t2.set_utc_cal_date(year  ,12,31,23,59,60,nanosec)
@@ -326,7 +326,7 @@ for year in range (1970,max(dataclasses.year_of(leap_sec_mjd[-1]),now.year)+3):
         assert dt3                          == datetime.datetime(year+1, 1, 1, 0, 0, 0,int(nanosec/1000.),tzinfo=datetime.timezone.utc)
         assert dt3+datetime.timedelta(0,-1) == datetime.datetime(year  ,12,31,23,59,59,int(nanosec/1000.),tzinfo=datetime.timezone.utc)
 
-        #although the invalid python leap second object return true when compared to eachother
+        #although the invalid python leap second object return true when compared to each other
         assert (t1+1*I3Units.second).date_time == dt2
         assert (t1+2*I3Units.second).date_time == dt3
         assert (t2+1*I3Units.second).date_time == dt3
@@ -395,7 +395,7 @@ for year in range (1970,max(dataclasses.year_of(leap_sec_mjd[-1]),now.year)+3):
         assert t2.get_utc_string("%Y-%m-%d %H:%M:%S")=="%4d-12-31 23:59:60"%t1.utc_year
         assert t3.get_utc_string("%Y-%m-%d %H:%M:%S")=="%4d-01-01 00:00:00"%t3.utc_year
 
-        #test arithmatic
+        #test arithmetic
         assert(t1+  I3Units.second==t2)
         assert(t2+  I3Units.second==t3)
         assert(t1+2*I3Units.second==t3)
@@ -431,7 +431,7 @@ for year in range (1970,max(dataclasses.year_of(leap_sec_mjd[-1]),now.year)+3):
         assert dt3                          == datetime.datetime(year+1, 1, 1, 0, 0, 0,int(nanosec/1000.),tzinfo=datetime.timezone.utc)
         assert dt3+datetime.timedelta(0,-1) == datetime.datetime(year  ,12,31,23,59,59,int(nanosec/1000.),tzinfo=datetime.timezone.utc)
 
-        #although the invalid python leap second object return true when compared to eachother
+        #although the invalid python leap second object return true when compared to each other
         assert (t1+1*I3Units.second).date_time == dt3
         assert (t3-1*I3Units.second).date_time == dt1
 
@@ -481,7 +481,7 @@ for year in range (1970,max(dataclasses.year_of(leap_sec_mjd[-1]),now.year)+3):
         assert t1.get_utc_string("%Y-%m-%d %H:%M:%S")=="%4d-12-31 23:59:59"%t1.utc_year
         assert t3.get_utc_string("%Y-%m-%d %H:%M:%S")=="%4d-01-01 00:00:00"%t3.utc_year
 
-        #test arithmatic
+        #test arithmetic
         assert(t1+1*I3Units.second==t3)
         assert(t3-1*I3Units.second==t1)
 

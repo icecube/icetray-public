@@ -106,7 +106,7 @@ I3_CLASS_VERSION(QuadraticFit, quadraticfit_version_);
  * The Compensation Factor is simply the mean charge of the TA0003 distribution divided by the
  * average SPE Template charge.
  * CF = (dintt_0^inf q f(q)_ta0003 dq) / (dintt_0^inf q f(q)_spe dq)
- * Given the current SPE Templates, this factor is rougly 1.3
+ * Given the current SPE Templates, this factor is roughly 1.3
  */
 struct SPEChargeDistribution
 {
@@ -487,7 +487,7 @@ class I3DOMCalibration {
   void SetATWDFreqFit(unsigned int chip, QuadraticFit fitParams);
 
   /**
-   * Get the fit paramater for the bin calibration.
+   * Get the fit parameter for the bin calibration.
    * This is really the conversion factor from
    * counts to volts.
    */
@@ -622,8 +622,8 @@ class I3DOMCalibration {
     noiseScintillationHits_ = scintillationhits;
   }
 
-  //On the assumption that this will be evaulated many times, we copy all data into it.
-  //This makes the object larger but hopefully avoids extra pointer derefences
+  //On the assumption that this will be evaluated many times, we copy all data into it.
+  //This makes the object larger but hopefully avoids extra pointer dereferences
   class DroopedSPETemplate{
   public:
     SPETemplate pulse;

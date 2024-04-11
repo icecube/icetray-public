@@ -155,7 +155,7 @@ char I3DalendarDate_docstring [] =
   "Alternate constructor for I3Time. "
   "Generates an I3Time object with a specified calendar date.\n"
   "\n"
-  "Equivelent to:\n"
+  "Equivalent to:\n"
   "\n"
   "    t = I3Time()\n"
   "    t.SetUTCCalDate(year,month,day,hour,minute,sec,nanosecond)\n"

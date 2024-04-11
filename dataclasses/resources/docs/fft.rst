@@ -10,7 +10,7 @@ Fourier Transforms and Derived Dataclasses/Functions
 
 The Fourier transform and more specifically the discrete Fourier transform (DST), also known as the Fast Fourier Transform (FFT), are critical to the analysis of data that is recorded by antennas.
 Many components of the analysis depends on working in Fourier space as the hardware and antennas themselves include frequency-dependent responses.
-This section includes a discussion about the intricacies of DFTs, the algorithm that is used under the hood (:ref:`fftw3`), and a note about the calucation of energy in the two domains.
+This section includes a discussion about the intricacies of DFTs, the algorithm that is used under the hood (:ref:`fftw3`), and a note about the calculation of energy in the two domains.
 
 ------------------------------
 The Discrete Fourier Transform
@@ -188,7 +188,7 @@ Note that the different treatment of the :math:`k=0,N/2` term and the factor of 
 
 The calculation of the energy then depends on the units of :math:`x_n`.
 For the common application of measured voltages, dividing both sides by the relevant impedance will yield energy on both sides.
-If the measured quantity is an electric field, then the division by the impedance will yeild the *energy fluence* (the integral of the Poynting vector).
+If the measured quantity is an electric field, then the division by the impedance will yield the *energy fluence* (the integral of the Poynting vector).
 
  .. note::
     This formulation of Parseval's Theorem is only valid for combination of DFT algorithm and normalization used by the :ref:`fft_data_container`.
@@ -255,7 +255,7 @@ Also note that there is no functionality to get the Hilbert Envelope from the fr
 Waveform Resampling
 ---------------------
 
-In the waveform analysis, the waveform is discribed by oscillating functions.
+In the waveform analysis, the waveform is described by oscillating functions.
 We can take advantage of this to artificially increase/decrease the resolution of the data sampling.
 The idea is that since the waveform has been decomposed into sines/cosines in the DFT process, you know exactly what you would have measured at any point along these functions had the sampling resolution been higher/lower.
 In practice this boils down to two steps: upsampling and downsampling.
