@@ -3,10 +3,11 @@
 
 /**
  * @brief High-level functions for astronomical conversions
- * for IceCube datatypes 
+ * for IceCube datatypes
  *
- * @copyright (C) 2015 The IceCube Collaboration
- * 
+ * Copyright (C) 2015 The IceCube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
  * $Id$
  *
  * @file I3Astro.h
@@ -35,11 +36,11 @@ const double ICECUBE_LONGITUDE = -62.6081*I3Units::degree;
 struct I3Equatorial : public I3FrameObject
 {
  I3Equatorial() : ra(NAN),dec(NAN) {};
- I3Equatorial(double r,double d) : ra(r),dec(d) {}; 
-  
+ I3Equatorial(double r,double d) : ra(r),dec(d) {};
+
   /// Right Ascension in radians
   double ra;
-  /// Declination in radians in radians 
+  /// Declination in radians in radians
   double dec;
 };
 
@@ -50,7 +51,7 @@ struct I3Galactic : public I3FrameObject
 {
  I3Galactic() : l(NAN),b(NAN) {};
  I3Galactic(double gl,double gb) : l(gl),b(gb) {};
-  
+
   /// Galactic Longitude in radians
   double l;
   /// Galactic Latitude in radians
@@ -65,20 +66,20 @@ struct I3SuperGalactic : public I3FrameObject
  I3SuperGalactic() : l(NAN),b(NAN) {};
  I3SuperGalactic(double SGL,double SGB) : l(SGL),b(SGB) {};
 
-  /// Supergalactic Longitude in radians 
+  /// Supergalactic Longitude in radians
   double l;
   /// Supergalactic Latitude in radians
   double b;
 };
 
 /**
- * @brief Container class for storing ecliptic coordinates 
+ * @brief Container class for storing ecliptic coordinates
  */
 struct I3Ecliptic: public I3FrameObject
 {
  I3Ecliptic() : l(NAN),b(NAN) {};
  I3Ecliptic(double el,double eb) : l(el),b(eb) {};
-  
+
   /// Galactic Longitude in radians
   double l;
   /// Galactic Latitude in radians
@@ -117,7 +118,7 @@ double I3GetGMAST(const I3Time& eventTime);
 double I3GetGMEST(const I3Time& eventTime);
 
 /**
- * @brief Gets the direction of the Moon in local IceCube coordinates 
+ * @brief Gets the direction of the Moon in local IceCube coordinates
  * at time
  *
  * @param time - the time of the observation in I3Time
@@ -127,7 +128,7 @@ I3Direction I3GetMoonDirection(const I3Time& time);
 
 
 /**
- * @brief Gets the direction of the Sun in local IceCube coordinates 
+ * @brief Gets the direction of the Sun in local IceCube coordinates
  * at time
  *
  * @param time - I3Time of the astronomical observation
@@ -136,10 +137,10 @@ I3Direction I3GetMoonDirection(const I3Time& time);
 I3Direction I3GetSunDirection(const I3Time& time);
 
 /**
- * @brief Convert an astronomical position in J2000 equatorial 
+ * @brief Convert an astronomical position in J2000 equatorial
  * coordinates to local IceCube coordnates at a given time
- * 
- * @param equatorial - I3Equatorial position of astronomical observation 
+ *
+ * @param equatorial - I3Equatorial position of astronomical observation
  *        in J2000 coordinate system
  * @param time - I3Time of the astronomical observation
  * @returns I3Direction containing local IceCube direction
@@ -147,20 +148,20 @@ I3Direction I3GetSunDirection(const I3Time& time);
 I3Direction I3GetDirectionFromEquatorial(const I3Equatorial& equatorial,const I3Time& time);
 
 /**
- * @brief Convert an IceCube direction to 
+ * @brief Convert an IceCube direction to
  * J2000 equatorial coordinates system at a given time
  *
  * @param direction - IceCube local coordinate to convert
  * @param time - I3Time of the astronomical observation
- * @returns I3Equatorial astronomical position of the 
+ * @returns I3Equatorial astronomical position of the
  *          event in J2000 coordinate system
  */
 I3Equatorial I3GetEquatorialFromDirection(const I3Direction& direction,const I3Time& time);
 
 /**
  * @brief Convert from Equatorial (J2000) to Ecliptic coordinate system
- * 
- * @param equatorial - I3Equatorial position of astronomical observation 
+ *
+ * @param equatorial - I3Equatorial position of astronomical observation
  *        in J2000 coordinate system
  * @param time - I3Time of the astronomical observation
  * @returns I3Ecliptic position in ecliptic coordinate system
@@ -169,10 +170,10 @@ I3Ecliptic I3GetEclipticFromEquatorial(const I3Equatorial& equatorial, const I3T
 
 /**
  * @brief Convert from Ecliptic to Equatorial (J2000) coordinate system
- * 
+ *
  * @param ecliptic - I3Ecliptic position in galactic coordinate system
  * @param time - I3Time of the astronomical observation
- * @returns I3Equatorial position of astronomical observation 
+ * @returns I3Equatorial position of astronomical observation
  *          in J2000 coordinate system
  */
 I3Equatorial I3GetEquatorialFromEcliptic(const I3Ecliptic& ecliptic, const I3Time& time);
@@ -181,8 +182,8 @@ I3Equatorial I3GetEquatorialFromEcliptic(const I3Ecliptic& ecliptic, const I3Tim
 
 /**
  * @brief Convert from Equatorial (J2000) to Galactic (IAU 1958) coordinate system
- * 
- * @param equatorial - I3Equatorial position of astronomical observation 
+ *
+ * @param equatorial - I3Equatorial position of astronomical observation
  *        in J2000 coordinate system
  * @returns I3Galactic position in galactic coordinate system
  */
@@ -190,9 +191,9 @@ I3Galactic I3GetGalacticFromEquatorial(const I3Equatorial& equatorial);
 
 /**
  * @brief Convert from Galactic (IAU 1958) to Equatorial (J2000) coordinate system
- * 
+ *
  * @param galactic - I3Galactic position in galactic coordinate system
- * @returns I3Equatorial position of astronomical observation 
+ * @returns I3Equatorial position of astronomical observation
  *          in J2000 coordinate system
  */
 I3Equatorial I3GetEquatorialFromGalactic(const I3Galactic& galactic);

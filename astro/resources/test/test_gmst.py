@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 #
-# @copyright (C) 2015 The IceCube Collaboration
-# 
+# Copyright (C) 2015 The IceCube Collaboration
+# SPDX-License-Identifier: BSD-2-Clause
+#
 # @author Kevin Meagher
 # @date August 2015
 
 """
-Test I3Astro by comparing the results to computed 
-ra and decs 
+Test I3Astro by comparing the results to computed
+ra and decs
 """
 
 import unittest
@@ -24,7 +25,7 @@ class GMSTTest(unittest.TestCase):
     def caclulate_gmst(self,mjd):
         #magic numbers
         j2k = 51544.5 # J2000
-        dd = 36525. 
+        dd = 36525.
         c0 = 280.46061837
         c1 = 1.31850007701e+07
         c2 = 3.87933e-04
@@ -44,7 +45,7 @@ class GMSTTest(unittest.TestCase):
             for hour in np.linspace(0,24,1):
                 for minute in np.linspace(0,60,1):
                     i3time = i3t0+day*minute*60*I3Units.s
-                
+
                     i3gmst_a = astro.I3GetGMST(i3time)
                     i3gmst_b = self.caclulate_gmst(i3time.mod_julian_day_double)
                     assert (abs(i3gmst_a-i3gmst_b) <0.000002)
@@ -52,5 +53,5 @@ class GMSTTest(unittest.TestCase):
 
 if __name__=='__main__':
     unittest.main()
-        
+
 

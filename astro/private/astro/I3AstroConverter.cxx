@@ -1,9 +1,10 @@
 /**
- * @brief Tableio Converter for I3Particle to store 
+ * @brief Tableio Converter for I3Particle to store
  * astronomical data
  *
- * @copyright (C) 2015 The Icecube Collaboration
- * 
+ * Copyright (C) 2015 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
  * $Id$
  *
  * @file I3AstroConverter.cxx
@@ -40,7 +41,7 @@ size_t I3AstroConverter::FillRows(const I3Particle& particle, I3TableRowPtr rows
 	    particle.GetZenith()/I3Units::degree,particle.GetAzimuth()/I3Units::degree,
 	    eq.ra/I3Units::degree,eq.dec/I3Units::degree
 	    );
-  
+
   rows->Set<double>("ra", eq.ra);
   rows->Set<double>("dec", eq.dec);
 
@@ -68,7 +69,7 @@ size_t I3GalacticConverter::FillRows(const I3Particle& particle, I3TableRowPtr r
         particle.GetZenith()/I3Units::degree,particle.GetAzimuth()/I3Units::degree,
 	    gal.l/I3Units::degree, gal.b/I3Units::degree
 	    );
-  
+
   rows->Set<double>("gal_l", gal.l);
   rows->Set<double>("gal_b", gal.b);
 
@@ -96,7 +97,7 @@ size_t I3SuperGalacticConverter::FillRows(const I3Particle& particle, I3TableRow
 	    particle.GetZenith()/I3Units::degree,particle.GetAzimuth()/I3Units::degree,
 	    sg.l/I3Units::degree, sg.b/I3Units::degree
 	    );
-  
+
   rows->Set<double>("sg_l", sg.l);
   rows->Set<double>("sg_b", sg.b);
 
@@ -117,12 +118,12 @@ size_t I3SunAndMoonConverter::FillRows(const I3EventHeader& header, I3TableRowPt
 {
   I3Direction sun  = I3GetSunDirection (header.GetStartTime());
   I3Direction moon = I3GetMoonDirection(header.GetStartTime());
-  
+
   log_debug("Booking direction of Sun: zenith=%8.4f azimuth=%8.4f and Moon: zenith=%8.4f azimuth=%8.4f",
 	    sun .GetZenith()/I3Units::degree, sun .GetAzimuth()/I3Units::degree,
 	    moon.GetZenith()/I3Units::degree, moon.GetAzimuth()/I3Units::degree
 	    );
-  
+
   rows->Set<double>( "sun_zenith" , sun .GetZenith ());
   rows->Set<double>( "sun_azimuth", sun .GetAzimuth());
   rows->Set<double>("moon_zenith" , moon.GetZenith ());

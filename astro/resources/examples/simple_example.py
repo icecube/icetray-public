@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 #
-# @copyright (C) 2015 The IceCube Collaboration
-# 
+# Copyright (C) 2015 The IceCube Collaboration
+# SPDX-License-Identifier: BSD-2-Clause
+#
 # @author Kevin Meagher
 # @date August 2015
 
@@ -99,7 +100,7 @@ print("At {} a very bright muon was observed by IceCube at zenith={:8.4f} deg, a
                muon_direction.azimuth/I3Units.degree,
                ))
 
-muon_equatorial = astro.I3GetEquatorialFromDirection(muon_direction,time)                    
+muon_equatorial = astro.I3GetEquatorialFromDirection(muon_direction,time)
 print("The The Muon came from of RA = {:8.4f} deg, Dec ={:+7.4f} deg (J2000)"
        .format(muon_equatorial.ra/I3Units.degree,
                muon_equatorial.dec/I3Units.degree,

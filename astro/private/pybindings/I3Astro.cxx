@@ -1,8 +1,9 @@
 /**
  * @brief Python pindings for astronimical conversions
  *
- * @copyright (C) 2015 The Icecube Collaboration
- * 
+ * Copyright (C) 2015 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
  * $Id$
  *
  * @file I3Astro.cxx
@@ -37,7 +38,7 @@ I3_PYTHON_MODULE(astro)
     .def_readwrite("ra",&I3Equatorial::ra,"Right Ascension in radians")
     .def_readwrite("dec",&I3Equatorial::dec,"Declination in radians in radians")
     ;
-  
+
   class_<I3Galactic,bases<I3FrameObject> >("I3Galactic",
     "Container class for storing galactic coordinates (IAU 1958)")
     .def(init<double, double>())
@@ -62,7 +63,7 @@ I3_PYTHON_MODULE(astro)
       "Returns:\n"
       " direction(I3Direction):Zenith and azimuth of the Moon obesrvation\n"
       );
-  
+
   def("I3GetSunDirection",
       &I3GetSunDirection,
       args("time"),
@@ -86,7 +87,7 @@ I3_PYTHON_MODULE(astro)
       "Returns:\n"
       " direction(I3Direction): Zenith and azimuth of the astronomical obesrvation\n"
       );
-  
+
   def("I3GetEquatorialFromDirection",
       &I3GetEquatorialFromDirection,
       (args("direction"),arg("time")),
@@ -98,7 +99,7 @@ I3_PYTHON_MODULE(astro)
       "Returns:\n"
       " equatorial(I3Equatorial): Right ascension and declination (J2000) of an astronomical observation\n"
       );
-  
+
   def("I3GetGalacticFromEquatorial",
       &I3GetGalacticFromEquatorial,
       (args("equatorial")),
@@ -109,7 +110,7 @@ I3_PYTHON_MODULE(astro)
       "Returns:\n"
       " galactic (I3Galactic): Galactic latitude and longitude\n"
       );
-  
+
   def("I3GetEquatorialFromGalactic",
       &I3GetEquatorialFromGalactic,
       args("galactic"),
@@ -197,7 +198,7 @@ I3_PYTHON_MODULE(astro)
       "Returns:\n"
       " est(double):extened-sidereal time in decimal hours\n"
       );
- 
+
 
 
 

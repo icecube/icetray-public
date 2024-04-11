@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 Release Notes
 =============
 
@@ -47,13 +51,13 @@ Dec. 15, 2021 Kevin Meagher
 IceTray Release v1.3.0
 
 * Fix race between tests
-* Add class `I3Ecliptic` for ecliptic coordinates and functions `I3GetEclipticFromEquatorial()` 
+* Add class `I3Ecliptic` for ecliptic coordinates and functions `I3GetEclipticFromEquatorial()`
   and `I3GetEquatorialFromEcliptic`
 * The PAL not found error message not gives the correct link to the install instructions
 * Use with statements for opening files in unit tests
 * Remove print statements from unit tests
 * Make example scripts more interesting and add plot_sun_azimuth.py
-* In order to avoid confusion example code refers to the location of Icecube's center as 
+* In order to avoid confusion example code refers to the location of Icecube's center as
   `icecube` rather than `south_pole`
 
 Dec. 20, 2019 Alex Olivas (aolivas@umd.edu)

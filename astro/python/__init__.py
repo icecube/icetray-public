@@ -1,10 +1,10 @@
-# 
-# copyright  (C) 2015
-# The Icecube Collaboration
-# 
+#
+# Copyright  (C) 2015 The Icecube Collaboration
+# SPDX-License-Identifier: BSD-2-Clause
+#
 # @date August 2015
 # @author Kevin Meagher
-# 
+#
 
 from icecube._astro import *
 from icecube._astro import converters
@@ -15,24 +15,24 @@ from icecube import dataclasses
 @np.vectorize
 def dir_to_equa(zenith,azimuth,mjd):
     """
-    Get the equatorial coordinates (right ascension and 
-    declination) of an IceCube event (`zenith` 
+    Get the equatorial coordinates (right ascension and
+    declination) of an IceCube event (`zenith`
     and `azimuth`) at a given time (`mjd`).
-    
+
     Parameters
     ----------
-    zenith : array_like 
+    zenith : array_like
        IceCube zenith of the direction
-    azimuth: array_like 
+    azimuth: array_like
        IceCube azimuth of the direction
-    mjd: array_like 
+    mjd: array_like
        Modified julian date of the event as as floating point
 
     Returns
     -------
-    ra : array_like 
+    ra : array_like
       Right Ascension in J2000
-    dec : array_like 
+    dec : array_like
       Declination in J2000
 
     """
@@ -52,16 +52,16 @@ def equa_to_dir(ra,dec,mjd):
     Warnings
     --------
 
-    This function is significantly slower than :py:func:`dir_to_equa`, 
+    This function is significantly slower than :py:func:`dir_to_equa`,
     it is highly recommended that if you need to perfrom a significant number
-    of calculations that you go from local to equatorial coordinates and 
+    of calculations that you go from local to equatorial coordinates and
     perform the analyses in equatorial coordinates, rather than the reverse.
-    
+
     Parameters
     ----------
-    ra : array_like 
+    ra : array_like
        Right Ascension (J2000) of the event
-    dec : array_like 
+    dec : array_like
        Declination (J2000) of the event
     mjd: array_like float
        Modified julian date of the event as a floating point
@@ -69,9 +69,9 @@ def equa_to_dir(ra,dec,mjd):
     Returns
     -------
     zenith : array_like
-      IceCube zenith direction 
+      IceCube zenith direction
     azimuth : array_like
-      IceCube azimuthal direction 
+      IceCube azimuthal direction
     """
     eq = I3Equatorial(ra,dec)
     i3time = dataclasses.I3Time()
@@ -85,7 +85,7 @@ def sun_dir(mjd):
     Get the location of the Sun in IceCube local coordinates
     `zenith` and `azimuth` for a given time in `mjd`
     """
-    
+
     i3time = dataclasses.I3Time()
     i3time.set_mod_julian_time_double(mjd)
     i3dir = I3GetSunDirection(i3time)
@@ -97,7 +97,7 @@ def moon_dir(mjd):
     Get the location of the Moon in IceCube local coordinates
     `zenith` and `azimuth` for a given time in `mjd`
     """
-    
+
     i3time = dataclasses.I3Time()
     i3time.set_mod_julian_time_double(mjd)
     i3dir = I3GetMoonDirection(i3time)
@@ -109,12 +109,12 @@ def equa_to_gal(ra,dec):
     """
     Get the Galactic coordinates `l` and `b` of an
     equatorial coordinate (Right Ascension and Declination).
-    
+
     Parameters
     ----------
-    ra : array_like 
+    ra : array_like
        Right Ascension (J2000) of the event
-    dec : array_like 
+    dec : array_like
        Declination (J2000) of the event
 
     Returns
@@ -131,8 +131,8 @@ def equa_to_gal(ra,dec):
 @np.vectorize
 def gal_to_equa(l,b):
     """
-    Get the equatorial coordinates (Right Ascension 
-    and Declination) from  Galactic coordinates 
+    Get the equatorial coordinates (Right Ascension
+    and Declination) from  Galactic coordinates
     `l` and `b`.
 
     Parameters
@@ -144,9 +144,9 @@ def gal_to_equa(l,b):
 
     Returns
     -------
-    ra : array_like 
+    ra : array_like
        Right Ascension (J2000) of the event
-    dec : array_like 
+    dec : array_like
        Declination (J2000) of the event
 
 
@@ -261,12 +261,12 @@ def supergal_to_equa(l,b):
 
 def angular_distance(lon1,lat1,lon2,lat2):
     """
-    calculate the angular distince along the great circle 
+    calculate the angular distince along the great circle
     on the surface of a shpere between the points
-    (`lon1`,`lat1`) and (`lon2`,`lat2`) 
+    (`lon1`,`lat1`) and (`lon2`,`lat2`)
 
-    This function Works for equatorial coordinates 
-    with right ascension as longitude and declination 
+    This function Works for equatorial coordinates
+    with right ascension as longitude and declination
     as latitude. This function uses the Vincenty formula
     for calculating the distance.
 
@@ -278,7 +278,7 @@ def angular_distance(lon1,lat1,lon2,lat2):
       latitude of the first point in radians
     lon2 : array_like
       longitude of second point in radians
-    lat2 : array_like 
+    lat2 : array_like
       latitude of the second point in radians
 
     """
@@ -289,7 +289,7 @@ def angular_distance(lon1,lat1,lon2,lat2):
     s2 = np.sin(lat2)
     sd = np.sin(lon2-lon1)
     cd = np.cos(lon2-lon1)
-    
+
     return np.arctan2(
         np.hypot(c2*sd,c1*s2-s1*c2*cd),
         s1*s2+c1*c2*cd
@@ -307,30 +307,30 @@ def fractional_mjd(mjd_day,mjd_sec,mjd_ns):
     mjd_sec : array_like
       Seconds since the start of the UTC day
     mjd_ns : array_like
-      number nanoseconds since the start of UTC second  
+      number nanoseconds since the start of UTC second
     """
 
     return mjd_day + mjd_sec/86400. + mjd_ns/8.64e13
-    
+
 def tables_to_equa(particle_table,event_header_table):
     """
-    Get the equatorial coordinates (right ascension and 
-    declination) of IceCubes Events from tables writen by 
+    Get the equatorial coordinates (right ascension and
+    declination) of IceCubes Events from tables writen by
     tableio. Works with hdf5 tables written by hdfwriter
     and read by pytables, h5py, or pandas
-    
+
     Parameters
     ----------
     particle_table : table
        Table containing Zenith and Azimuth of particles
     event_header_table : table
-       Table containing the start time of the events 
+       Table containing the start time of the events
 
     Returns
     -------
-    ra : array_like 
+    ra : array_like
       Right Ascension in J2000
-    dec : array_like 
+    dec : array_like
       Declination in J2000
 
     Example
@@ -352,7 +352,7 @@ def tables_to_equa(particle_table,event_header_table):
      p = pandas.read_hdf('foo.hdf5','Particle')
      h = pandas.read_hdf('foo.hdf5','I3EventHeader')
      ra,dec = tables_to_equa(p,h)
-       
+
     """
     if hasattr(particle_table,"cols"):
         zenith = particle_table.cols.zenith[:]
@@ -369,8 +369,8 @@ def tables_to_equa(particle_table,event_header_table):
         mjd_day = event_header_table["time_start_mjd_day"]
         mjd_sec = event_header_table["time_start_mjd_sec"]
         mjd_ns  = event_header_table["time_start_mjd_ns"]
-        
+
     mjd = fractional_mjd(mjd_day,mjd_sec,mjd_ns)
 
     return dir_to_equa(zenith,azimuth,mjd)
-        
+

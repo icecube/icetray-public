@@ -1,5 +1,6 @@
-.. @copyright (C) 2015 The IceCube Collaboration
-.. 
+.. Copyright (C) 2015 The IceCube Collaboration
+.. SPDX-License-Identifier: BSD-2-Clause
+..
 .. $Id$
 ..
 .. @author Kevin Meagher
@@ -14,9 +15,9 @@ astro
 ~~~~~
 
 This project provides functions for converting between local IceCube coordinates
-and astronomical coordinates. 
+and astronomical coordinates.
 
-Maintainer: Kevin Meahger 
+Maintainer: Kevin Meahger
 
 Overview
 ========
@@ -52,7 +53,7 @@ Background
 Astronomical objects are most commonly located in the celestial sphere by a coordinate
 system referred to as the equatorial coordinate system. This is the system in which the
 universe is 'at rest', aside from solar system objects, and stars near the solar system,
-astronomical objects do not move in equatorial coordinates. 
+astronomical objects do not move in equatorial coordinates.
 Equatorial coordinates are defined such that they have the same equator and poles as the Earth.
 The coordinates in
 this system are Right Ascension (commonly abbreviated  *RA* or *α*) and Declination
@@ -91,7 +92,7 @@ will give ordinal directions North(0°) => East(90°) => South(180°)
 For the convenience of IceCubers who are used to the IceCube coordinate system
 and are likely to be confused by convert to standard astronomical local coordinates,
 astro does not deal with astronomical local coordinates and converts directly
-from IceCube coordinates to equatorial coordinates. 
+from IceCube coordinates to equatorial coordinates.
 
 Unfortunately, the equatorial coordinate system can be ambiguous, although the direction of the
 Earth's poles and equator is stable on the short term. The position of the poles slowly moves
@@ -125,7 +126,7 @@ Convert from local coordinates to equatorial, galactic, and supergalactic:
   from equatorial coordinates ``ra`` and ``dec``
 * :py:func:`icecube.astro.gal_to_supergal` -  Get the supergalactic coordinates ``SGL`` and ``SGB``
   from galactic coordinates ``l`` and ``b``
-    
+
 .. note::
    Since the conversion from local to equatorial coordinates is rather complicated
    but the conversions between equatorial, galactic, and supergalactic are comparatively
@@ -134,10 +135,10 @@ Convert from local coordinates to equatorial, galactic, and supergalactic:
 
 Sun and Moon
 ------------
-   
+
 Analyses of the Sun and Moon are typically done in local coordinates, so the functions
-will return local coordinates for a given time: 
- 
+will return local coordinates for a given time:
+
 * :py:func:`icecube.astro.sun_dir` - Get the location of the Sun in IceCube local coordinates
   `zenith` and `azimuth` for a given time in `mjd`
 * :py:func:`icecube.astro.moon_dir` - Get the location of the Moon in IceCube local coordinates
@@ -148,16 +149,16 @@ Convenience Functions
 
 These Functions are provided for convenience
 
-* :py:func:`icecube.astro.angular_distance` - calculate the angular distance along the great circle 
+* :py:func:`icecube.astro.angular_distance` - calculate the angular distance along the great circle
   on the surface of a sphere between the points
   (`lon1`,`lat1`) and (`lon2`,`lat2`)
-* :py:func:`icecube.astro.tables_to_equa` - Get the equatorial coordinates (right ascension and 
-  declination) of IceCube's Events from tables written by 
+* :py:func:`icecube.astro.tables_to_equa` - Get the equatorial coordinates (right ascension and
+  declination) of IceCube's Events from tables written by
   tableio. Works with hdf5 tables written by hdfwriter
   and read by pytables, h5py, or pandas
 * :py:func:`icecube.astro.fractional_mjd` - This is a convenience function to
   convert the MJD information provided by the standard tableio booking to a fractional MJD.
- 
+
 Reverse Transformations
 -----------------------
 
@@ -170,13 +171,13 @@ back to local coordinate systems.
   at a given time `mjd`.
 
   .. warning::
-     This function is significantly slower than :py:func:`dir_to_equa`, 
+     This function is significantly slower than :py:func:`dir_to_equa`,
      it is highly recommended that if you need to perform a significant number
-     of calculations that you go from local to equatorial coordinates and 
+     of calculations that you go from local to equatorial coordinates and
      perform the analyses in equatorial coordinates, rather than the reverse.
-    
-* :py:func:`icecube.astro.gal_to_equa` - Get the equatorial coordinates (Right Ascension 
-  and Declination) from  Galactic coordinates 
+
+* :py:func:`icecube.astro.gal_to_equa` - Get the equatorial coordinates (Right Ascension
+  and Declination) from  Galactic coordinates
   `l` and `b`
 * :py:func:`icecube.astro.supergal_to_equa` - Get the galactic coordinates 'l' and 'b'
   from supergalactic coordinates 'SGL' and 'SGB'
@@ -196,7 +197,7 @@ location of the Crab Nebula.
    from icecube import astro
 
    with tables.openFile('tableio.h5') as f:
-   
+
      mjd = (f.root.I3EventHeader.cols.time_start_mjd_day[:]+
             f.root.I3EventHeader.cols.time_start_mjd_sec[:]/86400.)
      zenith  = f.root.OnlineL2_BestFit.cols.zenith[:]
@@ -252,7 +253,7 @@ These are the base classes used to store information and pass to functions:
   Epoch
 * :py:class:`icecube.astro.I3Galactic` - Struct to store galactic coordinates
 * :py:class:`icecube.astro.I3SuperGalactic` - Struct to store supergalactic coordinates
-  
+
 
 Forward Transformations
 -----------------------
@@ -268,7 +269,7 @@ Sun and Moon
 
 * :py:func:`icecube.astro.I3GetMoonDirection` - Returns the direction of the Moon in local IceCube coordinates at a given time
 * :py:func:`icecube.astro.I3GetSunDirection` - Returns the direction of the Sun in local IceCube coordinates at a given time
- 
+
 Time functions
 -----------------
 
@@ -289,22 +290,22 @@ Reverse Transformations
   (de Vaucouleurs) to Galactic (IAU 1958) coordinate system
 * :py:func:`icecube.astro.I3GetSuperGalacticFromGalactic` - Convert from Galactic
   (IAU 1958) to Supergalactic (de Vaucouleurs) coordinate system
-                
+
 Constants
 ---------
 
 * :py:const:`icecube.astro.ICECUBE_LATITUDE` - Latitude (WGS 84) of the origin of the IceCube coordinate system
 * :py:const:`icecube.astro.ICECUBE_LONGITUDE` - Longitude (WGS 84) of the origin of the IceCube coordinate system
-                   
+
 C++ Interface
 =============
 
 I3Astro provides 3 container classes:
 
-* :cpp:class:`I3Equatorial` for storing J2000 coordinates      
+* :cpp:class:`I3Equatorial` for storing J2000 coordinates
     :``ra``: Right ascension in radians
-    :``dec``: Declination in radians    
-* :cpp:class:`I3Galactic` for storing IAU1958 galactic coordinates     
+    :``dec``: Declination in radians
+* :cpp:class:`I3Galactic` for storing IAU1958 galactic coordinates
     :``l``: Galactic Longitude in radians
     :``b``: Galactic Latitude in radians
 * :cpp:class:`I3SuperGalactic` for storing de Vaucouleurs supergalactic coordinates
@@ -330,8 +331,8 @@ Tableio Converters
 
 I3Astro provides 4 :ref:`tableio <tableio-main>` converters:
 
-* :js:data:`I3AstroConverter` - Books equatorial coordinates 
-* :js:data:`I3GalacticConverter` - Books galactic coordinates 
+* :js:data:`I3AstroConverter` - Books equatorial coordinates
+* :js:data:`I3GalacticConverter` - Books galactic coordinates
 * :js:data:`I3SuperGalacticConverter` - Books supergalactic coordinates
 * :js:data:`I3SunAndMoonConverter` - Books the location of the Sun and moon for a timestamp provided by :cpp:class:`I3EventHeader`
 
@@ -350,7 +351,7 @@ Example:
                     'I3EventHeader' : [ dataclasses.converters.I3EventHeaderConverter(),
                                         astro.converters.I3SunAndMoonConverter()]
                    }
-                   
+
 Accuracy
 ========
 
@@ -360,7 +361,7 @@ However for IceCube data, muon/cascade reconstruction error is the dominant
 source of angular uncertainty, this is typically O(1°) for muon neutrinos and higher for
 cascades.
 None of the corrections typically applied by these packages (save nutation)
-are necessary to achieve the necessary level of accuracy for an IceCube analysis. 
+are necessary to achieve the necessary level of accuracy for an IceCube analysis.
 However, discussion of positional astronomy often lead to arguments about what corrections
 are appropriate to apply.
 The following table and discussion is intended to provide context to any future
@@ -376,7 +377,7 @@ discussions about which corrections are appropriate to apply.
 | precession             | 50"/yr     | Yes         | relative to the year 2000 |
 +------------------------+------------+-------------+---------------------------+
 | nutation               | < 11"      | Yes         |                           |
-+------------------------+------------+-------------+---------------------------+ 
++------------------------+------------+-------------+---------------------------+
 | annual aberration      | < 20.5"    | Yes         |                           |
 +------------------------+------------+-------------+---------------------------+
 | light deflection       | < 1.74"    | Yes         | only near the sun limb    |
@@ -426,9 +427,9 @@ This value is taken from the 2011 position of the South Pole in IceCube coordina
 :wiki:`wiki <Coordinate_system>`.
 IceCube reconstructions calculate zenith and azimuth angles relative to a position
 near the center of gravity of the hits, which can be up to 500 m from the center of the
-detector. No effort is made to correct for this. 
+detector. No effort is made to correct for this.
 In addition, the geographic location of IceCube move with the glacial flow of the
-antarctic ice at a rate 10 m/yr no effort is made to correct for this either. 
+antarctic ice at a rate 10 m/yr no effort is made to correct for this either.
 
 Dependencies
 ============

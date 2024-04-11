@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # This example can verify that the azimuth is defined correctly with reference to the sun
 # It is obvious that the sun should be at Grid South at midnight,
 # Grid East at 6:00, Grid North at 12:00, and Grid West at 18:00
@@ -48,7 +53,7 @@ def drawCirc(ax,radius,centX,centY,angle_,theta2_,color_='black'):
             color=color_
         )
     )
-    ax.set_xlim([centX-radius,centY+radius]) and ax.set_ylim([centY-radius,centY+radius]) 
+    ax.set_xlim([centX-radius,centY+radius]) and ax.set_ylim([centY-radius,centY+radius])
 
 drawCirc(ax1,200,0,0,0,75)
 ax1.text(100/2**.5,100/2**.5,"Azimuth",horizontalalignment='left',verticalalignment='bottom')

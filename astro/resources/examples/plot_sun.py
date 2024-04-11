@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 #
-# @copyright (C) 2015 The IceCube Collaboration
-# 
+# Copyright (C) 2015 The IceCube Collaboration
+# SPDX-License-Identifier: BSD-2-Clause
+#
 # @author Kevin Meagher
 # @date August 2015
 
