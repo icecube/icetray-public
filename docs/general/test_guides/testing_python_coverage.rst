@@ -11,13 +11,11 @@ accomplished via your package manager::
 
   $ sudo apt-get install python-coverage
 
-or via `pip`::
+or via ``pip``::
 
   $ pip install coverage
 
-Once that's completed, proceed to build your workspace as normal.
-
-::
+Once that's completed, proceed to build your workspace as normal. ::
 
    $ cd $I3_BUILD
    $ cmake -DCMAKE_BUILD_TYPE=Debug ../src
@@ -25,9 +23,9 @@ Once that's completed, proceed to build your workspace as normal.
    $ make pybindings
    $ make test-bins
 
-At this point we can generate our report.
+At this point we can generate our report. ::
 
-:: $ make pycoverage
+   $ make pycoverage
 
 When that completes you can find the report in
-`$I3_BUILD/pycoverage/00_LATEST/`.
+``$I3_BUILD/pycoverage/00_LATEST/``.

@@ -100,7 +100,7 @@ a {
     text-decoration: none;
 }
 
-/* H1 is a theme relevent blue, using 'initial' vice '#000000/black' will hopefully allow a future "dark-mode" theme */
+/* H1 is a theme relevant blue, using 'initial' vice '#000000/black' will hopefully allow a future "dark-mode" theme */
 h1 {
     color: initial;
 }

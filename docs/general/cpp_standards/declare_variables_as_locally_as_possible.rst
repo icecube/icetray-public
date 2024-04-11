@@ -10,6 +10,5 @@ the classes' member functions.  Globals are the worst, only use them
 when necessary.
 
 Define each variable as locally as you can, which is usually exactly
-at the point where you also have enough data to initalize it, and
-immediately before its first use.   
-
+at the point where you also have enough data to initialize it, and
+immediately before its first use.

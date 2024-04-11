@@ -1,8 +1,11 @@
+.. highlight:: cpp
 
 Make data members private, except in behaviorless aggregates (C-style structs)
 ------------------------------------------------------------------------------
 
-Information hiding is the key to good software engineering. Prefer making all data members private; private data is the best means that a class can use to preserve its internal consistency.
+Information hiding is the key to good software engineering. Prefer making all
+data members private; private data is the best means that a class can use to
+preserve its internal consistency.
 
 Here is an example, a class that stores dates. Consider this implementation::
 
@@ -13,9 +16,13 @@ Here is an example, a class that stores dates. Consider this implementation::
         int month_;
     };
 
-Months can range only from 1 to 12, and days only from 1 to 31 or less, depending on the month; but the exposed data can take any values. The responsiblity to check the consistency of the data is pushed onto the user of this class.
+Months can range only from 1 to 12, and days only from 1 to 31 or less,
+depending on the month; but the exposed data can take any values. The
+responsibility to check the consistency of the data is pushed onto the user of
+this class.
 
-If the data are private, the class itself can provide these checks and users can rely on the fact that Date instances passed to them have a valid state::
+If the data are private, the class itself can provide these checks and users
+can rely on the fact that Date instances passed to them have a valid state::
 
     // a better design
     class Date {
@@ -36,6 +43,12 @@ If the data are private, the class itself can provide these checks and users can
         int GetDay() const { return day_; }
     };
 
-Private data is preferred over protected data. Protected data have all the drawbacks of public data, because derived classes still share the responsiblity in keeping the internal state of the base consistent. Base classes should also encapsulate their state against derived classes.
+Private data is preferred over protected data. Protected data have all the
+drawbacks of public data, because derived classes still share the
+responsibility in keeping the internal state of the base consistent. Base
+classes should also encapsulate their state against derived classes.
 
-The exception to this rule are value aggregates, also called "C-style **structs**". They simply keep a bunch of data together and are not meant to maintain any internal consistency. **std::pair** and **boost::tuple** are typical examples.
+The exception to this rule are value aggregates, also called "C-style
+**structs**". They simply keep a bunch of data together and are not meant to
+maintain any internal consistency. ``std::pair`` and ``boost::tuple`` are
+typical examples.

@@ -4,7 +4,7 @@ IceCube's ``icetray`` at "supercomputing centers"
 =================================================
 
 The following is a tutorial for getting stared with ``icetray`` at
-"supercomputing centers". Wile originally written for `TACC
+"supercomputing centers". While originally written for `TACC
 <https://www.tacc.utexas.edu/>`_, it should generally apply to
 supercomputing or large-scale time-sharing centers.
 
@@ -67,7 +67,7 @@ If the module is loaded, you may need to create an override for that
 dependency. This is done by adding file to what is generically termed a
 "site cmake directory". By default, this directory is
 ``/usr/share/fizzicks``. (Yes, a silly name, but chosen at the time to
-avoid conficts.) This can be overridden by setting the environment
+avoid conflicts.) This can be overridden by setting the environment
 variable ``I3_SITE_CMAKE_DIR`` in your shell.
 
 The files in your site-cmake directory should mirror those in

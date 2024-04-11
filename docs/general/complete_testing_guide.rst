@@ -16,7 +16,7 @@ That's pretty much it.
 
 Python Tests
 ............
-Below is a document that explains how to write tests for python classes or C++ 
+Below is a document that explains how to write tests for python classes or C++
 classes with python bindings.
 
 .. toctree::
@@ -50,7 +50,7 @@ to write a python unittest and run it as a module in a chain.
 
 C++ Tests
 ..........
-If you have a C++ class that either has no python bindings or you want to test some 
+If you have a C++ class that either has no python bindings or you want to test some
 class method that's not bound in C++, then you have to write tests in C++.  Check
 out the docs on :ref:`I3Test <cmake-i3test>`.
 
@@ -76,7 +76,7 @@ Check out the last coverage report to see what kind of coverage your project has
 .. comment
    `Latest Coverage Report <http://software.icecube.wisc.edu/coverage/00_LATEST/>`_
 
-Coverage builds are run weekly, so if you want to see the effect your test had 
+Coverage builds are run weekly, so if you want to see the effect your test had
 on your project's coverage, you'll need to be patient. If you don't
 want to be patient, and would rather generate coverage reports
 locally, read on.

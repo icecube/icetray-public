@@ -28,7 +28,7 @@ Building the docs
 =================
 
 Building the entire docs can take quite some time, so they are available at
-`<https://docs.icecube.aq/>`_ where they are regularlly updated.  However, it
+`<https://docs.icecube.aq/>`_ where they are regularly updated.  However, it
 is often necessary to build the docs yourself.  The docs are build with a
 python script called ``docs-build`` which will be available in your path if
 you are in an IceTray environment.  If run without any arguments the entire
@@ -152,13 +152,22 @@ FAQs About Building the Documentation
 
         :44: (ERROR/3) Unknown interpreted text role "cpp:class".
 
-:A: You'll generally see errors like this during the two ``icetray-inspect`` phases of the documentation build. They refer to text roles that are compatible with ``sphinx``, but not understood by ``docutils`` (which underpins ``icetray-inspect``). These errors are harmless. Unfortunately there's nothing we can do to suppress or modify them, as they are printed straight to ``stderr`` from deep within ``docutils``.
+:A: You'll generally see errors like this during the two ``icetray-inspect``
+    phases of the documentation build. They refer to text roles that are
+    compatible with ``sphinx``, but not understood by ``docutils`` (which
+    underpins ``icetray-inspect``). These errors are harmless. Unfortunately
+    there's nothing we can do to suppress or modify them, as they are printed
+    straight to ``stderr`` from deep within ``docutils``.
 
 ..
 
-:Q: I want to help fix the docs, but when building I get an opaque wall of text! HELP!
+:Q: I want to help fix the docs, but when building I get an opaque wall of
+    text! HELP!
 
-:A: ``docs-build`` and ``icetray-inspect`` both understand rich-text formatting as implemented by the `rich python library <https://github.com/Textualize/rich>`_. All you need to do is install it. The easiest way is via ``pip3``.
+:A: ``docs-build`` and ``icetray-inspect`` both understand rich-text formatting
+    as implemented by the `rich python library
+    <https://github.com/Textualize/rich>`_. All you need to do is install it.
+    The easiest way is via ``pip3``.
 
     .. code-block:: console
 

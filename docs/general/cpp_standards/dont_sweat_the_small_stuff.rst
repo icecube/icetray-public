@@ -146,7 +146,7 @@ complete example below::
       [blank line]
   A very short file description (preferably one line), followed by a
       [blank line]
-  @file - Doxygen command to indecate file description
+  @file - Doxygen command to indicate file description
   @date - Followed by the Date tag
   @author name to identify author
 
@@ -180,7 +180,7 @@ Example for c++ files::
 
 .. highlight:: python
 
-For python, doxygen style comments are not nescessary. But the description
+For python, doxygen style comments are not necessary. But the description
 must be in a docstring::
 
   # SPDX-FileCopyrightText: 2024 The IceTray Contributors
@@ -189,7 +189,7 @@ must be in a docstring::
   # Date 2024-01-01
   # Author burgess
   # Author blaufuss
-  
+
   """
   Definition of Dummy class
   """
@@ -197,11 +197,11 @@ must be in a docstring::
 .. highlight:: none
 
 Doxygen auto generates documentation from the code with the help
-of specially formated comments::
+of specially formatted comments::
 
   @brief -  Used for brief descriptions and is written in  C style comment block
 
-  /** - Used for detailed descriptions and is writen like a C style comment block starting with an extra star.
+  /** - Used for detailed descriptions and is written like a C style comment block starting with an extra star.
 
   /// - Used for member variable descriptions.
 
@@ -233,7 +233,7 @@ documentation, leave clues as to what the author intended for the code
 to do, and assist in future debugging.
 
 
-As a guideline, the following guidlines are provided for choosing a
+As a guideline, the following guidelines are provided for choosing a
 logging level:
 
 * log_fatal - Only called for fatal errors, will throw.
@@ -243,7 +243,7 @@ logging level:
 * log_debug - Information for system expert.
 * log_trace - Chronic logorrhea. For step by step debugging.
 
-For non-CS experts, the guidline is:  Standard logging level is log_warn. Under
+For non-CS experts, the guideline is:  Standard logging level is log_warn. Under
 absolutely normal conditions, no output at log_warn or higher.
 The following list are examples of some messages you might see at each logging l
 evel:

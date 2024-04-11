@@ -43,9 +43,9 @@ problem, so that we don't have to ask if you tried something.
 Including what did not work will reduce the replies that repeat what
 you already tried.  Be specific.
 
-Try to phrase your question so someone will *not* have to ask: 
+Try to phrase your question so someone will *not* have to ask:
 
-* What did it do instead of working?  
+* What did it do instead of working?
 * What do you mean by working?
 * How do you know it is not working?
 * When did the problem start?
@@ -121,13 +121,13 @@ Use an illustrative subject line.
 
 Don't put in a subject line like "HELP ME!" or "icetray question."
 Instead, say something like "StreamError writing TWRMCHitSeriesMap".
- 
+
 Don't use meaningless words in the *Subject*
 
 **emergency**
   unless shutting down means losing data it probably isn't.
 
-**Help** 
+**Help**
   everybody with a question is looking for help
 
 **Question**
@@ -141,7 +141,7 @@ are not adequate.  Misleading subject lines make it difficult to
 locate your question again when we can answer it.  It is also
 frustrating to answer a question only to see that part of the
 description was contained only in the subject line.  So make sure that
-the subject line matches the question.  
+the subject line matches the question.
 
 Many people choose what they read based on the titles of the mails, so
 be precise if you want more eyeballs on the problems you post.
@@ -157,7 +157,7 @@ misleading one, report it.  Include what the problem actually was (and
 what the software claimed that it was, if it claimed anything).
 
 
-If you've struggled with a useless/vague error message, don't let the problem state slip away 
+If you've struggled with a useless/vague error message, don't let the problem state slip away
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you have encountered a problem and got a bad/incorrect/useless
@@ -206,5 +206,4 @@ Especially, if you include further projects in a meta-project
 release you might be on your own. Meta-project maintainers invest
 a lot of time to make sure that meta-project releases and the trunk
 are working. Extra projects may require dependencies that are not
-satisfied in a given meta-project release. 
-
+satisfied in a given meta-project release.

@@ -3,13 +3,17 @@
 Avoid inheriting from classes that were not designed to be base classes
 -----------------------------------------------------------------------
 
-Classes meant to be used standalone (utility) obey a different
-blueprint than base classes (See Item 32: Be clear what kind of class
-you are writing).  Using a standalone (utility) class as a base class
-is a serious design error and should be avoided.  Keep these principles in mind:
+Classes meant to be used standalone (utility) obey a different blueprint than
+base classes (See Item 32: Be clear what kind of class you are writing).  Using
+a standalone (utility) class as a base class is a serious design error and
+should be avoided.  Keep these principles in mind:
 
-- To add behavior, prefer to add nonmember functions instead of member functions (See Item 44: Prefer writing nonmember nonfriend functions).
-- To add state, prefer composition instead of inheritance (See Item 34: Prefer composition to inheritance).
+- To add behavior, prefer to add nonmember functions instead of member
+  functions (See Item 44: Prefer writing nonmember nonfriend functions).
+
+- To add state, prefer composition instead of inheritance (See Item 34: Prefer
+  composition to inheritance).
+
 - Avoid inheriting from concrete base classes.
 
 Adding behavior
@@ -65,17 +69,17 @@ relationships are "is-a" relationships.
 
     using std::string;
 
-    class Person 
+    class Person
     {
-	string Title;
-	string Name;
-	int Age;
+        string Title;
+        string Name;
+        int Age;
     }
 
-    class Employee : Person 
+    class Employee : Person
     {
-	int Salary;
-	string Title;
+        int Salary;
+        string Title;
     }
 
 Composition:
@@ -90,13 +94,13 @@ Person.
 
     using std::string;
 
-    class Person 
+    class Person
     {
         string Title;
         string Name;
         int Age;
 
-        public Person(string title, string name, string age) 
+        public Person(string title, string name, string age)
         {
             this.Title = title;
             this.Name = name;
@@ -104,12 +108,12 @@ Person.
         }
     }
 
-    class Employee 
+    class Employee
     {
         int Salary;
         private Person person;
 
-        public Employee(Person p, int salary) 
+        public Employee(Person p, int salary)
         {
             this.person = p;
             this.Salary = salary;
@@ -124,17 +128,16 @@ Composition over Inheritance:
 
 Now say you want to create a Manager type so you end up with::
 
-    class Manager : Person, Employee 
+    class Manager : Person, Employee
     {
     }
-
 
 This example will work fine, however, what if ``Person`` and
 ``Employee`` both declared ``Title``? Should ``Manager.Title`` return
 "Manager of Operations" or "Mr."? Under composition this ambiguity is
 better handled::
 
-    Class Manager 
+    Class Manager
     {
         public Title;
         public Manager(Person p, Employee e)
@@ -149,10 +152,9 @@ The Manager object is composed as an ``Employee`` and a
 explicit composition removes ambiguity among other things and you'll
 encounter fewer bugs.
 
-
 Avoid inheriting from concrete base classes.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Inheriting from a class with a public non-virtual destructor risks
-littering your code with underfined behavior by deleting pointers to
+littering your code with undefined behavior by deleting pointers to
 base class objects that actually point to the derived objects.

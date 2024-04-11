@@ -1,5 +1,13 @@
 Submitting Tickets
 ==================
+
+.. warning::
+
+   This documentation is deprecated, and only serves as a historical reference.
+   Since 2018 IceTry issues have been tracked on GitHub at
+   `<https://github.com/icecube/icetray/issues>`_. The general guidance of
+   being complete as possible still holds.
+
 Submitting tickets via Trac (`<http://code.icecube.wisc.edu/projects/icecube/newticket>`_) is 
 pretty self-explanatory, but there are a few things to keep in mind.  The most important
 of which is **DON'T SUBMIT TICKETS AS USER 'ICECUBE'!!!**  We often need to follow up 

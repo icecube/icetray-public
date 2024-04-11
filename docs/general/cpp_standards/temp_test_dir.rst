@@ -13,13 +13,13 @@ For python script tests, set up a temporary directory like such::
     import os
     import tempfile
     import shutil
-    
+
     orig_dir = os.getcwd()
     tmp_dir = tempfile.mkdtemp(dir=orig_dir)
     os.chdir(tmp_dir)
     try:
         # do tests here
-        
+
     finally:
         os.chdir(orig_dir)
         shutil.rmtree(tmp_dir)
@@ -36,7 +36,7 @@ If you are using the :py:mod:`unittest` framework, there is an alternate way::
     class MyTest(unittest.TestCase):
         def setUp(self):
             super(MyTest,self).setUp()
-            
+
             orig_dir = os.getcwd()
             tmp_dir = tempfile.mkdtemp(dir=orig_dir)
             os.chdir(tmp_dir)
@@ -44,6 +44,6 @@ If you are using the :py:mod:`unittest` framework, there is an alternate way::
                 os.chdir(orig_dir)
                 shutil.rmtree(tmp_dir)
             self.addCleanup(clean_dir)
-        
+
         def test_me(self):
             # do test here like normal

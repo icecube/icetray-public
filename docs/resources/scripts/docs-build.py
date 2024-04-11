@@ -121,7 +121,7 @@ def main():
     parser.add_argument('--verbose', '-v', action='count')
     parser.add_argument('--redirect-sphinx-output', action='store_true')
     parser.add_argument('--clean',action='store_true',
-                        help='clean out the old files in documentaiton build '
+                        help='clean out the old files in documentation build '
                         'directory before generating any new files')
     parser.add_argument('--projects', nargs='+',metavar='proj',
                         help='only generate documentation for these projects')
@@ -212,7 +212,7 @@ def main():
         python_src_dir = os.path.join(sourcedir,"python")
 
         def generate_python_docs():
-            # call program which generates rsts for all python moudles in libdir
+            # call program which generates rsts for all python modules in libdir
             for d in ["lib/icecube", "lib/pybdt"]:
                 if call("sphinx-apidoc",
                         "-q", "-l", "-M", "-e",

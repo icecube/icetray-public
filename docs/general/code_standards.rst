@@ -68,10 +68,11 @@ Good coding standards offer many interrelated advantages:
 * *Uniformity in the right dimension:* This frees developers
   to be creative in directions that matter.
 
-Code reviews will make constant reference to *C++ Coding Standards* [#]_, by Herb Sutter and Andrei Alexandrescu.  If you submit code that
-gets reviewed, you should have access to a copy: reviewers will refer
-to the book, and everybody will save time if you can read the full
-details/explanations yourself.
+Code reviews will make constant reference to *C++ Coding Standards* [#]_, by
+Herb Sutter and Andrei Alexandrescu.  If you submit code that gets reviewed,
+you should have access to a copy: reviewers will refer to the book, and
+everybody will save time if you can read the full details/explanations
+yourself.
 
 This document borrows pieces from the book's structure, and you will find direct
 quotes from the book throughout (like the opening paragraph of this
@@ -100,7 +101,7 @@ Design Style
 
 .. toctree::
    :titlesonly:
-   
+
    cpp_standards/dont_optimize_prematurely
    cpp_standards/minimize_global_data
 
@@ -214,30 +215,28 @@ Useful links
 ------------
 
 Bjarne Stroustrup's C++ pages <https://www.stroustrup.com/>
-    The pages of the creator of C++ 
+    The pages of the creator of C++
 
 Effective C++ <https://www.aristeia.com/books.html>
     Effective C++ and More Effective C++ contains many very useful items
-    for C++ programmers. 
+    for C++ programmers.
 
 C/C++ reference <https://www.cppreference.com/>
     General C/C++, standard C libraries, C++ I/0, strings and STL
-    reference. 
+    reference.
 
 C++ FAQ lite <http://www.parashift.com/c++-faq-lite/>
-    Many useful answers on most C++ topics 
+    Many useful answers on most C++ topics
 
 C++ Notes <http://www.fredosaurus.com/notes-cpp/index.html>
-    Small useful examples illustrating basic C++ usage. 
+    Small useful examples illustrating basic C++ usage.
 
 Doxygen <https://doxygen.nl>
-    Generates code documentation from source code comments 
+    Generates code documentation from source code comments
 
 Also handy for C++ programming GCC <http://www.gnu.org/software/gcc/>
     GNU Compiler Collection - many compilers, including the g++ C++
-    compiler! 
-
-
+    compiler!
 
 .. rubric:: Footnotes
 

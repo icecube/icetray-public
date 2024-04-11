@@ -1,3 +1,5 @@
+.. highlight:: cpp
+
 Don't write code that depends on the order of evaluation of function arguments
 ------------------------------------------------------------------------------
 
@@ -7,7 +9,7 @@ rely on it.
 If using iterators::
 
   foo(++i,++i)
-  
+
 it is undefined which argument will have which value.
 
 It becomes even more dangerous if when evaluating an argument an

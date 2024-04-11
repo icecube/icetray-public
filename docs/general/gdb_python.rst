@@ -1,3 +1,5 @@
+.. highlight:: text
+
 How to run a python script under the debugger
 ---------------------------------------------
 
@@ -22,7 +24,7 @@ First be sure that you have built either **Debug** or
 
 run gdb using ``--args``, passing ``python`` and your script::
 
-  % gdb --args python ./examples/resources/scripts/pass1.py 
+  % gdb --args python ./examples/resources/scripts/pass1.py
   GNU gdb 6.8-debian
   Copyright (C) 2008 Free Software Foundation, Inc.
   License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
@@ -92,7 +94,7 @@ given you a prompt.  Now it is useful to see a stack trace::
       at /home/troy/Icecube/meta-projects/offline-software/trunk/src/icetray/private/icetray/I3Module.cxx:131
   #5  0xb779bbe6 in I3Tray::Execute (this=0x81ccd08)
       at /home/troy/Icecube/meta-projects/offline-software/trunk/src/icetray/private/icetray/I3Tray.cxx:381
-  #6  0xb7c12230 in boost::python::detail::invoke<int, void (I3Tray::*)(), boost::python::arg_from_python<I3Tray&> > (f=@0x8352c14, 
+  #6  0xb7c12230 in boost::python::detail::invoke<int, void (I3Tray::*)(), boost::python::arg_from_python<I3Tray&> > (f=@0x8352c14,
       tc=@0xbfdc6df4) at /opt/i3/ports/include/boost-1.36.0/boost/python/detail/invoke.hpp:94
   #7  0xb7c14aee in boost::python::detail::caller_arity<1u>::impl<void (I3Tray::*)(), boost::python::default_call_policies, boost::mpl::vector2<void, I3Tray&> >::operator() (this=0x8352c14, args_=0x832ae0c)
       at /opt/i3/ports/include/boost-1.36.0/boost/python/detail/caller.hpp:223
@@ -110,28 +112,26 @@ given you a prompt.  Now it is useful to see a stack trace::
       at /opt/i3/ports/var/db/dports/build/file._opt_i3_ports_var_db_dports_sources_rsync.code.icecube.wisc.edu_icecube-tools-ports_devel_boost_1.36.0/work/boost_1.36.0/boost/function/function_template.hpp:815
   #14 0xb73545f0 in boost::python::handle_exception_impl (f=@0xbfdc6fdc)
       at /opt/i3/ports/var/db/dports/build/file._opt_i3_ports_var_db_dports_sources_rsync.code.icecube.wisc.edu_icecube-tools-ports_devel_boost_1.36.0/work/boost_1.36.0/libs/python/src/errors.cpp:25
-  #15 0xb733e177 in handle_exception<boost::python::objects::<unnamed>::bind_return> (f=
-	{m_result = @0xbfdc7030, m_f = 0x83591e8, m_args = 0x832ae0c, m_keywords = 0x0})
+  #15 0xb733e177 in handle_exception<boost::python::objects::<unnamed>::bind_return> (f={m_result = @0xbfdc7030, m_f = 0x83591e8, m_args = 0x832ae0c, m_keywords = 0x0})
       at /opt/i3/ports/var/db/dports/build/file._opt_i3_ports_var_db_dports_sources_rsync.code.icecube.wisc.edu_icecube-tools-ports_devel_boost_1.36.0/work/boost_1.36.0/libs/python/include/boost/python/errors.hpp:29
   #16 0xb733e1ff in function_call (func=0x83591e8, args=0x832ae0c, kw=0x0)
       at /opt/i3/ports/var/db/dports/build/file._opt_i3_ports_var_db_dports_sources_rsync.code.icecube.wisc.edu_icecube-tools-ports_devel_boost_1.36.0/work/boost_1.36.0/libs/python/src/object/function.cpp:613
   #17 0x0805cb97 in PyObject_Call (func=0x2, arg=0x832ae0c, kw=0x0) at ../Objects/abstract.c:1861
   #18 0x080c7aa7 in PyEval_EvalFrameEx (f=0x83a4104, throwflag=0) at ../Python/ceval.c:3784
-  #19 0x080cb1f7 in PyEval_EvalCodeEx (co=0xb7d6e2a8, globals=0xb7d69cec, locals=0x0, args=0x81a4bbc, argcount=1, kws=0x81a4bc0, 
+  #19 0x080cb1f7 in PyEval_EvalCodeEx (co=0xb7d6e2a8, globals=0xb7d69cec, locals=0x0, args=0x81a4bbc, argcount=1, kws=0x81a4bc0,
       kwcount=0, defs=0x0, defcount=0, closure=0x0) at ../Python/ceval.c:2836
   #20 0x080c93fe in PyEval_EvalFrameEx (f=0x81a4a84, throwflag=0) at ../Python/ceval.c:3669
-  #21 0x080cb1f7 in PyEval_EvalCodeEx (co=0xb7d679b0, globals=0xb7db6acc, locals=0xb7db6acc, args=0x0, argcount=0, kws=0x0, 
+  #21 0x080cb1f7 in PyEval_EvalCodeEx (co=0xb7d679b0, globals=0xb7db6acc, locals=0xb7db6acc, args=0x0, argcount=0, kws=0x0,
       kwcount=0, defs=0x0, defcount=0, closure=0x0) at ../Python/ceval.c:2836
   #22 0x080cb347 in PyEval_EvalCode (co=0xb7d679b0, globals=0xb7db6acc, locals=0xb7db6acc) at ../Python/ceval.c:494
-  #23 0x080ea818 in PyRun_FileExFlags (fp=0x816b008, filename=0xbfdc931f "./examples/resources/scripts/pass1.py", start=257, 
+  #23 0x080ea818 in PyRun_FileExFlags (fp=0x816b008, filename=0xbfdc931f "./examples/resources/scripts/pass1.py", start=257,
   ---Type <return> to continue, or q <return> to quit---
       globals=0xb7db6acc, locals=0xb7db6acc, closeit=1, flags=0xbfdc7648) at ../Python/pythonrun.c:1273
-  #24 0x080eaab9 in PyRun_SimpleFileExFlags (fp=0x816b008, filename=0xbfdc931f "./examples/resources/scripts/pass1.py", closeit=1, 
+  #24 0x080eaab9 in PyRun_SimpleFileExFlags (fp=0x816b008, filename=0xbfdc931f "./examples/resources/scripts/pass1.py", closeit=1,
       flags=0xbfdc7648) at ../Python/pythonrun.c:879
   #25 0x08059335 in Py_Main (argc=1, argv=0xbfdc7714) at ../Modules/main.c:523
-  #26 0x080587f2 in main (argc=Cannot access memory at address 0x2
-  ) at ../Modules/python.c:23
-  (gdb) 
+  #26 0x080587f2 in main (argc=Cannot access memory at address 0x2) at ../Modules/python.c:23
+  (gdb)
 
 OK, this is quite huge, but don't be discouraged.  Start at the top,
 where the innermost function is listed, where the to-first-order most
@@ -159,7 +159,7 @@ function with **list**::
   50            }
   51          frame->Put(outputSeries_, inIceSeries);
   52        }
-  53        
+  53
   54        int *p = 0;
   55        printf("%d", *p);
   56
@@ -171,8 +171,8 @@ Line 55 above is also what gdb reported to us when it first caught our
 segfault.  I can examine the values of various variables::
 
   (gdb) print outputSeries_
-  $1 = {static npos = 4294967295, 
-    _M_dataplus = {<std::allocator<char>> = {<__gnu_cxx::new_allocator<char>> = {<No data fields>}, <No data fields>}, 
+  $1 = {static npos = 4294967295,
+    _M_dataplus = {<std::allocator<char>> = {<__gnu_cxx::new_allocator<char>> = {<No data fields>}, <No data fields>},
       _M_p = 0x83a57b4 "InIceRecoHitSeries"}}
   (gdb) print featureExtractIceTop_
   $2 = true
@@ -185,7 +185,7 @@ pointer).
 Dealing with ``log_fatal()`` calls
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``log_fatal()`` is a function that throws an exception.  I add a ``log_fatal()`` before 
+``log_fatal()`` is a function that throws an exception.  I add a ``log_fatal()`` before
 the crashing call to printf, but I don't give it an informative message::
 
   (gdb) r
@@ -230,8 +230,7 @@ the crashing call to printf, but I don't give it an informative message::
     File "/home/troy/Icecube/meta-projects/offline-software/trunk/build/lib/I3Tray.py", line 74, in Execute
       args[0].the_tray.Execute()
   RuntimeError: I am crashing here but not telling you why.
-				     merge:      1 calls to physics     13.00s user      0.00s system
-
+     merge:      1 calls to physics     13.00s user      0.00s system
   Program exited with code 01.
   (gdb) where
   No stack.
@@ -317,7 +316,7 @@ and I see I need to move up the stack from ``__cxa_throw()`` to the site of the 
   (gdb) list
   51          frame->Put(outputSeries_, inIceSeries);
   52        }
-  53        
+  53
   54        int *p = 0;
   55        if (!p)
   56          log_fatal("I am crashing here but not telling you why.");
@@ -327,7 +326,7 @@ and I see I need to move up the stack from ``__cxa_throw()`` to the site of the 
   60        if(featureExtractIceTop_)
 
 If you know that your program will throw (e.g. you're diagnosing a
-problem that manifests itself via ``log_fatal()``, the *catch throw* 
+problem that manifests itself via ``log_fatal()``, the *catch throw*
 might not work at first::
 
   % gdb --args python ./examples/resources/scripts/pass1.py
@@ -340,7 +339,7 @@ might not work at first::
   This GDB was configured as "i486-linux-gnu"...
   (gdb) catch throw
   Function "__cxa_throw" not defined.
-  (gdb) 
+  (gdb)
 
 But after the first time you have run your program, gdb will know that there
 exists an exception-throwing function and will allow you to catch there::
@@ -357,15 +356,22 @@ exists an exception-throwing function and will allow you to catch there::
   Catchpoint 1 (throw)
   (gdb) r
 
-
-
 Profiling C++ Code
 ^^^^^^^^^^^^^^^^^^
-Profilers show you how much time your code is spending in each function. The "80/20 rule" is that on average your code will spend 80% of its time in 20% of the code. This means of course that only 20% of the code is really worth optimizing. We tend to be extremely bad at predicting which 20% that will be.
 
-When one optimizes code, one makes a decision that the loss of clarity introduced by rearranging code is worth the increase in speed that it brings. One therefore wants to do it only when and where necessary.
- 
-Furthermore, do not ever optimize code that is not thoroughly, I mean thoroughly tested:
+Profilers show you how much time your code is spending in each function. The
+"80/20 rule" is that on average your code will spend 80% of its time in 20% of
+the code. This means of course that only 20% of the code is really worth
+optimizing. We tend to be extremely bad at predicting which 20% that will be.
+
+When one optimizes code, one makes a decision that the loss of clarity
+introduced by rearranging code is worth the increase in speed that it brings.
+One therefore wants to do it only when and where necessary.
+
+Furthermore, do not ever optimize code that is not thoroughly, I mean thoroughly tested::
+
    "It is much, much easier to make correct code fast than it is to make fast code correct."
 
-Use the utilities **valgrind** (specifically the callgrind tool) and **kcachegrind** (nice graphical tool for viewing results).  Google them, you'll find stuff.
+Use the utilities **valgrind** (specifically the callgrind tool) and
+**kcachegrind** (nice graphical tool for viewing results).  Google them, you'll
+find stuff.
