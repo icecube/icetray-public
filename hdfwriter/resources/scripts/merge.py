@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-# 
-# copyright  (C) 2010
-# The Icecube Collaboration
-# 
+#
+# Copyright  (C) 2010 The Icecube Collaboration
+# SPDX-License-Identifier: BSD-2-Clause
+#
 # $Id: merge.py 136825 2015-08-25 07:39:27Z jvansanten $
-# 
+#
 # @version $Revision: 136825 $
 # @date $LastChangedDate: 2015-08-25 03:39:27 -0400 (Tue, 25 Aug 2015) $
 # @author Jakob van Santen <vansanten@wisc.edu> Last changed by: $LastChangedBy: jvansanten $
-# 
+#
 
 # concatenate tables, keeping track of indexes and such automatically
 
@@ -25,7 +25,7 @@ parser.add_option("-o","--output",dest="outfile",help="name of the output file",
 options,args = parser.parse_args()
 if len(args) < 1:
     parser.error("You must supply at least one input file")
-    
+
 infiles = args
 iformat = 'hdf5' # only service that supports reading at this point
 oformat = options.format
@@ -51,7 +51,7 @@ elif iformat == 'root':
     inservices = [(I3ROOTTableService,(infile,'r')) for infile in infiles]
 else:
     raise "Unknown input format '%s'" % iformat
-    
+
 if oformat == 'hdf5':
     outservice = I3HDFTableService(outfile,options.compress,'w')
 elif oformat == 'root':

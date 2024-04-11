@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-# 
-# copyright  (C) 2010
-# The Icecube Collaboration
-# 
+#
+# Copyright  (C) 2010 The Icecube Collaboration
+# SPDX-License-Identifier: BSD-2-Clause
+#
 # $Id: demo.py 136437 2015-08-18 22:28:14Z hdembinski $
-# 
+#
 # @version $Revision: 136437 $
 # @date $LastChangedDate: 2015-08-18 18:28:14 -0400 (Tue, 18 Aug 2015) $
 # @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy: hdembinski $
@@ -23,7 +23,7 @@ options,args = parser.parse_args()
 
 if len(args) != 1:
     parser.error("You must supply an input filename")
-    
+
 infile = args[0]
 outfile = os.path.basename(args[0]) + '.' + options.format
 

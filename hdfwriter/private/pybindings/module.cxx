@@ -1,8 +1,8 @@
 /**
  * hdf-writer pybindings
  *
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -26,7 +26,7 @@ BOOST_PP_SEQ_FOR_EACH(I3_REGISTRATION_FN_DECL, ~, REGISTER_THESE_THINGS)
 I3_PYTHON_MODULE(hdfwriter)
 {
 
-  load_project("hdfwriter", false); 
+  load_project("hdfwriter", false);
 
   BOOST_PP_SEQ_FOR_EACH(I3_REGISTER, ~, REGISTER_THESE_THINGS);
 }

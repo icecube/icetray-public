@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import os
 import unittest
 
@@ -31,12 +35,12 @@ class TestStringMethods(unittest.TestCase):
 
     def tearDown(self):
         os.unlink(FILE_NAME)
-    
+
     def test_key_with_slash(self):
         """frame keys that are not valid HDF5 dataset names raise ValueError"""
         with self.assertRaises(ValueError):
-            run_tray(Keys=["Bad/Hombre"]), 
-    
+            run_tray(Keys=["Bad/Hombre"]),
+
     def test_type_with_slash(self):
         with self.assertRaises(ValueError):
             run_tray(Types=[icetray.I3Int])

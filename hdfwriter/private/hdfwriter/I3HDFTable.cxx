@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -76,7 +76,7 @@ void I3HDFTable::CalculateChunkSize() {
     const std::vector<size_t>& fieldArrayLengths = description_->GetFieldArrayLengths();
     std::vector<I3Datatype>::const_iterator it;
     std::vector<size_t>::const_iterator as_it;
-    
+
     for (it = fieldI3Datatypes.begin(), as_it = fieldArrayLengths.begin();
          it != fieldI3Datatypes.end();
          it++, as_it++)
@@ -128,13 +128,13 @@ hid_t I3HDFTable::GetHDFType(const I3Datatype& dtype, const size_t arrayLength) 
                     H5Tenum_insert(hdftype,enum_it->first.c_str(),&(enum_it->second));
                 }
             }
-            break;     
+            break;
         default:
             log_fatal("I don't know what do with datatype %d.",dtype.kind);
-            break;     
+            break;
     }
     if (arrayLength > 1) {
-        hsize_t rank = 1; 
+        hsize_t rank = 1;
         std::vector<hsize_t> dims(1, arrayLength);
         hid_t array_tid = H5Tarray_create(hdftype, rank, &dims.front(), NULL);
         H5Tclose(hdftype);
@@ -152,7 +152,7 @@ I3Datatype I3HDFTable::GetI3Datatype(hid_t hdftype, size_t* arrayLength ) {
     long value;
     hsize_t i,n,array_size;
     int rank,perm;
-    
+
     switch (H5Tget_class(hdftype)) {
         case H5T_INTEGER:
             dtype.kind = I3Datatype::Int;
@@ -203,7 +203,7 @@ void I3HDFTable::CreateTable(int& compress) {
     const size_t structSize = description_->GetTotalByteSize();
     const unsigned nfields = description_->GetNumberOfFields();
     const size_t* fieldOffsets = &(description_->GetFieldByteOffsets().front());
-    
+
     // build HDF types from the supplied I3Datatypes
     std::vector<hid_t> fieldHdfTypes;
     std::vector<I3Datatype>::const_iterator t_it;
@@ -211,12 +211,12 @@ void I3HDFTable::CreateTable(int& compress) {
     const std::vector<I3Datatype>& fieldI3Datatypes = description_->GetFieldTypes();
     const std::vector<size_t>& fieldArrayLengths = description_->GetFieldArrayLengths();
     for (t_it = fieldI3Datatypes.begin(), arraySize_it = fieldArrayLengths.begin();
-         t_it != fieldI3Datatypes.end(); 
+         t_it != fieldI3Datatypes.end();
          t_it++, arraySize_it++) {
              fieldHdfTypes.push_back(GetHDFType(*t_it,*arraySize_it));
     }
     const hid_t* fieldTypes    = &(fieldHdfTypes.front());
-  
+
     // convert field name strings into char**
     std::vector<const char*> fieldNameVector;
     const std::vector<std::string>& nameStrings = description_->GetFieldNames();
@@ -226,9 +226,9 @@ void I3HDFTable::CreateTable(int& compress) {
     }
     const char** fieldNames = static_cast<const char**>(&fieldNameVector.front());
 
-    herr_t status = 
+    herr_t status =
         I3H5TBmake_table("",                // table title
-                       fileId_,             // hdf5 file opened by writer service 
+                       fileId_,             // hdf5 file opened by writer service
                        name_.c_str(),       // name of the data set
                        nfields,             // number of table fiels
                        0,                   // number of records writen at creation
@@ -239,7 +239,7 @@ void I3HDFTable::CreateTable(int& compress) {
                        (hsize_t)chunkSize_, // write data in chunks of ...
                        NULL,                // fill data to be written at creation
                        compress,            // compression level
-                       NULL);               // data to be written at creation  
+                       NULL);               // data to be written at creation
     if (status < 0) {
         log_fatal("Couln't create table");
     }
@@ -256,7 +256,7 @@ void I3HDFTable::CreateTable(int& compress) {
    for (i=0, it_unit = unitStrings.begin(), it_doc = docStrings.begin();
         it_unit != unitStrings.end();
         it_unit++, it_doc++, i++) {
-         
+
          std::ostringstream osu,osd;
          // build attribute names
          osu << "FIELD_" << i << "_UNIT";
@@ -269,13 +269,13 @@ void I3HDFTable::CreateTable(int& compress) {
          if (H5LTset_attribute_string( fileId_, name_.c_str(), osd.str().c_str(), it_doc->c_str() ) < 0)
 		 log_fatal("Couldn't set attribute '%s' = '%s' for dataset '%s'",
                           osd.str().c_str(),it_doc->c_str(),name_.c_str());
-      
+
    }
-   
+
    // set the MultiRow attribute
    char ragged = description_->GetIsMultiRow();
    H5LTset_attribute_char ( fileId_, name_.c_str(), "__I3RaggedTable__", &ragged, 1);
-   
+
    // finally, free any H5Ts we've created
    std::vector<hid_t>::iterator hid_it;
    for (hid_it = fieldHdfTypes.begin(); hid_it != fieldHdfTypes.end(); hid_it++) {
@@ -287,77 +287,77 @@ void I3HDFTable::CreateTable(int& compress) {
 
 // Create a TableRowDescription from an existing HDF table
 void I3HDFTable::CreateDescription() {
-   
+
    // for a table already on disk, we're responsible for the description
    I3TableRowDescriptionPtr description = I3TableRowDescriptionPtr(new I3TableRowDescription());
-   
+
    // Get the dimensions of the table
    hsize_t nfields,nrecords,i;
    H5TBget_table_info(fileId_,name_.c_str(),&nfields,&nrecords);
-   
+
    // note how many rows this table contains
    nrows_ = nrecords;
    nrowsWithPadding_ = nrecords;
-   
+
    // grab the table's compound datatype
    hid_t dset_id = H5Dopen(fileId_,name_.c_str());
    hid_t table_dtype = H5Dget_type(dset_id);
    H5Dclose(dset_id);
-   
+
    // this API is not so pretty. If I get the member name by hand, the library
    // mallocs enough memory to hold the string and hands me a pointer.
    // H5TBget_field_info does _exactly_ the same thing, only that it strcpys straight
-   // into the buffer I've passed, size be damned. As far as I know, there's 
+   // into the buffer I've passed, size be damned. As far as I know, there's
    // no simple/efficient way to query the size of the attribute string beforehand.
    char**  field_names   = new char*[nfields];
    for (i = 0; i < nfields; i++) {
       field_names[i] = H5Tget_member_name( table_dtype, (unsigned)i );
    }
-   
+
    size_t* field_sizes   = new size_t[nfields];
    size_t* field_offsets = new size_t[nfields];
    size_t type_size;
-      
+
    H5TBget_field_info(fileId_,name_.c_str(),field_names,field_sizes,field_offsets,&type_size);
-   
+
    description = I3TableRowDescriptionPtr(new I3TableRowDescription());
-   
+
    hid_t hdftype;
    size_t array_size;
    std::string unit,doc;
-   
+
    for (hsize_t i=0; i < nfields; i++) {
       hdftype = H5Tget_member_type(table_dtype,i);
-      
+
       array_size = 1;
       I3Datatype dtype = GetI3Datatype(hdftype, &array_size);
 
       std::ostringstream osu,osd;
       osu << "FIELD_" << i << "_UNIT";
       osd << "FIELD_" << i << "_DOC";
-      
+
       unit = ReadAttributeString(fileId_,name_,osu.str());
       doc  = ReadAttributeString(fileId_,name_,osd.str());
 
       description->AddField(std::string(field_names[i]),dtype,unit.c_str(),doc.c_str(),array_size);
-      
+
       // release the member datatype
       H5Tclose(hdftype);
    }
    H5Tclose(table_dtype);
-   
+
    // get the MultiRow attribute
    char ragged = 0;
    H5LTget_attribute_char ( fileId_, name_.c_str(), "__I3RaggedTable__", &ragged);
    description->isMultiRow_ = ragged;
-   
+
    // the individual strings were malloc'd by the HDF library,
    // not new'd by me
    for (i = 0; i < nfields; i++) free(field_names[i]);
    delete[] field_names;
    delete[] field_sizes;
    delete[] field_offsets;
-   
+
    description_ = description;
    nrows_ = nrecords;
    nrowsWithPadding_ = nrecords;
@@ -368,27 +368,27 @@ void I3HDFTable::CreateDescription() {
 
 // safely read an attribute string, avoiding overflows.
 // This is sort of important, as we in principle allow entire PRLs
-// to be pasted into the doc string for a field. 
+// to be pasted into the doc string for a field.
 std::string I3HDFTable::ReadAttributeString(hid_t fileID, std::string& where, std::string attribute) {
-   
+
    size_t attr_size;
    hsize_t dims;
    H5T_class_t type_class;
    std::string val;
    herr_t status;
-   
+
    status = H5LTget_attribute_info(fileID,where.c_str(),attribute.c_str(),&dims,&type_class,&attr_size);
-   
+
    if ((status < 0) || (type_class != H5T_STRING)) {
       return val;
    }
-   
+
    char* attr_buffer = new char[attr_size];
-      
+
    H5LTget_attribute_string(fileID,where.c_str(),attribute.c_str(),attr_buffer);
-   
+
    val = attr_buffer;
-   
+
    delete[] attr_buffer;
    return val;
 }
@@ -417,12 +417,12 @@ void I3HDFTable::Flush(size_t nrows) {
     log_trace("%s Flushing %zu rows from %zu-row cache",log_label().c_str(),nrows,writeCache_->GetNumberOfRows());
     if (nrows == 0) nrows = writeCache_->GetNumberOfRows();
     if (nrows == 0) return;
-    
+
     const size_t rowsize = description_->GetTotalByteSize();
     const size_t* fieldOffsets = &(description_->GetFieldByteOffsets().front());
     const size_t* fieldSizes   = &(description_->GetFieldTypeSizes().front());
     const void* buffer = writeCache_->GetPointer();
-    herr_t status = 
+    herr_t status =
         H5TBappend_records(fileId_,        // file
                            name_.c_str(),  // data set name
                            nrows,	       // number of the records in buffer
@@ -443,13 +443,13 @@ I3TableRowPtr I3HDFTable::ReadRowsFromTable(size_t start, size_t nrows) const {
    }
    I3TableRowPtr rows = I3TableRowPtr(new I3TableRow(description_,nrows));
    // TODO: reading every row-group individually is pretty
-   // inefficient for sequential reads of from bits of compressed blocks 
+   // inefficient for sequential reads of from bits of compressed blocks
    // (e.g. with TableTranscriber): come up with some sort of read-buffering scheme
    const size_t rowsize = description_->GetTotalByteSize();
    const size_t* fieldOffsets = &(description_->GetFieldByteOffsets().front());
    const size_t* fieldSizes   = &(description_->GetFieldTypeSizes().front());
    void* buffer = const_cast<void*>(rows->GetPointer());
-   herr_t status = 
+   herr_t status =
        H5TBread_records(fileId_,       // file
                         name_.c_str(), // data set name
                         start,         // index at which to start reading

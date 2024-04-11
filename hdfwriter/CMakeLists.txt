@@ -1,8 +1,12 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 # $Id$
 #
 
-i3_project(hdfwriter 
+i3_project(hdfwriter
 	PYTHON_DIR python
 	DOCS_DIR resources/docs
 )
@@ -30,7 +34,7 @@ IF(HDF5_FOUND)
 
   # add the path to the place where the hdf5 libs exist
   #TARGET_LINK_LIBRARIES(hdf-writer ${HDF5_LIBRARIES})
-  i3_test_executable(test 
+  i3_test_executable(test
     private/test/*.cxx
     USE_PROJECTS dataclasses icetray phys-services hdfwriter tableio)
 
@@ -43,7 +47,7 @@ IF(HDF5_FOUND)
 
 ELSE(HDF5_FOUND)
 
-  colormsg(CYAN   "+-- hdf5 library not found, skipping build of ${PROJECT_NAME}") 
+  colormsg(CYAN   "+-- hdf5 library not found, skipping build of ${PROJECT_NAME}")
   colormsg(YELLOW "*** Ask your admin to install the hdf5 package.")
 
 ENDIF(HDF5_FOUND)

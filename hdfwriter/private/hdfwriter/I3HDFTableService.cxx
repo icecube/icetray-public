@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -36,12 +36,12 @@ I3HDFTableService::init(I3::dataio::shared_filehandle filename, int compress, ch
         log_fatal("NULL file handle!");
     compress_ = compress;
     fileOpen_ = false;
-    if ( mode == 'w') { 
+    if ( mode == 'w') {
     fileId_ =  H5Fcreate(filename_->c_str(),
                          H5F_ACC_TRUNC, // truncate file if it exits
-                         H5P_DEFAULT,   // default meta data creation 
+                         H5P_DEFAULT,   // default meta data creation
                                         // - standard setting
-                         H5P_DEFAULT);  // file access property 
+                         H5P_DEFAULT);  // file access property
                                         // - standard setting
     if (fileId_ < 0)
         log_fatal("Could not create HDF file '%s'",filename_->c_str());
@@ -60,7 +60,7 @@ I3HDFTableService::init(I3::dataio::shared_filehandle filename, int compress, ch
       indexGroupId_ = H5Gopen(rootGroupId_,"__I3Index__");
       if (indexGroupId_ < 0) // create the group if it doesn't exist
          indexGroupId_ = H5Gcreate(rootGroupId_,"__I3Index__",1024);
-      
+
       FindTables();
    } else {
       log_fatal("Unsupported file mode '%c'",mode);
@@ -87,12 +87,12 @@ void I3HDFTableService::FindTables() {
 
    // get my pretties from the root group
    std::vector<std::string> tableNames;
-   H5Giterate(fileId_,"/",NULL,&GatherTableNames,&tableNames); 
+   H5Giterate(fileId_,"/",NULL,&GatherTableNames,&tableNames);
    std::vector<std::string>::iterator t_it;
    std::string name;
-   
+
    I3TablePtr index_table = I3TablePtr();
-   
+
    for (t_it = tableNames.begin(); t_it != tableNames.end();) {
       hsize_t nfields,nrecords;
       name = "";
@@ -102,8 +102,8 @@ void I3HDFTableService::FindTables() {
          t_it = tableNames.erase(t_it);
          log_error("Whups! Couldn't read dataset at %s",name.c_str());
          continue;
-      }  
-      
+      }
+
       // get the index table if it exists
       if (H5TBget_table_info(indexGroupId_,name.c_str(),&nfields,&nrecords) >= 0) {
          index_table = I3TablePtr(new I3HDFTable(*this,*t_it, indexGroupId_));
@@ -111,12 +111,12 @@ void I3HDFTableService::FindTables() {
          index_table = I3TablePtr();
          log_trace("(%s) no index table found.",t_it->c_str());
       }
-      
+
       // it's a table, read in the description
       tables_[*t_it] = I3TablePtr(new I3HDFTable(*this,*t_it, fileId_, index_table));
-      
+
       t_it++;
-      
+
    }
 }
 
@@ -127,11 +127,11 @@ I3HDFTableService::~I3HDFTableService() {};
 /******************************************************************************/
 
 
-I3TablePtr I3HDFTableService::CreateTable(const std::string& tableName, 
+I3TablePtr I3HDFTableService::CreateTable(const std::string& tableName,
                               I3TableRowDescriptionConstPtr description) {
     if (tableName.find("/") != std::string::npos) {
        std::ostringstream oss;
-       oss << "HDF5 table names can't include /. " 
+       oss << "HDF5 table names can't include /. "
        << "If you must have / characters in your key names, configure HDFWriter with e.g. "
        << "Keys=[{\"key\": \""<<tableName<<"\", \"name\": \""<<std::regex_replace(tableName, std::regex("/"), "_") <<"\"}] "
        << "rather than Keys=[\""<<tableName<<"\"]";
@@ -142,8 +142,8 @@ I3TablePtr I3HDFTableService::CreateTable(const std::string& tableName,
       I3TableRowDescriptionConstPtr index_desc = GetIndexDescription();
       index_table = I3TablePtr(new I3HDFTable(*this, tableName,
                                               index_desc, indexGroupId_, compress_));
-    }    
-    I3TablePtr table(new I3HDFTable(*this, tableName, 
+    }
+    I3TablePtr table(new I3HDFTable(*this, tableName,
                                     description, fileId_, compress_, index_table));
     return table;
 };

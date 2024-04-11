@@ -1,6 +1,6 @@
 /**
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -33,9 +33,9 @@ class I3HDFTable : public I3Table {
         static std::string ReadAttributeString(hid_t fileID, std::string& where, std::string attribute);
         static hid_t GetHDFType(const I3Datatype& dtype, const size_t arrayLength);
         static I3Datatype GetI3Datatype(hid_t dtype, size_t* arrayLength);
-        
+
         virtual I3TableRowConstPtr ReadRows(size_t start, size_t nrows) const;
-        
+
         virtual void Flush(const size_t nrows = 0);
 
     protected:
@@ -44,7 +44,7 @@ class I3HDFTable : public I3Table {
         void CreateTable(int& compress);
         void CreateDescription();
         hid_t fileId_;
-        
+
     private:
         I3TableRowPtr writeCache_;
         mutable I3TableRowPtr readCache_;

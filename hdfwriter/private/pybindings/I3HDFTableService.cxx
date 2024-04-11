@@ -1,8 +1,8 @@
 /**
  * I3TableService.cxx (pybindings)
  *
- * copyright  (C) 2010
- * The Icecube Collaboration
+ * Copyright  (C) 2010 The Icecube Collaboration
+ * SPDX-License-Identifier: BSD-2-Clause
  *
  * $Id$
  *
@@ -18,10 +18,10 @@ namespace bp = boost::python;
 
 
 void register_I3HDFTableService() {
-	
+
    typedef bp::init<const std::string&, int, char> ctor;
    typedef bp::init<I3::dataio::shared_filehandle, int, char> fh_ctor;
-   bp::class_<I3HDFTableService, 
+   bp::class_<I3HDFTableService,
       boost::shared_ptr<I3HDFTableService>, bp::bases<I3TableService> >
       ("I3HDFTableService", ctor((bp::args("filename"),
           bp::arg("compression_level")=1, bp::arg("mode")='w')))

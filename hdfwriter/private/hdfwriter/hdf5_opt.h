@@ -1,3 +1,5 @@
+// Copyright by The HDF Group
+// SPDX-License-Identifier: BSD-3-Clause
 #ifndef HDF5_OPT_H_INCLUDED
 #define HDF5_OPT_H_INCLUDED
 
@@ -27,7 +29,7 @@ herr_t I3H5TBmake_table( const char *table_title,
                        void *fill_data,
                        int compress,
                        const void *buf );
-                       
+
 #ifdef __cplusplus
 }
 #endif
