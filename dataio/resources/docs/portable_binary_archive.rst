@@ -157,7 +157,7 @@ of pointers
         return
     if is_abstract or is_polymorphic:
         class_name
-    if !intialized:
+    if !initialized:
         if class_info:
             class_id_optional
             tracking
@@ -228,8 +228,8 @@ There are two main cases, tracking vs non-tracking.  In the tracking case,
 objects will have a header that will vary depending on if this is the first
 time the type is seen.
 
-Tracking - First Occurance
-++++++++++++++++++++++++++
+Tracking - First Occurrence
++++++++++++++++++++++++++++
 
 * Object Header - 8 bytes
 
@@ -243,8 +243,8 @@ Tracking - First Occurance
 
 * (serialized data)
 
-Tracking - Second (or later) Occurance
-++++++++++++++++++++++++++++++++++++++
+Tracking - Second (or later) Occurrence
++++++++++++++++++++++++++++++++++++++++
 
 * Object Header - 4 bytes
 
@@ -254,11 +254,11 @@ Tracking - Second (or later) Occurance
 
 
 In the no tracking case, the class just needs to be registered the first
-time, and all other occurances are strictly the serialized data of the
+time, and all other occurrences are strictly the serialized data of the
 object.
 
-No Tracking - First Occurance
-+++++++++++++++++++++++++++++
+No Tracking - First Occurrence
+++++++++++++++++++++++++++++++
 
 * Object Header - 2 bytes
 
@@ -266,8 +266,8 @@ No Tracking - First Occurance
 
 * (serialized data)
 
-No Tracking - Second (or later) Occurance
-+++++++++++++++++++++++++++++++++++++++++
+No Tracking - Second (or later) Occurrence
+++++++++++++++++++++++++++++++++++++++++++
 
 * (serialized data)
 

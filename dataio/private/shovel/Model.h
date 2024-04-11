@@ -55,10 +55,10 @@ class Model
   View& view_;
   ///The sequence of I3 files the Model represents
   dataio::I3FrameSequence files_;
-  ///The collection of handles optained from staging the file
+  ///The collection of handles obtained from staging the file
   std::vector<I3::dataio::shared_filehandle> file_refs_;
 
-  ///A wrapper for information the Mdoel likes to cache about the frames it sees
+  ///A wrapper for information the Model likes to cache about the frames it sees
   struct FrameInfo{
     I3Frame::Stream stream;
     std::string sub_event_stream;
@@ -79,7 +79,7 @@ class Model
 
   ///An object which handles deciding when to display the progress bar for slow
   ///operations. Contains its own worker thread in order to do this only when
-  ///enough time has elasped for the user to probably prefer seeing a progress
+  ///enough time has elapsed for the user to probably prefer seeing a progress
   ///bar than an otherwise apparently frozen interface.
   struct ProgressManager{
   private:
@@ -113,7 +113,7 @@ class Model
   ///The progress bar manager
   ProgressManager pman_;
 
-  ///The index of the currently selcted framewithin the frame sequence
+  ///The index of the currently selected framewithin the frame sequence
   unsigned x_index_;
   ///The index of the currently selected key within the currently selected frame
   ///(considering its keys in alphabetical order)
@@ -137,7 +137,7 @@ class Model
   ///Fetch the frame at the given index
   I3FramePtr get_frame(unsigned);
 
-  ///Ensure that all froms up to index (exclusive) have been examined to
+  ///Ensure that all forms up to index (exclusive) have been examined to
   ///determine their basic properties. If index is larger than the extent of
   ///files_, all frames up to the end of the sequence will be examined.
   ///\return whether the scan could read up to the requested index (the frame
@@ -221,5 +221,3 @@ public:
 
 
 #endif
-
-

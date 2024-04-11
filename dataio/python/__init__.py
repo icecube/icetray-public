@@ -17,7 +17,7 @@ def get_stagers(staging_directory=None, extra_stagers=[]):
 
     :param staging_directory: use this directory for temporary files. If not\
         specified, the staging directory will be guessed.
-    :param extra_stagers: a list of stager classes to instatiate in addition to\
+    :param extra_stagers: a list of stager classes to instantiate in addition to\
         the those included with the base distribution
     """
     if staging_directory is not None:

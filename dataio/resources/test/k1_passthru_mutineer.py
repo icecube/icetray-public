@@ -10,7 +10,7 @@ from icecube import dataio
 tray = I3Tray()
 
 # by default the reader will log_fatal if it can't deserialize something
-#  no longer!  Lazy frame to the rescue.  Unkown class should just flow thru
+#  no longer!  Lazy frame to the rescue.  Unknown class should just flow thru
 
 tray.AddModule("I3Reader", "reader", Filename="hasmutineer.i3.gz")
 

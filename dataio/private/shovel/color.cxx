@@ -55,7 +55,7 @@ color_pair ColorParse(string in_color)
   string clr = in_color;
   color_pair ret;
 
-  // First, find if theres a hi-
+  // First, find if there's a hi-
   if (clr.substr(0, 3) == "hi_") {
     ret.bold = true;
     clr = clr.substr(3, clr.length() - 3);
@@ -63,7 +63,7 @@ color_pair ColorParse(string in_color)
     ret.bold = false;
   }
 
-  // First, find if theres a hi-
+  // First, find if there's a hi-
   if (clr.substr(0, 4) == "rev_") {
     ret.reverse = true;
     clr = clr.substr(4, clr.length() - 4);
@@ -71,7 +71,7 @@ color_pair ColorParse(string in_color)
     ret.reverse = false;
   }
 
-  // First, find if theres a hi-
+  // First, find if there's a hi-
   if (clr.substr(0, 4) == "dim_") {
     ret.dim = true;
     clr = clr.substr(4, clr.length() - 4);

@@ -17,7 +17,7 @@
    .. data:: frameno
       :noindex:
 
-      The current frame number. Read-only memeber.
+      The current frame number. Read-only member.
 
    .. data:: mode
       :noindex:

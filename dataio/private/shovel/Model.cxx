@@ -417,7 +417,7 @@ Model::do_find_event()
   auto old_x_index_ = x_index_;
   bool found=false;
   boost::shared_ptr<I3Frame> frame;
-  //serach forward form the current point
+  //search forward from the current point
   do {
     frame=get_frame(x_index_);
     if(!frame)

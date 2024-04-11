@@ -368,7 +368,7 @@ int main (int argc, char *argv[])
     while (true)
       {
         int c = getch();     /* refresh, accept single keystroke of input */
-#ifdef __APPLE__             /* add other keys to the swich below */
+#ifdef __APPLE__             /* add other keys to the switch below */
         if (c == 0x1B) {
           c = getch();
           if ((c == 0x4F) or (c == 0x5B)) {

@@ -420,7 +420,7 @@ physics_0340.00999.i3.gz::
 
   physics = glob("physics_0340.*.i3.gz")    # glob() the list of files from the disk
 
-  physics.sort()                            # sort() them (they probably wont glob in alphabetical order)
+  physics.sort()                            # sort() them (they probably won't glob in alphabetical order)
 
   tray.Add("I3Reader", FilenameList=["GCD_0340.i3.gz"]+physics)
 
