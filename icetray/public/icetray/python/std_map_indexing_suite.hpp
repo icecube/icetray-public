@@ -273,7 +273,7 @@ return incref(tuple.attr("__iter__")().ptr());
             };
         }
 
-        // create a new map with given keys, initialialized to value
+        // create a new map with given keys, initialized to value
         static object dict_fromkeys(object const& keys, object const& value)
         {
             object newmap = object(Container());

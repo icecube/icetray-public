@@ -7,7 +7,7 @@
 #
 # Test that icetray throws if you start the chain with a python function
 # They can't be driving modules.  Meaning they can't emit frames and
-# IceTray won't emmit for them.
+# IceTray won't emit for them.
 #
 
 from icecube.icetray import I3Tray

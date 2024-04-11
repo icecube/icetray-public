@@ -43,7 +43,7 @@ namespace{
 
   /**
    * The project_name should *not* have the preceding 'lib' unless
-   * that's acutally part of the project name.  For example, if the
+   * that's actually part of the project name.  For example, if the
    * project is actually library_reader, then the shared library
    * that's built (on linux) is liblibrary_reader.so.
    */

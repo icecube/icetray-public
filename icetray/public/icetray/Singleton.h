@@ -30,7 +30,7 @@
 // a) Initialize dynamically when used.
 // b) Require that all singletons be initialized before main
 // is called or any entry point into the shared library is invoked.
-// This guarentees no race condition for initialization.
+// This guarantees no race condition for initialization.
 // In debug mode, we assert that no non-const functions are called
 // after main is invoked.
 //
@@ -53,7 +53,7 @@ namespace I3 {
   // details.
   //
 
-  // singletons created by this code are guarenteed to be unique
+  // singletons created by this code are guaranteed to be unique
   // within the executable or shared library which creates them.
   // This is sufficient and in fact ideal for the serialization library.
   // The singleton is created when the module is loaded and destroyed
@@ -73,7 +73,7 @@ namespace I3 {
   // The intent is that all singletons created/used by this code
   // are to be initialized before main is called. A test program
   // can lock all the singletons when main is entereed.  This any
-  // attempt to retieve a mutable instances while locked will
+  // attempt to retrieve a mutable instances while locked will
   // generate a assertion if compiled for debug.
 
   class SingletonModule  : public boost::noncopyable

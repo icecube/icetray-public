@@ -61,7 +61,7 @@ TEST(finish_called)
   tray.AddService<TestServiceFactory>("serv1");
   tray.AddModule("BottomlessSource", "mod1");
 
-  ENSURE(TestServiceFactory::instance, "TestServiceFactory shoud exist now");
+  ENSURE(TestServiceFactory::instance, "TestServiceFactory should exist now");
 
   tray.Execute(1);
 

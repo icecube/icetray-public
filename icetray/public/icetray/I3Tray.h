@@ -185,7 +185,7 @@ public:
 		    const std::string& toModule);
 
   /**
-     Executes a procesing loop which will continue until there is no more
+     Executes a processing loop which will continue until there is no more
      data to process (that is, a module invokes RequestSuspension).
   */
   void Execute();
@@ -194,7 +194,7 @@ public:
      Runs the tray until the specified maximum count is reached, or a
      module invokes RequestSuspension();
 
-     @param maxCount the maximum process transistions for the driving module.
+     @param maxCount the maximum process transitions for the driving module.
   */
   void Execute(unsigned maxCount);
 
@@ -256,7 +256,7 @@ private:
 
   /**
    * Connects modules in a simple chain, each's outbox to the next's
-   * default inbox, for use in simple module chain situaitons so taht
+   * default inbox, for use in simple module chain situaitons so that
    * the order of AddModule can also be  used to set the outbox connections.
    *
    */
@@ -288,7 +288,7 @@ private:
 
   /**
    * Generates an Abort transition in the main module if it is in the
-   * appropraite state. Otherwise it does nothing.
+   * appropriate state. Otherwise it does nothing.
    */
   void Abort();
 
@@ -296,7 +296,7 @@ private:
    * Generate a new name for a module or service which had none specified.
    *
    * @param type the type of object being added (e.g. I3Reader)
-   * @param kind the cateogry of object being added (e.g. Module or Service)
+   * @param kind the category of object being added (e.g. Module or Service)
    * @param existingNames the names already in use by objects of the same kind
    */
   std::string CreateName(const std::string& type, const std::string& kind,

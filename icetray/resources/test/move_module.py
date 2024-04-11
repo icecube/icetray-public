@@ -49,7 +49,7 @@ except Exception:
 else:
         raise Exception("Reordering should fail with nonexistent target module")
 
-# Moving a module to before a nonexistant module also fails
+# Moving a module to before a nonexistent module also fails
 try:
     run(lambda tray: tray.MoveModule('thing1', 'no_anchor'))
 except Exception:

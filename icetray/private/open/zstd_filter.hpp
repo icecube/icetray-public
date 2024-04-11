@@ -113,7 +113,7 @@ public:
 	}
 
 	//flush buffered input
-	//without ZSTD_COMPRESSOR_CAN_FLUSH this function will only work sufficently to support close()
+	//without ZSTD_COMPRESSOR_CAN_FLUSH this function will only work sufficiently to support close()
 	template<typename Sink>
 	bool flush(Sink& dest){
 		//If no data was compressed initialize the stream anyway, so that we can

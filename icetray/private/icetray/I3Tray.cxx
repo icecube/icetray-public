@@ -428,7 +428,7 @@ I3Tray::Configure()
 #endif
 
 	//
-	//  If we never explicity called ConnectBoxes, connect the
+	//  If we never explicitly called ConnectBoxes, connect the
 	//  modules to one another in the order they were added.
 	//
 	if (!boxes_connected) {

@@ -251,7 +251,7 @@ I3Frame::GetStop(const std::string& key) const
 
 void I3Frame::validate_name(const std::string& name)
 {
-  // this should be more exhausive than just space tab newline.
+  // this should be more exhaustive than just space tab newline.
   if (name.empty())
     log_fatal("attempt to Put an element into frame with an empty string used as the key");
   if (name.find_first_of(" \t\n") != string::npos)

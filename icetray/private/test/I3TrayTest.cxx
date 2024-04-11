@@ -155,7 +155,7 @@ TEST(no_such_module)
 
   try {
     tray.ConnectBoxes("fork", "BadBox", "NoSuchModule");
-    FAIL("That should have thrown... attempt to connect Outbox to nonexistant module.");
+    FAIL("That should have thrown... attempt to connect Outbox to nonexistent module.");
   } catch(const std::exception& e) {
     // ok
   }

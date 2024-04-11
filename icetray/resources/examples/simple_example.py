@@ -6,7 +6,7 @@
 
 '''
 This script doesn't really do much.  For output, you should
-see 10 frames with an object of unkown type called 'my_object'
+see 10 frames with an object of unknown type called 'my_object'
 like so:
 
 [ I3Frame  (Physics):

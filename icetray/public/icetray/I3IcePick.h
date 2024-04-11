@@ -57,7 +57,7 @@ class I3IcePick : public I3ServiceBase
 
   /**
    * @brief This function configures the parameters that the I3IcePick
-   * base class containes.  From here, Configure is then called to give
+   * base class contains.  From here, Configure is then called to give
    * the derived classes a chance to configure themselves.
    */
   void ConfigureInterface();

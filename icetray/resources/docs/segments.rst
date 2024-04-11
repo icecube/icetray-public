@@ -113,7 +113,7 @@ way::
 
 When using |module_altconfig|, those parameters specified in the arguments to |module_altconfig| override the module's defaults. These can be overridden again in :py:meth:`.I3Tray.AddSegment` and any other arguments to the original module can also be specified there.
 
-These alterative configurations also are reported by icetray-inspect:
+These alternative configurations also are reported by icetray-inspect:
 
 .. code-block:: console
 

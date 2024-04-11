@@ -102,7 +102,7 @@ TEST(has)
   ENSURE(c.Has<CcConstPtr>("constc"));
 
   THROWS(c.Get<Cc>("constc"));
-  c.Get<const Cc>("constc"); // doesnt throw
+  c.Get<const Cc>("constc"); // doesn't throw
   ENSURE(!c.Get<CcPtr>("constc")); // returns null.
   ENSURE((bool)c.Get<CcConstPtr>("constc")); // success
 

@@ -118,7 +118,7 @@ TEST(ReplaceNotFound)
   I3IntPtr i2(new I3Int(22));
   try{
     f.Replace("MyInt",i2);
-    FAIL("I3Frame::Replace should fail on a nonexistant key");
+    FAIL("I3Frame::Replace should fail on a nonexistent key");
   }catch(...){
     //expect an exception. do nothing.
   }
@@ -258,7 +258,7 @@ TEST(deserialize_iterator)
 
   //
   //  if you don't access the object, you don't get deserialize
-  //  anyhing.
+  //  anything.
   //
   I3Frame::const_iterator iter = p->begin();
   while(iter != p->end())

@@ -102,7 +102,7 @@ public:
      Adds a new parameter to the local configuration.
 
      @param parameter the name of the parameter.
-     @param description a desciption of the parameter to the users.
+     @param description a description of the parameter to the users.
      @param defaultValue the default value of the parameter.
 
      Values are converted to/from strings by boost::lexical_cast<>
@@ -118,7 +118,7 @@ public:
   }
 
   /**
-     Gets the value of some parameter from the configuraiton.
+     Gets the value of some parameter from the configuration.
      @param name the name of the parameter.
      @param value where to put the value.
      @return void

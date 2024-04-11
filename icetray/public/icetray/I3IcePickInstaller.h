@@ -38,7 +38,7 @@
 /**
  * @brief This service factory is meant to install an I3IcePick
  * object into the context.  The specific I3IcePick being
- * installed is used as a template throughtout this class.
+ * installed is used as a template throughout this class.
  *
  * If you've written a new I3IcePick, be sure to add the appropriate
  * I3_SERVICE_FACTORY() macro to a .cxx file.
@@ -50,8 +50,8 @@ class I3IcePickInstaller : public I3SingleServiceFactory<IcePick, I3IcePick>
  public:
 
   /**
-   * @brief The constructer.  The context is then passed to the
-   * constructer of the I3IcePick object being installed
+   * @brief The constructor.  The context is then passed to the
+   * constructor of the I3IcePick object being installed
    *
    * @param context the I3Context where the I3IcePick should
    * be installed

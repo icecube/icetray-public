@@ -59,7 +59,7 @@ TEST(ConnectOutBox){
 
   boost::shared_ptr<I3Module> dummy1(new I3Module(ctx));
   boost::shared_ptr<I3Module> dummy2(new I3Module(ctx));
-  //connect an outbox which definietly exists
+  //connect an outbox which definitely exists
   ctm.ConnectOutBox("Box1",dummy1);
   //we have to permit this sort of out-of-order madness, apparently
   ctm.ConnectOutBox("Box2",dummy2);

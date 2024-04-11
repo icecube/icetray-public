@@ -53,7 +53,7 @@ class I3Context;
 class I3FrameMixer;
 
 /**
- * This class defines the interface which should be implementaed by all
+ * This class defines the interface which should be implemented by all
  * modules in IceTray.
  *
  * @version $Id$
@@ -140,7 +140,7 @@ public:
     Register(when, boost::bind(m_fn, static_cast<T*>(this), _1));
   }
 
-  // The following functions are called for the approiate Stop by the
+  // The following functions are called for the appropriate Stop by the
   // default 'Process' implementation.
 
   /**
@@ -252,7 +252,7 @@ public:
   void AddOutBox(const std::string& name);
 
   /**
-   * Puts the specified I3Frame into the specifed OutBox.
+   * Puts the specified I3Frame into the specified OutBox.
    *
    * @param frame the I3Frame to put into the OutBox.
    * @param name the name associated with the OutBox.

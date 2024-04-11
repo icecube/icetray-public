@@ -51,7 +51,7 @@ struct I3GetLoggerTester
 };
 
 // verifies that if the first object to log something is
-// via SET_LOGGER, the logging system is propery configured.
+// via SET_LOGGER, the logging system is properly configured.
 TEST(0_SET_LOGGER_logging_first)
 {
   I3GetLoggerTester t;

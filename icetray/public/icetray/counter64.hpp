@@ -30,7 +30,7 @@ namespace boost {
 
     //
     // Template name: basic_counter.
-    // Template paramters:
+    // Template parameters:
     //      Ch - The character type.
     // Description: Filter which counts lines and characters.
     //
