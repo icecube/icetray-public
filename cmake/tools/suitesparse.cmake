@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
 
 TOOLDEF (suitesparse
   include
@@ -10,7 +13,7 @@ TOOLDEF (suitesparse
 if (NOT SUITESPARSE_FOUND)
   TOOLDEF (suitesparse
       include
-      suitesparse/cholmod.h 
+      suitesparse/cholmod.h
       lib
       NONE
       camd ccolamd spqr cholmod amd colamd suitesparseconfig
@@ -21,7 +24,7 @@ if (NOT SUITESPARSE_FOUND)
   # Try again without libsuitesparseconfig
   TOOLDEF (suitesparse
       include
-      suitesparse/cholmod.h 
+      suitesparse/cholmod.h
       lib
       NONE
       camd ccolamd spqr cholmod amd colamd

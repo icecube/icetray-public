@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # Compilation configuration script
 # This script generates the necessary compiler flags to link against icetray projects
 #
@@ -60,7 +64,7 @@ check_project() {
 	eval CHECKED_PROJECT_${safe_name}=1
 	upper_project=`echo $1 | tr '[:lower:]' '[:upper:]'`
 	buildflag=`grep -m 1 BUILD_${upper_project}:BOOL $CMAKECACHE`
-	if [ "$buildflag" = "" ]; then 
+	if [ "$buildflag" = "" ]; then
 		echo "Project $1 was not found"
 		exit 1
 	fi
@@ -93,9 +97,9 @@ get_project_dependencies() {
 		return 0
 	fi
 	eval GOT_PROJECT_DEPS_${safe_name}=1
-	
+
 	check_project $project
-	
+
 	projectlist=`grep -m 1 ^${project}_PROJECT_DEPENDS:INTERNAL $CMAKECACHE | sed -e 's|;| |g' -e's|^.*INTERNAL=||'`
 	for depproj in $projectlist; do
 		get_project_dependencies $depproj
@@ -158,4 +162,4 @@ done
 
 #deduplicate
 OUTPUT_FLAGS=`echo $OUTPUT_FLAGS | tr ' ' '\n' | perl -ne '$H{$_}++ or print'`
-echo $OUTPUT_FLAGS 
+echo $OUTPUT_FLAGS

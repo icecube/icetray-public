@@ -1,3 +1,6 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
 
 Dependencies
 ============
@@ -28,10 +31,10 @@ These packages are required to compile IceTray.
     - :doc:`/projects/cmake/tools/boost`
   * - `GSL <https://www.gnu.org/software/gsl/>`_
     - GNU Scientific Library
-    -  
+    -
   * - `CFITSIO <https://heasarc.gsfc.nasa.gov/fitsio/>`_
     - A FITS File Subroutine Library
-    - 
+    -
   * - `zlib <https://zlib.net/>`_
     - Compression Algorithm
     - :doc:`/projects/dataio/tray`

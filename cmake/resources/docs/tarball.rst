@@ -1,4 +1,8 @@
-.. index:: 
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
+.. index::
    single: tarball
    single: grid, running on
    single: cluster, running on
@@ -13,15 +17,15 @@ workspace one finds in one's :envvar:`I3_BUILD` build directory after
 a build, with a few exceptions:
 
 1.  In the tarballing process, the dependencies of whatever libraries
-    exist in :file:`$I3_BUILD/lib` have been pulled in to the tarball,     
+    exist in :file:`$I3_BUILD/lib` have been pulled in to the tarball,
     in the directory :file:`$I3_BUILD/lib/tools`
 
-#.  The env-shell.sh file is different: it determines the value 
+#.  The env-shell.sh file is different: it determines the value
     of :file:`$I3_BUILD` from its own location.
 
 What this means is that these tarballs are relocatable: you should be
 able to move them to another machine or another directory and run
-from there.   
+from there.
 
 What is done
 ------------
@@ -37,10 +41,10 @@ The following is done in building a tarball:
   version number, like
   *offline-software.trunk.r49711.Linux-i686.gcc-4.2.3*.  This can be
   changed by setting ``CMAKE_INSTALL_PREFIX`` to a relative path (to
-  the build directory), or an absolute path.  
+  the build directory), or an absolute path.
 
 * The built project libraries are scanned for dependencies on tools
-  libraries, those are copied to a subdirectory ``tools/`` of  
+  libraries, those are copied to a subdirectory ``tools/`` of
   ``I3_BUILD/CMAKE_INSTALL_PREFIX/lib/``.
 
 * A (filesystem) relocatable :ref:`env-shell.sh` is generated and
@@ -56,7 +60,7 @@ The following is done in building a tarball:
   ``PATH``		``$TBDIR/bin/``
   ``PYTHONPATH``        ``$TBDIR/lib/``
   ===================== ==============================================
-  
+
 * *tarball-hook.sh* is run, if it exists (see below)
 
 * The directory is tarred up and a checksum is generated.
@@ -77,7 +81,7 @@ Example
    [  0%] Checking build against environment
    [  0%] Built target env-check
    [  5%] Built target boost_python
-   
+
       [ etc etc ]
 
    [100%] Built target coordinate_service-pybindings
@@ -87,7 +91,7 @@ Example
    -- Installing: offline-software.trunk.r47978.Linux-i686.gcc-4.2.3/lib/icecube/__init__.py
    -- Installing: offline-software.trunk.r47978.Linux-i686.gcc-4.2.3/./env-shell.sh
    -- Installing: offline-software.trunk.r47978.Linux-i686.gcc-4.2.3/./log4cplus.conf
-   
+
       [ etc etc ]
 
    -- Installing: offline-software.trunk.r47978.Linux-i686.gcc-4.2.3/include/DOMcalibrator/I3DOMcalibrator.h
@@ -108,8 +112,8 @@ now to exit our environment and untar this someplace else::
    % cp offline-software.trunk.r47978.Linux-i686.gcc-4.2.3.tar.gz /tmp
    % cd /tmp
    % mkdir instdir
-   % cd instdir 
-   % tar xvzf ../offline-software.trunk.r47978.Linux-i686.gcc-4.2.3.tar.gz 
+   % cd instdir
+   % tar xvzf ../offline-software.trunk.r47978.Linux-i686.gcc-4.2.3.tar.gz
    offline-software.trunk.r47978.Linux-i686.gcc-4.2.3/
    offline-software.trunk.r47978.Linux-i686.gcc-4.2.3/twr-decode/
    offline-software.trunk.r47978.Linux-i686.gcc-4.2.3/twr-decode/resources/
@@ -120,7 +124,7 @@ now to exit our environment and untar this someplace else::
 
 Note that the tools libraries have been pulled in to the tarball::
 
-   % ls offline-software.trunk.r47978.Linux-i686.gcc-4.2.3/lib/tools 
+   % ls offline-software.trunk.r47978.Linux-i686.gcc-4.2.3/lib/tools
    libCint.so@             libRint.so.5.18*
    libCint.so.5@           libTree.so@
    libCint.so.5.18*        libTree.so.5@
@@ -128,7 +132,7 @@ Note that the tools libraries have been pulled in to the tarball::
 
 And that the python is in :file:`lib/icecube`::
 
-   % ls lib/icecube 
+   % ls lib/icecube
    __init__.py            dataclasses.so  icetray/       phys_services.so
    __init__.pyc           dataio.so       icetray.so     util/
    cfirst.so              examples/       interfaces.so
@@ -136,7 +140,7 @@ And that the python is in :file:`lib/icecube`::
 
 Now we can run the env-shell.sh script that is in there and use the software::
 
-   % ./offline-software.trunk.r47978.Linux-i686.gcc-4.2.3/env-shell.sh 
+   % ./offline-software.trunk.r47978.Linux-i686.gcc-4.2.3/env-shell.sh
    ************************************************************************
    *                                                                      *
    *                   W E L C O M E  to  I C E T R A Y                   *
@@ -147,17 +151,17 @@ Now we can run the env-shell.sh script that is in there and use the software::
    *                        http://icecube.umd.edu                        *
    *                                                                      *
    ************************************************************************
-   
+
    Icetray environment has:
       I3_SRC       = /tmp/instdir/offline-software.trunk.r47978.Linux-i686.gcc-4.2.3
       I3_BUILD     = /tmp/instdir/offline-software.trunk.r47978.Linux-i686.gcc-4.2.3
    % python
-   Python 2.5.2 (r252:60911, Jul 31 2008, 17:28:52) 
+   Python 2.5.2 (r252:60911, Jul 31 2008, 17:28:52)
    [GCC 4.2.3 (Ubuntu 4.2.3-2ubuntu7)] on linux2
    Type "help", "copyright", "credits" or "license" for more information.
    >>> from icecube import icetray, dataclasses, dataio
    >>> rhs = dataclasses.I3RecoHitSeriesMap()
-   >>> 
+   >>>
 
 Note:
 
@@ -182,15 +186,15 @@ There is a script in the build space called
     # Sample tarball_hook script.  Modify as needed (but keep it tasteful)
     # and check in to your metaproject source directory.  It will get
     # configured by cmake and dropped into your build directory at cmake time.
-    
-    
+
+
     echo "Running tarball_hook.sh to tweak installation at @CMAKE_INSTALL_PREFIX@"
-    
+
     #
     # add the crunchy bits to your tarball here.
     #
     uname -a > @CMAKE_INSTALL_PREFIX@/uname.txt
-    
+
 Which is copied to ``tarball_hook.sh`` when cmake runs, and
 variables ``@INSIDE_AT_SIGNS@`` are expanded.  For instance
 ``@CMAKE_INSTALL_PREFIX@`` might become
@@ -207,7 +211,7 @@ Changing the name of the tarball
 .. index:: CMAKE_INSTALL_PREFIX
 
 Set :data:`CMAKE_INSTALL_PREFIX` as you like in your
-:file:`CMakeCache.txt`, or pass ``-DCMAKE_INSTALL_PREFIX=tarball_name`` when 
+:file:`CMakeCache.txt`, or pass ``-DCMAKE_INSTALL_PREFIX=tarball_name`` when
 you invoke ``cmake``. If you want to use the tarball together with
 ``icetray-start``, pass ``-DCMAKE_INSTALL_PREFIX=tarball_name.${OS_ARCH}``.
 

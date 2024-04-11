@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 lcov=`which lcov`                     # default lcov location
 genhtml=`which genhtml`               # default gehntml location
 output="docs/coverage"                # default output directory
@@ -51,7 +55,7 @@ fi
 project=${1}
 
 ## look for required programs
-if [ ! -z ${lcov} -o -x ${lcov} ]; then  
+if [ ! -z ${lcov} -o -x ${lcov} ]; then
     :
 else
     echo "** Can't find \"lcov\". Please ensure it's on your PATH"
@@ -100,7 +104,7 @@ if [ `which c++filt` ]; then
     ${genhtml} -s -k --sort --demangle-cpp --legend -b test_base.info -o "${output}" reports.info
 else
     ${genhtml} -s -k --sort --legend -b test_base.info -o "${output}" reports.info
-fi    
+fi
 
 ## reset the '00_LATEST' symlink
 #rm -f ../output/00_LATEST

@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 set(FailedFileName "@CMAKE_BINARY_DIR@/FailedTests.log")
 if(EXISTS "@CMAKE_BINARY_DIR@/Testing/Temporary/LastTestsFailed.log")
   file(STRINGS "@CMAKE_BINARY_DIR@/Testing/Temporary/LastTestsFailed.log" FailedTests)

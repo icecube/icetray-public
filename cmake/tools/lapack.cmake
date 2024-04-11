@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 ## If you're having trouble with detection on a debian/ubuntu
 ## multiarch system (Ubuntu 11.04+), uncomment the lines around the
 ## find_package() call.
@@ -16,10 +20,10 @@ if(LAPACK_FOUND)
 else()
   unset(LAPACK_CONFIG_ERROR)
   unset(LAPACK_INCLUDE_DIR)
-  
+
   find_package(OpenBLAS QUIET)
   if(OpenBLAS_FOUND)
-    colormsg("+ OpenBLAS")    
+    colormsg("+ OpenBLAS")
     colormsg("+  version: ${OpenBLAS_VERSION}")
     colormsg("+ includes: ${OpenBLAS_INCLUDE_DIRS}")
     colormsg("+     libs: ${OpenBLAS_LIBRARIES}")

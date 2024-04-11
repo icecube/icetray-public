@@ -1,9 +1,9 @@
 #
 #  $Id$
-#  
+#
 #  Copyright (C) 2007   Troy D. Straszheim  <troy@icecube.umd.edu>
-#  and the IceCube Collaboration <http://www.icecube.wisc.edu>
-#  
+#  Copyright (C) 2007   the IceCube Collaboration <http://www.icecube.wisc.edu>
+#
 #  Redistribution and use in source and binary forms, with or without
 #  modification, are permitted provided that the following conditions
 #  are met:
@@ -12,7 +12,7 @@
 #  2. Redistributions in binary form must reproduce the above copyright
 #     notice, this list of conditions and the following disclaimer in the
 #     documentation and/or other materials provided with the distribution.
-#  
+#
 #  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
 #  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 #  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -24,10 +24,10 @@
 #  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 #  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 #  SUCH DAMAGE.
-#  
+#
 #  SPDX-License-Identifier: BSD-2-Clause
-#  
-#  
+#
+#
 option(USE_ROOT "Build with root" ON)
 option(USE_CINT "Build dictionaries with rootcint" OFF)
 
@@ -50,11 +50,11 @@ if (USE_ROOT)
     if(ROOT_CONFIG_EXECUTABLE)
       set(SYSTEM_PACKAGES_ROOT TRUE)
       execute_process(
-        COMMAND ${ROOT_CONFIG_EXECUTABLE} --prefix 
-        OUTPUT_VARIABLE ROOTSYS 
+        COMMAND ${ROOT_CONFIG_EXECUTABLE} --prefix
+        OUTPUT_VARIABLE ROOTSYS
         OUTPUT_STRIP_TRAILING_WHITESPACE)
       execute_process(
-        COMMAND ${ROOT_CONFIG_EXECUTABLE} --version 
+        COMMAND ${ROOT_CONFIG_EXECUTABLE} --version
         OUTPUT_VARIABLE ROOT_VERSION
         OUTPUT_STRIP_TRAILING_WHITESPACE)
       string(REPLACE "/" "." ROOT_VERSION ${ROOT_VERSION})
@@ -147,7 +147,7 @@ if(NOT USE_ROOT OR NOT ROOT_VERSION)
   set(ROOT_LIBRARIES "" CACHE STRING "USE_ROOT is OFF")
   set(ROOTSYS "/USE_ROOT/IS/OFF" CACHE STRING "USE_ROOT is OFF")
   unset(ROOT_FOUND)
-  unset(ROOT_FOUND CACHE)	
+  unset(ROOT_FOUND CACHE)
   unset(USE_CINT)
   unset(USE_CINT CACHE)
   set(USE_CINT OFF CACHE BOOL "USE_ROOT is OFF (Can't have CINT without ROOT)")
@@ -164,7 +164,7 @@ else()
   if(NOT SYSTEM_PACKAGES_ROOT)
     set(old_TOOL_SYSTEM_PATH ${TOOL_SYSTEM_PATH})
     set(TOOL_SYSTEM_PATH NO_DEFAULT_PATH)
-    tooldef (root 
+    tooldef (root
       ${ROOTSYS}/include
       TObject.h
       ${ROOTSYS}/lib

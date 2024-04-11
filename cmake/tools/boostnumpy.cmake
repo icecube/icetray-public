@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
 
 tooldef(boostnumpy
     include
@@ -7,7 +10,7 @@ tooldef(boostnumpy
     boost_numpy${Python_VERSION_MAJOR}${Python_VERSION_MINOR}
 )
 
-# If we didn't find the library, it may be that we just guessed the 
+# If we didn't find the library, it may be that we just guessed the
 # wrong python version suffix, so repeat with some likely variants.
 IF (NOT BOOSTNUMPY_FOUND)
     tooldef(boostnumpy

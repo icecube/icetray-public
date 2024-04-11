@@ -1,14 +1,17 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
 
 .. _tooldetection:
 
-Tool detection/configuration 
+Tool detection/configuration
 ============================
 
 .. highlight:: c++
 
 In ``cmake/tools`` there are a collection of ``.cmake`` files that are
 each responsible for detecting a tool and configuring the build to use
-it correctly.  The rest of the cmake infrastructure 'uses' tool via 
+it correctly.  The rest of the cmake infrastructure 'uses' tool via
 several cmake variables.  For a tool *ZZZ*,
 
 **ZZZ_INCLUDE_DIR**:
@@ -58,7 +61,7 @@ of this.
 
 
 .. _SYSTEM_PACKAGES:
- 
+
 SYSTEM_PACKAGES
 ---------------
 
@@ -114,7 +117,7 @@ when substituting values like ``HOME``.
 Here is another example override for tools for *blas* and *lapack* (filenames
 ``blas.cmake`` and ``lapack.cmake``) used to find the
 `ATLAS <http://math-atlas.sourceforge.net>`_ libraries on a Fedora 20 system::
-        
+
         set(ATLAS_BASE "/usr/lib64/atlas")
         set(BLAS_FOUND TRUE CACHE BOOL "BLAS library found" FORCE)
         set(BLAS_LIBRARIES "${ATLAS_BASE}/libf77blas.so.3" CACHE FILEPATH "BLAS libraries" FORCE)
@@ -126,7 +129,7 @@ Troubleshooting
 
 .. highlight:: console
 .. index:: toolset ; troubleshooting
-   
+
 **Q**: Hello, I tried to install a new toolset and ran a problem at
 compilation. It failed as follows::
 
@@ -135,10 +138,10 @@ compilation. It failed as follows::
    lib/libGX11.so.5.18 x11/src/GX11Gui.o x11/src/Rotated.o
    x11/src/TGX11.o x11/src/gifdecode.o x11/src/gifencode.o
    x11/src/gifquantize.o x11/src/G__X11.o -lXpm -lXext -lX11 -lXft
-   /usr/bin/ld: cannot find -lXft 
+   /usr/bin/ld: cannot find -lXft
    collect2: ld returned 1 exit status
 
-It seems that there is a missing "-lXft". Does someone have an idea what "lxft" is and where can I find it? 
+It seems that there is a missing "-lXft". Does someone have an idea what "lxft" is and where can I find it?
 
 **A**: That thing is a linker flag.  ``-l___`` means to find ``lib___.so``
 and link it in.  Googling around for Xft and libXft reveals that this

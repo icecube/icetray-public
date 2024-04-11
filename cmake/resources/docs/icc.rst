@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. important::
 
    Support for Intel's C++ compiler hasn't been updated or even
@@ -7,7 +11,7 @@
 Using the Intel C++ compiler
 ============================
 
-Intel's C++ compiler is said to generate faster code than gcc and is free for 
+Intel's C++ compiler is said to generate faster code than gcc and is free for
 noncommerical use on Linux platforms. Available here:
 
   https://software.intel.com/en-us/c-compilers/
@@ -42,7 +46,7 @@ See this thread:
   https://software.intel.com/en-us/forums/topic/304565
 
 for details on a link error involving undefined symbol ``__sync_fetch_and_add``,
-which is found in gcc 4.2 stl headers.  The patch is in 
+which is found in gcc 4.2 stl headers.  The patch is in
 ``cmake/tool-patches/common/I3/intel_compatibility.h``.
 
 libimf.so

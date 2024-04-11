@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. index:: env-shell.sh, .bashrc
 
 .. _env-shell.sh:
@@ -41,7 +45,7 @@ the appropriate environment::
   *                        http://icecube.umd.edu                        *
   *                                                                      *
   ************************************************************************
-  
+
   Icetray environment has:
      I3_SRC       = /home/olivas/icecube/combo/stable/src
      I3_BUILD     = /home/olivas/icecube/combo/stable/build
@@ -65,7 +69,7 @@ behavior would look something like this::
 
   % echo $PATH
   /usr/bin:/bin
-  % ./env-shell.sh 
+  % ./env-shell.sh
   ************************************************************************
   *                                                                      *
   *                   W E L C O M E  to  I C E T R A Y                   *
@@ -76,7 +80,7 @@ behavior would look something like this::
   *                        http://icecube.umd.edu                        *
   *                                                                      *
   ************************************************************************
-  
+
   Icetray environment has:
      I3_SRC       = /home/olivas/icecube/combo/stable/src
      I3_BUILD     = /home/olivas/icecube/combo/stable/build
@@ -99,7 +103,7 @@ initializes::
 
   % echo $PATH
   /usr/bin:/bin
-  % ./env-shell.sh 
+  % ./env-shell.sh
   ************************************************************************
   *                                                                      *
   *                   W E L C O M E  to  I C E T R A Y                   *
@@ -110,7 +114,7 @@ initializes::
   *                        http://icecube.umd.edu                        *
   *                                                                      *
   ************************************************************************
-  
+
   Icetray environment has:
      I3_SRC       = /home/olivas/icecube/combo/stable/src
      I3_BUILD     = /home/olivas/icecube/combo/stable/build
@@ -146,17 +150,17 @@ variables inside an if-then block so that they are executed only once.
 Here it is ``.bashrc`` or ``.zshrc`` -style::
 
   #
-  # if MY_ENV_SET_ALREADY has zero length,     
+  # if MY_ENV_SET_ALREADY has zero length,
   #
   if [ -z "$MY_ENV_SET_ALREADY" ]; then
 
      #
      #  set my variables
      #
-     export PATH=/path/to/my/root/bin:$PATH    
+     export PATH=/path/to/my/root/bin:$PATH
      export ROOTSYS=/path/to/my/root
 
-     # 
+     #
      #  set the flag that we shouldn't do this in the future
      #
      export MY_ENV_SET_ALREADY=true
@@ -202,7 +206,7 @@ can configure things easily:
   Setting environment for root 5.20
   $ echo $PATH
   /path/to/my/root-5.20.00/bin:/usr/bin
-  
+
 .. warning::
 
    Again: you don't want to try to override the ROOT that a

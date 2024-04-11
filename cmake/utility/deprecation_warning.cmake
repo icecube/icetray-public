@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 ## This macro takes 2 arguments. The first, _d, is an "integer date"
 ## in the format of "YYYYmmdd". The second, _m, is a message that will
 ## be passed to message(WARNING ...) or message(FATAL_ERROR ...). A

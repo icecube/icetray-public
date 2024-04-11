@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 import sys, imp
 
 mod = imp.load_dynamic('@MODULENAME@', __path__[0] + "/@MODULENAME@.so")

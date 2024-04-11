@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 # Top-level CMake file for a parasitic metaproject build
 #
@@ -25,9 +29,9 @@
 cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
 set(CMAKE_MODULE_PATH
-  ${EXTRA_CMAKE_MODULE_PATH} 
-  ${CMAKE_SOURCE_DIR}/cmake 
-  ${CMAKE_SOURCE_DIR}/cmake/tools 
+  ${EXTRA_CMAKE_MODULE_PATH}
+  ${CMAKE_SOURCE_DIR}/cmake
+  ${CMAKE_SOURCE_DIR}/cmake/tools
   ${CMAKE_SOURCE_DIR}/cmake/utility)
 include(utility)
 
@@ -47,7 +51,7 @@ elseif(DEFINED ENV{SROOT} AND EXISTS $ENV{SROOT}/metaprojects)
       set(_metaproject_family ${METAPROJECT})
     endif(_metaproject_family STREQUAL "")
   endif()
-    
+
   # endif(NOT METAPROJECT STREQUAL "")
   if(EXISTS $ENV{SROOT}/metaprojects/${METAPROJECT}/env-shell.sh)
     # specified metaproject/version exists
@@ -148,7 +152,7 @@ macro(use_projects THIS_TARGET)
 endmacro(use_projects THIS_TARGET)
 
 #
-# A bare-bones version of use_pybindings() 
+# A bare-bones version of use_pybindings()
 #
 macro(use_pybindings THIS_TARGET)
   parse_arguments(${THIS_TARGET}_USE_PROJECTS
@@ -189,7 +193,7 @@ foreach(TOOL_ ${ALL_TOOLS})
     ${TOOL}_INCLUDE_DIR
     ${TOOL}_INCLUDE_DIRS
     ${TOOL}_LIBRARIES
-    ${TOOL}_LINK_FLAGS)  
+    ${TOOL}_LINK_FLAGS)
 endforeach(TOOL_ ${ALL_TOOLS})
 
 # Set compatibility shims for Python version etc. info
@@ -378,6 +382,6 @@ configure_file(${CMAKE_SOURCE_DIR}/cmake/env-check.sh.in
   ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/env-check.sh
   @ONLY)
 
-add_custom_target(env-check ALL 
+add_custom_target(env-check ALL
   COMMAND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/env-check.sh
   COMMENT "Checking build against environment")

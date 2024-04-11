@@ -1,11 +1,16 @@
 #!/bin/sh
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
 #
-#  $Id$  
+# SPDX-License-Identifier: BSD-2-Clause
+
+#
+#  $Id$
 #
 #   Properly setup a mini ROOTSYS in your tarball.
 #
 
-if [ -d @ROOTSYS@ ] 
+if [ -d @ROOTSYS@ ]
 then
 	echo "Generating tarball ROOTSYS"
 	mkdir -p @CMAKE_INSTALL_PREFIX@/cernroot/etc

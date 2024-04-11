@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 colormsg("")
 colormsg(HICYAN "libarchive")
 
@@ -19,12 +23,12 @@ find_path(LZMA_INCLUDE_DIR lzma.h
 		/usr/local)
 
 find_library(LZMA_LIBRARIES lzma
-             HINTS ${PC_LA_LIBDIR}                   
+             HINTS ${PC_LA_LIBDIR}
                    ${PC_LA_LIBRARY_DIRS}
                    ${TOOL_SYSTEM_PATH})
 
 find_path(LZMA_INCLUDE_DIR lzma.h
-          HINTS ${PC_LA_INCLUDEDIR}                
+          HINTS ${PC_LA_INCLUDEDIR}
                 ${PC_LA_INCLUDE_DIRS})
 
 ## look in Homebrew for libarchive. BREW_PREFIX defined in tooldef.cmake
@@ -39,19 +43,19 @@ endif()
 
 ## give cmake a chance to find a custom install of libarchive
 find_library(LIBARCHIVE_LIBRARIES archive
-             HINTS ${PC_LA_LIBDIR}                   
+             HINTS ${PC_LA_LIBDIR}
                    ${PC_LA_LIBRARY_DIRS}
                    ${TOOL_SYSTEM_PATH}
                    NO_DEFAULT_PATH)
 ## if that fails, allow searches in CMAKE_PREFIX/lib
 find_library(LIBARCHIVE_LIBRARIES archive
-             HINTS ${PC_LA_LIBDIR}                   
+             HINTS ${PC_LA_LIBDIR}
                    ${PC_LA_LIBRARY_DIRS}
                    ${TOOL_SYSTEM_PATH}
                    )
 
 find_path(LIBARCHIVE_INCLUDE_DIR archive.h
-          HINTS ${PC_LA_INCLUDEDIR}                
+          HINTS ${PC_LA_INCLUDEDIR}
                 ${PC_LA_INCLUDE_DIRS})
 
 if(NOT ${LIBARCHIVE_INCLUDE_DIR} MATCHES "-NOTFOUND")

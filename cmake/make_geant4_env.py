@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 '''
 Produces POSIX commands to setup the environment variables for Geant4.
 
@@ -79,7 +84,7 @@ for var in geant4_vars:
         sys.stderr.write(("Warning: Geant4 environment variable {0} could not be set, "
                           "g4-based modules may crash\n").format(var))
     else:
-        formatted_pairs.append("{0}={1}".format(var, value))           
+        formatted_pairs.append("{0}={1}".format(var, value))
 
-# extra formatting for env-shell.sh        
+# extra formatting for env-shell.sh
 sys.stdout.write(" \\\n\t".join(formatted_pairs))

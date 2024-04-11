@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. _writing-pybindings:
 
 How to write pybindings for your project
@@ -14,7 +18,7 @@ How to write pybindings for your project
 Registering your class with boost::python
 _________________________________________
 
-Classes are registered by instantiating boost::python::class_<YourClass>. 
+Classes are registered by instantiating boost::python::class_<YourClass>.
 
 ::
 
@@ -51,7 +55,7 @@ Maps can be exposed with:
 	  .def(std_map_indexing_suite<I3Map<OMKey,I3Vector<I3MyClass > > >())
 	;
 
-In addition to indexing, this will make the wrapped map behave as much like a Python dictionary as possible. 
+In addition to indexing, this will make the wrapped map behave as much like a Python dictionary as possible.
 
 Wrapping enumerated types
 _________________________
@@ -80,8 +84,8 @@ The wrapping code for each class should be placed in its own function::
 	void register_I3Particle()
 	{
 	 {
-	  boost::python::class_<I3Particle, 
-	                        bases<I3FrameObject>, 
+	  boost::python::class_<I3Particle,
+	                        bases<I3FrameObject>,
 	                        boost::shared_ptr<I3Particle > >("I3Particle")
 	  ...
 	 }
@@ -121,7 +125,7 @@ The header :code:`<boost/preprocessor/seq.hpp>` defines macros that can manipula
 
     #define MY_SEQUENCE (a)(whole)(bunch)(of)(tokens)
 
-These tokens can be expanded with 
+These tokens can be expanded with
 
 .. c:macro:: BOOST_PP_SEQ_FOR_EACH(Macro, Data, Seq)
 
@@ -193,7 +197,7 @@ If you want to be nice to your users, you can wrap your Get/Set methods in Pytho
 
 	:param Class: Parent C++ class
 	:param Prop: The name of the Python property
-	:param GotType: The type returned by GetFn() 
+	:param GotType: The type returned by GetFn()
 	:param Fn: The base name of the C++ Get/Set functions
 
 .. c:macro:: WRAP_PROP(R, Class, Fn)
@@ -223,7 +227,7 @@ For finer-grained control of the Python property name, use the trinary form:
 
 ::
 
-	PROPERTY(I3Particle, partyTime, Time)	
+	PROPERTY(I3Particle, partyTime, Time)
 
 
 Exposing public member data with access restrictions
@@ -232,14 +236,14 @@ Exposing public member data with access restrictions
 You can expose public member data as properties, either read/write or read-only:
 
 .. c:macro:: WRAP_RW(R, Class, Member)
-	
+
 	Expose Member as a read/write Python property. Suitable for use with :c:macro:`BOOST_PP_SEQ_FOR_EACH`.
 
 	:param Class: Parent C++ class
 	:param Member: Name of public data member and Python property
 
 .. c:macro:: WRAP_RO(R, Class, Member)
-	
+
 	Expose Member as a read-only Python property. Suitable for use with :c:macro:`BOOST_PP_SEQ_FOR_EACH`.
 
 	:param Class: Parent C++ class
@@ -261,7 +265,7 @@ If you need finer-grained control of the return type of your wrapped methods, yo
 
 	:param Objtype: The parent C++ class.
 	:param GotType: The type of object returned by Get()
-	:param Name: The base name of the Get/Set methods. 
+	:param Name: The base name of the Get/Set methods.
 
 	For a name ``X``, this will define :code:`Objtype::GetX()` to return a ``GotType`` by value. This is appropriate for POD like ints and doubles. It will also define :code:`SetX()`.
 
@@ -271,7 +275,7 @@ If you need finer-grained control of the return type of your wrapped methods, yo
 
 	:param Objtype: The parent C++ class.
 	:param GotType: The type of object returned by Get()
-	:param Name: The base name of the Get/Set methods. 
+	:param Name: The base name of the Get/Set methods.
 
 	This will define :code:`Objtype::GetX()` to return a reference to ``GotType``, where ``GotType`` is still owned by the parent object. This is appropriate for compound objects like vectors and maps.
 
@@ -316,7 +320,7 @@ Wrapping enumerated types
 	:param Name: The name of the C++ value.
 
 	**Example**::
-		
+
 		enum_<I3Particle::FitStatus>("FitStatus")
 		  #define FIT_STATUS (NotSet)(OK)(GeneralFailure)(InsufficientHits)      \
 		                     (FailedToConverge)(MissingSpeed)(InsufficientQuality)
@@ -334,7 +338,7 @@ Constructing a Python module
 	:param data: unused.
 
 .. c:macro:: I3_PYTHON_MODULE(module_name)
-	
+
 	Declare the following code to be run when the module is initialized.
 
 	:param module_name: The name of the Python module. Must be a legal Python variable name.
@@ -364,7 +368,7 @@ You may be mystified by errors like these:
 	    boost::python::detail::not_specified,
 	    boost::python::detail::not_specified
 	>::def(const char [11], <unresolved overloaded function type>)'
-	
+
 This can happen when the wrapped class exposes two different versions of the function, for example returning a const or non-const type. In this case, you have to specify the return type by hand. The :c:macro:`BOOST_PP_SEQ_FOR_EACH` tricks will not work; you'll need to use :c:macro:`GETSET` or :c:macro:`PROPERTY_TYPE` to wrap each name individually instead.
 
 Naming conventions
@@ -379,7 +383,7 @@ _________
 - `Boost::Python reference guide <https://www.boost.org/doc/libs/release/libs/python/doc/reference/>`_
 
 Todo: finer points of return-by-value vs. reference
-___________________________________________________ 
+___________________________________________________
 
 
 

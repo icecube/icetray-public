@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. _targets:
 .. _workspace-targets:
 
@@ -29,7 +33,7 @@ directory.
      - Will rsync the latest test data down to your
        :envvar:`I3_TESTDATA` directory
    * - test
-     - Will build everything, then run the test driver script to test 
+     - Will build everything, then run the test driver script to test
        everything, then print a summary.    See :ref:`testdriver`
    * - test-bins
      - Builds test binaries. See :ref:`testdriver`
@@ -40,7 +44,7 @@ directory.
        in the build process to ensure that you haven't set
        :envvar:`ROOTSYS` in your :file:`.bashrc`.
    * - docs
-     - make all of: *html*, *doxygen* and *inspect* 
+     - make all of: *html*, *doxygen* and *inspect*
    * - html
      - Generates this html documentation in :envvar:`I3_BUILD`/docs
    * - latex
@@ -49,21 +53,21 @@ directory.
      - runs doxygen to autogenerate documentation in :envvar:`I3_BUILD`/docs/doxygen
    * - inspect
      - builds :ref:`icetray-inspect` documentation in :envvar:`I3_BUILD`/docs/inspect
-   * - rebuild_cache 
+   * - rebuild_cache
      - See documentation for cmake and :ref:`rebuild_cache`
-   * - edit_cache 
+   * - edit_cache
      - See documentation for cmake and :ref:`rebuild_cache`
 
 Project level
 -------------
 
 Project level targets include several standard targets like *clean*
-and *all*, as well as whatever targets are created by calling 
-cmake macros described in :ref:`macroreference` and in the 
+and *all*, as well as whatever targets are created by calling
+cmake macros described in :ref:`macroreference` and in the
 standard cmake documentation.
-		 
 
 
 
 
-     
+
+

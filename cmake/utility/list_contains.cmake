@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 #  $Id$
 #
@@ -6,7 +10,7 @@
 # occurs within a list of strings:
 #
 #  list_contains(result string_to_find arg1 arg2 arg3 ... argn)
-# 
+#
 # This macro sets the variable named by result equal to TRUE if
 # string_to_find is found anywhere in the following arguments.
 macro(list_contains var value)

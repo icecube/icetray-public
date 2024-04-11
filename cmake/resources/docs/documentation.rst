@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. _Documentation:
 
 Documentation
@@ -33,7 +37,7 @@ documentation (and a good way to generate quick web pages).  See
 documentation toolkit built on top of restructured text, used for
 Python's standard documentation.
 
-.. index:: DOCS_DIR 
+.. index:: DOCS_DIR
 
 Projects that contain a :ref:`DOCS_DIR <DOCS_DIR>` in their
 CMakeList.txt's :ref:`i3_project <i3_project>` invocation will have
@@ -52,7 +56,7 @@ Doxygen is a open-source application which generates good-looking
 documentation of C, C++, Java and Python, from the source code
 itself. One particularly appealing apspect of doxygen is its ability
 to cross-reference classes and functions and generate inheritance and
-collaboration diagrams. Try them out.  
+collaboration diagrams. Try them out.
 
 On the other hand, doxygen isn't very good for hand-written explanatory,
 high-level documentation.

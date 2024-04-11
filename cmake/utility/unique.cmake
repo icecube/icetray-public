@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 MACRO(UNIQUE var_name list)
   # Make the given list have only one instance of each unique element and
   # store it in var_name.

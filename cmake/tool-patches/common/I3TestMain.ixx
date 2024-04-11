@@ -1,7 +1,7 @@
 /* -*- mode: c++; -*- vim: set ft=cpp: */
 /**
-   copyright  (C) 2005
-   the icecube collaboration
+   Copyright  (C) 2005 the icecube collaboration
+   SPDX-License-Identifier: BSD-2-Clause
    $Id$
 
    @version $Revision$
@@ -48,15 +48,15 @@ using namespace std;
 #include <signal.h>
 
 using namespace I3Test;
-namespace I3Test 
+namespace I3Test
 {
-  const std::string 
+  const std::string
   testfile(const std::string& fname, const std::string& project)
   {
     const char* i3_work = getenv("I3_BUILD");
     ENSURE(i3_work != NULL);
-  
-    const std::string dirname = i3_work + string("/") 
+
+    const std::string dirname = i3_work + string("/")
       + project + "/testdata";
 
 #if BOOST_VERSION > 104100
@@ -88,7 +88,7 @@ namespace I3Test
     siglongjmp(jmp_env, 1);
   }
 
-  void 
+  void
   trap_signals()
   {
     signal(SIGSEGV, handle_signal); // segmentation violation
@@ -109,23 +109,23 @@ namespace I3Test
 
   string encode_entities(const std::string&); // defined in I3TestMain.ixx
 
-  test_failure::test_failure(const string& file_, unsigned line_, 
-			     const string& predicate_, const string& message_) 
-    : I3TestException(message_), 
+  test_failure::test_failure(const string& file_, unsigned line_,
+			     const string& predicate_, const string& message_)
+    : I3TestException(message_),
       line(line_), file(file_), predicate(predicate_), message(message_) { }
-  
-  string test_failure::to_string(const string& name) const 
+
+  string test_failure::to_string(const string& name) const
   {
     ostringstream os;
     os << file << ":" << line << ": FAIL\n"
-       << "\n\tFile:      " << file 
-       << "\n\tLine:      " << line 
-       << "\n\tPredicate: " << predicate 
+       << "\n\tFile:      " << file
+       << "\n\tLine:      " << line
+       << "\n\tPredicate: " << predicate
        << "\n\tMessage:   " << message << "\n" << endl;
     return os.str();
   }
 
-  void 
+  void
   test_group::run(const string &unit, bool xml)
   {
     if (unit.empty())
@@ -192,13 +192,13 @@ namespace I3Test
 		  char message[255];
 		  if (signal_returned == SIGALRM)
 		    {
-		      snprintf(message, 255, "TIMEOUT: test killed by I3Test after %d seconds.", 
+		      snprintf(message, 255, "TIMEOUT: test killed by I3Test after %d seconds.",
 			       unit_test_time_limit);
 		      throw test_failure("unknown", 0, "Test timed out.", message);
 		    }
 		  else
 		    {
-		      snprintf(message, 255, "Signal (%d) received: %s", 
+		      snprintf(message, 255, "Signal (%d) received: %s",
 			       signal_returned, strsignal(signal_returned));
 		      throw test_failure("unknown", 0, "unexpected signal received", message);
 		    }
@@ -217,7 +217,7 @@ namespace I3Test
 		rout << "<status>pass</status>\n\t<output>\n" << encode_entities(output) << "\n\t</output>\n</unit>" << endl;
 	      else
 		cout << "   ok" << endl;
-	  
+
 	    } catch (const test_failure& failure) {
 	      untrap_signals();
 	      cout.rdbuf(cout_buf);
@@ -234,7 +234,7 @@ namespace I3Test
 	      cout.rdbuf(cout_buf);
 	      cerr.rdbuf(cerr_buf);
 	      if (xml)
-		rout << "<status>fail</status>\n\t<what>uncaught exception:\n" 
+		rout << "<status>fail</status>\n\t<what>uncaught exception:\n"
 		     << encode_entities(e.what()) << "</what>\n\t<output>"
 		     << encode_entities(oss.str()) << "</output>\n</unit>\n";
 	      else
@@ -247,7 +247,7 @@ namespace I3Test
 	      cout.rdbuf(cout_buf);
 	      cerr.rdbuf(cerr_buf);
 	      if (xml)
-		rout << "<status>fail</status>\n\t<what>uncaught exception:\n" 
+		rout << "<status>fail</status>\n\t<what>uncaught exception:\n"
 		     << "some python error" << "</what>\n\t<output>"
 		     << encode_entities(oss.str()) << "</output>\n</unit>\n";
 	      else
@@ -269,8 +269,8 @@ namespace I3Test
 	  }
       }
   }
-  
-  void 
+
+  void
   test_group::runtests(bool xml)
   {
     for (map<string, voidfunc>::iterator i = units.begin();
@@ -281,20 +281,20 @@ namespace I3Test
       }
   }
 
-  void 
-  test_group::first(const string &s, const pair<string, voidfunc>& p) 
+  void
+  test_group::first(const string &s, const pair<string, voidfunc>& p)
   {
     cout << s << "/" << p.first << endl;
   }
 
-  void 
+  void
   test_group::list(const string& s)
   {
     for_each(units.begin(), units.end(), bind(first,s,_1));
   }
 
 
-  void test_suite::runtests(bool xml) 
+  void test_suite::runtests(bool xml)
   {
     for (map<string, test_group*>::iterator i = groups.begin();
 	 i != groups.end();
@@ -304,14 +304,14 @@ namespace I3Test
 	  rout << "<group>\n\t<name>" << i->first << "</name>\n" << endl;
 	else
 	  cout << i->first << "..." << endl;
-	
+
 	i->second->runtests(xml);
 	if (xml)
 	  rout << "</group>" << endl;
       }
   }
-  
-  bool test_suite::report() 
+
+  bool test_suite::report()
   {
     unsigned successes = 0;
     unsigned failures = 0;
@@ -345,14 +345,14 @@ namespace I3Test
       return false;
   }
 
-  void 
-  test_suite::first(const pair<string, test_group*>& p) 
+  void
+  test_suite::first(const pair<string, test_group*>& p)
   {
     p.second->list(p.first);
     cout << endl;
   }
 
-  void 
+  void
   test_suite::list()
   {
     cout << "The part before the dot is the group name.\n"
@@ -363,7 +363,7 @@ namespace I3Test
     for_each(groups.begin(), groups.end(), first);
   }
 
-  void 
+  void
   test_suite::make_dartfiles(const string& path)
   {
     cout << "Making dartfiles in directory " << path << "\n";
@@ -371,23 +371,23 @@ namespace I3Test
     for_each(groups.begin(), groups.end(), first);
   }
 
-  void 
-  test_suite::run (const string& s) 
+  void
+  test_suite::run (const string& s)
   {
     string::size_type idx = s.find('/');
     string group_to_run = s.substr(0,idx);
     string unit_to_run = s.substr(idx+1);
     if (idx == string::npos)
       unit_to_run = "";
-    
+
     cout << group_to_run << "...\n";
 
     map<string, test_group*>::iterator iter = groups.find(group_to_run);
     if (iter != groups.end())
       iter->second->run(unit_to_run);
     else
-      throw I3TestException(string("Could not find test group \"") 
-			    + group_to_run 
+      throw I3TestException(string("Could not find test group \"")
+			    + group_to_run
 			    + "\"\nUse \"--help\" to see help.");
   }
 
@@ -454,7 +454,7 @@ void validate(boost::any &v, const std::vector<std::string>& values,
     I3LogLevel* target_type, int)
 {
     using namespace boost::program_options;
-    
+
     // Make sure no previous assignment to 'a' was made.
     validators::check_first_occurrence(v);
     // Extract the first string from 'values'. If there is more than
@@ -462,7 +462,7 @@ void validate(boost::any &v, const std::vector<std::string>& values,
     const string& s = validators::get_single_string(values);
     std::string supper;
     std::transform(s.begin(), s.end(), std::back_inserter(supper), ::toupper);
-    
+
     if (supper == "TRACE")
         v = boost::any(I3LOG_TRACE);
     else if (supper == "DEBUG")
@@ -492,7 +492,7 @@ namespace po = boost::program_options;
 template<class T>
 ostream& operator<<(ostream& os, const vector<T>& v)
 {
-  copy(v.begin(), v.end(), ostream_iterator<T>(cout, " ")); 
+  copy(v.begin(), v.end(), ostream_iterator<T>(cout, " "));
   return os;
 }
 
@@ -601,7 +601,7 @@ int main(int argc, char* argv[])
 	return 0;
       }
 
-    if (vm.count("run-tests")) 
+    if (vm.count("run-tests"))
       {
 	const vector<string>& tests =  vm["run-tests"].as< vector<string> >();
 	string first = *(tests.begin());

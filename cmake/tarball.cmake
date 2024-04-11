@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 # Tarball target
 #
@@ -18,7 +22,7 @@ add_custom_target(tarball-start
   COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/lib
   COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/bin
   COMMENT "Tarball start"
-  )  
+  )
 
 add_custom_target(tarball-install
   COMMAND ${CMAKE_MAKE_PROGRAM} install
@@ -90,7 +94,7 @@ configure_file(
   )
 execute_process(COMMAND chmod 755 ${MAKE_TARBALL_ROOTSYS_SH})
 
-if(EXISTS ${CMAKE_SOURCE_DIR}/tarball_hook.sh.in) 
+if(EXISTS ${CMAKE_SOURCE_DIR}/tarball_hook.sh.in)
   message(STATUS "Generating tarball_hook.sh")
   configure_file(
     ${CMAKE_SOURCE_DIR}/tarball_hook.sh.in
@@ -98,7 +102,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/tarball_hook.sh.in)
     @ONLY
     )
   execute_process(COMMAND chmod 755 ${CMAKE_BINARY_DIR}/tarball_hook.sh)
-endif(EXISTS ${CMAKE_SOURCE_DIR}/tarball_hook.sh.in) 
+endif(EXISTS ${CMAKE_SOURCE_DIR}/tarball_hook.sh.in)
 
 add_custom_target(retarball
   COMMAND ${CMAKE_MAKE_PROGRAM} wipe-tarball

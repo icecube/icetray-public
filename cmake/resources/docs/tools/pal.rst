@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. _pal-tool:
 
 PAL
@@ -23,7 +27,7 @@ Apple Mac OS X
 On MAC OS X, homebrew can be used:
 
 .. code-block:: console
-		
+
   brew tap IceCube-SPNO/homebrew-icecube
   brew install pal
 
@@ -42,22 +46,22 @@ PAL depends on a library called ERFA which can be downloaded from github.
   ./configure
   make
   make install
-  
-For Ubuntu you may also have to install **autoconf** and **libtool**, depending on your 
+
+For Ubuntu you may also have to install **autoconf** and **libtool**, depending on your
 specific distribution. :
 
 PAL can be installed by downloading from github and compiling:
 
 .. code-block:: console
-		
+
   git clone https://github.com/IceCube-SPNO/pal
   cd pal
-  ./bootstrap 
+  ./bootstrap
   ./configure --prefix=/usr/local
   make
   make install
 
-  
+
 See Also
 --------
 - `cvmfs script <https://github.com/WIPACrepo/cvmfs/blob/master/builders/tools/pal.py>`_

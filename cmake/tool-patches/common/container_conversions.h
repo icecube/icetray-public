@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef SCITBX_BOOST_PYTHON_CONTAINER_CONVERSIONS_H
 #define SCITBX_BOOST_PYTHON_CONTAINER_CONVERSIONS_H
 
@@ -160,10 +164,10 @@ namespace scitbx { namespace boost_python { namespace container_conversions {
                     || std::strcmp(
                          obj_ptr->ob_type->tp_name,
                          "Boost.Python.class") != 0)
-		   && PyObject_HasAttrString(obj_ptr, 
+		   && PyObject_HasAttrString(obj_ptr,
 					     const_cast<char*>("__len__"))
-		   && PyObject_HasAttrString(obj_ptr, 
-					     const_cast<char*>("__getitem__"))))) 
+		   && PyObject_HasAttrString(obj_ptr,
+					     const_cast<char*>("__getitem__")))))
 	return 0;
       boost::python::handle<> obj_iter(
         boost::python::allow_null(PyObject_GetIter(obj_ptr)));

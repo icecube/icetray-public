@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef ICETRAY_PYBINDINGS_HPP_INCLUDED
 #define ICETRAY_PYBINDINGS_HPP_INCLUDED
 
@@ -25,17 +29,17 @@ private:
     if (res != NULL) {
       Py_DECREF(res);
       return 1;
-    }   
-    
+    }
+
     if ((PyErr_Occurred() != NULL) &&
         PyErr_ExceptionMatches(PyExc_RuntimeError)) {
       PyErr_Clear();
       return 1;
-    }   
+    }
 
     PyErr_Clear();
     return 0;
-  };  
+  };
   // also had to make this public
 public:
   template <class classT>
@@ -45,8 +49,8 @@ public:
       ;
     };
 
-  static void setattr_with_dynamism_disabled( const boost::python::object& obj, 
-				       const boost::python::object& name, 
+  static void setattr_with_dynamism_disabled( const boost::python::object& obj,
+				       const boost::python::object& name,
 				       const boost::python::object& value){
     if( HasAttrWithException(obj.ptr(), name.ptr()) ){
       if( PyObject_GenericSetAttr( obj.ptr(), name.ptr(), value.ptr()) == -1)
@@ -56,7 +60,7 @@ public:
       std::string clname = boost::python::extract<std::string>( obj.attr("__class__").attr("__name__") );
       std::string attname = boost::python::extract<std::string>( name );
       ss<<"*** The dynamism of this class has been disabled"<<std::endl;
-      ss<<"*** Attribute ("<<attname<<") does not exist in class "<<clname<<std::endl; 
+      ss<<"*** Attribute ("<<attname<<") does not exist in class "<<clname<<std::endl;
       PyErr_SetString(PyExc_AttributeError, ss.str().c_str());
       throw boost::python::error_already_set();
     }
@@ -77,15 +81,15 @@ register_pointer_conversions()
   implicitly_convertible<boost::shared_ptr<T>, boost::shared_ptr<const I3FrameObject> >();
 }
 
-template <typename T> 
-T 
+template <typename T>
+T
 identity_(T t) { return t; }
 
 
 //
 //  macros for general use
 //
-// GETSET implementation.  Pass the name of the Type, 
+// GETSET implementation.  Pass the name of the Type,
 // the name of the member to access via Get*** Set***,
 // and the return value policy.
 // Used by the two macros below
@@ -124,11 +128,11 @@ identity_(T t) { return t; }
  * ATWDBinSize => atwdBinSize
  *
  * The return value must be free()'d by the user.
- * 
+ *
  * @param str the camel case string to change
  * @return a pointer to the new malloc()'d string
  */
-static inline char * lowerCamelCase(const char * str) 
+static inline char * lowerCamelCase(const char * str)
 {
   int len,i;
   char* out;
@@ -163,27 +167,27 @@ struct string_deleter
  * @param str the camel case string to change
  * @return a pointer to the new string
  */
-static inline string_deleter snake_case(const char * str) 
+static inline string_deleter snake_case(const char * str)
 {
-  int i,j,len; 
-  char* out; 
-  j=0; 
-  len = strlen(str); 
-  out = (char*)malloc(2*len+1); 
+  int i,j,len;
+  char* out;
+  j=0;
+  len = strlen(str);
+  out = (char*)malloc(2*len+1);
   memset(out, '\0', 2*len+1);
   for (i=0;i<len;i++) {
-    out[i+j] = tolower(str[i]); 
-    if ( (!isupper(str[i]) && isupper(str[i+1])) || 
-	 ((i<len-1) && isupper(str[i+1]) && islower(str[i+2])) || 
+    out[i+j] = tolower(str[i]);
+    if ( (!isupper(str[i]) && isupper(str[i+1])) ||
+	 ((i<len-1) && isupper(str[i+1]) && islower(str[i+2])) ||
 	 (!isalpha(str[i+1]) && (str[i+1] != '\0')) ) {
-      j++; 
-      out[i+j] = '_'; 
-    } 
-  } 
-  out[len+j] = '\0'; 
-  out = (char*)realloc(out,len+j+1); 
-  return string_deleter(out); 
-} 
+      j++;
+      out[i+j] = '_';
+    }
+  }
+  out[len+j] = '\0';
+  out = (char*)realloc(out,len+j+1);
+  return string_deleter(out);
+}
 
 #define I3_PYTHON_MODULE(N) BOOST_PYTHON_MODULE(_##N)
 
@@ -203,7 +207,7 @@ static inline string_deleter snake_case(const char * str)
 #define WRAP_PROP_RO_INTERNAL_REFERENCE(R, Class, Fn) 						\
    .add_property(snake_case(BOOST_PP_STRINGIZE(Fn)),					\
                  boost::python::make_function(BOOST_PP_CAT(&Class::Get,Fn), 			\
-                                              boost::python::return_internal_reference<1>())) 
+                                              boost::python::return_internal_reference<1>()))
 #define WRAP_RW(R, Class, Member) .def_readwrite(BOOST_PP_STRINGIZE(Member), &Class::Member)
 #define WRAP_RW_RECASE(R, Class, Member) .def_readwrite(snake_case(BOOST_PP_STRINGIZE(Member)), &Class::Member)
 #define WRAP_RO(R, Class, Member) .def_readonly(BOOST_PP_STRINGIZE(Member), &Class::Member)

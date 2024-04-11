@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. _platforms:
 
 Supported Platforms
@@ -46,7 +50,7 @@ Officially Supported
    supported_platforms/osx
    supported_platforms/centos
    supported_platforms/ubuntu
-   
+
 Community Supported
 *******************
 .. toctree::

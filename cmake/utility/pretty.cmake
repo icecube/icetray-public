@@ -10,6 +10,7 @@
 # Copyright (C) 2007 Douglas Gregor <doug.gregor@gmail.com>              #
 # Copyright (C) 2007 Troy Straszheim                                     #
 #                                                                        #
+# SPDX-License-Identifier: BSL-1.0                                       #
 # Distributed under the Boost Software License, Version 1.0.             #
 # See accompanying file LICENSE_1_0.txt or copy at                       #
 #   http://www.boost.org/LICENSE_1_0.txt                                 #
@@ -19,15 +20,15 @@
 # A big shout out to the cmake gurus @ compiz
 #
 
-# colormsg("Colors:"  
-#   WHITE "white" GRAY "gray" GREEN "green" 
-#   RED "red" YELLOW "yellow" BLUE "blue" MAG "mag" CYAN "cyan" 
-#   _WHITE_ "white" _GRAY_ "gray" _GREEN_ "green" 
-#   _RED_ "red" _YELLOW_ "yellow" _BLUE_ "blue" _MAG_ "mag" _CYAN_ "cyan" 
-#   _HIWHITE_ "white" _HIGRAY_ "gray" _HIGREEN_ "green" 
-#   _HIRED_ "red" _HIYELLOW_ "yellow" _HIBLUE_ "blue" _HIMAG_ "mag" _HICYAN_ "cyan" 
-#   HIWHITE "white" HIGRAY "gray" HIGREEN "green" 
-#   HIRED "red" HIYELLOW "yellow" HIBLUE "blue" HIMAG "mag" HICYAN "cyan" 
+# colormsg("Colors:"
+#   WHITE "white" GRAY "gray" GREEN "green"
+#   RED "red" YELLOW "yellow" BLUE "blue" MAG "mag" CYAN "cyan"
+#   _WHITE_ "white" _GRAY_ "gray" _GREEN_ "green"
+#   _RED_ "red" _YELLOW_ "yellow" _BLUE_ "blue" _MAG_ "mag" _CYAN_ "cyan"
+#   _HIWHITE_ "white" _HIGRAY_ "gray" _HIGREEN_ "green"
+#   _HIRED_ "red" _HIYELLOW_ "yellow" _HIBLUE_ "blue" _HIMAG_ "mag" _HICYAN_ "cyan"
+#   HIWHITE "white" HIGRAY "gray" HIGREEN "green"
+#   HIRED "red" HIYELLOW "yellow" HIBLUE "blue" HIMAG "mag" HICYAN "cyan"
 #   "right?")
 
 function (colormsg)
@@ -74,13 +75,13 @@ function (colormsg)
 endfunction()
 
 #
-#  pretty-prints the value of a variable so that the 
+#  pretty-prints the value of a variable so that the
 #  equals signs align
 #
 function(boost_report_value NAME)
   string(LENGTH "${NAME}" varlen)
   math(EXPR padding_len 30-${varlen})
-  string(SUBSTRING "                                      " 
+  string(SUBSTRING "                                      "
     0 ${padding_len} varpadding)
   colormsg("${NAME}${varpadding} = ${${NAME}}")
 endfunction()
@@ -93,16 +94,16 @@ function(trace NAME)
       0 ${padding_len} varpadding)
     message("${NAME} ${varpadding} ${${NAME}}")
   endif()
-endfunction()  
+endfunction()
 
 #
-#  pretty-prints the value of a variable so that the 
+#  pretty-prints the value of a variable so that the
 #  equals signs align
 #
 function(boost_report_pretty PRETTYNAME VARNAME)
   string(LENGTH "${PRETTYNAME}" varlen)
   math(EXPR padding_len 30-${varlen})
-  string(SUBSTRING "                                      " 
+  string(SUBSTRING "                                      "
     0 ${padding_len} varpadding)
   message(STATUS "${PRETTYNAME}${varpadding} = ${${VARNAME}}")
 endfunction()

@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. index:: parasite
 
 Parasitic metaprojects
@@ -27,15 +31,15 @@ Now, make a build directory and run cmake::
 	-- The C compiler identification is AppleClang 6.0.0.6000054
 	-- The CXX compiler identification is AppleClang 6.0.0.6000054
 	...
-	-- 
-	-- Configuring parasitic metaproject 
-	-- 
+	--
+	-- Configuring parasitic metaproject
+	--
 	-- Base metaproject: /Users/jakob/Documents/IceCube/metaprojects/icerec-lite/build
 	-- Built from:       https://github.com/icecube/icetray.git
 	-- Install prefix:   /Users/jakob/Documents/IceCube/metaprojects/parasite/build/icerec-plus.osx_10_x86_64
 	...
-	-- Configuring parasitic projects: 
-	-- 
+	-- Configuring parasitic projects:
+	--
 	-- Syminking resources from host projects
 	-- Syminking Python packages from /Users/jakob/Documents/IceCube/metaprojects/icerec-lite/build/lib/icecube/
 	-- Symlinking binaries from /Users/jakob/Documents/IceCube/metaprojects/icerec-lite/build/bin/

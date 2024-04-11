@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 User's Guide
 ------------
 
@@ -5,9 +9,9 @@ User's Guide
 
 `CMake <https://cmake.org/>`_ is a cross-platform build system which
 generates build files for use by native build systems for different
-platforms.  On UNIX-like systems it generates makefiles.  CMake provides 
+platforms.  On UNIX-like systems it generates makefiles.  CMake provides
 easier per-project build configuration, a more standard build
-environment across different platforms, additional testing infrastructure, 
+environment across different platforms, additional testing infrastructure,
 and out-of-source compilation.
 
 Building with CMake
@@ -29,7 +33,7 @@ work directory and check out source to a directory called ``src``::
 .. note::
 
    The "src" on the end of the ``git clone`` command tells it to check out
-   to the "src" directory. You may choose any directory you like.   
+   to the "src" directory. You may choose any directory you like.
 
 Create the build directory parallel to the source directory and
 execute ``cmake`` in the object directory to create the build environment::
@@ -51,7 +55,7 @@ somewhat like that of the source directory.  Main differences:
 
 * there are no sourcefiles in the subdirectories of ``build/``
 * build contains directories ``CMakeFiles/``, ``bin/``, and ``lib/``
-* build contains files ``CMakeCache.txt``, ``env-shell.sh``, 
+* build contains files ``CMakeCache.txt``, ``env-shell.sh``,
   and ``tarball_hook.sh``.
 
 While still in the build directory execute ``make``::
@@ -76,7 +80,7 @@ valid targets in the CMake-generated ``Makefile``::
   ... clean
   <more targets omitted>
 
-.. _rebuild_cache: 
+.. _rebuild_cache:
 
 Command line configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -125,7 +129,7 @@ Beware: The tests need to be run inside ``env-shell.sh``, or they won't work.
 
 If you do ``make test`` in the build directory of your meta-project,
 it will run all tests of all projects in the meta-project. That is
-usually not what you want, as it takes a long time to complete. 
+usually not what you want, as it takes a long time to complete.
 To run only the tests for a particular project, ``cd`` into its
 subdirectory and run ``make test`` there.
 

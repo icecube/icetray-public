@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 Organization/Structure of Projects and Metaprojects
 ===================================================
 
@@ -34,9 +38,9 @@ IceCube projects have the following general directory structure:
      |       |     |-- A/  (*.cxx)
      |       |     |-- pybindings/  (*.cxx)
      |       |     \-- test/         (main.cxx, test1.cxx...)
-     |       |    
-     |       |-- python/   (__init__.py + *.py) 
-     |       |     
+     |       |
+     |       |-- python/   (__init__.py + *.py)
+     |       |
      |       \-- resources/
      |             |-- scripts/      (*.C, *.py)
      |             \-- docs/         (*.rst)
@@ -50,9 +54,9 @@ IceCube projects have the following general directory structure:
      |       |     |-- B/  (*.cxx, ...)
      |       |     |-- pybindings/  (*.cxx)
      |       |     \-- test/         (main.cxx, test1.cxx...)
-     |       |    
-     |       |-- python/   (__init__.py + *.py) 
-     |       |    
+     |       |
+     |       |-- python/   (__init__.py + *.py)
+     |       |
      |       \-- resources/
      |             |-- scripts/      (*.C, *.py)
      |             \-- docs/         (*.rst)
@@ -79,7 +83,7 @@ dangerous file/directories exist. For example, if one creates the
 subdirectory "dangerous" in project icetray's public directory, the
 following appears::
 
-  % make 
+  % make
   Project "icetray" contains unsafe public files or directories:
   dangerous Build will fail momentarily.  This error will go away if
   you ensure that icetray contains only one directory under "public",
@@ -92,10 +96,10 @@ Documentation goes in :file:`resources/docs`, in files named
 automatically generated documentation and restructuredText for the
 kind of documentation you're reading now.
 
-Directories under private can be specified to be: 
+Directories under private can be specified to be:
 
-  * code to be built and linked into the project's library 
-  * source to be built into executables 
+  * code to be built and linked into the project's library
+  * source to be built into executables
   * source to be built into executables and run as test suites
   * code to be built and linked into a python binding library.
 
@@ -141,7 +145,7 @@ this area.  Release are typically tagged with a number: VXX-YY-ZZ.
 * ZZ - Bug fix version, incremented if a minor change is made fixing
   issues without changing the interface.
 
-.. note:: 
+.. note::
 
    In fact, these conventions are almost universally ignored as they
    are difficult to test and enforce.  Generally one increments the X,

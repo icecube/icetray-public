@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 ## CUDA is detected already in ../config.cmake via enable_language()
 ## this just just helps setup some convenient variables
 

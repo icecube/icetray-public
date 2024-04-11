@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 MACRO(FILTER_OUT FILTERS INPUTS OUTPUT)
   # Mimics Gnu Make's $(filter-out) which removes elements
   # from a list that match the pattern.
@@ -5,15 +9,15 @@ MACRO(FILTER_OUT FILTERS INPUTS OUTPUT)
   #  FILTERS - list of patterns that need to be removed
   #  INPUTS  - list of inputs that will be worked on
   #  OUTPUT  - the filtered list to be returned
-  # 
-  # Example: 
+  #
+  # Example:
   #  SET(MYLIST this that and the other)
   #  SET(FILTS this that)
   #
   #  FILTER_OUT("${FILTS}" "${MYLIST}" OUT)
   #  MESSAGE("OUTPUT = ${OUT}")
   #
-  # The output - 
+  # The output -
   #   OUTPUT = and;the;other
   #
   SET(FOUT "")
@@ -44,15 +48,15 @@ MACRO(STREQUAL_FILTER_OUT FILTERS INPUTS OUTPUT)
   #  FILTERS - list of patterns that need to be removed
   #  INPUTS  - list of inputs that will be worked on
   #  OUTPUT  - the filtered list to be returned
-  # 
-  # Example: 
+  #
+  # Example:
   #  SET(MYLIST this that and the other)
   #  SET(FILTS this that)
   #
   #  FILTER_OUT("${FILTS}" "${MYLIST}" OUT)
   #  MESSAGE("OUTPUT = ${OUT}")
   #
-  # The output - 
+  # The output -
   #   OUTPUT = and;the;other
   #
   SET(FOUT "")

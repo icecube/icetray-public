@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. _macroreference:
 
 Icetray-specific cmake macro reference
@@ -13,7 +17,7 @@ i3_project
 
 .. program:: i3_project
 
-.. index:: i3_project 
+.. index:: i3_project
    single: CMake macros ; i3_project
 
 .. object:: i3_project(project_name [ARGS])
@@ -21,7 +25,7 @@ i3_project
    Define a project.
 
    **Example**::
-     
+
       i3_project(fastreco
                  PYTHON_DIR python
                  DOCS_DIR   resources/docs
@@ -32,7 +36,7 @@ i3_project
    **Options**:
 
    .. cmdoption:: project_name
-      
+
       The name of the project.  Don't use hyphens, though
       some projects do have hyphenated names.  Project names
       must start with a letter or underscore and contain
@@ -62,7 +66,7 @@ i3_project
 
       See also :ref:`USE_SETUPTOOLS <USE_SETUPTOOLS>`
 
-   .. _PYTHON_DEST:	   
+   .. _PYTHON_DEST:
    .. index:: PYTHON_DEST
    .. cmdoption:: PYTHON_DEST <dir>
 
@@ -90,31 +94,31 @@ i3_project
       ``fast-reco`` at the python-legal name ``fast_reco``
       (transliterating hyphen to underscore), you need to include
       the leading ``icecube``::
- 
+
          i3_project(fast-reco
            PYTHON_DIR python
-           PYTHON_DEST icecube/fast_reco 
+           PYTHON_DEST icecube/fast_reco
            )
 
-   .. _DOCS_DIR:	   
-   .. index:: DOCS_DIR 
+   .. _DOCS_DIR:
+   .. index:: DOCS_DIR
    .. cmdoption:: DOCS_DIR <dir>
 
 
       Path to a directory containing restructuredtext documentation
-      for html/latex generation with *Sphinx*       
+      for html/latex generation with *Sphinx*
 
 
-   .. _USE_SETUPTOOLS:      
+   .. _USE_SETUPTOOLS:
    .. index:: USE_SETUPTOOLS
    .. cmdoption:: USE_SETUPTOOLS
 
       Specifies that python *setuptools* should be used to setup and
       install python software in PYTHON_DIR.  PYTHON_DEST is ignored
-      in this case.  
+      in this case.
 
       At config time, a command::
-     
+
         python setup.py develop
 
       will be run to create links in the build directory.  At install time
@@ -131,18 +135,18 @@ i3_add_library
 
 .. program:: i3_add_library
 
-.. index:: i3_add_library 
+.. index:: i3_add_library
    single: CMake macros ; i3_add_library
 
 .. object:: i3_add_library(name src1 src2 ... srcN [ARGS ...])
 
-   Add a library to the build.  
+   Add a library to the build.
 
    **Example**::
 
-     i3_add_library (dataio 
+     i3_add_library (dataio
        private/dataio/*.cxx
-       USE_TOOLS boost python 
+       USE_TOOLS boost python
        USE_PROJECTS icetray dataclasses interfaces
        )
 
@@ -153,10 +157,10 @@ i3_add_library
    .. _USE_TOOLS:
    .. index:: USE_TOOLS
    .. cmdoption:: USE_TOOLS tool1 [tool2 tool3 ...]
-   
+
       Add compile/link flags corresponding to the listed tools to the
       build of *name*.
-   
+
    .. cmdoption:: USE_PROJECTS proj1 [proj2 ... projn]
 
       Add compile/link flags to the build of the current library for
@@ -166,14 +170,14 @@ i3_add_library
 
       If a file LinkDef.h in the root of the project directory exists,
       attempt to generate and compile in a 'root' dictionary.
-      
+
    .. cmdoption:: LINK_LIBRARIES lib1 [lib2 ... libn]
 
       Link in these additional libraries.
 
    .. cmdoption:: COMPILE_FLAGS flag1 [flag2 ...]
 
-      Add these flags to the compile line.     
+      Add these flags to the compile line.
 
    .. cmdoption:: INSTALL_DESTINATION path
 
@@ -202,7 +206,7 @@ i3_executable
 
 .. program:: i3_executable
 
-.. index:: i3_executable 
+.. index:: i3_executable
    single: CMake macros ; i3_executable
 
 .. object:: i3_executable(name src1 src2 ... srcN [ARGS ...])
@@ -211,7 +215,7 @@ i3_executable
 
    **Example**::
 
-     i3_executable(inspect 
+     i3_executable(inspect
        private/inspect/*.cxx
        USE_PROJECTS icetray
        USE_TOOLS boost python)
@@ -224,9 +228,9 @@ i3_executable
 
    .. cmdoption:: USE_TOOLS tool1 [tool2 tool3 ...]
       :noindex:
-   
+
       As in i3_add_library.
-   
+
    .. cmdoption:: USE_PROJECTS proj1 [proj2 ... projn]
       :noindex:
 
@@ -272,9 +276,9 @@ i3_test_executable
 
    **Example**::
 
-     i3_test_executable(test 
-       private/test/CleanConstructorTest.cxx  
-       private/test/I3LoggingObjectFirst.cxx	    
+     i3_test_executable(test
+       private/test/CleanConstructorTest.cxx
+       private/test/I3LoggingObjectFirst.cxx
        private/test/ServicesAtDestruction.cxx
        private/test/I3ConditionalModuleTest.cxx
        USE_TOOLS root
@@ -308,7 +312,7 @@ i3_add_pybindings
 
 .. program:: i3_add_pybindings
 
-.. index:: i3_add_pybindings 
+.. index:: i3_add_pybindings
    single: CMake macros ; i3_add_pybindings
 
 .. object:: i3_add_pybindings(name src1 [src2 ... srcN] [ARGS ...])
@@ -321,11 +325,11 @@ i3_add_pybindings
        module.cxx
        OMKey.cxx
        I3Bool.cxx
-       USE_TOOLS boost python 
+       USE_TOOLS boost python
        USE_PROJECTS icetray
        )
 
-   **Targets created**:  A library target same as ``i3_add_library``, 
+   **Targets created**:  A library target same as ``i3_add_library``,
    but named *name-pybindings*.  Also certain compile flags are set
    and headers included to make it easier to build python bindings
    libraries:
@@ -344,7 +348,7 @@ i3_add_pybindings
        errors/warnings.
 
    **Options**:  Same as ``i3_add_library()``
-       
+
 
 i3_test_scripts
 ---------------
@@ -366,16 +370,16 @@ i3_test_scripts
 
    **Targets created**: none. Scripts are run via the
    :ref:`testdriver`.
-        
+
    **Options**: none
-	
+
    Registers the scripts that match the glob expressions ``glob1
    .. globn`` as scripts to be run during testing.  For each script
    :file:`S.py` that matches one of the glob expressions, the test will be
    named ``projectname/scripts/S.py``, e.g.  ``I3Db/scripts/dumpdaq_rndflt.py`` or
    ``examples/scripts/pass1.py``.
 
-      
+
 
 qt4_i3_automoc
 --------------

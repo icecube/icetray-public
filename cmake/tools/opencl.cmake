@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # we don't use the tooldef() macro, so we have to fudge pretty-printing
 colormsg("")
 colormsg(HICYAN "OpenCL")

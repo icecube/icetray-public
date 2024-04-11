@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 #
 #  $Id$
 #
@@ -8,16 +12,16 @@
 # list of names, and the third argument is a list of options. Both of
 # these lists should be quoted. The rest of PARSE_ARGUMENTS are
 # arguments from another macro to be parsed.
-# 
-#     PARSE_ARGUMENTS(prefix arg_names options arg1 arg2...) 
-# 
+#
+#     PARSE_ARGUMENTS(prefix arg_names options arg1 arg2...)
+#
 # For each item in options, PARSE_ARGUMENTS will create a variable with
 # that name, prefixed with prefix_. So, for example, if prefix is
 # MY_MACRO and options is OPTION1;OPTION2, then PARSE_ARGUMENTS will
 # create the variables MY_MACRO_OPTION1 and MY_MACRO_OPTION2. These
 # variables will be set to true if the option exists in the command line
 # or false otherwise.
-# 
+#
 # For each item in arg_names, PARSE_ARGUMENTS will create a variable
 # with that name, prefixed with prefix_. Each variable will be filled
 # with the arguments that occur after the given arg_name is encountered

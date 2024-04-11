@@ -2,7 +2,7 @@
 #  $Id$
 #
 #  Copyright (C) 2007-9  Troy D. Straszheim  <troy@icecube.umd.edu>
-#  and the IceCube Collaboration <http://www.icecube.wisc.edu>
+#  Copyright (C) 2007-9  the IceCube Collaboration <http://www.icecube.wisc.edu>
 #
 #  Redistribution and use in source and binary forms, with or without
 #  modification, are permitted provided that the following conditions
@@ -12,7 +12,7 @@
 #  2. Redistributions in binary form must reproduce the above copyright
 #     notice, this list of conditions and the following disclaimer in the
 #     documentation and/or other materials provided with the distribution.
-#  
+#
 #  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
 #  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 #  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -24,9 +24,9 @@
 #  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 #  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 #  SUCH DAMAGE.
-#  
+#
 #  SPDX-License-Identifier: BSD-2-Clause
-#  
+#
 #
 colormsg("")
 colormsg(_HIBLUE_ "Configuring tools...")
@@ -129,7 +129,7 @@ macro(use_tools THIS_USE_TOOLS_TARGET)
   foreach(USED_TOOL ${${THIS_USE_TOOLS_TARGET}_ALL_TOOLS})
     use_tool(${THIS_USE_TOOLS_TARGET} ${USED_TOOL})
   endforeach(USED_TOOL ${${THIS_USE_TOOLS_TARGET}_ALL_TOOLS})
-  
+
   if(NOT ${THIS_USE_TOOLS_TARGET}_COMPILE_FLAGS)
     set(${THIS_USE_TOOLS_TARGET}_COMPILE_FLAGS "")
   else(NOT ${THIS_USE_TOOLS_TARGET}_COMPILE_FLAGS)
@@ -138,9 +138,9 @@ macro(use_tools THIS_USE_TOOLS_TARGET)
 
   get_property(${THIS_USE_TOOLS_TARGET}_INCLUDE_DIRS DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
   set(${THIS_USE_TOOLS_TARGET}_INCLUDE_DIRS ${${THIS_USE_TOOLS_TARGET}_INCLUDE_DIRS} CACHE INTERNAL "Directories included by library ${THIS_USE_TOOLS_TARGET}")
-  
+
   set(${THIS_USE_TOOLS_TARGET}_COMPILE_FLAGS ${${THIS_USE_TOOLS_TARGET}_COMPILE_FLAGS} CACHE INTERNAL "Compilation flags used by library ${THIS_USE_TOOLS_TARGET}")
-  
+
   set(${THIS_USE_TOOLS_TARGET}_LIBRARY_DEPENDS ${${THIS_USE_TOOLS_TARGET}_LIBRARIES} CACHE INTERNAL "Libraries against which ${THIS_USE_TOOLS_TARGET} links")
 
 endmacro(use_tools)

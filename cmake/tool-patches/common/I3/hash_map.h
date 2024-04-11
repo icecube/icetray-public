@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 The IceTray Contributors
+//
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef I3_HASH_STRING_H_INCLUDED
 #define I3_HASH_STRING_H_INCLUDED
 
@@ -52,7 +56,7 @@ using hash = i3hash<T>;
 
 namespace icecube {
   namespace serialization {
-    
+
     template<class Archive, class Type, class Key, class Hash, class Equal, class Allocator >
     inline void save(Archive & ar,
                      const hash_map<Key, Type, Hash, Equal, Allocator> &t,
@@ -63,7 +67,7 @@ namespace icecube {
         hash_map<Key, Type, Hash, Equal, Allocator>
       >(ar, t);
     }
-    
+
     template<class Archive, class Type, class Key, class Hash, class Equal, class Allocator >
     inline void load(Archive & ar,
                      hash_map<Key, Type, Hash, Equal, Allocator> &t,
@@ -80,7 +84,7 @@ namespace icecube {
         >
       >(ar, t);
     }
-    
+
     // split non-intrusive serialization function member into separate
     // non intrusive save/load member functions
     template<class Archive, class Type, class Key, class Hash, class Equal, class Allocator >

@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. _cmake-i3test:
 
 I3Test Reference
@@ -89,28 +93,28 @@ four unit tests named *it_works*, *pinkness_is_4*, *pinkness_is_almost_pi*, and
 *this_one_fails* ::
 
   #include <I3Test.h>
-  
+
   TEST_GROUP(example_group);
-  
+
   TEST(it_works)
   {
     bool it_works = true;
-    ENSURE(it_works); 
+    ENSURE(it_works);
   }
-  
+
   TEST(pinkness_is_4)
   {
     double pinkness = 4.0;
     double redness = 4.0;
     ENSURE_EQUAL(pinkness, redness, "pinkness and redness not equal");
   }
-  
+
   TEST(pinkness_is_almost_pi)
   {
     double pinkness = 4;
     ENSURE_DISTANCE(pinkness, M_PI, 1.0, "pinkness not within 1 of pi");
   }
-  
+
   TEST(this_one_fails)
   {
     FAIL("this will fail unconditionally");
@@ -130,7 +134,7 @@ the build system which directories contain test groups via
 :ref:`i3_test_executable() <i3_test_executable()>` (in the project's
 :file:`CMakeCache.txt`).
 
-.. index:: I3TestMain.ixx 
+.. index:: I3TestMain.ixx
 
 One of these files must contain the main routine for the test
 driver. To do so, place one file (:file:`main.cxx` is a reasonable name) in
@@ -261,12 +265,12 @@ test driver will show the following help:
   % icetray-test --help
   I3 Test Suite Options Summary:
     -h [ --help ]          : this message
-    -f [ --fork ]          : fork() before each test (all tests will run 
+    -f [ --fork ]          : fork() before each test (all tests will run
                              even if one dumps core)
     -a [ --all ]           : run all tests
-    -x [ --xml ] arg       : run all tests, output xml to FILE (implies --fork 
+    -x [ --xml ] arg       : run all tests, output xml to FILE (implies --fork
                              and --timeout 600)
-    -s [ --show-spew ]     : pass along any thing the test spews 
+    -s [ --show-spew ]     : pass along any thing the test spews
                              to cout/cerr (you want to see it)
     -l [ --list ]          : list tests and groups in this suite
     --run-tests arg        : list of tests to run

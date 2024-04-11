@@ -1,13 +1,17 @@
 #!/bin/sh
 
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 printerr ()
 {
     echo "[----]" $*
 }
 
-exit_error () 
+exit_error ()
 {
-    printerr 
+    printerr
     printerr BUILD ENVIRONMENT CORRUPTION
     printerr
     printerr Environment says I3_BUILD is \'$I3_BUILD\'
@@ -20,12 +24,12 @@ exit_error ()
 }
 
 if [ -n "$I3_BUILD" -a "$I3_BUILD" != "@CMAKE_BINARY_DIR@" ]
-    then 
+    then
     exit_error
 fi
 
 if [ -n "$I3_SRC" -a "$I3_SRC" != "@CMAKE_SOURCE_DIR@" ]
-    then 
+    then
     exit_error
 fi
 

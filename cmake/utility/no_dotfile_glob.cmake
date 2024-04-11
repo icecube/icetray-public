@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 # Globs on each regular expression in the ARGN array and removes
 # matches that have a directory component that starts with dot
 # (e.g. matches slash-dot (/.) anywhere in the string)

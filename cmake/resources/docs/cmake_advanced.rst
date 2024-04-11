@@ -1,3 +1,7 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 Advanced CMake
 --------------
 
@@ -18,19 +22,19 @@ A handy curses app will pop up allowing you to change the values of
 various configuration variables.  As you move the cursor over them a
 description is shown at the bottom of the window::
 
-  BOOST_FOUND                      ON                            
+  BOOST_FOUND                      ON
   BOOST_INCLUDE_DIR                /Users/troy/ports/include/boos
   BOOST_LIBRARIES                  /Users/troy/ports/lib/boost-1.
-  BUILD_DATACLASSES                ON                            
-  BUILD_DATAIO                     ON                            
+  BUILD_DATACLASSES                ON
+  BUILD_DATAIO                     ON
 
-  BOOST_FOUND: BOOST found successfully                                
+  BOOST_FOUND: BOOST found successfully
   Press [enter] to edit option          CMake Version 2.4 - patch 6
   Press [c] to configure
   Press [h] for help         Press [q] to quit without generating
   Press [t] to toggle advanced mode (Currently Off)
 
- 
+
 After you have set things as you like them press **c** to run the
 configuration.  *You may have to do this twice*.  When CMake is
 ready to generate makefiles, an option **g** will appear in the menu.
@@ -55,18 +59,18 @@ Not all of the variables are useful.  Here are some that are:
 
 .. _CMAKE_BUILD_TYPE:
 .. _Release:
-.. index:: 
+.. index::
    pair: CMAKE_BUILD_TYPE; Release
 .. _Debug:
-.. index:: 
+.. index::
    pair: CMAKE_BUILD_TYPE; Debug
 .. _RelWithDebInfo:
-.. index:: 
+.. index::
    pair: CMAKE_BUILD_TYPE; RelWithDebInfo
 
-.. list-table:: Useful configuration variables 
+.. list-table:: Useful configuration variables
    :header-rows: 1
-   
+
    * - Option
      - Description
      - Default
@@ -97,9 +101,9 @@ Not all of the variables are useful.  Here are some that are:
 Uncommon CMake settings
 """""""""""""""""""""""
 
-.. list-table:: Less common configuration variables 
+.. list-table:: Less common configuration variables
    :header-rows: 1
-   
+
    * - Option
      - Description
      - Default
@@ -170,7 +174,7 @@ private/mylib/file2.cxx''.  There are two ways to handle this:
 1. *Don't use globs:* list the files explicitly,
    e.g.::
 
-     i3_add_library(mylib private/mylib/file1.cxx private/mylib/file2.cxx).  
+     i3_add_library(mylib private/mylib/file1.cxx private/mylib/file2.cxx).
 
    This way to add/remove files one edits a
    CMakeLists.txt and cmake will detect that the file has been

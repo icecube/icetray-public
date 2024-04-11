@@ -1,8 +1,7 @@
 #
 #  cmake/tools/geant4.cmake
 #
-#  Copyright (C) 2010
-#  the IceCube Collaboration <http://www.icecube.wisc.edu>
+#  Copyright (C) 2010 the IceCube Collaboration <http://www.icecube.wisc.edu>
 #
 #  Redistribution and use in source and binary forms, with or without
 #  modification, are permitted provided that the following conditions
@@ -12,7 +11,7 @@
 #  2. Redistributions in binary form must reproduce the above copyright
 #     notice, this list of conditions and the following disclaimer in the
 #     documentation and/or other materials provided with the distribution.
-#  
+#
 #  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
 #  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 #  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -24,22 +23,22 @@
 #  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 #  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 #  SUCH DAMAGE.
-#  
+#
 #  SPDX-License-Identifier: BSD-2-Clause
-#  
+#
 #
 # first look for Geant4 >= 4.9.5 (which does not need CLHEP)
 message(STATUS "Looking for Geant4 geant4-config program")
 
 find_program (GEANT4_CONFIG geant4-config)
- 
+
 if (${GEANT4_CONFIG} MATCHES ".*NOTFOUND$")
     message(STATUS "Looking for Geant4 geant4-config program -- not found")
     set(GEANT4_CONFIG_TOOL_FOUND FALSE)
 else (${GEANT4_CONFIG} MATCHES ".*NOTFOUND$")
     message(STATUS "Looking for Geant4 geant4-config program -- found")
     set(GEANT4_CONFIG_TOOL_FOUND TRUE)
-    
+
     # extract the library list from geant4-config
     execute_process(COMMAND ${GEANT4_CONFIG} --libs
       OUTPUT_VARIABLE GEANT4_CONFIG_OUTPUT OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -47,7 +46,7 @@ else (${GEANT4_CONFIG} MATCHES ".*NOTFOUND$")
 
     # look for the -L option
     string(REGEX MATCH "-L([^ ]*)" GEANT4_LIB_DIR ${GEANT4_CONFIG_OUTPUT})
-    
+
     # I would like to do this, but it is not supported on cmake < 2.8.5
     # string(SUBSTRING ${GEANT4_LIB_DIR} 2 -1 GEANT4_LIB_DIR) # remove "-L"
     # so instead do this:
@@ -57,7 +56,7 @@ else (${GEANT4_CONFIG} MATCHES ".*NOTFOUND$")
 
     get_filename_component(GEANT4_LIB_DIR ${GEANT4_LIB_DIR} ABSOLUTE)
     set(GEANT4_RELATIVE_LIB_DIR ${GEANT4_LIB_DIR})
-    
+
     # remove the "-L" option from the argument list
     # and extract a list of libraries
     string(REGEX REPLACE "-[L]([^ ]*)" "" GEANT4_LIBRARIES ${GEANT4_CONFIG_OUTPUT})
@@ -69,7 +68,7 @@ else (${GEANT4_CONFIG} MATCHES ".*NOTFOUND$")
     execute_process(COMMAND ${GEANT4_CONFIG} --cflags-without-gui
       OUTPUT_VARIABLE GEANT4_CONFIG_OUTPUT OUTPUT_STRIP_TRAILING_WHITESPACE
       )
-    
+
     # look for the -I option
     string(REGEX MATCH "-I([^ ]*)" GEANT4_INC_DIR ${GEANT4_CONFIG_OUTPUT})
 
@@ -78,7 +77,7 @@ else (${GEANT4_CONFIG} MATCHES ".*NOTFOUND$")
     string(LENGTH "${GEANT4_INC_DIR}" GEANT4_INC_DIR_length)
     math(EXPR GEANT4_INC_DIR_length "${GEANT4_INC_DIR_length}-2")
     string(SUBSTRING ${GEANT4_INC_DIR} 2 ${GEANT4_INC_DIR_length} GEANT4_INC_DIR) # remove "-I"
-    
+
     get_filename_component(GEANT4_INC_DIR ${GEANT4_INC_DIR} ABSOLUTE)
     set(GEANT4_RELATIVE_INC_DIR ${GEANT4_INC_DIR})
 
@@ -90,14 +89,14 @@ else (${GEANT4_CONFIG} MATCHES ".*NOTFOUND$")
       NONE  # bin is n/a, placeholder
       ${GEANT4_LIBRARIES}
       )
-      
+
     # (re-)define the "CLHEP" tool
     # (it's included with Geant4 now)
     unset(CLHEP_FOUND CACHE)
     unset(CLHEP_INCLUDE_DIR CACHE)
     unset(CLHEP_FOUND)
     unset(CLHEP_INCLUDE_DIR)
-    
+
     tooldef (clhep
       ${GEANT4_RELATIVE_INC_DIR}
       CLHEP/Units/SystemOfUnits.h
@@ -108,7 +107,7 @@ else (${GEANT4_CONFIG} MATCHES ".*NOTFOUND$")
     # no extra libraries for the geant4-internal version of clhep
     unset(CLHEP_LIBRARIES CACHE)
     unset(CLHEP_LIBRARIES)
-    
+
 endif (${GEANT4_CONFIG} MATCHES ".*NOTFOUND$")
 
 
@@ -121,7 +120,7 @@ if (NOT GEANT4_CONFIG_TOOL_FOUND)
     # we don't use the tooldef() macro, so we have to fudge pretty-printing
     colormsg("")
     colormsg(HICYAN "geant4")
-  
+
     colormsg(CYAN "- CLHEP not found - Skipping Geant4")
     set(GEANT4_CONFIG_ERROR TRUE)
   else ()
@@ -190,7 +189,7 @@ if (GEANT4_FOUND)
   # variables in env-shell.sh
   find_program (GEANT4_SH geant4.sh)
 
-  execute_process (COMMAND 
+  execute_process (COMMAND
     ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/cmake/make_geant4_env.py ${GEANT4_SH} ${GEANT4_VERSION}
     OUTPUT_VARIABLE GEANT4_ENV_VARS
     OUTPUT_STRIP_TRAILING_WHITESPACE

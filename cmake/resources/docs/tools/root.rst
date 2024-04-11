@@ -1,8 +1,12 @@
+.. SPDX-FileCopyrightText: 2024 The IceTray Contributors
+..
+.. SPDX-License-Identifier: BSD-2-Clause
+
 .. index:: root
    pair:   tool; root
    pair:   root; Using odd libraries from
    single: ROOTSYS
-   
+
 .. highlight:: none
 
 
@@ -32,7 +36,7 @@ you might get runtime link errors like this::
 If you run that garbled looking undefined symbol through *c++filt*,
 you'll see::
 
-  % c++filt 
+  % c++filt
   _ZN4TMVA6Reader7BookMVAERK7TStringS3_
   TMVA::Reader::BookMVA(TString const&, TString const&)
 
@@ -44,7 +48,7 @@ In your project's CMakeLists.txt::
   find_library(ROOT_TMVA_LIB   # variable to set, containing the library
     TMVA                       # name of library to find, without 'lib' or '.so'
     PATHS ${ROOTSYS}/lib       # where to look. ROOTSYS set by root-detection script
-    NO_DEFAULT_PATH            # in this case, only use the toolset ROOT 
+    NO_DEFAULT_PATH            # in this case, only use the toolset ROOT
     )
 
 See the cmake documentation (try ``cmake --help-full | less``) for
