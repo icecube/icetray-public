@@ -465,8 +465,9 @@ namespace GSL{
 ///\param f Function to integrate.
 ///\param a Lower integration limit.
 ///\param b Upper integration limit.
-///\param acc Accuracy parameter.
+///\param rtol Target relative tolerance.
 ///\param max_iter Maximum number of iterations to perform the integral.
+///\param memory_alloc Number of intervals of scratch space to allocate.
 template<typename FunctionType>
 double integrate(FunctionType&& f, double a, double b, double rtol=1e-7, unsigned int max_iter=10000, size_t memory_alloc=10000){
   using IntegrateWorkspace=std::unique_ptr<gsl_integration_workspace, void(*)(gsl_integration_workspace*)>;
