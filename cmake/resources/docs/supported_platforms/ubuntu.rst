@@ -84,7 +84,7 @@ Projects/tools in combo not built with the minimal package installation above:
       libzstd-dev libsuitesparse-dev libsprng2-dev liblapack-dev libhealpix-cxx-dev \
       python3-numpy libfftw3-dev libqt5opengl5-dev libcdk5-dev libncurses-dev \
       python3-sphinx doxygen python3-mysqldb python3-zmq python3-h5py \
-      python3-pandas python3-seaborn libnlopt-dev
+      python3-pandas python3-seaborn libnlopt-cxx-dev
 
 Special Install
 ...............
