@@ -129,5 +129,5 @@ i3_add_pybindings(phys_services
   private/pybindings/module.cxx
   ${OPTIONAL_PYBINDING_SOURCES}
   USE_TOOLS boost python
-  USE_PROJECTS phys-services interfaces
+  USE_PROJECTS phys-services interfaces tableio
   )
