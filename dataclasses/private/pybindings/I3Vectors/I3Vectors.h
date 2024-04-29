@@ -37,6 +37,7 @@
 #include <dataclasses/I3Vector.h>
 #include <dataclasses/ostream_overloads.hpp>
 #include <icetray/python/dataclass_suite.hpp>
+#include <icetray/python/get_class.hpp>
 #include <vector>
 #include <sstream>
 
@@ -49,16 +50,20 @@ void
 register_i3vector_of(const std::string& s)
 {
 
-  class_<std::vector<T> >((std::string("List") + s).c_str())
-    .def(dataclass_suite<std::vector<T> >())
-    ;
+  if (!get_class<std::vector<T> >()) {
+    class_<std::vector<T> >((std::string("List") + s).c_str())
+      .def(dataclass_suite<std::vector<T> >())
+      ;
+  }
 
   typedef I3Vector<T> vec_t;
-  class_<vec_t, bases<I3FrameObject, std::vector<T> >, boost::shared_ptr<vec_t> > 
-    ((std::string("I3Vector") + s).c_str())
-    .def(dataclass_suite<vec_t>())
-    ;
-  register_pointer_conversions<vec_t>();
+  if (!get_class<vec_t >()) {
+    class_<vec_t, bases<I3FrameObject, std::vector<T> >, boost::shared_ptr<vec_t> > 
+      ((std::string("I3Vector") + s).c_str())
+      .def(dataclass_suite<vec_t>())
+      ;
+    register_pointer_conversions<vec_t>();
+  }
 }
 
 template <typename T, typename U>
@@ -66,6 +71,18 @@ std::pair< T, U >
 py_make_pair( T t, U u)
 {
     return std::make_pair(t,u);
+}
+
+namespace {
+
+template <typename pair_t>
+std::string repr(const pair_t &self)
+{
+  std::ostringstream oss;
+  oss << "make_pair(" << self.first << "," << self.second << ")";
+  return oss.str();
+}
+
 }
 
 template <typename T, typename U>
@@ -78,6 +95,7 @@ register_std_pair(const char* s)
     .def_readwrite("first", &type_t::first)
     .def_readwrite("second", &type_t::second)
     .def(dataclass_suite<type_t>())
+    .def("__repr__", &repr<type_t>)
     ;
   def("make_pair", &py_make_pair<T, U>);
 }

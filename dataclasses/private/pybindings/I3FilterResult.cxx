@@ -86,9 +86,8 @@ void register_I3FilterResult()
   register_pointer_conversions<I3FilterResult>();
 
   class_<I3FilterResultMap, bases<I3FrameObject>, I3FilterResultMapPtr>("I3FilterResultMap")
+    .def(dataclass_suite<I3FilterResultMap>())
     .def("__str__",I3FilterResultMap_prettyprint)
-    .def(std_map_indexing_suite<I3FilterResultMap>())
-    .def(operator_suite<I3FilterResultMap>())
     ;
   register_pointer_conversions<I3FilterResultMap>();
   

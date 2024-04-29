@@ -2,9 +2,6 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 
-import warnings
-warnings.filterwarnings("ignore", ".*already registered; second conversion method ignored.", RuntimeWarning)
-
 from icecube._icetray import *
 __version__ = PROJECT_VERSION
 

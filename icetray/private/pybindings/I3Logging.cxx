@@ -77,8 +77,6 @@ void register_I3Logging()
 		.value("LOG_FATAL",  I3LOG_FATAL)
 	;
 
-
-	class_<I3Logger, boost::shared_ptr<I3Logger>, boost::noncopyable>("I3LoggerBase", "C++ logging abstract base class", no_init);
 	class_<I3LoggerWrapper, boost::shared_ptr<I3LoggerWrapper>, boost::noncopyable>
 	    ("I3Logger", "Logging base class")
 		.add_static_property("global_logger", &GetIcetrayLogger, &SetIcetrayLogger)
@@ -87,6 +85,11 @@ void register_I3Logging()
 		.def("set_level_for_unit", &I3Logger::SetLogLevelForUnit)
 		.def("set_level", &I3Logger::SetLogLevel)
 	;
+	// explicitly register abstract base class ptr. if the base were concrete,
+	// we could have done this implicitly by specifying
+	// boost::shared_ptr<I3Logger> as the second template arg to
+	// class_ above.
+	register_ptr_to_python< boost::shared_ptr<I3Logger> >();
 
 	class_<I3NullLogger, bases<I3Logger>, boost::shared_ptr<I3NullLogger>, boost::noncopyable>("I3NullLogger", "Logger that does not log. Useful if you don't want log messages");
 	class_<I3PrintfLogger, bases<I3Logger>, boost::shared_ptr<I3PrintfLogger>, boost::noncopyable>("I3PrintfLogger", "Logger that prints error messages to stderr (in color, if stderr is a tty).", init<optional<I3LogLevel> >())

@@ -29,15 +29,6 @@
 
 #include "dataclasses/I3MapOMKeyMask.h"
 
-namespace {
-
-  static boost::shared_ptr<I3WaveformSeriesMapConverter> makeWaveformSeriesMapConverter(bool bookGeometry)
-  {
-    return boost::shared_ptr<I3WaveformSeriesMapConverter>(new I3WaveformSeriesMapConverter(false, bookGeometry));
-  }
-
-}
-
 // Make the RecoPulseSeriesMapConverter work on pulse masks.
 class I3RecoPulseSeriesMapMaskConverter : public I3ConverterImplementation<I3RecoPulseSeriesMapMask>
 {
@@ -279,9 +270,8 @@ void register_dataclasses_converters() {
 								bp::bases<I3Converter>,
 								boost::noncopyable >("I3WaveformSeriesMapConverter",
 										     "Dumps a single I3WaveformSeriesMap (good for IceTop people not interested in FADC)",
-										     bp::init< bp::optional<bool, bool> >(bp::args("calibrate", "bookGeometry"))),
-						     true)
-      .def("__init__", bp::make_constructor(&::makeWaveformSeriesMapConverter, boost::python::default_call_policies(), (bp::arg("bookGeometry"))));
+										     bp::init< bool, bool >((bp::arg("calibrate")=false, bp::arg("bookGeometry")=false))),
+						     true);
 
 /*
     // A compilation test: I3MapConverter and I3VectorConverter should be able

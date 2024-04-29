@@ -27,6 +27,7 @@
 #include "scripting/qstringlist_converter.h"
 #include "scripting/pytypename.h"
 
+#include "icetray/python/get_class.hpp"
 #include "dataclasses/I3Direction.h"
 
 // has to be last, because it overwrites a template specialization
@@ -258,16 +259,24 @@ void export_shovelart_types(){
         .def( bp::vector_indexing_suite<std::vector<vec3d> >() );
 
     /* Keylists are just a fancy list of strings */
-    bp::class_< ArtistKeyList >( "ArtistKeylist" )
-        .def( bp::vector_indexing_suite<ArtistKeyList>() )
-        .def( "__repr__", list_repr< ArtistKeyList > );
+    if (bp::object obj = bp::get_class<ArtistKeyList >()) {
+        bp::scope().attr("ArtistKeylist") = obj;
+    } else {
+        bp::class_< ArtistKeyList >( "ArtistKeylist" )
+            .def( bp::vector_indexing_suite<ArtistKeyList>() )
+            .def( "__repr__", list_repr< ArtistKeyList > );
+    }
 
     /* Selection contents */
-    bp::class_<OMKeySet>( "OMKeySet",
-            "A set of OMKeys, backed by a std::vector.  Used as a PyArtist setting to indicate "
-            "that the artist wishes to track the currently selected OMs in the GUI.")
-        .def( bp::vector_indexing_suite< OMKeySet >() )
-        .def( "__repr__", list_repr<OMKeySet> );
+    if (bp::object obj = bp::get_class<OMKeySet >()) {
+        bp::scope().attr("OMKeySet") = obj;
+    } else {
+        bp::class_<OMKeySet>( "OMKeySet",
+                "A set of OMKeys, backed by a std::vector.  Used as a PyArtist setting to indicate "
+                "that the artist wishes to track the currently selected OMs in the GUI.")
+            .def( bp::vector_indexing_suite< OMKeySet >() )
+            .def( "__repr__", list_repr<OMKeySet> );
+    }
 
     bp::class_<
         RangeSetting,

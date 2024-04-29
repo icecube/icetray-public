@@ -26,8 +26,11 @@ boost::python::object get_class()
       // no unique from_python type
       std::set<PyTypeObject const*> pool;
       for(auto* r = registration->rvalue_chain; r ; r=r->next) {
-        if(r->expected_pytype) {
-          pool.insert(r->expected_pytype());
+        // each source type may itself have multiple implicit conversions,
+        // which we can't see through
+        const PyTypeObject *unique_type;
+        if(r->expected_pytype && (unique_type = r->expected_pytype()) != nullptr) {
+          pool.insert(unique_type);
         }
       }
       if (!pool.empty()) {

@@ -40,6 +40,8 @@
 #include <vector>
 #include <string>
 
+#include "icetray/python/list_indexing_suite.hpp"
+
 using namespace boost::python;
 using std::vector;
 using std::string;
@@ -78,7 +80,7 @@ void reg(const char* name)
   std::string s = "vector_";
   s += name; 
   class_<vector<T> >(s.c_str())
-    .def(vector_indexing_suite<vector<T> >())
+    .def(list_indexing_suite<vector<T> >())
     .def("__repr__", &vector_repr<T>)
     ;
   from_python_sequence<vector<T>, variable_capacity_policy>();

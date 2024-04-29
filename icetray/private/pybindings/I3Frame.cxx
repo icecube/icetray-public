@@ -34,6 +34,7 @@
 #include <icetray/I3Frame.h>
 #include <icetray/serialization.h>
 #include <icetray/python/boost_serializable_pickle_suite.hpp>
+#include <icetray/python/list_indexing_suite.hpp>
 
 using namespace boost::python;
 
@@ -223,7 +224,7 @@ void register_I3Frame()
     ;
 
   class_<std::vector<I3FramePtr> >("vector_I3Frame")
-    .def(vector_indexing_suite<std::vector<I3FramePtr>, true>())
+    .def(list_indexing_suite<std::vector<I3FramePtr>, true>())
     ;
   from_python_sequence<std::vector<I3FramePtr>, variable_capacity_policy>();
 }

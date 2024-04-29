@@ -206,6 +206,10 @@ return incref(tuple.attr("__iter__")().ptr());
         {
           return get_class<data_type>();
         }
+        static bp::object get_item_type()
+        {
+          return get_class<value_type>();
+        }
 
         // return a shallow copy of the map
         // FIXME: is this actually a shallow copy, or did i duplicate the pairs?
@@ -496,20 +500,22 @@ return incref(tuple.attr("__iter__")().ptr());
               , default_call_policies
             >::type get_data_return_policy;
 
-            class_<value_type>(elem_name.c_str())
-                .def("__repr__", &DerivedPolicies::print_elem)
-                .def("data", &DerivedPolicies::get_data, get_data_return_policy(),
-                   "K.data() -> the value associated with this pair.\n")
-                .def("key", &DerivedPolicies::get_key,
-                   "K.key() -> the key associated with this pair.\n")
-                .def("__getitem__",&pair_getitem)
-                .def("__iter__",&pair_iter)
-                .def("__len__",&pair_len)
-                .def("first",&DerivedPolicies::get_key,
-                   "K.first() -> the first item in this pair.\n")
-                .def("second",&DerivedPolicies::get_data, get_data_return_policy(),
-                   "K.second() -> the second item in this pair.\n")
-            ;
+            if (!get_class<value_type>()) {
+                class_<value_type>(elem_name.c_str())
+                    .def("__repr__", &DerivedPolicies::print_elem)
+                    .def("data", &DerivedPolicies::get_data, get_data_return_policy(),
+                    "K.data() -> the value associated with this pair.\n")
+                    .def("key", &DerivedPolicies::get_key,
+                    "K.key() -> the key associated with this pair.\n")
+                    .def("__getitem__",&pair_getitem)
+                    .def("__iter__",&pair_iter)
+                    .def("__len__",&pair_len)
+                    .def("first",&DerivedPolicies::get_key,
+                    "K.first() -> the first item in this pair.\n")
+                    .def("second",&DerivedPolicies::get_data, get_data_return_policy(),
+                    "K.second() -> the second item in this pair.\n")
+                ;
+            }
             // add convenience methods to the map
 
             cl
@@ -551,6 +557,8 @@ return incref(tuple.attr("__iter__")().ptr());
                 .staticmethod("__key_type__")
                 .def("__value_type__", &get_value_type)
                 .staticmethod("__value_type__")
+                .def("__item_type__", &get_item_type)
+                .staticmethod("__item_type__")
               ;
         }
 

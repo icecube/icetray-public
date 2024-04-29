@@ -65,7 +65,7 @@ TimeWindowColorPtr make_TimeWindowColor( bp::object arg1,
 }
 
 /**
- * Pythonic ParticlePoint contructor
+ * Pythonic ParticlePoint constructor
  */
 ParticlePointPtr make_ParticlePoint( const PyArtistSceneGroup& out,
                                      const I3ParticleConstPtr& particle,
@@ -85,26 +85,23 @@ ParticlePointPtr make_ParticlePoint( const PyArtistSceneGroup& out,
  */
 template <typename T>
 void
-export_SceneVariant( const std::string& Tname, bool wrapper = false, bool step = false, bool interp = false ){
+export_SceneVariant( const std::string& Tname, bool step = false, bool interp = false ){
 
 	typedef SceneVariant<T> VT;
 	std::string name = "Variant" + Tname;
 
-	// If a wrapper is to be defined, it needs to be defined first;
-	// exposing the wrapper class after the base class causes further
-	// subclasses of the base class to be incorrectly given the wrapper
-	// as their base class.  This may be a bp bug or I may just not
-	// understand.  The workaround comes from http://mail.python.org/pipermail/cplusplus-sig/2010-July/015646.html
-	if( wrapper ){
+	// register base class via wrapper
+	{
 		typedef VariantWrap<T> VWT;
 		std::string wrapperName = "Py" + name;
 		bp::class_< VWT, boost::shared_ptr< VWT >, boost::noncopyable >( wrapperName.c_str(), bp::init<>() )
 			.def( "value", bp::pure_virtual(&VT::value) );
 	}
-
-	// define the base class
-	bp::class_< VT, boost::shared_ptr<VT>, boost::noncopyable >( name.c_str(), bp::no_init )
-		.def( "value", bp::pure_virtual( &VT::value ) );
+	// explicitly register abstract base class ptr. if the base were concrete,
+	// we could have done this implicitly by specifying
+	// boost::shared_ptr<VT> as the second template arg to
+	// class_ above.
+	bp::register_ptr_to_python< boost::shared_ptr<VT> >();
 
 	// constant form
 	typedef SceneConstant<T> SCT;
@@ -138,15 +135,15 @@ void export_scene_variant_types(){
 	// Any type exported with export_SceneVariant and wrapper==true should also be included
 	// in the SVTYPES list in in scripting/pycompat.cpp
 
-	export_SceneVariant< vec3d >( "Vec3d", true, true, true );
+	export_SceneVariant< vec3d >( "Vec3d", true, true );
 	bp::class_< std::vector<VariantVec3dPtr> >( "VariantVec3dList" )
 		.def( bp::vector_indexing_suite< std::vector< VariantVec3dPtr > >() );
 
-	export_SceneVariant< float >( "Float", true, true, true );
+	export_SceneVariant< float >( "Float", true, true );
 
-	export_SceneVariant< double >( "Time", true, true, false );
+	export_SceneVariant< double >( "Time", true, false );
 
-	export_SceneVariant< QColor >( "QColor", true, true, true );
+	export_SceneVariant< QColor >( "QColor", true, true );
 
 	bp::class_< TimeWindow, TimeWindow* >( "TimeWindow", bp::init<double, double>() );
 

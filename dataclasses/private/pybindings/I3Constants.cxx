@@ -48,12 +48,12 @@ using namespace boost::python;
 
 // dummy class just used as a namespace.
 namespace {
-  struct dummy { };
+  struct icecube_dataclasses_I3Constants { };
 }
 
 void register_I3Constants()
 {
-  class_<dummy>("I3Constants")
+  class_<icecube_dataclasses_I3Constants>("I3Constants")
     .def_readonly("c", I3Constants::c, "Speed of light in vacuum")
     .def_readonly("z_vacuum", I3Constants::z_vacuum, "Impedance of free space")
     .def_readonly("n_ice_phase", I3Constants::n_ice_phase, "the average phase velocity for wavelength of 400nm") 
