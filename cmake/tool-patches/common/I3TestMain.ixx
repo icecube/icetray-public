@@ -18,7 +18,10 @@
 #include <vector>
 using namespace std;
 
+#include <boost/version.hpp>
+#if BOOST_VERSION < 108500
 #include <boost/filesystem/convenience.hpp>
+#endif
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/fstream.hpp>
 

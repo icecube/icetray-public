@@ -5,23 +5,20 @@
 #ifndef SERIALIZATION_TEST_H_INCLUDED
 #define SERIALIZATION_TEST_H_INCLUDED
 
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/fstream.hpp>
+#include "I3Test.h"
+#include "icetray/I3Frame.h"
+#include "icetray/open.h"
 
-#include <serialization/shared_ptr.hpp>
-#include <serialization/vector.hpp>
-#include <serialization/string.hpp>
+#include <boost/version.hpp>
+#if BOOST_VERSION < 108500
+#include <boost/filesystem/convenience.hpp>
+#endif
+#include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/iostreams/filtering_stream.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include <I3Test.h>
-#include <icetray/I3Logging.h>
-#include <icetray/I3Frame.h>
-#include <fstream>
-
-#include <boost/iostreams/filtering_stream.hpp>
 #include <archive/portable_binary_archive.hpp>
-#include <icetray/open.h>
 
 using icecube::archive::portable_binary_oarchive;
 using icecube::archive::portable_binary_iarchive;
