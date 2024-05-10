@@ -147,7 +147,7 @@ Custom Python variants
 It is possible to write a custom subclass of ``shovelart.VariantFloat``, etc.  This involves
 creating a subclass of ``shovelart.PyVariant*``, where * is the type of your choice, and providing
 a ``value(self, time)`` method that returns the variant's value at the specified time.  An example
-of a ``PyVariantVec3d`` can be found in the ``python/artists/Tank.py`` artist.
+of a ``PyVariantVec3d`` can be found in the ``python/resources/test/shovelscripts/Tank.py`` artist.
 
 PyVariants are a great deal slower than the built-in variant types.  If your artist generates many
 customized python variant artists, program performance will suffer.  In such a case it may be desirable

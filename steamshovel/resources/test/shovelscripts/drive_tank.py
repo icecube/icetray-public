@@ -4,12 +4,28 @@
 
 # Basic steamshovel driver script for testing
 
-# Because this script uses time.sleep(), it needs to be run with steamshovel --console;
+# Because this script uses time.sleep(), it needs to be run with:
+#   steamshovel -D --testmode --noconsole -s ./steamshovel/resources/test/shovelscripts/drive_tank.py
+#
 # Using it with the embedded ipython interaction widget will just hang the GUI.
+#
+# This doesn't do anything that other tests do, so don't add it to the list of tests in CMakeLists.txt
+
+# The window and app objects are provided by steamshovel so:
+#   ruff: noqa: F821
+
+
+from time import sleep
 
 from icecube.shovelart import vec3d
-from Tank import Tank
-from time import sleep
+
+try:
+    from Tank import Tank
+except Exception as e:
+    import os
+    import sys
+    sys.path.insert(0, os.environ['I3_SRC']+"/steamshovel/resources/test/shovelscripts")
+    from Tank import Tank
 
 timeline = window.timeline
 scenario = window.gl.scenario
