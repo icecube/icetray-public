@@ -59,12 +59,12 @@ def dumpScenarioState(code, scenario):
             if a.isActive:
                 code("scenario.setIsActive( artist, True )")
 
-        with code.block('except StandardError as e:'):
-            code('logging.log_error( e.__class__.__name__ + " occured '
+        with code.block('except Exception as e:'):
+            code('logging.log_error( e.__class__.__name__ + " occurred '
                  'while loading saved state of {0}: " + str(e) )',
                  a.description)
         with code.block('except:'):
-            code('logging.log_error( "Unknown error occured '
+            code('logging.log_error( "Unknown error occurred '
                  'while loading saved state of {0}: " + str(e) )',
                  a.description)
 

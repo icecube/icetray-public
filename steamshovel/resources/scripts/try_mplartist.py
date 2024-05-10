@@ -24,7 +24,7 @@ def GetArtist(arg):
                 module = imp.load_source(arg, path)
                 break
         else:
-            raise StandardError("Could not locate module")
+            raise Exception("Could not locate module")
 
     # find artist class and make instance
     from icecube.steamshovel.artists.mplart import MPLArtist
@@ -34,7 +34,7 @@ def GetArtist(arg):
             cl = obj
             break
     else:
-        raise StandardError("Could not find subclass of MPLArtist")
+        raise Exception("Could not find subclass of MPLArtist")
 
     return cl()
 
