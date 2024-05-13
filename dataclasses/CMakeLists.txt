@@ -78,9 +78,7 @@ i3_add_pybindings(dataclasses
   private/pybindings/I3AntennaWaveform.cxx
   private/pybindings/IceActKey.cxx
   private/pybindings/I3IceActGeo.cxx
-  private/pybindings/I3IceActRecoPulseMap.cxx
-  private/pybindings/I3IceActWaveformMap.cxx
-  private/pybindings/I3IceActTriggerMap.cxx
+  private/pybindings/I3IceActMaps.cxx
   private/pybindings/test_utils/I3VectorUtils.cxx
   USE_TOOLS boost python
   USE_PROJECTS serialization icetray dataclasses

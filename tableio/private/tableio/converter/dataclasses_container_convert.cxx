@@ -258,5 +258,17 @@ namespace convert {
     }
   }
 
+  void IceActKey::AddFields(I3TableRowDescriptionPtr desc, const booked_type&)
+  {
+    desc->AddField<int32_t>("station", "", "Station number");
+    desc->AddField<int32_t>("telescope", "", "Telescope number");
+  }
+
+  void IceActKey::FillSingleRow(const booked_type &key, I3TableRowPtr row)
+  {
+    row->Set<int32_t>("station", key.GetStationID());
+    row->Set<int32_t>("telescope", key.GetTelescopeID());
+  }
+
 }
 /// @endcond

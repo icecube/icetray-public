@@ -13,6 +13,7 @@ I3_SERIALIZABLE(I3MapStringBool);
 I3_SERIALIZABLE(I3MapStringVectorDouble);
 I3_SERIALIZABLE(I3MapStringStringDouble);
 I3_SERIALIZABLE(I3MapUnsignedUnsigned);
+I3_SERIALIZABLE(I3MapUnsignedDouble);
 I3_SERIALIZABLE(I3MapUShortUShort);
 I3_SERIALIZABLE(I3MapIntVectorInt);
 I3_SERIALIZABLE(I3MapKeyVectorDouble);

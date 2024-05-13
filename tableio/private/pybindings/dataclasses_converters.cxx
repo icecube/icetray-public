@@ -26,7 +26,7 @@
 #include "tableio/converter/I3EventHeaderConverter.h"
 #include "tableio/converter/I3WaveformSeriesMapConverter.h"
 #include "tableio/converter/I3FilterResultMapConverter.h"
-
+#include "tableio/converter/dataclasses_IceAct_convert.h"
 #include "dataclasses/I3MapOMKeyMask.h"
 
 // Make the RecoPulseSeriesMapConverter work on pulse masks.
@@ -287,5 +287,14 @@ void register_dataclasses_converters() {
     I3CONVERTER_EXPORT_DEFAULT(I3FilterResultMapConverter,
 		       "Dumps the results of each Pole filter to a table column.");
 
+    I3CONVERTER_EXPORT_DEFAULT(I3IceActBoolMapConverter,"Dumps I3IceActBoolMap to a table.");
+    I3CONVERTER_EXPORT_DEFAULT(I3IceActUnsignedMapConverter,"Dumps I3IceActUnsignedMap to a table.");
+    I3CONVERTER_EXPORT_DEFAULT(I3IceActDoubleMapConverter,"Dumps I3IceActDoubleMap to a table.");
+    I3CONVERTER_EXPORT_DEFAULT(I3IceActTelescopePixelUnsignedMapConverter,"Dumps I3IceActTelescopePixelUnsignedMap to a table.");
+    I3CONVERTER_EXPORT_DEFAULT(I3IceActTelescopePixelDoubleMapConverter,"Dumps I3IceActTelescopePixelDoubleMap to a table.");
+    I3CONVERTER_EXPORT_DEFAULT(I3IceActTelescopePixelVectorIntMapConverter,"Dumps I3IceActTelescopePixelVectorIntMap to a table.");
+    I3CONVERTER_EXPORT_DEFAULT(I3IceActTelescopeStringDoubleMapConverter,"Dumps I3IceActTelescopeStringDoubleMap to a table.");
+    I3CONVERTER_EXPORT_DEFAULT(I3IceActTriggerMapConverter,"Dumps I3IceActTriggerMap to a table.");
+    I3CONVERTER_EXPORT_DEFAULT(I3IceActRecoPulseSeriesMapConverter,"Dumps I3IceActRecoPulseSeriesMap to a table.");
 
 }

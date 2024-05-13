@@ -103,6 +103,7 @@ typedef I3Map<std::string, std::vector<double> > I3MapStringVectorDouble;
 typedef I3Map<std::string, I3MapStringDouble> I3MapStringStringDouble;
 
 typedef I3Map<unsigned, unsigned> I3MapUnsignedUnsigned;
+typedef I3Map<unsigned, double> I3MapUnsignedDouble;
 typedef I3Map<unsigned short, unsigned short> I3MapUShortUShort;
 
 typedef I3Map<int, std::vector<int> > I3MapIntVectorInt;
@@ -121,6 +122,7 @@ I3_POINTER_TYPEDEFS(I3MapStringString);
 I3_POINTER_TYPEDEFS(I3MapStringVectorDouble);
 I3_POINTER_TYPEDEFS(I3MapStringStringDouble);
 I3_POINTER_TYPEDEFS(I3MapUnsignedUnsigned);
+I3_POINTER_TYPEDEFS(I3MapUnsignedDouble);
 I3_POINTER_TYPEDEFS(I3MapUShortUShort);
 I3_POINTER_TYPEDEFS(I3MapIntVectorInt);
 I3_POINTER_TYPEDEFS(I3MapKeyVectorDouble);
