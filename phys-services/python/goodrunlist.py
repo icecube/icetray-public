@@ -115,6 +115,8 @@ import json
 import urllib
 import numpy as np
 
+from typing import no_type_check
+
 class RunInfo(dict):
     def __init__(self, data):
         super().__init__(data)
@@ -274,6 +276,7 @@ class GoodRunList(dict):
         if len(columns) != len(renamed_columns):
             raise RuntimeError('Column name lists need to be equal in length')
 
+    @no_type_check
     def load(self, path):
         """
         Loads a text GRL file and adds it to the already loeaded ones. This means
@@ -422,9 +425,8 @@ class GoodRunList(dict):
                     del self[r]
         elif isinstance(arg, str):
             with open(arg) as f:
-                runs = f.read()
+                runs = [int(r) for r in f.read().split()]
 
-            runs = [int(r) for r in runs.split()]
             self.exclude_runs(runs)
         else:
             try:
@@ -464,7 +466,7 @@ def GRL(pass2: bool = False, pass2a: bool = False, only_IC86: bool = False) -> G
 
     # Find all GRLs >= IC79 (or IC86 if only_IC86 is true) for given pass
     ic_grid = 'IC86' if only_IC86 else 'IC??'
-    pass2 = 'pass2a' if pass2a else 'pass2'
+    pass2 = 'pass2a' if pass2a else 'pass2'  # type: ignore[assignment]
 
     if pass2 or pass2a:
         lists = glob(f'/data/exp/IceCube/201[0-6]/filtered/level2{pass2}/{ic_grid}_201[0-6]_GoodRunInfo.txt')

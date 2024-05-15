@@ -39,6 +39,7 @@ class LoggingBridge(I3Logger):
 
 class ColorFormatter(logging.Formatter):
     def format(self, record):
+        assert self._fmt
         record.message = record.getMessage()
         if "%(asctime)" in self._fmt:
             record.asctime = self.formatTime(record, self.datefmt)
@@ -71,20 +72,20 @@ def rotating_files(filename, maxBytes=0, backupCount=0):
     _setup()
     handler = RotatingFileHandler(filename, maxBytes=maxBytes, backupCount=backupCount)
     handler.setFormatter(logging.Formatter("[%(asctime)s] "+BASIC_FORMAT))
-    logging._acquireLock()
+    logging._acquireLock() # type: ignore[attr-defined]
     logging.root.handlers = list()
     logging.root.addHandler(handler)
-    logging._releaseLock()
+    logging._releaseLock() # type: ignore[attr-defined]
 
 def syslog():
     from logging.handlers import SysLogHandler
     _setup()
     handler = SysLogHandler()
     handler.setFormatter(logging.Formatter("[%(asctime)s] "+BASIC_FORMAT))
-    logging._acquireLock()
+    logging._acquireLock() # type: ignore[attr-defined]
     logging.root.handlers = list()
     logging.root.addHandler(handler)
-    logging._releaseLock()
+    logging._releaseLock() # type: ignore[attr-defined]
 
 def _translate_level(name):
     if isinstance(name, I3LogLevel):

@@ -78,9 +78,10 @@ def get_matplotlib_colormaps():
 
     make_custom_maps()
 
-    ignore = set()
-    for r in _no_reverse:
-        ignore.add(r[:-2] if r.endswith("_r") else r + "_r")
+    ignore = {
+        r[:-2] if r.endswith("_r") else r + "_r"
+        for r in _no_reverse
+    }
 
     ret = []
 
@@ -124,12 +125,6 @@ def get_matplotlib_colormaps():
             if(any(callable(x) for x in rgb)):
                 continue
 
-        # turn unicode into string
-        try:
-            if type(name) == unicode:
-                name = str(name)
-        except NameError:
-            pass # python3 doesn't have 'unicode' type
         ret.append((name, rgb))
 
     return ret

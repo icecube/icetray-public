@@ -20,7 +20,7 @@ try:
             if record.levelno in i3logging.LoggingBridge.i3levels:
                 level = i3logging.LoggingBridge.i3levels[record.levelno]
             else:
-                levels = sorted(i3logging.LoggingBridge.pylevels.items(), lambda x,y: x[1]<y[1])
+                levels = sorted(i3logging.LoggingBridge.pylevels.items(), lambda x,y: x[1]<y[1])  # type: ignore[call-overload]
                 i = len(levels)
                 while i and levels[i-1][1] > record.levelno:
                     i -= 1
@@ -52,8 +52,8 @@ except:
 
 # Display controller logic: fail early if we can't load USB support
 try:
-    import usb.core
-    import usb.util
+    import usb.core  # type: ignore[import]
+    import usb.util  # type: ignore[import]
 except:
     raise ImportError("Failed to load pyUSB. LED displays are not supported.")
 
@@ -61,6 +61,8 @@ import os
 
 class DisplayLed:
     "Class representing the color of an RGB LED with time dependent color and brightness."
+
+    DATA_LENGTH: int
 
     def __init__(self, brightness, color):
         """Create a new DisplayLed object with given `brightness` and `color` values.
@@ -185,7 +187,7 @@ class DisplayController:
     def __parseTlvData(data):
         offset = 0
         data = bytearray(data)
-        tlv_list = list()
+        tlv_list: "list[tuple[int,int,bytearray]]" = list()
         while offset < len(data) and offset+1 < len(data):
             field_type = data[offset]
             field_length = data[offset+1]
@@ -199,7 +201,7 @@ class DisplayController:
 
     def __queryController(self):
         self.data_type = None
-        self.data_ranges = list()
+        self.data_ranges: "list[tuple[int,int]]" = list()
         self.led_type = None
         self.group = None
 
@@ -273,7 +275,7 @@ class DisplayController:
         except Exception as e:
             logger.error("Could not write EEPROM to display: {}".format(e))
 
-    def transmitDisplayBuffer(self, data):
+    def transmitDisplayBuffer(self, data: bytes):
         try:
             logger.debug("Sending frame data to {}".format(self.serial_number))
             # Write data to EP1
@@ -347,7 +349,7 @@ class DisplayWorker(threading.Thread):
                 self.transmit_done.set()
 
 class LogicalDisplay:
-    def __init__(self, controllers):
+    def __init__(self, controllers: "list[DisplayController]"):
         # \a controllers should be a list of controllers that displays a continuous string range
         if len(controllers) == 0:
             raise ValueError("Cannot create a display with 0 controllers")
@@ -403,7 +405,7 @@ class LogicalDisplay:
 
         # If control gets here, the internal state should be valid
         if led_type == DisplayController.LED_TYPE_APA102:
-            self.__led_class = LedAPA102
+            self.__led_class: "type[DisplayLed]" = LedAPA102
         elif led_type == DisplayController.LED_TYPE_WS2811:
             self.__led_class = LedWS2811
         else:
@@ -420,6 +422,7 @@ class LogicalDisplay:
         else:
             raise ValueError("Unsupported data type: {}".format(self.__data_type))
 
+        assert not (self.__range_start is None or self.__range_end is None)
         for string in range(self.__range_start, self.__range_end):
             if string not in self.__string_buffer_offset:
                 self.__string_buffer_offset[string] = offset
@@ -428,11 +431,11 @@ class LogicalDisplay:
 
         # Optional multithreading
         self.__multithreading = len(self.controllers) > 1
-        self.__workers = None
+        self.__workers: "None|list[DisplayWorker]" = None
 
-        self.__transmission_timer = None
-        self.__display_update_time = None
-        self.__data_buffer = None
+        self.__transmission_timer: "None|threading.Timer" = None
+        self.__display_update_time: "None|float" = None
+        self.__data_buffer: "None|bytes" = None
         self.__data_buffer_lock = threading.Lock()
 
     def open(self):
@@ -491,6 +494,7 @@ class LogicalDisplay:
     def __transmitStoredBuffer(self):
         self.__data_buffer_lock.acquire()
 
+        assert self.__data_buffer is not None
         if len(self.__data_buffer) != self.__buffer_length:
             raise ValueError("Data buffer has invalid length")
 
@@ -516,7 +520,7 @@ class LogicalDisplay:
         self.__display_update_time = time.time()
         self.__data_buffer_lock.release()
 
-    def transmitDisplayBuffer(self, data):
+    def transmitDisplayBuffer(self, data: bytes):
         # Store buffer and transmit/push for transmission if possible
         # If sending frames too fast, keep the last frame until the 25 FPS timer expires.
         # When a new frame is received just as we're about to send the currently stored one,
@@ -557,7 +561,7 @@ class DisplayManager:
 
         groups = self.__groupControllers(controllers)
 
-        self.__displays = list()
+        self.__displays: "list[LogicalDisplay]" = list()
         for group_controllers in groups:
             display = LogicalDisplay(group_controllers)
             self.__displays.append(display)
@@ -584,15 +588,15 @@ class DisplayManager:
         return self.__displays
 
     @staticmethod
-    def __groupControllers(controllers):
+    def __groupControllers(controllers: "list[DisplayController]"):
         """
         Return a list of lists of controllers.
         Ungrouped controllers are returned as length-1 lists.
         Controllers that advertise a grouping are returned grouped, irrespective of
         whether all group members are present.
         """
-        groups = list()
-        advertised_groups = dict()
+        groups: "list[list[DisplayController]]" = list()
+        advertised_groups: "dict[bytes,list[DisplayController]]" = dict()
         for controller in controllers:
             if controller.group is not None:
                 if controller.group not in advertised_groups:
@@ -723,6 +727,7 @@ try:
             # content of led_pulses: {led : [(time, charge-like)]} {int : [(float, float)]}
             led_pulses = {}
 
+            assert self._display is not None
             for omkey, pulses in omkey_pulses_map:
                 if self._display.canDisplayOMKey(geometry, omkey):
                     i3logging.log_trace(
@@ -758,13 +763,13 @@ try:
                 total_charge = 0.
                 if has_charge:
                     charges[led] = [(pulse.time, pulse.charge) for pulse in pulses]
-                    total_charge += pulse.charge
+                    total_charge += sum(pulse.charge for pulse in pulses)
                 elif has_npe:
                     charges[led] = [(pulse.time, pulse.npe) for pulse in pulses]
-                    total_charge += pulse.npe
+                    total_charge += sum(pulse.npe for pulse in pulses)
                 else:
                     charges[led] = [(pulse.time, 1.0) for pulse in pulses]
-                    total_charge += 1.0
+                    total_charge += len(pulses)
 
                 if total_charge > max_sum_charges:
                     max_sum_charges = total_charge
@@ -780,7 +785,7 @@ try:
 
                 if duration:
                     tail = 0
-                    head = None
+                    head = tail
                     # Determine pulse intervals
                     t0s = [t0]
                     while tail < len(pulses):
@@ -835,6 +840,7 @@ try:
 
             led_curves = {}
 
+            assert self._display is not None
             for omkey in omkey_list:
                 if self._display.canDisplayOMKey(geometry, omkey):
                     i3logging.log_trace(
@@ -852,7 +858,7 @@ try:
 
         def create(self, frame, output):
             # Connect to newly selected display, if any
-            display_index = self.setting(self._SETTING_DEVICE)
+            display_index = int(self.setting(self._SETTING_DEVICE))
             if display_index < len(self._manager.displays):
               new_display = self._manager.displays[display_index]
             else:

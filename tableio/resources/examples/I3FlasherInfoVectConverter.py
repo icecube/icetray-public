@@ -11,9 +11,9 @@ import numpy as n
 class I3FlasherInfoVectConverter(tableio.I3Converter):
     booked = I3FlasherInfoVect
 
-    def CreateDescription(self,fivect):
+    def CreateDescription(self,fivect: I3FlasherInfoVect):
         desc = tableio.I3TableRowDescription()
-        desc.IsMultiRow = True
+        desc.is_multi_row = True
         desc.add_field("string",tableio.types.Int32, "","string number of the flashing DOM")
         desc.add_field("om",tableio.types.UInt32, "","OM number of the flashing DOM")
         desc.add_field("flash_time",tableio.types.Float64, "ns","Time (in nsec) in 25 nsec units, of the LED flash time.")
@@ -27,21 +27,21 @@ class I3FlasherInfoVectConverter(tableio.I3Converter):
 
         return desc
 
-    def FillRows(self,fivect,rows):
+    def FillRows(self,fivect: I3FlasherInfoVect,rows: tableio.I3TableRow):
 
         start = rows.current_row
         for i,flasherinfo in enumerate(fivect):
             rows.current_row = start + i
-            rows["string"]     = flasherinfo.GetFlashingOM().GetString()
-            rows["om"]         = flasherinfo.GetFlashingOM().GetOM()
-            rows["flash_time"] = flasherinfo.GetFlashTime()
-            rows["mask"]       = flasherinfo.GetMask()
-            rows["width"]      = flasherinfo.GetWidth()
-            rows["rate"]       = flasherinfo.GetRate()
-            rows["brightness"] = flasherinfo.GetLEDBrightness()
-            rows["atwd_bin_size"] = flasherinfo.GetATWDBinSize()
+            rows["string"]     = flasherinfo.flashing_om.om
+            rows["om"]         = flasherinfo.flashing_om.string
+            rows["flash_time"] = flasherinfo.flash_time
+            rows["mask"]       = flasherinfo.mask
+            rows["width"]      = flasherinfo.width
+            rows["rate"]       = flasherinfo.rate
+            rows["brightness"] = flasherinfo.led_brightness
+            rows["atwd_bin_size"] = flasherinfo.atwd_bin_size
             #rows["pedestal_subtracted_atwd"] = ?
-            rows["raw_atwd3"] = n.asarray(flasherinfo.GetRawATWD3())
+            rows["raw_atwd3"] = n.asarray(flasherinfo.raw_atwd3)
 
         return rows.current_row + 1 - start
 

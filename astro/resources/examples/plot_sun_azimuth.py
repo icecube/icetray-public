@@ -12,7 +12,7 @@
 import os
 from icecube import icetray,dataio,astro,dataclasses
 import numpy as np
-import pylab as plt
+import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.ticker as ticker
 import matplotlib.patches as patches
@@ -22,7 +22,7 @@ fig, (ax1,ax2) = plt.subplots(1,2,figsize=[12,4.8],
 
 gcdfile = os.environ['I3_TESTDATA']+'/GCD/GeoCalibDetectorStatus_2016.57531_V0.i3.gz'
 with dataio.I3File(gcdfile) as f:
-    omgeo = f.pop_frame(Stream=icetray.I3Frame.Geometry)["I3Geometry"].omgeo
+    omgeo = dataclasses.I3Geometry.from_frame(f.pop_frame(Stream=icetray.I3Frame.Geometry)).omgeo
 
 x=[]
 y=[]
@@ -84,8 +84,8 @@ ax1.set_xlabel('x [m]')
 ax1.set_ylabel('y [m]')
 sunloc = 650
 
-for x,y,t in [(0,-620,0),(700,0,6),(0,620,12),(-660,0,18)]:
-    ax1.text(x,y,f"\u2600{t:02d}:00  ",c='tab:orange',fontsize=12,
+for xp,yp,t in [(0,-620,0),(700,0,6),(0,620,12),(-660,0,18)]:
+    ax1.text(xp,yp,f"\u2600{t:02d}:00  ",c='tab:orange',fontsize=12,
             horizontalalignment='center',verticalalignment='bottom' if x else 'center')
 
 ax1.axvline(0,c='k',lw=1)

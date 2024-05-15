@@ -23,10 +23,11 @@ filterwarnings("ignore", ".*already registered; second conversion method ignored
 
 from icecube.icetray import i3inspect
 from textwrap import fill
+from typing import Any, Optional, IO, Union
 import logging
 
 log = logging.getLogger(__file__)
-log_handler = None
+log_handler: logging.Handler
 try:
     # from rich.markup import escape
     from rich.logging import RichHandler
@@ -325,13 +326,16 @@ def get_doxygen_docstring(project,modulename):
 
     root = tree.getroot()
     comp = root.find("compounddef")
+    assert comp
     brief = comp.find('briefdescription')
+    assert brief
 
     doc = ET.tostring(brief, encoding='unicode', method='text')
 
     if opts.verbose_docs:
 
         detail = comp.find('detaileddescription')
+        assert detail
 
         #remove metadata tags
         for c in detail:
@@ -436,7 +440,7 @@ def display_project(project):
         proj_name = pyproject
 
     icetray.modules(cppproject)
-    modules = []
+    modules: list[tuple[Any, str, Any, Any, Optional[str]]] = []
 
     if not opts.no_modules:
         for mod in icetray.modules(cppproject):
@@ -481,7 +485,7 @@ def display_project(project):
             docs = inspect.getdoc(config)
             modules.append((segment, 'I3Tray segment', pyseg,config,docs))
 
-    if not opts.no_converters:
+    if pymodule and not opts.no_converters:
         for converter in get_converters(pyproject):
             doc = converter.__doc__
             convname =  pymodule.__name__ + "." + converter.__name__
@@ -499,7 +503,7 @@ def display_project(project):
             display_config(*module)
         output.project_footer()
 
-from optparse import Option, OptionParser
+from optparse import Option, OptionParser, OptionValueError
 import re,os.path
 
 Option.TYPES = Option.TYPES + ("regex",)
@@ -588,12 +592,12 @@ if opts.all:
     args = compiled_projects+python_projects
 
 if opts.output:
-    outfile = open(opts.output,"w")
+    outfile: IO = open(opts.output,"w")
 else:
     outfile = sys.stdout
 
 if opts.sphinx:
-    output = sphinx_writer(outfile)
+    output: Union[sphinx_writer, xml_writer, human_writer] = sphinx_writer(outfile)
 elif opts.xml:
     output = xml_writer(outfile)
 else:

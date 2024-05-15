@@ -5,6 +5,11 @@ import inspect
 from icecube import _icetray
 from . import i3logging as logging
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from typing import Type, Union, Callable, Optional, Any
+    from typing_extensions import Self
+
 class I3Tray(_icetray._I3TrayBase):
     """
     A convenience wrapper around the wrapped c++ class _icetray.I3Tray.
@@ -42,11 +47,11 @@ class I3Tray(_icetray._I3TrayBase):
                                  % (kind, _type,name), "I3Tray")
         return name
 
-    def Add(self, _type, _name=None, **kwargs):
+    def Add(self, _type: "Union[str, Type[_icetray.I3Module], Callable[..., Any]]", _name: "Optional[str]"=None, **kwargs):
         """
         Add a module, service, or segment to the tray.
         """
-        method = None
+        method: Optional[Callable] = None
         if isinstance(_type, "".__class__):
             # Search registries for a C++ factory type
             if _icetray.is_module(_type) and _icetray.is_service(_type):
@@ -72,7 +77,7 @@ class I3Tray(_icetray._I3TrayBase):
         else:
             return method(_type, _name, **kwargs)
 
-    def AddModule(self, _type, _name=None, If=None, **kwargs):
+    def AddModule(self, _type: "Union[str, Type[_icetray.I3Module], Callable[..., Any]]", _name: "Optional[str]"=None, *, If=None, **kwargs) -> "Self": # type: ignore[override]
         """
         Add a module to the tray's processing stream.
 
@@ -120,7 +125,7 @@ class I3Tray(_icetray._I3TrayBase):
         except:
             raise
 
-    def AddService(self, _type, _name=None, **kwargs):
+    def AddService(self, _type: str, _name: "Optional[str]"=None, **kwargs): # type: ignore[override]
         """
         Add a service factory to the tray.
 
@@ -145,7 +150,7 @@ class I3Tray(_icetray._I3TrayBase):
             super().SetParameter(_name, k, v)
         return self
 
-    def AddSegment(self, _segment, _name=None, If=None, **kwargs):
+    def AddSegment(self, _segment, _name: "Optional[str]"=None, If=None, **kwargs):
         """
         Add a tray segment to the tray. This is a small scriptlet that can
         autoconfigure some set of modules and services according to a
@@ -195,15 +200,8 @@ class I3Tray(_icetray._I3TrayBase):
         super().SetParameter(module, param, value)
         return self
 
-    def ConnectBoxes(self, *args):
-        if len(args) == 4:
-            super().ConnectBoxes(args[0], args[1], args[2], args[3])
-        elif len(args) == 3:
-            super().ConnectBoxes(args[0], args[1], args[2])
-        else:
-            logging.log_error('Wrong number of arguments %d to ConnectBoxes' % len(args), 'I3Tray')
-
-    def __call__(self, *args):
+    def __call__(self, *args: "tuple[str, Any]"):
+        assert self.last_added
         for pair in args:
             logging.log_info('%s: %s = %s' % (self.last_added, pair[0], pair[1]), unit='I3Tray')
             super().SetParameter(self.last_added, pair[0], pair[1])
@@ -237,7 +235,7 @@ class I3Tray(_icetray._I3TrayBase):
         keys = [p.key() for p in usage]
         keys.sort(key = lambda k: usage[k].usertime + usage[k].systime, reverse = True)
         total_time = sum([p.data().usertime + p.data().systime for p in usage])
-        acc_time = 0
+        acc_time = 0.
         print('-'*99)
         printed_keys = list()
         for k in keys:

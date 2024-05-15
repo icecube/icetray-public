@@ -36,17 +36,21 @@ def I3SimHDFWriter(tray, name, RunNumber=0, **kwargs):
     """
 
     if "SubEventStreams" in kwargs:
-        raise ArgumentError("SubEventStreams cannot be set for I3SimHDFWriter")
+        raise TypeError("SubEventStreams cannot be set for I3SimHDFWriter")
 
     from icecube import icetray, dataclasses, phys_services
-    def fake_event_header(frame):
-        header = dataclasses.I3EventHeader()
-        header.run_id = RunNumber
-        header.event_id = fake_event_header.event_id
-        fake_event_header.event_id += 1
-        frame['I3EventHeader'] = header
-    fake_event_header.event_id = 0
-    tray.Add(fake_event_header, Streams=[icetray.I3Frame.DAQ],
+    class FakeEventHeader(icetray.I3ConditionalModule):
+        def __init__(self, ctx):
+            super().__init__(ctx)
+            self.event_id = 0
+        def DAQ(self, frame):
+            header = dataclasses.I3EventHeader()
+            header.run_id = RunNumber
+            header.event_id = self.event_id
+            self.event_id += 1
+            frame['I3EventHeader'] = header
+            self.PushFrame(frame)
+    tray.Add(FakeEventHeader,
                  If=lambda f: 'I3EventHeader' not in f)
 
     tray.Add("I3NullSplitter",SubEventStreamName="SimHDFWriter")

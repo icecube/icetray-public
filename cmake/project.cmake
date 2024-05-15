@@ -33,10 +33,6 @@
 #  Magic __init__.py needed by everybody
 #
 file(MAKE_DIRECTORY ${LIBRARY_OUTPUT_PATH}/icecube)
-execute_process(
-  COMMAND ln -snf ${CMAKE_SOURCE_DIR}/cmake/load_pybindings.py ${LIBRARY_OUTPUT_PATH}/icecube/load_pybindings.py)
-install(FILES ${LIBRARY_OUTPUT_PATH}/icecube/load_pybindings.py
-  DESTINATION lib/icecube)
 
 #
 # rootcint() handles root dictionary generation

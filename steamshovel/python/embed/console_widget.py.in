@@ -30,7 +30,7 @@ def init_embedded_kernel():
 
     # warn if pyside is installed, which causes an error in the embedded shell
     try:
-        import PySide
+        import PySide  # type: ignore[import]
         print("You have PySide installed, which creates a conflict with "
               "Steamshovel's use of IPython and PyQt5. The embedded Python "
               "shell in Steamshovel will be disabled. Remove PySide to "
@@ -40,10 +40,10 @@ def init_embedded_kernel():
         pass
 
     try:
-        from qtconsole import inprocess
+        from qtconsole import inprocess  # type: ignore[import]
     except ImportError:
         try:
-            from IPython.qt import inprocess
+            from IPython.qt import inprocess  # type: ignore[import]
         except ImportError:
             print("Could not get QtInProcessKernelManager for IPython {0:s} ".format(IPython.__version__))
             return False
@@ -72,12 +72,12 @@ def embed_shell_widget( parent_ptr ):
     import IPython
     from IPython.lib import guisupport
     if IPython.version_info[0] < 4:
-        from IPython.qt.console.rich_ipython_widget import RichIPythonWidget as RichWidget
+        from IPython.qt.console.rich_ipython_widget import RichIPythonWidget as RichWidget  # type: ignore[import]
     else:
-        from qtconsole.rich_jupyter_widget import RichJupyterWidget as RichWidget
-    import sip
+        from qtconsole.rich_jupyter_widget import RichJupyterWidget as RichWidget  # type: ignore[import]
+    import sip  # type: ignore[import]
 
-    from PyQt5.QtWidgets import QWidget as QWidget
+    from PyQt5.QtWidgets import QWidget as QWidget  # type: ignore[import]
 
     # Wave the magic wand and turn an integer into a QWidget object.
     parent = sip.wrapinstance(parent_ptr, QWidget)
@@ -125,7 +125,7 @@ def execScript( path ):
                         if sys.version_info[0] < 3:
                             execfile( path, __main__.__dict__ )
                         else:
-                            exec(compile(open( path ).read(), path, 'exec'), __main__.__dict__) in globals(), locals()
+                            exec(compile(open( path ).read(), path, 'exec'), __main__.__dict__)
                     except:
                         traceback.print_exception(*sys.exc_info())
                         # quit app when there is an exception

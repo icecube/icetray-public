@@ -36,8 +36,8 @@ Bool    = make_dtype(dt.Bool,1,False)
 # make a pretty-printer for I3Datatype
 def pretty_dtype(self):
     return "I3Datatype(kind=%s, size=%s, signed=%s)"  % (self.kind,self.size,self.is_signed)
-
-I3Datatype.__repr__ = pretty_dtype
+    
+I3Datatype.__repr__ = pretty_dtype  # type: ignore[method-assign]
 
 del I3Datatype,dt,make_dtype,pretty_dtype
 

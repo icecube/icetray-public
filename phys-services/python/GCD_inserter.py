@@ -20,7 +20,7 @@ class GCD_inserter(icetray.I3PacketModule):
   """
   def __init__(self,context):
     super().__init__(context, icetray.I3Frame.DAQ)
-    self.ignoreTypeList = []
+    self.ignoreTypeList: "list[str]" = []
 
     self.AddParameter("IgnoreFrameTypes",
                       "Ignore this list of frametypes from the read GCD file",

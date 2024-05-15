@@ -7,6 +7,10 @@ import operator
 import math
 import numpy
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from typing import Any, Callable
+
 def _i3map_values_iter(i3map, e1, e2):
     for dom, values in i3map:
         for v in values:
@@ -186,8 +190,8 @@ def getRangeHistogram(frame, key, timeRange):
 
     if type(obj) == dataclasses.I3RecoPulseSeriesMap:
         # histogram the pulse times, weighting by charge
-        e1 = operator.attrgetter('time')
-        e2 = operator.attrgetter('charge')
+        e1 = operator.attrgetter('time')  # type: Callable[[Any], float]
+        e2 = operator.attrgetter('charge')  # type: Callable[[Any], float]
     elif type(obj) == dataclasses.I3DOMLaunchSeriesMap:
         # histogram the launch times, with equal weighting
         e1 = operator.attrgetter('time')

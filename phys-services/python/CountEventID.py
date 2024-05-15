@@ -83,7 +83,7 @@ class CountEventID(icetray.I3Module):
           icetray.logging.log_error("This frames misses the I3EventHeader!")
           icetray.logging.log_error(str(frame))
         else:
-          eh = frame["I3EventHeader"]
+          eh = dataclasses.I3EventHeader.from_frame(frame)
           outstream.append("Count: %08d Run: %06d Event: %08d"%(self.q_frameCount_,eh.run_id,eh.event_id))
 
         self.q_frameCount_+=1
@@ -109,7 +109,7 @@ class CountEventID(icetray.I3Module):
           icetray.logging.log_error("This frames misses the I3EventHeader!")
           icetray.logging.log_error(str(frame))
         else:
-          eh = frame["I3EventHeader"]
+          eh = dataclasses.I3EventHeader.from_frame(frame)
           outstream.append("Count: %08d Run: %06d Event: %08d SubEventStream: %s SubEventID: %02d"%(self.p_frameCount_,eh.run_id,eh.event_id,eh.sub_event_stream,eh.sub_event_id))
 
         self.p_frameCount_+=1
@@ -118,15 +118,15 @@ class CountEventID(icetray.I3Module):
         outstream.append("%s-frame "%(frame.Stop))
         if (self.g_seen_ and self.c_seen_ and self.d_seen_):
           outstream.append("[+GCD]")
-        if (q_frameCount_):
+        if (self.q_frameCount_):
           outstream.append("[+Q]")
 
     self.frameCount_+=1
 
     if (self.to_logging_):
-      icetray.logging.log_info(string.join(outstream, " "), "CountEventID")
+      icetray.logging.log_info(" ".join(outstream), "CountEventID")
     else:
-      print (string.join(outstream, " "))
+      print (" ".join(outstream))
 
     self.PushFrame(frame,"OutBox")
 

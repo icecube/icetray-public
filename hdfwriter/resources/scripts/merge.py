@@ -43,27 +43,27 @@ if 'hdf5' in [iformat,oformat]:
 if 'root' in [iformat,oformat]:
     from icecube.rootwriter import I3ROOTTableService
 if 'csv' in [iformat,oformat]:
-    from icecube.textwriter import I3CSVTableService
+    from icecube.textwriter import I3CSVTableService  # type: ignore[import]
 
 if iformat == 'hdf5':
-    inservices = [(I3HDFTableService,(infile,1,'r')) for infile in infiles]
+    inservices = [(I3HDFTableService,(infile,1,'r')) for infile in infiles]  # type: list[tuple[type[tableio.I3TableService],tuple]]
 elif iformat == 'root':
     inservices = [(I3ROOTTableService,(infile,'r')) for infile in infiles]
 else:
-    raise "Unknown input format '%s'" % iformat
-
+    parser.error("Unknown input format '%s'" % iformat)
+    
 if oformat == 'hdf5':
-    outservice = I3HDFTableService(outfile,options.compress,'w')
+    outservice = I3HDFTableService(outfile,options.compress,'w')  # type: tableio.I3TableService
 elif oformat == 'root':
     outservice = I3ROOTTableService(outfile,compression_level=options.compress)
 elif oformat == 'csv':
     outservice = I3CSVTableService(outfile)
 else:
-    raise "Unknown out format '%s'" % oformat
+    parser.error("Unknown out format '%s'" % oformat)
 
-for ctor,args in inservices:
+for ctor,init_args in inservices:
     print('Merging %s'%args[0])
-    inservice = ctor(*args)
+    inservice = ctor(*init_args)
     scribe = I3TableTranscriber(inservice,outservice)
     if options.nframes is not None:
         scribe.Execute(options.nframes)

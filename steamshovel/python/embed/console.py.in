@@ -25,7 +25,7 @@ _native_console = None
 class ScriptDrop:
     '''Message queue between main GUI thread and secondary console thread'''
 
-    paths = []
+    paths: "list[str]" = []
     lock = _thread.allocate_lock()
 
     @staticmethod
@@ -71,7 +71,7 @@ def setInputHook():
     try:
         # First ensure that PyQt5 won't install its own input hook at some later time.
         # It does so as part of its module initialization, because PyQt5 is a bad person.
-        from PyQt5 import QtCore  # noqa: E999
+        from PyQt5 import QtCore  # type: ignore[import] # noqa: E999
         QtCore.pyqtRemoveInputHook()
     except ImportError:
         pass

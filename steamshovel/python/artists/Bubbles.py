@@ -49,9 +49,9 @@ class Bubbles( PyArtist ):
         custom_time_range = get_custom_time_range(self.setting("custom color window"))
 
         # set by discovery later
-        self.has_scale = None
-        self.name_scale = None
-        self.has_time = None
+        self.has_scale: "None|bool" = None
+        self.name_scale: "None|str" = None
+        self.has_time: "None|bool" = None
 
         geom_key, frame_key = self.keys()
         omgeo = frame[geom_key].omgeo
@@ -118,9 +118,10 @@ class Bubbles( PyArtist ):
 
         self.has_time = hasattr(obj, "time")
 
-        for self.name_scale in ("charge", "npe"):
-            self.has_scale = hasattr(obj, self.name_scale)
+        for name_scale in ("charge", "npe"):
+            self.has_scale = hasattr(obj, name_scale)
             if self.has_scale:
+                self.name_scale = name_scale
                 return # self.name_scale now also has correct value
 
     @staticmethod
@@ -142,6 +143,7 @@ class Bubbles( PyArtist ):
     def handle_integral_bubble_delay( self, output, sphere, series,
                                       scale, power, colormap, delay,
                                       custom_time_range ):
+        assert self.name_scale is not None
         times = [x.time for x in series]
         chargemap = {}
         change_points = []
@@ -181,8 +183,9 @@ class Bubbles( PyArtist ):
     def handle_integral_bubble( self, output, sphere, series,
                                 scale, power, colormap,
                                 custom_time_range ):
+        assert self.name_scale is not None
         t0 = series[0].time
-        accum = 0
+        accum = 0.
         sizes = []
         for obj in series:
             if self.has_scale:

@@ -6,7 +6,7 @@
 
 import datetime
 import numpy as np
-import pylab as plt
+import matplotlib.pyplot as plt
 
 #crab
 src_ra=83.63308
@@ -23,9 +23,9 @@ src3_dec=-29.001
 mjd=59000.
 times = mjd + np.linspace(0,1,1000)
 
-import astropy.units as u
-from astropy.time import Time
-from astropy.coordinates import SkyCoord, EarthLocation, AltAz
+import astropy.units as u  # type: ignore[import-not-found]
+from astropy.time import Time  # type: ignore[import-not-found]
+from astropy.coordinates import SkyCoord, EarthLocation, AltAz  # type: ignore[import-not-found]
 
 ap_coords = SkyCoord(ra=src_ra*u.degree, dec=src_dec*u.degree, frame='icrs')
 ap2_coords = SkyCoord(ra=src2_ra*u.degree, dec=src2_dec*u.degree, frame='icrs')

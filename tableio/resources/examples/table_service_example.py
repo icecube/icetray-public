@@ -13,7 +13,7 @@ from icecube import dataio,tableio
 class I3SimpleTable(tableio.I3Table):
     def __init__(self,table_service,table_name,description):
         super().__init__(table_service,table_name,description)
-        self.data = { n:[] for n in description.field_names}
+        self.data = { n:[] for n in description.field_names}  # type: dict[str,list]
 
     def WriteRows(self,row):
         for i in range(row.number_of_rows):

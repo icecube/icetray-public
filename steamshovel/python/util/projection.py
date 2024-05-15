@@ -13,7 +13,7 @@ from functools import partial
 try:
     import PIL.Image as Image
 except ImportError:
-    import Image
+    import Image  # type: ignore
 
 from icecube import dataclasses
 from icecube.shovelart import vec3d
@@ -181,9 +181,7 @@ def get_view(gl, frame, myview=False):
             x -= 10
             y -= 10
 
-    pivot = (x, y, -63.2992)
-    location = (cameraLoc)
-    return (pivot, location)
+    return ((x, y, -63.2992), cameraLoc)
 
 def colorbar_size(width, scale):
     # height:width ratio is 1:10 for a scale factor of 1

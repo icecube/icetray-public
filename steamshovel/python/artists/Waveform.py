@@ -9,9 +9,15 @@ from icecube.icetray import I3Units
 import matplotlib.gridspec as gridspec
 from matplotlib.colors import colorConverter as mplcol
 from matplotlib import rcParams
-from cycler import cycler
+from cycler import cycler  # type: ignore[import-untyped]
 from itertools import cycle
 import numpy
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .mplart.AbstractMPLArtist import I3Frame, FigureBase
+    from icecube.icetray import OMKey
+    from collections.abc import Sequence
 
 class Waveform(MPLArtist):
 
@@ -96,11 +102,10 @@ class Waveform(MPLArtist):
             axis.legend()
 
 
-    def create_plot_raw( self, frame, fig ):
-
-        launchmap = frame[list(self.keys())[0]]
-        oms = self.setting( 'OMKeys' )
-        legend = ''
+    def create_plot_raw( self, frame: "I3Frame", fig: "FigureBase" ):
+        
+        launchmap = dataclasses.I3DOMLaunchSeriesMap.from_frame(frame, self.keys()[0])
+        oms: "Sequence[OMKey]" = self.setting( 'OMKeys' )
 
         # Determine ahead of time how many subplots are needed
         numchannels = 0
@@ -119,19 +124,17 @@ class Waveform(MPLArtist):
         if( self.setting('legend') ):
             speclen += 1
         gs = gridspec.GridSpec(speclen,1)
-        legendary = []
 
         fadc = fig.add_subplot(gs[0,0])
         fadc.set_title( 'FADC' )
 
-        atwd = [None]*numchannels
-        for i in range(0,numchannels):
-            atwd[i] = fig.add_subplot(gs[i+1,0], sharex=fadc)
-            atwd[i].set_title( 'ATWD Ch. ' + str(i) )
+        atwd = [fig.add_subplot(gs[i+1,0], sharex=fadc) for i in range(numchannels)]
+        for i, ax in enumerate(atwd):
+            ax.set_title( f'ATWD Ch. {i}' )
 
         geom = None
         if( 'I3Geometry' in frame.keys() ):
-            geom = frame['I3Geometry']
+            geom = dataclasses.I3Geometry.from_frame(frame)
 
         props = cycle(cycler(rcParams['axes.prop_cycle']))
         for omkey in oms:
@@ -140,7 +143,7 @@ class Waveform(MPLArtist):
             launches = launchmap[omkey]
 
             prop = next(props)
-            label = str(omkey)
+            label: "None|str" = str(omkey)
             for launch in launches:
                 self._plot_fadc( fadc, launch, label=label, **prop)
                 # change the label to None so that only one label appears for any omkey

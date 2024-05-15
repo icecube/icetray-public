@@ -22,8 +22,8 @@ def show():
 
     try:
         import IPython
-        from PyQt@_pyqtver@.QtWebKit import QWebView  # noqa: E999
-        from PyQt@_pyqtver@.QtCore import QUrl        # noqa: E999
+        from PyQt@_pyqtver@.QtWebKit import QWebView  # type: ignore[import,syntax] # noqa: E999
+        from PyQt@_pyqtver@.QtCore import QUrl        # type: ignore[import] # noqa: E999
 
         view = QWebView()
         view.setUrl(QUrl(path))

@@ -8,9 +8,11 @@
 # @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy: nwhitehorn $
 #
 
+from typing import no_type_check
+
 class baseEnum(int):
     name = None
-    values = {}
+    values: "dict[str,int]" = {}
 
     def __repr__(self):
         return self.name
@@ -19,6 +21,7 @@ class baseEnum(int):
 class metaEnum(type):
     """Helper metaclass to return the class variables as a dictionary " """
 
+    @no_type_check
     def __new__(cls, classname, bases, classdict):
         """Return a new class with a "values" attribute filled"""
 

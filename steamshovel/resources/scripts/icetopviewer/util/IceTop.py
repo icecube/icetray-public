@@ -90,20 +90,20 @@ class IceTop(Detector):
 
         if not len(amps): return
 
-        amps = np.log10(amps)
-        minAmp = min(amps)
-        maxAmp = max(amps)
+        log_amps = np.log10(amps)
+        minAmp = min(log_amps)
+        maxAmp = max(log_amps)
 
-        relPatchSize = self.minPatchSize*1.2 + (self.maxPatchSize - self.minPatchSize*1.2) * (amps - minAmp) / (maxAmp - minAmp + 0.01)
+        relPatchSize = self.minPatchSize*1.2 + (self.maxPatchSize - self.minPatchSize*1.2) * (log_amps - minAmp) / (maxAmp - minAmp + 0.01)
 
         # The color map is used for  showing the time delay of the pulses.
         # The time is set to 0 by subtracting the min and then it is normalized by dividing the max
         cmap = cm.get_cmap(self.colorMapType)
-        time = np.subtract(time, min(time))
-        time = np.divide(time, max(time))
-        time = cmap(time)
-        for size, pos, t in zip(relPatchSize, positions, time):
-            pulses_patches.append(Circle(pos, size, edgecolor="None",  facecolor=t, alpha=0.2))
+        reltime = np.subtract(time, min(time))
+        reltime = np.divide(reltime, max(reltime))
+        colors = cmap(reltime)
+        for size, pos, c in zip(relPatchSize, positions, colors):
+            pulses_patches.append(Circle(pos, size, edgecolor="None",  facecolor=c, alpha=0.2))
         self.tanks_pulse_patches = PatchCollection(pulses_patches, match_original=True)
         ax.add_collection(self.tanks_pulse_patches)
 
@@ -131,6 +131,7 @@ class IceTop(Detector):
 
 
     def __DrawLaputopLDF(self, ax, radii):
+        assert self.laputopParams
         lg_s125 = self.laputopParams.value(LaputopParameter.Log10_S125)
         lg_s125_err = self.laputopParams.error(LaputopParameter.Log10_S125)
         s125 = 10 ** lg_s125
@@ -171,10 +172,10 @@ class IceTop(Detector):
                 time.append(pulse[0].t)
 
             cmap = cm.get_cmap(self.colorMapType)
-            time = np.subtract(time, min(time))
-            time = np.divide(time, max(time))
-            time = cmap(time)
-            ax.scatter(radii,  amps, c=time, alpha=0.4, marker=self.shapes[ikey%len(self.shapes)], label=framekey)
+            reltime = np.subtract(time, min(time))
+            reltime = np.divide(reltime, max(reltime))
+            colors = cmap(reltime)
+            ax.scatter(radii,  amps, c=colors, alpha=0.4, marker=self.shapes[ikey%len(self.shapes)], label=framekey)
 
         if self.laputopParams:
             self.__DrawLaputopLDF(ax, radii)
@@ -219,10 +220,10 @@ class IceTop(Detector):
 
             # Same as above
             cmap = cm.get_cmap(self.colorMapType)
-            time = np.subtract(time, min(time))
-            time = np.divide(time, max(time))
-            time = cmap(time)
-            ax.scatter(radii, amps, c=time, alpha=0.4, marker=self.shapes[ikey%len(self.shapes)])
+            reltime = np.subtract(time, min(time))
+            reltime = np.divide(reltime, max(reltime))
+            colors = cmap(reltime)
+            ax.scatter(radii, amps, c=colors, alpha=0.4, marker=self.shapes[ikey%len(self.shapes)])
 
         if self.laputopParams:
             self.__DrawLaputopTiming(ax, radii)
@@ -231,6 +232,7 @@ class IceTop(Detector):
 
 
     def __DrawLaputopTiming(self, ax, radii):
+        assert self.laputopParams
         rmin = np.amin(radii, axis=0)
         rmax = np.amax(radii, axis=0)
         rspace = 10 ** np.linspace(np.log10(rmin*0.9), np.log10(rmax*1.1), 50)

@@ -18,6 +18,9 @@ try:
 except ImportError:
     pass
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from typing import Any
 
 # CamelCase because it behaves like a class
 def TankPositionGenerator(geometry):
@@ -164,7 +167,7 @@ def particle_pos(particle, time):
     return particle.pos + particle.dir * particle.speed * (time - particle.time)
 
 
-def to_shower_cs(i3direction):
+def to_shower_cs(i3direction: "dataclasses.I3Direction"):
     """
     Returns rotation matrix to shower CS for given i3direction.
 
@@ -179,13 +182,13 @@ def to_shower_cs(i3direction):
     ct = cos(theta)
     st = sin(theta)
     # counter-clockwise (pi + phi) rotation
-    d_phi = np.matrix([[-cp, -sp, 0],
-                       [sp , -cp, 0],
-                       [0  ,   0, 1]])
+    d_phi = np.matrix([[-cp, -sp, 0.],
+                       [sp , -cp, 0.],
+                       [0. ,  0., 1.]])  # type: np.matrix[float, Any]
     # clock-wise (pi - theta) rotation
-    d_theta = np.matrix([[-ct, 0, -st],
-                         [0  , 1,   0],
-                         [st , 0, -ct]])
+    d_theta = np.matrix([[-ct, 0., -st],
+                         [0. , 1.,  0.],
+                         [st , 0., -ct]])  # type: np.matrix[float, Any]
     return d_theta * d_phi
 
 
@@ -272,8 +275,9 @@ def jacobian(f, x, dx):
     x = np.atleast_1d(x)
     dx = np.atleast_1d(dx)
     nx = len(x)
+    if nx == 0:
+        return None
     ny = 0
-    jacobi = None
     e = np.zeros(nx)
     for ix in range(nx):
         e *= 0

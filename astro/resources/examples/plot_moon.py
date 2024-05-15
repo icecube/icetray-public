@@ -6,7 +6,7 @@
 # @author Kevin Meagher
 # @date August 2015
 
-import pylab as plt
+import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import FormatStrFormatter
 from matplotlib.dates import DateFormatter,AutoDateLocator

@@ -24,7 +24,8 @@ class AggMPLArtist( MPLArtist ):
         '''
         def impl():
             figure.clear()
-            self.manager.canvas.draw()
+            if self.manager is not None:
+                self.manager.canvas.draw()
         return impl
 
     def get_canvas_update( self, figure ):
@@ -33,6 +34,7 @@ class AggMPLArtist( MPLArtist ):
 
     def export_image( self ):
         '''Export self.manager.canvas to a tuple (raw_data_string, width, height)'''
+        assert self.manager is not None
         buf, (w, h) = self.manager.canvas.print_to_buffer()
         return buf, w, h
 

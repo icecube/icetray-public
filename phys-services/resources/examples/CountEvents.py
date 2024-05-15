@@ -19,7 +19,7 @@ from icecube import dataclasses
 from icecube import phys_services
 from icecube import dataio
 
-tray = I3Tray()
+tray = icetray.I3Tray()
 
 tray.AddModule("I3Reader","reader",FileName = options.INFILE)
 

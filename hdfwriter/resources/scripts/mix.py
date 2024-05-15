@@ -10,9 +10,7 @@ from subprocess import Popen, PIPE, call, check_output
 
 def h5ls(fname):
     objs = []
-    output = check_output(['h5ls', '-r', fname])
-    if sys.version_info.major > 2:
-        output = output.decode()
+    output = check_output(['h5ls', '-r', fname]).decode()
     for line in output.split('\n'):
         fields = re.split(r'\s+', line)
         if len(fields) < 2:
@@ -35,7 +33,7 @@ def h5repack(from_file, to_file, complevel=9):
     args += [from_file, to_file]
     code = call(args)
     if code != 0:
-        raise RuntimeError('%s failed with exit code %d!' % (args, stat))
+        raise RuntimeError('%s failed with exit code %d!' % (args, code))
 
 def h5inherit(infiles, outfile, overwrite=False):
     if overwrite:

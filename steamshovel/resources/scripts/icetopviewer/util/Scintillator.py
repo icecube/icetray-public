@@ -76,20 +76,20 @@ class Scintillator(Detector):
 
         if not len(amps): return
 
-        amps = np.log10(amps)
-        minAmp = min(amps)
-        maxAmp = max(amps)
+        log_amps = np.log10(amps)
+        minAmp = min(log_amps)
+        maxAmp = max(log_amps)
 
-        relPatchSize = self.minPatchSize*1.2 + (self.maxPatchSize - self.minPatchSize*1.2) * (amps - minAmp) / (maxAmp - minAmp + 0.01)
+        relPatchSize = self.minPatchSize*1.2 + (self.maxPatchSize - self.minPatchSize*1.2) * (log_amps - minAmp) / (maxAmp - minAmp + 0.01)
 
         # The color map is used for  showing the time delay of the pulses.
         # The time is set to 0 by subtracting the min and then it is normalized by dividing the max
         cmap = cm.get_cmap(self.colorMapType)
-        time = np.subtract(time, min(time))
-        time = np.divide(time, max(time))
-        time = cmap(time)
-        for size, pos, t in zip(relPatchSize, positions, time):
-            pulses_patches.append(Rectangle(pos, size/2., size/2., edgecolor="None", facecolor=t, alpha=0.2))
+        reltime = np.subtract(time, min(time))
+        reltime = np.divide(reltime, max(reltime))
+        colors = cmap(reltime)
+        for size, pos, c in zip(relPatchSize, positions, colors):
+            pulses_patches.append(Rectangle(pos, size/2., size/2., edgecolor="None", facecolor=c, alpha=0.2))
         self.scint_pulse_patches = PatchCollection(pulses_patches, match_original=True)
         ax.add_collection(self.scint_pulse_patches)
 
@@ -128,10 +128,10 @@ class Scintillator(Detector):
                 time.append(pulse.t)
 
             cmap = cm.get_cmap(self.colorMapType)
-            time = np.subtract(time, min(time))
-            time = np.divide(time, max(time))
-            time = cmap(time)
-            ax.scatter(radii,  amps, c=time, alpha=0.4, marker=self.shapes[(ikey+1)%len(self.shapes)], label=framekey)
+            reltime = np.subtract(time, min(time))
+            reltime = np.divide(reltime, max(reltime))
+            colors = cmap(reltime)
+            ax.scatter(radii,  amps, c=colors, alpha=0.4, marker=self.shapes[(ikey+1)%len(self.shapes)], label=framekey)
 
             # Silent stations
             radii = []
@@ -172,10 +172,10 @@ class Scintillator(Detector):
 
             # Same as above
             cmap = cm.get_cmap(self.colorMapType)
-            time = np.subtract(time, min(time))
-            time = np.divide(time, max(time))
-            time = cmap(time)
-            ax.scatter(radii,  amps, c=time, alpha=0.4, marker=self.shapes[(ikey+1)%len(self.shapes)])
+            reltime = np.subtract(time, min(time))
+            reltime = np.divide(reltime, max(reltime))
+            colors = cmap(reltime)
+            ax.scatter(radii,  amps, c=colors, alpha=0.4, marker=self.shapes[(ikey+1)%len(self.shapes)])
 
             # Silent stations are not needed for the time plot
 

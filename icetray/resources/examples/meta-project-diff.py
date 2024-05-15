@@ -38,8 +38,8 @@ def get_revision_number(meta_project):
     Returns : <revision_number>.
     '''
     svn_info = subprocess.check_output(["svn", "info", meta_project])
-    for line in svn_info.split('\n'):
-        if line.startswith("Revision:"):
+    for line in svn_info.split(b'\n'):
+        if line.startswith(b"Revision:"):
             return int(line.split()[1])
 
 def get_path_revision_number_pair(svn_info):

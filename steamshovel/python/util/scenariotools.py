@@ -72,6 +72,9 @@ def exectableScenarioDump():
     from __main__ import window
 
     code = PythonWriter()
+    code('from typing import TYPE_CHECKING')
+    with code.block('if TYPE_CHECKING:'):
+        code('from icecube.steamshovel.sessions._scripting import window')
     with code.block('def _dumpScenario():'):
         # save current state of artists
         from icecube import shovelart

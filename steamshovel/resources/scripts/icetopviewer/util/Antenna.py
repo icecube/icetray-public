@@ -114,14 +114,8 @@ class Antenna(Detector):
         #and uses it to update the plots
 
         if self.positions == {}: return
-        antennaKeys = []
-        antennaPos = []
-        for antKey in self.positions.keys():
-            antennaKeys.append(antKey)
-        for pos in self.positions.values():
-            antennaPos.append(pos[:2])
-        antennaPos = np.asarray(antennaPos)
-        antennaKeys = np.asarray(antennaKeys)
+        antennaKeys = np.array(list(self.positions.keys()))
+        antennaPos = np.array([pos[:2] for pos in self.positions.values()])
         distance = np.sum((antennaPos - click_pos) ** 2, axis=1)
         _min = np.argmin(distance)
         self.AntennaStationID = antennaKeys[_min]
@@ -142,7 +136,7 @@ class Antenna(Detector):
                 elif isinstance(frame[key], dataclasses.I3AntennaDataMap):
                     self.TimeFreqDbPlot(frame[key], axlist, 1, key)
                 else:
-                    log_fatal("Key: ({}) is type ({}). I don't know what this is!".format(key, type(frame[key])))
+                    icetray.logging.log_fatal("Key: ({}) is type ({}). I don't know what this is!".format(key, type(frame[key])))
         return
 
     def TimeFreqDbPlot(self, antDataMap, axlist, plotFrac, plotLabel):

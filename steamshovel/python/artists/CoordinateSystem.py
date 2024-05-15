@@ -30,10 +30,10 @@ class CoordinateSystem(PyArtist):
 
     def create( self, frame, group ):
         spos = self.setting("position").strip("()").split(",")
-        pos = [parse_engineering(x, "m") * I3Units.meter for x in spos]
-        if len(pos) != 3:
-            raise ValueError(str(pos) + " has wrong size")
-        pos = vec3d(pos[0], pos[1], pos[2])
+        pos_list = [parse_engineering(x, "m") * I3Units.meter for x in spos]
+        if len(pos_list) != 3:
+            raise ValueError(str(pos_list) + " has wrong size")
+        pos = vec3d(pos_list[0], pos_list[1], pos_list[2])
 
         xlen = parse_engineering(self.setting("x length"), "m") * I3Units.meter
         ylen = parse_engineering(self.setting("y length"), "m") * I3Units.meter

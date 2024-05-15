@@ -7,7 +7,7 @@
 # @date August 2015
 
 from datetime import datetime, timedelta, timezone
-import pylab as plt
+import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.ticker as ticker
 from icecube.icetray import I3Units

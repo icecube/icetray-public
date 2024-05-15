@@ -35,6 +35,8 @@ class TestExampleScripts(unittest.TestCase):
 
     '''
 
+    project_name: str
+
     def setUp(self):
         self.I3_TESTDATA = os.path.expandvars("$I3_TESTDATA")
 

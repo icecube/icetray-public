@@ -79,10 +79,10 @@ class SPEFitInjector:
         import numpy as np
 
 
-        feature = {}
-        for s in range(1,87):
-            for d in range(1,61):
-                dom = str(int(s))+','+str(int(d))
+        feature: "dict[str,dict[str,int]]" = {}
+        for s in range(1,87): 
+            for d in range(1,61): 
+                dom = str(int(s))+','+str(int(d)) 
                 feature[dom] = {}
 
         string,om,r,eff,avg = np.loadtxt(os.path.expandvars("$I3_SRC/phys-services/resources/eff.txt"),unpack = True)

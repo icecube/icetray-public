@@ -9,6 +9,8 @@ Take input files and an event list, and make an output file with only
 those events.
 """
 
+# mypy: ignore-errors
+
 import logging
 import math
 import sys

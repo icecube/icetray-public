@@ -13,6 +13,7 @@ import icecube.icetray # be nice and pull in our dependencies
 # (of all things)
 icecube.icetray.load('dataclasses', False)
 from icecube._dataclasses import *
+from icecube._dataclasses import fft
 
 # Add some aliases for naming consistency
 I3RecoPulseSeries = vector_I3RecoPulse
@@ -26,7 +27,7 @@ I3IceTopSLCCalibrationMap = Map_OMKey_I3IceTopSLCCalibration
 I3DOMCalibrationMap = Map_OMKey_I3DOMCalibration
 I3DOMStatusMap = Map_OMKey_I3DOMStatus
 ParticleTypeVect = ListParticleType
-TankKey.I3VectorTankKey = I3VectorTankKey
+setattr(TankKey, "I3VectorTankKey", I3VectorTankKey)  # noqa: B010
 
 del icecube
 

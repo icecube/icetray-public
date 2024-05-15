@@ -28,6 +28,7 @@
 #include "scripting/pytypename.h"
 
 #include "icetray/python/get_class.hpp"
+#include "icetray/python/list_indexing_suite.hpp"
 #include "dataclasses/I3Direction.h"
 
 // has to be last, because it overwrites a template specialization
@@ -378,7 +379,7 @@ void export_shovelart_types(){
 
     bp::class_<SceneState::OverlayHints>( "OverlaySizeHints",
             "A list of OverlaySizeHints, backed by a std::vector.")
-        .def( bp::vector_indexing_suite< SceneState::OverlayHints>() )
+        .def( bp::list_indexing_suite< SceneState::OverlayHints>() )
         .def( "__repr__", list_repr<SceneState::OverlayHints> )
     ;
 

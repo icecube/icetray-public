@@ -30,12 +30,17 @@ parser = argparse.ArgumentParser(description='Render IceTop in matplotlib indepe
 parser.add_argument('infile', nargs="+", help='Input I3File(s)')
 args = parser.parse_args()
 
-from util import surface_canvas
-
-#Load the detector types
-from util.Scintillator import Scintillator
-from util.IceTop import IceTop
-from util.Antenna import Antenna
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .util import surface_canvas
+    from .util.Scintillator import Scintillator
+    from .util.IceTop import IceTop
+    from .util.Antenna import Antenna
+else:
+    from util import surface_canvas
+    from util.Scintillator import Scintillator
+    from util.IceTop import IceTop
+    from util.Antenna import Antenna
 
 """
 This are the main 3 detectors on IceTop.

@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 
 from matplotlib.backends.backend_qt@_pyqtver@agg import new_figure_manager
-from PyQt@_pyqtver@ import QtCore  # noqa: E999
+from PyQt@_pyqtver@ import QtCore  # type: ignore[import] # noqa: E999
 
 from .AggMPLArtist import AggMPLArtist
 from icecube.shovelart import ChoiceSetting
@@ -21,14 +21,15 @@ class QtMPLArtist( AggMPLArtist ):
     def get_figure_manager( self, fignum ):
         manager = new_figure_manager( fignum )
         # Allow the user to close the window and have it reopen later
-        manager.window.setAttribute(QtCore.Qt.WA_DeleteOnClose, False)
+        manager.window.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose, False)
         return manager
 
     def get_canvas_update( self, figure ):
         '''Return the update action that fires whenever the time changes'''
         def impl( time ):
             self.update_plot( time )
-            self.manager.canvas.draw()
+            if self.manager is not None:
+                self.manager.canvas.draw()
         if self.is_animated and self.setting("Animated") and self.setting("Display"):
             return impl
         else:
@@ -37,7 +38,7 @@ class QtMPLArtist( AggMPLArtist ):
     def create_output(self, output):
         '''Export this artist's output to OpenGL and/or the dedicated MPL window'''
 
-        if self.setting("Display") == 1:
+        if self.setting("Display") == 1 and self.manager is not None:
             self.manager.show()
         else:
             AggMPLArtist.create_output( self, output )

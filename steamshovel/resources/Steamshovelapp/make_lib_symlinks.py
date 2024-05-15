@@ -11,7 +11,7 @@ for x in [os.path.realpath(_) for _ in sys.argv[1:]]:
     os.chdir( os.path.dirname(x) )
     parts = x.split('.')
     n = len(parts)
-    keep = []
+    keep = []  # type: list[str]
     for i in range(n):
         part = parts[n - 1 - i]
         if part.isdigit():

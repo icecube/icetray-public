@@ -2,6 +2,10 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from icecube.steamshovel.sessions._scripting import window
+
 def _dumpScenario():
     from icecube import shovelart
     from icecube.shovelart import OverlaySizeHint

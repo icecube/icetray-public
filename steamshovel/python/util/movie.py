@@ -61,7 +61,7 @@ def getMovieEncoders():
                 rval.append( encoder )
             else:
                 i3logging.log_info( '{0} does not pass the test\n{1}\nOutput:\n{2}'
-                                    .format(encoder, ' '.join(cmd), output) )
+                                    .format(encoder, ' '.join(cmd), output.decode()) )
         except OSError as e:
             i3logging.log_debug( encoder + ' is not installed or not in PATH' )
     return rval

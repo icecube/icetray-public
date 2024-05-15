@@ -8,7 +8,12 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import MultiCursor, CheckButtons, RadioButtons
 import math
 
-from util.GeometryTools import ProjectToObslev
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .GeometryTools import ProjectToObslev
+else:
+    from GeometryTools import ProjectToObslev
+
 
 from icecube.dataclasses import I3Constants
 from icecube import dataclasses

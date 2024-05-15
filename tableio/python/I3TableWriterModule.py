@@ -36,7 +36,6 @@ class I3TableWriter(I3ConditionalModule):
         self.AddParameter('BookEverything','Book absolutely everything in the frame, \
 using the default converters. This has the tendency to produce very, very large files, \
 and is almost certainly not what you actually want to do.', False)
-        self.writer = None
 
     def _get_tableservice(self):
         """Get the table service (passed v3-style as a python object)"""
@@ -155,12 +154,12 @@ the `keys' parameter, or a list of types as the `types' parameter when \
 configuring I3TableWriter. You can find a tutorial in \
 $I3_BUILD/doc/projects/tableio/howto.html .
 """,stacklevel=1)
-            # add type-specifications for everything we know about that wasn't included in 'Types'
-            all_types = I3ConverterRegistry.registry.keys()
+            # add type-specifications for everything we know about that wasn't included in 'Types'            
+            all_types = list(I3ConverterRegistry.registry.keys())
             # remove GCD types if they exist
             for t in [dataclasses.I3Geometry,dataclasses.I3DetectorStatus,dataclasses.I3Calibration]:
                 if t in all_types:
-                    del all_types[t]
+                    all_types.remove(t)
             specified_types = [d['type'] for d in types]
             for t in all_types:
                 if t not in specified_types:
@@ -190,15 +189,13 @@ $I3_BUILD/doc/projects/tableio/howto.html .
             # out what the default is
             if 'converter' in item and item['converter'] == default:
                 del item['converter']
-            t = tablespec(**item)
-            self.writer.add_object(key,t)
+            self.writer.add_object(key,tablespec(**item))
 
         for item in types:
             typus = item.pop('type')
             if 'converter' in item and item['converter'] == default:
                 del item['converter']
-            t = tablespec(**item)
-            self.writer.add_type(typespec(typus),t)
+            self.writer.add_type(typespec(typus),tablespec(**item))
 
     def Process(self):
         frame = self.PopFrame()

@@ -8,15 +8,21 @@
 # @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy: nwhitehorn $
 #
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from icecube.icetray import I3FrameObject
+    from icecube._tableio import I3Converter
+
 class I3ConverterRegistry:
     """A mapping of object type->I3Converter.
 
     This should be considered an implementation detail and subject to change without notice."""
-    registry = dict()
-    defaults = dict()
-    def register(cls,converter,object_type=None,is_default=False):
+    registry: "dict[type[I3FrameObject],list[type[I3Converter]]]" = dict()
+    defaults: "dict[type[I3FrameObject],type[I3Converter]]" = dict()
+    @classmethod
+    def register(cls,converter: "type[I3Converter]",object_type: "None|type[I3FrameObject]"=None,is_default=False):
         if object_type is None:
-            object_type = converter.booked
+            object_type = converter.booked  # type: ignore[attr-defined]
         if object_type not in cls.registry:
             cls.registry[object_type] = []
         converters = cls.registry[object_type]
@@ -25,13 +31,10 @@ class I3ConverterRegistry:
             if object_type in cls.defaults:
                  raise TypeError("Attempted to register '%s' as the default converter for '%s', but '%s' has already been registered as default!" % (converter, object_type, cls.defaults[object_type]))
             cls.defaults[object_type] = converter
-    register = classmethod(register)
+    @classmethod
     def update(cls,registry_dict):
         for conv,targets in registry_dict.items():
             if conv in cls.registry:
                 cls.registry[conv] += targets
             else:
                 cls.registry[conv] = targets
-    update = classmethod(update)
-
-

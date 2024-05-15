@@ -2,8 +2,9 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 
-import collections
 import re
+
+from collections.abc import Iterable
 
 from icecube import icetray
 from icecube import dataclasses
@@ -24,7 +25,7 @@ def format_line( frame, key, maxwidth = None, ellipsis = '...' ):
             return '(Unreadable)'
         if hasattr(obj, "apply"):
             obj = obj.apply(frame)
-        haslength = isinstance( obj, collections.Iterable )
+        haslength = isinstance( obj, Iterable )
     except Exception as e:
         obstr = '(Unreadable)'
     else:
@@ -69,7 +70,7 @@ def format_detail( frame, key ):
 
     if re.match(r'<icecube\.[\S]*\.[\S]* object at [0-9xa-f]*>', message):
         # Standard boring format.  In some cases we might be able to do better.
-        if isinstance( obj, collections.Iterable):
+        if isinstance( obj, Iterable):
             message += ', contents:\n' + '\n'.join( [ str(x) for x in frame[key] ] )
 
     return message
@@ -107,7 +108,7 @@ def format_size( frame, key):
 
     while size > cfactor and bool(unit):
         size /= cfactor
-        sunit = unit.pop(0)
+        sunit = unit.pop(0)  # type: ignore[assignment]
 
     if bool(sunit):
         if size < 10:

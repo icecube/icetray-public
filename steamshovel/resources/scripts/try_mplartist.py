@@ -24,31 +24,33 @@ def GetArtist(arg):
                 module = imp.load_source(arg, path)
                 break
         else:
-            raise Exception("Could not locate module")
+            raise RuntimeError("Could not locate module")
 
     # find artist class and make instance
-    from icecube.steamshovel.artists.mplart import MPLArtist
+    from icecube.steamshovel.artists.mplart.AbstractMPLArtist import MPLArtist
     for var in dir(module):
         obj = module.__dict__[var]
-        if issubclass(obj, MPLArtist.MPLArtist) and obj is not MPLArtist.MPLArtist:
+        if isinstance(obj, type):
+            print(obj, obj.__bases__)
+        if isinstance(obj, type) and issubclass(obj, MPLArtist) and obj is not MPLArtist:
             cl = obj
             break
     else:
-        raise Exception("Could not find subclass of MPLArtist")
+        raise RuntimeError("Could not find subclass of MPLArtist")
 
     return cl()
 
 
 def GetFrame(fileList, nFrame):
-    from icecube.shovelio import I3FileGroup, I3File
+    from icecube.shovelio import I3FrameSequence
     import os
-    fg = I3FileGroup()
+    fg = I3FrameSequence()
     for f in fileList:
         nf = os.path.expanduser(f)
-        fg.addFile(I3File(nf))
+        fg.add_file(nf)
     if nFrame < 0:
-        nFrame = fg.size() + nFrame
-    return fg.getFrame(nFrame)
+        nFrame = len(fg) + nFrame
+    return fg[nFrame]
 
 
 def Draw(artist, frame, keys):
@@ -92,7 +94,7 @@ def main():
 
     def setting(self, key):
         return self.settings_store[key] if key in self.settings_store else self.setting_(key)
-    artist.setting = types.MethodType(setting, artist, artist.__class__)
+    artist.setting = types.MethodType(setting, artist)
 
     frame = GetFrame(fileList, args.num)
     Draw(artist, frame, keys)

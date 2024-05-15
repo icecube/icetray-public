@@ -5,7 +5,15 @@
 from icecube.shovelart import PyArtist, PyQColor, RangeSetting, TimeWindowColor
 from matplotlib.figure import SubplotParams
 from icecube.icetray import logging
+from abc import abstractmethod
 import warnings
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from icecube.icetray import I3Frame
+    from typing import Any, Callable
+    from matplotlib.figure import FigureBase
+    from matplotlib.backend_bases import FigureManagerBase
 
 class MPLArtist( PyArtist ):
     '''A PyArtist representing a matplotlib figure, intended for any backend'''
@@ -32,6 +40,23 @@ class MPLArtist( PyArtist ):
                 #self.mgr.canvas.close_event()
                 self.mgr.destroy()
 
+    @abstractmethod
+    def get_figure_manager( self, fignum ) -> "FigureManagerBase": ...
+
+    @abstractmethod
+    def get_canvas_cleanup( self, figure: "FigureBase" ) -> "Callable[[],None]": ...
+
+    @abstractmethod
+    def get_canvas_update( self, figure: "FigureBase" ) -> "Callable[[],None]": ...
+    
+    @abstractmethod
+    def create_output( self, output ) -> None: ...
+
+    @abstractmethod
+    def create_plot ( self, frame: "I3Frame", fig: "FigureBase") -> "Any": ...
+
+    def update_plot ( self, time: int) -> "Any": ...
+
     _nextfig = 1
     @staticmethod
     def unique_figure():
@@ -48,7 +73,7 @@ class MPLArtist( PyArtist ):
         self.manager = None
 
         # An MPLArtist with an update_plot method can be animated; expose this as a setting
-        self.is_animated = hasattr( self, 'update_plot' )
+        self.is_animated = type(self).update_plot != MPLArtist.update_plot
         if( self.is_animated ):
             self.addSetting( "Animated", False )
 

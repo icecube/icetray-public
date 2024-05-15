@@ -6,7 +6,7 @@
 # @author Kevin Meagher
 # @date August 2015
 
-import pylab as plt
+from matplotlib import pyplot as plt
 from matplotlib.ticker import MultipleLocator,FormatStrFormatter
 from matplotlib.dates import WeekdayLocator,SU,DateFormatter,HourLocator
 from datetime import datetime,timedelta
