@@ -196,6 +196,11 @@ else()
   set(SUBDIRS ${I3_PROJECTS})
 endif()
 
+if(EXISTS "${CMAKE_BINARY_DIR}/_mypy_scripts")
+  file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/_mypy_scripts")
+endif()
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/_mypy_scripts")
+
 list(SORT SUBDIRS)
 foreach(subdir ${SUBDIRS})
   get_filename_component(pname ${subdir} NAME_WE)
@@ -220,7 +225,16 @@ foreach(subdir ${SUBDIRS})
   if(NOT IS_SYMLINK ${CMAKE_BINARY_DIR}/${pname}/resources)
     file(CREATE_LINK ${CMAKE_SOURCE_DIR}/${pname}/resources ${CMAKE_BINARY_DIR}/${pname}/resources SYMBOLIC)
   endif()
+  string(REPLACE "-" "_" project_id "${pname}")
+  if(NOT IS_SYMLINK ${CMAKE_BINARY_DIR}/_mypy_scripts/${project_id}/resources)
+    file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/_mypy_scripts/${project_id})
+    file(CREATE_LINK ${CMAKE_SOURCE_DIR}/${pname}/resources ${CMAKE_BINARY_DIR}/_mypy_scripts/${project_id}/resources SYMBOLIC)
+  endif()
+
 endforeach(subdir ${SUBDIRS})
+
+# add a top-level py.typed marker (only necessary for pybdtmodule)
+file(TOUCH ${CMAKE_BINARY_DIR}/lib/icecube/py.typed)
 
 ## documentation targets
 ## Documentation is now built with docs-build
@@ -307,3 +321,23 @@ add_custom_target(pycoverage_verbose
   COMMAND ./env-shell.sh pycoverage -d pycoverage/`date +%Y-%m-%d` -v
   COMMAND rm -f pycoverage/00_LATEST \; ln -sf `ls -1tr pycoverage |tail -1` pycoverage/00_LATEST
 )
+
+#
+#  mypy static type checking
+#
+list(TRANSFORM _i3_project_python_libs PREPEND "-p")
+list(TRANSFORM _i3_project_extension_libs PREPEND "-p")
+add_custom_target(mypy-libs
+  COMMAND ./env-shell.sh mypy
+    --config ${CMAKE_SOURCE_DIR}/pyproject.toml
+    ${_i3_project_python_libs}
+    ${_i3_project_extension_libs}
+)
+
+add_custom_target(mypy-scripts
+   COMMAND ${CMAKE_COMMAND} -E env "MYPYPATH=." ./env-shell.sh mypy
+    --config ${CMAKE_SOURCE_DIR}/pyproject.toml
+    --namespace-packages --explicit-package-bases _mypy_scripts 
+)
+
+add_custom_target(mypy DEPENDS mypy-libs mypy-scripts)

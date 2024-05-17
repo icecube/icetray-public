@@ -301,6 +301,9 @@ macro(i3_add_library THIS_LIB_NAME)
   endif(BUILD_${I3_PROJECT})
 endmacro(i3_add_library)
 
+set(_i3_project_python_libs "")
+set(_i3_project_extension_libs "")
+
 #
 # i3_project(ARG)
 #
@@ -395,6 +398,10 @@ macro(i3_project PROJECT_NAME)
 	  set(ARG_PYTHON_DEST icecube/${PROJECT_NAME})
 	  string(REPLACE "-" "_" ARG_PYTHON_DEST "icecube/${PROJECT_NAME}")
 	endif(NOT ARG_PYTHON_DEST)
+
+  string(REPLACE "/" "." ARG_PYTHON_LIB ${ARG_PYTHON_DEST})
+  list(APPEND _i3_project_python_libs ${ARG_PYTHON_LIB})
+  set(_i3_project_python_libs ${_i3_project_python_libs} PARENT_SCOPE)
 
 	#
 	#  Just bare python, no setuptools
@@ -685,6 +692,9 @@ macro(i3_add_pybindings MODULENAME)
         OUTPUT_NAME ${MODULENAME}
         LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}/icecube
         )
+      
+      list(APPEND _i3_project_extension_libs "icecube.${${MODULENAME}_PYPREFIX}${MODULENAME}")
+      set(_i3_project_extension_libs ${_i3_project_extension_libs} PARENT_SCOPE)
     endif()
 
     add_custom_command(TARGET ${MODULENAME}-pybindings
