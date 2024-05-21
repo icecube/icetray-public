@@ -48,7 +48,7 @@ logging.getLogger("icecube.icetray.i3inspect").setLevel(logging.INFO)
 def check_regex(option, opt, value):
     try:
         return re.compile(value)
-    except:
+    except re.error:
         raise OptionValueError("'%s' is not a regular expression" % value)
 
 class sphinx_writer:
@@ -326,16 +326,16 @@ def get_doxygen_docstring(project,modulename):
 
     root = tree.getroot()
     comp = root.find("compounddef")
-    assert comp
+    assert comp is not None
     brief = comp.find('briefdescription')
-    assert brief
+    assert brief is not None
 
     doc = ET.tostring(brief, encoding='unicode', method='text')
 
     if opts.verbose_docs:
 
         detail = comp.find('detaileddescription')
-        assert detail
+        assert detail is not None
 
         #remove metadata tags
         for c in detail:
@@ -446,7 +446,7 @@ def display_project(project):
         for mod in icetray.modules(cppproject):
             try:
                 config =  i3inspect.module_default_config(mod)
-            except:
+            except Exception:
                 log.warning('Ignoring "%s": %s', mod, sys.exc_info()[1])
                 continue
             docs = get_doxygen_docstring(cppproject,mod)
@@ -462,7 +462,7 @@ def display_project(project):
 
             try:
                 config = mod(icetray.I3Context()).configuration
-            except:
+            except Exception:
                 log.warning('Ignoring "%s": %s', mod, sys.exc_info()[1])
                 continue
             docs = inspect.getdoc(mod)
@@ -472,7 +472,7 @@ def display_project(project):
         for mod in icetray.services(cppproject):
             try:
                 config =  i3inspect.module_default_config(mod)
-            except:
+            except Exception:
                 log.warning('Ignoring "%s": %s', mod, sys.exc_info()[1])
                 continue
             docs = get_doxygen_docstring(cppproject,mod)
