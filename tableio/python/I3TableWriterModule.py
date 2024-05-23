@@ -12,7 +12,7 @@ from icecube.icetray import I3ConditionalModule, vector_string
 from icecube.tableio import I3TableService, I3Converter, I3ConverterBundle, \
     I3TableWriterWorker, I3ConverterRegistry, I3ConverterMill, vector_I3ConverterMillPtr, \
     I3BroadcastTableService
-from icecube import dataclasses
+from icecube import _dataclasses
 import re,warnings
 
 class DefaultConverter(I3Converter):
@@ -157,7 +157,7 @@ $I3_BUILD/doc/projects/tableio/howto.html .
             # add type-specifications for everything we know about that wasn't included in 'Types'            
             all_types = list(I3ConverterRegistry.registry.keys())
             # remove GCD types if they exist
-            for t in [dataclasses.I3Geometry,dataclasses.I3DetectorStatus,dataclasses.I3Calibration]:
+            for t in [_dataclasses.I3Geometry,_dataclasses.I3DetectorStatus,_dataclasses.I3Calibration]:
                 if t in all_types:
                     all_types.remove(t)
             specified_types = [d['type'] for d in types]

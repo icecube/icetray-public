@@ -35,10 +35,15 @@ i3_add_pybindings(tableio
   private/pybindings/I3CSVTableService.cxx
   private/pybindings/I3Datatype.cxx
   private/pybindings/type_helpers.cxx
-  private/pybindings/dataclasses_converters.cxx
   private/pybindings/module.cxx
   USE_TOOLS boost python
   USE_PROJECTS icetray tableio
+  )
+
+i3_add_pybindings(tableio_dataclasses
+  private/pybindings/dataclasses_converters.cxx
+  USE_TOOLS boost python
+  USE_PROJECTS icetray tableio dataclasses
   )
 
 i3_test_executable(test

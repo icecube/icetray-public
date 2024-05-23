@@ -323,6 +323,26 @@ add_custom_target(pycoverage_verbose
 )
 
 #
+#  check that all pybindings can be used together
+#
+configure_file(
+  "cmake/resources/test/import_all.py.in"
+  "cmake/resources/test/import_all.py"
+)
+add_test(NAME cmake::import_all_pybindings
+  WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+  COMMAND ${PYTHON_EXECUTABLE} "cmake/resources/test/import_all.py"
+)
+foreach(module ${_i3_project_extension_libs})
+  add_test(NAME cmake::import_${module}
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+    COMMAND ${PYTHON_EXECUTABLE} "-c" "import ${module}"
+  )
+  
+endforeach(module ${_i3_project_extension_libs})
+
+
+#
 #  mypy static type checking
 #
 list(TRANSFORM _i3_project_python_libs PREPEND "-p")

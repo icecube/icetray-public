@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+
+import importlib
+import warnings
+
+import unittest
+
+ALL_PYBINDINGS = "@_i3_project_extension_libs@"
+
+class ImportTest(unittest.TestCase):
+    def test_extensions_import_cleanly(self):
+        """
+        Do all extension modules import without raising an error?
+        """
+        with warnings.catch_warnings():
+            # duplicate pybindings break signature generation and are an error
+            warnings.filterwarnings("error", ".*already registered; second conversion method ignored.", RuntimeWarning)
+            for module in ALL_PYBINDINGS.split(";"):
+                with self.subTest(module):
+                    importlib.import_module(module)
+
+if __name__ == "__main__":
+    unittest.main()

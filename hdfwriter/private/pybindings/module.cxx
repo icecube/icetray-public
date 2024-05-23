@@ -28,6 +28,7 @@ I3_PYTHON_MODULE(hdfwriter)
 
   load_project("hdfwriter", false);
   bp::import("icecube._dataio");
+  bp::import("icecube._tableio");
 
   BOOST_PP_SEQ_FOR_EACH(I3_REGISTER, ~, REGISTER_THESE_THINGS);
 }

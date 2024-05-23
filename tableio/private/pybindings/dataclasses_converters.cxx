@@ -58,11 +58,8 @@ private:
 };
 
 void register_dataclasses_converters() {
-    I3CONVERTER_NAMESPACE(dataclasses);
-    {
-        // ensure icecube.dataclasses.converters
-        bp::import("icecube.dataclasses").attr("converters") = converter_module;
-    }
+    bp::import("icecube._dataclasses");
+    bp::object registry(bp::import("icecube.tableio.registry").attr("I3ConverterRegistry"));
 
     // typedef the template into a legal Python identifier
     I3CONVERTER_EXPORT_DEFAULT(I3EventHeaderConverter,"Dumps I3EventHeader objects");
@@ -297,4 +294,9 @@ void register_dataclasses_converters() {
     I3CONVERTER_EXPORT_DEFAULT(I3IceActTriggerMapConverter,"Dumps I3IceActTriggerMap to a table.");
     I3CONVERTER_EXPORT_DEFAULT(I3IceActRecoPulseSeriesMapConverter,"Dumps I3IceActRecoPulseSeriesMap to a table.");
 
+}
+
+I3_PYTHON_MODULE(tableio_dataclasses)
+{
+    register_dataclasses_converters();
 }

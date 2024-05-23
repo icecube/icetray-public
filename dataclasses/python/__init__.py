@@ -31,9 +31,4 @@ setattr(TankKey, "I3VectorTankKey", I3VectorTankKey)  # noqa: B010
 
 del icecube
 
-# tableio exposes classes in _dataclasses.converters
-try:
-    import icecube.tableio
-    from icecube._dataclasses import converters
-except ImportError:
-    ...
+import icecube._tableio_dataclasses as converters

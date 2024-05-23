@@ -24,6 +24,7 @@ I3_SERIALIZABLE(UnregisteredTrack);
 
 BOOST_PYTHON_MODULE(test_unregistered){
 
+  boost::python::import("icecube._dataclasses");
   class_<UnregisteredTrack,
          boost::shared_ptr<UnregisteredTrack>,
          bases<I3Particle> >
