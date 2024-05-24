@@ -29,6 +29,7 @@ I3ConverterPtr
 BuildConverter()
 {
 	namespace bp = boost::python;
+	bp::import("icecube.dataclasses");
 	bp::object tableio(bp::handle<>(PyImport_Import(bp::str("icecube.tableio").ptr())));
 	bp::object defaults(tableio.attr("I3ConverterRegistry").attr("defaults"));
 	bp::object cls(bp::object(T()).attr("__class__"));
