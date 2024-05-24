@@ -10,6 +10,11 @@ Release Notes
 main
 ----
 
+* Ensure that extension modules import cleanly (#3493)
+* Run mypy in CI (#3480)
+* mypy cleanup for core projects (#3414)
+* minimal fixes for boost 1.85.0
+* dataio - clean up typos (#3445)
 * [dataio] Add SPDX tags (#3434)
 
 March 14, 2023 don la dieu (nega at icecube.umd.edu)

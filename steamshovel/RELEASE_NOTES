@@ -10,6 +10,12 @@ Release Notes
 main
 ----
 
+* steamshovel - remove overeager type guard
+* Run mypy in CI (#3480)
+* mypy cleanup for core projects (#3414)
+* steamshovel - update the drive_tank integration test
+* replace python2's StandardError with python3's Exception
+* Add stubs for even more pybindings (#3413)
 * [steamshovel] Add SPDX tags (#3452)
 
 March 14, 2023 don la dieu (nega at icecube.umd.edu)
@@ -136,7 +142,7 @@ December 11, 2018, Alex Olivas (olivas@icecube.umd.edu)
 ------------------------------------------------------------
 Release V18-12-00
 
-* Support for mDOM vizualization.
+* Support for mDOM visualization.
 * Bug fix to reduced chi^2
 
 June 13, 2018, Alex Olivas (olivas@icecube.umd.edu)
@@ -506,7 +512,7 @@ V15-03-00
 * Angleclock shows I3Directions too, also make the legend plot the
   name of the displayed object
 
-* I3Particles show how they are incomping/outgoing if they happen to
+* I3Particles show how they are incoming/outgoing if they happen to
   be reconstructed as contained
 
 * Tweaks for new I3MCTree

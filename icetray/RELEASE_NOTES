@@ -10,6 +10,14 @@ Release Notes
 main
 ----
 
+* icetray-inspect - update asserts and exceptions
+* Run mypy in CI (#3480)
+* mypy cleanup for core projects (#3414)
+* icetray - clean up an error message
+* Add stubs for even more pybindings (#3413)
+* icetray documentation cleanup (#3443)
+* fix sloppy cut-n-paste in release notes
+
 March 14, 2023 don la dieu (nega at icecube.umd.edu)
 ----------------------------------------------------
 IceTray Release v1.10.0

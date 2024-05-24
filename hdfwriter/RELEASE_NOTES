@@ -10,6 +10,9 @@ Release Notes
 main
 ----
 
+* Ensure that extension modules import cleanly (#3493)
+* Run mypy in CI (#3480)
+* mypy cleanup for core projects (#3414)
 * [hdfwriter] Add SPDX tags (#3436)
 
 Feb. 20, 2024 don la dieu (nega at icecube.umd.edu)

@@ -10,6 +10,14 @@ Release Notes
 main
 ----
 
+* Ensure that extension modules import cleanly (#3493)
+* Run mypy in CI (#3480)
+* mypy cleanup for core projects (#3414)
+* Branch restructuring iceact dataclasses and adding tableio converter for iceact classes (#2987)
+* SPDX tags for infrastructure files. (#3454)
+* Add stubs for even more pybindings (#3413)
+* Fix doxygen comments. (#3459)
+* dataclasses - clean up typos (#3444)
 * [dataclasses] Add SPDX tags (#3433)
 
 March 14, 2023 don la dieu (nega at icecube.umd.edu)

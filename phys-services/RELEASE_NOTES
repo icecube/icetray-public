@@ -10,6 +10,10 @@ Release Notes
 main
 ----
 
+* Run mypy in CI (#3480)
+* mypy cleanup for core projects (#3414)
+* update some project dependencies
+* properly escape tokens in rst docstring (#3450)
 * [phys-services] Add SPDX tags (#3435)
 
 March 14, 2023 don la dieu (nega at icecube.umd.edu)
@@ -165,9 +169,9 @@ March 18, 2016, don la dieu  (nega@icecube.umd.edu)
 ---------------------------------------------------
 Release V16-03-00
 
-* documentation udpates
+* documentation updates
 * mainboard id updates
-* Add goodrunlist interpretor script
+* Add goodrunlist interpreter script
   -- Marcel Zoll
 * Add module for adding GCD-frames to the event stream on the fly according to goodrunlist
   -- Marcel Zoll
@@ -180,7 +184,7 @@ Release V15-12-00
 * flip a sign and add a missing factor of 1/2 in the acceptance calculation
 * document I3NullSPlitter
 * fix file ordering
-* fix a bug that cause event_hunter.py to mis the last P frame in every file
+* fix a bug that cause event_hunter.py to miss the last P frame in every file
 
 August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
 ------------------------------------------------------

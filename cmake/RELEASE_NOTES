@@ -12,6 +12,16 @@ Release Notes
 main
 ----
 
+- Ensure that extension modules import cleanly (#3493)
+- Run mypy in CI (#3480)
+- mypy cleanup for core projects (#3414)
+- minimal fixes for boost 1.85.0
+- cmake - remove long unused file
+- update nlopt detection (#3457)
+- docs: install libnlopt-cxx-dev on debian (#3455)
+- [cmake] Add SPDX tags (#3439)
+- cmake documentation cleanup (#3431)
+
 March 14, 2023 don la dieu (nega at icecube.umd.edu)
 ----------------------------------------------------
 IceTray Release v1.10.0
