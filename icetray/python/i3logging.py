@@ -3,7 +3,9 @@
 # SPDX-License-Identifier: BSD-2-Clause
 
 import logging, string, traceback
+from typing import NoReturn
 from icecube.icetray import I3Logger, I3LogLevel
+
 
 class LoggingBridge(I3Logger):
     pylevels = {
@@ -149,7 +151,7 @@ def log_error(message, unit="Python"):
     I3Logger.global_logger.log(I3LogLevel.LOG_ERROR, unit, tb[0], tb[1],
         tb[2], message)
 
-def log_fatal(message, unit="Python"):
+def log_fatal(message, unit="Python") -> NoReturn:
     tb = traceback.extract_stack(limit=2)[0]
     I3Logger.global_logger.log(I3LogLevel.LOG_FATAL, unit, tb[0], tb[1],
         tb[2], message)
