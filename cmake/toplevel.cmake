@@ -327,11 +327,11 @@ add_custom_target(pycoverage_verbose
 #
 configure_file(
   "cmake/resources/test/import_all.py.in"
-  "cmake/resources/test/import_all.py"
+  "cmake/import_all.py"
 )
 add_test(NAME cmake::import_all_pybindings
   WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-  COMMAND ${PYTHON_EXECUTABLE} "cmake/resources/test/import_all.py"
+  COMMAND ${PYTHON_EXECUTABLE} "cmake/import_all.py"
 )
 foreach(module ${_i3_project_extension_libs})
   add_test(NAME cmake::import_${module}
