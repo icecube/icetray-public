@@ -10,6 +10,7 @@ Release Notes
 main
 ----
 
+* mark icetray.logging.log_fatal as NoReturn
 * icetray-inspect - update asserts and exceptions
 * Run mypy in CI (#3480)
 * mypy cleanup for core projects (#3414)
