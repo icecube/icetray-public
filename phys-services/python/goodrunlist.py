@@ -238,7 +238,9 @@ class RunInfo(dict):
 
         :param end_time: a ``datetime`` instance corresponding to the end of the window to request run ids from
 
-        :return: list of bundled (run id, start-time of event, end-time of run) that took place between ``start_time`` and ``end_time``
+        :return: list of bundled (run id, start-time of run, end-time of run) as (int, datetime, datetime)
+        that took place between ``start_time`` and ``end_time``
+                 
         """
 
         test_url = "https://virgo.icecube.wisc.edu/run_info/"
@@ -249,20 +251,72 @@ class RunInfo(dict):
             "stop": end_time.strftime("%Y-%m-%d %H:%M:%S"),
         }
 
-        run_dicts = json.loads(urllib.request.urlopen(urllib.request.Request(test_url, urllib.parse.urlencode(params).encode("utf-8"))).read())
+        run_dicts = json.loads(urllib.request.urlopen(urllib.request.Request(
+            test_url, urllib.parse.urlencode(params).encode("utf-8"))).read())
 
         # convert to datetime format and bundle together
         run_times = []
         for run in run_dicts:
-            if (run["live_start"] is not None) and (run["stop"] is not None):
-                run_id = run["run_number"]
-                run_start_stamp = datetime.strptime(run["live_start"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
+            if (run["start"] is not None) and (run["stop"] is not None):
+                run_id = int(run["run_number"])
+                run_start_stamp = datetime.strptime(run["start"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
                 run_end_stamp = datetime.strptime(run["stop"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
                 run_times.append([run_id, run_start_stamp, run_end_stamp])
 
         return run_times
 
+    def get_good_run_times_in_range(self, start_time, end_time):
+        """
+        Return a list of run ids with their good start/stop times as recorded in the i3live GRL.
+        Be warned: this function should be used sparingly to not overload the I3Live server!
 
+        :param start_time: a ``datetime`` instance corresponding to the start of the time window to request
+
+        :param end_time: a ``datetime`` instance corresponding to the end of the time window to request
+
+        :return: list of bundled (run id, good start-time of run, good end-time of run) as (int, datetime, datetime)
+        that took place between ``start_time`` and ``end_time``
+        """
+
+        test_url = "https://live.icecube.wisc.edu/snapshot-export/"
+        params = {
+            "user": "icecube",
+            "pass": "skua",
+            "start_date": start_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "end_date": end_time.strftime("%Y-%m-%d %H:%M:%S"),
+        }
+
+        run_dicts = json.loads(urllib.request.urlopen(urllib.request.Request(
+            test_url, urllib.parse.urlencode(params).encode("utf-8"))).read())
+        run_dicts = run_dicts["runs"]
+
+        run_times = []
+        for run in run_dicts:
+            if run["good_i3"] is True and run["good_it"] is True:
+                run_num = int(run["run"])
+                
+                good_start = run["good_tstart"]
+                good_end = run["good_tstop"]
+                
+                # truncate to micro-seconds if need be
+                if len(good_start) > 26:
+                    good_start = good_start[:26]
+                if len(good_end) > 26:
+                    good_end = good_end[:26]
+                    
+                # add fractional seconds if need be
+                if len(good_start) == 19:
+                    good_start += '.0'
+                if len(good_end) == 19:
+                    good_end += '.0'
+                    
+                good_start = datetime.strptime(good_start, "%Y-%m-%d %H:%M:%S.%f").replace(tzinfo=timezone.utc)
+                good_end = datetime.strptime(good_end, "%Y-%m-%d %H:%M:%S.%f").replace(tzinfo=timezone.utc)
+                run_times.append([run_num, good_start, good_end])
+
+        return run_times
+
+    
 
 class GoodRunList(dict):
     def __init__(self, data = {}, columns = ['RunNum', 'Good_i3', 'Good_it', 'LiveTime', 'ActiveStrings', 'ActiveDoms', 'ActiveInIce', 'OutDir', 'Comment(s)'], renamed_columns = ['run_id', 'good_i3', 'good_it', 'livetime', 'active_strings', 'active_doms', 'active_inice', 'outdir', 'comment'], run_id_column = 0, num_decimals = 2):
