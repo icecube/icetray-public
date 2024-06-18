@@ -10,6 +10,10 @@ Release Notes
 main
 ----
 
+June 18, 2024 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.11.0
+
 * steamshovel - remove overeager type guard
 * Run mypy in CI (#3480)
 * mypy cleanup for core projects (#3414)
