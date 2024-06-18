@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: BSD-2-Clause
 
-#include <I3Test.h>
-#include <icetray/scratch.h>
+#include "I3Test.h"
+#include "icetray/I3Logging.h"
+#include "icetray/scratch.h"
 #include <cstdio> //for remove
 #include <cstdlib> //for setenv
 #include <unistd.h> //for getcwd, rmdir
@@ -23,8 +24,10 @@ namespace{
 			#endif
 		std::string cwd;
 		cwd.resize(pathSize);
-		::getcwd(&cwd.front(),pathSize);
-		return(cwd);
+		if(::getcwd(&cwd.front(),pathSize)) {
+			return(cwd);
+		}
+		log_fatal("couldn't getcwd()");
 	}
 
 	const std::string test_condor_dir="TEST_CONDOR_SCRATCH_DIR";
