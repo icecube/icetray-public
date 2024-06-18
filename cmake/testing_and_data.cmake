@@ -23,7 +23,7 @@ colormsg("")
 colormsg(_HIBLUE_ "Configuring data and tests...")
 colormsg("")
 
-set(TESTDATA_VERSION "trunk")
+set(TESTDATA_VERSION "releases/V01-11-00") # no changes between v1.11 and v1.11.1
 set(PRODDATA_VERSION "trunk")
 
 ## set the value of I3_TESTDATA
