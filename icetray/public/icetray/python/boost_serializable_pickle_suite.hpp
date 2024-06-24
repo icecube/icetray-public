@@ -77,7 +77,16 @@ struct boost_serializable_pickle_suite : boost::python::pickle_suite
 {
     static boost::python::tuple getstate(boost::python::object element_obj)
     {
+
+// as of gcc 14.1 -Wdangling-reference (included in -Wall) is still being
+// ironed out. kick that can down the road.
+#if __GNUC__ == 13 || \
+        (__GNUC__ == 14 && __GNUC_MINOR__ < 2)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdangling-reference"
         const T &element = boost::python::extract<const T &>(element_obj)();
+#pragma GCC diagnostic pop
+#endif
 
         // serialize the object into a buffer
         std::vector<char> blobBuffer;
