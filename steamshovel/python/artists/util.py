@@ -409,27 +409,3 @@ def mpl_hist(x, y, **kwargs):
         xy[1 + 2 * i + 1][1] = y[i]
 
     return mpatches.Polygon(xy, **kwargs)
-
-
-def rainbow_text(axes, x, y, strings, colors, **kwargs):
-    """
-    Draws a sequence of strings in various colors.
-
-    Based on http://stackoverflow.com/questions/9169052.
-    """
-    fontweights = None
-    if "fontweights" in kwargs:
-        fontweights = kwargs["fontweights"]
-        del kwargs["fontweights"]
-
-    renderer = axes.figure.canvas.get_renderer()
-    for i, s in enumerate(strings):
-        kwargs["color"] = colors[i]
-        if fontweights is not None:
-            kwargs["fontweight"] = fontweights[i]
-        tx = axes.text(x, y, s, **kwargs)
-        tx.draw(renderer)
-        ex = tx.get_window_extent()
-        kwargs["transform"] = mtransforms.offset_copy(tx._transform,
-                                                      x=ex.width,
-                                                      units='dots')

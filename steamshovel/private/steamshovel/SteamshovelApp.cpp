@@ -77,7 +77,6 @@ void SteamshovelApp::startLogViewer()
 	);
 
 	// check whether log-viewer is already running,
-	// see http://stackoverflow.com/questions/12601759
 	if( logviewer_pid_ && ::kill( logviewer_pid_, 0 ) == 0 )
 		return;
 

@@ -21,7 +21,6 @@ FilterConstants::FilterConstants():
   SkipAll(1, "^.*$"),
   OnlyKeepEventHeader(1)
 {
-  // anti-match pattern: see stackoverflow question 406230
   OnlyKeepEventHeader[0] = std::string("^((?!")
                          + I3DefaultName<I3EventHeader>::value()
                          + std::string(").)*$");

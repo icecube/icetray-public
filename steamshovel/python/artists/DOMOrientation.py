@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 
+import math
 from icecube import dataclasses
 from icecube.shovelart import PyArtist, PyQColor, PyQFont, RangeSetting, \
                               vec3d, ConstantVec3d
@@ -46,17 +47,11 @@ class DOMOrientation(PyArtist):
     requiredTypes = [ dataclasses.I3Geometry ]
     numRequiredKeys = 1
 
-    """
-        https://stackoverflow.com/a/33024979
-    """
-    def isclose( self, a, b, rel_tol=1e-09, abs_tol=0.0 ):
-        return (abs(a-b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol))
-
     def isDefaultDOMDirection(self, i3dir):
-        return self.isclose(i3dir.x, 0.0, 1e-09, 1e-12) and self.isclose(i3dir.y, 0.0, 1e-09, 1e-12) and self.isclose(i3dir.z, -1.0, 1e-09, 1e-12)
+        return math.isclose(i3dir.x, 0.0, rel_tol=1e-09, abs_tol=1e-12) and math.isclose(i3dir.y, 0.0, rel_tol=1e-09, abs_tol=1e-12) and math.isclose(i3dir.z, -1.0, rel_tol=1e-09, abs_tol=1e-12)
 
     def isDefaultFlasherDirection(self, i3dir):
-        return self.isclose(i3dir.x, 1.0, 1e-09, 1e-12) and self.isclose(i3dir.y, 0.0, 1e-09, 1e-12) and self.isclose(i3dir.z, 0.0, 1e-09, 1e-12)
+        return math.isclose(i3dir.x, 1.0, rel_tol=1e-09, abs_tol=1e-12) and math.isclose(i3dir.y, 0.0, rel_tol=1e-09, abs_tol=1e-12) and math.isclose(i3dir.z, 0.0, rel_tol=1e-09, abs_tol=1e-12)
 
     def create( self, frame, group ):
         # obtain the geometry of the detector
@@ -91,9 +86,9 @@ class DOMOrientation(PyArtist):
                 return
 
         """
-        if(self.isclose(arrowDir[0].x, 1.0)):
-            if(self.isclose(arrowDir[0].y, 0.0, 1e-09, 1e-12)):
-                if(self.isclose(arrowDir[0].z, 0.0, 1e-09, 1e-12)):
+        if(math.isclose(arrowDir[0].x, 1.0)):
+            if(math.isclose(arrowDir[0].y, 0.0, rel_tol=1e-09, abs_tol=1e-12)):
+                if(math.isclose(arrowDir[0].z, 0.0, rel_tol=1e-09, abs_tol=1e-12)):
                     if(count > 10000):
                         return
         print("i:%d  omkey:%s  pos:%f,%f,%f  up:%f,%f,%f" % (count, omkey, position.x, position.y, position.z, orientation.up.x, orientation.up.y, orientation.up.z))
