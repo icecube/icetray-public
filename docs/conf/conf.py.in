@@ -251,23 +251,11 @@ latex_documents = [
 # If false, no module index is generated.
 #latex_use_modindex = True
 
-# the following replaces the long out-of-date traclinks extension in
-# fact it's pulled from https://stackoverflow.com/a/2111327/4021251,
-# where traclinks got it
-
-trac_url = "https://code.icecube.wisc.edu/projects/icecube"
-
-def trac_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
-    ref = trac_url + '/intertrac/' + ulp.quote(text)
-    node = nodes.reference(rawtext, utils.unescape(text), refuri=ref, **options)
-    return [node],[]
-
-roles.register_canonical_role('trac', trac_role)
-
 extlinks = {'arxiv': ('https://arxiv.org/abs/%s','arXiv:%s'),
             'docushare': ('https://docushare.icecube.wisc.edu/dsweb/Services/Document-%s','Docushare:%s'),
             'wiki':('https://wiki.icecube.wisc.edu/index.php/%s','Wiki: %s'),
             'doi':('https://dx.doi.org/%s','doi:%s'),
+            'trac':('https://code.icecube.wisc.edu/projects/icecube/intertrac/%s','trac:%s'),
             }
 
 extlinks_detect_hardcoded_links = True
