@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from typing import Any, Protocol
 import numpy as np
 

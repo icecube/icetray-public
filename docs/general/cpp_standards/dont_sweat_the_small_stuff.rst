@@ -199,6 +199,12 @@ must be in a docstring::
   Definition of Dummy class
   """
 
+.. highlight:: bash
+
+You can also simply run the following command to have reuse automatically annotate your file
+
+  $ reuse annotate -c 'The IceTray Contributors' -l BSD-2-Clause
+
 .. highlight:: none
 
 Doxygen auto generates documentation from the code with the help

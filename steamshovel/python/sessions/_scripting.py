@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from typing import Any, Callable
@@ -13,14 +17,14 @@ if TYPE_CHECKING:
         cameraLock: bool
         perspectiveView: bool
         backgroundColor: shovelart.PyQColor
-    
+
     class Timeline:
         rangeFinder: str
         def setEventTimeWindow(self, arg2: float, arg3: float) -> None: ...
         time: float
         minTime: float
         maxTime: float
-    
+
     class FrameFilter:
         code: str
 
