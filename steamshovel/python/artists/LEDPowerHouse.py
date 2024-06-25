@@ -8,7 +8,7 @@ import struct
 import glob
 import json
 
-import serial  # type: ignore[import-not-found]
+import serial
 
 def find_devices():
     """Find activated serial devices"""

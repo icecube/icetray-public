@@ -71,7 +71,7 @@ def setInputHook():
     try:
         # First ensure that PyQt5 won't install its own input hook at some later time.
         # It does so as part of its module initialization, because PyQt5 is a bad person.
-        from PyQt5 import QtCore  # type: ignore[import] # noqa: E999
+        from PyQt5 import QtCore
         QtCore.pyqtRemoveInputHook()
     except ImportError:
         pass

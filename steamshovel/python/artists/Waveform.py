@@ -9,7 +9,7 @@ from icecube.icetray import I3Units
 import matplotlib.gridspec as gridspec
 from matplotlib.colors import colorConverter as mplcol
 from matplotlib import rcParams
-from cycler import cycler  # type: ignore[import-untyped]
+from cycler import cycler
 from itertools import cycle
 import numpy
 

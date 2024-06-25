@@ -43,7 +43,7 @@ if 'hdf5' in [iformat,oformat]:
 if 'root' in [iformat,oformat]:
     from icecube.rootwriter import I3ROOTTableService
 if 'csv' in [iformat,oformat]:
-    from icecube.textwriter import I3CSVTableService  # type: ignore[import]
+    from icecube.tableio import I3CSVTableService
 
 if iformat == 'hdf5':
     inservices = [(I3HDFTableService,(infile,1,'r')) for infile in infiles]  # type: list[tuple[type[tableio.I3TableService],tuple]]

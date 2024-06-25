@@ -30,7 +30,7 @@ def init_embedded_kernel():
 
     # warn if pyside is installed, which causes an error in the embedded shell
     try:
-        import PySide  # type: ignore[import]
+        import PySide
         print("You have PySide installed, which creates a conflict with "
               "Steamshovel's use of IPython and PyQt5. The embedded Python "
               "shell in Steamshovel will be disabled. Remove PySide to "
@@ -40,10 +40,10 @@ def init_embedded_kernel():
         pass
 
     try:
-        from qtconsole import inprocess  # type: ignore[import]
+        from qtconsole import inprocess
     except ImportError:
         try:
-            from IPython.qt import inprocess  # type: ignore[import]
+            from IPython.qt import inprocess
         except ImportError:
             print("Could not get QtInProcessKernelManager for IPython {0:s} ".format(IPython.__version__))
             return False
@@ -72,12 +72,12 @@ def embed_shell_widget( parent_ptr ):
     import IPython
     from IPython.lib import guisupport
     if IPython.version_info[0] < 4:
-        from IPython.qt.console.rich_ipython_widget import RichIPythonWidget as RichWidget  # type: ignore[import]
+        from IPython.qt.console.rich_ipython_widget import RichIPythonWidget as RichWidget
     else:
-        from qtconsole.rich_jupyter_widget import RichJupyterWidget as RichWidget  # type: ignore[import]
-    import sip  # type: ignore[import]
+        from qtconsole.rich_jupyter_widget import RichJupyterWidget as RichWidget
+    import sip
 
-    from PyQt5.QtWidgets import QWidget as QWidget  # type: ignore[import]
+    from PyQt5.QtWidgets import QWidget as QWidget
 
     # Wave the magic wand and turn an integer into a QWidget object.
     parent = sip.wrapinstance(parent_ptr, QWidget)

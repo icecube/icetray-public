@@ -7,7 +7,6 @@
 #
 
 from icecube._astro import *
-from icecube._astro import converters
 import numpy as np
 from icecube.icetray import I3Units
 from icecube import dataclasses

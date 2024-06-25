@@ -13,7 +13,6 @@ import icecube.icetray # be nice and pull in our dependencies
 # (of all things)
 icecube.icetray.load('dataclasses', False)
 from icecube._dataclasses import *
-from icecube._dataclasses import fft
 
 # Add some aliases for naming consistency
 I3RecoPulseSeries = vector_I3RecoPulse

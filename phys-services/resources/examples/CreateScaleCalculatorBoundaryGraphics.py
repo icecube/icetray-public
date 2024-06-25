@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 
 import os, sys
-import matplotlib.pyplot as plt # type: ignore[import]
+import matplotlib.pyplot as plt
 
 from icecube import icetray
 from icecube import dataclasses
@@ -138,7 +138,7 @@ f2.savefig(I3_SRC+"/phys-services/resources/docs/plots_scalecalculator/I3ScaleCa
 
 
 ##  --------------- Create an 3-D ICECUBE figure (oblique view) ------------------
-from mpl_toolkits import mplot3d # type: ignore[import]
+from mpl_toolkits import mplot3d
 f3 = plt.figure(3, figsize=[9,9])
 ax = plt.subplot(1, 1, 1, projection='3d')
 ax.view_init(20, -60)

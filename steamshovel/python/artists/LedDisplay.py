@@ -52,8 +52,8 @@ except:
 
 # Display controller logic: fail early if we can't load USB support
 try:
-    import usb.core  # type: ignore[import]
-    import usb.util  # type: ignore[import]
+    import usb.core
+    import usb.util
 except:
     raise ImportError("Failed to load pyUSB. LED displays are not supported.")
 

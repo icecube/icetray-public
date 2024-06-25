@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 
 from matplotlib.backends.backend_qt@_pyqtver@agg import new_figure_manager
-from PyQt@_pyqtver@ import QtCore  # type: ignore[import] # noqa: E999
+from PyQt@_pyqtver@ import QtCore
 
 from .AggMPLArtist import AggMPLArtist
 from icecube.shovelart import ChoiceSetting

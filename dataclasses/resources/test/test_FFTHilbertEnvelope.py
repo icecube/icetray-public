@@ -6,7 +6,6 @@
 
 import unittest
 from icecube.dataclasses import *
-from icecube.dataclasses.fft import *
 import numpy as np
 
 def FillTimeSeriesWithData(timeSeries, n, dt):
@@ -32,8 +31,8 @@ class TestHilbertTools(unittest.TestCase):
     FillTimeSeriesWithData(timeSeries, 10, 0.3)
 
     timeSeries[2] = 100
-    peakTime = GetHilbertPeakTime(timeSeries)
-    maxVal = GetHilbertPeak(timeSeries)
+    peakTime = fft.GetHilbertPeakTime(timeSeries)
+    maxVal = fft.GetHilbertPeak(timeSeries)
     self.assertAlmostEqual(peakTime, (2 * 0.3) - 33, 5)
     self.assertAlmostEqual(maxVal, 100, 3)
 
@@ -43,8 +42,8 @@ class TestHilbertTools(unittest.TestCase):
     FillTimeSeriesWithData3d(timeSeries, 10, 0.3)
 
     timeSeries[2] = I3Position(100 / np.sqrt(3.), 100 / np.sqrt(3.), 100 / np.sqrt(3.))
-    peakTime = GetHilbertPeakTime(timeSeries)
-    maxVal = GetHilbertPeak(timeSeries)
+    peakTime = fft.GetHilbertPeakTime(timeSeries)
+    maxVal = fft.GetHilbertPeak(timeSeries)
     self.assertAlmostEqual(peakTime, (2 * 0.3) - 33, 5)
     self.assertAlmostEqual(maxVal, 100, 2)
 
@@ -55,8 +54,8 @@ class TestHilbertTools(unittest.TestCase):
     fftData = FFTData()
     fftData.LoadTimeSeries(timeSeries)
 
-    self.assertAlmostEqual(GetHilbertPeak(timeSeries), GetHilbertPeak(fftData), 5)
-    self.assertAlmostEqual(GetHilbertPeakTime(timeSeries), GetHilbertPeakTime(fftData), 5)
+    self.assertAlmostEqual(fft.GetHilbertPeak(timeSeries), fft.GetHilbertPeak(fftData), 5)
+    self.assertAlmostEqual(fft.GetHilbertPeakTime(timeSeries), fft.GetHilbertPeakTime(fftData), 5)
 
   def test_wrappers_3d(self):
     timeSeries = EFieldTimeSeries()
@@ -65,7 +64,7 @@ class TestHilbertTools(unittest.TestCase):
     fftData = FFTData3D()
     fftData.LoadTimeSeries(timeSeries)
 
-    self.assertAlmostEqual(GetHilbertPeak(timeSeries), GetHilbertPeak(fftData), 5)
-    self.assertAlmostEqual(GetHilbertPeakTime(timeSeries), GetHilbertPeakTime(fftData), 5)
+    self.assertAlmostEqual(fft.GetHilbertPeak(timeSeries), fft.GetHilbertPeak(fftData), 5)
+    self.assertAlmostEqual(fft.GetHilbertPeakTime(timeSeries), fft.GetHilbertPeakTime(fftData), 5)
 
 unittest.main()
