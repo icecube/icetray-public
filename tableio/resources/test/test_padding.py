@@ -9,8 +9,9 @@ Ensure that hdf5 write does padding correctly for S and non-S frames
 """
 
 import os
-import re
-from icecube import icetray, dataclasses, tableio, phys_services, hdfwriter
+
+from icecube import phys_services  # noqa: F401
+from icecube import dataclasses, hdfwriter, icetray
 from icecube.icetray import I3Tray
 
 have_simclasses = False
@@ -20,8 +21,9 @@ try:
 except ImportError:
     pass
 
-import sys
 import unittest
+
+icetray.logging.set_level_for_unit("I3Tray", "WARN")
 
 class Generator(icetray.I3Module):
     def __init__(self,context):
@@ -57,6 +59,7 @@ class Generator(icetray.I3Module):
             self.RequestSuspension()
 
 class MCTreeTest(unittest.TestCase):
+    test_output = os.path.basename(__file__) + ".hdf5"
     def setUp(self):
 
         try:
@@ -71,7 +74,7 @@ class MCTreeTest(unittest.TestCase):
         tray.Add(Generator)
         tray.Add("I3NullSplitter", "nullsplit",SubEventStreamName='null')
         tray.Add(hdfwriter.I3HDFWriter,
-                 Output='foo.hdf5',
+                 Output=self.test_output,
                  Keys=['I3CorsikaInfo','I3EventHeader','I3MCTree','I3MCPrimary'],
                  Types=[],
                  SubEventStreams=["null"],
@@ -79,17 +82,16 @@ class MCTreeTest(unittest.TestCase):
         tray.Execute()
 
     def tearDown(self):
-        os.unlink("foo.hdf5")
-        pass
+        os.unlink(self.test_output)
 
     def testNumberOfRows(self):
         import tables
-        hdf = tables.open_file('foo.hdf5')
 
-        if have_simclasses:
-            self.assertEqual(len(hdf.root.I3CorsikaInfo),5,"I3CorsikaInfo should have 5 entries")
-        self.assertEqual(len(hdf.root.I3MCTree),50,"I3MCTree should have 50 entries")
-        self.assertEqual(len(hdf.root.I3MCPrimary),100,"I3MCPrimary should have 100 entries")
+        with tables.open_file(self.test_output) as hdf:
+            if have_simclasses:
+                self.assertEqual(len(hdf.root.I3CorsikaInfo),5,"I3CorsikaInfo should have 5 entries")
+            self.assertEqual(len(hdf.root.I3MCTree),50,"I3MCTree should have 50 entries")
+            self.assertEqual(len(hdf.root.I3MCPrimary),100,"I3MCPrimary should have 100 entries")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

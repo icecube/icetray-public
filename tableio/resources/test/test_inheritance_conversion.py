@@ -13,13 +13,15 @@ types can be written by converters registered for base classes
 # is selected would require vastly more plumbing, so instead we just do things
 # the sloppy way with temporary files and hoping that hdfwriter is around.
 
+import os
+import unittest
 from contextlib import contextmanager
 
+from icecube import phys_services  # noqa: F401
+from icecube import dataclasses, icetray, tableio
 from icecube.icetray import I3Tray
-from icecube import icetray, dataclasses, tableio, phys_services
 
-import sys, os
-import unittest
+icetray.logging.set_level_for_unit("I3Tray", "WARN")
 
 class Foo(icetray.I3FrameObject):
     def __init__(self):
@@ -104,48 +106,58 @@ def try_to_write(type,file,keys=["Object"],types=[]):
     tray.Execute(1)
 
 class BaseConverter(unittest.TestCase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.test_output = "test_" + self.__class__.__name__ + ".hdf5"
     def setUp(self):
-        try_to_write(Foo,"test_foo.hdf5")
+        try_to_write(Foo, self.test_output)
     def tearDown(self):
-        os.unlink("test_foo.hdf5")
+        os.unlink(self.test_output)
     def testGeneric(self):
         try:
             import tables
         except ImportError:
             raise unittest.SkipTest("pytables missing")
-        with tables.open_file("test_foo.hdf5") as hdf:
+        with tables.open_file(self.test_output) as hdf:
             table=hdf.get_node("/Object")
             self.assertIsNotNone(table, "Object table exists")
             self.assertIn("a", table.colnames, "'A' parameter was recorded")
             self.assertTrue("b" not in table.colnames, "'B' parameter does not exist")
 
 class GenericSubclassConverter(unittest.TestCase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.test_output = "test_" + self.__class__.__name__ + ".hdf5"
     def setUp(self):
-        try_to_write(Foo2,"test_foo2.hdf5")
+        try_to_write(Foo2,self.test_output)
     def tearDown(self):
-        os.unlink("test_foo2.hdf5")
+        os.unlink(self.test_output)
     def testGeneric(self):
         try:
             import tables
         except ImportError:
             raise unittest.SkipTest("pytables missing")
-        with tables.open_file("test_foo2.hdf5") as hdf:
+        with tables.open_file(self.test_output) as hdf:
             table = hdf.get_node("/Object")
             self.assertIsNotNone(table, "Object table exists")
             self.assertIn("a", table.colnames, "'A' parameter was recorded")
             self.assertTrue("b" not in table.colnames, "'B' parameter does not exist")
 
 class SpecificSubclassConverter(unittest.TestCase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.test_output = "test_" + self.__class__.__name__ + ".hdf5"
     def setUp(self):
-        try_to_write(Bar,"test_bar.hdf5")
+        print("class name: " + self.__class__.__name__)
+        try_to_write(Bar,self.test_output)
     def tearDown(self):
-        os.unlink("test_bar.hdf5")
+        os.unlink(self.test_output)
     def testGeneric(self):
         try:
             import tables
         except ImportError:
             raise unittest.SkipTest("pytables missing")
-        with tables.open_file("test_bar.hdf5") as hdf:
+        with tables.open_file(self.test_output) as hdf:
             table = hdf.get_node("/Object")
             self.assertIsNotNone(table, "Object table exists")
             self.assertIn("a", table.colnames, "'A' parameter was recorded")
