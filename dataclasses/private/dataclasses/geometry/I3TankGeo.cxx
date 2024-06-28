@@ -5,8 +5,6 @@
 #include <icetray/serialization.h>
 #include <dataclasses/geometry/I3TankGeo.h>
 
-I3TankGeo::~I3TankGeo() {}
-
 template <class Archive>
   void I3TankGeo::serialize(Archive& ar, unsigned version)
   {

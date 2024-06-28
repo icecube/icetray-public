@@ -80,16 +80,6 @@ class I3Position : public I3FrameObject
 
   {}
 
-  /**
-   * Copy constructor
-   */
-  I3Position(const I3Position& p):
-  x_(p.x_),
-  y_(p.y_),
-  z_(p.z_)
-
-  {}
-
   explicit I3Position(const I3Direction& d);
 
   //--------------

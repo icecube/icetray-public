@@ -333,8 +333,6 @@ class I3Particle : public I3FrameObject
   I3Particle(const boost::optional<I3Particle>& p);
 #endif
 
-  ~I3Particle();
-
   std::ostream& Print(std::ostream&) const override;
 
   bool IsTrack() const;
@@ -348,6 +346,7 @@ class I3Particle : public I3FrameObject
   bool HasEnergy() const;
 
   operator I3ParticleID() const{ return ID_; }
+  I3Particle(const I3Particle &rhs) { *this = rhs; }
   I3Particle& operator=(const I3Particle& rhs) {
     ID_ = rhs.ID_;
     pdgEncoding_ = rhs.pdgEncoding_;

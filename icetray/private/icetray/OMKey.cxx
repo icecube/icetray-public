@@ -32,8 +32,6 @@
 #include <sstream>
 #include <icetray/I3FrameObject.h>
 
-OMKey::~OMKey() { }
-
 template <class Archive>
 void OMKey::save(Archive& ar, unsigned version) const
 {

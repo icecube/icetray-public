@@ -55,8 +55,6 @@ public:
 
     I3OMGeo():omtype(UnknownType){}
 
-    ~I3OMGeo();
-
     /**
      * the OM's (or PMT's) x,y,z position
      */

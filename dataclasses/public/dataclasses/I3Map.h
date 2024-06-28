@@ -35,8 +35,6 @@ struct I3Map : public I3FrameObject, public std::map<Key, Value>
     ar & make_nvp("map", base_object< std::map<Key, Value> >(*this));
   }
 
-  ~I3Map();
-
   const Value&
   at(const Key& where) const
   {
@@ -83,9 +81,6 @@ private:
     return os;
   }
 };
-
-template <typename Key, typename Value>
-I3Map<Key, Value> :: ~I3Map() { }
 
 template <typename Key, typename Value>
 std::ostream& operator<<(std::ostream& os, const I3Map<Key, Value> m){

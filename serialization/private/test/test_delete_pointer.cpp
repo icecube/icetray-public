@@ -40,12 +40,7 @@ class A
     template<class Archive>
     void load(Archive & ar, const unsigned int /* file_version */)
     {
-        static int i = 0;
         ar >> I3_SERIALIZATION_NVP(next_);
-        //if(++i == 3)
-        //    icecube::serialization::throw_exception(icecube::archive::archive_exception(
-        //        icecube::archive::archive_exception::no_exception
-        //    ));
         ++loadcount;
     }
     I3_SERIALIZATION_SPLIT_MEMBER()

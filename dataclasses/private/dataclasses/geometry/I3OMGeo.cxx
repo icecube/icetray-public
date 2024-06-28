@@ -5,8 +5,6 @@
 #include <icetray/serialization.h>
 #include <dataclasses/geometry/I3OMGeo.h>
 
-I3OMGeo::~I3OMGeo() { }
-
 namespace {
     enum OldOrientation__ {Unspecified=0, Up=1, Down=-1};
 }

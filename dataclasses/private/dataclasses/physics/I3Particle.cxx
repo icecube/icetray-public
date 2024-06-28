@@ -96,7 +96,6 @@ void I3Particle::generateID(){
 #endif
 }
 
-I3Particle::~I3Particle() { }
 I3Particle::I3Particle(ParticleShape shape, ParticleType type) :
   pdgEncoding_(type),
   shape_(shape),

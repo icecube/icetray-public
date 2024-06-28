@@ -131,8 +131,6 @@ class I3Time : public I3FrameObject
    */
   explicit I3Time(double mjd);
 
-  ~I3Time();
-
   std::ostream& Print(std::ostream&) const override;
 
   /**

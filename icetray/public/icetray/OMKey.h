@@ -68,8 +68,6 @@ class OMKey
   OMKey(int str,unsigned int om, unsigned char pmt)
     : stringNumber_(str), omNumber_(om), pmtNumber_(pmt) {}
 
-  virtual ~OMKey();
-
   /**
    * retrieves the string number for this OMKey
    */

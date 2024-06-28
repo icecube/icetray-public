@@ -42,7 +42,7 @@ struct test_data
 };
 
 template<>
-wchar_t test_data<2>::wchar_encoding[] = {
+wchar_t test_data<2>::wchar_encoding[] __attribute__((unused)) = {
     0x0001,
     0x007f,
     0x0080,

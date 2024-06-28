@@ -103,8 +103,6 @@ I3Time::I3Time()
   daqTime_ = 0;
 }
 
-I3Time::~I3Time() {}
-
 I3Time::I3Time(int32_t year, int64_t daqTime) : year_(year),daqTime_(daqTime) {}
 
 I3Time::I3Time(double mjd) {

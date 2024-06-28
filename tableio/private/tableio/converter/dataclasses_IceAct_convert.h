@@ -297,7 +297,6 @@ class I3IceActTelescopePixelVectorIntMapConverter : public I3ConverterImplementa
     }
     size_t FillRows(const I3IceActTelescopePixelVectorIntMap& map, I3TableRowPtr rows) {
         I3IceActTelescopePixelVectorIntMap::const_iterator mapiter = map.begin();
-        const I3TableRowDescription &desc = *rows->GetDescription();
         size_t currentRow;
         for(mapiter = map.begin(), currentRow = rows->GetCurrentRow(); mapiter != map.end(); mapiter++)
         {
@@ -343,7 +342,6 @@ class I3IceActTelescopeStringDoubleMapConverter : public I3ConverterImplementati
 
     size_t FillRows(const I3IceActTelescopeStringDoubleMap& map, I3TableRowPtr rows) {
         I3IceActTelescopeStringDoubleMap::const_iterator mapiter = map.begin();
-        const I3TableRowDescription &desc = *rows->GetDescription();
         size_t currentRow;
         for(mapiter = map.begin(), currentRow = rows->GetCurrentRow(); mapiter != map.end(); mapiter++)
         {

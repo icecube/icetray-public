@@ -48,6 +48,12 @@ public:
 
   // doesn't do anything.  Just for RTTI purposes.
   virtual ~I3FrameObject();
+  // explicit dtor requires explicit move/copy ctors and assignment operators
+  I3FrameObject() = default;
+  I3FrameObject(const I3FrameObject &) = default;
+  I3FrameObject(I3FrameObject &&) = default;
+  I3FrameObject& operator=(const I3FrameObject&) & = default;
+  I3FrameObject& operator=(I3FrameObject&&) & = default;
 
   template <class Archive>
   void

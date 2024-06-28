@@ -45,8 +45,6 @@ struct I3TankGeo
     tanktype(NotSet)
   {};
 
-  ~I3TankGeo();
-
   I3Position position; //tank x,y,z position
   double orientation; //relative angular rotation of tank
   double tankradius; //tank radius (I3Units!)

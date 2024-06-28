@@ -87,7 +87,7 @@ void ShovelLogger::Log( I3LogLevel level,
 
 	if( size > 1023 ){
 		buf.resize(size + 1);
-		sprintf( &buf.front(), format,
+		snprintf( &buf.front(), size + 1, format,
 		         log_description, unit.c_str(),
 		         trimmed_filename.c_str(), line,
 		         func.c_str(), message.c_str() );

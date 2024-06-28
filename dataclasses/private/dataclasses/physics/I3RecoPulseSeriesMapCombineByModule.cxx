@@ -23,21 +23,15 @@ I3RecoPulseSeriesMapCombineByModule::I3RecoPulseSeriesMapCombineByModule(
 I3RecoPulseSeriesMapConstPtr
 I3RecoPulseSeriesMapCombineByModule::Apply(const I3Frame &frame) const
 {
-  typedef I3RecoPulseSeriesMap Map;
-  typedef boost::shared_ptr<const Map> MapConstPtr;
-  typedef Map::value_type Pair;
-  typedef Pair::second_type Series;
-  typedef Series::value_type Element;
-
   if (combined_)
     return combined_;
 
-  MapConstPtr in_pulses = frame.Get<MapConstPtr>(pulses_key_);
+  I3RecoPulseSeriesMapConstPtr in_pulses = frame.Get<I3RecoPulseSeriesMapConstPtr>(pulses_key_);
   if (!in_pulses)
     log_fatal("Couldn't find '%s' in the frame!",
         pulses_key_.c_str());
 
-  I3RecoPulseSeriesMapPtr combined = boost::make_shared<Map>();
+  I3RecoPulseSeriesMapPtr combined = boost::make_shared<I3RecoPulseSeriesMap>();
 
   for (const auto &pair : *in_pulses) {
     auto &target = (*combined)[OMKey(pair.first.GetString(), pair.first.GetOM(), 0)];
