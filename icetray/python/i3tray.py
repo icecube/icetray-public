@@ -125,7 +125,7 @@ class I3Tray(_icetray._I3TrayBase):
         except:
             raise
 
-    def AddService(self, _type: str, _name: "Optional[str]"=None, **kwargs): # type: ignore[override]
+    def AddService(self, _type: str, _name: "Optional[str]"=None, **kwargs):
         """
         Add a service factory to the tray.
 
