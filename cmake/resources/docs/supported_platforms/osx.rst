@@ -64,9 +64,9 @@ It also guides you through an installation of :doc:`../homebrew`.
    $ pip3 install -r requirements.txt
 
    # (Optional) add needed settings to your .bash_profile/.zshrc
-   source $HOME/py3/bin/activate
    export HDF5_DIR=$(brew --prefix hdf5)
    export PATH=$(brew --prefix python@3.12)/libexec/bin:${PATH}
+   source $HOME/py3/bin/activate
 
 Other Important Notes
 """""""""""""""""""""
