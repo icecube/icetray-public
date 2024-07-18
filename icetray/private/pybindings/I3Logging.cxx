@@ -20,10 +20,16 @@ public:
 	    const std::string &log_message)
 	{
 		detail::gil_holder gil;
-		if (override f = this->get_override("log")) {
-			f(level, unit, file, line, func, log_message);
-		} else {
-			RAISE(NotImplementedError, "I3LoggerBase subclasses must implement log()");
+		detail::restore_exceptions restore;
+		try {
+			if (override f = this->get_override("log")) {
+				f(level, unit, file, line, func, log_message);
+			} else {
+				RAISE(NotImplementedError, "I3LoggerBase subclasses must implement log()");
+			}
+		} catch (error_already_set &e) {
+			restore.set_raised_exception();
+			throw;
 		}
 	}
 

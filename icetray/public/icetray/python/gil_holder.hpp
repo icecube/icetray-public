@@ -27,6 +27,53 @@ private:
 	PyGILState_STATE gil_state;
 };
 
+class restore_exceptions {
+public:
+	inline restore_exceptions() {
+#if PY_VERSION_HEX < 0x030c0000
+		PyErr_Fetch(&current_exc.type, &current_exc.value, &current_exc.traceback);
+		PyErr_NormalizeException(&current_exc.type, &current_exc.value, &current_exc.traceback);
+#else
+		current_exc = PyErr_GetRaisedException();
+#endif
+	}
+	/// @brief Restore the current exception
+	inline void set_raised_exception() {
+#if PY_VERSION_HEX < 0x030c0000
+		if (current_exc.value != nullptr) {
+			PyObject *type, *value, *traceback;
+			PyErr_Fetch(&type, &value, &traceback);
+			PyErr_NormalizeException(&type, &value, &traceback);
+			PyException_SetContext(value, current_exc.value);
+			current_exc.value = value;
+			current_exc.type = type;
+			current_exc.traceback = traceback;
+		}
+#else
+		if (current_exc != nullptr) {
+			PyObject *new_exc = PyErr_GetRaisedException();
+			PyException_SetContext(new_exc, current_exc);
+			current_exc = new_exc;
+		}
+#endif
+	}
+	inline ~restore_exceptions() {
+#if PY_VERSION_HEX < 0x030c0000
+		if (current_exc.value != nullptr)
+			PyErr_Restore(current_exc.type, current_exc.value, current_exc.traceback);
+#else
+		if (current_exc != nullptr)
+			PyErr_SetRaisedException(current_exc);
+#endif
+	}
+private:
+#if PY_VERSION_HEX < 0x030c0000
+	struct { PyObject *type, *value, *traceback; } current_exc;
+#else
+	PyObject *current_exc;
+#endif
+};
+
 class allow_threads {
 public:
 	inline allow_threads() {
