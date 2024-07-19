@@ -54,8 +54,6 @@ public:
     double slope_CunkA0;
     double slope_CunkA1;
     double slope_CunkA2;
-    double A0_A1_crossover;
-    double A1_A2_crossover;
 
     I3IceTopSLCCalibration()
     {
@@ -78,8 +76,6 @@ public:
         slope_CunkA0 = NAN;
         slope_CunkA1 = NAN;
         slope_CunkA2 = NAN;
-        A0_A1_crossover = NAN;
-        A1_A2_crossover = NAN;
     }
     ~I3IceTopSLCCalibration();
 
@@ -211,10 +207,7 @@ public:
                 Compare(intercept_CunkA2, rhs.intercept_CunkA2) &&
                 Compare(slope_CunkA0, rhs.slope_CunkA0) &&
                 Compare(slope_CunkA1, rhs.slope_CunkA1) &&
-                Compare(slope_CunkA2, rhs.slope_CunkA2) &&
-                Compare(A0_A1_crossover, rhs.A0_A1_crossover) &&
-                Compare(A1_A2_crossover, rhs.A1_A2_crossover));
-
+                Compare(slope_CunkA2, rhs.slope_CunkA2));
     }
     bool operator!=(const I3IceTopSLCCalibration& rhs) const
     {
@@ -237,13 +230,13 @@ I3_POINTER_TYPEDEFS(I3IceTopSLCCalibrationMap);
 // Now define the container (I3FrameObject) which will actually go in the frame.
 // It contains the MapOfTheThings, plus other (small) associated objects, like StartTime/EndTime, etc.
 // (This bit is basically copied and adapted from I3Calibration.h)
-static const unsigned i3itslccalibration_version_ = 0;
+static const unsigned i3itslccalibration_version_ = 1;
 
 class I3IceTopSLCCalibrationCollection : public I3FrameObject
 {
 public:
-    I3Time startTime; ///< Start time of period used to compute constants (may be different from the rest of I3Calibration)
-    I3Time endTime;   ///< End time of period used to compute constants (may be different from the rest of I3Calibration)
+    int startRun; ///< Start run for which the constants are valid
+    int endRun;   ///< End run for which the constants are valid
 
     I3IceTopSLCCalibrationCollection();
 
@@ -251,11 +244,28 @@ public:
 
     I3IceTopSLCCalibrationMap ITslcCal;  ///< The most important object in here: the Map of all the calibration constants
 
+    //The "Provenance" is an enum indicating how these fields were filled (similar to "Snow Height Povenance" from I3Geometry)
+    enum ITSLCCalProvenance {
+      Unknown = 0,              ///< Unknown provenance
+      MoniRaw = 1,              ///< Derived from pfmonitoring, with p0's in raw charge units
+      PFFiltRaw = 11,           ///< Derived from PFFilt, with p0's in raw charge units
+      Level2VEM = 20,           ///< Derived from Level2, with p0's in units of VEM
+      Level2Raw = 21,           ///< Derived from Level2, with p0's in raw charge units
+      Placeholder = 30,         ///< Placeholder values for software testing (not for analysis)
+      Custom = 100              ///< Entered some other way
+    };
+
+    ITSLCCalProvenance itSlcCalProvenance;
+    //  Handy functions for enum<->string
+    std::string GetITSLCCalProvenanceString() const;
+    void SetITSLCCalProvenanceString(const std::string &str);
+
     bool operator==(const I3IceTopSLCCalibrationCollection& rhs)
     {
-      return (startTime == rhs.startTime &&
-              endTime == rhs.endTime &&
-              ITslcCal == rhs.ITslcCal);
+      return (startRun == rhs.startRun &&
+              endRun == rhs.endRun &&
+              ITslcCal == rhs.ITslcCal &&
+              itSlcCalProvenance == rhs.itSlcCalProvenance);
     }
     bool operator!=(const I3IceTopSLCCalibrationCollection& rhs)
     {
@@ -268,6 +278,10 @@ private:
     template <class Archive> void save(Archive & ar, unsigned version) const;
     I3_SERIALIZATION_SPLIT_MEMBER();
 };
+
+// Define the enums for ITSLCCalProvenance
+#define I3ICETOPSLCCALIBRATION_H_I3IceTopSLCCalibrationCollection_ITSLCCalProvenance \
+  (Unknown)(MoniRaw)(PFFiltRaw)(Level2VEM)(Level2Raw)(Placeholder)(Custom)
 
 I3_CLASS_VERSION(I3IceTopSLCCalibrationCollection, i3itslccalibration_version_);
 I3_POINTER_TYPEDEFS(I3IceTopSLCCalibrationCollection);

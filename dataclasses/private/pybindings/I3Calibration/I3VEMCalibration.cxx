@@ -58,8 +58,7 @@ void register_I3IceTopSLCCalibration()
     (intercept_C0A0)(intercept_C0A1)(intercept_C0A2)(intercept_C1A0)(intercept_C1A1)(intercept_C1A2) \
     (slope_C0A0)(slope_C0A1)(slope_C0A2)(slope_C1A0)(slope_C1A1)(slope_C1A2) \
     (intercept_CunkA0)(intercept_CunkA1)(intercept_CunkA2) \
-    (slope_CunkA0)(slope_CunkA1)(slope_CunkA2) \
-    (A0_A1_crossover)(A1_A2_crossover)
+    (slope_CunkA0)(slope_CunkA1)(slope_CunkA2)
     BOOST_PP_SEQ_FOR_EACH(WRAP_RW, I3IceTopSLCCalibration, I3ITSLCCALPROPS)
     #undef I3ITSLCCALPROPS
     .def("GetIntercept",&I3IceTopSLCCalibration::GetIntercept,bp::args("chip", "atwd"))

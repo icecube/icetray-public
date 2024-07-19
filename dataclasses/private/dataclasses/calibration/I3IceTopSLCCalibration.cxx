@@ -13,6 +13,11 @@
 #include <icetray/serialization.h>
 #include "dataclasses/calibration/I3IceTopSLCCalibration.h"
 
+#include <boost/foreach.hpp>
+
+#include <boost/preprocessor/seq/for_each.hpp>
+#include <boost/lexical_cast.hpp>
+
 // ---------- THE THINGS (CALIB CONSTANTS) THAT GO IN THE MAP ------------
 I3IceTopSLCCalibration::~I3IceTopSLCCalibration() {}
 
@@ -37,9 +42,6 @@ void I3IceTopSLCCalibration::serialize(Archive& ar, unsigned version)
     ar & make_nvp("slope_CunkA0",      slope_CunkA0);
     ar & make_nvp("slope_CunkA1",      slope_CunkA1);
     ar & make_nvp("slope_CunkA2",      slope_CunkA2);
-    ar & make_nvp("A0_A1_crossover",      A0_A1_crossover);
-    ar & make_nvp("A1_A2_crossover",      A1_A2_crossover);
-
 }
 
 std::ostream& operator<<(std::ostream& oss, const I3IceTopSLCCalibration& sc)
@@ -54,8 +56,6 @@ std::ostream& operator<<(std::ostream& oss, const I3IceTopSLCCalibration& sc)
     << "        intercept/slope UnknownChip ATWD0  : " << sc.intercept_CunkA0 <<" " << sc.slope_CunkA0 << std::endl
     << "        intercept/slope UnknownChip ATWD1  : " << sc.intercept_CunkA1 <<" " << sc.slope_CunkA1 << std::endl
     << "        intercept/slope UnknownChip ATWD2  : " << sc.intercept_CunkA2 <<" " << sc.slope_CunkA2 << std::endl
-    << "        ATWD0->1 crossover  : " << sc.A0_A1_crossover << std::endl
-    << "        ATWD1->2 crossover  : " << sc.A1_A2_crossover << std::endl
     << "]" ;
     return oss;
 }
@@ -69,8 +69,9 @@ void I3IceTopSLCCalibrationCollection::save(Archive& ar, unsigned version) const
 {
     ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
     ar & make_nvp("itslccal", ITslcCal);
-    ar & make_nvp("StartTime", startTime);
-    ar & make_nvp("EndTime", endTime);
+    ar & make_nvp("StartRun", startRun);
+    ar & make_nvp("EndRun", endRun);
+    ar & make_nvp("Provenance", itSlcCalProvenance);
 }
 
 template <class Archive>
@@ -81,8 +82,43 @@ void I3IceTopSLCCalibrationCollection::load(Archive& ar, unsigned version)
     }
     ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
     ar & make_nvp("itslccal", ITslcCal);
-    ar & make_nvp("StartTime", startTime);
-    ar & make_nvp("EndTime", endTime);
+    if (version < 1) {
+      I3Time garbage1;
+      I3Time garbage2;
+      ar & make_nvp("StartTime", garbage1);
+      ar & make_nvp("EndTime", garbage2);
+    }
+    if (version >= 1) {
+      ar & make_nvp("StartRun", startRun);
+      ar & make_nvp("EndRun", endRun);
+      ar & make_nvp("Provenance", itSlcCalProvenance);
+    }
+}
+
+
+// For converting ITSLCCalProvenance enum's to strings and back again:
+// I stole/adapted this from I3Geometry, which was stolen/adapted from I3Particle.
+#define MAKE_ENUM_TO_STRING_CASE_LINE(r, data, t) case I3IceTopSLCCalibrationCollection::t : return BOOST_PP_STRINGIZE(t);
+std::string I3IceTopSLCCalibrationCollection::GetITSLCCalProvenanceString() const
+{
+  switch (itSlcCalProvenance) {
+    BOOST_PP_SEQ_FOR_EACH(MAKE_ENUM_TO_STRING_CASE_LINE, ~, I3ICETOPSLCCALIBRATION_H_I3IceTopSLCCalibrationCollection_ITSLCCalProvenance)
+      }
+  return(boost::lexical_cast<std::string>( itSlcCalProvenance ));
+}
+
+#define MAKE_STRING_TO_ENUM_IF_LINE2(r, data, t) else if ( str == BOOST_PP_STRINGIZE(t) ) { data = t; }
+void I3IceTopSLCCalibrationCollection::SetITSLCCalProvenanceString(const std::string &str)
+{
+  if (false) { }
+  BOOST_PP_SEQ_FOR_EACH(MAKE_STRING_TO_ENUM_IF_LINE2, itSlcCalProvenance, I3ICETOPSLCCALIBRATION_H_I3IceTopSLCCalibrationCollection_ITSLCCalProvenance)
+  else {
+    try {
+      itSlcCalProvenance = static_cast<ITSLCCalProvenance>( boost::lexical_cast<int>(str) );
+    } catch(boost::bad_lexical_cast &bad) {
+      log_fatal("\"%s\" is not a valid ITSLCCalProvenance.", str.c_str());
+    }
+  }
 }
 
 
