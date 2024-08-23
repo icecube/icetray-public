@@ -10,6 +10,8 @@ Release Notes
 main
 ----
 
+* Non-spherical OMs data structures for clsim (#3520)
+
 June 18, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.11.0

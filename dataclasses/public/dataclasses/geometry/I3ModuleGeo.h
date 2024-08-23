@@ -41,7 +41,7 @@
 #include "dataclasses/I3Orientation.h"
 #include "dataclasses/I3Map.h"
 
-static const unsigned i3modulegeo_version_ = 0;
+static const unsigned i3modulegeo_version_ = 1;
 
 /**
  * List the names of enumeration members defined in this file
@@ -94,7 +94,7 @@ public:
     bool operator==(const I3ModuleGeo& rhs) const;
     
     ModuleType GetModuleType() const {return moduleType_;}
-    void SetModuleType(ModuleType newType) {moduleType_=newType;}
+    void SetModuleType(ModuleType newType);
     
     const I3Position &GetPos() const {return pos_;}
     void SetPos(const I3Position& p) {pos_=p;}
@@ -104,14 +104,26 @@ public:
     void SetOrientation(const I3Orientation& o) {orientation_=o;}
     I3Direction GetDir() const {return orientation_.GetDir();}
 
-    double GetRadius() const {return radius_;}
-    void SetRadius(double radius) {radius_=radius;}
-     
+    double GetRadius() const {return radR_;}
+    double GetRr() const {return radR_;}
+    double GetRz() const {return radZ_;}
+    double GetHeight() const {return h_;}
+
+    void SetRr(double value) {radR_=value;}
+    void SetRz(double value) {radZ_=value; h_=NAN;}
+    void SetHeight(double value) {h_=value; radZ_=NAN;}
+
+    void SetRadius(double radius) {radR_=radius; radZ_=radius; h_=NAN;}
+    void SetSpheroid(double radR, double radZ) {radR_=radR; radZ_=radZ; h_=NAN;}
+    void SetCylinder(double radR, double h) {radR_=radR; h_=h; radZ_=NAN;}
+	
 private:
     ModuleType moduleType_;
     I3Position pos_;
     I3Orientation orientation_;
-    double radius_;
+    double radR_;
+    double radZ_;
+    double h_;
     
     friend class icecube::serialization::access;
     template <class Archive> void serialize(Archive & ar, unsigned version);
@@ -121,7 +133,7 @@ std::ostream& operator<<(std::ostream&, const I3ModuleGeo&);
 
 I3_CLASS_VERSION(I3ModuleGeo, i3modulegeo_version_);
 
-typedef I3Map<ModuleKey, I3ModuleGeo> I3ModuleGeoMap; 
+typedef I3Map<ModuleKey, I3ModuleGeo> I3ModuleGeoMap;
 
 I3_POINTER_TYPEDEFS(I3ModuleGeo);
 I3_POINTER_TYPEDEFS(I3ModuleGeoMap);

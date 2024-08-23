@@ -15,6 +15,7 @@
 #include <dataclasses/geometry/I3ModuleGeo.h>
 #include <dataclasses/I3Time.h>
 #include <dataclasses/I3Double.h>
+#include <dataclasses/I3Orientation.h>
 
 #include <boost/foreach.hpp>
 
@@ -23,9 +24,7 @@
  * components (I3OMGeoMap, I3StationGeoMap and
  * I3Time) and stores them in the Geometry frame.
  *
- * While at it, this also generates an I3ModuleGeoMap
- * assuming that all existing DOMs are IceCube
- * single-PMT DOMs.
+ * While at it, this also generates an I3ModuleGeoMap.
  */
 class I3GeometryDecomposer : public I3Module
 {
@@ -139,11 +138,6 @@ I3GeometryDecomposer::GenerateSubdetectorMap(const I3OMGeoMap &omgeo) const
     BOOST_FOREACH(const I3OMGeoMap::value_type &pair, omgeo)
     {
         const OMKey &input_key = pair.first;
-        if (input_key.GetPMT() != 0) {
-            log_fatal("You seem to be using a non-IceCube I3Geometry object with non-zero PMT ids (pmtid=%u). Cannot convert this.",
-                      static_cast<unsigned int>(input_key.GetPMT()));
-        }
-
         const ModuleKey key(input_key.GetString(), input_key.GetOM());
 
         if (key.GetString() < 0) {
@@ -181,13 +175,13 @@ I3GeometryDecomposer::GenerateSubdetectorMap(const I3OMGeoMap &omgeo) const
 }
 
 /**
- * @brief Generates an I3ModuleGeoMap from a I3OMGeoMap,
- * assuming this is an IceCube-DOM-only geometry.
+ * @brief Generates an I3ModuleGeoMap from a I3OMGeoMap.
  */
 I3ModuleGeoMapPtr
 I3GeometryDecomposer::GenerateI3ModuleGeo(const I3OMGeoMap &omgeo) const
 {
     I3ModuleGeoMapPtr output(new I3ModuleGeoMap());
+    std::map<ModuleKey, unsigned> npmts;
 
     BOOST_FOREACH(const I3OMGeoMap::value_type &pair, omgeo)
     {
@@ -196,49 +190,80 @@ I3GeometryDecomposer::GenerateI3ModuleGeo(const I3OMGeoMap &omgeo) const
 
         const ModuleKey output_key(input_key.GetString(), input_key.GetOM());
 
-        if (input_key.GetPMT() != 0) {
-            log_fatal("You seem to be using a non-IceCube I3Geometry object with non-zero PMT ids (pmtid=%u). Cannot convert this.",
-                      static_cast<unsigned int>(input_key.GetPMT()));
-        }
-
         if (output->find(output_key) != output->end()) {
+          I3ModuleGeo &output_geo = output->at(output_key);
+
+          switch (input_geo.omtype) {
+          case I3OMGeo::UnknownType:
+          case I3OMGeo::AMANDA:
+          case I3OMGeo::IceCube:
+
+            // Surface detectors
+          case I3OMGeo::IceTop:
+          case I3OMGeo::Scintillator:
+          case I3OMGeo::IceAct:
+            
+            // New module types
+          case I3OMGeo::PDOM:
+          case I3OMGeo::WOM:
+          case I3OMGeo::FOM:
             log_fatal("Logic error. output ModuleKey(%i,%u) is already in output map.",
                       output_key.GetString(), output_key.GetOM());
+                        
+          case I3OMGeo::mDOM:
+          case I3OMGeo::DEgg:
+          case I3OMGeo::LOM:
+          case I3OMGeo::LOM16:
+          case I3OMGeo::LOM18:
+            npmts[output_key] += 1;
+            output_geo.SetPos((output_geo.GetPos() * (npmts[output_key] - 1) +  input_geo.position)/npmts[output_key]);
+            break;
+
+          default:
+            log_debug("Unknown input OMType number %u. Using I3ModuleGeo::ModuleType \"Unknown\".",
+                      static_cast<unsigned int>(input_geo.omtype));
+            break;
+          }
+        } else {
+          // insert empty object into output map and retrieve reference
+          I3ModuleGeo &output_geo =
+            output->insert(std::make_pair(output_key, I3ModuleGeo())).first->second;
+          npmts[output_key] = 1;
+
+          output_geo.SetPos(input_geo.position);
+          output_geo.SetOrientation(I3Orientation());
+
+          switch (input_geo.omtype) {
+          case I3OMGeo::UnknownType: output_geo.SetModuleType(I3ModuleGeo::UnknownType); break;
+          case I3OMGeo::AMANDA:      output_geo.SetModuleType(I3ModuleGeo::AMANDA);      break;
+          case I3OMGeo::IceCube:     output_geo.SetModuleType(I3ModuleGeo::IceCube);     break;
+
+            // Surface detectors
+          case I3OMGeo::IceTop:       output_geo.SetModuleType(I3ModuleGeo::IceTop);        break;
+          case I3OMGeo::Scintillator: output_geo.SetModuleType(I3ModuleGeo::Scintillator);  break;
+          case I3OMGeo::IceAct:       output_geo.SetModuleType(I3ModuleGeo::IceAct);        break;
+
+            // New module types
+          case I3OMGeo::mDOM:         output_geo.SetModuleType(I3ModuleGeo::mDOM);       break;
+          case I3OMGeo::PDOM:         output_geo.SetModuleType(I3ModuleGeo::PDOM);       break;
+          case I3OMGeo::DEgg:         output_geo.SetModuleType(I3ModuleGeo::DEgg);       break;
+          case I3OMGeo::WOM:          output_geo.SetModuleType(I3ModuleGeo::WOM);        break;
+          case I3OMGeo::FOM:          output_geo.SetModuleType(I3ModuleGeo::FOM);        break;
+          case I3OMGeo::LOM:
+          case I3OMGeo::LOM16:
+            output_geo.SetModuleType(I3ModuleGeo::LOM16);
+            break;
+          case I3OMGeo::LOM18:        output_geo.SetModuleType(I3ModuleGeo::LOM18);      break;
+
+          default:
+            log_debug("Unknown input OMType number %u. Using I3ModuleGeo::ModuleType \"Unknown\".",
+                      static_cast<unsigned int>(input_geo.omtype));
+            output_geo.SetModuleType(I3ModuleGeo::UnknownType);
+            break;
+          }
         }
-
-        // insert empty object into output map and retrieve reference
-        I3ModuleGeo &output_geo =
-        output->insert(std::make_pair(output_key, I3ModuleGeo())).first->second;
-
-        switch (input_geo.omtype) {
-            case I3OMGeo::UnknownType: output_geo.SetModuleType(I3ModuleGeo::UnknownType); break;
-            case I3OMGeo::AMANDA:      output_geo.SetModuleType(I3ModuleGeo::AMANDA);      break;
-            case I3OMGeo::IceCube:     output_geo.SetModuleType(I3ModuleGeo::IceCube);     break;
-
-	    // Surface detectors
-            case I3OMGeo::IceTop:       output_geo.SetModuleType(I3ModuleGeo::IceTop);        break;
-	    case I3OMGeo::Scintillator: output_geo.SetModuleType(I3ModuleGeo::Scintillator);  break;
-	    case I3OMGeo::IceAct:       output_geo.SetModuleType(I3ModuleGeo::IceAct);        break;
-
-	    // New module types
-            case I3OMGeo::mDOM:        output_geo.SetModuleType(I3ModuleGeo::mDOM);        break;
-            case I3OMGeo::PDOM:        output_geo.SetModuleType(I3ModuleGeo::PDOM);        break;
-            case I3OMGeo::DEgg:        output_geo.SetModuleType(I3ModuleGeo::DEgg);        break;
-            case I3OMGeo::WOM:         output_geo.SetModuleType(I3ModuleGeo::WOM);         break;
-            case I3OMGeo::FOM:         output_geo.SetModuleType(I3ModuleGeo::FOM);         break;
-
-            default:
-                log_debug("Unknown input OMType number %u. Using I3ModuleGeo::ModuleType \"Unknown\".",
-                          static_cast<unsigned int>(input_geo.omtype));
-                output_geo.SetModuleType(I3ModuleGeo::UnknownType);
-                break;
-        }
-
-        output_geo.SetPos(input_geo.position);
-        output_geo.SetOrientation(input_geo.orientation);
-
-        output_geo.SetRadius((13./2.)*25.4*I3Units::mm); // assume 13" diameter
     }
+    log_notice("Module orientation set to default where Dir points to z+ and Up to x+ for all module types.");
 
     return output;
 }
