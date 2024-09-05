@@ -23,6 +23,7 @@ public:
        lcWindowPost(NAN),
        pmtHV(NAN),
        speThreshold(NAN),
+       fePedestal(NAN),
        dacTriggerBias0(NAN),
        dacTriggerBias1(NAN),
        dacFADCRef(NAN),
