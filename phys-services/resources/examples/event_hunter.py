@@ -14,11 +14,7 @@ those events.
 import logging
 import math
 import sys
-
-if sys.version_info[0] < 3:
-    from itertools import ifilterfalse as filterfalse
-else:
-    from itertools import filterfalse
+from itertools import filterfalse
 
 from icecube import icetray,dataio,dataclasses
 

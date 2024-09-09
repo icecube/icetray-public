@@ -344,10 +344,7 @@ def get_doxygen_docstring(project,modulename):
                 for t in list(s):
                     s.remove(t)
 
-        if sys.version_info[0] < 3:
-            doc+='\n\n'+ET.tostring(detail, encoding='utf-8', method='text')
-        else:
-            doc+='\n\n'+ET.tostring(detail, encoding='unicode', method='text')
+        doc+='\n\n'+ET.tostring(detail, encoding='unicode', method='text')
 
     return doc.strip()
 
