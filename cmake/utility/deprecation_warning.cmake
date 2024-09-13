@@ -7,7 +7,7 @@
 ## be passed to message(WARNING ...) or message(FATAL_ERROR ...). A
 ## one line message is recommended.
 ##
-## It is recommended that you provide some explanitory warning prior to
+## It is recommended that you provide some explanatory warning prior to
 ## calling this macro.
 
 macro(deprecation_warning _d _m)

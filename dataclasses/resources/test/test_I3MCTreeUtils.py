@@ -17,8 +17,8 @@ class TestI3MCTreeUtils(unittest.TestCase):
         mctree0 = frame['I3MCTree']
         frame = inFile.pop_physics()
         mctree1 = frame['I3MCTree']
-        self.assertEqual(mctree0.has(mctree0[0]),True,"must be euqal")
-        self.assertEqual(mctree0.has(mctree1[0]),False,"must be euqal")
+        self.assertEqual(mctree0.has(mctree0[0]),True,"must be equal")
+        self.assertEqual(mctree0.has(mctree1[0]),False,"must be equal")
         inFile.close()
 
 

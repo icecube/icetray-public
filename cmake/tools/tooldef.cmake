@@ -77,7 +77,7 @@ macro(tooldef tool_ incdir incfile libdir bindir)
       found_ok("${incfile} found at ${${TOOL}_INCLUDE_DIR}")
     endif(${${TOOL}_INCLUDE_DIR} MATCHES ".*NOTFOUND$")
   else(NOT "${incdir}" STREQUAL "NONE")
-    set(${TOOL}_INCLUDE_DIR "/doesnt/exist" CACHE PATH "${TOOL} include dir")
+    set(${TOOL}_INCLUDE_DIR "/doesnt/exist" CACHE PATH "${TOOL} include dir")  # codespell:ignore
   endif(NOT "${incdir}" STREQUAL "NONE")
 
   set(${TOOL}_BIN_DIR  "" CACHE PATH "${TOOL} binary directory")

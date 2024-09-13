@@ -210,7 +210,7 @@ TEST(icetop_SLCcals)
 }
 
 /* This one makes sure I can make a "I3MapKeyVectorDouble" with two IceTop things in it, put it in the frame,
- and retreive the results.  It's actually not uniquely testing anything IceTop-specific or a new class in dataclasses,
+ and retrieve the results.  It's actually not uniquely testing anything IceTop-specific or a new class in dataclasses,
  I'm just finding it helpful for making sure I understand how I3MapKeyVectorDouble's work.
  Technically, this will be a DetectorStatus object, but I'm going to put the test in here for now just to
  make sure it works.  I might move it to DOMStatusTest.cxx later. --KR

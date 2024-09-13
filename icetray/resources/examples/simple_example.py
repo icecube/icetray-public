@@ -50,7 +50,7 @@ class AddStuffToFrames(icetray.I3Module):
         frame[self.frame_object_name] = fo
         self.PushFrame(frame)
 
-# You can use lamba functions as modules
+# You can use lambda functions as modules
 # This is an illustration of a simple filter.
 def filter_frames(frame):
     return frame.Has("my_object")

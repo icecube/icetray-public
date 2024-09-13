@@ -866,7 +866,7 @@ class I3DOMCalibration {
 
   /**
    *  Store the ATWD time offset from domcal calibration.  the ATWD used in transit time
-   *  calibratin will be 0.0, while the other could have up to a few ns offset...
+   *  calibration will be 0.0, while the other could have up to a few ns offset...
    */
 
   double atwdDeltaT_[2];
