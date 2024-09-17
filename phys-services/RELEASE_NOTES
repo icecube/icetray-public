@@ -11,6 +11,7 @@ main
 ----
 
 * Non-spherical OMs data structures for clsim (#3520)
+* Rename I3MT19937 to I3MTRandomService (#3633)
 
 June 18, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------

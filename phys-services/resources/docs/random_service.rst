@@ -29,9 +29,9 @@ Currently there are three implementations of this interface:
   produce independent streams of pseudo-random numbers for distributed
   computation.
 
-* :cpp:class:`I3MT19937` - Uses the c++11 random number interface for the widely used
+* :cpp:class:`I3MTRandomService` - Uses the c++11 random number interface for the widely used
   MT19937 algorithm. Can take a single int as a seed or a sequence of ints of
   arbitrary length for distributed computing. It can be added to the context
-  with :js:data:`I3MT19937Factory` or the python class :py:class:`icecube.phys_services.I3MT19937`.
+  with :js:data:`I3MTRandomServiceFactory` or the python class :py:class:`icecube.phys_services.I3MTRandomService`.
 
 The original ``I3TRandomService`` implementation was removed due to the fact that it was unused.

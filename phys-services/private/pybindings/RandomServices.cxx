@@ -35,7 +35,7 @@
 #include <phys-services/I3SPRNGRandomService.h>
 #endif
 #include <phys-services/I3GSLRandomService.h>
-#include <phys-services/I3MT19937.h>
+#include <phys-services/I3MTRandomService.h>
 
 using namespace boost::python;
 namespace bp = boost::python;
@@ -81,7 +81,7 @@ void register_RandomServices()
 	;
 
 
-  register_randomservice<I3MT19937>("I3MT19937",
+  register_randomservice<I3MTRandomService>("I3MTRandomService",
 				    "An implementation of the I3RandomService interface using the C++ "
 				    "random number engine for MT19937",
 				    init<std::vector<uint32_t> >((bp::arg("seed_vector")))

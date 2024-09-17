@@ -11,7 +11,7 @@
 #include <I3Test.h>
 
 #include "phys-services/I3RandomService.h"
-#include "phys-services/I3MT19937.h"
+#include "phys-services/I3MTRandomService.h"
 #include "phys-services/I3GSLRandomService.h"
 #include "phys-services/I3SPRNGRandomService.h"
 
@@ -150,12 +150,12 @@ void testStateRestoration(I3RandomService& random, unsigned int samples=16384)
 }
 }
 
-TEST(I3MT19937Test)
+TEST(I3MTRandomServiceTest)
 {
-  I3MT19937 random1;
-  I3MT19937 random2(666);
-  randomServiceTest::testRandomService<100000,I3MT19937>(random1);
-  randomServiceTest::testRandomService<100000,I3MT19937>(random2);
+  I3MTRandomService random1;
+  I3MTRandomService random2(666);
+  randomServiceTest::testRandomService<100000,I3MTRandomService>(random1);
+  randomServiceTest::testRandomService<100000,I3MTRandomService>(random2);
 }
 
 TEST(I3GSLRandomService)

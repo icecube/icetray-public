@@ -1,19 +1,19 @@
 /**
- * @file I3MT19937.h
+ * @file I3MTRandomService.h
  * @copyright Copyright (c) 2017 The IceCube Collaboration
 *  SPDX-License-Identifier: BSD-2-Clause
  * @author Kevin Meagher
  * @date December 2017
  */
 
-#ifndef I3MT19937_H
-#define I3MT19937_H
+#ifndef I3MTRandomService_H
+#define I3MTRandomService_H
 
 #include "icetray/I3ServiceFactory.h"
 #include "phys-services/I3StdRandomEngine.h"
 
 /**
- * @class I3MT19937
+ * @class I3MTRandomService
  * @brief An implementation of the I3RandomService interface using the C++
  * random number engine for MT19937
  *
@@ -37,20 +37,20 @@
  * The internal state can be saved and restored as an I3String representing
  * the internals state as a string of 624 integers
  */
-class I3MT19937 : public I3StdRandomEngine<I3MT19937>
+class I3MTRandomService : public I3StdRandomEngine<I3MTRandomService>
 {
  public:
   /**
    * default constructor uses the default seed as defined by the MT19937 paper.
-   * Equivelent to I3MT19937(5489)
+   * Equivelent to I3MTRandomService(5489)
    */
-  I3MT19937();
+  I3MTRandomService();
 
   /**
    * Constructor initilizes the internal state of the random number generator
    * using the state generating function defined in the MT19937 paper
    */
-  I3MT19937(uint32_t seed);
+  I3MTRandomService(uint32_t seed);
 
   /**
    * Initilize random number generator with the specified seed vector.
@@ -61,12 +61,12 @@ class I3MT19937 : public I3StdRandomEngine<I3MT19937>
    * {run_number,job_number} to each job submitted to a cluster will
    * result in independent random bit streams for each job.
    */
-  explicit I3MT19937(std::vector<uint32_t> seed_vector);
+  explicit I3MTRandomService(std::vector<uint32_t> seed_vector);
 
   /**
    * destructor
    */
-  virtual ~I3MT19937();
+  virtual ~I3MTRandomService();
 
  /**
   * Get all information necessary to restore the internal
@@ -85,27 +85,27 @@ public:
   std::mt19937& engine() { return engine_; }
   const std::mt19937& engine() const { return engine_; }
 
-  SET_LOGGER("I3MT19937");
+  SET_LOGGER("I3MTRandomService");
 };
 
-I3_POINTER_TYPEDEFS(I3MT19937);
+I3_POINTER_TYPEDEFS(I3MTRandomService);
 
 // Service Factory
 
 class I3Context;
 /**
- * @class I3MT19937Factory
- * @brief This class installs a I3MT19937 in the context
+ * @class I3MTRandomServiceFactory
+ * @brief This class installs a I3MTRandomService in the context
  *
- * I3MT19937 takes two parameters: <VAR>Seed</VAR>,
+ * I3MTRandomService takes two parameters: <VAR>Seed</VAR>,
  * <VAR>InstallServiceAs</VAR>.
  */
-class I3MT19937Factory : public I3ServiceFactory
+class I3MTRandomServiceFactory : public I3ServiceFactory
 {
  public:
   // Constructors and destructor
-  I3MT19937Factory(const I3Context& context);
-  virtual ~I3MT19937Factory();
+  I3MTRandomServiceFactory(const I3Context& context);
+  virtual ~I3MTRandomServiceFactory();
 
   // public member functions
   /**
@@ -123,10 +123,10 @@ class I3MT19937Factory : public I3ServiceFactory
 
  private:
   // private constructors, destructor and assignment
-  I3MT19937Factory
-    (const I3MT19937Factory& rhs); // stop default
-  I3MT19937Factory operator=
-    (const I3MT19937Factory& rhs); // stop default
+  I3MTRandomServiceFactory
+    (const I3MTRandomServiceFactory& rhs); // stop default
+  I3MTRandomServiceFactory operator=
+    (const I3MTRandomServiceFactory& rhs); // stop default
 
   /// initilization vector to create the seed for the random number generator
   std::vector<std::uint32_t> seed_vector_;
@@ -135,7 +135,7 @@ class I3MT19937Factory : public I3ServiceFactory
   /// pointer to the random service
   I3RandomServicePtr random_;
 
-  SET_LOGGER("I3MT19937Factory");
+  SET_LOGGER("I3MTRandomServiceFactory");
 };
 
 #endif //I319937_H

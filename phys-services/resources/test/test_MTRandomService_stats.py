@@ -6,7 +6,7 @@
 
 import numpy as np
 from scipy import stats
-from icecube.phys_services import I3MT19937
+from icecube.phys_services import I3MTRandomService
 
 N=1000
 
@@ -26,8 +26,8 @@ def test_p(pvals):
     frac = float((pvals < .05).sum())/pvals.size
     assert(frac<.15)
 
-for rs in [I3MT19937(), I3MT19937(0),I3MT19937([]),
-           I3MT19937([0]),I3MT19937([0,0]),I3MT19937([0,0,0])
+for rs in [I3MTRandomService(), I3MTRandomService(0),I3MTRandomService([]),
+           I3MTRandomService([0]),I3MTRandomService([0,0]),I3MTRandomService([0,0,0])
            ]:
 
     test_p([kstest(rs,'exp',(x,),'expon',(0,1./x)) for x in np.arange(.1,10,.1)])
