@@ -49,7 +49,7 @@ class I3StdRandomEngine : public I3RandomService
    */
   virtual unsigned int Integer(unsigned int imax)
   {
-    std::uniform_int_distribution<unsigned int> d(0, imax-1);
+    std::uniform_int_distribution<unsigned int> d(0, std::min(imax, imax-1));
     return d(static_cast<Base*>(this)->engine());
   }
 
