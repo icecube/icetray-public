@@ -70,6 +70,10 @@ unsigned int I3RandomService::Integer(unsigned int imax)
 	return (unsigned int)Uniform(imax);
 }
 
+uint32_t I3RandomService::Integer32(){
+	return (uint32_t)(Uniform(4294967296.0));
+}
+
 int I3RandomService::Poisson(double mean)
 {
 	return gsl_ran_poisson(gsl_, mean);

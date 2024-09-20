@@ -4,6 +4,7 @@
 
 #include "phys-services/I3GSLRandomService.h"
 #include <cstring>
+#include <cassert>
 #include <gsl/gsl_version.h>
 
 I3GSLRandomService::I3GSLRandomService():
@@ -13,6 +14,8 @@ track_state(true)
     construct_counted(r);
   else
     construct(r);
+  assert(gsl_rng_min(r) == 0);
+  assert(gsl_rng_max(r) == 0xFFFFFFFF);
 }
 
 I3GSLRandomService::I3GSLRandomService(unsigned long int seed, bool track_state):
@@ -26,6 +29,8 @@ track_state(track_state)
   if(track_state)
     gsl_rng_set(((gsl_rng_wrapper_state*)r->state)->rng,
                 ((gsl_rng_wrapper_state*)r->state)->seed);
+  assert(gsl_rng_min(r) == 0);
+  assert(gsl_rng_max(r) == 0xFFFFFFFF);
 }
 
 I3GSLRandomService::~I3GSLRandomService(){
@@ -47,6 +52,11 @@ double I3GSLRandomService::Exp(double tau)
 unsigned int I3GSLRandomService::Integer(unsigned int imax)
 {
   return (unsigned int)Uniform(imax);
+}
+
+uint32_t I3GSLRandomService::Integer32()
+{
+  return gsl_rng_get(r);
 }
 
 int I3GSLRandomService::Poisson(double mean)

@@ -54,6 +54,15 @@ class I3StdRandomEngine : public I3RandomService
   }
 
   /**
+   * Generate an integer drawn uniformly from amongst all 32-bit integers, that is [0, 4294967295]
+   */
+  virtual uint32_t Integer32()
+  {
+    std::uniform_int_distribution<unsigned int> d(0,0xFFFFFFFF);
+    return d(static_cast<Base*>(this)->engine());
+  }
+
+  /**
    * Generate an integer drawn from a Poisson distribution
    */
   virtual int Poisson(double mean)

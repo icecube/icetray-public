@@ -68,6 +68,11 @@ class I3GSLRandomService : public I3RandomService{
   virtual unsigned int Integer(unsigned int imax);
 
   /**
+   * Generate an integer drawn uniformly from amongst all 32-bit integers, that is [0, 4294967295]
+   */
+  virtual uint32_t Integer32();
+
+  /**
    * An integer drawn from a Poisson distribution
    */
   virtual int Poisson(double mean);

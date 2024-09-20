@@ -45,6 +45,7 @@ struct I3RandomServiceWrapper : I3RandomService, wrapper<I3RandomService>
   int Binomial(int ntot, double prob) { return this->get_override("Binomial")(ntot, prob); }
   double Exp(double tau) { return this->get_override("Exp")(tau); }
   unsigned int Integer(unsigned int imax) { return this->get_override("Integer")(imax); }
+  uint32_t Integer32() { return this->get_override("Integer32")(); }
   int Poisson(double mean) { return this->get_override("Poisson")(mean); }
   double PoissonD(double mean) { return this->get_override("PoissonD")(mean); }
   double Uniform(double x1) { return this->get_override("Uniform")(x1); }
@@ -72,6 +73,7 @@ void register_RandomServices()
 	        .def("binomial", pure_virtual(&I3RandomService::Binomial))
 	        .def("exp", pure_virtual(&I3RandomService::Exp))
 	        .def("integer", pure_virtual(&I3RandomService::Integer))
+	        .def("integer32",pure_virtual(&I3RandomService::Integer32))
 	        .def("poisson", pure_virtual(&I3RandomService::Poisson))
 	        .def("poisson_d", pure_virtual(&I3RandomService::PoissonD))
 	        .def("uniform", pure_virtual((double (I3RandomService::*)(double)) &I3RandomService::Uniform))
@@ -89,7 +91,8 @@ void register_RandomServices()
 	
 
   register_randomservice<I3GSLRandomService>("I3GSLRandomService", "gsl random goodness",
-					     init<unsigned long int,bool>((bp::arg("seed"),bp::arg("track_state")=true)));
+					    init<unsigned long int,bool>((bp::arg("seed"),bp::arg("track_state")=true)))
+						.def(init<>());
 
 #ifdef I3_USE_SPRNG
   register_randomservice<I3SPRNGRandomService>("I3SPRNGRandomService", "sprng random goodness",
