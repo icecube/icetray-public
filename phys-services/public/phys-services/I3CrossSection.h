@@ -108,7 +108,7 @@ class I3CrossSection
          *     The energy of the incoming neutrino in GeV
          * @param[in] scatteredType
          *     The type of the outgoing lepton
-         * @param[in]
+         * @param[in] random
          *     A pseudo-random number generator
          *
          * @return

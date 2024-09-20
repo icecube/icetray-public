@@ -9,6 +9,7 @@ from collections import deque
 from glob import glob
 from icecube.icetray import i3inspect
 import xml.etree.ElementTree as ET
+import shutil
 
 # suppress boost python object registration warnings
 from warnings import filterwarnings
@@ -275,6 +276,17 @@ def main():
                 queue.call(["doxygen",doxyfile])
 
         queue.wait()
+
+        combined = os.path.join(builddir, "logs", "combined_doxygen.log.txt")
+        if not os.path.exists(os.path.dirname(combined)):
+            os.makedirs(os.path.dirname(combined))
+        with open(combined, 'w') as c:
+            for f in glob(os.path.join(doxygendir, "*", "doxygen.log")):
+                with open(f) as fd:
+                    c.write(f"{f}:\n")
+                    shutil.copyfileobj(fd, c)
+                    c.write("\n")
+
     else:
         log.info("Skipping Doxygen Documentation")
 

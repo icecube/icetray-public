@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  * $Id$
  *
- * @file MergeXMLOMKey2MBIDConversionTable/main.cxx
+ * @file
  * @version $Revision$
  * @date $Date$
  */

@@ -398,11 +398,11 @@ class I3Frame
    * this function will throw via log_fatal.
    */
   void Put(const std::string& name,
-	   boost::shared_ptr<const I3FrameObject> element,
+	   I3FrameObjectConstPtr element,
 	   const I3Frame::Stream& stream);
 
   void Put(const std::string& name,
-	   boost::shared_ptr<const I3FrameObject> element);
+	   I3FrameObjectConstPtr element);
 
   /** Puts something into the frame at its "default" location.
    *
