@@ -13,6 +13,14 @@ main
 ----
 
 * Address the warning for policy CMP0167 (FindBoost).
+* clean up a small handful of typos
+* tweak macOS docs
+* Fix copyright and license statements in simulation projects (#3546)
+* [simclasses] Fix copyright and license statements (#3543)
+* [neutrino-generator] Fix copyright and license statements (#3545)
+* [CLSim] Fix copyright and license statements (#3542)
+* Add a GH action to run reuse to check SPDX tags (#3524)
+* point test-data back to trunk
 
 June 18, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------

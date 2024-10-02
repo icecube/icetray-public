@@ -10,9 +10,15 @@ Release Notes
 main
 ----
 
+* fix formatting and typos in docstrings
+* Update majority of tests to I3MTRandomService (#3658)
+* Fix MTRandomService exponential distribution bug and update full sim test (#3655)
+* Clean up doxygen warnings (#3640)
+* Rename I3MT19937 to I3MTRandomService so it is more clear what it is (#3633)
+* Update tooling and code to use ruff v0.6.4 (#3624)
+* Cosmetic improvements to stubs (#3494)
 * Non-spherical OMs data structures for clsim (#3520)
-* Rename I3MT19937 to I3MTRandomService (#3633)
-* Add Integer32 to I3RandomService to ensure 32-bit random numbers are correct(#3642)
+* Add Integer32 to I3RandomService to ensure 32-bit random numbers are correct (#3642)
 * Update simprod-scripts to I3MTRandomService and fix shell script tests so failures are caught (#3631)
 
 June 18, 2024 don la dieu (nega at icecube.umd.edu)

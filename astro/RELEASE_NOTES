@@ -8,13 +8,15 @@ Release Notes
 main
 ----
 
+* Cosmetic improvements to stubs (#3494)
+
 June 18, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.11.0
 
-- Run mypy in CI (#3480)
-- mypy cleanup for core projects (#3414)
-- [astro] Add SPDX tags for copyright and license (#3432)
+* Run mypy in CI (#3480)
+* mypy cleanup for core projects (#3414)
+* [astro] Add SPDX tags for copyright and license (#3432)
 
 Feb. 20, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------

@@ -10,6 +10,12 @@ Release Notes
 main
 ----
 
+- Adding instructions for cvmfsexec (#3650)
+- Clean up doxygen warnings (#3640)
+- refactor / remove StackOverflow code (#3512)
+- Add a GH action to run reuse to check SPDX tags (#3524)
+- Remove stack overflow code to make trac links (#3537)
+
 June 18, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.11.0

@@ -10,6 +10,11 @@ Release Notes
 main
 ----
 
+* clean up a small handful of typos
+* give I3DOMStatus::fePedestal an initial value (#3621)
+* [dataclasses / gcdserver / tpx / icetop_Level3_scripts] IceTopSLCCal implementation (#3571)
+* Compile cleanly with -Wall -Werror (#3540)
+* Cosmetic improvements to stubs (#3494)
 * Non-spherical OMs data structures for clsim (#3520)
 
 June 18, 2024 don la dieu (nega at icecube.umd.edu)

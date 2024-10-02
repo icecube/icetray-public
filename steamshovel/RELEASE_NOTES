@@ -10,6 +10,12 @@ Release Notes
 main
 ----
 
+* Update tooling and code to use ruff v0.6.4 (#3624)
+* Compile cleanly with -Wall -Werror (#3540)
+* Cosmetic improvements to stubs (#3494)
+* refactor / remove StackOverflow code (#3512)
+* Add a GH action to run reuse to check SPDX tags (#3524)
+
 June 18, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.11.0

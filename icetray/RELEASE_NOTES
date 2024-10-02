@@ -10,6 +10,20 @@ Release Notes
 main
 ----
 
+* Pass through Keyword-only Ifs in tray segments (#3667)
+* Eliminate Duplication of SeededRT Configuration (#3618)
+* Update majority of tests to I3MTRandomService (#3658)
+* Clean up doxygen warnings (#3640)
+* Clean up a small handful of typos
+* Update tooling and code to use ruff v0.6.4 (#3624)
+* Save and restore Python exception state in I3LoggerWrapper (#3552)
+* Mark positional-only parameters in stubs (#3557)
+* icetray - suppress dodgy gcc warning (#3551)
+* Revert "icetray - suppress dodgy gcc warning"
+* icetray - suppress dodgy gcc warning
+* Compile cleanly with -Wall -Werror (#3540)
+* Add a GH action to run reuse to check SPDX tags (#3524)
+
 June 18, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.11.0
