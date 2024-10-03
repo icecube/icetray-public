@@ -40,7 +40,7 @@ class I3StdRandomEngine : public I3RandomService
    */
   virtual double Exp(double tau)
   {
-    std::exponential_distribution<double> d(tau);
+    std::exponential_distribution<double> d(1./tau);
     return d(static_cast<Base*>(this)->engine());
   }
 

@@ -30,7 +30,7 @@ for rs in [I3MTRandomService(), I3MTRandomService(0),I3MTRandomService([]),
            I3MTRandomService([0]),I3MTRandomService([0,0]),I3MTRandomService([0,0,0])
            ]:
 
-    test_p([kstest(rs,'exp',(x,),'expon',(0,1./x)) for x in np.arange(.1,10,.1)])
+    test_p([kstest(rs,'exp',(x,),'expon',(0,x)) for x in np.arange(.1,10,.1)])
     test_p([kstest(rs,'uniform',(x,),'uniform',(0,x)) for x in np.arange(.1,10,.1)])
     test_p([kstest(rs,'uniform',(x,x+y),'uniform',(x,y)) for x in range(1,10) for y in range(1,10)])
     test_p([kstest(rs,'gaus',(x,y),'norm',(x,y)) for x in range(1,10) for y in range(1,10)])
