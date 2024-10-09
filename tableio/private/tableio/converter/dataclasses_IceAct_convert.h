@@ -43,9 +43,11 @@ class I3IceActTriggerMapConverter : public I3ConverterImplementation<I3IceActTri
     {
         //typedef typename I3IceActTriggerMap::const_iterator citer_type;
         I3IceActTriggerMap::const_iterator mapiter = map.begin();
-
-        for(mapiter = map.begin(); mapiter != map.end(); mapiter++)
+        const size_t maxindex = map.size();
+        size_t currentRow;
+        for(mapiter = map.begin(), currentRow = rows->GetCurrentRow(); mapiter != map.end(); mapiter++)
         {
+            rows->SetCurrentRow(currentRow++);
             rows->Set<int32_t>("station", mapiter->first.GetStationID());
             rows->Set<uint32_t>("telescope", mapiter->first.GetTelescopeID());
 
@@ -61,7 +63,10 @@ class I3IceActTriggerMapConverter : public I3ConverterImplementation<I3IceActTri
             if (key.CheckConfigID())
                 rows->Set<int32_t>("config_id", key.GetConfigID());
         };
-        return 1;
+        return maxindex;
+    }
+    size_t GetNumberOfRows(const I3IceActTriggerMap& map) override {
+        return map.size();
     }
 };
 
@@ -170,7 +175,7 @@ class I3IceActTelescopePixelUnsignedMapConverter : public I3ConverterImplementat
 
         const I3TableRowDescription &desc = *rows->GetDescription();
         const size_t rpssize = desc.GetFieldArrayLengths()[desc.GetFieldColumn("pixel")];
-
+        const size_t maxindex = map.size();
         size_t currentRow;
         for(mapiter = map.begin(), currentRow = rows->GetCurrentRow(); mapiter != map.end(); mapiter++)
         {
@@ -194,9 +199,11 @@ class I3IceActTelescopePixelUnsignedMapConverter : public I3ConverterImplementat
                 buffer_exists[i] = true;
             }
         };
-        return 1;
+        return maxindex;
     }
-
+    size_t GetNumberOfRows(const I3IceActTelescopePixelUnsignedMap& map) override {
+        return map.size();
+    }
     size_t getI3IceActTelescopePixelUnsignedMapLength(const I3IceActTelescopePixelUnsignedMap &map)
     {
         size_t size = 64;
@@ -241,6 +248,7 @@ class I3IceActTelescopePixelDoubleMapConverter : public I3ConverterImplementatio
         const size_t rpssize = desc.GetFieldArrayLengths()[desc.GetFieldColumn("pixel")];
 
         size_t currentRow;
+        const size_t maxindex = map.size();
         for(mapiter = map.begin(), currentRow = rows->GetCurrentRow(); mapiter != map.end(); mapiter++)
         {
             if (mapiter->second.size() == 0)
@@ -263,9 +271,11 @@ class I3IceActTelescopePixelDoubleMapConverter : public I3ConverterImplementatio
                 buffer_exists[i] = true;
             }
         };
-        return 1;
+        return maxindex;
     }
-
+    size_t GetNumberOfRows(const I3IceActTelescopePixelDoubleMap& map) override {
+        return map.size();
+    }
     size_t getI3IceActTelescopePixelDoubleMapLength(const I3IceActTelescopePixelDoubleMap &map)
     {
         size_t size = 64;
@@ -298,6 +308,7 @@ class I3IceActTelescopePixelVectorIntMapConverter : public I3ConverterImplementa
     size_t FillRows(const I3IceActTelescopePixelVectorIntMap& map, I3TableRowPtr rows) {
         I3IceActTelescopePixelVectorIntMap::const_iterator mapiter = map.begin();
         size_t currentRow;
+        const size_t maxindex = map.size();
         for(mapiter = map.begin(), currentRow = rows->GetCurrentRow(); mapiter != map.end(); mapiter++)
         {
             if (mapiter->second.size() == 0)
@@ -319,8 +330,11 @@ class I3IceActTelescopePixelVectorIntMapConverter : public I3ConverterImplementa
                 }
             }
         };
-        return 1;
+        return maxindex;
     };
+    size_t GetNumberOfRows(const I3IceActTelescopePixelVectorIntMap& map) override {
+        return map.size();
+    }
 };
 
 class I3IceActTelescopeStringDoubleMapConverter : public I3ConverterImplementation<I3IceActTelescopeStringDoubleMap>
@@ -343,6 +357,7 @@ class I3IceActTelescopeStringDoubleMapConverter : public I3ConverterImplementati
     size_t FillRows(const I3IceActTelescopeStringDoubleMap& map, I3TableRowPtr rows) {
         I3IceActTelescopeStringDoubleMap::const_iterator mapiter = map.begin();
         size_t currentRow;
+        const size_t maxindex = map.size();
         for(mapiter = map.begin(), currentRow = rows->GetCurrentRow(); mapiter != map.end(); mapiter++)
         {
             if (mapiter->second.size() == 0)
@@ -356,8 +371,11 @@ class I3IceActTelescopeStringDoubleMapConverter : public I3ConverterImplementati
                 rows->Set<double>(citer->first, citer->second);
             }
         };
-        return 1;
+        return maxindex;
     };
+    size_t GetNumberOfRows(const I3IceActTelescopeStringDoubleMap& map) override {
+        return map.size();
+    }
 };
 
 template<typename ValueType>
@@ -379,7 +397,6 @@ class I3MapIceActKeyConverter : public I3ConverterImplementation<I3Map<IceActKey
     size_t FillRows(const I3Map<IceActKey, ValueType>& map, I3TableRowPtr rows)
     {
         typedef typename I3Map<IceActKey, ValueType>::const_iterator citer_type;
-
         for(citer_type mapiter = map.begin(); mapiter != map.end(); mapiter++)
         {
             rows->Set<int32_t>("station", mapiter->first.GetStationID());
