@@ -32,7 +32,7 @@ try:
     # generate empty frames
     tray.Add("BottomlessSource")
     tray.Add(UseRandom)
-    tray.Add(UseRandom, I3RandomService=phys_services.I3GSLRandomService(3141579))
+    tray.Add(UseRandom, I3RandomService=phys_services.I3MTRandomService(3141579))
     tray.Add(UseRandom, I3RandomService=None)
     tray.Add("ContextFreeServiceTestModule")
     tray.Execute(11)

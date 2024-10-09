@@ -65,10 +65,10 @@ class PhysServicesPybindings(unittest.TestCase):
         logging.log_debug("I found calibrations for %d DOMs" % len(my_cal.dom_cal))
         self.assertTrue(len(my_cal.dom_cal) == 5433, "Should have gotten 5433 dom cals")
 
-    def testI3GSLRandomService(self):
+    def testI3MTRandomService(self):
         logging.log_debug("Working out randoms")
 
-        rng = phys_services.I3GSLRandomService(31334)
+        rng = phys_services.I3MTRandomService(31334)
         r = [rng.gaus(0, 1) for x in range(100)]
         logging.log_debug("Please take these 100 rands: \n %s" % r)
         self.assertTrue(len(r) == 100, "Should have gotten 100 rands")

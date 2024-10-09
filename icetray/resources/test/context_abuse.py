@@ -21,8 +21,8 @@ class UseRandom(icetray.I3Module):
 
 tray = I3Tray()
 
-tray.AddService("I3GSLRandomServiceFactory", "rng")
-rng = phys_services.I3GSLRandomService(1337)
+tray.AddService("I3MTRandomServiceFactory", "rng")
+rng = phys_services.I3MTRandomService(1337)
 
 # Pass a string to a module that expects to get a pointer.
 # I3Configuration::Get() should fall back to getting the
