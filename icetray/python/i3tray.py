@@ -150,7 +150,7 @@ class I3Tray(_icetray._I3TrayBase):
             super().SetParameter(_name, k, v)
         return self
 
-    def AddSegment(self, _segment, _name: "Optional[str]"=None, If=None, **kwargs):
+    def AddSegment(self, _segment, _name: "Optional[str]"=None, *, If=None, **kwargs):
         """
         Add a tray segment to the tray. This is a small scriptlet that can
         autoconfigure some set of modules and services according to a
@@ -170,7 +170,10 @@ class I3Tray(_icetray._I3TrayBase):
 
         """
         (keys,vals) = (list(kwargs.keys()), list(kwargs.values()))
-        argnames = inspect.getfullargspec(_segment)[0]
+        fullargspec = inspect.getfullargspec(_segment)
+        argnames = fullargspec.args
+        if 'If' not in argnames and 'If' in fullargspec[4]:
+            argnames.append('If')
         largnames = [a.lower() for a in argnames]
 
         if _name is None:
