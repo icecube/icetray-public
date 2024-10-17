@@ -68,6 +68,9 @@ endif()
 if(POLICY CMP0094)
     cmake_policy(SET CMP0094 NEW)
 endif()
+if(POLICY CMP0167)
+    cmake_policy(SET CMP0167 NEW)
+endif()
 
 #
 # search for header, libraries and frameworks inside of the system
@@ -338,7 +341,7 @@ foreach(module ${_i3_project_extension_libs})
     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
     COMMAND ${PYTHON_EXECUTABLE} "-c" "import ${module}"
   )
-  
+
 endforeach(module ${_i3_project_extension_libs})
 
 
@@ -357,7 +360,7 @@ add_custom_target(mypy-libs
 add_custom_target(mypy-scripts
    COMMAND ${CMAKE_COMMAND} -E env "MYPYPATH=." ./env-shell.sh mypy
     --config ${CMAKE_SOURCE_DIR}/pyproject.toml
-    --namespace-packages --explicit-package-bases _mypy_scripts 
+    --namespace-packages --explicit-package-bases _mypy_scripts
 )
 
 add_custom_target(mypy DEPENDS mypy-libs mypy-scripts)

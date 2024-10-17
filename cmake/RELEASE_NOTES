@@ -12,6 +12,8 @@ Release Notes
 main
 ----
 
+* Address the warning for policy CMP0167 (FindBoost).
+
 June 18, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.11.0
