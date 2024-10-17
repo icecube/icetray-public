@@ -166,7 +166,7 @@ class RunInfo(dict):
             file_number = self._find_file_number(f)
 
             if file_number not in metadata:
-                raise RuntimeError('No metadata avilable for run {run_id}, file #{file_number} ({path})'.format(run_id = self['run_id'], file_number = file_number, path = f))
+                raise RuntimeError('No metadata available for run {run_id}, file #{file_number} ({path})'.format(run_id = self['run_id'], file_number = file_number, path = f))
 
             entry = {
                 'path': f,
@@ -239,8 +239,8 @@ class RunInfo(dict):
         :param end_time: a ``datetime`` instance corresponding to the end of the window to request run ids from
 
         :return: list of bundled (run id, start-time of run, end-time of run) as (int, datetime, datetime)
-        that took place between ``start_time`` and ``end_time``
-                 
+                 that took place between ``start_time`` and ``end_time``
+
         """
 
         test_url = "https://virgo.icecube.wisc.edu/run_info/"
@@ -275,7 +275,7 @@ class RunInfo(dict):
         :param end_time: a ``datetime`` instance corresponding to the end of the time window to request
 
         :return: list of bundled (run id, good start-time of run, good end-time of run) as (int, datetime, datetime)
-        that took place between ``start_time`` and ``end_time``
+                 that took place between ``start_time`` and ``end_time``
         """
 
         test_url = "https://live.icecube.wisc.edu/snapshot-export/"
@@ -470,7 +470,7 @@ class GoodRunList(dict):
     def exclude_runs(self, arg):
         """
         Exclude certain runs from the GRL. You can pass a list of run ids, you can pass exactly one run id,
-        or you can pass a path to a file that contains run ids separated by whitspaces (space, new line, tab).
+        or you can pass a path to a file that contains run ids separated by whitespace (space, new line, tab).
         """
 
         if isinstance(arg, (list, tuple)):
