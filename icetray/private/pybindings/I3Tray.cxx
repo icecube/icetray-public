@@ -102,6 +102,7 @@ void register_I3Tray()
     .def("AddService",
 	 (I3Tray::param_setter (I3Tray::*)(const std::string&, std::string))
 	 &I3Tray::AddService)
+	.def("HasService", &I3Tray::HasService)
     .def("AddModule",
 	 (I3Tray::param_setter (I3Tray::*)(boost::python::object, std::string))
 	 &I3Tray::AddModule)

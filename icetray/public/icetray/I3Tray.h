@@ -147,6 +147,14 @@ public:
   param_setter
   AddService(std::string name="");
 
+  /**
+   * Checks whether the specified service has been added to the framework.
+   *
+   * @param The name of the service for which to check.
+   */
+  bool
+  HasService(const std::string& name){ return factories.count(name); }
+
 
   template <class Type>
   typename boost::enable_if<boost::is_base_of<I3Module,Type>,param_setter>::type

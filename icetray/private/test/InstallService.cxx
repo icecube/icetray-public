@@ -45,3 +45,12 @@ TEST(name)
   tray.Execute(10);
 }
 
+TEST(check_service_installed)
+{
+  I3Tray tray;
+  ENSURE(!tray.HasService("TESTNAME"),
+               "The service should not be found before it is installed");
+  tray.AddService<NameTestService>("TESTNAME");
+  ENSURE(tray.HasService("TESTNAME"),
+               "The service should be found after it is installed");
+}
