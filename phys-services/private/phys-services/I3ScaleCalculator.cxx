@@ -40,11 +40,11 @@ I3ScaleCalculator::I3ScaleCalculator (I3GeometryConstPtr geo,
   }
 
   if (iceConf_ == IC_CUSTOM) {
-    log_info("Using a custom list of strings");
+    log_info("Using a custom list of strings: length = %ld", strings.size());
     listOfBoundaryDeepStrings_ = strings;
   }
   if (topConf_ == IT_CUSTOM) {
-    log_info("Using a custom list of stations");
+    log_info("Using a custom list of stations: length = %ld", stations.size());
     listOfBoundarySurfaceStations_ = stations;
   }
   if (iceConf_ == IC79) {
@@ -83,9 +83,9 @@ I3ScaleCalculator::I3ScaleCalculator (I3GeometryConstPtr geo,
   }
 
   log_debug("At the end of the constructor, we've got configs: %d / %d", iceConf_, topConf_);
-  log_debug("And lists of strings:");
+  log_debug("And lists of strings (%ld):", listOfBoundaryDeepStrings_.size());
   BOOST_FOREACH(int s, listOfBoundaryDeepStrings_) { log_debug("%d", s); }
-  log_debug("And lists of stations:");
+  log_debug("And lists of stations (%ld):", listOfBoundarySurfaceStations_.size());
   BOOST_FOREACH(int s, listOfBoundarySurfaceStations_) { log_debug("%d", s); }
   log_debug("And top/bottom DOM's are: %d / %d", topDOMid_, bottomDOMid_);
 
@@ -222,6 +222,7 @@ std::vector<int > I3ScaleCalculator::GetOuterStrings () const {
   default:
     log_fatal("Unknown configuration %d", iceConf_);
   }
+  log_debug("Returning a list of outer strings with %ld elements.", outerStrings.size());
   return outerStrings;
 }
 
@@ -310,6 +311,7 @@ std::vector<int > I3ScaleCalculator::GetOuterStations () const {
   default:
     log_fatal("Unknown configuration %d", topConf_);
   }
+  log_debug("Returning a list of outer stations with %ld elements.", outerStations.size());
   return outerStations;
 }
 
@@ -338,6 +340,8 @@ void I3ScaleCalculator::CalcOuterStringPositions (std::vector<double > &x,
   // the overall z-coordinates (top and bottom) are made from the average z's of the boundary
   BOOST_FOREACH (int stringNo, outerStrings) {
     OMKey key (stringNo, nmiddle);  // pick roughly the middle of the string
+    if (omMap.find(key) == omMap.end() ) 
+      log_fatal("Looks like you asked for a string %d (middle DOM %d) which is not in the I3Geometry.", stringNo, nmiddle);
     double xPos = omMap[key].position.GetX ();
     double yPos = omMap[key].position.GetY ();
     x.push_back (xPos);
@@ -370,6 +374,8 @@ void I3ScaleCalculator::CalcOuterStationPositions (std::vector<double > &x,
   // calculate the positions of the two tanks within the station, and average them (X and Y)
   // the z-coordinate is fixed.
   BOOST_FOREACH (int stringNo, outerStrings) {
+    if (stationMap.find(stringNo) == stationMap.end() ) 
+      log_fatal("Looks like you asked for a station %d which is not in the I3Geometry.", stringNo);
     x.push_back ((stationMap[stringNo][0].position.GetX ()
                   + stationMap[stringNo][1].position.GetX ()) / 2);
     y.push_back ((stationMap[stringNo][0].position.GetY ()

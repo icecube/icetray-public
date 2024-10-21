@@ -10,7 +10,8 @@ Release Notes
 main
 ----
 
-* fix formatting and typos in docstrings
+* Add some error-catching and debugging to I3ScaleCalculator (#3693)
+* Fix formatting and typos in docstrings
 * Update majority of tests to I3MTRandomService (#3658)
 * Fix MTRandomService exponential distribution bug and update full sim test (#3655)
 * Clean up doxygen warnings (#3640)

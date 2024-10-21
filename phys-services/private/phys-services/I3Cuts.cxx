@@ -581,6 +581,17 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
   zcm = (zhigh+zlow)/2;
   I3Position CM(xcm,ycm,zcm);
 
+  // Some debugging statements
+  for (unsigned int i=0; i<x.size(); i++)
+    log_debug("X = %f, Y= %f", x[i], y[i]);
+
+  log_debug("Analyzing track: (%f, %f, %f) / (%f, %f)", 
+            track.GetPos().GetX(),
+            track.GetPos().GetY(),
+            track.GetPos().GetZ(),
+            track.GetDir().GetZenith(),
+            track.GetDir().GetAzimuth());  
+
   // Error-catching: what if the track goes right through the center of mass?
   if (I3Calculator::IsOnTrack(track,CM,DBL_EPSILON)) return 0;
 
