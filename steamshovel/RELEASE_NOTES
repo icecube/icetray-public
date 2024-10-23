@@ -10,6 +10,10 @@ Release Notes
 main
 ----
 
+Oct. 24, 2024 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.12.0
+
 * Update tooling and code to use ruff v0.6.4 (#3624)
 * Compile cleanly with -Wall -Werror (#3540)
 * Cosmetic improvements to stubs (#3494)
@@ -62,7 +66,7 @@ IceTray Release v1.9.0
 * python ruff cleanup fix EXE001 (#3289)
 * Fix a number of issues identified by ruff (#3262)
 * cleanup confusing loop control variables (#3246)
-* remove unnecessary `__future__` imports (#3243)
+* remove unnecessary ``__future__`` imports (#3243)
 * use callable(obj) vs hasattr(obj, "__call__") (#3242)
 * fix erroneous noqa directives (#3252)
 * remove I3Test.ENSURE* family of convenience functions (#3192)

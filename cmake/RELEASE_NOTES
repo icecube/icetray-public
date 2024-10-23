@@ -1,8 +1,8 @@
+.. -*- mode: rst -*- vim: ft=rst
+
 .. SPDX-FileCopyrightText: 2024 The IceTray Contributors
 ..
 .. SPDX-License-Identifier: BSD-2-Clause
-
-.. -*- mode: rst -*- vim: ft=rst
 
 .. _cmake-release-notes:
 
@@ -11,6 +11,10 @@ Release Notes
 
 main
 ----
+
+Oct. 24, 2024 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.12.0
 
 * Address the warning for policy CMP0167 (FindBoost).
 * clean up a small handful of typos

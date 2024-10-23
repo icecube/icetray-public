@@ -10,6 +10,10 @@ Release Notes
 main
 ----
 
+Oct. 24, 2024 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.12.0
+
 - Adding instructions for cvmfsexec (#3650)
 - Clean up doxygen warnings (#3640)
 - refactor / remove StackOverflow code (#3512)
