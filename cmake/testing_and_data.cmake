@@ -1,8 +1,8 @@
-# -*- mode: cmake; cmake-tab-width: 4 -*- vim: ft=cmake
-
 # SPDX-FileCopyrightText: 2024 The IceTray Contributors
 #
 # SPDX-License-Identifier: BSD-2-Clause
+
+# -*- mode: cmake; cmake-tab-width: 4 -*- vim: ft=cmake
 
 # This cmake file contains the "setup and configuration" for testing
 # and data. Primarily it sets two cmake variables from provided
@@ -23,7 +23,7 @@ colormsg("")
 colormsg(_HIBLUE_ "Configuring data and tests...")
 colormsg("")
 
-set(TESTDATA_VERSION "releases/V01-12-00")
+set(TESTDATA_VERSION "trunk")
 set(PRODDATA_VERSION "trunk")
 
 ## set the value of I3_TESTDATA
