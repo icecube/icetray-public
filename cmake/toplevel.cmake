@@ -28,7 +28,7 @@
 #
 #
 cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
-project(icetray VERSION 1.11.1)
+project(icetray VERSION 1.12.0)
 
 if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
   message(FATAL_ERROR "
