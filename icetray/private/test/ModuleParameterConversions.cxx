@@ -215,10 +215,10 @@ TEST(d_longs)
     {
       l = INT_MAX;
       l++;
-      _EXPECT_THROW(int_param, l, boost::python::error_already_set);
+      _EXPECT_THROW(int_param, l, std::bad_cast);
       l = INT_MIN;
       l--;
-      _EXPECT_THROW(int_param, l, boost::python::error_already_set);
+      _EXPECT_THROW(int_param, l, std::bad_cast);
     }
   else
     {
@@ -301,7 +301,7 @@ TEST(g_omkeys)
   _EXPECT_THROW(omkey_param, b, boost::python::error_already_set);
   _EXPECT_THROW(omkey_param, i, boost::python::error_already_set);
   _EXPECT_THROW(omkey_param, d, boost::python::error_already_set);
-  _EXPECT_THROW(omkey_param, s, std::runtime_error);
+  _EXPECT_THROW(omkey_param, s, boost::python::error_already_set);
 }
 
 TEST(case_insensitivity)

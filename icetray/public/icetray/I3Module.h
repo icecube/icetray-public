@@ -285,20 +285,23 @@ public:
     try {
       value = configuration_.Get<T>(name);
     } catch (...) {
+      log_debug_stream("...which failed the first time, so trying it again with Get<string>: " << name);
+      // Bail if the value is not a string, or that string is not a key in the context
+      // special case for Get<shared_ptr<T>>, which never throws
+      boost::python::extract<std::string> get_context_name(configuration_.Get(name));
+      if (!get_context_name.check() || !(is_shared_ptr<T>::value || context_.Has(get_context_name()))) {
+        throw;
+      }
       try {
-        // NB: we got here by catching an error thrown by boost::python::extract().
-        // All subsequent calls will fail unless we clean it up.
-        PyErr_Clear();
-        log_debug("...which failed the first time, so trying it again with Get<string>: %s", name.c_str());
-        std::string context_name = configuration_.Get<std::string>(name);
-        log_debug("Attempting a Get<T> on context name %s", context_name.c_str());
-        value = context_.Get<T>(context_name);
+        log_debug_stream("Attempting a Get<T> on context name " << get_context_name());
+        value = context_.Get<T>(get_context_name());
       } catch (...) {
         log_error("Error in %s module '%s', getting parameter '%s'",
                   I3::name_of(typeid(*this)).c_str(), GetName().c_str(),
                   name.c_str());
         throw;
       }
+      PyErr_Clear();
     }
   }
 

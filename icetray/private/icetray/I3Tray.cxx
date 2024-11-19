@@ -409,12 +409,12 @@ I3Tray::Configure()
 			PyErr_Fetch(&type, &value, &traceback);
 			log_error("Exception thrown while configuring "
 			    "module \"%s\".", objectname.c_str());
-			std::cerr << module->GetConfiguration();
+			log_error_stream(module->GetConfiguration());
 			PyErr_Restore(type, value, traceback);
 			throw;
 		}
 		if (!module->GetConfiguration().is_ok()) {
-			std::cerr << module->GetConfiguration();
+			log_error_stream(module->GetConfiguration());
 			log_fatal("Error in configuration for module "
 			    "\"%s\".  Turn up your logging to see just what.",
 			    objectname.c_str());
