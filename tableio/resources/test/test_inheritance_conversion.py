@@ -17,8 +17,14 @@ import os
 import unittest
 from contextlib import contextmanager
 
-from icecube import phys_services  # noqa: F401
-from icecube import dataclasses, icetray, tableio
+import h5py
+from icecube import (
+    dataclasses,
+    icetray,
+    phys_services,  # noqa: F401
+    tableio,
+)
+from icecube.hdfwriter import I3HDFWriter
 from icecube.icetray import I3Tray
 
 icetray.logging.set_level_for_unit("I3Tray", "WARN")
@@ -88,10 +94,6 @@ def make_make_object(type):
     return make_object
 
 def try_to_write(type,file,keys=["Object"],types=[]):
-    try:
-        from icecube.hdfwriter import I3HDFWriter
-    except ImportError:
-        raise unittest.SkipTest("hdfwriter project missing")
     tray = I3Tray()
     tray.AddModule('I3InfiniteSource')
     tray.AddModule(add_eventheader, Streams=[icetray.I3Frame.DAQ])
@@ -114,15 +116,11 @@ class BaseConverter(unittest.TestCase):
     def tearDown(self):
         os.unlink(self.test_output)
     def testGeneric(self):
-        try:
-            import tables
-        except ImportError:
-            raise unittest.SkipTest("pytables missing")
-        with tables.open_file(self.test_output) as hdf:
-            table=hdf.get_node("/Object")
+        with h5py.File(self.test_output,'r') as hdf:
+            table=hdf["/Object"]
             self.assertIsNotNone(table, "Object table exists")
-            self.assertIn("a", table.colnames, "'A' parameter was recorded")
-            self.assertTrue("b" not in table.colnames, "'B' parameter does not exist")
+            self.assertIn("a", table.dtype.names, "'A' parameter was recorded")
+            self.assertTrue("b" not in table.dtype.names, "'B' parameter does not exist")
 
 class GenericSubclassConverter(unittest.TestCase):
     def __init__(self, *args, **kwargs):
@@ -133,15 +131,11 @@ class GenericSubclassConverter(unittest.TestCase):
     def tearDown(self):
         os.unlink(self.test_output)
     def testGeneric(self):
-        try:
-            import tables
-        except ImportError:
-            raise unittest.SkipTest("pytables missing")
-        with tables.open_file(self.test_output) as hdf:
-            table = hdf.get_node("/Object")
+        with h5py.File(self.test_output,'r') as hdf:
+            table = hdf["/Object"]
             self.assertIsNotNone(table, "Object table exists")
-            self.assertIn("a", table.colnames, "'A' parameter was recorded")
-            self.assertTrue("b" not in table.colnames, "'B' parameter does not exist")
+            self.assertIn("a", table.dtype.names, "'A' parameter was recorded")
+            self.assertTrue("b" not in table.dtype.names, "'B' parameter does not exist")
 
 class SpecificSubclassConverter(unittest.TestCase):
     def __init__(self, *args, **kwargs):
@@ -153,28 +147,20 @@ class SpecificSubclassConverter(unittest.TestCase):
     def tearDown(self):
         os.unlink(self.test_output)
     def testGeneric(self):
-        try:
-            import tables
-        except ImportError:
-            raise unittest.SkipTest("pytables missing")
-        with tables.open_file(self.test_output) as hdf:
-            table = hdf.get_node("/Object")
+        with h5py.File(self.test_output,'r') as hdf:
+            table = hdf["/Object"]
             self.assertIsNotNone(table, "Object table exists")
-            self.assertIn("a", table.colnames, "'A' parameter was recorded")
-            self.assertIn("b", table.colnames, "'B' parameter was recorded")
+            self.assertIn("a", table.dtype.names, "'A' parameter was recorded")
+            self.assertIn("b", table.dtype.names, "'B' parameter was recorded")
 
 class ComposedConverter(unittest.TestCase):
 
     @contextmanager
     def table(self, klass=Bar, fname="test.hdf5", keys=["Object"], types=[]):
         try:
-            import tables
-        except ImportError:
-            raise unittest.SkipTest("pytables missing")
-        try:
             try_to_write(klass, fname, keys, types)
-            with tables.open_file(fname) as hdf:
-                table = hdf.get_node("/Object")
+            with h5py.File(fname,'r') as hdf:
+                table = hdf["/Object"]
                 self.assertIsNotNone(table, "Object table exists")
                 yield table
         finally:
@@ -183,8 +169,8 @@ class ComposedConverter(unittest.TestCase):
     @contextmanager
     def _check_table(self, **kwargs):
         with self.table(**kwargs) as table:
-            self.assertIn("a", table.colnames, "'A' parameter was recorded")
-            self.assertIn("b", table.colnames, "'B' parameter was recorded")
+            self.assertIn("a", table.dtype.names, "'A' parameter was recorded")
+            self.assertIn("b", table.dtype.names, "'B' parameter was recorded")
             yield table
 
     def testSingleConverterByKey(self):
@@ -195,8 +181,8 @@ class ComposedConverter(unittest.TestCase):
 
     def testComposedConverterByKey(self):
         with self._check_table(keys=[{"key": "Object", "converter": [BarConverter(), ExtendedBarConverter()]}]) as table:
-            self.assertIn("a2", table.colnames)
-            values = table.read()
+            self.assertIn("a2", table.dtype.names)
+            values = table[:]
             self.assertEqual(values['a']*2, values['a2'])
 
     def testSingleConverterByType(self):

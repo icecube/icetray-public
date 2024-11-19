@@ -6,14 +6,15 @@
 
 # Ensure that row padding works properly with split streams.
 
-from icecube import icetray, dataclasses, dataio, tableio, phys_services
-import os, sys, random, unittest
+import os
+import random
+import sys
+import unittest
+from subprocess import call
 
-try:
-    from icecube import hdfwriter
-    import tables
-except ImportError:
-    sys.exit()
+import h5py
+from icecube import dataclasses, dataio, hdfwriter, icetray, phys_services, tableio
+
 
 def headerfaker(frame):
     header = dataclasses.I3EventHeader()
@@ -34,9 +35,6 @@ def streampick(stream):
     return pick
 
 
-@unittest.skipIf("ICETRAY_RUNNER_OS" in os.environ and \
-                 "alma8" in os.environ.get("ICETRAY_RUNNER_OS"),
-                 "Skipping test on 'alma8': pytables triggers memory corruption when closing an hdf5 file")
 class SubeventTest(unittest.TestCase):
     fname = os.environ['I3_BUILD'] + '/hdfwriter/subevent_test.hdf5'
     @classmethod
@@ -71,17 +69,17 @@ class SubeventTest(unittest.TestCase):
     def tearDown(self):
         os.unlink(self.fname)
     def testRowAlignment(self):
-        hdf = tables.open_file(self.fname)
+        hdf = h5py.File(self.fname,'r')
         tabs = []
         for i in range(10):
             for j in range(2):
                 try:
-                    tabs.append(hdf.get_node('/s%de%d' % (j,i)))
+                    tabs.append(hdf[f'/s{j}e{i}'])
                 except:
                     pass
-        nrows = tabs[0].nrows
+        nrows = len(tabs[0])
         for tab in tabs[1:]:
-            self.assertEqual(nrows, tab.nrows)
+            self.assertEqual(nrows, len(tab))
         for i in range(nrows):
             canonical = tabs[0][i]
             for tab in tabs[1:]:
@@ -96,9 +94,6 @@ class SubeventTest(unittest.TestCase):
         hdf.close()
 
 
-@unittest.skipIf("ICETRAY_RUNNER_OS" in os.environ and \
-                 "alma8" in os.environ.get("ICETRAY_RUNNER_OS"),
-                 "Skipping test on 'alma8': pytables triggers memory corruption when closing an hdf5 file")
 class SubeventMergingTest(unittest.TestCase):
     fname1 = os.environ['I3_BUILD'] + '/hdfwriter/subevent_test_1.hdf5'
     fname2 = os.environ['I3_BUILD'] + '/hdfwriter/subevent_test_2.hdf5'
@@ -106,37 +101,36 @@ class SubeventMergingTest(unittest.TestCase):
     def setUp(self):
         SubeventTest.runtray(self.fname1)
         SubeventTest.runtray(self.fname2)
-        from subprocess import call
         call([os.environ['I3_BUILD'] + "/hdfwriter/resources/scripts/merge.py", "-o", self.fname_merged, self.fname1, self.fname2])
     def tearDown(self):
         for f in [self.fname1, self.fname2, self.fname_merged]:
             os.unlink(f)
     def testMergedAlignment(self):
-        hdf1 = tables.open_file(self.fname1)
-        hdf2 = tables.open_file(self.fname2)
-        hdfmerge = tables.open_file(self.fname_merged)
+        hdf1 = h5py.File(self.fname1,'r')
+        hdf2 = h5py.File(self.fname2,'r')
+        hdfmerge = h5py.File(self.fname_merged,'r')
 
         tabs = []
         for i in range(10):
             for j in range(2):
                 try:
-                    tabs.append(hdf1.get_node('/s%de%d' % (j,i)))
+                    tabs.append(hdf1[f'/s{j}e{i}'])
                 except:
                     pass
-        nrows1 = tabs[0].nrows
+        nrows1 = len(tabs[0])
         tabs = []
         for i in range(10):
             for j in range(2):
                 try:
-                    tabs.append(hdf2.get_node('/s%de%d' % (j,i)))
+                    tabs.append(hdf2[f'/s{j}e{i}'])
                 except:
                     pass
-        nrows2 = tabs[0].nrows
+        nrows2 = len(tabs[0])
         for tab in tabs:
-            itab = hdf2.get_node('/__I3Index__/%s' % tab.name)
-            imtab = hdfmerge.get_node('/__I3Index__/%s' % tab.name)
-            mtab = hdfmerge.get_node('/%s' % tab.name)
-            self.assertEqual(mtab.nrows, nrows1+nrows2)
+            itab = hdf2['/__I3Index__/%s' % tab.name]
+            imtab = hdfmerge['/__I3Index__/%s' % tab.name]
+            mtab = hdfmerge['/%s' % tab.name]
+            self.assertEqual(len(mtab), nrows1+nrows2)
             for i in range(nrows2):
                 row = tab[i]
                 mrow = mtab[i+nrows1]

@@ -9,9 +9,15 @@ Ensure that hdf5 write does padding correctly for S and non-S frames
 """
 
 import os
+import unittest
 
-from icecube import phys_services  # noqa: F401
-from icecube import dataclasses, hdfwriter, icetray
+import h5py
+from icecube import (
+    dataclasses,
+    hdfwriter,
+    icetray,
+    phys_services,  # noqa: F401
+)
 from icecube.icetray import I3Tray
 
 have_simclasses = False
@@ -20,8 +26,6 @@ try:
     have_simclasses = True
 except ImportError:
     pass
-
-import unittest
 
 icetray.logging.set_level_for_unit("I3Tray", "WARN")
 
@@ -60,15 +64,10 @@ class Generator(icetray.I3Module):
 
 class MCTreeTest(unittest.TestCase):
     test_output = os.path.basename(__file__) + ".hdf5"
+
     def setUp(self):
-
-        try:
-            import tables
-        except ImportError:
-            raise unittest.SkipTest("pytables missing")
-
-        if 'open_file' not in dir(tables):
-            raise unittest.SkipTest("pytables missing or incomplete")
+        if 'File' not in dir(h5py):
+            raise unittest.SkipTest("h5py missing or incomplete")
 
         tray = I3Tray()
         tray.Add(Generator)
@@ -85,13 +84,11 @@ class MCTreeTest(unittest.TestCase):
         os.unlink(self.test_output)
 
     def testNumberOfRows(self):
-        import tables
-
-        with tables.open_file(self.test_output) as hdf:
+        with h5py.File(self.test_output,'r') as hdf:
             if have_simclasses:
-                self.assertEqual(len(hdf.root.I3CorsikaInfo),5,"I3CorsikaInfo should have 5 entries")
-            self.assertEqual(len(hdf.root.I3MCTree),50,"I3MCTree should have 50 entries")
-            self.assertEqual(len(hdf.root.I3MCPrimary),100,"I3MCPrimary should have 100 entries")
+                self.assertEqual(len(hdf['I3CorsikaInfo']),5,"I3CorsikaInfo should have 5 entries")
+            self.assertEqual(len(hdf['I3MCTree']),50,"I3MCTree should have 50 entries")
+            self.assertEqual(len(hdf['I3MCPrimary']),100,"I3MCPrimary should have 100 entries")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

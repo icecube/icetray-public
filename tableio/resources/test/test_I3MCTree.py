@@ -64,33 +64,40 @@ class MCTreeTest(unittest.TestCase):
     test_output = os.path.basename(__file__) + ".hdf5"
     def setUp(self):
         try:
-            import tables
+            import h5py
         except ImportError:
-            raise unittest.SkipTest("pytables missing")
+            raise unittest.SkipTest("h5py missing")
 
-        if 'open_file' not in dir(tables):
-            raise unittest.SkipTest("pytables missing or incomplete")
+        if 'File' not in dir(h5py):
+            raise unittest.SkipTest("h5py missing or incomplete")
 
         try_to_write()
     def tearDown(self):
         os.unlink(self.test_output)
     def testNumberOfRows(self):
-        import tables
-        with tables.open_file(self.test_output) as hdf:
-            self.assertIsNotNone(hdf.get_node('/I3MCTree'), "I3MCTree table exists")
-            self.assertEqual(hdf.get_node('/I3MCTree').nrows, 2, "I3MCTree table has 2 rows")
+        import h5py
+        with h5py.File(self.test_output,'r') as hdf:
+            self.assertIsNotNone(hdf['/I3MCTree'], "I3MCTree table exists")
+            self.assertEqual(len(hdf['/I3MCTree']), 2, "I3MCTree table has 2 rows")
 
 class LinearizedMCTreeTest(MCTreeTest):
     def setUp(self):
         try:
-            import tables
+            import h5py
         except ImportError:
             raise unittest.SkipTest("pytables missing")
 
-        if 'open_file' not in dir(tables):
+        if 'File' not in dir(h5py):
             raise unittest.SkipTest("pytables missing or incomplete")
 
         try_to_write(linearized=True)
+    def tearDown(self):
+        os.unlink(self.test_output)
+    def testNumberOfRows(self):
+        import h5py
+        with h5py.File(self.test_output,'r') as hdf:
+            self.assertIsNotNone(hdf['/I3MCTree'], "I3MCTree table exists")
+            self.assertEqual(len(hdf['/I3MCTree']), 2, "I3MCTree table has 2 rows")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
