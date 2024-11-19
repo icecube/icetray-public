@@ -134,11 +134,12 @@ add_custom_target(inspect
           ${EXECUTABLE_OUTPUT_PATH}/icetray-inspect
           --sphinx --sphinx-references
           --all --no-params
-          --title=\"IceTracy Quick Reference\"
+          --title=\"IceTray Quick Reference\"
           -o ${SPHINX_DIR}/source/icetray_quick_reference.rst
   COMMENT "Generating rst from icetray-inspect of QuickReference"
   DEPENDS ${CMAKE_BINARY_DIR}/bin/icetray-inspect
   )
+#" extra quote to de-confuse syntax highlighters
 
 ## generate a URL and target to deploy docs to
 string(REGEX REPLACE "s\\.V.*$" "" DEST ${META_PROJECT})
@@ -150,7 +151,9 @@ add_custom_target(deploy-docs
   COMMENT Deploying docs to ${DEST}
   )
 
-include(tarball)
+if(ENABLE_TARBALL)
+  include(tarball)
+endif(ENABLE_TARBALL)
 
 #
 #  Environment checking targets
@@ -159,14 +162,29 @@ configure_file(${CMAKE_SOURCE_DIR}/cmake/env-check.sh.in
   ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/env-check.sh
   @ONLY)
 
+
+# reduce CMake's annoying variety of possible boolean values to predictable ones
+if(LEGACY_INSTALL)
+  set(LEGACY_INSTALL_NORMALIZED 1)
+else()
+  set(LEGACY_INSTALL_NORMALIZED 0)
+endif()
 configure_file(${CMAKE_SOURCE_DIR}/cmake/tarball-env-shell.sh.in
   ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tarball-env-shell.sh
   @ONLY)
 
+if(LEGACY_INSTALL)
+  install(PROGRAMS ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tarball-env-shell.sh
+    DESTINATION .
+    RENAME env-shell.sh
+    )
+endif(LEGACY_INSTALL)
+
 install(PROGRAMS ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tarball-env-shell.sh
-  DESTINATION .
-  RENAME env-shell.sh
+  TYPE BIN
+  RENAME icetray-shell
   )
+
 
 add_custom_target(env-check ALL
   COMMAND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/env-check.sh
@@ -256,6 +274,8 @@ foreach (file env-shell.sh)
   execute_process(COMMAND cp ${CMAKE_BINARY_DIR}/${file} ${NOTES_DIR})
 endforeach (file env-shell.sh)
 
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_BINARY_DIR}/env-shell.sh ${CMAKE_BINARY_DIR}/bin/icetray-shell)
+
 #
 # icetray-config
 #
@@ -268,6 +288,48 @@ configure_file(
 execute_process(COMMAND chmod 755 ${CMAKE_BINARY_DIR}/bin/icetray-config)
 execute_process(COMMAND cp ${CMAKE_BINARY_DIR}/bin/icetray-config ${NOTES_DIR})
 execute_process(COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh ARGS /usr/bin/env > ${NOTES_DIR}/env-post_shell.txt OUTPUT_QUIET ERROR_QUIET)
+
+set(ICETRAY_CONFIG_INSTALLED True)
+configure_file(
+  ${CMAKE_SOURCE_DIR}/cmake/icetray-config.in
+  ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/icetray-config
+  @ONLY
+  )
+unset(ICETRAY_CONFIG_INSTALLED)
+install(PROGRAMS ${CMAKE_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/icetray-config TYPE BIN)
+install(FILES ${CMAKE_BINARY_DIR}/CMakeCache.txt DESTINATION share/icetray/icetray)
+
+# if installing to a virtual environment,
+# symlink python package directory into the standard location
+if(DEFINED ENV{VIRTUAL_ENV} AND "${CMAKE_INSTALL_PREFIX}" STREQUAL "$ENV{VIRTUAL_ENV}")
+  INSTALL(CODE
+          "execute_process( \
+          COMMAND ${CMAKE_COMMAND} -E create_symlink \
+          \"${CMAKE_INSTALL_PREFIX}/lib/icecube\" \
+          \"${Python_SITEARCH}/icecube\" \
+          )" #" extra quote to de-confuse syntax highlighters
+          )
+  configure_file("${CMAKE_SOURCE_DIR}/cmake/init_shim.py.in"
+                 "${CMAKE_CURRENT_BINARY_DIR}/init_shim.py"
+                 @ONLY)
+  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/init_shim.py"
+          DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/icecube"
+          RENAME "__init__.py")
+endif()
+
+if(INSTALL_HEADERS)
+  if(LEGACY_INSTALL)
+    install(DIRECTORY "${CMAKE_SOURCE_DIR}/cmake/tool-patches/common/I3"
+            DESTINATION include
+            PATTERN ".git" EXCLUDE
+            PATTERN ".svn" EXCLUDE)
+  else()
+    install(DIRECTORY "${CMAKE_SOURCE_DIR}/cmake/tool-patches/common/I3"
+            DESTINATION include/icetray
+            PATTERN ".git" EXCLUDE
+            PATTERN ".svn" EXCLUDE)
+  endif()
+endif()
 
 #
 #  dpkg configuration

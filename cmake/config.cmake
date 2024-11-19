@@ -234,22 +234,56 @@ if(NOT HAVE_META_PROJECT)
 endif()
 
 
+option(ENABLE_TARBALL "Override the CMake installation system to produce a tarball" OFF)
+option(LEGACY_INSTALL "Use the legacy install layout" OFF)
 #
-# setup CMAKE_INSTALL_PREFIX
+# set up CMAKE_INSTALL_PREFIX
 # JC wants it like this.
 # set it to something reasonable if it equals /usr/local.
 #
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+if (ENABLE_TARBALL)
+  if(NOT DEFINED LEGACY_INSTALL)
+    set(LEGACY_INSTALL TRUE CACHE BOOL "Use the legacy install layout")
+  endif()
   if (META_PROJECT)
     set(CMAKE_INSTALL_PREFIX ${META_PROJECT}.r${GIT_SHORT_REVISION}.${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
   else()
     set(CMAKE_INSTALL_PREFIX ${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
+  endif()
+else()
+  # if no prefix is set and a virtual environment is being used,
+  # default the prefix to the virtual environment
+  if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT AND DEFINED ENV{VIRTUAL_ENV})
+    set(CMAKE_INSTALL_PREFIX $ENV{VIRTUAL_ENV} CACHE STRING "Install prefix" FORCE)
   endif()
 endif()
 
 if(CMAKE_INSTALL_PREFIX MATCHES "${META_PROJECT}.r[a-f0-9]+.${OSTYPE}-${ARCH}.${COMPILER_ID_TAG}")
   set(CMAKE_INSTALL_PREFIX ${META_PROJECT}.r${GIT_SHORT_REVISION}.${OSTYPE}-${ARCH}.${COMPILER_ID_TAG} CACHE STRING "Install prefix.  Also name of tarball." FORCE)
 endif()
+
+if(NOT LEGACY_INSTALL)
+  if(NOT DEFINED INSTALL_HEADERS)
+    set(INSTALL_HEADERS ON CACHE BOOL "install header files")
+  endif()
+  if(NOT DEFINED INSTALL_TOOL_LIBS)
+    set(INSTALL_TOOL_LIBS OFF CACHE BOOL "install tool libraries")
+  endif()
+endif()
+
+option(INSTALL_HEADERS "install header files" OFF)
+option(INSTALL_TOOL_LIBS "install libraries when making a tarball" ON)
+
+colormsg("")
+colormsg(_HIBLUE_ "Installation Settings")
+colormsg("")
+message("-- Install prefix: ${CMAKE_INSTALL_PREFIX}")
+if(ENABLE_TARBALL)
+  message("--  (Install configured for tarball)")
+endif()
+message("-- Use legacy install layout: ${LEGACY_INSTALL}")
+message("-- Install headers: ${INSTALL_HEADERS}")
+message("-- Install tool libraries: ${INSTALL_TOOL_LIBS}")
 
 colormsg("")
 colormsg(_HIBLUE_ "Setting compiler, compile drivers, and linker")

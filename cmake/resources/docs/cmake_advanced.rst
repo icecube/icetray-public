@@ -97,6 +97,9 @@ Not all of the variables are useful.  Here are some that are:
    * - .. attribute:: SYSTEM_PACKAGES
      - Use your operating system's installed versions of supporting libraries. Safe to use on modern (2015 and newer) OS's, but some more obscure libraries may need to be installed by hand.
      - OFF
+   * - .. attribute:: CMAKE_INSTALL_PREFIX
+     - The path to which the ``install`` make target will install the software. Cannot be used if ``ENABLE_TARBALL`` is on.
+     - ``/usr/local``, unless a python virtual environment is active when CMake is run, in which case it will be ``$VIRTUAL_ENV``.
 
 Uncommon CMake settings
 """""""""""""""""""""""
@@ -122,12 +125,18 @@ Uncommon CMake settings
    * - .. attribute:: USE_GIT_REVISION_FLAGS
      - Add compiled-in git revision information. Do not disable this option unless you want to have a bad time.
      - ON
-   * - .. attribute:: INSTALL_HEADERS
-     - Install header files when making tarball.
+   * - .. attribute:: ENABLE_TARBALL
+     - Enable creating a tarball instead of installing normally.
      - OFF
+   * - .. attribute:: LEGACY_INSTALL
+     - Install files in the old, non-standard locations.
+     - OFF
+   * - .. attribute:: INSTALL_HEADERS
+     - Install header files along with the rest of the software.
+     - ON unless ``LEGACY_INSTALL`` is enabled
    * - .. attribute:: INSTALL_TOOL_LIBS
      - Install 3rd party libraries when making tarball.
-     - ON
+     - OFF unless ``LEGACY_INSTALL`` is enabled
 
 Verbose build
 """""""""""""

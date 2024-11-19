@@ -5,8 +5,6 @@
 #
 # Tarball target
 #
-option(INSTALL_HEADERS "install header files when making tarball" OFF)
-option(INSTALL_TOOL_LIBS "install libraries when making tarball" ON)
 
 find_program(MD5SUM_PROGRAM md5sum)
 find_program(MD5SUM_PROGRAM md5)

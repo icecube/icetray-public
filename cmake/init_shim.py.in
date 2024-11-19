@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
+import os
+
+if "I3_SRC" not in os.environ:
+    expected_src="@CMAKE_INSTALL_PREFIX@/share/icetray"
+    os.environ["I3_SRC"] = expected_src
+    os.environ["I3_BUILD"] = expected_src
+    os.environ["I3_TESTDATA"] = "@I3_TESTDATA@"
+    os.environ["I3_PRODDATA"] = "@I3_PRODDATA@"
+    os.environ["I3_SHELL"] = os.environ.get("SHELL","")
+    if "HDF5_USE_FILE_LOCKING" not in os.environ:
+        os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE"

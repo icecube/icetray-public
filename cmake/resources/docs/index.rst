@@ -28,6 +28,7 @@ Quick User Guide
    dependencies
    platforms
    tutorial
+   install
    parasite
    tarball
 

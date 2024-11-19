@@ -62,10 +62,22 @@ pushd `dirname $0` >/dev/null
 BASEDIR=`pwd`
 popd >/dev/null
 
-_I3_SRC=$BASEDIR
-_I3_BUILD=$BASEDIR
-_I3_TESTDATA=@I3_TESTDATA@
-_I3_PRODDATA=@I3_PRODDATA@
+if [ $(basename $0) = "icetray-shell" ]; then
+    # if this executable is invoked with the new name, assume it lives in a bin directory
+    BASEDIR=$(dirname "$BASEDIR")
+    if [ "@LEGACY_INSTALL_NORMALIZED@" -eq "1" ]; then
+      _I3_SRC="$BASEDIR"
+      _I3_BUILD="$BASEDIR"
+    else
+      _I3_SRC="${BASEDIR}/share/icetray"
+      _I3_BUILD="${BASEDIR}/share/icetray"
+    fi
+else
+    _I3_SRC="$BASEDIR"
+    _I3_BUILD="$BASEDIR"
+fi
+_I3_TESTDATA="@I3_TESTDATA@"
+_I3_PRODDATA="@I3_PRODDATA@"
 
 # Check for I3_BUILD mismatch
 if [ -n "$I3_BUILD" -a "$I3_BUILD" != "$_I3_BUILD" ]
@@ -118,10 +130,10 @@ _LD_LIBRARY_PATH=${_LD_LIBRARY_PATH}:$LD_LIBRARY_PATH
 _DYLD_LIBRARY_PATH=${_DYLD_LIBRARY_PATH}:$DYLD_LIBRARY_PATH
 case "@ROOTSYS@" in
     */py3-v4.3*)
-        _PYTHONPATH=${_I3_BUILD}/lib:${_ROOTSYS}/lib/root:$PYTHONPATH
+        _PYTHONPATH=${BASEDIR}/lib:${_ROOTSYS}/lib/root:$PYTHONPATH
         ;;
     *)
-        _PYTHONPATH=${_I3_BUILD}/lib:${_ROOTSYS}/lib:$PYTHONPATH
+        _PYTHONPATH=${BASEDIR}/lib:${_ROOTSYS}/lib:$PYTHONPATH
         ;;
 esac
 _PATH=$BASEDIR/bin:$PATH

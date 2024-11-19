@@ -11,6 +11,9 @@
 Building tarballs for use on clusters or the grid
 =================================================
 
+The ``tarball`` target is available only if ``cmake`` was run with
+``ENABLE_TARBALL`` set to ON; it defaults to being disabled.
+
 ``make tarball`` will build an tarball suitable for distribution to
 the grid.  The unpacked tarballs have a similar layout to the
 workspace one finds in one's :envvar:`I3_BUILD` build directory after
@@ -32,7 +35,7 @@ What is done
 
 The following is done in building a tarball:
 
-.. _CMAKE_INSTALL_PREFIX:
+.. _CMAKE_INSTALL_PREFIX_TARBALL:
 .. index:: CMAKE_INSTALL_PREFIX
 
 * The 'make install' target is executed, which installs the locally
