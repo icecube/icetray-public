@@ -56,14 +56,14 @@ void loadframes(const std::string &where, unsigned nframes)
     filtering_istream ifs;
     I3::dataio::open(ifs, where);
     for (unsigned i=0; i<nframes; i++)
-      {
-	I3FramePtr newframe(new I3Frame);
-	newframe->load(ifs);
-	cout << *newframe << "\n";
-	cout << "stream size=" << ifs.size() << "\n";
-	void* stdifs = ifs.component<void>(ifs.size()-1);
-	cout << "stdifs is at " << stdifs << "\n";
-      }
+    {
+      I3FramePtr newframe(new I3Frame);
+      newframe->load(ifs);
+      cout << *newframe << "\n";
+      cout << "stream size=" << ifs.size() << "\n";
+      void* stdifs = ifs.component<void>(ifs.size()-1);
+      cout << "stdifs is at " << stdifs << "\n";
+    }
   }
 }
 
@@ -86,9 +86,8 @@ TEST(b_frame_plus_bool)
 TEST(c_hundred_doubles)
 {
   I3Frame fr;
-  for (double d=0; d<100; d++)
+  for (unsigned int d=0; d<100; d++)
     {
-      I3DoublePtr i3dp = I3DoublePtr(new I3Double(d));
       fr.Put(boost::lexical_cast<string>(d), I3DoublePtr(new I3Double(d)));
     }
   test(fr, "hundred_doubles.i3");
@@ -114,14 +113,14 @@ TEST(fail_reading_truncated_file)
   //  checksumming, but not when loading v3 files.
   //
   EXPECT_THROW(loadframes(string(getenv("I3_SRC"))
-			  + "/dataio/resources/data/serialization/truncated_hundred_doubles-v4.i3.gz",1),
-	       "This should throw.");
+                          + "/dataio/resources/data/serialization/truncated_hundred_doubles-v4.i3.gz",1),
+               "This should throw.");
 }
 
 TEST(fail_reading_corrupted_file)
 {
   EXPECT_THROW(loadframes(string(getenv("I3_SRC"))
-			  + "/dataio/resources/data/serialization/corrupt_hundred_doubles-v4.i3.gz",1),
-	       "This should throw.");
+                          + "/dataio/resources/data/serialization/corrupt_hundred_doubles-v4.i3.gz",1),
+               "This should throw.");
 }
 

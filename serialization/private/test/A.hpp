@@ -55,7 +55,7 @@ namespace std{
     #define DLL_DECL(x)
 #endif
 
-class DLL_DECL(BOOST_PP_EMPTY()) A
+class DLL_DECL(BOOST_PP_EMPTY()) A  // NOLINT(clang-analyzer-optin.performance.Padding)
 {
 private:
     friend class icecube::serialization::access;

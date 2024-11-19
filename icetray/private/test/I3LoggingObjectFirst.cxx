@@ -8,13 +8,8 @@
     @author troy d. straszheim <troy@resophonic.com>
 */
 
-#include <I3Test.h>
-#include <icetray/I3Logging.h>
-
-#include <string>
-using std::string;
-using std::cout;
-using std::endl;
+#include "I3Test.h"
+#include "icetray/I3Logging.h"
 
 // the "0" ensures that this test is run first (ascii sort order).  A
 // nasty hack.  I know.  But these order-of-initialization tests are
@@ -57,5 +52,3 @@ TEST(0_SET_LOGGER_logging_first)
   I3GetLoggerTester t;
   t.say_something();
 }
-
-

@@ -49,7 +49,7 @@ public:
 
     virtual const char *what( ) const throw( )
     {
-        const char *msg = "unknown exception code";
+        const char *msg = "unknown exception code";  // NOLINT(clang-analyzer-deadcode.DeadStores)
         switch(code){
         case invalid_6_bitcode:
             msg = "attempt to encode a value > 6 bits";

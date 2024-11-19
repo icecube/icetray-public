@@ -21,7 +21,8 @@ namespace std{
 #endif
 
 #include <archive/archive_exception.hpp>
-#include <I3Test.h>
+#include "I3Test.h"
+#include <iostream>
 
 #include "A.hpp"
 #include "A.ipp"

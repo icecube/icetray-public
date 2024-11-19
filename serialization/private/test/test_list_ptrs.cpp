@@ -20,7 +20,8 @@ namespace std{
 }
 #endif
 
-#include <I3Test.h>
+#include "I3Test.h"
+#include <iostream>
 
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/checked_delete.hpp>

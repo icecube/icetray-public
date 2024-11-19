@@ -111,6 +111,8 @@ TEST(resample) {
   FFTData data;
   FillData(data, 20, 1.0, -36);
 
+  // The following triggers https://github.com/boostorg/integer/issues/33
+  // NOLINTNEXTLINE(clang-analyzer-core.UndefinedBinaryOperatorResult)
   fft::ResampleFFTDataContainer(data, 2.5);
 
   AntennaTimeSeries timeseries = data.GetTimeSeries();

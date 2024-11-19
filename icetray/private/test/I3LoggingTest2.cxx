@@ -11,11 +11,6 @@
 #include <I3Test.h>
 #include <icetray/I3Logging.h>
 
-#include <string>
-using std::string;
-using std::cout;
-using std::endl;
-
 TEST_GROUP(I3LoggingTest2);
 TEST(two)
 {
