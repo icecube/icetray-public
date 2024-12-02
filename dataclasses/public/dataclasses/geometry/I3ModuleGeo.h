@@ -127,6 +127,8 @@ private:
     
     friend class icecube::serialization::access;
     template <class Archive> void serialize(Archive & ar, unsigned version);
+
+    static unsigned nwarns_;
 };
 
 std::ostream& operator<<(std::ostream&, const I3ModuleGeo&);

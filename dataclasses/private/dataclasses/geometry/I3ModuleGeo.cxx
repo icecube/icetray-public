@@ -56,6 +56,7 @@ bool I3ModuleGeo::operator==(const I3ModuleGeo& rhs) const
     return true;
 }
 
+unsigned I3ModuleGeo::nwarns_ = 0;
 
 template <class Archive>
 void 
@@ -65,13 +66,24 @@ I3ModuleGeo::serialize(Archive& ar, unsigned version)
         log_fatal("Attempting to read version %u from file but running version %u of I3ModuleGeo class.", version, i3modulegeo_version_);
     
     ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
-    
+
     ar & make_nvp("moduleType", moduleType_);
     ar & make_nvp("pos", pos_);
     ar & make_nvp("orientation", orientation_);
-    ar & make_nvp("radiusR", radR_);
-    ar & make_nvp("radiusZ", radZ_);
-    ar & make_nvp("height", h_);
+    if (version == 0) {
+      if (nwarns_ < 10) {
+        log_warn("Reading version %u from file into version %u of I3ModuleGeo class, all modules are assumed spherical.",
+                 version, i3modulegeo_version_);
+      }
+      ++nwarns_;
+      if (nwarns_ == 10) log_warn("Further I3ModuleGeo version %u warnings will be suppressed.", version);
+      ar & make_nvp("radius", radR_);
+      radZ_ = radR_;
+    } else{
+      ar & make_nvp("radiusR", radR_);
+      ar & make_nvp("radiusZ", radZ_);
+      ar & make_nvp("height", h_);
+    }
 }
 
 I3_SERIALIZABLE(I3ModuleGeo);
