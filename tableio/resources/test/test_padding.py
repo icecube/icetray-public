@@ -66,9 +66,6 @@ class MCTreeTest(unittest.TestCase):
     test_output = os.path.basename(__file__) + ".hdf5"
 
     def setUp(self):
-        if 'File' not in dir(h5py):
-            raise unittest.SkipTest("h5py missing or incomplete")
-
         tray = I3Tray()
         tray.Add(Generator)
         tray.Add("I3NullSplitter", "nullsplit",SubEventStreamName='null')

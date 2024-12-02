@@ -36,7 +36,7 @@ def streampick(stream):
 
 
 class SubeventTest(unittest.TestCase):
-    fname = os.environ['I3_BUILD'] + '/hdfwriter/subevent_test.hdf5'
+    fname = os.environ["I3_BUILD"] + "/tableio/subevent_test.hdf5"
     @classmethod
     def runtray(cls, fname):
         tray = icetray.I3Tray()
@@ -45,8 +45,8 @@ class SubeventTest(unittest.TestCase):
 
         tray.AddModule(headerfaker, 'headers', Streams=[icetray.I3Frame.DAQ])
 
-        tray.AddModule("I3NullSplitter", "s1")
-        tray.AddModule("I3NullSplitter", "s2")
+        tray.AddModule("I3NullSplitter", "s1", SubEventStreamName="s1")
+        tray.AddModule("I3NullSplitter", "s2", SubEventStreamName="s2")
 
         for i in range(10):
             tray.AddModule(emitter, 's1e%d' % i, label='s1e%d' % i, prob=0.1, If=streampick("s1"))
@@ -86,18 +86,16 @@ class SubeventTest(unittest.TestCase):
                 row = tab[i]
                 for field in ['Run', 'Event', 'SubEvent', 'SubEventStream']:
                     self.assertEqual(
-        canonical[field],
-        row[field],
-        "'%s' are equal in row %d (%d != %d)" % (field, i,
-                        canonical[field], row[field])
-    )
+                        canonical[field], row[field],
+                        "'%s' are equal in row %d (%d != %d)" % (field, i, canonical[field], row[field]),
+                    )
         hdf.close()
 
 
 class SubeventMergingTest(unittest.TestCase):
-    fname1 = os.environ['I3_BUILD'] + '/hdfwriter/subevent_test_1.hdf5'
-    fname2 = os.environ['I3_BUILD'] + '/hdfwriter/subevent_test_2.hdf5'
-    fname_merged = os.environ['I3_BUILD'] + '/hdfwriter/subevent_test_merged.hdf5'
+    fname1 = os.environ["I3_BUILD"] + "/tableio/subevent_test_1.hdf5"
+    fname2 = os.environ["I3_BUILD"] + "/tableio/subevent_test_2.hdf5"
+    fname_merged = os.environ["I3_BUILD"] + "/tableio/subevent_test_merged.hdf5"
     def setUp(self):
         SubeventTest.runtray(self.fname1)
         SubeventTest.runtray(self.fname2)
@@ -136,20 +134,16 @@ class SubeventMergingTest(unittest.TestCase):
                 mrow = mtab[i+nrows1]
                 for field in ['Run', 'Event', 'SubEvent', 'SubEventStream', 'exists']:
                     self.assertEqual(
-        row[field],
-        mrow[field],
-        "'%s' are equal in row %d (%d != %d)" % (field, i,
-                        row[field], mrow[field])
-    )
+                        row[field], mrow[field],
+                        "'%s' are equal in row %d (%d != %d)" % (field, i, row[field], mrow[field])
+                    )
                 irow = itab[i]
                 imrow = imtab[i+nrows1]
                 for field in ['Run', 'Event', 'SubEvent', 'SubEventStream', 'exists']:
                     self.assertEqual(
-        irow[field],
-        imrow[field],
-        "'%s' are equal in row %d (%d != %d)" % (field, i,
-                        irow[field], imrow[field])
-    )
+                        irow[field], imrow[field],
+                        "'%s' are equal in row %d (%d != %d)" % (field, i, irow[field], imrow[field])
+                    )
         hdf1.close()
         hdf2.close()
         hdfmerge.close()

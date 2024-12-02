@@ -8,6 +8,9 @@ Release Notes
 main
 ----
 
+* Switch tableio tests from pytables to h5py (#3726)
+* More cleanups for tableio tests (#3734)
+
 Oct. 24, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.12.0

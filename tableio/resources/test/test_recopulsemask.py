@@ -6,8 +6,10 @@
 
 # Ensure that it is possible to book I3RecoPulseSeriesMapMasks without error.
 
-from icecube import icetray, dataclasses, dataio, tableio
 import os
+import tempfile
+
+from icecube import dataclasses, dataio, icetray, tableio
 
 tray = icetray.I3Tray()
 
@@ -29,18 +31,15 @@ def fakeit(frame):
 
 tray.AddModule(fakeit, 'fakeit')
 
-dirname = os.environ['I3_BUILD'] + '/tableio/pulsemask_test'
-tabler = tableio.I3CSVTableService(dirname)
+dirname = tempfile.TemporaryDirectory(
+    dir=os.environ['I3_BUILD'] + '/tableio',
+    prefix='pulsemask_test.'
+)
+tabler = tableio.I3CSVTableService(dirname.name)
 
 tray.AddModule(tableio.I3TableWriter, 'scribe',
     tableservice=tabler,
     keys=['PulseMask'],
     )
 
-
 tray.Execute(1)
-
-
-import shutil
-shutil.rmtree(dirname)
-

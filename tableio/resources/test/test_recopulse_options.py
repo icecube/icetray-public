@@ -7,8 +7,10 @@
 # Booking a I3<thing>SeriesMap has two options: bookGeometry, and bookToParticle.
 # Make sure both of them (or one, or none) all work
 
-from icecube import icetray, dataclasses, dataio, tableio
 import os
+import tempfile
+
+from icecube import dataclasses, dataio, icetray, tableio
 
 tray = icetray.I3Tray()
 
@@ -19,8 +21,11 @@ tray.AddModule("I3Reader", "readme",
     filenamelist=[i3_testdata+"/GCD/GeoCalibDetectorStatus_2016.57531_V0.i3.gz",
         i3_testdata+"/level3-filter-muon/Level2_IC86.2016_NuMu.021002.muonL3test.i3.zst"])
 
-dirname = os.environ['I3_BUILD'] + '/tableio/recopulse_options_test'
-tabler = tableio.I3CSVTableService(dirname)
+dirname = tempfile.TemporaryDirectory(
+    dir=os.environ['I3_BUILD'] + '/tableio',
+    prefix='recopulse_options_test.'
+)
+tabler = tableio.I3CSVTableService(dirname.name)
 
 p = "SplitInIcePulses"
 t = "PoleMuonLlhFit"
@@ -43,10 +48,4 @@ tray.AddModule(tableio.I3TableWriter, 'scribe',
     subeventstreams=["InIceSplit"]
     )
 
-
 tray.Execute(10)  # The first InIceSplit P-frame (event number 12) is the 10th frame.
-
-## Remove the test results
-import shutil
-shutil.rmtree(dirname)
-

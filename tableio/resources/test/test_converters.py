@@ -9,12 +9,12 @@ Run all registered converters through both HDFWriter and ROOTWriter
 """
 
 import os
-import shutil
+import tempfile
 import warnings
 
-import icecube  # noqa: F401
-from icecube.icetray import I3Tray
+import h5py
 from icecube import dataclasses, icetray, tableio
+from icecube.icetray import I3Tray
 from icecube.tableio import I3BroadcastTableService
 
 # Since there is no clear way to inspect converters in pythonland,
@@ -90,23 +90,29 @@ tray = I3Tray()
 
 tray.Add("I3InfiniteSource")
 tray.Add(fake_event_header, Streams=[icetray.I3Frame.DAQ])
-tray.Add("I3NullSplitter", "nullsplit")
+tray.Add("I3NullSplitter", "nullsplit", SubEventStreamName="nullsplit")
 tray.Add(fill_frame)
 
-tablers = [tableio.I3CSVTableService('test_converters')]
-outfiles = ['test_converters']
+dirname = tempfile.TemporaryDirectory(
+    dir=os.environ['I3_BUILD'] + '/tableio',
+    prefix="test_converters."
+)
+tablers = [tableio.I3CSVTableService(dirname.name)]
+
+# set up HDF5 test file
 try:
     from icecube.hdfwriter import I3HDFTableService
-    tablers.append(I3HDFTableService("test_converters.hdf5", 6, 'w'))
-    outfiles.append('test_converters.hdf5')
+    tablers.append(I3HDFTableService(dirname.name + "/test_converters.hdf5", 6, 'w'))
 except ImportError:
     pass
+
+# set up root test file
 try:
     from icecube.rootwriter import I3ROOTTableService
-    tablers.append(I3ROOTTableService("test_converters.root"))
-    outfiles.append('test_converters.root')
+    tablers.append(I3ROOTTableService(dirname.name + "/test_converters.root"))
 except ImportError:
     pass
+
 if len(tablers) == 1:
     tabler = tablers[0]
 else:
@@ -125,26 +131,11 @@ with warnings.catch_warnings():
     tray.Execute(1)
 icetray.I3Logger.global_logger = ol
 
-try:
-    import h5py
-    with h5py.File("test_converters.hdf5", "r") as hdf:
-        for name, obj in fill_frame.objects.items():
-            table = hdf[name]
-            assert table.len() == 1
-            row = table[0]
-            for name in row.dtype.names:
-                if hasattr(obj, name) and isinstance(getattr(obj, name), type(row[name])):
-                    assert getattr(obj, name) == row[name]
-except ImportError:
-    icetray.logging.log_warn("Read test requires python3-h5py. Install it via pip/apt/yum/brew.")
-    pass
-
-try:
-    shutil.rmtree(outfiles[0])
-except OSError:
-    pass
-for outfile in outfiles[1:]:
-    try:
-        os.unlink(outfile)
-    except OSError:
-        pass
+with h5py.File(dirname.name + "/test_converters.hdf5", "r") as hdf:
+    for name, obj in fill_frame.objects.items():
+        table = hdf[name]
+        assert table.len() == 1
+        row = table[0]
+        for name in row.dtype.names:
+            if hasattr(obj, name) and isinstance(getattr(obj, name), type(row[name])):
+                assert getattr(obj, name) == row[name]
