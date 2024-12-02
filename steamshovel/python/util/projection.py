@@ -9,11 +9,8 @@ import tempfile
 import shutil
 from functools import partial
 
-# try importing Pillow before PIL
-try:
-    import PIL.Image as Image
-except ImportError:
-    import Image  # type: ignore
+# this is Pillow
+from PIL import Image
 
 from icecube import dataclasses
 from icecube.shovelart import vec3d
