@@ -5,6 +5,11 @@
 from icecube import icetray, tableio, dataio
 from icecube._hdfwriter import *
 
+_OPEN_FILENAMES_KEY = "I3HDFWriter_open_filenames"
+
+class OutputFileInUseError(ValueError):
+    pass
+
 @icetray.traysegment_inherit(tableio.I3TableWriter,
     removeopts=('TableService',))
 def I3HDFWriter(tray, name, Output=None, CompressionLevel=6, **kwargs):
@@ -16,6 +21,17 @@ def I3HDFWriter(tray, name, Output=None, CompressionLevel=6, **kwargs):
 
     if Output is None:
         raise ValueError("You must supply an output file name!")
+
+    if _OPEN_FILENAMES_KEY in tray.context:
+        if Output in tray.context[_OPEN_FILENAMES_KEY]:
+            raise OutputFileInUseError(
+                f"File {Output} was already opened in segment "
+                f"{tray.context[_OPEN_FILENAMES_KEY][Output]}. "
+                "Use unique output file names."
+            )
+        tray.context[_OPEN_FILENAMES_KEY][Output] = name
+    else:
+        tray.context[_OPEN_FILENAMES_KEY] = {Output: name}
 
     # Ready file for staging out if so configured
     if 'I3FileStager' in tray.context:

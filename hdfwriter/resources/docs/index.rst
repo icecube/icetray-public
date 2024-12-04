@@ -43,6 +43,11 @@ The :func:`I3HDFWriter` segment provides output to HDF5 tables. Use it like so::
 
     tray.Execute()
 
+.. note::
+  
+  The `Output` parameter must be a unique file name. If two instances of :func:`I3HDFWriter`
+  try to write to the same file, an exception will be raised. 
+
 .. _hdfwriter-sim-hdfwriter:
 
 I3SimHDFWriter
