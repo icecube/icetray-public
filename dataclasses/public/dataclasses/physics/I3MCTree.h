@@ -55,6 +55,7 @@ namespace TreeBase {
 
       TreeNode() : parent(NULL),firstChild(NULL),nextSibling(NULL) { }
       TreeNode(const T& d) : parent(NULL),firstChild(NULL),nextSibling(NULL),data(d) { }
+      TreeNode(const TreeNode<T>& other) : parent(other.parent),firstChild(other.firstChild),nextSibling(other.nextSibling),data(other.data) { }
       T operator*() { return data; }
       T operator=(const TreeNode<T>& other) { return data = other.data; }
       T operator=(const T& otherData) { return data = otherData; }

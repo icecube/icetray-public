@@ -17,7 +17,7 @@
 
 class I3IceActTriggerMapConverter : public I3ConverterImplementation<I3IceActTriggerMap>
 {
-    I3TableRowDescriptionPtr CreateDescription(const I3IceActTriggerMap& map)
+    I3TableRowDescriptionPtr CreateDescription(const I3IceActTriggerMap& map) override
     {
         if (map.size() == 0)
             log_error("Warning:  I3IceActTriggerMap used for converter configuration is EMPTY, "
@@ -39,7 +39,7 @@ class I3IceActTriggerMapConverter : public I3ConverterImplementation<I3IceActTri
 
         return desc;
     }
-    size_t FillRows(const I3IceActTriggerMap& map, I3TableRowPtr rows)
+    size_t FillRows(const I3IceActTriggerMap& map, I3TableRowPtr rows) override
     {
         //typedef typename I3IceActTriggerMap::const_iterator citer_type;
         I3IceActTriggerMap::const_iterator mapiter = map.begin();
@@ -147,7 +147,7 @@ class I3IceActRecoPulseSeriesMapConverter : public I3ConverterImplementation<I3I
 
 class I3IceActTelescopePixelUnsignedMapConverter : public I3ConverterImplementation<I3IceActTelescopePixelUnsignedMap>
 {
-    I3TableRowDescriptionPtr CreateDescription(const I3IceActTelescopePixelUnsignedMap& map) {
+    I3TableRowDescriptionPtr CreateDescription(const I3IceActTelescopePixelUnsignedMap& map) override {
         I3TableRowDescriptionPtr desc(new I3TableRowDescription());
 
         //Determining the size works on chunks so if Chunk does not include enough pixel table is short.
@@ -170,7 +170,7 @@ class I3IceActTelescopePixelUnsignedMapConverter : public I3ConverterImplementat
         return desc;
     }
 
-    size_t FillRows(const I3IceActTelescopePixelUnsignedMap& map, I3TableRowPtr rows) {
+    size_t FillRows(const I3IceActTelescopePixelUnsignedMap& map, I3TableRowPtr rows) override {
         I3IceActTelescopePixelUnsignedMap::const_iterator mapiter = map.begin();
 
         const I3TableRowDescription &desc = *rows->GetDescription();
@@ -216,7 +216,7 @@ class I3IceActTelescopePixelUnsignedMapConverter : public I3ConverterImplementat
 
 class I3IceActTelescopePixelDoubleMapConverter : public I3ConverterImplementation<I3IceActTelescopePixelDoubleMap>
 {
-    I3TableRowDescriptionPtr CreateDescription(const I3IceActTelescopePixelDoubleMap& map)
+    I3TableRowDescriptionPtr CreateDescription(const I3IceActTelescopePixelDoubleMap& map) override
     {
         I3TableRowDescriptionPtr desc(new I3TableRowDescription());
 
@@ -240,7 +240,7 @@ class I3IceActTelescopePixelDoubleMapConverter : public I3ConverterImplementatio
         return desc;
     }
 
-    size_t FillRows(const I3IceActTelescopePixelDoubleMap& map, I3TableRowPtr rows)
+    size_t FillRows(const I3IceActTelescopePixelDoubleMap& map, I3TableRowPtr rows) override
     {
         I3IceActTelescopePixelDoubleMap::const_iterator mapiter = map.begin();
 
@@ -288,7 +288,7 @@ class I3IceActTelescopePixelDoubleMapConverter : public I3ConverterImplementatio
 
 class I3IceActTelescopePixelVectorIntMapConverter : public I3ConverterImplementation<I3IceActTelescopePixelVectorIntMap>
 {
-    I3TableRowDescriptionPtr CreateDescription(const I3IceActTelescopePixelVectorIntMap& map) {
+    I3TableRowDescriptionPtr CreateDescription(const I3IceActTelescopePixelVectorIntMap& map) override {
         I3TableRowDescriptionPtr desc(new I3TableRowDescription());
         //Determining the size works on chunks so if Chunk does not include enough pixel table is short.
         size_t vecSize=40;
@@ -305,7 +305,7 @@ class I3IceActTelescopePixelVectorIntMapConverter : public I3ConverterImplementa
             log_error("Warning:  I3IceActTelescopePixelVectorIntMap used for converter configuration is EMPTY, nothing will be booked");
         return desc;
     }
-    size_t FillRows(const I3IceActTelescopePixelVectorIntMap& map, I3TableRowPtr rows) {
+    size_t FillRows(const I3IceActTelescopePixelVectorIntMap& map, I3TableRowPtr rows) override {
         I3IceActTelescopePixelVectorIntMap::const_iterator mapiter = map.begin();
         size_t currentRow;
         const size_t maxindex = map.size();
@@ -339,7 +339,7 @@ class I3IceActTelescopePixelVectorIntMapConverter : public I3ConverterImplementa
 
 class I3IceActTelescopeStringDoubleMapConverter : public I3ConverterImplementation<I3IceActTelescopeStringDoubleMap>
 {
-    I3TableRowDescriptionPtr CreateDescription(const I3IceActTelescopeStringDoubleMap& map) {
+    I3TableRowDescriptionPtr CreateDescription(const I3IceActTelescopeStringDoubleMap& map) override {
         I3TableRowDescriptionPtr desc(new I3TableRowDescription());
         desc->isMultiRow_ = true;
         desc->AddField<int32_t>("station", "", "Station number");
@@ -354,7 +354,7 @@ class I3IceActTelescopeStringDoubleMapConverter : public I3ConverterImplementati
         return desc;
     };
 
-    size_t FillRows(const I3IceActTelescopeStringDoubleMap& map, I3TableRowPtr rows) {
+    size_t FillRows(const I3IceActTelescopeStringDoubleMap& map, I3TableRowPtr rows) override {
         I3IceActTelescopeStringDoubleMap::const_iterator mapiter = map.begin();
         size_t currentRow;
         const size_t maxindex = map.size();
