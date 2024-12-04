@@ -41,6 +41,7 @@
 #include <icetray/I3Frame.h>
 #include <icetray/I3Configuration.h>
 #include <icetray/I3PhysicsUsage.h>
+#include <icetray/python/gil_holder.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/python/object.hpp>
@@ -285,6 +286,13 @@ public:
     try {
       value = configuration_.Get<T>(name);
     } catch (...) {
+      // This is a bit fiddly, because if we can get the parameter as a string, then get an object
+      // of the correct type from the context using that as a key, we want to just suppress the
+      // original error/exception, but if the fall-back fails, we want to report the original error.
+      // There may or may not be a python error involved, so if so, we need to capture it from the
+      // global state so that in the meantime the python interpreter doesn't get confused and
+      // believe that it has been emitted from any other python code which might be invoked.
+      boost::python::detail::restore_exceptions pyError;
       log_debug_stream("...which failed the first time, so trying it again with Get<string>: " << name);
       // Bail if the value is not a string, or that string is not a key in the context
       // special case for Get<shared_ptr<T>>, which never throws
@@ -299,9 +307,10 @@ public:
         log_error("Error in %s module '%s', getting parameter '%s'",
                   I3::name_of(typeid(*this)).c_str(), GetName().c_str(),
                   name.c_str());
+        pyError.set_raised_exception();
         throw;
       }
-      PyErr_Clear();
+      pyError.clear();
     }
   }
 

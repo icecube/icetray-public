@@ -66,6 +66,27 @@ public:
 			PyErr_SetRaisedException(current_exc);
 #endif
 	}
+	void clear() {
+#if PY_VERSION_HEX < 0x030c0000
+		if (current_exc.type != nullptr) {
+			Py_DECREF(current_exc.type);
+			current_exc.type = nullptr;
+		}
+		if (current_exc.value != nullptr) {
+			Py_DECREF(current_exc.value);
+			current_exc.value = nullptr;
+		}
+		if (current_exc.traceback != nullptr) {
+			Py_DECREF(current_exc.traceback);
+			current_exc.traceback = nullptr;
+		}
+#else
+		if (current_exc != nullptr) {
+			Py_DECREF(current_exc);
+			current_exc = nullptr;
+		}
+#endif
+	}
 private:
 #if PY_VERSION_HEX < 0x030c0000
 	struct { PyObject *type, *value, *traceback; } current_exc;
