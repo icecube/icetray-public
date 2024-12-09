@@ -47,11 +47,11 @@ u = tray.Usage()
 print("Got Usage: %s" % u)
 
 print("*****\n"*4)
-for entry in u:
-    print("%25s => %s" % (entry.key(), entry.data()))
+for entry in u.items():
+    print("%25s => %s" % entry)
 print("*****\n"*4)
 
-print("Total system time= %f s" % sum([entry.data().systime for entry in u]))
-print("Total user time=   %f s" % sum([entry.data().usertime for entry in u]))
-print("Max ncall=         %f s" % max([entry.data().ncall for entry in u]))
+print("Total system time= %f s" % sum(entry.systime for entry in u.values()))
+print("Total user time=   %f s" % sum(entry.usertime for entry in u.values()))
+print("Max ncall=         %f s" % max(entry.ncall for entry in u.values()))
 

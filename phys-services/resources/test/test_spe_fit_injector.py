@@ -55,14 +55,14 @@ class SPEFitTestModule(icetray.I3Module) :
         icetray.I3Module.__init__(self, context)
 
     def Calibration(self, frame) :
-        domcal = frame['I3Calibration'].dom_cal
-        n_valid = sum([1 for omkey, i3domcal in domcal.iteritems() \
-            if i3domcal.combined_spe_charge_distribution.is_valid])
+        domcal = dataclasses.I3Calibration.from_frame(frame).dom_cal
+        n_valid = sum(1 for i3domcal in domcal.values() \
+            if i3domcal.combined_spe_charge_distribution.is_valid)
         print(n_valid)
         n_nan_atwd_charge = 0
         n_nan_fadc_charge = 0
         n_nan_exp2_amp = 0
-        for omkey, i3domcal in domcal.iteritems() :
+        for omkey, i3domcal in domcal.items() :
             if i3domcal.combined_spe_charge_distribution.is_valid :
                 # it's not true in general, but for this test file
                 # whenever the combined fits are valid, the mean

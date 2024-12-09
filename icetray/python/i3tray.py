@@ -125,7 +125,7 @@ class I3Tray(_icetray._I3TrayBase):
         except:
             raise
 
-    def AddService(self, _type: str, _name: "Optional[str]"=None, **kwargs):
+    def AddService(self, _type: str, _name: "Optional[str]"=None, /, **kwargs):
         """
         Add a service factory to the tray.
 
@@ -235,9 +235,8 @@ class I3Tray(_icetray._I3TrayBase):
         usage = self.Usage()
         if len(usage) == 0:
             return
-        keys = [p.key() for p in usage]
-        keys.sort(key = lambda k: usage[k].usertime + usage[k].systime, reverse = True)
-        total_time = sum([p.data().usertime + p.data().systime for p in usage])
+        keys = sorted(usage, key = lambda k: usage[k].usertime + usage[k].systime, reverse = True)
+        total_time = sum([ru.usertime + ru.systime for ru in usage.values()])
         acc_time = 0.
         print('-'*99)
         printed_keys = list()

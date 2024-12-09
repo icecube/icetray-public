@@ -86,27 +86,4 @@ void reg(const char* name)
   from_python_sequence<vector<T>, variable_capacity_policy>();
 }
 
-template <typename Map>
-class i3_map_extras : public def_visitor<i3_map_extras<Map> >
-{
-  static list keys(Map const&  x)
-  {
-    list t;
-    for(typename Map::const_iterator it = x.begin(); it != x.end(); it++)
-      t.append(it->first);
-    return t;
-  }
-
-  template <typename Class>
-  void visit(Class& cl) const
-  {
-    // std::cout << __PRETTY_FUNCTION__ << "\n";
-    cl
-      .def("keys", &keys)
-      ;
-  }
-
-  friend class boost::python::def_visitor_access;
-};
-
 #endif

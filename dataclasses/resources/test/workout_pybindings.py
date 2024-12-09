@@ -377,7 +377,7 @@ class I3RecoPulseTestCase(unittest.TestCase):
         rpsm = dataclasses.I3RecoPulseSeriesMap()
         rpsm[icetray.OMKey(1, 1)] = rps
 
-        for key, pseries in rpsm:
+        for key, pseries in rpsm.items():
             logging.log_debug("key: %s" % key)
             for pulse in pseries:
                 logging.log_debug("pulse: %s" % pulse)

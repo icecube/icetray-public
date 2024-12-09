@@ -47,7 +47,7 @@ class I3AntennaGeo(unittest.TestCase):
             newI3File.close()
 
         theMap = testFrame[frameName]
-        readIn = theMap[theMap.keys()[0]]
+        readIn = theMap[next(iter(theMap.keys()))]
 
         self.assertEqual(readIn, antgeo)
 

@@ -12,6 +12,7 @@
 # JvS 2009-03-27
 
 import unittest, sys
+from typing import Iterator
 
 try:
     sorted([3,2,1])
@@ -22,6 +23,8 @@ except NameError:
         cpy = list(copy.copy(lst))
         cpy.sort()
         return cpy
+
+from icecube import icetray,dataclasses
 
 class I3MapDictInterfaceTest(unittest.TestCase):
     """Kick the tires on the dict interface.
@@ -36,8 +39,7 @@ class I3MapDictInterfaceTest(unittest.TestCase):
     # fromkeys(k,None) (ditto)
     # update (kwargs as keys can only work with string maps)
     def setUp(self):
-        from icecube import icetray,dataclasses
-        self.mapClass = dataclasses.TestMapStringString
+        self.mapClass = icetray.map_string_pyobject
         self.dict = {'foo':'bar', 'bom':'baz', 'steam':'locomotive'}
         self.map = self.mapClass()
         for k in self.dict.keys(): self.map[k] = self.dict[k]
@@ -90,7 +92,8 @@ class I3MapDictInterfaceTest(unittest.TestCase):
     def test___init__(self):
         """map accepts the same constructors as dict"""
         newMap = self.mapClass()
-        self.assertEqual(newMap.items(), [])
+        items = newMap.items()
+        self.assertEqual(list(items), [])
         newMap = self.mapClass(self.dict)
         self.assertEqual(sorted(list(newMap.items())), sorted(list(self.dict.items())))
         newMap = self.mapClass(list(self.dict.items()))
@@ -99,11 +102,7 @@ class I3MapDictInterfaceTest(unittest.TestCase):
         pass
     def test___iter__(self):
         """dict.__iter__() is equivalent to map.__iter__()"""
-        # dict iterates over keys, but the map returns
-        # wrapped pairs (i.e. items)
-        fromMap =  [iterate[0] for iterate in self.map]
-        fromDict = [iterate for iterate in self.dict]
-        self.assertEqual(sorted(fromMap), sorted(fromDict))
+        self.assertEqual(list(self.map), sorted(self.dict))
         pass
     def test___le__(self):
         """What does </> even mean for a dict? Skip."""
@@ -151,33 +150,6 @@ class I3MapDictInterfaceTest(unittest.TestCase):
         self.assertEqual([k for k,v in self.dict], [])
         self.assertEqual([k for k,v in self.map], [])
         pass
-    def test_copy(self):
-        """dict.copy() is equivalent to map.copy()"""
-        newMap = self.map.copy()
-        newDict = self.map.copy()
-        self.assertEqual(self.map.items(), newMap.items())
-        self.assertEqual(sorted(self.dict.items()), sorted(newDict.items()))
-        # FIXME: there seems to be no good way to test whether the copy was shallow
-        # confirm that the copy was shallow
-        # for dict_key,copied_dict_key in zip(sorted(self.dict.keys()),sorted(newDict.keys())):
-        #     self.assertEquals(id(dict_key),id(copied_dict_key))
-        #     self.assertEquals(id(self.dict[dict_key]),id(newDict[copied_dict_key]))
-        # for map_key,copied_map_key in zip(sorted(self.map.keys()),sorted(newMap.keys())):
-        #     self.assertEquals(id(map_key),id(copied_map_key))
-        #     self.assertEquals(id(self.map[map_key]),id(newMap[copied_map_key]))
-
-        pass
-    def test_fromkeys(self):
-        """dict.fromkeys() is equivalent to map.fromkeys()"""
-        v = list(self.dict.values())[0]
-        newDict = self.dict.fromkeys(self.dict.keys(),v)
-        newMap = self.map.fromkeys(self.map.keys(),v)
-        self.assertEqual(sorted(self.dict.keys()), sorted(newDict.keys()))
-        self.assertEqual(sorted(self.map.keys()), sorted(newMap.keys()))
-        for k in self.dict.keys():
-            self.assertEqual(newDict[k], v)
-            self.assertEqual(newMap[k], v)
-        pass
     def test_get(self):
         """dict.get() is equivalent to map.get()"""
         default = 42
@@ -200,7 +172,34 @@ class I3MapDictInterfaceTest(unittest.TestCase):
         dictItems = sorted(self.dict.keys())
         mapItems = sorted(self.map.keys())
         self.assertEqual(dictItems, mapItems)
-        pass
+
+        self.assertEqual(len(self.dict.keys()), len(self.map.keys()))
+
+        self.assertEqual(self.map.keys(), self.dict.keys())
+        self.assertNotEqual(self.dict.keys(), 1)
+        self.assertNotEqual(self.map.keys(), 1)
+
+        self.assertNotEqual(
+            self.map.keys(),
+            [list(self.map.values())[0]]*len(self.map),
+            "should compare nonequal, even if same length and all items contained"
+        )
+
+        mkv = self.map.keys()
+        # __contains__ should not exhaust the view like it would for an iterator
+        for _ in range(2):
+            for k in reversed(self.dict.keys()):
+                assert k in mkv
+
+        # our views aren't reversible
+        dkv = self.dict.keys()
+        with self.assertRaises(TypeError):
+            for k in reversed(self.map.keys()):
+                assert k in dkv
+
+        if sys.version_info >= (3,10):
+            self.assertEqual(dict(mkv.mapping), dkv.mapping)
+
     def test_pop(self):
         """dict.pop() is equivalent to map.pop()"""
         default = 42
@@ -240,8 +239,30 @@ class I3MapDictInterfaceTest(unittest.TestCase):
     def test_values(self):
         """dict.values() is equivalent to map.values()"""
         self.assertEqual(sorted(self.map.values()), sorted(self.dict.values()))
-        pass
+        # values views are never equal to anything
+        self.assertNotEqual(self.map.values(), self.dict.values())
+        self.assertNotEqual(self.dict.values(), self.map.values())
+        self.assertNotEqual(self.dict.values(), self.dict.values())
 
+    def test_view_references(self):
+        m = dataclasses.I3MapIntVectorInt({0: []})
+        for v in m.values():
+            v.append(1)
+        self.assertListEqual([list(v) for v in m.values()], [[1]])
+        for k, v in m.items():
+            v.append(2)
+        self.assertEqual([list(v) for v in m.values()], [[1, 2]])
+
+    def test_view_dynamism(self):
+        m = icetray.map_int_int({i: i for i in range(5,10)})
+        # begin() currently points to 5
+        keys = m.keys()
+        self.assertEqual(len(list(keys)), 5)
+        m.update({i: i for i in range(2)})
+        # invalidate the result of the previous begin()
+        del m[5]
+        # nothing blows up, as iteration invokes begin() again 
+        self.assertEqual(len(list(keys)), 6)
 
 if __name__ == '__main__':
     unittest.main()

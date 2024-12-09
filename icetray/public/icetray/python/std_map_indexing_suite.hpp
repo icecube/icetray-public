@@ -15,6 +15,7 @@
 # include <boost/python/overloads.hpp>
 # include <boost/iterator/transform_iterator.hpp>
 # include <icetray/python/get_class.hpp>
+# include <icetray/python/iterator_view.hpp>
 
 namespace bp = boost::python;
 
@@ -149,55 +150,17 @@ namespace boost { namespace python {
         typedef typename Container::difference_type difference_type;
         typedef typename Container::const_iterator const_iterator;
 
+        // return references to values if they are classes (but not shared_ptr) unless NoProxy was set
+        typedef typename mpl::and_<
+            is_class<data_type>
+            , mpl::not_<
+                mpl::or_<
+                    mpl::bool_<NoProxy>
+                  , detail::is_shared_ptr<data_type>
+                >
+            >
+        >::type return_value_by_proxy;
 
-        // __getitem__ for std::pair
-// FIXME: horrible (20x) performance regression vs. (pair.key(),pair.data())
-        static object pair_getitem(value_type const& x, int i) {
-            if (i==0 || i==-2) return object(x.first);
-            else if (i==1 || i==-1) return object(x.second);
-            else {
-                PyErr_SetString(PyExc_IndexError,"Index out of range.");
-                throw_error_already_set();
-                return object(); // None
-            }
-        }
-
-// __iter__ for std::pair
-// here we cheat by making a tuple and returning its iterator
-// FIXME: replace this with a pure C++ iterator
-// how to handle the different return types of first and second?
-static PyObject* pair_iter(value_type const& x) {
-object tuple = bp::make_tuple(x.first,x.second);
-return incref(tuple.attr("__iter__")().ptr());
-}
-
-        // __len__ std::pair = 2
-        static int pair_len(value_type const& x) { return 2; }
-
-        // return a list of keys
-        static bp::list keys(Container const&  x)
-        {
-          bp::list t;
-          for(typename Container::const_iterator it = x.begin(); it != x.end(); it++)
-            t.append(it->first);
-          return t;
-        }
-        // return a list of values
-        static bp::list values(Container const&  x)
-        {
-          bp::list t;
-          for(typename Container::const_iterator it = x.begin(); it != x.end(); it++)
-            t.append(it->second);
-          return t;
-        }
-        // return a list of (key,value) tuples
-        static bp::list items(Container const&  x)
-        {
-          bp::list t;
-          for(typename Container::const_iterator it = x.begin(); it != x.end(); it++)
-            t.append(bp::make_tuple(it->first, it->second));
-          return t;
-        }
         static bp::object get_key_type()
         {
           return get_class<key_type>();
@@ -205,19 +168,6 @@ return incref(tuple.attr("__iter__")().ptr());
         static bp::object get_value_type()
         {
           return get_class<data_type>();
-        }
-        static bp::object get_item_type()
-        {
-          return get_class<value_type>();
-        }
-
-        // return a shallow copy of the map
-        // FIXME: is this actually a shallow copy, or did i duplicate the pairs?
-        static Container copy(Container const& x)
-        {
-            Container newmap = Container();
-            for(const_iterator it = x.begin();it != x.end();it++) newmap.insert(*it);
-            return newmap;
         }
 
         // get with default value
@@ -281,11 +231,18 @@ return incref(tuple.attr("__iter__")().ptr());
         static object dict_fromkeys(object const& keys, object const& value)
         {
             object newmap = object(Container());
-            int numkeys = extract<int>(keys.attr("__len__")());
             object keys_iter = keys.attr("__iter__")();
-            for(int i=0;i<numkeys;i++) { // 'cuz python is more fun in C++...
-                object key = keys_iter.attr("__next__")();
-                newmap.attr("__setitem__")(key,value);
+            while (true) { // 'cuz python is more fun in C++...
+                try {
+                    object key = keys_iter.attr("__next__")();
+                    newmap.attr("__setitem__")(key,value);
+                } catch (error_already_set &err) {
+                    if (PyErr_ExceptionMatches(PyExc_StopIteration)) {
+                        PyErr_Clear();
+                        break;
+                    }
+                    throw;
+                }
             }
             return newmap;
         }
@@ -352,9 +309,13 @@ return incref(tuple.attr("__iter__")().ptr());
 
         struct itervalues
         {
-          typedef data_type result_type;
+          typedef typename mpl::if_<
+              return_value_by_proxy
+            , data_type&
+            , data_type
+          >::type result_type;
 
-          result_type operator()(value_type const& x) const
+          result_type operator()(value_type& x) const
           {
             return x.second;
           }
@@ -363,24 +324,50 @@ return incref(tuple.attr("__iter__")().ptr());
         struct iteritems {
           typedef tuple result_type;
 
-          result_type operator()(value_type const& x) const
+          // pass non-POD values back to python as references
+          typedef typename mpl::if_<
+              return_value_by_proxy
+            , boost::reference_wrapper<data_type>
+            , data_type
+          >::type maybe_ref;
+
+          result_type operator()(value_type & x) const
           {
-            return bp::make_tuple(x.first,x.second);
+            return bp::make_tuple(x.first, maybe_ref(x.second));
           }
         };
 
         template <typename Transform>
         struct make_transform_impl
         {
-          typedef boost::transform_iterator<Transform, const_iterator> iterator;
+          typedef boost::transform_iterator<Transform, typename Container::iterator> iterator;
+          // return references as internal references, values as copies
+          typedef typename mpl::if_c<
+            ::boost::is_reference<typename Transform::result_type>::value
+            , bp::return_internal_reference<>
+            , bp::objects::default_iterator_call_policies
+            >::type call_policies;
 
-          static iterator begin(const Container& m)
+          static iterator begin(Container& m)
           {
             return boost::make_transform_iterator(m.begin(), Transform());
           }
-          static iterator end(const Container& m)
+          static iterator end(Container& m)
           {
             return boost::make_transform_iterator(m.end(), Transform());
+          }
+
+          static bp::object view(const char *name, bool is_set)
+          {
+            // NB: use detail form to set call policy explicitly
+            return icetray::python::detail::make_view(
+                  name
+                , &begin
+                , &end
+                , is_set
+                , call_policies()
+                , bp::detail::target(&begin)
+            );
           }
 
           static bp::object range()
@@ -391,32 +378,16 @@ return incref(tuple.attr("__iter__")().ptr());
 
         template <typename Transform>
         static bp::object
-        make_transform()
+        make_view(const char *name, bool is_set=false)
+        {
+          return make_transform_impl<Transform>::view(name, is_set);
+        }
+
+        template <typename Transform>
+        static bp::object
+        make_range()
         {
           return make_transform_impl<Transform>::range();
-        }
-
-        static python::str
-        print_elem(typename Container::value_type const& e)
-        {
-            return python::str("(%s, %s)" % python::make_tuple(e.first, e.second));
-        }
-
-        static
-        typename mpl::if_<
-            is_class<data_type>
-          , data_type&
-          , data_type
-        >::type
-        get_data(typename Container::value_type& e)
-        {
-            return e.second;
-        }
-
-        static typename Container::key_type
-        get_key(typename Container::value_type& e)
-        {
-            return e.first;
         }
 
         static data_type&
@@ -485,39 +456,9 @@ return incref(tuple.attr("__iter__")().ptr());
         static void
         extension_def(Class& cl)
         {
-            //  Wrap the map's element (value_type)
-            std::string elem_name = "std_map_indexing_suite_";
-            std::string cl_name;
-            object class_name(cl.attr("__name__"));
-            extract<std::string> class_name_extractor(class_name);
-            cl_name = class_name_extractor();
-            elem_name += cl_name;
-            elem_name += "_entry";
+            std::string cl_name = extract<std::string>(cl.attr("__name__"));
 
-            typedef typename mpl::if_<
-                is_class<data_type>
-              , return_internal_reference<>
-              , default_call_policies
-            >::type get_data_return_policy;
-
-            if (!get_class<value_type>()) {
-                class_<value_type>(elem_name.c_str())
-                    .def("__repr__", &DerivedPolicies::print_elem)
-                    .def("data", &DerivedPolicies::get_data, get_data_return_policy(),
-                    "K.data() -> the value associated with this pair.\n")
-                    .def("key", &DerivedPolicies::get_key,
-                    "K.key() -> the key associated with this pair.\n")
-                    .def("__getitem__",&pair_getitem)
-                    .def("__iter__",&pair_iter)
-                    .def("__len__",&pair_len)
-                    .def("first",&DerivedPolicies::get_key,
-                    "K.first() -> the first item in this pair.\n")
-                    .def("second",&DerivedPolicies::get_data, get_data_return_policy(),
-                    "K.second() -> the second item in this pair.\n")
-                ;
-            }
             // add convenience methods to the map
-
             cl
                 // declare constructors in descending order of arity
                 .def("__init__", init_factory<Class>::from_list,
@@ -526,12 +467,7 @@ return incref(tuple.attr("__iter__")().ptr());
                  "Initialize with keys and values as tuples in a Python list: [('key','value')]\n")
                 .def(init<>()) // restore default constructor
 
-                .def("keys", &keys, "list of D's keys\n")
-                .def("has_key", &contains, "D.has_key(k) -> True if D has a key k, else False\n") // don't re-invent the wheel
-                .def("values", &values, "D.values() -> list of D's values\n")
-                .def("items", &items, "D.items() -> list of D's (key, value) pairs, as 2-tuples\n")
                 .def("clear", &Container::clear, "D.clear() -> None.  Remove all items from D.\n")
-                .def("copy", &copy, "a shallow copy of D\n")
                 .def("get", dict_get, dict_get_overloads(args("default_val"),
                  "D.get(k[,d]) -> D[k] if k in D, else d.  d defaults to None.\n"))
                 .def("pop", &dict_pop )
@@ -539,26 +475,23 @@ return incref(tuple.attr("__iter__")().ptr());
                  "D.pop(k[,d]) -> v, remove specified key and return the corresponding value\nIf key is not found, d is returned if given, otherwise KeyError is raised\n")
                 .def("popitem", &dict_pop_item,
                  "D.popitem() -> (k, v), remove and return some (key, value) pair as a\n2-tuple; but raise KeyError if D is empty\n")
-                .def("fromkeys", &dict_fromkeys,
-                 (cl_name+".fromkeys(S,v) -> New "+cl_name+" with keys from S and values equal to v.\n").c_str())
-                .staticmethod("fromkeys")
                 .def("update", &dict_update,
                  "D.update(E) -> None.  Update D from E: for k in E: D[k] = E[k]\n")
-                .def("iteritems",
-                 make_transform<iteritems>(),
+                .def("__iter__",
+                 make_range<iterkeys>())
+                .def("items",
+                 make_view<iteritems>("map_items", true),
                  "an iterator over the (key, value) items of D\n")
-                .def("iterkeys",
-                 make_transform<iterkeys>(),
+                .def("keys",
+                 make_view<iterkeys>("map_keys", true),
                  "an iterator over the keys of D\n")
-                .def("itervalues",
-                 make_transform<itervalues>(),
+                .def("values",
+                 make_view<itervalues>("map_values", false), // values are not a set
                  "an iterator over the values of D\n")
                 .def("__key_type__", &get_key_type)
                 .staticmethod("__key_type__")
                 .def("__value_type__", &get_value_type)
                 .staticmethod("__value_type__")
-                .def("__item_type__", &get_item_type)
-                .staticmethod("__item_type__")
               ;
         }
 

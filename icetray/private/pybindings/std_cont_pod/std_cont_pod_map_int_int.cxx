@@ -37,7 +37,6 @@ void register_std_cont_pod_map_int_int()
 {
   class_<std::map<int, int> >("map_int_int")
     .def(std_map_indexing_suite<std::map<int, int> >())
-    .def(i3_map_extras<std::map<int, int> >())
     ;
 
 }
