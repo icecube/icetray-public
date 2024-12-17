@@ -10,6 +10,12 @@ Release Notes
 main
 ----
 
+* Change std::map pybindings to follow Python 3 dict semantics (#3576)
+* Work around boost::asio API churn in boost 1.87 (#3761)
+* Hide and if necessary restore python errors during GetParameter to prevent python logging having spurious failures (#3747)
+* Make tests clang-tidy clean (#3549)
+* Raise more precise exceptions in I3Module::GetParameter (#3729)
+
 Oct. 24, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.12.0

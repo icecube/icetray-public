@@ -8,8 +8,10 @@ Release Notes
 main
 ----
 
+* Silence compile errors on clang 15 (#3743)
 * Switch tableio tests from pytables to h5py (#3726)
 * More cleanups for tableio tests (#3734)
+* Switch tableio tests from pytables to h5py (#3726)
 
 Oct. 24, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
@@ -17,7 +19,7 @@ IceTray Release v1.12.0
 
 * IceAct fixes for hdfwriter converter (#3660)
 * clean up a small handful of typos
-* tableio - use test-specific output filenames (#3539)
+* use test-specific output filenames (#3539)
 * Compile cleanly with -Wall -Werror (#3540)
 
 June 18, 2024 don la dieu (nega at icecube.umd.edu)

@@ -10,6 +10,13 @@ Release Notes
 main
 ----
 
+* Change std::map pybindings to follow Python 3 dict semantics (#3576)
+* remove check for python builtin "sorted()"
+* Change std::map pybindings to follow Python 3 dict semantics (#3576)
+* Silence compile errors on clang 15 (#3743)
+* switch on i3modulegeo version (#3739)
+* Make tests clang-tidy clean (#3549)
+
 Oct. 24, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.12.0

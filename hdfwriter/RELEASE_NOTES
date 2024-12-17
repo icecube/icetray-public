@@ -10,6 +10,8 @@ Release Notes
 main
 ----
 
+* check for reused filenames (#3745)
+
 Oct. 24, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.12.0
