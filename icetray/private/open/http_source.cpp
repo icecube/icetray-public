@@ -29,6 +29,10 @@
  *
  */
 
+#include <boost/version.hpp>
+
+#if BOOST_VERSION < 108700
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -175,3 +179,5 @@ http_source::read(char* s, std::streamsize size)
 
   return n;
 }
+
+#endif

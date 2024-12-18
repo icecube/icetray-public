@@ -5,6 +5,10 @@
 #ifndef HTTP_SOURCE_HPP
 #define HTTP_SOURCE_HPP
 
+#include <boost/version.hpp>
+
+#if BOOST_VERSION < 108700
+
 #include <boost/asio.hpp>
 
 struct http_source{
@@ -24,5 +28,7 @@ struct http_source{
   boost::shared_ptr<boost::asio::ip::tcp::socket> socket_;
   boost::shared_ptr<boost::asio::streambuf> buffer_;
 };
+
+#endif
 
 #endif // HTTP_SOURCE_HPP

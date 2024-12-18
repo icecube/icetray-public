@@ -119,9 +119,13 @@ namespace I3 {
       if (filename.find("socket://") == 0) {
         boost::iostreams::file_descriptor_source fs = create_socket_source(filename);
         ifs.push(fs);
-      } else if (filename.find("http://") == 0) {
+      }
+#if BOOST_VERSION < 108700
+      else if (filename.find("http://") == 0) {
         ifs.push(http_source(filename));
-      } else {
+      }
+#endif
+      else {
         boost::iostreams::file_source fs(filename);
         if (!fs.is_open())
         log_fatal("problems opening file '%s' for reading.  Check permissions, paths.",
