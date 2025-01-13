@@ -6,7 +6,7 @@
 
 import sys
 from icecube.icetray import I3Tray
-from icecube import dataio
+from icecube import icetray, dataio
 
 tray = I3Tray()
 
