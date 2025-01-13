@@ -11,6 +11,7 @@ Test I3TrayInfo
 import os
 
 from icecube import dataio, icetray
+from icecube.icetray import OMKey
 
 
 def main():
