@@ -63,7 +63,8 @@ class Bubbles( PyArtist ):
         if hasattr(fobj, "keys"):
             # an I3Map of OMKeys
             ommap = fobj
-            for omkey, val in ommap:
+            for omkey in ommap:
+                val = ommap[omkey]
                 try:
                     geo = omgeo[omkey]
                 except KeyError:

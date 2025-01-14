@@ -12,7 +12,8 @@ if TYPE_CHECKING:
     from typing import Any, Callable
 
 def _i3map_values_iter(i3map, e1, e2):
-    for dom, values in i3map:
+    for dom in i3map:
+        values = i3map[dom]
         for v in values:
             yield (e1(v), e2(v))
 
