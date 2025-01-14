@@ -21,6 +21,7 @@ I3DOMCalibration::I3DOMCalibration()
     fadcDeltaT_(NAN),
     frontEndImpedance_(NAN),
     domcalVersion_("unknown"),
+    domcalTime_(0),
     relativeDomEff_(NAN),
     noiseRate_(NAN),
     noiseThermalRate_(NAN),
@@ -784,6 +785,11 @@ I3DOMCalibration::serialize(Archive& ar, unsigned version)
 
       if (!meanATWDChargeValid) meanATWDCharge_=NAN;
       if (!meanFADCChargeValid) meanFADCCharge_=NAN;
+    }
+  if (version > 12)
+    {
+      // Use default initialization to zero for previous versions
+      ar & make_nvp("domcalTime", domcalTime_);
     }
 }
 

@@ -22,12 +22,13 @@
 #include <boost/math/constants/constants.hpp>
 
 #include <dataclasses/external/CompareFloatingPoint.h>
+#include <dataclasses/I3Time.h>
+#include <dataclasses/Utility.h>
 
 #include <icetray/I3Units.h>
-#include <dataclasses/Utility.h>
 #include <icetray/OMKey.h>
 
-static const unsigned i3domcalibration_version_ = 12;
+static const unsigned i3domcalibration_version_ = 13;
 static const unsigned linearfit_version_ = 0;
 static const unsigned quadraticfit_version_ = 0;
 static const unsigned tauparam_version_ = 0;
@@ -518,6 +519,18 @@ class I3DOMCalibration {
   }
 
   /**
+   * Get/Set time of DOMCal.
+   */
+  I3Time GetDOMCalTime() const
+  {
+    return domcalTime_;
+  }
+
+  void SetDOMCalTime(I3Time& t) {
+    domcalTime_ = t;
+  }
+
+  /**
    * Get the average ATWD baseline in data-taking mode, as measured from beacon launches.
    *
    * Note: The beacon baseline depends implicitly
@@ -750,6 +763,7 @@ class I3DOMCalibration {
         pmtTransitTime_ == rhs.pmtTransitTime_ &&
         hvGainRelation_ == rhs.hvGainRelation_ &&
         domcalVersion_ == rhs.domcalVersion_ &&
+        domcalTime_ == rhs.domcalTime_ &&
         std::equal(&atwdBeaconBaselines_[0][0],&atwdBeaconBaselines_[0][0] +
             2*N_ATWD_CHANNELS, &rhs.atwdBeaconBaselines_[0][0],
             CompareFloatingPoint::Compare_NanEqual) &&
@@ -852,6 +866,12 @@ class I3DOMCalibration {
    * 6.1.2, e.g.
    */
   std::string domcalVersion_;
+
+  /**
+   * Time of domcal execution.  Note that this time is invalid
+   * and should not be used for runs prior to the 2024 run start.
+  */
+ I3Time domcalTime_;
 
   /**
    *  Dumb-ol-array to hold the average baseline corrections measured from beacon launches.

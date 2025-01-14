@@ -51,7 +51,7 @@ void register_I3DOMCalibration()
       #define I3DOMCALPROPS (Temperature)(TransitTime)(HVGainFit)(FADCGain)           \
                             (FADCBaselineFit)(FADCBeaconBaseline)(FrontEndImpedance)  \
                             (TauParameters)(FADCGain)(FADCDeltaT)(DOMCalVersion)      \
-                            (SPEDiscCalib)      \
+                            (DOMCalTime)(SPEDiscCalib)      \
                             (MPEDiscCalib)(PMTDiscCalib)(DomNoiseRate)(RelativeDomEff)\
                             (DomNoiseThermalRate)(DomNoiseDecayRate)      \
                             (DomNoiseScintillationMean)(DomNoiseScintillationSigma)   \
