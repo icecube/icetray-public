@@ -10,6 +10,10 @@ Release Notes
 main
 ----
 
+Dec. 18, 2024 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.13.0
+
 * Change std::map pybindings to follow Python 3 dict semantics (#3576)
 * remove check for python builtin "sorted()"
 * Change std::map pybindings to follow Python 3 dict semantics (#3576)

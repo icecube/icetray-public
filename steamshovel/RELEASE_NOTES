@@ -10,6 +10,12 @@ Release Notes
 main
 ----
 
+* Fix for-loop-over-map errors introduced in #3576 (#3766)
+
+Dec. 18, 2024 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.13.0
+
 * remove import fallback from Pillow to PIL
 
 Oct. 24, 2024 don la dieu (nega at icecube.umd.edu)
