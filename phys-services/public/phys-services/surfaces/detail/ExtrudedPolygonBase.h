@@ -307,10 +307,14 @@ private:
 
 			// Is there an intersection?
 			if ((alpha >= 0.) && (alpha < 1.)) {
-				// Distance along ray to intersection point
-				double beta = dir.GetX() != 0. ?
-				    (x + alpha*sidey.vector.x)/dir.GetX() :
-				    (y + alpha*sidey.vector.y)/dir.GetY();
+				// Intersection point
+				double ix = x + alpha*sidey.vector.x;
+				double iy = y + alpha*sidey.vector.y;
+				// Displacement along ray to intersection point (can be negative)
+				double beta = std::copysign(
+					std::hypot(ix, iy),
+					ix*dir.GetX() + iy*dir.GetY()
+				) / std::hypot(dir.GetX(), dir.GetY());
 				// NB: reversed comparison is equivalent to
 				// (isnan(offsets.first) || beta < offsets.first)
 				if (!(beta >= offsets.first))
