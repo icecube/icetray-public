@@ -123,11 +123,11 @@ There is one additional I3Module subclass you can inherit from: I3PacketModule. 
 
 Instead of calling Physics() or DAQ(), I3PacketModule subclasses implement a method called FramePacket(), which is passed an array of I3FramePtrs instead of a single one. The module can then modify the frames, and then must push them to the next module, just like a regular I3Module.
 
-Here is a small example of such a module, written in Python. It operates on packets of DAQ frames and Physics frames and then writes the number of Physics frames in the event to the DAQ frame (the first one)::
+Here is a small example of such a module, written in Python. It operates on packets of DAQ frames and Physics frames and then writes the number of Physics frames in the event to the DAQ frame (the first one). The `I3Frame.DAQ` here indicates that each frame packet begins with a DAQ frame.::
 
  class ExampleMod(icetray.I3PacketModule):
     def __init__(self, context):
-        I3PacketModule.__init__(self, context)
+        I3PacketModule.__init__(self, context, I3Frame.DAQ)
 
     def FramePacket(self, frames):
         i = icetray.I3Int(len(frames) - 1)
