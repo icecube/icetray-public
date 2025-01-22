@@ -29,7 +29,7 @@ Quickstart
 
 From your shell (or in your login script) run::
 
-    $ eval $(/cvmfs/icecube.opensciencegrid.org/py3-v4.3.0/setup.sh)
+    $ eval $(/cvmfs/icecube.opensciencegrid.org/py3-v4.4.0/setup.sh)
 
 This will detect the current OS and architecture and set your
 environment variables appropriately.
@@ -44,7 +44,7 @@ environment variables appropriately.
   your your ``.login`` script. (Note the use of backticks in the
   expression)::
 
-    $ eval `/cvmfs/icecube.opensciencegrid.org/py3-v4.3.0/setup.sh`
+    $ eval `/cvmfs/icecube.opensciencegrid.org/py3-v4.4.0/setup.sh`
 
 This should be near the end of any login script, so you don't
 accidentally put something else in front of CVMFS on the path.
@@ -66,6 +66,33 @@ accidentally put something else in front of CVMFS on the path.
 
 Distributions and Platforms
 ---------------------------
+
+py3-v4.4
+^^^^^^^^
+
+.. note::
+
+   Works for IceTray releases after June 2023.
+   
+   Supports ``icetray-shell`` installs (after Dec 2024).
+
+* python 3.12, various python software upgrades over v4.3
+* gcc 13.3 (c++23) compiler included
+* Supported OS:
+
+  * RedHat / CentOS / Alma:  7 - 9
+  * Ubuntu: 20.04, 22.04, 24.04
+  * Debian: 9 - 12
+
+* Architecture optimizations:
+
+  * x86: supports `microarchitecture optimization levels <https://en.wikipedia.org/wiki/X86-64#Microarchitecture_levels>`_
+  * arm: supports aarch64
+
+* Some changes:
+
+  * ``PyROOT`` has been replaced with ``uproot``.
+  * Installing python packages using ``pip install --user`` is not supported - use a full virtual environment.
 
 py3-v4.3
 ^^^^^^^^
