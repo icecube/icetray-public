@@ -19,6 +19,7 @@
 //
 
 #include <boost/config.hpp>
+#include <boost/version.hpp>
 
 #if defined(BOOST_SP_USE_STD_ALLOCATOR) && defined(BOOST_SP_USE_QUICK_ALLOCATOR)
 # error BOOST_SP_USE_STD_ALLOCATOR and BOOST_SP_USE_QUICK_ALLOCATOR are incompatible.
@@ -26,7 +27,12 @@
 
 #include <boost/checked_delete.hpp>
 #include <serialization/throw_exception.hpp>
+
+#if BOOST_VERSION < 108700
 #include <boost/detail/lightweight_mutex.hpp>
+#else
+#include <boost/smart_ptr/detail/lightweight_mutex.hpp>
+#endif
 
 #if defined(BOOST_SP_USE_QUICK_ALLOCATOR)
 #include <boost/detail/quick_allocator.hpp>
