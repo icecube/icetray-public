@@ -35,7 +35,7 @@ I3OMGeoMapPtr I3GeoTrimmers::GetMinBallGeometry( const I3OMGeoMap &input_geo,
   std::map<int,int>::iterator itop;
   std::map<int,int>::iterator ibot;
   I3OMGeoMap::const_iterator igeo;
-  int Nused = 0;
+  [[maybe_unused]] int Nused = 0;
   for ( igeo = subgeo.begin(); igeo != subgeo.end(); igeo++ ){
     int istr = igeo->first.GetString();
     int iom = igeo->first.GetOM();
