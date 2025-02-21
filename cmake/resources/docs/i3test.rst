@@ -114,6 +114,12 @@ four unit tests named *it_works*, *pinkness_is_4*, *pinkness_is_almost_pi*, and
     double pinkness = 4;
     ENSURE_DISTANCE(pinkness, M_PI, 1.0, "pinkness not within 1 of pi");
   }
+  
+  TEST(digits_are_almost_pi)
+  {
+    double digits = 3.14159;
+    ENSURE_EPSILON(digits, M_PI, 1e-6, "digits not within 1e-6 of pi");
+  }
 
   TEST(this_one_fails)
   {
@@ -221,7 +227,16 @@ which pulls in definitions for :c:macro:`TEST_GROUP`, :c:macro:`ENSURE` etc. (se
 
    :c:macro:`ENSURE_DISTANCE` verifies that left-value is within distance of
    right-value. If it is not, it throws a test failure. If the optional
-   comment is specified, the failure will come withthat message.
+   comment is specified, the failure will come with that message.
+
+.. c:macro:: ENSURE_EPSILON
+
+   :c:macro:`ENSURE_EPSILON` verifies that left-value is within a relative
+   tolerance of right-value where the relative tolerance is calculated as 
+   :math:`max(epsilon, max(left,right)*epsilon)`.
+   For values close to zero epsilon will act like an absolute tolerance. 
+   If it is not, it throws a test failure. If the optional
+   comment is specified, the failure will come with that message.
 
 .. c:macro:: FAIL
 

@@ -117,6 +117,40 @@ namespace I3Test {
       throw test_failure(file, line, cond_txt, msg);
   }
 
+#define ENSURE_EPSILON(LEFT,RIGHT,EPSILON,...)                                 \
+  I3Test::ensure_epsilon(__FILE__,__LINE__,                                    \
+                          BOOST_PP_STRINGIZE(LEFT), BOOST_PP_STRINGIZE(RIGHT), \
+                          BOOST_PP_STRINGIZE(EPSILON), LEFT,RIGHT,EPSILON,     \
+                          ##__VA_ARGS__);
+
+  template <typename LeftType, typename RightType, typename ResultType>
+  inline
+  void ensure_epsilon (const std::string& file, unsigned line,
+                        const std::string& left_txt, const std::string& right_txt, const std::string& epsilon_txt,
+                        const LeftType& actual, const RightType& expected, const ResultType& epsilon,
+                        const std::string& msg = "unspecified")
+  {
+    if (std::isnan(expected) || std::isnan(actual) || std::isnan(epsilon))
+      {
+        std::stringstream ss;
+        ss << "ENSURE_EPSILON(" << left_txt << ", " << right_txt << ", " << epsilon_txt
+           << "): " << left_txt << " == " << actual
+           << " " << right_txt << " == " << expected
+           << " " << epsilon_txt << " == " << epsilon;
+        throw test_failure(file, line, ss.str(), msg);
+      }
+    ResultType threshold = std::max(std::max<ResultType>(abs(actual), abs(expected))*epsilon,std::numeric_limits<ResultType>::min());
+    ResultType distance = abs(expected-actual) ;
+    if( distance >= threshold )
+      {
+        std::stringstream ss;
+        ss << "ensure_epsilon: expected: " << std::setprecision(16) << expected
+           << " actual: " << actual << " epsilon: " << distance
+           << " >= " << threshold;
+        throw test_failure(file, line, ss.str(), msg);
+      }
+  }
+
 #define ENSURE_DISTANCE(LEFT,RIGHT,DISTANCE,...)                               \
   I3Test::ensure_distance(__FILE__,__LINE__,                                   \
                           BOOST_PP_STRINGIZE(LEFT), BOOST_PP_STRINGIZE(RIGHT), \
