@@ -5,10 +5,7 @@
 from __future__ import print_function
 import sys
 import os
-if sys.version_info[0] < 3:
-    import thread as _thread
-else:
-    import _thread
+import _thread
 import ctypes
 import __main__
 
@@ -54,11 +51,8 @@ def myInputHook():
     path = ScriptDrop.getPath()
     if(path):
         if( _native_console ):
-            if sys.version_info[0] < 3:
-                _native_console.runsource( 'execfile("{0}")'.format(path) )
-            else:
-                with open(path) as f:
-                    _native_console.runsource(f.read(), path, 'exec')
+            with open(path) as f:
+                _native_console.runsource(f.read(), path, 'exec')
         else:
             from IPython import get_ipython
             ip = get_ipython()

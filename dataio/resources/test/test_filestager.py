@@ -4,16 +4,14 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 
-import socketserver
-
-from icecube import dataio
-from icecube.dataio.I3FileStagerFile import I3FileStagerFile
-
-from icecube import icetray
 import os
 
+from icecube import dataio, icetray
+from icecube.dataio.I3FileStagerFile import I3FileStagerFile
+
+from icecube.icetray.i3logging import log_debug
 # icetray.logging.I3Logger.global_logger = icetray.I3NullLogger()
-icetray.logging.set_level('TRACE')
+icetray.logging.set_level('INFO')
 
 dataio.set_local_scratch_dir('.')
 
@@ -56,19 +54,18 @@ def _test_stage(url, minsize=100):
 
 def _make_http(port=None,usessl=False,basic_auth=False):
 
-    try:
-        from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
-    except ImportError:
-        from http.server import BaseHTTPRequestHandler,HTTPServer
     import random
     import ssl
-    import threading
     import subprocess
+    import threading
+    from http.server import BaseHTTPRequestHandler, HTTPServer
 
     data = b''.join([b'test' for _ in range(1000)])
 
     if basic_auth:
         class Handle(BaseHTTPRequestHandler):
+            def log_request(self, code):
+                pass
             def do_HEAD(self):
                 self.send_response(200)
                 self.send_header('Content-type','text')
@@ -92,6 +89,8 @@ def _make_http(port=None,usessl=False,basic_auth=False):
                     self.wfile.write('not authenticated')
     else:
         class Handle(BaseHTTPRequestHandler):
+            def log_request(self, code):
+                pass
             def do_HEAD(self):
                 self.send_response(200)
                 self.send_header('Content-type','text')
@@ -105,25 +104,29 @@ def _make_http(port=None,usessl=False,basic_auth=False):
             try:
                 port = random.randint(10000,50000)
                 httpd = HTTPServer(('localhost', port), Handle)
-            except socket.error:
+            except OSError:
                 continue
             break
     else:
         httpd = HTTPServer(('localhost', port), Handle)
 
     if usessl:
-        print('ssl')
+        log_debug("Generating SSL keys...")
         p = subprocess.Popen(['/usr/bin/openssl','req','-new','-x509',
                               '-keyout','privkey.pem',
                               '-out','cacert.pem','-days','1',
                               '-batch','-passout','pass:passkey',
                               '-subj', '/'],
-                              stdin=subprocess.PIPE)
+                             stdin=subprocess.PIPE,
+                             stdout=subprocess.DEVNULL,
+                             stderr=subprocess.DEVNULL,
+                             )
         p.communicate(input=b'passkey')
         if p.returncode:
             raise Exception('cannot generate self-signed cert')
         try:
-            if subprocess.call(['/usr/bin/openssl','rsa','-in','privkey.pem','-out','key.pem','-passin','pass:passkey']):
+            if subprocess.call(['/usr/bin/openssl','rsa','-in','privkey.pem','-out','key.pem','-passin','pass:passkey'],
+                               stderr=subprocess.DEVNULL):
                 raise Exception('error removing password from key.pem')
 
             ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)

@@ -5,23 +5,35 @@
 # SPDX-License-Identifier: BSD-2-Clause
 
 def GetArtist(arg):
+    import importlib.machinery
+    import importlib.util
     import os
-    import imp
     import re
+
+    # this is straight from the Python 3.13 documentation and is BSD-0-Clause
+    def load_source(modname, filename):
+        loader = importlib.machinery.SourceFileLoader(modname, filename)
+        spec = importlib.util.spec_from_file_location(modname, filename, loader=loader)
+        module = importlib.util.module_from_spec(spec)  # type: ignore[arg-type]
+        # The module is always executed and not cached in sys.modules.
+        # Uncomment the following line to cache the module.
+        # sys.modules[module.__name__] = module
+        loader.exec_module(module)
+        return module
 
     # locate and load module
     if arg.endswith(".py") and os.path.exists(arg):
         pieces = os.path.split(arg)
         name = os.path.splitext(pieces[-1])[0]
         path = arg
-        module = imp.load_source(name, path)
+        module = load_source(name, path)
     else:
         import sys
         for path2 in sys.path:
             path = os.path.join(
                 path2, "icecube", "steamshovel", "artists", arg + ".py")
             if os.path.exists(path):
-                module = imp.load_source(arg, path)
+                module = load_source(arg, path)
                 break
         else:
             raise RuntimeError("Could not locate module")
