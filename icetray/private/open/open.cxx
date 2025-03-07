@@ -158,7 +158,7 @@ namespace I3 {
       }else if (ends_with(filename,".zst")){
 #ifdef I3_WITH_ZSTD
         if(compression_level<=0)
-          compression_level=4;
+          compression_level=11;
         ofs.push(zstd_compressor(compression_level));
         log_trace("Output file ends in .zst. Using zstd compressor.");
 #else
