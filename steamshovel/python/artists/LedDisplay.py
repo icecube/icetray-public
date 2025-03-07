@@ -55,7 +55,8 @@ try:
     import usb.core
     import usb.util
 except:
-    raise ImportError("Failed to load pyUSB. LED displays are not supported.")
+    msg = "Failed to load pyUSB. LED displays are not supported."
+    raise ImportError(msg)
 
 import os
 
@@ -223,7 +224,7 @@ class DisplayController:
         return [cls(dev) for dev in usb.core.find(idVendor=0x1CE3, find_all=True)]
 
     def __str__(self):
-        return '<IceCube display controller {}>'.format(self.serial_number)
+        return f'<IceCube display controller {self.serial_number}>'
 
     def readDisplayInfo(self):
         tlv_list = []
@@ -236,7 +237,8 @@ class DisplayController:
               , (1<<8)
             )
             if data and struct.unpack("<H", data[:2])[0] != len(data):
-                raise ValueError("Display information has invalid length")
+                msg = "Display information has invalid length"
+                raise ValueError(msg)
             tlv_list = self.__parseTlvData(data[2:])
         except ValueError as e:
             logger.error(str(e))
@@ -258,7 +260,7 @@ class DisplayController:
             )
             return bytes(data)
         except Exception as e:
-            logger.error("Could not read EEPROM from display: {}".format(e))
+            logger.error("Could not read EEPROM from display: %s", e)
 
     def writeEepromSegment(self, offset, data):
         """Write an EEPROM segment to the device.
@@ -273,11 +275,11 @@ class DisplayController:
                 , data
             )
         except Exception as e:
-            logger.error("Could not write EEPROM to display: {}".format(e))
+            logger.error("Could not write EEPROM to display: %s", e)
 
     def transmitDisplayBuffer(self, data: bytes):
         try:
-            logger.debug("Sending frame data to {}".format(self.serial_number))
+            logger.debug("Sending frame data to %s", self.serial_number)
             # Write data to EP1
             self.device.write(1, data, 40)
         except usb.core.USBError as usb_error:
@@ -352,7 +354,8 @@ class LogicalDisplay:
     def __init__(self, controllers: "list[DisplayController]"):
         # \a controllers should be a list of controllers that displays a continuous string range
         if len(controllers) == 0:
-            raise ValueError("Cannot create a display with 0 controllers")
+            msg = "Cannot create a display with 0 controllers"
+            raise ValueError(msg)
 
         # Determine unified display string range
         # Sets a dict of {controller : led_buffer_slice} items
@@ -377,9 +380,11 @@ class LogicalDisplay:
                 self.__data_type = controller.data_type
                 led_type = controller.led_type
             elif self.__data_type != controller.data_type:
-                raise ValueError("Cannot create a single display with multiple data types")
+                msg = "Cannot create a single display with multiple data types"
+                raise ValueError(msg)
             elif led_type != controller.led_type:
-                raise ValueError("Cannot create a single display with multiple LED types")
+                msg = "Cannot create a single display with multiple LED types"
+                raise ValueError(msg)
 
 
             controller_string_count = 0
@@ -409,7 +414,8 @@ class LogicalDisplay:
         elif led_type == DisplayController.LED_TYPE_WS2811:
             self.__led_class = LedWS2811
         else:
-            raise ValueError("Unknown LED type: {}".format(led_type))
+            msg = f"Unknown LED type: {led_type}"
+            raise ValueError(msg)
             self.__led_class = None
 
         # Provide additional buffer for strings that don't map to a controller.
@@ -420,7 +426,8 @@ class LogicalDisplay:
         elif self.__data_type == DisplayController.DATA_TYPE_IT_STATION:
             string_size = self.__led_class.DATA_LENGTH
         else:
-            raise ValueError("Unsupported data type: {}".format(self.__data_type))
+            msg = f"Unsupported data type: {self.__data_type}"
+            raise ValueError(msg)
 
         assert not (self.__range_start is None or self.__range_end is None)
         for string in range(self.__range_start, self.__range_end):
@@ -496,7 +503,8 @@ class LogicalDisplay:
 
         assert self.__data_buffer is not None
         if len(self.__data_buffer) != self.__buffer_length:
-            raise ValueError("Data buffer has invalid length")
+            msg = "Data buffer has invalid length"
+            raise ValueError(msg)
 
         if not self.__multithreading:
             # Single threaded working code
@@ -581,7 +589,7 @@ class DisplayManager:
                   "Found display with %(strings)d %(type)s (%(led)s, buffer size %(buffer)d)"
                 , display_info
             )
-        logger.debug("Found {} display(s)".format(len(self.__displays)))
+        logger.debug("Found %s display(s)", len(self.__displays))
 
     @property
     def displays(self):
@@ -731,7 +739,7 @@ try:
             for omkey, pulses in omkey_pulses_map:
                 if self._display.canDisplayOMKey(geometry, omkey):
                     i3logging.log_trace(
-                        "Data available for DOM {}-{}".format(omkey.string, omkey.om)
+                        f"Data available for DOM {omkey.string}-{omkey.om}"
                       , "LedDisplay"
                     )
                     led = self._display.getLedIndex(omkey)
@@ -844,7 +852,7 @@ try:
             for omkey in omkey_list:
                 if self._display.canDisplayOMKey(geometry, omkey):
                     i3logging.log_trace(
-                          "Data available for DOM {}-{}".format(omkey.string, omkey.om)
+                          f"Data available for DOM {omkey.string}-{omkey.om}"
                         , "LedDisplay"
                     )
                     led = self._display.getLedIndex(omkey)

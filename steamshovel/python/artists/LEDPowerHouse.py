@@ -25,7 +25,8 @@ def find_devices():
     return sorted(ret)
 devices = find_devices()
 if not devices:
-    raise ImportError('no Teensy controllers detected')
+    msg = 'no Teensy controllers detected'
+    raise ImportError(msg)
 print(devices)
 
 from icecube import dataclasses
@@ -52,7 +53,8 @@ class Teensy:
             return None
     def __setitem__(self,key,value):
         if self.ser is None:
-            raise Exception('must use context manager to open serial connection')
+            msg = 'must use context manager to open serial connection'
+            raise Exception(msg)
         s,om = key
         r,g,b = value
         # write data to serial port
@@ -63,12 +65,14 @@ class Teensy:
         self.strings[s][om] = (r,g,b)
     def clear(self):
         if self.ser is None:
-            raise Exception('must use context manager to open serial connection')
+            msg = 'must use context manager to open serial connection'
+            raise Exception(msg)
         self.ser.write('C')
         self.strings = {}
     def set_size(self,strings,oms):
         if self.ser is None:
-            raise Exception('must use context manager to open serial connection')
+            msg = 'must use context manager to open serial connection'
+            raise Exception(msg)
         self.ser.write(struct.pack('<cBBB','M',strings,oms/256,oms%256))
 
 class LedLayout:

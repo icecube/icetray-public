@@ -313,7 +313,7 @@ class SurfaceCanvas:
         ax = self.axlist["info"]
 
         # First draw the meta-info about the run
-        words = "You are viewing a %s frame\n\n" % frame.Stop
+        words = f"You are viewing a {frame.Stop} frame\n\n"
 
         if "I3EventHeader" in frame:
             header = frame["I3EventHeader"]
@@ -321,8 +321,8 @@ class SurfaceCanvas:
             runID = header.run_id
 
             # Fill the left column
-            words += "Run ID:   {}\n".format(runID)
-            words += "Event ID: {}\n".format(evtID)
+            words += f"Run ID:   {runID}\n"
+            words += f"Event ID: {evtID}\n"
             words += "\n"
 
         # Print column 1
@@ -337,11 +337,11 @@ class SurfaceCanvas:
             if name in frame.keys():
                 words = ""
                 particle = frame[name]
-                words += "{}\n".format(name)
-                words += "Zen: {0:0.1f} deg\n".format(particle.dir.zenith / I3Units.degree)
-                words += "Azi: {0:0.1f} deg\n".format(particle.dir.azimuth / I3Units.degree)
+                words += f"{name}\n"
+                words += f"Zen: {particle.dir.zenith / I3Units.degree:0.1f} deg\n"
+                words += f"Azi: {particle.dir.azimuth / I3Units.degree:0.1f} deg\n"
                 if not math.isnan(np.log10(particle.energy / I3Units.eV)):
-                    words += "lg(E/eV): {0:0.2f}\n".format(np.log10(particle.energy / I3Units.eV))
+                    words += f"lg(E/eV): {np.log10(particle.energy / I3Units.eV):0.2f}\n"
                 words += "\n"
 
                 icol = item % 2
@@ -362,10 +362,10 @@ class SurfaceCanvas:
                 beta = parameters.value(LaputopParameter.Beta)
                 beta_err = parameters.error(LaputopParameter.Beta)
 
-                words += "{}\n".format(name)
+                words += f"{name}\n"
                 words += "log$_{i10}$(S$_{i125}$): {l:.1f}({e:.1f})\n".format(i10={10}, i125={125},
                                                                               l=lg_s125, e=lg_s125_err)
-                words += "Beta: {b:.1f}({e:.1f})\n".format(b=beta, e=beta_err)
+                words += f"Beta: {beta:.1f}({beta_err:.1f})\n"
                 words += "\n"
 
                 icol = item % 2

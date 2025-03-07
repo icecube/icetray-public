@@ -9,8 +9,8 @@ import subprocess
 from icecube.icetray import i3logging
 
 def ffmpeg_flags(fps):
-    return ['-framerate', '{0}'.format(fps),
-            '-r', '{0}'.format(fps),
+    return ['-framerate', f'{fps}',
+            '-r', f'{fps}',
             '-y', # erase old files
             # on ffmpeg v1.1.3, theses are required to create quicktime-compatible mp4
             '-vprofile', 'main',
@@ -25,11 +25,11 @@ def ffmpeg_flags(fps):
 def avconv_flags(fps):
     return ['-y', # erase old files
             '-pix_fmt', 'yuv420p',
-            '-r', '{0}'.format(fps),
+            '-r', f'{fps}',
             '-format', 'mp4']
 
 def mencoder_flags(fps):
-    return ['-mf', 'fps={0}'.format(fps),
+    return ['-mf', f'fps={fps}',
             '-ovc', 'lavc',
             '-lavcopts', 'vcodec=mpeg4',
             '-o']
@@ -49,8 +49,8 @@ def getMovieEncoders():
         if encoder == 'avconv':
             cmd = ['avconv'] + avconv_flags(25) + ['-version']
         if encoder == 'mencoder':
-            cmd = ['mencoder', 'mf://'  + tmpfile1.name] + mencoder_flags(25) + [tmpfile2.name]
-        i3logging.log_debug( 'testing encoder: ' + ' '.join(cmd) )
+            cmd = ['mencoder', f"mf://{tmpfile1.name}"] + mencoder_flags(25) + [tmpfile2.name]
+        i3logging.log_debug( f"testing encoder: {' '.join(cmd)}" )
         try:
             proc = subprocess.Popen( cmd,
                                      stderr=subprocess.STDOUT,
@@ -60,10 +60,9 @@ def getMovieEncoders():
             if retcode == 0: # encoder is available and accepts all arguments
                 rval.append( encoder )
             else:
-                i3logging.log_info( '{0} does not pass the test\n{1}\nOutput:\n{2}'
-                                    .format(encoder, ' '.join(cmd), output.decode()) )
+                i3logging.log_info( f'{encoder} does not pass the test\n{" ".join(cmd)}\nOutput:\n{output.decode()}')
         except OSError as e:
-            i3logging.log_debug( encoder + ' is not installed or not in PATH' )
+            i3logging.log_debug( f"{encoder} is not installed or not in PATH" )
     return rval
 
 
@@ -76,18 +75,18 @@ class AsyncMovie:
 
     def __init__( self, encoder, inpdir, outfile, fps ):
         if encoder == 'ffmpeg':
-            cmd = [ 'ffmpeg', '-i', '{0}/frame%08d.png'.format( inpdir ) ]
+            cmd = [ 'ffmpeg', '-i', f'{inpdir}/frame%08d.png' ]
             cmd += ffmpeg_flags(fps)
         elif encoder == 'avconv':
-            cmd = [ 'avconv', '-i', '{0}/frame%08d.png'.format( inpdir ) ]
+            cmd = [ 'avconv', '-i', f'{inpdir}/frame%08d.png' ]
             cmd += avconv_flags(fps)
         elif encoder == 'mencoder':
-            cmd = [ 'mencoder', 'mf://{0}/*.png'.format( inpdir ) ]
+            cmd = [ 'mencoder', f'mf://{inpdir}/*.png' ]
             cmd += mencoder_flags(fps)
         else:
-            i3logging.log_fatal( "bad encoder argument: {0}".format( encoder )  )
+            i3logging.log_fatal( f"bad encoder argument: {encoder}"  )
         cmd += [ outfile ]
-        i3logging.log_debug( 'Encoding cmdline: ' + ' '.join(cmd) )
+        i3logging.log_debug( f"Encoding cmdline: {' '.join(cmd)}" )
         self.proc = subprocess.Popen( cmd )
 
     def stop( self ):

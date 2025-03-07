@@ -132,7 +132,7 @@ cmd( 'cp -L -R {0}/lib/* {1}/icecube', build_dir, framework_dir )
 
 ## Get libs that were linked into the binaries and libs that we have so far from otool
 libs = LibraryCollector()
-libs.collect( glob.glob('{0}/Contents/MacOS/*'.format(app_dir))
+libs.collect( glob.glob(f'{app_dir}/Contents/MacOS/*')
               + cmd('find {0} -type f', framework_dir).split('\n') )
 
 ## Get icetray environment

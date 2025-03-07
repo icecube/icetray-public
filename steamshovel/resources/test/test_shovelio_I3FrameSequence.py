@@ -45,9 +45,9 @@ class ShovelIoTest(unittest.TestCase):
         # skip TrayInfo
         for i, ref in enumerate( self.ref_frame_info ):
             cur = seq[i]
-            self.assertEqual(ref["stop"], cur.Stop, "idx {0}: stops differ, {1} vs {2}".format(i, ref["stop"], cur.Stop))
+            self.assertEqual(ref["stop"], cur.Stop, f"idx {i}: stops differ, {ref['stop']} vs {cur.Stop}")
             self.assertEqual(ref["keys"], set(cur.keys()),
-                             "idx {0}: keys differ\nref: {1}\ntst: {2}".format(i, ref["keys"], set(cur.keys())))
+                             f"idx {i}: keys differ\nref: {ref['keys']}\ntst: {set(cur.keys())}")
 
     def testReverseAccess(self):
         seq = I3FrameSequence()
@@ -59,8 +59,8 @@ class ShovelIoTest(unittest.TestCase):
         for i in range( len(self.ref_frame_info) - 1, 0, -1 ):
             cur = seq[i]
             ref = self.ref_frame_info[i]
-            self.assertEqual(ref["stop"], cur.Stop, "idx {0}: stops differ, {1} vs {2}".format(i, ref["stop"], cur.Stop))
-            self.assertEqual(ref["keys"], set(cur.keys()), "idx {0}: keys differ".format(i))
+            self.assertEqual(ref["stop"], cur.Stop, f"idx {i}: stops differ, {ref['stop']} vs {cur.Stop}")
+            self.assertEqual(ref["keys"], set(cur.keys()), f"idx {i}: keys differ")
 
 if __name__ == '__main__':
     unittest.main()

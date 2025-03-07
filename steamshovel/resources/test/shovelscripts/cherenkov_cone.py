@@ -33,7 +33,7 @@ for i, beta in enumerate((0.7, 0.8, 0.9, 1.0)):
     p.speed = beta * dcl.I3Constants.c
     p.time = 38000
 
-    key = "p{:0.3f}".format(beta)
+    key = f"p{beta:0.3f}"
     frame[key] = p
     artist = scenario.add( "Particles", [key] )
     scenario.changeSetting(artist, "arrow head size", 50.0)

@@ -46,9 +46,9 @@ class AngleClock(MPLArtist):
         ax = fig.add_subplot(111, polar=True)
         angles = (("elevation", "azimuth"), ("elevation",), ("azimuth",))
         for angle in angles[self.setting("show")]:
-            length = self.setting(angle + " length")
-            c = self.setting(angle + " color").rgbF()
-            w = self.setting(angle + " width")
+            length = self.setting(f"{angle} length")
+            c = self.setting(f"{angle} color").rgbF()
+            w = self.setting(f"{angle} width")
             a = ( pi / 2 - direc.theta
                   if angle == "elevation" else
                   direc.phi )

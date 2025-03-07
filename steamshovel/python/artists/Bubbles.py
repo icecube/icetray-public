@@ -68,7 +68,8 @@ class Bubbles( PyArtist ):
                 try:
                     geo = omgeo[omkey]
                 except KeyError:
-                    raise KeyError("OMGeo doesn't contain %s" % (omkey))
+                    msg = f"OMGeo doesn't contain {omkey}"
+                    raise KeyError(msg)
                 pos = geo.position
                 if geo.omtype in [geo.IceCube, geo.IceTop, geo.PDOM]:
                     sphere = output.addSphere( scale, pos )
@@ -138,7 +139,8 @@ class Bubbles( PyArtist ):
                 axisfunc.add( size*axis, tc )
             obj.setAxis( axisfunc )
         else:
-            raise TypeError("Don't know how to scale %s object" % (type(Sphere)))
+            msg = f"Don't know how to scale {type(Sphere)} object"
+            raise TypeError(msg)
 
     def handle_integral_bubble_delay( self, output, sphere, series,
                                       scale, power, colormap, delay,

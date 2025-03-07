@@ -85,7 +85,7 @@ class Waveform(MPLArtist):
             waveforms = waveformmap[omkey]
 
             prop = next(props)
-            label = 'OM({},{})'.format(omkey.string, omkey.om)
+            label = f'OM({omkey.string},{omkey.om})'
             for wf in waveforms:
                 if wf.status != wf.VIRGINAL:
                     pass

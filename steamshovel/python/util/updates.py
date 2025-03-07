@@ -203,7 +203,7 @@ def updatesSince(last_rev):
             title = item[idx1+1:idx2]
             msg = item[idx2+1:]
             paragraphs = msg.split("\n\n")
-            msg = "".join(["<p>{}</p>".format(p) for p in paragraphs])
+            msg = "".join([f"<p>{p}</p>" for p in paragraphs])
             msg.replace("\n", " ")
-            richText.append("<h2>{}</h2><p>{}</p>".format(title, msg))
+            richText.append(f"<h2>{title}</h2><p>{msg}</p>")
     return "".join(richText)

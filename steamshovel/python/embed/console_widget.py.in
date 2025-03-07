@@ -45,7 +45,7 @@ def init_embedded_kernel():
         try:
             from IPython.qt import inprocess
         except ImportError:
-            print("Could not get QtInProcessKernelManager for IPython {0:s} ".format(IPython.__version__))
+            print(f"Could not get QtInProcessKernelManager for IPython {IPython.__version__} ")
             return False
 
     _kmgr = inprocess.QtInProcessKernelManager()
@@ -99,7 +99,7 @@ def execScript( path ):
     global widget, _kclient
     if widget:
         # widget.execute_file uses %run, but not %run -i, which we need
-        execstr = "%run -i {0}".format(path)
+        execstr = f"%run -i {path}"
         r = widget.execute( execstr )
     else:
         if( console._steamshovel_input_hook ):

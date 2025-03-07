@@ -22,7 +22,7 @@ def _dumpScenario():
         scenario.setOverlaySizeHints( artist, [OverlaySizeHint(10,10,230,60), ] )
         scenario.setIsActive( artist, True )
     except RuntimeError as e:
-        logging.log_error( "Could not load a saved artist: " + str(e) )
+        logging.log_error( f"Could not load a saved artist: {str(e)}" )
     try:
         artist = scenario.add( 'IceTopLDF', ['I3Geometry', 'Laputop', ] )
         scenario.setIsActive( artist, False )
@@ -47,7 +47,7 @@ def _dumpScenario():
         scenario.setOverlaySizeHints( artist, [OverlaySizeHint(770,10,485,780), ] )
         scenario.setIsActive( artist, True )
     except RuntimeError as e:
-        logging.log_error( "Could not load a saved artist: " + str(e) )
+        logging.log_error( f"Could not load a saved artist: {str(e)}" )
     try:
         artist = scenario.add( 'Ice', [] )
         scenario.setIsActive( artist, False )
@@ -64,7 +64,7 @@ def _dumpScenario():
         scenario.changeSetting( artist, 'Color dust', shovelart.PyQColor(100,100,100,50) )
         scenario.setIsActive( artist, True )
     except RuntimeError as e:
-        logging.log_error( "Could not load a saved artist: " + str(e) )
+        logging.log_error( f"Could not load a saved artist: {str(e)}" )
     try:
         artist = scenario.add( 'Detector', ['I3Geometry', ] )
         scenario.setIsActive( artist, False )
@@ -78,7 +78,7 @@ def _dumpScenario():
         scenario.changeSetting( artist, 'DOM labels', False )
         scenario.setIsActive( artist, True )
     except RuntimeError as e:
-        logging.log_error( "Could not load a saved artist: " + str(e) )
+        logging.log_error( f"Could not load a saved artist: {str(e)}" )
     try:
         artist = scenario.add( 'ChargeBubbles', ['I3Geometry', 'CleanedHLCTankPulses', ] )
         scenario.setIsActive( artist, False )
@@ -88,7 +88,7 @@ def _dumpScenario():
         scenario.changeSetting( artist, 'power', 0.27901 )
         scenario.setIsActive( artist, True )
     except RuntimeError as e:
-        logging.log_error( "Could not load a saved artist: " + str(e) )
+        logging.log_error( f"Could not load a saved artist: {str(e)}" )
     try:
         artist = scenario.add( 'CoordinateSystem', [] )
         scenario.setIsActive( artist, False )
@@ -102,7 +102,7 @@ def _dumpScenario():
         scenario.changeSetting( artist, 'head length', 30 )
         scenario.setIsActive( artist, True )
     except RuntimeError as e:
-        logging.log_error( "Could not load a saved artist: " + str(e) )
+        logging.log_error( f"Could not load a saved artist: {str(e)}" )
     try:
         artist = scenario.add( 'Particles', ['Laputop', ] )
         scenario.setIsActive( artist, False )
@@ -119,7 +119,7 @@ def _dumpScenario():
         scenario.changeSetting( artist, 'min. energy', '' )
         scenario.setIsActive( artist, True )
     except RuntimeError as e:
-        logging.log_error( "Could not load a saved artist: " + str(e) )
+        logging.log_error( f"Could not load a saved artist: {str(e)}" )
     window.gl.setCameraPivot(415.0, -4.0, 2000.0)
     window.gl.setCameraLoc(415.0, -4.0, 4400.0)
     window.gl.setCameraOrientation(1.0, 0.0, 0.0)

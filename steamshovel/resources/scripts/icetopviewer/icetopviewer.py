@@ -103,7 +103,7 @@ def ParseOptions(frame, particleKeys, paramsKeys, detectors, framesOfChoise):
 
     nNonDetectorOptions = 3
     for idet, det in enumerate(detectors):
-        print("{}: {}".format(idet + nNonDetectorOptions, det.GetKeyName()))
+        print(f"{idet + nNonDetectorOptions}: {det.GetKeyName()}")
 
     user_response = input("Enter number: ")
     print("")

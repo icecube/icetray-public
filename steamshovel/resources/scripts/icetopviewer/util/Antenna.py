@@ -136,7 +136,7 @@ class Antenna(Detector):
                 elif isinstance(frame[key], dataclasses.I3AntennaDataMap):
                     self.TimeFreqDbPlot(frame[key], axlist, 1, key)
                 else:
-                    icetray.logging.log_fatal("Key: ({}) is type ({}). I don't know what this is!".format(key, type(frame[key])))
+                    icetray.logging.log_fatal(f"Key: ({key}) is type ({type(frame[key])}). I don't know what this is!")
         return
 
     def TimeFreqDbPlot(self, antDataMap, axlist, plotFrac, plotLabel):
@@ -187,7 +187,7 @@ class Antenna(Detector):
         #The times and freqs (x-axis values) are converted into the requested units here
 
         if self.AntennaStationID not in vectorMap.keys():
-            logging.log_warn("Antenna key ({}) not found in the map!".format(self.AntennaStationID))
+            logging.log_warn(f"Antenna key ({self.AntennaStationID}) not found in the map!")
             return 0, 0, 0, 0, 0, 0, 0, 0,
 
         fftData = dataclasses.FFTData3D(vectorMap[self.AntennaStationID])
@@ -209,14 +209,14 @@ class Antenna(Detector):
 
         #Make sure that this antenna key is in the map
         if self.AntennaStationID not in antDataMap.keys():
-            logging.log_warn("Antenna key ({}) not found in the map!".format(self.AntennaStationID))
+            logging.log_warn(f"Antenna key ({self.AntennaStationID}) not found in the map!")
             return [], [], [], [], []
 
         channelMap = antDataMap[self.AntennaStationID]
 
         #Make sure that this channel key is in the map
         if channel_no not in channelMap.keys():
-            logging.log_warn("Channel key ({}) not found in the map of antenna key ({})!".format(channel_no,self.AntennaStationID))
+            logging.log_warn(f"Channel key ({channel_no}) not found in the map of antenna key ({self.AntennaStationID})!")
             return [], [], [], [], []
 
         fft = channelMap[channel_no].GetFFTData()
@@ -246,7 +246,7 @@ class Antenna(Detector):
         else:
             rms = np.std(amps[0:plotBins])
             ax.plot(times[0:plotBins], amps[0:plotBins], color=plotColor,
-                    label=plotLabel + " - RMS: {0:0.3f}".format(rms))
+                    label=plotLabel + f" - RMS: {rms:0.3f}")
 
         if not self.isADC:
             thisMax = max(amps[0:plotBins])
@@ -375,8 +375,7 @@ class Antenna(Detector):
         self.__reset_textbox(ax)
         words = ""
         # Fill the info
-        words += "Antenna Station ID:\n" \
-                 "{}\n".format(self.AntennaStationID)
+        words += f"Antenna Station ID:\n{self.AntennaStationID}\n"
         ax.text(0.05, 0.95, words, ha="left", va="top",
                 color="k", transform=ax.transAxes)
 

@@ -70,7 +70,7 @@ def get_view(gl, frame, myview=False):
     line = None
     for a in gl.scenario.getArtists():
         if not a.isActive:
-            logging.log_warn("Ignoring inactive Artist {} with keys {}".format(a.description,a.keys))
+            logging.log_warn(f"Ignoring inactive Artist {a.description} with keys {a.keys}")
             continue
 
         if a.description == 'Particles':
@@ -82,7 +82,8 @@ def get_view(gl, frame, myview=False):
                 line = k
                 break
         else:
-            raise Exception('Cannot determine track. Please select one with the Particles artist')
+            msg = 'Cannot determine track. Please select one with the Particles artist'
+            raise Exception(msg)
 
     if not line:
         log = "Misconfigured Particle artist. Please remove it and try again."
@@ -93,7 +94,7 @@ def get_view(gl, frame, myview=False):
     bubbles = None
     for a in gl.scenario.getArtists():
         if not a.isActive:
-            logging.log_warn("Ignoring inactive Artist {} with keys {}".format(a.description,a.keys))
+            logging.log_warn(f"Ignoring inactive Artist {a.description} with keys {a.keys}")
             continue
 
         if a.description == 'Bubbles':
@@ -105,7 +106,8 @@ def get_view(gl, frame, myview=False):
                 bubbles = k
                 break
         else:
-            raise Exception('Cannot determine pulses. Please select one with the Bubbles artist')
+            msg = 'Cannot determine pulses. Please select one with the Bubbles artist'
+            raise Exception(msg)
 
     if not bubbles:
         log = "Misconfigured Bubble artist. Please remove it and try again."
@@ -283,9 +285,9 @@ def get_projection(filename, frame=None, include_xyz=True, include_colorscale=Tr
     tmpdir = tempfile.mkdtemp()
     try:
         basename = os.path.join(tmpdir,'img')
-        mainname = basename+'_main.png'
+        mainname = f"{basename}_main.png"
         colorname = os.path.join(tmpdir,'color.png')
-        thumbname = basename+'_{}.png'
+        thumbname = f"{basename}_{{}}.png"
         thumb_settings = [ # (name, location, up_direction)
             ('top', (0,0,1.5e3), (0,1,0)),
             ('x', (1.5e3,0,0), (0,0,1)),
@@ -313,7 +315,7 @@ def get_projection(filename, frame=None, include_xyz=True, include_colorscale=Tr
             # render main
             pivot, loc = get_view(window.gl, frame, manual_view)
             window.gl.perspectiveView = True
-            pr.render(True, pivot, loc, (0,0,1), width, basename+"_main.png")
+            pr.render(True, pivot, loc, (0,0,1), width, f"{basename}_main.png")
 
             if include_xyz:
                 tres = width//len(thumb_settings)

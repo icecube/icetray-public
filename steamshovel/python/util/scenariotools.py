@@ -30,7 +30,7 @@ class PythonWriter:
         return '\n'.join(self.code)
 
     def __repr__(self):
-        return "PythonWriter(\"\"\"" + str(self) + "\"\"\")"
+        return f"PythonWriter(\"\"\"{str(self)}\"\"\")"
 
 
 def dumpScenarioState(code, scenario):
@@ -79,7 +79,7 @@ def exectableScenarioDump():
         # save current state of artists
         from icecube import shovelart
         shovelart_classes = ', '.join([x for x in dir(shovelart) if not x.startswith("_")])
-        code('from icecube.shovelart import ' + shovelart_classes)
+        code(f"from icecube.shovelart import {shovelart_classes}")
         code('from icecube.icetray import OMKey')
         # dumpScenarioState also expects to have access to log_error
         code('from icecube.icetray import logging')

@@ -21,7 +21,7 @@ def _dumpScenario():
         scenario.changeSetting( artist, 'power', 0.157 )
         scenario.setIsActive( artist, True )
     except RuntimeError as e:
-        logging.log_error( "Could not load a saved artist: " + str(e) )
+        logging.log_error( f"Could not load a saved artist: {str(e)}" )
     try:
         artist = scenario.add( 'Detector', ['I3Geometry', ] )
         scenario.changeSetting( artist, 'DOM color', shovelart.PyQColor(115,115,115,255) )
@@ -33,12 +33,12 @@ def _dumpScenario():
         scenario.changeSetting( artist, 'DOM labels', False )
         scenario.setIsActive( artist, True )
     except RuntimeError as e:
-        logging.log_error( "Could not load a saved artist: " + str(e) )
+        logging.log_error( f"Could not load a saved artist: {str(e)}" )
     try:
         artist = scenario.add( 'Ice', [] )
         scenario.setIsActive( artist, True )
     except RuntimeError as e:
-        logging.log_error( "Could not load a saved artist: " + str(e) )
+        logging.log_error( f"Could not load a saved artist: {str(e)}" )
     window.gl.setCameraPivot(7.17023658752, 36.1024436951, -63.2644119263)
     window.gl.setCameraLoc(1100.0, 1100.0, 900.0)
     window.gl.setCameraOrientation(-0.697558283806, 0.716528058052, 0.0)

@@ -65,7 +65,7 @@ for artist_name in scenario.listAvailableArtists():
         try:
             scenario.add( artist_name, artist_keys )
         except Exception as e:
-            print( "Error: {} raised {} with keys {}".format(artist_name, e, artist_keys) )
+            print( f"Error: {artist_name} raised {e} with keys {artist_keys}" )
             return_code = 2
 
 # shut down

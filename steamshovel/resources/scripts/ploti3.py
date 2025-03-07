@@ -53,7 +53,7 @@ def basic_scatter(num, coords, colors,cextents=None):
 
     ax4 = fig.add_subplot(gs[:,2], title='time (ns)')
     cb = mpl.colorbar.ColorbarBase(ax4, cmap=cm.Paired, norm=mpl.colors.Normalize(*cextents))
-    fig.savefig('plot/{0}r.png'.format(num))
+    fig.savefig(f'plot/{num}r.png')
     #pl.show()
 
 

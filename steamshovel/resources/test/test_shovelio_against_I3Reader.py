@@ -50,11 +50,13 @@ class AllframesModule( icetray.I3Module ):
                 print(len(only_s1), 'keys only in shovelio:', " ".join(only_s1))
             if only_s2:
                 print(len(only_s2), 'keys only in I3Reader:', " ".join(only_s2))
-            raise NotEqualError("keys differ" )
+            msg = "keys differ"
+            raise NotEqualError(msg )
         # Frames have the same stop ids
         if f1.Stop != frame.Stop:
-            print( "shovelio frame stop {0} != I3Reader frame stop {1}".format(f1.Stop,frame.Stop) )
-            raise NotEqualError("stops differ")
+            print( f"shovelio frame stop {f1.Stop} != I3Reader frame stop {frame.Stop}" )
+            msg = "stops differ"
+            raise NotEqualError(msg)
         # For any iterable frame objects, the lengths are the same
         for key in frame.keys():
             try:

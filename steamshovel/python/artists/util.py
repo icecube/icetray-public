@@ -48,13 +48,15 @@ def parse_engineering( string, unit = "" ):
     we are limited to ASCII.
     """
     if not string.endswith(unit):
-        raise ValueError("string '%s' is missing the unit '%s'" % (string, unit))
+        msg = f"string '{string}' is missing the unit '{unit}'"
+        raise ValueError(msg)
     if unit:
         string = string[:-len(unit)]
 
     m = re.match(r"\s*([\+\-]?[.0-9]+)\s*([a-zA-Z]*)\s*", string)
     if not m:
-        raise ValueError("string '%s' cannot be parsed" % string)
+        msg = f"string '{string}' cannot be parsed"
+        raise ValueError(msg)
     x = m.group(1)
     mod = m.group(2)
     conv = {'a':1e-18, 'f':1e-15, 'p':1e-12, 'n':1e-9, 'u':1e-6,
@@ -92,12 +94,12 @@ def format_engineering( number, unit = "" ):
 
     # print z, ten_exp, sci_places, sci_signific
     if trailing >= 10:
-        lead = "{:d}".format(int(round(trailing)))
+        lead = f"{int(round(trailing)):d}"
     elif trailing >= 1:
-        lead = "{:.1f}".format(trailing)
+        lead = f"{trailing:.1f}"
     else:
-        lead = "{:.2f}".format(trailing)
-    return lead + " " + expo_char + unit
+        lead = f"{trailing:.2f}"
+    return f"{lead} {expo_char}{unit}"
 
 
 def detector_outline( bottom_vec3d_list, top_vec3d_list ):

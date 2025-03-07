@@ -18,7 +18,7 @@ class DOMLaunchHistogram( MPLArtist ):
         axes.hist( launchtimes, 100 )
         axes.set_xlabel( 'time (ns)', fontsize='smaller' )
         axes.set_ylabel( 'DOMLaunches', fontsize='smaller' )
-        axes.set_title( 'Timing of initial DOMLaunches (' + dkey + ')', fontsize='smaller' )
+        axes.set_title( f"Timing of initial DOMLaunches ({dkey})", fontsize='smaller' )
         if( self.setting("Animated") ):
             self.timeline = axes.axvline( 0, color='black' )
 
