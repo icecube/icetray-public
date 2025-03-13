@@ -31,15 +31,13 @@
 //
 
 #ifndef I3VECTORS_H_PYBINDINGS
-#define I3VECTORS_H_PYBINDINGS 
+#define I3VECTORS_H_PYBINDINGS
 
-#include <icetray/ostream_pair.hpp>
 #include <dataclasses/I3Vector.h>
 #include <dataclasses/ostream_overloads.hpp>
 #include <icetray/python/dataclass_suite.hpp>
 #include <icetray/python/get_class.hpp>
 #include <vector>
-#include <sstream>
 
 using namespace boost::python;
 
@@ -64,40 +62,6 @@ register_i3vector_of(const std::string& s)
       ;
     register_pointer_conversions<vec_t>();
   }
-}
-
-template <typename T, typename U>
-std::pair< T, U >
-py_make_pair( T t, U u)
-{
-    return std::make_pair(t,u);
-}
-
-namespace {
-
-template <typename pair_t>
-std::string repr(const pair_t &self)
-{
-  std::ostringstream oss;
-  oss << "make_pair(" << self.first << "," << self.second << ")";
-  return oss.str();
-}
-
-}
-
-template <typename T, typename U>
-void
-register_std_pair(const char* s)
-{
-  typedef std::pair<T, U> type_t;
-
-  class_<type_t>(s)
-    .def_readwrite("first", &type_t::first)
-    .def_readwrite("second", &type_t::second)
-    .def(dataclass_suite<type_t>())
-    .def("__repr__", &repr<type_t>)
-    ;
-  def("make_pair", &py_make_pair<T, U>);
 }
 
 #endif //I3VECTORS_H_PYBINDINGS

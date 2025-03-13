@@ -55,7 +55,7 @@ namespace bp = boost::python;
   (I3DOMLaunchSeriesMap)(I3EventHeader)                                 \
   (I3RecoHit)(I3FlasherInfo)(I3Matrix)(I3ParticleID)                    \
   (I3MCHit)(vectorI3MCHit)(mapOMKeyI3MCHit)(I3MCHitSeriesMap)           \
-  (I3Calibration)(DroopedSPETemplate)(SPETemplate)            \
+  (I3Calibration)(DroopedSPETemplate)(SPETemplate)                      \
   (I3DOMCalibration)(I3VEMCalibration)(LinearFit)(QuadraticFit)         \
   (TauParam)(MapOMKeyI3DOMCalibration)(MapOMKeyI3VEMCalibration)        \
   (I3DetectorStatus)(I3DOMStatus)(I3TriggerStatus)(MapOMKeyI3DOMStatus) \
@@ -74,7 +74,7 @@ namespace bp = boost::python;
   (I3VectorUShort)(I3VectorInt)(I3VectorUInt)(I3VectorInt64)            \
   (I3VectorUInt64)(I3VectorFloat)(I3VectorDouble)(I3VectorDoubleDouble) \
   (I3VectorI3Particle)(I3VectorParticleType)(I3VectorI3Position)        \
-  (I3VectorPairDoubleDouble)(I3MCTreePhysicsLibrary)(I3VectorUtils)     \
+  (PairDoubleDouble)(I3MCTreePhysicsLibrary)(I3VectorUtils)             \
   (I3VectorAntennaKey)(I3VectorScintKey)                                \
   (SPEChargeDistribution)(I3TriggerHierarchy)(I3Trigger)(TriggerKey)    \
   (I3RecoPulseSeriesMapApplySPECorrection)(I3FlasherStatus)             \

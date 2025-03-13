@@ -66,6 +66,7 @@ i3_add_pybindings(dataclasses
   private/pybindings/I3MCTreePhysicsLibrary.cxx
   private/pybindings/ModuleKey.cxx
   private/pybindings/module.cxx
+  private/pybindings/PairDoubleDouble.cxx
   private/pybindings/TankKey.cxx
   private/pybindings/TriggerKey.cxx
   private/pybindings/ScintKey.cxx

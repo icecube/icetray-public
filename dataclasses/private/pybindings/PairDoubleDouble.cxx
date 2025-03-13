@@ -30,9 +30,50 @@
 //   
 //
 
-#include "I3Vectors.h"
+#include "icetray/python/dataclass_suite.hpp"
+#include <boost/python.hpp>
+#include <sstream>
+#include <string>
+#include <utility>
 
-void register_I3VectorPairDoubleDouble()
+using namespace boost::python;
+
+template <typename T, typename U>
+std::pair< T, U >
+py_make_pair( T t, U u)
 {
-  register_std_pair<double, double>("PairDoubleDouble");
+    return std::make_pair(t,u);
+}
+
+namespace {
+
+template <typename pair_t>
+std::string repr(const pair_t &self)
+{
+  std::ostringstream oss;
+  oss << "PairDoubleDouble(" << self.first << "," << self.second << ")";
+  return oss.str();
+}
+
+}
+
+template <typename T, typename U>
+void
+register_std_pair(const char* s, const char* ds)
+{
+  typedef std::pair<T, U> type_t;
+
+  class_<type_t>(s, ds)
+    .def_readwrite("first", &type_t::first)
+    .def_readwrite("second", &type_t::second)
+    .def(dataclass_suite<type_t>())
+    .def("__repr__", &repr<type_t>)
+    ;
+  def("make_pair", &py_make_pair<T, U>);
+}
+
+void register_PairDoubleDouble()
+{
+  register_std_pair<double, double>("PairDoubleDouble",
+                                    "A simple object representing a std::pair of doubles.");
 }
