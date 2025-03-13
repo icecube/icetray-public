@@ -23,9 +23,5 @@ def fix_logging_crash():
     :meta private:
     """
     I3Logger.global_logger = None  # type: ignore[assignment]
-atexit.register(fix_logging_crash)
 
-try:
-    from icecube.icetray.traydebug import I3TrayDebugger
-except ImportError:
-    pass
+atexit.register(fix_logging_crash)

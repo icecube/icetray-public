@@ -14,10 +14,6 @@ import re
 import math
 import html
 
-from icecube.icetray import i3inspect
-
-from jinja2 import Template
-
 ################################################################################
 
 class ParameterDescription:
@@ -39,6 +35,8 @@ class ModuleDescription:
         module definitions, basically a dict of ParameterDescription
     """
     def __init__(self, typename):
+        from icecube.icetray import i3inspect  # isort: skip
+
         self.typename = typename
         self.params = dict() # name.lower() -> ParameterDescription(..)
 
@@ -114,10 +112,33 @@ class ModuleInstance:
 
 class XMLOutput:
     def __init__(self, modules, services):
+        from jinja2 import Template  # isort: skip
+
         modules = modules
         services = services
 
+        # fmt: off
         self.modules = []
+        self.template = Template("""<xml>
+            {% for mod in modules %}
+            <module>
+             <classname> {{mod.classname}} </classname>
+             <instancename> {{mod.instancename}} </instancename>
+             <parameters>
+                {% for param in mod.params %}
+                <param>
+                    <name> {{ param.name }} </name>
+                    <default> {{ param.default }} </default>
+                    <configured> {{ param.configured }} </configured>
+                    <description> {{ param.description }} </description>
+                </param>
+                {% endfor %}
+             </parameters>
+            </module>
+            {% endfor %}
+        </xml>
+        """)
+        # fmt: on
 
         for k, mod in itertools.chain(iter(modules.items()),
                                       iter(services.items())):
@@ -132,26 +153,6 @@ class XMLOutput:
                                          description=self.escape(pdesc)) )
 
             self.modules.append(d)
-
-    template = Template("""<xml>
-        {% for mod in modules %}
-        <module>
-         <classname> {{mod.classname}} </classname>
-         <instancename> {{mod.instancename}} </instancename>
-         <parameters>
-            {% for param in mod.params %}
-            <param>
-                <name> {{ param.name }} </name>
-                <default> {{ param.default }} </default>
-                <configured> {{ param.configured }} </configured>
-                <description> {{ param.description }} </description>
-            </param>
-            {% endfor %}
-         </parameters>
-        </module>
-        {% endfor %}
-    </xml>
-    """)
 
     def escape(self, s):
         if isinstance(s, str):
