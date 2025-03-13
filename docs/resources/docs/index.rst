@@ -42,9 +42,9 @@ can be accomplished with:
 
 .. code:: console
 
-   $ ./env-shell.sh docs-build --projects astro bayesian-priors --open
+   $ ./env-shell.sh docs-build --projects astro lilliput --open
 
-This will only build two projects: astro and baysian-priors.
+This will only build two projects: :ref:`astro` and :ref:`lilliput`.
 In addition, the ``--open`` option will open the html file for you in the browser
 as soon as the build is complete.
 Other wise you will have to find the docs yourself in the directory they are
