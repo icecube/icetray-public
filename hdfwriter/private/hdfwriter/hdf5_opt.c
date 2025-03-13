@@ -149,11 +149,7 @@ herr_t I3H5TBmake_table( const char *table_title,
         /* get the member name */
         member_name = H5Tget_member_name( mem_type_id,(unsigned) i );
 
-        strcpy( attr_name, "FIELD_" );
-        sprintf( aux, "%d", (int)i );
-        strcat( attr_name, aux );
-        sprintf( aux, "%s", "_NAME" );
-        strcat( attr_name, aux );
+        snprintf(attr_name, sizeof(attr_name), "FIELD_%d_NAME", (int)i);
 
         /* attach the attribute */
         if (H5LTset_attribute_string( loc_id, dset_name, attr_name, member_name ) < 0)
@@ -182,11 +178,7 @@ herr_t I3H5TBmake_table( const char *table_title,
             /* get the member name */
             member_name = H5Tget_member_name(mem_type_id, (unsigned)i);
 
-            strcpy(attr_name, "FIELD_");
-            sprintf(aux, "%d", (int)i);
-            strcat(attr_name, aux);
-            sprintf(aux, "%s", "_FILL");
-            strcat(attr_name, aux);
+            snprintf(attr_name, sizeof(attr_name), "FIELD_%d_FILL", (int)i);
 
             if ((attr_id = H5Acreate(did, attr_name, field_types[i], sid, H5P_DEFAULT)) < 0)
                 goto out;

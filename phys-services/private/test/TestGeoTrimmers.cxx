@@ -376,10 +376,10 @@ TEST(MinimumBall3point)
                     geomap, pulsemap, margin );
 
         // check total number of selected DOMs
-        char msg[256]; // sorry
+        char msg[256]{}; // sorry
         size_t nball = ballmapptr->size();
-        log_info( "got %zu selected DOMs, expected %u", nball, nsel );
-        sprintf(msg,"got %zu selected DOMs, expected %u", nball, nsel );
+        snprintf(msg, sizeof(msg), "got %zu selected DOMs, expected %u", nball, nsel);
+        log_info_stream(msg);
         ENSURE( nball == nsel, msg );
 
         // check all DOMs individually
@@ -397,12 +397,12 @@ TEST(MinimumBall3point)
                     bool outside = ( ballmapptr->find(omkey) == ballmapptr->end());
                     bool inside = !outside;
                     if ( should_be_inside ){
-                        sprintf(msg, "ball with radius %.3f, DOM at %.3f was "
+                        snprintf(msg, sizeof(msg), "ball with radius %.3f, DOM at %.3f was "
                                      "rejected but should be included",
                                      sqrt(radius2),sqrt(r2) );
                         ENSURE( inside, msg );
                     } else {
-                        sprintf(msg, "ball with radius %.3f, DOM at %.3f was "
+                        snprintf(msg, sizeof(msg), "ball with radius %.3f, DOM at %.3f was "
                                      "kept but should be excluded",
                                      sqrt(radius2),sqrt(r2) );
                         ENSURE( outside, msg );

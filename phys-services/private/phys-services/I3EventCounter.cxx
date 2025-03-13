@@ -114,19 +114,19 @@ void I3EventCounter :: Configure()
 
 namespace {
   const char* myordinal(int i){
-    static char ordinal[256];
+    static char ordinal[256]{};
     if ( ( (i%10) > 3 ) || ((i%10)==0) || (((i/10)%10)==1) ){
-      sprintf(ordinal,"%dth",i);
+      snprintf(ordinal,sizeof(ordinal),"%dth",i);
     } else {
       switch(i%10){
       case 1:
-	sprintf(ordinal,"%dst",i); break;
+        snprintf(ordinal,sizeof(ordinal),"%dst",i); break;
       case 2:
-	sprintf(ordinal,"%dnd",i); break;
+        snprintf(ordinal,sizeof(ordinal),"%dnd",i); break;
       case 3:
-	sprintf(ordinal,"%drd",i); break;
+        snprintf(ordinal,sizeof(ordinal),"%drd",i); break;
       default:
-	log_fatal("programming error i=%d",i);
+        log_fatal("programming error i=%d",i);
       }
     }
     return ordinal;
@@ -189,7 +189,7 @@ void I3EventCounter :: Finish()
            GetName().c_str(), physCount_);
 
   // format string with values
-  sprintf(buffer,fmt_.c_str(),physCount_,geometryCount_,calibCount_,statusCount_);
+  snprintf(buffer,sizeof(buffer),fmt_.c_str(),physCount_,geometryCount_,calibCount_,statusCount_);
 
   if (!summary_) summary_= context_.Get<I3MapStringDoublePtr>("I3SummaryService");
 
