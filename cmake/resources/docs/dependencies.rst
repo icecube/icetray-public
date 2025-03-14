@@ -132,6 +132,9 @@ These dependencies are optional. If not present IceTray will compile with reduce
   * - `Qt5 <https://www.qt.io/>`_
     - GUI Widget Toolkit
     - :ref:`steamshovel <steamshovel>`
+  * - `sqlite3 <https://www.sqlite.org/cintro.html>`_
+    - Module to interact with SQLite databases in C++
+    - :ref:`Aurora <Aurora-database>`
 
 Other Dependencies
 ------------------
