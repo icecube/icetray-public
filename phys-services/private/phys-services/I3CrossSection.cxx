@@ -17,6 +17,7 @@
 #include <cmath>
 
 #include <icetray/I3Logging.h>
+#include <icetray/I3Units.h>
 
 namespace
 {
@@ -66,6 +67,12 @@ namespace
         if (x < ((m*m) / (2.*M*(E - m))))
         {
             // eq. 6 left inequality
+            return false;
+        }
+
+        if (2.*M*E*y*(1.-x) + pow(M, 2) < pow(M + particleMass(I3Particle::Pi0)*I3Units::GeV, 2)) {
+            // W^2 = Q^2 (1 - x) / x + M^2 = 2 M E y (1 - x) + M^2
+            // W^2 must be greater than the threshold (M + m_pi0)^2
             return false;
         }
 
