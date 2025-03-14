@@ -17,8 +17,14 @@
 namespace fs = boost::filesystem;
 
 I3CSVTableService::I3CSVTableService(const std::string& foldername) : folderName_(foldername) {
-    fs::remove_all( folderName_ );
-    fs::create_directory( folderName_ );
+    if (fs::is_directory( folderName_ )) {
+        if (fs::directory_iterator( folderName_ ) != fs::directory_iterator()) {
+            log_fatal("The output directory '%s' already exists and is not empty.", folderName_.c_str());
+      }
+    }
+    else {
+        fs::create_directory( folderName_ );
+    }
     fs::create_directory( folderName_ + "/__I3Index__" );
 }
 
