@@ -297,6 +297,13 @@ namespace TreeBase {
 
   template<typename T, typename Key, typename Hash>
   const std::vector<T>
+  Tree<T,Key,Hash>::siblings(const Key& key) const
+  {
+    return std::vector<T>(cbegin_sibling(key), cend_sibling());
+  }
+
+  template<typename T, typename Key, typename Hash>
+  const std::vector<T>
   Tree<T,Key,Hash>::children(const Key& key) const
   {
     std::vector<T> result;
@@ -476,6 +483,22 @@ namespace TreeBase {
       typename tree_hash_map::const_iterator iter = internalMap.find(*head_);
       if (iter != internalMap.end())
         ret = iter->second.data;
+    }
+    return ret;
+  }
+
+  template<typename T, typename Key, typename Hash>
+  const typename Tree<T,Key,Hash>::optional_value
+  Tree<T,Key,Hash>::get_head(const Key& key) const
+  {
+    optional_value ret;
+    typename tree_hash_map::const_iterator iter = internalMap.find(key);
+    if (iter != internalMap.end()) {
+      const treeNode* n = &(iter->second);
+      while (n->parent != NULL) {
+        n = n->parent;
+      }
+      ret = n->data;
     }
     return ret;
   }

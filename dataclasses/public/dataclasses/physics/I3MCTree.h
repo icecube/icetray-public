@@ -873,6 +873,10 @@ namespace TreeBase {
        */
       const optional_value get_head() const;
       /**
+       * \brief Get the corresponding head/root value
+       */
+      const optional_value get_head(const Key&) const;
+      /**
        * \brief Get all of the head/root values.
        */
       const std::vector<T> get_heads() const;
@@ -931,6 +935,10 @@ namespace TreeBase {
       iterator_base<Derived,const T,Storage>
       next_sibling(const iterator_base<Derived,const T,Storage>&) const;
 
+      /**
+       * Get siblings (including the element itself)
+       */
+      const std::vector<T> siblings(const Key&) const;
       /**
        * Get immediate children
        */

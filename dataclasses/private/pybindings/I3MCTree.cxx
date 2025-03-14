@@ -72,6 +72,8 @@ I3Particle getParticle(const I3MCTree::optional_value& ptr, std::string err="")
 }
 I3Particle get_head(const I3MCTree& t)
 { return getParticle(t.get_head(),"no head in tree"); }
+I3Particle get_head_p(const I3MCTree& t,const I3ParticleID& p)
+{ return t.get_head(p); }
 I3Particle parent(const I3MCTree& t,const I3ParticleID& p)
 { return getParticle(t.parent(p),"particle not found or no parent"); }
 I3Particle previous_sibling(const I3MCTree& t,const I3ParticleID& p)
@@ -163,6 +165,7 @@ outer::sib_iter sibling_iter(const I3MCTree& t, const I3ParticleID& p)
 
 bool contains(const I3MCTree& t,const I3ParticleID& p)
 { return bool(t.at(p)); }
+const std::vector<I3Particle> (I3MCTree::*siblings)(const I3ParticleID&) const  = &I3MCTree::siblings;
 const std::vector<I3Particle> (I3MCTree::*children)(const I3ParticleID&) const  = &I3MCTree::children;
 void (I3MCTree::*erase)(const I3ParticleID&) = &I3MCTree::erase;
 void (I3MCTree::*erase_children)(const I3ParticleID&) = &I3MCTree::erase_children;
@@ -227,11 +230,13 @@ void register_I3MCTree()
         
         // Base Class Methods
         .def("get_head", &get_head, "Get the left-most primary (the root or head of the tree)")
+        .def("get_head", &get_head_p, "Get the primary in whose subtree the I3ParticleID lies.")
         .def("get_heads", &I3MCTree::get_heads, "Get a list of all primaries (the roots or heads of the tree)")
         .def("at", &at, return_internal_reference<>(), "Get the I3Particle represented by the I3ParticleID")
         .def("parent", &parent, "Get the parent of the I3ParticleID")
         .def("previous_sibling", &previous_sibling, "Get the previous sibling of the I3ParticleID")
         .def("next_sibling", &next_sibling, "Get the next sibling of the I3ParticleID")
+        .def("siblings", siblings, "Get the siblings of the I3ParticleID (exluding the particle itself)")
         .def("children", children, "Get the children of the I3ParticleID")
         .def("first_child", &first_child, "Get the first (left-most) child of the I3ParticleID")
         .def("clear", &I3MCTree::clear, "Clear everything from the tree")
