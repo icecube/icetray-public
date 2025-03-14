@@ -463,6 +463,7 @@ void I3TableWriter::Finish() {
             DisconnectTable(it->table);
         }
     }
+    tables_.clear();
 
     if (ignoredStreams_.size() > 0) {
         std::ostringstream buf1, buf2;
@@ -503,5 +504,4 @@ void I3TableWriter::DisconnectTable(I3TablePtr& table) {
     log_debug("Disconnecting from table %s", table->GetName().c_str());
     table->Align();
     table->SetConnectedToWriter(false);
-    table.reset();
 }

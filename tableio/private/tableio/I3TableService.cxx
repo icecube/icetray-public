@@ -44,7 +44,7 @@ I3TablePtr I3TableService::GetTable(std::string name,
     } else if (description) {
        // create table if description is not NULL
       table = CreateTable(name,description);
-       tables_[name] = table;
+      tables_[name] = table;
     }
 
     // otherwise, return NULL
@@ -207,7 +207,10 @@ void I3TableService::Finish() {
     }
 
     /* Only close the file if all the tables are disconnected. */
-    if (finished) CloseFile();
+    if (finished) {
+        tables_.clear();
+        CloseFile();
+    }
 }
 
 I3TableService::~I3TableService() {
