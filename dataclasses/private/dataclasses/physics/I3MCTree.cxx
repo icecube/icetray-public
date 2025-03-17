@@ -32,7 +32,8 @@ std::ostream& Tree<I3Particle,I3ParticleID>::Print(std::ostream& s) const{
     s << iter->GetAzimuth()/I3Units::degree << "deg) ";
     s << iter->GetTime()/I3Units::ns << "ns ";
     s << iter->GetEnergy()/I3Units::GeV << "GeV ";
-    s << iter->GetLength()/I3Units::m << "m\n";
+    s << iter->GetLength()/I3Units::m << "m ";
+    s << iter->GetShapeString()<< "\n";
   }
   s << ']';
   return(s);
