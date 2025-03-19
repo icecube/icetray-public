@@ -10,6 +10,15 @@ Release Notes
 main
 ----
 
+Mar. 20, 2025 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.14.0
+
+* Make domcal date available to users (#3764)
+* move PairDoubleDouble out of I3Vectors (#3802)
+* added get_head(particle) and siblings(particle) functions to I3MCTree (#3798)
+* Non-dark particles in the MCTree (#3855)
+
 Dec. 18, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.13.0

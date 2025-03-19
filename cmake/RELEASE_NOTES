@@ -12,6 +12,16 @@ Release Notes
 main
 ----
 
+Mar. 20, 2025 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.14.0
+
+* point test-data back to trunk
+* Add ENSURE_EPSILON a relative tolerance macro for testing (#3789)
+* remove the last references to cPickle and unittest2 (#3805)
+* Modify the tarball env so it uses the ROOTSYS from the build env. (#3826)
+* add sqlite3 to icetray (#3800)
+
 Dec. 18, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.13.0

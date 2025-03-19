@@ -10,6 +10,13 @@ Release Notes
 main
 ----
 
+Mar. 20, 2025 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.14.0
+
+- cvmfs 4.4.0 updates (#3780)
+- Remove Bayesian priors (#3844)
+
 Oct. 24, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.12.0

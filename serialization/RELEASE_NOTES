@@ -8,11 +8,17 @@ Release Notes
 main
 ----
 
+Mar. 20, 2025 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.14.0
+
+- work around a boost deprecation
+
 Dec. 18, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.13.0
 
-* Make tests clang-tidy clean (#3549)
+- Make tests clang-tidy clean (#3549)
 
 Oct. 24, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------

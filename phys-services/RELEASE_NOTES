@@ -10,6 +10,15 @@ Release Notes
 main
 ----
 
+Mar. 20, 2025 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.14.0
+
+* Reduce rounding error in ExtrudedPolygon::GetIntersection (#3776)
+* squash warnings by adding [[maybe_unused]] compiler directive (#3808)
+* remove (most) of the calls to sprintf() (#3825)
+* Implement additional check on final state invariant mass (Add W^2 threshold for DIS) in I3CrossSection (#3836)
+
 Dec. 18, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.13.0

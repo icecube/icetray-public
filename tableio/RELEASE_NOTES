@@ -8,6 +8,13 @@ Release Notes
 main
 ----
 
+Mar. 20, 2025 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.14.0
+
+* Stop I3CSVTableService from deleting the output directory (#3814)
+* Ensure I3TableWriter properly deconstructs tables (#3815)
+
 Dec. 18, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.13.0

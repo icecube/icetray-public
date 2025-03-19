@@ -10,6 +10,13 @@ Release Notes
 main
 ----
 
+Mar. 20, 2025 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.14.0
+
+* Fixes to get steamshovel working again with recent updates (#3766)
+* remove the last references to cPickle and unittest2 (#3805)
+* switch to using fstrings (#3823)
 * Fix for-loop-over-map errors introduced in #3576 (#3766)
 
 Dec. 18, 2024 don la dieu (nega at icecube.umd.edu)
