@@ -20,6 +20,7 @@ except:
 tempdir = TemporaryDirectory()
 
 whitelist_files = [
+    "REUSE.toml",
     ".editorconfig",
     ".gitignore",
     ".pre-commit-config.yaml",
@@ -387,7 +388,6 @@ whitelist_files = [
 
 whitelist = [
     ".github",
-    ".reuse",
     "astro",
     "cmake",
     "dataclasses",
