@@ -154,7 +154,7 @@ if(BUILD_STEAMSHOVEL)
     target_link_libraries( steamshovel shovelart shovelio )
     add_dependencies( steamshovel steamshovel-logviewer shovelart shovelio
       shovelart-pybindings shovelio-pybindings
-      dataio-pybindings dataclasses-pybindings icetray-pybindings )
+      dataio-pybindings dataclasses-pybindings icetray-pybindings tableio_dataclasses-pybindings)
 
     # tests
     # test_shovelscripts.py is currently disabled.
