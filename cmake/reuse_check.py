@@ -388,6 +388,7 @@ whitelist_files = [
 
 whitelist = [
     ".github",
+    "NuRadioMCInterface",
     "astro",
     "cmake",
     "dataclasses",
