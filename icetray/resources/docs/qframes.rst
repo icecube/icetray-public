@@ -128,7 +128,7 @@ Simple example of this is available::
 
    examples/resources/examples/make_testdata.py
    examples/resources/test/pass1.py
-   daq-decode/resources/examples/dump-i3-online-data.py
+   payload-parsing/resources/examples/dump-i3-online-data.py
 
 
 
