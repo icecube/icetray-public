@@ -405,6 +405,7 @@ whitelist = [
     "interfaces",
     "LICENSES",
     "phys-services",
+    "rpdf",
     "serialization",
     "steamshovel",
     "tableio",
