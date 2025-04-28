@@ -402,6 +402,7 @@ whitelist = [
     "serialization",
     "steamshovel",
     "tableio",
+    "wavereform",
 ]
 
 ignore = shutil.ignore_patterns("*.pyc")
