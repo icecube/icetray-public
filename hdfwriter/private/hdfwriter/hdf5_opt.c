@@ -55,7 +55,6 @@ herr_t I3H5TBmake_table( const char *table_title,
     char    attr_name[255];
     char    *member_name;
     hid_t   attr_id;
-    char    aux[255];
     hsize_t i;
     unsigned char *tmp_buf;
 
