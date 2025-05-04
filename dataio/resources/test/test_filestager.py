@@ -117,6 +117,7 @@ def _make_http(port=None,usessl=False,basic_auth=False):
                               '-out','cacert.pem','-days','1',
                               '-batch','-passout','pass:passkey',
                               '-subj', '/'],
+                             env={},
                              stdin=subprocess.PIPE,
                              stdout=subprocess.DEVNULL,
                              stderr=subprocess.DEVNULL,
@@ -126,7 +127,7 @@ def _make_http(port=None,usessl=False,basic_auth=False):
             raise Exception('cannot generate self-signed cert')
         try:
             if subprocess.call(['/usr/bin/openssl','rsa','-in','privkey.pem','-out','key.pem','-passin','pass:passkey'],
-                               stderr=subprocess.DEVNULL):
+                               env={}, stderr=subprocess.DEVNULL):
                 raise Exception('error removing password from key.pem')
 
             ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
