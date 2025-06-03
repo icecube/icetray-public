@@ -4,18 +4,19 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 
-import os.path,sys,pkgutil,time,subprocess
+# mypy: ignore-errors
+
+import os.path, shutil, subprocess, sys, time  # noqa: E401,I001
+import xml.etree.ElementTree as ET
 from collections import deque
 from glob import glob
 from icecube.icetray import i3inspect
-import xml.etree.ElementTree as ET
-import shutil
 
 # suppress boost python object registration warnings
 from warnings import filterwarnings
 filterwarnings("ignore", ".*already registered; second conversion method ignored.", RuntimeWarning)
 
-import logging
+import logging  # noqa: E402,I001
 log = logging.getLogger(__file__)
 log.setLevel(logging.DEBUG)
 try:
@@ -49,13 +50,13 @@ class command_queue:
         self.running = newrunning
         while len(self.queue) and len(self.running) < self.max_processes:
             args, timeout = self.queue.popleft()
-            log.debug("Running %s", args)
+            log.debug("Running: %s", " ".join(*args))
 
             if timeout:
                 endtime = time.monotonic() + timeout
             else:
                 endtime = None
-            self.running.append((args, subprocess.Popen(*args), endtime))
+            self.running.append((args, subprocess.Popen(*args), endtime))  # noqa: S603
 
     def call(self, *args, timeout=None):
         self.queue.append((args, timeout))
@@ -66,10 +67,10 @@ class command_queue:
             self.check()
             time.sleep(polltime)
 
-def mkdir_p(dir):
-    if not os.path.isdir(dir):
-        # log.debug("making directory %s", dir)
-        os.mkdir(dir)
+def mkdir_p(d):
+    if not os.path.isdir(d):
+        log.debug("making directory %s", d)
+        os.mkdir(d)
 
 def symlink(src,dst):
     if os.path.islink(dst):
@@ -79,7 +80,7 @@ def symlink(src,dst):
 
 def symlinkdir(srcdir,destdir):
     for f in os.listdir(srcdir):
-        if f.endswith('.in') or f.endswith('.pyc') or f.endswith('~') or f.startswith('#'):
+        if f.endswith(('.in', '.pyc', '~')) or f.startswith('#'):
             continue
         if f in ["source","Makefile","CMakeLists.txt"]:
             continue
@@ -89,8 +90,8 @@ def symlinkdir(srcdir,destdir):
 def copy_replace(infile,outfile,replace):
     with open(infile) as f:
         txt = f.read()
-    for rin,rout in replace.items():
-        txt = txt.replace(rin,rout)
+    for rin,rout in replace.items():  # codespell:ignore rin
+        txt = txt.replace(rin,rout)  # codespell:ignore rin
     with open(outfile,"w") as f:
         f.write(txt)
 
@@ -102,8 +103,8 @@ def use_this_project(proj):
             )
 
 def call(*args,**kwargs):
-    log.debug("Calling %s with arguments %s", str(args), str(kwargs))
-    status = subprocess.call(args,**kwargs)
+    log.debug("Calling: %s", " ".join(args))
+    status = subprocess.call(args,**kwargs)  # noqa: S603
     if status:
         log.warning("Exit status %s: %s", args[0], status)
     return status
@@ -118,7 +119,7 @@ cppautodoctxt = """
     :path: {DOXYGEN_PROJECT_PATH}
 """
 
-def main():
+def main():  # noqa: C901,PLR0912,PLR0915
 
     import argparse
 
@@ -153,13 +154,13 @@ def main():
     parser.add_argument('--no-inspect', action='store_true',
                         help="don't generate IceTray reference docs using icetray-inspect")
     parser.add_argument('--no-sphinx',action='store_true',
-                        help='don''t run sphinx')
+                        help="don't run sphinx")
     parser.add_argument('--open',action='store_true',
                         help='convenience option to open a browser with the output of the html')
     parser.add_argument('-j',default=1,type=int,
                         help='number of parallel processes to run')
 
-    global args
+    global args  # noqa: PLW0603
     args = parser.parse_args()
 
     log.info("Setting up directories")
@@ -219,7 +220,7 @@ def main():
         def generate_python_docs():
             # call program which generates rsts for all python modules in libdir
             for d in ["lib/icecube", "lib/pybdt"]:
-                if call("sphinx-apidoc",
+                if call("sphinx-apidoc",  # noqa: SIM102
                         "-q", "-l", "-M", "-e",
                         "-H", "Python API Reference",
                         "--implicit-namespaces",
@@ -250,10 +251,9 @@ def main():
                     if s[1]!='rst' and not use_this_project(s[1]):
                         log.debug("Removing %s", rstfile)
                         os.unlink(rstfile)
-                else:
-                    if use_this_project(s[0]):
-                        log.debug("Removing %s", rstfile)
-                        os.unlink(rstfile)
+                elif use_this_project(s[0]):
+                    log.debug("Removing %s", rstfile)
+                    os.unlink(rstfile)
 
     if not args.no_doxygen:
         log.info("Generating Doxygen Documentation")
@@ -296,13 +296,13 @@ def main():
 
             #breathe crashes on anonymous namespaces so parse the xml tree and remove those elements
             index_xml = os.path.join(doxygen_dir,'index.xml')
-            root = ET.parse(index_xml).getroot()
+            root = ET.parse(index_xml).getroot()  # noqa: S314 -- yes this is untrusted input
             for element in root.iter():
               for subelement in element[:]:
                 refid = subelement.get('refid')
                 if refid is not None and refid.startswith('namespace_0d'):
                     element.remove(subelement)
-            log.info(f"Removing anonymous namespace from doxygen xml: {index_xml}")
+            log.info("Removing anonymous namespace from doxygen xml: %s", index_xml)
             with open(index_xml,'wb') as f:
               f.write(ET.tostring(root))
 
@@ -335,6 +335,7 @@ def main():
         log.info("Writing %s", quick_rst)
         queue.call(cmd, timeout=60)
 
+        log.info("Inspecting individual projects with icetray-inspect")
         inspectlibs = i3inspect.get_all_projects()
         rstfiles=[]
 
@@ -351,7 +352,6 @@ def main():
                    #--expand-segments,#"--verbose-docs" #these options might work in the future
                    "--title=",
                    "-o",rst_out]
-            log.debug("Writing %s", rst_out)
             queue.call(cmd, timeout=10)
 
         queue.wait()
@@ -362,6 +362,7 @@ def main():
             with open(rst_out) as f:
                 filelength = len(f.read().strip())
             if filelength ==0 :
+                log.debug("Removing empty output of %s", rst_out)
                 os.unlink(rst_out)
 
     if not args.no_sphinx:
@@ -375,15 +376,15 @@ def main():
 
         sphinx_kwargs = {}
         if args.redirect_sphinx_output:
-            sphinx_kwargs["stdout"] = open(os.path.join(logdir,"sphinx_build_stdout.txt"),'w')
-            sphinx_kwargs["stderr"] = open(os.path.join(logdir,"sphinx_build_stderr.txt"),'w')
+            sphinx_kwargs["stdout"] = open(os.path.join(logdir,"sphinx_build_stdout.txt"),'w')  # noqa: SIM115
+            sphinx_kwargs["stderr"] = open(os.path.join(logdir,"sphinx_build_stderr.txt"),'w')  # noqa: SIM115
 
         sphinx_cmd = [ "sphinx-build",
                         "-a",#all
                         "-j",str(args.j),
                         "-b",args.build_type,
                         "-d",doctreedir,
-                        "-E",sourcedir
+                        "-E",sourcedir,
                         ]
 
         if args.verbose:
@@ -411,8 +412,7 @@ def main():
                 call(opencmd,outfile)
 
         return retvalue
-    else:
-        return 0
+    return 0
 
 
 if __name__=="__main__":

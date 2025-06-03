@@ -8,6 +8,7 @@
 #ifndef I3CUTPARAMSMODULE_H
 #define I3CUTPARAMSMODULE_H
 
+#include "icetray/I3Logging.h"
 #include <icetray/I3ConditionalModule.h>
 #include "icetray/I3Tray.h"
 #include "dataclasses/physics/I3Particle.h"

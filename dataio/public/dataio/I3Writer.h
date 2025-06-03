@@ -31,6 +31,7 @@
 #ifndef DATAIO_I3WRITER_H_INCLUDED
 #define DATAIO_I3WRITER_H_INCLUDED
 
+#include "icetray/I3Logging.h"
 #include <dataio/I3WriterBase.h>
 
 class I3Writer : public I3WriterBase

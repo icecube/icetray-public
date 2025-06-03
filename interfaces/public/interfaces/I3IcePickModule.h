@@ -5,6 +5,7 @@
 #ifndef INTERFACES_I3ICEPICKMODULE_H
 #define INTERFACES_I3ICEPICKMODULE_H
 
+#include "icetray/I3Logging.h"
 #include <dataclasses/physics/I3EventHeader.h>
 #include <icetray/I3ConditionalModule.h>
 #include <icetray/I3Bool.h>

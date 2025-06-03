@@ -2,7 +2,6 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 
-# -*- coding: utf-8 -*-
 #
 # icetray documentation build configuration file, created by
 # sphinx-quickstart on Sun Aug 10 12:00:11 2008.
@@ -15,14 +14,7 @@
 # All configuration values have a default value; values that are commented out
 # serve to show the default value.
 
-import os
-import sys
 from warnings import filterwarnings
-
-# imports for the traclinks replacement code at the bottom of this file
-from docutils import nodes, utils
-from docutils.parsers.rst import roles
-import urllib.parse as ulp
 
 # suppress boost python object registration warnings
 filterwarnings("ignore", ".*already registered; second conversion method ignored.", RuntimeWarning)
@@ -30,8 +22,7 @@ filterwarnings("ignore", ".*already registered; second conversion method ignored
 # If your extensions are in another directory, add it here. If the directory
 # is relative to the documentation root, use os.path.abspath to make it
 # absolute, like shown here.
-
-sys.path = [os.path.join(os.environ["I3_SRC"],'docs','extensions')] + sys.path
+# sys.path = [os.path.join(os.environ["I3_SRC"], "docs", "extensions"), *sys.path]
 
 # General configuration
 # ---------------------
@@ -46,7 +37,7 @@ extensions = list(filter(None, ['sphinx.ext.autodoc',
                                 '@sphinx_NAPOLEON@',
                                 '@sphinx_BREATHE@',
                                 ]))
-print("Using extensions:", extensions)
+print("Using extensions:", extensions)  # noqa: T201
 intersphinx_mapping = { 'python': ('https://docs.python.org/3', None),
                         #'h5py': ('https://docs.h5py.org/en/latest/', None),
                         #'matplotlib': ('https://matplotlib.org/stable/', None),
@@ -58,7 +49,9 @@ intersphinx_mapping = { 'python': ('https://docs.python.org/3', None),
                        }
 
 # enable breathe debugging
-#breathe_debug_trace_directives = True
+# breathe_debug_trace_directives = True
+# breathe_debug_trace_doxygen_ids = True
+# breathe_debug_trace_qualification = True
 
 # sphinxcontrib.email: auto-obfuscate email addresses
 email_automode = True
@@ -75,7 +68,7 @@ master_doc = 'index'
 # REUSE-IgnoreStart
 # General substitutions.
 project = '@META_PROJECT@'
-copyright = 'Copyright © 2009-2024 The IceTray Contributors'
+copyright = 'Copyright © 2009-2025 The IceTray Contributors'  # noqa: A001
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
@@ -133,7 +126,7 @@ linkcheck_ignore = [
     # private github repos
     r'https?://github\.com/icecube/icetray/',
     r'https?://github\.com/IceCube-SPNO/IceTrayCombo/',
-    r'https?://github\.com/fiedl/',
+    r'https?://github\.com/fiedl/',  # codespell:ignore
     ]
 
 linkcheck_exclude_documents = [

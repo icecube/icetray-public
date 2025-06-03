@@ -13,6 +13,7 @@
 #define GEOSELTESTMODULE_H
 
 // header files
+#include "icetray/I3Logging.h"
 #include "icetray/I3Module.h"
 
 /**

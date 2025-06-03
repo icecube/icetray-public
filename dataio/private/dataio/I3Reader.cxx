@@ -28,6 +28,7 @@
  *  SPDX-License-Identifier: BSD-2-Clause
  *
  */
+#include "icetray/I3Logging.h"
 #include <icetray/IcetrayFwd.h>
 
 #include <boost/iostreams/filtering_stream.hpp>

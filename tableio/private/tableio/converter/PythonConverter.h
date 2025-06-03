@@ -5,6 +5,7 @@
 #ifndef TABLEIO_PYTHONCONVERTER_H_INCLUDED
 #define TABLEIO_PYTHONCONVERTER_H_INCLUDED
 
+#include "icetray/I3Logging.h"
 #include <tableio/I3Converter.h>
 #include <boost/python.hpp>
 #include <icetray/I3FrameObject.h>

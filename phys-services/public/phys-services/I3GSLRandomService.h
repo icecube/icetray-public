@@ -15,6 +15,7 @@
 #ifndef I3GSLRANDOMSERVICE_H
 #define I3GSLRANDOMSERVICE_H
 
+#include "icetray/I3Logging.h"
 #include "phys-services/I3RandomService.h"
 
 #include <gsl/gsl_randist.h>

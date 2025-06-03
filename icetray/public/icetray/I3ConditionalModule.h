@@ -30,6 +30,7 @@
 #ifndef ICETRAY_I3CONDITIONALMODULE_H_INCLUDED
 #define ICETRAY_I3CONDITIONALMODULE_H_INCLUDED
 
+#include "icetray/I3Logging.h"
 #include "icetray/I3Module.h"
 #include "icetray/I3IcePick.h"
 

@@ -9,6 +9,7 @@
 #ifndef I3MTRandomService_H
 #define I3MTRandomService_H
 
+#include "icetray/I3Logging.h"
 #include "icetray/I3ServiceFactory.h"
 #include "phys-services/I3StdRandomEngine.h"
 

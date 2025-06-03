@@ -12,6 +12,7 @@
 #ifndef	I3TABLESERVICE_H_INCLUDED
 #define I3TABLESERVICE_H_INCLUDED
 
+#include "icetray/I3Logging.h"
 #include <string>
 
 #include "icetray/IcetrayFwd.h"

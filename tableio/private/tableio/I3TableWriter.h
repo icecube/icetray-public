@@ -12,6 +12,7 @@
 #ifndef	I3TABLEWRITER_H_INCLUDED
 #define I3TABLEWRITER_H_INCLUDED
 
+#include "icetray/I3Logging.h"
 #include "icetray/IcetrayFwd.h"
 
 #include <string>

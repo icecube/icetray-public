@@ -32,6 +32,7 @@
 #ifndef ICETRAY_I3LOGGING_H_INCLUDED
 #define ICETRAY_I3LOGGING_H_INCLUDED
 
+#include "icetray/I3Logging.h"
 #include <signal.h>
 #ifdef I3_ONLINE
 #  include <boost/thread/shared_mutex.hpp>

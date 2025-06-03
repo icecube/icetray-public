@@ -31,6 +31,7 @@
 #ifndef DATAIO_SHOVEL_MODEL_H_INCLUDED
 #define DATAIO_SHOVEL_MODEL_H_INCLUDED
 
+#include "icetray/I3Logging.h"
 #include <string>
 #include <iostream>
 #include <vector>

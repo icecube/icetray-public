@@ -15,6 +15,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
+#include "icetray/I3Logging.h"
 #include <string>
 
 class I3Context;

@@ -12,6 +12,7 @@
  * @author Eike Middell <eike.middell@desy.de> $LastChangedBy$
  */
 
+#include "icetray/I3Logging.h"
 #include <tableio/I3Converter.h>
 #include <dataclasses/physics/I3Particle.h>
 

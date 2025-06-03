@@ -18,6 +18,7 @@
 #ifndef I3RANDOMSERVICE_H
 #define I3RANDOMSERVICE_H
 
+#include "icetray/I3Logging.h"
 #include "dataclasses/Utility.h"
 #include <icetray/I3DefaultName.h>
 #include <icetray/I3FrameObject.h>

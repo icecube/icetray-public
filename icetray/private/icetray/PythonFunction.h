@@ -30,6 +30,7 @@
 #ifndef PYTHON_FUNCTION_H
 #define PYTHON_FUNCTION_H
 
+#include "icetray/I3Logging.h"
 #include <iostream>
 #include <set>
 

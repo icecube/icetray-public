@@ -17,6 +17,7 @@
  * $LastChangedDate$
  *
  */
+#include "icetray/I3Logging.h"
 #include "tableio/I3Converter.h"
 #include "dataclasses/physics/I3EventHeader.h"
 

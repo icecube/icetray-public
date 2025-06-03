@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: BSD-2-Clause
 
+#include "icetray/I3Logging.h"
 #include <iostream>
 #include <algorithm>
 #include <vector>

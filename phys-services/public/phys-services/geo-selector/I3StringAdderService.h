@@ -12,6 +12,7 @@
 #ifndef I3STRINGADDER_H
 #define I3STRINGADDER_H
 
+#include "icetray/I3Logging.h"
 #include <vector>
 #include <string>
 #include <fstream>

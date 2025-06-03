@@ -10,6 +10,7 @@
 #ifndef DATACLASSES_I3MAPOMKEYMASK_H_INCLUDED
 #define DATACLASSES_I3MAPOMKEYMASK_H_INCLUDED
 
+#include "icetray/I3Logging.h"
 #include <functional>
 #include <string>
 #include <list>

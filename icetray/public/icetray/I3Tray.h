@@ -32,6 +32,7 @@
 #ifndef ICETRAY_I3TRAY_H_INCLUDED
 #define ICETRAY_I3TRAY_H_INCLUDED
 
+#include "icetray/I3Logging.h"
 #include <signal.h>
 
 #include <map>

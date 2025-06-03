@@ -15,6 +15,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
+#include "icetray/I3Logging.h"
 #include <icetray/I3ServiceFactory.h>
 #include <string>
 

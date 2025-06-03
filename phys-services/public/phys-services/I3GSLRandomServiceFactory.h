@@ -13,6 +13,7 @@
 
 // Header files
 
+#include "icetray/I3Logging.h"
 #include <string>
 
 // Forward declarations

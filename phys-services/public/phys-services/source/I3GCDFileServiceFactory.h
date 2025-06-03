@@ -13,6 +13,7 @@
 
 class I3Context;
 
+#include "icetray/I3Logging.h"
 #include "icetray/I3ServiceFactory.h"
 class I3GCDFileGeometryService;
 class I3GCDFileCalibrationService;

@@ -12,6 +12,7 @@
 #define I3_TRIGGER_STATUS_H_INCLUDED
 
 
+#include "icetray/I3Logging.h"
 #include <string>
 #include <map>
 

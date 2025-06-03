@@ -12,6 +12,7 @@
 #ifndef	I3CSVTABLE_H_INCLUDED
 #define I3CSVTABLE_H_INCLUDED
 
+#include "icetray/I3Logging.h"
 #include "tableio/I3Table.h"
 #include "tableio/I3Datatype.h"
 #include <fstream>

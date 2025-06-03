@@ -5,6 +5,7 @@
 #ifndef PHYSSERVICES_I3EVENTCOUNTER_H
 #define PHYSSERVICES_I3EVENTCOUNTER_H
 
+#include "icetray/I3Logging.h"
 #include "icetray/I3TrayHeaders.h"
 #include "icetray/I3Module.h"
 #include "phys-services/I3SummaryService.h"

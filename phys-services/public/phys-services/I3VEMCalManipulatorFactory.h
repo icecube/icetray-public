@@ -14,6 +14,7 @@
 #define PHYS_SERVICES_VEMCALMANIPULATORFACTORY_H
 
 
+#include "icetray/I3Logging.h"
 #include <icetray/I3ServiceFactory.h>
 #include <phys-services/I3VEMCalManipulator.h>
 

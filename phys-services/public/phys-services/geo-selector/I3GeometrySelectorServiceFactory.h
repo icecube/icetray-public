@@ -5,6 +5,7 @@
 #ifndef I3GEOMETRYSELECTORSERVICEFACTORY_H
 #define I3GEOMETRYSELECTORSERVICEFACTORY_H
 
+#include "icetray/I3Logging.h"
 #include "icetray/I3ServiceFactory.h"
 
 class I3GeometrySelectorService;

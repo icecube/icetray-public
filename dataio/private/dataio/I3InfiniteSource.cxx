@@ -6,6 +6,7 @@
  *
  */
 
+#include "icetray/I3Logging.h"
 #include <icetray/open.h>
 #include <icetray/I3Frame.h>
 #include <icetray/I3Module.h>

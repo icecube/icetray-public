@@ -5,6 +5,7 @@
 #ifndef MULTIPMT_COINCIFY_H_INCLUDED
 #define MULTIPMT_COINCIFY_H_INCLUDED
 
+#include "icetray/I3Logging.h"
 #include <string>
 #include <map>
 #include <vector>

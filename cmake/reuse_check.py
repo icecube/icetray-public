@@ -412,7 +412,7 @@ whitelist = [
     "wavereform",
 ]
 
-ignore = shutil.ignore_patterns("*.pyc")
+ignore = shutil.ignore_patterns("*.pyc", ".ruff_cache", ".mypy_cache", ".cache")
 
 for x in whitelist_files:
     dest = Path(tempdir.name) / x

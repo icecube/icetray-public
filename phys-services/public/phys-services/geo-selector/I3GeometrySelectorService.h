@@ -12,6 +12,7 @@
 #ifndef I3GEOMETRYSELECTORSERVICE_H
 #define I3GEOMETRYSELECTORSERVICE_H
 
+#include "icetray/I3Logging.h"
 #include <vector>
 #include <string>
 #include <fstream>

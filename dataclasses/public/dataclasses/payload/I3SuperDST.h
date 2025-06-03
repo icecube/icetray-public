@@ -16,6 +16,7 @@
 #define I3SUPERDST_I3SUPERDST_H_INCLUDED
 
 /* standard library stuff */
+#include "icetray/I3Logging.h"
 #include <map>
 #include <vector>
 

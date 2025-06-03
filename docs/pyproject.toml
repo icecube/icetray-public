@@ -1,0 +1,23 @@
+# SPDX-FileCopyrightText: 2024 The IceTray Contributors
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
+[tool.ruff]
+extend = "../pyproject.toml"
+extend-include = [
+    "conf/conf.py.in",
+]
+
+[tool.ruff.lint]
+extend-select = [ "ALL" ]
+extend-ignore = [
+    "N801",    # use camel case
+    "N806",    # use lowercase function variables
+    "PTH",     # use pathlib
+    "Q",       # quote normalization
+    "ANN",     # use type annotations
+    "D",       # use pydocstyle (PEP 257)
+    "ERA001",  # warn on commented-out code
+    "LOG002",  # use __name__ for logger name
+    "SIM108",  # use python "ternary if"
+]

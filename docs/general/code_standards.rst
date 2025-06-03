@@ -23,7 +23,7 @@ IceCube software in C++ and Python.  There is a companion document for
 This document refers primarily to offline software (including IceTray,
 Dataclasses, Simulation and the event viewer).  Users are encouraged
 to write their own private software to these standards, to make future
-code maintence and the adoption of private code for production use
+code maintenance and the adoption of private code for production use
 easier.
 
 .. _python-coding-standards:

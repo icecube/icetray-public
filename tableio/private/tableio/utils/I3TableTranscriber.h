@@ -9,6 +9,7 @@
  * @author Jakob van Santen <vansanten@wisc.edu> Last changed by: $LastChangedBy$
  */
 
+#include "icetray/I3Logging.h"
 #include <tableio/I3TableService.h>
 #include <tableio/I3Table.h>
 #include <tableio/converter/I3IndexColumnsGenerator.h>

@@ -13,6 +13,7 @@
 #ifndef PHYS_SERVICES_I3VEMCALMANIPULATOR_H_INCLUDED
 #define PHYS_SERVICES_I3VEMCALMANIPULATOR_H_INCLUDED
 
+#include "icetray/I3Logging.h"
 #include <interfaces/I3CalibrationService.h>
 #include <dataclasses/calibration/I3Calibration.h>
 #include <map>

@@ -29,6 +29,7 @@
  *
  */
 
+#include "icetray/I3Logging.h"
 #include <string>
 #include <vector>
 #include <boost/algorithm/string.hpp>

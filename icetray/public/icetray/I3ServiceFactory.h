@@ -32,6 +32,7 @@
 #ifndef I3SERVICEFACTORY_H
 #define I3SERVICEFACTORY_H
 
+#include "icetray/I3Logging.h"
 #include <icetray/I3Context.h>
 #include <icetray/I3Configuration.h>
 #include <boost/python/object.hpp>

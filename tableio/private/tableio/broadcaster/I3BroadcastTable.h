@@ -12,6 +12,7 @@
 #ifndef I3BROADCASTTABLE_H_INCLUDED
 #define I3BROADCASTTABLE_H_INCLUDED
 
+#include "icetray/I3Logging.h"
 #include <tableio/I3Table.h>
 #include <vector>
 

@@ -7,6 +7,7 @@
 
 class I3Context;
 
+#include "icetray/I3Logging.h"
 #include <string>
 #include <icetray/I3ServiceFactory.h>
 #include <interfaces/I3OMKey2MBID.h>
