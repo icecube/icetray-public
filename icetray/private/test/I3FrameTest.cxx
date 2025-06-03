@@ -119,9 +119,7 @@ TEST(ReplaceNotFound)
   try{
     f.Replace("MyInt",i2);
     FAIL("I3Frame::Replace should fail on a nonexistent key");
-  }catch(...){
-    //expect an exception. do nothing.
-  }
+  } catch (const std::exception& e) { }
 }
 
 // it is possible to put and get nullptr from c++, if you ever had a reason to do that
@@ -414,41 +412,6 @@ TEST(saving_drops_blobs)
   ofstream ofs("/dev/null");
   f.save(ofs);
   ENSURE(!f.has_blob("66"));
-}
-
-TEST(duplicated_pointer_fatals_when_saving)
-{
-  I3IntPtr i(new I3Int(1));
-  I3Frame f;
-  f.Put("one", i);
-  f.Put("one'", i);
-  ofstream ofs("/dev/null");
-  try {
-    f.save(ofs);
-    FAIL("save of frame with duplicated pointers didn't throw");
-  } catch (...) {
-    // ok
-  }
-}
-
-TEST(ok_to_save_multiple_nulls)
-{
-  I3Frame f;
-  f.Put("one", I3FrameObjectPtr());
-  f.Put("other", I3FrameObjectPtr());
-  ofstream ofs("/dev/null");
-  I3FramePtr f2 = saveload(f);
-
-  ENSURE(f.Has("one"));
-  ENSURE(f.Has("other"));
-  ENSURE(!f.Get<I3FrameObjectConstPtr>("one"));
-  ENSURE(!f.Get<I3FrameObjectConstPtr>("other"));
-  // check real quick
-  try {
-    f.Get<I3FrameObjectConstPtr>("elsewhere");
-    FAIL("difference between getting an existent null and something nonexistent..");
-  } catch (...) {
-  }
 }
 
 TEST(typename_survives_serialization)

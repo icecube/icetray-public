@@ -27,7 +27,7 @@ TEST(LogToFile){
 	try{
 		log_fatal("This is a fatal level message");
 		FAIL("log_fatal() should throw");
-	}catch(...){/*squash*/}
+	}catch(const std::exception&e){/*squash*/}
 
 	std::ifstream logfile(testfile);
 	std::string line;
