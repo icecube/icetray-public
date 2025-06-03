@@ -74,20 +74,18 @@ def rotating_files(filename, maxBytes=0, backupCount=0):
     _setup()
     handler = RotatingFileHandler(filename, maxBytes=maxBytes, backupCount=backupCount)
     handler.setFormatter(logging.Formatter("[%(asctime)s] "+BASIC_FORMAT))
-    logging._acquireLock() # type: ignore[attr-defined]
-    logging.root.handlers = list()
-    logging.root.addHandler(handler)
-    logging._releaseLock() # type: ignore[attr-defined]
+    with logging._lock:  # type: ignore[attr-defined]
+        logging.root.handlers = list()
+        logging.root.addHandler(handler)
 
 def syslog():
     from logging.handlers import SysLogHandler
     _setup()
     handler = SysLogHandler()
     handler.setFormatter(logging.Formatter("[%(asctime)s] "+BASIC_FORMAT))
-    logging._acquireLock() # type: ignore[attr-defined]
-    logging.root.handlers = list()
-    logging.root.addHandler(handler)
-    logging._releaseLock() # type: ignore[attr-defined]
+    with logging._lock:  # type: ignore[attr-defined]
+        logging.root.handlers = list()
+        logging.root.addHandler(handler)
 
 def _translate_level(name):
     if isinstance(name, I3LogLevel):
