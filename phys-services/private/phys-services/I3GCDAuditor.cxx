@@ -26,6 +26,8 @@ class I3GCDAuditor : public I3Module
 		std::string bad_dom_list_;
 		bool AMANDA_is_error_;
 		bool max_paranoia_;
+		bool NAN_is_error_;
+		bool Not1_is_error_;
 };
 
 I3_MODULE(I3GCDAuditor);
@@ -39,6 +41,12 @@ I3GCDAuditor::I3GCDAuditor(const I3Context& context) : I3Module(context)
 	    "are mostly only relevant for simulation (e.g. PMT discriminator "
 	    "thresholds) as well as things that are unreasonable but not "
 	    "universally fatal", true);
+	AddParameter("ChargeCorrNanIsAnError", "Fail if any InIce DOM has a nan value "
+	    "for ATWD or FADC charge correction.  Used to create GCD files for pass 3 step 1.",
+	    false);
+	AddParameter("ChargeCorrNot1IsAnError", "Fail if any InIce DOM has a value different "
+	    "than 1.0 for ATWD or FADC charge correction. Used to check GCD files for pass 3 step 1.",
+	    false);
 	AddOutBox("OutBox");
 }
 
@@ -48,6 +56,8 @@ I3GCDAuditor::Configure()
 	GetParameter("BadDOMList", bad_dom_list_);
 	GetParameter("AMANDAIsAnError", AMANDA_is_error_);
 	GetParameter("MaximumParanoia", max_paranoia_);
+	GetParameter("ChargeCorrNanIsAnError", NAN_is_error_);
+	GetParameter("ChargeCorrNot1IsAnError", Not1_is_error_);
 }
 
 void
@@ -111,6 +121,8 @@ I3GCDAuditor::DetectorStatus(I3FramePtr frame)
 
 	#undef paranoia
 
+	log_info("bad_dom_list_ %s", bad_dom_list_.c_str());
+
 	for (I3OMGeoMap::const_iterator i = geo.omgeo.begin();
 	   i != geo.omgeo.end(); i++) {
 		if (std::find(bdl.begin(), bdl.end(), i->first) != bdl.end())
@@ -123,7 +135,10 @@ I3GCDAuditor::DetectorStatus(I3FramePtr frame)
 		if (i->second.omtype == I3OMGeo::AMANDA && AMANDA_is_error_)
 			bad_dom("Geometry contains AMANDA OM%s",
 			    i->first.str().c_str());
-		if (i->second.omtype == I3OMGeo::AMANDA)
+		// Also skip scintillator or unknown OMs
+		if (i->second.omtype == I3OMGeo::AMANDA || 
+		    i->second.omtype == I3OMGeo::Scintillator ||
+		    i->second.omtype == I3OMGeo::UnknownType)
 			continue;
 
 		if (calib.domCal.find(i->first) == calib.domCal.end())
@@ -268,11 +283,44 @@ bool I3GCDAuditor::CheckDOM(OMKey om, const I3OMGeo &omgeo,
 		}
 	}
 	if (!std::isfinite(SPEPMTThreshold(status, cal)) ||
-	    SPEPMTThreshold(status, cal) <= 0)
-		sim_bad_dom("Invalid SPE threshold for OM%s (%f mV)",
-		    om.str().c_str(), SPEPMTThreshold(status, cal)/I3Units::mV);
+	    SPEPMTThreshold(status, cal) <= 0) {
+		if (omgeo.omtype!=I3OMGeo::IceTop) {
+			sim_bad_dom("Invalid SPE threshold for OM%s (%f mV)",
+			    om.str().c_str(), SPEPMTThreshold(status, cal)/I3Units::mV);
+		}
+		else {
+			log_warn("Invalid SPE threshold for OM%s (%f mV)",
+			    om.str().c_str(), SPEPMTThreshold(status, cal)/I3Units::mV);
+		}
+	}
 
-	return true;
+	// The following checks should always be done last.  Do not use bad_dom because want to check both ATWD and FADC.
+	bool rc = true;
+	if ( (NAN_is_error_ || Not1_is_error_) && omgeo.omtype == I3OMGeo::IceCube) {
+		if (!std::isfinite(cal.GetMeanATWDCharge())) {
+			log_error("Invalid mean ATWD charge correction for OM%s and is not in key %s", 
+			om.str().c_str(), bad_dom_list_.c_str());
+			rc = false;
+		}
+		else if (Not1_is_error_ && cal.GetMeanATWDCharge() != 1.0) {
+			log_error("Mean ATWD charge correction %f is not 1.0 for OM%s and is not in key %s",
+			cal.GetMeanATWDCharge(), om.str().c_str(), bad_dom_list_.c_str());
+			rc = false;
+		}
+
+		if (!std::isfinite(cal.GetMeanFADCCharge())) {
+			log_error("Invalid mean FADC charge correction for OM%s and is not in key %s",
+			om.str().c_str(), bad_dom_list_.c_str());
+			rc = false;
+		}
+		else if (Not1_is_error_ && cal.GetMeanFADCCharge() != 1.0) {
+			log_error("Mean FADC charge correction %f is not 1.0 for OM%s and is not in key %s",
+			cal.GetMeanFADCCharge(), om.str().c_str(), bad_dom_list_.c_str());
+			rc = false;
+		}
+	}
+
+	return rc;
 
 	#undef bad_dom
 	#undef sim_bad_dom

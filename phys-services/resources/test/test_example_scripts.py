@@ -26,4 +26,11 @@ class TestSimpleExample(I3Test.TestExampleScripts):
                 ids.add(f['I3EventHeader'].event_id)
         self.assertEqual(ids,set([2,29,83]),'did not get all ids. found:'+str(ids))
 
+    def test_audit_gcd(self):
+        input_file = self.I3_TESTDATA + "/2023data/Level2_IC86.2023_data_Run00138821_84_781_GCD_withSLCcal2.i3.zst"
+        with NamedTemporaryFile(dir=os.getcwd(), suffix=".i3.zst") as output_file:
+            self.run_example('AuditGCD.py',
+                             '-i',
+                             input_file)
+
 unittest.main()
