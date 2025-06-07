@@ -28,7 +28,7 @@ On Ubuntu/Debian, you can install these dependencies by doing:
 
 .. code-block:: shell
 
-	apt-get install build-essential cmake libbz2-dev libgsl0-dev libcfitsio-dev libboost-system-dev libboost-thread-dev libboost-date-time-dev libboost-python-dev libboost-serialization-dev libboost-filesystem-dev libboost-program-options-dev libboost-regex-dev libboost-iostreams-dev python3-numpy fftw3-dev libboost-python-numpy
+	apt-get install build-essential cmake libbz2-dev libgsl0-dev libcfitsio-dev libboost-system-dev libboost-thread-dev libboost-date-time-dev libboost-python-dev libboost-serialization-dev libboost-filesystem-dev libboost-program-options-dev libboost-regex-dev libboost-iostreams-dev python3-numpy fftw3-dev libboost-numpy-dev
 	
 If your system defaults to Python 2, please do the following:
 
