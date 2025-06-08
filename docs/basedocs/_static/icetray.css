@@ -112,6 +112,7 @@ h1 {
 }
 
 /* inline-code bg color. same as block-code. more contrast against the page. */
+code.literal
 span.pre {
     background-color: var(--background-grey);
 }
