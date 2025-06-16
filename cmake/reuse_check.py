@@ -404,6 +404,8 @@ whitelist = [
     "icetray",
     "interfaces",
     "LICENSES",
+    "offline_filterscripts",
+    "online_filterscripts",
     "phys-services",
     "rpdf",
     "serialization",
@@ -412,7 +414,7 @@ whitelist = [
     "wavereform",
 ]
 
-ignore = shutil.ignore_patterns("*.pyc", ".ruff_cache", ".mypy_cache", ".cache")
+ignore = shutil.ignore_patterns("*.pyc", ".ruff_cache", "steamshovel.qrc.depends", ".mypy_cache", ".cache")
 
 for x in whitelist_files:
     dest = Path(tempdir.name) / x
