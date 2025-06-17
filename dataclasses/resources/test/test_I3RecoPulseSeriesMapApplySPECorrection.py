@@ -17,8 +17,8 @@ class I3RecoPulseSeriesMapApplySPECorrection(unittest.TestCase):
         # create a calibration object
         calibration = dataclasses.I3Calibration()
         calibration.dom_cal[omkey] = dataclasses.I3DOMCalibration()
-        calibration.dom_cal[omkey].mean_atwd_charge = 1.2
-        calibration.dom_cal[omkey].mean_fadc_charge = 1.8
+        calibration.dom_cal[omkey].mean_atwd_charge_correction = 1.2
+        calibration.dom_cal[omkey].mean_fadc_charge_correction = 1.8
         frame["I3Calibration"] = calibration
 
         # create some pulses on our fake DOM
@@ -53,7 +53,7 @@ class I3RecoPulseSeriesMapApplySPECorrection(unittest.TestCase):
         self.assertEqual(pulse_series[omkey][0].width,  shifted_pulses[omkey][0].width, "these should be the same.")
         self.assertEqual(pulse_series[omkey][0].flags,  shifted_pulses[omkey][0].flags, "these should be the same.")
         self.assertAlmostEqual(
-          pulse_series[omkey][0].charge/calibration.dom_cal[omkey].mean_atwd_charge,
+          pulse_series[omkey][0].charge/calibration.dom_cal[omkey].mean_atwd_charge_correction,
           shifted_pulses[omkey][0].charge,
           places=4,msg="these should be the same.")
 
@@ -61,7 +61,7 @@ class I3RecoPulseSeriesMapApplySPECorrection(unittest.TestCase):
         self.assertEqual(pulse_series[omkey][1].width,  shifted_pulses[omkey][1].width, "these should be the same.")
         self.assertEqual(pulse_series[omkey][1].flags,  shifted_pulses[omkey][1].flags, "these should be the same.")
         self.assertAlmostEqual(
-          pulse_series[omkey][1].charge/calibration.dom_cal[omkey].mean_fadc_charge,
+          pulse_series[omkey][1].charge/calibration.dom_cal[omkey].mean_fadc_charge_correction,
           shifted_pulses[omkey][1].charge,
           places=4,msg="these should be the same.")
 

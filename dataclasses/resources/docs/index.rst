@@ -41,5 +41,6 @@ Table of Contents:
    python
    faq-common-probs
    i3double
+   spechargedistribution
 
 Also see the :ref:`doxygen <dataclasses-cpp>` docs.

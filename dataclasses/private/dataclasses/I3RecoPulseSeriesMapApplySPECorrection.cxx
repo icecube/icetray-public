@@ -58,11 +58,11 @@ I3RecoPulseSeriesMapApplySPECorrection::Apply(const I3Frame &frame) const
     // Load the SPE corrections
     double atwdSPECorrection = 1.;
     double fadcSPECorrection = 1.;
-    if (dom_calibration.IsMeanATWDChargeValid()) {
-      atwdSPECorrection = 1. / dom_calibration.GetMeanATWDCharge();
+    if (dom_calibration.IsMeanATWDChargeCorrectionValid()) {
+      atwdSPECorrection = 1. / dom_calibration.GetMeanATWDChargeCorrection();
     }
-    if (dom_calibration.IsMeanFADCChargeValid()) {
-      fadcSPECorrection = 1. / dom_calibration.GetMeanFADCCharge();
+    if (dom_calibration.IsMeanFADCChargeCorrectionValid()) {
+      fadcSPECorrection = 1. / dom_calibration.GetMeanFADCChargeCorrection();
     }
 
     // insert an entry for this DOM into the output map

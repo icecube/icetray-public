@@ -9,6 +9,10 @@ from icecube import dataclasses
 from icecube import dataio
 from copy import deepcopy
 
+from icecube.dataclasses import SPEChargeDistribution
+Exponential = SPEChargeDistribution.Exponential
+Gaussian = SPEChargeDistribution.Gaussian
+
 def convert_omkey(key):
     try:
         string = int(key.split(',')[0])
@@ -95,16 +99,9 @@ class SPEFitInjector:
                 else:
                     feature[dom]['HQE'] = 0
 
-
-
         cal = deepcopy(frame['I3Calibration'])
         del frame['I3Calibration']
-        attributes = ['exp1_amp','exp1_width', 'exp2_amp', 'exp2_width',
-                      'gaus_amp', 'gaus_mean', 'gaus_width', 'compensation_factor',
-                      'slc_gaus_mean']
 
-        #for key, fits in self.fit_values.items():
-        #    omkey = convert_omkey(key)
         for omkey, i3domcal in cal.dom_cal.items():
             dom = omkey_str(omkey)
             SPE_distribution = dataclasses.SPEChargeDistribution()
@@ -120,22 +117,23 @@ class SPEFitInjector:
                     i3domcal.relative_dom_eff = float(self.fit_values[dom]['RDE'])
                     print('RDE: '+str(float(self.fit_values[dom]['RDE'])))
 
-            SPE_distribution.exp1_amp       = self.fit_values[dom]['ATWD_fit']['exp1_amp']
-            SPE_distribution.exp1_width     = self.fit_values[dom]['ATWD_fit']['exp1_width']
-            SPE_distribution.exp2_amp       = self.fit_values[dom]['ATWD_fit']['exp2_amp']
-            SPE_distribution.exp2_width     = self.fit_values[dom]['ATWD_fit']['exp2_width']
-            SPE_distribution.gaus_amp       = self.fit_values[dom]['ATWD_fit']['gaus_amp']
-            SPE_distribution.gaus_mean      = self.fit_values[dom]['ATWD_fit']['gaus_mean']
-            SPE_distribution.gaus_width     = self.fit_values[dom]['ATWD_fit']['gaus_width']
-            SPE_distribution.slc_gaus_mean  = self.fit_values[dom]['SLC_fit']['gaus_mean']
+            # Here we assume the pass2-like distributions of Exp+Exp+Gaus
+            pdfs = [Exponential(amplitude = self.fit_values[dom]['ATWD_fit']['exp1_amp'],
+                                width = self.fit_values[dom]['ATWD_fit']['exp1_width']),
+                    Exponential(amplitude = self.fit_values[dom]['ATWD_fit']['exp2_amp'],
+                                width = self.fit_values[dom]['ATWD_fit']['exp2_width']),
+                    Gaussian(amplitude = self.fit_values[dom]['ATWD_fit']['gaus_amp'],
+                             mean = self.fit_values[dom]['ATWD_fit']['gaus_mean'],
+                             sigma = self.fit_values[dom]['ATWD_fit']['gaus_width'])]
+            SPE_distribution.pdfs.extend(pdfs)
 
             SPE_distribution.compensation_factor = self.fit_values[dom]['ATWD_fit']['compensation_factor']
             i3domcal.combined_spe_charge_distribution = SPE_distribution
 
             if not self.keep_gcd_atwd and 'mean_atwd_charge' in self.fit_values[dom]:
-                i3domcal.mean_atwd_charge = self.fit_values[dom]['mean_atwd_charge']
+                i3domcal.mean_atwd_charge_correction = self.fit_values[dom]['mean_atwd_charge']
             if not self.keep_gcd_fadc and 'mean_fadc_charge' in self.fit_values[dom]:
-                i3domcal.mean_fadc_charge = self.fit_values[dom]['mean_fadc_charge']
+                i3domcal.mean_fadc_charge_correction = self.fit_values[dom]['mean_fadc_charge']
             print('Got SPE template for dom',dom)
 
             cal.dom_cal[omkey] = i3domcal
@@ -169,15 +167,14 @@ class SPEFitInjector:
 
                 i3domcal = domcal[omkey]
                 spe_charge_dist = dataclasses.SPEChargeDistribution()
-                spe_charge_dist.exp1_amp    = 0.
-                spe_charge_dist.exp1_width  = 1.
-                spe_charge_dist.exp2_amp    = 0.590791#float(fits['JOINT_fit']['exp_norm'])
-                spe_charge_dist.exp2_width  = 0.5057#float(fits['JOINT_fit']['exp_scale'])
-                spe_charge_dist.gaus_amp    = 0.959663#float(fits['JOINT_fit']['gaus_norm'])
-                spe_charge_dist.gaus_mean   = 1.0#float(fits['JOINT_fit']['gaus_mean'])
-                spe_charge_dist.gaus_width  = 0.2916# float(fits['JOINT_fit']['gaus_stddev'])
-                spe_charge_dist.slc_gaus_mean = 1.0#float(fits['FADC_fit']['gaus_mean'])
-                #The numbers above describe the SPE charge distribution TA0003. This is the definition of a compensation factor of 1.0
+
+                # The numbers below describe the SPE charge distribution TA0003. 
+                # This is the definition of a compensation factor of 1.0
+                pdfs = [Exponential(amplitude=0.590791, width=0.5057),
+                        Gaussian(amplitude=0.959663, mean=1.0, sigma=0.2916)]
+                spe_charge_dist.pdfs.extend(pdfs)
+
+                spe_charge_dist.fadc_charge_scale = 1.0
                 spe_charge_dist.compensation_factor = 1.00
 
                 i3domcal.combined_spe_charge_distribution = spe_charge_dist
@@ -188,8 +185,8 @@ class SPEFitInjector:
                 fadc_mean = float(fits['FADC_fit']['gaus_mean']) \
                     if bool(fits['FADC_fit']['valid']) is True \
                     else numpy.nan
-                i3domcal.mean_atwd_charge = atwd_mean
-                i3domcal.mean_fadc_charge = fadc_mean
+                i3domcal.mean_atwd_charge_correction = atwd_mean
+                i3domcal.mean_fadc_charge_correction = fadc_mean
 
                 cal.dom_cal[omkey] = i3domcal
         del frame['I3Calibration']
@@ -205,8 +202,8 @@ class I3SPEFitInjector(icetray.I3Module):
     def __init__(self, context):
         icetray.I3Module.__init__(self, context)
         self.AddParameter("Filename", "Uncompressed JSON file with SPE fit data", "")
-        self.AddParameter("KeepGcdATWD", "Keep mean_atwd_charge from GCD file, i.e. do not overwrite with value from JSON file (only for new style json) [default False]", False)
-        self.AddParameter("KeepGcdFADC", "Keep mean_fadc_charge from GCD file, i.e. do not overwrite with value from JSON file (only for new style json) [default False]", False)
+        self.AddParameter("KeepGcdATWD", "Keep mean_atwd_charge_correction from GCD file, i.e. do not overwrite with value from JSON file (only for new style json) [default False]", False)
+        self.AddParameter("KeepGcdFADC", "Keep mean_fadc_charge_correction from GCD file, i.e. do not overwrite with value from JSON file (only for new style json) [default False]", False)
     def Configure(self):
         self.spe_fit_injector = SPEFitInjector(self.GetParameter("Filename"),keep_gcd_atwd=self.GetParameter("KeepGcdATWD"),keep_gcd_fadc=self.GetParameter("KeepGcdFADC"))
     def Calibration(self, frame):

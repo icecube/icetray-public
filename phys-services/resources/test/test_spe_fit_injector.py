@@ -61,26 +61,23 @@ class SPEFitTestModule(icetray.I3Module) :
         print(n_valid)
         n_nan_atwd_charge = 0
         n_nan_fadc_charge = 0
-        n_nan_exp2_amp = 0
         for omkey, i3domcal in domcal.items() :
             if i3domcal.combined_spe_charge_distribution.is_valid :
                 # it's not true in general, but for this test file
                 # whenever the combined fits are valid, the mean
                 # ATWD and FADC charges should be non-NaN as well
-                if isnan(i3domcal.mean_atwd_charge) :
+                if isnan(i3domcal.mean_atwd_charge_correction) :
                     n_nan_atwd_charge += 1
-                if isnan(i3domcal.mean_fadc_charge) :
+                if isnan(i3domcal.mean_fadc_charge_correction) :
                     n_nan_fadc_charge += 1
-                if isnan(i3domcal.combined_spe_charge_distribution.exp2_amp) :
-                    n_nan_exp2_amp += 1
 
             if omkey[0]==1 and omkey[1]==1:
                 print('\n -- Printing i3DOMCal Structure for DOM(1,1) -- ')
                 print(i3domcal)
                 print('\n\nOf Note: \n\
                     - CombinedSPEChargeDistribution should have non-NaNs.\n\
-                    - MeanATWDCharge should be roughly 0.95 - 1.05. \n\
-                    - MeanFADCCharge should be roughly 0.90 - 1.15.')
+                    - MeanATWDChargeCorrection should be roughly 0.95 - 1.05. \n\
+                    - MeanFADCChargeCorrection should be roughly 0.90 - 1.15.')
 
         spe_fi = SPEFitInjector(args.json_fn)
 
@@ -94,9 +91,9 @@ class SPEFitTestModule(icetray.I3Module) :
                 print("FAIL")
                 sys.exit(1) # report back to the mothership
         else:
+            print(n_nan_atwd_charge, n_nan_fadc_charge)
             assert n_nan_atwd_charge == 0, "All the ATWD mean charges should be non-NaN."
             assert n_nan_fadc_charge == 5, "There should be 5 NaN FADC charges."
-            assert n_nan_exp2_amp == 0, "All parameters describing the SPE Charge distribution should be non-NaN."
 
             # there are 5050 valid entries out of 5085 in the file 'final-spe-fits-pole-run2015.json'
             if n_valid != 5050 :

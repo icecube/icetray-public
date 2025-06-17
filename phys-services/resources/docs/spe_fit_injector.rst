@@ -9,8 +9,8 @@ Calibration Group) into the I3DOMCalibration class.  I3DOMCalibration has
 both a struct with combined fit values (SPEChargeDistribution) and mean
 values for the FADC and ATWD channels and accessed via C++ as follows :
 
-* I3DOMCalibration::GetMeanATWDCharge()
-* I3DOMCalibration::GetMeanFADCCharge()
+* I3DOMCalibration::GetMeanATWDChargeCorrection()
+* I3DOMCalibration::GetMeanFADCChargeCorrection()
 * I3DOMCalibration::GetCombinedSPEChargeDistribution()
 
 Caveats
@@ -19,8 +19,8 @@ Caveats
 * Missing entries in the I3Calibration::domCal map - This can happen if the combined fit, mean ATWD, **and** mean FADC charges are all marked invalid in the JSON file.
 * Downstream code should check that the mean ATWD and FADC charges are valid using the following convenience methods:
 
- - I3DOMCalibration::IsMeanATWDChargeValid
- - I3DOMCalibration::IsMeanFADCChargeValid
+ - I3DOMCalibration::IsMeanATWDChargeCorrectionValid
+ - I3DOMCalibration::IsMeanFADCChargeCorrectionValid
 
 For more information : :wiki:`SPE_recalibration`
 

@@ -110,37 +110,34 @@ class I3DOMFunctionsTestCase(unittest.TestCase):
         logging.log_debug("transittime: %s" % transittime)
         self.assertTrue(math.isnan(transittime))
 
-        dc.mean_fadc_charge = 0.6
-        dc.mean_atwd_charge = 0.7
+        dc.mean_fadc_charge_correction = 0.6
+        dc.mean_atwd_charge_correction = 0.7
 
         spe_charge_dist = dataclasses.SPEChargeDistribution()
-
-        spe_charge_dist.exp1_amp = 0.1
-        spe_charge_dist.exp1_width = 0.2
-        spe_charge_dist.exp2_amp = 0.1
-        spe_charge_dist.exp2_width = 0.2
-        spe_charge_dist.gaus_amp = 0.3
-        spe_charge_dist.gaus_mean = 0.4
-        spe_charge_dist.gaus_width = 0.5
+        Gauss = dataclasses.SPEChargeDistribution.Gaussian
+        Expon = dataclasses.SPEChargeDistribution.Exponential
+        spe_charge_dist.pdfs.append(Expon(amplitude=0.1, width=0.2))
+        spe_charge_dist.pdfs.append(Expon(amplitude=0.1, width=0.2))
+        spe_charge_dist.pdfs.append(Gauss(amplitude=0.3, mean=0.4, sigma=0.5))
         spe_charge_dist.compensation_factor = 0.9
-        spe_charge_dist.slc_gaus_mean = 0.5
+        spe_charge_dist.fadc_charge_scale = 1.
 
         dc.combined_spe_charge_distribution = spe_charge_dist
         self.assertIs(dc.combined_spe_charge_distribution.is_valid, True, "This should be true.")
 
-        spe_charge_dist.gaus_width = math.nan
+        spe_charge_dist.pdfs[2].sigma = math.nan
         dc.combined_spe_charge_distribution = spe_charge_dist
         self.assertIs(dc.combined_spe_charge_distribution.is_valid, False, "This should be false.")
 
-        dc.mean_fadc_charge = math.nan
-        self.assertIs(dc.is_mean_fadc_charge_valid, False, "This should be false.")
-        dc.mean_fadc_charge = 0.0
-        self.assertIs(dc.is_mean_fadc_charge_valid, False, "This should be false.")
+        dc.mean_fadc_charge_correction = math.nan
+        self.assertIs(dc.is_mean_fadc_charge_correction_valid, False, "This should be false.")
+        dc.mean_fadc_charge_correction = 0.0
+        self.assertIs(dc.is_mean_fadc_charge_correction_valid, False, "This should be false.")
 
-        dc.mean_atwd_charge = math.nan
-        self.assertIs(dc.is_mean_atwd_charge_valid, False, "This should be false.")
-        dc.mean_atwd_charge = 0.0
-        self.assertIs(dc.is_mean_atwd_charge_valid, False, "This should be false.")
+        dc.mean_atwd_charge_correction = math.nan
+        self.assertIs(dc.is_mean_atwd_charge_correction_valid, False, "This should be false.")
+        dc.mean_atwd_charge_correction = 0.0
+        self.assertIs(dc.is_mean_atwd_charge_correction_valid, False, "This should be false.")
 
 
 class I3DoubleTestCase(unittest.TestCase):

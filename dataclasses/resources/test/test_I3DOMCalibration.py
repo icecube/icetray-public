@@ -9,7 +9,6 @@ from icecube import dataclasses
 from icecube.icetray import I3Units
 
 class TestI3DOMCalibration(unittest.TestCase):
-
     def test_LinearFit_equality(self):
         fit1 = dataclasses.LinearFit()
         fit1.slope = 1.618
@@ -42,28 +41,20 @@ class TestI3DOMCalibration(unittest.TestCase):
 
     def test_SPEChargeDistribution_equality(self):
         d1 = dataclasses.SPEChargeDistribution()
-        d1.exp1_amp   = 6.68282
-        d1.exp1_width = 0.0342546
-        d1.exp2_amp   = 0.521208
-        d1.exp2_width = 0.445405
-        d1.gaus_amp   = 0.688097
-        d1.gaus_mean  = 1.
-        d1.gaus_width = 0.312677
+        d1.pdfs.append(d1.Exponential(amplitude=6.68282, width=0.0342546))
+        d1.pdfs.append(d1.Exponential(amplitude=0.521208, width=0.445405))
+        d1.pdfs.append(d1.Gaussian(amplitude=0.688097, mean=1., sigma=0.312677))
         d1.compensation_factor = 1.3
 
         d2 = dataclasses.SPEChargeDistribution()
-        d2.exp1_amp   = 6.68282
-        d2.exp1_width = 0.0342546
-        d2.exp2_amp   = 0.521208
-        d2.exp2_width = 0.445405
-        d2.gaus_amp   = 0.688097
-        d2.gaus_mean  = 1.
-        d2.gaus_width = 0.312677
+        d2.pdfs.append(d2.Exponential(amplitude=6.68282, width=0.0342546))
+        d2.pdfs.append(d2.Exponential(amplitude=0.521208, width=0.445405))
+        d2.pdfs.append(d2.Gaussian(amplitude=0.688097, mean=1., sigma=0.312677))
         d2.compensation_factor = 1.3
 
         self.assertEqual(d1, d2, "these should be the same.")
 
-        d2.exp1_amp = 0.
+        d2.pdfs[0].amplitude = 0.
         self.assertNotEqual(d1, d2, "these should be the same.")
 
     def test_TauParam_equality(self):
@@ -140,8 +131,9 @@ class TestI3DOMCalibration(unittest.TestCase):
     def test_SPEChargeDistribution_equality_default_ctor(self):
         o1 = dataclasses.SPEChargeDistribution()
         o2 = dataclasses.SPEChargeDistribution()
+        print("Default ctor")
         self.assertEqual(o1, o2, "these should be the same.")
-
+        print("default ctor passed")
 
     def test_LinearFit_string(self):
         fit1 = dataclasses.LinearFit()
@@ -169,26 +161,19 @@ class TestI3DOMCalibration(unittest.TestCase):
 
     def test_SPEChargeDistribution_string(self):
         d1 = dataclasses.SPEChargeDistribution()
-        d1.exp1_amp   = 6.68282
-        d1.exp1_width = 0.0342546
-        d1.exp2_amp   = 0.521208
-        d1.exp2_width = 0.445405
-        d1.gaus_amp   = 0.688097
-        d1.gaus_mean  = 1.
-        d1.gaus_width = 0.312677
+        d1.pdfs.append(d1.Exponential(amplitude=6.68282, width=0.0342546))
+        d1.pdfs.append(d1.Exponential(amplitude=0.521208, width=0.445405))
+        d1.pdfs.append(d1.Gaussian(amplitude=0.688097, mean=1., sigma=0.312677))
         d1.compensation_factor = 1.3
 
         d2 = dataclasses.SPEChargeDistribution()
-        d2.exp1_amp   = 6.68282
-        d2.exp1_width = 0.0342546
-        d2.exp2_amp   = 0.521208
-        d2.exp2_width = 0.445405
-        d2.gaus_amp   = 0.688097
-        d2.gaus_mean  = 1.
-        d2.gaus_width = 0.312677
+        d2.pdfs.append(d2.Exponential(amplitude=6.68282, width=0.0342546))
+        d2.pdfs.append(d2.Exponential(amplitude=0.521208, width=0.445405))
+        d2.pdfs.append(d2.Gaussian(amplitude=0.688097, mean=1., sigma=0.312677))
         d2.compensation_factor = 1.3
-
+        print("string")
         self.assertEqual(d1.__str__(), d2.__str__(), "these should be the same.")
+        print("string passed")
 
 
     def test_TauParam_string(self):
@@ -217,6 +202,5 @@ class TestI3DOMCalibration(unittest.TestCase):
         dc2 = dataclasses.I3DOMCalibration()
 
         self.assertEqual(dc1.__str__(), dc2.__str__(), "these should be the same.")
-
 
 unittest.main()

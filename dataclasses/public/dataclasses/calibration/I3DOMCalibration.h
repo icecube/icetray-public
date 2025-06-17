@@ -21,6 +21,7 @@
 
 #include <boost/math/constants/constants.hpp>
 
+#include <dataclasses/calibration/SPEChargeDistribution.h>
 #include <dataclasses/external/CompareFloatingPoint.h>
 #include <dataclasses/I3Time.h>
 #include <dataclasses/Utility.h>
@@ -32,7 +33,6 @@ static const unsigned i3domcalibration_version_ = 13;
 static const unsigned linearfit_version_ = 0;
 static const unsigned quadraticfit_version_ = 0;
 static const unsigned tauparam_version_ = 0;
-static const unsigned SPEChargeDistribution_version_ = 2;
 
 /**
  * @brief A struct to hold a linear fit
@@ -96,163 +96,6 @@ struct QuadraticFit
 
 };
 I3_CLASS_VERSION(QuadraticFit, quadraticfit_version_);
-
-/**
- *  @brief: A struct to hold the parameters of an two exponential + gaussian
- *  fit to the SPE charge distribution:
- *  P(q) = exp1_amp * exp(-q/exp1_width) +
- *         exp2_amp * exp(-q / exp2_width) +
- *         gaus_amp * np.exp(-0.5*(q - gaus_mean)**2/gaus_width**2))
- *
- * The Compensation Factor is simply the mean charge of the TA0003 distribution divided by the
- * average SPE Template charge.
- * CF = (dintt_0^inf q f(q)_ta0003 dq) / (dintt_0^inf q f(q)_spe dq)
- * Given the current SPE Templates, this factor is roughly 1.3
- */
-struct SPEChargeDistribution
-{
-  template <class Archive> void load(Archive& ar, unsigned version);
-  template <class Archive> void save(Archive& ar, unsigned version) const;
-  I3_SERIALIZATION_SPLIT_MEMBER();
-
-  SPEChargeDistribution() : exp1_amp(NAN),
-                            exp1_width(NAN),
-                            exp2_amp(NAN),
-                            exp2_width(NAN),
-                            gaus_amp(NAN),
-                            gaus_mean(NAN),
-                            gaus_width(NAN),
-                            compensation_factor(NAN),
-                            SLC_gaus_mean(NAN),
-                            mean_charge(NAN),
-                            variance(NAN),
-                            max_residual(NAN){ }
-
-  SPEChargeDistribution(double amp_exp1,
-                        double width_exp1,
-                        double amp_exp2,
-                        double width_exp2,
-                        double amp_gaus,
-                        double mean_gaus,
-                        double width_gaus,
-			double factor_compensation,
-			double gaus_mean_SLC) :
-      exp1_amp(amp_exp1),
-      exp1_width(width_exp1),
-      exp2_amp(amp_exp2),
-      exp2_width(width_exp2),
-      gaus_amp(amp_gaus),
-      gaus_mean(mean_gaus),
-      gaus_width(width_gaus),
-      compensation_factor(factor_compensation),
-      SLC_gaus_mean(gaus_mean_SLC),
-      mean_charge(NAN),
-      variance(NAN),
-      max_residual(NAN){ }
-
-  double exp1_amp;
-  double exp1_width;
-  double exp2_amp;
-  double exp2_width;
-  double gaus_amp;
-  double gaus_mean;
-  double gaus_width;
-  double compensation_factor;
-  double SLC_gaus_mean;
-  ///The expected value of this charge distribution.
-  ///This quantity is derived from others lazily, so it is does not participate in serialization or
-  ///comparison.
-  mutable double mean_charge;
-  mutable double variance;
-  mutable double max_residual;
-
-  bool IsValid() const
-  {
-    // consider valid only if no value is NaN
-    return(!std::isnan(exp1_amp) &&
-           !std::isnan(exp1_width) &&
-           !std::isnan(exp2_amp) &&
-           !std::isnan(exp2_width) &&
-           !std::isnan(gaus_amp) &&
-           !std::isnan(gaus_mean) &&
-           !std::isnan(gaus_width) &&
-		   !std::isnan(compensation_factor) &&
-		   !std::isnan(SLC_gaus_mean));
-  }
-
-  ///Evaluate the mean and standard deviation of the SPE template distribution
-  double Mean() const
-  {
-    if(std::isnan(mean_charge)){
-      mean_charge=ComputeMeanCharge();
-    }
-    return mean_charge;
-  }
-  double StdDev() const
-  {
-    if(std::isnan(variance)){
-      variance=ComputeChargeVariance();
-    }
-    return std::sqrt(variance);
-  }
-
-  double GetMaxResidual() const
-  {
-    if(std::isnan(max_residual))
-      max_residual = *std::max_element(yData, yData+correctionSize);
-    return max_residual;
-  }
-
-  double ComputeResidual(double q) const{
-    int i = 0;                            // find left end of interval for interpolation
-    if ( q >= xData[correctionSize - 2] ) // special case: beyond right end
-      i = correctionSize - 2;
-    else {
-      i = std::distance(xData, std::lower_bound(xData, xData+correctionSize, q));
-      if(i) i--;
-    }
-    double xL = xData[i], yL = yData[i], xR = xData[i+1], yR = yData[i+1];
-    double dydx = ( yR - yL ) / ( xR - xL );
-    double y = yL + dydx * ( q - xL );
-    return y;
-  }
-
-  bool operator==(const SPEChargeDistribution& rhs) const
-  {
-    return(CompareFloatingPoint::Compare_NanEqual(exp1_amp	, rhs.exp1_amp) &&
-           CompareFloatingPoint::Compare_NanEqual(exp1_width, rhs.exp1_width) &&
-           CompareFloatingPoint::Compare_NanEqual(exp2_amp	, rhs.exp2_amp) &&
-           CompareFloatingPoint::Compare_NanEqual(exp2_width, rhs.exp2_width) &&
-           CompareFloatingPoint::Compare_NanEqual(gaus_amp	, rhs.gaus_amp) &&
-           CompareFloatingPoint::Compare_NanEqual(gaus_mean	, rhs.gaus_mean) &&
-           CompareFloatingPoint::Compare_NanEqual(gaus_width, rhs.gaus_width) &&
-           CompareFloatingPoint::Compare_NanEqual(compensation_factor, rhs.compensation_factor) &&
-           CompareFloatingPoint::Compare_NanEqual(SLC_gaus_mean, rhs.SLC_gaus_mean));
-  }
-
-  bool operator!=(const SPEChargeDistribution& rhs) const
-  {
-    return !operator==(rhs);
-  }
-
-  double operator()(double q) const{
-    double y = ComputeResidual(q);
-    double e=(q-gaus_mean)/gaus_width;
-    return y*(exp1_amp*exp(-q/exp1_width)
-              + exp2_amp*exp(-q/exp2_width)
-              + gaus_amp*exp(-.5*e*e));
-  }
-
-private:
-  double ComputeMeanCharge() const;
-  double ComputeChargeVariance() const;
-
-  static const unsigned int correctionSize;
-  static const double xData[];
-  static const double yData[];
-};
-
-I3_CLASS_VERSION(SPEChargeDistribution, SPEChargeDistribution_version_);
 
 
 /**
@@ -709,27 +552,27 @@ class I3DOMCalibration {
   /**
    *  ATWD and FADC-specific corrections to the SPE charge distribution
    */
-  double GetMeanATWDCharge() const {return meanATWDCharge_;}
-  double GetMeanFADCCharge() const {return meanFADCCharge_;}
+  double GetMeanATWDChargeCorrection() const {return meanATWDChargeCorrection_;}
+  double GetMeanFADCChargeCorrection() const {return meanFADCChargeCorrection_;}
 
   /**
    * In dataclasses we use NaN to denote "invalid" however in the JSON
    * file invalid entries are set to 0.  To cover both cases we check
    * that it's finite and greater than 0.
    */
-  bool IsMeanATWDChargeValid() const {
-    return ((std::isfinite(meanATWDCharge_)) && (meanATWDCharge_ > 0.));
+  bool IsMeanATWDChargeCorrectionValid() const {
+    return ((std::isfinite(meanATWDChargeCorrection_)) && (meanATWDChargeCorrection_ > 0.));
   }
-  bool IsMeanFADCChargeValid() const {
-    return ((std::isfinite(meanFADCCharge_)) && (meanFADCCharge_ > 0.));
-  }
-
-  void SetMeanATWDCharge(double charge) {
-    meanATWDCharge_ = charge;
+  bool IsMeanFADCChargeCorrectionValid() const {
+    return ((std::isfinite(meanFADCChargeCorrection_)) && (meanFADCChargeCorrection_ > 0.));
   }
 
-  void SetMeanFADCCharge(double charge) {
-    meanFADCCharge_ = charge;
+  void SetMeanATWDChargeCorrection(double charge) {
+    meanATWDChargeCorrection_ = charge;
+  }
+
+  void SetMeanFADCChargeCorrection(double charge) {
+    meanFADCChargeCorrection_ = charge;
   }
 
   const SPEChargeDistribution& GetCombinedSPEChargeDistribution() const {
@@ -780,8 +623,8 @@ class I3DOMCalibration {
         CompareFloatingPoint::Compare_NanEqual(noiseScintillationSigma_,rhs.noiseScintillationSigma_) &&
         CompareFloatingPoint::Compare_NanEqual(noiseScintillationHits_,rhs.noiseScintillationHits_) &&
         combinedSPEFit_ == rhs.combinedSPEFit_ &&
-        CompareFloatingPoint::Compare_NanEqual(meanATWDCharge_,rhs.meanATWDCharge_) &&
-        CompareFloatingPoint::Compare_NanEqual(meanFADCCharge_,rhs.meanFADCCharge_));
+        CompareFloatingPoint::Compare_NanEqual(meanATWDChargeCorrection_,rhs.meanATWDChargeCorrection_) &&
+        CompareFloatingPoint::Compare_NanEqual(meanFADCChargeCorrection_,rhs.meanFADCChargeCorrection_));
   }
   bool operator!=(const I3DOMCalibration& rhs) const
   {
@@ -953,8 +796,8 @@ class I3DOMCalibration {
   /**
    *  ATWD and FADC-specific corrections to the SPE charge distribution
    */
-  double meanATWDCharge_;
-  double meanFADCCharge_;
+  double meanATWDChargeCorrection_;
+  double meanFADCChargeCorrection_;
 
   /**
    *  Allow the Diff compression class to directly use private data

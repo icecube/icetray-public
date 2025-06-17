@@ -55,7 +55,7 @@ void register_I3DOMCalibration()
                             (MPEDiscCalib)(PMTDiscCalib)(DomNoiseRate)(RelativeDomEff)\
                             (DomNoiseThermalRate)(DomNoiseDecayRate)      \
                             (DomNoiseScintillationMean)(DomNoiseScintillationSigma)   \
-                            (DomNoiseScintillationHits)(MeanATWDCharge)(MeanFADCCharge)
+                            (DomNoiseScintillationHits)(MeanATWDChargeCorrection)(MeanFADCChargeCorrection)
       BOOST_PP_SEQ_FOR_EACH(WRAP_PROP, I3DOMCalibration, I3DOMCALPROPS)
       #undef I3DOMCALPROPS
       #define EVIL_PROPS (ATWDBeaconBaseline)(ATWDDeltaT) \
@@ -63,8 +63,8 @@ void register_I3DOMCalibration()
       BOOST_PP_SEQ_FOR_EACH(WRAP_EVIL_PROP, I3DOMCalibration, EVIL_PROPS)
       #undef EVIL_PROPS
       .add_property("toroid_type", &I3DOMCalibration::GetToroidType)
-      .add_property("is_mean_atwd_charge_valid", &I3DOMCalibration::IsMeanATWDChargeValid)
-      .add_property("is_mean_fadc_charge_valid", &I3DOMCalibration::IsMeanFADCChargeValid)
+      .add_property("is_mean_atwd_charge_correction_valid", &I3DOMCalibration::IsMeanATWDChargeCorrectionValid)
+      .add_property("is_mean_fadc_charge_correction_valid", &I3DOMCalibration::IsMeanFADCChargeCorrectionValid)
       .add_property("combined_spe_charge_distribution", 
                     make_function(&I3DOMCalibration::GetCombinedSPEChargeDistribution, 
                                   return_internal_reference<>()),

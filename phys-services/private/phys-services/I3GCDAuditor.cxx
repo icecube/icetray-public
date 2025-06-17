@@ -297,25 +297,25 @@ bool I3GCDAuditor::CheckDOM(OMKey om, const I3OMGeo &omgeo,
 	// The following checks should always be done last.  Do not use bad_dom because want to check both ATWD and FADC.
 	bool rc = true;
 	if ( (NAN_is_error_ || Not1_is_error_) && omgeo.omtype == I3OMGeo::IceCube) {
-		if (!std::isfinite(cal.GetMeanATWDCharge())) {
+		if (!std::isfinite(cal.GetMeanATWDChargeCorrection())) {
 			log_error("Invalid mean ATWD charge correction for OM%s and is not in key %s", 
 			om.str().c_str(), bad_dom_list_.c_str());
 			rc = false;
 		}
-		else if (Not1_is_error_ && cal.GetMeanATWDCharge() != 1.0) {
+		else if (Not1_is_error_ && cal.GetMeanATWDChargeCorrection() != 1.0) {
 			log_error("Mean ATWD charge correction %f is not 1.0 for OM%s and is not in key %s",
-			cal.GetMeanATWDCharge(), om.str().c_str(), bad_dom_list_.c_str());
+			cal.GetMeanATWDChargeCorrection(), om.str().c_str(), bad_dom_list_.c_str());
 			rc = false;
 		}
 
-		if (!std::isfinite(cal.GetMeanFADCCharge())) {
+		if (!std::isfinite(cal.GetMeanFADCChargeCorrection())) {
 			log_error("Invalid mean FADC charge correction for OM%s and is not in key %s",
 			om.str().c_str(), bad_dom_list_.c_str());
 			rc = false;
 		}
-		else if (Not1_is_error_ && cal.GetMeanFADCCharge() != 1.0) {
+		else if (Not1_is_error_ && cal.GetMeanFADCChargeCorrection() != 1.0) {
 			log_error("Mean FADC charge correction %f is not 1.0 for OM%s and is not in key %s",
-			cal.GetMeanFADCCharge(), om.str().c_str(), bad_dom_list_.c_str());
+			cal.GetMeanFADCChargeCorrection(), om.str().c_str(), bad_dom_list_.c_str());
 			rc = false;
 		}
 	}
