@@ -13,11 +13,13 @@
 #ifndef I3SURFACES_EXTRUDEDPOLYGONBASE_H_INCLUDED
 #define I3SURFACES_EXTRUDEDPOLYGONBASE_H_INCLUDED
 
+#include <dataclasses/I3Position.h>
 #include <dataclasses/I3Direction.h>
+#include <dataclasses/physics/I3Particle.h>
+#include <dataclasses/I3Approach.h>
 #include <phys-services/surfaces/detail/polygon.h>
 #include <phys-services/I3RandomService.h>
 
-#include <boost/foreach.hpp>
 #include <boost/next_prior.hpp>
 #include <cmath>
 
@@ -29,7 +31,7 @@ std::pair<double, double>
 z_range(const std::vector<I3Position> &positions)
 {
 	std::pair<double, double> range(std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity());
-	BOOST_FOREACH(const I3Position &pos, positions) {
+	for (const I3Position &pos : positions) {
 		if (pos.GetZ() < range.first)
 			range.first = pos.GetZ();
 		if (pos.GetZ() > range.second)
@@ -109,10 +111,132 @@ public:
 		}
 	}
 
+	/// @brief Find closest approach of particle `p` to the detector.
+	/// Only works for particles outside of the detector, otherwise NAN is returned.
+	///
+	/// @returns a pair (closest approach distance: d, closest approach position: pos).
+	I3Approach GetClosestApproach(const I3Particle &p) const
+	{
+		// extract position, direction and length from the particle
+		I3Position pos = p.GetPos();
+		I3Direction dir = p.GetDir();
+		double len = p.GetLength();
+
+		// first check, that the particle trajectory indeed does not intersect the detector
+		// and return NAN else
+		std::pair<double, double> isect = GetIntersection(pos, dir);
+		if (len > isect.first && 0 < isect.second) {
+			return I3Approach();
+		}
+
+		std::vector<double> distances;
+		std::vector<I3Position> positions;
+
+		const I3Position birth = pos;
+		const I3Position death = birth + len * dir;
+
+		double t, k;
+
+		/// check distance of trajectory endpoints to caps
+		/// birth
+		if (PointInHull(birth)) {
+			distances.push_back(std::abs(birth.GetZ() - z_range_.first));
+			positions.push_back(birth);
+			distances.push_back(std::abs(birth.GetZ() - z_range_.second));
+			positions.push_back(birth);
+		}
+		/// death
+		if (PointInHull(death)) {
+			distances.push_back(std::abs(death.GetZ() - z_range_.first));
+			positions.push_back(death);
+			distances.push_back(std::abs(death.GetZ() - z_range_.second));
+			positions.push_back(death);
+		}
+
+		/// check distance of trajectory endpoints to hull
+		/// birth
+		if (birth.GetZ() > z_range_.first && birth.GetZ() < z_range_.second) {
+			for (const polygon::side3D &sidey : bottom_sides_) {
+				k = ((birth - sidey.origin) * sidey.direction);
+				if (k > 0. && k < sidey.length) {
+					distances.push_back((unit_vec_z * (birth.GetZ() - z_range_.first) + sidey.direction * k + sidey.origin - birth).Magnitude());
+					positions.push_back(birth);
+				}
+			}
+		}
+		/// death
+		if (death.GetZ() > z_range_.first && death.GetZ() < z_range_.second) {
+			for (const polygon::side3D &sidey : bottom_sides_) {
+				k = ((death - sidey.origin) * sidey.direction);
+				if (k > 0. && k < sidey.length) {
+					distances.push_back((unit_vec_z * (death.GetZ() - z_range_.first) + sidey.direction * k + sidey.origin - death).Magnitude());
+					positions.push_back(death);
+				}
+			}
+		}
+
+		/// check distance of trajectory to edges
+		for (const polygon::side3D &sidey : all_sides_) {
+			k = (sidey.origin - birth) * dir.Cross(dir.Cross(sidey.direction)) / (1 - (dir * sidey.direction) * (dir * sidey.direction));
+			if (k > 0. && k < sidey.length) {
+				t = sidey.direction * k * dir + (sidey.origin - birth) * dir;
+				if (t > 0 && t < len) {
+					distances.push_back((sidey.direction * k + sidey.origin - dir * t - birth).Magnitude());
+					positions.push_back(dir * t + birth);
+				}
+			}
+		}
+
+		/// check distance of trajectory endpoints to edges
+		/// birth
+		for (const polygon::side3D &sidey : all_sides_) {
+			k = (birth - sidey.origin) * sidey.direction;
+			if (k > 0. && k < sidey.length) {
+				distances.push_back((sidey.direction * k + sidey.origin - birth).Magnitude());
+				positions.push_back(birth);
+			}
+		}
+		/// death
+		for (const polygon::side3D &sidey : all_sides_) {
+			k = (death - sidey.origin) * sidey.direction;
+			if (k > 0. && k < sidey.length) {
+				distances.push_back((sidey.direction * k + sidey.origin - death).Magnitude());
+				positions.push_back(death);
+			}
+		}
+
+		/// check distance of trajectory to corners
+		for (const I3Position &cornery : corners_) {
+			t = (cornery - birth) * dir;
+			if (t > 0. && t < len) {
+				distances.push_back((dir * t + birth - cornery).Magnitude());
+				positions.push_back(dir * t + birth);
+			}
+		}
+
+		/// check distance of trajectory endpoints to corners
+		/// birth
+		for (const I3Position &cornery : corners_) {
+			distances.push_back((birth - cornery).Magnitude());
+			positions.push_back(birth);
+		}
+		/// death
+		for (const I3Position &cornery : corners_) {
+			distances.push_back((death - cornery).Magnitude());
+			positions.push_back(death);
+		}
+
+		/// lastly find the smallest distance and the corresponding position
+		std::vector<double>::iterator min_iter = std::min_element(distances.begin(), distances.end());
+		int min_idx = std::distance(distances.begin(), min_iter);
+
+		return I3Approach(*min_iter, positions[min_idx]);
+	}
+
 	double GetArea(const I3Direction &dir) const
 	{
 		double area = 0;
-		BOOST_FOREACH(const polygon::side &sidey, sides_) {
+		for (const polygon::side &sidey : sides_) {
 			double inner = sidey.normal*dir;
 			if (inner < 0)
 				area += -inner*sidey.length;
@@ -125,7 +249,7 @@ public:
 	double GetMaximumArea() const
 	{
 		double side_area = 0;
-		BOOST_FOREACH(const polygon::side &sidey, sides_) {
+		for (const polygon::side &sidey : sides_) {
 			side_area += sidey.length;
 		}
 		// the largest possible projected area occurs for a flat square
@@ -159,7 +283,7 @@ public:
 		std::pair<double, double> x_range(std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity());
 		std::pair<double, double> y_range(std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity());
 
-		BOOST_FOREACH(const polygon::side &sidey, sides_) {
+		for (const polygon::side &sidey : sides_) {
 			double inner = sidey.normal*dir;
 			if (inner < 0)
 				area += -inner*sidey.length*height;
@@ -204,14 +328,14 @@ public:
 	std::vector<double> GetX() const
 	{
 		std::vector<double> x;
-		BOOST_FOREACH(const polygon::side &sidey, sides_)
+		for (const polygon::side &sidey : sides_)
 			x.push_back(sidey.origin.x);
 		return x;
 	}
 	std::vector<double> GetY() const
 	{
 		std::vector<double> y;
-		BOOST_FOREACH(const polygon::side &sidey, sides_)
+		for (const polygon::side &sidey : sides_)
 			y.push_back(sidey.origin.y);
 		return y;
 	}
@@ -232,7 +356,7 @@ protected:
 		// passes through the normal, is
 		// A*\int_0^\pi \Theta(\sin\alpha)\sin\alpha d\alpha / 2\pi = A/\pi
 		double area = 0;
-		BOOST_FOREACH(const polygon::side &sidey, sides_)
+		for (const polygon::side &sidey : sides_)
 			area += sidey.length;
 		area *= GetLength()/M_PI;
 
@@ -243,26 +367,41 @@ protected:
 
 private:
 	std::vector<polygon::side> sides_;
+	std::vector<polygon::side3D> bottom_sides_;
+	std::vector<polygon::side3D> all_sides_;
+	std::vector<I3Position> corners_;
 	std::pair<double, double> z_range_;
 	double cap_area_;
+	I3Direction unit_vec_z = I3Direction(0., 0., 1.);
 
 	void initWithHull(const std::vector<polygon::vec2> &hull, const std::pair<double,double> &zrange)
 	{
 		using I3Surfaces::polygon::vec2;
 		using I3Surfaces::polygon::side;
+		using I3Surfaces::polygon::side3D;
 
 		z_range_ = zrange;
 		cap_area_ = 0;
 		sides_.clear();
+		bottom_sides_.clear();
+		all_sides_.clear();
+		corners_.clear();
 		for (std::vector<vec2>::const_iterator p = hull.begin(); p != hull.end(); p++) {
 			std::vector<vec2>::const_iterator np = boost::next(p);
 			if (np == hull.end())
 				np = hull.begin();
 
 			sides_.push_back(side(*p, *np));
+			bottom_sides_.push_back(side3D(I3Position(p->x, p->y, zrange.first), I3Position(np->x, np->y, zrange.first)));
+			all_sides_.push_back(side3D(I3Position(p->x, p->y, zrange.first), I3Position(np->x, np->y, zrange.first)));
+			all_sides_.push_back(side3D(I3Position(p->x, p->y, zrange.second), I3Position(np->x, np->y, zrange.second)));
+			all_sides_.push_back(side3D(I3Position(p->x, p->y, zrange.first), I3Position(p->x, p->y, zrange.second)));
 
 			// area of a simple polygon in the x-y plane
 			cap_area_ += (p->x*np->y - np->x*p->y);
+
+			corners_.push_back(I3Position(p->x, p->y, zrange.first));
+			corners_.push_back(I3Position(p->x, p->y, zrange.second));
 		}
 		cap_area_ /= 2.;
 	}
@@ -294,7 +433,7 @@ private:
 		if (dir.GetX() == 0 && dir.GetY() == 0)
 			log_fatal("Direction must have a horizontal component");
 
-		BOOST_FOREACH(const polygon::side &sidey, sides_) {
+		for (const polygon::side &sidey : sides_) {
 			// Components of the vector connecting the test
 			// point to the origin of the line segment
 			double x = sidey.origin.x - pos.GetX();
@@ -365,7 +504,7 @@ private:
 
 		ar & make_nvp("Base", base_object<Base>(*this));
 		std::vector<polygon::vec2> hull;
-		BOOST_FOREACH(const polygon::side &sidey, sides_) {
+		for (const polygon::side &sidey : sides_) {
 			hull.push_back(sidey.origin);
 		}
 		ar & make_nvp("HullXY", hull);

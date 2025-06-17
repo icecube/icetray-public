@@ -19,6 +19,7 @@ class I3Position;
 
 namespace I3Surfaces { namespace polygon {
 
+/// @brief Describes a point in 2d space
 struct vec2 {
 	vec2(double xi, double yi);
 	static vec2 from_I3Position(const I3Position &pos);
@@ -33,12 +34,22 @@ private:
 	void serialize(Archive &, unsigned);
 };
 
+/// @brief Describes a finite line between two points in 2d space
 struct side {
 	side(const vec2 &point, const vec2 &next_point);
 	vec2 origin;
 	vec2 vector;
 	double length;
 	I3Direction normal;
+};
+
+/// @brief Describes a finite line between two points in 3d space
+struct side3D {
+	side3D(const I3Position &point, const I3Position &next_point);
+	I3Position origin;
+	I3Direction direction;
+	double length;
+	I3Direction cross_z;
 };
 
 /// @brief Computes the convex hull of a set of 2D points.

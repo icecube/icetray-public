@@ -100,6 +100,7 @@ void register_Surface()
 	    .add_property("x", &ExtrudedPolygon::GetX)
 	    .add_property("y", &ExtrudedPolygon::GetY)
 	    .add_property("z", &ExtrudedPolygon::GetZ)
+	    .def("closest_approach", &ExtrudedPolygon::GetClosestApproach, (arg("p")))
 	;
 
 	class_<Sphere, bases<Surface> >("Sphere", init<double, double>())

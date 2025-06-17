@@ -142,6 +142,13 @@ side::side(const vec2 &p, const vec2 &np) : origin(p),
 	normal(vector.y/length, -vector.x/length, 0.)
 {}
 
+side3D::side3D(const I3Position &p, const I3Position &np) :
+	origin(p),
+	direction(np - p),
+	length((np - p).Magnitude()),
+	cross_z(direction.Cross(I3Direction(0., 0., 1.)))
+{}
+
 }}
 
 I3_SERIALIZABLE(I3Surfaces::polygon::vec2);
