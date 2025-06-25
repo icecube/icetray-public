@@ -8,6 +8,12 @@ Release Notes
 main
 ----
 
+Jun. 30, 2025 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.15.0
+
+* Documentation build process cleanup (#3915)
+
 Oct. 24, 2024 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.12.0
