@@ -13,19 +13,34 @@
 #ifndef I3SURFACES_EXTRUDEDPOLYGONBASE_H_INCLUDED
 #define I3SURFACES_EXTRUDEDPOLYGONBASE_H_INCLUDED
 
+#include <numeric>
+#include <set>
+
+#include <dataio/I3File.h>
 #include <dataclasses/I3Position.h>
 #include <dataclasses/I3Direction.h>
 #include <dataclasses/physics/I3Particle.h>
 #include <dataclasses/I3Approach.h>
+#include <dataclasses/geometry/I3Geometry.h>
+#include <dataclasses/geometry/I3OMGeo.h>
 #include <phys-services/surfaces/detail/polygon.h>
 #include <phys-services/I3RandomService.h>
 
 #include <boost/next_prior.hpp>
+#include <boost/filesystem.hpp>
 #include <cmath>
 
 namespace I3Surfaces {
 
 namespace {
+
+template <typename T>
+const T mean(const std::vector<T> &vec) {
+	if (vec.empty()) {
+		log_fatal("Vector is empty => there is no mean!");
+	}
+	return std::accumulate(vec.begin(), vec.end(), T(0)) / vec.size();
+}
 
 std::pair<double, double>
 z_range(const std::vector<I3Position> &positions)
@@ -62,7 +77,7 @@ integrate_area(double a, double b, double cap, double sides)
 template <typename Base>
 class ExtrudedPolygonBase : public Base {
 public:
-	ExtrudedPolygonBase(const std::vector<I3Position> &points, double padding=0.)
+	ExtrudedPolygonBase(const std::vector<I3Position> &points, double padding = 0.)
 	{
 		using namespace I3Surfaces::polygon;
 
@@ -75,6 +90,14 @@ public:
 		}
 		initWithHull(hull, zrange);
 	}
+
+	/// @brief Construct an instance of ExtrudedPolygonBase from the detector geometry given in an I3Geometry object
+	ExtrudedPolygonBase(const I3Geometry &i3geo, double padding = 0.)
+	 : ExtrudedPolygonBase(hull_from_I3Geometry(i3geo), padding) {}
+
+	/// @brief Construct an instance of ExtrudedPolygonBase from the detector geometry given in a gcd file
+	ExtrudedPolygonBase(const std::string &gcd_file, double padding = 0.)
+	 : ExtrudedPolygonBase(hull_from_gcd_file(gcd_file), padding) {}
 
 	/// @brief Calculate distance to entry and exit points
 	///
@@ -404,6 +427,54 @@ private:
 			corners_.push_back(I3Position(p->x, p->y, zrange.second));
 		}
 		cap_area_ /= 2.;
+	}
+
+	/// @brief Extract the detector geometry from an I3OMGeoMap
+	std::vector<I3Position> hull_from_I3Geometry(const I3Geometry &i3geo)
+	{
+		// define OM Types to be considered
+		std::set<I3OMGeo::OMType> om_types = {
+			I3OMGeo::OMType::IceCube,
+			I3OMGeo::OMType::DEgg,
+			I3OMGeo::OMType::mDOM,
+		  	I3OMGeo::OMType::WOM,
+		  	I3OMGeo::OMType::FOM,
+		};
+		// sort DOM coordinates by string and find min(z) and max(z)
+		std::set<unsigned int> string_nos;
+		std::map<unsigned int, std::vector<double>> string_dom_x;
+		std::map<unsigned int, std::vector<double>> string_dom_y;
+		double min_z = 0;
+		double max_z = 0;
+		for (std::pair<OMKey, I3OMGeo> entry : i3geo.omgeo) {
+			if (om_types.count(entry.second.omtype)) {
+				unsigned int string_no = entry.first.GetString();
+				string_nos.insert(string_no);
+				string_dom_x[string_no].push_back(entry.second.position.GetX());
+				string_dom_y[string_no].push_back(entry.second.position.GetY());
+				min_z = std::min(min_z, entry.second.position.GetZ());
+				max_z = std::max(max_z, entry.second.position.GetZ());
+			}
+		}
+		// construct vector of mean positions
+		std::vector<I3Position> positions;
+		for (unsigned int string_no : string_nos) {
+			positions.push_back(I3Position(mean(string_dom_x[string_no]), mean(string_dom_y[string_no]), min_z));
+			positions.push_back(I3Position(mean(string_dom_x[string_no]), mean(string_dom_y[string_no]), max_z));
+		}
+		return positions;
+	}
+
+	/// @brief Extract the detector geometry from a gcd file
+	std::vector<I3Position> hull_from_gcd_file(const std::string &gcd_file)
+	{
+		if (!boost::filesystem::exists(gcd_file)) // check that gcd file exists
+			log_fatal("The GCD file '%s' doesn't exist!", gcd_file.c_str());
+		dataio::I3File gcd = dataio::I3File(gcd_file);
+		// get I3Geometry from gcd file
+		I3Geometry i3geo = gcd.pop_frame(I3Frame::Geometry)->Get<I3Geometry>("I3Geometry");
+		// return hull from I3Geometry
+		return hull_from_I3Geometry(i3geo);
 	}
 
 	/// @brief Get distances to the infinite horizontal planes that define the

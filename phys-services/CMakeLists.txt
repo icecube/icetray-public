@@ -77,7 +77,7 @@ i3_add_library(phys-services
   private/surfaces/polygon.cxx
   ${OPTIONAL_SOURCES}
 
-  USE_PROJECTS serialization icetray dataclasses interfaces tableio
+  USE_PROJECTS serialization icetray dataclasses interfaces tableio dataio
 
   USE_TOOLS ${OPTIONAL_TOOLS} gsl boost python
   )
@@ -129,5 +129,5 @@ i3_add_pybindings(phys_services
   private/pybindings/module.cxx
   ${OPTIONAL_PYBINDING_SOURCES}
   USE_TOOLS boost python
-  USE_PROJECTS phys-services interfaces tableio
+  USE_PROJECTS phys-services interfaces tableio dataio
   )

@@ -23,6 +23,8 @@ private:
 	typedef ExtrudedPolygonBase<SamplingSurface> Base;
 public:
 	ExtrudedPolygon(const std::vector<I3Position> &points, double padding=0.) : Base(points, padding) {};
+	ExtrudedPolygon(const I3Geometry &i3geo, double padding=0.) : Base(i3geo, padding) {};
+	ExtrudedPolygon(const std::string &gcd_file, double padding=0.) : Base(gcd_file, padding) {};
 	~ExtrudedPolygon();
 private:
 	ExtrudedPolygon() {}

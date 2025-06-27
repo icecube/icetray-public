@@ -59,7 +59,7 @@ void register_Surface()
 	using namespace boost::python;
 
 	class_<PySurface, PySurfacePtr, boost::noncopyable>("Surface")
-	    .def("intersection", &Surface::GetIntersection)
+	    .def("intersection", &Surface::GetIntersection, (arg("pos"), arg("dir")))
 	;
 
 	implicitly_convertible<SurfacePtr, SurfaceConstPtr>();
@@ -96,7 +96,9 @@ void register_Surface()
 	implicitly_convertible<CupPtr, CupConstPtr>();
 
 	class_<ExtrudedPolygon, ExtrudedPolygonPtr, bases<SamplingSurface> >("ExtrudedPolygon",
-	    init<const std::vector<I3Position> &, double>((arg("points"), arg("padding")=0)))
+	    init<const std::vector<I3Position> &, double>((arg("points"), arg("padding")=0.)))
+	    .def(init<I3Geometry, double>((bp::arg("i3geo"), bp::arg("padding")=0.)))
+	    .def(init<std::string, double>((bp::arg("gcd_file"), bp::arg("padding")=0.)))
 	    .add_property("x", &ExtrudedPolygon::GetX)
 	    .add_property("y", &ExtrudedPolygon::GetY)
 	    .add_property("z", &ExtrudedPolygon::GetZ)
@@ -109,6 +111,6 @@ void register_Surface()
 	class_<AxialCylinder, bases<SamplingSurface> >("AxialCylinder",
 	    init<double,double,I3Position>((bp::arg("length"), bp::arg("radius"), bp::arg("center")=I3Position(0,0,0))))
 	    .def(init<double,double,double,I3Position>((bp::arg("lengthBefore"), "lengthAfter", "radius", bp::arg("center")=I3Position(0,0,0))))
-          .def(dataclass_suite<AxialCylinder>())
+            .def(dataclass_suite<AxialCylinder>())
 	;
 }
