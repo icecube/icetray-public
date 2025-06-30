@@ -48,6 +48,7 @@ struct SPEChargeDistribution
     template <class Archive> void serialize(Archive& ar, unsigned version);
     virtual double RelativeNormalization(){return 0;};
     virtual double Probability(double q){return 0;};
+    virtual double Weight(double q){return 0;};
     virtual bool IsGaussian(){return false;}
     virtual bool IsExponential(){return false;}
     virtual bool IsValid(){return false;}
@@ -65,7 +66,11 @@ struct SPEChargeDistribution
     template <class Archive> void serialize(Archive& ar, unsigned version);
     double RelativeNormalization(){return amplitude_ * std::sqrt(2*I3Constants::pi) * sigma_;}
     double Probability(double q){
-      return 1/pow(2.0*I3Constants::pi*sigma_*sigma_, 0.5) * exp(-pow(q-mean_,2)/2/sigma_/sigma_);
+      return Weight(q) / RelativeNormalization();
+    }
+    double Weight(double q){
+      double e = (q - mean_) / sigma_;
+      return amplitude_ * exp(-.5 * e *e);
     }
     template<class rng> double Sample(boost::shared_ptr<rng> random) {return random->Gaus(mean_, sigma_);}
     bool IsGaussian(){return true;}
@@ -98,7 +103,10 @@ struct SPEChargeDistribution
     double GetNorm() {return amplitude_;}
     double RelativeNormalization(){return amplitude_ * width_;}
     double Probability(double q){
-      return 1/width_ * exp(-q/width_);
+      return Weight(q) / RelativeNormalization();
+    }
+    double Weight(double q){
+      return amplitude_ * exp(-q/width_);
     }
     template<class rng> double Sample(boost::shared_ptr<rng> random) {return random->Exp(width_);}
     bool IsGaussian(){return false;}
@@ -211,7 +219,7 @@ struct SPEChargeDistribution
     std::vector<double> x;
     std::vector<double> y;
     static const std::vector<double> x_pass2;
-    static const std::vector<double> y_pass2;  
+    static const std::vector<double> y_pass2;
 
     // We compute this at initialization, so it doesn't need to be stored during serialization
     double max_residual;
@@ -230,6 +238,7 @@ struct SPEChargeDistribution
                             compensation_factor(NAN),
                             fadc_charge_scale(NAN),
                             residuals(new Residuals()),
+                            integral_ul(10),
                             mean_charge(NAN),
                             variance(NAN) {}
 
@@ -246,6 +255,7 @@ struct SPEChargeDistribution
     compensation_factor(factor_compensation),
     fadc_charge_scale(gaus_mean_SLC/mean_gaus),
     residuals(new Residuals()),
+    integral_ul(10*mean_gaus),
     mean_charge(NAN),
     variance(NAN)
     {
@@ -368,12 +378,10 @@ struct SPEChargeDistribution
   double operator()(double q) const{
     double correction = residuals->ComputeResidual(q);
     double p = 0;
-    double total_normalization = 0;
     for(auto pdf: PDFs){
-      total_normalization += pdf->RelativeNormalization();
-      p += pdf->RelativeNormalization() * pdf->Probability(q);
+      p += pdf->Weight(q);
     }
-    return correction*p/total_normalization;
+    return correction*p;
   }
 
 public:
@@ -391,6 +399,7 @@ private:
   friend class icecube::serialization::access;
   double ComputeMeanCharge() const;
   double ComputeChargeVariance() const;
+  double integral_ul;
 };
 
 I3_CLASS_VERSION(SPEChargeDistribution, SPEChargeDistribution_version_);

@@ -115,6 +115,7 @@ SPEChargeDistribution::load(Archive& ar, unsigned version)
 
     compensation_factor  = 1.;
     fadc_charge_scale = 1.;
+    integral_ul = 10. * atwd_gaus_mean;
     
     // No residuals here, so just leave it with the default constructor.
   }
@@ -132,6 +133,7 @@ SPEChargeDistribution::load(Archive& ar, unsigned version)
     PDFs.push_back(boost::shared_ptr<Exponential>(new Exponential(exp2_amp, exp2_width)));
     PDFs.push_back(boost::shared_ptr<Gaussian>(new Gaussian(gaus_amp, atwd_gaus_mean, gaus_width)));
     fadc_charge_scale = fadc_gaus_mean / atwd_gaus_mean;
+    integral_ul = 10. * atwd_gaus_mean;
 
     // Pass2 residuals here.
     residuals->SetPass2();
@@ -156,9 +158,9 @@ double SPEChargeDistribution::ComputeMeanCharge() const{
   //algorithm indicates that it produces an average relative error in the computed
   //mean of only 4.2e-06, and the worst observed error is 2.4e-4.
   const double int_tol = 1e-3;
-  double norm = GSL::integrate(*this, 0, 10, int_tol);
+  double norm = GSL::integrate(*this, 0, integral_ul, int_tol);
   auto moment_integrand = [this](double x){ return x*this->operator()(x); };
-  double mom1 = GSL::integrate(moment_integrand, 0, 10, int_tol);
+  double mom1 = GSL::integrate(moment_integrand, 0, integral_ul, int_tol);
   return mom1/norm;
 }
 
@@ -170,9 +172,9 @@ double SPEChargeDistribution::ComputeChargeVariance() const{
   // sampling from the distributions (like in DOMLauncher::PMT's SampleCharge).
   // This is well within the tolerance requirements needed for our purposes.
   const double int_tol = 1e-3;
-  double norm = GSL::integrate(*this, 0, 10, int_tol);
+  double norm = GSL::integrate(*this, 0, integral_ul, int_tol);
   auto moment_integrand = [this](double x){ return x*x*this->operator()(x); };
-  double mom2 = GSL::integrate(moment_integrand, 0, 10, int_tol);
+  double mom2 = GSL::integrate(moment_integrand, 0, integral_ul, int_tol);
   return mom2/norm - std::pow(Mean(), 2);
 }
 
@@ -207,23 +209,23 @@ bool SPEChargeDistribution::vector_equality(const std::vector<PDFPtr>& a,
   return std::equal(a.begin(), a.end(), b.begin(), element_equality);
 }
 
-const std::vector<double> SPEChargeDistribution::Residuals::x_pass2 = {0.0, 0.0025, 0.0125, 0.0225, 0.0325, 0.0425,
-                                                                       0.0525, 0.0625, 0.0725, 0.0825, 0.0925, 0.1025,
-                                                                       0.1125, 0.1225, 0.1325, 0.1425, 0.1525, 0.1625,
-                                                                       0.1725, 0.1825, 0.1925, 0.2025, 0.2125, 0.2225,
-                                                                       0.2325, 0.2425, 0.2525, 0.2625, 0.2725, 0.2825,
-                                                                       0.2925, 0.3025, 0.3125, 0.3225, 0.3325, 0.3425,
-                                                                       0.3525, 0.3625, 0.3725, 0.3825, 0.3925, 0.4025,
-                                                                       0.4125, 0.4225, 0.4325, 0.4425, 0.4525, 0.4625,
-                                                                       0.4725, 0.4825, 0.4925, 0.5025, 0.5125, 0.5225,
-                                                                       0.5325, 0.5425, 0.5525, 0.5625, 0.5725, 0.5825,
-                                                                       0.5925, 0.6025, 0.6125, 0.6225, 0.6325, 0.6425,
-                                                                       0.6525, 0.6625, 0.6725, 0.6825, 0.6925, 0.7025,
-                                                                       0.7125, 0.7225, 0.7325, 0.7425, 0.7525, 0.7625,
-                                                                       0.7725, 0.7825, 0.7925, 0.8025, 0.8125, 0.8225,
-                                                                       0.8325, 0.8425, 0.8525, 0.8625, 0.8725, 0.8825,
-                                                                       0.8925, 0.9025, 0.9125, 0.9225, 0.9325, 0.9425,
-                                                                       0.9525, 0.9625, 0.9725, 0.9825, 0.9925, 5.0};
+const std::vector<double> SPEChargeDistribution::Residuals::x_pass2 = {0.0, 0.0025, 0.0125, 0.0225, 0.0325, 0.042499999999999996,
+                                                                       0.052500000000000005, 0.0625, 0.07250000000000001, 0.0825,
+                                                                       0.0925, 0.10250000000000001, 0.1125, 0.1225, 0.1325, 0.14250000000000002,
+                                                                       0.1525, 0.1625, 0.17250000000000001, 0.1825, 0.1925, 0.2025, 0.2125,
+                                                                       0.2225, 0.2325, 0.2425, 0.2525, 0.2625, 0.2725, 0.28250000000000003,
+                                                                       0.2925, 0.3025, 0.3125, 0.3225, 0.3325, 0.3425, 0.35250000000000004,
+                                                                       0.3625, 0.3725, 0.3825, 0.3925, 0.4025, 0.41250000000000003, 0.4225,
+                                                                       0.4325, 0.4425, 0.4525, 0.4625, 0.47250000000000003, 0.4825, 0.4925,
+                                                                       0.5025, 0.5125, 0.5225, 0.5325, 0.5425, 0.5525, 0.5625, 0.5725, 0.5825,
+                                                                       0.5925, 0.6025, 0.6125, 0.6225, 0.6325000000000001, 0.6425000000000001,
+                                                                       0.6525000000000001, 0.6625000000000001, 0.6725000000000001, 0.6825000000000001,
+                                                                       0.6925000000000001, 0.7025, 0.7124999999999999, 0.7224999999999999,
+                                                                       0.7324999999999999, 0.7424999999999999, 0.7525, 0.7625, 0.7725, 0.7825,
+                                                                       0.7925, 0.8025, 0.8125, 0.8225, 0.8325, 0.8425, 0.8525, 0.8625, 0.8725,
+                                                                       0.8825000000000001, 0.8925000000000001, 0.9025000000000001, 0.9125000000000001,
+                                                                       0.9225000000000001, 0.9325000000000001, 0.9425000000000001, 0.9525000000000001,
+                                                                       0.9624999999999999, 0.9724999999999999, 0.9824999999999999, 0.9924999999999999, 5.0};
 
 const std::vector<double> SPEChargeDistribution::Residuals::y_pass2 = {1.0, 1.0, 1.0, 1.0,
                                                                        1.0, 1.0, 1.0, 1.0,
