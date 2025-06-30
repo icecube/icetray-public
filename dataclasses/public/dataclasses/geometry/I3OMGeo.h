@@ -41,17 +41,33 @@ static const unsigned i3omgeo_version_ = 1;
 class I3OMGeo
 {
 public:
-    enum OMType {UnknownType = 0, AMANDA = 10, IceCube = 20, IceTop = 30, Scintillator = 40, IceAct = 50,
-                 // OMType > 100 are Gen2 R&D sensors
-                 PDOM = 110, isoPDOM=111 ,DEgg = 120, mDOM = 130, WOM = 140, FOM = 150,
-		 DMIce = 160, LOM = 170, LOM16 = 171, LOM18 = 172,
-		 RadioReceiver = 180,
-		 // OMType > 200 for the various calibration sources
-		 POCAM = 200, PencilBeam = 210,
-		 RadioEmitter = 220,
-		 AcousticEmitter = 230,
-		 AbaloneHub = 240,
-		 FibreComm = 250,};
+    enum OMType {
+      UnknownType = 0,
+      AMANDA = 10,
+      IceCube = 20,
+      IceTop = 30,
+      Scintillator = 40,
+      IceAct = 50,
+      // OMType > 100 are Gen2 R&D sensors
+      PDOM = 110,
+      isoPDOM = 111,
+      DEgg = 120,
+      mDOM = 130,
+      WOM = 140,
+      FOM = 150,
+      DMIce = 160,
+      LOM = 170,
+      LOM16 = 171,
+      LOM18 = 172,
+      RadioReceiver = 180,
+      // OMType > 200 for the various calibration sources
+      POCAM = 200,
+      PencilBeam = 210,
+      RadioEmitter = 220,
+      AcousticEmitter = 230,
+      AbaloneHub = 240,
+      FibreComm = 250,
+    };
 
     I3OMGeo():omtype(UnknownType){}
 
