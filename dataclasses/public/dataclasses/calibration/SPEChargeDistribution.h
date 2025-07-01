@@ -238,9 +238,9 @@ struct SPEChargeDistribution
                             compensation_factor(NAN),
                             fadc_charge_scale(NAN),
                             residuals(new Residuals()),
-                            integral_ul(10),
                             mean_charge(NAN),
-                            variance(NAN) {}
+                            variance(NAN),
+                            integral_ul(10) {}
 
   SPEChargeDistribution(double amp_exp1,
                         double width_exp1,
@@ -255,9 +255,9 @@ struct SPEChargeDistribution
     compensation_factor(factor_compensation),
     fadc_charge_scale(gaus_mean_SLC/mean_gaus),
     residuals(new Residuals()),
-    integral_ul(10*mean_gaus),
     mean_charge(NAN),
-    variance(NAN)
+    variance(NAN),
+    integral_ul(10*mean_gaus)
     {
       PDFs.push_back(boost::shared_ptr<Exponential>(new Exponential(amp_exp1, width_exp1)));
       PDFs.push_back(boost::shared_ptr<Exponential>(new Exponential(amp_exp2, width_exp2)));
