@@ -64,13 +64,17 @@ struct SPEChargeDistribution
     Gaussian(double amplitude, double mean, double sigma): amplitude_(amplitude), mean_(mean), sigma_(sigma) {}
     ~Gaussian() {};
     template <class Archive> void serialize(Archive& ar, unsigned version);
-    double RelativeNormalization(){return amplitude_ * std::sqrt(2*I3Constants::pi) * sigma_;}
+    double RelativeNormalization(){
+      double std_gaus_norm = amplitude_ * std::sqrt(2*I3Constants::pi);
+      double truncated_gaus_denom = sigma_ * 0.5 * (1 + std::erf(mean_/sigma_/std::sqrt(2)));
+      return std_gaus_norm * truncated_gaus_denom;
+    }
     double Probability(double q){
       return Weight(q) / RelativeNormalization();
     }
     double Weight(double q){
       double e = (q - mean_) / sigma_;
-      return amplitude_ * exp(-.5 * e *e);
+      return amplitude_ * exp(-.5 * e * e);
     }
     template<class rng> double Sample(boost::shared_ptr<rng> random) {return random->Gaus(mean_, sigma_);}
     bool IsGaussian(){return true;}
