@@ -18,21 +18,26 @@ void* AnythingToVec3d::convertible( PyObject* o ){
     // check whether o is a suitable sequence
     if( PySequence_Size(o) >= 3 ){
         for( int i = 0; i < 3; ++i ){
-            bp::extract<double> n(obj[i]);
+            bp::extract<double> const n(obj[i]);
             if( !n.check() )
-                return 0;
+                return nullptr;
         }
         return o;
     }
 
     // check whether o has suitable attributes
-    const char* attrs[3] = { "x", "y", "z" };
-    for( int i = 0; i < 3; ++i ){
-        if( !PyObject_HasAttrString(o, attrs[i]) )
-            return 0;
-        bp::extract<double> n(obj.attr(attrs[i]));
+    static constexpr std::array<const char *, 3> attrs {"x", "y", "z"};
+    for(auto & attr : attrs){
+#if PY_VERSION_HEX >= 0x030d0000  // python 3.13
+        if( PyObject_HasAttrStringWithError(o, attr) != 1)
+            return nullptr;
+#else
+        if( !PyObject_HasAttrString(o, attr) )
+            return nullptr;
+#endif
+        bp::extract<double> const n(obj.attr(attr));
         if( !n.check() )
-            return 0;
+            return nullptr;
     }
     return o;
 }
@@ -61,6 +66,7 @@ void AnythingToVec3d::construct( PyObject* o,
     const double x = bp::extract<double>(obj.attr("x"));
     const double y = bp::extract<double>(obj.attr("y"));
     const double z = bp::extract<double>(obj.attr("z"));
-    new ( storage ) vec3d( x, y, z );        log_info_stream("xyz " << x << " " << y << " " << z);
+    new ( storage ) vec3d( x, y, z );
+    log_info_stream("xyz " << x << " " << y << " " << z);
     data->convertible = storage;
 }
