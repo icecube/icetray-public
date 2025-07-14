@@ -10,6 +10,12 @@ Release Notes
 main
 ----
 
+Jul. 14, 2025 don la dieu (nega at icecube.umd.edu)
+---------------------------------------------------
+IceTray Release v1.15.3
+
+* Add proper normalization to the gaussian terms to account for the lack of events below 0 PE (#3981)
+
 Jun. 30, 2025 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.15.0
