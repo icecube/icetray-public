@@ -15,11 +15,11 @@
 Python
 ======
 
-We use the *system* python3.  By default this is the one in
-``/usr/bin``.  The development packages are required, eg the file
-``/usr/include/python3.6/Python.h`` and so forth.  After you have
-ensured that you have python and your development packages installed,
-you will probably want to set up additional python tools.
+We use the *system* Python3 (and on macOS, the Python3 provided by Homebrew.)
+By default this is the one in ``/usr/bin``.  The development packages are
+required, eg the file :file:`/usr/include/python3.{x}/Python.h` and so forth.  After
+you have ensured that you have Python and your development packages installed,
+you will probably want to set up additional Python tools.
 
 To build against non-system python:
 
@@ -29,14 +29,17 @@ To build against non-system python:
 
 .. important::
 
-   You should be using Python3. Support for Python2 was dropped at the beginning of 2021.
+   You should be using Python3. Support for Python2 was dropped at the
+   beginning of 2021. Additionally, any Python version that has reached its
+   End-of-Life is unsupported. For a complete list see, the `Status of Python
+   Versions <https://devguide.python.org/versions/>`_.
 
 Setting Up Additional Python Tools
 ----------------------------------
 
 There are several useful python tools that can be added to your local
 environment to provide analysis-level tools like IPython
-(https://ipython.org/), MatPlotLib
+(https://ipython.org/), Matplotlib
 (https://matplotlib.org/), Numpy (https://numpy.org/)
 and PyTables (https://www.pytables.org/). These instructions will help
 you get these additional tools setup and guide you through a few

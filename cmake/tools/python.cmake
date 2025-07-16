@@ -33,7 +33,7 @@
 colormsg("")
 colormsg(HICYAN "python")
 
-find_package(Python 3.6 QUIET REQUIRED COMPONENTS Interpreter Development NumPy)
+find_package(Python 3.8 QUIET REQUIRED COMPONENTS Interpreter Development NumPy)
 message(STATUS "+  version: ${Python_VERSION}")
 message(STATUS "+   binary: ${Python_EXECUTABLE}")
 message(STATUS "+ includes: ${Python_INCLUDE_DIRS}")

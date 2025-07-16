@@ -12,7 +12,7 @@
 # JvS 2009-03-27
 
 import unittest, sys
-from typing import Iterator
+from collections.abc import Iterator
 
 from icecube import icetray, dataclasses
 

@@ -251,7 +251,7 @@ which again should produce output roughly like this::
  *                                                                      *
  *                   W E L C O M E  to  I C E T R A Y                   *
  *                                                                      *
- *                   Version combo.trunk     r177871                    *
+ *        Version icetray.main                     git:bb80750b         *
  *                                                                      *
  *                You are welcome to visit our Web site                 *
  *                        http://icecube.umd.edu                        *
@@ -262,7 +262,7 @@ which again should produce output roughly like this::
     I3_SRC       = /home/olivas/icecube/combo/trunk/src
     I3_BUILD     = /home/olivas/icecube/combo/trunk/build
     I3_TESTDATA  = /home/olivas/icecube/test-data/trunk
-    Python       = 3.6.9
+    Python       = 3.13.1
 
 This has setup up your PATH, LD_LIBRARY_PATH and other environment
 variables so that you are now ready to run IceTray python scripts and

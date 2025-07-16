@@ -7,7 +7,7 @@ from . import i3logging as logging
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from typing import Type, Union, Callable, Optional, Any
+    from typing import Union, Callable, Optional, Any
     from typing_extensions import Self
 
 class I3Tray(_icetray._I3TrayBase):
@@ -47,7 +47,7 @@ class I3Tray(_icetray._I3TrayBase):
                                  % (kind, _type,name), "I3Tray")
         return name
 
-    def Add(self, _type: "Union[str, Type[_icetray.I3Module], Callable[..., Any]]", _name: "Optional[str]"=None, **kwargs):
+    def Add(self, _type: "Union[str, type[_icetray.I3Module], Callable[..., Any]]", _name: "Optional[str]"=None, **kwargs):
         """
         Add a module, service, or segment to the tray.
         """
@@ -77,7 +77,7 @@ class I3Tray(_icetray._I3TrayBase):
         else:
             return method(_type, _name, **kwargs)
 
-    def AddModule(self, _type: "Union[str, Type[_icetray.I3Module], Callable[..., Any]]", _name: "Optional[str]"=None, *, If=None, **kwargs) -> "Self": # type: ignore[override]
+    def AddModule(self, _type: "Union[str, type[_icetray.I3Module], Callable[..., Any]]", _name: "Optional[str]"=None, *, If=None, **kwargs) -> "Self": # type: ignore[override]
         """
         Add a module to the tray's processing stream.
 

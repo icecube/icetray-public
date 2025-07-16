@@ -2,7 +2,8 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 
-from typing import Any, Iterable, Type, Optional
+from typing import Any, Optional
+from collections.abc import Iterable
 
 from icecube import icetray, dataclasses
 from icecube._dataio import (
@@ -13,7 +14,7 @@ from icecube.dataio.I3FileStagerFile import AbstractFileStager
 set_local_scratch_dir = AbstractFileStager.set_local_scratch_dir
 
 def get_stagers(staging_directory=None, extra_stagers=[]):
-    # type: (Optional[str], Iterable[Type[I3FileStager]]) -> I3FileStagerCollection
+    # type: (Optional[str], Iterable[type[I3FileStager]]) -> I3FileStagerCollection
     """
     Set up file stagers for all supported URL schemes.
 

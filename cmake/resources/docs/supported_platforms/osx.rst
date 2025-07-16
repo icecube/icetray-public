@@ -104,8 +104,8 @@ Developer Tools
 You'll need a compiler in order to build the IceCube software. Apple distributes
 clang and llvm-gcc both as a stand-alone download and as part of its Xcode IDE,
 but requires you to register for an `Apple ID`_  before you can download either
-one. **The `Xcode download`_ is 10 times larger than the command-line tools
-package, so you should only download it if you need it for non-IceCube work.**
+one. The `Xcode download`_ is 10 times larger than the command-line tools
+package, so you should **only download it if you need it for non-IceCube work.**
 
 .. _`Apple ID`: https://support.apple.com/apple-id
 .. _`Xcode download`: https://developer.apple.com/downloads
