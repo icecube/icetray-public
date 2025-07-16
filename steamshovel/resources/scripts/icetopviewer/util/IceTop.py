@@ -88,7 +88,7 @@ class IceTop(Detector):
                 amps.append(totalCharge)
                 time.append(pulse[0].t)
 
-        if not len(amps): return
+        if not amps: return
 
         log_amps = np.log10(amps)
         minAmp = min(log_amps)

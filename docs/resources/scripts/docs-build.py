@@ -6,14 +6,22 @@
 
 # mypy: ignore-errors
 
-import os.path, shutil, subprocess, sys, time  # noqa: E401,I001
+
+import argparse
+import os.path
+import shutil
+import subprocess
+import sys
+import time
 import xml.etree.ElementTree as ET
 from collections import deque
 from glob import glob
-from icecube.icetray import i3inspect
 
 # suppress boost python object registration warnings
 from warnings import filterwarnings
+
+from icecube.icetray import i3inspect
+
 filterwarnings("ignore", ".*already registered; second conversion method ignored.", RuntimeWarning)
 
 import logging  # noqa: E402,I001
@@ -120,8 +128,6 @@ cppautodoctxt = """
 """
 
 def main():  # noqa: C901,PLR0912,PLR0915
-
-    import argparse
 
     parser = argparse.ArgumentParser(description='Generate Documentation for IceTray')
     parser.add_argument('--verbose', '-v', action='count')

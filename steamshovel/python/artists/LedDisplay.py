@@ -762,8 +762,7 @@ try:
             # Determine event normalisation
             max_sum_charges = 0.
             charges = {}
-            for led in led_pulses:
-                pulses = led_pulses[led]
+            for led, pulses in led_pulses.items():
                 t0 = pulses[0].time
                 has_npe = hasattr(pulses[0], "npe")
                 has_charge = hasattr(pulses[0], "charge")
@@ -786,9 +785,8 @@ try:
             led_curves = {}
             normalisation = max_sum_charges
             power = self.setting(self._SETTING_COMPRESSION_POWER)
-            for led in charges:
+            for led, pulses in charges.items():
                 brightness = StepFunctionFloat(0)
-                pulses = charges[led]
                 t0 = pulses[0][0]
 
                 if duration:

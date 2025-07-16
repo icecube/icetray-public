@@ -65,8 +65,8 @@ def module_altconfig(module, **altdefargs):
 
     def segment(tray, name, **args):
         mergedargs = altdefargs.copy()
-        for userarg in args.keys():
-            mergedargs[userarg] = args[userarg]
+        for userarg, value in args.items():
+            mergedargs[userarg] = value
 
         # Arguments to AddModule are, in general, case insensitive
         # Resolve any duplicate arguments with case ambiguities in favor
@@ -101,7 +101,7 @@ def timedtraysegment(original_traysegment):
     @icetray.timedtraysegment
     def segment(tray, name, arg=stuff):
     """
-    
+
     @traysegment
     @functools.wraps(original_traysegment)
     def segment_with_timers(tray, name, *args, **kwargs):
@@ -114,12 +114,12 @@ def timedtraysegment(original_traysegment):
             runtime = time.time() - frame[timer_name].value
             del frame[timer_name]
             frame[timer_name] = I3Double(runtime)
-            
+
         tray.Add(start_timer, timer_name+"_start",
                  Streams=[I3Frame.DAQ, I3Frame.Physics])
         return_vals = original_traysegment(tray, name, *args, **kwargs)
         tray.Add(end_timer, timer_name+"_stop",
                  Streams=[I3Frame.DAQ, I3Frame.Physics])
         return return_vals
-        
+
     return segment_with_timers

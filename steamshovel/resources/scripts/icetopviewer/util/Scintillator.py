@@ -74,7 +74,7 @@ class Scintillator(Detector):
                 amps.append(pulse.charge)
                 time.append(pulse.t)
 
-        if not len(amps): return
+        if not amps: return
 
         log_amps = np.log10(amps)
         minAmp = min(log_amps)
