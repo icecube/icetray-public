@@ -4,7 +4,7 @@
 
 import re
 import math
-from icecube.shovelart import *
+from icecube.shovelart import PyQFont, PyArtist
 from icecube import dataclasses
 try: from icecube import simclasses
 except: pass # optional loading of simclasses

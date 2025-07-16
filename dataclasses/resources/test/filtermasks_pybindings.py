@@ -5,7 +5,6 @@
 # SPDX-License-Identifier: BSD-2-Clause
 
 from icecube import icetray, dataclasses
-from icecube.icetray.I3Test import *
 
 from icecube.icetray import I3Units
 

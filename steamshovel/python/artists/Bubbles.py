@@ -2,7 +2,10 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 
-from icecube.shovelart import *
+from icecube.shovelart import (
+    Cylinder, I3TimeColorMap, PyArtist, PyQColor, RangeSetting, Sphere, StepFunctionVec3d, StepFunctionFloat,
+    TimeWindow, TimeWindowColor, vec3d
+)
 
 from icecube import dataclasses
 import math

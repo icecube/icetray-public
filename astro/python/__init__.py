@@ -6,7 +6,12 @@
 # @author Kevin Meagher
 #
 
-from icecube._astro import *
+from icecube._astro import (
+    I3Equatorial, I3Galactic, I3GetDirectionFromEquatorial, I3GetEquatorialFromDirection, I3GetEquatorialFromGalactic,
+    I3GetEquatorialFromSuperGalactic, I3GetGMAST, I3GetGMEST, I3GetGMST, I3GetGalacticFromEquatorial,
+    I3GetGalacticFromSuperGalactic, I3GetMoonDirection, I3GetSunDirection, I3GetSuperGalacticFromEquatorial,
+    I3GetSuperGalacticFromGalactic, I3SuperGalactic, ICECUBE_LATITUDE, ICECUBE_LONGITUDE, converters
+)
 import numpy as np
 from icecube.icetray import I3Units
 from icecube import dataclasses

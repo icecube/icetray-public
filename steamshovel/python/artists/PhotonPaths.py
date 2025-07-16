@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 
-from icecube.shovelart import *
+from icecube.shovelart import PyArtist, I3TimeColorMap
 
 from icecube import dataclasses, phys_services
 from icecube.simclasses import I3PhotonSeriesMap

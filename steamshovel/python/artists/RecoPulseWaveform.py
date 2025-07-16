@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 
 from .mplart import MPLArtist
-from icecube.shovelart import *
+from icecube.shovelart import OMKeySet
 from icecube import dataclasses
 from matplotlib.colors import colorConverter as mplcol
 

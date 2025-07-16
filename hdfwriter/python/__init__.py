@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 
 from icecube import icetray, tableio, dataio
-from icecube._hdfwriter import *
+from icecube._hdfwriter import I3HDFTableService
 
 _OPEN_FILENAMES_KEY = "I3HDFWriter_open_filenames"
 

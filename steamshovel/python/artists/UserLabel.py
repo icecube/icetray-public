@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 
-from icecube.shovelart import *
+from icecube.shovelart import PyArtist, PyQFont
 
 class UserLabel( PyArtist ):
 

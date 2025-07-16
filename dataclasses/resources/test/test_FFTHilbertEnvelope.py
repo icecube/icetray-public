@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 
 import unittest
-from icecube.dataclasses import *
+from icecube.dataclasses import AntennaTimeSeries, I3Position, EFieldTimeSeries, FFTData, FFTData3D, fft
 import numpy as np
 
 def FillTimeSeriesWithData(timeSeries, n, dt):

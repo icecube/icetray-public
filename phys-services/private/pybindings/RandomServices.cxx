@@ -101,5 +101,8 @@ void register_RandomServices()
 								    bp::arg("streamnum"),
 								    bp::arg("instatefile")=std::string(),
 								    bp::arg("outstatefile")=std::string())));
+	bp::scope().attr("I3_USE_SPRNG")=true;
+#else
+    bp::scope().attr("I3_USE_SPRNG")=false;
 #endif
 }

@@ -10,8 +10,7 @@ import numpy as np
 from icecube import icetray
 from icecube import dataclasses
 from icecube.dataclasses import FFTData3D
-from icecube.icetray import *
-from icecube.icetray import I3Units
+from icecube.icetray import logging, I3Units
 from icecube.dataclasses import I3Constants
 from icecube import radcube
 from icecube import taxi_reader

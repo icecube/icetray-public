@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 
-from icecube.shovelart import *
+from icecube.shovelart import PyArtist, PyQColor, RangeSetting, ParticlePoint, TimePoint, vec3d
 from icecube.dataclasses import I3Particle
 
 class PlaneWave( PyArtist ):

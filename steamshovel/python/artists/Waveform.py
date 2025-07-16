@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 
 from .mplart import MPLArtist
-from icecube.shovelart import *
+from icecube.shovelart import OMKeySet
 from icecube import dataclasses
 from icecube.icetray import I3Units
 import matplotlib.gridspec as gridspec
@@ -103,7 +103,7 @@ class Waveform(MPLArtist):
 
 
     def create_plot_raw( self, frame: "I3Frame", fig: "FigureBase" ):
-        
+
         launchmap = dataclasses.I3DOMLaunchSeriesMap.from_frame(frame, self.keys()[0])
         oms: "Sequence[OMKey]" = self.setting( 'OMKeys' )
 

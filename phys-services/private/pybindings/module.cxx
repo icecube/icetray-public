@@ -69,6 +69,9 @@ I3_PYTHON_MODULE(phys_services)
 
 #ifdef I3_USE_PHOTOSPLINE
   register_I3CrossSection();
+  boost::python::scope().attr("I3_USE_PHOTOSPLINE")=true;
+#else
+  boost::python::scope().attr("I3_USE_PHOTOSPLINE")=false;
 #endif
 
 }

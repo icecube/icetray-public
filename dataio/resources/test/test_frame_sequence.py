@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 
 from icecube import icetray, dataio
-from icecube.icetray.i3logging import *
+from icecube.icetray.i3logging import log_debug
 icetray.logging.set_level(icetray.logging.I3LogLevel.LOG_DEBUG)
 
 import os

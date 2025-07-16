@@ -2,7 +2,6 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 
-from icecube.shovelart import *
 from icecube import dataclasses
 from icecube.steamshovel.artists.mplart import MPLArtist
 

@@ -30,7 +30,7 @@ if not devices:
 print(devices)
 
 from icecube import dataclasses
-from icecube.shovelart import *
+from icecube.shovelart import I3TimeColorMap, PyArtist, RangeSetting, StepFunctionFloat, TimeWindowColor
 
 
 class Teensy:

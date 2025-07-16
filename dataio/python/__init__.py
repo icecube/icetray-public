@@ -5,7 +5,9 @@
 from typing import Any, Iterable, Type, Optional
 
 from icecube import icetray, dataclasses
-from icecube._dataio import *
+from icecube._dataio import (
+    I3File, I3FileStager, I3FileStagerCollection, I3FrameSequence, I3TrivialFileStager, filehandle, vector_I3FileStager
+)
 
 from icecube.dataio.I3FileStagerFile import AbstractFileStager
 set_local_scratch_dir = AbstractFileStager.set_local_scratch_dir

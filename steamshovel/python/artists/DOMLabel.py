@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: BSD-2-Clause
 
-from icecube.shovelart import *
+from icecube.shovelart import OMKeySet, PyArtist, PyQFont, PyQColor
 from icecube import dataclasses
 from matplotlib.colors import colorConverter as mplcol
 
