@@ -166,11 +166,6 @@ i3_add_library
       Add compile/link flags to the build of the current library for
       the listed projects.
 
-   .. cmdoption:: ROOTCINT file1.h [file2.h ...]
-
-      If a file LinkDef.h in the root of the project directory exists,
-      attempt to generate and compile in a 'root' dictionary.
-
    .. cmdoption:: LINK_LIBRARIES lib1 [lib2 ... libn]
 
       Link in these additional libraries.

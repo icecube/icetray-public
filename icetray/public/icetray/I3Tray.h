@@ -354,7 +354,7 @@ template <class Type>
 typename boost::enable_if<boost::is_base_of<I3Module,Type>,I3Tray::param_setter>::type
 I3Tray::AddModule(std::string instancename)
 {
-  return this->AddModule(I3::name_of<Type>(), instancename);
+  return this->AddModule(icetray::name_of<Type>(), instancename);
 }
 
 template<typename Type>
@@ -372,7 +372,7 @@ template <class Type>
 I3Tray::param_setter
 I3Tray::AddService(std::string instancename)
 {
-  return this->AddService(I3::name_of<Type>(), instancename);
+  return this->AddService(icetray::name_of<Type>(), instancename);
 }
 
 template<typename RetType>

@@ -13,13 +13,7 @@ class OMKey;
 class I3Particle;
 class I3RecoPulse;
 class I3Geometry;
-
-#ifdef I3_USE_CINT
-// cint needs this for dictionary generation
-#include "dataclasses/I3Position.h"
-#else
 class I3Position;
-#endif
 
 #define CONTAINMENT_FUNCTIONS_AVAILABLE
 

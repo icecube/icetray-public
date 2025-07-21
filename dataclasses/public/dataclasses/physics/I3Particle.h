@@ -18,9 +18,7 @@
 #include <map>
 #include <string>
 
-#ifndef __CINT__
 #include <boost/optional.hpp>
-#endif
 
 /**
  * @brief
@@ -318,20 +316,13 @@ class I3Particle : public I3FrameObject
    * @param shape Shape of the track
    * @param length
    */
-#ifndef __CINT__
   I3Particle(const I3Position pos, const I3Direction dir, const double vertextime,
              ParticleShape shape = Null, double length=NAN);
-#else
-  I3Particle(const I3Position pos, const I3Direction dir, const double vertextime,
-             ParticleShape shape, double length);
-#endif
 
-#ifndef __CINT__
   /** @brief Constructor for particle from boost::optional<I3Particle>
    * @param p A particle
    */
   I3Particle(const boost::optional<I3Particle>& p);
-#endif
 
   std::ostream& Print(std::ostream&) const override;
 

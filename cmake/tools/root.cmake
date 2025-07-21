@@ -29,18 +29,8 @@
 #
 #
 option(USE_ROOT "Build with root" ON)
-option(USE_CINT "Build dictionaries with rootcint" OFF)
 
 set(SYSTEM_PACKAGES_ROOT FALSE)
-
-if(NOT USE_ROOT AND USE_CINT)
-  message(FATAL_ERROR "Cannot use rootcint without root")
-endif(NOT USE_ROOT AND USE_CINT)
-
-if(APPLE)
-  unset(USE_CINT)
-  unset(USE_CINT CACHE)
-endif()
 
 if (USE_ROOT)
   if(NOT ROOT_VERSION)
@@ -139,7 +129,6 @@ if(NOT USE_ROOT OR NOT ROOT_VERSION)
   colormsg("")
   colormsg(HICYAN "root")
   message(STATUS "+ ROOT not found or disabled: building without ROOT support")
-  #add_definitions(-UI3_USE_ROOT -UI3_USE_CINT)
   set(ROOT_INCLUDE_DIR "" CACHE STRING "USE_ROOT is OFF")
   set(ROOT_BIN_DIR "" CACHE STRING "USE_ROOT is OFF")
   # this is added to LD_LIBRARY_PATH
@@ -148,18 +137,12 @@ if(NOT USE_ROOT OR NOT ROOT_VERSION)
   set(ROOTSYS "/USE_ROOT/IS/OFF" CACHE STRING "USE_ROOT is OFF")
   unset(ROOT_FOUND)
   unset(ROOT_FOUND CACHE)
-  unset(USE_CINT)
-  unset(USE_CINT CACHE)
-  set(USE_CINT OFF CACHE BOOL "USE_ROOT is OFF (Can't have CINT without ROOT)")
 else()
 
   set(ROOT_5.18.00_LIBS Core Cint RIO Net Hist Graf Graf3d Gpad Tree Rint Postscript Matrix Physics Minuit)
 
   add_definitions(-DI3_USE_ROOT)
   add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-fno-strict-aliasing>)
-  if (USE_CINT)
-    add_definitions(-DI3_USE_CINT)
-  endif (USE_CINT)
 
   if(NOT SYSTEM_PACKAGES_ROOT)
     set(old_TOOL_SYSTEM_PATH ${TOOL_SYSTEM_PATH})

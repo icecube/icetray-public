@@ -29,72 +29,7 @@
 #  SPDX-License-Identifier: BSD-2-Clause
 #
 
-#
-#  Magic __init__.py needed by everybody
-#
 file(MAKE_DIRECTORY ${LIBRARY_OUTPUT_PATH}/icecube)
-
-#
-# rootcint() handles root dictionary generation
-#
-if(NOT ROOT_FOUND OR NOT USE_CINT)
-  macro(ROOTCINT)
-  endmacro(ROOTCINT)
-else()
-  macro(ROOTCINT TARGET)
-    parse_arguments(ARG
-      "LINKDEF;SOURCES;INCLUDE_DIRECTORIES;USE_TOOLS;USE_PROJECTS"
-      ""
-      ${ARGN}
-      )
-
-    get_directory_property(incdirs INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR})
-    foreach(dir ${incdirs})
-      list(APPEND ROOTCINT_INCLUDE_FLAGS -I${dir})
-    endforeach(dir ${ARG_INCLUDE_DIRECTORIES})
-
-    foreach(TOOL_ ${ARG_USE_TOOLS})
-      string(TOUPPER ${TOOL_} TOOL)
-      foreach(PATH_ ${${TOOL}_INCLUDE_DIR})
-	list(APPEND ROOTCINT_INCLUDE_FLAGS "-I${PATH_}")
-      endforeach(PATH_ ${${TOOL}_INCLUDE_DIR})
-    endforeach(TOOL_ ${ARG_USE_TOOLS})
-
-    foreach(PROJECT ${ARG_USE_PROJECTS})
-      list(APPEND ROOTCINT_INCLUDE_FLAGS -I${CMAKE_SOURCE_DIR}/${PROJECT}/public)
-    endforeach(PROJECT ${ARG_USE_PROJECTS})
-
-    set(ROOTCINT_HEADERS "")
-    set(ROOTINTERNAL_HEADERS "")
-    foreach(header ${ARG_SOURCES})
-      if(EXISTS ${ROOT_INCLUDE_DIR}/${header})
-	# If this is a ROOT header, don't add to dependencies or
-	# rootcint flags as root adds these automagically.
-	list(APPEND ROOTINTERNAL_HEADERS ${header})
-      elseif(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${header})
-	# if it isn't in our project (and isn't a root header), it
-	# isn't legal here, the other project needs to build the dict.
-	# I guess.
-	message("In ${CMAKE_CURRENT_SOURCE_DIR}:")
-	message(FATAL_ERROR "Header '${header}' passed to rootcint does not exist")
-      else()
-	# okay, it exists in our project, add it to our commandline
-	# and be dependent on it.
-	list(APPEND ROOTCINT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/${header})
-      endif()
-    endforeach(header ${ARG_SOURCES})
-
-    add_custom_command(
-      OUTPUT ${TARGET}
-      DEPENDS ${ARG_LINKDEF} ${ROOTCINT_HEADERS}
-      COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh
-      # rootcint found and ROOTSYS set in env-shell.sh path
-      ARGS rootcint -f ${TARGET} -c -DI3_USE_ROOT -DI3_USE_CINT ${ROOTCINT_INCLUDE_FLAGS} ${ROOTCINT_HEADERS} ${ROOTINTERNAL_HEADERS} ${ARG_LINKDEF}
-      COMMENT "Generating ${TARGET} with rootcint"
-      VERBATIM
-      )
-  ENDMACRO(ROOTCINT)
-ENDIF()
 
 #
 # use_projects() helper macro for, uh, using projects.
@@ -153,7 +88,7 @@ macro(i3_add_library THIS_LIB_NAME)
     # parsed arg values from the first.
     #
     parse_arguments(${THIS_LIB_NAME}_ARGS
-      "USE_TOOLS;USE_PROJECTS;ROOTCINT;INSTALL_DESTINATION;LINK_LIBRARIES;COMPILE_FLAGS"
+      "USE_TOOLS;USE_PROJECTS;INSTALL_DESTINATION;LINK_LIBRARIES;COMPILE_FLAGS"
       "MODULE;EXCLUDE_FROM_ALL;WITHOUT_I3_HEADERS;NO_DOXYGEN;IWYU;PYBIND11;NOUNDERSCORE"
       ${ARGN}
       )
@@ -164,30 +99,6 @@ macro(i3_add_library THIS_LIB_NAME)
       )
 
     no_dotfile_glob(${THIS_LIB_NAME}_ARGS_SOURCES ${${THIS_LIB_NAME}_ARGS_DEFAULT_ARGS})
-
-    if(${THIS_LIB_NAME}_ARGS_ROOTCINT)
-      if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/LinkDef.h)
-	set(LINKDEF_FILE ${CMAKE_CURRENT_SOURCE_DIR}/LinkDef.h)
-      else()
-	set(LINKDEF_FILE "NOTFOUND")
-      endif()
-    endif(${THIS_LIB_NAME}_ARGS_ROOTCINT)
-
-    if (LINKDEF_FILE AND ${THIS_LIB_NAME}_ARGS_ROOTCINT AND USE_CINT)
-
-      set (DICTIONARY_SOURCEFILE
-	${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${THIS_LIB_NAME}Dict.cxx)
-
-      set (${THIS_LIB_NAME}_ARGS_SOURCES ${${THIS_LIB_NAME}_ARGS_SOURCES} ${DICTIONARY_SOURCEFILE})
-
-      rootcint(${DICTIONARY_SOURCEFILE}
-	LINKDEF ${LINKDEF_FILE}
-	SOURCES ${${THIS_LIB_NAME}_ARGS_ROOTCINT}
-	USE_PROJECTS ${${THIS_LIB_NAME}_ARGS_USE_PROJECTS} ${THIS_LIB_NAME}
-	USE_TOOLS    ${${THIS_LIB_NAME}_ARGS_USE_TOOLS}
-	)
-
-    endif (LINKDEF_FILE AND ${THIS_LIB_NAME}_ARGS_ROOTCINT AND USE_CINT)
 
     set (ARGS)
     if (${THIS_LIB_NAME}_ARGS_EXCLUDE_FROM_ALL)

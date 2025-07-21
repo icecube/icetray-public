@@ -42,7 +42,6 @@ class I3Waveform
     SiPM = 6
   };
 
-#ifndef __CINT__
   union SourceCompound {
     struct {
       #if BYTE_ORDER == BIG_ENDIAN
@@ -66,7 +65,6 @@ class I3Waveform
       fields.slop = 0;
     }
   } __attribute((packed));
-#endif // __CINT__
 
   /** Describes possible artifacts within the data.
    *
@@ -154,10 +152,7 @@ class I3Waveform
   double binWidth_;
   std::vector<double> waveform_;
   std::vector<StatusCompound> waveformInfo_;
-#ifndef __CINT__
   SourceCompound source_;
-  // Source source_;
-#endif // __CINT__
 
  public:
   I3Waveform() :  startTime_(0), binWidth_(0), source_(ATWD) {}

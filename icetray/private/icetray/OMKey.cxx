@@ -27,10 +27,12 @@
  *  SPDX-License-Identifier: BSD-2-Clause
  *
  */
-#include <icetray/serialization.h>
-#include <icetray/OMKey.h>
+
+#include "icetray/OMKey.h"
+#include "icetray/I3Logging.h"
+#include "icetray/serialization.h"
+#include "icetray/I3FrameObject.h"
 #include <sstream>
-#include <icetray/I3FrameObject.h>
 
 template <class Archive>
 void OMKey::save(Archive& ar, unsigned version) const

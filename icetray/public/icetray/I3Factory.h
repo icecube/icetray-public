@@ -30,8 +30,6 @@
  */
 #ifndef ICETRAY_I3FACTORY_H_INCLUDED
 #define ICETRAY_I3FACTORY_H_INCLUDED
-// yesss we all looooove root
-#ifndef __CINT__
 
 #include <icetray/Singleton.h>
 #include <icetray/I3TrayInfo.h>
@@ -170,5 +168,3 @@ private:
 #define I3_SERVICE_FACTORY(TYPE) I3_REGISTER(I3ServiceFactory, TYPE, StandardCreate)
 
 #endif
-#endif
-

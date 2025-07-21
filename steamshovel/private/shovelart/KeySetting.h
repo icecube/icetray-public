@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <I3/name_of.h>
+#include <icetray/name_of.h>
 #include <icetray/I3Frame.h>
 #ifndef Q_MOC_RUN
 #include <boost/foreach.hpp>
@@ -20,7 +20,7 @@
 /**
  * A setting for a key in an I3Frame that matches any of the stored
  * type names. Stored typne names should match what is returned by
- * I3::name_of(...).
+ * icetray::name_of(...).
  */
 class KeySetting: public ComplexSetting<QString> {
     std::vector<std::string> type_name_;
@@ -37,11 +37,11 @@ public:
     KeySetting( const QString& val = "" ) :
         ComplexSetting<QString>( val ), type_name_(5)
     {
-        type_name_[0] = I3::name_of<T0>();
-        type_name_[1] = I3::name_of<T1>();
-        type_name_[2] = I3::name_of<T2>();
-        type_name_[3] = I3::name_of<T3>();
-        type_name_[4] = I3::name_of<T4>();
+        type_name_[0] = icetray::name_of<T0>();
+        type_name_[1] = icetray::name_of<T1>();
+        type_name_[2] = icetray::name_of<T2>();
+        type_name_[3] = icetray::name_of<T3>();
+        type_name_[4] = icetray::name_of<T4>();
         std::sort(type_name_.begin(), type_name_.end());
     }
 
@@ -52,10 +52,10 @@ public:
     KeySetting( const QString& val = "" ) :
         ComplexSetting<QString>( val ), type_name_(4)
     {
-        type_name_[0] = I3::name_of<T0>();
-        type_name_[1] = I3::name_of<T1>();
-        type_name_[2] = I3::name_of<T2>();
-        type_name_[3] = I3::name_of<T3>();
+        type_name_[0] = icetray::name_of<T0>();
+        type_name_[1] = icetray::name_of<T1>();
+        type_name_[2] = icetray::name_of<T2>();
+        type_name_[3] = icetray::name_of<T3>();
         std::sort(type_name_.begin(), type_name_.end());
     }
 
@@ -65,9 +65,9 @@ public:
     KeySetting( const QString& val = "" ) :
         ComplexSetting<QString>( val ), type_name_(3)
     {
-        type_name_[0] = I3::name_of<T0>();
-        type_name_[1] = I3::name_of<T1>();
-        type_name_[2] = I3::name_of<T2>();
+        type_name_[0] = icetray::name_of<T0>();
+        type_name_[1] = icetray::name_of<T1>();
+        type_name_[2] = icetray::name_of<T2>();
         std::sort(type_name_.begin(), type_name_.end());
     }
 
@@ -76,8 +76,8 @@ public:
     KeySetting( const QString& val = "" ) :
         ComplexSetting<QString>( val ), type_name_(2)
     {
-        type_name_[0] = I3::name_of<T0>();
-        type_name_[1] = I3::name_of<T1>();
+        type_name_[0] = icetray::name_of<T0>();
+        type_name_[1] = icetray::name_of<T1>();
         std::sort(type_name_.begin(), type_name_.end());
     }
 
@@ -85,7 +85,7 @@ public:
     KeySetting( const QString& val = "" ) :
         ComplexSetting<QString>( val ), type_name_(1)
     {
-        type_name_[0] = I3::name_of<T0>();
+        type_name_[0] = icetray::name_of<T0>();
     }
 
     // constructors for Python (used in Types.cpp)

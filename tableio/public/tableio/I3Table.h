@@ -15,9 +15,6 @@
 #include "icetray/I3Logging.h"
 #include <string>
 
-#include "icetray/IcetrayFwd.h"
-//#include "tableio/I3TableService.h"
-
 I3_FORWARD_DECLARATION(I3TableRowDescription);
 I3_FORWARD_DECLARATION(I3TableRow);
 I3_FORWARD_DECLARATION(I3EventHeader);

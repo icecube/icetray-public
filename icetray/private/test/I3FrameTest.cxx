@@ -487,7 +487,7 @@ TEST(type_id)
   f.Put("i", i);
 
   const std::type_info* ti = f.type_id("i");
-  log_trace("mine = %s vs %s", I3::name_of(typeid(i.get())).c_str(), I3::name_of(*ti).c_str());
+  log_trace("mine = %s vs %s", icetray::name_of(typeid(i.get())).c_str(), icetray::name_of(*ti).c_str());
   auto& r = *i.get();
   ENSURE_EQUAL(ti, &typeid(r));
 }

@@ -912,7 +912,6 @@ boost::assign::list_of<std::pair<int, I3Particle::ParticleType> >
 (3025, I3Particle::Mn55Nucleus)
 (3026, I3Particle::Fe56Nucleus);
 
-#ifndef __CINT__
 I3Particle::I3Particle(const boost::optional<I3Particle>& p) :
   ID_(p->ID_),
   pdgEncoding_(p->pdgEncoding_),
@@ -926,8 +925,6 @@ I3Particle::I3Particle(const boost::optional<I3Particle>& p) :
   status_(p->status_),
   locationType_(p->locationType_)
 {}
-#endif
-
 
 template <class Archive>
   void I3Particle::save(Archive& ar, unsigned version) const

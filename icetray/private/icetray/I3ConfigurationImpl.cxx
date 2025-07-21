@@ -30,7 +30,7 @@
  */
 #include <icetray/I3Logging.h>
 #include <icetray/I3ConfigurationImpl.h>
-#include <I3/name_of.h>
+#include <icetray/name_of.h>
 #include <icetray/serialization.h>
 
 #include <icetray/I3Parameter.h>

@@ -40,7 +40,7 @@
 #include <icetray/I3DefaultName.h>
 
 #include <icetray/is_shared_ptr.h>
-#include <I3/name_of.h>
+#include <icetray/name_of.h>
 #include <I3/hash_map.h>
 
 #include <boost/any.hpp>
@@ -176,13 +176,13 @@ class I3Context
         sp_t = boost::any_cast<boost::shared_ptr<T> >(iter->second);
       } catch (const boost::bad_any_cast &e) {
         log_fatal("error getting object \"%s\" out of context as \"%s\"",
-	  	  where.c_str(), I3::name_of<T>().c_str());
+                  where.c_str(), icetray::name_of<T>().c_str());
         sp_t = boost::shared_ptr<T>();
       }
     } catch (const boost::python::error_already_set &e) {
       PyErr_Clear();
       log_fatal("error getting object \"%s\" out of context as \"%s\"",
-		where.c_str(), I3::name_of<T>().c_str());
+                where.c_str(), icetray::name_of<T>().c_str());
       sp_t = boost::shared_ptr<T>();
     }
 
@@ -237,7 +237,7 @@ class I3Context
       std::string error_message = "Context item at ";
       error_message += where;
       error_message += " of type ";
-      error_message += I3::name_of(typeid(iter->second));
+      error_message += icetray::name_of(typeid(iter->second));
       error_message += " has no loaded pybindings";
       PyErr_SetString(PyExc_TypeError, error_message.c_str());
       boost::python::throw_error_already_set();

@@ -55,7 +55,7 @@ I3Context::dump() const
        iter != map_.end();
        iter++)
     {
-      oss << "   '" << iter->first << " ==> " << I3::name_of(typeid(iter->second)) << "\n";
+      oss << "   '" << iter->first << " ==> " << icetray::name_of(typeid(iter->second)) << "\n";
     }
   oss << "]\n";
   return oss.str();

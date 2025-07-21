@@ -389,7 +389,7 @@ string I3Frame::type_name(const value_t& value)
   string* strp = const_cast<string*>(&value.blob.type_name);
 
   const I3FrameObject& obj=*(value.ptr.get());
-  *strp = value.ptr ? I3::name_of(typeid(obj)) : "(null)";
+  *strp = value.ptr ? icetray::name_of(typeid(obj)) : "(null)";
 
   // and return that
   return value.blob.type_name;
@@ -476,7 +476,7 @@ const static i3frame_version_t version = 6;
 void I3Frame::create_blob_impl(I3Frame::value_t &value)
 {
   const I3FrameObject& obj=*(value.ptr.get());
-  value.blob.type_name = value.ptr ? I3::name_of(typeid(obj)) : "(null)";
+  value.blob.type_name = value.ptr ? icetray::name_of(typeid(obj)) : "(null)";
 
   typedef io::stream<io::back_insert_device<vector<char> > > vecstream_t;
   vecstream_t blobBufStream(value.blob.buf);

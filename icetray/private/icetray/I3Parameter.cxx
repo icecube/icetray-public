@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: BSD-2-Clause
 
-#include <I3/name_of.h>
+#include <icetray/name_of.h>
 #include <icetray/I3Parameter.h>
 
 #include <icetray/serialization.h>

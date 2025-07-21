@@ -5,12 +5,10 @@
 #ifndef I3ParticleID_H_INCLUDED
 #define I3ParticleID_H_INCLUDED
 
-#include <icetray/I3PointerTypedefs.h>
-#include <dataclasses/I3Map.h>
-
-#ifndef __CINT__
-#include <icetray/serialization.h>
-#endif
+#include "icetray/I3PointerTypedefs.h"
+#include "icetray/serialization.h"
+#include "dataclasses/I3Map.h"
+#include "I3/hash_map.h"
 
 /**
  * @brief A single object for holding the ID numbers of an I3Particle
@@ -83,7 +81,6 @@ struct I3ParticleID{
 #endif
 
 private:
-#ifndef __CINT__
   friend class icecube::serialization::access;
 
   template <class Archive> void serialize(Archive & ar, const unsigned version)
@@ -91,7 +88,6 @@ private:
     ar & make_nvp("majorID",majorID);
     ar & make_nvp("minorID",minorID);
   }
-#endif
 };
 
 I3_POINTER_TYPEDEFS(I3ParticleID);
@@ -99,9 +95,6 @@ typedef I3Map<I3ParticleID, double> I3MapI3ParticleIDDouble;
 I3_POINTER_TYPEDEFS(I3MapI3ParticleIDDouble);
 
 std::ostream& operator<<(std::ostream &, const I3ParticleID &);
-
-#ifndef __CINT__
-#include <I3/hash_map.h>
 
 #ifdef USING_GCC_EXT_HASH_MAP
 
@@ -135,7 +128,6 @@ struct i3hash<I3ParticleID>{
 #endif
 };
 
-#endif
 #endif
 
 #endif

@@ -71,7 +71,6 @@ if(Boost_FOUND)
 	  endif()
 	endforeach()
 	set(REAL_BOOST_LIBRARIES ${REAL_BOOST_LIBRARIES} CACHE STRING "Mapping of boost cmake target names to actual locations")
-	include_directories(${CMAKE_SOURCE_DIR}/cmake/tool-patches/boost-new)
 
 	message(STATUS "+  version: ${Boost_VERSION}")
 	message(STATUS "+ includes: ${BOOST_INCLUDE_DIR}")

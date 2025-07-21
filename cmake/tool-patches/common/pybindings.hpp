@@ -9,7 +9,7 @@
 #include <cctype>
 #include <boost/shared_ptr.hpp>
 #include "icetray/I3FrameObject.h"
-#include "I3/name_of.h"
+#include "icetray/name_of.h"
 
 #include <boost/python.hpp>
 #include <boost/python/suite/indexing/indexing_suite.hpp>

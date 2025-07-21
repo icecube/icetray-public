@@ -13,6 +13,8 @@
 #include "dataclasses/I3Vector.h"
 #include "icetray/OMKey.h"
 #include "dataclasses/I3Map.h"
+#include "icetray/I3Frame.h"
+
 
 /**
  * @brief A storage class for extracted pulses from a feature extractor
@@ -126,15 +128,8 @@ I3_POINTER_TYPEDEFS(I3RecoPulseMap);
  * in the frame into I3RecoPulseSeriesMaps.
  */
 
-// need to hide this from ROOT
-#ifndef __CINT__
-#include "icetray/I3Frame.h"
-
 template <>
 I3RecoPulseSeriesMapConstPtr
 I3Frame::Get(const std::string& name, void*, void*) const;
-#endif //__CINT__
 
 #endif //I3RECOPULSE_H_INCLUDED
-
-

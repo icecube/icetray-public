@@ -73,8 +73,6 @@ static double sprng_get_double(void * vstate)
   return( (double) sprng(stream->streamptr));
 }
 
-// rootcint 4.04.02 barfs on this.  stupid, stupid.
-#ifndef __CINT__
 static const gsl_rng_type gsl_rng_sprng20 =
   {"sprng20",        	/* name */
    0x7fffffffUL,     	/* RAND_MAX */
@@ -84,7 +82,6 @@ static const gsl_rng_type gsl_rng_sprng20 =
    &sprng_get,          /* get integer RN */
    &sprng_get_double  	/* get double RN */
 };
-#endif
 
 inline gsl_rng *gsl_sprng_init(int seed, int nstreams, int streamnum, char *state=NULL,
     uint64_t icalls=0, uint64_t dcalls=0)

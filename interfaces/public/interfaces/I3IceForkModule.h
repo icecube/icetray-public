@@ -24,7 +24,7 @@ class I3IceForkModule : public I3Module
  public:
   I3IceForkModule(const I3Context& context) :
     I3Module(context),
-    decisionName_(I3::name_of<IcePick>()),
+    decisionName_(icetray::name_of<IcePick>()),
     pick_(context)
     {
       // Synchronize the two configurations via the back door

@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: BSD-2-Clause
 
-#include <icetray/serialization.h>
 #include "dataclasses/TankKey.h"
+#include "icetray/I3Logging.h"
+#include "icetray/serialization.h"
 
 template <typename Archive>
 void

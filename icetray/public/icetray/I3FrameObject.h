@@ -33,9 +33,6 @@
 
 #include <icetray/I3PointerTypedefs.h>
 
-#ifdef __CINT__
-#include <zlib.h>
-#endif
 /**
    This is the mother of all classes that can live in the I3Frame.
    Exists strictly to provide a common base class for objects that

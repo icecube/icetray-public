@@ -255,7 +255,7 @@ protected:
  * Macro for C++ artist to specify their required types.
  * See examples within artists directory.
  */
-#define ARTIST_SEQ_TYPES( r, u, T ) t.push_back( I3::name_of<T>() );
+#define ARTIST_SEQ_TYPES( r, u, T ) t.push_back( icetray::name_of<T>() );
 
 #define ARTIST_REQUIRED_TYPES( SEQ )                            \
     virtual std::string description();                          \

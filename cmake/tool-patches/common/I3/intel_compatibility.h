@@ -20,12 +20,4 @@
 //
 #pragma warning (disable:193)
 
-#ifdef __CINT__
-//
-//  rootcint generates code that gets you zillions of
-//  'type qualifier is meaningless on cast type'.
-//
-#pragma warning (disable:191)
-#endif
-
 #endif

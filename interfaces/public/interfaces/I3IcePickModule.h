@@ -30,7 +30,7 @@ class I3IcePickModule : public I3ConditionalModule
  public:
   I3IcePickModule(const I3Context& context) :
     I3ConditionalModule(context),
-    decisionName_(I3::name_of<IcePick>()),
+    decisionName_(icetray::name_of<IcePick>()),
     discardEvents_(false),
     invertoutput_(false),
     pick_(context),

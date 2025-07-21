@@ -5,7 +5,6 @@
 #ifndef ICETRAY_NAME_OF_H_INCLUDED
 #define ICETRAY_NAME_OF_H_INCLUDED
 
-#ifndef __CINT__
 #include <string>
 #include <typeinfo>
 
@@ -20,5 +19,4 @@ namespace icetray
   }
 }
 
-#endif
 #endif

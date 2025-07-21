@@ -46,7 +46,7 @@
 #include <icetray/I3Logging.h>
 #include <icetray/IcetrayFwd.h>
 #include <icetray/is_shared_ptr.h>
-#include <I3/name_of.h>
+#include <icetray/name_of.h>
 
 /**
    The I3Frame is the container that I3Modules use to communicate with
@@ -347,7 +347,7 @@ class I3Frame
       typename boost::enable_if<is_shared_ptr<T> >::type * = 0,
       typename boost::enable_if<boost::is_const<typename T::element_type> >::type* = 0) const
   {
-    log_trace("Get<%s>(\"%s\")", I3::name_of<T>().c_str(), name.c_str());
+    log_trace("Get<%s>(\"%s\")", icetray::name_of<T>().c_str(), name.c_str());
 
     map_t::iterator iter = map_.find(name);
     if (iter == map_.end())
@@ -368,7 +368,7 @@ class I3Frame
   Get(const std::string& name = I3DefaultName<T>::value(),
       typename boost::disable_if<is_shared_ptr<T> >::type * = 0) const
   {
-    log_trace("Get<%s>(\"%s\")", I3::name_of<T>().c_str(), name.c_str());
+    log_trace("Get<%s>(\"%s\")", icetray::name_of<T>().c_str(), name.c_str());
 
     boost::shared_ptr<const T> sp_t = this->template Get<boost::shared_ptr<const T> >(name);
     if (!sp_t){
@@ -377,13 +377,13 @@ class I3Frame
         }else{
           log_fatal("object in frame at \"%s\" exists, but "
                     "won't dynamic cast to type \"%s\"",
-                    name.c_str(), I3::name_of<T>().c_str());
+                    name.c_str(), icetray::name_of<T>().c_str());
         }
     }
     else if (sp_t.unique())
       log_fatal("cannot get synthetic frame object \"%s\" (\"%s\") "
                 "by reference, only by shared pointer",
-                name.c_str(), I3::name_of<T>().c_str());
+                name.c_str(), icetray::name_of<T>().c_str());
     else
       return *sp_t;
   }

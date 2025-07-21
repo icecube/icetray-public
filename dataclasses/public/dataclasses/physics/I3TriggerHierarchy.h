@@ -18,6 +18,8 @@
 #include "dataclasses/I3Tree.h"
 #include "dataclasses/physics/I3Trigger.h"
 #include "icetray/I3DefaultName.h"
+#include "icetray/I3Frame.h"
+
 
 /**
  * Type definition for a n-ary tree of I3Trigger.
@@ -53,14 +55,9 @@ I3_POINTER_TYPEDEFS(I3TriggerHierarchy);
  * in the frame into I3TriggerHierarchies.
  */
 
-// need to hide this from ROOT
-#ifndef __CINT__
-#include "icetray/I3Frame.h"
-
 template <>
 I3TriggerHierarchyConstPtr
 I3Frame::Get(const std::string& name, void*, void*) const;
-#endif //__CINT__
 
 /**
  * define a default name to address hierarchy in a frame

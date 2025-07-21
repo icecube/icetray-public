@@ -231,11 +231,11 @@ bool
 Particles::isValidKey( I3FramePtr ptr, int key_idx, const std::string& key )
 {
   const std::string type_name = ptr->type_name(key);
-  return type_name == I3::name_of<I3Particle>() ||
-         type_name == I3::name_of<I3Vector<I3Particle> >() ||
-         type_name == I3::name_of<I3MCTree>() || // new I3MCTree
+  return type_name == icetray::name_of<I3Particle>() ||
+         type_name == icetray::name_of<I3Vector<I3Particle> >() ||
+         type_name == icetray::name_of<I3MCTree>() || // new I3MCTree
          type_name == "I3Tree<I3Particle>" || // old I3MCTree
-         type_name == I3::name_of<I3LinearizedMCTree>();
+         type_name == icetray::name_of<I3LinearizedMCTree>();
 }
 
 void

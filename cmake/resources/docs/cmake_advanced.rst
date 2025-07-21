@@ -82,9 +82,6 @@ Not all of the variables are useful.  Here are some that are:
    * - .. attribute:: USE_ROOT
      - Build with `ROOT <https://root.cern>`_ support. Disabling this option will cause some projects to be skipped when building. IceTop users will want this option to be on.
      - ON
-   * - .. attribute:: USE_CINT
-     - Build dictionaries with `rootcint <https://root.cern/root/html534/guides/users-guide/CINT.html>`_. rootcint support is deprecated as of April 1st, 2015, and this option will soon do nothing.
-     - OFF
    * - .. attribute:: USE_CCACHE
      - Use `ccache <https://ccache.dev/>`_ to aid in compilation. Requires administrator setup in order to use efficiently on multi-user systems.
      - OFF

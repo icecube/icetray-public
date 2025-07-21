@@ -16,9 +16,7 @@
 
 #include <icetray/I3Logging.h>
 #include <dataclasses/Utility.h>
-#ifndef __CINT__
 #include <boost/optional.hpp>
-#endif
 
 /**
  * List the names of enumeration members defined in this file
@@ -149,9 +147,7 @@ class TriggerKey
   SourceID source_;
   TypeID type_;
   SubtypeID subtype_;
-#ifndef __CINT__
   boost::optional<int> configID_;
-#endif
 
  public:
   /**

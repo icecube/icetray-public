@@ -15,7 +15,7 @@
 #include "tableio/I3TableWriter.h"
 #include "tableio/I3TableService.h"
 #include "tableio/converter/I3IndexColumnsGenerator.h"
-#include <I3/name_of.h>
+#include <icetray/name_of.h>
 
 #include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
@@ -55,7 +55,7 @@ I3TableWriter::~I3TableWriter() {};
 
 template <typename T>
 std::string name_of(const boost::shared_ptr<T> obj) {
-    return I3::name_of(typeid(*(obj.get())));
+    return icetray::name_of(typeid(*(obj.get())));
 }
 
 /******************************************************************************/
@@ -236,7 +236,7 @@ void I3TableWriter::Setup() {
 const std::string I3TableWriter::GetTypeName(I3FramePtr frame, const std::string& key) {
 	std::string typeName;
 	try {
-		typeName = I3::name_of(*frame->type_id(key));
+		typeName = icetray::name_of(*frame->type_id(key));
 	} catch (...) {
 		typeName = "";
 	}

@@ -33,8 +33,6 @@
 
 #include <boost/version.hpp>
 
-#ifndef __CINT__
-
 #include <icetray/i3_extended_type_info.h>
 #include <archive/xml_iarchive.hpp>
 #include <archive/xml_oarchive.hpp>
@@ -98,30 +96,5 @@ AsXML(const T& t)
   template void T::load(icecube::archive::portable_binary_iarchive&, unsigned); \
   template void T::load(icecube::archive::xml_iarchive&, unsigned);	\
   template void T::save(icecube::archive::xml_oarchive&, unsigned) const;
-
-
-#else // __CINT__
-
-#define I3_CLASS_VERSION(T,V)
-#define I3_IS_ABSTRACT(X)
-#define I3_CLASS_EXPORT(X)
-#define I3_SHARED_POINTER_EXPORT(X)
-#define I3_SERIALIZATION_SPLIT_MEMBER()
-
-namespace icecube
-{
-  namespace serialization
-  {
-    // normal forward declarations:
-    template <class T> struct nvp;
-    template <class T> const nvp<T> make_nvp(const char* name, T& t);
-
-    template <class Retval, class Derived>
-      Retval base_object(Derived);
-  }
-}
-using icecube::serialization::make_nvp;
-
-#endif
 
 #endif //BOOSTHEADERS_H_INCLUDED

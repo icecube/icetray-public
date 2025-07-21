@@ -20,7 +20,7 @@
 #include <string>
 #include <cctype>
 
-#include <I3/name_of.h>
+#include <icetray/name_of.h>
 
 /**
  * \brief Represents an atomic datatype
@@ -65,7 +65,7 @@ struct I3Datatype {
 template <typename T>
 I3Datatype I3DatatypeFromNativeType()
 {
-  std::string label = I3::name_of<T>();
+  std::string label = icetray::name_of<T>();
   BOOST_STATIC_ASSERT(boost::is_pod<T>::value);
 
     I3Datatype dtype;
@@ -108,7 +108,7 @@ static I3Datatype I3DatatypeFromNativeType(const std::vector<std::pair< std::str
     dtype.kind = I3Datatype::Enum;
     dtype.is_signed = true; // some dataclasses use signed values in enums
 
-    dtype.description = I3::name_of<T>();
+    dtype.description = icetray::name_of<T>();
     // copy the enum members into the map
     typename std::vector<std::pair<std::string,T> >::const_iterator it;
     for (it = enum_labels.begin(); it != enum_labels.end(); it++) {

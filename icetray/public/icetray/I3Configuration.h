@@ -31,7 +31,6 @@
 #ifndef ICETRAY_I3CONFIGURATION_H_INCLUDED
 #define ICETRAY_I3CONFIGURATION_H_INCLUDED
 
-#ifndef __CINT__
 #include <string>
 #include <map>
 #include <iosfwd>
@@ -147,7 +146,5 @@ std::ostream& operator<<(std::ostream&, const I3Configuration&);
 
 I3_DEFAULT_NAME(I3Configuration);
 I3_POINTER_TYPEDEFS(I3Configuration);
-
-#endif // ndef __CINT__
 
 #endif // I3CONFIGURATION_H
