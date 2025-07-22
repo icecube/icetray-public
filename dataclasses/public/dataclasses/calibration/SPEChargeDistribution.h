@@ -12,17 +12,14 @@
 #ifndef SPECHARGEDISTRIBUTION_H_INCLUDED
 #define SPECHARGEDISTRIBUTION_H_INCLUDED
 
+#include "icetray/I3Logging.h"
+#include "icetray/OMKey.h"
+#include "dataclasses/I3Constants.h"
+#include "dataclasses/external/CompareFloatingPoint.h"
+
 #include <string>
-#include <numeric>
 #include <vector>
 #include <cmath>
-
-#include <icetray/serialization.h>
-#include <dataclasses/I3Constants.h>
-#include <dataclasses/external/CompareFloatingPoint.h>
-
-#include <icetray/I3Units.h>
-#include <icetray/OMKey.h>
 
 static const unsigned SPEChargeDistribution_version_ = 3;
 static const unsigned SPEChargeDistribution_PDF_version_ = 0;
