@@ -241,7 +241,7 @@ struct SPEChargeDistribution
                             residuals(new Residuals()),
                             mean_charge(NAN),
                             variance(NAN),
-                            integral_ul(10) {}
+                            integral_ul(10.) {}
 
   SPEChargeDistribution(double amp_exp1,
                         double width_exp1,
@@ -258,7 +258,7 @@ struct SPEChargeDistribution
     residuals(new Residuals()),
     mean_charge(NAN),
     variance(NAN),
-    integral_ul(10*mean_gaus)
+    integral_ul(10.*mean_gaus)
     {
       PDFs.push_back(boost::shared_ptr<Exponential>(new Exponential(amp_exp1, width_exp1)));
       PDFs.push_back(boost::shared_ptr<Exponential>(new Exponential(amp_exp2, width_exp2)));

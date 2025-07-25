@@ -90,6 +90,7 @@ SPEChargeDistribution::save(Archive& ar, unsigned version) const
   ar & make_nvp("CompensationFactor", compensation_factor);
   ar & make_nvp("FADCChargeScale", fadc_charge_scale);
   ar & make_nvp("residuals", residuals);
+  ar & make_nvp("integral_ul", integral_ul);
 }
 
 template <class Archive>
@@ -143,6 +144,7 @@ SPEChargeDistribution::load(Archive& ar, unsigned version)
     ar & make_nvp("CompensationFactor", compensation_factor);
     ar & make_nvp("FADCChargeScale", fadc_charge_scale);
     ar & make_nvp("residuals", residuals);
+    ar & make_nvp("integral_ul", integral_ul);
   }
 
 }
