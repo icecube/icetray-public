@@ -146,6 +146,7 @@ set(DATACLASSES_PYTHON_TEST_SCRIPTS
   resources/test/test_disabling_of_python_dynamism.py
   resources/test/test_CountEqualKeys.py
   resources/test/test_names_and_masses.py
+  resources/test/test_meanspe_roundtrip.py
   )
 
 if(Python_VERSION_MAJOR VERSION_GREATER_EQUAL 3)
