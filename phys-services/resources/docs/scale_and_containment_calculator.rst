@@ -53,8 +53,8 @@ Here's an example of how you can compute the scaling factor (or "containment val
   # Specify your favorite track
   track = frame["NameOfMyFavoriteTrack"]
   # Compute the scaling factors; these will be numbers, either less than or greater than 1.0:
-  volume_containment = calc.icecube_scale(track)
-  area_containment = calc.icetop_scale(track)
+  volume_containment = calc.scale_icecube(track)
+  area_containment = calc.scale_icetop(track)
 
 Note that you need to specify not only the detector's I3Geometry, but also a description of how you'd like to define its "boundary."
 You can let it guess one based on the number of strings in the geometry, or you can choose one of several pre-defined options (below), or

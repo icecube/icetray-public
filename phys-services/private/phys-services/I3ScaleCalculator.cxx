@@ -458,16 +458,14 @@ double I3ScaleCalculator::ScaleInIceCascade (I3Particle part,bool areaonly) cons
   referenceTrack.SetDir (0, 0); // change to zenith 0
 
   // calculate the AreaSize
-  double areaScale
-    = I3Cuts::ContainmentAreaSize (referenceTrack, x, y, zMiddle);
+  double areaScale = I3Cuts::ContainmentAreaSize (referenceTrack, x, y, zMiddle);
 
   // calculate the z-Scale
-  double zScale = abs (referenceTrack.GetZ () - zMiddle)
-    / (zTop - zMiddle);
+  double zScale = abs (referenceTrack.GetZ () - zMiddle) / (zTop - zMiddle);
 
   if (areaonly) {
-  // return only the scaled area
-  return areaScale;
+    // return only the scaled area
+    return areaScale;
   }
   // return the minimum of both
   return std::max (zScale,  areaScale);
