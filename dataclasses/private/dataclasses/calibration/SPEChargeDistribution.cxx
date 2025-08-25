@@ -208,6 +208,9 @@ static bool element_equality(const PDFPtr& a, const PDFPtr& b){
 
 bool SPEChargeDistribution::vector_equality(const std::vector<PDFPtr>& a,
                                             const std::vector<PDFPtr>& b) const{
+  if (a.size() != b.size()){
+    return false;
+  }
   return std::equal(a.begin(), a.end(), b.begin(), element_equality);
 }
 
