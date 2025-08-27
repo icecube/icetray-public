@@ -21,7 +21,7 @@
 #include <vector>
 #include <cmath>
 
-static const unsigned SPEChargeDistribution_version_ = 3;
+static const unsigned SPEChargeDistribution_version_ = 4;
 static const unsigned SPEChargeDistribution_PDF_version_ = 0;
 
 /**

@@ -139,11 +139,13 @@ SPEChargeDistribution::load(Archive& ar, unsigned version)
     // Pass2 residuals here.
     residuals->SetPass2();
   }
-  if (version == 3){
+  if (version >= 3){
     ar & make_nvp("PDFs", PDFs);
     ar & make_nvp("CompensationFactor", compensation_factor);
     ar & make_nvp("FADCChargeScale", fadc_charge_scale);
     ar & make_nvp("residuals", residuals);
+  }
+  if (version == 4){
     ar & make_nvp("integral_ul", integral_ul);
   }
 
