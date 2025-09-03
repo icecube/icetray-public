@@ -42,7 +42,6 @@
 #include <icetray/I3Logging.h>
 #include <icetray/counter64.hpp>
 
-#include "http_source.hpp"
 #include "socket_source.hpp"
 
 #ifdef I3_WITH_ZSTD
@@ -119,17 +118,11 @@ namespace I3 {
       if (filename.find("socket://") == 0) {
         boost::iostreams::file_descriptor_source fs = create_socket_source(filename);
         ifs.push(fs);
-      }
-#if BOOST_VERSION < 108700
-      else if (filename.find("http://") == 0) {
-        ifs.push(http_source(filename));
-      }
-#endif
-      else {
+      } else {
         boost::iostreams::file_source fs(filename);
         if (!fs.is_open())
         log_fatal("problems opening file '%s' for reading.  Check permissions, paths.",
-		    filename.c_str());
+                  filename.c_str());
         ifs.push(fs);
       }
 

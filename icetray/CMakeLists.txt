@@ -126,7 +126,6 @@ i3_add_library(icetray
   private/icetray/memory.cxx
   private/icetray/scratch.cxx
   private/open/open.cxx
-  private/open/http_source.cpp
 
   #
   #  Modules:  testing and example
