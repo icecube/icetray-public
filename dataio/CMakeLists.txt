@@ -59,10 +59,6 @@ else()
   colormsg(CYAN "+-- dataio-shovel *not* included (missing CDK or ncurses libraries)")
 endif()
 
-# symlink for dataio-pyshovel
-execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink dataio-shovel dataio-pyshovel
-                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
 ## expect is needed for the datio-shovel-test
 find_program(EXPECT expect)
 

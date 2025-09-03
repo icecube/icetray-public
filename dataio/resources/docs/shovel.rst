@@ -29,19 +29,3 @@ that generated the datafile, including all module parameters, svn
 information, time of run, hostname, compiler and root versions, and
 operating system type. Full help is available in the shovel itself.
 
-
-dataio-pyshovel
----------------
-
-The dataio-pyshovel is a rewrite of dataio-shovel in python instead
-of C++.  This allows I3RecoPulseMapMasks and similar objects to be
-translated to human-readible things, and enables the 'o' or 'enter'
-keys to provide a pretty printout of objects.
-
-The other headline feature is the ability to drop into ipython while
-keeping the frame and its frame objects as local variables.  This
-allows very easy in-depth examination of frame objects.
-
-Other minor changes include only reading partially through a file and
-lazy loading the rest to allow prompt viewing of the first few frames.
-
