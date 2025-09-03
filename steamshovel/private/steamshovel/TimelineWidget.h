@@ -179,6 +179,7 @@ protected:
 	TimelineWidget* owner_;
 	TimelineScene( TimelineWidget* w );
 	void pickNewTime( QGraphicsSceneMouseEvent* event );
+	virtual bool event( QEvent* event );
 	virtual void mouseMoveEvent( QGraphicsSceneMouseEvent* event );
 	virtual void mousePressEvent( QGraphicsSceneMouseEvent* event );
 	friend class ::TimelineWidget;

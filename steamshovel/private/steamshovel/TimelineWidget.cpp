@@ -256,6 +256,7 @@ TimelineScene::TimelineScene(TimelineWidget* w) : QGraphicsScene(w),
 	QFont font;
 	font.setPixelSize( 15 );
 	timelabel_->setFont( font );
+	timelabel_->setBrush(QApplication::palette().windowText());
 
 	legend_ = new TimelineLegendItem();
 	addItem( legend_ );
@@ -336,6 +337,14 @@ void TimelineScene::pickNewTime( QGraphicsSceneMouseEvent* event ){
 	catch( TimeWindowError& e ){
 		log_debug_stream( x << " -- " << e.what() );
 	}
+}
+
+bool TimelineScene::event( QEvent* event ){
+	if (event->type() == QEvent::ApplicationPaletteChange) {
+		this->timelabel_->setBrush(QApplication::palette().windowText());
+		return true;
+	}
+	return QGraphicsScene::event(event);
 }
 
 void TimelineScene::mouseMoveEvent( QGraphicsSceneMouseEvent* event ){

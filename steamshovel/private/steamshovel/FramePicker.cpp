@@ -169,13 +169,13 @@ QGraphicsItem* FramePickerScene::makeBracket( qreal dx )
 {
 	QPainterPath p;
 	// draw [
-	const qreal y2 = 4 * YOFF;
+	const qreal y2 = 5 * YOFF;
 	const qreal y1 = 0.1 * YOFF;
 	p.moveTo( dx, y2 );
 	p.lineTo( 0, y2 );
 	p.lineTo( 0, y1 );
 	p.lineTo( dx, y1 );
-	QGraphicsItem* m = addPath( p, QPen() );
+	QGraphicsItem* m = addPath( p, QPen(QApplication::palette().windowText().color()) );
 	m->setCacheMode( QGraphicsItem::NoCache );
 	m->setZValue( -2 );
 	m->hide();
@@ -217,11 +217,13 @@ void FramePickerScene::addRuler( unsigned start, unsigned stop )
 	for( unsigned i = start / 5, n = stop / 5; i < n; ++i ){
 		if( i % 2 ){
 			const qreal x = (i * 5) * XOFF;
-			addLine( x, -0.5 * height, x, 0 );
+			// tick marks
+			addLine( x, -0.5 * height, x, 0, QPen(QApplication::palette().windowText().color()));
 		}
 		else{
 			const qreal x = (i * 5) * XOFF;
 			QGraphicsSimpleTextItem* t = addSimpleText( QString::number(i * 5), font );
+			t->setBrush(QApplication::palette().brush(QPalette::WindowText));
 			QPointF ctr = t->boundingRect().center();
 			t->setPos( x - ctr.x(), -height );
 		}
