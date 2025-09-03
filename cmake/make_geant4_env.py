@@ -21,13 +21,17 @@ from codecs import encode,decode
 geant4_sh, geant4_version = sys.argv[1:]
 
 # vars and standard directory names
-if int(geant4_version) < 1050:
+if int(geant4_version) >= 1110:
+    geant4_vars = {
+        "GEANT4_DATA_DIR"  : "GEANT4_DATA_DIR",
+    }
+elif int(geant4_version) >= 1050:
     geant4_vars = {
         "G4ABLADATA"       : "G4ABLA",
         "G4LEDATA"         : "G4EMLOW",
         "G4LEVELGAMMADATA" : "PhotonEvaporation",
         "G4NEUTRONHPDATA"  : "G4NDL",
-        "G4NEUTRONXSDATA"  : "G4NEUTRONXS",
+        "G4PARTICLEXSDATA" : "G4PARTICLEXS1.1",
         "G4PIIDATA"        : "G4PII",
         "G4RADIOACTIVEDATA": "RadioactiveDecay",
         "G4REALSURFACEDATA": "RealSurface",
@@ -40,7 +44,7 @@ else:
         "G4LEDATA"         : "G4EMLOW",
         "G4LEVELGAMMADATA" : "PhotonEvaporation",
         "G4NEUTRONHPDATA"  : "G4NDL",
-        "G4PARTICLEXSDATA" : "G4PARTICLEXS1.1",
+        "G4NEUTRONXSDATA"  : "G4NEUTRONXS",
         "G4PIIDATA"        : "G4PII",
         "G4RADIOACTIVEDATA": "RadioactiveDecay",
         "G4REALSURFACEDATA": "RealSurface",
