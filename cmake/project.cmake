@@ -29,7 +29,7 @@
 #  SPDX-License-Identifier: BSD-2-Clause
 #
 
-file(MAKE_DIRECTORY ${LIBRARY_OUTPUT_PATH}/icecube)
+file(MAKE_DIRECTORY ${PYTHON_PLATLIB_DIR}/icecube)
 
 #
 # use_projects() helper macro for, uh, using projects.
@@ -339,15 +339,15 @@ macro(i3_project PROJECT_NAME)
 	  file(GLOB_RECURSE python_components RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${ARG_PYTHON_DIR}/*.py)
 	  foreach(file ${python_components})
             string(REPLACE ${ARG_PYTHON_DIR}/ "" file ${file})
-            configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/${file} ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST}/${file} COPYONLY)
+            configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/${file} ${PYTHON_PLATLIB_DIR}/${ARG_PYTHON_DEST}/${file} COPYONLY)
           endforeach()
-        else (COPY_PYTHON_DIR)
-	  execute_process(COMMAND ln -fsn ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR} ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST})
+  else (COPY_PYTHON_DIR)
+	  execute_process(COMMAND ln -fsn ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR} ${PYTHON_PLATLIB_DIR}/${ARG_PYTHON_DEST})
 	  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/
-	    DESTINATION lib/${ARG_PYTHON_DEST}
+	    DESTINATION ${Python_PLATLIB}/${ARG_PYTHON_DEST}
 	    PATTERN ".git" EXCLUDE
 	    PATTERN ".svn" EXCLUDE)
-	  execute_process(COMMAND python -m compileall -fq ${CMAKE_BINARY_DIR}/lib/${ARG_PYTHON_DEST} OUTPUT_QUIET)
+	  execute_process(COMMAND python -m compileall -fq ${PYTHON_PLATLIB_DIR}/${ARG_PYTHON_DEST} OUTPUT_QUIET)
 	endif (COPY_PYTHON_DIR)
       endif(ARG_USE_SETUPTOOLS)
 
@@ -560,7 +560,7 @@ macro(i3_add_pybindings MODULENAME)
 
       i3_add_library(${MODULENAME}-pybindings ${ARGN}
         USE_TOOLS python
-        INSTALL_DESTINATION lib/icecube
+        INSTALL_DESTINATION ${Python_PLATLIB}/icecube
         NO_DOXYGEN
         MODULE
         )
@@ -605,14 +605,14 @@ macro(i3_add_pybindings MODULENAME)
         PROPERTIES
         PREFIX "${${MODULENAME}_PYPREFIX}"
         OUTPUT_NAME ${MODULENAME}
-        LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}/icecube
+        LIBRARY_OUTPUT_DIRECTORY ${PYTHON_PLATLIB_DIR}/icecube
         )
     else()
       colormsg(GREEN "+-- ${MODULENAME}-pybindings")
 
       i3_add_library(${MODULENAME}-pybindings ${ARGN}
         LINK_LIBRARIES ${BOOST_PYTHON}
-        INSTALL_DESTINATION lib/icecube
+        INSTALL_DESTINATION ${Python_PLATLIB}/icecube
         NO_DOXYGEN
         MODULE
         )
@@ -621,7 +621,8 @@ macro(i3_add_pybindings MODULENAME)
         PROPERTIES
         PREFIX "${${MODULENAME}_PYPREFIX}"
         OUTPUT_NAME ${MODULENAME}
-        LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}/icecube
+        LIBRARY_OUTPUT_DIRECTORY ${PYTHON_PLATLIB_DIR}/icecube
+        SUFFIX ${Python_EXT_SUFFIX}
         )
       
       list(APPEND _i3_project_extension_libs "icecube.${${MODULENAME}_PYPREFIX}${MODULENAME}")
@@ -630,7 +631,7 @@ macro(i3_add_pybindings MODULENAME)
 
     add_custom_command(TARGET ${MODULENAME}-pybindings
       PRE_LINK
-      COMMAND mkdir -p ${CMAKE_BINARY_DIR}/lib/icecube
+      COMMAND mkdir -p ${CMAKE_BINARY_DIR}/${Python_PLATLIB}/icecube
       )
 
     if(${MODULENAME}_ARGS_IWYU AND USE_IWYU)

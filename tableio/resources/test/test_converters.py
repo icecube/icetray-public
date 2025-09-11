@@ -22,7 +22,8 @@ from icecube.tableio import I3BroadcastTableService
 sframe_converters = ['I3CorsikaInfo', 'I3PrimaryInjectorInfo','I3TopInjectorInfo', 'I3GenieInfo']
 
 # hobo "from icecube import *", import everything to run as many converters as possible
-for path in sorted(os.listdir(os.environ['I3_BUILD']+'/lib/icecube')):
+moddir = os.environ['PYTHONPATH'].split(':')[0] + '/icecube'
+for path in sorted(os.listdir(moddir)):
     if 'ml_suite' in path or path[0]=='_':
         continue
 

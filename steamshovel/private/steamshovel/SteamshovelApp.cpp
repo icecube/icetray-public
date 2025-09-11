@@ -119,6 +119,10 @@ void SteamshovelApp::init( const std::vector<std::string>& startup_scripts,
 	// commands are executed in order
 	if( !startup_script_.open() )
 		log_fatal( "cannot open temporary file" );
+	
+	std::cerr << std::endl;
+	std::cerr << startup_script_.fileName().toStdString()
+	          << " will be used to run startup scripts." << std::endl;
 
 	if( !startup_scripts.empty() || batch ){
 		BOOST_FOREACH( const std::string& s, startup_scripts ){

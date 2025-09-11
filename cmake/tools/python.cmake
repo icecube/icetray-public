@@ -34,10 +34,33 @@ colormsg("")
 colormsg(HICYAN "python")
 
 find_package(Python 3.8 QUIET REQUIRED COMPONENTS Interpreter Development NumPy)
+
+# platlib is the directory where python searches for user provided platform dependent modules. This command asks 
+# sysconfig for the name to use relative to the root of the install prefix, it will be something like
+# `lib/pythonX.Y/site-packages`. For inplace builds it will be relative to $I3_BUILD for tarball installs it will 
+# be relative to the root of the tarball install. 
+# Note: it is possible to use ${Python_SITEARCH} instead and strip the prefix from that but this is easier
+execute_process(COMMAND 
+  ${Python_EXECUTABLE} -c "import os,sysconfig;print(sysconfig.get_path('platlib','posix_prefix',{'platbase':''}).strip(os.sep))"
+  OUTPUT_VARIABLE Python_PLATLIB
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+# This command gets the extension suffix of of python modules from sysconfig. It is something like 
+# `.cpython-39-x86_64-linux-gnu.so` for linux and `cpython-313-darwin.so` for macos. 
+# Note: it is possible to use ${Python_SOABI} but you need to add the `.so` suffix and this is easier
+execute_process(COMMAND 
+  ${Python_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_config_var('EXT_SUFFIX'))"
+  OUTPUT_VARIABLE Python_EXT_SUFFIX
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
 message(STATUS "+  version: ${Python_VERSION}")
 message(STATUS "+   binary: ${Python_EXECUTABLE}")
 message(STATUS "+ includes: ${Python_INCLUDE_DIRS}")
 message(STATUS "+     libs: ${Python_LIBRARIES}")
+message(STATUS "+  platlib: ${Python_PLATLIB}")
+message(STATUS "+   suffix: ${Python_EXT_SUFFIX}")
 
 # Compatibility variables -- need to be cached for parasitic projects
 set(PYTHON_FOUND ${PYTHON_FOUND} CACHE BOOL "Python found successfully")
@@ -46,6 +69,7 @@ set(PYTHON_VERSION ${Python_VERSION} CACHE STRING "Python Version Number")
 set(PYTHON_LIBRARY ${Python_LIBRARIES} CACHE STRING "Python libraries")
 set(PYTHON_LIBRARIES ${Python_LIBRARIES} CACHE STRING "Python libraries")
 set(PYTHON_INCLUDE_DIR ${Python_INCLUDE_DIRS} CACHE STRING "Python include directories")
+set(PYTHON_PLATLIB_DIR ${CMAKE_BINARY_DIR}/${Python_PLATLIB} CACHE STRING "Python binary output directory")
 
 # look for numpy
 set(NUMPY_FOUND ${Python_NumPy_FOUND} CACHE BOOL "Numpy found successfully")

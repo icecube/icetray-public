@@ -254,8 +254,9 @@ foreach(subdir ${SUBDIRS})
 
 endforeach(subdir ${SUBDIRS})
 
-# add a top-level py.typed marker (only necessary for pybdtmodule)
-file(TOUCH ${CMAKE_BINARY_DIR}/lib/icecube/py.typed)
+# add a top-level py.typed marker
+file(TOUCH ${PYTHON_PLATLIB_DIR}/icecube/py.typed)
+install(FILES ${PYTHON_PLATLIB_DIR}/icecube/py.typed DESTINATION ${Python_PLATLIB}/icecube)
 
 ## documentation targets
 ## Documentation is now built with docs-build
@@ -406,6 +407,15 @@ foreach(module ${_i3_project_extension_libs})
 
 endforeach(module ${_i3_project_extension_libs})
 
+#
+#  typing stub generation
+#
+add_custom_target(stubgen
+  COMMAND ${CMAKE_SOURCE_DIR}/cmake/icetray-stubgen
+  ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR}
+  ${_i3_project_extension_libs}
+)
+add_dependencies(stubgen pybindings)
 
 #
 #  mypy static type checking

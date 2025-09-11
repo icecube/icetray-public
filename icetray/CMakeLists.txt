@@ -255,8 +255,6 @@ endforeach(HEADER ${ALL_HEADERS})
 #
 # Python bindings
 #
-set(TMP_LIBRARY_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH})
-
 i3_add_pybindings(icetray
   private/pybindings/module.cxx
   USE_TOOLS boost python
@@ -271,15 +269,15 @@ if(BUILD_ICETRAY)
 # backwards compatibility
 #
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/private/pybindings/I3Tray.py
-  DESTINATION lib)
+  DESTINATION ${Python_PLATLIB})
 
-add_custom_command(OUTPUT ${TMP_LIBRARY_OUTPUT_PATH}/I3Tray.py
+add_custom_command(OUTPUT ${PYTHON_PLATLIB_DIR}/I3Tray.py
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/private/pybindings/I3Tray.py
-  COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/private/pybindings/I3Tray.py ${TMP_LIBRARY_OUTPUT_PATH}
+  COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/private/pybindings/I3Tray.py ${PYTHON_PLATLIB_DIR}
   )
 
 add_custom_target(I3Tray.py
-  DEPENDS ${TMP_LIBRARY_OUTPUT_PATH}/I3Tray.py
+  DEPENDS ${PYTHON_PLATLIB_DIR}/I3Tray.py
   )
 
   add_dependencies(icetray-pybindings I3Tray.py)
