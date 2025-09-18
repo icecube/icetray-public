@@ -121,14 +121,14 @@ PyConsole::PyConsole( const PyInterpreter& /* keep this to ensure order of calls
 			else{
 				log_warn( "Cannot embed IPython Qt widget, falling back to tty-based console" );
 			}
-		}
+		} /* falls through */
 		case IPython_shell:{
 			if( init_python_shell( true ) ){
 				type_ = IPython_shell;
 				break;
 			}
 			log_warn( "Could not use IPython, falling back to vanilla python console" );
-		}
+		} /* falls through */
 		case Vanilla:{
 			init_python_shell( false );
 			type_ = Vanilla;

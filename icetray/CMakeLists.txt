@@ -159,6 +159,13 @@ i3_add_library(icetray
   USE_TOOLS boost python ${OPTIONAL_TOOLS}
   LINK_LIBRARIES ${BOOST_PYTHON} ${LIBARCHIVE_LIBRARIES}
   )
+
+#
+# FIXME: disable warnings on sprintf and friends
+#
+set_source_files_properties(private/icetray/I3PrintfLogger.cxx private/icetray/I3SyslogLogger.cxx private/icetray/I3FileLogger.cxx private/icetray/I3Logging.cxx
+    PROPERTIES COMPILE_OPTIONS "-Wno-deprecated-declarations")
+
 #
 #  Configure/create directory containing inneresting workspace-wide #defines
 #

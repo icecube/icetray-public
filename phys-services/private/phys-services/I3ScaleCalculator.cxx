@@ -82,12 +82,14 @@ I3ScaleCalculator::I3ScaleCalculator (I3GeometryConstPtr geo,
     topDOMid_ = 40;  // for a "normal" string, approximately at the height of the top of the bit of deepcore below the dustlayer (~-160 meters)
   }
 
+#ifndef NDEBUG
   log_debug("At the end of the constructor, we've got configs: %d / %d", iceConf_, topConf_);
   log_debug("And lists of strings (%ld):", listOfBoundaryDeepStrings_.size());
   BOOST_FOREACH(int s, listOfBoundaryDeepStrings_) { log_debug("%d", s); }
   log_debug("And lists of stations (%ld):", listOfBoundarySurfaceStations_.size());
   BOOST_FOREACH(int s, listOfBoundarySurfaceStations_) { log_debug("%d", s); }
   log_debug("And top/bottom DOM's are: %d / %d", topDOMid_, bottomDOMid_);
+#endif
 
 }
 

@@ -54,6 +54,7 @@ void register_I3RecoPulseSeriesMapMask()
 		.def(bp::init<const I3Frame&, const std::string &, callback_t>())
 		.add_property("source", &I3RecoPulseSeriesMapMask::GetSource)
 		.add_property("bits", &getbits)
+// hush this false positive. appears to be fixed as of Apple Clang 16
 #ifdef __clang__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wself-assign-overloaded"

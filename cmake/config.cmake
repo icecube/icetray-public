@@ -428,20 +428,34 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
   set(CXX_WARNING_FLAGS "-w1 -Wno-non-virtual-dtor")
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   set(CMAKE_COMPILER_IS_CLANG TRUE)
-  set(CXX_WARNING_FLAGS "-Qunused-arguments" "-Wall" "-Wno-non-virtual-dtor")
+  set(CXX_WARNING_FLAGS "-Qunused-arguments" "-Wall" "-Wextra")
+  # work around https://github.com/boostorg/interprocess/issues/258 and AppleClang hardcoding "-I/usr/local/include"
+  add_compile_options($<$<COMPILE_LANGUAGE:CXX>:--system-header-prefix=boost/>)
 else()
-  set(CXX_WARNING_FLAGS "-Wall -Wno-non-virtual-dtor")
-endif(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+  set(CXX_WARNING_FLAGS "-Wall")
+  if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 9)
+    list(APPEND CXX_WARNING_FLAGS "-Wextra")
+  endif()
+endif()
 string(REPLACE ";" " " CXX_WARNING_FLAGS "${CXX_WARNING_FLAGS}")
 
 if(CMAKE_C_COMPILER_ID MATCHES "Intel")
   set(C_WARNING_FLAGS "-w1")
 elseif(CMAKE_C_COMPILER_ID MATCHES "Clang")
-  set(C_WARNING_FLAGS "-Qunused-arguments" "-Wall")
+  set(C_WARNING_FLAGS "-Qunused-arguments" "-Wall" "-Wno-deprecated-non-prototype")
 else()
   set(C_WARNING_FLAGS "-Wall")
 endif(CMAKE_C_COMPILER_ID MATCHES "Intel")
 string(REPLACE ";" " " C_WARNING_FLAGS "${C_WARNING_FLAGS}")
+
+# This is to address https://github.com/boostorg/python/issues/418
+# seems to not manifest with AppleClang 17
+if(CMAKE_CXX_COMPILER_ID MATCHES "AppleClang")
+  if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 17)
+    list(APPEND CXX_WARNING_FLAGS "-Wno-missing-field-initializers")
+    string(REPLACE ";" " " CXX_WARNING_FLAGS "${CXX_WARNING_FLAGS}")
+  endif()
+endif()
 
 #
 #  Set warning suppression flags for our compilers
@@ -450,7 +464,7 @@ string(REPLACE ";" " " C_WARNING_FLAGS "${C_WARNING_FLAGS}")
 #
 include(CheckCXXCompilerFlag)
 if (NOT CXX_WARNING_SUPPRESSION_FLAGS)
-    foreach(f -Wdeprecated -Wunused-variable -Wunused-local-typedef -Wunused-local-typedefs -Wpotentially-evaluated-expression -Wmaybe-uninitialized)
+    foreach(f -Wvla-cxx-extension -Wmaybe-uninitialized -Wunused-parameter -Wignored-qualifiers -Wdeprecated-copy-with-user-provided-copy -Wdeprecated-copy)
     string(REPLACE "-" "_" FLAG ${f})
     check_cxx_compiler_flag(${f} CXX_HAS${FLAG})
     if (CXX_HAS${FLAG})

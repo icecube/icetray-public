@@ -32,13 +32,15 @@ void register_i3antennawaveform_of(const std::string& s) {
   .def(bp::self - bp::self)
   .def(bp::self += bp::self)
 
-//hush this false positive
+// hush this false positive. appears to be fixed as of Apple Clang 16
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wself-assign-overloaded"
+#endif
 
   .def(bp::self -= bp::self)
 
+#ifdef __clang__
 #pragma clang diagnostic pop
 #endif
 

@@ -106,7 +106,8 @@ void register_I3Position()
     .def("get_unit_vector",&I3Position::GetUnitVector)
     .def("normalize",&I3Position::Normalize)
     .def(-self)
-    .def(self += self)    
+    .def(self += self)
+// hush this false positive. appears to be fixed as of Apple Clang 16
 #ifdef __clang__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wself-assign-overloaded"
@@ -114,7 +115,7 @@ void register_I3Position()
     .def(self -= self)
 #ifdef __clang__
 #pragma GCC diagnostic pop
-#endif    
+#endif
     .def(self + self)
     .def(self - self)
     .def(self * self)

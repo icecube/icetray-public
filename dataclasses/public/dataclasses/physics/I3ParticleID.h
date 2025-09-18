@@ -58,9 +58,6 @@ struct I3ParticleID{
    * These directives we need were added in gcc 4.6
    * https://gcc.gnu.org/gcc-4.6/changes.html
    */
-#if defined(__GNUC__) && GCC_VERSION > 40600
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#endif
   bool operator==(const I3ParticleID& other) const {
     return(majorID == other.majorID && minorID == other.minorID);
   }
@@ -74,11 +71,6 @@ struct I3ParticleID{
       return(majorID<other.majorID);
     return(minorID<other.minorID);
   }
-  // a pop without a push restores the command line options.
-  // https://gcc.gnu.org/onlinedocs/gcc/Diagnostic-Pragmas.html
-#if defined(__GNUC__) && GCC_VERSION > 40600
-#pragma GCC diagnostic pop
-#endif
 
 private:
   friend class icecube::serialization::access;
@@ -117,15 +109,9 @@ namespace __gnu_cxx{
 
 template<>
 struct i3hash<I3ParticleID>{
-#if defined(__GNUC__) && GCC_VERSION > 40600
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#endif
   size_t operator()(const I3ParticleID& id) const{
     return ::hash<int>()(id.majorID + id.minorID);
   }
-#if defined(__GNUC__) && GCC_VERSION > 40600
-#pragma GCC diagnostic pop
-#endif
 };
 
 #endif

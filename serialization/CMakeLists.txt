@@ -117,6 +117,9 @@ i3_test_executable(test
   USE_TOOLS boost python
   USE_PROJECTS serialization
 )
+set_source_files_properties(private/test/test_private_base.cpp PROPERTIES COMPILE_OPTIONS -Wno-overloaded-virtual)
+set_source_files_properties(private/test/test_map.cpp PROPERTIES COMPILE_OPTIONS -Wno-deprecated)
+set_source_files_properties(private/test/test_set.cpp PROPERTIES COMPILE_OPTIONS -Wno-deprecated)
 
 i3_test_executable(test_class_info_save
   private/test/main.cxx
@@ -157,6 +160,7 @@ i3_test_executable(test_shared_ptr_multi_base
   USE_TOOLS boost python
   USE_PROJECTS serialization
 )
+set_source_files_properties(private/test/test_shared_ptr_multi_base.cpp PROPERTIES COMPILE_OPTIONS -Wno-extra)
 
 # add a fake pybindings target
 if(BUILD_SERIALIZATION)

@@ -171,10 +171,10 @@ SET_LOGGER("Unknown");
     __icetray_logger_id(), __FILE__, __LINE__, __PRETTY_FUNCTION__, msg, )
 #endif
 #else
-#define log_trace(format, ...)
-#define log_debug(format, ...)
-#define log_trace_stream(msg)
-#define log_debug_stream(msg)
+#define log_trace(format, ...) ((void)0)
+#define log_debug(format, ...) ((void)0)
+#define log_trace_stream(msg) ((void)0)
+#define log_debug_stream(msg) ((void)0)
 #endif
 
 #define log_info(format, ...) I3_LOGGER(I3LOG_INFO, \

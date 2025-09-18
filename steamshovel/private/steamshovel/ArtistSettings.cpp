@@ -96,7 +96,7 @@ QVariant setting_QItemData( Scenario* scenario, ArtistPtr artist, const std::str
 					QFont f;
 					f.setItalic(true);
 					return f;
-				}
+				}  // falls through
 			default: return QVariant();
 		}
 	}

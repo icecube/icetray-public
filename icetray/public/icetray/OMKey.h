@@ -38,10 +38,6 @@
 #include <icetray/serialization.h>
 
 static const unsigned omkey_version_ = 2;
-#pragma GCC diagnostic push
-#if defined(__GNUC__) && !defined(__clang__)
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#endif
 
 /**
  * @brief A small class which is the string number, om number
@@ -180,7 +176,6 @@ inline bool operator<(const OMKey& lhs,const OMKey& rhs)
  */
 std::ostream& operator<<(std::ostream&, const OMKey& key);
 std::istream& operator>>(std::istream&,  OMKey&);
-#pragma GCC diagnostic pop
 
 I3_POINTER_TYPEDEFS(OMKey);
 

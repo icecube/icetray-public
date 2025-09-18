@@ -109,13 +109,6 @@ if(BUILD_STEAMSHOVEL)
       NOUNDERSCORE
     )
 
-    ## the following files trigger warnings in expanded macros
-    set_source_files_properties(private/shovelart/pybindings/Settings.cpp
-      PROPERTIES COMPILE_FLAGS "-Wno-parentheses-equality")
-    set_source_files_properties(private/shovelart/pybindings/Scenario.cpp
-      private/shovelart/pybindings/PyArtist.cpp
-      PROPERTIES COMPILE_FLAGS "-Wno-unused-function")
-
     target_link_libraries( shovelart-pybindings shovelart )
 
     i3_add_library( shovelio

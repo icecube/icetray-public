@@ -126,10 +126,8 @@ I3SuperDSTTestModule::DAQ(I3FramePtr frame)
 
 	pulses = clean_pulses;
 
-	//ENSURE_EQUAL(pulses->size(), fake_pulses->size());
 	BOOST_FOREACH(const I3RecoPulseSeriesMap::value_type &pair, *pulses) {
-		const OMKey &key = pair.first;
-		assert( fake_pulses->find(key) != fake_pulses->end() );
+		ENSURE( fake_pulses->find(pair.first) != fake_pulses->end() );
 	}
 
 	using namespace I3SuperDSTUtils;

@@ -6,7 +6,17 @@
 #define DATACLASSES_I3MATRIX_H_INCLUDED
 
 #include <icetray/I3FrameObject.h>
+
+// Boost::uBLAS used the deprecated `std::iterator` and wasn't fixed until 1.86
+#if BOOST_VERSION < 108600
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #include <boost/numeric/ublas/matrix.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <boost/numeric/ublas/matrix.hpp>
+#endif
+
 #include <serialization/serialization.hpp>
 #include <serialization/array.hpp>
 #include <serialization/collection_size_type.hpp>

@@ -253,8 +253,6 @@ namespace I3Test
 		rout << "<status>fail</status>\n\t<what>uncaught exception:\n"
 		     << "some python error" << "</what>\n\t<output>"
 		     << encode_entities(oss.str()) << "</output>\n</unit>\n";
-	      else
-		; //cout << " UNCAUGHT:" << e.what() << endl;
 	      failures[i->first] = boost::shared_ptr<test_failure>(new test_failure("?", 0, "uncaught exception", "uncaught exception"));
 #endif
 	    } catch (...) {

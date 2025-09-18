@@ -2,10 +2,11 @@
 //
 // SPDX-License-Identifier: BSD-2-Clause
 
-#include <I3Test.h>
-#include <icetray/I3Logging.h>
-
-#include <dataclasses/fft/FFTWPlan.h>
+#include "I3Test.h"
+#include "dataclasses/fft/FFTWPlan.h"
+#include "icetray/I3Logging.h"
+#include <cmath>
+#include <iostream>
 
 TEST_GROUP(FFTWPlan);
 
@@ -120,10 +121,10 @@ TEST(complex_to_complex_transform) {
 
   complexD outData[n];
   plan.CopyOutOfPlanC(outData);
-  ENSURE_DISTANCE(abs(outData[0] - complexD(2, 6)), 0, 1e-5);
-  ENSURE_DISTANCE(abs(outData[1] - complexD(-2, -2)), 0, 1e-5);
-  ENSURE_DISTANCE(abs(outData[2] - complexD(0, -2)), 0, 1e-5);
-  ENSURE_DISTANCE(abs(outData[3] - complexD(2, -2)), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(outData[0] - complexD(2, 6)), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(outData[1] - complexD(-2, -2)), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(outData[2] - complexD(0, -2)), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(outData[3] - complexD(2, -2)), 0, 1e-5);
 }
 
 TEST(complex_to_complex_transform_v2) {
@@ -136,15 +137,15 @@ TEST(complex_to_complex_transform_v2) {
 
   double outData[n][2];
   plan.CopyOutOfPlanC(outData);
-  ENSURE_DISTANCE(abs(outData[0][0] - 2), 0, 1e-5);
-  ENSURE_DISTANCE(abs(outData[1][0] - -2), 0, 1e-5);
-  ENSURE_DISTANCE(abs(outData[2][0] - 0), 0, 1e-5);
-  ENSURE_DISTANCE(abs(outData[3][0] - 2), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(outData[0][0] - 2), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(outData[1][0] - -2), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(outData[2][0] - 0), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(outData[3][0] - 2), 0, 1e-5);
 
-  ENSURE_DISTANCE(abs(outData[0][1] - 6), 0, 1e-5);
-  ENSURE_DISTANCE(abs(outData[1][1] - -2), 0, 1e-5);
-  ENSURE_DISTANCE(abs(outData[2][1] - -2), 0, 1e-5);
-  ENSURE_DISTANCE(abs(outData[3][1] - -2), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(outData[0][1] - 6), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(outData[1][1] - -2), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(outData[2][1] - -2), 0, 1e-5);
+  ENSURE_DISTANCE(std::abs(outData[3][1] - -2), 0, 1e-5);
 }
 
 TEST(printing) {
