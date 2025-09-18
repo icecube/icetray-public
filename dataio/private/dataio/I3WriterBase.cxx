@@ -84,6 +84,11 @@ I3WriterBase::I3WriterBase(const I3Context& ctx)
 	AddParameter("DropOrphanStreams", "Vector of I3Frame.Stream types to "
 	    "drop if they are not followed by other frames. Default: drop "
 	    "nothing", dropOrphanStreams_);
+
+	AddParameter("TrayInfoPrefix", "Short descriptor to attach to the beginning of the I3TrayInfo "
+	    "object name. Default: none.", "");
+
+
 }
 
 void
@@ -135,6 +140,13 @@ I3WriterBase::Configure()
 	file_stager_ = context_.Get<I3FileStagerPtr>();
 	if (!file_stager_)
 		file_stager_ = I3TrivialFileStager::create();
+	
+	GetParameter("TrayInfoPrefix", trayInfoPrefix_);
+	// If the prefix doesn't end with a "_" character, give the user a hand by adding one.
+	if ((!trayInfoPrefix_.empty()) && (trayInfoPrefix_.back()!='_'))
+	{
+		trayInfoPrefix_ = trayInfoPrefix_+"_";
+	}
 }
 
 void
@@ -170,12 +182,16 @@ I3WriterBase::WriteConfig(I3FramePtr frame)
 	else
 		oframe = I3FramePtr(new I3Frame(I3Frame::TrayInfo));
 
-	std::string timestr =
-	    to_iso_extended_string(microsec_clock::universal_time());
+	// Construct the name of the frame object: user-defined descriptor + clock time
+	std::string timestr = trayInfoPrefix_ +
+	    to_iso_extended_string(microsec_clock::universal_time()).substr(0,19);  // We don't need microseconds!
 
 	while(oframe->Has(timestr))
 		timestr += "~";
 
+	log_debug("Writing a TrayInfo frame object called %s", timestr.c_str());
+
+	// Put it in the frame
 	oframe->Put(timestr, trayinfo);
 
 	// If we didn't make the frame, don't save it, since it is already in

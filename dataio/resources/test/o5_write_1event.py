@@ -23,6 +23,7 @@ tray.AddModule("I3Reader","reader", Filename="pass1.i3")
 tray.AddModule("Dump","dump")
 
 tray.AddModule("I3Writer","writer")(
+    ("trayinfoprefix", "descriptor"),
     ("filename", "one_event.i3")
     )
 

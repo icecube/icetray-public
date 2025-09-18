@@ -302,6 +302,34 @@ name, you certainly can::
 
 will work too.
 
+
+Adding a Prefix to the I3TrayInfo
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The I3Writer module will automatically add an "I3TrayInfo" frame object to the "I-frame",
+which will record the configuration of all the modules and services in the tray for future reference.
+The default name of the frame object will be the timestamp of when the I3Writer was run, for instance:
+
+.. code-block:: "none"
+
+    2017-05-31T16:22:49
+
+...which, by itself, is maybe not the most descriptive for future users.  So, optionally,
+you can add a "TrayInfoPrefix" to the I3Writer module, which will add some identifying text
+to this frame object's name.  For instance, running this::
+
+    tray.Add("I3Writer",
+             TrayInfoPrefix="MySpecialProcessing",
+             ...<etc>)
+
+...will produce an I-frame frame object named this instead:
+
+.. code-block:: "none"
+
+   MySpecialProcessing_2017-05-31T16:22:49
+
+Keep the prefix brief and general.  Future users will thank you!
+
 Dropping Orphan Streams
 -----------------------
 

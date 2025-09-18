@@ -50,6 +50,7 @@ protected:
   std::vector<I3Frame::Stream> streams_;
   std::vector<I3Frame::Stream> dropOrphanStreams_;
   std::vector<I3FramePtr> orphanarium_;
+  std::string trayInfoPrefix_;
 
   void WriteConfig(I3FramePtr ptr);
 
