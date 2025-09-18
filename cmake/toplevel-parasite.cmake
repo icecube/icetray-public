@@ -85,7 +85,6 @@ get_filename_component(HOST_I3_SRC ${HOST_icetray_SOURCE_DIR} PATH)
 
 set(I3_SRC ${CMAKE_SOURCE_DIR})
 set(I3_BUILD ${CMAKE_BINARY_DIR})
-set(SPHINX_DIR "${CMAKE_BINARY_DIR}/sphinx_src")
 
 # pull git revision from cache
 load_cache(${HOST_I3_BUILD} READ_WITH_PREFIX "" GIT_REVISION GIT_URL META_PROJECT Python_VERSION)

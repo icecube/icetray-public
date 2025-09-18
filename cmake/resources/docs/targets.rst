@@ -43,16 +43,6 @@ directory.
      - Checks your environment for corruption.  Used at various times
        in the build process to ensure that you haven't set
        :envvar:`ROOTSYS` in your :file:`.bashrc`.
-   * - docs
-     - make all of: *html*, *doxygen* and *inspect*
-   * - html
-     - Generates this html documentation in :envvar:`I3_BUILD`/docs
-   * - latex
-     - Generates latex version of this documentation in :envvar:`I3_BUILD`/latex
-   * - doxygen
-     - runs doxygen to autogenerate documentation in :envvar:`I3_BUILD`/docs/doxygen
-   * - inspect
-     - builds :ref:`icetray-inspect` documentation in :envvar:`I3_BUILD`/docs/inspect
    * - rebuild_cache
      - See documentation for cmake and :ref:`rebuild_cache`
    * - edit_cache

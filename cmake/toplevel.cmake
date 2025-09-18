@@ -116,40 +116,8 @@ add_custom_target(test-bins)
 ## this must be set before any call to i3_add_pybindings() - see "meat" below
 add_custom_target(pybindings)
 
-## these doxygen settings need to happen before configuring projects
-set(INSPECT_ALL_HTML ${CMAKE_BINARY_DIR}/doxygen/inspect/index.html)
-set(SPHINX_DIR "${CMAKE_BINARY_DIR}/sphinx_src")
-add_custom_target(doxygen)
-
-## manipulate some directories before configuring projects
-file(MAKE_DIRECTORY "${DOXYGEN_OUTPUT_PATH}/.tagfiles")
-file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/docs/inspect")
-file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/inspect")
-
 ## look for xlstproc, required by icetray-inspect
 find_program(XSLTPROC_BIN xsltproc DOC "Location of the XSLT processor")
-
-add_custom_target(inspect
-  COMMAND ${CMAKE_BINARY_DIR}/env-shell.sh
-          ${EXECUTABLE_OUTPUT_PATH}/icetray-inspect
-          --sphinx --sphinx-references
-          --all --no-params
-          --title=\"IceTray Quick Reference\"
-          -o ${SPHINX_DIR}/source/icetray_quick_reference.rst
-  COMMENT "Generating rst from icetray-inspect of QuickReference"
-  DEPENDS ${CMAKE_BINARY_DIR}/bin/icetray-inspect
-  )
-#" extra quote to de-confuse syntax highlighters
-
-## generate a URL and target to deploy docs to
-string(REGEX REPLACE "s\\.V.*$" "" DEST ${META_PROJECT})
-string(REGEX REPLACE "-software" "" DEST ${DEST})
-string(REGEX REPLACE "\\." "_" DEST ${DEST})
-string(REGEX REPLACE "_release$" "" DEST ${DEST})
-add_custom_target(deploy-docs
-  COMMAND rsync -va --delete ${CMAKE_BINARY_DIR}/docs/ buildmaster@dragon:/opt/docs/${DEST}/
-  COMMENT Deploying docs to ${DEST}
-  )
 
 if(ENABLE_TARBALL)
   include(tarball)

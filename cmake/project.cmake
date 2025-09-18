@@ -224,6 +224,8 @@ set(_i3_project_extension_libs "")
 #
 macro(i3_project PROJECT_NAME)
   project(${PROJECT_NAME})
+
+  # DOCS_DIR is now a no-op. all documentation building is handled by the "docs" project.
   parse_arguments(ARG
     "PYTHON_DIR;PYTHON_DEST;DOCS_DIR"
     "USE_SETUPTOOLS"
@@ -259,13 +261,6 @@ macro(i3_project PROJECT_NAME)
 	  PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
       endif(LEGACY_INSTALL)
     endif (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/resources)
-
-    if(ARG_DOCS_DIR)
-      file(MAKE_DIRECTORY "${SPHINX_DIR}/source/projects")
-      execute_process(COMMAND ln -fsn
-      	${CMAKE_CURRENT_SOURCE_DIR}/${ARG_DOCS_DIR}
-        ${SPHINX_DIR}/source/projects/${PROJECT_NAME})
-    endif(ARG_DOCS_DIR)
 
     if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/public/${PROJECT_NAME} AND INSTALL_HEADERS)
       if(LEGACY_INSTALL)
