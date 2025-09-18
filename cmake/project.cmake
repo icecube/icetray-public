@@ -228,7 +228,7 @@ macro(i3_project PROJECT_NAME)
   # DOCS_DIR is now a no-op. all documentation building is handled by the "docs" project.
   parse_arguments(ARG
     "PYTHON_DIR;PYTHON_DEST;DOCS_DIR"
-    "USE_SETUPTOOLS"
+    ""  # parse_arguemnts() requires at least 3 arguments
     ${ARGN}
     )
 
@@ -247,108 +247,74 @@ macro(i3_project PROJECT_NAME)
     if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/resources)
       if(LEGACY_INSTALL)
         install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/resources/
-	  DESTINATION ${PROJECT_NAME}/resources/
-	  PATTERN ".svn" EXCLUDE
-	  PATTERN ".git" EXCLUDE
-	  PATTERN "*.py"
-	  PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
+          DESTINATION ${PROJECT_NAME}/resources/
+          PATTERN ".svn" EXCLUDE
+          PATTERN ".git" EXCLUDE
+          PATTERN "*.py"
+          PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
       else(LEGACY_INSTALL)
         install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/resources/
-	  DESTINATION share/icetray/${PROJECT_NAME}/resources/
-	  PATTERN ".svn" EXCLUDE
-	  PATTERN ".git" EXCLUDE
-	  PATTERN "*.py"
-	  PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
+          DESTINATION share/icetray/${PROJECT_NAME}/resources/
+          PATTERN ".svn" EXCLUDE
+          PATTERN ".git" EXCLUDE
+          PATTERN "*.py"
+          PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
       endif(LEGACY_INSTALL)
     endif (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/resources)
 
     if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/public/${PROJECT_NAME} AND INSTALL_HEADERS)
       if(LEGACY_INSTALL)
         install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/public/${PROJECT_NAME}
-	  DESTINATION include
-	  PATTERN ".git" EXCLUDE
-	  PATTERN ".svn" EXCLUDE)
+          DESTINATION include
+          PATTERN ".git" EXCLUDE
+          PATTERN ".svn" EXCLUDE)
       else(LEGACY_INSTALL)
         install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/public/${PROJECT_NAME}
-	  DESTINATION include/icetray
-	  PATTERN ".git" EXCLUDE
-	  PATTERN ".svn" EXCLUDE)
+          DESTINATION include/icetray
+          PATTERN ".git" EXCLUDE
+          PATTERN ".svn" EXCLUDE)
       endif()
     endif (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/public/${PROJECT_NAME} AND INSTALL_HEADERS)
 
     if(ARG_PYTHON_DIR AND IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR})
-      if(ARG_USE_SETUPTOOLS)
-	colormsg(GREEN "+-- python [setuptools]")
+      if (COPY_PYTHON_DIR)
+        colormsg(GREEN "+-- python [directory copy]")
+      else (COPY_PYTHON_DIR)
+        colormsg(GREEN "+-- python [symlinks]")
+      endif (COPY_PYTHON_DIR)
 
-	#
-	# do the 'setup.py develop'
-	#
-	execute_process(COMMAND
-	  /usr/bin/env PYTHONPATH=${LIBRARY_OUTPUT_PATH}:$ENV{PYTHONPATH}
-	  ${PYTHON_EXECUTABLE} setup.py -q develop
-	  --install-dir ${LIBRARY_OUTPUT_PATH}
-	  --script-dir  ${EXECUTABLE_OUTPUT_PATH}
-	  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-	  )
+      if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/__init__.py)
+        message(FATAL_ERROR
+                        "Project ${PROJECT_NAME} has PYTHON_DIR specified, but the directory contains no file '__init__.py' and will be useless")
+      endif (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/__init__.py)
 
-	#
-	# Install targets
-	#
-	add_custom_target(${PROJECT_NAME}-install-to-tarball
-	  /usr/bin/env PYTHONPATH=${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}/lib:$ENV{PYTHONPATH}
-	  ${PYTHON_EXECUTABLE} setup.py install
-	  --install-lib ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}/lib
-	  --install-scripts  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}/bin
-	  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-	  )
-	add_dependencies(${PROJECT_NAME}-install-to-tarball
-	  tarball-install)
-	add_dependencies(tarball-finish
-	  ${PROJECT_NAME}-install-to-tarball)
+      if(NOT ARG_PYTHON_DEST)
+        set(ARG_PYTHON_DEST icecube/${PROJECT_NAME})
+        string(REPLACE "-" "_" ARG_PYTHON_DEST "icecube/${PROJECT_NAME}")
+      endif(NOT ARG_PYTHON_DEST)
 
-      else(ARG_USE_SETUPTOOLS)
-	if (COPY_PYTHON_DIR)
-	  colormsg(GREEN "+-- python [directory copy]")
-	else (COPY_PYTHON_DIR)
-	  colormsg(GREEN "+-- python [symlinks]")
-	endif (COPY_PYTHON_DIR)
+      string(REPLACE "/" "." ARG_PYTHON_LIB ${ARG_PYTHON_DEST})
+      list(APPEND _i3_project_python_libs ${ARG_PYTHON_LIB})
+      set(_i3_project_python_libs ${_i3_project_python_libs} PARENT_SCOPE)
 
-	if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/__init__.py)
-	  message(FATAL_ERROR
-	    "Project ${PROJECT_NAME} has PYTHON_DIR specified, but the directory contains no file '__init__.py' and will be useless")
-	endif (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/__init__.py)
-
-	if(NOT ARG_PYTHON_DEST)
-	  set(ARG_PYTHON_DEST icecube/${PROJECT_NAME})
-	  string(REPLACE "-" "_" ARG_PYTHON_DEST "icecube/${PROJECT_NAME}")
-	endif(NOT ARG_PYTHON_DEST)
-
-  string(REPLACE "/" "." ARG_PYTHON_LIB ${ARG_PYTHON_DEST})
-  list(APPEND _i3_project_python_libs ${ARG_PYTHON_LIB})
-  set(_i3_project_python_libs ${_i3_project_python_libs} PARENT_SCOPE)
-
-	#
-	#  Just bare python, no setuptools
-	#
-	if (COPY_PYTHON_DIR)
-	  file(GLOB_RECURSE python_components RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${ARG_PYTHON_DIR}/*.py)
-	  foreach(file ${python_components})
-            string(REPLACE ${ARG_PYTHON_DIR}/ "" file ${file})
-            configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/${file} ${PYTHON_PLATLIB_DIR}/${ARG_PYTHON_DEST}/${file} COPYONLY)
-          endforeach()
-  else (COPY_PYTHON_DIR)
-	  execute_process(COMMAND ln -fsn ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR} ${PYTHON_PLATLIB_DIR}/${ARG_PYTHON_DEST})
-	  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/
-	    DESTINATION ${Python_PLATLIB}/${ARG_PYTHON_DEST}
-	    PATTERN ".git" EXCLUDE
-	    PATTERN ".svn" EXCLUDE)
-	  execute_process(COMMAND python -m compileall -fq ${PYTHON_PLATLIB_DIR}/${ARG_PYTHON_DEST} OUTPUT_QUIET)
-	endif (COPY_PYTHON_DIR)
-      endif(ARG_USE_SETUPTOOLS)
+      if (COPY_PYTHON_DIR)
+        file(GLOB_RECURSE python_components RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${ARG_PYTHON_DIR}/*.py)
+        foreach(file ${python_components})
+          string(REPLACE ${ARG_PYTHON_DIR}/ "" file ${file})
+          configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/${file} ${PYTHON_PLATLIB_DIR}/${ARG_PYTHON_DEST}/${file} COPYONLY)
+        endforeach()
+      else (COPY_PYTHON_DIR)
+        execute_process(COMMAND ln -fsn ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR} ${PYTHON_PLATLIB_DIR}/${ARG_PYTHON_DEST})
+        install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR}/
+                DESTINATION ${Python_PLATLIB}/${ARG_PYTHON_DEST}
+                PATTERN ".git" EXCLUDE
+                PATTERN ".svn" EXCLUDE)
+        execute_process(COMMAND python -m compileall -fq ${PYTHON_PLATLIB_DIR}/${ARG_PYTHON_DEST} OUTPUT_QUIET)
+      endif (COPY_PYTHON_DIR)
 
     endif(ARG_PYTHON_DIR AND IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_PYTHON_DIR})
 
-  endif(BUILD_${I3_PROJECT})
+	endif(BUILD_${I3_PROJECT})
 endmacro(i3_project PROJECT_NAME)
 
 macro(i3_executable_script THIS_EXECUTABLE_NAME THIS_SCRIPT_NAME)

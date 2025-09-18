@@ -28,8 +28,7 @@ i3_project
 
       i3_project(fastreco
                  PYTHON_DIR python
-                 DOCS_DIR   resources/docs
-		 USE_SETUPTOOLS)
+                 DOCS_DIR   resources/docs)
 
    **Targets created**:  none
 
@@ -63,8 +62,6 @@ i3_project
       this in your __init__.py::
 
          from icecube._project_name import *
-
-      See also :ref:`USE_SETUPTOOLS <USE_SETUPTOOLS>`
 
    .. _PYTHON_DEST:
    .. index:: PYTHON_DEST
@@ -107,26 +104,6 @@ i3_project
 
       Path to a directory containing restructuredtext documentation
       for html/latex generation with *Sphinx*
-
-
-   .. _USE_SETUPTOOLS:
-   .. index:: USE_SETUPTOOLS
-   .. cmdoption:: USE_SETUPTOOLS
-
-      Specifies that python *setuptools* should be used to setup and
-      install python software in PYTHON_DIR.  PYTHON_DEST is ignored
-      in this case.
-
-      At config time, a command::
-
-        python setup.py develop
-
-      will be run to create links in the build directory.  At install time
-      a command::
-
-        python setup.py install
-
-      will be used to install the python into the tarball.
 
 i3_add_library
 --------------
