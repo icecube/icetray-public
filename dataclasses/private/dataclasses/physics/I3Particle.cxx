@@ -213,6 +213,8 @@ boost::assign::list_of<std::pair<I3Particle::ParticleType, double> >
 (I3Particle::TauMinus, 1.77682*I3Units::GeV)
 (I3Particle::NuTau, 0.0*I3Units::GeV)
 (I3Particle::NuTauBar, 0.0*I3Units::GeV)
+(I3Particle::K0, 0.497614*I3Units::GeV)
+(I3Particle::K0Bar, 0.497614*I3Units::GeV)
 // Add particles for CORSIKA ehist option
 (I3Particle::Sigmac2520PlusPlus, 2.51841*I3Units::GeV)
 (I3Particle::Sigmac2520BarMinusMinus, 2.51841*I3Units::GeV)

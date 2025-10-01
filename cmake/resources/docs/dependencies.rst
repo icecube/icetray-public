@@ -101,7 +101,7 @@ These dependencies are optional. If not present IceTray will compile with reduce
     - :ref:`clsim-main`, :ref:`g4-tankresponse-main`
   * - `Geant4 <https://geant4.web.cern.ch/>`_
     - Simulation of the passage of particles through matter
-    - :ref:`clsim-main`, :ref:`g4-tankresponse-main`
+    - :ref:`clsim-main`, :ref:`g4-tankresponse-main`, geantprop
   * - `OpenCL <https://www.khronos.org/opencl/>`_
     - framework for programs that execute across heterogeneous platforms
     - :ref:`clsim-main`, :ref:`ppc <ppc-main>`

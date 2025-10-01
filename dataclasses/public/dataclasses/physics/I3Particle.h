@@ -37,6 +37,8 @@ class I3Particle : public I3FrameObject
     Pi0 = 111,
     PiPlus = 211,
     PiMinus = -211,
+    K0 = 311,
+    K0Bar = -311,
     K0_Long = 130,
     KPlus = 321,
     KMinus = -321,
@@ -536,6 +538,7 @@ std::string i3particle_type_string(int32_t pdg_code);
   (NeutronBar)(LambdaBar)(SigmaMinusBar)(Sigma0Bar)(SigmaPlusBar)(Xi0Bar)       \
   (XiPlusBar)(OmegaPlusBar)(DPlus)(DMinus)(D0)(D0Bar)(DsPlus)(DsMinusBar)       \
   (LambdacPlus)(WPlus)(WMinus)(Z0)(NuE)(NuEBar)                                 \
+  (K0)(K0Bar)                                                                   \
   (NuMu)(NuMuBar)(TauPlus)(TauMinus)(NuTau)(NuTauBar)(H2Nucleus)(H3Nucleus)     \
   (He3Nucleus)(He4Nucleus)(He5Nucleus)(He6Nucleus)                              \
   (Li5Nucleus)(Li6Nucleus)(Li7Nucleus)(Be9Nucleus)(B10Nucleus)                  \
