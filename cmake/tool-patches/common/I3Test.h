@@ -139,8 +139,8 @@ namespace I3Test {
            << " " << epsilon_txt << " == " << epsilon;
         throw test_failure(file, line, ss.str(), msg);
       }
-    ResultType threshold = std::max(std::max<ResultType>(abs(actual), abs(expected))*epsilon,std::numeric_limits<ResultType>::min());
-    ResultType distance = abs(expected-actual) ;
+    ResultType threshold = std::max(std::max<ResultType>(std::abs(actual), std::abs(expected))*epsilon,std::numeric_limits<ResultType>::min());
+    ResultType distance = std::abs(expected-actual) ;
     if( distance >= threshold )
       {
         std::stringstream ss;
