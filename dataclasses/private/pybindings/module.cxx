@@ -51,8 +51,14 @@ namespace bp = boost::python;
   (I3Time)(I3Position)(I3Direction)(I3Geometry)(I3MCTree)               \
   (I3Particle)(I3RecoPulse)(I3LinearizedMCTree)(I3TimeWindow)           \
   (I3Waveform)(I3WaveformSeries)(I3WaveformSeriesMap)                   \
-  (VectorI3WaveformStatusCompound)(I3DOMLaunch)(I3DOMLaunchSeries)      \
-  (I3DOMLaunchSeriesMap)(I3EventHeader)                                 \
+  (VectorI3WaveformStatusCompound)                                      \
+  (I3DOMLaunch)(I3DOMLaunchSeries)(I3DOMLaunchSeriesMap)                \
+  (I3mDOMLaunch)(I3mDOMLaunchSeries)(I3mDOMLaunchSeriesMap)             \
+  (I3DEggLaunch)(I3DEggLaunchSeries)(I3DEggLaunchSeriesMap)             \
+  (I3NoiseSuppressionRecord)(I3NoiseSuppressionRecordSeries)            \
+  (I3NoiseSuppressionRecordSeriesMap)                                   \
+  (I3XDOMHit)(I3XDOMHitSeries)(I3XDOMHitSeriesMap)                      \
+  (I3EventHeader)                                                       \
   (I3RecoHit)(I3FlasherInfo)(I3Matrix)(I3ParticleID)                    \
   (I3MCHit)(vectorI3MCHit)(mapOMKeyI3MCHit)(I3MCHitSeriesMap)           \
   (I3Calibration)(DroopedSPETemplate)(SPETemplate)                      \

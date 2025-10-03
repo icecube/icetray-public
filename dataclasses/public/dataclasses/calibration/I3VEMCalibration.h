@@ -34,7 +34,7 @@ public:
   double pePerVEM;
 
   /**
-   * Width of the the average muon peak for this tank in PE
+   * Width of the average muon peak for this tank in PE
    */
   double muPeakWidth;
 

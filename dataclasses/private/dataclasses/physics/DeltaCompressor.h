@@ -93,7 +93,7 @@ namespace I3DeltaCompression
 
 	  /**
 	   * Compresses the waveform passed in the vector of values. The compressed
-	   * waveform is stored internally and can be retrieved using the the getCompressed()
+	   * waveform is stored internally and can be retrieved using the getCompressed()
 	   * method.
 	   * The internal state of the compressor is not reset by this call. This allows
 	   * to compress several waveforms to the same internal compressed bitstream, by

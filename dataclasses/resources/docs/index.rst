@@ -42,5 +42,6 @@ Table of Contents:
    faq-common-probs
    i3double
    spechargedistribution
+   upgrade_launch_classes
 
 Also see the :ref:`doxygen <dataclasses-cpp>` docs.

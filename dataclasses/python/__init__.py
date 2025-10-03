@@ -53,7 +53,10 @@ from icecube._dataclasses import (
     julianday, leap_second_on_mjd, make_I3Time, make_pair, map_OMKey_I3MCHit, map_Subdetector_I3TriggerReadoutConfig,
     max_daq_time, mean_spe_charge, modjulianday, mpe_discriminator_threshold, old_mpe_threshold, old_spe_threshold,
     pmt_gain, spe_discriminator_threshold, spe_mean, spe_pmt_threshold, takes_vector_I3Particle, transit_time,
-    vector_I3MCHit, vector_I3RecoHit, vector_I3RecoPulse, which_atwd, year_of
+    vector_I3MCHit, vector_I3RecoHit, vector_I3RecoPulse, which_atwd, year_of,
+    # upgrade DOMs
+    I3DEggLaunch, I3mDOMLaunch, I3NoiseSuppressionRecord, I3XDOMHit,
+    I3DEggLaunchSeriesMap, I3mDOMLaunchSeriesMap, I3NoiseSuppressionRecordSeriesMap, I3XDOMHitSeriesMap,
 )
 
 # Add some aliases for naming consistency
