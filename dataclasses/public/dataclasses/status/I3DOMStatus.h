@@ -6,6 +6,7 @@
 #define I3DOMSTATUS_H_INCLUDED
 
 #include "dataclasses/Utility.h"
+#include "dataclasses/external/CompareFloatingPoint.h"
 #include <icetray/OMKey.h>
 #include <serialization/version.hpp>
 
@@ -55,17 +56,18 @@ public:
     return (trigMode == rhs.trigMode &&
         lcMode == rhs.lcMode &&
         txMode == rhs.txMode &&
-        lcWindowPre == rhs.lcWindowPre &&
-        lcWindowPost == rhs.lcWindowPost &&
+        CompareFloatingPoint::Compare_NanEqual(lcWindowPre, rhs.lcWindowPre) &&
+        CompareFloatingPoint::Compare_NanEqual(lcWindowPost, rhs.lcWindowPost) &&
         lcSpan == rhs.lcSpan &&
         statusATWDa == rhs.statusATWDa &&
         statusATWDb == rhs.statusATWDb &&
         statusFADC == rhs.statusFADC &&
-        pmtHV == rhs.pmtHV &&
-        speThreshold == rhs.speThreshold &&
-        dacTriggerBias0 == rhs.dacTriggerBias0 &&
-        dacTriggerBias1 == rhs.dacTriggerBias1 &&
-        dacFADCRef == rhs.dacFADCRef &&
+        CompareFloatingPoint::Compare_NanEqual(pmtHV, rhs.pmtHV) &&
+        CompareFloatingPoint::Compare_NanEqual(speThreshold, rhs.speThreshold) &&
+        CompareFloatingPoint::Compare_NanEqual(fePedestal, rhs.fePedestal) &&
+        CompareFloatingPoint::Compare_NanEqual(dacTriggerBias0, rhs.dacTriggerBias0) &&
+        CompareFloatingPoint::Compare_NanEqual(dacTriggerBias1, rhs.dacTriggerBias1) &&
+        CompareFloatingPoint::Compare_NanEqual(dacFADCRef, rhs.dacFADCRef) &&
         nBinsATWD0 == rhs.nBinsATWD0 &&
         nBinsATWD1 == rhs.nBinsATWD1 &&
         nBinsATWD2 == rhs.nBinsATWD2 &&
@@ -81,7 +83,7 @@ public:
         domGainType == rhs.domGainType &&
         cableType == rhs.cableType &&
         SLCActive == rhs.SLCActive &&
-        mpeThreshold == rhs.mpeThreshold);
+        CompareFloatingPoint::Compare_NanEqual(mpeThreshold, rhs.mpeThreshold));
   }
   bool operator!=(const I3DOMStatus& rhs) const
   {

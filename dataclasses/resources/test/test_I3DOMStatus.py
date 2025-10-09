@@ -8,22 +8,11 @@ import unittest
 from icecube import dataclasses
 from icecube.icetray import I3Units
 
-class TestI3DetectorStatus(unittest.TestCase):
+class TestI3DOMStatus(unittest.TestCase):
 
-    def test_I3DetectorStatus_equality(self):
-        stat1 = dataclasses.I3DetectorStatus()
-        stat1.dom_status = dataclasses.I3DOMStatusMap()
-        stat1.trigger_status = dataclasses.I3TriggerStatusMap()
-        stat1.start_time = dataclasses.I3Time()
-        stat1.end_time = dataclasses.I3Time()
-
-        stat2 = dataclasses.I3DetectorStatus()
-        stat2.dom_status = dataclasses.I3DOMStatusMap()
-        stat2.trigger_status = dataclasses.I3TriggerStatusMap()
-        stat2.start_time = dataclasses.I3Time()
-        stat2.end_time = dataclasses.I3Time()
-
-        self.assertEqual(stat1, stat2, "these should be the same.")
-
+    def test_I3DOMStatus_equality_default_ctor(self):
+        ds1 = dataclasses.I3DOMStatus()
+        ds2 = dataclasses.I3DOMStatus()
+        self.assertEqual(ds1, ds2, "these should be the same.")
 
 unittest.main()

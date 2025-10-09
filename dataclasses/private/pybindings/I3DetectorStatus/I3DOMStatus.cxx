@@ -50,6 +50,8 @@ void register_I3DOMStatus()
       // If we used snake_case, these two would end up as status_atw_da
       .def_readwrite("status_atwd_a", &I3DOMStatus::statusATWDa)
       .def_readwrite("status_atwd_b", &I3DOMStatus::statusATWDb)
+      .def("__eq__", &I3DOMStatus::operator==)
+      .def("__ne__", &I3DOMStatus::operator!=)
       .def(dataclass_suite<I3DOMStatus>())
       ;
 
