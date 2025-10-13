@@ -13,7 +13,7 @@
 .. _hdfwriter:
 
 hdfwriter
-=================
+=========
 
 A tableio plugin for writing HDF5 files.
 
