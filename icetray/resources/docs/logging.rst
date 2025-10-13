@@ -20,7 +20,7 @@ Call logging functions like you would call ``printf()``:
 
 ::
 
-   #include <icetray/I3Logging.h>
+   #include "icetray/I3Logging.h"
 
     void doSomething() {
       int j=6;
@@ -38,7 +38,7 @@ useful for easily formatting non-POD types. For example, both of following loggi
 
 ::
 
-   #include <icetray/I3Logging.h>
+   #include "icetray/I3Logging.h"
 
     void doSomething() {
       OMKey key(64, 26);

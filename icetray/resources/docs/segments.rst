@@ -17,9 +17,11 @@ meta-projects.  This is designed to reduce configuration duplication
 scripts in several cases (by building massive data processing
 scripts from segments of segments).  With this in mind, segments provide a way to:
 
-1. Logically connect sets of services and modules that together perform a single task (e.g. Gulliver-based reconstructions or pulse extraction with NFE)
+1. Logically connect sets of services and modules that together perform a single task (e.g. Gulliver-based reconstructions or
+   pulse extraction with NFE)
 2. Build large segments of standard processing (e.g. modularization of bulk filtering and processing scripts)
-3. Support modules with widely used alternate set of defaults for some specific use (e.g. when different settings are required for real data vs MC data)
+3. Support modules with widely used alternate set of defaults for some specific use (e.g. when different settings are required
+   for real data vs MC data)
 
 .. note::
 
@@ -51,7 +53,10 @@ A more realistic example from the payload-parsing project::
       tray.AddService("I3PayloadParsingEventDecoderFactory", name + "_EventDecoder")
       tray.AddModule("I3FrameBufferDecode", name + "_fbdecoder", BufferID=BufferID, ExceptionId=ExceptionId)
 
-The decorator (@icetray.traysegment) marks the function as a tray segment, allowing it to be found later (for example, by I3Tray and icetray-inspect). Note that this also allows you to have multiple tray segments in one file. The arguments of the segment are specified as keywords (e.g. OMKey2MBIDXML), with default values following the = sign. This segment can be added to your tray like so::
+The decorator (``@icetray.traysegment``) marks the function as a tray segment, allowing it to be found later (for example, by I3Tray
+and icetray-inspect). Note that this also allows you to have multiple tray segments in one file. The arguments of the segment
+are specified as keywords (e.g. OMKey2MBIDXML), with default values following the = sign. This segment can be added to your tray
+like so::
 
   tray.AddSegment(payload_parsing.I3DOMLaunchExtractor, "extract")
 
@@ -111,7 +116,9 @@ way::
 
   tray.AddSegment(WaveCalibrator.DOMSimulatorCalibrator, 'calibrator')
 
-When using |module_altconfig|, those parameters specified in the arguments to |module_altconfig| override the module's defaults. These can be overridden again in :py:meth:`.I3Tray.AddSegment` and any other arguments to the original module can also be specified there.
+When using |module_altconfig|, those parameters specified in the arguments to |module_altconfig| override the module's defaults.
+These can be overridden again in :py:meth:`.I3Tray.AddSegment` and any other arguments to the original module can also be
+specified there.
 
 These alternative configurations also are reported by icetray-inspect:
 
@@ -133,19 +140,20 @@ These alternative configurations also are reported by icetray-inspect:
 Writing a Segment for your Modules
 """"""""""""""""""""""""""""""""""
 
-Segments can be put in any location accessible to python, but those that are part of Icetray projects typically live in the module's pybdindings. They are then imported from the module's namespace.
+Segments can be put in any location accessible to python, but those that are part of Icetray projects typically live in the
+module's pybdindings. They are then imported from the module's namespace.
 
 Modules without any python component will need to add a PYTHON_DIR directive to their project's CMakeLists.txt::
 
   i3_project(myproject PYTHON_DIR python)
 
-and an `__init__.py` file to a new python subdirectory like this::
+and an ``__init__.py`` file to a new python subdirectory like this::
 
   from icecube import icetray
   import os
   icetray.load('myproject', False)
 
-Short segments can be added directly to this file, but longer ones should be added to another .py file, and then brought into the project's namespace with an import command in `__init__.py`.
+Short segments can be added directly to this file, but longer ones should be added to another .py file, and then brought into the project's namespace with an import command in ``__init__.py``.
 
 There is one additional variant of the icetray.traysegment decorator that can be useful in some circumstances. This is an example from the hdfwriter project::
 
@@ -159,7 +167,11 @@ There is one additional variant of the icetray.traysegment decorator that can be
         tray.AddModule(tableio.I3TableWriter, name, TableService=tabler,
             **kwargs)
 
-This is a wrapper around :cpp:class:`I3TableWriter` that adds one additional service. Any options besides `Output` are passed through to :cpp:class:`I3TableWriter` via the kwargs parameter, but what those available options are would not ordinarily show up in the output of icetray-inspect. The use of :py:func:`~.traysegment_inherit` here makes no functional changes, but causes the options taken by :cpp:class:`I3TableWriter` to be appended to the segment's own options (in this case, `Output`) when shown in ``icetray-inspect``.
+This is a wrapper around :cpp:class:`I3TableWriter` that adds one additional service. Any options besides ``Output`` are passed
+through to :cpp:class:`I3TableWriter` via the kwargs parameter, but what those available options are would not ordinarily show
+up in the output of icetray-inspect. The use of :py:func:`~.traysegment_inherit` here makes no functional changes, but causes
+the options taken by :cpp:class:`I3TableWriter` to be appended to the segment's own options (in this case, ``Output``) when shown
+in ``icetray-inspect``.
 
 Segments of Segments
 """"""""""""""""""""
@@ -180,7 +192,8 @@ Segments can of course include :py:func:`tray.AddSegment() <icecube.icetray.i3tr
           tray.AddModule('Rename', name + '_sdstrename',
             Keys=[superdstname, pulses], If=lambda fr: pulses not in fr)
 
-For common processing chains like the L2 processing, such a segment would typically live in a pure python project. For small personal projects, they can live in any python file (including in the script from which they are being used).
+For common processing chains like the L2 processing, such a segment would typically live in a pure python project. For small
+personal projects, they can live in any python file (including in the script from which they are being used).
 
 Expanding segments in the I3Tray
 """"""""""""""""""""""""""""""""
@@ -207,7 +220,10 @@ There are several ways to see what is inside of a segment. The simplest is using
       AddModule('I3FrameBufferDecode', 'example_fbdecoder', BufferID='I3DAQData', ExceptionId='I3DAQDecodeException')
 
 
-It is also possible to print out the contents of an I3Tray or TrayInfo object using the Python :py:func:`print` function to get the contents and configuration of the entire tray, with all segments expanded, in a human-readable form. The Python :py:func:`repr` operator can also be used to get a more-tractable (and potentially executable) version of a tray or TrayInfo frame::
+It is also possible to print out the contents of an I3Tray or TrayInfo object using the Python :py:func:`print` function to get
+the contents and configuration of the entire tray, with all segments expanded, in a human-readable form. The Python
+:py:func:`repr` operator can also be used to get a more-tractable (and potentially executable) version of a tray or TrayInfo
+frame::
 
   print(repr(tray))
 

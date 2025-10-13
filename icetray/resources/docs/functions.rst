@@ -36,8 +36,8 @@ stream only.
 
 .. warning::
 
-   it is **not** ``AddModule('frame_printer', ...``
-   it is ``AddModule(frame_printer, ...``
+   - It is **not** ``AddModule('frame_printer', ...``
+   - It is ``AddModule(frame_printer, ...``
 
    If you see a message like
 
@@ -46,6 +46,8 @@ stream only.
    it is because you've put the python function into quotes, making it a string, and
    icetray is failing to find that string in its registry of available C++ I3Modules.
 
+
+.. highlight:: text
 
 If you put that function between a :cpp:class:`BottomlessSource`, (which
 just pushed empty physics frames), the output should look like this::
@@ -140,6 +142,8 @@ are also called lambda expressions because they can only contain simple
 expressions. Note that functions created with lambda expressions cannot
 contain statements (if, while, for, try, with, ...). Check google for
 more information on this standard python construct.
+
+.. highlight:: python
 
 This makes writing very short modules possible. A simple function::
 

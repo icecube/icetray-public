@@ -6,8 +6,8 @@ I3PODHolder
 ===========
 
 This is a generic container for POD types - "plain old data" types.
-The data is stored in a `value` parameter, and each class has the
-standard comparison operators (`==, !=, <, >, <=, >=`) defined.
+The data is stored in a *value* parameter, and each class has the
+standard comparison operators (*==, !=, <, >, <=, >=*) defined.
 
 The instantiations of this container are::
 
@@ -16,15 +16,16 @@ The instantiations of this container are::
     dataclasses.I3Double
     dataclasses.I3String
 
-For the `I3Int` and `I3Double` types, they will automatically compare
-with normal `int` and `double` types in python, but will not automatically
+For the :cpp:type:`I3Int` and :cpp:type:`I3Double` types, they will automatically compare
+with normal :py:type:`int` and :py:type:`double` types in python, but will not automatically
 convert to the type.
+
+.. highlight:: ipythonconsole
 
 .. warning::
 
-    Be careful comparing I3Double with double in python, as certain values
-    will not compare equal because of the way floating point numbers are
-    represented.
+    Be careful comparing :cpp:type:`I3Double` with :py:type:`double` in Python, as certain values
+    will not compare equal because of the way floating point numbers are represented.
 
     For example::
 

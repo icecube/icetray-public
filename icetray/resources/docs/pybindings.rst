@@ -33,10 +33,10 @@ For more information check out the docs for `boost::python <https://www.boost.or
 
 private/pybindings/module.cxx::
 
-    #include <icetray/load_project.h>
+    #include "icetray/load_project.h"
 
-    #include <public/advanced_bootcamp/I3Bootcamp.h>
-    #include <icetray/python/dataclass_suite.hpp>
+    #include "public/advanced_bootcamp/I3Bootcamp.h"
+    #include "icetray/python/dataclass_suite.hpp"
 
     // write I3Bootcamp out to a string
     std::ostream& operator<<(std::ostream &s, const I3Bootcamp &thing)

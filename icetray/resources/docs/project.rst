@@ -222,8 +222,8 @@ public/advanced_bootcamp/I3Bootcamp.h::
     #ifndef BOOTCAMP_H
     #define BOOTCAMP_H
 
-    #include <icetray/I3FrameObject.h>
-    #include <icetray/serialization.h>
+    #include "icetray/I3FrameObject.h"
+    #include "icetray/serialization.h"
     #include <string>
 
     // subclass I3FrameObject so we can insert this class into the frame
@@ -251,7 +251,7 @@ Private Modules
 private/advanced_bootcamp/I3Bootcamp.cxx::
 
     // the module interface
-    #include <advanced_bootcamp/I3Bootcamp.h>
+    #include "advanced_bootcamp/I3Bootcamp.h"
 
     // do serialization (write to/read from an i3 file)
     // the version number can be used to establish version formats
@@ -277,10 +277,10 @@ private/advanced_bootcamp/I3Bootcamp.cxx::
 private/advanced_bootcamp/I3BootcampModule.cxx::
 
     // some basic includes
-    #include <icetray/I3ConditionalModule.h>
+    #include "icetray/I3ConditionalModule.h"
 
     // the module interface
-    #include <advanced_bootcamp/I3Bootcamp.h>
+    #include "advanced_bootcamp/I3Bootcamp.h"
 
     // let's make a private module
     class I3BootcampModule : public I3ConditionalModule {
@@ -315,9 +315,9 @@ Pybindings
 
 private/pybindings/module.cxx::
 
-    #include <icetray/load_project.h>
+    #include "icetray/load_project.h"
 
-    #include <public/advanced_bootcamp/I3Bootcamp.h>
+    #include "public/advanced_bootcamp/I3Bootcamp.h"
 
     // register function for the interface class
     void register_I3Bootcamp()
@@ -399,5 +399,3 @@ Let's use this module to do something::
     tray.AddModule('I3Writer', filename='foo.i3')
 
     tray.Execute()
-
-

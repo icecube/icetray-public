@@ -6,21 +6,31 @@
    pair: I3Context; C++ Class
 .. _I3Context:
 
-.. highlight:: pycon
+.. highlight:: cpp
 
 I3Context Reference
 ======================
 
 The I3Context is a container similar to the I3Frame. The main similarities:
- * Both are implemented with a map of strings to smart pointers.
- * With both, one Puts smart pointers in, but can retrieve either smart pointers or references.
+
+* Both are implemented with a map of strings to smart pointers.
+* With both, one Puts smart pointers in, but can retrieve either smart
+  pointers or references.
 
 The main differences are:
- * I3Context is not used to pass event data from module to module as I3Frame is. I3Context is how instances of I3Module access services and configuration information shared across all modules.
- * Consequently, only service factories and users of I3Tray can put things into the context but modules cannot -- and then only before the tray starts.
- * I3Context does not dynamic_cast when asked to Get() something. I3Context will only return an object as type T if that object was installed as exactly type T. (In contrast, the I3Frame will return an object as type T if it is a type T or a descendant of T, regardless of how it was Put().)
 
-The icetray passes a const I3Context to I3ServiceFactories and I3Modules in their constructors::
+* I3Context is not used to pass event data from module to module as I3Frame is.
+  I3Context is how instances of I3Module access services and configuration
+  information shared across all modules.
+* Consequently, only service factories and users of I3Tray can put things into
+  the context but modules cannot -- and then only before the tray starts.
+* I3Context does not dynamic_cast when asked to Get() something. I3Context will
+  only return an object as type T if that object was installed as exactly type
+  T. (In contrast, the I3Frame will return an object as type T if it is a type
+  T or a descendant of T, regardless of how it was Put().)
+
+The icetray passes a const I3Context to I3ServiceFactories and I3Modules in
+their constructors::
 
  class MyModule : public I3Module
  {
@@ -58,7 +68,7 @@ classes::
  };
 
 Interface
-----------------
+---------
 
 I3Context::Has()
 ^^^^^^^^^^^^^^^^
@@ -66,32 +76,41 @@ I3Context::Has()
 These following examples all assume an I3Context named
 ``context_`` is in scope:
 
-Find out if the context contains something named "something" regardless of what type that "something" might be::
+Find out if the context contains something named "something" regardless of what
+type that "something" might be::
 
  I3Context context_;
 
  bool contains = context_.Has("something");
 
-Find out if the context contains something named "littleman" of type RatMonster (something may exist at slot "littleman", this function will return true only if it is of type RatMonster::
+Find out if the context contains something named "littleman" of type RatMonster
+(something may exist at slot "littleman", this function will return true only
+if it is of type RatMonster::
 
  bool contains = context_.Has<RatMonster>("littleman");
 
-if this call returns true, it is guaranteed that a subsequent call to Get() will succeed.
+if this call returns true, it is guaranteed that a subsequent call to Get()
+will succeed.
 
 I3Context::Get()
-^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
 
-These examples get references to services out of the context with the name and type of the object fully specified. This form either succeeds or throws via log_fatal()::
+These examples get references to services out of the context with the name and
+type of the object fully specified. This form either succeeds or throws via
+log_fatal()::
 
  SomeService& service = context_.Get<SomeService>("where");
 
-These get references to services where the object has a DefaultName, determinable from its type; again, the call succeeds or calls log_fatal()::
+These get references to services where the object has a DefaultName,
+determinable from its type; again, the call succeeds or calls log_fatal()::
 
  I3MediumService& medium = context_.Get<I3MediumService>();
 
  I3RandomService& rng = context_.Get<I3RandomService>();
 
-The following form gets smart pointers to the same services. Get will return a null shared_ptr if either the context is empty at the relevant slot, or if the contents of the relevant slot are of the wrong type::
+The following form gets smart pointers to the same services. Get will return a
+null shared_ptr if either the context is empty at the relevant slot, or if the
+contents of the relevant slot are of the wrong type::
 
  I3MediumServicePtr medium_p = context_.Get<I3MediumServicePtr>();
  // medium_p == false,  if retrieval failed.
@@ -103,7 +122,14 @@ The following form gets smart pointers to the same services. Get will return a n
 I3Context::Put()
 ^^^^^^^^^^^^^^^^^
 
-The big difference between I3Frame's Put and I3Context's Put is that with the I3Frame, one doesn't have to pay attention to the type of the object at the time that one Puts it into the frame. With the I3Context, however, one is normally Putting a newly-created service, and one has to Put that service as its base type. That is, if you have just created a LaggedFibonacciRandomService, you must Put it as an I3RandomService, if client modules will be accessing it as an I3RandomService::
+The big difference between I3Frame's Put and I3Context's Put is that with the
+I3Frame, one doesn't have to pay attention to the type of the object at the
+time that one Puts it into the frame. With the I3Context, however, one is
+normally Putting a newly-created service, and one has to Put that service as
+its base type. That is, if you have just created a
+``LaggedFibonacciRandomService``, you must ``Put`` it as an
+``I3RandomService``, if client modules will be accessing it as an
+I3RandomService::
 
  LaggedFibonacciRandomServicePtr fib_p(new LaggedFibonacciRandomService);
  fib_p->initialize();
@@ -114,13 +140,27 @@ The example above assumes that I3RandomService has some default name.
 Example: A random number service
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The pattern I3Context follows helps keep modules ignorant of exactly what types of services they are using. For instance, one might want to run simulations with various different random number generators: you don't want to have to recompile when you switch generators, and if you want to run others' modules with your random number generator, you don't want to have to hunt through other people's code and remove/replace all the generators by hand.
+The pattern I3Context follows helps keep modules ignorant of exactly what types
+of services they are using. For instance, one might want to run simulations
+with various different random number generators: you don't want to have to
+recompile when you switch generators, and if you want to run others' modules
+with your random number generator, you don't want to have to hunt through other
+people's code and remove/replace all the generators by hand.
 
-Therefore one requires some single interface that all random number generators provide. This interface is specified in an /abstract base class/. Each particular kind of random number generator implements this base interface (that is, it provides implementations of the base classes' pure virtual functions). Modules that use these random number "services" can remain ignorant of exactly what kind of random number service they are using because,
-# They only use the base class' interface.
-# The icetray framework takes care of creating these random number services and putting them where modules can get them.
+Therefore one requires some single interface that all random number generators
+provide. This interface is specified in an "abstract base class". Each
+particular kind of random number generator implements this base interface (that
+is, it provides implementations of the base classes' pure virtual functions).
+Modules that use these random number "services" can remain ignorant of exactly
+what kind of random number service they are using because,
 
-We'll take a family of random number generators, each of which must supply random doubles and be seedable with an int. The base class specifies what any derived class must be able to do::
+#. They only use the base class' interface.
+#. The icetray framework takes care of creating these random number services
+   and putting them where modules can get them.
+
+We'll take a family of random number generators, each of which must supply
+random doubles and be seedable with an int. The base class specifies what any
+derived class must be able to do::
 
  class RandomNumberService
  {
@@ -135,7 +175,8 @@ We'll take a family of random number generators, each of which must supply rando
     virtual void   Seed(int) = 0;
  };
 
-Derived classes implement those pure virtual functions (the ones followed by = 0). Here is one that uses UNIX's built in rand() function::
+Derived classes implement those pure virtual functions (the ones followed by =
+0). Here is one that uses UNIX's built in ``rand()`` function::
 
  class UnixRandService : public RandomNumberService
  {

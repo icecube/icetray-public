@@ -6,21 +6,20 @@
    pair: I3Frame; C++ Class
 .. _I3Frame:
 
-.. highlight:: pycon
-
-
 I3Frame
-=========
+=======
 
 The I3Frame is the fundamental container passed between I3Modules.
 
 
 In C++
---------
+------
 
 
 I3Frame Reference
 ^^^^^^^^^^^^^^^^^
+
+.. highlight:: text
 
 The I3Frame is a flexible container that carries data from I3Module
 to I3Module as an icetray run proceeds. I3Modules receive a shared
@@ -33,16 +32,16 @@ modify it. This is intended to catch the subtle and frustrating bugs
 that come up when foreign code modifies your data (intentionally or
 unintentionally) without telling you about it.
 
-Internally, the I3Frame is implemented as a map<> of string to
-shared_ptr<I3FrameObject>. That is, only smart pointers to things that
+Internally, the I3Frame is implemented as a ``map<std::string>`` to
+``shared_ptr<I3FrameObject>``. That is, only smart pointers to things that
 inherit from I3FrameObject are storable in the frame. Any container such
 as I3Frame must require its contents to all have some common ancestor.
 
 .. _i3frame_print:
 
-If you send an I3Frame to cout (or 'print' it from python), it will
-show you the names and types of its contents (this is what the
-**Dump** I3Module does)::
+If you send an I3Frame to ``std::cout`` (or :py:func:`print` it from python),
+it will show you the names and types of its contents (this is what the **Dump**
+I3Module does)::
 
   [ I3Frame  (Physics):
     'DrivingTime' [Physics] ==> I3Time (38)
@@ -72,10 +71,13 @@ object has not yet been serialized, so its size is not yet known.
 (This is a bit of the *lazy frame* abstraction leaking through).
 
 So above we can see that at 'LineFit' there is a pointer to an
-I3Particle, and at 'Geometry' there is a pointer to an I3Geometry.
+:cpp:class:`I3Particle`, and at 'Geometry' there is a pointer to an
+:cpp:class:`I3Geometry`.
 
-To put things into a frame, you call the frame's Put method. Here's
-a skeleton of the Physics() method of some module::
+To put things into a frame, you call the frame's :cpp:func:`~I3Frame::Put`
+method. Here's a skeleton of the ``Physics()`` method of some module:
+
+.. code:: c++
 
  void
  MyModule::Physics(I3FramePtr frame)
@@ -106,7 +108,9 @@ contain the new particle::
  ]
 
 Getting that particle back out, say in the Physics() method of
-a module later in the processing chain, looks like this::
+a module later in the processing chain, looks like this:
+
+.. code:: c++
 
  void
  OtherModule::Physics(I3FramePtr frame)
@@ -120,7 +124,7 @@ a module later in the processing chain, looks like this::
 
 Here we've got a const shared pointer to the I3Particle. This is ideal: you
 can check that you got what you asked for (check for non-null pointer) and
-the_particleptr is const, so the compiler can ensure we don't
+``the_particleptr`` is const, so the compiler can ensure we don't
 accidentally modify it.
 
 Requirements on toplevel frame objects
@@ -129,76 +133,114 @@ Requirements on toplevel frame objects
 Toplevel frame objects... that is, those which you will directly Put
 and Get to/from the frame must satisfy several requirements:
 
- * Be descendants of I3FrameObject
+ * Be descendants of :cpp:class:`I3FrameObject`
  * Have at least one virtual, non-inline function (an empty virtual
    destructor, declared in the header file but defined in the
    implementation file, will do if the class has no other need for
    virtual functions)
  * Have a serialize method that also serializes its base classes via
    base_object
- * Use the I3_SERIALIZABLE() macro to instantiate the serialization
+ * Use the ``I3_SERIALIZABLE()`` macro to instantiate the serialization
    method for the relevant archive types.
 
 These requirements allow toplevel frame objects to work correctly with
-the frame's Get<> methods and to function correctly in the I3Writer,
-I3Reader, and other applications like the dataio-shovel.
+the frame's ``Get<>()`` methods and to function correctly in the :cpp:class:`I3Writer`,
+:cpp:class:`I3Reader`, and other applications like the ``dataio-shovel``.
 
-I3Map<> and I3Vector<> exist strictly to help std::vector and std::map
-satisfy the requirements above, so that these maps/vectors are
+``I3Map<>`` and ``I3Vector<>`` exist strictly to help ``std::vector``
+and ``std::map`` satisfy the requirements above, so that these maps/vectors are
 storable as toplevel frame objects.
 
-maps and vectors that are contained in toplevel frame objects, but are
-not themselves toplevel frame objects, need not be I3Maps or
-I3Vectors; plain vector and map will do.
+Maps and vectors that are contained in toplevel frame objects, but are
+not themselves toplevel frame objects, need not be ``I3Maps`` or
+``I3Vectors``; plain vector and map will do.
 
-I3Bool and I3Double are two other good examples of classes that exist
-only to contain data such that they are storable in the frame.
+:cpp:type:`I3Bool` and :cpp:type:`I3Double` are two other good examples of
+classes that exist only to contain data such that they are storable in the
+frame.
 
 I3Frame::Put()
 ^^^^^^^^^^^^^^
 
-Put() will succeed if no object exists in the frame at the requested
-key. If something already does, Put() throws an exception via a call
-to log_fatal(). For instance, this code::
+.. highlight:: c++
+
+:cpp:func:`~I3Frame::Put` will succeed if no object exists in the frame at the
+requested key. If something already does, ``Put()`` throws an exception via a call
+to ``log_fatal()``. For instance, this code::
 
  I3ParticlePtr p(new I3Particle);
  frame.Put("myparticle", p);
- frame.Put("myparticle", p); // this one is in error.  Slot full already.
+ frame.Put("myparticle", p);  // this one is an error.  Slot full already.
 
-generates the error::
+generates the error:
 
- Frame already contains myparticle of type I3Particle
+.. code:: text
+
+  FATAL (icetray): frame already contains "myparticle", of type "I3Particle"
 
 Notice that this function works only for shared_ptr<T> where T is or
 inherits from I3FrameObject. One cannot, for instance, place a string
 directly into the frame::
 
  std::string datum = generate_datum();
- frame.Put(datum, "datum_key");    // error, datum not a shared_ptr
+ frame.Put("datum_key", datum);  // error, datum not a shared_ptr
 
-the error is returned::
+the error is returned:
 
- badput.cxx:23: error: no matching function for call to 'I3Frame::Put(const
-  char [10], std::string&)'
- public/icetray/I3Frame.h:164: note: candidates are: void I3Frame::Put(cons
- t std::string&, boost::shared_ptr<const I3FrameObject>)
+.. code:: text
+
+  badput.cxx:18:11: error: no matching member function for call to 'Put'
+     18 |     frame.Put("datum_key", datum);
+        |     ~~~~~~^~~
+  /Users/nega/i3/icetray/src/icetray/public/icetray/I3Frame.h:404:8: note: candidate function not viable: no known conversion from 'std::string' (aka 'basic_string<char>') to 'I3FrameObjectConstPtr' (aka 'shared_ptr<const I3FrameObject>') for 2nd argument
+    404 |   void Put(const std::string& name,
+        |        ^
+    405 |            I3FrameObjectConstPtr element);
+        |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  /Users/nega/i3/icetray/src/icetray/public/icetray/I3Frame.h:414:8: note: candidate function template not viable: requires single argument 'element', but 2 arguments were provided
+    414 |   void Put(boost::shared_ptr<T> element)
+        |        ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  /Users/nega/i3/icetray/src/icetray/public/icetray/I3Frame.h:400:8: note: candidate function not viable: requires 3 arguments, but 2 were provided
+    400 |   void Put(const std::string& name,
+        |        ^   ~~~~~~~~~~~~~~~~~~~~~~~~
+    401 |            I3FrameObjectConstPtr element,
+        |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    402 |            const I3Frame::Stream& stream);
+        |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  1 error generated.
 
 Because datum is not a shared_ptr. Again, not just any shared_ptr will
 work. If we attempt to pass a shared_ptr to a string::
 
- shared_ptr<string> datum_p(new string);
- \*datum_p = generate_datum();
- frame.Put(datum_p, "datum_key"); // error, string not a I3FrameObject
+ using std::string;
+ boost::shared_ptr<string> datum_p(new string);
+ *datum_p = generate_datum();
+ frame.Put("datum_key", datum_p);  // error, string not a I3FrameObject
 
-string is not a descendant of I3FrameObject, which is a requirement
-placed on all frame objects. The error is a little longer::
+``string`` is not a descendant of ``I3FrameObject``, which is a requirement
+placed on all frame objects. The error is a similar:
 
- /icecube/work/offline-mk/tool-patches/boost/shared_ptr.hpp: In constructor
-  'boost::shared_ptr<T>::shared_ptr(const boost::shared_ptr<Y>&) [with Y =
- std::string, T = const I3FrameObject]':
- badput.cxx:23:   instantiated from here
- /icecube/work/offline-mk/tool-patches/boost/shared_ptr.hpp:186: error: can
- not convert 'std::string* const' to 'const I3FrameObject*' in initialization
+.. code:: text
+
+  badput.cxx:25:11: error: no matching member function for call to 'Put'
+     25 |     frame.Put("datum_key", datum_p);  // error, string not a I3FrameObject
+        |     ~~~~~~^~~
+  /Users/nega/i3/icetray/src/icetray/public/icetray/I3Frame.h:404:8: note: candidate function not viable: no known conversion from 'shared_ptr<string>' to 'shared_ptr<const I3FrameObject>' for 2nd argument
+    404 |   void Put(const std::string& name,
+        |        ^
+    405 |            I3FrameObjectConstPtr element);
+        |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  /Users/nega/i3/icetray/src/icetray/public/icetray/I3Frame.h:414:8: note: candidate function template not viable: requires single argument 'element', but 2 arguments were provided
+    414 |   void Put(boost::shared_ptr<T> element)
+        |        ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  /Users/nega/i3/icetray/src/icetray/public/icetray/I3Frame.h:400:8: note: candidate function not viable: requires 3 arguments, but 2 were provided
+    400 |   void Put(const std::string& name,
+        |        ^   ~~~~~~~~~~~~~~~~~~~~~~~~
+    401 |            I3FrameObjectConstPtr element,
+        |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    402 |            const I3Frame::Stream& stream);
+        |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  1 error generated.
 
 Where the last line is the most important: can't convert from
 pointer-to-string to pointer-to-I3FrameObject. It's easy enough to
@@ -218,11 +260,10 @@ fix::
 Put with default names
 ^^^^^^^^^^^^^^^^^^^^^^
 
-There are actually two forms of ``I3Frame::Put()``. One variation is
-for objects without associated default names (that's almost all of
-them), as used above in ``MyModule::Physics()``, ``void Put(const
-string& name, shared_ptr<I3FrameObject> element)``; and the other
-omits the name parameter::
+There are actually two forms of :cpp:func:`I3Frame::Put()`. One variation is
+for objects without associated default names (that's almost all of them), as
+used above in ``MyModule::Physics()``, ``void Put(const string& name,
+shared_ptr<I3FrameObject> element)``; and the other omits the name parameter::
 
  template <typename T>
  void
@@ -259,11 +300,10 @@ This form of Get retrieves a shared_ptr to a frame object::
  T
  Get(const std::string& key);
 
-The frame will first attempt to locate an object
-at key, and an object does exist there, the frame will then attempt to
-dynamic_pointer_cast this object to the template argument T. If either
-of these steps fails, the frame returns a null TPtr (or
-shared_ptr<const > if you like).
+The frame will first attempt to locate an object at key, and an object does
+exist there, the frame will then attempt to dynamic_pointer_cast this object to
+the template argument ``T``. If either of these steps fails, the frame returns
+a null ``TPtr`` (or ``shared_ptr<const >`` if you like).
 
 Note that this function will only compile if the type T is const. That
 is::
@@ -424,7 +464,7 @@ which is equivalent to::
  const shared_ptr<I3Particle> particle =
    frame.Get<shared_ptr<I3Particle> >("seed");
 
-as this const I3ParticlePtr is a const pointer to a nonconst particle;
+as this ``const I3ParticlePtr`` is a const pointer to a nonconst particle;
 the pointer isn't changeable, and the particle is. This is of course
 the opposite of the desired effect, and by design, the line above
 won't compile. The second typedef, TConstPtr, is the correct one::
@@ -438,33 +478,6 @@ pointer::
 
  shared_ptr<const I3Particle> particle =
    frame.Get<shared_ptr<const I3Particle> >("seed");
-
-If you attempt to Get<> something non-const, you will see an error
-something like::
-
- /Users/troy/Icecube/meta-projects/offline-software/work-dc2/offline-mk/too
- l-patches/boost/shared_ptr.hpp: In constructor 'boost::shared_ptr<T>::shar
- ed_ptr(const boost::shared_ptr<Y>&, boost::detail::dynamic_cast_tag) [with
-  Y = const I3FrameObject, T = TestedData]':
- /Users/troy/Icecube/meta-projects/offline-software/work-dc2/offline-mk/too
- l-patches/boost/shared_ptr.hpp:416:   instantiated from 'boost::shared_ptr
- <T> boost::dynamic_pointer_cast(const boost::shared_ptr<U>&) [with T = Tes
- tedData, U = const I3FrameObject]'
- public/icetray/I3Frame.h:84:   instantiated from 'boost::shared_ptr<typena
- me boost::add_const<typename T::value_type>::type> I3Frame::Get(const std:
- :string&, typename boost::enable_if<I3Frame::is_shared_ptr<T>, void>::type
- *) const [with T = TestedDataPtr]'
- private/test/wont_compile.cxx:27:   instantiated from here
- /Users/troy/Icecube/meta-projects/offline-software/work-dc2/offline-mk/too
- l-patches/boost/shared_ptr.hpp:201: error: cannot dynamic_cast 'r->boost::
- shared_ptr<const I3FrameObject>::px' (of type 'const class I3FrameObject*
- const') to type 'struct TestedData*' (conversion casts away constness)
- make: *** [/Users/troy/Icecube/meta-projects/offline-software/work-dc2/Mac
- OSX-libstdc++6-ppc/build/icetray/private/test/wont_compile.o] Error 1
-
-wherein the last line is the most important::
-
- cannot dynamic_cast, conversion casts away constness.
 
 .. index:: I3_DEFAULT_NAME
 .. _I3_DEFAULT_NAME:
@@ -489,8 +502,8 @@ enables the zero-argument forms of I3Frame::Get<> and I3Context::Get<>
 with the macro I3_DEFAULT_NAME. For example the file I3Geometry.h
 contains::
 
- #include <icetray/I3DefaultName.h>
- #include <icetray/I3FrameObject.h>
+ #include "icetray/I3DefaultName.h"
+ #include "icetray/I3FrameObject.h"
 
  struct I3Geometry : public I3FrameObject
  {
@@ -541,7 +554,7 @@ Physics frame.
 
 While a frame has a stream, so does each key stored in the frame. The
 individual keys' streams simply identify whether that key was directly added to
-the frame using `Put()`, or whether it was mixed from a preceding frame on
+the frame using :py:func:`.Put()`, or whether it was mixed from a preceding frame on
 another stream, and if so from which stream. Directly added keys - those whose
 streams match that of the containing frame - are termed 'native'.
 
@@ -563,6 +576,8 @@ reimplemented by users.
 
 In Python
 ^^^^^^^^^
+
+.. highlight:: pycon
 
 .. class:: icecube.icetray.I3Frame
    :noindex:
@@ -801,23 +816,21 @@ In Python
 
       Move frame object at *from* to slot *to*::
 
-         frame.Rename('foo', 'bar')
+         >>> frame.Rename('foo', 'bar')
 
       This form **preserves** the stream tags, i.e. if 'foo', above,
       is on stream 'X', it will still be on 'X' when renamed to 'bar'.
       This is potentially much different than::
 
-         frame['bar'] = frame['foo']
-         del frame['foo']
+         >>> frame['bar'] = frame['foo']
+         >>> del frame['foo']
 
       Since frame objects are tagged with the frame's stream belong to
       when they are *Put* into the frame, then the object at 'bar',
       above, will be tagged with whatever the frame's stream type is.
       Example::
 
-          # Rename() preserves that the object is on the Geometry
-          # stream
-
+          >>> # Rename() preserves that the object is on the Geometry stream
           >>> print frame
           [ I3Frame  (Physics):
 	    'bar' [Physics] ==> I3Int
@@ -830,7 +843,7 @@ In Python
             'quux' [Geometry] ==> I3Int
           ]
 
-          # note this one loses the original stream type
+          >>> # note this one loses the original stream type
           >>> frame['foo'] = frame['quux']
           >>> del frame['quux']
           >>> print frame
@@ -858,6 +871,8 @@ In Python
 I3FrameObject
 ^^^^^^^^^^^^^
 
+.. highlight:: c++
+
 Types that are to be stored in an I3Frame must meet several requirements:
 
 * Inherit publicly from ``I3FrameObject``
@@ -880,8 +895,8 @@ The struct ``I3Double`` in project ``dataclasses`` is a good example class
 
 Here is the implementation::
 
-  #include <icetray/serialization.h>
-  #include <dataclasses/I3Double.h>
+  #include "icetray/serialization.h"
+  #include "dataclasses/I3Double.h"
 
   template <class Archive>
   void
