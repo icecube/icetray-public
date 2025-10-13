@@ -2,6 +2,8 @@
 ..
 .. SPDX-License-Identifier: BSD-2-Clause
 
+.. highlight:: pycon
+
 FAQ / common errors
 -------------------
 
@@ -10,7 +12,9 @@ I can't make pybindings to an I3Vector of my class
 
 the ``vector_indexing_suite`` requires that the classes inside the
 vector have an ``operator==``, so that it is possible to write
-constructs like::
+constructs like:
+
+.. code-block:: python
 
   v = I3VectorMyType()
   mt = MyType()
@@ -18,7 +22,7 @@ constructs like::
   if mt in v:
      # do something
 
-So if you get deep compiler errors that involve 'operator==', check
+So if you get deep compiler errors that involve ``operator==``, check
 that your class is equality-comparable.
 
 
@@ -58,9 +62,11 @@ then you can't just do it later, due to the way python imports work::
   >>> f
   <icecube.icetray.I3FrameObject object at 0x84f12cc>
 
-Where ``f`` above should be an ``icecube.dataclasses.I3Time`` object, not an ``icecube.icetray.I3FrameObject``.
+Where ``f`` above should be an :class:`icecube.dataclasses.I3Time` object, not an :class:`icecube.icetray.I3FrameObject`.
 
-**Remedy**:  start from a fresh python session, and import like this::
+**Remedy**:  start from a fresh python session, and import like this:
+
+.. code-block:: python
 
   from icecube import icetray, dataclasses, dataio
 
@@ -96,15 +102,17 @@ that's no good.  If you reimport dataclasses, still no help::
     File "<stdin>", line 1, in <module>
   AttributeError: 'module' object has no attribute 'I3Time'
 
-so you have to :func:`~imp.reload` dataclasses::
+so you have to :func:`~importlib.reload` dataclasses:
 
+.. code-block:: pycon
+
+  >>> from importlib import reload
   >>> reload(dataclasses)
   <module 'icecube.dataclasses' from '/home/troy/Icecube/meta-projects/analysis/trunk/build/lib/icecube/dataclasses.so'>
   >>> t = dataclasses.I3Time()
   >>> t
   <icecube.dataclasses.I3Time object at 0xb36d8dec>
 
-See the python documentation for more information on how ``import``
-and ``reload()`` work.  Moral of the story: be careful with the order
+See the Python documentation for more information on how :ref:`importsystem`
+and :func:`~importlib.reload` work.  Moral of the story: be careful with the order
 of your imports.
-

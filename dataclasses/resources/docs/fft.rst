@@ -43,8 +43,7 @@ That is, it does not know if bin 1 corresponds to :math:`t=0` or :math:`t=-1000`
 And as important, the DFT, unlike the continuous version, does not know anything about the units.
 Thus it is important to note that if given only a frequency spectrum one cannot uiquely determine the initial time-domain waveform in the same way that performing an integral gives you the solution with an unknown constant.
 
-  .. note:: This is one of the reasons that the class `FFTDataContainer` is important as it keeps the two paired together. This way, when changing between the time domain and the frequency domain, the initial values and time-step is not lost.
-
+  .. note:: This is one of the reasons that the class :ref:`fft_data_container` is important as it keeps the two paired together. This way, when changing between the time domain and the frequency domain, the initial values and time-step is not lost.
 
 For more, see :ref:`fft_data_container`.
 
@@ -244,7 +243,7 @@ Below is an example of how to use these functions
   peakTime = fft.GetHilbertPeakTime(timeSeries)
   hilbertEnvelope = fft.GetHilbertEnvelope(timeSeries)
 
-Note that these functions work on 1D (`AntennaTimeSeries`) and 3D (`EFieldTimeSeries`) waveforms.
+Note that these functions work on 1D (``AntennaTimeSeries``) and 3D (``EFieldTimeSeries``) waveforms.
 If the Hilbert Envelope is requested, it will return a waveform of the same dimension as the object passed in.
 Also note that there is no functionality to get the Hilbert Envelope from the frequency spectrum since you cannot determine the start time of the waveform and as such the peak time of the Hilbert Envelope is also ill defined.
 
@@ -264,7 +263,7 @@ The upsampling process works by taking some frequency spectrum of length (N/2 + 
 To upsample, one adds additional bins to the frequency spectrum with an amplitude of zero.
 This adds no additional power to the waveform, leaving it essentially untouched in amplitude and length.
 Except now, the binning is more closely spaced.
-This process is commonly referred to as `zero-padding`.
+This process is commonly referred to as *zero-padding*.
 
 Downsampling works by simply throwing out data points in the time domain.
 For instance if you want to downsample by a factor of 2, then the process simply consists of removing every-other entry in the time series.

@@ -131,14 +131,14 @@ A Cascade interaction in the detector would look like a blob instead of a track.
 that produces a blob is a neutrino neutral current Deep Inelastic Scattering in the ice. This will produce a shower of hadrons
 (many of those are Cascades) in the final state of the interaction.
 
-An :class:`I3Particle` can be set as a cascade via :class:`ParticleShape` or :class:`ParticleType`
-in the constructor of :class:`I3Particle` class. A description of :class:`ParticleShape` and :class:`ParticleType`
+An :class:`I3Particle` can be set as a cascade via :enum:`~I3Particle::ParticleShape` or :enum:`~I3Particle::ParticleType`
+in the constructor of :class:`I3Particle` class. A description of :enum:`~I3Particle::ParticleShape` and :enum:`~I3Particle::ParticleType`
 is given below of this documentation.
 
-* The :class:`ParticleShape` options to set an :class:`I3Particle` as a Cascade are: ``Cascade`` or ``CascadeSegment``.
+* The :enum:`~I3Particle::ParticleShape` options to set an :class:`I3Particle` as a Cascade are: ``Cascade`` or ``CascadeSegment``.
 * Regarding to the type: ``EPlus``, ``EMinus``, ``Brems``, ``DeltaE``, ``PairProd``,
   ``NuclInt``, ``Hadrons``, ``PiPlus`` or ``PiMinus``. All these type of particles are cascades.
-* Furthermore, a :class:`ParticleShape` set as ``Primary`` and with a type of :class:`ParticleType`
+* Furthermore, a :enum:`~I3Particle::ParticleShape` set as ``Primary`` and with a type of :enum:`~I3Particle::ParticleType`
   as ``PPlus``, ``PMinus``, ``IsNucleus`` or ``Gamma`` will be a Cascade.
 
 Below an example of how to set the type and other properties of an :class:`I3Particle` in python::
@@ -280,7 +280,7 @@ particle IDs.  This is intentional.  I3Particles are copied when added to STL
 containers.  It would defeat the purpose of having a particle ID if it changed
 each time the particle was added to a container.  If you want to create a new
 particle with all the same properties of another particle, the method you're
-looking for is I3Particle::Clone.
+looking for is :func:`I3Particle::Clone`.
 
 
 Use case overview
@@ -306,22 +306,28 @@ Reconstructed through-going muon ``InfiniteTrack`` ``InIce``               NAN  
 
 .. [#NUprimaries] TODO: say something about length of neutrino primaries.
 
-.. [#InfTracks] For ``InfiniteTrack`` the position is in principle degenerate with the particle time. One can use any other position on the track, with a correspondingly adjusted time. For numerical reasons it can be good to choose a position (and corresponding time) close to the COG of the pulses of the event.
+.. [#InfTracks] For ``InfiniteTrack`` the position is in principle degenerate
+   with the particle time. One can use any other position on the track, with a
+   correspondingly adjusted time. For numerical reasons it can be good to
+   choose a position (and corresponding time) close to the COG of the pulses of
+   the event.
 
 
 Conventions and recommendations
 ===============================
 
 * Like most things in icetray, if you want to specify the :class:`I3Particle` data members
-  in specific units, you should use :class:`I3Units`, e.g. (in python):
+  in specific units, you should use :type:`I3Units`, e.g. (in python):
 
-  p=dataclasses.I3Particle()
-  p.dir.zenith = 42.0 * I3Units.degree
-  print("The zenith angle is %.1f degrees" % (p.dir.zenith/I3Units.zenith))
+  .. code-block:: python
+
+    p=dataclasses.I3Particle()
+    p.dir.zenith = 42.0 * I3Units.degree
+    print("The zenith angle is %.1f degrees" % (p.dir.zenith/I3Units.zenith))
 
 * Most data members (all, except the major and minor ID) have a default initialization value that
   indicates that it is not yet set. For floating point data members this is NAN
-  (Not a Number, TODO: add link), for the ``enum`` data members it is
+  (`Not a Number <https://en.wikipedia.org/wiki/NaN>`_), for the ``enum`` data members it is
   ``unknown`` (type), ``Null`` (shape), ``NotSet`` (fit status) and ``Anywhere`` (location).
 
 * Never use the explicit numerical values of the ``enum`` types. First, the ``enum`` constants
@@ -342,7 +348,7 @@ e.g. some conventions were different or some data members or ``enum`` values
 were not yet in use, but the basics have been relatively stable.
 
 The first version of the :class:`I3Particle` class was added to icetray in
-2005.  It was at least partly inspired by the :class:`mtrack` struct in the
+2005.  It was at least partly inspired by the :class:`!mtrack` struct in the
 ``rdmc`` library that was the foundation of the early AMANDA data processing
 and analysis software. In the early stages of icetray development (2004) we
 first tried to give literally every kind of simulated particle and

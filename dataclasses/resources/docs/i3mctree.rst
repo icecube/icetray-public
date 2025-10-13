@@ -354,7 +354,7 @@ those candidates, so will be slower than having no check.  If you need the extra
 
 **NB**: On the python side the above functions have the corresponding python-style names, e.g. "get_most_energetic_primary" and live in the dataclasses module.  So the usage is as follows:
 
-.. code-block:: pycon
+.. code-block:: ipython3
 
    Python 3.11.3 (main, Apr  7 2023, 21:05:46) [Clang 14.0.0 (clang-1400.0.29.202)]
    Type 'copyright', 'credits' or 'license' for more information

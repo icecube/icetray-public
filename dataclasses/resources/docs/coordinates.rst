@@ -249,7 +249,7 @@ The :ref:`astro` project will convert directly from IceCube Coordinates to astro
 AMANDA Coordinates
 ==================
 
-AMANDA Coordinates share the same definition of `x`, `y`, and `z` as the IceCube coordinates.
+AMANDA Coordinates share the same definition of *x*, *y*, and *z* as the IceCube coordinates.
 
 The AMANDA coordinate system is centered on the AMANDA array. The "formal" definition is:
 
