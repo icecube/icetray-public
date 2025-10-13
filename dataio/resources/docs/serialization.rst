@@ -8,13 +8,13 @@ Making a class serializable
 .. highlight:: c++
 
 Classes that are to make the round-trip to disk inside .i3 files need serialize()
-methods. Pending more documentation here, see the `boost::serialization documentation <https://www.boost.org/doc/libs/release/libs/serialization/>`_
+methods. Aside from the documentation here, see the `boost::serialization documentation <https://www.boost.org/doc/libs/release/libs/serialization/>`_
 directly for general information on writing serialization methods, or follow
-one of the many examples in project dataclasses.
+one of the many examples in project :ref:`dataclasses`.
 
 .. note::
 
-   Even though we've switched from boost::serialization to icecube::serialization,
+   Even though we've switched from ``boost::serialization`` to ``icecube::serialization``,
    the docs linked previously are still valid.  That links to boost 1.57 docs,
    which is where we're frozen at.  A simple change of the namespace from boost
    to icecube should be pretty much all the change you'll need.
@@ -22,10 +22,13 @@ one of the many examples in project dataclasses.
 I3_SERIALIZABLE
 ---------------
 
-This is a convenience macro that instantiates the serialization methods for its argument. In order to do its job, this macro must be located somewhere after the full definition of the serialization method for it's argument. Take I3Position.cxx for example::
+This is a convenience macro that instantiates the serialization methods for its
+argument. In order to do its job, this macro must be located somewhere after
+the full definition of the serialization method for it's argument. Take
+:file:`I3Position.cxx` for example::
 
- #include <icetray/serialization.h>
- #include <dataclasses/I3Position.h>
+ #include "icetray/serialization.h"
+ #include "dataclasses/I3Position.h"
 
  // not here
  // I3_SERIALIZABLE(I3Position);
@@ -55,8 +58,8 @@ A basic serialize method
 Writing a new class means writing a serialize method so that your
 class or struct can be written to an i3 file.  Mostly this is done through example.
 
-I use I3Hit as an example of the simplest case. I3Hit has only two data
-members. A double and an integer.  In I3Hit.h::
+We use :class:`!I3Hit` as a contrived example of the simplest case. :class:`!I3Hit` has only two data
+members. A double and an integer.  In :file:`I3Hit.h`::
 
  static const unsigned i3hit_version_ = 0;
  ....
@@ -68,8 +71,12 @@ members. A double and an integer.  In I3Hit.h::
  ....
  }
 
-Note that the only purpose of using a static const to specify the class version # (above) is to allow a check (see "if" statement in serialization method below) to ensure an obsolete executable does not attempt to handle a newer, likely incompatible, class version.
-To be able to serialize this class' data members you only need to add the following lines in the class' private area in I3Hit.h::
+Note that the only purpose of using a static const to specify the class version
+# (above) is to allow a check (see "if" statement in serialization method
+below) to ensure an obsolete executable does not attempt to handle a newer,
+likely incompatible, class version. To be able to serialize this class' data
+members you only need to add the following lines in the class' private area in
+:file:`I3Hit.h`::
 
  ....
  private:
@@ -78,9 +85,9 @@ To be able to serialize this class' data members you only need to add the follow
   template <class Archive> void serialize(Archive & ar, unsigned version);
   ...
 
-Then in the implementation of I3Hit.cxx::
+Then in the implementation of :file:`I3Hit.cxx`::
 
- #include <dataclasses/BoostHeaders.h>  //Gets all the BOOST stuff needed
+ #include "icetray/serialization.h"
 
   template <class Archive>
   void serialize(Archive& ar, unsigned version)
@@ -98,14 +105,17 @@ Each basic data type in the serialize method needs a "named value pair",
 where you specify a name (which will also be the name in XML-ized output)
 and the name of the variable from the class or structure
 
-The I3_SERIALIZABLE() macro registers the class as something the
+The :c:macro:`I3_SERIALIZABLE()` macro registers the class as something the
 BOOST system can write out.
 
 My class includes other classes or structures
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If your class has objects for data members and you want to serialize those as well you'll simply need to add a serialize method to those classes as well. Then they can be serialized just like primitive types. For example, say you want to add a data member to I3Hit of type I3Time. I3Time
-already has a serialization method so we don't need to add one.
+If your class has objects for data members and you want to serialize those as
+well you'll simply need to add a serialize method to those classes as well.
+Then they can be serialized just like primitive types. For example, say you
+want to add a data member to I3Hit of type I3Time. I3Time already has a
+serialization method so we don't need to add one.
 
 The relevant code for I3Hit then looks like::
 
@@ -211,7 +221,7 @@ You would add the following lines to your class::
 
 .. note::
 
-   The static const assignment and the `BOOST_CLASS_VERSION` macro need
+   The static const assignment and the :c:macro:`!BOOST_CLASS_VERSION` macro need
    to be in the header file (.h) that defines your class/structure.
 
 ...and modify the serialize method accordingly::

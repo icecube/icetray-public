@@ -125,7 +125,7 @@ filesystem. For example, if you're running on a random node on the Open Science
 Grid, you will not have direct access to the /data/sim and /data/exp
 filesystems in Madison. For such situations, dataio has built-in support for
 "staging" files in and out of local storage. This support is activated by
-replacing the `"I3Reader"` module with the `dataio.I3Reader` tray segment. For
+replacing the ``I3Reader`` module with the ``dataio.I3Reader`` tray segment. For
 example, to read files via GridFTP, use the following snippet::
 
 	from icecube import icetray, dataio
@@ -339,7 +339,7 @@ both 'Q' and 'P' frames, the output at the end can look like::
     QQQQQPQQQQQQQQQPQQQQQQQPQQQQQQPQQQ
 
 There are a lot of left over 'Q' frames that we should drop to save space.
-The easy option to take care of that is `DropOrphanStreams`::
+The easy option to take care of that is ``DropOrphanStreams::``
 
 
     tray.Add("I3Writer",
@@ -457,4 +457,4 @@ Examples
 --------
 
 There are some example python scripts using dataio in the
-`resources/examples` directory.
+``resources/examples`` directory.

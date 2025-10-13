@@ -6,7 +6,7 @@ Raw I3File Access
 =================
 
 For directly accessing an I3 file from outside an I3Tray, the convenience
-class :class:`I3File` is available::
+class :py:class:`.dataio.I3File` is available::
 
     from icecube import icetray, dataio
 
@@ -14,13 +14,13 @@ class :class:`I3File` is available::
     for frame in file:
         # do something with frame
 
-:class:`I3File` supports all the compression formats as the `I3Reader` module does.
+:py:class:`.I3File` supports all the compression formats as the :py:class:`.I3Reader` module does.
 Adding an extension should "just work".
 
 Access Methods
 --------------
 
-Like a regular file, :class:`I3File` takes a second parameter describing
+Like a regular file, :py:class:`.I3File` takes a second parameter describing
 the "mode" to open in:
 
 'r':
@@ -45,7 +45,7 @@ the "mode" to open in:
 Context Manager
 ---------------
 
-:class:`I3File` supports the context manager::
+:py:class:`.I3File` supports the context manager::
 
     with dataio.I3File('input.i3.gz') as file:
         for frame in file:
