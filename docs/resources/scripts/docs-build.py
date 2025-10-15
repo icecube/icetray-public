@@ -172,6 +172,7 @@ def main():  # noqa: C901,PLR0912,PLR0915
     log.info("Setting up directories")
     I3_BUILD = os.environ["I3_BUILD"]
     I3_SRC = os.environ["I3_SRC"]
+    platlib = os.environ["PYTHONPATH"].split(":")[0]
 
     docsdir = os.path.join(I3_SRC,'docs')
     sphinxdir = os.path.join(I3_BUILD,'docs')
@@ -225,20 +226,20 @@ def main():  # noqa: C901,PLR0912,PLR0915
 
         def generate_python_docs():
             # call program which generates rsts for all python modules in libdir
-            for d in ["lib/icecube", "lib/pybdt"]:
+            for d in ["icecube", "pybdt"]:
                 if call("sphinx-apidoc",  # noqa: SIM102
                         "-q", "-l", "-M", "-e",
                         "-H", "Python API Reference",
                         "--implicit-namespaces",
                         "-o", python_src_dir,
-                        os.path.join(I3_BUILD, d)):
+                        os.path.join(platlib, d)):
                     # previous call failed, try again w/o '-q'
                     if call("sphinx-apidoc",
                             "-l", "-M", "-e",
                             "-H", "Python API Reference",
                             "--implicit-namespaces",
                             "-o", python_src_dir,
-                            os.path.join(I3_BUILD, d)):
+                            os.path.join(platlib, d)):
                         log.warning("Generating Python references failed")
                         return
 
