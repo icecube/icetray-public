@@ -388,7 +388,7 @@ def main():  # noqa: C901,PLR0912,PLR0915
 
         sphinx_cmd = [ "sphinx-build",
                         "-a",#all
-                        "-j",str(args.j),
+                        "-j",str(args.j) if sys.platform != "darwin" else str(1),
                         "-b",args.build_type,
                         "-d",doctreedir,
                         "-E",sourcedir,
