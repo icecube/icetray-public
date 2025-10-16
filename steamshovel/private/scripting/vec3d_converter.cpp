@@ -16,13 +16,19 @@ void* AnythingToVec3d::convertible( PyObject* o ){
     bp::object obj( bp::handle<>(bp::borrowed(o)) );
 
     // check whether o is a suitable sequence
-    if( PySequence_Size(o) >= 3 ){
-        for( int i = 0; i < 3; ++i ){
-            bp::extract<double> const n(obj[i]);
-            if( !n.check() )
-                return nullptr;
+    if( PySequence_Check(o) ){
+        if( PySequence_Size(o) >= 3 ){
+            for( int i = 0; i < 3; ++i ){
+                bp::extract<double> const n(obj[i]);
+                if( !n.check() ){
+                    return nullptr;
+                }
+            }
+            return o;
+        } else if( PySequence_Size(o) < 0 ){
+            // PySequence_Size set an error; clear it so we can try attribute fallback
+            PyErr_Clear();
         }
-        return o;
     }
 
     // check whether o has suitable attributes

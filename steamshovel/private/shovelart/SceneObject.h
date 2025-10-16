@@ -497,7 +497,7 @@ public:
 	virtual float cameraDistance( double vistime, const I3Camera& camera );
 	virtual void drawBaseObject(double vistime, const I3Camera&);
 
-	void setAxis( VariantVec3dPtr::element_type* p ){ setLocation( VariantVec3dPtr(p) ); }
+	void setAxis( VariantVec3dPtr::element_type* p ){ setAxis( VariantVec3dPtr(p) ); }
 	void setAxis( VariantVec3dPtr p ){ axis_ = p; }
 	vec3d axis( double vistime ) const { return axis_->value(vistime); }
 
