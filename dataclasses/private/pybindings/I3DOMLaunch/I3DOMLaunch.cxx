@@ -62,8 +62,8 @@ void register_I3DOMLaunch()
       .add_property("charge_stamp_highest_sample", 
 		    &I3DOMLaunch::GetChargeStampHighestSample, &I3DOMLaunch::SetChargeStampHighestSample)
       .add_property("raw_fadc", get_raw_fadc_func, &I3DOMLaunch::SetRawFADC)
-      .add_property("raw_atwd", get_raw_atwds_func, get_raw_atwds_func)
-      .add_property("raw_charge_stamp", get_raw_charge_stamp_func, get_raw_charge_stamp_func)
+      .add_property("raw_atwd", get_raw_atwds_func, &I3DOMLaunch::SetRawATWD)
+      .add_property("raw_charge_stamp", get_raw_charge_stamp_func)
       .add_property("raw_atwd_charge_stamp",
         &I3DOMLaunch::GetRawATWDChargeStamp, &I3DOMLaunch::SetRawATWDChargeStamp)
       .add_property("which_atwd_charge_stamp", 

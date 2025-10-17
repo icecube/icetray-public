@@ -55,7 +55,9 @@ struct I3FileStagerWrapper : I3FileStager, bp::wrapper<I3FileStager>
     virtual void WillReadLater(const std::string &url, const std::string &fname)
     {
         boost::python::detail::gil_holder gil;
-        this->get_override("WillReadLater")(url, fname);
+        if (this->get_override("WillReadLater")) {
+            this->get_override("WillReadLater")(url, fname);
+        }
     }
 
     virtual void CopyFileIn(const std::string &url, const std::string &fname)

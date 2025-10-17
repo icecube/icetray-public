@@ -107,11 +107,6 @@ class AbstractFileStager(I3FileStager):
             except OSError as e:
                 icetray.logging.log_error("Cleanup error: %s" % str(e), unit="AbstractFileStager")
 
-    def WillReadLater(self, url, fname):
-        # not used for this implementation, this will
-        # just block while copying files in StageFile()
-        pass
-
 
 class I3FileStagerFile(AbstractFileStager):
     r"""
@@ -397,7 +392,7 @@ class DCacheStager(AbstractFileStager):
         icetray.logging.log_info("Downloading %s to %s" % (url, local_path), unit="DCacheStager")
         self.dccp(parsed.path, os.path.abspath(local_path))
 
-    def WillReadLater(self, url, fname):
+    def WillReadLater(self, url):
         """
         Tell the DCache gateway to move the file into disk cache
         """

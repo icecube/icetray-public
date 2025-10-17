@@ -396,7 +396,7 @@ class LogicalDisplay:
                     self.__range_end = end
                 else:
                     self.__range_start = min(self.__range_start, start)
-                    self.__range_end = max(self.__range_end, end)
+                    self.__range_end = max(self.__range_end, end) if self.__range_end is not None else end
                 # Calculate string to buffer offset mapping
                 for string in range(start,end+1):
                     self.__string_buffer_offset[string] = offset
