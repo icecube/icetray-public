@@ -26,7 +26,10 @@
 #include "tableio/converter/I3EventHeaderConverter.h"
 #include "tableio/converter/I3WaveformSeriesMapConverter.h"
 #include "tableio/converter/I3FilterResultMapConverter.h"
+
+#include "tableio/converter/I3AntennaDataMapConverter.h"
 #include "tableio/converter/dataclasses_IceAct_convert.h"
+
 #include "dataclasses/I3MapOMKeyMask.h"
 
 // Make the RecoPulseSeriesMapConverter work on pulse masks.
@@ -77,6 +80,8 @@ void register_dataclasses_converters() {
     I3_MAP_CONVERTER_EXPORT_DEFAULT(I3MapKeyVectorDoubleConverter, "Dumps all numbers verbatim");
     typedef I3MapOMKeyVectorConverter< convert::pod<int> > I3MapKeyVectorIntConverter;
     I3_MAP_CONVERTER_EXPORT_DEFAULT(I3MapKeyVectorIntConverter, "Dumps all numbers verbatim");
+    typedef I3MapAntennaKeyVectorConverter< convert::pod<double> > I3MapAntennaKeyVectorDoubleConverter;
+    I3_MAP_ANTKEY_CONVERTER_EXPORT_DEFAULT(I3MapAntennaKeyVectorDoubleConverter, "Dumps all numbers verbatim");
 
     I3CONVERTER_EXPORT_DEFAULT(I3MapStringDoubleConverter,"Dumps a std::map<string,double> verbatim");
     I3CONVERTER_EXPORT_DEFAULT(I3MapStringVectorDoubleConverter,"Dumps a std::map<string,vector<double> > verbatim");
@@ -245,6 +250,9 @@ void register_dataclasses_converters() {
     typedef I3VectorConverter< convert::TankKey > I3VectorTankKeyConverter;
     I3CONVERTER_EXPORT_DEFAULT(I3VectorTankKeyConverter, "Dumps an I3Vector of TankKeys");
 
+    typedef I3VectorConverter< convert::AntennaKey > I3VectorAntKeyConverter;
+    I3CONVERTER_EXPORT_DEFAULT(I3VectorAntKeyConverter, "Dumps an I3Vector of AntennaKeys");
+
     typedef I3VectorConverter< convert::double_pair > I3VectorDoubleDoubleConverter;
     I3CONVERTER_EXPORT_DEFAULT(I3VectorDoubleDoubleConverter, "Dumps an I3Vector of double-double pairs");
 
@@ -270,6 +278,16 @@ void register_dataclasses_converters() {
 										     bp::init< bool, bool >((bp::arg("calibrate")=false, bp::arg("bookGeometry")=false))),
 						     true);
 
+    //I3AntennaDataMapConverter
+    register_converter<I3AntennaDataMapConverter>(registry,
+						     bp::class_<I3AntennaDataMapConverter,
+								boost::shared_ptr<I3AntennaDataMapConverter>,
+								bp::bases<I3Converter>,
+								boost::noncopyable >("I3AntennaDataMapConverter",
+										     "Dumps a single I3AntennaDataMap",
+										     bp::init< bp::optional<bool> >(bp::args("bookGeometry"))),
+						     true)
+    ;
 /*
     // A compilation test: I3MapConverter and I3VectorConverter should be able
     // to accept any I3Converter as a template parameter. Remove comments to

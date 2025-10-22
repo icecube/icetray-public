@@ -14,8 +14,11 @@ std::string repr(const AntennaKey& key) {
   return s.str();
 }
 
-int antkeyhash(const AntennaKey& key) {
-  return 10000 * key.GetStationID() + key.GetAntennaID();
+size_t antkeyhash(const AntennaKey& key) {
+  size_t res = 17;
+  res = res * 31 + std::hash<int>()(key.GetStationID());
+  res = res * 31 + std::hash<int>()(key.GetAntennaID());
+  return res;
 }
 
 void register_AntennaKey() {
@@ -43,4 +46,12 @@ void register_I3MapAntennaKeyAntennaKey()
   .def(bp::dataclass_suite<I3MapAntennaKeyAntennaKey>())
   ;
   register_pointer_conversions<I3MapAntennaKeyAntennaKey>();
+}
+
+void register_I3MapAntennaKeyVectorDouble()
+{
+  bp::class_<I3MapAntennaKeyVectorDouble, bp::bases<I3FrameObject>, I3MapAntennaKeyVectorDoublePtr>("I3MapAntennaKeyVectorDouble")
+  .def(bp::dataclass_suite<I3MapAntennaKeyVectorDouble>())
+  ;
+  register_pointer_conversions<I3MapAntennaKeyVectorDouble>();
 }

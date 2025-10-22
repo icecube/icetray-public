@@ -15,6 +15,7 @@
 #include <icetray/I3PointerTypedefs.h>
 #include <icetray/OMKey.h>
 #include <dataclasses/TankKey.h>
+#include <dataclasses/AntennaKey.h>
 #include <dataclasses/IceActKey.h>
 #include <dataclasses/physics/I3Trigger.h>
 #include <dataclasses/physics/I3DOMLaunch.h>
@@ -67,6 +68,7 @@ namespace convert {
   TABLEIO_CONVERTER_FWD(I3FlasherInfo);
   TABLEIO_CONVERTER_FWD(OMKey);
   TABLEIO_CONVERTER_FWD(TankKey);
+  TABLEIO_CONVERTER_FWD(AntennaKey);
   TABLEIO_CONVERTER_FWD(IceActKey);
 
   struct double_pair

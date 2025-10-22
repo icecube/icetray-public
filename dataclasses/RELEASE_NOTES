@@ -99,6 +99,9 @@ IceTray Release v1.9.0
 * Pass an integer to randint in leap_second_test
 * remove I3Test.ENSURE* family of convenience functions (#3192)
 * added I3MapAntennaKeyAntennaKey
+* Add I3AntennaCal to store surface radio electronics info
+* Move "AntennaType" and "CableLength" fields from I3AntennaGeo to I3AntennaCal
+* Add I3AntennaCalibration, a clone of I3Calibration holding an I3AntennaCalMap
 
 Sep. 28, 2023 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------

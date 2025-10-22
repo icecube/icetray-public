@@ -258,6 +258,18 @@ namespace convert {
     }
   }
 
+  void AntennaKey::AddFields(I3TableRowDescriptionPtr desc, const booked_type&)
+  {
+    desc->AddField<int32_t>("station", "", "Station ID");
+    desc->AddField<int32_t>("antenna", "", "Antenna ID");
+  }
+
+  void AntennaKey::FillSingleRow(const booked_type &key, I3TableRowPtr row)
+  {
+    row->Set<int32_t>("station", key.GetStationID());
+    row->Set<int32_t>("antenna", key.GetAntennaID());
+  }
+
   void IceActKey::AddFields(I3TableRowDescriptionPtr desc, const booked_type&)
   {
     desc->AddField<int32_t>("station", "", "Station number");

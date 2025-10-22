@@ -14,5 +14,6 @@
 
 #include "tableio/converter/dataclasses_container_convert.h"
 #include "tableio/converter/I3MapConverter.h"
+#include "tableio/converter/I3MapAntennaKeyVectorConverter.h"
 
 #endif // TABLEIO_DATACLASSES_MAP_CONVERTERS_H_INCLUDED

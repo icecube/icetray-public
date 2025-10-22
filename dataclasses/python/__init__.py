@@ -17,7 +17,7 @@ from icecube._dataclasses import (
     AntennaTimeSeriesMap, CALIBRATION, Custom, Database, DroopedSPETemplate, EFieldSpectrum, EFieldSpectrumMap,
     EFieldTimeSeries, EFieldTimeSeriesMap, EXTERNAL, ExtrapolatedLinear, FAINT_PARTICLE, FFTData, FFTData3D,
     FFTData3DMap, FFTDataMap, FRAGMENT_MULTIPLICITY, Feb2011, GLOBAL, I3AntennaChannel, I3AntennaChannelMap,
-    I3AntennaDataMap, I3AntennaGeo, I3AntennaGeoMap, I3CalendarDate, I3Calibration, I3ComplexVector, I3Constants,
+    I3AntennaDataMap, I3AntennaGeo, I3AntennaGeoMap, I3AntennaCalibration, I3AntennaCal, I3AntennaCalMap, I3CalendarDate, I3Calibration, I3ComplexVector, I3Constants,
     I3DOMCalibration, I3DOMLaunch, I3DOMLaunchSeries, I3DOMLaunchSeriesMap, I3DOMStatus, I3DetectorStatus, I3Direction,
     I3Double, I3EventHeader, I3FilterResult, I3FilterResultMap, I3FlasherInfo, I3FlasherInfoVect, I3FlasherStatus,
     I3FlasherStatusMap, I3FlasherSubrunMap, I3Geometry, I3IceActBoolMap, I3IceActDoubleMap, I3IceActGeo, I3IceActGeoMap,

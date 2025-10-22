@@ -61,7 +61,7 @@ namespace bp = boost::python;
   (I3EventHeader)                                                       \
   (I3RecoHit)(I3FlasherInfo)(I3Matrix)(I3ParticleID)                    \
   (I3MCHit)(vectorI3MCHit)(mapOMKeyI3MCHit)(I3MCHitSeriesMap)           \
-  (I3Calibration)(DroopedSPETemplate)(SPETemplate)                      \
+  (I3Calibration)(I3AntennaCalibration)(DroopedSPETemplate)(SPETemplate)\
   (I3DOMCalibration)(I3VEMCalibration)(LinearFit)(QuadraticFit)         \
   (TauParam)(MapOMKeyI3DOMCalibration)(MapOMKeyI3VEMCalibration)        \
   (I3DetectorStatus)(I3DOMStatus)(I3TriggerStatus)(MapOMKeyI3DOMStatus) \
@@ -90,7 +90,7 @@ namespace bp = boost::python;
   (I3ScintWaveformSeriesMap)                                            \
   (AntennaKey)(I3AntennaChannel)(I3AntennaDataMap)(I3AntennaGeo)        \
   (I3AntennaWaveform)(FFTDataContainer)(FFTHilbertEnvelope)             \
-  (I3MapAntennaKeyAntennaKey)                                           \
+  (I3MapAntennaKeyAntennaKey)(I3MapAntennaKeyVectorDouble)(I3AntennaCal)\
   (FFTResamplingTools)(I3ComplexVector)                                 \
   (IceActKey)(I3IceActGeo)(I3IceActRecoPulseSeries)                     \
   (I3IceActRecoPulseSeriesMap)(I3IceActWaveform)(I3IceActWaveformMap)   \

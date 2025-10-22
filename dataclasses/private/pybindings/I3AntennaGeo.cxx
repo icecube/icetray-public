@@ -16,17 +16,9 @@ void register_I3AntennaGeo() {
                        .add_property("position", &I3AntennaGeo::GetPosition, &I3AntennaGeo::SetPosition)
                        .add_property("orientation", &I3AntennaGeo::GetOrientation, &I3AntennaGeo::SetOrientation)
                        .add_property("heightAboveSnow", &I3AntennaGeo::GetHeightAboveSnow, &I3AntennaGeo::SetHeightAboveSnow)
-                       .add_property("cableLength", &I3AntennaGeo::GetCableLength, &I3AntennaGeo::SetCableLength)
                        .add_property("antennaName", &I3AntennaGeo::GetAntennaName, &I3AntennaGeo::SetAntennaName)
-                       .add_property("antennatype", &I3AntennaGeo::GetAntennaType, &I3AntennaGeo::SetAntennaType)
                        .def(bp::dataclass_suite<I3AntennaGeo>())
                        ;
-
-    bp::enum_<I3AntennaGeo::AntennaType>("AntennaType")
-    .value("Unknown", I3AntennaGeo::Unknown)
-    .value("SKALA2", I3AntennaGeo::SKALA2)
-    .value("SKALA4", I3AntennaGeo::SKALA4)
-    ;
   }
 
   bp::class_<I3AntennaGeoMap, bp::bases<I3FrameObject>, I3AntennaGeoMapPtr>("I3AntennaGeoMap")

@@ -59,4 +59,7 @@ I3_POINTER_TYPEDEFS(I3VectorAntennaKey);
 typedef I3Map<AntennaKey, AntennaKey> I3MapAntennaKeyAntennaKey;
 I3_POINTER_TYPEDEFS(I3MapAntennaKeyAntennaKey);
 
+typedef I3Map<AntennaKey, std::vector<double> > I3MapAntennaKeyVectorDouble;
+I3_POINTER_TYPEDEFS(I3MapAntennaKeyVectorDouble);
+
 #endif

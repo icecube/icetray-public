@@ -66,4 +66,5 @@ i3_test_scripts(
     resources/test/test_I3MCTree.py
     resources/test/test_inheritance_conversion.py
     resources/test/test_converters.py
+    resources/test/test_I3AntennaDataMap.py
 )

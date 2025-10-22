@@ -38,3 +38,4 @@ bool operator<(const AntennaKey& lhs, const AntennaKey& rhs) {
 I3_SERIALIZABLE(AntennaKey);
 I3_SERIALIZABLE(I3VectorAntennaKey);
 I3_SERIALIZABLE(I3MapAntennaKeyAntennaKey);
+I3_SERIALIZABLE(I3MapAntennaKeyVectorDouble);

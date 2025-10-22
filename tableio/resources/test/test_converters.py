@@ -21,6 +21,9 @@ from icecube.tableio import I3BroadcastTableService
 # we can just put a list of S-Frame converters here I guess
 sframe_converters = ['I3CorsikaInfo', 'I3PrimaryInjectorInfo','I3TopInjectorInfo', 'I3GenieInfo']
 
+# These throw an error here, possibly due to their nested nature, and are instead tested in test_I3AntennaDataMap.py
+skip = ['I3AntChannelDoubleMap', 'I3AntennaDataMap']
+
 # hobo "from icecube import *", import everything to run as many converters as possible
 moddir = os.environ['PYTHONPATH'].split(':')[0] + '/icecube'
 for path in sorted(os.listdir(moddir)):
@@ -74,6 +77,8 @@ def fill_frame(frame):
     for typus, _ in tableio.registry.I3ConverterRegistry.registry.items():
         name = typus.__name__
         if name in sframe_converters:
+            continue
+        if name in skip:
             continue
         if name in frame:
             continue

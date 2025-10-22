@@ -96,6 +96,7 @@ set(DATACLASSES_PYTHON_TEST_SCRIPTS
   resources/test/test_I3Orientation_setOrientation.py
   resources/test/test_I3TankGeo.py
   resources/test/test_I3AntennaGeo.py
+  resources/test/test_I3AntennaCalibration.py
   resources/test/test_I3ScintGeo.py
   resources/test/test_I3IceActGeo.py
   resources/test/test_I3AntennaChannel.py

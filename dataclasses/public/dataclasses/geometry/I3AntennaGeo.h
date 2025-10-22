@@ -25,19 +25,12 @@
 
 #include <dataclasses/AntennaKey.h>
 
-static const unsigned i3antennageo_version_ = 0;
+static const unsigned i3antennageo_version_ = 1;
 
 class I3AntennaGeo {
  public:
 
-  enum AntennaType {
-    Unknown = 0,
-    SKALA2 = 1,
-    SKALA4 = 2,
-    AntennaTypeCount = 3
-  };
-
-  I3AntennaGeo(): antennaType_(Unknown) {}
+  I3AntennaGeo(): heightAboveSnow_(0) {};
   ~I3AntennaGeo();
 
   void SetPosition(I3Position &pos) {position_ = pos;}
@@ -46,26 +39,17 @@ class I3AntennaGeo {
   void SetOrientation(I3Orientation &orient) {orientation_ = orient;}
   I3Orientation GetOrientation() const {return orientation_;}
 
-  void SetAntennaType(AntennaType type) {antennaType_ = type;}
-  AntennaType GetAntennaType() const {return antennaType_;}
-
   void SetAntennaName(std::string name) { antennaName_ = name;}
   std::string GetAntennaName() const {return antennaName_;}
 
   void SetHeightAboveSnow(double height) {heightAboveSnow_ = height;}
   double GetHeightAboveSnow() const {return heightAboveSnow_;}
 
-  void SetCableLength(double length) {cableLength_ = length;}
-  double GetCableLength() const {return cableLength_;}
-
-
   bool operator==(const I3AntennaGeo& rhs) const {
     return (position_ == rhs.position_ &&
             orientation_ == rhs.orientation_ &&
-            antennaType_ == rhs.antennaType_ &&
             heightAboveSnow_ == rhs.heightAboveSnow_ &&
-            antennaName_ == rhs.antennaName_ &&
-            cableLength_ == rhs.cableLength_);
+            antennaName_ == rhs.antennaName_);
   }
   bool operator!=(const I3AntennaGeo& rhs) const {
     return !operator==(rhs);
@@ -77,10 +61,8 @@ class I3AntennaGeo {
 
   I3Position position_;
   I3Orientation orientation_;
-  AntennaType antennaType_;
   std::string antennaName_;
   double heightAboveSnow_; //In I3Units
-  double cableLength_; //In I3Units
 
   friend class icecube::serialization::access;
   template <class Archive>
