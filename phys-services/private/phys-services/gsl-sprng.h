@@ -119,10 +119,10 @@ inline gsl_rng *gsl_sprng_init(int seed, int nstreams, int streamnum, char *stat
    /*Allocate memory for rng parameters*/
    gsl_rng *r 	= (gsl_rng *) malloc (sizeof (gsl_rng));
    if (r == 0) {
-       GSL_ERROR_VAL ("failed to allocate space for rng struct",
-                        GSL_ENOMEM, 0);
-	   free(s);
-   };
+      free(s);
+      GSL_ERROR_VAL("failed to allocate space for rng struct",
+                    GSL_ENOMEM, 0);
+  };
 
    /*Set rng parameters*/
    r->type    = &gsl_rng_sprng20;
