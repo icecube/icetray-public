@@ -32,6 +32,7 @@ Table of Contents:
    masks
    vector_math
    coordinates
+   i3approach
    i3direction
    i3time
    i3Position
