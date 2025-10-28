@@ -10,6 +10,25 @@ Release Notes
 main
 ----
 
+Oct 30, 2025 don la dieu (nega at icecube.umd.edu)
+--------------------------------------------------
+
+* Merge surface radio overhaul from surfacearray branch (#4053)
+* Advance mypy to 1.18 (#4063)
+* clean up dataclasses docs (#4088)
+* Adding unique test in test_I3DOMStatus.py (#3925)
+* Launch classes for DEgg and mDOM (#3929)
+* Geant4 I3Propagator (#3750)
+* Squash all build warnings while enabling ``-Wextra`` (#3942)
+* Fix deserialization of I3Calibration (#4041)
+* Fix a segfault that occurs in the SPEChargeDistribution (#3997)
+* Test roundtrip SPE mean calculation (#4009)
+* Patch to preserve SPE charge distribution settings on write (#4008)
+* dataclasses - clean up SPEChargeDist includes
+* Remove the last bits of rootcint support (#3935)
+* Bump the minimum python version to the oldest supported (#3839)
+* Remove All Star Imports (#3902)
+
 Jul. 14, 2025 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.15.3
@@ -210,7 +229,7 @@ December 11, 2018, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------
 Release V18-12-00
 
-* Support of double expontential SPE fits.
+* Support of double exponential SPE fits.
 * Bug fix for sDST.
 * New I3RecoPulseSeriesMapCombineByModule.
 * Add equality operators for I3SuperDST and I3FilterResult.

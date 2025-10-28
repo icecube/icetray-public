@@ -8,6 +8,14 @@ Release Notes
 main
 ----
 
+Oct 30, 2025 don la dieu (nega at icecube.umd.edu)
+--------------------------------------------------
+
+* Merge surface radio overhaul from surfacearray branch (#4053)
+* Use standard directory for python files (#4030)
+* Remove the last bits of rootcint support (#3935)
+* Remove All Star Imports (#3902)
+
 Jun. 30, 2025 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.15.0

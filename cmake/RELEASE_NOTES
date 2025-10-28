@@ -12,6 +12,24 @@ Release Notes
 main
 ----
 
+Oct 30, 2025 don la dieu (nega at icecube.umd.edu)
+--------------------------------------------------
+
+* robustify GSL_VERSION and gsl-config finding (#4102)
+* use std::abs() in ENSURE_EPSILON (#4080)
+* Geant4 I3Propagator (#3750)
+* Squash all build warnings while enabling ``-Wextra`` (#3942)
+* remove the USE_SETUPTOOLS option to I3_PROJCECT (#4050)
+* remove or update cruft from the old docs process (#3957)
+* Use standard directory for python files (#4030)
+* update geant4 env var detection for geant4 11.1.0+ (#3990)
+* Remove system from boost libraries (#4047)
+* switch to using cmake's find_package() for blas lapack and gsl (#3995)
+* Remove triangle.c (#3998)
+* Remove the last bits of rootcint support (#3935)
+* Bump the minimum python version to the oldest supported (#3839)
+* point test data back to trunk
+
 Jun. 30, 2025 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.15.0

@@ -10,6 +10,15 @@ Release Notes
 main
 ----
 
+Oct 30, 2025 don la dieu (nega at icecube.umd.edu)
+--------------------------------------------------
+
+* phys-services - fix "free after return"
+* Squash all build warnings while enabling ``-Wextra`` (#3942)
+* Docs and Tests fixes: I3ScaleCalculator and icetop_Level3_scripts (#4001)
+* Remove the last bits of rootcint support (#3935)
+* Remove All Star Imports (#3902)
+
 Jun. 30, 2025 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.15.0

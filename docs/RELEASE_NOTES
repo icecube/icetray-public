@@ -10,6 +10,15 @@ Release Notes
 main
 ----
 
+Oct 30, 2025 don la dieu (nega at icecube.umd.edu)
+--------------------------------------------------
+
+- update docs-build with a reduced "j" flag on macOS
+- update docs-build to understand the new python layout
+- remove or update cruft from the old docs process (#3957)
+- Bump the minimum python version to the oldest supported (#3839)
+- Upgrade ruff to v0.12.2 (#3899)
+
 Jun. 30, 2025 don la dieu (nega at icecube.umd.edu)
 ---------------------------------------------------
 IceTray Release v1.15.0
