@@ -190,7 +190,7 @@ class Delta {
   Delta(uint32_t value, unsigned int bpw, unsigned int maxBpw=17u) {
     CheckBpw(bpw, maxBpw);
 
-    isFlag_ = (bpw == maxBpw) ? false : (value == (0x01 << (bpw - 1)));
+    isFlag_ = (bpw == maxBpw) ? false : (value == (0x01u << (bpw - 1)));
     if (!isFlag_) {
       bool msb = getbit(value, bpw - 1);
       if (msb) {
