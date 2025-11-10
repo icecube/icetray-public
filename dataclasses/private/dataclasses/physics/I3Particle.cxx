@@ -8,7 +8,6 @@
 #include <boost/functional/hash/hash.hpp>
 #include <dataclasses/I3Constants.h>
 
-#include <limits>
 #include <map>
 #include <boost/assign/list_of.hpp>
 

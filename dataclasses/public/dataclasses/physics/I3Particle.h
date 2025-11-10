@@ -11,11 +11,9 @@
 
 #include "dataclasses/I3Position.h"
 #include "dataclasses/I3Direction.h"
-#include "icetray/I3Units.h"
 #include "dataclasses/I3Vector.h"
 #include "dataclasses/physics/I3ParticleID.h"
 #include "dataclasses/external/CompareFloatingPoint.h"
-#include <map>
 #include <string>
 
 #include <boost/optional.hpp>
@@ -520,9 +518,6 @@ static const unsigned i3particle_version_ = 5;
  * Get name of an I3Particle::ParticleType as a string
  */
 std::string i3particle_type_string(int32_t pdg_code);
-
-// let other code know that I3Particle stores PDG encodings internally
-#define I3PARTICLE_SUPPORTS_PDG_ENCODINGS
 
 /**
  * List the names of enumeration members defined in this file

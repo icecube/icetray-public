@@ -22,9 +22,7 @@ I3TableRowDescriptionPtr I3ParticleConverter::CreateDescription(const I3Particle
     desc->AddField<double>("energy", "GeV",   "energy of particle");
     desc->AddField<double>("speed",  "Gm/s",  "particle speed");
     desc->AddField<double>("length", "m",     "length of track");
-    #ifdef I3PARTICLE_SUPPORTS_PDG_ENCODINGS
     desc->AddField<int32_t>("pdg_encoding", "",     "PDG encoding of particle type");
-    #endif
     // skip: major_id/minor_id
 
     MAKE_ENUM_VECTOR(type,I3Particle,I3Particle::ParticleType,I3PARTICLE_H_I3Particle_ParticleType);
@@ -51,9 +49,7 @@ size_t I3ParticleConverter::FillRows(const I3Particle& particle, I3TableRowPtr r
     rows->Set<double>("energy", particle.GetEnergy());
     rows->Set<double>("speed",  particle.GetSpeed());
     rows->Set<double>("length", particle.GetLength());
-    #ifdef I3PARTICLE_SUPPORTS_PDG_ENCODINGS
     rows->Set<int32_t>("pdg_encoding", particle.GetPdgEncoding());
-    #endif
 
     rows->Set<I3Particle::ParticleType> ("type",      particle.GetType());
     rows->Set<I3Particle::ParticleShape>("shape",     particle.GetShape());
