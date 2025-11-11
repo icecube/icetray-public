@@ -114,7 +114,7 @@ except ImportError:
 
 # set up root test file
 try:
-    from icecube.rootwriter import I3ROOTTableService
+    from icecube.tableio import I3ROOTTableService
     tablers.append(I3ROOTTableService(dirname.name + "/test_converters.root"))
 except ImportError:
     pass

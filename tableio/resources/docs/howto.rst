@@ -163,7 +163,7 @@ I3TableServices and passing them as a list to tableio.I3TableWriter::
     from icecube.icetray import I3Tray
     from icecube.tableio import I3TableWriter, I3CSVTableService
     from icecube.hdfwriter import I3HDFTableService
-    from icecube.rootwriter import I3ROOTTableService
+    from icecube.tableio import I3ROOTTableService
 
     tray = I3Tray()
     tray.AddModule('I3Reader',filename = 'foo.i3.gz')

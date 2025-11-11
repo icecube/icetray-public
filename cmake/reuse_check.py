@@ -387,7 +387,6 @@ whitelist = [
     "offline_filterscripts",
     "online_filterscripts",
     "phys-services",
-    "rootwriter",
     "rpdf",
     "serialization",
     "steamshovel",

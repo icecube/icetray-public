@@ -30,7 +30,7 @@ I3TableWriterService::
 
     from icecube import icetray,tableio
     from icecube.hdfwriter import I3HDFTableService
-    from icecube.rootwriter import I3ROOTTableService
+    from icecube.tableio import I3ROOTTableService
 
     from icecube.tableio import I3TableTranscriber
 

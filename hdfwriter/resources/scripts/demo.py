@@ -34,8 +34,7 @@ if options.format == 'hdf5':
     from icecube import hdfwriter
     tabler = hdfwriter.I3HDFTableService(outfile,options.compression)  # type: tableio.I3TableService
 elif options.format == 'root':
-    from icecube import rootwriter
-    tabler = rootwriter.I3ROOTTableService(outfile,options.compression)
+    tabler = tableio.I3ROOTTableService(outfile,options.compression)
 elif options.format == 'csv':
     tabler = tableio.I3CSVTableService(outfile[:-4] + '_csv')
 else:
