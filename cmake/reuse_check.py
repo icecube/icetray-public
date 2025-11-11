@@ -5,11 +5,11 @@
 # SPDX-License-Identifier: BSD-2-Clause
 
 import os
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
-import subprocess
-import shutil
 
 try:
     src = Path(os.environ["I3_SRC"])
@@ -387,6 +387,7 @@ whitelist = [
     "offline_filterscripts",
     "online_filterscripts",
     "phys-services",
+    "rootwriter",
     "rpdf",
     "serialization",
     "steamshovel",
