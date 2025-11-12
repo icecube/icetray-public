@@ -33,6 +33,19 @@ option(USE_ROOT "Build with root" ON)
 set(SYSTEM_PACKAGES_ROOT FALSE)
 
 if (USE_ROOT)
+  find_package(ROOT COMPONENTS Gui Minuit2)
+  if(ROOT_FOUND)
+    set(SYSTEM_PACKAGES_ROOT TRUE)
+    set(ROOT_LIB_DIR ${ROOT_LIBRARY_DIR})
+    set(ROOT_INCLUDE_DIR ${ROOT_INCLUDE_DIRS})
+    get_filename_component(_d ${ROOT_rootcling_CMD} DIRECTORY)
+    get_filename_component(ROOTSYS ${_d}/.. ABSOLUTE)
+    foreach(_fn ${ROOT_LIBRARIES})
+        get_filename_component(_f ${_fn} NAME)
+        list(APPEND ROOT_${ROOT_VERSION}_LIBS ${_f})
+    endforeach()
+  endif()
+
   if(NOT ROOT_VERSION)
     # try for system root
     find_program(ROOT_CONFIG_EXECUTABLE root-config
