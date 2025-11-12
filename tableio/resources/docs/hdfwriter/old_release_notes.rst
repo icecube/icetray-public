@@ -2,10 +2,10 @@
 ..
 .. SPDX-License-Identifier: BSD-2-Clause
 
-.. _hdfwriter-release-notes:
+.. _tableio/hdfwriter-old-release-notes:
 
-Release Notes
-=============
+Old hdfwriter Release Notes
+===========================
 
 main
 ----

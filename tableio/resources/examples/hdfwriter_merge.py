@@ -39,7 +39,7 @@ from icecube.tableio import I3TableTranscriber
 
 # try to import the appropriate services
 if 'hdf5' in [iformat,oformat]:
-    from icecube.hdfwriter import I3HDFTableService
+    from icecube.tableio import I3HDFTableService
 if 'root' in [iformat,oformat]:
     from icecube.tableio import I3ROOTTableService
 if 'csv' in [iformat,oformat]:

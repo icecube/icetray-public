@@ -14,10 +14,10 @@ import unittest
 import h5py
 from icecube import (
     dataclasses,
-    hdfwriter,
     icetray,
     phys_services,  # noqa: F401
 )
+from icecube.tableio import I3HDFWriter
 from icecube.icetray import I3Tray
 
 have_simclasses = False
@@ -69,7 +69,7 @@ class MCTreeTest(unittest.TestCase):
         tray = I3Tray()
         tray.Add(Generator)
         tray.Add("I3NullSplitter", "nullsplit",SubEventStreamName='null')
-        tray.Add(hdfwriter.I3HDFWriter,
+        tray.Add(I3HDFWriter,
                  Output=self.test_output,
                  Keys=['I3CorsikaInfo','I3EventHeader','I3MCTree','I3MCPrimary'],
                  Types=[],

@@ -2,17 +2,17 @@
 ..
 .. SPDX-License-Identifier: BSD-2-Clause
 
-.. py:currentmodule:: icecube.hdfwriter
+.. py:currentmodule:: icecube.tableio
 
-.. _hdfwriter-faq:
+.. _tableio/hdfwriter-faq:
 
 FAQ
 ===
 
-Can I use hdfwriter to write from files with only Q frames, or would I have to create P frames on my own with those objects that I want to have in the hdf5 file?
+Can I use tableio/hdfwriter to write from files with only Q frames, or would I have to create P frames on my own with those objects that I want to have in the hdf5 file?
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-The latter. Put an :cpp:class:`I3NullSplitter` in front of :func:`~.I3HDFWriter`. See also :ref:`hdfwriter-sim-hdfwriter`.
+The latter. Put an :cpp:class:`I3NullSplitter` in front of :func:`~.I3HDFWriter`. See also :ref:`tableio/hdfwriter-sim-hdfwriter`.
 
 I get errors like FATAL (tableio): trying to get the address of unknown field OFUFilter_14_BadGCD (I3TableRow.h:221 in T \*I3TableRow::GetPointer(const std::string &, size_t) [T = bool])
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ remove the new keys from each ``FilterMask`` if you do not need them.
 What happened to tables.Table.readEvent()?
 ------------------------------------------
 
-Old releases of :ref:`hdfwriter` included an extension for PyTables that let you
+Old releases of :ref:`tableio/hdfwriter` included an extension for PyTables that let you
 easily read the rows associated with a single event from a ragged table. This
 was not terribly well implemented, and conflicted with an API change in the
 PyTables 3.3 series, so it was `removed in 2016

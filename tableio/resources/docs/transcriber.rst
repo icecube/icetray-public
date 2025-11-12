@@ -29,10 +29,7 @@ This allows you to transcribe HDF tables to any other format that has an
 I3TableWriterService::
 
     from icecube import icetray,tableio
-    from icecube.hdfwriter import I3HDFTableService
-    from icecube.tableio import I3ROOTTableService
-
-    from icecube.tableio import I3TableTranscriber
+    from icecube.tableio import I3HDFTableService, I3ROOTTableService, I3TableTranscriber
 
     inservice = I3HDFTableService('foo.hd5','r')
     outservice = I3ROOTTableService('foo.root')

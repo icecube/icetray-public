@@ -31,8 +31,7 @@ from icecube import icetray,dataclasses,dataio,tableio
 from icecube.icetray import I3Tray
 
 if options.format == 'hdf5':
-    from icecube import hdfwriter
-    tabler = hdfwriter.I3HDFTableService(outfile,options.compression)  # type: tableio.I3TableService
+    tabler = tableio.I3HDFTableService(outfile,options.compression)  # type: tableio.I3TableService
 elif options.format == 'root':
     tabler = tableio.I3ROOTTableService(outfile,options.compression)
 elif options.format == 'csv':

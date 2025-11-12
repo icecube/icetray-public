@@ -49,9 +49,10 @@ if(NOT HDF5_FOUND)
     hdf5_serial hdf5_serial_hl
     )
 
-  if(HDF5_FOUND)
-    set(HDF5_FOUND TRUE CACHE BOOL "Tool HDF5 found successfully")
-    set(HDF5_LIBRARIES "${HDF5_LIBRARIES}" CACHE PATH "Libraries for tool HDF5")
-  endif(HDF5_FOUND)
-
 endif(NOT HDF5_FOUND)
+
+if(HDF5_FOUND)
+  set(HDF5_FOUND TRUE CACHE BOOL "Tool HDF5 found successfully")
+  set(HDF5_LIBRARIES "${HDF5_LIBRARIES}" CACHE PATH "Libraries for tool HDF5")
+  add_definitions(-DI3_USE_HDF5)
+endif(HDF5_FOUND)

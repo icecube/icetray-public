@@ -380,7 +380,6 @@ whitelist = [
     "dataio",
     "docs",
     "geantprop",
-    "hdfwriter",
     "icetray",
     "interfaces",
     "LICENSES",

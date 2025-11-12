@@ -247,7 +247,7 @@ class WaveformBookie(tableio.I3Converter):
 
 
 try:
-    from icecube import hdfwriter
+    from icecube.tableio import I3HDFTableService
     have_hdf = True
 except ImportError:
     print('hdfwriter is not available, skipping hdf-specific tests')
@@ -256,8 +256,8 @@ if have_hdf:
     class I3TableWriterPythonModuleTest(unittest.TestCase):
             """Test the option-parsing magic."""
             def setUp(self):
-                from icecube import icetray,tableio,dataclasses,hdfwriter
-                from icecube.tableio import I3TableWriter
+                from icecube import icetray,tableio,dataclasses
+                from icecube.tableio import I3TableWriter, I3HDFTableService
                 import tempfile
                 from icecube.icetray import I3Tray
                 from icecube import phys_services
@@ -266,7 +266,7 @@ if have_hdf:
                 tray.AddModule("I3InfiniteSource","streams", Stream=icetray.I3Frame.Physics)
                 self.tray = tray
                 self.tempfile = tempfile.NamedTemporaryFile()
-                self.hdf_service = hdfwriter.I3HDFTableService(self.tempfile.name,0)
+                self.hdf_service = I3HDFTableService(self.tempfile.name,0)
                 self.target = I3TableWriter
                 self.bookie = DOMLaunchBookie()
 

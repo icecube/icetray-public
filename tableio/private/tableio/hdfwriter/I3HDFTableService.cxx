@@ -11,8 +11,8 @@
 
 #include <regex>
 
-#include "hdfwriter/I3HDFTableService.h"
-#include "hdfwriter/I3HDFTable.h"
+#include "I3HDFTableService.h"
+#include "I3HDFTable.h"
 #include "tableio/I3TableRowDescription.h"
 
 #include "H5Tpublic.h"

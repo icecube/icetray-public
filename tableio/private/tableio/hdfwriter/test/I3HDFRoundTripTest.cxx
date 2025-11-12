@@ -17,8 +17,8 @@
 
 #include <tableio//I3TableRow.h>
 #include <tableio/I3TableRowDescription.h>
-#include <hdfwriter/I3HDFTableService.h>
-#include <hdfwriter/I3HDFTable.h>
+#include <tableio/hdfwriter/I3HDFTableService.h>
+#include <tableio/hdfwriter/I3HDFTable.h>
 
 #include <dataclasses/physics/I3EventHeader.h>
 

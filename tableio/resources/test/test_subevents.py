@@ -13,7 +13,7 @@ import unittest
 from subprocess import call
 
 import h5py
-from icecube import dataclasses, dataio, hdfwriter, icetray, phys_services, tableio
+from icecube import dataclasses, dataio, icetray, phys_services, tableio
 
 
 def headerfaker(frame):
@@ -54,7 +54,7 @@ class SubeventTest(unittest.TestCase):
         for i in range(10):
             tray.AddModule(emitter, 's2e%d' % i, label='s2e%d' % i, prob=0.1, If=streampick("s2"))
 
-        tabler = hdfwriter.I3HDFTableService(fname)
+        tabler = tableio.I3HDFTableService(fname)
         tray.AddModule(tableio.I3TableWriter, 'scribe',
             tableservice=tabler,
             types=[dataclasses.I3Particle],
@@ -99,7 +99,7 @@ class SubeventMergingTest(unittest.TestCase):
     def setUp(self):
         SubeventTest.runtray(self.fname1)
         SubeventTest.runtray(self.fname2)
-        call([os.environ['I3_BUILD'] + "/hdfwriter/resources/scripts/merge.py", "-o", self.fname_merged, self.fname1, self.fname2])
+        call([os.environ['I3_BUILD'] + "/tableio/resources/examples/hdfwriter_merge.py", "-o", self.fname_merged, self.fname1, self.fname2])
     def tearDown(self):
         for f in [self.fname1, self.fname2, self.fname_merged]:
             os.unlink(f)

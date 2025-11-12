@@ -18,7 +18,7 @@ the service. A simple script could look something like this::
 
     from icecube import icetray, dataio
     from icecube.icetray import I3Tray
-    from icecube.hdfwriter import I3HDFWriter
+    from icecube.tableio import I3HDFWriter
 
     tray = I3Tray()
     tray.AddModule('I3Reader',
@@ -56,7 +56,7 @@ Since P frames are created as an artifact of trigger post-processing, they do
 not exist in low-level simulation files, e.g. immediately after I3CORSIKAReader. To convert these files to tables with tableio, use one of the
 special-purpose segments, e.g.::
 
-    from icecube.hdfwriter import I3SimHDFWriter
+    from icecube.tableio import I3SimHDFWriter
     tray.AddSegment(I3SimHDFWriter,
                    output="foo.hdf5",
                    keys=['LineFit','InIceRawData'],
@@ -161,9 +161,7 @@ I3TableServices and passing them as a list to tableio.I3TableWriter::
 
     from icecube import icetray
     from icecube.icetray import I3Tray
-    from icecube.tableio import I3TableWriter, I3CSVTableService
-    from icecube.hdfwriter import I3HDFTableService
-    from icecube.tableio import I3ROOTTableService
+    from icecube.tableio import I3TableWriter, I3CSVTableService, I3HDFTableService, I3ROOTTableService
 
     tray = I3Tray()
     tray.AddModule('I3Reader',filename = 'foo.i3.gz')

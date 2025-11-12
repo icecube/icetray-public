@@ -107,7 +107,7 @@ tablers = [tableio.I3CSVTableService(dirname.name)]
 
 # set up HDF5 test file
 try:
-    from icecube.hdfwriter import I3HDFTableService
+    from icecube.tableio import I3HDFTableService
     tablers.append(I3HDFTableService(dirname.name + "/test_converters.hdf5", 6, 'w'))
 except ImportError:
     pass

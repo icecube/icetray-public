@@ -9,7 +9,7 @@ import unittest
 
 import h5py
 from icecube import icetray
-from icecube.hdfwriter import I3SimHDFWriter, OutputFileInUseError
+from icecube.tableio import I3SimHDFWriter, OutputFileInUseError
 from icecube.icetray import I3Tray
 
 FILE_NAME = "hdfwriter_test_double_open.hdf5"

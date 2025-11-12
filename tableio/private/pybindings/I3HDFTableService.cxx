@@ -12,7 +12,7 @@
  */
 
 #include "pybindings.hpp"
-#include <hdfwriter/I3HDFTableService.h>
+#include <tableio/hdfwriter/I3HDFTableService.h>
 
 namespace bp = boost::python;
 

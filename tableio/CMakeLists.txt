@@ -88,6 +88,41 @@ else(ROOT_FOUND)
   colormsg(CYAN "+-- Skipping build of rootwriter within ${PROJECT_NAME}")
 endif(ROOT_FOUND)
 
+IF(HDF5_FOUND)
+  # add the path to the place where the hdf5 lib header files exist
+  INCLUDE_DIRECTORIES(${HDF5_INCLUDE_DIR})
+  ADD_DEFINITIONS(-DH5_USE_16_API)
+
+  list(APPEND TABLEIO_SOURCES
+    private/tableio/hdfwriter/I3HDFTable.cxx
+    private/tableio/hdfwriter/I3HDFTableService.cxx
+    private/tableio/hdfwriter/hdf5_opt.c
+  )
+  list(APPEND TABLEIO_TOOLS zlib hdf5)
+  list(APPEND TABLEIO_PYBINDINGS
+    private/pybindings/I3HDFTableService.cxx
+  )
+  list(APPEND TABLEIO_TEST_EXECS
+    private/tableio/hdfwriter/test/I3HDFRoundTripTest.cxx
+  )
+  list(APPEND TABLEIO_TESTS
+    resources/test/hdfwriter/test_double_open.py
+    resources/test/hdfwriter/test_mix.sh
+    resources/test/hdfwriter/test_slash_in_key_name.py
+  )
+
+  # Link manipulation scripts into $I3_BUILD/bin for ease of use.
+  i3_executable_script(hdfwriter_merge resources/examples/hdfwriter_merge.py)
+  i3_executable_script(hdfwriter_mix resources/examples/hdfwriter_mix.py)
+  i3_executable_script(hdfwriter_book resources/examples/hdfwriter_book.py)
+
+ELSE(HDF5_FOUND)
+
+  colormsg(CYAN   "+-- hdf5 library not found, skipping build of hdfwriter within ${PROJECT_NAME}")
+  colormsg(YELLOW "*** Ask your admin to install the hdf5 package.")
+
+ENDIF(HDF5_FOUND)
+
 i3_add_library(tableio
   ${TABLEIO_SOURCES}
   USE_TOOLS ${TABLEIO_TOOLS}
@@ -126,3 +161,8 @@ endif(ROOT_FOUND)
 if(ROOT_FOUND)
   i3_project(rootwriter PYTHON_DIR shims/rootwriter)
 endif(ROOT_FOUND)
+
+# abuse i3_project to add import compatibility shims for hdfwriter
+if(HDF5_FOUND)
+  i3_project(hdfwriter PYTHON_DIR shims/hdfwriter)
+endif(HDF5_FOUND)

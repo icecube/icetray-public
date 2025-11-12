@@ -49,10 +49,10 @@ kwargs = {
     'Keys': args.keys,
 }
 if not args.sim:
-    from icecube.hdfwriter import I3HDFWriter as HDFWriter
+    from icecube.tableio import I3HDFWriter as HDFWriter
     kwargs['SubEventStreams'] = args.streams
 else:
-    from icecube.hdfwriter import I3SimHDFWriter as HDFWriter
+    from icecube.tableio import I3SimHDFWriter as HDFWriter
 
 tray.Add(HDFWriter, **kwargs)
 

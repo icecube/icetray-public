@@ -24,7 +24,7 @@ from icecube import (
     phys_services,  # noqa: F401
     tableio,
 )
-from icecube.hdfwriter import I3HDFWriter
+from icecube.tableio import I3HDFWriter
 from icecube.icetray import I3Tray
 
 icetray.logging.set_level_for_unit("I3Tray", "WARN")
