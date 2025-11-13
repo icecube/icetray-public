@@ -9,3 +9,7 @@ tooldef(sqlite3
     NONE # The bin directory is n/a, placeholder
     sqlite3
 )
+
+if(SQLITE3_FOUND)
+  add_definitions(-DI3_USE_SQLITE3)
+endif(SQLITE3_FOUND)

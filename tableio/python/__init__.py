@@ -9,7 +9,7 @@ from icecube.tableio.registry import I3ConverterRegistry
 from icecube._tableio import (
     ConvertState, EnumMember, EnumMemberList, I3BroadcastTableService, I3CSVTableService, I3Converter,
     I3ConverterBundle, I3ConverterMill, I3Datatype, I3Table, I3TableRow, I3TableRowDescription, I3TableService,
-    I3TableTranscriber, I3TableWriterWorker, vector_I3ConverterMillPtr, I3_USE_ROOT, I3_USE_HDF5
+    I3TableTranscriber, I3TableWriterWorker, vector_I3ConverterMillPtr, I3_USE_ROOT, I3_USE_HDF5, I3_USE_SQLITE3
 )
 
 from icecube.tableio.I3TableWriterModule import I3TableWriter, default
@@ -38,7 +38,7 @@ if I3_USE_ROOT:
             **kwargs)
 
 if I3_USE_HDF5:
-    from icecube._tableio import  I3HDFTableService
+    from icecube._tableio import I3HDFTableService
 
     _OPEN_FILENAMES_KEY = "I3HDFWriter_open_filenames"
 
@@ -107,6 +107,24 @@ if I3_USE_HDF5:
         tray.Add("I3NullSplitter",SubEventStreamName="SimHDFWriter")
 
         tray.Add(I3HDFWriter, name, SubEventStreams=["SimHDFWriter"], **kwargs)
+
+if I3_USE_SQLITE3:
+    from icecube._tableio import I3SQLiteTableService
+
+    @icetray.traysegment_inherit(I3TableWriter,
+        removeopts=('TableService',))
+    def I3SQLiteWriter(tray, name, path=None, **kwargs):
+        """Tabulate data to an SQL database.
+
+        :param path: Path to output database file
+        """
+
+        if path is None:
+            raise ValueError("You must supply an output database path!")
+
+        tabler = I3SQLiteTableService(path)
+        tray.AddModule(I3TableWriter, name, TableService=tabler,
+            **kwargs)
 
 from icecube.tableio import types
 

@@ -205,6 +205,7 @@ void I3TableService::Finish() {
         log_debug("In Finish, about to do a final align on %s", table_it->second->GetName().c_str());
         table_it->second->Align();
     }
+    tables_.clear();
 
     /* Only close the file if all the tables are disconnected. */
     if (finished) {

@@ -123,6 +123,44 @@ ELSE(HDF5_FOUND)
 
 ENDIF(HDF5_FOUND)
 
+IF(SQLITE3_FOUND)
+
+  list(APPEND TABLEIO_SOURCES
+    private/tableio/sqlitewriter/I3SQLiteTable.cxx
+    private/tableio/sqlitewriter/I3SQLiteTableService.cxx
+  )
+  list(APPEND TABLEIO_TOOLS sqlite3)
+  list(APPEND TABLEIO_PYBINDINGS
+    private/pybindings/I3SQLiteTableService.cxx
+  )
+  list(APPEND TABLEIO_TESTS
+    resources/test/sqlitewriter/test_book_I3MCTree.py
+  )
+
+  # add executables
+  i3_executable(sqlite_writer_merge_tables
+    private/tableio/sqlitewriter/executables/merge_tables.cxx
+    USE_TOOLS boost python sqlite3
+    USE_PROJECTS icetray dataclasses tableio dataio serialization
+  )
+  i3_executable(sqlitewriter_delete_tables
+    private/tableio/sqlitewriter/executables/delete_tables.cxx
+    USE_TOOLS boost python sqlite3
+    USE_PROJECTS icetray dataclasses tableio dataio serialization
+  )
+  i3_executable(sqlitewriter_concatenate
+    private/tableio/sqlitewriter/executables/concatenate.cxx
+    USE_TOOLS boost python sqlite3
+    USE_PROJECTS icetray dataclasses tableio dataio serialization
+  )
+
+ELSE(SQLITE3_FOUND)
+
+    colormsg(CYAN   "+-- sqlite3 library not found, skipping build of sqlitewriter within ${PROJECT_NAME}")
+    colormsg(YELLOW "*** Ask your admin to install the sqlite3 package.")
+
+ENDIF(SQLITE3_FOUND)
+
 i3_add_library(tableio
   ${TABLEIO_SOURCES}
   USE_TOOLS ${TABLEIO_TOOLS}
@@ -152,7 +190,6 @@ i3_test_scripts(
 )
 
 if(ROOT_FOUND)
-  target_compile_definitions(tableio PRIVATE ROOT_FOUND)
   set_property(TEST tableio::test_rootfile_contents_pyroot.py PROPERTY SKIP_REGULAR_EXPRESSION "^Skipping test")
   set_property(TEST tableio::test_rootfile_contents_uproot.py PROPERTY SKIP_REGULAR_EXPRESSION "^Skipping test")
 endif(ROOT_FOUND)
