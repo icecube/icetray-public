@@ -37,13 +37,21 @@ namespace bp = boost::python;
   #define REGISTER_SQLITE3_DEPENDENT
 #endif
 
+// only register classes depending on arrow, if it is found
+#ifdef I3_USE_ARROW
+  #define REGISTER_ARROW_DEPENDENT (I3ParquetTableService)
+#else
+  #define REGISTER_ARROW_DEPENDENT
+#endif
+
 #define REGISTER_THESE_THINGS \
    (I3TableRowDescription)(I3TableRow)(I3Converter)(I3TableService)     \
    (I3TableWriter)(I3TableTranscriber)(I3ConverterBundle)(I3Datatype)   \
    (I3Table)(I3BroadcastTableService)(I3CSVTableService)                \
     REGISTER_ROOT_DEPENDENT                                             \
     REGISTER_HDF5_DEPENDENT                                             \
-    REGISTER_SQLITE3_DEPENDENT
+    REGISTER_SQLITE3_DEPENDENT                                          \
+    REGISTER_ARROW_DEPENDENT
 
 #define I3_REGISTRATION_FN_DECL(r, data, t) void BOOST_PP_CAT(register_,t)();
 #define I3_REGISTER(r, data, t) BOOST_PP_CAT(register_,t)();
@@ -75,6 +83,13 @@ I3_PYTHON_MODULE(tableio)
     bp::scope().attr("I3_USE_SQLITE3")=true;
   #else
     bp::scope().attr("I3_USE_SQLITE3")=false;
+  #endif
+
+  // forward the I3_USE_ARROW definition
+  #ifdef I3_USE_ARROW
+    bp::scope().attr("I3_USE_ARROW")=true;
+  #else
+    bp::scope().attr("I3_USE_ARROW")=false;
   #endif
 
 }

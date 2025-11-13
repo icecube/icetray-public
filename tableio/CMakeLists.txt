@@ -134,7 +134,7 @@ IF(SQLITE3_FOUND)
     private/pybindings/I3SQLiteTableService.cxx
   )
   list(APPEND TABLEIO_TESTS
-    resources/test/sqlitewriter/test_book_I3MCTree.py
+    resources/test/sqlitewriter/sqlite_book_I3MCTree.py
   )
 
   # add executables
@@ -160,6 +160,39 @@ ELSE(SQLITE3_FOUND)
     colormsg(YELLOW "*** Ask your admin to install the sqlite3 package.")
 
 ENDIF(SQLITE3_FOUND)
+
+IF(ARROW_FOUND)
+
+  list(APPEND TABLEIO_SOURCES
+    private/tableio/parquetwriter/I3ParquetTable.cxx
+    private/tableio/parquetwriter/I3ParquetTableService.cxx
+  )
+  list(APPEND TABLEIO_TOOLS arrow)
+  list(APPEND TABLEIO_PYBINDINGS
+    private/pybindings/I3ParquetTableService.cxx
+  )
+  list(APPEND TABLEIO_TESTS
+    resources/test/parquetwriter/parquet_book_I3MCTree.py
+  )
+
+  # add executables
+  i3_executable(parquetwriter_concatenate
+    private/tableio/parquetwriter/executables/concatenate.cxx
+    USE_TOOLS boost python arrow
+    USE_PROJECTS icetray dataclasses tableio dataio serialization
+  )
+  i3_executable(parquetwriter_merge_fields
+    private/tableio/parquetwriter/executables/merge_fields.cxx
+    USE_TOOLS boost python arrow
+    USE_PROJECTS icetray dataclasses tableio dataio serialization
+  )
+
+ELSE(ARROW_FOUND)
+
+    colormsg(CYAN   "+-- apache arrow library not found, skipping build of parquetwriter within ${PROJECT_NAME}")
+    colormsg(YELLOW "*** Ask your admin to install the apache arrow package.")
+
+ENDIF(ARROW_FOUND)
 
 i3_add_library(tableio
   ${TABLEIO_SOURCES}

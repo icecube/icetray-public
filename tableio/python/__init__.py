@@ -9,7 +9,8 @@ from icecube.tableio.registry import I3ConverterRegistry
 from icecube._tableio import (
     ConvertState, EnumMember, EnumMemberList, I3BroadcastTableService, I3CSVTableService, I3Converter,
     I3ConverterBundle, I3ConverterMill, I3Datatype, I3Table, I3TableRow, I3TableRowDescription, I3TableService,
-    I3TableTranscriber, I3TableWriterWorker, vector_I3ConverterMillPtr, I3_USE_ROOT, I3_USE_HDF5, I3_USE_SQLITE3
+    I3TableTranscriber, I3TableWriterWorker, vector_I3ConverterMillPtr,
+    I3_USE_ROOT, I3_USE_HDF5, I3_USE_SQLITE3, I3_USE_ARROW
 )
 
 from icecube.tableio.I3TableWriterModule import I3TableWriter, default
@@ -123,6 +124,25 @@ if I3_USE_SQLITE3:
             raise ValueError("You must supply an output database path!")
 
         tabler = I3SQLiteTableService(path)
+        tray.AddModule(I3TableWriter, name, TableService=tabler,
+            **kwargs)
+
+if I3_USE_ARROW:
+    from icecube._tableio import I3ParquetTableService  # type: ignore[attr-defined]
+
+    @icetray.traysegment_inherit(I3TableWriter,
+        removeopts=('TableService',))
+    def I3ParquetWriter(tray, name, folder_path=None, compression="uncompressed", **kwargs):
+        """Tabulate data to a parquet file.
+
+        :param folder_path: Path to output folder
+        :param compression: Compression type
+        """
+
+        if folder_path is None:
+            raise ValueError("You must supply an output folder path!")
+
+        tabler = I3ParquetTableService(folder_path, compression)
         tray.AddModule(I3TableWriter, name, TableService=tabler,
             **kwargs)
 
