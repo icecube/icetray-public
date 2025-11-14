@@ -148,7 +148,7 @@ local build files::
  -- Configuring 'gfilt' STL decryptor
  -- Configuring done
  -- Generating done
- -- Build files have been written to: /home/olivas/icecube/combo/trunk/build
+ -- Build files have been written to: /home/olivas/icecube/icetray/trunk/build
 
 You're ready to build.
 
@@ -259,8 +259,8 @@ which again should produce output roughly like this::
  ************************************************************************
 
  Icetray environment has:
-    I3_SRC       = /home/olivas/icecube/combo/trunk/src
-    I3_BUILD     = /home/olivas/icecube/combo/trunk/build
+    I3_SRC       = /home/olivas/icecube/icetray/trunk/src
+    I3_BUILD     = /home/olivas/icecube/icetray/trunk/build
     I3_TESTDATA  = /home/olivas/icecube/test-data/trunk
     Python       = 3.13.1
 

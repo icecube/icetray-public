@@ -12,7 +12,7 @@ support all platforms.  When choosing a platform for your laptop,
 desktop, or institution cluster, prefer an officially supported
 platform.
 
-As of Fall 2019, only the most recent laptop platforms will be
+As of Fall 2025, only the most recent laptop platforms will be
 officially supported, meaning the latest Ubuntu LTS version and
 the latest Mac OSX version, with a reasonable (~6 month) transition
 period.
@@ -23,9 +23,9 @@ parity with a tested version of Ubuntu Linux.
 
 Officially Supported Platforms
 ++++++++++++++++++++++++++++++
-* CentOS : 8 and 7 (Server)
-* Ubuntu : 20.04 (Desktop/Laptop)
-* Mac OS X : 10.15 (Desktop/Laptop)
+* RedHat/AlmaLinux : 8 and 9 (Server)
+* Ubuntu : 24.04 (Desktop/Laptop)
+* Mac OS X : 15 (Desktop/Laptop)
 
 If you need a platform added to the list for your local cluster
 please generate a

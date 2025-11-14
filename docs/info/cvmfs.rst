@@ -29,7 +29,7 @@ Quickstart
 
 From your shell (or in your login script) run::
 
-    $ eval $(/cvmfs/icecube.opensciencegrid.org/py3-v4.4.0/setup.sh)
+    $ eval $(/cvmfs/icecube.opensciencegrid.org/py3-v4.4.2/setup.sh)
 
 This will detect the current OS and architecture and set your
 environment variables appropriately.
@@ -44,7 +44,7 @@ environment variables appropriately.
   your your ``.login`` script. (Note the use of backticks in the
   expression)::
 
-    $ eval `/cvmfs/icecube.opensciencegrid.org/py3-v4.4.0/setup.sh`
+    $ eval `/cvmfs/icecube.opensciencegrid.org/py3-v4.4.2/setup.sh`
 
 This should be near the end of any login script, so you don't
 accidentally put something else in front of CVMFS on the path.
@@ -80,7 +80,7 @@ py3-v4.4
 * gcc 13.3 (c++23) compiler included
 * Supported OS:
 
-  * RedHat / CentOS / Alma:  7 - 9
+  * RedHat / CentOS / Alma:  8 - 9
   * Ubuntu: 20.04, 22.04, 24.04
   * Debian: 9 - 12
 
@@ -97,6 +97,10 @@ py3-v4.4
 py3-v4.3
 ^^^^^^^^
 
+.. warning::
+
+   py3-v4.3* is deprecated and not supported.
+
 .. note::
 
    Works for IceTray releases after June 2023.
@@ -109,159 +113,171 @@ py3-v4.3
   * Ubuntu: 20.04, 22.04
   * Debian: 9 - 11
 
-py3-v4.2
-^^^^^^^^
+|
 
-.. warning::
+.. admonition:: **Old Versions**
+   :collapsible: closed
 
-   py3-v4.2* is deprecated and not supported.
 
-.. note::
+   .. warning::
 
-   py3-v4.2.1 includes geant4.10.5
+      These older versions do not work on the new Alma9 cobalts
 
-* python 3.10, various python software upgrades over v4.1
-* gcc 9.3 (c++17) compiler included
-* Supported OS:
+   |
 
-  * RedHat / CentOS / SL:  7 - 8
-  * Ubuntu: 18.04, 20.04
-  * Debian: 8 - 10
+   **py3-v4.2**
 
-  .. note::
+   .. warning::
 
-     Works for IceTray releases after January 2022.
+      py3-v4.2* is deprecated and not supported.
 
-py3-v4.1
-^^^^^^^^
+   .. note::
 
-.. warning::
+      py3-v4.2.1 includes geant4.10.5
 
-   py3-v4.1* is deprecated and not supported.
+   * python 3.10, various python software upgrades over v4.1
+   * gcc 9.3 (c++17) compiler included
+   * Supported OS:
 
-.. note::
+     * RedHat / CentOS / SL:  7 - 8
+     * Ubuntu: 18.04, 20.04
+     * Debian: 8 - 10
 
-   py3-v4.1.1 includes proper cdk-ncurses dependency.
+     .. note::
 
-* python 3.7 and software releases as of late 2019
-* gcc 9.2 (c++17) compiler included
-* Supported OS:
+        Works for IceTray releases after January 2022.
 
-  * RedHat / CentOS / SL:  7 - 8
-  * Ubuntu: 16.04 - 18.04
-  * Debian: 8 - 10
 
-  .. note::
+   **py3-v4.1**
 
-     Works for IceTray releases after January 2020.
+   .. warning::
 
-py3-v4
-^^^^^^
+      py3-v4.1* is deprecated and not supported.
 
-.. warning::
+   .. note::
 
-   py3-v4.0* is deprecated and not supported.
+      py3-v4.1.1 includes proper cdk-ncurses dependency.
 
-.. note::
+   * python 3.7 and software releases as of late 2019
+   * gcc 9.2 (c++17) compiler included
+   * Supported OS:
 
-   py3-v4.0.1 includes json-c.
-   py3-v4.0.0 is deprecated.
+     * RedHat / CentOS / SL:  7 - 8
+     * Ubuntu: 16.04 - 18.04
+     * Debian: 8 - 10
 
-* python 3.6 and software releases as of late 2018
-* gcc 7.3 (c++14) compiler included
-* Supported OS:
+     .. note::
 
-  * RedHat / CentOS / SL:  6 - 7
-  * Ubuntu: 15.10 - 18.04
-  * Debian: 8 - 9
+        Works for IceTray releases after January 2020.
 
-  .. note::
 
-     Works for IceTray releases after April 2019.
+   **py3-v4**
 
-py2-v3.1
-^^^^^^^^
+   .. warning::
 
-.. note::
+      py3-v4.0* is deprecated and not supported.
 
-   py2-v3.1.1 is a minor fix for Geant4.
-   py2-v3.1.0 is deprecated.
+   .. note::
 
-* python 2.7 and software releases as of 2017
-* GENIE 2.12.8 support
-* Supported OS:
+      py3-v4.0.1 includes json-c.
+      py3-v4.0.0 is deprecated.
 
-  * RedHat / CentOS / SL:  6 - 7
-  * Ubuntu: 14.04 - 18.04
-  * Debian: 8 - 9
+   * python 3.6 and software releases as of late 2018
+   * gcc 7.3 (c++14) compiler included
+   * Supported OS:
 
-  .. note::
+     * RedHat / CentOS / SL:  6 - 7
+     * Ubuntu: 15.10 - 18.04
+     * Debian: 8 - 9
 
-     Works for IceTray releases after August 2017.
-     Pre-compiled metaprojects available after April 2019.
-     C++11 compiler required.
+     .. note::
 
-py2-v3
-^^^^^^
+        Works for IceTray releases after April 2019.
 
-.. warning::
 
-   py2-v3.0* is deprecated and not supported.
+   **py2-v3.1**
 
-.. note::
+   .. note::
 
-   py2-v3.0.1 is a minor fix for some software.
-   py2-v3 is deprecated.
+      py2-v3.1.1 is a minor fix for Geant4.
+      py2-v3.1.0 is deprecated.
 
-* python 2.7 and software releases as of 2017
-* Supported OS:
+   * python 2.7 and software releases as of 2017
+   * GENIE 2.12.8 support
+   * Supported OS:
 
-  * RedHat / CentOS / SL:  6 - 7
-  * Ubuntu: 14.04 - 18.04
-  * Debian: 8 - 9
+     * RedHat / CentOS / SL:  6 - 7
+     * Ubuntu: 14.04 - 18.04
+     * Debian: 8 - 9
 
-  .. note::
+     .. note::
 
-     Works for IceTray releases between August 2017 and April 2019.
-     C++11 compiler required.
+        Works for IceTray releases after August 2017.
+        Pre-compiled metaprojects available after April 2019.
+        C++11 compiler required.
 
-py2-v2
-^^^^^^
 
-.. warning::
+   **py2-v3**
 
-   py2-v2 is deprecated and not supported.
+   .. warning::
 
-* python 2.7 and software releases as of 2015
-* Supported OS:
+      py2-v3.0* is deprecated and not supported.
 
-  * RedHat / CentOS / SL:  6 - 7
-  * Ubuntu: 12.04 - 16.04
-  * Debian: 8
+   .. note::
 
-  .. note::
+      py2-v3.0.1 is a minor fix for some software.
+      py2-v3 is deprecated.
 
-     Works for IceTray releases between April 2016 and August 2017.
-     No support after that date.
+   * python 2.7 and software releases as of 2017
+   * Supported OS:
 
-py2-v1
-^^^^^^
+     * RedHat / CentOS / SL:  6 - 7
+     * Ubuntu: 14.04 - 18.04
+     * Debian: 8 - 9
 
-.. warning::
+     .. note::
 
-   py2-v1 is deprecated and not supported.
+        Works for IceTray releases between August 2017 and April 2019.
+        C++11 compiler required.
 
-* python 2.7 and I3_PORTS
-* Supported OS:
 
-  * RedHat / CentOS / SL 6
-  * Ubuntu 12.04, 14.04
+   **py2-v2**
 
-  .. note::
+   .. warning::
 
-     Works for IceTray releases before April 2016. No support
-     after that date.
+      py2-v2 is deprecated and not supported.
 
+   * python 2.7 and software releases as of 2015
+   * Supported OS:
+
+     * RedHat / CentOS / SL:  6 - 7
+     * Ubuntu: 12.04 - 16.04
+     * Debian: 8
+
+     .. note::
+
+        Works for IceTray releases between April 2016 and August 2017.
+        No support after that date.
+
+
+   **py2-v1**
+
+   .. warning::
+
+      py2-v1 is deprecated and not supported.
+
+   * python 2.7 and I3_PORTS
+   * Supported OS:
+
+     * RedHat / CentOS / SL 6
+     * Ubuntu 12.04, 14.04
+
+    .. note::
+
+       Works for IceTray releases before April 2016. No support
+       after that date.
+
+|
 
 Self-contained IceTray Scripts
 ------------------------------

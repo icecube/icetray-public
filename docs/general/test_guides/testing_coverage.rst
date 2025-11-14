@@ -45,7 +45,7 @@ For Ubuntu::
 
   $ apt-get install lcov
 
-For Scientific Linux (or CentOS, or Fedora)::
+For Red Hat (or CentOS, or AlmaLinux, or Fedora)::
 
   $ yum install lcov
 
