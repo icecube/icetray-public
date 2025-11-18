@@ -398,6 +398,7 @@ whitelist = [
     "steamshovel",
     "tableio",
     "taxi-reader",
+    "trigger-splitter",
     "wavereform",
 ]
 
