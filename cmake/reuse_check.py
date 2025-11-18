@@ -375,6 +375,7 @@ whitelist = [
     ".github",
     "IceHive",
     "NuRadioMCInterface",
+    "SLOPTools",
     "astro",
     "cmake",
     "dataclasses",
