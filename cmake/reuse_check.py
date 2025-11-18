@@ -390,6 +390,7 @@ whitelist = [
     "serialization",
     "steamshovel",
     "tableio",
+    "taxi-reader",
     "wavereform",
 ]
 
