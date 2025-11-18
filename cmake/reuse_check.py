@@ -371,7 +371,7 @@ whitelist = [
     ".github",
     "IceHive",
     "NuRadioMCInterface",
-    "SLOPTools",
+    "SLOPtools",
     "TopologicalSplitter",
     "astro",
     "cmake",
