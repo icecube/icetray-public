@@ -393,6 +393,7 @@ whitelist = [
     "rpdf",
     "serialization",
     "shield",
+    "snowstorm",
     "steamshovel",
     "tableio",
     "taxi-reader",
