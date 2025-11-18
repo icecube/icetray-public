@@ -379,6 +379,7 @@ whitelist = [
     "dataclasses",
     "dataio",
     "docs",
+    "full_event_followup",
     "geantprop",
     "icetray",
     "interfaces",
