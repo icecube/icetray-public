@@ -389,6 +389,7 @@ whitelist = [
     "radcube",
     "rpdf",
     "serialization",
+    "shield",
     "steamshovel",
     "tableio",
     "taxi-reader",
