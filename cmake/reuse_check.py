@@ -373,6 +373,7 @@ whitelist_files = [
 
 whitelist = [
     ".github",
+    "IceHive",
     "NuRadioMCInterface",
     "astro",
     "cmake",
