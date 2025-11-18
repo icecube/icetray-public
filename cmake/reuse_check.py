@@ -375,6 +375,7 @@ whitelist = [
     "IceHive",
     "NuRadioMCInterface",
     "SLOPTools",
+    "TopologicalSplitter",
     "astro",
     "cmake",
     "dataclasses",
