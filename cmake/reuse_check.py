@@ -368,6 +368,7 @@ whitelist_files = [
 whitelist = [
     ".github",
     "IceHive",
+    "LeptonInjector",
     "NuRadioMCInterface",
     "SLOPtools",
     "TopologicalSplitter",
