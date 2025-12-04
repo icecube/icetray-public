@@ -108,6 +108,9 @@ set(DATACLASSES_PYTHON_TEST_SCRIPTS
   resources/test/i3matrix_test.py
   resources/test/std_map_indexing_suite_test.py
   resources/test/test_I3DOMCalibration.py
+  resources/test/test_I3PMTCal.py
+  resources/test/test_I3DEggCal.py
+  resources/test/test_I3mDOMCal.py
   resources/test/test_I3Geometry.py
   resources/test/test_i3particlevect.py
   resources/test/test_I3Time.py
@@ -123,6 +126,8 @@ set(DATACLASSES_PYTHON_TEST_SCRIPTS
   resources/test/i3double_compare.py
   resources/test/leap_second_test.py
   resources/test/test_I3DOMStatus.py
+  resources/test/test_I3DEggStatus.py
+  resources/test/test_I3mDOMStatus.py
   resources/test/test_I3MCTreeUtils.py
   resources/test/test_I3RecoPulseSeriesMapApplySPECorrection.py
   resources/test/test_I3Trigger.py

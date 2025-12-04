@@ -44,5 +44,6 @@ Table of Contents:
    i3double
    spechargedistribution
    upgrade_launch_classes
+   upgrade_calibration_status_classes
 
 Also see the :ref:`doxygen <dataclasses-cpp>` docs.
