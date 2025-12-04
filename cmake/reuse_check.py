@@ -378,6 +378,7 @@ whitelist = [
     "dataio",
     "docs",
     "full_event_followup",
+    "gcdserver",
     "earthmodel-service",
     "geantprop",
     "genie-reader",
