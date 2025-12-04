@@ -326,6 +326,10 @@ class I3Particle : public I3FrameObject
 
   std::ostream& Print(std::ostream&) const override;
 
+  bool IsHadron() const;
+  bool IsEM() const;
+  bool IsMuon() const;
+  bool IsTau() const;
   bool IsTrack() const;
   bool IsCascade() const;
   bool IsTopShower() const;

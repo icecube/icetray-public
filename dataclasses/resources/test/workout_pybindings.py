@@ -10,8 +10,8 @@ import unittest
 from icecube.icetray import I3Units, logging
 from icecube import icetray, dataclasses
 
-# with contextlib.suppress(ModuleNotFoundError):
-#     import scipy.constants
+with contextlib.suppress(ModuleNotFoundError):
+    import scipy.constants
 
 #icetray.set_log_level(icetray.I3LogLevel.LOG_TRACE)
 
@@ -50,10 +50,7 @@ class I3ConstantsTestCase(unittest.TestCase):
     def testI3Constants(self):
         # Avogadro's constant
         logging.log_debug("NA        : %s" % dataclasses.I3Constants.NA)
-        self.assertEqual(dataclasses.I3Constants.NA, 6.0221415e23)
-        # with contextlib.suppress(NameError):
-        #     logging.log_debug("NA (scipy): %s" % scipy.constants.N_A)
-        #     self.assertEqual(dataclasses.I3Constants.NA, scipy.constants.N_A, "Our Avogadro's number is not equal to scipy's")
+        self.assertEqual(dataclasses.I3Constants.NA, 6.02214076e23)
 
         # Conversion between IceCube and AMANDA coordinates
         # from docushare file by Kurt Woschnagg
@@ -76,9 +73,19 @@ class I3ConstantsTestCase(unittest.TestCase):
 
         # speed of light in a vacuum
         logging.log_debug("c:         %s" % dataclasses.I3Constants.c)
+
+        # compare against scipy if found
         with contextlib.suppress(NameError):
             logging.log_debug("c (scipy): %s" % scipy.constants.c)
-            self.assertEqual(dataclasses.I3Constants.c, scipy.constants.c * I3Units.m / I3Units.second, "c != c")
+            self.assertEqual(dataclasses.I3Constants.c, scipy.constants.c * I3Units.m / I3Units.second, "c != c (scipy)")
+            logging.log_debug("NA (scipy): %s" % scipy.constants.N_A)
+            self.assertEqual(dataclasses.I3Constants.NA, scipy.constants.N_A, "N_A != N_A (scipy)")
+            logging.log_debug("h (scipy): %s" % scipy.constants.h)
+            self.assertEqual(dataclasses.I3Constants.h, scipy.constants.h * I3Units.joule * I3Units.s, "h != h (scipy)")
+            logging.log_debug("kB (scipy): %s" % scipy.constants.Boltzmann)
+            self.assertEqual(dataclasses.I3Constants.KBoltzmann, scipy.constants.k * I3Units.joule / I3Units.kelvin, "kB != kB (scipy)")
+            logging.log_debug("eSI (scipy): %s" % scipy.constants.e)
+            self.assertEqual(I3Units.eSI, scipy.constants.e, "eSI != eSI (scipy)")
 
 
 class I3DirectionTestCase(unittest.TestCase):

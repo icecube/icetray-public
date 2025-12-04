@@ -434,7 +434,7 @@ namespace I3Units
    * Charge
    */
    static const double eplus = 1.;               // positron charge
-   static const double eSI   = 1.602176462e-19;  // positron charge in coulomb
+   static const double eSI   = 1.602176634e-19;  // positron charge in coulomb
 
   /**
    * Coulomb

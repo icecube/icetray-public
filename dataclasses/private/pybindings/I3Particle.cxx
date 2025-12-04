@@ -75,7 +75,7 @@ void register_I3Particle()
       #define RO_PROPERTIES (MajorID)(MinorID)(ID)(Mass)
       #define PROPERTIES (Time)(Energy)(TotalEnergy)(KineticEnergy)(Shape)(Type)(PdgEncoding)(Length)(Speed)(FitStatus)(LocationType) \
                          (ShapeString)(TypeString)(FitStatusString)(LocationTypeString)
-      #define CONVENIENCE_BOOLS (IsTrack)(IsCascade)(IsTopShower)(IsNeutrino)(HasMass)
+      #define CONVENIENCE_BOOLS (IsHadron)(IsEM)(IsMuon)(IsTau)(IsTrack)(IsCascade)(IsTopShower)(IsNeutrino)(IsNucleus)(HasPosition)(HasDirection)(HasEnergy)(HasMass)
       BOOST_PP_SEQ_FOR_EACH(WRAP_PROP_RO, I3Particle, RO_PROPERTIES)
       BOOST_PP_SEQ_FOR_EACH(WRAP_PROP, I3Particle, PROPERTIES)
       BOOST_PP_SEQ_FOR_EACH(WRAP_PROP_BOOL, I3Particle, CONVENIENCE_BOOLS)

@@ -26,7 +26,7 @@ namespace I3Constants
   /**
    * The speed of light in vacuum
    */
-  static const double c = 2.99792458e8 * I3Units::m / (I3Units::second);
+  static const double c = 299792458. * I3Units::m / (I3Units::second);
 
   /**
    * Impedance of free space
@@ -38,7 +38,7 @@ namespace I3Constants
    * Boltzmann temperature constant (i.e. k_B)
    */
 
-  static const double KBoltzmann = 1.38064852e-23 * I3Units::joule / I3Units::kelvin;
+  static const double KBoltzmann = 1.380649e-23 * I3Units::joule / I3Units::kelvin;
 
   /**
    * The "average" phase velocity (for wavelength of 400nm)
@@ -78,10 +78,10 @@ namespace I3Constants
   static const double e = M_E;
 
   /**
-   *  Avaogadro's Number
+   *  Avogadro's Number
    */
 
-  static const double NA = 6.0221415e23;
+  static const double NA = 6.02214076e23;
 
   /**
    * Elevation of ice surface (floor of string 21 deployment tower)
@@ -126,6 +126,64 @@ namespace I3Constants
    */
   static const double dt_window_l = -15*I3Units::ns;
   static const double dt_window_h = +25*I3Units::ns;
+
+  /**
+   * Rate of muon energy loss in ice [GeV / meter water equivalent]
+   * https://arxiv.org/pdf/hep-ph/0407075 Tab. 3
+   */
+  static const double dedx_a=0.26*I3Units::GeV/I3Units::m;
+  static const double dedx_b=0.36e-3*I3Units::GeV/I3Units::m;
+
+  /**
+   *  Planck Constant
+   */
+  static const double h = 6.62607015e-34 * I3Units::joule * (I3Units::second);
+
+  /**
+   *  reduced Planck Constant
+   */
+  static const double hbar = h / (2. * I3Constants::pi);
+
+  /**
+   *  unit conversion constant (hbar * c)
+   */
+  static const double hbarc = hbar * I3Constants::c;
+
+  /**
+   *  Fermi coupling constant
+   *  / (hbar * c)^3 is assumed
+   */
+  static const double G_Fermi = 1.1663787e-5 / (I3Units::GeV * I3Units::GeV);
+
+  /**
+   *  Permittivity of free space
+   */
+  static const double epsilon_0 = 8.854187817e-12 * I3Units::coulomb / (I3Units::V * I3Units::m);
+
+  /**
+   *  Permeability of free space
+   */
+  static const double mu_0 = 4 * I3Constants::pi * 1e-7 * I3Units::newton / (I3Units::A * I3Units::A);
+
+  /**
+   *  Fine-structure constant
+   *  \f$e^{2} / (2 \epsilon_0 h c)\f$
+   */
+  static const double alpha = 1./137.035999139;
+
+  /**
+   *  Weak-mixing Angle
+   *  \f$sin^{2} \hat{\theta} (M_{Z})
+   *  cos \theta_{W}\f$
+   */
+  static const double sinsq_theta_W = 0.23116;
+  static const double cos_theta_W = 0.881437669412353; // M_W / M_Z0
+
+  /**
+   *  Cabibbo Angle
+   */
+  static const double sin_theta_C = 0.22534;
+  static const double cos_theta_C = 0.97427;
 };
 
 #endif //I3CONSTANTS_H_INCLUDED

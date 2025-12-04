@@ -541,6 +541,98 @@ void I3Particle::SetLocationTypeString(const std::string &str)
   }
 }
 
+bool I3Particle::IsHadron() const
+{
+  const ParticleType type = ParticleType(pdgEncoding_);
+  switch(type){
+  case I3Particle::Hadrons:
+  case I3Particle::Neutron:
+  case I3Particle::PiPlus:
+  case I3Particle::PiMinus:
+  case I3Particle::K0_Long:
+  case I3Particle::KPlus:
+  case I3Particle::KMinus:
+  case I3Particle::PPlus:
+  case I3Particle::PMinus:
+  case I3Particle::K0_Short:
+  case I3Particle::Eta:
+  case I3Particle::Lambda:
+  case I3Particle::SigmaPlus:
+  case I3Particle::Sigma0:
+  case I3Particle::SigmaMinus:
+  case I3Particle::Xi0:
+  case I3Particle::XiMinus:
+  case I3Particle::OmegaMinus:
+  case I3Particle::NeutronBar:
+  case I3Particle::LambdaBar:
+  case I3Particle::SigmaMinusBar:
+  case I3Particle::Sigma0Bar:
+  case I3Particle::SigmaPlusBar:
+  case I3Particle::Xi0Bar:
+  case I3Particle::XiPlusBar:
+  case I3Particle::OmegaPlusBar:
+  case I3Particle::DPlus:
+  case I3Particle::DMinus:
+  case I3Particle::D0:
+  case I3Particle::D0Bar:
+  case I3Particle::DsPlus:
+  case I3Particle::DsMinusBar:
+  case I3Particle::LambdacPlus:
+  case I3Particle::WPlus:
+  case I3Particle::WMinus:
+  case I3Particle::Z0:
+  case I3Particle::NuclInt:
+  case I3Particle::WeakInt:
+  case I3Particle::K0:
+  case I3Particle::K0Bar:
+  case I3Particle::O16Nucleus:
+    return true;
+  default:
+    return false;
+  }
+}
+
+bool I3Particle::IsEM() const
+{
+  const ParticleType type = ParticleType(pdgEncoding_);
+  switch(type){
+  case I3Particle::EMinus:
+  case I3Particle::EPlus:
+  case I3Particle::Brems:
+  case I3Particle::DeltaE:
+  case I3Particle::PairProd:
+  case I3Particle::Gamma:
+  case I3Particle::Pi0: // Pi0 decays to 2 gammas and produce EM showers
+    return true;
+  default:
+    return false;
+  }
+}
+
+bool I3Particle::IsMuon() const
+{
+  const ParticleType type = ParticleType(pdgEncoding_);
+  switch(type){
+  case I3Particle::MuMinus:
+  case I3Particle::MuPlus:
+    return true;
+  default:
+    return false;
+  }
+}
+
+bool I3Particle::IsTau() const
+{
+  const ParticleType type = ParticleType(pdgEncoding_);
+  switch(type){
+  case I3Particle::TauMinus:
+  case I3Particle::TauPlus:
+    return true;
+  default:
+    return false;
+  }
+}
+
 bool I3Particle::IsNucleus() const
 {
   return (abs(pdgEncoding_) >= 1000000000 && abs(pdgEncoding_) <= 1099999999);

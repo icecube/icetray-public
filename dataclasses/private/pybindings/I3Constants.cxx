@@ -30,18 +30,27 @@
 
 #include "pybindings.hpp"
 #include <boost/preprocessor.hpp>
-#include <vector>
 
 #include <dataclasses/I3Constants.h>
 
 using namespace boost::python;
 
-#define I3_CONSTANT_NAMES			\
-  (c)(n_ice_phase)(n_ice_group)(n_ice)		\
-  (theta_cherenkov)(c_ice)(pi)(e)(NA)		\
-  (SurfaceElev)(OriginElev)(zIceTop)		\
-  (Coordinate_shift_x)(Coordinate_shift_y)	\
-  (Coordinate_shift_z)(dt_window_l)(dt_window_h)
+#define I3_CONSTANT_NAMES                  \
+  (c)(z_vacuum)(KBoltzmann)                \
+  (h)(hbar)(hbarc)                         \
+  (pi)(e)(NA)                              \
+  (n_ice_phase)(n_ice_group)(n_ice)        \
+  (theta_cherenkov)(c_ice)                 \
+  (SurfaceElev)(OriginElev)(zIceTop)       \
+  (earthRadius)                            \
+  (Coordinate_shift_x)(Coordinate_shift_y) \
+  (Coordinate_shift_z)                     \
+  (dt_window_l)(dt_window_h)               \
+  (dedx_a)(dedx_b)                         \
+  (G_Fermi)(epsilon_0)(mu_0)               \
+  (alpha)(sinsq_theta_W)                   \
+  (cos_theta_W)(sin_theta_C)               \
+  (cos_theta_C)
 
 #define I3CONSTANT_DEF(r,data,t) \
   .def_readonly(BOOST_PP_STRINGIZE(t), BOOST_PP_CAT(I3Constants::, t))
@@ -56,6 +65,7 @@ void register_I3Constants()
   class_<icecube_dataclasses_I3Constants>("I3Constants")
     .def_readonly("c", I3Constants::c, "Speed of light in vacuum")
     .def_readonly("z_vacuum", I3Constants::z_vacuum, "Impedance of free space")
+    .def_readonly("KBoltzmann", I3Constants::KBoltzmann, "Boltzmann's constant")
     .def_readonly("n_ice_phase", I3Constants::n_ice_phase, "the average phase velocity for wavelength of 400nm") 
     .def_readonly("n_ice_group", I3Constants::n_ice_group, "avg group velocity for 400nm")
     .def_readonly("n_ice", I3Constants::n_ice, "index of refraction of ice")
@@ -74,6 +84,19 @@ void register_I3Constants()
     .def_readonly("Coordinate_shift_z", I3Constants::Coordinate_shift_z, "conversion between icecube and amanda")
     .def_readonly("dt_window_l", I3Constants::dt_window_l, "default value for time residuals")
     .def_readonly("dt_window_h", I3Constants::dt_window_h, "default value for time residuals")
+    .def_readonly("dedx_a", I3Constants::dedx_a, "constant muon dedx in ice [GeV/meter water equivalent]")
+    .def_readonly("dedx_b", I3Constants::dedx_b, "enegy-dependent muon dedx term in ice [GeV/meter water equivalent]")
+    .def_readonly("h", I3Constants::h, "Planck Constant")
+    .def_readonly("hbar", I3Constants::hbar, "reduced Planck Constant")
+    .def_readonly("hbarc", I3Constants::hbarc, "Unit conversion")
+    .def_readonly("G_Fermi", I3Constants::G_Fermi, "Fermi constant, / (hbar * c)^3 is assumed")
+    .def_readonly("epsilon_0", I3Constants::epsilon_0, "Permittivity of free space")
+    .def_readonly("mu_0", I3Constants::mu_0, "Permeability of free space")
+    .def_readonly("alpha", I3Constants::alpha, "Fine-structure constant")
+    .def_readonly("sinsq_theta_W", I3Constants::sinsq_theta_W, "Weak-mixing Angle sin^{2} theta (M_{Z})")
+    .def_readonly("cos_theta_W", I3Constants::cos_theta_W, "Weak-mixing Angle cos theta_{W}")
+    .def_readonly("sin_theta_C", I3Constants::sin_theta_C, "Cabibbo Angle sin_theta_C")
+    .def_readonly("cos_theta_C", I3Constants::cos_theta_C, "Cabibbo Angle cos_theta_C")
     .def( freeze() )
     ;
 }
