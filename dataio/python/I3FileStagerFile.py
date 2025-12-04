@@ -272,46 +272,10 @@ class GridFTPStager(AbstractFileStager):
               You will also need to `obtain a user certificate :wiki:`Using_GridFTP`.
     """
 
-    def __init__(self, globus_url_copy='globus-url-copy', options=['-nodcau', '-rst', '-cd']):
-        super(type(self), self).__init__()
-        self.globus_url_copy = globus_url_copy
-        self.options = list(options)
-
-    def ReadSchemes(self):
-        return ['ftp', 'gsiftp']
-
-    def WriteSchemes(self):
-        return ['ftp', 'gsiftp']
-
-    def CopyFileIn(self, url, local_path):
-        icetray.logging.log_info("Downloading %s to %s" % (url, local_path), unit="GridFTPStager")
-        proc = subprocess.Popen(
-            [self.globus_url_copy] + self.options + [url, 'file://' + os.path.abspath(local_path)],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-        stdout, stderr = proc.communicate()
-        if proc.returncode != 0:
-            icetray.logging.log_fatal(
-                "globus-url-copy failed with status %d: %s" % (proc.returncode, stderr.decode().strip()), unit="GridFTPStager"
-            )
-        else:
-            icetray.logging.log_info("Download finished: %s to %s" % (url, local_path), unit="GridFTPStager")
-
-    def CopyFileOut(self, local_path, url):
-        icetray.logging.log_info("Uploading %s to %s" % (local_path, url), unit="GridFTPStager")
-        proc = subprocess.Popen(
-            [self.globus_url_copy] + self.options + ['file://' + os.path.abspath(local_path), url],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-        stdout, stderr = proc.communicate()
-        if proc.returncode != 0:
-            icetray.logging.log_fatal(
-                "globus-url-copy failed with status %d: %s" % (proc.returncode, stderr.decode().strip()), unit="GridFTPStager"
-            )
-        else:
-            icetray.logging.log_info("Upload finished: %s to %s" % (local_path, url), unit="GridFTPStager")
+    def __init__(self):
+        self.scratch_dir = None
+        raise DeprecationWarning("GridFTP has been deprecated. Replaced with Pelican. See https://wiki.icecube.wisc.edu/index.php/Pelican for more details")
+        
 
 
 class SCPStager(AbstractFileStager):

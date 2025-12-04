@@ -28,7 +28,8 @@ def get_stagers(staging_directory=None, extra_stagers=[]):
 
     impls = set(extra_stagers)
     for stager in AbstractFileStager.get_subclasses():
-        impls.add(stager)
+        if stager.__name__ != "GridFTPStager":
+            impls.add(stager)
 
     return I3FileStagerCollection([stager() for stager in impls])
 
