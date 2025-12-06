@@ -424,6 +424,32 @@ double I3Particle::GetTotalEnergy() const
   }
 }
 
+void I3Particle::SetEnergy(double energy)
+{
+  energy_ = energy;
+  if (this->HasMass()) {
+    ParticleType type = ParticleType(pdgEncoding_);
+    double m = fromParticleTypeMassTable.at(type);
+    speed_ = I3Constants::c * sqrt(std::max(0., fma(m / (energy_ + m), -m / (energy_ + m), 1.)));
+  } else {
+    log_debug("\"%s\" has no mass implemented. Cannot set speed.", (this->GetTypeString()).c_str());
+  }
+}
+
+void I3Particle::SetSpeed(double speed)
+{
+  speed_ = speed;
+  if (this->HasMass()) {
+    ParticleType type = ParticleType(pdgEncoding_);
+    double m = fromParticleTypeMassTable.at(type);
+    double g = 1. / sqrt(fma(speed_ / I3Constants::c, -speed_ / I3Constants::c, 1.));
+    if (std::isfinite(m * (g - 1))) energy_ = m * (g - 1);
+    else log_debug("\"%s\" has mass but energy is not finite for speed %f, will not set energy.", (this->GetTypeString()).c_str(), speed);
+  } else {
+    log_debug("\"%s\" has no mass implemented. Cannot set energy.", (this->GetTypeString()).c_str());
+  }
+}
+
 void I3Particle::SetTotalEnergy(double total_energy)
 {
   ParticleType type = ParticleType(pdgEncoding_);
@@ -484,6 +510,18 @@ std::string I3Particle::GetLocationTypeString() const
 
 
 #define MAKE_STRING_TO_ENUM_IF_LINE(r, data, t) else if ( str == BOOST_PP_STRINGIZE(t) ) { data = t; }
+
+void I3Particle::SetPdgEncoding(int32_t newid) {
+  pdgEncoding_=newid;
+  // synchronize speed with any preset energy
+  this->SetEnergy(energy_);
+}
+
+void I3Particle::SetType(ParticleType type) {
+  pdgEncoding_ = type;
+  // synchronize speed with any preset energy
+  this->SetEnergy(energy_);
+}
 
 void I3Particle::SetTypeString(const std::string &str)
 {

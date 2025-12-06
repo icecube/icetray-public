@@ -40,7 +40,7 @@ class LinearTreeTest(unittest.TestCase):
 
         self.assertEquivalent(p1.energy, p2.energy, 1e-2)
         self.assertEquivalent(p1.length, p2.length)
-        self.assertEquivalent(p1.speed, p2.speed)
+        self.assertEquivalent(p1.speed, p2.speed, 1e-9)
 
         self.assertEqual(p1.type, p2.type)
         self.assertEqual(p1.location_type, p2.location_type)

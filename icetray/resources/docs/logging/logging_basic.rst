@@ -16,7 +16,7 @@ Log Levels in order of increasing verbosity and severity:
 - fatal
 
 Trace and debug are compiled out in release mode.  The default in debug
-mode is info; the default in release mode is warn.
+mode is info; the default in release mode is notice.
 
 Functions
 ---------

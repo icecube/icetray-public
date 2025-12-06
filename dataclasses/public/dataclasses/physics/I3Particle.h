@@ -384,12 +384,12 @@ class I3Particle : public I3FrameObject
   uint64_t GetMajorID() const { return ID_.majorID; }
 
   int32_t GetPdgEncoding() const { return pdgEncoding_; }
-  void SetPdgEncoding(int32_t newid) { pdgEncoding_=newid; }
+  void SetPdgEncoding(int32_t newid);
 
   ParticleType GetType() const { return ParticleType(pdgEncoding_); };
   std::string GetTypeString() const;
 
-  void SetType(ParticleType type) { pdgEncoding_ = type; };
+  void SetType(ParticleType type);
   void SetTypeString(const std::string &str);
 
   ParticleShape GetShape() const { return shape_; }
@@ -455,7 +455,7 @@ class I3Particle : public I3FrameObject
   bool HasMass() const;
 
   /** @brief Sets the kinetic energy of the particle. */
-  void SetEnergy(double energy) { energy_ = energy; }
+  void SetEnergy(double energy);
 
   /** @brief Sets the kinetic energy of the particle. */
   void SetKineticEnergy(double energy) { SetEnergy(energy); }
@@ -464,7 +464,7 @@ class I3Particle : public I3FrameObject
   void SetTotalEnergy(double total_energy);
 
   double GetSpeed() const { return speed_; }
-  void SetSpeed(double s) { speed_ = s; }
+  void SetSpeed(double s);
 
   /** @brief get the position of the particle at this time
    *  @note ignores the shape of the track (start/stopping point), so the particle might not be defined at that very position

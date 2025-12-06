@@ -41,7 +41,6 @@ TEST(CopyPtrConstructor)
   p1->SetType(I3Particle::PMinus);
   p1->SetShape(I3Particle::Cascade);
   p1->SetEnergy(100*I3Units::GeV);
-  p1->SetSpeed(I3Constants::c);
   cout<<AsXML(p1);
 
   I3ParticlePtr p2(p1);
@@ -81,7 +80,6 @@ TEST(CopyObjConstructor)
   p1.SetType(I3Particle::PMinus);
   p1.SetShape(I3Particle::Cascade);
   p1.SetEnergy(100*I3Units::GeV);
-  p1.SetSpeed(I3Constants::c);
   cout<<AsXML(p1);
 
   I3Particle p2(p1);
