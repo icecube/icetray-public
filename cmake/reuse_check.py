@@ -399,6 +399,7 @@ whitelist = [
     "taxi-reader",
     "trigger-splitter",
     "wavereform",
+    "wimpsim-reader",
 ]
 
 ignore = shutil.ignore_patterns("*.pyc", ".ruff_cache", "steamshovel.qrc.depends", ".mypy_cache", ".cache")
