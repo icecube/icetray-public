@@ -281,6 +281,8 @@ class I3Particle : public I3FrameObject
     StoppingTrack = 60,
     ContainedTrack = 70,
     MCTrack = 80,
+    MCTrackSegment = 81,
+    MCTrackSegmentSlow = 82,
     Dark = 90
   };
 
@@ -574,7 +576,7 @@ std::string i3particle_type_string(int32_t pdg_code);
 
 #define I3PARTICLE_H_I3Particle_ParticleShape                                     \
     (Null)(Primary)(TopShower)(Cascade)(CascadeSegment)(InfiniteTrack)(StartingTrack)             \
-    (StoppingTrack)(ContainedTrack)(MCTrack)(Dark)
+    (StoppingTrack)(ContainedTrack)(MCTrack)(MCTrackSegment)(MCTrackSegmentSlow)(Dark)
 
 #define I3PARTICLE_H_I3Particle_FitStatus                                         \
     (NotSet)(OK)(GeneralFailure)(InsufficientHits)(FailedToConverge)              \

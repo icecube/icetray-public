@@ -17,8 +17,8 @@ class Particles : public GLArtist{
     bool isValidKey( I3FramePtr ptr, int key_idx, const std::string& key );
 
     template <typename Container>
-    void drawCollection( Container&, SceneGroup*, const SceneState&, bool, float, float );
-    void drawParticle( const I3Particle&, SceneGroup*, const SceneState&, bool, float, float );
+    void drawCollection( Container&, SceneGroup*, const SceneState&, bool, bool, float, float );
+    void drawParticle( const I3Particle&, SceneGroup*, const SceneState&, bool, bool, float, float );
 
 public:
     Particles();

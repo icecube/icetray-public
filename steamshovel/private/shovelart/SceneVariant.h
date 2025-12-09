@@ -199,18 +199,17 @@ public:
     virtual vec3d value( double vistime ) const override {
       I3Particle::ParticleShape shape = particle_->GetShape();
       double t = time_.value(vistime);
-      if( shape == I3Particle::StartingTrack ||
-          shape == I3Particle::ContainedTrack){
+      if (shape == I3Particle::InfiniteTrack) return loc_at_time(t);
+
+      if (shape != I3Particle::StoppingTrack) {
         t = std::max( t, particle_->GetStartTime() );
       }
 
-      if( shape == I3Particle::StoppingTrack ||
-          shape == I3Particle::ContainedTrack ){
-        t = std::min( t, particle_->GetStopTime() );
+      if (shape != I3Particle::StartingTrack &&
+          !std::isnan(particle_->GetLength()) &&
+          !std::isnan(particle_->GetSpeed())) {
+        t = std::min(t, particle_->GetStopTime());
       }
-
-      if( shape == I3Particle::Null )
-        t = std::max( t, particle_->GetTime() );
 
       return loc_at_time( t );
     }

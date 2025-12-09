@@ -430,7 +430,7 @@ void I3Particle::SetEnergy(double energy)
   if (this->HasMass()) {
     ParticleType type = ParticleType(pdgEncoding_);
     double m = fromParticleTypeMassTable.at(type);
-    speed_ = I3Constants::c * sqrt(std::max(0., fma(m / (energy_ + m), -m / (energy_ + m), 1.)));
+    speed_ = I3Constants::c * sqrt(fma(m / (energy_ + m), -m / (energy_ + m), 1.));
   } else {
     log_debug("\"%s\" has no mass implemented. Cannot set speed.", (this->GetTypeString()).c_str());
   }
@@ -680,6 +680,7 @@ bool I3Particle::IsTrack() const
 {
   if (shape_==InfiniteTrack || shape_==StartingTrack ||
       shape_==StoppingTrack || shape_==ContainedTrack ||
+      shape_==MCTrack || shape_==MCTrackSegment || shape_==MCTrackSegmentSlow ||
       pdgEncoding_==MuPlus || pdgEncoding_==MuMinus ||
       pdgEncoding_==TauPlus || pdgEncoding_==TauMinus ||
       pdgEncoding_==STauPlus || pdgEncoding_==STauMinus ||
@@ -769,52 +770,65 @@ I3Position I3Particle::ShiftTimeTrack(const double time) const
 
 I3Position I3Particle::GetStartPos() const
 {
-  if (shape_ == StartingTrack ||
-      shape_ == ContainedTrack ||
-      shape_ == MCTrack) return pos_;
-  else {
-    log_warn("GetStartPos undefined for a particle that is neither starting "
-	     "nor contained.");
+  if (shape_ == InfiniteTrack ||
+      shape_ == StoppingTrack) {
+    log_warn("GetStartPos undefined for InfiniteTrack and StoppingTrack");
     return I3Position();
   }
+  return pos_;
 }
 
 double I3Particle::GetStartTime() const
 {
-  if (shape_ == StartingTrack ||
-      shape_ == ContainedTrack ||
-      shape_ == MCTrack ) return time_;
-  else{
-    log_warn("GetStartTime undefined for a particle that is neither starting "
-	     "nor contained.");
+  if (shape_ == InfiniteTrack ||
+      shape_ == StoppingTrack) {
+    log_warn("GetStartTime undefined for InfiniteTrack and StoppingTrack.");
     return NAN;
   }
+  return time_;
 }
 
 I3Position I3Particle::GetStopPos() const
 {
+  if (shape_ == InfiniteTrack ||
+      shape_ == StartingTrack) {
+    log_warn("GetStopPos undefined for InfiniteTrack and StartingTrack");
+    return I3Position();
+  }
+
   if (shape_==StoppingTrack) return pos_;
-  else if (shape_ == ContainedTrack || shape_ == MCTrack){
-    return pos_ + length_*dir_;
+
+  if (std::isnan(length_)) {
+    log_warn("GetStopPos undefined for a particle with nan length.");
+    return I3Position();
   }
-  else {
-    log_warn("GetStopPos undefined for a particle that is neither stopping "
-	     "nor contained.");
-    I3Position nullpos;
-    return nullpos;
+
+  if (!HasDirection()) {
+    log_warn("GetStopPos undefined for a particle without direction.");
+    return I3Position();
   }
+  return pos_ + length_*dir_;
 }
 
 double I3Particle::GetStopTime() const
 {
-  if (shape_==StoppingTrack) return time_;
-  else if (shape_ == ContainedTrack || shape_ == MCTrack){
-    return time_ + length_/speed_;
-  }else{
-    log_warn("GetStopTime undefined for a particle that is neither stopping "
-	     "nor contained.");
+  if (shape_ == InfiniteTrack ||
+      shape_ == StartingTrack) {
+    log_warn("GetStopTime undefined for InfiniteTrack and StartingTrack.");
     return NAN;
   }
+  if (shape_==StoppingTrack) return time_;
+
+  if (std::isnan(length_)) {
+    log_warn("GetStopTime undefined for a particle with nan length.");
+    return NAN;
+  }
+
+  if (std::isnan(speed_)) {
+    log_warn("GetStopPos undefined for a particle with nan speed.");
+    return NAN;
+  }
+  return time_ + length_/speed_;
 }
 
 // XXX: These don't need to be bimaps. The look is only one way and they could

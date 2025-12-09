@@ -225,6 +225,7 @@ Particles::Particles() {
   addSetting( "labels", true );
   addSetting( "min. energy [track]", QString() );
   addSetting( "min. energy [cascade]", QString() );
+  addSetting( "draw dark", false );
 }
 
 bool
@@ -244,20 +245,21 @@ Particles::create( I3FramePtr ptr, SceneGroup* g, const SceneState& state )
   const float min_energy_cascade = ParseEnergy( setting<QString>("min. energy [cascade]") );
   const float min_energy_track = ParseEnergy( setting<QString>("min. energy [track]") );
   const bool incoming_outgoing = setting<bool>( "incoming/outgoing" );
+  const bool draw_dark = setting<bool>( "draw dark" );
 
   const std::string key = keys()[0];
   if (I3ParticleConstPtr p = ptr->Get<I3ParticleConstPtr>(key))
-    drawParticle( *p, g, state, incoming_outgoing,
+    drawParticle( *p, g, state, incoming_outgoing, draw_dark,
                   min_energy_cascade, min_energy_track );
   else
   if (I3MCTreeConstPtr t = ptr->Get<I3MCTreeConstPtr>(key))
-    drawCollection( *t, g, state, false, min_energy_cascade, min_energy_track );
+    drawCollection( *t, g, state, false, draw_dark, min_energy_cascade, min_energy_track );
   else
   if (I3LinearizedMCTreeConstPtr t = ptr->Get<I3LinearizedMCTreeConstPtr>(key))
-    drawCollection( *t, g, state, false, min_energy_cascade, min_energy_track );
+    drawCollection( *t, g, state, false, draw_dark, min_energy_cascade, min_energy_track );
   else
   if (I3VectorI3ParticleConstPtr v = ptr->Get<I3VectorI3ParticleConstPtr>(key))
-    drawCollection( *v, g, state, incoming_outgoing,
+    drawCollection( *v, g, state, incoming_outgoing, draw_dark,
                     min_energy_cascade, min_energy_track );
   return;
 }
@@ -267,13 +269,14 @@ void Particles::drawCollection( Container& container,
                                 SceneGroup *g,
                                 const SceneState& state,
                                 bool incoming_outgoing,
+                                bool draw_dark,
                                 float min_energy_cascade,
                                 float min_energy_track )
 {
   for (typename Container::const_iterator
          p = container.begin();
        p != container.end(); p++) {
-    drawParticle( *p, g, state, incoming_outgoing, min_energy_cascade, min_energy_track );
+    drawParticle( *p, g, state, incoming_outgoing, draw_dark, min_energy_cascade, min_energy_track );
   }
 }
 
@@ -281,9 +284,13 @@ void Particles::drawParticle( const I3Particle& p,
                               SceneGroup *g,
                               const SceneState& state,
                               bool incoming_outgoing,
+                              bool draw_dark,
                               float min_energy_cascade,
                               float min_energy_track )
 {
+  if( p.GetShape() == I3Particle::Dark && !draw_dark )
+      return;
+
   VariantQColorPtr color( new SceneConstant<QColor>(setting<QColor>("color")) );
 
   const float power = setting<RangeSetting>("power");
@@ -329,17 +336,20 @@ void Particles::drawParticle( const I3Particle& p,
           bubble->setColor(QColor("Green"));
           break;
         case I3Particle::PairProd:
+        case I3Particle::Pi0:
           bubble->setColor(QColor("Blue"));
           break;
         case I3Particle::NuclInt:
         case I3Particle::Hadrons:
+        case I3Particle::PiPlus:
+        case I3Particle::PiMinus:
           bubble->setColor(QColor("Magenta"));
           break;
         case I3Particle::WeakInt:
           bubble->setColor(QColor("Purple"));
           break;
         default:
-          log_warn ("Unknown Energy Loss Type: %i", p.GetType());
+          log_warn ("Unknown Energy Loss Type: %s", p.GetTypeString().c_str());
           break;
         }
       }
@@ -416,10 +426,11 @@ void Particles::drawParticle( const I3Particle& p,
       p.GetShape() != I3Particle::InfiniteTrack ){
     I3Particle::ParticleShape sh = p.GetShape();
     I3ParticlePtr p2[2]; // in, out
-
     if( sh == I3Particle::StartingTrack ||
         sh == I3Particle::ContainedTrack ||
-        sh == I3Particle::MCTrack ){
+        sh == I3Particle::MCTrack ||
+        sh == I3Particle::MCTrackSegment ||
+        sh == I3Particle::MCTrackSegmentSlow){
       // has a starting point
       p2[0].reset( new I3Particle() );
       p2[0]->SetShape( I3Particle::StoppingTrack );
@@ -429,7 +440,9 @@ void Particles::drawParticle( const I3Particle& p,
 
     if( sh == I3Particle::StoppingTrack ||
         ( ( sh == I3Particle::ContainedTrack ||
-            sh == I3Particle::MCTrack )
+            sh == I3Particle::MCTrack ||
+            sh == I3Particle::MCTrackSegment ||
+            sh == I3Particle::MCTrackSegmentSlow)
           && p.GetLength() > 0 ) ){
       // has a stopping point
       p2[1].reset( new I3Particle() );
