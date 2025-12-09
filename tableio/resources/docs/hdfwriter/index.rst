@@ -23,7 +23,7 @@ A tableio plugin for writing HDF5 files.
    FAQ
    C++ API Reference </doxygen/tableio/hdfwriter/index>
    IceTray Inspect Reference </inspect/tableio/hdfwriter>
-   release_notes
+   old_release_notes
 
 Usage
 ^^^^^
@@ -47,7 +47,7 @@ The :func:`.I3HDFWriter` segment provides output to HDF5 tables. Use it like so:
 
 .. note::
 
-  The ``Output`` parameter must be a unique file name. If two instances of
+   The ``Output`` parameter must be a unique file name. If two instances of
    :func:`.I3HDFWriter` try to write to the same file, an exception will be
    raised.
 

@@ -8,15 +8,19 @@
 .. @date $LastChangedDate$
 .. @author Aurora Wohlfahrt <lepeler@icecube.wisc.edu>, $LastChangedBy$
 
+.. _tableio/parquetwriter:
+
 tableio/parquetwriter
 =====================
 
-This is a writer service for :ref:`tableio` to create Apache Parquet files.
-See below for a list of supported compression algorithms.
-Please refer to the :ref:`tableio` docs for a comprehensive user's guide.
+This is a writer service for :ref:`tableio-main` to create `Apache Parquet
+<https://parquet.apache.org/>`_ files. See below for a list of supported
+compression algorithms. Please refer to the :ref:`tableio-main` docs for a
+comprehensive user's guide.
 
-example script:
----------------
+Example script
+--------------
+
 .. code-block:: python
 
     from icecube import icetray, dataio
@@ -26,32 +30,45 @@ example script:
 
     tray = I3Tray()
     tray.AddModule('I3Reader',
-                filename = 'your_input_file.i3')
+                   filename = 'your_input_file.i3')
 
-    writer = I3ParquetTableService(folder_path = 'your_output_folder', compression = 'chosen compression type')
+    writer = I3ParquetTableService(folder_path = 'your_output_folder',
+                                   compression = 'chosen compression type')
     tray.AddModule(I3TableWriter,
-                'writer',
-                TableService = writer,
-                Keys = ['I3MCTree'],
-                SubEventStreams = ['InIceSplit', 'NullSplit'],
-                )
+                   'writer',
+                   TableService = writer,
+                   Keys = ['I3MCTree'],
+                   SubEventStreams = ['InIceSplit', 'NullSplit'])
 
     tray.Execute()
     tray.Finish()
 
+Compression types
+-----------------
 
-compression types:
-------------------
 .. list-table::
-    * - 'brotli' | '.br'
-    * - 'bz2' | '.bz2'
-    * - 'gzip' | '.gz'
-    * - 'lz4' | '.lz4'
-    * - 'lz4_frame'
-    * - 'lz4_hadoop'
-    * - 'lz0' | '.lz0'
-    * - 'snappy' | '.sz'
-    * - 'uncompressed' | ''
-    * - 'zstd' | '.zst'
+   :align: left
+   :header-rows: 1
 
-
+   * - Type
+     - Extension
+   * - brotli
+     - .br
+   * - bz2
+     - .bz2
+   * - gzip
+     - .gz
+   * - lz4
+     - .lz4
+   * - lz4_frame
+     -
+   * - lz4_hadoop
+     -
+   * - lz0
+     - .lz0
+   * - snappy
+     - .sz
+   * - uncompressed
+     -
+   * - zstd
+     - .zst

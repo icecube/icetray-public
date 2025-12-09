@@ -10,7 +10,7 @@ FAQ
 ===
 
 Can I use tableio/hdfwriter to write from files with only Q frames, or would I have to create P frames on my own with those objects that I want to have in the hdf5 file?
------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 The latter. Put an :cpp:class:`I3NullSplitter` in front of :func:`~.I3HDFWriter`. See also :ref:`tableio/hdfwriter-sim-hdfwriter`.
 

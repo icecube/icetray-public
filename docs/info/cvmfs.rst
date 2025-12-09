@@ -393,23 +393,28 @@ for example::
 Setting up CVMFS on a cluster without CVMFS
 -------------------------------------------
 
-This requires user namespaces to be enable in the linux kernel. Generally this is enabled starting in RHEL8 and later. There is support in later versions of RHEL7.8, but it needs to be enabled by the admins. To check whether user namespaces is enabled
+.. highlight:: console
+
+This requires user namespaces to be enable in the linux kernel. Generally this
+is enabled starting in RHEL8 and later. There is support in later versions of
+RHEL7.8, but it needs to be enabled by the admins. To check whether user
+namespaces is enabled::
 
     $ sysctl user.max_user_namespaces
     user.max_user_namespaces = <non-zero>
 
-At certain sites, e.g. TACC, you need to be in an interactive slot on a worker node because the user namespace is disabled on the login/submit nodes. 
+At certain sites, e.g. TACC, you need to be in an interactive slot on a worker
+node because the user namespace is disabled on the login/submit nodes.
 
-To get start check out this git repo:
+To get start check out this git repo: https://github.com/cvmfs/cvmfsexec.
 
-    https://github.com/cvmfs/cvmfsexec
+Then generate a "cvmfs distribution" inside the ``cvmfsexec`` dir (best use the
+``osg`` option)::
 
-then generate a "cvmfs distribution" inside the cvmfsexec dir (best use the `osg` option):
+    $ ./makedist osg
 
-    ./makedist osg
+This only needs to be done when setting up cvmfsexec. To now create a cvmfs
+environment and run::
 
-This only needs to be done when setting up cvmfsexec. To now create a cvmfs 
-environment run
-
-    /cvmfsexec/cvmfsexec config-osg.opensciencegrid.org oasis.opensciencegrid.org singularity.opensciencegrid.org icecube.opensciencegrid.org -- ./glidein_start.sh
+    $ ./cvmfsexec/cvmfsexec config-osg.opensciencegrid.org oasis.opensciencegrid.org singularity.opensciencegrid.org icecube.opensciencegrid.org -- ./glidein_start.sh
 

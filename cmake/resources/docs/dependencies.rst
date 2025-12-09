@@ -80,7 +80,7 @@ These dependencies are optional. If not present IceTray will compile with reduce
     - :ref:`astro`, :ref:`filterscripts`, :ref:`wimpsim-reader`
   * - `HDF5 <https://www.hdfgroup.org/solutions/hdf5/>`_
     - High-performance data management and storage suite
-    - :ref:`hdfwriter`
+    - :ref:`tableio/hdfwriter`
   * - `Boost NumPy <https://www.boost.org/doc/libs/release/libs/python/doc/html/numpy/>`_
     - Boost.Python NumPy extension
     - :ref:`MuonGun-main` and :ref:`ml_suite` pybindings
@@ -92,7 +92,7 @@ These dependencies are optional. If not present IceTray will compile with reduce
     - :doc:`SPRNGRandomService </projects/phys-services/distributed_rng>`
   * - `ROOT <https://root.cern/>`_
     - Particle physics data analysis
-    - :ref:`rootwriter`, :ref:`I3GulliverMinuit2 <lilliput>`
+    - :ref:`tableio/rootwriter`, :ref:`I3GulliverMinuit2 <lilliput>`
   * - `Minuit2 <https://root.cern/topical/#minuit>`_
     - Physics analysis tool for function minimization.
     - :ref:`I3GulliverMinuit2 <lilliput>`
@@ -134,7 +134,7 @@ These dependencies are optional. If not present IceTray will compile with reduce
     - :ref:`steamshovel <steamshovel>`
   * - `sqlite3 <https://www.sqlite.org/cintro.html>`_
     - Module to interact with SQLite databases in C++
-    - :ref:`Aurora <Aurora-database>`
+    - :ref:`tableio/sqlitewriter`
 
 Other Dependencies
 ------------------

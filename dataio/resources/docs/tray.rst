@@ -310,7 +310,7 @@ The I3Writer module will automatically add an "I3TrayInfo" frame object to the "
 which will record the configuration of all the modules and services in the tray for future reference.
 The default name of the frame object will be the timestamp of when the I3Writer was run, for instance:
 
-.. code-block:: "none"
+.. code-block:: none
 
     2017-05-31T16:22:49
 
@@ -324,7 +324,7 @@ to this frame object's name.  For instance, running this::
 
 ...will produce an I-frame frame object named this instead:
 
-.. code-block:: "none"
+.. code-block:: none
 
    MySpecialProcessing_2017-05-31T16:22:49
 
@@ -339,8 +339,7 @@ both 'Q' and 'P' frames, the output at the end can look like::
     QQQQQPQQQQQQQQQPQQQQQQQPQQQQQQPQQQ
 
 There are a lot of left over 'Q' frames that we should drop to save space.
-The easy option to take care of that is ``DropOrphanStreams::``
-
+The easy option to take care of that is ``DropOrphanStreams``::
 
     tray.Add("I3Writer",
              Filename="outfile.i3",

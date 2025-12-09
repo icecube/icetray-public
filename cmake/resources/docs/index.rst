@@ -40,7 +40,6 @@ Advanced
 
    cmake_advanced
    organization
-   documentation
    targets
    toolset
    i3test

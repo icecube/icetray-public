@@ -18,7 +18,7 @@ Current maintainer: Katherine Rawlins <krawlins@alaska.edu>.
 .. toctree::
    :maxdepth: 1
 
-   release_notes
+   old_release_notes
 
 .. toctree::
 
