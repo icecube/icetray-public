@@ -390,6 +390,7 @@ whitelist = [
     "online_filterscripts",
     "phys-services",
     "radcube",
+    "rock_bottom",
     "rpdf",
     "serialization",
     "shield",
