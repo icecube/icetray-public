@@ -400,6 +400,7 @@ whitelist = [
     "tableio",
     "taxi-reader",
     "trigger-splitter",
+    "wavedeform",
     "wavereform",
     "wimpsim-reader",
 ]
