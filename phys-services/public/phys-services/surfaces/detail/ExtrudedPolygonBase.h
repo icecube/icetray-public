@@ -439,6 +439,9 @@ private:
 			I3OMGeo::OMType::mDOM,
 		  	I3OMGeo::OMType::WOM,
 		  	I3OMGeo::OMType::FOM,
+			I3OMGeo::OMType::LOM16,
+			I3OMGeo::OMType::LOM18,
+			I3OMGeo::OMType::LOM,
 		};
 		// sort DOM coordinates by string and find min(z) and max(z)
 		std::set<unsigned int> string_nos;
