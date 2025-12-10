@@ -367,6 +367,7 @@ whitelist_files = [
 
 whitelist = [
     ".github",
+    "CommonVariables",
     "IceHive",
     "LeptonInjector",
     "NuRadioMCInterface",
