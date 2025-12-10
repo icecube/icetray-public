@@ -20,7 +20,7 @@
 #include "dataclasses/Utility.h"
 
 
-static const unsigned i3omgeo_version_ = 1;
+static const unsigned i3omgeo_version_ = 2;
 
 
 /**
@@ -34,6 +34,9 @@ static const unsigned i3omgeo_version_ = 1;
   (UnknownType)(AMANDA)(IceCube)(IceTop)(mDOM)(Scintillator)(IceAct)\
   (PDOM)(isoPDOM)(DEgg)(WOM)(FOM)(DMIce)(LOM)(LOM16)(LOM18)(RadioReceiver) \
   (POCAM)(PencilBeam)(RadioEmitter)(AcousticEmitter)(AbaloneHub)(FibreComm)
+
+#define I3OMGEO_H_I3OMGeo_PMTType        \
+  (Unknown)(Nominal)(HQE)
 
 //Simple struct to contain all pertinent OM info.
 //See I3Geometry.h for more info
@@ -69,7 +72,13 @@ public:
       FibreComm = 250,
     };
 
-    I3OMGeo():omtype(UnknownType){}
+    enum PMTType {
+      Unknown = 0,
+      Nominal = 1,
+      HQE = 2,
+    };
+  
+    I3OMGeo() : omtype(UnknownType), pmttype(Unknown) {}
 
     /**
      * the OM's (or PMT's) x,y,z position
@@ -87,6 +96,11 @@ public:
     OMType omtype;
 
     /**
+     * Nominal or HQE types
+     */
+    PMTType pmttype;
+
+    /**
      * Effective collection area (use I3Units)
      */
     double area;
@@ -96,11 +110,27 @@ public:
      */
     inline I3Direction GetDirection() const {return orientation.GetDir();}
 
+    /**
+     * Gets the beta for angular sensitivity
+     */
+    double GetPMTBeta() const;
+
+    /**
+     * Gets the directionally averaged area
+     */
+    double GetAverageArea() const;
+
+    /**
+     * Gets approximate surface area of the photocathode
+     */
+    double GetCurvedArea() const;
+  
     bool operator==(const I3OMGeo& rhs) const
     {
       return (position == rhs.position &&
               orientation == rhs.orientation &&
               omtype == rhs.omtype &&
+              pmttype == rhs.pmttype &&
               area == rhs.area);
     }
     bool operator!=(const I3OMGeo& rhs) const

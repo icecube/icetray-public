@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: BSD-2-Clause
 
+#include <cmath>
 #include <icetray/serialization.h>
 #include <dataclasses/geometry/I3OMGeo.h>
 
@@ -41,6 +42,9 @@ I3OMGeo::serialize(Archive& ar, unsigned version)
         // Ignore it when reading older files.
         ar & make_nvp("AziAngle", aziangle);
     }
+    if (version >= 2) {
+        ar & make_nvp("PMTType", pmttype);
+    }
 }
 
 I3_SERIALIZABLE(I3OMGeo);
@@ -50,10 +54,43 @@ std::ostream& I3OMGeo::Print(std::ostream& os) const{
     os << "[I3OMGeo Position: " << position << '\n'
        << "      Orientation: " << orientation << '\n'
        << "           OMType: " << omtype << '\n'
+       << "          PMTType: " << pmttype << '\n'
        << "             Area: " << area << " ]";
     return os;
 }
 
 std::ostream& operator<<(std::ostream& os, const I3OMGeo& g){
     return(g.Print(os));
+}
+
+double I3OMGeo::GetPMTBeta() const {
+  // from NEXTGEN/om.conf in ice-models
+	switch (omtype) {
+  case I3OMGeo::AMANDA:
+	case I3OMGeo::IceCube:
+	case I3OMGeo::PDOM:
+		return 0.49;
+  case I3OMGeo::mDOM:
+    return 0.95;
+  case I3OMGeo::DEgg:
+    return 0.5;
+  case I3OMGeo::LOM:
+  case I3OMGeo::LOM16:
+  case I3OMGeo::LOM18:
+    return 1.;
+  case I3OMGeo::WOM:
+  case I3OMGeo::FOM:
+    // Assuming (cross sectional) area is 2rh and surface area 2pirh, solve for beta that gives the expected direcionally averaged area: pi rh / 2
+    return -2. / M_PI - 1.;
+  default:
+    return 0.;
+  }
+}
+
+double I3OMGeo::GetAverageArea() const {
+  return std::fabs(area / ( 2. * (1. + I3OMGeo::GetPMTBeta())));
+}
+
+double I3OMGeo::GetCurvedArea() const {
+  return 4. * GetAverageArea();
 }

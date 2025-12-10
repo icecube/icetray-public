@@ -72,10 +72,10 @@ class I3ModuleGeo : public I3FrameObject
 {
 public:
     enum ModuleType {UnknownType = 0, AMANDA = 10, IceCube = 20, IceTop = 30, 
-		     mDOM = 40, Scintillator = 45, // These do NOT match the enums in I3OMGeo! 
+		     Scintillator = 40,
 		     IceAct = 50,
-		     // OMType > 100 are Gen2 R&D optical modules
-		     PDOM = 110, DEgg = 120, WOM = 140, FOM = 150,
+		     // OMType > 100 are Upgrade / Gen2 optical modules
+		     PDOM = 110, DEgg = 120, mDOM = 130, WOM = 140, FOM = 150,
 		     DMIce = 160, LOM = 170, LOM16 = 171, LOM18 = 172,
 		     RadioReceiver = 180,
 		     // OMType > 200 for the various calibration devices
@@ -108,6 +108,8 @@ public:
     double GetRr() const {return radR_;}
     double GetRz() const {return radZ_;}
     double GetHeight() const {return h_;}
+    double GetArea(double z) const {return radZ_ > 0 ?
+        M_PI * radR_ * std::sqrt(radZ_ * radZ_ - z * z * (radZ_ * radZ_ - radR_ * radR_)): 2 * radR_ * h_ * std::sqrt(1 - z * z) ;}
 
     void SetRr(double value) {radR_=value;}
     void SetRz(double value) {radZ_=value; h_=NAN;}

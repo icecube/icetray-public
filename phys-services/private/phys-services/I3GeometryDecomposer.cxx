@@ -168,7 +168,12 @@ I3GeometryDecomposer::GenerateSubdetectorMap(const I3OMGeoMap &omgeo) const
             continue;
         }
 
-        (*output)[key] = "Upgrade";
+        if (key.GetString() <= 93) {
+            (*output)[key] = "Upgrade";
+            continue;
+        }
+
+        (*output)[key] = "Gen2";
     }
 
     return output;

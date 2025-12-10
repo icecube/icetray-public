@@ -48,7 +48,10 @@ void register_I3OMGeo()
   {
     scope omg = class_<I3OMGeo, boost::shared_ptr<I3OMGeo> >("I3OMGeo")
       .add_property("direction", &I3OMGeo::GetDirection)
-      #define I3OMGEOPROPS (position)(omtype)(orientation)(area) 
+      .add_property("beta", &I3OMGeo::GetPMTBeta)
+      .add_property("earea", &I3OMGeo::GetAverageArea)
+      .add_property("carea", &I3OMGeo::GetCurvedArea)
+      #define I3OMGEOPROPS (position)(omtype)(pmttype)(orientation)(area) 
       BOOST_PP_SEQ_FOR_EACH(WRAP_RW_RECASE, I3OMGeo, I3OMGEOPROPS )
       #undef I3OMGEOPROPS
       .def(dataclass_suite<I3OMGeo>())
@@ -61,8 +64,15 @@ void register_I3OMGeo()
       ;
     ;
 
+    enum_<I3OMGeo::PMTType>("PMTType")
+      BOOST_PP_SEQ_FOR_EACH(ENUM_DEF,I3OMGeo,I3OMGEO_H_I3OMGeo_PMTType)
+      .export_values()
+      ;
+    ;
+
   }
   def("identity", identity_<I3OMGeo::OMType>);
+  def("identity", identity_<I3OMGeo::PMTType>);
 
   class_<I3OMGeoMap, bases<I3FrameObject>, I3OMGeoMapPtr>("I3OMGeoMap")
     .def(dataclass_suite<I3OMGeoMap>())

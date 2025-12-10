@@ -36,6 +36,7 @@
 
 #include <icetray/IcetrayFwd.h>
 #include <icetray/I3FrameObject.h>
+#include <icetray/OMKey.h>
 #include <icetray/serialization.h>
 
 #include "dataclasses/I3Map.h"
@@ -62,6 +63,9 @@ class ModuleKey
 
   ModuleKey(int str,unsigned int om)
     : stringNumber_(str), omNumber_(om) {}
+
+  ModuleKey(OMKey omkey) 
+    : stringNumber_(omkey.GetString()), omNumber_(omkey.GetOM()) {}
 
   /**
    * retrieves the string number for this ModuleKey
@@ -113,7 +117,7 @@ class ModuleKey
   {
     size_t operator()(const ModuleKey& key) const
     {
-      return ((static_cast<size_t>(abs(key.GetString()+19)) * 64) +
+      return ((static_cast<size_t>(abs(key.GetString()+19)) * 200) +
                static_cast<size_t>(key.GetOM()));
     }
   };

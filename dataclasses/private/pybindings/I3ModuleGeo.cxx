@@ -63,6 +63,7 @@ void register_I3ModuleGeo()
                                     ),
                       (void (I3ModuleGeo::*)(const I3Orientation&)) &I3ModuleGeo::SetOrientation
                       )
+        .def("GetArea", &I3ModuleGeo::GetArea)
         .def(bp::dataclass_suite<I3ModuleGeo>())
         ;
 

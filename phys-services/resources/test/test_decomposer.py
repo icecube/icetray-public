@@ -47,7 +47,7 @@ class DecomposerTestModule(icetray.I3Module):
         udict = defaultdict(list)
         sdict = defaultdict(list)
         for k in modgeo.keys():
-            if modgeo[k].module_type in [0, 30, 45]:
+            if modgeo[k].module_type in [0, 30, 40]:
                 udict[k.string].append(k.om)
                 continue
             sdict[k.string].append(list(modgeo[k].pos))
