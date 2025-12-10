@@ -39,7 +39,10 @@ class I3Waveform
     TWR_OPTICAL = 3,
     ETC = 4,
     SLC = 5,
-    SiPM = 6
+    SiPM = 6,
+    DEgg_FADC = 7,
+    mDOM_FADC = 8,
+    LOM_FADC = 9
   };
 
   union SourceCompound {

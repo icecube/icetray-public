@@ -195,3 +195,45 @@ triggered.
 
 The configured time window within which two hits are considered to be in
 coincidence.
+
+
+I3LOMLaunch
+^^^^^^^^^^^^
+
+:cpp:class:`I3LOMLaunch` contains the output data from the LOM, for a single 
+channel/PMT. This dataclass is used regardless of the LOM variant, e.g. 
+LOM-16 vs LOM-18.
+
+**Important:** This is a very preliminary implementation acting as a 
+placeholder, as the LOM readout electronics are not yet fully developed. 
+Expect this dataclass to change substantially over time.  
+
+Members
+-------
+
+**Time**
+
+The time (in nanoseconds) of the 60 MHz ADC bin in which the launch is
+triggered (for this channel/PMT). Note that this is *not* the time of the 
+first ADC sample, since there are some recorded samples before the trigger.
+
+The time is marked as *valid* if the timestamp is synchronized with the 
+ICM clock, otherwise it is *invalid* (check this using ``HasValidTime``).
+
+The readout is triggered by an analog circuit if the high gain channel 
+exceeds  a threshold voltage equivalent to 0.2 photoelectrons.
+
+
+**ADCDataHighGain/LowGain**
+
+The ADC counts for each sample recorded, e.g. the waveforms. There are
+two distinct channels, one with high and one with low gain, each returning 
+a waveform. The two waveforms always have the same length, typically approx. 
+30 samples (5 of which are before the trigger) but can be longer for 
+large/complex signals, and are concurrent (e.g. triggered at the same time). 
+The sampling rate is 60 MHz. 
+
+The high gain channel is set such that it can observe single photoelectrons, 
+whilst the low gain channel is suited to much brighter events that would 
+saturate the high gain channel. The low gain chain has opposite polarity to 
+the high gain channel.
