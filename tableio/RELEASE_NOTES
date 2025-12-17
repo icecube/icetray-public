@@ -8,8 +8,21 @@ Release Notes
 main
 ----
 
+Dec 18, 2025 don la dieu (nega at icecube.umd.edu)
+--------------------------------------------------
+IceTray Release v1.17.0
+
+* documentation cleanup (#4177)
+* Fix duplicated copyright/license statement
+* add I3ParquetWriter (#3868)
+* added sqlitewriter (#3812)
+* Move hdfwriter (#4059)
+* move rootwriter into tableio (#4058)
+* Remove references to I3PARTICLE_SUPPORTS_PDG_ENCODINGS (#4125)
+
 Oct 30, 2025 don la dieu (nega at icecube.umd.edu)
 --------------------------------------------------
+IceTray Release v1.16.0
 
 * Merge surface radio overhaul from surfacearray branch (#4053)
 * Use standard directory for python files (#4030)

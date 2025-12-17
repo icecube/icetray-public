@@ -10,8 +10,16 @@ Release Notes
 main
 ----
 
+Dec 18, 2025 don la dieu (nega at icecube.umd.edu)
+--------------------------------------------------
+IceTray Release v1.17.0
+
+* documentation cleanup (#4177)
+* update docs for EL7 removal (#4143)
+
 Oct 30, 2025 don la dieu (nega at icecube.umd.edu)
 --------------------------------------------------
+IceTray Release v1.16.0
 
 - update docs-build with a reduced "j" flag on macOS
 - update docs-build to understand the new python layout

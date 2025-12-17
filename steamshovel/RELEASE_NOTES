@@ -10,8 +10,15 @@ Release Notes
 main
 ----
 
+Dec 18, 2025 don la dieu (nega at icecube.umd.edu)
+--------------------------------------------------
+IceTray Release v1.17.0
+
+* Incorporate variable beta into photon propagation for slow track-like particles (#4107)
+
 Oct 30, 2025 don la dieu (nega at icecube.umd.edu)
 --------------------------------------------------
+IceTray Release v1.16.0
 
 * Advance mypy to 1.18 (#4063)
 * Fix TypeError that crops up with Python 3.13 (#4072)

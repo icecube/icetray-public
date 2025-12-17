@@ -10,8 +10,16 @@ Release Notes
 main
 ----
 
+Dec 18, 2025 don la dieu (nega at icecube.umd.edu)
+--------------------------------------------------
+IceTray Release v1.17.0
+
+* associate I3Particle speed with its energy (#4109)
+* Update some I3Constants (#4154)
+
 Oct 30, 2025 don la dieu (nega at icecube.umd.edu)
 --------------------------------------------------
+IceTray Release v1.16.0
 
 * clean up icetray docs (#4087)
 * Squash all build warnings while enabling ``-Wextra`` (#3942)

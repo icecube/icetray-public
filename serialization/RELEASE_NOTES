@@ -10,6 +10,7 @@ main
 
 Oct 30, 2025 don la dieu (nega at icecube.umd.edu)
 --------------------------------------------------
+IceTray Release v1.16.0
 
 - clean up misc docs (#4090)
 - Squash all build warnings while enabling ``-Wextra`` (#3942)

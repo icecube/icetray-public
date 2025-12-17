@@ -10,8 +10,16 @@ Release Notes
 main
 ----
 
+Dec 18, 2025 don la dieu (nega at icecube.umd.edu)
+--------------------------------------------------
+IceTray Release v1.17.0
+
+* New I3MCPEGenerators for upgrade (#3927)
+* Update LOM16 effective areas and add support for LOM16/18 in ExtrudePolygon (#4068)
+
 Oct 30, 2025 don la dieu (nega at icecube.umd.edu)
 --------------------------------------------------
+IceTray Release v1.16.0
 
 * phys-services - fix "free after return"
 * Squash all build warnings while enabling ``-Wextra`` (#3942)

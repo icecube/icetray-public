@@ -12,8 +12,43 @@ Release Notes
 main
 ----
 
+Dec 18, 2025 don la dieu (nega at icecube.umd.edu)
+--------------------------------------------------
+IceTray Release v1.17.0
+
+* Delete unused arguments and imports (#4121)
+* Fix case sensitive issue that was missed on macos
+* Fix minor issues with reuse_check.py caused by merge conflict
+* License CommonVariables (#4175)
+* License IceHive (#4137)
+* License LeptonInjector (#4156)
+* License Radcube (#4145)
+* License Rootwriter (#4128)
+* License SLOPtools (#4136)
+* License Shield (#4144)
+* License Taxi-Reader (#4146)
+* License TopologicalSplitter (#4134)
+* License earthmodel-service (#4131)
+* License full_event_followup (#4139)
+* License gcdserver (#4157)
+* License genie-reader (#4135)
+* License ice-models (#4158)
+* License rock_bottom and fix symlink (#4165)
+* License snowstorm (#4138)
+* License trigger-splitter (#4133)
+* License wavedeform (#4176)
+* License wimpsim-reader
+* Move hdfwriter (#4059)
+* add I3ParquetWriter (#3868)
+* added sqlitewriter (#3812)
+* documentation cleanup (#4177)
+* fix missing symbols with root (#4132)
+* move rootwriter into tableio (#4058)
+* update docs for EL7 removal (#4143)
+
 Oct 30, 2025 don la dieu (nega at icecube.umd.edu)
 --------------------------------------------------
+IceTray Release v1.16.0
 
 * robustify GSL_VERSION and gsl-config finding (#4102)
 * use std::abs() in ENSURE_EPSILON (#4080)
