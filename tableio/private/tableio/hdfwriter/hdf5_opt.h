@@ -5,7 +5,7 @@
 
 #include "hdf5.h"
 
-#if (H5_VERS_MAJOR >= 1)&&(H5_VERS_MINOR >= 8)
+#if (H5_VERS_MAJOR > 1) || (H5_VERS_MAJOR == 1 && H5_VERS_MINOR >= 8)
 	#include "hdf5_hl.h"
 #else
     #include "H5LT.h"
