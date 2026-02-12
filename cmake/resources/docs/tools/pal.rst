@@ -7,18 +7,18 @@
 PAL
 ===
 
-PAL stands for Positional Astronomy Library it provides standard routines for
+PAL stands for Positional Astronomy Library. It provides standard routines for
 astronomical calculations. The PAL library is a partial re-implementation of
 Pat Wallace's popular SLALIB library written in C using a Gnu GPL license and
 layered on top of the IAU's SOFA library (or the BSD-licensed ERFA) where
-appropriate.  SLALIB is an old Fortran library which was translated into c, it
+appropriate.  SLALIB is an old Fortran library which was translated into C, it
 is no longer updated, has a weird license, and is hard to find.
 
 IceCube's astronomical coordinate software :ref:`astro` requires PAL to work.
 The PAL source code is available on `github
 <https://github.com/Starlink/pal>`_, but it is difficult to compile. A `fork
-<https://github.com/IceCube-SPNO/pal>`_ provided by IceCube which is much
-easier to compile is available from the IceCube github repository, it depends
+<https://github.com/icecube/pal>`_ provided by IceCube which is much
+easier to compile is available from the IceCube Github repository, it depends
 on a library called ERFA.
 
 Apple Mac OS X
@@ -28,10 +28,10 @@ On MAC OS X, homebrew can be used:
 
 .. code-block:: console
 
-  brew tap IceCube-SPNO/homebrew-icecube
+  brew tap icecube/homebrew-icecube
   brew install pal
 
-for other systems it must be installed from source.
+For other systems, check your package manager. It maybe called ``pal`` or ``starlink-pal``.
 
 Install from Source
 --------------------
@@ -54,8 +54,9 @@ PAL can be installed by downloading from github and compiling:
 
 .. code-block:: console
 
-  git clone https://github.com/IceCube-SPNO/pal
+  git clone https://github.com/icecube/pal
   cd pal
+  git checkout unstarlink
   ./bootstrap
   ./configure --prefix=/usr/local
   make
