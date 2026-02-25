@@ -39,6 +39,10 @@ const std::vector<size_t>& I3TableRowDescription::GetFieldArrayLengths() const {
     return fieldArrayLengths_;
 }
 
+const std::vector<size_t>& I3TableRowDescription::GetFieldSizes() const {
+    return fieldSizes_;
+}
+
 const std::vector<size_t>& I3TableRowDescription::GetFieldByteOffsets() const {
     return fieldByteOffsets_;
 }
@@ -165,6 +169,7 @@ void I3TableRowDescription::AddField(const std::string& name, I3Datatype type,
 
     fieldTypeSizes_.push_back(type.size);
     fieldArrayLengths_.push_back(arrayLength);
+    fieldSizes_.push_back(type.size*arrayLength);
     fieldByteOffsets_.push_back(byteOffset);
     fieldUnits_.push_back(unit);
     fieldDocStrings_.push_back(doc);
@@ -184,8 +189,7 @@ size_t I3TableRowDescription::GetNextOffset() const {
     if (fieldByteOffsets_.size() == 0)
         return 0;
     else
-        return fieldByteOffsets_.back() +
-	    fieldTypeSizes_.back()*fieldArrayLengths_.back();
+        return fieldByteOffsets_.back() + fieldSizes_.back();
 }
 
 
@@ -213,6 +217,7 @@ I3TableRowDescription& operator<<(I3TableRowDescription& lhs,
 
         // values that are just copied:
         lhs.fieldNames_.push_back( fieldName );
+        lhs.fieldSizes_.push_back( rhs.fieldSizes_.at(i) );
         lhs.fieldTypeSizes_.push_back( typesize );
         lhs.fieldTypes_.push_back( rhs.fieldTypes_.at(i) );
         lhs.fieldArrayLengths_.push_back( rhs.fieldArrayLengths_.at(i) );

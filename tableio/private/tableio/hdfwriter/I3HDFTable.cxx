@@ -420,7 +420,7 @@ void I3HDFTable::Flush(size_t nrows) {
 
     const size_t rowsize = description_->GetTotalByteSize();
     const size_t* fieldOffsets = &(description_->GetFieldByteOffsets().front());
-    const size_t* fieldSizes   = &(description_->GetFieldTypeSizes().front());
+    const size_t* fieldSizes   = &(description_->GetFieldSizes().front());
     const void* buffer = writeCache_->GetPointer();
     herr_t status =
         H5TBappend_records(fileId_,        // file
@@ -447,7 +447,7 @@ I3TableRowPtr I3HDFTable::ReadRowsFromTable(size_t start, size_t nrows) const {
    // (e.g. with TableTranscriber): come up with some sort of read-buffering scheme
    const size_t rowsize = description_->GetTotalByteSize();
    const size_t* fieldOffsets = &(description_->GetFieldByteOffsets().front());
-   const size_t* fieldSizes   = &(description_->GetFieldTypeSizes().front());
+   const size_t* fieldSizes   = &(description_->GetFieldSizes().front());
    void* buffer = const_cast<void*>(rows->GetPointer());
    herr_t status =
        H5TBread_records(fileId_,       // file

@@ -84,6 +84,7 @@ public:
     const std::vector<size_t>& GetFieldTypeSizes() const;
     const std::vector<size_t>& GetFieldByteOffsets() const;
     const std::vector<size_t>& GetFieldArrayLengths() const;
+    const std::vector<size_t>& GetFieldSizes() const;
     const std::vector<std::string>& GetFieldUnits() const;
     const std::vector<std::string>& GetFieldDocStrings() const;
 
@@ -112,8 +113,12 @@ private:
     typedef boost::unordered_map<std::string, size_t> fieldNameToIndex_t;
     fieldNameToIndex_t fieldNameToIndex_;
     std::vector<I3Datatype> fieldTypes_;
+    ///The size of each field's underlying datatype,
+    ///not accounting for that type being repeast by the field's array length
     std::vector<size_t> fieldTypeSizes_;
     std::vector<size_t> fieldArrayLengths_;
+    ///The full size of each field, accounting for its base type size and array length
+    std::vector<size_t> fieldSizes_;
     std::vector<size_t> fieldByteOffsets_;
     std::vector<std::string> fieldUnits_;
     std::vector<std::string> fieldDocStrings_;
