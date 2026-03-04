@@ -33,7 +33,7 @@ option(USE_ROOT "Build with root" ON)
 set(SYSTEM_PACKAGES_ROOT FALSE)
 
 if (USE_ROOT)
-  find_package(ROOT COMPONENTS Gui Minuit2 OPTIONAL)
+  find_package(ROOT COMPONENTS Gui Minuit2)
   if(ROOT_FOUND)
     set(SYSTEM_PACKAGES_ROOT TRUE)
     set(ROOT_LIB_DIR ${ROOT_LIBRARY_DIR})
