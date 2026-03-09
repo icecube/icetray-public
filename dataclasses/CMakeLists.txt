@@ -171,3 +171,10 @@ i3_test_scripts(${DATACLASSES_PYTHON_TEST_SCRIPTS})
 if(BUILD_DATACLASSES)
   set_tests_properties(dataclasses::test PROPERTIES LABELS RUN_LONG)
 endif()
+
+
+colormsg(RED "+-- I3AMANDAAnalogReadout is deprecated and will be removed in the Summer 2026 icetray release.")
+colormsg(RED "+-- I3TWRFrag is deprecated and will be removed in the Summer 2026 icetray release.")
+colormsg(RED "+-- I3TWRLaunch is deprecated and will be removed in the Summer 2026 icetray release.")
+colormsg(RED "+-- I3MCHit is deprecated and will be removed in the Summer 2026 icetray release.")
+colormsg(RED "+-- I3RecoHit is deprecated and will be removed in the Summer 2026 icetray release.")
