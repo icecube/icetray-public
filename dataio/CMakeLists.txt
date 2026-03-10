@@ -55,6 +55,8 @@ if(CDK_FOUND AND CURSES_FOUND)
     USE_PROJECTS dataio
     USE_TOOLS cdk curses
     )
+  configure_file("private/shovel/config.h.in" "shovel/config.h")
+  target_include_directories(dataio-shovel PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
 else()
   colormsg(CYAN "+-- dataio-shovel *not* included (missing CDK or ncurses libraries)")
 endif()
