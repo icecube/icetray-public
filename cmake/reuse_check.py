@@ -218,6 +218,7 @@ whitelist = [
     "LeptonInjector",
     "NuRadioMCInterface",
     "SLOPtools",
+    "SiPMResponseSimulator",
     "TopologicalSplitter",
     "astro",
     "clsim",
