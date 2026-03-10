@@ -141,8 +141,10 @@ double I3GetGMAST(const I3Time& time)
   // NOTE: MJD is expected with respect to UT
   const double mjd = get_mjd(time);
   const double gmst = I3GetGMST(time);
-  double dt = mjd - gmst;
-  double ast = mjd + dt;
+
+  // convert fractional day to hours 
+  double lst = ( mjd - int(mjd) )* 24.; 
+  double ast = 2*lst - gmst;
   ast = fmod(ast, 24);
   ast = (ast < 0.) ? ast + 24: ast;
 
@@ -154,12 +156,14 @@ double I3GetGMEST(const I3Time& time)
   // NOTE: MJD is expected with respect to UT
   const double mjd = get_mjd(time);
   const double gmst = I3GetGMST(time);
-  double dt = mjd - gmst;
-  double ast = mjd - 2*dt;
-  ast = fmod(ast, 24);
-  ast = (ast < 0.) ? ast + 24: ast;
 
-  return ast; // in hours
+  // convert fractional day to hours 
+  double lst = ( mjd - int(mjd) )* 24.; 
+  double est = 2*gmst - lst;
+  est = fmod(est, 24);
+  est = (est < 0.) ? est + 24: est;
+
+  return est; // in hours
 }
 
 
