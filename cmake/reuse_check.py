@@ -241,6 +241,7 @@ whitelist = [
     "radcube",
     "rock_bottom",
     "rpdf",
+    "segmented-spline-reco",
     "serialization",
     "shield",
     "snowstorm",
