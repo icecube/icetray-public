@@ -43,7 +43,7 @@ void register_I3DEggLaunch()
         .add_property("has_valid_baseline_value", &I3DEggLaunch::HasValidBaselineValue)
         .add_property("valid_baseline_value", &I3DEggLaunch::GetValidBaselineValue) // No setter
 
-        .add_property("lc_bit", &I3DEggLaunch::GetLCBit, make_function(&I3DEggLaunch::SetLCBit, return_internal_reference<>()))
+        .add_property("lc_flags", &I3DEggLaunch::GetLCFlags, make_function(&I3DEggLaunch::SetLCFlags, return_internal_reference<>()))
         .add_property("n_presamples", &I3DEggLaunch::GetNPreSamples, make_function(&I3DEggLaunch::SetNPreSamples, return_internal_reference<>()))
 
         .add_property("adc_data", make_function(get_adc_data, return_internal_reference<>()), make_function(I3DEggLaunch_SetADCDataWrapper, return_internal_reference<>()) )

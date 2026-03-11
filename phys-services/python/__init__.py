@@ -6,7 +6,7 @@ from icecube._phys_services import (
     AxialCylinder, Cup, Cylinder, ExtrudedPolygon, I3_USE_SPRNG, I3_USE_PHOTOSPLINE, I3Calculator, I3CascadeCutValues,
     I3CutValues, I3Cuts, I3GCDFileCalibrationService, I3GCDFileDetectorStatusService, I3GCDFileGeometryService,
     I3GSLRandomService, I3MTRandomService, I3RandomService, I3ScaleCalculator, I3Splitter, I3_USE_SPRNG,
-    I3XMLOMKey2MBID, MultiPMTCoincify, SamplingSurface, Sphere, Surface, converters,
+    I3XMLOMKey2MBID, SamplingSurface, Sphere, Surface, converters,
 )
 
 if I3_USE_PHOTOSPLINE:

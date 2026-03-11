@@ -22,9 +22,9 @@
 
 #include <icetray/I3Logging.h>
 #include <icetray/serialization.h>
+#include <dataclasses/physics/detail/UpgradeLCFlags.h>
 
-
-static const unsigned int i3xdomlaunch_version_ = 0;
+static const unsigned int i3xdomlaunch_version_ = 1;
 
 /** Direct readout of ADC data/a waveform from an xDOM such as DEgg or mDOM.
  * 
@@ -63,14 +63,15 @@ class I3XDOMLaunch
    */
   I3XDOMLaunch()
    : time_(NAN, false),
-     lc_(false),
+     lc_(UpgradeLCFlags::NoLC),
      nSamples_(0),
      startBitsPerWord_(START_BITS_PER_WORD),
      maxBitsPerWord_(MAX_BITS_PER_WORD),
      nPreSamples_(0),
      baselineValue_(NAN, false),
      fexResult_(FEXResult::UNDEFINED),
-     selectionType_(SelectionType::UNDEFINED) {}
+     selectionType_(SelectionType::UNDEFINED),
+     warned_old_lc_(false) {}
 
   // implicit destructor, copy constructor, copy assignment,
   // move constructor and move assignment
@@ -123,14 +124,23 @@ class I3XDOMLaunch
    * 
    * @return Local coincidence bit.
    */
-  bool GetLCBit() const { return lc_; }
-  /** Set the local coincidence bit.
+  UpgradeLCFlags GetLCFlags() const { return lc_; }
+  /** Set the local coincidence bits.
    *
-   * @param lc Local coincidence bit.
+   * @param lc Local coincidence bits.
    * @return This xDOM launch.
    */
-  I3XDOMLaunch& SetLCBit(bool lc) {
+  I3XDOMLaunch& SetLCFlags(UpgradeLCFlags lc) {
     lc_ = lc;
+    return *this;
+  }
+  /** Append local coincidence bits to the current bits
+   *
+   * @param lc Local coincidence bits.
+   * @return This xDOM launch.
+   */
+  I3XDOMLaunch& AddLCFlags(UpgradeLCFlags lc) {
+    lc_ |= lc;
     return *this;
   }
 
@@ -309,7 +319,7 @@ class I3XDOMLaunch
 
  private:
   std::pair<double, bool> time_;
-  bool lc_;
+  UpgradeLCFlags lc_;
   mutable std::vector<char> adcData_;
   mutable unsigned int nSamples_;
   mutable std::vector<int> adcCache_;
@@ -319,7 +329,7 @@ class I3XDOMLaunch
   std::pair<double, bool> baselineValue_;
   FEXResult fexResult_;
   SelectionType selectionType_;
-
+  bool warned_old_lc_;
 
   I3XDOMLaunch& SetDeltaCompressedADCData(unsigned int nSamples, bool lazy) {
     nSamples_ = nSamples;
@@ -359,10 +369,8 @@ class I3XDOMLaunch
  * @return The output stream.
  */
 std::ostream& operator<<(std::ostream& os, const I3XDOMLaunch& launch);
-
-
+  
 I3_CLASS_VERSION(I3XDOMLaunch, i3xdomlaunch_version_);
-
 #endif  // I3XDOMLaunch_H_INCLUDED
 
 

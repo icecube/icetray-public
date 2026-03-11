@@ -53,6 +53,7 @@ namespace bp = boost::python;
   (I3Waveform)(I3WaveformSeries)(I3WaveformSeriesMap)                   \
   (VectorI3WaveformStatusCompound)                                      \
   (I3DOMLaunch)(I3DOMLaunchSeries)(I3DOMLaunchSeriesMap)                \
+  (UpgradeLCFlags)                                                      \
   (I3mDOMLaunch)(I3mDOMLaunchSeries)(I3mDOMLaunchSeriesMap)             \
   (I3DEggLaunch)(I3DEggLaunchSeries)(I3DEggLaunchSeriesMap)             \
   (I3NoiseSuppressionRecord)(I3NoiseSuppressionRecordSeries)            \

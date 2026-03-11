@@ -17,7 +17,20 @@ void I3XDOMHit::serialize(Archive& ar, unsigned int version) {
               version, i3xdomhit_version_);
   }
   ar & make_nvp("time", time_);
-  ar & make_nvp("lc", lc_);
+  if (version == 0){
+    if(!warned_old_lc_){
+      log_warn("Reading version 0 of I3XDOMHit but running"
+               " version %u of the I3XDOMHit where new LC"
+               " flags have been implemented. Ignoring existing LC.",
+               i3xdomhit_version_);
+      warned_old_lc_ = true;
+    }
+    bool old_lc = false;
+    ar & make_nvp("lc", old_lc);
+  }
+  else{
+    ar & make_nvp("lc", lc_);
+  }
   ar & make_nvp("charge", charge_);
 }
 

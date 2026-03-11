@@ -10,6 +10,7 @@
 #include <vector>
 
 #include <dataclasses/I3Map.h>
+#include <dataclasses/physics/detail/UpgradeLCFlags.h>
 #include <dataclasses/physics/detail/I3XDOMLaunch.h>
 #include <icetray/I3PointerTypedefs.h>
 #include <icetray/OMKey.h>
@@ -73,14 +74,25 @@ class I3DEggLaunch
    * 
    * @return Local coincidence bit.
    */
-  bool GetLCBit() const { return launch_.GetLCBit(); }
-  /** Set the local coincidence bit.
+  UpgradeLCFlags GetLCFlags() const {
+    return launch_.GetLCFlags();
+  }
+  /** Set the local coincidence bits.
    *
-   * @param lc Local coincidence bit.
-   * @return This DEgg launch.
+   * @param lc Local coincidence bits.
+   * @return This xDOM launch.
    */
-  I3DEggLaunch& SetLCBit(bool lc) {
-    launch_.SetLCBit(lc);
+  I3DEggLaunch& SetLCFlags(UpgradeLCFlags lc) {
+    launch_.SetLCFlags(lc);
+    return *this;
+  }
+  /** Append local coincidence bits to the current bits
+   *
+   * @param lc Local coincidence bits.
+   * @return This xDOM launch.
+   */
+  I3DEggLaunch& AddLCFlags(UpgradeLCFlags lc) {
+    launch_.AddLCFlags(lc);
     return *this;
   }
 

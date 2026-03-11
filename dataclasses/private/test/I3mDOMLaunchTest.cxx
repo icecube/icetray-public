@@ -10,6 +10,8 @@
 #include <vector>
 
 #include <dataclasses/physics/I3mDOMLaunch.h>
+#include <dataclasses/physics/detail/UpgradeLCFlags.h>
+#include <dataclasses/physics/detail/I3XDOMLaunch.h>
 #include <icetray/I3Units.h>
 #include <icetray/serialization.h>
 
@@ -18,7 +20,7 @@ namespace {
 std::vector<int> setLaunchA(I3mDOMLaunch& launch, bool lazy=true) {
   std::vector<int> adcData{0x03, 0x02, 0x04, 0x09, 0x02c9};
   launch.SetTime(3.*I3Units::microsecond, true)
-        .SetLCBit(true)
+        .SetLCFlags(UpgradeLCFlags::MultiModuleLC)
         .SetADCData(adcData, lazy)
         .SetNPreSamples(2)
         .SetBaselineValue(7.31, true)
@@ -31,7 +33,7 @@ std::vector<int> setLaunchA(I3mDOMLaunch& launch, bool lazy=true) {
 std::vector<int> setLaunchB(I3mDOMLaunch& launch) {
   std::vector<int> adcData{893, 88, 6, 1842, 11, 1846, 3};
   launch.SetTime(32.*I3Units::microsecond)
-        .SetLCBit(false)
+        .SetLCFlags(UpgradeLCFlags::SingleModuleLC)
         .SetADCData(adcData)
         .SetNPreSamples(3)
         .SetBaselineValue(8.31, false)
@@ -39,7 +41,7 @@ std::vector<int> setLaunchB(I3mDOMLaunch& launch) {
         .GetTOTHits().emplace_back(50u, 17u);
   return adcData;
 }
-
+  
 }
 
 
@@ -90,7 +92,8 @@ TEST(default_constructor) {
          "Default constructor did not set time to 'invalid'");
   EXPECT_THROW(foo.GetValidTime(),
                "Default constructor did not set time to 'invalid'");
-  ENSURE(!foo.GetLCBit(), "Default constructor did not set LC to false");
+  ENSURE(foo.GetLCFlags() == UpgradeLCFlags::NoLC,
+         "Default constructor did not set LC to false");
   ENSURE(foo.GetADCData().empty(), "Default must not create ADC data");
   ENSURE_EQUAL(foo.GetNPreSamples(), 0u,
          "Default constructor did not set '#samples before trigger' to 0");
@@ -113,7 +116,7 @@ TEST(set) {
   ENSURE(foo.HasValidTime(), "SetTime did not set time to 'valid'");
   ENSURE_EPSILON(foo.GetValidTime()/I3Units::microsecond, 3., 1e-9,
                  "SetTime did not set time to 'valid' 3us");
-  ENSURE(foo.GetLCBit(), "SetLCBit did not set LC to true");
+  ENSURE(foo.GetLCFlags() == UpgradeLCFlags::MultiModuleLC, "SetLCFlags did not set LC to true");
   ENSURE(foo.GetADCData() == adcData,
          "SetADCData did not set ADC data matching it's input");
   ENSURE_EQUAL(foo.GetNPreSamples(), 2u,
@@ -124,8 +127,8 @@ TEST(set) {
          "SetBaselineValue did not set baseline to 'valid'");
   ENSURE_EPSILON(foo.GetBaselineValue(), 7.31, 1e-9,
                  "SetBaselineValue did not set baseline to 'valid' 7.31");
-  foo.SetLCBit(false);
-  ENSURE(!foo.GetLCBit(), "SetLCBit did not set LC to false");
+  foo.SetLCFlags(UpgradeLCFlags::NoLC);
+  ENSURE(foo.GetLCFlags() == UpgradeLCFlags::NoLC, "SetLCFlags did not set LC to false");
   foo.SetTime(7.*I3Units::microsecond, false);
   ENSURE_EPSILON(foo.GetTime()/I3Units::microsecond, 7., 1e-9,
                  "SetTime did not set time to 7us");
@@ -235,7 +238,8 @@ TEST(copy_move_constructor) {
     ENSURE_EPSILON(bar.GetTime()/I3Units::microsecond, 3., 1e-9,
                    "Time didn't move construct correctly");
     ENSURE(bar.HasValidTime(), "Time didn't move construct correctly");
-    ENSURE(bar.GetLCBit(), "LC didn't move construct correctly");
+    ENSURE(bar.GetLCFlags() == UpgradeLCFlags::MultiModuleLC,
+           "LC didn't move construct correctly");
     ENSURE(bar.GetADCData() == adcData,
            "ADC data didn't move construct correctly");
     ENSURE_EQUAL(bar.GetNPreSamples(), 2u,
@@ -265,7 +269,8 @@ TEST(assignment_operator) {
   bar = std::move(foo);
   ENSURE_EPSILON(bar.GetTime()/I3Units::microsecond, 3., 1e-9,
                  "Time didn't move assign correctly");
-  ENSURE(bar.GetLCBit(), "LC didn't move correctly");
+  ENSURE(bar.GetLCFlags() == UpgradeLCFlags::MultiModuleLC,
+         "LC didn't move correctly");
   ENSURE_EQUAL(bar.GetNPreSamples(), 2u,
                "#presamples didn't move assign correctly");
   ENSURE_EPSILON(bar.GetBaselineValue(), 7.31, 1e-9,

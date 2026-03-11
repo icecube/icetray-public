@@ -22,9 +22,9 @@
 #include <icetray/I3PointerTypedefs.h>
 #include <icetray/OMKey.h>
 #include <icetray/serialization.h>
+#include <dataclasses/physics/detail/UpgradeLCFlags.h>
 
-
-static const unsigned int i3xdomhit_version_ = 0;
+static const unsigned int i3xdomhit_version_ = 1;
 
 /** Direct readout of an extracted hit from an xDOM such as DEgg or mDOM.
  * 
@@ -38,7 +38,7 @@ class I3XDOMHit
    * 
    * It sets time and charge to NAN and local coincidence to false.
    */
-  I3XDOMHit() : time_(NAN), lc_(false), charge_(NAN) {}
+  I3XDOMHit() : time_(NAN), lc_(UpgradeLCFlags::NoLC), charge_(NAN), warned_old_lc_(false) {}
 
   // implicit destructor, copy constructor, copy assignment,
   // move constructor and move assignment
@@ -66,18 +66,27 @@ class I3XDOMHit
     return *this;
   }
 
-  /** Return local coincidence bit.
+  /** Return the local coincidence bit.
    * 
    * @return Local coincidence bit.
    */
-  bool GetLCBit() const { return lc_; }
-  /** Set the local coincidence bit.
+  UpgradeLCFlags GetLCFlags() const { return lc_; }
+  /** Set the local coincidence bits.
    *
-   * @param lc Local coincidence bit.
-   * @return This xDOM hit.
+   * @param lc Local coincidence bits.
+   * @return This xDOM launch.
    */
-  I3XDOMHit& SetLCBit(bool lc) {
+  I3XDOMHit& SetLCFlags(UpgradeLCFlags lc) {
     lc_ = lc;
+    return *this;
+  }
+  /** Append local coincidence bits to the current bits
+   *
+   * @param lc Local coincidence bits.
+   * @return This xDOM launch.
+   */
+  I3XDOMHit& AddLCFlags(UpgradeLCFlags lc) {
+    lc_ |= lc;
     return *this;
   }
 
@@ -112,9 +121,9 @@ class I3XDOMHit
 
  private:
   double time_;
-  bool lc_;
+  UpgradeLCFlags lc_;
   double charge_;
-
+  bool warned_old_lc_;
 
   friend class icecube::serialization::access;
   template <class Archive> void serialize(Archive& ar, unsigned int version);
@@ -140,5 +149,3 @@ I3_POINTER_TYPEDEFS(I3XDOMHitSeries);
 I3_POINTER_TYPEDEFS(I3XDOMHitSeriesMap);
 
 #endif  // I3XDOMHIT_H_INCLUDED
-
-

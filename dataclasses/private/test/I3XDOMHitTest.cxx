@@ -8,25 +8,23 @@
 #include <sstream>
 #include <utility>
 
+#include <dataclasses/physics/detail/UpgradeLCFlags.h>
 #include <dataclasses/physics/I3XDOMHit.h>
 #include <icetray/I3Units.h>
 #include <icetray/serialization.h>
 
-
 namespace {
-
 void setHitA(I3XDOMHit& hit) {
   hit.SetTime(3.*I3Units::microsecond)
-     .SetLCBit(true)
+    .SetLCFlags(UpgradeLCFlags::MultiModuleLC)
      .SetCharge(21.*I3Units::picocoulomb);
 }
 
 void setHitB(I3XDOMHit& hit) {
   hit.SetTime(32.*I3Units::microsecond)
-     .SetLCBit(false)
+    .SetLCFlags(UpgradeLCFlags::SingleModuleLC)
      .SetCharge(93.*I3Units::picocoulomb);
 }
-
 }
 
 
@@ -36,7 +34,7 @@ TEST(default_constructor) {
   I3XDOMHit foo;
   ENSURE(std::isnan(foo.GetTime()),
          "Default constructor did not set time to NAN");
-  ENSURE(!foo.GetLCBit(), "Default constructor did not set LC to false");
+  ENSURE(foo.GetLCFlags() == UpgradeLCFlags::NoLC, "Default constructor did not set LC to false");
   ENSURE(std::isnan(foo.GetCharge()),
          "Default constructor did not set charge to NAN");
 }
@@ -46,7 +44,7 @@ TEST(set) {
   setHitA(foo);
   ENSURE_EPSILON(foo.GetTime()/I3Units::microsecond, 3., 1e-9,
                  "SetTime did not set time to 3us");
-  ENSURE(foo.GetLCBit(), "SetLCBit did not set LC to true");
+  ENSURE(foo.GetLCFlags() == UpgradeLCFlags::MultiModuleLC, "SetLCFlags did not set LC to true");
   ENSURE_EPSILON(foo.GetCharge()/I3Units::picocoulomb, 21., 1e-9,
                  "SetCharge did not set charge to 21pC");
 }
@@ -96,7 +94,7 @@ TEST(serialize) {
   }
   ENSURE_EPSILON(bar.GetTime()/I3Units::microsecond, 3., 1e-9,
                  "Time didn't serialize correctly");
-  ENSURE(bar.GetLCBit(), "LC didn't serialize correctly");
+  ENSURE(bar.GetLCFlags() == UpgradeLCFlags::MultiModuleLC, "LC didn't serialize correctly");
   ENSURE_EPSILON(bar.GetCharge()/I3Units::picocoulomb, 21., 1e-9,
                  "Charge didn't serialize correctly");
   ENSURE(foo == bar, "hit didn't serialize correctly");
@@ -113,7 +111,7 @@ TEST(copy_move_constructor) {
     I3XDOMHit bar(std::move(foo));
     ENSURE_EPSILON(bar.GetTime()/I3Units::microsecond, 3., 1e-9,
                   "Time didn't move construct correctly");
-    ENSURE(bar.GetLCBit(), "LC didn't move construct correctly");
+    ENSURE(bar.GetLCFlags() == UpgradeLCFlags::MultiModuleLC, "LC didn't move construct correctly");
     ENSURE_EPSILON(bar.GetCharge()/I3Units::picocoulomb, 21., 1e-9,
                   "Charge didn't move construct correctly");
   }
@@ -133,7 +131,7 @@ TEST(assignment_operator) {
   bar = std::move(foo);
   ENSURE_EPSILON(bar.GetTime()/I3Units::microsecond, 3., 1e-9,
                  "Time didn't move assign correctly");
-  ENSURE(bar.GetLCBit(), "LC didn't move correctly");
+  ENSURE(bar.GetLCFlags() == UpgradeLCFlags::MultiModuleLC, "LC didn't move correctly");
   ENSURE_EPSILON(bar.GetCharge()/I3Units::picocoulomb, 21., 1e-9,
                  "Charge didn't move assign correctly");
 }

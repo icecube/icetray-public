@@ -19,7 +19,7 @@ class I3XDOMHitTest(unittest.TestCase):
         hit = dataclasses.I3XDOMHit()
         hit.time = 5.
         hit.charge = 10.
-        hit.lc_bit = True
+        hit.lc_flags = dataclasses.UpgradeLCFlags.SingleModuleLC
 
         hit_map = dataclasses.I3XDOMHitSeriesMap()
         om_key = icetray.OMKey(1, 2, 3)
@@ -56,9 +56,9 @@ class I3XDOMHitTest(unittest.TestCase):
         self.assertEqual(hit.charge, 11.)
 
         # Test hit LC flag
-        self.assertEqual(hit.lc_bit, True)
-        hit.lc_bit = False
-        self.assertEqual(hit.lc_bit, False)
+        self.assertEqual(hit.lc_flags, dataclasses.UpgradeLCFlags.SingleModuleLC)
+        hit.lc_flags = dataclasses.UpgradeLCFlags.NoLC
+        self.assertEqual(hit.lc_flags, dataclasses.UpgradeLCFlags.NoLC)
 
 
 if __name__ == '__main__':

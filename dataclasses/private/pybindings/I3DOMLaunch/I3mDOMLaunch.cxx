@@ -44,7 +44,7 @@ void register_I3mDOMLaunch()
         .add_property("has_valid_baseline_value", &I3mDOMLaunch::HasValidBaselineValue)
         .add_property("valid_baseline_value", &I3mDOMLaunch::GetValidBaselineValue) // No setter
 
-        .add_property("lc_bit", &I3mDOMLaunch::GetLCBit, make_function(&I3mDOMLaunch::SetLCBit, return_internal_reference<>()))
+        .add_property("lc_flags", &I3mDOMLaunch::GetLCFlags, make_function(&I3mDOMLaunch::SetLCFlags, return_internal_reference<>()))
         .add_property("n_presamples", &I3mDOMLaunch::GetNPreSamples, make_function(&I3mDOMLaunch::SetNPreSamples, return_internal_reference<>()))
 
         .add_property("trigger_type", &I3mDOMLaunch::GetTriggerType, make_function(&I3mDOMLaunch::SetTriggerType, return_internal_reference<>()))

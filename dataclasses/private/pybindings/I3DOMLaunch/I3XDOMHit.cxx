@@ -21,7 +21,7 @@ void register_I3XDOMHit()
     scope outer = 
         class_<I3XDOMHit, boost::shared_ptr<I3XDOMHit> >("I3XDOMHit")
           .add_property("time", &I3XDOMHit::GetTime, make_function(&I3XDOMHit::SetTime, return_internal_reference<>()))
-          .add_property("lc_bit", &I3XDOMHit::GetLCBit, make_function(&I3XDOMHit::SetLCBit, return_internal_reference<>()))
+          .add_property("lc_flags", &I3XDOMHit::GetLCFlags, make_function(&I3XDOMHit::SetLCFlags, return_internal_reference<>()))
           .add_property("charge", &I3XDOMHit::GetCharge, make_function(&I3XDOMHit::SetCharge, return_internal_reference<>()))
           .def(self == self)
           .def(dataclass_suite<I3XDOMHit>())

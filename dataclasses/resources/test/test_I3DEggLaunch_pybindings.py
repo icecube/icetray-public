@@ -19,7 +19,7 @@ class I3DEggLaunchTest(unittest.TestCase):
         launch = dataclasses.I3DEggLaunch()
         launch.time = 5.
         launch.baseline_value = 10.
-        launch.lc_bit = True
+        launch.lc_flags = dataclasses.UpgradeLCFlags.SingleModuleLC
         launch.n_presamples = 20
         launch.adc_data = [1,2,3]
 
@@ -69,9 +69,9 @@ class I3DEggLaunchTest(unittest.TestCase):
         self.assertEqual(launch.has_valid_baseline_value, False)
 
         # Test LC bit
-        self.assertEqual(launch.lc_bit, True)
-        launch.lc_bit = False
-        self.assertEqual(launch.lc_bit, False)
+        self.assertEqual(launch.lc_flags, dataclasses.UpgradeLCFlags.SingleModuleLC)
+        launch.lc_flags = dataclasses.UpgradeLCFlags.NoLC
+        self.assertEqual(launch.lc_flags, dataclasses.UpgradeLCFlags.NoLC)
 
         # Test num presamples
         self.assertEqual(launch.n_presamples, 20)

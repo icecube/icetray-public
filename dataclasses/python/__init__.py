@@ -59,6 +59,7 @@ from icecube._dataclasses import (
     I3DEggLaunchSeriesMap, I3mDOMLaunchSeriesMap, I3NoiseSuppressionRecordSeriesMap, I3XDOMHitSeriesMap,
     I3DEggCal, I3PMTCal, I3mDOMCal, I3DEggStatus, I3mDOMStatus, LinearityParameters,
     I3DEggCalMap, I3PMTCalMap, I3mDOMCalMap, I3DEggStatusMap, I3mDOMStatusMap,
+    UpgradeLCFlags,
 )
 
 # Add some aliases for naming consistency
