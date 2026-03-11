@@ -174,8 +174,13 @@ def harvest_objects(module,want):
     return harvest
 
 def get_inspectable_projects():
-
+    # In-place build environments have libraries in $I3_BUILD/lib
     libdir = os.path.join(os.environ['I3_BUILD'],'lib')
+
+    # But install directories set $I3_BUILD to $CMAKE_INSTALL_PREFIX/share, so
+    # we need a different path.
+    if not os.path.exists(libdir):
+        libdir = os.path.join(os.environ['I3_BUILD'],'../../lib')
 
     if sys.platform=='darwin':
         suffix='.dylib'
@@ -184,7 +189,7 @@ def get_inspectable_projects():
     cpp_libs = [os.path.basename(fname).split('.')[0][3:]
                 for fname in glob(os.path.join(libdir,'lib*'+suffix))]
 
-    moduleitr = pkgutil.iter_modules(path=[libdir+'/icecube'])
+    moduleitr = pkgutil.iter_modules(path=glob(libdir+'/python*/site-packages/icecube'))
     python_libs = [ x[1] for x in moduleitr if not x[1].startswith('_')]
 
     return cpp_libs,python_libs
