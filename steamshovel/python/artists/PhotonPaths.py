@@ -126,7 +126,7 @@ class PhotonPaths( PyArtist ):
 
         photonSeriesMap = frame[list(self.keys())[0]]
 
-        for key, photonSeries in photonSeriesMap:
+        for _, photonSeries in photonSeriesMap.items():
             for photon in photonSeries:
                 self.add_one_photon( photon, referenceTrack, group )
 
