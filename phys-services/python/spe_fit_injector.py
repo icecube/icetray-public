@@ -126,7 +126,8 @@ class SPEFitInjector:
                              mean = self.fit_values[dom]['ATWD_fit']['gaus_mean'],
                              sigma = self.fit_values[dom]['ATWD_fit']['gaus_width'])]
             SPE_distribution.pdfs.extend(pdfs)
-
+            SPE_distribution.residuals.SetPass2()
+            
             SPE_distribution.compensation_factor = self.fit_values[dom]['ATWD_fit']['compensation_factor']
             i3domcal.combined_spe_charge_distribution = SPE_distribution
 
