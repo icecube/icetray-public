@@ -25,13 +25,14 @@ class QConverter : public I3Module
 		std::vector<std::string> keys_to_q;
 		std::vector<std::string> types_to_q;
 		bool output_p_frame;
-                SET_LOGGER("QConverter");
+		bool found_qframe;
+		SET_LOGGER("QConverter");
 };
 
 I3_MODULE(QConverter);
 
 QConverter::QConverter(const I3Context& context) :
-    I3Module(context)
+	I3Module(context)
 {
 
 	keys_to_q.push_back("DrivingTime");
@@ -76,24 +77,35 @@ QConverter::Configure()
 	GetParameter("QKeys", keys_to_q);
 	GetParameter("QTypes", types_to_q);
 	GetParameter("WritePFrame", output_p_frame);
+
+	// Set a marker to keep track of whether we're missing
+	// Q-frames or not.
+	found_qframe = false;
 }
 
 void
 QConverter::Physics(I3FramePtr frame)
 {
+	// If we hit a physics frame without seeing a DAQ frame, we need
+	// to run this. Otherwise, skip it all.
+	if(found_qframe){
+		PushFrame(frame);
+		return;
+	}
+
 	// Purge all non-native keys, so we don't reassign GCD keys
 	frame->purge();
 
 	// Reassign special frame objects' stops from P -> Q
 	for (I3Frame::typename_iterator iter = frame->typename_begin();
-	    iter != frame->typename_end(); iter++) {
+		iter != frame->typename_end(); iter++) {
 		for (std::vector<std::string>::const_iterator toqiter =
-		    types_to_q.begin(); toqiter != types_to_q.end(); toqiter++)
+			types_to_q.begin(); toqiter != types_to_q.end(); toqiter++)
 			if (iter->second == *toqiter)
 				frame->ChangeStream(iter->first, I3Frame::DAQ);
 	}
 	for (std::vector<std::string>::const_iterator iter = keys_to_q.begin();
-	    iter != keys_to_q.end(); iter++) {
+		iter != keys_to_q.end(); iter++) {
 		if (frame->Has(*iter))
 			frame->ChangeStream(*iter, I3Frame::DAQ);
 	}
@@ -102,7 +114,7 @@ QConverter::Physics(I3FramePtr frame)
 	// since we can't make a stub P frame
 	if (!output_p_frame || !frame->Has("I3EventHeader")) {
 		for (I3Frame::typename_iterator iter = frame->typename_begin();
-		    iter != frame->typename_end(); iter++)
+			iter != frame->typename_end(); iter++)
 			frame->ChangeStream(iter->first, I3Frame::DAQ);
 	}
 
@@ -116,7 +128,7 @@ QConverter::Physics(I3FramePtr frame)
 	if(output_p_frame && frame->Has("I3EventHeader")) {
 		// Rewrite event header in P frame
 		I3EventHeaderPtr header(new
-		    I3EventHeader(frame->Get<I3EventHeader>()));
+			I3EventHeader(frame->Get<I3EventHeader>()));
 		header->SetSubEventStream(subevent_stream);
 		header->SetSubEventID(0);
 		frame->Delete("I3EventHeader");
@@ -128,6 +140,7 @@ QConverter::Physics(I3FramePtr frame)
 void
 QConverter::DAQ(I3FramePtr frame)
 {
-	log_fatal("Trying to QConvert data already containing Q frames!");
+	// If we find a Q-frame, then we don't need to run QConverter.
+	found_qframe = true;
+	PushFrame(frame);
 }
-
