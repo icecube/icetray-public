@@ -33,7 +33,7 @@ option(USE_ROOT "Build with root" ON)
 set(SYSTEM_PACKAGES_ROOT FALSE)
 
 if (USE_ROOT)
-  find_package(ROOT COMPONENTS Gui Minuit2)
+  find_package(ROOT QUIET COMPONENTS Gui Minuit2)
   if(ROOT_FOUND)
     set(SYSTEM_PACKAGES_ROOT TRUE)
     set(ROOT_LIB_DIR ${ROOT_LIBRARY_DIR})
@@ -80,11 +80,6 @@ if (USE_ROOT)
         OUTPUT_VARIABLE ROOT_LIB_DIR
         OUTPUT_STRIP_TRAILING_WHITESPACE)
       get_filename_component(ROOT_LIB_DIR ${ROOT_LIB_DIR} ABSOLUTE)
-      execute_process(
-        COMMAND ${ROOT_CONFIG_EXECUTABLE} --auxcflags
-        OUTPUT_VARIABLE ROOT_CXX_FLAGS
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-
       string(REGEX REPLACE "-[L]([^ ]*)" "" ROOT_LIBRARIES ${ROOT_LIB_OUTPUT})
       string(STRIP ${ROOT_LIBRARIES} ROOT_LIBRARIES)
       separate_arguments(ROOT_LIBRARIES)
@@ -180,11 +175,23 @@ else()
     set(ROOT_LIBRARIES ${ROOT_LIBRARIES} ${pthread_LIBRARIES})
   endif(NOT SYSTEM_PACKAGES_ROOT)
 
-  string(REGEX MATCH "std=c\\+\\+([0-9]+)" DUMMY ${ROOT_CXX_FLAGS})
-  if (${CMAKE_MATCH_1} EQUAL ${CMAKE_CXX_STANDARD})
-    message("-- + ROOT compiled with c++${CMAKE_MATCH_1}")
-  else()
+  # as of ROOT v6.32.0 ROOT_CXX_STANDARD is set for us
+  if(NOT ROOT_CXX_STANDARD)
+    find_program(ROOT_CONFIG_EXECUTABLE root-config
+                 HINTS $ENV{ROOTSYS}/bin)
+    if(ROOT_CONFIG_EXECUTABLE)
+      execute_process(
+        COMMAND ${ROOTSYS}/bin/root-config --auxcflags
+        OUTPUT_VARIABLE ROOT_CXX_FLAGS
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    endif()
+    string(REGEX MATCH "std=c\\+\\+([0-9]+)" DUMMY ${ROOT_CXX_FLAGS})
     set(ROOT_CXX_STANDARD ${CMAKE_MATCH_1})
+  endif(NOT ROOT_CXX_STANDARD)
+
+  if (${ROOT_CXX_STANDARD} EQUAL ${CMAKE_CXX_STANDARD})
+    message("-- + ROOT compiled with c++${ROOT_CXX_STANDARD}")
+  else()
     colormsg(RED "+ ROOT was compiled with c++${ROOT_CXX_STANDARD}, compiling projects that depend on ROOT with same standard")
   endif()
 
