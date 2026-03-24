@@ -99,7 +99,7 @@ class SubeventMergingTest(unittest.TestCase):
     def setUp(self):
         SubeventTest.runtray(self.fname1)
         SubeventTest.runtray(self.fname2)
-        call([os.environ['I3_BUILD'] + "/tableio/resources/examples/hdfwriter_merge.py", "-o", self.fname_merged, self.fname1, self.fname2])
+        call([sys.executable, os.environ['I3_BUILD'] + "/tableio/resources/examples/hdfwriter_merge.py", "-o", self.fname_merged, self.fname1, self.fname2])
     def tearDown(self):
         for f in [self.fname1, self.fname2, self.fname_merged]:
             os.unlink(f)

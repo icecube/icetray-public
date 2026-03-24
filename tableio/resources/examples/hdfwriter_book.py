@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!@PYTHON_EXECUTABLE@
 
 # SPDX-FileCopyrightText: 2024 The IceTray Contributors
 #

@@ -4,6 +4,7 @@
 
 import os
 import subprocess
+import sys
 import unittest
 from pathlib import PurePath
 
@@ -47,7 +48,7 @@ class TestExampleScripts(unittest.TestCase):
         script = str(p)
         del p
 
-        cmd = [script]
+        cmd = [sys.executable, script]
         for arg in args:
             cmd.append(arg)
         print(cmd)

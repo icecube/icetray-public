@@ -351,6 +351,18 @@ i3_test_scripts
    named ``projectname/scripts/S.py``, e.g.  ``I3Db/scripts/dumpdaq_rndflt.py`` or
    ``examples/scripts/pass1.py``.
 
+   Note that it is important to use the correct python interpreter when running
+   tests, as the python against which IceTray is built may not be the system or
+   environment default.
+   ``i3_test_scripts`` will automatically use the correct interpreter to run
+   any script passed to it whose filename ends in ``.py``.
+   However, if that script manually constructs any shell commands which
+   themselves invoke a python interpreter it should be careful to use
+   ``sys.executable`` to run the same python installation.
+   Any non-python script run (transitively) as or in a test should use the
+   environment variable ``PYTHON_EXECUTABLE`` to use the same installation
+   as the build system.
+
 
 
 qt4_i3_automoc

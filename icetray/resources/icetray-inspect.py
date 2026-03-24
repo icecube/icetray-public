@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!@PYTHON_EXECUTABLE@
 #
 #  $Id: icetray-inspect.py 2188 2015-07-30 04:09:28Z nega $
 #
