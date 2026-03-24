@@ -174,6 +174,12 @@ IF(ARROW_FOUND)
   list(APPEND TABLEIO_TESTS
     resources/test/parquetwriter/parquet_book_I3MCTree.py
   )
+  set_source_files_properties(
+    private/tableio/parquetwriter/I3ParquetTable.cxx
+    private/tableio/parquetwriter/I3ParquetTableService.cxx
+    private/pybindings/I3ParquetTableService.cxx
+    PROPERTIES COMPILE_FLAGS -std=c++20
+  )
 
   # add executables
   i3_executable(parquetwriter_concatenate
@@ -181,10 +187,17 @@ IF(ARROW_FOUND)
     USE_TOOLS boost python arrow
     USE_PROJECTS icetray dataclasses tableio dataio serialization
   )
+  set_target_properties(tableio-parquetwriter_concatenate
+    PROPERTIES CXX_STANDARD 20
+  )
+
   i3_executable(parquetwriter_merge_fields
     private/tableio/parquetwriter/executables/merge_fields.cxx
     USE_TOOLS boost python arrow
     USE_PROJECTS icetray dataclasses tableio dataio serialization
+  )
+  set_target_properties(tableio-parquetwriter_merge_fields
+    PROPERTIES CXX_STANDARD 20
   )
 
 ELSE(ARROW_FOUND)
