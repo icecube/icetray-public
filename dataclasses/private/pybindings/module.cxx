@@ -59,6 +59,7 @@ namespace bp = boost::python;
   (I3NoiseSuppressionRecord)(I3NoiseSuppressionRecordSeries)            \
   (I3NoiseSuppressionRecordSeriesMap)                                   \
   (I3XDOMHit)(I3XDOMHitSeries)(I3XDOMHitSeriesMap)                      \
+  (UpgradeReadout)                                                      \
   (I3LOMLaunch)(I3LOMLaunchSeries)(I3LOMLaunchSeriesMap)                \
   (I3EventHeader)                                                       \
   (I3RecoHit)(I3FlasherInfo)(I3Matrix)(I3ParticleID)                    \

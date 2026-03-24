@@ -33,7 +33,7 @@ MultiPMTCoincify::MultiPMTCoincify(const I3Context& ctx)
                DEggLaunchMapName_);
   AddParameter("XDOMHitMapName",
                "The name of the I3XDOMHitSeriesMap to apply coincidence conditions to.",
-               xDOMHitMapName_);  
+               xDOMHitMapName_);
   AddParameter("Span",
                "The number of modules up and down a string to check for coincidences.",
                moduleSpan_);
@@ -73,7 +73,7 @@ void MultiPMTCoincify::Configure()
 
   GetParameter("mDOMLaunchMapName", mDOMLaunchMapName_);
   GetParameter("DEggLaunchMapName", DEggLaunchMapName_);
-  GetParameter("XDOMHitMapName", xDOMHitMapName_);  
+  GetParameter("XDOMHitMapName", xDOMHitMapName_);
   GetParameter("Span", moduleSpan_);
   GetParameter("TimeWindowBetweenModules", moduleTime_);
   GetParameter("TimeWindowBetweenPMTs", pmtTime_);
@@ -96,28 +96,28 @@ void MultiPMTCoincify::Configure()
   }
 }
 
-void MultiPMTCoincify::Coincify(LaunchSeriesMap& launchMap){
+void MultiPMTCoincify::Coincify(UpgradeReadoutSeriesMap& readoutMap){
   log_debug("Entering MultiPMTCoincify::Coincify()");
-  
+
   //---------------------------
   // Run the coincidence processing
   // The plan here is to try to cleverly use four pieces of information:
   //  (1) I3Map is a map, so we know we read out in order of OMKeys
   //  (2) We can compare OMKeys to set the bound for a second loop
-  //  (3) Launches are time ordered now, so we can use std::lower_bound for LC calculations
+  //  (3) Readouts are time ordered now, so we can use std::lower_bound for LC calculations
   //  (4) LC conditions are symmetric, so we only need to look forward, not back.
   //---------------------------
-  for(auto firstPmtIter=launchMap.begin(); firstPmtIter!=launchMap.end(); ++firstPmtIter){
+  for(auto firstPmtIter=readoutMap.begin(); firstPmtIter!=readoutMap.end(); ++firstPmtIter){
     OMKey firstOMKey = firstPmtIter->first;
-    LaunchSeries& firstLaunches = firstPmtIter->second;
+    UpgradeReadoutSeries& firstReadouts = firstPmtIter->second;
 
     // Keep track of when we've gone too far...
     const OMKey tooFar = OMKey(firstOMKey.GetString(), firstOMKey.GetOM()+moduleSpan_+1, 0);
     for(auto secondPmtIter=std::next(firstPmtIter);
-	(secondPmtIter->first<tooFar) && (secondPmtIter!=launchMap.end());
+	(secondPmtIter->first<tooFar) && (secondPmtIter!=readoutMap.end());
 	++secondPmtIter){
       OMKey secondOMKey = secondPmtIter->first;
-      LaunchSeries& secondLaunches = secondPmtIter->second;
+      UpgradeReadoutSeries& secondReadouts = secondPmtIter->second;
 
       // Choose the time window to use for checks
       bool sameModule = ((firstOMKey.GetString() == secondOMKey.GetString())
@@ -128,14 +128,15 @@ void MultiPMTCoincify::Coincify(LaunchSeriesMap& launchMap){
       if(sameModule && !bool(lcTypes_ & UpgradeLCFlags::SingleModuleLC)){
         continue;
       }
-      
+
       //---------------------------
       // Start going through the launches, using std::lower_bound to
       // find the first hits worth checking.
       //---------------------------
-      for(auto& firstHit : firstLaunches){
-        auto secondHitIter = std::lower_bound(secondLaunches.begin(), secondLaunches.end(), firstHit);
-        for(; secondHitIter != secondLaunches.end(); ++secondHitIter){
+      for(auto& firstHit : firstReadouts){
+        auto secondHitIter = std::lower_bound(secondReadouts.begin(), secondReadouts.end(), firstHit,
+                                              [](const UpgradeReadout& A, const UpgradeReadout& B){return A.GetTime() < B.GetTime();});
+        for(; secondHitIter != secondReadouts.end(); ++secondHitIter){
           double dt = secondHitIter->GetTime() - firstHit.GetTime();
           if(dt > window){
             break;
@@ -173,105 +174,49 @@ void MultiPMTCoincify::Coincify(LaunchSeriesMap& launchMap){
   }
 }
 
-void MultiPMTCoincify::GetMaps(LaunchSeriesMap& launchMap,
-                               I3mDOMLaunchSeriesMap& mdomMap,
-                               I3DEggLaunchSeriesMap& deggMap,
-                               I3XDOMHitSeriesMap& xdomMap){
-  for(auto& [omkey, launchSeries] : launchMap){
-    for(auto& launch : launchSeries){
-      if(I3XDOMHit* hit = std::get_if<I3XDOMHit>(&launch.launch)){
-        xdomMap[omkey].push_back(*hit);
-      }
-      else if(I3mDOMLaunch* mdom_launch = std::get_if<I3mDOMLaunch>(&launch.launch)){
-        mdomMap[omkey].push_back(*mdom_launch);
-      }
-      else if(I3DEggLaunch* degg_launch = std::get_if<I3DEggLaunch>(&launch.launch)){
-        deggMap[omkey].push_back(*degg_launch);
-      }
-    }
-  }
-}
-
 void MultiPMTCoincify::DAQ(I3FramePtr frame){
+  // Need a copy of the geometry to figure out the type of the xDOMHit objects
+  I3GeometryConstPtr geo = frame->Get<I3GeometryConstPtr>();
+  if(!geo){
+    log_fatal("No geometry found in frame!");
+  }
+  const I3OMGeoMap& omgeoMap = geo->omgeo;
+
+  //---------------------------
+  // Copy into a non-const std::variant map
+  //---------------------------
+  UpgradeReadoutSeriesMap readoutMap;
+
   //---------------------------
   // Read the pulses from the frame
   //---------------------------
   I3mDOMLaunchSeriesMapConstPtr mdomConstMap = frame->Get<I3mDOMLaunchSeriesMapConstPtr>(mDOMLaunchMapName_);
-  I3DEggLaunchSeriesMapConstPtr deggConstMap = frame->Get<I3DEggLaunchSeriesMapConstPtr>(DEggLaunchMapName_);
-  I3XDOMHitSeriesMapConstPtr xdomConstMap = frame->Get<I3XDOMHitSeriesMapConstPtr>(xDOMHitMapName_);
-
-  // Need a copy of the geometry to figure out the type of the xDOMHit objects
-  I3GeometryConstPtr geo = frame->Get<I3GeometryConstPtr>();
-  const I3OMGeoMap& omgeoMap = geo->omgeo;
-  
-  //---------------------------
-  // Copy into a non-const std::variant map
-  //---------------------------
-  LaunchSeriesMap launchMap;
-
   if(mdomConstMap){
-    for(auto const& [omkey, originalLaunches] : *mdomConstMap){
-      LaunchSeries launches;
-      for(auto hit : originalLaunches){
-        if(reset_){
-          hit.SetLCFlags(hit.GetLCFlags() & ~lcTypes_);
-        }
-        launches.push_back(Launch(I3OMGeo::mDOM, hit));
-      }
-      std::sort(launches.begin(), launches.end());
-      launchMap[omkey] = launches;
-    }
+    readoutMap = UpgradeReadout::Merge(readoutMap, UpgradeReadout::From<I3mDOMLaunchSeriesMap>(*mdomConstMap, omgeoMap));
   }
 
+  I3DEggLaunchSeriesMapConstPtr deggConstMap = frame->Get<I3DEggLaunchSeriesMapConstPtr>(DEggLaunchMapName_);
   if(deggConstMap){
-    for(auto const& [omkey, originalLaunches] : *deggConstMap){
-      LaunchSeries launches;
-      for(auto hit : originalLaunches){
-        if(reset_){
-          hit.SetLCFlags(hit.GetLCFlags() & ~lcTypes_);
-        }
-      launches.push_back(Launch(I3OMGeo::DEgg, hit));
-      }
-      std::sort(launches.begin(), launches.end());
-      launchMap[omkey] = launches;
-    }
+    readoutMap = UpgradeReadout::Merge(readoutMap, UpgradeReadout::From<I3DEggLaunchSeriesMap>(*deggConstMap, omgeoMap));
   }
 
+  I3XDOMHitSeriesMapConstPtr xdomConstMap = frame->Get<I3XDOMHitSeriesMapConstPtr>(xDOMHitMapName_);
   if(xdomConstMap){
-    for(auto const& [omkey, originalHits] : *xdomConstMap){
-      LaunchSeries launches;
-      auto geoiter = omgeoMap.find(omkey);
-      if(geoiter == omgeoMap.end()){
-        log_fatal_stream("Found an I3XDOMHit on PMT " << omkey
-                         << " but this PMT doesn't exist in the I3OMGeoMap!");
-      }
-      const I3OMGeo& omgeo = geoiter->second;
-      assert((omgeo.omtype == I3OMGeo::mDOM)|| (omgeo.omtype == I3OMGeo::DEgg));
-      
-      for(auto hit : originalHits){
-        if(reset_){
-          hit.SetLCFlags(hit.GetLCFlags() & ~lcTypes_);
-        }
-      launches.push_back(Launch(omgeo.omtype, hit));
-      }
-      std::sort(launches.begin(), launches.end());
-      launchMap[omkey] = launches;
-    }
+    readoutMap = UpgradeReadout::Merge(readoutMap, UpgradeReadout::From<I3XDOMHitSeriesMap>(*xdomConstMap, omgeoMap));
   }
-  
+
   //---------------------------
   // Run the processing
   //---------------------------
-  Coincify(launchMap);
+  Coincify(readoutMap);
 
   //---------------------------
   // Write the newly coincified pulses back out.
   //---------------------------
-  I3mDOMLaunchSeriesMap updated_mdomMap;
-  I3DEggLaunchSeriesMap updated_deggMap;
-  I3XDOMHitSeriesMap    updated_xdomMap;
-  GetMaps(launchMap, updated_mdomMap, updated_deggMap, updated_xdomMap);
-  
+  I3mDOMLaunchSeriesMap updated_mdomMap = UpgradeReadout::To<I3mDOMLaunchSeriesMap>(readoutMap);
+  I3DEggLaunchSeriesMap updated_deggMap = UpgradeReadout::To<I3DEggLaunchSeriesMap>(readoutMap);
+  I3XDOMHitSeriesMap    updated_xdomMap = UpgradeReadout::To<I3XDOMHitSeriesMap>(readoutMap);
+
   if(mdomConstMap){
     frame->Delete(mDOMLaunchMapName_);
     frame->Put(mDOMLaunchMapName_, I3mDOMLaunchSeriesMapPtr(new I3mDOMLaunchSeriesMap(updated_mdomMap)));

@@ -13,6 +13,7 @@ i3_add_library(dataclasses
   private/dataclasses/*/*/*.cxx
   private/dataclasses/stream_overloads.cpp
   private/test_module/TestConstCache.cxx
+  public/dataclasses/physics/UpgradeReadout.h
 
   USE_TOOLS boost python fftw3 gsl
 

@@ -5,7 +5,7 @@
 .. @date $LastChangedDate: 22nd September 2025 $
 .. @author Tom Stuttard
 
-.. highlight:: python
+.. highlight:: pycon
 
 .. _upgrade_launch_classes-main:
 
@@ -256,3 +256,304 @@ The high gain channel is set such that it can observe single photoelectrons,
 whilst the low gain channel is suited to much brighter events that would 
 saturate the high gain channel. The low gain chain has opposite polarity to 
 the high gain channel.
+
+
+UpgradeReadout
+==============
+
+This class provides a common interface for Upgrade readout-like objects that do
+not share a common inheritance structure in C++. Internally, it acts as a wrapper
+for the underlying object using ``std::variant``. This interface is defined for
+three readout classes at the moment: :cpp:class:`I3DEggLaunch`, :cpp:class:`I3mDOMLaunch`,
+and :cpp:class:`I3XDOMHit`. Additional classes may be added in the future.
+
+C++ Interface
+^^^^^^^^^^^^^
+
+.. highlight:: c++
+
+The interface for the :cpp:class:`UpgradeReadout` class is intended to be a
+simplified version of the wrapped readout classes. This class can be constructed
+using an :cpp:enum:`I3OMGeo::OMType` and one of :cpp:class:`I3DEggLaunch`,
+:cpp:class:`I3mDOMLaunch`, or :cpp:class:`I3XDOMHit`. ::
+
+   auto readout1 = UpgradeReadout(I3mDOMLaunch(...), I3OMGeo::OMType::mDOM);
+   auto readout2 = UpgradeReadout(I3DEggLaunch(...), I3OMGeo::OMType::DEgg);
+   auto readout3 = UpgradeReadout(I3XDOMHit(...), I3OMGeo::OMType::mDOM);
+   auto readout4 = UpgradeReadout(I3XDOMHit(...), I3OMGeo::OMType::DEgg);
+
+We explicitly set the :cpp:enum:`I3OMGeo::OMType` here to enable users to
+filter based on hit types. For example, a user may wish to produce a vector of
+:cpp:class:`UpgradeReadout` from both :cpp:type:`I3DEggLaunchSeriesMap` and
+onboard extracted DEgg hits from the :cpp:type:`I3XDOMHitSeriesMap`. This
+is used explicitly in the Upgrade's local coincidence simulation as well,
+where we (optionally) have LC flags that differentiate between mDOM and DEgg
+hits.
+
+**Time and LCFlags**
+
+This class exposes two properties of the underlying launch/hit: the time (via
+:cpp:func:`UpgradeReadout::GetTime`) and LC flags (:cpp:func:`UpgradeReadout::GetLCFlags`).
+
+   **double GetTime() const**
+      Get the time returned by the underlying hit's ``GetTime()`` function.
+
+   **UpgradeLCFlags GetLCFlags()**
+      Get the current LC flags of the wrapped hit.
+
+Functionally, these are defined using ``std::visit`` calls in the header file.
+For example, the ``GetTime()`` function is defined as::
+
+   double GetTime() const{
+     return std::visit([](auto const& x){return x.GetTime();}, launch);
+   }
+
+This dispatches the call from the :cpp:class:`UpgradeReadout` to the underlying
+type in the contained launch/hit. This allows us to have a common, unified
+interface for accessing the times and LC flags for the three contained types.
+
+.. attention::
+   The definition of "time" may differ between the :cpp:class:`I3DEggLaunch`/
+   :cpp:class:`I3mDOMLaunch` (where it refers to the first discriminator crossing
+   of the full waveform) and :cpp:class:`I3XDOMHit` (where it refers to the time
+   of the pulse peak). If this distinction matters for your applications, tread
+   carefully when using `GetTime` or consider defining your own visitor function.
+
+Additional ``std::visit`` functions may be added to the code as needed, but
+take care to ensure all types in the ``std::variant`` are covered in any new
+visitation functions. The compiler will complain if any calls aren't available.
+
+The class includes several additional utility functions related to the Upgrade local
+coincidence flags.
+
+  .. function:: ResetLCFlags(UpgradeLCFlags flags)
+
+    Set the launch's LC flags matching the specified flags to false
+
+  .. function:: AddLCFlags(UpgradeLCFlags flags)
+
+    Set the launch's LC flags matching the specified flags to true
+
+  .. function:: SetLCFlags(UpgradeLCFlags flags)
+
+    Set all of the launch's LC flags to match specified values
+
+**Helper Functions**
+
+In addition to the time and charge, the :cpp:class:`UpgradeReadout` includes
+several helper functions to hide some of the complexity of ``std::variant``
+calls. Each of these will be discussed briefly.
+
+ .. function:: template <typename T> bool Contains() const
+
+   This function allows the user to determine whether the contained launch/hit
+   is of the specified type.
+
+These can be used for each of the types with specific template parameters. For
+example::
+
+   bool is_degg_launch = readout.Contains<I3DEggLaunch>();
+   bool is_mdom_launch = readout.Contains<I3mDOMLaunch>();
+   bool is_xdom_hit    = readout.Contains<I3XDOMHit>();
+
+We can also directly try to grab the underlying hit:
+
+ .. function:: template <typename T> T* Get() const
+
+    If the underlying hit is of type ``T``, return a pointer to the hit. Otherwise,
+    return nullptr.
+
+This is a light wrapper around ``std::get_if<T>``. Here, we can conditionally
+obtain a pointer to the underlying launch (in the original type), but only if
+the original type matches the template parameter ``T``. For example, this next
+block of code will succeed, yielding a valid pointer to an :cpp:class:`I3DEggLaunch`. ::
+
+   auto readout = UpgradeReadout(I3OMGeo::OMType::DEgg, I3DEggLaunch(...))
+   I3DEggLaunch* launch = readout.Get<I3DEggLaunch>()
+
+The next block will result in ``launch`` being set to ``nullptr``, since the contained
+launch/hit is not an :cpp:class:`I3DEggLaunch`. ::
+
+   auto readout = UpgradeReadout(I3OMGeo::OMType::DEgg, I3XDOMHit(...))
+   I3DEggLaunch* launch = readout.Get<I3DEggLaunch>()
+
+This can be useful if you need to handle each type of underlying readout
+differently. ::
+
+   if(I3DEggLaunch* launch = readout.Get<I3DEggLaunch>())
+     { ... code for I3DEggLaunch ... }
+   else if(I3mDOMLaunch* launch = readout.Get<I3mDOMLaunch>())
+     { ... code for I3mDOMLaunch ... }
+   else if(I3XDOMHit* hit = readout.Get<I3XDOMHit>())
+     { ... code for I3XDOMHit ... }
+   else
+     {log_fatal("UpgradeReadout's type was not of the three specified types!");}
+
+**Dealing with Maps**
+
+The :cpp:class:`UpgradeReadout` class includes typedefs for :cpp:type:`UpgradeReadoutSeries`
+and :cpp:type:`UpgradeReadoutSeriesMap` just like other IceCube readout classes. These
+interfaces act like other :cpp:class:`I3Map` objects. ::
+
+   UpgradeReadoutSeriesMap readoutMap;
+   readoutMap[OMKey(88, 41, 1)] = UpgradeReadoutSeries();
+   readoutMap[OMKey(88, 41, 1)].push_back(UpgradeReadout(...));
+
+   for(const auto& [omkey, readouts] : readoutMap){
+       for(const auto& readout : readouts){
+           double time = readout.GetTime();
+           ...
+       }
+   }
+
+These can be created with another helper function defined in the same namespace. ::
+
+   template<typename T> static UpgradeReadoutSeriesMap From(const T& inputMap, I3OMGeoMap omgeoMap)
+
+This static function can be used to build an :cpp:type:`UpgradeReadoutSeriesMap`
+directly from an :cpp:type:`I3DEggLaunchSeriesMap`, :cpp:type:`I3mDOMLaunchSeriesMap`,
+or :cpp:type:`I3XDOMHitSeriesMap`. These may be combined with :cpp:func:`UpgradeReadout::Merge`. ::
+
+   auto mdomConstMap = frame->Get<I3mDOMLaunchSeriesMapConstPtr>(...);
+   auto deggConstMap = frame->Get<I3DEggLaunchSeriesMapConstPtr>(...);
+   auto xdomConstMap = frame->Get<I3XDOMHitSeriesMapConstPtr>(...);
+
+   UpgradeReadoutSeriesMap readoutMap =
+          UpgradeReadout::Merge(UpgradeReadout::From<I3mDOMLaunchSeriesMap>(*mdomConstMap, omgeoMap),
+                                UpgradeReadout::From<I3DEggLaunchSeriesMap>(*deggConstMap, omgeoMap),
+                                UpgradeReadout::From<I3XDOMHitSeriesMap>(*xdomConstMap, omgeoMap));
+
+This will result in a single, unified time-sorted map object that may be iterated through
+similar to other hitmaps in IceCube. The :cpp:func:`UpgradeReadout::Merge` is a variadic function
+and can accept an arbitrary number of input :cpp:func:`UpgradeReadoutSeriesMap`.
+
+.. warning::
+   Using ``std::map::merge`` will not throw an error, but it will not combine hit series
+   from multiple sources if the occur on a single PMT. If you combine :cpp:type:`I3DEggLaunchSeriesMap`
+   /:cpp:type:`I3mDOMLaunchSeriesMap` with :cpp:type:`I3XDOMHitSeriesMap`, this will
+   result in a merged map that is missing hits! **Always** use the :cpp:func:`UpgradeReadout::Merge`
+   function instead.
+
+.. code-block:: c++
+
+   template<typename T> static T To(const UpgradeReadoutSeriesMap& readoutMap)
+
+The :cpp:func:`UpgradeReadout::To` static function works the opposite direction, converting an existing
+:cpp:type:`UpgradeReadoutSeriesMap` to the specified template type ``T`` by extracting
+all readouts of the correct type. ::
+
+   UpgradeReadoutSeriesMap readoutMap;
+   // ...
+   I3DEggLaunchSeriesMap deggMap = UpgradeReadout::To<I3DEggLaunchSeriesMap>(readoutMap);
+   I3mDOMLaunchSeriesMap mdomMap = UpgradeReadout::To<I3mDOMLaunchSeriesMap>(readoutMap);
+   I3XDOMHitSeriesMap    xdomMap = UpgradeReadout::To<I3XDOMHitSeriesMap>(readoutMap);
+
+.. attention::
+   The underlying types are **not** "converted" here. We're simply pulling
+   objects out into their **original** types. If a hit went in as an :cpp:class:`I3XDOMHit`,
+   it will not come out when you run ``UpgradeReadout::To<I3DEggLaunchSeriesMap>``.
+
+
+Python Interface
+^^^^^^^^^^^^^^^^
+
+.. highlight:: pycon
+
+In Python, the constructor is overloaded and accepts one of the supported
+readout types:
+
+  .. py:method:: UpgradeReadout(I3DEggLaunch, omtype)
+                 UpgradeReadout(I3mDOMLaunch, omtype)
+                 UpgradeReadout(I3XDOMHit, omtype)
+
+     Construct an :cpp:class:`UpgradeReadout` to wrap either an:
+     :cpp:class:`I3DEggLaunch`, :cpp:class:`I3mDOMLaunch`, or an :cpp:class:`I3XDOMHit`
+
+The time and local coincidence flags are available as attributes from the
+python object
+
+ .. py:attribute:: time
+    :type: float
+
+    The readout time, obtained from the underlying object via its
+    ``GetTime()`` method.
+
+ .. py:attribute:: lc_flags
+    :type: UpgradeLCFlags
+
+    Local coincidence (LC) flags associated with the readout.
+
+Like in C++, methods are included for checking the underlying type and
+retrieving the wrapped object.
+
+  .. py:method:: is_I3DEggLaunch() -> bool
+
+     Check whether the wrapped hit is an I3DEggLaunch.
+
+  .. py:method:: is_I3mDOMLaunch() -> bool
+
+     Check whether the wrapped hit is an I3mDOMLaunch.
+
+  .. py:method:: is_I3XDOMHit() -> bool
+
+     Check whether the wrapped hit is an I3XDOMHit.
+
+  .. py:method:: get_I3DEggLaunch() -> I3DEggLaunch | None
+
+     If the wrapped hit is an I3DEggLaunch, return the I3DEggLaunch. If
+     the wrapped hit is another type, this function will return None.
+
+  .. py:method:: get_I3mDOMLaunch() -> I3mDOMLaunch | None
+
+     If the wrapped hit is an I3mDOMLaunch, return the I3mDOMLaunch. If
+     the wrapped hit is another type, this function will return None.
+
+  .. py:method:: get_I3XDOMHit() -> I3XDOMHit | None
+
+     If the wrapped hit is an I3XDOMHit, return the I3XDOMHit. If
+     the wrapped hit is another type, this function will return None.
+
+The :py:class:`UpgradeReadoutSeriesMap` is also exposed, allowing users
+to build their own map objects. Like in C++, the :py:class:`UpgradeReadoutSeriesMap`
+can be built directly from the maps of the various types. As in other cases
+of hitmaps, these maps include a :py:type:`dict` interface. Maps can be combined
+with a dedicated ``merge`` function.
+
+  >>> readoutMap = UpgradeReadoutSeriesMap()
+  >>> readoutMap.merge(UpgradeReadoutSeriesMap(degg_map, omgeo))
+  >>> readoutMap.merge(UpgradeReadoutSeriesMap(mdom_map, omgeo))
+  >>> readoutMap.merge(UpgradeReadoutSeriesMap(xdom_map, omgeo))
+
+.. warning::
+   Using ``dict.update`` will not throw an error, but it will not combine hit series
+   from multiple sources if the occur on a single PMT. If you combine :cpp:type:`I3DEggLaunchSeriesMap`
+   /:cpp:type:`I3mDOMLaunchSeriesMap` with :cpp:type:`I3XDOMHitSeriesMap`, this will
+   result in a merged map that is missing hits! **Always** use the ``UpgradeReadoutSeriesMap.merge``
+   function instead.
+
+The :py:class:`UpgradeReadoutSeriesMap` includes functions to extract hits
+to their original types as well.
+
+  >>> degg_map = readoutMap.to_I3DEggLaunchSeriesMap()
+  >>> mdom_map = readoutMap.to_I3mDOMLaunchSeriesMap()
+  >>> xdom_map = readoutMap.to_I3XDOMHitSeriesMap()
+
+
+**Usage Example**
+
+.. code-block:: python
+
+   # Construct from different input maps
+   readout_map = UpgradeReadoutSeriesMap(omgeo, mdom_map)
+   readout_map2 = UpgradeReadoutSeriesMap(omgeo, degg_map)
+
+   # Merge maps
+   readout_map.update(readout_map2)
+
+   # Access data
+   for omkey, series in readout_map.items():
+       for readout in series:
+           print(readout.time, readout.lc_flags)
+
+   # Convert back to specific types
+   mdom_out = readout_map.to_I3mDOMLaunchSeriesMap()

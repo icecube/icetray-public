@@ -55,8 +55,8 @@ from icecube._dataclasses import (
     pmt_gain, spe_discriminator_threshold, spe_mean, spe_pmt_threshold, takes_vector_I3Particle, transit_time,
     vector_I3MCHit, vector_I3RecoHit, vector_I3RecoPulse, which_atwd, year_of,
     # upgrade DOMs
-    I3DEggLaunch, I3mDOMLaunch, I3NoiseSuppressionRecord, I3XDOMHit,
-    I3DEggLaunchSeriesMap, I3mDOMLaunchSeriesMap, I3NoiseSuppressionRecordSeriesMap, I3XDOMHitSeriesMap,
+    I3DEggLaunch, I3mDOMLaunch, I3NoiseSuppressionRecord, I3XDOMHit, UpgradeReadout,
+    I3DEggLaunchSeriesMap, I3mDOMLaunchSeriesMap, I3NoiseSuppressionRecordSeriesMap, I3XDOMHitSeriesMap, UpgradeReadoutSeriesMap,
     I3DEggCal, I3PMTCal, I3mDOMCal, I3DEggStatus, I3mDOMStatus, LinearityParameters,
     I3DEggCalMap, I3PMTCalMap, I3mDOMCalMap, I3DEggStatusMap, I3mDOMStatusMap,
     UpgradeLCFlags,
