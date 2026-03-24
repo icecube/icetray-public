@@ -50,7 +50,7 @@ using namespace boost::python;
   (G_Fermi)(epsilon_0)(mu_0)               \
   (alpha)(sinsq_theta_W)                   \
   (cos_theta_W)(sin_theta_C)               \
-  (cos_theta_C)
+  (cos_theta_C)(ref_wavelength)
 
 #define I3CONSTANT_DEF(r,data,t) \
   .def_readonly(BOOST_PP_STRINGIZE(t), BOOST_PP_CAT(I3Constants::, t))
@@ -97,6 +97,7 @@ void register_I3Constants()
     .def_readonly("cos_theta_W", I3Constants::cos_theta_W, "Weak-mixing Angle cos theta_{W}")
     .def_readonly("sin_theta_C", I3Constants::sin_theta_C, "Cabibbo Angle sin_theta_C")
     .def_readonly("cos_theta_C", I3Constants::cos_theta_C, "Cabibbo Angle cos_theta_C")
+    .def_readonly("ref_wavelength", I3Constants::ref_wavelength, "Reference wavelength of Cherenkov photon")
     .def( freeze() )
     ;
 }

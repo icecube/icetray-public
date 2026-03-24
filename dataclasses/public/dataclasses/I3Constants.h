@@ -184,6 +184,12 @@ namespace I3Constants
    */
   static const double sin_theta_C = 0.22534;
   static const double cos_theta_C = 0.97427;
+
+  /**
+   *  Nominal reference wavelength for ice model parametrizations
+   *  Also a good approximation for the peak of flasher emission
+   */
+  static const double ref_wavelength = 400. * I3Units::nanometer;
 };
 
 #endif //I3CONSTANTS_H_INCLUDED
