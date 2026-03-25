@@ -95,11 +95,13 @@ def symlinkdir(srcdir,destdir):
         src = os.path.join(srcdir,f)
         symlink(src, os.path.join(destdir,f))
 
+# add @'s here instead of feeding them in via `replace`
+# this is due to the change from COPYONLY to @ONLY in #4243
 def copy_replace(infile,outfile,replace):
     with open(infile) as f:
         txt = f.read()
     for rin,rout in replace.items():  # codespell:ignore rin
-        txt = txt.replace(rin,rout)  # codespell:ignore rin
+        txt = txt.replace(f'@{rin}@', rout)  # codespell:ignore rin
     with open(outfile,"w") as f:
         f.write(txt)
 
@@ -276,9 +278,9 @@ def main():  # noqa: C901,PLR0912,PLR0915
                 doxyfile = os.path.join(doxygendir,project+'.doxyfile')
                 copy_replace(os.path.join(docsdir,"conf","doxyfile.in"),
                              doxyfile,
-                             {"@PROJECT_NAME@":project,
-                              "@DOXYGEN_OUTPUT_PATH@":os.path.join(doxygendir,project),
-                              "@CMAKE_CURRENT_SOURCE_DIR@":projectdir,
+                             {"PROJECT_NAME":project,
+                              "DOXYGEN_OUTPUT_PATH":os.path.join(doxygendir,project),
+                              "CMAKE_CURRENT_SOURCE_DIR":projectdir,
                              })
                 queue.call(["doxygen",doxyfile])
 
