@@ -6,7 +6,7 @@
  * Serialization and Printing for I3mDOMCal and I3mDOMCalMap Classes
  *
  * @file I3mDOMCal.cxx
- * @date 2025-10-14
+ * @date 2026-2-6
  * @author lbloom12
  *
  */
@@ -14,6 +14,23 @@
 
 #include <icetray/serialization.h>
 #include <dataclasses/calibration/I3mDOMCal.h>
+#include "icetray/I3Units.h"
+
+
+/**
+ * Define the constants in I3mDOMCal
+ *
+ * constant values for all mDOM modules which are described in:
+ * https://github.com/WIPACrepo/STM32Workspace/blob/master/wf-processing/include/wf-processing/mdom/mdom_constants.h
+ */
+const double I3mDOMCal::adcToVolts = 0.045e-3 * I3Units::V;        // (Volts / ADC counts) MDOM_CNT_TO_V_FACTOR
+const double I3mDOMCal::sampleRate = 120 * I3Units::megahertz;     // (MHz) mDOM digitizer Sample Rate
+const double I3mDOMCal::frontEndImpedance = 75.35 * I3Units::ohm;  // (Ohms) MDOM_FRONT_END_IMPEDANCE
+
+const double I3mDOMCal::mdomTimeOffset = NAN * I3Units::ns;        // (ns) Systematic timing offset between mDOMs and Gen1 DOMs
+
+const double I3mDOMCal::discSampleRate = 960 * I3Units::megahertz; // (MHz) mDOM discriminator Sample Rate
+
 
 
 // serialization for I3mDOMCal for proper storaging
@@ -27,6 +44,13 @@ void I3mDOMCal::serialize(Archive& ar, unsigned version)
   ar & make_nvp("hvGainRelation", hvGainRelation);
   ar & make_nvp("pmtTransitTime", pmtTransitTime);
   ar & make_nvp("pmtTransitTimeSpread", pmtTransitTimeSpread);
+
+  if (version > 0) {
+      ar & make_nvp("adcBaselineValue", adcBaselineValue);
+      ar & make_nvp("adcBaselineDAC", adcBaselineDAC);
+      ar & make_nvp("discThreshold", discThreshold);
+      ar & make_nvp("discDAC", discDAC);
+  }
 }
 I3_SERIALIZABLE(I3mDOMCal);
 
@@ -38,16 +62,18 @@ I3_SERIALIZABLE(I3mDOMCalMap);
 // define the printing operator for I3mDOMCal for a better output than the address of the object
 std::ostream& operator<<(std::ostream& oss, const I3mDOMCal& c)
 {
-  oss << "[          I3mDOMCal :: " << std::endl
-      << "  ADC Counts-to-Volts : " << c.adcToVolts << std::endl
-      << "          Sample Rate : " << c.sampleRate << std::endl
-      << "  Front End Impedance : " << c.frontEndImpedance << std::endl
-      << "     mDOM Time Offset : " << c.mdomTimeOffset << std::endl
-      << "       DiscSampleRate : " << c.discSampleRate << std::endl
-      << " Linearity Parameters : " << c.linearityParams << std::endl
-      << "          HV-Gain Fit : " << c.hvGainRelation << std::endl
-      << "     PMT Transit Time : " << c.pmtTransitTime << std::endl
-      << "  Transit Time Spread : " << c.pmtTransitTimeSpread << std::endl
+  oss << "[            I3mDOMCal :: " << std::endl
+      << "    ADC Counts-to-Volts : " << c.adcToVolts << std::endl
+      << "            Sample Rate : " << c.sampleRate << std::endl
+      << "    Front End Impedance : " << c.frontEndImpedance << std::endl
+      << "       mDOM Time Offset : " << c.mdomTimeOffset << std::endl
+      << "         DiscSampleRate : " << c.discSampleRate << std::endl
+      << "   Linearity Parameters : " << c.linearityParams << std::endl
+      << "            HV-Gain Fit : " << c.hvGainRelation << std::endl
+      << "       PMT Transit Time : " << c.pmtTransitTime << std::endl
+      << "    Transit Time Spread : " << c.pmtTransitTimeSpread << std::endl
+      << "Baseline DAC/Value Pair : " << c.adcBaselineDAC << " / " << c.adcBaselineValue << std::endl
+      << "Disc DAC/Threshold Pair : " << c.discDAC << " / " << c.discThreshold << std::endl
       << "]" ;
   return oss;
 }

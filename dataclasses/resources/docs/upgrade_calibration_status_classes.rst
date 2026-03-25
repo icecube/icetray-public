@@ -2,7 +2,7 @@
 .. Copyright  (C) 2025 The Icecube Collaboration
 .. SPDX-License-Identifier: BSD-2-Clause
 ..
-.. @date $LastChangedDate: 24th October 2025 $
+.. @date $LastChangedDate: 10th March 2026 $
 .. @author lbloom12
 
 .. highlight:: python
@@ -31,7 +31,7 @@ relationships between various settings and their effects that can be referenced.
 
 ADCToVolts
   The factor that converts the output of the digitizer (ADC Counts) to a calibrated PMT Voltage. For the DEgg, this is a
-  constant value of 0.073e-3 Volts / ADC Counts.
+  constant value of 7.280e-5 Volts / ADC Counts.
 
 SampleRate
   The Sample Rate of the digitizer. This is the factor that converts the sample bins (ADC Sample Number) to a time. For the
@@ -68,7 +68,7 @@ DACBaselineRelation
   and is stored as :cpp:struct:`LinearFit`.
 
 Temperature
-  Temperature of the DEgg Mainboard, measured in degrees Celsius. This is used to determine the Droop time-constant value (see
+  Temperature of the DEgg Mainboard, measured in Kelvin. This is used to determine the Droop time-constant value (see
   ``TauParams``).
 
 TauParams
@@ -125,6 +125,43 @@ PMTTransitTime
 PMTTransitTimeSpread
   The variance of the Transit Time distribution about the mean, measured in nanoseconds. This is used to sample an offset from
   the average Transit Time for use in simulations.
+
+ADCBaselineValue
+  The requested ADC Baseline value in the calibration. This is the desired value for the baseline of the waveform in ADC Counts.
+
+ADCBaselineDAC
+  The DAC value returned by the calibration that yields a baseline value that best matches ``ADCBaselineValue``.
+
+DiscThreshold
+  The requested Disciminator Threshold in the calibration. This is the desired value for the threshold in Volts.
+
+DiscDAC
+  The DAC value returned by the calibration that yields a discriminator threshold that best matches ``DiscThreshold``.
+
+**Functions**
+
+GetValidBaselineValue()
+  Returns ``ADCBaselineValue`` if and only if the inputted value matches ``ADCBaselineDAC``, otherwise returns a RuntimeError.
+
+  >>> mDOMCal = icecube.dataclasses.I3mDOMCal()
+  >>> mDOMCal.adc_baseline_value = 3600
+  >>> mDOMCal.adc_baseline_dac = 13300
+  >>> mDOMCal.GetValidBaselineValue(13300)
+  3600
+  >>> mDOMCal.GetValidBaselineValue(12300)
+  RuntimeError: The specified DAC value does not match what is in calibration!
+
+GetValidDiscThreshold()
+  Returns ``DiscThreshold`` if and only if the inputted value matches ``DiscDAC``, otherwise returns a RuntimeError.
+
+  >>> mDOMCal = icecube.dataclasses.I3mDOMCal()
+  >>> mDOMCal.disc_threshold = 0.002
+  >>> mDOMCal.disc_dac = 23500
+  >>> mDOMCal.GetValidDiscThreshold(23500)
+  0.002
+  >>> mDOMCal.GetValidDiscThreshold(12300)
+  RuntimeError: The specified DAC value does not match what is in calibration!
+
 
 ****
 

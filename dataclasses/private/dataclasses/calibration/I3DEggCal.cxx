@@ -7,13 +7,28 @@
  * I3DEggCal, and I3DEggCalMap Classes
  *
  * @file I3DEggCal.cxx
- * @date 2025-10-23
+ * @date 2026-2-6
  * @author lbloom12
  *
  */
 
 #include <icetray/serialization.h>
 #include <dataclasses/calibration/I3DEggCal.h>
+#include "icetray/I3Units.h"
+
+
+/**
+ * Define the constants in I3DEggCal
+ *
+ * constant values for all DEgg modules which are described in:
+ * https://github.com/WIPACrepo/STM32Workspace/blob/master/wf-processing/include/wf-processing/degg/degg_constants.h
+ */ 
+const double I3DEggCal::adcToVolts = 7.280e-5 * I3Units::V;        // (Volts / ADC counts) DEGG_CNT_TO_V_FACTOR
+const double I3DEggCal::sampleRate = 240 * I3Units::megahertz;     // (MHz) DEgg digitizer Sample Rate 
+const double I3DEggCal::frontEndImpedance = 36.96 * I3Units::ohm;  // (Ohms) DEGG_FRONT_END_IMPEDANCE
+
+const double I3DEggCal::deggTimeOffset = NAN * I3Units::ns;        // (ns) Systematic timing offset between DEggs and Gen1 DOMs
+
 
 
 // serialization for LinearityParameters for proper storaging

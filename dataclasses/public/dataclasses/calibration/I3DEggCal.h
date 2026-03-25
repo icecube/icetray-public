@@ -6,7 +6,7 @@
  * Definition of I3DEggCal Class
  *
  * @file I3DEggCal.h
- * @date 2025-10-23
+ * @date 2026-2-6
  * @author lbloom12
  *
  */
@@ -22,7 +22,7 @@
 
 
 static const unsigned linearity_params_version_ = 0;
-static const unsigned i3degg_calibration_version_ = 0;
+static const unsigned i3degg_calibration_version_ = 1;
 
 
 
@@ -82,11 +82,11 @@ struct I3DEggCal {
      * constant values for all DEgg modules which are described in:
      * https://github.com/WIPACrepo/STM32Workspace/blob/master/wf-processing/include/wf-processing/degg/degg_constants.h
      */ 
-    static constexpr double adcToVolts = 0.073e-3;      // (Volts / ADC counts)
-    static constexpr int16_t sampleRate = 240;          // (MHz) DEgg digitizer Sample Rate
-    static constexpr double frontEndImpedance = 36.96;  // (Ohms)
+    static const double adcToVolts;         // (Volts / ADC counts) DEGG_CNT_TO_V_FACTOR in degg_constants.h
+    static const double sampleRate;         // (MHz) DEgg digitizer Sample Rate
+    static const double frontEndImpedance;  // (Ohms) DEGG_FRONT_END_IMPEDANCE in degg_constants.h
 
-    static constexpr double deggTimeOffset = NAN;       // Systematic timing offset between DEggs and Gen1 DOMs (ns)
+    static const double deggTimeOffset;     // (ns) Systematic timing offset between DEggs and Gen1 DOMs
 
     /**
      * Linearity parameters as described in:

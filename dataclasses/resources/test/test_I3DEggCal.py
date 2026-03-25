@@ -6,6 +6,8 @@
 
 import unittest
 from icecube import dataclasses, icetray
+from icecube.icetray import I3Frame, I3Units, OMKey
+
 
 class TestI3DEggCal(unittest.TestCase):
 
@@ -68,45 +70,45 @@ class TestI3DEggCal(unittest.TestCase):
         template = dataclasses.I3DEggCal()
 
         ### populate with non-constructor values
-        template.temperature = -40     # [C]
-        template.linearity_params.p0 = 36.71 # [mA]
-        template.linearity_params.p1 = 1.89  # [mA]
-        template.linearity_params.p2 = 0.14  # [mA]
-        template.pmt_transit_time = 58          # [ns]
-        template.pmt_transit_time_spread = 2.89 # [ns]
+        template.temperature = (-40 + 273.0) * I3Units.kelvin # (-40 degrees Celsius)
+        template.linearity_params.p0 = 36.71 * I3Units.mA
+        template.linearity_params.p1 = 1.89 * I3Units.mA
+        template.linearity_params.p2 = 0.14 * I3Units.mA
+        template.pmt_transit_time = 58 * I3Units.ns
+        template.pmt_transit_time_spread = 2.89 * I3Units.ns
         template.hv_gain_relation.slope = 6.25    # [log(Gain) / log(V)]
         template.hv_gain_relation.intercept = -30 # [log(Gain)]
         template.dac_baseline_relation.slope = 4/15  # [Counts / DAC]
         template.dac_baseline_relation.intercept = 0 # [Counts]
-        template.tau_params.p0 = 4.9  # [us]
-        template.tau_params.p1 = 26.7 # [us]
-        template.tau_params.p2 = 28.3 # [C]
+        template.tau_params.p0 = 4.9 * I3Units.microsecond
+        template.tau_params.p1 = 26.7 * I3Units.microsecond
+        template.tau_params.p2 = (28.3 + 273.0) * I3Units.kelvin # (28.3 degrees Celsius)
 
         ### test the new template
-        self.assertEqual(template.adcToVolts, 0.073e-3)
-        self.assertEqual(template.sampleRate, 240)
-        self.assertEqual(template.frontEndImpedance, 36.96)
-        #self.assertEqual(template.deggTimeOffset, )
-        self.assertEqual(template.temperature, -40)
-        self.assertEqual(template.linearity_params.p0, 36.71)
-        self.assertEqual(template.linearity_params.p1, 1.89)
-        self.assertEqual(template.linearity_params.p2, 0.14)
-        self.assertEqual(template.pmt_transit_time, 58)
-        self.assertEqual(template.pmt_transit_time_spread, 2.89)
+        self.assertEqual(template.adcToVolts, 7.280e-5 * I3Units.V)
+        self.assertEqual(template.sampleRate, 240 * I3Units.megahertz)
+        self.assertEqual(template.frontEndImpedance, 36.96 * I3Units.ohm)
+        #self.assertEqual(template.deggTimeOffset, ) current constant value is set to NAN, once measurement is made and the constant is updated then uncomment and add this condition
+        self.assertEqual(template.temperature, (-40 + 273.0) * I3Units.kelvin)
+        self.assertEqual(template.linearity_params.p0, 36.71 * I3Units.mA)
+        self.assertEqual(template.linearity_params.p1, 1.89 * I3Units.mA)
+        self.assertEqual(template.linearity_params.p2, 0.14 * I3Units.mA)
+        self.assertEqual(template.pmt_transit_time, 58 * I3Units.ns)
+        self.assertEqual(template.pmt_transit_time_spread, 2.89 * I3Units.ns)
         self.assertEqual(template.hv_gain_relation.slope, 6.25)
         self.assertEqual(template.hv_gain_relation.intercept, -30)
         self.assertEqual(template.dac_baseline_relation.slope, 4/15)
         self.assertEqual(template.dac_baseline_relation.intercept, 0)
-        self.assertEqual(template.tau_params.p0, 4.9)
-        self.assertEqual(template.tau_params.p1, 26.7)
-        self.assertEqual(template.tau_params.p2, 28.3)
+        self.assertEqual(template.tau_params.p0, 4.9 * I3Units.microsecond)
+        self.assertEqual(template.tau_params.p1, 26.7 * I3Units.microsecond)
+        self.assertEqual(template.tau_params.p2, (28.3 + 273.0) * I3Units.kelvin)
 
-        self.frame = icetray.I3Frame(icetray.I3Frame.Calibration)
+        self.frame = I3Frame(I3Frame.Calibration)
 
         ### populate a dictionary for all PMTs on one DEgg module
         degg_cal_dict = {}
         for pmt in range(2):
-            degg_cal_dict[icetray.OMKey(90, 64, pmt)] = template
+            degg_cal_dict[OMKey(90, 64, pmt)] = template
 
         self.frame['I3DEggCalMap'] = dataclasses.I3DEggCalMap(degg_cal_dict)
 
@@ -122,36 +124,36 @@ class TestI3DEggCal(unittest.TestCase):
 
         ### test the constant values
         dc = list(degg_cal_map.values())[0]
-        self.assertEqual(dc.adcToVolts, 0.073e-3)
-        self.assertEqual(dc.sampleRate, 240)
-        self.assertEqual(dc.frontEndImpedance, 36.96)
-        #self.assertEqual(dc.deggTimeOffset, )
+        self.assertEqual(dc.adcToVolts, 7.280e-5 * I3Units.V)
+        self.assertEqual(dc.sampleRate, 240 * I3Units.megahertz)
+        self.assertEqual(dc.frontEndImpedance, 36.96 * I3Units.ohm)
+        #self.assertEqual(dc.deggTimeOffset, ) current constant value is set to NAN, once measurement is made and the constant is updated then uncomment and add this condition
 
         ### test temperature
-        self.assertEqual(dc.temperature, -40)
-        dc.temperature = 20.
-        self.assertEqual(dc.temperature, 20.)
+        self.assertEqual(dc.temperature, (-40 + 273.) * I3Units.kelvin)
+        dc.temperature = (20. + 273.) * I3Units.kelvin
+        self.assertEqual(dc.temperature, 293. * I3Units.kelvin)
 
         ### test linearity params
-        self.assertEqual(dc.linearity_params.p0, 36.71)
-        self.assertEqual(dc.linearity_params.p1, 1.89)
-        self.assertEqual(dc.linearity_params.p2, 0.14)
-        dc.linearity_params.p0 = 24.56
-        dc.linearity_params.p1 = 2.45
-        dc.linearity_params.p2 = 0.12
-        self.assertEqual(dc.linearity_params.p0, 24.56)
-        self.assertEqual(dc.linearity_params.p1, 2.45)
-        self.assertEqual(dc.linearity_params.p2, 0.12)
+        self.assertEqual(dc.linearity_params.p0, 36.71 * I3Units.mA)
+        self.assertEqual(dc.linearity_params.p1, 1.89 * I3Units.mA)
+        self.assertEqual(dc.linearity_params.p2, 0.14 * I3Units.mA)
+        dc.linearity_params.p0 = 24.56 * I3Units.mA
+        dc.linearity_params.p1 = 2.45 * I3Units.mA
+        dc.linearity_params.p2 = 0.12 * I3Units.mA
+        self.assertEqual(dc.linearity_params.p0, 24.56 * I3Units.mA)
+        self.assertEqual(dc.linearity_params.p1, 2.45 * I3Units.mA)
+        self.assertEqual(dc.linearity_params.p2, 0.12 * I3Units.mA)
 
         ### test pmt transit time
-        self.assertEqual(dc.pmt_transit_time, 58)
-        dc.pmt_transit_time = 56.
-        self.assertEqual(dc.pmt_transit_time, 56.)
+        self.assertEqual(dc.pmt_transit_time, 58 * I3Units.ns)
+        dc.pmt_transit_time = 56. * I3Units.ns
+        self.assertEqual(dc.pmt_transit_time, 56. * I3Units.ns)
 
         ### test pmt transit time spread
-        self.assertEqual(dc.pmt_transit_time_spread, 2.89)
-        dc.pmt_transit_time_spread = 3.45
-        self.assertEqual(dc.pmt_transit_time_spread, 3.45)
+        self.assertEqual(dc.pmt_transit_time_spread, 2.89 * I3Units.ns)
+        dc.pmt_transit_time_spread = 3.45 * I3Units.ns
+        self.assertEqual(dc.pmt_transit_time_spread, 3.45 * I3Units.ns)
 
         ### test hv gain relation
         self.assertEqual(dc.hv_gain_relation.slope, 6.25)
@@ -170,15 +172,15 @@ class TestI3DEggCal(unittest.TestCase):
         self.assertEqual(dc.dac_baseline_relation.intercept, 1.)
 
         ### test tau params
-        self.assertEqual(dc.tau_params.p0, 4.9)
-        self.assertEqual(dc.tau_params.p1, 26.7)
-        self.assertEqual(dc.tau_params.p2, 28.3)
-        dc.tau_params.p0 = 5.6
-        dc.tau_params.p1 = 23.4
-        dc.tau_params.p2 = 34.5
-        self.assertEqual(dc.tau_params.p0, 5.6)
-        self.assertEqual(dc.tau_params.p1, 23.4)
-        self.assertEqual(dc.tau_params.p2, 34.5)
+        self.assertEqual(dc.tau_params.p0, 4.9 * I3Units.microsecond)
+        self.assertEqual(dc.tau_params.p1, 26.7 * I3Units.microsecond)
+        self.assertEqual(dc.tau_params.p2, (28.3 + 273.) * I3Units.kelvin)
+        dc.tau_params.p0 = 5.6 * I3Units.microsecond
+        dc.tau_params.p1 = 23.4 * I3Units.microsecond
+        dc.tau_params.p2 = (34.5 + 273.) * I3Units.kelvin
+        self.assertEqual(dc.tau_params.p0, 5.6 * I3Units.microsecond)
+        self.assertEqual(dc.tau_params.p1, 23.4 * I3Units.microsecond)
+        self.assertEqual(dc.tau_params.p2, 307.5 * I3Units.kelvin)
 
 
 

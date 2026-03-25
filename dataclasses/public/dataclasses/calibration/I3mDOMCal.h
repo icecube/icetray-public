@@ -6,7 +6,7 @@
  * Definition of I3mDOMCal Class
  *
  * @file I3mDOMCal.h
- * @date 2025-10-14
+ * @date 2026-2-6
  * @author lbloom12
  *
  */
@@ -20,7 +20,8 @@
 #include <dataclasses/calibration/I3DEggCal.h>
 
 
-static const unsigned i3mdom_calibration_version_ = 0;
+static const unsigned i3mdom_calibration_version_ = 1;
+
 
 /**
  * @brief A struct to hold the mDOM PMT Calibration parameters
@@ -31,13 +32,13 @@ struct I3mDOMCal {
      * constant values for all mDOM modules which are described in:
      * https://github.com/WIPACrepo/STM32Workspace/blob/master/wf-processing/include/wf-processing/mdom/mdom_constants.h
      */ 
-    static constexpr double adcToVolts = 0.045e-3;      // (Volts / ADC counts)
-    static constexpr int16_t sampleRate = 120;          // (MHz) mDOM digitizer Sample Rate
-    static constexpr double frontEndImpedance = 75.35;  // (Ohms)
+    static const double adcToVolts;         // (Volts / ADC counts) MDOM_CNT_TO_V_FACTOR in mdom_constants.h
+    static const double sampleRate;         // (MHz) mDOM digitizer Sample Rate
+    static const double frontEndImpedance;  // (Ohms) MDOM_FRONT_END_IMPEDANCE in mdom_constants.h
 
-    static constexpr double mdomTimeOffset = NAN;       // Systematic timing offset between mDOMs and Gen1 DOMs (ns)
+    static const double mdomTimeOffset;     // (ns) Systematic timing offset between mDOMs and Gen1 DOMs
 
-    static constexpr int16_t discSampleRate = 960;      // (MHz) mDOM discriminator Sample Rate
+    static const double discSampleRate;     // (MHz) mDOM discriminator Sample Rate
 
 
     /**
@@ -50,11 +51,42 @@ struct I3mDOMCal {
     /// the slope and intercept of:   log(gain) = m*log(HV) + b
     LinearFit hvGainRelation;
 
-    /// Time offset between the start of a pulse and when the photon initially hit the PMT
+    /// (ns) Time offset between the start of a pulse and when the photon initially hit the PMT
     double pmtTransitTime;
 
-    /// variance of the transit time distribution about the mean
+    /// (ns) variance of the transit time distribution about the mean
     double pmtTransitTimeSpread;
+
+    /**
+     * Since the DAC has significant hysteresis, the Baseline/DAC calibration will
+     * simply set the DAC to the appropriate value to get the desired ADC baseline.
+     * This yields a baseline value/DAC value pair, where the baseline value is valid
+     * if and only if the DAC value matches.
+     */
+    double adcBaselineValue; // the requested baseline value in the calibration
+    uint16_t adcBaselineDAC; // the DAC value returned by the calibration
+    double GetValidBaselineValue(uint16_t baselineDACVal) {
+        if (adcBaselineDAC == baselineDACVal) {
+            return adcBaselineValue;
+        } else {
+            throw std::runtime_error("The specified DAC value does not match what is in calibration!");
+        }
+    }
+
+    /*
+     * Same as above, the Discriminator/DAC calibration identifies the DAC value where
+     * the discriminator is at 0 Volts, then uses the known hardware relation to set
+     * the discriminator to a prescribed voltage.
+     */
+    double discThreshold; // (Volts) the requested discriminator threshold in the calibration
+    uint16_t discDAC;     // the DAC value returned by the calibration
+    double GetValidDiscThreshold(uint16_t discDACVal) {
+        if (discDAC == discDACVal) {
+            return discThreshold;
+        } else {
+            throw std::runtime_error("The specified DAC value does not match what is in calibration!");
+        }
+    }
 
 
 
@@ -63,7 +95,11 @@ struct I3mDOMCal {
         return (linearityParams == rhs.linearityParams &&
         hvGainRelation == rhs.hvGainRelation &&
         CompareFloatingPoint::Compare_NanEqual(pmtTransitTime, rhs.pmtTransitTime) &&
-        CompareFloatingPoint::Compare_NanEqual(pmtTransitTimeSpread, rhs.pmtTransitTimeSpread));
+        CompareFloatingPoint::Compare_NanEqual(pmtTransitTimeSpread, rhs.pmtTransitTimeSpread) &&
+        CompareFloatingPoint::Compare_NanEqual(adcBaselineValue, rhs.adcBaselineValue) &&
+        adcBaselineDAC == rhs.adcBaselineDAC &&
+        CompareFloatingPoint::Compare_NanEqual(discThreshold, rhs.discThreshold) &&
+        discDAC == rhs.discDAC);
     }
     bool operator!=(const I3mDOMCal& rhs) const {
         return !operator==(rhs);
@@ -80,6 +116,10 @@ struct I3mDOMCal {
     {
         pmtTransitTime = NAN;
         pmtTransitTimeSpread = NAN;
+        adcBaselineValue = NAN;
+        adcBaselineDAC = 0;
+        discThreshold = NAN;
+        discDAC = 0;
     }
 
 };
