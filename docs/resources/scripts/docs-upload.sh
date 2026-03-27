@@ -21,6 +21,6 @@ TARCMD="tar -czvf $TARBALL_NAME -C${I3_BUILD}/docs/build/html ."
 echo running $TARCMD
 ${TARCMD}
 
-UPLOADCMD="curl -XPUT -i --data-binary @${TARBALL_NAME} https://docs.icecube.aq/api/upload?path=icetray/main -u icecube:${ICECUBE_PASSWORD}"
+UPLOADCMD="curl -XPUT -i --data-binary @${TARBALL_NAME} https://docs.icecube.aq/api/upload?path=icetray/main -u icecube:${DOCS_ICECUBE_AQ_PASSWORD}"
 echo running ${UPLOADCMD}
 ${UPLOADCMD}
