@@ -6,7 +6,7 @@
  * Serialization and Printing for I3mDOMCal and I3mDOMCalMap Classes
  *
  * @file I3mDOMCal.cxx
- * @date 2026-2-6
+ * @date 2026-3-27
  * @author lbloom12
  *
  */
@@ -51,6 +51,10 @@ void I3mDOMCal::serialize(Archive& ar, unsigned version)
       ar & make_nvp("discThreshold", discThreshold);
       ar & make_nvp("discDAC", discDAC);
   }
+
+  if (version > 1) {
+      ar & make_nvp("adcBaselineRMS", adcBaselineRMS);
+  }
 }
 I3_SERIALIZABLE(I3mDOMCal);
 
@@ -72,6 +76,7 @@ std::ostream& operator<<(std::ostream& oss, const I3mDOMCal& c)
       << "            HV-Gain Fit : " << c.hvGainRelation << std::endl
       << "       PMT Transit Time : " << c.pmtTransitTime << std::endl
       << "    Transit Time Spread : " << c.pmtTransitTimeSpread << std::endl
+      << "           Baseline RMS : " << c.adcBaselineRMS << std::endl
       << "Baseline DAC/Value Pair : " << c.adcBaselineDAC << " / " << c.adcBaselineValue << std::endl
       << "Disc DAC/Threshold Pair : " << c.discDAC << " / " << c.discThreshold << std::endl
       << "]" ;

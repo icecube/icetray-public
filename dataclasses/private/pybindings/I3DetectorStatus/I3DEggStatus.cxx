@@ -6,7 +6,7 @@
  * Pybindings for I3DEggStatus and I3DEggStatusMap Classes
  *
  * @file I3DEggStatus.cxx
- * @date 2025-08-21
+ * @date 2026-03-26
  * @author lbloom12
  *
  */
@@ -53,7 +53,7 @@ void register_I3DEggStatus()
 {
   scope outer =
     class_<I3DEggStatus, boost::shared_ptr<I3DEggStatus> >("I3DEggStatus")
-      #define DEGGSTATUS_VALS (enabled)(trigMode)(trigThreshold) \
+      #define DEGGSTATUS_VALS (enabled)(trigMode)(trigThreshold)(readoutMode) \
                               (preSamples)(postSamples)(pmtHV)(baselineDAC)
       BOOST_PP_SEQ_FOR_EACH(WRAP_RW_RECASE, I3DEggStatus, DEGGSTATUS_VALS)
       #undef DEGGSTATUS_VALS
@@ -73,6 +73,16 @@ void register_I3DEggStatus()
     .export_values()
     ;
   def("identity", identity_<I3DEggStatus::DEggPMTTrigMode>);
+
+
+  // define the DEggReadoutMode enum
+  enum_<I3DEggStatus::DEggReadoutMode>("DEggReadoutMode")
+    .value("UnknownReadoutMode", I3DEggStatus::UnknownReadoutMode)
+    .value("FIXED_LENGTH", I3DEggStatus::FIXED_LENGTH)
+    .value("VARIABLE_LENGTH", I3DEggStatus::VARIABLE_LENGTH)
+    .export_values()
+    ;
+  def("identity", identity_<I3DEggStatus::DEggReadoutMode>);
 }
 
 

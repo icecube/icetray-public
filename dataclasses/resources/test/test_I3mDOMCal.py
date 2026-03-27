@@ -53,6 +53,7 @@ class TestI3mDOMCal(unittest.TestCase):
         template.pmt_transit_time_spread = 2.5 * I3Units.ns # [ns]
         template.hv_gain_relation.slope = 6.85      # [log(Gain) / log(V)]
         template.hv_gain_relation.intercept = -14.5 # [log(Gain)]
+        template.adc_baseline_rms = 2.5    # [Counts]
         template.adc_baseline_value = 3600 # [Counts]
         template.adc_baseline_dac = 13300  # [DAC]
         template.disc_threshold = 0.002 * I3Units.volt
@@ -72,6 +73,7 @@ class TestI3mDOMCal(unittest.TestCase):
         self.assertEqual(template.pmt_transit_time_spread, 2.5 * I3Units.ns)
         self.assertEqual(template.hv_gain_relation.slope, 6.85)
         self.assertEqual(template.hv_gain_relation.intercept, -14.5)
+        self.assertEqual(template.adc_baseline_rms, 2.5)
         self.assertEqual(template.adc_baseline_value, 3600)
         self.assertEqual(template.adc_baseline_dac, 13300) 
         self.assertEqual(template.disc_threshold, 0.002 * I3Units.volt)
@@ -133,6 +135,11 @@ class TestI3mDOMCal(unittest.TestCase):
         mc.hv_gain_relation.intercept = -23.
         self.assertEqual(mc.hv_gain_relation.slope, 5.67)
         self.assertEqual(mc.hv_gain_relation.intercept, -23.)
+
+        ### test ADC Baseline Uncertainty
+        self.assertEqual(mc.adc_baseline_rms, 2.5)
+        mc.adc_baseline_rms = 6.7
+        self.assertEqual(mc.adc_baseline_rms, 6.7)
 
         ### test ADC Baseline DAC/Value pair
         self.assertEqual(mc.adc_baseline_value, 3600)

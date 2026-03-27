@@ -6,7 +6,7 @@
  * Pybindings for I3PMTCal and I3PMTCalMap Classes
  *
  * @file I3PMTCal.cxx
- * @date 2025-08-21
+ * @date 2026-03-26
  * @author lbloom12
  *
  */
@@ -23,7 +23,7 @@ using namespace boost::python;
 void register_I3PMTCal()
 {
   class_<I3PMTCal, boost::shared_ptr<I3PMTCal> >("I3PMTCal")
-  #define I3PMTCAL_VALS (relativePmtEff)(noiseRate)
+  #define I3PMTCAL_VALS (relativePmtEff)(noiseRate)(speChargeDist)
   BOOST_PP_SEQ_FOR_EACH(WRAP_RW_RECASE, I3PMTCal, I3PMTCAL_VALS)
   #undef I3PMTCAL_VALS
   .def(dataclass_suite<I3PMTCal>())

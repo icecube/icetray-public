@@ -6,7 +6,7 @@
  * Serialization and Printing for I3PMTCal and I3PMTCalMap Classes
  *
  * @file I3PMTCal.cxx
- * @date 2025-08-21
+ * @date 2026-03-26
  * @author lbloom12
  *
  */
@@ -25,6 +25,10 @@ void I3PMTCal::serialize(Archive& ar, unsigned version)
 
   ar & make_nvp("relativePmtEff", relativePmtEff);
   ar & make_nvp("noiseRate", noiseRate);
+
+  if (version > 0) {
+      ar & make_nvp("speChargeDist", speChargeDist);
+  }
 }
 I3_SERIALIZABLE(I3PMTCal);
 
@@ -40,6 +44,7 @@ std::ostream& operator<<(std::ostream& oss, const I3PMTCal& c)
   oss << "[             I3PMTCal :: " << std::endl
       << "Relative PMT Efficiency : " << c.relativePmtEff << std::endl
       << "         PMT Noise Rate : " << c.noiseRate << std::endl
+      << " " << c.speChargeDist.Print() << std::endl
       << "]" ;
   return oss;
 }

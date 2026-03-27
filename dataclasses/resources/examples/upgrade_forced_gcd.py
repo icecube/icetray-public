@@ -44,9 +44,13 @@ output = args.outfile
 
 DEggCalTemplate = dataclasses.I3DEggCal()
 
-# best guesses
 DEggCalTemplate.temperature = (-40 + 273.0) * I3Units.kelvin # (-40 degrees Celsius)
-DEggCalTemplate.pmt_transit_time = 58 * I3Units.ns
+
+# from R5912-100 PMT Datasheet
+DEggCalTemplate.pmt_transit_time = 54 * I3Units.ns
+
+# from https://wiki.icecube.wisc.edu/index.php/D-Egg_MC_Inputs#ADC_baseline.2Fnoise
+DEggCalTemplate.adc_baseline_rms = 2.5 # [Counts]
 
 # from DEgg Paper
 DEggCalTemplate.linearity_params.p0 = 36.71 * I3Units.mA
@@ -78,6 +82,7 @@ DEggStatusTemplate.enabled = True # this PMT is sending readouts
 DEggStatusTemplate.trig_mode = dataclasses.I3DEggStatus.FIR # FIR trigger
 DEggStatusTemplate.trig_threshold = 12 # [Counts] spe threshold (0.25 PE)
 DEggStatusTemplate.fir_coefficients = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0]
+DEggStatusTemplate.readout_mode = dataclasses.I3DEggStatus.VARIABLE_LENGTH
 DEggStatusTemplate.pre_samples = 16
 DEggStatusTemplate.post_samples = 16
 DEggStatusTemplate.pmt_hv = 1600 * I3Units.volt # to get 1e7 gain
@@ -89,6 +94,8 @@ DEggStatusTemplate.baseline_dac = 30000 # [DAC] to get 8000 count baseline
 ########################################
 
 mDOMCalTemplate = dataclasses.I3mDOMCal()
+
+mDOMCalTemplate.adc_baseline_rms = 2.5 # [Counts]
 
 # from mDOM FAT (mDOM_D232_v1)
 mDOMCalTemplate.linearity_params.p0 = 700 # [PE]
@@ -115,6 +122,7 @@ mDOMStatusTemplate = dataclasses.I3mDOMStatus()
 mDOMStatusTemplate.enabled = True # this PMT is sending readouts
 mDOMStatusTemplate.trig_mode = dataclasses.I3mDOMStatus.Disc # Discriminator Trigger
 mDOMStatusTemplate.adc_threshold = 10 # [Counts]
+mDOMStatusTemplate.readout_mode = dataclasses.I3mDOMStatus.VARIABLE_LENGTH
 mDOMStatusTemplate.pre_samples = 16
 mDOMStatusTemplate.post_samples = 16
 mDOMStatusTemplate.pmt_hv = 85 * I3Units.volt # to get 1e7 gain
@@ -130,6 +138,18 @@ PMTCalTemplate = dataclasses.I3PMTCal()
 
 PMTCalTemplate.relative_pmt_eff = 1
 PMTCalTemplate.noise_rate = 5.5e-7 * (1/I3Units.ns) # [ns^-1]
+
+# SPE Charge Distribution fit parameters from the HamamatsuR15458_02PMT::defaultChargeDistribution() in:
+# https://github.com/icecube/icetray/blob/main/DOMLauncher/private/DOMLauncher/PMT.cxx
+PMTCalTemplate.spe_charge_dist.pdfs.append(dataclasses.SPEChargeDistribution.Exponential(amplitude = 6.89998311,
+                                                                                         width = 5.90687611e-03))
+PMTCalTemplate.spe_charge_dist.pdfs.append(dataclasses.SPEChargeDistribution.Exponential(amplitude = 4.72420342e-01,
+                                                                                         width = 2.48130571e-01))
+PMTCalTemplate.spe_charge_dist.pdfs.append(dataclasses.SPEChargeDistribution.Gaussian(amplitude = 8.08336816e-01,
+                                                                                      mean = 1.,
+                                                                                      sigma = 4.40735435e-01))
+PMTCalTemplate.spe_charge_dist.compensation_factor = 1.0
+                                           
 
 
 ########################################
@@ -205,7 +225,7 @@ def AddPMTCal(frame):
         if (omkey in DEgg_omkeys) or (omkey in mDOM_omkeys):
             pmt_cals[omkey] = PMTCalTemplate
             
-        # For existing IceCube PMTs, add the RDE and Noise Rate already in the GCD
+        # For existing IceCube PMTs, add the RDE, Noise Rate and SPE Charge Distribution parameters already in the GCD
         elif omkey in Gen1_omkeys:
             # not every DOM has a key in dom_cal, so skip these over
             if omkey not in all_dom_cal:
@@ -215,6 +235,7 @@ def AddPMTCal(frame):
             thisPMTCal = dataclasses.I3PMTCal()
             thisPMTCal.relative_pmt_eff = this_dom_cal.relative_dom_eff
             thisPMTCal.noise_rate = this_dom_cal.dom_noise_rate
+            thisPMTCal.spe_charge_dist = this_dom_cal.combined_spe_charge_distribution
             pmt_cals[omkey] = thisPMTCal
             
     frame['I3PMTCalibration'] = pmt_cals

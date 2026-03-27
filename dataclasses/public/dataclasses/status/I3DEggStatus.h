@@ -6,7 +6,7 @@
  * Definition of I3DEggStatus and I3DEggStatusMap Classes
  *
  * @file I3DEggStatus.h
- * @date 2025-08-21
+ * @date 2026-03-26
  * @author lbloom12
  *
  */
@@ -22,7 +22,7 @@
 #include <dataclasses/external/CompareFloatingPoint.h>
 
 
-static const unsigned i3deggstatus_version_ = 0;
+static const unsigned i3deggstatus_version_ = 1;
 
 
 struct I3DEggStatus {
@@ -64,6 +64,17 @@ struct I3DEggStatus {
    * https://uwprod.sharepoint.com/:w:/r/sites/icecubeupgrade/_layouts/15/Doc.aspx?sourcedoc=%7B7890b5f7-e337-4973-8d57-517a5e04bb02%7D&action=view&wdAccPdf=0&wdparaid=77FCD26
    */
   int8_t firCoefficients[16];
+
+  /**
+   * The DEgg PMT can readout its collected data with either a fixed number of samples in a launch
+   * or with a variable number of samples in a launch (configured with preSamples & postSamples)
+   */
+  enum DEggReadoutMode { UnknownReadoutMode = -1 , FIXED_LENGTH = 0, VARIABLE_LENGTH = 1 };
+
+  /**
+   * The readout mode for launches from this PMT
+   */
+  DEggReadoutMode readoutMode;
   
   /**
    * number of samples included in the readout BEFORE the sample that was triggered (preSamples)
@@ -92,6 +103,7 @@ struct I3DEggStatus {
     enabled(true),
     trigMode(UnknownTrigMode),
     trigThreshold(0),
+    readoutMode(UnknownReadoutMode),
     preSamples(0),
     postSamples(0),
     pmtHV(NAN),
@@ -121,6 +133,7 @@ struct I3DEggStatus {
             trigMode == rhs.trigMode &&
             trigThreshold == rhs.trigThreshold &&
             firCoefficients_equal &&
+            readoutMode == rhs.readoutMode &&
             preSamples == rhs.preSamples &&
             postSamples == rhs.postSamples &&
             CompareFloatingPoint::Compare_NanEqual(pmtHV, rhs.pmtHV) &&
@@ -132,9 +145,14 @@ struct I3DEggStatus {
   }
 
 
-  
-  // allow for a printing function for the firCoefficients array of integers
+  // A printing function for the firCoefficients array of integers
   std::string PrintFIRCoefficients() const;
+
+  // A printing function to display the DEggPMTTrigMode member assigned to trigMode as a string
+  std::string PrintTrigMode() const;
+
+  // A printing function to display the DEggReadoutMode member assigned to readoutMode as a string
+  std::string PrintReadoutMode() const;
   
  
   // set up serialization

@@ -6,7 +6,7 @@
  * Serialization and Printing for I3mDOMStatus and I3mDOMStatusMap Classes
  *
  * @file I3mDOMStatus.cxx
- * @date 2025-10-14
+ * @date 2026-03-26
  * @author lbloom12
  *
  */
@@ -35,6 +35,9 @@ void I3mDOMStatus::serialize (Archive& ar, const unsigned version)
   ar & make_nvp("adcBaselineDAC", adcBaselineDAC);
   ar & make_nvp("discDAC", discDAC);
 
+  if (version > 0) {
+      ar & make_nvp("readoutMode", readoutMode);
+  }
 }
 I3_SERIALIZABLE(I3mDOMStatus);
 
@@ -43,14 +46,35 @@ I3_SERIALIZABLE(I3mDOMStatus);
 I3_SERIALIZABLE(I3mDOMStatusMap);
 
 
+// define a printing function for the trigMode
+std::string I3mDOMStatus::PrintTrigMode() const {
+    switch (trigMode) {
+        case I3mDOMStatus::ADC:  return "ADC";
+        case I3mDOMStatus::Disc: return "Discriminator";
+        default:                 return "UnknownTrigMode";
+    }
+}
+
+
+// define a printing function for the readoutMode
+std::string I3mDOMStatus::PrintReadoutMode() const {
+    switch (readoutMode) {
+        case I3mDOMStatus::FIXED_LENGTH:    return "FIXED_LENGTH";
+        case I3mDOMStatus::VARIABLE_LENGTH: return "VARIABLE_LENGTH";
+        default:                            return "UnknownReadoutMode";
+    }
+}
+
+
 // define the printing operator for I3mDOMStatus
 // for a better output than the address of the object
 std::ostream& operator<<(std::ostream& oss, const I3mDOMStatus& s)
 {
   oss << "[       I3mDOMStatus :: " << std::endl
       << "          PMT enabled : " << s.enabled << std::endl
-      << "     PMT Trigger Mode : " << s.trigMode << std::endl
+      << "     PMT Trigger Mode : " << s.PrintTrigMode() << std::endl
       << "ADC Trigger Threshold : " << s.adcThreshold << std::endl
+      << "         Readout Mode : " << s.PrintReadoutMode() << std::endl
       << "  Samples Pre-Trigger : " << +s.preSamples << std::endl
       << " Samples Post-Trigger : " << +s.postSamples << std::endl
       << "               PMT HV : " << s.pmtHV << std::endl

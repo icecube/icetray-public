@@ -78,6 +78,7 @@ class TestI3DEggCal(unittest.TestCase):
         template.pmt_transit_time_spread = 2.89 * I3Units.ns
         template.hv_gain_relation.slope = 6.25    # [log(Gain) / log(V)]
         template.hv_gain_relation.intercept = -30 # [log(Gain)]
+        template.adc_baseline_rms = 2.5 # [Counts]
         template.dac_baseline_relation.slope = 4/15  # [Counts / DAC]
         template.dac_baseline_relation.intercept = 0 # [Counts]
         template.tau_params.p0 = 4.9 * I3Units.microsecond
@@ -97,6 +98,7 @@ class TestI3DEggCal(unittest.TestCase):
         self.assertEqual(template.pmt_transit_time_spread, 2.89 * I3Units.ns)
         self.assertEqual(template.hv_gain_relation.slope, 6.25)
         self.assertEqual(template.hv_gain_relation.intercept, -30)
+        self.assertEqual(template.adc_baseline_rms, 2.5)
         self.assertEqual(template.dac_baseline_relation.slope, 4/15)
         self.assertEqual(template.dac_baseline_relation.intercept, 0)
         self.assertEqual(template.tau_params.p0, 4.9 * I3Units.microsecond)
@@ -162,6 +164,11 @@ class TestI3DEggCal(unittest.TestCase):
         dc.hv_gain_relation.intercept = -23.
         self.assertEqual(dc.hv_gain_relation.slope, 5.67)
         self.assertEqual(dc.hv_gain_relation.intercept, -23.)
+
+        ### test ADC Baseline Uncertainty
+        self.assertEqual(dc.adc_baseline_rms, 2.5)
+        dc.adc_baseline_rms = 6.7
+        self.assertEqual(dc.adc_baseline_rms, 6.7)
 
         ### test dac baseline relation
         self.assertEqual(dc.dac_baseline_relation.slope, 4/15)

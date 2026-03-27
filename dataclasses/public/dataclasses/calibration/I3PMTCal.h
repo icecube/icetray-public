@@ -6,7 +6,7 @@
  * Definition of the Generic Calibration Class
  *
  * @file I3PMTCal.h
- * @date 2025-08-21
+ * @date 2026-03-26
  * @author lbloom12
  *
  */
@@ -18,8 +18,9 @@
 #include <icetray/OMKey.h>
 #include <dataclasses/I3Map.h>
 #include <dataclasses/external/CompareFloatingPoint.h>
+#include <dataclasses/calibration/SPEChargeDistribution.h>
 
-static const unsigned i3pmt_calibration_version_ = 0;
+static const unsigned i3pmt_calibration_version_ = 1;
 
 
 /**
@@ -39,12 +40,21 @@ struct I3PMTCal {
    */
   double noiseRate;
 
+  /**
+   * The fit parameters for the Single Photoelectron (SPE) distribution of charge.
+   * The SPEChargeDistribution type allows for an arbitrary number of exponential and
+   * gaussian PDFs to be included upon initialization.
+   * See /dataclasses/resources/docs/spechargedistribution.rst for documentation
+   */
+  SPEChargeDistribution speChargeDist;
+
 
 
   // Comparison operators
   bool operator==(const I3PMTCal& rhs) const {
     return (CompareFloatingPoint::Compare_NanEqual(relativePmtEff, rhs.relativePmtEff) &&
-    CompareFloatingPoint::Compare_NanEqual(noiseRate, rhs.noiseRate));
+    CompareFloatingPoint::Compare_NanEqual(noiseRate, rhs.noiseRate) &&
+    speChargeDist == rhs.speChargeDist);
   }
   bool operator!=(const I3PMTCal& rhs) const {
     return !operator==(rhs);

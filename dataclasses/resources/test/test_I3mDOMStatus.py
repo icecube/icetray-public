@@ -30,6 +30,7 @@ class TestI3mDOMStatus(unittest.TestCase):
         ### populate with non-constructor values
         template.trig_mode = dataclasses.I3mDOMStatus.Disc
         template.adc_threshold = 0
+        template.readout_mode = dataclasses.I3mDOMStatus.VARIABLE_LENGTH
         template.pre_samples = 16
         template.post_samples = 16
         template.pmt_hv = 85 # [V]
@@ -40,6 +41,7 @@ class TestI3mDOMStatus(unittest.TestCase):
         self.assertEqual(template.enabled, True)
         self.assertEqual(template.trig_mode, dataclasses.I3mDOMStatus.Disc)
         self.assertEqual(template.adc_threshold, 0)
+        self.assertEqual(template.readout_mode, dataclasses.I3mDOMStatus.VARIABLE_LENGTH)
         self.assertEqual(template.pre_samples, 16)
         self.assertEqual(template.post_samples, 16)
         self.assertEqual(template.pmt_hv, 85)
@@ -81,6 +83,11 @@ class TestI3mDOMStatus(unittest.TestCase):
         self.assertEqual(ms.adc_threshold, 0)
         ms.adc_threshold = 34
         self.assertEqual(ms.adc_threshold, 34)
+
+        ### test readout mode
+        self.assertEqual(ms.readout_mode, dataclasses.I3mDOMStatus.VARIABLE_LENGTH)
+        ms.readout_mode = dataclasses.I3mDOMStatus.FIXED_LENGTH
+        self.assertEqual(ms.readout_mode, dataclasses.I3mDOMStatus.FIXED_LENGTH)
 
         ### test pre samples
         self.assertEqual(ms.pre_samples, 16)

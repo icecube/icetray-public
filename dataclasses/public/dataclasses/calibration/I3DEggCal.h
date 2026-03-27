@@ -6,7 +6,7 @@
  * Definition of I3DEggCal Class
  *
  * @file I3DEggCal.h
- * @date 2026-2-6
+ * @date 2026-3-27
  * @author lbloom12
  *
  */
@@ -22,7 +22,7 @@
 
 
 static const unsigned linearity_params_version_ = 0;
-static const unsigned i3degg_calibration_version_ = 1;
+static const unsigned i3degg_calibration_version_ = 2;
 
 
 
@@ -71,8 +71,6 @@ I3_CLASS_VERSION(LinearityParameters, linearity_params_version_);
 
 
 
-
-
 /**
  * @brief A struct to hold the DEgg PMT Calibration parameters
  */
@@ -97,16 +95,22 @@ struct I3DEggCal {
     /// the slope and intercept of:   log(gain) = m*log(HV) + b
     LinearFit hvGainRelation;
 
-    /// Time offset between the start of a pulse and when the photon initially hit the PMT
+    /// (ns) Time offset between the start of a pulse and when the photon initially hit the PMT
     double pmtTransitTime;
 
-    /// variance of the transit time distribution about the mean
+    /// (ns) variance of the transit time distribution about the mean
     double pmtTransitTimeSpread;
+
+    /**
+     * the uncertainty in the waveform baseline, measured in ADC Counts.
+     * see: https://wiki.icecube.wisc.edu/index.php/D-Egg_MC_Inputs#ADC_baseline.2Fnoise
+     */
+    double adcBaselineRMS;
 
     /// the slope and intercept of:   ADC baseline = m*(DAC setting) + b
     LinearFit dacBaselineRelation;
 
-    /// temperature of the Mainboard
+    /// (Kelvin) temperature of the Mainboard
     double temperature;
 
     /**
@@ -131,14 +135,13 @@ struct I3DEggCal {
     TauParam tauParams;
   
 
-
-
     // Comparison operators
     bool operator==(const I3DEggCal& rhs) const {
         return (linearityParams == rhs.linearityParams &&
         hvGainRelation == rhs.hvGainRelation &&
         CompareFloatingPoint::Compare_NanEqual(pmtTransitTime, rhs.pmtTransitTime) &&
         CompareFloatingPoint::Compare_NanEqual(pmtTransitTimeSpread, rhs.pmtTransitTimeSpread) &&
+        CompareFloatingPoint::Compare_NanEqual(adcBaselineRMS, rhs.adcBaselineRMS) &&
         dacBaselineRelation == rhs.dacBaselineRelation &&
         CompareFloatingPoint::Compare_NanEqual(temperature, rhs.temperature) &&
         tauParams == rhs.tauParams);
@@ -164,6 +167,7 @@ struct I3DEggCal {
       {
         pmtTransitTime = NAN;
         pmtTransitTimeSpread = NAN;
+        adcBaselineRMS = NAN;
         temperature = NAN;
     }
 

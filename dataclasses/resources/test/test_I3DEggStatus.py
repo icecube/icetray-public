@@ -31,6 +31,7 @@ class TestI3DEggStatus(unittest.TestCase):
         template.trig_mode = dataclasses.I3DEggStatus.FIR
         template.trig_threshold = 12 # [Counts]
         template.fir_coefficients = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0]
+        template.readout_mode = dataclasses.I3DEggStatus.VARIABLE_LENGTH
         template.pre_samples = 16
         template.post_samples = 16
         template.pmt_hv = 1600 # [V]
@@ -41,6 +42,7 @@ class TestI3DEggStatus(unittest.TestCase):
         self.assertEqual(template.trig_mode, dataclasses.I3DEggStatus.FIR)
         self.assertEqual(template.trig_threshold, 12)
         self.assertEqual(template.fir_coefficients, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0])
+        self.assertEqual(template.readout_mode, dataclasses.I3DEggStatus.VARIABLE_LENGTH)
         self.assertEqual(template.pre_samples, 16)
         self.assertEqual(template.post_samples, 16)
         self.assertEqual(template.pmt_hv, 1600)
@@ -86,6 +88,11 @@ class TestI3DEggStatus(unittest.TestCase):
         self.assertEqual(ds.fir_coefficients, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0])
         ds.fir_coefficients = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
         self.assertEqual(ds.fir_coefficients, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+
+        ### test readout mode
+        self.assertEqual(ds.readout_mode, dataclasses.I3DEggStatus.VARIABLE_LENGTH)
+        ds.readout_mode = dataclasses.I3DEggStatus.FIXED_LENGTH
+        self.assertEqual(ds.readout_mode, dataclasses.I3DEggStatus.FIXED_LENGTH)
 
         ### test pre samples
         self.assertEqual(ds.pre_samples, 16)

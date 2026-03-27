@@ -6,7 +6,7 @@
  * Definition of I3mDOMStatus Class
  *
  * @file I3mDOMStatus.h
- * @date 2025-10-14
+ * @date 2026-03-26
  * @author lbloom12
  *
  */
@@ -22,7 +22,7 @@
 #include <dataclasses/external/CompareFloatingPoint.h>
 
 
-static const unsigned i3mdomstatus_version_ = 0;
+static const unsigned i3mdomstatus_version_ = 1;
 
 
 
@@ -59,6 +59,17 @@ struct I3mDOMStatus {
   uint16_t adcThreshold;
 
   /**
+   * The mDOM PMT can readout its collected data with either a fixed number of samples in a launch
+   * or with a variable number of samples in a launch (configured with preSamples & postSamples)
+   */
+  enum mDOMReadoutMode { UnknownReadoutMode = -1 , FIXED_LENGTH = 0, VARIABLE_LENGTH = 1 };
+
+  /**
+   * The readout mode for launches from this PMT
+   */
+  mDOMReadoutMode readoutMode;
+
+  /**
    * number of samples included in the readout BEFORE the sample that was triggered (preSamples)
    * number of samples included in the readout AFTER the trigger condition is no longer satisfied (postSamples)
   */
@@ -90,6 +101,7 @@ struct I3mDOMStatus {
     enabled(true),
     trigMode(UnknownTrigMode),
     adcThreshold(0),
+    readoutMode(UnknownReadoutMode),
     preSamples(0),
     postSamples(0),
     pmtHV(NAN),
@@ -105,6 +117,7 @@ struct I3mDOMStatus {
     return (enabled == rhs.enabled &&
             trigMode == rhs.trigMode &&
             adcThreshold == rhs.adcThreshold &&
+            readoutMode == rhs.readoutMode &&
             preSamples == rhs.preSamples &&
             postSamples == rhs.postSamples &&
             CompareFloatingPoint::Compare_NanEqual(pmtHV, rhs.pmtHV) &&
@@ -115,6 +128,13 @@ struct I3mDOMStatus {
   {
     return !operator==(rhs);
   }
+
+
+  // A printing function to display the mDOMPMTTrigMode member assigned to trigMode as a string
+  std::string PrintTrigMode() const;
+
+  // A printing function to display the mDOMReadoutMode member assigned to readoutMode as a string
+  std::string PrintReadoutMode() const;
 
 
   // set up serialization

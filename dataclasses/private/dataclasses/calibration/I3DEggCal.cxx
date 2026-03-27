@@ -7,7 +7,7 @@
  * I3DEggCal, and I3DEggCalMap Classes
  *
  * @file I3DEggCal.cxx
- * @date 2026-2-6
+ * @date 2026-3-27
  * @author lbloom12
  *
  */
@@ -60,6 +60,10 @@ void I3DEggCal::serialize(Archive& ar, unsigned version)
   ar & make_nvp("dacBaselineRelation", dacBaselineRelation);
   ar & make_nvp("temperature", temperature);
   ar & make_nvp("tauParams", tauParams);
+
+  if (version > 1) {
+      ar & make_nvp("adcBaselineRMS", adcBaselineRMS);
+  }
 }
 I3_SERIALIZABLE(I3DEggCal);
 
@@ -93,6 +97,7 @@ std::ostream& operator<<(std::ostream& oss, const I3DEggCal& c)
       << "         HV-Gain Fit : " << c.hvGainRelation << std::endl
       << "    PMT Transit Time : " << c.pmtTransitTime << std::endl
       << " Transit Time Spread : " << c.pmtTransitTimeSpread << std::endl
+      << "        Baseline RMS : " << c.adcBaselineRMS << std::endl
       << "    DAC-Baseline Fit : " << c.dacBaselineRelation << std::endl
       << "Droop Tau Parameters : " << c.tauParams << std::endl
       << "]" ;

@@ -7,7 +7,7 @@
  * I3DEggCal, and I3DEggCalMap Classes
  *
  * @file I3DEggCal.cxx
- * @date 2025-10-23
+ * @date 2026-3-27
  * @author lbloom12
  *
  */
@@ -41,8 +41,8 @@ void register_I3DEggCal()
 
   // ...to read/write all non-constant values
   #define I3DEGGCAL_VALS (linearityParams)(hvGainRelation)(pmtTransitTime) \
-                         (pmtTransitTimeSpread)(dacBaselineRelation)       \
-                         (temperature)(tauParams)
+                         (pmtTransitTimeSpread)(adcBaselineRMS)            \
+                         (dacBaselineRelation)(temperature)(tauParams)
   BOOST_PP_SEQ_FOR_EACH(WRAP_RW_RECASE, I3DEggCal, I3DEGGCAL_VALS)
   #undef I3DEGGCAL_VALS
 

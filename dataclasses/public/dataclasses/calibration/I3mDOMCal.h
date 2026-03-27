@@ -6,7 +6,7 @@
  * Definition of I3mDOMCal Class
  *
  * @file I3mDOMCal.h
- * @date 2026-2-6
+ * @date 2026-3-27
  * @author lbloom12
  *
  */
@@ -20,7 +20,7 @@
 #include <dataclasses/calibration/I3DEggCal.h>
 
 
-static const unsigned i3mdom_calibration_version_ = 1;
+static const unsigned i3mdom_calibration_version_ = 2;
 
 
 /**
@@ -57,6 +57,9 @@ struct I3mDOMCal {
     /// (ns) variance of the transit time distribution about the mean
     double pmtTransitTimeSpread;
 
+    /// the uncertainty in the waveform baseline, measured in ADC Counts.
+    double adcBaselineRMS;
+
     /**
      * Since the DAC has significant hysteresis, the Baseline/DAC calibration will
      * simply set the DAC to the appropriate value to get the desired ADC baseline.
@@ -89,13 +92,13 @@ struct I3mDOMCal {
     }
 
 
-
     // Comparison operators
     bool operator==(const I3mDOMCal& rhs) const {
         return (linearityParams == rhs.linearityParams &&
         hvGainRelation == rhs.hvGainRelation &&
         CompareFloatingPoint::Compare_NanEqual(pmtTransitTime, rhs.pmtTransitTime) &&
         CompareFloatingPoint::Compare_NanEqual(pmtTransitTimeSpread, rhs.pmtTransitTimeSpread) &&
+        CompareFloatingPoint::Compare_NanEqual(adcBaselineRMS, rhs.adcBaselineRMS) &&
         CompareFloatingPoint::Compare_NanEqual(adcBaselineValue, rhs.adcBaselineValue) &&
         adcBaselineDAC == rhs.adcBaselineDAC &&
         CompareFloatingPoint::Compare_NanEqual(discThreshold, rhs.discThreshold) &&
@@ -116,6 +119,7 @@ struct I3mDOMCal {
     {
         pmtTransitTime = NAN;
         pmtTransitTimeSpread = NAN;
+        adcBaselineRMS = NAN;
         adcBaselineValue = NAN;
         adcBaselineDAC = 0;
         discThreshold = NAN;

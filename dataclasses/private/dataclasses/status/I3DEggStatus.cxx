@@ -6,7 +6,7 @@
  * Serialization and Printing for I3DEggStatus and I3DEggStatusMap Classes
  *
  * @file I3DEggStatus.cxx
- * @date 2025-08-21
+ * @date 2026-03-26
  * @author lbloom12
  *
  */
@@ -35,6 +35,10 @@ void I3DEggStatus::serialize (Archive& ar, const unsigned version)
   ar & make_nvp("pmtHV", pmtHV);
   ar & make_nvp("baselineDAC", baselineDAC);
 
+  if (version > 0) {
+      ar & make_nvp("readoutMode", readoutMode);
+  }
+
 }
 I3_SERIALIZABLE(I3DEggStatus);
 
@@ -58,15 +62,36 @@ std::string I3DEggStatus::PrintFIRCoefficients() const {
 }
 
 
+// define a printing function for the trigMode
+std::string I3DEggStatus::PrintTrigMode() const {
+    switch (trigMode) {
+        case I3DEggStatus::ADC: return "ADC";
+        case I3DEggStatus::FIR: return "FIR";
+        default:                return "UnknownTrigMode";
+    }
+}
+
+
+// define a printing function for the readoutMode
+std::string I3DEggStatus::PrintReadoutMode() const {
+    switch (readoutMode) {
+        case I3DEggStatus::FIXED_LENGTH:    return "FIXED_LENGTH";
+        case I3DEggStatus::VARIABLE_LENGTH: return "VARIABLE_LENGTH";
+        default:                            return "UnknownReadoutMode";
+    }
+}
+
+
 // define the printing operator for I3DEggStatus
 // for a better output than the address of the object
 std::ostream& operator<<(std::ostream& oss, const I3DEggStatus& s)
 {
   oss << "[      I3DEggStatus :: " << std::endl
       << "         PMT enabled : " << s.enabled << std::endl
-      << "    PMT Trigger Mode : " << s.trigMode << std::endl
+      << "    PMT Trigger Mode : " << s.PrintTrigMode() << std::endl
       << "   Trigger Threshold : " << s.trigThreshold << std::endl
       << "    FIR Coefficients : " << s.PrintFIRCoefficients() << std::endl
+      << "        Readout Mode : " << s.PrintReadoutMode() << std::endl
       << " Samples Pre-Trigger : " << +s.preSamples << std::endl
       << "Samples Post-Trigger : " << +s.postSamples << std::endl
       << "              PMT HV : " << s.pmtHV << std::endl
