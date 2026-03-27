@@ -7,6 +7,7 @@
  *
  */
 
+#include "dataclasses/ModuleKey.h"
 #include <icetray/I3Module.h>
 #include <icetray/I3Units.h>
 #include <dataclasses/geometry/I3Geometry.h>
@@ -16,8 +17,6 @@
 #include <dataclasses/I3Time.h>
 #include <dataclasses/I3Double.h>
 #include <dataclasses/I3Orientation.h>
-
-#include <boost/foreach.hpp>
 
 /**
  * @brief Splits an I3Geometry object into its
@@ -111,7 +110,14 @@ I3GeometryDecomposer::Geometry(I3FramePtr frame)
     frame->Put("StartTime",     I3TimePtr         (new I3Time         (geometry->startTime )));
     frame->Put("EndTime",       I3TimePtr         (new I3Time         (geometry->endTime   )));
 
-    frame->Put("Subdetectors",  GenerateSubdetectorMap(geometry->omgeo));
+    I3MapModuleKeyStringPtr mod2type = GenerateSubdetectorMap(geometry->omgeo);
+    I3MapStringModuleKeysPtr type2mod(new I3MapStringModuleKeys());
+    for (const auto& pair : *mod2type)
+    {
+      (*type2mod)[pair.second].push_back(pair.first);
+    }
+    frame->Put("Subdetectors",  mod2type);
+    frame->Put("SubModuleKeys",  type2mod);
 
     const double bedrockDepth = 2810.*I3Units::m;
     const double icecubeCenterDepth = 1948.07*I3Units::m;
@@ -135,7 +141,7 @@ I3GeometryDecomposer::GenerateSubdetectorMap(const I3OMGeoMap &omgeo) const
 {
     I3MapModuleKeyStringPtr output(new I3MapModuleKeyString());
 
-    BOOST_FOREACH(const I3OMGeoMap::value_type &pair, omgeo)
+    for (const auto& pair: omgeo)
     {
         const OMKey &input_key = pair.first;
         const ModuleKey key(input_key.GetString(), input_key.GetOM());
@@ -168,7 +174,7 @@ I3GeometryDecomposer::GenerateSubdetectorMap(const I3OMGeoMap &omgeo) const
             continue;
         }
 
-        if (key.GetString() <= 93) {
+        if (key.GetString() <= 92) {
             (*output)[key] = "Upgrade";
             continue;
         }
@@ -188,7 +194,7 @@ I3GeometryDecomposer::GenerateI3ModuleGeo(const I3OMGeoMap &omgeo) const
     I3ModuleGeoMapPtr output(new I3ModuleGeoMap());
     std::map<ModuleKey, unsigned> npmts;
 
-    BOOST_FOREACH(const I3OMGeoMap::value_type &pair, omgeo)
+    for (const auto& pair: omgeo)
     {
         const OMKey &input_key = pair.first;
         const I3OMGeo &input_geo = pair.second;

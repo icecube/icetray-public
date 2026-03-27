@@ -84,4 +84,9 @@ register_ModuleKey()
     ;
   register_pointer_conversions<I3MapModuleKeyString>();
 
+  class_<I3MapStringModuleKeys, bases<I3FrameObject>, I3MapStringModuleKeysPtr>("I3MapStringModuleKeys")
+    .def(dataclass_suite<I3MapStringModuleKeys>())
+    ;
+  register_pointer_conversions<I3MapStringModuleKeys>();
+
 }

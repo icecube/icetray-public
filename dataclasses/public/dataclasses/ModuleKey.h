@@ -161,6 +161,8 @@ std::istream& operator>>(std::istream&, ModuleKey&);
 I3_POINTER_TYPEDEFS(ModuleKey);
 
 typedef I3Map<ModuleKey, std::string> I3MapModuleKeyString;
+typedef I3Map<std::string, std::vector<ModuleKey>> I3MapStringModuleKeys;
+I3_POINTER_TYPEDEFS(I3MapStringModuleKeys);
 I3_POINTER_TYPEDEFS(I3MapModuleKeyString);
 
 #endif //MODULEKEY_H_INCLUDED
