@@ -159,6 +159,16 @@ do_pyshell(char* argv[], Model& model, View& view){
     bp::dict options;
     options["user_ns"] = ns; // need this for first invocation
     ipython_embed.attr("start_ipython")(*arguments,**options);
+    try{
+      bp::object ishell_mod=bp::import("IPython.terminal.interactiveshell");
+      bp::object ishell_class=ishell_mod.attr("TerminalInteractiveShell");
+      ishell_class.attr("clear_instance")();
+    }
+    catch(bp::error_already_set& e){
+      std::cout << "Clearing IPython interactive shell instance failed" << std::endl;
+      PyErr_Print();
+      PyErr_Clear();
+    }
   }
   catch( bp::error_already_set& e ){
     log_warn("Unable to load IPython");
