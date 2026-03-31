@@ -25,6 +25,7 @@
 #include <icetray/I3Units.h>
 #include <icetray/OMKey.h>
 #include <icetray/serialization.h>
+#include <dataclasses/calibration/I3mDOMCal.h>
 
 static const unsigned int i3mdomlaunch_version_ = 0;
 
@@ -55,13 +56,11 @@ class I3mDOMLaunch
   class TOTHit
   {
    public:
-    static const double SAMPLING_RATE;
-
 
     TOTHit() : time_(NAN), tot_(NAN) {}
     TOTHit(double time, double tot) : time_(time), tot_(tot) {}
     TOTHit(unsigned int time, unsigned int tot,
-           double samplingRate=SAMPLING_RATE)
+           double samplingRate=I3mDOMCal::discSampleRate)
      : time_(time / samplingRate), tot_(tot / samplingRate) {}
 
     // implicit destructor, copy constructor, copy assignment,
@@ -120,7 +119,6 @@ class I3mDOMLaunch
     DISCRIMINATOR=3,
     EXTERNAL=4
   };
-
 
   /** Default constructor.
    */
@@ -211,6 +209,11 @@ class I3mDOMLaunch
    * @return ADC data.
    */
   const std::vector<int>& GetADCData() const { return launch_.GetADCData(); }
+  /** Return the time for each ADC sample
+   * 
+   * @return time vector (one element per sample).
+   */
+  std::vector<double> GetADCSampleTimes() const { return launch_.GetADCSampleTimes(1./I3mDOMCal::sampleRate); }
   /** Set the delta-compressed ADC data/waveform.
    *
    * The typical caller of this method is the 'payload parsing' that

@@ -156,9 +156,9 @@ The number of ADC samples recorded before the trigger (configurable).
 A vector of :cpp:class:`TOTHit` instances gives a simplified representation of
 the 960 MHz discriminator waveform. Each :cpp:class:`TOTHit` represents a
 single *low-to-high* crossing of the discriminator threshold, and has two
-members; ``Time`` (the start time of the discriminator waveform) and ``TOT``
-(*time-over-threshold*, e.g. the time of the *low-to-high* threshold crossing
-in the discriminator waveform).
+members; ``Time`` (the time that the discriminator threshold is crossed in the leading edge) and ``TOT``
+(*time-over-threshold*, e.g. the time duration the discriminator remains over threshold). These two 
+variables thus give the transition times of the discriminator logic waveform.
 
 **FEXResult**
 

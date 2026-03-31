@@ -15,6 +15,7 @@
 #include <icetray/I3PointerTypedefs.h>
 #include <icetray/OMKey.h>
 #include <icetray/serialization.h>
+#include <dataclasses/calibration/I3DEggCal.h>
 
 
 static const unsigned int i3degglaunch_version_ = 0;
@@ -27,6 +28,7 @@ static const unsigned int i3degglaunch_version_ = 0;
 class I3DEggLaunch
 {
  public:
+
   /** Default constructor.
    */
   I3DEggLaunch() : launch_() {}
@@ -101,6 +103,11 @@ class I3DEggLaunch
    * @return ADC data.
    */
   const std::vector<int>& GetADCData() const { return launch_.GetADCData(); }
+  /** Return the time for each ADC sample
+   * 
+   * @return time vector (one element per sample).
+   */
+  std::vector<double> GetADCSampleTimes() const { return launch_.GetADCSampleTimes(1./I3DEggCal::sampleRate); }
   /** Set the delta-compressed ADC data/waveform.
    *
    * The typical caller of this method is the 'payload parsing' that

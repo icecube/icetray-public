@@ -186,5 +186,28 @@ I3XDOMLaunch::operator==(const I3XDOMLaunch& rhs) const {
   return retVal;
 }
 
+std::vector<double> I3XDOMLaunch::GetADCSampleTimes(double clockCycle) const {
+  /*
+    This function is used to get the time of each waveform sample (e.g. GetADCData()). 
+    This is useful for comparing the waveform to other things during validation, such as input pulse times.
+  */
+
+  // Start from the launch time
+  double launchTime = GetValidTime();
+
+  // Subtract pre-samples to get waveform start time
+  double adcStartTime = launchTime - ((double)GetNPreSamples() * clockCycle);
+
+  // Make a vector of sample times, incrementing each time by the clock cycle
+  unsigned int numSamples = GetADCData().size();
+  std::vector<double> sampleTimes(numSamples);
+  double t = adcStartTime;
+  for(unsigned int i=0 ; i < numSamples ; ++i) {
+    sampleTimes[i] = t;
+    t += clockCycle;
+  }
+
+  return sampleTimes;
+}
 
 I3_SPLIT_SERIALIZABLE(I3XDOMLaunch);

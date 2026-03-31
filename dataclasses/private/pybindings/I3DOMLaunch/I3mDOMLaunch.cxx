@@ -50,6 +50,7 @@ void register_I3mDOMLaunch()
         .add_property("trigger_type", &I3mDOMLaunch::GetTriggerType, make_function(&I3mDOMLaunch::SetTriggerType, return_internal_reference<>()))
 
         .add_property("adc_data", make_function(get_adc_data, return_internal_reference<>()), make_function(I3mDOMLaunch_SetADCDataWrapper, return_internal_reference<>()) )
+        .def_readonly("adc_sample_times", &I3mDOMLaunch::GetADCSampleTimes)
 
         .add_property("tot_hits", make_function(get_tot_hits, return_internal_reference<>())) // Currently no setter here, instead user should edit the returned object
 

@@ -47,6 +47,7 @@ void register_I3DEggLaunch()
         .add_property("n_presamples", &I3DEggLaunch::GetNPreSamples, make_function(&I3DEggLaunch::SetNPreSamples, return_internal_reference<>()))
 
         .add_property("adc_data", make_function(get_adc_data, return_internal_reference<>()), make_function(I3DEggLaunch_SetADCDataWrapper, return_internal_reference<>()) )
+        .def_readonly("adc_sample_times", &I3DEggLaunch::GetADCSampleTimes)
 
         .def(self == self)
         .def(dataclass_suite<I3DEggLaunch>())

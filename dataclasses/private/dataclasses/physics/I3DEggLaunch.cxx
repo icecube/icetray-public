@@ -7,7 +7,7 @@
 
 #include <dataclasses/external/CompareFloatingPoint.h>
 #include <dataclasses/physics/I3DEggLaunch.h>
-
+#include <icetray/I3Units.h>
 
 template <class Archive>
 void I3DEggLaunch::serialize(Archive& ar, unsigned int version) {

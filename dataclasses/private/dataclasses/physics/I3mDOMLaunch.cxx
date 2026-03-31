@@ -9,12 +9,6 @@
 #include <dataclasses/physics/I3mDOMLaunch.h>
 #include <icetray/I3Units.h>
 
-
-// xDOMApp Reference Manual:
-// "The mDOM FPGA samples the discriminator logic level at 960 MHz"
-const double I3mDOMLaunch::TOTHit::SAMPLING_RATE = 960 * I3Units::megahertz;
-
-
 template <class Archive>
 void I3mDOMLaunch::TOTHit::serialize(Archive& ar, unsigned int version) {
   if (version > i3mdomlaunch_version_) {

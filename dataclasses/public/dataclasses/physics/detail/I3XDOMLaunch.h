@@ -149,6 +149,11 @@ class I3XDOMLaunch
    * @return ADC data.
    */
   const std::vector<int>& GetADCData() const;
+  /** Return the time for each ADC sample
+   * 
+   * @return time vector (one element per sample).
+   */
+  std::vector<double> GetADCSampleTimes(double clockCycle) const;
   /** Set the delta-compressed ADC data/waveform.
    *
    * The typical caller of this method is the 'payload parsing' that
