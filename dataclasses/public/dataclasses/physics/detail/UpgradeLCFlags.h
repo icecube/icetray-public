@@ -17,7 +17,7 @@
 #include <cstdint>
 #include <bitset>
 
-enum class UpgradeLCFlags : std::uint8_t {
+enum UpgradeLCFlags : std::uint8_t {
   NoLC = 0,                  // Either no LC is set or no LC conditions satisfied
   OnboardLC = (1 << 0),      // Onboard noise suppression LC for mDOMs
   SingleModuleLC = (1 << 1), // Offline LC with multiple PMTs on a single module
@@ -86,5 +86,3 @@ std::ostream& operator<<(std::ostream& os, const UpgradeLCFlags& flags){
 }
 
 #endif  // UPGRADELCFLAGS_H_INCLUDED
-
-
