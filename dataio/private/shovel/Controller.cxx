@@ -158,6 +158,12 @@ do_pyshell(char* argv[], Model& model, View& view){
     bp::tuple arguments;
     bp::dict options;
     options["user_ns"] = ns; // need this for first invocation
+    bp::object config=bp::import("traitlets.config").attr("Config")();
+    bp::object ishell_conf=config.attr("InteractiveShell");
+    ishell_conf.attr("confirm_exit")=false;
+    ishell_conf.attr("banner2")="The current frame is available as `frame`\n"
+                                "Press ^D to return to the dataio-shovel interface";
+    options["config"]=config;
     ipython_embed.attr("start_ipython")(*arguments,**options);
     try{
       bp::object ishell_mod=bp::import("IPython.terminal.interactiveshell");
