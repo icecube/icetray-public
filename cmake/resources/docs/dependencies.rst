@@ -74,10 +74,10 @@ These dependencies are optional. If not present IceTray will compile with reduce
     - :ref:`LeptonInjector-main`, :ref:`MuonGun-main`, :ref:`neutrino-generator`, :ref:`photonics-service`, :ref:`phys-services <phys-services>`, :ref:`spline-reco <spline-reco-main>`
   * - `ERFA <https://github.com/liberfa/erfa>`_
     - Essential Routines for Fundamental Astronomy
-    - :ref:`astro`, :ref:`filterscripts`, :ref:`wimpsim-reader`
+    - :ref:`astro`, :ref:`wimpsim-reader`
   * - `PAL <https://github.com/Starlink/pal>`_
     - Positional Astronomy Library
-    - :ref:`astro`, :ref:`filterscripts`, :ref:`wimpsim-reader`
+    - :ref:`astro`, :ref:`wimpsim-reader`
   * - `HDF5 <https://www.hdfgroup.org/solutions/hdf5/>`_
     - High-performance data management and storage suite
     - :ref:`tableio/hdfwriter`

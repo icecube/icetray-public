@@ -95,7 +95,6 @@ want to run clsim and ppc on GPUs, which require hardware drivers.
 * NoiseEngine (needs healpix-cxx)
 * dst (needs healpix-cxx)
 * astro (needs starlink-pal)
-* filterscripts-cxx (needs astro which needs starlink)
 * ROOT (no longer provided via aptitude)
 * clsim (needs OpenCL, ZMQ, and optionally GEANT)
 

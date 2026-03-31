@@ -62,7 +62,6 @@ Projects/tools in combo not built with the minimal package installation above:
 * NoiseEngine (needs libhealpix-cxx-dev)
 * dst (needs libhealpix-cxx-dev)
 * astro (needs libstarlink-pal-dev)
-* filterscripts-cxx (needs astro which needs libstarlink-pal-dev)
 * hdfwriter (needs libhdf5-serial-dev)
 * libarchive (needs libarchive-dev and libzstd-dev)
 * millipede (needs libsuitesparse-dev)
