@@ -5,9 +5,40 @@
 #include <cmath>
 #include <icetray/serialization.h>
 #include <dataclasses/geometry/I3OMGeo.h>
+#include <boost/preprocessor/seq/for_each.hpp>
 
 namespace {
     enum OldOrientation__ {Unspecified=0, Up=1, Down=-1};
+}
+
+#define MAKE_OMTYPE_TO_STRING_CASE_LINE(r, namespace, t) case I3OMGeo::t : return BOOST_PP_STRINGIZE(t);
+std::string to_string(const I3OMGeo::OMType& om_type)
+{
+  switch (om_type) {
+      BOOST_PP_SEQ_FOR_EACH(MAKE_OMTYPE_TO_STRING_CASE_LINE, ~, I3OMGEO_H_I3OMGeo_OMType)
+  }
+  return(boost::lexical_cast<std::string>( om_type ));
+}
+#undef MAKE_OMTYPE_TO_STRING_CASE_LINE
+
+std::ostream& operator<<(std::ostream& os, const I3OMGeo::OMType& om_type){
+     os << to_string(om_type);
+     return os;
+}
+
+#define MAKE_PMTTYPE_TO_STRING_CASE_LINE(r, namespace, t) case I3OMGeo::PMTType::t : return BOOST_PP_STRINGIZE(t);
+std::string  to_string(const I3OMGeo::PMTType& pmt_type)
+{
+  switch (pmt_type) {
+      BOOST_PP_SEQ_FOR_EACH(MAKE_PMTTYPE_TO_STRING_CASE_LINE, ~, I3OMGEO_H_I3OMGeo_PMTType)
+  }
+  return(boost::lexical_cast<std::string>( pmt_type ));
+}
+#undef MAKE_PMTTYPE_TO_STRING_CASE_LINE
+
+std::ostream& operator<<(std::ostream& os, const I3OMGeo::PMTType& pmt_type){
+     os << to_string(pmt_type);
+     return os;
 }
 
 template <class Archive>

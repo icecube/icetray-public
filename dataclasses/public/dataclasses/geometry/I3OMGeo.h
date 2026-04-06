@@ -36,7 +36,7 @@ static const unsigned i3omgeo_version_ = 2;
   (POCAM)(PencilBeam)(RadioEmitter)(AcousticEmitter)(AbaloneHub)(FibreComm)
 
 #define I3OMGEO_H_I3OMGeo_PMTType        \
-  (Unknown)(Nominal)(HQE)
+  (Unknown)(DOM_Standard)(DOM_HQE)(DEgg)(mDOM)(LOM_Hamamatsu)(LOM_NNVT)
 
 //Simple struct to contain all pertinent OM info.
 //See I3Geometry.h for more info
@@ -72,13 +72,17 @@ public:
       FibreComm = 250,
     };
 
-    enum PMTType {
-      Unknown = 0,
-      Nominal = 1,
-      HQE = 2,
+    enum class PMTType {
+      Unknown = 0,        // default
+      DOM_Standard = 1,   // Hamamatsu R7081-02
+      DOM_HQE = 2,        // Hamamatsu R7081-02MOD
+      DEgg = 10,          // Hamamatsu R5912-100
+      mDOM = 20,          // Hamamatsu R15458-02
+      LOM_Hamamatsu = 30, // Hamamatsu R16293-01-Y001
+      LOM_NNVT = 31,      // NNVT N2041
     };
   
-    I3OMGeo() : omtype(UnknownType), pmttype(Unknown) {}
+    I3OMGeo() : omtype(UnknownType), pmttype(PMTType::Unknown) {}
 
     /**
      * the OM's (or PMT's) x,y,z position
@@ -146,6 +150,11 @@ private:
     void serialize(Archive& ar, unsigned version);
 };
 
+std::string to_string(const I3OMGeo::PMTType&);
+std::string to_string(const I3OMGeo::OMType&);
+
+std::ostream& operator<<(std::ostream&, const I3OMGeo::OMType&);
+std::ostream& operator<<(std::ostream&, const I3OMGeo::PMTType&);
 std::ostream& operator<<(std::ostream&, const I3OMGeo&);
 
 I3_POINTER_TYPEDEFS(I3OMGeo);

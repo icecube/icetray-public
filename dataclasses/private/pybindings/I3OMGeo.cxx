@@ -65,8 +65,7 @@ void register_I3OMGeo()
     ;
 
     enum_<I3OMGeo::PMTType>("PMTType")
-      BOOST_PP_SEQ_FOR_EACH(ENUM_DEF,I3OMGeo,I3OMGEO_H_I3OMGeo_PMTType)
-      .export_values()
+      BOOST_PP_SEQ_FOR_EACH(ENUM_DEF,I3OMGeo::PMTType,I3OMGEO_H_I3OMGeo_PMTType)
       ;
     ;
 

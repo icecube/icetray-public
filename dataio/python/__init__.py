@@ -12,6 +12,7 @@ from icecube._dataio import (
 
 from icecube.dataio.I3FileStagerFile import AbstractFileStager
 set_local_scratch_dir = AbstractFileStager.set_local_scratch_dir
+from .pmttype_from_calibration import PMTTypeFromCal
 
 def get_stagers(staging_directory=None, extra_stagers=[]):
     # type: (Optional[str], Iterable[type[I3FileStager]]) -> I3FileStagerCollection

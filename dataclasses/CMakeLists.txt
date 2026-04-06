@@ -158,6 +158,7 @@ set(DATACLASSES_PYTHON_TEST_SCRIPTS
   resources/test/test_I3mDOMLaunch_pybindings.py
   resources/test/test_I3XDOMHit_pybindings.py
   resources/test/test_I3NoiseSuppressionRecord_pybindings.py
+  resources/test/test_PMTType_gcd.py
   )
 
 if(Python_VERSION_MAJOR VERSION_GREATER_EQUAL 3)
