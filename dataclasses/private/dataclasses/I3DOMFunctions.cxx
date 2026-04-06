@@ -209,7 +209,7 @@ double OldmpeThreshold(const I3DOMStatus& status)
 /*
  * 5/1024 "is just the conversion between a 10-bit DAC value and a voltage" (Spencer Axani 2019)
  * "The factor 9.6 is given by the gain product of U57 and U59, and (1 + 2200/249) is from the resistor divider attached to the discriminator DAC output" (Jim Braun 2019)
- * https://docushare.icecube.wisc.edu/dsweb/Get/Document-6683/sheet13.pdf
+ * https://drive.google.com/file/d/1FsMts-e5cHPMfjGtvAWDi8uVMkurIX-C
  */
 
 double SPEPMTThreshold(const I3DOMStatus& status,

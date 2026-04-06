@@ -259,7 +259,7 @@ The AMANDA coordinate system is centered on the AMANDA array. The "formal" defin
     the Earth's surface at the location of string 4 (also known as "up").
 
 A detailed description of its history can be found in the preface of
-`this report <https://docushare.wipac.wisc.edu/dsweb/Services/Document-10925>`_ by Kurt Woschnagg.
+`Non-optical geometry measurement in AMANDA.pdf <https://drive.google.com/file/d/1ZvFBCqkkxCQV6jj8PPJf4ExcZlxVLtm3>`_ by Kurt Woschnagg.
 
 Conversion to IceCube coordinates
 ---------------------------------
@@ -298,7 +298,7 @@ Transformation between the two systems are
 See Also
 ========
 
-* The original proposal for the IceCube Coordinate System can be found here: :docushare:`8945`.
+* The original proposal for the IceCube Coordinate System can be found here: `The IceCube Coordinate System.doc <https://docs.google.com/document/d/1E4OV7sfwczCXmryTLN0NAJPpJsBf8kF_>`_.
 * An overview of the IceCube coordinate system and the corresponding transformations between "local" and
   "global" coordinate systems can be found in
   :wiki:`this document <File:Spherical_geometry.pdf>` by J. van Santen.

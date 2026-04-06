@@ -112,7 +112,8 @@ namespace I3Constants
 
   /**
    * Conversion between IceCube and AMANDA coordinates
-   * from docushare file by Kurt Woschnagg
+   * from `The IceCube Coordinate System.doc` by Kurt Woschnagg
+   * https://docs.google.com/document/d/1E4OV7sfwczCXmryTLN0NAJPpJsBf8kF_
    * (x,y,z)icecube = (x,y,z)amanda - (x,y,z)shift
    */
   static const double Coordinate_shift_x = -339.8*I3Units::m;

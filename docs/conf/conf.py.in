@@ -245,7 +245,6 @@ latex_documents = [
 #latex_use_modindex = True
 
 extlinks = {'arxiv': ('https://arxiv.org/abs/%s','arXiv:%s'),
-            'docushare': ('https://docushare.icecube.wisc.edu/dsweb/Services/Document-%s','Docushare:%s'),
             'wiki':('https://wiki.icecube.wisc.edu/index.php/%s','Wiki: %s'),
             'doi':('https://dx.doi.org/%s','doi:%s'),
             'trac':('https://code.icecube.wisc.edu/projects/icecube/intertrac/%s','trac:%s'),
