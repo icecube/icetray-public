@@ -39,7 +39,7 @@ log.addHandler(log_handler)
 
 class command_queue:
     def __init__(self, max_processes=1):
-        self.queue = deque([])
+        self.queue = deque()
         self.running = []
         self.max_processes = max_processes
 

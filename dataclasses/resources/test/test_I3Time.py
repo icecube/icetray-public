@@ -18,7 +18,7 @@ class I3TimeTest(unittest.TestCase):
     def test_print(self):
         t = I3Time(2012, 116640000117197235)
         s = str(t)
-        subsecond = int(s.split(" ")[-2].split(".")[-1].replace(",", ""))
+        subsecond = int(s.split(" ")[-2].split(".")[-1].replace(",", ""))  # noqa: PLC0207
         self.assertEqual(subsecond, 117197235)
 
     def test_date(self):
