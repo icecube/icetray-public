@@ -19,6 +19,7 @@
 
 
 static const unsigned int i3degglaunch_version_ = 0;
+using flags_t = uint8_t;
 
 /** Direct readout of ADC data/a waveform from a DEgg (which share the same frontend electronics).
  * 
@@ -72,9 +73,9 @@ class I3DEggLaunch
     return *this;
   }
 
-  /** Return the local coincidence bit.
+  /** Return the local coincidence bits.
    * 
-   * @return Local coincidence bit.
+   * @return Local coincidence bits.
    */
   UpgradeLCFlags GetLCFlags() const {
     return launch_.GetLCFlags();

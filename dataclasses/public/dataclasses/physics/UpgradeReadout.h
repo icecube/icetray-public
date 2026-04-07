@@ -71,7 +71,7 @@ struct UpgradeReadout{
   /**
    * Get the UpgradeLCFlags associated with the wrapped readout.
    */
-  UpgradeLCFlags GetLCFlags(){
+  UpgradeLCFlags GetLCFlags() const{
     return std::visit([](auto const& x){return x.GetLCFlags();}, launch);
   }
 

@@ -222,3 +222,4 @@ TRIGGER_CONFIG_TYPES(std::string);
 
 template void I3TriggerStatus::SetTriggerConfigValue(const std::string&,const char*);
 template void I3TriggerStatus::SetTriggerConfigValue(const char*,const char*);
+template void I3TriggerStatus::GetTriggerConfigValue(const char*, boost::optional<unsigned char>&) const;

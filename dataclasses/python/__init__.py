@@ -46,7 +46,7 @@ from icecube._dataclasses import (
     QuadraticFit, SIMPLE_MULTIPLICITY, SLOW_PARTICLE, SPASE, SPASE_2, SPEChargeDistribution, SPETemplate, SPHERE,
     STRING, ScintKey, SnowHeightProvenance, SourceID, SubtypeID, T0, THREE_COINCIDENCE, THROUGHPUT, TWO_COINCIDENCE,
     TankKey, TauParam, TestMapStringString, TriggerKey, TriggerKeyVector, TypeID, UNBIASED, UNKNOWN_SOURCE,
-    UNKNOWN_SUBTYPE, UNKNOWN_TYPE, Unknown, VEMCal, VOLUME, VectorI3WaveformStatusCompound, atwd_sampling_rate,
+    UNKNOWN_SUBTYPE, UNKNOWN_TYPE, Unknown, UPGRADE_IN_ICE, VEMCal, VOLUME, VectorI3WaveformStatusCompound, atwd_sampling_rate,
     day_of_year, domcaal_version, fadc_baseline, fft, get_most_energetic, get_most_energetic_cascade,
     get_most_energetic_inice, get_most_energetic_inice_cascade, get_most_energetic_muon, get_most_energetic_neutrino,
     get_most_energetic_nucleus, get_most_energetic_primary, get_most_energetic_track, i3position_to_tuple, identity,

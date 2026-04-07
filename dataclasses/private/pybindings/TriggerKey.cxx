@@ -84,7 +84,6 @@ std::string repr(const TriggerKey& key){
 void
 register_TriggerKey()
 {
-
     class_<TriggerKey>("TriggerKey")
         .def(init<TriggerKey::SourceID, TriggerKey::TypeID>() )
         .def(init<TriggerKey::SourceID, TriggerKey::TypeID, int>() )
@@ -137,8 +136,4 @@ register_TriggerKey()
     class_<std::vector<TriggerKey> >("TriggerKeyVector")
         .def(dataclass_suite<std::vector<TriggerKey> >())
         ;
-
-
-
 }
-

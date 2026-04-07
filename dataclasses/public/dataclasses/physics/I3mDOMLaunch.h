@@ -28,6 +28,7 @@
 #include <dataclasses/calibration/I3mDOMCal.h>
 
 static const unsigned int i3mdomlaunch_version_ = 0;
+using flags_t = uint8_t;
 
 /** Direct readout of ADC data/a waveform from a mDOM.
  *
