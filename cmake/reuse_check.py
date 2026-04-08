@@ -216,7 +216,6 @@ whitelist = [
     "CommonVariables",
     "IceHive",
     "LeptonInjector",
-    "NuRadioMCInterface",
     "SLOPtools",
     "SiPMResponseSimulator",
     "TopologicalSplitter",
