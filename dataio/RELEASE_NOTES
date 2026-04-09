@@ -10,6 +10,12 @@ Release Notes
 main
 ----
 
+* Populate PMTType Enum (#4214)
+* Show the same help text in IPython as the vanilla python shell. (#4298)
+* Clear IPython state after each use so that recent versions do not get gummed up. (#4295)
+* Remove "qify" argument from ``offline_filterscripts`` (#4280)
+* Fixes calling IPython from dataio-shovel (#4228)
+
 Dec 18, 2025 don la dieu (nega at icecube.umd.edu)
 --------------------------------------------------
 IceTray Release v1.17.0

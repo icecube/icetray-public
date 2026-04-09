@@ -10,6 +10,9 @@ Release Notes
 main
 ----
 
+* Ensure that python script executables and tests use the correct python (#4243)
+* Give ``icetray-inspect`` a better path for libdir (#4268)
+
 Dec 18, 2025 don la dieu (nega at icecube.umd.edu)
 --------------------------------------------------
 IceTray Release v1.17.0

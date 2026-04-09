@@ -10,12 +10,17 @@ Release Notes
 main
 ----
 
+- Update ignores for incoming ruff 0.15 changes (#4299)
+- Remove all references to docushare (#4297)
+- update docs.icecube.aq password to something more secret (#4294)
+- Fix doxygen building due to changes in #4243
+
 Dec 18, 2025 don la dieu (nega at icecube.umd.edu)
 --------------------------------------------------
 IceTray Release v1.17.0
 
-* documentation cleanup (#4177)
-* update docs for EL7 removal (#4143)
+- documentation cleanup (#4177)
+- update docs for EL7 removal (#4143)
 
 Oct 30, 2025 don la dieu (nega at icecube.umd.edu)
 --------------------------------------------------

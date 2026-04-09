@@ -10,6 +10,11 @@ Release Notes
 main
 ----
 
+* Add SubModuleKeys to ``I3GeometryDecomposer`` (#4232)
+* Build a wrapper for ``std::variant<UpgradeReadouts...>`` (#4285)
+* Add I3SPEFitInjector to generate GCD file for pass3 step2 (#4287)
+* Implement the final LC for mDOM/DEgg (#4194)
+
 Dec 18, 2025 don la dieu (nega at icecube.umd.edu)
 --------------------------------------------------
 IceTray Release v1.17.0

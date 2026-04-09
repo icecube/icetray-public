@@ -12,6 +12,15 @@ Release Notes
 main
 ----
 
+* Remove the deprecated ``NuRadioMCInterface`` project from IceTray (#4284)
+* Remove the deprecated ``filterscripts`` project from IceTray (#4282)
+* Ensure that Python script executables and tests use the correct Python (#4243)
+* Update detection of C++ standard used by ROOT (#4288)
+* License segmented-spline-reco (#4187)
+* License SiPMResponseSimulator (#4186)
+* License clsim (#4181)
+* Update local docs for :ref:`starlink-pal <pal-tool>`
+
 Dec 18, 2025 don la dieu (nega at icecube.umd.edu)
 --------------------------------------------------
 IceTray Release v1.17.0

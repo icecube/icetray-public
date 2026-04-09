@@ -8,6 +8,11 @@ Release Notes
 main
 ----
 
+* Enable C++20 for Parquet bits (#4251)
+* Ensure that Python script executables and tests use the correct Python (#4243)
+* Pass the full sizes of table fields, accounting for their array lengths, to HDF5 functions (#4241)
+* Fix version checks to apply to HDF5 versions 1.8 and later (#4213)
+
 Dec 18, 2025 don la dieu (nega at icecube.umd.edu)
 --------------------------------------------------
 IceTray Release v1.17.0

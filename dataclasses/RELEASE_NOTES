@@ -10,6 +10,20 @@ Release Notes
 main
 ----
 
+* Update ``trigger-sim`` to use new readout classes (#4198)
+* Populate PMTType Enum (#4214)
+* Update ignores for incoming ruff 0.15 changes (#4299)
+* Remove all references to docushare (#4297)
+* Implement the mDOM discriminator (#4202)
+* Update mDOM noise suppression (#4197)
+* Additions to Upgrade CD classes (#4293)
+* Upgrade CD classes (#4209)
+* Add SubModuleKeys to ``I3GeometryDecomposer`` (#4232)
+* Add support for ice model version 20 (#4203)
+* Build a wrapper for ``std::variant<UpgradeReadouts...>`` (#4285)
+* Implement the final LC for mDOM/DEgg (#4194)
+* Add deprecation warnings for AMANDA readouts, I3RecoHit and I3MCHit. (#4200)
+
 Dec 18, 2025 don la dieu (nega at icecube.umd.edu)
 --------------------------------------------------
 IceTray Release v1.17.0
