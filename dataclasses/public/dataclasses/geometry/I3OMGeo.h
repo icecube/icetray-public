@@ -31,9 +31,10 @@ static const unsigned i3omgeo_version_ = 2;
  * the class.
  */
 #define I3OMGEO_H_I3OMGeo_OMType        \
-  (UnknownType)(AMANDA)(IceCube)(IceTop)(mDOM)(Scintillator)(IceAct)\
+  (UnknownType)(AMANDA)(IceCube)(IceTop)(mDOM)(Scintillator)(IceAct)(SwedishCamera)\
   (PDOM)(isoPDOM)(DEgg)(WOM)(FOM)(DMIce)(LOM)(LOM16)(LOM18)(RadioReceiver) \
-  (POCAM)(PencilBeam)(RadioEmitter)(AcousticEmitter)(AbaloneHub)(FibreComm)
+  (POCAM)(PencilBeam)(RadioEmitter)(AcousticEmitter)(AcousticModule)\
+  (AbaloneHub)(FibreComm)(FibreTestSystem)(PressureSensor)
 
 #define I3OMGEO_H_I3OMGeo_PMTType        \
   (Unknown)(DOM_Standard)(DOM_HQE)(DEgg)(mDOM)(LOM_Hamamatsu)(LOM_NNVT)
@@ -51,6 +52,7 @@ public:
       IceTop = 30,
       Scintillator = 40,
       IceAct = 50,
+      SwedishCamera = 60,
       // OMType > 100 are Gen2 R&D sensors
       PDOM = 110,
       isoPDOM = 111,
@@ -68,8 +70,11 @@ public:
       PencilBeam = 210,
       RadioEmitter = 220,
       AcousticEmitter = 230,
+      AcousticModule = 231,
       AbaloneHub = 240,
       FibreComm = 250,
+      FibreTestSystem = 251,
+      PressureSensor = 260
     };
 
     enum class PMTType {
