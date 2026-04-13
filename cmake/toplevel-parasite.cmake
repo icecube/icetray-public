@@ -112,6 +112,7 @@ add_custom_target(pybindings)
 set(CMAKE_SOURCE_DIR ${HOST_I3_SRC})
 include(config)
 set(CMAKE_SOURCE_DIR ${I3_SRC})
+load_cache(${HOST_I3_BUILD} READ_WITH_PREFIX "" PYTHON_PLATLIB_DIR)
 include(project)
 
 include_directories(${HOST_I3_SRC}/cmake/tool-patches/common)
