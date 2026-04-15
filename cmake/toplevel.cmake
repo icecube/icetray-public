@@ -52,7 +52,7 @@ set(CMAKE_MODULE_PATH
 #
 # CMake policies shared with parasitic builds
 #
-include(policies)
+include(policies NO_POLICY_SCOPE)
 
 #
 # search for header, libraries and frameworks inside of the system
