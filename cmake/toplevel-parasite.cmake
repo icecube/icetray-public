@@ -33,7 +33,9 @@ set(CMAKE_MODULE_PATH
   ${CMAKE_SOURCE_DIR}/cmake
   ${CMAKE_SOURCE_DIR}/cmake/tools
   ${CMAKE_SOURCE_DIR}/cmake/utility)
-include(utility)
+
+include(policies)  # CMake policies shared with non-parasitic builds
+include(utility)   # our utility functions/macros
 
 colormsg("")
 colormsg(_HIBLUE_ "Configuring parasitic metaproject")

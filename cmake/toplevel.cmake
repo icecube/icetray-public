@@ -42,35 +42,17 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 ")
 endif("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 
+## expand the module path to include our own directories
+set(CMAKE_MODULE_PATH
+  ${EXTRA_CMAKE_MODULE_PATH}
+  ${CMAKE_SOURCE_DIR}/cmake
+  ${CMAKE_SOURCE_DIR}/cmake/tools
+  ${CMAKE_SOURCE_DIR}/cmake/utility)
+
 #
-# set cmake policies. policy definitions can be found at
-# https://cmake.org/cmake/help/latest/manual/cmake-policies.7.html
-# or `man cmake-policies`
+# CMake policies shared with parasitic builds
 #
-if(POLICY CMP0002)
-    cmake_policy(SET CMP0002 NEW)
-endif()
-if(POLICY CMP0042)
-    cmake_policy(SET CMP0042 NEW)
-endif()
-if(POLICY CMP0046)
-    cmake_policy(SET CMP0046 NEW)
-endif()
-if(POLICY CMP0053)
-    cmake_policy(SET CMP0053 NEW)
-endif()
-if(POLICY CMP0054)
-    cmake_policy(SET CMP0054 NEW)
-endif()
-if(POLICY CMP0074)
-    cmake_policy(SET CMP0074 NEW)
-endif()
-if(POLICY CMP0094)
-    cmake_policy(SET CMP0094 NEW)
-endif()
-if(POLICY CMP0167)
-    cmake_policy(SET CMP0167 NEW)
-endif()
+include(policies)
 
 #
 # search for header, libraries and frameworks inside of the system
@@ -92,13 +74,6 @@ execute_process(COMMAND mkdir -p ${CMAKE_BINARY_DIR}/bin)
 
 ## pull in optional meta-project CMakeLists
 include(${CMAKE_SOURCE_DIR}/CMakeLists.optional.txt OPTIONAL)
-
-## expand the module path to include our own directories
-set(CMAKE_MODULE_PATH
-  ${EXTRA_CMAKE_MODULE_PATH}
-  ${CMAKE_SOURCE_DIR}/cmake
-  ${CMAKE_SOURCE_DIR}/cmake/tools
-  ${CMAKE_SOURCE_DIR}/cmake/utility)
 
 include(utility)  # load utility functions (pretty print, etc)
 include(config)   # trigger the configuration meat (build types, etc)
