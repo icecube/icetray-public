@@ -12,6 +12,11 @@ Release Notes
 main
 ----
 
+April 16, 2026 don la dieu (nega at icecube.umd.edu)
+----------------------------------------------------
+IceTray Release v1.18.0
+
+* Rearrange CMake policies so they can be shared with parasitic builds
 * Remove the deprecated ``NuRadioMCInterface`` project from IceTray (#4284)
 * Remove the deprecated ``filterscripts`` project from IceTray (#4282)
 * Ensure that Python script executables and tests use the correct Python (#4243)

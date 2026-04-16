@@ -10,6 +10,10 @@ Release Notes
 main
 ----
 
+April 16, 2026 don la dieu (nega at icecube.umd.edu)
+----------------------------------------------------
+IceTray Release v1.18.0
+
 * Update ``trigger-sim`` to use new readout classes (#4198)
 * Populate PMTType Enum (#4214)
 * Update ignores for incoming ruff 0.15 changes (#4299)

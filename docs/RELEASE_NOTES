@@ -10,6 +10,10 @@ Release Notes
 main
 ----
 
+April 16, 2026 don la dieu (nega at icecube.umd.edu)
+----------------------------------------------------
+IceTray Release v1.18.0
+
 - Update ignores for incoming ruff 0.15 changes (#4299)
 - Remove all references to docushare (#4297)
 - update docs.icecube.aq password to something more secret (#4294)

@@ -10,6 +10,10 @@ Release Notes
 main
 ----
 
+April 16, 2026 don la dieu (nega at icecube.umd.edu)
+----------------------------------------------------
+IceTray Release v1.18.0
+
 * Populate PMTType Enum (#4214)
 * Show the same help text in IPython as the vanilla python shell. (#4298)
 * Clear IPython state after each use so that recent versions do not get gummed up. (#4295)

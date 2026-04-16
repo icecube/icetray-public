@@ -10,6 +10,10 @@ Release Notes
 main
 ----
 
+April 16, 2026 don la dieu (nega at icecube.umd.edu)
+----------------------------------------------------
+IceTray Release v1.18.0
+
 * Add SubModuleKeys to ``I3GeometryDecomposer`` (#4232)
 * Build a wrapper for ``std::variant<UpgradeReadouts...>`` (#4285)
 * Add I3SPEFitInjector to generate GCD file for pass3 step2 (#4287)
