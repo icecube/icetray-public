@@ -10,55 +10,13 @@
 #include <dataclasses/physics/detail/I3XDOMLaunch.h>
 
 
-//#define TEST_DELTA_COMPRESSION_DO_PRINT
-#ifdef TEST_DELTA_COMPRESSION_DO_PRINT
-#include <iomanip>
-#include <iostream>
-using std::cout;
-using std::endl;
-using std::hex;
-using std::dec;
-using std::setw;
-using std::setfill;
-#endif
-
 using i3::dataclasses::detail::deltacompression::uncompress;
 using i3::dataclasses::detail::deltacompression::compress;
 
 
-#ifdef TEST_DELTA_COMPRESSION_DO_PRINT
-namespace {
-
-
-template <class T>
-void print_vector(const std::vector<T>& data, const char* fn) {
-  auto size = sizeof(T);
-  auto width = 2 * size;
-  auto mask = (0x01 << 8 * size) - 1;
-  cout << endl << fn << ": ";
-  for (unsigned int i = 0; i < data.size(); ++i) {
-    cout << "0x" << setfill('0') << setw(width) << hex;
-    if (i < data.size() - 1)
-      cout << (static_cast<unsigned int>(data[i]) & mask) << dec << ", ";
-    else
-      cout << (static_cast<unsigned int>(data[i]) & mask) << dec << endl;
-  }
-}
-
-
-}
-#endif
-
-
 void I3XDOMLaunch::Compress() const {
   try {
-#ifdef TEST_DELTA_COMPRESSION_DO_PRINT
-    print_vector(adcCache_, "Compress() [IN]");
-#endif
     compress(adcData_, adcCache_, startBitsPerWord_, maxBitsPerWord_);
-#ifdef TEST_DELTA_COMPRESSION_DO_PRINT
-    print_vector(adcData_, "Compress() [OUT]");
-#endif
     nSamples_ = adcCache_.size();
   } catch (...) {
     adcData_.clear();
@@ -69,14 +27,8 @@ void I3XDOMLaunch::Compress() const {
 
 void I3XDOMLaunch::Uncompress() const {
   try {
-#ifdef TEST_DELTA_COMPRESSION_DO_PRINT
-    print_vector(adcData_, "Uncompress() [IN]");
-#endif
     adcCache_.resize(nSamples_, 0);
     uncompress(adcCache_, adcData_, startBitsPerWord_, maxBitsPerWord_);
-#ifdef TEST_DELTA_COMPRESSION_DO_PRINT
-    print_vector(adcCache_, "Uncompress() [OUT]");
-#endif
   } catch (...) {
     adcCache_.clear();
     throw;

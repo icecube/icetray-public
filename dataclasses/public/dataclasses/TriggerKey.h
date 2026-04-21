@@ -26,8 +26,9 @@
  * the class.
  */
 #define TRIGGERKEY_H_TriggerKey_SourceID                                 \
-    (IN_ICE)(ICE_TOP)(AMANDA_TWR_DAQ)(EXTERNAL)(GLOBAL)(AMANDA_MUON_DAQ) \
-    (SPASE)(UNKNOWN_SOURCE)(IN_ICE_PULSES)(UPGRADE_IN_ICE)
+    (IN_ICE)(UPGRADE_IN_ICE)(ICE_TOP)                                    \
+    (AMANDA_TWR_DAQ)(EXTERNAL)(GLOBAL)(AMANDA_MUON_DAQ)                  \
+    (SPASE)(UNKNOWN_SOURCE)(IN_ICE_PULSES)
 
 #define TRIGGERKEY_H_TriggerKey_TypeID                                   \
     (SIMPLE_MULTIPLICITY)(CALIBRATION)(MIN_BIAS)(THROUGHPUT)             \
@@ -72,6 +73,7 @@ class TriggerKey
   enum SourceID	     // probably incomplete enumeration of trigger sources
   {
     IN_ICE = 0,           // InIce trigger system
+    UPGRADE_IN_ICE = 5,   // The Upgrade strings, including mDOMs and DEggs
     ICE_TOP = 10,         // IceTop trigger system
     AMANDA_TWR_DAQ = 20,  // AMANDA TWR DAQ triggers
     EXTERNAL = 30,        // Some external trigger
@@ -79,8 +81,7 @@ class TriggerKey
     AMANDA_MUON_DAQ = 50, // AMANDA Muon DAQ triggers
     SPASE = 70,           // A trigger from the SPASE shack
     UNKNOWN_SOURCE = 80,  // A mysterious source
-    IN_ICE_PULSES = 90,   // Either Upgrade or Gen2 in-ice with faked readouts
-    UPGRADE_IN_ICE = 100  // The Upgrade strings, including mDOMs and DEggs
+    IN_ICE_PULSES = 90    // Either Upgrade or Gen2 in-ice with faked readouts
   };
 
   /**

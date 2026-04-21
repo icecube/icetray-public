@@ -17,6 +17,8 @@ TriggerKey::GetSourceString(SourceID source)
   {
     case IN_ICE:
       return("IN_ICE");
+    case UPGRADE_IN_ICE:
+      return("UPGRADE_IN_ICE");
     case ICE_TOP:
       return("ICE_TOP");
     case AMANDA_TWR_DAQ:
@@ -33,8 +35,6 @@ TriggerKey::GetSourceString(SourceID source)
       return("UNKNOWN_SOURCE");
     case IN_ICE_PULSES:
       return("IN_ICE_PULSES");
-    case UPGRADE_IN_ICE:
-      return("UPGRADE_IN_ICE");
   }
   log_warn("undefined source ID %u",source);
 
@@ -46,6 +46,8 @@ TriggerKey::GetSourceFromString(const std::string& sourcestr)
 {
   if (sourcestr=="IN_ICE")
     return(IN_ICE);
+  if (sourcestr=="UPGRADE_IN_ICE")
+    return(UPGRADE_IN_ICE);
   if (sourcestr=="ICE_TOP")
     return(ICE_TOP);
   if (sourcestr=="AMANDA_TWR_DAQ")
@@ -62,8 +64,7 @@ TriggerKey::GetSourceFromString(const std::string& sourcestr)
     return(UNKNOWN_SOURCE);
   if (sourcestr=="IN_ICE_PULSES")
     return(IN_ICE_PULSES);
-  if (sourcestr=="UPGRADE_IN_ICE")
-    return(UPGRADE_IN_ICE);
+
   log_warn("undefined source string %s",sourcestr.c_str());
 
   return UNKNOWN_SOURCE;

@@ -20,21 +20,6 @@ using std::uint32_t;
 using std::vector;
 
 
-//#define DELTA_COMPRESSION_DO_PRINT
-#ifdef DELTA_COMPRESSION_DO_PRINT
-#include <iomanip>
-#include <iostream>
-using std::cout;
-using std::endl;
-using std::hex;
-using std::dec;
-using std::setw;
-using std::setfill;
-#include <bitset>
-using std::bitset;
-#endif
-
-
 namespace i3 { namespace dataclasses { namespace detail {
   namespace deltacompression {
 
@@ -98,7 +83,7 @@ class BitBuffer {
    * are not set.
    */
   uint32_t Pop(unsigned int bpw) {
-    if(bpw > 24u) {  // TODO: ok, we could have (32 - 1 - bitPosition_) here
+    if(bpw > 24u) {
       throw std::invalid_argument("bpw cannot exceed 24 bits");
     }
     if(bpw > remainingBits_) {
@@ -113,6 +98,7 @@ class BitBuffer {
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
     ;  // no-op
 #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#   error delta compression is not yet tested at big endian and not safe to use
     retVal = (((x & 0xff000000u) >> 24) |
               ((x & 0x00ff0000u) >>  8) |
               ((x & 0x0000ff00u) <<  8) |
@@ -120,17 +106,7 @@ class BitBuffer {
 #else
 #error Unable to determine machine endianness!
 #endif
-#ifdef DELTA_COMPRESSION_DO_PRINT
-    bitset<32> tmpRetVal(retVal);
-    cout << "BITBUFFER POP: " << tmpRetVal
-         << " (bpw=" << bpw << ", " << "bitposition=" << bitPosition_ << ")"
-         << endl;
-#endif
     retVal = (retVal & mask) >> bitPosition_;
-#ifdef DELTA_COMPRESSION_DO_PRINT
-    tmpRetVal = retVal;
-    cout << "BITBUFFER POP OUTPUT: " << tmpRetVal << endl;
-#endif
 
     remainingBits_ -= bpw;
     bitPosition_ += bpw;
@@ -201,7 +177,7 @@ class Delta {
       hasWastedBits_ = (bpw == 1) ?
         false : (std::abs(value_) < (0x01 << (Delta::GetNextLowerBpw(bpw) - 1)));
     }
-   }
+  }
 
   /** Check whether this delta is a flag.
    * 
@@ -280,18 +256,7 @@ class BitBuffer {
     uint32_t mask = ((0x01 << bpw) - 1);
     uint32_t* buf =
       reinterpret_cast<uint32_t*>(boost::addressof(buffer_[bytePosition_]));
-#ifdef DELTA_COMPRESSION_DO_PRINT
-    bitset<32> tmpBuf(*buf);
-    bitset<32> tmpBits(bits);
-    cout << "BITBUFFER PUSH: " << tmpBuf
-         << " (bpw=" << bpw << ", bits=" << tmpBits << ")"
-         << endl;
-#endif
     *buf = *buf | ((bits & mask) << bitPosition_);
-#ifdef DELTA_COMPRESSION_DO_PRINT
-    tmpBuf = *buf;
-    cout << "BITBUFFER PUSH RESULT: " << tmpBuf << endl;
-#endif
 
     remainingBits_ -= bpw;
     bitPosition_ += bpw;
