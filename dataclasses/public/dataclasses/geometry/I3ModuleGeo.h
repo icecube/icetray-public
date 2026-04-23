@@ -33,7 +33,6 @@
 #ifndef I3MODULEGEO_H_INCLUDED
 #define I3MODULEGEO_H_INCLUDED
 
-#include <vector>
 #include <icetray/I3DefaultName.h>
 #include "icetray/I3FrameObject.h"
 #include "dataclasses/ModuleKey.h"
@@ -110,6 +109,9 @@ public:
     double GetHeight() const {return h_;}
     double GetArea(double z) const {return radZ_ > 0 ?
         M_PI * radR_ * std::sqrt(radZ_ * radZ_ - z * z * (radZ_ * radZ_ - radR_ * radR_)): 2 * radR_ * h_ * std::sqrt(1 - z * z) ;}
+
+    /// @brief Get number of PMT's on the module
+    unsigned GetNPMT() const;
 
     void SetRr(double value) {radR_=value;}
     void SetRz(double value) {radZ_=value; h_=NAN;}

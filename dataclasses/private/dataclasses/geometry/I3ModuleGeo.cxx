@@ -103,6 +103,30 @@ std::ostream& operator<<(std::ostream& os, const I3ModuleGeo& g){
     return(g.Print(os));
 }
 
+unsigned I3ModuleGeo::GetNPMT() const
+{
+	switch (moduleType_) {
+	case I3ModuleGeo::AMANDA:
+	case I3ModuleGeo::IceCube:
+	case I3ModuleGeo::IceTop:
+	// New module types
+	case I3ModuleGeo::PDOM:
+	case I3ModuleGeo::FOM:
+		return 1;
+	case I3ModuleGeo::WOM:
+	case I3ModuleGeo::DEgg:
+		return 2;
+	case I3ModuleGeo::mDOM:
+		return 24;
+	case I3ModuleGeo::LOM:
+	case I3ModuleGeo::LOM16:
+		return 16;
+	case I3ModuleGeo::LOM18:
+		return 18;
+	default:
+		return 0;
+	}
+}
 
 void I3ModuleGeo::SetModuleType(ModuleType newType)
 {
