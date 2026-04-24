@@ -106,9 +106,10 @@ double I3OMGeo::GetPMTBeta() const {
   case I3OMGeo::DEgg:
     return 0.5;
   case I3OMGeo::LOM:
-  case I3OMGeo::LOM16:
   case I3OMGeo::LOM18:
     return 1.;
+  case I3OMGeo::LOM16:
+    return 0.97;
   case I3OMGeo::WOM:
   case I3OMGeo::FOM:
     // Assuming (cross sectional) area is 2rh and surface area 2pirh, solve for beta that gives the expected direcionally averaged area: pi rh / 2
