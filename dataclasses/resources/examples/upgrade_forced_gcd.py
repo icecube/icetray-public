@@ -53,9 +53,6 @@ DEggCalTemplate.pmt_transit_time = 54 * I3Units.ns
 DEggCalTemplate.adc_baseline_rms = 2.5 # [Counts]
 
 # from DEgg Paper
-DEggCalTemplate.linearity_params.p0 = 36.71 * I3Units.mA
-DEggCalTemplate.linearity_params.p1 = 1.89  * I3Units.mA
-DEggCalTemplate.linearity_params.p2 = 0.14  * I3Units.mA 
 DEggCalTemplate.pmt_transit_time_spread = 2.89 * I3Units.ns
 
 # from DEgg FAT (DEgg2020-1-048_v1)
@@ -98,9 +95,6 @@ mDOMCalTemplate = dataclasses.I3mDOMCal()
 mDOMCalTemplate.adc_baseline_rms = 2.5 # [Counts]
 
 # from mDOM FAT (mDOM_D232_v1)
-mDOMCalTemplate.linearity_params.p0 = 700 # [PE]
-mDOMCalTemplate.linearity_params.p1 = 175 # [PE]
-mDOMCalTemplate.linearity_params.p2 = 300 # [PE]
 mDOMCalTemplate.pmt_transit_time = 44         * I3Units.ns
 mDOMCalTemplate.pmt_transit_time_spread = 2.5 * I3Units.ns
 mDOMCalTemplate.hv_gain_relation.slope = 6.85      # [ln(Gain) / ln(V)]

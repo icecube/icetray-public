@@ -6,7 +6,7 @@
  * Definition of I3mDOMCal Class
  *
  * @file I3mDOMCal.h
- * @date 2026-3-27
+ * @date 2026-4-30
  * @author lbloom12
  *
  */
@@ -40,13 +40,6 @@ struct I3mDOMCal {
 
     static const double discSampleRate;     // (MHz) mDOM discriminator Sample Rate
 
-
-    /**
-     * Linearity parameters as described in:
-     * DEgg Paper (https://arxiv.org/pdf/2212.14526) Equation 4.1
-     * LinearityParameters are defined in I3DEggCal.h
-     */
-    LinearityParameters linearityParams;
 
     /// the slope and intercept of:   log(gain) = m*log(HV) + b
     LinearFit hvGainRelation;
@@ -94,8 +87,7 @@ struct I3mDOMCal {
 
     // Comparison operators
     bool operator==(const I3mDOMCal& rhs) const {
-        return (linearityParams == rhs.linearityParams &&
-        hvGainRelation == rhs.hvGainRelation &&
+        return (hvGainRelation == rhs.hvGainRelation &&
         CompareFloatingPoint::Compare_NanEqual(pmtTransitTime, rhs.pmtTransitTime) &&
         CompareFloatingPoint::Compare_NanEqual(pmtTransitTimeSpread, rhs.pmtTransitTimeSpread) &&
         CompareFloatingPoint::Compare_NanEqual(adcBaselineRMS, rhs.adcBaselineRMS) &&

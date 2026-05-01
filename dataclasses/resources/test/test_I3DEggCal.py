@@ -11,49 +11,11 @@ from icecube.icetray import I3Frame, I3Units, OMKey
 
 class TestI3DEggCal(unittest.TestCase):
 
-    def test_LinearityParameters_equality(self):
-        params1 = dataclasses.LinearityParameters()
-        params1.p0 = 1.618
-        params1.p1 = 1.645
-        params1.p2 = 1.20205
-
-        params2 = dataclasses.LinearityParameters()
-        params2.p0 = 1.618
-        params2.p1 = 1.645
-        params2.p2 = 1.20205
-
-        self.assertEqual(params1, params2, "these should be the same.")
-
-        params2.p0 = 0.
-        self.assertNotEqual(params1, params2, "these should be the same.")
-
-
-
+    
     def test_I3DEggCal_equality_default_ctor(self):
         dc1 = dataclasses.I3DEggCal()
         dc2 = dataclasses.I3DEggCal()
         self.assertEqual(dc1, dc2, "these should be the same.")
-
-
-
-    def test_LinearityParameters_equality_default_ctor(self):
-        o1 = dataclasses.LinearityParameters()
-        o2 = dataclasses.LinearityParameters()
-        self.assertEqual(o1, o2, "these should be the same.")
-
-
-
-    def test_LinearityParameters_string(self):
-        params1 = dataclasses.LinearityParameters()
-        params1.p0 = 1.618
-        params1.p1 = 1.645
-        params1.p2 = 1.20205
-        params2 = dataclasses.LinearityParameters()
-        params2.p0 = 1.618
-        params2.p1 = 1.645
-        params2.p2 = 1.20205
-
-        self.assertEqual(params1.__str__(), params2.__str__(), "these should be the same.")
 
 
 
@@ -71,9 +33,6 @@ class TestI3DEggCal(unittest.TestCase):
 
         ### populate with non-constructor values
         template.temperature = (-40 + 273.0) * I3Units.kelvin # (-40 degrees Celsius)
-        template.linearity_params.p0 = 36.71 * I3Units.mA
-        template.linearity_params.p1 = 1.89 * I3Units.mA
-        template.linearity_params.p2 = 0.14 * I3Units.mA
         template.pmt_transit_time = 58 * I3Units.ns
         template.pmt_transit_time_spread = 2.89 * I3Units.ns
         template.hv_gain_relation.slope = 6.25    # [log(Gain) / log(V)]
@@ -91,9 +50,6 @@ class TestI3DEggCal(unittest.TestCase):
         self.assertEqual(template.frontEndImpedance, 36.96 * I3Units.ohm)
         #self.assertEqual(template.deggTimeOffset, ) current constant value is set to NAN, once measurement is made and the constant is updated then uncomment and add this condition
         self.assertEqual(template.temperature, (-40 + 273.0) * I3Units.kelvin)
-        self.assertEqual(template.linearity_params.p0, 36.71 * I3Units.mA)
-        self.assertEqual(template.linearity_params.p1, 1.89 * I3Units.mA)
-        self.assertEqual(template.linearity_params.p2, 0.14 * I3Units.mA)
         self.assertEqual(template.pmt_transit_time, 58 * I3Units.ns)
         self.assertEqual(template.pmt_transit_time_spread, 2.89 * I3Units.ns)
         self.assertEqual(template.hv_gain_relation.slope, 6.25)
@@ -135,17 +91,6 @@ class TestI3DEggCal(unittest.TestCase):
         self.assertEqual(dc.temperature, (-40 + 273.) * I3Units.kelvin)
         dc.temperature = (20. + 273.) * I3Units.kelvin
         self.assertEqual(dc.temperature, 293. * I3Units.kelvin)
-
-        ### test linearity params
-        self.assertEqual(dc.linearity_params.p0, 36.71 * I3Units.mA)
-        self.assertEqual(dc.linearity_params.p1, 1.89 * I3Units.mA)
-        self.assertEqual(dc.linearity_params.p2, 0.14 * I3Units.mA)
-        dc.linearity_params.p0 = 24.56 * I3Units.mA
-        dc.linearity_params.p1 = 2.45 * I3Units.mA
-        dc.linearity_params.p2 = 0.12 * I3Units.mA
-        self.assertEqual(dc.linearity_params.p0, 24.56 * I3Units.mA)
-        self.assertEqual(dc.linearity_params.p1, 2.45 * I3Units.mA)
-        self.assertEqual(dc.linearity_params.p2, 0.12 * I3Units.mA)
 
         ### test pmt transit time
         self.assertEqual(dc.pmt_transit_time, 58 * I3Units.ns)

@@ -6,7 +6,7 @@
  * Definition of I3DEggCal Class
  *
  * @file I3DEggCal.h
- * @date 2026-3-27
+ * @date 2026-4-30
  * @author lbloom12
  *
  */
@@ -21,54 +21,7 @@
 #include <dataclasses/calibration/I3DOMCalibration.h>
 
 
-static const unsigned linearity_params_version_ = 0;
 static const unsigned i3degg_calibration_version_ = 2;
-
-
-
-/**
- * @brief A struct to hold the PMT Linearity parameters as described in
- * the DEgg Paper (https://arxiv.org/pdf/2212.14526) Equation 4.1
- * 
- * Relationship between the observed peak current (I_obs) versus the
- * ideal peak current (I_ideal = x) can be modeled as:
- * 
- * I_obs = x * ln(1 + x/p2) / ( ln(1 + x/p2) + (x/p0)*ln(1 + (x/p1)^3) )
- * 
- * where all variables and parameters are measured in milliamps (mA)
- */
-struct LinearityParameters
-{
-  double p0;
-  double p1;
-  double p2;
-
-  // comparison operators
-  bool operator==(const LinearityParameters& rhs) const
-  {
-    return (CompareFloatingPoint::Compare_NanEqual(p0,rhs.p0) &&
-        CompareFloatingPoint::Compare_NanEqual(p1,rhs.p1) &&
-        CompareFloatingPoint::Compare_NanEqual(p2,rhs.p2));
-  }
-  bool operator!=(const LinearityParameters& rhs) const
-  {
-    return !operator==(rhs);
-  }
-
-  // serialization
-  template <class Archive>
-  void serialize(Archive& ar, unsigned version);
-
-  // constructor
-  LinearityParameters()
-  {
-    p0 = NAN;
-    p1 = NAN;
-    p2 = NAN;
-  }
-};
-I3_CLASS_VERSION(LinearityParameters, linearity_params_version_);
-
 
 
 /**
@@ -86,11 +39,6 @@ struct I3DEggCal {
 
     static const double deggTimeOffset;     // (ns) Systematic timing offset between DEggs and Gen1 DOMs
 
-    /**
-     * Linearity parameters as described in:
-     * DEgg Paper (https://arxiv.org/pdf/2212.14526) Equation 4.1
-     */
-    LinearityParameters linearityParams;
 
     /// the slope and intercept of:   log(gain) = m*log(HV) + b
     LinearFit hvGainRelation;
@@ -137,8 +85,7 @@ struct I3DEggCal {
 
     // Comparison operators
     bool operator==(const I3DEggCal& rhs) const {
-        return (linearityParams == rhs.linearityParams &&
-        hvGainRelation == rhs.hvGainRelation &&
+        return (hvGainRelation == rhs.hvGainRelation &&
         CompareFloatingPoint::Compare_NanEqual(pmtTransitTime, rhs.pmtTransitTime) &&
         CompareFloatingPoint::Compare_NanEqual(pmtTransitTimeSpread, rhs.pmtTransitTimeSpread) &&
         CompareFloatingPoint::Compare_NanEqual(adcBaselineRMS, rhs.adcBaselineRMS) &&
@@ -182,7 +129,6 @@ I3_POINTER_TYPEDEFS(I3DEggCalMap);
 
 
 // allows the printing of objects in these classes
-std::ostream& operator<<(std::ostream& oss, const LinearityParameters& p);
 std::ostream& operator<<(std::ostream& oss, const I3DEggCal& c);
 std::ostream& operator<<(std::ostream& oss, const I3DEggCalMap& m);
 

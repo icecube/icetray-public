@@ -6,11 +6,10 @@
  * Serialization and Printing for I3mDOMCal and I3mDOMCalMap Classes
  *
  * @file I3mDOMCal.cxx
- * @date 2026-3-27
+ * @date 2026-4-30
  * @author lbloom12
  *
  */
-
 
 #include <icetray/serialization.h>
 #include <dataclasses/calibration/I3mDOMCal.h>
@@ -40,7 +39,6 @@ void I3mDOMCal::serialize(Archive& ar, unsigned version)
   if (version > i3mdom_calibration_version_)
     log_fatal("Attempting to read version %u from file but running version %u of I3mDOMCal class.", version, i3mdom_calibration_version_);
 
-  ar & make_nvp("linearityParams", linearityParams);
   ar & make_nvp("hvGainRelation", hvGainRelation);
   ar & make_nvp("pmtTransitTime", pmtTransitTime);
   ar & make_nvp("pmtTransitTimeSpread", pmtTransitTimeSpread);
@@ -72,7 +70,6 @@ std::ostream& operator<<(std::ostream& oss, const I3mDOMCal& c)
       << "    Front End Impedance : " << c.frontEndImpedance << std::endl
       << "       mDOM Time Offset : " << c.mdomTimeOffset << std::endl
       << "         DiscSampleRate : " << c.discSampleRate << std::endl
-      << "   Linearity Parameters : " << c.linearityParams << std::endl
       << "            HV-Gain Fit : " << c.hvGainRelation << std::endl
       << "       PMT Transit Time : " << c.pmtTransitTime << std::endl
       << "    Transit Time Spread : " << c.pmtTransitTimeSpread << std::endl

@@ -2,7 +2,7 @@
 .. Copyright  (C) 2025 The Icecube Collaboration
 .. SPDX-License-Identifier: BSD-2-Clause
 ..
-.. @date $LastChangedDate: 27th March 2026 $
+.. @date $LastChangedDate: 30th April 2026 $
 .. @author lbloom12
 
 .. highlight:: python
@@ -90,16 +90,6 @@ DEggTimeOffset
   meantime a value of **NAN** ns has been assigned.
 
   >>> degg_cal.deggTimeOffset
-
-LinearityParams
-  The parameters that describe the relationship between an Ideal Number of Photoelectrons (NPEs) and the Measured NPEs.
-  Ideally this relationship would be perfectly linear on the 1:1 line, but due to saturation of the PMT it tends to fall below
-  this line at high NPE. This is stored as :cpp:struct:`LinearityParameters`, where all parameters are in units of milliamps
-  (see ``LinearityParameters``).
-
-  >>> degg_cal.linearity_params.p0 = 36.71 * I3Units.mA
-  >>> degg_cal.linearity_params.p1 = 1.89  * I3Units.mA
-  >>> degg_cal.linearity_params.p2 = 0.14  * I3Units.mA
 
 HVGainRelation
   The slope and intercept that describe the linear relationship between log10(Gain) and log10(HV). This is referenced to
@@ -196,16 +186,6 @@ mDOMTimeOffset
 
   >>> mdom_cal.mdomTimeOffset
 
-LinearityParams
-  The parameters that describe the relationship between an Ideal Number of Photoelectrons (NPEs) and the Measured NPEs.
-  Ideally this relationship would be perfectly linear on the 1:1 line, but due to saturation of the PMT it tends to fall below
-  this line at high NPE. This is stored as :cpp:struct:`LinearityParameters`, where all parameters are in units of PEs (see
-  ``LinearityParameters``).
-
-  >>> mdom_cal.linearity_params.p0 = 700 # [PE]
-  >>> mdom_cal.linearity_params.p1 = 175 # [PE]
-  >>> mdom_cal.linearity_params.p2 = 300 # [PE]
-
 HVGainRelation
   The slope and intercept that describe the linear relationship between log10(Gain) and log10(HV). This is referenced to
   determine the HV that should be set in order to achieve the desired Gain, and is stored as :cpp:struct:`LinearFit`.
@@ -272,26 +252,6 @@ GetValidDiscThreshold()
   >>> mdom_cal.GetValidDiscThreshold(12300)
   RuntimeError: The specified DAC value does not match what is in calibration!
 
-
-****
-
-LinearityParameters
--------------------
-
-:cpp:struct:`LinearityParameters` contains the three parameters that describe the relationship between the Ideal Number of
-Photoelectrons (NPEs) and the Measured NPEs. Ideally this relationship would be perfectly linear on the 1:1 line, but due to
-saturation of the PMT it tends to fall below this line at high NPE.
-
-The PMT Linearity parameters (p0, p1, p2) are described in Equation 4.1 of the `DEgg Paper
-<https://arxiv.org/pdf/2212.14526>`_
-
-This relationship is:
-
-.. math::
-
-  Observed = Ideal * ln(1 + Ideal/p2) / ( ln(1 + Ideal/p2) + (Ideal/p0)*ln(1 + (Ideal/p1)^3) )
- 
-where all variables and parameters are measured in the same units.
 
 ****
 

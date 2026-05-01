@@ -6,7 +6,7 @@
  * Pybindings for I3mDOMCal and I3mDOMCalMap Classes
  *
  * @file I3mDOMCal.cxx
- * @date 2026-3-27
+ * @date 2026-4-30
  * @author lbloom12
  *
  */
@@ -24,7 +24,7 @@ void register_I3mDOMCal()
 {
   // ...to read/write all non-constant values
   class_<I3mDOMCal, boost::shared_ptr<I3mDOMCal> >("I3mDOMCal")
-  #define I3MDOMCAL_VALS  (linearityParams)(hvGainRelation)      \
+  #define I3MDOMCAL_VALS  (hvGainRelation)                       \
                           (pmtTransitTime)(pmtTransitTimeSpread) \
                           (adcBaselineRMS)                       \
                           (adcBaselineValue)(adcBaselineDAC)     \

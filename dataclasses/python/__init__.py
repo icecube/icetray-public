@@ -57,7 +57,7 @@ from icecube._dataclasses import (
     # upgrade DOMs
     I3DEggLaunch, I3mDOMLaunch, I3NoiseSuppressionRecord, I3XDOMHit, UpgradeReadout,
     I3DEggLaunchSeriesMap, I3mDOMLaunchSeriesMap, I3NoiseSuppressionRecordSeriesMap, I3XDOMHitSeriesMap, UpgradeReadoutSeriesMap,
-    I3DEggCal, I3PMTCal, I3mDOMCal, I3DEggStatus, I3mDOMStatus, LinearityParameters,
+    I3DEggCal, I3PMTCal, I3mDOMCal, I3DEggStatus, I3mDOMStatus,
     I3DEggCalMap, I3PMTCalMap, I3mDOMCalMap, I3DEggStatusMap, I3mDOMStatusMap,
     UpgradeLCFlags,
 )

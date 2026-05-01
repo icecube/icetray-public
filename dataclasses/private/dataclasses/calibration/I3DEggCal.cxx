@@ -3,11 +3,10 @@
  * SPDX-FileCopyrightText: 2025 The IceTray Contributors
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Serialization and Printing for LinearityParameters,
- * I3DEggCal, and I3DEggCalMap Classes
+ * Serialization and Printing for I3DEggCal and I3DEggCalMap Classes
  *
  * @file I3DEggCal.cxx
- * @date 2026-3-27
+ * @date 2026-4-30
  * @author lbloom12
  *
  */
@@ -31,21 +30,6 @@ const double I3DEggCal::deggTimeOffset = NAN * I3Units::ns;        // (ns) Syste
 
 
 
-// serialization for LinearityParameters for proper storaging
-template <class Archive>
-void LinearityParameters::serialize(Archive& ar, unsigned version)
-{
-  if (version > linearity_params_version_)
-    log_fatal("Attempting to read version %u from file but running version %u of LinearityParameters class.", version, linearity_params_version_);
-
-  ar & make_nvp("linearityP0", p0);
-  ar & make_nvp("linearityP1", p1);
-  ar & make_nvp("linearityP2", p2);
-}
-I3_SERIALIZABLE(LinearityParameters);
-
-
-
 // serialization for I3DEggCal for proper storaging
 template <class Archive>
 void I3DEggCal::serialize(Archive& ar, unsigned version)
@@ -53,7 +37,6 @@ void I3DEggCal::serialize(Archive& ar, unsigned version)
   if (version > i3degg_calibration_version_)
     log_fatal("Attempting to read version %u from file but running version %u of I3DEggCal class.", version, i3degg_calibration_version_);
 
-  ar & make_nvp("linearityParams", linearityParams);
   ar & make_nvp("hvGainRelation", hvGainRelation);
   ar & make_nvp("pmtTransitTime", pmtTransitTime);
   ar & make_nvp("pmtTransitTimeSpread", pmtTransitTimeSpread);
@@ -73,16 +56,6 @@ I3_SERIALIZABLE(I3DEggCalMap);
 
 
 
-// define the printing operator for LinearityParameters for a better output than the address of the object
-std::ostream& operator<<(std::ostream& oss, const LinearityParameters& p)
-{
-  oss << "[LinearityParameters: p0(" << p.p0 << ") p1(" << p.p1
-      << ") p2(" << p.p2 << ")]" ;
-  return oss;
-}
-
-
-
 
 // define the printing operator for I3DEggCal for a better output than the address of the object
 std::ostream& operator<<(std::ostream& oss, const I3DEggCal& c)
@@ -93,7 +66,6 @@ std::ostream& operator<<(std::ostream& oss, const I3DEggCal& c)
       << "         Sample Rate : " << c.sampleRate << std::endl
       << " Front End Impedance : " << c.frontEndImpedance << std::endl
       << "    DEgg Time Offset : " << c.deggTimeOffset << std::endl
-      << "Linearity Parameters : " << c.linearityParams << std::endl
       << "         HV-Gain Fit : " << c.hvGainRelation << std::endl
       << "    PMT Transit Time : " << c.pmtTransitTime << std::endl
       << " Transit Time Spread : " << c.pmtTransitTimeSpread << std::endl

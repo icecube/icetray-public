@@ -67,10 +67,10 @@ namespace bp = boost::python;
   (I3Calibration)(I3AntennaCalibration)(DroopedSPETemplate)(SPETemplate)\
   (I3DOMCalibration)(I3VEMCalibration)(LinearFit)(QuadraticFit)         \
   (TauParam)(MapOMKeyI3DOMCalibration)(MapOMKeyI3VEMCalibration)        \
-  (LinearityParameters)(I3DEggCal)(I3DEggCalMap)   	                \
-  (I3PMTCal)(I3PMTCalMap)(I3mDOMCal)(I3mDOMCalMap)			\
+  (I3DEggCal)(I3DEggCalMap)(I3mDOMCal)(I3mDOMCalMap)			        \
+  (I3PMTCal)(I3PMTCalMap)                                               \
   (I3DetectorStatus)(I3DOMStatus)(I3TriggerStatus)(MapOMKeyI3DOMStatus) \
-  (I3DEggStatus)(I3DEggStatusMap)(I3mDOMStatus)(I3mDOMStatusMap)	\
+  (I3DEggStatus)(I3DEggStatusMap)(I3mDOMStatus)(I3mDOMStatusMap)	    \
   (MapSubdetectorI3TriggerReadoutConfig)(MapTriggerKeyI3TriggerStatus)  \
   (I3DOMFunctions)(I3MapUnsignedUnsigned)(I3MapUShortUShort)            \
   (I3MapIntVectorInt)(I3MapKeyVectorDouble)(I3MapKeyDouble)             \

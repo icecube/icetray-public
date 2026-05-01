@@ -46,9 +46,6 @@ class TestI3mDOMCal(unittest.TestCase):
         template = dataclasses.I3mDOMCal()
 
         ### populate with non-constructor values
-        template.linearity_params.p0 = 700 # [PE]
-        template.linearity_params.p1 = 175 # [PE]
-        template.linearity_params.p2 = 300 # [PE]
         template.pmt_transit_time = 44 * I3Units.ns         # [ns]
         template.pmt_transit_time_spread = 2.5 * I3Units.ns # [ns]
         template.hv_gain_relation.slope = 6.85      # [log(Gain) / log(V)]
@@ -66,9 +63,6 @@ class TestI3mDOMCal(unittest.TestCase):
         self.assertEqual(template.frontEndImpedance, 75.35 * I3Units.ohm)
         #self.assertEqual(template.mdomTimeOffset, ) current constant value is set to NAN, once measurement is made and the constant is updated then uncomment and add this condition
         self.assertEqual(template.discSampleRate, 960 * I3Units.megahertz)
-        self.assertEqual(template.linearity_params.p0, 700)
-        self.assertEqual(template.linearity_params.p1, 175)
-        self.assertEqual(template.linearity_params.p2, 300)
         self.assertEqual(template.pmt_transit_time, 44 * I3Units.ns)
         self.assertEqual(template.pmt_transit_time_spread, 2.5 * I3Units.ns)
         self.assertEqual(template.hv_gain_relation.slope, 6.85)
@@ -105,18 +99,6 @@ class TestI3mDOMCal(unittest.TestCase):
         self.assertEqual(mc.frontEndImpedance, 75.35 * I3Units.ohm)
         #self.assertEqual(mc.mdomTimeOffset, ) current constant value is set to NAN, once measurement is made and the constant is updated then uncomment and add this condition
         self.assertEqual(mc.discSampleRate, 960 * I3Units.megahertz)
-
-
-        ### test linearity params
-        self.assertEqual(mc.linearity_params.p0, 700)
-        self.assertEqual(mc.linearity_params.p1, 175)
-        self.assertEqual(mc.linearity_params.p2, 300)
-        mc.linearity_params.p0 = 24.56
-        mc.linearity_params.p1 = 2.45
-        mc.linearity_params.p2 = 0.12
-        self.assertEqual(mc.linearity_params.p0, 24.56)
-        self.assertEqual(mc.linearity_params.p1, 2.45)
-        self.assertEqual(mc.linearity_params.p2, 0.12)
 
         ### test pmt transit time
         self.assertEqual(mc.pmt_transit_time, 44 * I3Units.ns)
