@@ -216,11 +216,11 @@ I3GeometryDecomposer::GenerateI3ModuleGeo(const I3OMGeoMap &omgeo) const
             
             // New module types
           case I3OMGeo::PDOM:
-          case I3OMGeo::WOM:
           case I3OMGeo::FOM:
             log_fatal("Logic error. output ModuleKey(%i,%u) is already in output map.",
                       output_key.GetString(), output_key.GetOM());
                         
+          case I3OMGeo::WOM:
           case I3OMGeo::mDOM:
           case I3OMGeo::DEgg:
           case I3OMGeo::LOM:
