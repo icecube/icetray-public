@@ -18,7 +18,7 @@ RTOL = 0.4 # string 21 seems to have larger variance in module positions
 def ztol(s):
     mdz = 13.
     if s > 86:
-        mdz = 2.9
+        mdz = 2.6
     elif s >= 79:
         mdz = 6.4
 
