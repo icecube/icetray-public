@@ -31,6 +31,7 @@ for x in gcddir.iterdir():
             if v.omtype in [
                 ot.UnknownType, ot.AMANDA, ot.Scintillator, ot.IceAct, ot.WOM, ot.FOM, ot.DMIce, ot.LOM, ot.RadioReceiver,
                 ot.POCAM, ot.PencilBeam, ot.RadioEmitter, ot.AcousticEmitter, ot.AbaloneHub, ot.FibreComm,
+                ot.AcousticModule, ot.SwedishCamera,
             ]:
                 assert v.pmttype in [pt.Unknown]
             elif v.omtype in [ot.IceCube, ot.IceTop, ot.PDOM, ot.isoPDOM]:
