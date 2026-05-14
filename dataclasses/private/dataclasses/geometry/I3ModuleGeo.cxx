@@ -148,11 +148,11 @@ void I3ModuleGeo::SetModuleType(ModuleType newType)
 		break;
 
 	case I3ModuleGeo::WOM:
-		I3ModuleGeo::SetCylinder(0.057*I3Units::m, 2*0.650*I3Units::m);
+		I3ModuleGeo::SetCylinder(0.0575*I3Units::m, 2*0.38*I3Units::m);
 		break;
 
 	case I3ModuleGeo::FOM:
-		I3ModuleGeo::SetCylinder(0.1524*I3Units::m, 2*0.6096*I3Units::m);
+		I3ModuleGeo::SetSpheroid(0.1524*I3Units::m, 0.6096*I3Units::m);
 		break;
 
 		// New module types
