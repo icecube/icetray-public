@@ -120,6 +120,32 @@ public:
     inline I3Direction GetDirection() const {return orientation.GetDir();}
 
     /**
+     * Gets approximate efficiency ratios per-PMT relative to standard IC DOM
+     * Computed based on the ratio of efficiencies at 400 nm using icetray v1.18.0
+     * (available at https://github.com/icecube/icetray/releases/tag/v1.18.0)
+     * ice-models/resources/models/NEXTGEN/om.wv_* with om.wv_171 used for both LOM types
+     * Can be used for scaling light yields in reconstruction.
+     */
+    double GetRelEffToDOM_Standard() const {
+      switch (pmttype) {
+      case PMTType::DOM_Standard:
+        return 1.;
+      case PMTType::DOM_HQE:
+        return 1.374;
+      case PMTType::DEgg:
+        return 1.181;
+      case PMTType::mDOM:
+        return 0.113;
+      case PMTType::LOM_Hamamatsu:
+        return 0.205;
+      case PMTType::LOM_NNVT:
+        return 0.205;
+      default:
+        return 1.;
+      }
+    }
+
+    /**
      * Gets the beta for angular sensitivity
      */
     double GetPMTBeta() const;
