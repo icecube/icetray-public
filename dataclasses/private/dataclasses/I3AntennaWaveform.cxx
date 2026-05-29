@@ -32,10 +32,14 @@ void I3AntennaWaveform<T>::serialize(Archive& ar, unsigned version) {
     return lhs;                                                      \
   }
 
+// FIXME: the pragmas here force (then restore) `-O1`
+// see: https://github.com/icecube/icetray/issues/4377
+#pragma GCC optimize 1
 LEFT_AUGMENTED_ARITHMETIC_OPERATOR_1D(AntennaTimeSeries, *=)
 LEFT_AUGMENTED_ARITHMETIC_OPERATOR_1D(AntennaTimeSeries, /=)
 LEFT_AUGMENTED_ARITHMETIC_OPERATOR_1D(AntennaSpectrum, *=)
 LEFT_AUGMENTED_ARITHMETIC_OPERATOR_1D(AntennaSpectrum, /=)
+#pragma GCC reset_options
 
 #undef LEFT_AUGMENTED_ARITHMETIC_OPERATOR_1D
 
